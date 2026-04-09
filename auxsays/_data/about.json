@@ -1,0 +1,26 @@
+{
+  "eyebrow": "About Aux",
+  "display_name": "AUXILIUM",
+  "intro": [
+    "Aux is an LMS administrator and instructional design professional specializing in medical-field instruction, advanced multimedia integration, and production workflows. His work includes building training systems and digital learning experiences for orthopedic education and government hospital environments.",
+    "He brings a strong background in multimedia production, combining instructional strategy with video, design, and technical systems thinking to improve how organizations deliver training at scale. Current focus areas include live broadcasting and broadcast workflows built with Unreal Engine 5."
+  ],
+  "primary_lane_title": "Primary lane",
+  "primary_lane_text": "LMS administration, workflow architecture, reporting support, process design, and platform stewardship.",
+  "secondary_lane_title": "Secondary lane",
+  "secondary_lane_text": "Instructional design, multimedia learning, content sequencing, and delivery systems that scale.",
+  "tools_title": "Tools and systems",
+  "tools": [
+    "Moodle",
+    "MySQL",
+    "Excel",
+    "Power Query",
+    "Process automation",
+    "Video systems",
+    "Training workflows"
+  ],
+  "thesis_title": "Working thesis",
+  "thesis_text": "Build systems that are practical, scalable, and technically honest. Reduce friction. Improve outputs. Keep the workflow legible.",
+  "interests_title": "Current interests",
+  "interests_text": "Real free AI utilities, advanced creator workflows, systems automation, live broadcasting, and Unreal Engine 5 pipeline design."
+}

@@ -1,0 +1,79 @@
+---
+layout: aux-base
+---
+<section class="hero-grid">
+  <article class="panel hero-copy reveal">
+    <div class="eyebrow">{{ site.data.home.eyebrow }}</div>
+    <h1 class="hero-title">
+      {% for line in site.data.home.title_lines %}
+      <span{% if forloop.index == 2 %} class="accent"{% endif %}>{{ line }}</span>
+      {% endfor %}
+    </h1>
+    <p class="hero-intro">{{ site.data.home.intro }}</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="{{ '/articles/' | relative_url }}">Browse articles</a>
+      <a class="btn btn-secondary" href="{{ '/about/' | relative_url }}">About Aux</a>
+    </div>
+  </article>
+
+  <article class="panel hero-side reveal">
+    <div class="hero-stack">
+      <div class="stack-block">
+        <div class="stack-label">Publication mode</div>
+        <h2>Modern tactical editorial</h2>
+        <p>Built as a clean resource hub first, with sharper systems thinking under the hood.</p>
+      </div>
+      <div class="stack-block">
+        <div class="stack-label">Focus</div>
+        <h3>Real tools. Real workflows.</h3>
+        <p>No fake-free fluff, no bloated stacks, and no vague recommendations without testing.</p>
+      </div>
+      <div class="stack-block compact">
+        <div class="stack-label">Current lanes</div>
+        <p>AI, production, automation, and training systems that scale.</p>
+      </div>
+    </div>
+  </article>
+</section>
+
+<section class="coverage-section reveal">
+  <div class="section-head">
+    <div class="eyebrow">Core coverage</div>
+    <h2>{{ site.data.home.coverage_intro }}</h2>
+    <p>{{ site.data.home.coverage_sub }}</p>
+  </div>
+
+  <div class="coverage-grid">
+    {% for card in site.data.home.cards %}
+    <article class="coverage-card" data-lottie="{{ card.lottie | relative_url }}">
+      <div class="coverage-topline">
+        <span class="coverage-fallback">{{ card.fallback }}</span>
+        <div class="coverage-lottie" aria-hidden="true"></div>
+        <span class="coverage-kicker">{{ card.kicker }}</span>
+      </div>
+      <h3>{{ card.title }}</h3>
+      <p>{{ card.summary }}</p>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="featured-section reveal">
+  <div class="section-head">
+    <div class="eyebrow">Featured reads</div>
+    <h2>Recent articles</h2>
+  </div>
+  <div class="featured-grid">
+    {% for post in site.posts limit:3 %}
+    <article class="featured-card">
+      <div class="card-topline">
+        <span>{{ post.date | date: '%b %d, %Y' }}</span>
+        {% if post.categories and post.categories.first %}<span>{{ post.categories.first }}</span>{% endif %}
+      </div>
+      <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
+      <p>{{ post.description | default: post.excerpt | strip_html | truncate: 150 }}</p>
+      <a class="text-link" href="{{ post.url | relative_url }}">Read article →</a>
+    </article>
+    {% endfor %}
+  </div>
+</section>
