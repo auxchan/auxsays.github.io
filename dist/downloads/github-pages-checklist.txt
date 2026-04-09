@@ -1,0 +1,7 @@
+AUXSAYS GitHub Pages checklist
+
+1. Keep the repository public.
+2. Keep the custom domain set to auxsays.com in Settings > Pages.
+3. If HTTPS is still unavailable, wait and refresh Settings > Pages.
+4. Add or edit articles in content/articles if you are not using the browser admin.
+5. Every push to main triggers the GitHub Pages workflow.
