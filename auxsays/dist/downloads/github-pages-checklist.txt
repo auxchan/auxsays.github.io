@@ -1,5 +1,0 @@
-AUXSAYS quick checklist
-- Upload .github and auxsays folders to repo root
-- Wait for GitHub Actions deploy
-- Visit auxsays.com
-- Hidden vault route: /vault/
