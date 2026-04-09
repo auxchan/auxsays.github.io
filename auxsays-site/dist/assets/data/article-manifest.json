@@ -1,0 +1,65 @@
+[
+  {
+    "slug": "lottiefiles-what-is-actually-free",
+    "title": "LottieFiles: what is actually free, and where the limits begin",
+    "category": "Free AI Tools",
+    "tags": [
+      "lottie",
+      "animation",
+      "free tools",
+      "workflow"
+    ],
+    "excerpt": "A grounded look at what LottieFiles gives you for free, where the platform tightens up, and which legal alternatives stay scalable.",
+    "cover": "/assets/img/aux-portrait-bw.jpg",
+    "date": "2026-04-08",
+    "featured": true,
+    "app": "LottieFiles",
+    "path": "/articles/lottiefiles-what-is-actually-free/",
+    "source": "/content/articles/lottiefiles-what-is-actually-free.md",
+    "video_embed": "",
+    "download_label": "Download GitHub Pages checklist",
+    "download_url": "/downloads/github-pages-checklist.txt"
+  },
+  {
+    "slug": "best-free-ai-tools-that-dont-trap-your-exports",
+    "title": "Best free AI tools that do not trap your exports later",
+    "category": "Content Creation Workflows",
+    "tags": [
+      "ai tools",
+      "exports",
+      "creator workflow",
+      "free tools"
+    ],
+    "excerpt": "A placeholder roundup focused on practical free tools that stay usable at the export stage instead of collapsing into fake-free bottlenecks.",
+    "cover": "/assets/img/aux-portrait-hero.jpg",
+    "date": "2026-04-07",
+    "featured": true,
+    "app": "Multi-app",
+    "path": "/articles/best-free-ai-tools-that-dont-trap-your-exports/",
+    "source": "/content/articles/best-free-ai-tools-that-dont-trap-your-exports.md",
+    "video_embed": "",
+    "download_label": "Download sample automation file",
+    "download_url": "/downloads/sample-automation.bat"
+  },
+  {
+    "slug": "how-to-build-a-content-workflow-around-actually-free-ai-utilities",
+    "title": "How to build a content workflow around actually free AI utilities",
+    "category": "Automation Productivity",
+    "tags": [
+      "automation",
+      "workflow",
+      "ai utilities",
+      "creator systems"
+    ],
+    "excerpt": "A placeholder framework for using free AI tools in a way that keeps your production stable, modular, and easy to swap.",
+    "cover": "/assets/img/aux-portrait-bw.jpg",
+    "date": "2026-04-05",
+    "featured": true,
+    "app": "Workflow design",
+    "path": "/articles/how-to-build-a-content-workflow-around-actually-free-ai-utilities/",
+    "source": "/content/articles/how-to-build-a-content-workflow-around-actually-free-ai-utilities.md",
+    "video_embed": "",
+    "download_label": "",
+    "download_url": ""
+  }
+]
