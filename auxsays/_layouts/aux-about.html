@@ -1,42 +1,98 @@
 ---
-layout: aux-base
+layout: page
+permalink: /about/
+title: About Aux
 ---
-<section class="about-grid reveal">
-  <figure class="panel about-portrait-wrap">
-    <img class="about-portrait" src="{{ '/assets/img/aux-about-portrait-v2.jpg' | relative_url }}" alt="Aux black and white portrait">
-  </figure>
-  <article class="panel about-copy">
-    <div class="eyebrow">{{ site.data.about.eyebrow }}</div>
-    <h1 class="about-title">{{ site.data.about.display_name }}</h1>
-    {% for para in site.data.about.intro %}
-    <p class="about-intro">{{ para }}</p>
-    {% endfor %}
 
-    <div class="about-panels two-col">
-      <section class="mini-panel">
-        <h2>{{ site.data.about.primary_lane_title }}</h2>
-        <p>{{ site.data.about.primary_lane_text }}</p>
-      </section>
-      <section class="mini-panel">
-        <h2>{{ site.data.about.secondary_lane_title }}</h2>
-        <p>{{ site.data.about.secondary_lane_text }}</p>
-      </section>
-      <section class="mini-panel span-two">
-        <h2>{{ site.data.about.tools_title }}</h2>
-        <ul class="tool-list">
-        {% for tool in site.data.about.tools %}
-          <li>{{ tool }}</li>
-        {% endfor %}
-        </ul>
-      </section>
-      <section class="mini-panel">
-        <h2>{{ site.data.about.thesis_title }}</h2>
-        <p>{{ site.data.about.thesis_text }}</p>
-      </section>
-      <section class="mini-panel">
-        <h2>{{ site.data.about.interests_title }}</h2>
-        <p>{{ site.data.about.interests_text }}</p>
+<div class="aux-page about-page">
+  <div class="aux-bg" aria-hidden="true"></div>
+
+  <section class="aux-shell">
+    <div class="about-grid">
+      <aside class="panel about-portrait-wrap">
+        <figure class="about-figure">
+          <img
+            class="about-portrait"
+            src="{{ '/assets/img/aux-about-portrait-editorial.jpg' | relative_url }}"
+            alt="Aux black and white portrait"
+          />
+          <figcaption class="about-caption">
+            <span class="about-caption-kicker">Aux / Editorial profile</span>
+            <span class="about-caption-text">
+              Systems-minded creator focused on training infrastructure, production workflows, and practical tool evaluation.
+            </span>
+          </figcaption>
+        </figure>
+      </aside>
+
+      <section class="panel about-copy">
+        <div class="eyebrow">About Aux</div>
+        <h1 class="about-title">Auxilium</h1>
+
+        <div class="about-intro">
+          <p>
+            Aux is an LMS administrator and instructional design professional specializing in
+            medical-field instruction, advanced multimedia integration, and production workflows.
+            His work includes building training systems and digital learning experiences for
+            orthopedic education and government hospital environments.
+          </p>
+
+          <p>
+            He brings a strong background in multimedia production, combining instructional
+            strategy, design, and technical systems thinking to improve how organizations deliver
+            training at scale. Current focus areas include live broadcasting, modern creator
+            workflows, and broadcast systems built around Unreal Engine 5.
+          </p>
+        </div>
+
+        <div class="about-panels two-col">
+          <article class="mini-panel">
+            <h2>Primary lane</h2>
+            <p>
+              LMS administration, workflow architecture, reporting support, process design,
+              and platform stewardship.
+            </p>
+          </article>
+
+          <article class="mini-panel">
+            <h2>Secondary lane</h2>
+            <p>
+              Instructional design, multimedia learning, content sequencing,
+              and scalable delivery systems.
+            </p>
+          </article>
+
+          <article class="mini-panel span-two">
+            <h2>Tools and systems</h2>
+            <ul class="tool-list">
+              <li>Moodle</li>
+              <li>MySQL</li>
+              <li>Excel</li>
+              <li>Power Query</li>
+              <li>Process automation</li>
+              <li>Video systems</li>
+              <li>Training workflows</li>
+              <li>Multimedia production</li>
+            </ul>
+          </article>
+
+          <article class="mini-panel">
+            <h2>Working thesis</h2>
+            <p>
+              Build systems that are practical, scalable, and technically honest.
+              Reduce friction. Improve outputs. Keep the workflow legible.
+            </p>
+          </article>
+
+          <article class="mini-panel">
+            <h2>Current interests</h2>
+            <p>
+              Real free AI utilities, advanced creator workflows, systems automation,
+              live broadcasting, and Unreal Engine 5 pipeline design.
+            </p>
+          </article>
+        </div>
       </section>
     </div>
-  </article>
-</section>
+  </section>
+</div>
