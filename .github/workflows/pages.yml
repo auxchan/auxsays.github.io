@@ -1,15 +1,8 @@
-name: "Build and Deploy"
+name: Build and Deploy Chirpy Site
 
 on:
   push:
-    branches:
-      - main
-      - master
-    paths-ignore:
-      - .gitignore
-      - README.md
-      - LICENSE
-
+    branches: ["main"]
   workflow_dispatch:
 
 permissions:
@@ -19,43 +12,37 @@ permissions:
 
 concurrency:
   group: "pages"
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    defaults:
-      run:
-        working-directory: ./auxsays
-
     steps:
       - name: Checkout
-        uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v5
+        uses: actions/checkout@v4
 
       - name: Setup Ruby
         uses: ruby/setup-ruby@v1
         with:
-          ruby-version: 3.4
+          ruby-version: '3.3'
 
-      - name: Install dependencies
-        run: bundle install
+      - name: Install Bundler and gems
+        working-directory: ./auxsays
+        run: |
+          gem install bundler
+          bundle install
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
 
       - name: Build site
-        run: bundle exec jekyll b -d "_site${{ steps.pages.outputs.base_path }}"
-        env:
-          JEKYLL_ENV: "production"
+        working-directory: ./auxsays
+        run: bundle exec jekyll build --trace
 
-      - name: Upload site artifact
-        uses: actions/upload-pages-artifact@v4
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          path: ./auxsays/_site${{ steps.pages.outputs.base_path }}
+          path: ./auxsays/_site
 
   deploy:
     environment:
@@ -63,7 +50,6 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: build
-
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
