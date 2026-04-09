@@ -102,6 +102,7 @@ a {
   letter-spacing: 0.18em;
 }
 
+/* Only the topbar wordmark uses AUX Triad */
 .aux-page h1,
 .aux-page h2,
 .aux-page h3,
@@ -173,7 +174,7 @@ a {
 }
 
 .about-grid {
-  grid-template-columns: minmax(280px, 0.72fr) minmax(0, 1.28fr);
+  grid-template-columns: minmax(240px, 0.48fr) minmax(0, 1.52fr);
   align-items: start;
 }
 
@@ -191,10 +192,15 @@ a {
   display: block;
 }
 
+.about-copy {
+  padding: 2.1rem 2rem;
+}
+
 .about-copy .about-intro {
   color: #d8dce6;
-  line-height: 1.78;
-  font-size: 1.06rem;
+  line-height: 1.82;
+  font-size: 1.04rem;
+  max-width: 62ch;
 }
 
 .hero-title {
@@ -333,6 +339,8 @@ a {
 
 .about-title {
   margin-bottom: 1rem;
+  font-size: clamp(2.2rem, 3vw, 3.5rem);
+  max-width: 10ch;
 }
 
 .section-head.narrow {
@@ -479,10 +487,28 @@ a {
 
 .about-portrait-wrap {
   overflow: hidden;
-  max-width: 390px;
+  max-width: 320px;
   align-self: start;
-  margin: 0 auto 0 0;
-  border-radius: 28px;
+  margin: 0;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.02);
+  position: relative;
+}
+
+.about-figure {
+  margin: 0;
+  position: relative;
+}
+
+.about-figure::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0.2)),
+    radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.04), transparent 42%);
+  mix-blend-mode: soft-light;
 }
 
 .about-portrait {
@@ -492,8 +518,29 @@ a {
   height: auto;
   min-height: unset;
   object-fit: cover;
-  object-position: center 14%;
-  filter: grayscale(1) contrast(1.08) brightness(0.96);
+  object-position: center 12%;
+  filter: grayscale(1) contrast(1.12) brightness(0.93);
+}
+
+.about-caption {
+  display: grid;
+  gap: 0.45rem;
+  padding: 1rem 1rem 1.1rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.about-caption-kicker {
+  color: var(--muted);
+  font-size: 0.72rem;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+}
+
+.about-caption-text {
+  color: #cfd6e3;
+  font-size: 0.95rem;
+  line-height: 1.65;
 }
 
 .about-panels {
@@ -652,7 +699,6 @@ a {
 
 @media (max-width: 1100px) {
   .hero-grid,
-  .about-grid,
   .coverage-grid,
   .featured-grid,
   .article-grid,
@@ -661,6 +707,10 @@ a {
   .vault-columns,
   .posts-layout {
     grid-template-columns: 1fr 1fr;
+  }
+
+  .about-grid {
+    grid-template-columns: minmax(220px, 0.5fr) minmax(0, 1.5fr);
   }
 }
 
