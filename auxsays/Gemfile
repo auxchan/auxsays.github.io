@@ -1,0 +1,10 @@
+source "https://rubygems.org"
+
+gem "jekyll", "~> 4.4"
+gem "jekyll-theme-chirpy"
+gem "jekyll-include-cache"
+gem "jekyll-feed"
+gem "jekyll-seo-tag"
+gem "jekyll-sitemap"
+gem "jekyll-archives"
+gem "webrick", "~> 1.8"

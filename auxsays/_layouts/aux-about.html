@@ -1,0 +1,42 @@
+---
+layout: aux-base
+---
+<section class="about-grid reveal">
+  <figure class="panel about-portrait-wrap">
+    <img class="about-portrait" src="{{ '/assets/img/aux-about-portrait-v2.jpg' | relative_url }}" alt="Aux black and white portrait">
+  </figure>
+  <article class="panel about-copy">
+    <div class="eyebrow">{{ site.data.about.eyebrow }}</div>
+    <h1 class="about-title">{{ site.data.about.display_name }}</h1>
+    {% for para in site.data.about.intro %}
+    <p class="about-intro">{{ para }}</p>
+    {% endfor %}
+
+    <div class="about-panels two-col">
+      <section class="mini-panel">
+        <h2>{{ site.data.about.primary_lane_title }}</h2>
+        <p>{{ site.data.about.primary_lane_text }}</p>
+      </section>
+      <section class="mini-panel">
+        <h2>{{ site.data.about.secondary_lane_title }}</h2>
+        <p>{{ site.data.about.secondary_lane_text }}</p>
+      </section>
+      <section class="mini-panel span-two">
+        <h2>{{ site.data.about.tools_title }}</h2>
+        <ul class="tool-list">
+        {% for tool in site.data.about.tools %}
+          <li>{{ tool }}</li>
+        {% endfor %}
+        </ul>
+      </section>
+      <section class="mini-panel">
+        <h2>{{ site.data.about.thesis_title }}</h2>
+        <p>{{ site.data.about.thesis_text }}</p>
+      </section>
+      <section class="mini-panel">
+        <h2>{{ site.data.about.interests_title }}</h2>
+        <p>{{ site.data.about.interests_text }}</p>
+      </section>
+    </div>
+  </article>
+</section>
