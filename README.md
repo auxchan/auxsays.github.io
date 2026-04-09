@@ -1,4 +1,4 @@
-# AUXSAYS site bundle
+# AUXSAYS site bundle v2
 
 This bundle is ready for GitHub Pages on your existing `auxchan/auxsays.github.io` repository.
 
