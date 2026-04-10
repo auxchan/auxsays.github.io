@@ -6,7 +6,7 @@ layout: aux-base
     <div class="eyebrow">{{ site.data.home.eyebrow }}</div>
     <h1 class="hero-title">
       {% for line in site.data.home.title_lines %}
-      <span{% if forloop.index == 2 %} class="accent"{% endif %}>{{ line }}</span>
+      <span{% if line contains '[accent]' %} class="accent"{% endif %}>{{ line | replace: '[accent]', '' }}</span>
       {% endfor %}
     </h1>
     <p class="hero-intro">{{ site.data.home.intro }}</p>
@@ -23,11 +23,13 @@ layout: aux-base
         <h2>Real tools. Real workflows.</h2>
         <p>No fake-free fluff, no bloated stacks, and no vague recommendations without testing.</p>
       </div>
+
       <div class="stack-row">
         <div class="stack-block compact">
           <div class="stack-label">Current lanes</div>
           <p>AI, production, automation, and training systems that scale.</p>
         </div>
+
         <div class="stack-block compact">
           <div class="stack-label">Publishing model</div>
           <p>App-first deep dives, sharper systems thinking, and practical output.</p>
@@ -48,12 +50,19 @@ layout: aux-base
     {% for card in site.data.home.cards %}
     <article class="coverage-card" data-card>
       <button class="coverage-hit" type="button" aria-expanded="false">
-        <span class="coverage-index">{{ card.fallback }}</span>
-        <span class="coverage-kicker">{{ card.kicker }}</span>
-        <span class="coverage-icon coverage-icon--{{ card.icon }}" aria-hidden="true"></span>
+        <span class="coverage-topline">
+          <span class="coverage-index">{{ card.fallback }}</span>
+          <span class="coverage-kicker">{{ card.kicker }}</span>
+          <span class="coverage-icon coverage-icon--{{ card.icon }}" aria-hidden="true"></span>
+        </span>
+
         <h3>{{ card.title }}</h3>
-        <span class="coverage-toggle">Open</span>
+
+        <span class="coverage-meta">
+          <span class="coverage-action">Tap / hover to expand</span>
+        </span>
       </button>
+
       <div class="coverage-body">
         <p>{{ card.summary }}</p>
       </div>
@@ -67,12 +76,15 @@ layout: aux-base
     <div class="eyebrow">Featured reads</div>
     <h2>Recent articles</h2>
   </div>
+
   <div class="featured-grid">
     {% for post in site.posts limit:3 %}
     <article class="featured-card">
       <div class="card-topline">
         <span>{{ post.date | date: '%b %d, %Y' }}</span>
-        {% if post.categories and post.categories.first %}<span>{{ post.categories.first }}</span>{% endif %}
+        {% if post.categories and post.categories.first %}
+        <span>{{ post.categories.first }}</span>
+        {% endif %}
       </div>
       <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
       <p>{{ post.description | default: post.excerpt | strip_html | truncate: 150 }}</p>
