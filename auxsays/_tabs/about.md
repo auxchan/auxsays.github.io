@@ -1,7 +1,7 @@
 ---
 layout: aux-about
 title: About Aux
-permalink: /about/
-icon: fas fa-user-secret
+icon: fas fa-user
 order: 2
+permalink: /about/
 ---
