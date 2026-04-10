@@ -1,8 +1,8 @@
 ---
 layout: aux-base
 ---
-<section class="hero-grid">
-  <article class="panel hero-copy reveal">
+<section class="hero-grid hero-grid--refined">
+  <article class="panel hero-copy reveal-up">
     <div class="eyebrow">{{ site.data.home.eyebrow }}</div>
     <h1 class="hero-title">
       {% for line in site.data.home.title_lines %}
@@ -16,49 +16,53 @@ layout: aux-base
     </div>
   </article>
 
-  <article class="panel hero-side reveal">
+  <article class="panel hero-side reveal-up reveal-delay-1">
     <div class="hero-stack">
-      <div class="stack-block">
-        <div class="stack-label">Publication mode</div>
-        <h2>Modern tactical editorial</h2>
-        <p>Built as a clean resource hub first, with sharper systems thinking under the hood.</p>
-      </div>
-      <div class="stack-block">
+      <div class="stack-block stack-block--feature">
         <div class="stack-label">Focus</div>
-        <h3>Real tools. Real workflows.</h3>
+        <h2>Real tools. Real workflows.</h2>
         <p>No fake-free fluff, no bloated stacks, and no vague recommendations without testing.</p>
       </div>
-      <div class="stack-block compact">
-        <div class="stack-label">Current lanes</div>
-        <p>AI, production, automation, and training systems that scale.</p>
+      <div class="stack-row">
+        <div class="stack-block compact">
+          <div class="stack-label">Current lanes</div>
+          <p>AI, production, automation, and training systems that scale.</p>
+        </div>
+        <div class="stack-block compact">
+          <div class="stack-label">Publishing model</div>
+          <p>App-first deep dives, sharper systems thinking, and practical output.</p>
+        </div>
       </div>
     </div>
   </article>
 </section>
 
-<section class="coverage-section reveal">
+<section class="coverage-section reveal-up reveal-delay-1">
   <div class="section-head">
     <div class="eyebrow">Core coverage</div>
     <h2>{{ site.data.home.coverage_intro }}</h2>
     <p>{{ site.data.home.coverage_sub }}</p>
   </div>
 
-  <div class="coverage-grid">
+  <div class="coverage-grid" id="coverage-grid">
     {% for card in site.data.home.cards %}
-    <article class="coverage-card" data-lottie="{{ card.lottie | relative_url }}">
-      <div class="coverage-topline">
-        <span class="coverage-fallback">{{ card.fallback }}</span>
-        <div class="coverage-lottie" aria-hidden="true"></div>
+    <article class="coverage-card" data-card>
+      <button class="coverage-hit" type="button" aria-expanded="false">
+        <span class="coverage-index">{{ card.fallback }}</span>
         <span class="coverage-kicker">{{ card.kicker }}</span>
+        <span class="coverage-icon coverage-icon--{{ card.icon }}" aria-hidden="true"></span>
+        <h3>{{ card.title }}</h3>
+        <span class="coverage-toggle">Open</span>
+      </button>
+      <div class="coverage-body">
+        <p>{{ card.summary }}</p>
       </div>
-      <h3>{{ card.title }}</h3>
-      <p>{{ card.summary }}</p>
     </article>
     {% endfor %}
   </div>
 </section>
 
-<section class="featured-section reveal">
+<section class="featured-section reveal-up reveal-delay-2">
   <div class="section-head">
     <div class="eyebrow">Featured reads</div>
     <h2>Recent articles</h2>
