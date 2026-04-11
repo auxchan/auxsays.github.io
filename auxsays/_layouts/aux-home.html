@@ -1,0 +1,93 @@
+---
+layout: aux-base
+---
+<section class="hero-grid hero-grid--refined">
+  <article class="panel hero-copy reveal-up">
+    <div class="eyebrow">{{ site.data.home.eyebrow }}</div>
+    <h1 class="hero-title">
+      {% for line in site.data.home.title_lines %}
+      <span{% if line contains '[accent]' %} class="accent"{% endif %}>{{ line | replace: '[accent]', '' }}</span>
+      {% endfor %}
+    </h1>
+    <p class="hero-intro">{{ site.data.home.intro }}</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="{{ '/articles/' | relative_url }}">Browse articles</a>
+      <a class="btn btn-secondary" href="{{ '/about/' | relative_url }}">About Aux</a>
+    </div>
+  </article>
+
+  <article class="panel hero-side reveal-up reveal-delay-1">
+    <div class="hero-stack">
+      <div class="stack-block stack-block--feature">
+        <div class="stack-label">Focus</div>
+        <h2>Real tools. Real workflows.</h2>
+        <p>No fake-free fluff, no bloated stacks, and no vague recommendations without testing.</p>
+      </div>
+
+      <div class="stack-row">
+        <div class="stack-block compact">
+          <div class="stack-label">Current lanes</div>
+          <p>AI, production, automation, and creator systems that scale without turning to sludge.</p>
+        </div>
+
+        <div class="stack-block compact">
+          <div class="stack-label">Publishing model</div>
+          <p>App-first deep dives, sharper systems thinking, and output-focused guides.</p>
+        </div>
+      </div>
+    </div>
+  </article>
+</section>
+
+<section class="coverage-section reveal-up reveal-delay-1">
+  <div class="section-head">
+    <div class="eyebrow">Core coverage</div>
+    <h2>{{ site.data.home.coverage_intro }}</h2>
+    <p>{{ site.data.home.coverage_sub }}</p>
+  </div>
+
+  <div class="coverage-grid" id="coverage-grid">
+    {% for card in site.data.home.cards %}
+    <article class="coverage-card" data-card>
+      <button class="coverage-hit" type="button" aria-expanded="false">
+        <span class="coverage-topline">
+          <span class="coverage-index">{{ card.fallback }}</span>
+          <span class="coverage-kicker">{{ card.kicker }}</span>
+          <span class="coverage-icon coverage-icon--{{ card.icon }}" aria-hidden="true"></span>
+        </span>
+
+        <h3>{{ card.title }}</h3>
+
+        <span class="coverage-meta">
+          <span class="coverage-action">Tap / hover to expand</span>
+        </span>
+      </button>
+
+      <div class="coverage-body">
+        <p>{{ card.summary }}</p>
+      </div>
+    </article>
+    {% endfor %}
+  </div>
+</section>
+
+<section class="featured-section reveal-up reveal-delay-2">
+  <div class="section-head">
+    <div class="eyebrow">Featured reads</div>
+    <h2>Recent articles</h2>
+  </div>
+
+  <div class="featured-grid">
+    {% for post in site.posts limit:3 %}
+    <article class="featured-card">
+      <div class="card-topline">
+        <span>{{ post.date | date: '%b %d, %Y' }}</span>
+        {% if post.categories and post.categories.first %}<span>{{ post.categories.first }}</span>{% endif %}
+      </div>
+      <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
+      <p>{{ post.description | default: post.excerpt | strip_html | truncate: 150 }}</p>
+      <a class="text-link" href="{{ post.url | relative_url }}">Read article →</a>
+    </article>
+    {% endfor %}
+  </div>
+</section>
