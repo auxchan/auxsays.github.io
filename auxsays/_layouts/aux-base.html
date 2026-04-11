@@ -11,31 +11,41 @@
     <script defer src="{{ '/assets/js/auxsays.js' | relative_url }}"></script>
   </head>
   <body class="aux-page {{ page.layout }}">
-    <div class="aux-bg"></div>
+    <div class="aux-bg" aria-hidden="true"></div>
+
     <div class="systems-field" aria-hidden="true">
-      <div class="systems-lottie" id="systems-lottie" aria-hidden="true"></div>
+      <div class="systems-lottie" id="systems-lottie"></div>
       <div class="systems-rings">
         <span class="systems-ring systems-ring--1"></span>
         <span class="systems-ring systems-ring--2"></span>
         <span class="systems-ring systems-ring--3"></span>
       </div>
       <div class="systems-grid"></div>
-      <div class="systems-particles" id="systems-particles"></div>
+      <div class="systems-particles systems-particles--bg" id="systems-particles-bg"></div>
+      <div class="systems-particles systems-particles--fg" id="systems-particles-fg"></div>
     </div>
+
     <header class="aux-topbar">
-      <a class="brand" href="{{ '/' | relative_url }}">
-        <span class="brand-mark">A</span>
-        <span class="brand-copy"><strong>{{ site.title }}</strong><em>{{ site.tagline }}</em></span>
-      </a>
-      <nav class="aux-nav" aria-label="Primary">
-        <a href="{{ '/' | relative_url }}" {% if page.url == '/' %}class="is-active"{% endif %}>Home</a>
-        <a href="{{ '/about/' | relative_url }}" {% if page.url contains '/about/' %}class="is-active"{% endif %}>About Aux</a>
-        <a href="{{ '/articles/' | relative_url }}" {% if page.url contains '/articles/' or page.layout == 'aux-post' %}class="is-active"{% endif %}>Articles</a>
-      </nav>
+      <div class="aux-topbar-inner">
+        <a class="brand" href="{{ '/' | relative_url }}">
+          <span class="brand-copy">
+            <strong>{{ site.title }}</strong>
+            <em>{{ site.tagline }}</em>
+          </span>
+        </a>
+
+        <nav class="aux-nav" aria-label="Primary">
+          <a href="{{ '/' | relative_url }}" {% if page.url == '/' %}class="is-active"{% endif %}>Home</a>
+          <a href="{{ '/about/' | relative_url }}" {% if page.url contains '/about/' %}class="is-active"{% endif %}>About Aux</a>
+          <a href="{{ '/articles/' | relative_url }}" {% if page.url contains '/articles/' or page.layout == 'aux-post' %}class="is-active"{% endif %}>Articles</a>
+        </nav>
+      </div>
     </header>
+
     <main class="aux-shell">
       {{ content }}
     </main>
+
     <footer class="aux-footer">
       <span>© {{ site.time | date: '%Y' }} {{ site.title }}.</span>
       <span>Signals • Systems • Articles</span>
