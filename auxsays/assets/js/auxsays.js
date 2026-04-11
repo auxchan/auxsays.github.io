@@ -1,14 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
   const coverageCards = Array.from(document.querySelectorAll('[data-card]'));
-  const isTouch = window.matchMedia('(hover: none)').matches;
+  const prefersTouch = window.matchMedia('(hover: none)').matches || window.innerWidth < 900;
+
+  function setCardState(card, open) {
+    if (!card) return;
+    card.classList.toggle('is-open', open);
+    const hit = card.querySelector('.coverage-hit');
+    if (hit) hit.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
 
   function closeOthers(activeCard) {
     coverageCards.forEach((card) => {
-      if (card !== activeCard) {
-        card.classList.remove('is-open');
-        const hit = card.querySelector('.coverage-hit');
-        if (hit) hit.setAttribute('aria-expanded', 'false');
-      }
+      if (card !== activeCard) setCardState(card, false);
     });
   }
 
@@ -16,36 +19,39 @@ document.addEventListener('DOMContentLoaded', () => {
     const hit = card.querySelector('.coverage-hit');
     if (!hit) return;
 
-    if (!isTouch) {
+    if (!prefersTouch) {
       card.addEventListener('mouseenter', () => {
         closeOthers(card);
-        card.classList.add('is-open');
-        hit.setAttribute('aria-expanded', 'true');
+        setCardState(card, true);
       });
 
       card.addEventListener('mouseleave', () => {
-        card.classList.remove('is-open');
-        hit.setAttribute('aria-expanded', 'false');
+        setCardState(card, false);
       });
     }
 
     hit.addEventListener('click', () => {
       const willOpen = !card.classList.contains('is-open');
       closeOthers(card);
-      card.classList.toggle('is-open', willOpen);
-      hit.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+      setCardState(card, willOpen);
     });
   });
+
+  if (prefersTouch && coverageCards.length) {
+    setCardState(coverageCards[0], true);
+  }
 
   const reveals = document.querySelectorAll('.reveal-up');
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('is-visible');
-        revealObserver.unobserve(entry.target);
-      }
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-visible');
+      revealObserver.unobserve(entry.target);
     });
-  }, { threshold: 0.14 });
+  }, {
+    threshold: 0.14,
+    rootMargin: '0px 0px -5% 0px'
+  });
 
   reveals.forEach((el) => revealObserver.observe(el));
 
@@ -64,10 +70,9 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function requestParallax() {
-    if (!ticking) {
-      window.requestAnimationFrame(updateParallax);
-      ticking = true;
-    }
+    if (ticking) return;
+    window.requestAnimationFrame(updateParallax);
+    ticking = true;
   }
 
   if (parallaxNodes.length) {
@@ -83,10 +88,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function applyFilters() {
     const query = (search?.value || '').toLowerCase().trim();
+
     articleCards.forEach((card) => {
-      const haystack = [card.dataset.title, card.dataset.description, card.dataset.tags].join(' ');
-      const categoryMatch = activeFilter === 'all' || (card.dataset.categories || '').includes(activeFilter);
+      const haystack = [
+        card.dataset.title || '',
+        card.dataset.description || '',
+        card.dataset.tags || ''
+      ].join(' ').toLowerCase();
+
+      const categories = (card.dataset.categories || '').toLowerCase();
+      const categoryMatch = activeFilter === 'all' || categories.includes(activeFilter);
       const queryMatch = !query || haystack.includes(query);
+
       card.style.display = categoryMatch && queryMatch ? '' : 'none';
     });
   }
