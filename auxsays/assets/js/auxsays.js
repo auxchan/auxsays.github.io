@@ -1,6 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const particlesRoot = document.getElementById('systems-particles');
-
   const lottieRoot = document.getElementById('systems-lottie');
   if (window.lottie && lottieRoot) {
     try {
@@ -19,29 +17,43 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-
   function buildParticles() {
-    if (!particlesRoot) return;
-    particlesRoot.innerHTML = '';
-    const count = window.innerWidth < 860 ? 12 : 22;
+    const bgRoot = document.getElementById('systems-particles-bg');
+    const fgRoot = document.getElementById('systems-particles-fg');
+    if (!bgRoot || !fgRoot) return;
 
-    for (let i = 0; i < count; i += 1) {
-      const particle = document.createElement('span');
-      const size = (Math.random() * 18) + 4;
-      const x = Math.random() * 100;
-      const y = Math.random() * 100;
-      const depth = (Math.random() * 0.22) - 0.11;
-      const duration = (Math.random() * 18) + 18;
-      const delay = Math.random() * -duration;
+    bgRoot.innerHTML = '';
+    fgRoot.innerHTML = '';
 
-      particle.className = 'systems-particle';
-      particle.style.setProperty('--x', `${x}%`);
-      particle.style.setProperty('--y', `${y}%`);
-      particle.style.setProperty('--size', `${size}px`);
-      particle.style.setProperty('--depth', depth.toFixed(3));
-      particle.style.setProperty('--duration', `${duration}s`);
-      particle.style.setProperty('--delay', `${delay}s`);
-      particlesRoot.appendChild(particle);
+    const bgCount = window.innerWidth < 860 ? 10 : 14;
+    const fgCount = window.innerWidth < 860 ? 3 : 5;
+
+    for (let i = 0; i < bgCount; i += 1) {
+      const p = document.createElement('span');
+      const size = (Math.random() * 10) + 4;
+      p.className = 'systems-particle systems-particle--bg';
+      p.style.setProperty('--x', `${Math.random() * 100}%`);
+      p.style.setProperty('--y', `${Math.random() * 100}%`);
+      p.style.setProperty('--size', `${size}px`);
+      p.style.setProperty('--drift-x', `${(Math.random() * 28 - 14).toFixed(1)}px`);
+      p.style.setProperty('--drift-y', `${(-18 - Math.random() * 28).toFixed(1)}px`);
+      p.style.setProperty('--duration', `${16 + Math.random() * 18}s`);
+      p.style.setProperty('--delay', `${-Math.random() * 18}s`);
+      bgRoot.appendChild(p);
+    }
+
+    for (let i = 0; i < fgCount; i += 1) {
+      const p = document.createElement('span');
+      const size = (Math.random() * 16) + 14;
+      p.className = 'systems-particle systems-particle--fg';
+      p.style.setProperty('--x', `${6 + Math.random() * 88}%`);
+      p.style.setProperty('--y', `${12 + Math.random() * 78}%`);
+      p.style.setProperty('--size', `${size}px`);
+      p.style.setProperty('--drift-x', `${(Math.random() * 38 - 19).toFixed(1)}px`);
+      p.style.setProperty('--drift-y', `${(-34 - Math.random() * 40).toFixed(1)}px`);
+      p.style.setProperty('--duration', `${12 + Math.random() * 10}s`);
+      p.style.setProperty('--delay', `${-Math.random() * 10}s`);
+      fgRoot.appendChild(p);
     }
   }
 
@@ -115,13 +127,6 @@ document.addEventListener('DOMContentLoaded', () => {
       const delta = (rect.top + rect.height / 2 - vh / 2) * speed;
       node.style.transform = `translate3d(0, ${delta}px, 0)`;
     });
-
-    document.querySelectorAll('.systems-particle').forEach((node) => {
-      const depth = parseFloat(node.style.getPropertyValue('--depth') || '0');
-      const drift = window.scrollY * depth;
-      node.style.setProperty('--scroll', `${drift}px`);
-    });
-
     ticking = false;
   }
 
@@ -131,9 +136,11 @@ document.addEventListener('DOMContentLoaded', () => {
     ticking = true;
   }
 
-  requestParallax();
-  window.addEventListener('scroll', requestParallax, { passive: true });
-  window.addEventListener('resize', requestParallax);
+  if (parallaxNodes.length) {
+    requestParallax();
+    window.addEventListener('scroll', requestParallax, { passive: true });
+    window.addEventListener('resize', requestParallax);
+  }
 
   const search = document.getElementById('article-search');
   const chips = document.querySelectorAll('.chip');
