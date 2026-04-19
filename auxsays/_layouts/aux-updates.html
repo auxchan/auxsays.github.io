@@ -3,25 +3,99 @@ layout: aux-base
 ---
 
 <style>
-  .updates-shell{display:grid;gap:1.35rem}
-  .updates-hero,.updates-card{padding:1.25rem 1.3rem}
-  .updates-hero h1{margin:0 0 .55rem;font-size:clamp(2rem,4vw,4rem);line-height:.94;letter-spacing:-.05em;text-transform:uppercase}
-  .updates-hero p{margin:0;max-width:50rem;color:#d7dce7;line-height:1.75}
-  .updates-grid{display:grid;gap:1rem}
-  .updates-card{display:grid;gap:.75rem}
-  .updates-topline{display:flex;flex-wrap:wrap;gap:.75rem;color:#aab2c2;font-size:.78rem;text-transform:uppercase;letter-spacing:.16em}
-  .updates-brandline{display:flex;align-items:center;gap:.75rem}
-  .updates-brand-badge{min-width:44px;height:44px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;padding:0 .72rem;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);color:#f4f7fc;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
-  .updates-card h2{margin:0;font-size:clamp(1.3rem,2vw,1.9rem);line-height:1.08;letter-spacing:-.03em;text-transform:uppercase}
-  .updates-card p{margin:0;color:#d7dce7;line-height:1.72;max-width:60rem}
-  .updates-reaction-row{display:flex;flex-wrap:wrap;gap:.75rem;align-items:center}
-  .updates-reaction-pill{display:inline-flex;align-items:center;padding:.58rem .8rem;border-radius:999px;border:1px solid rgba(255,255,255,.08);font-size:.76rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
-  .updates-reaction-pill--positive{background:rgba(82,255,168,.10);border-color:rgba(82,255,168,.24);color:#dffcee}
-  .updates-reaction-pill--moderate{background:rgba(255,205,72,.10);border-color:rgba(255,205,72,.24);color:#fff4d1}
-  .updates-reaction-pill--negative{background:rgba(255,82,117,.12);border-color:rgba(255,82,117,.25);color:#ffe2e8}
-  .updates-reaction-pill--insufficient{background:rgba(157,177,255,.10);border-color:rgba(157,177,255,.22);color:#e7edff}
-  .updates-links{display:flex;gap:1rem;flex-wrap:wrap;margin-top:.1rem}
-  .updates-links a{color:#fff;font-weight:700}
+  .updates-shell {
+    display: grid;
+    gap: 1.35rem;
+  }
+
+  .updates-hero,
+  .updates-card {
+    padding: 1.25rem 1.3rem;
+  }
+
+  .updates-hero h1 {
+    margin: 0 0 0.55rem;
+    font-size: clamp(2rem, 4vw, 4rem);
+    line-height: 0.94;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+  }
+
+  .updates-hero p {
+    margin: 0;
+    max-width: 50rem;
+    color: #d7dce7;
+    line-height: 1.75;
+  }
+
+  .updates-grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .updates-card {
+    display: grid;
+    gap: 0.75rem;
+  }
+
+  .updates-topline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    color: #aab2c2;
+    font-size: 0.78rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+  }
+
+  .updates-brandline {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .updates-brand-badge {
+    min-width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.72rem;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.03);
+    color: #f4f7fc;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .updates-card h2 {
+    margin: 0;
+    font-size: clamp(1.3rem, 2vw, 1.9rem);
+    line-height: 1.08;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+  }
+
+  .updates-card p {
+    margin: 0;
+    color: #d7dce7;
+    line-height: 1.72;
+    max-width: 60rem;
+  }
+
+  .updates-links {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-top: 0.1rem;
+  }
+
+  .updates-links a {
+    color: #fff;
+    font-weight: 700;
+  }
 </style>
 
 {% assign update_pages = site.pages | where: "update_entry", true | sort: "update_published_at" | reverse %}
@@ -29,32 +103,40 @@ layout: aux-base
 <section class="updates-shell">
   <section class="panel updates-hero">
     <div class="eyebrow">Update pilot</div>
-    <h1>Official updates, plus early high-signal reaction.</h1>
-    <p>This pilot watches one product only: OBS Studio. Facts come from the official release source first, then a small reaction signal is computed from GitHub Issues and the official OBS Forums.</p>
+    <h1>Official updates, summarized cleanly.</h1>
+    <p>This pilot watches one trusted source only: OBS Studio official GitHub releases. Each entry keeps the date high in view, links back to the official source, and strips the summary down to facts instead of hype.</p>
   </section>
 
   <section class="updates-grid">
     {% for item in update_pages %}
-    {% assign reaction_class = item.community_reaction | default: 'insufficient' %}
     <article class="panel updates-card">
       <div class="updates-topline">
         <span>{{ item.update_published_at | date: "%b %d, %Y" }}</span>
         <span>Version {{ item.update_version }}</span>
         <span>{{ item.update_category }}</span>
       </div>
+
       <div class="updates-brandline">
-        <span class="updates-brand-badge">{% if item.update_logo_text %}{{ item.update_logo_text }}{% else %}{{ item.update_product | slice: 0, 3 }}{% endif %}</span>
+        <span class="updates-brand-badge">
+          {% if item.update_logo_text %}
+            {{ item.update_logo_text }}
+          {% else %}
+            {{ item.update_product | slice: 0, 3 }}
+          {% endif %}
+        </span>
         <h2><a href="{{ item.url | relative_url }}">{{ item.title }}</a></h2>
       </div>
+
       <p>{{ item.description }}</p>
-      <div class="updates-reaction-row">
-        <span class="updates-reaction-pill updates-reaction-pill--{{ reaction_class }}">{{ item.community_reaction | default: 'Insufficient data' }}</span>
-        {% if item.community_summary %}<span>{{ item.community_summary }}</span>{% endif %}
-      </div>
+
       <div class="updates-links">
         <a href="{{ item.url | relative_url }}">Read breakdown →</a>
-        {% if item.update_source_url %}<a href="{{ item.update_source_url }}">Official source ↗</a>{% endif %}
-        {% if item.update_download_url %}<a href="{{ item.update_download_url }}">Download page ↗</a>{% endif %}
+        {% if item.update_source_url %}
+        <a href="{{ item.update_source_url }}">Official source ↗</a>
+        {% endif %}
+        {% if item.update_download_url %}
+        <a href="{{ item.update_download_url }}">Download page ↗</a>
+        {% endif %}
       </div>
     </article>
     {% endfor %}

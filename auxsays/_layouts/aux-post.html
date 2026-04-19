@@ -1,21 +1,186 @@
 ---
 layout: aux-base
 ---
-<article class="post-shell">
-  <header class="panel post-hero reveal-up">
-    <div class="eyebrow">{% if page.categories and page.categories.first %}{{ page.categories.first }}{% else %}Article{% endif %}</div>
-    <h1 class="post-title">{{ page.title }}</h1>
-    {% if page.description %}<p class="post-description">{{ page.description }}</p>{% endif %}
-    <div class="post-meta-line">
-      <span>{{ page.date | date: '%b %d, %Y' }}</span>
-      {% if page.tags %}<span>{{ page.tags | join: ' • ' }}</span>{% endif %}
-      <span><a href="{{ '/articles/' | relative_url }}">Back to articles</a></span>
-    </div>
-  </header>
 
-  <section class="panel post-body reveal-up reveal-delay-1">
-    <div class="post-content prose-tight">
-      {{ content }}
+{% assign words = content | number_of_words %}
+{% assign read_minutes = words | divided_by: 180 %}
+{% if read_minutes < 1 %}
+  {% assign read_minutes = 1 %}
+{% endif %}
+{% assign primary_category = page.categories | first %}
+{% assign related_posts = site.posts | where_exp: "item", "item.url != page.url" %}
+
+<style>
+  .aux-article-page {
+    width: min(1180px, calc(100vw - 48px));
+    margin: 1.4rem auto 2.2rem;
+    display: grid;
+    gap: 1.35rem;
+  }
+
+  .aux-article-page .panel {
+    background: linear-gradient(180deg, rgba(14, 18, 30, 0.86), rgba(7, 10, 18, 0.94));
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 28px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.26);
+  }
+
+  .article-hero { padding: 1.45rem 1.5rem 1.55rem; }
+  .article-hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(250px, 0.75fr);
+    gap: 1.4rem;
+    align-items: start;
+  }
+  .article-back-link {
+    display: inline-flex; align-items: center; gap: 0.45rem; margin-bottom: 1rem;
+    font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.16em; color: #aeb6c6;
+  }
+  .article-back-link:hover { color: #ffffff; }
+  .article-eyebrow {
+    display: inline-flex; align-items: center; gap: 0.55rem; margin-bottom: 0.9rem;
+    color: #9ea7b8; font-size: 0.76rem; text-transform: uppercase; letter-spacing: 0.19em;
+  }
+  .article-eyebrow::before {
+    content: ''; width: 34px; height: 2px; background: linear-gradient(90deg, #ff3652, transparent);
+  }
+  .article-title {
+    margin: 0; max-width: 14ch; font-size: clamp(2.3rem, 4vw, 4.7rem); line-height: 0.94;
+    letter-spacing: -0.055em; text-transform: uppercase; font-weight: 900; color: #f3f5fa;
+  }
+  .article-dek {
+    margin: 1rem 0 0; max-width: 40rem; color: #d6dbe7; font-size: 1.18rem; line-height: 1.72;
+  }
+  .article-surmise {
+    margin-top: 1.2rem; max-width: 42rem; padding: 1rem 1.05rem; border-radius: 18px;
+    border: 1px solid rgba(255, 255, 255, 0.07); background: rgba(255, 255, 255, 0.03);
+  }
+  .article-surmise-label {
+    display: block; margin-bottom: 0.45rem; color: #9ea7b8; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.2em;
+  }
+  .article-surmise p { margin: 0; color: #e3e8f2; line-height: 1.72; }
+  .article-rail-card {
+    position: sticky; top: 104px; display: grid; gap: 0.85rem; padding: 1rem 1rem 1.05rem;
+    border-radius: 22px; border: 1px solid rgba(255, 255, 255, 0.07); background: rgba(255, 255, 255, 0.03);
+  }
+  .rail-row { display: grid; gap: 0.2rem; }
+  .rail-label { color: #9ea7b8; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.18em; }
+  .rail-value { color: #f0f3f9; font-size: 1rem; line-height: 1.45; }
+  .article-body {
+    transition: background 240ms ease, border-color 240ms ease, box-shadow 240ms ease, opacity 240ms ease;
+    background: linear-gradient(180deg, rgba(14, 18, 30, 0.76), rgba(7, 10, 18, 0.82)); opacity: 0.97;
+  }
+  .aux-article-page.is-reading .article-body {
+    background: linear-gradient(180deg, rgba(14, 18, 30, 0.94), rgba(7, 10, 18, 0.985));
+    border-color: rgba(255, 255, 255, 0.12); box-shadow: 0 18px 46px rgba(0, 0, 0, 0.22); opacity: 1;
+  }
+  .article-body-inner { max-width: 760px; padding: 1.55rem 1.55rem 1.9rem; }
+  .article-body-inner > :first-child { margin-top: 0; }
+  .article-body-inner h2, .article-body-inner h3, .article-body-inner h4 {
+    color: #f3f5fa; letter-spacing: -0.03em; line-height: 1.08; margin-top: 1.5em; margin-bottom: 0.55em;
+  }
+  .article-body-inner h2 { font-size: clamp(1.75rem, 2.4vw, 2.55rem); text-transform: uppercase; }
+  .article-body-inner h3 { font-size: clamp(1.25rem, 1.9vw, 1.7rem); text-transform: uppercase; }
+  .article-body-inner p, .article-body-inner li, .article-body-inner blockquote {
+    color: #dce2ee; font-size: 1.08rem; line-height: 1.88;
+  }
+  .article-body-inner ul, .article-body-inner ol { padding-left: 1.3rem; }
+  .article-body-inner a { color: #d9e4ff; text-decoration: underline; text-decoration-color: rgba(157, 177, 255, 0.45); text-underline-offset: 0.16em; }
+  .article-body-inner strong { color: #ffffff; }
+  .article-body-inner hr { border: 0; border-top: 1px solid rgba(255, 255, 255, 0.08); margin: 2rem 0; }
+  .article-bottom-stack { display: grid; gap: 1rem; }
+  .article-tags, .article-related, .article-nav-strip { padding: 1.2rem 1.25rem 1.25rem; }
+  .article-section-label {
+    display: inline-flex; align-items: center; gap: 0.55rem; margin-bottom: 0.9rem; color: #9ea7b8;
+    font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.18em;
+  }
+  .article-section-label::before { content: ''; width: 34px; height: 2px; background: linear-gradient(90deg, #ff3652, transparent); }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+  .tag-chip {
+    display: inline-flex; align-items: center; padding: 0.7rem 0.95rem; border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.08); background: rgba(255, 255, 255, 0.03); color: #dde3ee; font-size: 0.86rem;
+  }
+  .article-nav-grid, .article-related-grid { display: grid; gap: 1rem; }
+  .article-nav-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .article-related-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .article-nav-card, .article-related-card {
+    display: grid; gap: 0.55rem; padding: 1rem 1rem 1.05rem; border-radius: 22px;
+    border: 1px solid rgba(255, 255, 255, 0.08); background: rgba(255, 255, 255, 0.028);
+  }
+  .article-nav-card:hover, .article-related-card:hover { border-color: rgba(255, 255, 255, 0.13); background: rgba(255, 255, 255, 0.04); }
+  .mini-meta { color: #9ea7b8; font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.16em; }
+  .article-nav-card strong, .article-related-card strong { color: #f2f5fb; line-height: 1.32; font-size: 1rem; }
+  .article-related-card p { margin: 0; color: #d6dde9; line-height: 1.68; font-size: 0.98rem; }
+  @media (max-width: 980px) {
+    .aux-article-page { width: calc(100vw - 24px); margin: 1rem auto 1.6rem; }
+    .article-hero-grid { grid-template-columns: 1fr; gap: 1rem; }
+    .article-rail-card { position: static; }
+    .article-title { max-width: 100%; font-size: clamp(2rem, 8vw, 3.45rem); }
+    .article-body-inner { padding: 1.2rem 1.15rem 1.45rem; }
+    .article-nav-grid, .article-related-grid { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div class="aux-article-page" data-article-page>
+  <section class="article-hero panel" data-article-hero>
+    <div class="article-hero-grid">
+      <div class="article-hero-main">
+        <a class="article-back-link" href="{{ '/articles/' | relative_url }}">← Back to Articles</a>
+        <div class="article-eyebrow">
+          <span>Article</span>
+          {% if primary_category %}<span>{{ primary_category }}</span>{% endif %}
+        </div>
+        <h1 class="article-title">{{ page.title }}</h1>
+        {% if page.description %}<p class="article-dek">{{ page.description }}</p>{% elsif page.excerpt %}<p class="article-dek">{{ page.excerpt | strip_html | truncate: 200 }}</p>{% endif %}
+        {% if page.description %}
+          <div class="article-surmise"><span class="article-surmise-label">Surmise</span><p>{{ page.description }}</p></div>
+        {% endif %}
+      </div>
+      <aside class="article-hero-rail">
+        <div class="article-rail-card">
+          <div class="rail-row"><span class="rail-label">Published</span><span class="rail-value">{{ page.date | date: "%b %d, %Y" }}</span></div>
+          <div class="rail-row"><span class="rail-label">Read time</span><span class="rail-value">{{ read_minutes }} min. read</span></div>
+          {% if primary_category %}<div class="rail-row"><span class="rail-label">Primary category</span><span class="rail-value">{{ primary_category }}</span></div>{% endif %}
+          {% if page.categories and page.categories.size > 1 %}<div class="rail-row"><span class="rail-label">Also filed under</span><span class="rail-value">{% for category in page.categories offset:1 %}{{ category }}{% unless forloop.last %}, {% endunless %}{% endfor %}</span></div>{% endif %}
+        </div>
+      </aside>
     </div>
   </section>
-</article>
+
+  <section class="article-reading-shell">
+    <article class="article-body panel"><div class="article-body-inner">{{ content }}</div></article>
+  </section>
+
+  <section class="article-bottom-stack">
+    {% if page.tags and page.tags.size > 0 %}
+    <section class="article-tags panel"><div class="article-section-label">Tags</div><div class="tag-row">{% for tag in page.tags %}<span class="tag-chip">{{ tag }}</span>{% endfor %}</div></section>
+    {% endif %}
+    {% if page.previous or page.next %}
+    <section class="article-nav-strip panel"><div class="article-section-label">Keep reading</div><div class="article-nav-grid">{% if page.previous %}<a class="article-nav-card" href="{{ page.previous.url | relative_url }}"><span class="mini-meta">Previous article</span><strong>{{ page.previous.title }}</strong></a>{% endif %}{% if page.next %}<a class="article-nav-card" href="{{ page.next.url | relative_url }}"><span class="mini-meta">Next article</span><strong>{{ page.next.title }}</strong></a>{% endif %}</div></section>
+    {% endif %}
+    <section class="article-related panel"><div class="article-section-label">Related reads</div><div class="article-related-grid">{% assign shown = 0 %}{% for post in related_posts %}{% if shown < 3 %}<a class="article-related-card" href="{{ post.url | relative_url }}"><span class="mini-meta">{{ post.date | date: "%b %d, %Y" }}{% if post.categories and post.categories.first %} · {{ post.categories.first }}{% endif %}</span><strong>{{ post.title }}</strong><p>{{ post.description | default: post.excerpt | strip_html | truncate: 120 }}</p></a>{% assign shown = shown | plus: 1 %}{% endif %}{% endfor %}</div></section>
+  </section>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const page = document.querySelector('[data-article-page]');
+  const hero = document.querySelector('[data-article-hero]');
+  if (!page || !hero) return;
+  let ticking = false;
+  function updateArticleReadingState() {
+    const heroBottom = hero.getBoundingClientRect().bottom;
+    const trigger = 140;
+    page.classList.toggle('is-reading', heroBottom <= trigger);
+    ticking = false;
+  }
+  function requestUpdate() {
+    if (ticking) return;
+    window.requestAnimationFrame(updateArticleReadingState);
+    ticking = true;
+  }
+  requestUpdate();
+  window.addEventListener('scroll', requestUpdate, { passive: true });
+  window.addEventListener('resize', requestUpdate);
+});
+</script>
