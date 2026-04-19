@@ -1,0 +1,140 @@
+---
+layout: aux-base
+---
+
+<style>
+  .update-page-shell {
+    display: grid;
+    gap: 1.2rem;
+  }
+  .update-hero,
+  .update-body,
+  .update-bottom {
+    padding: 1.25rem 1.3rem;
+  }
+  .update-topline {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    color: #aab2c2;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    margin-bottom: 0.9rem;
+  }
+  .update-title {
+    margin: 0;
+    max-width: 15ch;
+    font-size: clamp(2.1rem, 4vw, 4.3rem);
+    line-height: 0.94;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+  }
+  .update-dek {
+    margin: 0.9rem 0 0;
+    max-width: 46rem;
+    color: #d8dce7;
+    line-height: 1.76;
+    font-size: 1.08rem;
+  }
+  .update-source-row {
+    margin-top: 1rem;
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .update-source-row a {
+    color: #fff;
+    font-weight: 700;
+  }
+  .update-body .prose {
+    max-width: 760px;
+  }
+  .update-body .prose > :first-child {
+    margin-top: 0;
+  }
+  .update-body p,
+  .update-body li {
+    color: #dce2ee;
+    line-height: 1.86;
+    font-size: 1.05rem;
+  }
+  .update-body h2,
+  .update-body h3 {
+    text-transform: uppercase;
+    letter-spacing: -0.03em;
+    line-height: 1.08;
+  }
+  .update-bottom-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .mini-meta-card {
+    padding: 1rem;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.025);
+    display: grid;
+    gap: 0.3rem;
+  }
+  .mini-meta-card .label {
+    color: #aab2c2;
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+  }
+  .mini-meta-card .value {
+    color: #f0f3f9;
+    line-height: 1.5;
+  }
+  @media (max-width: 860px) {
+    .update-bottom-grid {
+      grid-template-columns: 1fr;
+    }
+    .update-title {
+      max-width: 100%;
+      font-size: clamp(2rem, 10vw, 3.4rem);
+    }
+  }
+</style>
+
+<section class="update-page-shell">
+  <section class="panel update-hero">
+    <a class="article-back-link" href="{{ '/updates/' | relative_url }}">← Back to Updates</a>
+    <div class="update-topline">
+      <span>{{ page.update_published_at | date: "%b %d, %Y" }}</span>
+      <span>Version {{ page.update_version }}</span>
+      <span>{{ page.update_product }}</span>
+      <span>{{ page.update_category }}</span>
+    </div>
+    <h1 class="update-title">{{ page.title }}</h1>
+    {% if page.description %}<p class="update-dek">{{ page.description }}</p>{% endif %}
+    <div class="update-source-row">
+      <a href="{{ page.update_source_url }}">Official source ↗</a>
+    </div>
+  </section>
+
+  <section class="panel update-body">
+    <div class="prose">
+      {{ content }}
+    </div>
+  </section>
+
+  <section class="panel update-bottom">
+    <div class="update-bottom-grid">
+      <div class="mini-meta-card">
+        <span class="label">Published</span>
+        <span class="value">{{ page.update_published_at | date: "%b %d, %Y" }}</span>
+      </div>
+      <div class="mini-meta-card">
+        <span class="label">Last checked</span>
+        <span class="value">{{ page.update_last_checked | date: "%b %d, %Y %H:%M UTC" }}</span>
+      </div>
+      <div class="mini-meta-card">
+        <span class="label">Consensus layer</span>
+        <span class="value">Not enabled in this pilot yet. This page is currently official-source only.</span>
+      </div>
+    </div>
+  </section>
+</section>
