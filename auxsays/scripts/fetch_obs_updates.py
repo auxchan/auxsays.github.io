@@ -10,6 +10,12 @@ API_URL = "https://api.github.com/repos/obsproject/obs-studio/releases/latest"
 OUTPUT_DIR = pathlib.Path("auxsays/updates/generated")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
+DOWNLOAD_PAGE_URL = "https://obsproject.com/download"
+PRODUCT_NAME = "OBS Studio"
+CATEGORY = "creator-software"
+TYPE = "broadcasting"
+LOGO_TEXT = "OBS"
+
 
 def github_request(url: str):
     headers = {
@@ -33,76 +39,123 @@ def slugify(value: str) -> str:
 def split_sections(body: str):
     current = "General"
     sections = {current: []}
+
     for raw in body.splitlines():
         line = raw.strip()
         if not line:
             continue
+
         if line.startswith("#"):
             current = re.sub(r"^#+\s*", "", line).strip()
             sections.setdefault(current, [])
             continue
-        if line.startswith(('-', '*')):
+
+        if line.startswith(("-", "*")):
             item = line[1:].strip()
-            if item:
+            if item and not item.startswith("!"):
                 sections.setdefault(current, []).append(item)
             continue
-        if line and not line.startswith('!['):
+
+        if line and not line.startswith("!["):
             sections.setdefault(current, []).append(line)
+
     return {k: v for k, v in sections.items() if v}
 
 
-def build_summary(sections: dict):
+def collect_bullets(sections: dict, max_items: int = 8):
     bullets = []
     for items in sections.values():
         for item in items:
-            bullets.append(item)
-    bullets = bullets[:6]
-    if not bullets:
-        return "Official OBS Studio release notes are available at the linked source.", []
-    lead = bullets[0]
+            cleaned = re.sub(r"\s+", " ", item).strip()
+            if cleaned:
+                bullets.append(cleaned)
+            if len(bullets) >= max_items:
+                return bullets
+    return bullets
+
+
+def build_summary(version: str, published_at: str, bullets: list[str]) -> str:
+    date_str = published_at[:10]
+    try:
+        date_obj = dt.datetime.fromisoformat(date_str)
+        nice_date = date_obj.strftime("%b %d, %Y")
+    except ValueError:
+        nice_date = date_str
+
+    summary_parts = []
+    if bullets:
+        summary_parts.append(bullets[0])
     if len(bullets) > 1:
-        lead += " " + bullets[1]
-    return lead, bullets
+        summary_parts.append(bullets[1])
+
+    summary = " ".join(summary_parts).strip()
+    if not summary:
+        summary = f"{PRODUCT_NAME} {version} is the latest official release published by the developer."
+
+    return f"Published {nice_date}. {summary}"
+
+
+def section_block(heading: str, items: list[str]) -> str:
+    lines = [f"## {heading}", ""]
+    for item in items[:8]:
+        lines.append(f"- {item}")
+    lines.append("")
+    return "\n".join(lines)
 
 
 def format_release(data: dict):
     version = data.get("tag_name") or data.get("name") or "latest"
-    release_name = data.get("name") or version
-    published_at = data.get("published_at") or dt.datetime.utcnow().isoformat() + "Z"
+    published_at = data.get("published_at") or dt.datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
     published_date = published_at[:10]
     body = data.get("body") or ""
     html_url = data.get("html_url") or "https://github.com/obsproject/obs-studio/releases"
 
     sections = split_sections(body)
-    summary, bullets = build_summary(sections)
-    why_it_matters = bullets[0] if bullets else "OBS Studio shipped a new release from the official repository."
+    bullets = collect_bullets(sections, max_items=8)
+    summary = build_summary(version, published_at, bullets)
 
     slug = slugify(version)
     filename = OUTPUT_DIR / f"{published_date}-obs-studio-{slug}.md"
     if filename.exists():
         return None
 
-    section_md = []
-    for heading, items in list(sections.items())[:5]:
-        clean_items = items[:8]
-        section_md.append(f"## {heading}\n")
-        for item in clean_items:
-            section_md.append(f"- {item}")
-        section_md.append("")
+    if bullets:
+        key_changes = section_block("Key changes", bullets[:4])
+    else:
+        key_changes = textwrap.dedent("""        ## Key changes
 
-    content = textwrap.dedent(f"""\
-    ---
+        - Official release notes are available at the linked source.
+        """)
+
+    structured_sections = []
+    count = 0
+    for heading, items in sections.items():
+        if count >= 4:
+            break
+        structured_sections.append(section_block(heading, items))
+        count += 1
+
+    official_breakdown = "\n".join(structured_sections).strip()
+    if not official_breakdown:
+        official_breakdown = textwrap.dedent("""        ## Official breakdown
+
+        - Official release notes are available at the linked source.
+        """)
+
+    content = textwrap.dedent(f"""    ---
     layout: aux-update
-    title: "OBS Studio {version}: official update breakdown"
-    description: "{summary.replace('"', '\\"')}"
+    title: "{PRODUCT_NAME} {version} official update breakdown"
+    description: "{summary.replace('"', '\\\"')}"
     permalink: /updates/obs-studio/{slug}/
     update_entry: true
-    update_product: "OBS Studio"
-    update_category: "creator-software"
-    update_type: "broadcasting"
+    update_product: "{PRODUCT_NAME}"
+    update_category: "{CATEGORY}"
+    update_type: "{TYPE}"
     update_source_name: "GitHub Releases"
     update_source_url: "{html_url}"
+    update_download_url: "{DOWNLOAD_PAGE_URL}"
     update_version: "{version}"
+    update_logo_text: "{LOGO_TEXT}"
     update_published_at: "{published_at}"
     update_last_checked: "{dt.datetime.utcnow().replace(microsecond=0).isoformat()}Z"
     update_sentiment_ready: false
@@ -113,21 +166,14 @@ def format_release(data: dict):
       - updates
     ---
 
-    ## TL;DR
+    {key_changes}
 
-    {summary}
-
-    ## Why this matters
-
-    {why_it_matters}
-
-    ## Official breakdown
-
-    {'\n'.join(section_md).strip()}
+    {official_breakdown}
 
     ## Source
 
-    - Official release notes: {html_url}
+    - Official GitHub releases: {html_url}
+    - Official download page: {DOWNLOAD_PAGE_URL}
     """)
     filename.write_text(content, encoding="utf-8")
     return str(filename)
