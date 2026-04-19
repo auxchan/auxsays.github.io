@@ -1,15 +1,15 @@
-name: OBS Update Watch
+name: OBS Updates Consensus Pilot
 
 on:
+  workflow_dispatch:
   schedule:
     - cron: '17 */6 * * *'
-  workflow_dispatch:
 
 permissions:
   contents: write
 
 jobs:
-  obs_updates:
+  generate:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -18,21 +18,19 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
-      - name: Fetch latest OBS release and generate page
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Generate OBS update page
         run: python auxsays/scripts/fetch_obs_updates.py
 
-      - name: Commit and push if changed
+      - name: Commit generated updates
         run: |
-          if [[ -n "$(git status --porcelain)" ]]; then
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-            git add auxsays/updates/generated
-            git commit -m "Add OBS update entry"
-            git push
-          else
-            echo "No new OBS updates found."
+          if git diff --quiet; then
+            echo "No content changes."
+            exit 0
           fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add auxsays/updates/generated auxsays/updates/index.md
+          git commit -m "Update OBS update digest"
+          git push
