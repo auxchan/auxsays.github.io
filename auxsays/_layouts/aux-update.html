@@ -7,11 +7,39 @@ layout: aux-base
     display: grid;
     gap: 1.2rem;
   }
+
   .update-hero,
   .update-body,
   .update-bottom {
     padding: 1.25rem 1.3rem;
   }
+
+  .update-hero-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(240px, 0.75fr);
+    gap: 1.25rem;
+    align-items: start;
+  }
+
+  .update-hero-main {
+    min-width: 0;
+  }
+
+  .update-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: 0.95rem;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: #aeb6c6;
+  }
+
+  .update-back-link:hover {
+    color: #ffffff;
+  }
+
   .update-topline {
     display: flex;
     flex-wrap: wrap;
@@ -22,54 +50,160 @@ layout: aux-base
     letter-spacing: 0.16em;
     margin-bottom: 0.9rem;
   }
+
+  .update-brand-row {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 0.9rem;
+  }
+
+  .update-brand-badge {
+    min-width: 52px;
+    height: 52px;
+    border-radius: 16px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.8rem;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.03);
+    color: #f4f7fc;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .update-brand-meta {
+    display: grid;
+    gap: 0.18rem;
+  }
+
+  .update-brand-meta strong {
+    color: #f4f7fc;
+    font-size: 1rem;
+    line-height: 1.1;
+  }
+
+  .update-brand-meta span {
+    color: #aab2c2;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.14em;
+  }
+
   .update-title {
     margin: 0;
-    max-width: 15ch;
-    font-size: clamp(2.1rem, 4vw, 4.3rem);
+    max-width: 14ch;
+    font-size: clamp(2.2rem, 4vw, 4.2rem);
     line-height: 0.94;
     letter-spacing: -0.05em;
     text-transform: uppercase;
   }
-  .update-dek {
-    margin: 0.9rem 0 0;
+
+  .update-summary {
+    margin: 1rem 0 0;
     max-width: 46rem;
-    color: #d8dce7;
-    line-height: 1.76;
-    font-size: 1.08rem;
+    padding: 1rem 1.05rem;
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,0.07);
+    background: rgba(255,255,255,0.03);
   }
+
+  .update-summary-label {
+    display: block;
+    margin-bottom: 0.45rem;
+    color: #9ea7b8;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+  }
+
+  .update-summary p {
+    margin: 0;
+    color: #e3e8f2;
+    line-height: 1.72;
+    font-size: 1.04rem;
+  }
+
   .update-source-row {
     margin-top: 1rem;
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
   }
-  .update-source-row a {
+
+  .update-source-row a,
+  .update-bottom-links a {
     color: #fff;
     font-weight: 700;
   }
+
+  .update-side-card {
+    display: grid;
+    gap: 0.8rem;
+    padding: 1rem 1rem 1.05rem;
+    border-radius: 22px;
+    border: 1px solid rgba(255,255,255,0.07);
+    background: rgba(255,255,255,0.03);
+  }
+
+  .update-side-row {
+    display: grid;
+    gap: 0.2rem;
+  }
+
+  .update-side-label {
+    color: #9ea7b8;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+  }
+
+  .update-side-value {
+    color: #f0f3f9;
+    line-height: 1.5;
+  }
+
   .update-body .prose {
     max-width: 760px;
   }
+
   .update-body .prose > :first-child {
     margin-top: 0;
   }
+
   .update-body p,
   .update-body li {
     color: #dce2ee;
     line-height: 1.86;
     font-size: 1.05rem;
   }
+
   .update-body h2,
   .update-body h3 {
     text-transform: uppercase;
     letter-spacing: -0.03em;
     line-height: 1.08;
   }
+
+  .update-bottom {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .update-bottom-links {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
   .update-bottom-grid {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 1rem;
   }
+
   .mini-meta-card {
     padding: 1rem;
     border-radius: 20px;
@@ -78,40 +212,100 @@ layout: aux-base
     display: grid;
     gap: 0.3rem;
   }
+
   .mini-meta-card .label {
     color: #aab2c2;
     font-size: 0.72rem;
     letter-spacing: 0.18em;
     text-transform: uppercase;
   }
+
   .mini-meta-card .value {
     color: #f0f3f9;
     line-height: 1.5;
   }
+
   @media (max-width: 860px) {
+    .update-hero-grid,
     .update-bottom-grid {
       grid-template-columns: 1fr;
     }
+
     .update-title {
       max-width: 100%;
-      font-size: clamp(2rem, 10vw, 3.4rem);
+      font-size: clamp(2rem, 10vw, 3.35rem);
     }
   }
 </style>
 
 <section class="update-page-shell">
   <section class="panel update-hero">
-    <a class="article-back-link" href="{{ '/updates/' | relative_url }}">← Back to Updates</a>
-    <div class="update-topline">
-      <span>{{ page.update_published_at | date: "%b %d, %Y" }}</span>
-      <span>Version {{ page.update_version }}</span>
-      <span>{{ page.update_product }}</span>
-      <span>{{ page.update_category }}</span>
-    </div>
-    <h1 class="update-title">{{ page.title }}</h1>
-    {% if page.description %}<p class="update-dek">{{ page.description }}</p>{% endif %}
-    <div class="update-source-row">
-      <a href="{{ page.update_source_url }}">Official source ↗</a>
+    <div class="update-hero-grid">
+      <div class="update-hero-main">
+        <a class="update-back-link" href="{{ '/updates/' | relative_url }}">← Back to Updates</a>
+
+        <div class="update-topline">
+          <span>{{ page.update_published_at | date: "%b %d, %Y" }}</span>
+          <span>Version {{ page.update_version }}</span>
+          <span>{{ page.update_product }}</span>
+          <span>{{ page.update_category }}</span>
+        </div>
+
+        <div class="update-brand-row">
+          <span class="update-brand-badge">
+            {% if page.update_logo_text %}
+              {{ page.update_logo_text }}
+            {% else %}
+              {{ page.update_product | slice: 0, 3 }}
+            {% endif %}
+          </span>
+          <span class="update-brand-meta">
+            <strong>{{ page.update_product }}</strong>
+            <span>{{ page.update_source_name }}</span>
+          </span>
+        </div>
+
+        <h1 class="update-title">{{ page.title }}</h1>
+
+        {% if page.description %}
+        <div class="update-summary">
+          <span class="update-summary-label">Summary</span>
+          <p>{{ page.description }}</p>
+        </div>
+        {% endif %}
+
+        <div class="update-source-row">
+          {% if page.update_source_url %}
+          <a href="{{ page.update_source_url }}">Official source ↗</a>
+          {% endif %}
+          {% if page.update_download_url %}
+          <a href="{{ page.update_download_url }}">Download page ↗</a>
+          {% endif %}
+        </div>
+      </div>
+
+      <aside class="update-hero-side">
+        <div class="update-side-card">
+          <div class="update-side-row">
+            <span class="update-side-label">Published</span>
+            <span class="update-side-value">{{ page.update_published_at | date: "%b %d, %Y" }}</span>
+          </div>
+          <div class="update-side-row">
+            <span class="update-side-label">Version</span>
+            <span class="update-side-value">{{ page.update_version }}</span>
+          </div>
+          <div class="update-side-row">
+            <span class="update-side-label">Last checked</span>
+            <span class="update-side-value">{{ page.update_last_checked | date: "%b %d, %Y %H:%M UTC" }}</span>
+          </div>
+          {% if page.update_type %}
+          <div class="update-side-row">
+            <span class="update-side-label">Type</span>
+            <span class="update-side-value">{{ page.update_type }}</span>
+          </div>
+          {% endif %}
+        </div>
+      </aside>
     </div>
   </section>
 
@@ -122,6 +316,15 @@ layout: aux-base
   </section>
 
   <section class="panel update-bottom">
+    <div class="update-bottom-links">
+      {% if page.update_source_url %}
+      <a href="{{ page.update_source_url }}">Official source ↗</a>
+      {% endif %}
+      {% if page.update_download_url %}
+      <a href="{{ page.update_download_url }}">Download page ↗</a>
+      {% endif %}
+    </div>
+
     <div class="update-bottom-grid">
       <div class="mini-meta-card">
         <span class="label">Published</span>
@@ -132,8 +335,8 @@ layout: aux-base
         <span class="value">{{ page.update_last_checked | date: "%b %d, %Y %H:%M UTC" }}</span>
       </div>
       <div class="mini-meta-card">
-        <span class="label">Consensus layer</span>
-        <span class="value">Not enabled in this pilot yet. This page is currently official-source only.</span>
+        <span class="label">Source mode</span>
+        <span class="value">Official-source summary pilot. Community consensus is not enabled yet.</span>
       </div>
     </div>
   </section>

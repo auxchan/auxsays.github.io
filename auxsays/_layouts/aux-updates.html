@@ -7,10 +7,12 @@ layout: aux-base
     display: grid;
     gap: 1.35rem;
   }
+
   .updates-hero,
   .updates-card {
     padding: 1.25rem 1.3rem;
   }
+
   .updates-hero h1 {
     margin: 0 0 0.55rem;
     font-size: clamp(2rem, 4vw, 4rem);
@@ -18,20 +20,24 @@ layout: aux-base
     letter-spacing: -0.05em;
     text-transform: uppercase;
   }
+
   .updates-hero p {
     margin: 0;
     max-width: 50rem;
     color: #d7dce7;
     line-height: 1.75;
   }
+
   .updates-grid {
     display: grid;
     gap: 1rem;
   }
+
   .updates-card {
     display: grid;
     gap: 0.75rem;
   }
+
   .updates-topline {
     display: flex;
     flex-wrap: wrap;
@@ -41,6 +47,29 @@ layout: aux-base
     text-transform: uppercase;
     letter-spacing: 0.16em;
   }
+
+  .updates-brandline {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .updates-brand-badge {
+    min-width: 44px;
+    height: 44px;
+    border-radius: 14px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0 0.72rem;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.03);
+    color: #f4f7fc;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
   .updates-card h2 {
     margin: 0;
     font-size: clamp(1.3rem, 2vw, 1.9rem);
@@ -48,18 +77,21 @@ layout: aux-base
     letter-spacing: -0.03em;
     text-transform: uppercase;
   }
+
   .updates-card p {
     margin: 0;
     color: #d7dce7;
     line-height: 1.72;
     max-width: 60rem;
   }
+
   .updates-links {
     display: flex;
     gap: 1rem;
     flex-wrap: wrap;
     margin-top: 0.1rem;
   }
+
   .updates-links a {
     color: #fff;
     font-weight: 700;
@@ -72,7 +104,7 @@ layout: aux-base
   <section class="panel updates-hero">
     <div class="eyebrow">Update pilot</div>
     <h1>Official updates, summarized cleanly.</h1>
-    <p>This pilot watches one trusted source only: OBS Studio official GitHub releases. Each entry keeps the date high in view, pulls from the official developer release notes, and rewrites them into a quicker breakdown without hiding the source.</p>
+    <p>This pilot watches one trusted source only: OBS Studio official GitHub releases. Each entry keeps the date high in view, links back to the official source, and strips the summary down to facts instead of hype.</p>
   </section>
 
   <section class="updates-grid">
@@ -81,14 +113,30 @@ layout: aux-base
       <div class="updates-topline">
         <span>{{ item.update_published_at | date: "%b %d, %Y" }}</span>
         <span>Version {{ item.update_version }}</span>
-        <span>{{ item.update_product }}</span>
         <span>{{ item.update_category }}</span>
       </div>
-      <h2><a href="{{ item.url | relative_url }}">{{ item.title }}</a></h2>
+
+      <div class="updates-brandline">
+        <span class="updates-brand-badge">
+          {% if item.update_logo_text %}
+            {{ item.update_logo_text }}
+          {% else %}
+            {{ item.update_product | slice: 0, 3 }}
+          {% endif %}
+        </span>
+        <h2><a href="{{ item.url | relative_url }}">{{ item.title }}</a></h2>
+      </div>
+
       <p>{{ item.description }}</p>
+
       <div class="updates-links">
         <a href="{{ item.url | relative_url }}">Read breakdown →</a>
+        {% if item.update_source_url %}
         <a href="{{ item.update_source_url }}">Official source ↗</a>
+        {% endif %}
+        {% if item.update_download_url %}
+        <a href="{{ item.update_download_url }}">Download page ↗</a>
+        {% endif %}
       </div>
     </article>
     {% endfor %}
