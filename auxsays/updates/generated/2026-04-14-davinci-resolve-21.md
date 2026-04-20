@@ -13,7 +13,7 @@ update_download_url: "https://www.blackmagicdesign.com/event/davinciresolvedownl
 update_version: "21"
 update_logo_text: "BMD"
 update_published_at: "2026-04-14T00:00:00Z"
-update_last_checked: "2026-04-20T07:30:06Z"
+update_last_checked: "2026-04-20T16:39:34Z"
 update_consensus_label: "Insufficient data"
 update_consensus_confidence: "Low"
 update_consensus_sample_count: 0
