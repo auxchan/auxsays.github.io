@@ -1,5 +1,5 @@
 ---
 layout: aux-updates
-title: Patch Feed
+title: Updates
 permalink: /updates/
 ---
