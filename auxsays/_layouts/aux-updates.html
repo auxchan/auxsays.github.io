@@ -1,142 +1,76 @@
 ---
 layout: aux-base
 ---
+{% assign update_pages = site.pages | where: "update_entry", true | sort: "update_published_at" | reverse %}
+{% assign page_title = "Patch Feed" %}
 
 <style>
-  .updates-shell {
-    display: grid;
-    gap: 1.35rem;
-  }
-
-  .updates-hero,
-  .updates-card {
-    padding: 1.25rem 1.3rem;
-  }
-
-  .updates-hero h1 {
-    margin: 0 0 0.55rem;
-    font-size: clamp(2rem, 4vw, 4rem);
-    line-height: 0.94;
-    letter-spacing: -0.05em;
-    text-transform: uppercase;
-  }
-
-  .updates-hero p {
-    margin: 0;
-    max-width: 50rem;
-    color: #d7dce7;
-    line-height: 1.75;
-  }
-
-  .updates-grid {
-    display: grid;
-    gap: 1rem;
-  }
-
-  .updates-card {
-    display: grid;
-    gap: 0.75rem;
-  }
-
-  .updates-topline {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.75rem;
-    color: #aab2c2;
-    font-size: 0.78rem;
-    text-transform: uppercase;
-    letter-spacing: 0.16em;
-  }
-
-  .updates-brandline {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-
-  .updates-brand-badge {
-    min-width: 44px;
-    height: 44px;
-    border-radius: 14px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 0.72rem;
-    border: 1px solid rgba(255,255,255,0.08);
-    background: rgba(255,255,255,0.03);
-    color: #f4f7fc;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .updates-card h2 {
-    margin: 0;
-    font-size: clamp(1.3rem, 2vw, 1.9rem);
-    line-height: 1.08;
-    letter-spacing: -0.03em;
-    text-transform: uppercase;
-  }
-
-  .updates-card p {
-    margin: 0;
-    color: #d7dce7;
-    line-height: 1.72;
-    max-width: 60rem;
-  }
-
-  .updates-links {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-    margin-top: 0.1rem;
-  }
-
-  .updates-links a {
-    color: #fff;
-    font-weight: 700;
-  }
+.patch-shell{display:grid;gap:1.35rem}
+.patch-hero,.patch-card{padding:1.25rem 1.3rem}
+.patch-hero h1{margin:0 0 .55rem;font-size:clamp(2rem,4vw,3.7rem);line-height:.96;letter-spacing:-.045em}
+.patch-hero p{margin:0;max-width:52rem;color:#d7dce7;line-height:1.72}
+.patch-grid{display:grid;gap:1rem}
+.patch-card{display:grid;gap:.8rem}
+.patch-topline{display:flex;flex-wrap:wrap;gap:.75rem;color:#aab2c2;font-size:.78rem;text-transform:uppercase;letter-spacing:.16em}
+.patch-brandline{display:flex;align-items:center;gap:.8rem}
+.patch-badge{min-width:50px;height:50px;border-radius:16px;display:inline-flex;align-items:center;justify-content:center;padding:0 .84rem;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);color:#f4f7fc;font-weight:800;letter-spacing:.08em;text-transform:uppercase}
+.patch-brandmeta{display:grid;gap:.15rem}
+.patch-brandmeta strong{color:#f4f7fc;font-size:1rem;line-height:1.1}
+.patch-brandmeta span{color:#aab2c2;font-size:.77rem;text-transform:uppercase;letter-spacing:.16em}
+.patch-card h2{margin:0;font-size:clamp(1.22rem,1.8vw,1.7rem);line-height:1.08;letter-spacing:-.03em}
+.patch-card p{margin:0;color:#d7dce7;line-height:1.72;max-width:60rem}
+.patch-links{display:flex;gap:1rem;flex-wrap:wrap;margin-top:.1rem}
+.patch-links a{color:#fff;font-weight:700}
+.patch-consensus{display:flex;flex-wrap:wrap;align-items:center;gap:.7rem}
+.patch-pill{display:inline-flex;align-items:center;padding:.42rem .68rem;border-radius:999px;font-size:.74rem;text-transform:uppercase;letter-spacing:.16em;font-weight:800;border:1px solid rgba(255,255,255,.08)}
+.patch-pill--positive{background:rgba(48,170,94,.14);color:#dff7e8}
+.patch-pill--moderate{background:rgba(210,155,44,.16);color:#fff0cb}
+.patch-pill--negative{background:rgba(210,74,74,.16);color:#ffd9d9}
+.patch-pill--insufficient-data,.patch-pill--insufficient{background:rgba(114,131,166,.16);color:#dfe6f5}
+.patch-consensus-copy{color:#aab2c2;font-size:.8rem;line-height:1.55}
 </style>
 
-{% assign update_pages = site.pages | where: "update_entry", true | sort: "update_published_at" | reverse %}
-
-<section class="updates-shell">
-  <section class="panel updates-hero">
-    <div class="eyebrow">Update pilot</div>
-    <h1>Official updates, summarized cleanly.</h1>
-    <p>This pilot watches one trusted source only: OBS Studio official GitHub releases. Each entry keeps the date high in view, links back to the official source, and strips the summary down to facts instead of hype.</p>
+<section class="patch-shell">
+  <section class="panel patch-hero">
+    <div class="eyebrow">Release notes, trimmed to what matters</div>
+    <h1>{{ page_title }}</h1>
+    <p>Official notes first. High-signal reaction second. This section is built to answer three questions fast: what changed, why it matters, and whether the early read looks calm, mixed, or messy.</p>
   </section>
 
-  <section class="updates-grid">
+  <section class="patch-grid">
     {% for item in update_pages %}
-    <article class="panel updates-card">
-      <div class="updates-topline">
+    {% assign brand = site.data.update_brands[item.update_brand_key] %}
+    {% assign consensus_label = item.update_consensus_label | default: 'Insufficient data' %}
+    {% assign consensus_class = consensus_label | downcase | replace: ' ', '-' %}
+    <article class="panel patch-card">
+      <div class="patch-topline">
         <span>{{ item.update_published_at | date: "%b %d, %Y" }}</span>
         <span>Version {{ item.update_version }}</span>
-        <span>{{ item.update_category }}</span>
+        <span>{{ brand.category_label | default: item.update_category }}</span>
       </div>
 
-      <div class="updates-brandline">
-        <span class="updates-brand-badge">
-          {% if item.update_logo_text %}
-            {{ item.update_logo_text }}
-          {% else %}
-            {{ item.update_product | slice: 0, 3 }}
-          {% endif %}
+      <div class="patch-brandline">
+        <span class="patch-badge">{{ brand.badge_text | default: item.update_logo_text | default: item.update_product | slice: 0, 3 }}</span>
+        <span class="patch-brandmeta">
+          <strong>{{ item.update_display_title | default: item.update_product }}</strong>
+          <span>{{ brand.company_label | default: item.update_source_name }}</span>
         </span>
-        <h2><a href="{{ item.url | relative_url }}">{{ item.title }}</a></h2>
       </div>
 
+      <h2><a href="{{ item.url | relative_url }}">{{ item.update_display_kicker | default: item.title }}</a></h2>
       <p>{{ item.description }}</p>
 
-      <div class="updates-links">
+      {% if item.update_consensus_summary %}
+      <div class="patch-consensus">
+        <span class="patch-pill patch-pill--{{ consensus_class }}">{{ consensus_label }}</span>
+        <span class="patch-consensus-copy">{{ item.update_consensus_summary }}</span>
+      </div>
+      {% endif %}
+
+      <div class="patch-links">
         <a href="{{ item.url | relative_url }}">Read breakdown →</a>
-        {% if item.update_source_url %}
-        <a href="{{ item.update_source_url }}">Official source ↗</a>
-        {% endif %}
-        {% if item.update_download_url %}
-        <a href="{{ item.update_download_url }}">Download page ↗</a>
-        {% endif %}
+        {% if item.update_source_url %}<a href="{{ item.update_source_url }}">Official source ↗</a>{% endif %}
+        {% if item.update_download_url %}<a href="{{ item.update_download_url }}">Download page ↗</a>{% endif %}
       </div>
     </article>
     {% endfor %}

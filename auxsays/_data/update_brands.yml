@@ -1,0 +1,15 @@
+obs-studio:
+  company_name: "OBS Project"
+  product_name: "OBS Studio"
+  badge_text: "OBS"
+  accent: "#ff3652"
+  category_label: "Creator Software"
+  company_label: "OBS Project"
+
+davinci-resolve:
+  company_name: "Blackmagic Design"
+  product_name: "DaVinci Resolve"
+  badge_text: "BMD"
+  accent: "#ff7a00"
+  category_label: "Creator Software"
+  company_label: "Blackmagic Design"

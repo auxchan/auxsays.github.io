@@ -290,24 +290,11 @@ button, input, select, textarea { font: inherit; }
 .coverage-topline { display: grid; grid-template-columns: 58px 1fr 58px; align-items: center; gap: .9rem; }
 .coverage-index { width: 46px; height: 46px; border-radius: 16px; border: 1px solid rgba(255,255,255,.08); display: grid; place-items: center; font-size: .95rem; font-weight: 800; color: #e8ecf5; background: rgba(255,255,255,.02); }
 .coverage-kicker { color: var(--muted); font-size: .74rem; text-transform: uppercase; letter-spacing: .19em; line-height: 1.45; }
-.coverage-icon { position: relative; justify-self: end; width: 42px; height: 42px; border-radius: 14px; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.025); overflow: hidden; }
-.coverage-icon::before, .coverage-icon::after { content: ''; position: absolute; inset: 0; margin: auto; transition: transform .5s cubic-bezier(.22,1,.36,1), opacity .35s ease; }
-.coverage-icon--spark::before { width:16px; height:16px; background: linear-gradient(135deg,#fff,var(--accent)); clip-path: polygon(50% 0%,63% 35%,100% 50%,63% 65%,50% 100%,37% 65%,0% 50%,37% 35%); opacity:.9; }
-.coverage-icon--spark::after { width:28px; height:2px; background: linear-gradient(90deg,transparent,rgba(255,255,255,.7),transparent); transform: rotate(45deg) scaleX(.5); opacity:.5; }
-.coverage-icon--grid::before { width:18px; height:18px; border:2px solid rgba(255,255,255,.88); box-shadow: 10px 0 0 -2px rgba(255,255,255,.88), 0 10px 0 -2px rgba(255,255,255,.88), 10px 10px 0 -2px var(--accent); }
-.coverage-icon--grid::after { width:24px; height:24px; border:1px solid rgba(255,255,255,.16); }
-.coverage-icon--orbit::before { width:26px; height:26px; border-radius:50%; border:2px solid rgba(255,255,255,.86); }
-.coverage-icon--orbit::after { width:7px; height:7px; border-radius:50%; background: var(--accent); transform: translate(10px,-8px); box-shadow: -16px 16px 0 0 rgba(255,255,255,.55); }
-.coverage-icon--stack::before { width:22px; height:14px; border-radius:4px; border:2px solid rgba(255,255,255,.86); box-shadow: 0 -7px 0 -2px rgba(255,255,255,.44), 0 7px 0 -2px var(--accent); }
-.coverage-icon--stack::after { width:28px; height:28px; border-radius:10px; border:1px solid rgba(255,255,255,.14); }
-.coverage-card:hover .coverage-icon--spark::before, .coverage-card.is-open .coverage-icon--spark::before { transform: scale(1.08) rotate(22deg); }
-.coverage-card:hover .coverage-icon--spark::after, .coverage-card.is-open .coverage-icon--spark::after { transform: rotate(45deg) scaleX(1); opacity:.9; }
-.coverage-card:hover .coverage-icon--grid::before, .coverage-card.is-open .coverage-icon--grid::before { transform: translateY(-1px) scale(1.03); }
-.coverage-card:hover .coverage-icon--grid::after, .coverage-card.is-open .coverage-icon--grid::after { transform: rotate(8deg) scale(1.05); }
-.coverage-card:hover .coverage-icon--orbit::before, .coverage-card.is-open .coverage-icon--orbit::before { transform: rotate(24deg) scale(1.04); }
-.coverage-card:hover .coverage-icon--orbit::after, .coverage-card.is-open .coverage-icon--orbit::after { transform: translate(6px,-10px); }
-.coverage-card:hover .coverage-icon--stack::before, .coverage-card.is-open .coverage-icon--stack::before { transform: translateY(-2px); }
-.coverage-card:hover .coverage-icon--stack::after, .coverage-card.is-open .coverage-icon--stack::after { transform: scale(1.05); }
+.coverage-icon { position: relative; justify-self: end; width: 42px; height: 42px; border-radius: 14px; border: 1px solid rgba(255,255,255,.08); background: rgba(255,255,255,.025); overflow: hidden; display:flex; align-items:center; justify-content:center; }
+.coverage-icon::before { content:''; position:absolute; inset:0; border-radius:inherit; background: radial-gradient(circle at 70% 30%, rgba(255,255,255,.12), transparent 55%); opacity:0; transition: opacity .35s ease; }
+.coverage-icon .lottie-icon { width: 28px; height: 28px; opacity:.92; filter: drop-shadow(0 0 10px rgba(255,255,255,.08)); transition: transform .38s cubic-bezier(.22,1,.36,1), filter .38s ease, opacity .28s ease; }
+.coverage-card:hover .coverage-icon::before, .coverage-card.is-open .coverage-icon::before { opacity:1; }
+.coverage-card:hover .coverage-icon .lottie-icon, .coverage-card.is-open .coverage-icon .lottie-icon { transform: scale(1.06); filter: drop-shadow(0 0 14px rgba(255,255,255,.12)); opacity:1; }
 .coverage-card h3 { margin:0; font-size:1.24rem; font-weight:800; letter-spacing:-.025em; line-height:1.08; text-transform:uppercase; }
 .coverage-meta { display:flex; justify-content:space-between; align-items:center; min-height:1.1rem; }
 .coverage-action { color:var(--muted); font-size:.73rem; letter-spacing:.16em; text-transform:uppercase; }
@@ -315,6 +302,7 @@ button, input, select, textarea { font: inherit; }
 .coverage-body > * { overflow:hidden; }
 .coverage-card.is-open .coverage-body, .coverage-card:hover .coverage-body { grid-template-rows:1fr; }
 .coverage-body p { margin:0; padding-top:.1rem; color:#d6dbe7; line-height:1.72; }
+
 
 .featured-grid, .article-grid { grid-template-columns: repeat(3, 1fr); }
 .featured-card, .article-card { padding:1.3rem; border:1px solid rgba(255,255,255,.08); border-radius:22px; background: rgba(255,255,255,.028); display:grid; gap:.85rem; }
@@ -436,4 +424,21 @@ button, input, select, textarea { font: inherit; }
     animation: none !important;
     transition: none !important;
   }
+}
+
+/* Patch feed / update polish */
+.updates-shell .eyebrow,
+.patch-shell .eyebrow,
+.update-page-shell .update-kicker,
+.update-page-shell .update-summary-label,
+.update-page-shell .update-side-label { color: var(--muted); }
+.patch-card h2, .update-title { text-transform: none; }
+.update-body h2, .update-body h3 { text-transform: none; }
+.patch-card, .update-hero, .update-body, .update-bottom { background: linear-gradient(180deg, rgba(14,18,30,.9), rgba(7,10,18,.95)); }
+.patch-card p + .patch-consensus { margin-top:.1rem; }
+.patch-links a, .update-source-row a, .update-bottom-links a { text-decoration: none; }
+.patch-links a:hover, .update-source-row a:hover, .update-bottom-links a:hover { opacity:.9; }
+
+@media (max-width: 860px) {
+  .patch-brandline { align-items:flex-start; }
 }

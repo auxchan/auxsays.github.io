@@ -1,41 +1,41 @@
 {
-  "eyebrow": "Publication hub \u2022 app-first guides \u2022 sharper systems",
+  "eyebrow": "Publication hub \u2022 app-first guides \u2022 signal-minded workflows",
   "title_lines": [
     "TACTICAL KNOWLEDGE",
     "[accent]FOR CREATORS",
     "WHO WANT CONTROL."
   ],
-  "intro": "AUXSAYS is a modern resource hub focused on real free AI tools, cleaner content systems, practical automation, and creator workflows that hold up under actual use.",
+  "intro": "AUXSAYS is a creator systems publication focused on trustworthy AI tools, cleaner production pipelines, sharper automation, and patch intelligence that helps people decide when to move and when to wait.",
   "coverage_intro": "What AUXSAYS actually covers",
-  "coverage_sub": "App-first tool guides, production systems, lightweight automation, and creator infrastructure that holds up under real use.",
+  "coverage_sub": "Practical tools, production systems, patch intelligence, and creator infrastructure that hold up under real use.",
   "cards": [
     {
       "title": "Free AI Tools",
       "kicker": "What is actually free",
-      "summary": "App-specific breakdowns of tools that are genuinely usable without hidden export traps or fake-free bottlenecks.",
+      "summary": "App-specific breakdowns of tools that stay useful without fake-free export traps, bait pricing, or crippled outputs.",
       "fallback": "01",
-      "icon": "spark"
+      "icon": "free-ai"
     },
     {
       "title": "Content Workflows",
       "kicker": "Creator systems",
-      "summary": "Repeatable pipelines for thumbnails, edits, automation, publishing, and repurposing content with less friction.",
+      "summary": "Repeatable pipelines for thumbnails, edits, publishing, clipping, and repurposing that reduce drag instead of adding more moving parts.",
       "fallback": "02",
-      "icon": "pipeline"
+      "icon": "content-workflows"
     },
     {
       "title": "Automation Productivity",
       "kicker": "Small tools, big leverage",
-      "summary": "Practical scripts, prompts, and tool chains that save time without becoming another maintenance burden.",
+      "summary": "Practical scripts, prompts, macros, and utility chains that save time without becoming another fragile maintenance project.",
       "fallback": "03",
-      "icon": "orbit"
+      "icon": "automation"
     },
     {
-      "title": "Signal Systems",
-      "kicker": "Signal architecture",
-      "summary": "Systems-minded guidance drawn from real instructional design, production support, and workflow architecture.",
+      "title": "Patch Feed",
+      "kicker": "Signals before friction",
+      "summary": "Official patch breakdowns and early reaction snapshots built to show what changed, what matters, and whether a release looks calm, mixed, or messy.",
       "fallback": "04",
-      "icon": "signal"
+      "icon": "patch-feed"
     }
   ]
 }

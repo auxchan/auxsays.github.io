@@ -8,9 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
         loop: true,
         autoplay: true,
         path: '/assets/lottie/systems-pulse.json',
-        rendererSettings: {
-          preserveAspectRatio: 'xMidYMid slice'
-        }
+        rendererSettings: { preserveAspectRatio: 'xMidYMid slice' }
       });
     } catch (err) {
       console.warn('Systems pulse animation failed to load.', err);
@@ -25,33 +23,33 @@ document.addEventListener('DOMContentLoaded', () => {
     bgRoot.innerHTML = '';
     fgRoot.innerHTML = '';
 
-    const bgCount = window.innerWidth < 860 ? 10 : 14;
-    const fgCount = window.innerWidth < 860 ? 3 : 5;
+    const bgCount = window.innerWidth < 860 ? 8 : 12;
+    const fgCount = window.innerWidth < 860 ? 2 : 4;
 
     for (let i = 0; i < bgCount; i += 1) {
       const p = document.createElement('span');
-      const size = (Math.random() * 10) + 4;
+      const size = (Math.random() * 8) + 4;
       p.className = 'systems-particle systems-particle--bg';
       p.style.setProperty('--x', `${Math.random() * 100}%`);
       p.style.setProperty('--y', `${Math.random() * 100}%`);
       p.style.setProperty('--size', `${size}px`);
-      p.style.setProperty('--drift-x', `${(Math.random() * 28 - 14).toFixed(1)}px`);
-      p.style.setProperty('--drift-y', `${(-18 - Math.random() * 28).toFixed(1)}px`);
-      p.style.setProperty('--duration', `${16 + Math.random() * 18}s`);
+      p.style.setProperty('--drift-x', `${(Math.random() * 18 - 9).toFixed(1)}px`);
+      p.style.setProperty('--drift-y', `${(-12 - Math.random() * 18).toFixed(1)}px`);
+      p.style.setProperty('--duration', `${18 + Math.random() * 16}s`);
       p.style.setProperty('--delay', `${-Math.random() * 18}s`);
       bgRoot.appendChild(p);
     }
 
     for (let i = 0; i < fgCount; i += 1) {
       const p = document.createElement('span');
-      const size = (Math.random() * 16) + 14;
+      const size = (Math.random() * 12) + 10;
       p.className = 'systems-particle systems-particle--fg';
-      p.style.setProperty('--x', `${6 + Math.random() * 88}%`);
-      p.style.setProperty('--y', `${12 + Math.random() * 78}%`);
+      p.style.setProperty('--x', `${8 + Math.random() * 84}%`);
+      p.style.setProperty('--y', `${10 + Math.random() * 76}%`);
       p.style.setProperty('--size', `${size}px`);
-      p.style.setProperty('--drift-x', `${(Math.random() * 38 - 19).toFixed(1)}px`);
-      p.style.setProperty('--drift-y', `${(-34 - Math.random() * 40).toFixed(1)}px`);
-      p.style.setProperty('--duration', `${12 + Math.random() * 10}s`);
+      p.style.setProperty('--drift-x', `${(Math.random() * 24 - 12).toFixed(1)}px`);
+      p.style.setProperty('--drift-y', `${(-20 - Math.random() * 18).toFixed(1)}px`);
+      p.style.setProperty('--duration', `${14 + Math.random() * 10}s`);
       p.style.setProperty('--delay', `${-Math.random() * 10}s`);
       fgRoot.appendChild(p);
     }
@@ -59,6 +57,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
   buildParticles();
   window.addEventListener('resize', buildParticles);
+
+  const iconMap = {
+    'free-ai': '/assets/lottie/free-ai.json',
+    'content-workflows': '/assets/lottie/content-workflows.json',
+    'automation': '/assets/lottie/automation.json',
+    'patch-feed': '/assets/lottie/lms-systems.json'
+  };
+
+  if (window.lottie) {
+    document.querySelectorAll('[data-lottie-icon]').forEach((node) => {
+      const key = node.dataset.lottieIcon;
+      const path = iconMap[key];
+      if (!path) return;
+      const holder = document.createElement('span');
+      holder.className = 'lottie-icon';
+      node.appendChild(holder);
+      try {
+        const anim = window.lottie.loadAnimation({
+          container: holder,
+          renderer: 'svg',
+          loop: true,
+          autoplay: true,
+          path
+        });
+        const card = node.closest('.coverage-card');
+        if (card) {
+          card.addEventListener('mouseenter', () => anim.setSpeed(1));
+          card.addEventListener('mouseleave', () => anim.setSpeed(0.8));
+        }
+      } catch (err) {
+        console.warn('Coverage icon animation failed.', key, err);
+      }
+    });
+  }
 
   const coverageCards = Array.from(document.querySelectorAll('[data-card]'));
   const prefersTouch = window.matchMedia('(hover: none)').matches || window.innerWidth < 900;
@@ -85,10 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
         closeOthers(card);
         setCardState(card, true);
       });
-
-      card.addEventListener('mouseleave', () => {
-        setCardState(card, false);
-      });
+      card.addEventListener('mouseleave', () => setCardState(card, false));
     }
 
     hit.addEventListener('click', () => {
@@ -98,9 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  if (prefersTouch && coverageCards.length) {
-    setCardState(coverageCards[0], true);
-  }
+  if (prefersTouch && coverageCards.length) setCardState(coverageCards[0], true);
 
   const reveals = document.querySelectorAll('.reveal-up');
   const revealObserver = new IntersectionObserver((entries) => {
@@ -109,38 +136,8 @@ document.addEventListener('DOMContentLoaded', () => {
       entry.target.classList.add('is-visible');
       revealObserver.unobserve(entry.target);
     });
-  }, {
-    threshold: 0.14,
-    rootMargin: '0px 0px -5% 0px'
-  });
-
+  }, { threshold: 0.14, rootMargin: '0px 0px -5% 0px' });
   reveals.forEach((el) => revealObserver.observe(el));
-
-  const parallaxNodes = document.querySelectorAll('[data-parallax]');
-  let ticking = false;
-
-  function updateParallax() {
-    const vh = window.innerHeight;
-    parallaxNodes.forEach((node) => {
-      const speed = parseFloat(node.dataset.parallax || '0');
-      const rect = node.getBoundingClientRect();
-      const delta = (rect.top + rect.height / 2 - vh / 2) * speed;
-      node.style.transform = `translate3d(0, ${delta}px, 0)`;
-    });
-    ticking = false;
-  }
-
-  function requestParallax() {
-    if (ticking) return;
-    window.requestAnimationFrame(updateParallax);
-    ticking = true;
-  }
-
-  if (parallaxNodes.length) {
-    requestParallax();
-    window.addEventListener('scroll', requestParallax, { passive: true });
-    window.addEventListener('resize', requestParallax);
-  }
 
   const search = document.getElementById('article-search');
   const chips = document.querySelectorAll('.chip');
@@ -149,18 +146,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function applyFilters() {
     const query = (search?.value || '').toLowerCase().trim();
-
     articleCards.forEach((card) => {
-      const haystack = [
-        card.dataset.title || '',
-        card.dataset.description || '',
-        card.dataset.tags || ''
-      ].join(' ').toLowerCase();
-
+      const haystack = [card.dataset.title || '', card.dataset.description || '', card.dataset.tags || ''].join(' ').toLowerCase();
       const categories = (card.dataset.categories || '').toLowerCase();
       const categoryMatch = activeFilter === 'all' || categories.includes(activeFilter);
       const queryMatch = !query || haystack.includes(query);
-
       card.style.display = categoryMatch && queryMatch ? '' : 'none';
     });
   }

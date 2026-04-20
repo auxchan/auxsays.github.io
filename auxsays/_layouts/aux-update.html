@@ -1,398 +1,80 @@
 ---
 layout: aux-base
 ---
-
-<style>
-  .update-page-shell {
-    display: grid;
-    gap: 1.2rem;
-  }
-
-  .update-hero,
-  .update-body,
-  .update-bottom {
-    padding: 1.25rem 1.3rem;
-  }
-
-  .update-hero-grid {
-    display: grid;
-    grid-template-columns: minmax(0, 1.7fr) minmax(240px, 0.75fr);
-    gap: 1.25rem;
-    align-items: start;
-  }
-
-  .update-topline {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.8rem;
-    color: #aab2c2;
-    font-size: 0.8rem;
-    text-transform: uppercase;
-    letter-spacing: 0.16em;
-    margin-bottom: 0.9rem;
-  }
-
-  .update-brand-row {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    margin-bottom: 0.9rem;
-  }
-
-  .update-brand-badge {
-    min-width: 52px;
-    height: 52px;
-    border-radius: 16px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    padding: 0 0.8rem;
-    border: 1px solid rgba(255,255,255,0.08);
-    background: rgba(255,255,255,0.03);
-    color: #f4f7fc;
-    font-weight: 800;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-  }
-
-  .update-brand-meta {
-    display: grid;
-    gap: 0.18rem;
-  }
-
-  .update-brand-meta strong {
-    color: #f4f7fc;
-    font-size: 1rem;
-    line-height: 1.1;
-  }
-
-  .update-brand-meta span {
-    color: #aab2c2;
-    font-size: 0.82rem;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-  }
-
-  .update-title {
-    margin: 0;
-    max-width: 14ch;
-    font-size: clamp(2.2rem, 4vw, 4.2rem);
-    line-height: 0.94;
-    letter-spacing: -0.05em;
-    text-transform: uppercase;
-  }
-
-  .update-summary {
-    margin: 1rem 0 0;
-    max-width: 46rem;
-    padding: 1rem 1.05rem;
-    border-radius: 18px;
-    border: 1px solid rgba(255,255,255,0.07);
-    background: rgba(255,255,255,0.03);
-  }
-
-  .update-summary-label {
-    display: block;
-    margin-bottom: 0.45rem;
-    color: #9ea7b8;
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.2em;
-  }
-
-  .update-summary p {
-    margin: 0;
-    color: #e3e8f2;
-    line-height: 1.72;
-    font-size: 1.04rem;
-  }
-
-  .update-consensus {
-    margin-top: 1rem;
-    max-width: 46rem;
-    display: grid;
-    gap: 0.55rem;
-    padding: 1rem 1.05rem;
-    border-radius: 18px;
-    border: 1px solid rgba(255,255,255,0.07);
-    background: rgba(255,255,255,0.03);
-  }
-
-  .update-consensus-top {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.7rem;
-    align-items: center;
-  }
-
-  .consensus-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 0.45rem 0.72rem;
-    border-radius: 999px;
-    font-size: 0.78rem;
-    text-transform: uppercase;
-    letter-spacing: 0.16em;
-    font-weight: 800;
-    border: 1px solid rgba(255,255,255,0.08);
-  }
-
-  .consensus-badge--positive {
-    background: rgba(48, 170, 94, 0.14);
-    color: #dff7e8;
-  }
-
-  .consensus-badge--moderate {
-    background: rgba(210, 155, 44, 0.16);
-    color: #fff0cb;
-  }
-
-  .consensus-badge--negative {
-    background: rgba(210, 74, 74, 0.16);
-    color: #ffd9d9;
-  }
-
-  .consensus-badge--insufficient {
-    background: rgba(114, 131, 166, 0.16);
-    color: #dfe6f5;
-  }
-
-  .consensus-meta {
-    color: #9ea7b8;
-    font-size: 0.78rem;
-    text-transform: uppercase;
-    letter-spacing: 0.14em;
-  }
-
-  .update-consensus p {
-    margin: 0;
-    color: #e4e9f2;
-    line-height: 1.72;
-  }
-
-  .update-source-row,
-  .update-bottom-links {
-    margin-top: 1rem;
-    display: flex;
-    gap: 1rem;
-    flex-wrap: wrap;
-  }
-
-  .update-source-row a,
-  .update-bottom-links a {
-    color: #fff;
-    font-weight: 700;
-  }
-
-  .update-side-card {
-    display: grid;
-    gap: 0.8rem;
-    padding: 1rem 1rem 1.05rem;
-    border-radius: 22px;
-    border: 1px solid rgba(255,255,255,0.07);
-    background: rgba(255,255,255,0.03);
-  }
-
-  .update-side-row {
-    display: grid;
-    gap: 0.2rem;
-  }
-
-  .update-side-label {
-    color: #9ea7b8;
-    font-size: 0.72rem;
-    text-transform: uppercase;
-    letter-spacing: 0.18em;
-  }
-
-  .update-side-value {
-    color: #f0f3f9;
-    line-height: 1.5;
-  }
-
-  .update-body .prose {
-    max-width: 760px;
-  }
-
-  .update-body .prose > :first-child {
-    margin-top: 0;
-  }
-
-  .update-body p,
-  .update-body li {
-    color: #dce2ee;
-    line-height: 1.86;
-    font-size: 1.05rem;
-  }
-
-  .update-body h2,
-  .update-body h3 {
-    text-transform: uppercase;
-    letter-spacing: -0.03em;
-    line-height: 1.08;
-  }
-
-  .update-bottom {
-    display: grid;
-    gap: 1rem;
-  }
-
-  .update-bottom-grid {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 1rem;
-  }
-
-  .mini-meta-card {
-    padding: 1rem;
-    border-radius: 20px;
-    border: 1px solid rgba(255,255,255,0.08);
-    background: rgba(255,255,255,0.025);
-    display: grid;
-    gap: 0.3rem;
-  }
-
-  .mini-meta-card .label {
-    color: #aab2c2;
-    font-size: 0.72rem;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-  }
-
-  .mini-meta-card .value {
-    color: #f0f3f9;
-    line-height: 1.5;
-  }
-
-  @media (max-width: 860px) {
-    .update-hero-grid,
-    .update-bottom-grid {
-      grid-template-columns: 1fr;
-    }
-
-    .update-title {
-      max-width: 100%;
-      font-size: clamp(2rem, 10vw, 3.35rem);
-    }
-  }
-</style>
-
+{% assign brand = site.data.update_brands[page.update_brand_key] %}
 {% assign consensus_label = page.update_consensus_label | default: "Insufficient data" %}
 {% assign consensus_class = consensus_label | downcase | replace: " ", "-" %}
+
+<style>
+.update-page-shell{display:grid;gap:1.2rem}.update-hero,.update-body,.update-bottom{padding:1.25rem 1.3rem}.update-hero-grid{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(240px,.75fr);gap:1.25rem;align-items:start}.update-back-link{display:inline-flex;align-items:center;gap:.45rem;margin-bottom:.95rem;font-size:.82rem;text-transform:uppercase;letter-spacing:.16em;color:#aeb6c6}.update-back-link:hover{color:#fff}.update-topline{display:flex;flex-wrap:wrap;gap:.8rem;color:#aab2c2;font-size:.8rem;text-transform:uppercase;letter-spacing:.16em;margin-bottom:.95rem}.update-brand-row{display:flex;align-items:center;gap:.9rem;margin-bottom:1rem}.update-brand-badge{min-width:58px;height:58px;border-radius:16px;display:inline-flex;align-items:center;justify-content:center;padding:0 .8rem;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.03);color:#f4f7fc;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.update-brand-meta{display:grid;gap:.18rem}.update-brand-meta strong{color:#f4f7fc;font-size:1rem;line-height:1.1}.update-brand-meta span{color:#aab2c2;font-size:.82rem;text-transform:uppercase;letter-spacing:.14em}.update-kicker{margin:0 0 .35rem;color:#aab2c2;font-size:.78rem;text-transform:uppercase;letter-spacing:.18em}.update-title{margin:0;max-width:13ch;font-size:clamp(1.95rem,3.35vw,3.35rem);line-height:.98;letter-spacing:-.04em;font-weight:820;color:#f4f7fc}.update-subtitle{margin:.5rem 0 0;color:#d8dee9;font-size:1.05rem;line-height:1.62;max-width:42rem}.update-summary,.update-consensus{margin-top:1rem;max-width:46rem;padding:1rem 1.05rem;border-radius:18px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03)}.update-summary-label{display:block;margin-bottom:.45rem;color:#9ea7b8;font-size:.72rem;text-transform:uppercase;letter-spacing:.2em}.update-summary p,.update-consensus p{margin:0;color:#e3e8f2;line-height:1.72;font-size:1.04rem}.update-consensus{display:grid;gap:.55rem}.update-consensus-top{display:flex;flex-wrap:wrap;gap:.7rem;align-items:center}.consensus-badge{display:inline-flex;align-items:center;padding:.45rem .72rem;border-radius:999px;font-size:.78rem;text-transform:uppercase;letter-spacing:.16em;font-weight:800;border:1px solid rgba(255,255,255,.08)}.consensus-badge--positive{background:rgba(48,170,94,.14);color:#dff7e8}.consensus-badge--moderate{background:rgba(210,155,44,.16);color:#fff0cb}.consensus-badge--negative{background:rgba(210,74,74,.16);color:#ffd9d9}.consensus-badge--insufficient-data,.consensus-badge--insufficient{background:rgba(114,131,166,.16);color:#dfe6f5}.consensus-meta{color:#9ea7b8;font-size:.78rem;text-transform:uppercase;letter-spacing:.14em}.update-source-row,.update-bottom-links{margin-top:1rem;display:flex;gap:1rem;flex-wrap:wrap}.update-source-row a,.update-bottom-links a{color:#fff;font-weight:700}.update-side-card{display:grid;gap:.8rem;padding:1rem 1rem 1.05rem;border-radius:22px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03)}.update-side-row{display:grid;gap:.2rem}.update-side-label{color:#9ea7b8;font-size:.72rem;text-transform:uppercase;letter-spacing:.18em}.update-side-value{color:#f0f3f9;line-height:1.5}.update-body .prose{max-width:760px}.update-body .prose>:first-child{margin-top:0}.update-body p,.update-body li{color:#dce2ee;line-height:1.86;font-size:1.05rem}.update-body h2,.update-body h3{font-size:clamp(1.25rem,2vw,1.8rem);letter-spacing:-.03em;line-height:1.1;margin-top:1.4em;margin-bottom:.55em}.update-bottom{display:grid;gap:1rem}.update-bottom-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1rem}.mini-meta-card{padding:1rem;border-radius:20px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.025);display:grid;gap:.3rem}.mini-meta-card .label{color:#aab2c2;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase}.mini-meta-card .value{color:#f0f3f9;line-height:1.5}@media (max-width:860px){.update-hero-grid,.update-bottom-grid{grid-template-columns:1fr}.update-title{max-width:100%;font-size:clamp(1.8rem,8vw,2.9rem)}}
+</style>
 
 <section class="update-page-shell">
   <section class="panel update-hero">
     <div class="update-hero-grid">
       <div class="update-hero-main">
-        <a class="update-back-link" href="{{ '/updates/' | relative_url }}">← Back to Updates</a>
-
+        <a class="update-back-link" href="{{ '/updates/' | relative_url }}">← Back to Patch Feed</a>
         <div class="update-topline">
           <span>{{ page.update_published_at | date: "%b %d, %Y" }}</span>
           <span>Version {{ page.update_version }}</span>
           <span>{{ page.update_product }}</span>
-          <span>{{ page.update_category }}</span>
+          <span>{{ brand.category_label | default: page.update_category }}</span>
         </div>
 
         <div class="update-brand-row">
-          <span class="update-brand-badge">
-            {% if page.update_logo_text %}
-              {{ page.update_logo_text }}
-            {% else %}
-              {{ page.update_product | slice: 0, 3 }}
-            {% endif %}
-          </span>
+          <span class="update-brand-badge">{{ brand.badge_text | default: page.update_logo_text | default: page.update_product | slice: 0, 3 }}</span>
           <span class="update-brand-meta">
-            <strong>{{ page.update_product }}</strong>
-            <span>{{ page.update_source_name }}</span>
+            <strong>{{ brand.product_name | default: page.update_product }}</strong>
+            <span>{{ brand.company_label | default: page.update_source_name }}</span>
           </span>
         </div>
 
-        <h1 class="update-title">{{ page.title }}</h1>
+        <p class="update-kicker">{{ page.update_display_kicker | default: "Official update breakdown" }}</p>
+        <h1 class="update-title">{{ page.update_display_title | default: page.title }}</h1>
+        {% if page.update_subtitle %}<p class="update-subtitle">{{ page.update_subtitle }}</p>{% endif %}
 
         {% if page.description %}
-        <div class="update-summary">
-          <span class="update-summary-label">Summary</span>
-          <p>{{ page.description }}</p>
-        </div>
+        <div class="update-summary"><span class="update-summary-label">Summary</span><p>{{ page.description }}</p></div>
         {% endif %}
 
         {% if page.update_consensus_summary %}
         <div class="update-consensus">
           <div class="update-consensus-top">
             <span class="consensus-badge consensus-badge--{{ consensus_class }}">{{ consensus_label }}</span>
-            <span class="consensus-meta">
-              {{ page.update_consensus_confidence | default: 'Low' }} confidence
-              {% if page.update_consensus_sample_count %} • {{ page.update_consensus_sample_count }} matched reports{% endif %}
-            </span>
+            <span class="consensus-meta">{{ page.update_consensus_confidence | default: 'Low' }} confidence{% if page.update_consensus_sample_count %} • {{ page.update_consensus_sample_count }} matched reports{% endif %}</span>
           </div>
           <p>{{ page.update_consensus_summary }}</p>
         </div>
         {% endif %}
 
         <div class="update-source-row">
-          {% if page.update_source_url %}
-          <a href="{{ page.update_source_url }}">Official source ↗</a>
-          {% endif %}
-          {% if page.update_download_url %}
-          <a href="{{ page.update_download_url }}">Download page ↗</a>
-          {% endif %}
+          {% if page.update_source_url %}<a href="{{ page.update_source_url }}">Official source ↗</a>{% endif %}
+          {% if page.update_download_url %}<a href="{{ page.update_download_url }}">Download page ↗</a>{% endif %}
         </div>
       </div>
 
       <aside class="update-hero-side">
         <div class="update-side-card">
-          <div class="update-side-row">
-            <span class="update-side-label">Published</span>
-            <span class="update-side-value">{{ page.update_published_at | date: "%b %d, %Y" }}</span>
-          </div>
-          <div class="update-side-row">
-            <span class="update-side-label">Version</span>
-            <span class="update-side-value">{{ page.update_version }}</span>
-          </div>
-          <div class="update-side-row">
-            <span class="update-side-label">Last checked</span>
-            <span class="update-side-value">{{ page.update_last_checked | date: "%b %d, %Y %H:%M UTC" }}</span>
-          </div>
-          {% if page.update_consensus_sources %}
-          <div class="update-side-row">
-            <span class="update-side-label">Consensus sources</span>
-            <span class="update-side-value">{{ page.update_consensus_sources }}</span>
-          </div>
-          {% endif %}
+          <div class="update-side-row"><span class="update-side-label">Published</span><span class="update-side-value">{{ page.update_published_at | date: "%b %d, %Y" }}</span></div>
+          <div class="update-side-row"><span class="update-side-label">Version</span><span class="update-side-value">{{ page.update_version }}</span></div>
+          <div class="update-side-row"><span class="update-side-label">Last checked</span><span class="update-side-value">{{ page.update_last_checked | date: "%b %d, %Y %H:%M UTC" }}</span></div>
+          {% if page.update_consensus_sources %}<div class="update-side-row"><span class="update-side-label">Consensus sources</span><span class="update-side-value">{{ page.update_consensus_sources }}</span></div>{% endif %}
         </div>
       </aside>
     </div>
   </section>
 
-  <section class="panel update-body">
-    <div class="prose">
-      {{ content }}
-    </div>
-  </section>
+  <section class="panel update-body"><div class="prose">{{ content }}</div></section>
 
   <section class="panel update-bottom">
     <div class="update-bottom-links">
-      {% if page.update_source_url %}
-      <a href="{{ page.update_source_url }}">Official source ↗</a>
-      {% endif %}
-      {% if page.update_download_url %}
-      <a href="{{ page.update_download_url }}">Download page ↗</a>
-      {% endif %}
+      {% if page.update_source_url %}<a href="{{ page.update_source_url }}">Official source ↗</a>{% endif %}
+      {% if page.update_download_url %}<a href="{{ page.update_download_url }}">Download page ↗</a>{% endif %}
     </div>
-
     <div class="update-bottom-grid">
-      <div class="mini-meta-card">
-        <span class="label">Published</span>
-        <span class="value">{{ page.update_published_at | date: "%b %d, %Y" }}</span>
-      </div>
-      <div class="mini-meta-card">
-        <span class="label">Last checked</span>
-        <span class="value">{{ page.update_last_checked | date: "%b %d, %Y %H:%M UTC" }}</span>
-      </div>
-      <div class="mini-meta-card">
-        <span class="label">Source mode</span>
-        <span class="value">Official notes first. Community reaction is a weighted snapshot, not a substitute for release notes.</span>
-      </div>
+      <div class="mini-meta-card"><span class="label">Published</span><span class="value">{{ page.update_published_at | date: "%b %d, %Y" }}</span></div>
+      <div class="mini-meta-card"><span class="label">Last checked</span><span class="value">{{ page.update_last_checked | date: "%b %d, %Y %H:%M UTC" }}</span></div>
+      <div class="mini-meta-card"><span class="label">Source mode</span><span class="value">Official notes first. Community reaction is a weighted snapshot, not a substitute for release notes.</span></div>
     </div>
   </section>
 </section>
