@@ -1,7 +1,7 @@
 ---
 layout: aux-base
 ---
-<section class="hero-grid hero-grid--refined">
+<section class="hero-grid hero-grid--single">
   <article class="panel hero-copy reveal-up">
     <div class="eyebrow">{{ site.data.home.eyebrow }}</div>
     <h1 class="hero-title">
@@ -13,28 +13,7 @@ layout: aux-base
     <div class="cta-row">
       <a class="btn btn-primary" href="{{ '/articles/' | relative_url }}">Browse articles</a>
       <a class="btn btn-secondary" href="{{ '/about/' | relative_url }}">About Aux</a>
-    </div>
-  </article>
-
-  <article class="panel hero-side reveal-up reveal-delay-1">
-    <div class="hero-stack">
-      <div class="stack-block stack-block--feature">
-        <div class="stack-label">Focus</div>
-        <h2>Real tools. Real workflows.</h2>
-        <p>No fake-free fluff, no bloated stacks, and no vague recommendations without testing.</p>
-      </div>
-
-      <div class="stack-row">
-        <div class="stack-block compact">
-          <div class="stack-label">Current lanes</div>
-          <p>AI, production, automation, and creator systems that scale without turning to sludge.</p>
-        </div>
-
-        <div class="stack-block compact">
-          <div class="stack-label">Patch intelligence</div>
-          <p>Official notes first. Early reaction second. Enough context to know whether to install now or wait.</p>
-        </div>
-      </div>
+      <a class="btn btn-secondary" href="{{ '/updates/' | relative_url }}">Patch Feed</a>
     </div>
   </article>
 </section>
@@ -53,7 +32,9 @@ layout: aux-base
         <span class="coverage-topline">
           <span class="coverage-index">{{ card.fallback }}</span>
           <span class="coverage-kicker">{{ card.kicker }}</span>
-          <span class="coverage-icon" data-lottie-icon="{{ card.icon }}" aria-hidden="true"></span>
+          <span class="coverage-icon" aria-hidden="true">
+            <span class="coverage-icon-lottie" data-coverage-icon="{{ card.icon }}"></span>
+          </span>
         </span>
 
         <h3>{{ card.title }}</h3>

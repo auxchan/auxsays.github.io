@@ -4,7 +4,7 @@ title: "DaVinci Resolve 21 Public Beta 1 official update breakdown"
 update_display_title: "DaVinci Resolve 21 Public Beta 1"
 update_display_kicker: "Official update breakdown"
 update_subtitle: "Blackmagic's current Resolve 21 public beta release."
-description: "Published Apr 14, 2026. Blackmagic Design announced DaVinci Resolve 21 and made the public beta available. The 21 release adds a new Photo page for still images and expands AI-powered tools across the Resolve workflow."
+description: "Published Apr 14, 2026. Blackmagic Design announced DaVinci Resolve 21 Public Beta 1 and made it available for download. The release adds a Photo page for still images and expands AI-powered tools across the Resolve workflow."
 permalink: /updates/davinci-resolve/21-public-beta-1/
 update_entry: true
 update_brand_key: "davinci-resolve"
@@ -22,19 +22,14 @@ update_consensus_label: "Insufficient data"
 update_consensus_confidence: "Low"
 update_consensus_sample_count: 0
 update_consensus_sources: "Official forum parsing not enabled yet"
-update_consensus_summary: "Consensus is not live for this source yet. This pilot is currently publishing official release facts only."
-tags:
-  - davinci-resolve
-  - creator-software
-  - video-editing
-  - updates
+update_consensus_summary: "Too little post-release filtering is wired up yet to make a reliable community call. This pilot currently focuses on official release facts only."
 ---
 
 ## Official summary
 
-- Blackmagic Design announced DaVinci Resolve 21 and made the public beta available for download.
+- Blackmagic Design announced DaVinci Resolve 21 Public Beta 1 and made it available for download.
 - The new release adds a dedicated Photo page for still-image workflows.
-- Version 21 also expands AI-powered tools and continues Blackmagic's push toward an all-in-one creator workflow for editing, color, audio, VFX, and now photo work.
+- The beta expands AI-powered tools across the Resolve workflow while Blackmagic continues building Resolve into an all-in-one creator environment.
 
 ## Source
 
