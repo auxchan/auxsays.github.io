@@ -3,7 +3,7 @@ layout: aux-update
 title: "DaVinci Resolve 21 official update breakdown"
 description: "Published Apr 14, 2026. Blackmagic Design announced DaVinci Resolve 21 and made the public beta available. The 21 release adds a new Photo page for still images and expands AI-powered tools across the Resolve workflow."
 permalink: /updates/davinci-resolve/21/
-update_entry: true
+update_entry: false
 update_product: "DaVinci Resolve"
 update_category: "creator-software"
 update_type: "video-editing"

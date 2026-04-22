@@ -1,11 +1,11 @@
 ---
 layout: aux-update
 title: "DaVinci Resolve 21 Public Beta 1 official update breakdown"
-description: "Published Apr 14, 2026. Blackmagic Design announced DaVinci Resolve 21 Public Beta 1, adding a new Photo page and broader AI-assisted tools across the Resolve workflow."
+description: "Published Apr 14, 2026. Blackmagic Design announced DaVinci Resolve 21 and made the public beta available. The 21 release adds a new Photo page for still images and expands AI-powered tools across the Resolve workflow."
 permalink: /updates/davinci-resolve/21-public-beta-1/
 update_entry: true
 update_product: "DaVinci Resolve"
-update_category: "creator-software"
+update_category: "video-editing"
 update_type: "video-editing"
 update_source_name: "Blackmagic Design"
 update_source_url: "https://www.blackmagicdesign.com/media/release/20260414-01"
@@ -13,12 +13,12 @@ update_download_url: "https://www.blackmagicdesign.com/event/davinciresolvedownl
 update_version: "21 Public Beta 1"
 update_logo_text: "BMD"
 update_published_at: "2026-04-14T00:00:00Z"
-update_last_checked: "2026-04-19T14:30:36Z"
-update_consensus_label: "Insufficient data"
+update_last_checked: "2026-04-20T00:00:00Z"
+update_consensus_label: "Moderate"
 update_consensus_confidence: "Low"
-update_consensus_sample_count: 0
-update_consensus_sources: "Official forum parsing not enabled yet"
-update_consensus_summary: "Too little post-release filtering is wired up yet to make a reliable community call. This pilot currently focuses on official release facts only."
+update_consensus_sample_count: 3
+update_consensus_sources: "Blackmagic Forum"
+update_consensus_summary: "If your current Resolve setup is stable, there is no rush to jump blind. Early reaction around the public beta is mixed rather than clearly bad or clearly calm."
 tags:
   - davinci-resolve
   - creator-software
@@ -28,9 +28,9 @@ tags:
 
 ## Official summary
 
-- Blackmagic Design announced DaVinci Resolve 21 Public Beta 1 and made it available for download.
-- The release adds a dedicated Photo page for still-image workflows.
-- Resolve 21 also broadens AI-assisted features across editing, color, audio, VFX, and photo work.
+- Blackmagic Design announced DaVinci Resolve 21 and made the public beta available for download.
+- The new release adds a dedicated Photo page for still-image workflows.
+- Version 21 also expands AI-powered tools and continues Blackmagic's push toward an all-in-one creator workflow for editing, color, audio, VFX, and now photo work.
 
 ## Source
 

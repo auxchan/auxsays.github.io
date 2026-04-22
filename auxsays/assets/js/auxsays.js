@@ -8,7 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
         loop: true,
         autoplay: true,
         path: '/assets/lottie/systems-pulse.json',
-        rendererSettings: { preserveAspectRatio: 'xMidYMid slice' }
+        rendererSettings: {
+          preserveAspectRatio: 'xMidYMid slice'
+        }
       });
     } catch (err) {
       console.warn('Systems pulse animation failed to load.', err);
@@ -19,103 +21,104 @@ document.addEventListener('DOMContentLoaded', () => {
     const bgRoot = document.getElementById('systems-particles-bg');
     const fgRoot = document.getElementById('systems-particles-fg');
     if (!bgRoot || !fgRoot) return;
+
     bgRoot.innerHTML = '';
     fgRoot.innerHTML = '';
-    const bgCount = window.innerWidth < 860 ? 8 : 12;
-    const fgCount = window.innerWidth < 860 ? 2 : 4;
+
+    const bgCount = window.innerWidth < 860 ? 10 : 14;
+    const fgCount = window.innerWidth < 860 ? 3 : 5;
+
     for (let i = 0; i < bgCount; i += 1) {
       const p = document.createElement('span');
-      const size = (Math.random() * 8) + 4;
+      const size = (Math.random() * 10) + 4;
       p.className = 'systems-particle systems-particle--bg';
       p.style.setProperty('--x', `${Math.random() * 100}%`);
       p.style.setProperty('--y', `${Math.random() * 100}%`);
       p.style.setProperty('--size', `${size}px`);
-      p.style.setProperty('--drift-x', `${(Math.random() * 24 - 12).toFixed(1)}px`);
-      p.style.setProperty('--drift-y', `${(-16 - Math.random() * 22).toFixed(1)}px`);
-      p.style.setProperty('--duration', `${18 + Math.random() * 18}s`);
+      p.style.setProperty('--drift-x', `${(Math.random() * 28 - 14).toFixed(1)}px`);
+      p.style.setProperty('--drift-y', `${(-18 - Math.random() * 28).toFixed(1)}px`);
+      p.style.setProperty('--duration', `${16 + Math.random() * 18}s`);
       p.style.setProperty('--delay', `${-Math.random() * 18}s`);
       bgRoot.appendChild(p);
     }
+
     for (let i = 0; i < fgCount; i += 1) {
       const p = document.createElement('span');
-      const size = (Math.random() * 12) + 10;
+      const size = (Math.random() * 16) + 14;
       p.className = 'systems-particle systems-particle--fg';
-      p.style.setProperty('--x', `${8 + Math.random() * 84}%`);
-      p.style.setProperty('--y', `${14 + Math.random() * 72}%`);
+      p.style.setProperty('--x', `${6 + Math.random() * 88}%`);
+      p.style.setProperty('--y', `${12 + Math.random() * 78}%`);
       p.style.setProperty('--size', `${size}px`);
-      p.style.setProperty('--drift-x', `${(Math.random() * 24 - 12).toFixed(1)}px`);
-      p.style.setProperty('--drift-y', `${(-24 - Math.random() * 24).toFixed(1)}px`);
-      p.style.setProperty('--duration', `${14 + Math.random() * 10}s`);
+      p.style.setProperty('--drift-x', `${(Math.random() * 38 - 19).toFixed(1)}px`);
+      p.style.setProperty('--drift-y', `${(-34 - Math.random() * 40).toFixed(1)}px`);
+      p.style.setProperty('--duration', `${12 + Math.random() * 10}s`);
       p.style.setProperty('--delay', `${-Math.random() * 10}s`);
       fgRoot.appendChild(p);
     }
   }
+
   buildParticles();
   window.addEventListener('resize', buildParticles);
 
-  // coverage cards
   const coverageCards = Array.from(document.querySelectorAll('[data-card]'));
   const prefersTouch = window.matchMedia('(hover: none)').matches || window.innerWidth < 900;
+
   function setCardState(card, open) {
     if (!card) return;
     card.classList.toggle('is-open', open);
     const hit = card.querySelector('.coverage-hit');
     if (hit) hit.setAttribute('aria-expanded', open ? 'true' : 'false');
   }
+
   function closeOthers(activeCard) {
     coverageCards.forEach((card) => {
       if (card !== activeCard) setCardState(card, false);
     });
   }
+
   coverageCards.forEach((card) => {
     const hit = card.querySelector('.coverage-hit');
     if (!hit) return;
+
     if (!prefersTouch) {
-      card.addEventListener('mouseenter', () => { closeOthers(card); setCardState(card, true); });
-      card.addEventListener('mouseleave', () => { setCardState(card, false); });
+      card.addEventListener('mouseenter', () => {
+        closeOthers(card);
+        setCardState(card, true);
+      });
+
+      card.addEventListener('mouseleave', () => {
+        setCardState(card, false);
+      });
     }
+
     hit.addEventListener('click', () => {
       const willOpen = !card.classList.contains('is-open');
       closeOthers(card);
       setCardState(card, willOpen);
     });
   });
-  if (prefersTouch && coverageCards.length) setCardState(coverageCards[0], true);
 
-  // coverage lottie icons
-  if (window.lottie) {
-    document.querySelectorAll('.coverage-lottie[data-lottie]').forEach((node) => {
-      const name = node.dataset.lottie;
-      try {
-        window.lottie.loadAnimation({
-          container: node,
-          renderer: 'svg',
-          loop: true,
-          autoplay: true,
-          path: `/assets/lottie/${name}.json`
-        });
-      } catch (err) {
-        console.warn('Coverage icon failed to load', name, err);
-      }
-    });
+  if (prefersTouch && coverageCards.length) {
+    setCardState(coverageCards[0], true);
   }
 
-  // reveal
   const reveals = document.querySelectorAll('.reveal-up');
-  if (reveals.length) {
-    const revealObserver = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        entry.target.classList.add('is-visible');
-        revealObserver.unobserve(entry.target);
-      });
-    }, { threshold: 0.14, rootMargin: '0px 0px -5% 0px' });
-    reveals.forEach((el) => revealObserver.observe(el));
-  }
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add('is-visible');
+      revealObserver.unobserve(entry.target);
+    });
+  }, {
+    threshold: 0.14,
+    rootMargin: '0px 0px -5% 0px'
+  });
 
-  // parallax
+  reveals.forEach((el) => revealObserver.observe(el));
+
   const parallaxNodes = document.querySelectorAll('[data-parallax]');
   let ticking = false;
+
   function updateParallax() {
     const vh = window.innerHeight;
     parallaxNodes.forEach((node) => {
@@ -126,88 +129,77 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     ticking = false;
   }
+
   function requestParallax() {
     if (ticking) return;
     window.requestAnimationFrame(updateParallax);
     ticking = true;
   }
+
   if (parallaxNodes.length) {
     requestParallax();
     window.addEventListener('scroll', requestParallax, { passive: true });
     window.addEventListener('resize', requestParallax);
   }
 
-  // article filters
-  const articleSearch = document.getElementById('article-search');
-  const articleChips = document.querySelectorAll('.chip');
+  const search = document.getElementById('article-search');
+  const chips = document.querySelectorAll('.chip');
   const articleCards = document.querySelectorAll('.article-card');
   let activeFilter = 'all';
-  function applyArticleFilters() {
-    const query = (articleSearch?.value || '').toLowerCase().trim();
+
+  function applyFilters() {
+    const query = (search?.value || '').toLowerCase().trim();
+
     articleCards.forEach((card) => {
-      const haystack = [card.dataset.title || '', card.dataset.description || '', card.dataset.tags || ''].join(' ').toLowerCase();
+      const haystack = [
+        card.dataset.title || '',
+        card.dataset.description || '',
+        card.dataset.tags || ''
+      ].join(' ').toLowerCase();
+
       const categories = (card.dataset.categories || '').toLowerCase();
       const categoryMatch = activeFilter === 'all' || categories.includes(activeFilter);
       const queryMatch = !query || haystack.includes(query);
+
       card.style.display = categoryMatch && queryMatch ? '' : 'none';
     });
   }
-  articleChips.forEach((chip) => {
+
+  chips.forEach((chip) => {
     chip.addEventListener('click', () => {
-      articleChips.forEach((c) => c.classList.remove('is-active'));
+      chips.forEach((c) => c.classList.remove('is-active'));
       chip.classList.add('is-active');
       activeFilter = chip.dataset.filter;
-      applyArticleFilters();
+      applyFilters();
     });
   });
-  articleSearch?.addEventListener('input', applyArticleFilters);
 
-  // patch feed filters
-  const pfGrid = document.getElementById('patchfeed-grid');
-  const pfSearch = document.getElementById('patchfeed-search');
-  const pfCards = pfGrid ? Array.from(pfGrid.querySelectorAll('.pf-card')) : [];
-  const pfFilterButtons = Array.from(document.querySelectorAll('[data-filter]'));
-  const pfSortButtons = Array.from(document.querySelectorAll('[data-sort]'));
-  let patchFilter = 'all';
-  let patchSort = 'latest';
-
-  function sortPatchCards(cards) {
-    const sorted = [...cards];
-    if (patchSort === 'alpha') sorted.sort((a,b) => (a.dataset.product || '').localeCompare(b.dataset.product || ''));
-    else if (patchSort === 'risk') sorted.sort((a,b) => Number(b.dataset.risk || 0) - Number(a.dataset.risk || 0) || Number(b.dataset.date||0)-Number(a.dataset.date||0));
-    else sorted.sort((a,b) => Number(b.dataset.date || 0) - Number(a.dataset.date || 0));
-    return sorted;
-  }
-
-  function applyPatchFeed() {
-    if (!pfGrid) return;
-    const query = (pfSearch?.value || '').toLowerCase().trim();
-    const filtered = pfCards.filter((card) => {
-      const haystack = [card.dataset.title, card.dataset.product, card.dataset.company, card.dataset.version].join(' ').toLowerCase();
-      const filterSpace = (card.dataset.filter || '').toLowerCase();
-      const matchSearch = !query || haystack.includes(query);
-      const matchFilter = patchFilter === 'all' || filterSpace.includes(patchFilter);
-      return matchSearch && matchFilter;
-    });
-    pfGrid.innerHTML = '';
-    sortPatchCards(filtered).forEach((card) => pfGrid.appendChild(card));
-  }
-
-  pfSearch?.addEventListener('input', applyPatchFeed);
-  pfFilterButtons.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      pfFilterButtons.forEach((b) => b.classList.remove('is-active'));
-      btn.classList.add('is-active');
-      patchFilter = btn.dataset.filter;
-      applyPatchFeed();
-    });
-  });
-  pfSortButtons.forEach((btn) => {
-    btn.addEventListener('click', () => {
-      pfSortButtons.forEach((b) => b.classList.remove('is-active'));
-      btn.classList.add('is-active');
-      patchSort = btn.dataset.sort;
-      applyPatchFeed();
-    });
-  });
+  search?.addEventListener('input', applyFilters);
 });
+
+
+(function () {
+  const iconRoots = document.querySelectorAll('.coverage-icon-lottie[data-lottie-path]');
+  if (!window.lottie || !iconRoots.length) return;
+
+  iconRoots.forEach((root) => {
+    try {
+      const anim = window.lottie.loadAnimation({
+        container: root,
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: root.dataset.lottiePath,
+        rendererSettings: { preserveAspectRatio: 'xMidYMid meet' }
+      });
+      if (anim && anim.setSpeed) anim.setSpeed(0.78);
+      const card = root.closest('.coverage-card');
+      if (card && anim && anim.setDirection) {
+        card.addEventListener('mouseenter', () => anim.setDirection(1));
+        card.addEventListener('mouseleave', () => anim.setDirection(1));
+      }
+    } catch (err) {
+      console.warn('Coverage icon animation failed to load.', err);
+    }
+  });
+})();
