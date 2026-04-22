@@ -1,13 +1,13 @@
 {
-  "eyebrow": "Publication hub \u2022 app-first guides \u2022 release intelligence",
+  "eyebrow": "Publication hub \u2022 app-first guides \u2022 sharper systems",
   "title_lines": [
     "TACTICAL KNOWLEDGE",
     "[accent]FOR CREATORS",
     "WHO WANT CONTROL."
   ],
-  "intro": "AUXSAYS is a creator-systems publication covering real free AI tools, sharper content workflows, practical automation, and a signal-first patch feed for software that actually matters.",
+  "intro": "AUXSAYS is a modern resource hub focused on real free AI tools, cleaner content systems, practical automation, and creator workflows that hold up under actual use.",
   "coverage_intro": "What AUXSAYS actually covers",
-  "coverage_sub": "App-first tool guides, production systems, lightweight automation, release intelligence, and creator infrastructure that holds up under real use.",
+  "coverage_sub": "App-first tool guides, production systems, lightweight automation, and creator infrastructure that holds up under real use.",
   "cards": [
     {
       "title": "Free AI Tools",
@@ -33,7 +33,7 @@
     {
       "title": "LMS Training Systems",
       "kicker": "Institutional delivery",
-      "summary": "Systems-minded guidance drawn from real instructional design, production support, reporting, and workflow architecture.",
+      "summary": "Systems-minded guidance drawn from real instructional design, reporting support, and workflow architecture.",
       "fallback": "04",
       "icon": "lms-systems"
     }

@@ -1,7 +1,7 @@
 ---
 layout: aux-base
 ---
-<section class="hero-grid hero-grid--single">
+<section class="hero-grid hero-grid--solo">
   <article class="panel hero-copy reveal-up">
     <div class="eyebrow">{{ site.data.home.eyebrow }}</div>
     <h1 class="hero-title">
@@ -10,7 +10,7 @@ layout: aux-base
       {% endfor %}
     </h1>
     <p class="hero-intro">{{ site.data.home.intro }}</p>
-    <div class="cta-row">
+    <div class="cta-row cta-row--triad">
       <a class="btn btn-primary" href="{{ '/articles/' | relative_url }}">Browse articles</a>
       <a class="btn btn-secondary" href="{{ '/about/' | relative_url }}">About Aux</a>
       <a class="btn btn-secondary" href="{{ '/updates/' | relative_url }}">Patch Feed</a>
@@ -33,7 +33,7 @@ layout: aux-base
           <span class="coverage-index">{{ card.fallback }}</span>
           <span class="coverage-kicker">{{ card.kicker }}</span>
           <span class="coverage-icon" aria-hidden="true">
-            <span class="coverage-icon-lottie" data-coverage-icon="{{ card.icon }}"></span>
+            <span class="coverage-lottie" data-lottie="{{ card.icon }}"></span>
           </span>
         </span>
 

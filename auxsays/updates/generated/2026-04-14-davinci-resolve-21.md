@@ -1,13 +1,9 @@
 ---
 layout: aux-update
 title: "DaVinci Resolve 21 official update breakdown"
-update_display_title: "DaVinci Resolve 21"
-update_display_kicker: "Official update breakdown"
-update_subtitle: "Resolve 21 public beta line from Blackmagic Design."
-description: "Published Apr 14, 2026. Blackmagic Design announced DaVinci Resolve 21 and made the public beta available. The new release adds a Photo page for still images and expands AI-powered tools across the Resolve workflow."
+description: "Published Apr 14, 2026. Blackmagic Design announced DaVinci Resolve 21 and made the public beta available. The 21 release adds a new Photo page for still images and expands AI-powered tools across the Resolve workflow."
 permalink: /updates/davinci-resolve/21/
 update_entry: true
-update_brand_key: "davinci-resolve"
 update_product: "DaVinci Resolve"
 update_category: "creator-software"
 update_type: "video-editing"
@@ -17,19 +13,24 @@ update_download_url: "https://www.blackmagicdesign.com/event/davinciresolvedownl
 update_version: "21"
 update_logo_text: "BMD"
 update_published_at: "2026-04-14T00:00:00Z"
-update_last_checked: "2026-04-20T00:00:00Z"
+update_last_checked: "2026-04-19T14:30:36Z"
 update_consensus_label: "Insufficient data"
 update_consensus_confidence: "Low"
 update_consensus_sample_count: 0
 update_consensus_sources: "Official forum parsing not enabled yet"
 update_consensus_summary: "Too little post-release filtering is wired up yet to make a reliable community call. This pilot currently focuses on official release facts only."
+tags:
+  - davinci-resolve
+  - creator-software
+  - video-editing
+  - updates
 ---
 
 ## Official summary
 
 - Blackmagic Design announced DaVinci Resolve 21 and made the public beta available for download.
 - The new release adds a dedicated Photo page for still-image workflows.
-- Version 21 expands AI-powered tools and continues Blackmagic's push toward an all-in-one creator workflow for editing, color, audio, VFX, and now photo work.
+- Version 21 also expands AI-powered tools and continues Blackmagic's push toward an all-in-one creator workflow for editing, color, audio, VFX, and now photo work.
 
 ## Source
 

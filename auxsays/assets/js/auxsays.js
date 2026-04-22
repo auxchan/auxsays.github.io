@@ -21,31 +21,31 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!bgRoot || !fgRoot) return;
     bgRoot.innerHTML = '';
     fgRoot.innerHTML = '';
-    const bgCount = window.innerWidth < 860 ? 10 : 14;
-    const fgCount = window.innerWidth < 860 ? 3 : 5;
+    const bgCount = window.innerWidth < 860 ? 8 : 12;
+    const fgCount = window.innerWidth < 860 ? 2 : 4;
     for (let i = 0; i < bgCount; i += 1) {
       const p = document.createElement('span');
-      const size = (Math.random() * 10) + 4;
+      const size = (Math.random() * 8) + 4;
       p.className = 'systems-particle systems-particle--bg';
       p.style.setProperty('--x', `${Math.random() * 100}%`);
       p.style.setProperty('--y', `${Math.random() * 100}%`);
       p.style.setProperty('--size', `${size}px`);
-      p.style.setProperty('--drift-x', `${(Math.random() * 28 - 14).toFixed(1)}px`);
-      p.style.setProperty('--drift-y', `${(-18 - Math.random() * 28).toFixed(1)}px`);
-      p.style.setProperty('--duration', `${16 + Math.random() * 18}s`);
+      p.style.setProperty('--drift-x', `${(Math.random() * 24 - 12).toFixed(1)}px`);
+      p.style.setProperty('--drift-y', `${(-16 - Math.random() * 22).toFixed(1)}px`);
+      p.style.setProperty('--duration', `${18 + Math.random() * 18}s`);
       p.style.setProperty('--delay', `${-Math.random() * 18}s`);
       bgRoot.appendChild(p);
     }
     for (let i = 0; i < fgCount; i += 1) {
       const p = document.createElement('span');
-      const size = (Math.random() * 16) + 14;
+      const size = (Math.random() * 12) + 10;
       p.className = 'systems-particle systems-particle--fg';
-      p.style.setProperty('--x', `${6 + Math.random() * 88}%`);
-      p.style.setProperty('--y', `${12 + Math.random() * 78}%`);
+      p.style.setProperty('--x', `${8 + Math.random() * 84}%`);
+      p.style.setProperty('--y', `${14 + Math.random() * 72}%`);
       p.style.setProperty('--size', `${size}px`);
-      p.style.setProperty('--drift-x', `${(Math.random() * 38 - 19).toFixed(1)}px`);
-      p.style.setProperty('--drift-y', `${(-34 - Math.random() * 40).toFixed(1)}px`);
-      p.style.setProperty('--duration', `${12 + Math.random() * 10}s`);
+      p.style.setProperty('--drift-x', `${(Math.random() * 24 - 12).toFixed(1)}px`);
+      p.style.setProperty('--drift-y', `${(-24 - Math.random() * 24).toFixed(1)}px`);
+      p.style.setProperty('--duration', `${14 + Math.random() * 10}s`);
       p.style.setProperty('--delay', `${-Math.random() * 10}s`);
       fgRoot.appendChild(p);
     }
@@ -53,33 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
   buildParticles();
   window.addEventListener('resize', buildParticles);
 
-  const coverageIconPaths = {
-    'free-ai': '/assets/lottie/free-ai.json',
-    'content-workflows': '/assets/lottie/content-workflows.json',
-    'automation': '/assets/lottie/automation.json',
-    'lms-systems': '/assets/lottie/lms-systems.json'
-  };
-
-  if (window.lottie) {
-    document.querySelectorAll('[data-coverage-icon]').forEach((node) => {
-      const key = node.dataset.coverageIcon;
-      const path = coverageIconPaths[key];
-      if (!path) return;
-      try {
-        window.lottie.loadAnimation({
-          container: node,
-          renderer: 'svg',
-          loop: true,
-          autoplay: true,
-          path,
-          rendererSettings: { preserveAspectRatio: 'xMidYMid meet' }
-        });
-      } catch (err) {
-        console.warn(`Coverage icon failed for ${key}`, err);
-      }
-    });
-  }
-
+  // coverage cards
   const coverageCards = Array.from(document.querySelectorAll('[data-card]'));
   const prefersTouch = window.matchMedia('(hover: none)').matches || window.innerWidth < 900;
   function setCardState(card, open) {
@@ -88,7 +62,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const hit = card.querySelector('.coverage-hit');
     if (hit) hit.setAttribute('aria-expanded', open ? 'true' : 'false');
   }
-  function closeOthers(activeCard) { coverageCards.forEach((card) => { if (card !== activeCard) setCardState(card, false); }); }
+  function closeOthers(activeCard) {
+    coverageCards.forEach((card) => {
+      if (card !== activeCard) setCardState(card, false);
+    });
+  }
   coverageCards.forEach((card) => {
     const hit = card.querySelector('.coverage-hit');
     if (!hit) return;
@@ -104,16 +82,38 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   if (prefersTouch && coverageCards.length) setCardState(coverageCards[0], true);
 
-  const reveals = document.querySelectorAll('.reveal-up');
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (!entry.isIntersecting) return;
-      entry.target.classList.add('is-visible');
-      revealObserver.unobserve(entry.target);
+  // coverage lottie icons
+  if (window.lottie) {
+    document.querySelectorAll('.coverage-lottie[data-lottie]').forEach((node) => {
+      const name = node.dataset.lottie;
+      try {
+        window.lottie.loadAnimation({
+          container: node,
+          renderer: 'svg',
+          loop: true,
+          autoplay: true,
+          path: `/assets/lottie/${name}.json`
+        });
+      } catch (err) {
+        console.warn('Coverage icon failed to load', name, err);
+      }
     });
-  }, { threshold: 0.14, rootMargin: '0px 0px -5% 0px' });
-  reveals.forEach((el) => revealObserver.observe(el));
+  }
 
+  // reveal
+  const reveals = document.querySelectorAll('.reveal-up');
+  if (reveals.length) {
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        entry.target.classList.add('is-visible');
+        revealObserver.unobserve(entry.target);
+      });
+    }, { threshold: 0.14, rootMargin: '0px 0px -5% 0px' });
+    reveals.forEach((el) => revealObserver.observe(el));
+  }
+
+  // parallax
   const parallaxNodes = document.querySelectorAll('[data-parallax]');
   let ticking = false;
   function updateParallax() {
@@ -126,19 +126,24 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     ticking = false;
   }
-  function requestParallax() { if (!ticking) { window.requestAnimationFrame(updateParallax); ticking = true; } }
+  function requestParallax() {
+    if (ticking) return;
+    window.requestAnimationFrame(updateParallax);
+    ticking = true;
+  }
   if (parallaxNodes.length) {
     requestParallax();
     window.addEventListener('scroll', requestParallax, { passive: true });
     window.addEventListener('resize', requestParallax);
   }
 
-  const search = document.getElementById('article-search');
-  const chips = document.querySelectorAll('.chip[data-filter]');
+  // article filters
+  const articleSearch = document.getElementById('article-search');
+  const articleChips = document.querySelectorAll('.chip');
   const articleCards = document.querySelectorAll('.article-card');
   let activeFilter = 'all';
-  function applyFilters() {
-    const query = (search?.value || '').toLowerCase().trim();
+  function applyArticleFilters() {
+    const query = (articleSearch?.value || '').toLowerCase().trim();
     articleCards.forEach((card) => {
       const haystack = [card.dataset.title || '', card.dataset.description || '', card.dataset.tags || ''].join(' ').toLowerCase();
       const categories = (card.dataset.categories || '').toLowerCase();
@@ -147,53 +152,62 @@ document.addEventListener('DOMContentLoaded', () => {
       card.style.display = categoryMatch && queryMatch ? '' : 'none';
     });
   }
-  chips.forEach((chip) => chip.addEventListener('click', () => {
-    chips.forEach((c) => c.classList.remove('is-active'));
-    chip.classList.add('is-active');
-    activeFilter = chip.dataset.filter;
-    applyFilters();
-  }));
-  search?.addEventListener('input', applyFilters);
+  articleChips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      articleChips.forEach((c) => c.classList.remove('is-active'));
+      chip.classList.add('is-active');
+      activeFilter = chip.dataset.filter;
+      applyArticleFilters();
+    });
+  });
+  articleSearch?.addEventListener('input', applyArticleFilters);
 
-  const patchSearch = document.getElementById('patchfeed-search');
-  const patchSort = document.getElementById('patchfeed-sort');
-  const patchCards = Array.from(document.querySelectorAll('[data-patch-card]'));
-  const patchChips = document.querySelectorAll('[data-patch-filter]');
+  // patch feed filters
+  const pfGrid = document.getElementById('patchfeed-grid');
+  const pfSearch = document.getElementById('patchfeed-search');
+  const pfCards = pfGrid ? Array.from(pfGrid.querySelectorAll('.pf-card')) : [];
+  const pfFilterButtons = Array.from(document.querySelectorAll('[data-filter]'));
+  const pfSortButtons = Array.from(document.querySelectorAll('[data-sort]'));
   let patchFilter = 'all';
-  const reactionRank = { negative: 0, moderate: 1, positive: 2, 'insufficient-data': 3, insufficient: 3 };
-  function applyPatchFeed() {
-    const query = (patchSearch?.value || '').toLowerCase().trim();
-    patchCards.forEach((card) => {
-      const haystack = [card.dataset.company, card.dataset.product, card.dataset.version].join(' ');
-      const filterMatch = patchFilter === 'all' || card.dataset.category === patchFilter;
-      const queryMatch = !query || haystack.includes(query);
-      card.style.display = filterMatch && queryMatch ? '' : 'none';
-    });
-    const grid = document.getElementById('patchfeed-grid');
-    if (!grid) return;
-    const sortMode = patchSort?.value || 'latest';
-    const sorted = [...patchCards].sort((a, b) => {
-      if (sortMode === 'latest') return (b.dataset.date || '').localeCompare(a.dataset.date || '');
-      const rankA = reactionRank[a.dataset.reaction] ?? 99;
-      const rankB = reactionRank[b.dataset.reaction] ?? 99;
-      if (sortMode === 'negative') return rankA - rankB;
-      if (sortMode === 'positive') return rankB - rankA;
-      if (sortMode === 'moderate') {
-        const distA = Math.abs((reactionRank[a.dataset.reaction] ?? 3) - 1);
-        const distB = Math.abs((reactionRank[b.dataset.reaction] ?? 3) - 1);
-        return distA - distB;
-      }
-      return 0;
-    });
-    sorted.forEach((card) => grid.appendChild(card));
+  let patchSort = 'latest';
+
+  function sortPatchCards(cards) {
+    const sorted = [...cards];
+    if (patchSort === 'alpha') sorted.sort((a,b) => (a.dataset.product || '').localeCompare(b.dataset.product || ''));
+    else if (patchSort === 'risk') sorted.sort((a,b) => Number(b.dataset.risk || 0) - Number(a.dataset.risk || 0) || Number(b.dataset.date||0)-Number(a.dataset.date||0));
+    else sorted.sort((a,b) => Number(b.dataset.date || 0) - Number(a.dataset.date || 0));
+    return sorted;
   }
-  patchChips.forEach((chip) => chip.addEventListener('click', () => {
-    patchChips.forEach((c) => c.classList.remove('is-active'));
-    chip.classList.add('is-active');
-    patchFilter = chip.dataset.patchFilter;
-    applyPatchFeed();
-  }));
-  patchSearch?.addEventListener('input', applyPatchFeed);
-  patchSort?.addEventListener('change', applyPatchFeed);
-  if (patchCards.length) applyPatchFeed();
+
+  function applyPatchFeed() {
+    if (!pfGrid) return;
+    const query = (pfSearch?.value || '').toLowerCase().trim();
+    const filtered = pfCards.filter((card) => {
+      const haystack = [card.dataset.title, card.dataset.product, card.dataset.company, card.dataset.version].join(' ').toLowerCase();
+      const filterSpace = (card.dataset.filter || '').toLowerCase();
+      const matchSearch = !query || haystack.includes(query);
+      const matchFilter = patchFilter === 'all' || filterSpace.includes(patchFilter);
+      return matchSearch && matchFilter;
+    });
+    pfGrid.innerHTML = '';
+    sortPatchCards(filtered).forEach((card) => pfGrid.appendChild(card));
+  }
+
+  pfSearch?.addEventListener('input', applyPatchFeed);
+  pfFilterButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      pfFilterButtons.forEach((b) => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      patchFilter = btn.dataset.filter;
+      applyPatchFeed();
+    });
+  });
+  pfSortButtons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      pfSortButtons.forEach((b) => b.classList.remove('is-active'));
+      btn.classList.add('is-active');
+      patchSort = btn.dataset.sort;
+      applyPatchFeed();
+    });
+  });
 });
