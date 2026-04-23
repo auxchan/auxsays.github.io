@@ -14,28 +14,28 @@
       "kicker": "What is actually free",
       "summary": "App-specific breakdowns of tools that are genuinely usable without bait-and-switch export traps.",
       "fallback": "01",
-      "icon": "spark"
+      "icon": "free-ai"
     },
     {
       "title": "Content Workflows",
       "kicker": "Creator systems",
       "summary": "Repeatable production chains for thumbnails, edits, repurposing, packaging, and publishing.",
       "fallback": "02",
-      "icon": "grid"
+      "icon": "workflow"
     },
     {
       "title": "Automation Productivity",
       "kicker": "Small tools, big leverage",
       "summary": "Scripts, prompts, and utility chains that save time without becoming another maintenance burden.",
       "fallback": "03",
-      "icon": "orbit"
+      "icon": "automation"
     },
     {
       "title": "LMS Training Systems",
       "kicker": "Institutional delivery",
       "summary": "Systems-minded guidance drawn from instructional design, production support, reporting, and workflow architecture.",
       "fallback": "04",
-      "icon": "stack"
+      "icon": "lms"
     }
   ]
 }

@@ -114,10 +114,10 @@ button, input, select, textarea { font: inherit; }
 
 .home-hero { display:grid; }
 .hero-panel { position:relative; padding:0; overflow:hidden; min-height:540px; }
-.hero-panel-backdrop { position:absolute; inset:0; background: linear-gradient(90deg, rgba(8,12,16,.88) 0%, rgba(8,12,16,.72) 36%, rgba(8,12,16,.42) 68%, rgba(8,12,16,.64) 100%), url('/assets/img/hero-signal-mountains.svg') center/cover no-repeat; }
-.hero-panel-backdrop::after { content:''; position:absolute; inset:0; background: linear-gradient(90deg, rgba(5,8,11,.18), rgba(5,8,11,.05) 48%, rgba(5,8,11,.35)), radial-gradient(circle at 69% 24%, rgba(79,202,220,.08), transparent 18%), linear-gradient(180deg, rgba(255,255,255,.012), rgba(0,0,0,.22)); }
+.hero-panel-backdrop { position:absolute; inset:0; background: linear-gradient(90deg, rgba(8,12,16,.90) 0%, rgba(8,12,16,.74) 34%, rgba(8,12,16,.34) 67%, rgba(8,12,16,.55) 100%), url('/assets/img/hero-signal-mountains.svg') center 52%/cover no-repeat; }
+.hero-panel-backdrop::after { content:''; position:absolute; inset:0; background: linear-gradient(90deg, rgba(5,8,11,.22), rgba(5,8,11,.03) 48%, rgba(5,8,11,.22)), radial-gradient(circle at 70% 24%, rgba(79,202,220,.045), transparent 22%), linear-gradient(180deg, rgba(255,255,255,.01), rgba(0,0,0,.18)); }
 .hero-panel-content { position:relative; z-index:1; width:min(760px, calc(100% - 56px)); padding:2.8rem 0 2.8rem 2.6rem; }
-.hero-title { margin:0; display:grid; gap:.12rem; font-weight:850; font-size:clamp(2.35rem, 4.4vw, 5rem); line-height:.92; letter-spacing:-.06em; text-transform:none; max-width:11ch; }
+.hero-title { margin:0; display:grid; gap:.12rem; font-weight:850; font-size:clamp(2.35rem, 4.4vw, 5rem); line-height:.92; letter-spacing:-.06em; text-transform:none; max-width:15ch; }
 .hero-title .accent { color: var(--accent-1); }
 .hero-intro { margin:1.2rem 0 0; max-width:43rem; color:#d6dde7; font-size:1.08rem; line-height:1.8; }
 .cta-row { display:flex; flex-wrap:wrap; gap:.9rem; margin-top:1.85rem; }
@@ -341,7 +341,7 @@ button, input, select, textarea { font: inherit; }
 
 /* Final integration fixes: Option B hero, About portrait, and Patch Feed report counts */
 .hero-panel { min-height: 560px; }
-.hero-panel-backdrop { background-position: center 42%; }
+.hero-panel-backdrop { background-position: center 52%; }
 .hero-panel-backdrop::before {
   content: '';
   position: absolute;
@@ -416,4 +416,64 @@ button, input, select, textarea { font: inherit; }
   .about-portrait-wrap { max-width: min(280px, 72vw); }
   .patch-card-headline { align-items: flex-start; }
   .patch-status-stack { justify-items: start; }
+}
+
+/* Refinement pass: clearer homepage icons, visible hero terrain, softer About portrait */
+.coverage-icon { color: var(--accent-1); }
+.coverage-icon::before,
+.coverage-icon::after { content: none !important; }
+.coverage-icon svg {
+  width: 25px;
+  height: 25px;
+  display: block;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: transform .32s cubic-bezier(.22,1,.36,1), color .28s ease, filter .28s ease;
+}
+.coverage-card:hover .coverage-icon svg,
+.coverage-card.is-open .coverage-icon svg {
+  color: var(--cyan-1);
+  filter: drop-shadow(0 0 7px rgba(126,207,215,.24));
+}
+.coverage-icon--workflow svg .flow-node,
+.coverage-icon--lms svg .screen-fill { fill: rgba(240,202,103,.16); stroke: currentColor; }
+.coverage-card:hover .coverage-icon--workflow svg .flow-node,
+.coverage-card.is-open .coverage-icon--workflow svg .flow-node,
+.coverage-card:hover .coverage-icon--lms svg .screen-fill,
+.coverage-card.is-open .coverage-icon--lms svg .screen-fill { fill: rgba(126,207,215,.14); }
+.coverage-card:hover .coverage-icon--workflow svg .flow-end,
+.coverage-card.is-open .coverage-icon--workflow svg .flow-end,
+.coverage-card:hover .coverage-icon--lms svg .accent-line,
+.coverage-card.is-open .coverage-icon--lms svg .accent-line { stroke: var(--accent-1); }
+.coverage-card:hover .coverage-icon--workflow svg,
+.coverage-card.is-open .coverage-icon--workflow svg,
+.coverage-card:hover .coverage-icon--lms svg,
+.coverage-card.is-open .coverage-icon--lms svg,
+.coverage-card:hover .coverage-icon--automation svg,
+.coverage-card.is-open .coverage-icon--automation svg,
+.coverage-card:hover .coverage-icon--free-ai svg,
+.coverage-card.is-open .coverage-icon--free-ai svg { transform: translateY(-1px) scale(1.045); }
+.about-portrait-wrap::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 42% 22%, rgba(255,255,255,.10), transparent 28%),
+    linear-gradient(135deg, rgba(126,207,215,.10), transparent 38%, rgba(214,171,78,.08));
+  mix-blend-mode: screen;
+  opacity: .24;
+  transition: opacity .32s ease;
+  pointer-events: none;
+}
+.about-portrait-wrap:hover::after { opacity: .04; }
+.about-portrait {
+  filter: grayscale(1) contrast(.95) brightness(1.03) saturate(.92);
+  transition: filter .32s ease, transform .32s ease;
+}
+.about-portrait-wrap:hover .about-portrait {
+  filter: grayscale(1) contrast(1.02) brightness(1.02) saturate(.98);
+  transform: scale(1.012);
 }
