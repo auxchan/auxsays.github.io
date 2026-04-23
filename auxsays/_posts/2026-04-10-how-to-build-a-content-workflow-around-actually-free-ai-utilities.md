@@ -26,7 +26,7 @@ I think about a lean creator workflow in four stages:
 
 For audio and video, a local transcription layer is one of the best leverage points you can add.
 
-The whisper.cpp project supports local speech recognition with CPU-only inference as well as efficient GPU support and quantization options. That makes it a practical transcription engine for people who want to turn recordings into usable text without depending on a SaaS quota every time. citeturn844418search2
+The whisper.cpp project supports local speech recognition with CPU-only inference as well as efficient GPU support and quantization options. That makes it a practical transcription engine for people who want to turn recordings into usable text without depending on a SaaS quota every time.
 
 What it gives you:
 
@@ -36,7 +36,7 @@ What it gives you:
 
 ### Stage 2: Thinking and shaping
 
-LM Studio’s current positioning is built around running models locally and privately, and recent LM Studio updates also introduced Model Context Protocol support and LM Link for remote/private model access. citeturn844418search0turn844418search16turn844418search20
+LM Studio’s current positioning is built around running models locally and privately, and recent LM Studio updates also introduced Model Context Protocol support and LM Link for remote/private model access.
 
 That makes LM Studio useful as a **local thought partner**, not just a chatbot:
 
@@ -50,7 +50,7 @@ The key is not to offload taste. The key is to use the tool to reduce friction i
 
 ### Stage 3: Asset generation and refinement
 
-For image workflows, ComfyUI is useful because it is modular. Its official repository describes a graph or node-based interface for designing advanced image-generation pipelines on Windows, Linux, and macOS. citeturn844418search1turn844418search17
+For image workflows, ComfyUI is useful because it is modular. Its official repository describes a graph or node-based interface for designing advanced image-generation pipelines on Windows, Linux, and macOS.
 
 That matters because creator workflows are rarely one click.
 
@@ -65,7 +65,7 @@ That is where node-based systems shine. They are less charming on day one, but m
 
 ### Stage 4: Edit and finish
 
-A modular workflow still needs a strong finishing environment. DaVinci Resolve free remains one of the best answers here because it is an actual editing and finishing platform, not just a novelty feature wrapper. Blackmagic’s product page positions it as an all-in-one post toolset, and the free version still covers a large amount of real editorial work. citeturn844418search0
+A modular workflow still needs a strong finishing environment. DaVinci Resolve free remains one of the best answers here because it is an actual editing and finishing platform, not just a novelty feature wrapper. Blackmagic’s product page positions it as an all-in-one post toolset, and the free version still covers a large amount of real editorial work.
 
 This is where your outputs stop being experiments and become deliverables.
 
@@ -117,8 +117,8 @@ That stack is not glamorous, but it is legible. And legible systems are the ones
 
 ## References
 
-- LM Studio official site: https://lmstudio.ai/
-- LM Studio MCP update: https://lmstudio.ai/blog/lmstudio-v0.3.17
-- LM Studio + Claude Code note: https://lmstudio.ai/blog/claudecode
-- ComfyUI official repository: https://github.com/comfy-org/ComfyUI
-- whisper.cpp official repository: https://github.com/ggml-org/whisper.cpp
+- [LM Studio official site](https://lmstudio.ai/)
+- [LM Studio MCP update](https://lmstudio.ai/blog/lmstudio-v0.3.17)
+- [LM Studio + Claude Code note](https://lmstudio.ai/blog/claudecode)
+- [ComfyUI official repository](https://github.com/comfy-org/ComfyUI)
+- [whisper.cpp official repository](https://github.com/ggml-org/whisper.cpp)

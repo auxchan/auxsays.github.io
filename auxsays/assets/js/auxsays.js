@@ -59,30 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
     reveals.forEach((el) => el.classList.add('is-visible'));
   }
 
-  // parallax elements
-  const parallaxNodes = document.querySelectorAll('[data-parallax]');
-  if (!prefersReducedMotion && parallaxNodes.length) {
-    let ticking = false;
-    const updateParallax = () => {
-      const vh = window.innerHeight;
-      parallaxNodes.forEach((node) => {
-        const speed = parseFloat(node.dataset.parallax || '0');
-        const rect = node.getBoundingClientRect();
-        const delta = (rect.top + rect.height / 2 - vh / 2) * speed;
-        node.style.transform = `translate3d(0, ${delta}px, 0)`;
-      });
-      ticking = false;
-    };
-    const requestParallax = () => {
-      if (ticking) return;
-      window.requestAnimationFrame(updateParallax);
-      ticking = true;
-    };
-    requestParallax();
-    window.addEventListener('scroll', requestParallax, { passive: true });
-    window.addEventListener('resize', requestParallax);
-  }
-
   // homepage coverage cards
   const coverageCards = Array.from(document.querySelectorAll('[data-card]'));
   const prefersTouch = window.matchMedia('(hover: none)').matches || window.innerWidth < 900;

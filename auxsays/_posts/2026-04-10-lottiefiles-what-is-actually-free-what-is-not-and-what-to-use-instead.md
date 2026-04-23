@@ -17,7 +17,7 @@ But if your goal is a repeatable production workflow, the real question is not �
 
 ## First, what Lottie actually is
 
-LottieFiles defines Lottie as a JSON-based animation format that can ship across platforms like a static asset while remaining small and scalable. Their own overview emphasizes that Lottie files scale well and are widely supported across platforms. citeturn837506search11turn837506search3
+LottieFiles defines Lottie as a JSON-based animation format that can ship across platforms like a static asset while remaining small and scalable. Their own overview emphasizes that Lottie files scale well and are widely supported across platforms.
 
 That makes Lottie good for:
 
@@ -28,7 +28,7 @@ That makes Lottie good for:
 
 ## What LottieFiles clearly offers for free
 
-On the public site, LottieFiles explicitly markets a large collection of free animations and a preview tool that lets you drag, drop, and inspect Lottie JSON or dotLottie files. The main site also says you can get started for free. citeturn837506search2turn837506search8turn837506search10
+On the public site, LottieFiles explicitly markets a large collection of free animations and a preview tool that lets you drag, drop, and inspect Lottie JSON or dotLottie files. The main site also says you can get started for free.
 
 That means the free value is real in at least three areas:
 
@@ -40,7 +40,7 @@ For many creators, that is enough to experiment and prototype.
 
 ## Where the plan boundary starts to matter
 
-The pricing page and product pages make it clear that LottieFiles also bundles plan-based features around editing, collaboration, premium assets, optimization, and delivery tooling. Their pricing page highlights premium animations, file-size optimization, developer handoff, workspaces, and other workflow features. The Lottie Creator page also highlights export options like dotLottie and video exports up to 4K as part of the broader product stack. citeturn837506search0turn837506search7turn837506search18
+The pricing page and product pages make it clear that LottieFiles also bundles plan-based features around editing, collaboration, premium assets, optimization, and delivery tooling. Their pricing page highlights premium animations, file-size optimization, developer handoff, workspaces, and other workflow features. The Lottie Creator page also highlights export options like dotLottie and video exports up to 4K as part of the broader product stack.
 
 That does **not** automatically make the platform bad. It just means you should treat LottieFiles as:
 
@@ -82,7 +82,7 @@ The official LottieFiles ecosystem also points to routes like:
 - After Effects export through the official plugin
 - Figma export guidance
 - the preview tool for testing
-- free animation collections for exploration and adaptation citeturn837506search6turn837506search4turn837506search10turn837506search8
+- free animation collections for exploration and adaptation
 
 That suggests the best use of LottieFiles is not “let the platform own everything.” It is “use the platform where it is strongest, then keep your production workflow portable.”
 
@@ -98,10 +98,10 @@ That is not a reason to avoid it. It is a reason to use it with your eyes open.
 
 ## References
 
-- LottieFiles homepage: https://lottiefiles.com/
-- LottieFiles pricing: https://lottiefiles.com/pricing
-- What is Lottie: https://lottiefiles.com/what-is-lottie
-- Why Use Lottie: https://lottiefiles.com/blog/working-with-lottie-animations/why-use-lottie
-- LottieFiles preview tool: https://lottiefiles.com/preview
-- LottieFiles After Effects plugin: https://lottiefiles.com/plugins/after-effects
-- Figma export guide: https://lottiefiles.com/plugins/figma/export-guide
+- [LottieFiles homepage](https://lottiefiles.com/)
+- [LottieFiles pricing](https://lottiefiles.com/pricing)
+- [What is Lottie](https://lottiefiles.com/what-is-lottie)
+- [Why Use Lottie](https://lottiefiles.com/blog/working-with-lottie-animations/why-use-lottie)
+- [LottieFiles preview tool](https://lottiefiles.com/preview)
+- [LottieFiles After Effects plugin](https://lottiefiles.com/plugins/after-effects)
+- [Figma export guide](https://lottiefiles.com/plugins/figma/export-guide)

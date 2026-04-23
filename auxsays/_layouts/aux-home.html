@@ -3,17 +3,20 @@ layout: aux-base
 ---
 <section class="home-hero reveal-up">
   <article class="panel hero-panel">
-    <div class="eyebrow">{{ site.data.home.eyebrow }}</div>
-    <h1 class="hero-title">
-      {% for line in site.data.home.title_lines %}
-      <span{% if line contains '[accent]' %} class="accent"{% endif %}>{{ line | replace: '[accent]', '' }}</span>
-      {% endfor %}
-    </h1>
-    <p class="hero-intro">{{ site.data.home.intro }}</p>
-    <div class="cta-row cta-row--home">
-      <a class="btn btn-home" href="{{ '/articles/' | relative_url }}">Browse Articles</a>
-      <a class="btn btn-home" href="{{ '/about/' | relative_url }}">About Aux</a>
-      <a class="btn btn-home" href="{{ '/updates/' | relative_url }}">Patch Feed</a>
+    <div class="hero-panel-backdrop" aria-hidden="true"></div>
+    <div class="hero-panel-content">
+      <div class="eyebrow">{{ site.data.home.eyebrow }}</div>
+      <h1 class="hero-title">
+        {% for line in site.data.home.title_lines %}
+        <span{% if line contains '[accent]' %} class="accent"{% endif %}>{{ line | replace: '[accent]', '' }}</span>
+        {% endfor %}
+      </h1>
+      <p class="hero-intro">{{ site.data.home.intro }}</p>
+      <div class="cta-row cta-row--home">
+        <a class="btn btn-home" href="{{ '/articles/' | relative_url }}">Browse Articles</a>
+        <a class="btn btn-home" href="{{ '/about/' | relative_url }}">About Aux</a>
+        <a class="btn btn-home" href="{{ '/updates/' | relative_url }}">Patch Feed</a>
+      </div>
     </div>
   </article>
 </section>
