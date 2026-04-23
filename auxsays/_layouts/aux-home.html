@@ -11,9 +11,9 @@ layout: aux-base
     </h1>
     <p class="hero-intro">{{ site.data.home.intro }}</p>
     <div class="cta-row cta-row--home">
-      <a class="btn btn-secondary btn-cta" href="{{ '/articles/' | relative_url }}">Browse articles</a>
-      <a class="btn btn-secondary btn-cta" href="{{ '/about/' | relative_url }}">About Aux</a>
-      <a class="btn btn-secondary btn-cta" href="{{ '/updates/' | relative_url }}">Patch Feed</a>
+      <a class="btn btn-home" href="{{ '/articles/' | relative_url }}">Browse articles</a>
+      <a class="btn btn-home" href="{{ '/about/' | relative_url }}">About Aux</a>
+      <a class="btn btn-home" href="{{ '/updates/' | relative_url }}">Patch Feed</a>
     </div>
   </article>
 </section>
@@ -32,9 +32,7 @@ layout: aux-base
         <span class="coverage-topline">
           <span class="coverage-index">{{ card.fallback }}</span>
           <span class="coverage-kicker">{{ card.kicker }}</span>
-          <span class="coverage-icon" aria-hidden="true">
-            <span class="coverage-icon-lottie" data-lottie-path="{{ '/assets/lottie/' | append: card.icon_file | relative_url }}"></span>
-          </span>
+          <span class="coverage-icon coverage-icon--{{ card.icon }}" aria-hidden="true"></span>
         </span>
 
         <h3>{{ card.title }}</h3>

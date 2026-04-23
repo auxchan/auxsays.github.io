@@ -4,90 +4,88 @@ layout: aux-base
 
 {% assign update_pages = site.pages | where: "update_entry", true | sort: "update_published_at" | reverse %}
 
-<section class="patchfeed-shell">
-  <section class="panel patchfeed-hero reveal-up">
+<section class="patch-shell">
+  <section class="panel patch-hero reveal-up">
     <div class="eyebrow">Release notes, trimmed to what matters</div>
-    <h1>Patch Feed</h1>
-    <p>Official notes first. High-signal reaction second. Scan by product, filter by software type, and jump straight to the one page that tells you what changed and whether the early read looks calm, mixed, or messy.</p>
+    <h1 class="patch-title">Patch Feed</h1>
+    <p class="patch-subtitle">Official notes first. High-signal reaction second. Scan by product, filter by software type, and jump straight to the one page that tells you what changed and whether the early read looks calm, mixed, or messy.</p>
   </section>
 
-  <section class="panel patchfeed-controls reveal-up reveal-delay-1">
-    <div class="patchfeed-controls-grid">
-      <label class="patchfeed-search-wrap">
-        <span class="sr-only">Search Patch Feed</span>
-        <input id="patchfeed-search" class="patchfeed-search" type="search" placeholder="Search product, company, or version">
+  <section class="panel patch-toolbar reveal-up reveal-delay-1">
+    <div class="patch-toolbar-grid">
+      <label class="patch-search-wrap">
+        <span class="patch-label">Search Patch Feed</span>
+        <input id="patch-search" class="patch-search" type="search" placeholder="Search product, company, or version">
       </label>
 
-      <div class="patchfeed-lanes">
-        <div class="patchfeed-control-group">
-          <span class="patchfeed-control-label">Browse by type</span>
-          <div class="patchfeed-chip-row">
-            <button class="pf-chip is-active" type="button" data-filter="all">All</button>
-            <button class="pf-chip" type="button" data-filter="broadcasting">Broadcasting</button>
-            <button class="pf-chip" type="button" data-filter="video-editing">Video Editing</button>
-            <button class="pf-chip" type="button" data-filter="creator-software">Creator Tools</button>
-          </div>
+      <div class="patch-controls-group">
+        <span class="patch-label">Browse by type</span>
+        <div class="patch-chips" id="patch-filter-chips">
+          <button class="patch-chip is-active" type="button" data-filter="all">All</button>
+          <button class="patch-chip" type="button" data-filter="broadcasting">Broadcasting</button>
+          <button class="patch-chip" type="button" data-filter="video-editing">Video Editing</button>
+          <button class="patch-chip" type="button" data-filter="creator-software">Creator Tools</button>
         </div>
+      </div>
 
-        <div class="patchfeed-control-group">
-          <span class="patchfeed-control-label">Sort</span>
-          <div class="patchfeed-chip-row">
-            <button class="pf-chip is-active" type="button" data-sort="latest">Latest</button>
-            <button class="pf-chip" type="button" data-sort="alpha">Product A–Z</button>
-            <button class="pf-chip" type="button" data-sort="risk">Risk first</button>
-          </div>
+      <div class="patch-controls-group">
+        <span class="patch-label">Sort</span>
+        <div class="patch-chips" id="patch-sort-chips">
+          <button class="patch-chip is-active" type="button" data-sort="latest">Latest</button>
+          <button class="patch-chip" type="button" data-sort="product">Product A–Z</button>
+          <button class="patch-chip" type="button" data-sort="risk">Risk first</button>
         </div>
       </div>
     </div>
   </section>
 
-  <section id="patchfeed-grid" class="patchfeed-grid reveal-up reveal-delay-2">
+  <section class="patch-feed" id="patch-feed">
     {% for item in update_pages %}
-      {% assign reaction = item.update_consensus_label | default: item.community_reaction | default: 'Insufficient data' %}
-      {% assign reaction_down = reaction | downcase %}
-      {% assign filter_key = item.update_type | default: item.update_category | default: 'creator-software' %}
-      {% assign display_title = item.update_product | append: ' ' | append: item.update_version %}
-      {% assign company_label = item.update_source_name %}
-      {% assign summary_line = item.description | default: item.update_consensus_summary | default: item.community_summary %}
-      <article class="panel pf-card"
-        data-title="{{ item.title | downcase }}"
-        data-product="{{ item.update_product | downcase }}"
-        data-company="{{ company_label | downcase }}"
-        data-version="{{ item.update_version | downcase }}"
-        data-filter="{{ filter_key | downcase }} {{ item.update_category | downcase }}"
-        data-risk="{% if reaction_down contains 'negative' %}3{% elsif reaction_down contains 'moderate' %}2{% elsif reaction_down contains 'positive' %}1{% else %}0{% endif %}"
+      {% unless item.update_hidden %}
+      {% assign reaction_value = item.update_consensus_label | default: item.community_reaction | default: 'Insufficient data' %}
+      {% assign reaction_class = reaction_value | downcase | replace: ' ', '-' %}
+      <article class="panel patch-card reveal-up"
+        data-title="{{ item.update_product | default: item.title | downcase }}"
+        data-company="{{ item.update_source_name | default: '' | downcase }}"
+        data-version="{{ item.update_version | default: '' | downcase }}"
+        data-category="{{ item.update_category | default: '' | downcase }}"
+        data-type="{{ item.update_type | default: '' | downcase }}"
+        data-risk="{{ reaction_class }}"
         data-date="{{ item.update_published_at | date: '%s' }}">
 
-        <div class="pf-meta">
-          <span>{{ item.update_published_at | date: "%b %d, %Y" }}</span>
-          <span>Version {{ item.update_version }}</span>
-          <span>{{ filter_key | replace: '-', ' ' }}</span>
+        <div class="patch-card-headline">
+          <div class="patch-meta-row">
+            <span>{{ item.update_published_at | date: "%b %d, %Y" }}</span>
+            <span>Version {{ item.update_version }}</span>
+            <span>{{ item.update_type | default: item.update_category | replace: '-', ' ' }}</span>
+          </div>
+          <span class="patch-status patch-status--{{ reaction_class }}">{{ reaction_value }}</span>
         </div>
 
-        <div class="pf-header">
-          <a href="{{ item.url | relative_url }}" class="pf-badge-link" aria-label="Open {{ display_title }}">
-            <span class="pf-badge">{{ item.update_logo_text | default: item.update_product | slice: 0, 3 | upcase }}</span>
+        <div class="patch-card-main">
+          <a class="patch-identity" href="{{ item.url | relative_url }}">
+            <span class="patch-badge">{{ item.update_logo_text | default: item.update_product | slice: 0, 3 }}</span>
+            <span class="patch-brand-copy">
+              <strong>{{ item.update_product }}</strong>
+              <em>{{ item.update_source_name }}</em>
+            </span>
           </a>
 
-          <div class="pf-header-copy">
-            <a href="{{ item.url | relative_url }}" class="pf-header-link">
-              <strong>{{ item.update_product }}</strong>
-              <span>{{ company_label }}</span>
-            </a>
+          <h2 class="patch-card-title"><a href="{{ item.url | relative_url }}">{{ item.update_display_title | default: item.update_product | append: ' ' | append: item.update_version }}</a></h2>
+
+          <p class="patch-card-summary">{{ item.description }}</p>
+
+          {% assign summary_line = item.update_consensus_summary | default: item.community_summary %}
+          {% if summary_line %}<p class="patch-consensus-line">{{ summary_line }}</p>{% endif %}
+
+          <div class="patch-card-links">
+            <a href="{{ item.url | relative_url }}">Read breakdown →</a>
+            {% if item.update_source_url %}<a href="{{ item.update_source_url }}">Official source ↗</a>{% endif %}
+            {% if item.update_download_url %}<a href="{{ item.update_download_url }}">Download page ↗</a>{% endif %}
           </div>
-
-          <div class="pf-status pf-status--{{ reaction_down | replace: ' ', '-' }}">{{ reaction }}</div>
-        </div>
-
-        <h2 class="pf-title"><a href="{{ item.url | relative_url }}">{{ display_title }}</a></h2>
-        <p class="pf-summary">{{ summary_line }}</p>
-
-        <div class="pf-links">
-          <a href="{{ item.url | relative_url }}">Read breakdown →</a>
-          {% if item.update_source_url %}<a href="{{ item.update_source_url }}">Official source ↗</a>{% endif %}
-          {% if item.update_download_url %}<a href="{{ item.update_download_url }}">Download page ↗</a>{% endif %}
         </div>
       </article>
+      {% endunless %}
     {% endfor %}
   </section>
 </section>

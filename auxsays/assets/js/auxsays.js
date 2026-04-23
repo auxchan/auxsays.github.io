@@ -25,8 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
     bgRoot.innerHTML = '';
     fgRoot.innerHTML = '';
 
-    const bgCount = window.innerWidth < 860 ? 10 : 14;
-    const fgCount = window.innerWidth < 860 ? 3 : 5;
+    const bgCount = window.innerWidth < 860 ? 8 : 11;
+    const fgCount = window.innerWidth < 860 ? 2 : 4;
 
     for (let i = 0; i < bgCount; i += 1) {
       const p = document.createElement('span');
@@ -177,29 +177,60 @@ document.addEventListener('DOMContentLoaded', () => {
   search?.addEventListener('input', applyFilters);
 });
 
+const patchFeed = document.getElementById('patch-feed');
+const patchSearch = document.getElementById('patch-search');
+const filterChips = Array.from(document.querySelectorAll('#patch-filter-chips [data-filter]'));
+const sortChips = Array.from(document.querySelectorAll('#patch-sort-chips [data-sort]'));
 
-(function () {
-  const iconRoots = document.querySelectorAll('.coverage-icon-lottie[data-lottie-path]');
-  if (!window.lottie || !iconRoots.length) return;
+if (patchFeed && (filterChips.length || sortChips.length || patchSearch)) {
+  const cards = Array.from(patchFeed.querySelectorAll('.patch-card'));
+  let currentFilter = 'all';
+  let currentSort = 'latest';
 
-  iconRoots.forEach((root) => {
-    try {
-      const anim = window.lottie.loadAnimation({
-        container: root,
-        renderer: 'svg',
-        loop: true,
-        autoplay: true,
-        path: root.dataset.lottiePath,
-        rendererSettings: { preserveAspectRatio: 'xMidYMid meet' }
-      });
-      if (anim && anim.setSpeed) anim.setSpeed(0.78);
-      const card = root.closest('.coverage-card');
-      if (card && anim && anim.setDirection) {
-        card.addEventListener('mouseenter', () => anim.setDirection(1));
-        card.addEventListener('mouseleave', () => anim.setDirection(1));
+  const riskRank = { 'negative': 3, 'moderate': 2, 'positive': 1, 'insufficient-data': 0, 'insufficient': 0 };
+
+  const applyPatchFeed = () => {
+    const query = (patchSearch?.value || '').toLowerCase().trim();
+    const visible = cards.filter((card) => {
+      const haystack = [card.dataset.title, card.dataset.company, card.dataset.version].join(' ').toLowerCase();
+      const type = (card.dataset.type || '').toLowerCase();
+      const category = (card.dataset.category || '').toLowerCase();
+      const filterPass = currentFilter === 'all' || type.includes(currentFilter) || category.includes(currentFilter);
+      const queryPass = !query || haystack.includes(query);
+      return filterPass && queryPass;
+    });
+
+    visible.sort((a, b) => {
+      if (currentSort === 'product') {
+        return (a.dataset.title || '').localeCompare(b.dataset.title || '');
       }
-    } catch (err) {
-      console.warn('Coverage icon animation failed to load.', err);
-    }
-  });
-})();
+      if (currentSort === 'risk') {
+        const delta = (riskRank[b.dataset.risk] || 0) - (riskRank[a.dataset.risk] || 0);
+        if (delta !== 0) return delta;
+      }
+      return Number(b.dataset.date || 0) - Number(a.dataset.date || 0);
+    });
+
+    cards.forEach((card) => card.classList.add('is-hidden'));
+    visible.forEach((card) => {
+      card.classList.remove('is-hidden');
+      patchFeed.appendChild(card);
+    });
+  };
+
+  patchSearch?.addEventListener('input', applyPatchFeed);
+  filterChips.forEach((chip) => chip.addEventListener('click', () => {
+    filterChips.forEach((c) => c.classList.remove('is-active'));
+    chip.classList.add('is-active');
+    currentFilter = chip.dataset.filter;
+    applyPatchFeed();
+  }));
+  sortChips.forEach((chip) => chip.addEventListener('click', () => {
+    sortChips.forEach((c) => c.classList.remove('is-active'));
+    chip.classList.add('is-active');
+    currentSort = chip.dataset.sort;
+    applyPatchFeed();
+  }));
+
+  applyPatchFeed();
+}

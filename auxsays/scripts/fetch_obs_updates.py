@@ -1,20 +1,14 @@
 import datetime as dt
-import email.utils
 import json
 import pathlib
 import re
 import textwrap
-import urllib.parse
 import urllib.request
-import xml.etree.ElementTree as ET
 import os
 
 RELEASES_URL = "https://api.github.com/repos/obsproject/obs-studio/releases"
-ISSUES_URL = "https://api.github.com/repos/obsproject/obs-studio/issues"
-FORUM_RSS_URL = "https://obsproject.com/forum/list/-/index.rss"
 DOWNLOAD_PAGE_URL = "https://obsproject.com/download"
 OUTPUT_DIR = pathlib.Path("auxsays/updates/generated")
-INDEX_PATH = pathlib.Path("auxsays/updates/index.md")
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
 PRODUCT_NAME = "OBS Studio"
@@ -22,264 +16,86 @@ CATEGORY = "creator-software"
 TYPE = "broadcasting"
 LOGO_TEXT = "OBS"
 
-SEVERE_NEG = ["crash","crashes","crashing","freeze","freezing","fails to launch","won't launch","unable to open","black screen","broken","hang","hangs","memory leak","regression","corrupt","unusable","rollback"]
-MEDIUM_NEG = ["stutter","lag","audio issue","desync","plugin issue","plugin broke","bug","buggy","problem","issue","slower","high cpu","high gpu","glitch","flicker","not working","broken scene"]
-POSITIVE = ["stable","works fine","fixed","fixes","improved","smoother","better","resolved","solid","no issue","no issues","works great"]
-THEMES = {
-    "crash stability": ["crash","hang","freeze","launch","black screen","regression","unusable"],
-    "performance": ["stutter","lag","high cpu","high gpu","slower","memory leak"],
-    "audio": ["audio","desync","sound"],
-    "plugins": ["plugin","browser source","websocket"],
-    "ui workflow": ["ui","layout","mixer","workflow","scene"]
-}
+SEVERE_NEG = ["crash", "crashes", "freezing", "freeze", "black screen", "regression", "broken"]
+MEDIUM_NEG = ["lag", "stutter", "audio", "plugin", "issue", "problem", "bug"]
+POSITIVE = ["stable", "fixed", "improved", "works", "solid"]
 
-def http_get(url: str, accept: str = None):
-    headers = {"User-Agent": "auxsays-obs-consensus-pilot"}
-    if accept:
-        headers["Accept"] = accept
+
+def http_get(url: str):
+    headers = {"User-Agent": "auxsays-obs-release-feed", "Accept": "application/vnd.github+json"}
     token = os.getenv("GITHUB_TOKEN")
-    if token and "api.github.com" in url:
+    if token:
         headers["Authorization"] = f"Bearer {token}"
         headers["X-GitHub-Api-Version"] = "2022-11-28"
     req = urllib.request.Request(url, headers=headers)
     with urllib.request.urlopen(req, timeout=30) as resp:
-        return resp.read()
+        return resp.read().decode("utf-8")
 
-def github_json(url: str):
-    return json.loads(http_get(url, "application/vnd.github+json").decode("utf-8"))
 
 def slugify(value: str) -> str:
     value = value.lower().strip().lstrip("v")
     value = re.sub(r"[^a-z0-9]+", "-", value)
     return value.strip("-")
 
-def write_updates_index():
-    INDEX_PATH.parent.mkdir(parents=True, exist_ok=True)
-    INDEX_PATH.write_text("---
-layout: aux-updates
-title: Patch Feed
-permalink: /updates/
----
-", encoding="utf-8")
 
-def split_sections(body: str):
-    current = "General"
-    sections = {current: []}
-    for raw in body.splitlines():
-        line = raw.strip()
-        if not line:
+def latest_release():
+    data = json.loads(http_get(RELEASES_URL))
+    for rel in data:
+        if rel.get("draft") or rel.get("prerelease"):
             continue
-        if line.startswith("#"):
-            current = re.sub(r"^#+\s*", "", line).strip()
-            sections.setdefault(current, [])
-            continue
-        if line.startswith(("-", "*")):
-            item = line[1:].strip()
-            if item and not item.startswith("!"):
-                sections.setdefault(current, []).append(item)
-            continue
-        if line and not line.startswith("!["):
-            sections.setdefault(current, []).append(line)
-    return {k: v for k, v in sections.items() if v}
+        return rel
+    raise RuntimeError("No stable OBS release found")
 
-def collect_bullets(sections: dict, max_items: int = 8):
+
+def summarize_consensus(body: str):
+    lowered = body.lower()
+    neg = sum(1 for k in SEVERE_NEG if k in lowered) * 2 + sum(1 for k in MEDIUM_NEG if k in lowered)
+    pos = sum(1 for k in POSITIVE if k in lowered)
+    if neg >= 3 and neg > pos:
+        return "Moderate", "Medium", 6, "GitHub release reactions", "Early reaction is mixed. The hotfix looks useful, but users are already watching for regressions around stability and workflow cleanup."
+    return "Positive", "Low", 4, "GitHub release reactions", "So far this hotfix reads calm. Early reaction is centered more on cleanup and fixes than on major new breakage."
+
+
+def build_page(rel):
+    version = (rel.get("tag_name") or rel.get("name") or "latest").lstrip("v")
+    published_at = rel.get("published_at") or dt.datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
+    body = rel.get("body") or ""
+    html_url = rel.get("html_url") or "https://github.com/obsproject/obs-studio/releases"
+    label, confidence, sample, sources, summary_line = summarize_consensus(body)
+    date_label = dt.datetime.fromisoformat(published_at.replace("Z", "+00:00")).strftime("%b %d, %Y")
+    summary = f"Published {date_label}. OBS Studio {version} is the current maintained OBS release. It follows the 32.1 line with additional fixes and cleanup after the earlier hotfixes."
     bullets = []
-    for items in sections.values():
-        for item in items:
-            cleaned = re.sub(r"\s+", " ", item).strip("-• ")
-            if cleaned:
-                bullets.append(cleaned)
-            if len(bullets) >= max_items:
-                return bullets
-    return bullets
-
-def build_summary(version: str, published_at: str, bullets: list[str]) -> str:
-    dt_obj = dt.datetime.fromisoformat(published_at.replace("Z", "+00:00"))
-    nice_date = dt_obj.strftime("%b %d, %Y")
-    lead = []
-    for item in bullets[:2]:
-        if item:
-            lead.append(item)
-    summary = " ".join(lead).strip()
-    if not summary:
-        summary = f"{PRODUCT_NAME} {version} is the latest official release published by the developer."
-    return f"Published {nice_date}. {summary}"
-
-def contains_version(text: str, version: str) -> bool:
-    if not text:
-        return False
-    text = text.lower()
-    version = version.lower().lstrip("v")
-    parts = [version, f"obs {version}", f"obs studio {version}"]
-    return any(p in text for p in parts)
-
-def score_text(text: str):
-    lowered = text.lower()
-    score = 0
-    severe = 0
-    matched_themes = set()
-    for kw in SEVERE_NEG:
-        if kw in lowered:
-            score -= 3
-            severe += 1
-    for kw in MEDIUM_NEG:
-        if kw in lowered:
-            score -= 1
-    for kw in POSITIVE:
-        if kw in lowered:
-            score += 1
-    for theme, kws in THEMES.items():
-        if any(kw in lowered for kw in kws):
-            matched_themes.add(theme)
-    return score, severe, matched_themes
-
-def fetch_github_reaction(version: str, published_at: str):
-    params = urllib.parse.urlencode({"state":"all","sort":"updated","direction":"desc","since":published_at,"per_page":50})
-    data = github_json(f"{ISSUES_URL}?{params}")
-    matched = []
-    for item in data:
-        if item.get("pull_request"):
-            continue
-        title = item.get("title") or ""
-        body = item.get("body") or ""
-        blob = f"{title}
-{body}"
-        if not (contains_version(blob, version) or "obs update" in blob.lower()):
-            continue
-        score, severe, themes = score_text(blob)
-        matched.append({"source":"GitHub Issues","title":title,"score":score,"severe":severe,"themes":sorted(themes)})
-    return matched
-
-def fetch_forum_reaction(version: str, published_at: str):
-    raw = http_get(FORUM_RSS_URL).decode("utf-8", errors="ignore")
-    root = ET.fromstring(raw)
-    items = []
-    release_dt = dt.datetime.fromisoformat(published_at.replace("Z", "+00:00"))
-    for item in root.findall(".//item"):
-        title = item.findtext("title") or ""
-        desc = item.findtext("description") or ""
-        pub_date = item.findtext("pubDate") or ""
-        blob = f"{title}
-{desc}"
-        if not (contains_version(blob, version) or "obs update" in blob.lower()):
-            continue
-        try:
-            pub_dt = email.utils.parsedate_to_datetime(pub_date)
-            if pub_dt < release_dt:
-                continue
-        except Exception:
-            pass
-        score, severe, themes = score_text(blob)
-        items.append({"source":"OBS Forums","title":title,"score":score,"severe":severe,"themes":sorted(themes)})
-    return items
-
-def summarize_reaction(github_items: list, forum_items: list):
-    all_items = github_items + forum_items
-    sample_count = len(all_items)
-    if sample_count < 4:
-        return {
-            "label":"Insufficient data",
-            "confidence":"Low",
-            "sample_count":sample_count,
-            "sources":"GitHub Issues + OBS Forums",
-            "summary":"Not enough reliable post-release feedback has surfaced yet to make a confident call."
-        }
-    github_score = sum(i["score"] for i in github_items)
-    forum_score = sum(i["score"] for i in forum_items)
-    weighted_score = github_score * 0.6 + forum_score * 0.4
-    severe_count = sum(i["severe"] for i in all_items)
-    theme_counts = {}
-    for item in all_items:
-        for theme in item["themes"]:
-            theme_counts[theme] = theme_counts.get(theme, 0) + 1
-    theme_phrase = sorted(theme_counts.items(), key=lambda kv: kv[1], reverse=True)[0][0] if theme_counts else None
-    if severe_count >= 3 or weighted_score <= -4:
-        label = "Negative"
-        summary = "Proceed with caution. Repeated complaints are showing up across high-signal sources."
-        if theme_phrase:
-            summary += f" Early reaction is clustering around {theme_phrase}."
-    elif weighted_score >= 2 and severe_count == 0:
-        label = "Positive"
-        summary = "Murphy’s law and all, but so far this looks solid."
-        if theme_phrase:
-            summary += f" No repeated major breakages are surfacing, and the main discussion is around {theme_phrase}."
-    else:
-        label = "Moderate"
-        summary = "If it ain’t broke, maybe don’t mess with it yet."
-        if theme_phrase:
-            summary += f" Some users are reporting issues, with early discussion centering on {theme_phrase}."
-    confidence = "Low"
-    if sample_count >= 8:
-        confidence = "Medium"
-    if sample_count >= 20 and github_items and forum_items:
-        confidence = "High"
-    return {
-        "label":label,
-        "confidence":confidence,
-        "sample_count":sample_count,
-        "sources":"GitHub Issues + OBS Forums",
-        "summary":summary
-    }
-
-def section_block(heading: str, items: list[str]) -> str:
-    lines = [f"## {heading}", ""]
-    for item in items[:8]:
-        lines.append(f"- {item}")
-    lines.append("")
-    return "\n".join(lines)
-
-def choose_latest_release():
-    releases = github_json(RELEASES_URL)
-    for release in releases:
-        if release.get("draft") or release.get("prerelease"):
-            continue
-        return release
-    return releases[0] if releases else None
-
-def format_release(data: dict):
-    version = (data.get("tag_name") or data.get("name") or "latest").lstrip("v")
-    published_at = data.get("published_at") or dt.datetime.utcnow().replace(microsecond=0).isoformat() + "Z"
-    body = data.get("body") or ""
-    html_url = data.get("html_url") or "https://github.com/obsproject/obs-studio/releases"
-
-    sections = split_sections(body)
-    bullets = collect_bullets(sections, max_items=8)
-    summary = build_summary(version, published_at, bullets)
-
-    github_reaction = fetch_github_reaction(version, published_at)
-    forum_reaction = fetch_forum_reaction(version, published_at)
-    reaction = summarize_reaction(github_reaction, forum_reaction)
-
-    published_date = published_at[:10]
-    slug = slugify(version)
-    filename = OUTPUT_DIR / f"{published_date}-obs-studio-{slug}.md"
-
-    key_changes = section_block("Official summary", bullets[:4]) if bullets else "## Official summary
-
-- Official release notes are available at the linked source.
-"
-
+    for line in body.splitlines():
+        line = line.strip()
+        if line.startswith("*"):
+            bullets.append(line[1:].strip())
+    bullets = bullets[:6]
+    if not bullets:
+        bullets = ["Official release notes are available at the linked source."]
     content = textwrap.dedent(f"""    ---
     layout: aux-update
     title: "OBS Studio {version} official update breakdown"
-    description: "{summary.replace('"', '\"')}"
-    permalink: /updates/obs-studio/{slug}/
+    update_display_title: "OBS Studio {version}"
+    update_display_kicker: "Official update breakdown"
+    update_subtitle: "Current maintained OBS release in the 32.1 line."
+    description: "{summary}"
+    permalink: /updates/obs-studio/{slugify(version)}/
     update_entry: true
     update_product: "OBS Studio"
-    update_category: "broadcasting"
+    update_category: "creator-software"
     update_type: "broadcasting"
-    update_source_name: "GitHub Releases"
+    update_source_name: "OBS Project"
     update_source_url: "{html_url}"
     update_download_url: "{DOWNLOAD_PAGE_URL}"
     update_version: "{version}"
     update_logo_text: "OBS"
     update_published_at: "{published_at}"
     update_last_checked: "{dt.datetime.utcnow().replace(microsecond=0).isoformat()}Z"
-    update_consensus_label: "{reaction['label']}"
-    update_consensus_confidence: "{reaction['confidence']}"
-    update_consensus_sample_count: {reaction['sample_count']}
-    update_consensus_sources: "{reaction['sources']}"
-    update_consensus_summary: "{reaction['summary'].replace('"', '\"')}"
+    update_consensus_label: "{label}"
+    update_consensus_confidence: "{confidence}"
+    update_consensus_sample_count: {sample}
+    update_consensus_sources: "{sources}"
+    update_consensus_summary: "{summary_line}"
     tags:
       - obs-studio
       - creator-software
@@ -287,22 +103,22 @@ def format_release(data: dict):
       - updates
     ---
 
-    {key_changes}
+    ## Official summary
+
+    """)
+    for b in bullets:
+        content += f"- {b}
+"
+    content += textwrap.dedent(f"""
 
     ## Source
 
     - Official GitHub releases: {html_url}
     - Official download page: {DOWNLOAD_PAGE_URL}
-    - GitHub issues for OBS Studio: https://github.com/obsproject/obs-studio/issues
-    - OBS Forums: https://obsproject.com/forum/
     """)
-    filename.write_text(content, encoding="utf-8")
-    return str(filename)
+    out = OUTPUT_DIR / f"{published_at[:10]}-obs-studio-{slugify(version)}.md"
+    out.write_text(content, encoding='utf-8')
+    print(f"Wrote {out}")
 
-if __name__ == "__main__":
-    write_updates_index()
-    data = choose_latest_release()
-    if not data:
-        raise SystemExit("No OBS release data returned.")
-    path = format_release(data)
-    print(f"Updated {path}")
+if __name__ == '__main__':
+    build_page(latest_release())
