@@ -26,7 +26,10 @@ layout: aux-base
         {% assign consensus_summary = page.update_consensus_summary | default: page.community_summary %}
         {% if consensus_summary %}
         <div class="update-consensus">
-          <div class="update-consensus-top"><span class="consensus-badge consensus-badge--{{ reaction_class }}">{{ reaction }}</span></div>
+          <div class="update-consensus-top">
+            <span class="consensus-badge consensus-badge--{{ reaction_class }}">{{ reaction }}</span>
+            <span class="update-report-count">{{ page.update_report_count | default: 0 }} matched reports{% if page.update_consensus_confidence %} • {{ page.update_consensus_confidence }} confidence{% endif %}</span>
+          </div>
           <p>{{ consensus_summary }}</p>
         </div>
         {% endif %}
@@ -40,6 +43,7 @@ layout: aux-base
           <div class="update-side-row"><span class="update-side-label">Published</span><span class="update-side-value">{{ page.update_published_at | date: "%b %d, %Y" }}</span></div>
           <div class="update-side-row"><span class="update-side-label">Version</span><span class="update-side-value">{{ page.update_version }}</span></div>
           <div class="update-side-row"><span class="update-side-label">Status</span><span class="update-side-value">{{ page.update_status | default: 'current' }}</span></div>
+          <div class="update-side-row"><span class="update-side-label">Reports</span><span class="update-side-value">{{ page.update_report_count | default: 0 }}</span></div>
           <div class="update-side-row"><span class="update-side-label">Last checked</span><span class="update-side-value">{{ page.update_last_checked | date: "%b %d, %Y" }}</span></div>
         </div>
       </aside>

@@ -23,8 +23,8 @@ def main():
  if stable:
   latest=(stable[0].get("tag_name") or "").lstrip("v")
   prev=state.get("obs-studio",{})
-  state["obs-studio"]={"current_version":latest,"previous_version":prev.get("current_version",""),"current_consensus":"Moderate","previous_consensus":prev.get("current_consensus","Negative"),"status_changed_at":dt.datetime.utcnow().replace(microsecond=0).isoformat()+"Z","status_change_type":"improved"}
+  state["obs-studio"]={"current_version":latest,"previous_version":prev.get("current_version",""),"current_consensus":"Moderate","previous_consensus":prev.get("current_consensus","Negative"),"status_changed_at":dt.datetime.utcnow().replace(microsecond=0).isoformat()+"Z","status_change_type":"improved","report_count":0}
   if not notes or notes[0].get("version")!=latest:
-   notes.insert(0,{"product":"OBS Studio","version":latest,"change_type":"improved","from":prev.get("current_consensus","Negative"),"to":"Moderate","changed_at":dt.datetime.utcnow().replace(microsecond=0).isoformat()+"Z","message":f"OBS Studio {latest} improved from Negative to Moderate after replacing the earlier unstable hotfix.","url":f"/updates/obs-studio/{slugify(latest)}/"})
+   notes.insert(0,{"product":"OBS Studio","version":latest,"change_type":"improved","from":prev.get("current_consensus","Negative"),"to":"Moderate","changed_at":dt.datetime.utcnow().replace(microsecond=0).isoformat()+"Z","message":f"OBS Studio {latest} improved from Negative to Moderate after replacing the earlier unstable hotfix.","url":f"/updates/obs-studio/{slugify(latest)}/","report_count":0})
  save_json(STATE_PATH,state); save_json(NOTIFY_PATH,notes[:25])
 if __name__=="__main__": main()

@@ -115,7 +115,7 @@ button, input, select, textarea { font: inherit; }
 .home-hero { display:grid; }
 .hero-panel { position:relative; padding:0; overflow:hidden; min-height:540px; }
 .hero-panel-backdrop { position:absolute; inset:0; background: linear-gradient(90deg, rgba(8,12,16,.88) 0%, rgba(8,12,16,.72) 36%, rgba(8,12,16,.42) 68%, rgba(8,12,16,.64) 100%), url('/assets/img/hero-signal-mountains.svg') center/cover no-repeat; }
-.hero-panel-backdrop::after { content:''; position:absolute; inset:0; background: radial-gradient(circle at 60% 28%, rgba(47,182,212,.12), transparent 24%), radial-gradient(circle at 24% 76%, rgba(214,171,78,.08), transparent 22%), linear-gradient(180deg, rgba(255,255,255,.012), rgba(255,255,255,0)); }
+.hero-panel-backdrop::after { content:''; position:absolute; inset:0; background: linear-gradient(90deg, rgba(5,8,11,.18), rgba(5,8,11,.05) 48%, rgba(5,8,11,.35)), radial-gradient(circle at 69% 24%, rgba(79,202,220,.08), transparent 18%), linear-gradient(180deg, rgba(255,255,255,.012), rgba(0,0,0,.22)); }
 .hero-panel-content { position:relative; z-index:1; width:min(760px, calc(100% - 56px)); padding:2.8rem 0 2.8rem 2.6rem; }
 .hero-title { margin:0; display:grid; gap:.12rem; font-weight:850; font-size:clamp(2.35rem, 4.4vw, 5rem); line-height:.92; letter-spacing:-.06em; text-transform:none; max-width:11ch; }
 .hero-title .accent { color: var(--accent-1); }
@@ -140,9 +140,9 @@ button, input, select, textarea { font: inherit; }
 }
 .coverage-card::after { content:none; }
 .coverage-card:hover, .coverage-card.is-open {
-  transform: translateY(-6px) scale(1.018);
-  border-color: rgba(214,171,78,.62);
-  box-shadow: 0 18px 38px rgba(0,0,0,.28), 0 0 0 1px rgba(214,171,78,.12), 0 10px 24px rgba(0,0,0,.18);
+  transform: translateY(-7px) scale(1.018);
+  border-color: rgba(240,202,103,.82);
+  box-shadow: 0 18px 38px rgba(0,0,0,.30), 0 0 0 1px rgba(240,202,103,.26);
 }
 
 
@@ -336,4 +336,84 @@ button, input, select, textarea { font: inherit; }
 
 @media (prefers-reduced-motion: reduce) {
   .systems-particle, .reveal-up, .coverage-card, .coverage-icon::before, .coverage-icon::after, .btn, .chip, .patch-chip { animation:none !important; transition:none !important; }
+}
+
+
+/* Final integration fixes: Option B hero, About portrait, and Patch Feed report counts */
+.hero-panel { min-height: 560px; }
+.hero-panel-backdrop { background-position: center 42%; }
+.hero-panel-backdrop::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,.018), rgba(0,0,0,.08) 42%, rgba(0,0,0,.42));
+  pointer-events: none;
+}
+.coverage-card::before { content: none !important; }
+.coverage-card:hover::after, .coverage-card.is-open::after { opacity: 0 !important; }
+
+.about-stage-shell {
+  grid-template-columns: minmax(260px, 340px) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(1.4rem, 3vw, 3rem);
+}
+.about-portrait-wrap {
+  position: relative;
+  z-index: 1;
+  max-width: 340px;
+}
+.about-portrait {
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+  object-position: center 18%;
+}
+.about-stage-copy {
+  position: relative;
+  z-index: 2;
+  align-self: center;
+}
+.about-lanes { align-items: stretch; }
+
+.patch-status-stack {
+  display: inline-grid;
+  justify-items: end;
+  gap: .42rem;
+  flex: 0 0 auto;
+}
+.patch-report-count,
+.patch-consensus-meta,
+.update-report-count {
+  color: var(--text-2);
+  font-size: .74rem;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+}
+.patch-consensus-block {
+  display: grid;
+  gap: .36rem;
+  max-width: 62rem;
+  padding: .9rem 1rem;
+  border-left: 2px solid rgba(214,171,78,.56);
+  background: rgba(255,255,255,.018);
+  border-radius: 0 16px 16px 0;
+}
+.patch-consensus-label {
+  color: var(--accent-0);
+  font-size: .72rem;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  font-weight: 800;
+}
+.update-consensus-top {
+  display: flex;
+  gap: .8rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 860px) {
+  .about-stage-shell { grid-template-columns: 1fr; }
+  .about-portrait-wrap { max-width: min(280px, 72vw); }
+  .patch-card-headline { align-items: flex-start; }
+  .patch-status-stack { justify-items: start; }
 }

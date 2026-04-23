@@ -20,6 +20,8 @@ update_feed_title: "DaVinci Resolve 21"
 update_detail_title: "DaVinci Resolve 21"
 update_consensus_label: "Insufficient data"
 update_consensus_summary: "This generic entry has been archived so the more specific Public Beta 1 article becomes the primary public record."
+update_report_count: 0
+update_consensus_confidence: "Low"
 status_change_type: "archived"
 notification_message: "This generic DaVinci Resolve 21 entry was archived so the more specific Public Beta 1 article can act as the current public reference."
 ---

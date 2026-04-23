@@ -1,43 +1,70 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 920" preserveAspectRatio="xMidYMid slice">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#071017"/>
-      <stop offset="50%" stop-color="#0b151b"/>
-      <stop offset="100%" stop-color="#0c171d"/>
+    <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#081015"/>
+      <stop offset="0.42" stop-color="#0b171d"/>
+      <stop offset="1" stop-color="#071014"/>
     </linearGradient>
-    <radialGradient id="cyanGlow" cx="62%" cy="34%" r="38%">
-      <stop offset="0%" stop-color="rgba(47,182,212,.42)"/>
-      <stop offset="55%" stop-color="rgba(27,99,121,.20)"/>
-      <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+    <linearGradient id="haze" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0a0d10" stop-opacity="0.92"/>
+      <stop offset="0.44" stop-color="#12323b" stop-opacity="0.52"/>
+      <stop offset="0.72" stop-color="#0b151a" stop-opacity="0.62"/>
+      <stop offset="1" stop-color="#060a0d" stop-opacity="0.94"/>
+    </linearGradient>
+    <radialGradient id="signalCore" cx="62%" cy="23%" r="28%">
+      <stop offset="0" stop-color="#3fc5db" stop-opacity="0.26"/>
+      <stop offset="0.42" stop-color="#2a8397" stop-opacity="0.12"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0"/>
     </radialGradient>
-    <radialGradient id="goldGlow" cx="28%" cy="72%" r="24%">
-      <stop offset="0%" stop-color="rgba(214,171,78,.18)"/>
-      <stop offset="100%" stop-color="rgba(0,0,0,0)"/>
+    <radialGradient id="ochreEdge" cx="19%" cy="83%" r="31%">
+      <stop offset="0" stop-color="#d6ab4e" stop-opacity="0.11"/>
+      <stop offset="1" stop-color="#000000" stop-opacity="0"/>
     </radialGradient>
+    <filter id="softBlur"><feGaussianBlur stdDeviation="8"/></filter>
+    <filter id="mountainBlur"><feGaussianBlur stdDeviation="1.2"/></filter>
+    <pattern id="grain" width="160" height="160" patternUnits="userSpaceOnUse">
+      <rect width="160" height="160" fill="transparent"/>
+      <circle cx="18" cy="44" r="0.8" fill="#ffffff" opacity="0.045"/>
+      <circle cx="96" cy="24" r="0.6" fill="#ffffff" opacity="0.04"/>
+      <circle cx="134" cy="98" r="0.7" fill="#ffffff" opacity="0.035"/>
+      <circle cx="42" cy="126" r="0.55" fill="#ffffff" opacity="0.035"/>
+    </pattern>
   </defs>
-  <rect width="1600" height="900" fill="url(#bg)"/>
-  <rect width="1600" height="900" fill="url(#cyanGlow)"/>
-  <rect width="1600" height="900" fill="url(#goldGlow)"/>
-  <g opacity=".18">
-    <path d="M0 708 L200 530 L420 688 L618 438 L796 618 L986 424 L1198 612 L1390 500 L1600 684 L1600 900 L0 900 Z" fill="#111920"/>
-    <path d="M0 770 L176 646 L356 742 L554 562 L726 702 L930 564 L1138 706 L1352 624 L1600 770 L1600 900 L0 900 Z" fill="#0b1217"/>
-    <path d="M0 824 L214 696 L412 784 L620 632 L800 740 L1010 610 L1228 744 L1406 666 L1600 798 L1600 900 L0 900 Z" fill="#081015"/>
+
+  <rect width="1800" height="920" fill="url(#sky)"/>
+  <rect width="1800" height="920" fill="url(#signalCore)"/>
+  <rect width="1800" height="920" fill="url(#ochreEdge)"/>
+
+  <!-- distant mountain atmosphere -->
+  <g opacity="0.36" filter="url(#mountainBlur)">
+    <path d="M0 650 C80 620 150 574 240 595 C315 612 358 525 438 552 C512 577 548 462 631 492 C715 522 760 410 858 450 C945 486 995 360 1094 405 C1180 445 1234 366 1326 420 C1410 468 1480 440 1562 506 C1642 570 1716 548 1800 620 L1800 920 L0 920 Z" fill="#17232a"/>
+    <path d="M0 708 C90 668 158 646 246 664 C340 684 407 590 484 618 C572 650 623 548 720 578 C812 606 886 506 979 552 C1064 594 1164 500 1245 552 C1345 616 1432 548 1518 610 C1600 670 1702 640 1800 704 L1800 920 L0 920 Z" fill="#10191f"/>
   </g>
-  <g opacity=".22" transform="translate(1050 165)">
-    <circle cx="0" cy="0" r="200" fill="none" stroke="#164c5e" stroke-width="1.2"/>
-    <circle cx="0" cy="0" r="150" fill="none" stroke="#1c6d85" stroke-width="1.1"/>
-    <circle cx="0" cy="0" r="108" fill="none" stroke="#2da8c3" stroke-width="1.0"/>
-    <circle cx="0" cy="0" r="60" fill="none" stroke="#d6ab4e" stroke-width="1.0"/>
-    <path d="M-200 0H200M0 -200V200" stroke="#1a5c70" stroke-width=".8"/>
-    <path d="M-141 -141L141 141M141 -141L-141 141" stroke="#1b5467" stroke-width=".8"/>
-    <circle cx="0" cy="0" r="5" fill="#37c5dc"/>
+
+  <!-- stronger foreground terrain, but still tasteful -->
+  <g opacity="0.62">
+    <path d="M0 770 C100 720 171 746 248 704 C320 664 390 710 468 666 C544 622 594 660 672 610 C742 565 812 614 884 556 C954 500 1024 570 1106 520 C1192 468 1256 548 1342 516 C1442 480 1504 588 1588 586 C1682 584 1738 666 1800 638 L1800 920 L0 920 Z" fill="#0b1116"/>
+    <path d="M0 822 C95 780 176 804 260 764 C346 722 416 774 506 726 C604 675 662 732 756 682 C858 630 924 704 1032 650 C1128 602 1200 704 1308 660 C1410 620 1486 728 1594 708 C1678 692 1740 756 1800 730 L1800 920 L0 920 Z" fill="#070b0f"/>
   </g>
-  <g opacity=".06">
-    <path d="M0 0H1600M0 72H1600M0 144H1600M0 216H1600M0 288H1600M0 360H1600M0 432H1600M0 504H1600M0 576H1600M0 648H1600M0 720H1600M0 792H1600" stroke="#cfd8dd" stroke-width="1"/>
+
+  <!-- intentional broadcast/signal array anchored to horizon focal point -->
+  <g transform="translate(1158 244)" opacity="0.23">
+    <circle r="58" fill="none" stroke="#d6ab4e" stroke-width="1.1" opacity="0.42"/>
+    <circle r="104" fill="none" stroke="#45c8dc" stroke-width="1" opacity="0.38"/>
+    <circle r="158" fill="none" stroke="#45c8dc" stroke-width="0.85" opacity="0.25"/>
+    <circle r="226" fill="none" stroke="#45c8dc" stroke-width="0.7" opacity="0.18"/>
+    <path d="M-226 0H226M0-226V226" stroke="#3fb5c6" stroke-width="0.55" opacity="0.18"/>
+    <path d="M-160-160L160 160M160-160L-160 160" stroke="#3fb5c6" stroke-width="0.45" opacity="0.12"/>
+    <circle r="6" fill="#3fc5db" opacity="0.55"/>
+    <circle cx="72" cy="-34" r="3.2" fill="#d6ab4e" opacity="0.55"/>
+    <circle cx="-92" cy="72" r="2.6" fill="#3fc5db" opacity="0.46"/>
   </g>
-  <g opacity=".35">
-    <circle cx="1160" cy="204" r="3" fill="#8fe7f3"/>
-    <circle cx="1084" cy="132" r="2.8" fill="#d6ab4e"/>
-    <circle cx="1002" cy="246" r="2.2" fill="#7bd7e7"/>
-  </g>
+
+  <!-- foreground haze and vignette -->
+  <rect width="1800" height="920" fill="url(#haze)"/>
+  <rect width="1800" height="920" fill="url(#grain)" opacity="0.55"/>
+  <rect width="1800" height="920" fill="none"/>
+  <rect width="1800" height="920" fill="rgba(0,0,0,0)"/>
+  <path d="M0 0H1800V920H0Z" fill="none"/>
+  <rect width="1800" height="920" fill="black" opacity="0.02"/>
 </svg>

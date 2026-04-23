@@ -19,6 +19,8 @@ update_feed_title: "DaVinci Resolve 21 Public Beta 1"
 update_detail_title: "DaVinci Resolve 21 Public Beta 1"
 update_consensus_label: "Moderate"
 update_consensus_summary: "Early beta reaction is mixed. Blackmagic's Resolve 21 beta forum is active with both setup questions and problem reports, so this is better treated like a test build than a clean default upgrade."
+update_report_count: 7
+update_consensus_confidence: "Low"
 status_change_type: "new"
 notification_message: ""
 ---
