@@ -5,7 +5,7 @@ layout: aux-base
   <div class="section-head narrow">
     <div class="eyebrow">Article engine</div>
     <h1>Articles</h1>
-    <p>App-first deep dives, quick comparative writeups, and systems-minded workflow notes.</p>
+    <p>App-first deep dives, quick comparative writeups, and systems-minded workflow notes designed for creators who want useful signal, not filler.</p>
   </div>
   <div class="article-controls">
     <input type="search" id="article-search" placeholder="Search articles, tags, or tools">
@@ -28,9 +28,7 @@ layout: aux-base
     </div>
     <h2><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h2>
     <p>{{ post.description | default: post.excerpt | strip_html | truncate: 170 }}</p>
-    <div class="card-meta">
-      <span>{% if post.tags %}{{ post.tags | join: ' • ' }}{% endif %}</span>
-    </div>
+    <div class="card-meta"><span>{% if post.tags %}{{ post.tags | join: ' • ' }}{% endif %}</span></div>
   </article>
   {% endfor %}
 </section>

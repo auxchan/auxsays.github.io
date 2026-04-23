@@ -1,8 +1,8 @@
 ---
 layout: aux-base
 ---
-<section class="hero-grid hero-grid--single">
-  <article class="panel hero-copy reveal-up">
+<section class="home-hero reveal-up">
+  <article class="panel hero-panel">
     <div class="eyebrow">{{ site.data.home.eyebrow }}</div>
     <h1 class="hero-title">
       {% for line in site.data.home.title_lines %}
@@ -11,7 +11,7 @@ layout: aux-base
     </h1>
     <p class="hero-intro">{{ site.data.home.intro }}</p>
     <div class="cta-row cta-row--home">
-      <a class="btn btn-home" href="{{ '/articles/' | relative_url }}">Browse articles</a>
+      <a class="btn btn-home" href="{{ '/articles/' | relative_url }}">Browse Articles</a>
       <a class="btn btn-home" href="{{ '/about/' | relative_url }}">About Aux</a>
       <a class="btn btn-home" href="{{ '/updates/' | relative_url }}">Patch Feed</a>
     </div>
@@ -19,7 +19,7 @@ layout: aux-base
 </section>
 
 <section class="coverage-section reveal-up reveal-delay-1">
-  <div class="section-head">
+  <div class="section-head section-head--wide">
     <div class="eyebrow">Core coverage</div>
     <h2>{{ site.data.home.coverage_intro }}</h2>
     <p>{{ site.data.home.coverage_sub }}</p>
@@ -34,14 +34,9 @@ layout: aux-base
           <span class="coverage-kicker">{{ card.kicker }}</span>
           <span class="coverage-icon coverage-icon--{{ card.icon }}" aria-hidden="true"></span>
         </span>
-
         <h3>{{ card.title }}</h3>
-
-        <span class="coverage-meta">
-          <span class="coverage-action">Tap / hover to expand</span>
-        </span>
+        <span class="coverage-meta"><span class="coverage-action">Hover to expand</span></span>
       </button>
-
       <div class="coverage-body">
         <p>{{ card.summary }}</p>
       </div>
@@ -52,10 +47,9 @@ layout: aux-base
 
 <section class="featured-section reveal-up reveal-delay-2">
   <div class="section-head">
-    <div class="eyebrow">Featured reads</div>
-    <h2>Recent articles</h2>
+    <div class="eyebrow">Recent reads</div>
+    <h2>Articles worth starting with</h2>
   </div>
-
   <div class="featured-grid">
     {% for post in site.posts limit:3 %}
     <article class="featured-card">

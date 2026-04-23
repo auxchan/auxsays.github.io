@@ -7,105 +7,156 @@ layout: aux-base
 {% assign current_pages = update_pages | where_exp: "item", "item.update_status != 'archived' and item.feed_hidden != true" %}
 {% assign archived_pages = update_pages | where: "update_status", "archived" %}
 
-<style>
-  .patch-shell { display:grid; gap:1.4rem; }
-  .patch-hero, .patch-controls, .patch-card, .patch-notify { padding:1.2rem 1.25rem; }
-  .patch-hero h1 { margin:0 0 .55rem; font-size:clamp(2rem,4vw,3.8rem); line-height:.94; letter-spacing:-.05em; text-transform:none; }
-  .patch-hero p { margin:0; max-width:58rem; color:#d7dce7; line-height:1.72; }
-  .patch-notify-list { display:grid; gap:.85rem; }
-  .patch-alert { display:flex; gap:.9rem; align-items:flex-start; padding:.9rem 1rem; border-radius:18px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); }
-  .patch-alert-pill { display:inline-flex; padding:.38rem .7rem; border-radius:999px; font-size:.74rem; font-weight:800; text-transform:uppercase; letter-spacing:.16em; }
-  .pill-improved { background:rgba(60,170,95,.15); color:#dff7e8; }
-  .pill-regressed { background:rgba(210,74,74,.15); color:#ffd9d9; }
-  .patch-controls { display:grid; gap:1rem; }
-  .patch-control-row { display:flex; gap:.75rem; flex-wrap:wrap; }
-  .patch-control-row input { width:min(520px,100%); padding:.95rem 1rem; border-radius:18px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.09); color:#fff; }
-  .patch-chip { display:inline-flex; align-items:center; justify-content:center; padding:.82rem 1rem; border-radius:999px; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.03); color:#eef2f7; cursor:pointer; }
-  .patch-chip.is-active { background:rgba(255,54,82,.18); border-color:rgba(255,54,82,.45); }
-  .patch-feed { display:grid; gap:1.15rem; }
-  .patch-card { display:grid; gap:1rem; }
-  .patch-topline { display:flex; gap:.8rem; flex-wrap:wrap; color:#aab2c2; font-size:.78rem; letter-spacing:.16em; text-transform:uppercase; }
-  .patch-card-main { display:flex; gap:1rem; align-items:flex-start; justify-content:space-between; }
-  .patch-left { display:flex; gap:1rem; align-items:flex-start; min-width:0; }
-  .patch-badge-link, .patch-product-link { color:inherit; text-decoration:none; }
-  .patch-badge { min-width:4.25rem; height:3.35rem; display:inline-flex; align-items:center; justify-content:center; border-radius:18px; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.03); font-weight:800; letter-spacing:.06em; }
-  .patch-product-link:hover strong { color:#ff7e92; }
-  .patch-product-link strong { display:block; font-size:1.1rem; line-height:1.15; }
-  .patch-product-link span { display:block; margin-top:.2rem; color:#aab2c2; font-size:.82rem; text-transform:uppercase; letter-spacing:.14em; }
-  .patch-status { display:inline-flex; align-items:center; padding:.45rem .78rem; border-radius:999px; font-size:.76rem; letter-spacing:.14em; text-transform:uppercase; font-weight:800; border:1px solid rgba(255,255,255,.08); }
-  .patch-status-positive { background:rgba(48,170,94,.14); color:#dff7e8; }
-  .patch-status-moderate { background:rgba(210,155,44,.16); color:#fff0cb; }
-  .patch-status-negative { background:rgba(210,74,74,.16); color:#ffd9d9; }
-  .patch-status-insufficient { background:rgba(114,131,166,.16); color:#dfe6f5; }
-  .patch-current-flag, .patch-archive-flag { display:inline-flex; margin-top:.25rem; padding:.28rem .55rem; border-radius:999px; font-size:.7rem; letter-spacing:.16em; text-transform:uppercase; border:1px solid rgba(255,255,255,.08); }
-  .patch-current-flag { background:rgba(255,255,255,.03); color:#f1f4fa; }
-  .patch-archive-flag { background:rgba(255,255,255,.02); color:#98a4b7; }
-  .patch-title { margin:0; font-size:clamp(1.7rem,2.6vw,2.35rem); line-height:1.05; letter-spacing:-.04em; text-transform:none; }
-  .patch-summary, .patch-consensus { margin:0; color:#d7dce7; line-height:1.72; max-width:62rem; }
-  .patch-links { display:flex; gap:1.1rem; flex-wrap:wrap; }
-  .patch-links a { font-weight:700; }
-  .patch-archive-wrap { display:grid; gap:1rem; }
-</style>
-
 <section class="patch-shell">
-  <section class="panel patch-hero">
-    <div class="eyebrow">Release notes, trimmed to what matters</div>
-    <h1>Patch Feed</h1>
-    <p>Official notes first. High-signal reaction second. Track what changed, what it broke or fixed, and when a patch improves, regresses, or stabilizes over time.</p>
+  <section class="panel patch-hero reveal-up">
+    <div class="eyebrow">Release intelligence</div>
+    <h1 class="patch-title">Patch Feed</h1>
+    <p class="patch-subtitle">Official notes first. High-signal community reaction second. Track what changed, what looks safe, what is still shaky, and when consensus improves or regresses over time.</p>
   </section>
 
-  <section class="panel patch-notify">
+  {% if notification_items and notification_items.size > 0 %}
+  <section class="panel patch-notify reveal-up reveal-delay-1">
     <div class="eyebrow">Status change alerts</div>
     <div class="patch-notify-list">
       {% for note in notification_items %}
-        <a class="patch-alert" href="{{ note.url | relative_url }}">
-          <span class="patch-alert-pill pill-{{ note.change_type | downcase }}">{{ note.change_type }}</span>
-          <span>
-            <strong>{{ note.product }} {{ note.version }}</strong>
-            <p>{{ note.message }}</p>
-          </span>
-        </a>
+      <a class="patch-alert" href="{{ note.url | relative_url }}">
+        <span class="patch-alert-pill pill-{{ note.change_type | downcase }}">{{ note.change_type }}</span>
+        <span>
+          <strong>{{ note.product }} {{ note.version }}</strong>
+          <p>{{ note.message }}</p>
+        </span>
+      </a>
       {% endfor %}
     </div>
   </section>
+  {% endif %}
 
-  <section class="panel patch-controls">
-    <div class="eyebrow">Archive-aware feed</div>
-    <div class="patch-control-row">
-      <input id="patch-search" type="search" placeholder="Search product, company, version, or note">
+  <section class="panel patch-controls reveal-up reveal-delay-1">
+    <div class="patch-toolbar-grid">
+      <div>
+        <label class="patch-label" for="patch-search">Search</label>
+        <input id="patch-search" class="patch-search" type="search" placeholder="Search product, company, version, or note">
+      </div>
+      <div>
+        <span class="patch-label">Software type</span>
+        <div class="patch-chips" id="patch-filter-chips">
+          <button class="patch-chip is-active" data-filter="all">All</button>
+          <button class="patch-chip" data-filter="broadcasting">Broadcasting</button>
+          <button class="patch-chip" data-filter="video-editing">Video Editing</button>
+          <button class="patch-chip" data-filter="creator-software">Creator Tools</button>
+        </div>
+      </div>
+      <div>
+        <span class="patch-label">Consensus</span>
+        <div class="patch-chips" id="patch-status-chips">
+          <button class="patch-chip is-active" data-status="all">All</button>
+          <button class="patch-chip" data-status="positive">Positive</button>
+          <button class="patch-chip" data-status="moderate">Moderate</button>
+          <button class="patch-chip" data-status="negative">Negative</button>
+          <button class="patch-chip" data-status="insufficient">Insufficient</button>
+        </div>
+      </div>
+      <div>
+        <span class="patch-label">Sort</span>
+        <div class="patch-chips" id="patch-sort-chips">
+          <button class="patch-chip is-active" data-sort="latest">Latest</button>
+          <button class="patch-chip" data-sort="product">Product A–Z</button>
+          <button class="patch-chip" data-sort="risk">Risk first</button>
+        </div>
+      </div>
     </div>
   </section>
 
-  <section class="patch-feed" id="patch-feed">
+  <section class="patch-feed patch-feed--current reveal-up" id="patch-feed">
     {% for item in current_pages %}
       {% assign reaction = item.update_consensus_label | default: item.community_reaction | default: "Insufficient" %}
       {% assign reaction_class = reaction | downcase | replace: ' ', '-' %}
-      <article class="panel patch-card" data-kind="current" data-product="{{ item.update_product | downcase }}" data-company="{{ item.update_source_name | downcase }}" data-title="{{ item.title | downcase }}" data-summary="{{ item.description | downcase }}" data-date="{{ item.update_published_at | date: '%s' }}">
-        <div class="patch-topline"><span>{{ item.update_published_at | date: "%b %d, %Y" }}</span><span>Version {{ item.update_version }}</span><span>{{ item.update_type | default: item.update_category }}</span></div>
-        <div class="patch-card-main"><div class="patch-left"><a class="patch-badge-link" href="{{ item.url | relative_url }}"><span class="patch-badge">{{ item.update_logo_text | default: item.update_product | slice: 0, 3 }}</span></a><div><a class="patch-product-link" href="{{ item.url | relative_url }}"><strong>{{ item.update_product }}</strong><span>{{ item.update_source_name }}</span></a><span class="patch-current-flag">Current</span></div></div><span class="patch-status patch-status-{{ reaction_class }}">{{ reaction }}</span></div>
-        <h2 class="patch-title"><a href="{{ item.url | relative_url }}">{{ item.update_feed_title | default: item.update_product | append: ' ' | append: item.update_version }}</a></h2>
-        <p class="patch-summary">{{ item.description }}</p>
-        {% assign consensus_summary = item.update_consensus_summary | default: item.community_summary %}{% if consensus_summary %}<p class="patch-consensus">{{ consensus_summary }}</p>{% endif %}
-        <div class="patch-links"><a href="{{ item.url | relative_url }}">Read breakdown →</a>{% if item.update_source_url %}<a href="{{ item.update_source_url }}">Official source ↗</a>{% endif %}{% if item.update_download_url %}<a href="{{ item.update_download_url }}">Download page ↗</a>{% endif %}</div>
+      <article class="panel patch-card"
+        data-kind="current"
+        data-type="{{ item.update_type | default: item.update_category | downcase }}"
+        data-category="{{ item.update_category | downcase }}"
+        data-status="{{ reaction_class }}"
+        data-product="{{ item.update_product | downcase }}"
+        data-company="{{ item.update_source_name | downcase }}"
+        data-title="{{ item.title | downcase }}"
+        data-summary="{{ item.description | downcase }}"
+        data-date="{{ item.update_published_at | date: '%s' }}">
+        <div class="patch-meta-row">
+          <span>{{ item.update_published_at | date: "%b %d, %Y" }}</span>
+          <span>Version {{ item.update_version }}</span>
+          <span>{{ item.update_type | default: item.update_category }}</span>
+        </div>
+        <div class="patch-card-headline">
+          <a class="patch-identity" href="{{ item.url | relative_url }}">
+            <span class="patch-badge">{{ item.update_logo_text | default: item.update_product | slice: 0, 3 }}</span>
+            <span class="patch-brand-copy">
+              <strong>{{ item.update_product }}</strong>
+              <em>{{ item.update_source_name }}</em>
+            </span>
+          </a>
+          <span class="patch-status patch-status--{{ reaction_class }}">{{ reaction }}</span>
+        </div>
+        <h2 class="patch-card-title"><a href="{{ item.url | relative_url }}">{{ item.update_feed_title | default: item.update_product | append: ' ' | append: item.update_version }}</a></h2>
+        <p class="patch-card-summary">{{ item.description }}</p>
+        {% assign consensus_summary = item.update_consensus_summary | default: item.community_summary %}
+        {% if consensus_summary %}<p class="patch-consensus-line">{{ consensus_summary }}</p>{% endif %}
+        <div class="patch-card-links">
+          <a href="{{ item.url | relative_url }}">Read breakdown →</a>
+          {% if item.update_source_url %}<a href="{{ item.update_source_url }}">Official source ↗</a>{% endif %}
+          {% if item.update_download_url %}<a href="{{ item.update_download_url }}">Download page ↗</a>{% endif %}
+        </div>
       </article>
     {% endfor %}
+  </section>
 
-    <section class="patch-archive-wrap" id="patch-archive-wrap">
+  <section class="patch-archive-wrap reveal-up reveal-delay-2" id="patch-archive-wrap">
+    <div class="section-head section-head--archive">
       <div class="eyebrow">Archive</div>
+      <h2>Previous versions still available</h2>
+      <p>Older updates stay public for research, rollback context, and documentary/reference use.</p>
+    </div>
+    <div class="patch-feed patch-feed--archive" id="patch-archive-feed">
       {% for item in archived_pages %}
         {% unless item.feed_hidden %}
         {% assign reaction = item.update_consensus_label | default: item.community_reaction | default: "Insufficient" %}
         {% assign reaction_class = reaction | downcase | replace: ' ', '-' %}
-        <article class="panel patch-card" data-kind="archived" data-product="{{ item.update_product | downcase }}" data-company="{{ item.update_source_name | downcase }}" data-title="{{ item.title | downcase }}" data-summary="{{ item.description | downcase }}" data-date="{{ item.update_published_at | date: '%s' }}">
-          <div class="patch-topline"><span>{{ item.update_published_at | date: "%b %d, %Y" }}</span><span>Version {{ item.update_version }}</span><span>{{ item.update_type | default: item.update_category }}</span></div>
-          <div class="patch-card-main"><div class="patch-left"><a class="patch-badge-link" href="{{ item.url | relative_url }}"><span class="patch-badge">{{ item.update_logo_text | default: item.update_product | slice: 0, 3 }}</span></a><div><a class="patch-product-link" href="{{ item.url | relative_url }}"><strong>{{ item.update_product }}</strong><span>{{ item.update_source_name }}</span></a><span class="patch-archive-flag">Archived</span></div></div><span class="patch-status patch-status-{{ reaction_class }}">{{ reaction }}</span></div>
-          <h2 class="patch-title"><a href="{{ item.url | relative_url }}">{{ item.update_feed_title | default: item.update_product | append: ' ' | append: item.update_version }}</a></h2>
-          <p class="patch-summary">{{ item.description }}</p>
-          {% assign consensus_summary = item.update_consensus_summary | default: item.community_summary %}{% if consensus_summary %}<p class="patch-consensus">{{ consensus_summary }}</p>{% endif %}
-          <div class="patch-links"><a href="{{ item.url | relative_url }}">Read breakdown →</a>{% if item.update_source_url %}<a href="{{ item.update_source_url }}">Official source ↗</a>{% endif %}{% if item.update_download_url %}<a href="{{ item.update_download_url }}">Download page ↗</a>{% endif %}</div>
+        <article class="panel patch-card patch-card--archived"
+          data-kind="archived"
+          data-type="{{ item.update_type | default: item.update_category | downcase }}"
+          data-category="{{ item.update_category | downcase }}"
+          data-status="{{ reaction_class }}"
+          data-product="{{ item.update_product | downcase }}"
+          data-company="{{ item.update_source_name | downcase }}"
+          data-title="{{ item.title | downcase }}"
+          data-summary="{{ item.description | downcase }}"
+          data-date="{{ item.update_published_at | date: '%s' }}">
+          <div class="patch-meta-row">
+            <span>{{ item.update_published_at | date: "%b %d, %Y" }}</span>
+            <span>Version {{ item.update_version }}</span>
+            <span>{{ item.update_type | default: item.update_category }}</span>
+          </div>
+          <div class="patch-card-headline">
+            <a class="patch-identity" href="{{ item.url | relative_url }}">
+              <span class="patch-badge">{{ item.update_logo_text | default: item.update_product | slice: 0, 3 }}</span>
+              <span class="patch-brand-copy">
+                <strong>{{ item.update_product }}</strong>
+                <em>{{ item.update_source_name }}</em>
+              </span>
+            </a>
+            <span class="patch-status patch-status--{{ reaction_class }}">{{ reaction }}</span>
+          </div>
+          <h2 class="patch-card-title"><a href="{{ item.url | relative_url }}">{{ item.update_feed_title | default: item.update_product | append: ' ' | append: item.update_version }}</a></h2>
+          <p class="patch-card-summary">{{ item.description }}</p>
+          {% assign consensus_summary = item.update_consensus_summary | default: item.community_summary %}
+          {% if consensus_summary %}<p class="patch-consensus-line">{{ consensus_summary }}</p>{% endif %}
+          <div class="patch-card-links">
+            <a href="{{ item.url | relative_url }}">Read breakdown →</a>
+            {% if item.update_source_url %}<a href="{{ item.update_source_url }}">Official source ↗</a>{% endif %}
+            {% if item.update_download_url %}<a href="{{ item.update_download_url }}">Download page ↗</a>{% endif %}
+          </div>
         </article>
         {% endunless %}
       {% endfor %}
-    </section>
+    </div>
   </section>
 </section>
