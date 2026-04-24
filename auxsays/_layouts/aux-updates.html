@@ -3,6 +3,7 @@ layout: aux-base
 ---
 
 {% assign notification_items = site.data.patch_notifications %}
+{% assign patch_sources = site.data.patch_sources %}
 {% assign update_pages = site.pages | where: "update_entry", true | sort: "update_published_at" | reverse %}
 {% assign current_pages = update_pages | where_exp: "item", "item.update_status != 'archived' and item.feed_hidden != true" %}
 {% assign archived_pages = update_pages | where: "update_status", "archived" %}
@@ -11,7 +12,7 @@ layout: aux-base
   <section class="panel patch-hero reveal-up">
     <div class="eyebrow">Release intelligence</div>
     <h1 class="patch-title">Patch Feed</h1>
-    <p class="patch-subtitle">Official notes first. High-signal community reaction second. Track what changed, what looks safe, what is still shaky, and when consensus improves or regresses over time.</p>
+    <p class="patch-subtitle">Official notes first. High-signal community reaction second. Track what changed, what looks safe, what is still shaky, and which creator-critical tools deserve active monitoring.</p>
   </section>
 
   {% if notification_items and notification_items.size > 0 %}
@@ -41,6 +42,18 @@ layout: aux-base
         <span class="patch-label">Software type</span>
         <div class="patch-chips" id="patch-filter-chips">
           <button class="patch-chip is-active" data-filter="all">All</button>
+          <button class="patch-chip" data-filter="ai-tools">AI Tools</button>
+          <button class="patch-chip" data-filter="ai-video">AI Video</button>
+          <button class="patch-chip" data-filter="ai-image">AI Image</button>
+          <button class="patch-chip" data-filter="streaming">Streaming</button>
+          <button class="patch-chip" data-filter="video-production">Video / Production</button>
+          <button class="patch-chip" data-filter="game-engines">Game / Engine</button>
+          <button class="patch-chip" data-filter="game-platforms">Game Platforms</button>
+          <button class="patch-chip" data-filter="creator-platforms">Creator Platforms</button>
+          <button class="patch-chip" data-filter="design-workflow">Design / Workflow</button>
+          <button class="patch-chip" data-filter="dev-web">Dev / Web</button>
+          <button class="patch-chip" data-filter="hardware-drivers">Hardware / Drivers</button>
+          <button class="patch-chip" data-filter="workflow-automation">Automation</button>
           <button class="patch-chip" data-filter="broadcasting">Broadcasting</button>
           <button class="patch-chip" data-filter="video-editing">Video Editing</button>
           <button class="patch-chip" data-filter="creator-software">Creator Tools</button>
@@ -66,6 +79,55 @@ layout: aux-base
       </div>
     </div>
   </section>
+
+
+
+  {% if patch_sources and patch_sources.size > 0 %}
+  <section class="panel patch-source-radar reveal-up reveal-delay-1" id="patch-source-radar">
+    <div class="patch-source-radar-head">
+      <div>
+        <div class="eyebrow">Source radar</div>
+        <h2 class="patch-source-title">Creator-critical companies to monitor</h2>
+        <p class="patch-source-subtitle">This is the watchlist behind the Patch Feed. Current breakdowns appear above and in the archive when there is a release worth covering. Source cards stay here as tracking targets until they have a dedicated update entry.</p>
+      </div>
+      <div class="patch-radar-stat-grid" aria-label="Patch source summary">
+        <span><strong>{{ patch_sources.size }}</strong><em>tracked sources</em></span>
+        <span><strong>5</strong><em>priority lanes</em></span>
+        <span><strong>2-step</strong><em>official + reaction</em></span>
+      </div>
+    </div>
+    <div class="patch-source-grid" id="patch-source-grid">
+      {% for source in patch_sources %}
+      <article class="patch-source-card"
+        data-source-card="true"
+        data-type="{{ source.category_key | downcase }}"
+        data-category="{{ source.category_key | downcase }}"
+        data-priority="{{ source.priority | downcase }}"
+        data-cadence="{{ source.cadence | downcase }}"
+        data-title="{{ source.product_name | downcase }}"
+        data-company="{{ source.company_name | downcase }}"
+        data-summary="{{ source.impact | append: ' ' | append: source.watch_reason | append: ' ' | append: source.signal_notes | downcase }}">
+        <div class="patch-source-topline">
+          <span class="patch-source-badge">{{ source.badge_text }}</span>
+          <span class="patch-source-meta">
+            <strong>{{ source.product_name }}</strong>
+            <em>{{ source.company_name }}</em>
+          </span>
+          <span class="patch-source-priority patch-source-priority--{{ source.priority | downcase }}">{{ source.priority }}</span>
+        </div>
+        <div class="patch-source-tags">
+          <span>{{ source.category_label }}</span>
+          <span>{{ source.cadence }} cadence</span>
+        </div>
+        <p>{{ source.impact }}</p>
+        <p class="patch-source-reason">{{ source.watch_reason }}</p>
+        {% if source.signal_notes %}<p class="patch-source-signal"><strong>Signal:</strong> {{ source.signal_notes }}</p>{% endif %}
+        {% if source.source_url %}<a class="patch-source-link" href="{{ source.source_url }}">{{ source.source_label | default: 'Official source' }} ↗</a>{% endif %}
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+  {% endif %}
 
   <section class="patch-feed patch-feed--current reveal-up" id="patch-feed">
     {% for item in current_pages %}

@@ -655,3 +655,266 @@ button, input, select, textarea { font: inherit; }
     box-shadow: 0 0 12px rgba(240,202,103,0.42);
   }
 }
+
+/* =========================================
+   PATCH FEED SOURCE RADAR OVERHAUL
+   ========================================= */
+
+.patch-source-radar {
+  padding: 1.35rem 1.45rem;
+  overflow: hidden;
+  position: relative;
+}
+
+.patch-source-radar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 16% 0%, rgba(126,207,215,.10), transparent 28%),
+    radial-gradient(circle at 92% 8%, rgba(214,171,78,.10), transparent 24%),
+    linear-gradient(180deg, rgba(255,255,255,.025), transparent 42%);
+  opacity: .7;
+}
+
+.patch-source-radar-head {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, .44fr);
+  gap: 1.2rem;
+  align-items: start;
+  margin-bottom: 1.2rem;
+}
+
+.patch-source-title {
+  margin: 0 0 .55rem;
+  font-size: clamp(1.65rem, 2.6vw, 2.5rem);
+  line-height: 1;
+  letter-spacing: -.04em;
+}
+
+.patch-source-subtitle {
+  margin: 0;
+  max-width: 68rem;
+  color: var(--text-1);
+  line-height: 1.72;
+}
+
+.patch-radar-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .65rem;
+}
+
+.patch-radar-stat-grid span {
+  display: grid;
+  gap: .22rem;
+  padding: .85rem .9rem;
+  border-radius: 18px;
+  border: 1px solid rgba(126,207,215,.12);
+  background: rgba(255,255,255,.024);
+}
+
+.patch-radar-stat-grid strong {
+  color: var(--cyan-1);
+  font-size: 1.08rem;
+  line-height: 1;
+}
+
+.patch-radar-stat-grid em {
+  color: var(--text-2);
+  font-size: .68rem;
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: .14em;
+  line-height: 1.35;
+}
+
+.patch-source-grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .9rem;
+}
+
+.patch-source-card {
+  position: relative;
+  display: grid;
+  align-content: start;
+  gap: .82rem;
+  padding: 1rem;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,.075);
+  background:
+    linear-gradient(180deg, rgba(16,24,29,.74), rgba(9,14,18,.88)),
+    radial-gradient(circle at 94% 0%, rgba(126,207,215,.09), transparent 36%);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.035);
+  content-visibility: auto;
+  contain-intrinsic-size: auto 250px;
+  transition: transform .24s cubic-bezier(.22,1,.36,1), border-color .24s ease, box-shadow .24s ease, background .24s ease;
+}
+
+.patch-source-card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(126,207,215,.18), transparent 22%, transparent 78%, rgba(214,171,78,.12)),
+    linear-gradient(180deg, rgba(255,255,255,.025), transparent 44%);
+  opacity: .45;
+}
+
+.patch-source-card[hidden],
+.patch-source-card.is-hidden {
+  display: none !important;
+}
+
+.patch-source-topline {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: .75rem;
+  align-items: center;
+}
+
+.patch-source-badge {
+  width: 2.9rem;
+  height: 2.9rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  border: 1px solid rgba(126,207,215,.18);
+  background: rgba(126,207,215,.055);
+  color: var(--cyan-1);
+  font-weight: 850;
+  font-size: .78rem;
+  letter-spacing: .08em;
+  box-shadow: 0 0 0 1px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.04);
+}
+
+.patch-source-meta {
+  display: grid;
+  gap: .13rem;
+  min-width: 0;
+}
+
+.patch-source-meta strong {
+  color: var(--text-0);
+  font-size: .98rem;
+  line-height: 1.12;
+}
+
+.patch-source-meta em {
+  color: var(--text-2);
+  font-size: .72rem;
+  font-style: normal;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+}
+
+.patch-source-priority {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: .36rem .55rem;
+  border-radius: 999px;
+  font-size: .62rem;
+  font-weight: 850;
+  text-transform: uppercase;
+  letter-spacing: .13em;
+  border: 1px solid rgba(255,255,255,.08);
+  color: var(--text-1);
+  background: rgba(255,255,255,.026);
+}
+
+.patch-source-priority--core {
+  color: #071015;
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-0));
+  border-color: rgba(240,202,103,.42);
+}
+
+.patch-source-priority--edge {
+  color: var(--cyan-1);
+  border-color: rgba(126,207,215,.32);
+  background: rgba(126,207,215,.065);
+}
+
+.patch-source-tags {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+}
+
+.patch-source-tags span {
+  display: inline-flex;
+  padding: .34rem .52rem;
+  border-radius: 999px;
+  border: 1px solid rgba(126,207,215,.12);
+  color: var(--text-2);
+  background: rgba(255,255,255,.025);
+  font-size: .7rem;
+  text-transform: uppercase;
+  letter-spacing: .11em;
+}
+
+.patch-source-card p {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  color: var(--text-1);
+  line-height: 1.62;
+  font-size: .94rem;
+}
+
+.patch-source-card .patch-source-reason {
+  color: #d6dde7;
+}
+
+.patch-source-signal {
+  padding: .72rem .8rem;
+  border-left: 2px solid rgba(52,217,248,.46);
+  border-radius: 0 14px 14px 0;
+  background: rgba(126,207,215,.035);
+}
+
+.patch-source-signal strong {
+  color: var(--cyan-1);
+}
+
+.patch-source-link {
+  position: relative;
+  z-index: 1;
+  width: max-content;
+  color: var(--accent-1);
+  font-weight: 780;
+  font-size: .9rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .patch-source-card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(126,207,215,.22);
+    box-shadow: 0 16px 34px rgba(0,0,0,.24), 0 0 0 1px rgba(52,217,248,.05);
+  }
+}
+
+@media (max-width: 1180px) {
+  .patch-source-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .patch-source-radar-head { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 760px) {
+  .patch-source-radar { padding: 1.12rem; }
+  .patch-radar-stat-grid { grid-template-columns: 1fr; }
+  .patch-source-grid { grid-template-columns: 1fr; }
+  .patch-source-card { content-visibility: visible; }
+}

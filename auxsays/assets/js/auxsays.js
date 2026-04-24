@@ -119,37 +119,45 @@ document.addEventListener('DOMContentLoaded', () => {
   // patch feed controls
   const patchFeed = document.getElementById('patch-feed');
   const patchArchiveFeed = document.getElementById('patch-archive-feed');
+  const patchSourceGrid = document.getElementById('patch-source-grid');
   const patchSearch = document.getElementById('patch-search');
   const filterChips = Array.from(document.querySelectorAll('#patch-filter-chips [data-filter]'));
   const statusChips = Array.from(document.querySelectorAll('#patch-status-chips [data-status]'));
   const sortChips = Array.from(document.querySelectorAll('#patch-sort-chips [data-sort]'));
 
-  if (patchFeed && patchArchiveFeed && (filterChips.length || sortChips.length || statusChips.length || patchSearch)) {
+  if ((patchFeed || patchSourceGrid) && (filterChips.length || sortChips.length || statusChips.length || patchSearch)) {
     const allCards = Array.from(document.querySelectorAll('.patch-card'));
+    const sourceCards = Array.from(document.querySelectorAll('[data-source-card="true"]'));
     let currentFilter = 'all';
     let currentStatus = 'all';
     let currentSort = 'latest';
     const riskRank = { negative: 3, moderate: 2, positive: 1, insufficient: 0, 'insufficient-data': 0 };
+    const priorityRank = { core: 3, edge: 2, expansion: 1 };
+
+    const matchesCommonFilters = (card, query, includeStatus = true) => {
+      const haystack = [card.dataset.title, card.dataset.product, card.dataset.company, card.dataset.summary].join(' ').toLowerCase();
+      const type = (card.dataset.type || '').toLowerCase();
+      const category = (card.dataset.category || '').toLowerCase();
+      const status = (card.dataset.status || '').toLowerCase();
+      const filterPass = currentFilter === 'all' || type.includes(currentFilter) || category.includes(currentFilter);
+      const statusPass = !includeStatus || currentStatus === 'all' || status.includes(currentStatus);
+      const queryPass = !query || haystack.includes(query);
+      return filterPass && statusPass && queryPass;
+    };
 
     const applyPatchFeed = () => {
       const query = (patchSearch?.value || '').toLowerCase().trim();
-      const visible = [];
+      const visibleUpdates = [];
+      const visibleSources = [];
 
       allCards.forEach((card) => {
-        const haystack = [card.dataset.title, card.dataset.product, card.dataset.company, card.dataset.summary].join(' ').toLowerCase();
-        const type = (card.dataset.type || '').toLowerCase();
-        const category = (card.dataset.category || '').toLowerCase();
-        const status = (card.dataset.status || '').toLowerCase();
-        const filterPass = currentFilter === 'all' || type.includes(currentFilter) || category.includes(currentFilter);
-        const statusPass = currentStatus === 'all' || status.includes(currentStatus);
-        const queryPass = !query || haystack.includes(query);
-        const isVisible = filterPass && statusPass && queryPass;
+        const isVisible = matchesCommonFilters(card, query, true);
         card.hidden = !isVisible;
         card.classList.toggle('is-hidden', !isVisible);
-        if (isVisible) visible.push(card);
+        if (isVisible) visibleUpdates.push(card);
       });
 
-      visible.sort((a, b) => {
+      visibleUpdates.sort((a, b) => {
         if (currentSort === 'product') return (a.dataset.product || '').localeCompare(b.dataset.product || '');
         if (currentSort === 'risk') {
           const delta = (riskRank[b.dataset.status] || 0) - (riskRank[a.dataset.status] || 0);
@@ -160,12 +168,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const currentFragment = document.createDocumentFragment();
       const archiveFragment = document.createDocumentFragment();
-      visible.forEach((card) => {
+      visibleUpdates.forEach((card) => {
         if (card.dataset.kind === 'archived') archiveFragment.appendChild(card);
         else currentFragment.appendChild(card);
       });
-      patchFeed.appendChild(currentFragment);
-      patchArchiveFeed.appendChild(archiveFragment);
+      if (patchFeed) patchFeed.appendChild(currentFragment);
+      if (patchArchiveFeed) patchArchiveFeed.appendChild(archiveFragment);
+
+      sourceCards.forEach((card) => {
+        const isVisible = currentStatus === 'all' && matchesCommonFilters(card, query, false);
+        card.hidden = !isVisible;
+        card.classList.toggle('is-hidden', !isVisible);
+        if (isVisible) visibleSources.push(card);
+      });
+
+      if (patchSourceGrid) {
+        if (currentSort === 'product') {
+          visibleSources.sort((a, b) => (a.dataset.title || '').localeCompare(b.dataset.title || ''));
+        } else if (currentSort === 'risk') {
+          visibleSources.sort((a, b) => (priorityRank[b.dataset.priority] || 0) - (priorityRank[a.dataset.priority] || 0));
+        }
+        const sourceFragment = document.createDocumentFragment();
+        visibleSources.forEach((card) => sourceFragment.appendChild(card));
+        patchSourceGrid.appendChild(sourceFragment);
+      }
     };
 
     const schedulePatchFeed = rafDebounce(applyPatchFeed);
