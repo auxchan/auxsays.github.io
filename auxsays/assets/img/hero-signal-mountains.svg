@@ -1,42 +1,100 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 900" preserveAspectRatio="xMidYMid slice">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1800 900" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Subtle technical cinema camera schematic over dark mountain atmosphere">
   <defs>
     <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0" stop-color="#0a0d10"/>
-      <stop offset="0.42" stop-color="#0d171c"/>
-      <stop offset="1" stop-color="#081014"/>
+      <stop offset="0" stop-color="#070b0f"/>
+      <stop offset="0.55" stop-color="#09131a"/>
+      <stop offset="1" stop-color="#05080b"/>
     </linearGradient>
-    <radialGradient id="cyanMist" cx="67%" cy="35%" r="46%">
-      <stop offset="0" stop-color="#144b57" stop-opacity="0.52"/>
-      <stop offset="0.48" stop-color="#0f2d36" stop-opacity="0.25"/>
-      <stop offset="1" stop-color="#000000" stop-opacity="0"/>
-    </radialGradient>
-    <radialGradient id="ochreMist" cx="72%" cy="74%" r="34%">
-      <stop offset="0" stop-color="#d6ab4e" stop-opacity="0.16"/>
-      <stop offset="1" stop-color="#000000" stop-opacity="0"/>
-    </radialGradient>
-    <linearGradient id="ridgeFar" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#24404a" stop-opacity="0.30"/><stop offset="1" stop-color="#10181d" stop-opacity="0.62"/></linearGradient>
-    <linearGradient id="ridgeMid" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#2b4d57" stop-opacity="0.38"/><stop offset="1" stop-color="#081015" stop-opacity="0.82"/></linearGradient>
-    <linearGradient id="ridgeNear" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#253943" stop-opacity="0.54"/><stop offset="1" stop-color="#03070a" stop-opacity="0.95"/></linearGradient>
-    <pattern id="grain" width="80" height="80" patternUnits="userSpaceOnUse">
-      <circle cx="9" cy="17" r="0.7" fill="#cdd8dc" opacity="0.11"/><circle cx="43" cy="8" r="0.5" fill="#7ecfd7" opacity="0.10"/><circle cx="71" cy="54" r="0.8" fill="#d6ab4e" opacity="0.08"/><circle cx="28" cy="66" r="0.55" fill="#fff" opacity="0.08"/>
+    <linearGradient id="fadeLeft" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#000" stop-opacity="0"/>
+      <stop offset="0.34" stop-color="#000" stop-opacity="0"/>
+      <stop offset="0.53" stop-color="#fff" stop-opacity="0.38"/>
+      <stop offset="1" stop-color="#fff" stop-opacity="1"/>
+    </linearGradient>
+    <linearGradient id="terrainFade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#172833" stop-opacity="0"/>
+      <stop offset="0.42" stop-color="#172833" stop-opacity="0.045"/>
+      <stop offset="1" stop-color="#020507" stop-opacity="0.66"/>
+    </linearGradient>
+    <mask id="mRight">
+      <rect width="1800" height="900" fill="url(#fadeLeft)"/>
+    </mask>
+    <pattern id="grid" width="42" height="42" patternUnits="userSpaceOnUse">
+      <path d="M42 0H0V42" fill="none" stroke="#9ab5bf" stroke-opacity="0.038" stroke-width="1"/>
+      <circle cx="0" cy="0" r="1" fill="#d6ab4e" opacity="0.045"/>
     </pattern>
+    <filter id="softGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="0.75" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <style>
+      .gold{fill:none;stroke:#d6ab4e;stroke-width:1.55;stroke-linecap:round;stroke-linejoin:round;opacity:.155;filter:url(#softGlow)}
+      .gold-thin{fill:none;stroke:#d6ab4e;stroke-width:.95;stroke-linecap:round;stroke-linejoin:round;opacity:.092}
+      .ghost{fill:none;stroke:#9ab5bf;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;opacity:.045}
+      .micro{font:600 13px Inter,Arial,sans-serif;letter-spacing:.18em;fill:#d6ab4e;opacity:.105}
+      .micro-dim{font:500 11px Inter,Arial,sans-serif;letter-spacing:.12em;fill:#c8d4d9;opacity:.075}
+    </style>
   </defs>
+
   <rect width="1800" height="900" fill="url(#sky)"/>
-  <rect width="1800" height="900" fill="url(#cyanMist)"/>
-  <rect width="1800" height="900" fill="url(#ochreMist)"/>
-  <path d="M990 0 C880 190 880 365 1025 548 C1168 730 1150 822 1080 900 L1800 900 L1800 0 Z" fill="#1d5360" opacity="0.055"/>
-  <path d="M1170 0 C1060 210 1090 436 1252 600 C1370 720 1398 810 1360 900 L1800 900 L1800 0 Z" fill="#d6ab4e" opacity="0.025"/>
-  <g transform="translate(0 86)">
-    <path fill="url(#ridgeFar)" d="M620 645 C680 598 735 555 805 584 C858 606 892 560 940 526 C1008 480 1064 492 1122 535 C1175 574 1216 534 1278 485 C1348 430 1418 456 1476 506 C1530 552 1598 524 1680 486 C1738 460 1776 466 1800 482 L1800 814 L620 814 Z"/>
-    <path fill="url(#ridgeMid)" d="M520 720 C585 648 652 613 735 648 C806 678 830 600 900 562 C980 518 1032 580 1088 624 C1142 666 1192 576 1260 520 C1328 464 1397 502 1455 556 C1510 608 1594 536 1676 506 C1732 486 1778 500 1800 518 L1800 814 L520 814 Z"/>
-    <path fill="url(#ridgeNear)" d="M420 794 C520 708 600 690 704 725 C780 752 842 642 930 606 C1005 575 1066 662 1138 700 C1202 734 1262 638 1330 590 C1408 535 1490 622 1540 660 C1594 700 1666 616 1735 590 C1775 576 1794 584 1800 590 L1800 814 L420 814 Z"/>
-    <path d="M880 606 L930 606 L978 680 L1038 630 L1094 700 L1140 700" stroke="#8feaf4" stroke-opacity="0.07" stroke-width="2" fill="none"/>
+  <rect width="1800" height="900" fill="url(#grid)" mask="url(#mRight)" opacity="0.56"/>
+
+  <!-- Quiet mountain atmosphere, intentionally dark and low contrast. -->
+  <g opacity="0.42">
+    <rect y="500" width="1800" height="400" fill="url(#terrainFade)"/>
+    <path d="M0 698 C90 660 160 668 230 632 C310 590 388 632 470 596 C560 557 628 614 706 574 C790 532 858 604 936 564 C1015 522 1096 596 1172 562 C1268 516 1338 582 1402 552 C1496 510 1575 590 1652 558 C1714 535 1760 536 1800 552 L1800 900 L0 900 Z" fill="#10212b" opacity=".24"/>
+    <path d="M420 750 C522 704 602 724 694 688 C772 660 836 720 918 682 C1010 642 1070 724 1152 694 C1238 662 1310 720 1386 692 C1468 662 1547 722 1628 696 C1698 674 1754 680 1800 704 L1800 900 L420 900 Z" fill="#081016" opacity=".55"/>
+    <path d="M780 742 C890 730 1005 734 1125 754 C1234 772 1362 776 1478 754 C1592 732 1708 738 1800 766 L1800 900 L780 900 Z" fill="#030609" opacity=".72"/>
+    <path d="M960 756 C1050 748 1130 752 1200 766 C1104 772 1020 772 930 764 Z" fill="#d6ab4e" opacity=".024"/>
   </g>
-  <g transform="translate(1238 208)" opacity="0.36">
-    <circle r="62" fill="none" stroke="#8feaf4" stroke-opacity="0.16" stroke-width="1.4"/><circle r="116" fill="none" stroke="#8feaf4" stroke-opacity="0.10" stroke-width="1.1"/><circle r="178" fill="none" stroke="#8feaf4" stroke-opacity="0.075" stroke-width="1"/><circle r="244" fill="none" stroke="#d6ab4e" stroke-opacity="0.055" stroke-width="1"/>
-    <path d="M-244 0H244M0-244V244" stroke="#8feaf4" stroke-opacity="0.045" stroke-width="1"/><path d="M-172 -172L172 172M172 -172L-172 172" stroke="#8feaf4" stroke-opacity="0.035" stroke-width="1"/>
-    <circle r="6" fill="#5fd4e5" opacity="0.45"/><circle cx="70" cy="-48" r="3" fill="#d6ab4e" opacity="0.45"/><circle cx="143" cy="50" r="3" fill="#8feaf4" opacity="0.36"/>
+
+  <!-- Subtle blueprint camera system; fills right-side dead space without becoming the subject. -->
+  <g mask="url(#mRight)">
+    <g transform="translate(700 280) scale(.98)">
+      <text x="114" y="-36" class="micro">FRONT VIEW</text>
+      <rect x="20" y="65" width="300" height="235" rx="18" class="gold"/>
+      <rect x="72" y="26" width="196" height="64" rx="12" class="gold-thin"/>
+      <rect x="50" y="102" width="240" height="160" rx="14" class="gold-thin"/>
+      <circle cx="170" cy="184" r="76" class="gold"/>
+      <circle cx="170" cy="184" r="51" class="gold-thin"/>
+      <rect x="135" y="149" width="70" height="70" rx="5" class="gold-thin"/>
+      <circle cx="55" cy="90" r="7" class="gold-thin"/><circle cx="285" cy="90" r="7" class="gold-thin"/>
+      <circle cx="55" cy="275" r="7" class="gold-thin"/><circle cx="285" cy="275" r="7" class="gold-thin"/>
+      <path d="M-18 42H350M-18 324H350M-12 42V324M350 42V324" class="ghost"/>
+      <path d="M52 323H288" class="ghost"/><text x="132" y="347" class="micro-dim">135.0</text>
+    </g>
+
+    <g transform="translate(1118 308) scale(.91)">
+      <text x="145" y="-38" class="micro">SIDE VIEW</text>
+      <rect x="44" y="92" width="335" height="210" rx="18" class="gold"/>
+      <rect x="116" y="53" width="250" height="52" rx="12" class="gold-thin"/>
+      <path d="M90 92 L155 42 H350" class="gold-thin"/>
+      <rect x="-12" y="132" width="72" height="108" rx="11" class="gold-thin"/>
+      <rect x="372" y="128" width="45" height="118" rx="10" class="gold-thin"/>
+      <rect x="130" y="130" width="132" height="130" rx="12" class="gold-thin"/>
+      <circle cx="304" cy="146" r="8" class="gold-thin"/><circle cx="334" cy="146" r="8" class="gold-thin"/>
+      <path d="M100 308H380M100 76H380M420 92V302" class="ghost"/>
+      <text x="205" y="334" class="micro-dim">152.0</text><text x="432" y="202" class="micro-dim">121.0</text>
+    </g>
+
+    <g transform="translate(1530 265) scale(.72)">
+      <text x="34" y="-18" class="micro">LENS BREAKDOWN</text>
+      <ellipse cx="90" cy="26" rx="78" ry="26" class="gold"/>
+      <ellipse cx="90" cy="92" rx="70" ry="22" class="gold-thin"/>
+      <ellipse cx="90" cy="158" rx="64" ry="20" class="gold-thin"/>
+      <ellipse cx="90" cy="226" rx="58" ry="19" class="gold-thin"/>
+      <ellipse cx="90" cy="296" rx="63" ry="20" class="gold-thin"/>
+      <ellipse cx="90" cy="366" rx="74" ry="24" class="gold"/>
+      <path d="M24 26V366M156 26V366" class="ghost"/>
+      <path d="M184 26H310M168 92H310M160 158H310M154 226H310M160 296H310M180 366H310" class="ghost"/>
+      <text x="318" y="32" class="micro-dim">FRONT ELEMENT</text>
+      <text x="318" y="98" class="micro-dim">FOCUS RING</text>
+      <text x="318" y="164" class="micro-dim">ZOOM GROUP</text>
+      <text x="318" y="232" class="micro-dim">APERTURE</text>
+      <text x="318" y="302" class="micro-dim">STABILIZER</text>
+      <text x="318" y="372" class="micro-dim">MOUNT</text>
+    </g>
   </g>
-  <rect width="1800" height="900" fill="url(#grain)" opacity="0.55"/>
-  <g opacity="0.035"><path d="M0 90H1800M0 180H1800M0 270H1800M0 360H1800M0 450H1800M0 540H1800M0 630H1800M0 720H1800" stroke="#d9e5e8"/></g>
+
+  <rect width="1800" height="900" fill="#000" opacity="0.13"/>
 </svg>

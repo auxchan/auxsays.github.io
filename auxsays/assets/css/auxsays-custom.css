@@ -477,3 +477,44 @@ button, input, select, textarea { font: inherit; }
   filter: grayscale(1) contrast(1.02) brightness(1.02) saturate(.98);
   transform: scale(1.012);
 }
+
+/* 2026-04-23: Subtle homepage title-card schematic pass.
+   Purpose: reduce dead space beside the title without making the background compete with the copy. */
+.hero-panel { min-height: 560px; }
+.hero-panel-backdrop {
+  background:
+    linear-gradient(90deg,
+      rgba(5,8,11,.965) 0%,
+      rgba(5,8,11,.94) 30%,
+      rgba(5,8,11,.80) 48%,
+      rgba(5,8,11,.66) 68%,
+      rgba(5,8,11,.76) 100%),
+    url('/assets/img/hero-signal-mountains.svg') center 52%/cover no-repeat;
+}
+.hero-panel-backdrop::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 74% 42%, rgba(214,171,78,.035), transparent 31%),
+    linear-gradient(180deg, rgba(255,255,255,.006), rgba(0,0,0,.44) 82%);
+  pointer-events: none;
+}
+.hero-panel-backdrop::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(5,8,11,.34), rgba(5,8,11,.04) 46%, rgba(5,8,11,.28)),
+    linear-gradient(180deg, rgba(5,8,11,.02), rgba(5,8,11,.28));
+  pointer-events: none;
+}
+.hero-panel-content { width:min(720px, calc(100% - 56px)); }
+
+@media (max-width: 980px) {
+  .hero-panel-backdrop {
+    background:
+      linear-gradient(90deg, rgba(5,8,11,.97) 0%, rgba(5,8,11,.91) 62%, rgba(5,8,11,.82) 100%),
+      url('/assets/img/hero-signal-mountains.svg') 58% 52%/cover no-repeat;
+  }
+}

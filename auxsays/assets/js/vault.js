@@ -46,6 +46,10 @@ async function putContent(path, content, message) {
   return res.json();
 }
 
+function decodeGithubContent(content) {
+  return decodeURIComponent(escape(atob(content.replace(/\n/g, ''))));
+}
+
 async function loadBasics() {
   const [home, about, posts] = await Promise.all([
     getContent(contentPath('_data/home.json')),
@@ -53,10 +57,8 @@ async function loadBasics() {
     getContent(contentPath('_posts'))
   ]);
 
-  homeEl().value = decodeURIComponent(escape(atob(home.content.replace(/
-/g, ''))));
-  aboutEl().value = decodeURIComponent(escape(atob(about.content.replace(/
-/g, ''))));
+  homeEl().value = decodeGithubContent(home.content);
+  aboutEl().value = decodeGithubContent(about.content);
 
   postListEl().innerHTML = '';
   posts.filter((item) => item.type === 'file' && item.name.endsWith('.md')).forEach((item) => {
@@ -71,8 +73,7 @@ async function loadBasics() {
 async function loadPost(path) {
   const file = await getContent(path);
   currentPostPath = path;
-  postBodyEl().value = decodeURIComponent(escape(atob(file.content.replace(/
-/g, ''))));
+  postBodyEl().value = decodeGithubContent(file.content);
   statusEl().textContent = `Loaded ${path}`;
 }
 
