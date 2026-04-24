@@ -123,16 +123,18 @@ document.addEventListener('DOMContentLoaded', () => {
   const patchArchiveFeed = document.getElementById('patch-archive-feed');
   const patchSourceGrid = document.getElementById('patch-source-grid');
   const patchSearch = document.getElementById('patch-search');
+  const sourceSelect = document.getElementById('patch-source-select');
   const filterChips = Array.from(document.querySelectorAll('#patch-filter-chips [data-filter]'));
   const statusChips = Array.from(document.querySelectorAll('#patch-status-chips [data-status]'));
   const sortChips = Array.from(document.querySelectorAll('#patch-sort-chips [data-sort]'));
 
-  if ((patchFeed || patchSourceGrid) && (filterChips.length || sortChips.length || statusChips.length || patchSearch)) {
+  if ((patchFeed || patchSourceGrid) && (filterChips.length || sortChips.length || statusChips.length || patchSearch || sourceSelect)) {
     const allCards = Array.from(document.querySelectorAll('.patch-card'));
     const sourceCards = Array.from(document.querySelectorAll('[data-source-card="true"]'));
     let currentFilter = 'all';
     let currentStatus = 'all';
     let currentSort = 'latest';
+    let currentSource = 'all';
     const riskRank = { negative: 3, moderate: 2, positive: 1, insufficient: 0, 'insufficient-data': 0 };
     const priorityRank = { core: 3, edge: 2, expansion: 1 };
 
@@ -141,10 +143,12 @@ document.addEventListener('DOMContentLoaded', () => {
       const type = (card.dataset.type || '').toLowerCase();
       const category = (card.dataset.category || '').toLowerCase();
       const status = (card.dataset.status || '').toLowerCase();
+      const sourceId = (card.dataset.sourceId || '').toLowerCase();
       const filterPass = currentFilter === 'all' || type.includes(currentFilter) || category.includes(currentFilter);
       const statusPass = !includeStatus || currentStatus === 'all' || status.includes(currentStatus);
+      const sourcePass = currentSource === 'all' || sourceId === currentSource;
       const queryPass = !query || haystack.includes(query);
-      return filterPass && statusPass && queryPass;
+      return filterPass && statusPass && sourcePass && queryPass;
     };
 
     const applyPatchFeed = () => {
@@ -196,26 +200,28 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     };
 
-    const schedulePatchFeed = rafDebounce(applyPatchFeed);
-
-    patchSearch?.addEventListener('input', schedulePatchFeed, { passive: true });
+    patchSearch?.addEventListener('input', applyPatchFeed);
+    sourceSelect?.addEventListener('change', () => {
+      currentSource = (sourceSelect.value || 'all').toLowerCase();
+      applyPatchFeed();
+    });
     filterChips.forEach((chip) => chip.addEventListener('click', () => {
       filterChips.forEach((c) => c.classList.remove('is-active'));
       chip.classList.add('is-active');
       currentFilter = chip.dataset.filter;
-      schedulePatchFeed();
+      applyPatchFeed();
     }));
     statusChips.forEach((chip) => chip.addEventListener('click', () => {
       statusChips.forEach((c) => c.classList.remove('is-active'));
       chip.classList.add('is-active');
       currentStatus = chip.dataset.status;
-      schedulePatchFeed();
+      applyPatchFeed();
     }));
     sortChips.forEach((chip) => chip.addEventListener('click', () => {
       sortChips.forEach((c) => c.classList.remove('is-active'));
       chip.classList.add('is-active');
       currentSort = chip.dataset.sort;
-      schedulePatchFeed();
+      applyPatchFeed();
     }));
     applyPatchFeed();
   }

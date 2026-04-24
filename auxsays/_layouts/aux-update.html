@@ -3,6 +3,7 @@ layout: aux-base
 ---
 {% assign reaction = page.update_consensus_label | default: page.community_reaction | default: 'Insufficient data' %}
 {% assign reaction_class = reaction | downcase | replace: ' ', '-' %}
+{% assign brand_meta = site.data.update_brands[page.update_brand_id] %}
 <div class="update-page-shell reveal-up">
   <section class="panel update-hero">
     <div class="update-hero-grid">
@@ -14,7 +15,13 @@ layout: aux-base
           <span>{{ page.update_type | default: page.update_category }}</span>
         </div>
         <div class="update-brand-row">
-          <span class="update-brand-badge">{{ page.update_logo_text | default: page.update_product | slice: 0, 3 }}</span>
+          <span class="update-brand-badge{% if brand_meta and brand_meta.logo_path %} patch-logo-badge patch-logo-badge--has-image{% endif %}">
+            {% if brand_meta and brand_meta.logo_path %}
+            <img src="{{ brand_meta.logo_path | relative_url }}" alt="{{ page.update_source_name }} logo" loading="lazy">
+            {% else %}
+            {{ page.update_logo_text | default: page.update_product | slice: 0, 3 }}
+            {% endif %}
+          </span>
           <span class="update-brand-meta">
             <strong>{{ page.update_product }}</strong>
             <span>{{ page.update_source_name }}</span>
