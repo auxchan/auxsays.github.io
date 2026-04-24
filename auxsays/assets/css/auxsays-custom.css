@@ -114,7 +114,7 @@ button, input, select, textarea { font: inherit; }
 
 .home-hero { display:grid; }
 .hero-panel { position:relative; padding:0; overflow:hidden; min-height:540px; }
-.hero-panel-backdrop { position:absolute; inset:0; background: linear-gradient(90deg, rgba(8,12,16,.82) 0%, rgba(8,12,16,.60) 29%, rgba(8,12,16,.24) 56%, rgba(8,12,16,.42) 100%), url('/assets/img/hero-signal-mountains.svg') center 54%/cover no-repeat; }
+.hero-panel-backdrop { position:absolute; inset:0; background: linear-gradient(90deg, rgba(8,12,16,.82) 0%, rgba(8,12,16,.60) 29%, rgba(8,12,16,.24) 56%, rgba(8,12,16,.42) 100%), url('/assets/img/hero-signal-mountains.png') center 54%/cover no-repeat; }
 .hero-panel-backdrop::after { content:''; position:absolute; inset:0; background: linear-gradient(90deg, rgba(5,8,11,.14), rgba(5,8,11,.02) 44%, rgba(5,8,11,.18)), radial-gradient(circle at 72% 26%, rgba(79,202,220,.06), transparent 24%), radial-gradient(circle at 88% 18%, rgba(71,206,233,.05), transparent 16%), linear-gradient(180deg, rgba(255,255,255,.012), rgba(0,0,0,.16)); }
 .hero-panel-content { position:relative; z-index:1; width:min(760px, calc(100% - 56px)); padding:2.8rem 0 2.8rem 2.6rem; }
 .hero-title { margin:0; display:grid; gap:.12rem; font-weight:850; font-size:clamp(2.35rem, 4.4vw, 5rem); line-height:.92; letter-spacing:-.06em; text-transform:none; max-width:15ch; }
