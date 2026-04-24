@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
+  document.documentElement.classList.add('js-motion');
   const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
   const finePointerQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
   const desktopMotionQuery = window.matchMedia('(min-width: 900px)');

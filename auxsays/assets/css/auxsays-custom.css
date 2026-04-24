@@ -314,8 +314,16 @@ button, input, select, textarea { font: inherit; }
   box-shadow: 0 18px 42px rgba(0,0,0,.20), inset 0 1px 0 rgba(255,255,255,.04);
 }
 
-.reveal-up { opacity:0; transform:translate3d(0,22px,0); transition: opacity .72s cubic-bezier(.22,1,.36,1), transform .72s cubic-bezier(.22,1,.36,1); }
-.reveal-up.is-visible { opacity:1; transform:none; }
+/* Safe reveal system: visible by default */
+.reveal-up { opacity:1; transform:none; }
+
+/* Only animate when JS explicitly enables motion */
+html.js-motion .reveal-up {
+  opacity:0;
+  transform:translate3d(0,22px,0);
+  transition: opacity .72s cubic-bezier(.22,1,.36,1), transform .72s cubic-bezier(.22,1,.36,1);
+}
+html.js-motion .reveal-up.is-visible { opacity:1; transform:none; }
 .reveal-delay-1 { transition-delay:.08s; }
 .reveal-delay-2 { transition-delay:.16s; }
 
@@ -1202,8 +1210,16 @@ button, input, select, textarea { font: inherit; }
   box-shadow: 0 18px 42px rgba(0,0,0,.20), inset 0 1px 0 rgba(255,255,255,.04);
 }
 
-.reveal-up { opacity:0; transform:translate3d(0,22px,0); transition: opacity .72s cubic-bezier(.22,1,.36,1), transform .72s cubic-bezier(.22,1,.36,1); }
-.reveal-up.is-visible { opacity:1; transform:none; }
+/* Safe reveal system: visible by default */
+.reveal-up { opacity:1; transform:none; }
+
+/* Only animate when JS explicitly enables motion */
+html.js-motion .reveal-up {
+  opacity:0;
+  transform:translate3d(0,22px,0);
+  transition: opacity .72s cubic-bezier(.22,1,.36,1), transform .72s cubic-bezier(.22,1,.36,1);
+}
+html.js-motion .reveal-up.is-visible { opacity:1; transform:none; }
 .reveal-delay-1 { transition-delay:.08s; }
 .reveal-delay-2 { transition-delay:.16s; }
 
@@ -1828,4 +1844,15 @@ button, input, select, textarea { font: inherit; }
   .patch-radar-stat-grid { grid-template-columns: 1fr; }
   .patch-source-grid { grid-template-columns: 1fr; }
   .patch-source-card { content-visibility: visible; }
+}
+
+
+/* Mobile-safe Patch Feed visibility override */
+@media (max-width: 900px) {
+  .patch-card.reveal-up,
+  .patch-source-card.reveal-up,
+  .patch-alert.reveal-up {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
