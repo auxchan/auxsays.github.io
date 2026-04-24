@@ -26,6 +26,11 @@ jobs:
         with:
           ruby-version: '3.3'
 
+      - name: Install image metadata tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libimage-exiftool-perl
+
       - name: Install Bundler and gems
         working-directory: ./auxsays
         run: |
@@ -34,6 +39,10 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
+
+      - name: Strip image metadata
+        working-directory: ./auxsays
+        run: bash scripts/strip_image_metadata.sh assets/img
 
       - name: Build site
         working-directory: ./auxsays
