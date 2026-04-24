@@ -1,11 +1,12 @@
 document.addEventListener('DOMContentLoaded', () => {
-  document.documentElement.classList.add('js-motion');
   const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
   const finePointerQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
   const desktopMotionQuery = window.matchMedia('(min-width: 900px)');
   const prefersReducedMotion = motionQuery.matches;
   const prefersFinePointer = finePointerQuery.matches;
   const allowAmbientMotion = !prefersReducedMotion && desktopMotionQuery.matches;
+  const enableJsMotion = !prefersReducedMotion && prefersFinePointer && window.innerWidth > 900;
+  if (enableJsMotion) document.documentElement.classList.add('js-motion');
 
   // Systems lottie: keep the premium ambient layer, but avoid running it on touch/mobile
   // where it competes with scrolling. Particles have been removed sitewide.

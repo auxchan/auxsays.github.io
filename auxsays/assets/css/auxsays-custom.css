@@ -1403,8 +1403,6 @@ html.js-motion .reveal-up.is-visible { opacity:1; transform:none; }
 .patch-card,
 .article-card,
 .featured-card {
-  content-visibility: auto;
-  contain-intrinsic-size: auto 260px;
 }
 
 .patch-card[hidden],
@@ -1679,8 +1677,6 @@ html.js-motion .reveal-up.is-visible { opacity:1; transform:none; }
     linear-gradient(180deg, rgba(16,24,29,.74), rgba(9,14,18,.88)),
     radial-gradient(circle at 94% 0%, rgba(126,207,215,.09), transparent 36%);
   box-shadow: inset 0 1px 0 rgba(255,255,255,.035);
-  content-visibility: auto;
-  contain-intrinsic-size: auto 250px;
   transition: transform .24s cubic-bezier(.22,1,.36,1), border-color .24s ease, box-shadow .24s ease, background .24s ease;
 }
 
