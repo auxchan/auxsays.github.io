@@ -114,8 +114,8 @@ button, input, select, textarea { font: inherit; }
 
 .home-hero { display:grid; }
 .hero-panel { position:relative; padding:0; overflow:hidden; min-height:540px; }
-.hero-panel-backdrop { position:absolute; inset:0; background: linear-gradient(90deg, rgba(8,12,16,.90) 0%, rgba(8,12,16,.74) 34%, rgba(8,12,16,.34) 67%, rgba(8,12,16,.55) 100%), url('/assets/img/hero-signal-mountains.svg') center 52%/cover no-repeat; }
-.hero-panel-backdrop::after { content:''; position:absolute; inset:0; background: linear-gradient(90deg, rgba(5,8,11,.22), rgba(5,8,11,.03) 48%, rgba(5,8,11,.22)), radial-gradient(circle at 70% 24%, rgba(79,202,220,.045), transparent 22%), linear-gradient(180deg, rgba(255,255,255,.01), rgba(0,0,0,.18)); }
+.hero-panel-backdrop { position:absolute; inset:0; background: linear-gradient(90deg, rgba(8,12,16,.82) 0%, rgba(8,12,16,.60) 29%, rgba(8,12,16,.24) 56%, rgba(8,12,16,.42) 100%), url('/assets/img/hero-signal-mountains.svg') center 54%/cover no-repeat; }
+.hero-panel-backdrop::after { content:''; position:absolute; inset:0; background: linear-gradient(90deg, rgba(5,8,11,.14), rgba(5,8,11,.02) 44%, rgba(5,8,11,.18)), radial-gradient(circle at 72% 26%, rgba(79,202,220,.06), transparent 24%), radial-gradient(circle at 88% 18%, rgba(71,206,233,.05), transparent 16%), linear-gradient(180deg, rgba(255,255,255,.012), rgba(0,0,0,.16)); }
 .hero-panel-content { position:relative; z-index:1; width:min(760px, calc(100% - 56px)); padding:2.8rem 0 2.8rem 2.6rem; }
 .hero-title { margin:0; display:grid; gap:.12rem; font-weight:850; font-size:clamp(2.35rem, 4.4vw, 5rem); line-height:.92; letter-spacing:-.06em; text-transform:none; max-width:15ch; }
 .hero-title .accent { color: var(--accent-1); }
@@ -476,45 +476,4 @@ button, input, select, textarea { font: inherit; }
 .about-portrait-wrap:hover .about-portrait {
   filter: grayscale(1) contrast(1.02) brightness(1.02) saturate(.98);
   transform: scale(1.012);
-}
-
-/* 2026-04-23: Subtle homepage title-card schematic pass.
-   Purpose: reduce dead space beside the title without making the background compete with the copy. */
-.hero-panel { min-height: 560px; }
-.hero-panel-backdrop {
-  background:
-    linear-gradient(90deg,
-      rgba(5,8,11,.965) 0%,
-      rgba(5,8,11,.94) 30%,
-      rgba(5,8,11,.80) 48%,
-      rgba(5,8,11,.66) 68%,
-      rgba(5,8,11,.76) 100%),
-    url('/assets/img/hero-signal-mountains.svg') center 52%/cover no-repeat;
-}
-.hero-panel-backdrop::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle at 74% 42%, rgba(214,171,78,.035), transparent 31%),
-    linear-gradient(180deg, rgba(255,255,255,.006), rgba(0,0,0,.44) 82%);
-  pointer-events: none;
-}
-.hero-panel-backdrop::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(90deg, rgba(5,8,11,.34), rgba(5,8,11,.04) 46%, rgba(5,8,11,.28)),
-    linear-gradient(180deg, rgba(5,8,11,.02), rgba(5,8,11,.28));
-  pointer-events: none;
-}
-.hero-panel-content { width:min(720px, calc(100% - 56px)); }
-
-@media (max-width: 980px) {
-  .hero-panel-backdrop {
-    background:
-      linear-gradient(90deg, rgba(5,8,11,.97) 0%, rgba(5,8,11,.91) 62%, rgba(5,8,11,.82) 100%),
-      url('/assets/img/hero-signal-mountains.svg') 58% 52%/cover no-repeat;
-  }
 }
