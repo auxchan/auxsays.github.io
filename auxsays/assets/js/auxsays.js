@@ -1,13 +1,19 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const finePointerQuery = window.matchMedia('(hover: hover) and (pointer: fine)');
+  const desktopMotionQuery = window.matchMedia('(min-width: 900px)');
+  const prefersReducedMotion = motionQuery.matches;
+  const prefersFinePointer = finePointerQuery.matches;
+  const allowAmbientMotion = !prefersReducedMotion && desktopMotionQuery.matches;
 
-  // Systems lottie
-  if (window.lottie) {
+  // Systems lottie: keep the premium ambient layer, but avoid running it on touch/mobile
+  // where it competes with scrolling. Particles have been removed sitewide.
+  if (window.lottie && allowAmbientMotion) {
     const lottieNode = document.getElementById('systems-lottie');
     if (lottieNode && !lottieNode.dataset.loaded) {
       const path = `${window.location.origin}/assets/lottie/systems-pulse.json`;
       try {
-        window.lottie.loadAnimation({
+        const animation = window.lottie.loadAnimation({
           container: lottieNode,
           renderer: 'svg',
           loop: true,
@@ -15,32 +21,12 @@ document.addEventListener('DOMContentLoaded', () => {
           path,
         });
         lottieNode.dataset.loaded = 'true';
+        document.addEventListener('visibilitychange', () => {
+          if (document.hidden) animation.pause();
+          else animation.play();
+        });
       } catch (e) {}
     }
-  }
-
-  // particles
-  function buildParticles(targetId, count, fg = false) {
-    const host = document.getElementById(targetId);
-    if (!host || host.dataset.loaded) return;
-    host.dataset.loaded = 'true';
-    for (let i = 0; i < count; i += 1) {
-      const particle = document.createElement('span');
-      particle.className = `systems-particle ${fg ? 'systems-particle--fg' : 'systems-particle--bg'}`;
-      const size = fg ? 2 + Math.random() * 5 : 1 + Math.random() * 4;
-      particle.style.setProperty('--size', `${size}px`);
-      particle.style.setProperty('--x', `${Math.random() * 100}%`);
-      particle.style.setProperty('--y', `${Math.random() * 100}%`);
-      particle.style.setProperty('--drift-x', `${(Math.random() - 0.5) * 50}px`);
-      particle.style.setProperty('--drift-y', `${40 + Math.random() * 70}px`);
-      particle.style.setProperty('--duration', `${7 + Math.random() * 8}s`);
-      particle.style.setProperty('--delay', `${Math.random() * 6}s`);
-      host.appendChild(particle);
-    }
-  }
-  if (!prefersReducedMotion) {
-    buildParticles('systems-particles-bg', 28, false);
-    buildParticles('systems-particles-fg', 12, true);
   }
 
   // reveals
@@ -53,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
           io.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.14, rootMargin: '0px 0px -6% 0px' });
+    }, { threshold: 0.08, rootMargin: '0px 0px -4% 0px' });
     reveals.forEach((el) => io.observe(el));
   } else {
     reveals.forEach((el) => el.classList.add('is-visible'));
@@ -61,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // homepage coverage cards
   const coverageCards = Array.from(document.querySelectorAll('[data-card]'));
-  const prefersTouch = window.matchMedia('(hover: none)').matches || window.innerWidth < 900;
+  const prefersTouch = !prefersFinePointer || window.innerWidth < 900;
   function setCardState(card, open) {
     if (!card) return;
     card.classList.toggle('is-open', open);
@@ -69,22 +55,20 @@ document.addEventListener('DOMContentLoaded', () => {
     if (hit) hit.setAttribute('aria-expanded', open ? 'true' : 'false');
   }
   function closeOthers(activeCard) {
-    coverageCards.forEach((card) => { if (card !== activeCard) setCardState(card, false); });
+    coverageCards.forEach((card) => {
+      if (card !== activeCard) setCardState(card, false);
+    });
   }
   coverageCards.forEach((card) => {
     const hit = card.querySelector('.coverage-hit');
     if (!hit) return;
     if (!prefersTouch) {
-      card.addEventListener('mouseenter', () => { closeOthers(card); setCardState(card, true); });
-      card.addEventListener('mouseleave', () => { setCardState(card, false); card.style.removeProperty('--tilt-x'); card.style.removeProperty('--tilt-y'); });
-      card.addEventListener('mousemove', (event) => {
-        const rect = card.getBoundingClientRect();
-        const px = (event.clientX - rect.left) / rect.width;
-        const py = (event.clientY - rect.top) / rect.height;
-        const tiltX = (0.5 - py) * 2.5;
-        const tiltY = (px - 0.5) * 2.5;
-        card.style.setProperty('--tilt-x', `${tiltX}deg`);
-        card.style.setProperty('--tilt-y', `${tiltY}deg`);
+      card.addEventListener('mouseenter', () => {
+        closeOthers(card);
+        setCardState(card, true);
+      });
+      card.addEventListener('mouseleave', () => {
+        setCardState(card, false);
       });
     }
     hit.addEventListener('click', () => {
@@ -95,30 +79,42 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   if (prefersTouch && coverageCards.length) setCardState(coverageCards[0], true);
 
+  const rafDebounce = (fn) => {
+    let frame = 0;
+    return (...args) => {
+      if (frame) cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        fn(...args);
+      });
+    };
+  };
+
   // article search filter
   const search = document.getElementById('article-search');
   const chips = document.querySelectorAll('.chip');
-  const articleCards = document.querySelectorAll('.article-card');
+  const articleCards = Array.from(document.querySelectorAll('.article-card'));
   let activeFilter = 'all';
-  function applyArticleFilters() {
+  const applyArticleFilters = () => {
     const query = (search?.value || '').toLowerCase().trim();
     articleCards.forEach((card) => {
       const haystack = [card.dataset.title || '', card.dataset.description || '', card.dataset.tags || ''].join(' ').toLowerCase();
       const categories = (card.dataset.categories || '').toLowerCase();
       const categoryMatch = activeFilter === 'all' || categories.includes(activeFilter);
       const queryMatch = !query || haystack.includes(query);
-      card.style.display = categoryMatch && queryMatch ? '' : 'none';
+      card.hidden = !(categoryMatch && queryMatch);
     });
-  }
+  };
+  const scheduleArticleFilters = rafDebounce(applyArticleFilters);
   chips.forEach((chip) => {
     chip.addEventListener('click', () => {
       chips.forEach((c) => c.classList.remove('is-active'));
       chip.classList.add('is-active');
       activeFilter = chip.dataset.filter;
-      applyArticleFilters();
+      scheduleArticleFilters();
     });
   });
-  search?.addEventListener('input', applyArticleFilters);
+  search?.addEventListener('input', scheduleArticleFilters, { passive: true });
 
   // patch feed controls
   const patchFeed = document.getElementById('patch-feed');
@@ -128,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const statusChips = Array.from(document.querySelectorAll('#patch-status-chips [data-status]'));
   const sortChips = Array.from(document.querySelectorAll('#patch-sort-chips [data-sort]'));
 
-  if (patchFeed && (filterChips.length || sortChips.length || statusChips.length || patchSearch)) {
+  if (patchFeed && patchArchiveFeed && (filterChips.length || sortChips.length || statusChips.length || patchSearch)) {
     const allCards = Array.from(document.querySelectorAll('.patch-card'));
     let currentFilter = 'all';
     let currentStatus = 'all';
@@ -137,7 +133,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const applyPatchFeed = () => {
       const query = (patchSearch?.value || '').toLowerCase().trim();
-      const visible = allCards.filter((card) => {
+      const visible = [];
+
+      allCards.forEach((card) => {
         const haystack = [card.dataset.title, card.dataset.product, card.dataset.company, card.dataset.summary].join(' ').toLowerCase();
         const type = (card.dataset.type || '').toLowerCase();
         const category = (card.dataset.category || '').toLowerCase();
@@ -145,7 +143,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const filterPass = currentFilter === 'all' || type.includes(currentFilter) || category.includes(currentFilter);
         const statusPass = currentStatus === 'all' || status.includes(currentStatus);
         const queryPass = !query || haystack.includes(query);
-        return filterPass && statusPass && queryPass;
+        const isVisible = filterPass && statusPass && queryPass;
+        card.hidden = !isVisible;
+        card.classList.toggle('is-hidden', !isVisible);
+        if (isVisible) visible.push(card);
       });
 
       visible.sort((a, b) => {
@@ -157,32 +158,36 @@ document.addEventListener('DOMContentLoaded', () => {
         return Number(b.dataset.date || 0) - Number(a.dataset.date || 0);
       });
 
-      allCards.forEach((card) => card.classList.add('is-hidden'));
+      const currentFragment = document.createDocumentFragment();
+      const archiveFragment = document.createDocumentFragment();
       visible.forEach((card) => {
-        card.classList.remove('is-hidden');
-        const target = card.dataset.kind === 'archived' ? patchArchiveFeed : patchFeed;
-        target.appendChild(card);
+        if (card.dataset.kind === 'archived') archiveFragment.appendChild(card);
+        else currentFragment.appendChild(card);
       });
+      patchFeed.appendChild(currentFragment);
+      patchArchiveFeed.appendChild(archiveFragment);
     };
 
-    patchSearch?.addEventListener('input', applyPatchFeed);
+    const schedulePatchFeed = rafDebounce(applyPatchFeed);
+
+    patchSearch?.addEventListener('input', schedulePatchFeed, { passive: true });
     filterChips.forEach((chip) => chip.addEventListener('click', () => {
       filterChips.forEach((c) => c.classList.remove('is-active'));
       chip.classList.add('is-active');
       currentFilter = chip.dataset.filter;
-      applyPatchFeed();
+      schedulePatchFeed();
     }));
     statusChips.forEach((chip) => chip.addEventListener('click', () => {
       statusChips.forEach((c) => c.classList.remove('is-active'));
       chip.classList.add('is-active');
       currentStatus = chip.dataset.status;
-      applyPatchFeed();
+      schedulePatchFeed();
     }));
     sortChips.forEach((chip) => chip.addEventListener('click', () => {
       sortChips.forEach((c) => c.classList.remove('is-active'));
       chip.classList.add('is-active');
       currentSort = chip.dataset.sort;
-      applyPatchFeed();
+      schedulePatchFeed();
     }));
     applyPatchFeed();
   }
