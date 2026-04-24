@@ -568,3 +568,48 @@ button, input, select, textarea { font: inherit; }
     text-align:left;
   }
 }
+/* =========================================
+   AUXSAYS NODE GRAPH BULLETS
+   ========================================= */
+
+.article-content ul {
+  list-style: none;
+  padding-left: 1.6rem;
+  margin: 1.2rem 0;
+}
+
+.article-content ul li {
+  position: relative;
+  margin-bottom: 0.65rem;
+  line-height: 1.6;
+}
+
+.article-content ul li::before {
+  content: '';
+  position: absolute;
+  left: -1.4rem;
+  top: 0.55em;
+  width: 8px;
+  height: 8px;
+  background: #34d9f8;
+  border-radius: 2px;
+  opacity: 0.85;
+  box-shadow: 0 0 6px rgba(52,217,248,0.25);
+}
+
+.article-content ul li:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: -1.05rem;
+  top: 1.2em;
+  width: 1px;
+  height: calc(100% - 1.1em);
+  background: rgba(52,217,248,0.18);
+}
+
+@media (hover: hover) {
+  .article-content ul li:hover::before {
+    box-shadow: 0 0 10px rgba(52,217,248,0.45);
+    opacity: 1;
+  }
+}
