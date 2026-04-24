@@ -2173,3 +2173,40 @@ html.js-motion .reveal-up.is-visible { opacity:1; transform:none; }
     align-items: flex-start;
   }
 }
+
+
+/* Logo visibility refinement: normalize brand icons for fast scanning on dark cards */
+.patch-logo-badge,
+.patch-source-badge.patch-logo-badge {
+  background:
+    radial-gradient(circle at 35% 20%, rgba(255,255,255,.16), transparent 42%),
+    linear-gradient(180deg, rgba(21,34,40,.96), rgba(8,13,17,.98));
+  border-color: rgba(95,212,229,.28);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 0 0 1px rgba(95,212,229,.04),
+    0 10px 24px rgba(0,0,0,.22);
+}
+
+.patch-logo-badge--has-image img {
+  height: 1.65rem;
+  filter:
+    drop-shadow(0 0 6px rgba(244,239,228,.16))
+    drop-shadow(0 0 12px rgba(95,212,229,.10));
+}
+
+.patch-source-badge.patch-logo-badge--has-image img {
+  height: 1.75rem;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .patch-card:hover .patch-logo-badge,
+  .patch-source-card:hover .patch-logo-badge {
+    border-color: rgba(95,212,229,.42);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.11),
+      0 0 0 1px rgba(95,212,229,.08),
+      0 14px 28px rgba(0,0,0,.26);
+  }
+}
+

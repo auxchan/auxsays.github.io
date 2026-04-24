@@ -39,10 +39,13 @@ function findIcon(candidates, index) {
 
 function iconSvg(icon, id) {
   const title = escapeXml(icon.title || id);
-  const hex = /^[0-9a-f]{6}$/i.test(icon.hex || '') ? `#${icon.hex}` : '#F4EFE4';
+
+  // AUXSAYS uses these logos as quick recognition cues on a dark UI.
+  // Simple Icons brand colors can be too dark or too low-contrast in the badge tiles,
+  // so we normalize generated icons to a warm white foreground by default.
   return `<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${title} logo" viewBox="0 0 24 24" width="24" height="24">
   <title>${title}</title>
-  <path fill="${hex}" d="${icon.path}"/>
+  <path fill="#F4EFE4" d="${icon.path}"/>
 </svg>
 `;
 }
@@ -80,7 +83,7 @@ function main() {
     }
 
     fs.writeFileSync(outPath, iconSvg(found.icon, id), 'utf8');
-    report.generated.push({ id, matched_slug_or_title: found.matched, simple_icons_title: found.icon.title, hex: found.icon.hex });
+    report.generated.push({ id, matched_slug_or_title: found.matched, simple_icons_title: found.icon.title, source_hex: found.icon.hex, rendered_fill: '#F4EFE4' });
   }
 
   fs.writeFileSync(reportPath, JSON.stringify(report, null, 2), 'utf8');
