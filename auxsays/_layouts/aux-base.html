@@ -9,7 +9,16 @@
     <link rel="stylesheet" href="{{ '/assets/css/auxsays-custom.css' | relative_url }}">
     <script defer src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.12.2/lottie.min.js"></script>
     <script defer src="{{ '/assets/js/auxsays.js' | relative_url }}"></script>
-  </head>
+    <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-4SVH0YHB76"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-4SVH0YHB76');
+  </script>
+</head>
   <body class="aux-page {{ page.layout }}">
     <div class="aux-bg" aria-hidden="true"></div>
 
