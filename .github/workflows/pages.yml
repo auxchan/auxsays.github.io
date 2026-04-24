@@ -29,6 +29,19 @@ jobs:
         with:
           ruby-version: '3.3'
 
+      - name: Setup Node for logo generation
+        uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install logo generation dependencies
+        working-directory: ./auxsays
+        run: npm install --no-audit --no-fund
+
+      - name: Generate Patch Feed logos
+        working-directory: ./auxsays
+        run: npm run generate:patch-logos
+
       - name: Install image metadata tools
         run: |
           sudo apt-get update
