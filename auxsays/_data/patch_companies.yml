@@ -64,7 +64,7 @@
     product_id: blackmagic-davinci
   documented_update_count: 1
   coverage_state: documented
-  coverage_status_label: Documented records live
+  coverage_status_label: Documented patches live
   tracked_product_count: 1
 - id: epic-games
   company_name: Epic Games
@@ -217,7 +217,7 @@
     product_id: obs-studio
   documented_update_count: 2
   coverage_state: documented
-  coverage_status_label: Documented records live
+  coverage_status_label: Documented patches live
   tracked_product_count: 1
 - id: openai
   company_name: OpenAI

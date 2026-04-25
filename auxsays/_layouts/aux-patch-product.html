@@ -9,7 +9,7 @@ layout: aux-base
 <section class="patch-intel-shell">
   <section class="panel patch-intel-hero reveal-up">
     <a class="update-back-link" href="{{ company.company_url | relative_url }}">← Back to {{ company.company_name }}</a>
-    <div class="eyebrow">Expansion tracker</div>
+    <div class="eyebrow">Software dossier</div>
     <div class="patch-intel-hero-grid">
       <div>
         <h1 class="patch-intel-title">{{ product.product_name }}</h1>
@@ -23,7 +23,7 @@ layout: aux-base
       <div class="patch-intel-stat-card">
         {% if product_updates.size > 0 %}
         <span>{{ product_updates.size }}</span>
-        <em>documented update records</em>
+        <em>documented patch records</em>
         {% else %}
         <span>WATCH</span>
         <em>monitoring active</em>

@@ -466,8 +466,8 @@
   current_status_score: 0
   documented_update_count: 1
   coverage_state: documented
-  coverage_status_label: Documented records live
-  ingestion_status: Records published
+  coverage_status_label: Documented patches live
+  ingestion_status: Patch records live
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -503,8 +503,8 @@
   current_status_score: 0
   documented_update_count: 2
   coverage_state: documented
-  coverage_status_label: Documented records live
-  ingestion_status: Records published
+  coverage_status_label: Documented patches live
+  ingestion_status: Patch records live
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.

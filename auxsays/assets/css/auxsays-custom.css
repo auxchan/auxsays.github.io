@@ -2635,3 +2635,104 @@ html.js-motion .reveal-up.is-visible { opacity:1; transform:none; }
   }
 }
 
+
+/* Company / Software / Patch terminology pass + cleaner navigation */
+.update-back-link,
+.article-back-link {
+  color: var(--cyan-1);
+  border: 1px solid rgba(95,212,229,.24);
+  background: rgba(95,212,229,.055);
+  border-radius: 999px;
+  padding: .48rem .74rem;
+  width: max-content;
+  max-width: 100%;
+  transition:
+    color .22s ease,
+    border-color .22s ease,
+    background .22s ease,
+    box-shadow .22s ease,
+    transform .22s ease;
+}
+
+.update-back-link:hover,
+.update-back-link:focus-visible,
+.article-back-link:hover,
+.article-back-link:focus-visible {
+  color: #f4feff;
+  border-color: rgba(95,212,229,.52);
+  background: rgba(95,212,229,.12);
+  box-shadow: 0 0 0 1px rgba(95,212,229,.08), 0 0 20px rgba(95,212,229,.12);
+  transform: translateX(-2px);
+}
+
+.update-meta-strip {
+  gap: .45rem .65rem;
+  margin: .9rem 0 1rem;
+}
+
+.update-meta-strip a,
+.update-meta-strip span {
+  min-height: 1.82rem;
+  padding: .28rem .62rem;
+  font-size: .72rem;
+  letter-spacing: .095em;
+}
+
+.consensus-compact {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .35rem .75rem;
+  color: var(--text-1);
+  line-height: 1.45;
+}
+
+.consensus-compact span {
+  display: inline-flex;
+  align-items: center;
+}
+
+.consensus-compact strong {
+  color: var(--text-0);
+}
+
+.consensus-compact--card {
+  margin: .35rem 0 1rem;
+  padding: .78rem .9rem;
+  border-left: 2px solid rgba(95,212,229,.55);
+  border-radius: 0 16px 16px 0;
+  background: rgba(95,212,229,.035);
+}
+
+.update-verdict-card--clean {
+  padding: .95rem 1rem;
+}
+
+@media (max-width: 860px) {
+  .update-meta-strip {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .4rem;
+  }
+
+  .update-meta-strip a,
+  .update-meta-strip span {
+    width: auto;
+    max-width: 100%;
+  }
+
+  .consensus-compact {
+    display: grid;
+    gap: .18rem;
+  }
+
+  .consensus-compact span {
+    display: block;
+  }
+
+  .update-back-link,
+  .article-back-link {
+    white-space: normal;
+  }
+}
+

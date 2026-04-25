@@ -9,29 +9,29 @@ layout: aux-base
 <section class="patch-intel-shell">
   <section class="panel patch-intel-hero reveal-up">
     <a class="update-back-link" href="{{ '/updates/' | relative_url }}">← Back to Patch Feed</a>
-    <div class="eyebrow">Core intelligence</div>
+    <div class="eyebrow">Company profile</div>
     <div class="patch-intel-hero-grid">
       <div>
         <h1 class="patch-intel-title">{{ company.company_name }}</h1>
         <p class="patch-intel-subtitle">{{ company.summary }}</p>
         <div class="patch-status-line">
           <span class="patch-coverage-pill patch-coverage-pill--{{ company.coverage_state | default: 'active_watch' }}">{{ company.coverage_status_label | default: 'Active watch' }}</span>
-          <span>{{ products.size }} tracked expansion{% if products.size != 1 %}s{% endif %}</span>
-          <span>{{ documented_count }} documented update record{% if documented_count != 1 %}s{% endif %}</span>
+          <span>{{ products.size }} tracked software{% if products.size != 1 %}s{% endif %}</span>
+          <span>{{ documented_count }} documented patch record{% if documented_count != 1 %}s{% endif %}</span>
         </div>
       </div>
       <div class="patch-intel-stat-card">
         <span>{{ products.size }}</span>
-        <em>tracked product lanes</em>
+        <em>tracked software lanes</em>
       </div>
     </div>
   </section>
 
   <section class="panel patch-intel-section reveal-up reveal-delay-1">
     <div class="section-head section-head--archive">
-      <div class="eyebrow">Expansions</div>
-      <h2>Tracked products and workflow surfaces</h2>
-      <p>Follow the product lanes below for release history, stability signals, workflow impact, official sources, and community consensus as records are added.</p>
+      <div class="eyebrow">Software</div>
+      <h2>Tracked software and workflow surfaces</h2>
+      <p>Follow the software lanes below for release history, stability signals, workflow impact, official sources, and community consensus as records are added.</p>
     </div>
     <div class="patch-product-grid">
       {% for product in products %}
@@ -45,7 +45,7 @@ layout: aux-base
         <p class="patch-source-signal"><strong>Signal:</strong> {{ product.signal_notes }}</p>
         <div class="patch-status-line patch-status-line--compact">
           <span class="patch-coverage-pill patch-coverage-pill--{{ product.coverage_state }}">{{ product.coverage_status_label }}</span>
-          <span>{{ product.documented_update_count | default: 0 }} update record{% if product.documented_update_count != 1 %}s{% endif %}</span>
+          <span>{{ product.documented_update_count | default: 0 }} patch record{% if product.documented_update_count != 1 %}s{% endif %}</span>
         </div>
         <div class="patch-card-links">
           <a href="{{ product.product_url | relative_url }}">Open software dossier →</a>
@@ -86,7 +86,7 @@ layout: aux-base
     </div>
     <div class="patch-dossier-grid">
       <div class="patch-dossier-card">
-        <h3>Primary watch lanes</h3>
+        <h3>Primary software watch lanes</h3>
         <ul>
           {% for product in products %}
           <li><strong>{{ product.product_name }}:</strong> {{ product.signal_notes }}</li>

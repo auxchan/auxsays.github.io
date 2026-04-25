@@ -24,22 +24,21 @@ layout: aux-base
         </span>
       </div>
 
-      <p class="update-kicker">Update intelligence record</p>
+      <p class="update-kicker">Patch intelligence record</p>
       <h1 class="update-title">{{ display_title }}</h1>
 
       <div class="update-meta-strip">
-        {% if company %}<a href="{{ company.company_url | relative_url }}">Core: {{ company.company_name }}</a>{% endif %}
-        {% if product %}<a href="{{ product.product_url | relative_url }}">Product: {{ product.product_name }}</a>{% endif %}
-        <span>Version {{ page.update_version }}</span>
-        <span>Update released on {{ page.update_published_at | date: "%b %-d, %Y" }}</span>
-        <span>Last checked {{ page.update_last_checked | date: "%b %-d, %Y" }}</span>
+        {% if company %}<a href="{{ company.company_url | relative_url }}">Company: {{ company.company_name }}</a>{% endif %}
+        {% if product %}<a href="{{ product.product_url | relative_url }}">Software: {{ product.product_name }}</a>{% endif %}
+        <span>Patch: {{ page.update_version }}</span>
+        <span>Patch released: {{ page.update_published_at | date: "%b %-d, %Y" }}</span>
+        <span>Last checked: {{ page.update_last_checked | date: "%b %-d, %Y" }}</span>
       </div>
 
       <div class="update-verdict-card update-verdict-card--clean">
-        <div class="consensus-line">
+        <div class="consensus-compact">
           <span><strong>Consensus:</strong> <em class="consensus-word consensus-word--{{ reaction_class }}">{{ reaction }}</em></span>
-          <span><strong>Reports assessed:</strong> {{ page.update_report_count | default: 0 }}</span>
-          <span><strong>Confidence:</strong> {{ page.update_consensus_confidence | default: 'Low' }}</span>
+          <span>{{ page.update_report_count | default: 0 }} reports assessed • {{ page.update_consensus_confidence | default: 'Low' }} confidence</span>
         </div>
       </div>
 
@@ -60,10 +59,9 @@ layout: aux-base
     <article class="panel update-info-card update-consensus-card">
       <div class="eyebrow">Community signal</div>
       <h2>Consensus report</h2>
-      <div class="consensus-line consensus-line--card">
+      <div class="consensus-compact consensus-compact--card">
         <span><strong>Consensus:</strong> <em class="consensus-word consensus-word--{{ reaction_class }}">{{ reaction }}</em></span>
-        <span><strong>Reports assessed:</strong> {{ page.update_report_count | default: 0 }}</span>
-        <span><strong>Confidence:</strong> {{ page.update_consensus_confidence | default: 'Low' }}</span>
+        <span>{{ page.update_report_count | default: 0 }} reports assessed • {{ page.update_consensus_confidence | default: 'Low' }} confidence</span>
       </div>
       <p>{{ page.consensus_report | default: page.community_summary }}</p>
 
