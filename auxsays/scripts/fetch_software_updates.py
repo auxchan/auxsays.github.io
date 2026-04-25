@@ -67,6 +67,58 @@ def yaml_frontmatter(data: dict[str, Any]) -> str:
     return yaml.safe_dump(data, sort_keys=False, allow_unicode=True, width=1000).strip()
 
 
+CURATED_UPDATE_FIELDS = [
+    "description",
+    "update_consensus_label",
+    "community_reaction",
+    "community_summary",
+    "update_consensus_summary",
+    "update_report_count",
+    "update_consensus_confidence",
+    "quick_verdict",
+    "official_summary",
+    "consensus_report",
+    "complaint_themes",
+    "status_events",
+    "status_change_type",
+    "notification_message",
+    "patch_file_size",
+    "patch_file_size_note",
+    "update_status",
+    "update_feed_title",
+    "update_detail_title",
+]
+
+
+def read_existing_frontmatter(path: pathlib.Path) -> dict[str, Any]:
+    """Read front matter from an existing generated update page."""
+    if not path.exists():
+        return {}
+    text = path.read_text(encoding="utf-8")
+    match = re.match(r"^---\s*\n(.*?)\n---\s*", text, flags=re.S)
+    if not match:
+        return {}
+    payload = yaml.safe_load(match.group(1)) or {}
+    return payload if isinstance(payload, dict) else {}
+
+
+def preserve_curated_update_fields(front: dict[str, Any], existing: dict[str, Any]) -> dict[str, Any]:
+    """Keep hand-edited AUXSAYS summary/consensus copy when regenerating pages."""
+    for field in CURATED_UPDATE_FIELDS:
+        value = existing.get(field)
+        if value not in (None, ""):
+            front[field] = value
+
+    # Older manually curated pages used community_reaction/community_summary.
+    # Current layouts prefer update_consensus_label/update_consensus_summary.
+    if existing.get("community_reaction"):
+        front["update_consensus_label"] = existing["community_reaction"]
+    if existing.get("community_summary"):
+        front["update_consensus_summary"] = existing["community_summary"]
+
+    return front
+
+
 def slugify(value: str) -> str:
     return re.sub(r"[^a-z0-9]+", "-", str(value).lower()).strip("-") or "update"
 
@@ -271,6 +323,8 @@ def write_github_release_page(source: dict[str, Any], release: dict[str, Any], i
         "official_checksums_capture_status": "captured-from-official-release" if checksums_body else "not-present",
     }
     output = OUTPUT_DIR / f"{date_slug}-{slugify(product_name)}-{version_slug}.md"
+    existing = read_existing_frontmatter(output)
+    front = preserve_curated_update_fields(front, existing)
     output.write_text("---\n" + yaml_frontmatter(front) + "\n---\n", encoding="utf-8")
     return output
 
