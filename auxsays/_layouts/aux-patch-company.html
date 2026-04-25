@@ -31,7 +31,7 @@ layout: aux-base
     <div class="section-head section-head--archive">
       <div class="eyebrow">Software</div>
       <h2>Tracked software and workflow surfaces</h2>
-      <p>Follow the software lanes below for release history, stability signals, workflow impact, official sources, and community consensus as records are added.</p>
+      <p>Follow the software profiles below for release history, stability signals, workflow impact, official sources, and community consensus as records are added.</p>
     </div>
     <div class="patch-product-grid">
       {% for product in products %}
@@ -43,11 +43,20 @@ layout: aux-base
       {% elsif product_cadence_label == 'Low' %}
         {% assign product_cadence_label = 'Occasional updates' %}
       {% endif %}
+      {% assign product_priority_label = product.priority %}
+      {% case product.priority %}
+        {% when 'Core' %}
+          {% assign product_priority_label = 'Primary' %}
+        {% when 'Expansion' %}
+          {% assign product_priority_label = 'Secondary' %}
+        {% when 'Edge' %}
+          {% assign product_priority_label = 'Watchlist' %}
+      {% endcase %}
       <article class="patch-product-card">
         <div class="patch-product-topline">
           <span class="patch-source-badge patch-logo-badge patch-logo-badge--has-image"><img src="{{ product.logo_path | relative_url }}" alt="{{ product.product_name }} logo" loading="lazy"></span>
           <span><strong>{{ product.product_name }}</strong><em>{{ product.category_label }}</em></span>
-          <span class="patch-source-priority patch-source-priority--{{ product.priority | downcase }}">{{ product.priority }}</span>
+          <span class="patch-source-priority patch-source-priority--{{ product.priority | downcase }}">{{ product_priority_label }}</span>
         </div>
         <p>{{ product.impact }}</p>
         <p class="patch-source-signal"><strong>Signal:</strong> {{ product.signal_notes }}</p>
