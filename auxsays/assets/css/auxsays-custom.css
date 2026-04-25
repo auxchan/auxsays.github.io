@@ -1487,7 +1487,7 @@ html.js-motion .reveal-up.is-visible { opacity:1; transform:none; }
 }
 
 
-/* Patch Feed control refinement: lane filters and clearer source/product sorting */
+/* Patch Feed control refinement: priority filters and clearer source/product sorting */
 .patch-toolbar-grid--enhanced {
   align-items: start;
 }

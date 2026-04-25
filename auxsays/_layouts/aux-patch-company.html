@@ -4,7 +4,13 @@ layout: aux-base
 {% assign company = site.data.patch_companies | where: "id", page.company_id | first %}
 {% assign products = site.data.patch_products | where: "company_id", page.company_id %}
 {% assign company_updates = site.pages | where: "update_entry", true | where: "company_id", page.company_id | sort: "update_published_at" | reverse %}
-{% assign documented_count = company.documented_update_count | default: company_updates.size %}
+{% assign documented_count = company_updates.size %}
+{% assign company_coverage_label = company.coverage_status_label | default: 'Active watch' %}
+{% assign company_coverage_state = company.coverage_state | default: 'active_watch' %}
+{% if documented_count > 0 %}
+  {% assign company_coverage_label = 'Patch records available' %}
+  {% assign company_coverage_state = 'documented' %}
+{% endif %}
 
 <section class="patch-intel-shell">
   <section class="panel patch-intel-hero reveal-up">
@@ -15,7 +21,7 @@ layout: aux-base
         <h1 class="patch-intel-title">{{ company.company_name }}</h1>
         <p class="patch-intel-subtitle">{{ company.summary }}</p>
         <div class="patch-status-line">
-          <span class="patch-coverage-pill patch-coverage-pill--{{ company.coverage_state | default: 'active_watch' }}">{{ company.coverage_status_label | default: 'Active watch' }}</span>
+          <span class="patch-coverage-pill patch-coverage-pill--{{ company_coverage_state }}">{{ company_coverage_label }}</span>
           <span>{{ products.size }} tracked software{% if products.size != 1 %}s{% endif %}</span>
           <span>{{ documented_count }} documented patch record{% if documented_count != 1 %}s{% endif %}</span>
         </div>
@@ -52,6 +58,14 @@ layout: aux-base
         {% when 'Edge' %}
           {% assign product_priority_label = 'Watchlist' %}
       {% endcase %}
+      {% assign product_updates_for_card = site.pages | where: "update_entry", true | where: "product_id", product.product_id %}
+      {% assign product_update_count = product_updates_for_card.size %}
+      {% assign product_coverage_label = product.coverage_status_label %}
+      {% assign product_coverage_state = product.coverage_state %}
+      {% if product_update_count > 0 %}
+        {% assign product_coverage_label = 'Patch records available' %}
+        {% assign product_coverage_state = 'documented' %}
+      {% endif %}
       <article class="patch-product-card">
         <div class="patch-product-topline">
           <span class="patch-source-badge patch-logo-badge patch-logo-badge--has-image"><img src="{{ product.logo_path | relative_url }}" alt="{{ product.product_name }} logo" loading="lazy"></span>
@@ -61,8 +75,8 @@ layout: aux-base
         <p>{{ product.impact }}</p>
         <p class="patch-source-signal"><strong>Signal:</strong> {{ product.signal_notes }}</p>
         <div class="patch-status-line patch-status-line--compact">
-          <span class="patch-coverage-pill patch-coverage-pill--{{ product.coverage_state }}">{{ product.coverage_status_label }}</span>
-          <span>{{ product.documented_update_count | default: 0 }} patch record{% if product.documented_update_count != 1 %}s{% endif %}</span>
+          <span class="patch-coverage-pill patch-coverage-pill--{{ product_coverage_state }}">{{ product_coverage_label }}</span>
+          <span>{{ product_update_count }} patch record{% if product_update_count != 1 %}s{% endif %}</span>
         </div>
         <div class="patch-card-links">
           <a href="{{ product.product_url | relative_url }}">Open software dossier →</a>
@@ -103,7 +117,7 @@ layout: aux-base
     </div>
     <div class="patch-dossier-grid">
       <div class="patch-dossier-card">
-        <h3>Primary software watch lanes</h3>
+        <h3>Primary software watch areas</h3>
         <ul>
           {% for product in products %}
           <li><strong>{{ product.product_name }}:</strong> {{ product.signal_notes }}</li>

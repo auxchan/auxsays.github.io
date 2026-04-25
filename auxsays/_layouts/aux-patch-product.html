@@ -4,7 +4,7 @@ layout: aux-base
 {% assign company = site.data.patch_companies | where: "id", page.company_id | first %}
 {% assign product = site.data.patch_products | where: "id", page.product_id | first %}
 {% assign product_updates = site.pages | where: "update_entry", true | where: "product_id", page.product_id | sort: "update_published_at" | reverse %}
-{% assign documented_count = product.documented_update_count | default: product_updates.size %}
+{% assign documented_count = product_updates.size %}
 {% assign cadence_label = product.cadence | default: source.cadence | default: '' %}
 {% if cadence_label == 'High' %}
   {% assign cadence_label = 'Frequent updates' %}
@@ -22,8 +22,14 @@ layout: aux-base
       <div>
         <h1 class="patch-intel-title">{{ product.product_name }}</h1>
         <p class="patch-intel-subtitle">{{ product.watch_reason }}</p>
+        {% assign product_coverage_label = product.coverage_status_label | default: 'Active watch' %}
+        {% assign product_coverage_state = product.coverage_state | default: 'active_watch' %}
+        {% if product_updates.size > 0 %}
+          {% assign product_coverage_label = 'Patch records available' %}
+          {% assign product_coverage_state = 'documented' %}
+        {% endif %}
         <div class="patch-status-line">
-          <span class="patch-coverage-pill patch-coverage-pill--{{ product.coverage_state | default: 'active_watch' }}">{{ product.coverage_status_label | default: 'Active watch' }}</span>
+          <span class="patch-coverage-pill patch-coverage-pill--{{ product_coverage_state }}">{{ product_coverage_label }}</span>
           <span>{{ product.category_label }}</span>
           <span>{{ cadence_label }}</span>
         </div>

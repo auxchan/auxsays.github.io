@@ -46,8 +46,6 @@ layout: aux-base
           {% for source in patch_sources %}
           <option value="{{ source.id }}">{{ source.product_name }}</option>
           {% endfor %}
-          <option value="obs-studio">OBS Studio</option>
-          <option value="davinci-resolve">DaVinci Resolve</option>
         </select>
       </div>
 
@@ -66,15 +64,18 @@ layout: aux-base
         <span class="patch-label">Category</span>
         <div class="patch-chips" id="patch-filter-chips">
           <button class="patch-chip is-active" data-filter="all">All</button>
-          <button class="patch-chip" data-filter="ai-tools">AI</button>
+          <button class="patch-chip" data-filter="ai-tools">AI Tools</button>
+          <button class="patch-chip" data-filter="ai-image">AI Image</button>
+          <button class="patch-chip" data-filter="ai-video">AI Video</button>
           <button class="patch-chip" data-filter="streaming">Streaming</button>
-          <button class="patch-chip" data-filter="video-production">Video</button>
-          <button class="patch-chip" data-filter="game-engines">Game/Engine</button>
-          <button class="patch-chip" data-filter="hardware-drivers">Hardware</button>
+          <button class="patch-chip" data-filter="video-production">Video / Production</button>
+          <button class="patch-chip" data-filter="creator-platforms">Creator Platforms</button>
+          <button class="patch-chip" data-filter="design-workflow">Design</button>
+          <button class="patch-chip" data-filter="game-engines">Game Engines</button>
+          <button class="patch-chip" data-filter="game-platforms">Game Platforms</button>
+          <button class="patch-chip" data-filter="hardware-drivers">Hardware / Drivers</button>
           <button class="patch-chip" data-filter="workflow-automation">Automation</button>
-          <button class="patch-chip" data-filter="broadcasting">Broadcasting</button>
-          <button class="patch-chip" data-filter="video-editing">Video Editing</button>
-          <button class="patch-chip" data-filter="creator-software">Creator Tools</button>
+          <button class="patch-chip" data-filter="dev-web">Dev / Web</button>
         </div>
       </div>
 
@@ -118,6 +119,14 @@ layout: aux-base
 
     <div class="patch-source-grid" id="patch-source-grid">
       {% for source in patch_sources %}
+      {% assign source_cadence_label = source.cadence | default: '' %}
+      {% if source_cadence_label == 'High' %}
+        {% assign source_cadence_label = 'Frequent updates' %}
+      {% elsif source_cadence_label == 'Medium' %}
+        {% assign source_cadence_label = 'Periodic updates' %}
+      {% elsif source_cadence_label == 'Low' %}
+        {% assign source_cadence_label = 'Occasional updates' %}
+      {% endif %}
       <article class="patch-source-card"
         data-source-card="true"
         data-source-id="{{ source.id }}"
