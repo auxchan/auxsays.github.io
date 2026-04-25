@@ -57,9 +57,7 @@ def split_official_sections(body):
     if "## Checksums" not in body:
         return body, ""
     before, after = body.split("## Checksums", 1)
-    checksum_body = "## Checksums
-
-" + after.strip()
+    checksum_body = "## Checksums\n\n" + after.strip()
     return before.rstrip(), checksum_body.strip()
 
 def write_obs_update_page(release, status="current"):
