@@ -37,15 +37,58 @@ function findIcon(candidates, index) {
   return null;
 }
 
+function hexToRgb(hex) {
+  const clean = String(hex || '').replace('#', '');
+  if (!/^[0-9a-f]{6}$/i.test(clean)) return null;
+  return {
+    r: parseInt(clean.slice(0, 2), 16),
+    g: parseInt(clean.slice(2, 4), 16),
+    b: parseInt(clean.slice(4, 6), 16)
+  };
+}
+
+function channelToLinear(value) {
+  const normalized = value / 255;
+  return normalized <= 0.03928
+    ? normalized / 12.92
+    : Math.pow((normalized + 0.055) / 1.055, 2.4);
+}
+
+function relativeLuminance(rgb) {
+  return (
+    0.2126 * channelToLinear(rgb.r) +
+    0.7152 * channelToLinear(rgb.g) +
+    0.0722 * channelToLinear(rgb.b)
+  );
+}
+
+function contrastRatio(hexA, hexB) {
+  const rgbA = hexToRgb(hexA);
+  const rgbB = hexToRgb(hexB);
+  if (!rgbA || !rgbB) return 0;
+  const lumA = relativeLuminance(rgbA);
+  const lumB = relativeLuminance(rgbB);
+  const lighter = Math.max(lumA, lumB);
+  const darker = Math.min(lumA, lumB);
+  return (lighter + 0.05) / (darker + 0.05);
+}
+
+function chooseIconFill(icon) {
+  const brandHex = /^[0-9a-f]{6}$/i.test(icon.hex || '') ? `#${icon.hex}` : '#F4EFE4';
+
+  // Logo tiles sit on a dark teal/black badge. Preserve brand color when it scans well,
+  // but convert very dark/low-contrast brand fills to warm white so they remain legible.
+  const tileBackground = '#101A20';
+  const contrast = contrastRatio(brandHex, tileBackground);
+  return contrast >= 2.35 ? brandHex : '#F4EFE4';
+}
+
 function iconSvg(icon, id) {
   const title = escapeXml(icon.title || id);
-
-  // AUXSAYS uses these logos as quick recognition cues on a dark UI.
-  // Simple Icons brand colors can be too dark or too low-contrast in the badge tiles,
-  // so we normalize generated icons to a warm white foreground by default.
+  const fill = chooseIconFill(icon);
   return `<svg xmlns="http://www.w3.org/2000/svg" role="img" aria-label="${title} logo" viewBox="0 0 24 24" width="24" height="24">
   <title>${title}</title>
-  <path fill="#F4EFE4" d="${icon.path}"/>
+  <path fill="${fill}" d="${icon.path}"/>
 </svg>
 `;
 }
@@ -83,7 +126,7 @@ function main() {
     }
 
     fs.writeFileSync(outPath, iconSvg(found.icon, id), 'utf8');
-    report.generated.push({ id, matched_slug_or_title: found.matched, simple_icons_title: found.icon.title, source_hex: found.icon.hex, rendered_fill: '#F4EFE4' });
+    report.generated.push({ id, matched_slug_or_title: found.matched, simple_icons_title: found.icon.title, source_hex: found.icon.hex, rendered_fill: chooseIconFill(found.icon) });
   }
 
   fs.writeFileSync(reportPath, JSON.stringify(report, null, 2), 'utf8');

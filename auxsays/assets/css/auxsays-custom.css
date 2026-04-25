@@ -2175,7 +2175,7 @@ html.js-motion .reveal-up.is-visible { opacity:1; transform:none; }
 }
 
 
-/* Logo visibility refinement: normalize brand icons for fast scanning on dark cards */
+/* Logo visibility refinement: preserve readable brand colors, improve dark logo tiles */
 .patch-logo-badge,
 .patch-source-badge.patch-logo-badge {
   background:
