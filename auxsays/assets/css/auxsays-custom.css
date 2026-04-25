@@ -2926,3 +2926,15 @@ html.js-motion .reveal-up.is-visible { opacity:1; transform:none; }
   margin-top: 1rem;
 }
 
+
+/* Patch history tables: remove visible score metric and rebalance columns */
+.patch-version-row--no-score {
+  grid-template-columns: minmax(120px, .9fr) minmax(90px, .7fr) minmax(110px, .75fr) minmax(90px, .6fr) minmax(110px, .7fr) minmax(120px, .8fr);
+}
+
+@media (max-width: 860px) {
+  .patch-version-row--no-score {
+    grid-template-columns: 1fr;
+  }
+}
+

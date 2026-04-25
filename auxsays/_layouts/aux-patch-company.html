@@ -61,18 +61,18 @@ layout: aux-base
     <div class="section-head section-head--archive">
       <div class="eyebrow">Latest documented records</div>
       <h2>Documented updates</h2>
-      <p>Documented records include the official update text, AUXSAYS summary, consensus score, complaint themes, confidence level, and status timeline.</p>
+      <p>Documented records include the official patch notes, summary, consensus read, reported issues, confidence level, and status history.</p>
     </div>
     <div class="patch-version-table">
-      <div class="patch-version-row patch-version-row--head"><span>Product</span><span>Version</span><span>Consensus</span><span>Score</span><span>Record</span></div>
+      <div class="patch-version-row patch-version-row--head patch-version-row--no-score"><span>Software</span><span>Patch</span><span>Consensus</span><span>Reports</span><span>Record</span></div>
       {% for item in company_updates %}
       {% assign reaction = item.update_consensus_label | default: item.community_reaction | default: 'Insufficient' %}
       <a class="patch-version-row" href="{{ item.url | relative_url }}">
         <span>{{ item.update_product }}</span>
         <span>{{ item.update_version }}</span>
         <span>{{ reaction }}</span>
-        <span>{{ item.consensus_score | default: 0 }}</span>
-        <span>View update →</span>
+        <span>{{ item.update_report_count | default: 0 }}</span>
+        <span>View patch →</span>
       </a>
       {% endfor %}
     </div>

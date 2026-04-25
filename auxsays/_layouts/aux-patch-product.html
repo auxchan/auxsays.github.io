@@ -39,21 +39,21 @@ layout: aux-base
   {% if product_updates.size > 0 %}
   <section class="panel patch-intel-section reveal-up reveal-delay-1">
     <div class="section-head section-head--archive">
-      <div class="eyebrow">Documented version history</div>
-      <h2>{{ product.product_name }} update history</h2>
-      <p>Tracked releases appear here with their official notes, AUXSAYS summary, consensus score, complaint themes, report count, and confidence rating.</p>
+      <div class="eyebrow">Documented patch history</div>
+      <h2>{{ product.product_name }} patch history</h2>
+      <p>Tracked patches appear here with official notes, summary, consensus, reported issues, report count, and confidence rating.</p>
     </div>
     <div class="patch-version-table">
-      <div class="patch-version-row patch-version-row--head"><span>Date</span><span>Version</span><span>Consensus</span><span>Score</span><span>Reports</span><span>Record</span></div>
+      <div class="patch-version-row patch-version-row--head patch-version-row--no-score"><span>Date</span><span>Patch</span><span>Consensus</span><span>Reports</span><span>Confidence</span><span>Record</span></div>
       {% for item in product_updates %}
       {% assign reaction = item.update_consensus_label | default: item.community_reaction | default: 'Insufficient' %}
       <a class="patch-version-row" href="{{ item.url | relative_url }}">
         <span>{{ item.update_published_at | date: "%b %-d, %Y" }}</span>
         <span>{{ item.update_version }}</span>
         <span>{{ reaction }}</span>
-        <span>{{ item.consensus_score | default: 0 }}</span>
         <span>{{ item.update_report_count | default: 0 }}</span>
-        <span>View update →</span>
+        <span>{{ item.update_consensus_confidence | default: "Low" }}</span>
+        <span>View patch →</span>
       </a>
       {% endfor %}
     </div>
