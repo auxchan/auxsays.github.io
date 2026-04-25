@@ -2823,6 +2823,8 @@ html.js-motion .reveal-up.is-visible { opacity:1; transform:none; }
 .update-info-card ul li,
 .official-patch-notes ul li,
 .node-bullet-scope ul li {
+  --node-size: 9px;
+  --node-left: -1.18rem;
   position: relative;
   margin-bottom: .62rem;
   line-height: 1.72;
@@ -2835,10 +2837,12 @@ html.js-motion .reveal-up.is-visible { opacity:1; transform:none; }
 .node-bullet-scope ul li::before {
   content: '';
   position: absolute;
-  left: -1.42rem;
+  left: var(--node-left);
   top: .72em;
-  width: 9px;
-  height: 9px;
+  width: var(--node-size);
+  height: var(--node-size);
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
   background: #34d9f8;
   border: 1px solid rgba(240,202,103,.75);
   border-radius: 3px;
@@ -2854,10 +2858,12 @@ html.js-motion .reveal-up.is-visible { opacity:1; transform:none; }
 .node-bullet-scope ul li:not(:last-child)::after {
   content: '';
   position: absolute;
-  left: -1.15rem;
-  top: 1.28em;
+  left: var(--node-left);
+  top: calc(.72em + (var(--node-size) / 2));
   width: 1px;
-  height: calc(100% - .82em);
+  height: calc(100% - .18em);
+  transform: translateX(-50%);
+  transform-origin: top center;
   background: linear-gradient(180deg, rgba(52,217,248,.36), rgba(52,217,248,.08));
   transition: background .22s ease, box-shadow .22s ease;
 }
@@ -2870,7 +2876,7 @@ html.js-motion .reveal-up.is-visible { opacity:1; transform:none; }
   .node-bullet-scope ul li:hover::before {
     opacity: 1;
     background: var(--cyan-1);
-    transform: translateX(1px) scale(1.12);
+    transform: translate(-50%, -50%) scale(1.18);
     box-shadow: 0 0 0 1px rgba(240,202,103,.32), 0 0 14px rgba(52,217,248,.55);
   }
 
@@ -2882,6 +2888,24 @@ html.js-motion .reveal-up.is-visible { opacity:1; transform:none; }
     background: linear-gradient(180deg, rgba(52,217,248,.72), rgba(52,217,248,.18));
     box-shadow: 0 0 10px rgba(52,217,248,.18);
   }
+}
+
+/* Collapsible Status History and Checksum polish */
+.update-checksum-details summary,
+.update-status-details summary {
+  color: var(--cyan-1);
+  transition: color .22s ease, text-shadow .22s ease;
+}
+
+.update-checksum-details summary:hover,
+.update-status-details summary:hover {
+  color: #f4feff;
+  text-shadow: 0 0 12px rgba(95,212,229,.28);
+}
+
+.checksum-helper {
+  color: var(--text-1);
+  margin-top: 1rem;
 }
 
 /* Collapsible Status History and Checksum polish */
