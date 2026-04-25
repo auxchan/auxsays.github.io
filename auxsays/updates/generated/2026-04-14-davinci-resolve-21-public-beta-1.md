@@ -28,9 +28,9 @@ company_id: blackmagic-design
 product_id: blackmagic-davinci
 official_patch_notes_source_type: vendor-release-page
 official_patch_notes_capture_status: partial-existing-record
-quick_verdict: DaVinci Resolve is currently rated Moderate. This read is based on 7 matched reports with Low confidence.
-official_summary: Published Apr 14, 2026. Blackmagic Design announced DaVinci Resolve 21 Public Beta 1 and made it available for download.
-consensus_report: Early beta reaction is mixed. Blackmagic's Resolve 21 beta forum is active with both setup questions and problem reports, so this is better treated like a test build than a clean default upgrade.
+quick_verdict: ''
+official_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and should be treated differently from a stable production build. The key user decision is not simply whether the release is new, but whether the new Resolve 21 feature set is worth testing in a non-critical environment. For production work, the practical read is to keep existing stable projects on a known-good version unless a specific Resolve 21 feature is needed and the project can tolerate beta risk.
+consensus_report: The consensus remains moderate because this is a beta release. Early interest is useful for testing the new version path, but production users should separate feature exploration from mission-critical work. Reports assessed are not strong enough yet to call this either safe-positive or failure-negative.
 complaint_themes:
 - theme: Beta setup questions
   frequency: Medium
@@ -43,12 +43,13 @@ complaint_themes:
   severity: Medium
 status_events:
 - at: '2026-04-14T00:00:00Z'
-  label: Published
-  note: Official update record created.
+  label: Update released
+  note: Official release became available.
 - at: '2026-04-23T00:00:00Z'
   label: Moderate
-  note: Consensus label set from 7 matched reports.
+  note: Consensus read based on 7 matched reports.
 legacy_consensus_score: 6
 legacy_consensus_score_percent: 53
 official_patch_notes_source_url: https://www.blackmagicdesign.com/media/release/20260414-01
+release_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and should be treated differently from a stable production build. The key user decision is not simply whether the release is new, but whether the new Resolve 21 feature set is worth testing in a non-critical environment. For production work, the practical read is to keep existing stable projects on a known-good version unless a specific Resolve 21 feature is needed and the project can tolerate beta risk.
 ---

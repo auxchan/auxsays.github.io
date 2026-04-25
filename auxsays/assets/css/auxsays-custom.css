@@ -2496,3 +2496,142 @@ html.js-motion .reveal-up.is-visible { opacity:1; transform:none; }
   color: var(--text-2);
 }
 
+
+/* Update page methodology pass: separate summary/consensus cards, remove redundant prose */
+.update-hero--v3 {
+  padding: 1.35rem 1.45rem;
+}
+
+.update-hero--v3 .update-title {
+  max-width: 18ch;
+}
+
+.update-content-grid {
+  display: grid;
+  gap: 1.15rem;
+}
+
+.update-info-card {
+  padding: 1.35rem 1.45rem;
+  overflow: hidden;
+}
+
+.update-info-card h2 {
+  margin: 0 0 .75rem;
+  font-size: clamp(1.35rem, 2.1vw, 2.05rem);
+  line-height: 1.05;
+}
+
+.update-info-card p {
+  color: var(--text-1);
+  line-height: 1.78;
+  max-width: 72rem;
+}
+
+.update-summary-card,
+.update-consensus-card {
+  border-color: rgba(95,212,229,.13);
+}
+
+.update-summary-card {
+  background:
+    linear-gradient(180deg, rgba(17,22,26,.9), rgba(11,15,18,.96)),
+    radial-gradient(circle at 8% 0%, rgba(95,212,229,.08), transparent 28%);
+}
+
+.update-consensus-card {
+  background:
+    linear-gradient(180deg, rgba(17,22,26,.9), rgba(11,15,18,.96)),
+    radial-gradient(circle at 0% 18%, rgba(95,212,229,.09), transparent 30%);
+}
+
+.consensus-line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .65rem .95rem;
+  color: var(--text-1);
+  line-height: 1.5;
+}
+
+.consensus-line span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: .34rem .68rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-subtle);
+  background: rgba(255,255,255,.022);
+}
+
+.consensus-line--card {
+  margin: .35rem 0 1rem;
+}
+
+.consensus-word {
+  font-style: normal;
+  margin-left: .3rem;
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  font-weight: 900;
+}
+
+.consensus-word--positive {
+  color: #d9f7e5;
+}
+
+.consensus-word--moderate {
+  color: var(--accent-1);
+}
+
+.consensus-word--negative {
+  color: #ffd7d7;
+}
+
+.consensus-word--insufficient,
+.consensus-word--insufficient-data {
+  color: #dee6ef;
+}
+
+.complaint-theme-table--renamed {
+  margin-top: 1rem;
+  border-left: 2px solid rgba(95,212,229,.5);
+  padding-left: .85rem;
+}
+
+.complaint-theme-row--head span {
+  color: var(--cyan-1);
+}
+
+.update-status-details {
+  padding: 1rem 1.2rem;
+}
+
+.update-status-details summary {
+  cursor: pointer;
+  color: var(--text-0);
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: -.02em;
+}
+
+.status-timeline--compact {
+  margin-top: 1rem;
+}
+
+.update-official-card {
+  border-color: rgba(214,171,78,.16);
+}
+
+@media (max-width: 860px) {
+  .update-hero--v3,
+  .update-info-card {
+    padding: 1.12rem;
+  }
+
+  .consensus-line {
+    display: grid;
+    gap: .45rem;
+  }
+}
+
