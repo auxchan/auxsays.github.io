@@ -24,7 +24,7 @@ layout: aux-base
         <span class="patch-alert-pill pill-{{ note.change_type | downcase }}">{{ note.change_type }}</span>
         <span>
           <strong>{{ note.product }} {{ note.version }}</strong>
-          <p>{{ note.message }}</p>
+          <p>{{ note.message }}</p>{% if note.changed_at %}<time class="patch-alert-time">Status updated {{ note.changed_at | date: "%b %-d, %Y %-I:%M %p %Z" }}</time>{% endif %}
         </span>
       </a>
       {% endfor %}
@@ -122,7 +122,7 @@ layout: aux-base
             <img src="{{ source.logo_path | relative_url }}" alt="{{ source.product_name }} logo" loading="lazy">
           </span>
           <span class="patch-source-meta">
-            <strong>{{ source.product_name }}</strong>
+            <strong><a href="{{ source.company_url | relative_url }}">{{ source.product_name }}</a></strong>
             <em>{{ source.company_name }}</em>
           </span>
           <span class="patch-source-priority patch-source-priority--{{ source.priority | downcase }}">{{ source.priority }}</span>
@@ -134,7 +134,7 @@ layout: aux-base
         <p>{{ source.impact }}</p>
         <p class="patch-source-reason">{{ source.watch_reason }}</p>
         {% if source.signal_notes %}<p class="patch-source-signal"><strong>Signal:</strong> {{ source.signal_notes }}</p>{% endif %}
-        {% if source.source_url %}<a class="patch-source-link" href="{{ source.source_url }}">{{ source.source_label | default: 'Official source' }} ↗</a>{% endif %}
+        <div class="patch-card-links patch-source-actions"><a class="patch-source-link" href="{{ source.company_url | relative_url }}">View company hub →</a><a class="patch-source-link" href="{{ source.product_url | relative_url }}">Software tracker →</a>{% if source.source_url %}<a class="patch-source-link" href="{{ source.source_url }}">{{ source.source_label | default: 'Official source' }} ↗</a>{% endif %}</div>
       </article>
       {% endfor %}
     </div>

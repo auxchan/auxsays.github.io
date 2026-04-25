@@ -1,0 +1,73 @@
+---
+layout: aux-base
+---
+{% assign company = site.data.patch_companies | where: "id", page.company_id | first %}
+{% assign products = site.data.patch_products | where: "company_id", page.company_id %}
+{% assign company_updates = site.pages | where: "update_entry", true | where: "company_id", page.company_id | sort: "update_published_at" | reverse %}
+
+<section class="patch-intel-shell">
+  <section class="panel patch-intel-hero reveal-up">
+    <a class="update-back-link" href="{{ '/updates/' | relative_url }}">← Back to Patch Feed</a>
+    <div class="eyebrow">Core intelligence</div>
+    <div class="patch-intel-hero-grid">
+      <div>
+        <h1 class="patch-intel-title">{{ company.company_name }}</h1>
+        <p class="patch-intel-subtitle">{{ company.summary }}</p>
+      </div>
+      <div class="patch-intel-stat-card">
+        <span>{{ products.size }}</span>
+        <em>tracked software / expansion lanes</em>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel patch-intel-section reveal-up reveal-delay-1">
+    <div class="section-head section-head--archive">
+      <div class="eyebrow">Expansions</div>
+      <h2>Tracked software and product surfaces</h2>
+      <p>Each expansion page keeps product-specific version history, consensus labels, official sources, and recurring complaint themes.</p>
+    </div>
+    <div class="patch-product-grid">
+      {% for product in products %}
+      <article class="patch-product-card">
+        <div class="patch-product-topline">
+          <span class="patch-source-badge patch-logo-badge patch-logo-badge--has-image"><img src="{{ product.logo_path | relative_url }}" alt="{{ product.product_name }} logo" loading="lazy"></span>
+          <span><strong>{{ product.product_name }}</strong><em>{{ product.category_label }}</em></span>
+          <span class="patch-source-priority patch-source-priority--{{ product.priority | downcase }}">{{ product.priority }}</span>
+        </div>
+        <p>{{ product.impact }}</p>
+        <p class="patch-source-signal"><strong>Signal:</strong> {{ product.signal_notes }}</p>
+        <div class="patch-card-links">
+          <a href="{{ product.product_url | relative_url }}">Open software tracker →</a>
+          {% if product.source_url %}<a href="{{ product.source_url }}">Official source ↗</a>{% endif %}
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+
+  <section class="panel patch-intel-section reveal-up reveal-delay-2">
+    <div class="section-head section-head--archive">
+      <div class="eyebrow">Latest records</div>
+      <h2>Documented updates</h2>
+      <p>Every update record keeps its own official notes, consensus score, status timeline, and evidence report.</p>
+    </div>
+    {% if company_updates.size > 0 %}
+    <div class="patch-version-table">
+      <div class="patch-version-row patch-version-row--head"><span>Product</span><span>Version</span><span>Consensus</span><span>Score</span><span>Record</span></div>
+      {% for item in company_updates %}
+      {% assign reaction = item.update_consensus_label | default: item.community_reaction | default: 'Insufficient' %}
+      <a class="patch-version-row" href="{{ item.url | relative_url }}">
+        <span>{{ item.update_product }}</span>
+        <span>{{ item.update_version }}</span>
+        <span>{{ reaction }}</span>
+        <span>{{ item.consensus_score | default: 0 }}</span>
+        <span>View update →</span>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="patch-empty-note">No individual update records have been published for this core yet. Tracking is initialized.</p>
+    {% endif %}
+  </section>
+</section>

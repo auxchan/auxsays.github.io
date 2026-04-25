@@ -1,45 +1,39 @@
 ---
 layout: aux-base
 ---
-{% assign reaction = page.update_consensus_label | default: page.community_reaction | default: 'Insufficient data' %}
+{% assign reaction = page.update_consensus_label | default: page.community_reaction | default: page.current_consensus | default: 'Insufficient data' %}
 {% assign reaction_class = reaction | downcase | replace: ' ', '-' %}
-{% assign brand_meta = site.data.update_brands[page.update_brand_id] %}
+{% assign company = site.data.patch_companies | where: "id", page.company_id | first %}
+{% assign product = site.data.patch_products | where: "id", page.product_id | first %}
+{% assign score = page.consensus_score | default: 0 %}
+{% assign score_percent = page.consensus_score_percent | default: 50 %}
 <div class="update-page-shell reveal-up">
-  <section class="panel update-hero">
+  <section class="panel update-hero update-hero--v2">
     <div class="update-hero-grid">
       <div class="update-hero-main">
-        <a class="update-back-link" href="{{ '/updates/' | relative_url }}">← Back to Patch Feed</a>
+        <a class="update-back-link" href="{{ product.product_url | default: '/updates/' | relative_url }}">← Back to {{ product.product_name | default: 'Software tracker' }}</a>
         <div class="update-topline">
-          <span>{{ page.update_published_at | date: "%b %d, %Y" }}</span>
+          <span>{{ page.update_published_at | date: "%b %-d, %Y" }}</span>
           <span>Version {{ page.update_version }}</span>
           <span>{{ page.update_type | default: page.update_category }}</span>
         </div>
         <div class="update-brand-row">
-          <span class="update-brand-badge{% if brand_meta and brand_meta.logo_path %} patch-logo-badge patch-logo-badge--has-image{% endif %}">
-            {% if brand_meta and brand_meta.logo_path %}
-            <img src="{{ brand_meta.logo_path | relative_url }}" alt="{{ page.update_source_name }} logo" loading="lazy">
-            {% else %}
-            {{ page.update_logo_text | default: page.update_product | slice: 0, 3 }}
-            {% endif %}
+          <span class="update-brand-badge patch-logo-badge patch-logo-badge--has-image">
+            {% if product.logo_path %}<img src="{{ product.logo_path | relative_url }}" alt="{{ product.product_name }} logo" loading="lazy">{% else %}{{ page.update_logo_text | default: page.update_product | slice: 0, 3 }}{% endif %}
           </span>
           <span class="update-brand-meta">
             <strong>{{ page.update_product }}</strong>
             <span>{{ page.update_source_name }}</span>
           </span>
         </div>
-        <p class="update-kicker">Official update breakdown</p>
+        <p class="update-kicker">Official update intelligence record</p>
         <h1 class="update-title">{{ page.update_detail_title | default: page.update_feed_title | default: page.update_product | append: ' ' | append: page.update_version }}</h1>
-        {% if page.description %}<div class="update-summary"><span class="update-summary-label">Summary</span><p>{{ page.description }}</p></div>{% endif %}
-        {% assign consensus_summary = page.update_consensus_summary | default: page.community_summary %}
-        {% if consensus_summary %}
-        <div class="update-consensus">
-          <div class="update-consensus-top">
-            <span class="consensus-badge consensus-badge--{{ reaction_class }}">{{ reaction }}</span>
-            <span class="update-report-count">{{ page.update_report_count | default: 0 }} matched reports{% if page.update_consensus_confidence %} • {{ page.update_consensus_confidence }} confidence{% endif %}</span>
-          </div>
-          <p>{{ consensus_summary }}</p>
+        <div class="update-verdict-card">
+          <span class="consensus-badge consensus-badge--{{ reaction_class }}">{{ reaction }}</span>
+          <div class="consensus-meter" style="--score-pos: {{ score_percent }}%;"><span></span></div>
+          <p><strong>Score:</strong> {{ score }} / 100 • <strong>Reports:</strong> {{ page.update_report_count | default: 0 }} • <strong>Confidence:</strong> {{ page.update_consensus_confidence | default: 'Low' }}</p>
+          <p>{{ page.quick_verdict }}</p>
         </div>
-        {% endif %}
         <div class="update-source-row">
           {% if page.update_source_url %}<a href="{{ page.update_source_url }}">Official source ↗</a>{% endif %}
           {% if page.update_download_url %}<a href="{{ page.update_download_url }}">Download page ↗</a>{% endif %}
@@ -47,15 +41,42 @@ layout: aux-base
       </div>
       <aside class="update-hero-side">
         <div class="update-side-card">
-          <div class="update-side-row"><span class="update-side-label">Published</span><span class="update-side-value">{{ page.update_published_at | date: "%b %d, %Y" }}</span></div>
-          <div class="update-side-row"><span class="update-side-label">Version</span><span class="update-side-value">{{ page.update_version }}</span></div>
-          <div class="update-side-row"><span class="update-side-label">Status</span><span class="update-side-value">{{ page.update_status | default: 'current' }}</span></div>
-          <div class="update-side-row"><span class="update-side-label">Reports</span><span class="update-side-value">{{ page.update_report_count | default: 0 }}</span></div>
-          <div class="update-side-row"><span class="update-side-label">Last checked</span><span class="update-side-value">{{ page.update_last_checked | date: "%b %d, %Y" }}</span></div>
+          {% if company %}<div class="update-side-row"><span class="update-side-label">Core</span><span class="update-side-value"><a href="{{ company.company_url | relative_url }}">{{ company.company_name }}</a></span></div>{% endif %}
+          {% if product %}<div class="update-side-row"><span class="update-side-label">Expansion</span><span class="update-side-value"><a href="{{ product.product_url | relative_url }}">{{ product.product_name }}</a></span></div>{% endif %}
+          <div class="update-side-row"><span class="update-side-label">Published</span><span class="update-side-value">{{ page.update_published_at | date: "%b %-d, %Y" }}</span></div>
+          <div class="update-side-row"><span class="update-side-label">Last checked</span><span class="update-side-value">{{ page.update_last_checked | date: "%b %-d, %Y" }}</span></div>
         </div>
       </aside>
     </div>
   </section>
 
-  <section class="panel update-body"><div class="prose">{{ content }}</div></section>
+  <section class="panel update-body update-body--v2">
+    <div class="prose">
+      <h2>AUXSAYS summary</h2>
+      <p>{{ page.official_summary | default: page.description }}</p>
+
+      <h2>Consensus report</h2>
+      <p>{{ page.consensus_report }}</p>
+      {% if page.complaint_themes and page.complaint_themes.size > 0 %}
+      <div class="complaint-theme-table">
+        <div class="complaint-theme-row complaint-theme-row--head"><span>Theme</span><span>Frequency</span><span>Severity</span></div>
+        {% for theme in page.complaint_themes %}
+        <div class="complaint-theme-row"><span>{{ theme.theme }}</span><span>{{ theme.frequency }}</span><span>{{ theme.severity }}</span></div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% if page.status_events and page.status_events.size > 0 %}
+      <h2>Status timeline</h2>
+      <div class="status-timeline">
+        {% for event in page.status_events %}
+        <div class="status-event"><time>{{ event.at | date: "%b %-d, %Y %-I:%M %p %Z" }}</time><strong>{{ event.label }}</strong><p>{{ event.note }}</p></div>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <p class="official-source-line">Official wording is preserved here for convenience when captured by the AUXSAYS workflow. The official source remains linked above for verification.</p>
+      {{ content }}
+    </div>
+  </section>
 </div>
