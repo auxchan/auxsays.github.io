@@ -20,6 +20,21 @@
   product_url: /updates/openai/openai-chatgpt/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: ChatGPT / OpenAI is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: anthropic-claude
   company_name: Anthropic
   product_name: Claude
@@ -42,6 +57,21 @@
   product_url: /updates/anthropic/anthropic-claude/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Claude is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: google-gemini
   company_name: Google
   product_name: Gemini
@@ -64,6 +94,21 @@
   product_url: /updates/google/google-gemini/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Gemini is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: perplexity
   company_name: Perplexity
   product_name: Perplexity
@@ -86,6 +131,21 @@
   product_url: /updates/perplexity/perplexity/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Perplexity is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: midjourney
   company_name: Midjourney
   product_name: Midjourney
@@ -108,6 +168,21 @@
   product_url: /updates/midjourney/midjourney/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Midjourney is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: stability-ai
   company_name: Stability AI
   product_name: Stable Diffusion / Stable Audio
@@ -130,6 +205,21 @@
   product_url: /updates/stability-ai/stability-ai/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Stable Diffusion / Stable Audio is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: runway
   company_name: Runway
   product_name: Runway
@@ -152,6 +242,21 @@
   product_url: /updates/runway/runway/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Runway is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: pika
   company_name: Pika
   product_name: Pika
@@ -174,6 +279,21 @@
   product_url: /updates/pika/pika/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Pika is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: lottiefiles
   company_name: LottieFiles
   product_name: LottieFiles
@@ -196,6 +316,21 @@
   product_url: /updates/lottiefiles/lottiefiles/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: LottieFiles is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: figma
   company_name: Figma
   product_name: Figma
@@ -218,6 +353,21 @@
   product_url: /updates/figma/figma/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Figma is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: canva
   company_name: Canva
   product_name: Canva
@@ -240,6 +390,21 @@
   product_url: /updates/canva/canva/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Canva is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: adobe-creative-cloud
   company_name: Adobe
   product_name: Creative Cloud / Firefly
@@ -262,6 +427,21 @@
   product_url: /updates/adobe/adobe-creative-cloud/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Creative Cloud / Firefly is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: blackmagic-davinci
   company_name: Blackmagic Design
   product_name: DaVinci Resolve
@@ -284,6 +464,21 @@
   product_url: /updates/blackmagic-design/blackmagic-davinci/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 1
+  coverage_state: documented
+  coverage_status_label: Documented records live
+  ingestion_status: Records published
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: DaVinci Resolve is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: obs-studio
   company_name: OBS Project
   product_name: OBS Studio
@@ -306,6 +501,21 @@
   product_url: /updates/obs-project/obs-studio/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 2
+  coverage_state: documented
+  coverage_status_label: Documented records live
+  ingestion_status: Records published
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: OBS Studio is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: twitch
   company_name: Twitch
   product_name: Twitch
@@ -328,6 +538,21 @@
   product_url: /updates/twitch/twitch/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Twitch is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: youtube
   company_name: YouTube
   product_name: YouTube / YouTube Studio
@@ -350,6 +575,21 @@
   product_url: /updates/youtube/youtube/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: YouTube / YouTube Studio is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: kick
   company_name: Kick
   product_name: Kick
@@ -372,6 +612,21 @@
   product_url: /updates/kick/kick/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Kick is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: rumble
   company_name: Rumble
   product_name: Rumble
@@ -394,6 +649,21 @@
   product_url: /updates/rumble/rumble/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Rumble is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: epic-unreal
   company_name: Epic Games
   product_name: Unreal Engine
@@ -416,6 +686,21 @@
   product_url: /updates/epic-games/epic-unreal/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Unreal Engine is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: unity
   company_name: Unity
   product_name: Unity
@@ -438,6 +723,21 @@
   product_url: /updates/unity/unity/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Unity is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: steam
   company_name: Valve
   product_name: Steam
@@ -460,6 +760,21 @@
   product_url: /updates/valve/steam/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Steam is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: nvidia
   company_name: NVIDIA
   product_name: NVIDIA App / GeForce / Studio
@@ -482,6 +797,21 @@
   product_url: /updates/nvidia/nvidia/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: NVIDIA App / GeForce / Studio is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: amd
   company_name: AMD
   product_name: AMD Software / Radeon
@@ -504,6 +834,21 @@
   product_url: /updates/amd/amd/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: AMD Software / Radeon is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: intel-arc
   company_name: Intel
   product_name: Intel Graphics / Arc
@@ -526,6 +871,21 @@
   product_url: /updates/intel/intel-arc/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Intel Graphics / Arc is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: blender
   company_name: Blender Foundation
   product_name: Blender
@@ -548,6 +908,21 @@
   product_url: /updates/blender-foundation/blender/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Blender is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: comfyui
   company_name: ComfyUI
   product_name: ComfyUI
@@ -570,6 +945,21 @@
   product_url: /updates/comfyui/comfyui/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: ComfyUI is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: hugging-face
   company_name: Hugging Face
   product_name: Hugging Face
@@ -592,6 +982,21 @@
   product_url: /updates/hugging-face/hugging-face/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Hugging Face is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: github
   company_name: GitHub
   product_name: GitHub / Copilot
@@ -614,6 +1019,21 @@
   product_url: /updates/github/github/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: GitHub / Copilot is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: cloudflare
   company_name: Cloudflare
   product_name: Cloudflare
@@ -636,6 +1056,21 @@
   product_url: /updates/cloudflare/cloudflare/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Cloudflare is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: netlify
   company_name: Netlify
   product_name: Netlify
@@ -658,6 +1093,21 @@
   product_url: /updates/netlify/netlify/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Netlify is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: notion
   company_name: Notion
   product_name: Notion
@@ -680,6 +1130,21 @@
   product_url: /updates/notion/notion/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Notion is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: zapier
   company_name: Zapier
   product_name: Zapier
@@ -702,6 +1167,21 @@
   product_url: /updates/zapier/zapier/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Zapier is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.
 - id: make
   company_name: Make
   product_name: Make
@@ -724,3 +1204,18 @@
   product_url: /updates/make/make/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Make is actively tracked by AUXSAYS. This page is a monitoring dossier until individual version records are backfilled or newly published.

@@ -134,7 +134,11 @@ layout: aux-base
         <p>{{ source.impact }}</p>
         <p class="patch-source-reason">{{ source.watch_reason }}</p>
         {% if source.signal_notes %}<p class="patch-source-signal"><strong>Signal:</strong> {{ source.signal_notes }}</p>{% endif %}
-        <div class="patch-card-links patch-source-actions"><a class="patch-source-link" href="{{ source.company_url | relative_url }}">View company hub →</a><a class="patch-source-link" href="{{ source.product_url | relative_url }}">Software tracker →</a>{% if source.source_url %}<a class="patch-source-link" href="{{ source.source_url }}">{{ source.source_label | default: 'Official source' }} ↗</a>{% endif %}</div>
+        <div class="patch-card-links patch-source-actions"><a class="patch-source-link" href="{{ source.company_url | relative_url }}">View company hub →</a><a class="patch-source-link" href="{{ source.product_url | relative_url }}">Software tracker →</a><div class="patch-card-links patch-source-card-links">
+          {% if source.company_url %}<a class="patch-source-link" href="{{ source.company_url | relative_url }}">View company hub →</a>{% endif %}
+          {% if source.product_url %}<a class="patch-source-link" href="{{ source.product_url | relative_url }}">Software dossier →</a>{% endif %}
+          {% if source.source_url %}<a class="patch-source-link" href="{{ source.source_url }}">{{ source.source_label | default: 'Official source' }} ↗</a>{% endif %}
+        </div></div>
       </article>
       {% endfor %}
     </div>

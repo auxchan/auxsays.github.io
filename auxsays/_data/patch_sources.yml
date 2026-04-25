@@ -20,6 +20,10 @@
   product_url: /updates/openai/openai-chatgpt/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
 - id: anthropic-claude
   company_name: Anthropic
   product_name: Claude
@@ -42,6 +46,10 @@
   product_url: /updates/anthropic/anthropic-claude/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
 - id: google-gemini
   company_name: Google
   product_name: Gemini
@@ -64,6 +72,10 @@
   product_url: /updates/google/google-gemini/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
 - id: perplexity
   company_name: Perplexity
   product_name: Perplexity
@@ -86,6 +98,10 @@
   product_url: /updates/perplexity/perplexity/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
 - id: midjourney
   company_name: Midjourney
   product_name: Midjourney
@@ -108,6 +124,10 @@
   product_url: /updates/midjourney/midjourney/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
 - id: stability-ai
   company_name: Stability AI
   product_name: Stable Diffusion / Stable Audio
@@ -130,6 +150,10 @@
   product_url: /updates/stability-ai/stability-ai/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
 - id: runway
   company_name: Runway
   product_name: Runway
@@ -152,6 +176,10 @@
   product_url: /updates/runway/runway/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
 - id: pika
   company_name: Pika
   product_name: Pika
@@ -174,6 +202,10 @@
   product_url: /updates/pika/pika/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
 - id: lottiefiles
   company_name: LottieFiles
   product_name: LottieFiles
@@ -196,6 +228,10 @@
   product_url: /updates/lottiefiles/lottiefiles/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
 - id: figma
   company_name: Figma
   product_name: Figma
@@ -218,6 +254,10 @@
   product_url: /updates/figma/figma/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
 - id: canva
   company_name: Canva
   product_name: Canva
@@ -240,6 +280,10 @@
   product_url: /updates/canva/canva/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
 - id: adobe-creative-cloud
   company_name: Adobe
   product_name: Creative Cloud / Firefly
@@ -262,6 +306,10 @@
   product_url: /updates/adobe/adobe-creative-cloud/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
 - id: blackmagic-davinci
   company_name: Blackmagic Design
   product_name: DaVinci Resolve
@@ -284,6 +332,10 @@
   product_url: /updates/blackmagic-design/blackmagic-davinci/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 1
+  coverage_state: documented
+  coverage_status_label: Documented records live
+  ingestion_status: Records published
 - id: obs-studio
   company_name: OBS Project
   product_name: OBS Studio
@@ -306,6 +358,10 @@
   product_url: /updates/obs-project/obs-studio/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 2
+  coverage_state: documented
+  coverage_status_label: Documented records live
+  ingestion_status: Records published
 - id: twitch
   company_name: Twitch
   product_name: Twitch
@@ -328,6 +384,10 @@
   product_url: /updates/twitch/twitch/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
 - id: youtube
   company_name: YouTube
   product_name: YouTube / YouTube Studio
@@ -350,6 +410,10 @@
   product_url: /updates/youtube/youtube/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
 - id: kick
   company_name: Kick
   product_name: Kick
@@ -372,6 +436,10 @@
   product_url: /updates/kick/kick/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
 - id: rumble
   company_name: Rumble
   product_name: Rumble
@@ -394,6 +462,10 @@
   product_url: /updates/rumble/rumble/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
 - id: epic-unreal
   company_name: Epic Games
   product_name: Unreal Engine
@@ -416,6 +488,10 @@
   product_url: /updates/epic-games/epic-unreal/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
 - id: unity
   company_name: Unity
   product_name: Unity
@@ -438,6 +514,10 @@
   product_url: /updates/unity/unity/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
 - id: steam
   company_name: Valve
   product_name: Steam
@@ -460,6 +540,10 @@
   product_url: /updates/valve/steam/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
 - id: nvidia
   company_name: NVIDIA
   product_name: NVIDIA App / GeForce / Studio
@@ -482,6 +566,10 @@
   product_url: /updates/nvidia/nvidia/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
 - id: amd
   company_name: AMD
   product_name: AMD Software / Radeon
@@ -504,6 +592,10 @@
   product_url: /updates/amd/amd/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
 - id: intel-arc
   company_name: Intel
   product_name: Intel Graphics / Arc
@@ -526,6 +618,10 @@
   product_url: /updates/intel/intel-arc/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
 - id: blender
   company_name: Blender Foundation
   product_name: Blender
@@ -548,6 +644,10 @@
   product_url: /updates/blender-foundation/blender/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
 - id: comfyui
   company_name: ComfyUI
   product_name: ComfyUI
@@ -570,6 +670,10 @@
   product_url: /updates/comfyui/comfyui/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
 - id: hugging-face
   company_name: Hugging Face
   product_name: Hugging Face
@@ -592,6 +696,10 @@
   product_url: /updates/hugging-face/hugging-face/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
 - id: github
   company_name: GitHub
   product_name: GitHub / Copilot
@@ -614,6 +722,10 @@
   product_url: /updates/github/github/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
 - id: cloudflare
   company_name: Cloudflare
   product_name: Cloudflare
@@ -636,6 +748,10 @@
   product_url: /updates/cloudflare/cloudflare/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
 - id: netlify
   company_name: Netlify
   product_name: Netlify
@@ -658,6 +774,10 @@
   product_url: /updates/netlify/netlify/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
 - id: notion
   company_name: Notion
   product_name: Notion
@@ -680,6 +800,10 @@
   product_url: /updates/notion/notion/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
 - id: zapier
   company_name: Zapier
   product_name: Zapier
@@ -702,6 +826,10 @@
   product_url: /updates/zapier/zapier/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
 - id: make
   company_name: Make
   product_name: Make
@@ -724,3 +852,7 @@
   product_url: /updates/make/make/
   current_status_label: Tracking initialized
   current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Active watch, first record pending
+  ingestion_status: Queued for first official update backfill
