@@ -2394,3 +2394,14 @@ html.js-motion .reveal-up.is-visible { opacity:1; transform:none; }
     justify-content: flex-start;
   }
 }
+
+
+/* Copy refinement: keep status helpful but less dominant on intelligence pages */
+.patch-intel-hero .patch-coverage-pill {
+  letter-spacing: .10em;
+}
+
+.patch-intel-section .section-head p {
+  max-width: 74rem;
+}
+

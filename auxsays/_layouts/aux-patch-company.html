@@ -22,7 +22,7 @@ layout: aux-base
       </div>
       <div class="patch-intel-stat-card">
         <span>{{ products.size }}</span>
-        <em>tracked software / expansion lanes</em>
+        <em>tracked product lanes</em>
       </div>
     </div>
   </section>
@@ -30,8 +30,8 @@ layout: aux-base
   <section class="panel patch-intel-section reveal-up reveal-delay-1">
     <div class="section-head section-head--archive">
       <div class="eyebrow">Expansions</div>
-      <h2>Tracked software and product surfaces</h2>
-      <p>Each expansion page is now a real monitoring dossier. If a version-specific record has not been published yet, the page shows the official source, impact scope, signal rules, and backfill state instead of pretending the page is complete.</p>
+      <h2>Tracked products and workflow surfaces</h2>
+      <p>Follow the product lanes below for release history, stability signals, workflow impact, official sources, and community consensus as records are added.</p>
     </div>
     <div class="patch-product-grid">
       {% for product in products %}
@@ -59,9 +59,9 @@ layout: aux-base
   {% if company_updates.size > 0 %}
   <section class="panel patch-intel-section reveal-up reveal-delay-2">
     <div class="section-head section-head--archive">
-      <div class="eyebrow">Latest records</div>
+      <div class="eyebrow">Latest documented records</div>
       <h2>Documented updates</h2>
-      <p>Every update record keeps its own official notes, consensus score, status timeline, and evidence report.</p>
+      <p>Documented records include the official update text, AUXSAYS summary, consensus score, complaint themes, confidence level, and status timeline.</p>
     </div>
     <div class="patch-version-table">
       <div class="patch-version-row patch-version-row--head"><span>Product</span><span>Version</span><span>Consensus</span><span>Score</span><span>Record</span></div>
@@ -80,13 +80,13 @@ layout: aux-base
   {% else %}
   <section class="panel patch-intel-section reveal-up reveal-delay-2">
     <div class="section-head section-head--archive">
-      <div class="eyebrow">Core dossier</div>
-      <h2>Tracking is active, first records are queued</h2>
-      <p>This core is not a blank directory page. It is an active monitoring profile. Version-specific records will appear here after official notes and enough community signal are captured.</p>
+      <div class="eyebrow">Monitoring focus</div>
+      <h2>{{ company.company_name }} watch profile</h2>
+      <p>{{ company.company_name }} is on the AUXSAYS watchlist for changes that can affect creator workflows, production stability, gaming performance, automation, publishing operations, or platform reliability.</p>
     </div>
     <div class="patch-dossier-grid">
       <div class="patch-dossier-card">
-        <h3>What AUXSAYS is watching</h3>
+        <h3>Primary watch lanes</h3>
         <ul>
           {% for product in products %}
           <li><strong>{{ product.product_name }}:</strong> {{ product.signal_notes }}</li>
@@ -94,7 +94,7 @@ layout: aux-base
         </ul>
       </div>
       <div class="patch-dossier-card">
-        <h3>Official source queue</h3>
+        <h3>Official sources</h3>
         <ul>
           {% for product in products %}
           <li>{% if product.source_url %}<a href="{{ product.source_url }}">{{ product.source_label | default: product.product_name }} ↗</a>{% else %}{{ product.product_name }} source pending{% endif %}</li>
@@ -102,8 +102,8 @@ layout: aux-base
         </ul>
       </div>
       <div class="patch-dossier-card">
-        <h3>Record trigger standard</h3>
-        <p>An individual record should be created when there is a public official release/change note plus enough impact to justify a consensus read. Security, compatibility, pricing, workflow, and stability changes get priority.</p>
+        <h3>What triggers a record</h3>
+        <p>A new record is created when an official release/change note has enough creator impact to justify tracking. Security, compatibility, pricing, workflow, stability, licensing, and performance changes get priority.</p>
       </div>
     </div>
   </section>

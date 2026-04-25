@@ -26,7 +26,7 @@ layout: aux-base
         <em>documented update records</em>
         {% else %}
         <span>WATCH</span>
-        <em>source dossier active</em>
+        <em>monitoring active</em>
         {% endif %}
       </div>
     </div>
@@ -39,9 +39,9 @@ layout: aux-base
   {% if product_updates.size > 0 %}
   <section class="panel patch-intel-section reveal-up reveal-delay-1">
     <div class="section-head section-head--archive">
-      <div class="eyebrow">Version history</div>
-      <h2>Consensus and update history</h2>
-      <p>The table below is the internal AUXSAYS record for this software surface. It is designed to grow as official notes and community evidence are collected.</p>
+      <div class="eyebrow">Documented version history</div>
+      <h2>{{ product.product_name }} update history</h2>
+      <p>Tracked releases appear here with their official notes, AUXSAYS summary, consensus score, complaint themes, report count, and confidence rating.</p>
     </div>
     <div class="patch-version-table">
       <div class="patch-version-row patch-version-row--head"><span>Date</span><span>Version</span><span>Consensus</span><span>Score</span><span>Reports</span><span>Record</span></div>
@@ -61,18 +61,18 @@ layout: aux-base
   {% else %}
   <section class="panel patch-intel-section reveal-up reveal-delay-1">
     <div class="section-head section-head--archive">
-      <div class="eyebrow">Active monitoring dossier</div>
-      <h2>No hollow page: this is the tracking profile</h2>
-      <p>{{ product.dossier_note }}</p>
+      <div class="eyebrow">Monitoring focus</div>
+      <h2>{{ product.product_name }} watch profile</h2>
+      <p>{{ product.product_name }} is tracked for creator impact, workflow stability, compatibility changes, platform behavior, pricing/policy shifts, and public release signals.</p>
     </div>
     <div class="patch-dossier-grid">
       <div class="patch-dossier-card patch-dossier-card--wide">
-        <h3>Why this matters</h3>
+        <h3>Why it matters</h3>
         <p>{{ product.impact }}</p>
         <p>{{ product.watch_reason }}</p>
       </div>
       <div class="patch-dossier-card">
-        <h3>Signal rules</h3>
+        <h3>Signals to watch</h3>
         <p>{{ product.signal_notes }}</p>
       </div>
       <div class="patch-dossier-card">
@@ -84,7 +84,7 @@ layout: aux-base
         {% endif %}
       </div>
       <div class="patch-dossier-card">
-        <h3>First-record trigger</h3>
+        <h3>What triggers a record</h3>
         <ul>
           {% for rule in product.record_trigger_rules %}
           <li>{{ rule }}</li>
@@ -92,7 +92,7 @@ layout: aux-base
         </ul>
       </div>
       <div class="patch-dossier-card">
-        <h3>Consensus workflow</h3>
+        <h3>Consensus method</h3>
         <ul>
           {% for method in product.consensus_method %}
           <li>{{ method }}</li>
@@ -104,9 +104,9 @@ layout: aux-base
   {% endif %}
 
   <section class="panel patch-intel-section reveal-up reveal-delay-2">
-    <div class="eyebrow">Monitoring rules</div>
+    <div class="eyebrow">Tracking rules</div>
     <div class="patch-monitor-card"><strong>Signal:</strong> {{ product.signal_notes }}</div>
     <div class="patch-monitor-card"><strong>Impact:</strong> {{ product.impact }}</div>
-    <div class="patch-monitor-card"><strong>Ingestion status:</strong> {{ product.ingestion_status }}</div>
+    <div class="patch-monitor-card"><strong>Status:</strong> {{ product.ingestion_status }}</div>
   </section>
 </section>
