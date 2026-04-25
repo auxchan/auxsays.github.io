@@ -31,6 +31,7 @@ layout: aux-base
         {% if company %}<a href="{{ company.company_url | relative_url }}">Company: {{ company.company_name }}</a>{% endif %}
         {% if product %}<a href="{{ product.product_url | relative_url }}">Software: {{ product.product_name }}</a>{% endif %}
         <span>Patch: {{ page.update_version }}</span>
+        {% if page.patch_file_size %}<span class="update-meta-chip--filesize" title="{{ page.patch_file_size_note | escape }}">File size: {{ page.patch_file_size }}</span>{% endif %}
         <span>Patch released: {{ page.update_published_at | date: "%b %-d, %Y" }}</span>
         <span>Last checked: {{ page.update_last_checked | date: "%b %-d, %Y" }}</span>
       </div>
@@ -38,7 +39,7 @@ layout: aux-base
       <div class="update-verdict-card update-verdict-card--clean">
         <div class="consensus-compact">
           <span><strong>Consensus:</strong> <em class="consensus-word consensus-word--{{ reaction_class }}">{{ reaction }}</em></span>
-          <span>{{ page.update_report_count | default: 0 }} reports assessed • {{ page.update_consensus_confidence | default: 'Low' }} confidence</span>
+          <span class="consensus-secondary">{{ page.update_report_count | default: 0 }} reports assessed • {{ page.update_consensus_confidence | default: 'Low' }} confidence</span>
         </div>
       </div>
 
@@ -61,7 +62,7 @@ layout: aux-base
       <h2>Consensus report</h2>
       <div class="consensus-compact consensus-compact--card">
         <span><strong>Consensus:</strong> <em class="consensus-word consensus-word--{{ reaction_class }}">{{ reaction }}</em></span>
-        <span>{{ page.update_report_count | default: 0 }} reports assessed • {{ page.update_consensus_confidence | default: 'Low' }} confidence</span>
+        <span class="consensus-secondary">{{ page.update_report_count | default: 0 }} reports assessed • {{ page.update_consensus_confidence | default: 'Low' }} confidence</span>
       </div>
       <p>{{ page.consensus_report | default: page.community_summary }}</p>
 

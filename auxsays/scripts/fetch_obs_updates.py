@@ -21,12 +21,65 @@ def slugify(v:str): return re.sub(r"[^a-z0-9]+","-",str(v).lower()).strip("-")
 
 def yaml_frontmatter(data): return yaml.safe_dump(data, sort_keys=False, allow_unicode=True, width=1000).strip()
 
+def format_asset_size(size_bytes):
+    try:
+        size = float(size_bytes or 0)
+    except (TypeError, ValueError):
+        return ""
+    if size <= 0:
+        return ""
+    units = ["B", "KB", "MB", "GB"]
+    idx = 0
+    while size >= 1024 and idx < len(units) - 1:
+        size /= 1024
+        idx += 1
+    if idx < 2:
+        return f"{size:.0f} {units[idx]}"
+    return f"{size:.0f} {units[idx]}" if size >= 100 else f"{size:.1f} {units[idx]}"
+
+def primary_asset_size(release):
+    assets = release.get("assets") or []
+    preferred = None
+    for asset in assets:
+        name = asset.get("name", "")
+        if "Windows-x64-Installer.exe" in name:
+            preferred = asset
+            break
+    if not preferred and assets:
+        preferred = assets[0]
+    if not preferred:
+        return "", ""
+    label = format_asset_size(preferred.get("size"))
+    note = f"{preferred.get('name', 'Primary asset')}. Platform assets vary."
+    return label, note
+
+def wrap_checksums(body):
+    if "## Checksums" not in body:
+        return body
+    before, after = body.split("## Checksums", 1)
+    return before.rstrip() + """
+
+<details markdown="1" class="checksums-details">
+<summary>Checksums / installer verification</summary>
+
+Use these hashes to verify downloaded installers match the files published with the official release.
+
+## Checksums
+
+""" + after.strip() + """
+
+</details>
+"""
+
+
 def write_obs_update_page(release, status="current"):
     version=(release.get("tag_name") or release.get("name") or "").lstrip("v")
     published=release.get("published_at") or dt.datetime.utcnow().replace(microsecond=0).isoformat()+"Z"
     date_slug=published[:10]
     slug=slugify(version)
     body=(release.get("body") or "No official release body was returned by the GitHub API.").strip()
+    body=wrap_checksums(body)
+    patch_file_size, patch_file_size_note = primary_asset_size(release)
     report_count=0
     label="Insufficient data"
     if status == "current":
@@ -50,6 +103,8 @@ def write_obs_update_page(release, status="current"):
         "update_logo_text":"OBS",
         "update_published_at":published,
         "update_last_checked":dt.datetime.utcnow().replace(microsecond=0).isoformat()+"Z",
+        "patch_file_size":patch_file_size,
+        "patch_file_size_note":patch_file_size_note,
         "update_status":status,
         "update_feed_title":f"OBS Studio {version}",
         "update_detail_title":f"OBS Studio {version}",
