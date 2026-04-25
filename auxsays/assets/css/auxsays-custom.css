@@ -2342,3 +2342,55 @@ html.js-motion .reveal-up.is-visible { opacity:1; transform:none; }
     grid-template-columns: 1fr;
   }
 }
+
+
+/* Source card action-row cleanup: one left-aligned internal path, official link secondary */
+.patch-source-card-links,
+.patch-source-actions {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .8rem 1.05rem;
+  margin-top: .1rem;
+  text-align: left;
+}
+
+.patch-source-card-links .patch-source-link,
+.patch-source-actions .patch-source-link {
+  display: inline-flex;
+  align-items: center;
+  width: auto;
+  color: var(--accent-1);
+  font-weight: 800;
+  line-height: 1.35;
+}
+
+.patch-source-card-links .patch-source-link--primary {
+  color: #f7d775;
+}
+
+.patch-source-card-links .patch-source-link--external {
+  color: var(--text-2);
+  font-weight: 700;
+}
+
+.patch-source-card-links .patch-source-link--external:hover {
+  color: var(--accent-1);
+}
+
+@media (max-width: 860px) {
+  .patch-source-card-links,
+  .patch-source-actions {
+    display: grid;
+    justify-content: stretch;
+    gap: .45rem;
+  }
+
+  .patch-source-card-links .patch-source-link,
+  .patch-source-actions .patch-source-link {
+    justify-content: flex-start;
+  }
+}
