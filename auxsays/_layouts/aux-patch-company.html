@@ -22,7 +22,7 @@ layout: aux-base
       </div>
       <div class="patch-intel-stat-card">
         <span>{{ products.size }}</span>
-        <em>tracked software lanes</em>
+        <em>tracked software</em>
       </div>
     </div>
   </section>
@@ -35,6 +35,14 @@ layout: aux-base
     </div>
     <div class="patch-product-grid">
       {% for product in products %}
+      {% assign product_cadence_label = product.cadence | default: '' %}
+      {% if product_cadence_label == 'High' %}
+        {% assign product_cadence_label = 'Frequent updates' %}
+      {% elsif product_cadence_label == 'Medium' %}
+        {% assign product_cadence_label = 'Periodic updates' %}
+      {% elsif product_cadence_label == 'Low' %}
+        {% assign product_cadence_label = 'Occasional updates' %}
+      {% endif %}
       <article class="patch-product-card">
         <div class="patch-product-topline">
           <span class="patch-source-badge patch-logo-badge patch-logo-badge--has-image"><img src="{{ product.logo_path | relative_url }}" alt="{{ product.product_name }} logo" loading="lazy"></span>

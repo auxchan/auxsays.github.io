@@ -22,8 +22,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -59,8 +59,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -96,8 +96,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -133,8 +133,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -170,8 +170,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -207,8 +207,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -244,8 +244,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -281,8 +281,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -318,8 +318,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -355,8 +355,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -392,8 +392,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -429,8 +429,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -466,8 +466,8 @@
   current_status_score: 0
   documented_update_count: 1
   coverage_state: documented
-  coverage_status_label: Documented patches live
-  ingestion_status: Patch records live
+  coverage_status_label: Patch records available
+  ingestion_status: Patch records available
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -503,8 +503,8 @@
   current_status_score: 0
   documented_update_count: 2
   coverage_state: documented
-  coverage_status_label: Documented patches live
-  ingestion_status: Patch records live
+  coverage_status_label: Patch records available
+  ingestion_status: Patch records available
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -540,8 +540,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -577,8 +577,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -614,8 +614,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -651,8 +651,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -688,8 +688,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -725,8 +725,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -762,8 +762,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -799,8 +799,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -836,8 +836,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -873,8 +873,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -910,8 +910,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -947,8 +947,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -984,8 +984,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -1021,8 +1021,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -1058,8 +1058,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -1095,8 +1095,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -1132,8 +1132,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -1169,8 +1169,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -1206,8 +1206,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.

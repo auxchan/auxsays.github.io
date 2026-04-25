@@ -2938,3 +2938,18 @@ html.js-motion .reveal-up.is-visible { opacity:1; transform:none; }
   }
 }
 
+
+/* Public-language cleanup: cadence/status chips should read like user-facing labels */
+.patch-source-chip,
+.patch-status-line span,
+.patch-coverage-pill {
+  text-transform: none;
+}
+
+.patch-source-priority,
+.patch-source-priority--core,
+.patch-source-priority--expansion,
+.patch-source-priority--edge {
+  text-transform: uppercase;
+}
+

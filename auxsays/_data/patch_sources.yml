@@ -22,8 +22,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
 - id: anthropic-claude
   company_name: Anthropic
   product_name: Claude
@@ -48,8 +48,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
 - id: google-gemini
   company_name: Google
   product_name: Gemini
@@ -74,8 +74,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
 - id: perplexity
   company_name: Perplexity
   product_name: Perplexity
@@ -100,8 +100,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
 - id: midjourney
   company_name: Midjourney
   product_name: Midjourney
@@ -126,8 +126,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
 - id: stability-ai
   company_name: Stability AI
   product_name: Stable Diffusion / Stable Audio
@@ -152,8 +152,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
 - id: runway
   company_name: Runway
   product_name: Runway
@@ -178,8 +178,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
 - id: pika
   company_name: Pika
   product_name: Pika
@@ -204,8 +204,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
 - id: lottiefiles
   company_name: LottieFiles
   product_name: LottieFiles
@@ -230,8 +230,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
 - id: figma
   company_name: Figma
   product_name: Figma
@@ -256,8 +256,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
 - id: canva
   company_name: Canva
   product_name: Canva
@@ -282,8 +282,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
 - id: adobe-creative-cloud
   company_name: Adobe
   product_name: Creative Cloud / Firefly
@@ -308,8 +308,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
 - id: blackmagic-davinci
   company_name: Blackmagic Design
   product_name: DaVinci Resolve
@@ -334,8 +334,8 @@
   current_status_score: 0
   documented_update_count: 1
   coverage_state: documented
-  coverage_status_label: Documented patches live
-  ingestion_status: Patch records live
+  coverage_status_label: Patch records available
+  ingestion_status: Patch records available
 - id: obs-studio
   company_name: OBS Project
   product_name: OBS Studio
@@ -360,8 +360,8 @@
   current_status_score: 0
   documented_update_count: 2
   coverage_state: documented
-  coverage_status_label: Documented patches live
-  ingestion_status: Patch records live
+  coverage_status_label: Patch records available
+  ingestion_status: Patch records available
 - id: twitch
   company_name: Twitch
   product_name: Twitch
@@ -386,8 +386,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
 - id: youtube
   company_name: YouTube
   product_name: YouTube / YouTube Studio
@@ -412,8 +412,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
 - id: kick
   company_name: Kick
   product_name: Kick
@@ -438,8 +438,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
 - id: rumble
   company_name: Rumble
   product_name: Rumble
@@ -464,8 +464,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
 - id: epic-unreal
   company_name: Epic Games
   product_name: Unreal Engine
@@ -490,8 +490,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
 - id: unity
   company_name: Unity
   product_name: Unity
@@ -516,8 +516,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
 - id: steam
   company_name: Valve
   product_name: Steam
@@ -542,8 +542,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
 - id: nvidia
   company_name: NVIDIA
   product_name: NVIDIA App / GeForce / Studio
@@ -568,8 +568,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
 - id: amd
   company_name: AMD
   product_name: AMD Software / Radeon
@@ -594,8 +594,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
 - id: intel-arc
   company_name: Intel
   product_name: Intel Graphics / Arc
@@ -620,8 +620,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
 - id: blender
   company_name: Blender Foundation
   product_name: Blender
@@ -646,8 +646,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
 - id: comfyui
   company_name: ComfyUI
   product_name: ComfyUI
@@ -672,8 +672,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
 - id: hugging-face
   company_name: Hugging Face
   product_name: Hugging Face
@@ -698,8 +698,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
 - id: github
   company_name: GitHub
   product_name: GitHub / Copilot
@@ -724,8 +724,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
 - id: cloudflare
   company_name: Cloudflare
   product_name: Cloudflare
@@ -750,8 +750,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
 - id: netlify
   company_name: Netlify
   product_name: Netlify
@@ -776,8 +776,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
 - id: notion
   company_name: Notion
   product_name: Notion
@@ -802,8 +802,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
 - id: zapier
   company_name: Zapier
   product_name: Zapier
@@ -828,8 +828,8 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
 - id: make
   company_name: Make
   product_name: Make
@@ -854,5 +854,5 @@
   current_status_score: 0
   documented_update_count: 0
   coverage_state: active_watch
-  coverage_status_label: Active watch
-  ingestion_status: First version record pending
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending

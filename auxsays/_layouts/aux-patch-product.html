@@ -5,6 +5,14 @@ layout: aux-base
 {% assign product = site.data.patch_products | where: "id", page.product_id | first %}
 {% assign product_updates = site.pages | where: "update_entry", true | where: "product_id", page.product_id | sort: "update_published_at" | reverse %}
 {% assign documented_count = product.documented_update_count | default: product_updates.size %}
+{% assign cadence_label = product.cadence | default: source.cadence | default: '' %}
+{% if cadence_label == 'High' %}
+  {% assign cadence_label = 'Frequent updates' %}
+{% elsif cadence_label == 'Medium' %}
+  {% assign cadence_label = 'Periodic updates' %}
+{% elsif cadence_label == 'Low' %}
+  {% assign cadence_label = 'Occasional updates' %}
+{% endif %}
 
 <section class="patch-intel-shell">
   <section class="panel patch-intel-hero reveal-up">
@@ -17,7 +25,7 @@ layout: aux-base
         <div class="patch-status-line">
           <span class="patch-coverage-pill patch-coverage-pill--{{ product.coverage_state | default: 'active_watch' }}">{{ product.coverage_status_label | default: 'Active watch' }}</span>
           <span>{{ product.category_label }}</span>
-          <span>{{ product.cadence }} cadence</span>
+          <span>{{ cadence_label }}</span>
         </div>
       </div>
       <div class="patch-intel-stat-card">
