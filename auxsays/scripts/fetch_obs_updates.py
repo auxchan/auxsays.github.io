@@ -29,10 +29,8 @@ def write_obs_update_page(release, status="current"):
     body=(release.get("body") or "No official release body was returned by the GitHub API.").strip()
     report_count=0
     label="Insufficient data"
-    score=0
     if status == "current":
         label="Moderate"
-        score=12
     front={
         "layout":"aux-update",
         "title":f"OBS Studio {version} official update breakdown",
@@ -56,9 +54,7 @@ def write_obs_update_page(release, status="current"):
         "update_feed_title":f"OBS Studio {version}",
         "update_detail_title":f"OBS Studio {version}",
         "update_consensus_label":label,
-        "consensus_score":score,
-        "consensus_score_percent":max(0,min(100,int((score+100)/2))),
-        "update_report_count":report_count,
+                "update_report_count":report_count,
         "update_consensus_confidence":"Low",
         "quick_verdict":f"OBS Studio {version} has an initialized AUXSAYS record. Consensus will be updated as matched reports are collected.",
         "official_summary":f"OBS Project published OBS Studio {version}. The official GitHub release notes are preserved below.",
@@ -69,10 +65,12 @@ def write_obs_update_page(release, status="current"):
             {"at":dt.datetime.utcnow().replace(microsecond=0).isoformat()+"Z","label":label,"note":"Initial AUXSAYS consensus record created."}
         ],
         "official_patch_notes_source_type":"github-release",
-        "official_patch_notes_capture_status":"captured-from-github-release-body"
+        "official_patch_notes_capture_status":"captured-from-github-release-body",
+        "official_patch_notes_source_url":release.get("html_url") or f"https://github.com/obsproject/obs-studio/releases/tag/{release.get('tag_name')}",
+        "official_patch_notes_body":body
     }
     output=OUTPUT_DIR/f"{date_slug}-obs-studio-{slug}.md"
-    output.write_text("---\n"+yaml_frontmatter(front)+"\n---\n\n## Official patch notes\n\n"+body+"\n", encoding="utf-8")
+    output.write_text("---\n"+yaml_frontmatter(front)+"\n---\n", encoding="utf-8")
 
 def main():
     releases=github_json(API_URL)

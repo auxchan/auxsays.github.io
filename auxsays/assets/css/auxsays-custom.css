@@ -2420,3 +2420,79 @@ html.js-motion .reveal-up.is-visible { opacity:1; transform:none; }
   border-color: rgba(95,212,229,.18);
 }
 
+
+/* Update page cleanup: no numeric score meter, no duplicate metadata sidebar */
+.update-hero-main--clean {
+  width: 100%;
+}
+
+.update-hero--v2 .update-hero-grid {
+  display: block;
+}
+
+.update-meta-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .55rem .85rem;
+  margin: 1rem 0 1.1rem;
+  color: var(--text-2);
+  font-size: .78rem;
+  letter-spacing: .10em;
+  text-transform: uppercase;
+}
+
+.update-meta-strip a,
+.update-meta-strip span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: .36rem .7rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-subtle);
+  background: rgba(255,255,255,.025);
+}
+
+.update-meta-strip a {
+  color: var(--accent-1);
+  font-weight: 800;
+}
+
+.update-verdict-card--clean {
+  display: grid;
+  gap: .7rem;
+}
+
+.update-verdict-card--clean .consensus-meter {
+  display: none;
+}
+
+.official-patch-notes {
+  margin-top: .9rem;
+  padding: 1.1rem 1.15rem;
+  border-radius: 18px;
+  border: 1px solid var(--border-subtle);
+  background: rgba(255,255,255,.018);
+}
+
+.official-patch-notes h2,
+.official-patch-notes h3 {
+  margin-top: 1.3rem;
+}
+
+.official-patch-notes > :first-child {
+  margin-top: 0;
+}
+
+.official-patch-notes pre {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  padding: 1rem;
+  border-radius: 14px;
+  border: 1px solid var(--border-subtle);
+  background: rgba(0,0,0,.25);
+}
+
+.official-patch-notes--pending {
+  color: var(--text-2);
+}
+
