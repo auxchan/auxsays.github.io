@@ -1,11 +1,12 @@
 {
   "obs-studio": {
     "current_version": "32.1.2",
-    "previous_version": "32.1.1",
+    "previous_version": "32.1.2",
     "current_consensus": "Moderate",
-    "previous_consensus": "Negative",
-    "status_changed_at": "2026-04-21T20:00:00Z",
-    "status_change_type": "improved"
+    "previous_consensus": "Moderate",
+    "status_changed_at": "2026-04-25T20:01:40Z",
+    "status_change_type": "updated",
+    "report_count": 0
   },
   "davinci-resolve": {
     "current_version": "21 Public Beta 1",
