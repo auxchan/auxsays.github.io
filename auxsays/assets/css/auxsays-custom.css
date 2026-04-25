@@ -2405,3 +2405,18 @@ html.js-motion .reveal-up.is-visible { opacity:1; transform:none; }
   max-width: 74rem;
 }
 
+
+/* Patch Feed control refinement: lane filters and clearer source/product sorting */
+.patch-toolbar-grid--enhanced {
+  align-items: start;
+}
+
+#patch-priority-chips .patch-chip[data-priority="core"] {
+  border-color: rgba(214,171,78,.26);
+}
+
+#patch-priority-chips .patch-chip[data-priority="expansion"],
+#patch-priority-chips .patch-chip[data-priority="edge"] {
+  border-color: rgba(95,212,229,.18);
+}
+

@@ -126,13 +126,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const sourceSelect = document.getElementById('patch-source-select');
   const filterChips = Array.from(document.querySelectorAll('#patch-filter-chips [data-filter]'));
   const statusChips = Array.from(document.querySelectorAll('#patch-status-chips [data-status]'));
+  const priorityChips = Array.from(document.querySelectorAll('#patch-priority-chips [data-priority]'));
   const sortChips = Array.from(document.querySelectorAll('#patch-sort-chips [data-sort]'));
 
-  if ((patchFeed || patchSourceGrid) && (filterChips.length || sortChips.length || statusChips.length || patchSearch || sourceSelect)) {
+  if ((patchFeed || patchSourceGrid) && (filterChips.length || sortChips.length || statusChips.length || priorityChips.length || patchSearch || sourceSelect)) {
     const allCards = Array.from(document.querySelectorAll('.patch-card'));
     const sourceCards = Array.from(document.querySelectorAll('[data-source-card="true"]'));
     let currentFilter = 'all';
     let currentStatus = 'all';
+    let currentPriority = 'all';
     let currentSort = 'latest';
     let currentSource = 'all';
     const riskRank = { negative: 3, moderate: 2, positive: 1, insufficient: 0, 'insufficient-data': 0 };
@@ -144,11 +146,13 @@ document.addEventListener('DOMContentLoaded', () => {
       const category = (card.dataset.category || '').toLowerCase();
       const status = (card.dataset.status || '').toLowerCase();
       const sourceId = (card.dataset.sourceId || '').toLowerCase();
+      const priority = (card.dataset.priority || '').toLowerCase();
       const filterPass = currentFilter === 'all' || type.includes(currentFilter) || category.includes(currentFilter);
       const statusPass = !includeStatus || currentStatus === 'all' || status.includes(currentStatus);
       const sourcePass = currentSource === 'all' || sourceId === currentSource;
+      const priorityPass = currentPriority === 'all' || priority === currentPriority;
       const queryPass = !query || haystack.includes(query);
-      return filterPass && statusPass && sourcePass && queryPass;
+      return filterPass && statusPass && sourcePass && priorityPass && queryPass;
     };
 
     const applyPatchFeed = () => {
@@ -164,7 +168,8 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       visibleUpdates.sort((a, b) => {
-        if (currentSort === 'product') return (a.dataset.product || '').localeCompare(b.dataset.product || '');
+        if (currentSort === 'software' || currentSort === 'product') return (a.dataset.product || '').localeCompare(b.dataset.product || '');
+        if (currentSort === 'company') return (a.dataset.company || '').localeCompare(b.dataset.company || '');
         if (currentSort === 'risk') {
           const delta = (riskRank[b.dataset.status] || 0) - (riskRank[a.dataset.status] || 0);
           if (delta !== 0) return delta;
@@ -189,8 +194,10 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       if (patchSourceGrid) {
-        if (currentSort === 'product') {
+        if (currentSort === 'software' || currentSort === 'product') {
           visibleSources.sort((a, b) => (a.dataset.title || '').localeCompare(b.dataset.title || ''));
+        } else if (currentSort === 'company') {
+          visibleSources.sort((a, b) => (a.dataset.company || '').localeCompare(b.dataset.company || ''));
         } else if (currentSort === 'risk') {
           visibleSources.sort((a, b) => (priorityRank[b.dataset.priority] || 0) - (priorityRank[a.dataset.priority] || 0));
         }
@@ -215,6 +222,12 @@ document.addEventListener('DOMContentLoaded', () => {
       statusChips.forEach((c) => c.classList.remove('is-active'));
       chip.classList.add('is-active');
       currentStatus = chip.dataset.status;
+      applyPatchFeed();
+    }));
+    priorityChips.forEach((chip) => chip.addEventListener('click', () => {
+      priorityChips.forEach((c) => c.classList.remove('is-active'));
+      chip.classList.add('is-active');
+      currentPriority = chip.dataset.priority;
       applyPatchFeed();
     }));
     sortChips.forEach((chip) => chip.addEventListener('click', () => {

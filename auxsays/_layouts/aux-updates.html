@@ -51,6 +51,17 @@ layout: aux-base
         </select>
       </div>
 
+
+      <div>
+        <span class="patch-label">Lane</span>
+        <div class="patch-chips" id="patch-priority-chips">
+          <button class="patch-chip is-active" data-priority="all">All lanes</button>
+          <button class="patch-chip" data-priority="core">Core</button>
+          <button class="patch-chip" data-priority="expansion">Expansion</button>
+          <button class="patch-chip" data-priority="edge">Edge</button>
+        </div>
+      </div>
+
       <div>
         <span class="patch-label">Category</span>
         <div class="patch-chips" id="patch-filter-chips">
@@ -82,7 +93,8 @@ layout: aux-base
         <span class="patch-label">Sort</span>
         <div class="patch-chips" id="patch-sort-chips">
           <button class="patch-chip is-active" data-sort="latest">Latest</button>
-          <button class="patch-chip" data-sort="product">Product A–Z</button>
+          <button class="patch-chip" data-sort="company">Company A–Z</button>
+          <button class="patch-chip" data-sort="software">Software A–Z</button>
           <button class="patch-chip" data-sort="risk">Risk first</button>
         </div>
       </div>
@@ -150,9 +162,11 @@ layout: aux-base
       {% assign reaction = item.update_consensus_label | default: item.community_reaction | default: "Insufficient" %}
       {% assign reaction_class = reaction | downcase | replace: ' ', '-' %}
       {% assign brand_meta = site.data.update_brands[item.update_brand_id] %}
+      {% assign update_product_meta = site.data.patch_products | where: "id", item.product_id | first %}
       <article class="panel patch-card"
         data-kind="current"
         data-source-id="{{ item.update_brand_id | default: item.update_product | slugify }}"
+        data-priority="{{ update_product_meta.priority | downcase }}"
         data-type="{{ item.update_type | default: item.update_category | downcase }}"
         data-category="{{ item.update_category | downcase }}"
         data-status="{{ reaction_class }}"
@@ -216,9 +230,11 @@ layout: aux-base
         {% assign reaction = item.update_consensus_label | default: item.community_reaction | default: "Insufficient" %}
         {% assign reaction_class = reaction | downcase | replace: ' ', '-' %}
         {% assign brand_meta = site.data.update_brands[item.update_brand_id] %}
+        {% assign update_product_meta = site.data.patch_products | where: "id", item.product_id | first %}
         <article class="panel patch-card patch-card--archived"
           data-kind="archived"
           data-source-id="{{ item.update_brand_id | default: item.update_product | slugify }}"
+          data-priority="{{ update_product_meta.priority | downcase }}"
           data-type="{{ item.update_type | default: item.update_category | downcase }}"
           data-category="{{ item.update_category | downcase }}"
           data-status="{{ reaction_class }}"
