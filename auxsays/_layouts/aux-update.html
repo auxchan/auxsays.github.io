@@ -52,14 +52,12 @@ layout: aux-base
 
   <section class="update-content-grid">
     <article class="panel update-info-card update-summary-card">
-      <div class="eyebrow">Patch read</div>
       <h2>Summary</h2>
       <p>{{ page.release_summary | default: page.official_summary | default: page.description }}</p>
     </article>
 
     <article class="panel update-info-card update-consensus-card">
-      <div class="eyebrow">Community signal</div>
-      <h2>Consensus report</h2>
+      <h2>Consensus</h2>
       <div class="consensus-compact consensus-compact--card">
         <span><strong>Consensus:</strong> <em class="consensus-word consensus-word--{{ reaction_class }}">{{ reaction }}</em></span>
         <span class="consensus-secondary">{{ page.update_report_count | default: 0 }} reports assessed • {{ page.update_consensus_confidence | default: 'Low' }} confidence</span>
@@ -76,22 +74,10 @@ layout: aux-base
       {% endif %}
     </article>
 
-    {% if page.status_events and page.status_events.size > 0 %}
-    <details class="panel update-info-card update-status-details">
-      <summary>Status history</summary>
-      <div class="status-timeline status-timeline--compact">
-        {% for event in page.status_events %}
-        <div class="status-event"><time>{{ event.at | date: "%b %-d, %Y %-I:%M %p %Z" }}</time><strong>{{ event.label }}</strong><p>{{ event.note }}</p></div>
-        {% endfor %}
-      </div>
-    </details>
-    {% endif %}
-
     <article class="panel update-info-card update-official-card">
-      <div class="eyebrow">Vendor wording</div>
-      <h2>Official patch notes</h2>
+      <h2>Official</h2>
       {% if page.official_patch_notes_body %}
-      <div class="official-patch-notes">
+      <div class="official-patch-notes node-bullet-scope">
         {{ page.official_patch_notes_body | markdownify }}
       </div>
       {% else %}
@@ -100,5 +86,26 @@ layout: aux-base
       </div>
       {% endif %}
     </article>
+
+    {% if page.status_events and page.status_events.size > 0 %}
+    <details class="panel update-info-card update-status-details">
+      <summary>Status History</summary>
+      <div class="status-timeline status-timeline--compact">
+        {% for event in page.status_events %}
+        <div class="status-event"><time>{{ event.at | date: "%b %-d, %Y %-I:%M %p %Z" }}</time><strong>{{ event.label }}</strong><p>{{ event.note }}</p></div>
+        {% endfor %}
+      </div>
+    </details>
+    {% endif %}
+
+    {% if page.official_checksums_body %}
+    <details class="panel update-info-card update-checksum-details">
+      <summary>Checksum</summary>
+      <p class="checksum-helper">Use these hashes to verify downloaded installers match the files published with the official release.</p>
+      <div class="official-patch-notes checksum-body">
+        {{ page.official_checksums_body | markdownify }}
+      </div>
+    </details>
+    {% endif %}
   </section>
 </div>

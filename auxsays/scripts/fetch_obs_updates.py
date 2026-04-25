@@ -53,24 +53,14 @@ def primary_asset_size(release):
     note = f"{preferred.get('name', 'Primary asset')}. Platform assets vary."
     return label, note
 
-def wrap_checksums(body):
+def split_official_sections(body):
     if "## Checksums" not in body:
-        return body
+        return body, ""
     before, after = body.split("## Checksums", 1)
-    return before.rstrip() + """
+    checksum_body = "## Checksums
 
-<details markdown="1" class="checksums-details">
-<summary>Checksums / installer verification</summary>
-
-Use these hashes to verify downloaded installers match the files published with the official release.
-
-## Checksums
-
-""" + after.strip() + """
-
-</details>
-"""
-
+" + after.strip()
+    return before.rstrip(), checksum_body.strip()
 
 def write_obs_update_page(release, status="current"):
     version=(release.get("tag_name") or release.get("name") or "").lstrip("v")
@@ -78,7 +68,7 @@ def write_obs_update_page(release, status="current"):
     date_slug=published[:10]
     slug=slugify(version)
     body=(release.get("body") or "No official release body was returned by the GitHub API.").strip()
-    body=wrap_checksums(body)
+    body, checksums_body = split_official_sections(body)
     patch_file_size, patch_file_size_note = primary_asset_size(release)
     report_count=0
     label="Insufficient data"
@@ -122,7 +112,9 @@ def write_obs_update_page(release, status="current"):
         "official_patch_notes_source_type":"github-release",
         "official_patch_notes_capture_status":"captured-from-github-release-body",
         "official_patch_notes_source_url":release.get("html_url") or f"https://github.com/obsproject/obs-studio/releases/tag/{release.get('tag_name')}",
-        "official_patch_notes_body":body
+        "official_patch_notes_body":body,
+        "official_checksums_body":checksums_body,
+        "official_checksums_capture_status":"captured-from-official-release" if checksums_body else "not-present"
     }
     output=OUTPUT_DIR/f"{date_slug}-obs-studio-{slug}.md"
     output.write_text("---\n"+yaml_frontmatter(front)+"\n---\n", encoding="utf-8")
