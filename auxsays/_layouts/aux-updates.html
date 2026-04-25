@@ -53,12 +53,12 @@ layout: aux-base
 
 
       <div>
-        <span class="patch-label">Lane</span>
+        <span class="patch-label">Tracking priority</span>
         <div class="patch-chips" id="patch-priority-chips">
-          <button class="patch-chip is-active" data-priority="all">All lanes</button>
-          <button class="patch-chip" data-priority="core">Core</button>
-          <button class="patch-chip" data-priority="expansion">Expansion</button>
-          <button class="patch-chip" data-priority="edge">Edge</button>
+          <button class="patch-chip is-active" data-priority="all">All priorities</button>
+          <button class="patch-chip" data-priority="core">Primary</button>
+          <button class="patch-chip" data-priority="expansion">Secondary</button>
+          <button class="patch-chip" data-priority="edge">Watchlist</button>
         </div>
       </div>
 
@@ -111,7 +111,7 @@ layout: aux-base
       </div>
       <div class="patch-radar-stat-grid" aria-label="Patch source summary">
         <span><strong>{{ patch_sources.size }}</strong><em>tracked sources</em></span>
-        <span><strong>5</strong><em>priority lanes</em></span>
+        <span><strong>3</strong><em>monitoring tiers</em></span>
         <span><strong>2-step</strong><em>official + reaction</em></span>
       </div>
     </div>
@@ -137,7 +137,16 @@ layout: aux-base
             <strong><a href="{{ source.company_url | relative_url }}">{{ source.product_name }}</a></strong>
             <em>{{ source.company_name }}</em>
           </span>
-          <span class="patch-source-priority patch-source-priority--{{ source.priority | downcase }}">{{ source.priority }}</span>
+          {% assign source_priority_label = source.priority %}
+          {% case source.priority %}
+            {% when 'Core' %}
+              {% assign source_priority_label = 'Primary' %}
+            {% when 'Expansion' %}
+              {% assign source_priority_label = 'Secondary' %}
+            {% when 'Edge' %}
+              {% assign source_priority_label = 'Watchlist' %}
+          {% endcase %}
+          <span class="patch-source-priority patch-source-priority--{{ source.priority | downcase }}">{{ source_priority_label }}</span>
         </div>
         <div class="patch-source-tags">
           <span>{{ source.category_label }}</span>
