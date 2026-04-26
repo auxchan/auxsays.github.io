@@ -24,7 +24,7 @@ layout: aux-base
         <span class="patch-alert-pill pill-{{ note.change_type | downcase }}">{{ note.change_type }}</span>
         <span>
           <strong>{{ note.product }} {{ note.version }}</strong>
-          <p>{{ note.message }}</p>{% if note.changed_at %}<time class="patch-alert-time">Status updated {{ note.changed_at | date: "%b %-d, %Y %-I:%M %p %Z" }}</time>{% endif %}
+          <p>{{ note.message }}</p>
         </span>
       </a>
       {% endfor %}
@@ -33,52 +33,32 @@ layout: aux-base
   {% endif %}
 
   <section class="panel patch-controls reveal-up reveal-delay-1">
-    <div class="patch-toolbar-grid patch-toolbar-grid--enhanced">
-      <div class="patch-search-wrap">
+    <div class="patch-toolbar-grid">
+      <div>
         <label class="patch-label" for="patch-search">Search</label>
         <input id="patch-search" class="patch-search" type="search" placeholder="Search product, company, version, or note">
       </div>
-
-      <div class="patch-source-select-wrap">
-        <label class="patch-label" for="patch-source-select">Source</label>
-        <select id="patch-source-select" class="patch-source-select">
-          <option value="all">All sources</option>
-          {% for source in patch_sources %}
-          <option value="{{ source.id }}">{{ source.product_name }}</option>
-          {% endfor %}
-        </select>
-      </div>
-
-
       <div>
-        <span class="patch-label">Tracking priority</span>
-        <div class="patch-chips" id="patch-priority-chips">
-          <button class="patch-chip is-active" data-priority="all">All priorities</button>
-          <button class="patch-chip" data-priority="core">Primary</button>
-          <button class="patch-chip" data-priority="expansion">Secondary</button>
-          <button class="patch-chip" data-priority="edge">Watchlist</button>
-        </div>
-      </div>
-
-      <div>
-        <span class="patch-label">Category</span>
+        <span class="patch-label">Software type</span>
         <div class="patch-chips" id="patch-filter-chips">
           <button class="patch-chip is-active" data-filter="all">All</button>
           <button class="patch-chip" data-filter="ai-tools">AI Tools</button>
-          <button class="patch-chip" data-filter="ai-image">AI Image</button>
           <button class="patch-chip" data-filter="ai-video">AI Video</button>
+          <button class="patch-chip" data-filter="ai-image">AI Image</button>
           <button class="patch-chip" data-filter="streaming">Streaming</button>
           <button class="patch-chip" data-filter="video-production">Video / Production</button>
-          <button class="patch-chip" data-filter="creator-platforms">Creator Platforms</button>
-          <button class="patch-chip" data-filter="design-workflow">Design</button>
-          <button class="patch-chip" data-filter="game-engines">Game Engines</button>
+          <button class="patch-chip" data-filter="game-engines">Game / Engine</button>
           <button class="patch-chip" data-filter="game-platforms">Game Platforms</button>
+          <button class="patch-chip" data-filter="creator-platforms">Creator Platforms</button>
+          <button class="patch-chip" data-filter="design-workflow">Design / Workflow</button>
+          <button class="patch-chip" data-filter="dev-web">Dev / Web</button>
           <button class="patch-chip" data-filter="hardware-drivers">Hardware / Drivers</button>
           <button class="patch-chip" data-filter="workflow-automation">Automation</button>
-          <button class="patch-chip" data-filter="dev-web">Dev / Web</button>
+          <button class="patch-chip" data-filter="broadcasting">Broadcasting</button>
+          <button class="patch-chip" data-filter="video-editing">Video Editing</button>
+          <button class="patch-chip" data-filter="creator-software">Creator Tools</button>
         </div>
       </div>
-
       <div>
         <span class="patch-label">Consensus</span>
         <div class="patch-chips" id="patch-status-chips">
@@ -89,18 +69,18 @@ layout: aux-base
           <button class="patch-chip" data-status="insufficient">Insufficient</button>
         </div>
       </div>
-
       <div>
         <span class="patch-label">Sort</span>
         <div class="patch-chips" id="patch-sort-chips">
           <button class="patch-chip is-active" data-sort="latest">Latest</button>
-          <button class="patch-chip" data-sort="company">Company A–Z</button>
-          <button class="patch-chip" data-sort="software">Software A–Z</button>
+          <button class="patch-chip" data-sort="product">Product A–Z</button>
           <button class="patch-chip" data-sort="risk">Risk first</button>
         </div>
       </div>
     </div>
   </section>
+
+
 
   {% if patch_sources and patch_sources.size > 0 %}
   <section class="panel patch-source-radar reveal-up reveal-delay-1" id="patch-source-radar">
@@ -112,63 +92,37 @@ layout: aux-base
       </div>
       <div class="patch-radar-stat-grid" aria-label="Patch source summary">
         <span><strong>{{ patch_sources.size }}</strong><em>tracked sources</em></span>
-        <span><strong>3</strong><em>monitoring tiers</em></span>
+        <span><strong>5</strong><em>priority lanes</em></span>
         <span><strong>2-step</strong><em>official + reaction</em></span>
       </div>
     </div>
-
     <div class="patch-source-grid" id="patch-source-grid">
       {% for source in patch_sources %}
-      {% assign source_cadence_label = source.cadence | default: '' %}
-      {% if source_cadence_label == 'High' %}
-        {% assign source_cadence_label = 'Frequent updates' %}
-      {% elsif source_cadence_label == 'Medium' %}
-        {% assign source_cadence_label = 'Periodic updates' %}
-      {% elsif source_cadence_label == 'Low' %}
-        {% assign source_cadence_label = 'Occasional updates' %}
-      {% endif %}
       <article class="patch-source-card"
         data-source-card="true"
-        data-source-id="{{ source.id }}"
         data-type="{{ source.category_key | downcase }}"
         data-category="{{ source.category_key | downcase }}"
         data-priority="{{ source.priority | downcase }}"
         data-cadence="{{ source.cadence | downcase }}"
         data-title="{{ source.product_name | downcase }}"
-        data-product="{{ source.product_name | downcase }}"
         data-company="{{ source.company_name | downcase }}"
         data-summary="{{ source.impact | append: ' ' | append: source.watch_reason | append: ' ' | append: source.signal_notes | downcase }}">
         <div class="patch-source-topline">
-          <span class="patch-source-badge patch-logo-badge patch-logo-badge--has-image">
-            <img src="{{ source.logo_path | relative_url }}" alt="{{ source.product_name }} logo" loading="lazy">
-          </span>
+          <span class="patch-source-badge">{{ source.badge_text }}</span>
           <span class="patch-source-meta">
-            <strong><a href="{{ source.company_url | relative_url }}">{{ source.product_name }}</a></strong>
+            <strong>{{ source.product_name }}</strong>
             <em>{{ source.company_name }}</em>
           </span>
-          {% assign source_priority_label = source.priority %}
-          {% case source.priority %}
-            {% when 'Core' %}
-              {% assign source_priority_label = 'Primary' %}
-            {% when 'Expansion' %}
-              {% assign source_priority_label = 'Secondary' %}
-            {% when 'Edge' %}
-              {% assign source_priority_label = 'Watchlist' %}
-          {% endcase %}
-          <span class="patch-source-priority patch-source-priority--{{ source.priority | downcase }}">{{ source_priority_label }}</span>
+          <span class="patch-source-priority patch-source-priority--{{ source.priority | downcase }}">{{ source.priority }}</span>
         </div>
         <div class="patch-source-tags">
           <span>{{ source.category_label }}</span>
-          <span>{{ source_cadence_label }}</span>
+          <span>{{ source.cadence }} cadence</span>
         </div>
         <p>{{ source.impact }}</p>
         <p class="patch-source-reason">{{ source.watch_reason }}</p>
         {% if source.signal_notes %}<p class="patch-source-signal"><strong>Signal:</strong> {{ source.signal_notes }}</p>{% endif %}
-        <div class="patch-card-links patch-source-card-links">
-          {% if source.company_url %}<a class="patch-source-link patch-source-link--primary" href="{{ source.company_url | relative_url }}">Company profile →</a>{% endif %}
-          {% if source.product_url %}<a class="patch-source-link" href="{{ source.product_url | relative_url }}">Software dossier →</a>{% endif %}
-          {% if source.source_url %}<a class="patch-source-link patch-source-link--external" href="{{ source.source_url }}">{{ source.source_label | default: 'Official notes' }} ↗</a>{% endif %}
-        </div>
+        {% if source.source_url %}<a class="patch-source-link" href="{{ source.source_url }}">{{ source.source_label | default: 'Official source' }} ↗</a>{% endif %}
       </article>
       {% endfor %}
     </div>
@@ -179,12 +133,8 @@ layout: aux-base
     {% for item in current_pages %}
       {% assign reaction = item.update_consensus_label | default: item.community_reaction | default: "Insufficient" %}
       {% assign reaction_class = reaction | downcase | replace: ' ', '-' %}
-      {% assign brand_meta = site.data.update_brands[item.update_brand_id] %}
-      {% assign update_product_meta = site.data.patch_products | where: "id", item.product_id | first %}
       <article class="panel patch-card"
         data-kind="current"
-        data-source-id="{{ item.update_brand_id | default: item.update_product | slugify }}"
-        data-priority="{{ update_product_meta.priority | downcase }}"
         data-type="{{ item.update_type | default: item.update_category | downcase }}"
         data-category="{{ item.update_category | downcase }}"
         data-status="{{ reaction_class }}"
@@ -200,13 +150,7 @@ layout: aux-base
         </div>
         <div class="patch-card-headline">
           <a class="patch-identity" href="{{ item.url | relative_url }}">
-            <span class="patch-badge{% if brand_meta and brand_meta.logo_path %} patch-logo-badge patch-logo-badge--has-image{% endif %}">
-              {% if brand_meta and brand_meta.logo_path %}
-              <img src="{{ brand_meta.logo_path | relative_url }}" alt="{{ item.update_source_name }} logo" loading="lazy">
-              {% else %}
-              {{ item.update_logo_text | default: item.update_product | slice: 0, 3 }}
-              {% endif %}
-            </span>
+            <span class="patch-badge">{{ item.update_logo_text | default: item.update_product | slice: 0, 3 }}</span>
             <span class="patch-brand-copy">
               <strong>{{ item.update_product }}</strong>
               <em>{{ item.update_source_name }}</em>
@@ -247,12 +191,8 @@ layout: aux-base
         {% unless item.feed_hidden %}
         {% assign reaction = item.update_consensus_label | default: item.community_reaction | default: "Insufficient" %}
         {% assign reaction_class = reaction | downcase | replace: ' ', '-' %}
-        {% assign brand_meta = site.data.update_brands[item.update_brand_id] %}
-        {% assign update_product_meta = site.data.patch_products | where: "id", item.product_id | first %}
         <article class="panel patch-card patch-card--archived"
           data-kind="archived"
-          data-source-id="{{ item.update_brand_id | default: item.update_product | slugify }}"
-          data-priority="{{ update_product_meta.priority | downcase }}"
           data-type="{{ item.update_type | default: item.update_category | downcase }}"
           data-category="{{ item.update_category | downcase }}"
           data-status="{{ reaction_class }}"
@@ -268,33 +208,27 @@ layout: aux-base
           </div>
           <div class="patch-card-headline">
             <a class="patch-identity" href="{{ item.url | relative_url }}">
-              <span class="patch-badge{% if brand_meta and brand_meta.logo_path %} patch-logo-badge patch-logo-badge--has-image{% endif %}">
-                {% if brand_meta and brand_meta.logo_path %}
-                <img src="{{ brand_meta.logo_path | relative_url }}" alt="{{ item.update_source_name }} logo" loading="lazy">
-                {% else %}
-                {{ item.update_logo_text | default: item.update_product | slice: 0, 3 }}
-                {% endif %}
-              </span>
+              <span class="patch-badge">{{ item.update_logo_text | default: item.update_product | slice: 0, 3 }}</span>
               <span class="patch-brand-copy">
                 <strong>{{ item.update_product }}</strong>
                 <em>{{ item.update_source_name }}</em>
               </span>
             </a>
             <span class="patch-status-stack">
-              <span class="patch-status patch-status--{{ reaction_class }}">{{ reaction }}</span>
-              <span class="patch-report-count">{{ item.update_report_count | default: 0 }} reports</span>
-            </span>
+            <span class="patch-status patch-status--{{ reaction_class }}">{{ reaction }}</span>
+            <span class="patch-report-count">{{ item.update_report_count | default: 0 }} reports</span>
+          </span>
           </div>
           <h2 class="patch-card-title"><a href="{{ item.url | relative_url }}">{{ item.update_feed_title | default: item.update_product | append: ' ' | append: item.update_version }}</a></h2>
           <p class="patch-card-summary">{{ item.description }}</p>
           {% assign consensus_summary = item.update_consensus_summary | default: item.community_summary %}
           {% if consensus_summary %}
-          <div class="patch-consensus-block">
-            <span class="patch-consensus-label">User consensus</span>
-            <p class="patch-consensus-line">{{ consensus_summary }}</p>
-            <span class="patch-consensus-meta">{{ item.update_report_count | default: 0 }} matched reports{% if item.update_consensus_confidence %} • {{ item.update_consensus_confidence }} confidence{% endif %}</span>
-          </div>
-          {% endif %}
+        <div class="patch-consensus-block">
+          <span class="patch-consensus-label">User consensus</span>
+          <p class="patch-consensus-line">{{ consensus_summary }}</p>
+          <span class="patch-consensus-meta">{{ item.update_report_count | default: 0 }} matched reports{% if item.update_consensus_confidence %} • {{ item.update_consensus_confidence }} confidence{% endif %}</span>
+        </div>
+        {% endif %}
           <div class="patch-card-links">
             <a href="{{ item.url | relative_url }}">Read breakdown →</a>
             {% if item.update_source_url %}<a href="{{ item.update_source_url }}">Official source ↗</a>{% endif %}
@@ -305,9 +239,4 @@ layout: aux-base
       {% endfor %}
     </div>
   </section>
-
-  <aside class="patch-legal-note reveal-up" aria-label="Independent publication disclaimer">
-    <span class="patch-legal-icon">◇</span>
-    <p>Product names, logos, and brands are property of their respective owners. AUXSAYS is an independent publication and is not affiliated with or endorsed by the companies listed.</p>
-  </aside>
 </section>

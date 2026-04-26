@@ -1,330 +1,231 @@
 openai-chatgpt:
-  company_name: OpenAI
-  product_name: ChatGPT / OpenAI
-  badge_text: OAI
+  company_name: 'OpenAI'
+  product_name: 'ChatGPT / OpenAI'
+  badge_text: 'OAI'
   accent: '#34d9f8'
-  category_label: AI Tools
-  company_label: OpenAI
-  source_id: openai-chatgpt
-  logo_label: OpenAI
-  logo_path: /assets/img/patch-logos/openai-chatgpt.svg
+  category_label: 'AI Tools'
+  company_label: 'OpenAI'
 anthropic-claude:
-  company_name: Anthropic
-  product_name: Claude
-  badge_text: ANT
+  company_name: 'Anthropic'
+  product_name: 'Claude'
+  badge_text: 'ANT'
   accent: '#34d9f8'
-  category_label: AI Tools
-  company_label: Anthropic
-  source_id: anthropic-claude
-  logo_label: Claude
-  logo_path: /assets/img/patch-logos/anthropic-claude.svg
+  category_label: 'AI Tools'
+  company_label: 'Anthropic'
 google-gemini:
-  company_name: Google
-  product_name: Gemini
-  badge_text: GEM
+  company_name: 'Google'
+  product_name: 'Gemini'
+  badge_text: 'GEM'
   accent: '#34d9f8'
-  category_label: AI Tools
-  company_label: Google
-  source_id: google-gemini
-  logo_label: Gemini
-  logo_path: /assets/img/patch-logos/google-gemini.svg
+  category_label: 'AI Tools'
+  company_label: 'Google'
 perplexity:
-  company_name: Perplexity
-  product_name: Perplexity
-  badge_text: PRX
+  company_name: 'Perplexity'
+  product_name: 'Perplexity'
+  badge_text: 'PRX'
   accent: '#34d9f8'
-  category_label: AI Tools
-  company_label: Perplexity
-  source_id: perplexity
-  logo_label: Perplexity
-  logo_path: /assets/img/patch-logos/perplexity.svg
+  category_label: 'AI Tools'
+  company_label: 'Perplexity'
 midjourney:
-  company_name: Midjourney
-  product_name: Midjourney
-  badge_text: MID
+  company_name: 'Midjourney'
+  product_name: 'Midjourney'
+  badge_text: 'MID'
   accent: '#34d9f8'
-  category_label: AI Image
-  company_label: Midjourney
-  source_id: midjourney
-  logo_label: Midjourney
-  logo_path: /assets/img/patch-logos/midjourney.svg
+  category_label: 'AI Image'
+  company_label: 'Midjourney'
 stability-ai:
-  company_name: Stability AI
-  product_name: Stable Diffusion / Stable Audio
-  badge_text: SD
+  company_name: 'Stability AI'
+  product_name: 'Stable Diffusion / Stable Audio'
+  badge_text: 'SD'
   accent: '#34d9f8'
-  category_label: AI Image
-  company_label: Stability AI
-  source_id: stability-ai
-  logo_label: Stability
-  logo_path: /assets/img/patch-logos/stability-ai.svg
+  category_label: 'AI Image'
+  company_label: 'Stability AI'
 runway:
-  company_name: Runway
-  product_name: Runway
-  badge_text: RUN
+  company_name: 'Runway'
+  product_name: 'Runway'
+  badge_text: 'RUN'
   accent: '#34d9f8'
-  category_label: AI Video
-  company_label: Runway
-  source_id: runway
-  logo_label: Runway
-  logo_path: /assets/img/patch-logos/runway.svg
+  category_label: 'AI Video'
+  company_label: 'Runway'
 pika:
-  company_name: Pika
-  product_name: Pika
-  badge_text: PIK
+  company_name: 'Pika'
+  product_name: 'Pika'
+  badge_text: 'PIK'
   accent: '#34d9f8'
-  category_label: AI Video
-  company_label: Pika
-  source_id: pika
-  logo_label: Pika
-  logo_path: /assets/img/patch-logos/pika.svg
+  category_label: 'AI Video'
+  company_label: 'Pika'
 lottiefiles:
-  company_name: LottieFiles
-  product_name: LottieFiles
-  badge_text: LOT
+  company_name: 'LottieFiles'
+  product_name: 'LottieFiles'
+  badge_text: 'LOT'
   accent: '#d6ab4e'
-  category_label: Design Workflow
-  company_label: LottieFiles
-  source_id: lottiefiles
-  logo_label: LottieFiles
-  logo_path: /assets/img/patch-logos/lottiefiles.svg
+  category_label: 'Design Workflow'
+  company_label: 'LottieFiles'
 figma:
-  company_name: Figma
-  product_name: Figma
-  badge_text: FIG
+  company_name: 'Figma'
+  product_name: 'Figma'
+  badge_text: 'FIG'
   accent: '#d6ab4e'
-  category_label: Design Workflow
-  company_label: Figma
-  source_id: figma
-  logo_label: Figma
-  logo_path: /assets/img/patch-logos/figma.svg
+  category_label: 'Design Workflow'
+  company_label: 'Figma'
 canva:
-  company_name: Canva
-  product_name: Canva
-  badge_text: CAN
+  company_name: 'Canva'
+  product_name: 'Canva'
+  badge_text: 'CAN'
   accent: '#d6ab4e'
-  category_label: Design Workflow
-  company_label: Canva
-  source_id: canva
-  logo_label: Canva
-  logo_path: /assets/img/patch-logos/canva.svg
+  category_label: 'Design Workflow'
+  company_label: 'Canva'
 adobe-creative-cloud:
-  company_name: Adobe
-  product_name: Creative Cloud / Firefly
-  badge_text: ADB
+  company_name: 'Adobe'
+  product_name: 'Creative Cloud / Firefly'
+  badge_text: 'ADB'
   accent: '#d6ab4e'
-  category_label: Video / Production
-  company_label: Adobe
-  source_id: adobe-creative-cloud
-  logo_label: Adobe
-  logo_path: /assets/img/patch-logos/adobe-creative-cloud.svg
+  category_label: 'Video / Production'
+  company_label: 'Adobe'
 twitch:
-  company_name: Twitch
-  product_name: Twitch
-  badge_text: TTV
+  company_name: 'Twitch'
+  product_name: 'Twitch'
+  badge_text: 'TTV'
   accent: '#d6ab4e'
-  category_label: Creator Platforms
-  company_label: Twitch
-  source_id: twitch
-  logo_label: Twitch
-  logo_path: /assets/img/patch-logos/twitch.svg
+  category_label: 'Creator Platforms'
+  company_label: 'Twitch'
 youtube:
-  company_name: YouTube
-  product_name: YouTube / YouTube Studio
-  badge_text: YTB
+  company_name: 'YouTube'
+  product_name: 'YouTube / YouTube Studio'
+  badge_text: 'YTB'
   accent: '#d6ab4e'
-  category_label: Creator Platforms
-  company_label: YouTube
-  source_id: youtube
-  logo_label: YouTube
-  logo_path: /assets/img/patch-logos/youtube.svg
+  category_label: 'Creator Platforms'
+  company_label: 'YouTube'
 kick:
-  company_name: Kick
-  product_name: Kick
-  badge_text: KCK
+  company_name: 'Kick'
+  product_name: 'Kick'
+  badge_text: 'KCK'
   accent: '#d6ab4e'
-  category_label: Creator Platforms
-  company_label: Kick
-  source_id: kick
-  logo_label: Kick
-  logo_path: /assets/img/patch-logos/kick.svg
+  category_label: 'Creator Platforms'
+  company_label: 'Kick'
 rumble:
-  company_name: Rumble
-  product_name: Rumble
-  badge_text: RMB
+  company_name: 'Rumble'
+  product_name: 'Rumble'
+  badge_text: 'RMB'
   accent: '#d6ab4e'
-  category_label: Creator Platforms
-  company_label: Rumble
-  source_id: rumble
-  logo_label: Rumble
-  logo_path: /assets/img/patch-logos/rumble.svg
+  category_label: 'Creator Platforms'
+  company_label: 'Rumble'
 epic-unreal:
-  company_name: Epic Games
-  product_name: Unreal Engine
-  badge_text: UE
+  company_name: 'Epic Games'
+  product_name: 'Unreal Engine'
+  badge_text: 'UE'
   accent: '#d6ab4e'
-  category_label: Game / Engine
-  company_label: Epic Games
-  source_id: epic-unreal
-  logo_label: Unreal Engine
-  logo_path: /assets/img/patch-logos/epic-unreal.svg
+  category_label: 'Game / Engine'
+  company_label: 'Epic Games'
 unity:
-  company_name: Unity
-  product_name: Unity
-  badge_text: UNT
+  company_name: 'Unity'
+  product_name: 'Unity'
+  badge_text: 'UNT'
   accent: '#d6ab4e'
-  category_label: Game / Engine
-  company_label: Unity
-  source_id: unity
-  logo_label: Unity
-  logo_path: /assets/img/patch-logos/unity.svg
+  category_label: 'Game / Engine'
+  company_label: 'Unity'
 steam:
-  company_name: Valve
-  product_name: Steam
-  badge_text: STM
+  company_name: 'Valve'
+  product_name: 'Steam'
+  badge_text: 'STM'
   accent: '#d6ab4e'
-  category_label: Game Platforms
-  company_label: Valve
-  source_id: steam
-  logo_label: Steam
-  logo_path: /assets/img/patch-logos/steam.svg
+  category_label: 'Game Platforms'
+  company_label: 'Valve'
 nvidia:
-  company_name: NVIDIA
-  product_name: NVIDIA App / GeForce / Studio
-  badge_text: NV
+  company_name: 'NVIDIA'
+  product_name: 'NVIDIA App / GeForce / Studio'
+  badge_text: 'NV'
   accent: '#d6ab4e'
-  category_label: Hardware / Drivers
-  company_label: NVIDIA
-  source_id: nvidia
-  logo_label: NVIDIA
-  logo_path: /assets/img/patch-logos/nvidia.svg
+  category_label: 'Hardware / Drivers'
+  company_label: 'NVIDIA'
 amd:
-  company_name: AMD
-  product_name: AMD Software / Radeon
-  badge_text: AMD
+  company_name: 'AMD'
+  product_name: 'AMD Software / Radeon'
+  badge_text: 'AMD'
   accent: '#d6ab4e'
-  category_label: Hardware / Drivers
-  company_label: AMD
-  source_id: amd
-  logo_label: AMD
-  logo_path: /assets/img/patch-logos/amd.svg
+  category_label: 'Hardware / Drivers'
+  company_label: 'AMD'
 intel-arc:
-  company_name: Intel
-  product_name: Intel Graphics / Arc
-  badge_text: INT
+  company_name: 'Intel'
+  product_name: 'Intel Graphics / Arc'
+  badge_text: 'INT'
   accent: '#d6ab4e'
-  category_label: Hardware / Drivers
-  company_label: Intel
-  source_id: intel-arc
-  logo_label: Intel
-  logo_path: /assets/img/patch-logos/intel-arc.svg
+  category_label: 'Hardware / Drivers'
+  company_label: 'Intel'
 blender:
-  company_name: Blender Foundation
-  product_name: Blender
-  badge_text: BLN
+  company_name: 'Blender Foundation'
+  product_name: 'Blender'
+  badge_text: 'BLN'
   accent: '#d6ab4e'
-  category_label: Video / Production
-  company_label: Blender Foundation
-  source_id: blender
-  logo_label: Blender
-  logo_path: /assets/img/patch-logos/blender.svg
+  category_label: 'Video / Production'
+  company_label: 'Blender Foundation'
 comfyui:
-  company_name: ComfyUI
-  product_name: ComfyUI
-  badge_text: CFY
+  company_name: 'ComfyUI'
+  product_name: 'ComfyUI'
+  badge_text: 'CFY'
   accent: '#34d9f8'
-  category_label: AI Image
-  company_label: ComfyUI
-  source_id: comfyui
-  logo_label: ComfyUI
-  logo_path: /assets/img/patch-logos/comfyui.svg
+  category_label: 'AI Image'
+  company_label: 'ComfyUI'
 hugging-face:
-  company_name: Hugging Face
-  product_name: Hugging Face
-  badge_text: HF
+  company_name: 'Hugging Face'
+  product_name: 'Hugging Face'
+  badge_text: 'HF'
   accent: '#34d9f8'
-  category_label: Dev / Web
-  company_label: Hugging Face
-  source_id: hugging-face
-  logo_label: Hugging Face
-  logo_path: /assets/img/patch-logos/hugging-face.svg
+  category_label: 'Dev / Web'
+  company_label: 'Hugging Face'
 github:
-  company_name: GitHub
-  product_name: GitHub / Copilot
-  badge_text: GH
+  company_name: 'GitHub'
+  product_name: 'GitHub / Copilot'
+  badge_text: 'GH'
   accent: '#34d9f8'
-  category_label: Dev / Web
-  company_label: GitHub
-  source_id: github
-  logo_label: GitHub / Copilot
-  logo_path: /assets/img/patch-logos/github.svg
+  category_label: 'Dev / Web'
+  company_label: 'GitHub'
 cloudflare:
-  company_name: Cloudflare
-  product_name: Cloudflare
-  badge_text: CF
+  company_name: 'Cloudflare'
+  product_name: 'Cloudflare'
+  badge_text: 'CF'
   accent: '#34d9f8'
-  category_label: Dev / Web
-  company_label: Cloudflare
-  source_id: cloudflare
-  logo_label: Cloudflare
-  logo_path: /assets/img/patch-logos/cloudflare.svg
+  category_label: 'Dev / Web'
+  company_label: 'Cloudflare'
 netlify:
-  company_name: Netlify
-  product_name: Netlify
-  badge_text: NET
+  company_name: 'Netlify'
+  product_name: 'Netlify'
+  badge_text: 'NET'
   accent: '#34d9f8'
-  category_label: Dev / Web
-  company_label: Netlify
-  source_id: netlify
-  logo_label: Netlify
-  logo_path: /assets/img/patch-logos/netlify.svg
+  category_label: 'Dev / Web'
+  company_label: 'Netlify'
 notion:
-  company_name: Notion
-  product_name: Notion
-  badge_text: NOT
+  company_name: 'Notion'
+  product_name: 'Notion'
+  badge_text: 'NOT'
   accent: '#d6ab4e'
-  category_label: Workflow / Automation
-  company_label: Notion
-  source_id: notion
-  logo_label: Notion
-  logo_path: /assets/img/patch-logos/notion.svg
+  category_label: 'Workflow / Automation'
+  company_label: 'Notion'
 zapier:
-  company_name: Zapier
-  product_name: Zapier
-  badge_text: ZAP
+  company_name: 'Zapier'
+  product_name: 'Zapier'
+  badge_text: 'ZAP'
   accent: '#d6ab4e'
-  category_label: Workflow / Automation
-  company_label: Zapier
-  source_id: zapier
-  logo_label: Zapier
-  logo_path: /assets/img/patch-logos/zapier.svg
+  category_label: 'Workflow / Automation'
+  company_label: 'Zapier'
 make:
-  company_name: Make
-  product_name: Make
-  badge_text: MKE
+  company_name: 'Make'
+  product_name: 'Make'
+  badge_text: 'MKE'
   accent: '#d6ab4e'
-  category_label: Workflow / Automation
-  company_label: Make
-  source_id: make
-  logo_label: Make
-  logo_path: /assets/img/patch-logos/make.svg
+  category_label: 'Workflow / Automation'
+  company_label: 'Make'
 obs-studio:
-  company_name: OBS Project
-  product_name: OBS Studio
-  badge_text: OBS
+  company_name: 'OBS Project'
+  product_name: 'OBS Studio'
+  badge_text: 'OBS'
   accent: '#d6ab4e'
-  category_label: Streaming
-  company_label: OBS Project
-  source_id: obs-studio
-  logo_label: OBS
-  logo_path: /assets/img/patch-logos/obs-studio.svg
+  category_label: 'Streaming'
+  company_label: 'OBS Project'
 davinci-resolve:
-  company_name: Blackmagic Design
-  product_name: DaVinci Resolve
-  badge_text: BMD
+  company_name: 'Blackmagic Design'
+  product_name: 'DaVinci Resolve'
+  badge_text: 'BMD'
   accent: '#d6ab4e'
-  category_label: Video / Production
-  company_label: Blackmagic Design
-  source_id: davinci-resolve
-  logo_label: DaVinci
-  logo_path: /assets/img/patch-logos/davinci-resolve.svg
+  category_label: 'Video / Production'
+  company_label: 'Blackmagic Design'

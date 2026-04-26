@@ -1,7 +1,9 @@
-name: DaVinci Resolve Legacy Manual Runner
+name: DaVinci Resolve Updates
 
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "17 */12 * * *"
 
 permissions:
   contents: write
@@ -11,29 +13,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
       - name: Setup Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
+          python-version: "3.11"
 
-      - name: Install Python dependencies
-        run: python -m pip install --upgrade pip PyYAML
+      - name: Generate / refresh DaVinci update entry
+        run: python auxsays/scripts/fetch_davinci_updates.py
 
-      - name: Refresh DaVinci source status through unified updater
-        env:
-          AUXSAYS_ONLY: blackmagic-davinci
-        run: python auxsays/scripts/fetch_software_updates.py
-
-      - name: Commit generated updates
+      - name: Commit changes if needed
         run: |
-          if git diff --quiet; then
-            echo "No content changes."
-            exit 0
-          fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add auxsays/_data/patch_state.json auxsays/_data/patch_notifications.json
-          git commit -m "Update DaVinci Resolve source status"
-          git push
+          git add auxsays/updates/generated/*.md
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "Update DaVinci Resolve release entry"
+            git push
+          fi
