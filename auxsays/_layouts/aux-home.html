@@ -84,14 +84,13 @@ layout: aux-base
         {% if article_image_src.src != blank %}{% assign article_image_src = article_image_src.src %}{% endif %}
         <article class="featured-card featured-card--wide">
           <a class="featured-card-visual" href="{{ post.url | relative_url }}" aria-hidden="true">
+            <span class="featured-visual featured-visual--{{ forloop.index }}"></span>
             {% if article_image_src != '' %}
               {% if article_image_src contains '://' %}
-                <img class="featured-card-image" src="{{ article_image_src }}" alt="" loading="lazy" decoding="async">
+                <img class="featured-card-image" src="{{ article_image_src }}" alt="" loading="lazy" decoding="async" onerror="this.style.display='none'">
               {% else %}
-                <img class="featured-card-image" src="{{ article_image_src | relative_url }}" alt="" loading="lazy" decoding="async">
+                <img class="featured-card-image" src="{{ article_image_src | relative_url }}" alt="" loading="lazy" decoding="async" onerror="this.style.display='none'">
               {% endif %}
-            {% else %}
-              <span class="featured-visual featured-visual--{{ forloop.index }}"></span>
             {% endif %}
           </a>
           <div class="featured-card-copy">
