@@ -2113,6 +2113,16 @@ button, input, select, textarea { font: inherit; }
   position: relative;
 }
 
+.featured-card-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+  filter: saturate(.92) contrast(1.04) brightness(.94);
+}
+
+
 .featured-visual {
   position: absolute;
   inset: 0;
@@ -2154,6 +2164,7 @@ button, input, select, textarea { font: inherit; }
   position: sticky;
   top: 6.4rem;
   min-width: 0;
+  padding-top: 2.65rem;
 }
 
 .home-patch-feed {
@@ -2273,6 +2284,7 @@ button, input, select, textarea { font: inherit; }
   .home-patch-column {
     position: relative;
     top: auto;
+    padding-top: 0;
   }
 
   .home-patch-list {
