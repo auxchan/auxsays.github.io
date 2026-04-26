@@ -2,18 +2,22 @@
 layout: aux-base
 ---
 <section class="home-hero reveal-up">
-  <article class="panel hero-panel">
+  <article class="panel hero-panel hero-panel--dashboard">
     <div class="hero-panel-backdrop" aria-hidden="true"></div>
+    <div class="hero-telemetry" aria-hidden="true">
+      <span class="hero-signal hero-signal--flow"></span>
+      <span class="hero-signal hero-signal--histogram"></span>
+      <span class="hero-signal hero-signal--radar"></span>
+    </div>
     <div class="hero-panel-content">
       <div class="eyebrow">{{ site.data.home.eyebrow }}</div>
-      <h1 class="hero-title">
-        {% for line in site.data.home.title_lines %}
-        <span{% if line contains '[accent]' %} class="accent"{% endif %}>{{ line | replace: '[accent]', '' }}</span>
-        {% endfor %}
+      <h1 class="hero-title hero-title--split">
+        <span><span class="hero-title-accent">Tactical</span> Knowledge</span>
+        <span><span class="hero-title-accent">Creator</span> Control</span>
       </h1>
       <p class="hero-intro">{{ site.data.home.intro }}</p>
       <div class="cta-row cta-row--home">
-        <a class="btn btn-home" href="{{ '/articles/' | relative_url }}">Browse Articles</a>
+        <a class="btn btn-home" href="{{ '/articles/' | relative_url }}">Browse Articles →</a>
         <a class="btn btn-home" href="{{ '/about/' | relative_url }}">About Aux</a>
         <a class="btn btn-home" href="{{ '/updates/' | relative_url }}">Patch Feed</a>
       </div>
@@ -21,62 +25,117 @@ layout: aux-base
   </article>
 </section>
 
-<section class="coverage-section reveal-up reveal-delay-1">
-  <div class="section-head section-head--wide">
-    <div class="eyebrow">Core coverage</div>
-    <h2>{{ site.data.home.coverage_intro }}</h2>
-    <p>{{ site.data.home.coverage_sub }}</p>
+<section class="home-dashboard reveal-up reveal-delay-1">
+  <div class="home-main-column">
+    <section class="coverage-section coverage-section--dashboard">
+      <div class="home-section-label">
+        <span>Core Coverage</span>
+      </div>
+
+      <div class="coverage-grid coverage-grid--dashboard" id="coverage-grid">
+        {% for card in site.data.home.cards %}
+        <article class="coverage-card coverage-card--dashboard coverage-card--{{ card.icon }}" data-card>
+          <button class="coverage-hit" type="button" aria-expanded="false">
+            <span class="coverage-topline">
+              <span class="coverage-index">{{ card.fallback }}</span>
+              <span class="coverage-kicker">{{ card.kicker }}</span>
+              <span class="coverage-icon coverage-icon--{{ card.icon }}" aria-hidden="true">
+                {% case card.icon %}
+                {% when "free-ai" %}
+                <svg viewBox="0 0 24 24"><rect class="screen-fill" x="5" y="5" width="14" height="14" rx="3"/><path class="accent-line" d="M9 12h6M12 9v6"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5 5l1.8 1.8M17.2 17.2 19 19"/></svg>
+                {% when "workflow" %}
+                <svg viewBox="0 0 24 24"><rect class="flow-node" x="3" y="4" width="6" height="6" rx="1.5"/><rect class="flow-node" x="15" y="4" width="6" height="6" rx="1.5"/><rect class="flow-node flow-end" x="9" y="15" width="6" height="6" rx="1.5"/><path d="M9 7h6M6 10v3.5c0 1 .5 1.5 1.5 1.5H12M18 10v3.5c0 1-.5 1.5-1.5 1.5H12"/></svg>
+                {% when "automation" %}
+                <svg viewBox="0 0 24 24"><path d="M13 2 5 13h6l-1 9 8-12h-6l1-8Z"/><path d="M19.5 4.5 21 3M4.5 19.5 3 21" opacity=".65"/></svg>
+                {% when "lms" %}
+                <svg viewBox="0 0 24 24"><rect class="screen-fill" x="4" y="5" width="16" height="11" rx="2"/><path class="accent-line" d="M8 19h8M12 16v3"/><path d="M8 9h8M8 12h5"/></svg>
+                {% else %}
+                <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><path d="M12 8v8M8 12h8"/></svg>
+                {% endcase %}
+              </span>
+            </span>
+            <h3>{{ card.title }}</h3>
+            <div class="coverage-body coverage-body--inline">
+              <p>{{ card.summary }}</p>
+            </div>
+            <span class="coverage-card-arrow" aria-hidden="true">→</span>
+          </button>
+        </article>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="featured-section featured-section--dashboard reveal-up reveal-delay-2">
+      <div class="home-section-label">
+        <span>Recent Articles</span>
+      </div>
+
+      <div class="featured-list">
+        {% for post in site.posts limit:2 %}
+        {% assign article_image_src = '' %}
+        {% if post.image != blank %}{% assign article_image_src = post.image %}{% endif %}
+        {% if article_image_src == '' and post.thumbnail != blank %}{% assign article_image_src = post.thumbnail %}{% endif %}
+        {% if article_image_src == '' and post.thumb != blank %}{% assign article_image_src = post.thumb %}{% endif %}
+        {% if article_image_src == '' and post.cover != blank %}{% assign article_image_src = post.cover %}{% endif %}
+        {% if article_image_src == '' and post.hero_image != blank %}{% assign article_image_src = post.hero_image %}{% endif %}
+        {% if article_image_src == '' and post.featured_image != blank %}{% assign article_image_src = post.featured_image %}{% endif %}
+        {% if article_image_src.path != blank %}{% assign article_image_src = article_image_src.path %}{% endif %}
+        {% if article_image_src.url != blank %}{% assign article_image_src = article_image_src.url %}{% endif %}
+        {% if article_image_src.src != blank %}{% assign article_image_src = article_image_src.src %}{% endif %}
+        <article class="featured-card featured-card--wide">
+          <a class="featured-card-visual" href="{{ post.url | relative_url }}" aria-hidden="true">
+            <span class="featured-visual featured-visual--{{ forloop.index }}"></span>
+            {% if article_image_src != '' %}
+              {% if article_image_src contains '://' %}
+                <img class="featured-card-image" src="{{ article_image_src }}" alt="" loading="lazy" decoding="async" onerror="this.style.display='none'">
+              {% else %}
+                <img class="featured-card-image" src="{{ article_image_src | relative_url }}" alt="" loading="lazy" decoding="async" onerror="this.style.display='none'">
+              {% endif %}
+            {% endif %}
+          </a>
+          <div class="featured-card-copy">
+            <div class="card-topline">
+              <span>{{ post.date | date: '%b %d, %Y' }}</span>
+              {% if post.categories and post.categories.first %}<span>{{ post.categories.first }}</span>{% endif %}
+            </div>
+            <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
+            <p>{{ post.description | default: post.excerpt | strip_html | truncate: 170 }}</p>
+          </div>
+          <a class="featured-card-arrow" href="{{ post.url | relative_url }}" aria-label="Read {{ post.title }}">→</a>
+        </article>
+        {% endfor %}
+      </div>
+    </section>
   </div>
 
-  <div class="coverage-grid" id="coverage-grid">
-    {% for card in site.data.home.cards %}
-    <article class="coverage-card" data-card>
-      <button class="coverage-hit" type="button" aria-expanded="false">
-        <span class="coverage-topline">
-          <span class="coverage-index">{{ card.fallback }}</span>
-          <span class="coverage-kicker">{{ card.kicker }}</span>
-          <span class="coverage-icon coverage-icon--{{ card.icon }}" aria-hidden="true">
-            {% case card.icon %}
-            {% when "free-ai" %}
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.2"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3"/></svg>
-            {% when "workflow" %}
-            <svg viewBox="0 0 24 24"><rect class="flow-node" x="3" y="4" width="6" height="6" rx="1.5"/><rect class="flow-node" x="15" y="4" width="6" height="6" rx="1.5"/><rect class="flow-node flow-end" x="9" y="15" width="6" height="6" rx="1.5"/><path d="M9 7h6M6 10v3.5c0 1 .5 1.5 1.5 1.5H12M18 10v3.5c0 1-.5 1.5-1.5 1.5H12"/></svg>
-            {% when "automation" %}
-            <svg viewBox="0 0 24 24"><path d="M13 2 5 13h6l-1 9 8-12h-6l1-8Z"/><path d="M19.5 4.5 21 3M4.5 19.5 3 21" opacity=".65"/></svg>
-            {% when "lms" %}
-            <svg viewBox="0 0 24 24"><rect class="screen-fill" x="4" y="5" width="16" height="11" rx="2"/><path class="accent-line" d="M8 19h8M12 16v3"/><path d="M8 9h8M8 12h5"/></svg>
-            {% else %}
-            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><path d="M12 8v8M8 12h8"/></svg>
-            {% endcase %}
-          </span>
-        </span>
-        <h3>{{ card.title }}</h3>
-        <span class="coverage-meta"><span class="coverage-action">Hover to expand</span></span>
-      </button>
-      <div class="coverage-body">
-        <p>{{ card.summary }}</p>
+  <aside class="home-patch-column reveal-up reveal-delay-2">
+    <section class="panel home-patch-feed">
+      <div class="home-patch-head">
+        <div>
+          <div class="home-section-label home-section-label--inline">
+            <span>Patch Feed</span>
+          </div>
+          <p>Latest software updates and status changes.</p>
+        </div>
       </div>
-    </article>
-    {% endfor %}
-  </div>
-</section>
 
-<section class="featured-section reveal-up reveal-delay-2">
-  <div class="section-head">
-    <div class="eyebrow">Recent reads</div>
-    <h2>Articles worth starting with</h2>
-  </div>
-  <div class="featured-grid">
-    {% for post in site.posts limit:3 %}
-    <article class="featured-card">
-      <div class="card-topline">
-        <span>{{ post.date | date: '%b %d, %Y' }}</span>
-        {% if post.categories and post.categories.first %}<span>{{ post.categories.first }}</span>{% endif %}
+      {% assign update_pages = site.pages | where: "update_entry", true | sort: "update_published_at" | reverse %}
+      <div class="home-patch-list">
+        {% for item in update_pages limit:8 %}
+          {% assign reaction = item.update_consensus_label | default: item.community_reaction | default: item.current_consensus | default: 'insufficient-data' %}
+          {% assign reaction_class = reaction | downcase | replace: ' ', '-' %}
+          <a class="home-patch-item" href="{{ item.url | relative_url }}">
+            <span class="home-patch-dot home-patch-dot--{{ reaction_class }}" aria-hidden="true"></span>
+            <span class="home-patch-copy">
+              <strong>{{ item.update_feed_title | default: item.update_detail_title | default: item.title }}</strong>
+              <em>{{ reaction }} • {{ item.update_report_count | default: 0 }} reports</em>
+            </span>
+            <time>{{ item.update_published_at | date: "%b %-d" }}</time>
+          </a>
+        {% endfor %}
       </div>
-      <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
-      <p>{{ post.description | default: post.excerpt | strip_html | truncate: 150 }}</p>
-      <a class="text-link" href="{{ post.url | relative_url }}">Read article →</a>
-    </article>
-    {% endfor %}
-  </div>
+
+      <a class="home-patch-link" href="{{ '/updates/' | relative_url }}">View full Patch Feed →</a>
+    </section>
+  </aside>
 </section>
