@@ -1,0 +1,47 @@
+---
+layout: aux-update
+title: Figma Developer Logging available for Governance+ customers official update breakdown
+description: Official Figma update record captured from Figma.
+permalink: /updates/figma/figma/developer-logging-available-for-governance-customers/
+update_entry: true
+company_id: figma
+product_id: figma
+update_brand_id: figma
+update_product: Figma
+update_category: Design Workflow
+update_type: official-source
+update_source_name: Figma
+update_source_url: https://www.figma.com/release-notes/?title=developer-logging-available-for-governance-customers
+update_download_url: ''
+update_version: Developer Logging available for Governance+ customers
+update_logo_text: FIG
+update_published_at: '2026-04-23T00:00:00.000Z'
+update_last_checked: '2026-04-27T23:09:11Z'
+patch_file_size: ''
+patch_file_size_note: ''
+update_status: current
+update_feed_title: Figma Developer Logging available for Governance+ customers
+update_detail_title: Figma Developer Logging available for Governance+ customers
+update_consensus_label: Insufficient data
+update_report_count: 0
+update_consensus_confidence: Low
+quick_verdict: Figma Developer Logging available for Governance+ customers has an official AUXSAYS record. Community consensus
+  is deferred until official ingestion is stable.
+official_summary: Figma published Figma Developer Logging available for Governance+ customers.
+release_summary: Get visibility into how your org's APIs are being used.
+consensus_report: Consensus collection is deferred. This page currently reflects official-source ingestion only.
+complaint_themes: []
+status_events:
+- at: '2026-04-23T00:00:00.000Z'
+  label: Published
+  note: Official source entry detected.
+- at: '2026-04-27T23:09:11Z'
+  label: Insufficient data
+  note: AUXSAYS official-ingestion record initialized.
+official_patch_notes_source_type: rss-feed
+official_patch_notes_capture_status: captured-from-rss-feed
+official_patch_notes_source_url: https://www.figma.com/release-notes/?title=developer-logging-available-for-governance-customers
+official_patch_notes_body: Get visibility into how your org's APIs are being used.
+official_checksums_body: ''
+official_checksums_capture_status: not-present
+---
