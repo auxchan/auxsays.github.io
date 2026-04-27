@@ -5,9 +5,6 @@ on:
     branches: ["main"]
   workflow_dispatch:
 
-env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
-
 permissions:
   contents: read
   pages: write
@@ -29,24 +26,6 @@ jobs:
         with:
           ruby-version: '3.3'
 
-      - name: Setup Node for logo generation
-        uses: actions/setup-node@v4
-        with:
-          node-version: '24'
-
-      - name: Install logo generation dependencies
-        working-directory: ./auxsays
-        run: npm install --no-audit --no-fund
-
-      - name: Generate Patch Feed logos
-        working-directory: ./auxsays
-        run: npm run generate:patch-logos
-
-      - name: Install image metadata tools
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y libimage-exiftool-perl
-
       - name: Install Bundler and gems
         working-directory: ./auxsays
         run: |
@@ -55,10 +34,6 @@ jobs:
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
-
-      - name: Strip image metadata
-        working-directory: ./auxsays
-        run: bash scripts/strip_image_metadata.sh assets/img
 
       - name: Build site
         working-directory: ./auxsays

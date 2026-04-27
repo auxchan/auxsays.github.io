@@ -217,7 +217,142 @@ document.addEventListener('DOMContentLoaded', () => {
     }));
     applyPatchFeed();
   }
-  // Patch Feed source/company cards: make the full card clickable while preserving inner links.
+  // Patch Feed filters and full-card links: public Company / Software / Watchlist lanes.
+  const normalizePatchLane = (value) => {
+    const lane = String(value || '').trim().toLowerCase();
+    if (lane === 'core') return 'company';
+    if (lane === 'expansion') return 'software';
+    if (lane === 'edge') return 'watchlist';
+    return lane;
+  };
+
+  const normalizePatchStatus = (value) => {
+    const status = String(value || '').trim().toLowerCase().replace(/\s+/g, '-');
+    if (status === 'insufficient') return 'insufficient-data';
+    return status;
+  };
+
+  const patchCardsForFiltering = document.querySelectorAll('.patch-source-card, .patch-card');
+
+  const setPatchCardVisibility = (predicate) => {
+    patchCardsForFiltering.forEach((card) => {
+      const shouldShow = predicate(card);
+      card.hidden = !shouldShow;
+      card.classList.toggle('is-filter-hidden', !shouldShow);
+      card.style.display = shouldShow ? '' : 'none';
+    });
+  };
+
+  document.querySelectorAll('[data-priority]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const selectedLane = normalizePatchLane(button.getAttribute('data-priority'));
+      document.querySelectorAll('[data-priority]').forEach((btn) => btn.classList.remove('is-active'));
+      button.classList.add('is-active');
+      if (!selectedLane || selectedLane === 'all') {
+        setPatchCardVisibility(() => true);
+        return;
+      }
+      setPatchCardVisibility((card) => normalizePatchLane(card.dataset.priority) === selectedLane);
+    });
+  });
+
+  document.querySelectorAll('[data-status-filter]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const selectedStatus = normalizePatchStatus(button.getAttribute('data-status-filter'));
+      document.querySelectorAll('[data-status-filter]').forEach((btn) => btn.classList.remove('is-active'));
+      button.classList.add('is-active');
+      if (!selectedStatus || selectedStatus === 'all') {
+        setPatchCardVisibility(() => true);
+        return;
+      }
+      setPatchCardVisibility((card) => normalizePatchStatus(card.dataset.status) === selectedStatus);
+    });
+  });
+
+  document.querySelectorAll('[data-card-href]').forEach((card) => {
+    const openCard = () => {
+      const href = card.getAttribute('data-card-href');
+      if (href) window.location.href = href;
+    };
+
+    card.addEventListener('click', (event) => {
+      if (event.target.closest('a, button, input, select, textarea')) return;
+      openCard();
+    });
+
+    card.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      if (event.target.closest('a, button, input, select, textarea')) return;
+      event.preventDefault();
+      openCard();
+    });
+  });
+
+  // Patch Feed filters repair: handles category, consensus, and public lane chips.
+  const normalizeAuxPatchLane = (value) => {
+    const lane = String(value || '').trim().toLowerCase();
+    if (lane === 'core') return 'company';
+    if (lane === 'expansion') return 'software';
+    if (lane === 'edge') return 'watchlist';
+    return lane;
+  };
+
+  const normalizeAuxPatchStatus = (value) => {
+    const status = String(value || '').trim().toLowerCase().replace(/\s+/g, '-');
+    if (status === 'insufficient') return 'insufficient-data';
+    return status;
+  };
+
+  const auxPatchCards = document.querySelectorAll('.patch-source-card, .patch-card');
+  const auxPatchState = {
+    category: 'all',
+    status: 'all',
+    lane: 'all'
+  };
+
+  const applyAuxPatchFilters = () => {
+    auxPatchCards.forEach((card) => {
+      const cardCategory = String(card.dataset.category || card.dataset.type || '').toLowerCase();
+      const cardStatus = normalizeAuxPatchStatus(card.dataset.status);
+      const cardLane = normalizeAuxPatchLane(card.dataset.priority);
+      const categoryOk = auxPatchState.category === 'all' || cardCategory === auxPatchState.category;
+      const statusOk = auxPatchState.status === 'all' || cardStatus === auxPatchState.status;
+      const laneOk = auxPatchState.lane === 'all' || cardLane === auxPatchState.lane;
+      const show = categoryOk && statusOk && laneOk;
+      card.hidden = !show;
+      card.classList.toggle('is-filter-hidden', !show);
+      card.style.display = show ? '' : 'none';
+    });
+  };
+
+  document.querySelectorAll('[data-filter]').forEach((button) => {
+    button.addEventListener('click', () => {
+      auxPatchState.category = String(button.dataset.filter || 'all').toLowerCase();
+      document.querySelectorAll('[data-filter]').forEach((btn) => btn.classList.remove('is-active'));
+      button.classList.add('is-active');
+      applyAuxPatchFilters();
+    });
+  });
+
+  document.querySelectorAll('[data-status], [data-status-filter]').forEach((button) => {
+    button.addEventListener('click', () => {
+      auxPatchState.status = normalizeAuxPatchStatus(button.dataset.status || button.dataset.statusFilter || 'all');
+      document.querySelectorAll('[data-status], [data-status-filter]').forEach((btn) => btn.classList.remove('is-active'));
+      button.classList.add('is-active');
+      applyAuxPatchFilters();
+    });
+  });
+
+  document.querySelectorAll('[data-lane-filter], [data-priority]').forEach((button) => {
+    if (button.classList.contains('patch-source-card') || button.classList.contains('patch-card')) return;
+    button.addEventListener('click', () => {
+      auxPatchState.lane = normalizeAuxPatchLane(button.dataset.laneFilter || button.dataset.priority || 'all');
+      document.querySelectorAll('[data-lane-filter], .patch-chip[data-priority]').forEach((btn) => btn.classList.remove('is-active'));
+      button.classList.add('is-active');
+      applyAuxPatchFilters();
+    });
+  });
+
   document.querySelectorAll('[data-card-href]').forEach((card) => {
     const openCard = () => {
       const href = card.getAttribute('data-card-href');

@@ -1,0 +1,24 @@
+Literal proof:
+contains <div class="eyebrow">Company Radar</div>: PASS
+contains Watchlist lane button: PASS
+contains Company lane button: PASS
+contains Software lane button: PASS
+contains normalized source priority metadata: PASS
+contains source logo image markup: PASS
+contains source_cadence_display_label: PASS
+does not contain raw cadence chip: PASS
+does not contain >Edge</button>: PASS
+does not contain >Core</button>: PASS
+does not contain >Expansion</button>: PASS
+JS filter repair present: PASS
+CSS rebuild marker present: PASS
+CSS brace balance: PASS
+
+Validation:
+YAML _data/patch_sources.yml: PASS
+YAML _config.yml: PASS
+front matter 2026-04-02-obs-studio-32-1-1.md: PASS
+front matter 2026-04-14-davinci-resolve-21-public-beta-1.md: PASS
+front matter 2026-04-14-davinci-resolve-21.md: PASS
+front matter 2026-04-21-obs-studio-32-1-2.md: PASS
+JS syntax assets/js/auxsays.js: PASS
