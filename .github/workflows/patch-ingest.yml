@@ -1,0 +1,68 @@
+name: AUXSAYS Patch Ingestion
+
+on:
+  workflow_dispatch:
+    inputs:
+      source:
+        description: "Optional product_id or company_id to ingest"
+        required: false
+        type: string
+      dry_run:
+        description: "Fetch and report without writing records"
+        required: false
+        default: false
+        type: boolean
+  schedule:
+    - cron: "17 */6 * * *"
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+permissions:
+  contents: write
+
+jobs:
+  ingest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install ingestion dependencies
+        run: pip install -r auxsays/scripts/requirements-ingest.txt
+
+      - name: Run enabled patch ingestion
+        if: ${{ github.event.inputs.source == '' || github.event.inputs.source == null }}
+        run: |
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            python auxsays/scripts/patch_ingest.py --dry-run
+          else
+            python auxsays/scripts/patch_ingest.py
+          fi
+
+      - name: Run selected patch ingestion
+        if: ${{ github.event.inputs.source != '' && github.event.inputs.source != null }}
+        run: |
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            python auxsays/scripts/patch_ingest.py --source "${{ github.event.inputs.source }}" --dry-run
+          else
+            python auxsays/scripts/patch_ingest.py --source "${{ github.event.inputs.source }}"
+          fi
+
+      - name: Commit generated patch records
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          if git diff --quiet; then
+            echo "No content changes."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add auxsays/_data/patch_ingest_state.json auxsays/updates/generated/*.md
+          git commit -m "Ingest official patch records"
+          git push

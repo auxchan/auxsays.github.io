@@ -1,39 +1,19 @@
-name: DaVinci Resolve Updates
+name: DaVinci Resolve Updates Deprecated
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "17 */12 * * *"
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  davinci-updates:
+  deprecated:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-
-      - name: Generate / refresh DaVinci update entry
-        run: python auxsays/scripts/fetch_davinci_updates.py
-
-      - name: Commit changes if needed
+      - name: Notice
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add auxsays/updates/generated/*.md
-          if git diff --cached --quiet; then
-            echo "No changes to commit"
-          else
-            git commit -m "Update DaVinci Resolve release entry"
-            git push
-          fi
+          echo "DaVinci ingestion is disabled until the Blackmagic parser is hardened."
+          echo "Use .github/workflows/patch-ingest.yml for the official ingestion framework."

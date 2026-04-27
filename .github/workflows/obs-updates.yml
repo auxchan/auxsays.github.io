@@ -1,39 +1,19 @@
-name: OBS Updates Consensus Pilot
+name: OBS Updates Consensus Pilot Deprecated
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: '17 */6 * * *'
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  generate:
+  deprecated:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Generate OBS update page
-        run: python auxsays/scripts/fetch_obs_updates.py
-
-      - name: Commit generated updates
+      - name: Notice
         run: |
-          if git diff --quiet; then
-            echo "No content changes."
-            exit 0
-          fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add auxsays/updates/generated auxsays/updates/index.md
-          git commit -m "Update OBS update digest"
-          git push
+          echo "OBS scheduled ingestion has moved to .github/workflows/patch-ingest.yml"
+          echo "The old script is retained for reference only."

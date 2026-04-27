@@ -1,0 +1,2735 @@
+- company_id: openai
+  product_id: openai-chatgpt
+  company: OpenAI
+  software: ChatGPT / OpenAI
+  public_category: AI Tools
+  enabled: false
+  recommended_priority: P2 build later
+  ingestion:
+    type: html_changelog
+    adapter: html_changelog
+    official_url: https://help.openai.com/en/articles/6825453-chatgpt-release-notes
+    secondary_official_url: null
+    feed_url: null
+    api_url: null
+    parser_profile: openai_release_notes
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: false
+    scrape_feasibility: High
+    reliability: High
+    breakage_risk: Medium
+    polling_frequency: 12h
+    update_detection_method: title-date comparison
+    extractable_fields:
+      version: false
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: false
+      file_size: false
+      checksum: false
+      known_issues: false
+      platform_specific_installers: false
+      archived_release_history: true
+    keywords:
+    - release
+    - update
+    - changelog
+    - patch
+    - version
+    - beta
+    - driver
+    - studio
+    - copilot
+  generated_record:
+    canonical_url_pattern: /updates/openai/openai-chatgpt/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - OpenAI Help Center
+    - OpenAI community/forum signals
+    - Reddit
+    difficulty: TBD
+    defer_until_official_ingestion_stable: true
+- company_id: anthropic
+  product_id: anthropic-claude
+  company: Anthropic
+  software: Claude
+  public_category: AI Tools
+  enabled: false
+  recommended_priority: P2 build later
+  ingestion:
+    type: html_changelog
+    adapter: html_changelog
+    official_url: https://support.claude.com/en/articles/12138966-release-notes
+    secondary_official_url: null
+    feed_url: null
+    api_url: null
+    parser_profile: anthropic_release_notes
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: false
+    scrape_feasibility: High
+    reliability: High
+    breakage_risk: Medium
+    polling_frequency: 12h
+    update_detection_method: title-date comparison
+    extractable_fields:
+      version: false
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: false
+      file_size: false
+      checksum: false
+      known_issues: false
+      platform_specific_installers: false
+      archived_release_history: true
+    keywords:
+    - release
+    - update
+    - changelog
+    - patch
+    - version
+    - beta
+    - driver
+    - studio
+    - copilot
+  generated_record:
+    canonical_url_pattern: /updates/anthropic/anthropic-claude/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - Claude release notes
+    - Anthropic support/community signals
+    - Reddit
+    difficulty: TBD
+    defer_until_official_ingestion_stable: true
+- company_id: google
+  product_id: google-gemini
+  company: Google
+  software: Gemini
+  public_category: AI Tools
+  enabled: false
+  recommended_priority: P2 build later
+  ingestion:
+    type: html_blog
+    adapter: html_blog
+    official_url: https://gemini.google/updates/
+    secondary_official_url: null
+    feed_url: null
+    api_url: null
+    parser_profile: google_gemini_updates
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: false
+    scrape_feasibility: Medium
+    reliability: Medium
+    breakage_risk: Medium-High
+    polling_frequency: 12h
+    update_detection_method: title-date comparison
+    extractable_fields:
+      version: false
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: false
+      file_size: false
+      checksum: false
+      known_issues: false
+      platform_specific_installers: false
+      archived_release_history: false
+    keywords:
+    - release
+    - update
+    - changelog
+    - patch
+    - version
+    - beta
+    - driver
+    - studio
+    - copilot
+  generated_record:
+    canonical_url_pattern: /updates/google/google-gemini/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - Google Help Community
+    - Reddit
+    - Product forums
+    difficulty: TBD
+    defer_until_official_ingestion_stable: true
+- company_id: perplexity
+  product_id: perplexity
+  company: Perplexity
+  software: Perplexity
+  public_category: AI Tools
+  enabled: false
+  recommended_priority: P3 monitor manually
+  ingestion:
+    type: html_blog
+    adapter: html_blog
+    official_url: https://www.perplexity.ai/hub/blog
+    secondary_official_url: null
+    feed_url: null
+    api_url: null
+    parser_profile: blog_keyword_filter
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: true
+    scrape_feasibility: Medium-Low
+    reliability: Medium
+    breakage_risk: High
+    polling_frequency: 24h
+    update_detection_method: title-date comparison
+    extractable_fields:
+      version: false
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: false
+      file_size: false
+      checksum: false
+      known_issues: false
+      platform_specific_installers: false
+      archived_release_history: false
+    keywords:
+    - release
+    - update
+    - changelog
+    - patch
+    - version
+    - beta
+    - driver
+    - studio
+    - copilot
+  generated_record:
+    canonical_url_pattern: /updates/perplexity/perplexity/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - Perplexity blog
+    - Reddit
+    - User forum/community
+    difficulty: TBD
+    defer_until_official_ingestion_stable: true
+- company_id: midjourney
+  product_id: midjourney
+  company: Midjourney
+  software: Midjourney
+  public_category: AI Image
+  enabled: false
+  recommended_priority: P3 monitor manually
+  ingestion:
+    type: manual_watch
+    adapter: manual_watch
+    official_url: https://www.midjourney.com/updates/
+    secondary_official_url: null
+    feed_url: null
+    api_url: null
+    parser_profile: manual_watch
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: true
+    scrape_feasibility: Low
+    reliability: Medium
+    breakage_risk: High
+    polling_frequency: manual
+    update_detection_method: manual review
+    extractable_fields:
+      version: false
+      release_date: false
+      title: false
+      release_note_body: false
+      download_url: false
+      file_size: false
+      checksum: false
+      known_issues: false
+      platform_specific_installers: false
+      archived_release_history: false
+    keywords: null
+  generated_record:
+    canonical_url_pattern: /updates/midjourney/midjourney/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - Midjourney Discord
+    - Reddit
+    - Official announcements
+    difficulty: TBD
+    defer_until_official_ingestion_stable: true
+- company_id: stability-ai
+  product_id: stability-ai
+  company: Stability AI
+  software: Stable Diffusion / Stable Audio
+  public_category: AI Image
+  enabled: false
+  recommended_priority: P2 build later
+  ingestion:
+    type: html_blog
+    adapter: html_blog
+    official_url: https://stability.ai/news
+    secondary_official_url: null
+    feed_url: null
+    api_url: null
+    parser_profile: blog_keyword_filter
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: false
+    scrape_feasibility: Medium
+    reliability: Medium
+    breakage_risk: Medium
+    polling_frequency: 24h
+    update_detection_method: title-date comparison
+    extractable_fields:
+      version: false
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: false
+      file_size: false
+      checksum: false
+      known_issues: false
+      platform_specific_installers: false
+      archived_release_history: false
+    keywords:
+    - release
+    - update
+    - changelog
+    - patch
+    - version
+    - beta
+    - driver
+    - studio
+    - copilot
+  generated_record:
+    canonical_url_pattern: /updates/stability-ai/stability-ai/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - Stability AI news
+    - GitHub where applicable
+    - Reddit
+    difficulty: TBD
+    defer_until_official_ingestion_stable: true
+- company_id: runway
+  product_id: runway
+  company: Runway
+  software: Runway
+  public_category: AI Video
+  enabled: false
+  recommended_priority: P3 monitor manually
+  ingestion:
+    type: html_blog
+    adapter: html_blog
+    official_url: https://runwayml.com/research/
+    secondary_official_url: null
+    feed_url: null
+    api_url: null
+    parser_profile: research_blog_keyword_filter
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: true
+    scrape_feasibility: Medium-Low
+    reliability: Medium
+    breakage_risk: Medium-High
+    polling_frequency: 24h
+    update_detection_method: title-date comparison
+    extractable_fields:
+      version: false
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: false
+      file_size: false
+      checksum: false
+      known_issues: false
+      platform_specific_installers: false
+      archived_release_history: false
+    keywords:
+    - release
+    - update
+    - changelog
+    - patch
+    - version
+    - beta
+    - driver
+    - studio
+    - copilot
+  generated_record:
+    canonical_url_pattern: /updates/runway/runway/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - Runway community
+    - Reddit
+    - Official socials
+    difficulty: TBD
+    defer_until_official_ingestion_stable: true
+- company_id: pika
+  product_id: pika
+  company: Pika
+  software: Pika
+  public_category: AI Video
+  enabled: false
+  recommended_priority: P4 not worth automating yet
+  ingestion:
+    type: manual_watch
+    adapter: manual_watch
+    official_url: https://pika.art/
+    secondary_official_url: null
+    feed_url: null
+    api_url: null
+    parser_profile: manual_watch
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: true
+    scrape_feasibility: Manual only
+    reliability: Low
+    breakage_risk: High
+    polling_frequency: manual
+    update_detection_method: manual review
+    extractable_fields:
+      version: false
+      release_date: false
+      title: false
+      release_note_body: false
+      download_url: false
+      file_size: false
+      checksum: false
+      known_issues: false
+      platform_specific_installers: false
+      archived_release_history: false
+    keywords: null
+  generated_record:
+    canonical_url_pattern: /updates/pika/pika/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - Pika community
+    - Official announcements
+    - Reddit
+    difficulty: TBD
+    defer_until_official_ingestion_stable: true
+- company_id: lottiefiles
+  product_id: lottiefiles
+  company: LottieFiles
+  software: LottieFiles
+  public_category: Design Workflow
+  enabled: false
+  recommended_priority: P3 monitor manually
+  ingestion:
+    type: html_blog
+    adapter: html_blog
+    official_url: https://lottiefiles.com/blog
+    secondary_official_url: null
+    feed_url: null
+    api_url: null
+    parser_profile: blog_keyword_filter
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: false
+    scrape_feasibility: Medium
+    reliability: Medium
+    breakage_risk: Medium
+    polling_frequency: 24h
+    update_detection_method: title-date comparison
+    extractable_fields:
+      version: false
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: false
+      file_size: false
+      checksum: false
+      known_issues: false
+      platform_specific_installers: false
+      archived_release_history: false
+    keywords:
+    - release
+    - update
+    - changelog
+    - patch
+    - version
+    - beta
+    - driver
+    - studio
+    - copilot
+  generated_record:
+    canonical_url_pattern: /updates/lottiefiles/lottiefiles/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - LottieFiles community
+    - Blog comments if available
+    - Reddit
+    difficulty: TBD
+    defer_until_official_ingestion_stable: true
+- company_id: figma
+  product_id: figma
+  company: Figma
+  software: Figma
+  public_category: Design Workflow
+  enabled: true
+  recommended_priority: P1 build now
+  ingestion:
+    type: rss
+    adapter: rss_feed
+    official_url: https://www.figma.com/release-notes/
+    secondary_official_url: https://forum.figma.com/product-updates-3
+    feed_url: null
+    api_url: null
+    parser_profile: rss_release_notes
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: false
+    scrape_feasibility: High
+    reliability: High
+    breakage_risk: Low
+    polling_frequency: 12h
+    update_detection_method: RSS GUID/title-date comparison
+    extractable_fields:
+      version: false
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: false
+      file_size: false
+      checksum: false
+      known_issues: false
+      platform_specific_installers: false
+      archived_release_history: true
+    keywords:
+    - release
+    - update
+    - changelog
+    - patch
+    - version
+    - beta
+    - driver
+    - studio
+    - copilot
+  generated_record:
+    canonical_url_pattern: /updates/figma/figma/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - Figma community forum
+    - Reddit
+    - Figma forum product updates
+    difficulty: Medium
+    defer_until_official_ingestion_stable: true
+- company_id: canva
+  product_id: canva
+  company: Canva
+  software: Canva
+  public_category: Design Workflow
+  enabled: false
+  recommended_priority: P3 monitor manually
+  ingestion:
+    type: html_blog
+    adapter: html_blog
+    official_url: https://www.canva.com/newsroom/
+    secondary_official_url: null
+    feed_url: null
+    api_url: null
+    parser_profile: newsroom_keyword_filter
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: true
+    scrape_feasibility: Medium-Low
+    reliability: Medium
+    breakage_risk: High
+    polling_frequency: 24h
+    update_detection_method: title-date comparison
+    extractable_fields:
+      version: false
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: false
+      file_size: false
+      checksum: false
+      known_issues: false
+      platform_specific_installers: false
+      archived_release_history: false
+    keywords:
+    - release
+    - update
+    - changelog
+    - patch
+    - version
+    - beta
+    - driver
+    - studio
+    - copilot
+  generated_record:
+    canonical_url_pattern: /updates/canva/canva/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - Canva newsroom
+    - Canva community
+    - Reddit
+    difficulty: TBD
+    defer_until_official_ingestion_stable: true
+- company_id: adobe
+  product_id: adobe-creative-cloud
+  company: Adobe
+  software: Creative Cloud / Firefly
+  public_category: Video / Production
+  enabled: false
+  recommended_priority: P2 build later
+  ingestion:
+    type: html_changelog
+    adapter: html_changelog
+    official_url: https://helpx.adobe.com/creative-cloud/release-note/cc-release-notes.html
+    secondary_official_url: null
+    feed_url: null
+    api_url: null
+    parser_profile: adobe_release_notes
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: false
+    scrape_feasibility: Medium
+    reliability: High
+    breakage_risk: Medium
+    polling_frequency: 24h
+    update_detection_method: version/date comparison
+    extractable_fields:
+      version: true
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: false
+      file_size: false
+      checksum: false
+      known_issues: true
+      platform_specific_installers: false
+      archived_release_history: true
+    keywords:
+    - release
+    - update
+    - changelog
+    - patch
+    - version
+    - beta
+    - driver
+    - studio
+    - copilot
+  generated_record:
+    canonical_url_pattern: /updates/adobe/adobe-creative-cloud/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - Adobe community
+    - Adobe forums
+    - Reddit
+    difficulty: TBD
+    defer_until_official_ingestion_stable: true
+- company_id: blackmagic-design
+  product_id: blackmagic-davinci
+  company: Blackmagic Design
+  software: DaVinci Resolve
+  public_category: Video / Production
+  enabled: false
+  recommended_priority: P2 build later
+  ingestion:
+    type: html_blog
+    adapter: html_blog
+    official_url: https://www.blackmagicdesign.com/media
+    secondary_official_url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
+    feed_url: null
+    api_url: null
+    parser_profile: blackmagic_media_keyword_filter
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: false
+    scrape_feasibility: Medium
+    reliability: Medium
+    breakage_risk: Medium-High
+    polling_frequency: 12h
+    update_detection_method: title-date keyword filter
+    extractable_fields:
+      version: false
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: true
+      file_size: false
+      checksum: false
+      known_issues: false
+      platform_specific_installers: false
+      archived_release_history: false
+    keywords:
+    - release
+    - update
+    - changelog
+    - patch
+    - version
+    - beta
+    - driver
+    - studio
+    - copilot
+  generated_record:
+    canonical_url_pattern: /updates/blackmagic-design/blackmagic-davinci/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - Blackmagic forum
+    - Reddit
+    - Official support forum
+    difficulty: TBD
+    defer_until_official_ingestion_stable: true
+- company_id: obs-project
+  product_id: obs-studio
+  company: OBS Project
+  software: OBS Studio
+  public_category: Streaming
+  enabled: true
+  recommended_priority: P1 build now
+  ingestion:
+    type: github_releases
+    adapter: github_releases
+    official_url: https://github.com/obsproject/obs-studio/releases
+    secondary_official_url: https://obsproject.com/download
+    feed_url: null
+    api_url: https://api.github.com/repos/obsproject/obs-studio/releases
+    parser_profile: github_release_standard
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: assets
+    checksum_selector: '## Checksums'
+    requires_javascript: false
+    scrape_feasibility: High
+    reliability: High
+    breakage_risk: Low
+    polling_frequency: 6h
+    update_detection_method: GitHub release tag
+    extractable_fields:
+      version: true
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: true
+      file_size: true
+      checksum: true
+      known_issues: false
+      platform_specific_installers: true
+      archived_release_history: true
+    keywords: null
+  generated_record:
+    canonical_url_pattern: /updates/obs-project/obs-studio/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - GitHub Issues
+    - GitHub Discussions
+    - OBS Forum
+    - Reddit
+    difficulty: Medium
+    defer_until_official_ingestion_stable: true
+- company_id: twitch
+  product_id: twitch
+  company: Twitch
+  software: Twitch
+  public_category: Creator Platforms
+  enabled: false
+  recommended_priority: P3 monitor manually
+  ingestion:
+    type: html_blog
+    adapter: html_blog
+    official_url: https://blog.twitch.tv/
+    secondary_official_url: null
+    feed_url: null
+    api_url: null
+    parser_profile: blog_keyword_filter
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: true
+    scrape_feasibility: Medium-Low
+    reliability: Medium
+    breakage_risk: High
+    polling_frequency: 24h
+    update_detection_method: title-date comparison
+    extractable_fields:
+      version: false
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: false
+      file_size: false
+      checksum: false
+      known_issues: false
+      platform_specific_installers: false
+      archived_release_history: false
+    keywords:
+    - release
+    - update
+    - changelog
+    - patch
+    - version
+    - beta
+    - driver
+    - studio
+    - copilot
+  generated_record:
+    canonical_url_pattern: /updates/twitch/twitch/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - Twitch UserVoice
+    - Twitch blog
+    - Reddit
+    difficulty: TBD
+    defer_until_official_ingestion_stable: true
+- company_id: youtube
+  product_id: youtube
+  company: YouTube
+  software: YouTube / YouTube Studio
+  public_category: Creator Platforms
+  enabled: false
+  recommended_priority: P3 monitor manually
+  ingestion:
+    type: html_blog
+    adapter: html_blog
+    official_url: https://blog.youtube/news-and-events/
+    secondary_official_url: null
+    feed_url: null
+    api_url: null
+    parser_profile: blog_keyword_filter
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: true
+    scrape_feasibility: Medium-Low
+    reliability: Medium
+    breakage_risk: High
+    polling_frequency: 24h
+    update_detection_method: title-date comparison
+    extractable_fields:
+      version: false
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: false
+      file_size: false
+      checksum: false
+      known_issues: false
+      platform_specific_installers: false
+      archived_release_history: false
+    keywords:
+    - release
+    - update
+    - changelog
+    - patch
+    - version
+    - beta
+    - driver
+    - studio
+    - copilot
+  generated_record:
+    canonical_url_pattern: /updates/youtube/youtube/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - YouTube Help Community
+    - Creator Insider
+    - Reddit
+    difficulty: TBD
+    defer_until_official_ingestion_stable: true
+- company_id: kick
+  product_id: kick
+  company: Kick
+  software: Kick
+  public_category: Creator Platforms
+  enabled: false
+  recommended_priority: P4 not worth automating yet
+  ingestion:
+    type: manual_watch
+    adapter: manual_watch
+    official_url: https://kick.com/blog
+    secondary_official_url: null
+    feed_url: null
+    api_url: null
+    parser_profile: manual_watch
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: true
+    scrape_feasibility: Low
+    reliability: Low-Medium
+    breakage_risk: High
+    polling_frequency: manual
+    update_detection_method: manual review
+    extractable_fields:
+      version: false
+      release_date: false
+      title: false
+      release_note_body: false
+      download_url: false
+      file_size: false
+      checksum: false
+      known_issues: false
+      platform_specific_installers: false
+      archived_release_history: false
+    keywords: null
+  generated_record:
+    canonical_url_pattern: /updates/kick/kick/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - Kick blog
+    - Creator community
+    - Reddit
+    difficulty: TBD
+    defer_until_official_ingestion_stable: true
+- company_id: rumble
+  product_id: rumble
+  company: Rumble
+  software: Rumble
+  public_category: Creator Platforms
+  enabled: false
+  recommended_priority: P3 monitor manually
+  ingestion:
+    type: html_blog
+    adapter: html_blog
+    official_url: https://corp.rumble.com/blog/
+    secondary_official_url: null
+    feed_url: null
+    api_url: null
+    parser_profile: blog_keyword_filter
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: false
+    scrape_feasibility: Medium-Low
+    reliability: Medium
+    breakage_risk: High
+    polling_frequency: 24h
+    update_detection_method: title-date comparison
+    extractable_fields:
+      version: false
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: false
+      file_size: false
+      checksum: false
+      known_issues: false
+      platform_specific_installers: false
+      archived_release_history: false
+    keywords:
+    - release
+    - update
+    - changelog
+    - patch
+    - version
+    - beta
+    - driver
+    - studio
+    - copilot
+  generated_record:
+    canonical_url_pattern: /updates/rumble/rumble/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - Rumble blog
+    - Rumble community
+    - Reddit
+    difficulty: TBD
+    defer_until_official_ingestion_stable: true
+- company_id: epic-games
+  product_id: epic-unreal
+  company: Epic Games
+  software: Unreal Engine
+  public_category: Game / Engine
+  enabled: false
+  recommended_priority: P2 build later
+  ingestion:
+    type: html_changelog
+    adapter: html_changelog
+    official_url: https://dev.epicgames.com/documentation/en-us/unreal-engine/whats-new
+    secondary_official_url: null
+    feed_url: null
+    api_url: null
+    parser_profile: unreal_docs_whats_new
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: false
+    scrape_feasibility: Medium
+    reliability: High
+    breakage_risk: Medium
+    polling_frequency: 24h
+    update_detection_method: version/page comparison
+    extractable_fields:
+      version: false
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: false
+      file_size: false
+      checksum: false
+      known_issues: false
+      platform_specific_installers: false
+      archived_release_history: true
+    keywords:
+    - release
+    - update
+    - changelog
+    - patch
+    - version
+    - beta
+    - driver
+    - studio
+    - copilot
+  generated_record:
+    canonical_url_pattern: /updates/epic-games/epic-unreal/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - Epic Developer Community
+    - Unreal forums
+    - Reddit
+    difficulty: TBD
+    defer_until_official_ingestion_stable: true
+- company_id: unity
+  product_id: unity
+  company: Unity
+  software: Unity
+  public_category: Game / Engine
+  enabled: false
+  recommended_priority: P2 build later
+  ingestion:
+    type: html_changelog
+    adapter: html_changelog
+    official_url: https://unity.com/releases
+    secondary_official_url: null
+    feed_url: null
+    api_url: null
+    parser_profile: unity_releases
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: false
+    scrape_feasibility: Medium-High
+    reliability: High
+    breakage_risk: Medium
+    polling_frequency: 24h
+    update_detection_method: version comparison
+    extractable_fields:
+      version: true
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: true
+      file_size: false
+      checksum: false
+      known_issues: true
+      platform_specific_installers: false
+      archived_release_history: true
+    keywords:
+    - release
+    - update
+    - changelog
+    - patch
+    - version
+    - beta
+    - driver
+    - studio
+    - copilot
+  generated_record:
+    canonical_url_pattern: /updates/unity/unity/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - Unity discussions
+    - Unity issue tracker
+    - Reddit
+    difficulty: TBD
+    defer_until_official_ingestion_stable: true
+- company_id: valve
+  product_id: steam
+  company: Valve
+  software: Steam
+  public_category: Game Platforms
+  enabled: false
+  recommended_priority: P2 build later
+  ingestion:
+    type: official_forum
+    adapter: official_forum_watch
+    official_url: https://store.steampowered.com/news/group/4145017
+    secondary_official_url: null
+    feed_url: null
+    api_url: null
+    parser_profile: steam_news_group
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: false
+    scrape_feasibility: Medium
+    reliability: Medium
+    breakage_risk: Medium
+    polling_frequency: 12h
+    update_detection_method: title-date comparison
+    extractable_fields:
+      version: false
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: false
+      file_size: false
+      checksum: false
+      known_issues: false
+      platform_specific_installers: false
+      archived_release_history: false
+    keywords: null
+  generated_record:
+    canonical_url_pattern: /updates/valve/steam/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - Steam discussions
+    - Steam news
+    - Reddit
+    difficulty: TBD
+    defer_until_official_ingestion_stable: true
+- company_id: nvidia
+  product_id: nvidia
+  company: NVIDIA
+  software: NVIDIA App / GeForce / Studio
+  public_category: Hardware / Drivers
+  enabled: false
+  recommended_priority: P2 build later
+  ingestion:
+    type: hybrid
+    adapter: html_blog
+    official_url: https://www.nvidia.com/en-us/geforce/news/
+    secondary_official_url: https://www.nvidia.com/en-us/geforce/drivers/
+    feed_url: null
+    api_url: null
+    parser_profile: nvidia_driver_news_filter
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: false
+    scrape_feasibility: Medium
+    reliability: Medium
+    breakage_risk: Medium-High
+    polling_frequency: 12h
+    update_detection_method: title-date plus driver version filter
+    extractable_fields:
+      version: false
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: false
+      file_size: false
+      checksum: false
+      known_issues: true
+      platform_specific_installers: false
+      archived_release_history: false
+    keywords:
+    - release
+    - update
+    - changelog
+    - patch
+    - version
+    - beta
+    - driver
+    - studio
+    - copilot
+  generated_record:
+    canonical_url_pattern: /updates/nvidia/nvidia/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - NVIDIA forums
+    - Reddit
+    - Steam forums for driver regressions
+    difficulty: TBD
+    defer_until_official_ingestion_stable: true
+- company_id: amd
+  product_id: amd
+  company: AMD
+  software: AMD Software / Radeon
+  public_category: Hardware / Drivers
+  enabled: false
+  recommended_priority: P2 build later
+  ingestion:
+    type: download_portal
+    adapter: download_portal_snapshot
+    official_url: https://www.amd.com/en/support/download/drivers.html
+    secondary_official_url: https://www.amd.com/en/support/download/drivers.html
+    feed_url: null
+    api_url: null
+    parser_profile: amd_driver_portal
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: true
+    scrape_feasibility: Medium
+    reliability: High
+    breakage_risk: Medium
+    polling_frequency: 12h
+    update_detection_method: version/snapshot comparison
+    extractable_fields:
+      version: true
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: true
+      file_size: false
+      checksum: false
+      known_issues: true
+      platform_specific_installers: true
+      archived_release_history: false
+    keywords: null
+  generated_record:
+    canonical_url_pattern: /updates/amd/amd/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - AMD community
+    - Reddit
+    - Steam forums
+    difficulty: TBD
+    defer_until_official_ingestion_stable: true
+- company_id: intel
+  product_id: intel-arc
+  company: Intel
+  software: Intel Graphics / Arc
+  public_category: Hardware / Drivers
+  enabled: false
+  recommended_priority: P2 build later
+  ingestion:
+    type: download_portal
+    adapter: download_portal_snapshot
+    official_url: https://www.intel.com/content/www/us/en/download-center/home.html
+    secondary_official_url: https://www.intel.com/content/www/us/en/download-center/home.html
+    feed_url: null
+    api_url: null
+    parser_profile: intel_download_center
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: true
+    scrape_feasibility: Medium
+    reliability: High
+    breakage_risk: Medium
+    polling_frequency: 12h
+    update_detection_method: version/snapshot comparison
+    extractable_fields:
+      version: true
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: true
+      file_size: false
+      checksum: false
+      known_issues: true
+      platform_specific_installers: true
+      archived_release_history: false
+    keywords: null
+  generated_record:
+    canonical_url_pattern: /updates/intel/intel-arc/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - Intel community
+    - Reddit
+    - Steam forums
+    difficulty: TBD
+    defer_until_official_ingestion_stable: true
+- company_id: blender-foundation
+  product_id: blender
+  company: Blender Foundation
+  software: Blender
+  public_category: Video / Production
+  enabled: false
+  recommended_priority: P2 build later
+  ingestion:
+    type: html_changelog
+    adapter: html_changelog
+    official_url: https://www.blender.org/download/releases/
+    secondary_official_url: null
+    feed_url: null
+    api_url: null
+    parser_profile: blender_releases
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: false
+    scrape_feasibility: Medium-High
+    reliability: High
+    breakage_risk: Medium
+    polling_frequency: 24h
+    update_detection_method: version/date comparison
+    extractable_fields:
+      version: true
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: true
+      file_size: false
+      checksum: false
+      known_issues: false
+      platform_specific_installers: false
+      archived_release_history: true
+    keywords:
+    - release
+    - update
+    - changelog
+    - patch
+    - version
+    - beta
+    - driver
+    - studio
+    - copilot
+  generated_record:
+    canonical_url_pattern: /updates/blender-foundation/blender/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - Developer.blender.org
+    - Blender Artists
+    - Reddit
+    difficulty: TBD
+    defer_until_official_ingestion_stable: true
+- company_id: comfyui
+  product_id: comfyui
+  company: ComfyUI
+  software: ComfyUI
+  public_category: AI Image
+  enabled: true
+  recommended_priority: P1 build now
+  ingestion:
+    type: github_releases
+    adapter: github_releases
+    official_url: https://github.com/comfyanonymous/ComfyUI/releases
+    secondary_official_url: null
+    feed_url: null
+    api_url: https://api.github.com/repos/Comfy-Org/ComfyUI/releases
+    parser_profile: github_release_standard
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: assets
+    checksum_selector: '## Checksums'
+    requires_javascript: false
+    scrape_feasibility: High
+    reliability: High
+    breakage_risk: Low
+    polling_frequency: 12h
+    update_detection_method: GitHub release tag
+    extractable_fields:
+      version: true
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: true
+      file_size: true
+      checksum: true
+      known_issues: false
+      platform_specific_installers: true
+      archived_release_history: true
+    keywords: null
+  generated_record:
+    canonical_url_pattern: /updates/comfyui/comfyui/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - GitHub Issues
+    - GitHub Discussions
+    - Reddit
+    - ComfyUI community
+    difficulty: Medium
+    defer_until_official_ingestion_stable: true
+- company_id: hugging-face
+  product_id: hugging-face
+  company: Hugging Face
+  software: Hugging Face
+  public_category: Dev / Web
+  enabled: false
+  recommended_priority: P3 monitor manually
+  ingestion:
+    type: html_blog
+    adapter: html_blog
+    official_url: https://huggingface.co/blog
+    secondary_official_url: null
+    feed_url: null
+    api_url: null
+    parser_profile: blog_keyword_filter
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: false
+    scrape_feasibility: Medium
+    reliability: Medium
+    breakage_risk: Medium
+    polling_frequency: 24h
+    update_detection_method: title-date comparison
+    extractable_fields:
+      version: false
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: false
+      file_size: false
+      checksum: false
+      known_issues: false
+      platform_specific_installers: false
+      archived_release_history: false
+    keywords:
+    - release
+    - update
+    - changelog
+    - patch
+    - version
+    - beta
+    - driver
+    - studio
+    - copilot
+  generated_record:
+    canonical_url_pattern: /updates/hugging-face/hugging-face/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - Hugging Face forums
+    - GitHub where applicable
+    - Reddit
+    difficulty: TBD
+    defer_until_official_ingestion_stable: true
+- company_id: github
+  product_id: github
+  company: GitHub
+  software: GitHub / Copilot
+  public_category: Dev / Web
+  enabled: true
+  recommended_priority: P1 build now
+  ingestion:
+    type: rss
+    adapter: rss_feed
+    official_url: https://github.blog/changelog/
+    secondary_official_url: https://github.blog/changelog/label/copilot/
+    feed_url: https://github.blog/changelog/feed/
+    api_url: null
+    parser_profile: github_changelog_feed
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: false
+    scrape_feasibility: High
+    reliability: High
+    breakage_risk: Low
+    polling_frequency: 12h
+    update_detection_method: RSS GUID/title-date comparison
+    extractable_fields:
+      version: false
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: false
+      file_size: false
+      checksum: false
+      known_issues: false
+      platform_specific_installers: false
+      archived_release_history: true
+    keywords:
+    - release
+    - update
+    - changelog
+    - patch
+    - version
+    - beta
+    - driver
+    - studio
+    - copilot
+  generated_record:
+    canonical_url_pattern: /updates/github/github/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - GitHub Community
+    - GitHub Issues where applicable
+    - Reddit
+    difficulty: Medium
+    defer_until_official_ingestion_stable: true
+- company_id: cloudflare
+  product_id: cloudflare
+  company: Cloudflare
+  software: Cloudflare
+  public_category: Dev / Web
+  enabled: false
+  recommended_priority: P2 build later
+  ingestion:
+    type: rss
+    adapter: rss_feed
+    official_url: https://blog.cloudflare.com/
+    secondary_official_url: null
+    feed_url: https://blog.cloudflare.com/rss/
+    api_url: null
+    parser_profile: cloudflare_blog_feed
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: false
+    scrape_feasibility: Medium-High
+    reliability: High
+    breakage_risk: Medium
+    polling_frequency: 24h
+    update_detection_method: RSS GUID/title-date comparison
+    extractable_fields:
+      version: false
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: false
+      file_size: false
+      checksum: false
+      known_issues: false
+      platform_specific_installers: false
+      archived_release_history: true
+    keywords:
+    - release
+    - update
+    - changelog
+    - patch
+    - version
+    - beta
+    - driver
+    - studio
+    - copilot
+  generated_record:
+    canonical_url_pattern: /updates/cloudflare/cloudflare/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - Cloudflare community
+    - GitHub where applicable
+    - Reddit
+    difficulty: TBD
+    defer_until_official_ingestion_stable: true
+- company_id: netlify
+  product_id: netlify
+  company: Netlify
+  software: Netlify
+  public_category: Dev / Web
+  enabled: true
+  recommended_priority: P1 build now
+  ingestion:
+    type: html_changelog
+    adapter: html_changelog
+    official_url: https://www.netlify.com/changelog/
+    secondary_official_url: https://www.netlify.com/changelog/
+    feed_url: null
+    api_url: null
+    parser_profile: netlify_changelog
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: false
+    scrape_feasibility: High
+    reliability: High
+    breakage_risk: Low
+    polling_frequency: 24h
+    update_detection_method: title-date comparison
+    extractable_fields:
+      version: false
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: false
+      file_size: false
+      checksum: false
+      known_issues: false
+      platform_specific_installers: false
+      archived_release_history: true
+    keywords:
+    - release
+    - update
+    - changelog
+    - patch
+    - version
+    - beta
+    - driver
+    - studio
+    - copilot
+  generated_record:
+    canonical_url_pattern: /updates/netlify/netlify/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - Netlify forum
+    - GitHub issues for CLI/build plugins
+    - Reddit
+    difficulty: Medium
+    defer_until_official_ingestion_stable: true
+- company_id: notion
+  product_id: notion
+  company: Notion
+  software: Notion
+  public_category: Workflow / Automation
+  enabled: false
+  recommended_priority: P2 build later
+  ingestion:
+    type: html_changelog
+    adapter: html_changelog
+    official_url: https://www.notion.com/releases
+    secondary_official_url: null
+    feed_url: null
+    api_url: null
+    parser_profile: notion_releases
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: false
+    scrape_feasibility: Medium-High
+    reliability: High
+    breakage_risk: Medium
+    polling_frequency: 24h
+    update_detection_method: title-date comparison
+    extractable_fields:
+      version: false
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: false
+      file_size: false
+      checksum: false
+      known_issues: false
+      platform_specific_installers: false
+      archived_release_history: true
+    keywords:
+    - release
+    - update
+    - changelog
+    - patch
+    - version
+    - beta
+    - driver
+    - studio
+    - copilot
+  generated_record:
+    canonical_url_pattern: /updates/notion/notion/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - Notion community
+    - Reddit
+    - Official help forum
+    difficulty: TBD
+    defer_until_official_ingestion_stable: true
+- company_id: zapier
+  product_id: zapier
+  company: Zapier
+  software: Zapier
+  public_category: Workflow / Automation
+  enabled: false
+  recommended_priority: P3 monitor manually
+  ingestion:
+    type: html_blog
+    adapter: html_blog
+    official_url: https://zapier.com/blog/updates/
+    secondary_official_url: null
+    feed_url: null
+    api_url: null
+    parser_profile: blog_keyword_filter
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: false
+    scrape_feasibility: Medium
+    reliability: Medium
+    breakage_risk: Medium
+    polling_frequency: 24h
+    update_detection_method: title-date comparison
+    extractable_fields:
+      version: false
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: false
+      file_size: false
+      checksum: false
+      known_issues: false
+      platform_specific_installers: false
+      archived_release_history: false
+    keywords:
+    - release
+    - update
+    - changelog
+    - patch
+    - version
+    - beta
+    - driver
+    - studio
+    - copilot
+  generated_record:
+    canonical_url_pattern: /updates/zapier/zapier/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - Zapier community
+    - Reddit
+    - Official blog
+    difficulty: TBD
+    defer_until_official_ingestion_stable: true
+- company_id: make
+  product_id: make
+  company: Make
+  software: Make
+  public_category: Workflow / Automation
+  enabled: false
+  recommended_priority: P3 monitor manually
+  ingestion:
+    type: html_changelog
+    adapter: html_changelog
+    official_url: https://www.make.com/en/changelog
+    secondary_official_url: null
+    feed_url: null
+    api_url: null
+    parser_profile: make_changelog
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: true
+    scrape_feasibility: Medium-Low
+    reliability: Medium
+    breakage_risk: High
+    polling_frequency: 24h
+    update_detection_method: title-date/snapshot comparison
+    extractable_fields:
+      version: false
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: false
+      file_size: false
+      checksum: false
+      known_issues: false
+      platform_specific_installers: false
+      archived_release_history: true
+    keywords:
+    - release
+    - update
+    - changelog
+    - patch
+    - version
+    - beta
+    - driver
+    - studio
+    - copilot
+  generated_record:
+    canonical_url_pattern: /updates/make/make/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
+  community_future:
+    possible_sources:
+    - Make community
+    - Reddit
+    - Official help forum
+    difficulty: TBD
+    defer_until_official_ingestion_stable: true

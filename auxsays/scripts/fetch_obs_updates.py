@@ -57,9 +57,7 @@ def split_official_sections(body):
     if "## Checksums" not in body:
         return body, ""
     before, after = body.split("## Checksums", 1)
-    checksum_body = "## Checksums
-
-" + after.strip()
+    checksum_body = "## Checksums\n\n" + after.strip()
     return before.rstrip(), checksum_body.strip()
 
 def write_obs_update_page(release, status="current"):
@@ -72,8 +70,6 @@ def write_obs_update_page(release, status="current"):
     patch_file_size, patch_file_size_note = primary_asset_size(release)
     report_count=0
     label="Insufficient data"
-    if status == "current":
-        label="Moderate"
     front={
         "layout":"aux-update",
         "title":f"OBS Studio {version} official update breakdown",
@@ -130,8 +126,8 @@ def main():
         latest=(stable[0].get("tag_name") or "").lstrip("v")
         prev=state.get("obs-studio",{})
         now=dt.datetime.utcnow().replace(microsecond=0).isoformat()+"Z"
-        state["obs-studio"]={"current_version":latest,"previous_version":prev.get("current_version",""),"current_consensus":"Moderate","previous_consensus":prev.get("current_consensus","Insufficient"),"status_changed_at":now,"status_change_type":"updated","report_count":0}
+        state["obs-studio"]={"current_version":latest,"previous_version":prev.get("current_version",""),"current_consensus":"Insufficient data","previous_consensus":prev.get("current_consensus","Insufficient"),"status_changed_at":now,"status_change_type":"updated","report_count":0}
         if not notes or notes[0].get("version")!=latest:
-            notes.insert(0,{"product":"OBS Studio","version":latest,"change_type":"updated","from":prev.get("current_consensus","Insufficient"),"to":"Moderate","changed_at":now,"message":f"OBS Studio {latest} official update record has been refreshed with upstream release notes and initialized consensus tracking.","url":f"/updates/obs-project/obs-studio/{slugify(latest)}/","report_count":0})
+            notes.insert(0,{"product":"OBS Studio","version":latest,"change_type":"updated","from":prev.get("current_consensus","Insufficient"),"to":"Insufficient data","changed_at":now,"message":f"OBS Studio {latest} official update record has been refreshed with upstream release notes and initialized consensus tracking.","url":f"/updates/obs-project/obs-studio/{slugify(latest)}/","report_count":0})
     save_json(STATE_PATH,state); save_json(NOTIFY_PATH,notes[:25])
 if __name__=="__main__": main()
