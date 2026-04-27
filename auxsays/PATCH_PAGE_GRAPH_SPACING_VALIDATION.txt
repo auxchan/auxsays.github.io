@@ -1,0 +1,16 @@
+consensus score logic present: PASS
+hero consensus graph present: PASS
+card consensus graph present: PASS
+source row spacing CSS present: PASS
+graph CSS present: PASS
+CSS brace balance: PASS
+YAML _config.yml: PASS
+YAML _data/patch_sources.yml: PASS
+YAML _data/patch_products.yml: PASS
+YAML _data/patch_companies.yml: PASS
+front matter 2026-04-02-obs-studio-32-1-1.md: PASS
+front matter 2026-04-14-davinci-resolve-21-public-beta-1.md: PASS
+front matter 2026-04-14-davinci-resolve-21.md: PASS
+front matter 2026-04-21-obs-studio-32-1-2.md: PASS
+JS syntax assets/js/auxsays.js: PASS
+Google Analytics preserved: PASS

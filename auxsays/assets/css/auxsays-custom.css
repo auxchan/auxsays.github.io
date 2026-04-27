@@ -3599,3 +3599,97 @@ button, input, select, textarea { font: inherit; }
 .patch-chip.is-active { border-color: rgba(240,202,103,.5); background: rgba(240,202,103,.12); color: var(--text-0); }
 .patch-source-card[data-card-href] { cursor: pointer; }
 .patch-source-card[data-card-href]:hover { border-color: rgba(95,212,229,.38); box-shadow: 0 22px 44px rgba(0,0,0,.32), 0 0 0 1px rgba(95,212,229,.10); }
+
+
+/* Patch page consensus graph + source link spacing */
+.update-source-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .8rem 1.1rem;
+  margin-top: .85rem;
+}
+
+.update-source-row a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.9rem;
+  padding: .18rem .12rem;
+}
+
+.consensus-position-graph {
+  display: grid;
+  gap: .48rem;
+  margin-top: .75rem;
+  max-width: min(720px, 100%);
+}
+
+.consensus-position-graph--card {
+  margin: .1rem 0 1rem;
+}
+
+.consensus-scale {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  height: 12px;
+  border-radius: 999px;
+  overflow: visible;
+  background: linear-gradient(90deg, rgba(184,74,74,.86), rgba(214,171,78,.90) 50%, rgba(59,165,103,.86));
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.10), 0 0 18px rgba(0,0,0,.22);
+}
+
+.consensus-scale-zone {
+  min-width: 0;
+}
+
+.consensus-scale-zone--negative {
+  border-radius: 999px 0 0 999px;
+}
+
+.consensus-scale-zone--positive {
+  border-radius: 0 999px 999px 0;
+}
+
+.consensus-scale-marker {
+  position: absolute;
+  top: 50%;
+  left: clamp(3%, var(--consensus-pos, 50%), 97%);
+  width: 18px;
+  height: 18px;
+  transform: translate(-50%, -50%);
+  border-radius: 999px;
+  border: 2px solid #0a0d10;
+  background: #f4efe4;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.38), 0 0 18px rgba(95,212,229,.30);
+}
+
+.consensus-scale-labels {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: .6rem;
+  color: var(--text-2);
+  font-size: .72rem;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+
+.consensus-scale-labels span:nth-child(2) {
+  text-align: center;
+}
+
+.consensus-scale-labels span:nth-child(3) {
+  text-align: right;
+}
+
+@media (max-width: 640px) {
+  .update-source-row {
+    gap: .55rem .9rem;
+  }
+
+  .consensus-scale-labels {
+    font-size: .66rem;
+    letter-spacing: .1em;
+  }
+}
+

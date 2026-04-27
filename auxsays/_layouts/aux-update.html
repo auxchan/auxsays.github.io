@@ -3,6 +3,18 @@ layout: aux-base
 ---
 {% assign reaction = page.update_consensus_label | default: page.community_reaction | default: page.current_consensus | default: 'Insufficient data' %}
 {% assign reaction_class = reaction | downcase | replace: ' ', '-' %}
+{% assign consensus_score_percent = page.consensus_score_percent | default: page.legacy_consensus_score_percent %}
+{% unless consensus_score_percent %}
+  {% if reaction_class == 'negative' %}
+    {% assign consensus_score_percent = 25 %}
+  {% elsif reaction_class == 'moderate' %}
+    {% assign consensus_score_percent = 55 %}
+  {% elsif reaction_class == 'positive' %}
+    {% assign consensus_score_percent = 82 %}
+  {% else %}
+    {% assign consensus_score_percent = 50 %}
+  {% endif %}
+{% endunless %}
 {% assign company = site.data.patch_companies | where: "id", page.company_id | first %}
 {% assign product = site.data.patch_products | where: "id", page.product_id | first %}
 {% assign display_title = page.update_product | append: ' ' | append: page.update_version %}
@@ -38,6 +50,17 @@ layout: aux-base
           <span><strong>Consensus:</strong> <em class="consensus-word consensus-word--{{ reaction_class }}">{{ reaction }}</em></span>
           <span class="consensus-secondary">{{ page.update_report_count | default: 0 }} reports assessed • {{ page.update_consensus_confidence | default: 'Low' }} confidence</span>
         </div>
+        <div class="consensus-position-graph consensus-position-graph--hero" style="--consensus-pos: {{ consensus_score_percent }}%;">
+          <div class="consensus-scale" aria-hidden="true">
+            <span class="consensus-scale-zone consensus-scale-zone--negative"></span>
+            <span class="consensus-scale-zone consensus-scale-zone--moderate"></span>
+            <span class="consensus-scale-zone consensus-scale-zone--positive"></span>
+            <span class="consensus-scale-marker"></span>
+          </div>
+          <div class="consensus-scale-labels" aria-hidden="true">
+            <span>Negative</span><span>Moderate</span><span>Positive</span>
+          </div>
+        </div>
       </div>
 
       <div class="update-source-row">
@@ -58,6 +81,17 @@ layout: aux-base
       <div class="consensus-compact consensus-compact--card">
         <span><strong>Consensus:</strong> <em class="consensus-word consensus-word--{{ reaction_class }}">{{ reaction }}</em></span>
         <span class="consensus-secondary">{{ page.update_report_count | default: 0 }} reports assessed • {{ page.update_consensus_confidence | default: 'Low' }} confidence</span>
+      </div>
+      <div class="consensus-position-graph consensus-position-graph--card" style="--consensus-pos: {{ consensus_score_percent }}%;">
+        <div class="consensus-scale" aria-label="Consensus position from negative through moderate to positive">
+          <span class="consensus-scale-zone consensus-scale-zone--negative"></span>
+          <span class="consensus-scale-zone consensus-scale-zone--moderate"></span>
+          <span class="consensus-scale-zone consensus-scale-zone--positive"></span>
+          <span class="consensus-scale-marker"></span>
+        </div>
+        <div class="consensus-scale-labels">
+          <span>Negative</span><span>Moderate</span><span>Positive</span>
+        </div>
       </div>
       <p>{{ page.consensus_report | default: page.community_summary }}</p>
 
