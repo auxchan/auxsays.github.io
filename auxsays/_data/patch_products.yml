@@ -1,0 +1,1221 @@
+- id: openai-chatgpt
+  company_name: OpenAI
+  product_name: ChatGPT / OpenAI
+  badge_text: OAI
+  category_key: ai-tools
+  category_label: AI Tools
+  priority: Core
+  cadence: High
+  impact: Creator workflows, coding, research, automations, and AI-assisted publishing.
+  watch_reason: Model, product, and workspace changes can immediately alter how creators plan, write, research, automate, and ship content.
+  source_url: https://help.openai.com/en/articles/6825453-chatgpt-release-notes
+  source_label: ChatGPT release notes
+  signal_notes: Separate model changes, product UI changes, workspace/agent changes, and policy/limit changes.
+  source_id: openai-chatgpt
+  logo_label: OpenAI
+  logo_path: /assets/img/patch-logos/openai-chatgpt.svg
+  company_id: openai
+  product_id: openai-chatgpt
+  company_url: /updates/openai/
+  product_url: /updates/openai/openai-chatgpt/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: ChatGPT / OpenAI is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: anthropic-claude
+  company_name: Anthropic
+  product_name: Claude
+  badge_text: ANT
+  category_key: ai-tools
+  category_label: AI Tools
+  priority: Core
+  cadence: High
+  impact: Writing, coding, analysis, long-context workflows, and Claude Code adoption.
+  watch_reason: Claude updates can change creator research, document workflows, coding velocity, and AI-agent reliability.
+  source_url: https://support.claude.com/en/articles/12138966-release-notes
+  source_label: Claude release notes
+  signal_notes: Track app updates separately from Claude Code and model launches.
+  source_id: anthropic-claude
+  logo_label: Claude
+  logo_path: /assets/img/patch-logos/anthropic-claude.svg
+  company_id: anthropic
+  product_id: anthropic-claude
+  company_url: /updates/anthropic/
+  product_url: /updates/anthropic/anthropic-claude/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Claude is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: google-gemini
+  company_name: Google
+  product_name: Gemini
+  badge_text: GEM
+  category_key: ai-tools
+  category_label: AI Tools
+  priority: Core
+  cadence: High
+  impact: Research, search-integrated AI, Android/Workspace workflows, and multimodal creation.
+  watch_reason: Gemini changes affect search behavior, Workspace AI features, mobile creator workflows, and AI video/image pipelines.
+  source_url: https://gemini.google/updates/
+  source_label: Gemini updates
+  signal_notes: Watch consumer Gemini, Workspace Gemini, and Veo/Nano Banana-style creative updates separately.
+  source_id: google-gemini
+  logo_label: Gemini
+  logo_path: /assets/img/patch-logos/google-gemini.svg
+  company_id: google
+  product_id: google-gemini
+  company_url: /updates/google/
+  product_url: /updates/google/google-gemini/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Gemini is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: perplexity
+  company_name: Perplexity
+  product_name: Perplexity
+  badge_text: PRX
+  category_key: ai-tools
+  category_label: AI Tools
+  priority: Core
+  cadence: Medium
+  impact: Research workflows, citation-first search, and creator briefing pipelines.
+  watch_reason: Useful for source discovery and public research workflows where citations and fast briefings matter.
+  source_url: https://www.perplexity.ai/hub/blog
+  source_label: Perplexity blog
+  signal_notes: Flag search/index changes, model picker changes, and Pro feature changes.
+  source_id: perplexity
+  logo_label: Perplexity
+  logo_path: /assets/img/patch-logos/perplexity.svg
+  company_id: perplexity
+  product_id: perplexity
+  company_url: /updates/perplexity/
+  product_url: /updates/perplexity/perplexity/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Perplexity is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: midjourney
+  company_name: Midjourney
+  product_name: Midjourney
+  badge_text: MID
+  category_key: ai-image
+  category_label: AI Image
+  priority: Core
+  cadence: High
+  impact: Thumbnails, concept art, brand visuals, moodboards, and image workflows.
+  watch_reason: Image model changes can quickly shift what creators can produce for thumbnails, brand worlds, and promotional graphics.
+  source_url: https://www.midjourney.com/updates/
+  source_label: Midjourney updates
+  signal_notes: Track web editor, model versions, image editing, style reference, and licensing/terms changes.
+  source_id: midjourney
+  logo_label: Midjourney
+  logo_path: /assets/img/patch-logos/midjourney.svg
+  company_id: midjourney
+  product_id: midjourney
+  company_url: /updates/midjourney/
+  product_url: /updates/midjourney/midjourney/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Midjourney is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: stability-ai
+  company_name: Stability AI
+  product_name: Stable Diffusion / Stable Audio
+  badge_text: SD
+  category_key: ai-image
+  category_label: AI Image
+  priority: Expansion
+  cadence: Medium
+  impact: Local and open-model image workflows, ComfyUI pipelines, and creator control.
+  watch_reason: Important for creators who care about local ownership, custom models, image generation, and workflow portability.
+  source_url: https://stability.ai/news
+  source_label: Stability AI news
+  signal_notes: Track model licensing, weights availability, API changes, and ComfyUI/community adoption.
+  source_id: stability-ai
+  logo_label: Stability
+  logo_path: /assets/img/patch-logos/stability-ai.svg
+  company_id: stability-ai
+  product_id: stability-ai
+  company_url: /updates/stability-ai/
+  product_url: /updates/stability-ai/stability-ai/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Stable Diffusion / Stable Audio is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: runway
+  company_name: Runway
+  product_name: Runway
+  badge_text: RUN
+  category_key: ai-video
+  category_label: AI Video
+  priority: Core
+  cadence: High
+  impact: AI video generation, creator ads, b-roll, motion design, and short-form production.
+  watch_reason: Runway updates are highly relevant to creators testing AI-assisted video and production pipelines.
+  source_url: https://runwayml.com/research/
+  source_label: Runway research
+  signal_notes: Track model releases, creator tools, API access, pricing, and export limitations.
+  source_id: runway
+  logo_label: Runway
+  logo_path: /assets/img/patch-logos/runway.svg
+  company_id: runway
+  product_id: runway
+  company_url: /updates/runway/
+  product_url: /updates/runway/runway/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Runway is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: pika
+  company_name: Pika
+  product_name: Pika
+  badge_text: PIK
+  category_key: ai-video
+  category_label: AI Video
+  priority: Expansion
+  cadence: Medium
+  impact: Fast AI clips, social video experiments, image-to-video, and trend-based creative testing.
+  watch_reason: Pika can matter when creators need fast experimental motion assets without a full editing pipeline.
+  source_url: https://pika.art/
+  source_label: Pika product site
+  signal_notes: Track model quality, plan limits, export resolution, watermarking, and app/mobile changes.
+  source_id: pika
+  logo_label: Pika
+  logo_path: /assets/img/patch-logos/pika.svg
+  company_id: pika
+  product_id: pika
+  company_url: /updates/pika/
+  product_url: /updates/pika/pika/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Pika is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: lottiefiles
+  company_name: LottieFiles
+  product_name: LottieFiles
+  badge_text: LOT
+  category_key: design-workflow
+  category_label: Design Workflow
+  priority: Core
+  cadence: Medium
+  impact: Web animation, scalable motion assets, UI micro-interactions, and export workflows.
+  watch_reason: Useful for creator sites and motion systems, but plan boundaries and export tooling need clear interpretation.
+  source_url: https://lottiefiles.com/blog
+  source_label: LottieFiles blog
+  signal_notes: Track creator tool changes, free-tier boundaries, export options, and plugin changes.
+  source_id: lottiefiles
+  logo_label: LottieFiles
+  logo_path: /assets/img/patch-logos/lottiefiles.svg
+  company_id: lottiefiles
+  product_id: lottiefiles
+  company_url: /updates/lottiefiles/
+  product_url: /updates/lottiefiles/lottiefiles/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: LottieFiles is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: figma
+  company_name: Figma
+  product_name: Figma
+  badge_text: FIG
+  category_key: design-workflow
+  category_label: Design Workflow
+  priority: Core
+  cadence: High
+  impact: Design systems, prototyping, web layouts, brand assets, and collaborative creator workflows.
+  watch_reason: Figma is central to modern web and visual planning workflows, especially for creators building repeatable design systems.
+  source_url: https://www.figma.com/release-notes/
+  source_label: Figma release notes
+  signal_notes: Track Sites, Make, Dev Mode, AI features, pricing, and export/workflow changes.
+  source_id: figma
+  logo_label: Figma
+  logo_path: /assets/img/patch-logos/figma.svg
+  company_id: figma
+  product_id: figma
+  company_url: /updates/figma/
+  product_url: /updates/figma/figma/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Figma is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: canva
+  company_name: Canva
+  product_name: Canva
+  badge_text: CAN
+  category_key: design-workflow
+  category_label: Design Workflow
+  priority: Expansion
+  cadence: Medium
+  impact: Fast social assets, thumbnails, decks, brand kits, and non-designer creator workflows.
+  watch_reason: Canva often ships high-impact creator features that affect thumbnail and social workflow speed.
+  source_url: https://www.canva.com/newsroom/
+  source_label: Canva newsroom
+  signal_notes: Track AI design features, asset licensing, export changes, and brand-kit changes.
+  source_id: canva
+  logo_label: Canva
+  logo_path: /assets/img/patch-logos/canva.svg
+  company_id: canva
+  product_id: canva
+  company_url: /updates/canva/
+  product_url: /updates/canva/canva/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Canva is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: adobe-creative-cloud
+  company_name: Adobe
+  product_name: Creative Cloud / Firefly
+  badge_text: ADB
+  category_key: video-production
+  category_label: Video / Production
+  priority: Core
+  cadence: High
+  impact: Editing, compositing, design, generative media, licensing, and professional creator workflows.
+  watch_reason: Adobe updates can reshape production pipelines and raise real workflow/licensing questions for creators.
+  source_url: https://helpx.adobe.com/creative-cloud/release-note/cc-release-notes.html
+  source_label: Creative Cloud release notes
+  signal_notes: Separate Firefly, Premiere, After Effects, Photoshop, licensing, and cloud workflow changes.
+  source_id: adobe-creative-cloud
+  logo_label: Adobe
+  logo_path: /assets/img/patch-logos/adobe-creative-cloud.svg
+  company_id: adobe
+  product_id: adobe-creative-cloud
+  company_url: /updates/adobe/
+  product_url: /updates/adobe/adobe-creative-cloud/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Creative Cloud / Firefly is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: blackmagic-davinci
+  company_name: Blackmagic Design
+  product_name: DaVinci Resolve
+  badge_text: BMD
+  category_key: video-production
+  category_label: Video / Production
+  priority: Core
+  cadence: High
+  impact: Editing, color, Fairlight, Fusion, camera workflows, and creator post-production.
+  watch_reason: Resolve updates can affect stability, collaboration, codecs, AI tools, and color workflow reliability.
+  source_url: https://www.blackmagicdesign.com/media
+  source_label: Blackmagic media releases
+  signal_notes: Treat public betas differently from stable production builds.
+  source_id: blackmagic-davinci
+  logo_label: DaVinci Resolve
+  logo_path: /assets/img/patch-logos/blackmagic-davinci.svg
+  company_id: blackmagic-design
+  product_id: blackmagic-davinci
+  company_url: /updates/blackmagic-design/
+  product_url: /updates/blackmagic-design/blackmagic-davinci/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 1
+  coverage_state: documented
+  coverage_status_label: Patch records available
+  ingestion_status: Patch records available
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: DaVinci Resolve is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: obs-studio
+  company_name: OBS Project
+  product_name: OBS Studio
+  badge_text: OBS
+  category_key: streaming
+  category_label: Streaming
+  priority: Core
+  cadence: High
+  impact: Streaming, recording, capture workflows, encoder settings, and broadcast reliability.
+  watch_reason: OBS changes directly affect creators who stream or record content and need stable production tooling.
+  source_url: https://github.com/obsproject/obs-studio/releases
+  source_label: OBS GitHub releases
+  signal_notes: Watch hotfixes and plugin compatibility after major/minor releases.
+  source_id: obs-studio
+  logo_label: OBS Studio
+  logo_path: /assets/img/patch-logos/obs-studio.svg
+  company_id: obs-project
+  product_id: obs-studio
+  company_url: /updates/obs-project/
+  product_url: /updates/obs-project/obs-studio/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 2
+  coverage_state: documented
+  coverage_status_label: Patch records available
+  ingestion_status: Patch records available
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: OBS Studio is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: twitch
+  company_name: Twitch
+  product_name: Twitch
+  badge_text: TTV
+  category_key: creator-platforms
+  category_label: Creator Platforms
+  priority: Core
+  cadence: High
+  impact: Streaming monetization, discovery, chat tools, and live platform strategy.
+  watch_reason: Policy, monetization, and discovery changes can immediately change creator platform strategy.
+  source_url: https://blog.twitch.tv/
+  source_label: Twitch blog
+  signal_notes: Track monetization, ad rules, simulcasting, discoverability, and moderation changes.
+  source_id: twitch
+  logo_label: Twitch
+  logo_path: /assets/img/patch-logos/twitch.svg
+  company_id: twitch
+  product_id: twitch
+  company_url: /updates/twitch/
+  product_url: /updates/twitch/twitch/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Twitch is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: youtube
+  company_name: YouTube
+  product_name: YouTube / YouTube Studio
+  badge_text: YTB
+  category_key: creator-platforms
+  category_label: Creator Platforms
+  priority: Core
+  cadence: High
+  impact: Video discovery, thumbnails, monetization, shorts, live streaming, and analytics.
+  watch_reason: YouTube changes are central to creator growth, discoverability, income, and format strategy.
+  source_url: https://blog.youtube/news-and-events/
+  source_label: YouTube official blog
+  signal_notes: Track Studio features, monetization, algorithm/discovery notes, Shorts, live, and analytics changes.
+  source_id: youtube
+  logo_label: YouTube
+  logo_path: /assets/img/patch-logos/youtube.svg
+  company_id: youtube
+  product_id: youtube
+  company_url: /updates/youtube/
+  product_url: /updates/youtube/youtube/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: YouTube / YouTube Studio is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: kick
+  company_name: Kick
+  product_name: Kick
+  badge_text: KCK
+  category_key: creator-platforms
+  category_label: Creator Platforms
+  priority: Core
+  cadence: Medium
+  impact: Live streaming alternatives, monetization, platform risk, and audience diversification.
+  watch_reason: Kick matters for creators evaluating live-stream revenue, discoverability, and platform redundancy.
+  source_url: https://kick.com/blog
+  source_label: Kick blog
+  signal_notes: Track monetization, content policy, streaming tools, mobile app changes, and creator dashboard changes.
+  source_id: kick
+  logo_label: Kick
+  logo_path: /assets/img/patch-logos/kick.svg
+  company_id: kick
+  product_id: kick
+  company_url: /updates/kick/
+  product_url: /updates/kick/kick/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Kick is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: rumble
+  company_name: Rumble
+  product_name: Rumble
+  badge_text: RMB
+  category_key: creator-platforms
+  category_label: Creator Platforms
+  priority: Expansion
+  cadence: Medium
+  impact: Video hosting, alternative platform strategy, monetization, and creator independence.
+  watch_reason: Rumble is relevant for creators testing platform diversification and alternate monetization channels.
+  source_url: https://corp.rumble.com/blog/
+  source_label: Rumble blog
+  signal_notes: Track creator tooling, monetization, live streaming, and policy changes.
+  source_id: rumble
+  logo_label: Rumble
+  logo_path: /assets/img/patch-logos/rumble.svg
+  company_id: rumble
+  product_id: rumble
+  company_url: /updates/rumble/
+  product_url: /updates/rumble/rumble/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Rumble is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: epic-unreal
+  company_name: Epic Games
+  product_name: Unreal Engine
+  badge_text: UE
+  category_key: game-engines
+  category_label: Game / Engine
+  priority: Core
+  cadence: High
+  impact: Game development, virtual production, UEFN, cinematics, and real-time creator workflows.
+  watch_reason: Unreal updates affect creators building games, virtual production assets, real-time environments, and cinematic systems.
+  source_url: https://dev.epicgames.com/documentation/en-us/unreal-engine/whats-new
+  source_label: Unreal what's new
+  signal_notes: Separate stable engine releases, UEFN updates, Fab marketplace, and licensing/business changes.
+  source_id: epic-unreal
+  logo_label: Unreal Engine
+  logo_path: /assets/img/patch-logos/epic-unreal.svg
+  company_id: epic-games
+  product_id: epic-unreal
+  company_url: /updates/epic-games/
+  product_url: /updates/epic-games/epic-unreal/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Unreal Engine is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: unity
+  company_name: Unity
+  product_name: Unity
+  badge_text: UNT
+  category_key: game-engines
+  category_label: Game / Engine
+  priority: Expansion
+  cadence: Medium
+  impact: Indie game development, mobile games, simulation, and creator tools.
+  watch_reason: Unity updates still matter for indie devs and mobile creators, especially when licensing or runtime behavior changes.
+  source_url: https://unity.com/releases
+  source_label: Unity releases
+  signal_notes: Track LTS releases, licensing, runtime/tooling changes, and package manager changes.
+  source_id: unity
+  logo_label: Unity
+  logo_path: /assets/img/patch-logos/unity.svg
+  company_id: unity
+  product_id: unity
+  company_url: /updates/unity/
+  product_url: /updates/unity/unity/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Unity is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: steam
+  company_name: Valve
+  product_name: Steam
+  badge_text: STM
+  category_key: game-platforms
+  category_label: Game Platforms
+  priority: Core
+  cadence: Medium
+  impact: PC game discovery, wishlists, reviews, launch strategy, and gamer behavior.
+  watch_reason: Steam ecosystem changes affect PC gaming trends, creator coverage angles, and indie launch strategy.
+  source_url: https://store.steampowered.com/news/group/4145017
+  source_label: Steam news
+  signal_notes: Track discovery, reviews, wishlists, Next Fest, Steam Deck, and store policy changes.
+  source_id: steam
+  logo_label: Steam
+  logo_path: /assets/img/patch-logos/steam.svg
+  company_id: valve
+  product_id: steam
+  company_url: /updates/valve/
+  product_url: /updates/valve/steam/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Steam is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: nvidia
+  company_name: NVIDIA
+  product_name: NVIDIA App / GeForce / Studio
+  badge_text: NV
+  category_key: hardware-drivers
+  category_label: Hardware / Drivers
+  priority: Core
+  cadence: High
+  impact: GPU drivers, DLSS, streaming encoders, AI workflows, and gaming performance.
+  watch_reason: NVIDIA driver and app changes can directly affect PC gaming, streaming, AI, and creator stability.
+  source_url: https://www.nvidia.com/en-us/geforce/news/
+  source_label: GeForce news
+  signal_notes: Track Game Ready drivers, Studio drivers, NVENC, DLSS, app changes, and known issues.
+  source_id: nvidia
+  logo_label: NVIDIA
+  logo_path: /assets/img/patch-logos/nvidia.svg
+  company_id: nvidia
+  product_id: nvidia
+  company_url: /updates/nvidia/
+  product_url: /updates/nvidia/nvidia/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: NVIDIA App / GeForce / Studio is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: amd
+  company_name: AMD
+  product_name: AMD Software / Radeon
+  badge_text: AMD
+  category_key: hardware-drivers
+  category_label: Hardware / Drivers
+  priority: Core
+  cadence: High
+  impact: GPU drivers, FSR, frame generation, encoder behavior, and PC gaming performance.
+  watch_reason: AMD driver updates can affect game performance, capture workflows, and streaming stability.
+  source_url: https://www.amd.com/en/support/download/drivers.html
+  source_label: AMD drivers
+  signal_notes: Track driver regressions, per-game fixes, FSR updates, and Adrenalin changes.
+  source_id: amd
+  logo_label: AMD
+  logo_path: /assets/img/patch-logos/amd.svg
+  company_id: amd
+  product_id: amd
+  company_url: /updates/amd/
+  product_url: /updates/amd/amd/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: AMD Software / Radeon is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: intel-arc
+  company_name: Intel
+  product_name: Intel Graphics / Arc
+  badge_text: INT
+  category_key: hardware-drivers
+  category_label: Hardware / Drivers
+  priority: Expansion
+  cadence: Medium
+  impact: GPU drivers, Quick Sync, Arc gaming performance, encoding, and creator workstation support.
+  watch_reason: Intel graphics updates can matter for creator encoding, laptop workflows, and Arc performance progress.
+  source_url: https://www.intel.com/content/www/us/en/download-center/home.html
+  source_label: Intel download center
+  signal_notes: Track Arc driver fixes, Quick Sync, AI PC features, and app-level compatibility.
+  source_id: intel-arc
+  logo_label: Intel
+  logo_path: /assets/img/patch-logos/intel-arc.svg
+  company_id: intel
+  product_id: intel-arc
+  company_url: /updates/intel/
+  product_url: /updates/intel/intel-arc/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Intel Graphics / Arc is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: blender
+  company_name: Blender Foundation
+  product_name: Blender
+  badge_text: BLN
+  category_key: video-production
+  category_label: Video / Production
+  priority: Expansion
+  cadence: Medium
+  impact: 3D assets, motion graphics, VFX, thumbnails, and game-dev content pipelines.
+  watch_reason: Blender is a high-signal open-source production tool for creators building 3D and visual systems.
+  source_url: https://www.blender.org/download/releases/
+  source_label: Blender releases
+  signal_notes: Track release candidates, LTS changes, rendering updates, and geometry node changes.
+  source_id: blender
+  logo_label: Blender
+  logo_path: /assets/img/patch-logos/blender.svg
+  company_id: blender-foundation
+  product_id: blender
+  company_url: /updates/blender-foundation/
+  product_url: /updates/blender-foundation/blender/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Blender is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: comfyui
+  company_name: ComfyUI
+  product_name: ComfyUI
+  badge_text: CFY
+  category_key: ai-image
+  category_label: AI Image
+  priority: Edge
+  cadence: High
+  impact: Local AI image workflows, node graphs, model testing, and reproducible creative pipelines.
+  watch_reason: ComfyUI is a strong AUXSAYS fit because it rewards technical creators who want control and repeatable workflows.
+  source_url: https://github.com/comfyanonymous/ComfyUI/releases
+  source_label: ComfyUI releases
+  signal_notes: Track breaking changes, model support, dependency shifts, and high-value custom node changes.
+  source_id: comfyui
+  logo_label: ComfyUI
+  logo_path: /assets/img/patch-logos/comfyui.svg
+  company_id: comfyui
+  product_id: comfyui
+  company_url: /updates/comfyui/
+  product_url: /updates/comfyui/comfyui/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: ComfyUI is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: hugging-face
+  company_name: Hugging Face
+  product_name: Hugging Face
+  badge_text: HF
+  category_key: dev-web
+  category_label: Dev / Web
+  priority: Expansion
+  cadence: Medium
+  impact: AI model hosting, datasets, Spaces, inference, and local model discovery.
+  watch_reason: Hugging Face matters when creator AI workflows depend on model availability, licensing, and hosted demos.
+  source_url: https://huggingface.co/blog
+  source_label: Hugging Face blog
+  signal_notes: Track model releases, Spaces platform changes, inference pricing, and license shifts.
+  source_id: hugging-face
+  logo_label: Hugging Face
+  logo_path: /assets/img/patch-logos/hugging-face.svg
+  company_id: hugging-face
+  product_id: hugging-face
+  company_url: /updates/hugging-face/
+  product_url: /updates/hugging-face/hugging-face/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Hugging Face is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: github
+  company_name: GitHub
+  product_name: GitHub / Copilot
+  badge_text: GH
+  category_key: dev-web
+  category_label: Dev / Web
+  priority: Core
+  cadence: High
+  impact: Creator sites, automations, Actions, Copilot, Pages, and code/content publishing.
+  watch_reason: GitHub updates affect creator infrastructure, site deployment, automation, and AI coding workflows.
+  source_url: https://github.blog/changelog/
+  source_label: GitHub changelog
+  signal_notes: Track Pages, Actions, Copilot, security, and workflow automation changes.
+  source_id: github
+  logo_label: GitHub / Copilot
+  logo_path: /assets/img/patch-logos/github.svg
+  company_id: github
+  product_id: github
+  company_url: /updates/github/
+  product_url: /updates/github/github/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: GitHub / Copilot is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: cloudflare
+  company_name: Cloudflare
+  product_name: Cloudflare
+  badge_text: CF
+  category_key: dev-web
+  category_label: Dev / Web
+  priority: Expansion
+  cadence: Medium
+  impact: DNS, site delivery, Workers, Pages, security, and performance infrastructure.
+  watch_reason: Cloudflare changes affect creator sites, performance, bot protection, and lightweight app deployment.
+  source_url: https://blog.cloudflare.com/
+  source_label: Cloudflare blog
+  signal_notes: Track Pages/Workers, DNS, security, caching, and performance changes.
+  source_id: cloudflare
+  logo_label: Cloudflare
+  logo_path: /assets/img/patch-logos/cloudflare.svg
+  company_id: cloudflare
+  product_id: cloudflare
+  company_url: /updates/cloudflare/
+  product_url: /updates/cloudflare/cloudflare/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Cloudflare is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: netlify
+  company_name: Netlify
+  product_name: Netlify
+  badge_text: NET
+  category_key: dev-web
+  category_label: Dev / Web
+  priority: Expansion
+  cadence: Medium
+  impact: Static sites, deployment workflows, edge functions, and creator websites.
+  watch_reason: Useful for creators choosing low-maintenance web publishing and static-site infrastructure.
+  source_url: https://www.netlify.com/changelog/
+  source_label: Netlify changelog
+  signal_notes: Track build limits, deployment, forms, edge, and pricing changes.
+  source_id: netlify
+  logo_label: Netlify
+  logo_path: /assets/img/patch-logos/netlify.svg
+  company_id: netlify
+  product_id: netlify
+  company_url: /updates/netlify/
+  product_url: /updates/netlify/netlify/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Netlify is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: notion
+  company_name: Notion
+  product_name: Notion
+  badge_text: NOT
+  category_key: workflow-automation
+  category_label: Workflow / Automation
+  priority: Expansion
+  cadence: Medium
+  impact: Planning, editorial systems, databases, notes, and team documentation.
+  watch_reason: Notion changes can improve or disrupt creator planning, scripting, and content calendar workflows.
+  source_url: https://www.notion.com/releases
+  source_label: Notion releases
+  signal_notes: Track Notion AI, database changes, integrations, automations, and calendar/workspace changes.
+  source_id: notion
+  logo_label: Notion
+  logo_path: /assets/img/patch-logos/notion.svg
+  company_id: notion
+  product_id: notion
+  company_url: /updates/notion/
+  product_url: /updates/notion/notion/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Notion is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: zapier
+  company_name: Zapier
+  product_name: Zapier
+  badge_text: ZAP
+  category_key: workflow-automation
+  category_label: Workflow / Automation
+  priority: Expansion
+  cadence: Medium
+  impact: No-code automation, creator ops, publishing workflows, and cross-app triggers.
+  watch_reason: Zapier updates matter when creators automate repetitive publishing, research, and distribution tasks.
+  source_url: https://zapier.com/blog/updates/
+  source_label: Zapier updates
+  signal_notes: Track AI agents, app actions, pricing/limits, and reliability-impacting workflow changes.
+  source_id: zapier
+  logo_label: Zapier
+  logo_path: /assets/img/patch-logos/zapier.svg
+  company_id: zapier
+  product_id: zapier
+  company_url: /updates/zapier/
+  product_url: /updates/zapier/zapier/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Zapier is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: make
+  company_name: Make
+  product_name: Make
+  badge_text: MKE
+  category_key: workflow-automation
+  category_label: Workflow / Automation
+  priority: Expansion
+  cadence: Medium
+  impact: Visual automation, operations workflows, and repeatable creator systems.
+  watch_reason: Make is relevant for creators who want more control than simple no-code automation.
+  source_url: https://www.make.com/en/changelog
+  source_label: Make changelog
+  signal_notes: Track modules, reliability, scheduling, pricing, and AI workflow changes.
+  source_id: make
+  logo_label: Make
+  logo_path: /assets/img/patch-logos/make.svg
+  company_id: make
+  product_id: make
+  company_url: /updates/make/
+  product_url: /updates/make/make/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Make is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.

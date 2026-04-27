@@ -1,0 +1,363 @@
+- product_id: openai-chatgpt
+  company_id: openai
+  product_name: ChatGPT / OpenAI
+  company_name: OpenAI
+  priority: Core
+  category_key: ai-tools
+  source_url: https://help.openai.com/en/articles/6825453-chatgpt-release-notes
+  source_label: ChatGPT release notes
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: anthropic-claude
+  company_id: anthropic
+  product_name: Claude
+  company_name: Anthropic
+  priority: Core
+  category_key: ai-tools
+  source_url: https://support.claude.com/en/articles/12138966-release-notes
+  source_label: Claude release notes
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: google-gemini
+  company_id: google
+  product_name: Gemini
+  company_name: Google
+  priority: Core
+  category_key: ai-tools
+  source_url: https://gemini.google/updates/
+  source_label: Gemini updates
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: perplexity
+  company_id: perplexity
+  product_name: Perplexity
+  company_name: Perplexity
+  priority: Core
+  category_key: ai-tools
+  source_url: https://www.perplexity.ai/hub/blog
+  source_label: Perplexity blog
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: midjourney
+  company_id: midjourney
+  product_name: Midjourney
+  company_name: Midjourney
+  priority: Core
+  category_key: ai-image
+  source_url: https://www.midjourney.com/updates/
+  source_label: Midjourney updates
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: stability-ai
+  company_id: stability-ai
+  product_name: Stable Diffusion / Stable Audio
+  company_name: Stability AI
+  priority: Expansion
+  category_key: ai-image
+  source_url: https://stability.ai/news
+  source_label: Stability AI news
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: runway
+  company_id: runway
+  product_name: Runway
+  company_name: Runway
+  priority: Core
+  category_key: ai-video
+  source_url: https://runwayml.com/research/
+  source_label: Runway research
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: pika
+  company_id: pika
+  product_name: Pika
+  company_name: Pika
+  priority: Expansion
+  category_key: ai-video
+  source_url: https://pika.art/
+  source_label: Pika product site
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: lottiefiles
+  company_id: lottiefiles
+  product_name: LottieFiles
+  company_name: LottieFiles
+  priority: Core
+  category_key: design-workflow
+  source_url: https://lottiefiles.com/blog
+  source_label: LottieFiles blog
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: figma
+  company_id: figma
+  product_name: Figma
+  company_name: Figma
+  priority: Core
+  category_key: design-workflow
+  source_url: https://www.figma.com/release-notes/
+  source_label: Figma release notes
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: canva
+  company_id: canva
+  product_name: Canva
+  company_name: Canva
+  priority: Expansion
+  category_key: design-workflow
+  source_url: https://www.canva.com/newsroom/
+  source_label: Canva newsroom
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: adobe-creative-cloud
+  company_id: adobe
+  product_name: Creative Cloud / Firefly
+  company_name: Adobe
+  priority: Core
+  category_key: video-production
+  source_url: https://helpx.adobe.com/creative-cloud/release-note/cc-release-notes.html
+  source_label: Creative Cloud release notes
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: blackmagic-davinci
+  company_id: blackmagic-design
+  product_name: DaVinci Resolve
+  company_name: Blackmagic Design
+  priority: Core
+  category_key: video-production
+  source_url: https://www.blackmagicdesign.com/media
+  source_label: Blackmagic media releases
+  coverage_state: documented
+  documented_update_count: 1
+  backfill_status: complete
+- product_id: obs-studio
+  company_id: obs-project
+  product_name: OBS Studio
+  company_name: OBS Project
+  priority: Core
+  category_key: streaming
+  source_url: https://github.com/obsproject/obs-studio/releases
+  source_label: OBS GitHub releases
+  coverage_state: documented
+  documented_update_count: 2
+  backfill_status: complete
+- product_id: twitch
+  company_id: twitch
+  product_name: Twitch
+  company_name: Twitch
+  priority: Core
+  category_key: creator-platforms
+  source_url: https://blog.twitch.tv/
+  source_label: Twitch blog
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: youtube
+  company_id: youtube
+  product_name: YouTube / YouTube Studio
+  company_name: YouTube
+  priority: Core
+  category_key: creator-platforms
+  source_url: https://blog.youtube/news-and-events/
+  source_label: YouTube official blog
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: kick
+  company_id: kick
+  product_name: Kick
+  company_name: Kick
+  priority: Core
+  category_key: creator-platforms
+  source_url: https://kick.com/blog
+  source_label: Kick blog
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: rumble
+  company_id: rumble
+  product_name: Rumble
+  company_name: Rumble
+  priority: Expansion
+  category_key: creator-platforms
+  source_url: https://corp.rumble.com/blog/
+  source_label: Rumble blog
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: epic-unreal
+  company_id: epic-games
+  product_name: Unreal Engine
+  company_name: Epic Games
+  priority: Core
+  category_key: game-engines
+  source_url: https://dev.epicgames.com/documentation/en-us/unreal-engine/whats-new
+  source_label: Unreal what's new
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: unity
+  company_id: unity
+  product_name: Unity
+  company_name: Unity
+  priority: Expansion
+  category_key: game-engines
+  source_url: https://unity.com/releases
+  source_label: Unity releases
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: steam
+  company_id: valve
+  product_name: Steam
+  company_name: Valve
+  priority: Core
+  category_key: game-platforms
+  source_url: https://store.steampowered.com/news/group/4145017
+  source_label: Steam news
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: nvidia
+  company_id: nvidia
+  product_name: NVIDIA App / GeForce / Studio
+  company_name: NVIDIA
+  priority: Core
+  category_key: hardware-drivers
+  source_url: https://www.nvidia.com/en-us/geforce/news/
+  source_label: GeForce news
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: amd
+  company_id: amd
+  product_name: AMD Software / Radeon
+  company_name: AMD
+  priority: Core
+  category_key: hardware-drivers
+  source_url: https://www.amd.com/en/support/download/drivers.html
+  source_label: AMD drivers
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: intel-arc
+  company_id: intel
+  product_name: Intel Graphics / Arc
+  company_name: Intel
+  priority: Expansion
+  category_key: hardware-drivers
+  source_url: https://www.intel.com/content/www/us/en/download-center/home.html
+  source_label: Intel download center
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: blender
+  company_id: blender-foundation
+  product_name: Blender
+  company_name: Blender Foundation
+  priority: Expansion
+  category_key: video-production
+  source_url: https://www.blender.org/download/releases/
+  source_label: Blender releases
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: comfyui
+  company_id: comfyui
+  product_name: ComfyUI
+  company_name: ComfyUI
+  priority: Edge
+  category_key: ai-image
+  source_url: https://github.com/comfyanonymous/ComfyUI/releases
+  source_label: ComfyUI releases
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: hugging-face
+  company_id: hugging-face
+  product_name: Hugging Face
+  company_name: Hugging Face
+  priority: Expansion
+  category_key: dev-web
+  source_url: https://huggingface.co/blog
+  source_label: Hugging Face blog
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: github
+  company_id: github
+  product_name: GitHub / Copilot
+  company_name: GitHub
+  priority: Core
+  category_key: dev-web
+  source_url: https://github.blog/changelog/
+  source_label: GitHub changelog
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: cloudflare
+  company_id: cloudflare
+  product_name: Cloudflare
+  company_name: Cloudflare
+  priority: Expansion
+  category_key: dev-web
+  source_url: https://blog.cloudflare.com/
+  source_label: Cloudflare blog
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: netlify
+  company_id: netlify
+  product_name: Netlify
+  company_name: Netlify
+  priority: Expansion
+  category_key: dev-web
+  source_url: https://www.netlify.com/changelog/
+  source_label: Netlify changelog
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: notion
+  company_id: notion
+  product_name: Notion
+  company_name: Notion
+  priority: Expansion
+  category_key: workflow-automation
+  source_url: https://www.notion.com/releases
+  source_label: Notion releases
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: zapier
+  company_id: zapier
+  product_name: Zapier
+  company_name: Zapier
+  priority: Expansion
+  category_key: workflow-automation
+  source_url: https://zapier.com/blog/updates/
+  source_label: Zapier updates
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: make
+  company_id: make
+  product_name: Make
+  company_name: Make
+  priority: Expansion
+  category_key: workflow-automation
+  source_url: https://www.make.com/en/changelog
+  source_label: Make changelog
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued

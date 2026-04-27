@@ -1,0 +1,119 @@
+---
+layout: aux-base
+---
+{% assign company = site.data.patch_companies | where: "id", page.company_id | first %}
+{% assign products = site.data.patch_products | where: "company_id", page.company_id %}
+{% assign company_updates = site.pages | where: "update_entry", true | where: "company_id", page.company_id | sort: "update_published_at" | reverse %}
+{% assign documented_count = company.documented_update_count | default: company_updates.size %}
+
+<section class="patch-intel-shell">
+  <section class="panel patch-intel-hero reveal-up">
+    <a class="update-back-link" href="{{ '/updates/' | relative_url }}">← Back to Patch Feed</a>
+    <div class="eyebrow">Company</div>
+    <div class="patch-intel-hero-grid">
+      <div>
+        <h1 class="patch-intel-title">{{ company.company_name }}</h1>
+        <p class="patch-intel-subtitle">{{ company.summary }}</p>
+        <div class="patch-status-line">
+          <span class="patch-coverage-pill patch-coverage-pill--{{ company.coverage_state | default: 'active_watch' }}">{{ company.coverage_status_label | default: 'Active watch' }}</span>
+          <span>{{ products.size }} tracked software{% if products.size != 1 %}s{% endif %}</span>
+          <span>{{ documented_count }} documented patch record{% if documented_count != 1 %}s{% endif %}</span>
+        </div>
+      </div>
+      <div class="patch-intel-stat-card">
+        <span>{{ products.size }}</span>
+        <em>tracked software</em>
+      </div>
+    </div>
+  </section>
+
+  <section class="panel patch-intel-section reveal-up reveal-delay-1">
+    <div class="section-head section-head--archive">
+      <div class="eyebrow">Software</div>
+      <h2>Tracked software and workflow surfaces</h2>
+      <p>Follow the software lanes below for release history, stability signals, workflow impact, official sources, and community consensus as records are added.</p>
+    </div>
+    <div class="patch-product-grid">
+      {% for product in products %}
+      {% assign product_cadence_label = product.cadence | default: '' %}
+      {% if product_cadence_label == 'High' %}
+        {% assign product_cadence_label = 'Frequent updates' %}
+      {% elsif product_cadence_label == 'Medium' %}
+        {% assign product_cadence_label = 'Periodic updates' %}
+      {% elsif product_cadence_label == 'Low' %}
+        {% assign product_cadence_label = 'Occasional updates' %}
+      {% endif %}
+      <article class="patch-product-card">
+        <div class="patch-product-topline">
+          <span class="patch-source-badge patch-logo-badge patch-logo-badge--has-image"><img src="{{ product.logo_path | relative_url }}" alt="{{ product.product_name }} logo" loading="lazy"></span>
+          <span><strong>{{ product.product_name }}</strong><em>{{ product.category_label }}</em></span>
+          <span class="patch-source-priority patch-source-priority--{{ product.priority | downcase }}">{{ product.priority }}</span>
+        </div>
+        <p>{{ product.impact }}</p>
+        <p class="patch-source-signal"><strong>Signal:</strong> {{ product.signal_notes }}</p>
+        <div class="patch-status-line patch-status-line--compact">
+          <span class="patch-coverage-pill patch-coverage-pill--{{ product.coverage_state }}">{{ product.coverage_status_label }}</span>
+          <span>{{ product.documented_update_count | default: 0 }} patch record{% if product.documented_update_count != 1 %}s{% endif %}</span>
+        </div>
+        <div class="patch-card-links">
+          <a href="{{ product.product_url | relative_url }}">Open software dossier →</a>
+          {% if product.source_url %}<a href="{{ product.source_url }}">Official source ↗</a>{% endif %}
+        </div>
+      </article>
+      {% endfor %}
+    </div>
+  </section>
+
+  {% if company_updates.size > 0 %}
+  <section class="panel patch-intel-section reveal-up reveal-delay-2">
+    <div class="section-head section-head--archive">
+      <div class="eyebrow">Latest documented records</div>
+      <h2>Documented updates</h2>
+      <p>Documented records include the official patch notes, summary, consensus read, reported issues, confidence level, and status history.</p>
+    </div>
+    <div class="patch-version-table">
+      <div class="patch-version-row patch-version-row--head patch-version-row--no-score"><span>Software</span><span>Patch</span><span>Consensus</span><span>Reports</span><span>Record</span></div>
+      {% for item in company_updates %}
+      {% assign reaction = item.update_consensus_label | default: item.community_reaction | default: 'Insufficient' %}
+      <a class="patch-version-row" href="{{ item.url | relative_url }}">
+        <span>{{ item.update_product }}</span>
+        <span>{{ item.update_version }}</span>
+        <span>{{ reaction }}</span>
+        <span>{{ item.update_report_count | default: 0 }}</span>
+        <span>View patch →</span>
+      </a>
+      {% endfor %}
+    </div>
+  </section>
+  {% else %}
+  <section class="panel patch-intel-section reveal-up reveal-delay-2">
+    <div class="section-head section-head--archive">
+      <div class="eyebrow">Monitoring focus</div>
+      <h2>{{ company.company_name }} watch profile</h2>
+      <p>{{ company.company_name }} is on the AUXSAYS watchlist for changes that can affect creator workflows, production stability, gaming performance, automation, publishing operations, or platform reliability.</p>
+    </div>
+    <div class="patch-dossier-grid">
+      <div class="patch-dossier-card">
+        <h3>Primary software watch lanes</h3>
+        <ul>
+          {% for product in products %}
+          <li><strong>{{ product.product_name }}:</strong> {{ product.signal_notes }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="patch-dossier-card">
+        <h3>Official sources</h3>
+        <ul>
+          {% for product in products %}
+          <li>{% if product.source_url %}<a href="{{ product.source_url }}">{{ product.source_label | default: product.product_name }} ↗</a>{% else %}{{ product.product_name }} source pending{% endif %}</li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="patch-dossier-card">
+        <h3>What triggers a record</h3>
+        <p>A new record is created when an official release/change note has enough creator impact to justify tracking. Security, compatibility, pricing, workflow, stability, licensing, and performance changes get priority.</p>
+      </div>
+    </div>
+  </section>
+  {% endif %}
+</section>

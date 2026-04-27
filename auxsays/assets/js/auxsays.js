@@ -217,4 +217,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }));
     applyPatchFeed();
   }
+  // Patch Feed source/company cards: make the full card clickable while preserving inner links.
+  document.querySelectorAll('[data-card-href]').forEach((card) => {
+    const openCard = () => {
+      const href = card.getAttribute('data-card-href');
+      if (href) window.location.href = href;
+    };
+    card.addEventListener('click', (event) => {
+      if (event.target.closest('a, button, input, select, textarea')) return;
+      openCard();
+    });
+    card.addEventListener('keydown', (event) => {
+      if (event.key !== 'Enter' && event.key !== ' ') return;
+      if (event.target.closest('a, button, input, select, textarea')) return;
+      event.preventDefault();
+      openCard();
+    });
+  });
+
 });
