@@ -1,0 +1,20 @@
+update page layout clean present: PASS
+obs permalink correct: PASS
+company radar present: PASS
+watchlist button present: PASS
+company button present: PASS
+software button present: PASS
+source card normalized priority: PASS
+no edge button: PASS
+no raw cadence chip: PASS
+filter js present: PASS
+css balance: PASS
+YAML _config.yml: PASS
+YAML _data/patch_sources.yml: PASS
+YAML _data/patch_products.yml: PASS
+YAML _data/patch_companies.yml: PASS
+JS syntax: PASS
+FM 2026-04-02-obs-studio-32-1-1.md: PASS
+FM 2026-04-14-davinci-resolve-21-public-beta-1.md: PASS
+FM 2026-04-14-davinci-resolve-21.md: PASS
+FM 2026-04-21-obs-studio-32-1-2.md: PASS
