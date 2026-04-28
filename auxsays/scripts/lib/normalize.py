@@ -68,9 +68,29 @@ def format_asset_size(size_bytes: int | str | None) -> str:
     return f"{size:.0f} {units[idx]}" if size >= 100 else f"{size:.1f} {units[idx]}"
 
 def summarize(text: str, max_chars: int = 420) -> str:
-    clean = re.sub(r"\s+", " ", strip_tags(text or "")).strip()
+    clean = strip_markdown_for_summary(text or "")
     if not clean:
         return "Official release notes were detected, but no summary has been generated yet."
     if len(clean) <= max_chars:
         return clean
     return clean[:max_chars].rsplit(" ", 1)[0].rstrip(".,;:") + "."
+
+def normalize_release_notes_body(text: str) -> str:
+    """Normalize common vendor/repository release-note headings for display consistency."""
+    value = str(text or "")
+    # GitHub auto-generated release notes commonly start with "What's Changed".
+    # In the current page typography this heading can render awkwardly as "What’ s".
+    # Use a simpler heading that reads cleanly and still preserves the meaning.
+    value = re.sub(r"(?im)^([#]{1,6})\s+What['’]s Changed\s*$", r"\1 Changes", value)
+    return value
+
+def strip_markdown_for_summary(text: str) -> str:
+    """Create a compact plain-text summary from Markdown-ish release bodies."""
+    clean = strip_tags(text or "")
+    clean = normalize_release_notes_body(clean)
+    clean = re.sub(r"(?m)^\s{0,3}#{1,6}\s+", "", clean)
+    clean = re.sub(r"(?m)^\s*[-*+]\s+", "", clean)
+    clean = re.sub(r"`([^`]+)`", r"\1", clean)
+    clean = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", r"\1", clean)
+    clean = re.sub(r"\s+", " ", clean).strip()
+    return clean

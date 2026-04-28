@@ -5,7 +5,7 @@ from pathlib import Path
 from typing import Any
 import yaml
 
-from .normalize import slugify, utc_now, summarize
+from .normalize import slugify, utc_now, summarize, normalize_release_notes_body
 
 DEFAULT_CONSENSUS = "Insufficient data"
 
@@ -26,7 +26,7 @@ def build_front_matter(record: dict[str, Any]) -> dict[str, Any]:
     company = record.get("company") or record.get("company_id")
     published = record.get("published_at") or utc_now()
     source_url = record.get("source_url") or record.get("official_url")
-    body = record.get("body") or "No official release-note body was captured."
+    body = normalize_release_notes_body(record.get("body") or "No official release-note body was captured.")
     summary = record.get("summary") or summarize(body)
     return {
         "layout": "aux-update",
