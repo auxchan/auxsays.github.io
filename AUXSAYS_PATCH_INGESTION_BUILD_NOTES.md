@@ -47,3 +47,11 @@ env:
 ```
 
 Some official GitHub actions may still report the warning until their internal action metadata is updated upstream.
+
+## Post-merge dynamic status repair
+
+- Product pages now derive Tracking Rules status from actual generated update records.
+- Company pages now derive patch counts from actual generated update records instead of static documented_update_count values.
+- Patch Feed radar now uses the correct cadence display variable.
+- Patch ingestion workflow now stages the full generated updates directory, so future generated-record deletions are included in commits.
+- Python __pycache__ artifacts were removed from the repository package.

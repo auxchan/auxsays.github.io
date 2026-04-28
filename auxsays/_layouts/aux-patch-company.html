@@ -4,7 +4,7 @@ layout: aux-base
 {% assign company = site.data.patch_companies | where: "id", page.company_id | first %}
 {% assign products = site.data.patch_products | where: "company_id", page.company_id %}
 {% assign company_updates = site.pages | where: "update_entry", true | where: "company_id", page.company_id | sort: "update_published_at" | reverse %}
-{% assign documented_count = company.documented_update_count | default: company_updates.size %}
+{% assign documented_count = company_updates.size %}
 
 <section class="patch-intel-shell">
   <section class="panel patch-intel-hero reveal-up">
@@ -43,6 +43,8 @@ layout: aux-base
       {% elsif product_cadence_label == 'Low' %}
         {% assign product_cadence_label = 'Occasional updates' %}
       {% endif %}
+      {% assign product_updates_for_card = site.pages | where: "update_entry", true | where: "product_id", product.id %}
+
       <article class="patch-product-card">
         <div class="patch-product-topline">
           <span class="patch-source-badge patch-logo-badge patch-logo-badge--has-image"><img src="{{ product.logo_path | relative_url }}" alt="{{ product.product_name }} logo" loading="lazy"></span>
@@ -52,8 +54,12 @@ layout: aux-base
         <p>{{ product.impact }}</p>
         <p class="patch-source-signal"><strong>Signal:</strong> {{ product.signal_notes }}</p>
         <div class="patch-status-line patch-status-line--compact">
-          <span class="patch-coverage-pill patch-coverage-pill--{{ product.coverage_state }}">{{ product.coverage_status_label }}</span>
-          <span>{{ product.documented_update_count | default: 0 }} patch record{% if product.documented_update_count != 1 %}s{% endif %}</span>
+          {% if product_updates_for_card.size > 0 %}
+          <span class="patch-coverage-pill patch-coverage-pill--documented">Patch records available</span>
+          {% else %}
+          <span class="patch-coverage-pill patch-coverage-pill--{{ product.coverage_state | default: 'active_watch' }}">{{ product.coverage_status_label | default: 'Monitoring active' }}</span>
+          {% endif %}
+          <span>{{ product_updates_for_card.size }} patch record{% if product_updates_for_card.size != 1 %}s{% endif %}</span>
         </div>
         <div class="patch-card-links">
           <a href="{{ product.product_url | relative_url }}">Open software dossier →</a>
