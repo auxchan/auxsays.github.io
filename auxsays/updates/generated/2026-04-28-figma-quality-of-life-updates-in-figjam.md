@@ -1,0 +1,48 @@
+---
+layout: aux-update
+title: Figma Quality of life updates in FigJam official update breakdown
+description: Official Figma update record captured from Figma.
+permalink: /updates/figma/figma/quality-of-life-updates-in-figjam/
+update_entry: true
+company_id: figma
+product_id: figma
+update_brand_id: figma
+update_product: Figma
+update_category: Design Workflow
+update_type: official-source
+update_source_name: Figma
+update_source_url: https://www.figma.com/release-notes/?title=quality-of-life-updates-in-figjam
+update_download_url: ''
+update_version: Quality of life updates in FigJam
+update_logo_text: FIG
+update_published_at: '2026-04-28T00:00:00.000Z'
+update_last_checked: '2026-04-28T18:07:29Z'
+patch_file_size: ''
+patch_file_size_note: ''
+update_status: current
+update_feed_title: Figma Quality of life updates in FigJam
+update_detail_title: Figma Quality of life updates in FigJam
+update_consensus_label: Insufficient data
+update_report_count: 0
+update_consensus_confidence: Low
+quick_verdict: Figma Quality of life updates in FigJam has an official AUXSAYS record. Community consensus is deferred until
+  official ingestion is stable.
+official_summary: Figma published Figma Quality of life updates in FigJam.
+release_summary: Table formatting, diagramming, canvas navigation, and template publishing in FigJam just got a bit better.
+consensus_report: Consensus collection is deferred. This page currently reflects official-source ingestion only.
+complaint_themes: []
+status_events:
+- at: '2026-04-28T00:00:00.000Z'
+  label: Published
+  note: Official source entry detected.
+- at: '2026-04-28T18:07:29Z'
+  label: Insufficient data
+  note: AUXSAYS official-ingestion record initialized.
+official_patch_notes_source_type: rss-feed
+official_patch_notes_capture_status: captured-from-rss-feed
+official_patch_notes_source_url: https://www.figma.com/release-notes/?title=quality-of-life-updates-in-figjam
+official_patch_notes_body: Table formatting, diagramming, canvas navigation, and template publishing in FigJam just got a
+  bit better.
+official_checksums_body: ''
+official_checksums_capture_status: not-present
+---
