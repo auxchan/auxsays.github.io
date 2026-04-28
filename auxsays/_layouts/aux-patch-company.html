@@ -54,7 +54,8 @@ layout: aux-base
       {% assign product_updates_for_card = site.pages | where: "update_entry", true | where: "product_id", product.id %}
 
       {% assign product_lane_label = 'Software' %}
-      <article class="patch-product-card patch-product-card--clickable"
+      <article class="patch-product-card patch-product-card--clickable{% if product.ui_backdrop_path %} patch-product-card--has-ui-backdrop{% endif %}"{% if product.ui_backdrop_path %}
+        style="--product-ui-backdrop: url('{{ product.ui_backdrop_path | relative_url }}');"{% endif %}
         data-card-href="{{ product.product_url | relative_url }}"
         data-product-card="{{ product.id }}"
         data-product-name="{{ product.product_name | downcase }}"

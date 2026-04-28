@@ -3790,3 +3790,111 @@ button, input, select, textarea { font: inherit; }
     letter-spacing: .1em;
   }
 }
+
+/* Adobe software UI backdrop cards - atmospheric, readability-first treatment */
+.patch-product-card--has-ui-backdrop {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 292px;
+  padding: 1.05rem;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.018)),
+    radial-gradient(circle at 86% 18%, rgba(95,212,229,.075), transparent 42%),
+    rgba(7,12,16,.86);
+}
+
+.patch-product-card--has-ui-backdrop::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 0 30%;
+  z-index: -2;
+  background-image: var(--product-ui-backdrop);
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: right center;
+  opacity: .38;
+  filter: saturate(.72) contrast(1.05) brightness(.86);
+  transform: scale(1.012);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.12) 10%, rgba(0,0,0,.72) 42%, rgba(0,0,0,.92) 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.12) 10%, rgba(0,0,0,.72) 42%, rgba(0,0,0,.92) 100%);
+  transition: opacity .28s ease, transform .28s ease, filter .28s ease;
+}
+
+.patch-product-card--has-ui-backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(6,10,14,.96) 0%, rgba(6,10,14,.90) 34%, rgba(6,10,14,.62) 68%, rgba(6,10,14,.72) 100%),
+    radial-gradient(circle at 72% 20%, rgba(95,212,229,.09), transparent 34%),
+    linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.012));
+}
+
+.patch-product-card--has-ui-backdrop > * {
+  position: relative;
+  z-index: 1;
+}
+
+.patch-product-card--has-ui-backdrop p:not(.patch-source-signal) {
+  max-width: 58ch;
+}
+
+.patch-product-card--has-ui-backdrop .patch-source-signal {
+  max-width: min(54ch, 74%);
+  background:
+    linear-gradient(180deg, rgba(16,26,32,.82), rgba(12,20,26,.72));
+  border-left-color: rgba(95,212,229,.82);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.035),
+    0 16px 34px rgba(0,0,0,.18);
+  backdrop-filter: blur(8px);
+}
+
+.patch-product-card--has-ui-backdrop .patch-product-topline,
+.patch-product-card--has-ui-backdrop .patch-status-line,
+.patch-product-card--has-ui-backdrop .patch-card-links {
+  max-width: 100%;
+}
+
+.patch-product-card--has-ui-backdrop:hover::before,
+.patch-product-card--has-ui-backdrop:focus-visible::before,
+.patch-product-card--has-ui-backdrop.is-selected-software::before {
+  opacity: .48;
+  transform: scale(1.026);
+  filter: saturate(.82) contrast(1.08) brightness(.92);
+}
+
+.patch-product-card--has-ui-backdrop.is-selected-software {
+  border-color: rgba(95,212,229,.62);
+  box-shadow:
+    0 24px 54px rgba(0,0,0,.35),
+    0 0 0 1px rgba(95,212,229,.16),
+    0 0 34px rgba(95,212,229,.10);
+}
+
+.patch-product-card--has-ui-backdrop .patch-source-priority--software {
+  background: rgba(95,212,229,.08);
+  box-shadow: 0 0 0 1px rgba(95,212,229,.12), 0 0 22px rgba(95,212,229,.08);
+}
+
+@media (max-width: 940px) {
+  .patch-product-card--has-ui-backdrop::before {
+    inset: 34% 0 0 0;
+    opacity: .20;
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.55) 22%, rgba(0,0,0,.85) 100%);
+    mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.55) 22%, rgba(0,0,0,.85) 100%);
+  }
+
+  .patch-product-card--has-ui-backdrop::after {
+    background:
+      linear-gradient(180deg, rgba(6,10,14,.96) 0%, rgba(6,10,14,.90) 58%, rgba(6,10,14,.76) 100%),
+      radial-gradient(circle at 74% 34%, rgba(95,212,229,.08), transparent 40%);
+  }
+
+  .patch-product-card--has-ui-backdrop .patch-source-signal {
+    max-width: 100%;
+  }
+}
