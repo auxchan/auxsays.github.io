@@ -421,7 +421,7 @@
   source_id: adobe-premiere-pro
   logo_label: Premiere
   logo_path: /assets/img/patch-logos/adobe-premiere-pro.svg
-  ui_backdrop_path: /assets/img/software-ui/adobe-premiere-pro-ui.svg
+  ui_backdrop_path: /assets/img/software-ui/adobe-premiere-pro-ui.webp
   company_id: adobe
   product_id: adobe-premiere-pro
   company_url: /updates/adobe/
@@ -459,7 +459,7 @@
   source_id: adobe-after-effects
   logo_label: After Effects
   logo_path: /assets/img/patch-logos/adobe-after-effects.svg
-  ui_backdrop_path: /assets/img/software-ui/adobe-after-effects-ui.svg
+  ui_backdrop_path: /assets/img/software-ui/adobe-after-effects-ui.webp
   company_id: adobe
   product_id: adobe-after-effects
   company_url: /updates/adobe/
@@ -497,7 +497,7 @@
   source_id: adobe-photoshop
   logo_label: Photoshop
   logo_path: /assets/img/patch-logos/adobe-photoshop.svg
-  ui_backdrop_path: /assets/img/software-ui/adobe-photoshop-ui.svg
+  ui_backdrop_path: /assets/img/software-ui/adobe-photoshop-ui.webp
   company_id: adobe
   product_id: adobe-photoshop
   company_url: /updates/adobe/
@@ -535,7 +535,7 @@
   source_id: adobe-media-encoder
   logo_label: Media Encoder
   logo_path: /assets/img/patch-logos/adobe-media-encoder.svg
-  ui_backdrop_path: /assets/img/software-ui/adobe-media-encoder-ui.svg
+  ui_backdrop_path: /assets/img/software-ui/adobe-media-encoder-ui.webp
   company_id: adobe
   product_id: adobe-media-encoder
   company_url: /updates/adobe/
@@ -573,7 +573,7 @@
   source_id: adobe-lightroom-classic
   logo_label: Lightroom Classic
   logo_path: /assets/img/patch-logos/adobe-lightroom-classic.svg
-  ui_backdrop_path: /assets/img/software-ui/adobe-lightroom-classic-ui.svg
+  ui_backdrop_path: /assets/img/software-ui/adobe-lightroom-classic-ui.webp
   company_id: adobe
   product_id: adobe-lightroom-classic
   company_url: /updates/adobe/
