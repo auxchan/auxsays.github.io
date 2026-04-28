@@ -2,7 +2,7 @@
 layout: aux-base
 ---
 {% assign company = site.data.patch_companies | where: "id", page.company_id | first %}
-{% assign products = site.data.patch_products | where: "company_id", page.company_id %}
+{% assign products = site.data.patch_products | where: "company_id", page.company_id | sort: "product_name" %}
 {% assign company_updates = site.pages | where: "update_entry", true | where: "company_id", page.company_id | sort: "update_published_at" | reverse %}
 {% assign documented_count = company_updates.size %}
 
@@ -33,7 +33,15 @@ layout: aux-base
       <h2>Tracked software and workflow surfaces</h2>
       <p>Follow the software lanes below for release history, stability signals, workflow impact, official sources, and community consensus as records are added.</p>
     </div>
-    <div class="patch-product-grid">
+    {% if products.size > 1 %}
+    <div class="patch-software-selector" data-software-selector aria-label="Software selector">
+      <button class="patch-software-chip is-active" type="button" data-product-select="all">All</button>
+      {% for product in products %}
+      <button class="patch-software-chip" type="button" data-product-select="{{ product.id }}">{{ product.product_name }}</button>
+      {% endfor %}
+    </div>
+    {% endif %}
+    <div class="patch-product-grid" data-product-grid>
       {% for product in products %}
       {% assign product_cadence_label = product.cadence | default: '' %}
       {% if product_cadence_label == 'High' %}
@@ -48,6 +56,8 @@ layout: aux-base
       {% assign product_lane_label = 'Software' %}
       <article class="patch-product-card patch-product-card--clickable"
         data-card-href="{{ product.product_url | relative_url }}"
+        data-product-card="{{ product.id }}"
+        data-product-name="{{ product.product_name | downcase }}"
         tabindex="0"
         role="link"
         aria-label="Open {{ product.product_name }} software page">

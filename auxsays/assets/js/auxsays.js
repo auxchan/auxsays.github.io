@@ -256,6 +256,42 @@ document.addEventListener('DOMContentLoaded', () => {
     applyPatchFeed();
   }
 
+  // Company software selector: keep all cards visible, but promote the selected software to the first slot.
+  document.querySelectorAll('[data-software-selector]').forEach((selector) => {
+    const chips = Array.from(selector.querySelectorAll('[data-product-select]'));
+    const grid = selector.parentElement ? selector.parentElement.querySelector('[data-product-grid]') : null;
+    if (!grid || !chips.length) return;
+
+    const cards = Array.from(grid.querySelectorAll('[data-product-card]'));
+    const originalOrder = cards.slice();
+
+    const renderOrder = (selectedId) => {
+      const normalized = String(selectedId || 'all');
+      const ordered = originalOrder.slice();
+      if (normalized !== 'all') {
+        const selectedCard = ordered.find((card) => card.dataset.productCard === normalized);
+        if (selectedCard) {
+          const remaining = ordered.filter((card) => card !== selectedCard);
+          ordered.splice(0, ordered.length, selectedCard, ...remaining);
+        }
+      }
+      ordered.forEach((card, index) => {
+        card.classList.toggle('is-selected-software', normalized !== 'all' && card.dataset.productCard === normalized);
+        card.style.order = String(index);
+      });
+    };
+
+    chips.forEach((chip) => {
+      chip.addEventListener('click', () => {
+        chips.forEach((item) => item.classList.remove('is-active'));
+        chip.classList.add('is-active');
+        renderOrder(chip.dataset.productSelect || 'all');
+      });
+    });
+
+    renderOrder('all');
+  });
+
   // Card click-through: make source/product cards clickable while preserving explicit links/buttons.
   document.querySelectorAll('[data-card-href]').forEach((card) => {
     const openCard = () => {

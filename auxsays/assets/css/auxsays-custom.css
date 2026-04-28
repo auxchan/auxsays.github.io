@@ -3735,3 +3735,58 @@ button, input, select, textarea { font: inherit; }
   max-width: 100%;
   max-height: 100%;
 }
+
+/* Company software selector: promote selected software without hiding the rest */
+.patch-software-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .65rem;
+  margin: 1.2rem 0 1.25rem;
+}
+
+.patch-software-chip {
+  appearance: none;
+  border: 1px solid rgba(95,212,229,.28);
+  background: rgba(95,212,229,.045);
+  color: var(--text-1);
+  border-radius: 999px;
+  padding: .62rem .95rem;
+  font-size: .72rem;
+  font-weight: 850;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: border-color .18s ease, background .18s ease, color .18s ease, box-shadow .18s ease, transform .18s ease;
+}
+
+.patch-software-chip:hover,
+.patch-software-chip:focus-visible {
+  border-color: rgba(95,212,229,.58);
+  background: rgba(95,212,229,.095);
+  color: var(--cyan-1);
+  transform: translateY(-1px);
+  outline: none;
+}
+
+.patch-software-chip.is-active {
+  border-color: rgba(95,212,229,.72);
+  background: linear-gradient(180deg, rgba(95,212,229,.18), rgba(95,212,229,.08));
+  color: var(--cyan-1);
+  box-shadow: 0 0 0 1px rgba(95,212,229,.08), 0 0 28px rgba(95,212,229,.08);
+}
+
+.patch-product-card.is-selected-software {
+  border-color: rgba(95,212,229,.62);
+  box-shadow: 0 24px 48px rgba(0,0,0,.34), 0 0 0 1px rgba(95,212,229,.14), 0 0 38px rgba(95,212,229,.08);
+}
+
+@media (max-width: 640px) {
+  .patch-software-selector {
+    gap: .5rem;
+  }
+  .patch-software-chip {
+    font-size: .66rem;
+    padding: .55rem .75rem;
+    letter-spacing: .1em;
+  }
+}
