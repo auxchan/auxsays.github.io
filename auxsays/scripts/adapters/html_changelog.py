@@ -71,7 +71,7 @@ def _adobe_version_from_title(title: str) -> str:
     return m.group(1).strip() if m else first_nonempty(title, "official-update")
 
 
-def _fetch_adobe_premiere_release_notes(source: dict, limit: int = 3) -> list[dict]:
+def _fetch_adobe_release_notes(source: dict, limit: int = 3) -> list[dict]:
     ingestion = source.get("ingestion", {})
     source_url = ingestion["official_url"]
     html = fetch_text(source_url).text
@@ -112,8 +112,8 @@ def _fetch_adobe_premiere_release_notes(source: dict, limit: int = 3) -> list[di
             "checksums_body": "",
             "summary": "",
             "source_type": "html-changelog",
-            "capture_status": "captured-from-official-adobe-premiere-release-notes",
-            "official_summary": f"Adobe published Premiere Pro {version} release notes.",
+            "capture_status": "captured-from-official-adobe-release-notes",
+            "official_summary": f"Adobe published {source['software']} {version} release notes.",
         })
         if len(records) >= limit:
             break
@@ -150,8 +150,8 @@ def _candidate_links(source: dict, source_url: str, html: str) -> list[str]:
 def fetch(source: dict, limit: int = 3) -> list[dict]:
     ingestion = source.get("ingestion", {})
     profile = ingestion.get("parser_profile") or "generic"
-    if profile == "adobe_premiere_release_notes":
-        return _fetch_adobe_premiere_release_notes(source, limit=limit)
+    if profile.startswith("adobe_") and profile.endswith("_release_notes"):
+        return _fetch_adobe_release_notes(source, limit=limit)
 
     source_url = ingestion["official_url"]
     listing = fetch_text(source_url).text

@@ -130,6 +130,50 @@
   coverage_state: active_watch
   documented_update_count: 0
   backfill_status: queued
+- product_id: adobe-after-effects
+  company_id: adobe
+  product_name: After Effects
+  company_name: Adobe
+  priority: Core
+  category_key: video-production
+  source_url: https://helpx.adobe.com/after-effects/release-note/release-notes-after-effects.html
+  source_label: After Effects release notes
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: adobe-photoshop
+  company_id: adobe
+  product_name: Photoshop
+  company_name: Adobe
+  priority: Core
+  category_key: design-workflow
+  source_url: https://helpx.adobe.com/photoshop/desktop/whats-new/photoshop-on-desktop-release-notes.html
+  source_label: Photoshop release notes
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: adobe-media-encoder
+  company_id: adobe
+  product_name: Media Encoder
+  company_name: Adobe
+  priority: Core
+  category_key: video-production
+  source_url: https://helpx.adobe.com/media-encoder/release-notes.html
+  source_label: Media Encoder release notes
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: adobe-lightroom-classic
+  company_id: adobe
+  product_name: Lightroom Classic
+  company_name: Adobe
+  priority: Core
+  category_key: design-workflow
+  source_url: https://helpx.adobe.com/lightroom-classic/help/whats-new/release-notes.html
+  source_label: Lightroom Classic release notes
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
 - product_id: blackmagic-davinci
   company_id: blackmagic-design
   product_name: DaVinci Resolve

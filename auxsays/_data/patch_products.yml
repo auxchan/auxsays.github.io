@@ -408,16 +408,16 @@
 - id: adobe-premiere-pro
   company_name: Adobe
   product_name: Premiere Pro
-  badge_text: PRM
+  badge_text: PR
   category_key: video-production
   category_label: Video / Production
   priority: Core
   cadence: High
-  impact: Editing, GPU acceleration, exports, codecs, captions, audio, AI tools, and professional video production workflows.
-  watch_reason: Premiere Pro updates can affect project stability, editing speed, GPU acceleration, exports, captions, codecs, and production deadlines.
+  impact: Non-linear editing (NLE), timeline performance, GPU acceleration, exports, codecs, captions, audio, AI tools, and professional video production workflows.
+  watch_reason: Premiere Pro updates can affect NLE timeline behavior, project stability, editing speed, GPU acceleration, exports, captions, codecs, and production deadlines.
   source_url: https://helpx.adobe.com/premiere/desktop/whats-new/release-notes.html
   source_label: Premiere Pro release notes
-  signal_notes: Track editing features, export behavior, codec support, GPU acceleration, captions, known issues, and fixed issues separately.
+  signal_notes: Track NLE timeline behavior, editing features, export behavior, codec support, GPU acceleration, captions, known issues, and fixed issues separately.
   source_id: adobe-premiere-pro
   logo_label: Premiere
   logo_path: /assets/img/patch-logos/adobe-premiere-pro.svg
@@ -442,6 +442,154 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: Premiere Pro is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: adobe-after-effects
+  company_name: Adobe
+  product_name: After Effects
+  badge_text: AE
+  category_key: video-production
+  category_label: Video / Production
+  priority: Core
+  cadence: High
+  impact: Motion graphics, compositing, visual effects, animation, GPU acceleration, render stability, and production pipeline workflows.
+  watch_reason: After Effects updates can affect motion graphics, compositing stability, expressions, GPU acceleration, plug-ins, renders, and production deadlines.
+  source_url: https://helpx.adobe.com/after-effects/release-note/release-notes-after-effects.html
+  source_label: After Effects release notes
+  signal_notes: Track compositing behavior, motion graphics changes, expression compatibility, GPU acceleration, rendering, plug-ins, known issues, and fixed issues.
+  source_id: adobe-after-effects
+  logo_label: After Effects
+  logo_path: /assets/img/patch-logos/adobe-after-effects.svg
+  company_id: adobe
+  product_id: adobe-after-effects
+  company_url: /updates/adobe/
+  product_url: /updates/adobe/adobe-after-effects/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: After Effects is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: adobe-photoshop
+  company_name: Adobe
+  product_name: Photoshop
+  badge_text: PS
+  category_key: design-workflow
+  category_label: Design Workflow
+  priority: Core
+  cadence: High
+  impact: Image editing, generative tools, masking, typography, color workflows, file compatibility, and creator asset production.
+  watch_reason: Photoshop updates can affect image editing speed, generative features, masking behavior, color workflows, plug-ins, file compatibility, and production assets.
+  source_url: https://helpx.adobe.com/photoshop/desktop/whats-new/photoshop-on-desktop-release-notes.html
+  source_label: Photoshop release notes
+  signal_notes: Track editing features, generative tools, masking, file compatibility, plug-in behavior, color workflow changes, known issues, and fixed issues.
+  source_id: adobe-photoshop
+  logo_label: Photoshop
+  logo_path: /assets/img/patch-logos/adobe-photoshop.svg
+  company_id: adobe
+  product_id: adobe-photoshop
+  company_url: /updates/adobe/
+  product_url: /updates/adobe/adobe-photoshop/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Photoshop is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: adobe-media-encoder
+  company_name: Adobe
+  product_name: Media Encoder
+  badge_text: ME
+  category_key: video-production
+  category_label: Video / Production
+  priority: Core
+  cadence: High
+  impact: Encoding, exports, codecs, presets, queue stability, Premiere Pro handoff, After Effects handoff, and delivery workflows.
+  watch_reason: Media Encoder updates can affect export reliability, codec support, preset behavior, queue stability, render handoff, and delivery deadlines.
+  source_url: https://helpx.adobe.com/media-encoder/release-notes.html
+  source_label: Media Encoder release notes
+  signal_notes: Track codec support, export behavior, queue stability, presets, GPU encoding, Premiere Pro handoff, After Effects handoff, known issues, and fixed issues.
+  source_id: adobe-media-encoder
+  logo_label: Media Encoder
+  logo_path: /assets/img/patch-logos/adobe-media-encoder.svg
+  company_id: adobe
+  product_id: adobe-media-encoder
+  company_url: /updates/adobe/
+  product_url: /updates/adobe/adobe-media-encoder/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Media Encoder is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+- id: adobe-lightroom-classic
+  company_name: Adobe
+  product_name: Lightroom Classic
+  badge_text: LRC
+  category_key: design-workflow
+  category_label: Design Workflow
+  priority: Core
+  cadence: Medium
+  impact: Photo ingest, catalog stability, masking, raw processing, camera/lens support, export behavior, and professional photo workflows.
+  watch_reason: Lightroom Classic updates can affect catalog stability, raw support, masking tools, camera and lens profiles, exports, sync behavior, and photo production deadlines.
+  source_url: https://helpx.adobe.com/lightroom-classic/help/whats-new/release-notes.html
+  source_label: Lightroom Classic release notes
+  signal_notes: Track catalog stability, camera raw support, lens profiles, masking behavior, export behavior, sync issues, known issues, and fixed issues.
+  source_id: adobe-lightroom-classic
+  logo_label: Lightroom Classic
+  logo_path: /assets/img/patch-logos/adobe-lightroom-classic.svg
+  company_id: adobe
+  product_id: adobe-lightroom-classic
+  company_url: /updates/adobe/
+  product_url: /updates/adobe/adobe-lightroom-classic/
+  current_status_label: Tracking initialized
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_status: First patch record pending
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
+  record_trigger_rules:
+  - New official release or changelog entry.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
+  - Enough public community signal to evaluate stability, regressions, or user confusion.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Lightroom Classic is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: blackmagic-davinci
   company_name: Blackmagic Design
   product_name: DaVinci Resolve

@@ -111,13 +111,53 @@ canva:
 adobe-premiere-pro:
   company_name: Adobe
   product_name: Premiere Pro
-  badge_text: PRM
+  badge_text: PR
   accent: '#d6ab4e'
   category_label: Video / Production
   company_label: Adobe
   source_id: adobe-premiere-pro
   logo_label: Premiere
   logo_path: /assets/img/patch-logos/adobe-premiere-pro.svg
+adobe-after-effects:
+  company_name: Adobe
+  product_name: After Effects
+  badge_text: AE
+  accent: '#d6ab4e'
+  category_label: Video / Production
+  company_label: Adobe
+  source_id: adobe-after-effects
+  logo_label: After Effects
+  logo_path: /assets/img/patch-logos/adobe-after-effects.svg
+adobe-photoshop:
+  company_name: Adobe
+  product_name: Photoshop
+  badge_text: PS
+  accent: '#d6ab4e'
+  category_label: Design Workflow
+  company_label: Adobe
+  source_id: adobe-photoshop
+  logo_label: Photoshop
+  logo_path: /assets/img/patch-logos/adobe-photoshop.svg
+adobe-media-encoder:
+  company_name: Adobe
+  product_name: Media Encoder
+  badge_text: ME
+  accent: '#d6ab4e'
+  category_label: Video / Production
+  company_label: Adobe
+  source_id: adobe-media-encoder
+  logo_label: Media Encoder
+  logo_path: /assets/img/patch-logos/adobe-media-encoder.svg
+adobe-lightroom-classic:
+  company_name: Adobe
+  product_name: Lightroom Classic
+  badge_text: LRC
+  accent: '#d6ab4e'
+  category_label: Design Workflow
+  company_label: Adobe
+  source_id: adobe-lightroom-classic
+  logo_label: Lightroom Classic
+  logo_path: /assets/img/patch-logos/adobe-lightroom-classic.svg
 twitch:
   company_name: Twitch
   product_name: Twitch

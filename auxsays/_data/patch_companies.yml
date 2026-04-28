@@ -4,17 +4,30 @@
   priority: Core
   category_keys:
   - video-production
-  summary: Adobe is tracked because changes to Premiere Pro can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
+  - design-workflow
+  summary: Adobe is tracked because changes to Premiere Pro, After Effects, Photoshop, Media Encoder, and Lightroom Classic can affect creator workflows, production stability, rendering, exports, design assets, and publishing operations.
   logo_path: /assets/img/patch-logos/adobe-premiere-pro.svg
   company_url: /updates/adobe/
   official_sources:
   - label: Premiere Pro release notes
     url: https://helpx.adobe.com/premiere/desktop/whats-new/release-notes.html
     product_id: adobe-premiere-pro
+  - label: After Effects release notes
+    url: https://helpx.adobe.com/after-effects/release-note/release-notes-after-effects.html
+    product_id: adobe-after-effects
+  - label: Photoshop release notes
+    url: https://helpx.adobe.com/photoshop/desktop/whats-new/photoshop-on-desktop-release-notes.html
+    product_id: adobe-photoshop
+  - label: Media Encoder release notes
+    url: https://helpx.adobe.com/media-encoder/release-notes.html
+    product_id: adobe-media-encoder
+  - label: Lightroom Classic release notes
+    url: https://helpx.adobe.com/lightroom-classic/help/whats-new/release-notes.html
+    product_id: adobe-lightroom-classic
   documented_update_count: 0
   coverage_state: active_watch
   coverage_status_label: Monitoring active
-  tracked_product_count: 1
+  tracked_product_count: 5
 - id: amd
   company_name: AMD
   display_name: AMD

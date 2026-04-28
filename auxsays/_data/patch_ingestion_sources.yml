@@ -1000,6 +1000,205 @@
     - Reddit
     difficulty: TBD
     defer_until_official_ingestion_stable: true
+- company_id: adobe
+  product_id: adobe-after-effects
+  company: Adobe
+  software: After Effects
+  public_category: Video / Production
+  enabled: true
+  recommended_priority: P1 build now
+  ingestion:
+    type: html_changelog
+    adapter: html_changelog
+    official_url: https://helpx.adobe.com/after-effects/release-note/release-notes-after-effects.html
+    secondary_official_url: null
+    feed_url: null
+    api_url: null
+    parser_profile: adobe_after_effects_release_notes
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: false
+    scrape_feasibility: Medium
+    reliability: High
+    breakage_risk: Medium
+    polling_frequency: 24h
+    update_detection_method: version/date comparison
+    extractable_fields:
+      version: true
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: false
+      file_size: false
+      checksum: false
+      known_issues: true
+      platform_specific_installers: false
+      archived_release_history: true
+    keywords:
+    - release
+    - update
+    - changelog
+    - patch
+    - version
+    - adobe
+    - after effects
+  generated_record:
+    canonical_url_pattern: /updates/adobe/adobe-after-effects/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields: [layout, title, description, permalink, update_entry, company_id, product_id, update_product, update_version, update_published_at, update_last_checked, patch_file_size, patch_file_size_note, update_source_url, update_download_url, official_summary, release_summary, official_patch_notes_body, official_checksums_body, update_consensus_label, update_report_count, update_consensus_confidence, consensus_report, complaint_themes, status_events]
+  community_future:
+    possible_sources: [Adobe community forum, Adobe known issues pages, Reddit, creator forums]
+    difficulty: Medium
+    defer_until_official_ingestion_stable: true
+- company_id: adobe
+  product_id: adobe-photoshop
+  company: Adobe
+  software: Photoshop
+  public_category: Design Workflow
+  enabled: true
+  recommended_priority: P1 build now
+  ingestion:
+    type: html_changelog
+    adapter: html_changelog
+    official_url: https://helpx.adobe.com/photoshop/desktop/whats-new/photoshop-on-desktop-release-notes.html
+    secondary_official_url: null
+    feed_url: null
+    api_url: null
+    parser_profile: adobe_photoshop_release_notes
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: false
+    scrape_feasibility: Medium
+    reliability: High
+    breakage_risk: Medium
+    polling_frequency: 24h
+    update_detection_method: version/date comparison
+    extractable_fields:
+      version: true
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: false
+      file_size: false
+      checksum: false
+      known_issues: true
+      platform_specific_installers: false
+      archived_release_history: true
+    keywords: [release, update, changelog, patch, version, adobe, photoshop]
+  generated_record:
+    canonical_url_pattern: /updates/adobe/adobe-photoshop/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields: [layout, title, description, permalink, update_entry, company_id, product_id, update_product, update_version, update_published_at, update_last_checked, patch_file_size, patch_file_size_note, update_source_url, update_download_url, official_summary, release_summary, official_patch_notes_body, official_checksums_body, update_consensus_label, update_report_count, update_consensus_confidence, consensus_report, complaint_themes, status_events]
+  community_future:
+    possible_sources: [Adobe community forum, Adobe known issues pages, Reddit, creator forums]
+    difficulty: Medium
+    defer_until_official_ingestion_stable: true
+- company_id: adobe
+  product_id: adobe-media-encoder
+  company: Adobe
+  software: Media Encoder
+  public_category: Video / Production
+  enabled: true
+  recommended_priority: P1 build now
+  ingestion:
+    type: html_changelog
+    adapter: html_changelog
+    official_url: https://helpx.adobe.com/media-encoder/release-notes.html
+    secondary_official_url: null
+    feed_url: null
+    api_url: null
+    parser_profile: adobe_media_encoder_release_notes
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: false
+    scrape_feasibility: Medium
+    reliability: High
+    breakage_risk: Medium
+    polling_frequency: 24h
+    update_detection_method: version/date comparison
+    extractable_fields:
+      version: true
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: false
+      file_size: false
+      checksum: false
+      known_issues: true
+      platform_specific_installers: false
+      archived_release_history: true
+    keywords: [release, update, changelog, patch, version, adobe, media encoder, export, codec]
+  generated_record:
+    canonical_url_pattern: /updates/adobe/adobe-media-encoder/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields: [layout, title, description, permalink, update_entry, company_id, product_id, update_product, update_version, update_published_at, update_last_checked, patch_file_size, patch_file_size_note, update_source_url, update_download_url, official_summary, release_summary, official_patch_notes_body, official_checksums_body, update_consensus_label, update_report_count, update_consensus_confidence, consensus_report, complaint_themes, status_events]
+  community_future:
+    possible_sources: [Adobe community forum, Adobe known issues pages, Reddit, creator forums]
+    difficulty: Medium
+    defer_until_official_ingestion_stable: true
+- company_id: adobe
+  product_id: adobe-lightroom-classic
+  company: Adobe
+  software: Lightroom Classic
+  public_category: Design Workflow
+  enabled: true
+  recommended_priority: P1 build now
+  ingestion:
+    type: html_changelog
+    adapter: html_changelog
+    official_url: https://helpx.adobe.com/lightroom-classic/help/whats-new/release-notes.html
+    secondary_official_url: null
+    feed_url: null
+    api_url: null
+    parser_profile: adobe_lightroom_classic_release_notes
+    include_prereleases: false
+    version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
+    title_selector: null
+    date_selector: null
+    body_selector: null
+    download_selector: null
+    checksum_selector: null
+    requires_javascript: false
+    scrape_feasibility: Medium
+    reliability: High
+    breakage_risk: Medium
+    polling_frequency: 24h
+    update_detection_method: version/date comparison
+    extractable_fields:
+      version: true
+      release_date: true
+      title: true
+      release_note_body: true
+      download_url: false
+      file_size: false
+      checksum: false
+      known_issues: true
+      platform_specific_installers: false
+      archived_release_history: true
+    keywords: [release, update, changelog, patch, version, adobe, lightroom, camera raw]
+  generated_record:
+    canonical_url_pattern: /updates/adobe/adobe-lightroom-classic/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+    front_matter_fields: [layout, title, description, permalink, update_entry, company_id, product_id, update_product, update_version, update_published_at, update_last_checked, patch_file_size, patch_file_size_note, update_source_url, update_download_url, official_summary, release_summary, official_patch_notes_body, official_checksums_body, update_consensus_label, update_report_count, update_consensus_confidence, consensus_report, complaint_themes, status_events]
+  community_future:
+    possible_sources: [Adobe community forum, Adobe known issues pages, Reddit, creator forums]
+    difficulty: Medium
+    defer_until_official_ingestion_stable: true
 - company_id: blackmagic-design
   product_id: blackmagic-davinci
   company: Blackmagic Design
