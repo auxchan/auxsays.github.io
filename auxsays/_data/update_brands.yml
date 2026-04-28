@@ -108,16 +108,16 @@ canva:
   source_id: canva
   logo_label: Canva
   logo_path: /assets/img/patch-logos/canva.svg
-adobe-creative-cloud:
+adobe-premiere-pro:
   company_name: Adobe
-  product_name: Creative Cloud / Firefly
-  badge_text: ADB
+  product_name: Premiere Pro
+  badge_text: PRM
   accent: '#d6ab4e'
   category_label: Video / Production
   company_label: Adobe
-  source_id: adobe-creative-cloud
-  logo_label: Adobe
-  logo_path: /assets/img/patch-logos/adobe-creative-cloud.svg
+  source_id: adobe-premiere-pro
+  logo_label: Premiere
+  logo_path: /assets/img/patch-logos/adobe-premiere-pro.svg
 twitch:
   company_name: Twitch
   product_name: Twitch

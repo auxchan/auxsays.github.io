@@ -55,3 +55,20 @@ Some official GitHub actions may still report the warning until their internal a
 - Patch Feed radar now uses the correct cadence display variable.
 - Patch ingestion workflow now stages the full generated updates directory, so future generated-record deletions are included in commits.
 - Python __pycache__ artifacts were removed from the repository package.
+
+## Premiere Pro ingestion update
+
+- Replaced the Adobe watch target from Creative Cloud / Firefly to Premiere Pro.
+- Enabled `adobe-premiere-pro` as the next official-source ingestion source.
+- Added an Adobe Premiere release-notes parser profile that extracts versioned month sections from Adobe HelpX release notes.
+- Official primary source: https://helpx.adobe.com/premiere/desktop/whats-new/release-notes.html
+- Secondary reference source for future known/fixed issue enrichment: https://helpx.adobe.com/premiere/desktop/troubleshooting/limitations-and-known-issues/known-and-fixed-issues.html
+- Added `.gitignore` and removed committed Python cache artifacts.
+
+Validation recommendation after push:
+
+1. Run `AUXSAYS Patch Ingestion` manually with source `adobe-premiere-pro` and `dry_run=true`.
+2. If it fetches one or more Premiere records without errors, run it again with `dry_run=false`.
+3. Confirm generated Premiere records appear under `/updates/adobe/adobe-premiere-pro/`.
+4. Only after that confirmation, batch-enable the next Adobe production apps.
+

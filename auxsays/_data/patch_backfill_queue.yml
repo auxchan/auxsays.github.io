@@ -119,14 +119,14 @@
   coverage_state: active_watch
   documented_update_count: 0
   backfill_status: queued
-- product_id: adobe-creative-cloud
+- product_id: adobe-premiere-pro
   company_id: adobe
-  product_name: Creative Cloud / Firefly
+  product_name: Premiere Pro
   company_name: Adobe
   priority: Core
   category_key: video-production
-  source_url: https://helpx.adobe.com/creative-cloud/release-note/cc-release-notes.html
-  source_label: Creative Cloud release notes
+  source_url: https://helpx.adobe.com/premiere/desktop/whats-new/release-notes.html
+  source_label: Premiere Pro release notes
   coverage_state: active_watch
   documented_update_count: 0
   backfill_status: queued

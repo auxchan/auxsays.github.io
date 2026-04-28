@@ -4,13 +4,13 @@
   priority: Core
   category_keys:
   - video-production
-  summary: Adobe is tracked because changes to Creative Cloud / Firefly can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: /assets/img/patch-logos/adobe-creative-cloud.svg
+  summary: Adobe is tracked because changes to Premiere Pro can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
+  logo_path: /assets/img/patch-logos/adobe-premiere-pro.svg
   company_url: /updates/adobe/
   official_sources:
-  - label: Creative Cloud release notes
-    url: https://helpx.adobe.com/creative-cloud/release-note/cc-release-notes.html
-    product_id: adobe-creative-cloud
+  - label: Premiere Pro release notes
+    url: https://helpx.adobe.com/premiere/desktop/whats-new/release-notes.html
+    product_id: adobe-premiere-pro
   documented_update_count: 0
   coverage_state: active_watch
   coverage_status_label: Monitoring active

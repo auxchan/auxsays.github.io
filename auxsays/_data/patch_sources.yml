@@ -284,26 +284,26 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   ingestion_status: First patch record pending
-- id: adobe-creative-cloud
+- id: adobe-premiere-pro
   company_name: Adobe
-  product_name: Creative Cloud / Firefly
-  badge_text: ADB
+  product_name: Premiere Pro
+  badge_text: PRM
   category_key: video-production
   category_label: Video / Production
   priority: Core
   cadence: High
-  impact: Editing, compositing, design, generative media, licensing, and professional creator workflows.
-  watch_reason: Adobe updates can reshape production pipelines and raise real workflow/licensing questions for creators.
-  source_url: https://helpx.adobe.com/creative-cloud/release-note/cc-release-notes.html
-  source_label: Creative Cloud release notes
-  signal_notes: Separate Firefly, Premiere, After Effects, Photoshop, licensing, and cloud workflow changes.
-  source_id: adobe-creative-cloud
-  logo_label: Adobe
-  logo_path: /assets/img/patch-logos/adobe-creative-cloud.svg
+  impact: Editing, GPU acceleration, exports, codecs, captions, audio, AI tools, and professional video production workflows.
+  watch_reason: Premiere Pro updates can affect project stability, editing speed, GPU acceleration, exports, captions, codecs, and production deadlines.
+  source_url: https://helpx.adobe.com/premiere/desktop/whats-new/release-notes.html
+  source_label: Premiere Pro release notes
+  signal_notes: Track editing features, export behavior, codec support, GPU acceleration, captions, known issues, and fixed issues separately.
+  source_id: adobe-premiere-pro
+  logo_label: Premiere
+  logo_path: /assets/img/patch-logos/adobe-premiere-pro.svg
   company_id: adobe
-  product_id: adobe-creative-cloud
+  product_id: adobe-premiere-pro
   company_url: /updates/adobe/
-  product_url: /updates/adobe/adobe-creative-cloud/
+  product_url: /updates/adobe/adobe-premiere-pro/
   current_status_label: Tracking initialized
   current_status_score: 0
   documented_update_count: 0
