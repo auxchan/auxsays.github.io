@@ -3899,3 +3899,85 @@ button, input, select, textarea { font: inherit; }
     max-width: 100%;
   }
 }
+
+/* AUXSAYS IA repair: compact main Patch Feed controls and clear hierarchy filters */
+.patch-controls--compact {
+  padding: 1rem 1.15rem !important;
+}
+.patch-toolbar-grid--compact {
+  grid-template-columns: minmax(260px, 1.2fr) minmax(190px, .72fr) minmax(220px, .86fr) !important;
+  gap: .85rem 1rem !important;
+  align-items: end !important;
+}
+.patch-toolbar-grid--compact > div:nth-child(n+4) {
+  grid-column: 1 / -1;
+}
+.patch-control-block--wide {
+  display: grid;
+  gap: .45rem;
+}
+.patch-controls--compact .patch-label {
+  display: block;
+  margin-bottom: .38rem;
+  font-size: .74rem;
+  letter-spacing: .08em;
+  opacity: .9;
+}
+.patch-controls--compact .patch-search,
+.patch-controls--compact .patch-source-select {
+  min-height: 2.72rem;
+  border-radius: 15px;
+  padding-top: .68rem;
+  padding-bottom: .68rem;
+}
+.patch-controls--compact .patch-chips {
+  gap: .42rem;
+}
+.patch-controls--compact .patch-chip {
+  min-height: 2.34rem;
+  padding: .52rem .86rem;
+  border-radius: 999px;
+  font-size: .86rem;
+}
+.patch-hierarchy-select option {
+  color: #10161c;
+}
+@media (max-width: 980px) {
+  .patch-toolbar-grid--compact {
+    grid-template-columns: 1fr !important;
+  }
+  .patch-toolbar-grid--compact > div {
+    grid-column: 1 / -1 !important;
+  }
+}
+
+/* AUXSAYS software UI backdrop tuning: real UI crops, less aggressive crop behavior */
+.patch-product-card--has-ui-backdrop::before {
+  inset: 8% 1.5rem 8% 38% !important;
+  background-size: contain !important;
+  background-position: right center !important;
+  opacity: .70 !important;
+  filter: saturate(.86) contrast(1.08) brightness(.96) !important;
+  transform: none !important;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.18) 10%, rgba(0,0,0,.76) 36%, rgba(0,0,0,.98) 100%) !important;
+  mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.18) 10%, rgba(0,0,0,.76) 36%, rgba(0,0,0,.98) 100%) !important;
+}
+.patch-product-card--has-ui-backdrop::after {
+  background:
+    linear-gradient(90deg, rgba(6,10,14,.99) 0%, rgba(6,10,14,.92) 30%, rgba(6,10,14,.46) 68%, rgba(6,10,14,.56) 100%),
+    radial-gradient(circle at 78% 18%, rgba(95,212,229,.08), transparent 34%),
+    linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.012)) !important;
+}
+.patch-product-card--has-ui-backdrop:hover::before,
+.patch-product-card--has-ui-backdrop:focus-visible::before,
+.patch-product-card--has-ui-backdrop.is-selected-software::before {
+  opacity: .78 !important;
+  transform: scale(1.015) !important;
+}
+@media (max-width: 940px) {
+  .patch-product-card--has-ui-backdrop::before {
+    inset: 42% .9rem .6rem .9rem !important;
+    background-size: contain !important;
+    opacity: .38 !important;
+  }
+}

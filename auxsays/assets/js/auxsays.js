@@ -116,14 +116,14 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   search?.addEventListener('input', scheduleArticleFilters, { passive: true });
 
-  // patch feed controls: single normalized filter/sort/click system.
+  // Patch Feed controls: company/software hierarchy filters, compact type/category controls, and sorting.
   const patchFeed = document.getElementById('patch-feed');
   const patchArchiveFeed = document.getElementById('patch-archive-feed');
   const patchSourceGrid = document.getElementById('patch-source-grid');
   const patchSearch = document.getElementById('patch-search');
-  const patchSourceSelect = document.getElementById('patch-source-select');
+  const patchCompanySelect = document.getElementById('patch-company-select');
+  const patchSoftwareSelect = document.getElementById('patch-software-select');
   const filterChips = Array.from(document.querySelectorAll('#patch-filter-chips [data-filter]'));
-  const statusChips = Array.from(document.querySelectorAll('#patch-status-chips [data-status]'));
   const sortChips = Array.from(document.querySelectorAll('#patch-sort-chips [data-sort]'));
   const priorityChips = Array.from(document.querySelectorAll('#patch-priority-chips [data-priority]'));
 
@@ -140,30 +140,50 @@ document.addEventListener('DOMContentLoaded', () => {
     return status;
   };
 
-  if ((patchFeed || patchSourceGrid) && (filterChips.length || sortChips.length || statusChips.length || priorityChips.length || patchSourceSelect || patchSearch)) {
+  if ((patchFeed || patchSourceGrid) && (filterChips.length || sortChips.length || priorityChips.length || patchCompanySelect || patchSoftwareSelect || patchSearch)) {
     const allCards = Array.from(document.querySelectorAll('.patch-card'));
     const sourceCards = Array.from(document.querySelectorAll('[data-source-card="true"]'));
     let currentFilter = 'all';
-    let currentStatus = 'all';
     let currentSort = 'latest';
     let currentLane = 'all';
-    let currentSource = 'all';
+    let currentCompany = 'all';
+    let currentSoftware = 'all';
     const riskRank = { negative: 3, moderate: 2, positive: 1, 'insufficient-data': 0, insufficient: 0 };
     const priorityRank = { company: 3, software: 2, watchlist: 1, core: 3, expansion: 2, edge: 1 };
 
-    const matchesCommonFilters = (card, query, includeStatus = true) => {
+    const includesToken = (tokens, token) => {
+      if (!token || token === 'all') return true;
+      return String(tokens || '').toLowerCase().split(/\s+/).includes(String(token).toLowerCase());
+    };
+
+    const matchesUpdateFilters = (card, query) => {
       const haystack = [card.dataset.title, card.dataset.product, card.dataset.company, card.dataset.summary].join(' ').toLowerCase();
-      const sourceId = String(card.dataset.sourceId || '').toLowerCase();
       const type = String(card.dataset.type || '').toLowerCase();
       const category = String(card.dataset.category || '').toLowerCase();
-      const status = normalizeStatus(card.dataset.status);
       const lane = normalizeLane(card.dataset.priority);
+      const companyId = String(card.dataset.companyId || '').toLowerCase();
+      const productId = String(card.dataset.productId || '').toLowerCase();
       const filterPass = currentFilter === 'all' || type.includes(currentFilter) || category.includes(currentFilter);
-      const statusPass = !includeStatus || currentStatus === 'all' || status === currentStatus || status.includes(currentStatus);
       const lanePass = currentLane === 'all' || lane === currentLane;
-      const sourcePass = currentSource === 'all' || sourceId === currentSource;
+      const companyPass = currentCompany === 'all' || companyId === currentCompany;
+      const softwarePass = currentSoftware === 'all' || productId === currentSoftware;
       const queryPass = !query || haystack.includes(query);
-      return filterPass && statusPass && lanePass && sourcePass && queryPass;
+      return filterPass && lanePass && companyPass && softwarePass && queryPass;
+    };
+
+    const matchesCompanyFilters = (card, query) => {
+      const haystack = [card.dataset.title, card.dataset.product, card.dataset.company, card.dataset.summary].join(' ').toLowerCase();
+      const type = String(card.dataset.type || '').toLowerCase();
+      const category = String(card.dataset.category || '').toLowerCase();
+      const lane = normalizeLane(card.dataset.priority);
+      const companyId = String(card.dataset.companyId || '').toLowerCase();
+      const productIds = String(card.dataset.products || '').toLowerCase();
+      const filterPass = currentFilter === 'all' || type.includes(currentFilter) || category.includes(currentFilter);
+      const lanePass = currentLane === 'all' || lane === currentLane;
+      const companyPass = currentCompany === 'all' || companyId === currentCompany;
+      const softwarePass = currentSoftware === 'all' || includesToken(productIds, currentSoftware);
+      const queryPass = !query || haystack.includes(query);
+      return filterPass && lanePass && companyPass && softwarePass && queryPass;
     };
 
     const applyPatchFeed = () => {
@@ -172,7 +192,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const visibleSources = [];
 
       allCards.forEach((card) => {
-        const isVisible = matchesCommonFilters(card, query, true);
+        const isVisible = matchesUpdateFilters(card, query);
         card.hidden = !isVisible;
         card.classList.toggle('is-hidden', !isVisible);
         card.classList.toggle('is-filter-hidden', !isVisible);
@@ -200,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (patchArchiveFeed) patchArchiveFeed.appendChild(archiveFragment);
 
       sourceCards.forEach((card) => {
-        const isVisible = currentStatus === 'all' && matchesCommonFilters(card, query, false);
+        const isVisible = matchesCompanyFilters(card, query);
         card.hidden = !isVisible;
         card.classList.toggle('is-hidden', !isVisible);
         card.classList.toggle('is-filter-hidden', !isVisible);
@@ -209,12 +229,12 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       if (patchSourceGrid) {
-        if (currentSort === 'company') {
-          visibleSources.sort((a, b) => (a.dataset.company || '').localeCompare(b.dataset.company || ''));
-        } else if (currentSort === 'software' || currentSort === 'product') {
-          visibleSources.sort((a, b) => (a.dataset.title || '').localeCompare(b.dataset.title || ''));
+        if (currentSort === 'software' || currentSort === 'product') {
+          visibleSources.sort((a, b) => (a.dataset.product || '').localeCompare(b.dataset.product || '') || (a.dataset.company || '').localeCompare(b.dataset.company || ''));
         } else if (currentSort === 'risk') {
-          visibleSources.sort((a, b) => (priorityRank[normalizeLane(b.dataset.priority)] || 0) - (priorityRank[normalizeLane(a.dataset.priority)] || 0));
+          visibleSources.sort((a, b) => (priorityRank[normalizeLane(b.dataset.priority)] || 0) - (priorityRank[normalizeLane(a.dataset.priority)] || 0) || (a.dataset.company || '').localeCompare(b.dataset.company || ''));
+        } else {
+          visibleSources.sort((a, b) => (a.dataset.company || '').localeCompare(b.dataset.company || ''));
         }
         const sourceFragment = document.createDocumentFragment();
         visibleSources.forEach((card) => sourceFragment.appendChild(card));
@@ -225,20 +245,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const schedulePatchFeed = rafDebounce(applyPatchFeed);
 
     patchSearch?.addEventListener('input', schedulePatchFeed, { passive: true });
-    patchSourceSelect?.addEventListener('change', () => {
-      currentSource = String(patchSourceSelect.value || 'all').toLowerCase();
+    patchCompanySelect?.addEventListener('change', () => {
+      currentCompany = String(patchCompanySelect.value || 'all').toLowerCase();
+      schedulePatchFeed();
+    });
+    patchSoftwareSelect?.addEventListener('change', () => {
+      currentSoftware = String(patchSoftwareSelect.value || 'all').toLowerCase();
       schedulePatchFeed();
     });
     filterChips.forEach((chip) => chip.addEventListener('click', () => {
       filterChips.forEach((c) => c.classList.remove('is-active'));
       chip.classList.add('is-active');
       currentFilter = String(chip.dataset.filter || 'all').toLowerCase();
-      schedulePatchFeed();
-    }));
-    statusChips.forEach((chip) => chip.addEventListener('click', () => {
-      statusChips.forEach((c) => c.classList.remove('is-active'));
-      chip.classList.add('is-active');
-      currentStatus = normalizeStatus(chip.dataset.status || 'all');
       schedulePatchFeed();
     }));
     priorityChips.forEach((chip) => chip.addEventListener('click', () => {

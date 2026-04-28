@@ -1,15 +1,42 @@
 {
-  "last_errors": [],
+  "last_errors": [
+    {
+      "error": "The read operation timed out",
+      "product_id": "adobe-premiere-pro"
+    },
+    {
+      "error": "The read operation timed out",
+      "product_id": "adobe-after-effects"
+    },
+    {
+      "error": "The read operation timed out",
+      "product_id": "adobe-photoshop"
+    },
+    {
+      "error": "The read operation timed out",
+      "product_id": "adobe-media-encoder"
+    },
+    {
+      "error": "The read operation timed out",
+      "product_id": "adobe-lightroom-classic"
+    }
+  ],
   "last_results": [
     {
       "adapter": "rss_feed",
       "fetched": 2,
       "product_id": "figma",
-      "skipped": [],
-      "written": [
-        "auxsays/updates/generated/2026-04-24-figma-performance-improvements-to-make-your-workflows-faster.md",
-        "auxsays/updates/generated/2026-04-23-figma-developer-logging-available-for-governance-customers.md"
-      ]
+      "skipped": [
+        {
+          "reason": "state-seen",
+          "record_id": "rss:figma:2490eafb-ecf7-4d76-9ca9-5e4dd193a086"
+        },
+        {
+          "reason": "state-seen",
+          "record_id": "rss:figma:57dd3e2e-da91-4a70-b924-72fa4c2cd0ba"
+        }
+      ],
+      "written": []
     },
     {
       "adapter": "github_releases",
@@ -17,13 +44,11 @@
       "product_id": "obs-studio",
       "skipped": [
         {
-          "path": "auxsays/updates/generated/2026-04-21-obs-studio-32-1-2.md",
-          "reason": "file-exists",
+          "reason": "state-seen",
           "record_id": "github:obs-studio:311922679"
         },
         {
-          "path": "auxsays/updates/generated/2026-04-02-obs-studio-32-1-1.md",
-          "reason": "file-exists",
+          "reason": "state-seen",
           "record_id": "github:obs-studio:304830335"
         }
       ],
@@ -33,24 +58,43 @@
       "adapter": "github_releases",
       "fetched": 2,
       "product_id": "comfyui",
-      "skipped": [],
-      "written": [
-        "auxsays/updates/generated/2026-04-27-comfyui-0-20-1.md",
-        "auxsays/updates/generated/2026-04-17-comfyui-0-19-3.md"
-      ]
+      "skipped": [
+        {
+          "reason": "state-seen",
+          "record_id": "github:comfyui:314258741"
+        },
+        {
+          "reason": "state-seen",
+          "record_id": "github:comfyui:310487464"
+        }
+      ],
+      "written": []
     },
     {
       "adapter": "rss_feed",
       "fetched": 2,
       "product_id": "github",
+      "skipped": [
+        {
+          "reason": "state-seen",
+          "record_id": "rss:github:https://github.blog/changelog/2026-04-23-copilot-student-gpt-5-3-codex-removal-from-model-picker"
+        },
+        {
+          "reason": "state-seen",
+          "record_id": "rss:github:https://github.blog/changelog/2026-04-27-copilot-cloud-agent-starts-20-faster-with-actions-custom-images"
+        }
+      ],
+      "written": []
+    },
+    {
+      "adapter": "html_changelog",
+      "fetched": 0,
+      "product_id": "netlify",
       "skipped": [],
-      "written": [
-        "auxsays/updates/generated/2026-04-27-github-copilot-copilot-student-gpt-5-3-codex-removal-from-model-picker.md",
-        "auxsays/updates/generated/2026-04-27-github-copilot-copilot-cloud-agent-starts-20-faster-with-actions-custom-images.md"
-      ]
+      "written": []
     }
   ],
-  "last_run_finished_at": "2026-04-27T23:09:13Z",
+  "last_run_finished_at": "2026-04-28T09:15:20Z",
   "last_run_started_at": "2026-04-27T23:09:10Z",
   "sources": {
     "comfyui": {

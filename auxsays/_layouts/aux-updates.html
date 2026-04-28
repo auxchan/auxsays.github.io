@@ -4,6 +4,8 @@ layout: aux-base
 
 {% assign notification_items = site.data.patch_notifications %}
 {% assign patch_sources = site.data.patch_sources %}
+{% assign patch_companies = site.data.patch_companies | sort: "company_name" %}
+{% assign patch_products = site.data.patch_products | sort: "product_name" %}
 {% assign update_pages = site.pages | where: "update_entry", true | sort: "update_published_at" | reverse %}
 {% assign current_pages = update_pages | where_exp: "item", "item.update_status != 'archived' and item.feed_hidden != true" %}
 {% assign archived_pages = update_pages | where: "update_status", "archived" %}
@@ -32,44 +34,35 @@ layout: aux-base
   </section>
   {% endif %}
 
-  <section class="panel patch-controls reveal-up reveal-delay-1">
-    <div class="patch-toolbar-grid patch-toolbar-grid--enhanced">
-      <div class="patch-search-wrap">
+  <section class="panel patch-controls patch-controls--compact reveal-up reveal-delay-1">
+    <div class="patch-toolbar-grid patch-toolbar-grid--enhanced patch-toolbar-grid--compact">
+      <div class="patch-search-wrap patch-control-block patch-control-block--search">
         <label class="patch-label" for="patch-search">Search</label>
-        <input id="patch-search" class="patch-search" type="search" placeholder="Search product, company, version, or note">
+        <input id="patch-search" class="patch-search" type="search" placeholder="Search patch, company, software, version, or note">
       </div>
 
-      <div class="patch-source-select-wrap">
-        <label class="patch-label" for="patch-source-select">Source</label>
-        <select id="patch-source-select" class="patch-source-select">
-          <option value="all">All sources</option>
-          {% for source in patch_sources %}
-      {% assign normalized_priority = source.priority | downcase %}
-      {% if normalized_priority == 'core' %}
-        {% assign normalized_priority = 'company' %}
-      {% elsif normalized_priority == 'expansion' %}
-        {% assign normalized_priority = 'software' %}
-      {% elsif normalized_priority == 'edge' %}
-        {% assign normalized_priority = 'watchlist' %}
-      {% endif %}
-      {% assign priority_display_label = source.priority %}
-      {% if source.priority == 'Core' %}
-        {% assign priority_display_label = 'Company' %}
-      {% elsif source.priority == 'Expansion' %}
-        {% assign priority_display_label = 'Software' %}
-      {% elsif source.priority == 'Edge' %}
-        {% assign priority_display_label = 'Watchlist' %}
-      {% endif %}
-          <option value="{{ source.id }}">{{ source.product_name }}</option>
+      <div class="patch-company-select-wrap patch-control-block">
+        <label class="patch-label" for="patch-company-select">Company</label>
+        <select id="patch-company-select" class="patch-source-select patch-hierarchy-select">
+          <option value="all">All companies</option>
+          {% for company in patch_companies %}
+          <option value="{{ company.id }}">{{ company.company_name }}</option>
           {% endfor %}
-          <option value="obs-studio">OBS Studio</option>
-          <option value="davinci-resolve">DaVinci Resolve</option>
         </select>
       </div>
 
+      <div class="patch-software-select-wrap patch-control-block">
+        <label class="patch-label" for="patch-software-select">Software</label>
+        <select id="patch-software-select" class="patch-source-select patch-hierarchy-select">
+          <option value="all">All software</option>
+          {% for product in patch_products %}
+          <option value="{{ product.id }}">{{ product.product_name }}</option>
+          {% endfor %}
+        </select>
+      </div>
 
-      <div>
-        <span class="patch-label">Lane</span>
+      <div class="patch-control-block patch-control-block--wide">
+        <span class="patch-label">Select Type</span>
         <div class="patch-chips" id="patch-priority-chips">
           <button class="patch-chip is-active" data-priority="all">All</button>
           <button class="patch-chip" data-priority="company">Company</button>
@@ -78,7 +71,7 @@ layout: aux-base
         </div>
       </div>
 
-      <div>
+      <div class="patch-control-block patch-control-block--wide">
         <span class="patch-label">Category</span>
         <div class="patch-chips" id="patch-filter-chips">
           <button class="patch-chip is-active" data-filter="all">All</button>
@@ -89,26 +82,15 @@ layout: aux-base
           <button class="patch-chip" data-filter="hardware-drivers">Hardware</button>
           <button class="patch-chip" data-filter="workflow-automation">Automation</button>
           <button class="patch-chip" data-filter="broadcasting">Broadcasting</button>
-          <button class="patch-chip" data-filter="video-editing">Video Editing</button>
-          <button class="patch-chip" data-filter="creator-software">Creator Tools</button>
+          <button class="patch-chip" data-filter="design-workflow">Design</button>
+          <button class="patch-chip" data-filter="developer-tools">Dev/Web</button>
         </div>
       </div>
 
-      <div>
-        <span class="patch-label">Consensus</span>
-        <div class="patch-chips" id="patch-status-chips">
-          <button class="patch-chip is-active" data-status="all">All</button>
-          <button class="patch-chip" data-status="positive">Positive</button>
-          <button class="patch-chip" data-status="moderate">Moderate</button>
-          <button class="patch-chip" data-status="negative">Negative</button>
-          <button class="patch-chip" data-status="insufficient">Insufficient</button>
-        </div>
-      </div>
-
-      <div>
+      <div class="patch-control-block patch-control-block--wide">
         <span class="patch-label">Sort</span>
         <div class="patch-chips" id="patch-sort-chips">
-          <button class="patch-chip is-active" data-sort="latest">Latest</button>
+          <button class="patch-chip is-active" data-sort="latest">Latest patches</button>
           <button class="patch-chip" data-sort="company">Company A–Z</button>
           <button class="patch-chip" data-sort="software">Software A–Z</button>
           <button class="patch-chip" data-sort="risk">Risk first</button>
@@ -117,24 +99,25 @@ layout: aux-base
     </div>
   </section>
 
-  {% if patch_sources and patch_sources.size > 0 %}
+  {% if patch_companies and patch_companies.size > 0 %}
   <section class="panel patch-source-radar reveal-up reveal-delay-1" id="patch-source-radar">
     <div class="patch-source-radar-head">
       <div>
         <div class="eyebrow">Company Radar</div>
         <h2 class="patch-source-title">Creator-critical companies to monitor</h2>
-        <p class="patch-source-subtitle">This is the watchlist behind the Patch Feed. Current breakdowns appear above and in the archive when there is a release worth covering. Company cards stay here as tracking targets until they have a dedicated update entry.</p>
+        <p class="patch-source-subtitle">Companies are the top-level tracking layer. Open a company to see its software, then open a software page to review patches and official release history.</p>
       </div>
       <div class="patch-radar-stat-grid" aria-label="Patch source summary">
-        <span><strong>{{ patch_sources.size }}</strong><em>tracked companies</em></span>
-        <span><strong>3</strong><em>watch lanes</em></span>
-        <span><strong>2-step</strong><em>official + reaction</em></span>
+        <span><strong>{{ patch_companies.size }}</strong><em>tracked companies</em></span>
+        <span><strong>{{ patch_products.size }}</strong><em>tracked software</em></span>
+        <span><strong>3-tier</strong><em>company → software → patches</em></span>
       </div>
     </div>
 
     <div class="patch-source-grid" id="patch-source-grid">
-      {% for source in patch_sources %}
-      {% assign normalized_priority = source.priority | downcase %}
+      {% for company in patch_companies %}
+      {% assign company_products = patch_products | where: "company_id", company.id | sort: "product_name" %}
+      {% assign normalized_priority = company.priority | downcase %}
       {% if normalized_priority == 'core' %}
         {% assign normalized_priority = 'company' %}
       {% elsif normalized_priority == 'expansion' %}
@@ -142,54 +125,45 @@ layout: aux-base
       {% elsif normalized_priority == 'edge' %}
         {% assign normalized_priority = 'watchlist' %}
       {% endif %}
-      {% assign priority_display_label = source.priority %}
-      {% if source.priority == 'Core' %}
-        {% assign priority_display_label = 'Company' %}
-      {% elsif source.priority == 'Expansion' %}
-        {% assign priority_display_label = 'Software' %}
-      {% elsif source.priority == 'Edge' %}
-        {% assign priority_display_label = 'Watchlist' %}
-      {% endif %}
-      {% assign source_cadence_display_label = source.cadence | default: '' %}
-      {% if source_cadence_display_label == 'High' %}
-        {% assign source_cadence_display_label = 'Frequent updates' %}
-      {% elsif source_cadence_display_label == 'Medium' %}
-        {% assign source_cadence_display_label = 'Periodic updates' %}
-      {% elsif source_cadence_display_label == 'Low' %}
-        {% assign source_cadence_display_label = 'Occasional updates' %}
-      {% endif %}
+      {% assign priority_display_label = 'Company' %}
+      {% assign company_product_names = company_products | map: "product_name" | join: " " %}
+      {% assign company_product_ids = company_products | map: "id" | join: " " %}
       <article class="patch-source-card"
         data-source-card="true"
-        data-source-id="{{ source.id }}"
-        data-type="{{ source.category_key | downcase }}"
-        data-category="{{ source.category_key | downcase }}"
+        data-source-id="{{ company.id }}"
+        data-company-id="{{ company.id }}"
+        data-product-id=""
+        data-products="{{ company_product_ids | downcase }}"
+        data-type="{{ company.category_keys | join: ' ' | downcase }}"
+        data-category="{{ company.category_keys | join: ' ' | downcase }}"
         data-priority="{{ normalized_priority }}"
-        data-cadence="{{ source.cadence | downcase }}"
-        data-title="{{ source.product_name | downcase }}"
-        data-product="{{ source.product_name | downcase }}"
-        data-company="{{ source.company_name | downcase }}"
-        data-summary="{{ source.impact | append: ' ' | append: source.watch_reason | append: ' ' | append: source.signal_notes | downcase }}" data-card-href="{{ source.company_url | relative_url }}" tabindex="0" role="link" aria-label="Open {{ source.company_name }} company page">
+        data-cadence=""
+        data-title="{{ company.company_name | downcase }}"
+        data-product="{{ company_product_names | downcase }}"
+        data-company="{{ company.company_name | downcase }}"
+        data-summary="{{ company.summary | append: ' ' | append: company_product_names | downcase }}"
+        data-card-href="{{ company.company_url | relative_url }}"
+        tabindex="0" role="link" aria-label="Open {{ company.company_name }} company page">
         <div class="patch-source-topline">
           <span class="patch-source-badge patch-logo-badge patch-logo-badge--has-image">
-            <img src="{{ source.logo_path | relative_url }}" alt="{{ source.product_name }} logo" loading="lazy">
+            <img src="{{ company.logo_path | relative_url }}" alt="{{ company.company_name }} logo" loading="lazy">
           </span>
           <span class="patch-source-meta">
-            <strong><a href="{{ source.company_url | relative_url }}">{{ source.product_name }}</a></strong>
-            <em>{{ source.company_name }}</em>
+            <strong><a href="{{ company.company_url | relative_url }}">{{ company.company_name }}</a></strong>
+            <em>{{ company_products.size }} tracked software item{% if company_products.size != 1 %}s{% endif %}</em>
           </span>
-          <span class="patch-source-priority patch-source-priority--{{ source.priority | downcase }}">{{ priority_display_label }}</span>
+          <span class="patch-source-priority patch-source-priority--company">{{ priority_display_label }}</span>
         </div>
         <div class="patch-source-tags">
-          <span>{{ source.category_label }}</span>
-          <span>{{ source_cadence_display_label }}</span>
+          {% for product in company_products limit: 4 %}<span>{{ product.product_name }}</span>{% endfor %}
+          {% if company_products.size > 4 %}<span>+{{ company_products.size | minus: 4 }} more</span>{% endif %}
         </div>
-        <p>{{ source.impact }}</p>
-        <p class="patch-source-reason">{{ source.watch_reason }}</p>
-        {% if source.signal_notes %}<p class="patch-source-signal"><strong>Signal:</strong> {{ source.signal_notes }}</p>{% endif %}
+        <p>{{ company.summary }}</p>
+        <p class="patch-source-reason">Hierarchy: {{ company.company_name }} → software → patches/updates.</p>
         <div class="patch-card-links patch-source-card-links">
-          {% if source.company_url %}<a class="patch-source-link patch-source-link--primary" href="{{ source.company_url | relative_url }}">View company →</a>{% endif %}
-          {% if source.product_url %}<a class="patch-source-link" href="{{ source.product_url | relative_url }}">View software →</a>{% endif %}
-          {% if source.source_url %}<a class="patch-source-link patch-source-link--external" href="{{ source.source_url }}">{{ source.source_label | default: 'Official notes' }} ↗</a>{% endif %}
+          {% if company.company_url %}<a class="patch-source-link patch-source-link--primary" href="{{ company.company_url | relative_url }}">View company →</a>{% endif %}
+          {% assign first_official_source = company.official_sources | first %}
+          {% if first_official_source and first_official_source.url %}<a class="patch-source-link patch-source-link--external" href="{{ first_official_source.url }}">Official source ↗</a>{% endif %}
         </div>
       </article>
       {% endfor %}
@@ -206,6 +180,8 @@ layout: aux-base
       <article class="panel patch-card"
         data-kind="current"
         data-source-id="{{ item.update_brand_id | default: item.update_product | slugify }}"
+        data-company-id="{{ item.company_id | default: update_product_meta.company_id | default: item.update_brand_id | default: item.update_source_name | slugify }}"
+        data-product-id="{{ item.product_id }}"
         data-priority="{{ update_product_meta.priority | downcase }}"
         data-type="{{ item.update_type | default: item.update_category | downcase }}"
         data-category="{{ item.update_category | downcase }}"
@@ -274,6 +250,8 @@ layout: aux-base
         <article class="panel patch-card patch-card--archived"
           data-kind="archived"
           data-source-id="{{ item.update_brand_id | default: item.update_product | slugify }}"
+          data-company-id="{{ item.company_id | default: update_product_meta.company_id | default: item.update_brand_id | default: item.update_source_name | slugify }}"
+          data-product-id="{{ item.product_id }}"
           data-priority="{{ update_product_meta.priority | downcase }}"
           data-type="{{ item.update_type | default: item.update_category | downcase }}"
           data-category="{{ item.update_category | downcase }}"
