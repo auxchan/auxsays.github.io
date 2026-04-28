@@ -3899,3 +3899,75 @@ button, input, select, textarea { font: inherit; }
     max-width: 100%;
   }
 }
+
+/* Software UI backdrop reliability fix: use a real HTML layer, not only a CSS variable pseudo-element. */
+.patch-product-card--has-ui-backdrop {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.042), rgba(255,255,255,.018)),
+    radial-gradient(circle at 82% 18%, rgba(95,212,229,.075), transparent 42%),
+    rgba(7,12,16,.88);
+}
+
+.patch-product-card--has-ui-backdrop::before {
+  display: none !important;
+}
+
+.patch-product-ui-backdrop {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: right center;
+  opacity: .44;
+  filter: saturate(.88) contrast(1.12) brightness(1.06);
+  transform: scale(1.015);
+  transition: opacity .28s ease, transform .28s ease, filter .28s ease;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.10) 18%, rgba(0,0,0,.72) 48%, rgba(0,0,0,1) 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.10) 18%, rgba(0,0,0,.72) 48%, rgba(0,0,0,1) 100%);
+}
+
+.patch-product-card--has-ui-backdrop::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(90deg, rgba(6,10,14,.98) 0%, rgba(6,10,14,.91) 30%, rgba(6,10,14,.58) 68%, rgba(6,10,14,.68) 100%),
+    radial-gradient(circle at 78% 22%, rgba(95,212,229,.08), transparent 36%),
+    linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,.006));
+}
+
+.patch-product-card--has-ui-backdrop > :not(.patch-product-ui-backdrop) {
+  position: relative;
+  z-index: 2;
+}
+
+.patch-product-card--has-ui-backdrop:hover .patch-product-ui-backdrop,
+.patch-product-card--has-ui-backdrop:focus-visible .patch-product-ui-backdrop,
+.patch-product-card--has-ui-backdrop.is-selected-software .patch-product-ui-backdrop {
+  opacity: .58;
+  transform: scale(1.035);
+  filter: saturate(.96) contrast(1.14) brightness(1.1);
+}
+
+@media (max-width: 940px) {
+  .patch-product-ui-backdrop {
+    inset: 28% 0 0 0;
+    opacity: .28;
+    background-position: center bottom;
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.40) 24%, rgba(0,0,0,.82) 100%);
+    mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.40) 24%, rgba(0,0,0,.82) 100%);
+  }
+
+  .patch-product-card--has-ui-backdrop::after {
+    background:
+      linear-gradient(180deg, rgba(6,10,14,.98) 0%, rgba(6,10,14,.93) 58%, rgba(6,10,14,.78) 100%),
+      radial-gradient(circle at 74% 34%, rgba(95,212,229,.08), transparent 40%);
+  }
+}

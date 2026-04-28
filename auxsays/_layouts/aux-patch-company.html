@@ -54,14 +54,14 @@ layout: aux-base
       {% assign product_updates_for_card = site.pages | where: "update_entry", true | where: "product_id", product.id %}
 
       {% assign product_lane_label = 'Software' %}
-      <article class="patch-product-card patch-product-card--clickable{% if product.ui_backdrop_path %} patch-product-card--has-ui-backdrop{% endif %}"{% if product.ui_backdrop_path %}
-        style="--product-ui-backdrop: url('{{ product.ui_backdrop_path | relative_url }}');"{% endif %}
+      <article class="patch-product-card patch-product-card--clickable{% if product.ui_backdrop_path %} patch-product-card--has-ui-backdrop{% endif %}"
         data-card-href="{{ product.product_url | relative_url }}"
         data-product-card="{{ product.id }}"
         data-product-name="{{ product.product_name | downcase }}"
         tabindex="0"
         role="link"
         aria-label="Open {{ product.product_name }} software page">
+        {% if product.ui_backdrop_path %}<span class="patch-product-ui-backdrop" aria-hidden="true" style="background-image: url('{{ product.ui_backdrop_path | relative_url }}');"></span>{% endif %}
         <div class="patch-product-topline">
           <span class="patch-source-badge patch-logo-badge patch-logo-badge--has-image patch-product-icon"><img src="{{ product.logo_path | relative_url }}" alt="{{ product.product_name }} logo" loading="lazy"></span>
           <span><strong>{{ product.product_name }}</strong><em>{{ product.category_label }}</em></span>
