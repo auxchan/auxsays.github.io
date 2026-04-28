@@ -483,7 +483,7 @@ button, input, select, textarea { font: inherit; }
 }
 .about-portrait-wrap:hover .about-portrait {
   filter: grayscale(1) contrast(1.02) brightness(1.02) saturate(.98);
-  transform: scale(1.012);
+  transform: scale(1.015);
 }
 
 
@@ -1371,7 +1371,7 @@ button, input, select, textarea { font: inherit; }
 }
 .about-portrait-wrap:hover .about-portrait {
   filter: grayscale(1) contrast(1.02) brightness(1.02) saturate(.98);
-  transform: scale(1.012);
+  transform: scale(1.015);
 }
 
 
@@ -3807,17 +3807,18 @@ button, input, select, textarea { font: inherit; }
 .patch-product-card--has-ui-backdrop::before {
   content: "";
   position: absolute;
-  inset: 0 0 0 30%;
-  z-index: -2;
+  inset: 0 0 0 28%;
+  z-index: 0;
+  pointer-events: none;
   background-image: var(--product-ui-backdrop);
   background-repeat: no-repeat;
   background-size: cover;
   background-position: right center;
-  opacity: .38;
-  filter: saturate(.72) contrast(1.05) brightness(.86);
-  transform: scale(1.012);
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.12) 10%, rgba(0,0,0,.72) 42%, rgba(0,0,0,.92) 100%);
-  mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.12) 10%, rgba(0,0,0,.72) 42%, rgba(0,0,0,.92) 100%);
+  opacity: .50;
+  filter: saturate(.76) contrast(1.08) brightness(.95);
+  transform: scale(1.015);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.16) 9%, rgba(0,0,0,.76) 38%, rgba(0,0,0,.98) 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,.16) 9%, rgba(0,0,0,.76) 38%, rgba(0,0,0,.98) 100%);
   transition: opacity .28s ease, transform .28s ease, filter .28s ease;
 }
 
@@ -3825,17 +3826,17 @@ button, input, select, textarea { font: inherit; }
   content: "";
   position: absolute;
   inset: 0;
-  z-index: -1;
+  z-index: 1;
   pointer-events: none;
   background:
-    linear-gradient(90deg, rgba(6,10,14,.96) 0%, rgba(6,10,14,.90) 34%, rgba(6,10,14,.62) 68%, rgba(6,10,14,.72) 100%),
+    linear-gradient(90deg, rgba(6,10,14,.98) 0%, rgba(6,10,14,.90) 32%, rgba(6,10,14,.55) 68%, rgba(6,10,14,.66) 100%),
     radial-gradient(circle at 72% 20%, rgba(95,212,229,.09), transparent 34%),
     linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.012));
 }
 
 .patch-product-card--has-ui-backdrop > * {
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 
 .patch-product-card--has-ui-backdrop p:not(.patch-source-signal) {
@@ -3862,9 +3863,9 @@ button, input, select, textarea { font: inherit; }
 .patch-product-card--has-ui-backdrop:hover::before,
 .patch-product-card--has-ui-backdrop:focus-visible::before,
 .patch-product-card--has-ui-backdrop.is-selected-software::before {
-  opacity: .48;
-  transform: scale(1.026);
-  filter: saturate(.82) contrast(1.08) brightness(.92);
+  opacity: .62;
+  transform: scale(1.03);
+  filter: saturate(.84) contrast(1.1) brightness(1);
 }
 
 .patch-product-card--has-ui-backdrop.is-selected-software {
@@ -3883,7 +3884,7 @@ button, input, select, textarea { font: inherit; }
 @media (max-width: 940px) {
   .patch-product-card--has-ui-backdrop::before {
     inset: 34% 0 0 0;
-    opacity: .20;
+    opacity: .28;
     -webkit-mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.55) 22%, rgba(0,0,0,.85) 100%);
     mask-image: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.55) 22%, rgba(0,0,0,.85) 100%);
   }
