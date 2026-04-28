@@ -127,13 +127,21 @@ layout: aux-base
       </div>
       <div class="patch-radar-stat-grid" aria-label="Patch source summary">
         <span><strong>{{ patch_sources.size }}</strong><em>tracked companies</em></span>
-        <span><strong>5</strong><em>priority lanes</em></span>
+        <span><strong>3</strong><em>watch lanes</em></span>
         <span><strong>2-step</strong><em>official + reaction</em></span>
       </div>
     </div>
 
     <div class="patch-source-grid" id="patch-source-grid">
       {% for source in patch_sources %}
+      {% assign normalized_priority = source.priority | downcase %}
+      {% if normalized_priority == 'core' %}
+        {% assign normalized_priority = 'company' %}
+      {% elsif normalized_priority == 'expansion' %}
+        {% assign normalized_priority = 'software' %}
+      {% elsif normalized_priority == 'edge' %}
+        {% assign normalized_priority = 'watchlist' %}
+      {% endif %}
       {% assign priority_display_label = source.priority %}
       {% if source.priority == 'Core' %}
         {% assign priority_display_label = 'Company' %}

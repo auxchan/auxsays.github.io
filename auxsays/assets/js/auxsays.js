@@ -116,33 +116,54 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   search?.addEventListener('input', scheduleArticleFilters, { passive: true });
 
-  // patch feed controls
+  // patch feed controls: single normalized filter/sort/click system.
   const patchFeed = document.getElementById('patch-feed');
   const patchArchiveFeed = document.getElementById('patch-archive-feed');
   const patchSourceGrid = document.getElementById('patch-source-grid');
   const patchSearch = document.getElementById('patch-search');
+  const patchSourceSelect = document.getElementById('patch-source-select');
   const filterChips = Array.from(document.querySelectorAll('#patch-filter-chips [data-filter]'));
   const statusChips = Array.from(document.querySelectorAll('#patch-status-chips [data-status]'));
   const sortChips = Array.from(document.querySelectorAll('#patch-sort-chips [data-sort]'));
+  const priorityChips = Array.from(document.querySelectorAll('#patch-priority-chips [data-priority]'));
 
-  if ((patchFeed || patchSourceGrid) && (filterChips.length || sortChips.length || statusChips.length || patchSearch)) {
+  const normalizeLane = (value) => {
+    const lane = String(value || '').trim().toLowerCase();
+    if (lane === 'core') return 'company';
+    if (lane === 'expansion') return 'software';
+    if (lane === 'edge') return 'watchlist';
+    return lane;
+  };
+  const normalizeStatus = (value) => {
+    const status = String(value || '').trim().toLowerCase().replace(/\s+/g, '-');
+    if (status === 'insufficient') return 'insufficient-data';
+    return status;
+  };
+
+  if ((patchFeed || patchSourceGrid) && (filterChips.length || sortChips.length || statusChips.length || priorityChips.length || patchSourceSelect || patchSearch)) {
     const allCards = Array.from(document.querySelectorAll('.patch-card'));
     const sourceCards = Array.from(document.querySelectorAll('[data-source-card="true"]'));
     let currentFilter = 'all';
     let currentStatus = 'all';
     let currentSort = 'latest';
-    const riskRank = { negative: 3, moderate: 2, positive: 1, insufficient: 0, 'insufficient-data': 0 };
-    const priorityRank = { core: 3, edge: 2, expansion: 1 };
+    let currentLane = 'all';
+    let currentSource = 'all';
+    const riskRank = { negative: 3, moderate: 2, positive: 1, 'insufficient-data': 0, insufficient: 0 };
+    const priorityRank = { company: 3, software: 2, watchlist: 1, core: 3, expansion: 2, edge: 1 };
 
     const matchesCommonFilters = (card, query, includeStatus = true) => {
       const haystack = [card.dataset.title, card.dataset.product, card.dataset.company, card.dataset.summary].join(' ').toLowerCase();
-      const type = (card.dataset.type || '').toLowerCase();
-      const category = (card.dataset.category || '').toLowerCase();
-      const status = (card.dataset.status || '').toLowerCase();
+      const sourceId = String(card.dataset.sourceId || '').toLowerCase();
+      const type = String(card.dataset.type || '').toLowerCase();
+      const category = String(card.dataset.category || '').toLowerCase();
+      const status = normalizeStatus(card.dataset.status);
+      const lane = normalizeLane(card.dataset.priority);
       const filterPass = currentFilter === 'all' || type.includes(currentFilter) || category.includes(currentFilter);
-      const statusPass = !includeStatus || currentStatus === 'all' || status.includes(currentStatus);
+      const statusPass = !includeStatus || currentStatus === 'all' || status === currentStatus || status.includes(currentStatus);
+      const lanePass = currentLane === 'all' || lane === currentLane;
+      const sourcePass = currentSource === 'all' || sourceId === currentSource;
       const queryPass = !query || haystack.includes(query);
-      return filterPass && statusPass && queryPass;
+      return filterPass && statusPass && lanePass && sourcePass && queryPass;
     };
 
     const applyPatchFeed = () => {
@@ -154,13 +175,16 @@ document.addEventListener('DOMContentLoaded', () => {
         const isVisible = matchesCommonFilters(card, query, true);
         card.hidden = !isVisible;
         card.classList.toggle('is-hidden', !isVisible);
+        card.classList.toggle('is-filter-hidden', !isVisible);
+        card.style.display = isVisible ? '' : 'none';
         if (isVisible) visibleUpdates.push(card);
       });
 
       visibleUpdates.sort((a, b) => {
-        if (currentSort === 'product') return (a.dataset.product || '').localeCompare(b.dataset.product || '');
+        if (currentSort === 'company') return (a.dataset.company || '').localeCompare(b.dataset.company || '');
+        if (currentSort === 'software' || currentSort === 'product') return (a.dataset.product || '').localeCompare(b.dataset.product || '');
         if (currentSort === 'risk') {
-          const delta = (riskRank[b.dataset.status] || 0) - (riskRank[a.dataset.status] || 0);
+          const delta = (riskRank[normalizeStatus(b.dataset.status)] || 0) - (riskRank[normalizeStatus(a.dataset.status)] || 0);
           if (delta !== 0) return delta;
         }
         return Number(b.dataset.date || 0) - Number(a.dataset.date || 0);
@@ -179,14 +203,18 @@ document.addEventListener('DOMContentLoaded', () => {
         const isVisible = currentStatus === 'all' && matchesCommonFilters(card, query, false);
         card.hidden = !isVisible;
         card.classList.toggle('is-hidden', !isVisible);
+        card.classList.toggle('is-filter-hidden', !isVisible);
+        card.style.display = isVisible ? '' : 'none';
         if (isVisible) visibleSources.push(card);
       });
 
       if (patchSourceGrid) {
-        if (currentSort === 'product') {
+        if (currentSort === 'company') {
+          visibleSources.sort((a, b) => (a.dataset.company || '').localeCompare(b.dataset.company || ''));
+        } else if (currentSort === 'software' || currentSort === 'product') {
           visibleSources.sort((a, b) => (a.dataset.title || '').localeCompare(b.dataset.title || ''));
         } else if (currentSort === 'risk') {
-          visibleSources.sort((a, b) => (priorityRank[b.dataset.priority] || 0) - (priorityRank[a.dataset.priority] || 0));
+          visibleSources.sort((a, b) => (priorityRank[normalizeLane(b.dataset.priority)] || 0) - (priorityRank[normalizeLane(a.dataset.priority)] || 0));
         }
         const sourceFragment = document.createDocumentFragment();
         visibleSources.forEach((card) => sourceFragment.appendChild(card));
@@ -197,27 +225,38 @@ document.addEventListener('DOMContentLoaded', () => {
     const schedulePatchFeed = rafDebounce(applyPatchFeed);
 
     patchSearch?.addEventListener('input', schedulePatchFeed, { passive: true });
+    patchSourceSelect?.addEventListener('change', () => {
+      currentSource = String(patchSourceSelect.value || 'all').toLowerCase();
+      schedulePatchFeed();
+    });
     filterChips.forEach((chip) => chip.addEventListener('click', () => {
       filterChips.forEach((c) => c.classList.remove('is-active'));
       chip.classList.add('is-active');
-      currentFilter = chip.dataset.filter;
+      currentFilter = String(chip.dataset.filter || 'all').toLowerCase();
       schedulePatchFeed();
     }));
     statusChips.forEach((chip) => chip.addEventListener('click', () => {
       statusChips.forEach((c) => c.classList.remove('is-active'));
       chip.classList.add('is-active');
-      currentStatus = chip.dataset.status;
+      currentStatus = normalizeStatus(chip.dataset.status || 'all');
+      schedulePatchFeed();
+    }));
+    priorityChips.forEach((chip) => chip.addEventListener('click', () => {
+      priorityChips.forEach((c) => c.classList.remove('is-active'));
+      chip.classList.add('is-active');
+      currentLane = normalizeLane(chip.dataset.priority || 'all');
       schedulePatchFeed();
     }));
     sortChips.forEach((chip) => chip.addEventListener('click', () => {
       sortChips.forEach((c) => c.classList.remove('is-active'));
       chip.classList.add('is-active');
-      currentSort = chip.dataset.sort;
+      currentSort = String(chip.dataset.sort || 'latest').toLowerCase();
       schedulePatchFeed();
     }));
     applyPatchFeed();
   }
-  // Patch Feed source/company cards: make the full card clickable while preserving inner links.
+
+  // Card click-through: make source/product cards clickable while preserving explicit links/buttons.
   document.querySelectorAll('[data-card-href]').forEach((card) => {
     const openCard = () => {
       const href = card.getAttribute('data-card-href');
@@ -235,62 +274,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Stable Patch Feed filters: normalize legacy lanes to public labels.
-  const auxNormalizeLane = (value) => {
-    const lane = String(value || '').trim().toLowerCase();
-    if (lane === 'core') return 'company';
-    if (lane === 'expansion') return 'software';
-    if (lane === 'edge') return 'watchlist';
-    return lane;
-  };
-  const auxNormalizeStatus = (value) => {
-    const status = String(value || '').trim().toLowerCase().replace(/\s+/g, '-');
-    if (status === 'insufficient') return 'insufficient-data';
-    return status;
-  };
-  const auxFilterCards = document.querySelectorAll('.patch-source-card, .patch-card');
-  const auxFilterState = { category: 'all', status: 'all', lane: 'all' };
-  const auxApplyFilters = () => {
-    auxFilterCards.forEach((card) => {
-      const cardCategory = String(card.dataset.category || card.dataset.type || '').toLowerCase();
-      const cardStatus = auxNormalizeStatus(card.dataset.status);
-      const cardLane = auxNormalizeLane(card.dataset.priority);
-      const show = (auxFilterState.category === 'all' || cardCategory === auxFilterState.category) &&
-                   (auxFilterState.status === 'all' || cardStatus === auxFilterState.status) &&
-                   (auxFilterState.lane === 'all' || cardLane === auxFilterState.lane);
-      card.hidden = !show;
-      card.classList.toggle('is-filter-hidden', !show);
-      card.style.display = show ? '' : 'none';
-    });
-  };
-  document.querySelectorAll('.patch-chip[data-filter]').forEach((button) => {
-    button.addEventListener('click', () => {
-      auxFilterState.category = String(button.dataset.filter || 'all').toLowerCase();
-      document.querySelectorAll('.patch-chip[data-filter]').forEach((btn) => btn.classList.remove('is-active'));
-      button.classList.add('is-active');
-      auxApplyFilters();
-    });
-  });
-  document.querySelectorAll('.patch-chip[data-status], .patch-chip[data-status-filter]').forEach((button) => {
-    button.addEventListener('click', () => {
-      auxFilterState.status = auxNormalizeStatus(button.dataset.status || button.dataset.statusFilter || 'all');
-      document.querySelectorAll('.patch-chip[data-status], .patch-chip[data-status-filter]').forEach((btn) => btn.classList.remove('is-active'));
-      button.classList.add('is-active');
-      auxApplyFilters();
-    });
-  });
-  document.querySelectorAll('.patch-chip[data-priority]').forEach((button) => {
-    button.addEventListener('click', () => {
-      auxFilterState.lane = auxNormalizeLane(button.dataset.priority || 'all');
-      document.querySelectorAll('.patch-chip[data-priority]').forEach((btn) => btn.classList.remove('is-active'));
-      button.classList.add('is-active');
-      auxApplyFilters();
-    });
-  });
-  document.querySelectorAll('[data-card-href]').forEach((card) => {
-    const openCard = () => { const href = card.getAttribute('data-card-href'); if (href) window.location.href = href; };
-    card.addEventListener('click', (event) => { if (!event.target.closest('a, button, input, select, textarea')) openCard(); });
-    card.addEventListener('keydown', (event) => { if ((event.key === 'Enter' || event.key === ' ') && !event.target.closest('a, button, input, select, textarea')) { event.preventDefault(); openCard(); } });
-  });
 
 });

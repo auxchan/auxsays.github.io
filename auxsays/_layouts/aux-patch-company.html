@@ -45,11 +45,16 @@ layout: aux-base
       {% endif %}
       {% assign product_updates_for_card = site.pages | where: "update_entry", true | where: "product_id", product.id %}
 
-      <article class="patch-product-card">
+      {% assign product_lane_label = 'Software' %}
+      <article class="patch-product-card patch-product-card--clickable"
+        data-card-href="{{ product.product_url | relative_url }}"
+        tabindex="0"
+        role="link"
+        aria-label="Open {{ product.product_name }} software page">
         <div class="patch-product-topline">
-          <span class="patch-source-badge patch-logo-badge patch-logo-badge--has-image"><img src="{{ product.logo_path | relative_url }}" alt="{{ product.product_name }} logo" loading="lazy"></span>
+          <span class="patch-source-badge patch-logo-badge patch-logo-badge--has-image patch-product-icon"><img src="{{ product.logo_path | relative_url }}" alt="{{ product.product_name }} logo" loading="lazy"></span>
           <span><strong>{{ product.product_name }}</strong><em>{{ product.category_label }}</em></span>
-          <span class="patch-source-priority patch-source-priority--{{ product.priority | downcase }}">{{ product.priority }}</span>
+          <span class="patch-source-priority patch-source-priority--software">{{ product_lane_label }}</span>
         </div>
         <p>{{ product.impact }}</p>
         <p class="patch-source-signal"><strong>Signal:</strong> {{ product.signal_notes }}</p>
@@ -62,7 +67,7 @@ layout: aux-base
           <span>{{ product_updates_for_card.size }} patch record{% if product_updates_for_card.size != 1 %}s{% endif %}</span>
         </div>
         <div class="patch-card-links">
-          <a href="{{ product.product_url | relative_url }}">Open software dossier →</a>
+          <span class="patch-source-link patch-source-link--primary">Open software page →</span>
           {% if product.source_url %}<a href="{{ product.source_url }}">Official source ↗</a>{% endif %}
         </div>
       </article>
