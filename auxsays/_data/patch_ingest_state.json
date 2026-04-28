@@ -26,11 +26,17 @@
       "adapter": "rss_feed",
       "fetched": 2,
       "product_id": "figma",
-      "skipped": [],
-      "written": [
-        "auxsays/updates/generated/2026-04-28-figma-quality-of-life-updates-in-figjam.md",
-        "auxsays/updates/generated/2026-04-28-figma-figjam-is-your-coding-agent-s-whiteboard-now.md"
-      ]
+      "skipped": [
+        {
+          "reason": "state-seen",
+          "record_id": "rss:figma:2490eafb-ecf7-4d76-9ca9-5e4dd193a086"
+        },
+        {
+          "reason": "state-seen",
+          "record_id": "rss:figma:57dd3e2e-da91-4a70-b924-72fa4c2cd0ba"
+        }
+      ],
+      "written": []
     },
     {
       "adapter": "github_releases",
@@ -88,7 +94,7 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-04-28T18:10:02Z",
+  "last_run_finished_at": "2026-04-28T09:15:20Z",
   "last_run_started_at": "2026-04-27T23:09:10Z",
   "sources": {
     "comfyui": {
@@ -99,8 +105,6 @@
     },
     "figma": {
       "seen": [
-        "rss:figma:5aff1eb4-6095-46fe-8afa-4fbd9885f719",
-        "rss:figma:03c7b6a9-b36f-41f7-93d9-017e577a76fb",
         "rss:figma:57dd3e2e-da91-4a70-b924-72fa4c2cd0ba",
         "rss:figma:2490eafb-ecf7-4d76-9ca9-5e4dd193a086"
       ]
