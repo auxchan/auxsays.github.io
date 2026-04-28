@@ -117,6 +117,9 @@ layout: aux-base
     <div class="patch-source-grid" id="patch-source-grid">
       {% for company in patch_companies %}
       {% assign company_products = patch_products | where: "company_id", company.id | sort: "product_name" %}
+      {% assign company_updates = update_pages | where: "company_id", company.id %}
+      {% assign company_latest_update = company_updates | sort: "update_published_at" | reverse | first %}
+      {% assign company_update_count = company_updates | size %}
       {% assign normalized_priority = company.priority | downcase %}
       {% if normalized_priority == 'core' %}
         {% assign normalized_priority = 'company' %}
@@ -136,7 +139,10 @@ layout: aux-base
         data-products="{{ company_product_ids | downcase }}"
         data-type="{{ company.category_keys | join: ' ' | downcase }}"
         data-category="{{ company.category_keys | join: ' ' | downcase }}"
-        data-priority="{{ normalized_priority }}"
+        data-priority="company"
+        data-watch-priority="{{ normalized_priority }}"
+        data-update-count="{{ company_update_count }}"
+        data-date="{% if company_latest_update %}{{ company_latest_update.update_published_at | date: '%s' }}{% else %}0{% endif %}"
         data-cadence=""
         data-title="{{ company.company_name | downcase }}"
         data-product="{{ company_product_names | downcase }}"
@@ -159,7 +165,7 @@ layout: aux-base
           {% if company_products.size > 4 %}<span>+{{ company_products.size | minus: 4 }} more</span>{% endif %}
         </div>
         <p>{{ company.summary }}</p>
-        <p class="patch-source-reason">Hierarchy: {{ company.company_name }} → software → patches/updates.</p>
+        <p class="patch-source-reason">Hierarchy: {{ company.company_name }} → software → patches/updates{% if company_update_count > 0 %} • {{ company_update_count }} documented patch record{% if company_update_count != 1 %}s{% endif %}{% endif %}.</p>
         <div class="patch-card-links patch-source-card-links">
           {% if company.company_url %}<a class="patch-source-link patch-source-link--primary" href="{{ company.company_url | relative_url }}">View company →</a>{% endif %}
           {% assign first_official_source = company.official_sources | first %}

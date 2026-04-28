@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-label="Adobe logo">
+  <defs>
+    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#ff4f45"/>
+      <stop offset="1" stop-color="#b91522"/>
+    </linearGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="10" result="blur"/>
+      <feColorMatrix in="blur" type="matrix" values="1 0 0 0 1  0 0.2 0 0 0.18  0 0 0.2 0 0.16  0 0 0 .45 0" result="glow"/>
+      <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect x="38" y="38" width="436" height="436" rx="96" fill="#080d12" stroke="#5fd4e5" stroke-opacity=".22" stroke-width="8"/>
+  <rect x="74" y="74" width="364" height="364" rx="72" fill="url(#g)" filter="url(#glow)"/>
+  <path d="M151 355 244 122h55l91 233h-64l-18-50h-75l-18 50h-64Zm99-102h40l-20-65-20 65Z" fill="#fff"/>
+  <path d="M99 122h93l-93 233V122Zm314 0h-94l94 233V122Z" fill="#fff" fill-opacity=".9"/>
+</svg>

@@ -6,7 +6,7 @@
   - video-production
   - design-workflow
   summary: Adobe is tracked because changes to Premiere Pro, After Effects, Photoshop, Media Encoder, and Lightroom Classic can affect creator workflows, production stability, rendering, exports, design assets, and publishing operations.
-  logo_path: /assets/img/patch-logos/adobe-premiere-pro.svg
+  logo_path: /assets/img/patch-logos/adobe.svg
   company_url: /updates/adobe/
   official_sources:
   - label: Premiere Pro release notes

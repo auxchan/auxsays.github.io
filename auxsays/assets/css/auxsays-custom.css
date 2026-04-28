@@ -3981,3 +3981,17 @@ button, input, select, textarea { font: inherit; }
     opacity: .38 !important;
   }
 }
+
+/* AUXSAYS Patch Feed IA fix: visible native select option text and reliable sort feedback */
+.patch-hierarchy-select option,
+.patch-source-select option {
+  background: #0b1117;
+  color: #f3f0e8;
+}
+.patch-source-card {
+  transition: order .18s ease, transform .22s ease, border-color .22s ease, box-shadow .22s ease;
+}
+.patch-source-card.is-filter-hidden,
+.patch-card.is-filter-hidden {
+  display: none !important;
+}

@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const companyId = String(card.dataset.companyId || '').toLowerCase();
       const productIds = String(card.dataset.products || '').toLowerCase();
       const filterPass = currentFilter === 'all' || type.includes(currentFilter) || category.includes(currentFilter);
-      const lanePass = currentLane === 'all' || lane === currentLane;
+      const lanePass = currentLane === 'all' || currentLane === 'company' || lane === currentLane;
       const companyPass = currentCompany === 'all' || companyId === currentCompany;
       const softwarePass = currentSoftware === 'all' || includesToken(productIds, currentSoftware);
       const queryPass = !query || haystack.includes(query);
@@ -229,15 +229,26 @@ document.addEventListener('DOMContentLoaded', () => {
       });
 
       if (patchSourceGrid) {
-        if (currentSort === 'software' || currentSort === 'product') {
+        if (currentSort === 'latest') {
+          visibleSources.sort((a, b) => {
+            const dateDelta = Number(b.dataset.date || 0) - Number(a.dataset.date || 0);
+            if (dateDelta !== 0) return dateDelta;
+            const countDelta = Number(b.dataset.updateCount || 0) - Number(a.dataset.updateCount || 0);
+            if (countDelta !== 0) return countDelta;
+            return (a.dataset.company || '').localeCompare(b.dataset.company || '');
+          });
+        } else if (currentSort === 'software' || currentSort === 'product') {
           visibleSources.sort((a, b) => (a.dataset.product || '').localeCompare(b.dataset.product || '') || (a.dataset.company || '').localeCompare(b.dataset.company || ''));
         } else if (currentSort === 'risk') {
-          visibleSources.sort((a, b) => (priorityRank[normalizeLane(b.dataset.priority)] || 0) - (priorityRank[normalizeLane(a.dataset.priority)] || 0) || (a.dataset.company || '').localeCompare(b.dataset.company || ''));
+          visibleSources.sort((a, b) => (priorityRank[normalizeLane(b.dataset.watchPriority || b.dataset.priority)] || 0) - (priorityRank[normalizeLane(a.dataset.watchPriority || a.dataset.priority)] || 0) || (a.dataset.company || '').localeCompare(b.dataset.company || ''));
         } else {
           visibleSources.sort((a, b) => (a.dataset.company || '').localeCompare(b.dataset.company || ''));
         }
         const sourceFragment = document.createDocumentFragment();
-        visibleSources.forEach((card) => sourceFragment.appendChild(card));
+        visibleSources.forEach((card, index) => {
+          card.style.order = String(index);
+          sourceFragment.appendChild(card);
+        });
         patchSourceGrid.appendChild(sourceFragment);
       }
     };
