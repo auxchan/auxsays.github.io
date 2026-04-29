@@ -1,15 +1,23 @@
 # AUXSAYS Update Page Readability Repair
 
-Focused repair for update page official note readability.
+Surgical patch package only.
 
-## Changes
-- Restores/protects the glowing circuit-node bullet treatment on official patch notes.
-- Converts raw GitHub PR URLs in ComfyUI official notes to compact `#PR` links.
-- Adds future normalization so new GitHub release records compact PR URLs before display.
-- Cleans ComfyUI generated summaries so they do not read like raw scraped GitHub text.
-- Strengthens file-size badge checks so empty/unknown/null values do not render as an empty pill.
+Files included:
+- auxsays/_layouts/aux-update.html
+- auxsays/assets/css/auxsays-custom.css
+- auxsays/scripts/lib/normalize.py
+- auxsays/updates/generated/2026-04-17-comfyui-0-19-3.md
+- auxsays/updates/generated/2026-04-27-comfyui-0-20-1.md
 
-## Not changed
-- No product expansion.
-- No consensus scraping activation.
-- No backend/API changes.
+Purpose:
+- Restore/protect glowing blue circuit-node official patch note styling.
+- Improve ComfyUI official-note readability.
+- Convert raw GitHub PR URLs into compact PR links where normalized.
+- Hide empty/unknown/null file-size pills.
+
+This package intentionally excludes:
+- .github
+- _data
+- all unrelated company/product pages
+- __pycache__ files
+- full repo root files
