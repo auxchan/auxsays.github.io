@@ -24,6 +24,19 @@ MONTHS = {
 }
 
 
+def _fetch_options(source: dict) -> dict:
+    ingestion = source.get("ingestion", {}) or {}
+    request = ingestion.get("request", {}) or {}
+    headers = request.get("headers") or {}
+    return {
+        "timeout": int(request.get("timeout_seconds") or ingestion.get("timeout_seconds") or 30),
+        "retries": int(request.get("retries") or ingestion.get("retries") or 0),
+        "backoff_seconds": float(request.get("backoff_seconds") or ingestion.get("backoff_seconds") or 2),
+        "max_bytes": int(request.get("max_bytes") or ingestion.get("max_bytes") or 0) or None,
+        "headers": headers if isinstance(headers, dict) else {},
+    }
+
+
 def _title_from_html(html: str) -> str:
     for pattern in [r"<h1[^>]*>(.*?)</h1>", r"<h2[^>]*>(.*?)</h2>", r"<title[^>]*>(.*?)</title>"]:
         m = re.search(pattern, html, flags=re.I | re.S)
@@ -74,7 +87,7 @@ def _adobe_version_from_title(title: str) -> str:
 def _fetch_adobe_release_notes(source: dict, limit: int = 3) -> list[dict]:
     ingestion = source.get("ingestion", {})
     source_url = ingestion["official_url"]
-    html = fetch_text(source_url).text
+    html = fetch_text(source_url, **_fetch_options(source)).text
     matches = list(ADOBE_VERSION_HEADING_RE.finditer(html))
     records = []
 
@@ -154,7 +167,7 @@ def fetch(source: dict, limit: int = 3) -> list[dict]:
         return _fetch_adobe_release_notes(source, limit=limit)
 
     source_url = ingestion["official_url"]
-    listing = fetch_text(source_url).text
+    listing = fetch_text(source_url, **_fetch_options(source)).text
     links = _candidate_links(source, source_url, listing)
 
     if not links:
@@ -187,7 +200,7 @@ def fetch(source: dict, limit: int = 3) -> list[dict]:
 
     records = []
     for link in links:
-        detail = fetch_text(link).text
+        detail = fetch_text(link, **_fetch_options(source)).text
         title = _title_from_html(detail)
         body = _body_from_html(detail)
         date = _date_from_html(detail)

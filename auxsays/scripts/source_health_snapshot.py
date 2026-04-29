@@ -69,7 +69,10 @@ def status_for(source: dict[str, Any], source_state: dict[str, Any], last_error:
     fetched = int(source_state.get("last_records_fetched") or 0)
 
     if last_error or failures:
-        if failures >= 2 or explicit == "failing":
+        # If an enabled source has never successfully completed, treat the
+        # operational signal as failing immediately. A first-time timeout is
+        # not merely degraded because there is no known-good baseline yet.
+        if not source_state.get("last_success_at") or failures >= 2 or explicit == "failing":
             return "Failing", "Failing"
         return "Degraded", "Degraded"
     if explicit == "degraded" or fetched == 0 and source_state.get("last_checked_at"):

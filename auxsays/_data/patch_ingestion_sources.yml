@@ -964,6 +964,14 @@
     - driver
     - studio
     - copilot
+    request:
+      timeout_seconds: 75
+      retries: 2
+      backoff_seconds: 4
+      max_bytes: 1500000
+      headers: &id001
+        Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+        Accept-Language: en-US,en;q=0.9
   generated_record:
     canonical_url_pattern: /updates/adobe/adobe-premiere-pro/{version_slug}/
     title_pattern: '{software} {version} official update breakdown'
@@ -1047,12 +1055,47 @@
     - version
     - adobe
     - after effects
+    request:
+      timeout_seconds: 75
+      retries: 2
+      backoff_seconds: 4
+      max_bytes: 1500000
+      headers: *id001
   generated_record:
     canonical_url_pattern: /updates/adobe/adobe-after-effects/{version_slug}/
     title_pattern: '{software} {version} official update breakdown'
-    front_matter_fields: [layout, title, description, permalink, update_entry, company_id, product_id, update_product, update_version, update_published_at, update_last_checked, patch_file_size, patch_file_size_note, update_source_url, update_download_url, official_summary, release_summary, official_patch_notes_body, official_checksums_body, update_consensus_label, update_report_count, update_consensus_confidence, consensus_report, complaint_themes, status_events]
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
   community_future:
-    possible_sources: [Adobe community forum, Adobe known issues pages, Reddit, creator forums]
+    possible_sources:
+    - Adobe community forum
+    - Adobe known issues pages
+    - Reddit
+    - creator forums
     difficulty: Medium
     defer_until_official_ingestion_stable: true
 - company_id: adobe
@@ -1094,13 +1137,55 @@
       known_issues: true
       platform_specific_installers: false
       archived_release_history: true
-    keywords: [release, update, changelog, patch, version, adobe, photoshop]
+    keywords:
+    - release
+    - update
+    - changelog
+    - patch
+    - version
+    - adobe
+    - photoshop
+    request:
+      timeout_seconds: 75
+      retries: 2
+      backoff_seconds: 4
+      max_bytes: 1500000
+      headers: *id001
   generated_record:
     canonical_url_pattern: /updates/adobe/adobe-photoshop/{version_slug}/
     title_pattern: '{software} {version} official update breakdown'
-    front_matter_fields: [layout, title, description, permalink, update_entry, company_id, product_id, update_product, update_version, update_published_at, update_last_checked, patch_file_size, patch_file_size_note, update_source_url, update_download_url, official_summary, release_summary, official_patch_notes_body, official_checksums_body, update_consensus_label, update_report_count, update_consensus_confidence, consensus_report, complaint_themes, status_events]
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
   community_future:
-    possible_sources: [Adobe community forum, Adobe known issues pages, Reddit, creator forums]
+    possible_sources:
+    - Adobe community forum
+    - Adobe known issues pages
+    - Reddit
+    - creator forums
     difficulty: Medium
     defer_until_official_ingestion_stable: true
 - company_id: adobe
@@ -1142,13 +1227,57 @@
       known_issues: true
       platform_specific_installers: false
       archived_release_history: true
-    keywords: [release, update, changelog, patch, version, adobe, media encoder, export, codec]
+    keywords:
+    - release
+    - update
+    - changelog
+    - patch
+    - version
+    - adobe
+    - media encoder
+    - export
+    - codec
+    request:
+      timeout_seconds: 75
+      retries: 2
+      backoff_seconds: 4
+      max_bytes: 1500000
+      headers: *id001
   generated_record:
     canonical_url_pattern: /updates/adobe/adobe-media-encoder/{version_slug}/
     title_pattern: '{software} {version} official update breakdown'
-    front_matter_fields: [layout, title, description, permalink, update_entry, company_id, product_id, update_product, update_version, update_published_at, update_last_checked, patch_file_size, patch_file_size_note, update_source_url, update_download_url, official_summary, release_summary, official_patch_notes_body, official_checksums_body, update_consensus_label, update_report_count, update_consensus_confidence, consensus_report, complaint_themes, status_events]
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
   community_future:
-    possible_sources: [Adobe community forum, Adobe known issues pages, Reddit, creator forums]
+    possible_sources:
+    - Adobe community forum
+    - Adobe known issues pages
+    - Reddit
+    - creator forums
     difficulty: Medium
     defer_until_official_ingestion_stable: true
 - company_id: adobe
@@ -1190,13 +1319,56 @@
       known_issues: true
       platform_specific_installers: false
       archived_release_history: true
-    keywords: [release, update, changelog, patch, version, adobe, lightroom, camera raw]
+    keywords:
+    - release
+    - update
+    - changelog
+    - patch
+    - version
+    - adobe
+    - lightroom
+    - camera raw
+    request:
+      timeout_seconds: 75
+      retries: 2
+      backoff_seconds: 4
+      max_bytes: 1500000
+      headers: *id001
   generated_record:
     canonical_url_pattern: /updates/adobe/adobe-lightroom-classic/{version_slug}/
     title_pattern: '{software} {version} official update breakdown'
-    front_matter_fields: [layout, title, description, permalink, update_entry, company_id, product_id, update_product, update_version, update_published_at, update_last_checked, patch_file_size, patch_file_size_note, update_source_url, update_download_url, official_summary, release_summary, official_patch_notes_body, official_checksums_body, update_consensus_label, update_report_count, update_consensus_confidence, consensus_report, complaint_themes, status_events]
+    front_matter_fields:
+    - layout
+    - title
+    - description
+    - permalink
+    - update_entry
+    - company_id
+    - product_id
+    - update_product
+    - update_version
+    - update_published_at
+    - update_last_checked
+    - patch_file_size
+    - patch_file_size_note
+    - update_source_url
+    - update_download_url
+    - official_summary
+    - release_summary
+    - official_patch_notes_body
+    - official_checksums_body
+    - update_consensus_label
+    - update_report_count
+    - update_consensus_confidence
+    - consensus_report
+    - complaint_themes
+    - status_events
   community_future:
-    possible_sources: [Adobe community forum, Adobe known issues pages, Reddit, creator forums]
+    possible_sources:
+    - Adobe community forum
+    - Adobe known issues pages
+    - Reddit
+    - creator forums
     difficulty: Medium
     defer_until_official_ingestion_stable: true
 - company_id: blackmagic-design
