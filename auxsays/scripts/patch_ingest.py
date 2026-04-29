@@ -16,6 +16,7 @@ import argparse
 import importlib
 import json
 import sys
+import time
 from pathlib import Path
 from typing import Any
 
@@ -26,7 +27,7 @@ if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
 from lib.normalize import utc_now
-from lib.state import load_state, save_state, is_seen, mark_seen
+from lib.state import load_state, save_state, is_seen, mark_seen, update_source_success, update_source_error
 from lib.write_update_record import write_record
 
 DEFAULT_CONFIG = Path("auxsays/_data/patch_ingestion_sources.yml")
@@ -58,6 +59,8 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
     if not adapter_name:
         raise RuntimeError(f"{product_id} is missing ingestion.adapter")
 
+    started = time.monotonic()
+    checked_at = utc_now()
     module = adapter_module(adapter_name)
     records = module.fetch(source, limit=args.limit)
     written = []
@@ -79,12 +82,26 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
         else:
             skipped.append({"record_id": record_id, "reason": "file-exists", "path": str(path)})
 
+    duration_ms = int((time.monotonic() - started) * 1000)
+    update_source_success(
+        state,
+        product_id,
+        checked_at=checked_at,
+        duration_ms=duration_ms,
+        adapter=adapter_name,
+        fetched=len(records),
+        written=len(written),
+        skipped=len(skipped),
+    )
+
     return {
         "product_id": product_id,
         "adapter": adapter_name,
         "fetched": len(records),
         "written": written,
         "skipped": skipped,
+        "status": "success",
+        "duration_ms": duration_ms,
     }
 
 def main() -> int:
@@ -102,7 +119,7 @@ def main() -> int:
 
     sources = load_sources(args.config)
     state = load_state(args.state)
-    state.setdefault("last_run_started_at", utc_now())
+    state["last_run_started_at"] = utc_now()
 
     results = []
     errors = []
@@ -122,8 +139,19 @@ def main() -> int:
             else:
                 results.append(run_source(source, args, state))
         except Exception as exc:
-            error = {"product_id": source.get("product_id"), "error": str(exc)}
+            product_id = source.get("product_id")
+            adapter_name = source.get("ingestion", {}).get("adapter") or source.get("ingestion", {}).get("type") or "unknown"
+            error = {"product_id": product_id, "adapter": adapter_name, "error": str(exc)}
             errors.append(error)
+            if not args.dry_run and product_id:
+                update_source_error(
+                    state,
+                    product_id,
+                    checked_at=utc_now(),
+                    duration_ms=0,
+                    adapter=adapter_name,
+                    error=str(exc),
+                )
             print(f"[ERROR] {error['product_id']}: {error['error']}", file=sys.stderr)
             if args.strict:
                 break

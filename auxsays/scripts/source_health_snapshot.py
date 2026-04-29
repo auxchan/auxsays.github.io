@@ -1,8 +1,13 @@
 #!/usr/bin/env python3
-"""Generate a lightweight static source-health snapshot for AUXSAYS.
+"""Generate a static source-health snapshot for AUXSAYS.
 
-This is not a backend monitor. It combines the current ingestion config with the
-last local state file so Jekyll can render a transparent source-health table.
+This script is intentionally static-site compatible. It does not require a
+backend, database, or long-running service. It combines:
+
+- patch_ingestion_sources.yml: what AUXSAYS intends to track
+- patch_ingest_state.json: what happened during the latest official ingestion
+
+The output is render-ready Jekyll data for methodology/source audit pages.
 """
 from __future__ import annotations
 
@@ -26,10 +31,75 @@ def load_json(path: Path) -> Any:
     return json.loads(path.read_text(encoding="utf-8")) if path.exists() else {}
 
 
+def friendly_error(error: str) -> str:
+    text = (error or "").strip()
+    lower = text.lower()
+    if not text:
+        return "None"
+    if "timed out" in lower or "timeout" in lower:
+        return "Timeout during last check"
+    if "403" in lower or "forbidden" in lower:
+        return "Blocked or forbidden by source"
+    if "404" in lower or "not found" in lower:
+        return "Source page not found"
+    if "parse" in lower or "selector" in lower:
+        return "Parser needs review"
+    if "ssl" in lower or "certificate" in lower:
+        return "TLS/certificate error"
+    if len(text) > 110:
+        return text[:107].rstrip() + "..."
+    return text
+
+
+def status_for(source: dict[str, Any], source_state: dict[str, Any], last_error: str) -> tuple[str, str]:
+    ingestion = source.get("ingestion") or {}
+    adapter = ingestion.get("adapter") or ingestion.get("type") or ""
+    enabled = bool(source.get("enabled"))
+    recommended = str(source.get("recommended_priority") or "").lower()
+
+    if not enabled:
+        if adapter == "manual_watch" or "manual" in recommended:
+            return "Manual watch", "Manual"
+        if "build later" in recommended or "p2" in recommended or "p3" in recommended:
+            return "Staged", "Staged"
+        return "Disabled", "Disabled"
+
+    explicit = str(source_state.get("status") or "").lower()
+    failures = int(source_state.get("consecutive_failures") or 0)
+    fetched = int(source_state.get("last_records_fetched") or 0)
+
+    if last_error or failures:
+        if failures >= 2 or explicit == "failing":
+            return "Failing", "Failing"
+        return "Degraded", "Degraded"
+    if explicit == "degraded" or fetched == 0 and source_state.get("last_checked_at"):
+        return "Degraded", "No records last run"
+    if source_state.get("last_success_at"):
+        return "Healthy", "Healthy"
+    return "Enabled", "Pending first check"
+
+
+def capability_summary(extractable: dict[str, Any]) -> dict[str, Any]:
+    def yes(key: str) -> bool:
+        return bool(extractable.get(key))
+
+    return {
+        "release_notes": yes("release_note_body") or yes("title") or yes("archived_release_history"),
+        "version": yes("version"),
+        "release_date": yes("release_date"),
+        "download_url": yes("download_url"),
+        "file_size": yes("file_size"),
+        "checksum": yes("checksum"),
+        "known_issues": yes("known_issues"),
+        "release_assets": yes("platform_specific_installers"),
+    }
+
+
 def main() -> int:
     sources = load_yaml(CONFIG_PATH)
     state = load_json(STATE_PATH)
     state_sources = state.get("sources") or {}
+
     error_map: dict[str, str] = {}
     for item in state.get("last_errors") or []:
         product_id = item.get("product_id")
@@ -42,22 +112,41 @@ def main() -> int:
         product_id = source.get("product_id") or source.get("source_id") or source.get("software")
         source_state = state_sources.get(product_id, {}) if isinstance(state_sources, dict) else {}
         last_error = error_map.get(product_id) or source_state.get("last_error") or ""
+        status, status_detail = status_for(source, source_state, last_error)
+        extractable = ingestion.get("extractable_fields") or {}
+        capabilities = capability_summary(extractable)
+
         rows.append({
             "source_id": product_id,
             "company_id": source.get("company_id"),
             "product_id": product_id,
             "company": source.get("company"),
             "software": source.get("software"),
+            "public_category": source.get("public_category"),
             "adapter_type": ingestion.get("adapter") or ingestion.get("type"),
             "enabled": bool(source.get("enabled")),
-            "last_success": source_state.get("last_success") or source_state.get("last_success_at") or "",
+            "status": status,
+            "status_detail": status_detail,
+            "polling_frequency": ingestion.get("polling_frequency") or source.get("polling_frequency") or "",
+            "last_success": source_state.get("last_success_at") or source_state.get("last_success") or "",
             "last_error": last_error,
-            "consecutive_failures": source_state.get("consecutive_failures") or (1 if last_error else 0),
-            "last_checked": source_state.get("last_checked") or state.get("last_run_finished_at") or "",
+            "last_error_display": friendly_error(last_error),
+            "last_error_type": source_state.get("last_error_type") or "",
+            "consecutive_failures": int(source_state.get("consecutive_failures") or (1 if last_error else 0)),
+            "last_checked": source_state.get("last_checked_at") or source_state.get("last_checked") or state.get("last_run_finished_at") or "",
+            "last_records_fetched": int(source_state.get("last_records_fetched") or 0),
+            "last_records_written": int(source_state.get("last_records_written") or 0),
+            "last_records_skipped": int(source_state.get("last_records_skipped") or 0),
+            "last_run_duration_ms": int(source_state.get("last_run_duration_ms") or 0),
+            "last_health_note": source_state.get("last_health_note") or "",
+            "capabilities": capabilities,
+            "raw_extractable_fields": extractable,
         })
 
-    rows.sort(key=lambda row: ((row.get("company") or "").lower(), (row.get("software") or "").lower()))
-    OUTPUT_PATH.write_text(yaml.safe_dump(rows, sort_keys=False, allow_unicode=True, width=120), encoding="utf-8")
+    # Status order first, then alpha. Healthy/degraded enabled sources should be easy to audit.
+    status_order = {"Failing": 0, "Degraded": 1, "Enabled": 2, "Healthy": 3, "Staged": 4, "Manual watch": 5, "Disabled": 6}
+    rows.sort(key=lambda row: (status_order.get(row.get("status"), 9), (row.get("company") or "").lower(), (row.get("software") or "").lower()))
+    OUTPUT_PATH.write_text(yaml.safe_dump(rows, sort_keys=False, allow_unicode=True, width=140), encoding="utf-8")
     print(f"Wrote {len(rows)} source-health rows to {OUTPUT_PATH.relative_to(ROOT)}")
     return 0
 

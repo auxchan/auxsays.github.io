@@ -4153,36 +4153,56 @@ button, input, select, textarea { font: inherit; }
   .update-decision-box { padding: .85rem; }
 }
 
-/* Update QA repair: make GitHub-generated official notes readable.
-   Official release bodies often contain long PR lists. On patch pages they should
-   read like compact evidence cards, not a decorative node timeline. */
+/* Core reliability sprint: preserve AUXSAYS circuit-node official notes while improving scanability. */
 .official-patch-notes.node-bullet-scope ul,
 .official-patch-notes ul {
   list-style: none !important;
-  padding-left: 0 !important;
-  margin: 0.8rem 0 0 !important;
+  padding-left: 1.7rem !important;
+  margin: 1rem 0 0 !important;
   display: grid;
-  gap: 0.52rem;
+  gap: .52rem;
 }
 
 .official-patch-notes.node-bullet-scope li,
 .official-patch-notes ul li {
+  position: relative;
   margin: 0 !important;
-  padding: 0.72rem 0.82rem 0.72rem 0.95rem !important;
+  padding: .68rem .82rem .68rem .95rem !important;
   border: 1px solid rgba(255,255,255,.055);
-  border-left: 3px solid rgba(95,212,229,.62);
+  border-left: 1px solid rgba(95,212,229,.34);
   border-radius: 12px;
-  background: linear-gradient(180deg, rgba(13,23,30,.72), rgba(9,16,22,.56));
-  line-height: 1.48 !important;
+  background: linear-gradient(180deg, rgba(13,23,30,.66), rgba(9,16,22,.48));
+  line-height: 1.5 !important;
   overflow-wrap: anywhere;
 }
 
 .official-patch-notes.node-bullet-scope li::before,
-.official-patch-notes.node-bullet-scope li::after,
-.official-patch-notes ul li::before,
-.official-patch-notes ul li::after {
-  content: none !important;
-  display: none !important;
+.official-patch-notes ul li::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute;
+  left: -1.05rem;
+  top: 1.35rem;
+  width: 9px;
+  height: 9px;
+  transform: translate(-50%, -50%);
+  background: #34d9f8;
+  border: 1px solid rgba(240,202,103,.78);
+  border-radius: 3px;
+  box-shadow: 0 0 0 1px rgba(52,217,248,.14), 0 0 10px rgba(52,217,248,.36);
+}
+
+.official-patch-notes.node-bullet-scope li:not(:last-child)::after,
+.official-patch-notes ul li:not(:last-child)::after {
+  content: '' !important;
+  display: block !important;
+  position: absolute;
+  left: -1.05rem;
+  top: calc(1.35rem + 6px);
+  width: 1px;
+  height: calc(100% + .52rem);
+  transform: translateX(-50%);
+  background: linear-gradient(180deg, rgba(52,217,248,.58), rgba(52,217,248,.10));
 }
 
 .official-patch-notes a {
@@ -4192,10 +4212,121 @@ button, input, select, textarea { font: inherit; }
 }
 
 .official-patch-notes a:hover,
-.official-patch-notes a:focus-visible {
-  text-decoration: underline;
+.official-patch-notes a:focus-visible { text-decoration: underline; }
+.official-patch-notes p { overflow-wrap: anywhere; }
+
+/* Core reliability sprint: source-health audit surface. */
+.source-health-summary {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .75rem;
+  margin: 1rem 0 1.1rem;
 }
 
-.official-patch-notes p {
-  overflow-wrap: anywhere;
+.source-health-summary div {
+  padding: .85rem 1rem;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(95,212,229,.08), rgba(255,255,255,.025));
+  border: 1px solid rgba(95,212,229,.14);
+}
+
+.source-health-summary strong {
+  display: block;
+  color: var(--aux-cyan);
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.source-health-summary span {
+  display: block;
+  margin-top: .35rem;
+  color: var(--aux-muted);
+  text-transform: uppercase;
+  letter-spacing: .12em;
+  font-size: .72rem;
+  font-weight: 800;
+}
+
+.source-health-table {
+  display: grid;
+  gap: .42rem;
+  overflow-x: auto;
+  padding-bottom: .3rem;
+}
+
+.source-health-row {
+  display: grid;
+  grid-template-columns: 1.15fr 1.15fr .9fr 1.1fr 1.05fr 1.15fr 1.3fr;
+  gap: .65rem;
+  min-width: 1180px;
+  padding: .82rem .95rem;
+  border-radius: 13px;
+  background: rgba(255,255,255,.032);
+  border: 1px solid rgba(255,255,255,.07);
+  color: rgba(230,234,236,.82);
+  font-size: .86rem;
+}
+
+.source-health-row--head {
+  color: var(--aux-text);
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: .09em;
+  font-size: .72rem;
+  background: rgba(95,212,229,.07);
+  border-color: rgba(95,212,229,.14);
+}
+
+.source-health-row span { min-width: 0; overflow-wrap: anywhere; }
+.source-health-row small,
+.source-health-id em {
+  display: block;
+  margin-top: .24rem;
+  color: rgba(199,205,208,.58);
+  font-size: .76rem;
+  font-style: normal;
+}
+
+.source-health-status {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: .28rem .56rem;
+  border-radius: 999px;
+  background: rgba(255,255,255,.055);
+  border: 1px solid rgba(255,255,255,.12);
+  color: var(--aux-text);
+  font-size: .72rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.source-health-status--healthy { color: #9af0be; border-color: rgba(70,209,137,.34); background: rgba(70,209,137,.10); }
+.source-health-status--degraded,
+.source-health-status--no-records-last-run { color: #f0ca67; border-color: rgba(240,202,103,.34); background: rgba(240,202,103,.10); }
+.source-health-status--failing { color: #ff9386; border-color: rgba(238,110,95,.38); background: rgba(238,110,95,.10); }
+.source-health-status--staged,
+.source-health-status--manual-watch { color: #9bdff0; border-color: rgba(95,212,229,.26); background: rgba(95,212,229,.08); }
+.source-health-status--disabled { color: rgba(230,234,236,.64); }
+
+.source-health-capabilities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .28rem;
+}
+
+.source-health-capabilities b {
+  display: inline-flex;
+  padding: .22rem .45rem;
+  border-radius: 999px;
+  background: rgba(95,212,229,.08);
+  border: 1px solid rgba(95,212,229,.16);
+  color: rgba(230,234,236,.78);
+  font-size: .68rem;
+  line-height: 1;
+}
+
+@media (max-width: 760px) {
+  .source-health-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }

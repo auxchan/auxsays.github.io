@@ -3,405 +3,1552 @@
   product_id: adobe-after-effects
   company: Adobe
   software: After Effects
+  public_category: Video / Production
   adapter_type: html_changelog
   enabled: true
+  status: Degraded
+  status_detail: Degraded
+  polling_frequency: 24h
   last_success: ''
   last_error: The read operation timed out
+  last_error_display: Timeout during last check
+  last_error_type: ''
   consecutive_failures: 1
-  last_checked: '2026-04-28T21:47:28Z'
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: true
+    release_date: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: true
+    release_assets: false
+  raw_extractable_fields:
+    version: true
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: true
+    platform_specific_installers: false
+    archived_release_history: true
 - source_id: adobe-lightroom-classic
   company_id: adobe
   product_id: adobe-lightroom-classic
   company: Adobe
   software: Lightroom Classic
+  public_category: Design Workflow
   adapter_type: html_changelog
   enabled: true
+  status: Degraded
+  status_detail: Degraded
+  polling_frequency: 24h
   last_success: ''
   last_error: The read operation timed out
+  last_error_display: Timeout during last check
+  last_error_type: ''
   consecutive_failures: 1
-  last_checked: '2026-04-28T21:47:28Z'
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: true
+    release_date: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: true
+    release_assets: false
+  raw_extractable_fields:
+    version: true
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: true
+    platform_specific_installers: false
+    archived_release_history: true
 - source_id: adobe-media-encoder
   company_id: adobe
   product_id: adobe-media-encoder
   company: Adobe
   software: Media Encoder
+  public_category: Video / Production
   adapter_type: html_changelog
   enabled: true
+  status: Degraded
+  status_detail: Degraded
+  polling_frequency: 24h
   last_success: ''
   last_error: The read operation timed out
+  last_error_display: Timeout during last check
+  last_error_type: ''
   consecutive_failures: 1
-  last_checked: '2026-04-28T21:47:28Z'
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: true
+    release_date: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: true
+    release_assets: false
+  raw_extractable_fields:
+    version: true
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: true
+    platform_specific_installers: false
+    archived_release_history: true
 - source_id: adobe-photoshop
   company_id: adobe
   product_id: adobe-photoshop
   company: Adobe
   software: Photoshop
+  public_category: Design Workflow
   adapter_type: html_changelog
   enabled: true
+  status: Degraded
+  status_detail: Degraded
+  polling_frequency: 24h
   last_success: ''
   last_error: The read operation timed out
+  last_error_display: Timeout during last check
+  last_error_type: ''
   consecutive_failures: 1
-  last_checked: '2026-04-28T21:47:28Z'
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: true
+    release_date: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: true
+    release_assets: false
+  raw_extractable_fields:
+    version: true
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: true
+    platform_specific_installers: false
+    archived_release_history: true
 - source_id: adobe-premiere-pro
   company_id: adobe
   product_id: adobe-premiere-pro
   company: Adobe
   software: Premiere Pro
+  public_category: Video / Production
   adapter_type: html_changelog
   enabled: true
+  status: Degraded
+  status_detail: Degraded
+  polling_frequency: 24h
   last_success: ''
   last_error: The read operation timed out
+  last_error_display: Timeout during last check
+  last_error_type: ''
   consecutive_failures: 1
-  last_checked: '2026-04-28T21:47:28Z'
-- source_id: amd
-  company_id: amd
-  product_id: amd
-  company: AMD
-  software: AMD Software / Radeon
-  adapter_type: download_portal_snapshot
-  enabled: false
-  last_success: ''
-  last_error: ''
-  consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
-- source_id: anthropic-claude
-  company_id: anthropic
-  product_id: anthropic-claude
-  company: Anthropic
-  software: Claude
-  adapter_type: html_changelog
-  enabled: false
-  last_success: ''
-  last_error: ''
-  consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
-- source_id: blackmagic-davinci
-  company_id: blackmagic-design
-  product_id: blackmagic-davinci
-  company: Blackmagic Design
-  software: DaVinci Resolve
-  adapter_type: html_blog
-  enabled: false
-  last_success: ''
-  last_error: ''
-  consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
-- source_id: blender
-  company_id: blender-foundation
-  product_id: blender
-  company: Blender Foundation
-  software: Blender
-  adapter_type: html_changelog
-  enabled: false
-  last_success: ''
-  last_error: ''
-  consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
-- source_id: canva
-  company_id: canva
-  product_id: canva
-  company: Canva
-  software: Canva
-  adapter_type: html_blog
-  enabled: false
-  last_success: ''
-  last_error: ''
-  consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
-- source_id: cloudflare
-  company_id: cloudflare
-  product_id: cloudflare
-  company: Cloudflare
-  software: Cloudflare
-  adapter_type: rss_feed
-  enabled: false
-  last_success: ''
-  last_error: ''
-  consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: true
+    release_date: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: true
+    release_assets: false
+  raw_extractable_fields:
+    version: true
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: true
+    platform_specific_installers: false
+    archived_release_history: true
 - source_id: comfyui
   company_id: comfyui
   product_id: comfyui
   company: ComfyUI
   software: ComfyUI
+  public_category: AI Image
   adapter_type: github_releases
   enabled: true
+  status: Enabled
+  status_detail: Pending first check
+  polling_frequency: 12h
   last_success: ''
   last_error: ''
+  last_error_display: None
+  last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
-- source_id: epic-unreal
-  company_id: epic-games
-  product_id: epic-unreal
-  company: Epic Games
-  software: Unreal Engine
-  adapter_type: html_changelog
-  enabled: false
-  last_success: ''
-  last_error: ''
-  consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: true
+    release_date: true
+    download_url: true
+    file_size: true
+    checksum: true
+    known_issues: false
+    release_assets: true
+  raw_extractable_fields:
+    version: true
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: true
+    file_size: true
+    checksum: true
+    known_issues: false
+    platform_specific_installers: true
+    archived_release_history: true
 - source_id: figma
   company_id: figma
   product_id: figma
   company: Figma
   software: Figma
+  public_category: Design Workflow
   adapter_type: rss_feed
   enabled: true
+  status: Enabled
+  status_detail: Pending first check
+  polling_frequency: 12h
   last_success: ''
   last_error: ''
+  last_error_display: None
+  last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: false
+    release_date: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    release_assets: false
+  raw_extractable_fields:
+    version: false
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    platform_specific_installers: false
+    archived_release_history: true
 - source_id: github
   company_id: github
   product_id: github
   company: GitHub
   software: GitHub / Copilot
+  public_category: Dev / Web
   adapter_type: rss_feed
   enabled: true
+  status: Enabled
+  status_detail: Pending first check
+  polling_frequency: 12h
   last_success: ''
   last_error: ''
+  last_error_display: None
+  last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
-- source_id: google-gemini
-  company_id: google
-  product_id: google-gemini
-  company: Google
-  software: Gemini
-  adapter_type: html_blog
-  enabled: false
-  last_success: ''
-  last_error: ''
-  consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
-- source_id: hugging-face
-  company_id: hugging-face
-  product_id: hugging-face
-  company: Hugging Face
-  software: Hugging Face
-  adapter_type: html_blog
-  enabled: false
-  last_success: ''
-  last_error: ''
-  consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
-- source_id: intel-arc
-  company_id: intel
-  product_id: intel-arc
-  company: Intel
-  software: Intel Graphics / Arc
-  adapter_type: download_portal_snapshot
-  enabled: false
-  last_success: ''
-  last_error: ''
-  consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
-- source_id: kick
-  company_id: kick
-  product_id: kick
-  company: Kick
-  software: Kick
-  adapter_type: manual_watch
-  enabled: false
-  last_success: ''
-  last_error: ''
-  consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
-- source_id: lottiefiles
-  company_id: lottiefiles
-  product_id: lottiefiles
-  company: LottieFiles
-  software: LottieFiles
-  adapter_type: html_blog
-  enabled: false
-  last_success: ''
-  last_error: ''
-  consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
-- source_id: make
-  company_id: make
-  product_id: make
-  company: Make
-  software: Make
-  adapter_type: html_changelog
-  enabled: false
-  last_success: ''
-  last_error: ''
-  consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
-- source_id: midjourney
-  company_id: midjourney
-  product_id: midjourney
-  company: Midjourney
-  software: Midjourney
-  adapter_type: manual_watch
-  enabled: false
-  last_success: ''
-  last_error: ''
-  consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: false
+    release_date: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    release_assets: false
+  raw_extractable_fields:
+    version: false
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    platform_specific_installers: false
+    archived_release_history: true
 - source_id: netlify
   company_id: netlify
   product_id: netlify
   company: Netlify
   software: Netlify
+  public_category: Dev / Web
   adapter_type: html_changelog
   enabled: true
+  status: Enabled
+  status_detail: Pending first check
+  polling_frequency: 24h
   last_success: ''
   last_error: ''
+  last_error_display: None
+  last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
-- source_id: notion
-  company_id: notion
-  product_id: notion
-  company: Notion
-  software: Notion
-  adapter_type: html_changelog
-  enabled: false
-  last_success: ''
-  last_error: ''
-  consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
-- source_id: nvidia
-  company_id: nvidia
-  product_id: nvidia
-  company: NVIDIA
-  software: NVIDIA App / GeForce / Studio
-  adapter_type: html_blog
-  enabled: false
-  last_success: ''
-  last_error: ''
-  consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: false
+    release_date: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    release_assets: false
+  raw_extractable_fields:
+    version: false
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    platform_specific_installers: false
+    archived_release_history: true
 - source_id: obs-studio
   company_id: obs-project
   product_id: obs-studio
   company: OBS Project
   software: OBS Studio
+  public_category: Streaming
   adapter_type: github_releases
   enabled: true
+  status: Enabled
+  status_detail: Pending first check
+  polling_frequency: 6h
   last_success: ''
   last_error: ''
+  last_error_display: None
+  last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: true
+    release_date: true
+    download_url: true
+    file_size: true
+    checksum: true
+    known_issues: false
+    release_assets: true
+  raw_extractable_fields:
+    version: true
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: true
+    file_size: true
+    checksum: true
+    known_issues: false
+    platform_specific_installers: true
+    archived_release_history: true
+- source_id: amd
+  company_id: amd
+  product_id: amd
+  company: AMD
+  software: AMD Software / Radeon
+  public_category: Hardware / Drivers
+  adapter_type: download_portal_snapshot
+  enabled: false
+  status: Staged
+  status_detail: Staged
+  polling_frequency: 12h
+  last_success: ''
+  last_error: ''
+  last_error_display: None
+  last_error_type: ''
+  consecutive_failures: 0
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: true
+    release_date: true
+    download_url: true
+    file_size: false
+    checksum: false
+    known_issues: true
+    release_assets: true
+  raw_extractable_fields:
+    version: true
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: true
+    file_size: false
+    checksum: false
+    known_issues: true
+    platform_specific_installers: true
+    archived_release_history: false
+- source_id: anthropic-claude
+  company_id: anthropic
+  product_id: anthropic-claude
+  company: Anthropic
+  software: Claude
+  public_category: AI Tools
+  adapter_type: html_changelog
+  enabled: false
+  status: Staged
+  status_detail: Staged
+  polling_frequency: 12h
+  last_success: ''
+  last_error: ''
+  last_error_display: None
+  last_error_type: ''
+  consecutive_failures: 0
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: false
+    release_date: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    release_assets: false
+  raw_extractable_fields:
+    version: false
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    platform_specific_installers: false
+    archived_release_history: true
+- source_id: blackmagic-davinci
+  company_id: blackmagic-design
+  product_id: blackmagic-davinci
+  company: Blackmagic Design
+  software: DaVinci Resolve
+  public_category: Video / Production
+  adapter_type: html_blog
+  enabled: false
+  status: Staged
+  status_detail: Staged
+  polling_frequency: 12h
+  last_success: ''
+  last_error: ''
+  last_error_display: None
+  last_error_type: ''
+  consecutive_failures: 0
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: false
+    release_date: true
+    download_url: true
+    file_size: false
+    checksum: false
+    known_issues: false
+    release_assets: false
+  raw_extractable_fields:
+    version: false
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: true
+    file_size: false
+    checksum: false
+    known_issues: false
+    platform_specific_installers: false
+    archived_release_history: false
+- source_id: blender
+  company_id: blender-foundation
+  product_id: blender
+  company: Blender Foundation
+  software: Blender
+  public_category: Video / Production
+  adapter_type: html_changelog
+  enabled: false
+  status: Staged
+  status_detail: Staged
+  polling_frequency: 24h
+  last_success: ''
+  last_error: ''
+  last_error_display: None
+  last_error_type: ''
+  consecutive_failures: 0
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: true
+    release_date: true
+    download_url: true
+    file_size: false
+    checksum: false
+    known_issues: false
+    release_assets: false
+  raw_extractable_fields:
+    version: true
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: true
+    file_size: false
+    checksum: false
+    known_issues: false
+    platform_specific_installers: false
+    archived_release_history: true
+- source_id: cloudflare
+  company_id: cloudflare
+  product_id: cloudflare
+  company: Cloudflare
+  software: Cloudflare
+  public_category: Dev / Web
+  adapter_type: rss_feed
+  enabled: false
+  status: Staged
+  status_detail: Staged
+  polling_frequency: 24h
+  last_success: ''
+  last_error: ''
+  last_error_display: None
+  last_error_type: ''
+  consecutive_failures: 0
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: false
+    release_date: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    release_assets: false
+  raw_extractable_fields:
+    version: false
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    platform_specific_installers: false
+    archived_release_history: true
+- source_id: epic-unreal
+  company_id: epic-games
+  product_id: epic-unreal
+  company: Epic Games
+  software: Unreal Engine
+  public_category: Game / Engine
+  adapter_type: html_changelog
+  enabled: false
+  status: Staged
+  status_detail: Staged
+  polling_frequency: 24h
+  last_success: ''
+  last_error: ''
+  last_error_display: None
+  last_error_type: ''
+  consecutive_failures: 0
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: false
+    release_date: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    release_assets: false
+  raw_extractable_fields:
+    version: false
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    platform_specific_installers: false
+    archived_release_history: true
+- source_id: google-gemini
+  company_id: google
+  product_id: google-gemini
+  company: Google
+  software: Gemini
+  public_category: AI Tools
+  adapter_type: html_blog
+  enabled: false
+  status: Staged
+  status_detail: Staged
+  polling_frequency: 12h
+  last_success: ''
+  last_error: ''
+  last_error_display: None
+  last_error_type: ''
+  consecutive_failures: 0
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: false
+    release_date: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    release_assets: false
+  raw_extractable_fields:
+    version: false
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    platform_specific_installers: false
+    archived_release_history: false
+- source_id: intel-arc
+  company_id: intel
+  product_id: intel-arc
+  company: Intel
+  software: Intel Graphics / Arc
+  public_category: Hardware / Drivers
+  adapter_type: download_portal_snapshot
+  enabled: false
+  status: Staged
+  status_detail: Staged
+  polling_frequency: 12h
+  last_success: ''
+  last_error: ''
+  last_error_display: None
+  last_error_type: ''
+  consecutive_failures: 0
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: true
+    release_date: true
+    download_url: true
+    file_size: false
+    checksum: false
+    known_issues: true
+    release_assets: true
+  raw_extractable_fields:
+    version: true
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: true
+    file_size: false
+    checksum: false
+    known_issues: true
+    platform_specific_installers: true
+    archived_release_history: false
+- source_id: notion
+  company_id: notion
+  product_id: notion
+  company: Notion
+  software: Notion
+  public_category: Workflow / Automation
+  adapter_type: html_changelog
+  enabled: false
+  status: Staged
+  status_detail: Staged
+  polling_frequency: 24h
+  last_success: ''
+  last_error: ''
+  last_error_display: None
+  last_error_type: ''
+  consecutive_failures: 0
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: false
+    release_date: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    release_assets: false
+  raw_extractable_fields:
+    version: false
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    platform_specific_installers: false
+    archived_release_history: true
+- source_id: nvidia
+  company_id: nvidia
+  product_id: nvidia
+  company: NVIDIA
+  software: NVIDIA App / GeForce / Studio
+  public_category: Hardware / Drivers
+  adapter_type: html_blog
+  enabled: false
+  status: Staged
+  status_detail: Staged
+  polling_frequency: 12h
+  last_success: ''
+  last_error: ''
+  last_error_display: None
+  last_error_type: ''
+  consecutive_failures: 0
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: false
+    release_date: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: true
+    release_assets: false
+  raw_extractable_fields:
+    version: false
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: true
+    platform_specific_installers: false
+    archived_release_history: false
 - source_id: openai-chatgpt
   company_id: openai
   product_id: openai-chatgpt
   company: OpenAI
   software: ChatGPT / OpenAI
+  public_category: AI Tools
   adapter_type: html_changelog
   enabled: false
+  status: Staged
+  status_detail: Staged
+  polling_frequency: 12h
   last_success: ''
   last_error: ''
+  last_error_display: None
+  last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
-- source_id: perplexity
-  company_id: perplexity
-  product_id: perplexity
-  company: Perplexity
-  software: Perplexity
-  adapter_type: html_blog
-  enabled: false
-  last_success: ''
-  last_error: ''
-  consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
-- source_id: pika
-  company_id: pika
-  product_id: pika
-  company: Pika
-  software: Pika
-  adapter_type: manual_watch
-  enabled: false
-  last_success: ''
-  last_error: ''
-  consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
-- source_id: rumble
-  company_id: rumble
-  product_id: rumble
-  company: Rumble
-  software: Rumble
-  adapter_type: html_blog
-  enabled: false
-  last_success: ''
-  last_error: ''
-  consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
-- source_id: runway
-  company_id: runway
-  product_id: runway
-  company: Runway
-  software: Runway
-  adapter_type: html_blog
-  enabled: false
-  last_success: ''
-  last_error: ''
-  consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: false
+    release_date: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    release_assets: false
+  raw_extractable_fields:
+    version: false
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    platform_specific_installers: false
+    archived_release_history: true
 - source_id: stability-ai
   company_id: stability-ai
   product_id: stability-ai
   company: Stability AI
   software: Stable Diffusion / Stable Audio
+  public_category: AI Image
   adapter_type: html_blog
   enabled: false
+  status: Staged
+  status_detail: Staged
+  polling_frequency: 24h
   last_success: ''
   last_error: ''
+  last_error_display: None
+  last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
-- source_id: twitch
-  company_id: twitch
-  product_id: twitch
-  company: Twitch
-  software: Twitch
-  adapter_type: html_blog
-  enabled: false
-  last_success: ''
-  last_error: ''
-  consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: false
+    release_date: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    release_assets: false
+  raw_extractable_fields:
+    version: false
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    platform_specific_installers: false
+    archived_release_history: false
 - source_id: unity
   company_id: unity
   product_id: unity
   company: Unity
   software: Unity
+  public_category: Game / Engine
   adapter_type: html_changelog
   enabled: false
+  status: Staged
+  status_detail: Staged
+  polling_frequency: 24h
   last_success: ''
   last_error: ''
+  last_error_display: None
+  last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: true
+    release_date: true
+    download_url: true
+    file_size: false
+    checksum: false
+    known_issues: true
+    release_assets: false
+  raw_extractable_fields:
+    version: true
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: true
+    file_size: false
+    checksum: false
+    known_issues: true
+    platform_specific_installers: false
+    archived_release_history: true
 - source_id: steam
   company_id: valve
   product_id: steam
   company: Valve
   software: Steam
+  public_category: Game Platforms
   adapter_type: official_forum_watch
   enabled: false
+  status: Staged
+  status_detail: Staged
+  polling_frequency: 12h
   last_success: ''
   last_error: ''
+  last_error_display: None
+  last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: false
+    release_date: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    release_assets: false
+  raw_extractable_fields:
+    version: false
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    platform_specific_installers: false
+    archived_release_history: false
+- source_id: canva
+  company_id: canva
+  product_id: canva
+  company: Canva
+  software: Canva
+  public_category: Design Workflow
+  adapter_type: html_blog
+  enabled: false
+  status: Manual watch
+  status_detail: Manual
+  polling_frequency: 24h
+  last_success: ''
+  last_error: ''
+  last_error_display: None
+  last_error_type: ''
+  consecutive_failures: 0
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: false
+    release_date: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    release_assets: false
+  raw_extractable_fields:
+    version: false
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    platform_specific_installers: false
+    archived_release_history: false
+- source_id: hugging-face
+  company_id: hugging-face
+  product_id: hugging-face
+  company: Hugging Face
+  software: Hugging Face
+  public_category: Dev / Web
+  adapter_type: html_blog
+  enabled: false
+  status: Manual watch
+  status_detail: Manual
+  polling_frequency: 24h
+  last_success: ''
+  last_error: ''
+  last_error_display: None
+  last_error_type: ''
+  consecutive_failures: 0
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: false
+    release_date: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    release_assets: false
+  raw_extractable_fields:
+    version: false
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    platform_specific_installers: false
+    archived_release_history: false
+- source_id: kick
+  company_id: kick
+  product_id: kick
+  company: Kick
+  software: Kick
+  public_category: Creator Platforms
+  adapter_type: manual_watch
+  enabled: false
+  status: Manual watch
+  status_detail: Manual
+  polling_frequency: manual
+  last_success: ''
+  last_error: ''
+  last_error_display: None
+  last_error_type: ''
+  consecutive_failures: 0
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: false
+    version: false
+    release_date: false
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    release_assets: false
+  raw_extractable_fields:
+    version: false
+    release_date: false
+    title: false
+    release_note_body: false
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    platform_specific_installers: false
+    archived_release_history: false
+- source_id: lottiefiles
+  company_id: lottiefiles
+  product_id: lottiefiles
+  company: LottieFiles
+  software: LottieFiles
+  public_category: Design Workflow
+  adapter_type: html_blog
+  enabled: false
+  status: Manual watch
+  status_detail: Manual
+  polling_frequency: 24h
+  last_success: ''
+  last_error: ''
+  last_error_display: None
+  last_error_type: ''
+  consecutive_failures: 0
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: false
+    release_date: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    release_assets: false
+  raw_extractable_fields:
+    version: false
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    platform_specific_installers: false
+    archived_release_history: false
+- source_id: make
+  company_id: make
+  product_id: make
+  company: Make
+  software: Make
+  public_category: Workflow / Automation
+  adapter_type: html_changelog
+  enabled: false
+  status: Manual watch
+  status_detail: Manual
+  polling_frequency: 24h
+  last_success: ''
+  last_error: ''
+  last_error_display: None
+  last_error_type: ''
+  consecutive_failures: 0
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: false
+    release_date: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    release_assets: false
+  raw_extractable_fields:
+    version: false
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    platform_specific_installers: false
+    archived_release_history: true
+- source_id: midjourney
+  company_id: midjourney
+  product_id: midjourney
+  company: Midjourney
+  software: Midjourney
+  public_category: AI Image
+  adapter_type: manual_watch
+  enabled: false
+  status: Manual watch
+  status_detail: Manual
+  polling_frequency: manual
+  last_success: ''
+  last_error: ''
+  last_error_display: None
+  last_error_type: ''
+  consecutive_failures: 0
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: false
+    version: false
+    release_date: false
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    release_assets: false
+  raw_extractable_fields:
+    version: false
+    release_date: false
+    title: false
+    release_note_body: false
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    platform_specific_installers: false
+    archived_release_history: false
+- source_id: perplexity
+  company_id: perplexity
+  product_id: perplexity
+  company: Perplexity
+  software: Perplexity
+  public_category: AI Tools
+  adapter_type: html_blog
+  enabled: false
+  status: Manual watch
+  status_detail: Manual
+  polling_frequency: 24h
+  last_success: ''
+  last_error: ''
+  last_error_display: None
+  last_error_type: ''
+  consecutive_failures: 0
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: false
+    release_date: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    release_assets: false
+  raw_extractable_fields:
+    version: false
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    platform_specific_installers: false
+    archived_release_history: false
+- source_id: pika
+  company_id: pika
+  product_id: pika
+  company: Pika
+  software: Pika
+  public_category: AI Video
+  adapter_type: manual_watch
+  enabled: false
+  status: Manual watch
+  status_detail: Manual
+  polling_frequency: manual
+  last_success: ''
+  last_error: ''
+  last_error_display: None
+  last_error_type: ''
+  consecutive_failures: 0
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: false
+    version: false
+    release_date: false
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    release_assets: false
+  raw_extractable_fields:
+    version: false
+    release_date: false
+    title: false
+    release_note_body: false
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    platform_specific_installers: false
+    archived_release_history: false
+- source_id: rumble
+  company_id: rumble
+  product_id: rumble
+  company: Rumble
+  software: Rumble
+  public_category: Creator Platforms
+  adapter_type: html_blog
+  enabled: false
+  status: Manual watch
+  status_detail: Manual
+  polling_frequency: 24h
+  last_success: ''
+  last_error: ''
+  last_error_display: None
+  last_error_type: ''
+  consecutive_failures: 0
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: false
+    release_date: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    release_assets: false
+  raw_extractable_fields:
+    version: false
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    platform_specific_installers: false
+    archived_release_history: false
+- source_id: runway
+  company_id: runway
+  product_id: runway
+  company: Runway
+  software: Runway
+  public_category: AI Video
+  adapter_type: html_blog
+  enabled: false
+  status: Manual watch
+  status_detail: Manual
+  polling_frequency: 24h
+  last_success: ''
+  last_error: ''
+  last_error_display: None
+  last_error_type: ''
+  consecutive_failures: 0
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: false
+    release_date: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    release_assets: false
+  raw_extractable_fields:
+    version: false
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    platform_specific_installers: false
+    archived_release_history: false
+- source_id: twitch
+  company_id: twitch
+  product_id: twitch
+  company: Twitch
+  software: Twitch
+  public_category: Creator Platforms
+  adapter_type: html_blog
+  enabled: false
+  status: Manual watch
+  status_detail: Manual
+  polling_frequency: 24h
+  last_success: ''
+  last_error: ''
+  last_error_display: None
+  last_error_type: ''
+  consecutive_failures: 0
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: false
+    release_date: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    release_assets: false
+  raw_extractable_fields:
+    version: false
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    platform_specific_installers: false
+    archived_release_history: false
 - source_id: youtube
   company_id: youtube
   product_id: youtube
   company: YouTube
   software: YouTube / YouTube Studio
+  public_category: Creator Platforms
   adapter_type: html_blog
   enabled: false
+  status: Manual watch
+  status_detail: Manual
+  polling_frequency: 24h
   last_success: ''
   last_error: ''
+  last_error_display: None
+  last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: false
+    release_date: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    release_assets: false
+  raw_extractable_fields:
+    version: false
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    platform_specific_installers: false
+    archived_release_history: false
 - source_id: zapier
   company_id: zapier
   product_id: zapier
   company: Zapier
   software: Zapier
+  public_category: Workflow / Automation
   adapter_type: html_blog
   enabled: false
+  status: Manual watch
+  status_detail: Manual
+  polling_frequency: 24h
   last_success: ''
   last_error: ''
+  last_error_display: None
+  last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-28T21:47:28Z'
+  last_checked: '2026-04-29T17:13:51Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: ''
+  capabilities:
+    release_notes: true
+    version: false
+    release_date: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    release_assets: false
+  raw_extractable_fields:
+    version: false
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: false
+    platform_specific_installers: false
+    archived_release_history: false

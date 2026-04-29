@@ -66,21 +66,41 @@ permalink: /updates/methodology/
   </section>
 
   <section class="panel methodology-source-health reveal-up reveal-delay-2">
-    <div class="eyebrow">Source health</div>
-    <h2>Current ingestion source status</h2>
-    <p>This table is a static render-ready snapshot generated from the current ingestion config and state file. It is a lightweight audit surface, not a backend monitoring dashboard.</p>
-    <div class="source-health-table" role="table" aria-label="AUXSAYS source health snapshot">
+    <div class="eyebrow">Source audit</div>
+    <h2>Current official-ingestion source health</h2>
+    <p>This is a static audit snapshot produced from the ingestion config and the latest GitHub Actions state file. It is meant to show whether official-source monitoring is healthy, degraded, failing, staged, or disabled. It is not a backend service and it does not represent live community consensus.</p>
+
+    {% assign healthy_sources = site.data.source_health | where: "status", "Healthy" %}
+    {% assign degraded_sources = site.data.source_health | where: "status", "Degraded" %}
+    {% assign failing_sources = site.data.source_health | where: "status", "Failing" %}
+    {% assign staged_sources = site.data.source_health | where: "status", "Staged" %}
+    <div class="source-health-summary" aria-label="Source health totals">
+      <div><strong>{{ healthy_sources.size }}</strong><span>Healthy</span></div>
+      <div><strong>{{ degraded_sources.size }}</strong><span>Degraded</span></div>
+      <div><strong>{{ failing_sources.size }}</strong><span>Failing</span></div>
+      <div><strong>{{ staged_sources.size }}</strong><span>Staged</span></div>
+    </div>
+
+    <div class="source-health-table" role="table" aria-label="AUXSAYS official ingestion source-health snapshot">
       <div class="source-health-row source-health-row--head" role="row">
-        <span>Source</span><span>Software</span><span>Adapter</span><span>Status</span><span>Last checked</span><span>Last error</span>
+        <span>Source</span><span>Software</span><span>Status</span><span>Last run</span><span>Records</span><span>Capabilities</span><span>Last error</span>
       </div>
       {% for item in site.data.source_health %}
-      <div class="source-health-row" role="row">
-        <span>{{ item.source_id }}</span>
-        <span>{{ item.software }}</span>
-        <span>{{ item.adapter_type }}</span>
-        <span>{% if item.enabled %}Enabled{% else %}Disabled{% endif %}</span>
-        <span>{{ item.last_checked | default: 'Not checked' }}</span>
-        <span>{{ item.last_error | default: 'None' }}</span>
+      <div class="source-health-row source-health-row--{{ item.status | downcase | replace: ' ', '-' }}" role="row">
+        <span class="source-health-id"><strong>{{ item.source_id }}</strong><em>{{ item.company }}</em></span>
+        <span>{{ item.software }}<small>{{ item.adapter_type }}</small></span>
+        <span><mark class="source-health-status source-health-status--{{ item.status | downcase | replace: ' ', '-' }}">{{ item.status }}</mark><small>{{ item.status_detail }}</small></span>
+        <span>{% if item.last_checked != blank %}{{ item.last_checked }}{% else %}Not checked{% endif %}<small>{% if item.polling_frequency != blank %}Target: {{ item.polling_frequency }}{% endif %}</small></span>
+        <span>{{ item.last_records_fetched }} fetched / {{ item.last_records_written }} written<small>{{ item.last_records_skipped }} skipped · {{ item.consecutive_failures }} failures</small></span>
+        <span class="source-health-capabilities">
+          {% if item.capabilities.release_notes %}<b>notes</b>{% endif %}
+          {% if item.capabilities.version %}<b>version</b>{% endif %}
+          {% if item.capabilities.download_url %}<b>download</b>{% endif %}
+          {% if item.capabilities.file_size %}<b>size</b>{% endif %}
+          {% if item.capabilities.checksum %}<b>checksum</b>{% endif %}
+          {% if item.capabilities.known_issues %}<b>known issues</b>{% endif %}
+        </span>
+        <span>{% if item.last_error_display != blank and item.last_error_display != 'None' %}{{ item.last_error_display }}{% else %}None{% endif %}</span>
       </div>
       {% endfor %}
     </div>
