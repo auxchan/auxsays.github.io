@@ -76,12 +76,31 @@ def summarize(text: str, max_chars: int = 420) -> str:
     return clean[:max_chars].rsplit(" ", 1)[0].rstrip(".,;:") + "."
 
 def normalize_release_notes_body(text: str) -> str:
-    """Normalize common vendor/repository release-note headings for display consistency."""
+    """Normalize vendor/repository release notes for readable AUXSAYS display.
+
+    GitHub auto-generated release notes are useful, but raw release bodies often
+    include headings such as "What's Changed" and full PR URLs in every bullet.
+    This helper preserves the evidence while making the rendered patch page more
+    readable and less visually noisy.
+    """
     value = str(text or "")
     # GitHub auto-generated release notes commonly start with "What's Changed".
-    # In the current page typography this heading can render awkwardly as "What’ s".
-    # Use a simpler heading that reads cleanly and still preserves the meaning.
+    # In display typography this heading can render awkwardly as "What’ s".
     value = re.sub(r"(?im)^([#]{1,6})\s+What['’]s Changed\s*$", r"\1 Changes", value)
+
+    # Convert raw GitHub PR URLs inside bullets into compact Markdown links.
+    # Example: "by @name in https://github.com/org/repo/pull/123"
+    # becomes: "by @name ([PR #123](https://github.com/org/repo/pull/123))".
+    value = re.sub(
+        r"\s+by\s+(@[A-Za-z0-9_.-]+)\s+in\s+(https://github\.com/[^\s)]+/pull/(\d+))",
+        r" by \1 ([PR #\3](\2))",
+        value,
+    )
+    value = re.sub(
+        r"(?im)^\*\*Full Changelog\*\*:\s*(https://github\.com/[^\s]+)\s*$",
+        r"[Full changelog](\1)",
+        value,
+    )
     return value
 
 def strip_markdown_for_summary(text: str) -> str:

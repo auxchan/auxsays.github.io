@@ -4152,3 +4152,50 @@ button, input, select, textarea { font: inherit; }
   .update-decision-grid { grid-template-columns: 1fr; }
   .update-decision-box { padding: .85rem; }
 }
+
+/* Update QA repair: make GitHub-generated official notes readable.
+   Official release bodies often contain long PR lists. On patch pages they should
+   read like compact evidence cards, not a decorative node timeline. */
+.official-patch-notes.node-bullet-scope ul,
+.official-patch-notes ul {
+  list-style: none !important;
+  padding-left: 0 !important;
+  margin: 0.8rem 0 0 !important;
+  display: grid;
+  gap: 0.52rem;
+}
+
+.official-patch-notes.node-bullet-scope li,
+.official-patch-notes ul li {
+  margin: 0 !important;
+  padding: 0.72rem 0.82rem 0.72rem 0.95rem !important;
+  border: 1px solid rgba(255,255,255,.055);
+  border-left: 3px solid rgba(95,212,229,.62);
+  border-radius: 12px;
+  background: linear-gradient(180deg, rgba(13,23,30,.72), rgba(9,16,22,.56));
+  line-height: 1.48 !important;
+  overflow-wrap: anywhere;
+}
+
+.official-patch-notes.node-bullet-scope li::before,
+.official-patch-notes.node-bullet-scope li::after,
+.official-patch-notes ul li::before,
+.official-patch-notes ul li::after {
+  content: none !important;
+  display: none !important;
+}
+
+.official-patch-notes a {
+  color: var(--accent-1);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.official-patch-notes a:hover,
+.official-patch-notes a:focus-visible {
+  text-decoration: underline;
+}
+
+.official-patch-notes p {
+  overflow-wrap: anywhere;
+}
