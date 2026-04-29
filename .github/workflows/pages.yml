@@ -34,6 +34,14 @@ jobs:
         with:
           node-version: '24'
 
+      - name: Setup Python for source health snapshot
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install source health dependencies
+        run: pip install -r auxsays/scripts/requirements-ingest.txt
+
       - name: Install logo generation dependencies
         working-directory: ./auxsays
         run: npm install --no-audit --no-fund
@@ -59,6 +67,9 @@ jobs:
       - name: Strip image metadata
         working-directory: ./auxsays
         run: bash scripts/strip_image_metadata.sh assets/img
+
+      - name: Generate source health snapshot
+        run: python auxsays/scripts/source_health_snapshot.py
 
       - name: Build site
         working-directory: ./auxsays

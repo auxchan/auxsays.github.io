@@ -63,22 +63,18 @@ jobs:
           fi
 
 
-      - name: Generate source health snapshot
-        if: ${{ github.event.inputs.dry_run != 'true' }}
-        run: python auxsays/scripts/source_health_snapshot.py
-
       - name: Commit generated patch records
         id: commit
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: |
-          if git diff --quiet; then
-            echo "No content changes."
+          if git diff --quiet -- auxsays/_data/patch_ingest_state.json auxsays/updates/generated; then
+            echo "No durable ingestion changes."
             echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add auxsays/_data/patch_ingest_state.json auxsays/_data/source_health.yml auxsays/updates/generated
+          git add auxsays/_data/patch_ingest_state.json auxsays/updates/generated
           git commit -m "Ingest official patch records"
           git push
           echo "changed=true" >> "$GITHUB_OUTPUT"
@@ -107,6 +103,14 @@ jobs:
         with:
           node-version: '24'
 
+      - name: Setup Python for source health snapshot
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install source health dependencies
+        run: pip install -r auxsays/scripts/requirements-ingest.txt
+
       - name: Install logo generation dependencies
         working-directory: ./auxsays
         run: npm install --no-audit --no-fund
@@ -132,6 +136,9 @@ jobs:
       - name: Strip image metadata
         working-directory: ./auxsays
         run: bash scripts/strip_image_metadata.sh assets/img
+
+      - name: Generate source health snapshot
+        run: python auxsays/scripts/source_health_snapshot.py
 
       - name: Build site
         working-directory: ./auxsays
