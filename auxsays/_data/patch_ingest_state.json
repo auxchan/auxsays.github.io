@@ -1,22 +1,27 @@
 {
   "last_errors": [
     {
+      "adapter": "html_changelog",
       "error": "The read operation timed out",
       "product_id": "adobe-premiere-pro"
     },
     {
+      "adapter": "html_changelog",
       "error": "The read operation timed out",
       "product_id": "adobe-after-effects"
     },
     {
+      "adapter": "html_changelog",
       "error": "The read operation timed out",
       "product_id": "adobe-photoshop"
     },
     {
+      "adapter": "html_changelog",
       "error": "The read operation timed out",
       "product_id": "adobe-media-encoder"
     },
     {
+      "adapter": "html_changelog",
       "error": "The read operation timed out",
       "product_id": "adobe-lightroom-classic"
     }
@@ -24,16 +29,25 @@
   "last_results": [
     {
       "adapter": "rss_feed",
+      "duration_ms": 787,
       "fetched": 2,
       "product_id": "figma",
-      "skipped": [],
-      "written": [
-        "auxsays/updates/generated/2026-04-29-figma-more-ways-to-add-references-when-using-ai-to-generate-or-edit-images.md",
-        "auxsays/updates/generated/2026-04-29-figma-more-tools-less-switching-in-draw.md"
-      ]
+      "skipped": [
+        {
+          "reason": "state-seen",
+          "record_id": "rss:figma:0dcbfd47-b88e-4828-977a-b56b7769f89a"
+        },
+        {
+          "reason": "state-seen",
+          "record_id": "rss:figma:9923866c-4511-4991-8536-75f226c095a5"
+        }
+      ],
+      "status": "success",
+      "written": []
     },
     {
       "adapter": "github_releases",
+      "duration_ms": 702,
       "fetched": 2,
       "product_id": "obs-studio",
       "skipped": [
@@ -46,10 +60,12 @@
           "record_id": "github:obs-studio:304830335"
         }
       ],
+      "status": "success",
       "written": []
     },
     {
       "adapter": "github_releases",
+      "duration_ms": 468,
       "fetched": 2,
       "product_id": "comfyui",
       "skipped": [
@@ -62,10 +78,12 @@
           "record_id": "github:comfyui:310487464"
         }
       ],
+      "status": "success",
       "written": []
     },
     {
       "adapter": "rss_feed",
+      "duration_ms": 30,
       "fetched": 2,
       "product_id": "github",
       "skipped": [
@@ -78,26 +96,131 @@
           "record_id": "rss:github:https://github.blog/changelog/2026-04-27-copilot-cloud-agent-starts-20-faster-with-actions-custom-images"
         }
       ],
+      "status": "success",
       "written": []
     },
     {
       "adapter": "html_changelog",
+      "duration_ms": 309,
       "fetched": 0,
       "product_id": "netlify",
       "skipped": [],
+      "status": "success",
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-04-29T17:13:51Z",
-  "last_run_started_at": "2026-04-27T23:09:10Z",
+  "last_run_finished_at": "2026-04-29T17:47:33Z",
+  "last_run_started_at": "2026-04-29T17:45:00Z",
   "sources": {
+    "adobe-after-effects": {
+      "consecutive_failures": 1,
+      "last_adapter": "html_changelog",
+      "last_checked_at": "2026-04-29T17:46:01Z",
+      "last_error": "The read operation timed out",
+      "last_error_at": "2026-04-29T17:46:01Z",
+      "last_error_type": "timeout",
+      "last_health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
+      "last_records_fetched": 0,
+      "last_records_skipped": 0,
+      "last_records_written": 0,
+      "last_run_duration_ms": 0,
+      "seen": [],
+      "status": "degraded"
+    },
+    "adobe-lightroom-classic": {
+      "consecutive_failures": 1,
+      "last_adapter": "html_changelog",
+      "last_checked_at": "2026-04-29T17:47:31Z",
+      "last_error": "The read operation timed out",
+      "last_error_at": "2026-04-29T17:47:31Z",
+      "last_error_type": "timeout",
+      "last_health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
+      "last_records_fetched": 0,
+      "last_records_skipped": 0,
+      "last_records_written": 0,
+      "last_run_duration_ms": 0,
+      "seen": [],
+      "status": "degraded"
+    },
+    "adobe-media-encoder": {
+      "consecutive_failures": 1,
+      "last_adapter": "html_changelog",
+      "last_checked_at": "2026-04-29T17:47:01Z",
+      "last_error": "The read operation timed out",
+      "last_error_at": "2026-04-29T17:47:01Z",
+      "last_error_type": "timeout",
+      "last_health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
+      "last_records_fetched": 0,
+      "last_records_skipped": 0,
+      "last_records_written": 0,
+      "last_run_duration_ms": 0,
+      "seen": [],
+      "status": "degraded"
+    },
+    "adobe-photoshop": {
+      "consecutive_failures": 1,
+      "last_adapter": "html_changelog",
+      "last_checked_at": "2026-04-29T17:46:31Z",
+      "last_error": "The read operation timed out",
+      "last_error_at": "2026-04-29T17:46:31Z",
+      "last_error_type": "timeout",
+      "last_health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
+      "last_records_fetched": 0,
+      "last_records_skipped": 0,
+      "last_records_written": 0,
+      "last_run_duration_ms": 0,
+      "seen": [],
+      "status": "degraded"
+    },
+    "adobe-premiere-pro": {
+      "consecutive_failures": 1,
+      "last_adapter": "html_changelog",
+      "last_checked_at": "2026-04-29T17:45:31Z",
+      "last_error": "The read operation timed out",
+      "last_error_at": "2026-04-29T17:45:31Z",
+      "last_error_type": "timeout",
+      "last_health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
+      "last_records_fetched": 0,
+      "last_records_skipped": 0,
+      "last_records_written": 0,
+      "last_run_duration_ms": 0,
+      "seen": [],
+      "status": "degraded"
+    },
     "comfyui": {
+      "consecutive_failures": 0,
+      "last_adapter": "github_releases",
+      "last_checked_at": "2026-04-29T17:47:32Z",
+      "last_error": "",
+      "last_error_at": "",
+      "last_error_type": "",
+      "last_health_note": "Fetch succeeded.",
+      "last_records_fetched": 2,
+      "last_records_skipped": 2,
+      "last_records_written": 0,
+      "last_run_duration_ms": 468,
+      "last_success_at": "2026-04-29T17:47:32Z",
+      "previous_consecutive_failures": 0,
       "seen": [
         "github:comfyui:310487464",
         "github:comfyui:314258741"
-      ]
+      ],
+      "status": "healthy"
     },
     "figma": {
+      "consecutive_failures": 0,
+      "last_adapter": "rss_feed",
+      "last_checked_at": "2026-04-29T17:45:00Z",
+      "last_error": "",
+      "last_error_at": "",
+      "last_error_type": "",
+      "last_health_note": "Fetch succeeded.",
+      "last_records_fetched": 2,
+      "last_records_skipped": 2,
+      "last_records_written": 0,
+      "last_run_duration_ms": 787,
+      "last_success_at": "2026-04-29T17:45:00Z",
+      "previous_consecutive_failures": 0,
       "seen": [
         "rss:figma:9923866c-4511-4991-8536-75f226c095a5",
         "rss:figma:0dcbfd47-b88e-4828-977a-b56b7769f89a",
@@ -105,20 +228,64 @@
         "rss:figma:03c7b6a9-b36f-41f7-93d9-017e577a76fb",
         "rss:figma:57dd3e2e-da91-4a70-b924-72fa4c2cd0ba",
         "rss:figma:2490eafb-ecf7-4d76-9ca9-5e4dd193a086"
-      ]
+      ],
+      "status": "healthy"
     },
     "github": {
+      "consecutive_failures": 0,
+      "last_adapter": "rss_feed",
+      "last_checked_at": "2026-04-29T17:47:33Z",
+      "last_error": "",
+      "last_error_at": "",
+      "last_error_type": "",
+      "last_health_note": "Fetch succeeded.",
+      "last_records_fetched": 2,
+      "last_records_skipped": 2,
+      "last_records_written": 0,
+      "last_run_duration_ms": 30,
+      "last_success_at": "2026-04-29T17:47:33Z",
+      "previous_consecutive_failures": 0,
       "seen": [
         "rss:github:https://github.blog/changelog/2026-04-27-copilot-cloud-agent-starts-20-faster-with-actions-custom-images",
         "rss:github:https://github.blog/changelog/2026-04-23-copilot-student-gpt-5-3-codex-removal-from-model-picker"
-      ]
+      ],
+      "status": "healthy"
     },
-    "netlify": {},
+    "netlify": {
+      "consecutive_failures": 0,
+      "last_adapter": "html_changelog",
+      "last_checked_at": "2026-04-29T17:47:33Z",
+      "last_error": "",
+      "last_error_at": "",
+      "last_error_type": "",
+      "last_health_note": "Fetch succeeded, but no records were extracted. This can mean no new updates or that the parser needs review.",
+      "last_records_fetched": 0,
+      "last_records_skipped": 0,
+      "last_records_written": 0,
+      "last_run_duration_ms": 309,
+      "last_success_at": "2026-04-29T17:47:33Z",
+      "previous_consecutive_failures": 0,
+      "status": "degraded"
+    },
     "obs-studio": {
+      "consecutive_failures": 0,
+      "last_adapter": "github_releases",
+      "last_checked_at": "2026-04-29T17:47:31Z",
+      "last_error": "",
+      "last_error_at": "",
+      "last_error_type": "",
+      "last_health_note": "Fetch succeeded.",
+      "last_records_fetched": 2,
+      "last_records_skipped": 2,
+      "last_records_written": 0,
+      "last_run_duration_ms": 702,
+      "last_success_at": "2026-04-29T17:47:31Z",
+      "previous_consecutive_failures": 0,
       "seen": [
         "github:obs-studio:304830335",
         "github:obs-studio:311922679"
-      ]
+      ],
+      "status": "healthy"
     }
   }
 }
