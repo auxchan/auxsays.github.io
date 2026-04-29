@@ -43,7 +43,7 @@ layout: aux-base
       </div>
     </div>
     <div class="patch-card-links patch-intel-links">
-      {% if product.source_url != blank %}<a href="{{ product.source_url }}">Official source ↗</a>{% endif %}
+      {% if product.source_url %}<a href="{{ product.source_url }}">Official source ↗</a>{% endif %}
       <a href="{{ '/updates/' | relative_url }}">Global Patch Feed →</a>
     </div>
   </section>
@@ -89,7 +89,7 @@ layout: aux-base
       </div>
       <div class="patch-dossier-card">
         <h3>Official source</h3>
-        {% if product.source_url != blank %}
+        {% if product.source_url %}
         <p><a href="{{ product.source_url }}">{{ product.source_label | default: 'Official source' }} ↗</a></p>
         {% else %}
         <p>Official source pending.</p>
