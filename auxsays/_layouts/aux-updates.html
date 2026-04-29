@@ -222,7 +222,16 @@ layout: aux-base
             <span class="patch-report-count">{{ item.update_report_count | default: 0 }} confirmed</span>
           </span>
         </div>
-        <h2 class="patch-card-title"><a href="{{ item.url | relative_url }}">{{ item.update_feed_title | default: item.update_product | append: ' ' | append: item.update_version }}</a></h2>
+        {% if item.update_feed_title != blank %}
+        {% assign card_title = item.update_feed_title %}
+        {% elsif item.update_product != blank and item.update_version != blank %}
+        {% assign card_title = item.update_product | append: ' ' | append: item.update_version %}
+        {% elsif item.update_product != blank %}
+        {% assign card_title = item.update_product %}
+        {% else %}
+        {% assign card_title = item.title %}
+        {% endif %}
+        <h2 class="patch-card-title"><a href="{{ item.url | relative_url }}">{{ card_title }}</a></h2>
         <p class="patch-card-summary">{{ item.description }}</p>
         {% assign consensus_summary = item.update_consensus_summary | default: item.community_summary %}
         {% if consensus_summary %}
@@ -292,7 +301,16 @@ layout: aux-base
               <span class="patch-report-count">{{ item.update_report_count | default: 0 }} confirmed</span>
             </span>
           </div>
-          <h2 class="patch-card-title"><a href="{{ item.url | relative_url }}">{{ item.update_feed_title | default: item.update_product | append: ' ' | append: item.update_version }}</a></h2>
+          {% if item.update_feed_title != blank %}
+          {% assign card_title = item.update_feed_title %}
+          {% elsif item.update_product != blank and item.update_version != blank %}
+          {% assign card_title = item.update_product | append: ' ' | append: item.update_version %}
+          {% elsif item.update_product != blank %}
+          {% assign card_title = item.update_product %}
+          {% else %}
+          {% assign card_title = item.title %}
+          {% endif %}
+          <h2 class="patch-card-title"><a href="{{ item.url | relative_url }}">{{ card_title }}</a></h2>
           <p class="patch-card-summary">{{ item.description }}</p>
           {% assign consensus_summary = item.update_consensus_summary | default: item.community_summary %}
           {% if consensus_summary %}
