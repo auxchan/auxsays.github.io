@@ -26,17 +26,11 @@
       "adapter": "rss_feed",
       "fetched": 2,
       "product_id": "figma",
-      "skipped": [
-        {
-          "reason": "state-seen",
-          "record_id": "rss:figma:03c7b6a9-b36f-41f7-93d9-017e577a76fb"
-        },
-        {
-          "reason": "state-seen",
-          "record_id": "rss:figma:5aff1eb4-6095-46fe-8afa-4fbd9885f719"
-        }
-      ],
-      "written": []
+      "skipped": [],
+      "written": [
+        "auxsays/updates/generated/2026-04-29-figma-more-ways-to-add-references-when-using-ai-to-generate-or-edit-images.md",
+        "auxsays/updates/generated/2026-04-29-figma-more-tools-less-switching-in-draw.md"
+      ]
     },
     {
       "adapter": "github_releases",
@@ -94,7 +88,7 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-04-29T08:39:42Z",
+  "last_run_finished_at": "2026-04-29T17:13:51Z",
   "last_run_started_at": "2026-04-27T23:09:10Z",
   "sources": {
     "comfyui": {
@@ -105,6 +99,8 @@
     },
     "figma": {
       "seen": [
+        "rss:figma:9923866c-4511-4991-8536-75f226c095a5",
+        "rss:figma:0dcbfd47-b88e-4828-977a-b56b7769f89a",
         "rss:figma:5aff1eb4-6095-46fe-8afa-4fbd9885f719",
         "rss:figma:03c7b6a9-b36f-41f7-93d9-017e577a76fb",
         "rss:figma:57dd3e2e-da91-4a70-b924-72fa4c2cd0ba",
