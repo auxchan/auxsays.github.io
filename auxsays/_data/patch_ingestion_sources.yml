@@ -9,7 +9,7 @@
     type: html_changelog
     adapter: html_changelog
     official_url: https://help.openai.com/en/articles/6825453-chatgpt-release-notes
-    secondary_official_url: https://helpx.adobe.com/premiere/desktop/troubleshooting/limitations-and-known-issues/known-and-fixed-issues.html
+    secondary_official_url: null
     feed_url: null
     api_url: null
     parser_profile: openai_release_notes
@@ -94,7 +94,7 @@
     type: html_changelog
     adapter: html_changelog
     official_url: https://support.claude.com/en/articles/12138966-release-notes
-    secondary_official_url: https://helpx.adobe.com/premiere/desktop/troubleshooting/limitations-and-known-issues/known-and-fixed-issues.html
+    secondary_official_url: null
     feed_url: null
     api_url: null
     parser_profile: anthropic_release_notes
@@ -179,7 +179,7 @@
     type: html_blog
     adapter: html_blog
     official_url: https://gemini.google/updates/
-    secondary_official_url: https://helpx.adobe.com/premiere/desktop/troubleshooting/limitations-and-known-issues/known-and-fixed-issues.html
+    secondary_official_url: null
     feed_url: null
     api_url: null
     parser_profile: google_gemini_updates
@@ -264,7 +264,7 @@
     type: html_blog
     adapter: html_blog
     official_url: https://www.perplexity.ai/hub/blog
-    secondary_official_url: https://helpx.adobe.com/premiere/desktop/troubleshooting/limitations-and-known-issues/known-and-fixed-issues.html
+    secondary_official_url: null
     feed_url: null
     api_url: null
     parser_profile: blog_keyword_filter
@@ -349,7 +349,7 @@
     type: manual_watch
     adapter: manual_watch
     official_url: https://www.midjourney.com/updates/
-    secondary_official_url: https://helpx.adobe.com/premiere/desktop/troubleshooting/limitations-and-known-issues/known-and-fixed-issues.html
+    secondary_official_url: null
     feed_url: null
     api_url: null
     parser_profile: manual_watch
@@ -425,7 +425,7 @@
     type: html_blog
     adapter: html_blog
     official_url: https://stability.ai/news
-    secondary_official_url: https://helpx.adobe.com/premiere/desktop/troubleshooting/limitations-and-known-issues/known-and-fixed-issues.html
+    secondary_official_url: null
     feed_url: null
     api_url: null
     parser_profile: blog_keyword_filter
@@ -510,7 +510,7 @@
     type: html_blog
     adapter: html_blog
     official_url: https://runwayml.com/research/
-    secondary_official_url: https://helpx.adobe.com/premiere/desktop/troubleshooting/limitations-and-known-issues/known-and-fixed-issues.html
+    secondary_official_url: null
     feed_url: null
     api_url: null
     parser_profile: research_blog_keyword_filter
@@ -595,7 +595,7 @@
     type: manual_watch
     adapter: manual_watch
     official_url: https://pika.art/
-    secondary_official_url: https://helpx.adobe.com/premiere/desktop/troubleshooting/limitations-and-known-issues/known-and-fixed-issues.html
+    secondary_official_url: null
     feed_url: null
     api_url: null
     parser_profile: manual_watch
@@ -671,7 +671,7 @@
     type: html_blog
     adapter: html_blog
     official_url: https://lottiefiles.com/blog
-    secondary_official_url: https://helpx.adobe.com/premiere/desktop/troubleshooting/limitations-and-known-issues/known-and-fixed-issues.html
+    secondary_official_url: null
     feed_url: null
     api_url: null
     parser_profile: blog_keyword_filter
@@ -841,7 +841,7 @@
     type: html_blog
     adapter: html_blog
     official_url: https://www.canva.com/newsroom/
-    secondary_official_url: https://helpx.adobe.com/premiere/desktop/troubleshooting/limitations-and-known-issues/known-and-fixed-issues.html
+    secondary_official_url: null
     feed_url: null
     api_url: null
     parser_profile: newsroom_keyword_filter
@@ -960,10 +960,10 @@
     - changelog
     - patch
     - version
-    - beta
-    - driver
-    - studio
-    - copilot
+    - adobe
+    - premiere
+    - nle
+    - video editing
     request:
       timeout_seconds: 30
       retries: 1
@@ -1057,6 +1057,8 @@
     - version
     - adobe
     - after effects
+    - motion graphics
+    - compositing
     request:
       timeout_seconds: 30
       retries: 1
@@ -1103,8 +1105,7 @@
     - creator forums
     difficulty: Medium
     defer_until_official_ingestion_stable: true
-  source_health_note: Visible product page retained. Official ingestion staged to avoid repeated Adobe HelpX timeouts while Premiere Pro adapter
-    is hardened.
+  source_health_note: Visible Adobe product retained. Official ingestion is staged unless Premiere Pro adapter is explicitly active.
 - company_id: adobe
   product_id: adobe-photoshop
   company: Adobe
@@ -1152,6 +1153,8 @@
     - version
     - adobe
     - photoshop
+    - image editing
+    - design
     request:
       timeout_seconds: 30
       retries: 1
@@ -1198,8 +1201,7 @@
     - creator forums
     difficulty: Medium
     defer_until_official_ingestion_stable: true
-  source_health_note: Visible product page retained. Official ingestion staged to avoid repeated Adobe HelpX timeouts while Premiere Pro adapter
-    is hardened.
+  source_health_note: Visible Adobe product retained. Official ingestion is staged unless Premiere Pro adapter is explicitly active.
 - company_id: adobe
   product_id: adobe-media-encoder
   company: Adobe
@@ -1295,8 +1297,7 @@
     - creator forums
     difficulty: Medium
     defer_until_official_ingestion_stable: true
-  source_health_note: Visible product page retained. Official ingestion staged to avoid repeated Adobe HelpX timeouts while Premiere Pro adapter
-    is hardened.
+  source_health_note: Visible Adobe product retained. Official ingestion is staged unless Premiere Pro adapter is explicitly active.
 - company_id: adobe
   product_id: adobe-lightroom-classic
   company: Adobe
@@ -1345,6 +1346,7 @@
     - adobe
     - lightroom
     - camera raw
+    - photo editing
     request:
       timeout_seconds: 30
       retries: 1
@@ -1391,8 +1393,7 @@
     - creator forums
     difficulty: Medium
     defer_until_official_ingestion_stable: true
-  source_health_note: Visible product page retained. Official ingestion staged to avoid repeated Adobe HelpX timeouts while Premiere Pro adapter
-    is hardened.
+  source_health_note: Visible Adobe product retained. Official ingestion is staged unless Premiere Pro adapter is explicitly active.
 - company_id: blackmagic-design
   product_id: blackmagic-davinci
   company: Blackmagic Design
@@ -1566,7 +1567,7 @@
     type: html_blog
     adapter: html_blog
     official_url: https://blog.twitch.tv/
-    secondary_official_url: https://helpx.adobe.com/premiere/desktop/troubleshooting/limitations-and-known-issues/known-and-fixed-issues.html
+    secondary_official_url: null
     feed_url: null
     api_url: null
     parser_profile: blog_keyword_filter
@@ -1651,7 +1652,7 @@
     type: html_blog
     adapter: html_blog
     official_url: https://blog.youtube/news-and-events/
-    secondary_official_url: https://helpx.adobe.com/premiere/desktop/troubleshooting/limitations-and-known-issues/known-and-fixed-issues.html
+    secondary_official_url: null
     feed_url: null
     api_url: null
     parser_profile: blog_keyword_filter
@@ -1736,7 +1737,7 @@
     type: manual_watch
     adapter: manual_watch
     official_url: https://kick.com/blog
-    secondary_official_url: https://helpx.adobe.com/premiere/desktop/troubleshooting/limitations-and-known-issues/known-and-fixed-issues.html
+    secondary_official_url: null
     feed_url: null
     api_url: null
     parser_profile: manual_watch
@@ -1812,7 +1813,7 @@
     type: html_blog
     adapter: html_blog
     official_url: https://corp.rumble.com/blog/
-    secondary_official_url: https://helpx.adobe.com/premiere/desktop/troubleshooting/limitations-and-known-issues/known-and-fixed-issues.html
+    secondary_official_url: null
     feed_url: null
     api_url: null
     parser_profile: blog_keyword_filter
@@ -1897,7 +1898,7 @@
     type: html_changelog
     adapter: html_changelog
     official_url: https://dev.epicgames.com/documentation/en-us/unreal-engine/whats-new
-    secondary_official_url: https://helpx.adobe.com/premiere/desktop/troubleshooting/limitations-and-known-issues/known-and-fixed-issues.html
+    secondary_official_url: null
     feed_url: null
     api_url: null
     parser_profile: unreal_docs_whats_new
@@ -1982,7 +1983,7 @@
     type: html_changelog
     adapter: html_changelog
     official_url: https://unity.com/releases
-    secondary_official_url: https://helpx.adobe.com/premiere/desktop/troubleshooting/limitations-and-known-issues/known-and-fixed-issues.html
+    secondary_official_url: null
     feed_url: null
     api_url: null
     parser_profile: unity_releases
@@ -2067,7 +2068,7 @@
     type: official_forum
     adapter: official_forum_watch
     official_url: https://store.steampowered.com/news/group/4145017
-    secondary_official_url: https://helpx.adobe.com/premiere/desktop/troubleshooting/limitations-and-known-issues/known-and-fixed-issues.html
+    secondary_official_url: null
     feed_url: null
     api_url: null
     parser_profile: steam_news_group
@@ -2380,7 +2381,7 @@
     type: html_changelog
     adapter: html_changelog
     official_url: https://www.blender.org/download/releases/
-    secondary_official_url: https://helpx.adobe.com/premiere/desktop/troubleshooting/limitations-and-known-issues/known-and-fixed-issues.html
+    secondary_official_url: null
     feed_url: null
     api_url: null
     parser_profile: blender_releases
@@ -2464,8 +2465,8 @@
   ingestion:
     type: github_releases
     adapter: github_releases
-    official_url: https://github.com/comfyanonymous/ComfyUI/releases
-    secondary_official_url: https://helpx.adobe.com/premiere/desktop/troubleshooting/limitations-and-known-issues/known-and-fixed-issues.html
+    official_url: https://github.com/Comfy-Org/ComfyUI/releases
+    secondary_official_url: https://docs.comfy.org/changelog
     feed_url: null
     api_url: https://api.github.com/repos/Comfy-Org/ComfyUI/releases
     parser_profile: github_release_standard
@@ -2542,7 +2543,7 @@
     type: html_blog
     adapter: html_blog
     official_url: https://huggingface.co/blog
-    secondary_official_url: https://helpx.adobe.com/premiere/desktop/troubleshooting/limitations-and-known-issues/known-and-fixed-issues.html
+    secondary_official_url: null
     feed_url: null
     api_url: null
     parser_profile: blog_keyword_filter
@@ -2882,7 +2883,7 @@
     type: html_changelog
     adapter: html_changelog
     official_url: https://www.notion.com/releases
-    secondary_official_url: https://helpx.adobe.com/premiere/desktop/troubleshooting/limitations-and-known-issues/known-and-fixed-issues.html
+    secondary_official_url: null
     feed_url: null
     api_url: null
     parser_profile: notion_releases
@@ -2967,7 +2968,7 @@
     type: html_blog
     adapter: html_blog
     official_url: https://zapier.com/blog/updates/
-    secondary_official_url: https://helpx.adobe.com/premiere/desktop/troubleshooting/limitations-and-known-issues/known-and-fixed-issues.html
+    secondary_official_url: null
     feed_url: null
     api_url: null
     parser_profile: blog_keyword_filter
@@ -3052,7 +3053,7 @@
     type: html_changelog
     adapter: html_changelog
     official_url: https://www.make.com/en/changelog
-    secondary_official_url: https://helpx.adobe.com/premiere/desktop/troubleshooting/limitations-and-known-issues/known-and-fixed-issues.html
+    secondary_official_url: null
     feed_url: null
     api_url: null
     parser_profile: make_changelog
