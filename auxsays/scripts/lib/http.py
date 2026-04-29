@@ -80,19 +80,19 @@ def fetch_text(
                 )
         except urllib.error.HTTPError as exc:
             body = exc.read().decode("utf-8", errors="replace")
-            last_exc = RuntimeError(f"HTTP {exc.code} while fetching {url}: {body[:500]}")
+            last_exc = RuntimeError(f"HTTP {exc.code} while fetching official source URL [{url}] — {body[:500]}")
             # Retrying hard 4xx usually wastes time. 408/429 can be transient.
             if exc.code not in {408, 429, 500, 502, 503, 504}:
                 break
         except urllib.error.URLError as exc:
-            last_exc = RuntimeError(f"Network failure while fetching {url}: {exc}")
+            last_exc = RuntimeError(f"Network failure while fetching official source URL [{url}] — {exc}")
         except TimeoutError as exc:
-            last_exc = RuntimeError(f"Timeout while fetching {url}: {exc}")
+            last_exc = RuntimeError(f"Timeout while fetching official source URL [{url}] — {exc}")
 
         if attempt < attempts - 1:
             time.sleep(float(backoff_seconds) * (attempt + 1))
 
-    raise last_exc or RuntimeError(f"Failed to fetch {url}")
+    raise last_exc or RuntimeError(f"Failed to fetch official source URL [{url}]")
 
 
 def fetch_json(url: str, timeout: int = 30) -> Any:

@@ -44,6 +44,9 @@ jobs:
       - name: Install ingestion dependencies
         run: pip install -r auxsays/scripts/requirements-ingest.txt
 
+      - name: Validate ingestion source config
+        run: python auxsays/scripts/validate_ingestion_sources.py
+
       - name: Run enabled patch ingestion
         if: ${{ github.event.inputs.source == '' || github.event.inputs.source == null }}
         run: |
