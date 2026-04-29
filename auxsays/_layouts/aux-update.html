@@ -18,6 +18,54 @@ layout: aux-base
 {% assign company = site.data.patch_companies | where: "id", page.company_id | first %}
 {% assign product = site.data.patch_products | where: "id", page.product_id | first %}
 {% assign display_title = page.update_product | append: ' ' | append: page.update_version %}
+{% assign report_count = page.update_report_count | default: 0 | plus: 0 %}
+{% assign collection_status = page.consensus_collection_status | default: 'deferred_official_only' %}
+{% assign source_url_present = false %}
+{% if page.update_source_url != blank or page.official_patch_notes_source_url != blank %}{% assign source_url_present = true %}{% endif %}
+{% assign official_body_present = false %}
+{% if page.official_patch_notes_body != blank %}{% assign official_body_present = true %}{% endif %}
+{% assign official_captured = false %}
+{% if source_url_present or official_body_present %}{% assign official_captured = true %}{% endif %}
+{% assign evidence_state = 'Insufficient data' %}
+{% assign evidence_state_class = 'insufficient' %}
+{% if collection_status == 'live_consensus' or collection_status == 'consensus_live' %}
+  {% assign evidence_state = 'Consensus live' %}
+  {% assign evidence_state_class = 'live' %}
+{% elsif collection_status == 'static_initial_sample' or page.evidence_state == 'static_sample' %}
+  {% assign evidence_state = 'Static sample' %}
+  {% assign evidence_state_class = 'static' %}
+{% elsif official_captured %}
+  {% assign evidence_state = 'Official only' %}
+  {% assign evidence_state_class = 'official' %}
+{% endif %}
+{% assign source_captured_label = 'No' %}{% if official_captured %}{% assign source_captured_label = 'Yes' %}{% endif %}
+{% assign known_issues_label = 'Insufficient data' %}
+{% if page.known_issues_present == true %}
+  {% assign known_issues_label = 'Yes' %}
+{% elsif page.known_issues_present == false %}
+  {% assign known_issues_label = 'No' %}
+{% elsif page.complaint_themes and page.complaint_themes.size > 0 %}
+  {% assign known_issues_label = 'Yes' %}
+{% endif %}
+{% assign verdict_text = page.quick_verdict %}
+{% if verdict_text == blank %}
+  {% if evidence_state == 'Consensus live' %}
+    {% assign verdict_text = 'Consensus collection is active for this patch. Review the confirmed patch-specific reports and official notes before upgrading.' %}
+  {% elsif evidence_state == 'Static sample' %}
+    {% assign verdict_text = 'This record includes a static initial consensus sample. It is not a live community telemetry feed.' %}
+  {% elsif evidence_state == 'Official only' %}
+    {% assign verdict_text = 'Official source captured. Community consensus is not live yet for this patch.' %}
+  {% else %}
+    {% assign verdict_text = 'Insufficient data. AUXSAYS has not captured enough official or confirmed community evidence for a recommendation.' %}
+  {% endif %}
+{% endif %}
+{% assign summary_text = page.release_summary | default: page.official_summary | default: page.description %}
+{% assign consensus_text = page.consensus_report | default: page.community_summary %}
+{% assign file_size_present = false %}
+{% if page.patch_file_size != blank and page.patch_file_size != 'Not captured' and page.patch_file_size != 'Unknown' %}{% assign file_size_present = true %}{% endif %}
+{% assign checksum_present = false %}
+{% if page.official_checksums_body != blank %}{% assign checksum_present = true %}{% endif %}
+
 <div class="update-page-shell reveal-up">
   <section class="panel update-hero update-hero--v3">
     <div class="update-hero-main update-hero-main--clean">
@@ -25,11 +73,11 @@ layout: aux-base
 
       <div class="update-brand-row">
         <span class="update-brand-badge patch-logo-badge patch-logo-badge--has-image">
-          {% if product.logo_path %}<img src="{{ product.logo_path | relative_url }}" alt="{{ product.product_name }} logo" loading="lazy">{% else %}{{ page.update_logo_text | default: page.update_product | slice: 0, 3 }}{% endif %}
+          {% if product.logo_path != blank %}<img src="{{ product.logo_path | relative_url }}" alt="{{ product.product_name }} logo" loading="lazy">{% else %}{{ page.update_logo_text | default: page.update_product | slice: 0, 3 }}{% endif %}
         </span>
         <span class="update-brand-meta">
           <strong>{{ page.update_product }}</strong>
-          <span>{{ page.update_source_name }}</span>
+          {% if page.update_source_name != blank %}<span>{{ page.update_source_name }}</span>{% endif %}
         </span>
       </div>
 
@@ -39,16 +87,16 @@ layout: aux-base
       <div class="update-meta-strip">
         {% if company %}<a href="{{ company.company_url | relative_url }}">Company: {{ company.company_name }}</a>{% endif %}
         {% if product %}<a href="{{ product.product_url | relative_url }}">Software: {{ product.product_name }}</a>{% endif %}
-        <span>Patch: {{ page.update_version }}</span>
-        {% if page.patch_file_size %}<span class="update-meta-chip--filesize" title="{{ page.patch_file_size_note | escape }}">File size: {{ page.patch_file_size }}</span>{% endif %}
-        <span>Patch released: {{ page.update_published_at | date: "%b %-d, %Y" }}</span>
-        <span>Last checked: {{ page.update_last_checked | date: "%b %-d, %Y" }}</span>
+        {% if page.update_version != blank %}<span>Patch: {{ page.update_version }}</span>{% endif %}
+        {% if file_size_present %}<span class="update-meta-chip--filesize"{% if page.patch_file_size_note != blank %} title="{{ page.patch_file_size_note | escape }}"{% endif %}>File size: {{ page.patch_file_size }}</span>{% endif %}
+        {% if page.update_published_at != blank %}<span>Patch released: {{ page.update_published_at | date: "%b %-d, %Y" }}</span>{% endif %}
+        {% if page.update_last_checked != blank %}<span>Last checked: {{ page.update_last_checked | date: "%b %-d, %Y" }}</span>{% endif %}
       </div>
 
       <div class="update-verdict-card update-verdict-card--clean">
         <div class="consensus-compact">
           <span><strong>Consensus:</strong> <em class="consensus-word consensus-word--{{ reaction_class }}">{{ reaction }}</em></span>
-          <span class="consensus-secondary">{{ page.update_report_count | default: 0 }} confirmed patch-specific reports • {{ page.update_consensus_confidence | default: 'Low' }} confidence</span>
+          <span class="consensus-secondary">{{ report_count }} confirmed patch-specific reports • {{ page.update_consensus_confidence | default: 'Low' }} confidence</span>
         </div>
         <div class="consensus-position-graph consensus-position-graph--hero" style="--consensus-pos: {{ consensus_score_percent }}%;">
           <div class="consensus-scale" aria-hidden="true">
@@ -63,24 +111,44 @@ layout: aux-base
         </div>
       </div>
 
+      <div class="update-decision-box update-decision-box--{{ evidence_state_class }}">
+        <div class="update-decision-box__header">
+          <span class="update-decision-eyebrow">AUXSAYS verdict</span>
+          <strong>{{ verdict_text }}</strong>
+        </div>
+        <dl class="update-decision-grid">
+          <div><dt>Confidence</dt><dd>{{ page.update_consensus_confidence | default: 'Low' }}</dd></div>
+          <div><dt>Evidence state</dt><dd>{{ evidence_state }}</dd></div>
+          <div><dt>Official source captured</dt><dd>{{ source_captured_label }}</dd></div>
+          <div><dt>Confirmed reports counted</dt><dd>{{ report_count }}</dd></div>
+          <div><dt>Known issues present</dt><dd>{{ known_issues_label }}</dd></div>
+        </dl>
+        <p class="update-decision-note">
+          {% if evidence_state == 'Static sample' %}Static sample means this page has manually encoded or previously captured confirmed patch-specific reports, but live consensus refresh is not active yet.{% elsif evidence_state == 'Official only' %}Official only means this page currently reflects official-source ingestion. No confirmed patch-specific community reports are counted yet.{% elsif evidence_state == 'Consensus live' %}Consensus live means confirmed patch-specific reports are being refreshed by the consensus pipeline.{% else %}Insufficient data means AUXSAYS has not captured enough evidence to score this update beyond a placeholder state.{% endif %}
+          <a href="{{ '/updates/methodology/' | relative_url }}">Read the methodology →</a>
+        </p>
+      </div>
+
       <div class="update-source-row">
-        {% if page.update_source_url %}<a href="{{ page.update_source_url }}">Official source ↗</a>{% endif %}
-        {% if page.update_download_url %}<a href="{{ page.update_download_url }}">Download page ↗</a>{% endif %}
+        {% if page.update_source_url != blank %}<a href="{{ page.update_source_url }}">Official source ↗</a>{% endif %}
+        {% if page.update_download_url != blank %}<a href="{{ page.update_download_url }}">Download page ↗</a>{% endif %}
       </div>
     </div>
   </section>
 
   <section class="update-content-grid">
+    {% if summary_text != blank %}
     <article class="panel update-info-card update-summary-card">
       <h2>Summary</h2>
-      <p>{{ page.release_summary | default: page.official_summary | default: page.description }}</p>
+      <p>{{ summary_text }}</p>
     </article>
+    {% endif %}
 
     <article class="panel update-info-card update-consensus-card">
-      <h2>Consensus</h2>
+      <h2>Evidence status</h2>
       <div class="consensus-compact consensus-compact--card">
-        <span><strong>Consensus:</strong> <em class="consensus-word consensus-word--{{ reaction_class }}">{{ reaction }}</em></span>
-        <span class="consensus-secondary">{{ page.update_report_count | default: 0 }} confirmed patch-specific reports • {{ page.update_consensus_confidence | default: 'Low' }} confidence</span>
+        <span><strong>Evidence:</strong> <em class="consensus-word consensus-word--{{ reaction_class }}">{{ evidence_state }}</em></span>
+        <span class="consensus-secondary">{{ report_count }} confirmed patch-specific reports • {{ page.update_consensus_confidence | default: 'Low' }} confidence</span>
       </div>
       <div class="consensus-position-graph consensus-position-graph--card" style="--consensus-pos: {{ consensus_score_percent }}%;">
         <div class="consensus-scale" aria-label="Consensus position from negative through moderate to positive">
@@ -89,12 +157,10 @@ layout: aux-base
           <span class="consensus-scale-zone consensus-scale-zone--positive"></span>
           <span class="consensus-scale-marker"></span>
         </div>
-        <div class="consensus-scale-labels">
-          <span>Negative</span><span>Moderate</span><span>Positive</span>
-        </div>
+        <div class="consensus-scale-labels"><span>Negative</span><span>Moderate</span><span>Positive</span></div>
       </div>
-      <p>{{ page.consensus_report | default: page.community_summary }}</p>
-      <p class="consensus-rule-note">AUXSAYS counts a report only when the specific patch/version is named in the report itself or in the parent discussion title. Every confirmed patch-specific report is counted equally.</p>
+      {% if consensus_text != blank %}<p>{{ consensus_text }}</p>{% endif %}
+      <p class="consensus-rule-note">AUXSAYS counts a report only when the specific patch/version is named in the report itself or in the parent discussion title. Every confirmed patch-specific report is counted equally. <a href="{{ '/updates/methodology/' | relative_url }}">Methodology</a></p>
 
       {% if page.complaint_themes and page.complaint_themes.size > 0 %}
       <div class="complaint-theme-table complaint-theme-table--renamed">
@@ -106,37 +172,34 @@ layout: aux-base
       {% endif %}
     </article>
 
+    {% if official_body_present %}
+    <details class="panel update-info-card update-official-details" open>
+      <summary>Official</summary>
+      <div class="official-patch-notes node-bullet-scope">{{ page.official_patch_notes_body | markdownify }}</div>
+    </details>
+    {% elsif page.update_source_url != blank %}
     <details class="panel update-info-card update-official-details">
       <summary>Official</summary>
-      {% if page.official_patch_notes_body %}
-      <div class="official-patch-notes node-bullet-scope">
-        {{ page.official_patch_notes_body | markdownify }}
-      </div>
-      {% else %}
-      <div class="official-patch-notes official-patch-notes--pending">
-        <p>Official patch notes have not been captured into this AUXSAYS record yet. Use the official source link above until the record is backfilled.</p>
-      </div>
-      {% endif %}
+      <div class="official-patch-notes official-patch-notes--pending"><p>Official patch notes have not been captured into this AUXSAYS record yet. Use the official source link above until the record is backfilled.</p></div>
     </details>
+    {% endif %}
 
     {% if page.status_events and page.status_events.size > 0 %}
     <details class="panel update-info-card update-status-details">
       <summary>Status History</summary>
       <div class="status-timeline status-timeline--compact">
         {% for event in page.status_events %}
-        <div class="status-event"><time>{{ event.at | date: "%b %-d, %Y %-I:%M %p %Z" }}</time><strong>{{ event.label }}</strong><p>{{ event.note }}</p></div>
+        <div class="status-event"><time>{{ event.at | date: "%b %-d, %Y %-I:%M %p %Z" }}</time><strong>{{ event.label }}</strong>{% if event.note != blank %}<p>{{ event.note }}</p>{% endif %}</div>
         {% endfor %}
       </div>
     </details>
     {% endif %}
 
-    {% if page.official_checksums_body %}
+    {% if checksum_present %}
     <details class="panel update-info-card update-checksum-details">
       <summary>Checksum</summary>
       <p class="checksum-helper">Use these hashes to verify downloaded installers match the files published with the official release.</p>
-      <div class="official-patch-notes checksum-body">
-        {{ page.official_checksums_body | markdownify }}
-      </div>
+      <div class="official-patch-notes checksum-body">{{ page.official_checksums_body | markdownify }}</div>
     </details>
     {% endif %}
   </section>

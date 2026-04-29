@@ -53,4 +53,9 @@ consensus_report_count_label: confirmed patch-specific reports
 consensus_report_weighting: equal_per_confirmed_report
 consensus_low_context_policy: excluded
 consensus_collection_status: deferred_official_only
+evidence_state: official_only
+evidence_state_label: Official only
+official_source_captured: true
+confirmed_patch_specific_report_count: 0
+known_issues_present: null
 ---

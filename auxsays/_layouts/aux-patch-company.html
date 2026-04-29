@@ -79,7 +79,7 @@ layout: aux-base
         </div>
         <div class="patch-card-links">
           <span class="patch-source-link patch-source-link--primary">Open software page →</span>
-          {% if product.source_url %}<a href="{{ product.source_url }}">Official source ↗</a>{% endif %}
+          {% if product.source_url != blank %}<a href="{{ product.source_url }}">Official source ↗</a>{% endif %}
         </div>
       </article>
       {% endfor %}
@@ -127,7 +127,7 @@ layout: aux-base
         <h3>Official sources</h3>
         <ul>
           {% for product in products %}
-          <li>{% if product.source_url %}<a href="{{ product.source_url }}">{{ product.source_label | default: product.product_name }} ↗</a>{% else %}{{ product.product_name }} source pending{% endif %}</li>
+          <li>{% if product.source_url != blank %}<a href="{{ product.source_url }}">{{ product.source_label | default: product.product_name }} ↗</a>{% else %}{{ product.product_name }} source pending{% endif %}</li>
           {% endfor %}
         </ul>
       </div>
