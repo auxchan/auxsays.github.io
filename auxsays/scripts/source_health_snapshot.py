@@ -60,7 +60,7 @@ def status_for(source: dict[str, Any], source_state: dict[str, Any], last_error:
     if not enabled:
         if adapter == "manual_watch" or "manual" in recommended:
             return "Manual watch", "Manual"
-        if "build later" in recommended or "p2" in recommended or "p3" in recommended:
+        if "staged" in recommended or "build later" in recommended or "p2" in recommended or "p3" in recommended:
             return "Staged", "Staged"
         return "Disabled", "Disabled"
 
@@ -114,10 +114,17 @@ def main() -> int:
         ingestion = source.get("ingestion") or {}
         product_id = source.get("product_id") or source.get("source_id") or source.get("software")
         source_state = state_sources.get(product_id, {}) if isinstance(state_sources, dict) else {}
-        last_error = error_map.get(product_id) or source_state.get("last_error") or ""
+        enabled = bool(source.get("enabled"))
+        # Disabled/staged sources should not keep showing stale errors from an
+        # older enabled test run. Their current operational state is staged,
+        # not actively failing.
+        last_error = (error_map.get(product_id) or source_state.get("last_error") or "") if enabled else ""
         status, status_detail = status_for(source, source_state, last_error)
         extractable = ingestion.get("extractable_fields") or {}
         capabilities = capability_summary(extractable)
+        health_note = source.get("source_health_note") or source_state.get("last_health_note") or ""
+        if not enabled and status == "Staged" and not health_note:
+            health_note = "Source configured but intentionally staged until adapter reliability is proven."
 
         rows.append({
             "source_id": product_id,
@@ -141,7 +148,7 @@ def main() -> int:
             "last_records_written": int(source_state.get("last_records_written") or 0),
             "last_records_skipped": int(source_state.get("last_records_skipped") or 0),
             "last_run_duration_ms": int(source_state.get("last_run_duration_ms") or 0),
-            "last_health_note": source_state.get("last_health_note") or "",
+            "last_health_note": health_note,
             "capabilities": capabilities,
             "raw_extractable_fields": extractable,
         })

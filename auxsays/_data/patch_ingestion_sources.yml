@@ -921,10 +921,10 @@
   software: Premiere Pro
   public_category: Video / Production
   enabled: true
-  recommended_priority: P1 build now
+  recommended_priority: P1 active Adobe adapter test lane
   ingestion:
     type: html_changelog
-    adapter: html_changelog
+    adapter: adobe_release_notes
     official_url: https://helpx.adobe.com/premiere/desktop/whats-new/release-notes.html
     secondary_official_url: https://helpx.adobe.com/premiere/desktop/troubleshooting/limitations-and-known-issues/known-and-fixed-issues.html
     feed_url: null
@@ -965,13 +965,14 @@
     - studio
     - copilot
     request:
-      timeout_seconds: 75
-      retries: 2
-      backoff_seconds: 4
-      max_bytes: 1500000
-      headers: &id001
+      timeout_seconds: 30
+      retries: 1
+      backoff_seconds: 2.5
+      max_bytes: 750000
+      headers:
         Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
         Accept-Language: en-US,en;q=0.9
+        Connection: close
   generated_record:
     canonical_url_pattern: /updates/adobe/adobe-premiere-pro/{version_slug}/
     title_pattern: '{software} {version} official update breakdown'
@@ -1008,16 +1009,17 @@
     - Reddit
     difficulty: TBD
     defer_until_official_ingestion_stable: true
+  source_health_note: Active Adobe test lane. Other Adobe products remain staged until this adapter proves stable.
 - company_id: adobe
   product_id: adobe-after-effects
   company: Adobe
   software: After Effects
   public_category: Video / Production
-  enabled: true
-  recommended_priority: P1 build now
+  enabled: false
+  recommended_priority: P1 staged until Adobe adapter is stable
   ingestion:
     type: html_changelog
-    adapter: html_changelog
+    adapter: adobe_release_notes
     official_url: https://helpx.adobe.com/after-effects/release-note/release-notes-after-effects.html
     secondary_official_url: null
     feed_url: null
@@ -1056,11 +1058,14 @@
     - adobe
     - after effects
     request:
-      timeout_seconds: 75
-      retries: 2
-      backoff_seconds: 4
-      max_bytes: 1500000
-      headers: *id001
+      timeout_seconds: 30
+      retries: 1
+      backoff_seconds: 2.5
+      max_bytes: 750000
+      headers:
+        Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+        Accept-Language: en-US,en;q=0.9
+        Connection: close
   generated_record:
     canonical_url_pattern: /updates/adobe/adobe-after-effects/{version_slug}/
     title_pattern: '{software} {version} official update breakdown'
@@ -1098,16 +1103,18 @@
     - creator forums
     difficulty: Medium
     defer_until_official_ingestion_stable: true
+  source_health_note: Visible product page retained. Official ingestion staged to avoid repeated Adobe HelpX timeouts while Premiere Pro adapter
+    is hardened.
 - company_id: adobe
   product_id: adobe-photoshop
   company: Adobe
   software: Photoshop
   public_category: Design Workflow
-  enabled: true
-  recommended_priority: P1 build now
+  enabled: false
+  recommended_priority: P1 staged until Adobe adapter is stable
   ingestion:
     type: html_changelog
-    adapter: html_changelog
+    adapter: adobe_release_notes
     official_url: https://helpx.adobe.com/photoshop/desktop/whats-new/photoshop-on-desktop-release-notes.html
     secondary_official_url: null
     feed_url: null
@@ -1146,11 +1153,14 @@
     - adobe
     - photoshop
     request:
-      timeout_seconds: 75
-      retries: 2
-      backoff_seconds: 4
-      max_bytes: 1500000
-      headers: *id001
+      timeout_seconds: 30
+      retries: 1
+      backoff_seconds: 2.5
+      max_bytes: 750000
+      headers:
+        Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+        Accept-Language: en-US,en;q=0.9
+        Connection: close
   generated_record:
     canonical_url_pattern: /updates/adobe/adobe-photoshop/{version_slug}/
     title_pattern: '{software} {version} official update breakdown'
@@ -1188,16 +1198,18 @@
     - creator forums
     difficulty: Medium
     defer_until_official_ingestion_stable: true
+  source_health_note: Visible product page retained. Official ingestion staged to avoid repeated Adobe HelpX timeouts while Premiere Pro adapter
+    is hardened.
 - company_id: adobe
   product_id: adobe-media-encoder
   company: Adobe
   software: Media Encoder
   public_category: Video / Production
-  enabled: true
-  recommended_priority: P1 build now
+  enabled: false
+  recommended_priority: P1 staged until Adobe adapter is stable
   ingestion:
     type: html_changelog
-    adapter: html_changelog
+    adapter: adobe_release_notes
     official_url: https://helpx.adobe.com/media-encoder/release-notes.html
     secondary_official_url: null
     feed_url: null
@@ -1238,11 +1250,14 @@
     - export
     - codec
     request:
-      timeout_seconds: 75
-      retries: 2
-      backoff_seconds: 4
-      max_bytes: 1500000
-      headers: *id001
+      timeout_seconds: 30
+      retries: 1
+      backoff_seconds: 2.5
+      max_bytes: 750000
+      headers:
+        Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+        Accept-Language: en-US,en;q=0.9
+        Connection: close
   generated_record:
     canonical_url_pattern: /updates/adobe/adobe-media-encoder/{version_slug}/
     title_pattern: '{software} {version} official update breakdown'
@@ -1280,16 +1295,18 @@
     - creator forums
     difficulty: Medium
     defer_until_official_ingestion_stable: true
+  source_health_note: Visible product page retained. Official ingestion staged to avoid repeated Adobe HelpX timeouts while Premiere Pro adapter
+    is hardened.
 - company_id: adobe
   product_id: adobe-lightroom-classic
   company: Adobe
   software: Lightroom Classic
   public_category: Design Workflow
-  enabled: true
-  recommended_priority: P1 build now
+  enabled: false
+  recommended_priority: P1 staged until Adobe adapter is stable
   ingestion:
     type: html_changelog
-    adapter: html_changelog
+    adapter: adobe_release_notes
     official_url: https://helpx.adobe.com/lightroom-classic/help/whats-new/release-notes.html
     secondary_official_url: null
     feed_url: null
@@ -1329,11 +1346,14 @@
     - lightroom
     - camera raw
     request:
-      timeout_seconds: 75
-      retries: 2
-      backoff_seconds: 4
-      max_bytes: 1500000
-      headers: *id001
+      timeout_seconds: 30
+      retries: 1
+      backoff_seconds: 2.5
+      max_bytes: 750000
+      headers:
+        Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
+        Accept-Language: en-US,en;q=0.9
+        Connection: close
   generated_record:
     canonical_url_pattern: /updates/adobe/adobe-lightroom-classic/{version_slug}/
     title_pattern: '{software} {version} official update breakdown'
@@ -1371,6 +1391,8 @@
     - creator forums
     difficulty: Medium
     defer_until_official_ingestion_stable: true
+  source_health_note: Visible product page retained. Official ingestion staged to avoid repeated Adobe HelpX timeouts while Premiere Pro adapter
+    is hardened.
 - company_id: blackmagic-design
   product_id: blackmagic-davinci
   company: Blackmagic Design

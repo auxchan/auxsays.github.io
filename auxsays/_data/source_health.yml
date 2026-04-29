@@ -1,193 +1,25 @@
-- source_id: adobe-after-effects
-  company_id: adobe
-  product_id: adobe-after-effects
-  company: Adobe
-  software: After Effects
-  public_category: Video / Production
-  adapter_type: html_changelog
-  enabled: true
-  status: Degraded
-  status_detail: Degraded
-  polling_frequency: 24h
-  last_success: ''
-  last_error: The read operation timed out
-  last_error_display: Timeout during last check
-  last_error_type: timeout
-  consecutive_failures: 1
-  last_checked: '2026-04-29T17:46:01Z'
-  last_records_fetched: 0
-  last_records_written: 0
-  last_records_skipped: 0
-  last_run_duration_ms: 0
-  last_health_note: Fetch failed. Review source availability, adapter timeout, or parser behavior.
-  capabilities:
-    release_notes: true
-    version: true
-    release_date: true
-    download_url: false
-    file_size: false
-    checksum: false
-    known_issues: true
-    release_assets: false
-  raw_extractable_fields:
-    version: true
-    release_date: true
-    title: true
-    release_note_body: true
-    download_url: false
-    file_size: false
-    checksum: false
-    known_issues: true
-    platform_specific_installers: false
-    archived_release_history: true
-- source_id: adobe-lightroom-classic
-  company_id: adobe
-  product_id: adobe-lightroom-classic
-  company: Adobe
-  software: Lightroom Classic
-  public_category: Design Workflow
-  adapter_type: html_changelog
-  enabled: true
-  status: Degraded
-  status_detail: Degraded
-  polling_frequency: 24h
-  last_success: ''
-  last_error: The read operation timed out
-  last_error_display: Timeout during last check
-  last_error_type: timeout
-  consecutive_failures: 1
-  last_checked: '2026-04-29T17:47:31Z'
-  last_records_fetched: 0
-  last_records_written: 0
-  last_records_skipped: 0
-  last_run_duration_ms: 0
-  last_health_note: Fetch failed. Review source availability, adapter timeout, or parser behavior.
-  capabilities:
-    release_notes: true
-    version: true
-    release_date: true
-    download_url: false
-    file_size: false
-    checksum: false
-    known_issues: true
-    release_assets: false
-  raw_extractable_fields:
-    version: true
-    release_date: true
-    title: true
-    release_note_body: true
-    download_url: false
-    file_size: false
-    checksum: false
-    known_issues: true
-    platform_specific_installers: false
-    archived_release_history: true
-- source_id: adobe-media-encoder
-  company_id: adobe
-  product_id: adobe-media-encoder
-  company: Adobe
-  software: Media Encoder
-  public_category: Video / Production
-  adapter_type: html_changelog
-  enabled: true
-  status: Degraded
-  status_detail: Degraded
-  polling_frequency: 24h
-  last_success: ''
-  last_error: The read operation timed out
-  last_error_display: Timeout during last check
-  last_error_type: timeout
-  consecutive_failures: 1
-  last_checked: '2026-04-29T17:47:01Z'
-  last_records_fetched: 0
-  last_records_written: 0
-  last_records_skipped: 0
-  last_run_duration_ms: 0
-  last_health_note: Fetch failed. Review source availability, adapter timeout, or parser behavior.
-  capabilities:
-    release_notes: true
-    version: true
-    release_date: true
-    download_url: false
-    file_size: false
-    checksum: false
-    known_issues: true
-    release_assets: false
-  raw_extractable_fields:
-    version: true
-    release_date: true
-    title: true
-    release_note_body: true
-    download_url: false
-    file_size: false
-    checksum: false
-    known_issues: true
-    platform_specific_installers: false
-    archived_release_history: true
-- source_id: adobe-photoshop
-  company_id: adobe
-  product_id: adobe-photoshop
-  company: Adobe
-  software: Photoshop
-  public_category: Design Workflow
-  adapter_type: html_changelog
-  enabled: true
-  status: Degraded
-  status_detail: Degraded
-  polling_frequency: 24h
-  last_success: ''
-  last_error: The read operation timed out
-  last_error_display: Timeout during last check
-  last_error_type: timeout
-  consecutive_failures: 1
-  last_checked: '2026-04-29T17:46:31Z'
-  last_records_fetched: 0
-  last_records_written: 0
-  last_records_skipped: 0
-  last_run_duration_ms: 0
-  last_health_note: Fetch failed. Review source availability, adapter timeout, or parser behavior.
-  capabilities:
-    release_notes: true
-    version: true
-    release_date: true
-    download_url: false
-    file_size: false
-    checksum: false
-    known_issues: true
-    release_assets: false
-  raw_extractable_fields:
-    version: true
-    release_date: true
-    title: true
-    release_note_body: true
-    download_url: false
-    file_size: false
-    checksum: false
-    known_issues: true
-    platform_specific_installers: false
-    archived_release_history: true
 - source_id: adobe-premiere-pro
   company_id: adobe
   product_id: adobe-premiere-pro
   company: Adobe
   software: Premiere Pro
   public_category: Video / Production
-  adapter_type: html_changelog
+  adapter_type: adobe_release_notes
   enabled: true
-  status: Degraded
-  status_detail: Degraded
+  status: Failing
+  status_detail: Failing
   polling_frequency: 24h
   last_success: ''
-  last_error: The read operation timed out
+  last_error: 'Timeout while fetching https://helpx.adobe.com/premiere/desktop/whats-new/release-notes.html: The read operation timed out'
   last_error_display: Timeout during last check
   last_error_type: timeout
-  consecutive_failures: 1
-  last_checked: '2026-04-29T17:45:31Z'
+  consecutive_failures: 2
+  last_checked: '2026-04-29T19:47:04Z'
   last_records_fetched: 0
   last_records_written: 0
   last_records_skipped: 0
   last_run_duration_ms: 0
-  last_health_note: Fetch failed. Review source availability, adapter timeout, or parser behavior.
+  last_health_note: Active Adobe test lane. Other Adobe products remain staged until this adapter proves stable.
   capabilities:
     release_notes: true
     version: true
@@ -219,16 +51,16 @@
   status: Degraded
   status_detail: No records last run
   polling_frequency: 24h
-  last_success: '2026-04-29T17:47:33Z'
+  last_success: '2026-04-29T20:02:55Z'
   last_error: ''
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:47:33Z'
+  last_checked: '2026-04-29T20:02:55Z'
   last_records_fetched: 0
   last_records_written: 0
   last_records_skipped: 0
-  last_run_duration_ms: 309
+  last_run_duration_ms: 237
   last_health_note: Fetch succeeded, but no records were extracted. This can mean no new updates or that the parser needs review.
   capabilities:
     release_notes: true
@@ -261,16 +93,16 @@
   status: Healthy
   status_detail: Healthy
   polling_frequency: 12h
-  last_success: '2026-04-29T17:47:32Z'
+  last_success: '2026-04-29T20:02:54Z'
   last_error: ''
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:47:32Z'
+  last_checked: '2026-04-29T20:02:54Z'
   last_records_fetched: 2
   last_records_written: 0
   last_records_skipped: 2
-  last_run_duration_ms: 468
+  last_run_duration_ms: 581
   last_health_note: Fetch succeeded.
   capabilities:
     release_notes: true
@@ -303,16 +135,16 @@
   status: Healthy
   status_detail: Healthy
   polling_frequency: 12h
-  last_success: '2026-04-29T17:45:00Z'
+  last_success: '2026-04-29T19:43:06Z'
   last_error: ''
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:45:00Z'
+  last_checked: '2026-04-29T19:43:06Z'
   last_records_fetched: 2
   last_records_written: 0
   last_records_skipped: 2
-  last_run_duration_ms: 787
+  last_run_duration_ms: 908
   last_health_note: Fetch succeeded.
   capabilities:
     release_notes: true
@@ -345,16 +177,16 @@
   status: Healthy
   status_detail: Healthy
   polling_frequency: 12h
-  last_success: '2026-04-29T17:47:33Z'
+  last_success: '2026-04-29T20:02:55Z'
   last_error: ''
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:47:33Z'
+  last_checked: '2026-04-29T20:02:55Z'
   last_records_fetched: 2
   last_records_written: 0
   last_records_skipped: 2
-  last_run_duration_ms: 30
+  last_run_duration_ms: 70
   last_health_note: Fetch succeeded.
   capabilities:
     release_notes: true
@@ -387,16 +219,16 @@
   status: Healthy
   status_detail: Healthy
   polling_frequency: 6h
-  last_success: '2026-04-29T17:47:31Z'
+  last_success: '2026-04-29T20:02:53Z'
   last_error: ''
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:47:31Z'
+  last_checked: '2026-04-29T20:02:53Z'
   last_records_fetched: 2
   last_records_written: 0
   last_records_skipped: 2
-  last_run_duration_ms: 702
+  last_run_duration_ms: 821
   last_health_note: Fetch succeeded.
   capabilities:
     release_notes: true
@@ -418,6 +250,178 @@
     known_issues: false
     platform_specific_installers: true
     archived_release_history: true
+- source_id: adobe-after-effects
+  company_id: adobe
+  product_id: adobe-after-effects
+  company: Adobe
+  software: After Effects
+  public_category: Video / Production
+  adapter_type: adobe_release_notes
+  enabled: false
+  status: Staged
+  status_detail: Staged
+  polling_frequency: 24h
+  last_success: ''
+  last_error: ''
+  last_error_display: None
+  last_error_type: timeout
+  consecutive_failures: 2
+  last_checked: '2026-04-29T19:51:02Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: Visible product page retained. Official ingestion staged to avoid repeated Adobe HelpX timeouts while Premiere Pro adapter
+    is hardened.
+  capabilities:
+    release_notes: true
+    version: true
+    release_date: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: true
+    release_assets: false
+  raw_extractable_fields:
+    version: true
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: true
+    platform_specific_installers: false
+    archived_release_history: true
+- source_id: adobe-lightroom-classic
+  company_id: adobe
+  product_id: adobe-lightroom-classic
+  company: Adobe
+  software: Lightroom Classic
+  public_category: Design Workflow
+  adapter_type: adobe_release_notes
+  enabled: false
+  status: Staged
+  status_detail: Staged
+  polling_frequency: 24h
+  last_success: ''
+  last_error: ''
+  last_error_display: None
+  last_error_type: timeout
+  consecutive_failures: 2
+  last_checked: '2026-04-29T20:02:53Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: Visible product page retained. Official ingestion staged to avoid repeated Adobe HelpX timeouts while Premiere Pro adapter
+    is hardened.
+  capabilities:
+    release_notes: true
+    version: true
+    release_date: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: true
+    release_assets: false
+  raw_extractable_fields:
+    version: true
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: true
+    platform_specific_installers: false
+    archived_release_history: true
+- source_id: adobe-media-encoder
+  company_id: adobe
+  product_id: adobe-media-encoder
+  company: Adobe
+  software: Media Encoder
+  public_category: Video / Production
+  adapter_type: adobe_release_notes
+  enabled: false
+  status: Staged
+  status_detail: Staged
+  polling_frequency: 24h
+  last_success: ''
+  last_error: ''
+  last_error_display: None
+  last_error_type: timeout
+  consecutive_failures: 2
+  last_checked: '2026-04-29T19:58:56Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: Visible product page retained. Official ingestion staged to avoid repeated Adobe HelpX timeouts while Premiere Pro adapter
+    is hardened.
+  capabilities:
+    release_notes: true
+    version: true
+    release_date: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: true
+    release_assets: false
+  raw_extractable_fields:
+    version: true
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: true
+    platform_specific_installers: false
+    archived_release_history: true
+- source_id: adobe-photoshop
+  company_id: adobe
+  product_id: adobe-photoshop
+  company: Adobe
+  software: Photoshop
+  public_category: Design Workflow
+  adapter_type: adobe_release_notes
+  enabled: false
+  status: Staged
+  status_detail: Staged
+  polling_frequency: 24h
+  last_success: ''
+  last_error: ''
+  last_error_display: None
+  last_error_type: timeout
+  consecutive_failures: 2
+  last_checked: '2026-04-29T19:54:59Z'
+  last_records_fetched: 0
+  last_records_written: 0
+  last_records_skipped: 0
+  last_run_duration_ms: 0
+  last_health_note: Visible product page retained. Official ingestion staged to avoid repeated Adobe HelpX timeouts while Premiere Pro adapter
+    is hardened.
+  capabilities:
+    release_notes: true
+    version: true
+    release_date: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: true
+    release_assets: false
+  raw_extractable_fields:
+    version: true
+    release_date: true
+    title: true
+    release_note_body: true
+    download_url: false
+    file_size: false
+    checksum: false
+    known_issues: true
+    platform_specific_installers: false
+    archived_release_history: true
 - source_id: amd
   company_id: amd
   product_id: amd
@@ -434,12 +438,12 @@
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:47:33Z'
+  last_checked: '2026-04-29T20:02:55Z'
   last_records_fetched: 0
   last_records_written: 0
   last_records_skipped: 0
   last_run_duration_ms: 0
-  last_health_note: ''
+  last_health_note: Source configured but intentionally staged until adapter reliability is proven.
   capabilities:
     release_notes: true
     version: true
@@ -476,12 +480,12 @@
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:47:33Z'
+  last_checked: '2026-04-29T20:02:55Z'
   last_records_fetched: 0
   last_records_written: 0
   last_records_skipped: 0
   last_run_duration_ms: 0
-  last_health_note: ''
+  last_health_note: Source configured but intentionally staged until adapter reliability is proven.
   capabilities:
     release_notes: true
     version: false
@@ -518,12 +522,12 @@
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:47:33Z'
+  last_checked: '2026-04-29T20:02:55Z'
   last_records_fetched: 0
   last_records_written: 0
   last_records_skipped: 0
   last_run_duration_ms: 0
-  last_health_note: ''
+  last_health_note: Source configured but intentionally staged until adapter reliability is proven.
   capabilities:
     release_notes: true
     version: false
@@ -560,12 +564,12 @@
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:47:33Z'
+  last_checked: '2026-04-29T20:02:55Z'
   last_records_fetched: 0
   last_records_written: 0
   last_records_skipped: 0
   last_run_duration_ms: 0
-  last_health_note: ''
+  last_health_note: Source configured but intentionally staged until adapter reliability is proven.
   capabilities:
     release_notes: true
     version: true
@@ -602,12 +606,12 @@
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:47:33Z'
+  last_checked: '2026-04-29T20:02:55Z'
   last_records_fetched: 0
   last_records_written: 0
   last_records_skipped: 0
   last_run_duration_ms: 0
-  last_health_note: ''
+  last_health_note: Source configured but intentionally staged until adapter reliability is proven.
   capabilities:
     release_notes: true
     version: false
@@ -644,12 +648,12 @@
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:47:33Z'
+  last_checked: '2026-04-29T20:02:55Z'
   last_records_fetched: 0
   last_records_written: 0
   last_records_skipped: 0
   last_run_duration_ms: 0
-  last_health_note: ''
+  last_health_note: Source configured but intentionally staged until adapter reliability is proven.
   capabilities:
     release_notes: true
     version: false
@@ -686,12 +690,12 @@
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:47:33Z'
+  last_checked: '2026-04-29T20:02:55Z'
   last_records_fetched: 0
   last_records_written: 0
   last_records_skipped: 0
   last_run_duration_ms: 0
-  last_health_note: ''
+  last_health_note: Source configured but intentionally staged until adapter reliability is proven.
   capabilities:
     release_notes: true
     version: false
@@ -728,12 +732,12 @@
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:47:33Z'
+  last_checked: '2026-04-29T20:02:55Z'
   last_records_fetched: 0
   last_records_written: 0
   last_records_skipped: 0
   last_run_duration_ms: 0
-  last_health_note: ''
+  last_health_note: Source configured but intentionally staged until adapter reliability is proven.
   capabilities:
     release_notes: true
     version: true
@@ -770,12 +774,12 @@
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:47:33Z'
+  last_checked: '2026-04-29T20:02:55Z'
   last_records_fetched: 0
   last_records_written: 0
   last_records_skipped: 0
   last_run_duration_ms: 0
-  last_health_note: ''
+  last_health_note: Source configured but intentionally staged until adapter reliability is proven.
   capabilities:
     release_notes: true
     version: false
@@ -812,12 +816,12 @@
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:47:33Z'
+  last_checked: '2026-04-29T20:02:55Z'
   last_records_fetched: 0
   last_records_written: 0
   last_records_skipped: 0
   last_run_duration_ms: 0
-  last_health_note: ''
+  last_health_note: Source configured but intentionally staged until adapter reliability is proven.
   capabilities:
     release_notes: true
     version: false
@@ -854,12 +858,12 @@
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:47:33Z'
+  last_checked: '2026-04-29T20:02:55Z'
   last_records_fetched: 0
   last_records_written: 0
   last_records_skipped: 0
   last_run_duration_ms: 0
-  last_health_note: ''
+  last_health_note: Source configured but intentionally staged until adapter reliability is proven.
   capabilities:
     release_notes: true
     version: false
@@ -896,12 +900,12 @@
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:47:33Z'
+  last_checked: '2026-04-29T20:02:55Z'
   last_records_fetched: 0
   last_records_written: 0
   last_records_skipped: 0
   last_run_duration_ms: 0
-  last_health_note: ''
+  last_health_note: Source configured but intentionally staged until adapter reliability is proven.
   capabilities:
     release_notes: true
     version: false
@@ -938,12 +942,12 @@
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:47:33Z'
+  last_checked: '2026-04-29T20:02:55Z'
   last_records_fetched: 0
   last_records_written: 0
   last_records_skipped: 0
   last_run_duration_ms: 0
-  last_health_note: ''
+  last_health_note: Source configured but intentionally staged until adapter reliability is proven.
   capabilities:
     release_notes: true
     version: true
@@ -980,12 +984,12 @@
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:47:33Z'
+  last_checked: '2026-04-29T20:02:55Z'
   last_records_fetched: 0
   last_records_written: 0
   last_records_skipped: 0
   last_run_duration_ms: 0
-  last_health_note: ''
+  last_health_note: Source configured but intentionally staged until adapter reliability is proven.
   capabilities:
     release_notes: true
     version: false
@@ -1022,7 +1026,7 @@
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:47:33Z'
+  last_checked: '2026-04-29T20:02:55Z'
   last_records_fetched: 0
   last_records_written: 0
   last_records_skipped: 0
@@ -1064,7 +1068,7 @@
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:47:33Z'
+  last_checked: '2026-04-29T20:02:55Z'
   last_records_fetched: 0
   last_records_written: 0
   last_records_skipped: 0
@@ -1106,7 +1110,7 @@
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:47:33Z'
+  last_checked: '2026-04-29T20:02:55Z'
   last_records_fetched: 0
   last_records_written: 0
   last_records_skipped: 0
@@ -1148,7 +1152,7 @@
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:47:33Z'
+  last_checked: '2026-04-29T20:02:55Z'
   last_records_fetched: 0
   last_records_written: 0
   last_records_skipped: 0
@@ -1190,7 +1194,7 @@
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:47:33Z'
+  last_checked: '2026-04-29T20:02:55Z'
   last_records_fetched: 0
   last_records_written: 0
   last_records_skipped: 0
@@ -1232,7 +1236,7 @@
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:47:33Z'
+  last_checked: '2026-04-29T20:02:55Z'
   last_records_fetched: 0
   last_records_written: 0
   last_records_skipped: 0
@@ -1274,7 +1278,7 @@
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:47:33Z'
+  last_checked: '2026-04-29T20:02:55Z'
   last_records_fetched: 0
   last_records_written: 0
   last_records_skipped: 0
@@ -1316,7 +1320,7 @@
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:47:33Z'
+  last_checked: '2026-04-29T20:02:55Z'
   last_records_fetched: 0
   last_records_written: 0
   last_records_skipped: 0
@@ -1358,7 +1362,7 @@
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:47:33Z'
+  last_checked: '2026-04-29T20:02:55Z'
   last_records_fetched: 0
   last_records_written: 0
   last_records_skipped: 0
@@ -1400,7 +1404,7 @@
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:47:33Z'
+  last_checked: '2026-04-29T20:02:55Z'
   last_records_fetched: 0
   last_records_written: 0
   last_records_skipped: 0
@@ -1442,7 +1446,7 @@
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:47:33Z'
+  last_checked: '2026-04-29T20:02:55Z'
   last_records_fetched: 0
   last_records_written: 0
   last_records_skipped: 0
@@ -1484,7 +1488,7 @@
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:47:33Z'
+  last_checked: '2026-04-29T20:02:55Z'
   last_records_fetched: 0
   last_records_written: 0
   last_records_skipped: 0
@@ -1526,7 +1530,7 @@
   last_error_display: None
   last_error_type: ''
   consecutive_failures: 0
-  last_checked: '2026-04-29T17:47:33Z'
+  last_checked: '2026-04-29T20:02:55Z'
   last_records_fetched: 0
   last_records_written: 0
   last_records_skipped: 0
