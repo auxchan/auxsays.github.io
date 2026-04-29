@@ -68,4 +68,10 @@ consensus_report_count_label: confirmed patch-specific reports
 consensus_report_weighting: equal_per_confirmed_report
 consensus_low_context_policy: excluded
 consensus_collection_status: static_initial_sample
+evidence_state: static_sample
+evidence_state_label: Static sample
+official_source_captured: true
+confirmed_patch_specific_report_count: 7
+known_issues_present: true
+official_checksums_body: ''
 ---

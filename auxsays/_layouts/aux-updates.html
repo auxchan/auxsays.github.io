@@ -14,7 +14,8 @@ layout: aux-base
   <section class="panel patch-hero reveal-up">
     <div class="eyebrow">Release intelligence</div>
     <h1 class="patch-title">Patch Feed</h1>
-    <p class="patch-subtitle">Official notes first. High-signal community reaction second. Track what changed, what looks safe, what is still shaky, and which creator-critical tools deserve active monitoring.</p>
+    <p class="patch-subtitle">Official notes first. Confirmed patch-specific community evidence second. Track what changed, what is official-only, what has a static sample, and which creator-critical tools deserve active monitoring.</p>
+    <p class="patch-methodology-link"><a href="{{ '/updates/methodology/' | relative_url }}">Read the AUXSAYS methodology →</a></p>
   </section>
 
   {% if notification_items and notification_items.size > 0 %}
@@ -233,8 +234,8 @@ layout: aux-base
         {% endif %}
         <div class="patch-card-links">
           <a href="{{ item.url | relative_url }}">Read breakdown →</a>
-          {% if item.update_source_url %}<a href="{{ item.update_source_url }}">Official source ↗</a>{% endif %}
-          {% if item.update_download_url %}<a href="{{ item.update_download_url }}">Download page ↗</a>{% endif %}
+          {% if item.update_source_url != blank %}<a href="{{ item.update_source_url }}">Official source ↗</a>{% endif %}
+          {% if item.update_download_url != blank %}<a href="{{ item.update_download_url }}">Download page ↗</a>{% endif %}
         </div>
       </article>
     {% endfor %}
@@ -303,8 +304,8 @@ layout: aux-base
           {% endif %}
           <div class="patch-card-links">
             <a href="{{ item.url | relative_url }}">Read breakdown →</a>
-            {% if item.update_source_url %}<a href="{{ item.update_source_url }}">Official source ↗</a>{% endif %}
-            {% if item.update_download_url %}<a href="{{ item.update_download_url }}">Download page ↗</a>{% endif %}
+            {% if item.update_source_url != blank %}<a href="{{ item.update_source_url }}">Official source ↗</a>{% endif %}
+            {% if item.update_download_url != blank %}<a href="{{ item.update_download_url }}">Download page ↗</a>{% endif %}
           </div>
         </article>
         {% endunless %}
