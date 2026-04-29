@@ -2,34 +2,34 @@
   "last_errors": [
     {
       "adapter": "html_changelog",
-      "error": "The read operation timed out",
+      "error": "Timeout while fetching https://helpx.adobe.com/premiere/desktop/whats-new/release-notes.html: The read operation timed out",
       "product_id": "adobe-premiere-pro"
     },
     {
       "adapter": "html_changelog",
-      "error": "The read operation timed out",
+      "error": "Timeout while fetching https://helpx.adobe.com/after-effects/release-note/release-notes-after-effects.html: The read operation timed out",
       "product_id": "adobe-after-effects"
     },
     {
       "adapter": "html_changelog",
-      "error": "The read operation timed out",
+      "error": "Timeout while fetching https://helpx.adobe.com/photoshop/desktop/whats-new/photoshop-on-desktop-release-notes.html: The read operation timed out",
       "product_id": "adobe-photoshop"
     },
     {
       "adapter": "html_changelog",
-      "error": "The read operation timed out",
+      "error": "Timeout while fetching https://helpx.adobe.com/media-encoder/release-notes.html: The read operation timed out",
       "product_id": "adobe-media-encoder"
     },
     {
       "adapter": "html_changelog",
-      "error": "The read operation timed out",
+      "error": "Timeout while fetching https://helpx.adobe.com/lightroom-classic/help/whats-new/release-notes.html: The read operation timed out",
       "product_id": "adobe-lightroom-classic"
     }
   ],
   "last_results": [
     {
       "adapter": "rss_feed",
-      "duration_ms": 787,
+      "duration_ms": 908,
       "fetched": 2,
       "product_id": "figma",
       "skipped": [
@@ -47,7 +47,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 702,
+      "duration_ms": 821,
       "fetched": 2,
       "product_id": "obs-studio",
       "skipped": [
@@ -65,7 +65,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 468,
+      "duration_ms": 581,
       "fetched": 2,
       "product_id": "comfyui",
       "skipped": [
@@ -83,7 +83,7 @@
     },
     {
       "adapter": "rss_feed",
-      "duration_ms": 30,
+      "duration_ms": 70,
       "fetched": 2,
       "product_id": "github",
       "skipped": [
@@ -101,7 +101,7 @@
     },
     {
       "adapter": "html_changelog",
-      "duration_ms": 309,
+      "duration_ms": 237,
       "fetched": 0,
       "product_id": "netlify",
       "skipped": [],
@@ -109,15 +109,15 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-04-29T17:47:33Z",
-  "last_run_started_at": "2026-04-29T17:45:00Z",
+  "last_run_finished_at": "2026-04-29T20:02:55Z",
+  "last_run_started_at": "2026-04-29T19:43:06Z",
   "sources": {
     "adobe-after-effects": {
-      "consecutive_failures": 1,
+      "consecutive_failures": 2,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-04-29T17:46:01Z",
-      "last_error": "The read operation timed out",
-      "last_error_at": "2026-04-29T17:46:01Z",
+      "last_checked_at": "2026-04-29T19:51:02Z",
+      "last_error": "Timeout while fetching https://helpx.adobe.com/after-effects/release-note/release-notes-after-effects.html: The read operation timed out",
+      "last_error_at": "2026-04-29T19:51:02Z",
       "last_error_type": "timeout",
       "last_health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
       "last_records_fetched": 0,
@@ -125,14 +125,14 @@
       "last_records_written": 0,
       "last_run_duration_ms": 0,
       "seen": [],
-      "status": "degraded"
+      "status": "failing"
     },
     "adobe-lightroom-classic": {
-      "consecutive_failures": 1,
+      "consecutive_failures": 2,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-04-29T17:47:31Z",
-      "last_error": "The read operation timed out",
-      "last_error_at": "2026-04-29T17:47:31Z",
+      "last_checked_at": "2026-04-29T20:02:53Z",
+      "last_error": "Timeout while fetching https://helpx.adobe.com/lightroom-classic/help/whats-new/release-notes.html: The read operation timed out",
+      "last_error_at": "2026-04-29T20:02:53Z",
       "last_error_type": "timeout",
       "last_health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
       "last_records_fetched": 0,
@@ -140,14 +140,14 @@
       "last_records_written": 0,
       "last_run_duration_ms": 0,
       "seen": [],
-      "status": "degraded"
+      "status": "failing"
     },
     "adobe-media-encoder": {
-      "consecutive_failures": 1,
+      "consecutive_failures": 2,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-04-29T17:47:01Z",
-      "last_error": "The read operation timed out",
-      "last_error_at": "2026-04-29T17:47:01Z",
+      "last_checked_at": "2026-04-29T19:58:56Z",
+      "last_error": "Timeout while fetching https://helpx.adobe.com/media-encoder/release-notes.html: The read operation timed out",
+      "last_error_at": "2026-04-29T19:58:56Z",
       "last_error_type": "timeout",
       "last_health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
       "last_records_fetched": 0,
@@ -155,14 +155,14 @@
       "last_records_written": 0,
       "last_run_duration_ms": 0,
       "seen": [],
-      "status": "degraded"
+      "status": "failing"
     },
     "adobe-photoshop": {
-      "consecutive_failures": 1,
+      "consecutive_failures": 2,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-04-29T17:46:31Z",
-      "last_error": "The read operation timed out",
-      "last_error_at": "2026-04-29T17:46:31Z",
+      "last_checked_at": "2026-04-29T19:54:59Z",
+      "last_error": "Timeout while fetching https://helpx.adobe.com/photoshop/desktop/whats-new/photoshop-on-desktop-release-notes.html: The read operation timed out",
+      "last_error_at": "2026-04-29T19:54:59Z",
       "last_error_type": "timeout",
       "last_health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
       "last_records_fetched": 0,
@@ -170,14 +170,14 @@
       "last_records_written": 0,
       "last_run_duration_ms": 0,
       "seen": [],
-      "status": "degraded"
+      "status": "failing"
     },
     "adobe-premiere-pro": {
-      "consecutive_failures": 1,
+      "consecutive_failures": 2,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-04-29T17:45:31Z",
-      "last_error": "The read operation timed out",
-      "last_error_at": "2026-04-29T17:45:31Z",
+      "last_checked_at": "2026-04-29T19:47:04Z",
+      "last_error": "Timeout while fetching https://helpx.adobe.com/premiere/desktop/whats-new/release-notes.html: The read operation timed out",
+      "last_error_at": "2026-04-29T19:47:04Z",
       "last_error_type": "timeout",
       "last_health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
       "last_records_fetched": 0,
@@ -185,12 +185,12 @@
       "last_records_written": 0,
       "last_run_duration_ms": 0,
       "seen": [],
-      "status": "degraded"
+      "status": "failing"
     },
     "comfyui": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-04-29T17:47:32Z",
+      "last_checked_at": "2026-04-29T20:02:54Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -198,8 +198,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 2,
       "last_records_written": 0,
-      "last_run_duration_ms": 468,
-      "last_success_at": "2026-04-29T17:47:32Z",
+      "last_run_duration_ms": 581,
+      "last_success_at": "2026-04-29T20:02:54Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:comfyui:310487464",
@@ -210,7 +210,7 @@
     "figma": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-04-29T17:45:00Z",
+      "last_checked_at": "2026-04-29T19:43:06Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -218,8 +218,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 2,
       "last_records_written": 0,
-      "last_run_duration_ms": 787,
-      "last_success_at": "2026-04-29T17:45:00Z",
+      "last_run_duration_ms": 908,
+      "last_success_at": "2026-04-29T19:43:06Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:figma:9923866c-4511-4991-8536-75f226c095a5",
@@ -234,7 +234,7 @@
     "github": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-04-29T17:47:33Z",
+      "last_checked_at": "2026-04-29T20:02:55Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -242,8 +242,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 2,
       "last_records_written": 0,
-      "last_run_duration_ms": 30,
-      "last_success_at": "2026-04-29T17:47:33Z",
+      "last_run_duration_ms": 70,
+      "last_success_at": "2026-04-29T20:02:55Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:github:https://github.blog/changelog/2026-04-27-copilot-cloud-agent-starts-20-faster-with-actions-custom-images",
@@ -254,7 +254,7 @@
     "netlify": {
       "consecutive_failures": 0,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-04-29T17:47:33Z",
+      "last_checked_at": "2026-04-29T20:02:55Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -262,15 +262,15 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 309,
-      "last_success_at": "2026-04-29T17:47:33Z",
+      "last_run_duration_ms": 237,
+      "last_success_at": "2026-04-29T20:02:55Z",
       "previous_consecutive_failures": 0,
       "status": "degraded"
     },
     "obs-studio": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-04-29T17:47:31Z",
+      "last_checked_at": "2026-04-29T20:02:53Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -278,8 +278,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 2,
       "last_records_written": 0,
-      "last_run_duration_ms": 702,
-      "last_success_at": "2026-04-29T17:47:31Z",
+      "last_run_duration_ms": 821,
+      "last_success_at": "2026-04-29T20:02:53Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:obs-studio:304830335",
