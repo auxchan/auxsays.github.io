@@ -25,11 +25,12 @@ update_detail_title: Figma Quality of life updates in FigJam
 update_consensus_label: Insufficient data
 update_report_count: 0
 update_consensus_confidence: Low
-quick_verdict: Figma Quality of life updates in FigJam has an official AUXSAYS record. Community consensus is deferred until
-  official ingestion is stable.
+quick_verdict: Figma Quality of life updates in FigJam has an official AUXSAYS record. Confirmed patch-specific consensus
+  is deferred until official ingestion is stable.
 official_summary: Figma published Figma Quality of life updates in FigJam.
 release_summary: Table formatting, diagramming, canvas navigation, and template publishing in FigJam just got a bit better.
-consensus_report: Consensus collection is deferred. This page currently reflects official-source ingestion only.
+consensus_report: Confirmed patch-specific consensus collection is deferred. This page currently reflects official-source
+  ingestion only.
 complaint_themes: []
 status_events:
 - at: '2026-04-28T00:00:00.000Z'
@@ -45,4 +46,10 @@ official_patch_notes_body: Table formatting, diagramming, canvas navigation, and
   bit better.
 official_checksums_body: ''
 official_checksums_capture_status: not-present
+consensus_match_policy: confirmed_patch_specific_reports_v1
+consensus_match_policy_label: Confirmed patch-specific reports only
+consensus_report_count_label: confirmed patch-specific reports
+consensus_report_weighting: equal_per_confirmed_report
+consensus_low_context_policy: excluded
+consensus_collection_status: deferred_official_only
 ---

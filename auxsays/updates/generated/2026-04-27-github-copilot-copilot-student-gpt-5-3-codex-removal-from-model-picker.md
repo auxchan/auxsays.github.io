@@ -25,8 +25,8 @@ update_detail_title: GitHub / Copilot Copilot Student GPT-5.3-Codex removal from
 update_consensus_label: Insufficient data
 update_report_count: 0
 update_consensus_confidence: Low
-quick_verdict: GitHub / Copilot Copilot Student GPT-5.3-Codex removal from model picker has an official AUXSAYS record. Community
-  consensus is deferred until official ingestion is stable.
+quick_verdict: GitHub / Copilot Copilot Student GPT-5.3-Codex removal from model picker has an official AUXSAYS record. Confirmed
+  patch-specific consensus is deferred until official ingestion is stable.
 official_summary: GitHub published GitHub / Copilot Copilot Student GPT-5.3-Codex removal from model picker.
 release_summary: "Starting today, in our Copilot Student plan, we are removing GPT-5.3-Codex from the model picker. It remains\
   \ available through auto model selection.\n\n\n Auto model selection is built to match each request with the strongest model\
@@ -39,7 +39,8 @@ release_summary: "Starting today, in our Copilot Student plan, we are removing G
   \ Join the GitHub Education Community to share your feedback.\n\n\n Editor’s note (April 27, 2026): Updated the link for\
   \ the GitHub Education Community.\n\n\n\n The post Copilot Student GPT-5.3-Codex removal from model picker appeared first\
   \ on The GitHub Blog ."
-consensus_report: Consensus collection is deferred. This page currently reflects official-source ingestion only.
+consensus_report: Confirmed patch-specific consensus collection is deferred. This page currently reflects official-source
+  ingestion only.
 complaint_themes: []
 status_events:
 - at: '2026-04-27T17:01:58Z'
@@ -64,4 +65,10 @@ official_patch_notes_body: "Starting today, in our Copilot Student plan, we are 
   \ picker appeared first on The GitHub Blog ."
 official_checksums_body: ''
 official_checksums_capture_status: not-present
+consensus_match_policy: confirmed_patch_specific_reports_v1
+consensus_match_policy_label: Confirmed patch-specific reports only
+consensus_report_count_label: confirmed patch-specific reports
+consensus_report_weighting: equal_per_confirmed_report
+consensus_low_context_policy: excluded
+consensus_collection_status: deferred_official_only
 ---

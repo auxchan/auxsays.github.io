@@ -1,0 +1,34 @@
+policy_id: confirmed_patch_specific_reports_v1
+policy_label: Confirmed patch-specific reports only
+public_summary: Reports are counted only when the specific patch/version is named in the report itself or in the parent discussion title.
+match_required: true
+exclude_low_context: true
+equal_weight_reports: true
+valid_match_anchors:
+  - exact_version_in_report
+  - exact_version_in_parent_title
+  - exact_patch_title_in_report
+  - exact_patch_title_in_parent_title
+  - official_patch_release_thread
+reply_inclusion_rule: If the parent thread/page title names the exact patch or version, replies inside that thread are treated as patch-specific unless the reply explicitly shifts to another version or unrelated issue.
+exclusion_rules:
+  - Generic software complaints without a specific patch/version anchor.
+  - General praise posts without a specific patch/version anchor.
+  - Driver, OS, plug-in, or hardware issues unless the patch-specific discussion ties them directly to the update being assessed.
+  - Replies that explicitly identify a different version, different patch, or unrelated update path.
+  - Rumors or secondhand claims without a source URL.
+scoring:
+  report_weighting: equal
+  source_prestige_weighting: false
+  included_report_value: 1
+source_type_policy:
+  official_forum: counted_if_patch_specific
+  dedicated_forum: counted_if_patch_specific
+  github_issue: counted_if_patch_specific
+  github_discussion: counted_if_patch_specific
+  subreddit: counted_if_patch_specific
+  general_social: excluded_unless_patch_specific
+future_refresh_cadence:
+  official_ingestion: every_6_hours
+  consensus_refresh_target_active_window: every_30_to_60_minutes_after_release
+  consensus_refresh_target_after_two_weeks: daily_or_manual

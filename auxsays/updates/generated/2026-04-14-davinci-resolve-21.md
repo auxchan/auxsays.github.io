@@ -1,7 +1,8 @@
 ---
 layout: aux-update
 title: DaVinci Resolve 21 official update breakdown
-description: Published Apr 14, 2026. This generic DaVinci Resolve 21 entry has been archived in favor of the more specific Public Beta 1 article.
+description: Published Apr 14, 2026. This generic DaVinci Resolve 21 entry has been archived in favor of the more specific
+  Public Beta 1 article.
 permalink: /updates/blackmagic-design/davinci-resolve/21/
 update_entry: true
 feed_hidden: true
@@ -19,18 +20,21 @@ update_status: archived
 update_feed_title: DaVinci Resolve 21
 update_detail_title: DaVinci Resolve 21
 update_consensus_label: Insufficient data
-update_consensus_summary: This generic entry has been archived so the more specific Public Beta 1 article becomes the primary public record.
+update_consensus_summary: This generic entry has been archived so the more specific Public Beta 1 article becomes the primary
+  public record.
 update_report_count: 0
 update_consensus_confidence: Low
 status_change_type: archived
-notification_message: This generic DaVinci Resolve 21 entry was archived so the more specific Public Beta 1 article can act as the current public reference.
+notification_message: This generic DaVinci Resolve 21 entry was archived so the more specific Public Beta 1 article can act
+  as the current public reference.
 update_brand_id: blackmagic-davinci
 company_id: blackmagic-design
 product_id: blackmagic-davinci
 official_patch_notes_source_type: vendor-release-page
 official_patch_notes_capture_status: partial-existing-record
 quick_verdict: ''
-official_summary: This archived DaVinci Resolve 21 record is retained only as broad release context. The more useful tracked record is the specific DaVinci Resolve 21 Public Beta 1 entry, which carries the active update and consensus notes.
+official_summary: This archived DaVinci Resolve 21 record is retained only as broad release context. The more useful tracked
+  record is the specific DaVinci Resolve 21 Public Beta 1 entry, which carries the active update and consensus notes.
 consensus_report: Insufficient data. This generic entry is archived in favor of the specific Public Beta 1 record.
 complaint_themes:
 - theme: Beta setup questions
@@ -48,9 +52,16 @@ status_events:
   note: Official release became available.
 - at: '2026-04-23T00:00:00Z'
   label: Insufficient data
-  note: Consensus read based on 0 matched reports.
+  note: Consensus read based on 0 confirmed patch-specific reports.
 legacy_consensus_score: 0
 legacy_consensus_score_percent: 50
 official_patch_notes_source_url: https://www.blackmagicdesign.com/media/release/20260414-01
-release_summary: This archived DaVinci Resolve 21 record is retained only as broad release context. The more useful tracked record is the specific DaVinci Resolve 21 Public Beta 1 entry, which carries the active update and consensus notes.
+release_summary: This archived DaVinci Resolve 21 record is retained only as broad release context. The more useful tracked
+  record is the specific DaVinci Resolve 21 Public Beta 1 entry, which carries the active update and consensus notes.
+consensus_match_policy: confirmed_patch_specific_reports_v1
+consensus_match_policy_label: Confirmed patch-specific reports only
+consensus_report_count_label: confirmed patch-specific reports
+consensus_report_weighting: equal_per_confirmed_report
+consensus_low_context_policy: excluded
+consensus_collection_status: deferred_official_only
 ---

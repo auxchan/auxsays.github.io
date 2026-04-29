@@ -1,0 +1,22 @@
+name: AUXSAYS Consensus Policy Audit
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install audit dependencies
+        run: pip install -r auxsays/scripts/requirements-ingest.txt
+      - name: Audit consensus metadata
+        run: python auxsays/scripts/consensus_refresh.py --json

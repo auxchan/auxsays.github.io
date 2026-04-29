@@ -218,7 +218,7 @@ layout: aux-base
           </a>
           <span class="patch-status-stack">
             <span class="patch-status patch-status--{{ reaction_class }}">{{ reaction }}</span>
-            <span class="patch-report-count">{{ item.update_report_count | default: 0 }} reports</span>
+            <span class="patch-report-count">{{ item.update_report_count | default: 0 }} confirmed</span>
           </span>
         </div>
         <h2 class="patch-card-title"><a href="{{ item.url | relative_url }}">{{ item.update_feed_title | default: item.update_product | append: ' ' | append: item.update_version }}</a></h2>
@@ -226,9 +226,9 @@ layout: aux-base
         {% assign consensus_summary = item.update_consensus_summary | default: item.community_summary %}
         {% if consensus_summary %}
         <div class="patch-consensus-block">
-          <span class="patch-consensus-label">User consensus</span>
+          <span class="patch-consensus-label">Patch-specific consensus</span>
           <p class="patch-consensus-line">{{ consensus_summary }}</p>
-          <span class="patch-consensus-meta">{{ item.update_report_count | default: 0 }} matched reports{% if item.update_consensus_confidence %} • {{ item.update_consensus_confidence }} confidence{% endif %}</span>
+          <span class="patch-consensus-meta">{{ item.update_report_count | default: 0 }} confirmed patch-specific reports{% if item.update_consensus_confidence %} • {{ item.update_consensus_confidence }} confidence{% endif %}</span>
         </div>
         {% endif %}
         <div class="patch-card-links">
@@ -288,7 +288,7 @@ layout: aux-base
             </a>
             <span class="patch-status-stack">
               <span class="patch-status patch-status--{{ reaction_class }}">{{ reaction }}</span>
-              <span class="patch-report-count">{{ item.update_report_count | default: 0 }} reports</span>
+              <span class="patch-report-count">{{ item.update_report_count | default: 0 }} confirmed</span>
             </span>
           </div>
           <h2 class="patch-card-title"><a href="{{ item.url | relative_url }}">{{ item.update_feed_title | default: item.update_product | append: ' ' | append: item.update_version }}</a></h2>
@@ -296,9 +296,9 @@ layout: aux-base
           {% assign consensus_summary = item.update_consensus_summary | default: item.community_summary %}
           {% if consensus_summary %}
           <div class="patch-consensus-block">
-            <span class="patch-consensus-label">User consensus</span>
+            <span class="patch-consensus-label">Patch-specific consensus</span>
             <p class="patch-consensus-line">{{ consensus_summary }}</p>
-            <span class="patch-consensus-meta">{{ item.update_report_count | default: 0 }} matched reports{% if item.update_consensus_confidence %} • {{ item.update_consensus_confidence }} confidence{% endif %}</span>
+            <span class="patch-consensus-meta">{{ item.update_report_count | default: 0 }} confirmed patch-specific reports{% if item.update_consensus_confidence %} • {{ item.update_consensus_confidence }} confidence{% endif %}</span>
           </div>
           {% endif %}
           <div class="patch-card-links">

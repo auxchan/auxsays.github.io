@@ -48,7 +48,7 @@ layout: aux-base
       <div class="update-verdict-card update-verdict-card--clean">
         <div class="consensus-compact">
           <span><strong>Consensus:</strong> <em class="consensus-word consensus-word--{{ reaction_class }}">{{ reaction }}</em></span>
-          <span class="consensus-secondary">{{ page.update_report_count | default: 0 }} reports assessed • {{ page.update_consensus_confidence | default: 'Low' }} confidence</span>
+          <span class="consensus-secondary">{{ page.update_report_count | default: 0 }} confirmed patch-specific reports • {{ page.update_consensus_confidence | default: 'Low' }} confidence</span>
         </div>
         <div class="consensus-position-graph consensus-position-graph--hero" style="--consensus-pos: {{ consensus_score_percent }}%;">
           <div class="consensus-scale" aria-hidden="true">
@@ -80,7 +80,7 @@ layout: aux-base
       <h2>Consensus</h2>
       <div class="consensus-compact consensus-compact--card">
         <span><strong>Consensus:</strong> <em class="consensus-word consensus-word--{{ reaction_class }}">{{ reaction }}</em></span>
-        <span class="consensus-secondary">{{ page.update_report_count | default: 0 }} reports assessed • {{ page.update_consensus_confidence | default: 'Low' }} confidence</span>
+        <span class="consensus-secondary">{{ page.update_report_count | default: 0 }} confirmed patch-specific reports • {{ page.update_consensus_confidence | default: 'Low' }} confidence</span>
       </div>
       <div class="consensus-position-graph consensus-position-graph--card" style="--consensus-pos: {{ consensus_score_percent }}%;">
         <div class="consensus-scale" aria-label="Consensus position from negative through moderate to positive">
@@ -94,6 +94,7 @@ layout: aux-base
         </div>
       </div>
       <p>{{ page.consensus_report | default: page.community_summary }}</p>
+      <p class="consensus-rule-note">AUXSAYS counts a report only when the specific patch/version is named in the report itself or in the parent discussion title. Every confirmed patch-specific report is counted equally.</p>
 
       {% if page.complaint_themes and page.complaint_themes.size > 0 %}
       <div class="complaint-theme-table complaint-theme-table--renamed">

@@ -25,11 +25,12 @@ update_detail_title: Figma Developer Logging available for Governance+ customers
 update_consensus_label: Insufficient data
 update_report_count: 0
 update_consensus_confidence: Low
-quick_verdict: Figma Developer Logging available for Governance+ customers has an official AUXSAYS record. Community consensus
-  is deferred until official ingestion is stable.
+quick_verdict: Figma Developer Logging available for Governance+ customers has an official AUXSAYS record. Confirmed patch-specific
+  consensus is deferred until official ingestion is stable.
 official_summary: Figma published Figma Developer Logging available for Governance+ customers.
 release_summary: Get visibility into how your org's APIs are being used.
-consensus_report: Consensus collection is deferred. This page currently reflects official-source ingestion only.
+consensus_report: Confirmed patch-specific consensus collection is deferred. This page currently reflects official-source
+  ingestion only.
 complaint_themes: []
 status_events:
 - at: '2026-04-23T00:00:00.000Z'
@@ -44,4 +45,10 @@ official_patch_notes_source_url: https://www.figma.com/release-notes/?title=deve
 official_patch_notes_body: Get visibility into how your org's APIs are being used.
 official_checksums_body: ''
 official_checksums_capture_status: not-present
+consensus_match_policy: confirmed_patch_specific_reports_v1
+consensus_match_policy_label: Confirmed patch-specific reports only
+consensus_report_count_label: confirmed patch-specific reports
+consensus_report_weighting: equal_per_confirmed_report
+consensus_low_context_policy: excluded
+consensus_collection_status: deferred_official_only
 ---

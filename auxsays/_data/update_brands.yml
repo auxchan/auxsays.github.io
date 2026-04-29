@@ -361,10 +361,20 @@ obs-studio:
 davinci-resolve:
   company_name: Blackmagic Design
   product_name: DaVinci Resolve
-  badge_text: BMD
+  badge_text: DVR
   accent: '#d6ab4e'
   category_label: Video / Production
   company_label: Blackmagic Design
   source_id: davinci-resolve
   logo_label: DaVinci
+  logo_path: /assets/img/patch-logos/davinci-resolve.svg
+blackmagic-davinci:
+  company_name: Blackmagic Design
+  product_name: DaVinci Resolve
+  badge_text: DVR
+  accent: '#d6ab4e'
+  category_label: Video / Production
+  company_label: Blackmagic Design
+  source_id: blackmagic-davinci
+  logo_label: DaVinci Resolve
   logo_path: /assets/img/patch-logos/davinci-resolve.svg

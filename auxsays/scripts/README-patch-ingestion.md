@@ -43,7 +43,7 @@ python auxsays/scripts/patch_ingest.py --dry-run
 ## Important constraints
 
 - Official ingestion only.
-- Community consensus is deferred.
+- Confirmed patch-specific consensus is deferred.
 - Existing generated Markdown records are not overwritten by default.
 - State is stored separately in `_data/patch_ingest_state.json` so it does not collide with the site's existing `_data/patch_state.json`.
 - Only enable additional sources after testing the adapter against the official source format.

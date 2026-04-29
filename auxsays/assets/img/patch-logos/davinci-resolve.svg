@@ -1,4 +1,14 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="90" height="38" viewBox="0 0 90 38" role="img" aria-label="DaVinci logo">
-  <rect x="1" y="1" width="88" height="36" rx="10" fill="#101A20" stroke="#29444D"/>
-  <text x="50%" y="51%" dominant-baseline="middle" text-anchor="middle" fill="#F4EFE4" font-family="Inter, Arial, Helvetica, sans-serif" font-size="18" font-weight="800" letter-spacing="0.5">DaVinci</text>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="DaVinci Resolve logo">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="45%" r="65%"><stop offset="0" stop-color="#1a2630"/><stop offset="1" stop-color="#04070a"/></radialGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <rect width="256" height="256" rx="56" fill="url(#bg)"/>
+  <circle cx="128" cy="128" r="86" fill="none" stroke="#d6ab4e" stroke-opacity=".28" stroke-width="5"/>
+  <g filter="url(#glow)">
+    <path d="M128 42a74 74 0 0 1 64 111c-27-5-49-20-64-43-15 23-37 38-64 43A74 74 0 0 1 128 42Z" fill="#f1ca52"/>
+    <path d="M64 153c27-5 49-20 64-43 15 23 37 38 64 43a74 74 0 0 1-128 0Z" fill="#df4a46"/>
+    <path d="M128 110c-15 23-37 38-64 43a74 74 0 0 0 128 0c-27-5-49-20-64-43Z" fill="#34a8db" opacity=".78"/>
+    <circle cx="128" cy="128" r="25" fill="#091018" stroke="#fff" stroke-opacity=".28"/>
+  </g>
 </svg>

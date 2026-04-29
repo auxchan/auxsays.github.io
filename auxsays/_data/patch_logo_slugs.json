@@ -1,39 +1,149 @@
 {
-  "openai-chatgpt": ["openai", "chatgpt"],
-  "anthropic-claude": ["anthropic", "claude"],
-  "google-gemini": ["googlegemini", "google"],
-  "perplexity": ["perplexity"],
-  "midjourney": ["midjourney"],
-  "stability-ai": ["stabilityai", "stablediffusion"],
-  "runway": ["runway"],
-  "pika": ["pika"],
-  "lottiefiles": ["lottiefiles"],
-  "figma": ["figma"],
-  "canva": ["canva"],
-  "adobe-premiere-pro": ["adobepremierepro", "adobepremiere", "premierepro", "premiere", "pr", "adobe"],
-  "adobe-after-effects": ["adobeaftereffects", "aftereffects", "aftereffect", "ae", "adobe"],
-  "adobe-photoshop": ["adobephotoshop", "photoshop", "ps", "adobe"],
-  "adobe-media-encoder": ["adobemediaencoder", "mediaencoder", "ame", "me", "adobe"],
-  "adobe-lightroom-classic": ["adobelightroomclassic", "lightroomclassic", "lightroom", "lrc", "adobe"],
-  "twitch": ["twitch"],
-  "youtube": ["youtube"],
-  "kick": ["kick"],
-  "rumble": ["rumble"],
-  "epic-unreal": ["unrealengine", "epicgames"],
-  "unity": ["unity"],
-  "steam": ["steam"],
-  "nvidia": ["nvidia"],
-  "amd": ["amd"],
-  "intel-arc": ["intel"],
-  "blender": ["blender"],
-  "comfyui": ["comfyui"],
-  "hugging-face": ["huggingface"],
-  "github": ["github"],
-  "cloudflare": ["cloudflare"],
-  "netlify": ["netlify"],
-  "notion": ["notion"],
-  "zapier": ["zapier"],
-  "make": ["make"],
-  "obs-studio": ["obsstudio", "obs"],
-  "davinci-resolve": ["davinciresolve", "blackmagicdesign"]
+  "openai-chatgpt": [
+    "openai",
+    "chatgpt"
+  ],
+  "anthropic-claude": [
+    "anthropic",
+    "claude"
+  ],
+  "google-gemini": [
+    "googlegemini",
+    "google"
+  ],
+  "perplexity": [
+    "perplexity"
+  ],
+  "midjourney": [
+    "midjourney"
+  ],
+  "stability-ai": [
+    "stabilityai",
+    "stablediffusion"
+  ],
+  "runway": [
+    "runway"
+  ],
+  "pika": [
+    "pika"
+  ],
+  "lottiefiles": [
+    "lottiefiles"
+  ],
+  "figma": [
+    "figma"
+  ],
+  "canva": [
+    "canva"
+  ],
+  "adobe-premiere-pro": [
+    "adobepremierepro",
+    "adobepremiere",
+    "premierepro",
+    "premiere",
+    "pr",
+    "adobe"
+  ],
+  "adobe-after-effects": [
+    "adobeaftereffects",
+    "aftereffects",
+    "aftereffect",
+    "ae",
+    "adobe"
+  ],
+  "adobe-photoshop": [
+    "adobephotoshop",
+    "photoshop",
+    "ps",
+    "adobe"
+  ],
+  "adobe-media-encoder": [
+    "adobemediaencoder",
+    "mediaencoder",
+    "ame",
+    "me",
+    "adobe"
+  ],
+  "adobe-lightroom-classic": [
+    "adobelightroomclassic",
+    "lightroomclassic",
+    "lightroom",
+    "lrc",
+    "adobe"
+  ],
+  "twitch": [
+    "twitch"
+  ],
+  "youtube": [
+    "youtube"
+  ],
+  "kick": [
+    "kick"
+  ],
+  "rumble": [
+    "rumble"
+  ],
+  "epic-unreal": [
+    "unrealengine",
+    "epicgames"
+  ],
+  "unity": [
+    "unity"
+  ],
+  "steam": [
+    "steam"
+  ],
+  "nvidia": [
+    "nvidia"
+  ],
+  "amd": [
+    "amd"
+  ],
+  "intel-arc": [
+    "intel"
+  ],
+  "blender": [
+    "blender"
+  ],
+  "comfyui": [
+    "comfyui"
+  ],
+  "hugging-face": [
+    "huggingface"
+  ],
+  "github": [
+    "github"
+  ],
+  "cloudflare": [
+    "cloudflare"
+  ],
+  "netlify": [
+    "netlify"
+  ],
+  "notion": [
+    "notion"
+  ],
+  "zapier": [
+    "zapier"
+  ],
+  "make": [
+    "make"
+  ],
+  "obs-studio": [
+    "obsstudio",
+    "obs"
+  ],
+  "davinci-resolve": [
+    "davinciresolve",
+    "resolve"
+  ],
+  "blackmagic-design": [
+    "blackmagicdesign",
+    "bmd"
+  ],
+  "blackmagic-davinci": [
+    "davinciresolve",
+    "blackmagicdesign",
+    "resolve"
+  ]
 }

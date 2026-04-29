@@ -56,7 +56,7 @@ layout: aux-base
       <p>Tracked patches appear here with official notes, summary, consensus, reported issues, report count, and confidence rating.</p>
     </div>
     <div class="patch-version-table">
-      <div class="patch-version-row patch-version-row--head patch-version-row--no-score"><span>Date</span><span>Patch</span><span>Consensus</span><span>Reports</span><span>Confidence</span><span>Record</span></div>
+      <div class="patch-version-row patch-version-row--head patch-version-row--no-score"><span>Date</span><span>Patch</span><span>Consensus</span><span>Confirmed reports</span><span>Confidence</span><span>Record</span></div>
       {% for item in product_updates %}
       {% assign reaction = item.update_consensus_label | default: item.community_reaction | default: 'Insufficient' %}
       <a class="patch-version-row" href="{{ item.url | relative_url }}">

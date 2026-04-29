@@ -31,7 +31,7 @@ layout: aux-base
     <div class="section-head section-head--archive">
       <div class="eyebrow">Software</div>
       <h2>Tracked software and workflow surfaces</h2>
-      <p>Follow the software lanes below for release history, stability signals, workflow impact, official sources, and community consensus as records are added.</p>
+      <p>Follow the software lanes below for release history, stability signals, workflow impact, official sources, and confirmed patch-specific consensus as records are added.</p>
     </div>
     {% if products.size > 1 %}
     <div class="patch-software-selector" data-software-selector aria-label="Software selector">
@@ -91,10 +91,10 @@ layout: aux-base
     <div class="section-head section-head--archive">
       <div class="eyebrow">Latest documented records</div>
       <h2>Documented updates</h2>
-      <p>Documented records include the official patch notes, summary, consensus read, reported issues, confidence level, and status history.</p>
+      <p>Documented records include the official patch notes, summary, confirmed patch-specific consensus read, reported issues, confidence level, and status history.</p>
     </div>
     <div class="patch-version-table">
-      <div class="patch-version-row patch-version-row--head patch-version-row--no-score"><span>Software</span><span>Patch</span><span>Consensus</span><span>Reports</span><span>Record</span></div>
+      <div class="patch-version-row patch-version-row--head patch-version-row--no-score"><span>Software</span><span>Patch</span><span>Consensus</span><span>Confirmed reports</span><span>Record</span></div>
       {% for item in company_updates %}
       {% assign reaction = item.update_consensus_label | default: item.community_reaction | default: 'Insufficient' %}
       <a class="patch-version-row" href="{{ item.url | relative_url }}">

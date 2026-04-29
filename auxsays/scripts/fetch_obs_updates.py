@@ -97,7 +97,7 @@ def write_obs_update_page(release, status="current"):
         "update_consensus_label":label,
                 "update_report_count":report_count,
         "update_consensus_confidence":"Low",
-        "quick_verdict":f"OBS Studio {version} has an initialized AUXSAYS record. Consensus will be updated as matched reports are collected.",
+        "quick_verdict":f"OBS Studio {version} has an initialized AUXSAYS record. Consensus will be updated only as confirmed patch-specific reports are collected.",
         "official_summary":f"OBS Project published OBS Studio {version}. The official GitHub release notes are preserved below.",
         "consensus_report":"Consensus collection is initialized. Community reports still need to be gathered, categorized, and verified before a strong recommendation is assigned.",
         "complaint_themes":[],

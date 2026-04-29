@@ -8,7 +8,7 @@ Default behavior:
 - Tracks dedupe state in auxsays/_data/patch_ingest_state.json.
 - Does not overwrite existing hand-authored or previously generated records.
 
-This is official-source ingestion only. Community consensus is intentionally deferred.
+This is official-source ingestion only. Confirmed patch-specific consensus is intentionally deferred.
 """
 from __future__ import annotations
 
