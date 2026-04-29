@@ -4010,15 +4010,60 @@ button, input, select, textarea { font: inherit; }
   text-transform: none;
 }
 
+/* Mobile header navigation repair
+   Keeps the AUXSAYS topbar inside the viewport on narrow screens. */
+@media (max-width: 760px) {
+  .aux-topbar {
+    padding: 0.85rem 0.75rem;
+  }
 
-/* Consensus policy note */
-.consensus-rule-note {
-  margin-top: .9rem;
-  color: rgba(214,220,224,.72);
-  font-size: .92rem;
-  line-height: 1.55;
-  border-left: 2px solid rgba(95,212,229,.56);
-  padding: .75rem .9rem;
-  background: rgba(95,212,229,.045);
-  border-radius: 0 14px 14px 0;
+  .aux-topbar-inner {
+    width: calc(100vw - 24px);
+    max-width: calc(100vw - 24px);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    margin: 0 auto;
+  }
+
+  .brand {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .brand-copy {
+    min-width: 0;
+  }
+
+  .brand-copy strong {
+    font-size: 1.25rem;
+  }
+
+  .aux-nav {
+    width: 100%;
+    margin-left: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 0.45rem;
+  }
+
+  .aux-nav a {
+    padding: 0.58rem 0.78rem;
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 420px) {
+  .aux-nav {
+    gap: 0.38rem;
+  }
+
+  .aux-nav a {
+    padding: 0.52rem 0.66rem;
+    font-size: 0.84rem;
+  }
 }
