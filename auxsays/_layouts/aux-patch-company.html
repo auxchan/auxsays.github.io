@@ -54,6 +54,10 @@ layout: aux-base
       {% assign product_updates_for_card = site.pages | where: "update_entry", true | where: "product_id", product.id %}
 
       {% assign product_lane_label = 'Software' %}
+      {% assign product_logo_path = product.logo_path %}
+      {% if product_logo_path == blank %}
+        {% capture product_logo_path %}/assets/img/patch-logos/{{ product.id }}.svg{% endcapture %}
+      {% endif %}
       <article class="patch-product-card patch-product-card--clickable{% if product.ui_backdrop_path %} patch-product-card--has-ui-backdrop{% endif %}"{% if product.ui_backdrop_path %}
         style="--product-ui-backdrop: url('{{ product.ui_backdrop_path | relative_url }}');"{% endif %}
         data-card-href="{{ product.product_url | relative_url }}"
@@ -63,7 +67,7 @@ layout: aux-base
         role="link"
         aria-label="Open {{ product.product_name }} software page">
         <div class="patch-product-topline">
-          <span class="patch-source-badge patch-logo-badge patch-logo-badge--has-image patch-product-icon"><img src="{{ product.logo_path | relative_url }}" alt="{{ product.product_name }} logo" loading="lazy"></span>
+          <span class="patch-source-badge patch-logo-badge patch-logo-badge--has-image patch-product-icon"><img src="{{ product_logo_path | relative_url }}" alt="{{ product.product_name }} logo" loading="lazy"></span>
           <span><strong>{{ product.product_name }}</strong><em>{{ product.category_label }}</em></span>
           <span class="patch-source-priority patch-source-priority--software">{{ product_lane_label }}</span>
         </div>

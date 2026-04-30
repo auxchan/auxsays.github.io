@@ -151,9 +151,13 @@ layout: aux-base
         data-summary="{{ company.summary | append: ' ' | append: company_product_names | downcase }}"
         data-card-href="{{ company.company_url | relative_url }}"
         tabindex="0" role="link" aria-label="Open {{ company.company_name }} company page">
+        {% assign company_logo_path = company.logo_path %}
+        {% if company_logo_path == blank %}
+          {% capture company_logo_path %}/assets/img/patch-logos/{{ company.id }}.svg{% endcapture %}
+        {% endif %}
         <div class="patch-source-topline">
           <span class="patch-source-badge patch-logo-badge patch-logo-badge--has-image">
-            <img src="{{ company.logo_path | relative_url }}" alt="{{ company.company_name }} logo" loading="lazy">
+            <img src="{{ company_logo_path | relative_url }}" alt="{{ company.company_name }} logo" loading="lazy">
           </span>
           <span class="patch-source-meta">
             <strong><a href="{{ company.company_url | relative_url }}">{{ company.company_name }}</a></strong>
@@ -204,10 +208,16 @@ layout: aux-base
           <span>{{ item.update_type | default: item.update_category }}</span>
         </div>
         <div class="patch-card-headline">
+          {% assign item_logo_path = brand_meta.logo_path %}
+          {% if item_logo_path == blank and update_product_meta.logo_path != blank %}
+            {% assign item_logo_path = update_product_meta.logo_path %}
+          {% elsif item_logo_path == blank and update_product_meta.id != blank %}
+            {% capture item_logo_path %}/assets/img/patch-logos/{{ update_product_meta.id }}.svg{% endcapture %}
+          {% endif %}
           <a class="patch-identity" href="{{ item.url | relative_url }}">
-            <span class="patch-badge{% if brand_meta and brand_meta.logo_path %} patch-logo-badge patch-logo-badge--has-image{% endif %}">
-              {% if brand_meta and brand_meta.logo_path %}
-              <img src="{{ brand_meta.logo_path | relative_url }}" alt="{{ item.update_source_name }} logo" loading="lazy">
+            <span class="patch-badge{% if item_logo_path != blank %} patch-logo-badge patch-logo-badge--has-image{% endif %}">
+              {% if item_logo_path != blank %}
+              <img src="{{ item_logo_path | relative_url }}" alt="{{ item.update_product }} logo" loading="lazy">
               {% else %}
               {{ item.update_logo_text | default: item.update_product | slice: 0, 3 }}
               {% endif %}
@@ -283,10 +293,16 @@ layout: aux-base
             <span>{{ item.update_type | default: item.update_category }}</span>
           </div>
           <div class="patch-card-headline">
+            {% assign item_logo_path = brand_meta.logo_path %}
+            {% if item_logo_path == blank and update_product_meta.logo_path != blank %}
+              {% assign item_logo_path = update_product_meta.logo_path %}
+            {% elsif item_logo_path == blank and update_product_meta.id != blank %}
+              {% capture item_logo_path %}/assets/img/patch-logos/{{ update_product_meta.id }}.svg{% endcapture %}
+            {% endif %}
             <a class="patch-identity" href="{{ item.url | relative_url }}">
-              <span class="patch-badge{% if brand_meta and brand_meta.logo_path %} patch-logo-badge patch-logo-badge--has-image{% endif %}">
-                {% if brand_meta and brand_meta.logo_path %}
-                <img src="{{ brand_meta.logo_path | relative_url }}" alt="{{ item.update_source_name }} logo" loading="lazy">
+              <span class="patch-badge{% if item_logo_path != blank %} patch-logo-badge patch-logo-badge--has-image{% endif %}">
+                {% if item_logo_path != blank %}
+                <img src="{{ item_logo_path | relative_url }}" alt="{{ item.update_product }} logo" loading="lazy">
                 {% else %}
                 {{ item.update_logo_text | default: item.update_product | slice: 0, 3 }}
                 {% endif %}

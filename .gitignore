@@ -11,3 +11,4 @@ node_modules/
 *.pyc
 auxsays/_data/qa_status.json
 auxsays/_data/consensus_status.json
+auxsays/assets/img/patch-logos/_generation-report.json

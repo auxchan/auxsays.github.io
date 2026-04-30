@@ -107,6 +107,11 @@ layout: aux-base
   {% assign official_note_label = 'Official Vendor Blog' %}
 {% endif %}
 
+{% assign update_logo_path = product.logo_path %}
+{% if update_logo_path == blank and product.id != blank %}
+  {% capture update_logo_path %}/assets/img/patch-logos/{{ product.id }}.svg{% endcapture %}
+{% endif %}
+
 <div class="update-page-shell reveal-up">
   <section class="panel update-hero update-hero--v3">
     <div class="update-hero-main update-hero-main--clean">
@@ -114,7 +119,7 @@ layout: aux-base
 
       <div class="update-brand-row">
         <span class="update-brand-badge patch-logo-badge patch-logo-badge--has-image">
-          {% if product.logo_path != blank %}<img src="{{ product.logo_path | relative_url }}" alt="{{ product.product_name }} logo" loading="lazy">{% else %}{{ page.update_logo_text | default: page.update_product | slice: 0, 3 }}{% endif %}
+          {% if update_logo_path != blank %}<img src="{{ update_logo_path | relative_url }}" alt="{{ product.product_name | default: page.update_product }} logo" loading="lazy">{% else %}{{ page.update_logo_text | default: page.update_product | slice: 0, 3 }}{% endif %}
         </span>
         <span class="update-brand-meta">
           <strong>{{ page.update_product }}</strong>
