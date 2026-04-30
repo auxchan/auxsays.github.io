@@ -3,7 +3,7 @@
   "last_results": [
     {
       "adapter": "rss_feed",
-      "duration_ms": 874,
+      "duration_ms": 987,
       "fetched": 2,
       "product_id": "figma",
       "skipped": [
@@ -21,18 +21,21 @@
     },
     {
       "adapter": "adobe_release_notes",
-      "duration_ms": 751,
+      "duration_ms": 588,
       "fetched": 1,
       "product_id": "adobe-premiere-pro",
-      "skipped": [],
+      "skipped": [
+        {
+          "reason": "state-seen",
+          "record_id": "adobe:adobe-premiere-pro:26.2:9fa3e1e53c0b275d"
+        }
+      ],
       "status": "success",
-      "written": [
-        "auxsays/updates/generated/2026-04-30-premiere-pro-26-2.md"
-      ]
+      "written": []
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 495,
+      "duration_ms": 1001,
       "fetched": 2,
       "product_id": "obs-studio",
       "skipped": [
@@ -50,7 +53,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 311,
+      "duration_ms": 677,
       "fetched": 2,
       "product_id": "comfyui",
       "skipped": [
@@ -68,7 +71,7 @@
     },
     {
       "adapter": "rss_feed",
-      "duration_ms": 19,
+      "duration_ms": 274,
       "fetched": 2,
       "product_id": "github",
       "skipped": [
@@ -86,7 +89,7 @@
     },
     {
       "adapter": "html_changelog",
-      "duration_ms": 68,
+      "duration_ms": 521,
       "fetched": 0,
       "product_id": "netlify",
       "skipped": [],
@@ -94,8 +97,8 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-04-30T02:44:49Z",
-  "last_run_started_at": "2026-04-30T02:44:46Z",
+  "last_run_finished_at": "2026-04-30T07:50:21Z",
+  "last_run_started_at": "2026-04-30T07:50:17Z",
   "sources": {
     "adobe-after-effects": {
       "consecutive_failures": 2,
@@ -160,17 +163,17 @@
     "adobe-premiere-pro": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_release_notes",
-      "last_checked_at": "2026-04-30T02:44:47Z",
+      "last_checked_at": "2026-04-30T07:50:18Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 1,
-      "last_records_skipped": 0,
-      "last_records_written": 1,
-      "last_run_duration_ms": 751,
-      "last_success_at": "2026-04-30T02:44:47Z",
-      "previous_consecutive_failures": 8,
+      "last_records_skipped": 1,
+      "last_records_written": 0,
+      "last_run_duration_ms": 588,
+      "last_success_at": "2026-04-30T07:50:18Z",
+      "previous_consecutive_failures": 0,
       "seen": [
         "adobe:adobe-premiere-pro:26.2:9fa3e1e53c0b275d"
       ],
@@ -179,7 +182,7 @@
     "comfyui": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-04-30T02:44:49Z",
+      "last_checked_at": "2026-04-30T07:50:19Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -187,8 +190,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 2,
       "last_records_written": 0,
-      "last_run_duration_ms": 311,
-      "last_success_at": "2026-04-30T02:44:49Z",
+      "last_run_duration_ms": 677,
+      "last_success_at": "2026-04-30T07:50:19Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:comfyui:310487464",
@@ -199,7 +202,7 @@
     "figma": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-04-30T02:44:46Z",
+      "last_checked_at": "2026-04-30T07:50:17Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -207,8 +210,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 2,
       "last_records_written": 0,
-      "last_run_duration_ms": 874,
-      "last_success_at": "2026-04-30T02:44:46Z",
+      "last_run_duration_ms": 987,
+      "last_success_at": "2026-04-30T07:50:17Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:figma:9923866c-4511-4991-8536-75f226c095a5",
@@ -223,7 +226,7 @@
     "github": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-04-30T02:44:49Z",
+      "last_checked_at": "2026-04-30T07:50:20Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -231,8 +234,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 2,
       "last_records_written": 0,
-      "last_run_duration_ms": 19,
-      "last_success_at": "2026-04-30T02:44:49Z",
+      "last_run_duration_ms": 274,
+      "last_success_at": "2026-04-30T07:50:20Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:github:https://github.blog/changelog/2026-04-27-copilot-cloud-agent-starts-20-faster-with-actions-custom-images",
@@ -243,7 +246,7 @@
     "netlify": {
       "consecutive_failures": 0,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-04-30T02:44:49Z",
+      "last_checked_at": "2026-04-30T07:50:20Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -251,15 +254,15 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 68,
-      "last_success_at": "2026-04-30T02:44:49Z",
+      "last_run_duration_ms": 521,
+      "last_success_at": "2026-04-30T07:50:20Z",
       "previous_consecutive_failures": 0,
       "status": "degraded"
     },
     "obs-studio": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-04-30T02:44:48Z",
+      "last_checked_at": "2026-04-30T07:50:18Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -267,8 +270,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 2,
       "last_records_written": 0,
-      "last_run_duration_ms": 495,
-      "last_success_at": "2026-04-30T02:44:48Z",
+      "last_run_duration_ms": 1001,
+      "last_success_at": "2026-04-30T07:50:18Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:obs-studio:304830335",
