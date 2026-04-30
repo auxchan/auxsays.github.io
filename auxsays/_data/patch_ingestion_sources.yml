@@ -3128,3 +3128,318 @@
     - Official help forum
     difficulty: TBD
     defer_until_official_ingestion_stable: true
+- company_id: adobe
+  product_id: adobe-acrobat-reader
+  company: Adobe
+  software: Acrobat / Acrobat Reader
+  public_category: Workplace Critical
+  enabled: false
+  recommended_priority: P1 staged next adapter
+  ingestion:
+    type: html_release_notes
+    adapter: adobe_release_notes
+    official_url: https://www.adobe.com/devnet-docs/acrobatetk/tools/ReleaseNotesDC/index.html
+    secondary_official_url: https://helpx.adobe.com/security/products/acrobat.html
+    feed_url: null
+    api_url: null
+    parser_profile: adobe_acrobat_enterprise_release_notes
+    official_source_type: release_notes
+    source_capture_status: staged_not_enabled
+    include_prereleases: false
+    version_pattern: ^(?P<version>[0-9]+\.[0-9]+\.[0-9]+).*$
+    requires_javascript: false
+    scrape_feasibility: Medium
+    reliability: High
+    breakage_risk: Medium
+    polling_frequency: 24h
+    update_detection_method: release-note index diff
+    file_size_status_when_missing: creative_cloud_managed
+    extractable_fields: {version: true, release_date: true, title: true, release_note_body: true, download_url: false, file_size: false, checksum: false, known_issues: true, platform_specific_installers: false, archived_release_history: true}
+    keywords: [release, update, security, planned update, Acrobat, Reader]
+  generated_record:
+    canonical_url_pattern: /updates/adobe/adobe-acrobat-reader/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+  community_future:
+    possible_sources: [Adobe Acrobat community, enterprise deployment reports, Reddit]
+    difficulty: Medium
+    defer_until_official_ingestion_stable: true
+- company_id: microsoft
+  product_id: microsoft-windows-11
+  company: Microsoft
+  software: Windows 11
+  public_category: Operating Systems
+  enabled: false
+  recommended_priority: P1 staged next adapter
+  ingestion:
+    type: release_health
+    adapter: microsoft_release_health
+    official_url: https://learn.microsoft.com/en-us/windows/release-health/
+    secondary_official_url: https://learn.microsoft.com/en-us/windows/release-health/windows11-release-information
+    feed_url: null
+    api_url: null
+    parser_profile: windows_release_health
+    official_source_type: release_health
+    source_capture_status: staged_not_enabled
+    include_prereleases: false
+    version_pattern: ^Windows 11.*(?P<version>[0-9]{2}H[0-9]).*$
+    requires_javascript: false
+    scrape_feasibility: Medium
+    reliability: High
+    breakage_risk: Medium
+    polling_frequency: 12h
+    update_detection_method: release-health known-issue/safeguard diff
+    file_size_status_when_missing: microsoft_managed
+    extractable_fields: {version: true, release_date: true, title: true, release_note_body: true, download_url: false, file_size: false, checksum: false, known_issues: true, platform_specific_installers: false, archived_release_history: true}
+    keywords: [release health, known issues, safeguard hold, rollout, cumulative update, security]
+  generated_record:
+    canonical_url_pattern: /updates/microsoft/microsoft-windows-11/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+  community_future:
+    possible_sources: [Microsoft Learn known issues, Windows forums, Reddit]
+    difficulty: Medium-High
+    defer_until_official_ingestion_stable: true
+- company_id: microsoft
+  product_id: microsoft-teams
+  company: Microsoft
+  software: Microsoft Teams
+  public_category: Workplace Critical
+  enabled: false
+  recommended_priority: P2 manual watch
+  ingestion:
+    type: html_release_notes
+    adapter: manual_watch
+    official_url: https://learn.microsoft.com/en-us/officeupdates/teams-app-versioning
+    secondary_official_url: https://support.microsoft.com/en-us/office/what-s-new-in-microsoft-teams-d7092a6d-c896-424c-b362-a472d5f105de
+    feed_url: null
+    api_url: null
+    parser_profile: microsoft_teams_version_history
+    official_source_type: release_notes
+    source_capture_status: staged_manual_watch
+    include_prereleases: false
+    version_pattern: ^(?P<version>[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$
+    requires_javascript: false
+    scrape_feasibility: Medium
+    reliability: Medium
+    breakage_risk: Medium
+    polling_frequency: 24h
+    update_detection_method: version-history/manual watch
+    file_size_status_when_missing: microsoft_managed
+    extractable_fields: {version: true, release_date: true, title: true, release_note_body: true, download_url: false, file_size: false, checksum: false, known_issues: false, platform_specific_installers: true, archived_release_history: true}
+    keywords: [Teams, version, release, update]
+  generated_record:
+    canonical_url_pattern: /updates/microsoft/microsoft-teams/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+  community_future:
+    possible_sources: [Microsoft Tech Community, admin reports, Reddit]
+    difficulty: Medium
+    defer_until_official_ingestion_stable: true
+- company_id: microsoft
+  product_id: microsoft-powerpoint
+  company: Microsoft
+  software: Microsoft PowerPoint
+  public_category: Productivity
+  enabled: false
+  recommended_priority: P2 manual watch through M365
+  ingestion:
+    type: html_release_notes
+    adapter: manual_watch
+    official_url: https://learn.microsoft.com/en-us/officeupdates/release-notes-microsoft365-apps
+    secondary_official_url: https://learn.microsoft.com/en-us/officeupdates/update-history-microsoft365-apps-by-date
+    feed_url: null
+    api_url: null
+    parser_profile: microsoft_365_powerpoint_release_notes
+    official_source_type: release_notes
+    source_capture_status: staged_manual_watch
+    include_prereleases: false
+    version_pattern: ^Version (?P<version>[0-9]+).*$
+    requires_javascript: false
+    scrape_feasibility: Medium
+    reliability: Medium
+    breakage_risk: Medium
+    polling_frequency: 24h
+    update_detection_method: Microsoft 365 Apps release-note product filter
+    file_size_status_when_missing: microsoft_managed
+    extractable_fields: {version: true, release_date: true, title: true, release_note_body: true, download_url: false, file_size: false, checksum: false, known_issues: false, platform_specific_installers: false, archived_release_history: true}
+    keywords: [PowerPoint, presentation, release, update]
+  generated_record:
+    canonical_url_pattern: /updates/microsoft/microsoft-powerpoint/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+  community_future:
+    possible_sources: [Microsoft Answers, Microsoft Tech Community, workplace reports]
+    difficulty: Medium
+    defer_until_official_ingestion_stable: true
+- company_id: microsoft
+  product_id: microsoft-365-apps
+  company: Microsoft
+  software: Microsoft 365 Apps
+  public_category: Productivity
+  enabled: false
+  recommended_priority: P2 staged after Windows/Acrobat/Elgato
+  ingestion:
+    type: html_release_notes
+    adapter: manual_watch
+    official_url: https://learn.microsoft.com/en-us/officeupdates/update-history-microsoft365-apps-by-date
+    secondary_official_url: https://learn.microsoft.com/en-us/officeupdates/release-notes-microsoft365-apps
+    feed_url: null
+    api_url: null
+    parser_profile: microsoft_365_apps_update_history
+    official_source_type: release_notes
+    source_capture_status: staged_manual_watch
+    include_prereleases: false
+    version_pattern: ^Version (?P<version>[0-9]+).*$
+    requires_javascript: false
+    scrape_feasibility: Medium
+    reliability: High
+    breakage_risk: Medium
+    polling_frequency: 24h
+    update_detection_method: update-history table diff
+    file_size_status_when_missing: microsoft_managed
+    extractable_fields: {version: true, release_date: true, title: true, release_note_body: true, download_url: false, file_size: false, checksum: false, known_issues: false, platform_specific_installers: false, archived_release_history: true}
+    keywords: [Microsoft 365 Apps, Current Channel, Monthly Enterprise, security, release notes]
+  generated_record:
+    canonical_url_pattern: /updates/microsoft/microsoft-365-apps/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+  community_future:
+    possible_sources: [Microsoft Tech Community, enterprise admin reports]
+    difficulty: Medium
+    defer_until_official_ingestion_stable: true
+- company_id: elgato
+  product_id: elgato-stream-deck
+  company: Elgato
+  software: Stream Deck
+  public_category: Streaming Tools
+  enabled: false
+  recommended_priority: P1 staged next adapter
+  ingestion:
+    type: help_center_release_notes
+    adapter: elgato_help_center
+    official_url: https://help.elgato.com/hc/en-us/sections/5162671529357-Elgato-Stream-Deck-Software-Release-Notes
+    secondary_official_url: null
+    feed_url: null
+    api_url: null
+    parser_profile: elgato_stream_deck_release_notes
+    official_source_type: release_notes
+    source_capture_status: staged_not_enabled
+    include_prereleases: false
+    version_pattern: ^Elgato Stream Deck (?P<version>[0-9]+(\.[0-9]+)+).*$
+    requires_javascript: false
+    scrape_feasibility: High
+    reliability: High
+    breakage_risk: Medium
+    polling_frequency: 12h
+    update_detection_method: Help Center section/article diff
+    file_size_status_when_missing: download_portal_only
+    extractable_fields: {version: true, release_date: true, title: true, release_note_body: true, download_url: true, file_size: false, checksum: false, known_issues: false, platform_specific_installers: true, archived_release_history: true}
+    keywords: [Stream Deck, release notes, plugin, OBS, firmware]
+  generated_record:
+    canonical_url_pattern: /updates/elgato/elgato-stream-deck/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+  community_future:
+    possible_sources: [Elgato subreddit, Elgato Help Center comments, OBS/Stream Deck plugin reports]
+    difficulty: Medium
+    defer_until_official_ingestion_stable: true
+- company_id: elgato
+  product_id: elgato-wave-link
+  company: Elgato
+  software: Wave Link
+  public_category: Streaming Tools
+  enabled: false
+  recommended_priority: P1 staged next adapter
+  ingestion:
+    type: help_center_release_notes
+    adapter: elgato_help_center
+    official_url: https://help.elgato.com/hc/en-us/sections/4913442828941-Wave-Link-Release-Notes
+    secondary_official_url: null
+    feed_url: null
+    api_url: null
+    parser_profile: elgato_wave_link_release_notes
+    official_source_type: release_notes
+    source_capture_status: staged_not_enabled
+    include_prereleases: false
+    version_pattern: ^Elgato Wave Link (?P<version>[0-9]+(\.[0-9]+)+).*$
+    requires_javascript: false
+    scrape_feasibility: High
+    reliability: High
+    breakage_risk: Medium
+    polling_frequency: 12h
+    update_detection_method: Help Center section/article diff
+    file_size_status_when_missing: download_portal_only
+    extractable_fields: {version: true, release_date: true, title: true, release_note_body: true, download_url: true, file_size: false, checksum: false, known_issues: false, platform_specific_installers: true, archived_release_history: true}
+    keywords: [Wave Link, release notes, audio routing, OBS, VST]
+  generated_record:
+    canonical_url_pattern: /updates/elgato/elgato-wave-link/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+  community_future:
+    possible_sources: [Elgato subreddit, audio routing reports, OBS audio workflow reports]
+    difficulty: Medium
+    defer_until_official_ingestion_stable: true
+- company_id: elgato
+  product_id: elgato-camera-hub
+  company: Elgato
+  software: Camera Hub
+  public_category: Streaming Tools
+  enabled: false
+  recommended_priority: P1 staged next adapter
+  ingestion:
+    type: help_center_release_notes
+    adapter: elgato_help_center
+    official_url: https://help.elgato.com/hc/en-us/sections/4880787756941-Elgato-Camera-Hub-Release-Notes
+    secondary_official_url: null
+    feed_url: null
+    api_url: null
+    parser_profile: elgato_camera_hub_release_notes
+    official_source_type: release_notes
+    source_capture_status: staged_not_enabled
+    include_prereleases: false
+    version_pattern: ^Elgato Camera Hub (?P<version>[0-9]+(\.[0-9]+)+).*$
+    requires_javascript: false
+    scrape_feasibility: High
+    reliability: High
+    breakage_risk: Medium
+    polling_frequency: 12h
+    update_detection_method: Help Center section/article diff
+    file_size_status_when_missing: download_portal_only
+    extractable_fields: {version: true, release_date: true, title: true, release_note_body: true, download_url: true, file_size: false, checksum: false, known_issues: false, platform_specific_installers: true, archived_release_history: true}
+    keywords: [Camera Hub, release notes, Facecam, firmware, Prompter]
+  generated_record:
+    canonical_url_pattern: /updates/elgato/elgato-camera-hub/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+  community_future:
+    possible_sources: [Elgato subreddit, Facecam reports, OBS camera reports]
+    difficulty: Medium
+    defer_until_official_ingestion_stable: true
+- company_id: elgato
+  product_id: elgato-4k-capture-utility
+  company: Elgato
+  software: 4K Capture Utility
+  public_category: Streaming Tools
+  enabled: false
+  recommended_priority: P1 staged next adapter
+  ingestion:
+    type: help_center_release_notes
+    adapter: elgato_help_center
+    official_url: https://help.elgato.com/hc/en-us/sections/5126053814029-Elgato-4K-Capture-Utility-Release-Notes
+    secondary_official_url: null
+    feed_url: null
+    api_url: null
+    parser_profile: elgato_4k_capture_utility_release_notes
+    official_source_type: release_notes
+    source_capture_status: staged_not_enabled
+    include_prereleases: false
+    version_pattern: ^Elgato 4K Capture Utility (?P<version>[0-9]+(\.[0-9]+)+).*$
+    requires_javascript: false
+    scrape_feasibility: High
+    reliability: High
+    breakage_risk: Medium
+    polling_frequency: 12h
+    update_detection_method: Help Center section/article diff
+    file_size_status_when_missing: download_portal_only
+    extractable_fields: {version: true, release_date: true, title: true, release_note_body: true, download_url: true, file_size: false, checksum: false, known_issues: false, platform_specific_installers: true, archived_release_history: true}
+    keywords: [4K Capture Utility, release notes, 4K X, firmware, HDR]
+  generated_record:
+    canonical_url_pattern: /updates/elgato/elgato-4k-capture-utility/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+  community_future:
+    possible_sources: [Elgato subreddit, capture-card reports, OBS capture reports]
+    difficulty: Medium
+    defer_until_official_ingestion_stable: true

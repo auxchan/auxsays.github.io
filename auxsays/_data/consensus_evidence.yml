@@ -1,0 +1,4 @@
+schema_version: 1
+# Manual-assisted evidence only. Do not add broad scraped complaints here.
+# Count only reports tied to the exact patch/update version by report text or parent thread/article title.
+evidence: []

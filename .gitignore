@@ -9,3 +9,5 @@ Thumbs.db
 auxsays/_site/
 node_modules/
 *.pyc
+auxsays/_data/qa_status.json
+auxsays/_data/consensus_status.json

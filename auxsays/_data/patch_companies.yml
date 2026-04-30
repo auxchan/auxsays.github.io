@@ -5,7 +5,7 @@
   category_keys:
   - video-production
   - design-workflow
-  summary: Adobe is tracked because changes to Premiere Pro, After Effects, Photoshop, Media Encoder, and Lightroom Classic
+  summary: Adobe is tracked because changes to Premiere Pro, Acrobat / Reader, After Effects, Photoshop, Media Encoder, and Lightroom Classic
     can affect creator workflows, production stability, rendering, exports, design assets, and publishing operations.
   logo_path: /assets/img/patch-logos/adobe.svg
   company_url: /updates/adobe/
@@ -19,6 +19,9 @@
   - label: Photoshop release notes
     url: https://helpx.adobe.com/photoshop/desktop/whats-new/photoshop-on-desktop-release-notes.html
     product_id: adobe-photoshop
+  - label: Acrobat Enterprise release notes
+    url: https://www.adobe.com/devnet-docs/acrobatetk/tools/ReleaseNotesDC/index.html
+    product_id: adobe-acrobat-reader
   - label: Media Encoder release notes
     url: https://helpx.adobe.com/media-encoder/release-notes.html
     product_id: adobe-media-encoder
@@ -28,7 +31,7 @@
   documented_update_count: 0
   coverage_state: active_watch
   coverage_status_label: Monitoring active
-  tracked_product_count: 5
+  tracked_product_count: 6
 - id: amd
   company_name: AMD
   display_name: AMD
@@ -605,3 +608,61 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
+- id: microsoft
+  company_name: Microsoft
+  display_name: Microsoft
+  priority: Core
+  category_keys:
+  - operating-systems
+  - workplace-critical
+  - productivity
+  summary: Microsoft is tracked because Windows 11, Teams, PowerPoint, and Microsoft 365 Apps updates can affect security posture,
+    workplace reliability, presentation delivery, meetings, collaboration, gaming performance, and creator workstation stability.
+  logo_path: /assets/img/patch-logos/microsoft.svg
+  company_url: /updates/microsoft/
+  official_sources:
+  - label: Windows release health
+    url: https://learn.microsoft.com/en-us/windows/release-health/
+    product_id: microsoft-windows-11
+  - label: Microsoft Teams app version history
+    url: https://learn.microsoft.com/en-us/officeupdates/teams-app-versioning
+    product_id: microsoft-teams
+  - label: Microsoft 365 Apps update history
+    url: https://learn.microsoft.com/en-us/officeupdates/update-history-microsoft365-apps-by-date
+    product_id: microsoft-365-apps
+  - label: Microsoft 365 Apps release notes
+    url: https://learn.microsoft.com/en-us/officeupdates/release-notes-microsoft365-apps
+    product_id: microsoft-powerpoint
+  documented_update_count: 0
+  coverage_state: staged
+  coverage_status_label: Source map staged
+  tracked_product_count: 4
+- id: elgato
+  company_name: Elgato
+  display_name: Elgato
+  priority: Core
+  category_keys:
+  - streaming-tools
+  - creator-hardware
+  - capture-workflows
+  summary: Elgato is tracked because Stream Deck, Wave Link, Camera Hub, and 4K Capture Utility updates can affect streaming
+    controls, OBS actions, audio routing, camera behavior, capture-device reliability, firmware compatibility, and creator production uptime.
+  logo_path: /assets/img/patch-logos/elgato.svg
+  company_url: /updates/elgato/
+  official_sources:
+  - label: Stream Deck release notes
+    url: https://help.elgato.com/hc/en-us/sections/5162671529357-Elgato-Stream-Deck-Software-Release-Notes
+    product_id: elgato-stream-deck
+  - label: Wave Link release notes
+    url: https://help.elgato.com/hc/en-us/sections/4913442828941-Wave-Link-Release-Notes
+    product_id: elgato-wave-link
+  - label: Camera Hub release notes
+    url: https://help.elgato.com/hc/en-us/sections/4880787756941-Elgato-Camera-Hub-Release-Notes
+    product_id: elgato-camera-hub
+  - label: 4K Capture Utility release notes
+    url: https://help.elgato.com/hc/en-us/sections/5126053814029-Elgato-4K-Capture-Utility-Release-Notes
+    product_id: elgato-4k-capture-utility
+  documented_update_count: 0
+  coverage_state: staged
+  coverage_status_label: Source map staged
+  tracked_product_count: 4
