@@ -7,7 +7,7 @@
   - video-production
   - design-workflow
   summary: Adobe is tracked because changes to Premiere Pro, Acrobat / Reader, After Effects, Photoshop, Media Encoder, and Lightroom Classic can affect creator workflows, production stability, rendering, exports, design assets, and publishing operations.
-  logo_path: https://cdn.simpleicons.org/adobe/ffffff
+  logo_path: https://cdn.simpleicons.org/adobe
   company_url: "/updates/adobe/"
   official_sources:
   - label: Premiere Pro release notes
@@ -39,7 +39,7 @@
   category_keys:
   - hardware-drivers
   summary: AMD is tracked because changes to AMD Software / Radeon can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/amd/ffffff
+  logo_path: https://cdn.simpleicons.org/amd
   company_url: "/updates/amd/"
   official_sources:
   - label: AMD drivers
@@ -56,7 +56,7 @@
   category_keys:
   - ai-tools
   summary: Anthropic is tracked because changes to Claude can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/anthropic/ffffff
+  logo_path: https://cdn.simpleicons.org/anthropic
   company_url: "/updates/anthropic/"
   official_sources:
   - label: Claude release notes
@@ -73,7 +73,7 @@
   category_keys:
   - video-production
   summary: Blackmagic Design is tracked because DaVinci Resolve releases can affect editing, color, Fusion, Fairlight, GPU behavior, codecs, collaboration, and creator post-production readiness.
-  logo_path: https://cdn.simpleicons.org/blackmagicdesign/ffffff
+  logo_path: https://cdn.simpleicons.org/blackmagicdesign
   company_url: "/updates/blackmagic-design/"
   official_sources:
   - label: Blackmagic media releases
@@ -90,7 +90,7 @@
   category_keys:
   - game-engines
   summary: Epic Games is tracked because changes to Unreal Engine can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/epicgames/ffffff
+  logo_path: https://cdn.simpleicons.org/epicgames
   company_url: "/updates/epic-games/"
   official_sources:
   - label: Unreal what's new
@@ -107,7 +107,7 @@
   category_keys:
   - design-workflow
   summary: Figma is tracked because changes to Figma can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/figma/ffffff
+  logo_path: https://cdn.simpleicons.org/figma
   company_url: "/updates/figma/"
   official_sources:
   - label: Figma release notes
@@ -124,7 +124,7 @@
   category_keys:
   - dev-web
   summary: GitHub is tracked because changes to GitHub / Copilot can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/github/ffffff
+  logo_path: https://cdn.simpleicons.org/github
   company_url: "/updates/github/"
   official_sources:
   - label: GitHub changelog
@@ -141,7 +141,7 @@
   category_keys:
   - ai-tools
   summary: Google is tracked because changes to Gemini can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/google/ffffff
+  logo_path: https://cdn.simpleicons.org/google
   company_url: "/updates/google/"
   official_sources:
   - label: Gemini updates
@@ -158,7 +158,7 @@
   category_keys:
   - creator-platforms
   summary: Kick is tracked because changes to Kick can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/kick/ffffff
+  logo_path: https://cdn.simpleicons.org/kick
   company_url: "/updates/kick/"
   official_sources:
   - label: Kick blog
@@ -175,7 +175,7 @@
   category_keys:
   - design-workflow
   summary: LottieFiles is tracked because changes to LottieFiles can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/lottiefiles/ffffff
+  logo_path: https://cdn.simpleicons.org/lottiefiles
   company_url: "/updates/lottiefiles/"
   official_sources:
   - label: LottieFiles blog
@@ -192,7 +192,7 @@
   category_keys:
   - ai-image
   summary: Midjourney is tracked because changes to Midjourney can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/midjourney/ffffff
+  logo_path: https://cdn.simpleicons.org/midjourney
   company_url: "/updates/midjourney/"
   official_sources:
   - label: Midjourney updates
@@ -209,7 +209,7 @@
   category_keys:
   - hardware-drivers
   summary: NVIDIA tracking focuses on Game Ready drivers, Studio drivers, NVIDIA App changes, NVENC, DLSS, RTX features, and creator/gaming stability.
-  logo_path: https://cdn.simpleicons.org/nvidia/ffffff
+  logo_path: https://cdn.simpleicons.org/nvidia
   company_url: "/updates/nvidia/"
   official_sources:
   - label: GeForce news
@@ -226,7 +226,7 @@
   category_keys:
   - streaming
   summary: OBS Project tracking focuses on OBS Studio releases, streaming stability, encoder behavior, plugin compatibility, and production workflow regressions.
-  logo_path: https://cdn.simpleicons.org/obsstudio/ffffff
+  logo_path: https://cdn.simpleicons.org/obsstudio
   company_url: "/updates/obs-project/"
   official_sources:
   - label: OBS GitHub releases
@@ -243,7 +243,7 @@
   category_keys:
   - ai-tools
   summary: OpenAI tracking focuses on ChatGPT, model changes, product interface changes, workspace behavior, automation, and creator workflow impact.
-  logo_path: https://cdn.simpleicons.org/openai/ffffff
+  logo_path: https://cdn.simpleicons.org/openai
   company_url: "/updates/openai/"
   official_sources:
   - label: ChatGPT release notes
@@ -260,7 +260,7 @@
   category_keys:
   - ai-tools
   summary: Perplexity is tracked because changes to Perplexity can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/perplexity/ffffff
+  logo_path: https://cdn.simpleicons.org/perplexity
   company_url: "/updates/perplexity/"
   official_sources:
   - label: Perplexity blog
@@ -277,7 +277,7 @@
   category_keys:
   - ai-video
   summary: Runway is tracked because changes to Runway can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/runway/ffffff
+  logo_path: https://cdn.simpleicons.org/runway
   company_url: "/updates/runway/"
   official_sources:
   - label: Runway research
@@ -294,7 +294,7 @@
   category_keys:
   - creator-platforms
   summary: Twitch is tracked because changes to Twitch can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/twitch/ffffff
+  logo_path: https://cdn.simpleicons.org/twitch
   company_url: "/updates/twitch/"
   official_sources:
   - label: Twitch blog
@@ -311,7 +311,7 @@
   category_keys:
   - game-platforms
   summary: Valve tracking focuses on Steam platform changes, discovery, store policy, Steam Deck, launches, wishlists, reviews, and PC gaming behavior.
-  logo_path: https://cdn.simpleicons.org/steam/ffffff
+  logo_path: https://cdn.simpleicons.org/steam
   company_url: "/updates/valve/"
   official_sources:
   - label: Steam news
@@ -328,7 +328,7 @@
   category_keys:
   - creator-platforms
   summary: YouTube is tracked because changes to YouTube / YouTube Studio can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/youtube/ffffff
+  logo_path: https://cdn.simpleicons.org/youtube
   company_url: "/updates/youtube/"
   official_sources:
   - label: YouTube official blog
@@ -345,7 +345,7 @@
   category_keys:
   - video-production
   summary: Blender Foundation is tracked because changes to Blender can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/blender/ffffff
+  logo_path: https://cdn.simpleicons.org/blender
   company_url: "/updates/blender-foundation/"
   official_sources:
   - label: Blender releases
@@ -362,7 +362,7 @@
   category_keys:
   - design-workflow
   summary: Canva is tracked because changes to Canva can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/canva/ffffff
+  logo_path: https://cdn.simpleicons.org/canva
   company_url: "/updates/canva/"
   official_sources:
   - label: Canva newsroom
@@ -379,7 +379,7 @@
   category_keys:
   - dev-web
   summary: Cloudflare is tracked because changes to Cloudflare can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/cloudflare/ffffff
+  logo_path: https://cdn.simpleicons.org/cloudflare
   company_url: "/updates/cloudflare/"
   official_sources:
   - label: Cloudflare blog
@@ -413,7 +413,7 @@
   category_keys:
   - dev-web
   summary: Hugging Face is tracked because changes to Hugging Face can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/huggingface/ffffff
+  logo_path: https://cdn.simpleicons.org/huggingface
   company_url: "/updates/hugging-face/"
   official_sources:
   - label: Hugging Face blog
@@ -430,7 +430,7 @@
   category_keys:
   - hardware-drivers
   summary: Intel is tracked because changes to Intel Graphics / Arc can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/intel/ffffff
+  logo_path: https://cdn.simpleicons.org/intel
   company_url: "/updates/intel/"
   official_sources:
   - label: Intel download center
@@ -447,7 +447,7 @@
   category_keys:
   - workflow-automation
   summary: Make is tracked because changes to Make can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/make/ffffff
+  logo_path: https://cdn.simpleicons.org/make
   company_url: "/updates/make/"
   official_sources:
   - label: Make changelog
@@ -464,7 +464,7 @@
   category_keys:
   - dev-web
   summary: Netlify is tracked because changes to Netlify can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/netlify/ffffff
+  logo_path: https://cdn.simpleicons.org/netlify
   company_url: "/updates/netlify/"
   official_sources:
   - label: Netlify changelog
@@ -481,7 +481,7 @@
   category_keys:
   - workflow-automation
   summary: Notion is tracked because changes to Notion can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/notion/ffffff
+  logo_path: https://cdn.simpleicons.org/notion
   company_url: "/updates/notion/"
   official_sources:
   - label: Notion releases
@@ -515,7 +515,7 @@
   category_keys:
   - creator-platforms
   summary: Rumble is tracked because changes to Rumble can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/rumble/ffffff
+  logo_path: https://cdn.simpleicons.org/rumble
   company_url: "/updates/rumble/"
   official_sources:
   - label: Rumble blog
@@ -549,7 +549,7 @@
   category_keys:
   - game-engines
   summary: Unity is tracked because changes to Unity can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/unity/ffffff
+  logo_path: https://cdn.simpleicons.org/unity
   company_url: "/updates/unity/"
   official_sources:
   - label: Unity releases
@@ -566,7 +566,7 @@
   category_keys:
   - workflow-automation
   summary: Zapier is tracked because changes to Zapier can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/zapier/ffffff
+  logo_path: https://cdn.simpleicons.org/zapier
   company_url: "/updates/zapier/"
   official_sources:
   - label: Zapier updates
@@ -613,7 +613,7 @@
   - creator-hardware
   - capture-workflows
   summary: Elgato is tracked because Stream Deck, Wave Link, Camera Hub, and 4K Capture Utility updates can affect streaming controls, OBS actions, audio routing, camera behavior, capture-device reliability, firmware compatibility, and creator production uptime.
-  logo_path: https://cdn.simpleicons.org/elgato/ffffff
+  logo_path: https://cdn.simpleicons.org/elgato
   company_url: "/updates/elgato/"
   official_sources:
   - label: Stream Deck release notes
