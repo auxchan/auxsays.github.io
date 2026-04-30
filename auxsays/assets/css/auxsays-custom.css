@@ -4077,7 +4077,8 @@ button, input, select, textarea { font: inherit; }
   background: linear-gradient(180deg, rgba(12, 20, 26, .88), rgba(7, 12, 16, .74));
   box-shadow: inset 0 1px 0 rgba(255,255,255,.035), 0 18px 40px rgba(0,0,0,.22);
 }
-.update-decision-box--static { border-color: rgba(240, 202, 103, .36); }
+.update-decision-box--static,
+.update-decision-box--pilot { border-color: rgba(240, 202, 103, .36); }
 .update-decision-box--official { border-color: rgba(95, 212, 229, .28); }
 .update-decision-box--live { border-color: rgba(70, 209, 137, .40); }
 .update-decision-box--insufficient { border-color: rgba(255,255,255,.14); }
@@ -4092,7 +4093,7 @@ button, input, select, textarea { font: inherit; }
 .update-decision-box__header strong { font-size: clamp(1rem, 1.5vw, 1.22rem); color: var(--aux-text); line-height: 1.35; }
 .update-decision-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   gap: .65rem;
   margin: 0;
 }
@@ -4386,3 +4387,36 @@ button, input, select, textarea { font: inherit; }
   color: var(--text-0);
   font-size: .9rem;
 }
+
+
+/* Consensus foundation sprint: reusable evidence/status badge language */
+.evidence-badge,
+.stage-badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  padding: .28rem .58rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,.12);
+  background: rgba(255,255,255,.055);
+  color: var(--aux-text);
+  font-size: .7rem;
+  font-weight: 900;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.evidence-badge--official-only,
+.stage-badge--official-live { color: #9bdff0; border-color: rgba(95,212,229,.28); background: rgba(95,212,229,.08); }
+.evidence-badge--pilot-sample,
+.stage-badge--pilot { color: #f0ca67; border-color: rgba(240,202,103,.34); background: rgba(240,202,103,.10); }
+.evidence-badge--consensus-live,
+.stage-badge--consensus-live { color: #9af0be; border-color: rgba(70,209,137,.34); background: rgba(70,209,137,.10); }
+.evidence-badge--insufficient-data,
+.stage-badge--staged { color: rgba(230,234,236,.70); border-color: rgba(230,234,236,.18); background: rgba(230,234,236,.055); }
+.stage-badge--archived { color: rgba(230,234,236,.62); border-color: rgba(230,234,236,.14); background: rgba(230,234,236,.035); }
+
+.source-health-status--official-only { color: #9bdff0; border-color: rgba(95,212,229,.28); background: rgba(95,212,229,.08); }
+.source-health-status--pilot-sample { color: #f0ca67; border-color: rgba(240,202,103,.34); background: rgba(240,202,103,.10); }
+.source-health-status--consensus-live { color: #9af0be; border-color: rgba(70,209,137,.34); background: rgba(70,209,137,.10); }
+.source-health-status--insufficient-data { color: rgba(230,234,236,.70); border-color: rgba(230,234,236,.18); background: rgba(230,234,236,.055); }

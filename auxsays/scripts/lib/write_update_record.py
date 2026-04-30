@@ -9,6 +9,38 @@ from .normalize import slugify, utc_now, summarize, normalize_release_notes_body
 
 DEFAULT_CONSENSUS = "Insufficient data"
 
+EVIDENCE_STATE_ALIASES = {
+    "static_sample": "pilot_sample",
+    "static_initial_sample": "pilot_initial_sample",
+}
+
+CONSENSUS_STATUS_ALIASES = {
+    "static_initial_sample": "pilot_initial_sample",
+    "live_consensus": "consensus_live",
+}
+
+
+def _normalize_taxonomy(value: Any, aliases: dict[str, str]) -> str:
+    normalized = str(value or "").strip().lower().replace("-", "_")
+    return aliases.get(normalized, normalized)
+
+
+def _intelligence_stage(record: dict[str, Any], evidence_state: str, report_count: int, source_url: Any, body: str) -> str:
+    explicit = str(record.get("intelligence_stage") or "").strip().lower().replace("-", "_")
+    if explicit:
+        return explicit
+    if evidence_state == "consensus_live":
+        return "consensus_live"
+    if evidence_state in {"pilot_sample", "pilot_initial_sample"} or report_count > 0:
+        return "pilot"
+    if evidence_state == "official_only" and (source_url or body):
+        return "official_live"
+    if evidence_state == "archived":
+        return "archived"
+    if evidence_state == "insufficient_data":
+        return "staged"
+    return "staged"
+
 
 def _file_size_status(record: dict[str, Any]) -> str:
     if record.get("file_size"):
@@ -41,10 +73,17 @@ def build_front_matter(record: dict[str, Any]) -> dict[str, Any]:
     report_count = int(record.get("report_count") or record.get("update_report_count") or 0)
     consensus_label = record.get("consensus_label") or record.get("update_consensus_label") or DEFAULT_CONSENSUS
     consensus_confidence = record.get("consensus_confidence") or record.get("update_consensus_confidence") or "Low"
-    consensus_status = record.get("consensus_collection_status") or ("static_initial_sample" if report_count else "deferred_official_only")
-    evidence_state = record.get("evidence_state") or ("static_sample" if report_count else "official_only")
-    evidence_state_label = record.get("evidence_state_label") or ("Static sample" if report_count else "Official only")
+    consensus_status_raw = record.get("consensus_collection_status") or ("pilot_initial_sample" if report_count else "deferred_official_only")
+    consensus_status = _normalize_taxonomy(consensus_status_raw, CONSENSUS_STATUS_ALIASES)
+    evidence_state_raw = record.get("evidence_state") or ("pilot_sample" if report_count else "official_only")
+    evidence_state = _normalize_taxonomy(evidence_state_raw, EVIDENCE_STATE_ALIASES)
+    evidence_state_label = record.get("evidence_state_label")
+    if not evidence_state_label or str(evidence_state_label).strip().lower() == "static sample":
+        evidence_state_label = "Pilot sample" if evidence_state in {"pilot_sample", "pilot_initial_sample"} else "Official only"
+    intelligence_stage = _intelligence_stage(record, evidence_state, report_count, source_url, body)
     quick_verdict = record.get("quick_verdict") or f"{software} {version} has an official AUXSAYS record. Confirmed patch-specific consensus is deferred until the consensus refresh pipeline is active."
+    if evidence_state in {"pilot_sample", "pilot_initial_sample"}:
+        quick_verdict = record.get("quick_verdict") or f"{software} {version} includes a pilot sample of confirmed patch-specific reports. It is not live consensus yet."
     consensus_report = record.get("consensus_report") or "Confirmed patch-specific consensus collection is deferred. This page currently reflects official-source ingestion only."
     known_issues_present = record.get("known_issues_present")
     if known_issues_present is None and record.get("complaint_themes"):
@@ -87,6 +126,7 @@ def build_front_matter(record: dict[str, Any]) -> dict[str, Any]:
         "consensus_report": consensus_report,
         "evidence_state": evidence_state,
         "evidence_state_label": evidence_state_label,
+        "intelligence_stage": intelligence_stage,
         "official_source_captured": bool(source_url or body),
         "confirmed_patch_specific_report_count": report_count,
         "known_issues_present": known_issues_present,

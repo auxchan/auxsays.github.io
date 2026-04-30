@@ -30,7 +30,7 @@ permalink: /updates/methodology/
 
     <article class="methodology-card">
       <h2>Community consensus</h2>
-      <p>Community consensus is separate from official ingestion. It is not treated as live unless the page explicitly says <strong>Consensus live</strong>. Static samples are labeled as samples and should not be read as live telemetry.</p>
+      <p>Community consensus is separate from official ingestion. It is not treated as live unless the page explicitly says <strong>Consensus live</strong>. Pilot samples are labeled as samples and should not be read as live telemetry.</p>
       <p>When consensus collection is implemented, every confirmed patch-specific report will count equally. Official forums, dedicated forums, Reddit, GitHub Issues, or other public sources may be labeled by source type for auditability, but source type does not multiply or discount the report.</p>
     </article>
 
@@ -54,12 +54,24 @@ permalink: /updates/methodology/
       <p>Low-context reports are excluded entirely. They are not downweighted or used as weak signals.</p>
     </article>
 
+
+    <article class="methodology-card">
+      <h2>Intelligence stages</h2>
+      <dl class="methodology-definition-list">
+        <div><dt>Staged</dt><dd>The source, product, or record is configured, but it is not yet producing reliable official records.</dd></div>
+        <div><dt>Official live</dt><dd>Official-source capture is active. The page records what changed, without claiming community consensus.</dd></div>
+        <div><dt>Pilot</dt><dd>Confirmed patch-specific report counts have been manually encoded or previously captured for a limited pilot record.</dd></div>
+        <div><dt>Consensus live</dt><dd>Confirmed patch-specific reports are refreshed through the consensus pipeline and backed by structured evidence objects.</dd></div>
+        <div><dt>Archived</dt><dd>The record is preserved for history but no longer refreshed.</dd></div>
+      </dl>
+    </article>
+
     <article class="methodology-card">
       <h2>Evidence states</h2>
       <dl class="methodology-definition-list">
-        <div><dt>Consensus live</dt><dd>Confirmed patch-specific reports are actively refreshed by a consensus pipeline.</dd></div>
+        <div><dt>Consensus live</dt><dd>Confirmed patch-specific reports are actively refreshed by the consensus pipeline and backed by structured evidence objects.</dd></div>
         <div><dt>Official only</dt><dd>An official source has been captured, but no confirmed patch-specific community reports are counted yet.</dd></div>
-        <div><dt>Static sample</dt><dd>The page contains manually encoded or previously captured confirmed patch-specific report data. It is not live telemetry.</dd></div>
+        <div><dt>Pilot sample</dt><dd>The page contains manually encoded or previously captured confirmed patch-specific report data. It is not live telemetry and does not imply automated live refresh.</dd></div>
         <div><dt>Insufficient data</dt><dd>AUXSAYS has not captured enough official or community evidence to support a verdict beyond a placeholder state.</dd></div>
       </dl>
     </article>

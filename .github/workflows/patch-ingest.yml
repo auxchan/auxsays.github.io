@@ -143,6 +143,9 @@ jobs:
       - name: Generate source health snapshot
         run: python auxsays/scripts/source_health_snapshot.py
 
+      - name: Run generated patch record QA
+        run: python -S auxsays/scripts/qa_patch_records.py
+
       - name: Build site
         working-directory: ./auxsays
         run: bundle exec jekyll build --trace

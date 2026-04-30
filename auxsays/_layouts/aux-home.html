@@ -143,7 +143,11 @@ layout: aux-base
               {% assign report_count = item.update_report_count | default: 0 | plus: 0 %}
               {% assign known_issues_value = item.known_issues_present | default: false %}
               {% assign evidence_state = item.evidence_state | default: 'insufficient_data' | downcase | replace: '-', '_' %}
+              {% if evidence_state == 'static_sample' %}{% assign evidence_state = 'pilot_sample' %}{% endif %}
+              {% if evidence_state == 'static_initial_sample' %}{% assign evidence_state = 'pilot_initial_sample' %}{% endif %}
               {% assign intelligence_stage = item.intelligence_stage | default: '' | downcase | replace: '-', '_' %}
+              {% if intelligence_stage == '' and evidence_state == 'official_only' %}{% assign intelligence_stage = 'official_live' %}{% endif %}
+              {% if intelligence_stage == '' and evidence_state contains 'pilot' %}{% assign intelligence_stage = 'pilot' %}{% endif %}
               {% assign consensus_label = item.update_consensus_label | default: item.community_reaction | default: item.current_consensus | default: 'Insufficient data' %}
               {% assign consensus_key = consensus_label | downcase | replace: ' ', '-' %}
               {% assign is_known_issue = false %}
@@ -151,7 +155,7 @@ layout: aux-base
                 {% assign is_known_issue = true %}
               {% endif %}
               {% assign has_evidence_signal = false %}
-              {% if report_count > 0 or is_known_issue == true or evidence_state == 'pilot_sample' or evidence_state == 'static_sample' or evidence_state == 'static_initial_sample' or evidence_state == 'consensus_live' or intelligence_stage == 'pilot' or item.homepage_featured == true %}
+              {% if report_count > 0 or is_known_issue == true or evidence_state == 'pilot_sample' or evidence_state == 'pilot_initial_sample' or evidence_state == 'consensus_live' or intelligence_stage == 'pilot' or item.homepage_featured == true %}
                 {% assign has_evidence_signal = true %}
               {% endif %}
 
@@ -170,7 +174,7 @@ layout: aux-base
 
               {% if show_signal and home_patch_count < home_patch_limit %}
                 {% assign evidence_label = item.evidence_state_label | default: evidence_state | replace: '_', ' ' | capitalize %}
-                {% if evidence_state == 'static_sample' or evidence_state == 'static_initial_sample' %}
+                {% if evidence_state == 'pilot_sample' or evidence_state == 'pilot_initial_sample' %}
                   {% assign evidence_label = 'Pilot sample' %}
                 {% endif %}
                 {% assign stage_label = item.intelligence_stage_label | default: item.intelligence_stage | default: '' | replace: '_', ' ' | capitalize %}

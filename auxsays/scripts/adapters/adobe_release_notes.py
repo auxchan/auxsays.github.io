@@ -199,19 +199,20 @@ def _premiere_262_static_consensus(version: str) -> dict[str, Any]:
         "consensus_score_percent": 38,
         "report_count": 7,
         "consensus_confidence": "Low",
-        "consensus_collection_status": "static_initial_sample",
-        "evidence_state": "static_sample",
-        "evidence_state_label": "Static sample",
+        "consensus_collection_status": "pilot_initial_sample",
+        "evidence_state": "pilot_sample",
+        "evidence_state_label": "Pilot sample",
+        "intelligence_stage": "pilot",
         "known_issues_present": True,
         "quick_verdict": (
-            "Premiere Pro 26.2 has an official Adobe release record and an initial AUXSAYS static sample of "
+            "Premiere Pro 26.2 has an official Adobe release record and an initial AUXSAYS pilot sample of "
             "confirmed patch-specific Adobe Community reports. Treat this as a caution build for production systems "
             "until live consensus refresh is active."
         ),
         "consensus_report": (
             "Initial confirmed patch-specific sample is cautionary. Adobe Community bug reports naming Premiere Pro "
             "26.2/26.2.0 include repeated crash, UI lag, freezing, project-open delay, and system-hang reports. "
-            "This is not yet live telemetry; it is a static seed based on explicit 26.2 community reports."
+            "This is not yet live telemetry; it is a pilot seed based on explicit 26.2 community reports."
         ),
         "complaint_themes": [
             {"theme": "UI lag, freezing, or system hang", "frequency": "4 confirmed reports", "severity": "High"},
