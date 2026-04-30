@@ -6,7 +6,7 @@
     "generate:patch-logos": "node scripts/generate_patch_logos.mjs"
   },
   "devDependencies": {
-    "simple-icons": "^14.0.0",
-    "js-yaml": "^4.1.0"
-  }
+    "simple-icons": "^14.0.0"
+  },
+  "description": "AUXSAYS site tooling. Patch logo generation is disabled in favor of explicit curated/official logo_path values."
 }

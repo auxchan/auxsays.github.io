@@ -42,13 +42,6 @@ jobs:
       - name: Install source health dependencies
         run: pip install -r auxsays/scripts/requirements-ingest.txt
 
-      - name: Install logo generation dependencies
-        working-directory: ./auxsays
-        run: npm install --no-audit --no-fund
-
-      - name: Generate Patch Feed logos
-        working-directory: ./auxsays
-        run: npm run generate:patch-logos
 
       - name: Install image metadata tools
         run: |

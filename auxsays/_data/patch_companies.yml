@@ -618,7 +618,7 @@
   - productivity
   summary: Microsoft is tracked because Windows 11, Teams, PowerPoint, and Microsoft 365 Apps updates can affect security posture,
     workplace reliability, presentation delivery, meetings, collaboration, gaming performance, and creator workstation stability.
-  logo_path: /assets/img/patch-logos/microsoft.svg
+  logo_path: https://msftstories.thesourcemediaassets.com/2022/05/Microsoft-logo_rgb_c-wht-768x344.png
   company_url: /updates/microsoft/
   official_sources:
   - label: Windows release health

@@ -1489,7 +1489,7 @@
     GPU/driver interaction, capture devices, audio routing, and rollout channel.
   source_id: microsoft-windows-11
   logo_label: Windows 11
-  logo_path: /assets/img/patch-logos/microsoft-windows-11.svg
+  logo_path: https://msftstories.thesourcemediaassets.com/2022/05/Microsoft-logo_rgb_c-wht-768x344.png
   company_id: microsoft
   product_id: microsoft-windows-11
   company_url: /updates/microsoft/
@@ -1525,7 +1525,7 @@
   signal_notes: Track client version rollout, meeting reliability, audio/video behavior, screen sharing, tenant/admin impact, and staged rollout.
   source_id: microsoft-teams
   logo_label: Teams
-  logo_path: /assets/img/patch-logos/microsoft-teams.svg
+  logo_path: https://www.microsoft.com/content/dam/microsoft/bade/images/icons/en-us/m365-app-icons-fy26/Teams-Icon-FY26.svg
   company_id: microsoft
   product_id: microsoft-teams
   company_url: /updates/microsoft/
@@ -1558,7 +1558,7 @@
   signal_notes: Track channel-specific rollout, presentation/export reliability, embedded media, collaboration, add-ins, and Copilot behavior.
   source_id: microsoft-powerpoint
   logo_label: PowerPoint
-  logo_path: /assets/img/patch-logos/microsoft-powerpoint.svg
+  logo_path: https://www.microsoft.com/content/dam/microsoft/bade/images/icons/en-us/m365-app-icons-fy26/PowerPoint-Icon-FY26.svg
   company_id: microsoft
   product_id: microsoft-powerpoint
   company_url: /updates/microsoft/
@@ -1592,7 +1592,7 @@
     collaboration, and Copilot behavior.
   source_id: microsoft-365-apps
   logo_label: M365
-  logo_path: /assets/img/patch-logos/microsoft-365-apps.svg
+  logo_path: https://cdn-dynmedia-1.microsoft.com/is/content/microsoftcorp/product-icon-M365-Copilot-48x48?fit=constrain&hei=48&op_usm=1.5%2C0.65%2C15%2C0&qlt=100&resMode=sharp2&wid=48
   company_id: microsoft
   product_id: microsoft-365-apps
   company_url: /updates/microsoft/
