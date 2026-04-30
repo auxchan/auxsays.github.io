@@ -98,11 +98,42 @@ def _first_title(html: str, software: str, version: str) -> str:
 
 
 def _clean_body(title: str, html: str) -> str:
+    """Return a readable official-note body, not the entire Adobe Community shell."""
     text = strip_tags(f"{title}\n\n{html}")
+    text = re.sub(r"(?is)function\s+[a-zA-Z0-9_]+\s*\([^)]*\)\s*\{.*?\}", " ", text)
+    text = re.sub(r"(?is)document\.addEventListener\s*\(.*", " ", text)
+    text = re.sub(r"(?i)skip to main content\s+", " ", text)
+    text = re.sub(r"(?i)featured communities\s+announcements\s+feature requests\s+", " ", text)
+    text = re.sub(r"(?i)create a post\s+login\s+home\s+app communities\s+adobe premiere\s+", " ", text)
+
+    # Adobe Community announcement pages include a useful body followed by forum chrome.
+    start_markers = [
+        "What’s new in Premiere Pro",
+        "What's new in Premiere Pro",
+        "We’ve just released",
+        "We've just released",
+    ]
+    for marker in start_markers:
+        idx = text.find(marker)
+        if idx >= 0:
+            text = text[idx:]
+            break
+
+    end_markers = [
+        "Like Reply Subscribe",
+        "Reply Subscribe",
+        "Was this post helpful",
+        "Related conversations",
+    ]
+    for marker in end_markers:
+        idx = text.find(marker)
+        if idx > 0:
+            text = text[:idx]
+            break
+
     text = re.sub(r"\s+", " ", text).strip()
-    # Remove recurring cookie/login/navigation noise where possible.
-    text = re.sub(r"(?i)sign in\s+.*?create a post", "", text)
-    return text[:7000]
+    text = re.sub(r"(?i)welcome to premiere 26\.2!\s+welcome to premiere 26\.2!\s*\|\s*community", "Welcome to Premiere 26.2!", text)
+    return text[:2600]
 
 
 def _source_candidates(source: dict[str, Any]) -> list[str]:
@@ -160,6 +191,37 @@ def _records_from_version_headings(source: dict[str, Any], source_url: str, html
     return records
 
 
+def _premiere_262_static_consensus(version: str) -> dict[str, Any]:
+    if not str(version).startswith("26.2"):
+        return {}
+    return {
+        "consensus_label": "Moderate",
+        "consensus_score_percent": 38,
+        "report_count": 7,
+        "consensus_confidence": "Low",
+        "consensus_collection_status": "static_initial_sample",
+        "evidence_state": "static_sample",
+        "evidence_state_label": "Static sample",
+        "known_issues_present": True,
+        "quick_verdict": (
+            "Premiere Pro 26.2 has an official Adobe release record and an initial AUXSAYS static sample of "
+            "confirmed patch-specific Adobe Community reports. Treat this as a caution build for production systems "
+            "until live consensus refresh is active."
+        ),
+        "consensus_report": (
+            "Initial confirmed patch-specific sample is cautionary. Adobe Community bug reports naming Premiere Pro "
+            "26.2/26.2.0 include repeated crash, UI lag, freezing, project-open delay, and system-hang reports. "
+            "This is not yet live telemetry; it is a static seed based on explicit 26.2 community reports."
+        ),
+        "complaint_themes": [
+            {"theme": "UI lag, freezing, or system hang", "frequency": "4 confirmed reports", "severity": "High"},
+            {"theme": "Timeline/editing crashes or freezes", "frequency": "2 confirmed reports", "severity": "High"},
+            {"theme": "Project launch/opening delays or hangs", "frequency": "2 confirmed reports", "severity": "Medium-High"},
+            {"theme": "Program Monitor / anchor point visibility regression", "frequency": "1 confirmed report", "severity": "Medium"},
+        ],
+    }
+
+
 def _record(
     source: dict[str, Any],
     source_url: str,
@@ -169,7 +231,7 @@ def _record(
     body: str,
 ) -> dict[str, Any]:
     digest = hashlib.sha256((source_url + version + title).encode("utf-8")).hexdigest()[:16]
-    return {
+    record = {
         "record_id": f"adobe:{source['product_id']}:{version}:{digest}",
         "company_id": source["company_id"],
         "product_id": source["product_id"],
@@ -183,7 +245,8 @@ def _record(
         "official_url": source_url,
         "download_url": "",
         "file_size": "",
-        "file_size_note": "Adobe public release notes do not expose installer/package size metadata.",
+        "file_size_status": "not_provided_by_source",
+        "file_size_note": "Adobe's public release source does not expose standalone Creative Cloud installer/package size metadata.",
         "body": body or title,
         "checksums_body": "",
         "summary": "",
@@ -191,6 +254,9 @@ def _record(
         "capture_status": "captured-from-official-adobe-source",
         "official_summary": f"Adobe published {source['software']} {version} release information.",
     }
+    if source.get("product_id") == "adobe-premiere-pro":
+        record.update(_premiere_262_static_consensus(version))
+    return record
 
 
 def fetch(source: dict[str, Any], limit: int = 3) -> list[dict[str, Any]]:

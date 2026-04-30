@@ -4330,3 +4330,13 @@ button, input, select, textarea { font: inherit; }
 @media (max-width: 760px) {
   .source-health-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
+
+
+/* Explicit metadata field states for patch records */
+.update-meta-strip .update-meta-chip--field-state {
+  color: rgba(218, 226, 229, .78);
+  border-color: rgba(218, 226, 229, .24);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015));
+  box-shadow: none;
+}

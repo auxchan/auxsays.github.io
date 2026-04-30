@@ -9,6 +9,16 @@ from .normalize import slugify, utc_now, summarize, normalize_release_notes_body
 
 DEFAULT_CONSENSUS = "Insufficient data"
 
+
+def _file_size_status(record: dict[str, Any]) -> str:
+    if record.get("file_size"):
+        return "captured"
+    if record.get("file_size_status"):
+        return str(record.get("file_size_status"))
+    if record.get("file_size_note"):
+        return "not_provided_by_source"
+    return "pending_adapter_support"
+
 def record_slug(record: dict[str, Any]) -> str:
     version = record.get("version") or record.get("title") or record.get("record_id")
     return slugify(version)
@@ -28,6 +38,21 @@ def build_front_matter(record: dict[str, Any]) -> dict[str, Any]:
     source_url = record.get("source_url") or record.get("official_url")
     body = normalize_release_notes_body(record.get("body") or "No official release-note body was captured.")
     summary = record.get("summary") or summarize(body)
+    report_count = int(record.get("report_count") or record.get("update_report_count") or 0)
+    consensus_label = record.get("consensus_label") or record.get("update_consensus_label") or DEFAULT_CONSENSUS
+    consensus_confidence = record.get("consensus_confidence") or record.get("update_consensus_confidence") or "Low"
+    consensus_status = record.get("consensus_collection_status") or ("static_initial_sample" if report_count else "deferred_official_only")
+    evidence_state = record.get("evidence_state") or ("static_sample" if report_count else "official_only")
+    evidence_state_label = record.get("evidence_state_label") or ("Static sample" if report_count else "Official only")
+    quick_verdict = record.get("quick_verdict") or f"{software} {version} has an official AUXSAYS record. Confirmed patch-specific consensus is deferred until the consensus refresh pipeline is active."
+    consensus_report = record.get("consensus_report") or "Confirmed patch-specific consensus collection is deferred. This page currently reflects official-source ingestion only."
+    known_issues_present = record.get("known_issues_present")
+    if known_issues_present is None and record.get("complaint_themes"):
+        known_issues_present = True
+    status_events = record.get("status_events") or [
+        {"at": published, "label": "Published", "note": "Official source entry detected."},
+        {"at": utc_now(), "label": consensus_label, "note": "AUXSAYS official-ingestion record initialized."},
+    ]
     return {
         "layout": "aux-update",
         "title": f"{software} {version} official update breakdown",
@@ -49,32 +74,30 @@ def build_front_matter(record: dict[str, Any]) -> dict[str, Any]:
         "update_last_checked": utc_now(),
         "patch_file_size": record.get("file_size") or "",
         "patch_file_size_note": record.get("file_size_note") or "",
+        "patch_file_size_status": _file_size_status(record),
         "update_status": "current",
         "update_feed_title": f"{software} {version}",
         "update_detail_title": f"{software} {version}",
-        "update_consensus_label": DEFAULT_CONSENSUS,
-        "update_report_count": 0,
-        "update_consensus_confidence": "Low",
-        "quick_verdict": f"{software} {version} has an official AUXSAYS record. Confirmed patch-specific consensus is deferred until the consensus refresh pipeline is active.",
+        "update_consensus_label": consensus_label,
+        "update_report_count": report_count,
+        "update_consensus_confidence": consensus_confidence,
+        "quick_verdict": quick_verdict,
         "official_summary": record.get("official_summary") or f"{company} published {software} {version}.",
         "release_summary": summary,
-        "consensus_report": "Confirmed patch-specific consensus collection is deferred. This page currently reflects official-source ingestion only.",
-        "evidence_state": "official_only",
-        "evidence_state_label": "Official only",
+        "consensus_report": consensus_report,
+        "evidence_state": evidence_state,
+        "evidence_state_label": evidence_state_label,
         "official_source_captured": bool(source_url or body),
-        "confirmed_patch_specific_report_count": 0,
-        "known_issues_present": None,
-        "consensus_collection_status": "deferred_official_only",
+        "confirmed_patch_specific_report_count": report_count,
+        "known_issues_present": known_issues_present,
+        "consensus_collection_status": consensus_status,
         "consensus_match_policy": "confirmed_patch_specific_reports_v1",
         "consensus_match_policy_label": "Confirmed patch-specific reports only",
         "consensus_report_count_label": "confirmed patch-specific reports",
         "consensus_report_weighting": "equal_per_confirmed_report",
         "consensus_low_context_policy": "excluded",
-        "complaint_themes": [],
-        "status_events": [
-            {"at": published, "label": "Published", "note": "Official source entry detected."},
-            {"at": utc_now(), "label": DEFAULT_CONSENSUS, "note": "AUXSAYS official-ingestion record initialized."},
-        ],
+        "complaint_themes": record.get("complaint_themes") or [],
+        "status_events": status_events,
         "official_patch_notes_source_type": record.get("source_type") or "official-source",
         "official_patch_notes_capture_status": record.get("capture_status") or "captured-from-official-source",
         "official_patch_notes_source_url": source_url,

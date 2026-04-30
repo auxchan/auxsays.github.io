@@ -70,6 +70,23 @@ layout: aux-base
 {% assign file_size_present = false %}
 {% assign patch_file_size_clean = page.patch_file_size | default: '' | strip %}
 {% if patch_file_size_clean != blank and patch_file_size_clean != 'Not captured' and patch_file_size_clean != 'Unknown' and patch_file_size_clean != 'null' %}{% assign file_size_present = true %}{% endif %}
+{% assign file_size_label = patch_file_size_clean %}
+{% assign file_size_meta_class = 'update-meta-chip--filesize' %}
+{% if file_size_present == false %}
+  {% assign file_size_state = page.patch_file_size_status | default: '' | strip %}
+  {% if file_size_state == 'not_provided_by_source' %}
+    {% assign file_size_label = 'Not provided by source' %}
+    {% assign file_size_meta_class = 'update-meta-chip--filesize update-meta-chip--field-state' %}
+  {% elsif file_size_state == 'creative_cloud_managed' %}
+    {% assign file_size_label = 'Creative Cloud-managed' %}
+    {% assign file_size_meta_class = 'update-meta-chip--filesize update-meta-chip--field-state' %}
+  {% elsif page.patch_file_size_note != blank %}
+    {% assign file_size_label = 'Not provided by source' %}
+    {% assign file_size_meta_class = 'update-meta-chip--filesize update-meta-chip--field-state' %}
+  {% endif %}
+{% endif %}
+{% assign file_size_renderable = false %}
+{% if file_size_present or file_size_label != blank %}{% assign file_size_renderable = true %}{% endif %}
 {% assign checksum_present = false %}
 {% if page.official_checksums_body != blank %}{% assign checksum_present = true %}{% endif %}
 
@@ -95,7 +112,7 @@ layout: aux-base
         {% if company %}<a href="{{ company.company_url | relative_url }}">Company: {{ company.company_name }}</a>{% endif %}
         {% if product %}<a href="{{ product.product_url | relative_url }}">Software: {{ product.product_name }}</a>{% endif %}
         {% if page.update_version != blank %}<span>Patch: {{ page.update_version }}</span>{% endif %}
-        {% if file_size_present %}<span class="update-meta-chip--filesize"{% if page.patch_file_size_note != blank %} title="{{ page.patch_file_size_note | escape }}"{% endif %}>File size: {{ patch_file_size_clean }}</span>{% endif %}
+        {% if file_size_renderable %}<span class="{{ file_size_meta_class }}"{% if page.patch_file_size_note != blank %} title="{{ page.patch_file_size_note | escape }}"{% endif %}>File size: {{ file_size_label }}</span>{% endif %}
         {% if page.update_published_at != blank %}<span>Patch released: {{ page.update_published_at | date: "%b %-d, %Y" }}</span>{% endif %}
         {% if page.update_last_checked != blank %}<span>Last checked: {{ page.update_last_checked | date: "%b %-d, %Y" }}</span>{% endif %}
       </div>
