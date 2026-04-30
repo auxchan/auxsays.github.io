@@ -3,25 +3,23 @@
   "last_results": [
     {
       "adapter": "rss_feed",
-      "duration_ms": 1456,
+      "duration_ms": 1150,
       "fetched": 2,
       "product_id": "figma",
       "skipped": [
         {
           "reason": "state-seen",
           "record_id": "rss:figma:0dcbfd47-b88e-4828-977a-b56b7769f89a"
-        },
-        {
-          "reason": "state-seen",
-          "record_id": "rss:figma:9923866c-4511-4991-8536-75f226c095a5"
         }
       ],
       "status": "success",
-      "written": []
+      "written": [
+        "auxsays/updates/generated/2026-04-30-figma-new-in-make-voice-to-text-question-cards-and-more.md"
+      ]
     },
     {
       "adapter": "adobe_release_notes",
-      "duration_ms": 569,
+      "duration_ms": 25813,
       "fetched": 1,
       "product_id": "adobe-premiere-pro",
       "skipped": [
@@ -35,7 +33,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 815,
+      "duration_ms": 672,
       "fetched": 2,
       "product_id": "obs-studio",
       "skipped": [
@@ -53,7 +51,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 590,
+      "duration_ms": 351,
       "fetched": 2,
       "product_id": "comfyui",
       "skipped": [
@@ -71,25 +69,23 @@
     },
     {
       "adapter": "rss_feed",
-      "duration_ms": 50,
+      "duration_ms": 33,
       "fetched": 2,
       "product_id": "github",
       "skipped": [
         {
           "reason": "state-seen",
           "record_id": "rss:github:https://github.blog/changelog/2026-04-23-copilot-student-gpt-5-3-codex-removal-from-model-picker"
-        },
-        {
-          "reason": "state-seen",
-          "record_id": "rss:github:https://github.blog/changelog/2026-04-27-copilot-cloud-agent-starts-20-faster-with-actions-custom-images"
         }
       ],
       "status": "success",
-      "written": []
+      "written": [
+        "auxsays/updates/generated/2026-04-30-github-copilot-github-copilot-in-visual-studio-april-update.md"
+      ]
     },
     {
       "adapter": "html_changelog",
-      "duration_ms": 114,
+      "duration_ms": 150,
       "fetched": 0,
       "product_id": "netlify",
       "skipped": [],
@@ -97,8 +93,8 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-04-30T08:38:36Z",
-  "last_run_started_at": "2026-04-30T08:38:32Z",
+  "last_run_finished_at": "2026-04-30T17:05:03Z",
+  "last_run_started_at": "2026-04-30T17:04:35Z",
   "sources": {
     "adobe-after-effects": {
       "consecutive_failures": 2,
@@ -163,7 +159,7 @@
     "adobe-premiere-pro": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_release_notes",
-      "last_checked_at": "2026-04-30T08:38:34Z",
+      "last_checked_at": "2026-04-30T17:04:36Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -171,8 +167,8 @@
       "last_records_fetched": 1,
       "last_records_skipped": 1,
       "last_records_written": 0,
-      "last_run_duration_ms": 569,
-      "last_success_at": "2026-04-30T08:38:34Z",
+      "last_run_duration_ms": 25813,
+      "last_success_at": "2026-04-30T17:04:36Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "adobe:adobe-premiere-pro:26.2:9fa3e1e53c0b275d"
@@ -182,7 +178,7 @@
     "comfyui": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-04-30T08:38:35Z",
+      "last_checked_at": "2026-04-30T17:05:02Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -190,8 +186,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 2,
       "last_records_written": 0,
-      "last_run_duration_ms": 590,
-      "last_success_at": "2026-04-30T08:38:35Z",
+      "last_run_duration_ms": 351,
+      "last_success_at": "2026-04-30T17:05:02Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:comfyui:310487464",
@@ -202,18 +198,19 @@
     "figma": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-04-30T08:38:32Z",
+      "last_checked_at": "2026-04-30T17:04:35Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 2,
-      "last_records_skipped": 2,
-      "last_records_written": 0,
-      "last_run_duration_ms": 1456,
-      "last_success_at": "2026-04-30T08:38:32Z",
+      "last_records_skipped": 1,
+      "last_records_written": 1,
+      "last_run_duration_ms": 1150,
+      "last_success_at": "2026-04-30T17:04:35Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "rss:figma:9de2d329-519d-4e1d-b0ca-f81528c285a8",
         "rss:figma:9923866c-4511-4991-8536-75f226c095a5",
         "rss:figma:0dcbfd47-b88e-4828-977a-b56b7769f89a",
         "rss:figma:5aff1eb4-6095-46fe-8afa-4fbd9885f719",
@@ -226,18 +223,19 @@
     "github": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-04-30T08:38:36Z",
+      "last_checked_at": "2026-04-30T17:05:03Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 2,
-      "last_records_skipped": 2,
-      "last_records_written": 0,
-      "last_run_duration_ms": 50,
-      "last_success_at": "2026-04-30T08:38:36Z",
+      "last_records_skipped": 1,
+      "last_records_written": 1,
+      "last_run_duration_ms": 33,
+      "last_success_at": "2026-04-30T17:05:03Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "rss:github:https://github.blog/changelog/2026-04-28-github-copilot-in-visual-studio-april-update",
         "rss:github:https://github.blog/changelog/2026-04-27-copilot-cloud-agent-starts-20-faster-with-actions-custom-images",
         "rss:github:https://github.blog/changelog/2026-04-23-copilot-student-gpt-5-3-codex-removal-from-model-picker"
       ],
@@ -246,7 +244,7 @@
     "netlify": {
       "consecutive_failures": 0,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-04-30T08:38:36Z",
+      "last_checked_at": "2026-04-30T17:05:03Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -254,15 +252,15 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 114,
-      "last_success_at": "2026-04-30T08:38:36Z",
+      "last_run_duration_ms": 150,
+      "last_success_at": "2026-04-30T17:05:03Z",
       "previous_consecutive_failures": 0,
       "status": "degraded"
     },
     "obs-studio": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-04-30T08:38:34Z",
+      "last_checked_at": "2026-04-30T17:05:01Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -270,8 +268,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 2,
       "last_records_written": 0,
-      "last_run_duration_ms": 815,
-      "last_success_at": "2026-04-30T08:38:34Z",
+      "last_run_duration_ms": 672,
+      "last_success_at": "2026-04-30T17:05:01Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:obs-studio:304830335",
