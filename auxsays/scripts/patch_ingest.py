@@ -15,11 +15,11 @@ from __future__ import annotations
 import argparse
 import importlib
 import json
-import re
 import sys
 import time
 from pathlib import Path
 from typing import Any
+import re
 
 import yaml
 
@@ -35,18 +35,19 @@ DEFAULT_CONFIG = Path("auxsays/_data/patch_ingestion_sources.yml")
 DEFAULT_STATE = Path("auxsays/_data/patch_ingest_state.json")
 DEFAULT_OUTPUT = Path("auxsays/updates/generated")
 
-RAW_URL_RE = re.compile(r"https?://[^\s\]\)]+")
+URL_RE = re.compile(r"https?://[^\s\])}>\"']+")
 
-def public_error_message(message: str) -> str:
-    """Remove raw URLs from top-level logs/state errors.
 
-    URLs stay available in source config and structured records. The headline
-    error should explain what failed without GitHub auto-linking a long vendor
-    URL and making it look malformed.
+def sanitize_error_message(message: object) -> str:
+    """Keep Action headlines readable while preserving URLs in source config/state.
+
+    GitHub Actions auto-links URLs in log output. For fetch failures, that makes
+    the URL dominate the error and has repeatedly made punctuation look like
+    part of the URL. The source URL remains auditable in configuration and source
+    health metadata; the top-level error should explain the failure.
     """
-    clean = RAW_URL_RE.sub("[official source URL]", str(message or ""))
-    clean = re.sub(r"\s+", " ", clean).strip()
-    return clean or "Unknown ingestion error"
+    text = str(message)
+    return URL_RE.sub("[source URL]", text)
 
 def load_sources(path: Path) -> list[dict[str, Any]]:
     if not path.exists():
@@ -155,8 +156,7 @@ def main() -> int:
         except Exception as exc:
             product_id = source.get("product_id")
             adapter_name = source.get("ingestion", {}).get("adapter") or source.get("ingestion", {}).get("type") or "unknown"
-            safe_error = public_error_message(str(exc))
-            error = {"product_id": product_id, "adapter": adapter_name, "error": safe_error}
+            error = {"product_id": product_id, "adapter": adapter_name, "error": sanitize_error_message(exc)}
             errors.append(error)
             if not args.dry_run and product_id:
                 update_source_error(
@@ -165,7 +165,7 @@ def main() -> int:
                     checked_at=utc_now(),
                     duration_ms=0,
                     adapter=adapter_name,
-                    error=safe_error,
+                    error=sanitize_error_message(exc),
                 )
             print(f"[ERROR] {error['product_id']}: {error['error']}", file=sys.stderr)
             if args.strict:

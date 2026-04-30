@@ -925,8 +925,8 @@
   ingestion:
     type: html_changelog
     adapter: adobe_release_notes
-    official_url: https://helpx.adobe.com/premiere/desktop/whats-new/release-notes.html
-    secondary_official_url: https://helpx.adobe.com/premiere/desktop/troubleshooting/limitations-and-known-issues/known-and-fixed-issues.html
+    official_url: https://community.adobe.com/announcements-727/welcome-to-premiere-26-2-1557825
+    secondary_official_url: https://helpx.adobe.com/premiere/desktop/whats-new/release-notes.html
     feed_url: null
     api_url: null
     parser_profile: adobe_premiere_release_notes
@@ -938,11 +938,11 @@
     download_selector: null
     checksum_selector: null
     requires_javascript: false
-    scrape_feasibility: Medium
-    reliability: High
+    scrape_feasibility: Medium-High
+    reliability: Medium-High
     breakage_risk: Medium
     polling_frequency: 24h
-    update_detection_method: version/date comparison
+    update_detection_method: Adobe official community announcement with HelpX release-note fallback
     extractable_fields:
       version: true
       release_date: true
@@ -965,10 +965,11 @@
     - nle
     - video editing
     request:
-      timeout_seconds: 30
-      retries: 1
-      backoff_seconds: 2.5
-      max_bytes: 750000
+      timeout_seconds: 25
+      retries: 0
+      backoff_seconds: 2.0
+      max_bytes: 500000
+      curl_fallback: false
       headers:
         Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8
         Accept-Language: en-US,en;q=0.9
@@ -1009,7 +1010,7 @@
     - Reddit
     difficulty: TBD
     defer_until_official_ingestion_stable: true
-  source_health_note: Active Adobe test lane. Other Adobe products remain staged until this adapter proves stable.
+  source_health_note: Active Adobe test lane. Uses a fetch-stable official Adobe Community announcement as primary source and HelpX release notes as secondary reference.
 - company_id: adobe
   product_id: adobe-after-effects
   company: Adobe
