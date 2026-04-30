@@ -25,40 +25,22 @@ layout: aux-base
   {% assign display_title = page.update_product | append: ' ' | append: page.update_version %}
 {% endif %}
 {% assign report_count = page.update_report_count | default: 0 | plus: 0 %}
-{% assign collection_status = page.consensus_collection_status | default: 'deferred_official_only' | downcase | replace: '-', '_' %}
-{% if collection_status == 'static_initial_sample' %}{% assign collection_status = 'pilot_initial_sample' %}{% endif %}
-{% if collection_status == 'live_consensus' %}{% assign collection_status = 'consensus_live' %}{% endif %}
+{% assign collection_status = page.consensus_collection_status | default: 'deferred_official_only' %}
 {% assign source_url_present = false %}
 {% if page.update_source_url != blank or page.official_patch_notes_source_url != blank %}{% assign source_url_present = true %}{% endif %}
 {% assign official_body_present = false %}
 {% if page.official_patch_notes_body != blank %}{% assign official_body_present = true %}{% endif %}
 {% assign official_captured = false %}
 {% if source_url_present or official_body_present %}{% assign official_captured = true %}{% endif %}
-{% assign evidence_key = page.evidence_state | default: 'insufficient_data' | downcase | replace: '-', '_' %}
-{% if evidence_key == 'static_sample' %}{% assign evidence_key = 'pilot_sample' %}{% endif %}
-{% if evidence_key == 'static_initial_sample' %}{% assign evidence_key = 'pilot_initial_sample' %}{% endif %}
-{% assign intelligence_stage = page.intelligence_stage | default: '' | downcase | replace: '-', '_' %}
-{% if intelligence_stage == '' %}
-  {% if evidence_key == 'consensus_live' or collection_status == 'consensus_live' %}
-    {% assign intelligence_stage = 'consensus_live' %}
-  {% elsif evidence_key == 'pilot_sample' or evidence_key == 'pilot_initial_sample' or collection_status == 'pilot_initial_sample' or report_count > 0 %}
-    {% assign intelligence_stage = 'pilot' %}
-  {% elsif official_captured %}
-    {% assign intelligence_stage = 'official_live' %}
-  {% else %}
-    {% assign intelligence_stage = 'staged' %}
-  {% endif %}
-{% endif %}
-{% assign intelligence_stage_label = page.intelligence_stage_label | default: intelligence_stage | replace: '_', ' ' | capitalize %}
 {% assign evidence_state = 'Insufficient data' %}
 {% assign evidence_state_class = 'insufficient' %}
-{% if evidence_key == 'consensus_live' or collection_status == 'consensus_live' %}
+{% if collection_status == 'live_consensus' or collection_status == 'consensus_live' %}
   {% assign evidence_state = 'Consensus live' %}
   {% assign evidence_state_class = 'live' %}
-{% elsif evidence_key == 'pilot_sample' or evidence_key == 'pilot_initial_sample' or collection_status == 'pilot_initial_sample' %}
+{% elsif collection_status == 'pilot_initial_sample' or collection_status == 'static_initial_sample' or page.evidence_state == 'pilot_sample' or page.evidence_state == 'static_sample' %}
   {% assign evidence_state = 'Pilot sample' %}
   {% assign evidence_state_class = 'pilot' %}
-{% elsif evidence_key == 'official_only' or official_captured %}
+{% elsif official_captured %}
   {% assign evidence_state = 'Official only' %}
   {% assign evidence_state_class = 'official' %}
 {% endif %}
@@ -76,7 +58,7 @@ layout: aux-base
   {% if evidence_state == 'Consensus live' %}
     {% assign verdict_text = 'Consensus collection is active for this patch. Review the confirmed patch-specific reports and official notes before upgrading.' %}
   {% elsif evidence_state == 'Pilot sample' %}
-    {% assign verdict_text = 'This record includes a pilot sample of confirmed patch-specific reports. It is not live community telemetry.' %}
+    {% assign verdict_text = 'This record includes a pilot consensus sample. It is not a live community telemetry feed.' %}
   {% elsif evidence_state == 'Official only' %}
     {% assign verdict_text = 'Official source captured. Community consensus is not live yet for this patch.' %}
   {% else %}
@@ -107,6 +89,23 @@ layout: aux-base
 {% if file_size_present or file_size_label != blank %}{% assign file_size_renderable = true %}{% endif %}
 {% assign checksum_present = false %}
 {% if page.official_checksums_body != blank %}{% assign checksum_present = true %}{% endif %}
+{% assign official_source_type = page.official_patch_notes_source_type | default: page.official_source_type | default: 'official-source' %}
+{% assign official_note_label = page.official_note_label | default: 'Official source summary' %}
+{% if official_source_type == 'release_notes' %}
+  {% assign official_note_label = 'Official Release Notes' %}
+{% elsif official_source_type == 'fixed_issues' %}
+  {% assign official_note_label = 'Official Fixed Issues' %}
+{% elsif official_source_type == 'security_advisory' %}
+  {% assign official_note_label = 'Official Security Advisory' %}
+{% elsif official_source_type == 'changelog' %}
+  {% assign official_note_label = 'Official Changelog' %}
+{% elsif official_source_type == 'whats_new' %}
+  {% assign official_note_label = 'Official Feature Summary' %}
+{% elsif official_source_type == 'community_official_post' %}
+  {% assign official_note_label = 'Official Vendor Announcement' %}
+{% elsif official_source_type == 'vendor_blog' %}
+  {% assign official_note_label = 'Official Vendor Blog' %}
+{% endif %}
 
 <div class="update-page-shell reveal-up">
   <section class="panel update-hero update-hero--v3">
@@ -161,7 +160,6 @@ layout: aux-base
         <dl class="update-decision-grid">
           <div><dt>Confidence</dt><dd>{{ page.update_consensus_confidence | default: 'Low' }}</dd></div>
           <div><dt>Evidence state</dt><dd>{{ evidence_state }}</dd></div>
-          <div><dt>Intelligence stage</dt><dd><span class="stage-badge stage-badge--{{ intelligence_stage | replace: '_', '-' }}">{{ intelligence_stage_label }}</span></dd></div>
           <div><dt>Official source captured</dt><dd>{{ source_captured_label }}</dd></div>
           <div><dt>Confirmed reports counted</dt><dd>{{ report_count }}</dd></div>
           <div><dt>Known issues present</dt><dd>{{ known_issues_label }}</dd></div>
@@ -190,7 +188,7 @@ layout: aux-base
     <article class="panel update-info-card update-consensus-card">
       <h2>Evidence status</h2>
       <div class="consensus-compact consensus-compact--card">
-        <span><strong>Evidence:</strong> <em class="evidence-badge evidence-badge--{{ evidence_state | downcase | replace: ' ', '-' }}">{{ evidence_state }}</em></span>
+        <span><strong>Evidence:</strong> <em class="consensus-word consensus-word--{{ reaction_class }}">{{ evidence_state }}</em></span>
         <span class="consensus-secondary">{{ report_count }} confirmed patch-specific reports • {{ page.update_consensus_confidence | default: 'Low' }} confidence</span>
       </div>
       <div class="consensus-position-graph consensus-position-graph--card" style="--consensus-pos: {{ consensus_score_percent }}%;">
@@ -217,13 +215,27 @@ layout: aux-base
 
     {% if official_body_present %}
     <details class="panel update-info-card update-official-details" open>
-      <summary>Official</summary>
+      <summary>{{ official_note_label }}</summary>
+      <div class="official-source-classification">
+        <span>Source type: {{ official_source_type | replace: '_', ' ' | capitalize }}</span>
+        {% if page.official_source_classification_note != blank %}<p>{{ page.official_source_classification_note }}</p>{% endif %}
+      </div>
       <div class="official-patch-notes node-bullet-scope">{{ page.official_patch_notes_body | markdownify }}</div>
+      {% if page.official_sources and page.official_sources.size > 0 %}
+      <div class="official-source-list">
+        <strong>Official references</strong>
+        <ul>
+          {% for source in page.official_sources %}
+          <li><a href="{{ source.url }}">{{ source.label | default: source.source_type }}</a><span>{{ source.source_type | replace: '_', ' ' }}</span></li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endif %}
     </details>
     {% elsif page.update_source_url != blank %}
     <details class="panel update-info-card update-official-details">
-      <summary>Official</summary>
-      <div class="official-patch-notes official-patch-notes--pending"><p>Official patch notes have not been captured into this AUXSAYS record yet. Use the official source link above until the record is backfilled.</p></div>
+      <summary>{{ official_note_label }}</summary>
+      <div class="official-patch-notes official-patch-notes--pending"><p>Official source content has not been captured into this AUXSAYS record yet. Use the official source link above until the record is backfilled and classified.</p></div>
     </details>
     {% endif %}
 

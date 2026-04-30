@@ -70,9 +70,9 @@ consensus_low_context_policy: excluded
 consensus_collection_status: pilot_initial_sample
 evidence_state: pilot_sample
 evidence_state_label: Pilot sample
-intelligence_stage: pilot
 official_source_captured: true
 confirmed_patch_specific_report_count: 7
 known_issues_present: true
 official_checksums_body: ''
+intelligence_stage: pilot
 ---

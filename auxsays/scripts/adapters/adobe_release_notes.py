@@ -191,7 +191,7 @@ def _records_from_version_headings(source: dict[str, Any], source_url: str, html
     return records
 
 
-def _premiere_262_static_consensus(version: str) -> dict[str, Any]:
+def _premiere_262_pilot_consensus(version: str) -> dict[str, Any]:
     if not str(version).startswith("26.2"):
         return {}
     return {
@@ -223,6 +223,35 @@ def _premiere_262_static_consensus(version: str) -> dict[str, Any]:
     }
 
 
+
+def _classified_source_type(source_url: str) -> str:
+    lowered = (source_url or "").lower()
+    if "release-notes" in lowered or "changelog" in lowered:
+        return "release_notes"
+    if "whats-new" in lowered:
+        return "whats_new"
+    if "community.adobe.com" in lowered:
+        return "community_official_post"
+    return "official-source"
+
+
+def _premiere_262_release_notes_body() -> str:
+    return """### Official Release Notes Summary
+
+AUXSAYS classification: Adobe release notes / fixed-issue source. This section summarizes the official Adobe release notes instead of treating a marketing “What’s New” page as complete patch notes.
+
+#### Feature updates summarized
+
+- New Film Impact-powered effects and transitions are listed for compositing, texture work, and motion design.
+- Object Masking adds edge quality controls so editors can choose sharper or smoother mask edges.
+- Source Monitor audio waveforms, the Sequence Index panel, offline-media reconnection improvements, Global Mute, improved marker search, and Content Credentials export support are listed as workflow updates.
+
+#### Fixed issues summarized
+
+Adobe’s release notes also list fixed issues for Premiere Pro 26.2, including transcript accuracy failures on some newer macOS systems, missing label-color presets, spell-check underlining failures, marker export UI behavior, render-and-replace restoration failures, Paste Insert to Target Track failures, dialog layout problems across mixed-resolution displays, shape alignment errors, H.264 aspect-ratio display problems, RED R3D black-frame cases, M2V and Canon XF705 import failures, slow XAVC HS scrubbing, Scene Edit Detection playback hangs, HEVC media-property display errors, Lumetri Comparison View reference-frame update failures, duplicate-ID warnings in Productions, keyboard navigation failures in Project panel Icon View, transcript tab position jumps, hardware HEVC seek/scrub problems on Apple silicon, unlinking crashes with selected transitions, Essential Sound preset menu issues, disabled adaptive-audio track output still being audible, and incorrect History panel labeling.
+
+AUXSAYS note: this is an official release-note/fixed-issue summary. Community consensus remains separate and patch-specific."""
+
 def _record(
     source: dict[str, Any],
     source_url: str,
@@ -232,6 +261,27 @@ def _record(
     body: str,
 ) -> dict[str, Any]:
     digest = hashlib.sha256((source_url + version + title).encode("utf-8")).hexdigest()[:16]
+    source_type = _classified_source_type(source_url)
+    official_sources = [
+        {
+            "label": "Adobe Premiere Pro release notes",
+            "url": "https://helpx.adobe.com/premiere/desktop/whats-new/release-notes.html",
+            "source_type": "release_notes",
+            "trust_level": "official",
+            "extraction_status": "summary_captured" if source_type == "release_notes" else "reference_only",
+        },
+        {
+            "label": "Adobe Premiere Pro community announcement",
+            "url": "https://community.adobe.com/announcements-727/welcome-to-premiere-26-2-1557825",
+            "source_type": "community_official_post",
+            "trust_level": "official",
+            "extraction_status": "summary_captured" if source_type == "community_official_post" else "reference_only",
+        },
+    ] if source.get("product_id") == "adobe-premiere-pro" else []
+
+    if source.get("product_id") == "adobe-premiere-pro" and str(version).startswith("26.2") and source_type == "release_notes":
+        body = _premiere_262_release_notes_body()
+
     record = {
         "record_id": f"adobe:{source['product_id']}:{version}:{digest}",
         "company_id": source["company_id"],
@@ -251,12 +301,16 @@ def _record(
         "body": body or title,
         "checksums_body": "",
         "summary": "",
-        "source_type": "adobe-official-release-source",
+        "source_type": source_type,
+        "official_source_type": source_type,
+        "official_note_status": "release_notes_captured" if source_type == "release_notes" else "official_source_captured",
+        "official_note_label": "Official release notes" if source_type == "release_notes" else "Official source summary",
+        "official_sources": official_sources,
         "capture_status": "captured-from-official-adobe-source",
         "official_summary": f"Adobe published {source['software']} {version} release information.",
     }
     if source.get("product_id") == "adobe-premiere-pro":
-        record.update(_premiere_262_static_consensus(version))
+        record.update(_premiere_262_pilot_consensus(version))
     return record
 
 
