@@ -1,0 +1,172 @@
+# Approved logo registry for AUXSAYS patch intelligence.
+#
+# This file is intentionally explicit. The logo generator must not guess from
+# product names or individual tokens, because that can mis-map products such as
+# "Windows 11" to unrelated brands that contain "11".
+#
+# Supported source types:
+# - simple_icons: exact Simple Icons slug lookup only, in listed order
+# - alias: copy/generate the approved logo for another registry ID
+# - manual: leave the committed file in place and report it as manually managed
+#
+# Product names, logos, and brands remain property of their respective owners.
+# AUXSAYS uses these marks only for product identification in an independent
+# compatibility/update reference context.
+logos:
+  openai-chatgpt:
+    type: simple_icons
+    slugs: [openai]
+  anthropic-claude:
+    type: simple_icons
+    slugs: [anthropic]
+  google-gemini:
+    type: simple_icons
+    slugs: [googlegemini, google]
+  perplexity:
+    type: simple_icons
+    slugs: [perplexity]
+  midjourney:
+    type: simple_icons
+    slugs: [midjourney]
+  stability-ai:
+    type: simple_icons
+    slugs: [stabilityai]
+  runway:
+    type: simple_icons
+    slugs: [runway]
+  pika:
+    type: simple_icons
+    slugs: [pika]
+  lottiefiles:
+    type: simple_icons
+    slugs: [lottiefiles]
+  figma:
+    type: simple_icons
+    slugs: [figma]
+  canva:
+    type: simple_icons
+    slugs: [canva]
+
+  adobe-premiere-pro:
+    type: simple_icons
+    slugs: [adobepremierepro]
+  adobe-after-effects:
+    type: simple_icons
+    slugs: [adobeaftereffects]
+  adobe-photoshop:
+    type: simple_icons
+    slugs: [adobephotoshop]
+  adobe-media-encoder:
+    type: simple_icons
+    slugs: [adobemediaencoder, adobe]
+  adobe-lightroom-classic:
+    type: simple_icons
+    slugs: [adobelightroomclassic, adobelightroom]
+  adobe-acrobat-reader:
+    type: simple_icons
+    slugs: [adobeacrobatreader, adobeacrobat, adobe]
+
+  twitch:
+    type: simple_icons
+    slugs: [twitch]
+  youtube:
+    type: simple_icons
+    slugs: [youtube]
+  kick:
+    type: simple_icons
+    slugs: [kick]
+  rumble:
+    type: simple_icons
+    slugs: [rumble]
+
+  epic-unreal:
+    type: simple_icons
+    slugs: [unrealengine, epicgames]
+  unity:
+    type: simple_icons
+    slugs: [unity]
+  steam:
+    type: simple_icons
+    slugs: [steam]
+  nvidia:
+    type: simple_icons
+    slugs: [nvidia]
+  amd:
+    type: simple_icons
+    slugs: [amd]
+  intel-arc:
+    type: simple_icons
+    slugs: [intel]
+
+  blender:
+    type: simple_icons
+    slugs: [blender]
+  comfyui:
+    type: manual
+    note: No stable Simple Icons match expected. Preserve committed project badge/logo.
+  hugging-face:
+    type: simple_icons
+    slugs: [huggingface]
+  github:
+    type: simple_icons
+    slugs: [github]
+  cloudflare:
+    type: simple_icons
+    slugs: [cloudflare]
+  netlify:
+    type: simple_icons
+    slugs: [netlify]
+  notion:
+    type: simple_icons
+    slugs: [notion]
+  zapier:
+    type: simple_icons
+    slugs: [zapier]
+  make:
+    type: simple_icons
+    slugs: [make]
+
+  obs-studio:
+    type: simple_icons
+    slugs: [obsstudio]
+  davinci-resolve:
+    type: simple_icons
+    slugs: [davinciresolve]
+  blackmagic-design:
+    type: simple_icons
+    slugs: [blackmagicdesign]
+  blackmagic-davinci:
+    type: alias
+    target: davinci-resolve
+
+  microsoft:
+    type: simple_icons
+    slugs: [microsoft]
+  microsoft-windows-11:
+    type: simple_icons
+    slugs: [windows11, windows, microsoft]
+  microsoft-teams:
+    type: simple_icons
+    slugs: [microsoftteams, microsoft]
+  microsoft-powerpoint:
+    type: simple_icons
+    slugs: [microsoftpowerpoint, microsoftoffice, microsoft]
+  microsoft-365-apps:
+    type: simple_icons
+    slugs: [microsoft365, microsoftoffice, microsoft]
+
+  elgato:
+    type: simple_icons
+    slugs: [elgato]
+  elgato-stream-deck:
+    type: alias
+    target: elgato
+  elgato-wave-link:
+    type: alias
+    target: elgato
+  elgato-camera-hub:
+    type: alias
+    target: elgato
+  elgato-4k-capture-utility:
+    type: alias
+    target: elgato
