@@ -4341,3 +4341,48 @@ button, input, select, textarea { font: inherit; }
     linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015));
   box-shadow: none;
 }
+
+/* HOME PATCH SIGNALS CURATION */
+.home-patch-feed--signals .home-patch-head p {
+  max-width: 30ch;
+}
+
+.home-patch-item--signal {
+  align-items: start;
+}
+
+.home-patch-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+  margin-top: .28rem;
+}
+
+.home-patch-meta span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.35rem;
+  padding: .18rem .48rem .16rem;
+  border: 1px solid rgba(95,212,229,.20);
+  border-radius: 999px;
+  background: rgba(95,212,229,.065);
+  color: var(--text-2);
+  font-size: .66rem;
+  line-height: 1;
+  letter-spacing: .075em;
+  text-transform: uppercase;
+}
+
+.home-patch-empty {
+  display: grid;
+  gap: .25rem;
+  padding: .9rem 0 .15rem;
+  border-top: 1px solid rgba(255,255,255,.055);
+  color: var(--text-2);
+  font-size: .82rem;
+}
+
+.home-patch-empty strong {
+  color: var(--text-0);
+  font-size: .9rem;
+}

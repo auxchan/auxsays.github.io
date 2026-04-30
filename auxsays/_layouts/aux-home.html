@@ -109,34 +109,107 @@ layout: aux-base
     </section>
   </div>
 
-  <aside class="home-patch-column reveal-up reveal-delay-2">
-    <section class="panel home-patch-feed">
+    <aside class="home-patch-column reveal-up reveal-delay-2">
+    <section class="panel home-patch-feed home-patch-feed--signals">
       <div class="home-patch-head">
         <div>
           <div class="home-section-label home-section-label--inline">
-            <span>Patch Feed</span>
+            <span>Patch Signals</span>
           </div>
-          <p>Latest software updates and status changes.</p>
+          <p>Updates with confirmed reports, known issues, or notable workflow impact.</p>
         </div>
       </div>
 
       {% assign update_pages = site.pages | where: "update_entry", true | sort: "update_published_at" | reverse %}
-      <div class="home-patch-list">
-        {% for item in update_pages limit:8 %}
-          {% assign reaction = item.update_consensus_label | default: item.community_reaction | default: item.current_consensus | default: 'insufficient-data' %}
-          {% assign reaction_class = reaction | downcase | replace: ' ', '-' %}
-          <a class="home-patch-item" href="{{ item.url | relative_url }}">
-            <span class="home-patch-dot home-patch-dot--{{ reaction_class }}" aria-hidden="true"></span>
-            <span class="home-patch-copy">
-              <strong>{{ item.update_feed_title | default: item.update_detail_title | default: item.title }}</strong>
-              <em>{{ reaction }} • {{ item.update_report_count | default: 0 }} reports</em>
-            </span>
-            <time>{{ item.update_published_at | date: "%b %-d" }}</time>
-          </a>
+      {% assign home_patch_limit = 8 %}
+      {% assign home_patch_count = 0 %}
+      {% assign home_patch_seen = '|' %}
+      <div class="home-patch-list home-patch-list--signals">
+        {% comment %}
+          Homepage Patch Signals is intentionally stricter than the full Patch Feed.
+          It promotes actionable evidence, not every official-only capture.
+          Inclusion buckets are ordered by signal priority, then date within each bucket:
+          1) manually featured records
+          2) negative consensus with confirmed reports or known issues
+          3) moderate consensus with confirmed reports or known issues
+          4) positive consensus with confirmed reports or known issues
+          5) any remaining pilot/live/known-issue records
+        {% endcomment %}
+
+        {% for signal_bucket in (1..5) %}
+          {% for item in update_pages %}
+            {% assign item_url_key = '|' | append: item.url | append: '|' %}
+            {% unless home_patch_seen contains item_url_key %}
+              {% assign report_count = item.update_report_count | default: 0 | plus: 0 %}
+              {% assign known_issues_value = item.known_issues_present | default: false %}
+              {% assign evidence_state = item.evidence_state | default: 'insufficient_data' | downcase | replace: '-', '_' %}
+              {% assign intelligence_stage = item.intelligence_stage | default: '' | downcase | replace: '-', '_' %}
+              {% assign consensus_label = item.update_consensus_label | default: item.community_reaction | default: item.current_consensus | default: 'Insufficient data' %}
+              {% assign consensus_key = consensus_label | downcase | replace: ' ', '-' %}
+              {% assign is_known_issue = false %}
+              {% if known_issues_value == true or known_issues_value == 'true' or known_issues_value == 'yes' %}
+                {% assign is_known_issue = true %}
+              {% endif %}
+              {% assign has_evidence_signal = false %}
+              {% if report_count > 0 or is_known_issue == true or evidence_state == 'pilot_sample' or evidence_state == 'static_sample' or evidence_state == 'static_initial_sample' or evidence_state == 'consensus_live' or intelligence_stage == 'pilot' or item.homepage_featured == true %}
+                {% assign has_evidence_signal = true %}
+              {% endif %}
+
+              {% assign show_signal = false %}
+              {% if signal_bucket == 1 and item.homepage_featured == true %}
+                {% assign show_signal = true %}
+              {% elsif signal_bucket == 2 and consensus_key == 'negative' and has_evidence_signal == true %}
+                {% assign show_signal = true %}
+              {% elsif signal_bucket == 3 and consensus_key == 'moderate' and has_evidence_signal == true %}
+                {% assign show_signal = true %}
+              {% elsif signal_bucket == 4 and consensus_key == 'positive' and has_evidence_signal == true %}
+                {% assign show_signal = true %}
+              {% elsif signal_bucket == 5 and has_evidence_signal == true %}
+                {% assign show_signal = true %}
+              {% endif %}
+
+              {% if show_signal and home_patch_count < home_patch_limit %}
+                {% assign evidence_label = item.evidence_state_label | default: evidence_state | replace: '_', ' ' | capitalize %}
+                {% if evidence_state == 'static_sample' or evidence_state == 'static_initial_sample' %}
+                  {% assign evidence_label = 'Pilot sample' %}
+                {% endif %}
+                {% assign stage_label = item.intelligence_stage_label | default: item.intelligence_stage | default: '' | replace: '_', ' ' | capitalize %}
+                <a class="home-patch-item home-patch-item--signal" href="{{ item.url | relative_url }}" data-home-patch-signal>
+                  <span class="home-patch-dot home-patch-dot--{{ consensus_key }}" aria-hidden="true"></span>
+                  <span class="home-patch-copy">
+                    <strong>{{ item.update_feed_title | default: item.update_detail_title | default: item.title }}</strong>
+                    <em>
+                      {{ consensus_label }}
+                      {% if report_count > 0 %}
+                        • {{ report_count }} reports
+                      {% elsif is_known_issue == true %}
+                        • known issues
+                      {% endif %}
+                    </em>
+                    <span class="home-patch-meta">
+                      <span>{{ evidence_label }}</span>
+                      {% if stage_label != '' %}<span>{{ stage_label }}</span>{% endif %}
+                    </span>
+                  </span>
+                  <time>{{ item.update_published_at | date: "%b %-d" }}</time>
+                </a>
+                {% assign home_patch_seen = home_patch_seen | append: item.url | append: '|' %}
+                {% assign home_patch_count = home_patch_count | plus: 1 %}
+              {% endif %}
+            {% endunless %}
+          {% endfor %}
         {% endfor %}
+
+        {% if home_patch_count == 0 %}
+          <div class="home-patch-empty">
+            <strong>No actionable patch signals yet.</strong>
+            <span>Official captures are still available in the full Patch Feed.</span>
+          </div>
+        {% endif %}
       </div>
 
       <a class="home-patch-link" href="{{ '/updates/' | relative_url }}">View full Patch Feed →</a>
     </section>
   </aside>
+
 </section>
