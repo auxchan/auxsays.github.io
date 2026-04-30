@@ -24,7 +24,6 @@ avatar: "/assets/img/aux-about-portrait.jpg"
 theme: jekyll-theme-chirpy
 
 plugins:
-  - jekyll-feed
   - jekyll-seo-tag
   - jekyll-sitemap
   - jekyll-archives

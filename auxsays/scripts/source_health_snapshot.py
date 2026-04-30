@@ -75,8 +75,18 @@ def status_for(source: dict[str, Any], source_state: dict[str, Any], last_error:
         if not source_state.get("last_success_at") or failures >= 2 or explicit == "failing":
             return "Failing", "Failing"
         return "Degraded", "Degraded"
-    if explicit == "degraded" or fetched == 0 and source_state.get("last_checked_at"):
-        return "Degraded", "No records last run"
+
+    checked = bool(source_state.get("last_checked_at"))
+    written = int(source_state.get("last_records_written") or 0)
+
+    if checked and fetched == 0 and written == 0:
+        # A successful run with no extracted/written records is not a degraded
+        # source. It means the source was reachable but no eligible new update
+        # record was found during that run.
+        return "Idle healthy", "No new records"
+
+    if explicit == "degraded":
+        return "Degraded", "Degraded"
     if source_state.get("last_success_at"):
         return "Healthy", "Healthy"
     return "Enabled", "Pending first check"
@@ -154,7 +164,7 @@ def main() -> int:
         })
 
     # Status order first, then alpha. Healthy/degraded enabled sources should be easy to audit.
-    status_order = {"Failing": 0, "Degraded": 1, "Enabled": 2, "Healthy": 3, "Staged": 4, "Manual watch": 5, "Disabled": 6}
+    status_order = {"Failing": 0, "Degraded": 1, "Enabled": 2, "Healthy": 3, "Idle healthy": 4, "Staged": 5, "Manual watch": 6, "Disabled": 7}
     rows.sort(key=lambda row: (status_order.get(row.get("status"), 9), (row.get("company") or "").lower(), (row.get("software") or "").lower()))
     OUTPUT_PATH.write_text(yaml.safe_dump(rows, sort_keys=False, allow_unicode=True, width=140), encoding="utf-8")
     print(f"Wrote {len(rows)} source-health rows to {OUTPUT_PATH.relative_to(ROOT)}")

@@ -72,10 +72,12 @@ permalink: /updates/methodology/
 
     {% assign healthy_sources = site.data.source_health | where: "status", "Healthy" %}
     {% assign degraded_sources = site.data.source_health | where: "status", "Degraded" %}
+    {% assign idle_healthy_sources = site.data.source_health | where: "status", "Idle healthy" %}
     {% assign failing_sources = site.data.source_health | where: "status", "Failing" %}
     {% assign staged_sources = site.data.source_health | where: "status", "Staged" %}
     <div class="source-health-summary" aria-label="Source health totals">
       <div><strong>{{ healthy_sources.size }}</strong><span>Healthy</span></div>
+      <div><strong>{{ idle_healthy_sources.size }}</strong><span>Idle healthy</span></div>
       <div><strong>{{ degraded_sources.size }}</strong><span>Degraded</span></div>
       <div><strong>{{ failing_sources.size }}</strong><span>Failing</span></div>
       <div><strong>{{ staged_sources.size }}</strong><span>Staged</span></div>

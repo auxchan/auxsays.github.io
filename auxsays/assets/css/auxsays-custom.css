@@ -4303,6 +4303,7 @@ button, input, select, textarea { font: inherit; }
 }
 
 .source-health-status--healthy { color: #9af0be; border-color: rgba(70,209,137,.34); background: rgba(70,209,137,.10); }
+.source-health-status--idle-healthy { color: #9bdff0; border-color: rgba(95,212,229,.26); background: rgba(95,212,229,.08); }
 .source-health-status--degraded,
 .source-health-status--no-records-last-run { color: #f0ca67; border-color: rgba(240,202,103,.34); background: rgba(240,202,103,.10); }
 .source-health-status--failing { color: #ff9386; border-color: rgba(238,110,95,.38); background: rgba(238,110,95,.10); }
