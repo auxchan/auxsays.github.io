@@ -4663,3 +4663,61 @@ button, input, select, textarea { font: inherit; }
     grid-template-columns: 1fr;
   }
 }
+
+/* Decision-page polish: keep verdict/action above methodology details */
+.update-methodology-details {
+  border-color: rgba(255,255,255,.08);
+  background: linear-gradient(180deg, rgba(13,18,22,.82), rgba(8,12,16,.88));
+}
+
+.update-methodology-details summary {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  cursor: pointer;
+  color: var(--text-0);
+  font-size: clamp(1.15rem, 1.7vw, 1.55rem);
+  font-weight: 850;
+  line-height: 1.12;
+  letter-spacing: -.03em;
+}
+
+.update-methodology-details summary::before {
+  content: "▸";
+  color: var(--accent-0);
+  transform: translateY(-1px);
+}
+
+.update-methodology-details[open] summary::before {
+  transform: rotate(90deg) translateX(1px);
+}
+
+.update-methodology-details .consensus-position-graph {
+  margin-top: .75rem;
+}
+
+.update-methodology-details .complaint-theme-table {
+  margin-top: 1rem;
+}
+
+.update-practical-card {
+  order: 4;
+}
+
+.update-methodology-details {
+  order: 5;
+}
+
+.update-decision-box {
+  margin-top: 1.45rem;
+}
+
+.update-decision-box__header strong {
+  font-size: clamp(1.25rem, 2.2vw, 1.8rem);
+  color: var(--accent-1);
+}
+
+.update-decision-grid div:first-child,
+.update-decision-grid div:nth-child(2) {
+  border-color: rgba(240,202,103,.18);
+}

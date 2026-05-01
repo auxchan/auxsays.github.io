@@ -1,15 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="DaVinci Resolve logo">
-  <title>DaVinci Resolve</title>
-  <defs>
-    <radialGradient id="drbg" cx="50%" cy="45%" r="70%"><stop offset="0" stop-color="#22313a"/><stop offset="1" stop-color="#05080b"/></radialGradient>
-    <filter id="drs" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity=".45"/></filter>
-  </defs>
-  <rect x="4" y="4" width="88" height="88" rx="22" fill="url(#drbg)"/>
-  <circle cx="48" cy="48" r="34" fill="#101820" stroke="#E9ECEF" stroke-opacity=".18" stroke-width="2"/>
-  <g filter="url(#drs)">
-    <path d="M48 15a29 29 0 0 1 25 44c-10-2-19-7-25-16-6 9-15 14-25 16A29 29 0 0 1 48 15Z" fill="#F1C84B"/>
-    <path d="M23 59c10-2 19-7 25-16 6 9 15 14 25 16A29 29 0 0 1 23 59Z" fill="#DF4A46"/>
-    <path d="M48 43c-6 9-15 14-25 16a29 29 0 0 0 50 0c-10-2-19-7-25-16Z" fill="#2C9EDB" opacity=".85"/>
-    <circle cx="48" cy="48" r="10" fill="#091018" stroke="#FFFFFF" stroke-opacity=".25"/>
-  </g>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="DaVinci Resolve logo"><title>DaVinci Resolve</title><defs><radialGradient id="bg" cx="50%" cy="45%" r="70%"><stop offset="0" stop-color="#222A30"/><stop offset="1" stop-color="#05080B"/></radialGradient></defs><rect x="6" y="6" width="84" height="84" rx="22" fill="url(#bg)"/><circle cx="48" cy="48" r="33" fill="#11181D" stroke="#FFFFFF" stroke-opacity=".12" stroke-width="2"/><path d="M48 16a32 32 0 0 1 27.7 48 42 42 0 0 1-27.7-18A42 42 0 0 1 20.3 64 32 32 0 0 1 48 16Z" fill="#F2C646"/><path d="M20.3 64A42 42 0 0 0 48 46a42 42 0 0 0 27.7 18A32 32 0 0 1 20.3 64Z" fill="#2D9CDB"/><path d="M24 29.5A32 32 0 0 1 48 16v30A42 42 0 0 1 24 29.5Z" fill="#E14842" opacity=".92"/><circle cx="48" cy="48" r="9" fill="#071016" stroke="#FFFFFF" stroke-opacity=".22" stroke-width="2"/><rect x="6" y="6" width="84" height="84" rx="22" fill="none" stroke="#5FD4E5" stroke-opacity=".18" stroke-width="3"/></svg>

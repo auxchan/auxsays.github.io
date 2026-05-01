@@ -1,4 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="365">
-  <rect width="128" height="128" rx="24" fill="#111827"/>
-  <text x="64" y="75" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="800" fill="#9df7ff">365</text>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Microsoft 365 Apps icon"><title>Microsoft 365 Apps</title><defs><linearGradient id="m365" x1="18" y1="18" x2="78" y2="78"><stop stop-color="#F25022"/><stop offset=".34" stop-color="#7FBA00"/><stop offset=".68" stop-color="#00A4EF"/><stop offset="1" stop-color="#8B5CF6"/></linearGradient></defs><rect x="6" y="6" width="84" height="84" rx="20" fill="#101A20"/><path d="M48 19 73 33v30L48 77 23 63V33Z" fill="none" stroke="url(#m365)" stroke-width="9" stroke-linejoin="round"/><path d="M48 19v58M23 33l25 14 25-14M23 63l25-16 25 16" fill="none" stroke="#FFFFFF" stroke-opacity=".18" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><rect x="6" y="6" width="84" height="84" rx="20" fill="none" stroke="#5FD4E5" stroke-opacity=".18" stroke-width="3"/></svg>

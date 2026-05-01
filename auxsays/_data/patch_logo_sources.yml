@@ -6,7 +6,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/adobe.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
@@ -17,7 +18,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/amd.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
@@ -28,7 +30,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/anthropic.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
@@ -36,13 +39,15 @@ assets:
   kind: company_logo
   owner_name: Blackmagic Design
   source_type: manual_curated
-  source_url: https://en.wikipedia.org/wiki/File:Blackmagic_Design_logo.svg
+  source_url: https://simpleicons.org/?q=blackmagic%20design
   local_path: /assets/img/patch-logos/blackmagic-design.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Company-level logo asset.
+  notes: Simplified local Blackmagic Design identifier replacing noisy/manual tri-node
+    tile.
 - asset_id: epic-games
   kind: company_logo
   owner_name: Epic Games
@@ -50,7 +55,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/epic-games.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
@@ -61,7 +67,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/figma.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
@@ -72,7 +79,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/github.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
@@ -83,7 +91,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/google.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
@@ -94,7 +103,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/kick.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
@@ -105,7 +115,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/lottiefiles.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
@@ -116,7 +127,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/midjourney.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
@@ -127,21 +139,23 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/nvidia.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
 - asset_id: obs-project
   kind: company_logo
   owner_name: OBS Project
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
+  source_type: simple_icons
+  source_url: https://simpleicons.org/?q=obs%20studio
   local_path: /assets/img/patch-logos/obs-project.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Company-level logo asset.
+  notes: Company card uses OBS Studio icon as the practical OBS Project identifier.
 - asset_id: openai
   kind: company_logo
   owner_name: OpenAI
@@ -149,7 +163,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/openai.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
@@ -160,7 +175,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/perplexity.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
@@ -171,7 +187,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/runway.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
@@ -182,7 +199,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/twitch.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
@@ -193,7 +211,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/valve.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
@@ -204,7 +223,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/youtube.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
@@ -215,7 +235,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/blender-foundation.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
@@ -226,7 +247,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/canva.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
@@ -237,7 +259,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/cloudflare.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
@@ -248,7 +271,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/comfyui.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
@@ -259,7 +283,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/hugging-face.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
@@ -270,7 +295,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/intel.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
@@ -281,7 +307,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/make.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
@@ -292,7 +319,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/netlify.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
@@ -303,7 +331,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/notion.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
@@ -314,7 +343,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/pika.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
@@ -325,7 +355,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/rumble.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
@@ -336,7 +367,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/stability-ai.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
@@ -347,7 +379,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/unity.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
@@ -358,21 +391,23 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/zapier.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
 - asset_id: microsoft
   kind: company_logo
   owner_name: Microsoft
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
+  source_type: manual_curated
+  source_url: https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks
   local_path: /assets/img/patch-logos/microsoft.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Company-level logo asset.
+  notes: Local Microsoft four-square identifier replacing weak text tile.
 - asset_id: elgato
   kind: company_logo
   owner_name: Elgato
@@ -380,7 +415,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/elgato.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Company-level logo asset.
@@ -391,7 +427,8 @@ assets:
   source_url: /updates/openai/
   local_path: /assets/img/patch-logos/openai.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
@@ -402,7 +439,8 @@ assets:
   source_url: /updates/anthropic/
   local_path: /assets/img/patch-logos/anthropic.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
@@ -413,7 +451,8 @@ assets:
   source_url: /updates/google/
   local_path: /assets/img/patch-logos/google.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
@@ -424,7 +463,8 @@ assets:
   source_url: /updates/perplexity/
   local_path: /assets/img/patch-logos/perplexity.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
@@ -435,7 +475,8 @@ assets:
   source_url: /updates/midjourney/
   local_path: /assets/img/patch-logos/midjourney.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
@@ -446,7 +487,8 @@ assets:
   source_url: /updates/stability-ai/
   local_path: /assets/img/patch-logos/stability-ai.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
@@ -457,7 +499,8 @@ assets:
   source_url: /updates/runway/
   local_path: /assets/img/patch-logos/runway.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
@@ -468,7 +511,8 @@ assets:
   source_url: /updates/pika/
   local_path: /assets/img/patch-logos/pika.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
@@ -479,7 +523,8 @@ assets:
   source_url: /updates/lottiefiles/
   local_path: /assets/img/patch-logos/lottiefiles.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
@@ -490,7 +535,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/figma.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Product/software icon asset.
@@ -501,7 +547,8 @@ assets:
   source_url: /updates/canva/
   local_path: /assets/img/patch-logos/canva.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
@@ -512,7 +559,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/adobe-premiere-pro.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Product/software icon asset.
@@ -523,7 +571,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/adobe-after-effects.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Product/software icon asset.
@@ -534,7 +583,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/adobe-photoshop.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Product/software icon asset.
@@ -545,7 +595,8 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/adobe-media-encoder.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Product/software icon asset.
@@ -556,32 +607,36 @@ assets:
   source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/adobe-lightroom-classic.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
   notes: Product/software icon asset.
 - asset_id: blackmagic-davinci
   kind: product_icon
-  owner_name: DaVinci Resolve
-  source_type: local_curated_or_simple_icons
+  owner_name: Blackmagic Design / DaVinci Resolve
+  source_type: manual_curated
   source_url: https://commons.wikimedia.org/wiki/File:DaVinci_Resolve_17_logo.svg
   local_path: /assets/img/patch-logos/blackmagic-davinci.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Product/software icon asset.
+  notes: Cleaned local DaVinci Resolve product-icon treatment.
 - asset_id: obs-studio
   kind: product_icon
-  owner_name: OBS Studio
-  source_type: local_curated_or_simple_icons
-  source_url: https://svgcon.dev/icon/obs-studio/
+  owner_name: OBS Project
+  source_type: simple_icons
+  source_url: https://simpleicons.org/?q=obs%20studio
   local_path: /assets/img/patch-logos/obs-studio.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Product/software icon asset.
+  notes: Local OBS Studio Simple Icons SVG path. Preserved because current live OBS
+    icon is visually acceptable.
 - asset_id: twitch
   kind: company_fallback
   owner_name: Twitch
@@ -589,7 +644,8 @@ assets:
   source_url: /updates/twitch/
   local_path: /assets/img/patch-logos/twitch.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
@@ -600,7 +656,8 @@ assets:
   source_url: /updates/youtube/
   local_path: /assets/img/patch-logos/youtube.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
@@ -611,7 +668,8 @@ assets:
   source_url: /updates/kick/
   local_path: /assets/img/patch-logos/kick.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
@@ -622,7 +680,8 @@ assets:
   source_url: /updates/rumble/
   local_path: /assets/img/patch-logos/rumble.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
@@ -633,7 +692,8 @@ assets:
   source_url: /updates/epic-games/
   local_path: /assets/img/patch-logos/epic-games.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
@@ -644,7 +704,8 @@ assets:
   source_url: /updates/unity/
   local_path: /assets/img/patch-logos/unity.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
@@ -655,7 +716,8 @@ assets:
   source_url: /updates/valve/
   local_path: /assets/img/patch-logos/valve.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
@@ -666,21 +728,23 @@ assets:
   source_url: /updates/nvidia/
   local_path: /assets/img/patch-logos/nvidia.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
 - asset_id: amd
-  kind: product_icon
-  owner_name: AMD Software / Radeon
-  source_type: local_curated_or_simple_icons
-  source_url: https://www.svgviewer.dev/s/35121/amd
+  kind: company_logo
+  owner_name: AMD
+  source_type: simple_icons
+  source_url: https://simpleicons.org/?q=amd
   local_path: /assets/img/patch-logos/amd.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Product/software icon asset.
+  notes: Local AMD Simple Icons SVG path replacing text badge.
 - asset_id: intel-arc
   kind: company_fallback
   owner_name: Intel Graphics / Arc
@@ -688,7 +752,8 @@ assets:
   source_url: /updates/intel/
   local_path: /assets/img/patch-logos/intel.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
@@ -699,7 +764,8 @@ assets:
   source_url: /updates/blender-foundation/
   local_path: /assets/img/patch-logos/blender-foundation.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
@@ -710,7 +776,8 @@ assets:
   source_url: /updates/comfyui/
   local_path: /assets/img/patch-logos/comfyui.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
@@ -721,7 +788,8 @@ assets:
   source_url: /updates/hugging-face/
   local_path: /assets/img/patch-logos/hugging-face.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
@@ -732,7 +800,8 @@ assets:
   source_url: /updates/github/
   local_path: /assets/img/patch-logos/github.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
@@ -743,7 +812,8 @@ assets:
   source_url: /updates/cloudflare/
   local_path: /assets/img/patch-logos/cloudflare.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
@@ -754,7 +824,8 @@ assets:
   source_url: /updates/netlify/
   local_path: /assets/img/patch-logos/netlify.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
@@ -765,7 +836,8 @@ assets:
   source_url: /updates/notion/
   local_path: /assets/img/patch-logos/notion.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
@@ -776,7 +848,8 @@ assets:
   source_url: /updates/zapier/
   local_path: /assets/img/patch-logos/zapier.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
@@ -787,65 +860,71 @@ assets:
   source_url: /updates/make/
   local_path: /assets/img/patch-logos/make.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
 - asset_id: adobe-acrobat-reader
   kind: product_icon
-  owner_name: Acrobat / Acrobat Reader
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
+  owner_name: Adobe Acrobat Reader
+  source_type: manual_curated
+  source_url: https://www.adobe.com/legal/permissions/trademarks.html
   local_path: /assets/img/patch-logos/adobe-acrobat-reader.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Product/software icon asset.
+  notes: Local Acrobat product-icon treatment and UI backdrop added.
 - asset_id: microsoft-windows-11
   kind: product_icon
-  owner_name: Windows 11
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
+  owner_name: Microsoft Windows
+  source_type: manual_curated
+  source_url: https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks
   local_path: /assets/img/patch-logos/microsoft-windows-11.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Product/software icon asset.
+  notes: Local Windows 11 product-icon treatment.
 - asset_id: microsoft-teams
   kind: product_icon
   owner_name: Microsoft Teams
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
+  source_type: manual_curated
+  source_url: https://commons.wikimedia.org/wiki/File:Microsoft_Office_Teams_(2019%E2%80%932025).svg
   local_path: /assets/img/patch-logos/microsoft-teams.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Product/software icon asset.
+  notes: Local Teams product-icon treatment replacing text tile.
 - asset_id: microsoft-powerpoint
   kind: product_icon
   owner_name: Microsoft PowerPoint
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
+  source_type: manual_curated
+  source_url: https://commons.wikimedia.org/wiki/File:Microsoft_Office_PowerPoint_(2019%E2%80%93present).svg
   local_path: /assets/img/patch-logos/microsoft-powerpoint.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Product/software icon asset.
+  notes: Local PowerPoint product-icon treatment replacing text tile.
 - asset_id: microsoft-365-apps
   kind: product_icon
   owner_name: Microsoft 365 Apps
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
+  source_type: manual_curated
+  source_url: https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks
   local_path: /assets/img/patch-logos/microsoft-365-apps.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Product/software icon asset.
+  notes: Local Microsoft 365 Apps product-icon treatment replacing text tile.
 - asset_id: elgato-stream-deck
   kind: company_fallback
   owner_name: Stream Deck
@@ -853,7 +932,8 @@ assets:
   source_url: /updates/elgato/
   local_path: /assets/img/patch-logos/elgato.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
@@ -864,7 +944,8 @@ assets:
   source_url: /updates/elgato/
   local_path: /assets/img/patch-logos/elgato.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
@@ -875,7 +956,8 @@ assets:
   source_url: /updates/elgato/
   local_path: /assets/img/patch-logos/elgato.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
@@ -886,7 +968,20 @@ assets:
   source_url: /updates/elgato/
   local_path: /assets/img/patch-logos/elgato.svg
   attribution_required: false
-  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
+- asset_id: davinci-resolve
+  kind: product_icon
+  owner_name: Blackmagic Design / DaVinci Resolve
+  source_type: manual_curated
+  source_url: https://commons.wikimedia.org/wiki/File:DaVinci_Resolve_17_logo.svg
+  local_path: /assets/img/patch-logos/davinci-resolve.svg
+  attribution_required: false
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
+  last_verified_at: '2026-05-01'
+  fallback_to_company_logo: false
+  notes: Alias asset for DaVinci Resolve product icon.

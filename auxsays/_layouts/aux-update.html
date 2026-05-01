@@ -189,34 +189,6 @@ layout: aux-base
     </article>
     {% endif %}
 
-    <article class="panel update-info-card update-consensus-card">
-      <h2>Evidence status</h2>
-      <div class="consensus-compact consensus-compact--card">
-        <span><strong>Evidence:</strong> <em class="consensus-word consensus-word--{{ reaction_class }}">{{ evidence_state }}</em></span>
-        <span class="consensus-secondary">{{ report_count }} confirmed patch-specific reports • {{ page.update_consensus_confidence | default: 'Low' }} confidence</span>
-      </div>
-      <div class="consensus-position-graph consensus-position-graph--card" style="--consensus-pos: {{ consensus_score_percent }}%;">
-        <div class="consensus-scale" aria-label="Consensus position from negative through moderate to positive">
-          <span class="consensus-scale-zone consensus-scale-zone--negative"></span>
-          <span class="consensus-scale-zone consensus-scale-zone--moderate"></span>
-          <span class="consensus-scale-zone consensus-scale-zone--positive"></span>
-          <span class="consensus-scale-marker"></span>
-        </div>
-        <div class="consensus-scale-labels"><span>Negative</span><span>Moderate</span><span>Positive</span></div>
-      </div>
-      {% if consensus_text != blank %}<p>{{ consensus_text }}</p>{% endif %}
-      <p class="consensus-rule-note">AUXSAYS counts a report only when the specific patch/version is named in the report itself or in the parent discussion title. Every confirmed patch-specific report is counted equally. <a href="{{ '/updates/methodology/' | relative_url }}">Methodology</a></p>
-
-      {% if page.complaint_themes and page.complaint_themes.size > 0 %}
-      <div class="complaint-theme-table complaint-theme-table--renamed">
-        <div class="complaint-theme-row complaint-theme-row--head"><span>Reported issue</span><span>Frequency</span><span>Severity</span></div>
-        {% for item in page.complaint_themes %}
-        <div class="complaint-theme-row"><span>{{ item.theme }}</span><span>{{ item.frequency }}</span><span>{{ item.severity }}</span></div>
-        {% endfor %}
-      </div>
-      {% endif %}
-    </article>
-
     {% if page.official_additions or page.official_fixes %}
     <article class="panel update-info-card update-official-change-card">
       <h2>Official changes</h2>
@@ -272,6 +244,35 @@ layout: aux-base
       </ul>
     </article>
     {% endif %}
+
+    <details class="panel update-info-card update-consensus-card update-methodology-details">
+      <summary>Evidence methodology details</summary>
+      <div class="consensus-compact consensus-compact--card">
+        <span><strong>Evidence:</strong> <em class="consensus-word consensus-word--{{ reaction_class }}">{{ evidence_state }}</em></span>
+        <span class="consensus-secondary">{{ report_count }} confirmed patch-specific reports • {{ page.update_consensus_confidence | default: 'Low' }} confidence</span>
+      </div>
+      <div class="consensus-position-graph consensus-position-graph--card" style="--consensus-pos: {{ consensus_score_percent }}%;">
+        <div class="consensus-scale" aria-label="Consensus position from negative through moderate to positive">
+          <span class="consensus-scale-zone consensus-scale-zone--negative"></span>
+          <span class="consensus-scale-zone consensus-scale-zone--moderate"></span>
+          <span class="consensus-scale-zone consensus-scale-zone--positive"></span>
+          <span class="consensus-scale-marker"></span>
+        </div>
+        <div class="consensus-scale-labels"><span>Negative</span><span>Moderate</span><span>Positive</span></div>
+      </div>
+      {% if consensus_text != blank %}<p>{{ consensus_text }}</p>{% endif %}
+      <p class="consensus-rule-note">Pilot sample means this page uses manually reviewed, patch-specific reports. It is not live consensus yet. AUXSAYS counts a report only when the specific patch/version is named in the report itself or in the parent discussion title. <a href="{{ '/updates/methodology/' | relative_url }}">Methodology</a></p>
+
+      {% if page.complaint_themes and page.complaint_themes.size > 0 %}
+      <div class="complaint-theme-table complaint-theme-table--renamed">
+        <div class="complaint-theme-row complaint-theme-row--head"><span>Reported issue</span><span>Frequency</span><span>Severity</span></div>
+        {% for item in page.complaint_themes %}
+        <div class="complaint-theme-row"><span>{{ item.theme }}</span><span>{{ item.frequency }}</span><span>{{ item.severity }}</span></div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    </details>
+
 
     {% if official_body_present %}
     <details class="panel update-info-card update-official-details" open>

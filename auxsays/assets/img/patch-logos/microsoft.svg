@@ -1,4 +1,1 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="MS">
-  <rect width="128" height="128" rx="24" fill="#111827"/>
-  <text x="64" y="75" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="800" fill="#9df7ff">MS</text>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Microsoft logo"><title>Microsoft</title><rect x="6" y="6" width="84" height="84" rx="20" fill="#101A20"/><rect x="24" y="24" width="20" height="20" fill="#F25022"/><rect x="52" y="24" width="20" height="20" fill="#7FBA00"/><rect x="24" y="52" width="20" height="20" fill="#00A4EF"/><rect x="52" y="52" width="20" height="20" fill="#FFB900"/><rect x="6" y="6" width="84" height="84" rx="20" fill="none" stroke="#5FD4E5" stroke-opacity=".18" stroke-width="3"/></svg>
