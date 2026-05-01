@@ -4893,3 +4893,26 @@ button, input, select, textarea { font: inherit; }
     padding-inline: .62rem;
   }
 }
+
+
+/* Hard visual order for update decision pages.
+   This prevents audit-only sections like history/checksum from appearing mid-article if their
+   Liquid blocks are emitted earlier than intended. */
+.update-content-grid {
+  display: grid;
+}
+
+.update-order-summary { order: 10; }
+.update-order-official-changes { order: 20; }
+.update-order-community-risk { order: 30; }
+.update-order-recommendation { order: 40; }
+.update-order-evidence-status { order: 50; }
+.update-order-official-details { order: 60; }
+.update-order-sources { order: 70; }
+.update-order-history { order: 90; }
+.update-order-checksum { order: 100; }
+
+/* Prevent duplicate source lists: Sources is the canonical reference area. */
+.update-official-details .official-source-list {
+  display: none !important;
+}
