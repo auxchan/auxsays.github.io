@@ -4721,3 +4721,108 @@ button, input, select, textarea { font: inherit; }
 .update-decision-grid div:nth-child(2) {
   border-color: rgba(240,202,103,.18);
 }
+
+/* Update page section navigation and editorial polish */
+.update-section-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .55rem;
+  align-items: center;
+  padding: .8rem .9rem;
+  border: 1px solid rgba(95,212,229,.14);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(17,23,28,.82), rgba(10,14,18,.92));
+}
+
+.update-section-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 2rem;
+  padding: .38rem .72rem;
+  border-radius: 999px;
+  border: 1px solid rgba(95,212,229,.18);
+  color: var(--accent-0);
+  font-size: .72rem;
+  font-weight: 850;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  background: rgba(95,212,229,.045);
+}
+
+.update-section-nav a:hover,
+.update-section-nav a:focus-visible {
+  color: var(--text-0);
+  border-color: rgba(95,212,229,.42);
+  background: rgba(95,212,229,.10);
+}
+
+.update-sources-card {
+  border-color: rgba(214,171,78,.16);
+}
+
+.update-source-list {
+  list-style: none;
+  padding: 0;
+  margin: .85rem 0 0;
+  display: grid;
+  gap: .55rem;
+}
+
+.update-source-list li {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .5rem .75rem;
+  align-items: baseline;
+  padding: .72rem .85rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.025);
+}
+
+.update-source-list a {
+  color: var(--aux-gold, var(--accent-1));
+  font-weight: 850;
+  text-decoration: none;
+}
+
+.update-source-list a:hover,
+.update-source-list a:focus-visible {
+  text-decoration: underline;
+}
+
+.update-source-list span {
+  color: var(--text-2);
+  font-size: .76rem;
+  letter-spacing: .10em;
+  text-transform: uppercase;
+}
+
+.update-methodology-details {
+  border-color: rgba(95,212,229,.12);
+}
+
+.update-methodology-details:not([open]) {
+  background: rgba(255,255,255,.018);
+}
+
+.update-decision-grid dt:nth-child(5) {
+  max-width: 14ch;
+}
+
+@media (max-width: 720px) {
+  .update-section-nav {
+    gap: .45rem;
+    padding: .7rem;
+  }
+
+  .update-section-nav a {
+    font-size: .68rem;
+    letter-spacing: .09em;
+    padding: .34rem .58rem;
+  }
+
+  .update-source-list li {
+    display: grid;
+  }
+}

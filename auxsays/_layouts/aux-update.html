@@ -155,7 +155,7 @@ layout: aux-base
         </div>
       </div>
 
-      <div class="update-decision-box update-decision-box--{{ evidence_state_class }}">
+      <div id="verdict" class="update-decision-box update-decision-box--{{ evidence_state_class }}">
         <div class="update-decision-box__header">
           <span class="update-decision-eyebrow">AUXSAYS verdict</span>
           <strong>{{ decision_label }}</strong>
@@ -166,7 +166,7 @@ layout: aux-base
           <div><dt>Evidence state</dt><dd>{{ evidence_state }}</dd></div>
           <div><dt>Official source captured</dt><dd>{{ source_captured_label }}</dd></div>
           <div><dt>Confirmed reports counted</dt><dd>{{ report_count }}</dd></div>
-          <div><dt>Known issues present</dt><dd>{{ known_issues_label }}</dd></div>
+          <div><dt>Patch-specific user reports</dt><dd>{{ known_issues_label }}</dd></div>
         </dl>
         <p class="update-decision-note">
           {% if evidence_state == 'Pilot sample' %}Pilot sample means this page has manually encoded or previously captured confirmed patch-specific reports, but live consensus refresh is not active yet.{% elsif evidence_state == 'Official only' %}Official only means this page currently reflects official-source ingestion. No confirmed patch-specific community reports are counted yet.{% elsif evidence_state == 'Consensus live' %}Consensus live means confirmed patch-specific reports are being refreshed by the consensus pipeline.{% else %}Insufficient data means AUXSAYS has not captured enough evidence to score this update beyond a placeholder state.{% endif %}
@@ -174,12 +174,19 @@ layout: aux-base
         </p>
       </div>
 
-      <div class="update-source-row">
-        {% if page.update_source_url != blank %}<a href="{{ page.update_source_url }}">Official source ↗</a>{% endif %}
-        {% if page.update_download_url != blank %}<a href="{{ page.update_download_url }}">Download page ↗</a>{% endif %}
-      </div>
     </div>
   </section>
+
+  <nav class="update-section-nav" aria-label="Patch page sections">
+    <a href="#verdict">Verdict</a>
+    {% if page.official_additions or page.official_fixes %}<a href="#official-changes">Official changes</a>{% endif %}
+    {% if page.evidence_samples and page.evidence_samples.size > 0 %}<a href="#community-risk">Community risk sample</a>{% endif %}
+    {% if page.practical_recommendations and page.practical_recommendations.size > 0 %}<a href="#recommendation">Recommendation</a>{% endif %}
+    <a href="#evidence-status">Evidence status</a>
+    {% if page.official_sources or page.update_source_url != blank or page.update_download_url != blank %}<a href="#sources">Sources</a>{% endif %}
+    {% if page.status_events and page.status_events.size > 0 %}<a href="#history">History</a>{% endif %}
+    {% if checksum_present %}<a href="#checksum">Checksum</a>{% endif %}
+  </nav>
 
   <section class="update-content-grid">
     {% if summary_text != blank %}
@@ -190,7 +197,7 @@ layout: aux-base
     {% endif %}
 
     {% if page.official_additions or page.official_fixes %}
-    <article class="panel update-info-card update-official-change-card">
+    <article id="official-changes" class="panel update-info-card update-official-change-card">
       <h2>Official changes</h2>
       <div class="update-change-grid">
         {% if page.official_additions and page.official_additions.size > 0 %}
@@ -214,7 +221,7 @@ layout: aux-base
     {% endif %}
 
     {% if page.evidence_samples and page.evidence_samples.size > 0 %}
-    <article class="panel update-info-card update-evidence-sample-card">
+    <article id="community-risk" class="panel update-info-card update-evidence-sample-card">
       <h2>Community risk sample</h2>
       <p class="update-section-intro">These manually reviewed examples show why this page recommends waiting or testing before using 26.2 on production systems.</p>
       <div class="update-evidence-sample-grid">
@@ -237,7 +244,7 @@ layout: aux-base
     {% endif %}
 
     {% if page.practical_recommendations and page.practical_recommendations.size > 0 %}
-    <article class="panel update-info-card update-practical-card">
+    <article id="recommendation" class="panel update-info-card update-practical-card">
       <h2>Practical recommendation</h2>
       <ul class="update-practical-list">
         {% for item in page.practical_recommendations %}<li>{{ item }}</li>{% endfor %}
@@ -245,7 +252,7 @@ layout: aux-base
     </article>
     {% endif %}
 
-    <details class="panel update-info-card update-consensus-card update-methodology-details">
+    <details id="evidence-status" class="panel update-info-card update-consensus-card update-methodology-details">
       <summary>Evidence methodology details</summary>
       <div class="consensus-compact consensus-compact--card">
         <span><strong>Evidence:</strong> <em class="consensus-word consensus-word--{{ reaction_class }}">{{ evidence_state }}</em></span>
@@ -261,7 +268,7 @@ layout: aux-base
         <div class="consensus-scale-labels"><span>Negative</span><span>Moderate</span><span>Positive</span></div>
       </div>
       {% if consensus_text != blank %}<p>{{ consensus_text }}</p>{% endif %}
-      <p class="consensus-rule-note">Pilot sample means this page uses manually reviewed, patch-specific reports. It is not live consensus yet. AUXSAYS counts a report only when the specific patch/version is named in the report itself or in the parent discussion title. <a href="{{ '/updates/methodology/' | relative_url }}">Methodology</a></p>
+      <p class="consensus-rule-note">{% if page.evidence_status_note != blank %}{{ page.evidence_status_note }}{% else %}Pilot sample means this page uses manually reviewed, patch-specific reports. It is not live consensus yet.{% endif %} AUXSAYS counts a report only when the specific patch/version is named in the report or parent discussion title. <a href="{{ '/updates/methodology/' | relative_url }}">Methodology</a></p>
 
       {% if page.complaint_themes and page.complaint_themes.size > 0 %}
       <div class="complaint-theme-table complaint-theme-table--renamed">
@@ -300,8 +307,25 @@ layout: aux-base
     </details>
     {% endif %}
 
+
+    {% if page.official_sources or page.update_source_url != blank or page.update_download_url != blank %}
+    <article id="sources" class="panel update-info-card update-sources-card">
+      <h2>Sources</h2>
+      <p class="update-section-intro">Official sources are listed first. Community bug reports are shown in the risk sample above when they are counted as evidence.</p>
+      <ul class="update-source-list">
+        {% if page.official_sources and page.official_sources.size > 0 %}
+          {% for source in page.official_sources %}
+          <li><a href="{{ source.url }}">{{ source.label | default: source.source_type }}</a><span>{{ source.source_type | replace: '_', ' ' }}</span></li>
+          {% endfor %}
+        {% elsif page.update_source_url != blank %}
+          <li><a href="{{ page.update_source_url }}">Official source</a><span>official</span></li>
+        {% endif %}
+        {% if page.update_download_url != blank %}<li><a href="{{ page.update_download_url }}">Download page</a><span>download</span></li>{% endif %}
+      </ul>
+    </article>
+    {% endif %}
     {% if page.status_events and page.status_events.size > 0 %}
-    <details class="panel update-info-card update-status-details">
+    <details id="history" class="panel update-info-card update-status-details">
       <summary>Status History</summary>
       <div class="status-timeline status-timeline--compact">
         {% for event in page.status_events %}
@@ -312,11 +336,12 @@ layout: aux-base
     {% endif %}
 
     {% if checksum_present %}
-    <details class="panel update-info-card update-checksum-details">
+    <details id="checksum" class="panel update-info-card update-checksum-details">
       <summary>Checksum</summary>
       <p class="checksum-helper">Use these hashes to verify downloaded installers match the files published with the official release.</p>
       <div class="official-patch-notes checksum-body">{{ page.official_checksums_body | markdownify }}</div>
     </details>
     {% endif %}
+
   </section>
 </div>
