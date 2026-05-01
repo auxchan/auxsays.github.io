@@ -4460,3 +4460,69 @@ button, input, select, textarea { font: inherit; }
 .official-source-list a:hover,
 .official-source-list a:focus-visible { text-decoration: underline; }
 .official-source-list span { color: var(--aux-muted); font-size: .82rem; text-transform: uppercase; letter-spacing: .08em; }
+
+/* Status Change Alerts: add software icon support */
+.patch-alert {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.patch-alert-icon {
+  width: 3rem;
+  height: 3rem;
+  min-width: 3rem;
+  min-height: 3rem;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: .35rem;
+}
+
+.patch-alert-icon img {
+  width: auto;
+  height: auto;
+  max-width: 72%;
+  max-height: 72%;
+  object-fit: contain;
+}
+
+.patch-alert-copy {
+  display: grid;
+  gap: .25rem;
+  min-width: 0;
+}
+
+.patch-alert-topline {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  flex-wrap: wrap;
+}
+
+.patch-alert-title {
+  display: inline-block;
+  font-size: 1.02rem;
+  line-height: 1.2;
+  color: var(--text-0);
+}
+
+.patch-alert-copy p {
+  margin: 0;
+}
+
+@media (max-width: 640px) {
+  .patch-alert {
+    grid-template-columns: 1fr;
+    gap: .8rem;
+  }
+
+  .patch-alert-icon {
+    width: 2.75rem;
+    height: 2.75rem;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+  }
+}

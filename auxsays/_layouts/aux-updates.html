@@ -23,10 +23,30 @@ layout: aux-base
     <div class="eyebrow">Status change alerts</div>
     <div class="patch-notify-list">
       {% for note in notification_items %}
+      {% assign alert_page = site.pages | where: "url", note.url | first %}
+      {% assign alert_product = nil %}
+      {% if alert_page and alert_page.product_id %}
+        {% assign alert_product = site.data.patch_products | where: "id", alert_page.product_id | first %}
+      {% endif %}
+      {% if alert_product == nil %}
+        {% assign alert_product = site.data.patch_products | where: "product_name", note.product | first %}
+      {% endif %}
+      {% assign alert_company = nil %}
+      {% if alert_product and alert_product.company_id %}
+        {% assign alert_company = site.data.patch_companies | where: "id", alert_product.company_id | first %}
+      {% endif %}
+      {% assign alert_logo_path = alert_product.logo_path | default: alert_company.logo_path %}
       <a class="patch-alert" href="{{ note.url | relative_url }}">
-        <span class="patch-alert-pill pill-{{ note.change_type | downcase }}">{{ note.change_type }}</span>
-        <span>
-          <strong>{{ note.product }} {{ note.version }}</strong>
+        {% if alert_logo_path %}
+        <span class="patch-alert-icon patch-logo-badge patch-logo-badge--has-image" aria-hidden="true">
+          <img src="{% if alert_logo_path contains "://" %}{{ alert_logo_path }}{% else %}{{ alert_logo_path | relative_url }}{% endif %}" alt="{{ note.product }} icon" loading="lazy">
+        </span>
+        {% endif %}
+        <span class="patch-alert-copy">
+          <span class="patch-alert-topline">
+            <span class="patch-alert-pill pill-{{ note.change_type | downcase }}">{{ note.change_type }}</span>
+            <strong class="patch-alert-title">{{ note.product }} {{ note.version }}</strong>
+          </span>
           <p>{{ note.message }}</p>{% if note.changed_at %}<time class="patch-alert-time">Status updated {{ note.changed_at | date: "%b %-d, %Y %-I:%M %p %Z" }}</time>{% endif %}
         </span>
       </a>
