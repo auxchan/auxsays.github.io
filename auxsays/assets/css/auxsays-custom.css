@@ -4461,83 +4461,71 @@ button, input, select, textarea { font: inherit; }
 .official-source-list a:focus-visible { text-decoration: underline; }
 .official-source-list span { color: var(--aux-muted); font-size: .82rem; text-transform: uppercase; letter-spacing: .08em; }
 
-/* Product card heading layout refinement: icon first, title underneath */
-.patch-product-topline {
-  display: grid;
-  grid-template-columns: minmax(0,1fr) auto;
-  gap: .85rem 1rem;
-  align-items: start;
+/* Update hero spacing refinement: clearer separation between product icon block and patch title */
+.update-brand-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 0 1.35rem;
 }
 
-.patch-product-heading {
-  display: grid;
-  justify-items: start;
-  gap: .72rem;
-  min-width: 0;
+.update-brand-row .update-brand-badge.patch-logo-badge,
+.update-brand-row .update-brand-badge {
+  width: 4.15rem;
+  height: 4.15rem;
+  min-width: 4.15rem;
+  min-height: 4.15rem;
+  border-radius: 18px;
+  padding: .42rem;
 }
 
-.patch-product-heading-text {
-  display: grid;
-  gap: .18rem;
-  min-width: 0;
-}
-
-.patch-product-heading-text strong {
-  display: block;
-  line-height: 1.06;
-  font-size: 1.18rem;
-  letter-spacing: -.02em;
-}
-
-.patch-product-heading-text em {
-  display: block;
-  color: var(--text-2);
-  font-style: normal;
-  text-transform: uppercase;
-  letter-spacing: .16em;
-  font-size: .74rem;
-}
-
-.patch-product-topline .patch-product-icon,
-.patch-product-topline .patch-product-icon.patch-logo-badge,
-.patch-product-topline .patch-product-icon.patch-source-badge.patch-logo-badge {
-  width: 64px;
-  height: 64px;
-  min-width: 64px;
-  min-height: 64px;
-  border-radius: 20px;
-  align-self: start;
-}
-
-.patch-product-topline .patch-product-icon.patch-logo-badge--has-image img,
-.patch-product-topline .patch-product-icon.patch-source-badge.patch-logo-badge--has-image img {
-  max-width: 74%;
-  max-height: 74%;
-  height: auto;
+.update-brand-row .update-brand-badge.patch-logo-badge--has-image img,
+.update-brand-row .update-brand-badge img {
+  max-width: 72%;
+  max-height: 72%;
   width: auto;
+  height: auto;
 }
 
-.patch-product-topline .patch-source-priority--software {
-  justify-self: end;
-  align-self: start;
+.update-brand-row .update-brand-meta {
+  display: grid;
+  gap: .24rem;
+}
+
+.update-brand-row .update-brand-meta strong {
+  font-size: 1.25rem;
+  line-height: 1.06;
+}
+
+.update-brand-row .update-brand-meta span {
+  font-size: .76rem;
+  letter-spacing: .14em;
+}
+
+.update-hero--v3 .update-kicker {
+  margin: .15rem 0 .7rem;
+}
+
+.update-hero--v3 .update-title {
+  margin-top: 0;
 }
 
 @media (max-width: 640px) {
-  .patch-product-topline {
-    grid-template-columns: 1fr;
+  .update-brand-row {
+    gap: .8rem;
+    margin-bottom: 1.1rem;
   }
 
-  .patch-product-topline .patch-source-priority--software {
-    justify-self: start;
+  .update-brand-row .update-brand-badge.patch-logo-badge,
+  .update-brand-row .update-brand-badge {
+    width: 3.6rem;
+    height: 3.6rem;
+    min-width: 3.6rem;
+    min-height: 3.6rem;
+    border-radius: 16px;
   }
 
-  .patch-product-topline .patch-product-icon,
-  .patch-product-topline .patch-product-icon.patch-logo-badge,
-  .patch-product-topline .patch-product-icon.patch-source-badge.patch-logo-badge {
-    width: 58px;
-    height: 58px;
-    min-width: 58px;
-    min-height: 58px;
-    border-radius: 18px;
+  .update-brand-row .update-brand-meta strong {
+    font-size: 1.08rem;
   }
 }
