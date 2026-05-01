@@ -7,8 +7,7 @@
   priority: Core
   cadence: High
   impact: Creator workflows, coding, research, automations, and AI-assisted publishing.
-  watch_reason: Model, product, and workspace changes can immediately alter how creators plan, write, research, automate,
-    and ship content.
+  watch_reason: Model, product, and workspace changes can immediately alter how creators plan, write, research, automate, and ship content.
   source_url: https://help.openai.com/en/articles/6825453-chatgpt-release-notes
   source_label: ChatGPT release notes
   signal_notes: Separate model changes, product UI changes, workspace/agent changes, and policy/limit changes.
@@ -35,8 +34,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: ChatGPT / OpenAI is tracked for release changes, workflow impact, compatibility shifts, stability signals,
-    and community consensus.
+  dossier_note: ChatGPT / OpenAI is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: anthropic-claude
   company_name: Anthropic
   product_name: Claude
@@ -73,8 +71,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: Claude is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community
-    consensus.
+  dossier_note: Claude is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: google-gemini
   company_name: Google
   product_name: Gemini
@@ -84,8 +81,7 @@
   priority: Core
   cadence: High
   impact: Research, search-integrated AI, Android/Workspace workflows, and multimodal creation.
-  watch_reason: Gemini changes affect search behavior, Workspace AI features, mobile creator workflows, and AI video/image
-    pipelines.
+  watch_reason: Gemini changes affect search behavior, Workspace AI features, mobile creator workflows, and AI video/image pipelines.
   source_url: https://gemini.google/updates/
   source_label: Gemini updates
   signal_notes: Watch consumer Gemini, Workspace Gemini, and Veo/Nano Banana-style creative updates separately.
@@ -112,8 +108,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: Gemini is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community
-    consensus.
+  dossier_note: Gemini is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: perplexity
   company_name: Perplexity
   product_name: Perplexity
@@ -150,8 +145,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: Perplexity is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community
-    consensus.
+  dossier_note: Perplexity is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: midjourney
   company_name: Midjourney
   product_name: Midjourney
@@ -161,8 +155,7 @@
   priority: Core
   cadence: High
   impact: Thumbnails, concept art, brand visuals, moodboards, and image workflows.
-  watch_reason: Image model changes can quickly shift what creators can produce for thumbnails, brand worlds, and promotional
-    graphics.
+  watch_reason: Image model changes can quickly shift what creators can produce for thumbnails, brand worlds, and promotional graphics.
   source_url: https://www.midjourney.com/updates/
   source_label: Midjourney updates
   signal_notes: Track web editor, model versions, image editing, style reference, and licensing/terms changes.
@@ -189,8 +182,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: Midjourney is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community
-    consensus.
+  dossier_note: Midjourney is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: stability-ai
   company_name: Stability AI
   product_name: Stable Diffusion / Stable Audio
@@ -227,8 +219,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: Stable Diffusion / Stable Audio is tracked for release changes, workflow impact, compatibility shifts, stability
-    signals, and community consensus.
+  dossier_note: Stable Diffusion / Stable Audio is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: runway
   company_name: Runway
   product_name: Runway
@@ -265,8 +256,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: Runway is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community
-    consensus.
+  dossier_note: Runway is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: pika
   company_name: Pika
   product_name: Pika
@@ -303,8 +293,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: Pika is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community
-    consensus.
+  dossier_note: Pika is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: lottiefiles
   company_name: LottieFiles
   product_name: LottieFiles
@@ -341,8 +330,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: LottieFiles is tracked for release changes, workflow impact, compatibility shifts, stability signals, and
-    community consensus.
+  dossier_note: LottieFiles is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: figma
   company_name: Figma
   product_name: Figma
@@ -352,8 +340,7 @@
   priority: Core
   cadence: High
   impact: Design systems, prototyping, web layouts, brand assets, and collaborative creator workflows.
-  watch_reason: Figma is central to modern web and visual planning workflows, especially for creators building repeatable
-    design systems.
+  watch_reason: Figma is central to modern web and visual planning workflows, especially for creators building repeatable design systems.
   source_url: https://www.figma.com/release-notes/
   source_label: Figma release notes
   signal_notes: Track Sites, Make, Dev Mode, AI features, pricing, and export/workflow changes.
@@ -380,8 +367,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: Figma is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community
-    consensus.
+  dossier_note: Figma is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: canva
   company_name: Canva
   product_name: Canva
@@ -418,8 +404,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: Canva is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community
-    consensus.
+  dossier_note: Canva is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: adobe-premiere-pro
   company_name: Adobe
   product_name: Premiere Pro
@@ -428,14 +413,11 @@
   category_label: Video / Production
   priority: Core
   cadence: High
-  impact: Non-linear editing (NLE), timeline performance, GPU acceleration, exports, codecs, captions, audio, AI tools, and
-    professional video production workflows.
-  watch_reason: Premiere Pro updates can affect NLE timeline behavior, project stability, editing speed, GPU acceleration,
-    exports, captions, codecs, and production deadlines.
+  impact: Non-linear editing (NLE), timeline performance, GPU acceleration, exports, codecs, captions, audio, AI tools, and professional video production workflows.
+  watch_reason: Premiere Pro updates can affect NLE timeline behavior, project stability, editing speed, GPU acceleration, exports, captions, codecs, and production deadlines.
   source_url: https://helpx.adobe.com/premiere/desktop/whats-new/release-notes.html
   source_label: Premiere Pro release notes
-  signal_notes: Track NLE timeline behavior, editing features, export behavior, codec support, GPU acceleration, captions,
-    known issues, and fixed issues separately.
+  signal_notes: Track NLE timeline behavior, editing features, export behavior, codec support, GPU acceleration, captions, known issues, and fixed issues separately.
   source_id: adobe-premiere-pro
   logo_label: Premiere
   logo_path: /assets/img/patch-logos/adobe-premiere-pro.svg
@@ -460,8 +442,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: Premiere Pro is tracked for release changes, workflow impact, compatibility shifts, stability signals, and
-    community consensus.
+  dossier_note: Premiere Pro is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: adobe-after-effects
   company_name: Adobe
   product_name: After Effects
@@ -470,14 +451,11 @@
   category_label: Video / Production
   priority: Core
   cadence: High
-  impact: Motion graphics, compositing, visual effects, animation, GPU acceleration, render stability, and production pipeline
-    workflows.
-  watch_reason: After Effects updates can affect motion graphics, compositing stability, expressions, GPU acceleration, plug-ins,
-    renders, and production deadlines.
+  impact: Motion graphics, compositing, visual effects, animation, GPU acceleration, render stability, and production pipeline workflows.
+  watch_reason: After Effects updates can affect motion graphics, compositing stability, expressions, GPU acceleration, plug-ins, renders, and production deadlines.
   source_url: https://helpx.adobe.com/after-effects/release-note/release-notes-after-effects.html
   source_label: After Effects release notes
-  signal_notes: Track compositing behavior, motion graphics changes, expression compatibility, GPU acceleration, rendering,
-    plug-ins, known issues, and fixed issues.
+  signal_notes: Track compositing behavior, motion graphics changes, expression compatibility, GPU acceleration, rendering, plug-ins, known issues, and fixed issues.
   source_id: adobe-after-effects
   logo_label: After Effects
   logo_path: /assets/img/patch-logos/adobe-after-effects.svg
@@ -502,8 +480,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: After Effects is tracked for release changes, workflow impact, compatibility shifts, stability signals, and
-    community consensus.
+  dossier_note: After Effects is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: adobe-photoshop
   company_name: Adobe
   product_name: Photoshop
@@ -513,12 +490,10 @@
   priority: Core
   cadence: High
   impact: Image editing, generative tools, masking, typography, color workflows, file compatibility, and creator asset production.
-  watch_reason: Photoshop updates can affect image editing speed, generative features, masking behavior, color workflows,
-    plug-ins, file compatibility, and production assets.
+  watch_reason: Photoshop updates can affect image editing speed, generative features, masking behavior, color workflows, plug-ins, file compatibility, and production assets.
   source_url: https://helpx.adobe.com/photoshop/desktop/whats-new/photoshop-on-desktop-release-notes.html
   source_label: Photoshop release notes
-  signal_notes: Track editing features, generative tools, masking, file compatibility, plug-in behavior, color workflow changes,
-    known issues, and fixed issues.
+  signal_notes: Track editing features, generative tools, masking, file compatibility, plug-in behavior, color workflow changes, known issues, and fixed issues.
   source_id: adobe-photoshop
   logo_label: Photoshop
   logo_path: /assets/img/patch-logos/adobe-photoshop.svg
@@ -543,8 +518,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: Photoshop is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community
-    consensus.
+  dossier_note: Photoshop is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: adobe-media-encoder
   company_name: Adobe
   product_name: Media Encoder
@@ -554,12 +528,10 @@
   priority: Core
   cadence: High
   impact: Encoding, exports, codecs, presets, queue stability, Premiere Pro handoff, After Effects handoff, and delivery workflows.
-  watch_reason: Media Encoder updates can affect export reliability, codec support, preset behavior, queue stability, render
-    handoff, and delivery deadlines.
+  watch_reason: Media Encoder updates can affect export reliability, codec support, preset behavior, queue stability, render handoff, and delivery deadlines.
   source_url: https://helpx.adobe.com/media-encoder/release-notes.html
   source_label: Media Encoder release notes
-  signal_notes: Track codec support, export behavior, queue stability, presets, GPU encoding, Premiere Pro handoff, After
-    Effects handoff, known issues, and fixed issues.
+  signal_notes: Track codec support, export behavior, queue stability, presets, GPU encoding, Premiere Pro handoff, After Effects handoff, known issues, and fixed issues.
   source_id: adobe-media-encoder
   logo_label: Media Encoder
   logo_path: /assets/img/patch-logos/adobe-media-encoder.svg
@@ -584,8 +556,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: Media Encoder is tracked for release changes, workflow impact, compatibility shifts, stability signals, and
-    community consensus.
+  dossier_note: Media Encoder is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: adobe-lightroom-classic
   company_name: Adobe
   product_name: Lightroom Classic
@@ -594,14 +565,11 @@
   category_label: Design Workflow
   priority: Core
   cadence: Medium
-  impact: Photo ingest, catalog stability, masking, raw processing, camera/lens support, export behavior, and professional
-    photo workflows.
-  watch_reason: Lightroom Classic updates can affect catalog stability, raw support, masking tools, camera and lens profiles,
-    exports, sync behavior, and photo production deadlines.
+  impact: Photo ingest, catalog stability, masking, raw processing, camera/lens support, export behavior, and professional photo workflows.
+  watch_reason: Lightroom Classic updates can affect catalog stability, raw support, masking tools, camera and lens profiles, exports, sync behavior, and photo production deadlines.
   source_url: https://helpx.adobe.com/lightroom-classic/help/whats-new/release-notes.html
   source_label: Lightroom Classic release notes
-  signal_notes: Track catalog stability, camera raw support, lens profiles, masking behavior, export behavior, sync issues,
-    known issues, and fixed issues.
+  signal_notes: Track catalog stability, camera raw support, lens profiles, masking behavior, export behavior, sync issues, known issues, and fixed issues.
   source_id: adobe-lightroom-classic
   logo_label: Lightroom Classic
   logo_path: /assets/img/patch-logos/adobe-lightroom-classic.svg
@@ -626,8 +594,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: Lightroom Classic is tracked for release changes, workflow impact, compatibility shifts, stability signals,
-    and community consensus.
+  dossier_note: Lightroom Classic is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: blackmagic-davinci
   company_name: Blackmagic Design
   product_name: DaVinci Resolve
@@ -637,12 +604,10 @@
   priority: Core
   cadence: High
   impact: Editing, color grading, Fusion VFX, Fairlight audio, codecs, camera workflows, and creator post-production.
-  watch_reason: DaVinci Resolve updates can affect project stability, timeline performance, render behavior, GPU acceleration,
-    codecs, collaboration, and color workflow reliability.
+  watch_reason: DaVinci Resolve updates can affect project stability, timeline performance, render behavior, GPU acceleration, codecs, collaboration, and color workflow reliability.
   source_url: https://www.blackmagicdesign.com/media
   source_label: Blackmagic media releases
-  signal_notes: Track edit/color page stability, render behavior, codec support, GPU acceleration, Fairlight/Fusion issues,
-    known issues, and fixed issues separately.
+  signal_notes: Track edit/color page stability, render behavior, codec support, GPU acceleration, Fairlight/Fusion issues, known issues, and fixed issues separately.
   source_id: blackmagic-davinci
   logo_label: DaVinci Resolve
   logo_path: /assets/img/patch-logos/davinci-resolve.svg
@@ -666,8 +631,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: DaVinci Resolve is tracked for release changes, workflow impact, compatibility shifts, stability signals,
-    and community consensus.
+  dossier_note: DaVinci Resolve is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
   ui_backdrop_path: /assets/img/software-ui/davinci-resolve-ui.webp
 - id: obs-studio
   company_name: OBS Project
@@ -705,8 +669,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: OBS Studio is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community
-    consensus.
+  dossier_note: OBS Studio is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: twitch
   company_name: Twitch
   product_name: Twitch
@@ -743,8 +706,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: Twitch is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community
-    consensus.
+  dossier_note: Twitch is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: youtube
   company_name: YouTube
   product_name: YouTube / YouTube Studio
@@ -781,8 +743,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: YouTube / YouTube Studio is tracked for release changes, workflow impact, compatibility shifts, stability
-    signals, and community consensus.
+  dossier_note: YouTube / YouTube Studio is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: kick
   company_name: Kick
   product_name: Kick
@@ -819,8 +780,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: Kick is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community
-    consensus.
+  dossier_note: Kick is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: rumble
   company_name: Rumble
   product_name: Rumble
@@ -857,8 +817,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: Rumble is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community
-    consensus.
+  dossier_note: Rumble is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: epic-unreal
   company_name: Epic Games
   product_name: Unreal Engine
@@ -868,8 +827,7 @@
   priority: Core
   cadence: High
   impact: Game development, virtual production, UEFN, cinematics, and real-time creator workflows.
-  watch_reason: Unreal updates affect creators building games, virtual production assets, real-time environments, and cinematic
-    systems.
+  watch_reason: Unreal updates affect creators building games, virtual production assets, real-time environments, and cinematic systems.
   source_url: https://dev.epicgames.com/documentation/en-us/unreal-engine/whats-new
   source_label: Unreal what's new
   signal_notes: Separate stable engine releases, UEFN updates, Fab marketplace, and licensing/business changes.
@@ -896,8 +854,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: Unreal Engine is tracked for release changes, workflow impact, compatibility shifts, stability signals, and
-    community consensus.
+  dossier_note: Unreal Engine is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: unity
   company_name: Unity
   product_name: Unity
@@ -907,8 +864,7 @@
   priority: Expansion
   cadence: Medium
   impact: Indie game development, mobile games, simulation, and creator tools.
-  watch_reason: Unity updates still matter for indie devs and mobile creators, especially when licensing or runtime behavior
-    changes.
+  watch_reason: Unity updates still matter for indie devs and mobile creators, especially when licensing or runtime behavior changes.
   source_url: https://unity.com/releases
   source_label: Unity releases
   signal_notes: Track LTS releases, licensing, runtime/tooling changes, and package manager changes.
@@ -935,8 +891,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: Unity is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community
-    consensus.
+  dossier_note: Unity is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: steam
   company_name: Valve
   product_name: Steam
@@ -973,8 +928,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: Steam is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community
-    consensus.
+  dossier_note: Steam is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: nvidia
   company_name: NVIDIA
   product_name: NVIDIA App / GeForce / Studio
@@ -1011,8 +965,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: NVIDIA App / GeForce / Studio is tracked for release changes, workflow impact, compatibility shifts, stability
-    signals, and community consensus.
+  dossier_note: NVIDIA App / GeForce / Studio is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: amd
   company_name: AMD
   product_name: AMD Software / Radeon
@@ -1049,8 +1002,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: AMD Software / Radeon is tracked for release changes, workflow impact, compatibility shifts, stability signals,
-    and community consensus.
+  dossier_note: AMD Software / Radeon is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: intel-arc
   company_name: Intel
   product_name: Intel Graphics / Arc
@@ -1087,8 +1039,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: Intel Graphics / Arc is tracked for release changes, workflow impact, compatibility shifts, stability signals,
-    and community consensus.
+  dossier_note: Intel Graphics / Arc is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: blender
   company_name: Blender Foundation
   product_name: Blender
@@ -1125,8 +1076,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: Blender is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community
-    consensus.
+  dossier_note: Blender is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: comfyui
   company_name: ComfyUI
   product_name: ComfyUI
@@ -1163,8 +1113,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: ComfyUI is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community
-    consensus.
+  dossier_note: ComfyUI is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: hugging-face
   company_name: Hugging Face
   product_name: Hugging Face
@@ -1201,8 +1150,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: Hugging Face is tracked for release changes, workflow impact, compatibility shifts, stability signals, and
-    community consensus.
+  dossier_note: Hugging Face is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: github
   company_name: GitHub
   product_name: GitHub / Copilot
@@ -1239,8 +1187,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: GitHub / Copilot is tracked for release changes, workflow impact, compatibility shifts, stability signals,
-    and community consensus.
+  dossier_note: GitHub / Copilot is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: cloudflare
   company_name: Cloudflare
   product_name: Cloudflare
@@ -1277,8 +1224,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: Cloudflare is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community
-    consensus.
+  dossier_note: Cloudflare is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: netlify
   company_name: Netlify
   product_name: Netlify
@@ -1315,8 +1261,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: Netlify is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community
-    consensus.
+  dossier_note: Netlify is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: notion
   company_name: Notion
   product_name: Notion
@@ -1353,8 +1298,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: Notion is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community
-    consensus.
+  dossier_note: Notion is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: zapier
   company_name: Zapier
   product_name: Zapier
@@ -1391,8 +1335,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: Zapier is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community
-    consensus.
+  dossier_note: Zapier is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: make
   company_name: Make
   product_name: Make
@@ -1429,8 +1372,7 @@
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
-  dossier_note: Make is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community
-    consensus.
+  dossier_note: Make is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
 - id: adobe-acrobat-reader
   company_name: Adobe
   product_name: Acrobat / Acrobat Reader
@@ -1440,12 +1382,10 @@
   priority: Core
   cadence: High
   impact: PDF opening, rendering, fillable forms, signatures, printing, browser integration, enterprise deployment, and security exposure.
-  watch_reason: Acrobat and Reader updates can affect PDF workflows that offices depend on, especially forms, printing, e-signatures,
-    browser handoff, compatibility with older PDFs, and security-sensitive PDF handling.
+  watch_reason: Acrobat and Reader updates can affect PDF workflows that offices depend on, especially forms, printing, e-signatures, browser handoff, compatibility with older PDFs, and security-sensitive PDF handling.
   source_url: https://www.adobe.com/devnet-docs/acrobatetk/tools/ReleaseNotesDC/index.html
   source_label: Acrobat Enterprise release notes
-  signal_notes: Track security urgency, Continuous vs Classic track differences, Reader vs Acrobat behavior, printing, signatures,
-    fillable forms, browser plug-ins, and enterprise deployment impact.
+  signal_notes: Track security urgency, Continuous vs Classic track differences, Reader vs Acrobat behavior, printing, signatures, fillable forms, browser plug-ins, and enterprise deployment impact.
   source_id: adobe-acrobat-reader
   logo_label: Acrobat
   logo_path: /assets/img/patch-logos/adobe-acrobat-reader.svg
@@ -1469,8 +1409,7 @@
   - Security bulletin or urgent planned update.
   - Workflow impact involving PDFs, printing, signatures, forms, browser integration, or enterprise deployment.
   - Enough confirmed patch-specific public reports to evaluate install risk.
-  dossier_note: Acrobat / Reader is tracked as a workplace-critical PDF platform where security updates may be urgent, but fragile
-    form, print, and signature workflows still require careful testing.
+  dossier_note: Acrobat / Reader is tracked as a workplace-critical PDF platform where security updates may be urgent, but fragile form, print, and signature workflows still require careful testing.
 - id: microsoft-windows-11
   company_name: Microsoft
   product_name: Windows 11
@@ -1479,17 +1418,14 @@
   category_label: Operating Systems
   priority: Core
   cadence: High
-  impact: Security posture, OS reliability, gaming performance, GPU/driver behavior, audio routing, capture cards, app compatibility,
-    and enterprise deployment.
-  watch_reason: Windows 11 updates can alter security exposure, safeguard holds, gaming/creator performance, drivers, audio/capture
-    behavior, and workplace deployment timing.
+  impact: Security posture, OS reliability, gaming performance, GPU/driver behavior, audio routing, capture cards, app compatibility, and enterprise deployment.
+  watch_reason: Windows 11 updates can alter security exposure, safeguard holds, gaming/creator performance, drivers, audio/capture behavior, and workplace deployment timing.
   source_url: https://learn.microsoft.com/en-us/windows/release-health/
   source_label: Windows release health
-  signal_notes: Track release health, known issues, safeguard holds, security urgency, gaming performance, creator app compatibility,
-    GPU/driver interaction, capture devices, audio routing, and rollout channel.
+  signal_notes: Track release health, known issues, safeguard holds, security urgency, gaming performance, creator app compatibility, GPU/driver interaction, capture devices, audio routing, and rollout channel.
   source_id: microsoft-windows-11
   logo_label: Windows 11
-  logo_path: https://msftstories.thesourcemediaassets.com/2022/05/Microsoft-logo_rgb_c-wht-768x344.png
+  logo_path: /assets/img/patch-logos/microsoft-windows-11.svg
   company_id: microsoft
   product_id: microsoft-windows-11
   company_url: /updates/microsoft/
@@ -1508,8 +1444,7 @@
   - New Windows release health update or known-issue notice.
   - Security-sensitive cumulative update with creator/gaming/workplace relevance.
   - Safeguard hold or known issue affecting creator, gaming, device, or enterprise workflows.
-  dossier_note: Windows 11 is tracked as a security-sensitive OS platform where update advice must balance exposure, known issues,
-    staged rollout behavior, and fragile creator/gaming workstations.
+  dossier_note: Windows 11 is tracked as a security-sensitive OS platform where update advice must balance exposure, known issues, staged rollout behavior, and fragile creator/gaming workstations.
 - id: microsoft-teams
   company_name: Microsoft
   product_name: Microsoft Teams
@@ -1525,7 +1460,7 @@
   signal_notes: Track client version rollout, meeting reliability, audio/video behavior, screen sharing, tenant/admin impact, and staged rollout.
   source_id: microsoft-teams
   logo_label: Teams
-  logo_path: https://www.microsoft.com/content/dam/microsoft/bade/images/icons/en-us/m365-app-icons-fy26/Teams-Icon-FY26.svg
+  logo_path: /assets/img/patch-logos/microsoft-teams.svg
   company_id: microsoft
   product_id: microsoft-teams
   company_url: /updates/microsoft/
@@ -1558,7 +1493,7 @@
   signal_notes: Track channel-specific rollout, presentation/export reliability, embedded media, collaboration, add-ins, and Copilot behavior.
   source_id: microsoft-powerpoint
   logo_label: PowerPoint
-  logo_path: https://www.microsoft.com/content/dam/microsoft/bade/images/icons/en-us/m365-app-icons-fy26/PowerPoint-Icon-FY26.svg
+  logo_path: /assets/img/patch-logos/microsoft-powerpoint.svg
   company_id: microsoft
   product_id: microsoft-powerpoint
   company_url: /updates/microsoft/
@@ -1584,15 +1519,13 @@
   priority: Core
   cadence: High
   impact: Office update channels, security fixes, collaboration, sync, add-ins, Copilot behavior, enterprise rollout, and workplace productivity.
-  watch_reason: Microsoft 365 Apps updates affect the broader Office suite and can change security exposure, collaboration behavior,
-    update-channel rollout, and workplace app reliability.
+  watch_reason: Microsoft 365 Apps updates affect the broader Office suite and can change security exposure, collaboration behavior, update-channel rollout, and workplace app reliability.
   source_url: https://learn.microsoft.com/en-us/officeupdates/update-history-microsoft365-apps-by-date
   source_label: Microsoft 365 Apps update history
-  signal_notes: Track Current Channel, Monthly Enterprise, Semi-Annual Enterprise, security updates, feature rollout, add-ins, sync,
-    collaboration, and Copilot behavior.
+  signal_notes: Track Current Channel, Monthly Enterprise, Semi-Annual Enterprise, security updates, feature rollout, add-ins, sync, collaboration, and Copilot behavior.
   source_id: microsoft-365-apps
   logo_label: M365
-  logo_path: https://cdn-dynmedia-1.microsoft.com/is/content/microsoftcorp/product-icon-M365-Copilot-48x48?fit=constrain&hei=48&op_usm=1.5%2C0.65%2C15%2C0&qlt=100&resMode=sharp2&wid=48
+  logo_path: /assets/img/patch-logos/microsoft-365-apps.svg
   company_id: microsoft
   product_id: microsoft-365-apps
   company_url: /updates/microsoft/
@@ -1610,8 +1543,7 @@
   - New Microsoft 365 Apps release-note entry.
   - Security or non-security update affecting Office desktop apps.
   - Channel-specific rollout with workplace deployment impact.
-  dossier_note: Microsoft 365 Apps is tracked as the broader Office update stream that may include PowerPoint, Word, Excel, Outlook,
-    security, and Copilot-related changes.
+  dossier_note: Microsoft 365 Apps is tracked as the broader Office update stream that may include PowerPoint, Word, Excel, Outlook, security, and Copilot-related changes.
 - id: elgato-stream-deck
   company_name: Elgato
   product_name: Stream Deck

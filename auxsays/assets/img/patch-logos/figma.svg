@@ -1,4 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="74" height="38" viewBox="0 0 74 38" role="img" aria-label="Figma logo">
-  <rect x="1" y="1" width="72" height="36" rx="10" fill="#101A20" stroke="#29444D"/>
-  <text x="50%" y="51%" dominant-baseline="middle" text-anchor="middle" fill="#F4EFE4" font-family="Inter, Arial, Helvetica, sans-serif" font-size="18" font-weight="800" letter-spacing="0.5">Figma</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="84" height="42" viewBox="0 0 84 42" role="img" aria-label="Figma logo">
+  <rect x="1" y="1" width="82" height="40" rx="12" fill="#101A20" stroke="#29444D"/>
+  <g transform="translate(20 6)">
+    <rect x="0" y="0" width="12" height="12" rx="6" fill="#F24E1E"/>
+    <rect x="12" y="0" width="12" height="12" rx="6" fill="#FF7262"/>
+    <rect x="0" y="12" width="12" height="12" rx="6" fill="#A259FF"/>
+    <rect x="12" y="12" width="12" height="12" rx="6" fill="#1ABCFE"/>
+    <rect x="0" y="24" width="12" height="12" rx="6" fill="#0ACF83"/>
+  </g>
+  <text x="54" y="24" text-anchor="middle" dominant-baseline="middle" fill="#F4EFE4" font-family="Inter, Arial, Helvetica, sans-serif" font-size="15" font-weight="800" letter-spacing="0.4">Figma</text>
 </svg>

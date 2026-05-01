@@ -1,4 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="PPT">
-  <rect width="128" height="128" rx="24" fill="#111827"/>
-  <text x="64" y="75" text-anchor="middle" font-family="Inter, Arial, sans-serif" font-size="34" font-weight="800" fill="#9df7ff">PPT</text>
+<svg xmlns="http://www.w3.org/2000/svg" width="84" height="42" viewBox="0 0 84 42" role="img" aria-label="Microsoft PowerPoint logo">
+  <rect x="1" y="1" width="82" height="40" rx="12" fill="#101A20" stroke="#29444D"/>
+  <circle cx="28" cy="21" r="10" fill="#D35230"/>
+  <path d="M28 11a10 10 0 0 1 10 10h-10V11Z" fill="#FF8F6B"/>
+  <rect x="18" y="14" width="12" height="14" rx="2" fill="#B7472A"/>
+  <text x="24" y="23" text-anchor="middle" dominant-baseline="middle" fill="#FFFFFF" font-family="Inter, Arial, Helvetica, sans-serif" font-size="11" font-weight="900">P</text>
+  <text x="57" y="22" text-anchor="middle" dominant-baseline="middle" fill="#F4EFE4" font-family="Inter, Arial, Helvetica, sans-serif" font-size="11.5" font-weight="800">PowerPoint</text>
 </svg>
