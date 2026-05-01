@@ -54,6 +54,7 @@ layout: aux-base
       {% assign product_updates_for_card = site.pages | where: "update_entry", true | where: "product_id", product.id %}
 
       {% assign product_lane_label = 'Software' %}
+      {% assign resolved_product_logo_path = product.logo_path | default: company.logo_path %}
       <article class="patch-product-card patch-product-card--clickable{% if product.ui_backdrop_path %} patch-product-card--has-ui-backdrop{% endif %}"{% if product.ui_backdrop_path %}
         style="--product-ui-backdrop: url('{{ product.ui_backdrop_path | relative_url }}');"{% endif %}
         data-card-href="{{ product.product_url | relative_url }}"
@@ -63,10 +64,8 @@ layout: aux-base
         role="link"
         aria-label="Open {{ product.product_name }} software page">
         <div class="patch-product-topline">
-          <div class="patch-product-heading">
-            <span class="patch-source-badge patch-logo-badge patch-logo-badge--has-image patch-product-icon"><img src="{% if product.logo_path contains "://" %}{{ product.logo_path }}{% else %}{{ product.logo_path | relative_url }}{% endif %}" alt="{{ product.product_name }} logo" loading="lazy"></span>
-            <span class="patch-product-heading-text"><strong>{{ product.product_name }}</strong><em>{{ product.category_label }}</em></span>
-          </div>
+          <span class="patch-source-badge patch-logo-badge patch-logo-badge--has-image patch-product-icon"><img src="{% if resolved_product_logo_path contains "://" %}{{ resolved_product_logo_path }}{% else %}{{ resolved_product_logo_path | relative_url }}{% endif %}" alt="{{ product.product_name }} logo" loading="lazy"></span>
+          <span><strong>{{ product.product_name }}</strong><em>{{ product.category_label }}</em></span>
           <span class="patch-source-priority patch-source-priority--software">{{ product_lane_label }}</span>
         </div>
         <p>{{ product.impact }}</p>

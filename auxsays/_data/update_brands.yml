@@ -7,7 +7,7 @@ openai-chatgpt:
   company_label: OpenAI
   source_id: openai-chatgpt
   logo_label: OpenAI
-  logo_path: /assets/img/patch-logos/openai-chatgpt.svg
+  logo_path: https://cdn.simpleicons.org/openai/ffffff
 anthropic-claude:
   company_name: Anthropic
   product_name: Claude
@@ -17,7 +17,7 @@ anthropic-claude:
   company_label: Anthropic
   source_id: anthropic-claude
   logo_label: Claude
-  logo_path: /assets/img/patch-logos/anthropic-claude.svg
+  logo_path: https://cdn.simpleicons.org/anthropic/ffffff
 google-gemini:
   company_name: Google
   product_name: Gemini
@@ -27,7 +27,7 @@ google-gemini:
   company_label: Google
   source_id: google-gemini
   logo_label: Gemini
-  logo_path: /assets/img/patch-logos/google-gemini.svg
+  logo_path: https://cdn.simpleicons.org/google/ffffff
 perplexity:
   company_name: Perplexity
   product_name: Perplexity
@@ -37,7 +37,7 @@ perplexity:
   company_label: Perplexity
   source_id: perplexity
   logo_label: Perplexity
-  logo_path: /assets/img/patch-logos/perplexity.svg
+  logo_path: https://cdn.simpleicons.org/perplexity/ffffff
 midjourney:
   company_name: Midjourney
   product_name: Midjourney
@@ -47,7 +47,7 @@ midjourney:
   company_label: Midjourney
   source_id: midjourney
   logo_label: Midjourney
-  logo_path: /assets/img/patch-logos/midjourney.svg
+  logo_path: https://cdn.simpleicons.org/midjourney/ffffff
 stability-ai:
   company_name: Stability AI
   product_name: Stable Diffusion / Stable Audio
@@ -67,7 +67,7 @@ runway:
   company_label: Runway
   source_id: runway
   logo_label: Runway
-  logo_path: /assets/img/patch-logos/runway.svg
+  logo_path: https://cdn.simpleicons.org/runway/ffffff
 pika:
   company_name: Pika
   product_name: Pika
@@ -87,7 +87,7 @@ lottiefiles:
   company_label: LottieFiles
   source_id: lottiefiles
   logo_label: LottieFiles
-  logo_path: /assets/img/patch-logos/lottiefiles.svg
+  logo_path: https://cdn.simpleicons.org/lottiefiles/ffffff
 figma:
   company_name: Figma
   product_name: Figma
@@ -97,7 +97,7 @@ figma:
   company_label: Figma
   source_id: figma
   logo_label: Figma
-  logo_path: /assets/img/patch-logos/figma.svg
+  logo_path: https://cdn.simpleicons.org/figma/ffffff
 canva:
   company_name: Canva
   product_name: Canva
@@ -107,7 +107,7 @@ canva:
   company_label: Canva
   source_id: canva
   logo_label: Canva
-  logo_path: /assets/img/patch-logos/canva.svg
+  logo_path: https://cdn.simpleicons.org/canva/ffffff
 adobe-premiere-pro:
   company_name: Adobe
   product_name: Premiere Pro
@@ -167,7 +167,7 @@ twitch:
   company_label: Twitch
   source_id: twitch
   logo_label: Twitch
-  logo_path: /assets/img/patch-logos/twitch.svg
+  logo_path: https://cdn.simpleicons.org/twitch/ffffff
 youtube:
   company_name: YouTube
   product_name: YouTube / YouTube Studio
@@ -177,7 +177,7 @@ youtube:
   company_label: YouTube
   source_id: youtube
   logo_label: YouTube
-  logo_path: /assets/img/patch-logos/youtube.svg
+  logo_path: https://cdn.simpleicons.org/youtube/ffffff
 kick:
   company_name: Kick
   product_name: Kick
@@ -187,7 +187,7 @@ kick:
   company_label: Kick
   source_id: kick
   logo_label: Kick
-  logo_path: /assets/img/patch-logos/kick.svg
+  logo_path: https://cdn.simpleicons.org/kick/ffffff
 rumble:
   company_name: Rumble
   product_name: Rumble
@@ -197,7 +197,7 @@ rumble:
   company_label: Rumble
   source_id: rumble
   logo_label: Rumble
-  logo_path: /assets/img/patch-logos/rumble.svg
+  logo_path: https://cdn.simpleicons.org/rumble/ffffff
 epic-unreal:
   company_name: Epic Games
   product_name: Unreal Engine
@@ -207,7 +207,7 @@ epic-unreal:
   company_label: Epic Games
   source_id: epic-unreal
   logo_label: Unreal Engine
-  logo_path: /assets/img/patch-logos/epic-unreal.svg
+  logo_path: https://cdn.simpleicons.org/epicgames/ffffff
 unity:
   company_name: Unity
   product_name: Unity
@@ -217,7 +217,7 @@ unity:
   company_label: Unity
   source_id: unity
   logo_label: Unity
-  logo_path: /assets/img/patch-logos/unity.svg
+  logo_path: https://cdn.simpleicons.org/unity/ffffff
 steam:
   company_name: Valve
   product_name: Steam
@@ -227,7 +227,7 @@ steam:
   company_label: Valve
   source_id: steam
   logo_label: Steam
-  logo_path: /assets/img/patch-logos/steam.svg
+  logo_path: https://cdn.simpleicons.org/steam/ffffff
 nvidia:
   company_name: NVIDIA
   product_name: NVIDIA App / GeForce / Studio
@@ -237,7 +237,7 @@ nvidia:
   company_label: NVIDIA
   source_id: nvidia
   logo_label: NVIDIA
-  logo_path: /assets/img/patch-logos/nvidia.svg
+  logo_path: https://cdn.simpleicons.org/nvidia/ffffff
 amd:
   company_name: AMD
   product_name: AMD Software / Radeon
@@ -247,7 +247,7 @@ amd:
   company_label: AMD
   source_id: amd
   logo_label: AMD
-  logo_path: /assets/img/patch-logos/amd.svg
+  logo_path: https://cdn.simpleicons.org/amd/ffffff
 intel-arc:
   company_name: Intel
   product_name: Intel Graphics / Arc
@@ -257,7 +257,7 @@ intel-arc:
   company_label: Intel
   source_id: intel-arc
   logo_label: Intel
-  logo_path: /assets/img/patch-logos/intel-arc.svg
+  logo_path: https://cdn.simpleicons.org/intel/ffffff
 blender:
   company_name: Blender Foundation
   product_name: Blender
@@ -267,7 +267,7 @@ blender:
   company_label: Blender Foundation
   source_id: blender
   logo_label: Blender
-  logo_path: /assets/img/patch-logos/blender.svg
+  logo_path: https://cdn.simpleicons.org/blender/ffffff
 comfyui:
   company_name: ComfyUI
   product_name: ComfyUI
@@ -287,7 +287,7 @@ hugging-face:
   company_label: Hugging Face
   source_id: hugging-face
   logo_label: Hugging Face
-  logo_path: /assets/img/patch-logos/hugging-face.svg
+  logo_path: https://cdn.simpleicons.org/huggingface/ffffff
 github:
   company_name: GitHub
   product_name: GitHub / Copilot
@@ -297,7 +297,7 @@ github:
   company_label: GitHub
   source_id: github
   logo_label: GitHub / Copilot
-  logo_path: /assets/img/patch-logos/github.svg
+  logo_path: https://cdn.simpleicons.org/github/ffffff
 cloudflare:
   company_name: Cloudflare
   product_name: Cloudflare
@@ -307,7 +307,7 @@ cloudflare:
   company_label: Cloudflare
   source_id: cloudflare
   logo_label: Cloudflare
-  logo_path: /assets/img/patch-logos/cloudflare.svg
+  logo_path: https://cdn.simpleicons.org/cloudflare/ffffff
 netlify:
   company_name: Netlify
   product_name: Netlify
@@ -317,7 +317,7 @@ netlify:
   company_label: Netlify
   source_id: netlify
   logo_label: Netlify
-  logo_path: /assets/img/patch-logos/netlify.svg
+  logo_path: https://cdn.simpleicons.org/netlify/ffffff
 notion:
   company_name: Notion
   product_name: Notion
@@ -327,7 +327,7 @@ notion:
   company_label: Notion
   source_id: notion
   logo_label: Notion
-  logo_path: /assets/img/patch-logos/notion.svg
+  logo_path: https://cdn.simpleicons.org/notion/ffffff
 zapier:
   company_name: Zapier
   product_name: Zapier
@@ -337,7 +337,7 @@ zapier:
   company_label: Zapier
   source_id: zapier
   logo_label: Zapier
-  logo_path: /assets/img/patch-logos/zapier.svg
+  logo_path: https://cdn.simpleicons.org/zapier/ffffff
 make:
   company_name: Make
   product_name: Make
@@ -347,7 +347,7 @@ make:
   company_label: Make
   source_id: make
   logo_label: Make
-  logo_path: /assets/img/patch-logos/make.svg
+  logo_path: https://cdn.simpleicons.org/make/ffffff
 obs-studio:
   company_name: OBS Project
   product_name: OBS Studio
@@ -357,7 +357,7 @@ obs-studio:
   company_label: OBS Project
   source_id: obs-studio
   logo_label: OBS
-  logo_path: /assets/img/patch-logos/obs-studio.svg
+  logo_path: https://cdn.simpleicons.org/obsstudio/ffffff
 davinci-resolve:
   company_name: Blackmagic Design
   product_name: DaVinci Resolve
@@ -377,4 +377,4 @@ blackmagic-davinci:
   company_label: Blackmagic Design
   source_id: blackmagic-davinci
   logo_label: DaVinci Resolve
-  logo_path: /assets/img/patch-logos/davinci-resolve.svg
+  logo_path: https://cdn.simpleicons.org/blackmagicdesign/ffffff

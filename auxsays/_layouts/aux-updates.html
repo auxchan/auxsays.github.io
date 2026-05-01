@@ -184,6 +184,7 @@ layout: aux-base
       {% assign reaction_class = reaction | downcase | replace: ' ', '-' %}
       {% assign brand_meta = site.data.update_brands[item.update_brand_id] %}
       {% assign update_product_meta = site.data.patch_products | where: "id", item.product_id | first %}
+      {% assign resolved_brand_logo_path = brand_meta.logo_path | default: update_product_meta.logo_path %}
       <article class="panel patch-card"
         data-kind="current"
         data-source-id="{{ item.update_brand_id | default: item.update_product | slugify }}"
@@ -205,9 +206,9 @@ layout: aux-base
         </div>
         <div class="patch-card-headline">
           <a class="patch-identity" href="{{ item.url | relative_url }}">
-            <span class="patch-badge{% if brand_meta and brand_meta.logo_path %} patch-logo-badge patch-logo-badge--has-image{% endif %}">
-              {% if brand_meta and brand_meta.logo_path %}
-              <img src="{% if brand_meta.logo_path contains "://" %}{{ brand_meta.logo_path }}{% else %}{{ brand_meta.logo_path | relative_url }}{% endif %}" alt="{{ item.update_source_name }} logo" loading="lazy">
+            <span class="patch-badge{% if resolved_brand_logo_path %} patch-logo-badge patch-logo-badge--has-image{% endif %}">
+              {% if resolved_brand_logo_path %}
+              <img src="{% if resolved_brand_logo_path contains "://" %}{{ resolved_brand_logo_path }}{% else %}{{ resolved_brand_logo_path | relative_url }}{% endif %}" alt="{{ item.update_source_name }} logo" loading="lazy">
               {% else %}
               {{ item.update_logo_text | default: item.update_product | slice: 0, 3 }}
               {% endif %}
@@ -263,6 +264,7 @@ layout: aux-base
         {% assign reaction_class = reaction | downcase | replace: ' ', '-' %}
         {% assign brand_meta = site.data.update_brands[item.update_brand_id] %}
         {% assign update_product_meta = site.data.patch_products | where: "id", item.product_id | first %}
+        {% assign resolved_brand_logo_path = brand_meta.logo_path | default: update_product_meta.logo_path %}
         <article class="panel patch-card patch-card--archived"
           data-kind="archived"
           data-source-id="{{ item.update_brand_id | default: item.update_product | slugify }}"
@@ -284,9 +286,9 @@ layout: aux-base
           </div>
           <div class="patch-card-headline">
             <a class="patch-identity" href="{{ item.url | relative_url }}">
-              <span class="patch-badge{% if brand_meta and brand_meta.logo_path %} patch-logo-badge patch-logo-badge--has-image{% endif %}">
-                {% if brand_meta and brand_meta.logo_path %}
-                <img src="{% if brand_meta.logo_path contains "://" %}{{ brand_meta.logo_path }}{% else %}{{ brand_meta.logo_path | relative_url }}{% endif %}" alt="{{ item.update_source_name }} logo" loading="lazy">
+              <span class="patch-badge{% if resolved_brand_logo_path %} patch-logo-badge patch-logo-badge--has-image{% endif %}">
+                {% if resolved_brand_logo_path %}
+                <img src="{% if resolved_brand_logo_path contains "://" %}{{ resolved_brand_logo_path }}{% else %}{{ resolved_brand_logo_path | relative_url }}{% endif %}" alt="{{ item.update_source_name }} logo" loading="lazy">
                 {% else %}
                 {{ item.update_logo_text | default: item.update_product | slice: 0, 3 }}
                 {% endif %}

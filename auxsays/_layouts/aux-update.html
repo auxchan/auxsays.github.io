@@ -107,6 +107,7 @@ layout: aux-base
   {% assign official_note_label = 'Official Vendor Blog' %}
 {% endif %}
 
+{% assign resolved_update_logo_path = product.logo_path | default: company.logo_path %}
 <div class="update-page-shell reveal-up">
   <section class="panel update-hero update-hero--v3">
     <div class="update-hero-main update-hero-main--clean">
@@ -114,7 +115,7 @@ layout: aux-base
 
       <div class="update-brand-row">
         <span class="update-brand-badge patch-logo-badge patch-logo-badge--has-image">
-          {% if product.logo_path != blank %}<img src="{% if product.logo_path contains "://" %}{{ product.logo_path }}{% else %}{{ product.logo_path | relative_url }}{% endif %}" alt="{{ product.product_name }} logo" loading="lazy">{% else %}{{ page.update_logo_text | default: page.update_product | slice: 0, 3 }}{% endif %}
+          {% if resolved_update_logo_path != blank %}<img src="{% if resolved_update_logo_path contains "://" %}{{ resolved_update_logo_path }}{% else %}{{ resolved_update_logo_path | relative_url }}{% endif %}" alt="{{ product.product_name }} logo" loading="lazy">{% else %}{{ page.update_logo_text | default: page.update_product | slice: 0, 3 }}{% endif %}
         </span>
         <span class="update-brand-meta">
           <strong>{{ page.update_product }}</strong>

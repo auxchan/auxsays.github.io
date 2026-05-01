@@ -64,9 +64,6 @@ jobs:
       - name: Generate source health snapshot
         run: python auxsays/scripts/source_health_snapshot.py
 
-      - name: Validate local logo assets
-        run: python auxsays/scripts/validate_logo_assets.py
-
       - name: Run generated record QA
         run: python auxsays/scripts/qa_patch_records.py
 
