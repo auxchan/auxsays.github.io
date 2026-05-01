@@ -1,17 +1,24 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="84" height="42" viewBox="0 0 84 42" role="img" aria-label="OBS Studio logo">
-  <defs>
-    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
-      <feDropShadow dx="0" dy="1" stdDeviation="1" flood-color="#000" flood-opacity="0.35"/>
-    </filter>
-  </defs>
   <rect x="1" y="1" width="82" height="40" rx="12" fill="#101A20" stroke="#29444D"/>
-  <g transform="translate(12 5)" filter="url(#shadow)">
-    <circle cx="16" cy="16" r="13.5" fill="#111111" stroke="#F3F4F6" stroke-width="1.6"/>
-    <g fill="#F3F4F6">
-      <path d="M18.8 8.3c2.7 0 4.9 2.2 4.9 4.9 0 1.2-.4 2.4-1.2 3.3a6.4 6.4 0 0 0-7.3-8 5 5 0 0 1 3.6-.2Z"/>
-      <path d="M13.8 23.7c-2.7 0-4.9-2.2-4.9-4.9 0-1.2.4-2.4 1.2-3.3a6.4 6.4 0 0 0 7.3 8 5 5 0 0 1-3.6.2Z"/>
-      <path d="M15.4 10.3a4.9 4.9 0 0 1 4.2 7.4 6.4 6.4 0 0 0-2.7 8.8 4.9 4.9 0 0 1-5.3-8.3 6.4 6.4 0 0 0 3.8-7.9Z" opacity="0.98"/>
+  <g transform="translate(21 4)">
+    <circle cx="21" cy="17" r="13.8" fill="#0F1115" stroke="#F3F4F6" stroke-width="1.5"/>
+    <g transform="translate(21 17)">
+      <g fill="#F3F4F6">
+        <g transform="rotate(0)">
+          <circle cx="0" cy="-8.4" r="6.7"/>
+          <circle cx="-2.7" cy="-12.1" r="6.7" fill="#0F1115"/>
+        </g>
+        <g transform="rotate(120)">
+          <circle cx="0" cy="-8.4" r="6.7"/>
+          <circle cx="-2.7" cy="-12.1" r="6.7" fill="#0F1115"/>
+        </g>
+        <g transform="rotate(240)">
+          <circle cx="0" cy="-8.4" r="6.7"/>
+          <circle cx="-2.7" cy="-12.1" r="6.7" fill="#0F1115"/>
+        </g>
+      </g>
+      <circle cx="0" cy="0" r="3.1" fill="#0F1115"/>
     </g>
   </g>
-  <text x="58" y="22" text-anchor="middle" dominant-baseline="middle" fill="#F4EFE4" font-family="Inter, Arial, Helvetica, sans-serif" font-size="13" font-weight="800">OBS Studio</text>
+  <text x="58" y="21.5" text-anchor="middle" dominant-baseline="middle" fill="#F4EFE4" font-family="Inter, Arial, Helvetica, sans-serif" font-size="12.5" font-weight="800" letter-spacing="0.2">OBS Studio</text>
 </svg>
