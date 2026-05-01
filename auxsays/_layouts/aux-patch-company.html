@@ -63,8 +63,10 @@ layout: aux-base
         role="link"
         aria-label="Open {{ product.product_name }} software page">
         <div class="patch-product-topline">
-          <span class="patch-source-badge patch-logo-badge patch-logo-badge--has-image patch-product-icon"><img src="{% if product.logo_path contains "://" %}{{ product.logo_path }}{% else %}{{ product.logo_path | relative_url }}{% endif %}" alt="{{ product.product_name }} logo" loading="lazy"></span>
-          <span><strong>{{ product.product_name }}</strong><em>{{ product.category_label }}</em></span>
+          <div class="patch-product-heading">
+            <span class="patch-source-badge patch-logo-badge patch-logo-badge--has-image patch-product-icon"><img src="{% if product.logo_path contains "://" %}{{ product.logo_path }}{% else %}{{ product.logo_path | relative_url }}{% endif %}" alt="{{ product.product_name }} logo" loading="lazy"></span>
+            <span class="patch-product-heading-text"><strong>{{ product.product_name }}</strong><em>{{ product.category_label }}</em></span>
+          </div>
           <span class="patch-source-priority patch-source-priority--software">{{ product_lane_label }}</span>
         </div>
         <p>{{ product.impact }}</p>

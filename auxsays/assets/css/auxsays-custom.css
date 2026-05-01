@@ -4461,43 +4461,35 @@ button, input, select, textarea { font: inherit; }
 .official-source-list a:focus-visible { text-decoration: underline; }
 .official-source-list span { color: var(--aux-muted); font-size: .82rem; text-transform: uppercase; letter-spacing: .08em; }
 
-/* Product card heading spacing refinement: give titles more room beneath the icon */
+/* Product card heading layout refinement: icon first, title underneath */
 .patch-product-topline {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr);
-  grid-template-areas:
-    "icon priority"
-    "title title";
-  column-gap: .9rem;
-  row-gap: .72rem;
+  grid-template-columns: minmax(0,1fr) auto;
+  gap: .85rem 1rem;
   align-items: start;
 }
 
-.patch-product-topline > :nth-child(1) {
-  grid-area: icon;
+.patch-product-heading {
+  display: grid;
+  justify-items: start;
+  gap: .72rem;
+  min-width: 0;
 }
 
-.patch-product-topline > :nth-child(2) {
-  grid-area: title;
+.patch-product-heading-text {
   display: grid;
   gap: .18rem;
   min-width: 0;
 }
 
-.patch-product-topline > :nth-child(3) {
-  grid-area: priority;
-  justify-self: end;
-  align-self: start;
-}
-
-.patch-product-topline strong {
+.patch-product-heading-text strong {
   display: block;
-  line-height: 1.08;
+  line-height: 1.06;
   font-size: 1.18rem;
   letter-spacing: -.02em;
 }
 
-.patch-product-topline em {
+.patch-product-heading-text em {
   display: block;
   color: var(--text-2);
   font-style: normal;
@@ -4506,7 +4498,7 @@ button, input, select, textarea { font: inherit; }
   font-size: .74rem;
 }
 
-.patch-product-icon,
+.patch-product-topline .patch-product-icon,
 .patch-product-topline .patch-product-icon.patch-logo-badge,
 .patch-product-topline .patch-product-icon.patch-source-badge.patch-logo-badge {
   width: 64px;
@@ -4517,21 +4509,29 @@ button, input, select, textarea { font: inherit; }
   align-self: start;
 }
 
-.patch-product-topline .patch-product-icon.patch-logo-badge--has-image img {
-  max-width: 78%;
-  max-height: 78%;
+.patch-product-topline .patch-product-icon.patch-logo-badge--has-image img,
+.patch-product-topline .patch-product-icon.patch-source-badge.patch-logo-badge--has-image img {
+  max-width: 74%;
+  max-height: 74%;
+  height: auto;
+  width: auto;
+}
+
+.patch-product-topline .patch-source-priority--software {
+  justify-self: end;
+  align-self: start;
 }
 
 @media (max-width: 640px) {
   .patch-product-topline {
-    row-gap: .6rem;
+    grid-template-columns: 1fr;
   }
 
-  .patch-product-topline strong {
-    font-size: 1.08rem;
+  .patch-product-topline .patch-source-priority--software {
+    justify-self: start;
   }
 
-  .patch-product-icon,
+  .patch-product-topline .patch-product-icon,
   .patch-product-topline .patch-product-icon.patch-logo-badge,
   .patch-product-topline .patch-product-icon.patch-source-badge.patch-logo-badge {
     width: 58px;
