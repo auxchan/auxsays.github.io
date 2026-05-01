@@ -4526,3 +4526,140 @@ button, input, select, textarea { font: inherit; }
     min-height: 2.75rem;
   }
 }
+
+/* Decision-page modules for update records */
+.update-decision-box__header p {
+  margin: .55rem 0 0;
+  max-width: 76rem;
+  color: var(--text-1);
+  line-height: 1.65;
+  font-weight: 500;
+}
+
+.update-section-intro {
+  margin: -.25rem 0 1rem;
+  max-width: 72rem;
+  color: var(--text-1);
+  line-height: 1.7;
+}
+
+.update-change-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: .9rem;
+}
+
+.update-change-list,
+.update-evidence-sample {
+  padding: 1rem 1.05rem;
+  border-radius: 18px;
+  border: 1px solid rgba(95,212,229,.14);
+  background: rgba(255,255,255,.024);
+}
+
+.update-change-list h3,
+.update-evidence-sample h3 {
+  margin: 0 0 .65rem;
+  color: var(--text-0);
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.update-change-list ul,
+.update-practical-list {
+  margin: 0;
+  padding-left: 1.15rem;
+  display: grid;
+  gap: .45rem;
+}
+
+.update-change-list li,
+.update-practical-list li {
+  color: var(--text-1);
+  line-height: 1.65;
+}
+
+.update-evidence-sample-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: .9rem;
+}
+
+.update-evidence-sample {
+  display: grid;
+  gap: .7rem;
+}
+
+.update-evidence-sample__topline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .45rem;
+  color: var(--text-2);
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  font-size: .68rem;
+}
+
+.update-evidence-sample__topline span,
+.update-evidence-sample__topline em {
+  display: inline-flex;
+  padding: .22rem .5rem;
+  border-radius: 999px;
+  border: 1px solid rgba(95,212,229,.16);
+  background: rgba(95,212,229,.055);
+  font-style: normal;
+}
+
+.update-evidence-sample h3 a {
+  color: var(--accent-1);
+  text-decoration: none;
+}
+
+.update-evidence-sample h3 a:hover,
+.update-evidence-sample h3 a:focus-visible {
+  text-decoration: underline;
+}
+
+.update-evidence-sample dl {
+  margin: 0;
+  display: grid;
+  gap: .55rem;
+}
+
+.update-evidence-sample dl div {
+  display: grid;
+  gap: .15rem;
+}
+
+.update-evidence-sample dt {
+  color: var(--text-2);
+  font-size: .68rem;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+}
+
+.update-evidence-sample dd {
+  margin: 0;
+  color: var(--text-1);
+  line-height: 1.55;
+}
+
+.update-practical-card {
+  border-color: rgba(240,202,103,.24);
+  background:
+    linear-gradient(180deg, rgba(17,22,26,.9), rgba(11,15,18,.96)),
+    radial-gradient(circle at 8% 0%, rgba(240,202,103,.08), transparent 30%);
+}
+
+@media (max-width: 1040px) {
+  .update-evidence-sample-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .update-change-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -54,6 +54,8 @@ layout: aux-base
   {% assign known_issues_label = 'Yes' %}
 {% endif %}
 {% assign verdict_text = page.quick_verdict %}
+{% assign decision_label = page.update_decision_label | default: verdict_text %}
+{% assign decision_body = page.update_decision_body %}
 {% if verdict_text == blank %}
   {% if evidence_state == 'Consensus live' %}
     {% assign verdict_text = 'Consensus collection is active for this patch. Review the confirmed patch-specific reports and official notes before upgrading.' %}
@@ -156,7 +158,8 @@ layout: aux-base
       <div class="update-decision-box update-decision-box--{{ evidence_state_class }}">
         <div class="update-decision-box__header">
           <span class="update-decision-eyebrow">AUXSAYS verdict</span>
-          <strong>{{ verdict_text }}</strong>
+          <strong>{{ decision_label }}</strong>
+          {% if decision_body != blank %}<p>{{ decision_body }}</p>{% elsif decision_label != verdict_text %}<p>{{ verdict_text }}</p>{% endif %}
         </div>
         <dl class="update-decision-grid">
           <div><dt>Confidence</dt><dd>{{ page.update_consensus_confidence | default: 'Low' }}</dd></div>
@@ -213,6 +216,62 @@ layout: aux-base
       </div>
       {% endif %}
     </article>
+
+    {% if page.official_additions or page.official_fixes %}
+    <article class="panel update-info-card update-official-change-card">
+      <h2>Official changes</h2>
+      <div class="update-change-grid">
+        {% if page.official_additions and page.official_additions.size > 0 %}
+        <section class="update-change-list">
+          <h3>Official additions</h3>
+          <ul>
+            {% for item in page.official_additions %}<li>{{ item }}</li>{% endfor %}
+          </ul>
+        </section>
+        {% endif %}
+        {% if page.official_fixes and page.official_fixes.size > 0 %}
+        <section class="update-change-list">
+          <h3>Official fixes</h3>
+          <ul>
+            {% for item in page.official_fixes %}<li>{{ item }}</li>{% endfor %}
+          </ul>
+        </section>
+        {% endif %}
+      </div>
+    </article>
+    {% endif %}
+
+    {% if page.evidence_samples and page.evidence_samples.size > 0 %}
+    <article class="panel update-info-card update-evidence-sample-card">
+      <h2>Community risk sample</h2>
+      <p class="update-section-intro">These manually reviewed examples show why this page recommends waiting or testing before using 26.2 on production systems.</p>
+      <div class="update-evidence-sample-grid">
+        {% for item in page.evidence_samples %}
+        <article class="update-evidence-sample">
+          <div class="update-evidence-sample__topline">
+            <span>{{ item.source_name | default: 'Source' }}</span>
+            {% if item.counted == true %}<em>Counted: Yes</em>{% endif %}
+          </div>
+          <h3>{% if item.source_url %}<a href="{{ item.source_url }}">{{ item.source_title }}</a>{% else %}{{ item.source_title }}{% endif %}</h3>
+          <dl>
+            <div><dt>Version matched</dt><dd>{{ item.version_matched }}</dd></div>
+            <div><dt>Issue</dt><dd>{{ item.issue }}</dd></div>
+            {% if item.outcome %}<div><dt>Outcome</dt><dd>{{ item.outcome }}</dd></div>{% endif %}
+          </dl>
+        </article>
+        {% endfor %}
+      </div>
+    </article>
+    {% endif %}
+
+    {% if page.practical_recommendations and page.practical_recommendations.size > 0 %}
+    <article class="panel update-info-card update-practical-card">
+      <h2>Practical recommendation</h2>
+      <ul class="update-practical-list">
+        {% for item in page.practical_recommendations %}<li>{{ item }}</li>{% endfor %}
+      </ul>
+    </article>
+    {% endif %}
 
     {% if official_body_present %}
     <details class="panel update-info-card update-official-details" open>

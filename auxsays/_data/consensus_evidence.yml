@@ -1,4 +1,61 @@
 schema_version: 1
-# Manual-assisted evidence only. Do not add broad scraped complaints here.
-# Count only reports tied to the exact patch/update version by report text or parent thread/article title.
-evidence: []
+evidence:
+- id: adobe-premiere-pro-26-2-interface-slowdown-build-65
+  product_id: adobe-premiere-pro
+  update_version: '26.2'
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/constant-crashes-on-version-26-2-0-1558068
+  parent_title: Constant Crashes on Version 26.2.0
+  report_title: Constant Crashes on Version 26.2.0
+  report_text_excerpt: '26.2.0 Build 65: Timeline crash when dragging a clip. Reverting to 26.0.2 resolved it.'
+  captured_at: '2026-05-01T00:00:00Z'
+  patch_version_matched: true
+  counted: true
+  exclusion_reason: null
+  sentiment: negative
+  severity: high
+  issue_theme: timeline crash
+  workflow_area: timeline editing
+  platform: unknown
+  source_weight: 1
+- id: adobe-premiere-pro-26-2-crashes-build-65
+  product_id: adobe-premiere-pro
+  update_version: '26.2'
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/since-the-update-i-ve-been-experiencing-instability-and-slowdown-issues-in-the-interface-premiere-26-2-build-65-1558015
+  parent_title: Instability and slowdown, Premiere 26.2 Build 65
+  report_title: Instability and slowdown, Premiere 26.2 Build 65
+  report_text_excerpt: '26.2 Build 65: Instability, UI slowdown, and timeline/interface hangs. Counted as patch-specific risk
+    evidence.'
+  captured_at: '2026-05-01T00:00:00Z'
+  patch_version_matched: true
+  counted: true
+  exclusion_reason: null
+  sentiment: negative
+  severity: high
+  issue_theme: interface lag and hangs
+  workflow_area: editing interface
+  platform: unknown
+  source_weight: 1
+- id: adobe-premiere-pro-26-2-ui-lag-freezing-rollback
+  product_id: adobe-premiere-pro
+  update_version: '26.2'
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community Bug Report
+  source_url: https://community.adobe.com/bug-reports-728/premiere-pro-26-2-ui-lag-and-freezing-resolved-by-reverting-to-26-0-1-1558514
+  parent_title: Premiere Pro 26.2 UI Lag and Freezing Resolved by Reverting to 26.0.1
+  report_title: Premiere Pro 26.2 UI Lag and Freezing Resolved by Reverting to 26.0.1
+  report_text_excerpt: '26.2: Severe UI lag and freezing. Reverting to 26.0.1 resolved it; Adobe staff suggested testing beta
+    26.3.0 build 51 or later.'
+  captured_at: '2026-05-01T00:00:00Z'
+  patch_version_matched: true
+  counted: true
+  exclusion_reason: null
+  sentiment: negative
+  severity: high
+  issue_theme: ui lag and freezing
+  workflow_area: editing interface
+  platform: unknown
+  source_weight: 1

@@ -78,6 +78,16 @@ def has_structured_evidence(data: dict[str, Any]) -> bool:
     return isinstance(evidence, list) and len(evidence) > 0 and all(isinstance(item, dict) for item in evidence)
 
 
+def contains_public_static_sample(value: Any) -> bool:
+    if isinstance(value, str):
+        return "static sample" in value.lower()
+    if isinstance(value, list):
+        return any(contains_public_static_sample(item) for item in value)
+    if isinstance(value, dict):
+        return any(contains_public_static_sample(item) for item in value.values())
+    return False
+
+
 def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
     errors: list[dict[str, str]] = []
     warnings: list[dict[str, str]] = []
@@ -111,6 +121,22 @@ def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]
         add(errors, path, "live_without_structured_evidence", "consensus_live requires structured evidence objects.")
     if evidence_state and evidence_state not in VALID_EVIDENCE_STATES:
         add(warnings, path, "unknown_evidence_state", f"Evidence state '{evidence_state}' is not in the normalized taxonomy.")
+    if contains_public_static_sample(data):
+        add(errors, path, "public_static_sample_wording", "Public-facing generated record data still contains 'Static sample' wording. Use 'Pilot sample'.")
+
+    evidence_samples = data.get("evidence_samples")
+    if evidence_samples is not None:
+        if not isinstance(evidence_samples, list):
+            add(errors, path, "evidence_samples_not_list", "evidence_samples must be a list of source objects.")
+        else:
+            for idx, item in enumerate(evidence_samples):
+                if not isinstance(item, dict):
+                    add(errors, path, "evidence_sample_item_not_object", f"evidence_samples[{idx}] must be an object.")
+                    continue
+                if not looks_like_url(item.get("source_url")):
+                    add(errors, path, "evidence_sample_missing_source_url", f"evidence_samples[{idx}] is missing a valid source_url.")
+                if item.get("counted") is True and item.get("patch_version_matched") is not True:
+                    add(errors, path, "counted_evidence_without_patch_match", f"evidence_samples[{idx}] is counted but patch_version_matched is not true.")
 
     stage = str(data.get("intelligence_stage") or "").strip()
     if stage and stage not in VALID_INTELLIGENCE_STAGES:
@@ -123,6 +149,8 @@ def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]
 
     if data.get("patch_file_size") in (None, "") and not data.get("patch_file_size_status"):
         add(warnings, path, "blank_file_size_without_status", "patch_file_size is blank and no patch_file_size_status explains why.")
+    if str(data.get("official_checksums_capture_status") or "").strip() in {"captured", "present"} and not str(data.get("official_checksums_body") or "").strip():
+        add(errors, path, "checksum_status_without_body", "Checksum capture status says checksums are present but official_checksums_body is blank.")
 
     official_claim = " ".join([title, detail_title, official_body[:500]]).lower()
     if "patch notes" in official_claim and source_type in NON_PATCH_NOTE_SOURCE_TYPES:
