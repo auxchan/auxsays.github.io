@@ -7,15 +7,13 @@
   priority: Core
   cadence: High
   impact: Creator workflows, coding, research, automations, and AI-assisted publishing.
-  watch_reason: Model, product, and workspace changes can immediately alter how creators
-    plan, write, research, automate, and ship content.
+  watch_reason: Model, product, and workspace changes can immediately alter how creators plan, write, research, automate, and ship content.
   source_url: https://help.openai.com/en/articles/6825453-chatgpt-release-notes
   source_label: ChatGPT release notes
-  signal_notes: Separate model changes, product UI changes, workspace/agent changes,
-    and policy/limit changes.
+  signal_notes: Separate model changes, product UI changes, workspace/agent changes, and policy/limit changes.
   source_id: openai-chatgpt
   logo_label: OpenAI
-  logo_path: https://cdn.simpleicons.org/openai/ffffff
+  logo_path: /assets/img/patch-logos/openai.svg
   company_id: openai
   product_id: openai-chatgpt
   company_url: /updates/openai/
@@ -30,17 +28,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: ChatGPT / OpenAI is tracked for release changes, workflow impact,
-    compatibility shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: ChatGPT / OpenAI is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: ChatGPT / OpenAI
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: anthropic-claude
   company_name: Anthropic
   product_name: Claude
@@ -50,14 +47,13 @@
   priority: Core
   cadence: High
   impact: Writing, coding, analysis, long-context workflows, and Claude Code adoption.
-  watch_reason: Claude updates can change creator research, document workflows, coding
-    velocity, and AI-agent reliability.
+  watch_reason: Claude updates can change creator research, document workflows, coding velocity, and AI-agent reliability.
   source_url: https://support.claude.com/en/articles/12138966-release-notes
   source_label: Claude release notes
   signal_notes: Track app updates separately from Claude Code and model launches.
   source_id: anthropic-claude
   logo_label: Claude
-  logo_path: https://cdn.simpleicons.org/anthropic/ffffff
+  logo_path: /assets/img/patch-logos/anthropic.svg
   company_id: anthropic
   product_id: anthropic-claude
   company_url: /updates/anthropic/
@@ -72,17 +68,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: Claude is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Claude is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: Claude
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: google-gemini
   company_name: Google
   product_name: Gemini
@@ -91,17 +86,14 @@
   category_label: AI Tools
   priority: Core
   cadence: High
-  impact: Research, search-integrated AI, Android/Workspace workflows, and multimodal
-    creation.
-  watch_reason: Gemini changes affect search behavior, Workspace AI features, mobile
-    creator workflows, and AI video/image pipelines.
+  impact: Research, search-integrated AI, Android/Workspace workflows, and multimodal creation.
+  watch_reason: Gemini changes affect search behavior, Workspace AI features, mobile creator workflows, and AI video/image pipelines.
   source_url: https://gemini.google/updates/
   source_label: Gemini updates
-  signal_notes: Watch consumer Gemini, Workspace Gemini, and Veo/Nano Banana-style
-    creative updates separately.
+  signal_notes: Watch consumer Gemini, Workspace Gemini, and Veo/Nano Banana-style creative updates separately.
   source_id: google-gemini
   logo_label: Gemini
-  logo_path: https://cdn.simpleicons.org/google/ffffff
+  logo_path: /assets/img/patch-logos/google.svg
   company_id: google
   product_id: google-gemini
   company_url: /updates/google/
@@ -116,17 +108,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: Gemini is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Gemini is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: Gemini
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: perplexity
   company_name: Perplexity
   product_name: Perplexity
@@ -136,14 +127,13 @@
   priority: Core
   cadence: Medium
   impact: Research workflows, citation-first search, and creator briefing pipelines.
-  watch_reason: Useful for source discovery and public research workflows where citations
-    and fast briefings matter.
+  watch_reason: Useful for source discovery and public research workflows where citations and fast briefings matter.
   source_url: https://www.perplexity.ai/hub/blog
   source_label: Perplexity blog
   signal_notes: Flag search/index changes, model picker changes, and Pro feature changes.
   source_id: perplexity
   logo_label: Perplexity
-  logo_path: https://cdn.simpleicons.org/perplexity/ffffff
+  logo_path: /assets/img/patch-logos/perplexity.svg
   company_id: perplexity
   product_id: perplexity
   company_url: /updates/perplexity/
@@ -158,17 +148,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: Perplexity is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Perplexity is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: Perplexity
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: midjourney
   company_name: Midjourney
   product_name: Midjourney
@@ -178,15 +167,13 @@
   priority: Core
   cadence: High
   impact: Thumbnails, concept art, brand visuals, moodboards, and image workflows.
-  watch_reason: Image model changes can quickly shift what creators can produce for
-    thumbnails, brand worlds, and promotional graphics.
+  watch_reason: Image model changes can quickly shift what creators can produce for thumbnails, brand worlds, and promotional graphics.
   source_url: https://www.midjourney.com/updates/
   source_label: Midjourney updates
-  signal_notes: Track web editor, model versions, image editing, style reference,
-    and licensing/terms changes.
+  signal_notes: Track web editor, model versions, image editing, style reference, and licensing/terms changes.
   source_id: midjourney
   logo_label: Midjourney
-  logo_path: https://cdn.simpleicons.org/midjourney/ffffff
+  logo_path: /assets/img/patch-logos/midjourney.svg
   company_id: midjourney
   product_id: midjourney
   company_url: /updates/midjourney/
@@ -201,17 +188,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: Midjourney is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Midjourney is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: Midjourney
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: stability-ai
   company_name: Stability AI
   product_name: Stable Diffusion / Stable Audio
@@ -221,12 +207,10 @@
   priority: Expansion
   cadence: Medium
   impact: Local and open-model image workflows, ComfyUI pipelines, and creator control.
-  watch_reason: Important for creators who care about local ownership, custom models,
-    image generation, and workflow portability.
+  watch_reason: Important for creators who care about local ownership, custom models, image generation, and workflow portability.
   source_url: https://stability.ai/news
   source_label: Stability AI news
-  signal_notes: Track model licensing, weights availability, API changes, and ComfyUI/community
-    adoption.
+  signal_notes: Track model licensing, weights availability, API changes, and ComfyUI/community adoption.
   source_id: stability-ai
   logo_label: Stability
   logo_path: /assets/img/patch-logos/stability-ai.svg
@@ -244,17 +228,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: Stable Diffusion / Stable Audio is tracked for release changes, workflow
-    impact, compatibility shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Stable Diffusion / Stable Audio is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: Stable Diffusion / Stable Audio
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: runway
   company_name: Runway
   product_name: Runway
@@ -263,17 +246,14 @@
   category_label: AI Video
   priority: Core
   cadence: High
-  impact: AI video generation, creator ads, b-roll, motion design, and short-form
-    production.
-  watch_reason: Runway updates are highly relevant to creators testing AI-assisted
-    video and production pipelines.
+  impact: AI video generation, creator ads, b-roll, motion design, and short-form production.
+  watch_reason: Runway updates are highly relevant to creators testing AI-assisted video and production pipelines.
   source_url: https://runwayml.com/research/
   source_label: Runway research
-  signal_notes: Track model releases, creator tools, API access, pricing, and export
-    limitations.
+  signal_notes: Track model releases, creator tools, API access, pricing, and export limitations.
   source_id: runway
   logo_label: Runway
-  logo_path: https://cdn.simpleicons.org/runway/ffffff
+  logo_path: /assets/img/patch-logos/runway.svg
   company_id: runway
   product_id: runway
   company_url: /updates/runway/
@@ -288,17 +268,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: Runway is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Runway is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: Runway
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: pika
   company_name: Pika
   product_name: Pika
@@ -307,14 +286,11 @@
   category_label: AI Video
   priority: Expansion
   cadence: Medium
-  impact: Fast AI clips, social video experiments, image-to-video, and trend-based
-    creative testing.
-  watch_reason: Pika can matter when creators need fast experimental motion assets
-    without a full editing pipeline.
+  impact: Fast AI clips, social video experiments, image-to-video, and trend-based creative testing.
+  watch_reason: Pika can matter when creators need fast experimental motion assets without a full editing pipeline.
   source_url: https://pika.art/
   source_label: Pika product site
-  signal_notes: Track model quality, plan limits, export resolution, watermarking,
-    and app/mobile changes.
+  signal_notes: Track model quality, plan limits, export resolution, watermarking, and app/mobile changes.
   source_id: pika
   logo_label: Pika
   logo_path: /assets/img/patch-logos/pika.svg
@@ -332,17 +308,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: Pika is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Pika is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: Pika
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: lottiefiles
   company_name: LottieFiles
   product_name: LottieFiles
@@ -351,17 +326,14 @@
   category_label: Design Workflow
   priority: Core
   cadence: Medium
-  impact: Web animation, scalable motion assets, UI micro-interactions, and export
-    workflows.
-  watch_reason: Useful for creator sites and motion systems, but plan boundaries and
-    export tooling need clear interpretation.
+  impact: Web animation, scalable motion assets, UI micro-interactions, and export workflows.
+  watch_reason: Useful for creator sites and motion systems, but plan boundaries and export tooling need clear interpretation.
   source_url: https://lottiefiles.com/blog
   source_label: LottieFiles blog
-  signal_notes: Track creator tool changes, free-tier boundaries, export options,
-    and plugin changes.
+  signal_notes: Track creator tool changes, free-tier boundaries, export options, and plugin changes.
   source_id: lottiefiles
   logo_label: LottieFiles
-  logo_path: https://cdn.simpleicons.org/lottiefiles/ffffff
+  logo_path: /assets/img/patch-logos/lottiefiles.svg
   company_id: lottiefiles
   product_id: lottiefiles
   company_url: /updates/lottiefiles/
@@ -376,17 +348,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: LottieFiles is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: LottieFiles is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: LottieFiles
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: figma
   company_name: Figma
   product_name: Figma
@@ -395,17 +366,14 @@
   category_label: Design Workflow
   priority: Core
   cadence: High
-  impact: Design systems, prototyping, web layouts, brand assets, and collaborative
-    creator workflows.
-  watch_reason: Figma is central to modern web and visual planning workflows, especially
-    for creators building repeatable design systems.
+  impact: Design systems, prototyping, web layouts, brand assets, and collaborative creator workflows.
+  watch_reason: Figma is central to modern web and visual planning workflows, especially for creators building repeatable design systems.
   source_url: https://www.figma.com/release-notes/
   source_label: Figma release notes
-  signal_notes: Track Sites, Make, Dev Mode, AI features, pricing, and export/workflow
-    changes.
+  signal_notes: Track Sites, Make, Dev Mode, AI features, pricing, and export/workflow changes.
   source_id: figma
   logo_label: Figma
-  logo_path: https://cdn.simpleicons.org/figma/ffffff
+  logo_path: /assets/img/patch-logos/figma.svg
   company_id: figma
   product_id: figma
   company_url: /updates/figma/
@@ -420,17 +388,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: Figma is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Figma is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: Figma
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: canva
   company_name: Canva
   product_name: Canva
@@ -439,17 +406,14 @@
   category_label: Design Workflow
   priority: Expansion
   cadence: Medium
-  impact: Fast social assets, thumbnails, decks, brand kits, and non-designer creator
-    workflows.
-  watch_reason: Canva often ships high-impact creator features that affect thumbnail
-    and social workflow speed.
+  impact: Fast social assets, thumbnails, decks, brand kits, and non-designer creator workflows.
+  watch_reason: Canva often ships high-impact creator features that affect thumbnail and social workflow speed.
   source_url: https://www.canva.com/newsroom/
   source_label: Canva newsroom
-  signal_notes: Track AI design features, asset licensing, export changes, and brand-kit
-    changes.
+  signal_notes: Track AI design features, asset licensing, export changes, and brand-kit changes.
   source_id: canva
   logo_label: Canva
-  logo_path: https://cdn.simpleicons.org/canva/ffffff
+  logo_path: /assets/img/patch-logos/canva.svg
   company_id: canva
   product_id: canva
   company_url: /updates/canva/
@@ -464,17 +428,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: Canva is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Canva is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: Canva
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: adobe-premiere-pro
   company_name: Adobe
   product_name: Premiere Pro
@@ -483,14 +446,11 @@
   category_label: Video / Production
   priority: Core
   cadence: High
-  impact: Non-linear editing (NLE), timeline performance, GPU acceleration, exports,
-    codecs, captions, audio, AI tools, and professional video production workflows.
-  watch_reason: Premiere Pro updates can affect NLE timeline behavior, project stability,
-    editing speed, GPU acceleration, exports, captions, codecs, and production deadlines.
+  impact: Non-linear editing (NLE), timeline performance, GPU acceleration, exports, codecs, captions, audio, AI tools, and professional video production workflows.
+  watch_reason: Premiere Pro updates can affect NLE timeline behavior, project stability, editing speed, GPU acceleration, exports, captions, codecs, and production deadlines.
   source_url: https://helpx.adobe.com/premiere/desktop/whats-new/release-notes.html
   source_label: Premiere Pro release notes
-  signal_notes: Track NLE timeline behavior, editing features, export behavior, codec
-    support, GPU acceleration, captions, known issues, and fixed issues separately.
+  signal_notes: Track NLE timeline behavior, editing features, export behavior, codec support, GPU acceleration, captions, known issues, and fixed issues separately.
   source_id: adobe-premiere-pro
   logo_label: Premiere
   logo_path: /assets/img/patch-logos/adobe-premiere-pro.svg
@@ -509,17 +469,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: Premiere Pro is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Premiere Pro is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: Premiere Pro
+  asset_type: product_icon
+  fallback_to_company_logo: false
 - id: adobe-after-effects
   company_name: Adobe
   product_name: After Effects
@@ -528,14 +487,11 @@
   category_label: Video / Production
   priority: Core
   cadence: High
-  impact: Motion graphics, compositing, visual effects, animation, GPU acceleration,
-    render stability, and production pipeline workflows.
-  watch_reason: After Effects updates can affect motion graphics, compositing stability,
-    expressions, GPU acceleration, plug-ins, renders, and production deadlines.
+  impact: Motion graphics, compositing, visual effects, animation, GPU acceleration, render stability, and production pipeline workflows.
+  watch_reason: After Effects updates can affect motion graphics, compositing stability, expressions, GPU acceleration, plug-ins, renders, and production deadlines.
   source_url: https://helpx.adobe.com/after-effects/release-note/release-notes-after-effects.html
   source_label: After Effects release notes
-  signal_notes: Track compositing behavior, motion graphics changes, expression compatibility,
-    GPU acceleration, rendering, plug-ins, known issues, and fixed issues.
+  signal_notes: Track compositing behavior, motion graphics changes, expression compatibility, GPU acceleration, rendering, plug-ins, known issues, and fixed issues.
   source_id: adobe-after-effects
   logo_label: After Effects
   logo_path: /assets/img/patch-logos/adobe-after-effects.svg
@@ -554,17 +510,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: After Effects is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: After Effects is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: After Effects
+  asset_type: product_icon
+  fallback_to_company_logo: false
 - id: adobe-photoshop
   company_name: Adobe
   product_name: Photoshop
@@ -573,15 +528,11 @@
   category_label: Design Workflow
   priority: Core
   cadence: High
-  impact: Image editing, generative tools, masking, typography, color workflows, file
-    compatibility, and creator asset production.
-  watch_reason: Photoshop updates can affect image editing speed, generative features,
-    masking behavior, color workflows, plug-ins, file compatibility, and production
-    assets.
+  impact: Image editing, generative tools, masking, typography, color workflows, file compatibility, and creator asset production.
+  watch_reason: Photoshop updates can affect image editing speed, generative features, masking behavior, color workflows, plug-ins, file compatibility, and production assets.
   source_url: https://helpx.adobe.com/photoshop/desktop/whats-new/photoshop-on-desktop-release-notes.html
   source_label: Photoshop release notes
-  signal_notes: Track editing features, generative tools, masking, file compatibility,
-    plug-in behavior, color workflow changes, known issues, and fixed issues.
+  signal_notes: Track editing features, generative tools, masking, file compatibility, plug-in behavior, color workflow changes, known issues, and fixed issues.
   source_id: adobe-photoshop
   logo_label: Photoshop
   logo_path: /assets/img/patch-logos/adobe-photoshop.svg
@@ -600,17 +551,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: Photoshop is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Photoshop is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: Photoshop
+  asset_type: product_icon
+  fallback_to_company_logo: false
 - id: adobe-media-encoder
   company_name: Adobe
   product_name: Media Encoder
@@ -619,15 +569,11 @@
   category_label: Video / Production
   priority: Core
   cadence: High
-  impact: Encoding, exports, codecs, presets, queue stability, Premiere Pro handoff,
-    After Effects handoff, and delivery workflows.
-  watch_reason: Media Encoder updates can affect export reliability, codec support,
-    preset behavior, queue stability, render handoff, and delivery deadlines.
+  impact: Encoding, exports, codecs, presets, queue stability, Premiere Pro handoff, After Effects handoff, and delivery workflows.
+  watch_reason: Media Encoder updates can affect export reliability, codec support, preset behavior, queue stability, render handoff, and delivery deadlines.
   source_url: https://helpx.adobe.com/media-encoder/release-notes.html
   source_label: Media Encoder release notes
-  signal_notes: Track codec support, export behavior, queue stability, presets, GPU
-    encoding, Premiere Pro handoff, After Effects handoff, known issues, and fixed
-    issues.
+  signal_notes: Track codec support, export behavior, queue stability, presets, GPU encoding, Premiere Pro handoff, After Effects handoff, known issues, and fixed issues.
   source_id: adobe-media-encoder
   logo_label: Media Encoder
   logo_path: /assets/img/patch-logos/adobe-media-encoder.svg
@@ -646,17 +592,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: Media Encoder is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Media Encoder is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: Media Encoder
+  asset_type: product_icon
+  fallback_to_company_logo: false
 - id: adobe-lightroom-classic
   company_name: Adobe
   product_name: Lightroom Classic
@@ -665,15 +610,11 @@
   category_label: Design Workflow
   priority: Core
   cadence: Medium
-  impact: Photo ingest, catalog stability, masking, raw processing, camera/lens support,
-    export behavior, and professional photo workflows.
-  watch_reason: Lightroom Classic updates can affect catalog stability, raw support,
-    masking tools, camera and lens profiles, exports, sync behavior, and photo production
-    deadlines.
+  impact: Photo ingest, catalog stability, masking, raw processing, camera/lens support, export behavior, and professional photo workflows.
+  watch_reason: Lightroom Classic updates can affect catalog stability, raw support, masking tools, camera and lens profiles, exports, sync behavior, and photo production deadlines.
   source_url: https://helpx.adobe.com/lightroom-classic/help/whats-new/release-notes.html
   source_label: Lightroom Classic release notes
-  signal_notes: Track catalog stability, camera raw support, lens profiles, masking
-    behavior, export behavior, sync issues, known issues, and fixed issues.
+  signal_notes: Track catalog stability, camera raw support, lens profiles, masking behavior, export behavior, sync issues, known issues, and fixed issues.
   source_id: adobe-lightroom-classic
   logo_label: Lightroom Classic
   logo_path: /assets/img/patch-logos/adobe-lightroom-classic.svg
@@ -692,17 +633,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: Lightroom Classic is tracked for release changes, workflow impact,
-    compatibility shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Lightroom Classic is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: Lightroom Classic
+  asset_type: product_icon
+  fallback_to_company_logo: false
 - id: blackmagic-davinci
   company_name: Blackmagic Design
   product_name: DaVinci Resolve
@@ -711,17 +651,14 @@
   category_label: Video / Production
   priority: Core
   cadence: High
-  impact: Editing, color grading, Fusion VFX, Fairlight audio, codecs, camera workflows,
-    and creator post-production.
-  watch_reason: DaVinci Resolve updates can affect project stability, timeline performance,
-    render behavior, GPU acceleration, codecs, collaboration, and color workflow reliability.
+  impact: Editing, color grading, Fusion VFX, Fairlight audio, codecs, camera workflows, and creator post-production.
+  watch_reason: DaVinci Resolve updates can affect project stability, timeline performance, render behavior, GPU acceleration, codecs, collaboration, and color workflow reliability.
   source_url: https://www.blackmagicdesign.com/media
   source_label: Blackmagic media releases
-  signal_notes: Track edit/color page stability, render behavior, codec support, GPU
-    acceleration, Fairlight/Fusion issues, known issues, and fixed issues separately.
+  signal_notes: Track edit/color page stability, render behavior, codec support, GPU acceleration, Fairlight/Fusion issues, known issues, and fixed issues separately.
   source_id: blackmagic-davinci
   logo_label: DaVinci Resolve
-  logo_path: https://cdn.simpleicons.org/blackmagicdesign/ffffff
+  logo_path: /assets/img/patch-logos/blackmagic-design.svg
   company_id: blackmagic-design
   product_id: blackmagic-davinci
   company_url: /updates/blackmagic-design/
@@ -735,19 +672,18 @@
   consensus_method:
   - Official source is treated as the factual baseline.
   - Only confirmed patch-specific reports are counted.
-  - A report counts when the exact patch/version is named in the report itself or
-    in the parent discussion title.
+  - A report counts when the exact patch/version is named in the report itself or in the parent discussion title.
   - Every confirmed patch-specific report has equal weight.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: DaVinci Resolve is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: DaVinci Resolve is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
   ui_backdrop_path: /assets/img/software-ui/davinci-resolve-ui.webp
+  name: DaVinci Resolve
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: obs-studio
   company_name: OBS Project
   product_name: OBS Studio
@@ -756,16 +692,14 @@
   category_label: Streaming
   priority: Core
   cadence: High
-  impact: Streaming, recording, capture workflows, encoder settings, and broadcast
-    reliability.
-  watch_reason: OBS changes directly affect creators who stream or record content
-    and need stable production tooling.
+  impact: Streaming, recording, capture workflows, encoder settings, and broadcast reliability.
+  watch_reason: OBS changes directly affect creators who stream or record content and need stable production tooling.
   source_url: https://github.com/obsproject/obs-studio/releases
   source_label: OBS GitHub releases
   signal_notes: Watch hotfixes and plugin compatibility after major/minor releases.
   source_id: obs-studio
   logo_label: OBS Studio
-  logo_path: https://cdn.simpleicons.org/obsstudio/ffffff
+  logo_path: /assets/img/patch-logos/obs-project.svg
   company_id: obs-project
   product_id: obs-studio
   company_url: /updates/obs-project/
@@ -780,17 +714,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: OBS Studio is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: OBS Studio is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: OBS Studio
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: twitch
   company_name: Twitch
   product_name: Twitch
@@ -800,15 +733,13 @@
   priority: Core
   cadence: High
   impact: Streaming monetization, discovery, chat tools, and live platform strategy.
-  watch_reason: Policy, monetization, and discovery changes can immediately change
-    creator platform strategy.
+  watch_reason: Policy, monetization, and discovery changes can immediately change creator platform strategy.
   source_url: https://blog.twitch.tv/
   source_label: Twitch blog
-  signal_notes: Track monetization, ad rules, simulcasting, discoverability, and moderation
-    changes.
+  signal_notes: Track monetization, ad rules, simulcasting, discoverability, and moderation changes.
   source_id: twitch
   logo_label: Twitch
-  logo_path: https://cdn.simpleicons.org/twitch/ffffff
+  logo_path: /assets/img/patch-logos/twitch.svg
   company_id: twitch
   product_id: twitch
   company_url: /updates/twitch/
@@ -823,17 +754,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: Twitch is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Twitch is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: Twitch
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: youtube
   company_name: YouTube
   product_name: YouTube / YouTube Studio
@@ -843,15 +773,13 @@
   priority: Core
   cadence: High
   impact: Video discovery, thumbnails, monetization, shorts, live streaming, and analytics.
-  watch_reason: YouTube changes are central to creator growth, discoverability, income,
-    and format strategy.
+  watch_reason: YouTube changes are central to creator growth, discoverability, income, and format strategy.
   source_url: https://blog.youtube/news-and-events/
   source_label: YouTube official blog
-  signal_notes: Track Studio features, monetization, algorithm/discovery notes, Shorts,
-    live, and analytics changes.
+  signal_notes: Track Studio features, monetization, algorithm/discovery notes, Shorts, live, and analytics changes.
   source_id: youtube
   logo_label: YouTube
-  logo_path: https://cdn.simpleicons.org/youtube/ffffff
+  logo_path: /assets/img/patch-logos/youtube.svg
   company_id: youtube
   product_id: youtube
   company_url: /updates/youtube/
@@ -866,17 +794,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: YouTube / YouTube Studio is tracked for release changes, workflow
-    impact, compatibility shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: YouTube / YouTube Studio is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: YouTube / YouTube Studio
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: kick
   company_name: Kick
   product_name: Kick
@@ -886,15 +813,13 @@
   priority: Core
   cadence: Medium
   impact: Live streaming alternatives, monetization, platform risk, and audience diversification.
-  watch_reason: Kick matters for creators evaluating live-stream revenue, discoverability,
-    and platform redundancy.
+  watch_reason: Kick matters for creators evaluating live-stream revenue, discoverability, and platform redundancy.
   source_url: https://kick.com/blog
   source_label: Kick blog
-  signal_notes: Track monetization, content policy, streaming tools, mobile app changes,
-    and creator dashboard changes.
+  signal_notes: Track monetization, content policy, streaming tools, mobile app changes, and creator dashboard changes.
   source_id: kick
   logo_label: Kick
-  logo_path: https://cdn.simpleicons.org/kick/ffffff
+  logo_path: /assets/img/patch-logos/kick.svg
   company_id: kick
   product_id: kick
   company_url: /updates/kick/
@@ -909,17 +834,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: Kick is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Kick is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: Kick
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: rumble
   company_name: Rumble
   product_name: Rumble
@@ -928,16 +852,14 @@
   category_label: Creator Platforms
   priority: Expansion
   cadence: Medium
-  impact: Video hosting, alternative platform strategy, monetization, and creator
-    independence.
-  watch_reason: Rumble is relevant for creators testing platform diversification and
-    alternate monetization channels.
+  impact: Video hosting, alternative platform strategy, monetization, and creator independence.
+  watch_reason: Rumble is relevant for creators testing platform diversification and alternate monetization channels.
   source_url: https://corp.rumble.com/blog/
   source_label: Rumble blog
   signal_notes: Track creator tooling, monetization, live streaming, and policy changes.
   source_id: rumble
   logo_label: Rumble
-  logo_path: https://cdn.simpleicons.org/rumble/ffffff
+  logo_path: /assets/img/patch-logos/rumble.svg
   company_id: rumble
   product_id: rumble
   company_url: /updates/rumble/
@@ -952,17 +874,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: Rumble is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Rumble is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: Rumble
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: epic-unreal
   company_name: Epic Games
   product_name: Unreal Engine
@@ -971,17 +892,14 @@
   category_label: Game / Engine
   priority: Core
   cadence: High
-  impact: Game development, virtual production, UEFN, cinematics, and real-time creator
-    workflows.
-  watch_reason: Unreal updates affect creators building games, virtual production
-    assets, real-time environments, and cinematic systems.
+  impact: Game development, virtual production, UEFN, cinematics, and real-time creator workflows.
+  watch_reason: Unreal updates affect creators building games, virtual production assets, real-time environments, and cinematic systems.
   source_url: https://dev.epicgames.com/documentation/en-us/unreal-engine/whats-new
   source_label: Unreal what's new
-  signal_notes: Separate stable engine releases, UEFN updates, Fab marketplace, and
-    licensing/business changes.
+  signal_notes: Separate stable engine releases, UEFN updates, Fab marketplace, and licensing/business changes.
   source_id: epic-unreal
   logo_label: Unreal Engine
-  logo_path: https://cdn.simpleicons.org/epicgames/ffffff
+  logo_path: /assets/img/patch-logos/epic-games.svg
   company_id: epic-games
   product_id: epic-unreal
   company_url: /updates/epic-games/
@@ -996,17 +914,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: Unreal Engine is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Unreal Engine is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: Unreal Engine
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: unity
   company_name: Unity
   product_name: Unity
@@ -1016,15 +933,13 @@
   priority: Expansion
   cadence: Medium
   impact: Indie game development, mobile games, simulation, and creator tools.
-  watch_reason: Unity updates still matter for indie devs and mobile creators, especially
-    when licensing or runtime behavior changes.
+  watch_reason: Unity updates still matter for indie devs and mobile creators, especially when licensing or runtime behavior changes.
   source_url: https://unity.com/releases
   source_label: Unity releases
-  signal_notes: Track LTS releases, licensing, runtime/tooling changes, and package
-    manager changes.
+  signal_notes: Track LTS releases, licensing, runtime/tooling changes, and package manager changes.
   source_id: unity
   logo_label: Unity
-  logo_path: https://cdn.simpleicons.org/unity/ffffff
+  logo_path: /assets/img/patch-logos/unity.svg
   company_id: unity
   product_id: unity
   company_url: /updates/unity/
@@ -1039,17 +954,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: Unity is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Unity is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: Unity
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: steam
   company_name: Valve
   product_name: Steam
@@ -1059,15 +973,13 @@
   priority: Core
   cadence: Medium
   impact: PC game discovery, wishlists, reviews, launch strategy, and gamer behavior.
-  watch_reason: Steam ecosystem changes affect PC gaming trends, creator coverage
-    angles, and indie launch strategy.
+  watch_reason: Steam ecosystem changes affect PC gaming trends, creator coverage angles, and indie launch strategy.
   source_url: https://store.steampowered.com/news/group/4145017
   source_label: Steam news
-  signal_notes: Track discovery, reviews, wishlists, Next Fest, Steam Deck, and store
-    policy changes.
+  signal_notes: Track discovery, reviews, wishlists, Next Fest, Steam Deck, and store policy changes.
   source_id: steam
   logo_label: Steam
-  logo_path: https://cdn.simpleicons.org/steam/ffffff
+  logo_path: /assets/img/patch-logos/valve.svg
   company_id: valve
   product_id: steam
   company_url: /updates/valve/
@@ -1082,17 +994,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: Steam is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Steam is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: Steam
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: nvidia
   company_name: NVIDIA
   product_name: NVIDIA App / GeForce / Studio
@@ -1102,15 +1013,13 @@
   priority: Core
   cadence: High
   impact: GPU drivers, DLSS, streaming encoders, AI workflows, and gaming performance.
-  watch_reason: NVIDIA driver and app changes can directly affect PC gaming, streaming,
-    AI, and creator stability.
+  watch_reason: NVIDIA driver and app changes can directly affect PC gaming, streaming, AI, and creator stability.
   source_url: https://www.nvidia.com/en-us/geforce/news/
   source_label: GeForce news
-  signal_notes: Track Game Ready drivers, Studio drivers, NVENC, DLSS, app changes,
-    and known issues.
+  signal_notes: Track Game Ready drivers, Studio drivers, NVENC, DLSS, app changes, and known issues.
   source_id: nvidia
   logo_label: NVIDIA
-  logo_path: https://cdn.simpleicons.org/nvidia/ffffff
+  logo_path: /assets/img/patch-logos/nvidia.svg
   company_id: nvidia
   product_id: nvidia
   company_url: /updates/nvidia/
@@ -1125,17 +1034,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: NVIDIA App / GeForce / Studio is tracked for release changes, workflow
-    impact, compatibility shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: NVIDIA App / GeForce / Studio is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: NVIDIA App / GeForce / Studio
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: amd
   company_name: AMD
   product_name: AMD Software / Radeon
@@ -1145,15 +1053,13 @@
   priority: Core
   cadence: High
   impact: GPU drivers, FSR, frame generation, encoder behavior, and PC gaming performance.
-  watch_reason: AMD driver updates can affect game performance, capture workflows,
-    and streaming stability.
+  watch_reason: AMD driver updates can affect game performance, capture workflows, and streaming stability.
   source_url: https://www.amd.com/en/support/download/drivers.html
   source_label: AMD drivers
-  signal_notes: Track driver regressions, per-game fixes, FSR updates, and Adrenalin
-    changes.
+  signal_notes: Track driver regressions, per-game fixes, FSR updates, and Adrenalin changes.
   source_id: amd
   logo_label: AMD
-  logo_path: https://cdn.simpleicons.org/amd/ffffff
+  logo_path: /assets/img/patch-logos/amd.svg
   company_id: amd
   product_id: amd
   company_url: /updates/amd/
@@ -1168,17 +1074,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: AMD Software / Radeon is tracked for release changes, workflow impact,
-    compatibility shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: AMD Software / Radeon is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: AMD Software / Radeon
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: intel-arc
   company_name: Intel
   product_name: Intel Graphics / Arc
@@ -1187,17 +1092,14 @@
   category_label: Hardware / Drivers
   priority: Expansion
   cadence: Medium
-  impact: GPU drivers, Quick Sync, Arc gaming performance, encoding, and creator workstation
-    support.
-  watch_reason: Intel graphics updates can matter for creator encoding, laptop workflows,
-    and Arc performance progress.
+  impact: GPU drivers, Quick Sync, Arc gaming performance, encoding, and creator workstation support.
+  watch_reason: Intel graphics updates can matter for creator encoding, laptop workflows, and Arc performance progress.
   source_url: https://www.intel.com/content/www/us/en/download-center/home.html
   source_label: Intel download center
-  signal_notes: Track Arc driver fixes, Quick Sync, AI PC features, and app-level
-    compatibility.
+  signal_notes: Track Arc driver fixes, Quick Sync, AI PC features, and app-level compatibility.
   source_id: intel-arc
   logo_label: Intel
-  logo_path: https://cdn.simpleicons.org/intel/ffffff
+  logo_path: /assets/img/patch-logos/intel.svg
   company_id: intel
   product_id: intel-arc
   company_url: /updates/intel/
@@ -1212,17 +1114,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: Intel Graphics / Arc is tracked for release changes, workflow impact,
-    compatibility shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Intel Graphics / Arc is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: Intel Graphics / Arc
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: blender
   company_name: Blender Foundation
   product_name: Blender
@@ -1232,15 +1133,13 @@
   priority: Expansion
   cadence: Medium
   impact: 3D assets, motion graphics, VFX, thumbnails, and game-dev content pipelines.
-  watch_reason: Blender is a high-signal open-source production tool for creators
-    building 3D and visual systems.
+  watch_reason: Blender is a high-signal open-source production tool for creators building 3D and visual systems.
   source_url: https://www.blender.org/download/releases/
   source_label: Blender releases
-  signal_notes: Track release candidates, LTS changes, rendering updates, and geometry
-    node changes.
+  signal_notes: Track release candidates, LTS changes, rendering updates, and geometry node changes.
   source_id: blender
   logo_label: Blender
-  logo_path: https://cdn.simpleicons.org/blender/ffffff
+  logo_path: /assets/img/patch-logos/blender-foundation.svg
   company_id: blender-foundation
   product_id: blender
   company_url: /updates/blender-foundation/
@@ -1255,17 +1154,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: Blender is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Blender is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: Blender
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: comfyui
   company_name: ComfyUI
   product_name: ComfyUI
@@ -1274,14 +1172,11 @@
   category_label: AI Image
   priority: Edge
   cadence: High
-  impact: Local AI image workflows, node graphs, model testing, and reproducible creative
-    pipelines.
-  watch_reason: ComfyUI is a strong AUXSAYS fit because it rewards technical creators
-    who want control and repeatable workflows.
+  impact: Local AI image workflows, node graphs, model testing, and reproducible creative pipelines.
+  watch_reason: ComfyUI is a strong AUXSAYS fit because it rewards technical creators who want control and repeatable workflows.
   source_url: https://github.com/comfyanonymous/ComfyUI/releases
   source_label: ComfyUI releases
-  signal_notes: Track breaking changes, model support, dependency shifts, and high-value
-    custom node changes.
+  signal_notes: Track breaking changes, model support, dependency shifts, and high-value custom node changes.
   source_id: comfyui
   logo_label: ComfyUI
   logo_path: /assets/img/patch-logos/comfyui.svg
@@ -1299,17 +1194,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: ComfyUI is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: ComfyUI is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: ComfyUI
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: hugging-face
   company_name: Hugging Face
   product_name: Hugging Face
@@ -1319,15 +1213,13 @@
   priority: Expansion
   cadence: Medium
   impact: AI model hosting, datasets, Spaces, inference, and local model discovery.
-  watch_reason: Hugging Face matters when creator AI workflows depend on model availability,
-    licensing, and hosted demos.
+  watch_reason: Hugging Face matters when creator AI workflows depend on model availability, licensing, and hosted demos.
   source_url: https://huggingface.co/blog
   source_label: Hugging Face blog
-  signal_notes: Track model releases, Spaces platform changes, inference pricing,
-    and license shifts.
+  signal_notes: Track model releases, Spaces platform changes, inference pricing, and license shifts.
   source_id: hugging-face
   logo_label: Hugging Face
-  logo_path: https://cdn.simpleicons.org/huggingface/ffffff
+  logo_path: /assets/img/patch-logos/hugging-face.svg
   company_id: hugging-face
   product_id: hugging-face
   company_url: /updates/hugging-face/
@@ -1342,17 +1234,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: Hugging Face is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Hugging Face is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: Hugging Face
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: github
   company_name: GitHub
   product_name: GitHub / Copilot
@@ -1362,14 +1253,13 @@
   priority: Core
   cadence: High
   impact: Creator sites, automations, Actions, Copilot, Pages, and code/content publishing.
-  watch_reason: GitHub updates affect creator infrastructure, site deployment, automation,
-    and AI coding workflows.
+  watch_reason: GitHub updates affect creator infrastructure, site deployment, automation, and AI coding workflows.
   source_url: https://github.blog/changelog/
   source_label: GitHub changelog
   signal_notes: Track Pages, Actions, Copilot, security, and workflow automation changes.
   source_id: github
   logo_label: GitHub / Copilot
-  logo_path: https://cdn.simpleicons.org/github/ffffff
+  logo_path: /assets/img/patch-logos/github.svg
   company_id: github
   product_id: github
   company_url: /updates/github/
@@ -1384,17 +1274,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: GitHub / Copilot is tracked for release changes, workflow impact,
-    compatibility shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: GitHub / Copilot is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: GitHub / Copilot
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: cloudflare
   company_name: Cloudflare
   product_name: Cloudflare
@@ -1404,14 +1293,13 @@
   priority: Expansion
   cadence: Medium
   impact: DNS, site delivery, Workers, Pages, security, and performance infrastructure.
-  watch_reason: Cloudflare changes affect creator sites, performance, bot protection,
-    and lightweight app deployment.
+  watch_reason: Cloudflare changes affect creator sites, performance, bot protection, and lightweight app deployment.
   source_url: https://blog.cloudflare.com/
   source_label: Cloudflare blog
   signal_notes: Track Pages/Workers, DNS, security, caching, and performance changes.
   source_id: cloudflare
   logo_label: Cloudflare
-  logo_path: https://cdn.simpleicons.org/cloudflare/ffffff
+  logo_path: /assets/img/patch-logos/cloudflare.svg
   company_id: cloudflare
   product_id: cloudflare
   company_url: /updates/cloudflare/
@@ -1426,17 +1314,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: Cloudflare is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Cloudflare is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: Cloudflare
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: netlify
   company_name: Netlify
   product_name: Netlify
@@ -1446,14 +1333,13 @@
   priority: Expansion
   cadence: Medium
   impact: Static sites, deployment workflows, edge functions, and creator websites.
-  watch_reason: Useful for creators choosing low-maintenance web publishing and static-site
-    infrastructure.
+  watch_reason: Useful for creators choosing low-maintenance web publishing and static-site infrastructure.
   source_url: https://www.netlify.com/changelog/
   source_label: Netlify changelog
   signal_notes: Track build limits, deployment, forms, edge, and pricing changes.
   source_id: netlify
   logo_label: Netlify
-  logo_path: https://cdn.simpleicons.org/netlify/ffffff
+  logo_path: /assets/img/patch-logos/netlify.svg
   company_id: netlify
   product_id: netlify
   company_url: /updates/netlify/
@@ -1468,17 +1354,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: Netlify is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Netlify is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: Netlify
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: notion
   company_name: Notion
   product_name: Notion
@@ -1488,15 +1373,13 @@
   priority: Expansion
   cadence: Medium
   impact: Planning, editorial systems, databases, notes, and team documentation.
-  watch_reason: Notion changes can improve or disrupt creator planning, scripting,
-    and content calendar workflows.
+  watch_reason: Notion changes can improve or disrupt creator planning, scripting, and content calendar workflows.
   source_url: https://www.notion.com/releases
   source_label: Notion releases
-  signal_notes: Track Notion AI, database changes, integrations, automations, and
-    calendar/workspace changes.
+  signal_notes: Track Notion AI, database changes, integrations, automations, and calendar/workspace changes.
   source_id: notion
   logo_label: Notion
-  logo_path: https://cdn.simpleicons.org/notion/ffffff
+  logo_path: /assets/img/patch-logos/notion.svg
   company_id: notion
   product_id: notion
   company_url: /updates/notion/
@@ -1511,17 +1394,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: Notion is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Notion is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: Notion
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: zapier
   company_name: Zapier
   product_name: Zapier
@@ -1531,15 +1413,13 @@
   priority: Expansion
   cadence: Medium
   impact: No-code automation, creator ops, publishing workflows, and cross-app triggers.
-  watch_reason: Zapier updates matter when creators automate repetitive publishing,
-    research, and distribution tasks.
+  watch_reason: Zapier updates matter when creators automate repetitive publishing, research, and distribution tasks.
   source_url: https://zapier.com/blog/updates/
   source_label: Zapier updates
-  signal_notes: Track AI agents, app actions, pricing/limits, and reliability-impacting
-    workflow changes.
+  signal_notes: Track AI agents, app actions, pricing/limits, and reliability-impacting workflow changes.
   source_id: zapier
   logo_label: Zapier
-  logo_path: https://cdn.simpleicons.org/zapier/ffffff
+  logo_path: /assets/img/patch-logos/zapier.svg
   company_id: zapier
   product_id: zapier
   company_url: /updates/zapier/
@@ -1554,17 +1434,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: Zapier is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Zapier is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: Zapier
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: make
   company_name: Make
   product_name: Make
@@ -1574,14 +1453,13 @@
   priority: Expansion
   cadence: Medium
   impact: Visual automation, operations workflows, and repeatable creator systems.
-  watch_reason: Make is relevant for creators who want more control than simple no-code
-    automation.
+  watch_reason: Make is relevant for creators who want more control than simple no-code automation.
   source_url: https://www.make.com/en/changelog
   source_label: Make changelog
   signal_notes: Track modules, reliability, scheduling, pricing, and AI workflow changes.
   source_id: make
   logo_label: Make
-  logo_path: https://cdn.simpleicons.org/make/ffffff
+  logo_path: /assets/img/patch-logos/make.svg
   company_id: make
   product_id: make
   company_url: /updates/make/
@@ -1596,17 +1474,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New official release or changelog entry.
-  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,
-    or web publishing.
+  - Meaningful workflow impact for gaming, streaming, AI, creator production, automation, or web publishing.
   - Enough public community signal to evaluate stability, regressions, or user confusion.
-  - Security, pricing, policy, licensing, or compatibility changes that creators may
-    miss.
-  dossier_note: Make is tracked for release changes, workflow impact, compatibility
-    shifts, stability signals, and community consensus.
+  - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
+  dossier_note: Make is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
+  name: Make
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: adobe-acrobat-reader
   company_name: Adobe
   product_name: Acrobat / Acrobat Reader
@@ -1615,16 +1492,11 @@
   category_label: Workplace Critical
   priority: Core
   cadence: High
-  impact: PDF opening, rendering, fillable forms, signatures, printing, browser integration,
-    enterprise deployment, and security exposure.
-  watch_reason: Acrobat and Reader updates can affect PDF workflows that offices depend
-    on, especially forms, printing, e-signatures, browser handoff, compatibility with
-    older PDFs, and security-sensitive PDF handling.
+  impact: PDF opening, rendering, fillable forms, signatures, printing, browser integration, enterprise deployment, and security exposure.
+  watch_reason: Acrobat and Reader updates can affect PDF workflows that offices depend on, especially forms, printing, e-signatures, browser handoff, compatibility with older PDFs, and security-sensitive PDF handling.
   source_url: https://www.adobe.com/devnet-docs/acrobatetk/tools/ReleaseNotesDC/index.html
   source_label: Acrobat Enterprise release notes
-  signal_notes: Track security urgency, Continuous vs Classic track differences, Reader
-    vs Acrobat behavior, printing, signatures, fillable forms, browser plug-ins, and
-    enterprise deployment impact.
+  signal_notes: Track security urgency, Continuous vs Classic track differences, Reader vs Acrobat behavior, printing, signatures, fillable forms, browser plug-ins, and enterprise deployment impact.
   source_id: adobe-acrobat-reader
   logo_label: Acrobat
   logo_path: /assets/img/patch-logos/adobe-acrobat-reader.svg
@@ -1642,17 +1514,16 @@
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
-  - Individual update pages carry the deeper score, report count, confidence, and
-    timeline.
+  - Individual update pages carry the deeper score, report count, confidence, and timeline.
   record_trigger_rules:
   - New Adobe Acrobat / Reader release-note entry.
   - Security bulletin or urgent planned update.
-  - Workflow impact involving PDFs, printing, signatures, forms, browser integration,
-    or enterprise deployment.
+  - Workflow impact involving PDFs, printing, signatures, forms, browser integration, or enterprise deployment.
   - Enough confirmed patch-specific public reports to evaluate install risk.
-  dossier_note: Acrobat / Reader is tracked as a workplace-critical PDF platform where
-    security updates may be urgent, but fragile form, print, and signature workflows
-    still require careful testing.
+  dossier_note: Acrobat / Reader is tracked as a workplace-critical PDF platform where security updates may be urgent, but fragile form, print, and signature workflows still require careful testing.
+  name: Acrobat / Acrobat Reader
+  asset_type: product_icon
+  fallback_to_company_logo: false
 - id: microsoft-windows-11
   company_name: Microsoft
   product_name: Windows 11
@@ -1661,18 +1532,14 @@
   category_label: Operating Systems
   priority: Core
   cadence: High
-  impact: Security posture, OS reliability, gaming performance, GPU/driver behavior,
-    audio routing, capture cards, app compatibility, and enterprise deployment.
-  watch_reason: Windows 11 updates can alter security exposure, safeguard holds, gaming/creator
-    performance, drivers, audio/capture behavior, and workplace deployment timing.
+  impact: Security posture, OS reliability, gaming performance, GPU/driver behavior, audio routing, capture cards, app compatibility, and enterprise deployment.
+  watch_reason: Windows 11 updates can alter security exposure, safeguard holds, gaming/creator performance, drivers, audio/capture behavior, and workplace deployment timing.
   source_url: https://learn.microsoft.com/en-us/windows/release-health/
   source_label: Windows release health
-  signal_notes: Track release health, known issues, safeguard holds, security urgency,
-    gaming performance, creator app compatibility, GPU/driver interaction, capture
-    devices, audio routing, and rollout channel.
+  signal_notes: Track release health, known issues, safeguard holds, security urgency, gaming performance, creator app compatibility, GPU/driver interaction, capture devices, audio routing, and rollout channel.
   source_id: microsoft-windows-11
   logo_label: Windows 11
-  logo_path: https://msftstories.thesourcemediaassets.com/2022/05/Microsoft-logo_rgb_c-wht-768x344.png
+  logo_path: /assets/img/patch-logos/microsoft.svg
   company_id: microsoft
   product_id: microsoft-windows-11
   company_url: /updates/microsoft/
@@ -1686,16 +1553,15 @@
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
-  - Security-sensitive updates use cautious language and should not be casually labeled
-    avoid.
+  - Security-sensitive updates use cautious language and should not be casually labeled avoid.
   record_trigger_rules:
   - New Windows release health update or known-issue notice.
   - Security-sensitive cumulative update with creator/gaming/workplace relevance.
-  - Safeguard hold or known issue affecting creator, gaming, device, or enterprise
-    workflows.
-  dossier_note: Windows 11 is tracked as a security-sensitive OS platform where update
-    advice must balance exposure, known issues, staged rollout behavior, and fragile
-    creator/gaming workstations.
+  - Safeguard hold or known issue affecting creator, gaming, device, or enterprise workflows.
+  dossier_note: Windows 11 is tracked as a security-sensitive OS platform where update advice must balance exposure, known issues, staged rollout behavior, and fragile creator/gaming workstations.
+  name: Windows 11
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: microsoft-teams
   company_name: Microsoft
   product_name: Microsoft Teams
@@ -1704,17 +1570,14 @@
   category_label: Workplace Critical
   priority: Core
   cadence: High
-  impact: Meetings, collaboration, audio/video reliability, screen sharing, chat,
-    tenant policies, and workplace communication.
-  watch_reason: Teams changes can affect meetings, call reliability, collaboration
-    workflows, administration, and workplace continuity.
+  impact: Meetings, collaboration, audio/video reliability, screen sharing, chat, tenant policies, and workplace communication.
+  watch_reason: Teams changes can affect meetings, call reliability, collaboration workflows, administration, and workplace continuity.
   source_url: https://learn.microsoft.com/en-us/officeupdates/teams-app-versioning
   source_label: Teams app version history
-  signal_notes: Track client version rollout, meeting reliability, audio/video behavior,
-    screen sharing, tenant/admin impact, and staged rollout.
+  signal_notes: Track client version rollout, meeting reliability, audio/video behavior, screen sharing, tenant/admin impact, and staged rollout.
   source_id: microsoft-teams
   logo_label: Teams
-  logo_path: https://msftstories.thesourcemediaassets.com/2022/05/Microsoft-logo_rgb_c-wht-768x344.png
+  logo_path: /assets/img/patch-logos/microsoft.svg
   company_id: microsoft
   product_id: microsoft-teams
   company_url: /updates/microsoft/
@@ -1731,8 +1594,10 @@
   record_trigger_rules:
   - New Teams app version history or release-note entry.
   - Meeting/calling reliability or admin-impacting rollout notice.
-  dossier_note: Microsoft Teams is tracked for meeting reliability, tenant rollout,
-    and workplace communication risk.
+  dossier_note: Microsoft Teams is tracked for meeting reliability, tenant rollout, and workplace communication risk.
+  name: Microsoft Teams
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: microsoft-powerpoint
   company_name: Microsoft
   product_name: Microsoft PowerPoint
@@ -1741,17 +1606,14 @@
   category_label: Productivity
   priority: Core
   cadence: Medium
-  impact: Presentation delivery, media export, collaboration, embedded video/audio,
-    add-ins, Copilot behavior, and Microsoft 365 channel rollout.
-  watch_reason: PowerPoint updates can affect presentation delivery, media behavior,
-    exports, collaboration, add-ins, and workplace training materials.
+  impact: Presentation delivery, media export, collaboration, embedded video/audio, add-ins, Copilot behavior, and Microsoft 365 channel rollout.
+  watch_reason: PowerPoint updates can affect presentation delivery, media behavior, exports, collaboration, add-ins, and workplace training materials.
   source_url: https://learn.microsoft.com/en-us/officeupdates/release-notes-microsoft365-apps
   source_label: Microsoft 365 Apps release notes
-  signal_notes: Track channel-specific rollout, presentation/export reliability, embedded
-    media, collaboration, add-ins, and Copilot behavior.
+  signal_notes: Track channel-specific rollout, presentation/export reliability, embedded media, collaboration, add-ins, and Copilot behavior.
   source_id: microsoft-powerpoint
   logo_label: PowerPoint
-  logo_path: https://msftstories.thesourcemediaassets.com/2022/05/Microsoft-logo_rgb_c-wht-768x344.png
+  logo_path: /assets/img/patch-logos/microsoft.svg
   company_id: microsoft
   product_id: microsoft-powerpoint
   company_url: /updates/microsoft/
@@ -1761,16 +1623,16 @@
   documented_update_count: 0
   coverage_state: staged
   coverage_status_label: Source map staged
-  ingestion_status: Manual watch through Microsoft 365 Apps source until product-specific
-    extraction is proven
+  ingestion_status: Manual watch through Microsoft 365 Apps source until product-specific extraction is proven
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
   record_trigger_rules:
-  - Microsoft 365 Apps release entry with PowerPoint-specific feature, fix, security,
-    or regression risk.
-  dossier_note: PowerPoint is tracked for presentation-critical workplace and creator
-    workflows, especially media/export/add-in reliability.
+  - Microsoft 365 Apps release entry with PowerPoint-specific feature, fix, security, or regression risk.
+  dossier_note: PowerPoint is tracked for presentation-critical workplace and creator workflows, especially media/export/add-in reliability.
+  name: Microsoft PowerPoint
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: microsoft-365-apps
   company_name: Microsoft
   product_name: Microsoft 365 Apps
@@ -1779,18 +1641,14 @@
   category_label: Productivity
   priority: Core
   cadence: High
-  impact: Office update channels, security fixes, collaboration, sync, add-ins, Copilot
-    behavior, enterprise rollout, and workplace productivity.
-  watch_reason: Microsoft 365 Apps updates affect the broader Office suite and can
-    change security exposure, collaboration behavior, update-channel rollout, and
-    workplace app reliability.
+  impact: Office update channels, security fixes, collaboration, sync, add-ins, Copilot behavior, enterprise rollout, and workplace productivity.
+  watch_reason: Microsoft 365 Apps updates affect the broader Office suite and can change security exposure, collaboration behavior, update-channel rollout, and workplace app reliability.
   source_url: https://learn.microsoft.com/en-us/officeupdates/update-history-microsoft365-apps-by-date
   source_label: Microsoft 365 Apps update history
-  signal_notes: Track Current Channel, Monthly Enterprise, Semi-Annual Enterprise,
-    security updates, feature rollout, add-ins, sync, collaboration, and Copilot behavior.
+  signal_notes: Track Current Channel, Monthly Enterprise, Semi-Annual Enterprise, security updates, feature rollout, add-ins, sync, collaboration, and Copilot behavior.
   source_id: microsoft-365-apps
   logo_label: M365
-  logo_path: https://msftstories.thesourcemediaassets.com/2022/05/Microsoft-logo_rgb_c-wht-768x344.png
+  logo_path: /assets/img/patch-logos/microsoft.svg
   company_id: microsoft
   product_id: microsoft-365-apps
   company_url: /updates/microsoft/
@@ -1808,9 +1666,10 @@
   - New Microsoft 365 Apps release-note entry.
   - Security or non-security update affecting Office desktop apps.
   - Channel-specific rollout with workplace deployment impact.
-  dossier_note: Microsoft 365 Apps is tracked as the broader Office update stream
-    that may include PowerPoint, Word, Excel, Outlook, security, and Copilot-related
-    changes.
+  dossier_note: Microsoft 365 Apps is tracked as the broader Office update stream that may include PowerPoint, Word, Excel, Outlook, security, and Copilot-related changes.
+  name: Microsoft 365 Apps
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: elgato-stream-deck
   company_name: Elgato
   product_name: Stream Deck
@@ -1819,17 +1678,14 @@
   category_label: Streaming Tools
   priority: Core
   cadence: High
-  impact: Stream Deck profiles, OBS actions, plugins, Marketplace integrations, device
-    firmware, and live-production control reliability.
-  watch_reason: Stream Deck updates can break or improve profiles, plugins, OBS actions,
-    account integrations, firmware behavior, and stream control.
+  impact: Stream Deck profiles, OBS actions, plugins, Marketplace integrations, device firmware, and live-production control reliability.
+  watch_reason: Stream Deck updates can break or improve profiles, plugins, OBS actions, account integrations, firmware behavior, and stream control.
   source_url: https://help.elgato.com/hc/en-us/sections/5162671529357-Elgato-Stream-Deck-Software-Release-Notes
   source_label: Stream Deck release notes
-  signal_notes: Track profiles, plugins, OBS actions, account authentication, Marketplace
-    behavior, firmware mismatch, and device reliability.
+  signal_notes: Track profiles, plugins, OBS actions, account authentication, Marketplace behavior, firmware mismatch, and device reliability.
   source_id: elgato-stream-deck
   logo_label: Stream Deck
-  logo_path: https://cdn.simpleicons.org/elgato/ffffff
+  logo_path: /assets/img/patch-logos/elgato.svg
   company_id: elgato
   product_id: elgato-stream-deck
   company_url: /updates/elgato/
@@ -1845,10 +1701,11 @@
   - Community reports are grouped by recurring theme, severity, and frequency.
   record_trigger_rules:
   - New Stream Deck release-note entry.
-  - Plugin, profile, OBS action, firmware, account integration, or Marketplace-impacting
-    update.
-  dossier_note: Stream Deck is tracked as a live-production control surface where
-    plugin and profile stability matter.
+  - Plugin, profile, OBS action, firmware, account integration, or Marketplace-impacting update.
+  dossier_note: Stream Deck is tracked as a live-production control surface where plugin and profile stability matter.
+  name: Stream Deck
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: elgato-wave-link
   company_name: Elgato
   product_name: Wave Link
@@ -1857,17 +1714,14 @@
   category_label: Streaming Tools
   priority: Core
   cadence: Medium
-  impact: Audio routing, VSTs, Stream Mix, microphone support, OBS audio workflows,
-    plugin compatibility, and live-production reliability.
-  watch_reason: Wave Link updates can affect stream audio routing, mic behavior, VST
-    chains, OBS capture, and live-production reliability.
+  impact: Audio routing, VSTs, Stream Mix, microphone support, OBS audio workflows, plugin compatibility, and live-production reliability.
+  watch_reason: Wave Link updates can affect stream audio routing, mic behavior, VST chains, OBS capture, and live-production reliability.
   source_url: https://help.elgato.com/hc/en-us/sections/4913442828941-Wave-Link-Release-Notes
   source_label: Wave Link release notes
-  signal_notes: Track audio routing, Stream Mix behavior, mic/device compatibility,
-    VST behavior, OBS capture, and Stream Deck integration.
+  signal_notes: Track audio routing, Stream Mix behavior, mic/device compatibility, VST behavior, OBS capture, and Stream Deck integration.
   source_id: elgato-wave-link
   logo_label: Wave Link
-  logo_path: https://cdn.simpleicons.org/elgato/ffffff
+  logo_path: /assets/img/patch-logos/elgato.svg
   company_id: elgato
   product_id: elgato-wave-link
   company_url: /updates/elgato/
@@ -1884,8 +1738,10 @@
   record_trigger_rules:
   - New Wave Link release-note entry.
   - Audio routing, VST, device support, or OBS workflow-impacting update.
-  dossier_note: Wave Link is tracked for stream audio routing, mic/device behavior,
-    and OBS/live-production stability.
+  dossier_note: Wave Link is tracked for stream audio routing, mic/device behavior, and OBS/live-production stability.
+  name: Wave Link
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: elgato-camera-hub
   company_name: Elgato
   product_name: Camera Hub
@@ -1894,17 +1750,14 @@
   category_label: Streaming Tools
   priority: Core
   cadence: Medium
-  impact: Facecam behavior, color settings, firmware, virtual camera workflows, Prompter
-    integration, and camera reliability.
-  watch_reason: Camera Hub updates can affect Facecam behavior, firmware, virtual
-    camera use, color pipelines, Prompter workflows, and OBS camera capture.
+  impact: Facecam behavior, color settings, firmware, virtual camera workflows, Prompter integration, and camera reliability.
+  watch_reason: Camera Hub updates can affect Facecam behavior, firmware, virtual camera use, color pipelines, Prompter workflows, and OBS camera capture.
   source_url: https://help.elgato.com/hc/en-us/sections/4880787756941-Elgato-Camera-Hub-Release-Notes
   source_label: Camera Hub release notes
-  signal_notes: Track Facecam behavior, firmware, virtual camera, Prompter integration,
-    color controls, and OBS camera reliability.
+  signal_notes: Track Facecam behavior, firmware, virtual camera, Prompter integration, color controls, and OBS camera reliability.
   source_id: elgato-camera-hub
   logo_label: Camera Hub
-  logo_path: https://cdn.simpleicons.org/elgato/ffffff
+  logo_path: /assets/img/patch-logos/elgato.svg
   company_id: elgato
   product_id: elgato-camera-hub
   company_url: /updates/elgato/
@@ -1921,8 +1774,10 @@
   record_trigger_rules:
   - New Camera Hub release-note entry.
   - Camera, firmware, Prompter, virtual camera, or OBS workflow-impacting update.
-  dossier_note: Camera Hub is tracked for camera-control, firmware, virtual-camera,
-    and OBS capture stability.
+  dossier_note: Camera Hub is tracked for camera-control, firmware, virtual-camera, and OBS capture stability.
+  name: Camera Hub
+  asset_type: company_fallback
+  fallback_to_company_logo: true
 - id: elgato-4k-capture-utility
   company_name: Elgato
   product_name: 4K Capture Utility
@@ -1931,17 +1786,14 @@
   category_label: Streaming Tools
   priority: Core
   cadence: Medium
-  impact: Capture-card utility behavior, recording stability, HDR, device firmware,
-    USB detection, and capture workflow reliability.
-  watch_reason: 4K Capture Utility updates can affect capture-device stability, recording
-    reliability, HDR behavior, firmware, USB detection, and creator capture workflows.
+  impact: Capture-card utility behavior, recording stability, HDR, device firmware, USB detection, and capture workflow reliability.
+  watch_reason: 4K Capture Utility updates can affect capture-device stability, recording reliability, HDR behavior, firmware, USB detection, and creator capture workflows.
   source_url: https://help.elgato.com/hc/en-us/sections/5126053814029-Elgato-4K-Capture-Utility-Release-Notes
   source_label: 4K Capture Utility release notes
-  signal_notes: Track 4K X / 4K60 behavior, firmware, HDR recording, USB detection,
-    recording stability, and capture-card compatibility.
+  signal_notes: Track 4K X / 4K60 behavior, firmware, HDR recording, USB detection, recording stability, and capture-card compatibility.
   source_id: elgato-4k-capture-utility
   logo_label: 4K Capture Utility
-  logo_path: https://cdn.simpleicons.org/elgato/ffffff
+  logo_path: /assets/img/patch-logos/elgato.svg
   company_id: elgato
   product_id: elgato-4k-capture-utility
   company_url: /updates/elgato/
@@ -1958,5 +1810,7 @@
   record_trigger_rules:
   - New 4K Capture Utility release-note entry.
   - Capture device, firmware, USB, HDR, or recording stability-impacting update.
-  dossier_note: 4K Capture Utility is tracked for capture-card reliability, HDR behavior,
-    USB detection, firmware, and recording stability.
+  dossier_note: 4K Capture Utility is tracked for capture-card reliability, HDR behavior, USB detection, firmware, and recording stability.
+  name: 4K Capture Utility
+  asset_type: company_fallback
+  fallback_to_company_logo: true

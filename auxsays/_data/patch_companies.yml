@@ -1,4 +1,3 @@
----
 - id: adobe
   company_name: Adobe
   display_name: Adobe
@@ -7,8 +6,8 @@
   - video-production
   - design-workflow
   summary: Adobe is tracked because changes to Premiere Pro, Acrobat / Reader, After Effects, Photoshop, Media Encoder, and Lightroom Classic can affect creator workflows, production stability, rendering, exports, design assets, and publishing operations.
-  logo_path: https://cdn.simpleicons.org/adobe/ffffff
-  company_url: "/updates/adobe/"
+  logo_path: /assets/img/patch-logos/adobe.svg
+  company_url: /updates/adobe/
   official_sources:
   - label: Premiere Pro release notes
     url: https://helpx.adobe.com/premiere/desktop/whats-new/release-notes.html
@@ -32,6 +31,8 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 6
+  name: Adobe
+  asset_type: company_logo
 - id: amd
   company_name: AMD
   display_name: AMD
@@ -39,8 +40,8 @@
   category_keys:
   - hardware-drivers
   summary: AMD is tracked because changes to AMD Software / Radeon can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/amd/ffffff
-  company_url: "/updates/amd/"
+  logo_path: /assets/img/patch-logos/amd.svg
+  company_url: /updates/amd/
   official_sources:
   - label: AMD drivers
     url: https://www.amd.com/en/support/download/drivers.html
@@ -49,6 +50,8 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
+  name: AMD
+  asset_type: company_logo
 - id: anthropic
   company_name: Anthropic
   display_name: Anthropic
@@ -56,8 +59,8 @@
   category_keys:
   - ai-tools
   summary: Anthropic is tracked because changes to Claude can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/anthropic/ffffff
-  company_url: "/updates/anthropic/"
+  logo_path: /assets/img/patch-logos/anthropic.svg
+  company_url: /updates/anthropic/
   official_sources:
   - label: Claude release notes
     url: https://support.claude.com/en/articles/12138966-release-notes
@@ -66,6 +69,8 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
+  name: Anthropic
+  asset_type: company_logo
 - id: blackmagic-design
   company_name: Blackmagic Design
   display_name: Blackmagic Design
@@ -73,8 +78,8 @@
   category_keys:
   - video-production
   summary: Blackmagic Design is tracked because DaVinci Resolve releases can affect editing, color, Fusion, Fairlight, GPU behavior, codecs, collaboration, and creator post-production readiness.
-  logo_path: https://cdn.simpleicons.org/blackmagicdesign/ffffff
-  company_url: "/updates/blackmagic-design/"
+  logo_path: /assets/img/patch-logos/blackmagic-design.svg
+  company_url: /updates/blackmagic-design/
   official_sources:
   - label: Blackmagic media releases
     url: https://www.blackmagicdesign.com/media
@@ -83,6 +88,8 @@
   coverage_state: documented
   coverage_status_label: Patch records available
   tracked_product_count: 1
+  name: Blackmagic Design
+  asset_type: company_logo
 - id: epic-games
   company_name: Epic Games
   display_name: Epic Games
@@ -90,8 +97,8 @@
   category_keys:
   - game-engines
   summary: Epic Games is tracked because changes to Unreal Engine can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/epicgames/ffffff
-  company_url: "/updates/epic-games/"
+  logo_path: /assets/img/patch-logos/epic-games.svg
+  company_url: /updates/epic-games/
   official_sources:
   - label: Unreal what's new
     url: https://dev.epicgames.com/documentation/en-us/unreal-engine/whats-new
@@ -100,6 +107,8 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
+  name: Epic Games
+  asset_type: company_logo
 - id: figma
   company_name: Figma
   display_name: Figma
@@ -107,8 +116,8 @@
   category_keys:
   - design-workflow
   summary: Figma is tracked because changes to Figma can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/figma/ffffff
-  company_url: "/updates/figma/"
+  logo_path: /assets/img/patch-logos/figma.svg
+  company_url: /updates/figma/
   official_sources:
   - label: Figma release notes
     url: https://www.figma.com/release-notes/
@@ -117,6 +126,8 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
+  name: Figma
+  asset_type: company_logo
 - id: github
   company_name: GitHub
   display_name: GitHub
@@ -124,8 +135,8 @@
   category_keys:
   - dev-web
   summary: GitHub is tracked because changes to GitHub / Copilot can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/github/ffffff
-  company_url: "/updates/github/"
+  logo_path: /assets/img/patch-logos/github.svg
+  company_url: /updates/github/
   official_sources:
   - label: GitHub changelog
     url: https://github.blog/changelog/
@@ -134,6 +145,8 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
+  name: GitHub
+  asset_type: company_logo
 - id: google
   company_name: Google
   display_name: Google
@@ -141,8 +154,8 @@
   category_keys:
   - ai-tools
   summary: Google is tracked because changes to Gemini can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/google/ffffff
-  company_url: "/updates/google/"
+  logo_path: /assets/img/patch-logos/google.svg
+  company_url: /updates/google/
   official_sources:
   - label: Gemini updates
     url: https://gemini.google/updates/
@@ -151,6 +164,8 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
+  name: Google
+  asset_type: company_logo
 - id: kick
   company_name: Kick
   display_name: Kick
@@ -158,8 +173,8 @@
   category_keys:
   - creator-platforms
   summary: Kick is tracked because changes to Kick can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/kick/ffffff
-  company_url: "/updates/kick/"
+  logo_path: /assets/img/patch-logos/kick.svg
+  company_url: /updates/kick/
   official_sources:
   - label: Kick blog
     url: https://kick.com/blog
@@ -168,6 +183,8 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
+  name: Kick
+  asset_type: company_logo
 - id: lottiefiles
   company_name: LottieFiles
   display_name: LottieFiles
@@ -175,8 +192,8 @@
   category_keys:
   - design-workflow
   summary: LottieFiles is tracked because changes to LottieFiles can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/lottiefiles/ffffff
-  company_url: "/updates/lottiefiles/"
+  logo_path: /assets/img/patch-logos/lottiefiles.svg
+  company_url: /updates/lottiefiles/
   official_sources:
   - label: LottieFiles blog
     url: https://lottiefiles.com/blog
@@ -185,6 +202,8 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
+  name: LottieFiles
+  asset_type: company_logo
 - id: midjourney
   company_name: Midjourney
   display_name: Midjourney
@@ -192,8 +211,8 @@
   category_keys:
   - ai-image
   summary: Midjourney is tracked because changes to Midjourney can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/midjourney/ffffff
-  company_url: "/updates/midjourney/"
+  logo_path: /assets/img/patch-logos/midjourney.svg
+  company_url: /updates/midjourney/
   official_sources:
   - label: Midjourney updates
     url: https://www.midjourney.com/updates/
@@ -202,6 +221,8 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
+  name: Midjourney
+  asset_type: company_logo
 - id: nvidia
   company_name: NVIDIA
   display_name: NVIDIA
@@ -209,8 +230,8 @@
   category_keys:
   - hardware-drivers
   summary: NVIDIA tracking focuses on Game Ready drivers, Studio drivers, NVIDIA App changes, NVENC, DLSS, RTX features, and creator/gaming stability.
-  logo_path: https://cdn.simpleicons.org/nvidia/ffffff
-  company_url: "/updates/nvidia/"
+  logo_path: /assets/img/patch-logos/nvidia.svg
+  company_url: /updates/nvidia/
   official_sources:
   - label: GeForce news
     url: https://www.nvidia.com/en-us/geforce/news/
@@ -219,6 +240,8 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
+  name: NVIDIA
+  asset_type: company_logo
 - id: obs-project
   company_name: OBS Project
   display_name: OBS Project
@@ -226,8 +249,8 @@
   category_keys:
   - streaming
   summary: OBS Project tracking focuses on OBS Studio releases, streaming stability, encoder behavior, plugin compatibility, and production workflow regressions.
-  logo_path: https://cdn.simpleicons.org/obsstudio/ffffff
-  company_url: "/updates/obs-project/"
+  logo_path: /assets/img/patch-logos/obs-project.svg
+  company_url: /updates/obs-project/
   official_sources:
   - label: OBS GitHub releases
     url: https://github.com/obsproject/obs-studio/releases
@@ -236,6 +259,8 @@
   coverage_state: documented
   coverage_status_label: Patch records available
   tracked_product_count: 1
+  name: OBS Project
+  asset_type: company_logo
 - id: openai
   company_name: OpenAI
   display_name: OpenAI
@@ -243,8 +268,8 @@
   category_keys:
   - ai-tools
   summary: OpenAI tracking focuses on ChatGPT, model changes, product interface changes, workspace behavior, automation, and creator workflow impact.
-  logo_path: https://cdn.simpleicons.org/openai/ffffff
-  company_url: "/updates/openai/"
+  logo_path: /assets/img/patch-logos/openai.svg
+  company_url: /updates/openai/
   official_sources:
   - label: ChatGPT release notes
     url: https://help.openai.com/en/articles/6825453-chatgpt-release-notes
@@ -253,6 +278,8 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
+  name: OpenAI
+  asset_type: company_logo
 - id: perplexity
   company_name: Perplexity
   display_name: Perplexity
@@ -260,8 +287,8 @@
   category_keys:
   - ai-tools
   summary: Perplexity is tracked because changes to Perplexity can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/perplexity/ffffff
-  company_url: "/updates/perplexity/"
+  logo_path: /assets/img/patch-logos/perplexity.svg
+  company_url: /updates/perplexity/
   official_sources:
   - label: Perplexity blog
     url: https://www.perplexity.ai/hub/blog
@@ -270,6 +297,8 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
+  name: Perplexity
+  asset_type: company_logo
 - id: runway
   company_name: Runway
   display_name: Runway
@@ -277,8 +306,8 @@
   category_keys:
   - ai-video
   summary: Runway is tracked because changes to Runway can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/runway/ffffff
-  company_url: "/updates/runway/"
+  logo_path: /assets/img/patch-logos/runway.svg
+  company_url: /updates/runway/
   official_sources:
   - label: Runway research
     url: https://runwayml.com/research/
@@ -287,6 +316,8 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
+  name: Runway
+  asset_type: company_logo
 - id: twitch
   company_name: Twitch
   display_name: Twitch
@@ -294,8 +325,8 @@
   category_keys:
   - creator-platforms
   summary: Twitch is tracked because changes to Twitch can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/twitch/ffffff
-  company_url: "/updates/twitch/"
+  logo_path: /assets/img/patch-logos/twitch.svg
+  company_url: /updates/twitch/
   official_sources:
   - label: Twitch blog
     url: https://blog.twitch.tv/
@@ -304,6 +335,8 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
+  name: Twitch
+  asset_type: company_logo
 - id: valve
   company_name: Valve
   display_name: Valve
@@ -311,8 +344,8 @@
   category_keys:
   - game-platforms
   summary: Valve tracking focuses on Steam platform changes, discovery, store policy, Steam Deck, launches, wishlists, reviews, and PC gaming behavior.
-  logo_path: https://cdn.simpleicons.org/steam/ffffff
-  company_url: "/updates/valve/"
+  logo_path: /assets/img/patch-logos/valve.svg
+  company_url: /updates/valve/
   official_sources:
   - label: Steam news
     url: https://store.steampowered.com/news/group/4145017
@@ -321,6 +354,8 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
+  name: Valve
+  asset_type: company_logo
 - id: youtube
   company_name: YouTube
   display_name: YouTube
@@ -328,8 +363,8 @@
   category_keys:
   - creator-platforms
   summary: YouTube is tracked because changes to YouTube / YouTube Studio can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/youtube/ffffff
-  company_url: "/updates/youtube/"
+  logo_path: /assets/img/patch-logos/youtube.svg
+  company_url: /updates/youtube/
   official_sources:
   - label: YouTube official blog
     url: https://blog.youtube/news-and-events/
@@ -338,6 +373,8 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
+  name: YouTube
+  asset_type: company_logo
 - id: blender-foundation
   company_name: Blender Foundation
   display_name: Blender Foundation
@@ -345,8 +382,8 @@
   category_keys:
   - video-production
   summary: Blender Foundation is tracked because changes to Blender can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/blender/ffffff
-  company_url: "/updates/blender-foundation/"
+  logo_path: /assets/img/patch-logos/blender-foundation.svg
+  company_url: /updates/blender-foundation/
   official_sources:
   - label: Blender releases
     url: https://www.blender.org/download/releases/
@@ -355,6 +392,8 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
+  name: Blender Foundation
+  asset_type: company_logo
 - id: canva
   company_name: Canva
   display_name: Canva
@@ -362,8 +401,8 @@
   category_keys:
   - design-workflow
   summary: Canva is tracked because changes to Canva can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/canva/ffffff
-  company_url: "/updates/canva/"
+  logo_path: /assets/img/patch-logos/canva.svg
+  company_url: /updates/canva/
   official_sources:
   - label: Canva newsroom
     url: https://www.canva.com/newsroom/
@@ -372,6 +411,8 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
+  name: Canva
+  asset_type: company_logo
 - id: cloudflare
   company_name: Cloudflare
   display_name: Cloudflare
@@ -379,8 +420,8 @@
   category_keys:
   - dev-web
   summary: Cloudflare is tracked because changes to Cloudflare can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/cloudflare/ffffff
-  company_url: "/updates/cloudflare/"
+  logo_path: /assets/img/patch-logos/cloudflare.svg
+  company_url: /updates/cloudflare/
   official_sources:
   - label: Cloudflare blog
     url: https://blog.cloudflare.com/
@@ -389,6 +430,8 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
+  name: Cloudflare
+  asset_type: company_logo
 - id: comfyui
   company_name: ComfyUI
   display_name: ComfyUI
@@ -396,8 +439,8 @@
   category_keys:
   - ai-image
   summary: ComfyUI is tracked because changes to ComfyUI can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: "/assets/img/patch-logos/comfyui.svg"
-  company_url: "/updates/comfyui/"
+  logo_path: /assets/img/patch-logos/comfyui.svg
+  company_url: /updates/comfyui/
   official_sources:
   - label: ComfyUI releases
     url: https://github.com/comfyanonymous/ComfyUI/releases
@@ -406,6 +449,8 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
+  name: ComfyUI
+  asset_type: company_logo
 - id: hugging-face
   company_name: Hugging Face
   display_name: Hugging Face
@@ -413,8 +458,8 @@
   category_keys:
   - dev-web
   summary: Hugging Face is tracked because changes to Hugging Face can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/huggingface/ffffff
-  company_url: "/updates/hugging-face/"
+  logo_path: /assets/img/patch-logos/hugging-face.svg
+  company_url: /updates/hugging-face/
   official_sources:
   - label: Hugging Face blog
     url: https://huggingface.co/blog
@@ -423,6 +468,8 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
+  name: Hugging Face
+  asset_type: company_logo
 - id: intel
   company_name: Intel
   display_name: Intel
@@ -430,8 +477,8 @@
   category_keys:
   - hardware-drivers
   summary: Intel is tracked because changes to Intel Graphics / Arc can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/intel/ffffff
-  company_url: "/updates/intel/"
+  logo_path: /assets/img/patch-logos/intel.svg
+  company_url: /updates/intel/
   official_sources:
   - label: Intel download center
     url: https://www.intel.com/content/www/us/en/download-center/home.html
@@ -440,6 +487,8 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
+  name: Intel
+  asset_type: company_logo
 - id: make
   company_name: Make
   display_name: Make
@@ -447,8 +496,8 @@
   category_keys:
   - workflow-automation
   summary: Make is tracked because changes to Make can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/make/ffffff
-  company_url: "/updates/make/"
+  logo_path: /assets/img/patch-logos/make.svg
+  company_url: /updates/make/
   official_sources:
   - label: Make changelog
     url: https://www.make.com/en/changelog
@@ -457,6 +506,8 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
+  name: Make
+  asset_type: company_logo
 - id: netlify
   company_name: Netlify
   display_name: Netlify
@@ -464,8 +515,8 @@
   category_keys:
   - dev-web
   summary: Netlify is tracked because changes to Netlify can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/netlify/ffffff
-  company_url: "/updates/netlify/"
+  logo_path: /assets/img/patch-logos/netlify.svg
+  company_url: /updates/netlify/
   official_sources:
   - label: Netlify changelog
     url: https://www.netlify.com/changelog/
@@ -474,6 +525,8 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
+  name: Netlify
+  asset_type: company_logo
 - id: notion
   company_name: Notion
   display_name: Notion
@@ -481,8 +534,8 @@
   category_keys:
   - workflow-automation
   summary: Notion is tracked because changes to Notion can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/notion/ffffff
-  company_url: "/updates/notion/"
+  logo_path: /assets/img/patch-logos/notion.svg
+  company_url: /updates/notion/
   official_sources:
   - label: Notion releases
     url: https://www.notion.com/releases
@@ -491,6 +544,8 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
+  name: Notion
+  asset_type: company_logo
 - id: pika
   company_name: Pika
   display_name: Pika
@@ -498,8 +553,8 @@
   category_keys:
   - ai-video
   summary: Pika is tracked because changes to Pika can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: "/assets/img/patch-logos/pika.svg"
-  company_url: "/updates/pika/"
+  logo_path: /assets/img/patch-logos/pika.svg
+  company_url: /updates/pika/
   official_sources:
   - label: Pika product site
     url: https://pika.art/
@@ -508,6 +563,8 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
+  name: Pika
+  asset_type: company_logo
 - id: rumble
   company_name: Rumble
   display_name: Rumble
@@ -515,8 +572,8 @@
   category_keys:
   - creator-platforms
   summary: Rumble is tracked because changes to Rumble can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/rumble/ffffff
-  company_url: "/updates/rumble/"
+  logo_path: /assets/img/patch-logos/rumble.svg
+  company_url: /updates/rumble/
   official_sources:
   - label: Rumble blog
     url: https://corp.rumble.com/blog/
@@ -525,6 +582,8 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
+  name: Rumble
+  asset_type: company_logo
 - id: stability-ai
   company_name: Stability AI
   display_name: Stability AI
@@ -532,8 +591,8 @@
   category_keys:
   - ai-image
   summary: Stability AI is tracked because changes to Stable Diffusion / Stable Audio can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: "/assets/img/patch-logos/stability-ai.svg"
-  company_url: "/updates/stability-ai/"
+  logo_path: /assets/img/patch-logos/stability-ai.svg
+  company_url: /updates/stability-ai/
   official_sources:
   - label: Stability AI news
     url: https://stability.ai/news
@@ -542,6 +601,8 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
+  name: Stability AI
+  asset_type: company_logo
 - id: unity
   company_name: Unity
   display_name: Unity
@@ -549,8 +610,8 @@
   category_keys:
   - game-engines
   summary: Unity is tracked because changes to Unity can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/unity/ffffff
-  company_url: "/updates/unity/"
+  logo_path: /assets/img/patch-logos/unity.svg
+  company_url: /updates/unity/
   official_sources:
   - label: Unity releases
     url: https://unity.com/releases
@@ -559,6 +620,8 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
+  name: Unity
+  asset_type: company_logo
 - id: zapier
   company_name: Zapier
   display_name: Zapier
@@ -566,8 +629,8 @@
   category_keys:
   - workflow-automation
   summary: Zapier is tracked because changes to Zapier can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: https://cdn.simpleicons.org/zapier/ffffff
-  company_url: "/updates/zapier/"
+  logo_path: /assets/img/patch-logos/zapier.svg
+  company_url: /updates/zapier/
   official_sources:
   - label: Zapier updates
     url: https://zapier.com/blog/updates/
@@ -576,6 +639,8 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
+  name: Zapier
+  asset_type: company_logo
 - id: microsoft
   company_name: Microsoft
   display_name: Microsoft
@@ -585,8 +650,8 @@
   - workplace-critical
   - productivity
   summary: Microsoft is tracked because Windows 11, Teams, PowerPoint, and Microsoft 365 Apps updates can affect security posture, workplace reliability, presentation delivery, meetings, collaboration, gaming performance, and creator workstation stability.
-  logo_path: https://msftstories.thesourcemediaassets.com/2022/05/Microsoft-logo_rgb_c-wht-768x344.png
-  company_url: "/updates/microsoft/"
+  logo_path: /assets/img/patch-logos/microsoft.svg
+  company_url: /updates/microsoft/
   official_sources:
   - label: Windows release health
     url: https://learn.microsoft.com/en-us/windows/release-health/
@@ -604,6 +669,8 @@
   coverage_state: staged
   coverage_status_label: Source map staged
   tracked_product_count: 4
+  name: Microsoft
+  asset_type: company_logo
 - id: elgato
   company_name: Elgato
   display_name: Elgato
@@ -613,8 +680,8 @@
   - creator-hardware
   - capture-workflows
   summary: Elgato is tracked because Stream Deck, Wave Link, Camera Hub, and 4K Capture Utility updates can affect streaming controls, OBS actions, audio routing, camera behavior, capture-device reliability, firmware compatibility, and creator production uptime.
-  logo_path: https://cdn.simpleicons.org/elgato/ffffff
-  company_url: "/updates/elgato/"
+  logo_path: /assets/img/patch-logos/elgato.svg
+  company_url: /updates/elgato/
   official_sources:
   - label: Stream Deck release notes
     url: https://help.elgato.com/hc/en-us/sections/5162671529357-Elgato-Stream-Deck-Software-Release-Notes
@@ -632,3 +699,5 @@
   coverage_state: staged
   coverage_status_label: Source map staged
   tracked_product_count: 4
+  name: Elgato
+  asset_type: company_logo
