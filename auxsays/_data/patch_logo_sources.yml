@@ -1,986 +1,892 @@
-schema_version: 2
-policy_summary:
-  local_first: true
-  external_logo_urls_allowed_in_data: false
-  ai_generated_or_hand_drawn_approximations_allowed: false
-  usage_context: Independent editorial/reference identification only. No sponsorship, endorsement, partnership, or affiliation implied.
-allowed_source_types:
-- official_brand_assets
-- official_product_icon
-- official_docs
-- licensed_third_party
-- manual_curated
-- company_fallback
 assets:
-- asset_id: company:adobe
+- asset_id: adobe
   kind: company_logo
   owner_name: Adobe
-  source_type: manual_curated
-  source_url: https://helpx.adobe.com/premiere/desktop/whats-new/release-notes.html
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/adobe.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: adobe
-- asset_id: company:amd
+  notes: Company-level logo asset.
+- asset_id: amd
   kind: company_logo
   owner_name: AMD
-  source_type: manual_curated
-  source_url: https://www.amd.com/en/support/download/drivers.html
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/amd.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: amd
-- asset_id: company:anthropic
+  notes: Company-level logo asset.
+- asset_id: anthropic
   kind: company_logo
   owner_name: Anthropic
-  source_type: manual_curated
-  source_url: https://support.claude.com/en/articles/12138966-release-notes
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/anthropic.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: anthropic
-- asset_id: company:blackmagic-design
+  notes: Company-level logo asset.
+- asset_id: blackmagic-design
   kind: company_logo
   owner_name: Blackmagic Design
   source_type: manual_curated
-  source_url: https://www.blackmagicdesign.com/media
+  source_url: https://en.wikipedia.org/wiki/File:Blackmagic_Design_logo.svg
   local_path: /assets/img/patch-logos/blackmagic-design.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: blackmagic-design
-- asset_id: company:epic-games
+  notes: Company-level logo asset.
+- asset_id: epic-games
   kind: company_logo
   owner_name: Epic Games
-  source_type: manual_curated
-  source_url: https://dev.epicgames.com/documentation/en-us/unreal-engine/whats-new
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/epic-games.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: epic-games
-- asset_id: company:figma
+  notes: Company-level logo asset.
+- asset_id: figma
   kind: company_logo
   owner_name: Figma
-  source_type: manual_curated
-  source_url: https://www.figma.com/release-notes/
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/figma.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: figma
-- asset_id: company:github
+  notes: Company-level logo asset.
+- asset_id: github
   kind: company_logo
   owner_name: GitHub
-  source_type: manual_curated
-  source_url: https://github.blog/changelog/
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/github.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: github
-- asset_id: company:google
+  notes: Company-level logo asset.
+- asset_id: google
   kind: company_logo
   owner_name: Google
-  source_type: manual_curated
-  source_url: https://gemini.google/updates/
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/google.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: google
-- asset_id: company:kick
+  notes: Company-level logo asset.
+- asset_id: kick
   kind: company_logo
   owner_name: Kick
-  source_type: manual_curated
-  source_url: https://kick.com/blog
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/kick.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: kick
-- asset_id: company:lottiefiles
+  notes: Company-level logo asset.
+- asset_id: lottiefiles
   kind: company_logo
   owner_name: LottieFiles
-  source_type: manual_curated
-  source_url: https://lottiefiles.com/blog
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/lottiefiles.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: lottiefiles
-- asset_id: company:midjourney
+  notes: Company-level logo asset.
+- asset_id: midjourney
   kind: company_logo
   owner_name: Midjourney
-  source_type: manual_curated
-  source_url: https://www.midjourney.com/updates/
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/midjourney.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: midjourney
-- asset_id: company:nvidia
+  notes: Company-level logo asset.
+- asset_id: nvidia
   kind: company_logo
   owner_name: NVIDIA
-  source_type: manual_curated
-  source_url: https://www.nvidia.com/en-us/geforce/news/
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/nvidia.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: nvidia
-- asset_id: company:obs-project
+  notes: Company-level logo asset.
+- asset_id: obs-project
   kind: company_logo
   owner_name: OBS Project
-  source_type: manual_curated
-  source_url: https://github.com/obsproject/obs-studio/releases
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/obs-project.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: obs-project
-- asset_id: company:openai
+  notes: Company-level logo asset.
+- asset_id: openai
   kind: company_logo
   owner_name: OpenAI
-  source_type: manual_curated
-  source_url: https://help.openai.com/en/articles/6825453-chatgpt-release-notes
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/openai.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: openai
-- asset_id: company:perplexity
+  notes: Company-level logo asset.
+- asset_id: perplexity
   kind: company_logo
   owner_name: Perplexity
-  source_type: manual_curated
-  source_url: https://www.perplexity.ai/hub/blog
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/perplexity.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: perplexity
-- asset_id: company:runway
+  notes: Company-level logo asset.
+- asset_id: runway
   kind: company_logo
   owner_name: Runway
-  source_type: manual_curated
-  source_url: https://runwayml.com/research/
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/runway.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: runway
-- asset_id: company:twitch
+  notes: Company-level logo asset.
+- asset_id: twitch
   kind: company_logo
   owner_name: Twitch
-  source_type: manual_curated
-  source_url: https://blog.twitch.tv/
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/twitch.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: twitch
-- asset_id: company:valve
+  notes: Company-level logo asset.
+- asset_id: valve
   kind: company_logo
   owner_name: Valve
-  source_type: manual_curated
-  source_url: https://store.steampowered.com/news/group/4145017
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/valve.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: valve
-- asset_id: company:youtube
+  notes: Company-level logo asset.
+- asset_id: youtube
   kind: company_logo
   owner_name: YouTube
-  source_type: manual_curated
-  source_url: https://blog.youtube/news-and-events/
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/youtube.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: youtube
-- asset_id: company:blender-foundation
+  notes: Company-level logo asset.
+- asset_id: blender-foundation
   kind: company_logo
   owner_name: Blender Foundation
-  source_type: manual_curated
-  source_url: https://www.blender.org/download/releases/
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/blender-foundation.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: blender-foundation
-- asset_id: company:canva
+  notes: Company-level logo asset.
+- asset_id: canva
   kind: company_logo
   owner_name: Canva
-  source_type: manual_curated
-  source_url: https://www.canva.com/newsroom/
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/canva.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: canva
-- asset_id: company:cloudflare
+  notes: Company-level logo asset.
+- asset_id: cloudflare
   kind: company_logo
   owner_name: Cloudflare
-  source_type: manual_curated
-  source_url: https://blog.cloudflare.com/
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/cloudflare.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: cloudflare
-- asset_id: company:comfyui
+  notes: Company-level logo asset.
+- asset_id: comfyui
   kind: company_logo
   owner_name: ComfyUI
-  source_type: manual_curated
-  source_url: https://github.com/comfyanonymous/ComfyUI/releases
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/comfyui.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: comfyui
-- asset_id: company:hugging-face
+  notes: Company-level logo asset.
+- asset_id: hugging-face
   kind: company_logo
   owner_name: Hugging Face
-  source_type: manual_curated
-  source_url: https://huggingface.co/blog
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/hugging-face.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: hugging-face
-- asset_id: company:intel
+  notes: Company-level logo asset.
+- asset_id: intel
   kind: company_logo
   owner_name: Intel
-  source_type: manual_curated
-  source_url: https://www.intel.com/content/www/us/en/download-center/home.html
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/intel.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: intel
-- asset_id: company:make
+  notes: Company-level logo asset.
+- asset_id: make
   kind: company_logo
   owner_name: Make
-  source_type: manual_curated
-  source_url: https://www.make.com/en/changelog
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/make.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: make
-- asset_id: company:netlify
+  notes: Company-level logo asset.
+- asset_id: netlify
   kind: company_logo
   owner_name: Netlify
-  source_type: manual_curated
-  source_url: https://www.netlify.com/changelog/
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/netlify.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: netlify
-- asset_id: company:notion
+  notes: Company-level logo asset.
+- asset_id: notion
   kind: company_logo
   owner_name: Notion
-  source_type: manual_curated
-  source_url: https://www.notion.com/releases
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/notion.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: notion
-- asset_id: company:pika
+  notes: Company-level logo asset.
+- asset_id: pika
   kind: company_logo
   owner_name: Pika
-  source_type: manual_curated
-  source_url: https://pika.art/
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/pika.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: pika
-- asset_id: company:rumble
+  notes: Company-level logo asset.
+- asset_id: rumble
   kind: company_logo
   owner_name: Rumble
-  source_type: manual_curated
-  source_url: https://corp.rumble.com/blog/
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/rumble.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: rumble
-- asset_id: company:stability-ai
+  notes: Company-level logo asset.
+- asset_id: stability-ai
   kind: company_logo
   owner_name: Stability AI
-  source_type: manual_curated
-  source_url: https://stability.ai/news
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/stability-ai.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: stability-ai
-- asset_id: company:unity
+  notes: Company-level logo asset.
+- asset_id: unity
   kind: company_logo
   owner_name: Unity
-  source_type: manual_curated
-  source_url: https://unity.com/releases
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/unity.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: unity
-- asset_id: company:zapier
+  notes: Company-level logo asset.
+- asset_id: zapier
   kind: company_logo
   owner_name: Zapier
-  source_type: manual_curated
-  source_url: https://zapier.com/blog/updates/
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/zapier.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: zapier
-- asset_id: company:microsoft
+  notes: Company-level logo asset.
+- asset_id: microsoft
   kind: company_logo
   owner_name: Microsoft
-  source_type: manual_curated
-  source_url: https://learn.microsoft.com/en-us/windows/release-health/
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/microsoft.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: microsoft
-- asset_id: company:elgato
+  notes: Company-level logo asset.
+- asset_id: elgato
   kind: company_logo
   owner_name: Elgato
-  source_type: manual_curated
-  source_url: https://help.elgato.com/hc/en-us/sections/5162671529357-Elgato-Stream-Deck-Software-Release-Notes
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/elgato.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local company identity asset. Do not hotlink remote logos in site data.
-  record_id: elgato
-- asset_id: product:openai-chatgpt
+  notes: Company-level logo asset.
+- asset_id: openai-chatgpt
   kind: company_fallback
-  owner_name: OpenAI
+  owner_name: ChatGPT / OpenAI
   source_type: company_fallback
-  source_url: https://help.openai.com/en/articles/6825453-chatgpt-release-notes
+  source_url: /updates/openai/
   local_path: /assets/img/patch-logos/openai.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: openai-chatgpt
-- asset_id: product:anthropic-claude
+  notes: Explicit fallback to company logo.
+- asset_id: anthropic-claude
   kind: company_fallback
-  owner_name: Anthropic
+  owner_name: Claude
   source_type: company_fallback
-  source_url: https://support.claude.com/en/articles/12138966-release-notes
+  source_url: /updates/anthropic/
   local_path: /assets/img/patch-logos/anthropic.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: anthropic-claude
-- asset_id: product:google-gemini
+  notes: Explicit fallback to company logo.
+- asset_id: google-gemini
   kind: company_fallback
-  owner_name: Google
+  owner_name: Gemini
   source_type: company_fallback
-  source_url: https://gemini.google/updates/
+  source_url: /updates/google/
   local_path: /assets/img/patch-logos/google.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: google-gemini
-- asset_id: product:perplexity
+  notes: Explicit fallback to company logo.
+- asset_id: perplexity
   kind: company_fallback
   owner_name: Perplexity
   source_type: company_fallback
-  source_url: https://www.perplexity.ai/hub/blog
+  source_url: /updates/perplexity/
   local_path: /assets/img/patch-logos/perplexity.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: perplexity
-- asset_id: product:midjourney
+  notes: Explicit fallback to company logo.
+- asset_id: midjourney
   kind: company_fallback
   owner_name: Midjourney
   source_type: company_fallback
-  source_url: https://www.midjourney.com/updates/
+  source_url: /updates/midjourney/
   local_path: /assets/img/patch-logos/midjourney.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: midjourney
-- asset_id: product:stability-ai
+  notes: Explicit fallback to company logo.
+- asset_id: stability-ai
   kind: company_fallback
-  owner_name: Stability AI
+  owner_name: Stable Diffusion / Stable Audio
   source_type: company_fallback
-  source_url: https://stability.ai/news
+  source_url: /updates/stability-ai/
   local_path: /assets/img/patch-logos/stability-ai.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: stability-ai
-- asset_id: product:runway
+  notes: Explicit fallback to company logo.
+- asset_id: runway
   kind: company_fallback
   owner_name: Runway
   source_type: company_fallback
-  source_url: https://runwayml.com/research/
+  source_url: /updates/runway/
   local_path: /assets/img/patch-logos/runway.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: runway
-- asset_id: product:pika
+  notes: Explicit fallback to company logo.
+- asset_id: pika
   kind: company_fallback
   owner_name: Pika
   source_type: company_fallback
-  source_url: https://pika.art/
+  source_url: /updates/pika/
   local_path: /assets/img/patch-logos/pika.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: pika
-- asset_id: product:lottiefiles
+  notes: Explicit fallback to company logo.
+- asset_id: lottiefiles
   kind: company_fallback
   owner_name: LottieFiles
   source_type: company_fallback
-  source_url: https://lottiefiles.com/blog
+  source_url: /updates/lottiefiles/
   local_path: /assets/img/patch-logos/lottiefiles.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: lottiefiles
-- asset_id: product:figma
-  kind: company_fallback
+  notes: Explicit fallback to company logo.
+- asset_id: figma
+  kind: product_icon
   owner_name: Figma
-  source_type: company_fallback
-  source_url: https://www.figma.com/release-notes/
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/figma.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
-  fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: figma
-- asset_id: product:canva
+  fallback_to_company_logo: false
+  notes: Product/software icon asset.
+- asset_id: canva
   kind: company_fallback
   owner_name: Canva
   source_type: company_fallback
-  source_url: https://www.canva.com/newsroom/
+  source_url: /updates/canva/
   local_path: /assets/img/patch-logos/canva.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: canva
-- asset_id: product:adobe-premiere-pro
+  notes: Explicit fallback to company logo.
+- asset_id: adobe-premiere-pro
   kind: product_icon
-  owner_name: Adobe
-  source_type: manual_curated
-  source_url: https://helpx.adobe.com/premiere/desktop/whats-new/release-notes.html
+  owner_name: Premiere Pro
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/adobe-premiere-pro.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local product-specific asset.
-  record_id: adobe-premiere-pro
-- asset_id: product:adobe-after-effects
+  notes: Product/software icon asset.
+- asset_id: adobe-after-effects
   kind: product_icon
-  owner_name: Adobe
-  source_type: manual_curated
-  source_url: https://helpx.adobe.com/after-effects/release-note/release-notes-after-effects.html
+  owner_name: After Effects
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/adobe-after-effects.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local product-specific asset.
-  record_id: adobe-after-effects
-- asset_id: product:adobe-photoshop
+  notes: Product/software icon asset.
+- asset_id: adobe-photoshop
   kind: product_icon
-  owner_name: Adobe
-  source_type: manual_curated
-  source_url: https://helpx.adobe.com/photoshop/desktop/whats-new/photoshop-on-desktop-release-notes.html
+  owner_name: Photoshop
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/adobe-photoshop.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local product-specific asset.
-  record_id: adobe-photoshop
-- asset_id: product:adobe-media-encoder
+  notes: Product/software icon asset.
+- asset_id: adobe-media-encoder
   kind: product_icon
-  owner_name: Adobe
-  source_type: manual_curated
-  source_url: https://helpx.adobe.com/media-encoder/release-notes.html
+  owner_name: Media Encoder
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/adobe-media-encoder.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local product-specific asset.
-  record_id: adobe-media-encoder
-- asset_id: product:adobe-lightroom-classic
+  notes: Product/software icon asset.
+- asset_id: adobe-lightroom-classic
   kind: product_icon
-  owner_name: Adobe
-  source_type: manual_curated
-  source_url: https://helpx.adobe.com/lightroom-classic/help/whats-new/release-notes.html
+  owner_name: Lightroom Classic
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/adobe-lightroom-classic.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local product-specific asset.
-  record_id: adobe-lightroom-classic
-- asset_id: product:blackmagic-davinci
-  kind: company_fallback
-  owner_name: Blackmagic Design
-  source_type: company_fallback
-  source_url: https://www.blackmagicdesign.com/media
-  local_path: /assets/img/patch-logos/blackmagic-design.svg
+  notes: Product/software icon asset.
+- asset_id: blackmagic-davinci
+  kind: product_icon
+  owner_name: DaVinci Resolve
+  source_type: local_curated_or_simple_icons
+  source_url: https://commons.wikimedia.org/wiki/File:DaVinci_Resolve_17_logo.svg
+  local_path: /assets/img/patch-logos/blackmagic-davinci.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
-  fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: blackmagic-davinci
-- asset_id: product:obs-studio
-  kind: company_fallback
-  owner_name: OBS Project
-  source_type: company_fallback
-  source_url: https://github.com/obsproject/obs-studio/releases
-  local_path: /assets/img/patch-logos/obs-project.svg
+  fallback_to_company_logo: false
+  notes: Product/software icon asset.
+- asset_id: obs-studio
+  kind: product_icon
+  owner_name: OBS Studio
+  source_type: local_curated_or_simple_icons
+  source_url: https://svgcon.dev/icon/obs-studio/
+  local_path: /assets/img/patch-logos/obs-studio.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
-  fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: obs-studio
-- asset_id: product:twitch
+  fallback_to_company_logo: false
+  notes: Product/software icon asset.
+- asset_id: twitch
   kind: company_fallback
   owner_name: Twitch
   source_type: company_fallback
-  source_url: https://blog.twitch.tv/
+  source_url: /updates/twitch/
   local_path: /assets/img/patch-logos/twitch.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: twitch
-- asset_id: product:youtube
+  notes: Explicit fallback to company logo.
+- asset_id: youtube
   kind: company_fallback
-  owner_name: YouTube
+  owner_name: YouTube / YouTube Studio
   source_type: company_fallback
-  source_url: https://blog.youtube/news-and-events/
+  source_url: /updates/youtube/
   local_path: /assets/img/patch-logos/youtube.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: youtube
-- asset_id: product:kick
+  notes: Explicit fallback to company logo.
+- asset_id: kick
   kind: company_fallback
   owner_name: Kick
   source_type: company_fallback
-  source_url: https://kick.com/blog
+  source_url: /updates/kick/
   local_path: /assets/img/patch-logos/kick.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: kick
-- asset_id: product:rumble
+  notes: Explicit fallback to company logo.
+- asset_id: rumble
   kind: company_fallback
   owner_name: Rumble
   source_type: company_fallback
-  source_url: https://corp.rumble.com/blog/
+  source_url: /updates/rumble/
   local_path: /assets/img/patch-logos/rumble.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: rumble
-- asset_id: product:epic-unreal
+  notes: Explicit fallback to company logo.
+- asset_id: epic-unreal
   kind: company_fallback
-  owner_name: Epic Games
+  owner_name: Unreal Engine
   source_type: company_fallback
-  source_url: https://dev.epicgames.com/documentation/en-us/unreal-engine/whats-new
+  source_url: /updates/epic-games/
   local_path: /assets/img/patch-logos/epic-games.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: epic-unreal
-- asset_id: product:unity
+  notes: Explicit fallback to company logo.
+- asset_id: unity
   kind: company_fallback
   owner_name: Unity
   source_type: company_fallback
-  source_url: https://unity.com/releases
+  source_url: /updates/unity/
   local_path: /assets/img/patch-logos/unity.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: unity
-- asset_id: product:steam
+  notes: Explicit fallback to company logo.
+- asset_id: steam
   kind: company_fallback
-  owner_name: Valve
+  owner_name: Steam
   source_type: company_fallback
-  source_url: https://store.steampowered.com/news/group/4145017
+  source_url: /updates/valve/
   local_path: /assets/img/patch-logos/valve.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: steam
-- asset_id: product:nvidia
+  notes: Explicit fallback to company logo.
+- asset_id: nvidia
   kind: company_fallback
-  owner_name: NVIDIA
+  owner_name: NVIDIA App / GeForce / Studio
   source_type: company_fallback
-  source_url: https://www.nvidia.com/en-us/geforce/news/
+  source_url: /updates/nvidia/
   local_path: /assets/img/patch-logos/nvidia.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: nvidia
-- asset_id: product:amd
-  kind: company_fallback
-  owner_name: AMD
-  source_type: company_fallback
-  source_url: https://www.amd.com/en/support/download/drivers.html
+  notes: Explicit fallback to company logo.
+- asset_id: amd
+  kind: product_icon
+  owner_name: AMD Software / Radeon
+  source_type: local_curated_or_simple_icons
+  source_url: https://www.svgviewer.dev/s/35121/amd
   local_path: /assets/img/patch-logos/amd.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
-  fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: amd
-- asset_id: product:intel-arc
+  fallback_to_company_logo: false
+  notes: Product/software icon asset.
+- asset_id: intel-arc
   kind: company_fallback
-  owner_name: Intel
+  owner_name: Intel Graphics / Arc
   source_type: company_fallback
-  source_url: https://www.intel.com/content/www/us/en/download-center/home.html
+  source_url: /updates/intel/
   local_path: /assets/img/patch-logos/intel.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: intel-arc
-- asset_id: product:blender
+  notes: Explicit fallback to company logo.
+- asset_id: blender
   kind: company_fallback
-  owner_name: Blender Foundation
+  owner_name: Blender
   source_type: company_fallback
-  source_url: https://www.blender.org/download/releases/
+  source_url: /updates/blender-foundation/
   local_path: /assets/img/patch-logos/blender-foundation.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: blender
-- asset_id: product:comfyui
+  notes: Explicit fallback to company logo.
+- asset_id: comfyui
   kind: company_fallback
   owner_name: ComfyUI
   source_type: company_fallback
-  source_url: https://github.com/comfyanonymous/ComfyUI/releases
+  source_url: /updates/comfyui/
   local_path: /assets/img/patch-logos/comfyui.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: comfyui
-- asset_id: product:hugging-face
+  notes: Explicit fallback to company logo.
+- asset_id: hugging-face
   kind: company_fallback
   owner_name: Hugging Face
   source_type: company_fallback
-  source_url: https://huggingface.co/blog
+  source_url: /updates/hugging-face/
   local_path: /assets/img/patch-logos/hugging-face.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: hugging-face
-- asset_id: product:github
+  notes: Explicit fallback to company logo.
+- asset_id: github
   kind: company_fallback
-  owner_name: GitHub
+  owner_name: GitHub / Copilot
   source_type: company_fallback
-  source_url: https://github.blog/changelog/
+  source_url: /updates/github/
   local_path: /assets/img/patch-logos/github.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: github
-- asset_id: product:cloudflare
+  notes: Explicit fallback to company logo.
+- asset_id: cloudflare
   kind: company_fallback
   owner_name: Cloudflare
   source_type: company_fallback
-  source_url: https://blog.cloudflare.com/
+  source_url: /updates/cloudflare/
   local_path: /assets/img/patch-logos/cloudflare.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: cloudflare
-- asset_id: product:netlify
+  notes: Explicit fallback to company logo.
+- asset_id: netlify
   kind: company_fallback
   owner_name: Netlify
   source_type: company_fallback
-  source_url: https://www.netlify.com/changelog/
+  source_url: /updates/netlify/
   local_path: /assets/img/patch-logos/netlify.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: netlify
-- asset_id: product:notion
+  notes: Explicit fallback to company logo.
+- asset_id: notion
   kind: company_fallback
   owner_name: Notion
   source_type: company_fallback
-  source_url: https://www.notion.com/releases
+  source_url: /updates/notion/
   local_path: /assets/img/patch-logos/notion.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: notion
-- asset_id: product:zapier
+  notes: Explicit fallback to company logo.
+- asset_id: zapier
   kind: company_fallback
   owner_name: Zapier
   source_type: company_fallback
-  source_url: https://zapier.com/blog/updates/
+  source_url: /updates/zapier/
   local_path: /assets/img/patch-logos/zapier.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: zapier
-- asset_id: product:make
+  notes: Explicit fallback to company logo.
+- asset_id: make
   kind: company_fallback
   owner_name: Make
   source_type: company_fallback
-  source_url: https://www.make.com/en/changelog
+  source_url: /updates/make/
   local_path: /assets/img/patch-logos/make.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: make
-- asset_id: product:adobe-acrobat-reader
+  notes: Explicit fallback to company logo.
+- asset_id: adobe-acrobat-reader
   kind: product_icon
-  owner_name: Adobe
-  source_type: manual_curated
-  source_url: https://www.adobe.com/devnet-docs/acrobatetk/tools/ReleaseNotesDC/index.html
+  owner_name: Acrobat / Acrobat Reader
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
   local_path: /assets/img/patch-logos/adobe-acrobat-reader.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Asset is used for independent editorial identification only; replace with verified official/brand-kit asset when sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local product-specific asset.
-  record_id: adobe-acrobat-reader
-- asset_id: product:microsoft-windows-11
-  kind: company_fallback
-  owner_name: Microsoft
-  source_type: company_fallback
-  source_url: https://learn.microsoft.com/en-us/windows/release-health/
-  local_path: /assets/img/patch-logos/microsoft.svg
+  notes: Product/software icon asset.
+- asset_id: microsoft-windows-11
+  kind: product_icon
+  owner_name: Windows 11
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
+  local_path: /assets/img/patch-logos/microsoft-windows-11.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
-  fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: microsoft-windows-11
-- asset_id: product:microsoft-teams
-  kind: company_fallback
-  owner_name: Microsoft
-  source_type: company_fallback
-  source_url: https://learn.microsoft.com/en-us/officeupdates/teams-app-versioning
-  local_path: /assets/img/patch-logos/microsoft.svg
+  fallback_to_company_logo: false
+  notes: Product/software icon asset.
+- asset_id: microsoft-teams
+  kind: product_icon
+  owner_name: Microsoft Teams
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
+  local_path: /assets/img/patch-logos/microsoft-teams.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
-  fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: microsoft-teams
-- asset_id: product:microsoft-powerpoint
-  kind: company_fallback
-  owner_name: Microsoft
-  source_type: company_fallback
-  source_url: https://learn.microsoft.com/en-us/officeupdates/release-notes-microsoft365-apps
-  local_path: /assets/img/patch-logos/microsoft.svg
+  fallback_to_company_logo: false
+  notes: Product/software icon asset.
+- asset_id: microsoft-powerpoint
+  kind: product_icon
+  owner_name: Microsoft PowerPoint
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
+  local_path: /assets/img/patch-logos/microsoft-powerpoint.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
-  fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: microsoft-powerpoint
-- asset_id: product:microsoft-365-apps
-  kind: company_fallback
-  owner_name: Microsoft
-  source_type: company_fallback
-  source_url: https://learn.microsoft.com/en-us/officeupdates/update-history-microsoft365-apps-by-date
-  local_path: /assets/img/patch-logos/microsoft.svg
+  fallback_to_company_logo: false
+  notes: Product/software icon asset.
+- asset_id: microsoft-365-apps
+  kind: product_icon
+  owner_name: Microsoft 365 Apps
+  source_type: local_curated_or_simple_icons
+  source_url: https://simpleicons.org/
+  local_path: /assets/img/patch-logos/microsoft-365-apps.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
-  fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: microsoft-365-apps
-- asset_id: product:elgato-stream-deck
+  fallback_to_company_logo: false
+  notes: Product/software icon asset.
+- asset_id: elgato-stream-deck
   kind: company_fallback
-  owner_name: Elgato
+  owner_name: Stream Deck
   source_type: company_fallback
-  source_url: https://help.elgato.com/hc/en-us/sections/5162671529357-Elgato-Stream-Deck-Software-Release-Notes
+  source_url: /updates/elgato/
   local_path: /assets/img/patch-logos/elgato.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: elgato-stream-deck
-- asset_id: product:elgato-wave-link
+  notes: Explicit fallback to company logo.
+- asset_id: elgato-wave-link
   kind: company_fallback
-  owner_name: Elgato
+  owner_name: Wave Link
   source_type: company_fallback
-  source_url: https://help.elgato.com/hc/en-us/sections/4913442828941-Wave-Link-Release-Notes
+  source_url: /updates/elgato/
   local_path: /assets/img/patch-logos/elgato.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: elgato-wave-link
-- asset_id: product:elgato-camera-hub
+  notes: Explicit fallback to company logo.
+- asset_id: elgato-camera-hub
   kind: company_fallback
-  owner_name: Elgato
+  owner_name: Camera Hub
   source_type: company_fallback
-  source_url: https://help.elgato.com/hc/en-us/sections/4880787756941-Elgato-Camera-Hub-Release-Notes
+  source_url: /updates/elgato/
   local_path: /assets/img/patch-logos/elgato.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: elgato-camera-hub
-- asset_id: product:elgato-4k-capture-utility
+  notes: Explicit fallback to company logo.
+- asset_id: elgato-4k-capture-utility
   kind: company_fallback
-  owner_name: Elgato
+  owner_name: 4K Capture Utility
   source_type: company_fallback
-  source_url: https://help.elgato.com/hc/en-us/sections/5126053814029-Elgato-4K-Capture-Utility-Release-Notes
+  source_url: /updates/elgato/
   local_path: /assets/img/patch-logos/elgato.svg
   attribution_required: false
-  attribution_note: No third-party attribution recorded. Product falls back to company logo when a verified product-specific icon has not been sourced.
+  attribution_note: Used for editorial identification only; trademarks remain with respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: true
-  notes: Explicit company-logo fallback; not a product-specific icon.
-  record_id: elgato-4k-capture-utility
+  notes: Explicit fallback to company logo.

@@ -31,7 +31,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 6
-  name: Adobe
   asset_type: company_logo
 - id: amd
   company_name: AMD
@@ -50,7 +49,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
-  name: AMD
   asset_type: company_logo
 - id: anthropic
   company_name: Anthropic
@@ -69,7 +67,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
-  name: Anthropic
   asset_type: company_logo
 - id: blackmagic-design
   company_name: Blackmagic Design
@@ -88,7 +85,6 @@
   coverage_state: documented
   coverage_status_label: Patch records available
   tracked_product_count: 1
-  name: Blackmagic Design
   asset_type: company_logo
 - id: epic-games
   company_name: Epic Games
@@ -107,7 +103,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
-  name: Epic Games
   asset_type: company_logo
 - id: figma
   company_name: Figma
@@ -126,7 +121,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
-  name: Figma
   asset_type: company_logo
 - id: github
   company_name: GitHub
@@ -145,7 +139,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
-  name: GitHub
   asset_type: company_logo
 - id: google
   company_name: Google
@@ -164,7 +157,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
-  name: Google
   asset_type: company_logo
 - id: kick
   company_name: Kick
@@ -183,7 +175,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
-  name: Kick
   asset_type: company_logo
 - id: lottiefiles
   company_name: LottieFiles
@@ -202,7 +193,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
-  name: LottieFiles
   asset_type: company_logo
 - id: midjourney
   company_name: Midjourney
@@ -221,7 +211,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
-  name: Midjourney
   asset_type: company_logo
 - id: nvidia
   company_name: NVIDIA
@@ -240,7 +229,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
-  name: NVIDIA
   asset_type: company_logo
 - id: obs-project
   company_name: OBS Project
@@ -259,7 +247,6 @@
   coverage_state: documented
   coverage_status_label: Patch records available
   tracked_product_count: 1
-  name: OBS Project
   asset_type: company_logo
 - id: openai
   company_name: OpenAI
@@ -278,7 +265,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
-  name: OpenAI
   asset_type: company_logo
 - id: perplexity
   company_name: Perplexity
@@ -297,7 +283,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
-  name: Perplexity
   asset_type: company_logo
 - id: runway
   company_name: Runway
@@ -316,7 +301,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
-  name: Runway
   asset_type: company_logo
 - id: twitch
   company_name: Twitch
@@ -335,7 +319,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
-  name: Twitch
   asset_type: company_logo
 - id: valve
   company_name: Valve
@@ -354,7 +337,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
-  name: Valve
   asset_type: company_logo
 - id: youtube
   company_name: YouTube
@@ -373,7 +355,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
-  name: YouTube
   asset_type: company_logo
 - id: blender-foundation
   company_name: Blender Foundation
@@ -392,7 +373,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
-  name: Blender Foundation
   asset_type: company_logo
 - id: canva
   company_name: Canva
@@ -411,7 +391,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
-  name: Canva
   asset_type: company_logo
 - id: cloudflare
   company_name: Cloudflare
@@ -430,7 +409,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
-  name: Cloudflare
   asset_type: company_logo
 - id: comfyui
   company_name: ComfyUI
@@ -449,7 +427,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
-  name: ComfyUI
   asset_type: company_logo
 - id: hugging-face
   company_name: Hugging Face
@@ -468,7 +445,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
-  name: Hugging Face
   asset_type: company_logo
 - id: intel
   company_name: Intel
@@ -487,7 +463,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
-  name: Intel
   asset_type: company_logo
 - id: make
   company_name: Make
@@ -506,7 +481,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
-  name: Make
   asset_type: company_logo
 - id: netlify
   company_name: Netlify
@@ -525,7 +499,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
-  name: Netlify
   asset_type: company_logo
 - id: notion
   company_name: Notion
@@ -544,7 +517,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
-  name: Notion
   asset_type: company_logo
 - id: pika
   company_name: Pika
@@ -563,7 +535,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
-  name: Pika
   asset_type: company_logo
 - id: rumble
   company_name: Rumble
@@ -582,7 +553,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
-  name: Rumble
   asset_type: company_logo
 - id: stability-ai
   company_name: Stability AI
@@ -601,7 +571,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
-  name: Stability AI
   asset_type: company_logo
 - id: unity
   company_name: Unity
@@ -620,7 +589,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
-  name: Unity
   asset_type: company_logo
 - id: zapier
   company_name: Zapier
@@ -639,7 +607,6 @@
   coverage_state: active_watch
   coverage_status_label: Monitoring active
   tracked_product_count: 1
-  name: Zapier
   asset_type: company_logo
 - id: microsoft
   company_name: Microsoft
@@ -669,7 +636,6 @@
   coverage_state: staged
   coverage_status_label: Source map staged
   tracked_product_count: 4
-  name: Microsoft
   asset_type: company_logo
 - id: elgato
   company_name: Elgato
@@ -699,5 +665,4 @@
   coverage_state: staged
   coverage_status_label: Source map staged
   tracked_product_count: 4
-  name: Elgato
   asset_type: company_logo

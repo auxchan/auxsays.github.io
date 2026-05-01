@@ -35,9 +35,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: ChatGPT / OpenAI is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: ChatGPT / OpenAI
   asset_type: company_fallback
-  fallback_to_company_logo: true
 - id: anthropic-claude
   company_name: Anthropic
   product_name: Claude
@@ -75,9 +73,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: Claude is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: Claude
   asset_type: company_fallback
-  fallback_to_company_logo: true
 - id: google-gemini
   company_name: Google
   product_name: Gemini
@@ -115,9 +111,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: Gemini is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: Gemini
   asset_type: company_fallback
-  fallback_to_company_logo: true
 - id: perplexity
   company_name: Perplexity
   product_name: Perplexity
@@ -155,9 +149,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: Perplexity is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: Perplexity
   asset_type: company_fallback
-  fallback_to_company_logo: true
 - id: midjourney
   company_name: Midjourney
   product_name: Midjourney
@@ -195,9 +187,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: Midjourney is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: Midjourney
   asset_type: company_fallback
-  fallback_to_company_logo: true
 - id: stability-ai
   company_name: Stability AI
   product_name: Stable Diffusion / Stable Audio
@@ -235,9 +225,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: Stable Diffusion / Stable Audio is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: Stable Diffusion / Stable Audio
   asset_type: company_fallback
-  fallback_to_company_logo: true
 - id: runway
   company_name: Runway
   product_name: Runway
@@ -275,9 +263,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: Runway is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: Runway
   asset_type: company_fallback
-  fallback_to_company_logo: true
 - id: pika
   company_name: Pika
   product_name: Pika
@@ -315,9 +301,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: Pika is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: Pika
   asset_type: company_fallback
-  fallback_to_company_logo: true
 - id: lottiefiles
   company_name: LottieFiles
   product_name: LottieFiles
@@ -355,9 +339,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: LottieFiles is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: LottieFiles
   asset_type: company_fallback
-  fallback_to_company_logo: true
 - id: figma
   company_name: Figma
   product_name: Figma
@@ -395,9 +377,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: Figma is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: Figma
-  asset_type: company_fallback
-  fallback_to_company_logo: true
+  asset_type: product_icon
 - id: canva
   company_name: Canva
   product_name: Canva
@@ -435,9 +415,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: Canva is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: Canva
   asset_type: company_fallback
-  fallback_to_company_logo: true
 - id: adobe-premiere-pro
   company_name: Adobe
   product_name: Premiere Pro
@@ -476,9 +454,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: Premiere Pro is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: Premiere Pro
   asset_type: product_icon
-  fallback_to_company_logo: false
 - id: adobe-after-effects
   company_name: Adobe
   product_name: After Effects
@@ -517,9 +493,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: After Effects is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: After Effects
   asset_type: product_icon
-  fallback_to_company_logo: false
 - id: adobe-photoshop
   company_name: Adobe
   product_name: Photoshop
@@ -558,9 +532,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: Photoshop is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: Photoshop
   asset_type: product_icon
-  fallback_to_company_logo: false
 - id: adobe-media-encoder
   company_name: Adobe
   product_name: Media Encoder
@@ -599,9 +571,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: Media Encoder is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: Media Encoder
   asset_type: product_icon
-  fallback_to_company_logo: false
 - id: adobe-lightroom-classic
   company_name: Adobe
   product_name: Lightroom Classic
@@ -640,9 +610,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: Lightroom Classic is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: Lightroom Classic
   asset_type: product_icon
-  fallback_to_company_logo: false
 - id: blackmagic-davinci
   company_name: Blackmagic Design
   product_name: DaVinci Resolve
@@ -658,7 +626,7 @@
   signal_notes: Track edit/color page stability, render behavior, codec support, GPU acceleration, Fairlight/Fusion issues, known issues, and fixed issues separately.
   source_id: blackmagic-davinci
   logo_label: DaVinci Resolve
-  logo_path: /assets/img/patch-logos/blackmagic-design.svg
+  logo_path: /assets/img/patch-logos/blackmagic-davinci.svg
   company_id: blackmagic-design
   product_id: blackmagic-davinci
   company_url: /updates/blackmagic-design/
@@ -681,9 +649,7 @@
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: DaVinci Resolve is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
   ui_backdrop_path: /assets/img/software-ui/davinci-resolve-ui.webp
-  name: DaVinci Resolve
-  asset_type: company_fallback
-  fallback_to_company_logo: true
+  asset_type: product_icon
 - id: obs-studio
   company_name: OBS Project
   product_name: OBS Studio
@@ -699,7 +665,7 @@
   signal_notes: Watch hotfixes and plugin compatibility after major/minor releases.
   source_id: obs-studio
   logo_label: OBS Studio
-  logo_path: /assets/img/patch-logos/obs-project.svg
+  logo_path: /assets/img/patch-logos/obs-studio.svg
   company_id: obs-project
   product_id: obs-studio
   company_url: /updates/obs-project/
@@ -721,9 +687,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: OBS Studio is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: OBS Studio
-  asset_type: company_fallback
-  fallback_to_company_logo: true
+  asset_type: product_icon
 - id: twitch
   company_name: Twitch
   product_name: Twitch
@@ -761,9 +725,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: Twitch is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: Twitch
   asset_type: company_fallback
-  fallback_to_company_logo: true
 - id: youtube
   company_name: YouTube
   product_name: YouTube / YouTube Studio
@@ -801,9 +763,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: YouTube / YouTube Studio is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: YouTube / YouTube Studio
   asset_type: company_fallback
-  fallback_to_company_logo: true
 - id: kick
   company_name: Kick
   product_name: Kick
@@ -841,9 +801,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: Kick is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: Kick
   asset_type: company_fallback
-  fallback_to_company_logo: true
 - id: rumble
   company_name: Rumble
   product_name: Rumble
@@ -881,9 +839,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: Rumble is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: Rumble
   asset_type: company_fallback
-  fallback_to_company_logo: true
 - id: epic-unreal
   company_name: Epic Games
   product_name: Unreal Engine
@@ -921,9 +877,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: Unreal Engine is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: Unreal Engine
   asset_type: company_fallback
-  fallback_to_company_logo: true
 - id: unity
   company_name: Unity
   product_name: Unity
@@ -961,9 +915,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: Unity is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: Unity
   asset_type: company_fallback
-  fallback_to_company_logo: true
 - id: steam
   company_name: Valve
   product_name: Steam
@@ -1001,9 +953,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: Steam is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: Steam
   asset_type: company_fallback
-  fallback_to_company_logo: true
 - id: nvidia
   company_name: NVIDIA
   product_name: NVIDIA App / GeForce / Studio
@@ -1041,9 +991,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: NVIDIA App / GeForce / Studio is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: NVIDIA App / GeForce / Studio
   asset_type: company_fallback
-  fallback_to_company_logo: true
 - id: amd
   company_name: AMD
   product_name: AMD Software / Radeon
@@ -1081,9 +1029,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: AMD Software / Radeon is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: AMD Software / Radeon
-  asset_type: company_fallback
-  fallback_to_company_logo: true
+  asset_type: product_icon
 - id: intel-arc
   company_name: Intel
   product_name: Intel Graphics / Arc
@@ -1121,9 +1067,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: Intel Graphics / Arc is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: Intel Graphics / Arc
   asset_type: company_fallback
-  fallback_to_company_logo: true
 - id: blender
   company_name: Blender Foundation
   product_name: Blender
@@ -1161,9 +1105,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: Blender is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: Blender
   asset_type: company_fallback
-  fallback_to_company_logo: true
 - id: comfyui
   company_name: ComfyUI
   product_name: ComfyUI
@@ -1201,9 +1143,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: ComfyUI is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: ComfyUI
   asset_type: company_fallback
-  fallback_to_company_logo: true
 - id: hugging-face
   company_name: Hugging Face
   product_name: Hugging Face
@@ -1241,9 +1181,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: Hugging Face is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: Hugging Face
   asset_type: company_fallback
-  fallback_to_company_logo: true
 - id: github
   company_name: GitHub
   product_name: GitHub / Copilot
@@ -1281,9 +1219,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: GitHub / Copilot is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: GitHub / Copilot
   asset_type: company_fallback
-  fallback_to_company_logo: true
 - id: cloudflare
   company_name: Cloudflare
   product_name: Cloudflare
@@ -1321,9 +1257,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: Cloudflare is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: Cloudflare
   asset_type: company_fallback
-  fallback_to_company_logo: true
 - id: netlify
   company_name: Netlify
   product_name: Netlify
@@ -1361,9 +1295,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: Netlify is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: Netlify
   asset_type: company_fallback
-  fallback_to_company_logo: true
 - id: notion
   company_name: Notion
   product_name: Notion
@@ -1401,9 +1333,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: Notion is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: Notion
   asset_type: company_fallback
-  fallback_to_company_logo: true
 - id: zapier
   company_name: Zapier
   product_name: Zapier
@@ -1441,9 +1371,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: Zapier is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: Zapier
   asset_type: company_fallback
-  fallback_to_company_logo: true
 - id: make
   company_name: Make
   product_name: Make
@@ -1481,9 +1409,7 @@
   - Enough public community signal to evaluate stability, regressions, or user confusion.
   - Security, pricing, policy, licensing, or compatibility changes that creators may miss.
   dossier_note: Make is tracked for release changes, workflow impact, compatibility shifts, stability signals, and community consensus.
-  name: Make
   asset_type: company_fallback
-  fallback_to_company_logo: true
 - id: adobe-acrobat-reader
   company_name: Adobe
   product_name: Acrobat / Acrobat Reader
@@ -1521,9 +1447,7 @@
   - Workflow impact involving PDFs, printing, signatures, forms, browser integration, or enterprise deployment.
   - Enough confirmed patch-specific public reports to evaluate install risk.
   dossier_note: Acrobat / Reader is tracked as a workplace-critical PDF platform where security updates may be urgent, but fragile form, print, and signature workflows still require careful testing.
-  name: Acrobat / Acrobat Reader
   asset_type: product_icon
-  fallback_to_company_logo: false
 - id: microsoft-windows-11
   company_name: Microsoft
   product_name: Windows 11
@@ -1539,7 +1463,7 @@
   signal_notes: Track release health, known issues, safeguard holds, security urgency, gaming performance, creator app compatibility, GPU/driver interaction, capture devices, audio routing, and rollout channel.
   source_id: microsoft-windows-11
   logo_label: Windows 11
-  logo_path: /assets/img/patch-logos/microsoft.svg
+  logo_path: /assets/img/patch-logos/microsoft-windows-11.svg
   company_id: microsoft
   product_id: microsoft-windows-11
   company_url: /updates/microsoft/
@@ -1559,9 +1483,7 @@
   - Security-sensitive cumulative update with creator/gaming/workplace relevance.
   - Safeguard hold or known issue affecting creator, gaming, device, or enterprise workflows.
   dossier_note: Windows 11 is tracked as a security-sensitive OS platform where update advice must balance exposure, known issues, staged rollout behavior, and fragile creator/gaming workstations.
-  name: Windows 11
-  asset_type: company_fallback
-  fallback_to_company_logo: true
+  asset_type: product_icon
 - id: microsoft-teams
   company_name: Microsoft
   product_name: Microsoft Teams
@@ -1577,7 +1499,7 @@
   signal_notes: Track client version rollout, meeting reliability, audio/video behavior, screen sharing, tenant/admin impact, and staged rollout.
   source_id: microsoft-teams
   logo_label: Teams
-  logo_path: /assets/img/patch-logos/microsoft.svg
+  logo_path: /assets/img/patch-logos/microsoft-teams.svg
   company_id: microsoft
   product_id: microsoft-teams
   company_url: /updates/microsoft/
@@ -1595,9 +1517,7 @@
   - New Teams app version history or release-note entry.
   - Meeting/calling reliability or admin-impacting rollout notice.
   dossier_note: Microsoft Teams is tracked for meeting reliability, tenant rollout, and workplace communication risk.
-  name: Microsoft Teams
-  asset_type: company_fallback
-  fallback_to_company_logo: true
+  asset_type: product_icon
 - id: microsoft-powerpoint
   company_name: Microsoft
   product_name: Microsoft PowerPoint
@@ -1613,7 +1533,7 @@
   signal_notes: Track channel-specific rollout, presentation/export reliability, embedded media, collaboration, add-ins, and Copilot behavior.
   source_id: microsoft-powerpoint
   logo_label: PowerPoint
-  logo_path: /assets/img/patch-logos/microsoft.svg
+  logo_path: /assets/img/patch-logos/microsoft-powerpoint.svg
   company_id: microsoft
   product_id: microsoft-powerpoint
   company_url: /updates/microsoft/
@@ -1630,9 +1550,7 @@
   record_trigger_rules:
   - Microsoft 365 Apps release entry with PowerPoint-specific feature, fix, security, or regression risk.
   dossier_note: PowerPoint is tracked for presentation-critical workplace and creator workflows, especially media/export/add-in reliability.
-  name: Microsoft PowerPoint
-  asset_type: company_fallback
-  fallback_to_company_logo: true
+  asset_type: product_icon
 - id: microsoft-365-apps
   company_name: Microsoft
   product_name: Microsoft 365 Apps
@@ -1648,7 +1566,7 @@
   signal_notes: Track Current Channel, Monthly Enterprise, Semi-Annual Enterprise, security updates, feature rollout, add-ins, sync, collaboration, and Copilot behavior.
   source_id: microsoft-365-apps
   logo_label: M365
-  logo_path: /assets/img/patch-logos/microsoft.svg
+  logo_path: /assets/img/patch-logos/microsoft-365-apps.svg
   company_id: microsoft
   product_id: microsoft-365-apps
   company_url: /updates/microsoft/
@@ -1667,9 +1585,7 @@
   - Security or non-security update affecting Office desktop apps.
   - Channel-specific rollout with workplace deployment impact.
   dossier_note: Microsoft 365 Apps is tracked as the broader Office update stream that may include PowerPoint, Word, Excel, Outlook, security, and Copilot-related changes.
-  name: Microsoft 365 Apps
-  asset_type: company_fallback
-  fallback_to_company_logo: true
+  asset_type: product_icon
 - id: elgato-stream-deck
   company_name: Elgato
   product_name: Stream Deck
@@ -1703,9 +1619,7 @@
   - New Stream Deck release-note entry.
   - Plugin, profile, OBS action, firmware, account integration, or Marketplace-impacting update.
   dossier_note: Stream Deck is tracked as a live-production control surface where plugin and profile stability matter.
-  name: Stream Deck
   asset_type: company_fallback
-  fallback_to_company_logo: true
 - id: elgato-wave-link
   company_name: Elgato
   product_name: Wave Link
@@ -1739,9 +1653,7 @@
   - New Wave Link release-note entry.
   - Audio routing, VST, device support, or OBS workflow-impacting update.
   dossier_note: Wave Link is tracked for stream audio routing, mic/device behavior, and OBS/live-production stability.
-  name: Wave Link
   asset_type: company_fallback
-  fallback_to_company_logo: true
 - id: elgato-camera-hub
   company_name: Elgato
   product_name: Camera Hub
@@ -1775,9 +1687,7 @@
   - New Camera Hub release-note entry.
   - Camera, firmware, Prompter, virtual camera, or OBS workflow-impacting update.
   dossier_note: Camera Hub is tracked for camera-control, firmware, virtual-camera, and OBS capture stability.
-  name: Camera Hub
   asset_type: company_fallback
-  fallback_to_company_logo: true
 - id: elgato-4k-capture-utility
   company_name: Elgato
   product_name: 4K Capture Utility
@@ -1811,6 +1721,4 @@
   - New 4K Capture Utility release-note entry.
   - Capture device, firmware, USB, HDR, or recording stability-impacting update.
   dossier_note: 4K Capture Utility is tracked for capture-card reliability, HDR behavior, USB detection, firmware, and recording stability.
-  name: 4K Capture Utility
   asset_type: company_fallback
-  fallback_to_company_logo: true

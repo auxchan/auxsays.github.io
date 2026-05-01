@@ -1,18 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="Blackmagic Design logo">
-  <defs>
-    <linearGradient id="bmdg" x1="0" x2="1" y1="0" y2="1">
-      <stop offset="0" stop-color="#1b242b"/>
-      <stop offset="1" stop-color="#05080b"/>
-    </linearGradient>
-    <linearGradient id="gold" x1="0" x2="1">
-      <stop offset="0" stop-color="#f4d17a"/>
-      <stop offset="1" stop-color="#b68124"/>
-    </linearGradient>
-  </defs>
-  <rect width="256" height="256" rx="54" fill="url(#bmdg)"/>
-  <rect x="16" y="16" width="224" height="224" rx="44" fill="none" stroke="#d6ab4e" stroke-opacity=".45" stroke-width="4"/>
-  <g fill="url(#gold)">
-    <path d="M58 85h54c27 0 42 13 42 34 0 12-6 22-18 28 15 5 24 17 24 34 0 26-18 40-51 40H58V85Zm42 52c12 0 19-5 19-15s-7-15-19-15H86v30h14Zm5 62c14 0 22-6 22-18s-8-18-22-18H86v36h19Z"/>
-    <path d="M175 85h27v136h-27V85Z" opacity=".76"/>
-  </g>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="Blackmagic Design logo">
+  <title>Blackmagic Design</title>
+  <defs><radialGradient id="bmd" cx="50%" cy="42%" r="70%"><stop offset="0" stop-color="#28313A"/><stop offset="1" stop-color="#05080B"/></radialGradient></defs>
+  <rect x="4" y="4" width="88" height="88" rx="22" fill="url(#bmd)"/>
+  <circle cx="48" cy="48" r="32" fill="none" stroke="#FFA200" stroke-width="5" stroke-opacity=".95"/>
+  <circle cx="48" cy="26" r="8" fill="#FFA200"/>
+  <circle cx="67" cy="59" r="8" fill="#FFA200"/>
+  <circle cx="29" cy="59" r="8" fill="#FFA200"/>
+  <path d="M48 34c5 9 10 15 19 18M42 56c-10-1-18-7-22-15M54 56c-1 10-5 17-14 22" fill="none" stroke="#F4EFE4" stroke-width="5" stroke-linecap="round" opacity=".72"/>
 </svg>

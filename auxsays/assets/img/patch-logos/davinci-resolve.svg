@@ -1,14 +1,15 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" role="img" aria-label="DaVinci Resolve logo">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" role="img" aria-label="DaVinci Resolve logo">
+  <title>DaVinci Resolve</title>
   <defs>
-    <radialGradient id="bg" cx="50%" cy="45%" r="65%"><stop offset="0" stop-color="#1a2630"/><stop offset="1" stop-color="#04070a"/></radialGradient>
-    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <radialGradient id="drbg" cx="50%" cy="45%" r="70%"><stop offset="0" stop-color="#22313a"/><stop offset="1" stop-color="#05080b"/></radialGradient>
+    <filter id="drs" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#000" flood-opacity=".45"/></filter>
   </defs>
-  <rect width="256" height="256" rx="56" fill="url(#bg)"/>
-  <circle cx="128" cy="128" r="86" fill="none" stroke="#d6ab4e" stroke-opacity=".28" stroke-width="5"/>
-  <g filter="url(#glow)">
-    <path d="M128 42a74 74 0 0 1 64 111c-27-5-49-20-64-43-15 23-37 38-64 43A74 74 0 0 1 128 42Z" fill="#f1ca52"/>
-    <path d="M64 153c27-5 49-20 64-43 15 23 37 38 64 43a74 74 0 0 1-128 0Z" fill="#df4a46"/>
-    <path d="M128 110c-15 23-37 38-64 43a74 74 0 0 0 128 0c-27-5-49-20-64-43Z" fill="#34a8db" opacity=".78"/>
-    <circle cx="128" cy="128" r="25" fill="#091018" stroke="#fff" stroke-opacity=".28"/>
+  <rect x="4" y="4" width="88" height="88" rx="22" fill="url(#drbg)"/>
+  <circle cx="48" cy="48" r="34" fill="#101820" stroke="#E9ECEF" stroke-opacity=".18" stroke-width="2"/>
+  <g filter="url(#drs)">
+    <path d="M48 15a29 29 0 0 1 25 44c-10-2-19-7-25-16-6 9-15 14-25 16A29 29 0 0 1 48 15Z" fill="#F1C84B"/>
+    <path d="M23 59c10-2 19-7 25-16 6 9 15 14 25 16A29 29 0 0 1 23 59Z" fill="#DF4A46"/>
+    <path d="M48 43c-6 9-15 14-25 16a29 29 0 0 0 50 0c-10-2-19-7-25-16Z" fill="#2C9EDB" opacity=".85"/>
+    <circle cx="48" cy="48" r="10" fill="#091018" stroke="#FFFFFF" stroke-opacity=".25"/>
   </g>
 </svg>
