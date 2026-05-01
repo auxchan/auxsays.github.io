@@ -4826,3 +4826,70 @@ button, input, select, textarea { font: inherit; }
     display: grid;
   }
 }
+
+
+/* Update page navigation polish: sticky horizontal table-of-contents without a floating overlay */
+.update-section-nav {
+  position: sticky;
+  top: 78px;
+  z-index: 8;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: .5rem;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  margin: .85rem 0 1rem;
+  padding: .55rem .6rem;
+  border: 1px solid rgba(126,207,215,.13);
+  border-radius: 18px;
+  background: rgba(8,13,17,.86);
+  backdrop-filter: blur(14px);
+  box-shadow: 0 12px 32px rgba(0,0,0,.22);
+}
+
+.update-section-nav a {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  min-height: 2.1rem;
+  padding: .48rem .72rem;
+  border: 1px solid rgba(126,207,215,.16);
+  border-radius: 999px;
+  color: var(--text-1);
+  font-size: .74rem;
+  font-weight: 800;
+  letter-spacing: .11em;
+  text-transform: uppercase;
+  background: rgba(255,255,255,.025);
+}
+
+.update-section-nav a:hover,
+.update-section-nav a:focus-visible {
+  color: #f4feff;
+  border-color: rgba(95,212,229,.44);
+  background: rgba(95,212,229,.09);
+  text-decoration: none;
+}
+
+.update-official-details .official-source-list {
+  display: none;
+}
+
+.update-status-details,
+.update-checksum-details {
+  opacity: .94;
+}
+
+@media (max-width: 760px) {
+  .update-section-nav {
+    top: 66px;
+    margin-inline: -.35rem;
+    border-radius: 14px;
+  }
+
+  .update-section-nav a {
+    font-size: .68rem;
+    letter-spacing: .08em;
+    padding-inline: .62rem;
+  }
+}

@@ -110,7 +110,7 @@ layout: aux-base
 {% endif %}
 
 {% assign resolved_update_logo_path = product.logo_path | default: company.logo_path %}
-<div class="update-page-shell reveal-up">
+<div id="top" class="update-page-shell reveal-up">
   <section class="panel update-hero update-hero--v3">
     <div class="update-hero-main update-hero-main--clean">
       <a class="update-back-link" href="{{ company.company_url | default: product.product_url | default: '/updates/' | relative_url }}">← Back to {{ company.company_name | default: product.product_name | default: 'Patch Feed' }}</a>
@@ -178,6 +178,7 @@ layout: aux-base
   </section>
 
   <nav class="update-section-nav" aria-label="Patch page sections">
+    <a href="#top">Top</a>
     <a href="#verdict">Verdict</a>
     {% if page.official_additions or page.official_fixes %}<a href="#official-changes">Official changes</a>{% endif %}
     {% if page.evidence_samples and page.evidence_samples.size > 0 %}<a href="#community-risk">Community risk sample</a>{% endif %}
@@ -280,7 +281,6 @@ layout: aux-base
       {% endif %}
     </details>
 
-
     {% if official_body_present %}
     <details class="panel update-info-card update-official-details" open>
       <summary>{{ official_note_label }}</summary>
@@ -289,16 +289,6 @@ layout: aux-base
         {% if page.official_source_classification_note != blank %}<p>{{ page.official_source_classification_note }}</p>{% endif %}
       </div>
       <div class="official-patch-notes node-bullet-scope">{{ page.official_patch_notes_body | markdownify }}</div>
-      {% if page.official_sources and page.official_sources.size > 0 %}
-      <div class="official-source-list">
-        <strong>Official references</strong>
-        <ul>
-          {% for source in page.official_sources %}
-          <li><a href="{{ source.url }}">{{ source.label | default: source.source_type }}</a><span>{{ source.source_type | replace: '_', ' ' }}</span></li>
-          {% endfor %}
-        </ul>
-      </div>
-      {% endif %}
     </details>
     {% elsif page.update_source_url != blank %}
     <details class="panel update-info-card update-official-details">
@@ -306,7 +296,6 @@ layout: aux-base
       <div class="official-patch-notes official-patch-notes--pending"><p>Official source content has not been captured into this AUXSAYS record yet. Use the official source link above until the record is backfilled and classified.</p></div>
     </details>
     {% endif %}
-
 
     {% if page.official_sources or page.update_source_url != blank or page.update_download_url != blank %}
     <article id="sources" class="panel update-info-card update-sources-card">
@@ -324,6 +313,7 @@ layout: aux-base
       </ul>
     </article>
     {% endif %}
+
     {% if page.status_events and page.status_events.size > 0 %}
     <details id="history" class="panel update-info-card update-status-details">
       <summary>Status History</summary>
