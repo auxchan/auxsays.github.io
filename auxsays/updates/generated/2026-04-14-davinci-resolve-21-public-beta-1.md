@@ -29,7 +29,9 @@ update_brand_id: blackmagic-davinci
 company_id: blackmagic-design
 product_id: blackmagic-davinci
 official_patch_notes_source_type: vendor-release-page
-official_patch_notes_capture_status: partial-existing-record
+official_patch_notes_capture_status: official-source-linked-body-not-captured
+official_source_classification_note: Blackmagic's source is a vendor release page for the DaVinci Resolve 21 announcement.
+  AUXSAYS links it as the official source, but has not captured a full structured patch-note body from that page.
 patch_file_size_status: not_provided_by_source
 release_channel_label: Public beta
 quick_verdict: WAIT for production systems. DaVinci Resolve 21 Public Beta 1 is a beta build; test only in non-critical
@@ -65,6 +67,7 @@ status_events:
 legacy_consensus_score: 6
 legacy_consensus_score_percent: 53
 official_patch_notes_source_url: https://www.blackmagicdesign.com/media/release/20260414-01
+official_patch_notes_body: ''
 release_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and should be treated differently from a stable
   production build. The key user decision is not simply whether the release is new, but whether the new Resolve 21 feature
   set is worth testing in a non-critical environment. For production work, the practical read is to keep existing stable projects

@@ -84,21 +84,21 @@ permalink: /updates/methodology/
   <section class="panel methodology-source-health reveal-up reveal-delay-2">
     <div class="eyebrow">Source audit</div>
     <h2>Current official-ingestion source health</h2>
-    <p>This is a static audit snapshot produced from the ingestion config and the latest GitHub Actions state file. It is meant to show whether official-source monitoring is healthy, degraded, failing, staged, or disabled. It is not a backend service and it does not represent live community consensus.</p>
+    <p>This is a static audit snapshot produced from the ingestion config and the latest GitHub Actions state file. It is meant to show whether official-source monitoring is active, manual watch, needs an adapter, disabled, in error, or unknown. It is not a backend service and it does not represent live community consensus.</p>
 
-    {% assign healthy_sources = site.data.source_health | where: "status", "Healthy" %}
-    {% assign degraded_sources = site.data.source_health | where: "status", "Degraded" %}
-    {% assign idle_healthy_sources = site.data.source_health | where: "status", "Idle healthy" %}
-    {% assign failing_sources = site.data.source_health | where: "status", "Failing" %}
-    {% assign staged_sources = site.data.source_health | where: "status", "Staged" %}
+    {% assign active_sources = site.data.source_health | where: "status", "Active" %}
     {% assign manual_watch_sources = site.data.source_health | where: "status", "Manual watch" %}
+    {% assign needs_adapter_sources = site.data.source_health | where: "status", "Needs adapter" %}
+    {% assign disabled_sources = site.data.source_health | where: "status", "Disabled" %}
+    {% assign error_sources = site.data.source_health | where: "status", "Error" %}
+    {% assign unknown_sources = site.data.source_health | where: "status", "Unknown" %}
     <div class="source-health-summary" aria-label="Source health totals">
-      <div><strong>{{ healthy_sources.size }}</strong><span>Healthy</span></div>
-      <div><strong>{{ idle_healthy_sources.size }}</strong><span>Idle healthy</span></div>
-      <div><strong>{{ degraded_sources.size }}</strong><span>Degraded</span></div>
-      <div><strong>{{ failing_sources.size }}</strong><span>Failing</span></div>
-      <div><strong>{{ staged_sources.size }}</strong><span>Staged</span></div>
+      <div><strong>{{ active_sources.size }}</strong><span>Active</span></div>
       <div><strong>{{ manual_watch_sources.size }}</strong><span>Manual watch</span></div>
+      <div><strong>{{ needs_adapter_sources.size }}</strong><span>Needs adapter</span></div>
+      <div><strong>{{ disabled_sources.size }}</strong><span>Disabled</span></div>
+      <div><strong>{{ error_sources.size }}</strong><span>Error</span></div>
+      <div><strong>{{ unknown_sources.size }}</strong><span>Unknown</span></div>
     </div>
 
     <div class="source-health-table" role="table" aria-label="AUXSAYS official ingestion source-health snapshot">

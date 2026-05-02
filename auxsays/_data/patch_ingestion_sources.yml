@@ -4,7 +4,7 @@
   software: ChatGPT / OpenAI
   public_category: AI Tools
   enabled: false
-  recommended_priority: P2 build later
+  recommended_priority: P2 needs source-specific adapter
   ingestion:
     type: html_changelog
     adapter: html_changelog
@@ -89,7 +89,7 @@
   software: Claude
   public_category: AI Tools
   enabled: false
-  recommended_priority: P2 build later
+  recommended_priority: P2 needs source-specific adapter
   ingestion:
     type: html_changelog
     adapter: html_changelog
@@ -174,7 +174,7 @@
   software: Gemini
   public_category: AI Tools
   enabled: false
-  recommended_priority: P2 build later
+  recommended_priority: P2 needs source-specific adapter
   ingestion:
     type: html_blog
     adapter: html_blog
@@ -259,7 +259,7 @@
   software: Perplexity
   public_category: AI Tools
   enabled: false
-  recommended_priority: P3 monitor manually
+  recommended_priority: P3 manual watch - broad blog source
   ingestion:
     type: html_blog
     adapter: html_blog
@@ -344,7 +344,7 @@
   software: Midjourney
   public_category: AI Image
   enabled: false
-  recommended_priority: P3 monitor manually
+  recommended_priority: P3 manual watch active
   ingestion:
     type: manual_watch
     adapter: manual_watch
@@ -420,7 +420,7 @@
   software: Stable Diffusion / Stable Audio
   public_category: AI Image
   enabled: false
-  recommended_priority: P2 build later
+  recommended_priority: P2 manual watch - broad news source
   ingestion:
     type: html_blog
     adapter: html_blog
@@ -505,7 +505,7 @@
   software: Runway
   public_category: AI Video
   enabled: false
-  recommended_priority: P3 monitor manually
+  recommended_priority: P3 manual watch - broad research source
   ingestion:
     type: html_blog
     adapter: html_blog
@@ -590,7 +590,7 @@
   software: Pika
   public_category: AI Video
   enabled: false
-  recommended_priority: P4 not worth automating yet
+  recommended_priority: P4 do not enable - low value source
   ingestion:
     type: manual_watch
     adapter: manual_watch
@@ -666,7 +666,7 @@
   software: LottieFiles
   public_category: Design Workflow
   enabled: false
-  recommended_priority: P3 monitor manually
+  recommended_priority: P3 manual watch - broad blog source
   ingestion:
     type: html_blog
     adapter: html_blog
@@ -836,7 +836,7 @@
   software: Canva
   public_category: Design Workflow
   enabled: false
-  recommended_priority: P3 monitor manually
+  recommended_priority: P3 manual watch - broad newsroom source
   ingestion:
     type: html_blog
     adapter: html_blog
@@ -1017,7 +1017,7 @@
   software: After Effects
   public_category: Video / Production
   enabled: false
-  recommended_priority: P1 staged until Adobe adapter is stable
+  recommended_priority: P1 needs Adobe source-specific adapter validation
   ingestion:
     type: html_changelog
     adapter: adobe_release_notes
@@ -1106,14 +1106,14 @@
     - creator forums
     difficulty: Medium
     defer_until_official_ingestion_stable: true
-  source_health_note: Visible Adobe product retained. Official ingestion is staged unless Premiere Pro adapter is explicitly active.
+  source_health_note: Visible Adobe product retained. Official ingestion remains disabled until this Adobe source has adapter validation.
 - company_id: adobe
   product_id: adobe-photoshop
   company: Adobe
   software: Photoshop
   public_category: Design Workflow
   enabled: false
-  recommended_priority: P1 staged until Adobe adapter is stable
+  recommended_priority: P1 needs Adobe source-specific adapter validation
   ingestion:
     type: html_changelog
     adapter: adobe_release_notes
@@ -1202,14 +1202,14 @@
     - creator forums
     difficulty: Medium
     defer_until_official_ingestion_stable: true
-  source_health_note: Visible Adobe product retained. Official ingestion is staged unless Premiere Pro adapter is explicitly active.
+  source_health_note: Visible Adobe product retained. Official ingestion remains disabled until this Adobe source has adapter validation.
 - company_id: adobe
   product_id: adobe-media-encoder
   company: Adobe
   software: Media Encoder
   public_category: Video / Production
   enabled: false
-  recommended_priority: P1 staged until Adobe adapter is stable
+  recommended_priority: P1 needs Adobe source-specific adapter validation
   ingestion:
     type: html_changelog
     adapter: adobe_release_notes
@@ -1298,14 +1298,14 @@
     - creator forums
     difficulty: Medium
     defer_until_official_ingestion_stable: true
-  source_health_note: Visible Adobe product retained. Official ingestion is staged unless Premiere Pro adapter is explicitly active.
+  source_health_note: Visible Adobe product retained. Official ingestion remains disabled until this Adobe source has adapter validation.
 - company_id: adobe
   product_id: adobe-lightroom-classic
   company: Adobe
   software: Lightroom Classic
   public_category: Design Workflow
   enabled: false
-  recommended_priority: P1 staged until Adobe adapter is stable
+  recommended_priority: P1 needs Adobe source-specific adapter validation
   ingestion:
     type: html_changelog
     adapter: adobe_release_notes
@@ -1394,7 +1394,7 @@
     - creator forums
     difficulty: Medium
     defer_until_official_ingestion_stable: true
-  source_health_note: Visible Adobe product retained. Official ingestion is staged unless Premiere Pro adapter is explicitly active.
+  source_health_note: Visible Adobe product retained. Official ingestion remains disabled until this Adobe source has adapter validation.
 - company_id: blackmagic-design
   product_id: blackmagic-davinci
   company: Blackmagic Design
@@ -1564,7 +1564,7 @@
   software: Twitch
   public_category: Creator Platforms
   enabled: false
-  recommended_priority: P3 monitor manually
+  recommended_priority: P3 manual watch - broad blog source
   ingestion:
     type: html_blog
     adapter: html_blog
@@ -1649,7 +1649,7 @@
   software: YouTube / YouTube Studio
   public_category: Creator Platforms
   enabled: false
-  recommended_priority: P3 monitor manually
+  recommended_priority: P3 manual watch - broad news source
   ingestion:
     type: html_blog
     adapter: html_blog
@@ -1734,7 +1734,7 @@
   software: Kick
   public_category: Creator Platforms
   enabled: false
-  recommended_priority: P4 not worth automating yet
+  recommended_priority: P4 do not enable - low value source
   ingestion:
     type: manual_watch
     adapter: manual_watch
@@ -1810,7 +1810,7 @@
   software: Rumble
   public_category: Creator Platforms
   enabled: false
-  recommended_priority: P3 monitor manually
+  recommended_priority: P3 manual watch - broad blog source
   ingestion:
     type: html_blog
     adapter: html_blog
@@ -1895,7 +1895,7 @@
   software: Unreal Engine
   public_category: Game / Engine
   enabled: false
-  recommended_priority: P2 build later
+  recommended_priority: P2 needs source-specific adapter
   ingestion:
     type: html_changelog
     adapter: html_changelog
@@ -1980,7 +1980,7 @@
   software: Unity
   public_category: Game / Engine
   enabled: false
-  recommended_priority: P2 build later
+  recommended_priority: P2 needs source-specific adapter
   ingestion:
     type: html_changelog
     adapter: html_changelog
@@ -2065,7 +2065,7 @@
   software: Steam
   public_category: Game Platforms
   enabled: false
-  recommended_priority: P2 build later
+  recommended_priority: P2 needs source-specific adapter
   ingestion:
     type: official_forum
     adapter: official_forum_watch
@@ -2141,7 +2141,7 @@
   software: NVIDIA App / GeForce / Studio
   public_category: Hardware / Drivers
   enabled: false
-  recommended_priority: P2 build later
+  recommended_priority: P2 needs source-specific adapter
   ingestion:
     type: hybrid
     adapter: html_blog
@@ -2226,7 +2226,7 @@
   software: AMD Software / Radeon
   public_category: Hardware / Drivers
   enabled: false
-  recommended_priority: P2 build later
+  recommended_priority: P2 needs source-specific adapter
   ingestion:
     type: download_portal
     adapter: download_portal_snapshot
@@ -2302,7 +2302,7 @@
   software: Intel Graphics / Arc
   public_category: Hardware / Drivers
   enabled: false
-  recommended_priority: P2 build later
+  recommended_priority: P2 needs source-specific adapter
   ingestion:
     type: download_portal
     adapter: download_portal_snapshot
@@ -2378,7 +2378,7 @@
   software: Blender
   public_category: Video / Production
   enabled: false
-  recommended_priority: P2 build later
+  recommended_priority: P2 needs source-specific adapter
   ingestion:
     type: html_changelog
     adapter: html_changelog
@@ -2540,7 +2540,7 @@
   software: Hugging Face
   public_category: Dev / Web
   enabled: false
-  recommended_priority: P3 monitor manually
+  recommended_priority: P3 manual watch - broad blog source
   ingestion:
     type: html_blog
     adapter: html_blog
@@ -2710,7 +2710,7 @@
   software: Cloudflare
   public_category: Dev / Web
   enabled: false
-  recommended_priority: P2 build later
+  recommended_priority: P2 manual watch - broad RSS source
   ingestion:
     type: rss
     adapter: rss_feed
@@ -2880,7 +2880,7 @@
   software: Notion
   public_category: Workflow / Automation
   enabled: false
-  recommended_priority: P2 build later
+  recommended_priority: P2 needs source-specific adapter
   ingestion:
     type: html_changelog
     adapter: html_changelog
@@ -2965,7 +2965,7 @@
   software: Zapier
   public_category: Workflow / Automation
   enabled: false
-  recommended_priority: P3 monitor manually
+  recommended_priority: P3 manual watch - broad blog source
   ingestion:
     type: html_blog
     adapter: html_blog
@@ -3050,7 +3050,7 @@
   software: Make
   public_category: Workflow / Automation
   enabled: false
-  recommended_priority: P3 monitor manually
+  recommended_priority: P3 needs source-specific adapter
   ingestion:
     type: html_changelog
     adapter: html_changelog
@@ -3135,7 +3135,7 @@
   software: Acrobat / Acrobat Reader
   public_category: Workplace Critical
   enabled: false
-  recommended_priority: P1 staged next adapter
+  recommended_priority: P1 needs source-specific adapter
   ingestion:
     type: html_release_notes
     adapter: adobe_release_notes
@@ -3145,7 +3145,7 @@
     api_url: null
     parser_profile: adobe_acrobat_enterprise_release_notes
     official_source_type: release_notes
-    source_capture_status: staged_not_enabled
+    source_capture_status: needs_adapter
     include_prereleases: false
     version_pattern: ^(?P<version>[0-9]+\.[0-9]+\.[0-9]+).*$
     requires_javascript: false
@@ -3170,7 +3170,7 @@
   software: Windows 11
   public_category: Operating Systems
   enabled: false
-  recommended_priority: P1 staged next adapter
+  recommended_priority: P1 needs source-specific adapter
   ingestion:
     type: release_health
     adapter: microsoft_release_health
@@ -3180,7 +3180,7 @@
     api_url: null
     parser_profile: windows_release_health
     official_source_type: release_health
-    source_capture_status: staged_not_enabled
+    source_capture_status: needs_adapter
     include_prereleases: false
     version_pattern: ^Windows 11.*(?P<version>[0-9]{2}H[0-9]).*$
     requires_javascript: false
@@ -3215,7 +3215,7 @@
     api_url: null
     parser_profile: microsoft_teams_version_history
     official_source_type: release_notes
-    source_capture_status: staged_manual_watch
+    source_capture_status: manual_watch
     include_prereleases: false
     version_pattern: ^(?P<version>[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$
     requires_javascript: false
@@ -3250,7 +3250,7 @@
     api_url: null
     parser_profile: microsoft_365_powerpoint_release_notes
     official_source_type: release_notes
-    source_capture_status: staged_manual_watch
+    source_capture_status: manual_watch
     include_prereleases: false
     version_pattern: ^Version (?P<version>[0-9]+).*$
     requires_javascript: false
@@ -3275,7 +3275,7 @@
   software: Microsoft 365 Apps
   public_category: Productivity
   enabled: false
-  recommended_priority: P2 staged after Windows/Acrobat/Elgato
+  recommended_priority: P2 manual watch through M365
   ingestion:
     type: html_release_notes
     adapter: manual_watch
@@ -3285,7 +3285,7 @@
     api_url: null
     parser_profile: microsoft_365_apps_update_history
     official_source_type: release_notes
-    source_capture_status: staged_manual_watch
+    source_capture_status: manual_watch
     include_prereleases: false
     version_pattern: ^Version (?P<version>[0-9]+).*$
     requires_javascript: false
@@ -3310,7 +3310,7 @@
   software: Stream Deck
   public_category: Streaming Tools
   enabled: false
-  recommended_priority: P1 staged next adapter
+  recommended_priority: P1 needs source-specific adapter
   ingestion:
     type: help_center_release_notes
     adapter: elgato_help_center
@@ -3320,7 +3320,7 @@
     api_url: null
     parser_profile: elgato_stream_deck_release_notes
     official_source_type: release_notes
-    source_capture_status: staged_not_enabled
+    source_capture_status: needs_adapter
     include_prereleases: false
     version_pattern: ^Elgato Stream Deck (?P<version>[0-9]+(\.[0-9]+)+).*$
     requires_javascript: false
@@ -3345,7 +3345,7 @@
   software: Wave Link
   public_category: Streaming Tools
   enabled: false
-  recommended_priority: P1 staged next adapter
+  recommended_priority: P1 needs source-specific adapter
   ingestion:
     type: help_center_release_notes
     adapter: elgato_help_center
@@ -3355,7 +3355,7 @@
     api_url: null
     parser_profile: elgato_wave_link_release_notes
     official_source_type: release_notes
-    source_capture_status: staged_not_enabled
+    source_capture_status: needs_adapter
     include_prereleases: false
     version_pattern: ^Elgato Wave Link (?P<version>[0-9]+(\.[0-9]+)+).*$
     requires_javascript: false
@@ -3380,7 +3380,7 @@
   software: Camera Hub
   public_category: Streaming Tools
   enabled: false
-  recommended_priority: P1 staged next adapter
+  recommended_priority: P1 needs source-specific adapter
   ingestion:
     type: help_center_release_notes
     adapter: elgato_help_center
@@ -3390,7 +3390,7 @@
     api_url: null
     parser_profile: elgato_camera_hub_release_notes
     official_source_type: release_notes
-    source_capture_status: staged_not_enabled
+    source_capture_status: needs_adapter
     include_prereleases: false
     version_pattern: ^Elgato Camera Hub (?P<version>[0-9]+(\.[0-9]+)+).*$
     requires_javascript: false
@@ -3415,7 +3415,7 @@
   software: 4K Capture Utility
   public_category: Streaming Tools
   enabled: false
-  recommended_priority: P1 staged next adapter
+  recommended_priority: P1 needs source-specific adapter
   ingestion:
     type: help_center_release_notes
     adapter: elgato_help_center
@@ -3425,7 +3425,7 @@
     api_url: null
     parser_profile: elgato_4k_capture_utility_release_notes
     official_source_type: release_notes
-    source_capture_status: staged_not_enabled
+    source_capture_status: needs_adapter
     include_prereleases: false
     version_pattern: ^Elgato 4K Capture Utility (?P<version>[0-9]+(\.[0-9]+)+).*$
     requires_javascript: false

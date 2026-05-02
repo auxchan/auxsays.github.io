@@ -36,6 +36,8 @@ layout: aux-base
 {% if official_body_clean != blank %}{% assign official_body_present = true %}{% endif %}
 {% assign official_captured = false %}
 {% if source_url_present or official_body_present %}{% assign official_captured = true %}{% endif %}
+{% assign official_body_missing_renderable = false %}
+{% if official_body_present == false and source_url_present %}{% assign official_body_missing_renderable = true %}{% endif %}
 {% assign evidence_state = 'Insufficient data' %}
 {% assign evidence_state_class = 'insufficient' %}
 {% if collection_status == 'live_consensus' or collection_status == 'consensus_live' %}
@@ -341,6 +343,15 @@ layout: aux-base
       </div>
       <div class="official-patch-notes node-bullet-scope">{{ page.official_patch_notes_body | markdownify }}</div>
     </details>
+    {% elsif official_body_missing_renderable %}
+    <article class="panel update-info-card update-official-details update-order-official-details">
+      <h2>{{ official_note_label }}</h2>
+      <div class="official-source-classification">
+        <span>Source type: {{ official_source_type | replace: '_', ' ' | capitalize }}</span>
+        {% if page.official_source_classification_note != blank %}<p>{{ page.official_source_classification_note }}</p>{% endif %}
+      </div>
+      <p>Official source linked, but full patch-note body has not been captured yet.</p>
+    </article>
     {% endif %}
 
     {% if page.official_sources or page.update_source_url != blank or page.update_download_url != blank %}

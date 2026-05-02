@@ -24,6 +24,7 @@ except ModuleNotFoundError:  # pragma: no cover - used in lightweight local shel
 ROOT = Path(__file__).resolve().parents[1]
 GENERATED_DIR = ROOT / "updates" / "generated"
 EVIDENCE_PATH = ROOT / "_data" / "consensus_evidence.yml"
+STATE_PATH = ROOT / "_data" / "patch_ingest_state.json"
 DEFAULT_STALE_DAYS = 7
 
 
@@ -105,6 +106,16 @@ def load_evidence(path: Path) -> list[dict[str, Any]]:
     return simple_consensus_evidence(text)
 
 
+def load_state(path: Path) -> dict[str, Any]:
+    if not path.exists():
+        return {}
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return {}
+    return payload if isinstance(payload, dict) else {}
+
+
 def record_key(data: dict[str, Any]) -> tuple[str, str]:
     return (str(data.get("product_id") or "").strip(), str(data.get("update_version") or "").strip())
 
@@ -157,6 +168,8 @@ def is_stale(value: Any, *, now: datetime, stale_days: int) -> bool:
 def audit(stale_days: int = DEFAULT_STALE_DAYS) -> dict[str, Any]:
     now = datetime.now(timezone.utc)
     evidence = load_evidence(EVIDENCE_PATH)
+    state = load_state(STATE_PATH)
+    source_state_by_product = state.get("sources") if isinstance(state.get("sources"), dict) else {}
     evidence_by_key: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
     for item in evidence:
         product_id = str(item.get("product_id") or "").strip()
@@ -172,16 +185,27 @@ def audit(stale_days: int = DEFAULT_STALE_DAYS) -> dict[str, Any]:
             continue
         key = record_key(data)
         generated_count = report_count(data)
+        source_state = source_state_by_product.get(key[0], {}) if isinstance(source_state_by_product, dict) else {}
+        official_body = str(data.get("official_patch_notes_body") or "").strip()
+        checksum_body = str(data.get("official_checksums_body") or "").strip()
         item = {
             "path": str(path.relative_to(ROOT)),
+            "permalink": data.get("permalink"),
             "title": data.get("title"),
             "product_id": key[0],
             "update_version": key[1],
+            "update_status": data.get("update_status"),
             "generated_report_count": generated_count,
+            "update_report_count": int(data.get("update_report_count") or 0),
+            "confirmed_patch_specific_report_count": int(data.get("confirmed_patch_specific_report_count") or 0),
             "evidence_state": data.get("evidence_state"),
             "consensus_collection_status": data.get("consensus_collection_status"),
             "update_last_checked": data.get("update_last_checked"),
+            "source_last_checked": source_state.get("last_checked_at") or source_state.get("last_checked"),
             "evidence_last_checked": data.get("evidence_last_checked") or data.get("consensus_last_checked"),
+            "official_patch_notes_capture_status": data.get("official_patch_notes_capture_status"),
+            "official_patch_notes_body_populated": bool(official_body),
+            "official_checksums_body_populated": bool(checksum_body),
         }
         generated_records.append(item)
         if key[0] and key[1]:
@@ -213,6 +237,10 @@ def audit(stale_days: int = DEFAULT_STALE_DAYS) -> dict[str, Any]:
     for item in generated_records:
         if is_stale(item.get("update_last_checked"), now=now, stale_days=stale_days):
             stale_records.append({**item, "stale_reason": "stale_or_missing_update_last_checked"})
+        source_checked = parse_time(item.get("source_last_checked"))
+        record_checked = parse_time(item.get("update_last_checked"))
+        if source_checked and record_checked and source_checked > record_checked:
+            stale_records.append({**item, "stale_reason": "source_checked_after_record_last_checked"})
 
     evidence_without_matching_record: list[dict[str, Any]] = []
     evidence_count_mismatches: list[dict[str, Any]] = []
@@ -241,6 +269,7 @@ def audit(stale_days: int = DEFAULT_STALE_DAYS) -> dict[str, Any]:
         "stale_after_days": stale_days,
         "generated_records_scanned": len(generated_records),
         "generated_records_with_reports": records_with_reports,
+        "generated_records": generated_records,
         "structured_evidence_groups": [
             {
                 "product_id": product_id,
