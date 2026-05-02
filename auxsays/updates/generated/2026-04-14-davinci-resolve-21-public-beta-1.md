@@ -31,12 +31,18 @@ product_id: blackmagic-davinci
 official_patch_notes_source_type: vendor-release-page
 official_patch_notes_capture_status: partial-existing-record
 patch_file_size_status: not_provided_by_source
-quick_verdict: ''
+release_channel_label: Public beta
+quick_verdict: WAIT for production systems. DaVinci Resolve 21 Public Beta 1 is a beta build; test only in non-critical
+  projects unless you specifically need the Resolve 21 feature set and can tolerate beta risk.
+update_decision_label: WAIT for production systems
+update_decision_body: Public beta build. Treat this as a testing release for editors and color workflows, not a clean default
+  upgrade for active client work.
+source_freshness_note: Official source should be refreshed before relying on this page for current install guidance.
 official_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and should be treated differently from a stable
   production build. The key user decision is not simply whether the release is new, but whether the new Resolve 21 feature
   set is worth testing in a non-critical environment. For production work, the practical read is to keep existing stable projects
   on a known-good version unless a specific Resolve 21 feature is needed and the project can tolerate beta risk.
-consensus_report: The consensus remains moderate because this is a beta release. Early interest is useful for testing the
+consensus_report: The pilot sample remains moderate because this is a beta release. Early interest is useful for testing the
   new version path, but production users should separate feature exploration from mission-critical work. Confirmed patch-specific
   reports assessed are not strong enough yet to call this either safe-positive or failure-negative.
 complaint_themes:
@@ -63,6 +69,10 @@ release_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and s
   production build. The key user decision is not simply whether the release is new, but whether the new Resolve 21 feature
   set is worth testing in a non-critical environment. For production work, the practical read is to keep existing stable projects
   on a known-good version unless a specific Resolve 21 feature is needed and the project can tolerate beta risk.
+practical_recommendations:
+- Wait for production systems unless you have a specific Resolve 21 beta feature to test.
+- Test beta projects separately from active client work and keep a known-good Resolve version available.
+- Refresh the official source before relying on this page for current guidance.
 consensus_match_policy: confirmed_patch_specific_reports_v1
 consensus_match_policy_label: Confirmed patch-specific reports only
 consensus_report_count_label: confirmed patch-specific reports

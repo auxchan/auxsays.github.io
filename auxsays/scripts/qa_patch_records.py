@@ -73,6 +73,10 @@ def looks_like_url(value: Any) -> bool:
     return parsed.scheme in {"http", "https"} and bool(parsed.netloc)
 
 
+def is_blank(value: Any) -> bool:
+    return value is None or str(value).strip() == ""
+
+
 def has_structured_evidence(data: dict[str, Any]) -> bool:
     evidence = data.get("consensus_evidence") or data.get("structured_evidence") or data.get("evidence_objects")
     return isinstance(evidence, list) and len(evidence) > 0 and all(isinstance(item, dict) for item in evidence)
@@ -147,10 +151,21 @@ def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]
         if value not in (None, "") and not looks_like_url(value):
             add(warnings, path, "malformed_url", f"{key} does not look like a valid HTTP(S) URL.")
 
-    if data.get("patch_file_size") in (None, "") and not data.get("patch_file_size_status"):
+    if is_blank(data.get("patch_file_size")) and is_blank(data.get("patch_file_size_status")):
         add(warnings, path, "blank_file_size_without_status", "patch_file_size is blank and no patch_file_size_status explains why.")
-    if str(data.get("official_checksums_capture_status") or "").strip() in {"captured", "present"} and not str(data.get("official_checksums_body") or "").strip():
+    if is_blank(data.get("patch_file_size")) and not is_blank(data.get("patch_file_size_status")):
+        valid_file_size_statuses = {"not_provided_by_source", "creative_cloud_managed", "pending_adapter_support"}
+        if str(data.get("patch_file_size_status") or "").strip() not in valid_file_size_statuses:
+            add(warnings, path, "unknown_file_size_status", "patch_file_size_status is present but not in the normalized status list.")
+    if evidence_state == "official_only" and report_count == 0:
+        if data.get("known_issues_present") is True:
+            add(warnings, path, "official_only_zero_reports_known_issues_yes", "official_only record has 0 reports but known_issues_present is true; the UI may imply patch-specific user reports exist.")
+        if data.get("complaint_themes"):
+            add(warnings, path, "official_only_zero_reports_complaint_themes", "official_only record has 0 reports but complaint_themes are present; this can imply counted patch-specific user reports.")
+    if str(data.get("official_checksums_capture_status") or "").strip() in {"captured", "present"} and is_blank(data.get("official_checksums_body")):
         add(errors, path, "checksum_status_without_body", "Checksum capture status says checksums are present but official_checksums_body is blank.")
+    if is_blank(data.get("official_checksums_body")) and (data.get("show_checksum_section") is True or data.get("checksum_nav_enabled") is True):
+        add(errors, path, "checksum_display_without_body", "Record enables checksum display but official_checksums_body is blank.")
 
     official_claim = " ".join([title, detail_title, official_body[:500]]).lower()
     if "patch notes" in official_claim and source_type in NON_PATCH_NOTE_SOURCE_TYPES:
