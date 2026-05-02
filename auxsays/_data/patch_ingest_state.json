@@ -1,36 +1,27 @@
 {
-  "last_errors": [
-    {
-      "adapter": "github_releases",
-      "error": "HTTP 403 while fetching official GitHub source \u2014 {\"message\":\"API rate limit exceeded for 20.3.221.181. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)\",\"documentation_url\":\"[source URL]\"}\n",
-      "product_id": "obs-studio"
-    },
-    {
-      "adapter": "github_releases",
-      "error": "HTTP 403 while fetching official GitHub source \u2014 {\"message\":\"API rate limit exceeded for 20.3.221.181. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)\",\"documentation_url\":\"[source URL]\"}\n",
-      "product_id": "comfyui"
-    }
-  ],
+  "last_errors": [],
   "last_results": [
     {
       "adapter": "rss_feed",
-      "duration_ms": 757,
+      "duration_ms": 817,
       "fetched": 2,
       "product_id": "figma",
       "skipped": [
+        {
+          "reason": "state-seen",
+          "record_id": "rss:figma:54fa1eaf-a38e-4416-80b8-bf063515723e"
+        },
         {
           "reason": "state-seen",
           "record_id": "rss:figma:9de2d329-519d-4e1d-b0ca-f81528c285a8"
         }
       ],
       "status": "success",
-      "written": [
-        "auxsays/updates/generated/2026-05-01-figma-faster-file-transitions-on-desktop.md"
-      ]
+      "written": []
     },
     {
       "adapter": "adobe_release_notes",
-      "duration_ms": 25825,
+      "duration_ms": 25739,
       "fetched": 1,
       "product_id": "adobe-premiere-pro",
       "skipped": [
@@ -43,26 +34,60 @@
       "written": []
     },
     {
-      "adapter": "rss_feed",
-      "duration_ms": 195,
+      "adapter": "github_releases",
+      "duration_ms": 568,
       "fetched": 2,
-      "product_id": "github",
+      "product_id": "obs-studio",
       "skipped": [
         {
           "reason": "state-seen",
-          "record_id": "rss:github:https://github.blog/changelog/2026-04-28-github-copilot-in-visual-studio-april-update"
+          "record_id": "github:obs-studio:311922679"
         },
         {
           "reason": "state-seen",
-          "record_id": "rss:github:https://github.blog/changelog/2026-04-23-copilot-student-gpt-5-3-codex-removal-from-model-picker"
+          "record_id": "github:obs-studio:304830335"
         }
       ],
       "status": "success",
       "written": []
     },
     {
+      "adapter": "github_releases",
+      "duration_ms": 306,
+      "fetched": 2,
+      "product_id": "comfyui",
+      "skipped": [
+        {
+          "reason": "state-seen",
+          "record_id": "github:comfyui:314258741"
+        },
+        {
+          "reason": "state-seen",
+          "record_id": "github:comfyui:310487464"
+        }
+      ],
+      "status": "success",
+      "written": []
+    },
+    {
+      "adapter": "rss_feed",
+      "duration_ms": 34,
+      "fetched": 2,
+      "product_id": "github",
+      "skipped": [
+        {
+          "reason": "state-seen",
+          "record_id": "rss:github:https://github.blog/changelog/2026-04-28-github-copilot-in-visual-studio-april-update"
+        }
+      ],
+      "status": "success",
+      "written": [
+        "auxsays/updates/generated/2026-05-01-github-copilot-upcoming-deprecation-of-gpt-5-2-and-gpt-5-2-codex.md"
+      ]
+    },
+    {
       "adapter": "html_changelog",
-      "duration_ms": 230,
+      "duration_ms": 188,
       "fetched": 0,
       "product_id": "netlify",
       "skipped": [],
@@ -70,8 +95,8 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-05-01T21:11:05Z",
-  "last_run_started_at": "2026-05-01T21:10:38Z",
+  "last_run_finished_at": "2026-05-02T07:10:48Z",
+  "last_run_started_at": "2026-05-02T07:10:21Z",
   "sources": {
     "adobe-after-effects": {
       "consecutive_failures": 2,
@@ -136,7 +161,7 @@
     "adobe-premiere-pro": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_release_notes",
-      "last_checked_at": "2026-05-01T21:10:38Z",
+      "last_checked_at": "2026-05-02T07:10:22Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -144,8 +169,8 @@
       "last_records_fetched": 1,
       "last_records_skipped": 1,
       "last_records_written": 0,
-      "last_run_duration_ms": 25825,
-      "last_success_at": "2026-05-01T21:10:38Z",
+      "last_run_duration_ms": 25739,
+      "last_success_at": "2026-05-02T07:10:22Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "adobe:adobe-premiere-pro:26.2:9fa3e1e53c0b275d"
@@ -153,38 +178,38 @@
       "status": "healthy"
     },
     "comfyui": {
-      "consecutive_failures": 1,
-      "last_adapter": "github_releases",
-      "last_checked_at": "2026-05-01T21:11:04Z",
-      "last_error": "HTTP 403 while fetching official GitHub source \u2014 {\"message\":\"API rate limit exceeded for 20.3.221.181. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)\",\"documentation_url\":\"[source URL]\"}\n",
-      "last_error_at": "2026-05-01T21:11:04Z",
-      "last_error_type": "blocked",
-      "last_health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
-      "last_records_fetched": 0,
-      "last_records_skipped": 0,
-      "last_records_written": 0,
-      "last_run_duration_ms": 0,
-      "last_success_at": "2026-05-01T15:39:37Z",
-      "previous_consecutive_failures": 0,
-      "seen": [
-        "github:comfyui:310487464",
-        "github:comfyui:314258741"
-      ],
-      "status": "degraded"
-    },
-    "figma": {
       "consecutive_failures": 0,
-      "last_adapter": "rss_feed",
-      "last_checked_at": "2026-05-01T21:10:38Z",
+      "last_adapter": "github_releases",
+      "last_checked_at": "2026-05-02T07:10:48Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 2,
-      "last_records_skipped": 1,
-      "last_records_written": 1,
-      "last_run_duration_ms": 757,
-      "last_success_at": "2026-05-01T21:10:38Z",
+      "last_records_skipped": 2,
+      "last_records_written": 0,
+      "last_run_duration_ms": 306,
+      "last_success_at": "2026-05-02T07:10:48Z",
+      "previous_consecutive_failures": 1,
+      "seen": [
+        "github:comfyui:310487464",
+        "github:comfyui:314258741"
+      ],
+      "status": "healthy"
+    },
+    "figma": {
+      "consecutive_failures": 0,
+      "last_adapter": "rss_feed",
+      "last_checked_at": "2026-05-02T07:10:21Z",
+      "last_error": "",
+      "last_error_at": "",
+      "last_error_type": "",
+      "last_health_note": "Fetch succeeded.",
+      "last_records_fetched": 2,
+      "last_records_skipped": 2,
+      "last_records_written": 0,
+      "last_run_duration_ms": 817,
+      "last_success_at": "2026-05-02T07:10:21Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:figma:54fa1eaf-a38e-4416-80b8-bf063515723e",
@@ -201,18 +226,19 @@
     "github": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-05-01T21:11:04Z",
+      "last_checked_at": "2026-05-02T07:10:48Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 2,
-      "last_records_skipped": 2,
-      "last_records_written": 0,
-      "last_run_duration_ms": 195,
-      "last_success_at": "2026-05-01T21:11:04Z",
+      "last_records_skipped": 1,
+      "last_records_written": 1,
+      "last_run_duration_ms": 34,
+      "last_success_at": "2026-05-02T07:10:48Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "rss:github:https://github.blog/changelog/2026-05-01-upcoming-deprecation-of-gpt-5-2-and-gpt-5-2-codex",
         "rss:github:https://github.blog/changelog/2026-04-28-github-copilot-in-visual-studio-april-update",
         "rss:github:https://github.blog/changelog/2026-04-27-copilot-cloud-agent-starts-20-faster-with-actions-custom-images",
         "rss:github:https://github.blog/changelog/2026-04-23-copilot-student-gpt-5-3-codex-removal-from-model-picker"
@@ -222,7 +248,7 @@
     "netlify": {
       "consecutive_failures": 0,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-05-01T21:11:05Z",
+      "last_checked_at": "2026-05-02T07:10:48Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -230,30 +256,30 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 230,
-      "last_success_at": "2026-05-01T21:11:05Z",
+      "last_run_duration_ms": 188,
+      "last_success_at": "2026-05-02T07:10:48Z",
       "previous_consecutive_failures": 0,
       "status": "degraded"
     },
     "obs-studio": {
-      "consecutive_failures": 1,
+      "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-05-01T21:11:04Z",
-      "last_error": "HTTP 403 while fetching official GitHub source \u2014 {\"message\":\"API rate limit exceeded for 20.3.221.181. (But here's the good news: Authenticated requests get a higher rate limit. Check out the documentation for more details.)\",\"documentation_url\":\"[source URL]\"}\n",
-      "last_error_at": "2026-05-01T21:11:04Z",
-      "last_error_type": "blocked",
-      "last_health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
-      "last_records_fetched": 0,
-      "last_records_skipped": 0,
+      "last_checked_at": "2026-05-02T07:10:47Z",
+      "last_error": "",
+      "last_error_at": "",
+      "last_error_type": "",
+      "last_health_note": "Fetch succeeded.",
+      "last_records_fetched": 2,
+      "last_records_skipped": 2,
       "last_records_written": 0,
-      "last_run_duration_ms": 0,
-      "last_success_at": "2026-05-01T15:39:37Z",
-      "previous_consecutive_failures": 0,
+      "last_run_duration_ms": 568,
+      "last_success_at": "2026-05-02T07:10:47Z",
+      "previous_consecutive_failures": 1,
       "seen": [
         "github:obs-studio:304830335",
         "github:obs-studio:311922679"
       ],
-      "status": "degraded"
+      "status": "healthy"
     }
   }
 }
