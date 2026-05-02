@@ -32,6 +32,7 @@ company_id: blackmagic-design
 product_id: blackmagic-davinci
 official_patch_notes_source_type: vendor-release-page
 official_patch_notes_capture_status: partial-existing-record
+patch_file_size_status: not_provided_by_source
 quick_verdict: ''
 official_summary: This archived DaVinci Resolve 21 record is retained only as broad release context. The more useful tracked
   record is the specific DaVinci Resolve 21 Public Beta 1 entry, which carries the active update and consensus notes.

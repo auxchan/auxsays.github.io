@@ -18,6 +18,7 @@ update_logo_text: FIG
 update_published_at: '2026-04-28T00:00:00.000Z'
 update_last_checked: '2026-04-28T18:07:29Z'
 patch_file_size: ''
+patch_file_size_status: not_provided_by_source
 patch_file_size_note: ''
 update_status: current
 update_feed_title: Figma Quality of life updates in FigJam

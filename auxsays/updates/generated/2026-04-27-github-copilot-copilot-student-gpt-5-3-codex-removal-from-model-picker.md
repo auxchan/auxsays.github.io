@@ -18,6 +18,7 @@ update_logo_text: GIT
 update_published_at: '2026-04-27T17:01:58Z'
 update_last_checked: '2026-04-27T23:09:12Z'
 patch_file_size: ''
+patch_file_size_status: not_provided_by_source
 patch_file_size_note: ''
 update_status: current
 update_feed_title: GitHub / Copilot Copilot Student GPT-5.3-Codex removal from model picker
@@ -30,13 +31,13 @@ quick_verdict: GitHub / Copilot Copilot Student GPT-5.3-Codex removal from model
 official_summary: GitHub published GitHub / Copilot Copilot Student GPT-5.3-Codex removal from model picker.
 release_summary: "Starting today, in our Copilot Student plan, we are removing GPT-5.3-Codex from the model picker. It remains\
   \ available through auto model selection.\n\n\n Auto model selection is built to match each request with the strongest model\
-  \ for the job, which means less time toggling settings and more time coding. It’s also how we keep the Student plan performant\
+  \ for the job, which means less time toggling settings and more time coding. Itâ€™s also how we keep the Student plan performant\
   \ and free for learners around the world.\n\n\n This change is part of the temporary reliability and performance measures\
   \ we recently rolled out across Copilot Individual plans (Free, Pro, Pro+, and Student) as we prepare for the broader transition\
   \ to usage-based billing .\n\n\n Learn more\n To explore all models available in GitHub Copilot Student, see our documentation\
   \ on supported models .\n\n\n For the full context on upcoming billing changes, read our announcement about GitHub Copilot\
   \ moving to usage-based billing .\n\n\n Share your feedback\n Check our SDP and Copilot FAQ for answers to common questions.\
-  \ Join the GitHub Education Community to share your feedback.\n\n\n Editor’s note (April 27, 2026): Updated the link for\
+  \ Join the GitHub Education Community to share your feedback.\n\n\n Editorâ€™s note (April 27, 2026): Updated the link for\
   \ the GitHub Education Community.\n\n\n\n The post Copilot Student GPT-5.3-Codex removal from model picker appeared first\
   \ on The GitHub Blog ."
 consensus_report: Confirmed patch-specific consensus collection is deferred. This page currently reflects official-source
@@ -54,13 +55,13 @@ official_patch_notes_capture_status: captured-from-rss-feed
 official_patch_notes_source_url: https://github.blog/changelog/2026-04-27-copilot-student-gpt-5-3-codex-removal-from-model-picker
 official_patch_notes_body: "Starting today, in our Copilot Student plan, we are removing GPT-5.3-Codex from the model picker.\
   \ It remains available through auto model selection.\n\n\n Auto model selection is built to match each request with the\
-  \ strongest model for the job, which means less time toggling settings and more time coding. It’s also how we keep the Student\
+  \ strongest model for the job, which means less time toggling settings and more time coding. Itâ€™s also how we keep the Student\
   \ plan performant and free for learners around the world.\n\n\n This change is part of the temporary reliability and performance\
   \ measures we recently rolled out across Copilot Individual plans (Free, Pro, Pro+, and Student) as we prepare for the broader\
   \ transition to usage-based billing .\n\n\n Learn more\n To explore all models available in GitHub Copilot Student, see\
   \ our documentation on supported models .\n\n\n For the full context on upcoming billing changes, read our announcement\
   \ about GitHub Copilot moving to usage-based billing .\n\n\n Share your feedback\n Check our SDP and Copilot FAQ for answers\
-  \ to common questions. Join the GitHub Education Community to share your feedback.\n\n\n Editor’s note (April 27, 2026):\
+  \ to common questions. Join the GitHub Education Community to share your feedback.\n\n\n Editorâ€™s note (April 27, 2026):\
   \ Updated the link for the GitHub Education Community.\n\n\n\n The post Copilot Student GPT-5.3-Codex removal from model\
   \ picker appeared first on The GitHub Blog ."
 official_checksums_body: ''

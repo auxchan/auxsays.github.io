@@ -18,6 +18,7 @@ update_logo_text: FIG
 update_published_at: '2026-04-29T00:00:00.000Z'
 update_last_checked: '2026-04-29T17:11:19Z'
 patch_file_size: ''
+patch_file_size_status: not_provided_by_source
 patch_file_size_note: ''
 update_status: current
 update_feed_title: Figma More ways to add references when using AI to generate or edit images
@@ -28,7 +29,7 @@ update_consensus_confidence: Low
 quick_verdict: Figma More ways to add references when using AI to generate or edit images has an official AUXSAYS record.
   Confirmed patch-specific consensus is deferred until the consensus refresh pipeline is active.
 official_summary: Figma published Figma More ways to add references when using AI to generate or edit images.
-release_summary: It’s now easier to add references when using Make Image and Edit Image in Figma.
+release_summary: Itâ€™s now easier to add references when using Make Image and Edit Image in Figma.
 consensus_report: Confirmed patch-specific consensus collection is deferred. This page currently reflects official-source
   ingestion only.
 evidence_state: official_only
@@ -53,7 +54,7 @@ status_events:
 official_patch_notes_source_type: rss-feed
 official_patch_notes_capture_status: captured-from-rss-feed
 official_patch_notes_source_url: https://www.figma.com/release-notes/?title=more-ways-to-add-references-when-using-ai-to-generate-or-edit-images
-official_patch_notes_body: It’s now easier to add references when using Make Image and Edit Image in Figma.
+official_patch_notes_body: Itâ€™s now easier to add references when using Make Image and Edit Image in Figma.
 official_checksums_body: ''
 official_checksums_capture_status: not-present
 ---

@@ -18,6 +18,7 @@ update_logo_text: GIT
 update_published_at: '2026-04-27T16:01:40Z'
 update_last_checked: '2026-04-27T23:09:12Z'
 patch_file_size: ''
+patch_file_size_status: not_provided_by_source
 patch_file_size_note: ''
 update_status: current
 update_feed_title: GitHub / Copilot Copilot cloud agent starts 20% faster with Actions custom images

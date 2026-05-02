@@ -30,6 +30,7 @@ company_id: blackmagic-design
 product_id: blackmagic-davinci
 official_patch_notes_source_type: vendor-release-page
 official_patch_notes_capture_status: partial-existing-record
+patch_file_size_status: not_provided_by_source
 quick_verdict: ''
 official_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and should be treated differently from a stable
   production build. The key user decision is not simply whether the release is new, but whether the new Resolve 21 feature

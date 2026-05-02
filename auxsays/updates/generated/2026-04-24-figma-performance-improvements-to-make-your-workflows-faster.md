@@ -18,6 +18,7 @@ update_logo_text: FIG
 update_published_at: '2026-04-24T00:00:00.000Z'
 update_last_checked: '2026-04-27T23:09:11Z'
 patch_file_size: ''
+patch_file_size_status: not_provided_by_source
 patch_file_size_note: ''
 update_status: current
 update_feed_title: Figma Performance improvements to make your workflows faster
