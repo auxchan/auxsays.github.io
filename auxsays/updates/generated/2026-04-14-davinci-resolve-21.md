@@ -34,20 +34,15 @@ official_patch_notes_source_type: vendor-release-page
 official_patch_notes_capture_status: partial-existing-record
 patch_file_size_status: not_provided_by_source
 update_channel_label: Archived broad Resolve 21 record
-quick_verdict: OFFICIAL ONLY / MANUAL WATCH. This archived broad Resolve 21 record is not a production-stable install
-  recommendation; use the Public Beta 1 page for beta-specific risk and refresh the official source before acting on current
-  guidance.
-update_decision_label: OFFICIAL ONLY / MANUAL WATCH
-update_decision_body: Official source captured, but this broad Resolve 21 record is archived and has 0 confirmed patch-specific
-  reports. Treat it as a manual-watch reference, not a live consensus verdict.
-source_freshness_note: Official source should be refreshed before relying on this page for current install guidance.
+quick_verdict: No AUXSAYS recommendation yet.
+update_decision_label: No AUXSAYS recommendation yet.
+update_decision_body: Official source captured. No confirmed patch-specific reports have been counted.
+source_freshness_note: Official source should be refreshed before relying on this page for current status.
+record_note: This archived broad Resolve 21 record is retained only as release context. The more specific DaVinci Resolve
+  21 Public Beta 1 page carries the beta-specific risk and report context.
 official_summary: This archived DaVinci Resolve 21 record is retained only as broad release context. The more useful tracked
   record is the specific DaVinci Resolve 21 Public Beta 1 entry, which carries the active update and consensus notes.
 consensus_report: Insufficient data. This generic entry is archived in favor of the specific Public Beta 1 record.
-practical_recommendations:
-- Do not use this archived broad Resolve 21 record as a production-stable install recommendation.
-- Use the DaVinci Resolve 21 Public Beta 1 page for beta-specific caution and report context.
-- Refresh the official source before relying on this page for current guidance.
 status_events:
 - at: '2026-04-14T00:00:00Z'
   label: Update released

@@ -16,6 +16,7 @@ GENERATED_DIR = ROOT / "updates" / "generated"
 OUT_PATH = ROOT / "_data" / "qa_status.json"
 PRODUCTS_PATH = ROOT / "_data" / "patch_products.yml"
 SOURCES_PATH = ROOT / "_data" / "patch_ingestion_sources.yml"
+UPDATE_LAYOUT_PATH = ROOT / "_layouts" / "aux-update.html"
 
 VALID_EVIDENCE_STATES = {"official_only", "pilot_sample", "pilot_initial_sample", "consensus_live", "insufficient_data"}
 VALID_INTELLIGENCE_STAGES = {"staged", "official_live", "pilot", "consensus_live", "archived"}
@@ -92,6 +93,16 @@ def contains_public_static_sample(value: Any) -> bool:
     return False
 
 
+def flatten_text(value: Any) -> str:
+    if isinstance(value, str):
+        return value
+    if isinstance(value, list):
+        return " ".join(flatten_text(item) for item in value)
+    if isinstance(value, dict):
+        return " ".join(flatten_text(item) for item in value.values())
+    return ""
+
+
 def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
     errors: list[dict[str, str]] = []
     warnings: list[dict[str, str]] = []
@@ -162,6 +173,26 @@ def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]
             add(warnings, path, "official_only_zero_reports_known_issues_yes", "official_only record has 0 reports but known_issues_present is true; the UI may imply patch-specific user reports exist.")
         if data.get("complaint_themes"):
             add(warnings, path, "official_only_zero_reports_complaint_themes", "official_only record has 0 reports but complaint_themes are present; this can imply counted patch-specific user reports.")
+        recommendation_text = " ".join(
+            [
+                str(data.get("quick_verdict") or ""),
+                str(data.get("update_decision_label") or ""),
+                str(data.get("update_decision_body") or ""),
+                flatten_text(data.get("practical_recommendations")),
+            ]
+        ).lower()
+        blocked_recommendation_terms = (
+            "wait",
+            "avoid",
+            "safe enough",
+            "production-stable",
+            "production systems",
+            "install guidance",
+            "manual watch",
+            "manual-watch",
+        )
+        if any(term in recommendation_text for term in blocked_recommendation_terms):
+            add(warnings, path, "official_only_zero_reports_recommendation_language", "official_only record has 0 reports but still stores install-verdict recommendation language.")
     if str(data.get("official_checksums_capture_status") or "").strip() in {"captured", "present"} and is_blank(data.get("official_checksums_body")):
         add(errors, path, "checksum_status_without_body", "Checksum capture status says checksums are present but official_checksums_body is blank.")
     if is_blank(data.get("official_checksums_body")) and (data.get("show_checksum_section") is True or data.get("checksum_nav_enabled") is True):
@@ -189,6 +220,48 @@ def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]
                 if not item.get("source_type"):
                     add(warnings, path, "official_source_item_missing_type", f"official_sources[{idx}] is missing source_type.")
 
+    return errors, warnings
+
+
+def scan_update_layout_public_copy() -> tuple[list[dict[str, str]], list[dict[str, str]]]:
+    errors: list[dict[str, str]] = []
+    warnings: list[dict[str, str]] = []
+    if not UPDATE_LAYOUT_PATH.exists():
+        add(errors, UPDATE_LAYOUT_PATH, "missing_update_layout", "aux-update.html is missing.")
+        return errors, warnings
+
+    text = UPDATE_LAYOUT_PATH.read_text(encoding="utf-8")
+    forbidden_public_copy = {
+        "Practical recommendation": "Use public heading 'Recommendation' instead.",
+        "Evidence methodology details": "Use 'Consensus Report' for report-bearing pages and hide the large section for 0-report pages.",
+        "Static sample": "Public-facing wording must use Pilot sample.",
+        "Official sources are listed first": "Sources should render as concise citations without filler intro copy.",
+        "Community bug reports are shown": "Sources should not repeat methodology filler.",
+        "AUXSAYS counts a report only when": "Methodology details belong on the methodology page, not patch bodies.",
+        "Official source content has not been captured into this AUXSAYS record yet": "Do not force a blank Official Source Summary block.",
+    }
+    for phrase, message in forbidden_public_copy.items():
+        if phrase in text:
+            add(errors, UPDATE_LAYOUT_PATH, "layout_public_copy_regression", message)
+
+    if "checksum_body_clean" not in text or "{% if checksum_present %}<a href=\"#checksum\">Checksum</a>{% endif %}" not in text:
+        add(errors, UPDATE_LAYOUT_PATH, "checksum_nav_not_guarded", "Checksum nav must require stripped non-empty checksum content.")
+    if "{{ checksum_body_clean | markdownify }}" not in text:
+        add(errors, UPDATE_LAYOUT_PATH, "checksum_body_render_path_missing", "Checksum section should render stripped checksum content when present.")
+    if "official_body_clean" not in text:
+        add(warnings, UPDATE_LAYOUT_PATH, "official_summary_blank_guard_missing", "Official source summary should be guarded by stripped non-empty body content.")
+
+    return errors, warnings
+
+
+def scan_required_record_paths() -> tuple[list[dict[str, str]], list[dict[str, str]]]:
+    errors: list[dict[str, str]] = []
+    warnings: list[dict[str, str]] = []
+    obs_path = GENERATED_DIR / "2026-04-21-obs-studio-32-1-2.md"
+    if obs_path.exists():
+        data = front_matter(obs_path)
+        if is_blank(data.get("official_checksums_body")):
+            add(errors, obs_path, "obs_32_1_2_checksum_missing", "OBS Studio 32.1.2 should retain official_checksums_body content.")
     return errors, warnings
 
 
@@ -232,6 +305,12 @@ def main() -> int:
         warnings.extend(w)
 
     e, w = scan_priority_source_coverage()
+    errors.extend(e)
+    warnings.extend(w)
+    e, w = scan_update_layout_public_copy()
+    errors.extend(e)
+    warnings.extend(w)
+    e, w = scan_required_record_paths()
     errors.extend(e)
     warnings.extend(w)
 

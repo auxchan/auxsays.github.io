@@ -4798,6 +4798,16 @@ button, input, select, textarea { font: inherit; }
   text-transform: uppercase;
 }
 
+.update-source-list cite {
+  font-style: normal;
+  color: var(--text-1);
+  line-height: 1.55;
+}
+
+.update-practical-card p {
+  margin: 0 0 .45rem;
+}
+
 .update-methodology-details {
   border-color: rgba(95,212,229,.12);
 }

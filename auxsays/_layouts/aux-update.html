@@ -29,7 +29,8 @@ layout: aux-base
 {% assign source_url_present = false %}
 {% if page.update_source_url != blank or page.official_patch_notes_source_url != blank %}{% assign source_url_present = true %}{% endif %}
 {% assign official_body_present = false %}
-{% if page.official_patch_notes_body != blank %}{% assign official_body_present = true %}{% endif %}
+{% assign official_body_clean = page.official_patch_notes_body | default: '' | strip %}
+{% if official_body_clean != blank %}{% assign official_body_present = true %}{% endif %}
 {% assign official_captured = false %}
 {% if source_url_present or official_body_present %}{% assign official_captured = true %}{% endif %}
 {% assign evidence_state = 'Insufficient data' %}
@@ -45,6 +46,10 @@ layout: aux-base
   {% assign evidence_state_class = 'official' %}
 {% endif %}
 {% assign source_captured_label = 'No' %}{% if official_captured %}{% assign source_captured_label = 'Yes' %}{% endif %}
+{% assign official_only_zero_reports = false %}
+{% if evidence_state == 'Official only' and report_count == 0 %}{% assign official_only_zero_reports = true %}{% endif %}
+{% assign security_sensitive = false %}
+{% if page.security_sensitive == true or page.update_security_sensitive == true or page.official_patch_notes_source_type == 'security_advisory' or page.official_source_type == 'security_advisory' %}{% assign security_sensitive = true %}{% endif %}
 {% assign known_issues_label = 'Insufficient data' %}
 {% if page.known_issues_present == true %}
   {% assign known_issues_label = 'Yes' %}
@@ -67,6 +72,16 @@ layout: aux-base
   {% endif %}
 {% endif %}
 {% assign decision_label = page.update_decision_label | default: verdict_text %}
+{% if official_only_zero_reports %}
+  {% assign decision_label = 'No AUXSAYS recommendation yet.' %}
+  {% if security_sensitive %}
+    {% assign verdict_text = 'Security-sensitive update. Test first if your workflow is fragile, but do not ignore security exposure.' %}
+    {% assign decision_body = verdict_text %}
+  {% else %}
+    {% assign verdict_text = 'Official source captured. No confirmed patch-specific reports have been counted.' %}
+    {% assign decision_body = verdict_text %}
+  {% endif %}
+{% endif %}
 {% assign patch_specific_reports_label = 'Not counted yet' %}
 {% if report_count > 0 %}
   {% assign patch_specific_reports_label = 'Yes' %}
@@ -74,7 +89,22 @@ layout: aux-base
   {% assign patch_specific_reports_label = 'No confirmed reports yet' %}
 {% endif %}
 {% assign summary_text = page.release_summary | default: page.official_summary | default: page.description %}
+{% assign record_note_text = page.record_note | default: '' | strip %}
 {% assign consensus_text = page.consensus_report | default: page.community_summary %}
+{% assign has_practical_recommendations = false %}
+{% if page.practical_recommendations and page.practical_recommendations.size > 0 %}{% assign has_practical_recommendations = true %}{% endif %}
+{% assign recommendation_renderable = false %}
+{% if official_only_zero_reports or has_practical_recommendations %}{% assign recommendation_renderable = true %}{% endif %}
+{% assign consensus_report_renderable = false %}
+{% if report_count > 0 and consensus_text != blank %}{% assign consensus_report_renderable = true %}{% endif %}
+{% assign intel_status_label = 'Insufficient data' %}
+{% if evidence_state == 'Official only' %}
+  {% assign intel_status_label = 'Official source only' %}
+{% elsif evidence_state == 'Pilot sample' %}
+  {% assign intel_status_label = 'Pilot sample' %}
+{% elsif evidence_state == 'Consensus live' %}
+  {% assign intel_status_label = 'Consensus live' %}
+{% endif %}
 {% assign file_size_present = false %}
 {% assign patch_file_size_clean = page.patch_file_size | default: '' | strip %}
 {% if patch_file_size_clean != blank and patch_file_size_clean != 'Not captured' and patch_file_size_clean != 'Unknown' and patch_file_size_clean != 'null' %}{% assign file_size_present = true %}{% endif %}
@@ -171,15 +201,11 @@ layout: aux-base
         </div>
         <dl class="update-decision-grid">
           <div><dt>Confidence</dt><dd>{{ page.update_consensus_confidence | default: 'Low' }}</dd></div>
-          <div><dt>Evidence state</dt><dd>{{ evidence_state }}</dd></div>
+          <div><dt>Intel Status</dt><dd>{{ intel_status_label }}</dd></div>
           <div><dt>Official source captured</dt><dd>{{ source_captured_label }}</dd></div>
           <div><dt>Confirmed reports counted</dt><dd>{{ report_count }}</dd></div>
           <div><dt>Patch-specific user reports</dt><dd>{{ patch_specific_reports_label }}</dd></div>
         </dl>
-        <p class="update-decision-note">
-          {% if evidence_state == 'Pilot sample' %}Pilot sample means this page has manually encoded or previously captured confirmed patch-specific reports, but live consensus refresh is not active yet.{% elsif evidence_state == 'Official only' %}Official only means this page currently reflects official-source ingestion. No confirmed patch-specific community reports are counted yet.{% elsif evidence_state == 'Consensus live' %}Consensus live means confirmed patch-specific reports are being refreshed by the consensus pipeline.{% else %}Insufficient data means AUXSAYS has not captured enough evidence to score this update beyond a placeholder state.{% endif %}
-          <a href="{{ '/updates/methodology/' | relative_url }}">Read the methodology →</a>
-        </p>
         {% if page.source_freshness_note != blank %}<p class="update-decision-note">{{ page.source_freshness_note }}</p>{% endif %}
       </div>
 
@@ -191,17 +217,22 @@ layout: aux-base
     <a href="#verdict">Verdict</a>
     {% if page.official_additions or page.official_fixes %}<a href="#official-changes">Official changes</a>{% endif %}
     {% if page.evidence_samples and page.evidence_samples.size > 0 %}<a href="#community-risk">Community risk sample</a>{% endif %}
-    {% if page.practical_recommendations and page.practical_recommendations.size > 0 %}<a href="#recommendation">Recommendation</a>{% endif %}
-    <a href="#evidence-status">Evidence status</a>
+    {% if recommendation_renderable %}<a href="#recommendation">Recommendation</a>{% endif %}
+    {% if consensus_report_renderable %}<a href="#consensus-report">Consensus Report</a>{% endif %}
     {% if page.official_sources or page.update_source_url != blank or page.update_download_url != blank %}<a href="#sources">Sources</a>{% endif %}
     {% if page.status_events and page.status_events.size > 0 %}<a href="#history">History</a>{% endif %}
     {% if checksum_present %}<a href="#checksum">Checksum</a>{% endif %}
   </nav>
 
   <section class="update-content-grid">
-    {% if summary_text != blank %}
+    {% if record_note_text != blank %}
     <article class="panel update-info-card update-summary-card update-order-summary">
-      <h2>Summary</h2>
+      <h2>Record Note</h2>
+      <p>{{ record_note_text }}</p>
+    </article>
+    {% elsif summary_text != blank %}
+    <article class="panel update-info-card update-summary-card update-order-summary">
+      <h2>Update Summary</h2>
       <p>{{ summary_text }}</p>
     </article>
     {% endif %}
@@ -233,7 +264,7 @@ layout: aux-base
     {% if page.evidence_samples and page.evidence_samples.size > 0 %}
     <article id="community-risk" class="panel update-info-card update-evidence-sample-card update-order-community-risk">
       <h2>Community risk sample</h2>
-      <p class="update-section-intro">These manually reviewed examples show why this page recommends waiting or testing before using 26.2 on production systems.</p>
+      <p class="update-section-intro">Confirmed examples behind the current recommendation.</p>
       <div class="update-evidence-sample-grid">
         {% for item in page.evidence_samples %}
         <article class="update-evidence-sample">
@@ -253,19 +284,25 @@ layout: aux-base
     </article>
     {% endif %}
 
-    {% if page.practical_recommendations and page.practical_recommendations.size > 0 %}
+    {% if recommendation_renderable %}
     <article id="recommendation" class="panel update-info-card update-practical-card update-order-recommendation">
-      <h2>Practical recommendation</h2>
-      <ul class="update-practical-list">
-        {% for item in page.practical_recommendations %}<li>{{ item }}</li>{% endfor %}
-      </ul>
+      <h2>Recommendation</h2>
+      {% if official_only_zero_reports %}
+        <p><strong>No AUXSAYS recommendation yet.</strong></p>
+        <p>{% if security_sensitive %}Security-sensitive update. Test first if your workflow is fragile, but do not ignore security exposure.{% else %}Official source captured. No confirmed patch-specific reports have been counted.{% endif %}</p>
+      {% else %}
+        <ul class="update-practical-list">
+          {% for item in page.practical_recommendations %}<li>{{ item }}</li>{% endfor %}
+        </ul>
+      {% endif %}
     </article>
     {% endif %}
 
-    <details id="evidence-status" class="panel update-info-card update-consensus-card update-methodology-details update-order-evidence-status">
-      <summary>Evidence methodology details</summary>
+    {% if consensus_report_renderable %}
+    <article id="consensus-report" class="panel update-info-card update-consensus-card update-methodology-details update-order-evidence-status">
+      <h2>Consensus Report</h2>
       <div class="consensus-compact consensus-compact--card">
-        <span><strong>Evidence:</strong> <em class="consensus-word consensus-word--{{ reaction_class }}">{{ evidence_state }}</em></span>
+        <span><strong>Intel Status:</strong> <em class="consensus-word consensus-word--{{ reaction_class }}">{{ intel_status_label }}</em></span>
         <span class="consensus-secondary">{{ report_count }} confirmed patch-specific reports • {{ page.update_consensus_confidence | default: 'Low' }} confidence</span>
       </div>
       <div class="consensus-position-graph consensus-position-graph--card" style="--consensus-pos: {{ consensus_score_percent }}%;">
@@ -278,8 +315,6 @@ layout: aux-base
         <div class="consensus-scale-labels"><span>Negative</span><span>Moderate</span><span>Positive</span></div>
       </div>
       {% if consensus_text != blank %}<p>{{ consensus_text }}</p>{% endif %}
-      <p class="consensus-rule-note">{% if page.evidence_status_note != blank %}{{ page.evidence_status_note }}{% else %}Pilot sample means this page uses manually reviewed, patch-specific reports. It is not live consensus yet.{% endif %} AUXSAYS counts a report only when the specific patch/version is named in the report or parent discussion title. <a href="{{ '/updates/methodology/' | relative_url }}">Methodology</a></p>
-
       {% if page.complaint_themes and page.complaint_themes.size > 0 %}
       <div class="complaint-theme-table complaint-theme-table--renamed">
         <div class="complaint-theme-row complaint-theme-row--head"><span>Reported issue</span><span>Frequency</span><span>Severity</span></div>
@@ -288,7 +323,8 @@ layout: aux-base
         {% endfor %}
       </div>
       {% endif %}
-    </details>
+    </article>
+    {% endif %}
 
     {% if official_body_present %}
     <details class="panel update-info-card update-official-details update-order-official-details" open>
@@ -299,26 +335,20 @@ layout: aux-base
       </div>
       <div class="official-patch-notes node-bullet-scope">{{ page.official_patch_notes_body | markdownify }}</div>
     </details>
-    {% elsif page.update_source_url != blank %}
-    <details class="panel update-info-card update-official-details update-order-official-details">
-      <summary>{{ official_note_label }}</summary>
-      <div class="official-patch-notes official-patch-notes--pending"><p>Official source content has not been captured into this AUXSAYS record yet. Use the official source link above until the record is backfilled and classified.</p></div>
-    </details>
     {% endif %}
 
     {% if page.official_sources or page.update_source_url != blank or page.update_download_url != blank %}
     <article id="sources" class="panel update-info-card update-sources-card update-order-sources">
       <h2>Sources</h2>
-      <p class="update-section-intro">Official sources are listed first. Community bug reports are shown in the risk sample above when they are counted as evidence.</p>
       <ul class="update-source-list">
         {% if page.official_sources and page.official_sources.size > 0 %}
           {% for source in page.official_sources %}
-          <li><a href="{{ source.url }}">{{ source.label | default: source.source_type }}</a><span>{{ source.source_type | replace: '_', ' ' }}</span></li>
+          <li><cite>{% if page.update_source_name != blank %}{{ page.update_source_name }}. {% endif %}{% if page.update_published_at != blank %}({{ page.update_published_at | date: "%Y, %B %-d" }}). {% endif %}<a href="{{ source.url }}">{{ source.label | default: source.source_type }}</a>.</cite><span>{{ source.source_type | replace: '_', ' ' }}</span></li>
           {% endfor %}
         {% elsif page.update_source_url != blank %}
-          <li><a href="{{ page.update_source_url }}">Official source</a><span>official</span></li>
+          <li><cite>{% if page.update_source_name != blank %}{{ page.update_source_name }}. {% endif %}{% if page.update_published_at != blank %}({{ page.update_published_at | date: "%Y, %B %-d" }}). {% endif %}<a href="{{ page.update_source_url }}">{{ page.update_feed_title | default: display_title }}</a>.</cite><span>{{ official_source_type | replace: '_', ' ' }}</span></li>
         {% endif %}
-        {% if page.update_download_url != blank %}<li><a href="{{ page.update_download_url }}">Download page</a><span>download</span></li>{% endif %}
+        {% if page.update_download_url != blank %}<li><cite>{% if page.update_source_name != blank %}{{ page.update_source_name }}. {% endif %}<a href="{{ page.update_download_url }}">Download page</a>.</cite><span>download</span></li>{% endif %}
       </ul>
     </article>
     {% endif %}
@@ -338,7 +368,7 @@ layout: aux-base
     <details id="checksum" class="panel update-info-card update-checksum-details update-order-checksum">
       <summary>Checksum</summary>
       <p class="checksum-helper">Use these hashes to verify downloaded installers match the files published with the official release.</p>
-      <div class="official-patch-notes checksum-body">{{ page.official_checksums_body | markdownify }}</div>
+      <div class="official-patch-notes checksum-body">{{ checksum_body_clean | markdownify }}</div>
     </details>
     {% endif %}
 
