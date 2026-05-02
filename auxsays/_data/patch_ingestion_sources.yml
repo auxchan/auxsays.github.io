@@ -1401,7 +1401,7 @@
   software: DaVinci Resolve
   public_category: Video / Production
   enabled: false
-  recommended_priority: P2 build later
+  recommended_priority: P2 manual watch active
   ingestion:
     type: html_blog
     adapter: html_blog
@@ -1422,7 +1422,7 @@
     reliability: Medium
     breakage_risk: Medium-High
     polling_frequency: 12h
-    update_detection_method: title-date keyword filter
+    update_detection_method: manual watch with title-date keyword filter candidate
     extractable_fields:
       version: false
       release_date: true
@@ -1480,6 +1480,7 @@
     - Official support forum
     difficulty: TBD
     defer_until_official_ingestion_stable: true
+  source_health_note: Official record tracked; automated ingestion is not active because the current Blackmagic adapter path is not source-specific enough for safe unattended runs.
 - company_id: obs-project
   product_id: obs-studio
   company: OBS Project

@@ -36,18 +36,18 @@ layout: aux-base
 {% assign evidence_state = 'Insufficient data' %}
 {% assign evidence_state_class = 'insufficient' %}
 {% if collection_status == 'live_consensus' or collection_status == 'consensus_live' %}
-  {% assign evidence_state = 'Consensus live' %}
+  {% assign evidence_state = 'Live consensus' %}
   {% assign evidence_state_class = 'live' %}
 {% elsif collection_status == 'pilot_initial_sample' or collection_status == 'static_initial_sample' or page.evidence_state == 'pilot_sample' or page.evidence_state == 'static_sample' %}
-  {% assign evidence_state = 'Pilot sample' %}
+  {% assign evidence_state = 'Verified reports' %}
   {% assign evidence_state_class = 'pilot' %}
 {% elsif official_captured %}
-  {% assign evidence_state = 'Official only' %}
+  {% assign evidence_state = 'Official source only' %}
   {% assign evidence_state_class = 'official' %}
 {% endif %}
 {% assign source_captured_label = 'No' %}{% if official_captured %}{% assign source_captured_label = 'Yes' %}{% endif %}
 {% assign official_only_zero_reports = false %}
-{% if evidence_state == 'Official only' and report_count == 0 %}{% assign official_only_zero_reports = true %}{% endif %}
+{% if evidence_state == 'Official source only' and report_count == 0 %}{% assign official_only_zero_reports = true %}{% endif %}
 {% assign security_sensitive = false %}
 {% if page.security_sensitive == true or page.update_security_sensitive == true or page.official_patch_notes_source_type == 'security_advisory' or page.official_source_type == 'security_advisory' %}{% assign security_sensitive = true %}{% endif %}
 {% assign known_issues_label = 'Insufficient data' %}
@@ -61,11 +61,11 @@ layout: aux-base
 {% assign verdict_text = page.quick_verdict %}
 {% assign decision_body = page.update_decision_body %}
 {% if verdict_text == blank %}
-  {% if evidence_state == 'Consensus live' %}
+  {% if evidence_state == 'Live consensus' %}
     {% assign verdict_text = 'Consensus collection is active for this patch. Review the confirmed patch-specific reports and official notes before upgrading.' %}
-  {% elsif evidence_state == 'Pilot sample' %}
-    {% assign verdict_text = 'This record includes a pilot consensus sample. It is not a live community telemetry feed.' %}
-  {% elsif evidence_state == 'Official only' %}
+  {% elsif evidence_state == 'Verified reports' %}
+    {% assign verdict_text = 'This record includes verified patch-specific reports. It is not a live community telemetry feed.' %}
+  {% elsif evidence_state == 'Official source only' %}
     {% assign verdict_text = 'Official source captured. Community consensus is not live yet for this patch.' %}
   {% else %}
     {% assign verdict_text = 'Insufficient data. AUXSAYS has not captured enough official or confirmed community evidence for a recommendation.' %}
@@ -85,7 +85,7 @@ layout: aux-base
 {% assign patch_specific_reports_label = 'Not counted yet' %}
 {% if report_count > 0 %}
   {% assign patch_specific_reports_label = 'Yes' %}
-{% elsif evidence_state == 'Official only' %}
+{% elsif evidence_state == 'Official source only' %}
   {% assign patch_specific_reports_label = 'No confirmed reports yet' %}
 {% endif %}
 {% assign summary_text = page.release_summary | default: page.official_summary | default: page.description %}
@@ -98,12 +98,12 @@ layout: aux-base
 {% assign consensus_report_renderable = false %}
 {% if report_count > 0 and consensus_text != blank %}{% assign consensus_report_renderable = true %}{% endif %}
 {% assign intel_status_label = 'Insufficient data' %}
-{% if evidence_state == 'Official only' %}
+{% if evidence_state == 'Official source only' %}
   {% assign intel_status_label = 'Official source only' %}
-{% elsif evidence_state == 'Pilot sample' %}
-  {% assign intel_status_label = 'Pilot sample' %}
-{% elsif evidence_state == 'Consensus live' %}
-  {% assign intel_status_label = 'Consensus live' %}
+{% elsif evidence_state == 'Verified reports' %}
+  {% assign intel_status_label = 'Verified reports' %}
+{% elsif evidence_state == 'Live consensus' %}
+  {% assign intel_status_label = 'Live consensus' %}
 {% endif %}
 {% assign file_size_present = false %}
 {% assign patch_file_size_clean = page.patch_file_size | default: '' | strip %}
@@ -201,7 +201,7 @@ layout: aux-base
         </div>
         <dl class="update-decision-grid">
           <div><dt>Confidence</dt><dd>{{ page.update_consensus_confidence | default: 'Low' }}</dd></div>
-          <div><dt>Intel Status</dt><dd>{{ intel_status_label }}</dd></div>
+          <div><dt>Evidence Status</dt><dd>{{ intel_status_label }}</dd></div>
           <div><dt>Official source captured</dt><dd>{{ source_captured_label }}</dd></div>
           <div><dt>Confirmed reports counted</dt><dd>{{ report_count }}</dd></div>
           <div><dt>Patch-specific user reports</dt><dd>{{ patch_specific_reports_label }}</dd></div>
@@ -302,7 +302,7 @@ layout: aux-base
     <article id="consensus-report" class="panel update-info-card update-consensus-card update-methodology-details update-order-evidence-status">
       <h2>Consensus Report</h2>
       <div class="consensus-compact consensus-compact--card">
-        <span><strong>Intel Status:</strong> <em class="consensus-word consensus-word--{{ reaction_class }}">{{ intel_status_label }}</em></span>
+        <span><strong>Evidence Status:</strong> <em class="consensus-word consensus-word--{{ reaction_class }}">{{ intel_status_label }}</em></span>
         <span class="consensus-secondary">{{ report_count }} confirmed patch-specific reports • {{ page.update_consensus_confidence | default: 'Low' }} confidence</span>
       </div>
       <div class="consensus-position-graph consensus-position-graph--card" style="--consensus-pos: {{ consensus_score_percent }}%;">

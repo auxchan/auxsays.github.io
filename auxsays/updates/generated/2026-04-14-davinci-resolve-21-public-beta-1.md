@@ -42,7 +42,7 @@ official_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and 
   production build. The key user decision is not simply whether the release is new, but whether the new Resolve 21 feature
   set is worth testing in a non-critical environment. For production work, the practical read is to keep existing stable projects
   on a known-good version unless a specific Resolve 21 feature is needed and the project can tolerate beta risk.
-consensus_report: The pilot sample remains moderate because this is a beta release. Early interest is useful for testing the
+consensus_report: The verified-report set remains moderate because this is a beta release. Early interest is useful for testing the
   new version path, but production users should separate feature exploration from mission-critical work. Confirmed patch-specific
   reports assessed are not strong enough yet to call this either safe-positive or failure-negative.
 complaint_themes:
@@ -80,7 +80,7 @@ consensus_report_weighting: equal_per_confirmed_report
 consensus_low_context_policy: excluded
 consensus_collection_status: pilot_initial_sample
 evidence_state: pilot_sample
-evidence_state_label: Pilot sample
+evidence_state_label: Verified reports
 official_source_captured: true
 confirmed_patch_specific_report_count: 7
 known_issues_present: true

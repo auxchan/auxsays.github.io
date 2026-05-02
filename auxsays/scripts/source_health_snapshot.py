@@ -59,7 +59,7 @@ def status_for(source: dict[str, Any], source_state: dict[str, Any], last_error:
 
     if not enabled:
         if adapter == "manual_watch" or "manual" in recommended:
-            return "Manual watch", "Manual"
+            return "Manual watch", "Manual watch active"
         if "staged" in recommended or "build later" in recommended or "p2" in recommended or "p3" in recommended:
             return "Staged", "Staged"
         return "Disabled", "Disabled"

@@ -96,14 +96,19 @@ For security-sensitive updates, do not casually tell users to avoid them. Prefer
 
 ## Evidence states
 
-Allowed public evidence states:
+Allowed internal evidence states:
 
 - `official_only`
 - `pilot_sample`
 - `consensus_live`
 - `insufficient_data`
 
-Public-facing wording must use **Pilot sample**, not **Static sample**.
+Public-facing labels must use:
+
+- `official_only` → **Official source only**
+- `pilot_sample` → **Verified reports**
+- `consensus_live` → **Live consensus**
+- `insufficient_data` → **Insufficient data**
 
 Legacy internal handling for `static_sample` may remain only for backward compatibility, but it should not appear as public user-facing language.
 
@@ -499,7 +504,7 @@ Make AUXSAYS better.
 Prefer scoped tasks like:
 
 ```text
-Repair the Premiere Pro 26.2 page so it shows a WAIT verdict, renders Pilot sample wording, displays evidence sample cards, hides empty checksum sections, and preserves generated/state files.
+Repair the Premiere Pro 26.2 page so it shows a WAIT verdict, renders Verified reports wording, displays evidence sample cards, hides empty checksum sections, and preserves generated/state files.
 ```
 
 ## Final reminder

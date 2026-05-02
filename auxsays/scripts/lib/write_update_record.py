@@ -43,7 +43,7 @@ def build_front_matter(record: dict[str, Any]) -> dict[str, Any]:
     consensus_confidence = record.get("consensus_confidence") or record.get("update_consensus_confidence") or "Low"
     consensus_status = record.get("consensus_collection_status") or ("pilot_initial_sample" if report_count else "deferred_official_only")
     evidence_state = record.get("evidence_state") or ("pilot_sample" if report_count else "official_only")
-    evidence_state_label = record.get("evidence_state_label") or ("Pilot sample" if report_count else "Official only")
+    evidence_state_label = record.get("evidence_state_label") or ("Verified reports" if report_count else "Official source only")
     intelligence_stage = record.get("intelligence_stage") or ("pilot" if report_count else "official_live")
     official_sources = record.get("official_sources") or []
     official_source_type = record.get("official_source_type") or record.get("source_type") or "official-source"

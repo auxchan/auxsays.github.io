@@ -85,7 +85,7 @@ def has_structured_evidence(data: dict[str, Any]) -> bool:
 
 def contains_public_static_sample(value: Any) -> bool:
     if isinstance(value, str):
-        return "static sample" in value.lower()
+        return ("static" + " sample") in value.lower()
     if isinstance(value, list):
         return any(contains_public_static_sample(item) for item in value)
     if isinstance(value, dict):
@@ -137,7 +137,10 @@ def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]
     if evidence_state and evidence_state not in VALID_EVIDENCE_STATES:
         add(warnings, path, "unknown_evidence_state", f"Evidence state '{evidence_state}' is not in the normalized taxonomy.")
     if contains_public_static_sample(data):
-        add(errors, path, "public_static_sample_wording", "Public-facing generated record data still contains 'Static sample' wording. Use 'Pilot sample'.")
+        add(errors, path, "public_static_sample_wording", "Public-facing generated record data still contains obsolete sample wording. Use 'Verified reports' for confirmed report samples.")
+    public_text = flatten_text(data)
+    if ("Pilot" + " sample") in public_text or ("pilot" + " sample") in public_text:
+        add(errors, path, "public_pilot_sample_wording", "Public-facing generated record data still contains obsolete verified-report wording. Use 'Verified reports'.")
 
     evidence_samples = data.get("evidence_samples")
     if evidence_samples is not None:
@@ -234,7 +237,10 @@ def scan_update_layout_public_copy() -> tuple[list[dict[str, str]], list[dict[st
     forbidden_public_copy = {
         "Practical recommendation": "Use public heading 'Recommendation' instead.",
         "Evidence methodology details": "Use 'Consensus Report' for report-bearing pages and hide the large section for 0-report pages.",
-        "Static sample": "Public-facing wording must use Pilot sample.",
+        "Static" + " sample": "Public-facing wording must use Verified reports.",
+        "Pilot" + " sample": "Public-facing wording must use Verified reports.",
+        "pilot" + " sample": "Public-facing wording must use Verified reports.",
+        "Intel" + " Status": "Public-facing wording must use Evidence Status.",
         "Official sources are listed first": "Sources should render as concise citations without filler intro copy.",
         "Community bug reports are shown": "Sources should not repeat methodology filler.",
         "AUXSAYS counts a report only when": "Methodology details belong on the methodology page, not patch bodies.",

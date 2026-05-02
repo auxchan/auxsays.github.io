@@ -33,7 +33,7 @@ release_summary: Itâ€™s now easier to add references when using Make Image 
 consensus_report: Confirmed patch-specific consensus collection is deferred. This page currently reflects official-source
   ingestion only.
 evidence_state: official_only
-evidence_state_label: Official only
+evidence_state_label: Official source only
 official_source_captured: true
 confirmed_patch_specific_report_count: 0
 known_issues_present: null

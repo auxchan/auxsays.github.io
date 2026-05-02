@@ -514,8 +514,8 @@
   public_category: Video / Production
   adapter_type: html_blog
   enabled: false
-  status: Staged
-  status_detail: Staged
+  status: Manual watch
+  status_detail: Manual watch active
   polling_frequency: 12h
   last_success: ''
   last_error: ''
@@ -527,7 +527,7 @@
   last_records_written: 0
   last_records_skipped: 0
   last_run_duration_ms: 0
-  last_health_note: Source configured but intentionally staged until adapter reliability is proven.
+  last_health_note: Official record tracked; automated ingestion is not active because the current Blackmagic adapter path is not source-specific enough for safe unattended runs.
   capabilities:
     release_notes: true
     version: false

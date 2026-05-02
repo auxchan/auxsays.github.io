@@ -171,7 +171,13 @@ layout: aux-base
               {% if show_signal and home_patch_count < home_patch_limit %}
                 {% assign evidence_label = item.evidence_state_label | default: evidence_state | replace: '_', ' ' | capitalize %}
                 {% if evidence_state == 'pilot_sample' or evidence_state == 'static_sample' or evidence_state == 'pilot_initial_sample' or evidence_state == 'static_initial_sample' %}
-                  {% assign evidence_label = 'Pilot sample' %}
+                  {% assign evidence_label = 'Verified reports' %}
+                {% elsif evidence_state == 'official_only' %}
+                  {% assign evidence_label = 'Official source only' %}
+                {% elsif evidence_state == 'consensus_live' %}
+                  {% assign evidence_label = 'Live consensus' %}
+                {% elsif evidence_state == 'insufficient_data' %}
+                  {% assign evidence_label = 'Insufficient data' %}
                 {% endif %}
                 {% assign stage_label = item.intelligence_stage_label | default: item.intelligence_stage | default: '' | replace: '_', ' ' | capitalize %}
                 <a class="home-patch-item home-patch-item--signal" href="{{ item.url | relative_url }}" data-home-patch-signal>

@@ -56,7 +56,7 @@ release_summary: "The April 2026 update to Visual Studio centers on agentic work
 consensus_report: Confirmed patch-specific consensus collection is deferred. This page currently reflects official-source
   ingestion only.
 evidence_state: official_only
-evidence_state_label: Official only
+evidence_state_label: Official source only
 intelligence_stage: official_live
 official_source_captured: true
 confirmed_patch_specific_report_count: 0
