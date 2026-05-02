@@ -27,3 +27,7 @@ Every confirmed patch-specific report counts equally. Official forums, dedicated
 `scripts/consensus_refresh.py` is currently an audit scaffold. It validates that generated Patch records are labeled with the global consensus policy. It does not scrape forums yet.
 
 Official update ingestion remains separate from consensus refresh.
+
+`scripts/audit_consensus_evidence.py` compares generated Patch record report counts with the structured rows in `auxsays/_data/consensus_evidence.yml`. It reports records that claim confirmed reports without matching structured evidence, records where evidence exists but counts differ, and missing or stale evidence freshness dates.
+
+This audit is not a collector. It does not fetch Reddit, forums, GitHub Issues, Adobe Community, or any other public community source. A page should say `Live consensus` only after a real collector exists and its structured evidence backs the displayed counts.

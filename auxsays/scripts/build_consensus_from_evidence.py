@@ -67,6 +67,26 @@ def confidence(total: int) -> str:
     return "Insufficient"
 
 
+def latest_captured_at(items: list[dict[str, Any]]) -> str:
+    parsed: list[datetime] = []
+    for item in items:
+        value = str(item.get("captured_at") or "").strip()
+        if not value:
+            continue
+        try:
+            if value.endswith("Z"):
+                value = value[:-1] + "+00:00"
+            captured = datetime.fromisoformat(value)
+        except ValueError:
+            continue
+        if captured.tzinfo is None:
+            captured = captured.replace(tzinfo=timezone.utc)
+        parsed.append(captured.astimezone(timezone.utc))
+    if not parsed:
+        return ""
+    return max(parsed).isoformat().replace("+00:00", "Z")
+
+
 def main() -> int:
     evidence = load_evidence()
     groups: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
@@ -112,6 +132,7 @@ def main() -> int:
             "consensus_label": consensus_label(sentiments),
             "confidence": confidence(len(items)),
             "evidence_state": "pilot_sample",
+            "evidence_last_checked": latest_captured_at(items),
         })
 
     OUT_PATH.write_text(json.dumps({

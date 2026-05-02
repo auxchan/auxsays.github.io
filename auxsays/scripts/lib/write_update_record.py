@@ -95,6 +95,7 @@ def build_front_matter(record: dict[str, Any]) -> dict[str, Any]:
         "intelligence_stage": intelligence_stage,
         "official_source_captured": bool(source_url or body),
         "confirmed_patch_specific_report_count": report_count,
+        "evidence_last_checked": record.get("evidence_last_checked") or record.get("consensus_last_checked") or "",
         "known_issues_present": known_issues_present,
         "consensus_collection_status": consensus_status,
         "consensus_match_policy": "confirmed_patch_specific_reports_v1",

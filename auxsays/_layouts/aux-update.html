@@ -26,6 +26,9 @@ layout: aux-base
 {% endif %}
 {% assign report_count = page.update_report_count | default: 0 | plus: 0 %}
 {% assign collection_status = page.consensus_collection_status | default: 'deferred_official_only' %}
+{% assign evidence_checked_at = page.evidence_last_checked | default: page.consensus_last_checked %}
+{% assign evidence_checked_label = 'Not recorded' %}
+{% if evidence_checked_at != blank %}{% assign evidence_checked_label = evidence_checked_at | date: "%b %-d, %Y" %}{% endif %}
 {% assign source_url_present = false %}
 {% if page.update_source_url != blank or page.official_patch_notes_source_url != blank %}{% assign source_url_present = true %}{% endif %}
 {% assign official_body_present = false %}
@@ -179,6 +182,7 @@ layout: aux-base
         <div class="consensus-compact">
           <span><strong>Consensus:</strong> <em class="consensus-word consensus-word--{{ reaction_class }}">{{ reaction }}</em></span>
           <span class="consensus-secondary">{{ report_count }} confirmed patch-specific reports • {{ page.update_consensus_confidence | default: 'Low' }} confidence</span>
+          {% if report_count > 0 %}<span class="consensus-secondary">Evidence last checked: {{ evidence_checked_label }}</span>{% endif %}
         </div>
         <div class="consensus-position-graph consensus-position-graph--hero" style="--consensus-pos: {{ consensus_score_percent }}%;">
           <div class="consensus-scale" aria-hidden="true">
@@ -205,6 +209,7 @@ layout: aux-base
           <div><dt>Official source captured</dt><dd>{{ source_captured_label }}</dd></div>
           <div><dt>Confirmed reports counted</dt><dd>{{ report_count }}</dd></div>
           <div><dt>Patch-specific user reports</dt><dd>{{ patch_specific_reports_label }}</dd></div>
+          {% if report_count > 0 %}<div><dt>Evidence last checked</dt><dd>{{ evidence_checked_label }}</dd></div>{% endif %}
         </dl>
         {% if page.source_freshness_note != blank %}<p class="update-decision-note">{{ page.source_freshness_note }}</p>{% endif %}
       </div>
@@ -304,6 +309,7 @@ layout: aux-base
       <div class="consensus-compact consensus-compact--card">
         <span><strong>Evidence Status:</strong> <em class="consensus-word consensus-word--{{ reaction_class }}">{{ intel_status_label }}</em></span>
         <span class="consensus-secondary">{{ report_count }} confirmed patch-specific reports • {{ page.update_consensus_confidence | default: 'Low' }} confidence</span>
+        <span class="consensus-secondary">Evidence last checked: {{ evidence_checked_label }}</span>
       </div>
       <div class="consensus-position-graph consensus-position-graph--card" style="--consensus-pos: {{ consensus_score_percent }}%;">
         <div class="consensus-scale" aria-label="Consensus position from negative through moderate to positive">

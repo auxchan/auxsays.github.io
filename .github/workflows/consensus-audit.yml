@@ -20,3 +20,5 @@ jobs:
         run: pip install -r auxsays/scripts/requirements-ingest.txt
       - name: Audit consensus metadata
         run: python auxsays/scripts/consensus_refresh.py --json
+      - name: Audit generated counts against structured evidence
+        run: python auxsays/scripts/audit_consensus_evidence.py --json --strict

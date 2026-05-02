@@ -36,8 +36,18 @@ permalink: /updates/methodology/
 
     <article class="methodology-card">
       <h2>Community consensus</h2>
-      <p>Community consensus is separate from official ingestion. It is not treated as live unless the page explicitly says <strong>Live consensus</strong>. Verified reports are manually confirmed patch-specific reports and should not be read as live telemetry.</p>
-      <p>When consensus collection is implemented, every confirmed patch-specific report will count equally. Official forums, dedicated forums, Reddit, GitHub Issues, or other public sources may be labeled by source type for auditability, but source type does not multiply or discount the report.</p>
+      <p>Community consensus is separate from official ingestion. It is not treated as live unless the page explicitly says <strong>Live consensus</strong>. Verified reports are manually confirmed patch-specific reports or previously captured structured reports; they should not be read as continuous community scraping.</p>
+      <p>When a live collector exists, every confirmed patch-specific report will count equally. Official forums, dedicated forums, Reddit, GitHub Issues, or other public sources may be labeled by source type for auditability, but source type does not multiply or discount the report.</p>
+    </article>
+
+    <article class="methodology-card">
+      <h2>Manual tracking</h2>
+      <p>Some priority products are watched manually while an adapter or collector is incomplete. Manual watch means AUXSAYS is tracking the source intentionally, but it does not mean automated official ingestion or live report scraping is active.</p>
+    </article>
+
+    <article class="methodology-card">
+      <h2>Consensus audit</h2>
+      <p>The consensus audit checks whether generated patch pages that show confirmed reports are backed by structured evidence rows. It can identify stale or manually encoded counts, but it does not collect new reports from public communities.</p>
     </article>
 
     <article class="methodology-card">
@@ -65,7 +75,7 @@ permalink: /updates/methodology/
       <dl class="methodology-definition-list">
         <div><dt>Live consensus</dt><dd>Confirmed patch-specific reports are actively refreshed by a consensus pipeline.</dd></div>
         <div><dt>Official source only</dt><dd>An official source has been captured, but no confirmed patch-specific community reports are counted yet.</dd></div>
-        <div><dt>Verified reports</dt><dd>The page contains manually encoded or previously captured confirmed patch-specific report data. It is not live telemetry.</dd></div>
+        <div><dt>Verified reports</dt><dd>The page contains manually encoded or previously captured confirmed patch-specific report data. Check the evidence freshness line before treating it as current.</dd></div>
         <div><dt>Insufficient data</dt><dd>AUXSAYS has not captured enough official or community evidence to support a verdict beyond a placeholder state.</dd></div>
       </dl>
     </article>
