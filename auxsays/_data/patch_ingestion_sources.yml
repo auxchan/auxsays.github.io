@@ -2230,7 +2230,7 @@
     type: download_portal
     adapter: download_portal_snapshot
     official_url: https://www.amd.com/en/support/download/drivers.html
-    secondary_official_url: https://www.amd.com/en/support/download/drivers.html
+    secondary_official_url: null
     feed_url: null
     api_url: null
     parser_profile: amd_driver_portal
@@ -2306,7 +2306,7 @@
     type: download_portal
     adapter: download_portal_snapshot
     official_url: https://www.intel.com/content/www/us/en/download-center/home.html
-    secondary_official_url: https://www.intel.com/content/www/us/en/download-center/home.html
+    secondary_official_url: null
     feed_url: null
     api_url: null
     parser_profile: intel_download_center
@@ -2799,7 +2799,7 @@
     type: html_changelog
     adapter: html_changelog
     official_url: https://www.netlify.com/changelog/
-    secondary_official_url: https://www.netlify.com/changelog/
+    secondary_official_url: null
     feed_url: null
     api_url: null
     parser_profile: netlify_changelog
