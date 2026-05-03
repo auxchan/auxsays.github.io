@@ -29,6 +29,21 @@ layout: aux-base
 {% assign evidence_checked_at = page.evidence_last_checked | default: page.consensus_last_checked %}
 {% assign evidence_checked_label = 'Not recorded' %}
 {% if evidence_checked_at != blank %}{% assign evidence_checked_label = evidence_checked_at | date: "%b %-d, %Y" %}{% endif %}
+{% assign source_checked_at = page.source_last_checked %}
+{% assign source_checked_label = 'Not recorded' %}
+{% if source_checked_at != blank %}{% assign source_checked_label = source_checked_at | date: "%b %-d, %Y" %}{% endif %}
+{% assign official_body_checked_at = page.official_body_last_checked %}
+{% assign official_body_checked_label = 'Not captured' %}
+{% if official_body_checked_at != blank %}{% assign official_body_checked_label = official_body_checked_at | date: "%b %-d, %Y" %}{% endif %}
+{% assign record_updated_at = page.record_last_updated %}
+{% assign record_updated_label = 'Not recorded' %}
+{% assign record_updated_is_legacy = false %}
+{% if record_updated_at != blank %}
+  {% assign record_updated_label = record_updated_at | date: "%b %-d, %Y" %}
+{% elsif page.update_last_checked != blank %}
+  {% assign record_updated_label = page.update_last_checked | date: "%b %-d, %Y" %}
+  {% assign record_updated_is_legacy = true %}
+{% endif %}
 {% assign source_url_present = false %}
 {% if page.update_source_url != blank or page.official_patch_notes_source_url != blank %}{% assign source_url_present = true %}{% endif %}
 {% assign official_body_present = false %}
@@ -177,7 +192,8 @@ layout: aux-base
         {% if page.update_channel_label != blank %}<span>{{ page.update_channel_label }}</span>{% elsif page.release_channel_label != blank %}<span>Release channel: {{ page.release_channel_label }}</span>{% endif %}
         {% if file_size_renderable %}<span class="{{ file_size_meta_class }}"{% if page.patch_file_size_note != blank %} title="{{ page.patch_file_size_note | escape }}"{% endif %}>File size: {{ file_size_label }}</span>{% endif %}
         {% if page.update_published_at != blank %}<span>Patch released: {{ page.update_published_at | date: "%b %-d, %Y" }}</span>{% endif %}
-        {% if page.update_last_checked != blank %}<span>Last checked: {{ page.update_last_checked | date: "%b %-d, %Y" }}</span>{% endif %}
+        <span>Official source checked: {{ source_checked_label }}</span>
+        <span>{% if record_updated_is_legacy %}Legacy record date{% else %}Record updated{% endif %}: {{ record_updated_label }}</span>
       </div>
 
       <div class="update-verdict-card update-verdict-card--clean">
@@ -211,6 +227,9 @@ layout: aux-base
           <div><dt>Official source captured</dt><dd>{{ source_captured_label }}</dd></div>
           <div><dt>Confirmed reports counted</dt><dd>{{ report_count }}</dd></div>
           <div><dt>Patch-specific user reports</dt><dd>{{ patch_specific_reports_label }}</dd></div>
+          <div><dt>Official source checked</dt><dd>{{ source_checked_label }}</dd></div>
+          <div><dt>Official notes checked</dt><dd>{{ official_body_checked_label }}</dd></div>
+          <div><dt>{% if record_updated_is_legacy %}Legacy record date{% else %}Record updated{% endif %}</dt><dd>{{ record_updated_label }}</dd></div>
           {% if report_count > 0 %}<div><dt>Evidence last checked</dt><dd>{{ evidence_checked_label }}</dd></div>{% endif %}
         </dl>
         {% if page.source_freshness_note != blank %}<p class="update-decision-note">{{ page.source_freshness_note }}</p>{% endif %}

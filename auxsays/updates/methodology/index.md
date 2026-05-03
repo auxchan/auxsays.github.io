@@ -26,12 +26,14 @@ permalink: /updates/methodology/
       <h2>Official-source ingestion</h2>
       <p>Official-source ingestion captures releases from vendor changelogs, RSS feeds, GitHub releases, or official release pages. This pipeline is active for selected sources and runs through GitHub Actions.</p>
       <p>Official ingestion does not prove a patch is safe. It only records that an official update exists and preserves the available release note details.</p>
+      <p><strong>Official source checked</strong> means AUXSAYS contacted the vendor source or feed. It does not mean the page verdict, community evidence, or report count changed.</p>
     </article>
 
     <article class="methodology-card">
       <h2>Official source classification</h2>
       <p>Official vendor pages are classified before display. A release-notes page, fixed-issue list, security advisory, changelog, vendor blog, “What’s New” article, download portal, and official community announcement are not treated as the same evidence type.</p>
       <p>AUXSAYS should only label a section as <strong>Official Release Notes</strong> when the captured source is classified as release notes, fixed issues, a security advisory, or a changelog. Feature summaries and vendor announcements remain official, but they are labeled as summaries or announcements.</p>
+      <p><strong>Official notes checked</strong> means AUXSAYS attempted to capture official body text. A linked source can still show a missing-body note when extraction fails or the source is not a structured changelog.</p>
     </article>
 
     <article class="methodology-card">
@@ -48,6 +50,13 @@ permalink: /updates/methodology/
     <article class="methodology-card">
       <h2>Consensus audit</h2>
       <p>The consensus audit checks whether generated patch pages that show confirmed reports are backed by structured evidence rows. It can identify stale or manually encoded counts, but it does not collect new reports from public communities.</p>
+      <p><strong>Evidence checked</strong> is separate from official-source checks. It should only move when structured community/report evidence is reviewed or collected. Live consensus is not active unless a real evidence collector is running.</p>
+    </article>
+
+    <article class="methodology-card">
+      <h2>Record freshness</h2>
+      <p><strong>Record updated</strong> means the generated patch page materially changed. Older records may show a legacy record date until the refreshed ingestion path writes the newer source and body-check fields.</p>
+      <p>Source checked, official notes checked, record updated, and evidence checked are separate timestamps. One timestamp should not be read as proof that the others changed.</p>
     </article>
 
     <article class="methodology-card">
