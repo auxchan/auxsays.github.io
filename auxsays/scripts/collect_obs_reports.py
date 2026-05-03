@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Collect OBS Studio patch-specific GitHub Issue evidence for one pilot patch.
+"""Collect version-scoped OBS Studio GitHub Issue evidence.
 
-This is a manual pilot collector. It only reads GitHub Issues from
+This collector is intentionally narrow: it only reads GitHub Issues from
 obsproject/obs-studio and only counts candidates that explicitly name the
 requested OBS version in the issue title or body.
 """
@@ -15,7 +15,7 @@ import sys
 import textwrap
 import urllib.parse
 import urllib.request
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
@@ -23,11 +23,12 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 EVIDENCE_PATH = ROOT / "_data" / "consensus_evidence.yml"
-OBS_32_1_2_RECORD = ROOT / "updates" / "generated" / "2026-04-21-obs-studio-32-1-2.md"
+GENERATED_DIR = ROOT / "updates" / "generated"
 API_ROOT = "https://api.github.com"
 REPO = "obsproject/obs-studio"
 PRODUCT_ID = "obs-studio"
 SOURCE_NAME = "obsproject/obs-studio"
+VERSION_RE = re.compile(r"^\d+(?:\.\d+){1,3}(?:[-+][0-9A-Za-z][0-9A-Za-z.-]*)?$")
 
 
 def utc_now() -> str:
@@ -42,7 +43,7 @@ def slug(value: str) -> str:
 def request_json(url: str) -> Any:
     headers = {
         "Accept": "application/vnd.github+json",
-        "User-Agent": "AUXSAYS-OBS-Report-Pilot",
+        "User-Agent": "AUXSAYS-OBS-Report-Beta",
         "X-GitHub-Api-Version": "2022-11-28",
     }
     token = os.getenv("GITHUB_TOKEN")
@@ -103,12 +104,7 @@ def match_basis(issue: dict[str, Any], version: str) -> str | None:
 
 
 def issue_text(issue: dict[str, Any]) -> tuple[str, str, str, str]:
-    """Return normalized title/body/labels plus a body with template headings removed.
-
-    OBS GitHub issue bodies include headings like "OBS Studio Crash Log URL" even
-    when the report is not a crash. Classification and developer-only detection
-    should not treat those headings as issue substance.
-    """
+    """Return normalized title/body/labels plus body with template headings removed."""
     title = str(issue.get("title") or "")
     body = str(issue.get("body") or "")
     labels = " ".join(str(label.get("name") or "") for label in issue.get("labels") or [] if isinstance(label, dict))
@@ -234,20 +230,6 @@ def evidence_row(issue: dict[str, Any], version: str, basis: str, captured_at: s
     }
 
 
-def parse_existing_rows(path: Path) -> list[dict[str, Any]]:
-    if not path.exists():
-        return []
-    payload = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
-    if isinstance(payload, list):
-        return [normalize_row(item) for item in payload if isinstance(item, dict)]
-    if isinstance(payload, dict):
-        evidence = payload.get("evidence") or []
-        if not isinstance(evidence, list):
-            raise ValueError(f"{path} field 'evidence' must be a list")
-        return [normalize_row(item) for item in evidence if isinstance(item, dict)]
-    raise ValueError(f"{path} must contain a YAML list or a mapping with an evidence list")
-
-
 def normalize_row(row: dict[str, Any]) -> dict[str, Any]:
     normalized = dict(row)
     string_fields = {
@@ -283,6 +265,20 @@ def normalize_row(row: dict[str, Any]) -> dict[str, Any]:
     return normalized
 
 
+def parse_existing_rows(path: Path) -> list[dict[str, Any]]:
+    if not path.exists():
+        return []
+    payload = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    if isinstance(payload, list):
+        return [normalize_row(item) for item in payload if isinstance(item, dict)]
+    if isinstance(payload, dict):
+        evidence = payload.get("evidence") or []
+        if not isinstance(evidence, list):
+            raise ValueError(f"{path} field 'evidence' must be a list")
+        return [normalize_row(item) for item in evidence if isinstance(item, dict)]
+    raise ValueError(f"{path} must contain a YAML list or a mapping with an evidence list")
+
+
 def write_evidence_file(path: Path, rows: list[dict[str, Any]]) -> None:
     payload = {"schema_version": 1, "evidence": [normalize_row(row) for row in rows]}
     path.write_text(
@@ -291,43 +287,75 @@ def write_evidence_file(path: Path, rows: list[dict[str, Any]]) -> None:
     )
 
 
-def dump_inline_scalar(value: Any) -> str:
-    return yaml.safe_dump(value, default_flow_style=True, allow_unicode=True, width=1000).splitlines()[0]
+def evidence_key(row: dict[str, Any], field: str) -> tuple[str, str, str]:
+    return (
+        str(row.get("product_id") or "").strip(),
+        str(row.get("update_version") or "").strip(),
+        str(row.get(field) or "").strip(),
+    )
 
 
-def replace_or_add_lines(text: str, updates: dict[str, Any]) -> str:
-    lines = text.splitlines()
-    found: set[str] = set()
-    output: list[str] = []
-    in_front = False
-    for idx, line in enumerate(lines):
-        if idx == 0 and line == "---":
-            in_front = True
-            output.append(line)
+def write_evidence(rows: list[dict[str, Any]]) -> tuple[int, int, list[dict[str, Any]]]:
+    existing = parse_existing_rows(EVIDENCE_PATH)
+    seen_ids = {evidence_key(row, "id") for row in existing if row.get("id")}
+    seen_urls = {evidence_key(row, "source_url") for row in existing if row.get("source_url")}
+    added = 0
+    for row in rows:
+        id_key = evidence_key(row, "id")
+        url_key = evidence_key(row, "source_url")
+        if id_key in seen_ids or url_key in seen_urls:
             continue
-        if in_front and line == "---":
-            for key, value in updates.items():
-                if key not in found:
-                    output.append(f"{key}: {dump_inline_scalar(value)}")
-            in_front = False
-            output.append(line)
-            continue
-        if in_front and ":" in line and not line.startswith((" ", "-")):
-            key = line.split(":", 1)[0]
-            if key in updates:
-                output.append(f"{key}: {dump_inline_scalar(updates[key])}")
-                found.add(key)
-                continue
-        output.append(line)
-    return "\n".join(output) + "\n"
+        existing.append(row)
+        seen_ids.add(id_key)
+        seen_urls.add(url_key)
+        added += 1
+    if added:
+        write_evidence_file(EVIDENCE_PATH, existing)
+    return added, len(existing), existing
 
 
-def update_obs_record(count: int, captured_at: str) -> bool:
-    if not OBS_32_1_2_RECORD.exists():
+def counted_evidence_count(rows: list[dict[str, Any]], version: str) -> int:
+    return sum(
+        1
+        for row in rows
+        if str(row.get("product_id") or "").strip() == PRODUCT_ID
+        and str(row.get("update_version") or "").strip() == version
+        and row.get("counted") is not False
+    )
+
+
+def front_matter_parts(path: Path) -> tuple[dict[str, Any], str]:
+    text = path.read_text(encoding="utf-8")
+    if not text.startswith("---"):
+        return {}, text
+    match = re.match(r"^---\r?\n(.*?)\r?\n---\r?\n?(.*)$", text, flags=re.S)
+    if not match:
+        return {}, text
+    data = yaml.safe_load(match.group(1)) or {}
+    return (data if isinstance(data, dict) else {}), match.group(2)
+
+
+def write_front_matter(path: Path, data: dict[str, Any], body: str) -> None:
+    front = yaml.safe_dump(data, sort_keys=False, allow_unicode=True, width=1000).strip()
+    path.write_text(f"---\n{front}\n---\n{body}", encoding="utf-8")
+
+
+def report_count(data: dict[str, Any]) -> int:
+    for key in ("confirmed_patch_specific_report_count", "update_report_count"):
+        value = data.get(key)
+        if value not in (None, ""):
+            try:
+                return int(value)
+            except (TypeError, ValueError):
+                return 0
+    return 0
+
+
+def update_obs_record(record_path: Path, count: int, captured_at: str) -> bool:
+    data, body = front_matter_parts(record_path)
+    if not data:
         return False
-    text = OBS_32_1_2_RECORD.read_text(encoding="utf-8")
-    legacy_match = re.search(r"^update_report_count:\s*(\d+)\s*$", text, flags=re.M)
-    legacy_count = int(legacy_match.group(1)) if legacy_match else None
+    current_count = report_count(data)
     updates: dict[str, Any] = {
         "update_report_count": count,
         "confirmed_patch_specific_report_count": count,
@@ -335,14 +363,30 @@ def update_obs_record(count: int, captured_at: str) -> bool:
         "record_last_updated": captured_at,
         "evidence_scope": "github_issues_pilot",
     }
-    if legacy_count is not None and legacy_count != count:
-        updates["legacy_report_count"] = legacy_count
+    if current_count != count and data.get("legacy_report_count") in (None, ""):
+        updates["legacy_report_count"] = current_count
         updates["evidence_backfill_status"] = "legacy_manual_count_pending_source_rows"
-    new_text = replace_or_add_lines(text, updates)
-    if new_text == text:
+
+    changed = any(data.get(key) != value for key, value in updates.items())
+    if not changed:
         return False
-    OBS_32_1_2_RECORD.write_text(new_text, encoding="utf-8")
+    data.update(updates)
+    write_front_matter(record_path, data, body)
     return True
+
+
+def valid_update_version(value: Any) -> bool:
+    return bool(VERSION_RE.fullmatch(str(value or "").strip()))
+
+
+def active_obs_records() -> list[tuple[str, Path]]:
+    records: list[tuple[str, Path]] = []
+    for path in sorted(GENERATED_DIR.glob("*.md")):
+        data, _body = front_matter_parts(path)
+        version = str(data.get("update_version") or "").strip()
+        if data.get("update_entry") is True and data.get("product_id") == PRODUCT_ID and valid_update_version(version):
+            records.append((version, path))
+    return records
 
 
 def collect(version: str, since: str | None, max_pages: int) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
@@ -362,54 +406,16 @@ def collect(version: str, since: str | None, max_pages: int) -> tuple[list[dict[
     return accepted, rejected
 
 
-def write_evidence(rows: list[dict[str, Any]]) -> tuple[int, int]:
-    existing = parse_existing_rows(EVIDENCE_PATH)
-    seen_ids = {str(row.get("id")) for row in existing}
-    seen_urls = {str(row.get("source_url")) for row in existing}
-    added = 0
-    for row in rows:
-        if str(row.get("id")) in seen_ids or str(row.get("source_url")) in seen_urls:
-            continue
-        existing.append(row)
-        seen_ids.add(str(row.get("id")))
-        seen_urls.add(str(row.get("source_url")))
-        added += 1
-    write_evidence_file(EVIDENCE_PATH, existing)
-    return added, len(existing)
+def since_from_days(days: int | None) -> str | None:
+    if days is None:
+        return None
+    return (datetime.now(timezone.utc) - timedelta(days=max(0, days))).date().isoformat()
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser(description="Collect OBS Studio GitHub Issue evidence for one patch version.")
-    parser.add_argument("--version", required=True)
-    parser.add_argument("--dry-run", action="store_true")
-    parser.add_argument("--write", action="store_true")
-    parser.add_argument("--since", help="Optional YYYY-MM-DD issue creation lower bound.")
-    parser.add_argument("--max-pages", type=int, default=2)
-    args = parser.parse_args()
-
-    if args.version != "32.1.2":
-        print("This pilot collector is intentionally scoped to OBS Studio 32.1.2.", file=sys.stderr)
-        return 2
-    if args.dry_run and args.write:
-        print("Use either --dry-run or --write, not both.", file=sys.stderr)
-        return 2
-
-    try:
-        accepted, rejected = collect(args.version, args.since, args.max_pages)
-    except Exception as exc:
-        print(json.dumps({
-            "version": args.version,
-            "mode": "write" if args.write else "dry-run",
-            "status": "fetch_failed",
-            "error": str(exc),
-            "candidates_reviewed": 0,
-            "accepted_count": 0,
-            "rejected_count": 0,
-        }, indent=2, ensure_ascii=False))
-        return 1
-    result = {
-        "version": args.version,
-        "mode": "write" if args.write else "dry-run",
+def summarize(version: str, mode: str, accepted: list[dict[str, Any]], rejected: list[dict[str, Any]]) -> dict[str, Any]:
+    result: dict[str, Any] = {
+        "version": version,
+        "mode": mode,
         "candidates_reviewed": len(accepted) + len(rejected),
         "accepted_count": len(accepted),
         "rejected_count": len(rejected),
@@ -419,16 +425,94 @@ def main() -> int:
     for item in rejected:
         reason = item["reason"]
         result["rejection_reasons"][reason] = result["rejection_reasons"].get(reason, 0) + 1
+    return result
 
-    if args.write:
-        added, total = write_evidence(accepted)
-        changed = update_obs_record(len(accepted), utc_now())
+
+def collect_one(
+    version: str,
+    record_path: Path | None,
+    since: str | None,
+    max_pages: int,
+    write: bool,
+) -> tuple[int, dict[str, Any]]:
+    try:
+        accepted, rejected = collect(version, since, max_pages)
+    except Exception as exc:
+        return 1, {
+            "version": version,
+            "mode": "write" if write else "dry-run",
+            "status": "fetch_failed",
+            "error": str(exc),
+            "candidates_reviewed": 0,
+            "accepted_count": 0,
+            "rejected_count": 0,
+        }
+
+    result = summarize(version, "write" if write else "dry-run", accepted, rejected)
+    if write:
+        added, total, rows = write_evidence(accepted)
+        structured_count = counted_evidence_count(rows, version)
+        record_updated = False
+        if record_path and (added > 0 or record_needs_count_update(record_path, structured_count)):
+            record_updated = update_obs_record(record_path, structured_count, utc_now())
         result["evidence_rows_added"] = added
         result["evidence_rows_total"] = total
-        result["obs_record_updated"] = changed
+        result["structured_count_for_version"] = structured_count
+        result["obs_record_updated"] = record_updated
+    return 0, result
 
-    print(json.dumps(result, indent=2, ensure_ascii=False))
-    return 0
+
+def record_needs_count_update(record_path: Path, count: int) -> bool:
+    data, _body = front_matter_parts(record_path)
+    if not data:
+        return False
+    return report_count(data) != count
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Collect OBS Studio GitHub Issue evidence for patch versions.")
+    target = parser.add_mutually_exclusive_group(required=True)
+    target.add_argument("--version", help="OBS Studio update_version to collect.")
+    target.add_argument("--all-active-obs", action="store_true", help="Collect all generated OBS update records with valid versions.")
+    mode = parser.add_mutually_exclusive_group()
+    mode.add_argument("--dry-run", action="store_true")
+    mode.add_argument("--write", action="store_true")
+    parser.add_argument("--since", help="Optional YYYY-MM-DD issue creation lower bound.")
+    parser.add_argument("--since-days", type=int, help="Optional issue creation lower bound relative to today.")
+    parser.add_argument("--max-pages", type=int, default=2)
+    args = parser.parse_args()
+
+    write = bool(args.write)
+    since = args.since or since_from_days(args.since_days)
+
+    if args.version:
+        version = str(args.version).strip()
+        if not valid_update_version(version):
+            print(f"Invalid OBS update_version: {version}", file=sys.stderr)
+            return 2
+        matching_records = [item for item in active_obs_records() if item[0] == version]
+        record_path = matching_records[0][1] if matching_records else None
+        status, result = collect_one(version, record_path, since, args.max_pages, write)
+        print(json.dumps(result, indent=2, ensure_ascii=False))
+        return status
+
+    records = active_obs_records()
+    results: list[dict[str, Any]] = []
+    status = 0
+    for version, record_path in records:
+        item_status, result = collect_one(version, record_path, since, args.max_pages, write)
+        status = max(status, item_status)
+        result["record_path"] = str(record_path.relative_to(ROOT))
+        results.append(result)
+
+    print(json.dumps({
+        "mode": "write" if write else "dry-run",
+        "since": since,
+        "max_pages": args.max_pages,
+        "records_scanned": len(records),
+        "results": results,
+    }, indent=2, ensure_ascii=False))
+    return status
 
 
 if __name__ == "__main__":

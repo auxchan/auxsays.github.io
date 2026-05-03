@@ -1,0 +1,60 @@
+name: OBS Evidence Collection
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 * * * *'
+
+permissions:
+  contents: write
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r auxsays/scripts/requirements-ingest.txt
+
+      - name: Collect OBS evidence
+        run: python auxsays/scripts/collect_obs_reports.py --all-active-obs --since-days 45 --max-pages 5 --write
+
+      - name: Build consensus status
+        run: python auxsays/scripts/build_consensus_from_evidence.py
+
+      - name: QA patch records
+        run: python auxsays/scripts/qa_patch_records.py
+
+      - name: Audit consensus evidence
+        run: python auxsays/scripts/audit_consensus_evidence.py
+
+      - name: Remove transient validation output
+        run: |
+          rm -rf auxsays/_site node_modules .jekyll-cache
+          find . -type d -name __pycache__ -prune -exec rm -rf {} +
+          find . -type f -name '*.pyc' -delete
+          rm -f auxsays/_data/source_health.yml
+          rm -f auxsays/_data/qa_status.json
+          rm -f auxsays/_data/consensus_status.json
+          rm -f auxsays/_data/patch_ingest_state.json
+
+      - name: Commit material OBS evidence changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add auxsays/_data/consensus_evidence.yml auxsays/updates/generated/*obs-studio*.md
+          if git diff --cached --quiet; then
+            echo "No material OBS evidence changes to commit."
+            exit 0
+          fi
+          git commit -m "Update OBS evidence collection"
+          git push
