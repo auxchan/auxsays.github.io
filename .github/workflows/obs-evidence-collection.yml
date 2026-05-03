@@ -7,12 +7,14 @@ on:
 
 permissions:
   contents: write
+  actions: write
 
 jobs:
   collect:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ github.token }}
+      GH_TOKEN: ${{ github.token }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -48,13 +50,20 @@ jobs:
           rm -f auxsays/_data/patch_ingest_state.json
 
       - name: Commit material OBS evidence changes
+        id: commit
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git add auxsays/_data/consensus_evidence.yml auxsays/updates/generated/*obs-studio*.md
           if git diff --cached --quiet; then
             echo "No material OBS evidence changes to commit."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
             exit 0
           fi
           git commit -m "Update OBS evidence collection"
           git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Trigger site deploy
+        if: ${{ steps.commit.outputs.changed == 'true' }}
+        run: gh workflow run pages.yml --ref main
