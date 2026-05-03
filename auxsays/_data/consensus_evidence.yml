@@ -288,3 +288,801 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13364
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13364
+  parent_title: OBS crash when trying to project a source
+  report_title: OBS crash when trying to project a source
+  report_text_excerpt: '### Operating System Info Other ### Other OS Arch linux ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/lY9QzCBO8dz7z0Bc ### OBS Studio Crash Log URL https://obsproject.com/logs/lY9QzCBO8dz7z'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: linux
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13292
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13292
+  parent_title: Severe frame pacing issues when recording screen.
+  report_title: Severe frame pacing issues when recording screen.
+  report_text_excerpt: '### Operating System Info Fedora Linux 43 ### OBS Studio Version 32.1.1 & 32.1.0 Flatpak ### Expected Behavior When recording a 60 Hz screen at 60 fps, the recorded video should have every frame that was shown on the screen. ### Current Behavior The recor'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: linux
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13318
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13318
+  parent_title: 'Crash after selecting input source  Cannot create EGLImage: Arguments are inconsistent'
+  report_title: 'Crash after selecting input source  Cannot create EGLImage: Arguments are inconsistent'
+  report_text_excerpt: '### Operating System Info Other ### Other OS NixOS ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/R9I4mVnxYYFpxqa0 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Captu'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture regression
+  workflow_area: screen/window capture
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13309
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13309
+  parent_title: OBS Studio crash when selecting IPV6 and binding to IPV4 address
+  report_title: OBS Studio crash when selecting IPV6 and binding to IPV4 address
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/73aOOS68svJxzm1O ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/JzVbK'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13278
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13278
+  parent_title: OBS Dock size issue
+  report_title: OBS Dock size issue
+  report_text_excerpt: 'Operating System Info Other ### Other OS Arch Linux and Windows 10 ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/4ObGBvYPJcyxcWwS ### OBS Studio Crash Log URL _No response_ ### Expected Behavior OBS r'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13293
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13293
+  parent_title: Docks not saving correctly with Custom output Enabled
+  report_title: Docks not saving correctly with Custom output Enabled
+  report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/iQkGhltNEagedPGO ### OBS Studio Crash Log URL _No response_ ### Expected Behavior When'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13317
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13317
+  parent_title: OBS crash when using a media source to play back a file OBS recorded
+  report_title: OBS crash when using a media source to play back a file OBS recorded
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/vdtRJEmAbVCt7w7N ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Not t'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13326
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13326
+  parent_title: Audio does not fade in correctly on scene transition when using Game Capture with Capture Audio (BETA)
+  report_title: Audio does not fade in correctly on scene transition when using Game Capture with Capture Audio (BETA)
+  report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/kHddVHNLXELQdUDo ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Audio'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13348
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13348
+  parent_title: OBS crashes on startup (possibly browser source related)
+  report_title: OBS crashes on startup (possibly browser source related)
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) 32.1.0/31.1.2/30.1 ### OBS Studio Log URL https://obsproject.com/logs/cQLBL0HVvgEocm3n ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13338
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13338
+  parent_title: 32.1.1 crashes, I haven't updated because of it
+  report_title: 32.1.1 crashes, I haven't updated because of it
+  report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/moIUO6E4GAtQwyzf ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/5YeG3'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13286
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13286
+  parent_title: 'OBS Settings: Output tab UI bug'
+  report_title: 'OBS Settings: Output tab UI bug'
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/DsBQDrRHb574PneE ### OBS Studio Crash Log URL _No response_ ### Expected Behavior When'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13297
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13297
+  parent_title: Audio Mixer preview doesn't show audio sources from groups or nested scenes
+  report_title: Audio Mixer preview doesn't show audio sources from groups or nested scenes
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/vRamE78edFwumr17 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Music'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13337
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13337
+  parent_title: Can't capture DLSS FG frames
+  report_title: Can't capture DLSS FG frames
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/LsUFhNVOqVOOZnHA ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I exp'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13316
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13316
+  parent_title: VAAPI crashes at recording on Ubuntu
+  report_title: VAAPI crashes at recording on Ubuntu
+  report_text_excerpt: '### Operating System Info Ubuntu 24.04 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/DHs0eyObzTUgI5Dx ### OBS Studio Crash Log URL _No response_ ### Expected Behavior GPU r'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: linux
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13355
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13355
+  parent_title: Great job on OBS, I just wasted a bunch of time recording into MP4 and all my audio was lost, please don't make the settings change on update thanks
+  report_title: Great job on OBS, I just wasted a bunch of time recording into MP4 and all my audio was lost, please don't make the settings change on update thanks
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL idk ### OBS Studio Crash Log URL _No response_ ### Expected Behavior update doesn''t change settings ### Current Beh'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13362
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13362
+  parent_title: 'Regression: Screen Capture completely broken on macOS Tahoe 26.4.1 (works on 32.0.4, broken on 32.1.0+)'
+  report_title: 'Regression: Screen Capture completely broken on macOS Tahoe 26.4.1 (works on 32.0.4, broken on 32.1.0+)'
+  report_text_excerpt: '### Operating System Info macOS 26 ### OBS Studio Version 32.1.0, 32.1.1, 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/bkXueL3wzHiPWPrw ### OBS Studio Crash Log URL ### Expected Behavior Screen cont'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture regression
+  workflow_area: screen/window capture
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13304
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13304
+  parent_title: Filter values not visible
+  report_title: Filter values not visible
+  report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/uz5fwHxJpYn6MC8B ### OBS Studio Crash Log URL _No response_ ### Expected Behavior <img'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13313
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13313
+  parent_title: '[Bug] Wayland/EGL: eglSwapInterval(0) called every frame causes flickering on NVIDIA; adapter selection silently ignored'
+  report_title: '[Bug] Wayland/EGL: eglSwapInterval(0) called every frame causes flickering on NVIDIA; adapter selection silently ignored'
+  report_text_excerpt: 'y/display) + NVIDIA A2000 (secondary) - **Driver**: NVIDIA proprietary - **OBS Version**: 32.1.1 - **Installed via**: PPA (obsproject/obs-studio) ## Bug 1: `eglSwapInterval(0)` called on every frame presentation **File**: `libobs-opengl/gl-wayland-egl.c`, lines 331–341 ```c stati'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13340
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13340
+  parent_title: starting OBS (flatpak) spawns numerous small windows
+  report_title: starting OBS (flatpak) spawns numerous small windows
+  report_text_excerpt: '### Operating System Info Other ### Other OS Ubuntu 22.04 ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) flatpak ### OBS Studio Log URL https://obsproject.com/logs/9yOG12btf0oCgSVg ### OBS Studio Crash Log URL _No response_ ### Expected Behavior When I star'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13332
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13332
+  parent_title: OBS forum cannot log in using github account.
+  report_title: OBS forum cannot log in using github account.
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL Unable to provide ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Successfully logged in to your g'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13331
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13331
+  parent_title: Twitch chat and twitch account login won't be saved after restart
+  report_title: Twitch chat and twitch account login won't be saved after restart
+  report_text_excerpt: '### Operating System Info macOS 15 ### Other OS 15.6.1 ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/n5UeOoYV7OWKrLTl ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I exp'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: macos
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13361
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13361
+  parent_title: elgato 4k x capture modes other than mjpeg colors are incorrect
+  report_title: elgato 4k x capture modes other than mjpeg colors are incorrect
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/Ad2PAPFHAXsuOhYv ### OBS Studio Crash Log URL _No response_ ### Expected Behavior elgat'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13287
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13287
+  parent_title: Warning about "meterThickness" in Classic theme
+  report_title: Warning about "meterThickness" in Classic theme
+  report_text_excerpt: '### Operating System Info Other ### Other OS Arch Linux ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/SlowmWBgu9kZrcLE ### OBS Studio Crash Log URL _No response_ ### Expected Behavior No wa'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: linux
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13352
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13352
+  parent_title: mac-capture crashes OBS on macOS 26.0 beta — mach_vm_allocate_kernel failed in obs_get_source_properties
+  report_title: mac-capture crashes OBS on macOS 26.0 beta — mach_vm_allocate_kernel failed in obs_get_source_properties
+  report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/oWBUBhapSTtoVB7Q ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/0uRLD'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture regression
+  workflow_area: screen/window capture
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13343
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13343
+  parent_title: Global System Audio Issue only while OBS Studio is open
+  report_title: Global System Audio Issue only while OBS Studio is open
+  report_text_excerpt: '### Operating System Info Windows 11 ### OBS Studio Version 32.1.1 ### OBS Studio Log URL https://obsproject.com/logs/znJAYXCenrV9t1OM ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I expected my audio to remain the same when I open'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13298
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13298
+  parent_title: OBS Camera black screen but works fine in Windows Camera app
+  report_title: OBS Camera black screen but works fine in Windows Camera app
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/nXdqqteOIXPliAv4 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior camer'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture regression
+  workflow_area: screen/window capture
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13310
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13310
+  parent_title: Opus is not an option for streaming
+  report_title: Opus is not an option for streaming
+  report_text_excerpt: '### Operating System Info Other ### Other OS Fedora 43 ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/KUxrzEjqvmtOmDwg ### OBS Studio Crash Log URL _No response_ ### Expected Behavior https'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13324
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13324
+  parent_title: Plugin Load Error - AJA and Log upload failed
+  report_title: Plugin Load Error - AJA and Log upload failed
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS Windows 11 Pro ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) OBS Studio ### OBS Studio Log URL null ### OBS Studio Crash Log URL null ### Expected Behavior There is an issue related to plugin initialization and lo'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13345
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13345
+  parent_title: Monitors go black and computer freezes when editing source properties
+  report_title: Monitors go black and computer freezes when editing source properties
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/Bz4VhItEW3qM2BqQ ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I exp'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13334
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13334
+  parent_title: Pause/Unpause hotkeys actually start/stop recording
+  report_title: Pause/Unpause hotkeys actually start/stop recording
+  report_text_excerpt: 'r OS This is windows 10 pro, enrolled for extended support updates ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/oPspfNII7e490FNB ### OBS Studio Crash Log URL _No response_ ### Expected Behavior This'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: hotkey regression
+  workflow_area: keyboard shortcuts
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13336
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13336
+  parent_title: Display Capture suddenly started showing a black screen
+  report_title: Display Capture suddenly started showing a black screen
+  report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/Csejqh1Q87ddiv2D ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Recor'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture regression
+  workflow_area: screen/window capture
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13329
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13329
+  parent_title: Display Preview Not Matching Display Name
+  report_title: Display Preview Not Matching Display Name
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/IkYJmb67LVilBTXA ### OBS Studio Crash Log URL _No response_ ### Expected Behavior When'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13289
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13289
+  parent_title: 'Question: What is the practical meaning of infinite nesting recursion when using Display Capture to capture the screen containing OBS itself?'
+  report_title: 'Question: What is the practical meaning of infinite nesting recursion when using Display Capture to capture the screen containing OBS itself?'
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/bL5o3HBwXe5h662s ### OBS Studio Crash Log URL _No response_ ### Expected Behavior When'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13358
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13358
+  parent_title: 'VLC Source: Shuffle/Random option does not re-randomize or update from disk on scene change'
+  report_title: 'VLC Source: Shuffle/Random option does not re-randomize or update from disk on scene change'
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/P0oC6rpNSYNbamrI ### OBS Studio Crash Log URL _No response_ ### Expected Behavior i wan'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13300
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13300
+  parent_title: Scene list type-to-select is laggy since 32.1.0 and no longer matches multi-letter input correctly
+  report_title: Scene list type-to-select is laggy since 32.1.0 and no longer matches multi-letter input correctly
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/mUSROvuyclO5F2hX ### OBS Studio Crash Log URL _No response_ ### Expected Behavior When'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13319
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13319
+  parent_title: 'VLC 4.0: error: ‘libvlc_Ended’ undeclared (first use in this function); did you mean ‘libvlc_new’?'
+  report_title: 'VLC 4.0: error: ‘libvlc_Ended’ undeclared (first use in this function); did you mean ‘libvlc_new’?'
+  report_text_excerpt: '### Operating System Info Other ### Other OS gentoo ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://paste.gentoo.zip/aXs7zX4l ### OBS Studio Crash Log URL _No response_ ### Expected Behavior It seems some fu'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13291
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13291
+  parent_title: Streaming stops after changing monetization settings on YouTube (OBS shows streaming, but no video received)
+  report_title: Streaming stops after changing monetization settings on YouTube (OBS shows streaming, but no video received)
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/HTwlb85skfT2Pa74 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior ## Ex'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture regression
+  workflow_area: screen/window capture
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13360
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13360
+  parent_title: 'Feature request: refresh API / hotkey for Custom Browser Docks (parity with browser sources)'
+  report_title: 'Feature request: refresh API / hotkey for Custom Browser Docks (parity with browser sources)'
+  report_text_excerpt: 'er sources, but no UI or API path exposes a reload. This was confirmed against OBS Studio 32.1.1 on macOS — issue persists in the current release. ## Use case Streamers using third-party web tools (Restream channels/titles/chat dock, StreamElements panels, custom dashboards, Twit'
+  captured_at: '2026-05-03T02:44:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: hotkey regression
+  workflow_area: keyboard shortcuts
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
