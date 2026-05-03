@@ -34,8 +34,8 @@ official_source_classification_note: Blackmagic's source is a vendor release pag
   AUXSAYS links it as the official source, but has not captured a full structured patch-note body from that page.
 patch_file_size_status: not_provided_by_source
 release_channel_label: Public beta
-quick_verdict: WAIT for production systems. DaVinci Resolve 21 Public Beta 1 is a beta build; test only in non-critical
-  projects unless you specifically need the Resolve 21 feature set and can tolerate beta risk.
+quick_verdict: WAIT for production systems. DaVinci Resolve 21 Public Beta 1 is a beta build; test only in non-critical projects
+  unless you specifically need the Resolve 21 feature set and can tolerate beta risk.
 update_decision_label: WAIT for production systems
 update_decision_body: Public beta build. Treat this as a testing release for editors and color workflows, not a clean default
   upgrade for active client work.
@@ -44,8 +44,8 @@ official_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and 
   production build. The key user decision is not simply whether the release is new, but whether the new Resolve 21 feature
   set is worth testing in a non-critical environment. For production work, the practical read is to keep existing stable projects
   on a known-good version unless a specific Resolve 21 feature is needed and the project can tolerate beta risk.
-consensus_report: The verified-report set remains moderate because this is a beta release. Early interest is useful for testing the
-  new version path, but production users should separate feature exploration from mission-critical work. Confirmed patch-specific
+consensus_report: The verified-report set remains moderate because this is a beta release. Early interest is useful for testing
+  the new version path, but production users should separate feature exploration from mission-critical work. Confirmed patch-specific
   reports assessed are not strong enough yet to call this either safe-positive or failure-negative.
 complaint_themes:
 - theme: Beta setup questions
@@ -89,4 +89,14 @@ confirmed_patch_specific_report_count: 7
 known_issues_present: true
 official_checksums_body: ''
 intelligence_stage: pilot
+source_last_checked: '2026-05-03T00:32:16Z'
+official_body_last_checked: '2026-05-03T00:32:16Z'
+primary_official_source: https://www.blackmagicdesign.com/media/release/20260414-01
+fallback_official_sources: []
+official_source_attempts:
+- at: '2026-05-03T00:32:16Z'
+  url: https://www.blackmagicdesign.com/media/release/20260414-01
+  status: official-source-parser-failed
+  body_captured: false
+  checksums_captured: false
 ---
