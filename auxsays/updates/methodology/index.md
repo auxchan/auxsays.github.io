@@ -51,6 +51,7 @@ permalink: /updates/methodology/
       <h2>Consensus audit</h2>
       <p>The consensus audit checks whether generated patch pages that show confirmed reports are backed by structured evidence rows. It can identify stale or manually encoded counts, but it does not collect new reports from public communities.</p>
       <p><strong>Evidence checked</strong> is separate from official-source checks. It should only move when structured community/report evidence is reviewed or collected. Live consensus is not active unless a real evidence collector is running.</p>
+      <p>AUXSAYS may run narrow manual pilot collectors, such as a GitHub Issues pilot for a single OBS Studio patch. Those pilots are structured evidence collection, not live consensus.</p>
     </article>
 
     <article class="methodology-card">

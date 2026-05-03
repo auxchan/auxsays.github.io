@@ -27,8 +27,7 @@ evidence:
   source_url: https://community.adobe.com/bug-reports-728/since-the-update-i-ve-been-experiencing-instability-and-slowdown-issues-in-the-interface-premiere-26-2-build-65-1558015
   parent_title: Instability and slowdown, Premiere 26.2 Build 65
   report_title: Instability and slowdown, Premiere 26.2 Build 65
-  report_text_excerpt: '26.2 Build 65: Instability, UI slowdown, and timeline/interface hangs. Counted as patch-specific risk
-    evidence.'
+  report_text_excerpt: '26.2 Build 65: Instability, UI slowdown, and timeline/interface hangs. Counted as patch-specific risk evidence.'
   captured_at: '2026-05-01T00:00:00Z'
   patch_version_matched: true
   counted: true
@@ -47,8 +46,7 @@ evidence:
   source_url: https://community.adobe.com/bug-reports-728/premiere-pro-26-2-ui-lag-and-freezing-resolved-by-reverting-to-26-0-1-1558514
   parent_title: Premiere Pro 26.2 UI Lag and Freezing Resolved by Reverting to 26.0.1
   report_title: Premiere Pro 26.2 UI Lag and Freezing Resolved by Reverting to 26.0.1
-  report_text_excerpt: '26.2: Severe UI lag and freezing. Reverting to 26.0.1 resolved it; Adobe staff suggested testing beta
-    26.3.0 build 51 or later.'
+  report_text_excerpt: '26.2: Severe UI lag and freezing. Reverting to 26.0.1 resolved it; Adobe staff suggested testing beta 26.3.0 build 51 or later.'
   captured_at: '2026-05-01T00:00:00Z'
   patch_version_matched: true
   counted: true
@@ -58,4 +56,235 @@ evidence:
   issue_theme: ui lag and freezing
   workflow_area: editing interface
   platform: unknown
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13367
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13367
+  parent_title: Crash if service restrictions change resolution and the user rejects changes
+  report_title: Crash if service restrictions change resolution and the user rejects changes
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/crashes/0ivKCCEPMbyCs3IB ### OBS Studio Crash Log URL _No response_ ### Expected Behavi'
+  captured_at: '2026-05-03T01:00:10Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash / stability
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13389
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13389
+  parent_title: Audio Mixer source name truncated too short in horizontal mode
+  report_title: Audio Mixer source name truncated too short in horizontal mode
+  report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/OZOMXweAd6RE4SBc ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I wou'
+  captured_at: '2026-05-03T01:00:10Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13350
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13350
+  parent_title: Black square behind mouse cursor with Rec. 2100 colour spaces
+  report_title: Black square behind mouse cursor with Rec. 2100 colour spaces
+  report_text_excerpt: 'ther ### Other OS Manjaro KDE ### OBS Studio Version Other ### OBS Studio Version (Other) 32.1.2 ### OBS Studio Log URL https://obsproject.com/logs/ML4ON1rbulbtj1M3 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The mouse cursor should not have a black square su'
+  captured_at: '2026-05-03T01:00:10Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: visual capture artifact
+  workflow_area: display capture / HDR workflow
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13366
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13366
+  parent_title: Rescale output can be set to bad values and then prevents outputs from stopping
+  report_title: Rescale output can be set to bad values and then prevents outputs from stopping
+  report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/a072h1wEtjso9peK ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Able'
+  captured_at: '2026-05-03T01:00:10Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: output configuration regression
+  workflow_area: output settings
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13377
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13377
+  parent_title: '[macOS 26 Tahoe] OBS crashes on quit when Elgato Camera Hub is running simultaneously'
+  report_title: '[macOS 26 Tahoe] OBS crashes on quit when Elgato Camera Hub is running simultaneously'
+  report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/jKP2slf660HgklAF ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/bMzRA'
+  captured_at: '2026-05-03T01:00:10Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash / stability
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13385
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13385
+  parent_title: Hotkey using "Alt + C" or "Alt + O" is unable to be set in UI
+  report_title: Hotkey using "Alt + C" or "Alt + O" is unable to be set in UI
+  report_text_excerpt: '### Operating System Info Other ### Other OS Arch Linux ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/SuXX4d1A7AHSIQxE ### OBS Studio Crash Log URL _No response_ ### Expected Behavior You s'
+  captured_at: '2026-05-03T01:00:10Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: hotkey regression
+  workflow_area: keyboard shortcuts
+  platform: linux
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13373
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13373
+  parent_title: xcomposite shows black screen in 32.1.2 flatpak
+  report_title: xcomposite shows black screen in 32.1.2 flatpak
+  report_text_excerpt: 'Operating System Info Ubuntu 24.04 ### Other OS Cinnamon Mint 22.1 ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/5OaNbsBrCPCQK2zt ### OBS Studio Crash Log URL _No response_ ### Expected Behavior xcomp'
+  captured_at: '2026-05-03T01:00:10Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture regression
+  workflow_area: screen/window capture
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13362
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13362
+  parent_title: 'Regression: Screen Capture completely broken on macOS Tahoe 26.4.1 (works on 32.0.4, broken on 32.1.0+)'
+  report_title: 'Regression: Screen Capture completely broken on macOS Tahoe 26.4.1 (works on 32.0.4, broken on 32.1.0+)'
+  report_text_excerpt: '### Operating System Info macOS 26 ### OBS Studio Version 32.1.0, 32.1.1, 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/bkXueL3wzHiPWPrw ### OBS Studio Crash Log URL ### Expected Behavior Screen content shou'
+  captured_at: '2026-05-03T01:00:10Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture regression
+  workflow_area: screen/window capture
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13370
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13370
+  parent_title: Multiple Scenes Causes Web Camera to Disappear
+  report_title: Multiple Scenes Causes Web Camera to Disappear
+  report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/fIRfgb66zfGsN6T0 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I''ve'
+  captured_at: '2026-05-03T01:00:10Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13353
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13353
+  parent_title: PipeWire - "Remember this selection" always uses default "primary" monitor in Wayland
+  report_title: PipeWire - "Remember this selection" always uses default "primary" monitor in Wayland
+  report_text_excerpt: 'her ### Other OS Ubuntu 25.10 ### OBS Studio Version Other ### OBS Studio Version (Other) 32.1.2 (flatpak) ### OBS Studio Log URL https://obsproject.com/logs/iUBLOcxg5igVBxMo ### OBS Studio Crash Log URL _No response_ ### Expected Behavior - In the log above, I have set "Remember'
+  captured_at: '2026-05-03T01:00:10Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture selection regression
+  workflow_area: screen/window capture
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13388
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13388
+  parent_title: v4l2 input sets incorrect framerate
+  report_title: v4l2 input sets incorrect framerate
+  report_text_excerpt: 'ion Other ### OBS Studio Version (Other) 32.1.0 (latest distro package), {also present in 32.1.2 Flatpak}; v4l2 plugin latest from git (optionally w/ patch below) ### OBS Studio Log URL https://obsproject.com/logs/d9PdKsvIEWLOYDTt ### OBS Studio Crash Log URL _No response_ ### Ex'
+  captured_at: '2026-05-03T01:32:12Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: linux
+  severity: high
+  sentiment: negative
   source_weight: 1
