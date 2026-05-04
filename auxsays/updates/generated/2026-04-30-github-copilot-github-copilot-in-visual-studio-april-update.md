@@ -110,8 +110,8 @@ official_patch_notes_body: "The April 2026 update to Visual Studio centers on ag
   \ on The GitHub Blog ."
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-source_last_checked: '2026-05-04T09:08:59Z'
-official_body_last_checked: '2026-05-04T09:08:59Z'
+source_last_checked: '2026-05-04T18:03:07Z'
+official_body_last_checked: '2026-05-04T18:03:07Z'
 primary_official_source: https://github.blog/changelog/
 fallback_official_sources:
 - https://github.blog/changelog/label/copilot/
@@ -132,6 +132,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-05-04T09:08:59Z'
+  url: https://github.blog/changelog/2026-04-30-github-copilot-in-visual-studio-april-update
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-05-04T18:03:07Z'
   url: https://github.blog/changelog/2026-04-30-github-copilot-in-visual-studio-april-update
   status: captured-from-rss-feed
   body_captured: true
