@@ -3,7 +3,7 @@
   "last_results": [
     {
       "adapter": "rss_feed",
-      "duration_ms": 913,
+      "duration_ms": 830,
       "fetched": 2,
       "product_id": "figma",
       "refreshed": [
@@ -24,7 +24,7 @@
     },
     {
       "adapter": "adobe_release_notes",
-      "duration_ms": 25819,
+      "duration_ms": 26051,
       "fetched": 1,
       "product_id": "adobe-premiere-pro",
       "refreshed": [
@@ -40,7 +40,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 952,
+      "duration_ms": 948,
       "fetched": 2,
       "product_id": "obs-studio",
       "refreshed": [
@@ -61,7 +61,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 822,
+      "duration_ms": 667,
       "fetched": 2,
       "product_id": "comfyui",
       "refreshed": [
@@ -82,7 +82,7 @@
     },
     {
       "adapter": "rss_feed",
-      "duration_ms": 330,
+      "duration_ms": 508,
       "fetched": 2,
       "product_id": "github",
       "refreshed": [
@@ -103,7 +103,7 @@
     },
     {
       "adapter": "html_changelog",
-      "duration_ms": 43,
+      "duration_ms": 169,
       "fetched": 0,
       "product_id": "netlify",
       "refreshed": [],
@@ -112,8 +112,8 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-05-03T20:08:45Z",
-  "last_run_started_at": "2026-05-03T20:08:16Z",
+  "last_run_finished_at": "2026-05-04T09:08:59Z",
+  "last_run_started_at": "2026-05-04T09:08:30Z",
   "sources": {
     "adobe-after-effects": {
       "consecutive_failures": 2,
@@ -178,7 +178,7 @@
     "adobe-premiere-pro": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_release_notes",
-      "last_checked_at": "2026-05-03T20:08:17Z",
+      "last_checked_at": "2026-05-04T09:08:31Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -186,8 +186,8 @@
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 25819,
-      "last_success_at": "2026-05-03T20:08:17Z",
+      "last_run_duration_ms": 26051,
+      "last_success_at": "2026-05-04T09:08:31Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "adobe:adobe-premiere-pro:26.2:9fa3e1e53c0b275d"
@@ -197,7 +197,7 @@
     "comfyui": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-05-03T20:08:43Z",
+      "last_checked_at": "2026-05-04T09:08:58Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -205,8 +205,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 822,
-      "last_success_at": "2026-05-03T20:08:43Z",
+      "last_run_duration_ms": 667,
+      "last_success_at": "2026-05-04T09:08:58Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:comfyui:310487464",
@@ -217,7 +217,7 @@
     "figma": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-05-03T20:08:16Z",
+      "last_checked_at": "2026-05-04T09:08:30Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -225,8 +225,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 913,
-      "last_success_at": "2026-05-03T20:08:16Z",
+      "last_run_duration_ms": 830,
+      "last_success_at": "2026-05-04T09:08:30Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:figma:54fa1eaf-a38e-4416-80b8-bf063515723e",
@@ -243,7 +243,7 @@
     "github": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-05-03T20:08:44Z",
+      "last_checked_at": "2026-05-04T09:08:59Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -251,8 +251,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 330,
-      "last_success_at": "2026-05-03T20:08:44Z",
+      "last_run_duration_ms": 508,
+      "last_success_at": "2026-05-04T09:08:59Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:github:https://github.blog/changelog/2026-05-01-upcoming-deprecation-of-gpt-5-2-and-gpt-5-2-codex",
@@ -265,7 +265,7 @@
     "netlify": {
       "consecutive_failures": 0,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-05-03T20:08:45Z",
+      "last_checked_at": "2026-05-04T09:08:59Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -273,15 +273,15 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 43,
-      "last_success_at": "2026-05-03T20:08:45Z",
+      "last_run_duration_ms": 169,
+      "last_success_at": "2026-05-04T09:08:59Z",
       "previous_consecutive_failures": 0,
       "status": "degraded"
     },
     "obs-studio": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-05-03T20:08:42Z",
+      "last_checked_at": "2026-05-04T09:08:57Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -289,8 +289,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 952,
-      "last_success_at": "2026-05-03T20:08:42Z",
+      "last_run_duration_ms": 948,
+      "last_success_at": "2026-05-04T09:08:57Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:obs-studio:304830335",
