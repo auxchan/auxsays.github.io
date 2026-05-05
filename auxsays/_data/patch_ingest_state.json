@@ -3,7 +3,7 @@
   "last_results": [
     {
       "adapter": "rss_feed",
-      "duration_ms": 1643,
+      "duration_ms": 3417,
       "fetched": 2,
       "product_id": "figma",
       "refreshed": [
@@ -24,7 +24,7 @@
     },
     {
       "adapter": "adobe_release_notes",
-      "duration_ms": 25864,
+      "duration_ms": 25903,
       "fetched": 1,
       "product_id": "adobe-premiere-pro",
       "refreshed": [
@@ -40,7 +40,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 563,
+      "duration_ms": 983,
       "fetched": 2,
       "product_id": "obs-studio",
       "refreshed": [
@@ -61,7 +61,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 470,
+      "duration_ms": 757,
       "fetched": 2,
       "product_id": "comfyui",
       "refreshed": [
@@ -82,28 +82,20 @@
     },
     {
       "adapter": "rss_feed",
-      "duration_ms": 307,
+      "duration_ms": 569,
       "fetched": 2,
       "product_id": "github",
-      "refreshed": [
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-05-01-github-copilot-upcoming-deprecation-of-gpt-5-2-and-gpt-5-2-codex.md",
-          "record_id": "rss:github:https://github.blog/changelog/2026-05-01-upcoming-deprecation-of-gpt-5-2-and-gpt-5-2-codex"
-        },
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-04-30-github-copilot-github-copilot-in-visual-studio-april-update.md",
-          "record_id": "rss:github:https://github.blog/changelog/2026-04-28-github-copilot-in-visual-studio-april-update"
-        }
-      ],
+      "refreshed": [],
       "skipped": [],
       "status": "success",
-      "written": []
+      "written": [
+        "auxsays/updates/generated/2026-05-05-github-copilot-code-to-cloud-risk-visibility-with-microsoft-defender-for-cloud-is-now-generally-available.md",
+        "auxsays/updates/generated/2026-05-05-github-copilot-deprecation-notice-code-scanning-upload-field-will-be-removed-from-rate-limit-api-endpoint.md"
+      ]
     },
     {
       "adapter": "html_changelog",
-      "duration_ms": 182,
+      "duration_ms": 303,
       "fetched": 0,
       "product_id": "netlify",
       "refreshed": [],
@@ -112,8 +104,8 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-05-05T07:34:09Z",
-  "last_run_started_at": "2026-05-05T07:33:40Z",
+  "last_run_finished_at": "2026-05-05T17:09:55Z",
+  "last_run_started_at": "2026-05-05T17:09:23Z",
   "sources": {
     "adobe-after-effects": {
       "consecutive_failures": 2,
@@ -178,7 +170,7 @@
     "adobe-premiere-pro": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_release_notes",
-      "last_checked_at": "2026-05-05T07:33:41Z",
+      "last_checked_at": "2026-05-05T17:09:26Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -186,8 +178,8 @@
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 25864,
-      "last_success_at": "2026-05-05T07:33:41Z",
+      "last_run_duration_ms": 25903,
+      "last_success_at": "2026-05-05T17:09:26Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "adobe:adobe-premiere-pro:26.2:9fa3e1e53c0b275d"
@@ -197,7 +189,7 @@
     "comfyui": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-05-05T07:34:08Z",
+      "last_checked_at": "2026-05-05T17:09:53Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -205,8 +197,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 470,
-      "last_success_at": "2026-05-05T07:34:08Z",
+      "last_run_duration_ms": 757,
+      "last_success_at": "2026-05-05T17:09:53Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:comfyui:310487464",
@@ -217,7 +209,7 @@
     "figma": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-05-05T07:33:40Z",
+      "last_checked_at": "2026-05-05T17:09:23Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -225,8 +217,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 1643,
-      "last_success_at": "2026-05-05T07:33:40Z",
+      "last_run_duration_ms": 3417,
+      "last_success_at": "2026-05-05T17:09:23Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:figma:54fa1eaf-a38e-4416-80b8-bf063515723e",
@@ -243,7 +235,7 @@
     "github": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-05-05T07:34:08Z",
+      "last_checked_at": "2026-05-05T17:09:54Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -251,10 +243,12 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 307,
-      "last_success_at": "2026-05-05T07:34:08Z",
+      "last_run_duration_ms": 569,
+      "last_success_at": "2026-05-05T17:09:54Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "rss:github:https://github.blog/changelog/2026-05-05-deprecation-notice-code_scanning_upload-field-will-be-removed-from-rate_limit-api-endpoint",
+        "rss:github:https://github.blog/changelog/2026-05-05-code-to-cloud-risk-visibility-with-microsoft-defender-for-cloud-is-now-generally-available",
         "rss:github:https://github.blog/changelog/2026-05-01-upcoming-deprecation-of-gpt-5-2-and-gpt-5-2-codex",
         "rss:github:https://github.blog/changelog/2026-04-28-github-copilot-in-visual-studio-april-update",
         "rss:github:https://github.blog/changelog/2026-04-27-copilot-cloud-agent-starts-20-faster-with-actions-custom-images",
@@ -265,7 +259,7 @@
     "netlify": {
       "consecutive_failures": 0,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-05-05T07:34:08Z",
+      "last_checked_at": "2026-05-05T17:09:54Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -273,15 +267,15 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 182,
-      "last_success_at": "2026-05-05T07:34:08Z",
+      "last_run_duration_ms": 303,
+      "last_success_at": "2026-05-05T17:09:54Z",
       "previous_consecutive_failures": 0,
       "status": "degraded"
     },
     "obs-studio": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-05-05T07:34:07Z",
+      "last_checked_at": "2026-05-05T17:09:52Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -289,8 +283,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 563,
-      "last_success_at": "2026-05-05T07:34:07Z",
+      "last_run_duration_ms": 983,
+      "last_success_at": "2026-05-05T17:09:52Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:obs-studio:304830335",
