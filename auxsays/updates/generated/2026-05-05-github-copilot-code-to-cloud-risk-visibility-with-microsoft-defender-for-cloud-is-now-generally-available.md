@@ -18,8 +18,8 @@ update_version: Code-to-cloud risk visibility with Microsoft Defender for Cloud 
 update_logo_text: GIT
 update_published_at: '2026-05-05T14:24:24Z'
 update_last_checked: '2026-05-05T17:09:54Z'
-source_last_checked: '2026-05-05T17:09:54Z'
-official_body_last_checked: '2026-05-05T17:09:54Z'
+source_last_checked: '2026-05-05T21:45:07Z'
+official_body_last_checked: '2026-05-05T21:45:07Z'
 record_last_updated: '2026-05-05T17:09:54Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -93,6 +93,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-05-05T17:09:54Z'
+  url: https://github.blog/changelog/2026-05-05-code-to-cloud-risk-visibility-with-microsoft-defender-for-cloud-is-now-generally-available
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-05-05T21:45:07Z'
   url: https://github.blog/changelog/2026-05-05-code-to-cloud-risk-visibility-with-microsoft-defender-for-cloud-is-now-generally-available
   status: captured-from-rss-feed
   body_captured: true
