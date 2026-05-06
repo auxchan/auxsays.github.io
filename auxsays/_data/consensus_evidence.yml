@@ -1191,3 +1191,24 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13409
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13409
+  parent_title: Cannot bypass iCUE equalizer
+  report_title: Cannot bypass iCUE equalizer
+  report_text_excerpt: '11 ### Other OS _No response_ ### OBS Studio Version Other ### OBS Studio Version (Other) 32.1.1 ### OBS Studio Log URL https://obsproject.com/logs/lE3rqEHFBs46G1HW ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The "Audio Capture (BETA)" feature should bypass a'
+  captured_at: '2026-05-06T20:56:02Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
