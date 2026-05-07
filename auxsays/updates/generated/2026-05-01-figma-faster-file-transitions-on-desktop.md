@@ -66,17 +66,12 @@ official_patch_notes_body: Move between files in the Figma desktop app without t
   Links open where you already are, recent work is a search away, and what's next loads before you get there.
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-source_last_checked: '2026-05-06T21:47:50Z'
-official_body_last_checked: '2026-05-06T21:47:50Z'
+source_last_checked: '2026-05-07T18:12:49Z'
+official_body_last_checked: '2026-05-07T18:12:49Z'
 primary_official_source: https://www.figma.com/release-notes/
 fallback_official_sources:
 - https://forum.figma.com/product-updates-3
 official_source_attempts:
-- at: '2026-05-05T07:33:40Z'
-  url: https://www.figma.com/release-notes/?title=faster-file-transitions-on-desktop
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-05-05T17:09:23Z'
   url: https://www.figma.com/release-notes/?title=faster-file-transitions-on-desktop
   status: captured-from-rss-feed
@@ -93,6 +88,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-05-06T21:47:50Z'
+  url: https://www.figma.com/release-notes/?title=faster-file-transitions-on-desktop
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-05-07T18:12:49Z'
   url: https://www.figma.com/release-notes/?title=faster-file-transitions-on-desktop
   status: captured-from-rss-feed
   body_captured: true
