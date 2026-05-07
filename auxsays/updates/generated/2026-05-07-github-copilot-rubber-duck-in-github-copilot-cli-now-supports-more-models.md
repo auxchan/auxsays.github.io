@@ -17,8 +17,8 @@ update_version: Rubber Duck in GitHub Copilot CLI now supports more models
 update_logo_text: GIT
 update_published_at: '2026-05-07T14:49:28Z'
 update_last_checked: '2026-05-07T18:13:17Z'
-source_last_checked: '2026-05-07T18:13:17Z'
-official_body_last_checked: '2026-05-07T18:13:17Z'
+source_last_checked: '2026-05-07T21:37:56Z'
+official_body_last_checked: '2026-05-07T21:37:56Z'
 record_last_updated: '2026-05-07T18:13:17Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -79,6 +79,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-05-07T18:13:17Z'
+  url: https://github.blog/changelog/2026-05-07-rubber-duck-in-github-copilot-cli-now-supports-more-models
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-05-07T21:37:56Z'
   url: https://github.blog/changelog/2026-05-07-rubber-duck-in-github-copilot-cli-now-supports-more-models
   status: captured-from-rss-feed
   body_captured: true

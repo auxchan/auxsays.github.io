@@ -3,7 +3,7 @@
   "last_results": [
     {
       "adapter": "rss_feed",
-      "duration_ms": 522,
+      "duration_ms": 1693,
       "fetched": 2,
       "product_id": "figma",
       "refreshed": [
@@ -24,7 +24,7 @@
     },
     {
       "adapter": "adobe_release_notes",
-      "duration_ms": 25807,
+      "duration_ms": 25911,
       "fetched": 1,
       "product_id": "adobe-premiere-pro",
       "refreshed": [
@@ -40,7 +40,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 1354,
+      "duration_ms": 997,
       "fetched": 2,
       "product_id": "obs-studio",
       "refreshed": [
@@ -61,7 +61,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 924,
+      "duration_ms": 862,
       "fetched": 2,
       "product_id": "comfyui",
       "refreshed": [
@@ -82,20 +82,25 @@
     },
     {
       "adapter": "rss_feed",
-      "duration_ms": 666,
+      "duration_ms": 573,
       "fetched": 2,
       "product_id": "github",
-      "refreshed": [],
+      "refreshed": [
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-05-07-github-copilot-rubber-duck-in-github-copilot-cli-now-supports-more-models.md",
+          "record_id": "rss:github:https://github.blog/changelog/2026-05-07-rubber-duck-in-github-copilot-cli-now-supports-more-models"
+        }
+      ],
       "skipped": [],
       "status": "success",
       "written": [
-        "auxsays/updates/generated/2026-05-07-github-copilot-rubber-duck-in-github-copilot-cli-now-supports-more-models.md",
-        "auxsays/updates/generated/2026-05-07-github-copilot-repository-rulesets-user-bypass-and-branch-renaming.md"
+        "auxsays/updates/generated/2026-05-07-github-copilot-enterprise-live-migrations-is-now-in-public-preview.md"
       ]
     },
     {
       "adapter": "html_changelog",
-      "duration_ms": 96,
+      "duration_ms": 246,
       "fetched": 0,
       "product_id": "netlify",
       "refreshed": [],
@@ -104,8 +109,8 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-05-07T18:13:18Z",
-  "last_run_started_at": "2026-05-07T18:12:49Z",
+  "last_run_finished_at": "2026-05-07T21:37:57Z",
+  "last_run_started_at": "2026-05-07T21:37:27Z",
   "sources": {
     "adobe-after-effects": {
       "consecutive_failures": 2,
@@ -170,7 +175,7 @@
     "adobe-premiere-pro": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_release_notes",
-      "last_checked_at": "2026-05-07T18:12:49Z",
+      "last_checked_at": "2026-05-07T21:37:28Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -178,8 +183,8 @@
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 25807,
-      "last_success_at": "2026-05-07T18:12:49Z",
+      "last_run_duration_ms": 25911,
+      "last_success_at": "2026-05-07T21:37:28Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "adobe:adobe-premiere-pro:26.2:9fa3e1e53c0b275d"
@@ -189,7 +194,7 @@
     "comfyui": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-05-07T18:13:16Z",
+      "last_checked_at": "2026-05-07T21:37:55Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -197,8 +202,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 924,
-      "last_success_at": "2026-05-07T18:13:16Z",
+      "last_run_duration_ms": 862,
+      "last_success_at": "2026-05-07T21:37:55Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:comfyui:310487464",
@@ -209,7 +214,7 @@
     "figma": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-05-07T18:12:49Z",
+      "last_checked_at": "2026-05-07T21:37:27Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -217,8 +222,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 522,
-      "last_success_at": "2026-05-07T18:12:49Z",
+      "last_run_duration_ms": 1693,
+      "last_success_at": "2026-05-07T21:37:27Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:figma:4e06e0f1-2f46-4787-84eb-f431f16214e4",
@@ -236,7 +241,7 @@
     "github": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-05-07T18:13:17Z",
+      "last_checked_at": "2026-05-07T21:37:56Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -244,10 +249,11 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 666,
-      "last_success_at": "2026-05-07T18:13:17Z",
+      "last_run_duration_ms": 573,
+      "last_success_at": "2026-05-07T21:37:56Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "rss:github:https://github.blog/changelog/2026-05-07-enterprise-live-migrations-is-now-in-public-preview",
         "rss:github:https://github.blog/changelog/2026-05-07-repository-rulesets-user-bypass-and-branch-renaming",
         "rss:github:https://github.blog/changelog/2026-05-07-rubber-duck-in-github-copilot-cli-now-supports-more-models",
         "rss:github:https://github.blog/changelog/2026-05-05-github-copilot-in-visual-studio-code-april-releases",
@@ -266,7 +272,7 @@
     "netlify": {
       "consecutive_failures": 0,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-05-07T18:13:18Z",
+      "last_checked_at": "2026-05-07T21:37:57Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -274,15 +280,15 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 96,
-      "last_success_at": "2026-05-07T18:13:18Z",
+      "last_run_duration_ms": 246,
+      "last_success_at": "2026-05-07T21:37:57Z",
       "previous_consecutive_failures": 0,
       "status": "degraded"
     },
     "obs-studio": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-05-07T18:13:15Z",
+      "last_checked_at": "2026-05-07T21:37:54Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -290,8 +296,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 1354,
-      "last_success_at": "2026-05-07T18:13:15Z",
+      "last_run_duration_ms": 997,
+      "last_success_at": "2026-05-07T21:37:54Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:obs-studio:304830335",
