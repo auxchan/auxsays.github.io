@@ -17,8 +17,8 @@ update_version: Upcoming deprecation of Grok Code Fast 1
 update_logo_text: GIT
 update_published_at: '2026-05-08T20:21:00Z'
 update_last_checked: '2026-05-08T21:43:56Z'
-source_last_checked: '2026-05-08T21:43:56Z'
-official_body_last_checked: '2026-05-08T21:43:56Z'
+source_last_checked: '2026-05-09T07:26:17Z'
+official_body_last_checked: '2026-05-09T07:26:17Z'
 record_last_updated: '2026-05-08T21:43:56Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -81,6 +81,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-05-08T21:43:56Z'
+  url: https://github.blog/changelog/2026-05-08-upcoming-deprecation-of-grok-code-fast-1
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-05-09T07:26:17Z'
   url: https://github.blog/changelog/2026-05-08-upcoming-deprecation-of-grok-code-fast-1
   status: captured-from-rss-feed
   body_captured: true
