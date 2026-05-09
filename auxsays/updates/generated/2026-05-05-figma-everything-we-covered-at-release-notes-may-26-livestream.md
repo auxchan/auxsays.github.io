@@ -17,8 +17,8 @@ update_version: Everything we covered at Release Notes May '26 livestream
 update_logo_text: FIG
 update_published_at: '2026-05-05T00:00:00.000Z'
 update_last_checked: '2026-05-06T21:47:50Z'
-source_last_checked: '2026-05-09T13:55:05Z'
-official_body_last_checked: '2026-05-09T13:55:05Z'
+source_last_checked: '2026-05-09T19:35:55Z'
+official_body_last_checked: '2026-05-09T19:35:55Z'
 record_last_updated: '2026-05-06T21:47:50Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -69,11 +69,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-05-08T06:23:20Z'
-  url: https://www.figma.com/release-notes/?title=everything-we-covered-at-release-notes-may-26-livestream
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-05-08T16:55:22Z'
   url: https://www.figma.com/release-notes/?title=everything-we-covered-at-release-notes-may-26-livestream
   status: captured-from-rss-feed
@@ -90,6 +85,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-05-09T13:55:05Z'
+  url: https://www.figma.com/release-notes/?title=everything-we-covered-at-release-notes-may-26-livestream
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-05-09T19:35:55Z'
   url: https://www.figma.com/release-notes/?title=everything-we-covered-at-release-notes-may-26-livestream
   status: captured-from-rss-feed
   body_captured: true
