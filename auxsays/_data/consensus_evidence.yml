@@ -1254,3 +1254,24 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13420
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13420
+  parent_title: OBS unresponsive to mouse after docking or resizing panels on KDE Wayland.
+  report_title: OBS unresponsive to mouse after docking or resizing panels on KDE Wayland.
+  report_text_excerpt: 'E Plasma (Wayland), Qt: 6.8.2 ### OBS Studio Version Other ### OBS Studio Version (Other) 32.1.2 (Flatpak) ### OBS Studio Log URL https://obsproject.com/logs/OrzrVKg1fjPJ7N3j ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Upon resizing or docking/undocking a win'
+  captured_at: '2026-05-09T00:14:39Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
