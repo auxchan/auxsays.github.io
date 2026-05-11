@@ -12,3 +12,8 @@ node_modules/
 auxsays/_data/qa_status.json
 auxsays/_data/consensus_status.json
 auxsays/assets/img/patch-logos/_generation-report.json
+# Ruby/Bundler — local dev only, not part of the repo deliverable
+auxsays/.bundle/
+auxsays/vendor/
+# Replit platform metadata — not part of the repo deliverable
+.agents/

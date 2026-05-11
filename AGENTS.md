@@ -25,6 +25,10 @@ The site should help users avoid bad patches, broken workflows, unstable release
 9. **Do not make the site look more mature than the intelligence layer actually is.**
 10. **Run relevant validation before reporting success.**
 
+## Replit dev-environment note
+
+The "Start application" workflow (`bundle exec jekyll serve --host 0.0.0.0 --port ${PORT:-9000}`) is a local Replit preview only. It is safe to ignore outside Replit. Production is served by GitHub Pages via `.github/workflows/` — that CI/CD pipeline is unchanged by Phase 0 work and must not be modified without explicit instruction. Ruby gems in `auxsays/vendor/bundle/` and `auxsays/.bundle/` are gitignored local dependencies and are not part of the committed repo.
+
 ## Development posture
 
 When working in this repo:
