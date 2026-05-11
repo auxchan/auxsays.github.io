@@ -1296,3 +1296,24 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13425
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13425
+  parent_title: '[macOS] mac-avcapture aborts on camera hot-plug: uncaught NSException from -[AVCaptureSession startRunning]'
+  report_title: '[macOS] mac-avcapture aborts on camera hot-plug: uncaught NSException from -[AVCaptureSession startRunning]'
+  report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/8S3wBZPQ2vtcOcmB ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/R51BD'
+  captured_at: '2026-05-11T23:10:28Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
