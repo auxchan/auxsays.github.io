@@ -17,8 +17,8 @@ update_version: Copilot code review comment types now in usage metrics API
 update_logo_text: GIT
 update_published_at: '2026-05-08T18:57:13Z'
 update_last_checked: '2026-05-08T21:43:56Z'
-source_last_checked: '2026-05-10T19:36:17Z'
-official_body_last_checked: '2026-05-10T19:36:17Z'
+source_last_checked: '2026-05-11T04:39:32Z'
+official_body_last_checked: '2026-05-11T04:39:32Z'
 record_last_updated: '2026-05-08T21:43:56Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -87,11 +87,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-05-09T19:36:25Z'
-  url: https://github.blog/changelog/2026-05-08-copilot-code-review-comment-types-now-in-usage-metrics-api
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-05-10T04:18:42Z'
   url: https://github.blog/changelog/2026-05-08-copilot-code-review-comment-types-now-in-usage-metrics-api
   status: captured-from-rss-feed
@@ -108,6 +103,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-05-10T19:36:17Z'
+  url: https://github.blog/changelog/2026-05-08-copilot-code-review-comment-types-now-in-usage-metrics-api
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-05-11T04:39:32Z'
   url: https://github.blog/changelog/2026-05-08-copilot-code-review-comment-types-now-in-usage-metrics-api
   status: captured-from-rss-feed
   body_captured: true
