@@ -196,6 +196,41 @@ def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]
         )
         if any(term in recommendation_text for term in blocked_recommendation_terms):
             add(warnings, path, "official_only_zero_reports_recommendation_language", "official_only record has 0 reports but still stores install-verdict recommendation language.")
+    # Safety rule 3 — manual_watch + nonzero verified count
+    # If intelligence_stage is manual_watch, verified report counts must be 0
+    # unless a clearly separate legacy_manual_report_count field carries the value.
+    if stage == "manual_watch" and report_count > 0:
+        legacy_count = data.get("legacy_manual_report_count")
+        legacy_is_separate = legacy_count not in (None, "")
+        if not legacy_is_separate:
+            add(
+                errors,
+                path,
+                "manual_watch_nonzero_verified_count",
+                f"intelligence_stage is manual_watch but update_report_count is {report_count}. "
+                "Verified report counts must be 0 for manual_watch records unless a separate "
+                "legacy_manual_report_count field preserves historical context.",
+            )
+
+    # Safety rule 4 — legacy_manual_report_count must not drive verified evidence
+    # Warn if legacy_manual_report_count is nonzero AND the primary report_count
+    # also equals it — this risks the legacy value being treated as evidence-backed.
+    legacy_count_value = data.get("legacy_manual_report_count")
+    if legacy_count_value not in (None, ""):
+        try:
+            legacy_int = int(legacy_count_value)
+        except (TypeError, ValueError):
+            legacy_int = 0
+        if legacy_int > 0 and report_count == legacy_int and evidence_state in ("official_only", "insufficient_data", ""):
+            add(
+                warnings,
+                path,
+                "legacy_count_equals_report_count_no_evidence_state",
+                f"legacy_manual_report_count ({legacy_int}) equals update_report_count but evidence_state "
+                f"is '{evidence_state or 'not set'}'. If this count is historical-only, it must not match "
+                "the live report_count — the live count should be 0 for records with no structured evidence.",
+            )
+
     if str(data.get("official_checksums_capture_status") or "").strip() in {"captured", "present"} and is_blank(data.get("official_checksums_body")):
         add(errors, path, "checksum_status_without_body", "Checksum capture status says checksums are present but official_checksums_body is blank.")
     if is_blank(data.get("official_checksums_body")) and (data.get("show_checksum_section") is True or data.get("checksum_nav_enabled") is True):

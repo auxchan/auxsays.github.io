@@ -1,0 +1,443 @@
+# DaVinci Real Evidence Candidates — Phase 1E Staging File
+#
+# PURPOSE
+#   Staged candidate rows for human review before any row can be promoted
+#   to auxsays/_data/consensus_evidence.yml. These rows are NOT production
+#   evidence. They do NOT affect public site counts. They are used only for
+#   dry-run pipeline testing in apply_consensus_to_records.py.
+#
+# SOURCE PROBE RESULTS (Phase 1E — 2026-05-12)
+#   Blackmagic forum (forum.blackmagicdesign.com): HTTP 403 on all requests.
+#   Reddit (reddit.com): HTTP 403 on all requests (HTML and .json endpoints).
+#   All positive candidate rows are therefore access_status: blocked_or_search_snippet_only.
+#   include_in_dry_run is set based on whether the title/snippet provided
+#   an exact version signal without requiring page body access.
+#
+# SCHEMA NOTE
+#   Fields mirror auxsays/_data/consensus_evidence.yml where they overlap.
+#   Additional staging-only fields: access_status, include_in_dry_run,
+#   candidate_update_version_raw, proposed_update_version, evidence_category.
+#
+# DO NOT WRITE THESE ROWS TO consensus_evidence.yml IN PHASE 1E.
+# DO NOT MODIFY GENERATED RECORDS USING THESE ROWS.
+# DO NOT SET PUBLIC REPORT COUNTS FROM THESE ROWS.
+
+schema_version: 1
+staging_phase: phase1e
+generated_at: '2026-05-12T00:00:00Z'
+candidates:
+
+  # ============================================================
+  # POSITIVE CANDIDATES — real source-backed, blocked access
+  # ============================================================
+
+  - id: davinci-candidate-bmd-forum-t235179-magic-mask-crash
+    product_id: blackmagic-davinci
+    candidate_update_version_raw: Resolve Studio 21.0B Build 20
+    proposed_update_version: 21 Public Beta 1
+    source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235179
+    source_type: blackmagic_official_forum
+    source_name: Blackmagic Design Community Forum
+    source_title: Resolve Studio 21.0B Build 20 crashes when creating Magic Mask
+    source_date: null
+    observed_issue_summary: >
+      DaVinci Resolve Studio 21.0B (Build 20, the Public Beta 1 build) crashes
+      when attempting to create a Magic Mask. Magic Mask is an AI-assisted
+      rotoscoping feature in the Color page. The crash appears on the Public Beta 1
+      build (Build 20 per Blackmagic's internal build numbering).
+    access_status: blocked_or_search_snippet_only
+    exact_version_match: true
+    match_basis: >
+      Title contains "21.0B Build 20". DaVinci Resolve 21.0 Public Beta 1 was
+      released 2026-04-14 as Build 20 per Blackmagic's internal build numbering.
+      "21.0B Build 20" normalizes to "21 Public Beta 1" via the known
+      build-number mapping for this beta release.
+    evidence_category: crash_on_specific_feature
+    confidence: medium
+    include_in_dry_run: true
+    rejection_reason: null
+    sentiment: negative
+    severity: high
+    issue_theme: ai_magic_mask_crash
+    workflow_area: color_grading
+    platform: unknown
+    source_weight: 1
+    patch_version_matched: true
+    counted: true
+    captured_at: '2026-05-12T00:00:00Z'
+    reviewer_note: >
+      Build-to-beta-number mapping (Build 20 = Public Beta 1) should be
+      confirmed against Blackmagic's release notes or download page before
+      promoting to production evidence. Access blocked during Phase 1E probing.
+
+  - id: davinci-candidate-reddit-1sn39qf-decode-failure
+    product_id: blackmagic-davinci
+    candidate_update_version_raw: DaVinci Resolve public beta 21
+    proposed_update_version: 21 Public Beta 1
+    source_url: https://www.reddit.com/r/davinciresolve/comments/1sn39qf/davinci_resolve_failed_to_decode_video_frame_when/
+    source_type: reddit_community_report
+    source_name: r/davinciresolve
+    source_title: DaVinci Resolve failed to decode video frame when rendering / public beta 21
+    source_date: null
+    observed_issue_summary: >
+      User reports DaVinci Resolve Public Beta 21 fails to decode video frames
+      during render or playback. The slug and search context confirm this is the
+      public beta of version 21, not a stable release. Failure-to-decode errors
+      during render are a known risk area in public beta builds.
+    access_status: blocked_or_search_snippet_only
+    exact_version_match: true
+    match_basis: >
+      URL slug contains "davinci_resolve_failed_to_decode_video_frame_when" and
+      search/task context describes this as "DaVinci Resolve public beta 21".
+      "public beta 21" maps to "21 Public Beta" of DaVinci Resolve. Since only
+      one Public Beta (Beta 1) has been released and is in the AUXSAYS dataset,
+      the proposed mapping is "21 Public Beta 1". Confidence is low because the
+      exact beta number (1 vs a future 2) is inferred from dataset context, not
+      from the post title itself.
+    evidence_category: render_decode_failure
+    confidence: low
+    include_in_dry_run: true
+    rejection_reason: null
+    sentiment: negative
+    severity: medium
+    issue_theme: render_decode_failure
+    workflow_area: export_render
+    platform: unknown
+    source_weight: 1
+    patch_version_matched: true
+    counted: true
+    captured_at: '2026-05-12T00:00:00Z'
+    reviewer_note: >
+      Confidence is low because "public beta 21" does not explicitly state
+      "Beta 1". If a Beta 2 is released, this row must be re-evaluated to
+      confirm it applies to Beta 1 specifically. Human review required before
+      promotion to production evidence.
+
+  # ============================================================
+  # EXCLUDED POSITIVE CANDIDATES — real URLs, blocked, ambiguous version
+  # ============================================================
+
+  - id: davinci-candidate-bmd-forum-t235117-crash-corrupted-project
+    product_id: blackmagic-davinci
+    candidate_update_version_raw: DR 21b
+    proposed_update_version: null
+    source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235117
+    source_type: blackmagic_official_forum
+    source_name: Blackmagic Design Community Forum
+    source_title: Crash and Corrupted Project [DR 21b]
+    source_date: null
+    observed_issue_summary: >
+      Crash and project corruption reported for DaVinci Resolve 21 beta builds.
+      Title uses abbreviation "DR 21b" which normalizes to "DR 21 beta" — a
+      rejected ambiguous form because no specific beta number is given.
+    access_status: blocked_or_search_snippet_only
+    exact_version_match: false
+    match_basis: >
+      Title says "DR 21b". "DR" is the DR-prefix abbreviation which is rejected
+      by the normalizer. Even stripping the prefix, "21b" without a digit is an
+      ambiguous beta (no number). Cannot confirm whether this is Beta 1 or a
+      later beta build.
+    evidence_category: crash_and_data_corruption
+    confidence: low
+    include_in_dry_run: false
+    rejection_reason: ambiguous_beta_no_number_and_dr_prefix_abbreviation
+    sentiment: negative
+    severity: high
+    issue_theme: crash_and_project_corruption
+    workflow_area: project_management
+    platform: unknown
+    source_weight: 1
+    patch_version_matched: false
+    counted: false
+    captured_at: '2026-05-12T00:00:00Z'
+    reviewer_note: >
+      Excluded because version "DR 21b" is ambiguous — normalizer rejects both
+      the DR abbreviation and the ambiguous beta form (no beta number). If page
+      body confirms this is specifically Public Beta 1, the row may be re-staged
+      with an updated candidate_update_version_raw.
+
+  - id: davinci-candidate-bmd-forum-t234906-compound-clips-crash
+    product_id: blackmagic-davinci
+    candidate_update_version_raw: null
+    proposed_update_version: null
+    source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=234906
+    source_type: blackmagic_official_forum
+    source_name: Blackmagic Design Community Forum
+    source_title: BUG - Compound clips crash AI Magic Mask
+    source_date: null
+    observed_issue_summary: >
+      Compound clips cause AI Magic Mask to crash. No version string appears in
+      the post title. The forum section (f=42) is the DaVinci Resolve feedback
+      board which covers all DaVinci versions. Cannot confirm which release this
+      applies to from the title alone.
+    access_status: blocked_or_search_snippet_only
+    exact_version_match: false
+    match_basis: >
+      Title contains no version string. Forum section f=42 covers all DaVinci
+      Resolve versions. Cannot determine whether this is Beta 1 or another
+      release without access to the post body.
+    evidence_category: crash_on_specific_feature
+    confidence: very_low
+    include_in_dry_run: false
+    rejection_reason: no_version_in_title_access_blocked
+    sentiment: negative
+    severity: high
+    issue_theme: compound_clips_magic_mask_crash
+    workflow_area: color_grading
+    platform: unknown
+    source_weight: 1
+    patch_version_matched: false
+    counted: false
+    captured_at: '2026-05-12T00:00:00Z'
+    reviewer_note: >
+      Excluded because the post title contains no version string and the body
+      is inaccessible. If Playwright-rendered access becomes available or a
+      human reviewer reads the post body and confirms version, re-stage with
+      a populated candidate_update_version_raw.
+
+  - id: davinci-candidate-reddit-1sl3sqn-crashes-macbook
+    product_id: blackmagic-davinci
+    candidate_update_version_raw: DaVinci Resolve 21
+    proposed_update_version: null
+    source_url: https://www.reddit.com/r/davinciresolve/comments/1sl3sqn/davinci_resolve_21_crashes_instantly_on_macbook/
+    source_type: reddit_community_report
+    source_name: r/davinciresolve
+    source_title: DaVinci Resolve 21 crashes instantly on MacBook Air M1
+    source_date: null
+    observed_issue_summary: >
+      DaVinci Resolve 21 crashes instantly on MacBook Air M1. The title says
+      "Resolve 21" without specifying whether this is the stable release or the
+      Public Beta. Cannot confirm beta vs stable from title alone.
+    access_status: blocked_or_search_snippet_only
+    exact_version_match: false
+    match_basis: >
+      Title says "DaVinci Resolve 21" which normalizes to the stable canonical
+      "21" — not "21 Public Beta 1". Without page body access, cannot determine
+      whether the reporter is using the beta or stable build. The generated
+      record for stable "21" is archived/broad and currently has 0 reports.
+      Assigning this to Beta 1 would be unsupported.
+    evidence_category: application_crash
+    confidence: very_low
+    include_in_dry_run: false
+    rejection_reason: ambiguous_stable_vs_beta_version
+    sentiment: negative
+    severity: high
+    issue_theme: application_crash_on_launch
+    workflow_area: general
+    platform: mac
+    source_weight: 1
+    patch_version_matched: false
+    counted: false
+    captured_at: '2026-05-12T00:00:00Z'
+    reviewer_note: >
+      Excluded because "DaVinci Resolve 21" normalizes to the stable "21"
+      canonical, not "21 Public Beta 1". If page body confirms the reporter
+      was using the Public Beta build, the candidate_update_version_raw should
+      be updated and the row re-staged. Beta vs stable is a hard boundary in
+      AUXSAYS evidence — do not assume beta when title says "21".
+
+  - id: davinci-candidate-reddit-1skz03l-resolve21-problem
+    product_id: blackmagic-davinci
+    candidate_update_version_raw: DaVinci 21 Beta
+    proposed_update_version: null
+    source_url: https://www.reddit.com/r/davinciresolve/comments/1skz03l/davinci_resolve_21_problem/
+    source_type: reddit_community_report
+    source_name: r/davinciresolve
+    source_title: DaVinci Resolve 21 problem / DaVinci 21 Beta export issue
+    source_date: null
+    observed_issue_summary: >
+      Export issue on DaVinci Resolve 21 on Windows 10. Context description
+      suggests this is about "DaVinci 21 Beta" but the exact beta number is
+      not specified.
+    access_status: blocked_or_search_snippet_only
+    exact_version_match: false
+    match_basis: >
+      Context says "DaVinci 21 Beta" — a beta indicator without a specific
+      beta number. "21 Beta" (without a number) is a rejected form per the
+      normalizer's ambiguous_beta_no_number rule. Cannot determine Beta 1 vs
+      a future beta from this alone.
+    evidence_category: export_failure
+    confidence: very_low
+    include_in_dry_run: false
+    rejection_reason: ambiguous_beta_no_number
+    sentiment: negative
+    severity: medium
+    issue_theme: export_failure
+    workflow_area: export_render
+    platform: windows
+    source_weight: 1
+    patch_version_matched: false
+    counted: false
+    captured_at: '2026-05-12T00:00:00Z'
+    reviewer_note: >
+      Excluded because "DaVinci 21 Beta" has no beta number. The normalizer
+      rejects this form (ambiguous_beta_no_number). If page body or comments
+      confirm "Beta 1" specifically, re-stage with that version string.
+
+  # ============================================================
+  # NEGATIVE TEST ROWS — invalid/synthetic, clearly labelled
+  # These exist only to prove the safety gates reject them.
+  # ============================================================
+
+  - id: davinci-negative-test-wrong-product
+    product_id: obs-studio
+    candidate_update_version_raw: 32.1.2
+    proposed_update_version: 32.1.2
+    source_url: https://github.com/obsproject/obs-studio/releases/tag/32.1.2
+    source_type: github_release
+    source_name: OBS Studio GitHub Releases
+    source_title: OBS Studio 32.1.2
+    source_date: '2026-04-21'
+    observed_issue_summary: >
+      NEGATIVE TEST ROW — wrong product_id. product_id is obs-studio, not
+      blackmagic-davinci. The dry-run updater must exclude this row from all
+      DaVinci aggregates. It must not contribute to any DaVinci count.
+    access_status: not_applicable_negative_test
+    exact_version_match: false
+    match_basis: negative_test_wrong_product
+    evidence_category: negative_test
+    confidence: rejected
+    include_in_dry_run: false
+    rejection_reason: wrong_product_id_not_blackmagic_davinci
+    sentiment: negative
+    severity: low
+    issue_theme: negative_test
+    workflow_area: negative_test
+    platform: unknown
+    source_weight: 1
+    patch_version_matched: false
+    counted: false
+    captured_at: '2026-05-12T00:00:00Z'
+    reviewer_note: NEGATIVE TEST ROW. Must be excluded by product_id gate.
+
+  - id: davinci-negative-test-ambiguous-version
+    product_id: blackmagic-davinci
+    candidate_update_version_raw: 21 beta
+    proposed_update_version: null
+    source_url: https://example.invalid/negative-test-ambiguous-beta
+    source_type: negative_test
+    source_name: NEGATIVE TEST — synthetic invalid example
+    source_title: NEGATIVE TEST — DaVinci 21 beta (no number)
+    source_date: null
+    observed_issue_summary: >
+      NEGATIVE TEST ROW — uses the ambiguous "21 beta" version string with no
+      beta number. The normalizer must reject this with ambiguous_beta_no_number.
+      The dry-run updater must exclude this row and not count it.
+    access_status: not_applicable_negative_test
+    exact_version_match: false
+    match_basis: negative_test_ambiguous_version
+    evidence_category: negative_test
+    confidence: rejected
+    include_in_dry_run: false
+    rejection_reason: ambiguous_beta_no_number
+    sentiment: negative
+    severity: low
+    issue_theme: negative_test
+    workflow_area: negative_test
+    platform: unknown
+    source_weight: 1
+    patch_version_matched: false
+    counted: false
+    captured_at: '2026-05-12T00:00:00Z'
+    reviewer_note: NEGATIVE TEST ROW. Must be rejected by version normalization gate.
+
+  - id: davinci-negative-test-missing-source-url
+    product_id: blackmagic-davinci
+    candidate_update_version_raw: 21 Public Beta 1
+    proposed_update_version: 21 Public Beta 1
+    source_url: ''
+    source_type: negative_test
+    source_name: NEGATIVE TEST — synthetic invalid example
+    source_title: NEGATIVE TEST — missing source_url
+    source_date: null
+    observed_issue_summary: >
+      NEGATIVE TEST ROW — source_url is empty. Gate 11 requires all candidate
+      rows to have a source_url. The dry-run updater must exclude this row.
+    access_status: not_applicable_negative_test
+    exact_version_match: false
+    match_basis: negative_test_missing_source_url
+    evidence_category: negative_test
+    confidence: rejected
+    include_in_dry_run: false
+    rejection_reason: missing_source_url
+    sentiment: negative
+    severity: low
+    issue_theme: negative_test
+    workflow_area: negative_test
+    platform: unknown
+    source_weight: 1
+    patch_version_matched: true
+    counted: true
+    captured_at: '2026-05-12T00:00:00Z'
+    reviewer_note: >
+      NEGATIVE TEST ROW. Even though patch_version_matched and counted are
+      true, the missing source_url must cause Gate 11 to exclude this row.
+
+  - id: davinci-negative-test-non-exact-version-match
+    product_id: blackmagic-davinci
+    candidate_update_version_raw: 21 Public Beta 1
+    proposed_update_version: 21 Public Beta 1
+    source_url: https://example.invalid/negative-test-non-exact-match
+    source_type: negative_test
+    source_name: NEGATIVE TEST — synthetic invalid example
+    source_title: NEGATIVE TEST — exact_version_match is false
+    source_date: null
+    observed_issue_summary: >
+      NEGATIVE TEST ROW — exact_version_match is false. Gate 12 requires
+      exact_version_match: true for a row to be counted. The dry-run updater
+      must exclude this row even though the version string appears correct,
+      because the match basis was not confirmed to be exact.
+    access_status: not_applicable_negative_test
+    exact_version_match: false
+    match_basis: negative_test_non_exact_match
+    evidence_category: negative_test
+    confidence: rejected
+    include_in_dry_run: false
+    rejection_reason: exact_version_match_is_false
+    sentiment: negative
+    severity: low
+    issue_theme: negative_test
+    workflow_area: negative_test
+    platform: unknown
+    source_weight: 1
+    patch_version_matched: false
+    counted: false
+    captured_at: '2026-05-12T00:00:00Z'
+    reviewer_note: >
+      NEGATIVE TEST ROW. Must be excluded by Gate 12 (exact_version_match
+      required). include_in_dry_run is also false, providing a second
+      exclusion layer from Gate 13.
+
+  - id: davinci-negative-test-include-in-dry-run-false
+    product_id: blackmagic-davinci
+    candidate_update_version_raw: 21 Public Beta 1
+    proposed_update_version: 21 Public Beta 1
+    source_url: https://example.invalid/negative-test-dry-run-false
+    source_type: negative_test
+    source_name: NEGATIVE TEST — synthetic invalid example
+    source_title: NEGATIVE TEST — include_in_dry_run is false
+    source_date: null
+    observed_issue_summary: >
+      NEGATIVE TEST ROW — include_in_dry_run is false. Gate 13 must exclude
+      this row from the candidate count even though the version matches and
+      patch_version_matched is true. This tests that include_in_dry_run: false
+      is a hard exclusion gate.
+    access_status: not_applicable_negative_test
+    exact_version_match: true
+    match_basis: negative_test_include_false
+    evidence_category: negative_test
+    confidence: rejected
+    include_in_dry_run: false
+    rejection_reason: include_in_dry_run_false
+    sentiment: negative
+    severity: low
+    issue_theme: negative_test
+    workflow_area: negative_test
+    platform: unknown
+    source_weight: 1
+    patch_version_matched: true
+    counted: true
+    captured_at: '2026-05-12T00:00:00Z'
+    reviewer_note: >
+      NEGATIVE TEST ROW. Must be excluded because include_in_dry_run: false
+      even though all other fields appear valid.
