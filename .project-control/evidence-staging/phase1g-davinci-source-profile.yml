@@ -1,0 +1,45 @@
+schema_version: 1
+phase: phase1g
+product_id: blackmagic-davinci
+mode: manual_review_candidate_staging
+created_for: DaVinci Resolve 21 stable and DaVinci Resolve 21 Public Beta 1 evidence separation
+rules:
+- Do not write consensus_evidence.yml from collector output.
+- Do not write generated patch records from collector output.
+- Do not schedule DaVinci ingestion or scraping.
+- Do not require credentials, cookies, OAuth tokens, or API keys.
+- Do not bypass blocked or inaccessible sites.
+- Do not count search snippets alone as verified evidence.
+- Do not cross-count stable evidence into beta records or beta evidence into stable records.
+- Mark blocked, body-inaccessible, snippet-only, RSS-only, and discovery-only rows as needs_user_verification or reject.
+current_records:
+- target_record: stable
+  generated_record: auxsays/updates/generated/2026-04-14-davinci-resolve-21.md
+  update_version: '21'
+  starting_verified_report_count: 0
+- target_record: beta
+  generated_record: auxsays/updates/generated/2026-04-14-davinci-resolve-21-public-beta-1.md
+  update_version: 21 Public Beta 1
+  starting_verified_report_count: 2
+source_profiles:
+- source_type: blackmagic_forum
+  role: community_issue_candidate
+  access_policy: single polite GET only; no login; no retry loop; blocked pages remain manual-review candidates
+- source_type: reddit_community_report
+  role: community_issue_candidate
+  access_policy: single polite GET only; no API credentials; no OAuth; blocked pages remain manual-review candidates
+- source_type: community_discovery
+  role: discovery_only
+  access_policy: do not count as evidence without a specific body-reviewed thread URL
+- source_type: release_metadata
+  role: release_metadata_only
+  access_policy: never promote as user issue report evidence
+promotion_policy:
+  promote_now_requires_real_url: true
+  promote_now_requires_body_accessed_or_user_verified: true
+  promote_now_requires_actual_issue: true
+  promote_now_requires_exact_current_record_match: true
+  promote_now_blocks_existing_duplicates: true
+  promote_now_blocks_snippet_only: true
+  promote_now_blocks_rss_only: true
+  promote_now_blocks_later_betas_without_generated_record: true

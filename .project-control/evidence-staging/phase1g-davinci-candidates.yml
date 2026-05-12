@@ -1,0 +1,271 @@
+generated_at: 2026-05-12T12:14:46.391124Z
+mode: dry_run_manual_candidate_collection
+target: both
+candidate_policy: manual_review_only_no_consensus_or_record_writes
+candidates:
+- product_id: blackmagic-davinci
+  source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235117
+  source_type: blackmagic_forum
+  source_title: Blackmagic forum thread t=235117
+  access_status: fetch_error_URLError
+  body_accessed: false
+  body_verified: false
+  candidate_update_version_raw: ''
+  proposed_update_version: ''
+  target_record: ambiguous
+  exact_version_match: false
+  match_basis: no_version_in_seed_or_accessed_body
+  issue_summary: Blackmagic forum seed requires manual body review before it can count as evidence.
+  evidence_category: issue_report_candidate
+  severity: medium
+  confidence: low
+  duplicate_existing_evidence: false
+  include_for_promotion: false
+  promotion_blocker: needs_user_verification
+- product_id: blackmagic-davinci
+  source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235536
+  source_type: blackmagic_forum
+  source_title: Blackmagic forum thread t=235536
+  access_status: fetch_error_URLError
+  body_accessed: false
+  body_verified: false
+  candidate_update_version_raw: ''
+  proposed_update_version: ''
+  target_record: ambiguous
+  exact_version_match: false
+  match_basis: no_version_in_seed_or_accessed_body
+  issue_summary: Blackmagic forum seed requires manual body review before it can count as evidence.
+  evidence_category: issue_report_candidate
+  severity: medium
+  confidence: low
+  duplicate_existing_evidence: false
+  include_for_promotion: false
+  promotion_blocker: needs_user_verification
+- product_id: blackmagic-davinci
+  source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235458
+  source_type: blackmagic_forum
+  source_title: Blackmagic forum thread t=235458
+  access_status: fetch_error_URLError
+  body_accessed: false
+  body_verified: false
+  candidate_update_version_raw: ''
+  proposed_update_version: ''
+  target_record: ambiguous
+  exact_version_match: false
+  match_basis: no_version_in_seed_or_accessed_body
+  issue_summary: Blackmagic forum seed requires manual body review before it can count as evidence.
+  evidence_category: issue_report_candidate
+  severity: medium
+  confidence: low
+  duplicate_existing_evidence: false
+  include_for_promotion: false
+  promotion_blocker: needs_user_verification
+- product_id: blackmagic-davinci
+  source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235208
+  source_type: blackmagic_forum
+  source_title: Blackmagic forum thread t=235208
+  access_status: fetch_error_URLError
+  body_accessed: false
+  body_verified: false
+  candidate_update_version_raw: ''
+  proposed_update_version: ''
+  target_record: ambiguous
+  exact_version_match: false
+  match_basis: no_version_in_seed_or_accessed_body
+  issue_summary: Blackmagic forum seed requires manual body review before it can count as evidence.
+  evidence_category: issue_report_candidate
+  severity: medium
+  confidence: low
+  duplicate_existing_evidence: false
+  include_for_promotion: false
+  promotion_blocker: needs_user_verification
+- product_id: blackmagic-davinci
+  source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=234870
+  source_type: blackmagic_forum
+  source_title: Blackmagic forum thread t=234870
+  access_status: fetch_error_URLError
+  body_accessed: false
+  body_verified: false
+  candidate_update_version_raw: ''
+  proposed_update_version: ''
+  target_record: ambiguous
+  exact_version_match: false
+  match_basis: no_version_in_seed_or_accessed_body
+  issue_summary: Blackmagic forum seed requires manual body review before it can count as evidence.
+  evidence_category: issue_report_candidate
+  severity: medium
+  confidence: low
+  duplicate_existing_evidence: false
+  include_for_promotion: false
+  promotion_blocker: needs_user_verification
+- product_id: blackmagic-davinci
+  source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235179
+  source_type: blackmagic_forum
+  source_title: Resolve Studio 21.0B Build 20 crashes when creating Magic Mask
+  access_status: fetch_error_URLError
+  body_accessed: false
+  body_verified: true
+  candidate_update_version_raw: 21 Public Beta 1
+  proposed_update_version: 21 Public Beta 1
+  target_record: beta
+  exact_version_match: true
+  match_basis: normalizer_exact_public_beta_1
+  issue_summary: Magic Mask crash report already promoted in Phase 1F.
+  evidence_category: issue_report
+  severity: high
+  confidence: high
+  duplicate_existing_evidence: true
+  include_for_promotion: false
+  promotion_blocker: duplicate_existing_evidence
+- product_id: blackmagic-davinci
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1sl3sqn/davinci_resolve_21_crashes_instantly_on_macbook/
+  source_type: reddit_community_report
+  source_title: DaVinci Resolve 21 crashes instantly on MacBook
+  access_status: fetch_error_URLError
+  body_accessed: false
+  body_verified: false
+  candidate_update_version_raw: DaVinci Resolve 21
+  proposed_update_version: 21
+  target_record: stable
+  exact_version_match: true
+  match_basis: normalizer_exact_stable_21
+  issue_summary: "Potential stable 21 startup crash report; body must be reviewed before promotion."
+  evidence_category: issue_report_candidate
+  severity: high
+  confidence: low
+  duplicate_existing_evidence: false
+  include_for_promotion: false
+  promotion_blocker: needs_user_verification
+- product_id: blackmagic-davinci
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1skz03l/davinci_resolve_21_problem/
+  source_type: reddit_community_report
+  source_title: DaVinci Resolve 21 problem
+  access_status: fetch_error_URLError
+  body_accessed: false
+  body_verified: false
+  candidate_update_version_raw: DaVinci Resolve 21
+  proposed_update_version: 21
+  target_record: stable
+  exact_version_match: true
+  match_basis: normalizer_exact_stable_21
+  issue_summary: "Potential stable 21 problem report; body must be reviewed before promotion."
+  evidence_category: issue_report_candidate
+  severity: medium
+  confidence: low
+  duplicate_existing_evidence: false
+  include_for_promotion: false
+  promotion_blocker: needs_user_verification
+- product_id: blackmagic-davinci
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1sn39qf/davinci_resolve_failed_to_decode_video_frame_when/
+  source_type: reddit_community_report
+  source_title: DaVinci Resolve failed to decode video frame when rendering / public beta 21
+  access_status: fetch_error_URLError
+  body_accessed: false
+  body_verified: true
+  candidate_update_version_raw: 21 Public Beta 1
+  proposed_update_version: 21 Public Beta 1
+  target_record: beta
+  exact_version_match: true
+  match_basis: normalizer_exact_public_beta_1
+  issue_summary: Decode/render failure already promoted in Phase 1F.
+  evidence_category: issue_report
+  severity: medium
+  confidence: high
+  duplicate_existing_evidence: true
+  include_for_promotion: false
+  promotion_blocker: duplicate_existing_evidence
+- product_id: blackmagic-davinci
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1sy9fi3/release_of_davinci_resolve_210b2/
+  source_type: reddit_community_report
+  source_title: Release of DaVinci Resolve 21.0b2
+  access_status: fetch_error_URLError
+  body_accessed: false
+  body_verified: false
+  candidate_update_version_raw: DaVinci Resolve 21.0b2
+  proposed_update_version: 21 Public Beta 2
+  target_record: future
+  exact_version_match: false
+  match_basis: seed_identified_future_update
+  issue_summary: Beta 2 discussion is a future update for AUXSAYS until a matching generated record exists.
+  evidence_category: release_discussion
+  severity: low
+  confidence: low
+  duplicate_existing_evidence: false
+  include_for_promotion: false
+  promotion_blocker: future_update_not_current_record
+- product_id: blackmagic-davinci
+  source_url: https://www.liftgammagain.com/forum/index.php?forums/davinci-resolve.36/
+  source_type: community_discovery
+  source_title: Lift Gamma Gain DaVinci Resolve forum discovery source
+  access_status: not_fetched_discovery_or_metadata_source
+  body_accessed: false
+  body_verified: false
+  candidate_update_version_raw: ''
+  proposed_update_version: ''
+  target_record: ambiguous
+  exact_version_match: false
+  match_basis: no_version_in_seed_or_accessed_body
+  issue_summary: "Discovery source for manual review; not report evidence without a specific body-reviewed thread."
+  evidence_category: discovery_source
+  severity: low
+  confidence: low
+  duplicate_existing_evidence: false
+  include_for_promotion: false
+  promotion_blocker: ambiguous_or_non_exact_version
+- product_id: blackmagic-davinci
+  source_url: https://creativecow.net/forums/forum/davinci-resolve/
+  source_type: community_discovery
+  source_title: Creative COW DaVinci Resolve forum discovery source
+  access_status: not_fetched_discovery_or_metadata_source
+  body_accessed: false
+  body_verified: false
+  candidate_update_version_raw: ''
+  proposed_update_version: ''
+  target_record: ambiguous
+  exact_version_match: false
+  match_basis: no_version_in_seed_or_accessed_body
+  issue_summary: "Discovery source for manual review; not report evidence without a specific body-reviewed thread."
+  evidence_category: discovery_source
+  severity: low
+  confidence: low
+  duplicate_existing_evidence: false
+  include_for_promotion: false
+  promotion_blocker: ambiguous_or_non_exact_version
+- product_id: blackmagic-davinci
+  source_url: https://www.dpreview.com/forums
+  source_type: community_discovery
+  source_title: DPReview DaVinci Resolve Beta 21 discussion discovery source
+  access_status: not_fetched_discovery_or_metadata_source
+  body_accessed: false
+  body_verified: false
+  candidate_update_version_raw: DaVinci Resolve Beta 21
+  proposed_update_version: ''
+  target_record: ambiguous
+  exact_version_match: false
+  match_basis: unrecognized_version_format
+  issue_summary: "Discovery source only; a specific body-reviewed discussion URL is needed before counting evidence."
+  evidence_category: discovery_source
+  severity: low
+  confidence: low
+  duplicate_existing_evidence: false
+  include_for_promotion: false
+  promotion_blocker: ambiguous_or_non_exact_version
+- product_id: blackmagic-davinci
+  source_url: https://www.videohelp.com/software/DaVinci-Resolve/version-history
+  source_type: release_metadata
+  source_title: VideoHelp DaVinci Resolve version history
+  access_status: not_fetched_discovery_or_metadata_source
+  body_accessed: false
+  body_verified: false
+  candidate_update_version_raw: ''
+  proposed_update_version: ''
+  target_record: ambiguous
+  exact_version_match: false
+  match_basis: no_version_in_seed_or_accessed_body
+  issue_summary: "Release metadata source only; not user issue report evidence."
+  evidence_category: release_metadata
+  severity: low
+  confidence: low
+  duplicate_existing_evidence: false
+  include_for_promotion: false
+  promotion_blocker: ambiguous_or_non_exact_version

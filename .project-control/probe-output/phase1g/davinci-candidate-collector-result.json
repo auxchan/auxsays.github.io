@@ -1,0 +1,30 @@
+{
+  "generated_at": "2026-05-12T12:14:46.392124Z",
+  "mode": "dry_run_manual_candidate_collection",
+  "target": "both",
+  "candidate_output": ".project-control\\evidence-staging\\phase1g-davinci-candidates.yml",
+  "candidate_count": 14,
+  "candidate_count_by_source": {
+    "blackmagic_forum": 6,
+    "reddit_community_report": 4,
+    "community_discovery": 3,
+    "release_metadata": 1
+  },
+  "candidate_count_by_target_record": {
+    "ambiguous": 9,
+    "beta": 2,
+    "stable": 2,
+    "future": 1
+  },
+  "decision_counts": {
+    "needs_user_verification": 7,
+    "duplicate_existing_evidence": 2,
+    "future_update_not_current_record": 1,
+    "ambiguous_version": 4
+  },
+  "promote_now_count": 0,
+  "duplicates_detected": 2,
+  "writes_production_files": false,
+  "requires_credentials": false,
+  "bypasses_blocked_sites": false
+}
