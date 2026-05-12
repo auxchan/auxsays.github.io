@@ -17,3 +17,7 @@ auxsays/.bundle/
 auxsays/vendor/
 # Replit platform metadata — not part of the repo deliverable
 .agents/
+# Replit chat attachments — never part of the repo deliverable
+attached_assets/
+# Project-control export artifacts — generated outputs, not source
+.project-control/exports/
