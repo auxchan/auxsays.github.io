@@ -1,0 +1,114 @@
+{
+  "probe_type": "davinci-user-report-source-discovery",
+  "phase": "1C",
+  "read_only": true,
+  "probes": {
+    "blackmagic_forum_index": {
+      "label": "blackmagic_forum_index",
+      "url": "https://forum.blackmagicdesign.com/",
+      "http_status": 403,
+      "fetch_ok": false,
+      "response_length_chars": 0,
+      "content_type": "",
+      "is_json": false,
+      "is_rss": false,
+      "error": "empty response",
+      "access": "denied"
+    },
+    "blackmagic_forum_davinci": {
+      "label": "blackmagic_forum_davinci",
+      "url": "https://forum.blackmagicdesign.com/viewforum.php?f=21",
+      "http_status": 403,
+      "fetch_ok": false,
+      "response_length_chars": 0,
+      "content_type": "",
+      "is_json": false,
+      "is_rss": false,
+      "error": "empty response",
+      "access": "denied"
+    },
+    "blackmagic_forum_search": {
+      "label": "blackmagic_forum_search",
+      "url": "https://forum.blackmagicdesign.com/search.php?keywords=resolve+21+beta&fid[]=21",
+      "http_status": 403,
+      "fetch_ok": false,
+      "response_length_chars": 0,
+      "content_type": "",
+      "is_json": false,
+      "is_rss": false,
+      "error": "empty response",
+      "access": "denied"
+    },
+    "reddit_davinciresolve": {
+      "label": "reddit_davinciresolve",
+      "url": "https://www.reddit.com/r/davinciresolve/",
+      "http_status": 403,
+      "fetch_ok": false,
+      "response_length_chars": 0,
+      "content_type": "",
+      "is_json": false,
+      "is_rss": false,
+      "error": "empty response",
+      "access": "denied"
+    },
+    "reddit_davinci_new_json": {
+      "label": "reddit_davinci_new_json",
+      "url": "https://www.reddit.com/r/davinciresolve/new.json?limit=5",
+      "http_status": 403,
+      "fetch_ok": false,
+      "response_length_chars": 0,
+      "content_type": "",
+      "is_json": false,
+      "is_rss": false,
+      "error": "empty response",
+      "access": "denied"
+    },
+    "reddit_davinci_search_json": {
+      "label": "reddit_davinci_search_json",
+      "url": "https://www.reddit.com/r/davinciresolve/search.json?q=resolve+21+beta&restrict_sr=1&sort=new&limit=5",
+      "http_status": 403,
+      "fetch_ok": false,
+      "response_length_chars": 0,
+      "content_type": "",
+      "is_json": false,
+      "is_rss": false,
+      "error": "empty response",
+      "access": "denied"
+    },
+    "reddit_davinci_rss": {
+      "label": "reddit_davinci_rss",
+      "url": "https://www.reddit.com/r/davinciresolve/.rss",
+      "http_status": 200,
+      "fetch_ok": true,
+      "response_length_chars": 60348,
+      "content_type": "application/atom+xml; charset=UTF-8",
+      "is_json": false,
+      "is_rss": true,
+      "access": "public",
+      "rss_item_count": 26,
+      "rss_titles_sample": [
+        "DaVinci Resolve",
+        "May Dev/Tools Monthly Megathread - for tool builders",
+        "r/davinciresolve Monthly Hardware Thread",
+        "YouTube ProRes 422 HQ vs H624. Two Pass enable or disable?",
+        "how can one achieve this exactly ?",
+        "black boxes/artefacts glitching pls help",
+        "Can someone help me to get this look?",
+        "Irregular mask position in the color tab",
+        "Anyone face critical errors and were unable to load an auto backup or save any project in a specific project library on a specific SSD?",
+        "PC Slow Response Randomly"
+      ],
+      "structured_accessible": true
+    }
+  },
+  "summary": {
+    "blackmagic_forum_accessible": false,
+    "blackmagic_forum_davinci_section_accessible": false,
+    "blackmagic_forum_login_wall": true,
+    "reddit_html_accessible": false,
+    "reddit_json_api_accessible": false,
+    "reddit_rss_accessible": true,
+    "reddit_json_structured": false,
+    "reddit_rss_structured": true
+  }
+}

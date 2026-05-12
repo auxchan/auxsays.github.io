@@ -1,0 +1,263 @@
+{
+  "probe_type": "blackmagic-static-source-access",
+  "phase": "1C",
+  "read_only": true,
+  "playwright_available": false,
+  "playwright_note": "Playwright is not installed in this Replit environment. Only static (urllib) fetches are possible for this probe. Headless browser rendering requires separate setup.",
+  "probes": {
+    "press_release_specific": {
+      "label": "press_release_specific",
+      "url": "https://www.blackmagicdesign.com/media/release/20260414-01",
+      "http_status": 200,
+      "fetch_ok": true,
+      "response_length_chars": 67212,
+      "content_type": "text/html; charset=utf-8",
+      "page_title": "Media | Blackmagic Design",
+      "h1s": [
+        "Products",
+        "Support",
+        "Community",
+        "Company"
+      ],
+      "canonical": "https://www.blackmagicdesign.com/media/release/20260414-01",
+      "rss_links": [
+        "https://www.blackmagicdesign.com/media/release/20260414-01",
+        "https://www.blackmagicdesign.com/ae/media/release/20260414-01",
+        "https://www.blackmagicdesign.com/ar/media/release/20260414-01",
+        "https://www.blackmagicdesign.com/at/media/release/20260414-01",
+        "https://www.blackmagicdesign.com/au/media/release/20260414-01",
+        "https://www.blackmagicdesign.com/br/media/release/20260414-01",
+        "https://www.blackmagicdesign.com/ca/media/release/20260414-01",
+        "https://www.blackmagicdesign.com/cn/media/release/20260414-01",
+        "https://www.blackmagicdesign.com/de/media/release/20260414-01",
+        "https://www.blackmagicdesign.com/dk/media/release/20260414-01"
+      ],
+      "total_links": 206,
+      "meta_og_title": "",
+      "meta_description": "",
+      "media_release_links_count": 129,
+      "media_release_links_sample": [
+        "/media/release/archive",
+        "/ar/media/release/20260414-01",
+        "/au/media/release/20260414-01",
+        "/at/media/release/20260414-01",
+        "/br/media/release/20260414-01",
+        "/ca/media/release/20260414-01",
+        "/cn/media/release/20260414-01",
+        "/dk/media/release/20260414-01",
+        "/fi/media/release/20260414-01",
+        "/fr/media/release/20260414-01"
+      ],
+      "download_links_count": 0,
+      "download_links_sample": [],
+      "version_strings_found": [],
+      "json_ld_blocks_count": 0,
+      "json_ld_sample": [],
+      "inline_scripts_count": 9,
+      "api_hints": [],
+      "embedded_config_snippets": [
+        "dataLayer.push(arguments)"
+      ]
+    },
+    "press_release_listing": {
+      "label": "press_release_listing",
+      "url": "https://www.blackmagicdesign.com/media",
+      "http_status": 200,
+      "fetch_ok": true,
+      "response_length_chars": 63972,
+      "content_type": "text/html; charset=utf-8",
+      "page_title": "Media | Blackmagic Design",
+      "h1s": [
+        "Products",
+        "Support",
+        "Community",
+        "Company"
+      ],
+      "canonical": "https://www.blackmagicdesign.com/media",
+      "rss_links": [
+        "https://www.blackmagicdesign.com/media",
+        "https://www.blackmagicdesign.com/ae/media",
+        "https://www.blackmagicdesign.com/ar/media",
+        "https://www.blackmagicdesign.com/at/media",
+        "https://www.blackmagicdesign.com/au/media",
+        "https://www.blackmagicdesign.com/br/media",
+        "https://www.blackmagicdesign.com/ca/media",
+        "https://www.blackmagicdesign.com/cn/media",
+        "https://www.blackmagicdesign.com/de/media",
+        "https://www.blackmagicdesign.com/dk/media"
+      ],
+      "total_links": 206,
+      "meta_og_title": "",
+      "meta_description": "",
+      "media_release_links_count": 1,
+      "media_release_links_sample": [
+        "/media/release/archive"
+      ],
+      "download_links_count": 0,
+      "download_links_sample": [],
+      "version_strings_found": [],
+      "json_ld_blocks_count": 0,
+      "json_ld_sample": [],
+      "inline_scripts_count": 9,
+      "api_hints": [],
+      "embedded_config_snippets": [
+        "dataLayer.push(arguments)"
+      ]
+    },
+    "support_page": {
+      "label": "support_page",
+      "url": "https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion",
+      "http_status": 200,
+      "fetch_ok": true,
+      "response_length_chars": 138465,
+      "content_type": "text/html; charset=utf-8",
+      "page_title": "Support Center | Blackmagic Design",
+      "h1s": [
+        "Support Center",
+        "Need Assistance?",
+        "Products",
+        "Support",
+        "Community"
+      ],
+      "canonical": "https://www.blackmagicdesign.com/support",
+      "rss_links": [
+        "https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion",
+        "https://www.blackmagicdesign.com/ae/support/family/davinci-resolve-and-fusion",
+        "https://www.blackmagicdesign.com/ar/support/family/davinci-resolve-and-fusion",
+        "https://www.blackmagicdesign.com/at/support/family/davinci-resolve-and-fusion",
+        "https://www.blackmagicdesign.com/au/support/family/davinci-resolve-and-fusion",
+        "https://www.blackmagicdesign.com/br/support/family/davinci-resolve-and-fusion",
+        "https://www.blackmagicdesign.com/ca/support/family/davinci-resolve-and-fusion",
+        "https://www.blackmagicdesign.com/cn/support/family/davinci-resolve-and-fusion",
+        "https://www.blackmagicdesign.com/de/support/family/davinci-resolve-and-fusion",
+        "https://www.blackmagicdesign.com/dk/support/family/davinci-resolve-and-fusion"
+      ],
+      "total_links": 209,
+      "meta_og_title": "",
+      "meta_description": "Blackmagic Design customer support provides the latest software updates, support notes, instruction manuals and contacts for any product related questions.",
+      "media_release_links_count": 0,
+      "media_release_links_sample": [],
+      "download_links_count": 0,
+      "download_links_sample": [],
+      "version_strings_found": [],
+      "json_ld_blocks_count": 0,
+      "json_ld_sample": [],
+      "inline_scripts_count": 5,
+      "api_hints": [],
+      "embedded_config_snippets": [
+        "dataLayer.push(arguments)"
+      ]
+    },
+    "download_page": {
+      "label": "download_page",
+      "url": "https://www.blackmagicdesign.com/support/download/20260414-01",
+      "http_status": 200,
+      "fetch_ok": true,
+      "response_length_chars": 137343,
+      "content_type": "text/html; charset=utf-8",
+      "page_title": "Support Center | Blackmagic Design",
+      "h1s": [
+        "Support Center",
+        "Need Assistance?",
+        "Products",
+        "Support",
+        "Community"
+      ],
+      "canonical": "https://www.blackmagicdesign.com/support",
+      "rss_links": [
+        "https://www.blackmagicdesign.com/support",
+        "https://www.blackmagicdesign.com/ae/support",
+        "https://www.blackmagicdesign.com/ar/support",
+        "https://www.blackmagicdesign.com/at/support",
+        "https://www.blackmagicdesign.com/au/support",
+        "https://www.blackmagicdesign.com/br/support",
+        "https://www.blackmagicdesign.com/ca/support",
+        "https://www.blackmagicdesign.com/cn/support",
+        "https://www.blackmagicdesign.com/de/support",
+        "https://www.blackmagicdesign.com/dk/support"
+      ],
+      "total_links": 209,
+      "meta_og_title": "",
+      "meta_description": "Blackmagic Design customer support provides the latest software updates, support notes, instruction manuals and contacts for any product related questions.",
+      "media_release_links_count": 0,
+      "media_release_links_sample": [],
+      "download_links_count": 0,
+      "download_links_sample": [],
+      "version_strings_found": [],
+      "json_ld_blocks_count": 0,
+      "json_ld_sample": [],
+      "inline_scripts_count": 5,
+      "api_hints": [],
+      "embedded_config_snippets": [
+        "dataLayer.push(arguments)"
+      ]
+    },
+    "robots_txt": {
+      "label": "robots_txt",
+      "url": "https://www.blackmagicdesign.com/robots.txt",
+      "http_status": 200,
+      "fetch_ok": true,
+      "response_length_chars": 1745,
+      "content_type": "text/plain; charset=UTF-8",
+      "raw_excerpt": "# Capture bots or misbehaved bots, download lots of pages with no public benefit\nuser-agent: AhrefsBot\ndisallow: /\n\nuser-agent: BUbiNG\ndisallow: /\n\nuser-agent: dotbot\ndisallow: /\n\nuser-agent: mj12bot\ndisallow: /\n\nuser-agent: MJ12bot\ndisallow: /\n\nUser-agent: deepcrawl\ndisallow: /\n\nuser-agent: Scrapy\ndisallow: /\n\nuser-agent: grub-client\ndisallow: /\n\nuser-agent: k2spider\ndisallow: /\n\n# http://www.webreaper.net/\nuser-agent: WebReaper\ndisallow: /\n\n# Some bots are known to be trouble, particularly those designed to copy\n# entire sites. Please obey robots.txt.\nuser-agent: sitecheck.internetseer.com\ndisallow: /\n\nuser-agent: Zealbot\ndisallow: /\n\nuser-agent: MSIECrawler\ndisallow: /\n\nuser-agent: SiteSnagger\ndisallow: /\n\nuser-agent: WebStripper\ndisallow: /\n\nuser-agent: WebCopier\ndisallow: /\n\nuser-agent: Fetch\ndisallow: /\n\nuser-agent: Offline Explorer\ndisallow: /\n\nuser-agent: Teleport\ndisallow: /\n\nuser-agent: TeleportPro\ndisallow: /\n\nuser-agent: WebZIP\ndisallow: /\n\nuser-agent: linko\ndisallow: /\n\nuser-agent: HTTrack\ndisallow: /\n\nuser-agent: Microsoft.URL.Control\ndisallow: /\n\nuser-agent: Xenu\ndisallow: /\n\nuser-agent: larbin\ndisallow: /\n\nuser-agent: libwww\ndisallow: /\n\nuser-agent: ZyBORG\ndisallow: /\n\nuser-agent: Download Ninja\ndisallow: /\n\n# Well behaved bots\nuser-agent: *\ncrawl-delay: 1\nallow: /images/*.jpg$\nallow: /images/*.jpg?_v=*\nallow: /images/*.jpeg$\nallow: /images/*.jpeg?_v=*\nallow: /images/*.png$\nallow: /images/*.png?_v=*\nallow: /images/*.svg$\nallow: /images/*.svg?_v=*\nallow: /images/*.gif$\nallow: /images/*.gif?_v=*\ndisallow: /images\ndisallow: /support/download/\ndisallow: /api/print/to-pdf/*\ndisallow: /api/print/to-txt/*\ndisallow: /*?rendering-to-pdf=true\ndisallow: /*ecommerce/\ndisallow: /*edelivery/\ndisallow: /*checkout/\n"
+    },
+    "sitemap_xml": {
+      "label": "sitemap_xml",
+      "url": "https://www.blackmagicdesign.com/sitemap.xml",
+      "http_status": 404,
+      "fetch_ok": false,
+      "response_length_chars": 0,
+      "content_type": "",
+      "error": "empty"
+    },
+    "sitemap_index": {
+      "label": "sitemap_index",
+      "url": "https://www.blackmagicdesign.com/sitemap_index.xml",
+      "http_status": 404,
+      "fetch_ok": false,
+      "response_length_chars": 0,
+      "content_type": "",
+      "error": "empty"
+    }
+  },
+  "analysis": {
+    "press_release_static_feasible": true,
+    "listing_has_release_links": true,
+    "support_has_download_links": false,
+    "support_has_version_strings": false,
+    "rss_feeds_found": [
+      "https://www.blackmagicdesign.com/media",
+      "https://www.blackmagicdesign.com/ae/media",
+      "https://www.blackmagicdesign.com/ar/media",
+      "https://www.blackmagicdesign.com/at/media",
+      "https://www.blackmagicdesign.com/au/media",
+      "https://www.blackmagicdesign.com/br/media",
+      "https://www.blackmagicdesign.com/ca/media",
+      "https://www.blackmagicdesign.com/cn/media",
+      "https://www.blackmagicdesign.com/de/media",
+      "https://www.blackmagicdesign.com/dk/media",
+      "https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion",
+      "https://www.blackmagicdesign.com/ae/support/family/davinci-resolve-and-fusion",
+      "https://www.blackmagicdesign.com/ar/support/family/davinci-resolve-and-fusion",
+      "https://www.blackmagicdesign.com/at/support/family/davinci-resolve-and-fusion",
+      "https://www.blackmagicdesign.com/au/support/family/davinci-resolve-and-fusion",
+      "https://www.blackmagicdesign.com/br/support/family/davinci-resolve-and-fusion",
+      "https://www.blackmagicdesign.com/ca/support/family/davinci-resolve-and-fusion",
+      "https://www.blackmagicdesign.com/cn/support/family/davinci-resolve-and-fusion",
+      "https://www.blackmagicdesign.com/de/support/family/davinci-resolve-and-fusion",
+      "https://www.blackmagicdesign.com/dk/support/family/davinci-resolve-and-fusion",
+      "https://www.blackmagicdesign.com/media/release/20260414-01",
+      "https://www.blackmagicdesign.com/ae/media/release/20260414-01",
+      "https://www.blackmagicdesign.com/ar/media/release/20260414-01",
+      "https://www.blackmagicdesign.com/at/media/release/20260414-01",
+      "https://www.blackmagicdesign.com/au/media/release/20260414-01",
+      "https://www.blackmagicdesign.com/br/media/release/20260414-01",
+      "https://www.blackmagicdesign.com/ca/media/release/20260414-01",
+      "https://www.blackmagicdesign.com/cn/media/release/20260414-01",
+      "https://www.blackmagicdesign.com/de/media/release/20260414-01",
+      "https://www.blackmagicdesign.com/dk/media/release/20260414-01"
+    ],
+    "any_api_hints": false,
+    "any_json_ld": false
+  }
+}

@@ -19,7 +19,7 @@ SOURCES_PATH = ROOT / "_data" / "patch_ingestion_sources.yml"
 UPDATE_LAYOUT_PATH = ROOT / "_layouts" / "aux-update.html"
 
 VALID_EVIDENCE_STATES = {"official_only", "pilot_sample", "pilot_initial_sample", "consensus_live", "insufficient_data"}
-VALID_INTELLIGENCE_STAGES = {"staged", "official_live", "pilot", "consensus_live", "archived"}
+VALID_INTELLIGENCE_STAGES = {"staged", "official_live", "pilot", "consensus_live", "archived", "manual_watch"}
 PATCH_NOTE_SOURCE_TYPES = {"release_notes", "fixed_issues", "security_advisory", "changelog"}
 NON_PATCH_NOTE_SOURCE_TYPES = {"whats_new", "vendor_blog", "community_official_post", "download_portal"}
 OPERATIONAL_SOURCE_TYPES = {"release_health", "known_issues", "help_center_release_notes"}
