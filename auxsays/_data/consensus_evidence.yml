@@ -1317,3 +1317,45 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+- id: blackmagic-davinci-21-public-beta-1-bmd-forum-t235179-magic-mask-crash
+  product_id: blackmagic-davinci
+  update_version: 21 Public Beta 1
+  source_type: blackmagic_forum
+  source_name: Blackmagic Design Community Forum
+  source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235179
+  parent_title: Resolve Studio 21.0B Build 20 crashes when creating Magic Mask
+  report_title: Resolve Studio 21.0B Build 20 crashes when creating Magic Mask
+  report_text_excerpt: User-verified Blackmagic forum report describing Resolve Studio 21.0B Build 20 crashing when creating Magic Mask.
+  captured_at: '2026-05-12T00:00:00Z'
+  patch_version_matched: true
+  matched_version: 21 Public Beta 1
+  match_basis: user_verified_body_title_build_20
+  counted: true
+  exclusion_reason: null
+  issue_theme: magic_mask_crash
+  workflow_area: color_grading
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-public-beta-1-reddit-1sn39qf-decode-failure
+  product_id: blackmagic-davinci
+  update_version: 21 Public Beta 1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1sn39qf/davinci_resolve_failed_to_decode_video_frame_when/
+  parent_title: DaVinci Resolve failed to decode video frame when rendering
+  report_title: DaVinci Resolve failed to decode video frame when rendering / public beta 21
+  report_text_excerpt: User-verified Reddit report describing a decode/render failure while trying DaVinci Resolve public beta 21.
+  captured_at: '2026-05-12T00:00:00Z'
+  patch_version_matched: true
+  matched_version: 21 Public Beta 1
+  match_basis: user_verified_public_beta_21_post_body_title
+  counted: true
+  exclusion_reason: null
+  issue_theme: decode_render_failure
+  workflow_area: render_export
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1

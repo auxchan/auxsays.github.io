@@ -1,0 +1,240 @@
+{
+  "generated_at": "2026-05-12T07:17:24.501868Z",
+  "mode": "write_back",
+  "write_mode_active": true,
+  "evidence_source": "_data/consensus_evidence.yml",
+  "product_id_filter": "blackmagic-davinci",
+  "version_filter": "21 Public Beta 1",
+  "generated_records_indexed": 38,
+  "aggregate_groups_evaluated": 1,
+  "groups_would_write": 1,
+  "groups_write_blocked": 0,
+  "total_included_candidates": 2,
+  "total_excluded_candidates": 0,
+  "results": [
+    {
+      "product_id": "blackmagic-davinci",
+      "update_version": "21 Public Beta 1",
+      "matched_generated_record_path": "updates/generated/2026-04-14-davinci-resolve-21-public-beta-1.md",
+      "evidence_row_count": 2,
+      "included_candidate_count": 2,
+      "excluded_candidate_count": 0,
+      "confirmed_patch_specific_report_count": 2,
+      "proposed_update_report_count": 2,
+      "proposed_evidence_state": "pilot_sample",
+      "proposed_consensus_collection_status": "pilot_initial_sample",
+      "proposed_consensus_label": "Negative",
+      "proposed_confidence": "Low",
+      "proposed_issue_themes": {
+        "magic_mask_crash": 1,
+        "decode_render_failure": 1
+      },
+      "source_urls": [
+        "https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235179",
+        "https://www.reddit.com/r/davinciresolve/comments/1sn39qf/davinci_resolve_failed_to_decode_video_frame_when/"
+      ],
+      "included_rows": [
+        {
+          "id": "blackmagic-davinci-21-public-beta-1-bmd-forum-t235179-magic-mask-crash",
+          "source_url": "https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235179",
+          "source_title": "Resolve Studio 21.0B Build 20 crashes when creating Magic Mask",
+          "proposed_update_version": "21 Public Beta 1",
+          "exact_version_match": null,
+          "patch_version_matched": true,
+          "access_status": null,
+          "confidence": null,
+          "sentiment": "negative",
+          "severity": "high",
+          "issue_theme": "magic_mask_crash"
+        },
+        {
+          "id": "blackmagic-davinci-21-public-beta-1-reddit-1sn39qf-decode-failure",
+          "source_url": "https://www.reddit.com/r/davinciresolve/comments/1sn39qf/davinci_resolve_failed_to_decode_video_frame_when/",
+          "source_title": "DaVinci Resolve failed to decode video frame when rendering / public beta 21",
+          "proposed_update_version": "21 Public Beta 1",
+          "exact_version_match": null,
+          "patch_version_matched": true,
+          "access_status": null,
+          "confidence": null,
+          "sentiment": "negative",
+          "severity": "medium",
+          "issue_theme": "decode_render_failure"
+        }
+      ],
+      "rejected_candidate_reasons": [],
+      "safety_gate_results": {
+        "gate_01_nonzero_count_requires_rows": {
+          "passed": true,
+          "note": "Proposed count 2; included rows 2.",
+          "blocking": true
+        },
+        "gate_02_count_equals_included_rows": {
+          "passed": true,
+          "note": "proposed_count=2, included_rows=2.",
+          "blocking": true
+        },
+        "gate_03_product_id_matches_record": {
+          "passed": true,
+          "note": "Evidence product_id='blackmagic-davinci', record product_id='blackmagic-davinci'.",
+          "blocking": true
+        },
+        "gate_04_version_matches_record": {
+          "passed": true,
+          "note": "Evidence version='21 Public Beta 1', record version='21 Public Beta 1'.",
+          "blocking": true
+        },
+        "gate_05_no_beta_stable_cross_match": {
+          "passed": true,
+          "note": "0 included row(s) have a version mismatch vs '21 Public Beta 1'.",
+          "blocking": true
+        },
+        "gate_06_legacy_count_not_verified": {
+          "passed": true,
+          "note": "legacy_manual_report_count=7; proposed_count=2; backed_by_rows=True.",
+          "blocking": false
+        },
+        "gate_07_official_only_zero_rows_stays_zero": {
+          "passed": true,
+          "note": "evidence_state='official_only', proposed_count=2, included_rows=2.",
+          "blocking": true
+        },
+        "gate_08_no_ambiguous_versions": {
+          "passed": true,
+          "note": "0 included row(s) have an empty version.",
+          "blocking": true
+        },
+        "gate_09_record_must_exist_for_write": {
+          "passed": true,
+          "note": "A matching generated record must exist before a write can proceed.",
+          "blocking": true
+        },
+        "gate_10_dry_run_precedes_write": {
+          "passed": true,
+          "note": "Dry-run/write planning completed before any write.",
+          "blocking": false
+        },
+        "gate_11_source_url_required": {
+          "passed": true,
+          "note": "0 included row(s) are missing source_url.",
+          "blocking": true
+        },
+        "gate_12_patch_version_matched_required": {
+          "passed": true,
+          "note": "0 evidence row(s) do not have patch_version_matched: true.",
+          "blocking": true
+        },
+        "gate_13_counted_required": {
+          "passed": true,
+          "note": "0 evidence row(s) have counted: false.",
+          "blocking": true
+        },
+        "gate_14_access_limited_rows_flagged": {
+          "passed": true,
+          "note": "0 included row(s) have limited access metadata; user verification required for promotion.",
+          "blocking": false
+        },
+        "gate_15_write_requested_explicitly": {
+          "passed": true,
+          "note": "Write mode requested with explicit product/version/confirm flags.",
+          "blocking": true
+        }
+      },
+      "blocking_gate_failures": [],
+      "would_write": true,
+      "write_blocked_reason": null,
+      "proposed_fields_if_written": {
+        "update_report_count": 2,
+        "confirmed_patch_specific_report_count": 2,
+        "evidence_state": "pilot_sample",
+        "evidence_state_label": "Verified reports",
+        "consensus_collection_status": "pilot_initial_sample",
+        "update_consensus_label": "Negative",
+        "update_consensus_confidence": "Low",
+        "consensus_report_count_label": "confirmed patch-specific reports",
+        "update_consensus_summary": "AUXSAYS has verified 2 source-backed, patch-specific reports for DaVinci Resolve 21 Public Beta 1. The current verified-report set is negative with Low confidence.",
+        "consensus_report": "AUXSAYS counted 2 user-verified, source-backed reports for DaVinci Resolve 21 Public Beta 1. The promoted evidence rows are stored in consensus_evidence.yml and matched by product_id/update_version. Sources: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235179; https://www.reddit.com/r/davinciresolve/comments/1sn39qf/davinci_resolve_failed_to_decode_video_frame_when/.",
+        "evidence_last_checked": "2026-05-12T00:00:00Z",
+        "record_last_updated": "2026-05-12T07:17:24.501766Z",
+        "intelligence_stage": "pilot",
+        "evidence_samples": [
+          {
+            "source_name": "Blackmagic Design Community Forum",
+            "source_url": "https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235179",
+            "source_title": "Resolve Studio 21.0B Build 20 crashes when creating Magic Mask",
+            "counted": true,
+            "version_matched": "21 Public Beta 1",
+            "issue": "magic_mask_crash",
+            "outcome": "high"
+          },
+          {
+            "source_name": "r/davinciresolve",
+            "source_url": "https://www.reddit.com/r/davinciresolve/comments/1sn39qf/davinci_resolve_failed_to_decode_video_frame_when/",
+            "source_title": "DaVinci Resolve failed to decode video frame when rendering / public beta 21",
+            "counted": true,
+            "version_matched": "21 Public Beta 1",
+            "issue": "decode_render_failure",
+            "outcome": "medium"
+          }
+        ],
+        "status_events_append": {
+          "at": "2026-05-12T07:17:24.501766Z",
+          "label": "Verified reports",
+          "note": "Phase 1F controlled write-back: 2 user-verified, source-backed reports promoted from consensus_evidence.yml."
+        }
+      },
+      "protected_fields_not_touched": [
+        "company_id",
+        "complaint_themes",
+        "description",
+        "evidence_backfill_status",
+        "layout",
+        "legacy_manual_report_count",
+        "legacy_manual_report_count_note",
+        "legacy_report_count",
+        "official_checksums_body",
+        "official_patch_notes_body",
+        "official_summary",
+        "permalink",
+        "practical_recommendations",
+        "product_id",
+        "quick_verdict",
+        "record_note",
+        "release_summary",
+        "title",
+        "update_decision_body",
+        "update_decision_label",
+        "update_download_url",
+        "update_entry",
+        "update_product",
+        "update_published_at",
+        "update_source_url",
+        "update_version"
+      ]
+    }
+  ],
+  "write_result": {
+    "success": true,
+    "record_path": "updates/generated/2026-04-14-davinci-resolve-21-public-beta-1.md",
+    "fields_written": [
+      "confirmed_patch_specific_report_count",
+      "consensus_collection_status",
+      "consensus_report",
+      "consensus_report_count_label",
+      "evidence_last_checked",
+      "evidence_samples",
+      "evidence_state",
+      "evidence_state_label",
+      "intelligence_stage",
+      "record_last_updated",
+      "update_consensus_confidence",
+      "update_consensus_label",
+      "update_consensus_summary",
+      "update_report_count",
+      "status_events"
+    ],
+    "pre_write_report_count": 0,
+    "post_write_report_count": 2,
+    "pre_write_evidence_state": "official_only",
+    "post_write_evidence_state": "pilot_sample"
+  }
+}
