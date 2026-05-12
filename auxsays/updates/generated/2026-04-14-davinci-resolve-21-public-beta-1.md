@@ -41,7 +41,7 @@ update_decision_body: Public beta build. Treat this as a testing release for edi
   clean default upgrade for active client work.
 source_freshness_note: Official source should be refreshed before relying on this page for current install guidance.
 record_note: AUXSAYS has completed an initial pilot evidence pass for this DaVinci Resolve 21 Public Beta 1 record.
-  Two source-backed, user-verified issue reports are currently counted. This remains a low-confidence pilot sample,
+  Two source-backed, user-verified issue reports are currently counted. This remains a low-confidence Verified reports,
   not broad consensus. The legacy manual count remains historical context only and does not drive the verified report
   count. DaVinci ingestion remains disabled/manual-watch for ongoing automated collection.
 official_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and should be treated differently from
