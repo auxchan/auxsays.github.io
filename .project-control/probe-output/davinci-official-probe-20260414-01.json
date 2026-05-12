@@ -1,0 +1,140 @@
+{
+  "probe_type": "davinci-official-source-dry-run",
+  "phase": "1A",
+  "read_only": true,
+  "writes_records": false,
+  "lib_available": true,
+  "press_release_probe": {
+    "url": "https://www.blackmagicdesign.com/media/release/20260414-01",
+    "adapter_path": {
+      "article_tag_found": false,
+      "main_tag_found": false
+    },
+    "custom_selectors": {
+      "attempts": [
+        {
+          "pattern_index": 0,
+          "found": false
+        },
+        {
+          "pattern_index": 1,
+          "found": true,
+          "body_length": 74,
+          "body_excerpt": "Terry Frechette\n\n\n +1 408 954 0500 Ext. 321\n\n\n pr-usa@blackmagicdesign.com",
+          "passes_body_match_check": false
+        },
+        {
+          "pattern_index": 2,
+          "found": false
+        }
+      ]
+    },
+    "meta": {
+      "http_status": 200,
+      "fetch_ok": true,
+      "response_length_chars": 67212,
+      "h1": "Blackmagic Design News Archive",
+      "page_title": "Media | Blackmagic Design",
+      "date_extracted": null,
+      "url_date_prefix": "20260414"
+    }
+  },
+  "listing_page_probe": {
+    "url": "https://www.blackmagicdesign.com/media",
+    "link_discovery": {
+      "total_anchor_tags": 213,
+      "generic_filter_candidates": 0,
+      "generic_filter_sample": [],
+      "blackmagic_release_links": 0,
+      "blackmagic_release_sample": [],
+      "likely_js_rendered": false,
+      "note": "If likely_js_rendered=true, the listing page is a JavaScript shell and static fetch will not discover release links. URL construction strategy required."
+    },
+    "http_status": 200,
+    "fetch_ok": true,
+    "response_length_chars": 63972
+  },
+  "version_normalization": {
+    "samples": [
+      {
+        "input": "DaVinci Resolve 21 Public Beta 1",
+        "current_pattern_matches": false,
+        "current_version_extracted": null,
+        "relaxed_pattern_matches": false,
+        "relaxed_version_extracted": null
+      },
+      {
+        "input": "DaVinci Resolve 21 Public Beta 2",
+        "current_pattern_matches": false,
+        "current_version_extracted": null,
+        "relaxed_pattern_matches": false,
+        "relaxed_version_extracted": null
+      },
+      {
+        "input": "DaVinci Resolve 21",
+        "current_pattern_matches": false,
+        "current_version_extracted": null,
+        "relaxed_pattern_matches": false,
+        "relaxed_version_extracted": null
+      },
+      {
+        "input": "DaVinci Resolve 21.0.1",
+        "current_pattern_matches": false,
+        "current_version_extracted": null,
+        "relaxed_pattern_matches": false,
+        "relaxed_version_extracted": null
+      },
+      {
+        "input": "DaVinci Resolve 20.0.0",
+        "current_pattern_matches": false,
+        "current_version_extracted": null,
+        "relaxed_pattern_matches": false,
+        "relaxed_version_extracted": null
+      },
+      {
+        "input": "DaVinci Resolve 19.1",
+        "current_pattern_matches": false,
+        "current_version_extracted": null,
+        "relaxed_pattern_matches": false,
+        "relaxed_version_extracted": null
+      },
+      {
+        "input": "v21.0.1",
+        "current_pattern_matches": true,
+        "current_version_extracted": "21.0.1",
+        "relaxed_pattern_matches": true,
+        "relaxed_version_extracted": "21.0.1"
+      },
+      {
+        "input": "21",
+        "current_pattern_matches": false,
+        "current_version_extracted": null,
+        "relaxed_pattern_matches": true,
+        "relaxed_version_extracted": "21"
+      },
+      {
+        "input": "21.0.1",
+        "current_pattern_matches": true,
+        "current_version_extracted": "21.0.1",
+        "relaxed_pattern_matches": true,
+        "relaxed_version_extracted": "21.0.1"
+      },
+      {
+        "input": "21 Public Beta 1",
+        "current_pattern_matches": false,
+        "current_version_extracted": null,
+        "relaxed_pattern_matches": true,
+        "relaxed_version_extracted": "21 Public Beta 1"
+      }
+    ]
+  },
+  "support_page_probe": {
+    "url": "https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion",
+    "http_status": 200,
+    "fetch_ok": true,
+    "response_length_chars": 138465,
+    "version_strings_found": [],
+    "download_links_found": 0,
+    "download_link_sample": []
+  }
+}
