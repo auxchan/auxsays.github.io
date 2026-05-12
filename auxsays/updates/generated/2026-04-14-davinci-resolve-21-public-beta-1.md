@@ -19,8 +19,8 @@ update_status: current
 update_feed_title: DaVinci Resolve 21 Public Beta 1
 update_detail_title: DaVinci Resolve 21 Public Beta 1
 update_consensus_label: Insufficient data
-update_consensus_summary: No structured evidence collection has been completed for this release. Official source is linked but
-  body capture has not succeeded. This record is official-source/manual-watch only.
+update_consensus_summary: No structured evidence collection has been completed for this release. Official source is linked
+  but body capture has not succeeded. This record is official-source/manual-watch only.
 update_report_count: 0
 update_consensus_confidence: Low
 status_change_type: new
@@ -41,15 +41,15 @@ update_decision_body: Public beta build. Treat this as a testing release for edi
   upgrade for active client work.
 source_freshness_note: Official source should be refreshed before relying on this page for current install guidance.
 record_note: This DaVinci Resolve record is currently official-source/manual-watch only. The previous 7-report value is preserved
-  as historical context only and is not backed by structured consensus_evidence.yml rows. AUXSAYS has not yet completed a DaVinci
-  evidence collection cycle.
+  as historical context only and is not backed by structured consensus_evidence.yml rows. AUXSAYS has not yet completed a
+  DaVinci evidence collection cycle.
 official_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and should be treated differently from a stable
   production build. The key user decision is not simply whether the release is new, but whether the new Resolve 21 feature
   set is worth testing in a non-critical environment. For production work, the practical read is to keep existing stable projects
   on a known-good version unless a specific Resolve 21 feature is needed and the project can tolerate beta risk.
 consensus_report: No structured evidence collection has been completed for DaVinci Resolve 21 Public Beta 1. The previous
-  7-report value was a pre-evidence manual estimate and is not backed by consensus_evidence.yml rows. AUXSAYS has not run a
-  DaVinci evidence collection cycle. This record is official-source/manual-watch only pending Phase 1C implementation.
+  7-report value was a pre-evidence manual estimate and is not backed by consensus_evidence.yml rows. AUXSAYS has not run
+  a DaVinci evidence collection cycle. This record is official-source/manual-watch only pending Phase 1C implementation.
 complaint_themes:
 - theme: Beta setup questions
   frequency: Medium
@@ -66,8 +66,8 @@ status_events:
   note: Official release became available.
 - at: '2026-04-23T00:00:00Z'
   label: Insufficient data
-  note: 'Phase 1B correction: prior 7-report value was a pre-evidence manual estimate not backed by consensus_evidence.yml rows.
-    Evidence state corrected to official_only. Report count set to 0.'
+  note: 'Phase 1B correction: prior 7-report value was a pre-evidence manual estimate not backed by consensus_evidence.yml
+    rows. Evidence state corrected to official_only. Report count set to 0.'
 legacy_consensus_score: 6
 legacy_consensus_score_percent: 53
 official_patch_notes_source_url: https://www.blackmagicdesign.com/media/release/20260414-01
@@ -96,16 +96,11 @@ legacy_manual_report_count_note: Previous 7-report value appears to be a pre-evi
 known_issues_present: true
 official_checksums_body: ''
 intelligence_stage: manual_watch
-source_last_checked: '2026-05-11T20:06:51Z'
-official_body_last_checked: '2026-05-11T20:06:51Z'
+source_last_checked: '2026-05-12T04:09:14Z'
+official_body_last_checked: '2026-05-12T04:09:14Z'
 primary_official_source: https://www.blackmagicdesign.com/media/release/20260414-01
 fallback_official_sources: []
 official_source_attempts:
-- at: '2026-05-10T19:36:18Z'
-  url: https://www.blackmagicdesign.com/media/release/20260414-01
-  status: official-source-parser-failed
-  body_captured: false
-  checksums_captured: false
 - at: '2026-05-11T04:39:32Z'
   url: https://www.blackmagicdesign.com/media/release/20260414-01
   status: official-source-parser-failed
@@ -122,6 +117,11 @@ official_source_attempts:
   body_captured: false
   checksums_captured: false
 - at: '2026-05-11T20:06:51Z'
+  url: https://www.blackmagicdesign.com/media/release/20260414-01
+  status: official-source-parser-failed
+  body_captured: false
+  checksums_captured: false
+- at: '2026-05-12T04:09:14Z'
   url: https://www.blackmagicdesign.com/media/release/20260414-01
   status: official-source-parser-failed
   body_captured: false

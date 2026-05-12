@@ -3,10 +3,15 @@
   "last_results": [
     {
       "adapter": "rss_feed",
-      "duration_ms": 826,
+      "duration_ms": 845,
       "fetched": 2,
       "product_id": "figma",
       "refreshed": [
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-05-11-figma-custom-skills-in-make.md",
+          "record_id": "rss:figma:11173709-f3f3-44ff-8711-ae180a888f29"
+        },
         {
           "action": "freshness-updated",
           "path": "auxsays/updates/generated/2026-05-05-figma-everything-we-covered-at-release-notes-may-26-livestream.md",
@@ -15,13 +20,11 @@
       ],
       "skipped": [],
       "status": "success",
-      "written": [
-        "auxsays/updates/generated/2026-05-11-figma-custom-skills-in-make.md"
-      ]
+      "written": []
     },
     {
       "adapter": "adobe_release_notes",
-      "duration_ms": 25833,
+      "duration_ms": 25761,
       "fetched": 1,
       "product_id": "adobe-premiere-pro",
       "refreshed": [
@@ -37,7 +40,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 1064,
+      "duration_ms": 1134,
       "fetched": 2,
       "product_id": "obs-studio",
       "refreshed": [
@@ -58,7 +61,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 898,
+      "duration_ms": 734,
       "fetched": 2,
       "product_id": "comfyui",
       "refreshed": [
@@ -79,10 +82,15 @@
     },
     {
       "adapter": "rss_feed",
-      "duration_ms": 528,
+      "duration_ms": 295,
       "fetched": 2,
       "product_id": "github",
       "refreshed": [
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-05-11-github-copilot-create-repositories-on-the-go-with-github-mobile.md",
+          "record_id": "rss:github:https://github.blog/changelog/2026-05-11-create-repositories-on-the-go-with-github-mobile"
+        },
         {
           "action": "freshness-updated",
           "path": "auxsays/updates/generated/2026-05-08-github-copilot-upcoming-deprecation-of-grok-code-fast-1.md",
@@ -91,13 +99,11 @@
       ],
       "skipped": [],
       "status": "success",
-      "written": [
-        "auxsays/updates/generated/2026-05-11-github-copilot-create-repositories-on-the-go-with-github-mobile.md"
-      ]
+      "written": []
     },
     {
       "adapter": "html_changelog",
-      "duration_ms": 258,
+      "duration_ms": 278,
       "fetched": 0,
       "product_id": "netlify",
       "refreshed": [],
@@ -106,8 +112,8 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-05-11T20:06:51Z",
-  "last_run_started_at": "2026-05-11T20:06:22Z",
+  "last_run_finished_at": "2026-05-12T04:09:14Z",
+  "last_run_started_at": "2026-05-12T04:08:45Z",
   "sources": {
     "adobe-after-effects": {
       "consecutive_failures": 2,
@@ -172,7 +178,7 @@
     "adobe-premiere-pro": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_release_notes",
-      "last_checked_at": "2026-05-11T20:06:22Z",
+      "last_checked_at": "2026-05-12T04:08:46Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -180,8 +186,8 @@
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 25833,
-      "last_success_at": "2026-05-11T20:06:22Z",
+      "last_run_duration_ms": 25761,
+      "last_success_at": "2026-05-12T04:08:46Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "adobe:adobe-premiere-pro:26.2:9fa3e1e53c0b275d"
@@ -191,7 +197,7 @@
     "comfyui": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-05-11T20:06:49Z",
+      "last_checked_at": "2026-05-12T04:09:13Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -199,8 +205,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 898,
-      "last_success_at": "2026-05-11T20:06:49Z",
+      "last_run_duration_ms": 734,
+      "last_success_at": "2026-05-12T04:09:13Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:comfyui:320256380",
@@ -212,7 +218,7 @@
     "figma": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-05-11T20:06:22Z",
+      "last_checked_at": "2026-05-12T04:08:45Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -220,8 +226,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 826,
-      "last_success_at": "2026-05-11T20:06:22Z",
+      "last_run_duration_ms": 845,
+      "last_success_at": "2026-05-12T04:08:45Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:figma:11173709-f3f3-44ff-8711-ae180a888f29",
@@ -240,7 +246,7 @@
     "github": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-05-11T20:06:50Z",
+      "last_checked_at": "2026-05-12T04:09:14Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -248,8 +254,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 528,
-      "last_success_at": "2026-05-11T20:06:50Z",
+      "last_run_duration_ms": 295,
+      "last_success_at": "2026-05-12T04:09:14Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:github:https://github.blog/changelog/2026-05-11-create-repositories-on-the-go-with-github-mobile",
@@ -278,7 +284,7 @@
     "netlify": {
       "consecutive_failures": 0,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-05-11T20:06:51Z",
+      "last_checked_at": "2026-05-12T04:09:14Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -286,15 +292,15 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 258,
-      "last_success_at": "2026-05-11T20:06:51Z",
+      "last_run_duration_ms": 278,
+      "last_success_at": "2026-05-12T04:09:14Z",
       "previous_consecutive_failures": 0,
       "status": "degraded"
     },
     "obs-studio": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-05-11T20:06:48Z",
+      "last_checked_at": "2026-05-12T04:09:12Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -302,8 +308,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 1064,
-      "last_success_at": "2026-05-11T20:06:48Z",
+      "last_run_duration_ms": 1134,
+      "last_success_at": "2026-05-12T04:09:12Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:obs-studio:304830335",
