@@ -40,9 +40,10 @@ update_decision_label: WAIT for production systems
 update_decision_body: Public beta build. Treat this as a testing release for editors and color workflows, not a
   clean default upgrade for active client work.
 source_freshness_note: Official source should be refreshed before relying on this page for current install guidance.
-record_note: This DaVinci Resolve record is currently official-source/manual-watch only. The previous 7-report value
-  is preserved as historical context only and is not backed by structured consensus_evidence.yml rows. AUXSAYS has
-  not yet completed a DaVinci evidence collection cycle.
+record_note: AUXSAYS has completed an initial pilot evidence pass for this DaVinci Resolve 21 Public Beta 1 record.
+  Two source-backed, user-verified issue reports are currently counted. This remains a low-confidence pilot sample,
+  not broad consensus. The legacy manual count remains historical context only and does not drive the verified report
+  count. DaVinci ingestion remains disabled/manual-watch for ongoing automated collection.
 official_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and should be treated differently from
   a stable production build. The key user decision is not simply whether the release is new, but whether the new
   Resolve 21 feature set is worth testing in a non-critical environment. For production work, the practical read
