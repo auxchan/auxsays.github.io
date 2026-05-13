@@ -38,8 +38,48 @@ from .base import (
 PRODUCT_ID = "blackmagic-davinci"
 SOURCE_NAME_REDDIT = "r/davinciresolve"
 REDDIT_SEARCH = "https://www.reddit.com/r/davinciresolve/search.json"
+FORUM_SEARCH = "https://forum.blackmagicdesign.com/search.php"
+FORUM_DISCOVERY_ISSUE_TERMS = (
+    "crash",
+    "corrupt",
+    "render",
+    "export",
+    "gpu",
+    "install",
+    "bug",
+    "magic mask",
+)
+PRODUCT_CONTEXT_RE = re.compile(r"\b(?:davinci\s+resolve|resolve\s+studio|resolve)\b", flags=re.I)
 
+# Seed/fallback coverage only: these URLs are calibration examples for the
+# deterministic gates, not the primary long-term DaVinci evidence mechanism.
+# Productive vendor forum / Reddit discovery should reduce reliance on this list.
 KNOWN_WATCHLIST = (
+    {
+        "source_url": "https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235117",
+        "source_type": "blackmagic_forum",
+        "source_name": "Blackmagic Design Community Forum",
+    },
+    {
+        "source_url": "https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235536",
+        "source_type": "blackmagic_forum",
+        "source_name": "Blackmagic Design Community Forum",
+    },
+    {
+        "source_url": "https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235458",
+        "source_type": "blackmagic_forum",
+        "source_name": "Blackmagic Design Community Forum",
+    },
+    {
+        "source_url": "https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235208",
+        "source_type": "blackmagic_forum",
+        "source_name": "Blackmagic Design Community Forum",
+    },
+    {
+        "source_url": "https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=234870",
+        "source_type": "blackmagic_forum",
+        "source_name": "Blackmagic Design Community Forum",
+    },
     {
         "source_url": "https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235179",
         "source_type": "blackmagic_forum",
@@ -51,8 +91,6 @@ KNOWN_WATCHLIST = (
         "source_name": SOURCE_NAME_REDDIT,
     },
 )
-
-FORUM_SEARCH = "https://forum.blackmagicdesign.com/search.php"
 
 
 class DavinciCollector(ProductCollector):
@@ -138,8 +176,9 @@ def version_aliases(version: str) -> list[str]:
             "DaVinci Resolve Studio 21.0B Build 20",
             "DaVinci Resolve 21.0b1",
             "Resolve 21.0b1",
-            "public beta 21",
-            "beta 21",
+            "DR 21 Public Beta 1",
+            "DR 21 Beta 1",
+            "DR 21b1",
         ])
     return aliases
 
@@ -164,11 +203,11 @@ def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[
         method_accepted, method_rejected = evaluate_candidates(record, candidates, captured_at, seen_urls)
         accepted.extend(method_accepted)
         rejected.extend(method_rejected)
-        for error in errors:
-            rejected.append({
-                "source_url": error.get("source_url") or error.get("query") or "",
-                "exclusion_reason": error.get("reason") or "fetch_failed",
-            })
+        fetch_failure_count = len(errors)
+        blocked_reason = "; ".join(str(error.get("reason") or "fetch_failed") for error in errors)
+        notes = method_notes(method_id)
+        if fetch_failure_count:
+            notes = f"{notes} Fetch failures: {fetch_failure_count}."
         status = "disabled" if method_id == "web_search" else method_status(candidates, method_accepted, method_rejected, errors)
         health.append(method_health_row(
             product_id=PRODUCT_ID,
@@ -178,10 +217,10 @@ def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[
             status=status,
             candidates_found=len(candidates),
             accepted_reports=len(method_accepted),
-            rejected_reports=len(method_rejected) + len(errors),
-            blocked_reason="; ".join(str(error.get("reason") or "fetch_failed") for error in errors),
+            rejected_reports=len(method_rejected),
+            blocked_reason=blocked_reason,
             last_run=captured_at,
-            notes=method_notes(method_id),
+            notes=notes,
         ))
 
     return accepted, rejected, health
@@ -249,14 +288,16 @@ def known_watchlist_candidates(record: PatchRecord, context: CollectorContext, e
 
 
 def vendor_forum_search_candidates(record: PatchRecord, context: CollectorContext, errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    params = urllib.parse.urlencode({"keywords": record.update_version, "terms": "all", "author": "", "sc": "1", "sf": "titleonly"})
-    url = f"{FORUM_SEARCH}?{params}"
-    try:
-        text = request_text(url)
-    except Exception as exc:
-        errors.append({"source_url": url, "reason": f"vendor_forum_search_blocked_or_failed:{type(exc).__name__}"})
-        return []
-    links = re.findall(r"href=\"(viewtopic\.php\?[^\"#]+t=\d+[^\"#]*)", text, flags=re.I)
+    links: list[str] = []
+    for term in forum_search_terms(record):
+        params = urllib.parse.urlencode({"keywords": term, "terms": "all", "author": "", "sc": "1", "sf": "all"})
+        url = f"{FORUM_SEARCH}?{params}"
+        try:
+            text = request_text(url)
+        except Exception as exc:
+            errors.append({"source_url": url, "reason": f"vendor_forum_search_blocked_or_failed:{type(exc).__name__}"})
+            continue
+        links.extend(re.findall(r"href=\"(viewtopic\.php\?[^\"#]+t=\d+[^\"#]*)", text, flags=re.I))
     candidates: list[dict[str, Any]] = []
     for link in sorted(set(links))[:25]:
         source_url = urllib.parse.urljoin("https://forum.blackmagicdesign.com/", html.unescape(link))
@@ -277,6 +318,21 @@ def vendor_forum_search_candidates(record: PatchRecord, context: CollectorContex
             "source_date": extract_source_date(clean),
         })
     return candidates
+
+
+def forum_search_terms(record: PatchRecord) -> list[str]:
+    version_terms: list[str] = []
+    seen: set[str] = set()
+    for term in [record.update_version, *version_aliases(record.update_version)]:
+        term = re.sub(r"\s+", " ", str(term or "")).strip()
+        if term and term.lower() not in seen:
+            seen.add(term.lower())
+            version_terms.append(term)
+    queries = list(version_terms)
+    for version_term in version_terms[:6]:
+        for issue_term in FORUM_DISCOVERY_ISSUE_TERMS[:4]:
+            queries.append(f"{version_term} {issue_term}")
+    return queries[:24]
 
 
 def web_search_candidates(record: PatchRecord, context: CollectorContext, errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -351,9 +407,9 @@ def method_status(
 
 def method_notes(method_id: str) -> str:
     notes = {
-        "known_watchlist": "Specific known report URLs are fetched and passed through the same deterministic evidence gates.",
+        "known_watchlist": "Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method.",
         "reddit_search": "Subreddit search discovers candidate posts; accepted rows still require exact version/date/report gates.",
-        "vendor_forum_search": "Blackmagic forum search discovers candidate threads when accessible; accepted rows still require exact version/date/report gates.",
+        "vendor_forum_search": "Blackmagic forum search uses exact version aliases plus issue-language terms to discover candidate threads; accepted rows still require exact version/date/report gates.",
         "web_search": "Reserved fallback discovery method; no adapter is configured in Phase A.",
     }
     return notes.get(method_id, "")
@@ -391,7 +447,15 @@ def row_from_candidate(record: PatchRecord, candidate: dict[str, Any], captured_
         sentiment=sentiment,
         row_id=f"{PRODUCT_ID}-{slug(record.update_version)}-{slug(str(candidate.get('source_type') or 'source'))}-{slug(str(candidate.get('source_url') or ''))}",
     )
-    return apply_acceptance_gates(row, report_text=report_text)
+    gated = apply_acceptance_gates(row, report_text=report_text)
+    if gated.get("counted") is True and not davinci_product_match(report_text):
+        gated["counted"] = False
+        gated["exclusion_reason"] = "missing_davinci_product_context"
+    return gated
+
+
+def davinci_product_match(text: str) -> bool:
+    return bool(PRODUCT_CONTEXT_RE.search(text or ""))
 
 
 def classify(text: str) -> tuple[str, str, str, str, str]:

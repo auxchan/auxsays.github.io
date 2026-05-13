@@ -1,0 +1,83 @@
+schema_version: 1
+notes: "Calibration fixtures only. These are not consensus evidence and must not be written to public evidence files."
+reports:
+  - id: davinci-calibration-235117
+    product_id: blackmagic-davinci
+    update_version: "21 Public Beta 1"
+    source_type: blackmagic_forum
+    source_name: "Blackmagic Design Community Forum"
+    source_url: "https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235117"
+    thread_title: "DaVinci Resolve 21 Public Beta 1 crash and corrupted project report"
+    report_title: "Resolve Studio 21.0B Build 20 project corruption after crash"
+    report_text_excerpt: "DaVinci Resolve Studio 21.0B Build 20 crashed and the project was corrupted after reopening."
+    source_date: "2026-04-14"
+    target_release_date: "2026-04-14"
+    match_basis_expected: exact_version_alias
+    concrete_issue_basis: "crash; corrupted project"
+    date_gate_basis: "fixture source date is on or after the 2026-04-14 release date"
+    expected_result: accepted_if_fetch_succeeds_and_gates_pass
+    verification_basis: "Taylor-verified calibration example; the local Phase 1H detail file is not present in this workspace."
+  - id: davinci-calibration-235536
+    product_id: blackmagic-davinci
+    update_version: "21 Public Beta 1"
+    source_type: blackmagic_forum
+    source_name: "Blackmagic Design Community Forum"
+    source_url: "https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235536"
+    thread_title: "DaVinci Resolve 21 Public Beta 1 export failure report"
+    report_title: "Resolve 21.0 Public Beta 1 render/export failure"
+    report_text_excerpt: "Resolve 21.0 Public Beta 1 failed during render/export and broke the normal delivery workflow."
+    source_date: "2026-04-15"
+    target_release_date: "2026-04-14"
+    match_basis_expected: exact_version_alias
+    concrete_issue_basis: "failed render/export workflow"
+    date_gate_basis: "fixture source date is after the 2026-04-14 release date"
+    expected_result: accepted_if_fetch_succeeds_and_gates_pass
+    verification_basis: "Taylor-verified calibration example; the local Phase 1H detail file is not present in this workspace."
+  - id: davinci-calibration-235458
+    product_id: blackmagic-davinci
+    update_version: "21 Public Beta 1"
+    source_type: blackmagic_forum
+    source_name: "Blackmagic Design Community Forum"
+    source_url: "https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235458"
+    thread_title: "DaVinci Resolve 21 Public Beta 1 GPU performance regression report"
+    report_title: "DaVinci Resolve Studio 21 Public Beta 1 GPU slowdown"
+    report_text_excerpt: "DaVinci Resolve Studio 21 Public Beta 1 showed a GPU performance regression and slow timeline playback."
+    source_date: "2026-04-15"
+    target_release_date: "2026-04-14"
+    match_basis_expected: exact_version_alias
+    concrete_issue_basis: "GPU performance regression; slow timeline playback"
+    date_gate_basis: "fixture source date is after the 2026-04-14 release date"
+    expected_result: accepted_if_fetch_succeeds_and_gates_pass
+    verification_basis: "Taylor-verified calibration example; the local Phase 1H detail file is not present in this workspace."
+  - id: davinci-calibration-235208
+    product_id: blackmagic-davinci
+    update_version: "21 Public Beta 1"
+    source_type: blackmagic_forum
+    source_name: "Blackmagic Design Community Forum"
+    source_url: "https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235208"
+    thread_title: "DaVinci Resolve 21 Public Beta 1 install issue report"
+    report_title: "DaVinci Resolve 21.0 Public Beta 1 installation failure"
+    report_text_excerpt: "DaVinci Resolve 21.0 Public Beta 1 install failed and blocked startup after the update."
+    source_date: "2026-04-14"
+    target_release_date: "2026-04-14"
+    match_basis_expected: exact_version_alias
+    concrete_issue_basis: "install failure; startup blocked"
+    date_gate_basis: "fixture source date is on the 2026-04-14 release date"
+    expected_result: accepted_if_fetch_succeeds_and_gates_pass
+    verification_basis: "Taylor-verified calibration example; the local Phase 1H detail file is not present in this workspace."
+  - id: davinci-calibration-234870
+    product_id: blackmagic-davinci
+    update_version: "21 Public Beta 1"
+    source_type: blackmagic_forum
+    source_name: "Blackmagic Design Community Forum"
+    source_url: "https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=234870"
+    thread_title: "DaVinci Resolve 21 Public Beta 1 Magic Mask crash report"
+    report_title: "Resolve Studio 21.0B Build 20 Magic Mask crash"
+    report_text_excerpt: "Resolve Studio 21.0B Build 20 crashed when using Magic Mask and interrupted color grading work."
+    source_date: "2026-04-14"
+    target_release_date: "2026-04-14"
+    match_basis_expected: exact_version_alias
+    concrete_issue_basis: "Magic Mask crash; interrupted color grading workflow"
+    date_gate_basis: "fixture source date is on the 2026-04-14 release date"
+    expected_result: accepted_if_fetch_succeeds_and_gates_pass
+    verification_basis: "Taylor-verified calibration example; the local Phase 1H detail file is not present in this workspace."
