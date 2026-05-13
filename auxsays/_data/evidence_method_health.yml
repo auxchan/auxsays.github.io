@@ -26,36 +26,35 @@ methods:
   update_version: 21 Public Beta 1
   method_id: known_watchlist
   source_type: curated_watchlist
-  status: broken
-  candidates_found: 0
+  status: partial
+  candidates_found: 6
   accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: probe_fetch_failed:HTTPError; probe_fetch_failed:HTTPError; probe_fetch_failed:HTTPError; probe_fetch_failed:HTTPError; probe_fetch_failed:HTTPError; probe_fetch_failed:HTTPError; probe_fetch_failed:HTTPError
-  last_run: '2026-05-13T07:25:04Z'
-  notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 7.'
+  rejected_reports: 6
+  blocked_reason: reddit_post_fetch_failed:http_403_Blocked
+  last_run: '2026-05-13T08:09:49Z'
+  notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 1.'
 - product_id: blackmagic-davinci
   update_version: 21 Public Beta 1
   method_id: reddit_search
   source_type: reddit_community_report
-  status: broken
-  candidates_found: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError
-  last_run: '2026-05-13T07:25:04Z'
-  notes: 'Subreddit search discovers candidate posts; accepted rows still require exact version/date/report gates. Fetch failures: 14.'
-- product_id: blackmagic-davinci
-  update_version: 21 Public Beta 1
-  method_id: vendor_forum_search
-  source_type: blackmagic_forum
   status: blocked
   candidates_found: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError;
-    vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError
-  last_run: '2026-05-13T07:25:04Z'
-  notes: 'Blackmagic forum search uses exact version aliases plus issue-language terms to discover candidate threads; accepted rows still require exact version/date/report gates. Fetch failures: 24.'
+  blocked_reason: reddit_search_fetch_failed:http_403_Blocked; reddit_search_fetch_failed:http_403_Blocked; reddit_search_fetch_failed:http_403_Blocked; reddit_search_fetch_failed:http_403_Blocked; reddit_search_fetch_failed:http_403_Blocked; reddit_search_fetch_failed:http_403_Blocked; reddit_search_fetch_failed:http_403_Blocked; reddit_search_fetch_failed:http_403_Blocked; reddit_search_fetch_failed:http_403_Blocked; reddit_search_fetch_failed:http_403_Blocked; reddit_search_fetch_failed:http_403_Blocked; reddit_search_fetch_failed:http_403_Blocked; reddit_search_fetch_failed:http_403_Blocked; reddit_search_fetch_failed:http_403_Blocked; reddit_search_fetch_failed:http_403_Blocked; reddit_search_fetch_failed:http_403_Blocked; reddit_search_fetch_failed:http_403_Blocked; reddit_search_fetch_failed:http_403_Blocked; reddit_search_fetch_failed:http_403_Blocked
+  last_run: '2026-05-13T08:09:49Z'
+  notes: 'Subreddit search discovers candidate posts; accepted rows still require exact version/date/report gates. Fetch failures: 19.'
+- product_id: blackmagic-davinci
+  update_version: 21 Public Beta 1
+  method_id: vendor_forum_search
+  source_type: blackmagic_forum
+  status: no_results
+  candidates_found: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: ''
+  last_run: '2026-05-13T08:09:49Z'
+  notes: Blackmagic forum search uses exact version aliases plus issue-language terms to discover candidate threads; accepted rows still require exact version/date/report gates.
 - product_id: blackmagic-davinci
   update_version: 21 Public Beta 1
   method_id: web_search
@@ -65,5 +64,5 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: web_search_adapter_disabled_in_phase_a
-  last_run: '2026-05-13T07:25:04Z'
+  last_run: '2026-05-13T08:09:49Z'
   notes: 'Reserved fallback discovery method; no adapter is configured in Phase A. Fetch failures: 1.'
