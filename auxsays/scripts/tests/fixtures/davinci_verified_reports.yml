@@ -1,5 +1,5 @@
 schema_version: 1
-notes: "Calibration fixtures only. These are not consensus evidence and must not be written to public evidence files."
+notes: "One-time Taylor-authorized calibration bridge. These fixtures may be promoted only through auxsays/scripts/promote_davinci_verified_reports.py after deterministic gates pass; future reports still require automated discovery/fetch/gating."
 reports:
   - id: davinci-calibration-235117
     product_id: blackmagic-davinci
@@ -16,7 +16,12 @@ reports:
     concrete_issue_basis: "crash; corrupted project"
     date_gate_basis: "fixture source date is on or after the 2026-04-14 release date"
     expected_result: accepted_if_fetch_succeeds_and_gates_pass
-    verification_basis: "Taylor-verified calibration example; the local Phase 1H detail file is not present in this workspace."
+    counted: true
+    source_weight: 1
+    verification_source: taylor_phase_1g_1h_manual_verification
+    promotion_ready: true
+    promotion_blocker: ""
+    verification_basis: "Taylor-authorized Phase 1G/1H manual verification bridge; not a substitute for future automated discovery/fetch/gating."
   - id: davinci-calibration-235536
     product_id: blackmagic-davinci
     update_version: "21 Public Beta 1"
@@ -32,7 +37,12 @@ reports:
     concrete_issue_basis: "failed render/export workflow"
     date_gate_basis: "fixture source date is after the 2026-04-14 release date"
     expected_result: accepted_if_fetch_succeeds_and_gates_pass
-    verification_basis: "Taylor-verified calibration example; the local Phase 1H detail file is not present in this workspace."
+    counted: true
+    source_weight: 1
+    verification_source: taylor_phase_1g_1h_manual_verification
+    promotion_ready: true
+    promotion_blocker: ""
+    verification_basis: "Taylor-authorized Phase 1G/1H manual verification bridge; not a substitute for future automated discovery/fetch/gating."
   - id: davinci-calibration-235458
     product_id: blackmagic-davinci
     update_version: "21 Public Beta 1"
@@ -48,7 +58,12 @@ reports:
     concrete_issue_basis: "GPU performance regression; slow timeline playback"
     date_gate_basis: "fixture source date is after the 2026-04-14 release date"
     expected_result: accepted_if_fetch_succeeds_and_gates_pass
-    verification_basis: "Taylor-verified calibration example; the local Phase 1H detail file is not present in this workspace."
+    counted: true
+    source_weight: 1
+    verification_source: taylor_phase_1g_1h_manual_verification
+    promotion_ready: true
+    promotion_blocker: ""
+    verification_basis: "Taylor-authorized Phase 1G/1H manual verification bridge; not a substitute for future automated discovery/fetch/gating."
   - id: davinci-calibration-235208
     product_id: blackmagic-davinci
     update_version: "21 Public Beta 1"
@@ -64,7 +79,12 @@ reports:
     concrete_issue_basis: "install failure; startup blocked"
     date_gate_basis: "fixture source date is on the 2026-04-14 release date"
     expected_result: accepted_if_fetch_succeeds_and_gates_pass
-    verification_basis: "Taylor-verified calibration example; the local Phase 1H detail file is not present in this workspace."
+    counted: true
+    source_weight: 1
+    verification_source: taylor_phase_1g_1h_manual_verification
+    promotion_ready: true
+    promotion_blocker: ""
+    verification_basis: "Taylor-authorized Phase 1G/1H manual verification bridge; not a substitute for future automated discovery/fetch/gating."
   - id: davinci-calibration-234870
     product_id: blackmagic-davinci
     update_version: "21 Public Beta 1"
@@ -80,4 +100,9 @@ reports:
     concrete_issue_basis: "Magic Mask crash; interrupted color grading workflow"
     date_gate_basis: "fixture source date is on the 2026-04-14 release date"
     expected_result: accepted_if_fetch_succeeds_and_gates_pass
-    verification_basis: "Taylor-verified calibration example; the local Phase 1H detail file is not present in this workspace."
+    counted: true
+    source_weight: 1
+    verification_source: taylor_phase_1g_1h_manual_verification
+    promotion_ready: true
+    promotion_blocker: ""
+    verification_basis: "Taylor-authorized Phase 1G/1H manual verification bridge; not a substitute for future automated discovery/fetch/gating."

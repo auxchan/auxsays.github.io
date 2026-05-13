@@ -1,0 +1,67 @@
+name: Promote DaVinci Verified Calibration Reports
+
+on:
+  workflow_dispatch:
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+permissions:
+  contents: write
+  actions: write
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Checkout main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r auxsays/scripts/requirements-ingest.txt
+
+      - name: Validate verified DaVinci promotion fixtures
+        run: python auxsays/scripts/promote_davinci_verified_reports.py
+
+      - name: Promote verified DaVinci reports
+        run: python auxsays/scripts/promote_davinci_verified_reports.py --write
+
+      - name: Remove transient validation output
+        run: |
+          rm -rf auxsays/_site node_modules .jekyll-cache .codex_tmp
+          find . -type d -name __pycache__ -prune -exec rm -rf {} +
+          find . -type f -name '*.pyc' -delete
+          rm -f auxsays/_data/source_health.yml
+          rm -f auxsays/_data/qa_status.json
+          rm -f auxsays/_data/consensus_status.json
+          rm -f auxsays/_data/patch_ingest_state.json
+
+      - name: Commit material promotion changes
+        id: commit
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add auxsays/_data/consensus_evidence.yml
+          git add auxsays/updates/generated/2026-04-14-davinci-resolve-21-public-beta-1.md
+          if git diff --cached --quiet; then
+            echo "No material DaVinci verified promotion changes to commit."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git commit -m "Promote verified DaVinci calibration reports"
+          git push origin main
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Trigger site deploy
+        if: ${{ steps.commit.outputs.changed == 'true' }}
+        run: gh workflow run pages.yml --ref main
