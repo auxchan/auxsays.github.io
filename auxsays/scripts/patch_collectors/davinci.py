@@ -534,6 +534,12 @@ def version_aliases(version: str) -> list[str]:
             "DaVinci Resolve Studio 21.0B Build 20",
             "DaVinci Resolve 21.0b1",
             "Resolve 21.0b1",
+            "DaVinci Resolve public beta 21",
+            "Resolve public beta 21",
+            "public beta 21",
+            "DaVinci Resolve 21 beta",
+            "Resolve 21 beta",
+            "DaVinci Resolve Studio 21 beta",
             "DR 21 Public Beta 1",
             "DR 21 Beta 1",
             "DR 21b1",
@@ -566,6 +572,8 @@ def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[
         notes = method_notes(method_id)
         if fetch_failure_count:
             notes = f"{notes} Fetch failures: {fetch_failure_count}."
+        if method_rejected and not method_accepted:
+            notes = f"{notes} Rejected candidates: {format_rejection_counts(method_rejected)}."
         status = "disabled" if method_id == "web_search" else method_status(candidates, method_accepted, method_rejected, errors)
         health.append(method_health_row(
             product_id=PRODUCT_ID,
@@ -734,7 +742,7 @@ def reddit_listing_attempts(params: dict[str, str]) -> list[tuple[str, str]]:
 def reddit_feed_discovery_candidates(record: PatchRecord, context: CollectorContext, errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
     candidates: list[dict[str, Any]] = []
     seen_urls: set[str] = set()
-    for query in reddit_search_queries(record):
+    for query in reddit_feed_search_queries(record):
         for family, url in reddit_search_feed_attempts(query):
             try:
                 feed_candidates = request_reddit_feed(url, endpoint_family=family)
@@ -746,10 +754,12 @@ def reddit_feed_discovery_candidates(record: PatchRecord, context: CollectorCont
                 })
                 continue
             for candidate in feed_candidates:
-                url = str(candidate.get("source_url") or "").strip().rstrip("/").lower()
-                if not url or url in seen_urls:
+                candidate_url = str(candidate.get("source_url") or "").strip().rstrip("/").lower()
+                if not candidate_url or candidate_url in seen_urls:
                     continue
-                seen_urls.add(url)
+                if not candidate_has_version_hint(record, candidate):
+                    continue
+                seen_urls.add(candidate_url)
                 candidates.append(candidate)
     for family, url in reddit_listing_feed_attempts():
         try:
@@ -766,9 +776,55 @@ def reddit_feed_discovery_candidates(record: PatchRecord, context: CollectorCont
             candidate_url = str(candidate.get("source_url") or "").strip().rstrip("/").lower()
             if not candidate_url or candidate_url in seen_urls:
                 continue
+            if not candidate_has_version_hint(record, candidate):
+                continue
             seen_urls.add(candidate_url)
             candidates.append(candidate)
     return candidates
+
+
+def reddit_feed_search_queries(record: PatchRecord) -> list[str]:
+    normalized = normalize_davinci_version(record.update_version)
+    if normalized.get("is_beta") and int(normalized.get("beta_number") or 0) == 1:
+        base_queries = [
+            '"21 Public Beta 1"',
+            '"DaVinci Resolve 21 Public Beta 1"',
+            '"Resolve 21 Public Beta 1"',
+            '"public beta 21"',
+            '"Resolve 21 beta"',
+            '"DaVinci Resolve 21 beta"',
+            '"21.0B"',
+            '"21b1"',
+        ]
+    else:
+        base_queries = [
+            f'"DaVinci Resolve {record.update_version}"',
+            f'"Resolve {record.update_version}"',
+            f'"DaVinci Resolve Studio {record.update_version}"',
+        ]
+    issue_terms = ("crash", "render", "export", "bug")
+    queries = list(base_queries)
+    for base in base_queries[:6]:
+        for issue_term in issue_terms[:3]:
+            queries.append(f"{base} {issue_term}")
+    deduped: list[str] = []
+    seen: set[str] = set()
+    for query in queries:
+        normalized_query = re.sub(r"\s+", " ", query).strip()
+        if normalized_query and normalized_query.lower() not in seen:
+            seen.add(normalized_query.lower())
+            deduped.append(normalized_query)
+    return deduped[:24]
+
+
+def candidate_has_version_hint(record: PatchRecord, candidate: dict[str, Any]) -> bool:
+    text = " ".join([
+        str(candidate.get("parent_title") or ""),
+        str(candidate.get("report_title") or ""),
+        str(candidate.get("report_text") or ""),
+    ])
+    matched, _matched_version, _basis = exact_version_match(text, record.update_version, version_aliases(record.update_version))
+    return matched
 
 
 def reddit_search_feed_attempts(query: str) -> list[tuple[str, str]]:
@@ -1145,7 +1201,7 @@ def blocked_reason_from_errors(errors: list[dict[str, Any]]) -> str:
 def method_notes(method_id: str) -> str:
     notes = {
         "known_watchlist": "Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method.",
-        "reddit_search": "Subreddit search discovers candidate posts; accepted rows still require exact version/date/report gates.",
+        "reddit_search": "Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates.",
         "vendor_forum_search": "Blackmagic forum search uses exact version aliases plus issue-language terms to discover candidate threads; accepted rows still require exact version/date/report gates.",
         "web_search": "Reserved fallback discovery method; no adapter is configured in Phase A.",
     }
@@ -1268,6 +1324,11 @@ def rejection_counts(rows: list[dict[str, Any]]) -> dict[str, int]:
         reason = str(row.get("exclusion_reason") or "unknown")
         counts[reason] = counts.get(reason, 0) + 1
     return counts
+
+
+def format_rejection_counts(rows: list[dict[str, Any]]) -> str:
+    counts = rejection_counts(rows)
+    return ", ".join(f"{reason}={count}" for reason, count in sorted(counts.items()))
 
 
 def record_needs_count_update(record: PatchRecord, count: int) -> bool:

@@ -186,6 +186,69 @@ def run() -> int:
         f"reason={stable_for_beta_row.get('exclusion_reason')!r}",
     )
 
+    rss_public_beta_21 = {
+        "source_type": "reddit_community_report",
+        "source_name": "r/davinciresolve",
+        "source_url": "https://www.reddit.com/r/davinciresolve/comments/rss001/example/",
+        "parent_title": "DaVinci Resolve public beta 21 crashes during render",
+        "report_title": "DaVinci Resolve public beta 21 crashes during render",
+        "report_text": "DaVinci Resolve public beta 21 crashed while rendering a timeline.",
+        "source_date": "2026-04-15",
+    }
+    rss_public_beta_21_row = row_from_candidate(beta_record, rss_public_beta_21, "2026-05-13T00:00:00Z")
+    check(
+        "RSS-style public beta 21 with DaVinci context matches Beta 1",
+        rss_public_beta_21_row.get("counted") is True
+        and rss_public_beta_21_row.get("patch_version_matched") is True
+        and rss_public_beta_21_row.get("matched_version") in {"DaVinci Resolve public beta 21", "public beta 21"},
+        f"reason={rss_public_beta_21_row.get('exclusion_reason')!r}, matched={rss_public_beta_21_row.get('matched_version')!r}",
+    )
+
+    rss_resolve_21_beta = dict(rss_public_beta_21)
+    rss_resolve_21_beta.update({
+        "source_url": "https://www.reddit.com/r/davinciresolve/comments/rss002/example/",
+        "parent_title": "Resolve 21 beta export crash",
+        "report_title": "Resolve 21 beta export crash",
+        "report_text": "Resolve 21 beta crashed when exporting a project.",
+    })
+    rss_resolve_21_beta_row = row_from_candidate(beta_record, rss_resolve_21_beta, "2026-05-13T00:00:00Z")
+    check(
+        "RSS-style Resolve 21 beta with issue context matches Beta 1",
+        rss_resolve_21_beta_row.get("counted") is True
+        and rss_resolve_21_beta_row.get("matched_version") == "Resolve 21 beta",
+        f"reason={rss_resolve_21_beta_row.get('exclusion_reason')!r}, matched={rss_resolve_21_beta_row.get('matched_version')!r}",
+    )
+
+    rss_generic_resolve = dict(rss_public_beta_21)
+    rss_generic_resolve.update({
+        "source_url": "https://www.reddit.com/r/davinciresolve/comments/rss003/example/",
+        "parent_title": "Resolve crash during render",
+        "report_title": "Resolve crash during render",
+        "report_text": "Resolve crashed while rendering a timeline.",
+    })
+    rss_generic_resolve_row = row_from_candidate(beta_record, rss_generic_resolve, "2026-05-13T00:00:00Z")
+    check(
+        "RSS-style generic Resolve crash does not match Beta 1",
+        rss_generic_resolve_row.get("counted") is False
+        and rss_generic_resolve_row.get("exclusion_reason") == "missing_exact_patch_version_match",
+        f"reason={rss_generic_resolve_row.get('exclusion_reason')!r}",
+    )
+
+    rss_public_beta_no_product = dict(rss_public_beta_21)
+    rss_public_beta_no_product.update({
+        "source_url": "https://www.reddit.com/r/davinciresolve/comments/rss004/example/",
+        "parent_title": "public beta crash during render",
+        "report_title": "public beta crash during render",
+        "report_text": "public beta crashed while rendering a timeline.",
+    })
+    rss_public_beta_no_product_row = row_from_candidate(beta_record, rss_public_beta_no_product, "2026-05-13T00:00:00Z")
+    check(
+        "broad public beta without product context does not match Beta 1",
+        rss_public_beta_no_product_row.get("counted") is False
+        and rss_public_beta_no_product_row.get("exclusion_reason") == "missing_exact_patch_version_match",
+        f"reason={rss_public_beta_no_product_row.get('exclusion_reason')!r}, matched={rss_public_beta_no_product_row.get('matched_version')!r}",
+    )
+
     generic_no_version = dict(stable_for_beta)
     generic_no_version.update({
         "parent_title": "Resolve crashes during render",
