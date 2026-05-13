@@ -1401,7 +1401,7 @@
   software: DaVinci Resolve
   public_category: Video / Production
   enabled: false
-  recommended_priority: P2 manual watch active
+  recommended_priority: P1 evidence automation active; official-source adapter still needs hardening
   ingestion:
     type: html_blog
     adapter: html_blog
@@ -1422,7 +1422,7 @@
     reliability: Medium
     breakage_risk: Medium-High
     polling_frequency: 12h
-    update_detection_method: manual watch with title-date keyword filter candidate
+    update_detection_method: automated evidence collection plus title-date keyword filter candidate
     extractable_fields:
       version: false
       release_date: true
@@ -1478,9 +1478,21 @@
     - Blackmagic forum
     - Reddit
     - Official support forum
-    difficulty: TBD
-    defer_until_official_ingestion_stable: true
-  source_health_note: Official record tracked; automated ingestion is not active because the current Blackmagic adapter path is not source-specific enough for safe unattended runs.
+    difficulty: Medium
+    defer_until_official_ingestion_stable: false
+  evidence_collection:
+    runner: auxsays/scripts/run_patch_evidence_collection.py
+    collector: patch_collectors.davinci.DavinciCollector
+    production_writeback: true
+    accepted_rows_path: auxsays/_data/consensus_evidence.yml
+    deterministic_gates:
+    - exact patch/version match or explicit version alias
+    - specific report/thread/post URL
+    - source date on or after release date when release date is known
+    - issue-like report text required
+    - release notes, announcements, index pages, and pre-release reports excluded
+    source_weighting: equal_per_confirmed_report
+  source_health_note: Official record tracked; official-source ingestion remains conservative, but production evidence collection now runs through the shared patch evidence runner.
 - company_id: obs-project
   product_id: obs-studio
   company: OBS Project

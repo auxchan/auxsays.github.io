@@ -1,0 +1,68 @@
+schema_version: 1
+methods:
+- product_id: obs-studio
+  update_version: 32.1.1
+  method_id: github_issues
+  source_type: github_issue
+  status: success
+  candidates_found: 39
+  accepted_reports: 39
+  rejected_reports: 0
+  blocked_reason: ''
+  last_run: '2026-05-06T20:56:02Z'
+  notes: Backfilled from existing structured OBS evidence. The shared evidence runner refreshes this method health on write runs.
+- product_id: obs-studio
+  update_version: 32.1.2
+  method_id: github_issues
+  source_type: github_issue
+  status: success
+  candidates_found: 21
+  accepted_reports: 21
+  rejected_reports: 0
+  blocked_reason: ''
+  last_run: '2026-05-11T23:10:28Z'
+  notes: Backfilled from existing structured OBS evidence. The shared evidence runner refreshes this method health on write runs.
+- product_id: blackmagic-davinci
+  update_version: 21 Public Beta 1
+  method_id: known_watchlist
+  source_type: curated_watchlist
+  status: success
+  candidates_found: 2
+  accepted_reports: 2
+  rejected_reports: 0
+  blocked_reason: ''
+  last_run: '2026-05-12T00:00:00Z'
+  notes: Backfilled from existing structured DaVinci evidence. The shared evidence runner refreshes this method health on write runs.
+- product_id: blackmagic-davinci
+  update_version: 21 Public Beta 1
+  method_id: reddit_search
+  source_type: reddit_community_report
+  status: no_results
+  candidates_found: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: ''
+  last_run: ''
+  notes: Phase A fallback method configured; no local successful run has populated live candidates yet. Discovered candidates must pass the same deterministic evidence gates.
+- product_id: blackmagic-davinci
+  update_version: 21 Public Beta 1
+  method_id: vendor_forum_search
+  source_type: blackmagic_forum
+  status: no_results
+  candidates_found: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: ''
+  last_run: ''
+  notes: Phase A fallback method configured; no local successful run has populated live candidates yet. Blocked or inaccessible forum search will be reported here.
+- product_id: blackmagic-davinci
+  update_version: 21 Public Beta 1
+  method_id: web_search
+  source_type: web_search
+  status: disabled
+  candidates_found: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: web_search_adapter_disabled_in_phase_a
+  last_run: ''
+  notes: Reserved fallback discovery slot; no accepted evidence can be produced until a deterministic web-search adapter is configured.

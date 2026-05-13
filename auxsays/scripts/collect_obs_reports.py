@@ -4,6 +4,10 @@
 This collector is intentionally narrow: it only reads GitHub Issues from
 obsproject/obs-studio and only counts candidates that explicitly name the
 requested OBS version in the issue title or body.
+
+The shared Phase A runner wraps this collector via patch_collectors/obs.py so
+OBS participates in the same automated evidence framework as other products
+without changing its production behavior.
 """
 from __future__ import annotations
 

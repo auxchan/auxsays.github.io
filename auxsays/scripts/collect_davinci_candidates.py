@@ -1,9 +1,12 @@
 #!/usr/bin/env python3
-"""Collect DaVinci Resolve evidence candidates for manual review.
+"""Collect DaVinci Resolve evidence candidates for fallback manual review.
 
-This is a conservative staging tool. It does not write consensus_evidence.yml,
-does not write generated records, does not schedule workflows, does not require
-credentials, and does not bypass blocked sources.
+Production evidence collection lives in patch_collectors/davinci.py and is run
+through run_patch_evidence_collection.py. This conservative staging tool remains
+only for rejected or ambiguous candidates that fail deterministic gates. It does
+not write consensus_evidence.yml, does not write generated records, does not
+schedule workflows, does not require credentials, and does not bypass blocked
+sources.
 """
 from __future__ import annotations
 
@@ -38,6 +41,11 @@ CURRENT_RECORDS = {
     "beta": "21 Public Beta 1",
 }
 
+CURRENT_RECORD_PATHS = {
+    "stable": GENERATED_DIR / "2026-04-14-davinci-resolve-21.md",
+    "beta": GENERATED_DIR / "2026-04-14-davinci-resolve-21-public-beta-1.md",
+}
+
 
 @dataclass(frozen=True)
 class Seed:
@@ -50,6 +58,7 @@ class Seed:
     severity: str
     target_hint: str | None = None
     manual_user_verified: bool = False
+    source_published_at: str = ""
     fetch: bool = True
 
 
@@ -312,6 +321,16 @@ def current_generated_versions() -> set[str]:
     return versions
 
 
+def current_record_release_dates() -> dict[str, str]:
+    dates: dict[str, str] = {}
+    for target, path in CURRENT_RECORD_PATHS.items():
+        data = front_matter(path)
+        published = str(data.get("update_published_at") or "").strip().strip("'\"")
+        if published:
+            dates[target] = published[:10]
+    return dates
+
+
 def existing_evidence_urls() -> set[str]:
     urls: set[str] = set()
     for row in simple_yaml_items(EVIDENCE_PATH, "evidence"):
@@ -465,6 +484,17 @@ def target_for(raw_version: str, target_hint: str | None, generated_versions: se
     return "future", proposed, False, "normalized_version_not_current_phase1g_record"
 
 
+def date_gate(seed: Seed, target_record: str, release_dates: dict[str, str]) -> tuple[bool | None, str, str]:
+    if target_record not in release_dates:
+        return None, "", "no_current_record_release_date_gate"
+    release_date = release_dates[target_record]
+    if not seed.source_published_at:
+        return None, release_date, "source_published_at_missing_manual_review_required"
+    if seed.source_published_at < release_date:
+        return False, release_date, "source_published_before_patch_release"
+    return True, release_date, "source_published_on_or_after_patch_release"
+
+
 def issue_like(seed: Seed, fetched: dict[str, Any]) -> bool:
     text = " ".join([seed.source_title, seed.issue_summary, str(fetched.get("source_title") or ""), str(fetched.get("text_sample") or "")]).lower()
     return any(term in text for term in ("crash", "failed", "failure", "problem", "error", "decode", "issue", "hang", "broken"))
@@ -479,6 +509,7 @@ def promotion_blocker(
     body_verified: bool,
     duplicate: bool,
     issue_report: bool,
+    release_date_gate_passed: bool | None,
 ) -> tuple[bool, str]:
     if duplicate:
         return False, "duplicate_existing_evidence"
@@ -490,6 +521,10 @@ def promotion_blocker(
         return False, "ambiguous_or_non_exact_version"
     if seed.evidence_category in {"release_metadata", "discovery_source", "release_discussion"}:
         return False, "not_user_issue_report_evidence"
+    if release_date_gate_passed is False:
+        return False, "source_published_before_patch_release"
+    if release_date_gate_passed is None:
+        return False, "source_date_unverified"
     if not issue_report:
         return False, "not_an_actual_issue_report"
     if not body_accessed and not body_verified:
@@ -499,10 +534,11 @@ def promotion_blocker(
     return True, ""
 
 
-def candidate_from_seed(seed: Seed, generated_versions: set[str], existing_urls: set[str]) -> dict[str, Any]:
+def candidate_from_seed(seed: Seed, generated_versions: set[str], existing_urls: set[str], release_dates: dict[str, str]) -> dict[str, Any]:
     fetched = fetch_source(seed)
     raw_version = infer_raw_version(seed, fetched)
     target_record, proposed, exact_match, match_basis = target_for(raw_version, seed.target_hint, generated_versions)
+    release_date_gate_passed, target_release_date, release_date_gate_reason = date_gate(seed, target_record, release_dates)
     duplicate = normalize_url(seed.source_url) in existing_urls
     body_accessed = bool(fetched["body_accessed"])
     body_verified = seed.manual_user_verified or (body_accessed and duplicate)
@@ -515,6 +551,7 @@ def candidate_from_seed(seed: Seed, generated_versions: set[str], existing_urls:
         body_verified=body_verified,
         duplicate=duplicate,
         issue_report=issue_report,
+        release_date_gate_passed=release_date_gate_passed,
     )
     confidence = "high" if body_verified and exact_match else ("medium" if body_accessed and exact_match else "low")
     return {
@@ -530,6 +567,10 @@ def candidate_from_seed(seed: Seed, generated_versions: set[str], existing_urls:
         "target_record": target_record,
         "exact_version_match": exact_match,
         "match_basis": match_basis,
+        "source_published_at": seed.source_published_at,
+        "target_release_date": target_release_date,
+        "release_date_gate_passed": release_date_gate_passed,
+        "release_date_gate_reason": release_date_gate_reason,
         "issue_summary": seed.issue_summary,
         "evidence_category": seed.evidence_category,
         "severity": seed.severity,
@@ -554,7 +595,7 @@ def decision_for(candidate: dict[str, Any]) -> str:
         return "duplicate_existing_evidence"
     if candidate["target_record"] == "future":
         return "future_update_not_current_record"
-    if blocker in {"needs_user_verification", "manual_review_required_before_promotion"}:
+    if blocker in {"needs_user_verification", "manual_review_required_before_promotion", "source_date_unverified"}:
         return "needs_user_verification"
     if candidate["target_record"] == "ambiguous" or blocker == "ambiguous_or_non_exact_version":
         return "ambiguous_version"
@@ -602,7 +643,8 @@ def main(argv: list[str] | None = None) -> int:
 
     generated_versions = current_generated_versions()
     existing_urls = existing_evidence_urls()
-    all_candidates = [candidate_from_seed(seed, generated_versions, existing_urls) for seed in SEEDS]
+    release_dates = current_record_release_dates()
+    all_candidates = [candidate_from_seed(seed, generated_versions, existing_urls, release_dates) for seed in SEEDS]
     candidates = filter_target(all_candidates, args.target)
 
     output = Path(args.output)

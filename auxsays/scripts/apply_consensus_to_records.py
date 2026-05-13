@@ -9,8 +9,8 @@ an auditable plan.
 Write mode is intentionally guarded. It requires all of:
   --write --confirm-write --product-id <id> --update-version <version>
 
-Phase 1F uses this to update exactly one DaVinci generated record after matching
-source-backed evidence rows are present in consensus_evidence.yml.
+Evidence automation uses this to update exactly one generated record after
+matching source-backed evidence rows are present in consensus_evidence.yml.
 """
 from __future__ import annotations
 
@@ -145,6 +145,7 @@ def _index_generated_records() -> dict[tuple[str, str], dict[str, Any]]:
                 "abs_path": path,
                 "product_id": product_id,
                 "update_version": version,
+                "update_product": str(data.get("update_product") or product_id).strip(),
                 "current_report_count": _record_count(data),
                 "evidence_state": str(data.get("evidence_state") or "").strip(),
                 "intelligence_stage": str(data.get("intelligence_stage") or "").strip(),
@@ -247,6 +248,8 @@ def _evaluate_gates(
         _gate("gate_12_patch_version_matched_required", len(bad_patch_match) == 0, f"{len(bad_patch_match)} evidence row(s) do not have patch_version_matched: true.")
         counted_false = [r for r in included_rows if r.get("counted") is False]
         _gate("gate_13_counted_required", len(counted_false) == 0, f"{len(counted_false)} evidence row(s) have counted: false.")
+        source_date_failed = [r for r in included_rows if r.get("source_date_pass") is False]
+        _gate("gate_16_source_date_gate_required", len(source_date_failed) == 0, f"{len(source_date_failed)} evidence row(s) failed the source-date gate.")
 
     access_limited = [
         r for r in included_rows
@@ -403,15 +406,19 @@ def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], reco
     now = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
     version_label = ver
     source_list = "; ".join(str(r.get("source_url") or "") for r in rows if r.get("source_url"))
+    product_label = str((record or {}).get("update_product") or pid).strip()
+    top_themes = ", ".join(theme for theme, _count in themes.most_common(3)) or "general workflow issues"
     summary = (
         f"AUXSAYS has verified {count} source-backed, patch-specific report"
-        f"{'s' if count != 1 else ''} for DaVinci Resolve {version_label}. "
-        f"The current verified-report set is {consensus_label.lower()} with {confidence} confidence."
+        f"{'s' if count != 1 else ''} for {product_label} {version_label}. "
+        f"The current verified-report set is {consensus_label.lower()} with {confidence} confidence. "
+        f"Most common theme{'s' if len(themes) != 1 else ''}: {top_themes}."
     )
     report = (
-        f"AUXSAYS counted {count} user-verified, source-backed report"
-        f"{'s' if count != 1 else ''} for DaVinci Resolve {version_label}. "
-        "The promoted evidence rows are stored in consensus_evidence.yml and matched by product_id/update_version. "
+        f"AUXSAYS counted {count} source-backed, deterministically accepted report"
+        f"{'s' if count != 1 else ''} for {product_label} {version_label}. "
+        "The promoted evidence rows are stored in consensus_evidence.yml and matched by product_id/update_version; "
+        "every accepted row has equal source_weight. "
         f"Sources: {source_list}."
     )
     samples = []
@@ -445,7 +452,7 @@ def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], reco
             "at": now,
             "label": "Verified reports" if count > 0 else "Insufficient data",
             "note": (
-                f"Phase 1F controlled write-back: {count} user-verified, source-backed "
+                f"Automated evidence write-back: {count} source-backed, patch-specific "
                 f"report{'s' if count != 1 else ''} promoted from consensus_evidence.yml."
             ),
         },
@@ -576,10 +583,6 @@ def main(argv: list[str] | None = None) -> int:
             _write_json(payload, args.output)
             return 2
         record_path = ROOT / record_rel
-        if args.product_id == "blackmagic-davinci" and args.update_version != "21 Public Beta 1":
-            payload["write_result"] = {"success": False, "reason": "Phase 1F only permits blackmagic-davinci 21 Public Beta 1 write-back."}
-            _write_json(payload, args.output)
-            return 2
         snapshot = _apply_record_fields(record_path, result["proposed_fields_if_written"])
         payload["write_result"] = {
             "success": True,

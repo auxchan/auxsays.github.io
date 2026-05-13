@@ -747,13 +747,14 @@
   documented_update_count: 2
   coverage_state: documented
   coverage_status_label: Patch records available
-  ingestion_status: Patch records available
+  ingestion_status: Patch records available; automated evidence collection active
   consensus_method:
   - Official source is treated as the factual baseline.
   - Only confirmed patch-specific reports are counted.
   - A report counts when the exact patch/version is named in the report itself or
     in the parent discussion title.
   - Every confirmed patch-specific report has equal weight.
+  evidence_collection_status: Shared automated evidence runner active for production writeback
   record_trigger_rules:
   - New official release or changelog entry.
   - Meaningful workflow impact for gaming, streaming, AI, creator production, automation,

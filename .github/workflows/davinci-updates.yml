@@ -1,19 +1,86 @@
-name: DaVinci Resolve Updates Deprecated
+name: DaVinci Evidence Collection
 
 on:
   workflow_dispatch:
+    inputs:
+      dry_run:
+        description: "Fetch and report without writing evidence or records"
+        required: false
+        default: false
+        type: boolean
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 permissions:
-  contents: read
+  contents: write
+  actions: write
 
 jobs:
-  deprecated:
+  collect:
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+      GH_TOKEN: ${{ github.token }}
     steps:
-      - name: Notice
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r auxsays/scripts/requirements-ingest.txt
+
+      - name: Collect DaVinci evidence
         run: |
-          echo "DaVinci ingestion is disabled until the Blackmagic parser is hardened."
-          echo "Use .github/workflows/patch-ingest.yml for the official ingestion framework."
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
+            python auxsays/scripts/run_patch_evidence_collection.py --product-id blackmagic-davinci --since-days 45 --max-pages 5 --dry-run
+          else
+            python auxsays/scripts/run_patch_evidence_collection.py --product-id blackmagic-davinci --since-days 45 --max-pages 5 --write
+          fi
+
+      - name: Build consensus status
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: python auxsays/scripts/build_consensus_from_evidence.py
+
+      - name: QA patch records
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: python auxsays/scripts/qa_patch_records.py
+
+      - name: Audit consensus evidence
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: python auxsays/scripts/audit_consensus_evidence.py
+
+      - name: Remove transient validation output
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          rm -rf auxsays/_site node_modules .jekyll-cache
+          find . -type d -name __pycache__ -prune -exec rm -rf {} +
+          find . -type f -name '*.pyc' -delete
+          rm -f auxsays/_data/source_health.yml
+          rm -f auxsays/_data/qa_status.json
+          rm -f auxsays/_data/consensus_status.json
+          rm -f auxsays/_data/patch_ingest_state.json
+
+      - name: Commit material DaVinci evidence changes
+        id: commit
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add auxsays/_data/consensus_evidence.yml auxsays/_data/evidence_method_health.yml auxsays/updates/generated/*davinci*.md
+          if git diff --cached --quiet; then
+            echo "No material DaVinci evidence changes to commit."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          git commit -m "Update DaVinci evidence collection"
+          git push
+          echo "changed=true" >> "$GITHUB_OUTPUT"
+
+      - name: Trigger site deploy
+        if: ${{ steps.commit.outputs.changed == 'true' }}
+        run: gh workflow run pages.yml --ref main

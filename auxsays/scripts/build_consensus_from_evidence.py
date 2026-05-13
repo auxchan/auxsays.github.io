@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build a dry-run consensus status file from manually curated evidence.
+"""Build a dry-run consensus status file from structured evidence.
 
 This does not scrape communities and does not modify generated update records.
 """
@@ -67,6 +67,30 @@ def confidence(total: int) -> str:
     return "Insufficient"
 
 
+def evidence_state(total: int) -> str:
+    if total <= 0:
+        return "insufficient_data"
+    # Phase A keeps low-volume verified rows in pilot_sample. consensus_live
+    # should only be introduced after a higher-volume structured threshold and
+    # page-level structured-evidence rendering are both in place.
+    return "pilot_sample"
+
+
+def consensus_summary(product_id: str, version: str, items: list[dict[str, Any]], counts: Counter[str], themes: Counter[str]) -> str:
+    total = len(items)
+    if total <= 0:
+        return f"No accepted structured evidence is available for {product_id} {version}."
+    label = consensus_label(counts).lower()
+    top_themes = ", ".join(theme for theme, _count in themes.most_common(3)) or "general workflow issues"
+    platforms = Counter(str(item.get("platform") or "unknown").lower() for item in items)
+    platform_summary = ", ".join(f"{name}: {count}" for name, count in platforms.most_common(3))
+    return (
+        f"{total} counted patch-specific report{'s' if total != 1 else ''}; "
+        f"current structured read is {label}; top theme{'s' if len(themes) != 1 else ''}: {top_themes}; "
+        f"platform tags: {platform_summary or 'unknown'}."
+    )
+
+
 def latest_captured_at(items: list[dict[str, Any]]) -> str:
     parsed: list[datetime] = []
     for item in items:
@@ -131,13 +155,14 @@ def main() -> int:
             "severity_summary": dict(severities.most_common()),
             "consensus_label": consensus_label(sentiments),
             "confidence": confidence(len(items)),
-            "evidence_state": "pilot_sample",
+            "evidence_state": evidence_state(len(items)),
+            "consensus_summary": consensus_summary(product_id, version, items, sentiments, themes),
             "evidence_last_checked": latest_captured_at(items),
         })
 
     OUT_PATH.write_text(json.dumps({
         "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
-        "mode": "dry_run_manual_evidence_only",
+        "mode": "dry_run_structured_evidence_only",
         "evidence_items_read": len(evidence),
         "aggregate_count": len(aggregate),
         "excluded_count": len(excluded),
