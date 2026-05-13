@@ -31,7 +31,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: probe_fetch_failed:HTTPError; probe_fetch_failed:HTTPError; probe_fetch_failed:HTTPError; probe_fetch_failed:HTTPError; probe_fetch_failed:HTTPError; probe_fetch_failed:HTTPError; probe_fetch_failed:HTTPError
-  last_run: '2026-05-13T04:45:57Z'
+  last_run: '2026-05-13T04:55:03Z'
   notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 7.'
 - product_id: blackmagic-davinci
   update_version: 21 Public Beta 1
@@ -42,7 +42,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError
-  last_run: '2026-05-13T04:45:57Z'
+  last_run: '2026-05-13T04:55:03Z'
   notes: 'Subreddit search discovers candidate posts; accepted rows still require exact version/date/report gates. Fetch failures: 14.'
 - product_id: blackmagic-davinci
   update_version: 21 Public Beta 1
@@ -54,7 +54,7 @@ methods:
   rejected_reports: 0
   blocked_reason: vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError;
     vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError; vendor_forum_search_blocked_or_failed:HTTPError
-  last_run: '2026-05-13T04:45:57Z'
+  last_run: '2026-05-13T04:55:03Z'
   notes: 'Blackmagic forum search uses exact version aliases plus issue-language terms to discover candidate threads; accepted rows still require exact version/date/report gates. Fetch failures: 24.'
 - product_id: blackmagic-davinci
   update_version: 21 Public Beta 1
@@ -65,5 +65,5 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: web_search_adapter_disabled_in_phase_a
-  last_run: '2026-05-13T04:45:57Z'
+  last_run: '2026-05-13T04:55:03Z'
   notes: 'Reserved fallback discovery method; no adapter is configured in Phase A. Fetch failures: 1.'
