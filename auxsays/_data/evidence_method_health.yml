@@ -9,7 +9,7 @@ methods:
   accepted_reports: 39
   rejected_reports: 1
   blocked_reason: ''
-  last_run: '2026-05-13T16:33:27Z'
+  last_run: '2026-05-13T19:06:57Z'
   notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
 - product_id: obs-studio
   update_version: 32.1.2
@@ -20,7 +20,7 @@ methods:
   accepted_reports: 21
   rejected_reports: 5
   blocked_reason: ''
-  last_run: '2026-05-13T16:33:33Z'
+  last_run: '2026-05-13T19:07:08Z'
   notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
 - product_id: blackmagic-davinci
   update_version: 21 Public Beta 1
@@ -31,7 +31,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 7
   blocked_reason: ''
-  last_run: '2026-05-13T17:25:19Z'
+  last_run: '2026-05-13T19:06:14Z'
   notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Rejected candidates: missing_exact_patch_version_match=7.'
 - product_id: blackmagic-davinci
   update_version: 21 Public Beta 1
@@ -42,7 +42,7 @@ methods:
   accepted_reports: 4
   rejected_reports: 3
   blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]
-  last_run: '2026-05-13T17:25:19Z'
+  last_run: '2026-05-13T19:06:14Z'
   notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 4.'
 - product_id: blackmagic-davinci
   update_version: 21 Public Beta 1
@@ -53,7 +53,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-05-13T17:25:19Z'
+  last_run: '2026-05-13T19:06:14Z'
   notes: Blackmagic forum search uses exact version aliases plus issue-language terms to discover candidate threads; accepted rows still require exact version/date/report gates.
 - product_id: blackmagic-davinci
   update_version: 21 Public Beta 1
@@ -64,5 +64,5 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: web_search_adapter_disabled_in_phase_a
-  last_run: '2026-05-13T17:25:19Z'
+  last_run: '2026-05-13T19:06:14Z'
   notes: 'Reserved fallback discovery method; no adapter is configured in Phase A. Fetch failures: 1.'
