@@ -35,6 +35,9 @@ jobs:
         run: pip install -r auxsays/scripts/requirements-ingest.txt
 
       - name: Collect DaVinci evidence
+        env:
+          AUXSAYS_REDDIT_DIAGNOSTICS: "1"
+          AUXSAYS_REDDIT_REQUEST_DELAY_SECONDS: "0.75"
         run: |
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
             python auxsays/scripts/run_patch_evidence_collection.py --product-id blackmagic-davinci --since-days 45 --max-pages 5 --dry-run

@@ -10,9 +10,10 @@ import html
 import json
 import os
 import re
+import time
 import urllib.parse
 import urllib.request
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
 from datetime import datetime, timezone
 from typing import Any
 
@@ -38,16 +39,28 @@ from .base import (
 
 PRODUCT_ID = "blackmagic-davinci"
 SOURCE_NAME_REDDIT = "r/davinciresolve"
-REDDIT_SEARCH = "https://www.reddit.com/r/davinciresolve/search.json"
+REDDIT_SUBREDDIT = "davinciresolve"
+REDDIT_SEARCH = f"https://www.reddit.com/r/{REDDIT_SUBREDDIT}/search.json"
+REDDIT_OLD_SEARCH = f"https://old.reddit.com/r/{REDDIT_SUBREDDIT}/search.json"
+REDDIT_LISTING = f"https://www.reddit.com/r/{REDDIT_SUBREDDIT}/new.json"
+REDDIT_OLD_LISTING = f"https://old.reddit.com/r/{REDDIT_SUBREDDIT}/new.json"
+REDDIT_GLOBAL_SEARCH = "https://www.reddit.com/search.json"
 FORUM_SEARCH = "https://forum.blackmagicdesign.com/search.php"
 TEXT_HEADERS = {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,text/plain;q=0.8,*/*;q=0.5",
     "Accept-Language": "en-US,en;q=0.9",
     "User-Agent": "Mozilla/5.0 (compatible; AUXSAYS-DaVinci-Evidence-Collector/1.0; +https://auxsays.com/)",
 }
+REDDIT_USER_AGENT = os.getenv(
+    "AUXSAYS_REDDIT_USER_AGENT",
+    "script:com.auxsays.patch-intelligence:v1.0 (by /u/auxsays)",
+)
 JSON_HEADERS = {
-    "Accept": "application/json,text/plain;q=0.8,*/*;q=0.5",
-    "User-Agent": "Mozilla/5.0 (compatible; AUXSAYS-DaVinci-Evidence-Collector/1.0; +https://auxsays.com/)",
+    "Accept": "application/json, text/plain;q=0.8, */*;q=0.5",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Cache-Control": "no-cache",
+    "Connection": "close",
+    "User-Agent": REDDIT_USER_AGENT,
 }
 FORUM_DISCOVERY_ISSUE_TERMS = (
     "crash",
@@ -64,10 +77,23 @@ BETA_CONTEXT_RE = re.compile(r"\b(?:public\s+beta|beta\s*\d*|21\.0b\d*|21b\d+|21
 
 
 class SourceAccessError(RuntimeError):
-    def __init__(self, reason: str, *, status: int | None = None) -> None:
+    def __init__(
+        self,
+        reason: str,
+        *,
+        status: int | None = None,
+        content_type: str = "",
+        blocked_signature: str = "",
+        endpoint_family: str = "",
+        headers_strategy: str = "",
+    ) -> None:
         super().__init__(reason)
         self.reason = reason
         self.status = status
+        self.content_type = content_type
+        self.blocked_signature = blocked_signature
+        self.endpoint_family = endpoint_family
+        self.headers_strategy = headers_strategy
 
 # Seed/fallback coverage only: these URLs are calibration examples for the
 # deterministic gates, not the primary long-term DaVinci evidence mechanism.
@@ -147,17 +173,200 @@ class DavinciCollector(ProductCollector):
         return results
 
 
-def request_json(url: str) -> Any:
+def reddit_headers_strategy(headers: dict[str, str]) -> str:
+    strategy = "reddit_descriptive_ua_json"
+    if headers.get("Authorization"):
+        strategy += "+bearer"
+    return strategy
+
+
+def reddit_diagnostics_enabled() -> bool:
+    value = os.getenv("AUXSAYS_REDDIT_DIAGNOSTICS")
+    if value is not None:
+        return value.strip().lower() in {"1", "true", "yes", "on"}
+    return os.getenv("GITHUB_ACTIONS", "").strip().lower() == "true"
+
+
+def sanitize_diagnostic_url(url: str) -> str:
+    parsed = urllib.parse.urlsplit(url)
+    sensitive = {"access_token", "token", "client_secret", "authorization", "bearer"}
+    query_pairs = urllib.parse.parse_qsl(parsed.query, keep_blank_values=True)
+    clean_query = urllib.parse.urlencode([
+        (key, "[redacted]" if key.lower() in sensitive else value)
+        for key, value in query_pairs
+    ])
+    return urllib.parse.urlunsplit((parsed.scheme, parsed.netloc, parsed.path, clean_query, ""))
+
+
+def blocked_signature(text: str, *, status: int | None, content_type: str, headers: dict[str, str] | None = None) -> str:
+    lowered = (text or "").lower()
+    header_text = " ".join(f"{key}:{value}" for key, value in (headers or {}).items()).lower()
+    if status == 429 or "rate limit" in lowered or "too many requests" in lowered:
+        return "rate_limited"
+    if "cf-ray" in header_text or "cloudflare" in lowered or "checking your browser" in lowered:
+        return "cloudflare_or_browser_challenge"
+    if "blocked" in lowered or status == 403:
+        return "blocked"
+    if "login" in lowered and "reddit" in lowered:
+        return "login_or_auth_challenge"
+    if "captcha" in lowered:
+        return "captcha_challenge"
+    if "text/html" in content_type.lower() and "application/json" not in content_type.lower():
+        title = extract_title(text)
+        return f"html_response:{title[:60]}" if title else "html_response"
+    if not text:
+        return "empty_body"
+    return "none"
+
+
+def emit_reddit_fetch_diagnostic(
+    *,
+    url: str,
+    endpoint_family: str,
+    status: int | None,
+    content_type: str,
+    signature: str,
+    headers_strategy: str,
+) -> None:
+    if not reddit_diagnostics_enabled():
+        return
+    payload = {
+        "event": "reddit_fetch",
+        "url": sanitize_diagnostic_url(url),
+        "endpoint_family": endpoint_family,
+        "http_status": status,
+        "content_type": content_type,
+        "blocked_signature": signature,
+        "headers_strategy": headers_strategy,
+    }
+    print(f"[auxsays:diagnostic] {json.dumps(payload, sort_keys=True, ensure_ascii=True)}")
+
+
+def reddit_request_delay() -> float:
+    try:
+        return max(0.0, float(os.getenv("AUXSAYS_REDDIT_REQUEST_DELAY_SECONDS", "0.35")))
+    except ValueError:
+        return 0.35
+
+
+def pace_reddit_request() -> None:
+    delay = reddit_request_delay()
+    if delay > 0:
+        time.sleep(delay)
+
+
+def with_raw_json(url: str) -> str:
+    parsed = urllib.parse.urlsplit(url)
+    pairs = urllib.parse.parse_qsl(parsed.query, keep_blank_values=True)
+    if not any(key == "raw_json" for key, _value in pairs):
+        pairs.append(("raw_json", "1"))
+    query = urllib.parse.urlencode(pairs)
+    return urllib.parse.urlunsplit((parsed.scheme, parsed.netloc, parsed.path, query, parsed.fragment))
+
+
+def request_json(url: str, *, endpoint_family: str = "reddit_json") -> Any:
     headers = dict(JSON_HEADERS)
     token = os.getenv("REDDIT_BEARER_TOKEN")
     if token:
         headers["Authorization"] = f"Bearer {token}"
-    request = urllib.request.Request(url, headers=headers)
+    headers_strategy = reddit_headers_strategy(headers)
+    request_url = with_raw_json(url)
+    request = urllib.request.Request(request_url, headers=headers)
     try:
         with urllib.request.urlopen(request, timeout=30) as response:
-            return json.loads(response.read().decode("utf-8"))
+            raw = response.read()
+            content_type = response.headers.get("content-type", "")
+            status = int(getattr(response, "status", 200) or 200)
+            charset = response.headers.get_content_charset() or "utf-8"
+            text = raw.decode(charset, errors="replace")
+            signature = blocked_signature(text[:4000], status=status, content_type=content_type, headers=dict(response.headers.items()))
+            emit_reddit_fetch_diagnostic(
+                url=request_url,
+                endpoint_family=endpoint_family,
+                status=status,
+                content_type=content_type,
+                signature=signature,
+                headers_strategy=headers_strategy,
+            )
+            try:
+                return json.loads(text)
+            except json.JSONDecodeError as exc:
+                raise SourceAccessError(
+                    f"json_decode_failed:{type(exc).__name__}",
+                    status=status,
+                    content_type=content_type,
+                    blocked_signature=signature,
+                    endpoint_family=endpoint_family,
+                    headers_strategy=headers_strategy,
+                ) from exc
     except HTTPError as exc:
-        raise SourceAccessError(f"http_{exc.code}_{exc.reason}", status=exc.code) from exc
+        body = exc.read(8000).decode("utf-8", errors="replace")
+        content_type = exc.headers.get("content-type", "") if exc.headers else ""
+        signature = blocked_signature(body, status=exc.code, content_type=content_type, headers=dict(exc.headers.items()) if exc.headers else {})
+        emit_reddit_fetch_diagnostic(
+            url=request_url,
+            endpoint_family=endpoint_family,
+            status=exc.code,
+            content_type=content_type,
+            signature=signature,
+            headers_strategy=headers_strategy,
+        )
+        raise SourceAccessError(
+            f"http_{exc.code}_{exc.reason}",
+            status=exc.code,
+            content_type=content_type,
+            blocked_signature=signature,
+            endpoint_family=endpoint_family,
+            headers_strategy=headers_strategy,
+        ) from exc
+    except (URLError, TimeoutError, OSError) as exc:
+        emit_reddit_fetch_diagnostic(
+            url=request_url,
+            endpoint_family=endpoint_family,
+            status=None,
+            content_type="",
+            signature=type(exc).__name__,
+            headers_strategy=headers_strategy,
+        )
+        raise SourceAccessError(
+            f"network_{type(exc).__name__}",
+            endpoint_family=endpoint_family,
+            blocked_signature=type(exc).__name__,
+            headers_strategy=headers_strategy,
+        ) from exc
+
+
+def reddit_failure_summary(failures: list[dict[str, Any]]) -> str:
+    pieces: list[str] = []
+    for failure in failures:
+        family = str(failure.get("endpoint_family") or "reddit_json")
+        reason = str(failure.get("reason") or "fetch_failed")
+        signature = str(failure.get("blocked_signature") or "")
+        piece = f"{family}={reason}"
+        if signature and signature != "none":
+            piece += f":{signature}"
+        pieces.append(piece)
+    return "all_reddit_endpoint_attempts_failed[" + ";".join(pieces[:4]) + "]"
+
+
+def request_reddit_json_with_fallback(attempts: list[tuple[str, str]]) -> Any:
+    failures: list[dict[str, Any]] = []
+    for endpoint_family, url in attempts:
+        try:
+            payload = request_json(url, endpoint_family=endpoint_family)
+            pace_reddit_request()
+            return payload
+        except SourceAccessError as exc:
+            failures.append({
+                "endpoint_family": endpoint_family,
+                "reason": exc.reason,
+                "status": exc.status,
+                "content_type": exc.content_type,
+                "blocked_signature": exc.blocked_signature,
+            })
+            pace_reddit_request()
+            continue
+    raise SourceAccessError(reddit_failure_summary(failures), status=failures[0].get("status") if failures else None)
 
 
 def request_text(url: str) -> str:
@@ -228,7 +437,7 @@ def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[
         accepted.extend(method_accepted)
         rejected.extend(method_rejected)
         fetch_failure_count = len(errors)
-        blocked_reason = "; ".join(str(error.get("reason") or "fetch_failed") for error in errors)
+        blocked_reason = blocked_reason_from_errors(errors)
         notes = method_notes(method_id)
         if fetch_failure_count:
             notes = f"{notes} Fetch failures: {fetch_failure_count}."
@@ -275,6 +484,7 @@ def reddit_search_candidates(record: PatchRecord, context: CollectorContext, err
     queries = reddit_search_queries(record)
     candidates: list[dict[str, Any]] = []
     seen_queries: set[str] = set()
+    consecutive_fetch_failures = 0
     for query in queries:
         if query.lower() in seen_queries:
             continue
@@ -290,12 +500,17 @@ def reddit_search_candidates(record: PatchRecord, context: CollectorContext, err
             }
             if after:
                 params["after"] = after
-            url = f"{REDDIT_SEARCH}?{urllib.parse.urlencode(params)}"
             try:
-                payload = request_json(url)
+                payload = request_reddit_json_with_fallback(reddit_search_attempts(query, params))
             except Exception as exc:
-                errors.append({"query": query, "source_url": url, "reason": f"reddit_search_fetch_failed:{error_reason(exc)}"})
+                errors.append({
+                    "query": query,
+                    "source_url": f"{REDDIT_SEARCH}?{urllib.parse.urlencode(params)}",
+                    "reason": f"reddit_search_fetch_failed:{error_reason(exc)}",
+                })
+                consecutive_fetch_failures += 1
                 break
+            consecutive_fetch_failures = 0
             children = (((payload or {}).get("data") or {}).get("children") or [])
             for child in children:
                 data = child.get("data") if isinstance(child, dict) else None
@@ -304,7 +519,85 @@ def reddit_search_candidates(record: PatchRecord, context: CollectorContext, err
             after = ((payload or {}).get("data") or {}).get("after")
             if not after:
                 break
+        if consecutive_fetch_failures >= 3:
+            break
+    listing_errors: list[dict[str, Any]] = []
+    listing_candidates = reddit_listing_candidates(record, context, listing_errors)
+    if listing_candidates:
+        candidates.extend(listing_candidates)
+    else:
+        errors.extend(listing_errors)
     return candidates
+
+
+def reddit_search_attempts(query: str, params: dict[str, str]) -> list[tuple[str, str]]:
+    attempts: list[tuple[str, str]] = []
+    encoded = urllib.parse.urlencode(params)
+    token = os.getenv("REDDIT_BEARER_TOKEN")
+    if token:
+        attempts.append((
+            "reddit_search_oauth",
+            f"https://oauth.reddit.com/r/{REDDIT_SUBREDDIT}/search?{encoded}",
+        ))
+    attempts.extend([
+        ("reddit_search_www_json", f"{REDDIT_SEARCH}?{encoded}"),
+        ("reddit_search_old_json", f"{REDDIT_OLD_SEARCH}?{encoded}"),
+        ("reddit_search_global_json", f"{REDDIT_GLOBAL_SEARCH}?{urllib.parse.urlencode(global_reddit_search_params(query, params))}"),
+    ])
+    return attempts
+
+
+def global_reddit_search_params(query: str, params: dict[str, str]) -> dict[str, str]:
+    global_params = dict(params)
+    global_params.pop("restrict_sr", None)
+    global_params["q"] = f"subreddit:{REDDIT_SUBREDDIT} {query}"
+    return global_params
+
+
+def reddit_listing_candidates(record: PatchRecord, context: CollectorContext, errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    candidates: list[dict[str, Any]] = []
+    after: str | None = None
+    for _page in range(max(1, context.max_pages)):
+        params = {"limit": "100"}
+        if after:
+            params["after"] = after
+        try:
+            payload = request_reddit_json_with_fallback(reddit_listing_attempts(params))
+        except Exception as exc:
+            errors.append({
+                "source_url": f"{REDDIT_LISTING}?{urllib.parse.urlencode(params)}",
+                "reason": f"reddit_listing_fetch_failed:{error_reason(exc)}",
+            })
+            break
+        children = (((payload or {}).get("data") or {}).get("children") or [])
+        for child in children:
+            data = child.get("data") if isinstance(child, dict) else None
+            if not isinstance(data, dict):
+                continue
+            candidate = reddit_candidate(data)
+            if context.since and candidate.get("source_date") and date_part(candidate.get("source_date")) < context.since:
+                continue
+            candidates.append(candidate)
+        after = ((payload or {}).get("data") or {}).get("after")
+        if not after:
+            break
+    return candidates
+
+
+def reddit_listing_attempts(params: dict[str, str]) -> list[tuple[str, str]]:
+    encoded = urllib.parse.urlencode(params)
+    attempts: list[tuple[str, str]] = []
+    token = os.getenv("REDDIT_BEARER_TOKEN")
+    if token:
+        attempts.append((
+            "reddit_listing_oauth",
+            f"https://oauth.reddit.com/r/{REDDIT_SUBREDDIT}/new?{encoded}",
+        ))
+    attempts.extend([
+        ("reddit_listing_www_json", f"{REDDIT_LISTING}?{encoded}"),
+        ("reddit_listing_old_json", f"{REDDIT_OLD_LISTING}?{encoded}"),
+    ])
+    return attempts
 
 
 def reddit_search_queries(record: PatchRecord) -> list[str]:
@@ -417,13 +710,47 @@ def reddit_candidate(data: dict[str, Any]) -> dict[str, Any]:
 
 
 def reddit_post_candidate(url: str, source_name: str) -> dict[str, Any]:
-    json_url = url.rstrip("/") + "/.json"
-    payload = request_json(json_url)
+    payload = request_reddit_json_with_fallback(reddit_post_attempts(url))
     post = (((payload or [{}])[0].get("data") or {}).get("children") or [{}])[0].get("data") or {}
     candidate = reddit_candidate(post)
     candidate["source_name"] = source_name or SOURCE_NAME_REDDIT
     candidate["source_url"] = url
     return candidate
+
+
+def reddit_post_attempts(url: str) -> list[tuple[str, str]]:
+    parsed = urllib.parse.urlsplit(url)
+    path = parsed.path.rstrip("/")
+    if path.endswith(".json"):
+        path = path[:-5].rstrip("/")
+    json_path = f"{path}/.json"
+    attempts: list[tuple[str, str]] = []
+    token = os.getenv("REDDIT_BEARER_TOKEN")
+    if token:
+        oauth_path = path
+        attempts.append(("reddit_post_oauth", urllib.parse.urlunsplit(("https", "oauth.reddit.com", oauth_path, "", ""))))
+    attempts.extend([
+        ("reddit_post_www_json", urllib.parse.urlunsplit(("https", "www.reddit.com", json_path, "", ""))),
+        ("reddit_post_old_json", urllib.parse.urlunsplit(("https", "old.reddit.com", json_path, "", ""))),
+    ])
+    post_id = reddit_post_id(url)
+    if post_id:
+        compact_path = f"/r/{REDDIT_SUBREDDIT}/comments/{post_id}/.json"
+        attempts.extend([
+            ("reddit_post_www_comments_json", urllib.parse.urlunsplit(("https", "www.reddit.com", compact_path, "", ""))),
+            ("reddit_post_old_comments_json", urllib.parse.urlunsplit(("https", "old.reddit.com", compact_path, "", ""))),
+        ])
+    return attempts
+
+
+def reddit_post_id(url: str) -> str:
+    parts = [part for part in urllib.parse.urlsplit(url).path.split("/") if part]
+    for idx, part in enumerate(parts):
+        if part == "comments" and idx + 1 < len(parts):
+            candidate = parts[idx + 1].strip()
+            if re.fullmatch(r"[A-Za-z0-9_]+", candidate):
+                return candidate
+    return ""
 
 
 def source_probe_candidates(
@@ -477,6 +804,19 @@ def method_status(
         reasons = " ".join(str(error.get("reason") or "") for error in errors).lower()
         return "blocked" if "blocked" in reasons else "broken"
     return "no_results"
+
+
+def blocked_reason_from_errors(errors: list[dict[str, Any]]) -> str:
+    if not errors:
+        return ""
+    counts: dict[str, int] = {}
+    for error in errors:
+        reason = str(error.get("reason") or "fetch_failed")
+        counts[reason] = counts.get(reason, 0) + 1
+    return "; ".join(
+        f"{reason} x{count}" if count > 1 else reason
+        for reason, count in counts.items()
+    )
 
 
 def method_notes(method_id: str) -> str:
