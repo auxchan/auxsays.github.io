@@ -1,8 +1,8 @@
 ---
 layout: aux-update
 title: DaVinci Resolve 21 Public Beta 1 official update breakdown
-description: Published Apr 14, 2026. Blackmagic Design announced DaVinci Resolve 21 Public Beta 1 and made it available
-  for download.
+description: Published Apr 14, 2026. Blackmagic Design announced DaVinci Resolve 21 Public Beta 1 and made it available for
+  download.
 permalink: /updates/blackmagic-design/davinci-resolve/21-public-beta-1/
 update_entry: true
 update_product: DaVinci Resolve
@@ -19,9 +19,9 @@ update_status: current
 update_feed_title: DaVinci Resolve 21 Public Beta 1
 update_detail_title: DaVinci Resolve 21 Public Beta 1
 update_consensus_label: Negative
-update_consensus_summary: 'AUXSAYS has verified 7 source-backed, patch-specific reports for DaVinci Resolve 21 Public
-  Beta 1. The current verified-report set is negative with Low confidence. Most common themes: magic_mask_crash,
-  decode_render_failure, startup or application crash.'
+update_consensus_summary: 'AUXSAYS has verified 7 source-backed, patch-specific reports for DaVinci Resolve 21 Public Beta
+  1. The current verified-report set is negative with Low confidence. Most common themes: magic_mask_crash, decode_render_failure,
+  startup or application crash.'
 update_report_count: 7
 update_consensus_confidence: Low
 status_change_type: new
@@ -35,27 +35,26 @@ official_source_classification_note: Blackmagic's source is a vendor release pag
   AUXSAYS links it as the official source, but has not captured a full structured patch-note body from that page.
 patch_file_size_status: not_provided_by_source
 release_channel_label: Public beta
-quick_verdict: WAIT for production systems. DaVinci Resolve 21 Public Beta 1 is a beta build; test only in non-critical
-  projects unless you specifically need the Resolve 21 feature set and can tolerate beta risk.
+quick_verdict: WAIT for production systems. DaVinci Resolve 21 Public Beta 1 is a beta build; test only in non-critical projects
+  unless you specifically need the Resolve 21 feature set and can tolerate beta risk.
 update_decision_label: WAIT for production systems
-update_decision_body: Public beta build. Treat this as a testing release for editors and color workflows, not a
-  clean default upgrade for active client work.
+update_decision_body: Public beta build. Treat this as a testing release for editors and color workflows, not a clean default
+  upgrade for active client work.
 source_freshness_note: Official source should be refreshed before relying on this page for current install guidance.
-record_note: AUXSAYS has completed an initial pilot evidence pass for this DaVinci Resolve 21 Public Beta 1 record.
-  Two source-backed, user-verified issue reports are currently counted. This remains a low-confidence Verified reports,
-  not broad consensus. The legacy manual count remains historical context only and does not drive the verified report
-  count. DaVinci ingestion remains disabled/manual-watch for ongoing automated collection.
-official_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and should be treated differently from
-  a stable production build. The key user decision is not simply whether the release is new, but whether the new
-  Resolve 21 feature set is worth testing in a non-critical environment. For production work, the practical read
-  is to keep existing stable projects on a known-good version unless a specific Resolve 21 feature is needed and
-  the project can tolerate beta risk.
-consensus_report: 'AUXSAYS counted 7 source-backed, deterministically accepted reports for DaVinci Resolve 21 Public
-  Beta 1. The promoted evidence rows are stored in consensus_evidence.yml and matched by product_id/update_version;
-  every accepted row has equal source_weight. Sources: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235179;
-  https://www.reddit.com/r/davinciresolve/comments/1sn39qf/davinci_resolve_failed_to_decode_video_frame_when/; https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235117;
-  https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235536; https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235458;
-  https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235208; https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=234870.'
+record_note: AUXSAYS has completed an initial pilot evidence pass for this DaVinci Resolve 21 Public Beta 1 record. Two source-backed,
+  user-verified issue reports are currently counted. This remains a low-confidence Verified reports, not broad consensus.
+  The legacy manual count remains historical context only and does not drive the verified report count. DaVinci ingestion
+  remains disabled/manual-watch for ongoing automated collection.
+official_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and should be treated differently from a stable
+  production build. The key user decision is not simply whether the release is new, but whether the new Resolve 21 feature
+  set is worth testing in a non-critical environment. For production work, the practical read is to keep existing stable projects
+  on a known-good version unless a specific Resolve 21 feature is needed and the project can tolerate beta risk.
+consensus_report: 'AUXSAYS counted 7 source-backed, deterministically accepted reports for DaVinci Resolve 21 Public Beta
+  1. The promoted evidence rows are stored in consensus_evidence.yml and matched by product_id/update_version; every accepted
+  row has equal source_weight. Sources: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235179; https://www.reddit.com/r/davinciresolve/comments/1sn39qf/davinci_resolve_failed_to_decode_video_frame_when/;
+  https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235117; https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235536;
+  https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235458; https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235208;
+  https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=234870.'
 complaint_themes:
 - theme: Beta setup questions
   frequency: Medium
@@ -84,11 +83,10 @@ legacy_consensus_score: 6
 legacy_consensus_score_percent: 53
 official_patch_notes_source_url: https://www.blackmagicdesign.com/media/release/20260414-01
 official_patch_notes_body: ''
-release_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and should be treated differently from
-  a stable production build. The key user decision is not simply whether the release is new, but whether the new
-  Resolve 21 feature set is worth testing in a non-critical environment. For production work, the practical read
-  is to keep existing stable projects on a known-good version unless a specific Resolve 21 feature is needed and
-  the project can tolerate beta risk.
+release_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and should be treated differently from a stable
+  production build. The key user decision is not simply whether the release is new, but whether the new Resolve 21 feature
+  set is worth testing in a non-critical environment. For production work, the practical read is to keep existing stable projects
+  on a known-good version unless a specific Resolve 21 feature is needed and the project can tolerate beta risk.
 practical_recommendations:
 - Wait for production systems unless you have a specific Resolve 21 beta feature to test.
 - Test beta projects separately from active client work and keep a known-good Resolve version available.
@@ -104,21 +102,16 @@ evidence_state_label: Verified reports
 official_source_captured: true
 confirmed_patch_specific_report_count: 7
 legacy_manual_report_count: 7
-legacy_manual_report_count_note: Previous 7-report value appears to be a pre-evidence/manual/pilot estimate. It
-  is not currently backed by structured consensus_evidence.yml rows and should not be rendered as verified reports.
+legacy_manual_report_count_note: Previous 7-report value appears to be a pre-evidence/manual/pilot estimate. It is not currently
+  backed by structured consensus_evidence.yml rows and should not be rendered as verified reports.
 known_issues_present: true
 official_checksums_body: ''
 intelligence_stage: pilot
-source_last_checked: '2026-05-13T04:15:56Z'
-official_body_last_checked: '2026-05-13T04:15:56Z'
+source_last_checked: '2026-05-13T09:21:24Z'
+official_body_last_checked: '2026-05-13T09:21:24Z'
 primary_official_source: https://www.blackmagicdesign.com/media/release/20260414-01
 fallback_official_sources: []
 official_source_attempts:
-- at: '2026-05-11T20:06:51Z'
-  url: https://www.blackmagicdesign.com/media/release/20260414-01
-  status: official-source-parser-failed
-  body_captured: false
-  checksums_captured: false
 - at: '2026-05-12T04:09:14Z'
   url: https://www.blackmagicdesign.com/media/release/20260414-01
   status: official-source-parser-failed
@@ -135,6 +128,11 @@ official_source_attempts:
   body_captured: false
   checksums_captured: false
 - at: '2026-05-13T04:15:56Z'
+  url: https://www.blackmagicdesign.com/media/release/20260414-01
+  status: official-source-parser-failed
+  body_captured: false
+  checksums_captured: false
+- at: '2026-05-13T09:21:24Z'
   url: https://www.blackmagicdesign.com/media/release/20260414-01
   status: official-source-parser-failed
   body_captured: false
