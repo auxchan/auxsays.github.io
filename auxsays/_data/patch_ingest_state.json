@@ -3,7 +3,7 @@
   "last_results": [
     {
       "adapter": "rss_feed",
-      "duration_ms": 872,
+      "duration_ms": 653,
       "fetched": 2,
       "product_id": "figma",
       "refreshed": [
@@ -24,7 +24,7 @@
     },
     {
       "adapter": "adobe_release_notes",
-      "duration_ms": 25786,
+      "duration_ms": 25931,
       "fetched": 1,
       "product_id": "adobe-premiere-pro",
       "refreshed": [
@@ -40,7 +40,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 717,
+      "duration_ms": 1213,
       "fetched": 2,
       "product_id": "obs-studio",
       "refreshed": [
@@ -61,7 +61,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 453,
+      "duration_ms": 942,
       "fetched": 2,
       "product_id": "comfyui",
       "refreshed": [
@@ -82,20 +82,28 @@
     },
     {
       "adapter": "rss_feed",
-      "duration_ms": 1158,
+      "duration_ms": 465,
       "fetched": 2,
       "product_id": "github",
-      "refreshed": [],
+      "refreshed": [
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-05-12-github-copilot-copilot-code-review-comment-experience-improvements.md",
+          "record_id": "rss:github:https://github.blog/changelog/2026-05-12-copilot-code-review-comment-experience-improvements"
+        },
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-05-12-github-copilot-april-reports-are-now-available-to-prepare-for-usage-based-billing.md",
+          "record_id": "rss:github:https://github.blog/changelog/2026-05-12-april-reports-are-now-available-to-prepare-for-usage-based-billing"
+        }
+      ],
       "skipped": [],
       "status": "success",
-      "written": [
-        "auxsays/updates/generated/2026-05-12-github-copilot-copilot-code-review-comment-experience-improvements.md",
-        "auxsays/updates/generated/2026-05-12-github-copilot-april-reports-are-now-available-to-prepare-for-usage-based-billing.md"
-      ]
+      "written": []
     },
     {
       "adapter": "html_changelog",
-      "duration_ms": 68,
+      "duration_ms": 253,
       "fetched": 0,
       "product_id": "netlify",
       "refreshed": [],
@@ -104,8 +112,8 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-05-12T20:12:00Z",
-  "last_run_started_at": "2026-05-12T20:11:31Z",
+  "last_run_finished_at": "2026-05-13T04:15:56Z",
+  "last_run_started_at": "2026-05-13T04:15:27Z",
   "sources": {
     "adobe-after-effects": {
       "consecutive_failures": 2,
@@ -170,7 +178,7 @@
     "adobe-premiere-pro": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_release_notes",
-      "last_checked_at": "2026-05-12T20:11:32Z",
+      "last_checked_at": "2026-05-13T04:15:27Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -178,8 +186,8 @@
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 25786,
-      "last_success_at": "2026-05-12T20:11:32Z",
+      "last_run_duration_ms": 25931,
+      "last_success_at": "2026-05-13T04:15:27Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "adobe:adobe-premiere-pro:26.2:9fa3e1e53c0b275d"
@@ -189,7 +197,7 @@
     "comfyui": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-05-12T20:11:58Z",
+      "last_checked_at": "2026-05-13T04:15:55Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -197,8 +205,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 453,
-      "last_success_at": "2026-05-12T20:11:58Z",
+      "last_run_duration_ms": 942,
+      "last_success_at": "2026-05-13T04:15:55Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:comfyui:320256380",
@@ -210,7 +218,7 @@
     "figma": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-05-12T20:11:31Z",
+      "last_checked_at": "2026-05-13T04:15:27Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -218,8 +226,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 872,
-      "last_success_at": "2026-05-12T20:11:31Z",
+      "last_run_duration_ms": 653,
+      "last_success_at": "2026-05-13T04:15:27Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:figma:11173709-f3f3-44ff-8711-ae180a888f29",
@@ -238,7 +246,7 @@
     "github": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-05-12T20:11:59Z",
+      "last_checked_at": "2026-05-13T04:15:55Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -246,8 +254,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 1158,
-      "last_success_at": "2026-05-12T20:11:59Z",
+      "last_run_duration_ms": 465,
+      "last_success_at": "2026-05-13T04:15:55Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:github:https://github.blog/changelog/2026-05-12-april-reports-are-now-available-to-prepare-for-usage-based-billing",
@@ -279,7 +287,7 @@
     "netlify": {
       "consecutive_failures": 0,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-05-12T20:12:00Z",
+      "last_checked_at": "2026-05-13T04:15:56Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -287,15 +295,15 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 68,
-      "last_success_at": "2026-05-12T20:12:00Z",
+      "last_run_duration_ms": 253,
+      "last_success_at": "2026-05-13T04:15:56Z",
       "previous_consecutive_failures": 0,
       "status": "degraded"
     },
     "obs-studio": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-05-12T20:11:57Z",
+      "last_checked_at": "2026-05-13T04:15:53Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -303,8 +311,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 717,
-      "last_success_at": "2026-05-12T20:11:57Z",
+      "last_run_duration_ms": 1213,
+      "last_success_at": "2026-05-13T04:15:53Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:obs-studio:304830335",

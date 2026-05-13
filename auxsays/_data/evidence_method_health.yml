@@ -5,56 +5,56 @@ methods:
   method_id: github_issues
   source_type: github_issue
   status: success
-  candidates_found: 39
+  candidates_found: 40
   accepted_reports: 39
-  rejected_reports: 0
+  rejected_reports: 1
   blocked_reason: ''
-  last_run: '2026-05-06T20:56:02Z'
-  notes: Backfilled from existing structured OBS evidence. The shared evidence runner refreshes this method health on write runs.
+  last_run: '2026-05-13T04:11:46Z'
+  notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
 - product_id: obs-studio
   update_version: 32.1.2
   method_id: github_issues
   source_type: github_issue
   status: success
-  candidates_found: 21
+  candidates_found: 26
   accepted_reports: 21
-  rejected_reports: 0
+  rejected_reports: 5
   blocked_reason: ''
-  last_run: '2026-05-11T23:10:28Z'
-  notes: Backfilled from existing structured OBS evidence. The shared evidence runner refreshes this method health on write runs.
+  last_run: '2026-05-13T04:11:55Z'
+  notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
 - product_id: blackmagic-davinci
   update_version: 21 Public Beta 1
   method_id: known_watchlist
   source_type: curated_watchlist
-  status: success
-  candidates_found: 2
-  accepted_reports: 2
-  rejected_reports: 0
-  blocked_reason: ''
-  last_run: '2026-05-12T00:00:00Z'
-  notes: Backfilled from existing structured DaVinci evidence. The shared evidence runner refreshes this method health on write runs.
+  status: broken
+  candidates_found: 0
+  accepted_reports: 0
+  rejected_reports: 2
+  blocked_reason: probe_fetch_failed:HTTPError; probe_fetch_failed:HTTPError
+  last_run: '2026-05-13T04:11:29Z'
+  notes: Specific known report URLs are fetched and passed through the same deterministic evidence gates.
 - product_id: blackmagic-davinci
   update_version: 21 Public Beta 1
   method_id: reddit_search
   source_type: reddit_community_report
-  status: no_results
+  status: broken
   candidates_found: 0
   accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: ''
-  last_run: ''
-  notes: Phase A fallback method configured; no local successful run has populated live candidates yet. Discovered candidates must pass the same deterministic evidence gates.
+  rejected_reports: 13
+  blocked_reason: reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError; reddit_search_fetch_failed:HTTPError
+  last_run: '2026-05-13T04:11:29Z'
+  notes: Subreddit search discovers candidate posts; accepted rows still require exact version/date/report gates.
 - product_id: blackmagic-davinci
   update_version: 21 Public Beta 1
   method_id: vendor_forum_search
   source_type: blackmagic_forum
-  status: no_results
+  status: blocked
   candidates_found: 0
   accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: ''
-  last_run: ''
-  notes: Phase A fallback method configured; no local successful run has populated live candidates yet. Blocked or inaccessible forum search will be reported here.
+  rejected_reports: 1
+  blocked_reason: vendor_forum_search_blocked_or_failed:HTTPError
+  last_run: '2026-05-13T04:11:29Z'
+  notes: Blackmagic forum search discovers candidate threads when accessible; accepted rows still require exact version/date/report gates.
 - product_id: blackmagic-davinci
   update_version: 21 Public Beta 1
   method_id: web_search
@@ -62,7 +62,7 @@ methods:
   status: disabled
   candidates_found: 0
   accepted_reports: 0
-  rejected_reports: 0
+  rejected_reports: 1
   blocked_reason: web_search_adapter_disabled_in_phase_a
-  last_run: ''
-  notes: Reserved fallback discovery slot; no accepted evidence can be produced until a deterministic web-search adapter is configured.
+  last_run: '2026-05-13T04:11:29Z'
+  notes: Reserved fallback discovery method; no adapter is configured in Phase A.
