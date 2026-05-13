@@ -21,7 +21,8 @@ sys.path.insert(0, str(_REPO / "auxsays" / "scripts"))
 sys.modules.setdefault("yaml", types.SimpleNamespace(safe_load=lambda *_args, **_kwargs: {}, safe_dump=lambda *_args, **_kwargs: ""))
 
 from patch_collectors.base import PatchRecord
-from patch_collectors.davinci import row_from_candidate
+from patch_collectors.davinci import row_from_candidate, version_aliases
+from apply_consensus_to_records import _proposed_record_fields
 
 FIXTURE_PATH = Path(__file__).resolve().parent / "fixtures" / "davinci_verified_reports.yml"
 
@@ -269,6 +270,175 @@ def run() -> int:
         "exact stable 21 report with issue/date/specific URL passes",
         valid_stable_row.get("counted") is True,
         f"reason={valid_stable_row.get('exclusion_reason')!r}",
+    )
+
+    stable_aliases = version_aliases("21")
+    for alias in (
+        "DaVinci Resolve Studio 21",
+        "Resolve Studio 21",
+        "DaVinci 21",
+        "21.0",
+        "DaVinci Resolve 21.0",
+        "DaVinci Resolve Studio 21.0",
+        "Resolve 21.0",
+        "Resolve Studio 21.0",
+        "version 21",
+        "version 21.0",
+    ):
+        check(
+            f"stable 21 aliases include {alias}",
+            alias in stable_aliases,
+            f"aliases={stable_aliases}",
+        )
+
+    stable_alias_cases = [
+        ("stable Studio full product alias passes", "DaVinci Resolve Studio 21 crashed during export."),
+        ("stable Resolve Studio alias passes", "Resolve Studio 21 crashed during export."),
+        ("stable DaVinci shorthand alias passes", "DaVinci 21 crashed during export."),
+        ("stable 21.0 alias passes", "DaVinci Resolve Studio 21.0 crashed during export."),
+        ("stable version 21 alias passes with product context", "DaVinci Resolve version 21 crashed during export."),
+    ]
+    for index, (label, text) in enumerate(stable_alias_cases, start=1):
+        stable_alias_candidate = dict(stable_for_beta)
+        stable_alias_candidate.update({
+            "source_url": f"https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=24100{index}",
+            "parent_title": text,
+            "report_title": text,
+            "report_text": text,
+        })
+        stable_alias_row = row_from_candidate(stable_record, stable_alias_candidate, "2026-05-13T00:00:00Z")
+        check(
+            label,
+            stable_alias_row.get("counted") is True,
+            f"reason={stable_alias_row.get('exclusion_reason')!r}, matched={stable_alias_row.get('matched_version')!r}",
+        )
+
+    version_only_stable = dict(stable_for_beta)
+    version_only_stable.update({
+        "source_url": "https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=241020",
+        "parent_title": "version 21 crash during export",
+        "report_title": "version 21 crash during export",
+        "report_text": "version 21 crashed during export.",
+    })
+    version_only_stable_row = row_from_candidate(stable_record, version_only_stable, "2026-05-13T00:00:00Z")
+    check(
+        "stable version 21 without product context does not count",
+        version_only_stable_row.get("counted") is False
+        and version_only_stable_row.get("exclusion_reason") == "missing_davinci_product_context",
+        f"reason={version_only_stable_row.get('exclusion_reason')!r}",
+    )
+
+    support_question_stable = dict(stable_for_beta)
+    support_question_stable.update({
+        "source_url": "https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=241023",
+        "parent_title": "Is there a way to lock a color page palette to a node?",
+        "report_title": "Is there a way to lock a color page palette to a node?",
+        "report_text": "Resolve version: DaVinci Resolve 21 Studio. OS: Windows 11. I am trying to learn Resolve for a workflow question.",
+    })
+    support_question_stable_row = row_from_candidate(stable_record, support_question_stable, "2026-05-13T00:00:00Z")
+    check(
+        "stable version metadata in a support question does not count",
+        support_question_stable_row.get("counted") is False
+        and support_question_stable_row.get("exclusion_reason") == "not_a_real_issue_report",
+        f"reason={support_question_stable_row.get('exclusion_reason')!r}",
+    )
+
+    conflicting_version_stable = dict(stable_for_beta)
+    conflicting_version_stable.update({
+        "source_url": "https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=241024",
+        "parent_title": "DaVinci Resolve free version 20 crash on launch",
+        "report_title": "DaVinci Resolve free version 20 crash on launch",
+        "report_text": "DaVinci Resolve free version 20 crashed on launch. I also tried version 21 while debugging.",
+    })
+    conflicting_version_stable_row = row_from_candidate(stable_record, conflicting_version_stable, "2026-05-13T00:00:00Z")
+    check(
+        "stable 21 rejects conflicting DaVinci version context",
+        conflicting_version_stable_row.get("counted") is False
+        and conflicting_version_stable_row.get("exclusion_reason") == "conflicting_davinci_version_context",
+        f"reason={conflicting_version_stable_row.get('exclusion_reason')!r}",
+    )
+
+    public_beta_for_stable = dict(beta_for_stable)
+    public_beta_for_stable.update({
+        "source_url": "https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=241021",
+        "parent_title": "DaVinci Resolve 21.0 Public Beta 1 render crash",
+        "report_title": "DaVinci Resolve 21.0 Public Beta 1 render crash",
+        "report_text": "DaVinci Resolve 21.0 Public Beta 1 crashed during render.",
+    })
+    public_beta_for_stable_row = row_from_candidate(stable_record, public_beta_for_stable, "2026-05-13T00:00:00Z")
+    check(
+        "stable 21 rejects Public Beta 1 context even with 21.0 alias",
+        public_beta_for_stable_row.get("counted") is False
+        and public_beta_for_stable_row.get("exclusion_reason") == "beta_context_for_stable_record",
+        f"reason={public_beta_for_stable_row.get('exclusion_reason')!r}",
+    )
+
+    point_zero_for_beta = dict(stable_for_beta)
+    point_zero_for_beta.update({
+        "source_url": "https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=241022",
+        "parent_title": "DaVinci Resolve Studio 21.0 render crash",
+        "report_title": "DaVinci Resolve Studio 21.0 render crash",
+        "report_text": "DaVinci Resolve Studio 21.0 crashed during render.",
+    })
+    point_zero_for_beta_row = row_from_candidate(beta_record, point_zero_for_beta, "2026-05-13T00:00:00Z")
+    check(
+        "Beta 1 rejects stable 21.0 wording",
+        point_zero_for_beta_row.get("counted") is False
+        and point_zero_for_beta_row.get("exclusion_reason") == "missing_exact_patch_version_match",
+        f"reason={point_zero_for_beta_row.get('exclusion_reason')!r}",
+    )
+
+    coherence_rows = [
+        row_from_candidate(stable_record, valid_stable, "2026-05-13T00:00:00Z"),
+        row_from_candidate(stable_record, stable_alias_candidate, "2026-05-13T00:00:00Z"),
+    ]
+    archived_stable_record = {
+        "update_product": "DaVinci Resolve",
+        "update_status": "archived",
+    }
+    stable_fields = _proposed_record_fields(
+        "blackmagic-davinci",
+        "21",
+        coherence_rows,
+        archived_stable_record,
+        "2026-05-13T00:00:00Z",
+    )
+    check(
+        "stable evidence promotes archived DaVinci 21 to current",
+        stable_fields.get("update_status") == "current" and stable_fields.get("feed_hidden") is False,
+        f"status={stable_fields.get('update_status')!r}, feed_hidden={stable_fields.get('feed_hidden')!r}",
+    )
+    check(
+        "stable writeback removes archived-only beta wording",
+        "archived" not in str(stable_fields.get("record_note") or "").lower()
+        and "primary public record" not in str(stable_fields.get("record_note") or "").lower()
+        and "stable/Studio" in str(stable_fields.get("record_note") or ""),
+        f"record_note={stable_fields.get('record_note')!r}",
+    )
+    active_stable_fields = _proposed_record_fields(
+        "blackmagic-davinci",
+        "21",
+        coherence_rows,
+        {"update_product": "DaVinci Resolve", "update_status": "current"},
+        "2026-05-13T00:00:00Z",
+    )
+    check(
+        "active stable DaVinci 21 keeps coherence wording managed",
+        "low-confidence Verified reports set" in str(active_stable_fields.get("update_decision_body") or ""),
+        f"decision_body={active_stable_fields.get('update_decision_body')!r}",
+    )
+
+    beta_fields = _proposed_record_fields(
+        "blackmagic-davinci",
+        "21 Public Beta 1",
+        [row_from_candidate(beta_record, candidate_from_fixture(control), "2026-05-13T00:00:00Z")],
+        {"update_product": "DaVinci Resolve", "update_status": "archived"},
+        "2026-05-13T00:00:00Z",
+    )
+    check(
+        "Beta writeback does not use stable activation fields",
+        "update_status" not in beta_fields and "record_note" not in beta_fields,
+        f"fields={sorted(beta_fields)}",
     )
 
     print()

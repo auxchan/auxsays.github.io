@@ -1680,3 +1680,51 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1tc8hvq-video-breaks-when-i-export-it
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1tc8hvq/video_breaks_when_i_export_it/
+  parent_title: Video breaks when i export it
+  report_title: Video breaks when i export it
+  report_text_excerpt: Video breaks when i export it this happens every time i export the video it looks perfectly fine while editing in the software how do i fix it. im using davinci resolve 21
+  captured_at: '2026-05-13T19:32:01Z'
+  source_date: '2026-05-13'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1skz03l-davinci-resolve-21-problem
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1skz03l/davinci_resolve_21_problem/
+  parent_title: Davinci Resolve 21 problem
+  report_title: Davinci Resolve 21 problem
+  report_text_excerpt: Davinci Resolve 21 problem I tried to export a photo edited in the new photo editor in davici and this is what I got (windows) https://preview.redd.it/10hjwuxj83vg1.png?width=488&format=png&auto=webp&s=f982dda6ccb5f9ed134dd5cb49280304a914fdb3
+  captured_at: '2026-05-13T19:32:01Z'
+  source_date: '2026-04-14'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1

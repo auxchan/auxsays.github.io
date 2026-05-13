@@ -46,6 +46,21 @@ PROTECTED_FIELDS = frozenset({
     "legacy_report_count", "evidence_backfill_status",
 })
 
+CONSENSUS_COHERENCE_FIELDS = {
+    "description",
+    "feed_hidden",
+    "update_status",
+    "status_change_type",
+    "notification_message",
+    "update_channel_label",
+    "quick_verdict",
+    "update_decision_label",
+    "update_decision_body",
+    "record_note",
+    "official_summary",
+    "release_summary",
+}
+
 WRITEABLE_FIELDS = {
     "update_report_count",
     "confirmed_patch_specific_report_count",
@@ -62,6 +77,7 @@ WRITEABLE_FIELDS = {
     "intelligence_stage",
     "evidence_samples",
     "status_events",
+    *CONSENSUS_COHERENCE_FIELDS,
 }
 
 
@@ -151,6 +167,13 @@ def _index_generated_records() -> dict[tuple[str, str], dict[str, Any]]:
                 "intelligence_stage": str(data.get("intelligence_stage") or "").strip(),
                 "consensus_collection_status": str(data.get("consensus_collection_status") or "").strip(),
                 "legacy_manual_report_count": data.get("legacy_manual_report_count"),
+                "description": str(data.get("description") or "").strip(),
+                "feed_hidden": data.get("feed_hidden"),
+                "update_status": str(data.get("update_status") or "").strip(),
+                "status_change_type": str(data.get("status_change_type") or "").strip(),
+                "notification_message": str(data.get("notification_message") or "").strip(),
+                "update_channel_label": str(data.get("update_channel_label") or "").strip(),
+                "record_note": str(data.get("record_note") or "").strip(),
             }
     return index
 
@@ -433,7 +456,7 @@ def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], reco
             "issue": row.get("issue_theme") or row.get("report_title") or row.get("observed_issue_summary") or "Confirmed patch-specific report",
             "outcome": row.get("severity") or "medium",
         })
-    return {
+    fields = {
         "update_report_count": count,
         "confirmed_patch_specific_report_count": count,
         "evidence_state": _evidence_state(count),
@@ -457,6 +480,53 @@ def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], reco
             ),
         },
     }
+    fields.update(_record_coherence_fields(pid, ver, count, record))
+    return fields
+
+
+def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, Any] | None) -> dict[str, Any]:
+    if count <= 0 or pid != "blackmagic-davinci" or _davinci_version_is_beta(ver):
+        return {}
+    if not record:
+        return {}
+
+    product_label = str(record.get("update_product") or "DaVinci Resolve").strip()
+    return {
+        "description": (
+            f"Published Apr 14, 2026. AUXSAYS is tracking {product_label} {ver} as a separate stable/Studio evidence "
+            "record from the Public Beta 1 page."
+        ),
+        "feed_hidden": False,
+        "update_status": "current",
+        "status_change_type": "new",
+        "notification_message": "",
+        "update_channel_label": "Stable / Studio evidence record",
+        "quick_verdict": (
+            "WAIT for fragile production workflows. AUXSAYS has a small verified-report sample for DaVinci Resolve "
+            f"{ver}, but confidence remains low."
+        ),
+        "update_decision_label": "WAIT",
+        "update_decision_body": (
+            "Stable/Studio evidence is now tracked separately from Public Beta 1. Treat the current report set as a "
+            "low-confidence Verified reports set, not broad consensus."
+        ),
+        "record_note": (
+            f"This is the active stable/Studio DaVinci Resolve {ver} evidence record. Beta-specific reports remain routed "
+            "to the DaVinci Resolve 21 Public Beta 1 record."
+        ),
+        "official_summary": (
+            f"DaVinci Resolve {ver} stable/Studio reports are tracked separately from DaVinci Resolve 21 Public Beta 1. "
+            "The official source capture should be refreshed before relying on this page for full release-note detail."
+        ),
+        "release_summary": (
+            f"DaVinci Resolve {ver} stable/Studio reports are tracked separately from DaVinci Resolve 21 Public Beta 1. "
+            "Use this page for stable/Studio evidence and the beta page for beta-build risk."
+        ),
+    }
+
+
+def _davinci_version_is_beta(version: str) -> bool:
+    return bool(re.search(r"\b(?:public\s+)?beta\b|b\d+\b", str(version or ""), flags=re.I))
 
 
 def run_dry_run(*, evidence_path: Path, product_id_filter: str | None, is_candidate_mode: bool, records_index: dict[tuple[str, str], dict[str, Any]], write_requested: bool = False) -> list[dict[str, Any]]:
@@ -501,7 +571,7 @@ def _write_json(payload: dict[str, Any], output: str | None) -> None:
 def _apply_record_fields(record_path: Path, fields: dict[str, Any]) -> dict[str, Any]:
     data, body = _load_front_matter_and_body(record_path)
     before = deepcopy(data)
-    illegal = sorted(k for k in fields if k in PROTECTED_FIELDS)
+    illegal = sorted(k for k in fields if k in PROTECTED_FIELDS and k not in CONSENSUS_COHERENCE_FIELDS)
     if illegal:
         raise RuntimeError(f"Refusing to overwrite protected fields: {illegal}")
     for key, value in fields.items():

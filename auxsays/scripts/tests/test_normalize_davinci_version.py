@@ -359,6 +359,16 @@ def run() -> int:
         "DaVinci Resolve 21" in aliases_stable,
         f'aliases: {aliases_stable}',
     )
+    check(
+        '"21" aliases include "Resolve Studio 21"',
+        "Resolve Studio 21" in aliases_stable,
+        f'aliases: {aliases_stable}',
+    )
+    check(
+        '"21" aliases include "DaVinci 21"',
+        "DaVinci 21" in aliases_stable,
+        f'aliases: {aliases_stable}',
+    )
 
     # ------------------------------------------------------------------ #
     # Summary                                                             #

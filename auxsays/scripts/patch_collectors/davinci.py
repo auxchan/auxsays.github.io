@@ -88,7 +88,19 @@ FORUM_DISCOVERY_ISSUE_TERMS = (
     "magic mask",
 )
 PRODUCT_CONTEXT_RE = re.compile(r"\b(?:davinci\s+resolve|resolve\s+studio|resolve)\b", flags=re.I)
+VERSIONED_DAVINCI_CONTEXT_RE = re.compile(
+    r"\bdavinci\s+(?:version\s+)?v?\d{1,2}(?:\.\d+){0,2}\b",
+    flags=re.I,
+)
 BETA_CONTEXT_RE = re.compile(r"\b(?:public\s+beta|beta\s*\d*|21\.0b\d*|21b\d+|21\.0b\s+build\s+20|build\s+20)\b", flags=re.I)
+DAVINCI_VERSION_CONTEXT_RE = re.compile(
+    r"\b(?:davinci\s+resolve(?:\s+studio)?|resolve(?:\s+studio)?|davinci|version)\s+v?(\d{1,2})(?:\.\d+){0,2}\b",
+    flags=re.I,
+)
+DAVINCI_STRONG_ISSUE_RE = re.compile(
+    r"\b(?:crash(?:es|ed|ing)?|freez(?:e|es|ing|en)|hang(?:s|ing)?|fail(?:ed|s|ure|ing)?|error|bug|broke|broken|breaks|corrupt(?:ed|ion)?|regression|slow|lag(?:gy)?|won't\s+open|can't\s+open|cannot\s+open|does\s+not\s+open|decode|install(?:ation)?\s+issue|problem)\b",
+    flags=re.I,
+)
 
 
 class SourceAccessError(RuntimeError):
@@ -156,7 +168,7 @@ class DavinciCollector(ProductCollector):
     product_id = PRODUCT_ID
 
     def collect(self, context: CollectorContext) -> list[dict[str, Any]]:
-        records = generated_records(PRODUCT_ID, context.target_versions, include_archived=False)
+        records = generated_records(PRODUCT_ID, context.target_versions, include_archived=bool(context.target_versions))
         results: list[dict[str, Any]] = []
         for record in records:
             accepted, rejected, method_health = collect_for_record(record, context)
@@ -176,7 +188,7 @@ class DavinciCollector(ProductCollector):
                 added, total, rows = append_evidence_rows(accepted)
                 structured_count = len(counted_rows(rows, PRODUCT_ID, record.update_version))
                 record_updated = False
-                if accepted and (added > 0 or record_needs_count_update(record, structured_count)):
+                if accepted:
                     record_updated = apply_consensus_writeback(record.update_version)
                 result.update({
                     "evidence_rows_added": added,
@@ -525,6 +537,7 @@ def version_aliases(version: str) -> list[str]:
         f"Resolve {version}",
         f"DaVinci Resolve Studio {version}",
     ]
+    aliases.extend(str(alias) for alias in normalized.get("normalized_aliases") or [])
     if normalized.get("is_beta") and int(normalized.get("beta_number") or 0) == 1:
         aliases.extend([
             "DaVinci Resolve 21.0 Public Beta 1",
@@ -544,7 +557,30 @@ def version_aliases(version: str) -> list[str]:
             "DR 21 Beta 1",
             "DR 21b1",
         ])
-    return aliases
+    elif normalized.get("is_beta") is False and normalized.get("minor_version") is None:
+        major = int(normalized.get("major_version") or 0)
+        if major:
+            aliases.extend([
+                f"{major}.0",
+                f"DaVinci Resolve {major}.0",
+                f"DaVinci Resolve Studio {major}.0",
+                f"Resolve {major}.0",
+                f"Resolve Studio {major}.0",
+                f"DaVinci {major}.0",
+                f"version {major}",
+                f"version {major}.0",
+                f"DaVinci Resolve version {major}",
+                f"DaVinci Resolve version {major}.0",
+                f"Resolve Studio {major}",
+            ])
+    deduped: list[str] = []
+    seen: set[str] = set()
+    for alias in aliases:
+        alias = re.sub(r"\s+", " ", str(alias or "")).strip()
+        if alias and alias.lower() not in seen:
+            seen.add(alias.lower())
+            deduped.append(alias)
+    return deduped
 
 
 def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
@@ -1247,11 +1283,17 @@ def row_from_candidate(record: PatchRecord, candidate: dict[str, Any], captured_
     if gated.get("counted") is True and not davinci_product_match(report_text):
         gated["counted"] = False
         gated["exclusion_reason"] = "missing_davinci_product_context"
+    if gated.get("counted") is True and is_stable_record(record.update_version) and conflicting_stable_major_context(record.update_version, report_text):
+        gated["counted"] = False
+        gated["exclusion_reason"] = "conflicting_davinci_version_context"
+    if gated.get("counted") is True and not davinci_strong_issue_match(report_text):
+        gated["counted"] = False
+        gated["exclusion_reason"] = "not_a_real_issue_report"
     return gated
 
 
 def davinci_product_match(text: str) -> bool:
-    return bool(PRODUCT_CONTEXT_RE.search(text or ""))
+    return bool(PRODUCT_CONTEXT_RE.search(text or "") or VERSIONED_DAVINCI_CONTEXT_RE.search(text or ""))
 
 
 def is_stable_record(version: str) -> bool:
@@ -1261,6 +1303,25 @@ def is_stable_record(version: str) -> bool:
 
 def beta_context_present(text: str) -> bool:
     return bool(BETA_CONTEXT_RE.search(text or ""))
+
+
+def conflicting_stable_major_context(version: str, text: str) -> bool:
+    normalized = normalize_davinci_version(version)
+    major = int(normalized.get("major_version") or 0)
+    if not major:
+        return False
+    for match in DAVINCI_VERSION_CONTEXT_RE.finditer(text or ""):
+        try:
+            matched_major = int(match.group(1))
+        except (TypeError, ValueError):
+            continue
+        if matched_major != major:
+            return True
+    return False
+
+
+def davinci_strong_issue_match(text: str) -> bool:
+    return bool(DAVINCI_STRONG_ISSUE_RE.search(text or ""))
 
 
 def error_reason(exc: Exception) -> str:

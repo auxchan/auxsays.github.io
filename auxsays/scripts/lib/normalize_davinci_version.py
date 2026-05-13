@@ -104,6 +104,8 @@ def _stable_aliases(major: int, minor: str | None, patch: str | None) -> list[st
         f"DaVinci Resolve {ver}",
         f"DaVinci Resolve Studio {ver}",
         f"Resolve {ver}",
+        f"Resolve Studio {ver}",
+        f"DaVinci {ver}",
         f"v{ver}",
     ]
 
