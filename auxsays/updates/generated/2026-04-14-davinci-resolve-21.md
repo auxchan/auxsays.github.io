@@ -111,7 +111,7 @@ official_source_attempts:
   status: official-source-parser-failed
   body_captured: false
   checksums_captured: false
-<<- at: '2026-05-13T20:13:23Z'
+- at: '2026-05-13T20:13:23Z'
   url: https://www.blackmagicdesign.com/media/release/20260414-01
   status: official-source-parser-failed
   body_captured: false
