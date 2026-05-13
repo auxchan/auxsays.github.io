@@ -2,6 +2,12 @@ name: Promote DaVinci Verified Calibration Reports
 
 on:
   workflow_dispatch:
+    inputs:
+      promote:
+        description: "Write accepted calibration rows to consensus evidence"
+        required: true
+        default: false
+        type: boolean
 
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
@@ -30,13 +36,19 @@ jobs:
       - name: Install dependencies
         run: pip install -r auxsays/scripts/requirements-ingest.txt
 
-      - name: Validate verified DaVinci promotion fixtures
+      - name: Validate verified DaVinci calibration rows
         run: python auxsays/scripts/promote_davinci_verified_reports.py
 
       - name: Promote verified DaVinci reports
+        if: ${{ github.event.inputs.promote == 'true' }}
         run: python auxsays/scripts/promote_davinci_verified_reports.py --write
 
+      - name: Report dry-run only
+        if: ${{ github.event.inputs.promote != 'true' }}
+        run: echo "Dry-run complete. Re-run with promote=true to write accepted calibration rows."
+
       - name: Remove transient validation output
+        if: ${{ github.event.inputs.promote == 'true' }}
         run: |
           rm -rf auxsays/_site node_modules .jekyll-cache .codex_tmp
           find . -type d -name __pycache__ -prune -exec rm -rf {} +
@@ -48,6 +60,7 @@ jobs:
 
       - name: Commit material promotion changes
         id: commit
+        if: ${{ github.event.inputs.promote == 'true' }}
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"

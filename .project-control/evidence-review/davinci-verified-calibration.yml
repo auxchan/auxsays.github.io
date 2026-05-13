@@ -1,0 +1,108 @@
+schema_version: 1
+notes: "Structured calibration review data only. This is not public consensus evidence. Promote through auxsays/scripts/promote_davinci_verified_reports.py after deterministic gates pass. This fallback bridge exists for ambiguous or blocked candidates; normal DaVinci evidence should flow through automated discovery, fetch, gates, evidence writeback, consensus summary, and deploy."
+reports:
+  - id: davinci-calibration-235117
+    product_id: blackmagic-davinci
+    update_version: "21 Public Beta 1"
+    source_type: blackmagic_forum
+    source_name: "Blackmagic Design Community Forum"
+    source_url: "https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235117"
+    parent_title: "DaVinci Resolve 21 Public Beta 1 crash and corrupted project report"
+    report_title: "Resolve Studio 21.0B Build 20 project corruption after crash"
+    report_text_excerpt: "DaVinci Resolve Studio 21.0B Build 20 crashed and the project was corrupted after reopening."
+    source_date: "2026-04-14"
+    target_release_date: "2026-04-14"
+    date_gate_basis: "source date is on or after the 2026-04-14 release date"
+    matched_version: "21 Public Beta 1"
+    match_basis: exact_version_text
+    concrete_issue_basis: "crash; corrupted project"
+    counted: true
+    source_weight: 1
+    verification_source: taylor_phase_1g_1h_manual_verification
+    verification_status: accepted_calibration_verification
+    promotion_ready: true
+    reviewer_note: "Taylor-authorized Phase 1G/1H calibration bridge; not a substitute for future automated discovery/fetch/gating."
+  - id: davinci-calibration-235536
+    product_id: blackmagic-davinci
+    update_version: "21 Public Beta 1"
+    source_type: blackmagic_forum
+    source_name: "Blackmagic Design Community Forum"
+    source_url: "https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235536"
+    parent_title: "DaVinci Resolve 21 Public Beta 1 export failure report"
+    report_title: "Resolve 21.0 Public Beta 1 render/export failure"
+    report_text_excerpt: "Resolve 21.0 Public Beta 1 failed during render/export and broke the normal delivery workflow."
+    source_date: "2026-04-15"
+    target_release_date: "2026-04-14"
+    date_gate_basis: "source date is after the 2026-04-14 release date"
+    matched_version: "21 Public Beta 1"
+    match_basis: exact_version_text
+    concrete_issue_basis: "failed render/export workflow"
+    counted: true
+    source_weight: 1
+    verification_source: taylor_phase_1g_1h_manual_verification
+    verification_status: accepted_calibration_verification
+    promotion_ready: true
+    reviewer_note: "Taylor-authorized Phase 1G/1H calibration bridge; not a substitute for future automated discovery/fetch/gating."
+  - id: davinci-calibration-235458
+    product_id: blackmagic-davinci
+    update_version: "21 Public Beta 1"
+    source_type: blackmagic_forum
+    source_name: "Blackmagic Design Community Forum"
+    source_url: "https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235458"
+    parent_title: "DaVinci Resolve 21 Public Beta 1 GPU performance regression report"
+    report_title: "DaVinci Resolve Studio 21 Public Beta 1 GPU slowdown"
+    report_text_excerpt: "DaVinci Resolve Studio 21 Public Beta 1 showed a GPU performance regression and slow timeline playback."
+    source_date: "2026-04-15"
+    target_release_date: "2026-04-14"
+    date_gate_basis: "source date is after the 2026-04-14 release date"
+    matched_version: "21 Public Beta 1"
+    match_basis: exact_version_text
+    concrete_issue_basis: "GPU performance regression; slow timeline playback"
+    counted: true
+    source_weight: 1
+    verification_source: taylor_phase_1g_1h_manual_verification
+    verification_status: accepted_calibration_verification
+    promotion_ready: true
+    reviewer_note: "Taylor-authorized Phase 1G/1H calibration bridge; not a substitute for future automated discovery/fetch/gating."
+  - id: davinci-calibration-235208
+    product_id: blackmagic-davinci
+    update_version: "21 Public Beta 1"
+    source_type: blackmagic_forum
+    source_name: "Blackmagic Design Community Forum"
+    source_url: "https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235208"
+    parent_title: "DaVinci Resolve 21 Public Beta 1 install issue report"
+    report_title: "DaVinci Resolve 21.0 Public Beta 1 installation failure"
+    report_text_excerpt: "DaVinci Resolve 21.0 Public Beta 1 install failed and blocked startup after the update."
+    source_date: "2026-04-14"
+    target_release_date: "2026-04-14"
+    date_gate_basis: "source date is on the 2026-04-14 release date"
+    matched_version: "21 Public Beta 1"
+    match_basis: exact_version_text
+    concrete_issue_basis: "install failure; startup blocked"
+    counted: true
+    source_weight: 1
+    verification_source: taylor_phase_1g_1h_manual_verification
+    verification_status: accepted_calibration_verification
+    promotion_ready: true
+    reviewer_note: "Taylor-authorized Phase 1G/1H calibration bridge; not a substitute for future automated discovery/fetch/gating."
+  - id: davinci-calibration-234870
+    product_id: blackmagic-davinci
+    update_version: "21 Public Beta 1"
+    source_type: blackmagic_forum
+    source_name: "Blackmagic Design Community Forum"
+    source_url: "https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=234870"
+    parent_title: "DaVinci Resolve 21 Public Beta 1 Magic Mask crash report"
+    report_title: "Resolve Studio 21.0B Build 20 Magic Mask crash"
+    report_text_excerpt: "Resolve Studio 21.0B Build 20 crashed when using Magic Mask and interrupted color grading work."
+    source_date: "2026-04-14"
+    target_release_date: "2026-04-14"
+    date_gate_basis: "source date is on the 2026-04-14 release date"
+    matched_version: "21 Public Beta 1"
+    match_basis: exact_version_text
+    concrete_issue_basis: "Magic Mask crash; interrupted color grading workflow"
+    counted: true
+    source_weight: 1
+    verification_source: taylor_phase_1g_1h_manual_verification
+    verification_status: accepted_calibration_verification
+    promotion_ready: true
+    reviewer_note: "Taylor-authorized Phase 1G/1H calibration bridge; not a substitute for future automated discovery/fetch/gating."
