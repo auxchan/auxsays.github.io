@@ -1680,3 +1680,99 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+- id: blackmagic-davinci-21-public-beta-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1t6ff26-autosubs-plugin-not-working
+  product_id: blackmagic-davinci
+  update_version: 21 Public Beta 1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1t6ff26/autosubs_plugin_not_working/
+  parent_title: Autosubs plugin not working
+  report_title: Autosubs plugin not working
+  report_text_excerpt: Autosubs plugin not working So I been using Davinci for a while and I been using autosubs plugin to make the subtitles which helps me to edit. However after the most recent update version 5.3 it stopped working either it doesn't connect despite being opened through Davinci...
+  captured_at: '2026-05-13T17:25:19Z'
+  source_date: '2026-05-07'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: DaVinci Resolve 21 beta
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-public-beta-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1szxp3j-how-do-i-report-21-beta-bugs
+  product_id: blackmagic-davinci
+  update_version: 21 Public Beta 1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1szxp3j/how_do_i_report_21_beta_bugs/
+  parent_title: How do I report 21 beta bugs?
+  report_title: How do I report 21 beta bugs?
+  report_text_excerpt: How do I report 21 beta bugs? How do I report bugs that I experience in the Davinci Resolve 21 beta? I keep having the same issues that I did not have in 20 but don’t see an option to report the bugs I’m experiencing submitted by /u/Decent-Science3920 [link] [comments]
+  captured_at: '2026-05-13T17:25:19Z'
+  source_date: '2026-04-30'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: DaVinci Resolve 21 beta
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: unknown
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: blackmagic-davinci-21-public-beta-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1sym4fv-is-there-a-way-to-build-this-fusion-compo
+  product_id: blackmagic-davinci
+  update_version: 21 Public Beta 1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1sym4fv/is_there_a_way_to_build_this_fusion_composition/
+  parent_title: Is there a way to build this fusion composition to speed up performance?
+  report_title: Is there a way to build this fusion composition to speed up performance?
+  report_text_excerpt: 'Is there a way to build this fusion composition to speed up performance? Result: Neon Box, result of fusion composition Fusion Composition: Screenshot of Fusion Composition Currently, how this starts with a blank canvas of 720x720. Then the background get applied. Then the...'
+  captured_at: '2026-05-13T17:25:19Z'
+  source_date: '2026-04-29'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: Resolve 21 beta
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-public-beta-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ssi2se-how-to-resize-without-loosing-quality
+  product_id: blackmagic-davinci
+  update_version: 21 Public Beta 1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ssi2se/how_to_resize_without_loosing_quality/
+  parent_title: how to resize without loosing quality
+  report_title: how to resize without loosing quality
+  report_text_excerpt: how to resize without loosing quality when i change the size of the image to fit in the viewport the quality decreases even though the when i zoom in the original image in the photos app the quality stays the same i tried the resize node , transform node , and tried to change...
+  captured_at: '2026-05-13T17:25:19Z'
+  source_date: '2026-04-22'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: DaVinci Resolve 21 beta
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
