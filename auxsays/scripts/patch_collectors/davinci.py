@@ -12,6 +12,7 @@ import os
 import re
 import urllib.parse
 import urllib.request
+from urllib.error import HTTPError
 from datetime import datetime, timezone
 from typing import Any
 
@@ -39,6 +40,15 @@ PRODUCT_ID = "blackmagic-davinci"
 SOURCE_NAME_REDDIT = "r/davinciresolve"
 REDDIT_SEARCH = "https://www.reddit.com/r/davinciresolve/search.json"
 FORUM_SEARCH = "https://forum.blackmagicdesign.com/search.php"
+TEXT_HEADERS = {
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,text/plain;q=0.8,*/*;q=0.5",
+    "Accept-Language": "en-US,en;q=0.9",
+    "User-Agent": "Mozilla/5.0 (compatible; AUXSAYS-DaVinci-Evidence-Collector/1.0; +https://auxsays.com/)",
+}
+JSON_HEADERS = {
+    "Accept": "application/json,text/plain;q=0.8,*/*;q=0.5",
+    "User-Agent": "Mozilla/5.0 (compatible; AUXSAYS-DaVinci-Evidence-Collector/1.0; +https://auxsays.com/)",
+}
 FORUM_DISCOVERY_ISSUE_TERMS = (
     "crash",
     "corrupt",
@@ -50,6 +60,14 @@ FORUM_DISCOVERY_ISSUE_TERMS = (
     "magic mask",
 )
 PRODUCT_CONTEXT_RE = re.compile(r"\b(?:davinci\s+resolve|resolve\s+studio|resolve)\b", flags=re.I)
+BETA_CONTEXT_RE = re.compile(r"\b(?:public\s+beta|beta\s*\d*|21\.0b\d*|21b\d+|21\.0b\s+build\s+20|build\s+20)\b", flags=re.I)
+
+
+class SourceAccessError(RuntimeError):
+    def __init__(self, reason: str, *, status: int | None = None) -> None:
+        super().__init__(reason)
+        self.reason = reason
+        self.status = status
 
 # Seed/fallback coverage only: these URLs are calibration examples for the
 # deterministic gates, not the primary long-term DaVinci evidence mechanism.
@@ -130,34 +148,40 @@ class DavinciCollector(ProductCollector):
 
 
 def request_json(url: str) -> Any:
-    headers = {
-        "Accept": "application/json,text/plain;q=0.8,*/*;q=0.5",
-        "User-Agent": "AUXSAYS-DaVinci-Evidence-Collector/1.0",
-    }
+    headers = dict(JSON_HEADERS)
     token = os.getenv("REDDIT_BEARER_TOKEN")
     if token:
         headers["Authorization"] = f"Bearer {token}"
     request = urllib.request.Request(url, headers=headers)
-    with urllib.request.urlopen(request, timeout=30) as response:
-        return json.loads(response.read().decode("utf-8"))
+    try:
+        with urllib.request.urlopen(request, timeout=30) as response:
+            return json.loads(response.read().decode("utf-8"))
+    except HTTPError as exc:
+        raise SourceAccessError(f"http_{exc.code}_{exc.reason}", status=exc.code) from exc
 
 
 def request_text(url: str) -> str:
-    request = urllib.request.Request(
-        url,
-        headers={
-            "Accept": "text/html,application/xhtml+xml,text/plain;q=0.8,*/*;q=0.5",
-            "User-Agent": "AUXSAYS-DaVinci-Evidence-Collector/1.0",
-        },
-    )
-    with urllib.request.urlopen(request, timeout=30) as response:
-        raw = response.read(500_000)
-        content_type = response.headers.get("content-type", "")
+    request = urllib.request.Request(url, headers=TEXT_HEADERS)
+    try:
+        with urllib.request.urlopen(request, timeout=30) as response:
+            raw = response.read(500_000)
+            content_type = response.headers.get("content-type", "")
+            status = response.status
+    except HTTPError as exc:
+        raise SourceAccessError(f"http_{exc.code}_{exc.reason}", status=exc.code) from exc
     charset = "utf-8"
     match = re.search(r"charset=([A-Za-z0-9_\-]+)", content_type)
     if match:
         charset = match.group(1)
-    return raw.decode(charset, errors="replace")
+    text = raw.decode(charset, errors="replace")
+    if status == 202 and blackmagic_access_challenge(text):
+        raise SourceAccessError("http_202_access_challenge", status=202)
+    return text
+
+
+def blackmagic_access_challenge(text: str) -> bool:
+    lowered = text.lower()
+    return "<title></title>" in lowered and "please enable javascript" in lowered or "checking your browser" in lowered
 
 
 def version_aliases(version: str) -> list[str]:
@@ -248,7 +272,7 @@ def evaluate_candidates(
 
 
 def reddit_search_candidates(record: PatchRecord, context: CollectorContext, errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    queries = [f'"{record.update_version}"', *[f'"{alias}"' for alias in version_aliases(record.update_version)]]
+    queries = reddit_search_queries(record)
     candidates: list[dict[str, Any]] = []
     seen_queries: set[str] = set()
     for query in queries:
@@ -270,7 +294,7 @@ def reddit_search_candidates(record: PatchRecord, context: CollectorContext, err
             try:
                 payload = request_json(url)
             except Exception as exc:
-                errors.append({"query": query, "reason": f"reddit_search_fetch_failed:{type(exc).__name__}"})
+                errors.append({"query": query, "source_url": url, "reason": f"reddit_search_fetch_failed:{error_reason(exc)}"})
                 break
             children = (((payload or {}).get("data") or {}).get("children") or [])
             for child in children:
@@ -281,6 +305,38 @@ def reddit_search_candidates(record: PatchRecord, context: CollectorContext, err
             if not after:
                 break
     return candidates
+
+
+def reddit_search_queries(record: PatchRecord) -> list[str]:
+    aliases = [record.update_version, *version_aliases(record.update_version)]
+    queries: list[str] = []
+    for alias in aliases:
+        alias = str(alias or "").strip()
+        if alias:
+            queries.append(f'"{alias}"')
+    normalized = normalize_davinci_version(record.update_version)
+    if normalized.get("is_beta"):
+        queries.extend([
+            '"public beta 21"',
+            '"21.0B"',
+            '"21b1"',
+            "davinci resolve public beta render",
+            "davinci resolve public beta crash",
+        ])
+    else:
+        queries.extend([
+            '"DaVinci Resolve 21"',
+            '"Resolve Studio 21"',
+            "davinci resolve 21 crash",
+            "davinci resolve 21 render",
+        ])
+    deduped: list[str] = []
+    seen: set[str] = set()
+    for query in queries:
+        if query.lower() not in seen:
+            seen.add(query.lower())
+            deduped.append(query)
+    return deduped
 
 
 def known_watchlist_candidates(record: PatchRecord, context: CollectorContext, errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
@@ -295,7 +351,7 @@ def vendor_forum_search_candidates(record: PatchRecord, context: CollectorContex
         try:
             text = request_text(url)
         except Exception as exc:
-            errors.append({"source_url": url, "reason": f"vendor_forum_search_blocked_or_failed:{type(exc).__name__}"})
+            errors.append({"source_url": url, "reason": f"vendor_forum_search_blocked_or_failed:{error_reason(exc)}"})
             continue
         links.extend(re.findall(r"href=\"(viewtopic\.php\?[^\"#]+t=\d+[^\"#]*)", text, flags=re.I))
     candidates: list[dict[str, Any]] = []
@@ -304,7 +360,7 @@ def vendor_forum_search_candidates(record: PatchRecord, context: CollectorContex
         try:
             page = request_text(source_url)
         except Exception as exc:
-            errors.append({"source_url": source_url, "reason": f"vendor_forum_thread_fetch_failed:{type(exc).__name__}"})
+            errors.append({"source_url": source_url, "reason": f"vendor_forum_thread_fetch_failed:{error_reason(exc)}"})
             continue
         clean = clean_html(page)
         title = extract_title(page) or source_url
@@ -360,6 +416,16 @@ def reddit_candidate(data: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def reddit_post_candidate(url: str, source_name: str) -> dict[str, Any]:
+    json_url = url.rstrip("/") + "/.json"
+    payload = request_json(json_url)
+    post = (((payload or [{}])[0].get("data") or {}).get("children") or [{}])[0].get("data") or {}
+    candidate = reddit_candidate(post)
+    candidate["source_name"] = source_name or SOURCE_NAME_REDDIT
+    candidate["source_url"] = url
+    return candidate
+
+
 def source_probe_candidates(
     record: PatchRecord,
     context: CollectorContext,
@@ -368,10 +434,16 @@ def source_probe_candidates(
 ) -> list[dict[str, Any]]:
     candidates: list[dict[str, Any]] = []
     for probe in probes:
+        if "reddit.com" in probe["source_url"]:
+            try:
+                candidates.append(reddit_post_candidate(probe["source_url"], probe.get("source_name", "")))
+            except Exception as exc:
+                errors.append({"source_url": probe["source_url"], "reason": f"reddit_post_fetch_failed:{error_reason(exc)}"})
+            continue
         try:
             text = request_text(probe["source_url"])
         except Exception as exc:
-            errors.append({"source_url": probe["source_url"], "reason": f"probe_fetch_failed:{type(exc).__name__}"})
+            errors.append({"source_url": probe["source_url"], "reason": f"probe_fetch_failed:{error_reason(exc)}"})
             continue
         title = extract_title(text) or probe["source_url"]
         clean = clean_html(text)
@@ -397,6 +469,8 @@ def method_status(
         return "partial"
     if accepted:
         return "success"
+    if candidates and errors:
+        return "partial"
     if candidates and rejected:
         return "no_results"
     if errors:
@@ -448,6 +522,9 @@ def row_from_candidate(record: PatchRecord, candidate: dict[str, Any], captured_
         row_id=f"{PRODUCT_ID}-{slug(record.update_version)}-{slug(str(candidate.get('source_type') or 'source'))}-{slug(str(candidate.get('source_url') or ''))}",
     )
     gated = apply_acceptance_gates(row, report_text=report_text)
+    if gated.get("counted") is True and is_stable_record(record.update_version) and beta_context_present(report_text):
+        gated["counted"] = False
+        gated["exclusion_reason"] = "beta_context_for_stable_record"
     if gated.get("counted") is True and not davinci_product_match(report_text):
         gated["counted"] = False
         gated["exclusion_reason"] = "missing_davinci_product_context"
@@ -456,6 +533,21 @@ def row_from_candidate(record: PatchRecord, candidate: dict[str, Any], captured_
 
 def davinci_product_match(text: str) -> bool:
     return bool(PRODUCT_CONTEXT_RE.search(text or ""))
+
+
+def is_stable_record(version: str) -> bool:
+    normalized = normalize_davinci_version(version)
+    return bool(normalized.get("major_version")) and normalized.get("is_beta") is False
+
+
+def beta_context_present(text: str) -> bool:
+    return bool(BETA_CONTEXT_RE.search(text or ""))
+
+
+def error_reason(exc: Exception) -> str:
+    if isinstance(exc, SourceAccessError):
+        return exc.reason
+    return type(exc).__name__
 
 
 def classify(text: str) -> tuple[str, str, str, str, str]:

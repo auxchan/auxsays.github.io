@@ -145,6 +145,69 @@ def run() -> int:
         f"reason={generic_url_row.get('exclusion_reason')!r}",
     )
 
+    stable_record = PatchRecord(
+        product_id="blackmagic-davinci",
+        update_version="21",
+        path=Path("auxsays/updates/generated/2026-04-14-davinci-resolve-21.md"),
+        update_published_at="2026-04-14",
+        update_status="current",
+        update_product="DaVinci Resolve",
+    )
+    beta_for_stable = {
+        "source_type": "blackmagic_forum",
+        "source_name": "Blackmagic Design Community Forum",
+        "source_url": "https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235117",
+        "parent_title": "DaVinci Resolve 21 Public Beta 1 crash report",
+        "report_title": "Resolve Studio 21.0B Build 20 crash",
+        "report_text": "DaVinci Resolve Studio 21.0B Build 20 crashed during export.",
+        "source_date": "2026-04-14",
+    }
+    beta_for_stable_row = row_from_candidate(stable_record, beta_for_stable, "2026-05-13T00:00:00Z")
+    check(
+        "stable 21 rejects Beta 1 context",
+        beta_for_stable_row.get("counted") is False and beta_for_stable_row.get("exclusion_reason") == "beta_context_for_stable_record",
+        f"reason={beta_for_stable_row.get('exclusion_reason')!r}",
+    )
+
+    beta_record = record_from_fixture(control)
+    stable_for_beta = {
+        "source_type": "blackmagic_forum",
+        "source_name": "Blackmagic Design Community Forum",
+        "source_url": "https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=240001",
+        "parent_title": "DaVinci Resolve 21 render crash report",
+        "report_title": "Resolve Studio 21 render crash",
+        "report_text": "DaVinci Resolve 21 crashed while rendering a timeline.",
+        "source_date": "2026-04-14",
+    }
+    stable_for_beta_row = row_from_candidate(beta_record, stable_for_beta, "2026-05-13T00:00:00Z")
+    check(
+        "Beta 1 rejects stable 21 wording",
+        stable_for_beta_row.get("counted") is False and stable_for_beta_row.get("exclusion_reason") == "missing_exact_patch_version_match",
+        f"reason={stable_for_beta_row.get('exclusion_reason')!r}",
+    )
+
+    generic_no_version = dict(stable_for_beta)
+    generic_no_version.update({
+        "parent_title": "Resolve crashes during render",
+        "report_title": "Resolve render crash",
+        "report_text": "Resolve crashed while rendering a timeline.",
+    })
+    generic_no_version_row = row_from_candidate(stable_record, generic_no_version, "2026-05-13T00:00:00Z")
+    check(
+        "generic Resolve crash without version does not count",
+        generic_no_version_row.get("counted") is False and generic_no_version_row.get("exclusion_reason") == "missing_exact_patch_version_match",
+        f"reason={generic_no_version_row.get('exclusion_reason')!r}",
+    )
+
+    valid_stable = dict(stable_for_beta)
+    valid_stable["source_url"] = "https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=240002"
+    valid_stable_row = row_from_candidate(stable_record, valid_stable, "2026-05-13T00:00:00Z")
+    check(
+        "exact stable 21 report with issue/date/specific URL passes",
+        valid_stable_row.get("counted") is True,
+        f"reason={valid_stable_row.get('exclusion_reason')!r}",
+    )
+
     print()
     print("=" * 60)
     total = _PASS + _FAIL
