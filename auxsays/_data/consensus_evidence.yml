@@ -752,7 +752,7 @@ evidence:
   source_url: https://github.com/obsproject/obs-studio/issues/13313
   parent_title: '[Bug] Wayland/EGL: eglSwapInterval(0) called every frame causes flickering on NVIDIA; adapter selection silently ignored'
   report_title: '[Bug] Wayland/EGL: eglSwapInterval(0) called every frame causes flickering on NVIDIA; adapter selection silently ignored'
-  report_text_excerpt: 'y/display) + NVIDIA A2000 (secondary) - **Driver**: NVIDIA proprietary - **OBS Version**: 32.1.1 - **Installed via**: PPA (obsproject/obs-studio) ## Bug 1: `eglSwapInterval(0)` called on every frame presentation **File**: `libobs-opengl/gl-wayland-egl.c`, lines 331–341 ```c stati'
+  report_text_excerpt: 'y/display) + NVIDIA A2000 (secondary) - **Driver**: NVIDIA proprietary - **OBS Version**: 32.1.1 - **Installed via**: PPA (obsproject/obs-studio) ## Bug 1: `eglSwapInterval(0)` called on every frame presentation **File**: `libobs-opengl/gl-wayland-egl.c`, lines 331â€“341 ```c stati'
   captured_at: '2026-05-03T02:44:22Z'
   source_date: null
   target_release_date: null
@@ -894,8 +894,8 @@ evidence:
   source_type: github_issue
   source_name: obsproject/obs-studio
   source_url: https://github.com/obsproject/obs-studio/issues/13352
-  parent_title: mac-capture crashes OBS on macOS 26.0 beta — mach_vm_allocate_kernel failed in obs_get_source_properties
-  report_title: mac-capture crashes OBS on macOS 26.0 beta — mach_vm_allocate_kernel failed in obs_get_source_properties
+  parent_title: mac-capture crashes OBS on macOS 26.0 beta â€” mach_vm_allocate_kernel failed in obs_get_source_properties
+  report_title: mac-capture crashes OBS on macOS 26.0 beta â€” mach_vm_allocate_kernel failed in obs_get_source_properties
   report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/oWBUBhapSTtoVB7Q ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/0uRLD'
   captured_at: '2026-05-03T02:44:22Z'
   source_date: null
@@ -1182,8 +1182,8 @@ evidence:
   source_type: github_issue
   source_name: obsproject/obs-studio
   source_url: https://github.com/obsproject/obs-studio/issues/13319
-  parent_title: 'VLC 4.0: error: ‘libvlc_Ended’ undeclared (first use in this function); did you mean ‘libvlc_new’?'
-  report_title: 'VLC 4.0: error: ‘libvlc_Ended’ undeclared (first use in this function); did you mean ‘libvlc_new’?'
+  parent_title: 'VLC 4.0: error: â€˜libvlc_Endedâ€™ undeclared (first use in this function); did you mean â€˜libvlc_newâ€™?'
+  report_title: 'VLC 4.0: error: â€˜libvlc_Endedâ€™ undeclared (first use in this function); did you mean â€˜libvlc_newâ€™?'
   report_text_excerpt: '### Operating System Info Other ### Other OS gentoo ### OBS Studio Version 32.1.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://paste.gentoo.zip/aXs7zX4l ### OBS Studio Crash Log URL _No response_ ### Expected Behavior It seems some fu'
   captured_at: '2026-05-03T02:44:22Z'
   source_date: null
@@ -1232,7 +1232,7 @@ evidence:
   source_url: https://github.com/obsproject/obs-studio/issues/13360
   parent_title: 'Feature request: refresh API / hotkey for Custom Browser Docks (parity with browser sources)'
   report_title: 'Feature request: refresh API / hotkey for Custom Browser Docks (parity with browser sources)'
-  report_text_excerpt: 'er sources, but no UI or API path exposes a reload. This was confirmed against OBS Studio 32.1.1 on macOS — issue persists in the current release. ## Use case Streamers using third-party web tools (Restream channels/titles/chat dock, StreamElements panels, custom dashboards, Twit'
+  report_text_excerpt: 'er sources, but no UI or API path exposes a reload. This was confirmed against OBS Studio 32.1.1 on macOS â€” issue persists in the current release. ## Use case Streamers using third-party web tools (Restream channels/titles/chat dock, StreamElements panels, custom dashboards, Twit'
   captured_at: '2026-05-03T02:44:22Z'
   source_date: null
   target_release_date: null

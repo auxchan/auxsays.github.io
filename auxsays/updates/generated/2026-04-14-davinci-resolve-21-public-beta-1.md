@@ -19,11 +19,11 @@ update_status: current
 update_feed_title: DaVinci Resolve 21 Public Beta 1
 update_detail_title: DaVinci Resolve 21 Public Beta 1
 update_consensus_label: Negative
-update_consensus_summary: 'AUXSAYS has verified 7 source-backed, patch-specific reports for DaVinci Resolve 21 Public Beta
-  1. The current verified-report set is negative with Low confidence. Most common themes: magic_mask_crash, decode_render_failure,
-  startup or application crash.'
-update_report_count: 7
-update_consensus_confidence: Low
+update_consensus_summary: 'AUXSAYS has verified 11 source-backed, patch-specific reports for DaVinci Resolve 21 Public Beta
+  1. The current verified-report set is negative with Low-Medium confidence. Most common themes: startup or application crash,
+  performance regression, unspecified issue.'
+update_report_count: 11
+update_consensus_confidence: Low-Medium
 status_change_type: new
 notification_message: ''
 update_brand_id: blackmagic-davinci
@@ -49,12 +49,14 @@ official_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and 
   production build. The key user decision is not simply whether the release is new, but whether the new Resolve 21 feature
   set is worth testing in a non-critical environment. For production work, the practical read is to keep existing stable projects
   on a known-good version unless a specific Resolve 21 feature is needed and the project can tolerate beta risk.
-consensus_report: 'AUXSAYS counted 7 source-backed, deterministically accepted reports for DaVinci Resolve 21 Public Beta
+consensus_report: 'AUXSAYS counted 11 source-backed, deterministically accepted reports for DaVinci Resolve 21 Public Beta
   1. The promoted evidence rows are stored in consensus_evidence.yml and matched by product_id/update_version; every accepted
   row has equal source_weight. Sources: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235179; https://www.reddit.com/r/davinciresolve/comments/1sn39qf/davinci_resolve_failed_to_decode_video_frame_when/;
   https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235117; https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235536;
   https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235458; https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235208;
-  https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=234870.'
+  https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=234870; https://www.reddit.com/r/davinciresolve/comments/1t6ff26/autosubs_plugin_not_working/;
+  https://www.reddit.com/r/davinciresolve/comments/1szxp3j/how_do_i_report_21_beta_bugs/; https://www.reddit.com/r/davinciresolve/comments/1sym4fv/is_there_a_way_to_build_this_fusion_composition/;
+  https://www.reddit.com/r/davinciresolve/comments/1ssi2se/how_to_resize_without_loosing_quality/.'
 complaint_themes:
 - theme: Beta setup questions
   frequency: Medium
@@ -79,6 +81,9 @@ status_events:
 - at: '2026-05-13T06:54:21.293024Z'
   label: Verified reports
   note: 'Automated evidence write-back: 7 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
+- at: '2026-05-13T17:25:50.918655Z'
+  label: Verified reports
+  note: 'Automated evidence write-back: 11 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
 legacy_consensus_score: 6
 legacy_consensus_score_percent: 53
 official_patch_notes_source_url: https://www.blackmagicdesign.com/media/release/20260414-01
@@ -100,23 +105,18 @@ consensus_collection_status: pilot_initial_sample
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 official_source_captured: true
-confirmed_patch_specific_report_count: 7
+confirmed_patch_specific_report_count: 11
 legacy_manual_report_count: 7
 legacy_manual_report_count_note: Previous 7-report value appears to be a pre-evidence/manual/pilot estimate. It is not currently
   backed by structured consensus_evidence.yml rows and should not be rendered as verified reports.
 known_issues_present: true
 official_checksums_body: ''
 intelligence_stage: pilot
-source_last_checked: '2026-05-13T15:16:22Z'
-official_body_last_checked: '2026-05-13T15:16:22Z'
+source_last_checked: '2026-05-13T20:13:23Z'
+official_body_last_checked: '2026-05-13T20:13:23Z'
 primary_official_source: https://www.blackmagicdesign.com/media/release/20260414-01
 fallback_official_sources: []
 official_source_attempts:
-- at: '2026-05-12T15:12:15Z'
-  url: https://www.blackmagicdesign.com/media/release/20260414-01
-  status: official-source-parser-failed
-  body_captured: false
-  checksums_captured: false
 - at: '2026-05-12T20:12:00Z'
   url: https://www.blackmagicdesign.com/media/release/20260414-01
   status: official-source-parser-failed
@@ -137,8 +137,13 @@ official_source_attempts:
   status: official-source-parser-failed
   body_captured: false
   checksums_captured: false
-evidence_last_checked: '2026-05-13T06:54:20Z'
-record_last_updated: '2026-05-13T06:54:21.293024Z'
+- at: '2026-05-13T20:13:23Z'
+  url: https://www.blackmagicdesign.com/media/release/20260414-01
+  status: official-source-parser-failed
+  body_captured: false
+  checksums_captured: false
+evidence_last_checked: '2026-05-13T17:25:19Z'
+record_last_updated: '2026-05-13T17:25:50.918655Z'
 evidence_samples:
 - source_name: Blackmagic Design Community Forum
   source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235179
@@ -196,4 +201,36 @@ evidence_samples:
   patch_version_matched: true
   issue: magic mask crash
   outcome: high
+- source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1t6ff26/autosubs_plugin_not_working/
+  source_title: Autosubs plugin not working
+  counted: true
+  version_matched: DaVinci Resolve 21 beta
+  patch_version_matched: true
+  issue: startup or application crash
+  outcome: high
+- source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1szxp3j/how_do_i_report_21_beta_bugs/
+  source_title: How do I report 21 beta bugs?
+  counted: true
+  version_matched: DaVinci Resolve 21 beta
+  patch_version_matched: true
+  issue: unspecified issue
+  outcome: medium
+- source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1sym4fv/is_there_a_way_to_build_this_fusion_composition/
+  source_title: Is there a way to build this fusion composition to speed up performance?
+  counted: true
+  version_matched: Resolve 21 beta
+  patch_version_matched: true
+  issue: performance regression
+  outcome: medium
+- source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ssi2se/how_to_resize_without_loosing_quality/
+  source_title: how to resize without loosing quality
+  counted: true
+  version_matched: DaVinci Resolve 21 beta
+  patch_version_matched: true
+  issue: unspecified issue
+  outcome: medium
 ---
