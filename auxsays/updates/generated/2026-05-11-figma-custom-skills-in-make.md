@@ -17,8 +17,8 @@ update_version: Custom skills in Make
 update_logo_text: FIG
 update_published_at: '2026-05-11T00:00:00.000Z'
 update_last_checked: '2026-05-11T20:06:22Z'
-source_last_checked: '2026-05-12T04:08:45Z'
-official_body_last_checked: '2026-05-12T04:08:45Z'
+source_last_checked: '2026-05-12T20:11:31Z'
+official_body_last_checked: '2026-05-12T20:11:31Z'
 record_last_updated: '2026-05-11T20:06:22Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -75,6 +75,16 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-05-12T04:08:45Z'
+  url: https://www.figma.com/release-notes/?title=Custom%20skills%20in%20Make
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-05-12T15:11:45Z'
+  url: https://www.figma.com/release-notes/?title=Custom%20skills%20in%20Make
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-05-12T20:11:31Z'
   url: https://www.figma.com/release-notes/?title=Custom%20skills%20in%20Make
   status: captured-from-rss-feed
   body_captured: true
