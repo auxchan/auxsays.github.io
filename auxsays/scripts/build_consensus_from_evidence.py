@@ -6,6 +6,7 @@ This does not scrape communities and does not modify generated update records.
 from __future__ import annotations
 
 import json
+import re
 from collections import Counter, defaultdict
 from datetime import datetime, timezone
 from pathlib import Path
@@ -18,6 +19,20 @@ EVIDENCE_PATH = ROOT / "_data" / "consensus_evidence.yml"
 OUT_PATH = ROOT / "_data" / "consensus_status.json"
 VALID_SENTIMENTS = {"positive", "moderate", "negative"}
 VALID_SEVERITIES = {"low", "medium", "high", "critical"}
+PRODUCT_LABELS = {
+    "blackmagic-davinci": "DaVinci Resolve",
+    "obs-studio": "OBS Studio",
+    "adobe-premiere-pro": "Adobe Premiere Pro",
+    "adobe-acrobat-reader": "Adobe Acrobat / Reader",
+    "windows-11": "Windows 11",
+    "elgato": "Elgato",
+    "adobe-photoshop": "Adobe Photoshop",
+    "chatgpt": "ChatGPT",
+    "microsoft-powerpoint": "Microsoft PowerPoint",
+    "microsoft-teams": "Microsoft Teams",
+    "microsoft-365-apps": "Microsoft 365 Apps",
+    "dji-mimo": "DJI Mimo",
+}
 
 
 def load_evidence() -> list[dict[str, Any]]:
@@ -76,19 +91,122 @@ def evidence_state(total: int) -> str:
     return "pilot_sample"
 
 
+def clean_public_phrase(value: Any, *, fallback: str = "") -> str:
+    text = str(value or "").strip()
+    if not text:
+        return fallback
+    text = re.sub(r"[_-]+", " ", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def product_label(product_id: str) -> str:
+    return PRODUCT_LABELS.get(product_id, clean_public_phrase(product_id, fallback=product_id))
+
+
+def join_public_list(items: list[str]) -> str:
+    clean = [item for item in items if item]
+    if not clean:
+        return ""
+    if len(clean) == 1:
+        return clean[0]
+    if len(clean) == 2:
+        return f"{clean[0]} and {clean[1]}"
+    return ", ".join(clean[:-1]) + f", and {clean[-1]}"
+
+
+def top_theme_phrases(themes: Counter[str], *, limit: int = 3) -> list[str]:
+    phrases: list[str] = []
+    for theme, _count in themes.most_common():
+        phrase = clean_public_phrase(theme).lower()
+        if not phrase or phrase == "unspecified issue":
+            continue
+        if phrase not in phrases:
+            phrases.append(phrase)
+        if len(phrases) >= limit:
+            break
+    return phrases
+
+
+def sample_size_label(total: int) -> str:
+    if total >= 25:
+        return "larger"
+    if total >= 8:
+        return "meaningful pilot"
+    if total > 0:
+        return "small"
+    return "no"
+
+
+def version_is_beta(version: str) -> bool:
+    return bool(re.search(r"\b(?:public\s+)?beta\b|b\d+\b", str(version or ""), flags=re.I))
+
+
+def recommendation_prefix(product_id: str, version: str, label: str, total: int) -> str:
+    label = label.lower()
+    if total <= 0:
+        return "INSUFFICIENT DATA"
+    if product_id == "blackmagic-davinci" and version_is_beta(version) and label == "negative":
+        return "AVOID for production"
+    if label == "negative":
+        return "WAIT"
+    if label == "positive":
+        return "SAFE ENOUGH to test"
+    return "TEST FIRST"
+
+
+def affected_workflow_sentence(product_id: str, version: str, label: str, themes: Counter[str]) -> str:
+    label = label.lower()
+    theme_words = " ".join(top_theme_phrases(themes, limit=5))
+    if product_id == "blackmagic-davinci":
+        if version_is_beta(version):
+            return "Production editors should avoid it on active projects; test only in disposable or non-critical projects."
+        if "export" in theme_words or "render" in theme_words:
+            return "Production editors with active export deadlines should wait unless they need a specific fix."
+        return "Production editors should test on copied projects before moving active work to this version."
+    if product_id == "obs-studio":
+        return "Streamers and recording setups with stable scenes, plugins, or capture devices should wait or test on a backup profile."
+    if label == "negative":
+        return "Users with fragile production workflows should wait unless they need a specific fix."
+    if label == "positive":
+        return "Most users can test the update, while critical workflows should still keep a rollback path."
+    return "Users with fragile workflows should test first before upgrading production systems."
+
+
+def source_limitation_sentence(items: list[dict[str, Any]], confidence_label: str) -> str:
+    if not items:
+        return "No patch-specific user reports have been counted yet."
+    source_types = [str(item.get("source_type") or item.get("source_name") or "").lower() for item in items]
+    reddit_count = sum(1 for value in source_types if "reddit" in value)
+    if reddit_count and reddit_count / len(items) >= 0.6:
+        return "Current evidence is Reddit-heavy, so treat this as a wait/test signal rather than broad consensus."
+    if confidence_label.lower() in {"low", "insufficient"}:
+        return "Evidence is still limited, so treat this as a wait/test signal rather than broad consensus."
+    return "Evidence is still a verified-report sample, not broad live consensus."
+
+
 def consensus_summary(product_id: str, version: str, items: list[dict[str, Any]], counts: Counter[str], themes: Counter[str]) -> str:
     total = len(items)
+    label_name = product_label(product_id)
     if total <= 0:
-        return f"No accepted structured evidence is available for {product_id} {version}."
+        return (
+            f"INSUFFICIENT DATA: {label_name} {version} has no confirmed patch-specific user reports yet. "
+            "Use the official source only until accepted evidence is available."
+        )
     label = consensus_label(counts).lower()
-    top_themes = ", ".join(theme for theme, _count in themes.most_common(3)) or "general workflow issues"
-    platforms = Counter(str(item.get("platform") or "unknown").lower() for item in items)
-    platform_summary = ", ".join(f"{name}: {count}" for name, count in platforms.most_common(3))
-    return (
-        f"{total} counted patch-specific report{'s' if total != 1 else ''}; "
-        f"current structured read is {label}; top theme{'s' if len(themes) != 1 else ''}: {top_themes}; "
-        f"platform tags: {platform_summary or 'unknown'}."
-    )
+    confidence_label = confidence(total)
+    theme_phrases = top_theme_phrases(themes)
+    if theme_phrases:
+        issue_sentence = f"Reported issues cluster around {join_public_list(theme_phrases)}."
+    else:
+        issue_sentence = "Reported issues are not yet specific enough to cluster cleanly."
+    return " ".join([
+        (
+            f"{recommendation_prefix(product_id, version, label, total)}: {label_name} {version} has a "
+            f"{sample_size_label(total)} {label} Verified reports set with {confidence_label} confidence."
+        ),
+        issue_sentence,
+        f"{affected_workflow_sentence(product_id, version, label, themes)} {source_limitation_sentence(items, confidence_label)}",
+    ])
 
 
 def latest_captured_at(items: list[dict[str, Any]]) -> str:

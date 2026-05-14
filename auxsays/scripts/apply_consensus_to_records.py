@@ -420,6 +420,176 @@ def _public_row_summary(row: dict[str, Any], *, is_candidate_mode: bool) -> dict
     }
 
 
+def _clean_public_phrase(value: Any, *, fallback: str = "") -> str:
+    text = str(value or "").strip()
+    if not text:
+        return fallback
+    text = re.sub(r"[_-]+", " ", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def _truncate_public_text(value: Any, *, limit: int = 140) -> str:
+    text = _clean_public_phrase(value)
+    if len(text) <= limit:
+        return text
+    return text[: limit - 1].rstrip() + "..."
+
+
+def _join_public_list(items: list[str]) -> str:
+    clean = [item for item in items if item]
+    if not clean:
+        return ""
+    if len(clean) == 1:
+        return clean[0]
+    if len(clean) == 2:
+        return f"{clean[0]} and {clean[1]}"
+    return ", ".join(clean[:-1]) + f", and {clean[-1]}"
+
+
+def _top_theme_phrases(themes: Counter, *, limit: int = 3) -> list[str]:
+    phrases: list[str] = []
+    for theme, _count in themes.most_common():
+        phrase = _clean_public_phrase(theme).lower()
+        if not phrase or phrase == "unspecified issue":
+            continue
+        if phrase not in phrases:
+            phrases.append(phrase)
+        if len(phrases) >= limit:
+            break
+    return phrases
+
+
+def _sample_size_label(count: int) -> str:
+    if count >= 25:
+        return "larger"
+    if count >= 8:
+        return "meaningful pilot"
+    if count > 0:
+        return "small"
+    return "no"
+
+
+def _recommendation_prefix(pid: str, ver: str, consensus_label: str, count: int) -> str:
+    label = consensus_label.lower()
+    if count <= 0:
+        return "INSUFFICIENT DATA"
+    if _davinci_version_is_beta(ver) and label == "negative":
+        return "AVOID for production"
+    if label == "negative":
+        return "WAIT"
+    if label == "positive":
+        return "SAFE ENOUGH to test"
+    return "TEST FIRST"
+
+
+def _affected_workflow_sentence(pid: str, ver: str, consensus_label: str, themes: Counter) -> str:
+    label = consensus_label.lower()
+    theme_words = " ".join(_top_theme_phrases(themes, limit=5))
+    if pid == "blackmagic-davinci":
+        if _davinci_version_is_beta(ver):
+            return "Production editors should avoid it on active projects; test only in disposable or non-critical projects."
+        if "export" in theme_words or "render" in theme_words:
+            return "Production editors with active export deadlines should wait unless they need a specific fix."
+        return "Production editors should test on copied projects before moving active work to this version."
+    if pid == "obs-studio":
+        return "Streamers and recording setups with stable scenes, plugins, or capture devices should wait or test on a backup profile."
+    if label == "negative":
+        return "Users with fragile production workflows should wait unless they need a specific fix."
+    if label == "positive":
+        return "Most users can test the update, while critical workflows should still keep a rollback path."
+    return "Users with fragile workflows should test first before upgrading production systems."
+
+
+def _source_limitation_sentence(rows: list[dict[str, Any]], confidence: str) -> str:
+    if not rows:
+        return "No patch-specific user reports have been counted yet."
+
+    source_types = [str(row.get("source_type") or row.get("source_name") or "").lower() for row in rows]
+    reddit_count = sum(1 for value in source_types if "reddit" in value)
+    if reddit_count and reddit_count / len(rows) >= 0.6:
+        return "Current evidence is Reddit-heavy, so treat this as a wait/test signal rather than broad consensus."
+    if confidence.lower() in {"low", "insufficient"}:
+        return "Evidence is still limited, so treat this as a wait/test signal rather than broad consensus."
+    return "Evidence is still a verified-report sample, not broad live consensus."
+
+
+def _public_summary(
+    *,
+    pid: str,
+    ver: str,
+    product_label: str,
+    rows: list[dict[str, Any]],
+    consensus_label: str,
+    confidence: str,
+    themes: Counter,
+) -> str:
+    count = len(rows)
+    version_label = ver
+    if count <= 0:
+        return (
+            f"INSUFFICIENT DATA: {product_label} {version_label} has no confirmed patch-specific user reports yet. "
+            "Use the official source only until accepted evidence is available."
+        )
+    verdict = _recommendation_prefix(pid, ver, consensus_label, count)
+    sample_size = _sample_size_label(count)
+    theme_phrases = _top_theme_phrases(themes)
+    if theme_phrases:
+        issue_sentence = f"Reported issues cluster around {_join_public_list(theme_phrases)}."
+    else:
+        issue_sentence = "Reported issues are not yet specific enough to cluster cleanly."
+    return " ".join([
+        (
+            f"{verdict}: {product_label} {version_label} has a {sample_size} "
+            f"{consensus_label.lower()} Verified reports set with {confidence} confidence."
+        ),
+        issue_sentence,
+        f"{_affected_workflow_sentence(pid, ver, consensus_label, themes)} {_source_limitation_sentence(rows, confidence)}",
+    ])
+
+
+def _public_consensus_report(
+    *,
+    pid: str,
+    ver: str,
+    product_label: str,
+    rows: list[dict[str, Any]],
+    consensus_label: str,
+    confidence: str,
+    themes: Counter,
+) -> str:
+    count = len(rows)
+    theme_phrases = _top_theme_phrases(themes)
+    theme_sentence = (
+        f"The clearest reported themes are {_join_public_list(theme_phrases)}."
+        if theme_phrases
+        else "The accepted reports do not yet form a clean issue-theme cluster."
+    )
+    sources = []
+    for row in rows:
+        source = _clean_public_phrase(row.get("source_name") or row.get("source_type") or "source")
+        if source and source not in sources:
+            sources.append(source)
+    source_sentence = f"Sources represented: {_join_public_list(sources[:4])}." if sources else ""
+    return " ".join(part for part in [
+        (
+            f"{count} confirmed patch-specific report{'s' if count != 1 else ''} "
+            f"{'are' if count != 1 else 'is'} counted for {product_label} {ver}; the current read is {consensus_label.lower()} "
+            f"with {confidence} confidence."
+        ),
+        theme_sentence,
+        _source_limitation_sentence(rows, confidence),
+        source_sentence,
+    ] if part)
+
+
+def _public_sample_issue(row: dict[str, Any]) -> str:
+    return (
+        _truncate_public_text(row.get("observed_issue_summary"), limit=150)
+        or _truncate_public_text(row.get("report_title") or row.get("source_title") or row.get("parent_title"), limit=120)
+        or _clean_public_phrase(row.get("issue_theme"), fallback="Confirmed patch-specific report")
+    )
+
+
 def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], record: dict[str, Any] | None, evidence_last_checked: str) -> dict[str, Any]:
     count = len(rows)
     sentiments = Counter(str(r.get("sentiment") or "").lower() for r in rows)
@@ -428,21 +598,24 @@ def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], reco
     confidence = _confidence(count)
     now = datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
     version_label = ver
-    source_list = "; ".join(str(r.get("source_url") or "") for r in rows if r.get("source_url"))
     product_label = str((record or {}).get("update_product") or pid).strip()
-    top_themes = ", ".join(theme for theme, _count in themes.most_common(3)) or "general workflow issues"
-    summary = (
-        f"AUXSAYS has verified {count} source-backed, patch-specific report"
-        f"{'s' if count != 1 else ''} for {product_label} {version_label}. "
-        f"The current verified-report set is {consensus_label.lower()} with {confidence} confidence. "
-        f"Most common theme{'s' if len(themes) != 1 else ''}: {top_themes}."
+    summary = _public_summary(
+        pid=pid,
+        ver=version_label,
+        product_label=product_label,
+        rows=rows,
+        consensus_label=consensus_label,
+        confidence=confidence,
+        themes=themes,
     )
-    report = (
-        f"AUXSAYS counted {count} source-backed, deterministically accepted report"
-        f"{'s' if count != 1 else ''} for {product_label} {version_label}. "
-        "The promoted evidence rows are stored in consensus_evidence.yml and matched by product_id/update_version; "
-        "every accepted row has equal source_weight. "
-        f"Sources: {source_list}."
+    report = _public_consensus_report(
+        pid=pid,
+        ver=version_label,
+        product_label=product_label,
+        rows=rows,
+        consensus_label=consensus_label,
+        confidence=confidence,
+        themes=themes,
     )
     samples = []
     for row in rows:
@@ -453,8 +626,8 @@ def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], reco
             "counted": True,
             "version_matched": row.get("matched_version") or row.get("update_version") or ver,
             "patch_version_matched": True,
-            "issue": row.get("issue_theme") or row.get("report_title") or row.get("observed_issue_summary") or "Confirmed patch-specific report",
-            "outcome": row.get("severity") or "medium",
+            "issue": _public_sample_issue(row),
+            "outcome": _clean_public_phrase(row.get("severity"), fallback="medium"),
         })
     fields = {
         "update_report_count": count,
@@ -475,8 +648,8 @@ def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], reco
             "at": now,
             "label": "Verified reports" if count > 0 else "Insufficient data",
             "note": (
-                f"Automated evidence write-back: {count} source-backed, patch-specific "
-                f"report{'s' if count != 1 else ''} promoted from consensus_evidence.yml."
+                f"Verified report count updated to {count}; current read is "
+                f"{consensus_label.lower()} with {confidence} confidence."
             ),
         },
     }
@@ -502,17 +675,15 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
         "notification_message": "",
         "update_channel_label": "Stable / Studio evidence record",
         "quick_verdict": (
-            "WAIT for fragile production workflows. AUXSAYS has a small verified-report sample for DaVinci Resolve "
-            f"{ver}, but confidence remains low."
+            f"WAIT: DaVinci Resolve {ver} has a small negative Verified reports set with Low confidence."
         ),
         "update_decision_label": "WAIT",
         "update_decision_body": (
-            "Stable/Studio evidence is now tracked separately from Public Beta 1. Treat the current report set as a "
-            "low-confidence Verified reports set, not broad consensus."
+            "Production editors should wait unless they need a specific fix. The clearest reports involve export failures, "
+            "and current evidence is still a limited wait/test signal."
         ),
         "record_note": (
-            f"This is the active stable/Studio DaVinci Resolve {ver} evidence record. Beta-specific reports remain routed "
-            "to the DaVinci Resolve 21 Public Beta 1 record."
+            f"This stable/Studio DaVinci Resolve {ver} record is tracked separately from the Public Beta 1 record."
         ),
         "official_summary": (
             f"DaVinci Resolve {ver} stable/Studio reports are tracked separately from DaVinci Resolve 21 Public Beta 1. "
