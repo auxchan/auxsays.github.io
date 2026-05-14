@@ -1,8 +1,8 @@
 ---
 layout: aux-update
 title: DaVinci Resolve 20.3.2 official update breakdown
-description: Published Apr 14, 2026. AUXSAYS is tracking DaVinci Resolve 20.3.2 as a separate stable/Studio evidence
-  record from the Public Beta 1 page.
+description: Published Apr 14, 2026. AUXSAYS is tracking DaVinci Resolve 20.3.2 as a separate stable/Studio evidence record
+  from the Public Beta 1 page.
 permalink: /updates/blackmagic-design/blackmagic-davinci/20-3-2/
 update_entry: true
 company_id: blackmagic-design
@@ -18,8 +18,8 @@ update_version: 20.3.2
 update_logo_text: DAV
 update_published_at: '2026-02-12T00:00:00Z'
 update_last_checked: '2026-05-14T04:15:50Z'
-source_last_checked: '2026-05-14T09:11:05Z'
-official_body_last_checked: '2026-05-14T09:11:05Z'
+source_last_checked: '2026-05-14T14:46:21Z'
+official_body_last_checked: '2026-05-14T14:46:21Z'
 record_last_updated: '2026-05-14T13:04:48.027491Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
@@ -30,24 +30,24 @@ update_detail_title: DaVinci Resolve 20.3.2
 update_consensus_label: Negative
 update_report_count: 19
 update_consensus_confidence: Low-Medium
-quick_verdict: WAIT for fragile production workflows. AUXSAYS has a small verified-report sample for DaVinci Resolve
-  20.3.2, but confidence remains low.
-official_summary: DaVinci Resolve 20.3.2 stable/Studio reports are tracked separately from DaVinci Resolve 21 Public
-  Beta 1. The official source capture should be refreshed before relying on this page for full release-note detail.
-release_summary: DaVinci Resolve 20.3.2 stable/Studio reports are tracked separately from DaVinci Resolve 21 Public
-  Beta 1. Use this page for stable/Studio evidence and the beta page for beta-build risk.
-consensus_report: 'AUXSAYS counted 19 source-backed, deterministically accepted reports for DaVinci Resolve 20.3.2.
-  The promoted evidence rows are stored in consensus_evidence.yml and matched by product_id/update_version; every
-  accepted row has equal source_weight. Sources: https://www.reddit.com/r/davinciresolve/comments/1ta80h5/win_11_davinci_resolve_issue/;
-  https://www.reddit.com/r/davinciresolve/comments/1t2vhf6/whats_going_on_with_these_captions/; https://www.reddit.com/r/davinciresolve/comments/1t1gyr9/can_somebody_help_me_please/;
-  https://www.reddit.com/r/davinciresolve/comments/1sm6gl6/for_the_love_of_god_help_me_to_understand_how_do/; https://www.reddit.com/r/davinciresolve/comments/1sh3754/samsung_q990f_for_dolby_atmos_audio_mixing_in/;
-  https://www.reddit.com/r/davinciresolve/comments/1sgdei7/need_help_to_figure_out_what_making_davinci_keep/; https://www.reddit.com/r/davinciresolve/comments/1sdvq2u/text_follower_shading_bug_options_showing_without/;
-  https://www.reddit.com/r/davinciresolve/comments/1s58s70/rendering_failure_related_to_key_frames/; https://www.reddit.com/r/davinciresolve/comments/1t0q5a6/how_to_move_a_plate_clip_inside_a_poly_mask/;
-  https://www.reddit.com/r/davinciresolve/comments/1t20mlc/resolve_studio_203_crash_on_launch_nobara_43/; https://www.reddit.com/r/davinciresolve/comments/1sp7wvs/fusion_compositions_break_when_copied_between/;
-  https://www.reddit.com/r/davinciresolve/comments/1scgtk6/need_help_with_a_repeating_crash/; https://www.reddit.com/r/davinciresolve/comments/1rv2fen/insufficient_storage_error_even_if_i_have_plenty/;
-  https://www.reddit.com/r/davinciresolve/comments/1rtulu2/linux_davinci_resolve_cant_open_existing_projects/; https://www.reddit.com/r/davinciresolve/comments/1rtbw9a/davinci_resolve_studio_2032_segfault_on_startup/;
-  https://www.reddit.com/r/davinciresolve/comments/1rzg2vi/cant_create_project_library/; https://www.reddit.com/r/davinciresolve/comments/1s2on7n/performance_has_plummeted_getting_2ps_on_h265/;
-  https://www.reddit.com/r/davinciresolve/comments/1rcgenp/davinci_making_pc_run_insanely_slow/; https://creativecow.net/forums/thread/ai-magic-mask-not-rendering/.'
+quick_verdict: WAIT for fragile production workflows. AUXSAYS has a small verified-report sample for DaVinci Resolve 20.3.2,
+  but confidence remains low.
+official_summary: DaVinci Resolve 20.3.2 stable/Studio reports are tracked separately from DaVinci Resolve 21 Public Beta
+  1. The official source capture should be refreshed before relying on this page for full release-note detail.
+release_summary: DaVinci Resolve 20.3.2 stable/Studio reports are tracked separately from DaVinci Resolve 21 Public Beta 1.
+  Use this page for stable/Studio evidence and the beta page for beta-build risk.
+consensus_report: 'AUXSAYS counted 19 source-backed, deterministically accepted reports for DaVinci Resolve 20.3.2. The promoted
+  evidence rows are stored in consensus_evidence.yml and matched by product_id/update_version; every accepted row has equal
+  source_weight. Sources: https://www.reddit.com/r/davinciresolve/comments/1ta80h5/win_11_davinci_resolve_issue/; https://www.reddit.com/r/davinciresolve/comments/1t2vhf6/whats_going_on_with_these_captions/;
+  https://www.reddit.com/r/davinciresolve/comments/1t1gyr9/can_somebody_help_me_please/; https://www.reddit.com/r/davinciresolve/comments/1sm6gl6/for_the_love_of_god_help_me_to_understand_how_do/;
+  https://www.reddit.com/r/davinciresolve/comments/1sh3754/samsung_q990f_for_dolby_atmos_audio_mixing_in/; https://www.reddit.com/r/davinciresolve/comments/1sgdei7/need_help_to_figure_out_what_making_davinci_keep/;
+  https://www.reddit.com/r/davinciresolve/comments/1sdvq2u/text_follower_shading_bug_options_showing_without/; https://www.reddit.com/r/davinciresolve/comments/1s58s70/rendering_failure_related_to_key_frames/;
+  https://www.reddit.com/r/davinciresolve/comments/1t0q5a6/how_to_move_a_plate_clip_inside_a_poly_mask/; https://www.reddit.com/r/davinciresolve/comments/1t20mlc/resolve_studio_203_crash_on_launch_nobara_43/;
+  https://www.reddit.com/r/davinciresolve/comments/1sp7wvs/fusion_compositions_break_when_copied_between/; https://www.reddit.com/r/davinciresolve/comments/1scgtk6/need_help_with_a_repeating_crash/;
+  https://www.reddit.com/r/davinciresolve/comments/1rv2fen/insufficient_storage_error_even_if_i_have_plenty/; https://www.reddit.com/r/davinciresolve/comments/1rtulu2/linux_davinci_resolve_cant_open_existing_projects/;
+  https://www.reddit.com/r/davinciresolve/comments/1rtbw9a/davinci_resolve_studio_2032_segfault_on_startup/; https://www.reddit.com/r/davinciresolve/comments/1rzg2vi/cant_create_project_library/;
+  https://www.reddit.com/r/davinciresolve/comments/1s2on7n/performance_has_plummeted_getting_2ps_on_h265/; https://www.reddit.com/r/davinciresolve/comments/1rcgenp/davinci_making_pc_run_insanely_slow/;
+  https://creativecow.net/forums/thread/ai-magic-mask-not-rendering/.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
@@ -90,8 +90,8 @@ official_patch_notes_source_url: https://www.blackmagicdesign.com/support/family
 official_note_status: official_source_captured
 official_note_label: Official download portal entry
 official_source_type: download_portal
-official_source_classification_note: Blackmagic's support downloads API is treated as an official download-portal
-  source. It confirms version availability and summary text; community evidence remains separate.
+official_source_classification_note: Blackmagic's support downloads API is treated as an official download-portal source.
+  It confirms version availability and summary text; community evidence remains separate.
 official_sources:
 - label: Blackmagic support downloads
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
@@ -114,6 +114,11 @@ official_source_attempts:
   status: captured-from-official-blackmagic-support-api
   body_captured: true
   checksums_captured: false
+- at: '2026-05-14T14:46:21Z'
+  url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
+  status: captured-from-official-blackmagic-support-api
+  body_captured: true
+  checksums_captured: false
 official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci Resolve Studio 20.3.2
 
   Channel: Stable
@@ -123,10 +128,10 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   Platforms listed: Mac OS X, Windows, Linux, Windows ARM
 
 
-  This software update adds new trim editor options for dynamic trimming, improved kerning for subtitles, and new
-  colorspace and gamma options for Fujifilm camera footage. It also includes improved magic mask caching, as well
-  as better metadata retention and timeline rendering for immersive and stereo 3D projects. This version requires
-  a DaVinci Resolve Studio license dongle, Blackmagic Cloud license or software activation code.
+  This software update adds new trim editor options for dynamic trimming, improved kerning for subtitles, and new colorspace
+  and gamma options for Fujifilm camera footage. It also includes improved magic mask caching, as well as better metadata
+  retention and timeline rendering for immersive and stereo 3D projects. This version requires a DaVinci Resolve Studio license
+  dongle, Blackmagic Cloud license or software activation code.
 
 
   Official support page: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
@@ -137,9 +142,9 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'AUXSAYS has verified 19 source-backed, patch-specific reports for DaVinci Resolve 20.3.2.
-  The current verified-report set is negative with Low-Medium confidence. Most common themes: render/export failure,
-  startup or application crash, unspecified issue.'
+update_consensus_summary: 'AUXSAYS has verified 19 source-backed, patch-specific reports for DaVinci Resolve 20.3.2. The current
+  verified-report set is negative with Low-Medium confidence. Most common themes: render/export failure, startup or application
+  crash, unspecified issue.'
 evidence_samples:
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1ta80h5/win_11_davinci_resolve_issue/
@@ -223,8 +228,8 @@ evidence_samples:
   outcome: high
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1sp7wvs/fusion_compositions_break_when_copied_between/
-  source_title: Fusion compositions break when copied between projects via Dynamic Project Switching — looking for
-    a quick fix or better workflow
+  source_title: Fusion compositions break when copied between projects via Dynamic Project Switching — looking for a quick
+    fix or better workflow
   counted: true
   version_matched: 20.3.2
   patch_version_matched: true
@@ -299,8 +304,8 @@ status_change_type: new
 notification_message: ''
 update_channel_label: Stable / Studio evidence record
 update_decision_label: WAIT
-update_decision_body: Stable/Studio evidence is now tracked separately from Public Beta 1. Treat the current report
-  set as a low-confidence Verified reports set, not broad consensus.
-record_note: This is the active stable/Studio DaVinci Resolve 20.3.2 evidence record. Beta-specific reports remain
-  routed to the DaVinci Resolve 21 Public Beta 1 record.
+update_decision_body: Stable/Studio evidence is now tracked separately from Public Beta 1. Treat the current report set as
+  a low-confidence Verified reports set, not broad consensus.
+record_note: This is the active stable/Studio DaVinci Resolve 20.3.2 evidence record. Beta-specific reports remain routed
+  to the DaVinci Resolve 21 Public Beta 1 record.
 ---
