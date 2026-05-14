@@ -514,20 +514,62 @@ def request_text(url: str) -> str:
             content_type = response.headers.get("content-type", "")
             status = response.status
     except HTTPError as exc:
-        raise SourceAccessError(f"http_{exc.code}_{exc.reason}", status=exc.code) from exc
+        body = exc.read(8000).decode("utf-8", errors="replace")
+        reason = blackmagic_access_challenge_reason(body) if is_blackmagic_forum_url(url) else ""
+        raise SourceAccessError(reason or f"http_{exc.code}_{exc.reason}", status=exc.code) from exc
     charset = "utf-8"
     match = re.search(r"charset=([A-Za-z0-9_\-]+)", content_type)
     if match:
         charset = match.group(1)
     text = raw.decode(charset, errors="replace")
-    if status == 202 and blackmagic_access_challenge(text):
-        raise SourceAccessError("http_202_access_challenge", status=202)
+    if is_blackmagic_forum_url(url) and blackmagic_access_challenge(text):
+        raise SourceAccessError(blackmagic_access_challenge_reason(text), status=status)
     return text
 
 
+def is_blackmagic_forum_url(url: str) -> bool:
+    parsed = urllib.parse.urlsplit(str(url or ""))
+    return parsed.netloc.lower() == "forum.blackmagicdesign.com"
+
+
 def blackmagic_access_challenge(text: str) -> bool:
+    return blackmagic_access_challenge_reason(text) != ""
+
+
+def blackmagic_access_challenge_reason(text: str) -> str:
     lowered = text.lower()
-    return "<title></title>" in lowered and "please enable javascript" in lowered or "checking your browser" in lowered
+    if "window.gokuprops" in lowered or "awswaf" in lowered:
+        return "http_202_aws_waf_challenge"
+    if "<title></title>" in lowered and "please enable javascript" in lowered:
+        return "http_202_javascript_challenge"
+    if "checking your browser" in lowered:
+        return "http_202_browser_challenge"
+    return ""
+
+
+def blackmagic_forum_unusable_reason(text: str) -> str:
+    access_reason = blackmagic_access_challenge_reason(text)
+    if access_reason:
+        return access_reason
+    lowered = (text or "").lower()
+    if not lowered.strip():
+        return "source_unusable_response"
+    if "captcha" in lowered:
+        return "blackmagic_forum_captcha_challenge"
+    if "access denied" in lowered or "forbidden" in lowered:
+        return "blackmagic_forum_access_denied"
+    forum_markers = (
+        "forum.blackmagicdesign.com",
+        "blackmagic design community forum",
+        "viewtopic.php",
+        "search.php",
+        "phpbb",
+        "board index",
+        "no suitable matches were found",
+    )
+    if any(marker in lowered for marker in forum_markers):
+        return ""
+    return "source_returned_non_forum_content"
 
 
 def version_aliases(version: str) -> list[str]:
@@ -611,6 +653,8 @@ def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[
         if method_rejected and not method_accepted:
             notes = f"{notes} Rejected candidates: {format_rejection_counts(method_rejected)}."
         status = "disabled" if method_id == "web_search" else method_status(candidates, method_accepted, method_rejected, errors)
+        if method_id == "vendor_forum_search" and status in {"blocked", "low_confidence"}:
+            notes = f"Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. {blocked_reason}"
         health.append(method_health_row(
             product_id=PRODUCT_ID,
             update_version=record.update_version,
@@ -931,7 +975,13 @@ def vendor_forum_search_candidates(record: PatchRecord, context: CollectorContex
             text = request_text(url)
         except Exception as exc:
             errors.append({"source_url": url, "reason": f"vendor_forum_search_blocked_or_failed:{error_reason(exc)}"})
+            if blackmagic_error_is_access_limited(error_reason(exc)):
+                break
             continue
+        unusable_reason = blackmagic_forum_unusable_reason(text)
+        if unusable_reason:
+            errors.append({"source_url": url, "reason": f"vendor_forum_search_unusable:{unusable_reason}"})
+            break
         links.extend(re.findall(r"href=\"(viewtopic\.php\?[^\"#]+t=\d+[^\"#]*)", text, flags=re.I))
     candidates: list[dict[str, Any]] = []
     for link in sorted(set(links))[:25]:
@@ -940,6 +990,10 @@ def vendor_forum_search_candidates(record: PatchRecord, context: CollectorContex
             page = request_text(source_url)
         except Exception as exc:
             errors.append({"source_url": source_url, "reason": f"vendor_forum_thread_fetch_failed:{error_reason(exc)}"})
+            continue
+        unusable_reason = blackmagic_forum_unusable_reason(page)
+        if unusable_reason:
+            errors.append({"source_url": source_url, "reason": f"vendor_forum_thread_unusable:{unusable_reason}"})
             continue
         clean = clean_html(page)
         title = extract_title(page) or source_url
@@ -953,6 +1007,11 @@ def vendor_forum_search_candidates(record: PatchRecord, context: CollectorContex
             "source_date": extract_source_date(clean),
         })
     return candidates
+
+
+def blackmagic_error_is_access_limited(reason: str) -> bool:
+    lowered = str(reason or "").lower()
+    return any(token in lowered for token in ("blocked", "challenge", "waf", "captcha", "access_denied", "unusable"))
 
 
 def forum_search_terms(record: PatchRecord) -> list[str]:
@@ -1217,7 +1276,11 @@ def method_status(
         return "no_results"
     if errors:
         reasons = " ".join(str(error.get("reason") or "") for error in errors).lower()
-        return "blocked" if "blocked" in reasons else "broken"
+        if any(token in reasons for token in ("blocked", "challenge", "waf", "captcha", "access_denied")):
+            return "blocked"
+        if "unusable" in reasons or "source_returned_non_forum_content" in reasons or "source_unusable_response" in reasons:
+            return "low_confidence"
+        return "broken"
     return "no_results"
 
 

@@ -20,8 +20,15 @@ sys.path.insert(0, str(_REPO / "auxsays" / "scripts"))
 # gate functions exercised here do not need YAML I/O, so provide an import shim.
 sys.modules.setdefault("yaml", types.SimpleNamespace(safe_load=lambda *_args, **_kwargs: {}, safe_dump=lambda *_args, **_kwargs: ""))
 
-from patch_collectors.base import PatchRecord
-from patch_collectors.davinci import row_from_candidate, version_aliases
+from patch_collectors.base import CollectorContext, PatchRecord
+import patch_collectors.davinci as davinci
+from patch_collectors.davinci import (
+    blackmagic_access_challenge_reason,
+    blackmagic_forum_unusable_reason,
+    method_status,
+    row_from_candidate,
+    version_aliases,
+)
 from apply_consensus_to_records import _proposed_record_fields
 
 FIXTURE_PATH = Path(__file__).resolve().parent / "fixtures" / "davinci_verified_reports.yml"
@@ -101,6 +108,48 @@ def run() -> int:
 
     reports = load_fixture_reports()
     check("five Taylor-verified calibration reports loaded", len(reports) == 5, f"got: {len(reports)}")
+    check(
+        "Blackmagic AWS WAF challenge is classified as blocked access",
+        blackmagic_access_challenge_reason("<html><script>window.gokuProps = {}</script></html>") == "http_202_aws_waf_challenge",
+    )
+    check(
+        "non-forum Blackmagic response is classified as non-forum content",
+        blackmagic_forum_unusable_reason("<html><title>Blackmagic Design</title><main>Products</main></html>") == "source_returned_non_forum_content",
+    )
+    check(
+        "usable Blackmagic forum no-results page is not classified unusable",
+        blackmagic_forum_unusable_reason("<html><title>Search</title><body>forum.blackmagicdesign.com No suitable matches were found</body></html>") == "",
+    )
+    check(
+        "vendor forum unusable errors produce low-confidence method health",
+        method_status([], [], [], [{"reason": "vendor_forum_search_unusable:source_returned_non_forum_content"}]) == "low_confidence",
+    )
+    check(
+        "vendor forum challenge errors produce blocked method health",
+        method_status([], [], [], [{"reason": "vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge"}]) == "blocked",
+    )
+    original_request_text = davinci.request_text
+    try:
+        davinci.request_text = lambda _url: "<html><title>Blackmagic Design</title><main>Products</main></html>"
+        forum_errors: list[dict[str, str]] = []
+        forum_candidates = davinci.vendor_forum_search_candidates(
+            record_from_fixture(reports[0]),
+            CollectorContext(write=False, since=None, max_pages=1),
+            forum_errors,
+        )
+    finally:
+        davinci.request_text = original_request_text
+    check(
+        "vendor forum non-forum response yields no candidates",
+        forum_candidates == [],
+        f"candidates={forum_candidates!r}",
+    )
+    check(
+        "vendor forum non-forum response records unusable source health",
+        len(forum_errors) == 1
+        and forum_errors[0].get("reason") == "vendor_forum_search_unusable:source_returned_non_forum_content",
+        f"errors={forum_errors!r}",
+    )
 
     for report in reports:
         row = row_from_candidate(record_from_fixture(report), candidate_from_fixture(report), "2026-05-13T00:00:00Z")
