@@ -20,7 +20,7 @@ update_published_at: '2025-12-18T00:00:00Z'
 update_last_checked: '2026-05-14T04:15:50Z'
 source_last_checked: '2026-05-14T14:46:21Z'
 official_body_last_checked: '2026-05-14T14:46:21Z'
-record_last_updated: '2026-05-14T15:30:55.611907Z'
+record_last_updated: '2026-05-14T18:07:16.048702Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -78,6 +78,9 @@ status_events:
   label: Verified reports
   note: 'Automated evidence write-back: 11 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
 - at: '2026-05-14T15:30:55.611907Z'
+  label: Verified reports
+  note: 'Automated evidence write-back: 11 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
+- at: '2026-05-14T18:07:16.048702Z'
   label: Verified reports
   note: 'Automated evidence write-back: 11 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
 official_patch_notes_source_type: download_portal

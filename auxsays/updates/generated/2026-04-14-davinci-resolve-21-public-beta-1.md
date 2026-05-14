@@ -115,6 +115,9 @@ status_events:
 - at: '2026-05-14T15:31:25.865907Z'
   label: Verified reports
   note: 'Automated evidence write-back: 11 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
+- at: '2026-05-14T18:07:58.955554Z'
+  label: Verified reports
+  note: 'Automated evidence write-back: 11 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
 legacy_consensus_score: 6
 legacy_consensus_score_percent: 53
 official_patch_notes_source_url: https://www.blackmagicdesign.com/media/release/20260414-01
@@ -175,7 +178,7 @@ official_source_attempts:
   body_captured: false
   checksums_captured: false
 evidence_last_checked: '2026-05-13T17:25:19Z'
-record_last_updated: '2026-05-14T15:31:25.865907Z'
+record_last_updated: '2026-05-14T18:07:58.955554Z'
 evidence_samples:
 - source_name: Blackmagic Design Community Forum
   source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235179
