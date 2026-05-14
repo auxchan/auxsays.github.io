@@ -121,6 +121,9 @@ status_events:
 - at: '2026-05-14T20:31:57.722694Z'
   label: Verified reports
   note: Verified report count updated to 11; current read is negative with Low-Medium confidence.
+- at: '2026-05-14T21:23:04.197934Z'
+  label: Verified reports
+  note: Verified report count updated to 11; current read is negative with Low-Medium confidence.
 legacy_consensus_score: 6
 legacy_consensus_score_percent: 53
 official_patch_notes_source_url: https://www.blackmagicdesign.com/media/release/20260414-01
@@ -181,7 +184,7 @@ official_source_attempts:
   body_captured: false
   checksums_captured: false
 evidence_last_checked: '2026-05-13T17:25:19Z'
-record_last_updated: '2026-05-14T20:31:57.722694Z'
+record_last_updated: '2026-05-14T21:23:04.197934Z'
 evidence_samples:
 - source_name: Blackmagic Design Community Forum
   source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235179
