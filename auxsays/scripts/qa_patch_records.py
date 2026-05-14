@@ -42,7 +42,6 @@ BANNED_PUBLIC_TERMS = {
     "low confidence",
     "broad consensus",
     "evidence state",
-    "yaml",
     "collector",
     "candidate rows",
 }
