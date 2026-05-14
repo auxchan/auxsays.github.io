@@ -1824,3 +1824,675 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+- id: blackmagic-davinci-20-3-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1qo19z2-getting-started-with-colorgrading-in-reso
+  product_id: blackmagic-davinci
+  update_version: 20.3.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1qo19z2/getting_started_with_colorgrading_in_resolve/
+  parent_title: Getting started with color-grading in resolve
+  report_title: Getting started with color-grading in resolve
+  report_text_excerpt: Getting started with color-grading in resolve Hi, I hope this is the correct place to ask this. I don't have much experience with video editing software, and just finished cutting a project with which I am honestly quite happy edit-wise. Since I am a bit more experienced in...
+  captured_at: '2026-05-14T07:09:01Z'
+  source_date: '2026-01-27'
+  target_release_date: '2025-12-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: unknown
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: blackmagic-davinci-20-3-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ptievt-fix-for-instagram-reels-ads-rejection-on
+  product_id: blackmagic-davinci
+  update_version: 20.3.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ptievt/fix_for_instagram_reels_ads_rejection_on_linux/
+  parent_title: Fix for Instagram Reels Ads rejection on Linux (DaVinci Resolve exports)
+  report_title: Fix for Instagram Reels Ads rejection on Linux (DaVinci Resolve exports)
+  report_text_excerpt: 'Fix for Instagram Reels Ads rejection on Linux (DaVinci Resolve exports) If you’re using DaVinci Resolve on Linux and trying to promote Instagram Reels as ads, you might have run into this frustrating issue: • The video uploads fine • It plays correctly on Instagram • It’s...'
+  captured_at: '2026-05-14T07:09:01Z'
+  source_date: '2025-12-23'
+  target_release_date: '2025-12-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: linux
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-3-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1slhj55-resolve-not-rendering-on-delivery-page
+  product_id: blackmagic-davinci
+  update_version: 20.3.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1slhj55/resolve_not_rendering_on_delivery_page/
+  parent_title: Resolve not rendering on Delivery Page
+  report_title: Resolve not rendering on Delivery Page
+  report_text_excerpt: Resolve not rendering on Delivery Page Thanks in advance for any help. I'm using resolve 20.3.1 (also tried 20.3.2) Studio build 6. on Windows 11, Studio driver 580.97. I'm having a new issue where projects are suddenly not rendering on the Delivery page. I've tried various...
+  captured_at: '2026-05-14T07:09:01Z'
+  source_date: '2026-04-14'
+  target_release_date: '2025-12-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-3-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1sjdug4-black-bars-appearing-when-sliding-horizon
+  product_id: blackmagic-davinci
+  update_version: 20.3.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1sjdug4/black_bars_appearing_when_sliding_horizontal/
+  parent_title: Black bars appearing when sliding horizontal video in a vertical timeline
+  report_title: Black bars appearing when sliding horizontal video in a vertical timeline
+  report_text_excerpt: Black bars appearing when sliding horizontal video in a vertical timeline https://preview.redd.it/ll7kns38arug1.png?width=1230&format=png&auto=webp&s=0b1328199842d3f03cf109ab0a586bd504e1211a I have a multicam clip, with 2 horizontal videos. I created a timeline with that, and...
+  captured_at: '2026-05-14T07:09:01Z'
+  source_date: '2026-04-12'
+  target_release_date: '2025-12-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: blackmagic-davinci-20-3-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1sfv9rt-resolve-2031-2032-crashes-when-opening-ti
+  product_id: blackmagic-davinci
+  update_version: 20.3.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1sfv9rt/resolve_2031_2032_crashes_when_opening_timeline/
+  parent_title: Resolve 20.3.1 & 20.3.2 crashes when opening Timeline Settings (fresh project, reproducible)
+  report_title: Resolve 20.3.1 & 20.3.2 crashes when opening Timeline Settings (fresh project, reproducible)
+  report_text_excerpt: Resolve 20.3.1 & 20.3.2 crashes when opening Timeline Settings (fresh project, reproducible) First of all thanks for your time reading this! I am experiencing a bug , I cant open any timeline settings once they have been created. I tested in an existing project and a new...
+  captured_at: '2026-05-14T07:09:01Z'
+  source_date: '2026-04-08'
+  target_release_date: '2025-12-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-3-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1r0bfmj-resolve-crashing-when-opening-remote-moni
+  product_id: blackmagic-davinci
+  update_version: 20.3.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1r0bfmj/resolve_crashing_when_opening_remote_monitoring/
+  parent_title: Resolve crashing when opening remote monitoring
+  report_title: Resolve crashing when opening remote monitoring
+  report_text_excerpt: Resolve crashing when opening remote monitoring Hello! First time poster here, but I’m running into an issue I can’t seem to find discussed anywhere else. TLDR whenever I go to workspace and click “Remote Monitoring” I get the spinning beach ball of death and the program...
+  captured_at: '2026-05-14T07:09:01Z'
+  source_date: '2026-02-09'
+  target_release_date: '2025-12-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-3-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1qiedqf-mono-audio-wont-play
+  product_id: blackmagic-davinci
+  update_version: 20.3.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1qiedqf/mono_audio_wont_play/
+  parent_title: Mono Audio Won't Play
+  report_title: Mono Audio Won't Play
+  report_text_excerpt: Mono Audio Won't Play Having a weird issue all of a sudden that I haven't had previously. When I switch my audio track from Stereo to Mono, no audio won't play and it won't render--just look at the time estimate below for 90 min of mp3 files. When I switch through track back...
+  captured_at: '2026-05-14T07:09:01Z'
+  source_date: '2026-01-20'
+  target_release_date: '2025-12-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-3-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1sg6jdx-is-cqp-during-media-management-transcodin
+  product_id: blackmagic-davinci
+  update_version: 20.3.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1sg6jdx/is_cqp_during_media_management_transcoding_broken/
+  parent_title: Is CQP during Media Management transcoding broken?
+  report_title: Is CQP during Media Management transcoding broken?
+  report_text_excerpt: Is CQP during Media Management transcoding broken? Hello Reddit, I have Davinci Resolve Studio 20.3.1 on Windows and I'm trying to transcode some clips using Media Management. I noticed something peculiar when I set my Rate Control to Constant QP. Which is that I'm still...
+  captured_at: '2026-05-14T07:09:01Z'
+  source_date: '2026-04-08'
+  target_release_date: '2025-12-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-3-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1qy29ip-weird-playback-issues-on-windows-11-pcs
+  product_id: blackmagic-davinci
+  update_version: 20.3.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1qy29ip/weird_playback_issues_on_windows_11_pcs/
+  parent_title: weird Playback issues on Windows 11 PCs
+  report_title: weird Playback issues on Windows 11 PCs
+  report_text_excerpt: 'weird Playback issues on Windows 11 PCs So we noticed a weird playback issue on our main editing rig (Win11, Ryzen 7 5800X, 32GB RAM, 512GB NVMe, RTX 3060, connected via 10G fibre to our storage cluster): playback suddenly completeley stops for a little more then a second and...'
+  captured_at: '2026-05-14T07:09:01Z'
+  source_date: '2026-02-07'
+  target_release_date: '2025-12-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: compatibility issue
+  workflow_area: plugins / codecs
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-3-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1pxoglj-resolve-shutting-down-non-stop-since-last
+  product_id: blackmagic-davinci
+  update_version: 20.3.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1pxoglj/resolve_shutting_down_non_stop_since_last_update/
+  parent_title: resolve shutting down non stop since last update
+  report_title: resolve shutting down non stop since last update
+  report_text_excerpt: resolve shutting down non stop since last update Running Davinci Resolve Studio 20.3.1 on Mac OS Tahoe 26.1 I've just made the update yesterday morning, and since then, I can't use resolve without it crashing for no reason in like... ten seconds. I'm loading my project (I've...
+  captured_at: '2026-05-14T07:09:01Z'
+  source_date: '2025-12-28'
+  target_release_date: '2025-12-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ta80h5-win-11-davinci-resolve-issue
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ta80h5/win_11_davinci_resolve_issue/
+  parent_title: Win 11 DaVinci Resolve issue
+  report_title: Win 11 DaVinci Resolve issue
+  report_text_excerpt: Win 11 DaVinci Resolve issue So this morning I open DaVinci Resolve to work (using DaVinci Resolve 20). It took longer than usual, so I left and returned but no difference the splash screen was still showing. I clicked it and it crashed. I tried again but the same issue. I...
+  captured_at: '2026-05-14T07:09:22Z'
+  source_date: '2026-05-11'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1t2vhf6-whats-going-on-with-these-captions
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1t2vhf6/whats_going_on_with_these_captions/
+  parent_title: what's going on with these Captions?
+  report_title: what's going on with these Captions?
+  report_text_excerpt: what's going on with these Captions? https://preview.redd.it/t84dvcx67zyg1.png?width=407&format=png&auto=webp&s=68a57147af2ed2fdb98a12afaf08fd9e669a740d as you guys can see some of my text is full quality but some are low quality in the same timeline.....and its not just in...
+  captured_at: '2026-05-14T07:09:22Z'
+  source_date: '2026-05-03'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1t1gyr9-can-somebody-help-me-please
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1t1gyr9/can_somebody_help_me_please/
+  parent_title: Can somebody help me please?
+  report_title: Can somebody help me please?
+  report_text_excerpt: 'Can somebody help me please? I don''t know why, but my fusion page seems broken now. The new fusion clip I made can''t be processed successfully, it will just show complete blank for me. How can I solve this issue? Davinci Resolve 20.3.2 CPU: 12th Gen Intel i5-12450HX GPU: RTX...'
+  captured_at: '2026-05-14T07:09:22Z'
+  source_date: '2026-05-02'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1sm6gl6-for-the-love-of-god-help-me-to-understand
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1sm6gl6/for_the_love_of_god_help_me_to_understand_how_do/
+  parent_title: For the love of God help me to understand how do I set up a 3D camera orientation in Fusion
+  report_title: For the love of God help me to understand how do I set up a 3D camera orientation in Fusion
+  report_text_excerpt: For the love of God help me to understand how do I set up a 3D camera orientation in Fusion Hi! No matter what I do I can't properly set up a ground plane in export panel inside of CameraTracker. I have been struggling with that for 2 days now. I've watched tons of videos on...
+  captured_at: '2026-05-14T07:09:22Z'
+  source_date: '2026-04-15'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1sh3754-samsung-q990f-for-dolby-atmos-audio-mixin
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1sh3754/samsung_q990f_for_dolby_atmos_audio_mixing_in/
+  parent_title: Samsung Q990F for Dolby Atmos Audio Mixing in Davinci Resolve
+  report_title: Samsung Q990F for Dolby Atmos Audio Mixing in Davinci Resolve
+  report_text_excerpt: Samsung Q990F for Dolby Atmos Audio Mixing in Davinci Resolve Hi everyone, my dad bought a Samsung Q990F which sound pretty amazing, can't watch movie without now. I was curious about experimenting with Dolby Atmos in Davinci Resolve with this soundbar. I plugged my laptop...
+  captured_at: '2026-05-14T07:09:22Z'
+  source_date: '2026-04-09'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: unknown
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1sgdei7-need-help-to-figure-out-what-making-davin
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1sgdei7/need_help_to_figure_out_what_making_davinci_keep/
+  parent_title: Need help to figure out what making Davinci keep on crashing.
+  report_title: Need help to figure out what making Davinci keep on crashing.
+  report_text_excerpt: Need help to figure out what making Davinci keep on crashing. I use recent MacBook pro M5 pro 48gb, 18cpu 20gpu. 1 TB version. Yet can’t even handle a magic mask most of the time. I’m using the studio version - DaVinci Resolve 20.3.2 I’m editing a 30-40sec 10bit slog3 clip. I...
+  captured_at: '2026-05-14T07:09:22Z'
+  source_date: '2026-04-09'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: magic mask crash
+  workflow_area: color grading / Magic Mask
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1sdvq2u-text-follower-shading-bug-options-showing
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1sdvq2u/text_follower_shading_bug_options_showing_without/
+  parent_title: 'Text+ Follower Shading Bug: Options showing without enabling & no live updates (Resolve 20.3.2)'
+  report_title: 'Text+ Follower Shading Bug: Options showing without enabling & no live updates (Resolve 20.3.2)'
+  report_text_excerpt: 'Text+ Follower Shading Bug: Options showing without enabling & no live updates (Resolve 20.3.2) Hey guys, I''m facing a really frustrating issue with the Text+ Follower modifier in DaVinci Resolve 20.3.2. (Free Version) Just to be clear upfront: I know exactly how the Text+...'
+  captured_at: '2026-05-14T07:09:22Z'
+  source_date: '2026-04-06'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: install issue
+  workflow_area: installation
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1s58s70-rendering-failure-related-to-key-frames
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1s58s70/rendering_failure_related_to_key_frames/
+  parent_title: Rendering Failure Related to Key Frames
+  report_title: Rendering Failure Related to Key Frames
+  report_text_excerpt: 'Rendering Failure Related to Key Frames Hi everyone, I am having a render issue with the paid version of Davinci Resolve 20.3.2 Build 9. It is a longer video (~45 minutes). The rendering fails immediately and I get a message on my video: "There is no key frame with enabled...'
+  captured_at: '2026-05-14T07:09:22Z'
+  source_date: '2026-03-27'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1t0q5a6-how-to-move-a-plate-clip-inside-a-poly-ma
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1t0q5a6/how_to_move_a_plate_clip_inside_a_poly_mask/
+  parent_title: How to move a plate clip inside a poly mask independent of each other?
+  report_title: How to move a plate clip inside a poly mask independent of each other?
+  report_text_excerpt: How to move a plate clip inside a poly mask independent of each other? Hey team. I'm currently trying to tackle the removal of this piece of tape. I can't figure out how to move the plate clip inside the polygon without moving the polygon itself. Atm my transform moves both of...
+  captured_at: '2026-05-14T07:09:22Z'
+  source_date: '2026-05-01'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: unknown
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1t20mlc-resolve-studio-203-crash-on-launch-nobara
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1t20mlc/resolve_studio_203_crash_on_launch_nobara_43/
+  parent_title: Resolve Studio 20.3 Crash on Launch - Nobara 43 - Signal 6 (fusionscript.so / libtbbmalloc)
+  report_title: Resolve Studio 20.3 Crash on Launch - Nobara 43 - Signal 6 (fusionscript.so / libtbbmalloc)
+  report_text_excerpt: Resolve Studio 20.3 Crash on Launch - Nobara 43 - Signal 6 (fusionscript.so / libtbbmalloc) Need help with a constant crash on launch. I'm on Nobara 43 (Fedora 43 base) with an NVIDIA RTX 3050. Resolve kills the process during the splash screen while "Launching main window."...
+  captured_at: '2026-05-14T07:09:22Z'
+  source_date: '2026-05-02'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1sp7wvs-fusion-compositions-break-when-copied-bet
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1sp7wvs/fusion_compositions_break_when_copied_between/
+  parent_title: Fusion compositions break when copied between projects via Dynamic Project Switching — looking for a quick fix or better workflow
+  report_title: Fusion compositions break when copied between projects via Dynamic Project Switching — looking for a quick fix or better workflow
+  report_text_excerpt: Fusion compositions break when copied between projects via Dynamic Project Switching — looking for a quick fix or better workflow Hi everyone, I'm a video editor using DaVinci Resolve Studio 20 on Windows. I have a workflow where I maintain a "Templates Hub" project — a single...
+  captured_at: '2026-05-14T07:09:22Z'
+  source_date: '2026-04-18'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1scgtk6-need-help-with-a-repeating-crash
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1scgtk6/need_help_with_a_repeating_crash/
+  parent_title: Need help with a repeating crash
+  report_title: Need help with a repeating crash
+  report_text_excerpt: Need help with a repeating crash Hey so I edit for a living and out of nowhere my Resolve has become unusable. I can open a project and work on it for about 10 minutes with no issues at all, then I experience extreme and persistent lag, response time when clicking is so slow...
+  captured_at: '2026-05-14T07:09:22Z'
+  source_date: '2026-04-04'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1rv2fen-insufficient-storage-error-even-if-i-have
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1rv2fen/insufficient_storage_error_even_if_i_have_plenty/
+  parent_title: Insufficient Storage error even if i have plenty of free storage
+  report_title: Insufficient Storage error even if i have plenty of free storage
+  report_text_excerpt: Insufficient Storage error even if i have plenty of free storage Hello, i have this annoying problem with Davinci Resolve everytime i add a project to the render queue. I have 760GB free on C, 560GB free on D, 1,5TB free on F and 600GB free on G. The only drive that doesn't...
+  captured_at: '2026-05-14T07:09:22Z'
+  source_date: '2026-03-16'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1rtulu2-linux-davinci-resolve-cant-open-existing
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1rtulu2/linux_davinci_resolve_cant_open_existing_projects/
+  parent_title: '[Linux] DaVinci Resolve can''t open existing projects'
+  report_title: '[Linux] DaVinci Resolve can''t open existing projects'
+  report_text_excerpt: '[Linux] DaVinci Resolve can''t open existing projects I’m currently trying to switch from Windows to Linux, so I’m also trying to get DaVinci Resolve to run on Linux. It’s a bit shaky, but after a few attempts, I’ve gotten pretty decent results so far. I currently have Fedora...'
+  captured_at: '2026-05-14T07:09:22Z'
+  source_date: '2026-03-14'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: install issue
+  workflow_area: installation
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1rtbw9a-davinci-resolve-studio-2032-segfault-on-s
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1rtbw9a/davinci_resolve_studio_2032_segfault_on_startup/
+  parent_title: DaVinci Resolve Studio 20.3.2 segfault on startup — RX 6700 XT, Linux Mint 22.2
+  report_title: DaVinci Resolve Studio 20.3.2 segfault on startup — RX 6700 XT, Linux Mint 22.2
+  report_text_excerpt: DaVinci Resolve Studio 20.3.2 segfault on startup — RX 6700 XT, Linux Mint 22.2 Sup gang, I keep getting a consistent segfault at GPUDetect on every time I launch which is preventing me to even get to the edit page. I tried to follow hlacik's guide from 2 years ago but it has...
+  captured_at: '2026-05-14T07:09:22Z'
+  source_date: '2026-03-14'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1rzg2vi-cant-create-project-library
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1rzg2vi/cant_create_project_library/
+  parent_title: Cant create project library
+  report_title: Cant create project library
+  report_text_excerpt: Cant create project library I cant create a project library and when it takes me to the website the website is crashed. I cant see my cloud videos either and I paid for 1 tb where the ability to get 1 cloud project library comes with it I'm just so confused and this is so...
+  captured_at: '2026-05-14T07:09:22Z'
+  source_date: '2026-03-21'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1s2on7n-performance-has-plummeted-getting-2ps-on
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1s2on7n/performance_has_plummeted_getting_2ps_on_h265/
+  parent_title: Performance has plummeted. Getting 2ps on H265 playback in edit / cut views
+  report_title: Performance has plummeted. Getting 2ps on H265 playback in edit / cut views
+  report_text_excerpt: Performance has plummeted. Getting 2ps on H265 playback in edit / cut views MacBook Air M1 16gb 512gb - 15.7.5 (24G623) - has been flawless up until working on the last couple of edits Davinci Resolve 20.3.2 build 9 When attempting to play back some footage just on the cut and...
+  captured_at: '2026-05-14T07:09:22Z'
+  source_date: '2026-03-24'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1rcgenp-davinci-making-pc-run-insanely-slow
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1rcgenp/davinci_making_pc_run_insanely_slow/
+  parent_title: DaVinci making PC run insanely slow
+  report_title: DaVinci making PC run insanely slow
+  report_text_excerpt: DaVinci making PC run insanely slow Sometimes, while editing a video (usually when there's 5+ hours of footage) DaVinci randomly makes my PC run at lower than 1 FPS and it only fixes after restarting the PC. I have been using DaVinci for 4 years now and this problem started...
+  captured_at: '2026-05-14T07:09:22Z'
+  source_date: '2026-02-23'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
