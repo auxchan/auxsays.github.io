@@ -1400,16 +1400,18 @@
   company: Blackmagic Design
   software: DaVinci Resolve
   public_category: Video / Production
-  enabled: false
-  recommended_priority: P1 evidence automation active; official-source adapter still needs hardening
+  enabled: true
+  recommended_priority: P1 evidence automation active; official support-download ingestion enabled
   ingestion:
-    type: html_blog
-    adapter: html_blog
-    official_url: https://www.blackmagicdesign.com/media
-    secondary_official_url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
+    type: support_downloads_api
+    adapter: blackmagic_support_downloads
+    official_url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
+    secondary_official_url: https://www.blackmagicdesign.com/media
     feed_url: null
-    api_url: null
-    parser_profile: blackmagic_media_keyword_filter
+    api_url: https://www.blackmagicdesign.com/api/support/us/downloads.json
+    parser_profile: blackmagic_support_downloads
+    official_source_type: download_portal
+    source_capture_status: adapter_enabled
     include_prereleases: false
     version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
     title_selector: null
@@ -1422,12 +1424,12 @@
     reliability: Medium
     breakage_risk: Medium-High
     polling_frequency: 12h
-    update_detection_method: automated evidence collection plus title-date keyword filter candidate
+    update_detection_method: official support-download API version diff plus automated evidence collection
     extractable_fields:
-      version: false
+      version: true
       release_date: true
       title: true
-      release_note_body: true
+      release_note_body: false
       download_url: true
       file_size: false
       checksum: false
@@ -1492,7 +1494,7 @@
     - issue-like report text required
     - release notes, announcements, index pages, and pre-release reports excluded
     source_weighting: equal_per_confirmed_report
-  source_health_note: Official record tracked; official-source ingestion remains conservative, but production evidence collection now runs through the shared patch evidence runner.
+  source_health_note: Official support-download ingestion is enabled for stable DaVinci records; production evidence collection runs through the shared patch evidence runner. Public beta detection remains separated and disabled unless include_prereleases is explicitly enabled.
 - company_id: obs-project
   product_id: obs-studio
   company: OBS Project
