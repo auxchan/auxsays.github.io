@@ -1,8 +1,8 @@
 ---
 layout: aux-update
 title: DaVinci Resolve 21 Public Beta 1 official update breakdown
-description: Published Apr 14, 2026. Blackmagic Design announced DaVinci Resolve 21 Public Beta 1 and made it available for
-  download.
+description: Published Apr 14, 2026. Blackmagic Design announced DaVinci Resolve 21 Public Beta 1 and made it available
+  for download.
 permalink: /updates/blackmagic-design/davinci-resolve/21-public-beta-1/
 update_entry: true
 update_product: DaVinci Resolve
@@ -19,9 +19,10 @@ update_status: current
 update_feed_title: DaVinci Resolve 21 Public Beta 1
 update_detail_title: DaVinci Resolve 21 Public Beta 1
 update_consensus_label: Negative
-update_consensus_summary: 'AUXSAYS has verified 11 source-backed, patch-specific reports for DaVinci Resolve 21 Public Beta
-  1. The current verified-report set is negative with Low-Medium confidence. Most common themes: startup or application crash,
-  performance regression, unspecified issue.'
+update_consensus_summary: 'AVOID for production: DaVinci Resolve 21 Public Beta 1 has a meaningful pilot negative
+  Verified reports set with Low-Medium confidence. Reported issues cluster around startup or application crash,
+  performance regression, and magic mask crash. Production editors should avoid it on active projects; test only
+  in disposable or non-critical projects. Evidence is still a verified-report sample, not broad live consensus.'
 update_report_count: 11
 update_consensus_confidence: Low-Medium
 status_change_type: new
@@ -35,28 +36,25 @@ official_source_classification_note: Blackmagic's source is a vendor release pag
   AUXSAYS links it as the official source, but has not captured a full structured patch-note body from that page.
 patch_file_size_status: not_provided_by_source
 release_channel_label: Public beta
-quick_verdict: WAIT for production systems. DaVinci Resolve 21 Public Beta 1 is a beta build; test only in non-critical projects
-  unless you specifically need the Resolve 21 feature set and can tolerate beta risk.
+quick_verdict: WAIT for production systems. DaVinci Resolve 21 Public Beta 1 is a beta build; test only in non-critical
+  projects unless you specifically need the Resolve 21 feature set and can tolerate beta risk.
 update_decision_label: WAIT for production systems
-update_decision_body: Public beta build. Treat this as a testing release for editors and color workflows, not a clean default
-  upgrade for active client work.
+update_decision_body: Public beta build. Treat this as a testing release for editors and color workflows, not a
+  clean default upgrade for active client work.
 source_freshness_note: Official source should be refreshed before relying on this page for current install guidance.
-record_note: AUXSAYS has completed an initial pilot evidence pass for this DaVinci Resolve 21 Public Beta 1 record. Two source-backed,
-  user-verified issue reports are currently counted. This remains a low-confidence Verified reports, not broad consensus.
-  The legacy manual count remains historical context only and does not drive the verified report count. DaVinci ingestion
-  remains disabled/manual-watch for ongoing automated collection.
-official_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and should be treated differently from a stable
-  production build. The key user decision is not simply whether the release is new, but whether the new Resolve 21 feature
-  set is worth testing in a non-critical environment. For production work, the practical read is to keep existing stable projects
-  on a known-good version unless a specific Resolve 21 feature is needed and the project can tolerate beta risk.
-consensus_report: 'AUXSAYS counted 11 source-backed, deterministically accepted reports for DaVinci Resolve 21 Public Beta
-  1. The promoted evidence rows are stored in consensus_evidence.yml and matched by product_id/update_version; every accepted
-  row has equal source_weight. Sources: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235179; https://www.reddit.com/r/davinciresolve/comments/1sn39qf/davinci_resolve_failed_to_decode_video_frame_when/;
-  https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235117; https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235536;
-  https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235458; https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235208;
-  https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=234870; https://www.reddit.com/r/davinciresolve/comments/1t6ff26/autosubs_plugin_not_working/;
-  https://www.reddit.com/r/davinciresolve/comments/1szxp3j/how_do_i_report_21_beta_bugs/; https://www.reddit.com/r/davinciresolve/comments/1sym4fv/is_there_a_way_to_build_this_fusion_composition/;
-  https://www.reddit.com/r/davinciresolve/comments/1ssi2se/how_to_resize_without_loosing_quality/.'
+record_note: AUXSAYS has completed an initial pilot evidence pass for this DaVinci Resolve 21 Public Beta 1 record.
+  Two source-backed, user-verified issue reports are currently counted. This remains a low-confidence Verified reports,
+  not broad consensus. The legacy manual count remains historical context only and does not drive the verified report
+  count. DaVinci ingestion remains disabled/manual-watch for ongoing automated collection.
+official_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and should be treated differently from
+  a stable production build. The key user decision is not simply whether the release is new, but whether the new
+  Resolve 21 feature set is worth testing in a non-critical environment. For production work, the practical read
+  is to keep existing stable projects on a known-good version unless a specific Resolve 21 feature is needed and
+  the project can tolerate beta risk.
+consensus_report: '11 confirmed patch-specific reports are counted for DaVinci Resolve 21 Public Beta 1; the current
+  read is negative with Low-Medium confidence. The clearest reported themes are startup or application crash, performance
+  regression, and magic mask crash. Evidence is still a verified-report sample, not broad live consensus. Sources
+  represented: Blackmagic Design Community Forum and r/davinciresolve.'
 complaint_themes:
 - theme: Beta setup questions
   frequency: Medium
@@ -120,14 +118,18 @@ status_events:
 - at: '2026-05-14T20:02:19.676849Z'
   label: Verified reports
   note: 'Automated evidence write-back: 11 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
+- at: '2026-05-14T20:31:57.722694Z'
+  label: Verified reports
+  note: Verified report count updated to 11; current read is negative with Low-Medium confidence.
 legacy_consensus_score: 6
 legacy_consensus_score_percent: 53
 official_patch_notes_source_url: https://www.blackmagicdesign.com/media/release/20260414-01
 official_patch_notes_body: ''
-release_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and should be treated differently from a stable
-  production build. The key user decision is not simply whether the release is new, but whether the new Resolve 21 feature
-  set is worth testing in a non-critical environment. For production work, the practical read is to keep existing stable projects
-  on a known-good version unless a specific Resolve 21 feature is needed and the project can tolerate beta risk.
+release_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and should be treated differently from
+  a stable production build. The key user decision is not simply whether the release is new, but whether the new
+  Resolve 21 feature set is worth testing in a non-critical environment. For production work, the practical read
+  is to keep existing stable projects on a known-good version unless a specific Resolve 21 feature is needed and
+  the project can tolerate beta risk.
 practical_recommendations:
 - Wait for production systems unless you have a specific Resolve 21 beta feature to test.
 - Test beta projects separately from active client work and keep a known-good Resolve version available.
@@ -143,8 +145,8 @@ evidence_state_label: Verified reports
 official_source_captured: true
 confirmed_patch_specific_report_count: 11
 legacy_manual_report_count: 7
-legacy_manual_report_count_note: Previous 7-report value appears to be a pre-evidence/manual/pilot estimate. It is not currently
-  backed by structured consensus_evidence.yml rows and should not be rendered as verified reports.
+legacy_manual_report_count_note: Previous 7-report value appears to be a pre-evidence/manual/pilot estimate. It
+  is not currently backed by structured consensus_evidence.yml rows and should not be rendered as verified reports.
 known_issues_present: true
 official_checksums_body: ''
 intelligence_stage: pilot
@@ -179,7 +181,7 @@ official_source_attempts:
   body_captured: false
   checksums_captured: false
 evidence_last_checked: '2026-05-13T17:25:19Z'
-record_last_updated: '2026-05-14T20:02:19.676849Z'
+record_last_updated: '2026-05-14T20:31:57.722694Z'
 evidence_samples:
 - source_name: Blackmagic Design Community Forum
   source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235179
@@ -187,7 +189,7 @@ evidence_samples:
   counted: true
   version_matched: 21 Public Beta 1
   patch_version_matched: true
-  issue: magic_mask_crash
+  issue: Resolve Studio 21.0B Build 20 crashes when creating Magic Mask
   outcome: high
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1sn39qf/davinci_resolve_failed_to_decode_video_frame_when/
@@ -195,7 +197,7 @@ evidence_samples:
   counted: true
   version_matched: 21 Public Beta 1
   patch_version_matched: true
-  issue: decode_render_failure
+  issue: DaVinci Resolve failed to decode video frame when rendering / public beta 21
   outcome: medium
 - source_name: Blackmagic Design Community Forum
   source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235117
@@ -203,7 +205,7 @@ evidence_samples:
   counted: true
   version_matched: 21 Public Beta 1
   patch_version_matched: true
-  issue: startup or application crash
+  issue: Resolve Studio 21.0B Build 20 project corruption after crash
   outcome: high
 - source_name: Blackmagic Design Community Forum
   source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235536
@@ -211,7 +213,7 @@ evidence_samples:
   counted: true
   version_matched: 21 Public Beta 1
   patch_version_matched: true
-  issue: render/export failure
+  issue: Resolve 21.0 Public Beta 1 render/export failure
   outcome: medium
 - source_name: Blackmagic Design Community Forum
   source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235458
@@ -219,7 +221,7 @@ evidence_samples:
   counted: true
   version_matched: 21 Public Beta 1
   patch_version_matched: true
-  issue: performance regression
+  issue: DaVinci Resolve Studio 21 Public Beta 1 GPU slowdown
   outcome: medium
 - source_name: Blackmagic Design Community Forum
   source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235208
@@ -227,7 +229,7 @@ evidence_samples:
   counted: true
   version_matched: 21 Public Beta 1
   patch_version_matched: true
-  issue: install issue
+  issue: DaVinci Resolve 21.0 Public Beta 1 installation failure
   outcome: medium
 - source_name: Blackmagic Design Community Forum
   source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=234870
@@ -235,7 +237,7 @@ evidence_samples:
   counted: true
   version_matched: 21 Public Beta 1
   patch_version_matched: true
-  issue: magic mask crash
+  issue: Resolve Studio 21.0B Build 20 Magic Mask crash
   outcome: high
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1t6ff26/autosubs_plugin_not_working/
@@ -243,7 +245,7 @@ evidence_samples:
   counted: true
   version_matched: DaVinci Resolve 21 beta
   patch_version_matched: true
-  issue: startup or application crash
+  issue: Autosubs plugin not working
   outcome: high
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1szxp3j/how_do_i_report_21_beta_bugs/
@@ -251,7 +253,7 @@ evidence_samples:
   counted: true
   version_matched: DaVinci Resolve 21 beta
   patch_version_matched: true
-  issue: unspecified issue
+  issue: How do I report 21 beta bugs?
   outcome: medium
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1sym4fv/is_there_a_way_to_build_this_fusion_composition/
@@ -259,7 +261,7 @@ evidence_samples:
   counted: true
   version_matched: Resolve 21 beta
   patch_version_matched: true
-  issue: performance regression
+  issue: Is there a way to build this fusion composition to speed up performance?
   outcome: medium
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1ssi2se/how_to_resize_without_loosing_quality/
@@ -267,6 +269,6 @@ evidence_samples:
   counted: true
   version_matched: DaVinci Resolve 21 beta
   patch_version_matched: true
-  issue: unspecified issue
+  issue: how to resize without loosing quality
   outcome: medium
 ---

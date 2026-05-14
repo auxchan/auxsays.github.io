@@ -1,8 +1,8 @@
 ---
 layout: aux-update
 title: DaVinci Resolve 20.3.1 official update breakdown
-description: Published Apr 14, 2026. AUXSAYS is tracking DaVinci Resolve 20.3.1 as a separate stable/Studio evidence record
-  from the Public Beta 1 page.
+description: Published Apr 14, 2026. AUXSAYS is tracking DaVinci Resolve 20.3.1 as a separate stable/Studio evidence
+  record from the Public Beta 1 page.
 permalink: /updates/blackmagic-design/blackmagic-davinci/20-3-1/
 update_entry: true
 company_id: blackmagic-design
@@ -20,7 +20,7 @@ update_published_at: '2025-12-18T00:00:00Z'
 update_last_checked: '2026-05-14T04:15:50Z'
 source_last_checked: '2026-05-14T20:04:53Z'
 official_body_last_checked: '2026-05-14T20:04:53Z'
-record_last_updated: '2026-05-14T20:01:40.530903Z'
+record_last_updated: '2026-05-14T20:30:58.913596Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -30,20 +30,15 @@ update_detail_title: DaVinci Resolve 20.3.1
 update_consensus_label: Negative
 update_report_count: 11
 update_consensus_confidence: Low-Medium
-quick_verdict: WAIT for fragile production workflows. AUXSAYS has a small verified-report sample for DaVinci Resolve 20.3.1,
-  but confidence remains low.
-official_summary: DaVinci Resolve 20.3.1 stable/Studio reports are tracked separately from DaVinci Resolve 21 Public Beta
-  1. The official source capture should be refreshed before relying on this page for full release-note detail.
-release_summary: DaVinci Resolve 20.3.1 stable/Studio reports are tracked separately from DaVinci Resolve 21 Public Beta 1.
-  Use this page for stable/Studio evidence and the beta page for beta-build risk.
-consensus_report: 'AUXSAYS counted 11 source-backed, deterministically accepted reports for DaVinci Resolve 20.3.1. The promoted
-  evidence rows are stored in consensus_evidence.yml and matched by product_id/update_version; every accepted row has equal
-  source_weight. Sources: https://www.reddit.com/r/davinciresolve/comments/1qo19z2/getting_started_with_colorgrading_in_resolve/;
-  https://www.reddit.com/r/davinciresolve/comments/1ptievt/fix_for_instagram_reels_ads_rejection_on_linux/; https://www.reddit.com/r/davinciresolve/comments/1slhj55/resolve_not_rendering_on_delivery_page/;
-  https://www.reddit.com/r/davinciresolve/comments/1sjdug4/black_bars_appearing_when_sliding_horizontal/; https://www.reddit.com/r/davinciresolve/comments/1sfv9rt/resolve_2031_2032_crashes_when_opening_timeline/;
-  https://www.reddit.com/r/davinciresolve/comments/1r0bfmj/resolve_crashing_when_opening_remote_monitoring/; https://www.reddit.com/r/davinciresolve/comments/1qiedqf/mono_audio_wont_play/;
-  https://www.reddit.com/r/davinciresolve/comments/1sg6jdx/is_cqp_during_media_management_transcoding_broken/; https://www.reddit.com/r/davinciresolve/comments/1qy29ip/weird_playback_issues_on_windows_11_pcs/;
-  https://www.reddit.com/r/davinciresolve/comments/1pxoglj/resolve_shutting_down_non_stop_since_last_update/; https://creativecow.net/forums/thread/ai-magic-mask-not-rendering/.'
+quick_verdict: 'WAIT: DaVinci Resolve 20.3.1 has a small negative Verified reports set with Low confidence.'
+official_summary: DaVinci Resolve 20.3.1 stable/Studio reports are tracked separately from DaVinci Resolve 21 Public
+  Beta 1. The official source capture should be refreshed before relying on this page for full release-note detail.
+release_summary: DaVinci Resolve 20.3.1 stable/Studio reports are tracked separately from DaVinci Resolve 21 Public
+  Beta 1. Use this page for stable/Studio evidence and the beta page for beta-build risk.
+consensus_report: '11 confirmed patch-specific reports are counted for DaVinci Resolve 20.3.1; the current read
+  is negative with Low-Medium confidence. The clearest reported themes are render/export failure, startup or application
+  crash, and compatibility issue. Current evidence is Reddit-heavy, so treat this as a wait/test signal rather than
+  broad consensus. Sources represented: r/davinciresolve and Creative COW DaVinci Resolve.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
@@ -86,6 +81,9 @@ status_events:
 - at: '2026-05-14T20:01:40.530903Z'
   label: Verified reports
   note: 'Automated evidence write-back: 11 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
+- at: '2026-05-14T20:30:58.913596Z'
+  label: Verified reports
+  note: Verified report count updated to 11; current read is negative with Low-Medium confidence.
 official_patch_notes_source_type: download_portal
 primary_official_source: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
 fallback_official_sources:
@@ -95,8 +93,8 @@ official_patch_notes_source_url: https://www.blackmagicdesign.com/support/family
 official_note_status: official_source_captured
 official_note_label: Official download portal entry
 official_source_type: download_portal
-official_source_classification_note: Blackmagic's support downloads API is treated as an official download-portal source.
-  It confirms version availability and summary text; community evidence remains separate.
+official_source_classification_note: Blackmagic's support downloads API is treated as an official download-portal
+  source. It confirms version availability and summary text; community evidence remains separate.
 official_sources:
 - label: Blackmagic support downloads
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
@@ -138,9 +136,10 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   Platforms listed: Mac OS X, Windows, Linux, Windows ARM
 
 
-  This software update adds the ability to quickly search for effects in Chinese, Japanese and Korean, improvements to Fusion
-  previews for transforms and merges, as well as improved HDR10 metadata embedding and better stereoscopic 3D monitoring.
-  This version requires a DaVinci Resolve Studio license dongle, Blackmagic Cloud license or software activation code.
+  This software update adds the ability to quickly search for effects in Chinese, Japanese and Korean, improvements
+  to Fusion previews for transforms and merges, as well as improved HDR10 metadata embedding and better stereoscopic
+  3D monitoring. This version requires a DaVinci Resolve Studio license dongle, Blackmagic Cloud license or software
+  activation code.
 
 
   Official support page: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
@@ -151,9 +150,10 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'AUXSAYS has verified 11 source-backed, patch-specific reports for DaVinci Resolve 20.3.1. The current
-  verified-report set is negative with Low-Medium confidence. Most common themes: render/export failure, startup or application
-  crash, unspecified issue.'
+update_consensus_summary: 'WAIT: DaVinci Resolve 20.3.1 has a meaningful pilot negative Verified reports set with
+  Low-Medium confidence. Reported issues cluster around render/export failure, startup or application crash, and
+  compatibility issue. Production editors with active export deadlines should wait unless they need a specific fix.
+  Current evidence is Reddit-heavy, so treat this as a wait/test signal rather than broad consensus.'
 evidence_samples:
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1qo19z2/getting_started_with_colorgrading_in_resolve/
@@ -161,7 +161,7 @@ evidence_samples:
   counted: true
   version_matched: 20.3.1
   patch_version_matched: true
-  issue: unspecified issue
+  issue: Getting started with color grading in resolve
   outcome: medium
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1ptievt/fix_for_instagram_reels_ads_rejection_on_linux/
@@ -169,7 +169,7 @@ evidence_samples:
   counted: true
   version_matched: 20.3.1
   patch_version_matched: true
-  issue: render/export failure
+  issue: Fix for Instagram Reels Ads rejection on Linux (DaVinci Resolve exports)
   outcome: medium
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1slhj55/resolve_not_rendering_on_delivery_page/
@@ -177,7 +177,7 @@ evidence_samples:
   counted: true
   version_matched: 20.3.1
   patch_version_matched: true
-  issue: render/export failure
+  issue: Resolve not rendering on Delivery Page
   outcome: medium
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1sjdug4/black_bars_appearing_when_sliding_horizontal/
@@ -185,7 +185,7 @@ evidence_samples:
   counted: true
   version_matched: 20.3.1
   patch_version_matched: true
-  issue: unspecified issue
+  issue: Black bars appearing when sliding horizontal video in a vertical timeline
   outcome: medium
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1sfv9rt/resolve_2031_2032_crashes_when_opening_timeline/
@@ -193,7 +193,7 @@ evidence_samples:
   counted: true
   version_matched: 20.3.1
   patch_version_matched: true
-  issue: startup or application crash
+  issue: Resolve 20.3.1 & 20.3.2 crashes when opening Timeline Settings (fresh project, reproducible)
   outcome: high
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1r0bfmj/resolve_crashing_when_opening_remote_monitoring/
@@ -201,7 +201,7 @@ evidence_samples:
   counted: true
   version_matched: 20.3.1
   patch_version_matched: true
-  issue: startup or application crash
+  issue: Resolve crashing when opening remote monitoring
   outcome: high
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1qiedqf/mono_audio_wont_play/
@@ -209,7 +209,7 @@ evidence_samples:
   counted: true
   version_matched: 20.3.1
   patch_version_matched: true
-  issue: render/export failure
+  issue: Mono Audio Won't Play
   outcome: medium
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1sg6jdx/is_cqp_during_media_management_transcoding_broken/
@@ -217,7 +217,7 @@ evidence_samples:
   counted: true
   version_matched: 20.3.1
   patch_version_matched: true
-  issue: render/export failure
+  issue: Is CQP during Media Management transcoding broken?
   outcome: medium
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1qy29ip/weird_playback_issues_on_windows_11_pcs/
@@ -225,7 +225,7 @@ evidence_samples:
   counted: true
   version_matched: 20.3.1
   patch_version_matched: true
-  issue: compatibility issue
+  issue: weird Playback issues on Windows 11 PCs
   outcome: medium
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1pxoglj/resolve_shutting_down_non_stop_since_last_update/
@@ -233,7 +233,7 @@ evidence_samples:
   counted: true
   version_matched: 20.3.1
   patch_version_matched: true
-  issue: startup or application crash
+  issue: resolve shutting down non stop since last update
   outcome: high
 - source_name: Creative COW DaVinci Resolve
   source_url: https://creativecow.net/forums/thread/ai-magic-mask-not-rendering/
@@ -241,15 +241,14 @@ evidence_samples:
   counted: true
   version_matched: 20.3.1
   patch_version_matched: true
-  issue: render/export failure
+  issue: Creative Communities of the World Forums
   outcome: medium
 feed_hidden: false
 status_change_type: new
 notification_message: ''
 update_channel_label: Stable / Studio evidence record
 update_decision_label: WAIT
-update_decision_body: Stable/Studio evidence is now tracked separately from Public Beta 1. Treat the current report set as
-  a low-confidence Verified reports set, not broad consensus.
-record_note: This is the active stable/Studio DaVinci Resolve 20.3.1 evidence record. Beta-specific reports remain routed
-  to the DaVinci Resolve 21 Public Beta 1 record.
+update_decision_body: Production editors should wait unless they need a specific fix. The clearest reports involve
+  export failures, and current evidence is still a limited wait/test signal.
+record_note: This stable/Studio DaVinci Resolve 20.3.1 record is tracked separately from the Public Beta 1 record.
 ---
