@@ -20,7 +20,7 @@ update_published_at: '2025-12-18T00:00:00Z'
 update_last_checked: '2026-05-14T04:15:50Z'
 source_last_checked: '2026-05-14T04:15:50Z'
 official_body_last_checked: '2026-05-14T04:15:50Z'
-record_last_updated: '2026-05-14T07:09:22.246299Z'
+record_last_updated: '2026-05-14T07:21:44.759588Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -28,7 +28,7 @@ update_status: current
 update_feed_title: DaVinci Resolve 20.3.1
 update_detail_title: DaVinci Resolve 20.3.1
 update_consensus_label: Negative
-update_report_count: 10
+update_report_count: 11
 update_consensus_confidence: Low-Medium
 quick_verdict: WAIT for fragile production workflows. AUXSAYS has a small verified-report sample for DaVinci Resolve
   20.3.1, but confidence remains low.
@@ -36,20 +36,20 @@ official_summary: DaVinci Resolve 20.3.1 stable/Studio reports are tracked separ
   Beta 1. The official source capture should be refreshed before relying on this page for full release-note detail.
 release_summary: DaVinci Resolve 20.3.1 stable/Studio reports are tracked separately from DaVinci Resolve 21 Public
   Beta 1. Use this page for stable/Studio evidence and the beta page for beta-build risk.
-consensus_report: 'AUXSAYS counted 10 source-backed, deterministically accepted reports for DaVinci Resolve 20.3.1.
+consensus_report: 'AUXSAYS counted 11 source-backed, deterministically accepted reports for DaVinci Resolve 20.3.1.
   The promoted evidence rows are stored in consensus_evidence.yml and matched by product_id/update_version; every
   accepted row has equal source_weight. Sources: https://www.reddit.com/r/davinciresolve/comments/1qo19z2/getting_started_with_colorgrading_in_resolve/;
   https://www.reddit.com/r/davinciresolve/comments/1ptievt/fix_for_instagram_reels_ads_rejection_on_linux/; https://www.reddit.com/r/davinciresolve/comments/1slhj55/resolve_not_rendering_on_delivery_page/;
   https://www.reddit.com/r/davinciresolve/comments/1sjdug4/black_bars_appearing_when_sliding_horizontal/; https://www.reddit.com/r/davinciresolve/comments/1sfv9rt/resolve_2031_2032_crashes_when_opening_timeline/;
   https://www.reddit.com/r/davinciresolve/comments/1r0bfmj/resolve_crashing_when_opening_remote_monitoring/; https://www.reddit.com/r/davinciresolve/comments/1qiedqf/mono_audio_wont_play/;
   https://www.reddit.com/r/davinciresolve/comments/1sg6jdx/is_cqp_during_media_management_transcoding_broken/; https://www.reddit.com/r/davinciresolve/comments/1qy29ip/weird_playback_issues_on_windows_11_pcs/;
-  https://www.reddit.com/r/davinciresolve/comments/1pxoglj/resolve_shutting_down_non_stop_since_last_update/.'
+  https://www.reddit.com/r/davinciresolve/comments/1pxoglj/resolve_shutting_down_non_stop_since_last_update/; https://creativecow.net/forums/thread/ai-magic-mask-not-rendering/.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
 official_source_captured: true
-confirmed_patch_specific_report_count: 10
-evidence_last_checked: '2026-05-14T07:09:01Z'
+confirmed_patch_specific_report_count: 11
+evidence_last_checked: '2026-05-14T07:20:12Z'
 known_issues_present: null
 consensus_collection_status: pilot_initial_sample
 consensus_match_policy: confirmed_patch_specific_reports_v1
@@ -68,6 +68,9 @@ status_events:
 - at: '2026-05-14T07:09:22.246299Z'
   label: Verified reports
   note: 'Automated evidence write-back: 10 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
+- at: '2026-05-14T07:21:44.759588Z'
+  label: Verified reports
+  note: 'Automated evidence write-back: 11 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
 official_patch_notes_source_type: download_portal
 primary_official_source: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
 fallback_official_sources:
@@ -119,7 +122,7 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'AUXSAYS has verified 10 source-backed, patch-specific reports for DaVinci Resolve 20.3.1.
+update_consensus_summary: 'AUXSAYS has verified 11 source-backed, patch-specific reports for DaVinci Resolve 20.3.1.
   The current verified-report set is negative with Low-Medium confidence. Most common themes: render/export failure,
   startup or application crash, unspecified issue.'
 evidence_samples:
@@ -203,6 +206,14 @@ evidence_samples:
   patch_version_matched: true
   issue: startup or application crash
   outcome: high
+- source_name: Creative COW DaVinci Resolve
+  source_url: https://creativecow.net/forums/thread/ai-magic-mask-not-rendering/
+  source_title: Creative Communities of the World Forums
+  counted: true
+  version_matched: 20.3.1
+  patch_version_matched: true
+  issue: render/export failure
+  outcome: medium
 feed_hidden: false
 status_change_type: new
 notification_message: ''

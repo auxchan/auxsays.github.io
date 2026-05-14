@@ -20,7 +20,7 @@ update_published_at: '2026-02-12T00:00:00Z'
 update_last_checked: '2026-05-14T04:15:50Z'
 source_last_checked: '2026-05-14T04:15:50Z'
 official_body_last_checked: '2026-05-14T04:15:50Z'
-record_last_updated: '2026-05-14T07:09:44.236448Z'
+record_last_updated: '2026-05-14T07:22:04.899440Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -28,7 +28,7 @@ update_status: current
 update_feed_title: DaVinci Resolve 20.3.2
 update_detail_title: DaVinci Resolve 20.3.2
 update_consensus_label: Negative
-update_report_count: 18
+update_report_count: 19
 update_consensus_confidence: Low-Medium
 quick_verdict: WAIT for fragile production workflows. AUXSAYS has a small verified-report sample for DaVinci Resolve
   20.3.2, but confidence remains low.
@@ -36,7 +36,7 @@ official_summary: DaVinci Resolve 20.3.2 stable/Studio reports are tracked separ
   Beta 1. The official source capture should be refreshed before relying on this page for full release-note detail.
 release_summary: DaVinci Resolve 20.3.2 stable/Studio reports are tracked separately from DaVinci Resolve 21 Public
   Beta 1. Use this page for stable/Studio evidence and the beta page for beta-build risk.
-consensus_report: 'AUXSAYS counted 18 source-backed, deterministically accepted reports for DaVinci Resolve 20.3.2.
+consensus_report: 'AUXSAYS counted 19 source-backed, deterministically accepted reports for DaVinci Resolve 20.3.2.
   The promoted evidence rows are stored in consensus_evidence.yml and matched by product_id/update_version; every
   accepted row has equal source_weight. Sources: https://www.reddit.com/r/davinciresolve/comments/1ta80h5/win_11_davinci_resolve_issue/;
   https://www.reddit.com/r/davinciresolve/comments/1t2vhf6/whats_going_on_with_these_captions/; https://www.reddit.com/r/davinciresolve/comments/1t1gyr9/can_somebody_help_me_please/;
@@ -47,13 +47,13 @@ consensus_report: 'AUXSAYS counted 18 source-backed, deterministically accepted 
   https://www.reddit.com/r/davinciresolve/comments/1scgtk6/need_help_with_a_repeating_crash/; https://www.reddit.com/r/davinciresolve/comments/1rv2fen/insufficient_storage_error_even_if_i_have_plenty/;
   https://www.reddit.com/r/davinciresolve/comments/1rtulu2/linux_davinci_resolve_cant_open_existing_projects/; https://www.reddit.com/r/davinciresolve/comments/1rtbw9a/davinci_resolve_studio_2032_segfault_on_startup/;
   https://www.reddit.com/r/davinciresolve/comments/1rzg2vi/cant_create_project_library/; https://www.reddit.com/r/davinciresolve/comments/1s2on7n/performance_has_plummeted_getting_2ps_on_h265/;
-  https://www.reddit.com/r/davinciresolve/comments/1rcgenp/davinci_making_pc_run_insanely_slow/.'
+  https://www.reddit.com/r/davinciresolve/comments/1rcgenp/davinci_making_pc_run_insanely_slow/; https://creativecow.net/forums/thread/ai-magic-mask-not-rendering/.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
 official_source_captured: true
-confirmed_patch_specific_report_count: 18
-evidence_last_checked: '2026-05-14T07:09:22Z'
+confirmed_patch_specific_report_count: 19
+evidence_last_checked: '2026-05-14T07:21:44Z'
 known_issues_present: null
 consensus_collection_status: pilot_initial_sample
 consensus_match_policy: confirmed_patch_specific_reports_v1
@@ -72,6 +72,9 @@ status_events:
 - at: '2026-05-14T07:09:44.236448Z'
   label: Verified reports
   note: 'Automated evidence write-back: 18 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
+- at: '2026-05-14T07:22:04.899440Z'
+  label: Verified reports
+  note: 'Automated evidence write-back: 19 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
 official_patch_notes_source_type: download_portal
 primary_official_source: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
 fallback_official_sources:
@@ -123,7 +126,7 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'AUXSAYS has verified 18 source-backed, patch-specific reports for DaVinci Resolve 20.3.2.
+update_consensus_summary: 'AUXSAYS has verified 19 source-backed, patch-specific reports for DaVinci Resolve 20.3.2.
   The current verified-report set is negative with Low-Medium confidence. Most common themes: render/export failure,
   startup or application crash, unspecified issue.'
 evidence_samples:
@@ -267,6 +270,14 @@ evidence_samples:
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1rcgenp/davinci_making_pc_run_insanely_slow/
   source_title: DaVinci making PC run insanely slow
+  counted: true
+  version_matched: 20.3.2
+  patch_version_matched: true
+  issue: render/export failure
+  outcome: medium
+- source_name: Creative COW DaVinci Resolve
+  source_url: https://creativecow.net/forums/thread/ai-magic-mask-not-rendering/
+  source_title: Creative Communities of the World Forums
   counted: true
   version_matched: 20.3.2
   patch_version_matched: true

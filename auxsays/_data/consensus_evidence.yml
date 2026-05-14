@@ -2496,3 +2496,51 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+- id: blackmagic-davinci-20-3-1-creator-forum-report-https-creativecow-net-forums-thread-ai-magic-mask-not-rendering
+  product_id: blackmagic-davinci
+  update_version: 20.3.1
+  source_type: creator_forum_report
+  source_name: Creative COW DaVinci Resolve
+  source_url: https://creativecow.net/forums/thread/ai-magic-mask-not-rendering/
+  parent_title: Creative Communities of the World Forums
+  report_title: Creative Communities of the World Forums
+  report_text_excerpt: AI Magic Mask not rendering - DaVinci Resolve - Creative COW FORUMS Adobe After Effects Adobe After Effects Expressions Adobe Premiere Pro A.I. Apple Final Cut Pro Apple Motion Avid Media Composer Blackmagic Fusion Blender Creative Community Conversations DaVinci Resolve Maxon...
+  captured_at: '2026-05-14T07:20:12Z'
+  source_date: '2026-03-30'
+  target_release_date: '2025-12-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-3-2-creator-forum-report-https-creativecow-net-forums-thread-ai-magic-mask-not-rendering
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: creator_forum_report
+  source_name: Creative COW DaVinci Resolve
+  source_url: https://creativecow.net/forums/thread/ai-magic-mask-not-rendering/
+  parent_title: Creative Communities of the World Forums
+  report_title: Creative Communities of the World Forums
+  report_text_excerpt: AI Magic Mask not rendering - DaVinci Resolve - Creative COW FORUMS Adobe After Effects Adobe After Effects Expressions Adobe Premiere Pro A.I. Apple Final Cut Pro Apple Motion Avid Media Composer Blackmagic Fusion Blender Creative Community Conversations DaVinci Resolve Maxon...
+  captured_at: '2026-05-14T07:21:44Z'
+  source_date: '2026-03-30'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
