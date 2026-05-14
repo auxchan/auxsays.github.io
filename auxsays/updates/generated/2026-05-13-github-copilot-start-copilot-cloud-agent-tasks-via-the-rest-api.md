@@ -17,8 +17,8 @@ update_version: Start Copilot cloud agent tasks via the REST API
 update_logo_text: GIT
 update_published_at: '2026-05-13T18:01:15Z'
 update_last_checked: '2026-05-13T20:13:21Z'
-source_last_checked: '2026-05-13T20:13:21Z'
-official_body_last_checked: '2026-05-13T20:13:21Z'
+source_last_checked: '2026-05-14T04:15:52Z'
+official_body_last_checked: '2026-05-14T04:15:52Z'
 record_last_updated: '2026-05-13T20:13:21Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -79,6 +79,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-05-13T20:13:21Z'
+  url: https://github.blog/changelog/2026-05-13-start-copilot-cloud-agent-tasks-via-the-rest-api
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-05-14T04:15:52Z'
   url: https://github.blog/changelog/2026-05-13-start-copilot-cloud-agent-tasks-via-the-rest-api
   status: captured-from-rss-feed
   body_captured: true
