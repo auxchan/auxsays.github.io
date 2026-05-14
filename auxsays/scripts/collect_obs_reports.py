@@ -379,6 +379,34 @@ def update_obs_record(record_path: Path, count: int, captured_at: str) -> bool:
     return True
 
 
+def apply_consensus_writeback(version: str) -> bool:
+    from apply_consensus_to_records import _apply_record_fields, _index_generated_records, run_dry_run
+
+    records_index = _index_generated_records()
+    results = run_dry_run(
+        evidence_path=EVIDENCE_PATH,
+        product_id_filter=PRODUCT_ID,
+        is_candidate_mode=False,
+        records_index=records_index,
+        write_requested=True,
+    )
+    matches = [item for item in results if item["update_version"] == version]
+    if len(matches) != 1 or not matches[0].get("would_write"):
+        return False
+    record_key = (PRODUCT_ID, version)
+    if record_key not in records_index:
+        return False
+    result = matches[0]
+    record_path = records_index[record_key]["abs_path"]
+    fields = dict(result["proposed_fields_if_written"])
+    data, _body = front_matter_parts(record_path)
+    comparable = {k: v for k, v in fields.items() if k != "status_events_append"}
+    if all(data.get(k) == v for k, v in comparable.items()):
+        return False
+    _apply_record_fields(record_path, fields)
+    return True
+
+
 def valid_update_version(value: Any) -> bool:
     return bool(VERSION_RE.fullmatch(str(value or "").strip()))
 
@@ -457,8 +485,10 @@ def collect_one(
         added, total, rows = write_evidence(accepted)
         structured_count = counted_evidence_count(rows, version)
         record_updated = False
-        if record_path and (added > 0 or record_needs_count_update(record_path, structured_count)):
-            record_updated = update_obs_record(record_path, structured_count, utc_now())
+        if record_path:
+            record_updated = apply_consensus_writeback(version)
+            if not record_updated and record_needs_count_update(record_path, structured_count):
+                record_updated = update_obs_record(record_path, structured_count, utc_now())
         result["evidence_rows_added"] = added
         result["evidence_rows_total"] = total
         result["structured_count_for_version"] = structured_count

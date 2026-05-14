@@ -16,6 +16,7 @@ GENERATED_DIR = ROOT / "updates" / "generated"
 OUT_PATH = ROOT / "_data" / "qa_status.json"
 PRODUCTS_PATH = ROOT / "_data" / "patch_products.yml"
 SOURCES_PATH = ROOT / "_data" / "patch_ingestion_sources.yml"
+EVIDENCE_PATH = ROOT / "_data" / "consensus_evidence.yml"
 UPDATE_LAYOUT_PATH = ROOT / "_layouts" / "aux-update.html"
 
 VALID_EVIDENCE_STATES = {"official_only", "pilot_sample", "pilot_initial_sample", "consensus_live", "insufficient_data"}
@@ -25,6 +26,36 @@ NON_PATCH_NOTE_SOURCE_TYPES = {"whats_new", "vendor_blog", "community_official_p
 OPERATIONAL_SOURCE_TYPES = {"release_health", "known_issues", "help_center_release_notes"}
 LEGACY_SOURCE_TYPES = {"official-source", "adobe-official-release-source", "github-release", "rss-feed", "vendor-release-page"}
 KNOWN_SOURCE_TYPES = PATCH_NOTE_SOURCE_TYPES | NON_PATCH_NOTE_SOURCE_TYPES | OPERATIONAL_SOURCE_TYPES | LEGACY_SOURCE_TYPES
+BANNED_PUBLIC_TERMS = {
+    "consensus_evidence.yml",
+    "deterministically accepted",
+    "source_weight",
+    "promoted evidence rows",
+    "promoted rows",
+    "write-back",
+    "writeback",
+    "collector",
+    "candidate rows",
+}
+PUBLIC_TEXT_FIELDS = {
+    "description",
+    "update_consensus_summary",
+    "quick_verdict",
+    "update_decision_label",
+    "update_decision_body",
+    "source_freshness_note",
+    "record_note",
+    "official_summary",
+    "release_summary",
+    "consensus_report",
+    "community_summary",
+    "practical_recommendations",
+    "complaint_themes",
+    "status_events",
+    "evidence_samples",
+    "accepted_report_sources",
+    "evidence_source_limitations",
+}
 
 PRIORITY_PRODUCTS = {
     "obs-studio",
@@ -103,6 +134,35 @@ def flatten_text(value: Any) -> str:
     return ""
 
 
+def public_record_text(data: dict[str, Any]) -> str:
+    return " ".join(flatten_text(data.get(field)) for field in sorted(PUBLIC_TEXT_FIELDS))
+
+
+def load_counted_evidence_counts() -> dict[tuple[str, str], int]:
+    counts: dict[tuple[str, str], int] = {}
+    payload = load_yaml(EVIDENCE_PATH, [])
+    if isinstance(payload, dict):
+        rows = payload.get("evidence") or []
+    else:
+        rows = payload
+    if not isinstance(rows, list):
+        return counts
+    for row in rows:
+        if not isinstance(row, dict):
+            continue
+        product_id = str(row.get("product_id") or "").strip()
+        version = str(row.get("update_version") or "").strip()
+        if not product_id or not version:
+            continue
+        if row.get("counted") is False:
+            continue
+        if row.get("patch_version_matched") is not True:
+            continue
+        key = (product_id, version)
+        counts[key] = counts.get(key, 0) + 1
+    return counts
+
+
 def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
     errors: list[dict[str, str]] = []
     warnings: list[dict[str, str]] = []
@@ -138,9 +198,25 @@ def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]
         add(warnings, path, "unknown_evidence_state", f"Evidence state '{evidence_state}' is not in the normalized taxonomy.")
     if contains_public_static_sample(data):
         add(errors, path, "public_static_sample_wording", "Public-facing generated record data still contains obsolete sample wording. Use 'Verified reports' for confirmed report samples.")
-    public_text = flatten_text(data)
+    public_text = public_record_text(data)
     if ("Pilot" + " sample") in public_text or ("pilot" + " sample") in public_text:
         add(errors, path, "public_pilot_sample_wording", "Public-facing generated record data still contains obsolete verified-report wording. Use 'Verified reports'.")
+    public_text_lower = public_text.lower()
+    for term in sorted(BANNED_PUBLIC_TERMS):
+        if term in public_text_lower:
+            add(errors, path, "public_internal_term", f"Public-facing generated fields contain internal term '{term}'.")
+    if re.search(r"https?://\S+;\s*https?://", public_text):
+        add(errors, path, "raw_source_urls_in_public_prose", "Public-facing generated prose appears to dump raw source URLs; use source objects/lists instead.")
+
+    if report_count > 0:
+        if is_blank(data.get("update_consensus_summary")):
+            add(errors, path, "report_count_without_consensus_summary", "Record has report_count > 0 but no update_consensus_summary.")
+        if not isinstance(data.get("evidence_samples"), list) or len(data.get("evidence_samples") or []) == 0:
+            add(errors, path, "report_count_without_evidence_samples", "Record has report_count > 0 but no representative evidence_samples.")
+        if not isinstance(data.get("accepted_report_sources"), list) or len(data.get("accepted_report_sources") or []) == 0:
+            add(warnings, path, "report_count_without_accepted_report_sources", "Record has report_count > 0 but no collapsed full accepted source list.")
+        if isinstance(data.get("evidence_samples"), list) and len(data.get("evidence_samples") or []) > 5:
+            add(errors, path, "too_many_representative_samples", "evidence_samples should contain no more than five representative items; put the full list in accepted_report_sources.")
 
     evidence_samples = data.get("evidence_samples")
     if evidence_samples is not None:
@@ -291,6 +367,12 @@ def scan_update_layout_public_copy() -> tuple[list[dict[str, str]], list[dict[st
         add(errors, UPDATE_LAYOUT_PATH, "checksum_body_render_path_missing", "Checksum section should render stripped checksum content when present.")
     if "official_body_clean" not in text:
         add(warnings, UPDATE_LAYOUT_PATH, "official_summary_blank_guard_missing", "Official source summary should be guarded by stripped non-empty body content.")
+    if "limit: visible_evidence_limit" not in text:
+        add(errors, UPDATE_LAYOUT_PATH, "representative_sample_limit_missing", "Community risk samples must be limited to a concise representative set.")
+    if "accepted_report_sources" not in text or "Full accepted report list" not in text:
+        add(errors, UPDATE_LAYOUT_PATH, "collapsed_accepted_sources_missing", "Full accepted report/source lists must render behind a collapsed disclosure.")
+    if "evidence_source_limitations" not in text or "Source limitations" not in text:
+        add(warnings, UPDATE_LAYOUT_PATH, "source_limitations_disclosure_missing", "Source/method limitations should render compactly when generated.")
 
     return errors, warnings
 
@@ -303,6 +385,34 @@ def scan_required_record_paths() -> tuple[list[dict[str, str]], list[dict[str, s
         data = front_matter(obs_path)
         if is_blank(data.get("official_checksums_body")):
             add(errors, obs_path, "obs_32_1_2_checksum_missing", "OBS Studio 32.1.2 should retain official_checksums_body content.")
+    return errors, warnings
+
+
+def scan_evidence_count_alignment(files: list[Path]) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
+    errors: list[dict[str, str]] = []
+    warnings: list[dict[str, str]] = []
+    evidence_counts = load_counted_evidence_counts()
+    if not evidence_counts:
+        return errors, warnings
+
+    for path in files:
+        data = front_matter(path)
+        product_id = str(data.get("product_id") or "").strip()
+        version = str(data.get("update_version") or "").strip()
+        if not product_id or not version:
+            continue
+        key = (product_id, version)
+        if key not in evidence_counts:
+            continue
+        expected = evidence_counts[key]
+        actual = int(data.get("update_report_count") or data.get("confirmed_patch_specific_report_count") or 0)
+        if actual != expected:
+            add(
+                warnings,
+                path,
+                "generated_report_count_mismatch",
+                f"Generated report count is {actual}, but structured counted evidence has {expected} rows.",
+            )
     return errors, warnings
 
 
@@ -346,6 +456,9 @@ def main() -> int:
         warnings.extend(w)
 
     e, w = scan_priority_source_coverage()
+    errors.extend(e)
+    warnings.extend(w)
+    e, w = scan_evidence_count_alignment(files)
     errors.extend(e)
     warnings.extend(w)
     e, w = scan_update_layout_public_copy()

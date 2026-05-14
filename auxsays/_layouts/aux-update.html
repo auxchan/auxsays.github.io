@@ -165,6 +165,11 @@ layout: aux-base
 {% elsif official_source_type == 'vendor_blog' %}
   {% assign official_note_label = 'Official Vendor Blog' %}
 {% endif %}
+{% assign visible_evidence_limit = page.evidence_sample_visible_limit | default: 5 | plus: 0 %}
+{% assign accepted_report_sources = page.accepted_report_sources %}
+{% if accepted_report_sources == nil or accepted_report_sources.size == 0 %}
+  {% assign accepted_report_sources = page.evidence_samples %}
+{% endif %}
 
 {% assign resolved_update_logo_path = product.logo_path | default: company.logo_path %}
 <div id="top" class="update-page-shell reveal-up">
@@ -243,6 +248,8 @@ layout: aux-base
     <a href="#verdict">Verdict</a>
     {% if page.official_additions or page.official_fixes %}<a href="#official-changes">Official changes</a>{% endif %}
     {% if page.evidence_samples and page.evidence_samples.size > 0 %}<a href="#community-risk">Community risk sample</a>{% endif %}
+    {% if accepted_report_sources and accepted_report_sources.size > 0 %}<a href="#accepted-reports">Accepted reports</a>{% endif %}
+    {% if page.evidence_source_limitations and page.evidence_source_limitations.size > 0 %}<a href="#source-limitations">Source limits</a>{% endif %}
     {% if recommendation_renderable %}<a href="#recommendation">Recommendation</a>{% endif %}
     {% if consensus_report_renderable %}<a href="#consensus-report">Consensus Report</a>{% endif %}
     {% if page.official_sources or page.update_source_url != blank or page.update_download_url != blank %}<a href="#sources">Sources</a>{% endif %}
@@ -292,7 +299,7 @@ layout: aux-base
       <h2>Community risk sample</h2>
       <p class="update-section-intro">Confirmed examples behind the current recommendation.</p>
       <div class="update-evidence-sample-grid">
-        {% for item in page.evidence_samples %}
+        {% for item in page.evidence_samples limit: visible_evidence_limit %}
         <article class="update-evidence-sample">
           <div class="update-evidence-sample__topline">
             <span>{{ item.source_name | default: 'Source' }}</span>
@@ -307,6 +314,33 @@ layout: aux-base
         </article>
         {% endfor %}
       </div>
+      {% if accepted_report_sources and accepted_report_sources.size > 0 %}
+      <details id="accepted-reports" class="update-evidence-full-list">
+        <summary>Full accepted report list <span>{{ accepted_report_sources.size }} source{% unless accepted_report_sources.size == 1 %}s{% endunless %}</span></summary>
+        <ul class="update-source-list update-source-list--accepted">
+          {% for source in accepted_report_sources %}
+          {% assign source_title = source.source_title | default: source.title | default: 'Accepted report' %}
+          {% assign source_type_label = source.source_type | default: source.source_name | default: 'community report' %}
+          {% assign source_issue = source.issue | default: source.issue_theme %}
+          {% assign source_workflow = source.workflow_area %}
+          <li>
+            <cite>{% if source.source_name != blank %}{{ source.source_name }}. {% endif %}{% if source.source_date != blank %}({{ source.source_date | date: "%Y, %B %-d" }}). {% endif %}{% if source.source_url != blank %}<a href="{{ source.source_url }}">{{ source_title }}</a>{% else %}{{ source_title }}{% endif %}.</cite>
+            <span>{{ source_type_label | replace: '_', ' ' }}</span>
+            {% if source_issue != blank %}<small>Issue: {{ source_issue }}</small>{% endif %}
+            {% if source_workflow != blank %}<small>Workflow: {{ source_workflow }}</small>{% endif %}
+          </li>
+          {% endfor %}
+        </ul>
+      </details>
+      {% endif %}
+      {% if page.evidence_source_limitations and page.evidence_source_limitations.size > 0 %}
+      <details id="source-limitations" class="update-evidence-method-details">
+        <summary>Source limitations</summary>
+        <ul class="update-practical-list">
+          {% for item in page.evidence_source_limitations %}<li>{{ item }}</li>{% endfor %}
+        </ul>
+      </details>
+      {% endif %}
     </article>
     {% endif %}
 

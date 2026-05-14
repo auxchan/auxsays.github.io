@@ -473,7 +473,8 @@ def run() -> int:
     )
     check(
         "active stable DaVinci 21 keeps coherence wording managed",
-        "low-confidence Verified reports set" in str(active_stable_fields.get("update_decision_body") or ""),
+        "stable Resolve 21 release" in str(active_stable_fields.get("update_decision_body") or "")
+        and "render/export failures" in str(active_stable_fields.get("update_decision_body") or ""),
         f"decision_body={active_stable_fields.get('update_decision_body')!r}",
     )
 

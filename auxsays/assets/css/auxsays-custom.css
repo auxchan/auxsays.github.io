@@ -4645,6 +4645,61 @@ button, input, select, textarea { font: inherit; }
   line-height: 1.55;
 }
 
+.update-evidence-full-list,
+.update-evidence-method-details {
+  margin-top: 1rem;
+  padding: .9rem 1rem;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.018);
+}
+
+.update-evidence-full-list summary,
+.update-evidence-method-details summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+  cursor: pointer;
+  color: var(--text-0);
+  font-weight: 850;
+}
+
+.update-evidence-full-list summary::-webkit-details-marker,
+.update-evidence-method-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.update-evidence-full-list summary::before,
+.update-evidence-method-details summary::before {
+  content: ">";
+  color: var(--accent-0);
+  font-size: .85rem;
+  transform: translateY(-1px);
+}
+
+.update-evidence-full-list[open] summary::before,
+.update-evidence-method-details[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.update-evidence-full-list summary span {
+  margin-left: auto;
+  color: var(--text-2);
+  font-size: .72rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.update-source-list--accepted li {
+  align-items: center;
+}
+
+.update-source-list--accepted small {
+  color: var(--text-2);
+  line-height: 1.45;
+}
+
 .update-practical-card {
   border-color: rgba(240,202,103,.24);
   background:

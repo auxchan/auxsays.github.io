@@ -114,27 +114,81 @@ def join_public_list(items: list[str]) -> str:
     return ", ".join(clean[:-1]) + f", and {clean[-1]}"
 
 
+def number_word(value: int) -> str:
+    words = {
+        0: "zero",
+        1: "one",
+        2: "two",
+        3: "three",
+        4: "four",
+        5: "five",
+        6: "six",
+        7: "seven",
+        8: "eight",
+        9: "nine",
+        10: "ten",
+    }
+    return words.get(value, str(value))
+
+
+def public_issue_bucket(product_id: str, item: dict[str, Any]) -> str:
+    raw_theme = clean_public_phrase(item.get("issue_theme"))
+    raw_workflow = clean_public_phrase(item.get("workflow_area"))
+    raw_title = clean_public_phrase(item.get("report_title") or item.get("source_title") or item.get("parent_title"))
+    text = " ".join([raw_theme, raw_workflow, raw_title]).lower()
+
+    if product_id == "blackmagic-davinci":
+        if "magic mask" in text:
+            return "Magic Mask crashes"
+        if "decode" in text and ("render" in text or "export" in text):
+            return "render/decode failures"
+        if "render" in text or "export" in text or "delivery" in text:
+            return "render/export failures"
+        if "crash" in text or "startup" in text or "launch" in text:
+            return "startup or application crashes"
+        if "performance" in text or "gpu" in text or "slow" in text:
+            return "performance slowdowns"
+        if "install" in text:
+            return "installation problems"
+
+    if product_id == "obs-studio":
+        if "scene list" in text or ("scene" in text and "selection" in text):
+            return "scene list workflow regressions"
+        if "audio" in text or "mixer" in text or "monitoring" in text:
+            return "audio mixer or routing issues"
+        if "capture" in text or "camera" in text or "xcomposite" in text or "screen" in text or "window" in text:
+            return "capture-source issues"
+        if "plugin" in text or "setup" in text or "profile" in text:
+            return "plugin or setup compatibility"
+        if "crash" in text or "freeze" in text or "hang" in text or "stability" in text:
+            return "crash or stability problems"
+        if "hotkey" in text or "shortcut" in text:
+            return "keyboard shortcut regressions"
+        if "output" in text or "recording" in text or "stream" in text:
+            return "output or recording regressions"
+
+    if raw_theme and raw_theme.lower() != "unspecified issue":
+        return raw_theme.lower()
+    if raw_workflow and not raw_workflow.lower().startswith("general "):
+        return raw_workflow.lower()
+    return "general workflow reports"
+
+
+def issue_counter(product_id: str, items: list[dict[str, Any]]) -> Counter[str]:
+    return Counter(public_issue_bucket(product_id, item) for item in items)
+
+
 def top_theme_phrases(themes: Counter[str], *, limit: int = 3) -> list[str]:
     phrases: list[str] = []
     for theme, _count in themes.most_common():
-        phrase = clean_public_phrase(theme).lower()
-        if not phrase or phrase == "unspecified issue":
+        phrase = clean_public_phrase(theme)
+        if not phrase or phrase.lower() in {"unspecified issue", "general workflow reports"}:
             continue
         if phrase not in phrases:
             phrases.append(phrase)
         if len(phrases) >= limit:
             break
     return phrases
-
-
-def sample_size_label(total: int) -> str:
-    if total >= 25:
-        return "larger"
-    if total >= 8:
-        return "meaningful pilot"
-    if total > 0:
-        return "small"
-    return "no"
 
 
 def version_is_beta(version: str) -> bool:
@@ -156,7 +210,7 @@ def recommendation_prefix(product_id: str, version: str, label: str, total: int)
 
 def affected_workflow_sentence(product_id: str, version: str, label: str, themes: Counter[str]) -> str:
     label = label.lower()
-    theme_words = " ".join(top_theme_phrases(themes, limit=5))
+    theme_words = " ".join(top_theme_phrases(themes, limit=5)).lower()
     if product_id == "blackmagic-davinci":
         if version_is_beta(version):
             return "Production editors should avoid it on active projects; test only in disposable or non-critical projects."
@@ -177,11 +231,21 @@ def source_limitation_sentence(items: list[dict[str, Any]], confidence_label: st
         return "No patch-specific user reports have been counted yet."
     source_types = [str(item.get("source_type") or item.get("source_name") or "").lower() for item in items]
     reddit_count = sum(1 for value in source_types if "reddit" in value)
+    if len(items) <= 2:
+        report_word = "report is" if len(items) == 1 else "reports are"
+        return f"Only {number_word(len(items))} patch-specific {report_word} confirmed so far, so this is a wait/test signal rather than broad consensus."
     if reddit_count and reddit_count / len(items) >= 0.6:
-        return "Current evidence is Reddit-heavy, so treat this as a wait/test signal rather than broad consensus."
+        return "Current evidence is Reddit-heavy, so production users should test before updating."
     if confidence_label.lower() in {"low", "insufficient"}:
-        return "Evidence is still limited, so treat this as a wait/test signal rather than broad consensus."
-    return "Evidence is still a verified-report sample, not broad live consensus."
+        return "The sample is still limited, so production users should test before updating."
+    return "This is a verified-report sample rather than a live consensus feed."
+
+
+def issue_cluster_sentence(themes: Counter[str]) -> str:
+    theme_phrases = top_theme_phrases(themes)
+    if theme_phrases:
+        return f"Confirmed reports cluster around {join_public_list(theme_phrases)}."
+    return "Confirmed reports do not yet form a clean issue cluster."
 
 
 def consensus_summary(product_id: str, version: str, items: list[dict[str, Any]], counts: Counter[str], themes: Counter[str]) -> str:
@@ -194,17 +258,11 @@ def consensus_summary(product_id: str, version: str, items: list[dict[str, Any]]
         )
     label = consensus_label(counts).lower()
     confidence_label = confidence(total)
-    theme_phrases = top_theme_phrases(themes)
-    if theme_phrases:
-        issue_sentence = f"Reported issues cluster around {join_public_list(theme_phrases)}."
-    else:
-        issue_sentence = "Reported issues are not yet specific enough to cluster cleanly."
+    report_word = "report" if total == 1 else "reports"
     return " ".join([
-        (
-            f"{recommendation_prefix(product_id, version, label, total)}: {label_name} {version} has a "
-            f"{sample_size_label(total)} {label} Verified reports set with {confidence_label} confidence."
-        ),
-        issue_sentence,
+        f"{recommendation_prefix(product_id, version, label, total)}: {label_name} {version} has {total} confirmed patch-specific {report_word}.",
+        f"Current read: {label} with {confidence_label} confidence.",
+        issue_cluster_sentence(themes),
         f"{affected_workflow_sentence(product_id, version, label, themes)} {source_limitation_sentence(items, confidence_label)}",
     ])
 
@@ -261,7 +319,7 @@ def main() -> int:
     for (product_id, version), items in sorted(groups.items()):
         sentiments = Counter(str(item.get("sentiment")).lower() for item in items)
         severities = Counter(str(item.get("severity") or "low").lower() for item in items)
-        themes = Counter(str(item.get("issue_theme") or "unspecified") for item in items)
+        themes = issue_counter(product_id, items)
         aggregate.append({
             "product_id": product_id,
             "update_version": version,
