@@ -419,6 +419,8 @@ def source_url_is_specific(url: str) -> bool:
         return bool(re.search(r"/issues/\d+/?$", path))
     if "forum.blackmagicdesign.com" in host:
         return path.endswith("viewtopic.php") and bool(query.get("t"))
+    if "creativecow.net" in host:
+        return bool(re.fullmatch(r"/forums/thread/[^/]+/?", path))
     return not path.rstrip("/").endswith(("/search", "/forums", "/forum")) and path.strip("/") not in {"", "forums", "forum"}
 
 

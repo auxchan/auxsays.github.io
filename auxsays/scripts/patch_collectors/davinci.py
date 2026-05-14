@@ -54,6 +54,9 @@ REDDIT_OLD_NEW_RSS = f"https://old.reddit.com/r/{REDDIT_SUBREDDIT}/new/.rss"
 REDDIT_HOT_RSS = f"https://www.reddit.com/r/{REDDIT_SUBREDDIT}/.rss"
 REDDIT_OLD_HOT_RSS = f"https://old.reddit.com/r/{REDDIT_SUBREDDIT}/.rss"
 FORUM_SEARCH = "https://forum.blackmagicdesign.com/search.php"
+CREATIVE_COW_FORUM = "https://creativecow.net/forums/forum/davinci-resolve/"
+CREATIVE_COW_SOURCE_NAME = "Creative COW DaVinci Resolve"
+CREATIVE_COW_SOURCE_TYPE = "creator_forum_report"
 TEXT_HEADERS = {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,text/plain;q=0.8,*/*;q=0.5",
     "Accept-Language": "en-US,en;q=0.9",
@@ -635,6 +638,7 @@ def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[
     method_stack = (
         ("known_watchlist", "curated_watchlist", known_watchlist_candidates),
         ("reddit_search", "reddit_community_report", reddit_search_candidates),
+        ("creative_cow_forum_search", CREATIVE_COW_SOURCE_TYPE, creative_cow_forum_search_candidates),
         ("vendor_forum_search", "blackmagic_forum", vendor_forum_search_candidates),
         ("web_search", "web_search", web_search_candidates),
     )
@@ -652,7 +656,12 @@ def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[
             notes = f"{notes} Fetch failures: {fetch_failure_count}."
         if method_rejected and not method_accepted:
             notes = f"{notes} Rejected candidates: {format_rejection_counts(method_rejected)}."
-        status = "disabled" if method_id == "web_search" else method_status(candidates, method_accepted, method_rejected, errors)
+        if method_id == "web_search":
+            status = "disabled"
+        elif method_id == "creative_cow_forum_search":
+            status = creative_cow_method_status(candidates, method_accepted, method_rejected, errors)
+        else:
+            status = method_status(candidates, method_accepted, method_rejected, errors)
         if method_id == "vendor_forum_search" and status in {"blocked", "low_confidence"}:
             notes = f"Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. {blocked_reason}"
         health.append(method_health_row(
@@ -1009,6 +1018,154 @@ def vendor_forum_search_candidates(record: PatchRecord, context: CollectorContex
     return candidates
 
 
+def creative_cow_forum_search_candidates(record: PatchRecord, context: CollectorContext, errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    thread_urls: list[str] = []
+    seen_urls: set[str] = set()
+    for listing_url in creative_cow_listing_urls(context):
+        try:
+            text = request_text(listing_url)
+        except Exception as exc:
+            errors.append({"source_url": listing_url, "reason": f"creative_cow_listing_fetch_failed:{error_reason(exc)}"})
+            continue
+        links = creative_cow_thread_links(text)
+        if not links:
+            continue
+        for link in links:
+            url = canonical_creative_cow_thread_url(urllib.parse.urljoin(CREATIVE_COW_FORUM, link))
+            key = url.lower()
+            if url and key not in seen_urls:
+                seen_urls.add(key)
+                thread_urls.append(url)
+
+    candidates: list[dict[str, Any]] = []
+    for source_url in thread_urls[:25]:
+        try:
+            page = request_text(source_url)
+        except Exception as exc:
+            errors.append({"source_url": source_url, "reason": f"creative_cow_thread_fetch_failed:{error_reason(exc)}"})
+            continue
+        candidate = creative_cow_thread_candidate(source_url, page)
+        if not candidate:
+            errors.append({"source_url": source_url, "reason": "creative_cow_thread_unparseable"})
+            continue
+        if context.since and candidate.get("source_date") and date_part(candidate.get("source_date")) < context.since:
+            continue
+        candidates.append(candidate)
+    return candidates
+
+
+def creative_cow_method_status(
+    candidates: list[dict[str, Any]],
+    accepted: list[dict[str, Any]],
+    rejected: list[dict[str, Any]],
+    errors: list[dict[str, Any]],
+) -> str:
+    if candidates and errors:
+        return "partial"
+    if candidates:
+        return "success"
+    return method_status(candidates, accepted, rejected, errors)
+
+
+def creative_cow_listing_urls(context: CollectorContext) -> list[str]:
+    pages = max(1, context.max_pages)
+    urls = [CREATIVE_COW_FORUM]
+    for page in range(2, pages + 1):
+        urls.append(urllib.parse.urljoin(CREATIVE_COW_FORUM, f"page/{page}/"))
+    return urls
+
+
+def creative_cow_thread_links(text: str) -> list[str]:
+    links: list[str] = []
+    for match in re.finditer(r"""href=["']([^"']*/forums/thread/[^"'#?]+/?)(?:[?#][^"']*)?["']""", text or "", flags=re.I):
+        links.append(html.unescape(match.group(1)))
+    return links
+
+
+def canonical_creative_cow_thread_url(url: str) -> str:
+    parsed = urllib.parse.urlsplit(str(url or "").strip())
+    if "creativecow.net" not in parsed.netloc.lower():
+        return ""
+    path = parsed.path
+    match = re.match(r"^/forums/thread/([^/]+)/?", path, flags=re.I)
+    if not match:
+        return ""
+    slug_part = match.group(1)
+    return urllib.parse.urlunsplit(("https", "creativecow.net", f"/forums/thread/{slug_part}/", "", ""))
+
+
+def creative_cow_thread_candidate(source_url: str, text: str) -> dict[str, Any] | None:
+    canonical_url = canonical_creative_cow_thread_url(source_url)
+    if not canonical_url:
+        return None
+    clean = clean_html(text)
+    if not clean:
+        return None
+    title = extract_h1(text) or extract_meta_content(text, "og:title") or extract_title(text) or canonical_url
+    title = clean_creative_cow_title(title)
+    return {
+        "source_type": CREATIVE_COW_SOURCE_TYPE,
+        "source_name": CREATIVE_COW_SOURCE_NAME,
+        "source_url": canonical_url,
+        "parent_title": title,
+        "report_title": title,
+        "report_text": clean[:4000],
+        "source_date": extract_creative_cow_source_date(text, clean),
+    }
+
+
+def clean_creative_cow_title(title: str) -> str:
+    title = html.unescape(re.sub(r"\s+", " ", str(title or ""))).strip()
+    title = re.sub(r"\s+[-|]\s+Creative COW.*$", "", title, flags=re.I).strip()
+    return title
+
+
+def extract_h1(text: str) -> str:
+    match = re.search(r"<h1[^>]*>(.*?)</h1>", text or "", flags=re.I | re.S)
+    return clean_html(match.group(1)) if match else ""
+
+
+def extract_meta_content(text: str, property_name: str) -> str:
+    pattern = rf"<meta[^>]+(?:property|name)=['\"]{re.escape(property_name)}['\"][^>]+content=['\"]([^'\"]+)['\"]"
+    match = re.search(pattern, text or "", flags=re.I | re.S)
+    if not match:
+        pattern = rf"<meta[^>]+content=['\"]([^'\"]+)['\"][^>]+(?:property|name)=['\"]{re.escape(property_name)}['\"]"
+        match = re.search(pattern, text or "", flags=re.I | re.S)
+    return html.unescape(match.group(1)).strip() if match else ""
+
+
+def extract_creative_cow_source_date(raw_html: str, clean_text: str) -> str:
+    for pattern in (
+        r"<time[^>]+datetime=['\"]([^'\"]+)['\"]",
+        r"<meta[^>]+(?:property|name)=['\"](?:article:published_time|date|dc.date)['\"][^>]+content=['\"]([^'\"]+)['\"]",
+        r"<meta[^>]+content=['\"]([^'\"]+)['\"][^>]+(?:property|name)=['\"](?:article:published_time|date|dc.date)['\"]",
+    ):
+        match = re.search(pattern, raw_html or "", flags=re.I | re.S)
+        if match:
+            parsed = date_part(match.group(1))
+            if parsed:
+                return parsed
+    month_names = (
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December",
+        "Jan", "Feb", "Mar", "Apr", "Jun", "Jul", "Aug", "Sep", "Sept", "Oct", "Nov", "Dec",
+    )
+    month_pattern = "|".join(month_names)
+    match = re.search(rf"\b({month_pattern})\s+(\d{{1,2}}),\s+(20\d{{2}})\b", clean_text or "", flags=re.I)
+    if not match:
+        return ""
+    month_lookup = {
+        "jan": 1, "january": 1, "feb": 2, "february": 2, "mar": 3, "march": 3,
+        "apr": 4, "april": 4, "may": 5, "jun": 6, "june": 6, "jul": 7, "july": 7,
+        "aug": 8, "august": 8, "sep": 9, "sept": 9, "september": 9,
+        "oct": 10, "october": 10, "nov": 11, "november": 11, "dec": 12, "december": 12,
+    }
+    month = month_lookup.get(match.group(1).lower())
+    if not month:
+        return ""
+    return datetime(int(match.group(3)), month, int(match.group(2)), tzinfo=timezone.utc).date().isoformat()
+
+
 def blackmagic_error_is_access_limited(reason: str) -> bool:
     lowered = str(reason or "").lower()
     return any(token in lowered for token in ("blocked", "challenge", "waf", "captcha", "access_denied", "unusable"))
@@ -1301,6 +1458,7 @@ def method_notes(method_id: str) -> str:
     notes = {
         "known_watchlist": "Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method.",
         "reddit_search": "Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates.",
+        "creative_cow_forum_search": "Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence.",
         "vendor_forum_search": "Blackmagic forum search uses exact version aliases plus issue-language terms to discover candidate threads; accepted rows still require exact version/date/report gates.",
         "web_search": "Reserved fallback discovery method; no adapter is configured in Phase A.",
     }
