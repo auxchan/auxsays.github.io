@@ -1,16 +1,12 @@
 #!/usr/bin/env python3
 """Consensus-to-generated-record updater with dry-run-first safety gates.
 
-Reads structured evidence rows from either production consensus_evidence.yml or
-an internal candidate staging file, aggregates by (product_id, update_version),
+Reads structured evidence rows, aggregates by (product_id, update_version),
 finds matching generated Markdown records, validates safety gates, and outputs
 an auditable plan.
 
-Write mode is intentionally guarded. It requires all of:
+Write mode is intentionally guarded. Single-record writes require all of:
   --write --confirm-write --product-id <id> --update-version <version>
-
-Evidence automation uses this to update exactly one generated record after
-matching source-backed evidence rows are present in consensus_evidence.yml.
 """
 from __future__ import annotations
 
@@ -564,25 +560,24 @@ def _affected_workflow_sentence(pid: str, ver: str, consensus_label: str, themes
 
 def _source_limitation_sentence(rows: list[dict[str, Any]], confidence: str) -> str:
     if not rows:
-        return "No patch-specific user reports have been counted yet."
+        return "No user reports found yet."
 
     source_types = [str(row.get("source_type") or row.get("source_name") or "").lower() for row in rows]
     reddit_count = sum(1 for value in source_types if "reddit" in value)
     if len(rows) <= 2:
-        report_word = "report is" if len(rows) == 1 else "reports are"
-        return f"Only {_number_word(len(rows))} patch-specific {report_word} confirmed so far, so this is a wait/test signal rather than broad consensus."
+        return "Too few reports for a firm verdict yet."
     if reddit_count and reddit_count / len(rows) >= 0.6:
-        return "Current evidence is Reddit-heavy, so production users should test before updating."
+        return "Current reports are Reddit-heavy, so production users should test before updating."
     if confidence.lower() in {"low", "insufficient"}:
-        return "The sample is still limited, so production users should test before updating."
-    return "This is a verified-report sample rather than a live consensus feed."
+        return "Small sample size; production users should test before updating."
+    return "This is a surfaced user-report sample, not a live telemetry feed."
 
 
 def _issue_cluster_sentence(themes: Counter) -> str:
     theme_phrases = _top_theme_phrases(themes)
     if theme_phrases:
-        return f"Confirmed reports cluster around {_join_public_list(theme_phrases)}."
-    return "Confirmed reports do not yet form a clean issue cluster."
+        return f"Current reports mention {_join_public_list(theme_phrases)}."
+    return "Current reports are too varied to group cleanly."
 
 
 def _load_method_health_rows() -> list[dict[str, Any]]:
@@ -633,14 +628,15 @@ def _public_summary(
     version_label = ver
     if count <= 0:
         return (
-            f"INSUFFICIENT DATA: {product_label} {version_label} has no confirmed patch-specific user reports yet. "
-            "Use the official source only until accepted evidence is available."
+            f"INSUFFICIENT DATA: {product_label} {version_label} has no user reports found yet. "
+            "Use the official source only until reports are available."
         )
     verdict = _recommendation_prefix(pid, ver, consensus_label, count)
     report_word = "report" if count == 1 else "reports"
+    sample_sentence = "Small sample size." if count < 8 else "User reports show a repeat pattern."
     return " ".join([
-        f"{verdict}: {product_label} {version_label} has {count} confirmed patch-specific {report_word}.",
-        f"Current read: {consensus_label.lower()} with {confidence} confidence.",
+        f"{verdict}: {product_label} {version_label} has {count} user {report_word} found.",
+        sample_sentence,
         _issue_cluster_sentence(themes),
         f"{_affected_workflow_sentence(pid, ver, consensus_label, themes)} {_source_limitation_sentence(rows, confidence)}",
     ])
@@ -664,11 +660,7 @@ def _public_consensus_report(
             sources.append(source)
     source_sentence = f"Sources represented: {_join_public_list(sources[:4])}." if sources else ""
     return " ".join(part for part in [
-        (
-            f"{count} confirmed patch-specific report{'s' if count != 1 else ''} "
-            f"{'are' if count != 1 else 'is'} counted for {product_label} {ver}. Current read: {consensus_label.lower()} "
-            f"with {confidence} confidence."
-        ),
+        f"{count} user report{'s' if count != 1 else ''} found for {product_label} {ver}.",
         _issue_cluster_sentence(themes),
         _source_limitation_sentence(rows, confidence),
         source_sentence,
@@ -685,7 +677,7 @@ def _public_sample_issue(pid: str, row: dict[str, Any]) -> str:
     return (
         _truncate_public_text(row.get("observed_issue_summary"), limit=150)
         or _truncate_public_text(row.get("report_title") or row.get("source_title") or row.get("parent_title"), limit=120)
-        or _clean_public_phrase(row.get("issue_theme"), fallback="Confirmed patch-specific report")
+        or _clean_public_phrase(row.get("issue_theme"), fallback="Patch-specific user report")
     )
 
 
@@ -783,11 +775,11 @@ def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], reco
         "update_report_count": count,
         "confirmed_patch_specific_report_count": count,
         "evidence_state": _evidence_state(count),
-        "evidence_state_label": "Official source only" if count == 0 else "Verified reports",
+        "evidence_state_label": "Official source only" if count == 0 else "User reports found",
         "consensus_collection_status": _collection_status(count),
         "update_consensus_label": consensus_label,
         "update_consensus_confidence": confidence,
-        "consensus_report_count_label": "confirmed patch-specific reports",
+        "consensus_report_count_label": "user reports found",
         "update_consensus_summary": summary,
         "consensus_report": report,
         "evidence_last_checked": evidence_last_checked,
@@ -799,18 +791,17 @@ def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], reco
         "evidence_source_limitations": _public_source_limitations(pid, ver, rows, confidence),
         "status_events_append": {
             "at": now,
-            "label": "Verified reports" if count > 0 else "Insufficient data",
+            "label": "User reports found" if count > 0 else "Insufficient data",
             "note": (
-                f"Verified report count updated to {count}; current read is "
-                f"{consensus_label.lower()} with {confidence} confidence."
+                f"User report count updated to {count}."
             ),
         },
     }
-    fields.update(_record_coherence_fields(pid, ver, count, record))
+    fields.update(_record_coherence_fields(pid, ver, count, record, themes))
     return fields
 
 
-def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, Any] | None) -> dict[str, Any]:
+def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, Any] | None, themes: Counter) -> dict[str, Any]:
     if count <= 0:
         return {}
     if not record:
@@ -822,7 +813,7 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
         if _davinci_version_is_beta(ver):
             return {
                 "quick_verdict": (
-                    f"WAIT for production systems: {product_label} {ver} is a beta build with confirmed reports behind the current caution signal."
+                    f"WAIT for production systems: {product_label} {ver} is a beta build with {count} user reports found."
                 ),
                 "update_decision_label": "WAIT for production systems",
                 "update_decision_body": (
@@ -834,43 +825,47 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
                 "practical_recommendations": [
                     "Wait for production systems unless you have a specific Resolve 21 beta feature to test.",
                     "Test beta projects separately from active client work and keep a known-good Resolve version available.",
-                    "Review the confirmed report sample before using this build on deadline-sensitive work.",
+                    "Review the user report sample before using this build on deadline-sensitive work.",
                 ],
                 "source_freshness_note": "",
             }
 
-        return {
-            "description": (
-                f"Published Apr 14, 2026. AUXSAYS tracks {product_label} {ver} stable/Studio separately from the Public Beta 1 page."
-            ),
-            "feed_hidden": False,
-            "update_status": "current",
-            "status_change_type": "new",
-            "notification_message": "",
-            "update_channel_label": "Stable / Studio evidence record",
+        fields = {
             "quick_verdict": (
-                f"WAIT: {product_label} {ver} has a small confirmed report sample, with reports pointing to render/export problems."
+                f"WAIT: {product_label} {ver} has {count} user reports found."
             ),
             "update_decision_label": "WAIT",
             "update_decision_body": (
-                "This page covers the stable Resolve 21 release. Public beta reports are excluded. Confirmed reports currently point to render/export failures, so production editors with active delivery deadlines should wait or test on copied projects."
+                f"{_issue_cluster_sentence(themes)} Production editors with active delivery deadlines should wait or test on copied projects."
             ),
             "record_note": (
-                f"This page covers the stable {product_label} {ver} release. Public Beta 1 reports are handled on the separate beta page."
-            ),
-            "official_summary": (
-                f"{product_label} {ver} is tracked here as the stable/Studio release record, separate from Public Beta 1."
-            ),
-            "release_summary": (
-                f"{product_label} {ver} is the stable/Studio record. Use this page for stable release risk and the beta page for beta-build risk."
+                f"This page covers {product_label} {ver}. Beta reports are excluded from this record."
             ),
             "practical_recommendations": [
                 "Wait if you have active render/export deadlines.",
                 "Test on copied projects before moving client work to this version.",
-                "Use the Public Beta 1 page for beta-build reports.",
+                "Review the sample reports before updating a production workstation.",
             ],
             "source_freshness_note": "",
         }
+        if str(ver).strip() == "21":
+            fields.update({
+                "description": (
+                    f"Published Apr 14, 2026. This page covers the stable {product_label} {ver} release. Public beta reports are excluded."
+                ),
+                "feed_hidden": False,
+                "update_status": "current",
+                "status_change_type": "new",
+                "notification_message": "",
+                "update_channel_label": "Stable / Studio release",
+                "official_summary": (
+                    f"{product_label} {ver} is tracked here as the stable/Studio release. Public Beta 1 reports are excluded."
+                ),
+                "release_summary": (
+                    f"{product_label} {ver} is the stable/Studio release. Use this page for stable release risk."
+                ),
+            })
+        return fields
 
     if pid == "obs-studio":
         archived = str(record.get("update_status") or "").strip().lower() == "archived"
@@ -885,7 +880,7 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
                 "Test on a backup profile before using this OBS build for live streams or important recordings, especially if your setup depends on plugins, capture devices, audio routing, or large scene collections."
             )
         return {
-            "quick_verdict": f"{decision_label}: {product_label} {ver} has confirmed patch-specific reports behind the current caution signal.",
+            "quick_verdict": f"{decision_label}: {product_label} {ver} has {count} user reports found.",
             "update_decision_label": decision_label,
             "update_decision_body": body,
             "practical_recommendations": [
@@ -945,18 +940,26 @@ def _write_json(payload: dict[str, Any], output: str | None) -> None:
 PUBLIC_INTERNAL_TERMS = (
     "consensus_evidence.yml",
     "deterministically accepted",
+    "source-backed",
     "source_weight",
     "promoted evidence rows",
     "promoted rows",
     "write-back",
     "writeback",
+    "verified reports set",
+    "not broad consensus",
+    "low-confidence",
+    "low confidence",
+    "broad consensus",
+    "yaml",
+    "collector",
     "candidate rows",
 )
 
 
 def _contains_internal_public_term(value: Any) -> bool:
     text = str(value or "").lower()
-    return any(term in text for term in PUBLIC_INTERNAL_TERMS)
+    return any(term.lower() in text for term in PUBLIC_INTERNAL_TERMS)
 
 
 def _sanitize_status_events(events: Any) -> list[dict[str, Any]]:
@@ -967,16 +970,47 @@ def _sanitize_status_events(events: Any) -> list[dict[str, Any]]:
         if not isinstance(event, dict):
             continue
         clean_event = dict(event)
-        if _contains_internal_public_term(clean_event.get("note")):
-            label = str(clean_event.get("label") or "").lower()
-            if "verified" in label:
-                clean_event["note"] = "Verified report count updated after the latest evidence pass."
-            elif "insufficient" in label:
-                clean_event["note"] = "Evidence state updated after the latest source check."
+        label = str(clean_event.get("label") or "").lower()
+        note = str(clean_event.get("note") or "").lower()
+        dirty_label = _contains_internal_public_term(clean_event.get("label")) or "verified" in label
+        dirty_note = (
+            _contains_internal_public_term(clean_event.get("note"))
+            or "verified report" in note
+            or "evidence state" in note
+        )
+        if dirty_label:
+            if "insufficient" in label:
+                clean_event["label"] = "Insufficient data"
+            elif "report" in label or "verified" in label:
+                clean_event["label"] = "User reports found"
+            else:
+                clean_event["label"] = "Record updated"
+        if dirty_note:
+            if "insufficient" in label:
+                clean_event["note"] = "Record status updated after the latest source check."
+            elif "report" in label or "verified" in label:
+                clean_event["note"] = "User report count updated after the latest evidence pass."
             else:
                 clean_event["note"] = "Record status updated after the latest evidence pass."
         sanitized.append(clean_event)
     return sanitized
+
+
+def _status_events_need_sanitization(events: Any) -> bool:
+    if not isinstance(events, list):
+        return False
+    return _sanitize_status_events(events) != events
+
+
+def _fields_for_record_write(data: dict[str, Any], fields: dict[str, Any]) -> dict[str, Any]:
+    compare_ignored = {"record_last_updated", "status_events_append"}
+    comparable_fields = {key: value for key, value in fields.items() if key not in compare_ignored}
+    content_changed = any(data.get(key) != value for key, value in comparable_fields.items())
+    if content_changed:
+        return fields
+    if _status_events_need_sanitization(data.get("status_events")):
+        return {"status_events": _sanitize_status_events(data.get("status_events"))}
+    return {}
 
 
 def _apply_record_fields(record_path: Path, fields: dict[str, Any]) -> dict[str, Any]:
@@ -1002,26 +1036,35 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Consensus-to-generated-record dry-run/write-back updater.")
     parser.add_argument("--dry-run", action="store_true", default=False, help="Show proposed changes without writing.")
     parser.add_argument("--write", action="store_true", default=False, help="Write matching generated record after all safety gates pass.")
-    parser.add_argument("--confirm-write", action="store_true", default=False, help="Required with --write.")
+    parser.add_argument("--write-all", action="store_true", default=False, help="Reconcile all matching generated records after all safety gates pass.")
+    parser.add_argument("--confirm-write", action="store_true", default=False, help="Required with --write or --write-all.")
     parser.add_argument("--product-id", default=None, help="Filter to a single product_id.")
     parser.add_argument("--update-version", default=None, help="Required with --write. Exact generated record update_version.")
-    parser.add_argument("--candidate-file", default=None, help="Candidate staging YAML file instead of production consensus_evidence.yml.")
+    parser.add_argument("--candidate-file", default=None, help="Candidate staging file instead of production evidence.")
     parser.add_argument("--output", default=None, help="Path to write JSON output.")
     parser.add_argument("--version-filter", default=None, help="Dry-run filter to a specific update_version string.")
     args = parser.parse_args(argv)
 
-    if args.write:
+    if args.write and args.write_all:
+        print("ERROR: Choose either --write or --write-all, not both.", file=sys.stderr)
+        return 2
+
+    write_requested = bool(args.write or args.write_all)
+
+    if write_requested:
         if not args.confirm_write:
-            print("ERROR: --write requires --confirm-write.", file=sys.stderr)
+            print("ERROR: Write mode requires --confirm-write.", file=sys.stderr)
             return 2
+        if args.candidate_file:
+            print("ERROR: Write mode cannot use --candidate-file. Promote rows to production evidence first.", file=sys.stderr)
+            return 2
+
+    if args.write:
         if not args.product_id:
             print("ERROR: --write requires --product-id.", file=sys.stderr)
             return 2
         if not args.update_version:
             print("ERROR: --write requires --update-version.", file=sys.stderr)
-            return 2
-        if args.candidate_file:
-            print("ERROR: --write cannot use --candidate-file. Promote rows to consensus_evidence.yml first.", file=sys.stderr)
             return 2
 
     if args.candidate_file:
@@ -1038,13 +1081,13 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
     records_index = _index_generated_records()
-    results = run_dry_run(evidence_path=evidence_path, product_id_filter=args.product_id, is_candidate_mode=is_candidate_mode, records_index=records_index, write_requested=args.write)
+    results = run_dry_run(evidence_path=evidence_path, product_id_filter=args.product_id, is_candidate_mode=is_candidate_mode, records_index=records_index, write_requested=write_requested)
 
-    version_filter = args.update_version if args.write else args.version_filter
+    version_filter = args.update_version if args.update_version else args.version_filter
     if version_filter:
         results = [r for r in results if r["update_version"] == version_filter]
 
-    payload = _payload(results, evidence_path=evidence_path, is_candidate_mode=is_candidate_mode, product_id_filter=args.product_id, version_filter=version_filter, records_index=records_index, write_mode_active=args.write)
+    payload = _payload(results, evidence_path=evidence_path, is_candidate_mode=is_candidate_mode, product_id_filter=args.product_id, version_filter=version_filter, records_index=records_index, write_mode_active=write_requested)
 
     if args.write:
         if len(results) != 1:
@@ -1072,6 +1115,68 @@ def main(argv: list[str] | None = None) -> int:
             "pre_write_evidence_state": snapshot["before"].get("evidence_state"),
             "post_write_evidence_state": snapshot["after"].get("evidence_state"),
         }
+
+    if args.write_all:
+        write_results: list[dict[str, Any]] = []
+        for result in results:
+            record_rel = result.get("matched_generated_record_path")
+            if int(result.get("confirmed_patch_specific_report_count") or 0) <= 0:
+                write_results.append({
+                    "success": True,
+                    "record_path": record_rel,
+                    "product_id": result["product_id"],
+                    "update_version": result["update_version"],
+                    "skipped": True,
+                    "reason": "No counted user reports for this group.",
+                })
+                continue
+            if not result["would_write"]:
+                write_results.append({
+                    "success": False,
+                    "record_path": record_rel,
+                    "product_id": result["product_id"],
+                    "update_version": result["update_version"],
+                    "skipped": True,
+                    "reason": result.get("write_blocked_reason"),
+                })
+                continue
+            if not record_rel:
+                write_results.append({
+                    "success": False,
+                    "record_path": None,
+                    "product_id": result["product_id"],
+                    "update_version": result["update_version"],
+                    "skipped": True,
+                    "reason": "No matching generated record path.",
+                })
+                continue
+            record_path = ROOT / record_rel
+            current_data = _load_front_matter(record_path)
+            fields_to_write = _fields_for_record_write(current_data, result["proposed_fields_if_written"])
+            if not fields_to_write:
+                write_results.append({
+                    "success": True,
+                    "record_path": record_rel,
+                    "product_id": result["product_id"],
+                    "update_version": result["update_version"],
+                    "skipped": True,
+                    "reason": "Already current.",
+                })
+                continue
+            snapshot = _apply_record_fields(record_path, fields_to_write)
+            write_results.append({
+                "success": True,
+                "record_path": str(record_path.relative_to(ROOT)),
+                "product_id": result["product_id"],
+                "update_version": result["update_version"],
+                "skipped": False,
+                "fields_written": sorted(k for k in fields_to_write.keys() if k != "status_events_append") + (["status_events"] if "status_events_append" in fields_to_write else []),
+                "pre_write_report_count": snapshot["before"].get("update_report_count"),
+                "post_write_report_count": snapshot["after"].get("update_report_count"),
+            })
+        payload["write_all_results"] = write_results
+        payload["records_written"] = sum(1 for item in write_results if item.get("success") and not item.get("skipped"))
+        payload["records_skipped"] = sum(1 for item in write_results if item.get("skipped"))
 
     _write_json(payload, args.output)
     print(

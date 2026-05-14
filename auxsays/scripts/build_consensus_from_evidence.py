@@ -228,24 +228,23 @@ def affected_workflow_sentence(product_id: str, version: str, label: str, themes
 
 def source_limitation_sentence(items: list[dict[str, Any]], confidence_label: str) -> str:
     if not items:
-        return "No patch-specific user reports have been counted yet."
+        return "No user reports found yet."
     source_types = [str(item.get("source_type") or item.get("source_name") or "").lower() for item in items]
     reddit_count = sum(1 for value in source_types if "reddit" in value)
     if len(items) <= 2:
-        report_word = "report is" if len(items) == 1 else "reports are"
-        return f"Only {number_word(len(items))} patch-specific {report_word} confirmed so far, so this is a wait/test signal rather than broad consensus."
+        return "Too few reports for a firm verdict yet."
     if reddit_count and reddit_count / len(items) >= 0.6:
-        return "Current evidence is Reddit-heavy, so production users should test before updating."
+        return "Current reports are Reddit-heavy, so production users should test before updating."
     if confidence_label.lower() in {"low", "insufficient"}:
-        return "The sample is still limited, so production users should test before updating."
-    return "This is a verified-report sample rather than a live consensus feed."
+        return "Small sample size; production users should test before updating."
+    return "This is a surfaced user-report sample, not a live telemetry feed."
 
 
 def issue_cluster_sentence(themes: Counter[str]) -> str:
     theme_phrases = top_theme_phrases(themes)
     if theme_phrases:
-        return f"Confirmed reports cluster around {join_public_list(theme_phrases)}."
-    return "Confirmed reports do not yet form a clean issue cluster."
+        return f"Current reports mention {join_public_list(theme_phrases)}."
+    return "Current reports are too varied to group cleanly."
 
 
 def consensus_summary(product_id: str, version: str, items: list[dict[str, Any]], counts: Counter[str], themes: Counter[str]) -> str:
@@ -253,15 +252,16 @@ def consensus_summary(product_id: str, version: str, items: list[dict[str, Any]]
     label_name = product_label(product_id)
     if total <= 0:
         return (
-            f"INSUFFICIENT DATA: {label_name} {version} has no confirmed patch-specific user reports yet. "
-            "Use the official source only until accepted evidence is available."
+            f"INSUFFICIENT DATA: {label_name} {version} has no user reports found yet. "
+            "Use the official source only until reports are available."
         )
     label = consensus_label(counts).lower()
     confidence_label = confidence(total)
     report_word = "report" if total == 1 else "reports"
+    sample_sentence = "Small sample size." if total < 8 else "User reports show a repeat pattern."
     return " ".join([
-        f"{recommendation_prefix(product_id, version, label, total)}: {label_name} {version} has {total} confirmed patch-specific {report_word}.",
-        f"Current read: {label} with {confidence_label} confidence.",
+        f"{recommendation_prefix(product_id, version, label, total)}: {label_name} {version} has {total} user {report_word} found.",
+        sample_sentence,
         issue_cluster_sentence(themes),
         f"{affected_workflow_sentence(product_id, version, label, themes)} {source_limitation_sentence(items, confidence_label)}",
     ])

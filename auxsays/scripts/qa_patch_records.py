@@ -29,11 +29,20 @@ KNOWN_SOURCE_TYPES = PATCH_NOTE_SOURCE_TYPES | NON_PATCH_NOTE_SOURCE_TYPES | OPE
 BANNED_PUBLIC_TERMS = {
     "consensus_evidence.yml",
     "deterministically accepted",
+    "source-backed",
     "source_weight",
     "promoted evidence rows",
     "promoted rows",
     "write-back",
     "writeback",
+    "verified reports",
+    "verified reports set",
+    "not broad consensus",
+    "low-confidence",
+    "low confidence",
+    "broad consensus",
+    "evidence state",
+    "yaml",
     "collector",
     "candidate rows",
 }
@@ -197,10 +206,10 @@ def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]
     if evidence_state and evidence_state not in VALID_EVIDENCE_STATES:
         add(warnings, path, "unknown_evidence_state", f"Evidence state '{evidence_state}' is not in the normalized taxonomy.")
     if contains_public_static_sample(data):
-        add(errors, path, "public_static_sample_wording", "Public-facing generated record data still contains obsolete sample wording. Use 'Verified reports' for confirmed report samples.")
+        add(errors, path, "public_static_sample_wording", "Public-facing generated record data still contains obsolete sample wording. Use 'User reports found'.")
     public_text = public_record_text(data)
     if ("Pilot" + " sample") in public_text or ("pilot" + " sample") in public_text:
-        add(errors, path, "public_pilot_sample_wording", "Public-facing generated record data still contains obsolete verified-report wording. Use 'Verified reports'.")
+        add(errors, path, "public_pilot_sample_wording", "Public-facing generated record data still contains obsolete pilot-sample wording. Use 'User reports found'.")
     public_text_lower = public_text.lower()
     for term in sorted(BANNED_PUBLIC_TERMS):
         if term in public_text_lower:
@@ -284,7 +293,7 @@ def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]
                 path,
                 "manual_watch_nonzero_verified_count",
                 f"intelligence_stage is manual_watch but update_report_count is {report_count}. "
-                "Verified report counts must be 0 for manual_watch records unless a separate "
+                "User report counts must be 0 for manual_watch records unless a separate "
                 "legacy_manual_report_count field preserves historical context.",
             )
 
@@ -348,9 +357,9 @@ def scan_update_layout_public_copy() -> tuple[list[dict[str, str]], list[dict[st
     forbidden_public_copy = {
         "Practical recommendation": "Use public heading 'Recommendation' instead.",
         "Evidence methodology details": "Use 'Consensus Report' for report-bearing pages and hide the large section for 0-report pages.",
-        "Static" + " sample": "Public-facing wording must use Verified reports.",
-        "Pilot" + " sample": "Public-facing wording must use Verified reports.",
-        "pilot" + " sample": "Public-facing wording must use Verified reports.",
+        "Static" + " sample": "Public-facing wording must use User reports found.",
+        "Pilot" + " sample": "Public-facing wording must use User reports found.",
+        "pilot" + " sample": "Public-facing wording must use User reports found.",
         "Intel" + " Status": "Public-facing wording must use Evidence Status.",
         "Official sources are listed first": "Sources should render as concise citations without filler intro copy.",
         "Community bug reports are shown": "Sources should not repeat methodology filler.",

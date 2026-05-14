@@ -49,6 +49,10 @@ jobs:
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: python auxsays/scripts/build_consensus_from_evidence.py
 
+      - name: Reconcile generated evidence records
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: python auxsays/scripts/apply_consensus_to_records.py --write-all --confirm-write
+
       - name: QA patch records
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: python auxsays/scripts/qa_patch_records.py
@@ -74,7 +78,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add auxsays/_data/consensus_evidence.yml auxsays/_data/evidence_method_health.yml auxsays/updates/generated/*davinci*.md
+          git add auxsays/_data/consensus_evidence.yml auxsays/_data/evidence_method_health.yml auxsays/updates/generated/*.md
           if git diff --cached --quiet; then
             echo "No material DaVinci evidence changes to commit."
             echo "changed=false" >> "$GITHUB_OUTPUT"

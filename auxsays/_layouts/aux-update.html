@@ -59,7 +59,7 @@ layout: aux-base
   {% assign evidence_state = 'Live consensus' %}
   {% assign evidence_state_class = 'live' %}
 {% elsif collection_status == 'pilot_initial_sample' or collection_status == 'static_initial_sample' or page.evidence_state == 'pilot_sample' or page.evidence_state == 'static_sample' %}
-  {% assign evidence_state = 'Verified reports' %}
+  {% assign evidence_state = 'User reports found' %}
   {% assign evidence_state_class = 'pilot' %}
 {% elsif official_captured %}
   {% assign evidence_state = 'Official source only' %}
@@ -82,13 +82,13 @@ layout: aux-base
 {% assign decision_body = page.update_decision_body %}
 {% if verdict_text == blank %}
   {% if evidence_state == 'Live consensus' %}
-    {% assign verdict_text = 'Consensus collection is active for this patch. Review the confirmed patch-specific reports and official notes before upgrading.' %}
-  {% elsif evidence_state == 'Verified reports' %}
-    {% assign verdict_text = 'This record includes verified patch-specific reports. It is not a live community telemetry feed.' %}
+    {% assign verdict_text = 'Consensus collection is active for this patch. Review the user reports and official notes before upgrading.' %}
+  {% elsif evidence_state == 'User reports found' %}
+    {% assign verdict_text = 'This record includes patch-specific user reports. It is not a live telemetry feed.' %}
   {% elsif evidence_state == 'Official source only' %}
     {% assign verdict_text = 'Official source captured. Community consensus is not live yet for this patch.' %}
   {% else %}
-    {% assign verdict_text = 'Insufficient data. AUXSAYS has not captured enough official or confirmed community evidence for a recommendation.' %}
+    {% assign verdict_text = 'Insufficient data. AUXSAYS has not captured enough official or community evidence for a recommendation.' %}
   {% endif %}
 {% endif %}
 {% assign decision_label = page.update_decision_label | default: verdict_text %}
@@ -98,15 +98,21 @@ layout: aux-base
     {% assign verdict_text = 'Security-sensitive update. Test first if your workflow is fragile, but do not ignore security exposure.' %}
     {% assign decision_body = verdict_text %}
   {% else %}
-    {% assign verdict_text = 'Official source captured. No confirmed patch-specific reports have been counted.' %}
+    {% assign verdict_text = 'Official source captured. No user reports have been counted.' %}
     {% assign decision_body = verdict_text %}
   {% endif %}
 {% endif %}
 {% assign patch_specific_reports_label = 'Not counted yet' %}
 {% if report_count > 0 %}
-  {% assign patch_specific_reports_label = 'Yes' %}
+  {% capture patch_specific_reports_label %}{{ report_count }} found{% endcapture %}
 {% elsif evidence_state == 'Official source only' %}
-  {% assign patch_specific_reports_label = 'No confirmed reports yet' %}
+  {% assign patch_specific_reports_label = 'No user reports yet' %}
+{% endif %}
+{% assign sample_size_label = 'Unavailable' %}
+{% if report_count > 0 and report_count < 8 %}
+  {% assign sample_size_label = 'Small sample size' %}
+{% elsif report_count >= 8 %}
+  {% assign sample_size_label = 'Growing sample' %}
 {% endif %}
 {% assign summary_text = page.release_summary | default: page.official_summary | default: page.description %}
 {% assign record_note_text = page.record_note | default: '' | strip %}
@@ -120,8 +126,8 @@ layout: aux-base
 {% assign intel_status_label = 'Insufficient data' %}
 {% if evidence_state == 'Official source only' %}
   {% assign intel_status_label = 'Official source only' %}
-{% elsif evidence_state == 'Verified reports' %}
-  {% assign intel_status_label = 'Verified reports' %}
+{% elsif evidence_state == 'User reports found' %}
+  {% assign intel_status_label = 'User reports found' %}
 {% elsif evidence_state == 'Live consensus' %}
   {% assign intel_status_label = 'Live consensus' %}
 {% endif %}
@@ -204,7 +210,7 @@ layout: aux-base
       <div class="update-verdict-card update-verdict-card--clean">
         <div class="consensus-compact">
           <span><strong>Consensus:</strong> <em class="consensus-word consensus-word--{{ reaction_class }}">{{ reaction }}</em></span>
-          <span class="consensus-secondary">{{ report_count }} confirmed patch-specific reports • {{ page.update_consensus_confidence | default: 'Low' }} confidence</span>
+          <span class="consensus-secondary">{{ report_count }} user report{% unless report_count == 1 %}s{% endunless %} found</span>
           {% if report_count > 0 %}<span class="consensus-secondary">Evidence last checked: {{ evidence_checked_label }}</span>{% endif %}
         </div>
         <div class="consensus-position-graph consensus-position-graph--hero" style="--consensus-pos: {{ consensus_score_percent }}%;">
@@ -227,10 +233,10 @@ layout: aux-base
           {% if decision_body != blank %}<p>{{ decision_body }}</p>{% elsif decision_label != verdict_text %}<p>{{ verdict_text }}</p>{% endif %}
         </div>
         <dl class="update-decision-grid">
-          <div><dt>Confidence</dt><dd>{{ page.update_consensus_confidence | default: 'Low' }}</dd></div>
+          <div><dt>Sample size</dt><dd>{{ sample_size_label }}</dd></div>
           <div><dt>Evidence Status</dt><dd>{{ intel_status_label }}</dd></div>
           <div><dt>Official source captured</dt><dd>{{ source_captured_label }}</dd></div>
-          <div><dt>Confirmed reports counted</dt><dd>{{ report_count }}</dd></div>
+          <div><dt>Reports counted</dt><dd>{{ report_count }}</dd></div>
           <div><dt>Patch-specific user reports</dt><dd>{{ patch_specific_reports_label }}</dd></div>
           <div><dt>Official source checked</dt><dd>{{ source_checked_label }}</dd></div>
           <div><dt>Official notes checked</dt><dd>{{ official_body_checked_label }}</dd></div>
@@ -297,13 +303,13 @@ layout: aux-base
     {% if page.evidence_samples and page.evidence_samples.size > 0 %}
     <article id="community-risk" class="panel update-info-card update-evidence-sample-card update-order-community-risk">
       <h2>Community risk sample</h2>
-      <p class="update-section-intro">Confirmed examples behind the current recommendation.</p>
+      <p class="update-section-intro">Representative examples behind the current recommendation.</p>
       <div class="update-evidence-sample-grid">
         {% for item in page.evidence_samples limit: visible_evidence_limit %}
         <article class="update-evidence-sample">
           <div class="update-evidence-sample__topline">
             <span>{{ item.source_name | default: 'Source' }}</span>
-            {% if item.counted == true %}<em>Counted: Yes</em>{% endif %}
+            {% if item.counted == true %}<em>Included</em>{% endif %}
           </div>
           <h3>{% if item.source_url %}<a href="{{ item.source_url }}">{{ item.source_title }}</a>{% else %}{{ item.source_title }}{% endif %}</h3>
           <dl>
@@ -349,7 +355,7 @@ layout: aux-base
       <h2>Recommendation</h2>
       {% if official_only_zero_reports %}
         <p><strong>No AUXSAYS recommendation yet.</strong></p>
-        <p>{% if security_sensitive %}Security-sensitive update. Test first if your workflow is fragile, but do not ignore security exposure.{% else %}Official source captured. No confirmed patch-specific reports have been counted.{% endif %}</p>
+        <p>{% if security_sensitive %}Security-sensitive update. Test first if your workflow is fragile, but do not ignore security exposure.{% else %}Official source captured. No user reports have been counted.{% endif %}</p>
       {% else %}
         <ul class="update-practical-list">
           {% for item in page.practical_recommendations %}<li>{{ item }}</li>{% endfor %}
@@ -363,7 +369,7 @@ layout: aux-base
       <h2>Consensus Report</h2>
       <div class="consensus-compact consensus-compact--card">
         <span><strong>Evidence Status:</strong> <em class="consensus-word consensus-word--{{ reaction_class }}">{{ intel_status_label }}</em></span>
-        <span class="consensus-secondary">{{ report_count }} confirmed patch-specific reports • {{ page.update_consensus_confidence | default: 'Low' }} confidence</span>
+        <span class="consensus-secondary">{{ report_count }} user report{% unless report_count == 1 %}s{% endunless %} found</span>
         <span class="consensus-secondary">Evidence last checked: {{ evidence_checked_label }}</span>
       </div>
       <div class="consensus-position-graph consensus-position-graph--card" style="--consensus-pos: {{ consensus_score_percent }}%;">

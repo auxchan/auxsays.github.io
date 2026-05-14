@@ -14,7 +14,7 @@ layout: aux-base
   <section class="panel patch-hero reveal-up">
     <div class="eyebrow">Release intelligence</div>
     <h1 class="patch-title">Patch Feed</h1>
-    <p class="patch-subtitle">Official notes first. Confirmed patch-specific community evidence second. Track what changed, what is official-source only, what has verified reports, and which creator-critical tools deserve active monitoring.</p>
+    <p class="patch-subtitle">Official notes first. Patch-specific user reports second. Track what changed, what is official-source only, what has user reports, and which creator-critical tools deserve active monitoring.</p>
     <p class="patch-methodology-link"><a href="{{ '/updates/methodology/' | relative_url }}">Read the AUXSAYS methodology →</a></p>
   </section>
 
@@ -240,7 +240,7 @@ layout: aux-base
           </a>
           <span class="patch-status-stack">
             <span class="patch-status patch-status--{{ reaction_class }}">{{ reaction }}</span>
-            <span class="patch-report-count">{{ item.update_report_count | default: 0 }} confirmed</span>
+            <span class="patch-report-count">{{ item.update_report_count | default: 0 }} user report{% unless item.update_report_count == 1 %}s{% endunless %}</span>
           </span>
         </div>
         {% if item.update_feed_title != blank %}
@@ -259,7 +259,7 @@ layout: aux-base
         <div class="patch-consensus-block">
           <span class="patch-consensus-label">Patch-specific consensus</span>
           <p class="patch-consensus-line">{{ consensus_summary }}</p>
-          <span class="patch-consensus-meta">{{ item.update_report_count | default: 0 }} confirmed patch-specific reports{% if item.update_consensus_confidence %} • {{ item.update_consensus_confidence }} confidence{% endif %}</span>
+          <span class="patch-consensus-meta">{{ item.update_report_count | default: 0 }} user report{% unless item.update_report_count == 1 %}s{% endunless %} found</span>
         </div>
         {% endif %}
         <div class="patch-card-links">
@@ -320,7 +320,7 @@ layout: aux-base
             </a>
             <span class="patch-status-stack">
               <span class="patch-status patch-status--{{ reaction_class }}">{{ reaction }}</span>
-              <span class="patch-report-count">{{ item.update_report_count | default: 0 }} confirmed</span>
+              <span class="patch-report-count">{{ item.update_report_count | default: 0 }} user report{% unless item.update_report_count == 1 %}s{% endunless %}</span>
             </span>
           </div>
           {% if item.update_feed_title != blank %}
@@ -339,7 +339,7 @@ layout: aux-base
           <div class="patch-consensus-block">
             <span class="patch-consensus-label">Patch-specific consensus</span>
             <p class="patch-consensus-line">{{ consensus_summary }}</p>
-            <span class="patch-consensus-meta">{{ item.update_report_count | default: 0 }} confirmed patch-specific reports{% if item.update_consensus_confidence %} • {{ item.update_consensus_confidence }} confidence{% endif %}</span>
+            <span class="patch-consensus-meta">{{ item.update_report_count | default: 0 }} user report{% unless item.update_report_count == 1 %}s{% endunless %} found</span>
           </div>
           {% endif %}
           <div class="patch-card-links">
