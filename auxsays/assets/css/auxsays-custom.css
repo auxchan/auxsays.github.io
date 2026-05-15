@@ -4990,14 +4990,47 @@ button, input, select, textarea { font: inherit; }
 .update-evidence-card.update-verdict-card--clean {
   display: grid;
   align-items: stretch;
+  gap: .82rem;
   width: min(820px, 100%);
   padding: .9rem 1rem;
+}
+
+.update-evidence-card .consensus-compact {
+  display: grid;
+  gap: .48rem;
+}
+
+.update-evidence-summary-line {
+  width: fit-content;
+  max-width: 100%;
+}
+
+.update-evidence-card .update-evidence-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .38rem .55rem;
+}
+
+.update-evidence-meta-row .consensus-secondary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.65rem;
+  padding: .2rem .55rem;
+  border: 1px solid rgba(95,212,229,.16);
+  border-radius: 999px;
+  background: rgba(95,212,229,.045);
+  color: var(--text-1);
+  font-size: .74rem;
+  font-weight: 800;
+  letter-spacing: .075em;
+  line-height: 1.2;
+  text-transform: uppercase;
 }
 
 .update-evidence-card .consensus-position-graph {
   width: 100%;
   max-width: 100%;
-  margin-top: .45rem;
+  margin-top: .08rem;
 }
 
 .consensus-chart-meta {

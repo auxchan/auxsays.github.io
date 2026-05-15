@@ -211,9 +211,13 @@ layout: aux-base
 
       <div class="update-verdict-card update-verdict-card--clean update-evidence-card" aria-label="User report evidence summary">
         <div class="consensus-compact">
-          <span><strong>Evidence summary:</strong> <em class="consensus-word consensus-word--{{ evidence_metric_class }}">{{ evidence_metric_label }}</em></span>
-          {% if page.update_published_at != blank %}<span class="consensus-secondary">Release date: {{ page.update_published_at | date: "%b %-d, %Y" }}</span>{% endif %}
-          {% if file_size_present %}<span class="consensus-secondary">File size: {{ patch_file_size_clean }}</span>{% endif %}
+          <span class="update-evidence-summary-line"><strong>Evidence summary:</strong> <em class="consensus-word consensus-word--{{ evidence_metric_class }}">{{ evidence_metric_label }}</em></span>
+          {% if page.update_published_at != blank or file_size_present %}
+          <span class="update-evidence-meta-row">
+            {% if page.update_published_at != blank %}<span class="consensus-secondary">Release date: {{ page.update_published_at | date: "%b %-d, %Y" }}</span>{% endif %}
+            {% if file_size_present %}<span class="consensus-secondary">File size: {{ patch_file_size_clean }}</span>{% endif %}
+          </span>
+          {% endif %}
         </div>
         <div class="consensus-position-graph consensus-position-graph--hero" style="--consensus-pos: {{ consensus_score_percent }}%;">
           <div class="consensus-scale" aria-hidden="true">
