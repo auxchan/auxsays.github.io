@@ -5207,3 +5207,95 @@ button, input, select, textarea { font: inherit; }
     grid-template-columns: 1fr;
   }
 }
+
+/* Official Patch Notes simplification: readable release notes with lighter AUX nodes. */
+.update-official-details > .official-patch-notes.node-bullet-scope {
+  margin-top: .9rem;
+  padding: .15rem 0 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+.update-official-details > .official-patch-notes.node-bullet-scope p {
+  max-width: 74rem;
+  color: var(--text-1);
+  line-height: 1.72;
+  overflow-wrap: break-word;
+}
+
+.update-official-details > .official-patch-notes.node-bullet-scope ul {
+  display: grid;
+  gap: .78rem;
+  margin: 1rem 0 0 !important;
+  padding-left: 1.72rem !important;
+}
+
+.update-official-details > .official-patch-notes.node-bullet-scope li {
+  --node-size: 9px;
+  --node-left: -1.08rem;
+  margin: 0 !important;
+  padding: .18rem .45rem .52rem .82rem !important;
+  border: 0;
+  border-radius: 9px;
+  background: transparent;
+  color: var(--text-1);
+  font-weight: 450;
+  line-height: 1.68 !important;
+  overflow-wrap: break-word;
+  text-wrap: pretty;
+  transition: background .18s ease, color .18s ease;
+}
+
+.update-official-details > .official-patch-notes.node-bullet-scope li::before {
+  left: var(--node-left);
+  top: .98em;
+  width: var(--node-size);
+  height: var(--node-size);
+  background: rgba(52,217,248,.82);
+  border-color: rgba(240,202,103,.68);
+  opacity: .84;
+  box-shadow: 0 0 0 1px rgba(52,217,248,.12), 0 0 8px rgba(52,217,248,.22);
+}
+
+.update-official-details > .official-patch-notes.node-bullet-scope li:not(:last-child)::after {
+  left: var(--node-left);
+  top: calc(.98em + 6px);
+  height: calc(100% + .64rem);
+  background: linear-gradient(180deg, rgba(52,217,248,.38), rgba(52,217,248,.07));
+}
+
+.update-official-details > .official-patch-notes.node-bullet-scope li:hover {
+  color: var(--text-0);
+  background: rgba(95,212,229,.032);
+}
+
+.update-official-details > .official-patch-notes.node-bullet-scope li:hover::before {
+  opacity: 1;
+  background: var(--cyan-1);
+  transform: translate(-50%, -50%) scale(1.2);
+  box-shadow: 0 0 0 1px rgba(240,202,103,.36), 0 0 16px rgba(52,217,248,.58), 0 0 28px rgba(52,217,248,.18);
+}
+
+.update-official-details > .official-patch-notes.node-bullet-scope li:hover::after {
+  background: linear-gradient(180deg, rgba(52,217,248,.72), rgba(52,217,248,.13));
+  box-shadow: 0 0 12px rgba(52,217,248,.16);
+}
+
+.update-official-details > .official-patch-notes.node-bullet-scope li ul {
+  gap: .46rem;
+  margin: .58rem 0 0 !important;
+  padding-left: 1.35rem !important;
+}
+
+.update-official-details > .official-patch-notes.node-bullet-scope li li {
+  padding-top: .08rem !important;
+  padding-bottom: .22rem !important;
+  line-height: 1.62 !important;
+}
+
+.update-official-details > .official-patch-notes.node-bullet-scope a {
+  color: var(--accent-1);
+  font-weight: 650;
+  text-underline-offset: .18em;
+}
