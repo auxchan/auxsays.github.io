@@ -2640,3 +2640,27 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+- id: blackmagic-davinci-20-3-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1tdykoa-timeline-playback-popping-sound-between-a
+  product_id: blackmagic-davinci
+  update_version: 20.3.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1tdykoa/timeline_playback_popping_sound_between_audio/
+  parent_title: Timeline playback popping sound between audio clips
+  report_title: Timeline playback popping sound between audio clips
+  report_text_excerpt: 'Timeline playback popping sound between audio clips FIXED: I solved it by using a audio transition cross-fade. I think my problem was a "jump cut pop" which happens when two audio clips are so dissimilar when transitioning. I couldn''t add it before because of "insufficient...'
+  captured_at: '2026-05-15T15:28:38Z'
+  source_date: '2026-05-15'
+  target_release_date: '2025-12-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1

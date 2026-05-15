@@ -1,7 +1,8 @@
 ---
 layout: aux-update
 title: DaVinci Resolve 21 official update breakdown
-description: Published Apr 14, 2026. This page covers the stable DaVinci Resolve 21 release. Public beta reports are excluded.
+description: Published Apr 14, 2026. This page covers the stable DaVinci Resolve 21 release. Public beta reports
+  are excluded.
 permalink: /updates/blackmagic-design/davinci-resolve/21/
 update_entry: true
 feed_hidden: false
@@ -19,9 +20,9 @@ update_status: current
 update_feed_title: DaVinci Resolve 21
 update_detail_title: DaVinci Resolve 21
 update_consensus_label: Negative
-update_consensus_summary: 'WAIT: DaVinci Resolve 21 has 2 user reports found. Small sample size. Current reports mention render/export
-  failures. Production editors with active export deadlines should wait unless they need a specific fix. Too few reports for
-  a firm verdict yet.'
+update_consensus_summary: 'WAIT: DaVinci Resolve 21 has 2 user reports found. Small sample size. Current reports
+  mention render/export failures. Production editors with active export deadlines should wait unless they need a
+  specific fix. Too few reports for a firm verdict yet.'
 update_report_count: 2
 update_consensus_confidence: Low
 status_change_type: new
@@ -37,13 +38,13 @@ patch_file_size_status: not_provided_by_source
 update_channel_label: Stable / Studio release
 quick_verdict: 'WAIT: DaVinci Resolve 21 has 2 user reports found.'
 update_decision_label: WAIT
-update_decision_body: Current reports mention render/export failures. Production editors with active delivery deadlines should
-  wait or test on copied projects.
+update_decision_body: Current reports mention render/export failures. Production editors with active delivery deadlines
+  should wait or test on copied projects.
 source_freshness_note: ''
 record_note: This page covers DaVinci Resolve 21. Beta reports are excluded from this record.
 official_summary: DaVinci Resolve 21 is tracked here as the stable/Studio release. Public Beta 1 reports are excluded.
-consensus_report: '2 user reports found for DaVinci Resolve 21. Current reports mention render/export failures. Too few reports
-  for a firm verdict yet. Sources represented: r/davinciresolve.'
+consensus_report: '2 user reports found for DaVinci Resolve 21. Current reports mention render/export failures.
+  Too few reports for a firm verdict yet. Sources represented: r/davinciresolve.'
 status_events:
 - at: '2026-04-14T00:00:00Z'
   label: Update released
@@ -132,7 +133,7 @@ official_source_attempts:
   body_captured: false
   checksums_captured: false
 evidence_last_checked: '2026-05-13T19:32:01Z'
-record_last_updated: '2026-05-15T00:07:10.263181Z'
+record_last_updated: '2026-05-15T15:30:37.714210Z'
 intelligence_stage: pilot
 evidence_samples:
 - source_name: r/davinciresolve
@@ -157,7 +158,7 @@ accepted_report_sources:
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1tc8hvq/video_breaks_when_i_export_it/
   source_title: Video breaks when i export it
-  source_date: 2026 05 13T19:32:01Z
+  source_date: '2026-05-13'
   version_matched: '21'
   patch_version_matched: true
   issue: render/export failures
@@ -166,7 +167,7 @@ accepted_report_sources:
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1skz03l/davinci_resolve_21_problem/
   source_title: Davinci Resolve 21 problem
-  source_date: 2026 05 13T19:32:01Z
+  source_date: '2026-04-14'
   version_matched: '21'
   patch_version_matched: true
   issue: render/export failures
