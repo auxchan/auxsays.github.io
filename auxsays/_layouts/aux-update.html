@@ -165,6 +165,8 @@ layout: aux-base
 {% endif %}
 {% assign file_size_renderable = false %}
 {% if file_size_present or file_size_label != blank %}{% assign file_size_renderable = true %}{% endif %}
+{% assign file_size_pill_value = '' %}
+{% if file_size_present %}{% assign file_size_pill_value = patch_file_size_clean | strip %}{% endif %}
 {% assign technical_details_renderable = false %}
 {% if checksum_present or file_size_renderable or source_checked_at != blank or official_body_checked_at != blank or page.update_published_at != blank %}{% assign technical_details_renderable = true %}{% endif %}
 {% assign visible_evidence_limit = page.evidence_sample_visible_limit | default: 5 | plus: 0 %}
@@ -213,15 +215,15 @@ layout: aux-base
       <div class="update-meta-strip">
         {% if product_name_clean != blank %}
           {% if product_url_clean != blank %}
-          <a href="{{ product_url_clean | relative_url }}">Product: {{ product_name_clean }}</a>
+          <a class="update-meta-pill" href="{{ product_url_clean | relative_url }}"><span class="update-meta-pill__label">Product</span><span class="update-meta-pill__value">{{ product_name_clean }}</span></a>
           {% else %}
-          <span>Product: {{ product_name_clean }}</span>
+          <span class="update-meta-pill"><span class="update-meta-pill__label">Product</span><span class="update-meta-pill__value">{{ product_name_clean }}</span></span>
           {% endif %}
         {% endif %}
-        {% if update_version_clean != blank %}<span>Version: {{ update_version_clean }}</span>{% endif %}
-        {% if release_channel_pill_clean != blank %}<span>{{ release_channel_pill_clean }}</span>{% endif %}
-        {% if page.update_published_at != blank %}<span>Release date: {{ page.update_published_at | date: "%b %-d, %Y" }}</span>{% endif %}
-        {% if file_size_present %}<span>File size: {{ patch_file_size_clean }}</span>{% endif %}
+        {% if update_version_clean != blank %}<span class="update-meta-pill"><span class="update-meta-pill__label">Version</span><span class="update-meta-pill__value">{{ update_version_clean }}</span></span>{% endif %}
+        {% if release_channel_pill_clean != blank %}<span class="update-meta-pill update-meta-pill--channel"><span class="update-meta-pill__value">{{ release_channel_pill_clean }}</span></span>{% endif %}
+        {% if page.update_published_at != blank %}<span class="update-meta-pill"><span class="update-meta-pill__label">Release date</span><span class="update-meta-pill__value">{{ page.update_published_at | date: "%b %-d, %Y" }}</span></span>{% endif %}
+        {% if file_size_pill_value != blank %}<span class="update-meta-pill"><span class="update-meta-pill__label">File size</span><span class="update-meta-pill__value">{{ file_size_pill_value }}</span></span>{% endif %}
       </div>
 
       <div class="update-verdict-card update-verdict-card--clean update-evidence-card" aria-label="User report evidence summary">

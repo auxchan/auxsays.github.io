@@ -2959,11 +2959,15 @@ button, input, select, textarea { font: inherit; }
 .update-meta-strip > span {
   display: inline-flex;
   align-items: center;
+  gap: .34rem;
   min-height: 2rem;
   padding: .36rem .7rem;
   border-radius: 999px;
-  border: 1px solid var(--border-subtle);
-  background: rgba(255,255,255,.025);
+  border: 1px solid rgba(202,226,232,.18);
+  background: rgba(255,255,255,.055);
+  color: var(--text-0);
+  line-height: 1.2;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.025);
 }
 
 .update-meta-strip > a:empty,
@@ -2972,8 +2976,26 @@ button, input, select, textarea { font: inherit; }
 }
 
 .update-meta-strip a {
-  color: var(--accent-1);
+  color: var(--text-0);
   font-weight: 800;
+}
+
+.update-meta-pill__label {
+  color: rgba(217,231,235,.72);
+  font-weight: 750;
+}
+
+.update-meta-pill__value {
+  color: #f4fbfc;
+  font-weight: 850;
+}
+
+.update-meta-strip a .update-meta-pill__value {
+  color: #c8f7ff;
+}
+
+.update-meta-pill--channel .update-meta-pill__value {
+  color: #f5de9a;
 }
 
 .update-verdict-card--clean {
