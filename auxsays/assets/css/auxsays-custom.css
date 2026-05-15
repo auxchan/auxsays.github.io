@@ -2955,8 +2955,8 @@ button, input, select, textarea { font: inherit; }
   text-transform: uppercase;
 }
 
-.update-meta-strip a,
-.update-meta-strip span {
+.update-meta-strip > a,
+.update-meta-strip > span {
   display: inline-flex;
   align-items: center;
   min-height: 2rem;
@@ -2964,6 +2964,11 @@ button, input, select, textarea { font: inherit; }
   border-radius: 999px;
   border: 1px solid var(--border-subtle);
   background: rgba(255,255,255,.025);
+}
+
+.update-meta-strip > a:empty,
+.update-meta-strip > span:empty {
+  display: none !important;
 }
 
 .update-meta-strip a {
@@ -3184,8 +3189,8 @@ button, input, select, textarea { font: inherit; }
   margin: .9rem 0 1rem;
 }
 
-.update-meta-strip a,
-.update-meta-strip span {
+.update-meta-strip > a,
+.update-meta-strip > span {
   min-height: 1.82rem;
   padding: .28rem .62rem;
   font-size: .72rem;
@@ -3229,8 +3234,8 @@ button, input, select, textarea { font: inherit; }
     gap: .4rem;
   }
 
-  .update-meta-strip a,
-  .update-meta-strip span {
+  .update-meta-strip > a,
+  .update-meta-strip > span {
     width: auto;
     max-width: 100%;
   }

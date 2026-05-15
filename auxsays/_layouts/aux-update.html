@@ -189,10 +189,8 @@ layout: aux-base
 {% assign update_version_clean = page.update_version | default: '' | strip %}
 {% assign update_channel_clean = page.update_channel_label | default: '' | strip %}
 {% assign release_channel_clean = page.release_channel_label | default: '' | strip %}
-{% assign update_platform_clean = page.update_platform_label | default: '' | strip %}
-{% assign platform_label_clean = page.platform_label | default: '' | strip %}
 {% assign release_type_clean = page.release_type_label | default: '' | strip %}
-{% assign update_type_clean = page.update_type | default: '' | strip | replace: '-', ' ' %}
+{% assign release_channel_pill_clean = update_channel_clean | default: release_channel_clean | default: release_type_clean | strip %}
 
 <div id="top" class="update-page-shell reveal-up">
   <section class="panel update-hero update-hero--v3">
@@ -221,9 +219,7 @@ layout: aux-base
           {% endif %}
         {% endif %}
         {% if update_version_clean != blank %}<span>Version: {{ update_version_clean }}</span>{% endif %}
-        {% if update_channel_clean != blank %}<span>{{ update_channel_clean }}</span>{% elsif release_channel_clean != blank %}<span>{{ release_channel_clean }}</span>{% endif %}
-        {% if update_platform_clean != blank %}<span>{{ update_platform_clean }}</span>{% elsif platform_label_clean != blank %}<span>{{ platform_label_clean }}</span>{% endif %}
-        {% if release_type_clean != blank %}<span>{{ release_type_clean }}</span>{% elsif update_type_clean != blank %}<span>{{ update_type_clean }}</span>{% endif %}
+        {% if release_channel_pill_clean != blank %}<span>{{ release_channel_pill_clean }}</span>{% endif %}
         {% if page.update_published_at != blank %}<span>Release date: {{ page.update_published_at | date: "%b %-d, %Y" }}</span>{% endif %}
         {% if file_size_present %}<span>File size: {{ patch_file_size_clean }}</span>{% endif %}
       </div>

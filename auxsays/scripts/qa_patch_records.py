@@ -418,6 +418,8 @@ def scan_update_layout_public_copy() -> tuple[list[dict[str, str]], list[dict[st
         add(errors, UPDATE_LAYOUT_PATH, "sentiment_marker_class_missing", "The top sentiment graph should carry the evidence summary class for visual state handling.")
     if "consensus-scale-labels--neutral" not in text:
         add(errors, UPDATE_LAYOUT_PATH, "sentiment_neutral_state_missing", "Not-enough-report pages should use a neutral chart treatment.")
+    if "update_platform_clean" in text or "platform_label_clean" in text or "update_type_clean" in text:
+        add(errors, UPDATE_LAYOUT_PATH, "top_metadata_placeholder_pill_regression", "Top metadata should render only data-bearing product, version, channel, release date, and file-size pills.")
     official_notes_pos = text.find('id="official-patch-notes"')
     technical_details_pos = text.find('id="technical-details"')
     sources_pos = text.find('id="user-reports-sources"')
