@@ -2554,6 +2554,9 @@ evidence:
   report_title: Audio Filter window has no light or meter to show it is turned on
   report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/7hRgpHBvFwwRLd56 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior There'
   captured_at: '2026-05-14T10:33:30Z'
+  source_date: null
+  target_release_date: null
+  source_date_pass: null
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -2575,6 +2578,9 @@ evidence:
   report_title: bug de telechargement
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://apps.microsoft.com/detail/XPFFH613W8V6LV?hl=fr-FR&gl=FR&ocid=pdpshare ### OBS Studio Crash Log URL https://'
   captured_at: '2026-05-14T18:08:40Z'
+  source_date: null
+  target_release_date: null
+  source_date_pass: null
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -2596,6 +2602,9 @@ evidence:
   report_title: Audio missing from output when started programmatically (auto-start, websocket) - works correctly when started via dialog
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/pXIIBXADUdxGKA4t ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Audio'
   captured_at: '2026-05-14T20:02:59Z'
+  source_date: null
+  target_release_date: null
+  source_date_pass: null
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -2604,6 +2613,30 @@ evidence:
   issue_theme: audio mixer regression
   workflow_area: audio mixer UI
   platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1tdgyqx-davinci-resolve-studio-2032-failed-to-ope
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1tdgyqx/davinci_resolve_studio_2032_failed_to_open/
+  parent_title: Davinci Resolve Studio 20.3.2 failed to open project after Mac software update
+  report_title: Davinci Resolve Studio 20.3.2 failed to open project after Mac software update
+  report_text_excerpt: Davinci Resolve Studio 20.3.2 failed to open project after Mac software update So, originally I had Davinci Resolve Studio on an external hard drive to save space on my computer (Big mistake, I know, and it has been corrected, so please don't mention it in your reply ). So...
+  captured_at: '2026-05-15T04:16:36Z'
+  source_date: '2026-05-15'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: macos
   severity: medium
   sentiment: negative
   source_weight: 1

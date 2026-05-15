@@ -20,7 +20,7 @@ update_published_at: '2026-02-12T00:00:00Z'
 update_last_checked: '2026-05-14T04:15:50Z'
 source_last_checked: '2026-05-14T20:04:53Z'
 official_body_last_checked: '2026-05-14T20:04:53Z'
-record_last_updated: '2026-05-15T00:09:08.795335Z'
+record_last_updated: '2026-05-15T04:16:59.258823Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -28,22 +28,22 @@ update_status: current
 update_feed_title: DaVinci Resolve 20.3.2
 update_detail_title: DaVinci Resolve 20.3.2
 update_consensus_label: Negative
-update_report_count: 19
+update_report_count: 20
 update_consensus_confidence: Low-Medium
-quick_verdict: 'WAIT: DaVinci Resolve 20.3.2 has 19 user reports found.'
+quick_verdict: 'WAIT: DaVinci Resolve 20.3.2 has 20 user reports found.'
 official_summary: DaVinci Resolve 20.3.2 stable/Studio reports are tracked separately from DaVinci Resolve 21 Public
   Beta 1. The official source capture should be refreshed before relying on this page for full release-note detail.
 release_summary: DaVinci Resolve 20.3.2 stable/Studio reports are tracked separately from DaVinci Resolve 21 Public
   Beta 1. Use this page for stable/Studio evidence and the beta page for beta-build risk.
-consensus_report: '19 user reports found for DaVinci Resolve 20.3.2. Current reports mention render/export failures,
+consensus_report: '20 user reports found for DaVinci Resolve 20.3.2. Current reports mention render/export failures,
   startup or application crashes, and installation problems. Current reports are Reddit-heavy, so production users
   should test before updating. Sources represented: r/davinciresolve and Creative COW DaVinci Resolve.'
 evidence_state: pilot_sample
 evidence_state_label: User reports found
 intelligence_stage: pilot
 official_source_captured: true
-confirmed_patch_specific_report_count: 19
-evidence_last_checked: '2026-05-14T07:21:44Z'
+confirmed_patch_specific_report_count: 20
+evidence_last_checked: '2026-05-15T04:16:36Z'
 known_issues_present: null
 consensus_collection_status: pilot_initial_sample
 consensus_match_policy: confirmed_patch_specific_reports_v1
@@ -92,6 +92,9 @@ status_events:
 - at: '2026-05-15T00:09:08.795335Z'
   label: User reports found
   note: User report count updated to 19.
+- at: '2026-05-15T04:16:59.258823Z'
+  label: User reports found
+  note: User report count updated to 20.
 official_patch_notes_source_type: download_portal
 primary_official_source: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
 fallback_official_sources:
@@ -158,7 +161,7 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'WAIT: DaVinci Resolve 20.3.2 has 19 user reports found. User reports show a repeat pattern.
+update_consensus_summary: 'WAIT: DaVinci Resolve 20.3.2 has 20 user reports found. User reports show a repeat pattern.
   Current reports mention render/export failures, startup or application crashes, and installation problems. Production
   editors with active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy,
   so production users should test before updating.'
@@ -381,6 +384,15 @@ accepted_report_sources:
   source_url: https://creativecow.net/forums/thread/ai-magic-mask-not-rendering/
   source_title: Creative Communities of the World Forums
   source_date: 2026 05 14T07:21:44Z
+  version_matched: 20.3.2
+  patch_version_matched: true
+  issue: render/export failures
+  workflow_area: render/export
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1tdgyqx/davinci_resolve_studio_2032_failed_to_open/
+  source_title: Davinci Resolve Studio 20.3.2 failed to open project after Mac software update
+  source_date: 2026 05 15T04:16:36Z
   version_matched: 20.3.2
   patch_version_matched: true
   issue: render/export failures
