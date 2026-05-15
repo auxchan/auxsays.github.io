@@ -20,7 +20,7 @@ update_published_at: '2026-02-12T00:00:00Z'
 update_last_checked: '2026-05-14T04:15:50Z'
 source_last_checked: '2026-05-14T20:04:53Z'
 official_body_last_checked: '2026-05-14T20:04:53Z'
-record_last_updated: '2026-05-15T00:06:30.356075Z'
+record_last_updated: '2026-05-15T00:09:08.795335Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -87,6 +87,9 @@ status_events:
   label: User reports found
   note: User report count updated after the latest evidence pass.
 - at: '2026-05-15T00:06:30.356075Z'
+  label: User reports found
+  note: User report count updated to 19.
+- at: '2026-05-15T00:09:08.795335Z'
   label: User reports found
   note: User report count updated to 19.
 official_patch_notes_source_type: download_portal
