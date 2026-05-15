@@ -20,7 +20,7 @@ update_published_at: '2025-12-18T00:00:00Z'
 update_last_checked: '2026-05-14T04:15:50Z'
 source_last_checked: '2026-05-14T20:04:53Z'
 official_body_last_checked: '2026-05-14T20:04:53Z'
-record_last_updated: '2026-05-14T21:22:31.612697Z'
+record_last_updated: '2026-05-15T00:06:07.789043Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -30,17 +30,16 @@ update_detail_title: DaVinci Resolve 20.3.1
 update_consensus_label: Negative
 update_report_count: 11
 update_consensus_confidence: Low-Medium
-quick_verdict: 'WAIT: DaVinci Resolve 20.3.1 has a small negative Verified reports set with Low confidence.'
+quick_verdict: 'WAIT: DaVinci Resolve 20.3.1 has 11 user reports found.'
 official_summary: DaVinci Resolve 20.3.1 stable/Studio reports are tracked separately from DaVinci Resolve 21 Public
   Beta 1. The official source capture should be refreshed before relying on this page for full release-note detail.
 release_summary: DaVinci Resolve 20.3.1 stable/Studio reports are tracked separately from DaVinci Resolve 21 Public
   Beta 1. Use this page for stable/Studio evidence and the beta page for beta-build risk.
-consensus_report: '11 confirmed patch-specific reports are counted for DaVinci Resolve 20.3.1; the current read
-  is negative with Low-Medium confidence. The clearest reported themes are render/export failure, startup or application
-  crash, and compatibility issue. Current evidence is Reddit-heavy, so treat this as a wait/test signal rather than
-  broad consensus. Sources represented: r/davinciresolve and Creative COW DaVinci Resolve.'
+consensus_report: '11 user reports found for DaVinci Resolve 20.3.1. Current reports mention render/export failures,
+  startup or application crashes, and plugin issues. Current reports are Reddit-heavy, so production users should
+  test before updating. Sources represented: r/davinciresolve and Creative COW DaVinci Resolve.'
 evidence_state: pilot_sample
-evidence_state_label: Verified reports
+evidence_state_label: User reports found
 intelligence_stage: pilot
 official_source_captured: true
 confirmed_patch_specific_report_count: 11
@@ -49,7 +48,7 @@ known_issues_present: null
 consensus_collection_status: pilot_initial_sample
 consensus_match_policy: confirmed_patch_specific_reports_v1
 consensus_match_policy_label: Confirmed patch-specific reports only
-consensus_report_count_label: confirmed patch-specific reports
+consensus_report_count_label: user reports found
 consensus_report_weighting: equal_per_confirmed_report
 consensus_low_context_policy: excluded
 complaint_themes: []
@@ -61,32 +60,35 @@ status_events:
   label: Insufficient data
   note: AUXSAYS official-ingestion record initialized.
 - at: '2026-05-14T07:09:22.246299Z'
-  label: Verified reports
-  note: 'Automated evidence write-back: 10 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
+  label: User reports found
+  note: User report count updated after the latest evidence pass.
 - at: '2026-05-14T07:21:44.759588Z'
-  label: Verified reports
-  note: 'Automated evidence write-back: 11 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
+  label: User reports found
+  note: User report count updated after the latest evidence pass.
 - at: '2026-05-14T10:32:13.816636Z'
-  label: Verified reports
-  note: 'Automated evidence write-back: 11 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
+  label: User reports found
+  note: User report count updated after the latest evidence pass.
 - at: '2026-05-14T13:04:33.305557Z'
-  label: Verified reports
-  note: 'Automated evidence write-back: 11 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
+  label: User reports found
+  note: User report count updated after the latest evidence pass.
 - at: '2026-05-14T15:30:55.611907Z'
-  label: Verified reports
-  note: 'Automated evidence write-back: 11 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
+  label: User reports found
+  note: User report count updated after the latest evidence pass.
 - at: '2026-05-14T18:07:16.048702Z'
-  label: Verified reports
-  note: 'Automated evidence write-back: 11 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
+  label: User reports found
+  note: User report count updated after the latest evidence pass.
 - at: '2026-05-14T20:01:40.530903Z'
-  label: Verified reports
-  note: 'Automated evidence write-back: 11 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
+  label: User reports found
+  note: User report count updated after the latest evidence pass.
 - at: '2026-05-14T20:30:58.913596Z'
-  label: Verified reports
-  note: Verified report count updated to 11; current read is negative with Low-Medium confidence.
+  label: User reports found
+  note: User report count updated after the latest evidence pass.
 - at: '2026-05-14T21:22:31.612697Z'
-  label: Verified reports
-  note: Verified report count updated to 11; current read is negative with Low-Medium confidence.
+  label: User reports found
+  note: User report count updated after the latest evidence pass.
+- at: '2026-05-15T00:06:07.789043Z'
+  label: User reports found
+  note: User report count updated to 11.
 official_patch_notes_source_type: download_portal
 primary_official_source: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
 fallback_official_sources:
@@ -153,42 +155,18 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'WAIT: DaVinci Resolve 20.3.1 has a meaningful pilot negative Verified reports set with
-  Low-Medium confidence. Reported issues cluster around render/export failure, startup or application crash, and
-  compatibility issue. Production editors with active export deadlines should wait unless they need a specific fix.
-  Current evidence is Reddit-heavy, so treat this as a wait/test signal rather than broad consensus.'
+update_consensus_summary: 'WAIT: DaVinci Resolve 20.3.1 has 11 user reports found. User reports show a repeat pattern.
+  Current reports mention render/export failures, startup or application crashes, and plugin issues. Production
+  editors with active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy,
+  so production users should test before updating.'
 evidence_samples:
-- source_name: r/davinciresolve
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1qo19z2/getting_started_with_colorgrading_in_resolve/
-  source_title: Getting started with color-grading in resolve
-  counted: true
-  version_matched: 20.3.1
-  patch_version_matched: true
-  issue: Getting started with color grading in resolve
-  outcome: medium
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1ptievt/fix_for_instagram_reels_ads_rejection_on_linux/
   source_title: Fix for Instagram Reels Ads rejection on Linux (DaVinci Resolve exports)
   counted: true
   version_matched: 20.3.1
   patch_version_matched: true
-  issue: Fix for Instagram Reels Ads rejection on Linux (DaVinci Resolve exports)
-  outcome: medium
-- source_name: r/davinciresolve
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1slhj55/resolve_not_rendering_on_delivery_page/
-  source_title: Resolve not rendering on Delivery Page
-  counted: true
-  version_matched: 20.3.1
-  patch_version_matched: true
-  issue: Resolve not rendering on Delivery Page
-  outcome: medium
-- source_name: r/davinciresolve
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1sjdug4/black_bars_appearing_when_sliding_horizontal/
-  source_title: Black bars appearing when sliding horizontal video in a vertical timeline
-  counted: true
-  version_matched: 20.3.1
-  patch_version_matched: true
-  issue: Black bars appearing when sliding horizontal video in a vertical timeline
+  issue: render/export failures
   outcome: medium
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1sfv9rt/resolve_2031_2032_crashes_when_opening_timeline/
@@ -196,31 +174,15 @@ evidence_samples:
   counted: true
   version_matched: 20.3.1
   patch_version_matched: true
-  issue: Resolve 20.3.1 & 20.3.2 crashes when opening Timeline Settings (fresh project, reproducible)
+  issue: startup or application crashes in application stability
   outcome: high
 - source_name: r/davinciresolve
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1r0bfmj/resolve_crashing_when_opening_remote_monitoring/
-  source_title: Resolve crashing when opening remote monitoring
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1qo19z2/getting_started_with_colorgrading_in_resolve/
+  source_title: Getting started with color-grading in resolve
   counted: true
   version_matched: 20.3.1
   patch_version_matched: true
-  issue: Resolve crashing when opening remote monitoring
-  outcome: high
-- source_name: r/davinciresolve
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1qiedqf/mono_audio_wont_play/
-  source_title: Mono Audio Won't Play
-  counted: true
-  version_matched: 20.3.1
-  patch_version_matched: true
-  issue: Mono Audio Won't Play
-  outcome: medium
-- source_name: r/davinciresolve
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1sg6jdx/is_cqp_during_media_management_transcoding_broken/
-  source_title: Is CQP during Media Management transcoding broken?
-  counted: true
-  version_matched: 20.3.1
-  patch_version_matched: true
-  issue: Is CQP during Media Management transcoding broken?
+  issue: general workflow reports
   outcome: medium
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1qy29ip/weird_playback_issues_on_windows_11_pcs/
@@ -228,30 +190,131 @@ evidence_samples:
   counted: true
   version_matched: 20.3.1
   patch_version_matched: true
-  issue: weird Playback issues on Windows 11 PCs
+  issue: plugin issues in plugins / codecs
   outcome: medium
 - source_name: r/davinciresolve
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1pxoglj/resolve_shutting_down_non_stop_since_last_update/
-  source_title: resolve shutting down non stop since last update
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1r0bfmj/resolve_crashing_when_opening_remote_monitoring/
+  source_title: Resolve crashing when opening remote monitoring
   counted: true
   version_matched: 20.3.1
   patch_version_matched: true
-  issue: resolve shutting down non stop since last update
+  issue: startup or application crashes in application stability
   outcome: high
-- source_name: Creative COW DaVinci Resolve
-  source_url: https://creativecow.net/forums/thread/ai-magic-mask-not-rendering/
-  source_title: Creative Communities of the World Forums
-  counted: true
-  version_matched: 20.3.1
-  patch_version_matched: true
-  issue: Creative Communities of the World Forums
-  outcome: medium
 feed_hidden: false
 status_change_type: new
 notification_message: ''
 update_channel_label: Stable / Studio evidence record
 update_decision_label: WAIT
-update_decision_body: Production editors should wait unless they need a specific fix. The clearest reports involve
-  export failures, and current evidence is still a limited wait/test signal.
-record_note: This stable/Studio DaVinci Resolve 20.3.1 record is tracked separately from the Public Beta 1 record.
+update_decision_body: Current reports mention render/export failures, startup or application crashes, and plugin
+  issues. Production editors with active delivery deadlines should wait or test on copied projects.
+record_note: This page covers DaVinci Resolve 20.3.1. Beta reports are excluded from this record.
+evidence_sample_visible_limit: 5
+accepted_report_sources:
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1qo19z2/getting_started_with_colorgrading_in_resolve/
+  source_title: Getting started with color-grading in resolve
+  source_date: 2026 05 14T07:09:01Z
+  version_matched: 20.3.1
+  patch_version_matched: true
+  issue: general workflow reports
+  workflow_area: general DaVinci Resolve workflow
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ptievt/fix_for_instagram_reels_ads_rejection_on_linux/
+  source_title: Fix for Instagram Reels Ads rejection on Linux (DaVinci Resolve exports)
+  source_date: 2026 05 14T07:09:01Z
+  version_matched: 20.3.1
+  patch_version_matched: true
+  issue: render/export failures
+  workflow_area: render/export
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1slhj55/resolve_not_rendering_on_delivery_page/
+  source_title: Resolve not rendering on Delivery Page
+  source_date: 2026 05 14T07:09:01Z
+  version_matched: 20.3.1
+  patch_version_matched: true
+  issue: render/export failures
+  workflow_area: render/export
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1sjdug4/black_bars_appearing_when_sliding_horizontal/
+  source_title: Black bars appearing when sliding horizontal video in a vertical timeline
+  source_date: 2026 05 14T07:09:01Z
+  version_matched: 20.3.1
+  patch_version_matched: true
+  issue: general workflow reports
+  workflow_area: general DaVinci Resolve workflow
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1sfv9rt/resolve_2031_2032_crashes_when_opening_timeline/
+  source_title: Resolve 20.3.1 & 20.3.2 crashes when opening Timeline Settings (fresh project, reproducible)
+  source_date: 2026 05 14T07:09:01Z
+  version_matched: 20.3.1
+  patch_version_matched: true
+  issue: startup or application crashes in application stability
+  workflow_area: application stability
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1r0bfmj/resolve_crashing_when_opening_remote_monitoring/
+  source_title: Resolve crashing when opening remote monitoring
+  source_date: 2026 05 14T07:09:01Z
+  version_matched: 20.3.1
+  patch_version_matched: true
+  issue: startup or application crashes in application stability
+  workflow_area: application stability
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1qiedqf/mono_audio_wont_play/
+  source_title: Mono Audio Won't Play
+  source_date: 2026 05 14T07:09:01Z
+  version_matched: 20.3.1
+  patch_version_matched: true
+  issue: render/export failures
+  workflow_area: render/export
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1sg6jdx/is_cqp_during_media_management_transcoding_broken/
+  source_title: Is CQP during Media Management transcoding broken?
+  source_date: 2026 05 14T07:09:01Z
+  version_matched: 20.3.1
+  patch_version_matched: true
+  issue: render/export failures
+  workflow_area: render/export
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1qy29ip/weird_playback_issues_on_windows_11_pcs/
+  source_title: weird Playback issues on Windows 11 PCs
+  source_date: 2026 05 14T07:09:01Z
+  version_matched: 20.3.1
+  patch_version_matched: true
+  issue: plugin issues in plugins / codecs
+  workflow_area: plugins / codecs
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1pxoglj/resolve_shutting_down_non_stop_since_last_update/
+  source_title: resolve shutting down non stop since last update
+  source_date: 2026 05 14T07:09:01Z
+  version_matched: 20.3.1
+  patch_version_matched: true
+  issue: startup or application crashes in application stability
+  workflow_area: application stability
+- source_name: Creative COW DaVinci Resolve
+  source_type: creator forum report
+  source_url: https://creativecow.net/forums/thread/ai-magic-mask-not-rendering/
+  source_title: Creative Communities of the World Forums
+  source_date: 2026 05 14T07:20:12Z
+  version_matched: 20.3.1
+  patch_version_matched: true
+  issue: render/export failures
+  workflow_area: render/export
+evidence_source_limitations:
+- Current reports are Reddit-heavy, so production users should test before updating.
+- Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
+practical_recommendations:
+- Wait if you have active render/export deadlines.
+- Test on copied projects before moving client work to this version.
+- Review the sample reports before updating a production workstation.
+source_freshness_note: ''
 ---

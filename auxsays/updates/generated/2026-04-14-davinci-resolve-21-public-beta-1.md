@@ -19,10 +19,10 @@ update_status: current
 update_feed_title: DaVinci Resolve 21 Public Beta 1
 update_detail_title: DaVinci Resolve 21 Public Beta 1
 update_consensus_label: Negative
-update_consensus_summary: 'AVOID for production: DaVinci Resolve 21 Public Beta 1 has a meaningful pilot negative
-  Verified reports set with Low-Medium confidence. Reported issues cluster around startup or application crash,
-  performance regression, and magic mask crash. Production editors should avoid it on active projects; test only
-  in disposable or non-critical projects. Evidence is still a verified-report sample, not broad live consensus.'
+update_consensus_summary: 'AVOID for production: DaVinci Resolve 21 Public Beta 1 has 11 user reports found. User
+  reports show a repeat pattern. Current reports mention Magic Mask crashes, startup or application crashes, and
+  performance slowdowns. Production editors should avoid it on active projects; test only in disposable or non-critical
+  projects. This is a surfaced user-report sample, not a live telemetry feed.'
 update_report_count: 11
 update_consensus_confidence: Low-Medium
 status_change_type: new
@@ -36,25 +36,22 @@ official_source_classification_note: Blackmagic's source is a vendor release pag
   AUXSAYS links it as the official source, but has not captured a full structured patch-note body from that page.
 patch_file_size_status: not_provided_by_source
 release_channel_label: Public beta
-quick_verdict: WAIT for production systems. DaVinci Resolve 21 Public Beta 1 is a beta build; test only in non-critical
-  projects unless you specifically need the Resolve 21 feature set and can tolerate beta risk.
+quick_verdict: 'WAIT for production systems: DaVinci Resolve 21 Public Beta 1 is a beta build with 11 user reports
+  found.'
 update_decision_label: WAIT for production systems
-update_decision_body: Public beta build. Treat this as a testing release for editors and color workflows, not a
-  clean default upgrade for active client work.
-source_freshness_note: Official source should be refreshed before relying on this page for current install guidance.
-record_note: AUXSAYS has completed an initial pilot evidence pass for this DaVinci Resolve 21 Public Beta 1 record.
-  Two source-backed, user-verified issue reports are currently counted. This remains a low-confidence Verified reports,
-  not broad consensus. The legacy manual count remains historical context only and does not drive the verified report
-  count. DaVinci ingestion remains disabled/manual-watch for ongoing automated collection.
+update_decision_body: Use this beta only for non-critical testing. Active client projects should stay on a known-good
+  stable build unless a Resolve 21 beta feature is worth the risk.
+source_freshness_note: ''
+record_note: This page covers DaVinci Resolve 21 Public Beta 1. Stable/Studio reports are excluded and tracked on
+  the separate stable page.
 official_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and should be treated differently from
   a stable production build. The key user decision is not simply whether the release is new, but whether the new
   Resolve 21 feature set is worth testing in a non-critical environment. For production work, the practical read
   is to keep existing stable projects on a known-good version unless a specific Resolve 21 feature is needed and
   the project can tolerate beta risk.
-consensus_report: '11 confirmed patch-specific reports are counted for DaVinci Resolve 21 Public Beta 1; the current
-  read is negative with Low-Medium confidence. The clearest reported themes are startup or application crash, performance
-  regression, and magic mask crash. Evidence is still a verified-report sample, not broad live consensus. Sources
-  represented: Blackmagic Design Community Forum and r/davinciresolve.'
+consensus_report: '11 user reports found for DaVinci Resolve 21 Public Beta 1. Current reports mention Magic Mask
+  crashes, startup or application crashes, and performance slowdowns. This is a surfaced user-report sample, not
+  a live telemetry feed. Sources represented: Blackmagic Design Community Forum and r/davinciresolve.'
 complaint_themes:
 - theme: Beta setup questions
   frequency: Medium
@@ -71,59 +68,61 @@ status_events:
   note: Official release became available.
 - at: '2026-04-23T00:00:00Z'
   label: Insufficient data
-  note: 'Phase 1B correction: prior 7-report value was a pre-evidence manual estimate not backed by consensus_evidence.yml
-    rows. Evidence state corrected to official_only. Report count set to 0.'
+  note: Record status updated after the latest source check.
 - at: '2026-05-12T07:17:24.501766Z'
-  label: Verified reports
-  note: 'Phase 1F controlled write-back: 2 user-verified, source-backed reports promoted from consensus_evidence.yml.'
+  label: User reports found
+  note: User report count updated after the latest evidence pass.
 - at: '2026-05-13T06:54:21.293024Z'
-  label: Verified reports
-  note: 'Automated evidence write-back: 7 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
+  label: User reports found
+  note: User report count updated after the latest evidence pass.
 - at: '2026-05-13T17:25:50.918655Z'
-  label: Verified reports
-  note: 'Automated evidence write-back: 11 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
+  label: User reports found
+  note: User report count updated after the latest evidence pass.
 - at: '2026-05-13T23:29:22.914122Z'
-  label: Verified reports
-  note: 'Automated evidence write-back: 11 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
+  label: User reports found
+  note: User report count updated after the latest evidence pass.
 - at: '2026-05-14T00:14:31.525438Z'
-  label: Verified reports
-  note: 'Automated evidence write-back: 11 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
+  label: User reports found
+  note: User report count updated after the latest evidence pass.
 - at: '2026-05-14T00:35:57.096801Z'
-  label: Verified reports
-  note: 'Automated evidence write-back: 11 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
+  label: User reports found
+  note: User report count updated after the latest evidence pass.
 - at: '2026-05-14T04:08:33.501127Z'
-  label: Verified reports
-  note: 'Automated evidence write-back: 11 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
+  label: User reports found
+  note: User report count updated after the latest evidence pass.
 - at: '2026-05-14T04:12:43.856746Z'
-  label: Verified reports
-  note: 'Automated evidence write-back: 11 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
+  label: User reports found
+  note: User report count updated after the latest evidence pass.
 - at: '2026-05-14T07:10:06.821199Z'
-  label: Verified reports
-  note: 'Automated evidence write-back: 11 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
+  label: User reports found
+  note: User report count updated after the latest evidence pass.
 - at: '2026-05-14T07:22:21.695885Z'
-  label: Verified reports
-  note: 'Automated evidence write-back: 11 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
+  label: User reports found
+  note: User report count updated after the latest evidence pass.
 - at: '2026-05-14T10:32:56.150466Z'
-  label: Verified reports
-  note: 'Automated evidence write-back: 11 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
+  label: User reports found
+  note: User report count updated after the latest evidence pass.
 - at: '2026-05-14T13:05:00.910571Z'
-  label: Verified reports
-  note: 'Automated evidence write-back: 11 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
+  label: User reports found
+  note: User report count updated after the latest evidence pass.
 - at: '2026-05-14T15:31:25.865907Z'
-  label: Verified reports
-  note: 'Automated evidence write-back: 11 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
+  label: User reports found
+  note: User report count updated after the latest evidence pass.
 - at: '2026-05-14T18:07:58.955554Z'
-  label: Verified reports
-  note: 'Automated evidence write-back: 11 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
+  label: User reports found
+  note: User report count updated after the latest evidence pass.
 - at: '2026-05-14T20:02:19.676849Z'
-  label: Verified reports
-  note: 'Automated evidence write-back: 11 source-backed, patch-specific reports promoted from consensus_evidence.yml.'
+  label: User reports found
+  note: User report count updated after the latest evidence pass.
 - at: '2026-05-14T20:31:57.722694Z'
-  label: Verified reports
-  note: Verified report count updated to 11; current read is negative with Low-Medium confidence.
+  label: User reports found
+  note: User report count updated after the latest evidence pass.
 - at: '2026-05-14T21:23:04.197934Z'
-  label: Verified reports
-  note: Verified report count updated to 11; current read is negative with Low-Medium confidence.
+  label: User reports found
+  note: User report count updated after the latest evidence pass.
+- at: '2026-05-15T00:06:49.680146Z'
+  label: User reports found
+  note: User report count updated to 11.
 legacy_consensus_score: 6
 legacy_consensus_score_percent: 53
 official_patch_notes_source_url: https://www.blackmagicdesign.com/media/release/20260414-01
@@ -136,15 +135,15 @@ release_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and s
 practical_recommendations:
 - Wait for production systems unless you have a specific Resolve 21 beta feature to test.
 - Test beta projects separately from active client work and keep a known-good Resolve version available.
-- Refresh the official source before relying on this page for current guidance.
+- Review the user report sample before using this build on deadline-sensitive work.
 consensus_match_policy: confirmed_patch_specific_reports_v1
 consensus_match_policy_label: Confirmed patch-specific reports only
-consensus_report_count_label: confirmed patch-specific reports
+consensus_report_count_label: user reports found
 consensus_report_weighting: equal_per_confirmed_report
 consensus_low_context_policy: excluded
 consensus_collection_status: pilot_initial_sample
 evidence_state: pilot_sample
-evidence_state_label: Verified reports
+evidence_state_label: User reports found
 official_source_captured: true
 confirmed_patch_specific_report_count: 11
 legacy_manual_report_count: 7
@@ -184,7 +183,7 @@ official_source_attempts:
   body_captured: false
   checksums_captured: false
 evidence_last_checked: '2026-05-13T17:25:19Z'
-record_last_updated: '2026-05-14T21:23:04.197934Z'
+record_last_updated: '2026-05-15T00:06:49.680146Z'
 evidence_samples:
 - source_name: Blackmagic Design Community Forum
   source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235179
@@ -192,86 +191,142 @@ evidence_samples:
   counted: true
   version_matched: 21 Public Beta 1
   patch_version_matched: true
-  issue: Resolve Studio 21.0B Build 20 crashes when creating Magic Mask
+  issue: Magic Mask crashes in color grading
   outcome: high
-- source_name: r/davinciresolve
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1sn39qf/davinci_resolve_failed_to_decode_video_frame_when/
-  source_title: DaVinci Resolve failed to decode video frame when rendering / public beta 21
-  counted: true
-  version_matched: 21 Public Beta 1
-  patch_version_matched: true
-  issue: DaVinci Resolve failed to decode video frame when rendering / public beta 21
-  outcome: medium
 - source_name: Blackmagic Design Community Forum
   source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235117
   source_title: Resolve Studio 21.0B Build 20 project corruption after crash
   counted: true
   version_matched: 21 Public Beta 1
   patch_version_matched: true
-  issue: Resolve Studio 21.0B Build 20 project corruption after crash
+  issue: startup or application crashes in application stability
   outcome: high
-- source_name: Blackmagic Design Community Forum
-  source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235536
-  source_title: Resolve 21.0 Public Beta 1 render/export failure
-  counted: true
-  version_matched: 21 Public Beta 1
-  patch_version_matched: true
-  issue: Resolve 21.0 Public Beta 1 render/export failure
-  outcome: medium
 - source_name: Blackmagic Design Community Forum
   source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235458
   source_title: DaVinci Resolve Studio 21 Public Beta 1 GPU slowdown
   counted: true
   version_matched: 21 Public Beta 1
   patch_version_matched: true
-  issue: DaVinci Resolve Studio 21 Public Beta 1 GPU slowdown
+  issue: performance slowdowns in timeline / GPU performance
   outcome: medium
-- source_name: Blackmagic Design Community Forum
-  source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235208
-  source_title: DaVinci Resolve 21.0 Public Beta 1 installation failure
-  counted: true
-  version_matched: 21 Public Beta 1
-  patch_version_matched: true
-  issue: DaVinci Resolve 21.0 Public Beta 1 installation failure
-  outcome: medium
-- source_name: Blackmagic Design Community Forum
-  source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=234870
-  source_title: Resolve Studio 21.0B Build 20 Magic Mask crash
-  counted: true
-  version_matched: 21 Public Beta 1
-  patch_version_matched: true
-  issue: Resolve Studio 21.0B Build 20 Magic Mask crash
-  outcome: high
-- source_name: r/davinciresolve
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1t6ff26/autosubs_plugin_not_working/
-  source_title: Autosubs plugin not working
-  counted: true
-  version_matched: DaVinci Resolve 21 beta
-  patch_version_matched: true
-  issue: Autosubs plugin not working
-  outcome: high
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1szxp3j/how_do_i_report_21_beta_bugs/
   source_title: How do I report 21 beta bugs?
   counted: true
   version_matched: DaVinci Resolve 21 beta
   patch_version_matched: true
-  issue: How do I report 21 beta bugs?
+  issue: general workflow reports
   outcome: medium
 - source_name: r/davinciresolve
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1sym4fv/is_there_a_way_to_build_this_fusion_composition/
-  source_title: Is there a way to build this fusion composition to speed up performance?
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1sn39qf/davinci_resolve_failed_to_decode_video_frame_when/
+  source_title: DaVinci Resolve failed to decode video frame when rendering / public beta 21
   counted: true
-  version_matched: Resolve 21 beta
+  version_matched: 21 Public Beta 1
   patch_version_matched: true
-  issue: Is there a way to build this fusion composition to speed up performance?
+  issue: render/decode failures in render export
   outcome: medium
+evidence_sample_visible_limit: 5
+accepted_report_sources:
+- source_name: Blackmagic Design Community Forum
+  source_type: blackmagic forum
+  source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235179
+  source_title: Resolve Studio 21.0B Build 20 crashes when creating Magic Mask
+  source_date: 2026 05 12T00:00:00Z
+  version_matched: 21 Public Beta 1
+  patch_version_matched: true
+  issue: Magic Mask crashes in color grading
+  workflow_area: color grading
 - source_name: r/davinciresolve
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1ssi2se/how_to_resize_without_loosing_quality/
-  source_title: how to resize without loosing quality
-  counted: true
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1sn39qf/davinci_resolve_failed_to_decode_video_frame_when/
+  source_title: DaVinci Resolve failed to decode video frame when rendering / public beta 21
+  source_date: 2026 05 12T00:00:00Z
+  version_matched: 21 Public Beta 1
+  patch_version_matched: true
+  issue: render/decode failures in render export
+  workflow_area: render export
+- source_name: Blackmagic Design Community Forum
+  source_type: blackmagic forum
+  source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235117
+  source_title: Resolve Studio 21.0B Build 20 project corruption after crash
+  source_date: 2026 05 13T06:54:20Z
+  version_matched: 21 Public Beta 1
+  patch_version_matched: true
+  issue: startup or application crashes in application stability
+  workflow_area: application stability
+- source_name: Blackmagic Design Community Forum
+  source_type: blackmagic forum
+  source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235536
+  source_title: Resolve 21.0 Public Beta 1 render/export failure
+  source_date: 2026 05 13T06:54:20Z
+  version_matched: 21 Public Beta 1
+  patch_version_matched: true
+  issue: render/export failures
+  workflow_area: render/export
+- source_name: Blackmagic Design Community Forum
+  source_type: blackmagic forum
+  source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235458
+  source_title: DaVinci Resolve Studio 21 Public Beta 1 GPU slowdown
+  source_date: 2026 05 13T06:54:20Z
+  version_matched: 21 Public Beta 1
+  patch_version_matched: true
+  issue: performance slowdowns in timeline / GPU performance
+  workflow_area: timeline / GPU performance
+- source_name: Blackmagic Design Community Forum
+  source_type: blackmagic forum
+  source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235208
+  source_title: DaVinci Resolve 21.0 Public Beta 1 installation failure
+  source_date: 2026 05 13T06:54:20Z
+  version_matched: 21 Public Beta 1
+  patch_version_matched: true
+  issue: installation problems
+  workflow_area: installation
+- source_name: Blackmagic Design Community Forum
+  source_type: blackmagic forum
+  source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=234870
+  source_title: Resolve Studio 21.0B Build 20 Magic Mask crash
+  source_date: 2026 05 13T06:54:20Z
+  version_matched: 21 Public Beta 1
+  patch_version_matched: true
+  issue: Magic Mask crashes in color grading / Magic Mask
+  workflow_area: color grading / Magic Mask
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1t6ff26/autosubs_plugin_not_working/
+  source_title: Autosubs plugin not working
+  source_date: 2026 05 13T17:25:19Z
   version_matched: DaVinci Resolve 21 beta
   patch_version_matched: true
-  issue: how to resize without loosing quality
-  outcome: medium
+  issue: startup or application crashes in application stability
+  workflow_area: application stability
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1szxp3j/how_do_i_report_21_beta_bugs/
+  source_title: How do I report 21 beta bugs?
+  source_date: 2026 05 13T17:25:19Z
+  version_matched: DaVinci Resolve 21 beta
+  patch_version_matched: true
+  issue: general workflow reports
+  workflow_area: general DaVinci Resolve workflow
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1sym4fv/is_there_a_way_to_build_this_fusion_composition/
+  source_title: Is there a way to build this fusion composition to speed up performance?
+  source_date: 2026 05 13T17:25:19Z
+  version_matched: Resolve 21 beta
+  patch_version_matched: true
+  issue: performance slowdowns in timeline / GPU performance
+  workflow_area: timeline / GPU performance
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ssi2se/how_to_resize_without_loosing_quality/
+  source_title: how to resize without loosing quality
+  source_date: 2026 05 13T17:25:19Z
+  version_matched: DaVinci Resolve 21 beta
+  patch_version_matched: true
+  issue: general workflow reports
+  workflow_area: general DaVinci Resolve workflow
+evidence_source_limitations:
+- This is a surfaced user-report sample, not a live telemetry feed.
+- Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 ---
