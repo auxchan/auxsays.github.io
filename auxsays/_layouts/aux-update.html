@@ -44,6 +44,12 @@ layout: aux-base
 {% assign evidence_checked_at = page.evidence_last_checked | default: page.consensus_last_checked %}
 {% assign evidence_checked_label = 'Not recorded' %}
 {% if evidence_checked_at != blank %}{% assign evidence_checked_label = evidence_checked_at | date: "%b %-d, %Y" %}{% endif %}
+{% assign source_checked_at = page.source_last_checked %}
+{% assign source_checked_label = 'Not recorded' %}
+{% if source_checked_at != blank %}{% assign source_checked_label = source_checked_at | date: "%b %-d, %Y" %}{% endif %}
+{% assign official_body_checked_at = page.official_body_last_checked %}
+{% assign official_body_checked_label = 'Not recorded' %}
+{% if official_body_checked_at != blank %}{% assign official_body_checked_label = official_body_checked_at | date: "%b %-d, %Y" %}{% endif %}
 {% assign source_url_present = false %}
 {% if page.update_source_url != blank or page.official_patch_notes_source_url != blank %}{% assign source_url_present = true %}{% endif %}
 {% assign official_body_clean = page.official_patch_notes_body | default: '' | strip %}
@@ -157,6 +163,8 @@ layout: aux-base
 {% endif %}
 {% assign file_size_renderable = false %}
 {% if file_size_present or file_size_label != blank %}{% assign file_size_renderable = true %}{% endif %}
+{% assign technical_details_renderable = false %}
+{% if checksum_present or file_size_renderable or source_checked_at != blank or official_body_checked_at != blank or page.update_published_at != blank %}{% assign technical_details_renderable = true %}{% endif %}
 {% assign visible_evidence_limit = page.evidence_sample_visible_limit | default: 5 | plus: 0 %}
 {% assign accepted_report_sources = page.accepted_report_sources %}
 {% if accepted_report_sources == nil or accepted_report_sources.size == 0 %}
@@ -243,6 +251,7 @@ layout: aux-base
 
   <nav class="update-section-nav" aria-label="Patch page sections">
     <a href="#official-patch-notes">Official Patch Notes</a>
+    {% if technical_details_renderable %}<a href="#technical-details">Technical Details</a>{% endif %}
     <a href="#user-reports-sources">User Reports / Sources</a>
     <a href="{{ '/updates/methodology/' | relative_url }}">Methodology</a>
     {% if has_public_history %}<a href="#history">History / Updates</a>{% endif %}
@@ -251,12 +260,6 @@ layout: aux-base
   <section class="update-content-grid">
     <article id="official-patch-notes" class="panel update-info-card update-official-details update-order-official-details">
       <h2>Official Patch Notes</h2>
-      {% if page.update_published_at != blank or file_size_renderable %}
-      <div class="update-official-meta">
-        {% if page.update_published_at != blank %}<span>Released {{ page.update_published_at | date: "%b %-d, %Y" }}</span>{% endif %}
-        {% if file_size_renderable %}<span>File size: {{ file_size_label }}</span>{% endif %}
-      </div>
-      {% endif %}
       {% if summary_text != blank %}<p>{{ summary_text }}</p>{% endif %}
       {% if page.official_additions or page.official_fixes %}
       <div class="update-change-grid">
@@ -285,14 +288,28 @@ layout: aux-base
       {% else %}
       <p>Official patch-note body has not been captured yet.</p>
       {% endif %}
-      {% if checksum_present %}
-      <details id="checksum" class="update-checksum-details">
-        <summary>Checksum</summary>
-        <p class="checksum-helper">Use these hashes to verify downloaded installers match the files published with the official release.</p>
-        <div class="official-patch-notes checksum-body">{{ checksum_body_clean | markdownify }}</div>
-      </details>
-      {% endif %}
     </article>
+
+    {% if technical_details_renderable %}
+    <details id="technical-details" class="panel update-info-card update-technical-details update-order-technical">
+      <summary>Technical Details</summary>
+      <div class="update-technical-details__body">
+        <dl class="update-technical-list">
+          {% if page.update_published_at != blank %}<div><dt>Released</dt><dd>{{ page.update_published_at | date: "%b %-d, %Y" }}</dd></div>{% endif %}
+          {% if file_size_renderable %}<div><dt>File size</dt><dd>{{ file_size_label }}</dd></div>{% endif %}
+          {% if source_checked_at != blank %}<div><dt>Official source checked</dt><dd>{{ source_checked_label }}</dd></div>{% endif %}
+          {% if official_body_checked_at != blank %}<div><dt>Official notes checked</dt><dd>{{ official_body_checked_label }}</dd></div>{% endif %}
+        </dl>
+        {% if checksum_present %}
+        <details id="checksum" class="update-checksum-details update-checksum-details--nested">
+          <summary>Checksum</summary>
+          <p class="checksum-helper">Use these hashes to verify downloaded installers match the files published with the official release.</p>
+          <div class="official-patch-notes checksum-body">{{ checksum_body_clean | markdownify }}</div>
+        </details>
+        {% endif %}
+      </div>
+    </details>
+    {% endif %}
 
     <details id="user-reports-sources" class="panel update-info-card update-sources-card update-sources-disclosure update-order-sources"{% unless sources_collapsed_by_default %} open{% endunless %}>
       <summary><span>User Reports / Sources</span> <span class="update-sources-count">({{ user_report_source_count }})</span></summary>

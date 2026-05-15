@@ -5055,6 +5055,90 @@ button, input, select, textarea { font: inherit; }
   margin-top: .55rem;
 }
 
+.update-technical-details {
+  padding: 0;
+  border-color: rgba(95,212,229,.12);
+  background: rgba(255,255,255,.018);
+}
+
+.update-technical-details > summary {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  cursor: pointer;
+  padding: .95rem 1.15rem;
+  color: var(--text-0);
+  font-size: 1rem;
+  font-weight: 850;
+  letter-spacing: .08em;
+  line-height: 1.15;
+  text-transform: uppercase;
+  list-style: none;
+}
+
+.update-technical-details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.update-technical-details > summary::before {
+  content: ">";
+  flex: 0 0 auto;
+  color: var(--accent-0);
+  font-size: .85rem;
+  transform: translateY(-1px);
+  transition: transform .18s ease;
+}
+
+.update-technical-details[open] > summary::before {
+  transform: rotate(90deg) translateX(1px);
+}
+
+.update-technical-details__body {
+  padding: 0 1.15rem 1.05rem;
+}
+
+.update-technical-list {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: .55rem;
+  margin: 0;
+}
+
+.update-technical-list div {
+  padding: .65rem .72rem;
+  border: 1px solid rgba(255,255,255,.065);
+  border-radius: 12px;
+  background: rgba(255,255,255,.022);
+}
+
+.update-technical-list dt {
+  margin: 0 0 .22rem;
+  color: var(--text-2);
+  font-size: .66rem;
+  font-weight: 850;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.update-technical-list dd {
+  margin: 0;
+  color: var(--text-1);
+  font-weight: 750;
+}
+
+.update-checksum-details--nested {
+  margin-top: .75rem;
+  padding: .75rem .85rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(0,0,0,.12);
+}
+
+.update-checksum-details--nested summary {
+  font-size: .82rem;
+  letter-spacing: .08em;
+}
+
 .update-sources-disclosure {
   padding: 0;
 }
@@ -5108,5 +5192,18 @@ button, input, select, textarea { font: inherit; }
 }
 
 .update-order-official-details { order: 10; }
-.update-order-sources { order: 20; }
-.update-order-history { order: 30; }
+.update-order-technical { order: 20; }
+.update-order-sources { order: 30; }
+.update-order-history { order: 40; }
+
+@media (max-width: 860px) {
+  .update-technical-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 560px) {
+  .update-technical-list {
+    grid-template-columns: 1fr;
+  }
+}

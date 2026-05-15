@@ -358,7 +358,6 @@ def scan_update_layout_public_copy() -> tuple[list[dict[str, str]], list[dict[st
         "Sample size": "Sample size should not render as a standalone public field.",
         "Evidence Status": "Evidence status should not render as a standalone public field.",
         "Official source captured": "Official-source capture state should stay out of the public patch-page card stack.",
-        "Official notes checked": "Official-note check timestamps should stay out of public patch pages.",
         "Record updated": "Record update timestamps should stay out of public patch pages.",
         "Patch-specific user reports": "Patch-specific report counts should not be repeated outside the top evidence card.",
         "Community risk sample": "User reports should render as sources, not as a separate community-risk concept.",
@@ -392,6 +391,7 @@ def scan_update_layout_public_copy() -> tuple[list[dict[str, str]], list[dict[st
 
     required_public_labels = [
         "Official Patch Notes",
+        "Technical Details",
         "User Reports / Sources",
         "Methodology",
         "AUXSAYS verdict",
@@ -405,6 +405,14 @@ def scan_update_layout_public_copy() -> tuple[list[dict[str, str]], list[dict[st
         add(errors, UPDATE_LAYOUT_PATH, "checksum_render_not_guarded", "Checksum content must require stripped non-empty checksum content.")
     if "{{ checksum_body_clean | markdownify }}" not in text:
         add(errors, UPDATE_LAYOUT_PATH, "checksum_body_render_path_missing", "Checksum section should render stripped checksum content when present.")
+    official_notes_pos = text.find('id="official-patch-notes"')
+    technical_details_pos = text.find('id="technical-details"')
+    sources_pos = text.find('id="user-reports-sources"')
+    checksum_pos = text.find('id="checksum"')
+    if not (official_notes_pos != -1 and technical_details_pos != -1 and sources_pos != -1 and official_notes_pos < technical_details_pos < sources_pos):
+        add(errors, UPDATE_LAYOUT_PATH, "technical_details_order_regression", "Technical Details must render after Official Patch Notes and before User Reports / Sources.")
+    if checksum_pos != -1 and not (technical_details_pos != -1 and technical_details_pos < checksum_pos < sources_pos):
+        add(errors, UPDATE_LAYOUT_PATH, "checksum_inside_official_notes", "Checksum must render inside Technical Details, not inside Official Patch Notes.")
     if "official_body_clean" not in text:
         add(warnings, UPDATE_LAYOUT_PATH, "official_summary_blank_guard_missing", "Official source summary should be guarded by stripped non-empty body content.")
     sources_disclosure = re.search(r"<details\b(?=[^>]*\bid=[\"']user-reports-sources[\"'])[^>]*>", text)
