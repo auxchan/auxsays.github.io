@@ -17,8 +17,8 @@ update_version: Timestamp fields in GitHub Projects
 update_logo_text: GIT
 update_published_at: '2026-05-15T12:55:56Z'
 update_last_checked: '2026-05-15T14:38:59Z'
-source_last_checked: '2026-05-15T14:38:59Z'
-official_body_last_checked: '2026-05-15T14:38:59Z'
+source_last_checked: '2026-05-15T19:56:31Z'
+official_body_last_checked: '2026-05-15T19:56:31Z'
 record_last_updated: '2026-05-15T14:38:59Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -77,6 +77,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-05-15T14:38:59Z'
+  url: https://github.blog/changelog/2026-05-15-timestamp-fields-in-github-projects
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-05-15T19:56:31Z'
   url: https://github.blog/changelog/2026-05-15-timestamp-fields-in-github-projects
   status: captured-from-rss-feed
   body_captured: true
