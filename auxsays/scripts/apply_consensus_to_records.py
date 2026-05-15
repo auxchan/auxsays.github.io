@@ -434,6 +434,19 @@ def _clean_public_phrase(value: Any, *, fallback: str = "") -> str:
     return re.sub(r"\s+", " ", text).strip()
 
 
+def _public_date(value: Any) -> str:
+    text = str(value or "").strip()
+    if not text:
+        return ""
+    if re.fullmatch(r"\d{4}-\d{2}-\d{2}", text):
+        return text
+    iso_text = text[:-1] + "+00:00" if text.endswith("Z") else text
+    try:
+        return datetime.fromisoformat(iso_text).date().isoformat()
+    except ValueError:
+        return ""
+
+
 def _truncate_public_text(value: Any, *, limit: int = 140) -> str:
     text = _clean_public_phrase(value)
     if len(text) <= limit:
@@ -718,9 +731,9 @@ def _representative_rows(pid: str, rows: list[dict[str, Any]], *, limit: int = 5
 
 def _public_source_item(pid: str, ver: str, row: dict[str, Any]) -> dict[str, Any]:
     source_date = (
-        _clean_public_phrase(row.get("source_published_at"))
-        or _clean_public_phrase(row.get("published_at"))
-        or _clean_public_phrase(row.get("captured_at"))
+        _public_date(row.get("source_date"))
+        or _public_date(row.get("source_published_at"))
+        or _public_date(row.get("published_at"))
     )
     return {
         "source_name": row.get("source_name") or row.get("source_type") or "Source",
