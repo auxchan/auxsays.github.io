@@ -836,9 +836,6 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
                 "update_decision_body": (
                     "Use this beta only for non-critical testing. Active client projects should stay on a known-good stable build unless a Resolve 21 beta feature is worth the risk."
                 ),
-                "record_note": (
-                    f"This page covers {product_label} {ver}. Stable/Studio reports are excluded and tracked on the separate stable page."
-                ),
                 "practical_recommendations": [
                     "Wait for production systems unless you have a specific Resolve 21 beta feature to test.",
                     "Test beta projects separately from active client work and keep a known-good Resolve version available.",
@@ -854,9 +851,6 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
             "update_decision_label": "WAIT",
             "update_decision_body": (
                 f"{_issue_cluster_sentence(themes)} Production editors with active delivery deadlines should wait or test on copied projects."
-            ),
-            "record_note": (
-                f"This page covers {product_label} {ver}. Beta reports are excluded from this record."
             ),
             "practical_recommendations": [
                 "Wait if you have active render/export deadlines.",
