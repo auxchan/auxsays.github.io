@@ -1,8 +1,8 @@
 ---
 layout: aux-update
 title: DaVinci Resolve 21 Public Beta 1 official update breakdown
-description: Published Apr 14, 2026. Blackmagic Design announced DaVinci Resolve 21 Public Beta 1 and made it available for
-  download.
+description: Published Apr 14, 2026. Blackmagic Design announced DaVinci Resolve 21 Public Beta 1 and made it available
+  for download.
 permalink: /updates/blackmagic-design/davinci-resolve/21-public-beta-1/
 update_entry: true
 update_product: DaVinci Resolve
@@ -19,10 +19,10 @@ update_status: current
 update_feed_title: DaVinci Resolve 21 Public Beta 1
 update_detail_title: DaVinci Resolve 21 Public Beta 1
 update_consensus_label: Negative
-update_consensus_summary: 'AVOID for production: DaVinci Resolve 21 Public Beta 1 has 11 user reports found. User reports
-  show a repeat pattern. Current reports mention Magic Mask crashes, startup or application crashes, and performance slowdowns.
-  Production editors should avoid it on active projects; test only in disposable or non-critical projects. This is a surfaced
-  user-report sample, not a live telemetry feed.'
+update_consensus_summary: 'AVOID for production: DaVinci Resolve 21 Public Beta 1 has 11 user reports found. User
+  reports show a repeat pattern. Current reports mention Magic Mask crashes, startup or application crashes, and
+  performance slowdowns. Production editors should avoid it on active projects; test only in disposable or non-critical
+  projects. This is a surfaced user-report sample, not a live telemetry feed.'
 update_report_count: 11
 update_consensus_confidence: Low-Medium
 status_change_type: new
@@ -36,20 +36,22 @@ official_source_classification_note: Blackmagic's source is a vendor release pag
   AUXSAYS links it as the official source, but has not captured a full structured patch-note body from that page.
 patch_file_size_status: not_provided_by_source
 release_channel_label: Public beta
-quick_verdict: 'WAIT for production systems: DaVinci Resolve 21 Public Beta 1 is a beta build with 11 user reports found.'
+quick_verdict: 'WAIT for production systems: DaVinci Resolve 21 Public Beta 1 is a beta build with 11 user reports
+  found.'
 update_decision_label: WAIT for production systems
-update_decision_body: Use this beta only for non-critical testing. Active client projects should stay on a known-good stable
-  build unless a Resolve 21 beta feature is worth the risk.
+update_decision_body: Use this beta only for non-critical testing. Active client projects should stay on a known-good
+  stable build unless a Resolve 21 beta feature is worth the risk.
 source_freshness_note: ''
-record_note: This page covers DaVinci Resolve 21 Public Beta 1. Stable/Studio reports are excluded and tracked on the separate
-  stable page.
-official_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and should be treated differently from a stable
-  production build. The key user decision is not simply whether the release is new, but whether the new Resolve 21 feature
-  set is worth testing in a non-critical environment. For production work, the practical read is to keep existing stable projects
-  on a known-good version unless a specific Resolve 21 feature is needed and the project can tolerate beta risk.
-consensus_report: '11 user reports found for DaVinci Resolve 21 Public Beta 1. Current reports mention Magic Mask crashes,
-  startup or application crashes, and performance slowdowns. This is a surfaced user-report sample, not a live telemetry feed.
-  Sources represented: Blackmagic Design Community Forum and r/davinciresolve.'
+record_note: This page covers DaVinci Resolve 21 Public Beta 1. Stable/Studio reports are excluded and tracked on
+  the separate stable page.
+official_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and should be treated differently from
+  a stable production build. The key user decision is not simply whether the release is new, but whether the new
+  Resolve 21 feature set is worth testing in a non-critical environment. For production work, the practical read
+  is to keep existing stable projects on a known-good version unless a specific Resolve 21 feature is needed and
+  the project can tolerate beta risk.
+consensus_report: '11 user reports found for DaVinci Resolve 21 Public Beta 1. Current reports mention Magic Mask
+  crashes, startup or application crashes, and performance slowdowns. This is a surfaced user-report sample, not
+  a live telemetry feed. Sources represented: Blackmagic Design Community Forum and r/davinciresolve.'
 complaint_themes:
 - theme: Beta setup questions
   frequency: Medium
@@ -128,10 +130,11 @@ legacy_consensus_score: 6
 legacy_consensus_score_percent: 53
 official_patch_notes_source_url: https://www.blackmagicdesign.com/media/release/20260414-01
 official_patch_notes_body: ''
-release_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and should be treated differently from a stable
-  production build. The key user decision is not simply whether the release is new, but whether the new Resolve 21 feature
-  set is worth testing in a non-critical environment. For production work, the practical read is to keep existing stable projects
-  on a known-good version unless a specific Resolve 21 feature is needed and the project can tolerate beta risk.
+release_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and should be treated differently from
+  a stable production build. The key user decision is not simply whether the release is new, but whether the new
+  Resolve 21 feature set is worth testing in a non-critical environment. For production work, the practical read
+  is to keep existing stable projects on a known-good version unless a specific Resolve 21 feature is needed and
+  the project can tolerate beta risk.
 practical_recommendations:
 - Wait for production systems unless you have a specific Resolve 21 beta feature to test.
 - Test beta projects separately from active client work and keep a known-good Resolve version available.
@@ -147,8 +150,8 @@ evidence_state_label: User reports found
 official_source_captured: true
 confirmed_patch_specific_report_count: 11
 legacy_manual_report_count: 7
-legacy_manual_report_count_note: Previous 7-report value appears to be a pre-evidence/manual/pilot estimate. It is not currently
-  backed by structured consensus_evidence.yml rows and should not be rendered as verified reports.
+legacy_manual_report_count_note: Previous 7-report value appears to be a pre-evidence/manual/pilot estimate. It
+  is not currently backed by structured consensus_evidence.yml rows and should not be rendered as verified reports.
 known_issues_present: true
 official_checksums_body: ''
 intelligence_stage: pilot
@@ -183,7 +186,7 @@ official_source_attempts:
   body_captured: false
   checksums_captured: false
 evidence_last_checked: '2026-05-13T17:25:19Z'
-record_last_updated: '2026-05-15T00:09:21.255002Z'
+record_last_updated: '2026-05-15T10:37:57.742516Z'
 evidence_samples:
 - source_name: Blackmagic Design Community Forum
   source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235179
@@ -231,7 +234,7 @@ accepted_report_sources:
   source_type: blackmagic forum
   source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235179
   source_title: Resolve Studio 21.0B Build 20 crashes when creating Magic Mask
-  source_date: 2026 05 12T00:00:00Z
+  source_date: ''
   version_matched: 21 Public Beta 1
   patch_version_matched: true
   issue: Magic Mask crashes in color grading
@@ -240,7 +243,7 @@ accepted_report_sources:
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1sn39qf/davinci_resolve_failed_to_decode_video_frame_when/
   source_title: DaVinci Resolve failed to decode video frame when rendering / public beta 21
-  source_date: 2026 05 12T00:00:00Z
+  source_date: ''
   version_matched: 21 Public Beta 1
   patch_version_matched: true
   issue: render/decode failures in render export
@@ -249,7 +252,7 @@ accepted_report_sources:
   source_type: blackmagic forum
   source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235117
   source_title: Resolve Studio 21.0B Build 20 project corruption after crash
-  source_date: 2026 05 13T06:54:20Z
+  source_date: '2026-04-14'
   version_matched: 21 Public Beta 1
   patch_version_matched: true
   issue: startup or application crashes in application stability
@@ -258,7 +261,7 @@ accepted_report_sources:
   source_type: blackmagic forum
   source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235536
   source_title: Resolve 21.0 Public Beta 1 render/export failure
-  source_date: 2026 05 13T06:54:20Z
+  source_date: '2026-04-15'
   version_matched: 21 Public Beta 1
   patch_version_matched: true
   issue: render/export failures
@@ -267,7 +270,7 @@ accepted_report_sources:
   source_type: blackmagic forum
   source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235458
   source_title: DaVinci Resolve Studio 21 Public Beta 1 GPU slowdown
-  source_date: 2026 05 13T06:54:20Z
+  source_date: '2026-04-15'
   version_matched: 21 Public Beta 1
   patch_version_matched: true
   issue: performance slowdowns in timeline / GPU performance
@@ -276,7 +279,7 @@ accepted_report_sources:
   source_type: blackmagic forum
   source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235208
   source_title: DaVinci Resolve 21.0 Public Beta 1 installation failure
-  source_date: 2026 05 13T06:54:20Z
+  source_date: '2026-04-14'
   version_matched: 21 Public Beta 1
   patch_version_matched: true
   issue: installation problems
@@ -285,7 +288,7 @@ accepted_report_sources:
   source_type: blackmagic forum
   source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=234870
   source_title: Resolve Studio 21.0B Build 20 Magic Mask crash
-  source_date: 2026 05 13T06:54:20Z
+  source_date: '2026-04-14'
   version_matched: 21 Public Beta 1
   patch_version_matched: true
   issue: Magic Mask crashes in color grading / Magic Mask
@@ -294,7 +297,7 @@ accepted_report_sources:
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1t6ff26/autosubs_plugin_not_working/
   source_title: Autosubs plugin not working
-  source_date: 2026 05 13T17:25:19Z
+  source_date: '2026-05-07'
   version_matched: DaVinci Resolve 21 beta
   patch_version_matched: true
   issue: startup or application crashes in application stability
@@ -303,7 +306,7 @@ accepted_report_sources:
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1szxp3j/how_do_i_report_21_beta_bugs/
   source_title: How do I report 21 beta bugs?
-  source_date: 2026 05 13T17:25:19Z
+  source_date: '2026-04-30'
   version_matched: DaVinci Resolve 21 beta
   patch_version_matched: true
   issue: general workflow reports
@@ -312,7 +315,7 @@ accepted_report_sources:
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1sym4fv/is_there_a_way_to_build_this_fusion_composition/
   source_title: Is there a way to build this fusion composition to speed up performance?
-  source_date: 2026 05 13T17:25:19Z
+  source_date: '2026-04-29'
   version_matched: Resolve 21 beta
   patch_version_matched: true
   issue: performance slowdowns in timeline / GPU performance
@@ -321,7 +324,7 @@ accepted_report_sources:
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1ssi2se/how_to_resize_without_loosing_quality/
   source_title: how to resize without loosing quality
-  source_date: 2026 05 13T17:25:19Z
+  source_date: '2026-04-22'
   version_matched: DaVinci Resolve 21 beta
   patch_version_matched: true
   issue: general workflow reports
