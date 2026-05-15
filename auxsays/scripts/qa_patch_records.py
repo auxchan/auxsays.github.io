@@ -407,7 +407,9 @@ def scan_update_layout_public_copy() -> tuple[list[dict[str, str]], list[dict[st
     if "{{ checksum_body_clean | markdownify }}" not in text:
         add(errors, UPDATE_LAYOUT_PATH, "checksum_body_render_path_missing", "Checksum section should render stripped checksum content when present.")
     if "user report{% unless report_count == 1 %}s{% endunless %} counted" in text:
-        add(errors, UPDATE_LAYOUT_PATH, "top_evidence_card_duplicate_data", "Top evidence card should not repeat report count as text.")
+        add(errors, UPDATE_LAYOUT_PATH, "top_evidence_card_duplicate_data", "Top evidence card should use the concise found-count line, not old counted copy.")
+    if "update-evidence-report-count" not in text or "user report{% unless report_count == 1 %}s{% endunless %} found" not in text:
+        add(errors, UPDATE_LAYOUT_PATH, "top_evidence_report_count_missing", "Top evidence card should show the counted user-report total once inside the evidence card.")
     if "consensus-chart-meta" not in text:
         add(errors, UPDATE_LAYOUT_PATH, "top_chart_evidence_date_missing", "Top chart should retain the last evidence checked date inside the chart area.")
     if "update-evidence-meta-row" in text:
@@ -424,6 +426,8 @@ def scan_update_layout_public_copy() -> tuple[list[dict[str, str]], list[dict[st
         add(errors, UPDATE_LAYOUT_PATH, "file_size_pill_value_guard_missing", "The top file-size pill must render only when a stripped real value exists.")
     if "File size: {{ patch_file_size_clean" in text:
         add(errors, UPDATE_LAYOUT_PATH, "file_size_label_only_regression", "File-size metadata should use guarded label/value markup, not a label that can render without a value.")
+    if "issue_cluster_first" not in text or "issue_label_first" not in text:
+        add(errors, UPDATE_LAYOUT_PATH, "verdict_issue_cluster_sanitize_missing", "Verdict issue cluster copy should strip leading punctuation before rendering.")
     official_notes_pos = text.find('id="official-patch-notes"')
     technical_details_pos = text.find('id="technical-details"')
     sources_pos = text.find('id="user-reports-sources"')

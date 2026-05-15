@@ -2975,6 +2975,10 @@ button, input, select, textarea { font: inherit; }
   display: none !important;
 }
 
+.update-meta-pill:has(.update-meta-pill__value:empty) {
+  display: none !important;
+}
+
 .update-meta-strip a {
   color: var(--text-0);
   font-weight: 800;
@@ -5054,6 +5058,19 @@ button, input, select, textarea { font: inherit; }
 .update-evidence-summary-line {
   width: fit-content;
   max-width: 100%;
+}
+
+.update-evidence-report-count {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  max-width: 100%;
+  color: var(--text-1);
+  font-size: .78rem;
+  font-weight: 800;
+  letter-spacing: .085em;
+  line-height: 1.25;
+  text-transform: uppercase;
 }
 
 .update-evidence-card .consensus-position-graph {

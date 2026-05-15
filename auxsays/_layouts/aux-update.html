@@ -99,6 +99,10 @@ layout: aux-base
 {% if page.evidence_samples and page.evidence_samples.size > 0 %}
   {% for item in page.evidence_samples %}
     {% assign issue_label = item.issue | default: item.issue_theme | default: item.theme | default: '' | strip %}
+    {% assign issue_label_first = issue_label | slice: 0 %}
+    {% if issue_label_first == ',' or issue_label_first == ';' %}
+      {% assign issue_label = issue_label | slice: 1, 240 | strip %}
+    {% endif %}
     {% if issue_label != blank %}
       {% assign issue_cluster_token = '|' | append: issue_label | append: '|' %}
       {% unless issue_cluster_seen contains issue_cluster_token %}
@@ -117,6 +121,10 @@ layout: aux-base
 {% if issue_cluster_text == blank and page.complaint_themes and page.complaint_themes.size > 0 %}
   {% for item in page.complaint_themes %}
     {% assign issue_label = item.theme | default: '' | strip %}
+    {% assign issue_label_first = issue_label | slice: 0 %}
+    {% if issue_label_first == ',' or issue_label_first == ';' %}
+      {% assign issue_label = issue_label | slice: 1, 240 | strip %}
+    {% endif %}
     {% if issue_label != blank %}
       {% if issue_cluster_text == blank %}
         {% assign issue_cluster_text = issue_label %}
@@ -128,6 +136,12 @@ layout: aux-base
     {% if issue_cluster_count >= 3 %}{% break %}{% endif %}
   {% endfor %}
 {% endif %}
+{% assign issue_cluster_text = issue_cluster_text | strip %}
+{% assign issue_cluster_first = issue_cluster_text | slice: 0 %}
+{% if issue_cluster_first == ',' or issue_cluster_first == ';' %}
+  {% assign issue_cluster_text = issue_cluster_text | slice: 1, 720 | strip %}
+{% endif %}
+{% assign issue_cluster_text = issue_cluster_text | replace: ' ,', ',' | replace: ', ,', ', ' | replace: '  ', ' ' | strip %}
 {% assign has_practical_recommendations = false %}
 {% if page.practical_recommendations and page.practical_recommendations.size > 0 %}{% assign has_practical_recommendations = true %}{% endif %}
 {% if decision_body == blank and has_practical_recommendations %}
@@ -192,7 +206,14 @@ layout: aux-base
 {% assign update_channel_clean = page.update_channel_label | default: '' | strip %}
 {% assign release_channel_clean = page.release_channel_label | default: '' | strip %}
 {% assign release_type_clean = page.release_type_label | default: '' | strip %}
-{% assign release_channel_pill_clean = update_channel_clean | default: release_channel_clean | default: release_type_clean | strip %}
+{% assign release_channel_pill_clean = '' %}
+{% if update_channel_clean != blank %}
+  {% assign release_channel_pill_clean = update_channel_clean %}
+{% elsif release_channel_clean != blank %}
+  {% assign release_channel_pill_clean = release_channel_clean %}
+{% elsif release_type_clean != blank %}
+  {% assign release_channel_pill_clean = release_type_clean %}
+{% endif %}
 
 <div id="top" class="update-page-shell reveal-up">
   <section class="panel update-hero update-hero--v3">
@@ -229,6 +250,7 @@ layout: aux-base
       <div class="update-verdict-card update-verdict-card--clean update-evidence-card" aria-label="User report evidence summary">
         <div class="consensus-compact">
           <span class="update-evidence-summary-line"><strong>Evidence summary:</strong> <em class="consensus-word consensus-word--{{ evidence_metric_class }}">{{ evidence_metric_label }}</em></span>
+          <span class="update-evidence-report-count">{{ report_count }} user report{% unless report_count == 1 %}s{% endunless %} found</span>
         </div>
         <div class="consensus-position-graph consensus-position-graph--hero consensus-position-graph--{{ evidence_metric_class }}" style="--consensus-pos: {{ consensus_score_percent }}%;">
           {% if evidence_metric_class == 'insufficient-data' %}
