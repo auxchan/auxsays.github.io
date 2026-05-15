@@ -256,11 +256,14 @@ layout: aux-base
         <p class="patch-card-summary">{{ item.description }}</p>
         {% assign consensus_summary = item.update_consensus_summary | default: item.community_summary %}
         {% if consensus_summary %}
+        {% assign evidence_summary = consensus_summary | replace: 'This is a surfaced user-report sample, not a live telemetry feed.', '' | replace: 'This is a surfaced user-report sample, not a live telemetry feed', '' | replace: 'Confirmed patch-specific consensus collection is deferred until the consensus refresh pipeline is active.', 'No patch-specific user reports found yet.' | replace: 'Confirmed patch-specific consensus is deferred until the consensus refresh pipeline is active.', 'No patch-specific user reports found yet.' | strip %}
+        {% if evidence_summary != blank %}
         <div class="patch-consensus-block">
-          <span class="patch-consensus-label">Patch-specific consensus</span>
-          <p class="patch-consensus-line">{{ consensus_summary }}</p>
+          <span class="patch-consensus-label">Evidence summary</span>
+          <p class="patch-consensus-line">{{ evidence_summary }}</p>
           <span class="patch-consensus-meta">{{ item.update_report_count | default: 0 }} user report{% unless item.update_report_count == 1 %}s{% endunless %} found</span>
         </div>
+        {% endif %}
         {% endif %}
         <div class="patch-card-links">
           <a href="{{ item.url | relative_url }}">Read breakdown →</a>
@@ -336,11 +339,14 @@ layout: aux-base
           <p class="patch-card-summary">{{ item.description }}</p>
           {% assign consensus_summary = item.update_consensus_summary | default: item.community_summary %}
           {% if consensus_summary %}
+          {% assign evidence_summary = consensus_summary | replace: 'This is a surfaced user-report sample, not a live telemetry feed.', '' | replace: 'This is a surfaced user-report sample, not a live telemetry feed', '' | replace: 'Confirmed patch-specific consensus collection is deferred until the consensus refresh pipeline is active.', 'No patch-specific user reports found yet.' | replace: 'Confirmed patch-specific consensus is deferred until the consensus refresh pipeline is active.', 'No patch-specific user reports found yet.' | strip %}
+          {% if evidence_summary != blank %}
           <div class="patch-consensus-block">
-            <span class="patch-consensus-label">Patch-specific consensus</span>
-            <p class="patch-consensus-line">{{ consensus_summary }}</p>
+            <span class="patch-consensus-label">Evidence summary</span>
+            <p class="patch-consensus-line">{{ evidence_summary }}</p>
             <span class="patch-consensus-meta">{{ item.update_report_count | default: 0 }} user report{% unless item.update_report_count == 1 %}s{% endunless %} found</span>
           </div>
+          {% endif %}
           {% endif %}
           <div class="patch-card-links">
             <a href="{{ item.url | relative_url }}">Read breakdown →</a>

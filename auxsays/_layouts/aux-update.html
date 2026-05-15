@@ -82,11 +82,11 @@ layout: aux-base
 {% assign decision_body = page.update_decision_body %}
 {% if verdict_text == blank %}
   {% if evidence_state == 'Live consensus' %}
-    {% assign verdict_text = 'Consensus collection is active for this patch. Review the user reports and official notes before upgrading.' %}
+    {% assign verdict_text = 'User report tracking is active for this patch. Review the user reports and official notes before upgrading.' %}
   {% elsif evidence_state == 'User reports found' %}
-    {% assign verdict_text = 'This record includes patch-specific user reports. It is not a live telemetry feed.' %}
+    {% assign verdict_text = 'Patch-specific user reports have been found. Review the reported issues before updating a production setup.' %}
   {% elsif evidence_state == 'Official source only' %}
-    {% assign verdict_text = 'Official source captured. Community consensus is not live yet for this patch.' %}
+    {% assign verdict_text = 'Official source captured. No patch-specific user reports found yet.' %}
   {% else %}
     {% assign verdict_text = 'Insufficient data. AUXSAYS has not captured enough official or community evidence for a recommendation.' %}
   {% endif %}
@@ -117,19 +117,20 @@ layout: aux-base
 {% assign summary_text = page.release_summary | default: page.official_summary | default: page.description %}
 {% assign record_note_text = page.record_note | default: '' | strip %}
 {% assign consensus_text = page.consensus_report | default: page.community_summary %}
+{% assign evidence_summary_text = consensus_text | replace: 'This is a surfaced user-report sample, not a live telemetry feed.', '' | replace: 'This is a surfaced user-report sample, not a live telemetry feed', '' | replace: 'Confirmed patch-specific consensus collection is deferred until the consensus refresh pipeline is active.', 'No patch-specific user reports found yet.' | replace: 'Confirmed patch-specific consensus is deferred until the consensus refresh pipeline is active.', 'No patch-specific user reports found yet.' | strip %}
 {% assign has_practical_recommendations = false %}
 {% if page.practical_recommendations and page.practical_recommendations.size > 0 %}{% assign has_practical_recommendations = true %}{% endif %}
 {% assign recommendation_renderable = false %}
 {% if official_only_zero_reports or has_practical_recommendations %}{% assign recommendation_renderable = true %}{% endif %}
 {% assign consensus_report_renderable = false %}
-{% if report_count > 0 and consensus_text != blank %}{% assign consensus_report_renderable = true %}{% endif %}
+{% if report_count > 0 and evidence_summary_text != blank %}{% assign consensus_report_renderable = true %}{% endif %}
 {% assign intel_status_label = 'Insufficient data' %}
 {% if evidence_state == 'Official source only' %}
   {% assign intel_status_label = 'Official source only' %}
 {% elsif evidence_state == 'User reports found' %}
   {% assign intel_status_label = 'User reports found' %}
 {% elsif evidence_state == 'Live consensus' %}
-  {% assign intel_status_label = 'Live consensus' %}
+  {% assign intel_status_label = 'Live report tracking' %}
 {% endif %}
 {% assign file_size_present = false %}
 {% assign patch_file_size_clean = page.patch_file_size | default: '' | strip %}
@@ -209,7 +210,7 @@ layout: aux-base
 
       <div class="update-verdict-card update-verdict-card--clean">
         <div class="consensus-compact">
-          <span><strong>Consensus:</strong> <em class="consensus-word consensus-word--{{ reaction_class }}">{{ reaction }}</em></span>
+          <span><strong>Evidence summary:</strong> <em class="consensus-word consensus-word--{{ reaction_class }}">{{ reaction }}</em></span>
           <span class="consensus-secondary">{{ report_count }} user report{% unless report_count == 1 %}s{% endunless %} found</span>
           {% if report_count > 0 %}<span class="consensus-secondary">Evidence last checked: {{ evidence_checked_label }}</span>{% endif %}
         </div>
@@ -257,7 +258,7 @@ layout: aux-base
     {% if accepted_report_sources and accepted_report_sources.size > 0 %}<a href="#accepted-reports">Accepted reports</a>{% endif %}
     {% if page.evidence_source_limitations and page.evidence_source_limitations.size > 0 %}<a href="#source-limitations">Source limits</a>{% endif %}
     {% if recommendation_renderable %}<a href="#recommendation">Recommendation</a>{% endif %}
-    {% if consensus_report_renderable %}<a href="#consensus-report">Consensus Report</a>{% endif %}
+    {% if consensus_report_renderable %}<a href="#consensus-report">Evidence summary</a>{% endif %}
     {% if page.official_sources or page.update_source_url != blank or page.update_download_url != blank %}<a href="#sources">Sources</a>{% endif %}
     {% if page.status_events and page.status_events.size > 0 %}<a href="#history">History</a>{% endif %}
     {% if checksum_present %}<a href="#checksum">Checksum</a>{% endif %}
@@ -322,10 +323,10 @@ layout: aux-base
       </div>
       {% if accepted_report_sources and accepted_report_sources.size > 0 %}
       <details id="accepted-reports" class="update-evidence-full-list">
-        <summary>Full accepted report list <span>{{ accepted_report_sources.size }} source{% unless accepted_report_sources.size == 1 %}s{% endunless %}</span></summary>
+        <summary>Full report list <span>{{ accepted_report_sources.size }} source{% unless accepted_report_sources.size == 1 %}s{% endunless %}</span></summary>
         <ul class="update-source-list update-source-list--accepted">
           {% for source in accepted_report_sources %}
-          {% assign source_title = source.source_title | default: source.title | default: 'Accepted report' %}
+          {% assign source_title = source.source_title | default: source.title | default: 'User report' %}
           {% assign source_type_label = source.source_type | default: source.source_name | default: 'community report' %}
           {% assign source_issue = source.issue | default: source.issue_theme %}
           {% assign source_workflow = source.workflow_area %}
@@ -366,14 +367,14 @@ layout: aux-base
 
     {% if consensus_report_renderable %}
     <article id="consensus-report" class="panel update-info-card update-consensus-card update-methodology-details update-order-evidence-status">
-      <h2>Consensus Report</h2>
+      <h2>Evidence summary</h2>
       <div class="consensus-compact consensus-compact--card">
-        <span><strong>Evidence Status:</strong> <em class="consensus-word consensus-word--{{ reaction_class }}">{{ intel_status_label }}</em></span>
+        <span><strong>Evidence status:</strong> <em class="consensus-word consensus-word--{{ reaction_class }}">{{ intel_status_label }}</em></span>
         <span class="consensus-secondary">{{ report_count }} user report{% unless report_count == 1 %}s{% endunless %} found</span>
         <span class="consensus-secondary">Evidence last checked: {{ evidence_checked_label }}</span>
       </div>
       <div class="consensus-position-graph consensus-position-graph--card" style="--consensus-pos: {{ consensus_score_percent }}%;">
-        <div class="consensus-scale" aria-label="Consensus position from negative through moderate to positive">
+        <div class="consensus-scale" aria-label="Evidence direction from negative through moderate to positive">
           <span class="consensus-scale-zone consensus-scale-zone--negative"></span>
           <span class="consensus-scale-zone consensus-scale-zone--moderate"></span>
           <span class="consensus-scale-zone consensus-scale-zone--positive"></span>
@@ -381,7 +382,7 @@ layout: aux-base
         </div>
         <div class="consensus-scale-labels"><span>Negative</span><span>Moderate</span><span>Positive</span></div>
       </div>
-      {% if consensus_text != blank %}<p>{{ consensus_text }}</p>{% endif %}
+      {% if evidence_summary_text != blank %}<p>{{ evidence_summary_text }}</p>{% endif %}
       {% if page.complaint_themes and page.complaint_themes.size > 0 %}
       <div class="complaint-theme-table complaint-theme-table--renamed">
         <div class="complaint-theme-row complaint-theme-row--head"><span>Reported issue</span><span>Frequency</span><span>Severity</span></div>
