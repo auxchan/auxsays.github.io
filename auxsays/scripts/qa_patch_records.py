@@ -355,7 +355,7 @@ def scan_update_layout_public_copy() -> tuple[list[dict[str, str]], list[dict[st
     text = UPDATE_LAYOUT_PATH.read_text(encoding="utf-8")
     forbidden_public_copy = {
         "Practical recommendation": "Use public heading 'Recommendation' instead.",
-        "Evidence methodology details": "Use 'Consensus Report' for report-bearing pages and hide the large section for 0-report pages.",
+        "Evidence methodology details": "Use 'Evidence summary' for report-bearing pages and hide the large section for 0-report pages.",
         "Static" + " sample": "Public-facing wording must use User reports found.",
         "Pilot" + " sample": "Public-facing wording must use User reports found.",
         "pilot" + " sample": "Public-facing wording must use User reports found.",
@@ -377,8 +377,9 @@ def scan_update_layout_public_copy() -> tuple[list[dict[str, str]], list[dict[st
         add(warnings, UPDATE_LAYOUT_PATH, "official_summary_blank_guard_missing", "Official source summary should be guarded by stripped non-empty body content.")
     if "limit: visible_evidence_limit" not in text:
         add(errors, UPDATE_LAYOUT_PATH, "representative_sample_limit_missing", "Community risk samples must be limited to a concise representative set.")
-    if "accepted_report_sources" not in text or "Full accepted report list" not in text:
-        add(errors, UPDATE_LAYOUT_PATH, "collapsed_accepted_sources_missing", "Full accepted report/source lists must render behind a collapsed disclosure.")
+    accepted_sources_disclosure = re.search(r"<details\b(?=[^>]*\bid=[\"']accepted-reports[\"'])(?![^>]*\bopen\b)[^>]*>", text)
+    if "accepted_report_sources" not in text or "Full report list" not in text or not accepted_sources_disclosure:
+        add(errors, UPDATE_LAYOUT_PATH, "collapsed_accepted_sources_missing", "Accepted report/source lists must render behind a collapsed disclosure with the public 'Full report list' label.")
     if "evidence_source_limitations" not in text or "Source limitations" not in text:
         add(warnings, UPDATE_LAYOUT_PATH, "source_limitations_disclosure_missing", "Source/method limitations should render compactly when generated.")
 
