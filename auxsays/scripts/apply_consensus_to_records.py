@@ -377,8 +377,11 @@ def _result_for_group(pid: str, ver: str, rows: list[dict[str, Any]], *, is_cand
 
     evidence_last_checked = _latest_captured_at(included)
     proposed_fields: dict[str, Any] = {}
+    effective_write_plan: dict[str, Any] = {}
     if gate_eval["would_write"]:
         proposed_fields = _proposed_record_fields(pid, ver, included, record, evidence_last_checked)
+        if record:
+            effective_write_plan = _public_write_plan(_load_front_matter(record["abs_path"]), proposed_fields)
 
     return {
         "product_id": pid,
@@ -402,6 +405,7 @@ def _result_for_group(pid: str, ver: str, rows: list[dict[str, Any]], *, is_cand
         "would_write": gate_eval["would_write"],
         "write_blocked_reason": gate_eval["write_blocked_reason"],
         "proposed_fields_if_written": proposed_fields,
+        "effective_write_plan": effective_write_plan,
         "protected_fields_not_touched": sorted(PROTECTED_FIELDS),
     }
 
@@ -1002,15 +1006,102 @@ def _status_events_need_sanitization(events: Any) -> bool:
     return _sanitize_status_events(events) != events
 
 
+RECORD_SUBSTANTIVE_COMPARE_IGNORED = {"record_last_updated", "status_events_append"}
+STATUS_EVENT_SUBSTANTIVE_COMPARE_IGNORED = {"at", "timestamp", "captured_at", "updated_at"}
+
+
+def _has_substantive_record_change(data: dict[str, Any], fields: dict[str, Any]) -> bool:
+    comparable_fields = {key: value for key, value in fields.items() if key not in RECORD_SUBSTANTIVE_COMPARE_IGNORED}
+    return any(data.get(key) != value for key, value in comparable_fields.items())
+
+
+def _status_event_signature(event: Any) -> dict[str, Any] | None:
+    if not isinstance(event, dict):
+        return None
+    sanitized = _sanitize_status_events([event])
+    if not sanitized:
+        return None
+    signature: dict[str, Any] = {}
+    for key, value in sanitized[0].items():
+        if key in STATUS_EVENT_SUBSTANTIVE_COMPARE_IGNORED:
+            continue
+        if isinstance(value, str):
+            signature[key] = re.sub(r"\s+", " ", value).strip().lower()
+        else:
+            signature[key] = value
+    return signature
+
+
+def _latest_status_event_equivalent(events: Any, proposed_event: Any) -> bool:
+    sanitized_events = _sanitize_status_events(events)
+    if not sanitized_events:
+        return False
+    proposed_signature = _status_event_signature(proposed_event)
+    if proposed_signature is None:
+        return False
+    return _status_event_signature(sanitized_events[-1]) == proposed_signature
+
+
+def _record_write_plan(data: dict[str, Any], fields: dict[str, Any]) -> dict[str, Any]:
+    fields_to_write = dict(fields)
+    status_event = fields_to_write.get("status_events_append")
+    status_event_requested = status_event is not None
+    substantive_change = _has_substantive_record_change(data, fields)
+    latest_event_equivalent = (
+        _latest_status_event_equivalent(data.get("status_events"), status_event)
+        if status_event_requested
+        else False
+    )
+
+    status_event_would_apply = False
+    status_event_reason = "not_requested"
+    if status_event_requested:
+        status_event_would_apply = substantive_change and not latest_event_equivalent
+        if not substantive_change:
+            status_event_reason = "skipped_no_substantive_record_change"
+        elif latest_event_equivalent:
+            status_event_reason = "skipped_latest_status_event_equivalent"
+        else:
+            status_event_reason = "applied_substantive_record_change"
+        if not status_event_would_apply:
+            fields_to_write.pop("status_events_append", None)
+
+    if not substantive_change:
+        if _status_events_need_sanitization(data.get("status_events")):
+            fields_to_write = {"status_events": _sanitize_status_events(data.get("status_events"))}
+        else:
+            fields_to_write = {}
+
+    return {
+        "fields": fields_to_write,
+        "substantive_record_change": substantive_change,
+        "status_events_append": {
+            "requested": status_event_requested,
+            "would_apply": status_event_would_apply,
+            "reason": status_event_reason,
+            "latest_existing_event_equivalent": latest_event_equivalent,
+        },
+    }
+
+
 def _fields_for_record_write(data: dict[str, Any], fields: dict[str, Any]) -> dict[str, Any]:
-    compare_ignored = {"record_last_updated", "status_events_append"}
-    comparable_fields = {key: value for key, value in fields.items() if key not in compare_ignored}
-    content_changed = any(data.get(key) != value for key, value in comparable_fields.items())
-    if content_changed:
-        return fields
-    if _status_events_need_sanitization(data.get("status_events")):
-        return {"status_events": _sanitize_status_events(data.get("status_events"))}
-    return {}
+    return _record_write_plan(data, fields)["fields"]
+
+
+def _public_write_plan(data: dict[str, Any], fields: dict[str, Any]) -> dict[str, Any]:
+    plan = _record_write_plan(data, fields)
+    return {
+        "fields_that_would_write": _fields_written_labels(plan["fields"]),
+        "substantive_record_change": plan["substantive_record_change"],
+        "status_events_append": plan["status_events_append"],
+    }
+
+
+def _fields_written_labels(fields: dict[str, Any]) -> list[str]:
+    labels = sorted(k for k in fields.keys() if k != "status_events_append")
+    if "status_events_append" in fields:
+        labels.append("status_events")
+    return labels
 
 
 def _apply_record_fields(record_path: Path, fields: dict[str, Any]) -> dict[str, Any]:
@@ -1019,7 +1110,11 @@ def _apply_record_fields(record_path: Path, fields: dict[str, Any]) -> dict[str,
     illegal = sorted(k for k in fields if k in PROTECTED_FIELDS and k not in CONSENSUS_COHERENCE_FIELDS)
     if illegal:
         raise RuntimeError(f"Refusing to overwrite protected fields: {illegal}")
-    for key, value in fields.items():
+    write_plan = _record_write_plan(data, fields)
+    fields_to_apply = write_plan["fields"]
+    if not fields_to_apply:
+        return {"before": before, "after": data, "write_plan": write_plan}
+    for key, value in fields_to_apply.items():
         if key == "status_events_append":
             events = _sanitize_status_events(data.get("status_events"))
             events.append(value)
@@ -1029,7 +1124,7 @@ def _apply_record_fields(record_path: Path, fields: dict[str, Any]) -> dict[str,
         else:
             raise RuntimeError(f"Refusing to write unapproved field: {key}")
     _write_front_matter_and_body(record_path, data, body)
-    return {"before": before, "after": data}
+    return {"before": before, "after": data, "write_plan": write_plan}
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -1105,15 +1200,41 @@ def main(argv: list[str] | None = None) -> int:
             _write_json(payload, args.output)
             return 2
         record_path = ROOT / record_rel
-        snapshot = _apply_record_fields(record_path, result["proposed_fields_if_written"])
+        current_data = _load_front_matter(record_path)
+        fields_to_write = _fields_for_record_write(current_data, result["proposed_fields_if_written"])
+        effective_write_plan = _public_write_plan(current_data, result["proposed_fields_if_written"])
+        if not fields_to_write:
+            payload["write_result"] = {
+                "success": True,
+                "record_path": str(record_path.relative_to(ROOT)),
+                "skipped": True,
+                "reason": "Already current.",
+                "fields_written": [],
+                "pre_write_report_count": current_data.get("update_report_count"),
+                "post_write_report_count": current_data.get("update_report_count"),
+                "pre_write_evidence_state": current_data.get("evidence_state"),
+                "post_write_evidence_state": current_data.get("evidence_state"),
+                "effective_write_plan": effective_write_plan,
+            }
+            _write_json(payload, args.output)
+            print(
+                f"[apply_consensus_to_records] {payload['mode']}: {len(results)} group(s); "
+                f"{payload['groups_would_write']} would write; {payload['groups_write_blocked']} blocked; "
+                f"{payload['total_included_candidates']} included; {payload['total_excluded_candidates']} excluded.",
+                file=sys.stderr,
+            )
+            return 0
+        snapshot = _apply_record_fields(record_path, fields_to_write)
         payload["write_result"] = {
             "success": True,
             "record_path": str(record_path.relative_to(ROOT)),
-            "fields_written": sorted(k for k in result["proposed_fields_if_written"].keys() if k != "status_events_append") + ["status_events"],
+            "skipped": False,
+            "fields_written": _fields_written_labels(fields_to_write),
             "pre_write_report_count": snapshot["before"].get("update_report_count"),
             "post_write_report_count": snapshot["after"].get("update_report_count"),
             "pre_write_evidence_state": snapshot["before"].get("evidence_state"),
             "post_write_evidence_state": snapshot["after"].get("evidence_state"),
+            "effective_write_plan": effective_write_plan,
         }
 
     if args.write_all:
@@ -1170,7 +1291,7 @@ def main(argv: list[str] | None = None) -> int:
                 "product_id": result["product_id"],
                 "update_version": result["update_version"],
                 "skipped": False,
-                "fields_written": sorted(k for k in fields_to_write.keys() if k != "status_events_append") + (["status_events"] if "status_events_append" in fields_to_write else []),
+                "fields_written": _fields_written_labels(fields_to_write),
                 "pre_write_report_count": snapshot["before"].get("update_report_count"),
                 "post_write_report_count": snapshot["after"].get("update_report_count"),
             })
