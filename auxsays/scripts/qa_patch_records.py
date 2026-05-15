@@ -410,6 +410,14 @@ def scan_update_layout_public_copy() -> tuple[list[dict[str, str]], list[dict[st
         add(errors, UPDATE_LAYOUT_PATH, "top_evidence_card_duplicate_data", "Top evidence card should not repeat report count as text.")
     if "consensus-chart-meta" not in text:
         add(errors, UPDATE_LAYOUT_PATH, "top_chart_evidence_date_missing", "Top chart should retain the last evidence checked date inside the chart area.")
+    if "update-evidence-meta-row" in text:
+        add(errors, UPDATE_LAYOUT_PATH, "top_evidence_card_metadata_regression", "Release date and file size should render as top metadata pills, not inside the evidence card.")
+    if "legacy_consensus_score_percent" in text or "page.consensus_score_percent" in text:
+        add(errors, UPDATE_LAYOUT_PATH, "sentiment_marker_uses_legacy_score", "The top sentiment marker must follow the displayed evidence summary, not legacy score fields.")
+    if "consensus-position-graph--{{ evidence_metric_class }}" not in text:
+        add(errors, UPDATE_LAYOUT_PATH, "sentiment_marker_class_missing", "The top sentiment graph should carry the evidence summary class for visual state handling.")
+    if "consensus-scale-labels--neutral" not in text:
+        add(errors, UPDATE_LAYOUT_PATH, "sentiment_neutral_state_missing", "Not-enough-report pages should use a neutral chart treatment.")
     official_notes_pos = text.find('id="official-patch-notes"')
     technical_details_pos = text.find('id="technical-details"')
     sources_pos = text.find('id="user-reports-sources"')

@@ -20,18 +20,15 @@ layout: aux-base
   {% assign evidence_metric_class = 'moderate' %}
 {% endif %}
 {% assign reaction_class = evidence_metric_class %}
-{% assign consensus_score_percent = page.consensus_score_percent | default: page.legacy_consensus_score_percent %}
-{% unless consensus_score_percent %}
-  {% if evidence_metric_class == 'negative' %}
-    {% assign consensus_score_percent = 25 %}
-  {% elsif evidence_metric_class == 'moderate' %}
-    {% assign consensus_score_percent = 55 %}
-  {% elsif evidence_metric_class == 'optimal' %}
-    {% assign consensus_score_percent = 82 %}
-  {% else %}
-    {% assign consensus_score_percent = 50 %}
-  {% endif %}
-{% endunless %}
+{% if evidence_metric_class == 'negative' %}
+  {% assign consensus_score_percent = 18 %}
+{% elsif evidence_metric_class == 'moderate' %}
+  {% assign consensus_score_percent = 50 %}
+{% elsif evidence_metric_class == 'optimal' %}
+  {% assign consensus_score_percent = 84 %}
+{% else %}
+  {% assign consensus_score_percent = 50 %}
+{% endif %}
 {% assign company = site.data.patch_companies | where: "id", page.company_id | first %}
 {% assign product = site.data.patch_products | where: "id", page.product_id | first %}
 {% if page.update_detail_title != blank %}
@@ -149,7 +146,12 @@ layout: aux-base
 {% assign official_source_type = page.official_patch_notes_source_type | default: page.official_source_type | default: 'official-source' %}
 {% assign file_size_present = false %}
 {% assign patch_file_size_clean = page.patch_file_size | default: '' | strip %}
-{% if patch_file_size_clean != blank and patch_file_size_clean != 'Not captured' and patch_file_size_clean != 'Unknown' and patch_file_size_clean != 'null' %}{% assign file_size_present = true %}{% endif %}
+{% assign patch_file_size_key = patch_file_size_clean | downcase %}
+{% assign blocked_file_size_values = '|not captured|unknown|null|not provided by source|creative cloud-managed / not provided by source|' %}
+{% assign patch_file_size_token = '|' | append: patch_file_size_key | append: '|' %}
+{% if patch_file_size_clean != blank %}
+  {% unless blocked_file_size_values contains patch_file_size_token %}{% assign file_size_present = true %}{% endunless %}
+{% endif %}
 {% assign file_size_label = patch_file_size_clean %}
 {% if file_size_present == false %}
   {% assign file_size_state = page.patch_file_size_status | default: '' | strip %}
@@ -182,6 +184,15 @@ layout: aux-base
 {% assign has_public_history = false %}
 {% if rendered_history_events and rendered_history_events.size > 0 %}{% assign has_public_history = true %}{% endif %}
 {% assign resolved_update_logo_path = product.logo_path | default: company.logo_path %}
+{% assign product_name_clean = product.product_name | default: '' | strip %}
+{% assign product_url_clean = product.product_url | default: '' | strip %}
+{% assign update_version_clean = page.update_version | default: '' | strip %}
+{% assign update_channel_clean = page.update_channel_label | default: '' | strip %}
+{% assign release_channel_clean = page.release_channel_label | default: '' | strip %}
+{% assign update_platform_clean = page.update_platform_label | default: '' | strip %}
+{% assign platform_label_clean = page.platform_label | default: '' | strip %}
+{% assign release_type_clean = page.release_type_label | default: '' | strip %}
+{% assign update_type_clean = page.update_type | default: '' | strip | replace: '-', ' ' %}
 
 <div id="top" class="update-page-shell reveal-up">
   <section class="panel update-hero update-hero--v3">
@@ -202,24 +213,35 @@ layout: aux-base
       <h1 class="update-title">{{ display_title }}</h1>
 
       <div class="update-meta-strip">
-        {% if product %}<a href="{{ product.product_url | relative_url }}">Product: {{ product.product_name }}</a>{% endif %}
-        {% if page.update_version != blank %}<span>Version: {{ page.update_version }}</span>{% endif %}
-        {% if page.update_channel_label != blank %}<span>{{ page.update_channel_label }}</span>{% elsif page.release_channel_label != blank %}<span>{{ page.release_channel_label }}</span>{% endif %}
-        {% if page.update_platform_label != blank %}<span>{{ page.update_platform_label }}</span>{% elsif page.platform_label != blank %}<span>{{ page.platform_label }}</span>{% endif %}
-        {% if page.release_type_label != blank %}<span>{{ page.release_type_label }}</span>{% elsif page.update_type != blank %}<span>{{ page.update_type | replace: '-', ' ' }}</span>{% endif %}
+        {% if product_name_clean != blank %}
+          {% if product_url_clean != blank %}
+          <a href="{{ product_url_clean | relative_url }}">Product: {{ product_name_clean }}</a>
+          {% else %}
+          <span>Product: {{ product_name_clean }}</span>
+          {% endif %}
+        {% endif %}
+        {% if update_version_clean != blank %}<span>Version: {{ update_version_clean }}</span>{% endif %}
+        {% if update_channel_clean != blank %}<span>{{ update_channel_clean }}</span>{% elsif release_channel_clean != blank %}<span>{{ release_channel_clean }}</span>{% endif %}
+        {% if update_platform_clean != blank %}<span>{{ update_platform_clean }}</span>{% elsif platform_label_clean != blank %}<span>{{ platform_label_clean }}</span>{% endif %}
+        {% if release_type_clean != blank %}<span>{{ release_type_clean }}</span>{% elsif update_type_clean != blank %}<span>{{ update_type_clean }}</span>{% endif %}
+        {% if page.update_published_at != blank %}<span>Release date: {{ page.update_published_at | date: "%b %-d, %Y" }}</span>{% endif %}
+        {% if file_size_present %}<span>File size: {{ patch_file_size_clean }}</span>{% endif %}
       </div>
 
       <div class="update-verdict-card update-verdict-card--clean update-evidence-card" aria-label="User report evidence summary">
         <div class="consensus-compact">
           <span class="update-evidence-summary-line"><strong>Evidence summary:</strong> <em class="consensus-word consensus-word--{{ evidence_metric_class }}">{{ evidence_metric_label }}</em></span>
-          {% if page.update_published_at != blank or file_size_present %}
-          <span class="update-evidence-meta-row">
-            {% if page.update_published_at != blank %}<span class="consensus-secondary">Release date: {{ page.update_published_at | date: "%b %-d, %Y" }}</span>{% endif %}
-            {% if file_size_present %}<span class="consensus-secondary">File size: {{ patch_file_size_clean }}</span>{% endif %}
-          </span>
-          {% endif %}
         </div>
-        <div class="consensus-position-graph consensus-position-graph--hero" style="--consensus-pos: {{ consensus_score_percent }}%;">
+        <div class="consensus-position-graph consensus-position-graph--hero consensus-position-graph--{{ evidence_metric_class }}" style="--consensus-pos: {{ consensus_score_percent }}%;">
+          {% if evidence_metric_class == 'insufficient-data' %}
+          <div class="consensus-scale consensus-scale--neutral" aria-hidden="true">
+            <span class="consensus-scale-zone consensus-scale-zone--neutral"></span>
+            <span class="consensus-scale-marker"></span>
+          </div>
+          <div class="consensus-scale-labels consensus-scale-labels--neutral" aria-hidden="true">
+            <span>Not enough reports</span>
+          </div>
+          {% else %}
           <div class="consensus-scale" aria-hidden="true">
             <span class="consensus-scale-zone consensus-scale-zone--negative"></span>
             <span class="consensus-scale-zone consensus-scale-zone--moderate"></span>
@@ -229,6 +251,7 @@ layout: aux-base
           <div class="consensus-scale-labels" aria-hidden="true">
             <span>Negative</span><span>Moderate</span><span>Optimal</span>
           </div>
+          {% endif %}
           {% if evidence_checked_at != blank %}<p class="consensus-chart-meta">Last evidence checked: {{ evidence_checked_label }}</p>{% endif %}
         </div>
       </div>

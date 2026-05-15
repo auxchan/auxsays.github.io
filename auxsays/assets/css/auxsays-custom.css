@@ -3651,6 +3651,15 @@ button, input, select, textarea { font: inherit; }
   border-radius: 0 999px 999px 0;
 }
 
+.consensus-scale--neutral {
+  grid-template-columns: 1fr;
+  background: linear-gradient(90deg, rgba(126,145,153,.42), rgba(95,212,229,.22), rgba(126,145,153,.42));
+}
+
+.consensus-scale-zone--neutral {
+  border-radius: 999px;
+}
+
 .consensus-scale-marker {
   position: absolute;
   top: 50%;
@@ -3680,6 +3689,21 @@ button, input, select, textarea { font: inherit; }
 
 .consensus-scale-labels span:nth-child(3) {
   text-align: right;
+}
+
+.consensus-scale-labels--neutral {
+  grid-template-columns: 1fr;
+}
+
+.consensus-scale-labels--neutral span,
+.consensus-scale-labels--neutral span:nth-child(2),
+.consensus-scale-labels--neutral span:nth-child(3) {
+  text-align: center;
+}
+
+.consensus-position-graph--insufficient-data .consensus-scale-marker {
+  background: #d8edf1;
+  box-shadow: 0 0 0 1px rgba(255,255,255,.28), 0 0 16px rgba(95,212,229,.20);
 }
 
 @media (max-width: 640px) {
@@ -5003,28 +5027,6 @@ button, input, select, textarea { font: inherit; }
 .update-evidence-summary-line {
   width: fit-content;
   max-width: 100%;
-}
-
-.update-evidence-card .update-evidence-meta-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: .38rem .55rem;
-}
-
-.update-evidence-meta-row .consensus-secondary {
-  display: inline-flex;
-  align-items: center;
-  min-height: 1.65rem;
-  padding: .2rem .55rem;
-  border: 1px solid rgba(95,212,229,.16);
-  border-radius: 999px;
-  background: rgba(95,212,229,.045);
-  color: var(--text-1);
-  font-size: .74rem;
-  font-weight: 800;
-  letter-spacing: .075em;
-  line-height: 1.2;
-  text-transform: uppercase;
 }
 
 .update-evidence-card .consensus-position-graph {
