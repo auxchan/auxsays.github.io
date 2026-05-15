@@ -407,11 +407,11 @@ def scan_update_layout_public_copy() -> tuple[list[dict[str, str]], list[dict[st
         add(errors, UPDATE_LAYOUT_PATH, "checksum_body_render_path_missing", "Checksum section should render stripped checksum content when present.")
     if "official_body_clean" not in text:
         add(warnings, UPDATE_LAYOUT_PATH, "official_summary_blank_guard_missing", "Official source summary should be guarded by stripped non-empty body content.")
-    if "limit: visible_evidence_limit" not in text:
-        add(errors, UPDATE_LAYOUT_PATH, "visible_source_limit_missing", "User report source lists must render a concise initial set.")
-    accepted_sources_disclosure = re.search(r"<details\b(?=[^>]*\bid=[\"']accepted-reports[\"'])(?![^>]*\bopen\b)[^>]*>", text)
-    if "accepted_report_sources" not in text or "Show more user report sources" not in text or not accepted_sources_disclosure:
-        add(errors, UPDATE_LAYOUT_PATH, "collapsed_accepted_sources_missing", "Long user report source lists must render behind a collapsed disclosure.")
+    sources_disclosure = re.search(r"<details\b(?=[^>]*\bid=[\"']user-reports-sources[\"'])[^>]*>", text)
+    if "accepted_report_sources" not in text or "user_report_source_count" not in text or "sources_collapsed_by_default" not in text or not sources_disclosure:
+        add(errors, UPDATE_LAYOUT_PATH, "collapsible_sources_missing", "User Reports / Sources must render as a count-labeled details disclosure.")
+    if "{% if user_report_source_count > 5 %}" not in text:
+        add(errors, UPDATE_LAYOUT_PATH, "sources_collapse_threshold_missing", "User Reports / Sources should collapse by default only when more than five source items exist.")
     if "evidence_source_limitations" in text or "Source limitations" in text:
         add(warnings, UPDATE_LAYOUT_PATH, "source_limitations_public_copy_present", "Method limitations should live on the methodology page, not each patch page.")
 

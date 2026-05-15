@@ -164,6 +164,10 @@ layout: aux-base
 {% endif %}
 {% assign has_user_report_sources = false %}
 {% if accepted_report_sources and accepted_report_sources.size > 0 %}{% assign has_user_report_sources = true %}{% endif %}
+{% assign user_report_source_count = 0 %}
+{% if has_user_report_sources %}{% assign user_report_source_count = accepted_report_sources.size | plus: 0 %}{% endif %}
+{% assign sources_collapsed_by_default = false %}
+{% if user_report_source_count > 5 %}{% assign sources_collapsed_by_default = true %}{% endif %}
 {% assign has_official_links = false %}
 {% if page.official_sources or page.update_source_url != blank or page.update_download_url != blank %}{% assign has_official_links = true %}{% endif %}
 {% assign rendered_history_events = page.public_status_events | default: page.public_history_events | default: page.update_history %}
@@ -290,12 +294,13 @@ layout: aux-base
       {% endif %}
     </article>
 
-    <article id="user-reports-sources" class="panel update-info-card update-sources-card update-order-sources">
-      <h2>User Reports / Sources</h2>
+    <details id="user-reports-sources" class="panel update-info-card update-sources-card update-sources-disclosure update-order-sources"{% unless sources_collapsed_by_default %} open{% endunless %}>
+      <summary><span>User Reports / Sources</span> <span class="update-sources-count">({{ user_report_source_count }})</span></summary>
+      <div class="update-sources-disclosure__body">
       {% if has_user_report_sources %}
       <p class="update-section-intro">User report sources used for the current read.</p>
       <ul class="update-source-list update-source-list--accepted">
-        {% for source in accepted_report_sources limit: visible_evidence_limit %}
+        {% for source in accepted_report_sources %}
         {% assign source_title = source.source_title | default: source.title | default: 'User report' %}
         {% assign source_type_label = source.source_type | default: source.source_name | default: 'user report' %}
         {% assign source_issue = source.issue | default: source.issue_theme %}
@@ -308,25 +313,6 @@ layout: aux-base
         </li>
         {% endfor %}
       </ul>
-      {% if accepted_report_sources.size > visible_evidence_limit %}
-      <details id="accepted-reports" class="update-evidence-full-list">
-        <summary>Show more user report sources</summary>
-        <ul class="update-source-list update-source-list--accepted">
-          {% for source in accepted_report_sources offset: visible_evidence_limit %}
-          {% assign source_title = source.source_title | default: source.title | default: 'User report' %}
-          {% assign source_type_label = source.source_type | default: source.source_name | default: 'user report' %}
-          {% assign source_issue = source.issue | default: source.issue_theme %}
-          {% assign source_workflow = source.workflow_area %}
-          <li>
-            <cite>{% if source.source_name != blank %}{{ source.source_name }}. {% endif %}{% if source.source_date != blank %}({{ source.source_date | date: "%Y, %B %-d" }}). {% endif %}{% if source.source_url != blank %}<a href="{{ source.source_url }}">{{ source_title }}</a>{% else %}{{ source_title }}{% endif %}.</cite>
-            <span>{{ source_type_label | replace: '_', ' ' }}</span>
-            {% if source_issue != blank %}<small>Issue: {{ source_issue }}</small>{% endif %}
-            {% if source_workflow != blank %}<small>Workflow: {{ source_workflow }}</small>{% endif %}
-          </li>
-          {% endfor %}
-        </ul>
-      </details>
-      {% endif %}
       {% else %}
       <p>No user report sources have been counted for this record yet.</p>
       {% endif %}
@@ -344,7 +330,8 @@ layout: aux-base
         {% if page.update_download_url != blank %}<li><cite>{% if page.update_source_name != blank %}{{ page.update_source_name }}. {% endif %}<a href="{{ page.update_download_url }}">Download page</a>.</cite><span>download</span></li>{% endif %}
       </ul>
       {% endif %}
-    </article>
+      </div>
+    </details>
 
     {% if has_public_history %}
     <details id="history" class="panel update-info-card update-status-details update-order-history">

@@ -5055,6 +5055,58 @@ button, input, select, textarea { font: inherit; }
   margin-top: .55rem;
 }
 
+.update-sources-disclosure {
+  padding: 0;
+}
+
+.update-sources-disclosure > summary {
+  display: flex;
+  align-items: center;
+  gap: .45rem;
+  cursor: pointer;
+  padding: 1.15rem 1.35rem;
+  color: var(--text-0);
+  font-size: clamp(1.25rem, 1.9vw, 1.85rem);
+  font-weight: 850;
+  line-height: 1.08;
+  list-style: none;
+}
+
+.update-sources-disclosure > summary::-webkit-details-marker {
+  display: none;
+}
+
+.update-sources-disclosure > summary::before {
+  content: ">";
+  flex: 0 0 auto;
+  color: var(--accent-0);
+  font-size: 1rem;
+  transform: translateY(-1px);
+  transition: transform .18s ease;
+}
+
+.update-sources-disclosure[open] > summary::before {
+  transform: rotate(90deg) translateX(1px);
+}
+
+.update-sources-count {
+  color: var(--text-2);
+  font-size: .82rem;
+  letter-spacing: .08em;
+}
+
+.update-sources-disclosure__body {
+  padding: 0 1.35rem 1.35rem;
+}
+
+.update-sources-disclosure:not([open]) {
+  background: rgba(255,255,255,.018);
+}
+
+.update-sources-disclosure:not([open]) > summary {
+  border-radius: inherit;
+}
+
 .update-order-official-details { order: 10; }
 .update-order-sources { order: 20; }
 .update-order-history { order: 30; }
