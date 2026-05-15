@@ -212,8 +212,8 @@ layout: aux-base
       <div class="update-verdict-card update-verdict-card--clean update-evidence-card" aria-label="User report evidence summary">
         <div class="consensus-compact">
           <span><strong>Evidence summary:</strong> <em class="consensus-word consensus-word--{{ evidence_metric_class }}">{{ evidence_metric_label }}</em></span>
-          <span class="consensus-secondary">{{ report_count }} user report{% unless report_count == 1 %}s{% endunless %} counted</span>
-          <span class="consensus-secondary">Last evidence check: {{ evidence_checked_label }}</span>
+          {% if page.update_published_at != blank %}<span class="consensus-secondary">Release date: {{ page.update_published_at | date: "%b %-d, %Y" }}</span>{% endif %}
+          {% if file_size_present %}<span class="consensus-secondary">File size: {{ patch_file_size_clean }}</span>{% endif %}
         </div>
         <div class="consensus-position-graph consensus-position-graph--hero" style="--consensus-pos: {{ consensus_score_percent }}%;">
           <div class="consensus-scale" aria-hidden="true">
@@ -225,6 +225,7 @@ layout: aux-base
           <div class="consensus-scale-labels" aria-hidden="true">
             <span>Negative</span><span>Moderate</span><span>Optimal</span>
           </div>
+          {% if evidence_checked_at != blank %}<p class="consensus-chart-meta">Last evidence checked: {{ evidence_checked_label }}</p>{% endif %}
         </div>
       </div>
 

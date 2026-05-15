@@ -5000,6 +5000,17 @@ button, input, select, textarea { font: inherit; }
   margin-top: .45rem;
 }
 
+.consensus-chart-meta {
+  margin: -.12rem 0 0;
+  color: var(--text-2);
+  font-size: .72rem;
+  font-weight: 750;
+  letter-spacing: .08em;
+  line-height: 1.35;
+  text-align: right;
+  text-transform: uppercase;
+}
+
 .update-decision-recommendation {
   margin: .5rem 0 0;
   padding-left: .75rem;

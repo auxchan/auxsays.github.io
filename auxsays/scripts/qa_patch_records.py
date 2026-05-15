@@ -395,7 +395,8 @@ def scan_update_layout_public_copy() -> tuple[list[dict[str, str]], list[dict[st
         "User Reports / Sources",
         "Methodology",
         "AUXSAYS verdict",
-        "Last evidence check",
+        "Release date",
+        "Last evidence checked",
     ]
     for phrase in required_public_labels:
         if phrase not in text:
@@ -405,6 +406,10 @@ def scan_update_layout_public_copy() -> tuple[list[dict[str, str]], list[dict[st
         add(errors, UPDATE_LAYOUT_PATH, "checksum_render_not_guarded", "Checksum content must require stripped non-empty checksum content.")
     if "{{ checksum_body_clean | markdownify }}" not in text:
         add(errors, UPDATE_LAYOUT_PATH, "checksum_body_render_path_missing", "Checksum section should render stripped checksum content when present.")
+    if "user report{% unless report_count == 1 %}s{% endunless %} counted" in text:
+        add(errors, UPDATE_LAYOUT_PATH, "top_evidence_card_duplicate_data", "Top evidence card should not repeat report count as text.")
+    if "consensus-chart-meta" not in text:
+        add(errors, UPDATE_LAYOUT_PATH, "top_chart_evidence_date_missing", "Top chart should retain the last evidence checked date inside the chart area.")
     official_notes_pos = text.find('id="official-patch-notes"')
     technical_details_pos = text.find('id="technical-details"')
     sources_pos = text.find('id="user-reports-sources"')
