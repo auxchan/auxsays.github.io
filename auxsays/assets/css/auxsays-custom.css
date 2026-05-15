@@ -4981,3 +4981,80 @@ button, input, select, textarea { font: inherit; }
 .update-official-details .official-source-list {
   display: none !important;
 }
+
+/* Patch page layout standardization: one concise decision hierarchy. */
+.consensus-word--optimal {
+  color: #d9f7e5;
+}
+
+.update-evidence-card.update-verdict-card--clean {
+  display: grid;
+  align-items: stretch;
+  width: min(820px, 100%);
+  padding: .9rem 1rem;
+}
+
+.update-evidence-card .consensus-position-graph {
+  width: 100%;
+  max-width: 100%;
+  margin-top: .45rem;
+}
+
+.update-decision-recommendation {
+  margin: .5rem 0 0;
+  padding-left: .75rem;
+  border-left: 2px solid rgba(240,202,103,.56);
+  color: var(--text-0);
+  font-weight: 700;
+}
+
+.update-decision-reasoning {
+  display: grid;
+  gap: .4rem;
+  margin-top: .85rem;
+}
+
+.update-decision-reasoning p {
+  margin: 0;
+  max-width: 76rem;
+  color: var(--text-1);
+  line-height: 1.62;
+}
+
+.update-official-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .45rem;
+  margin: 0 0 .9rem;
+}
+
+.update-official-meta span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.75rem;
+  padding: .24rem .58rem;
+  border: 1px solid rgba(95,212,229,.16);
+  border-radius: 999px;
+  background: rgba(95,212,229,.045);
+  color: var(--text-2);
+  font-size: .72rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+
+.update-source-subhead {
+  margin: 1.1rem 0 .15rem;
+  color: var(--text-0);
+  font-size: .9rem;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+
+.update-source-list--official {
+  margin-top: .55rem;
+}
+
+.update-order-official-details { order: 10; }
+.update-order-sources { order: 20; }
+.update-order-history { order: 30; }

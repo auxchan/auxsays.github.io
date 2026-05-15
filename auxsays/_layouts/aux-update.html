@@ -2,14 +2,31 @@
 layout: aux-base
 ---
 {% assign reaction = page.update_consensus_label | default: page.community_reaction | default: page.current_consensus | default: 'Insufficient data' %}
-{% assign reaction_class = reaction | downcase | replace: ' ', '-' %}
+{% assign reaction_key = reaction | downcase %}
+{% assign report_count = page.update_report_count | default: 0 | plus: 0 %}
+{% assign evidence_metric_label = 'Not enough reports' %}
+{% assign evidence_metric_class = 'insufficient-data' %}
+{% if reaction_key contains 'negative' or reaction_key contains 'avoid' %}
+  {% assign evidence_metric_label = 'Negative' %}
+  {% assign evidence_metric_class = 'negative' %}
+{% elsif reaction_key contains 'positive' or reaction_key contains 'optimal' or reaction_key contains 'safe' %}
+  {% assign evidence_metric_label = 'Optimal' %}
+  {% assign evidence_metric_class = 'optimal' %}
+{% elsif reaction_key contains 'moderate' or reaction_key contains 'wait' or reaction_key contains 'mixed' %}
+  {% assign evidence_metric_label = 'Moderate' %}
+  {% assign evidence_metric_class = 'moderate' %}
+{% elsif report_count > 0 %}
+  {% assign evidence_metric_label = 'Moderate' %}
+  {% assign evidence_metric_class = 'moderate' %}
+{% endif %}
+{% assign reaction_class = evidence_metric_class %}
 {% assign consensus_score_percent = page.consensus_score_percent | default: page.legacy_consensus_score_percent %}
 {% unless consensus_score_percent %}
-  {% if reaction_class == 'negative' %}
+  {% if evidence_metric_class == 'negative' %}
     {% assign consensus_score_percent = 25 %}
-  {% elsif reaction_class == 'moderate' %}
+  {% elsif evidence_metric_class == 'moderate' %}
     {% assign consensus_score_percent = 55 %}
-  {% elsif reaction_class == 'positive' %}
+  {% elsif evidence_metric_class == 'optimal' %}
     {% assign consensus_score_percent = 82 %}
   {% else %}
     {% assign consensus_score_percent = 50 %}
@@ -24,35 +41,19 @@ layout: aux-base
 {% else %}
   {% assign display_title = page.update_product | append: ' ' | append: page.update_version %}
 {% endif %}
-{% assign report_count = page.update_report_count | default: 0 | plus: 0 %}
-{% assign collection_status = page.consensus_collection_status | default: 'deferred_official_only' %}
 {% assign evidence_checked_at = page.evidence_last_checked | default: page.consensus_last_checked %}
 {% assign evidence_checked_label = 'Not recorded' %}
 {% if evidence_checked_at != blank %}{% assign evidence_checked_label = evidence_checked_at | date: "%b %-d, %Y" %}{% endif %}
-{% assign source_checked_at = page.source_last_checked %}
-{% assign source_checked_label = 'Not recorded' %}
-{% if source_checked_at != blank %}{% assign source_checked_label = source_checked_at | date: "%b %-d, %Y" %}{% endif %}
-{% assign official_body_checked_at = page.official_body_last_checked %}
-{% assign official_body_checked_label = 'Not captured' %}
-{% if official_body_checked_at != blank %}{% assign official_body_checked_label = official_body_checked_at | date: "%b %-d, %Y" %}{% endif %}
-{% assign record_updated_at = page.record_last_updated %}
-{% assign record_updated_label = 'Not recorded' %}
-{% assign record_updated_is_legacy = false %}
-{% if record_updated_at != blank %}
-  {% assign record_updated_label = record_updated_at | date: "%b %-d, %Y" %}
-{% elsif page.update_last_checked != blank %}
-  {% assign record_updated_label = page.update_last_checked | date: "%b %-d, %Y" %}
-  {% assign record_updated_is_legacy = true %}
-{% endif %}
 {% assign source_url_present = false %}
 {% if page.update_source_url != blank or page.official_patch_notes_source_url != blank %}{% assign source_url_present = true %}{% endif %}
-{% assign official_body_present = false %}
 {% assign official_body_clean = page.official_patch_notes_body | default: '' | strip %}
+{% assign official_body_present = false %}
 {% if official_body_clean != blank %}{% assign official_body_present = true %}{% endif %}
 {% assign official_captured = false %}
 {% if source_url_present or official_body_present %}{% assign official_captured = true %}{% endif %}
 {% assign official_body_missing_renderable = false %}
 {% if official_body_present == false and source_url_present %}{% assign official_body_missing_renderable = true %}{% endif %}
+{% assign collection_status = page.consensus_collection_status | default: 'deferred_official_only' %}
 {% assign evidence_state = 'Insufficient data' %}
 {% assign evidence_state_class = 'insufficient' %}
 {% if collection_status == 'live_consensus' or collection_status == 'consensus_live' %}
@@ -65,128 +66,119 @@ layout: aux-base
   {% assign evidence_state = 'Official source only' %}
   {% assign evidence_state_class = 'official' %}
 {% endif %}
-{% assign source_captured_label = 'No' %}{% if official_captured %}{% assign source_captured_label = 'Yes' %}{% endif %}
 {% assign official_only_zero_reports = false %}
 {% if evidence_state == 'Official source only' and report_count == 0 %}{% assign official_only_zero_reports = true %}{% endif %}
 {% assign security_sensitive = false %}
 {% if page.security_sensitive == true or page.update_security_sensitive == true or page.official_patch_notes_source_type == 'security_advisory' or page.official_source_type == 'security_advisory' %}{% assign security_sensitive = true %}{% endif %}
-{% assign known_issues_label = 'Insufficient data' %}
-{% if page.known_issues_present == true %}
-  {% assign known_issues_label = 'Yes' %}
-{% elsif page.known_issues_present == false %}
-  {% assign known_issues_label = 'No' %}
-{% elsif page.complaint_themes and page.complaint_themes.size > 0 %}
-  {% assign known_issues_label = 'Yes' %}
-{% endif %}
 {% assign verdict_text = page.quick_verdict %}
 {% assign decision_body = page.update_decision_body %}
-{% if verdict_text == blank %}
-  {% if evidence_state == 'Live consensus' %}
-    {% assign verdict_text = 'User report tracking is active for this patch. Review the user reports and official notes before upgrading.' %}
-  {% elsif evidence_state == 'User reports found' %}
-    {% assign verdict_text = 'Patch-specific user reports have been found. Review the reported issues before updating a production setup.' %}
-  {% elsif evidence_state == 'Official source only' %}
-    {% assign verdict_text = 'Official source captured. No patch-specific user reports found yet.' %}
-  {% else %}
-    {% assign verdict_text = 'Insufficient data. AUXSAYS has not captured enough official or community evidence for a recommendation.' %}
-  {% endif %}
+{% assign decision_label = page.update_decision_label %}
+{% if decision_label == blank and page.update_consensus_summary contains ':' %}
+  {% assign decision_label = page.update_consensus_summary | split: ':' | first | strip %}
+{% elsif decision_label == blank and verdict_text contains ':' %}
+  {% assign decision_label = verdict_text | split: ':' | first | strip %}
+{% elsif decision_label == blank %}
+  {% assign decision_label = 'INSUFFICIENT DATA' %}
 {% endif %}
-{% assign decision_label = page.update_decision_label | default: verdict_text %}
 {% if official_only_zero_reports %}
-  {% assign decision_label = 'No AUXSAYS recommendation yet.' %}
+  {% assign decision_label = 'INSUFFICIENT DATA' %}
   {% if security_sensitive %}
-    {% assign verdict_text = 'Security-sensitive update. Test first if your workflow is fragile, but do not ignore security exposure.' %}
-    {% assign decision_body = verdict_text %}
+    {% assign decision_body = 'Security-sensitive update. Test first if your workflow is fragile, but do not ignore security exposure.' %}
   {% else %}
-    {% assign verdict_text = 'Official source captured. No user reports have been counted.' %}
-    {% assign decision_body = verdict_text %}
+    {% assign decision_body = 'Too few reports for a verdict yet.' %}
   {% endif %}
-{% endif %}
-{% assign patch_specific_reports_label = 'Not counted yet' %}
-{% if report_count > 0 %}
-  {% capture patch_specific_reports_label %}{{ report_count }} found{% endcapture %}
-{% elsif evidence_state == 'Official source only' %}
-  {% assign patch_specific_reports_label = 'No user reports yet' %}
-{% endif %}
-{% assign sample_size_label = 'Unavailable' %}
-{% if report_count > 0 and report_count < 8 %}
-  {% assign sample_size_label = 'Small sample size' %}
-{% elsif report_count >= 8 %}
-  {% assign sample_size_label = 'Growing sample' %}
 {% endif %}
 {% assign summary_text = page.release_summary | default: page.official_summary | default: page.description %}
 {% assign record_note_text = page.record_note | default: '' | strip %}
-{% assign consensus_text = page.consensus_report | default: page.community_summary %}
-{% assign evidence_summary_text = consensus_text | replace: 'This is a surfaced user-report sample, not a live telemetry feed.', '' | replace: 'This is a surfaced user-report sample, not a live telemetry feed', '' | replace: 'Confirmed patch-specific consensus collection is deferred until the consensus refresh pipeline is active.', 'No patch-specific user reports found yet.' | replace: 'Confirmed patch-specific consensus is deferred until the consensus refresh pipeline is active.', 'No patch-specific user reports found yet.' | strip %}
+{% assign issue_cluster_text = '' %}
+{% assign issue_cluster_seen = '|' %}
+{% assign issue_cluster_count = 0 %}
+{% if page.evidence_samples and page.evidence_samples.size > 0 %}
+  {% for item in page.evidence_samples %}
+    {% assign issue_label = item.issue | default: item.issue_theme | default: item.theme | default: '' | strip %}
+    {% if issue_label != blank %}
+      {% assign issue_cluster_token = '|' | append: issue_label | append: '|' %}
+      {% unless issue_cluster_seen contains issue_cluster_token %}
+        {% if issue_cluster_text == blank %}
+          {% assign issue_cluster_text = issue_label %}
+        {% else %}
+          {% capture issue_cluster_text %}{{ issue_cluster_text }}, {{ issue_label }}{% endcapture %}
+        {% endif %}
+        {% capture issue_cluster_seen %}{{ issue_cluster_seen }}{{ issue_label }}|{% endcapture %}
+        {% assign issue_cluster_count = issue_cluster_count | plus: 1 %}
+      {% endunless %}
+    {% endif %}
+    {% if issue_cluster_count >= 3 %}{% break %}{% endif %}
+  {% endfor %}
+{% endif %}
+{% if issue_cluster_text == blank and page.complaint_themes and page.complaint_themes.size > 0 %}
+  {% for item in page.complaint_themes %}
+    {% assign issue_label = item.theme | default: '' | strip %}
+    {% if issue_label != blank %}
+      {% if issue_cluster_text == blank %}
+        {% assign issue_cluster_text = issue_label %}
+      {% else %}
+        {% capture issue_cluster_text %}{{ issue_cluster_text }}, {{ issue_label }}{% endcapture %}
+      {% endif %}
+      {% assign issue_cluster_count = issue_cluster_count | plus: 1 %}
+    {% endif %}
+    {% if issue_cluster_count >= 3 %}{% break %}{% endif %}
+  {% endfor %}
+{% endif %}
 {% assign has_practical_recommendations = false %}
 {% if page.practical_recommendations and page.practical_recommendations.size > 0 %}{% assign has_practical_recommendations = true %}{% endif %}
-{% assign recommendation_renderable = false %}
-{% if official_only_zero_reports or has_practical_recommendations %}{% assign recommendation_renderable = true %}{% endif %}
-{% assign consensus_report_renderable = false %}
-{% if report_count > 0 and evidence_summary_text != blank %}{% assign consensus_report_renderable = true %}{% endif %}
-{% assign intel_status_label = 'Insufficient data' %}
-{% if evidence_state == 'Official source only' %}
-  {% assign intel_status_label = 'Official source only' %}
-{% elsif evidence_state == 'User reports found' %}
-  {% assign intel_status_label = 'User reports found' %}
-{% elsif evidence_state == 'Live consensus' %}
-  {% assign intel_status_label = 'Live report tracking' %}
+{% if decision_body == blank and has_practical_recommendations %}
+  {% assign decision_body = page.practical_recommendations | first %}
 {% endif %}
+{% if decision_body == blank %}
+  {% if report_count > 0 %}
+    {% assign decision_body = 'Review the report sources and test before updating deadline-sensitive work.' %}
+  {% else %}
+    {% assign decision_body = 'Too few reports for a verdict yet.' %}
+  {% endif %}
+{% endif %}
+{% assign checksum_body_clean = page.official_checksums_body | default: '' | strip %}
+{% assign checksum_present = false %}
+{% if checksum_body_clean != blank %}{% assign checksum_present = true %}{% endif %}
+{% assign official_source_type = page.official_patch_notes_source_type | default: page.official_source_type | default: 'official-source' %}
 {% assign file_size_present = false %}
 {% assign patch_file_size_clean = page.patch_file_size | default: '' | strip %}
 {% if patch_file_size_clean != blank and patch_file_size_clean != 'Not captured' and patch_file_size_clean != 'Unknown' and patch_file_size_clean != 'null' %}{% assign file_size_present = true %}{% endif %}
 {% assign file_size_label = patch_file_size_clean %}
-{% assign file_size_meta_class = 'update-meta-chip--filesize' %}
 {% if file_size_present == false %}
   {% assign file_size_state = page.patch_file_size_status | default: '' | strip %}
   {% if file_size_state == 'not_provided_by_source' %}
     {% assign file_size_label = 'Not provided by source' %}
-    {% assign file_size_meta_class = 'update-meta-chip--filesize update-meta-chip--field-state' %}
   {% elsif file_size_state == 'creative_cloud_managed' %}
-    {% assign file_size_label = 'Creative Cloud-managed' %}
-    {% assign file_size_meta_class = 'update-meta-chip--filesize update-meta-chip--field-state' %}
+    {% assign file_size_label = 'Creative Cloud-managed / not provided by source' %}
   {% elsif page.patch_file_size_note != blank %}
     {% assign file_size_label = 'Not provided by source' %}
-    {% assign file_size_meta_class = 'update-meta-chip--filesize update-meta-chip--field-state' %}
   {% endif %}
 {% endif %}
 {% assign file_size_renderable = false %}
 {% if file_size_present or file_size_label != blank %}{% assign file_size_renderable = true %}{% endif %}
-{% assign checksum_present = false %}
-{% assign checksum_body_clean = page.official_checksums_body | default: '' | strip %}
-{% if checksum_body_clean != blank %}{% assign checksum_present = true %}{% endif %}
-{% assign official_source_type = page.official_patch_notes_source_type | default: page.official_source_type | default: 'official-source' %}
-{% assign official_note_label = page.official_note_label | default: 'Official source summary' %}
-{% if official_source_type == 'release_notes' %}
-  {% assign official_note_label = 'Official Release Notes' %}
-{% elsif official_source_type == 'fixed_issues' %}
-  {% assign official_note_label = 'Official Fixed Issues' %}
-{% elsif official_source_type == 'security_advisory' %}
-  {% assign official_note_label = 'Official Security Advisory' %}
-{% elsif official_source_type == 'changelog' %}
-  {% assign official_note_label = 'Official Changelog' %}
-{% elsif official_source_type == 'whats_new' %}
-  {% assign official_note_label = 'Official Feature Summary' %}
-{% elsif official_source_type == 'community_official_post' %}
-  {% assign official_note_label = 'Official Vendor Announcement' %}
-{% elsif official_source_type == 'vendor_blog' %}
-  {% assign official_note_label = 'Official Vendor Blog' %}
-{% endif %}
 {% assign visible_evidence_limit = page.evidence_sample_visible_limit | default: 5 | plus: 0 %}
 {% assign accepted_report_sources = page.accepted_report_sources %}
 {% if accepted_report_sources == nil or accepted_report_sources.size == 0 %}
   {% assign accepted_report_sources = page.evidence_samples %}
 {% endif %}
-
+{% assign has_user_report_sources = false %}
+{% if accepted_report_sources and accepted_report_sources.size > 0 %}{% assign has_user_report_sources = true %}{% endif %}
+{% assign has_official_links = false %}
+{% if page.official_sources or page.update_source_url != blank or page.update_download_url != blank %}{% assign has_official_links = true %}{% endif %}
+{% assign rendered_history_events = page.public_status_events | default: page.public_history_events | default: page.update_history %}
+{% assign has_public_history = false %}
+{% if rendered_history_events and rendered_history_events.size > 0 %}{% assign has_public_history = true %}{% endif %}
 {% assign resolved_update_logo_path = product.logo_path | default: company.logo_path %}
+
 <div id="top" class="update-page-shell reveal-up">
   <section class="panel update-hero update-hero--v3">
     <div class="update-hero-main update-hero-main--clean">
-      <a class="update-back-link" href="{{ company.company_url | default: product.product_url | default: '/updates/' | relative_url }}">← Back to {{ company.company_name | default: product.product_name | default: 'Patch Feed' }}</a>
+      <a class="update-back-link" href="{{ company.company_url | default: product.product_url | default: '/updates/' | relative_url }}">&lt; Back to {{ company.company_name | default: product.product_name | default: 'Patch Feed' }}</a>
 
       <div class="update-brand-row">
         <span class="update-brand-badge patch-logo-badge patch-logo-badge--has-image">
-          {% if resolved_update_logo_path != blank %}<img src="{% if resolved_update_logo_path contains "://" %}{{ resolved_update_logo_path }}{% else %}{{ resolved_update_logo_path | relative_url }}{% endif %}" alt="{{ product.product_name }} logo" loading="lazy">{% else %}{{ page.update_logo_text | default: page.update_product | slice: 0, 3 }}{% endif %}
+          {% if resolved_update_logo_path != blank %}<img src="{% if resolved_update_logo_path contains "://" %}{{ resolved_update_logo_path }}{% else %}{{ resolved_update_logo_path | relative_url }}{% endif %}" alt="{{ product.product_name | default: page.update_product }} logo" loading="lazy">{% else %}{{ page.update_logo_text | default: page.update_product | slice: 0, 3 }}{% endif %}
         </span>
         <span class="update-brand-meta">
           <strong>{{ page.update_product }}</strong>
@@ -198,21 +190,18 @@ layout: aux-base
       <h1 class="update-title">{{ display_title }}</h1>
 
       <div class="update-meta-strip">
-        {% if company %}<a href="{{ company.company_url | relative_url }}">Company: {{ company.company_name }}</a>{% endif %}
-        {% if product %}<a href="{{ product.product_url | relative_url }}">Software: {{ product.product_name }}</a>{% endif %}
-        {% if page.update_version != blank %}<span>Patch: {{ page.update_version }}</span>{% endif %}
-        {% if page.update_channel_label != blank %}<span>{{ page.update_channel_label }}</span>{% elsif page.release_channel_label != blank %}<span>Release channel: {{ page.release_channel_label }}</span>{% endif %}
-        {% if file_size_renderable %}<span class="{{ file_size_meta_class }}"{% if page.patch_file_size_note != blank %} title="{{ page.patch_file_size_note | escape }}"{% endif %}>File size: {{ file_size_label }}</span>{% endif %}
-        {% if page.update_published_at != blank %}<span>Patch released: {{ page.update_published_at | date: "%b %-d, %Y" }}</span>{% endif %}
-        <span>Official source checked: {{ source_checked_label }}</span>
-        <span>{% if record_updated_is_legacy %}Legacy record date{% else %}Record updated{% endif %}: {{ record_updated_label }}</span>
+        {% if product %}<a href="{{ product.product_url | relative_url }}">Product: {{ product.product_name }}</a>{% endif %}
+        {% if page.update_version != blank %}<span>Version: {{ page.update_version }}</span>{% endif %}
+        {% if page.update_channel_label != blank %}<span>{{ page.update_channel_label }}</span>{% elsif page.release_channel_label != blank %}<span>{{ page.release_channel_label }}</span>{% endif %}
+        {% if page.update_platform_label != blank %}<span>{{ page.update_platform_label }}</span>{% elsif page.platform_label != blank %}<span>{{ page.platform_label }}</span>{% endif %}
+        {% if page.release_type_label != blank %}<span>{{ page.release_type_label }}</span>{% elsif page.update_type != blank %}<span>{{ page.update_type | replace: '-', ' ' }}</span>{% endif %}
       </div>
 
-      <div class="update-verdict-card update-verdict-card--clean">
+      <div class="update-verdict-card update-verdict-card--clean update-evidence-card" aria-label="User report evidence summary">
         <div class="consensus-compact">
-          <span><strong>Evidence summary:</strong> <em class="consensus-word consensus-word--{{ reaction_class }}">{{ reaction }}</em></span>
-          <span class="consensus-secondary">{{ report_count }} user report{% unless report_count == 1 %}s{% endunless %} found</span>
-          {% if report_count > 0 %}<span class="consensus-secondary">Evidence last checked: {{ evidence_checked_label }}</span>{% endif %}
+          <span><strong>Evidence summary:</strong> <em class="consensus-word consensus-word--{{ evidence_metric_class }}">{{ evidence_metric_label }}</em></span>
+          <span class="consensus-secondary">{{ report_count }} user report{% unless report_count == 1 %}s{% endunless %} counted</span>
+          <span class="consensus-secondary">Last evidence check: {{ evidence_checked_label }}</span>
         </div>
         <div class="consensus-position-graph consensus-position-graph--hero" style="--consensus-pos: {{ consensus_score_percent }}%;">
           <div class="consensus-scale" aria-hidden="true">
@@ -222,7 +211,7 @@ layout: aux-base
             <span class="consensus-scale-marker"></span>
           </div>
           <div class="consensus-scale-labels" aria-hidden="true">
-            <span>Negative</span><span>Moderate</span><span>Positive</span>
+            <span>Negative</span><span>Moderate</span><span>Optimal</span>
           </div>
         </div>
       </div>
@@ -231,55 +220,41 @@ layout: aux-base
         <div class="update-decision-box__header">
           <span class="update-decision-eyebrow">AUXSAYS verdict</span>
           <strong>{{ decision_label }}</strong>
-          {% if decision_body != blank %}<p>{{ decision_body }}</p>{% elsif decision_label != verdict_text %}<p>{{ verdict_text }}</p>{% endif %}
+          <p class="update-decision-recommendation">{{ decision_body }}</p>
         </div>
-        <dl class="update-decision-grid">
-          <div><dt>Sample size</dt><dd>{{ sample_size_label }}</dd></div>
-          <div><dt>Evidence Status</dt><dd>{{ intel_status_label }}</dd></div>
-          <div><dt>Official source captured</dt><dd>{{ source_captured_label }}</dd></div>
-          <div><dt>Reports counted</dt><dd>{{ report_count }}</dd></div>
-          <div><dt>Patch-specific user reports</dt><dd>{{ patch_specific_reports_label }}</dd></div>
-          <div><dt>Official source checked</dt><dd>{{ source_checked_label }}</dd></div>
-          <div><dt>Official notes checked</dt><dd>{{ official_body_checked_label }}</dd></div>
-          <div><dt>{% if record_updated_is_legacy %}Legacy record date{% else %}Record updated{% endif %}</dt><dd>{{ record_updated_label }}</dd></div>
-          {% if report_count > 0 %}<div><dt>Evidence last checked</dt><dd>{{ evidence_checked_label }}</dd></div>{% endif %}
-        </dl>
-        {% if page.source_freshness_note != blank %}<p class="update-decision-note">{{ page.source_freshness_note }}</p>{% endif %}
+        <div class="update-decision-reasoning">
+          {% if report_count > 0 and issue_cluster_text != blank %}
+          <p>Current reports mention {{ issue_cluster_text }}.</p>
+          {% elsif report_count > 0 %}
+          <p>User reports are present; review the source list before updating critical work.</p>
+          {% else %}
+          <p>Too few reports for a verdict yet.</p>
+          {% endif %}
+          {% if report_count > 0 and report_count < 3 %}<p>Too few reports for a verdict yet.</p>{% endif %}
+          {% if record_note_text != blank %}<p>{{ record_note_text }}</p>{% endif %}
+        </div>
       </div>
-
     </div>
   </section>
 
   <nav class="update-section-nav" aria-label="Patch page sections">
-    <a href="#top">Top</a>
-    <a href="#verdict">Verdict</a>
-    {% if page.official_additions or page.official_fixes %}<a href="#official-changes">Official changes</a>{% endif %}
-    {% if page.evidence_samples and page.evidence_samples.size > 0 %}<a href="#community-risk">Community risk sample</a>{% endif %}
-    {% if accepted_report_sources and accepted_report_sources.size > 0 %}<a href="#accepted-reports">Accepted reports</a>{% endif %}
-    {% if page.evidence_source_limitations and page.evidence_source_limitations.size > 0 %}<a href="#source-limitations">Source limits</a>{% endif %}
-    {% if recommendation_renderable %}<a href="#recommendation">Recommendation</a>{% endif %}
-    {% if consensus_report_renderable %}<a href="#consensus-report">Evidence summary</a>{% endif %}
-    {% if page.official_sources or page.update_source_url != blank or page.update_download_url != blank %}<a href="#sources">Sources</a>{% endif %}
-    {% if page.status_events and page.status_events.size > 0 %}<a href="#history">History</a>{% endif %}
-    {% if checksum_present %}<a href="#checksum">Checksum</a>{% endif %}
+    <a href="#official-patch-notes">Official Patch Notes</a>
+    <a href="#user-reports-sources">User Reports / Sources</a>
+    <a href="{{ '/updates/methodology/' | relative_url }}">Methodology</a>
+    {% if has_public_history %}<a href="#history">History / Updates</a>{% endif %}
   </nav>
 
   <section class="update-content-grid">
-    {% if record_note_text != blank %}
-    <article class="panel update-info-card update-summary-card update-order-summary">
-      <h2>Record Note</h2>
-      <p>{{ record_note_text }}</p>
-    </article>
-    {% elsif summary_text != blank %}
-    <article class="panel update-info-card update-summary-card update-order-summary">
-      <h2>Update Summary</h2>
-      <p>{{ summary_text }}</p>
-    </article>
-    {% endif %}
-
-    {% if page.official_additions or page.official_fixes %}
-    <article id="official-changes" class="panel update-info-card update-official-change-card update-order-official-changes">
-      <h2>Official changes</h2>
+    <article id="official-patch-notes" class="panel update-info-card update-official-details update-order-official-details">
+      <h2>Official Patch Notes</h2>
+      {% if page.update_published_at != blank or file_size_renderable %}
+      <div class="update-official-meta">
+        {% if page.update_published_at != blank %}<span>Released {{ page.update_published_at | date: "%b %-d, %Y" }}</span>{% endif %}
+        {% if file_size_renderable %}<span>File size: {{ file_size_label }}</span>{% endif %}
+      </div>
+      {% endif %}
+      {% if summary_text != blank %}<p>{{ summary_text }}</p>{% endif %}
+      {% if page.official_additions or page.official_fixes %}
       <div class="update-change-grid">
         {% if page.official_additions and page.official_additions.size > 0 %}
         <section class="update-change-list">
@@ -298,36 +273,48 @@ layout: aux-base
         </section>
         {% endif %}
       </div>
+      {% endif %}
+      {% if official_body_present %}
+      <div class="official-patch-notes node-bullet-scope">{{ official_body_clean | markdownify }}</div>
+      {% elsif official_body_missing_renderable %}
+      <p>Official source linked, but full patch-note body has not been captured yet.</p>
+      {% else %}
+      <p>Official patch-note body has not been captured yet.</p>
+      {% endif %}
+      {% if checksum_present %}
+      <details id="checksum" class="update-checksum-details">
+        <summary>Checksum</summary>
+        <p class="checksum-helper">Use these hashes to verify downloaded installers match the files published with the official release.</p>
+        <div class="official-patch-notes checksum-body">{{ checksum_body_clean | markdownify }}</div>
+      </details>
+      {% endif %}
     </article>
-    {% endif %}
 
-    {% if page.evidence_samples and page.evidence_samples.size > 0 %}
-    <article id="community-risk" class="panel update-info-card update-evidence-sample-card update-order-community-risk">
-      <h2>Community risk sample</h2>
-      <p class="update-section-intro">Representative examples behind the current recommendation.</p>
-      <div class="update-evidence-sample-grid">
-        {% for item in page.evidence_samples limit: visible_evidence_limit %}
-        <article class="update-evidence-sample">
-          <div class="update-evidence-sample__topline">
-            <span>{{ item.source_name | default: 'Source' }}</span>
-            {% if item.counted == true %}<em>Included</em>{% endif %}
-          </div>
-          <h3>{% if item.source_url %}<a href="{{ item.source_url }}">{{ item.source_title }}</a>{% else %}{{ item.source_title }}{% endif %}</h3>
-          <dl>
-            <div><dt>Version matched</dt><dd>{{ item.version_matched }}</dd></div>
-            <div><dt>Issue</dt><dd>{{ item.issue }}</dd></div>
-            {% if item.outcome %}<div><dt>Outcome</dt><dd>{{ item.outcome }}</dd></div>{% endif %}
-          </dl>
-        </article>
+    <article id="user-reports-sources" class="panel update-info-card update-sources-card update-order-sources">
+      <h2>User Reports / Sources</h2>
+      {% if has_user_report_sources %}
+      <p class="update-section-intro">User report sources used for the current read.</p>
+      <ul class="update-source-list update-source-list--accepted">
+        {% for source in accepted_report_sources limit: visible_evidence_limit %}
+        {% assign source_title = source.source_title | default: source.title | default: 'User report' %}
+        {% assign source_type_label = source.source_type | default: source.source_name | default: 'user report' %}
+        {% assign source_issue = source.issue | default: source.issue_theme %}
+        {% assign source_workflow = source.workflow_area %}
+        <li>
+          <cite>{% if source.source_name != blank %}{{ source.source_name }}. {% endif %}{% if source.source_date != blank %}({{ source.source_date | date: "%Y, %B %-d" }}). {% endif %}{% if source.source_url != blank %}<a href="{{ source.source_url }}">{{ source_title }}</a>{% else %}{{ source_title }}{% endif %}.</cite>
+          <span>{{ source_type_label | replace: '_', ' ' }}</span>
+          {% if source_issue != blank %}<small>Issue: {{ source_issue }}</small>{% endif %}
+          {% if source_workflow != blank %}<small>Workflow: {{ source_workflow }}</small>{% endif %}
+        </li>
         {% endfor %}
-      </div>
-      {% if accepted_report_sources and accepted_report_sources.size > 0 %}
+      </ul>
+      {% if accepted_report_sources.size > visible_evidence_limit %}
       <details id="accepted-reports" class="update-evidence-full-list">
-        <summary>Full report list <span>{{ accepted_report_sources.size }} source{% unless accepted_report_sources.size == 1 %}s{% endunless %}</span></summary>
+        <summary>Show more user report sources</summary>
         <ul class="update-source-list update-source-list--accepted">
-          {% for source in accepted_report_sources %}
+          {% for source in accepted_report_sources offset: visible_evidence_limit %}
           {% assign source_title = source.source_title | default: source.title | default: 'User report' %}
-          {% assign source_type_label = source.source_type | default: source.source_name | default: 'community report' %}
+          {% assign source_type_label = source.source_type | default: source.source_name | default: 'user report' %}
           {% assign source_issue = source.issue | default: source.issue_theme %}
           {% assign source_workflow = source.workflow_area %}
           <li>
@@ -340,84 +327,13 @@ layout: aux-base
         </ul>
       </details>
       {% endif %}
-      {% if page.evidence_source_limitations and page.evidence_source_limitations.size > 0 %}
-      <details id="source-limitations" class="update-evidence-method-details">
-        <summary>Source limitations</summary>
-        <ul class="update-practical-list">
-          {% for item in page.evidence_source_limitations %}<li>{{ item }}</li>{% endfor %}
-        </ul>
-      </details>
-      {% endif %}
-    </article>
-    {% endif %}
-
-    {% if recommendation_renderable %}
-    <article id="recommendation" class="panel update-info-card update-practical-card update-order-recommendation">
-      <h2>Recommendation</h2>
-      {% if official_only_zero_reports %}
-        <p><strong>No AUXSAYS recommendation yet.</strong></p>
-        <p>{% if security_sensitive %}Security-sensitive update. Test first if your workflow is fragile, but do not ignore security exposure.{% else %}Official source captured. No user reports have been counted.{% endif %}</p>
       {% else %}
-        <ul class="update-practical-list">
-          {% for item in page.practical_recommendations %}<li>{{ item }}</li>{% endfor %}
-        </ul>
+      <p>No user report sources have been counted for this record yet.</p>
       {% endif %}
-    </article>
-    {% endif %}
 
-    {% if consensus_report_renderable %}
-    <article id="consensus-report" class="panel update-info-card update-consensus-card update-methodology-details update-order-evidence-status">
-      <h2>Evidence summary</h2>
-      <div class="consensus-compact consensus-compact--card">
-        <span><strong>Evidence status:</strong> <em class="consensus-word consensus-word--{{ reaction_class }}">{{ intel_status_label }}</em></span>
-        <span class="consensus-secondary">{{ report_count }} user report{% unless report_count == 1 %}s{% endunless %} found</span>
-        <span class="consensus-secondary">Evidence last checked: {{ evidence_checked_label }}</span>
-      </div>
-      <div class="consensus-position-graph consensus-position-graph--card" style="--consensus-pos: {{ consensus_score_percent }}%;">
-        <div class="consensus-scale" aria-label="Evidence direction from negative through moderate to positive">
-          <span class="consensus-scale-zone consensus-scale-zone--negative"></span>
-          <span class="consensus-scale-zone consensus-scale-zone--moderate"></span>
-          <span class="consensus-scale-zone consensus-scale-zone--positive"></span>
-          <span class="consensus-scale-marker"></span>
-        </div>
-        <div class="consensus-scale-labels"><span>Negative</span><span>Moderate</span><span>Positive</span></div>
-      </div>
-      {% if evidence_summary_text != blank %}<p>{{ evidence_summary_text }}</p>{% endif %}
-      {% if page.complaint_themes and page.complaint_themes.size > 0 %}
-      <div class="complaint-theme-table complaint-theme-table--renamed">
-        <div class="complaint-theme-row complaint-theme-row--head"><span>Reported issue</span><span>Frequency</span><span>Severity</span></div>
-        {% for item in page.complaint_themes %}
-        <div class="complaint-theme-row"><span>{{ item.theme }}</span><span>{{ item.frequency }}</span><span>{{ item.severity }}</span></div>
-        {% endfor %}
-      </div>
-      {% endif %}
-    </article>
-    {% endif %}
-
-    {% if official_body_present %}
-    <details class="panel update-info-card update-official-details update-order-official-details" open>
-      <summary>{{ official_note_label }}</summary>
-      <div class="official-source-classification">
-        <span>Source type: {{ official_source_type | replace: '_', ' ' | capitalize }}</span>
-        {% if page.official_source_classification_note != blank %}<p>{{ page.official_source_classification_note }}</p>{% endif %}
-      </div>
-      <div class="official-patch-notes node-bullet-scope">{{ page.official_patch_notes_body | markdownify }}</div>
-    </details>
-    {% elsif official_body_missing_renderable %}
-    <article class="panel update-info-card update-official-details update-order-official-details">
-      <h2>{{ official_note_label }}</h2>
-      <div class="official-source-classification">
-        <span>Source type: {{ official_source_type | replace: '_', ' ' | capitalize }}</span>
-        {% if page.official_source_classification_note != blank %}<p>{{ page.official_source_classification_note }}</p>{% endif %}
-      </div>
-      <p>Official source linked, but full patch-note body has not been captured yet.</p>
-    </article>
-    {% endif %}
-
-    {% if page.official_sources or page.update_source_url != blank or page.update_download_url != blank %}
-    <article id="sources" class="panel update-info-card update-sources-card update-order-sources">
-      <h2>Sources</h2>
-      <ul class="update-source-list">
+      {% if has_official_links %}
+      <h3 class="update-source-subhead">Official sources</h3>
+      <ul class="update-source-list update-source-list--official">
         {% if page.official_sources and page.official_sources.size > 0 %}
           {% for source in page.official_sources %}
           <li><cite>{% if page.update_source_name != blank %}{{ page.update_source_name }}. {% endif %}{% if page.update_published_at != blank %}({{ page.update_published_at | date: "%Y, %B %-d" }}). {% endif %}<a href="{{ source.url }}">{{ source.label | default: source.source_type }}</a>.</cite><span>{{ source.source_type | replace: '_', ' ' }}</span></li>
@@ -427,27 +343,18 @@ layout: aux-base
         {% endif %}
         {% if page.update_download_url != blank %}<li><cite>{% if page.update_source_name != blank %}{{ page.update_source_name }}. {% endif %}<a href="{{ page.update_download_url }}">Download page</a>.</cite><span>download</span></li>{% endif %}
       </ul>
+      {% endif %}
     </article>
-    {% endif %}
 
-    {% if page.status_events and page.status_events.size > 0 %}
+    {% if has_public_history %}
     <details id="history" class="panel update-info-card update-status-details update-order-history">
-      <summary>Status History</summary>
+      <summary>History / Updates</summary>
       <div class="status-timeline status-timeline--compact">
-        {% for event in page.status_events %}
-        <div class="status-event"><time>{{ event.at | date: "%b %-d, %Y %-I:%M %p %Z" }}</time><strong>{{ event.label }}</strong>{% if event.note != blank %}<p>{{ event.note }}</p>{% endif %}</div>
+        {% for event in rendered_history_events %}
+        <div class="status-event"><time>{{ event.at | date: "%b %-d, %Y" }}</time><strong>{{ event.label }}</strong>{% if event.note != blank %}<p>{{ event.note }}</p>{% endif %}</div>
         {% endfor %}
       </div>
     </details>
     {% endif %}
-
-    {% if checksum_present %}
-    <details id="checksum" class="panel update-info-card update-checksum-details update-order-checksum">
-      <summary>Checksum</summary>
-      <p class="checksum-helper">Use these hashes to verify downloaded installers match the files published with the official release.</p>
-      <div class="official-patch-notes checksum-body">{{ checksum_body_clean | markdownify }}</div>
-    </details>
-    {% endif %}
-
   </section>
 </div>

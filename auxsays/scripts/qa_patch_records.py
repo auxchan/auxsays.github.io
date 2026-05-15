@@ -354,6 +354,14 @@ def scan_update_layout_public_copy() -> tuple[list[dict[str, str]], list[dict[st
 
     text = UPDATE_LAYOUT_PATH.read_text(encoding="utf-8")
     forbidden_public_copy = {
+        "Record Note": "Record notes must be folded into the verdict context, not rendered as a standalone card.",
+        "Sample size": "Sample size should not render as a standalone public field.",
+        "Evidence Status": "Evidence status should not render as a standalone public field.",
+        "Official source captured": "Official-source capture state should stay out of the public patch-page card stack.",
+        "Official notes checked": "Official-note check timestamps should stay out of public patch pages.",
+        "Record updated": "Record update timestamps should stay out of public patch pages.",
+        "Patch-specific user reports": "Patch-specific report counts should not be repeated outside the top evidence card.",
+        "Community risk sample": "User reports should render as sources, not as a separate community-risk concept.",
         "Practical recommendation": "Use public heading 'Recommendation' instead.",
         "Evidence methodology details": "Use 'Evidence summary' for report-bearing pages and hide the large section for 0-report pages.",
         "Static" + " sample": "Public-facing wording must use User reports found.",
@@ -364,24 +372,48 @@ def scan_update_layout_public_copy() -> tuple[list[dict[str, str]], list[dict[st
         "Community bug reports are shown": "Sources should not repeat methodology filler.",
         "AUXSAYS counts a report only when": "Methodology details belong on the methodology page, not patch bodies.",
         "Official source content has not been captured into this AUXSAYS record yet": "Do not force a blank Official Source Summary block.",
+        "verified reports": "Public patch pages should use plain user-report/source wording.",
+        "deterministically accepted": "Backend evidence-gate wording must not render on public patch pages.",
+        "source-backed": "Backend evidence-gate wording must not render on public patch pages.",
+        "source_weight": "Backend evidence fields must not render on public patch pages.",
+        "consensus_evidence.yml": "Repository implementation filenames must not render on public patch pages.",
+        "promoted rows": "Backend evidence-row wording must not render on public patch pages.",
+        "YAML": "Backend serialization wording must not render on public patch pages.",
+        "writeback": "Backend pipeline wording must not render on public patch pages.",
+        "collector": "Backend collection-worker wording must not render on public patch pages.",
+        "candidate rows": "Backend evidence-row wording must not render on public patch pages.",
+        "evidence state": "Internal evidence-state wording must not render on public patch pages.",
+        "low confidence": "Methodology confidence shorthand belongs on the methodology page, not patch bodies.",
+        "broad consensus": "Consensus claims must not be implied by patch-page boilerplate.",
     }
     for phrase, message in forbidden_public_copy.items():
         if phrase in text:
             add(errors, UPDATE_LAYOUT_PATH, "layout_public_copy_regression", message)
 
-    if "checksum_body_clean" not in text or "{% if checksum_present %}<a href=\"#checksum\">Checksum</a>{% endif %}" not in text:
-        add(errors, UPDATE_LAYOUT_PATH, "checksum_nav_not_guarded", "Checksum nav must require stripped non-empty checksum content.")
+    required_public_labels = [
+        "Official Patch Notes",
+        "User Reports / Sources",
+        "Methodology",
+        "AUXSAYS verdict",
+        "Last evidence check",
+    ]
+    for phrase in required_public_labels:
+        if phrase not in text:
+            add(errors, UPDATE_LAYOUT_PATH, "layout_required_label_missing", f"Patch layout must render '{phrase}'.")
+
+    if "checksum_body_clean" not in text or "{% if checksum_present %}" not in text:
+        add(errors, UPDATE_LAYOUT_PATH, "checksum_render_not_guarded", "Checksum content must require stripped non-empty checksum content.")
     if "{{ checksum_body_clean | markdownify }}" not in text:
         add(errors, UPDATE_LAYOUT_PATH, "checksum_body_render_path_missing", "Checksum section should render stripped checksum content when present.")
     if "official_body_clean" not in text:
         add(warnings, UPDATE_LAYOUT_PATH, "official_summary_blank_guard_missing", "Official source summary should be guarded by stripped non-empty body content.")
     if "limit: visible_evidence_limit" not in text:
-        add(errors, UPDATE_LAYOUT_PATH, "representative_sample_limit_missing", "Community risk samples must be limited to a concise representative set.")
+        add(errors, UPDATE_LAYOUT_PATH, "visible_source_limit_missing", "User report source lists must render a concise initial set.")
     accepted_sources_disclosure = re.search(r"<details\b(?=[^>]*\bid=[\"']accepted-reports[\"'])(?![^>]*\bopen\b)[^>]*>", text)
-    if "accepted_report_sources" not in text or "Full report list" not in text or not accepted_sources_disclosure:
-        add(errors, UPDATE_LAYOUT_PATH, "collapsed_accepted_sources_missing", "Accepted report/source lists must render behind a collapsed disclosure with the public 'Full report list' label.")
-    if "evidence_source_limitations" not in text or "Source limitations" not in text:
-        add(warnings, UPDATE_LAYOUT_PATH, "source_limitations_disclosure_missing", "Source/method limitations should render compactly when generated.")
+    if "accepted_report_sources" not in text or "Show more user report sources" not in text or not accepted_sources_disclosure:
+        add(errors, UPDATE_LAYOUT_PATH, "collapsed_accepted_sources_missing", "Long user report source lists must render behind a collapsed disclosure.")
+    if "evidence_source_limitations" in text or "Source limitations" in text:
+        add(warnings, UPDATE_LAYOUT_PATH, "source_limitations_public_copy_present", "Method limitations should live on the methodology page, not each patch page.")
 
     return errors, warnings
 
