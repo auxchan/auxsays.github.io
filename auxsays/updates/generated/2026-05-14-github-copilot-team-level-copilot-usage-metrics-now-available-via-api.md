@@ -17,8 +17,8 @@ update_version: Team-level Copilot usage metrics now available via API
 update_logo_text: GIT
 update_published_at: '2026-05-14T23:06:25Z'
 update_last_checked: '2026-05-15T04:31:04Z'
-source_last_checked: '2026-05-15T04:31:04Z'
-official_body_last_checked: '2026-05-15T04:31:04Z'
+source_last_checked: '2026-05-15T09:25:57Z'
+official_body_last_checked: '2026-05-15T09:25:57Z'
 record_last_updated: '2026-05-15T04:31:04Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -92,6 +92,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-05-15T04:31:04Z'
+  url: https://github.blog/changelog/2026-05-14-team-level-copilot-usage-metrics-now-available-via-api
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-05-15T09:25:57Z'
   url: https://github.blog/changelog/2026-05-14-team-level-copilot-usage-metrics-now-available-via-api
   status: captured-from-rss-feed
   body_captured: true
