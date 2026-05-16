@@ -1,8 +1,8 @@
 ---
 layout: aux-update
 title: DaVinci Resolve 21 Public Beta 1 official update breakdown
-description: Published Apr 14, 2026. Blackmagic Design announced DaVinci Resolve 21 Public Beta 1 and made it available for
-  download.
+description: Published Apr 14, 2026. Blackmagic Design announced DaVinci Resolve 21 Public Beta 1 and made it available
+  for download.
 permalink: /updates/blackmagic-design/davinci-resolve/21-public-beta-1/
 update_entry: true
 update_product: DaVinci Resolve
@@ -19,11 +19,11 @@ update_status: current
 update_feed_title: DaVinci Resolve 21 Public Beta 1
 update_detail_title: DaVinci Resolve 21 Public Beta 1
 update_consensus_label: Negative
-update_consensus_summary: 'AVOID for production: DaVinci Resolve 21 Public Beta 1 has 11 user reports found. User reports
-  show a repeat pattern. Current reports mention Magic Mask crashes, startup or application crashes, and performance slowdowns.
-  Production editors should avoid it on active projects; test only in disposable or non-critical projects. This is a surfaced
-  user-report sample, not a live telemetry feed.'
-update_report_count: 11
+update_consensus_summary: 'AVOID for production: DaVinci Resolve 21 Public Beta 1 has 12 user reports found. User
+  reports show a repeat pattern. Current reports mention Magic Mask crashes, startup or application crashes, and
+  performance slowdowns. Production editors should avoid it on active projects; test only in disposable or non-critical
+  projects. This is a surfaced user-report sample, not a live telemetry feed.'
+update_report_count: 12
 update_consensus_confidence: Low-Medium
 status_change_type: new
 notification_message: ''
@@ -36,20 +36,22 @@ official_source_classification_note: Blackmagic's source is a vendor release pag
   AUXSAYS links it as the official source, but has not captured a full structured patch-note body from that page.
 patch_file_size_status: not_provided_by_source
 release_channel_label: Public beta
-quick_verdict: 'WAIT for production systems: DaVinci Resolve 21 Public Beta 1 is a beta build with 11 user reports found.'
+quick_verdict: 'WAIT for production systems: DaVinci Resolve 21 Public Beta 1 is a beta build with 12 user reports
+  found.'
 update_decision_label: WAIT for production systems
-update_decision_body: Use this beta only for non-critical testing. Active client projects should stay on a known-good stable
-  build unless a Resolve 21 beta feature is worth the risk.
+update_decision_body: Use this beta only for non-critical testing. Active client projects should stay on a known-good
+  stable build unless a Resolve 21 beta feature is worth the risk.
 source_freshness_note: ''
-record_note: This page covers DaVinci Resolve 21 Public Beta 1. Stable/Studio reports are excluded and tracked on the separate
-  stable page.
-official_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and should be treated differently from a stable
-  production build. The key user decision is not simply whether the release is new, but whether the new Resolve 21 feature
-  set is worth testing in a non-critical environment. For production work, the practical read is to keep existing stable projects
-  on a known-good version unless a specific Resolve 21 feature is needed and the project can tolerate beta risk.
-consensus_report: '11 user reports found for DaVinci Resolve 21 Public Beta 1. Current reports mention Magic Mask crashes,
-  startup or application crashes, and performance slowdowns. This is a surfaced user-report sample, not a live telemetry feed.
-  Sources represented: Blackmagic Design Community Forum and r/davinciresolve.'
+record_note: This page covers DaVinci Resolve 21 Public Beta 1. Stable/Studio reports are excluded and tracked on
+  the separate stable page.
+official_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and should be treated differently from
+  a stable production build. The key user decision is not simply whether the release is new, but whether the new
+  Resolve 21 feature set is worth testing in a non-critical environment. For production work, the practical read
+  is to keep existing stable projects on a known-good version unless a specific Resolve 21 feature is needed and
+  the project can tolerate beta risk.
+consensus_report: '12 user reports found for DaVinci Resolve 21 Public Beta 1. Current reports mention Magic Mask
+  crashes, startup or application crashes, and performance slowdowns. This is a surfaced user-report sample, not
+  a live telemetry feed. Sources represented: Blackmagic Design Community Forum and r/davinciresolve.'
 complaint_themes:
 - theme: Beta setup questions
   frequency: Medium
@@ -124,14 +126,18 @@ status_events:
 - at: '2026-05-15T00:09:21.255002Z'
   label: User reports found
   note: User report count updated to 11.
+- at: '2026-05-16T19:32:51.073077Z'
+  label: User reports found
+  note: User report count updated to 12.
 legacy_consensus_score: 6
 legacy_consensus_score_percent: 53
 official_patch_notes_source_url: https://www.blackmagicdesign.com/media/release/20260414-01
 official_patch_notes_body: ''
-release_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and should be treated differently from a stable
-  production build. The key user decision is not simply whether the release is new, but whether the new Resolve 21 feature
-  set is worth testing in a non-critical environment. For production work, the practical read is to keep existing stable projects
-  on a known-good version unless a specific Resolve 21 feature is needed and the project can tolerate beta risk.
+release_summary: DaVinci Resolve 21 Public Beta 1 is a public beta release and should be treated differently from
+  a stable production build. The key user decision is not simply whether the release is new, but whether the new
+  Resolve 21 feature set is worth testing in a non-critical environment. For production work, the practical read
+  is to keep existing stable projects on a known-good version unless a specific Resolve 21 feature is needed and
+  the project can tolerate beta risk.
 practical_recommendations:
 - Wait for production systems unless you have a specific Resolve 21 beta feature to test.
 - Test beta projects separately from active client work and keep a known-good Resolve version available.
@@ -145,10 +151,10 @@ consensus_collection_status: pilot_initial_sample
 evidence_state: pilot_sample
 evidence_state_label: User reports found
 official_source_captured: true
-confirmed_patch_specific_report_count: 11
+confirmed_patch_specific_report_count: 12
 legacy_manual_report_count: 7
-legacy_manual_report_count_note: Previous 7-report value appears to be a pre-evidence/manual/pilot estimate. It is not currently
-  backed by structured consensus_evidence.yml rows and should not be rendered as verified reports.
+legacy_manual_report_count_note: Previous 7-report value appears to be a pre-evidence/manual/pilot estimate. It
+  is not currently backed by structured consensus_evidence.yml rows and should not be rendered as verified reports.
 known_issues_present: true
 official_checksums_body: ''
 intelligence_stage: pilot
@@ -182,8 +188,8 @@ official_source_attempts:
   status: official-source-parser-failed
   body_captured: false
   checksums_captured: false
-evidence_last_checked: '2026-05-13T17:25:19Z'
-record_last_updated: '2026-05-15T10:37:57.742516Z'
+evidence_last_checked: '2026-05-16T19:32:30Z'
+record_last_updated: '2026-05-16T19:32:51.073077Z'
 evidence_samples:
 - source_name: Blackmagic Design Community Forum
   source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235179
@@ -326,6 +332,15 @@ accepted_report_sources:
   patch_version_matched: true
   issue: general workflow reports
   workflow_area: general DaVinci Resolve workflow
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1tf1ven/relink_media_with_changed_file_extension/
+  source_title: Relink media with changed file extension
+  source_date: '2026-05-16'
+  version_matched: Resolve 21 beta
+  patch_version_matched: true
+  issue: plugin issues in plugins / codecs
+  workflow_area: plugins / codecs
 evidence_source_limitations:
 - This is a surfaced user-report sample, not a live telemetry feed.
 - Some community sources were unavailable during the last check; unavailable sources were not counted as reports.

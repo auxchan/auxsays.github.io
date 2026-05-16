@@ -2674,6 +2674,9 @@ evidence:
   report_title: Mouse cursor **icon** becomes laggy when show cursor is on
   report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/WxGY6zUj4MtvkaG9 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The m'
   captured_at: '2026-05-16T06:35:08Z'
+  source_date: null
+  target_release_date: null
+  source_date_pass: null
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -2695,6 +2698,9 @@ evidence:
   report_title: GIFs from EmoteLab freeze every second
   report_text_excerpt: lar, more similar issues will appear. Also issue is not limited to Linux, Windows version 32.1.2 has this behavior. <img width="500" height="500" alt="Image" src="https://github.com/user-attachments/assets/54d6d954-002d-4adc-9a49-2e95ad82c928" />
   captured_at: '2026-05-16T15:17:09Z'
+  source_date: null
+  target_release_date: null
+  source_date_pass: null
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -2716,6 +2722,9 @@ evidence:
   report_title: Discrete NVIDIA GPU on Linux Memory Leak/Crash
   report_text_excerpt: 'Info Other ### Other OS Flatpak/Fedora Atomic/Bluefin 44.20260512 ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL I couldn''t launch OBS to upload one. ### OBS Studio Crash Log URL I couldn''t launch OBS to upload one. ### Expected'
   captured_at: '2026-05-16T15:17:09Z'
+  source_date: null
+  target_release_date: null
+  source_date_pass: null
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -2724,6 +2733,30 @@ evidence:
   issue_theme: audio mixer regression
   workflow_area: audio mixer UI
   platform: linux
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-public-beta-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1tf1ven-relink-media-with-changed-file-extension
+  product_id: blackmagic-davinci
+  update_version: 21 Public Beta 1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1tf1ven/relink_media_with_changed_file_extension/
+  parent_title: Relink media with changed file extension
+  report_title: Relink media with changed file extension
+  report_text_excerpt: Relink media with changed file extension I’m looking for the most efficient way to relink a ton of footage in old projects that has been transcoded from its original format, whether Sony MXF, Pro Res MOV, some of it is even previously Canon RAW, to a new AV1 codec in a .mp4...
+  captured_at: '2026-05-16T19:32:30Z'
+  source_date: '2026-05-16'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: Resolve 21 beta
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: compatibility issue
+  workflow_area: plugins / codecs
+  platform: macos
   severity: medium
   sentiment: negative
   source_weight: 1
