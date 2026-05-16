@@ -2685,3 +2685,45 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13436
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13436
+  parent_title: GIFs from EmoteLab freeze every second
+  report_title: GIFs from EmoteLab freeze every second
+  report_text_excerpt: lar, more similar issues will appear. Also issue is not limited to Linux, Windows version 32.1.2 has this behavior. <img width="500" height="500" alt="Image" src="https://github.com/user-attachments/assets/54d6d954-002d-4adc-9a49-2e95ad82c928" />
+  captured_at: '2026-05-16T15:17:09Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13437
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13437
+  parent_title: Discrete NVIDIA GPU on Linux Memory Leak/Crash
+  report_title: Discrete NVIDIA GPU on Linux Memory Leak/Crash
+  report_text_excerpt: 'Info Other ### Other OS Flatpak/Fedora Atomic/Bluefin 44.20260512 ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL I couldn''t launch OBS to upload one. ### OBS Studio Crash Log URL I couldn''t launch OBS to upload one. ### Expected'
+  captured_at: '2026-05-16T15:17:09Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: linux
+  severity: medium
+  sentiment: negative
+  source_weight: 1
