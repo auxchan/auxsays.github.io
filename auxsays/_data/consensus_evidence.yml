@@ -2760,3 +2760,27 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+- id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1tf3jzh-davinci-resolve-randomly-started-crashing
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1tf3jzh/davinci_resolve_randomly_started_crashing_in/
+  parent_title: DaVinci Resolve randomly started crashing. In desperate need of help!
+  report_title: DaVinci Resolve randomly started crashing. In desperate need of help!
+  report_text_excerpt: 'DaVinci Resolve randomly started crashing. In desperate need of help! Hi all! Where to begin? Simply put: video playback in DaVinci Resolve is between 1 to 3 FPS at all times. It doesn''t matter where the video files for that project are stored (either on my NAS over a 10Gb...'
+  captured_at: '2026-05-16T21:04:05Z'
+  source_date: '2026-05-16'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
