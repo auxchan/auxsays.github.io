@@ -2784,3 +2784,48 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+- id: blackmagic-davinci-21-public-beta-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1tfnqne-davinci-resolve-21-beta-crache-78-au-char
+  product_id: blackmagic-davinci
+  update_version: 21 Public Beta 1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1tfnqne/davinci_resolve_21_beta_crache_à_78_au_chargement/
+  parent_title: DaVinci Resolve 21 Beta crache à 78% au chargement – Projet corrompu pour la 2e fois, mémoire saturée, besoin d'aide avancée
+  report_title: DaVinci Resolve 21 Beta crache à 78% au chargement – Projet corrompu pour la 2e fois, mémoire saturée, besoin d'aide avancée
+  report_text_excerpt: DaVinci Resolve 21 Beta crache à 78% au chargement – Projet corrompu pour la 2e fois, mémoire saturée, besoin d'aide avancée Bonjour à tout le monde, Je me retrouve sans aucune solution, à bout de forces et avec un moral au plus bas. Après des semaines de montage intensif,...
+  captured_at: '2026-05-17T13:56:42Z'
+  source_date: '2026-05-17'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: DaVinci Resolve 21 beta
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13439
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13439
+  parent_title: Virtual Camera not visible in Windows 11 22H2+ camera list due to missing EnableFrameServerMode registry key
+  report_title: Virtual Camera not visible in Windows 11 22H2+ camera list due to missing EnableFrameServerMode registry key
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL not needed ### OBS Studio Crash Log URL _No response_ ### Expected Behavior After installing OBS Virtual Camera, it'
+  captured_at: '2026-05-17T13:57:38Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
