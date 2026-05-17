@@ -17,8 +17,8 @@ update_version: Grok Code Fast 1 deprecated
 update_logo_text: GIT
 update_published_at: '2026-05-15T17:58:15Z'
 update_last_checked: '2026-05-15T19:56:31Z'
-source_last_checked: '2026-05-17T14:00:30Z'
-official_body_last_checked: '2026-05-17T14:00:30Z'
+source_last_checked: '2026-05-17T19:39:41Z'
+official_body_last_checked: '2026-05-17T19:39:41Z'
 record_last_updated: '2026-05-15T19:56:31Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -79,11 +79,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-05-16T14:02:20Z'
-  url: https://github.blog/changelog/2026-05-15-grok-code-fast-1-deprecated
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-05-16T19:36:26Z'
   url: https://github.blog/changelog/2026-05-15-grok-code-fast-1-deprecated
   status: captured-from-rss-feed
@@ -100,6 +95,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-05-17T14:00:30Z'
+  url: https://github.blog/changelog/2026-05-15-grok-code-fast-1-deprecated
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-05-17T19:39:41Z'
   url: https://github.blog/changelog/2026-05-15-grok-code-fast-1-deprecated
   status: captured-from-rss-feed
   body_captured: true
