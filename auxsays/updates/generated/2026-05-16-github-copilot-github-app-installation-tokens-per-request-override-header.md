@@ -17,8 +17,8 @@ update_version: 'GitHub App installation tokens: Per-request override header'
 update_logo_text: GIT
 update_published_at: '2026-05-16T00:07:40Z'
 update_last_checked: '2026-05-16T04:05:55Z'
-source_last_checked: '2026-05-17T04:35:14Z'
-official_body_last_checked: '2026-05-17T04:35:14Z'
+source_last_checked: '2026-05-17T08:34:31Z'
+official_body_last_checked: '2026-05-17T08:34:31Z'
 record_last_updated: '2026-05-16T04:05:55Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -103,11 +103,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-05-16T04:05:55Z'
-  url: https://github.blog/changelog/2026-05-15-github-app-installation-tokens-per-request-override-header
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-05-16T08:21:01Z'
   url: https://github.blog/changelog/2026-05-15-github-app-installation-tokens-per-request-override-header
   status: captured-from-rss-feed
@@ -124,6 +119,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-05-17T04:35:14Z'
+  url: https://github.blog/changelog/2026-05-15-github-app-installation-tokens-per-request-override-header
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-05-17T08:34:31Z'
   url: https://github.blog/changelog/2026-05-15-github-app-installation-tokens-per-request-override-header
   status: captured-from-rss-feed
   body_captured: true
