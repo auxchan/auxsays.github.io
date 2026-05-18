@@ -3,7 +3,7 @@
   "last_results": [
     {
       "adapter": "rss_feed",
-      "duration_ms": 1441,
+      "duration_ms": 1096,
       "fetched": 2,
       "product_id": "figma",
       "refreshed": [
@@ -24,7 +24,7 @@
     },
     {
       "adapter": "adobe_release_notes",
-      "duration_ms": 25968,
+      "duration_ms": 26044,
       "fetched": 1,
       "product_id": "adobe-premiere-pro",
       "refreshed": [
@@ -40,7 +40,7 @@
     },
     {
       "adapter": "blackmagic_support_downloads",
-      "duration_ms": 648,
+      "duration_ms": 905,
       "fetched": 2,
       "product_id": "blackmagic-davinci",
       "refreshed": [
@@ -61,7 +61,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 709,
+      "duration_ms": 973,
       "fetched": 2,
       "product_id": "obs-studio",
       "refreshed": [
@@ -82,7 +82,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 447,
+      "duration_ms": 512,
       "fetched": 2,
       "product_id": "comfyui",
       "refreshed": [
@@ -103,7 +103,7 @@
     },
     {
       "adapter": "rss_feed",
-      "duration_ms": 363,
+      "duration_ms": 925,
       "fetched": 2,
       "product_id": "github",
       "refreshed": [
@@ -111,20 +111,17 @@
           "action": "freshness-updated",
           "path": "auxsays/updates/generated/2026-05-16-github-copilot-github-app-installation-tokens-per-request-override-header.md",
           "record_id": "rss:github:https://github.blog/changelog/2026-05-15-github-app-installation-tokens-per-request-override-header"
-        },
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-05-15-github-copilot-grok-code-fast-1-deprecated.md",
-          "record_id": "rss:github:https://github.blog/changelog/2026-05-15-grok-code-fast-1-deprecated"
         }
       ],
       "skipped": [],
       "status": "success",
-      "written": []
+      "written": [
+        "auxsays/updates/generated/2026-05-18-github-copilot-gpt-5-3-codex-is-now-the-base-model-for-copilot-business-and-enterprise.md"
+      ]
     },
     {
       "adapter": "html_changelog",
-      "duration_ms": 173,
+      "duration_ms": 128,
       "fetched": 0,
       "product_id": "netlify",
       "refreshed": [],
@@ -133,8 +130,8 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-05-17T19:39:42Z",
-  "last_run_started_at": "2026-05-17T19:39:12Z",
+  "last_run_finished_at": "2026-05-18T04:45:22Z",
+  "last_run_started_at": "2026-05-18T04:44:51Z",
   "sources": {
     "adobe-after-effects": {
       "consecutive_failures": 2,
@@ -199,7 +196,7 @@
     "adobe-premiere-pro": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_release_notes",
-      "last_checked_at": "2026-05-17T19:39:13Z",
+      "last_checked_at": "2026-05-18T04:44:52Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -207,8 +204,8 @@
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 25968,
-      "last_success_at": "2026-05-17T19:39:13Z",
+      "last_run_duration_ms": 26044,
+      "last_success_at": "2026-05-18T04:44:52Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "adobe:adobe-premiere-pro:26.2:9fa3e1e53c0b275d"
@@ -218,7 +215,7 @@
     "blackmagic-davinci": {
       "consecutive_failures": 0,
       "last_adapter": "blackmagic_support_downloads",
-      "last_checked_at": "2026-05-17T19:39:39Z",
+      "last_checked_at": "2026-05-18T04:45:18Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -226,8 +223,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 648,
-      "last_success_at": "2026-05-17T19:39:39Z",
+      "last_run_duration_ms": 905,
+      "last_success_at": "2026-05-18T04:45:18Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "blackmagic-support:blackmagic-davinci:20.3.1:ea408484da59422794a6764f0cb7f11f",
@@ -238,7 +235,7 @@
     "comfyui": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-05-17T19:39:41Z",
+      "last_checked_at": "2026-05-18T04:45:20Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -246,8 +243,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 447,
-      "last_success_at": "2026-05-17T19:39:41Z",
+      "last_run_duration_ms": 512,
+      "last_success_at": "2026-05-18T04:45:20Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:comfyui:322123426",
@@ -260,7 +257,7 @@
     "figma": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-05-17T19:39:12Z",
+      "last_checked_at": "2026-05-18T04:44:51Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -268,8 +265,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 1441,
-      "last_success_at": "2026-05-17T19:39:12Z",
+      "last_run_duration_ms": 1096,
+      "last_success_at": "2026-05-18T04:44:51Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:figma:11173709-f3f3-44ff-8711-ae180a888f29",
@@ -288,7 +285,7 @@
     "github": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-05-17T19:39:41Z",
+      "last_checked_at": "2026-05-18T04:45:21Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -296,10 +293,11 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 363,
-      "last_success_at": "2026-05-17T19:39:41Z",
+      "last_run_duration_ms": 925,
+      "last_success_at": "2026-05-18T04:45:21Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "rss:github:https://github.blog/changelog/2026-05-17-gpt-5-3-codex-is-now-the-base-model-for-copilot-business-and-enterprise",
         "rss:github:https://github.blog/changelog/2026-05-15-github-app-installation-tokens-per-request-override-header",
         "rss:github:https://github.blog/changelog/2026-05-15-grok-code-fast-1-deprecated",
         "rss:github:https://github.blog/changelog/2026-05-15-timestamp-fields-in-github-projects",
@@ -339,7 +337,7 @@
     "netlify": {
       "consecutive_failures": 0,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-05-17T19:39:42Z",
+      "last_checked_at": "2026-05-18T04:45:22Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -347,15 +345,15 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 173,
-      "last_success_at": "2026-05-17T19:39:42Z",
+      "last_run_duration_ms": 128,
+      "last_success_at": "2026-05-18T04:45:22Z",
       "previous_consecutive_failures": 0,
       "status": "degraded"
     },
     "obs-studio": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-05-17T19:39:40Z",
+      "last_checked_at": "2026-05-18T04:45:19Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -363,8 +361,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 709,
-      "last_success_at": "2026-05-17T19:39:40Z",
+      "last_run_duration_ms": 973,
+      "last_success_at": "2026-05-18T04:45:19Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:obs-studio:304830335",
