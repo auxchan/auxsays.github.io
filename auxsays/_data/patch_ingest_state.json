@@ -3,10 +3,15 @@
   "last_results": [
     {
       "adapter": "rss_feed",
-      "duration_ms": 1214,
+      "duration_ms": 921,
       "fetched": 2,
       "product_id": "figma",
       "refreshed": [
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-05-18-figma-sections-in-figma-slides.md",
+          "record_id": "rss:figma:bd335822-5b89-4ce0-8ae0-1758197dcd78"
+        },
         {
           "action": "freshness-updated",
           "path": "auxsays/updates/generated/2026-05-11-figma-custom-skills-in-make.md",
@@ -15,13 +20,11 @@
       ],
       "skipped": [],
       "status": "success",
-      "written": [
-        "auxsays/updates/generated/2026-05-18-figma-sections-in-figma-slides.md"
-      ]
+      "written": []
     },
     {
       "adapter": "adobe_release_notes",
-      "duration_ms": 25817,
+      "duration_ms": 25903,
       "fetched": 1,
       "product_id": "adobe-premiere-pro",
       "refreshed": [
@@ -37,7 +40,7 @@
     },
     {
       "adapter": "blackmagic_support_downloads",
-      "duration_ms": 560,
+      "duration_ms": 593,
       "fetched": 2,
       "product_id": "blackmagic-davinci",
       "refreshed": [
@@ -58,7 +61,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 899,
+      "duration_ms": 836,
       "fetched": 2,
       "product_id": "obs-studio",
       "refreshed": [
@@ -79,7 +82,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 567,
+      "duration_ms": 439,
       "fetched": 2,
       "product_id": "comfyui",
       "refreshed": [
@@ -100,20 +103,20 @@
     },
     {
       "adapter": "rss_feed",
-      "duration_ms": 1388,
+      "duration_ms": 1538,
       "fetched": 2,
       "product_id": "github",
       "refreshed": [],
       "skipped": [],
       "status": "success",
       "written": [
-        "auxsays/updates/generated/2026-05-18-github-copilot-audit-repository-copilot-cloud-agent-configuration-via-the-rest-api.md",
-        "auxsays/updates/generated/2026-05-18-github-copilot-copilot-spaces-api-now-generally-available.md"
+        "auxsays/updates/generated/2026-05-18-github-copilot-one-click-fixes-for-failing-actions-with-copilot-cloud-agent.md",
+        "auxsays/updates/generated/2026-05-18-github-copilot-copilot-cloud-agent-fast-cost-efficient-models-for-simple-tasks.md"
       ]
     },
     {
       "adapter": "html_changelog",
-      "duration_ms": 167,
+      "duration_ms": 101,
       "fetched": 0,
       "product_id": "netlify",
       "refreshed": [],
@@ -122,8 +125,8 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-05-18T20:04:53Z",
-  "last_run_started_at": "2026-05-18T20:04:22Z",
+  "last_run_finished_at": "2026-05-19T04:36:25Z",
+  "last_run_started_at": "2026-05-19T04:35:55Z",
   "sources": {
     "adobe-after-effects": {
       "consecutive_failures": 2,
@@ -188,7 +191,7 @@
     "adobe-premiere-pro": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_release_notes",
-      "last_checked_at": "2026-05-18T20:04:24Z",
+      "last_checked_at": "2026-05-19T04:35:56Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -196,8 +199,8 @@
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 25817,
-      "last_success_at": "2026-05-18T20:04:24Z",
+      "last_run_duration_ms": 25903,
+      "last_success_at": "2026-05-19T04:35:56Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "adobe:adobe-premiere-pro:26.2:9fa3e1e53c0b275d"
@@ -207,7 +210,7 @@
     "blackmagic-davinci": {
       "consecutive_failures": 0,
       "last_adapter": "blackmagic_support_downloads",
-      "last_checked_at": "2026-05-18T20:04:49Z",
+      "last_checked_at": "2026-05-19T04:36:22Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -215,8 +218,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 560,
-      "last_success_at": "2026-05-18T20:04:49Z",
+      "last_run_duration_ms": 593,
+      "last_success_at": "2026-05-19T04:36:22Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "blackmagic-support:blackmagic-davinci:20.3.1:ea408484da59422794a6764f0cb7f11f",
@@ -227,7 +230,7 @@
     "comfyui": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-05-18T20:04:51Z",
+      "last_checked_at": "2026-05-19T04:36:23Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -235,8 +238,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 567,
-      "last_success_at": "2026-05-18T20:04:51Z",
+      "last_run_duration_ms": 439,
+      "last_success_at": "2026-05-19T04:36:23Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:comfyui:322123426",
@@ -249,7 +252,7 @@
     "figma": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-05-18T20:04:22Z",
+      "last_checked_at": "2026-05-19T04:35:55Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -257,8 +260,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 1214,
-      "last_success_at": "2026-05-18T20:04:22Z",
+      "last_run_duration_ms": 921,
+      "last_success_at": "2026-05-19T04:35:55Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:figma:bd335822-5b89-4ce0-8ae0-1758197dcd78",
@@ -278,7 +281,7 @@
     "github": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-05-18T20:04:51Z",
+      "last_checked_at": "2026-05-19T04:36:24Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -286,10 +289,12 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 1388,
-      "last_success_at": "2026-05-18T20:04:51Z",
+      "last_run_duration_ms": 1538,
+      "last_success_at": "2026-05-19T04:36:24Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "rss:github:https://github.blog/changelog/2026-05-18-copilot-cloud-agent-fast-cost-efficient-models-for-simple-tasks",
+        "rss:github:https://github.blog/changelog/2026-05-18-one-click-fixes-for-failing-actions-with-copilot-cloud-agent",
         "rss:github:https://github.blog/changelog/2026-05-18-copilot-spaces-api-now-generally-available",
         "rss:github:https://github.blog/changelog/2026-05-18-audit-repository-copilot-cloud-agent-configuration-via-the-rest-api",
         "rss:github:https://github.blog/changelog/2026-05-17-gpt-5-3-codex-is-now-the-base-model-for-copilot-business-and-enterprise",
@@ -332,7 +337,7 @@
     "netlify": {
       "consecutive_failures": 0,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-05-18T20:04:53Z",
+      "last_checked_at": "2026-05-19T04:36:25Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -340,15 +345,15 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 167,
-      "last_success_at": "2026-05-18T20:04:53Z",
+      "last_run_duration_ms": 101,
+      "last_success_at": "2026-05-19T04:36:25Z",
       "previous_consecutive_failures": 0,
       "status": "degraded"
     },
     "obs-studio": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-05-18T20:04:50Z",
+      "last_checked_at": "2026-05-19T04:36:23Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -356,8 +361,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 899,
-      "last_success_at": "2026-05-18T20:04:50Z",
+      "last_run_duration_ms": 836,
+      "last_success_at": "2026-05-19T04:36:23Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:obs-studio:304830335",
