@@ -17,8 +17,8 @@ update_version: Sections in Figma Slides
 update_logo_text: FIG
 update_published_at: '2026-05-18T00:00:00.000Z'
 update_last_checked: '2026-05-18T20:04:22Z'
-source_last_checked: '2026-05-19T10:09:45Z'
-official_body_last_checked: '2026-05-19T10:09:45Z'
+source_last_checked: '2026-05-19T15:52:43Z'
+official_body_last_checked: '2026-05-19T15:52:43Z'
 record_last_updated: '2026-05-18T20:04:22Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -80,6 +80,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-05-19T10:09:45Z'
+  url: https://www.figma.com/release-notes/?title=sections-in-figma-slides
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-05-19T15:52:43Z'
   url: https://www.figma.com/release-notes/?title=sections-in-figma-slides
   status: captured-from-rss-feed
   body_captured: true
