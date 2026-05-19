@@ -2818,6 +2818,9 @@ evidence:
   report_title: Virtual Camera not visible in Windows 11 22H2+ camera list due to missing EnableFrameServerMode registry key
   report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL not needed ### OBS Studio Crash Log URL _No response_ ### Expected Behavior After installing OBS Virtual Camera, it'
   captured_at: '2026-05-17T13:57:38Z'
+  source_date: null
+  target_release_date: null
+  source_date_pass: null
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -2839,6 +2842,9 @@ evidence:
   report_title: YouTube Account Disconnects on Startup
   report_text_excerpt: '### Operating System Info macOS 15 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/OTHWOdo590L4mlAD ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The Y'
   captured_at: '2026-05-17T17:14:41Z'
+  source_date: null
+  target_release_date: null
+  source_date_pass: null
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -2860,6 +2866,9 @@ evidence:
   report_title: Segfault on startup
   report_text_excerpt: '### Operating System Info Other ### Other OS Manjaro Linux ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) 32.1.2-2 ### OBS Studio Log URL na ### OBS Studio Crash Log URL na ### Expected Behavior Being able to start OBS ### Current Behavior Starting OBS from'
   captured_at: '2026-05-17T18:10:28Z'
+  source_date: null
+  target_release_date: null
+  source_date_pass: null
   patch_version_matched: true
   matched_version: 32.1.2
   match_basis: body
@@ -2868,6 +2877,30 @@ evidence:
   issue_theme: audio mixer regression
   workflow_area: audio mixer UI
   platform: linux
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1thh603-problem-with-keyframe-tab-in-fusion
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1thh603/problem_with_keyframe_tab_in_fusion/
+  parent_title: Problem with keyframe tab in fusion
+  report_title: Problem with keyframe tab in fusion
+  report_text_excerpt: 'Problem with keyframe tab in fusion [edit: solved] Hello, as shown in picture when i use fusion and trying to edit keyframes tab window is completly black for some reason. If you know how to fix this i would be very thankful. Im using davincy resolve 21 System info: Processor...'
+  captured_at: '2026-05-19T12:20:22Z'
+  source_date: '2026-05-19'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: install issue
+  workflow_area: installation
+  platform: unknown
   severity: medium
   sentiment: negative
   source_weight: 1
