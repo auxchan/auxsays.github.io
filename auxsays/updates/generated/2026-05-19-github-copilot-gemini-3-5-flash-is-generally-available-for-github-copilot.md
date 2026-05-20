@@ -17,8 +17,8 @@ update_version: Gemini 3.5 Flash is generally available for GitHub Copilot
 update_logo_text: GIT
 update_published_at: '2026-05-19T17:56:38Z'
 update_last_checked: '2026-05-19T20:06:23Z'
-source_last_checked: '2026-05-20T04:40:01Z'
-official_body_last_checked: '2026-05-20T04:40:01Z'
+source_last_checked: '2026-05-20T09:55:42Z'
+official_body_last_checked: '2026-05-20T09:55:42Z'
 record_last_updated: '2026-05-20T04:40:01Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -86,6 +86,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-05-20T04:40:01Z'
+  url: https://github.blog/changelog/2026-05-19-gemini-3-5-flash-is-generally-available-for-github-copilot
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-05-20T09:55:42Z'
   url: https://github.blog/changelog/2026-05-19-gemini-3-5-flash-is-generally-available-for-github-copilot
   status: captured-from-rss-feed
   body_captured: true
