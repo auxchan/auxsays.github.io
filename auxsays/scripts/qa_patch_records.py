@@ -35,7 +35,6 @@ BANNED_PUBLIC_TERMS = {
     "promoted rows",
     "write-back",
     "writeback",
-    "verified reports",
     "verified reports set",
     "not broad consensus",
     "low-confidence",
@@ -205,10 +204,10 @@ def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]
     if evidence_state and evidence_state not in VALID_EVIDENCE_STATES:
         add(warnings, path, "unknown_evidence_state", f"Evidence state '{evidence_state}' is not in the normalized taxonomy.")
     if contains_public_static_sample(data):
-        add(errors, path, "public_static_sample_wording", "Public-facing generated record data still contains obsolete sample wording. Use 'User reports found'.")
+        add(errors, path, "public_static_sample_wording", "Public-facing generated record data still contains obsolete sample wording. Use 'Verified reports' for the evidence-state label.")
     public_text = public_record_text(data)
     if ("Pilot" + " sample") in public_text or ("pilot" + " sample") in public_text:
-        add(errors, path, "public_pilot_sample_wording", "Public-facing generated record data still contains obsolete pilot-sample wording. Use 'User reports found'.")
+        add(errors, path, "public_pilot_sample_wording", "Public-facing generated record data still contains obsolete pilot-sample wording. Use 'Verified reports' for the evidence-state label.")
     public_text_lower = public_text.lower()
     for term in sorted(BANNED_PUBLIC_TERMS):
         if term in public_text_lower:
@@ -363,15 +362,14 @@ def scan_update_layout_public_copy() -> tuple[list[dict[str, str]], list[dict[st
         "Community risk sample": "User reports should render as sources, not as a separate community-risk concept.",
         "Practical recommendation": "Use public heading 'Recommendation' instead.",
         "Evidence methodology details": "Use 'Evidence summary' for report-bearing pages and hide the large section for 0-report pages.",
-        "Static" + " sample": "Public-facing wording must use User reports found.",
-        "Pilot" + " sample": "Public-facing wording must use User reports found.",
-        "pilot" + " sample": "Public-facing wording must use User reports found.",
+        "Static" + " sample": "Public-facing evidence labels must use Verified reports.",
+        "Pilot" + " sample": "Public-facing evidence labels must use Verified reports.",
+        "pilot" + " sample": "Public-facing evidence labels must use Verified reports.",
         "Intel" + " Status": "Public-facing wording must use Evidence Status.",
         "Official sources are listed first": "Sources should render as concise citations without filler intro copy.",
         "Community bug reports are shown": "Sources should not repeat methodology filler.",
         "AUXSAYS counts a report only when": "Methodology details belong on the methodology page, not patch bodies.",
         "Official source content has not been captured into this AUXSAYS record yet": "Do not force a blank Official Source Summary block.",
-        "verified reports": "Public patch pages should use plain user-report/source wording.",
         "deterministically accepted": "Backend evidence-gate wording must not render on public patch pages.",
         "source-backed": "Backend evidence-gate wording must not render on public patch pages.",
         "source_weight": "Backend evidence fields must not render on public patch pages.",
@@ -389,10 +387,16 @@ def scan_update_layout_public_copy() -> tuple[list[dict[str, str]], list[dict[st
         if phrase in text:
             add(errors, UPDATE_LAYOUT_PATH, "layout_public_copy_regression", message)
 
+    if "{% assign evidence_state = 'User reports found' %}" in text:
+        add(errors, UPDATE_LAYOUT_PATH, "layout_pilot_sample_label_stale", "pilot_sample must render as Verified reports, not User reports found.")
+    if "{% assign evidence_state = 'Verified reports' %}" not in text:
+        add(errors, UPDATE_LAYOUT_PATH, "layout_pilot_sample_label_missing", "Patch layout must normalize pilot_sample to Verified reports.")
+
     required_public_labels = [
         "Official Patch Notes",
         "Technical Details",
         "User Reports / Sources",
+        "Verified reports",
         "Methodology",
         "AUXSAYS verdict",
         "Release date",

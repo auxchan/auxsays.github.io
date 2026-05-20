@@ -63,7 +63,7 @@ layout: aux-base
   {% assign evidence_state = 'Live consensus' %}
   {% assign evidence_state_class = 'live' %}
 {% elsif collection_status == 'pilot_initial_sample' or collection_status == 'static_initial_sample' or page.evidence_state == 'pilot_sample' or page.evidence_state == 'static_sample' %}
-  {% assign evidence_state = 'User reports found' %}
+  {% assign evidence_state = 'Verified reports' %}
   {% assign evidence_state_class = 'pilot' %}
 {% elsif official_captured %}
   {% assign evidence_state = 'Official source only' %}

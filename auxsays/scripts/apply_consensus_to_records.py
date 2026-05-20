@@ -792,7 +792,7 @@ def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], reco
         "update_report_count": count,
         "confirmed_patch_specific_report_count": count,
         "evidence_state": _evidence_state(count),
-        "evidence_state_label": "Official source only" if count == 0 else "User reports found",
+        "evidence_state_label": "Official source only" if count == 0 else "Verified reports",
         "consensus_collection_status": _collection_status(count),
         "update_consensus_label": consensus_label,
         "update_consensus_confidence": confidence,
@@ -983,10 +983,9 @@ def _sanitize_status_events(events: Any) -> list[dict[str, Any]]:
         clean_event = dict(event)
         label = str(clean_event.get("label") or "").lower()
         note = str(clean_event.get("note") or "").lower()
-        dirty_label = _contains_internal_public_term(clean_event.get("label")) or "verified" in label
+        dirty_label = _contains_internal_public_term(clean_event.get("label"))
         dirty_note = (
             _contains_internal_public_term(clean_event.get("note"))
-            or "verified report" in note
             or "evidence state" in note
         )
         if dirty_label:
