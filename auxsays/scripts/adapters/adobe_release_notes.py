@@ -309,7 +309,7 @@ def _record(
         "capture_status": "captured-from-official-adobe-source",
         "official_summary": f"Adobe published {source['software']} {version} release information.",
     }
-    if source.get("product_id") == "adobe-premiere-pro":
+    if source.get("product_id") == "adobe-premiere-pro" and source.get("ingestion", {}).get("allow_legacy_premiere_pilot_consensus_seed"):
         record.update(_premiere_262_pilot_consensus(version))
     return record
 

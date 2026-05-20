@@ -14,10 +14,12 @@ if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
 from patch_collectors.base import CollectorContext, upsert_method_health  # noqa: E402
+from patch_collectors.adobe_premiere import AdobePremiereCollector  # noqa: E402
 from patch_collectors.davinci import DavinciCollector  # noqa: E402
 from patch_collectors.obs import ObsCollector  # noqa: E402
 
 COLLECTORS = {
+    "adobe-premiere-pro": AdobePremiereCollector,
     "obs-studio": ObsCollector,
     "blackmagic-davinci": DavinciCollector,
 }

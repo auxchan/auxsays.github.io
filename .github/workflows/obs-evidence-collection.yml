@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       product_id:
-        description: "Optional product_id: obs-studio or blackmagic-davinci"
+        description: "Optional product_id: obs-studio, blackmagic-davinci, or adobe-premiere-pro"
         required: false
         type: string
       dry_run:
@@ -79,7 +79,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add auxsays/_data/consensus_evidence.yml auxsays/_data/evidence_method_health.yml auxsays/updates/generated/*obs-studio*.md auxsays/updates/generated/*davinci*.md
+          git add auxsays/_data/consensus_evidence.yml auxsays/_data/evidence_method_health.yml auxsays/updates/generated/*obs-studio*.md auxsays/updates/generated/*davinci*.md auxsays/updates/generated/*premiere-pro*.md
           if git diff --cached --quiet; then
             echo "No material evidence changes to commit."
             echo "changed=false" >> "$GITHUB_OUTPUT"

@@ -12,6 +12,7 @@ node_modules/
 auxsays/_data/qa_status.json
 auxsays/_data/consensus_status.json
 auxsays/assets/img/patch-logos/_generation-report.json
+auxsays/tools/local-browser-capture/launcher/*.exe
 # Ruby/Bundler — local dev only, not part of the repo deliverable
 auxsays/.bundle/
 auxsays/vendor/
