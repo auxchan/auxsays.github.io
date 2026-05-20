@@ -1,0 +1,32 @@
+{
+  "product_id": "blackmagic-davinci",
+  "target_version": "21",
+  "release_date": "2026-04-14",
+  "watch_until": "2026-06-14",
+  "query_variants": [
+    "DaVinci Resolve 21",
+    "DaVinci Resolve Studio 21",
+    "Resolve Studio 21",
+    "DaVinci Resolve 21 crash",
+    "DaVinci Resolve 21 export",
+    "DaVinci Resolve 21 render",
+    "DaVinci Resolve 21 audio",
+    "DaVinci Resolve 21 GPU"
+  ],
+  "allowed_source_domains": [
+    "forum.blackmagicdesign.com"
+  ],
+  "capture": {
+    "output_root": "C:\\AUXSAYS_CAPTURE",
+    "browser_profile_dir": "C:\\AUXSAYS_CAPTURE\\browser-profiles\\blackmagic-forum",
+    "browser_channel": "msedge",
+    "headless": false,
+    "max_pages_per_run": 20,
+    "max_results_per_query": 6,
+    "delay_min_ms": 5000,
+    "delay_max_ms": 12000,
+    "navigation_timeout_ms": 45000,
+    "max_text_chars": 12000,
+    "stop_on_block": true
+  }
+}

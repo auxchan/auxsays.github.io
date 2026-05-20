@@ -3,9 +3,14 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "generate:patch-logos": "node scripts/generate_patch_logos.mjs"
+    "generate:patch-logos": "node scripts/generate_patch_logos.mjs",
+    "capture:blackmagic-ui": "powershell -NoProfile -ExecutionPolicy Bypass -File tools/local-browser-capture/launcher/AuxsaysCaptureLauncher.ps1",
+    "capture:blackmagic-dry-run": "node tools/local-browser-capture/capture.mjs --config tools/local-browser-capture/configs/blackmagic-davinci.sample.json --dry-run",
+    "capture:blackmagic": "node tools/local-browser-capture/capture.mjs --config tools/local-browser-capture/configs/blackmagic-davinci.sample.json",
+    "test:local-browser-capture": "node --test tools/local-browser-capture/tests/capture-core.test.mjs"
   },
   "devDependencies": {
+    "playwright": "^1.44.0",
     "simple-icons": "^14.0.0"
   },
   "description": "AUXSAYS site tooling. Patch logo generation is disabled in favor of explicit curated/official logo_path values."
