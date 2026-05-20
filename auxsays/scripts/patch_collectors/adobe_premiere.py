@@ -27,6 +27,7 @@ from .base import (
     date_part,
     exact_version_match,
     generated_records,
+    load_evidence,
     load_front_matter_and_body,
     make_evidence_row,
     method_health_row,
@@ -38,6 +39,9 @@ PRODUCT_ID = "adobe-premiere-pro"
 SOURCE_TYPE = "adobe_community_bug_report"
 SOURCE_NAME = "Adobe Community Bug Report"
 ADOBE_SEARCH_URL = "https://community.adobe.com/t5/forums/searchpage/tab/message"
+ADOBE_PREMIERE_BUG_TAB_BASE_URL = "https://community.adobe.com/t5/premiere-pro/ct-p/ct-premiere-pro"
+MAX_SEARCH_QUERIES_PER_RUN = 2
+MAX_SEARCH_PAGES_PER_QUERY = 1
 HEADERS = {
     "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,text/plain;q=0.8,*/*;q=0.5",
     "Accept-Language": "en-US,en;q=0.9",
@@ -115,64 +119,205 @@ class AdobePremiereCollector(ProductCollector):
 
 def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
     captured_at = utc_now()
-    errors: list[dict[str, Any]] = []
-    candidates = adobe_community_search_candidates(record, context, errors)
-    accepted, rejected = evaluate_candidates(record, candidates, captured_at)
-    blocked_reason = blocked_reason_from_errors(errors)
-    notes = "Adobe Community search discovers specific Premiere Pro bug-report pages; accepted rows still require exact product, version, date, URL, and issue gates."
-    if errors:
-        notes = f"{notes} Fetch failures: {len(errors)}."
-    if rejected and not accepted:
-        notes = f"{notes} Rejected candidates: {format_rejection_counts(rejected)}."
-    health = [
-        method_health_row(
-            product_id=PRODUCT_ID,
-            update_version=record.update_version,
-            method_id="adobe_community_search",
-            source_type=SOURCE_TYPE,
-            status=adobe_community_method_status(candidates, accepted, rejected, errors),
-            candidates_found=len(candidates),
-            accepted_reports=len(accepted),
-            rejected_reports=len(rejected),
-            blocked_reason=blocked_reason,
-            last_run=captured_at,
-            notes=notes,
-        )
-    ]
+    method_results: list[dict[str, Any]] = []
+
+    for method_id, collector in (
+        ("adobe_community_search", adobe_community_search_candidates),
+        ("adobe_community_bug_tab_index", adobe_community_bug_tab_candidates),
+        ("adobe_community_known_url_recheck", adobe_community_known_url_candidates),
+    ):
+        errors: list[dict[str, Any]] = []
+        candidates = collector(record, context, errors)
+        accepted, rejected = evaluate_candidates(record, candidates, captured_at)
+        method_results.append({
+            "method_id": method_id,
+            "candidates": candidates,
+            "accepted": accepted,
+            "rejected": rejected,
+            "errors": errors,
+        })
+
+    accepted = merge_rows_by_url([row for result in method_results for row in result["accepted"]])
+    rejected = merge_rows_by_url([row for result in method_results for row in result["rejected"] if not row_is_accepted_url(row, accepted)])
+    health = [health_for_method(record, captured_at, result) for result in method_results]
     return accepted, rejected, health
 
 
 def adobe_community_search_candidates(record: PatchRecord, context: CollectorContext, errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
     candidates: list[dict[str, Any]] = []
     seen_urls: set[str] = set()
-    for query in search_queries(record):
-        for page in range(1, max(1, context.max_pages) + 1):
+    max_queries = min(MAX_SEARCH_QUERIES_PER_RUN, max(1, context.max_pages), len(search_queries(record)))
+    max_pages = min(MAX_SEARCH_PAGES_PER_QUERY, max(1, context.max_pages))
+    for query in search_queries(record)[:max_queries]:
+        for page in range(1, max_pages + 1):
             url = search_url(query, page)
             try:
                 html_text = request_text(url)
             except Exception as exc:
                 errors.append({"source_url": url, "reason": f"adobe_community_search_fetch_failed:{error_reason(exc)}"})
+                if error_is_blocked(exc):
+                    return candidates
                 break
             links = extract_report_links(html_text)
             if not links:
                 break
-            for link in links:
-                canonical = canonical_adobe_url(link)
-                if canonical.lower() in seen_urls:
-                    continue
-                seen_urls.add(canonical.lower())
-                try:
-                    page_html = request_text(canonical)
-                    candidate = adobe_bug_report_candidate(canonical, page_html)
-                except Exception as exc:
-                    errors.append({"source_url": canonical, "reason": f"adobe_community_report_fetch_failed:{error_reason(exc)}"})
-                    continue
-                if not candidate:
-                    continue
-                if context.since and candidate.get("source_date") and date_part(candidate["source_date"]) < context.since:
-                    continue
-                candidates.append(candidate)
+            candidates.extend(candidates_from_report_links(links, context, errors, seen_urls, "adobe_community_search"))
     return candidates
+
+
+def adobe_community_bug_tab_candidates(record: PatchRecord, context: CollectorContext, errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    candidates: list[dict[str, Any]] = []
+    seen_urls: set[str] = set()
+    for page in range(1, max(1, context.max_pages) + 1):
+        url = bug_tab_url(page)
+        try:
+            html_text = request_text(url)
+        except Exception as exc:
+            errors.append({"source_url": url, "reason": f"adobe_community_bug_tab_fetch_failed:{error_reason(exc)}"})
+            if error_is_blocked(exc):
+                break
+            continue
+        links = extract_report_links(html_text)
+        if not links:
+            if page == 1:
+                continue
+            break
+        before = len(candidates)
+        candidates.extend(candidates_from_report_links(links, context, errors, seen_urls, "adobe_community_bug_tab_index"))
+        if len(candidates) == before and page > 1:
+            break
+    return candidates
+
+
+def adobe_community_known_url_candidates(record: PatchRecord, context: CollectorContext, errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    urls = known_candidate_urls(record)
+    seen_urls: set[str] = set()
+    return candidates_from_report_links(urls, context, errors, seen_urls, "adobe_community_known_url_recheck")
+
+
+def candidates_from_report_links(
+    links: list[str],
+    context: CollectorContext,
+    errors: list[dict[str, Any]],
+    seen_urls: set[str],
+    method_id: str,
+) -> list[dict[str, Any]]:
+    candidates: list[dict[str, Any]] = []
+    for link in links:
+        canonical = canonical_adobe_url(link)
+        if not canonical or canonical.lower() in seen_urls:
+            continue
+        seen_urls.add(canonical.lower())
+        if not adobe_report_url_is_specific(canonical):
+            continue
+        try:
+            page_html = request_text(canonical)
+            candidate = adobe_bug_report_candidate(canonical, page_html)
+        except Exception as exc:
+            errors.append({"source_url": canonical, "reason": f"{method_id}_report_fetch_failed:{error_reason(exc)}"})
+            continue
+        if not candidate:
+            continue
+        if context.since and candidate.get("source_date") and date_part(candidate["source_date"]) < context.since:
+            continue
+        candidates.append(candidate)
+    return candidates
+
+
+def bug_tab_url(page: int) -> str:
+    params = {
+        "tabid": "bugs",
+        "sort": "latest_replies",
+        "filter": "all",
+        "lang": "all",
+    }
+    if page > 1:
+        params["page"] = str(page)
+    return f"{ADOBE_PREMIERE_BUG_TAB_BASE_URL}?{urllib.parse.urlencode(params)}"
+
+
+def known_candidate_urls(record: PatchRecord) -> list[str]:
+    urls: list[str] = []
+    try:
+        rows = load_evidence()
+    except Exception:
+        rows = []
+    for row in rows:
+        if str(row.get("product_id") or "").strip() != PRODUCT_ID:
+            continue
+        if str(row.get("update_version") or "").strip() != record.update_version:
+            continue
+        url = canonical_adobe_url(str(row.get("source_url") or ""))
+        if adobe_report_url_is_specific(url):
+            urls.append(url)
+    return dedupe(urls)
+
+
+def health_for_method(record: PatchRecord, captured_at: str, result: dict[str, Any]) -> dict[str, Any]:
+    method_id = str(result["method_id"])
+    candidates = list(result["candidates"])
+    accepted = list(result["accepted"])
+    rejected = list(result["rejected"])
+    errors = list(result["errors"])
+    blocked_reason = blocked_reason_from_errors(errors)
+    notes = method_notes(method_id, candidates, accepted, rejected, errors)
+    return method_health_row(
+        product_id=PRODUCT_ID,
+        update_version=record.update_version,
+        method_id=method_id,
+        source_type=SOURCE_TYPE,
+        status=adobe_community_method_status(candidates, accepted, rejected, errors),
+        candidates_found=len(candidates),
+        accepted_reports=len(accepted),
+        rejected_reports=len(rejected),
+        blocked_reason=blocked_reason,
+        last_run=captured_at,
+        notes=notes,
+    )
+
+
+def method_notes(
+    method_id: str,
+    candidates: list[dict[str, Any]],
+    accepted: list[dict[str, Any]],
+    rejected: list[dict[str, Any]],
+    errors: list[dict[str, Any]],
+) -> str:
+    labels = {
+        "adobe_community_search": "Adobe Community search",
+        "adobe_community_bug_tab_index": "Adobe Community Premiere bug-tab listing",
+        "adobe_community_known_url_recheck": "Known Adobe Community bug-report URL recheck",
+    }
+    notes = f"{labels.get(method_id, method_id)} discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates."
+    if method_id == "adobe_community_search":
+        notes = f"{notes} Search requests are deliberately capped so rate limiting moves the collector to fallback methods instead of retrying the blocked endpoint repeatedly."
+    if errors:
+        notes = f"{notes} Fetch failures: {len(errors)}."
+    if rejected and not accepted:
+        notes = f"{notes} Rejected candidates: {format_rejection_counts(rejected)}."
+    return notes
+
+
+def merge_rows_by_url(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    merged: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for row in rows:
+        url = canonical_adobe_url(str(row.get("source_url") or ""))
+        if not url or url.lower() in seen:
+            continue
+        seen.add(url.lower())
+        merged.append(row)
+    return merged
+
+
+def row_is_accepted_url(row: dict[str, Any], accepted: list[dict[str, Any]]) -> bool:
+    url = canonical_adobe_url(str(row.get("source_url") or ""))
+    return bool(url) and any(canonical_adobe_url(str(item.get("source_url") or "")).lower() == url.lower() for item in accepted)
+
+
+def error_is_blocked(exc: Exception) -> bool:
+    reason = error_reason(exc).lower()
+    return any(token in reason for token in ("blocked", "challenge", "captcha", "rate_limited", "access_denied"))
 
 
 def search_queries(record: PatchRecord) -> list[str]:

@@ -24,6 +24,8 @@ from patch_collectors.base import CollectorContext, PatchRecord
 import patch_collectors.adobe_premiere as premiere
 from patch_collectors.adobe_premiere import (
     AdobeCommunityAccessError,
+    adobe_community_bug_tab_candidates,
+    adobe_community_known_url_candidates,
     adobe_community_method_status,
     adobe_community_search_candidates,
     adobe_report_url_is_specific,
@@ -42,6 +44,17 @@ SEARCH_HTML = """
     <a href="/bug-reports-728/premiere-pro-26-2-export-crash-1559001">Premiere Pro 26.2 export crash</a>
     <a href="/bug-reports-728/premiere-pro-26-2-export-crash-1559001?tracking=1">Duplicate link</a>
     <a href="/announcements-727/welcome-to-premiere-26-2-1557825">Official announcement</a>
+  </body>
+</html>
+"""
+
+BUG_TAB_HTML = """
+<html>
+  <body>
+    <a href="/bug-reports-728/premiere-pro-26-2-export-crash-1559001">Premiere Pro 26.2 export crash</a>
+    <a href="/bug-reports-728/premiere-pro-26-2-export-crash-1559001?tracking=1">Duplicate bug-tab link</a>
+    <a href="/t5/premiere-pro/ct-p/ct-premiere-pro?tabid=bugs">Premiere product bug tab</a>
+    <a href="/t5/forums/searchpage/tab/message?q=Premiere%2026.2">Search results</a>
   </body>
 </html>
 """
@@ -214,6 +227,77 @@ def run() -> int:
         premiere.request_text = original_request_text
     check("mocked Adobe Community search discovers specific report URL", len(discovered) == 1, f"candidates={discovered!r}, errors={errors!r}")
     check("mocked Adobe Community search has no errors", errors == [], f"errors={errors!r}")
+
+    original_request_text = premiere.request_text
+    try:
+        pages = {
+            premiere.bug_tab_url(1): BUG_TAB_HTML,
+            "https://community.adobe.com/bug-reports-728/premiere-pro-26-2-export-crash-1559001": BUG_HTML,
+        }
+
+        def fake_request(url: str, *_args: object, **_kwargs: object) -> str:
+            if url in pages:
+                return pages[url]
+            return "<html><body>No results</body></html>"
+
+        premiere.request_text = fake_request
+        errors = []
+        bug_tab_candidates = adobe_community_bug_tab_candidates(record(), CollectorContext(write=False, since=None, max_pages=1), errors)
+    finally:
+        premiere.request_text = original_request_text
+    check("bug-tab listing discovers specific report URL", len(bug_tab_candidates) == 1, f"candidates={bug_tab_candidates!r}, errors={errors!r}")
+    check("bug-tab listing ignores category/search links", errors == [], f"errors={errors!r}")
+
+    check("Adobe product landing URL is not specific", adobe_report_url_is_specific("https://community.adobe.com/t5/premiere-pro/ct-p/ct-premiere-pro?tabid=bugs") is False)
+    check("Adobe search page URL is not specific", adobe_report_url_is_specific("https://community.adobe.com/t5/forums/searchpage/tab/message?q=Premiere%2026.2") is False)
+
+    original_request_text = premiere.request_text
+    original_load_evidence = premiere.load_evidence
+    try:
+        def fake_request(url: str, *_args: object, **_kwargs: object) -> str:
+            if url == "https://community.adobe.com/bug-reports-728/premiere-pro-26-2-export-crash-1559001":
+                return BUG_HTML
+            return "<html><body>No results</body></html>"
+
+        def fake_load_evidence() -> list[dict[str, object]]:
+            return [{
+                "product_id": "adobe-premiere-pro",
+                "update_version": "26.2",
+                "source_url": "https://community.adobe.com/bug-reports-728/premiere-pro-26-2-export-crash-1559001?utm=old",
+            }]
+
+        premiere.request_text = fake_request
+        premiere.load_evidence = fake_load_evidence
+        errors = []
+        known_candidates = adobe_community_known_url_candidates(record(), CollectorContext(write=False, since=None, max_pages=1), errors)
+    finally:
+        premiere.request_text = original_request_text
+        premiere.load_evidence = original_load_evidence
+    check("known URL recheck refetches and validates specific URLs", len(known_candidates) == 1, f"candidates={known_candidates!r}, errors={errors!r}")
+
+    original_request_text = premiere.request_text
+    try:
+        calls: list[str] = []
+
+        def fake_request(url: str, *_args: object, **_kwargs: object) -> str:
+            calls.append(url)
+            if url.startswith(premiere.ADOBE_SEARCH_URL):
+                raise AdobeCommunityAccessError("rate_limited")
+            if url == premiere.bug_tab_url(1):
+                return BUG_TAB_HTML
+            if url == "https://community.adobe.com/bug-reports-728/premiere-pro-26-2-export-crash-1559001":
+                return BUG_HTML
+            return "<html><body>No results</body></html>"
+
+        premiere.request_text = fake_request
+        accepted_rows, rejected_rows, health = premiere.collect_for_record(record(), CollectorContext(write=False, since=None, max_pages=1))
+    finally:
+        premiere.request_text = original_request_text
+    health_by_id = {row.get("method_id"): row for row in health}
+    check("search rate limit does not stop fallback bug-tab method", len(accepted_rows) == 1, f"accepted={accepted_rows!r}, rejected={rejected_rows!r}, health={health!r}")
+    check("method health records search as blocked", health_by_id.get("adobe_community_search", {}).get("status") == "blocked", f"health={health!r}")
+    check("method health records bug-tab separately", health_by_id.get("adobe_community_bug_tab_index", {}).get("status") == "success", f"health={health!r}")
+    check("blocked search endpoint is not retried six times", sum(1 for url in calls if url.startswith(premiere.ADOBE_SEARCH_URL)) <= 1, f"calls={calls!r}")
 
     check("method health success when accepted rows exist", adobe_community_method_status(discovered, [valid], [], []) == "success")
     check("method health no_results when search returns nothing", adobe_community_method_status([], [], [], []) == "no_results")
