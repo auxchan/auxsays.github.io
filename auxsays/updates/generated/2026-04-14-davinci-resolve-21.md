@@ -104,16 +104,11 @@ official_source_captured: true
 confirmed_patch_specific_report_count: 3
 known_issues_present: null
 official_checksums_body: ''
-source_last_checked: '2026-05-20T09:55:43Z'
-official_body_last_checked: '2026-05-20T09:55:43Z'
+source_last_checked: '2026-05-20T15:59:53Z'
+official_body_last_checked: '2026-05-20T15:59:53Z'
 primary_official_source: https://www.blackmagicdesign.com/media/release/20260414-01
 fallback_official_sources: []
 official_source_attempts:
-- at: '2026-05-19T10:10:16Z'
-  url: https://www.blackmagicdesign.com/media/release/20260414-01
-  status: official-source-parser-failed
-  body_captured: false
-  checksums_captured: false
 - at: '2026-05-19T15:53:14Z'
   url: https://www.blackmagicdesign.com/media/release/20260414-01
   status: official-source-parser-failed
@@ -130,6 +125,11 @@ official_source_attempts:
   body_captured: false
   checksums_captured: false
 - at: '2026-05-20T09:55:43Z'
+  url: https://www.blackmagicdesign.com/media/release/20260414-01
+  status: official-source-parser-failed
+  body_captured: false
+  checksums_captured: false
+- at: '2026-05-20T15:59:53Z'
   url: https://www.blackmagicdesign.com/media/release/20260414-01
   status: official-source-parser-failed
   body_captured: false

@@ -17,8 +17,8 @@ update_version: Easily apply Copilot code review feedback with Copilot cloud age
 update_logo_text: GIT
 update_published_at: '2026-05-19T22:28:17Z'
 update_last_checked: '2026-05-20T04:40:01Z'
-source_last_checked: '2026-05-20T09:55:42Z'
-official_body_last_checked: '2026-05-20T09:55:42Z'
+source_last_checked: '2026-05-20T15:59:51Z'
+official_body_last_checked: '2026-05-20T15:59:51Z'
 record_last_updated: '2026-05-20T04:40:01Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -89,6 +89,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-05-20T09:55:42Z'
+  url: https://github.blog/changelog/2026-05-19-easily-apply-copilot-code-review-feedback-with-copilot-cloud-agent
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-05-20T15:59:51Z'
   url: https://github.blog/changelog/2026-05-19-easily-apply-copilot-code-review-feedback-with-copilot-cloud-agent
   status: captured-from-rss-feed
   body_captured: true
