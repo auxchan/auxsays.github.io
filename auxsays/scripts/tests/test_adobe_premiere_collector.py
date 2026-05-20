@@ -8,6 +8,7 @@ live Adobe Community requests.
 """
 from __future__ import annotations
 
+import os
 import sys
 import traceback
 import types
@@ -29,6 +30,8 @@ from patch_collectors.adobe_premiere import (
     adobe_community_method_status,
     adobe_community_search_candidates,
     adobe_report_url_is_specific,
+    brave_search_api_candidates,
+    extract_brave_report_links,
     evaluate_candidates,
     row_from_candidate,
 )
@@ -298,6 +301,76 @@ def run() -> int:
     check("method health records search as blocked", health_by_id.get("adobe_community_search", {}).get("status") == "blocked", f"health={health!r}")
     check("method health records bug-tab separately", health_by_id.get("adobe_community_bug_tab_index", {}).get("status") == "success", f"health={health!r}")
     check("blocked search endpoint is not retried six times", sum(1 for url in calls if url.startswith(premiere.ADOBE_SEARCH_URL)) <= 1, f"calls={calls!r}")
+
+
+    original_request_text = premiere.request_text
+    original_request_brave_search = premiere.request_brave_search
+    original_env = os.environ.get(premiere.BRAVE_API_KEY_ENV)
+    try:
+        os.environ.pop(premiere.BRAVE_API_KEY_ENV, None)
+        errors = []
+        brave_missing = brave_search_api_candidates(record(), CollectorContext(write=False, since=None, max_pages=1), errors)
+    finally:
+        if original_env is not None:
+            os.environ[premiere.BRAVE_API_KEY_ENV] = original_env
+    check("Brave method disables cleanly when API key is missing", brave_missing == [] and errors and errors[0]["reason"] == "missing_BRAVE_SEARCH_API_KEY", f"candidates={brave_missing!r}, errors={errors!r}")
+    check("method health disabled when Brave key is missing", adobe_community_method_status([], [], [], errors) == "disabled", f"errors={errors!r}")
+
+    brave_payload = {
+        "web": {
+            "results": [
+                {"url": "https://community.adobe.com/bug-reports-728/premiere-pro-26-2-export-crash-1559001?tracking=brave"},
+                {"url": "https://community.adobe.com/t5/premiere-pro/ct-p/ct-premiere-pro"},
+                {"url": "https://example.com/not-adobe"},
+            ]
+        }
+    }
+    brave_links = extract_brave_report_links(brave_payload)
+    check("Brave response extracts only specific Adobe bug-report URLs", brave_links == ["https://community.adobe.com/bug-reports-728/premiere-pro-26-2-export-crash-1559001"], f"links={brave_links!r}")
+
+    try:
+        os.environ[premiere.BRAVE_API_KEY_ENV] = "test-token"
+
+        def fake_brave_search(query: str, api_key: str, *_args: object, **_kwargs: object) -> dict[str, object]:
+            check("Brave token is read from env and passed to request helper", api_key == "test-token")
+            return brave_payload
+
+        def fake_request(url: str, *_args: object, **_kwargs: object) -> str:
+            if url == "https://community.adobe.com/bug-reports-728/premiere-pro-26-2-export-crash-1559001":
+                return BUG_HTML
+            return "<html><body>No results</body></html>"
+
+        premiere.request_brave_search = fake_brave_search
+        premiere.request_text = fake_request
+        errors = []
+        brave_candidates = brave_search_api_candidates(record(), CollectorContext(write=False, since=None, max_pages=1), errors)
+    finally:
+        premiere.request_text = original_request_text
+        premiere.request_brave_search = original_request_brave_search
+        if original_env is None:
+            os.environ.pop(premiere.BRAVE_API_KEY_ENV, None)
+        else:
+            os.environ[premiere.BRAVE_API_KEY_ENV] = original_env
+    check("Brave candidate URL is fetched and converted to candidate", len(brave_candidates) == 1 and errors == [], f"candidates={brave_candidates!r}, errors={errors!r}")
+
+    original_request_brave_search = premiere.request_brave_search
+    original_env = os.environ.get(premiere.BRAVE_API_KEY_ENV)
+    try:
+        os.environ[premiere.BRAVE_API_KEY_ENV] = "test-token"
+
+        def fake_brave_blocked(query: str, api_key: str, *_args: object, **_kwargs: object) -> dict[str, object]:
+            raise AdobeCommunityAccessError("brave_rate_limited")
+
+        premiere.request_brave_search = fake_brave_blocked
+        errors = []
+        blocked_brave = brave_search_api_candidates(record(), CollectorContext(write=False, since=None, max_pages=1), errors)
+    finally:
+        premiere.request_brave_search = original_request_brave_search
+        if original_env is None:
+            os.environ.pop(premiere.BRAVE_API_KEY_ENV, None)
+        else:
+            os.environ[premiere.BRAVE_API_KEY_ENV] = original_env
+    check("Brave API rate limit records blocked diagnostics without crashing", blocked_brave == [] and errors and "brave_rate_limited" in errors[0]["reason"], f"candidates={blocked_brave!r}, errors={errors!r}")
 
     check("method health success when accepted rows exist", adobe_community_method_status(discovered, [valid], [], []) == "success")
     check("method health no_results when search returns nothing", adobe_community_method_status([], [], [], []) == "no_results")

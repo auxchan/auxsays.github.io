@@ -8,6 +8,8 @@ community consensus.
 from __future__ import annotations
 
 import html
+import json
+import os
 import re
 import urllib.parse
 import urllib.request
@@ -40,6 +42,10 @@ SOURCE_TYPE = "adobe_community_bug_report"
 SOURCE_NAME = "Adobe Community Bug Report"
 ADOBE_SEARCH_URL = "https://community.adobe.com/t5/forums/searchpage/tab/message"
 ADOBE_PREMIERE_BUG_TAB_BASE_URL = "https://community.adobe.com/t5/premiere-pro/ct-p/ct-premiere-pro"
+BRAVE_SEARCH_API_URL = "https://api.search.brave.com/res/v1/web/search"
+BRAVE_API_KEY_ENV = "BRAVE_SEARCH_API_KEY"
+MAX_BRAVE_QUERIES_PER_RUN = 4
+MAX_BRAVE_RESULTS_PER_QUERY = 10
 MAX_SEARCH_QUERIES_PER_RUN = 2
 MAX_SEARCH_PAGES_PER_QUERY = 1
 HEADERS = {
@@ -125,6 +131,7 @@ def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[
         ("adobe_community_search", adobe_community_search_candidates),
         ("adobe_community_bug_tab_index", adobe_community_bug_tab_candidates),
         ("adobe_community_known_url_recheck", adobe_community_known_url_candidates),
+        ("brave_search_api", brave_search_api_candidates),
     ):
         errors: list[dict[str, Any]] = []
         candidates = collector(record, context, errors)
@@ -194,6 +201,114 @@ def adobe_community_known_url_candidates(record: PatchRecord, context: Collector
     seen_urls: set[str] = set()
     return candidates_from_report_links(urls, context, errors, seen_urls, "adobe_community_known_url_recheck")
 
+
+
+
+def brave_search_api_candidates(record: PatchRecord, context: CollectorContext, errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    api_key = os.environ.get(BRAVE_API_KEY_ENV, "").strip()
+    if not api_key:
+        errors.append({"source_url": BRAVE_SEARCH_API_URL, "reason": f"missing_{BRAVE_API_KEY_ENV}"})
+        return []
+
+    links: list[str] = []
+    for query in brave_search_queries(record)[:MAX_BRAVE_QUERIES_PER_RUN]:
+        try:
+            payload = request_brave_search(query, api_key)
+        except Exception as exc:
+            errors.append({"source_url": BRAVE_SEARCH_API_URL, "reason": f"brave_search_api_fetch_failed:{error_reason(exc)}"})
+            if error_is_blocked(exc):
+                break
+            continue
+        links.extend(extract_brave_report_links(payload))
+
+    seen_urls: set[str] = set()
+    return candidates_from_report_links(links, context, errors, seen_urls, "brave_search_api")
+
+
+def brave_search_queries(record: PatchRecord) -> list[str]:
+    version = record.update_version
+    queries = [
+        f'site:community.adobe.com/bug-reports-728 "Premiere Pro" "{version}"',
+        f'site:community.adobe.com/bug-reports-728 "Adobe Premiere Pro {version}"',
+    ]
+    if re.fullmatch(r"\d+\.\d+", version or ""):
+        queries.append(f'site:community.adobe.com/bug-reports-728 "Premiere Pro" "{version}.0"')
+    if version == "26.2":
+        queries.append('site:community.adobe.com/bug-reports-728 "Build 65" "Premiere Pro"')
+    return dedupe(queries)
+
+
+def request_brave_search(query: str, api_key: str, timeout: int = 30) -> dict[str, Any]:
+    params = {
+        "q": query,
+        "count": str(MAX_BRAVE_RESULTS_PER_QUERY),
+        "safesearch": "moderate",
+        "search_lang": "en",
+        "country": "US",
+    }
+    url = f"{BRAVE_SEARCH_API_URL}?{urllib.parse.urlencode(params)}"
+    headers = {
+        "Accept": "application/json",
+        "X-Subscription-Token": api_key,
+        "User-Agent": HEADERS["User-Agent"],
+    }
+    req = urllib.request.Request(url, headers=headers)
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as response:
+            status = getattr(response, "status", None)
+            body = response.read(500000).decode("utf-8", errors="replace")
+    except HTTPError as exc:
+        try:
+            body = exc.read(12000).decode("utf-8", errors="replace")
+        except Exception:
+            body = ""
+        raise AdobeCommunityAccessError(brave_error_reason(exc.code, body), status=exc.code, content_type=exc.headers.get("Content-Type", "")) from exc
+    except URLError as exc:
+        raise AdobeCommunityAccessError(f"url_error_{getattr(exc, 'reason', exc)}") from exc
+
+    if status in {401, 403, 429}:
+        raise AdobeCommunityAccessError(brave_error_reason(status, body), status=status, content_type="application/json")
+    try:
+        data = json.loads(body)
+    except json.JSONDecodeError as exc:
+        raise AdobeCommunityAccessError("brave_invalid_json") from exc
+    if not isinstance(data, dict):
+        raise AdobeCommunityAccessError("brave_unexpected_response")
+    return data
+
+
+def brave_error_reason(status: int | None, body: str = "") -> str:
+    if status == 401:
+        return "brave_unauthorized"
+    if status == 403:
+        return "brave_forbidden"
+    if status == 429:
+        return "brave_rate_limited"
+    lowered = (body or "").lower()
+    if "rate" in lowered and "limit" in lowered:
+        return "brave_rate_limited"
+    return f"brave_http_{status}" if status else "brave_fetch_failed"
+
+
+def extract_brave_report_links(payload: dict[str, Any]) -> list[str]:
+    links: list[str] = []
+    web = payload.get("web") if isinstance(payload, dict) else None
+    results = web.get("results") if isinstance(web, dict) else []
+    if not isinstance(results, list):
+        return []
+    for item in results:
+        if not isinstance(item, dict):
+            continue
+        for key in ("url", "profile", "meta_url"):
+            value = item.get(key)
+            if isinstance(value, str):
+                links.append(value)
+            elif isinstance(value, dict):
+                for nested_key in ("url", "href"):
+                    nested = value.get(nested_key)
+                    if isinstance(nested, str):
+                        links.append(nested)
+    return [canonical for canonical in (canonical_adobe_url(url) for url in dedupe(links)) if adobe_report_url_is_specific(canonical)]
 
 def candidates_from_report_links(
     links: list[str],
@@ -287,10 +402,13 @@ def method_notes(
         "adobe_community_search": "Adobe Community search",
         "adobe_community_bug_tab_index": "Adobe Community Premiere bug-tab listing",
         "adobe_community_known_url_recheck": "Known Adobe Community bug-report URL recheck",
+        "brave_search_api": "Brave Search API candidate discovery",
     }
     notes = f"{labels.get(method_id, method_id)} discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates."
     if method_id == "adobe_community_search":
         notes = f"{notes} Search requests are deliberately capped so rate limiting moves the collector to fallback methods instead of retrying the blocked endpoint repeatedly."
+    if method_id == "brave_search_api":
+        notes = f"{notes} This method reads BRAVE_SEARCH_API_KEY from the GitHub Actions environment, caps query volume, and never decides evidence acceptance."
     if errors:
         notes = f"{notes} Fetch failures: {len(errors)}."
     if rejected and not accepted:
@@ -555,7 +673,9 @@ def adobe_community_method_status(
         return "no_results"
     if errors:
         reasons = " ".join(str(error.get("reason") or "") for error in errors).lower()
-        if any(token in reasons for token in ("blocked", "challenge", "captcha", "rate_limited", "access_denied")):
+        if "missing_brave_search_api_key" in reasons:
+            return "disabled"
+        if any(token in reasons for token in ("blocked", "challenge", "captcha", "rate_limited", "access_denied", "brave_unauthorized", "brave_forbidden", "brave_rate_limited")):
             return "blocked"
         return "broken"
     return "no_results"

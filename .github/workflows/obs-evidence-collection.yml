@@ -25,6 +25,7 @@ jobs:
     env:
       GITHUB_TOKEN: ${{ github.token }}
       GH_TOKEN: ${{ github.token }}
+      BRAVE_SEARCH_API_KEY: ${{ secrets.BRAVE_SEARCH_API_KEY }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
