@@ -3,7 +3,7 @@
   "last_results": [
     {
       "adapter": "rss_feed",
-      "duration_ms": 823,
+      "duration_ms": 791,
       "fetched": 2,
       "product_id": "figma",
       "refreshed": [
@@ -24,7 +24,7 @@
     },
     {
       "adapter": "adobe_release_notes",
-      "duration_ms": 25834,
+      "duration_ms": 25999,
       "fetched": 1,
       "product_id": "adobe-premiere-pro",
       "refreshed": [
@@ -40,7 +40,7 @@
     },
     {
       "adapter": "blackmagic_support_downloads",
-      "duration_ms": 688,
+      "duration_ms": 249,
       "fetched": 2,
       "product_id": "blackmagic-davinci",
       "refreshed": [
@@ -61,7 +61,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 1102,
+      "duration_ms": 913,
       "fetched": 2,
       "product_id": "obs-studio",
       "refreshed": [
@@ -82,7 +82,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 789,
+      "duration_ms": 597,
       "fetched": 2,
       "product_id": "comfyui",
       "refreshed": [
@@ -103,20 +103,25 @@
     },
     {
       "adapter": "rss_feed",
-      "duration_ms": 1183,
+      "duration_ms": 869,
       "fetched": 2,
       "product_id": "github",
-      "refreshed": [],
+      "refreshed": [
+        {
+          "action": "refreshed",
+          "path": "auxsays/updates/generated/2026-05-19-github-copilot-gemini-3-5-flash-is-generally-available-for-github-copilot.md",
+          "record_id": "rss:github:https://github.blog/changelog/2026-05-19-gemini-3-5-flash-is-generally-available-for-github-copilot"
+        }
+      ],
       "skipped": [],
       "status": "success",
       "written": [
-        "auxsays/updates/generated/2026-05-19-github-copilot-gemini-3-5-flash-is-generally-available-for-github-copilot.md",
-        "auxsays/updates/generated/2026-05-19-github-copilot-expanded-oidc-support-for-dependabot-and-code-scanning.md"
+        "auxsays/updates/generated/2026-05-19-github-copilot-easily-apply-copilot-code-review-feedback-with-copilot-cloud-agent.md"
       ]
     },
     {
       "adapter": "html_changelog",
-      "duration_ms": 172,
+      "duration_ms": 77,
       "fetched": 0,
       "product_id": "netlify",
       "refreshed": [],
@@ -125,8 +130,8 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-05-19T20:06:24Z",
-  "last_run_started_at": "2026-05-19T20:05:53Z",
+  "last_run_finished_at": "2026-05-20T04:40:02Z",
+  "last_run_started_at": "2026-05-20T04:39:33Z",
   "sources": {
     "adobe-after-effects": {
       "consecutive_failures": 2,
@@ -191,7 +196,7 @@
     "adobe-premiere-pro": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_release_notes",
-      "last_checked_at": "2026-05-19T20:05:54Z",
+      "last_checked_at": "2026-05-20T04:39:34Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -199,8 +204,8 @@
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 25834,
-      "last_success_at": "2026-05-19T20:05:54Z",
+      "last_run_duration_ms": 25999,
+      "last_success_at": "2026-05-20T04:39:34Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "adobe:adobe-premiere-pro:26.2:9fa3e1e53c0b275d"
@@ -210,7 +215,7 @@
     "blackmagic-davinci": {
       "consecutive_failures": 0,
       "last_adapter": "blackmagic_support_downloads",
-      "last_checked_at": "2026-05-19T20:06:20Z",
+      "last_checked_at": "2026-05-20T04:40:00Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -218,8 +223,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 688,
-      "last_success_at": "2026-05-19T20:06:20Z",
+      "last_run_duration_ms": 249,
+      "last_success_at": "2026-05-20T04:40:00Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "blackmagic-support:blackmagic-davinci:20.3.1:ea408484da59422794a6764f0cb7f11f",
@@ -230,7 +235,7 @@
     "comfyui": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-05-19T20:06:22Z",
+      "last_checked_at": "2026-05-20T04:40:01Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -238,8 +243,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 789,
-      "last_success_at": "2026-05-19T20:06:22Z",
+      "last_run_duration_ms": 597,
+      "last_success_at": "2026-05-20T04:40:01Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:comfyui:322123426",
@@ -252,7 +257,7 @@
     "figma": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-05-19T20:05:53Z",
+      "last_checked_at": "2026-05-20T04:39:33Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -260,8 +265,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 823,
-      "last_success_at": "2026-05-19T20:05:53Z",
+      "last_run_duration_ms": 791,
+      "last_success_at": "2026-05-20T04:39:33Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:figma:bd335822-5b89-4ce0-8ae0-1758197dcd78",
@@ -281,7 +286,7 @@
     "github": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-05-19T20:06:23Z",
+      "last_checked_at": "2026-05-20T04:40:01Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -289,10 +294,11 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 1183,
-      "last_success_at": "2026-05-19T20:06:23Z",
+      "last_run_duration_ms": 869,
+      "last_success_at": "2026-05-20T04:40:01Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "rss:github:https://github.blog/changelog/2026-05-19-easily-apply-copilot-code-review-feedback-with-copilot-cloud-agent",
         "rss:github:https://github.blog/changelog/2026-05-12-expanded-oidc-support-for-dependabot-and-code-scanning",
         "rss:github:https://github.blog/changelog/2026-05-19-gemini-3-5-flash-is-generally-available-for-github-copilot",
         "rss:github:https://github.blog/changelog/2026-05-19-removal-of-code_scanning_upload-field-from-rate_limit-api-endpoint",
@@ -341,7 +347,7 @@
     "netlify": {
       "consecutive_failures": 0,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-05-19T20:06:24Z",
+      "last_checked_at": "2026-05-20T04:40:02Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -349,15 +355,15 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 172,
-      "last_success_at": "2026-05-19T20:06:24Z",
+      "last_run_duration_ms": 77,
+      "last_success_at": "2026-05-20T04:40:02Z",
       "previous_consecutive_failures": 0,
       "status": "degraded"
     },
     "obs-studio": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-05-19T20:06:21Z",
+      "last_checked_at": "2026-05-20T04:40:00Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -365,8 +371,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 1102,
-      "last_success_at": "2026-05-19T20:06:21Z",
+      "last_run_duration_ms": 913,
+      "last_success_at": "2026-05-20T04:40:00Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:obs-studio:304830335",

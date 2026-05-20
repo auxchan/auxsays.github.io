@@ -17,9 +17,9 @@ update_version: Gemini 3.5 Flash is generally available for GitHub Copilot
 update_logo_text: GIT
 update_published_at: '2026-05-19T17:56:38Z'
 update_last_checked: '2026-05-19T20:06:23Z'
-source_last_checked: '2026-05-19T20:06:23Z'
-official_body_last_checked: '2026-05-19T20:06:23Z'
-record_last_updated: '2026-05-19T20:06:23Z'
+source_last_checked: '2026-05-20T04:40:01Z'
+official_body_last_checked: '2026-05-20T04:40:01Z'
+record_last_updated: '2026-05-20T04:40:01Z'
 patch_file_size: ''
 patch_file_size_note: ''
 patch_file_size_status: pending_adapter_support
@@ -85,18 +85,23 @@ official_source_attempts:
   status: captured-from-rss-feed
   body_captured: true
   checksums_captured: false
+- at: '2026-05-20T04:40:01Z'
+  url: https://github.blog/changelog/2026-05-19-gemini-3-5-flash-is-generally-available-for-github-copilot
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
 official_patch_notes_body: "Gemini 3.5 Flash , Google’s latest Flash-tier model, is now rolling out on GitHub Copilot. In\
   \ our early testing, Gemini 3.5 Flash delivers near-Pro coding quality at Flash-tier speed and cost with strong tool use,\
   \ fast response times, and high cache efficiency that make it well-suited for fast, iterative agentic coding workflows.\n\
   \n\n Note, that while this model is launching with a 14X premium request multiplier, pricing is tentative and subject to\
   \ change.\n\n\n Availability in GitHub Copilot\n Gemini 3.5 Flash will be available to Copilot Pro, Copilot Pro+, Copilot\
   \ Business, and Copilot Enterprise users.\n\n\n You’ll be able to select the model in:\n\n\n\n Visual Studio Code in versions\
-  \ 1.115.0 or later\n Visual Studio in versions 17.14.22 or 18.1.0 and later\n GitHub Mobile iOS and Android\n JetBrains\n\
-  \ Xcode\n Eclipse\n\n Rollout will be gradual. Check back soon if you don’t see it yet.\n\n\n Enabling access\n Copilot\
-  \ Enterprise and Copilot Business plan administrators must enable the Gemini 3.5 Flash policy in Copilot settings.\n\n\n\
-  \ Learn more\n To explore all models available in GitHub Copilot, see our documentation on models and get started with Copilot.\n\
-  \n\n Share your feedback\n Join the GitHub Community to share your feedback.\n\n\n\n The post Gemini 3.5 Flash is generally\
-  \ available for GitHub Copilot appeared first on The GitHub Blog ."
+  \ 1.115.0 or later\n Visual Studio in versions 17.14.22 or 18.1.0 and later\n JetBrains\n Xcode\n Eclipse\n\n Rollout will\
+  \ be gradual. Check back soon if you don’t see it yet.\n\n\n Enabling access\n Copilot Enterprise and Copilot Business plan\
+  \ administrators must enable the Gemini 3.5 Flash policy in Copilot settings.\n\n\n Learn more\n To explore all models available\
+  \ in GitHub Copilot, see our documentation on models and get started with Copilot.\n\n\n Share your feedback\n Join the\
+  \ GitHub Community to share your feedback.\n\n\n\n The post Gemini 3.5 Flash is generally available for GitHub Copilot appeared\
+  \ first on The GitHub Blog ."
 official_checksums_body: ''
 official_checksums_capture_status: not-present
 ---

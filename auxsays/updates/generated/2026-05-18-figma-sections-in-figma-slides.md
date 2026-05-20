@@ -17,8 +17,8 @@ update_version: Sections in Figma Slides
 update_logo_text: FIG
 update_published_at: '2026-05-18T00:00:00.000Z'
 update_last_checked: '2026-05-18T20:04:22Z'
-source_last_checked: '2026-05-19T20:05:53Z'
-official_body_last_checked: '2026-05-19T20:05:53Z'
+source_last_checked: '2026-05-20T04:39:33Z'
+official_body_last_checked: '2026-05-20T04:39:33Z'
 record_last_updated: '2026-05-18T20:04:22Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -69,11 +69,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-05-18T20:04:22Z'
-  url: https://www.figma.com/release-notes/?title=sections-in-figma-slides
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-05-19T04:35:55Z'
   url: https://www.figma.com/release-notes/?title=sections-in-figma-slides
   status: captured-from-rss-feed
@@ -90,6 +85,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-05-19T20:05:53Z'
+  url: https://www.figma.com/release-notes/?title=sections-in-figma-slides
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-05-20T04:39:33Z'
   url: https://www.figma.com/release-notes/?title=sections-in-figma-slides
   status: captured-from-rss-feed
   body_captured: true
