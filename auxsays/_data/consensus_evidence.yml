@@ -2904,3 +2904,24 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13446
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13446
+  parent_title: Starting and stopping recording leaks memory
+  report_title: Starting and stopping recording leaks memory
+  report_text_excerpt: 'perating System Info Other ### Other OS Arch Linux (6.18.31-1-lts) ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/eU7G4S4tAHWCY9e2 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior When'
+  captured_at: '2026-05-20T05:17:04Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: linux
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
