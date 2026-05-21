@@ -17,8 +17,8 @@ update_version: Updates to available models in Copilot on web
 update_logo_text: GIT
 update_published_at: '2026-05-20T17:11:42Z'
 update_last_checked: '2026-05-20T20:32:01Z'
-source_last_checked: '2026-05-20T20:32:01Z'
-official_body_last_checked: '2026-05-20T20:32:01Z'
+source_last_checked: '2026-05-21T04:48:24Z'
+official_body_last_checked: '2026-05-21T04:48:24Z'
 record_last_updated: '2026-05-20T20:32:01Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -78,6 +78,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-05-20T20:32:01Z'
+  url: https://github.blog/changelog/2026-05-20-updates-to-available-models-in-copilot-on-web
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-05-21T04:48:24Z'
   url: https://github.blog/changelog/2026-05-20-updates-to-available-models-in-copilot-on-web
   status: captured-from-rss-feed
   body_captured: true
