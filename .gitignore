@@ -22,3 +22,11 @@ auxsays/vendor/
 attached_assets/
 # Project-control export artifacts — generated outputs, not source
 .project-control/exports/
+auxsays/tools/local-playwright-capture/node_modules/
+auxsays/tools/local-playwright-capture/**/node_modules/
+auxsays/tools/local-playwright-capture/**/.local-browsers/
+auxsays/tools/local-playwright-capture/outbox/
+auxsays/tools/local-playwright-capture/logs/
+auxsays/tools/local-playwright-capture/dist/
+auxsays/tools/local-playwright-capture/*.zip
+auxsays/tools/local-playwright-capture/*.exe

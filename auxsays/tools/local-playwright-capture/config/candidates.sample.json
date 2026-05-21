@@ -1,0 +1,17 @@
+{
+  "max_urls_per_run": 10,
+  "candidates": [
+    {
+      "source_url": "https://community.adobe.com/t5/premiere-pro-discussions/bd-p/premiere-pro?page=1",
+      "source_name": "Adobe Community",
+      "product_hint": "adobe-premiere-pro",
+      "version_hint": "26.2"
+    },
+    {
+      "source_url": "https://creativecow.net/forums/forum/adobe-premiere-pro/",
+      "source_name": "Creative COW",
+      "product_hint": "adobe-premiere-pro",
+      "version_hint": "26.2"
+    }
+  ]
+}

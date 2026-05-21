@@ -1,0 +1,20 @@
+{
+  "name": "auxsays-local-playwright-capture",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AUXSAYS portable local Playwright capture agent for public candidate report pages.",
+  "type": "module",
+  "bin": {
+    "auxsays-capture-agent": "./capture-agent.mjs"
+  },
+  "scripts": {
+    "capture": "node capture-agent.mjs",
+    "test": "node scripts/test-capture.mjs"
+  },
+  "dependencies": {
+    "playwright": "^1.56.1"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
