@@ -40,11 +40,14 @@ from .base import (
 PRODUCT_ID = "adobe-premiere-pro"
 SOURCE_TYPE = "adobe_community_bug_report"
 SOURCE_NAME = "Adobe Community Bug Report"
+CREATIVE_COW_SOURCE_TYPE = "creativecow_forum_report"
+CREATIVE_COW_SOURCE_NAME = "Creative COW Premiere Pro Forum"
 ADOBE_SEARCH_URL = "https://community.adobe.com/t5/forums/searchpage/tab/message"
 ADOBE_PREMIERE_BUG_TAB_BASE_URL = "https://community.adobe.com/t5/premiere-pro/ct-p/ct-premiere-pro"
 BRAVE_SEARCH_URL = "https://api.search.brave.com/res/v1/web/search"
 WAYBACK_CDX_URL = "https://web.archive.org/cdx"
 WAYBACK_SNAPSHOT_BASE_URL = "https://web.archive.org/web"
+CREATIVE_COW_FORUM_URL = "https://creativecow.net/forums/forum/adobe-premiere-pro/"
 BRAVE_SEARCH_API_KEY_ENV = "BRAVE_SEARCH_API_KEY"
 MAX_BRAVE_QUERIES_PER_RUN = 4
 MAX_SEARCH_QUERIES_PER_RUN = 2
@@ -66,6 +69,7 @@ SPECIFIC_ADOBE_BUG_URL_RE = re.compile(
     r"^/(?:bug-reports-\d+/[^/?#]+-\d+|t5/premiere-pro-bugs/[^/?#]+/(?:idi|td)-p/\d+)/?$",
     flags=re.I,
 )
+SPECIFIC_CREATIVE_COW_THREAD_RE = re.compile(r"^/forums/thread/[^/?#]+/?$", flags=re.I)
 STRONG_ISSUE_RE = re.compile(
     r"\b(?:crash(?:es|ed|ing)?|freez(?:e|es|ing|en)|hang(?:s|ing)?|lag(?:gy)?|slow(?:down)?|sluggish|fail(?:ed|s|ure|ing)?|error|bug|broke|broken|regression|rollback|revert(?:ed|ing)?|export|render|install(?:ation)?|compatib(?:le|ility)|plugin|project\s+(?:open|opening|load|loading)|timeline|media|decode|audio|video|corrupt(?:ed|ion)?|data\s+loss)\b",
     flags=re.I,
@@ -148,6 +152,8 @@ def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[
         ("adobe_community_known_url_recheck", adobe_community_known_url_candidates),
         ("brave_search_api", brave_search_api_candidates),
         ("wayback_snapshot_recheck", wayback_snapshot_recheck_candidates),
+        ("creativecow_forum_index", creativecow_forum_index_candidates),
+        ("creativecow_brave_search", creativecow_brave_search_candidates),
     ):
         errors: list[dict[str, Any]] = []
         candidates = collector(record, context, errors)
@@ -348,6 +354,78 @@ def known_candidate_urls(record: PatchRecord) -> list[str]:
     return dedupe(urls)
 
 
+
+def creativecow_forum_index_candidates(record: PatchRecord, context: CollectorContext, errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    candidates: list[dict[str, Any]] = []
+    seen_urls: set[str] = set()
+    for page in range(1, min(max(1, context.max_pages), 3) + 1):
+        url = creativecow_forum_page_url(page)
+        try:
+            html_text = request_text(url)
+        except Exception as exc:
+            errors.append({"source_url": url, "reason": f"creativecow_forum_index_fetch_failed:{error_reason(exc)}"})
+            if error_is_blocked(exc):
+                break
+            continue
+        links = extract_creativecow_thread_links(html_text)
+        if not links:
+            break
+        before = len(candidates)
+        candidates.extend(candidates_from_creativecow_links(links, context, errors, seen_urls, "creativecow_forum_index"))
+        if len(candidates) == before and page > 1:
+            break
+    return candidates
+
+
+def creativecow_brave_search_candidates(record: PatchRecord, context: CollectorContext, errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    api_key = os.environ.get(BRAVE_SEARCH_API_KEY_ENV, "").strip()
+    if not api_key:
+        errors.append({"source_url": BRAVE_SEARCH_URL, "reason": f"missing_{BRAVE_SEARCH_API_KEY_ENV}"})
+        return []
+    candidates: list[dict[str, Any]] = []
+    seen_urls: set[str] = set()
+    max_queries = min(MAX_BRAVE_QUERIES_PER_RUN, max(1, context.max_pages), len(creativecow_brave_search_queries(record)))
+    for query in creativecow_brave_search_queries(record)[:max_queries]:
+        url = brave_search_url(query)
+        try:
+            payload = request_json(url, api_key=api_key)
+        except Exception as exc:
+            errors.append({"source_url": url, "reason": f"creativecow_brave_search_fetch_failed:{error_reason(exc)}"})
+            if error_is_blocked(exc):
+                break
+            continue
+        candidates.extend(candidates_from_creativecow_links(extract_creativecow_brave_result_links(payload), context, errors, seen_urls, "creativecow_brave_search"))
+    return candidates
+
+
+def candidates_from_creativecow_links(
+    links: list[str],
+    context: CollectorContext,
+    errors: list[dict[str, Any]],
+    seen_urls: set[str],
+    method_id: str,
+) -> list[dict[str, Any]]:
+    candidates: list[dict[str, Any]] = []
+    for link in links:
+        canonical = canonical_creativecow_url(link)
+        if not canonical or canonical.lower() in seen_urls:
+            continue
+        seen_urls.add(canonical.lower())
+        if not creativecow_thread_url_is_specific(canonical):
+            continue
+        try:
+            page_html = request_text(canonical)
+            candidate = creativecow_thread_candidate(canonical, page_html)
+        except Exception as exc:
+            errors.append({"source_url": canonical, "reason": f"{method_id}_thread_fetch_failed:{error_reason(exc)}"})
+            continue
+        if not candidate:
+            continue
+        if context.since and candidate.get("source_date") and date_part(candidate["source_date"]) < context.since:
+            continue
+        candidates.append(candidate)
+    return candidates
+
 def health_for_method(record: PatchRecord, captured_at: str, result: dict[str, Any]) -> dict[str, Any]:
     method_id = str(result["method_id"])
     candidates = list(result["candidates"])
@@ -360,7 +438,7 @@ def health_for_method(record: PatchRecord, captured_at: str, result: dict[str, A
         product_id=PRODUCT_ID,
         update_version=record.update_version,
         method_id=method_id,
-        source_type=SOURCE_TYPE,
+        source_type=method_source_type(method_id),
         status=adobe_community_method_status(candidates, accepted, rejected, errors),
         candidates_found=len(candidates),
         accepted_reports=len(accepted),
@@ -369,6 +447,12 @@ def health_for_method(record: PatchRecord, captured_at: str, result: dict[str, A
         last_run=captured_at,
         notes=notes,
     )
+
+
+def method_source_type(method_id: str) -> str:
+    if method_id.startswith("creativecow"):
+        return CREATIVE_COW_SOURCE_TYPE
+    return SOURCE_TYPE
 
 
 def method_notes(
@@ -384,6 +468,8 @@ def method_notes(
         "adobe_community_known_url_recheck": "Known Adobe Community bug-report URL recheck",
         "brave_search_api": "Brave Search API fallback",
         "wayback_snapshot_recheck": "Wayback snapshot recheck",
+        "creativecow_forum_index": "Creative COW Premiere Pro forum index",
+        "creativecow_brave_search": "Creative COW Brave Search fallback",
     }
     notes = f"{labels.get(method_id, method_id)} discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates."
     if method_id == "adobe_community_search":
@@ -392,6 +478,8 @@ def method_notes(
         notes = f"{notes} This method reads {BRAVE_SEARCH_API_KEY_ENV} from the workflow environment, uses it only as an API header, and never logs the token."
     if method_id == "wayback_snapshot_recheck":
         notes = f"{notes} This method verifies blocked Adobe Community report pages through public Wayback snapshots of the same specific report URL when enough archived text is available."
+    if method_id in {"creativecow_forum_index", "creativecow_brave_search"}:
+        notes = f"{notes} This non-Adobe source is used only for specific Creative COW Premiere Pro forum threads that explicitly match the same patch/version and concrete-issue gates."
     if errors:
         notes = f"{notes} Fetch failures: {len(errors)}."
     if rejected and not accepted:
@@ -403,7 +491,7 @@ def merge_rows_by_url(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
     merged: list[dict[str, Any]] = []
     seen: set[str] = set()
     for row in rows:
-        url = canonical_adobe_url(str(row.get("source_url") or ""))
+        url = canonical_evidence_url(str(row.get("source_url") or ""))
         if not url or url.lower() in seen:
             continue
         seen.add(url.lower())
@@ -412,8 +500,8 @@ def merge_rows_by_url(rows: list[dict[str, Any]]) -> list[dict[str, Any]]:
 
 
 def row_is_accepted_url(row: dict[str, Any], accepted: list[dict[str, Any]]) -> bool:
-    url = canonical_adobe_url(str(row.get("source_url") or ""))
-    return bool(url) and any(canonical_adobe_url(str(item.get("source_url") or "")).lower() == url.lower() for item in accepted)
+    url = canonical_evidence_url(str(row.get("source_url") or ""))
+    return bool(url) and any(canonical_evidence_url(str(item.get("source_url") or "")).lower() == url.lower() for item in accepted)
 
 
 def error_is_blocked(exc: Exception) -> bool:
@@ -470,6 +558,71 @@ def brave_search_url(query: str) -> str:
     }
     return f"{BRAVE_SEARCH_URL}?{urllib.parse.urlencode(params)}"
 
+
+
+def creativecow_forum_page_url(page: int) -> str:
+    if page <= 1:
+        return CREATIVE_COW_FORUM_URL
+    return urllib.parse.urljoin(CREATIVE_COW_FORUM_URL, f"page/{page}/")
+
+
+def creativecow_brave_search_queries(record: PatchRecord) -> list[str]:
+    version = record.update_version
+    queries = [
+        f'site:creativecow.net/forums/thread "Premiere Pro" "{version}"',
+        f'site:creativecow.net/forums/thread "Adobe Premiere Pro {version}"',
+        f'site:creativecow.net/forums/thread "PPro" "{version}"',
+    ]
+    if re.fullmatch(r"\d+\.\d+", version or ""):
+        queries.append(f'site:creativecow.net/forums/thread "Premiere Pro" "{version}.0"')
+    if version == "26.2":
+        queries.append('site:creativecow.net/forums/thread "Build 65" "Premiere Pro"')
+    return dedupe(queries)[:MAX_BRAVE_QUERIES_PER_RUN]
+
+
+def extract_creativecow_thread_links(html_text: str) -> list[str]:
+    links: list[str] = []
+    for raw in re.findall(r"""href=["']([^"']+)["']""", html_text or "", flags=re.I):
+        url = html.unescape(raw)
+        if not url.startswith(("http://", "https://")):
+            url = urllib.parse.urljoin(CREATIVE_COW_FORUM_URL, url)
+        canonical = canonical_creativecow_url(url)
+        if creativecow_thread_url_is_specific(canonical):
+            links.append(canonical)
+    return dedupe(links)
+
+
+def extract_creativecow_brave_result_links(payload: dict[str, Any]) -> list[str]:
+    links: list[str] = []
+    web_results = payload.get("web", {}).get("results", []) if isinstance(payload, dict) else []
+    if not isinstance(web_results, list):
+        return []
+    for result in web_results:
+        if not isinstance(result, dict):
+            continue
+        canonical = canonical_creativecow_url(str(result.get("url") or "").strip())
+        if creativecow_thread_url_is_specific(canonical):
+            links.append(canonical)
+    return dedupe(links)
+
+
+def creativecow_thread_candidate(url: str, html_text: str) -> dict[str, str] | None:
+    canonical = canonical_creativecow_url(url)
+    if not creativecow_thread_url_is_specific(canonical):
+        return None
+    title = extract_title(html_text) or canonical
+    text = clean_html(html_text)
+    if not text:
+        return None
+    return {
+        "source_type": CREATIVE_COW_SOURCE_TYPE,
+        "source_name": CREATIVE_COW_SOURCE_NAME,
+        "source_url": canonical,
+        "parent_title": title,
+        "report_title": title,
+        "report_text": text[:6000],
+        "source_date": extract_source_date(html_text) or extract_source_date(text),
+    }
 
 def wayback_cdx_url(original_url: str) -> str:
     params = {
@@ -571,7 +724,7 @@ def evaluate_candidates(
     rejected: list[dict[str, Any]] = []
     seen_urls: set[str] = set()
     for candidate in candidates:
-        url = canonical_adobe_url(str(candidate.get("source_url") or ""))
+        url = canonical_evidence_url(str(candidate.get("source_url") or ""))
         if not url or url.lower() in seen_urls:
             continue
         seen_urls.add(url.lower())
@@ -624,7 +777,10 @@ def row_from_candidate(record: PatchRecord, candidate: dict[str, Any], captured_
     gated = apply_acceptance_gates(row, report_text=report_text)
     if archive_url:
         gated["archive_url"] = archive_url
-    if gated.get("counted") is True and not adobe_report_url_is_specific(str(gated.get("source_url") or "")):
+    if gated.get("counted") is True and str(gated.get("source_type") or "") == SOURCE_TYPE and not adobe_report_url_is_specific(str(gated.get("source_url") or "")):
+        gated["counted"] = False
+        gated["exclusion_reason"] = "source_url_not_specific_report"
+    if gated.get("counted") is True and str(gated.get("source_type") or "") == CREATIVE_COW_SOURCE_TYPE and not creativecow_thread_url_is_specific(str(gated.get("source_url") or "")):
         gated["counted"] = False
         gated["exclusion_reason"] = "source_url_not_specific_report"
     if gated.get("counted") is True and not PREMIERE_PRODUCT_RE.search(report_text):
@@ -681,6 +837,33 @@ def canonical_adobe_url(url: str) -> str:
         return ""
     path = re.sub(r"/+", "/", parsed.path).rstrip("/")
     return urllib.parse.urlunsplit((parsed.scheme.lower(), parsed.netloc.lower(), path, "", ""))
+
+
+def creativecow_thread_url_is_specific(url: str) -> bool:
+    parsed = urllib.parse.urlsplit(url)
+    return parsed.scheme in {"http", "https"} and parsed.netloc.lower() == "creativecow.net" and bool(SPECIFIC_CREATIVE_COW_THREAD_RE.match(parsed.path))
+
+
+def canonical_creativecow_url(url: str) -> str:
+    parsed = urllib.parse.urlsplit((url or "").strip())
+    if not parsed.scheme:
+        return ""
+    if parsed.netloc.lower() not in {"creativecow.net", "www.creativecow.net"}:
+        return ""
+    path = re.sub(r"/+", "/", parsed.path).rstrip("/")
+    return urllib.parse.urlunsplit(("https", "creativecow.net", path, "", ""))
+
+
+def canonical_evidence_url(url: str) -> str:
+    parsed = urllib.parse.urlsplit((url or "").strip())
+    if "community.adobe.com" in parsed.netloc.lower():
+        return canonical_adobe_url(url)
+    if "creativecow.net" in parsed.netloc.lower():
+        return canonical_creativecow_url(url)
+    if parsed.scheme in {"http", "https"} and parsed.netloc:
+        path = re.sub(r"/+", "/", parsed.path).rstrip("/")
+        return urllib.parse.urlunsplit((parsed.scheme.lower(), parsed.netloc.lower(), path, "", ""))
+    return ""
 
 
 def request_text(url: str, timeout: int = 30, max_bytes: int = 800000) -> str:

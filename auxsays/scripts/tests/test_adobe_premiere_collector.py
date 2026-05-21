@@ -32,7 +32,12 @@ from patch_collectors.adobe_premiere import (
     adobe_community_search_candidates,
     adobe_report_url_is_specific,
     brave_search_api_candidates,
+    creativecow_brave_search_candidates,
+    creativecow_forum_index_candidates,
+    creativecow_thread_url_is_specific,
     extract_brave_result_links,
+    extract_creativecow_brave_result_links,
+    extract_creativecow_thread_links,
     wayback_snapshot_recheck_candidates,
     wayback_latest_timestamp,
     evaluate_candidates,
@@ -92,6 +97,40 @@ BRAVE_RESPONSE = {
             {"url": "https://community.adobe.com/bug-reports-728/premiere-pro-26-2-export-crash-1559001?tracking=1", "title": "Premiere Pro 26.2 export crash"},
             {"url": "https://community.adobe.com/t5/premiere-pro/ct-p/ct-premiere-pro", "title": "Premiere Pro forum"},
             {"url": "https://community.adobe.com/bug-reports-728/premiere-pro-26-2-export-crash-1559001", "title": "Duplicate"},
+        ]
+    }
+}
+
+CREATIVE_COW_INDEX_HTML = """
+<html>
+  <body>
+    <a href="/forums/thread/premiere-pro-26-2-export-crash/">Premiere Pro 26.2 export crash</a>
+    <a href="/forums/thread/premiere-pro-26-2-export-crash/?reply=1">Duplicate Creative COW thread</a>
+    <a href="/forums/forum/adobe-premiere-pro/">Adobe Premiere Pro forum</a>
+  </body>
+</html>
+"""
+
+CREATIVE_COW_THREAD_HTML = """
+<html>
+  <head>
+    <title>Premiere Pro 26.2 export crash - Creative COW</title>
+    <meta property="article:published_time" content="2026-05-03T09:00:00Z">
+  </head>
+  <body>
+    <h1>Premiere Pro 26.2 export crash</h1>
+    <p>Posted by Jane Editor on May 3, 2026 at 9:00 am</p>
+    <p>Adobe Premiere Pro 26.2 crashes every time I export my timeline on Windows after updating.</p>
+  </body>
+</html>
+"""
+
+CREATIVE_COW_BRAVE_RESPONSE = {
+    "web": {
+        "results": [
+            {"url": "https://creativecow.net/forums/thread/premiere-pro-26-2-export-crash/?utm=brave", "title": "Premiere Pro 26.2 export crash"},
+            {"url": "https://creativecow.net/forums/forum/adobe-premiere-pro/", "title": "Adobe Premiere Pro forum"},
+            {"url": "https://creativecow.net/forums/thread/premiere-pro-26-2-export-crash/", "title": "Duplicate"},
         ]
     }
 }
@@ -523,6 +562,102 @@ def run() -> int:
         else:
             os.environ[premiere.BRAVE_SEARCH_API_KEY_ENV] = original_token
     check("Wayback no snapshot does not crash collector", no_snapshot_candidates == [] and any(error.get("reason") == "wayback_no_snapshot" for error in errors), f"candidates={no_snapshot_candidates!r}, errors={errors!r}")
+
+
+    check("Creative COW thread URL is specific", creativecow_thread_url_is_specific("https://creativecow.net/forums/thread/premiere-pro-26-2-export-crash/") is True)
+    check("Creative COW forum URL is not specific", creativecow_thread_url_is_specific("https://creativecow.net/forums/forum/adobe-premiere-pro/") is False)
+    check("Creative COW index extracts thread URL only", extract_creativecow_thread_links(CREATIVE_COW_INDEX_HTML) == ["https://creativecow.net/forums/thread/premiere-pro-26-2-export-crash"], f"links={extract_creativecow_thread_links(CREATIVE_COW_INDEX_HTML)!r}")
+    check("Creative COW Brave results extract thread URL only", extract_creativecow_brave_result_links(CREATIVE_COW_BRAVE_RESPONSE) == ["https://creativecow.net/forums/thread/premiere-pro-26-2-export-crash"], f"links={extract_creativecow_brave_result_links(CREATIVE_COW_BRAVE_RESPONSE)!r}")
+
+    creative_candidate = row_from_candidate(
+        record(),
+        {
+            "source_type": premiere.CREATIVE_COW_SOURCE_TYPE,
+            "source_name": premiere.CREATIVE_COW_SOURCE_NAME,
+            "source_url": "https://creativecow.net/forums/thread/premiere-pro-26-2-export-crash/",
+            "parent_title": "Premiere Pro 26.2 export crash",
+            "report_title": "Premiere Pro 26.2 export crash",
+            "report_text": "Adobe Premiere Pro 26.2 crashes every time I export my timeline on Windows after updating.",
+            "source_date": "2026-05-03",
+        },
+        "2026-05-20T00:00:00Z",
+    )
+    check("Creative COW specific Premiere 26.2 issue counts", creative_candidate.get("counted") is True, f"reason={creative_candidate.get('exclusion_reason')!r}")
+    check("Creative COW source type is preserved", creative_candidate.get("source_type") == premiere.CREATIVE_COW_SOURCE_TYPE, str(creative_candidate))
+
+    creative_wrong_version = row_from_candidate(
+        record(),
+        {
+            "source_type": premiere.CREATIVE_COW_SOURCE_TYPE,
+            "source_name": premiere.CREATIVE_COW_SOURCE_NAME,
+            "source_url": "https://creativecow.net/forums/thread/premiere-pro-26-2-2-export-crash/",
+            "parent_title": "Premiere Pro 26.2.2 export crash",
+            "report_title": "Premiere Pro 26.2.2 export crash",
+            "report_text": "Adobe Premiere Pro 26.2.2 crashes every time I export my timeline on Windows.",
+            "source_date": "2026-05-19",
+        },
+        "2026-05-20T00:00:00Z",
+    )
+    check("Creative COW wrong version is rejected", creative_wrong_version.get("counted") is False and creative_wrong_version.get("exclusion_reason") == "missing_exact_patch_version_match", f"reason={creative_wrong_version.get('exclusion_reason')!r}")
+
+    original_request_text = premiere.request_text
+    try:
+        def fake_request_creativecow(url: str, *_args: object, **_kwargs: object) -> str:
+            if url == premiere.CREATIVE_COW_FORUM_URL:
+                return CREATIVE_COW_INDEX_HTML
+            if url == "https://creativecow.net/forums/thread/premiere-pro-26-2-export-crash":
+                return CREATIVE_COW_THREAD_HTML
+            return "<html><body>No results</body></html>"
+
+        premiere.request_text = fake_request_creativecow
+        errors = []
+        cow_index_candidates = creativecow_forum_index_candidates(record(), CollectorContext(write=False, since=None, max_pages=1), errors)
+    finally:
+        premiere.request_text = original_request_text
+    check("Creative COW forum index discovers specific thread", len(cow_index_candidates) == 1, f"candidates={cow_index_candidates!r}, errors={errors!r}")
+    check("Creative COW forum index has no errors", errors == [], f"errors={errors!r}")
+
+    original_request_text = premiere.request_text
+    original_request_json = premiere.request_json
+    original_token = os.environ.get(premiere.BRAVE_SEARCH_API_KEY_ENV)
+    try:
+        os.environ[premiere.BRAVE_SEARCH_API_KEY_ENV] = "test-token"
+        premiere.request_json = lambda *_args, **_kwargs: CREATIVE_COW_BRAVE_RESPONSE
+        premiere.request_text = lambda url, *_args, **_kwargs: CREATIVE_COW_THREAD_HTML if url == "https://creativecow.net/forums/thread/premiere-pro-26-2-export-crash" else "<html><body>No results</body></html>"
+        errors = []
+        cow_brave_candidates = creativecow_brave_search_candidates(record(), CollectorContext(write=False, since=None, max_pages=4), errors)
+    finally:
+        premiere.request_text = original_request_text
+        premiere.request_json = original_request_json
+        if original_token is None:
+            os.environ.pop(premiere.BRAVE_SEARCH_API_KEY_ENV, None)
+        else:
+            os.environ[premiere.BRAVE_SEARCH_API_KEY_ENV] = original_token
+    check("Creative COW Brave fallback discovers specific thread", len(cow_brave_candidates) == 1, f"candidates={cow_brave_candidates!r}, errors={errors!r}")
+    check("Creative COW Brave fallback has no errors for valid response", errors == [], f"errors={errors!r}")
+
+    original_request_text = premiere.request_text
+    original_request_json = premiere.request_json
+    original_load_evidence = premiere.load_evidence
+    original_token = os.environ.get(premiere.BRAVE_SEARCH_API_KEY_ENV)
+    try:
+        os.environ[premiere.BRAVE_SEARCH_API_KEY_ENV] = "test-token"
+        premiere.request_text = lambda url, *_args, **_kwargs: CREATIVE_COW_THREAD_HTML if url == "https://creativecow.net/forums/thread/premiere-pro-26-2-export-crash" else (_ for _ in ()).throw(AdobeCommunityAccessError("rate_limited"))
+        premiere.request_json = lambda *_args, **_kwargs: CREATIVE_COW_BRAVE_RESPONSE
+        premiere.request_public_json = lambda *_args, **_kwargs: []
+        premiere.load_evidence = lambda: []
+        accepted_rows, rejected_rows, health = premiere.collect_for_record(record(), CollectorContext(write=False, since=None, max_pages=1))
+    finally:
+        premiere.request_text = original_request_text
+        premiere.request_json = original_request_json
+        premiere.load_evidence = original_load_evidence
+        if original_token is None:
+            os.environ.pop(premiere.BRAVE_SEARCH_API_KEY_ENV, None)
+        else:
+            os.environ[premiere.BRAVE_SEARCH_API_KEY_ENV] = original_token
+    health_by_id = {row.get("method_id"): row for row in health}
+    check("Creative COW fallback can accept when Adobe methods are blocked", any(row.get("source_type") == premiere.CREATIVE_COW_SOURCE_TYPE for row in accepted_rows), f"accepted={accepted_rows!r}, health={health!r}")
+    check("method health records Creative COW separately", health_by_id.get("creativecow_brave_search", {}).get("status") == "success", f"health={health!r}")
 
     check("method health success when accepted rows exist", adobe_community_method_status(discovered, [valid], [], []) == "success")
     check("method health no_results when search returns nothing", adobe_community_method_status([], [], [], []) == "no_results")
