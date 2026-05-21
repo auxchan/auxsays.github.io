@@ -25,13 +25,16 @@ from patch_collectors.base import CollectorContext, PatchRecord
 import patch_collectors.adobe_premiere as premiere
 from patch_collectors.adobe_premiere import (
     AdobeCommunityAccessError,
+    BraveSearchAccessError,
     adobe_community_bug_tab_candidates,
     adobe_community_known_url_candidates,
     adobe_community_method_status,
     adobe_community_search_candidates,
     adobe_report_url_is_specific,
     brave_search_api_candidates,
-    extract_brave_report_links,
+    extract_brave_result_links,
+    wayback_snapshot_recheck_candidates,
+    wayback_latest_timestamp,
     evaluate_candidates,
     row_from_candidate,
 )
@@ -76,6 +79,22 @@ BUG_HTML = """
   </body>
 </html>
 """
+
+WAYBACK_CDX_RESPONSE = [
+    ["timestamp", "original", "statuscode", "mimetype"],
+    ["20260502120000", "https://community.adobe.com/bug-reports-728/premiere-pro-26-2-export-crash-1559001", "200", "text/html"],
+]
+
+
+BRAVE_RESPONSE = {
+    "web": {
+        "results": [
+            {"url": "https://community.adobe.com/bug-reports-728/premiere-pro-26-2-export-crash-1559001?tracking=1", "title": "Premiere Pro 26.2 export crash"},
+            {"url": "https://community.adobe.com/t5/premiere-pro/ct-p/ct-premiere-pro", "title": "Premiere Pro forum"},
+            {"url": "https://community.adobe.com/bug-reports-728/premiere-pro-26-2-export-crash-1559001", "title": "Duplicate"},
+        ]
+    }
+}
 
 
 def check(label: str, condition: bool, detail: str = "") -> None:
@@ -302,75 +321,208 @@ def run() -> int:
     check("method health records bug-tab separately", health_by_id.get("adobe_community_bug_tab_index", {}).get("status") == "success", f"health={health!r}")
     check("blocked search endpoint is not retried six times", sum(1 for url in calls if url.startswith(premiere.ADOBE_SEARCH_URL)) <= 1, f"calls={calls!r}")
 
+    original_token = os.environ.pop(premiere.BRAVE_SEARCH_API_KEY_ENV, None)
+    try:
+        errors = []
+        no_secret_candidates = brave_search_api_candidates(record(), CollectorContext(write=False, since=None, max_pages=1), errors)
+    finally:
+        if original_token is not None:
+            os.environ[premiere.BRAVE_SEARCH_API_KEY_ENV] = original_token
+    check("Brave method is disabled when secret is missing", no_secret_candidates == [] and errors and errors[0].get("reason") == "missing_BRAVE_SEARCH_API_KEY", f"candidates={no_secret_candidates!r}, errors={errors!r}")
+    check("missing Brave secret maps to disabled method health", adobe_community_method_status([], [], [], errors) == "disabled", f"errors={errors!r}")
+
+    check("Brave response extracts only specific report URLs", extract_brave_result_links(BRAVE_RESPONSE) == ["https://community.adobe.com/bug-reports-728/premiere-pro-26-2-export-crash-1559001"], f"links={extract_brave_result_links(BRAVE_RESPONSE)!r}")
 
     original_request_text = premiere.request_text
-    original_request_brave_search = premiere.request_brave_search
-    original_env = os.environ.get(premiere.BRAVE_API_KEY_ENV)
+    original_request_json = premiere.request_json
+    original_token = os.environ.get(premiere.BRAVE_SEARCH_API_KEY_ENV)
     try:
-        os.environ.pop(premiere.BRAVE_API_KEY_ENV, None)
-        errors = []
-        brave_missing = brave_search_api_candidates(record(), CollectorContext(write=False, since=None, max_pages=1), errors)
-    finally:
-        if original_env is not None:
-            os.environ[premiere.BRAVE_API_KEY_ENV] = original_env
-    check("Brave method disables cleanly when API key is missing", brave_missing == [] and errors and errors[0]["reason"] == "missing_BRAVE_SEARCH_API_KEY", f"candidates={brave_missing!r}, errors={errors!r}")
-    check("method health disabled when Brave key is missing", adobe_community_method_status([], [], [], errors) == "disabled", f"errors={errors!r}")
+        os.environ[premiere.BRAVE_SEARCH_API_KEY_ENV] = "test-token"
 
-    brave_payload = {
-        "web": {
-            "results": [
-                {"url": "https://community.adobe.com/bug-reports-728/premiere-pro-26-2-export-crash-1559001?tracking=brave"},
-                {"url": "https://community.adobe.com/t5/premiere-pro/ct-p/ct-premiere-pro"},
-                {"url": "https://example.com/not-adobe"},
-            ]
-        }
-    }
-    brave_links = extract_brave_report_links(brave_payload)
-    check("Brave response extracts only specific Adobe bug-report URLs", brave_links == ["https://community.adobe.com/bug-reports-728/premiere-pro-26-2-export-crash-1559001"], f"links={brave_links!r}")
-
-    try:
-        os.environ[premiere.BRAVE_API_KEY_ENV] = "test-token"
-
-        def fake_brave_search(query: str, api_key: str, *_args: object, **_kwargs: object) -> dict[str, object]:
-            check("Brave token is read from env and passed to request helper", api_key == "test-token")
-            return brave_payload
+        def fake_json(url: str, *, api_key: str, **_kwargs: object) -> dict[str, object]:
+            check("Brave token is passed as a header value, not embedded in the URL", api_key == "test-token" and "test-token" not in url, f"url={url!r}, api_key={api_key!r}")
+            return BRAVE_RESPONSE
 
         def fake_request(url: str, *_args: object, **_kwargs: object) -> str:
             if url == "https://community.adobe.com/bug-reports-728/premiere-pro-26-2-export-crash-1559001":
                 return BUG_HTML
             return "<html><body>No results</body></html>"
 
-        premiere.request_brave_search = fake_brave_search
+        premiere.request_json = fake_json
         premiere.request_text = fake_request
         errors = []
-        brave_candidates = brave_search_api_candidates(record(), CollectorContext(write=False, since=None, max_pages=1), errors)
+        brave_candidates = brave_search_api_candidates(record(), CollectorContext(write=False, since=None, max_pages=4), errors)
     finally:
         premiere.request_text = original_request_text
-        premiere.request_brave_search = original_request_brave_search
-        if original_env is None:
-            os.environ.pop(premiere.BRAVE_API_KEY_ENV, None)
+        premiere.request_json = original_request_json
+        if original_token is None:
+            os.environ.pop(premiere.BRAVE_SEARCH_API_KEY_ENV, None)
         else:
-            os.environ[premiere.BRAVE_API_KEY_ENV] = original_env
-    check("Brave candidate URL is fetched and converted to candidate", len(brave_candidates) == 1 and errors == [], f"candidates={brave_candidates!r}, errors={errors!r}")
+            os.environ[premiere.BRAVE_SEARCH_API_KEY_ENV] = original_token
+    check("Brave fallback discovers specific report URL", len(brave_candidates) == 1, f"candidates={brave_candidates!r}, errors={errors!r}")
+    check("Brave fallback has no errors for valid response", errors == [], f"errors={errors!r}")
 
-    original_request_brave_search = premiere.request_brave_search
-    original_env = os.environ.get(premiere.BRAVE_API_KEY_ENV)
+    original_request_json = premiere.request_json
+    original_token = os.environ.get(premiere.BRAVE_SEARCH_API_KEY_ENV)
     try:
-        os.environ[premiere.BRAVE_API_KEY_ENV] = "test-token"
+        os.environ[premiere.BRAVE_SEARCH_API_KEY_ENV] = "test-token"
 
-        def fake_brave_blocked(query: str, api_key: str, *_args: object, **_kwargs: object) -> dict[str, object]:
-            raise AdobeCommunityAccessError("brave_rate_limited")
+        def fake_json_rate_limited(url: str, *, api_key: str, **_kwargs: object) -> dict[str, object]:
+            raise BraveSearchAccessError("http_429_rate_limited", status=429)
 
-        premiere.request_brave_search = fake_brave_blocked
+        premiere.request_json = fake_json_rate_limited
         errors = []
-        blocked_brave = brave_search_api_candidates(record(), CollectorContext(write=False, since=None, max_pages=1), errors)
+        rate_limited_candidates = brave_search_api_candidates(record(), CollectorContext(write=False, since=None, max_pages=4), errors)
     finally:
-        premiere.request_brave_search = original_request_brave_search
-        if original_env is None:
-            os.environ.pop(premiere.BRAVE_API_KEY_ENV, None)
+        premiere.request_json = original_request_json
+        if original_token is None:
+            os.environ.pop(premiere.BRAVE_SEARCH_API_KEY_ENV, None)
         else:
-            os.environ[premiere.BRAVE_API_KEY_ENV] = original_env
-    check("Brave API rate limit records blocked diagnostics without crashing", blocked_brave == [] and errors and "brave_rate_limited" in errors[0]["reason"], f"candidates={blocked_brave!r}, errors={errors!r}")
+            os.environ[premiere.BRAVE_SEARCH_API_KEY_ENV] = original_token
+    check("Brave API rate limit does not crash collector", rate_limited_candidates == [] and errors, f"candidates={rate_limited_candidates!r}, errors={errors!r}")
+    check("Brave API rate limit maps to blocked method health", adobe_community_method_status([], [], [], errors) == "blocked", f"errors={errors!r}")
+
+    original_request_text = premiere.request_text
+    original_request_json = premiere.request_json
+    original_load_evidence = premiere.load_evidence
+    original_token = os.environ.get(premiere.BRAVE_SEARCH_API_KEY_ENV)
+    try:
+        os.environ[premiere.BRAVE_SEARCH_API_KEY_ENV] = "test-token"
+
+        def fake_request(url: str, *_args: object, **_kwargs: object) -> str:
+            if url.startswith(premiere.ADOBE_SEARCH_URL) or url == premiere.bug_tab_url(1):
+                raise AdobeCommunityAccessError("rate_limited")
+            if url == "https://community.adobe.com/bug-reports-728/premiere-pro-26-2-export-crash-1559001":
+                return BUG_HTML
+            return "<html><body>No results</body></html>"
+
+        def fake_json(url: str, *, api_key: str, **_kwargs: object) -> dict[str, object]:
+            return BRAVE_RESPONSE
+
+        premiere.request_text = fake_request
+        premiere.request_json = fake_json
+        premiere.load_evidence = lambda: []
+        accepted_rows, rejected_rows, health = premiere.collect_for_record(record(), CollectorContext(write=False, since=None, max_pages=1))
+    finally:
+        premiere.request_text = original_request_text
+        premiere.request_json = original_request_json
+        premiere.load_evidence = original_load_evidence
+        if original_token is None:
+            os.environ.pop(premiere.BRAVE_SEARCH_API_KEY_ENV, None)
+        else:
+            os.environ[premiere.BRAVE_SEARCH_API_KEY_ENV] = original_token
+    health_by_id = {row.get("method_id"): row for row in health}
+    check("Brave fallback runs when Adobe direct methods are blocked", len(accepted_rows) == 1, f"accepted={accepted_rows!r}, rejected={rejected_rows!r}, health={health!r}")
+    check("method health records Brave separately", health_by_id.get("brave_search_api", {}).get("status") == "success", f"health={health!r}")
+
+    check("Wayback CDX parser returns latest timestamp", wayback_latest_timestamp(WAYBACK_CDX_RESPONSE) == "20260502120000")
+
+    original_request_text = premiere.request_text
+    original_request_json = premiere.request_json
+    original_request_public_json = premiere.request_public_json
+    original_token = os.environ.get(premiere.BRAVE_SEARCH_API_KEY_ENV)
+    try:
+        os.environ[premiere.BRAVE_SEARCH_API_KEY_ENV] = "test-token"
+
+        def fake_json_for_wayback(url: str, *, api_key: str, **_kwargs: object) -> dict[str, object]:
+            return BRAVE_RESPONSE
+
+        def fake_public_json(url: str, *_args: object, **_kwargs: object) -> list[list[str]]:
+            check("Wayback CDX query targets original Adobe report URL", "community.adobe.com%2Fbug-reports-728%2Fpremiere-pro-26-2-export-crash-1559001" in url or "community.adobe.com/bug-reports-728/premiere-pro-26-2-export-crash-1559001" in url, f"url={url!r}")
+            return WAYBACK_CDX_RESPONSE
+
+        def fake_request(url: str, *_args: object, **_kwargs: object) -> str:
+            if url.startswith("https://web.archive.org/web/20260502120000id_/"):
+                return BUG_HTML
+            raise AdobeCommunityAccessError("rate_limited")
+
+        premiere.request_json = fake_json_for_wayback
+        premiere.request_public_json = fake_public_json
+        premiere.request_text = fake_request
+        errors = []
+        wayback_candidates = wayback_snapshot_recheck_candidates(record(), CollectorContext(write=False, since=None, max_pages=4), errors)
+    finally:
+        premiere.request_text = original_request_text
+        premiere.request_json = original_request_json
+        premiere.request_public_json = original_request_public_json
+        if original_token is None:
+            os.environ.pop(premiere.BRAVE_SEARCH_API_KEY_ENV, None)
+        else:
+            os.environ[premiere.BRAVE_SEARCH_API_KEY_ENV] = original_token
+    check("Wayback recheck produces candidate from archived Adobe report", len(wayback_candidates) == 1, f"candidates={wayback_candidates!r}, errors={errors!r}")
+    check("Wayback candidate keeps original Adobe source URL", wayback_candidates and wayback_candidates[0].get("source_url") == "https://community.adobe.com/bug-reports-728/premiere-pro-26-2-export-crash-1559001", f"candidates={wayback_candidates!r}")
+    check("Wayback candidate stores archive URL", wayback_candidates and str(wayback_candidates[0].get("archive_url") or "").startswith("https://web.archive.org/web/20260502120000id_/"), f"candidates={wayback_candidates!r}")
+
+    original_request_text = premiere.request_text
+    original_request_json = premiere.request_json
+    original_request_public_json = premiere.request_public_json
+    original_load_evidence = premiere.load_evidence
+    original_token = os.environ.get(premiere.BRAVE_SEARCH_API_KEY_ENV)
+    try:
+        os.environ[premiere.BRAVE_SEARCH_API_KEY_ENV] = "test-token"
+
+        def fake_request_all_live_blocked(url: str, *_args: object, **_kwargs: object) -> str:
+            if url.startswith("https://web.archive.org/web/20260502120000id_/"):
+                return BUG_HTML
+            raise AdobeCommunityAccessError("rate_limited")
+
+        premiere.request_text = fake_request_all_live_blocked
+        premiere.request_json = lambda *_args, **_kwargs: BRAVE_RESPONSE
+        premiere.request_public_json = lambda *_args, **_kwargs: WAYBACK_CDX_RESPONSE
+        premiere.load_evidence = lambda: []
+        accepted_rows, rejected_rows, health = premiere.collect_for_record(record(), CollectorContext(write=False, since=None, max_pages=1))
+    finally:
+        premiere.request_text = original_request_text
+        premiere.request_json = original_request_json
+        premiere.request_public_json = original_request_public_json
+        premiere.load_evidence = original_load_evidence
+        if original_token is None:
+            os.environ.pop(premiere.BRAVE_SEARCH_API_KEY_ENV, None)
+        else:
+            os.environ[premiere.BRAVE_SEARCH_API_KEY_ENV] = original_token
+    health_by_id = {row.get("method_id"): row for row in health}
+    check("Wayback fallback can accept when live Adobe detail fetch is blocked", len(accepted_rows) == 1, f"accepted={accepted_rows!r}, rejected={rejected_rows!r}, health={health!r}")
+    check("accepted Wayback row stores archive_url", accepted_rows and str(accepted_rows[0].get("archive_url") or "").startswith("https://web.archive.org/web/"), f"accepted={accepted_rows!r}")
+    check("method health records Wayback separately", health_by_id.get("wayback_snapshot_recheck", {}).get("status") == "success", f"health={health!r}")
+
+    original_request_public_json = premiere.request_public_json
+    original_load_evidence = premiere.load_evidence
+    original_token = os.environ.pop(premiere.BRAVE_SEARCH_API_KEY_ENV, None)
+    try:
+        premiere.request_public_json = lambda *_args, **_kwargs: WAYBACK_CDX_RESPONSE
+        premiere.request_text = lambda url, *_args, **_kwargs: BUG_HTML if url.startswith("https://web.archive.org/web/") else ""
+        premiere.load_evidence = lambda: [{
+            "product_id": "adobe-premiere-pro",
+            "update_version": "26.2",
+            "source_url": "https://community.adobe.com/bug-reports-728/premiere-pro-26-2-export-crash-1559001",
+        }]
+        errors = []
+        known_wayback_candidates = wayback_snapshot_recheck_candidates(record(), CollectorContext(write=False, since=None, max_pages=1), errors)
+    finally:
+        premiere.request_public_json = original_request_public_json
+        premiere.request_text = original_request_text
+        premiere.load_evidence = original_load_evidence
+        if original_token is not None:
+            os.environ[premiere.BRAVE_SEARCH_API_KEY_ENV] = original_token
+    check("Wayback can recheck known URLs without Brave secret", len(known_wayback_candidates) == 1, f"candidates={known_wayback_candidates!r}, errors={errors!r}")
+
+    original_request_json = premiere.request_json
+    original_request_public_json = premiere.request_public_json
+    original_token = os.environ.get(premiere.BRAVE_SEARCH_API_KEY_ENV)
+    try:
+        os.environ[premiere.BRAVE_SEARCH_API_KEY_ENV] = "test-token"
+        premiere.request_json = lambda *_args, **_kwargs: BRAVE_RESPONSE
+        premiere.request_public_json = lambda *_args, **_kwargs: [["timestamp", "original", "statuscode", "mimetype"]]
+        errors = []
+        no_snapshot_candidates = wayback_snapshot_recheck_candidates(record(), CollectorContext(write=False, since=None, max_pages=1), errors)
+    finally:
+        premiere.request_json = original_request_json
+        premiere.request_public_json = original_request_public_json
+        if original_token is None:
+            os.environ.pop(premiere.BRAVE_SEARCH_API_KEY_ENV, None)
+        else:
+            os.environ[premiere.BRAVE_SEARCH_API_KEY_ENV] = original_token
+    check("Wayback no snapshot does not crash collector", no_snapshot_candidates == [] and any(error.get("reason") == "wayback_no_snapshot" for error in errors), f"candidates={no_snapshot_candidates!r}, errors={errors!r}")
 
     check("method health success when accepted rows exist", adobe_community_method_status(discovered, [valid], [], []) == "success")
     check("method health no_results when search returns nothing", adobe_community_method_status([], [], [], []) == "no_results")

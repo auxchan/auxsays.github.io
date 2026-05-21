@@ -28,6 +28,7 @@ EVIDENCE_FIELDS = (
     "source_type",
     "source_name",
     "source_url",
+    "archive_url",
     "parent_title",
     "report_title",
     "report_text_excerpt",

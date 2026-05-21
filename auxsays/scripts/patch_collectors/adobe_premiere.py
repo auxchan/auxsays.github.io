@@ -42,10 +42,11 @@ SOURCE_TYPE = "adobe_community_bug_report"
 SOURCE_NAME = "Adobe Community Bug Report"
 ADOBE_SEARCH_URL = "https://community.adobe.com/t5/forums/searchpage/tab/message"
 ADOBE_PREMIERE_BUG_TAB_BASE_URL = "https://community.adobe.com/t5/premiere-pro/ct-p/ct-premiere-pro"
-BRAVE_SEARCH_API_URL = "https://api.search.brave.com/res/v1/web/search"
-BRAVE_API_KEY_ENV = "BRAVE_SEARCH_API_KEY"
+BRAVE_SEARCH_URL = "https://api.search.brave.com/res/v1/web/search"
+WAYBACK_CDX_URL = "https://web.archive.org/cdx"
+WAYBACK_SNAPSHOT_BASE_URL = "https://web.archive.org/web"
+BRAVE_SEARCH_API_KEY_ENV = "BRAVE_SEARCH_API_KEY"
 MAX_BRAVE_QUERIES_PER_RUN = 4
-MAX_BRAVE_RESULTS_PER_QUERY = 10
 MAX_SEARCH_QUERIES_PER_RUN = 2
 MAX_SEARCH_PAGES_PER_QUERY = 1
 HEADERS = {
@@ -85,6 +86,20 @@ class AdobeCommunityAccessError(RuntimeError):
         self.reason = reason
         self.status = status
         self.content_type = content_type
+
+
+class BraveSearchAccessError(RuntimeError):
+    def __init__(self, reason: str, *, status: int | None = None) -> None:
+        super().__init__(reason)
+        self.reason = reason
+        self.status = status
+
+
+class WaybackAccessError(RuntimeError):
+    def __init__(self, reason: str, *, status: int | None = None) -> None:
+        super().__init__(reason)
+        self.reason = reason
+        self.status = status
 
 
 class AdobePremiereCollector(ProductCollector):
@@ -132,6 +147,7 @@ def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[
         ("adobe_community_bug_tab_index", adobe_community_bug_tab_candidates),
         ("adobe_community_known_url_recheck", adobe_community_known_url_candidates),
         ("brave_search_api", brave_search_api_candidates),
+        ("wayback_snapshot_recheck", wayback_snapshot_recheck_candidates),
     ):
         errors: list[dict[str, Any]] = []
         candidates = collector(record, context, errors)
@@ -202,113 +218,77 @@ def adobe_community_known_url_candidates(record: PatchRecord, context: Collector
     return candidates_from_report_links(urls, context, errors, seen_urls, "adobe_community_known_url_recheck")
 
 
-
-
 def brave_search_api_candidates(record: PatchRecord, context: CollectorContext, errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
-    api_key = os.environ.get(BRAVE_API_KEY_ENV, "").strip()
+    api_key = os.environ.get(BRAVE_SEARCH_API_KEY_ENV, "").strip()
     if not api_key:
-        errors.append({"source_url": BRAVE_SEARCH_API_URL, "reason": f"missing_{BRAVE_API_KEY_ENV}"})
+        errors.append({"source_url": BRAVE_SEARCH_URL, "reason": f"missing_{BRAVE_SEARCH_API_KEY_ENV}"})
         return []
 
-    links: list[str] = []
-    for query in brave_search_queries(record)[:MAX_BRAVE_QUERIES_PER_RUN]:
+    candidates: list[dict[str, Any]] = []
+    seen_urls: set[str] = set()
+    for link in brave_discovered_report_links(record, context, errors, "brave_search_fetch_failed"):
+        candidates.extend(candidates_from_report_links([link], context, errors, seen_urls, "brave_search_api"))
+    return candidates
+
+
+def wayback_snapshot_recheck_candidates(record: PatchRecord, context: CollectorContext, errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    candidates: list[dict[str, Any]] = []
+    seen_urls: set[str] = set()
+    links = known_candidate_urls(record)
+
+    brave_errors: list[dict[str, Any]] = []
+    brave_links = brave_discovered_report_links(record, context, brave_errors, "wayback_brave_search_fetch_failed")
+    if brave_links:
+        links.extend(brave_links)
+    elif not links:
+        errors.extend(brave_errors)
+
+    for link in dedupe(links):
+        canonical = canonical_adobe_url(link)
+        if not canonical or canonical.lower() in seen_urls or not adobe_report_url_is_specific(canonical):
+            continue
+        seen_urls.add(canonical.lower())
+        snapshot_url = latest_wayback_snapshot_url(canonical, errors)
+        if not snapshot_url:
+            continue
         try:
-            payload = request_brave_search(query, api_key)
+            page_html = request_text(snapshot_url)
+            candidate = adobe_bug_report_candidate(
+                canonical,
+                page_html,
+                source_name="Adobe Community Bug Report via Wayback",
+                archive_url=snapshot_url,
+            )
         except Exception as exc:
-            errors.append({"source_url": BRAVE_SEARCH_API_URL, "reason": f"brave_search_api_fetch_failed:{error_reason(exc)}"})
+            errors.append({"source_url": snapshot_url, "reason": f"wayback_snapshot_fetch_failed:{error_reason(exc)}"})
+            continue
+        if not candidate:
+            continue
+        if context.since and candidate.get("source_date") and date_part(candidate["source_date"]) < context.since:
+            continue
+        candidates.append(candidate)
+    return candidates
+
+
+def brave_discovered_report_links(record: PatchRecord, context: CollectorContext, errors: list[dict[str, Any]], reason_prefix: str) -> list[str]:
+    api_key = os.environ.get(BRAVE_SEARCH_API_KEY_ENV, "").strip()
+    if not api_key:
+        errors.append({"source_url": BRAVE_SEARCH_URL, "reason": f"missing_{BRAVE_SEARCH_API_KEY_ENV}"})
+        return []
+    links: list[str] = []
+    max_queries = min(MAX_BRAVE_QUERIES_PER_RUN, max(1, context.max_pages), len(brave_search_queries(record)))
+    for query in brave_search_queries(record)[:max_queries]:
+        url = brave_search_url(query)
+        try:
+            payload = request_json(url, api_key=api_key)
+        except Exception as exc:
+            errors.append({"source_url": url, "reason": f"{reason_prefix}:{error_reason(exc)}"})
             if error_is_blocked(exc):
                 break
             continue
-        links.extend(extract_brave_report_links(payload))
+        links.extend(extract_brave_result_links(payload))
+    return dedupe(links)
 
-    seen_urls: set[str] = set()
-    return candidates_from_report_links(links, context, errors, seen_urls, "brave_search_api")
-
-
-def brave_search_queries(record: PatchRecord) -> list[str]:
-    version = record.update_version
-    queries = [
-        f'site:community.adobe.com/bug-reports-728 "Premiere Pro" "{version}"',
-        f'site:community.adobe.com/bug-reports-728 "Adobe Premiere Pro {version}"',
-    ]
-    if re.fullmatch(r"\d+\.\d+", version or ""):
-        queries.append(f'site:community.adobe.com/bug-reports-728 "Premiere Pro" "{version}.0"')
-    if version == "26.2":
-        queries.append('site:community.adobe.com/bug-reports-728 "Build 65" "Premiere Pro"')
-    return dedupe(queries)
-
-
-def request_brave_search(query: str, api_key: str, timeout: int = 30) -> dict[str, Any]:
-    params = {
-        "q": query,
-        "count": str(MAX_BRAVE_RESULTS_PER_QUERY),
-        "safesearch": "moderate",
-        "search_lang": "en",
-        "country": "US",
-    }
-    url = f"{BRAVE_SEARCH_API_URL}?{urllib.parse.urlencode(params)}"
-    headers = {
-        "Accept": "application/json",
-        "X-Subscription-Token": api_key,
-        "User-Agent": HEADERS["User-Agent"],
-    }
-    req = urllib.request.Request(url, headers=headers)
-    try:
-        with urllib.request.urlopen(req, timeout=timeout) as response:
-            status = getattr(response, "status", None)
-            body = response.read(500000).decode("utf-8", errors="replace")
-    except HTTPError as exc:
-        try:
-            body = exc.read(12000).decode("utf-8", errors="replace")
-        except Exception:
-            body = ""
-        raise AdobeCommunityAccessError(brave_error_reason(exc.code, body), status=exc.code, content_type=exc.headers.get("Content-Type", "")) from exc
-    except URLError as exc:
-        raise AdobeCommunityAccessError(f"url_error_{getattr(exc, 'reason', exc)}") from exc
-
-    if status in {401, 403, 429}:
-        raise AdobeCommunityAccessError(brave_error_reason(status, body), status=status, content_type="application/json")
-    try:
-        data = json.loads(body)
-    except json.JSONDecodeError as exc:
-        raise AdobeCommunityAccessError("brave_invalid_json") from exc
-    if not isinstance(data, dict):
-        raise AdobeCommunityAccessError("brave_unexpected_response")
-    return data
-
-
-def brave_error_reason(status: int | None, body: str = "") -> str:
-    if status == 401:
-        return "brave_unauthorized"
-    if status == 403:
-        return "brave_forbidden"
-    if status == 429:
-        return "brave_rate_limited"
-    lowered = (body or "").lower()
-    if "rate" in lowered and "limit" in lowered:
-        return "brave_rate_limited"
-    return f"brave_http_{status}" if status else "brave_fetch_failed"
-
-
-def extract_brave_report_links(payload: dict[str, Any]) -> list[str]:
-    links: list[str] = []
-    web = payload.get("web") if isinstance(payload, dict) else None
-    results = web.get("results") if isinstance(web, dict) else []
-    if not isinstance(results, list):
-        return []
-    for item in results:
-        if not isinstance(item, dict):
-            continue
-        for key in ("url", "profile", "meta_url"):
-            value = item.get(key)
-            if isinstance(value, str):
-                links.append(value)
-            elif isinstance(value, dict):
-                for nested_key in ("url", "href"):
-                    nested = value.get(nested_key)
-                    if isinstance(nested, str):
-                        links.append(nested)
-    return [canonical for canonical in (canonical_adobe_url(url) for url in dedupe(links)) if adobe_report_url_is_specific(canonical)]
 
 def candidates_from_report_links(
     links: list[str],
@@ -402,13 +382,16 @@ def method_notes(
         "adobe_community_search": "Adobe Community search",
         "adobe_community_bug_tab_index": "Adobe Community Premiere bug-tab listing",
         "adobe_community_known_url_recheck": "Known Adobe Community bug-report URL recheck",
-        "brave_search_api": "Brave Search API candidate discovery",
+        "brave_search_api": "Brave Search API fallback",
+        "wayback_snapshot_recheck": "Wayback snapshot recheck",
     }
     notes = f"{labels.get(method_id, method_id)} discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates."
     if method_id == "adobe_community_search":
         notes = f"{notes} Search requests are deliberately capped so rate limiting moves the collector to fallback methods instead of retrying the blocked endpoint repeatedly."
     if method_id == "brave_search_api":
-        notes = f"{notes} This method reads BRAVE_SEARCH_API_KEY from the GitHub Actions environment, caps query volume, and never decides evidence acceptance."
+        notes = f"{notes} This method reads {BRAVE_SEARCH_API_KEY_ENV} from the workflow environment, uses it only as an API header, and never logs the token."
+    if method_id == "wayback_snapshot_recheck":
+        notes = f"{notes} This method verifies blocked Adobe Community report pages through public Wayback snapshots of the same specific report URL when enough archived text is available."
     if errors:
         notes = f"{notes} Fetch failures: {len(errors)}."
     if rejected and not accepted:
@@ -463,6 +446,75 @@ def search_url(query: str, page: int) -> str:
     return f"{ADOBE_SEARCH_URL}?{urllib.parse.urlencode(params)}"
 
 
+def brave_search_queries(record: PatchRecord) -> list[str]:
+    version = record.update_version
+    queries = [
+        f'site:community.adobe.com/bug-reports-728 "Premiere Pro" "{version}"',
+        f'site:community.adobe.com/bug-reports-728 "Adobe Premiere Pro {version}"',
+    ]
+    if re.fullmatch(r"\d+\.\d+", version or ""):
+        queries.append(f'site:community.adobe.com/bug-reports-728 "Premiere Pro" "{version}.0"')
+    if version == "26.2":
+        queries.append('site:community.adobe.com/bug-reports-728 "Build 65" "Premiere Pro"')
+    return dedupe(queries)[:MAX_BRAVE_QUERIES_PER_RUN]
+
+
+def brave_search_url(query: str) -> str:
+    params = {
+        "q": query,
+        "count": "10",
+        "safesearch": "moderate",
+        "search_lang": "en",
+        "country": "us",
+        "text_decorations": "false",
+    }
+    return f"{BRAVE_SEARCH_URL}?{urllib.parse.urlencode(params)}"
+
+
+def wayback_cdx_url(original_url: str) -> str:
+    params = {
+        "url": original_url,
+        "output": "json",
+        "fl": "timestamp,original,statuscode,mimetype",
+        "filter": ["statuscode:200", "mimetype:text/html"],
+        "collapse": "digest",
+        "sort": "reverse",
+        "limit": "5",
+    }
+    return f"{WAYBACK_CDX_URL}?{urllib.parse.urlencode(params, doseq=True)}"
+
+
+def latest_wayback_snapshot_url(original_url: str, errors: list[dict[str, Any]]) -> str:
+    url = wayback_cdx_url(original_url)
+    try:
+        payload = request_public_json(url)
+    except Exception as exc:
+        errors.append({"source_url": url, "reason": f"wayback_cdx_fetch_failed:{error_reason(exc)}"})
+        return ""
+    timestamp = wayback_latest_timestamp(payload)
+    if not timestamp:
+        errors.append({"source_url": original_url, "reason": "wayback_no_snapshot"})
+        return ""
+    return f"{WAYBACK_SNAPSHOT_BASE_URL}/{timestamp}id_/{original_url}"
+
+
+def wayback_latest_timestamp(payload: Any) -> str:
+    if not isinstance(payload, list) or len(payload) < 2:
+        return ""
+    header = payload[0] if isinstance(payload[0], list) else []
+    try:
+        timestamp_index = header.index("timestamp")
+    except ValueError:
+        timestamp_index = 0
+    for row in payload[1:]:
+        if not isinstance(row, list) or len(row) <= timestamp_index:
+            continue
+        timestamp = str(row[timestamp_index] or "").strip()
+        if re.fullmatch(r"\d{14}", timestamp):
+            return timestamp
+    return ""
+
+
 def extract_report_links(html_text: str) -> list[str]:
     links: list[str] = []
     for raw in re.findall(r"""href=["']([^"']+)["']""", html_text or "", flags=re.I):
@@ -475,7 +527,22 @@ def extract_report_links(html_text: str) -> list[str]:
     return dedupe(links)
 
 
-def adobe_bug_report_candidate(url: str, html_text: str) -> dict[str, str] | None:
+def extract_brave_result_links(payload: dict[str, Any]) -> list[str]:
+    links: list[str] = []
+    web_results = payload.get("web", {}).get("results", []) if isinstance(payload, dict) else []
+    if not isinstance(web_results, list):
+        return []
+    for result in web_results:
+        if not isinstance(result, dict):
+            continue
+        url = str(result.get("url") or "").strip()
+        canonical = canonical_adobe_url(url)
+        if adobe_report_url_is_specific(canonical):
+            links.append(canonical)
+    return dedupe(links)
+
+
+def adobe_bug_report_candidate(url: str, html_text: str, *, source_name: str = SOURCE_NAME, archive_url: str = "") -> dict[str, str] | None:
     canonical = canonical_adobe_url(url)
     if not adobe_report_url_is_specific(canonical):
         return None
@@ -485,8 +552,9 @@ def adobe_bug_report_candidate(url: str, html_text: str) -> dict[str, str] | Non
         return None
     return {
         "source_type": SOURCE_TYPE,
-        "source_name": SOURCE_NAME,
+        "source_name": source_name,
         "source_url": canonical,
+        "archive_url": archive_url,
         "parent_title": title,
         "report_title": title,
         "report_text": text[:6000],
@@ -524,6 +592,7 @@ def row_from_candidate(record: PatchRecord, candidate: dict[str, Any], captured_
     matched, matched_version, basis = premiere_version_match(report_text, record.update_version)
     theme, workflow_area, platform, severity, sentiment = classify(report_text)
     source_date = date_part(candidate.get("source_date"))
+    archive_url = str(candidate.get("archive_url") or "").strip()
     row = make_evidence_row(
         product_id=PRODUCT_ID,
         update_version=record.update_version,
@@ -548,9 +617,13 @@ def row_from_candidate(record: PatchRecord, candidate: dict[str, Any], captured_
         sentiment=sentiment,
         row_id=f"{PRODUCT_ID}-{slug(record.update_version)}-{slug(str(candidate.get('source_type') or SOURCE_TYPE))}-{slug(str(candidate.get('source_url') or ''))}",
     )
+    if archive_url:
+        row["archive_url"] = archive_url
     if not source_date:
         row["source_date_pass"] = None
     gated = apply_acceptance_gates(row, report_text=report_text)
+    if archive_url:
+        gated["archive_url"] = archive_url
     if gated.get("counted") is True and not adobe_report_url_is_specific(str(gated.get("source_url") or "")):
         gated["counted"] = False
         gated["exclusion_reason"] = "source_url_not_specific_report"
@@ -632,6 +705,62 @@ def request_text(url: str, timeout: int = 30, max_bytes: int = 800000) -> str:
     return body
 
 
+def request_json(url: str, *, api_key: str, timeout: int = 30, max_bytes: int = 800000) -> dict[str, Any]:
+    headers = {
+        "Accept": "application/json",
+        "X-Subscription-Token": api_key,
+        "User-Agent": HEADERS["User-Agent"],
+    }
+    req = urllib.request.Request(url, headers=headers)
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as response:
+            status = getattr(response, "status", None)
+            body = response.read(max_bytes).decode("utf-8", errors="replace")
+    except HTTPError as exc:
+        raise BraveSearchAccessError(f"http_{exc.code}_{brave_status_reason(exc.code)}", status=exc.code) from exc
+    except URLError as exc:
+        raise BraveSearchAccessError(f"url_error_{getattr(exc, 'reason', exc)}") from exc
+    if status in {401, 403, 429}:
+        raise BraveSearchAccessError(f"http_{status}_{brave_status_reason(status)}", status=status)
+    try:
+        payload = json.loads(body)
+    except json.JSONDecodeError as exc:
+        raise BraveSearchAccessError("invalid_json") from exc
+    if not isinstance(payload, dict):
+        raise BraveSearchAccessError("unexpected_json_shape")
+    return payload
+
+
+def request_public_json(url: str, timeout: int = 30, max_bytes: int = 800000) -> Any:
+    headers = {
+        "Accept": "application/json",
+        "User-Agent": HEADERS["User-Agent"],
+    }
+    req = urllib.request.Request(url, headers=headers)
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as response:
+            status = getattr(response, "status", None)
+            body = response.read(max_bytes).decode("utf-8", errors="replace")
+    except HTTPError as exc:
+        raise WaybackAccessError(f"http_{exc.code}_{brave_status_reason(exc.code)}", status=exc.code) from exc
+    except URLError as exc:
+        raise WaybackAccessError(f"url_error_{getattr(exc, 'reason', exc)}") from exc
+    if status in {401, 403, 429}:
+        raise WaybackAccessError(f"http_{status}_{brave_status_reason(status)}", status=status)
+    try:
+        return json.loads(body)
+    except json.JSONDecodeError as exc:
+        raise WaybackAccessError("invalid_json") from exc
+
+
+def brave_status_reason(status: int | None) -> str:
+    if status == 429:
+        return "rate_limited"
+    if status in {401, 403}:
+        return "blocked"
+    return "error"
+
+
 def blocked_signature(text: str, *, status: int | None, content_type: str) -> str:
     lowered = (text or "").lower()
     if status in {401, 403}:
@@ -652,7 +781,7 @@ def blocked_signature(text: str, *, status: int | None, content_type: str) -> st
 
 
 def error_reason(exc: Exception) -> str:
-    if isinstance(exc, AdobeCommunityAccessError):
+    if isinstance(exc, (AdobeCommunityAccessError, BraveSearchAccessError, WaybackAccessError)):
         return exc.reason
     return type(exc).__name__
 
@@ -675,7 +804,7 @@ def adobe_community_method_status(
         reasons = " ".join(str(error.get("reason") or "") for error in errors).lower()
         if "missing_brave_search_api_key" in reasons:
             return "disabled"
-        if any(token in reasons for token in ("blocked", "challenge", "captcha", "rate_limited", "access_denied", "brave_unauthorized", "brave_forbidden", "brave_rate_limited")):
+        if any(token in reasons for token in ("blocked", "challenge", "captcha", "rate_limited", "access_denied", "http_401", "http_403", "http_429")):
             return "blocked"
         return "broken"
     return "no_results"
