@@ -1,8 +1,7 @@
 ---
 layout: aux-update
 title: DaVinci Resolve 21 official update breakdown
-description: Published Apr 14, 2026. This page covers the stable DaVinci Resolve 21 release. Public beta reports
-  are excluded.
+description: Published Apr 14, 2026. This page covers the stable DaVinci Resolve 21 release. Public beta reports are excluded.
 permalink: /updates/blackmagic-design/davinci-resolve/21/
 update_entry: true
 feed_hidden: false
@@ -20,10 +19,9 @@ update_status: current
 update_feed_title: DaVinci Resolve 21
 update_detail_title: DaVinci Resolve 21
 update_consensus_label: Negative
-update_consensus_summary: 'WAIT: DaVinci Resolve 21 has 3 user reports found. Small sample size. Current reports
-  mention render/export failures and installation problems. Production editors with active export deadlines should
-  wait unless they need a specific fix. Current reports are Reddit-heavy, so production users should test before
-  updating.'
+update_consensus_summary: 'WAIT: DaVinci Resolve 21 has 3 user reports found. Small sample size. Current reports mention render/export
+  failures and installation problems. Production editors with active export deadlines should wait unless they need a specific
+  fix. Current reports are Reddit-heavy, so production users should test before updating.'
 update_report_count: 3
 update_consensus_confidence: Low
 status_change_type: new
@@ -39,14 +37,13 @@ patch_file_size_status: not_provided_by_source
 update_channel_label: Stable / Studio release
 quick_verdict: 'WAIT: DaVinci Resolve 21 has 3 user reports found.'
 update_decision_label: WAIT
-update_decision_body: Current reports mention render/export failures and installation problems. Production editors
-  with active delivery deadlines should wait or test on copied projects.
+update_decision_body: Current reports mention render/export failures and installation problems. Production editors with active
+  delivery deadlines should wait or test on copied projects.
 source_freshness_note: ''
 record_note: This page covers DaVinci Resolve 21. Beta reports are excluded from this record.
 official_summary: DaVinci Resolve 21 is tracked here as the stable/Studio release. Public Beta 1 reports are excluded.
-consensus_report: '3 user reports found for DaVinci Resolve 21. Current reports mention render/export failures and
-  installation problems. Current reports are Reddit-heavy, so production users should test before updating. Sources
-  represented: r/davinciresolve.'
+consensus_report: '3 user reports found for DaVinci Resolve 21. Current reports mention render/export failures and installation
+  problems. Current reports are Reddit-heavy, so production users should test before updating. Sources represented: r/davinciresolve.'
 status_events:
 - at: '2026-04-14T00:00:00Z'
   label: Update released
@@ -107,16 +104,11 @@ official_source_captured: true
 confirmed_patch_specific_report_count: 3
 known_issues_present: null
 official_checksums_body: ''
-source_last_checked: '2026-05-21T10:05:52Z'
-official_body_last_checked: '2026-05-21T10:05:52Z'
+source_last_checked: '2026-05-21T15:53:33Z'
+official_body_last_checked: '2026-05-21T15:53:33Z'
 primary_official_source: https://www.blackmagicdesign.com/media/release/20260414-01
 fallback_official_sources: []
 official_source_attempts:
-- at: '2026-05-20T09:55:43Z'
-  url: https://www.blackmagicdesign.com/media/release/20260414-01
-  status: official-source-parser-failed
-  body_captured: false
-  checksums_captured: false
 - at: '2026-05-20T15:59:53Z'
   url: https://www.blackmagicdesign.com/media/release/20260414-01
   status: official-source-parser-failed
@@ -133,6 +125,11 @@ official_source_attempts:
   body_captured: false
   checksums_captured: false
 - at: '2026-05-21T10:05:52Z'
+  url: https://www.blackmagicdesign.com/media/release/20260414-01
+  status: official-source-parser-failed
+  body_captured: false
+  checksums_captured: false
+- at: '2026-05-21T15:53:33Z'
   url: https://www.blackmagicdesign.com/media/release/20260414-01
   status: official-source-parser-failed
   body_captured: false
