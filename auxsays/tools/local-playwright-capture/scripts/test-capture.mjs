@@ -1,8 +1,10 @@
 import assert from "node:assert/strict";
+import { execFile } from "node:child_process";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import { promisify } from "node:util";
 import test from "node:test";
 
 import {
@@ -20,6 +22,7 @@ import {
 
 const thisFile = fileURLToPath(import.meta.url);
 const repoRoot = path.resolve(path.dirname(thisFile), "..", "..", "..", "..");
+const execFileAsync = promisify(execFile);
 const protectedPaths = [
   "auxsays/_data/consensus_evidence.yml",
   "auxsays/_data/evidence_method_health.yml",
@@ -57,6 +60,21 @@ async function snapshotProtectedFiles() {
       }
       snapshot.set(relativePath, "missing");
     }
+  }
+  return snapshot;
+}
+
+async function snapshotGeneratedRecords() {
+  const generatedRoot = path.join(repoRoot, "auxsays", "updates", "generated");
+  const entries = await fs.readdir(generatedRoot, { withFileTypes: true });
+  const snapshot = new Map();
+  for (const entry of entries) {
+    if (!entry.isFile()) {
+      continue;
+    }
+    const fullPath = path.join(generatedRoot, entry.name);
+    const stat = await fs.stat(fullPath);
+    snapshot.set(entry.name, `${stat.mtimeMs}:${stat.size}`);
   }
   return snapshot;
 }
@@ -158,4 +176,54 @@ test("writes only capture outbox paths, not consensus/generated/state files", as
 
   const after = await snapshotProtectedFiles();
   assert.deepEqual(after, before);
+});
+
+test("portable build creates capture-and-promote command files safely", async () => {
+  const beforeProtected = await snapshotProtectedFiles();
+  const beforeGenerated = await snapshotGeneratedRecords();
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), "auxsays-capture-build-"));
+  const buildScript = path.join(repoRoot, "auxsays", "tools", "local-playwright-capture", "scripts", "build-portable.ps1");
+
+  await execFileAsync(
+    "powershell.exe",
+    [
+      "-NoProfile",
+      "-ExecutionPolicy",
+      "Bypass",
+      "-File",
+      buildScript,
+      "-OutputRoot",
+      tempDir,
+      "-SkipInstall",
+    ],
+    { cwd: repoRoot, windowsHide: true, timeout: 60_000 },
+  );
+
+  const commandNames = [
+    "Run Capture.cmd",
+    "Run Capture Once.cmd",
+    "Run Capture Then Promote Dry Run.cmd",
+    "Run Capture Then Promote WRITE.cmd",
+  ];
+  for (const commandName of commandNames) {
+    const commandPath = path.join(tempDir, commandName);
+    const stat = await fs.stat(commandPath);
+    assert.equal(stat.isFile(), true);
+  }
+
+  const dryRunCommand = await fs.readFile(path.join(tempDir, "Run Capture Then Promote Dry Run.cmd"), "ascii");
+  const writeCommand = await fs.readFile(path.join(tempDir, "Run Capture Then Promote WRITE.cmd"), "ascii");
+
+  assert.match(dryRunCommand, /C:\\GITHUB PROJECTS\\auxsays\.github\.io/);
+  assert.match(dryRunCommand, /run-capture-and-promote\.ps1/);
+  assert.doesNotMatch(dryRunCommand, /(?:^|\s)-(?:-)?write(?:\s|$)/i);
+  assert.match(writeCommand, /set \/p AUXSAYS_CONFIRM=Confirmation:/i);
+  assert.match(writeCommand, /if not "%AUXSAYS_CONFIRM%"=="WRITE"/i);
+  assert.match(writeCommand, /-Write\b/);
+  assert.match(writeCommand, /-ConfirmedWrite\b/);
+
+  const afterProtected = await snapshotProtectedFiles();
+  const afterGenerated = await snapshotGeneratedRecords();
+  assert.deepEqual(afterProtected, beforeProtected);
+  assert.deepEqual(afterGenerated, beforeGenerated);
 });

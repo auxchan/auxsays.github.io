@@ -2,13 +2,13 @@
 
 This is an MVP portable local capture agent for public patch-report pages that cloud runners may fail to fetch because of rate limits, browser challenges, or cloud-runner blocking.
 
-It is a transport only. It writes candidate page captures to JSONL. It does not decide consensus, score reports, edit generated records, write accepted evidence rows, or publish verdicts.
+It is a transport/operator package. Capture writes candidate page captures to JSONL. Promotion is delegated back to repo-owned deterministic scripts; the USB package does not decide consensus, score reports, edit generated records directly, write accepted evidence rows itself, or publish verdicts.
 
 ## Automation Doctrine Fit
 
-AUXSAYS automation should gather, verify, score, summarize, and publish patch intelligence with minimal human intervention. This tool covers only the local gather transport for difficult public pages. The next required step is a deterministic verifier/promoter that reads `outbox/captured-pages.jsonl`, confirms patch-specific evidence, scores it, and writes accepted evidence through repo-owned scripts.
+AUXSAYS automation should gather, verify, score, summarize, and publish patch intelligence with minimal human intervention. This package covers the local gather transport for difficult public pages and provides one-command wrappers that call the repo-owned deterministic verifier/promoter.
 
-Until that verifier exists, this MVP is intentionally incomplete as a full intelligence pipeline. Taylor should not manually review every captured source as the normal workflow; manual review is only for calibration, debugging, and ambiguous fallback cases.
+Taylor should not manually review every captured source as the normal workflow. Manual review is only for calibration, debugging, and ambiguous fallback cases. Accepted evidence must still pass the repo verifier and normal consensus/writeback path.
 
 ## Guardrails
 
@@ -37,6 +37,8 @@ Expected layout:
 D:\AUXSAYS_CAPTURE_PORTABLE\
   Run Capture.cmd
   Run Capture Once.cmd
+  Run Capture Then Promote Dry Run.cmd
+  Run Capture Then Promote WRITE.cmd
   app\
     package.json
     capture-agent.mjs
@@ -105,6 +107,36 @@ cd D:\AUXSAYS_CAPTURE_PORTABLE\app
 powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\run-capture.ps1
 ```
 
+## Run Capture Then Promote
+
+Safe dry-run path:
+
+```text
+D:\AUXSAYS_CAPTURE_PORTABLE\Run Capture Then Promote Dry Run.cmd
+```
+
+This runs capture, then calls:
+
+```powershell
+python auxsays/scripts/promote_local_playwright_captures.py --input "D:\AUXSAYS_CAPTURE_PORTABLE\app\outbox\captured-pages.jsonl" --product-id adobe-premiere-pro --dry-run
+```
+
+Dry-run prints rows read, listing cards found, accepted/rejected counts, unmatched versions, generated records that would update, and files that would change in write mode. It does not modify `consensus_evidence.yml`, `evidence_method_health.yml`, or generated records.
+
+Explicit write path:
+
+```text
+D:\AUXSAYS_CAPTURE_PORTABLE\Run Capture Then Promote WRITE.cmd
+```
+
+The WRITE command requires typing:
+
+```text
+WRITE
+```
+
+before it calls the repo-owned promotion bridge in `--write` mode. Write mode appends accepted evidence through shared helpers and applies generated-record writeback through the existing repo pipeline. It does not move evidence rules into the USB capture agent.
+
 ## Interval Mode
 
 Double-click:
@@ -135,6 +167,8 @@ Logs:
 ```text
 D:\AUXSAYS_CAPTURE_PORTABLE\app\logs\capture.log
 D:\AUXSAYS_CAPTURE_PORTABLE\app\logs\capture-meta.jsonl
+D:\AUXSAYS_CAPTURE_PORTABLE\app\logs\operator-flow.log
+D:\AUXSAYS_CAPTURE_PORTABLE\app\logs\operator-flow-meta.jsonl
 ```
 
 Each JSONL row includes:
