@@ -17,8 +17,8 @@ update_version: The Figma agent is here
 update_logo_text: FIG
 update_published_at: '2026-05-20T00:00:00.000Z'
 update_last_checked: '2026-05-20T15:59:21Z'
-source_last_checked: '2026-05-21T10:05:23Z'
-official_body_last_checked: '2026-05-21T10:05:23Z'
+source_last_checked: '2026-05-21T15:53:02Z'
+official_body_last_checked: '2026-05-21T15:53:02Z'
 record_last_updated: '2026-05-20T15:59:21Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -86,6 +86,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-05-21T10:05:23Z'
+  url: https://www.figma.com/release-notes/?title=the-figma-agent-is-here
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-05-21T15:53:02Z'
   url: https://www.figma.com/release-notes/?title=the-figma-agent-is-here
   status: captured-from-rss-feed
   body_captured: true
