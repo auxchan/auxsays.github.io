@@ -27,8 +27,19 @@ Copy-Item -LiteralPath (Join-Path $SourceRoot "README.md") -Destination (Join-Pa
 Copy-Item -LiteralPath (Join-Path $SourceRoot "scripts\run-capture.ps1") -Destination (Join-Path $AppRoot "scripts\run-capture.ps1") -Force
 
 $CandidatesPath = Join-Path $AppRoot "config\candidates.json"
+$SampleCandidatesPath = Join-Path $AppRoot "config\candidates.sample.json"
+Copy-Item -LiteralPath (Join-Path $SourceRoot "config\candidates.sample.json") -Destination $SampleCandidatesPath -Force
 if (-not (Test-Path -LiteralPath $CandidatesPath)) {
   Copy-Item -LiteralPath (Join-Path $SourceRoot "config\candidates.sample.json") -Destination $CandidatesPath -Force
+}
+else {
+  $existingConfig = Get-Content -LiteralPath $CandidatesPath -Raw -ErrorAction Stop
+  if ($existingConfig -notmatch '"sources"\s*:' -or $existingConfig -notmatch '"config_version"\s*:\s*2') {
+    $backupPath = Join-Path $AppRoot "config\candidates.legacy-backup.json"
+    Copy-Item -LiteralPath $CandidatesPath -Destination $backupPath -Force
+    Copy-Item -LiteralPath (Join-Path $SourceRoot "config\candidates.sample.json") -Destination $CandidatesPath -Force
+    Write-Host "Updated legacy candidate config for source-based deep capture. Backup: $backupPath"
+  }
 }
 
 $runCaptureCmd = @"

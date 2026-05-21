@@ -79,6 +79,10 @@ METHOD_HEALTH_FIELDS = (
     "source_type",
     "status",
     "candidates_found",
+    "accepted_candidates",
+    "duplicate_existing_evidence",
+    "evidence_rows_added",
+    "public_counted_reports",
     "accepted_reports",
     "rejected_reports",
     "blocked_reason",
@@ -271,10 +275,26 @@ def write_evidence_file(rows: list[dict[str, Any]], path: Path = EVIDENCE_PATH) 
 
 def normalize_method_health_row(row: dict[str, Any]) -> dict[str, Any]:
     normalized = {field: row.get(field) for field in METHOD_HEALTH_FIELDS}
-    for field in ("candidates_found", "accepted_reports", "rejected_reports"):
+    for field in (
+        "candidates_found",
+        "accepted_candidates",
+        "duplicate_existing_evidence",
+        "evidence_rows_added",
+        "public_counted_reports",
+        "accepted_reports",
+        "rejected_reports",
+    ):
         normalized[field] = int(normalized.get(field) or 0)
     for field in METHOD_HEALTH_FIELDS:
-        if field in {"candidates_found", "accepted_reports", "rejected_reports"}:
+        if field in {
+            "candidates_found",
+            "accepted_candidates",
+            "duplicate_existing_evidence",
+            "evidence_rows_added",
+            "public_counted_reports",
+            "accepted_reports",
+            "rejected_reports",
+        }:
             continue
         if normalized[field] is None:
             normalized[field] = ""
@@ -347,6 +367,10 @@ def method_health_row(
     blocked_reason: str | None,
     last_run: str,
     notes: str,
+    accepted_candidates: int | None = None,
+    duplicate_existing_evidence: int = 0,
+    evidence_rows_added: int | None = None,
+    public_counted_reports: int | None = None,
 ) -> dict[str, Any]:
     return normalize_method_health_row({
         "product_id": product_id,
@@ -355,6 +379,10 @@ def method_health_row(
         "source_type": source_type,
         "status": status,
         "candidates_found": candidates_found,
+        "accepted_candidates": accepted_reports if accepted_candidates is None else accepted_candidates,
+        "duplicate_existing_evidence": duplicate_existing_evidence,
+        "evidence_rows_added": accepted_reports if evidence_rows_added is None else evidence_rows_added,
+        "public_counted_reports": accepted_reports if public_counted_reports is None else public_counted_reports,
         "accepted_reports": accepted_reports,
         "rejected_reports": rejected_reports,
         "blocked_reason": blocked_reason or "",

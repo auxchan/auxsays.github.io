@@ -11,6 +11,7 @@ import {
   CAPTURE_METHOD,
   appendJsonl,
   classifyBlockedPage,
+  extractCandidateDetailUrlsFromAnchors,
   loadCandidateConfig,
   makeCaptureRow,
   resolveRuntimePaths,
@@ -18,6 +19,7 @@ import {
   serializeJsonl,
   validateCandidates,
   validateCaptureRow,
+  validateSources,
 } from "../capture-agent.mjs";
 
 const thisFile = fileURLToPath(import.meta.url);
@@ -44,6 +46,33 @@ const sampleCandidates = [
     source_name: "Creative COW",
     product_hint: "adobe-premiere-pro",
     version_hint: "26.2",
+  },
+];
+
+const sampleSources = [
+  {
+    product_id: "adobe-premiere-pro",
+    channel: "community",
+    source_name: "Adobe Community",
+    source_type: "adobe_community",
+    listing_urls: ["https://community.adobe.com/t5/premiere-pro-discussions/bd-p/premiere-pro?page=1"],
+    detail_url_allow_patterns: ["^https://community\\.adobe\\.com/t5/premiere-pro-discussions/.+/td-p/\\d+$"],
+    max_listing_pages: 1,
+    max_detail_pages: 2,
+    enabled: true,
+    requires_local_capture: true,
+  },
+  {
+    product_id: "adobe-premiere-pro",
+    channel: "community",
+    source_name: "Creative COW",
+    source_type: "creativecow_forum",
+    listing_urls: ["https://creativecow.net/forums/forum/adobe-premiere-pro/"],
+    detail_url_allow_patterns: ["^https://creativecow\\.net/forums/thread/.+"],
+    max_listing_pages: 1,
+    max_detail_pages: 2,
+    enabled: true,
+    requires_local_capture: true,
   },
 ];
 
@@ -86,12 +115,20 @@ test("parses candidate config arrays and objects", async () => {
 
   const config = await loadCandidateConfig(configPath);
   assert.equal(config.candidates.length, 2);
+  assert.equal(config.sources.length, 0);
   assert.equal(config.maxUrlsPerRun, 1);
 
   const arrayConfigPath = path.join(tempDir, "array-candidates.json");
   await fs.writeFile(arrayConfigPath, JSON.stringify(sampleCandidates), "utf8");
   const arrayConfig = await loadCandidateConfig(arrayConfigPath);
   assert.equal(arrayConfig.candidates.length, 2);
+
+  const sourceConfigPath = path.join(tempDir, "source-candidates.json");
+  await fs.writeFile(sourceConfigPath, JSON.stringify({ sources: sampleSources, candidates: [] }), "utf8");
+  const sourceConfig = await loadCandidateConfig(sourceConfigPath);
+  assert.equal(sourceConfig.candidates.length, 0);
+  assert.equal(sourceConfig.sources.length, 2);
+  assert.equal(sourceConfig.sources[0].max_detail_pages, 2);
 });
 
 test("loads and limits URL list", () => {
@@ -100,6 +137,74 @@ test("loads and limits URL list", () => {
   assert.equal(selected.length, 1);
   assert.equal(selected[0].source_name, "Adobe Community");
   assert.equal(selected[0].source_url, "https://community.adobe.com/t5/premiere-pro-discussions/example/td-p/12345");
+
+  const sources = validateSources(sampleSources);
+  assert.equal(sources.length, 2);
+  assert.equal(sources[1].source_type, "creativecow_forum");
+});
+
+test("Adobe listing extracts same-domain candidate detail URLs", () => {
+  const [source] = validateSources(sampleSources);
+  const listingUrl = source.listing_urls[0];
+  const extracted = extractCandidateDetailUrlsFromAnchors([
+    {
+      href: "/t5/premiere-pro-discussions/premiere-pro-26-2-2-freezes/td-p/1560001",
+      text: "Premiere Pro 26.2.2 freezes",
+      containerText: "Bug Reports Premiere Pro 26.2.2 freezes 5 hours ago",
+    },
+    {
+      href: "https://community.adobe.com/t5/after-effects-discussions/other/td-p/999",
+      text: "Wrong board",
+      containerText: "Yesterday",
+    },
+  ], source, listingUrl);
+
+  assert.equal(extracted.candidates.length, 1);
+  assert.equal(extracted.candidates[0].detail_url, "https://community.adobe.com/t5/premiere-pro-discussions/premiere-pro-26-2-2-freezes/td-p/1560001");
+  assert.equal(extracted.candidates[0].listing_card_date_text, "5 hours ago");
+  assert.equal(extracted.skipped.some((row) => row.reason === "allow_pattern_miss"), true);
+});
+
+test("Creative COW listing extracts candidate thread URLs", () => {
+  const source = validateSources(sampleSources)[1];
+  const listingUrl = source.listing_urls[0];
+  const extracted = extractCandidateDetailUrlsFromAnchors([
+    {
+      href: "https://creativecow.net/forums/thread/premiere-pro-262-export-freezes/",
+      text: "Premiere Pro 26.2.2 export freezes",
+      containerText: "Premiere Pro 26.2.2 export freezes 2 days ago",
+    },
+  ], source, listingUrl);
+
+  assert.equal(extracted.candidates.length, 1);
+  assert.equal(extracted.candidates[0].detail_url, "https://creativecow.net/forums/thread/premiere-pro-262-export-freezes");
+  assert.equal(extracted.candidates[0].listing_card_date_text, "2 days ago");
+});
+
+test("detail URLs are bounded by allow patterns and duplicate URLs visit once", () => {
+  const source = validateSources(sampleSources)[1];
+  const listingUrl = source.listing_urls[0];
+  const extracted = extractCandidateDetailUrlsFromAnchors([
+    {
+      href: "https://creativecow.net/forums/thread/premiere-pro-262-export-freezes/?utm_source=x",
+      text: "Premiere Pro 26.2.2 export freezes",
+      containerText: "2 days ago",
+    },
+    {
+      href: "https://creativecow.net/forums/thread/premiere-pro-262-export-freezes/",
+      text: "Duplicate title",
+      containerText: "2 days ago",
+    },
+    {
+      href: "https://example.com/forums/thread/premiere-pro-262-export-freezes/",
+      text: "External",
+      containerText: "2 days ago",
+    },
+  ], source, listingUrl);
+
+  assert.equal(extracted.candidates.length, 1);
+  assert.equal(extracted.skipped.some((row) => row.reason === "duplicate_candidate_url"), true);
+  assert.equal(extracted.skipped.some((row) => row.reason === "different_domain"), true);
 });
 
 test("serializes JSONL output shape", () => {

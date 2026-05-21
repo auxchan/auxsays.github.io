@@ -93,6 +93,9 @@ function Invoke-LoggedProcess {
 }
 
 function Find-PythonCommand {
+  if ($Env:PYTHON -and (Test-Path -LiteralPath $Env:PYTHON -PathType Leaf)) {
+    return [pscustomobject]@{ FilePath = $Env:PYTHON; PrefixArgs = @() }
+  }
   $python = Get-Command python -ErrorAction SilentlyContinue
   if ($python) {
     return [pscustomobject]@{ FilePath = $python.Source; PrefixArgs = @() }
@@ -100,6 +103,10 @@ function Find-PythonCommand {
   $py = Get-Command py -ErrorAction SilentlyContinue
   if ($py) {
     return [pscustomobject]@{ FilePath = $py.Source; PrefixArgs = @("-3") }
+  }
+  $codexPython = Join-Path $Env:USERPROFILE ".cache\codex-runtimes\codex-primary-runtime\dependencies\python\python.exe"
+  if (Test-Path -LiteralPath $codexPython -PathType Leaf) {
+    return [pscustomobject]@{ FilePath = $codexPython; PrefixArgs = @() }
   }
   return $null
 }
@@ -149,14 +156,40 @@ function Show-PromotionSummary {
   Write-Host "---------------------------------------"
   Write-Host ("Rows read: {0}" -f $Summary.rows_read)
   Write-Host ("Listing cards found: {0}" -f $Summary.listing_cards_found)
+  if ($null -ne $Summary.detail_pages_found) {
+    Write-Host ("Detail pages parsed: {0}" -f $Summary.detail_pages_found)
+  }
+  if ($null -ne $Summary.candidates_found) {
+    Write-Host ("Candidate reports evaluated: {0}" -f $Summary.candidates_found)
+  }
   Write-Host ("Accepted: {0}" -f $Summary.accepted_count)
   Write-Host ("Rejected: {0}" -f $Summary.rejected_count)
+  if ($null -ne $Summary.duplicate_existing_evidence) {
+    Write-Host ("Duplicate existing evidence: {0}" -f $Summary.duplicate_existing_evidence)
+  }
   Write-Host ("Unmatched versions: {0}" -f (($Summary.unmatched_versions -join ", ") -replace "^$", "none"))
   Write-Host ("Generated records that would update: {0}" -f (($wouldUpdate -join ", ") -replace "^$", "none"))
   Write-Host "Files that would change in write mode:"
   foreach ($path in @($Summary.output_files_that_would_change)) {
     Write-Host ("  {0}" -f $path)
   }
+}
+
+function Show-CaptureSummary {
+  param([object]$Summary)
+  if (-not $Summary) {
+    Write-OperatorLine "Capture summary could not be parsed; see operator-flow.log for raw output."
+    return
+  }
+
+  Write-Host ""
+  Write-Host "AUXSAYS local capture summary"
+  Write-Host "-----------------------------"
+  Write-Host ("Rows written: {0}" -f $Summary.rows_written)
+  Write-Host ("Listing pages captured: {0}" -f $Summary.listing_pages_captured)
+  Write-Host ("Candidate detail URLs extracted: {0}" -f $Summary.candidate_detail_urls_extracted)
+  Write-Host ("Detail pages captured: {0}" -f $Summary.detail_pages_captured)
+  Write-Host ("Skipped URLs logged: {0}" -f $Summary.skipped_urls)
 }
 
 $RepoPath = [System.IO.Path]::GetFullPath($RepoPath)
@@ -216,6 +249,8 @@ try {
     if ($captureResult.ExitCode -ne 0) {
       throw "Capture failed with exit code $($captureResult.ExitCode)."
     }
+    $captureSummary = Parse-PromotionSummary -Text $captureResult.Stdout
+    Show-CaptureSummary -Summary $captureSummary
   }
   else {
     Write-OperatorLine "Skipping capture; using existing captured-pages.jsonl."
@@ -280,9 +315,16 @@ try {
     skip_capture = [bool]$SkipCapture
     max_rows = if ($MaxRows -gt 0) { $MaxRows } else { $null }
   }
+  if ($captureSummary) {
+    $meta["listing_pages_captured"] = $captureSummary.listing_pages_captured
+    $meta["candidate_detail_urls_extracted"] = $captureSummary.candidate_detail_urls_extracted
+    $meta["detail_pages_captured"] = $captureSummary.detail_pages_captured
+  }
   if ($summary) {
     $meta["rows_read"] = $summary.rows_read
     $meta["listing_cards_found"] = $summary.listing_cards_found
+    $meta["detail_pages_found"] = $summary.detail_pages_found
+    $meta["candidates_found"] = $summary.candidates_found
     $meta["accepted_count"] = $summary.accepted_count
     $meta["rejected_count"] = $summary.rejected_count
     $meta["unmatched_version_count"] = $summary.unmatched_version_count

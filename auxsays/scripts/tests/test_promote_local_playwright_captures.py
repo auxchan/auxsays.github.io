@@ -185,6 +185,42 @@ Adobe Premiere Pro 26.2.2 freezes for several minutes during export and timeline
 """
 
 
+def detail_capture_row(
+    title: str,
+    body: str,
+    *,
+    source_url: str = "https://community.adobe.com/t5/premiere-pro-discussions/premiere-pro-26-2-2-freezes/td-p/1560001",
+    source_name: str = "Adobe Community",
+    source_type: str = "adobe_community",
+    source_date_text: str = "May 21, 2026",
+    source_date_resolved: str = "2026-05-21T10:00:00.000Z",
+    listing_card_title: str = "",
+    captured_at: str = "2026-05-21T12:00:00Z",
+) -> dict[str, object]:
+    return {
+        "source_url": source_url,
+        "detail_url": source_url,
+        "final_url": source_url,
+        "source_name": source_name,
+        "source_type": source_type,
+        "product_id": "adobe-premiere-pro",
+        "product_hint": "adobe-premiere-pro",
+        "version_hint": "26.2",
+        "page_title": title,
+        "title": title,
+        "visible_text": f"{title}\n{source_date_text}\n{body}",
+        "body_text": body,
+        "source_date_text": source_date_text,
+        "source_date_resolved": source_date_resolved,
+        "listing_card_title": listing_card_title,
+        "listing_card_date_text": source_date_text,
+        "captured_at": captured_at,
+        "capture_method": "local_playwright",
+        "capture_status": "success",
+        "url_dedupe_key": source_url.rstrip("/"),
+    }
+
+
 def fake_record(version: str = "26.2.2", published_at: str = "2026-05-20T00:00:00Z", product: str = "Premiere Pro") -> object:
     return types.SimpleNamespace(
         product_id="adobe-premiere-pro",
@@ -335,6 +371,92 @@ def run() -> int:
     )
     check("accepts Creative COW listing fixture with exact version and concrete issue", creative_concrete.get("counted") is True, str(creative_concrete))
 
+    adobe_detail_candidates = candidates_from_capture(
+        detail_capture_row(
+            "Premiere Pro 26.2.2 freezes when opening menus",
+            "Using Adobe Premiere Pro 26.2.2, the application freezes whenever I open a drop-down menu while editing.",
+        ),
+        product_id="adobe-premiere-pro",
+    )
+    adobe_detail = evaluate_candidate(adobe_detail_candidates[0], {"26.2.2": fake_record("26.2.2", "2026-05-01T00:00:00Z")})
+    check(
+        "detail-page rows promote through exact version matching",
+        adobe_detail.get("counted") is True
+        and adobe_detail.get("match_basis") == "exact_version"
+        and adobe_detail.get("source_url", "").endswith("/td-p/1560001"),
+        str(adobe_detail),
+    )
+
+    inferred_detail = evaluate_candidate(
+        candidates_from_capture(detail_capture_row(
+            "Export freezes after the latest update",
+            "Adobe Premiere Pro freezes during export after the latest update.",
+            source_url="https://community.adobe.com/t5/premiere-pro-discussions/export-freezes-latest-update/td-p/1560002",
+            listing_card_title="Export freezes after the latest update",
+        ), product_id="adobe-premiere-pro")[0],
+        record_map(stable_2622, stable_2623),
+    )
+    check(
+        "detail-page rows promote through release-window inference when valid",
+        inferred_detail.get("counted") is True
+        and inferred_detail.get("update_version") == "26.2.2"
+        and inferred_detail.get("match_basis") == "release_window_inferred",
+        str(inferred_detail),
+    )
+
+    creative_detail_title_only = evaluate_candidate(
+        candidates_from_capture(detail_capture_row(
+            "WARNING: PPro Version 26.2.2 gives you more time to watch paint dry...",
+            "WARNING: PPro Version 26.2.2 gives you more time to watch paint dry...",
+            source_url="https://creativecow.net/forums/thread/premiere-pro-262-title-only/",
+            source_name="Creative COW",
+            source_type="creativecow_forum",
+            source_date_text="May 21, 2026",
+            source_date_resolved="2026-05-21T10:00:00.000Z",
+        ), product_id="adobe-premiere-pro")[0],
+        {"26.2.2": fake_record("26.2.2", "2026-05-01T00:00:00Z")},
+    )
+    check(
+        "Creative COW title-only detail page remains rejected without concrete issue text",
+        creative_detail_title_only.get("counted") is False
+        and creative_detail_title_only.get("exclusion_reason") == "not_a_real_issue_report",
+        str(creative_detail_title_only),
+    )
+
+    creative_detail = evaluate_candidate(
+        candidates_from_capture(detail_capture_row(
+            "Premiere Pro 26.2.2 export freezes",
+            "Adobe Premiere Pro 26.2.2 freezes for several minutes during export and timeline editing after the update.",
+            source_url="https://creativecow.net/forums/thread/premiere-pro-262-export-freezes/",
+            source_name="Creative COW",
+            source_type="creativecow_forum",
+            source_date_text="May 21, 2026",
+            source_date_resolved="2026-05-21T10:00:00.000Z",
+        ), product_id="adobe-premiere-pro")[0],
+        {"26.2.2": fake_record("26.2.2", "2026-05-01T00:00:00Z")},
+    )
+    check("Creative COW detail page with exact version and concrete issue can count", creative_detail.get("counted") is True, str(creative_detail))
+
+    detail_feature = evaluate_candidate(
+        candidates_from_capture(detail_capture_row(
+            "Premiere Pro 26.2.2 should add new labels",
+            "Feature request: Adobe Premiere Pro 26.2.2 should add a new color label option.",
+            source_url="https://community.adobe.com/t5/premiere-pro-discussions/new-labels/td-p/1560003",
+        ), product_id="adobe-premiere-pro")[0],
+        {"26.2.2": fake_record("26.2.2", "2026-05-01T00:00:00Z")},
+    )
+    check("feature requests still reject from detail pages", detail_feature.get("counted") is False and detail_feature.get("exclusion_reason") == "not_a_real_issue_report", str(detail_feature))
+
+    detail_announcement = evaluate_candidate(
+        candidates_from_capture(detail_capture_row(
+            "What's New in Adobe Premiere 26.2.2",
+            "Official announcement: Adobe says Premiere Pro 26.2.2 brings a range of improvements and release notes.",
+            source_url="https://community.adobe.com/announcements-727/what-s-new-in-adobe-premiere-26-2-2/td-p/1560004",
+        ), product_id="adobe-premiere-pro")[0],
+        {"26.2.2": fake_record("26.2.2", "2026-05-01T00:00:00Z")},
+    )
+    check("official announcements still reject from detail pages", detail_announcement.get("counted") is False and detail_announcement.get("exclusion_reason") == "official_announcement_not_user_evidence", str(detail_announcement))
+
     old_record_row = evaluate_candidate(candidates[0], {"26.2": fake_record("26.2")})
     check("does not map 26.2.2 evidence to 26.2 without family rule", old_record_row.get("update_version") == "26.2.2", str(old_record_row))
     check("26.2.2 can be accepted but unmatched when no 26.2.2 record exists", old_record_row.get("counted") is True, str(old_record_row))
@@ -369,6 +491,33 @@ def run() -> int:
             bridge.generated_records = original_generated
             bridge.load_evidence = original_load_evidence
         check("dedupes against existing evidence card IDs", len(result.accepted) == 0 and any(item.get("exclusion_reason") == "duplicate_existing_evidence" for item in result.rejected), str(result.rejected))
+
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp_path = Path(tmp)
+        input_path = tmp_path / "captured-pages.jsonl"
+        shared_title = "In 26.2.2, the app would freeze whenever I needed to open a drop-down in the menu."
+        detail_row = detail_capture_row(
+            shared_title,
+            "Using Adobe Premiere Pro 26.2.2, the application freezes whenever I open a drop-down menu while editing.",
+            listing_card_title=shared_title,
+        )
+        write_jsonl(input_path, [capture_row(adobe_bug_listing_text()), detail_row])
+        original_generated = bridge.generated_records
+        original_load_evidence = bridge.load_evidence
+        try:
+            bridge.generated_records = lambda *_args, **_kwargs: [fake_record("26.2.2", "2026-05-01T00:00:00Z")]
+            bridge.load_evidence = lambda *_args, **_kwargs: []
+            result = promote(input_path=input_path, product_id="adobe-premiere-pro", max_rows=100, write=False)
+        finally:
+            bridge.generated_records = original_generated
+            bridge.load_evidence = original_load_evidence
+        check(
+            "listing-card and detail-page version of same report dedupe to one detail evidence row",
+            len(result.accepted) == 1
+            and result.accepted[0].get("source_url", "").endswith("/td-p/1560001")
+            and any(item.get("exclusion_reason") == "duplicate_detail_page_evidence" for item in result.rejected),
+            f"accepted={result.accepted} rejected={result.rejected}",
+        )
 
     before = protected_snapshot()
     with tempfile.TemporaryDirectory() as tmp:

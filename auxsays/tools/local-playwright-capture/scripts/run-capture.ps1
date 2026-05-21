@@ -21,6 +21,8 @@ try {
     "--outbox", "outbox\captured-pages.jsonl",
     "--log-file", "logs\capture.log",
     "--meta-log", "logs\capture-meta.jsonl",
+    "--detail-log", "logs\capture-detail-pages.jsonl",
+    "--skipped-url-log", "logs\capture-skipped-urls.jsonl",
     "--max-urls", $MaxUrls,
     "--timeout-ms", $TimeoutMs
   )

@@ -1,17 +1,44 @@
 {
+  "config_version": 2,
   "max_urls_per_run": 10,
-  "candidates": [
+  "sources": [
     {
-      "source_url": "https://community.adobe.com/t5/premiere-pro-discussions/bd-p/premiere-pro?page=1",
+      "product_id": "adobe-premiere-pro",
+      "channel": "community",
       "source_name": "Adobe Community",
-      "product_hint": "adobe-premiere-pro",
-      "version_hint": "26.2"
+      "source_type": "adobe_community",
+      "listing_urls": [
+        "https://community.adobe.com/t5/premiere-pro-discussions/bd-p/premiere-pro?page=1"
+      ],
+      "search_urls": [],
+      "detail_url_allow_patterns": [
+        "^https://community\\.adobe\\.com/(?:bug-reports|questions|announcements)-\\d+/.+-\\d+$",
+        "^https://community\\.adobe\\.com/t5/premiere-pro-(?:discussions|bugs)/.+/(?:td|idi)-p/\\d+$"
+      ],
+      "max_listing_pages": 1,
+      "max_detail_pages": 4,
+      "enabled": true,
+      "requires_local_capture": true,
+      "notes": "Deep-captures recent Premiere Pro discussion detail pages from configured listing pages."
     },
     {
-      "source_url": "https://creativecow.net/forums/forum/adobe-premiere-pro/",
+      "product_id": "adobe-premiere-pro",
+      "channel": "community",
       "source_name": "Creative COW",
-      "product_hint": "adobe-premiere-pro",
-      "version_hint": "26.2"
+      "source_type": "creativecow_forum",
+      "listing_urls": [
+        "https://creativecow.net/forums/forum/adobe-premiere-pro/"
+      ],
+      "search_urls": [],
+      "detail_url_allow_patterns": [
+        "^https://creativecow\\.net/forums/thread/.+"
+      ],
+      "max_listing_pages": 1,
+      "max_detail_pages": 4,
+      "enabled": true,
+      "requires_local_capture": true,
+      "notes": "Deep-captures recent Premiere Pro forum thread detail pages from configured listing pages."
     }
-  ]
+  ],
+  "candidates": []
 }

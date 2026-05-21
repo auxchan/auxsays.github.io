@@ -10,6 +10,9 @@ export const APP_NAME = "AUXSAYS Local Playwright Capture";
 export const DEFAULT_MAX_URLS_PER_RUN = 10;
 export const DEFAULT_TIMEOUT_MS = 30000;
 export const DEFAULT_TEXT_LIMIT = 60000;
+export const DEFAULT_DETAIL_TEXT_LIMIT = 30000;
+export const DEFAULT_MAX_LISTING_PAGES = 1;
+export const DEFAULT_MAX_DETAIL_PAGES = 10;
 export const CAPTURE_STATUSES = new Set(["success", "blocked", "error"]);
 
 export const REQUIRED_CANDIDATE_FIELDS = [
@@ -17,6 +20,15 @@ export const REQUIRED_CANDIDATE_FIELDS = [
   "source_name",
   "product_hint",
   "version_hint",
+];
+
+export const REQUIRED_SOURCE_FIELDS = [
+  "product_id",
+  "channel",
+  "source_name",
+  "source_type",
+  "listing_urls",
+  "detail_url_allow_patterns",
 ];
 
 export const REQUIRED_OUTPUT_FIELDS = [
@@ -55,6 +67,8 @@ Options:
   --outbox <path>               JSONL output file. Default: ./outbox/captured-pages.jsonl
   --log-file <path>             Human-readable log. Default: ./logs/capture.log
   --meta-log <path>             JSONL meta log. Default: ./logs/capture-meta.jsonl
+  --detail-log <path>            Captured detail-page JSONL log. Default: ./logs/capture-detail-pages.jsonl
+  --skipped-url-log <path>       Skipped candidate URL JSONL log. Default: ./logs/capture-skipped-urls.jsonl
   --max-urls <number>           Maximum candidate URLs per run. Default: 10
   --timeout-ms <number>         Timeout per page. Default: 30000
   --interval-minutes <number>   Run repeatedly with this delay between runs.
@@ -94,6 +108,8 @@ export function resolveRuntimePaths(options = {}) {
     outboxPath: path.resolve(options.outbox || path.join(appRoot, "outbox", "captured-pages.jsonl")),
     logFilePath: path.resolve(options.logFile || path.join(appRoot, "logs", "capture.log")),
     metaLogPath: path.resolve(options.metaLog || path.join(appRoot, "logs", "capture-meta.jsonl")),
+    detailLogPath: path.resolve(options.detailLog || path.join(appRoot, "logs", "capture-detail-pages.jsonl")),
+    skippedUrlLogPath: path.resolve(options.skippedUrlLog || path.join(appRoot, "logs", "capture-skipped-urls.jsonl")),
   };
 }
 
@@ -105,14 +121,22 @@ export async function loadCandidateConfig(configPath, options = {}) {
     throw new Error(`Unable to read candidate config at ${configPath}: ${error.message}`);
   }
 
-  const candidates = Array.isArray(parsed) ? parsed : parsed.candidates;
+  const candidates = Array.isArray(parsed) ? parsed : (parsed.candidates || []);
+  const sources = Array.isArray(parsed) ? [] : (parsed.sources || []);
   if (!Array.isArray(candidates)) {
-    throw new Error("candidate config must be an array or an object with a candidates array");
+    throw new Error("candidate config candidates field must be an array");
+  }
+  if (!Array.isArray(sources)) {
+    throw new Error("candidate config sources field must be an array");
+  }
+  if (!candidates.length && !sources.length) {
+    throw new Error("candidate config must include candidates or sources");
   }
 
   const maxUrlsPerRun = Number(parsed.max_urls_per_run ?? parsed.maxUrlsPerRun ?? DEFAULT_MAX_URLS_PER_RUN);
   return {
     candidates: validateCandidates(candidates, options),
+    sources: validateSources(sources, options),
     maxUrlsPerRun: Number.isFinite(maxUrlsPerRun) && maxUrlsPerRun > 0
       ? Math.floor(maxUrlsPerRun)
       : DEFAULT_MAX_URLS_PER_RUN,
@@ -134,6 +158,58 @@ export function validateCandidates(candidates, options = {}) {
       version_hint: normalizeText(candidate.version_hint),
     };
   });
+}
+
+export function validateSources(sources, options = {}) {
+  return sources
+    .filter((source) => source && source.enabled !== false)
+    .map((source, index) => {
+      for (const field of REQUIRED_SOURCE_FIELDS) {
+        const value = source[field];
+        const missingArray = Array.isArray(value) && value.length === 0;
+        if ((!Array.isArray(value) && !String(value ?? "").trim()) || missingArray) {
+          throw new Error(`source ${index + 1} missing required field: ${field}`);
+        }
+      }
+      if (!Array.isArray(source.listing_urls)) {
+        throw new Error(`source ${index + 1} listing_urls must be an array`);
+      }
+      if (!Array.isArray(source.detail_url_allow_patterns)) {
+        throw new Error(`source ${index + 1} detail_url_allow_patterns must be an array`);
+      }
+      for (const pattern of source.detail_url_allow_patterns) {
+        try {
+          new RegExp(String(pattern));
+        } catch (error) {
+          throw new Error(`source ${index + 1} invalid detail_url_allow_patterns entry: ${error.message}`);
+        }
+      }
+      const listingUrls = source.listing_urls.map((url) => normalizeCandidateUrl(url, options));
+      const maxListingPages = positiveInt(source.max_listing_pages ?? source.maxListingPages, DEFAULT_MAX_LISTING_PAGES);
+      const maxDetailPages = positiveInt(source.max_detail_pages ?? source.maxDetailPages, DEFAULT_MAX_DETAIL_PAGES);
+      return {
+        product_id: normalizeText(source.product_id),
+        channel: normalizeText(source.channel),
+        source_name: normalizeText(source.source_name),
+        source_type: normalizeText(source.source_type),
+        listing_urls: listingUrls,
+        search_urls: Array.isArray(source.search_urls)
+          ? source.search_urls.map((url) => normalizeCandidateUrl(url, options))
+          : [],
+        detail_url_allow_patterns: source.detail_url_allow_patterns.map((pattern) => String(pattern)),
+        max_listing_pages: maxListingPages,
+        max_detail_pages: maxDetailPages,
+        enabled: source.enabled !== false,
+        requires_local_capture: source.requires_local_capture !== false,
+        notes: normalizeText(source.notes || ""),
+        version_hint: normalizeText(source.version_hint || ""),
+      };
+    });
+}
+
+export function positiveInt(value, fallback) {
+  const parsed = Number(value);
+  return Number.isFinite(parsed) && parsed > 0 ? Math.floor(parsed) : fallback;
 }
 
 export function normalizeCandidateUrl(value, options = {}) {
@@ -266,6 +342,12 @@ export async function writeMetaLine(filePath, event) {
   await fs.appendFile(filePath, `${JSON.stringify({ captured_at: utcTimestamp(), app_name: APP_NAME, ...event })}\n`, "utf8");
 }
 
+export async function appendRawJsonl(filePath, row) {
+  await assertOutboxPath(filePath);
+  await fs.mkdir(path.dirname(filePath), { recursive: true });
+  await fs.appendFile(filePath, `${JSON.stringify(row)}\n`, "utf8");
+}
+
 export async function assertOutboxPath(filePath) {
   const normalized = path.resolve(filePath).replace(/\\/g, "/").toLowerCase();
   for (const marker of FORBIDDEN_REPO_WRITE_PATH_MARKERS) {
@@ -322,12 +404,217 @@ export async function captureCandidate(page, candidate, timeoutMs) {
   }
 }
 
+export function canonicalDedupeUrl(value) {
+  let parsed;
+  try {
+    parsed = new URL(String(value ?? "").trim());
+  } catch {
+    return "";
+  }
+  if (!["http:", "https:"].includes(parsed.protocol)) {
+    return "";
+  }
+  parsed.hash = "";
+  parsed.username = "";
+  parsed.password = "";
+  parsed.protocol = parsed.protocol.toLowerCase();
+  parsed.hostname = parsed.hostname.toLowerCase();
+  if (parsed.hostname === "www.creativecow.net") {
+    parsed.hostname = "creativecow.net";
+  }
+  parsed.pathname = parsed.pathname.replace(/\/+/g, "/").replace(/\/$/, "");
+  parsed.search = "";
+  return parsed.toString();
+}
+
+export function sameDomainUrl(candidateUrl, listingUrl) {
+  try {
+    const candidate = new URL(candidateUrl);
+    const listing = new URL(listingUrl);
+    const candidateHost = candidate.hostname.toLowerCase().replace(/^www\./, "");
+    const listingHost = listing.hostname.toLowerCase().replace(/^www\./, "");
+    return candidateHost === listingHost;
+  } catch {
+    return false;
+  }
+}
+
+export function urlAllowedByPatterns(url, patterns) {
+  return patterns.some((pattern) => new RegExp(pattern).test(url));
+}
+
+export function extractDateText(text) {
+  const match = String(text || "").match(
+    /\b(?:\d+\s+(?:minute|hour|day|week|month|year)s?\s+ago|yesterday|today|(?:Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?|Sep(?:t(?:ember)?)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\s+\d{1,2},\s+20\d{2})\b/i,
+  );
+  return match ? match[0] : "";
+}
+
+export function extractCandidateDetailUrlsFromAnchors(anchors, source, listingUrl) {
+  const candidates = [];
+  const skipped = [];
+  const seen = new Set();
+
+  for (const anchor of anchors) {
+    let absoluteUrl = "";
+    try {
+      absoluteUrl = new URL(String(anchor.href || ""), listingUrl).toString();
+    } catch {
+      skipped.push({ candidate_url: String(anchor.href || ""), reason: "invalid_url" });
+      continue;
+    }
+
+    const dedupeKey = canonicalDedupeUrl(absoluteUrl);
+    if (!dedupeKey) {
+      skipped.push({ candidate_url: absoluteUrl, reason: "unsupported_url" });
+      continue;
+    }
+    if (!sameDomainUrl(dedupeKey, listingUrl)) {
+      skipped.push({ candidate_url: absoluteUrl, reason: "different_domain" });
+      continue;
+    }
+    if (!urlAllowedByPatterns(dedupeKey, source.detail_url_allow_patterns)) {
+      skipped.push({ candidate_url: absoluteUrl, reason: "allow_pattern_miss" });
+      continue;
+    }
+    if (seen.has(dedupeKey)) {
+      skipped.push({ candidate_url: absoluteUrl, reason: "duplicate_candidate_url", url_dedupe_key: dedupeKey });
+      continue;
+    }
+    seen.add(dedupeKey);
+    const listingCardTitle = normalizeText(anchor.text || anchor.title || anchor.ariaLabel || "");
+    const listingCardDateText = extractDateText(anchor.containerText || "");
+    candidates.push({
+      detail_url: dedupeKey,
+      url_dedupe_key: dedupeKey,
+      listing_card_title: listingCardTitle,
+      listing_card_date_text: listingCardDateText,
+      listing_source_url: listingUrl,
+      source_name: source.source_name,
+      source_type: source.source_type,
+      product_id: source.product_id,
+      channel: source.channel,
+    });
+  }
+
+  return { candidates, skipped };
+}
+
+export async function extractCandidateDetailUrls(page, source, listingUrl) {
+  const anchors = await page.locator("a[href]").evaluateAll((nodes) => nodes.map((node) => {
+    const container = node.closest("article, li, tr, .lia-list-row, .lia-message-view, .message-list-item, .topic, .bbp-topic, div");
+    return {
+      href: node.getAttribute("href") || "",
+      text: node.textContent || "",
+      title: node.getAttribute("title") || "",
+      ariaLabel: node.getAttribute("aria-label") || "",
+      containerText: container ? (container.textContent || "") : (node.parentElement ? node.parentElement.textContent || "" : ""),
+    };
+  })).catch(() => []);
+  return extractCandidateDetailUrlsFromAnchors(anchors, source, listingUrl);
+}
+
+export async function captureDetailPage(page, detailCandidate, source, timeoutMs) {
+  const candidate = {
+    source_url: detailCandidate.detail_url,
+    source_name: source.source_name,
+    product_hint: source.product_id,
+    version_hint: source.version_hint || "",
+  };
+  const baseRow = await captureCandidate(page, candidate, timeoutMs);
+  if (baseRow.capture_status !== "success") {
+    return {
+      ...baseRow,
+      product_id: source.product_id,
+      source_type: source.source_type,
+      detail_url: detailCandidate.detail_url,
+      listing_source_url: detailCandidate.listing_source_url,
+      listing_card_title: detailCandidate.listing_card_title || "",
+      listing_card_date_text: detailCandidate.listing_card_date_text || "",
+      url_dedupe_key: detailCandidate.url_dedupe_key,
+    };
+  }
+
+  const detailData = await page.evaluate(() => {
+    const textOf = (selector) => {
+      const node = document.querySelector(selector);
+      return node ? (node.textContent || "").trim() : "";
+    };
+    const title = textOf("h1") || textOf("h2") || document.title || "";
+    const main = document.querySelector("article, main, [role='main'], .lia-message-body-content, .bbp-reply-content") || document.body;
+    const bodyText = main ? (main.innerText || main.textContent || "") : "";
+    const timeNode = document.querySelector("time[datetime], time");
+    const timeDate = timeNode ? (timeNode.getAttribute("datetime") || "") : "";
+    const timeText = timeNode ? (timeNode.textContent || "").trim() : "";
+    const author = textOf("[rel='author']") || textOf(".lia-user-name") || textOf(".author") || textOf(".bbp-author-name");
+    const fullText = document.body ? (document.body.innerText || "") : "";
+    const categoryMatch = fullText.match(/\b(Bug Reports|Discussions|Questions|Ideas|Feature Requests|Community)\b/i);
+    const statusMatch = fullText.match(/\b(Open for Voting|Needs More Info|Solved|Unsolved|Closed|Locked)\b/i);
+    return {
+      title,
+      bodyText,
+      sourceDateText: timeText || timeDate,
+      sourceDateResolved: timeDate,
+      authorContext: author,
+      category: categoryMatch ? categoryMatch[1] : "",
+      status: statusMatch ? statusMatch[1] : "",
+    };
+  }).catch(() => ({
+    title: baseRow.page_title,
+    bodyText: baseRow.visible_text,
+    sourceDateText: "",
+    sourceDateResolved: "",
+    authorContext: "",
+    category: "",
+    status: "",
+  }));
+
+  const title = normalizeText(detailData.title || baseRow.page_title);
+  const bodyText = normalizeText(detailData.bodyText || baseRow.visible_text, DEFAULT_DETAIL_TEXT_LIMIT);
+  const sourceDateText = normalizeText(detailData.sourceDateText || extractDateText(bodyText) || detailCandidate.listing_card_date_text || "");
+  const sourceDateResolved = normalizeResolvedDate(detailData.sourceDateResolved || "");
+
+  return {
+    ...baseRow,
+    product_id: source.product_id,
+    channel: source.channel,
+    source_type: source.source_type,
+    detail_url: detailCandidate.detail_url,
+    listing_source_url: detailCandidate.listing_source_url,
+    title,
+    body_text: bodyText,
+    excerpt: normalizeText(bodyText, 1200),
+    source_date_text: sourceDateText,
+    source_date_resolved: sourceDateResolved,
+    listing_card_title: detailCandidate.listing_card_title || "",
+    listing_card_date_text: detailCandidate.listing_card_date_text || "",
+    category: normalizeText(detailData.category || ""),
+    status: normalizeText(detailData.status || ""),
+    author_context: normalizeText(detailData.authorContext || ""),
+    url_dedupe_key: detailCandidate.url_dedupe_key,
+    visible_text: normalizeText([title, sourceDateText, bodyText].filter(Boolean).join("\n"), DEFAULT_TEXT_LIMIT),
+  };
+}
+
+export function normalizeResolvedDate(value) {
+  const text = String(value || "").trim();
+  if (!text) {
+    return "";
+  }
+  const parsed = new Date(text);
+  if (Number.isNaN(parsed.getTime())) {
+    return text;
+  }
+  return parsed.toISOString();
+}
+
 export async function runCaptureOnce(options = {}) {
   const paths = resolveRuntimePaths(options);
   const config = await loadCandidateConfig(paths.configPath, {
     allowLocalhostTest: options.allowLocalhostTest,
   });
   const candidates = config.candidates;
+  const sources = config.sources;
   const maxUrls = Number(options.maxUrls ?? config.maxUrlsPerRun ?? DEFAULT_MAX_URLS_PER_RUN);
   const selected = selectCandidatesForRun(candidates, maxUrls);
   const timeoutMs = Number(options.timeoutMs ?? DEFAULT_TIMEOUT_MS);
@@ -339,16 +626,20 @@ export async function runCaptureOnce(options = {}) {
       outbox_path: paths.outboxPath,
       log_file: paths.logFilePath,
       meta_log: paths.metaLogPath,
+      detail_log: paths.detailLogPath,
+      skipped_url_log: paths.skippedUrlLogPath,
       candidates_loaded: candidates.length,
       candidates_selected: selected.length,
+      sources_loaded: sources.length,
     };
   }
 
-  await writeLogLine(paths.logFilePath, `run started; selected ${selected.length} candidate URL(s)`);
+  await writeLogLine(paths.logFilePath, `run started; selected ${selected.length} candidate URL(s), ${sources.length} source(s)`);
   await writeMetaLine(paths.metaLogPath, {
     event: "run_started",
     candidates_loaded: candidates.length,
     candidates_selected: selected.length,
+    sources_loaded: sources.length,
     outbox_path: paths.outboxPath,
   });
 
@@ -358,12 +649,18 @@ export async function runCaptureOnce(options = {}) {
     candidates_loaded: candidates.length,
     candidates_selected: selected.length,
     rows_written: 0,
+    listing_pages_captured: 0,
+    candidate_detail_urls_extracted: 0,
+    detail_pages_captured: 0,
+    skipped_urls: 0,
     success: 0,
     blocked: 0,
     error: 0,
     outbox_path: paths.outboxPath,
     log_file: paths.logFilePath,
     meta_log: paths.metaLogPath,
+    detail_log: paths.detailLogPath,
+    skipped_url_log: paths.skippedUrlLogPath,
   };
 
   try {
@@ -399,6 +696,108 @@ export async function runCaptureOnce(options = {}) {
       });
     }
 
+    for (const source of sources) {
+      const listingUrls = source.listing_urls.slice(0, source.max_listing_pages);
+      const sourceDetailSeen = new Set();
+      for (const listingUrl of listingUrls) {
+        const listingCandidate = {
+          source_url: listingUrl,
+          source_name: source.source_name,
+          product_hint: source.product_id,
+          version_hint: source.version_hint || "",
+        };
+        await writeMetaLine(paths.metaLogPath, {
+          event: "listing_started",
+          source_url: listingUrl,
+          source_name: source.source_name,
+          source_type: source.source_type,
+        });
+        const listingRow = await captureCandidate(page, listingCandidate, timeoutMs);
+        listingRow.product_id = source.product_id;
+        listingRow.channel = source.channel;
+        listingRow.source_type = source.source_type;
+        listingRow.requires_local_capture = source.requires_local_capture;
+        await appendJsonl(paths.outboxPath, listingRow);
+        summary.rows_written += 1;
+        summary[listingRow.capture_status] += 1;
+        if (listingRow.capture_status === "success") {
+          summary.listing_pages_captured += 1;
+          const extracted = await extractCandidateDetailUrls(page, source, listingUrl);
+          for (const skipped of extracted.skipped) {
+            summary.skipped_urls += 1;
+            await appendRawJsonl(paths.skippedUrlLogPath, {
+              ...skipped,
+              source_name: source.source_name,
+              source_type: source.source_type,
+              source_url: listingUrl,
+              captured_at: utcTimestamp(),
+            });
+          }
+          const detailCandidates = [];
+          for (const detailCandidate of extracted.candidates) {
+            if (sourceDetailSeen.has(detailCandidate.url_dedupe_key)) {
+              summary.skipped_urls += 1;
+              await appendRawJsonl(paths.skippedUrlLogPath, {
+                source_name: source.source_name,
+                source_type: source.source_type,
+                source_url: listingUrl,
+                candidate_url: detailCandidate.detail_url,
+                reason: "duplicate_candidate_url",
+                url_dedupe_key: detailCandidate.url_dedupe_key,
+                captured_at: utcTimestamp(),
+              });
+              continue;
+            }
+            sourceDetailSeen.add(detailCandidate.url_dedupe_key);
+            detailCandidates.push(detailCandidate);
+          }
+          summary.candidate_detail_urls_extracted += detailCandidates.length;
+          for (const detailCandidate of detailCandidates.slice(0, source.max_detail_pages)) {
+            await writeMetaLine(paths.metaLogPath, {
+              event: "detail_started",
+              source_url: listingUrl,
+              detail_url: detailCandidate.detail_url,
+              source_name: source.source_name,
+            });
+            const detailRow = await captureDetailPage(page, detailCandidate, source, timeoutMs);
+            await appendJsonl(paths.outboxPath, detailRow);
+            await appendJsonl(paths.detailLogPath, detailRow);
+            summary.rows_written += 1;
+            summary[detailRow.capture_status] += 1;
+            if (detailRow.capture_status === "success") {
+              summary.detail_pages_captured += 1;
+            }
+            await writeMetaLine(paths.metaLogPath, {
+              event: "detail_finished",
+              source_url: listingUrl,
+              detail_url: detailCandidate.detail_url,
+              capture_status: detailRow.capture_status,
+              error_reason: detailRow.error_reason || "",
+            });
+          }
+          for (const detailCandidate of detailCandidates.slice(source.max_detail_pages)) {
+            summary.skipped_urls += 1;
+            await appendRawJsonl(paths.skippedUrlLogPath, {
+              source_name: source.source_name,
+              source_type: source.source_type,
+              source_url: listingUrl,
+              candidate_url: detailCandidate.detail_url,
+              reason: "max_detail_pages_exceeded",
+              url_dedupe_key: detailCandidate.url_dedupe_key,
+              captured_at: utcTimestamp(),
+            });
+          }
+        }
+        await writeMetaLine(paths.metaLogPath, {
+          event: "listing_finished",
+          source_url: listingUrl,
+          final_url: listingRow.final_url,
+          capture_status: listingRow.capture_status,
+          error_reason: listingRow.error_reason || "",
+        });
+      }
+    }
+
     await context.close().catch(() => {});
   } finally {
     if (browser) {
@@ -406,11 +805,15 @@ export async function runCaptureOnce(options = {}) {
     }
     await writeLogLine(
       paths.logFilePath,
-      `run finished; rows=${summary.rows_written}; success=${summary.success}; blocked=${summary.blocked}; error=${summary.error}`,
+      `run finished; rows=${summary.rows_written}; listings=${summary.listing_pages_captured}; detail_urls=${summary.candidate_detail_urls_extracted}; details=${summary.detail_pages_captured}; success=${summary.success}; blocked=${summary.blocked}; error=${summary.error}`,
     );
     await writeMetaLine(paths.metaLogPath, {
       event: "run_finished",
       rows_written: summary.rows_written,
+      listing_pages_captured: summary.listing_pages_captured,
+      candidate_detail_urls_extracted: summary.candidate_detail_urls_extracted,
+      detail_pages_captured: summary.detail_pages_captured,
+      skipped_urls: summary.skipped_urls,
       success: summary.success,
       blocked: summary.blocked,
       error: summary.error,
@@ -461,6 +864,8 @@ async function main() {
       outbox: { type: "string" },
       "log-file": { type: "string" },
       "meta-log": { type: "string" },
+      "detail-log": { type: "string" },
+      "skipped-url-log": { type: "string" },
       "max-urls": { type: "string" },
       "timeout-ms": { type: "string" },
       "interval-minutes": { type: "string" },
@@ -482,6 +887,8 @@ async function main() {
     outbox: values.outbox,
     logFile: values["log-file"],
     metaLog: values["meta-log"],
+    detailLog: values["detail-log"],
+    skippedUrlLog: values["skipped-url-log"],
     maxUrls: values["max-urls"] ? Number(values["max-urls"]) : undefined,
     timeoutMs: values["timeout-ms"] ? Number(values["timeout-ms"]) : undefined,
     intervalMinutes: values["interval-minutes"] ? Number(values["interval-minutes"]) : 0,

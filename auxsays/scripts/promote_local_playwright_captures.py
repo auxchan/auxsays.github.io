@@ -128,6 +128,8 @@ class PromotionResult:
     rows_read: int
     pages_parsed: int
     listing_cards_found: int
+    detail_pages_found: int
+    candidates_found: int
     accepted: list[dict[str, Any]]
     rejected: list[dict[str, Any]]
     unmatched_versions: set[str]
@@ -135,6 +137,7 @@ class PromotionResult:
     generated_records_updated: list[str]
     evidence_rows_added: int = 0
     method_health_changed: int = 0
+    duplicate_existing_evidence: int = 0
 
     @property
     def accepted_versions_with_records(self) -> set[str]:
@@ -146,13 +149,17 @@ class PromotionResult:
             "rows_read": self.rows_read,
             "pages_parsed": self.pages_parsed,
             "listing_cards_found": self.listing_cards_found,
+            "detail_pages_found": self.detail_pages_found,
+            "candidates_found": self.candidates_found,
             "accepted_count": len(self.accepted),
             "rejected_count": len(self.rejected),
+            "duplicate_existing_evidence": self.duplicate_existing_evidence,
             "unmatched_version_count": len(self.unmatched_versions),
             "unmatched_versions": sorted(self.unmatched_versions),
             "generated_records_updated": bool(self.generated_records_updated),
             "generated_record_versions": sorted(self.generated_record_versions),
             "evidence_rows_added": self.evidence_rows_added,
+            "public_counted_reports": self.evidence_rows_added if write else len(self.accepted),
             "method_health_changed": self.method_health_changed,
             "output_files_that_would_change": [str(path) for path in output_files],
             "accepted": compact_rows(self.accepted),
@@ -281,10 +288,13 @@ def promote(
         if str(row.get("match_basis") or "") != "embedded_listing_report_card"
     }
 
+    accepted_pending: list[dict[str, Any]] = []
     accepted: list[dict[str, Any]] = []
     rejected: list[dict[str, Any]] = []
     duplicate_existing: list[dict[str, Any]] = []
     listing_cards_found = 0
+    detail_pages_found = 0
+    candidates_found = 0
 
     for capture in capture_rows:
         if str(capture.get("capture_status") or "") != "success":
@@ -292,19 +302,28 @@ def promote(
             continue
         page_candidates = candidates_from_capture(capture, product_id=product_id)
         listing_cards_found += sum(1 for candidate in page_candidates if candidate.get("match_basis") == "embedded_listing_report_card")
+        detail_pages_found += sum(1 for candidate in page_candidates if candidate.get("candidate_kind") == "detail")
+        candidates_found += len(page_candidates)
         if not page_candidates:
             rejected.append(rejection_from_capture(capture, "no_discrete_report_card_or_detail_report"))
             continue
         for candidate in page_candidates:
             row = evaluate_candidate(candidate, record_by_version, release_windows)
-            if duplicate_row(row, existing_ids, existing_listing_keys, existing_urls, accepted):
-                row["counted"] = False
-                row["exclusion_reason"] = "duplicate_existing_evidence"
-                duplicate_existing.append(row)
             if row.get("counted") is True:
-                accepted.append(row)
+                accepted_pending.append(row)
             else:
                 rejected.append(row)
+
+    accepted_preferred, detail_duplicate_rejections = prefer_detail_evidence(accepted_pending)
+    rejected.extend(detail_duplicate_rejections)
+    for row in accepted_preferred:
+        if duplicate_row(row, existing_ids, existing_listing_keys, existing_urls, accepted):
+            row["counted"] = False
+            row["exclusion_reason"] = "duplicate_existing_evidence"
+            duplicate_existing.append(row)
+            rejected.append(row)
+        else:
+            accepted.append(row)
 
     accepted_versions = {str(row.get("update_version") or "") for row in accepted}
     duplicate_existing_versions = {str(row.get("update_version") or "") for row in duplicate_existing}
@@ -332,6 +351,8 @@ def promote(
         rows_read=len(capture_rows),
         pages_parsed=sum(1 for row in capture_rows if row.get("capture_status") == "success"),
         listing_cards_found=listing_cards_found,
+        detail_pages_found=detail_pages_found,
+        candidates_found=candidates_found,
         accepted=accepted,
         rejected=rejected,
         unmatched_versions=unmatched_versions,
@@ -339,6 +360,7 @@ def promote(
         generated_records_updated=updated_versions,
         evidence_rows_added=evidence_rows_added,
         method_health_changed=method_health_changed,
+        duplicate_existing_evidence=len(duplicate_existing),
     )
 
 
@@ -426,17 +448,19 @@ def version_sort_key(version: str) -> tuple[int, ...]:
 
 
 def candidates_from_capture(capture: dict[str, Any], *, product_id: str) -> list[dict[str, Any]]:
-    source_url = canonical_url(str(capture.get("source_url") or ""))
+    source_url = canonical_url(str(capture.get("detail_url") or capture.get("source_url") or ""))
     source_name = str(capture.get("source_name") or "").strip()
-    visible_text = str(capture.get("visible_text") or "").replace("\u00a0", " ").strip()
-    page_title = normalize_text(capture.get("page_title"))
+    structured_title = normalize_text(capture.get("title") or capture.get("page_title"))
+    structured_body = str(capture.get("body_text") or capture.get("excerpt") or capture.get("visible_text") or "").replace("\u00a0", " ").strip()
+    visible_text = structured_body
+    page_title = structured_title
     captured_at = str(capture.get("captured_at") or "").strip()
-    product_hint = str(capture.get("product_hint") or "").strip()
+    product_hint = str(capture.get("product_id") or capture.get("product_hint") or "").strip()
     text = "\n".join(item for item in (page_title, visible_text) if item)
 
     if product_hint and product_hint != product_id:
         return []
-    if source_is_specific_detail(source_url):
+    if capture.get("detail_url") or source_is_specific_detail(source_url):
         return [detail_candidate(capture, source_url, source_name, page_title, text)]
     return listing_card_candidates(capture, source_url, source_name, text, captured_at)
 
@@ -448,21 +472,29 @@ def detail_candidate(
     page_title: str,
     text: str,
 ) -> dict[str, Any]:
-    source_type = premiere.SOURCE_TYPE if "community.adobe.com" in source_url else premiere.CREATIVE_COW_SOURCE_TYPE
+    configured_source_type = str(capture.get("source_type") or "").strip()
+    source_type = configured_source_type or (premiere.SOURCE_TYPE if "community.adobe.com" in source_url else premiere.CREATIVE_COW_SOURCE_TYPE)
     version = best_version(text)
+    title = normalize_text(capture.get("title") or page_title or first_nonempty_line(text))
+    date_text = str(capture.get("source_date_text") or relative_or_absolute_date_text(text) or capture.get("listing_card_date_text") or "")
+    source_date = str(capture.get("source_date_resolved") or capture.get("source_date") or premiere.extract_source_date(text) or "")
     return {
         "candidate_kind": "detail",
+        "product_hint": str(capture.get("product_id") or capture.get("product_hint") or ""),
         "source_type": source_type,
         "source_name": source_name or ("Adobe Community" if source_type == premiere.SOURCE_TYPE else "Creative COW"),
         "source_url": source_url,
-        "parent_title": page_title or first_nonempty_line(text),
-        "report_title": page_title or first_nonempty_line(text),
+        "parent_title": title,
+        "report_title": title,
         "report_text": text,
-        "source_date": premiere.extract_source_date(text),
-        "source_date_text": relative_or_absolute_date_text(text),
+        "source_date": source_date,
+        "source_date_text": date_text,
         "captured_at": str(capture.get("captured_at") or ""),
         "update_version": version,
         "match_basis": "detail_page",
+        "listing_card_title": str(capture.get("listing_card_title") or ""),
+        "listing_card_date_text": str(capture.get("listing_card_date_text") or ""),
+        "url_dedupe_key": str(capture.get("url_dedupe_key") or canonical_url(source_url)),
     }
 
 
@@ -566,6 +598,8 @@ def evaluate_candidate(candidate: dict[str, Any], record_by_version: dict[str, A
     row["listing_card_title"] = str(candidate.get("listing_card_title") or "")
     row["listing_card_category"] = str(candidate.get("listing_card_category") or "")
     row["listing_card_date_text"] = str(candidate.get("listing_card_date_text") or "")
+    row["capture_candidate_kind"] = str(candidate.get("candidate_kind") or "")
+    row["url_dedupe_key"] = str(candidate.get("url_dedupe_key") or "")
     row["accepted_reason"] = ""
 
     reason = version_match.rejection_reason or exclusion_reason(row, candidate, report_text)
@@ -838,7 +872,7 @@ def exclusion_reason(row: dict[str, Any], candidate: dict[str, Any], report_text
         row["source_date_pass"] = row.get("source_date_pass") if row.get("source_date") else True
         return None
 
-    if not source_is_specific_detail(str(row.get("source_url") or "")):
+    if candidate.get("candidate_kind") != "detail" and not source_is_specific_detail(str(row.get("source_url") or "")):
         return "source_url_not_specific_report"
     source_date_pass = source_date_passes(str(row.get("source_date") or ""), str(row.get("target_release_date") or ""))
     if source_date_pass is False:
@@ -904,12 +938,54 @@ def duplicate_row(
     accepted_ids = {str(item.get("id") or "").strip() for item in accepted}
     if row_id and row_id in accepted_ids:
         return True
-    if row.get("match_basis") == "embedded_listing_report_card":
+    if is_listing_card_row(row):
         key = listing_card_key(row)
         accepted_keys = {listing_card_key(item) for item in accepted if listing_card_key(item)}
         return bool(key and (key in existing_listing_keys or key in accepted_keys))
     key = evidence_url_key(row)
     return key in existing_urls or key in {evidence_url_key(item) for item in accepted}
+
+
+def prefer_detail_evidence(rows: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    detail_title_keys = {
+        report_title_key(row)
+        for row in rows
+        if is_detail_row(row) and report_title_key(row)[2]
+    }
+    preferred: list[dict[str, Any]] = []
+    rejected: list[dict[str, Any]] = []
+    for row in rows:
+        key = report_title_key(row)
+        if is_listing_card_row(row) and key[2] and key in detail_title_keys:
+            duplicate = dict(row)
+            duplicate["counted"] = False
+            duplicate["exclusion_reason"] = "duplicate_detail_page_evidence"
+            rejected.append(duplicate)
+            continue
+        preferred.append(row)
+    return preferred, rejected
+
+
+def is_listing_card_row(row: dict[str, Any]) -> bool:
+    if str(row.get("capture_candidate_kind") or "") == "detail":
+        return False
+    return (
+        str(row.get("capture_candidate_kind") or "") == "listing_card"
+        or bool(str(row.get("listing_card_title") or "").strip() and not source_is_specific_detail(str(row.get("source_url") or "")))
+    )
+
+
+def is_detail_row(row: dict[str, Any]) -> bool:
+    return str(row.get("capture_candidate_kind") or "") == "detail" or source_is_specific_detail(str(row.get("source_url") or ""))
+
+
+def report_title_key(row: dict[str, Any]) -> tuple[str, str, str]:
+    title = normalize_text(row.get("listing_card_title") or row.get("report_title") or "").lower()
+    return (
+        str(row.get("product_id") or "").strip(),
+        str(row.get("update_version") or "").strip(),
+        title,
+    ) if title else ("", "", "")
 
 
 def build_method_health_rows(
@@ -924,7 +1000,18 @@ def build_method_health_rows(
         versions = sorted({str(row.get("update_version") or "") for row in rejected if row.get("update_version")}) or [""]
     rows: list[dict[str, Any]] = []
     for version in versions:
-        accepted_for_version = [row for row in accepted if str(row.get("update_version") or "") == version]
+        accepted_for_version = [
+            row
+            for row in accepted
+            if str(row.get("update_version") or "") == version
+            and row.get("counted") is True
+        ]
+        duplicate_for_version = [
+            row
+            for row in accepted
+            if str(row.get("update_version") or "") == version
+            and str(row.get("exclusion_reason") or "") == "duplicate_existing_evidence"
+        ]
         rejected_for_version = [
             row
             for row in rejected
@@ -940,9 +1027,14 @@ def build_method_health_rows(
         else:
             status = "no_results"
         reasons = Counter(str(row.get("exclusion_reason") or "unknown") for row in rejected_for_version)
-        notes = "Promotes local Playwright candidate captures through deterministic Premiere Pro evidence gates."
+        notes = (
+            "Promotes local Playwright candidate captures through deterministic Premiere Pro evidence gates. "
+            "accepted_reports means accepted evidence rows, not listing-card candidates."
+        )
         if version and version not in generated_versions and accepted_for_version:
             notes += " Accepted evidence is pending a matching official generated record."
+        if duplicate_for_version:
+            notes += f" Duplicate existing evidence rows skipped: {len(duplicate_for_version)}."
         if reasons:
             notes += " Rejected candidates: " + ", ".join(f"{reason}={count}" for reason, count in sorted(reasons.items())) + "."
         rows.append(method_health_row(
@@ -951,7 +1043,11 @@ def build_method_health_rows(
             method_id=METHOD_ID,
             source_type="local_playwright_capture",
             status=status,
-            candidates_found=len(accepted_for_version) + len(rejected_for_version),
+            candidates_found=len(accepted_for_version) + len(duplicate_for_version) + len(rejected_for_version),
+            accepted_candidates=len(accepted_for_version),
+            duplicate_existing_evidence=len(duplicate_for_version),
+            evidence_rows_added=len(accepted_for_version),
+            public_counted_reports=len(accepted_for_version),
             accepted_reports=len(accepted_for_version),
             rejected_reports=len(rejected_for_version),
             blocked_reason="",
