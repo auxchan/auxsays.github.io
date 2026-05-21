@@ -1,7 +1,8 @@
 ---
 layout: aux-update
 title: DaVinci Resolve 21 official update breakdown
-description: Published Apr 14, 2026. This page covers the stable DaVinci Resolve 21 release. Public beta reports are excluded.
+description: Published Apr 14, 2026. This page covers the stable DaVinci Resolve 21 release. Public beta reports
+  are excluded.
 permalink: /updates/blackmagic-design/davinci-resolve/21/
 update_entry: true
 feed_hidden: false
@@ -19,9 +20,10 @@ update_status: current
 update_feed_title: DaVinci Resolve 21
 update_detail_title: DaVinci Resolve 21
 update_consensus_label: Negative
-update_consensus_summary: 'WAIT: DaVinci Resolve 21 has 3 user reports found. Small sample size. Current reports mention render/export
-  failures and installation problems. Production editors with active export deadlines should wait unless they need a specific
-  fix. Current reports are Reddit-heavy, so production users should test before updating.'
+update_consensus_summary: 'WAIT: DaVinci Resolve 21 has 3 user reports found. Small sample size. Current reports
+  mention render/export failures and installation problems. Production editors with active export deadlines should
+  wait unless they need a specific fix. Current reports are Reddit-heavy, so production users should test before
+  updating.'
 update_report_count: 3
 update_consensus_confidence: Low
 status_change_type: new
@@ -37,13 +39,14 @@ patch_file_size_status: not_provided_by_source
 update_channel_label: Stable / Studio release
 quick_verdict: 'WAIT: DaVinci Resolve 21 has 3 user reports found.'
 update_decision_label: WAIT
-update_decision_body: Current reports mention render/export failures and installation problems. Production editors with active
-  delivery deadlines should wait or test on copied projects.
+update_decision_body: Current reports mention render/export failures and installation problems. Production editors
+  with active delivery deadlines should wait or test on copied projects.
 source_freshness_note: ''
 record_note: This page covers DaVinci Resolve 21. Beta reports are excluded from this record.
 official_summary: DaVinci Resolve 21 is tracked here as the stable/Studio release. Public Beta 1 reports are excluded.
-consensus_report: '3 user reports found for DaVinci Resolve 21. Current reports mention render/export failures and installation
-  problems. Current reports are Reddit-heavy, so production users should test before updating. Sources represented: r/davinciresolve.'
+consensus_report: '3 user reports found for DaVinci Resolve 21. Current reports mention render/export failures and
+  installation problems. Current reports are Reddit-heavy, so production users should test before updating. Sources
+  represented: r/davinciresolve.'
 status_events:
 - at: '2026-04-14T00:00:00Z'
   label: Update released
@@ -99,7 +102,7 @@ consensus_report_weighting: equal_per_confirmed_report
 consensus_low_context_policy: excluded
 consensus_collection_status: pilot_initial_sample
 evidence_state: pilot_sample
-evidence_state_label: User reports found
+evidence_state_label: Verified reports
 official_source_captured: true
 confirmed_patch_specific_report_count: 3
 known_issues_present: null
@@ -135,7 +138,7 @@ official_source_attempts:
   body_captured: false
   checksums_captured: false
 evidence_last_checked: '2026-05-19T12:20:22Z'
-record_last_updated: '2026-05-19T12:20:37.508679Z'
+record_last_updated: '2026-05-21T13:41:02.827891Z'
 intelligence_stage: pilot
 evidence_samples:
 - source_name: r/davinciresolve

@@ -192,7 +192,7 @@ official_source_attempts:
   body_captured: false
   checksums_captured: false
 evidence_last_checked: '2026-05-17T13:56:42Z'
-record_last_updated: '2026-05-21T10:36:36.171042Z'
+record_last_updated: '2026-05-21T13:40:45.769465Z'
 evidence_samples:
 - source_name: Blackmagic Design Community Forum
   source_url: https://forum.blackmagicdesign.com/viewtopic.php?f=42&t=235117
@@ -356,4 +356,5 @@ accepted_report_sources:
   workflow_area: application stability
 evidence_source_limitations:
 - This is a surfaced user-report sample, not a live telemetry feed.
+- Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 ---
