@@ -47,6 +47,11 @@ EVIDENCE_FIELDS = (
     "severity",
     "sentiment",
     "source_weight",
+    "capture_method",
+    "source_date_text",
+    "listing_card_title",
+    "listing_card_category",
+    "listing_card_date_text",
 )
 
 METHOD_HEALTH_FIELDS = (
@@ -366,17 +371,26 @@ def evidence_key(row: dict[str, Any], key_field: str) -> tuple[str, str, str]:
 def append_evidence_rows(rows: list[dict[str, Any]], path: Path = EVIDENCE_PATH) -> tuple[int, int, list[dict[str, Any]]]:
     existing = load_evidence(path)
     seen_ids = {evidence_key(row, "id") for row in existing if row.get("id")}
-    seen_urls = {evidence_key(row, "source_url") for row in existing if row.get("source_url")}
+    seen_urls = {
+        evidence_key(row, "source_url")
+        for row in existing
+        if row.get("source_url") and row.get("match_basis") != "embedded_listing_report_card"
+    }
     added = 0
     for row in rows:
         normalized = normalize_evidence_row(row)
         id_key = evidence_key(normalized, "id")
         url_key = evidence_key(normalized, "source_url")
-        if id_key in seen_ids or url_key in seen_urls:
+        url_duplicate = (
+            normalized.get("match_basis") != "embedded_listing_report_card"
+            and url_key in seen_urls
+        )
+        if id_key in seen_ids or url_duplicate:
             continue
         existing.append(normalized)
         seen_ids.add(id_key)
-        seen_urls.add(url_key)
+        if normalized.get("match_basis") != "embedded_listing_report_card":
+            seen_urls.add(url_key)
         added += 1
     if added:
         write_evidence_file(existing, path)
