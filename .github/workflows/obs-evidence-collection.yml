@@ -41,14 +41,28 @@ jobs:
       - name: Collect patch evidence
         run: |
           args=(--since-days 45 --max-pages 5)
-          if [ "${{ github.event.inputs.product_id }}" != "" ]; then
-            args+=(--product-id "${{ github.event.inputs.product_id }}")
+
+          raw_product_id="${{ github.event.inputs.product_id }}"
+          product_id="$(printf '%s' "$raw_product_id" | tr -d '\r' | sed -E 's/^[[:space:]]*product_id:[[:space:]]*//' | xargs)"
+
+          case "$product_id" in
+            ""|obs-studio|blackmagic-davinci|adobe-premiere-pro) ;;
+            *)
+              echo "::error::Invalid product_id '$product_id'. Use obs-studio, blackmagic-davinci, or adobe-premiere-pro."
+              exit 2
+              ;;
+          esac
+
+          if [ "$product_id" != "" ]; then
+            args+=(--product-id "$product_id")
           fi
+
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
             args+=(--dry-run)
           else
             args+=(--write)
           fi
+
           python auxsays/scripts/run_patch_evidence_collection.py "${args[@]}"
 
       - name: Build consensus status
