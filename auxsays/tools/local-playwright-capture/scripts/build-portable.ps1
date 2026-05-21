@@ -53,7 +53,8 @@ $runCaptureThenPromoteDryRunCmd = @"
 @echo off
 setlocal
 set "REPO_PATH=$RepoPath"
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%REPO_PATH%\auxsays\tools\local-playwright-capture\scripts\run-capture-and-promote.ps1" -RepoPath "%REPO_PATH%" -PortablePath "%~dp0" -ProductId "adobe-premiere-pro"
+set "PORTABLE_PATH=%~dp0."
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%REPO_PATH%\auxsays\tools\local-playwright-capture\scripts\run-capture-and-promote.ps1" -RepoPath "%REPO_PATH%" -PortablePath "%PORTABLE_PATH%" -ProductId "adobe-premiere-pro"
 set AUXSAYS_EXIT=%ERRORLEVEL%
 pause
 endlocal & exit /b %AUXSAYS_EXIT%
@@ -63,6 +64,7 @@ $runCaptureThenPromoteWriteCmd = @"
 @echo off
 setlocal
 set "REPO_PATH=$RepoPath"
+set "PORTABLE_PATH=%~dp0."
 echo AUXSAYS WRITE mode will run capture, promote accepted rows, and modify repo evidence/generated files through the repo-owned verifier.
 echo Type WRITE to continue. Anything else exits without writing.
 set /p AUXSAYS_CONFIRM=Confirmation:
@@ -71,7 +73,7 @@ if not "%AUXSAYS_CONFIRM%"=="WRITE" (
   endlocal
   exit /b 2
 )
-powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%REPO_PATH%\auxsays\tools\local-playwright-capture\scripts\run-capture-and-promote.ps1" -RepoPath "%REPO_PATH%" -PortablePath "%~dp0" -ProductId "adobe-premiere-pro" -Write -ConfirmedWrite
+powershell.exe -NoProfile -ExecutionPolicy Bypass -File "%REPO_PATH%\auxsays\tools\local-playwright-capture\scripts\run-capture-and-promote.ps1" -RepoPath "%REPO_PATH%" -PortablePath "%PORTABLE_PATH%" -ProductId "adobe-premiere-pro" -Write -ConfirmedWrite
 set AUXSAYS_EXIT=%ERRORLEVEL%
 pause
 endlocal & exit /b %AUXSAYS_EXIT%

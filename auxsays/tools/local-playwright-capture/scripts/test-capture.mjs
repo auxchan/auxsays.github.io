@@ -216,9 +216,14 @@ test("portable build creates capture-and-promote command files safely", async ()
 
   assert.match(dryRunCommand, /C:\\GITHUB PROJECTS\\auxsays\.github\.io/);
   assert.match(dryRunCommand, /run-capture-and-promote\.ps1/);
+  assert.match(dryRunCommand, /set "PORTABLE_PATH=%~dp0\."/);
+  assert.match(dryRunCommand, /-PortablePath "%PORTABLE_PATH%"/);
+  assert.doesNotMatch(dryRunCommand, /-PortablePath "%~dp0"/);
   assert.doesNotMatch(dryRunCommand, /(?:^|\s)-(?:-)?write(?:\s|$)/i);
   assert.match(writeCommand, /set \/p AUXSAYS_CONFIRM=Confirmation:/i);
   assert.match(writeCommand, /if not "%AUXSAYS_CONFIRM%"=="WRITE"/i);
+  assert.match(writeCommand, /set "PORTABLE_PATH=%~dp0\."/);
+  assert.match(writeCommand, /-PortablePath "%PORTABLE_PATH%"/);
   assert.match(writeCommand, /-Write\b/);
   assert.match(writeCommand, /-ConfirmedWrite\b/);
 
