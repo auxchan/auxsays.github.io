@@ -17,8 +17,8 @@ update_version: Copilot usage metrics reports now use GitHub-owned download URLs
 update_logo_text: GIT
 update_published_at: '2026-05-20T23:58:35Z'
 update_last_checked: '2026-05-21T04:48:24Z'
-source_last_checked: '2026-05-21T04:48:24Z'
-official_body_last_checked: '2026-05-21T04:48:24Z'
+source_last_checked: '2026-05-21T10:05:51Z'
+official_body_last_checked: '2026-05-21T10:05:51Z'
 record_last_updated: '2026-05-21T04:48:24Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -89,6 +89,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-05-21T04:48:24Z'
+  url: https://github.blog/changelog/2026-05-20-copilot-usage-metrics-reports-now-use-github-owned-download-urls
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-05-21T10:05:51Z'
   url: https://github.blog/changelog/2026-05-20-copilot-usage-metrics-reports-now-use-github-owned-download-urls
   status: captured-from-rss-feed
   body_captured: true
