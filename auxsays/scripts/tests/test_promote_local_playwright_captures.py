@@ -20,8 +20,10 @@ except Exception:
 
 import promote_local_playwright_captures as bridge
 from promote_local_playwright_captures import (
+    build_release_windows,
     candidates_from_capture,
     evaluate_candidate,
+    main as bridge_main,
     promote,
     read_capture_jsonl,
 )
@@ -95,13 +97,66 @@ I am learning Adobe Premiere Pro and want to know how to use captions.
 """
 
 
-def no_version_text() -> str:
+def no_version_current_text() -> str:
     return """
 Adobe Premiere Pro
 Bug Reports
 Export freezes after the latest update
 3 hours ago
 Adobe Premiere Pro freezes on export after updating.
+"""
+
+
+def mask_tool_current_text() -> str:
+    return """
+Adobe Premiere Pro
+Participant
+Bug Reports
+Mask Tool Issues (Gaussian Blur & Opacity)
+5 hours ago
+IssueOpacity mask tools (pen, rectangle, ellipse) do not appear in Effect Controls for certain MP4 files in Premiere Pro 2026, even though the files are standard H.264 video clips and effects apply normally. This makes it impossible to mask Gaussian Blur.
+"""
+
+
+def truncated_262_text(date_text: str = "5 hours ago") -> str:
+    return f"""
+Adobe Premiere Pro
+Participant
+Bug Reports
+Premiere 26.2 freezes during editing
+{date_text}
+Premiere Pro 26.2 freezes when opening menus after the update.
+"""
+
+
+def conflicting_old_exact_text() -> str:
+    return """
+Adobe Premiere Pro
+Participant
+Bug Reports
+Premiere Pro 26.0.1 search broken
+5 hours ago
+Premiere Pro 26.0.1 search is broken after installing the current app.
+"""
+
+
+def beta_report_text() -> str:
+    return """
+Adobe Premiere Pro
+Participant
+Bug Reports
+Premiere Pro 2026 beta export freezes
+5 hours ago
+The latest Premiere Pro beta freezes on export after updating.
+"""
+
+
+def official_announcement_text() -> str:
+    return """
+Adobe Premiere Pro
+What's New in Adobe Premiere 26.2.2 - May 2026
+May 21, 2026
+Adobe says Premiere Pro 26.2.2 fixes a critical stability issue that could cause Premiere Pro to hang.
 """
 
 
@@ -130,8 +185,18 @@ Adobe Premiere Pro 26.2.2 freezes for several minutes during export and timeline
 """
 
 
-def fake_record(version: str = "26.2.2") -> object:
-    return types.SimpleNamespace(update_version=version, update_published_at="2026-05-20T00:00:00Z")
+def fake_record(version: str = "26.2.2", published_at: str = "2026-05-20T00:00:00Z", product: str = "Premiere Pro") -> object:
+    return types.SimpleNamespace(
+        product_id="adobe-premiere-pro",
+        update_version=version,
+        update_published_at=published_at,
+        update_status="current",
+        update_product=product,
+    )
+
+
+def record_map(*records: object) -> dict[str, object]:
+    return {str(record.update_version): record for record in records}
 
 
 def write_jsonl(path: Path, rows: list[dict[str, object]]) -> None:
@@ -153,8 +218,79 @@ def run() -> int:
     candidates = candidates_from_capture(capture_row(adobe_bug_listing_text()), product_id="adobe-premiere-pro")
     row = evaluate_candidate(candidates[0], {"26.2.2": fake_record("26.2.2")})
     check("accepts Adobe embedded Bug Reports exact 26.2.2 freeze card", row.get("counted") is True, str(row))
-    check("listing card uses embedded match basis", row.get("match_basis") == "embedded_listing_report_card", str(row))
+    check("exact version uses exact_version basis", row.get("match_basis") == "exact_version" and row.get("version_match_confidence") == "exact", str(row))
     check("26.2.2 stays mapped to 26.2.2", row.get("update_version") == "26.2.2", str(row))
+
+    stable_2622 = fake_record("26.2.2", "2026-05-01T00:00:00Z")
+    stable_2623 = fake_record("26.2.3", "2026-05-25T00:00:00Z")
+    truncated = evaluate_candidate(
+        candidates_from_capture(capture_row(truncated_262_text()), product_id="adobe-premiere-pro")[0],
+        record_map(stable_2622, stable_2623),
+    )
+    check(
+        "short version prefix inside active release window counts as truncated_version_in_release_window",
+        truncated.get("counted") is True
+        and truncated.get("update_version") == "26.2.2"
+        and truncated.get("match_basis") == "truncated_version_in_release_window"
+        and truncated.get("version_match_confidence") == "inferred_truncated_window",
+        str(truncated),
+    )
+
+    truncated_before = evaluate_candidate(
+        candidates_from_capture(capture_row(truncated_262_text("April 28, 2026")), product_id="adobe-premiere-pro")[0],
+        record_map(stable_2622, stable_2623),
+    )
+    check("short version prefix before patch release is rejected", truncated_before.get("counted") is False, str(truncated_before))
+
+    after_next = evaluate_candidate(
+        candidates_from_capture(capture_row(truncated_262_text(), captured_at="2026-05-27T12:00:00Z"), product_id="adobe-premiere-pro")[0],
+        record_map(stable_2622, stable_2623),
+    )
+    check(
+        "short version prefix after next patch release maps to newer active patch",
+        after_next.get("counted") is True and after_next.get("update_version") == "26.2.3",
+        str(after_next),
+    )
+
+    current = evaluate_candidate(
+        candidates_from_capture(capture_row(no_version_current_text()), product_id="adobe-premiere-pro")[0],
+        record_map(stable_2622, stable_2623),
+    )
+    check(
+        "no-version current/latest report inside active window can count as release_window_inferred",
+        current.get("counted") is True
+        and current.get("update_version") == "26.2.2"
+        and current.get("match_basis") == "release_window_inferred"
+        and current.get("version_match_confidence") == "inferred_release_window",
+        str(current),
+    )
+
+    mask_tool = evaluate_candidate(
+        candidates_from_capture(capture_row(mask_tool_current_text()), product_id="adobe-premiere-pro")[0],
+        record_map(stable_2622, stable_2623),
+    )
+    check(
+        "Mask Tool Issues can count by release-window inference",
+        mask_tool.get("counted") is True
+        and mask_tool.get("update_version") == "26.2.2"
+        and mask_tool.get("match_basis") == "release_window_inferred",
+        str(mask_tool),
+    )
+
+    no_date_capture = capture_row(no_version_current_text(), captured_at="")
+    no_date_candidates = candidates_from_capture(no_date_capture, product_id="adobe-premiere-pro")
+    no_date = evaluate_candidate(no_date_candidates[0], record_map(stable_2622))
+    check("no-version report with no resolvable date is rejected", no_date.get("counted") is False and no_date.get("exclusion_reason") == "missing_resolvable_source_date_for_inferred_match", str(no_date))
+
+    conflict = evaluate_candidate(
+        candidates_from_capture(capture_row(conflicting_old_exact_text()), product_id="adobe-premiere-pro")[0],
+        record_map(fake_record("26.0.1", "2026-02-01T00:00:00Z"), stable_2622),
+    )
+    check("report with conflicting exact older version is rejected", conflict.get("counted") is False and conflict.get("exclusion_reason") == "conflicting_exact_version_for_active_release_window", str(conflict))
+
+    beta_stable_records = record_map(stable_2622, fake_record("26.3 beta", "2026-05-01T00:00:00Z", product="Premiere Pro Beta"))
+    beta = evaluate_candidate(candidates_from_capture(capture_row(beta_report_text()), product_id="adobe-premiere-pro")[0], beta_stable_records)
+    check("beta/stable channels do not cross-map", beta.get("counted") is False or beta.get("update_version") != "26.2.2", str(beta))
 
     feature = evaluate_candidate(candidates_from_capture(capture_row(feature_request_text()), product_id="adobe-premiere-pro")[0], {"26.2.2": fake_record()})
     check("rejects Adobe feature request listing card", feature.get("counted") is False and feature.get("exclusion_reason") == "not_a_real_issue_report", str(feature))
@@ -162,8 +298,22 @@ def run() -> int:
     question = evaluate_candidate(candidates_from_capture(capture_row(question_text()), product_id="adobe-premiere-pro")[0], {"26.2.2": fake_record()})
     check("rejects Adobe question/how-to without concrete regression", question.get("counted") is False and question.get("exclusion_reason") == "not_a_real_issue_report", str(question))
 
-    no_version_candidates = candidates_from_capture(capture_row(no_version_text()), product_id="adobe-premiere-pro")
-    check("rejects listing card with no exact version", no_version_candidates == [], str(no_version_candidates))
+    announcement_candidate = candidates_from_capture(
+        capture_row(
+            official_announcement_text(),
+            source_url="https://community.adobe.com/announcements-727/what-s-new-in-adobe-premiere-26-2-2-may-2026-1560755",
+            final_url="https://community.adobe.com/announcements-727/what-s-new-in-adobe-premiere-26-2-2-may-2026-1560755",
+        ),
+        product_id="adobe-premiere-pro",
+    )[0]
+    announcement = evaluate_candidate(announcement_candidate, {"26.2.2": fake_record("26.2.2", "2026-05-01T00:00:00Z")})
+    check("official announcement inside active window is rejected as user evidence", announcement.get("counted") is False and announcement.get("exclusion_reason") == "official_announcement_not_user_evidence", str(announcement))
+
+    no_context_current = evaluate_candidate(
+        candidates_from_capture(capture_row(no_version_current_text(), captured_at=""), product_id="adobe-premiere-pro")[0],
+        {"26.2.2": fake_record()},
+    )
+    check("rejects no-version listing card without date", no_context_current.get("counted") is False, str(no_context_current))
 
     generic_candidates = candidates_from_capture(capture_row(generic_listing_text()), product_id="adobe-premiere-pro")
     check("rejects generic listing page text without discrete card", generic_candidates == [], str(generic_candidates))
@@ -181,7 +331,7 @@ def run() -> int:
 
     creative_concrete = evaluate_candidate(
         candidates_from_capture(capture_row(creative_concrete_text(), source_url=creative_source, final_url=creative_source, source_name="Creative COW"), product_id="adobe-premiere-pro")[0],
-        {"26.2.2": fake_record()},
+        {"26.2.2": fake_record("26.2.2", "2026-05-01T00:00:00Z")},
     )
     check("accepts Creative COW listing fixture with exact version and concrete issue", creative_concrete.get("counted") is True, str(creative_concrete))
 
@@ -235,6 +385,36 @@ def run() -> int:
             bridge.generated_records = original_generated
             bridge.load_evidence = original_load_evidence
     check("dry-run does not write consensus/generated/state files", protected_snapshot() == before)
+
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp_path = Path(tmp)
+        input_path = tmp_path / "outbox" / "captured-pages.jsonl"
+        input_path.parent.mkdir()
+        write_jsonl(input_path, [capture_row(adobe_bug_listing_text()), capture_row(feature_request_text())])
+        before_logs = protected_snapshot()
+        original_generated = bridge.generated_records
+        original_load_evidence = bridge.load_evidence
+        try:
+            bridge.generated_records = lambda *_args, **_kwargs: [fake_record("26.2.2", "2026-05-01T00:00:00Z")]
+            bridge.load_evidence = lambda *_args, **_kwargs: []
+            exit_code = bridge_main(["--input", str(input_path), "--product-id", "adobe-premiere-pro", "--dry-run"])
+        finally:
+            bridge.generated_records = original_generated
+            bridge.load_evidence = original_load_evidence
+        accepted_log = input_path.parent / "logs" / "promotion-accepted.jsonl"
+        rejected_log = input_path.parent / "logs" / "promotion-rejections.jsonl"
+        accepted_rows = [json.loads(line) for line in accepted_log.read_text(encoding="utf-8").splitlines() if line.strip()]
+        rejected_rows = [json.loads(line) for line in rejected_log.read_text(encoding="utf-8").splitlines() if line.strip()]
+        check(
+            "dry-run writes accepted/rejected explanation JSONL",
+            exit_code == 0
+            and accepted_rows
+            and rejected_rows
+            and accepted_rows[0].get("accepted_reason")
+            and rejected_rows[0].get("rejection_reason"),
+            f"accepted={accepted_rows} rejected={rejected_rows}",
+        )
+        check("dry-run explanation JSONL does not modify consensus/generated/state files", protected_snapshot() == before_logs)
 
     with tempfile.TemporaryDirectory() as tmp:
         tmp_path = Path(tmp)

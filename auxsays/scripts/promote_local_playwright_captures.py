@@ -14,6 +14,7 @@ import sys
 import urllib.parse
 from collections import Counter, defaultdict
 from dataclasses import dataclass
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Iterable
 
@@ -44,6 +45,7 @@ from patch_collectors.base import (
     load_evidence,
     make_evidence_row,
     method_health_row,
+    parse_iso_date,
     slug,
     source_date_passes,
     upsert_method_health,
@@ -77,6 +79,48 @@ CARD_CATEGORIES = (
 )
 ADOBE_LISTING_HOST = "community.adobe.com"
 CREATIVE_COW_HOST = "creativecow.net"
+CURRENT_RELEASE_RE = re.compile(
+    r"\b(?:latest|current|current\s+build|current\s+release|after\s+(?:the\s+)?(?:latest|current)\s+update|"
+    r"after\s+updat(?:e|ing)|since\s+updat(?:e|ing)|premiere\s+pro\s+2026|premiere\s+2026)\b",
+    re.I,
+)
+TITLE_SKIP_RE = re.compile(
+    r"^(?:adobe premiere pro|open for voting|needs more info|participant|bug reports|questions|ideas|feature requests|discussions|community)$",
+    re.I,
+)
+
+
+@dataclass(frozen=True)
+class ReleaseWindow:
+    product_id: str
+    update_version: str
+    start: datetime
+    end: datetime | None
+    channel: str
+    record: Any
+
+
+@dataclass(frozen=True)
+class SourceDateResolution:
+    resolved_at: str
+    resolved_date: str
+    date_text: str
+    precision: str
+    source: str
+
+
+@dataclass(frozen=True)
+class VersionMatch:
+    update_version: str
+    matched_version: str
+    match_basis: str
+    confidence: str
+    target_release_date: str
+    next_release_date: str
+    source_date_resolved: str
+    source_date_text: str
+    source_date_pass: bool | None
+    rejection_reason: str | None = None
 
 
 @dataclass
@@ -131,8 +175,11 @@ def main(argv: list[str] | None = None) -> int:
         max_rows=args.max_rows,
         write=write,
     )
+    explanation_paths = write_explanation_logs(result, Path(args.input))
     output_files = planned_output_files(result, write=write)
-    print(json.dumps(result.summary(write=write, output_files=output_files), indent=2, sort_keys=True))
+    summary = result.summary(write=write, output_files=output_files)
+    summary["explanation_files"] = {key: str(value) for key, value in explanation_paths.items()}
+    print(json.dumps(summary, indent=2, sort_keys=True))
     if result.unmatched_versions:
         for version in sorted(result.unmatched_versions):
             print(
@@ -222,9 +269,12 @@ def promote(
     writeback_func: Any | None = None,
 ) -> PromotionResult:
     capture_rows = read_capture_jsonl(input_path, max_rows=max_rows)
-    record_by_version = {record.update_version: record for record in generated_records(product_id, include_archived=True)}
+    records = generated_records(product_id, include_archived=True)
+    record_by_version = {record.update_version: record for record in records}
+    release_windows = build_release_windows(records)
     existing = load_evidence(evidence_path)
     existing_ids = {str(row.get("id") or "").strip() for row in existing}
+    existing_listing_keys = {listing_card_key(row) for row in existing if listing_card_key(row)}
     existing_urls = {
         evidence_url_key(row)
         for row in existing
@@ -246,8 +296,8 @@ def promote(
             rejected.append(rejection_from_capture(capture, "no_discrete_report_card_or_detail_report"))
             continue
         for candidate in page_candidates:
-            row = evaluate_candidate(candidate, record_by_version)
-            if duplicate_row(row, existing_ids, existing_urls, accepted):
+            row = evaluate_candidate(candidate, record_by_version, release_windows)
+            if duplicate_row(row, existing_ids, existing_listing_keys, existing_urls, accepted):
                 row["counted"] = False
                 row["exclusion_reason"] = "duplicate_existing_evidence"
                 duplicate_existing.append(row)
@@ -311,6 +361,70 @@ def read_capture_jsonl(path: Path, *, max_rows: int) -> list[dict[str, Any]]:
     return rows
 
 
+def build_release_windows(records: list[Any]) -> list[ReleaseWindow]:
+    grouped: dict[tuple[str, str], list[tuple[Any, datetime]]] = defaultdict(list)
+    for record in records:
+        start = parse_iso_date(getattr(record, "update_published_at", ""))
+        if not start:
+            continue
+        channel = release_channel_for_record(record)
+        grouped[(getattr(record, "product_id", ""), channel)].append((record, start))
+
+    windows: list[ReleaseWindow] = []
+    for (product_id, channel), items in grouped.items():
+        ordered = sorted(items, key=lambda item: (item[1], version_sort_key(str(getattr(item[0], "update_version", "")))))
+        for index, (record, start) in enumerate(ordered):
+            end = ordered[index + 1][1] if index + 1 < len(ordered) else None
+            windows.append(ReleaseWindow(
+                product_id=str(product_id),
+                update_version=str(getattr(record, "update_version", "")),
+                start=start,
+                end=end,
+                channel=channel,
+                record=record,
+            ))
+    return windows
+
+
+def release_channel_for_record(record: Any) -> str:
+    text_parts = [
+        str(getattr(record, "update_version", "")),
+        str(getattr(record, "update_product", "")),
+        str(getattr(record, "update_status", "")),
+    ]
+    path = getattr(record, "path", None)
+    if path:
+        try:
+            from patch_collectors.base import load_front_matter_and_body
+
+            data, _body = load_front_matter_and_body(Path(path))
+            text_parts.extend(str(data.get(field) or "") for field in (
+                "title",
+                "update_type",
+                "update_channel_label",
+                "update_release_channel",
+                "release_channel",
+            ))
+        except Exception:
+            pass
+    text = " ".join(text_parts)
+    return "beta" if re.search(r"\b(?:beta|public\s+beta|preview|pre[- ]?release|rc)\b", text, flags=re.I) else "stable"
+
+
+def release_channel_for_report(text: str) -> str:
+    return "beta" if re.search(r"\b(?:public\s+beta|beta|pre[-\s]?release|prerelease|preview|release\s+candidate|rc)\b", text or "", flags=re.I) else "stable"
+
+
+def version_sort_key(version: str) -> tuple[int, ...]:
+    parts = []
+    for part in str(version or "").split("."):
+        try:
+            parts.append(int(part))
+        except ValueError:
+            parts.append(0)
+    return tuple(parts)
+
+
 def candidates_from_capture(capture: dict[str, Any], *, product_id: str) -> list[dict[str, Any]]:
     source_url = canonical_url(str(capture.get("source_url") or ""))
     source_name = str(capture.get("source_name") or "").strip()
@@ -369,7 +483,7 @@ def listing_card_candidates(
     for index, line in enumerate(lines):
         if index in consumed_indices:
             continue
-        if not VERSION_RE.search(line):
+        if not line_is_candidate_title(line, lines, index):
             continue
         host = urllib.parse.urlsplit(source_url).netloc.lower().removeprefix("www.")
         if host == CREATIVE_COW_HOST:
@@ -395,6 +509,7 @@ def listing_card_candidates(
             "report_text": window,
             "source_date": "",
             "source_date_text": date_text,
+            "metadata_date": str(capture.get("source_date") or capture.get("metadata_date") or ""),
             "captured_at": captured_at,
             "update_version": best_version(window),
             "match_basis": "embedded_listing_report_card",
@@ -406,18 +521,16 @@ def listing_card_candidates(
     return candidates
 
 
-def evaluate_candidate(candidate: dict[str, Any], record_by_version: dict[str, Any]) -> dict[str, Any]:
-    version = str(candidate.get("update_version") or "").strip()
-    record = record_by_version.get(version)
-    target_release_date = date_part(record.update_published_at) if record else ""
+def evaluate_candidate(candidate: dict[str, Any], record_by_version: dict[str, Any], release_windows: list[ReleaseWindow] | None = None) -> dict[str, Any]:
     report_text = " ".join([
         str(candidate.get("parent_title") or ""),
         str(candidate.get("report_title") or ""),
         str(candidate.get("report_text") or ""),
     ])
-    matched, matched_version, basis = premiere.premiere_version_match(report_text, version) if version else (False, "", "")
-    if candidate.get("match_basis") == "embedded_listing_report_card" and matched:
-        basis = "embedded_listing_report_card"
+    release_windows = release_windows or build_release_windows(list(record_by_version.values()))
+    version_match = resolve_version_match(report_text, candidate, record_by_version, release_windows)
+    version = version_match.update_version
+    matched = not version_match.rejection_reason and bool(version_match.update_version)
     theme, workflow_area, platform, severity, sentiment = premiere.classify(report_text)
 
     row = make_evidence_row(
@@ -430,11 +543,11 @@ def evaluate_candidate(candidate: dict[str, Any], record_by_version: dict[str, A
         report_title=str(candidate.get("report_title") or ""),
         report_text=str(candidate.get("report_text") or ""),
         captured_at=str(candidate.get("captured_at") or utc_now()),
-        source_date=str(candidate.get("source_date") or ""),
-        target_release_date=target_release_date,
+        source_date=version_match.source_date_resolved[:10] if version_match.source_date_resolved else str(candidate.get("source_date") or ""),
+        target_release_date=version_match.target_release_date,
         patch_version_matched=matched,
-        matched_version=matched_version,
-        match_basis=basis,
+        matched_version=version_match.matched_version,
+        match_basis=version_match.match_basis,
         counted=False,
         exclusion_reason=None,
         issue_theme=theme,
@@ -445,12 +558,17 @@ def evaluate_candidate(candidate: dict[str, Any], record_by_version: dict[str, A
         row_id=row_id_for_candidate(candidate, version),
     )
     row["capture_method"] = CAPTURE_METHOD
-    row["source_date_text"] = str(candidate.get("source_date_text") or "")
+    row["source_date_text"] = version_match.source_date_text or str(candidate.get("source_date_text") or "")
+    row["source_date_resolved"] = version_match.source_date_resolved
+    row["next_release_date"] = version_match.next_release_date
+    row["source_date_pass"] = version_match.source_date_pass
+    row["version_match_confidence"] = version_match.confidence
     row["listing_card_title"] = str(candidate.get("listing_card_title") or "")
     row["listing_card_category"] = str(candidate.get("listing_card_category") or "")
     row["listing_card_date_text"] = str(candidate.get("listing_card_date_text") or "")
+    row["accepted_reason"] = ""
 
-    reason = exclusion_reason(row, candidate, report_text)
+    reason = version_match.rejection_reason or exclusion_reason(row, candidate, report_text)
     if reason:
         row["counted"] = False
         row["exclusion_reason"] = reason
@@ -458,7 +576,230 @@ def evaluate_candidate(candidate: dict[str, Any], record_by_version: dict[str, A
         row["counted"] = True
         row["exclusion_reason"] = None
         row["source_weight"] = 1
+        row["accepted_reason"] = f"{version_match.match_basis}:{version_match.confidence}"
     return row
+
+
+def resolve_version_match(
+    report_text: str,
+    candidate: dict[str, Any],
+    record_by_version: dict[str, Any],
+    release_windows: list[ReleaseWindow],
+) -> VersionMatch:
+    date_resolution = resolve_source_date(candidate)
+    mentions = VERSION_RE.findall(report_text or "")
+    full_mentions = [version for version in mentions if version.count(".") >= 2]
+    short_mentions = [version for version in mentions if version.count(".") == 1]
+    report_channel = release_channel_for_report(report_text)
+
+    if full_mentions:
+        unique_full = sorted(set(full_mentions), key=lambda item: (-item.count("."), item))
+        version = unique_full[0]
+        if len(set(unique_full)) > 1:
+            return empty_version_match(date_resolution, "conflicting_exact_version_mentions")
+        if date_resolution:
+            active_window = active_window_for_date(release_windows, date_resolution, report_channel)
+            if active_window and version != active_window.update_version and not version.startswith(active_window.update_version + "."):
+                return empty_version_match(date_resolution, "conflicting_exact_version_for_active_release_window")
+        record = record_by_version.get(version)
+        window = window_for_version(release_windows, version, report_channel)
+        return VersionMatch(
+            update_version=version,
+            matched_version=version,
+            match_basis="exact_version",
+            confidence="exact",
+            target_release_date=date_part(getattr(record, "update_published_at", "")) if record else (window.start.date().isoformat() if window else ""),
+            next_release_date=window.end.date().isoformat() if window and window.end else "",
+            source_date_resolved=date_resolution.resolved_at if date_resolution else "",
+            source_date_text=(date_resolution.date_text if date_resolution else str(candidate.get("source_date_text") or "")),
+            source_date_pass=source_date_passes(date_resolution.resolved_date if date_resolution else "", date_part(getattr(record, "update_published_at", "")) if record else ""),
+        )
+
+    if short_mentions:
+        if not date_resolution:
+            return empty_version_match(None, "missing_resolvable_source_date_for_inferred_match")
+        active_window = active_window_for_date(release_windows, date_resolution, report_channel)
+        if not active_window:
+            return empty_version_match(date_resolution, "source_date_outside_release_windows")
+        matching_short = [version for version in sorted(set(short_mentions)) if short_version_matches_window(version, active_window)]
+        if not matching_short:
+            return empty_version_match(date_resolution, "truncated_version_outside_active_release_window")
+        if coarse_date_too_close_to_boundary(date_resolution, active_window):
+            return empty_version_match(date_resolution, "source_date_too_coarse_near_release_boundary")
+        basis = "exact_version" if active_window.update_version in matching_short else "truncated_version_in_release_window"
+        confidence = "exact" if basis == "exact_version" else "inferred_truncated_window"
+        return VersionMatch(
+            update_version=active_window.update_version,
+            matched_version=active_window.update_version,
+            match_basis=basis,
+            confidence=confidence,
+            target_release_date=active_window.start.date().isoformat(),
+            next_release_date=active_window.end.date().isoformat() if active_window.end else "",
+            source_date_resolved=date_resolution.resolved_at,
+            source_date_text=date_resolution.date_text,
+            source_date_pass=True,
+        )
+
+    if not CURRENT_RELEASE_RE.search(report_text or ""):
+        return empty_version_match(date_resolution, "missing_exact_patch_version_match")
+    if not date_resolution:
+        return empty_version_match(None, "missing_resolvable_source_date_for_inferred_match")
+    active_window = active_window_for_date(release_windows, date_resolution, report_channel)
+    if not active_window:
+        return empty_version_match(date_resolution, "source_date_outside_release_windows")
+    if coarse_date_too_close_to_boundary(date_resolution, active_window):
+        return empty_version_match(date_resolution, "source_date_too_coarse_near_release_boundary")
+    return VersionMatch(
+        update_version=active_window.update_version,
+        matched_version=active_window.update_version,
+        match_basis="release_window_inferred",
+        confidence="inferred_release_window",
+        target_release_date=active_window.start.date().isoformat(),
+        next_release_date=active_window.end.date().isoformat() if active_window.end else "",
+        source_date_resolved=date_resolution.resolved_at,
+        source_date_text=date_resolution.date_text,
+        source_date_pass=True,
+    )
+
+
+def empty_version_match(date_resolution: SourceDateResolution | None, reason: str) -> VersionMatch:
+    return VersionMatch(
+        update_version="",
+        matched_version="",
+        match_basis="",
+        confidence="",
+        target_release_date="",
+        next_release_date="",
+        source_date_resolved=date_resolution.resolved_at if date_resolution else "",
+        source_date_text=date_resolution.date_text if date_resolution else "",
+        source_date_pass=False if date_resolution else None,
+        rejection_reason=reason,
+    )
+
+
+def window_for_version(windows: list[ReleaseWindow], version: str, channel: str) -> ReleaseWindow | None:
+    for window in windows:
+        if window.update_version == version and window.channel == channel:
+            return window
+    for window in windows:
+        if window.update_version == version:
+            return window
+    return None
+
+
+def active_window_for_date(
+    windows: list[ReleaseWindow],
+    date_resolution: SourceDateResolution,
+    channel: str,
+) -> ReleaseWindow | None:
+    parsed = parse_iso_date(date_resolution.resolved_at)
+    if not parsed:
+        return None
+    candidates = [window for window in windows if window.channel == channel and parsed >= window.start and (window.end is None or parsed < window.end)]
+    if not candidates:
+        return None
+    return sorted(candidates, key=lambda window: window.start, reverse=True)[0]
+
+
+def short_version_matches_window(short_version: str, window: ReleaseWindow) -> bool:
+    version = str(window.update_version or "")
+    return version == short_version or version.startswith(short_version + ".")
+
+
+def coarse_date_too_close_to_boundary(date_resolution: SourceDateResolution, window: ReleaseWindow) -> bool:
+    if date_resolution.precision not in {"day", "coarse"}:
+        return False
+    parsed = parse_iso_date(date_resolution.resolved_at)
+    if not parsed:
+        return True
+    boundaries = [window.start]
+    if window.end:
+        boundaries.append(window.end)
+    return any(abs(parsed - boundary) < timedelta(days=1) for boundary in boundaries)
+
+
+def resolve_source_date(candidate: dict[str, Any]) -> SourceDateResolution | None:
+    absolute_candidates = [
+        ("detail_source_date", str(candidate.get("source_date") or "")),
+        ("listing_card_date_text", str(candidate.get("listing_card_date_text") or "")),
+        ("source_date_text", str(candidate.get("source_date_text") or "")),
+        ("metadata_date", str(candidate.get("metadata_date") or "")),
+    ]
+    for source, value in absolute_candidates:
+        parsed = parse_absolute_date_text(value)
+        if parsed:
+            return SourceDateResolution(
+                resolved_at=to_utc_iso(parsed),
+                resolved_date=parsed.date().isoformat(),
+                date_text=value,
+                precision="day" if len(value.strip()) <= 12 else "instant",
+                source=source,
+            )
+
+    relative_text = str(candidate.get("listing_card_date_text") or candidate.get("source_date_text") or "")
+    captured_at = parse_iso_date(candidate.get("captured_at"))
+    if relative_text and captured_at:
+        relative = resolve_relative_date(relative_text, captured_at)
+        if relative:
+            resolved, precision = relative
+            return SourceDateResolution(
+                resolved_at=to_utc_iso(resolved),
+                resolved_date=resolved.date().isoformat(),
+                date_text=relative_text,
+                precision=precision,
+                source="listing_card_relative_date",
+            )
+    return None
+
+
+def parse_absolute_date_text(value: str) -> datetime | None:
+    text = str(value or "").strip()
+    if not text:
+        return None
+    parsed = parse_iso_date(text)
+    if parsed:
+        return parsed
+    match = ABSOLUTE_DATE_RE.search(text)
+    if not match:
+        return None
+    for fmt in ("%B %d, %Y", "%b %d, %Y"):
+        try:
+            return datetime.strptime(match.group(0), fmt).replace(tzinfo=timezone.utc)
+        except ValueError:
+            continue
+    return None
+
+
+def resolve_relative_date(text: str, captured_at: datetime) -> tuple[datetime, str] | None:
+    lowered = str(text or "").lower()
+    if "today" in lowered:
+        return captured_at, "day"
+    if "yesterday" in lowered:
+        return captured_at - timedelta(days=1), "day"
+    match = re.search(r"(\d+)\s+(minute|hour|day|week|month|year)s?\s+ago", lowered)
+    if not match:
+        return None
+    amount = int(match.group(1))
+    unit = match.group(2)
+    if unit == "minute":
+        return captured_at - timedelta(minutes=amount), "instant"
+    if unit == "hour":
+        return captured_at - timedelta(hours=amount), "instant"
+    if unit == "day":
+        return captured_at - timedelta(days=amount), "day"
+    if unit == "week":
+        return captured_at - timedelta(weeks=amount), "day"
+    if unit == "month":
+        return captured_at - timedelta(days=30 * amount), "coarse"
+    if unit == "year":
+        return captured_at - timedelta(days=365 * amount), "coarse"
+    return None
+
+
+def to_utc_iso(value: datetime) -> str:
+    if value.tzinfo is None:
+        value = value.replace(tzinfo=timezone.utc)
+    return value.astimezone(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
 
 
 def exclusion_reason(row: dict[str, Any], candidate: dict[str, Any], report_text: str) -> str | None:
@@ -466,11 +807,13 @@ def exclusion_reason(row: dict[str, Any], candidate: dict[str, Any], report_text
         return "missing_exact_patch_version_match"
     if not row.get("patch_version_matched"):
         return "missing_exact_patch_version_match"
+    if official_or_announcement_source(str(row.get("source_url") or ""), report_text):
+        return "official_announcement_not_user_evidence"
     if not premiere.PREMIERE_PRODUCT_RE.search(report_text) and str(candidate.get("product_hint") or "") != DEFAULT_PRODUCT_ID:
         return "missing_premiere_product_context"
     if premiere.PRE_RELEASE_RE.search(report_text):
         return "prerelease_context_for_stable_record"
-    if not premiere.premiere_strong_issue_match(report_text):
+    if not concrete_issue_match(report_text):
         return "not_a_real_issue_report"
     if feature_request_or_how_to_only(candidate, report_text):
         return "not_a_real_issue_report"
@@ -488,6 +831,8 @@ def exclusion_reason(row: dict[str, Any], candidate: dict[str, Any], report_text
             return "insufficient_concrete_issue_detail"
         if not str(row.get("listing_card_date_text") or row.get("source_date") or row.get("source_date_text") or "").strip():
             return "missing_listing_card_date"
+        if row.get("source_date_pass") is False:
+            return "source_date_before_or_unverified_against_release"
         if not listing_card_has_enough_issue_detail(candidate):
             return "insufficient_concrete_issue_detail"
         row["source_date_pass"] = row.get("source_date_pass") if row.get("source_date") else True
@@ -499,6 +844,31 @@ def exclusion_reason(row: dict[str, Any], candidate: dict[str, Any], report_text
     if source_date_pass is False:
         return "source_date_before_or_unverified_against_release"
     return None
+
+
+def official_or_announcement_source(source_url: str, report_text: str) -> bool:
+    url = source_url.lower()
+    if "/announcements-" in url or "helpx.adobe.com" in url:
+        return True
+    normalized = normalize_text(report_text).replace("\u2019", "'").replace("\u2018", "'")
+    return bool(re.search(
+        r"\b(?:official\s+announcement|release\s+notes|what.?s\s+new|version\s+history|"
+        r"we.?ve\s+just\s+released|bringing\s+a\s+range\s+of\s+improvements|new\s+features)\b",
+        normalized,
+        flags=re.I,
+    ))
+
+
+def concrete_issue_match(report_text: str) -> bool:
+    return bool(
+        premiere.premiere_strong_issue_match(report_text)
+        or re.search(
+            r"\b(?:missing|unavailable|not\s+available|do(?:es)?\s+not\s+appear|won.?t\s+appear|"
+            r"impossible\s+to|cannot\s+(?:mask|open|export|render|use)|can.?t\s+(?:mask|open|export|render|use))\b",
+            report_text or "",
+            flags=re.I,
+        )
+    )
 
 
 def feature_request_or_how_to_only(candidate: dict[str, Any], report_text: str) -> bool:
@@ -516,7 +886,7 @@ def listing_card_has_enough_issue_detail(candidate: dict[str, Any]) -> bool:
     text = str(candidate.get("report_text") or "")
     if len(text) < len(title) + 20:
         return False
-    if not premiere.STRONG_ISSUE_RE.search(text):
+    if not concrete_issue_match(text):
         return False
     return True
 
@@ -524,6 +894,7 @@ def listing_card_has_enough_issue_detail(candidate: dict[str, Any]) -> bool:
 def duplicate_row(
     row: dict[str, Any],
     existing_ids: set[str],
+    existing_listing_keys: set[tuple[str, str, str]],
     existing_urls: set[tuple[str, str, str]],
     accepted: list[dict[str, Any]],
 ) -> bool:
@@ -534,7 +905,9 @@ def duplicate_row(
     if row_id and row_id in accepted_ids:
         return True
     if row.get("match_basis") == "embedded_listing_report_card":
-        return False
+        key = listing_card_key(row)
+        accepted_keys = {listing_card_key(item) for item in accepted if listing_card_key(item)}
+        return bool(key and (key in existing_listing_keys or key in accepted_keys))
     key = evidence_url_key(row)
     return key in existing_urls or key in {evidence_url_key(item) for item in accepted}
 
@@ -601,6 +974,46 @@ def planned_output_files(result: PromotionResult, *, write: bool) -> list[Path]:
             files.append(ROOT / "updates" / "generated")
     return files
 
+
+def write_explanation_logs(result: PromotionResult, input_path: Path) -> dict[str, Path]:
+    log_dir = promotion_log_dir(input_path)
+    log_dir.mkdir(parents=True, exist_ok=True)
+    accepted_path = log_dir / "promotion-accepted.jsonl"
+    rejections_path = log_dir / "promotion-rejections.jsonl"
+    write_jsonl_rows(accepted_path, [explanation_row(row, accepted=True) for row in result.accepted])
+    write_jsonl_rows(rejections_path, [explanation_row(row, accepted=False) for row in result.rejected])
+    return {"accepted": accepted_path, "rejections": rejections_path}
+
+
+def promotion_log_dir(input_path: Path) -> Path:
+    resolved = input_path.resolve()
+    parent = resolved.parent
+    if parent.name.lower() == "outbox" and parent.parent.name.lower() == "app":
+        return parent.parent / "logs"
+    return parent / "logs"
+
+
+def write_jsonl_rows(path: Path, rows: list[dict[str, Any]]) -> None:
+    path.write_text("".join(json.dumps(row, sort_keys=True, ensure_ascii=False) + "\n" for row in rows), encoding="utf-8")
+
+
+def explanation_row(row: dict[str, Any], *, accepted: bool) -> dict[str, Any]:
+    return {
+        "source_name": row.get("source_name") or "",
+        "source_url": row.get("source_url") or "",
+        "listing_card_title": row.get("listing_card_title") or row.get("report_title") or "",
+        "listing_card_category": row.get("listing_card_category") or "",
+        "listing_card_date_text": row.get("listing_card_date_text") or "",
+        "source_date_resolved": row.get("source_date_resolved") or row.get("source_date") or "",
+        "matched_version": row.get("matched_version") or "",
+        "match_basis": row.get("match_basis") or "",
+        "version_match_confidence": row.get("version_match_confidence") or "",
+        "accepted_reason": row.get("accepted_reason") if accepted else "",
+        "rejection_reason": "" if accepted else (row.get("exclusion_reason") or ""),
+        "short_excerpt": row.get("report_text_excerpt") or "",
+    }
+
+
 def rejection_from_capture(capture: dict[str, Any], reason: str) -> dict[str, Any]:
     return {
         "id": "",
@@ -614,11 +1027,14 @@ def rejection_from_capture(capture: dict[str, Any], reason: str) -> dict[str, An
         "report_text_excerpt": "",
         "captured_at": str(capture.get("captured_at") or ""),
         "source_date": "",
+        "source_date_resolved": "",
         "target_release_date": "",
+        "next_release_date": "",
         "source_date_pass": None,
         "patch_version_matched": False,
         "matched_version": "",
         "match_basis": "",
+        "version_match_confidence": "",
         "counted": False,
         "exclusion_reason": reason,
         "issue_theme": "",
@@ -664,6 +1080,15 @@ def evidence_url_key(row: dict[str, Any]) -> tuple[str, str, str]:
     )
 
 
+def listing_card_key(row: dict[str, Any]) -> tuple[str, str, str] | None:
+    title = normalize_text(row.get("listing_card_title") or row.get("report_title") or "").lower()
+    url = canonical_url(str(row.get("source_url") or ""))
+    product_id = str(row.get("product_id") or "").strip()
+    if not title or not url or not product_id:
+        return None
+    return (product_id, url, title)
+
+
 def source_is_specific_detail(url: str) -> bool:
     return premiere.adobe_report_url_is_specific(url) or premiere.creativecow_thread_url_is_specific(url)
 
@@ -690,6 +1115,25 @@ def nearest_category(lines: list[str], index: int) -> str:
                     if category.lower() in clean.lower():
                         return category
     return ""
+
+
+def line_is_candidate_title(line: str, lines: list[str], index: int) -> bool:
+    clean = normalize_text(line)
+    if len(clean) < 8:
+        return False
+    if TITLE_SKIP_RE.match(clean):
+        return False
+    if relative_or_absolute_date_text(clean):
+        return False
+    if VERSION_RE.search(clean):
+        return True
+    category = nearest_category(lines, index)
+    date_text = nearest_date_text(lines, index)
+    if not category or not date_text:
+        return False
+    if "feature" in category.lower() or "idea" in category.lower():
+        return True
+    return bool(concrete_issue_match(clean) or CURRENT_RELEASE_RE.search(clean) or re.search(r"\b(?:issue|issues|problem|missing|unavailable)\b", clean, flags=re.I))
 
 
 def nearest_date_text(lines: list[str], index: int) -> str:
