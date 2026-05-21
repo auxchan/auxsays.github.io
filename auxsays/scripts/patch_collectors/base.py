@@ -54,6 +54,18 @@ EVIDENCE_FIELDS = (
     "listing_card_date_text",
 )
 
+OPTIONAL_EVIDENCE_FIELDS = {
+    "archive_url",
+    "source_date",
+    "target_release_date",
+    "source_date_pass",
+    "capture_method",
+    "source_date_text",
+    "listing_card_title",
+    "listing_card_category",
+    "listing_card_date_text",
+}
+
 METHOD_HEALTH_FIELDS = (
     "product_id",
     "update_version",
@@ -346,13 +358,19 @@ def method_health_row(
 
 
 def normalize_evidence_row(row: dict[str, Any]) -> dict[str, Any]:
-    normalized = {field: row.get(field) for field in EVIDENCE_FIELDS}
+    normalized = {
+        field: row.get(field)
+        for field in EVIDENCE_FIELDS
+        if field not in OPTIONAL_EVIDENCE_FIELDS or row.get(field) not in (None, "")
+    }
     normalized["source_weight"] = int(normalized.get("source_weight") or 1)
     normalized["counted"] = bool(normalized.get("counted"))
     normalized["patch_version_matched"] = bool(normalized.get("patch_version_matched"))
     if normalized.get("source_date_pass") not in (True, False, None):
         normalized["source_date_pass"] = bool(normalized.get("source_date_pass"))
     for field in EVIDENCE_FIELDS:
+        if field not in normalized:
+            continue
         if field in {"source_weight", "counted", "patch_version_matched", "source_date_pass"}:
             continue
         if normalized[field] is not None:
@@ -393,7 +411,14 @@ def append_evidence_rows(rows: list[dict[str, Any]], path: Path = EVIDENCE_PATH)
             seen_urls.add(url_key)
         added += 1
     if added:
-        write_evidence_file(existing, path)
+        if path.exists():
+            appended_rows = existing[-added:]
+            with path.open("a", encoding="utf-8") as handle:
+                if path.stat().st_size > 0:
+                    handle.write("\n")
+                handle.write(yaml.safe_dump(appended_rows, sort_keys=False, allow_unicode=True, width=1000))
+        else:
+            write_evidence_file(existing, path)
     return added, len(existing), existing
 
 

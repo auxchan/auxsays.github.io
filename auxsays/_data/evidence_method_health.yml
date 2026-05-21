@@ -319,3 +319,14 @@ methods:
   blocked_reason: creativecow_brave_search_thread_fetch_failed:browser_challenge
   last_run: '2026-05-21T02:01:32Z'
   notes: 'Creative COW Brave Search fallback discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. This non-Adobe source is used only for specific Creative COW Premiere Pro forum threads that explicitly match the same patch/version and concrete-issue gates. Fetch failures: 1.'
+- product_id: adobe-premiere-pro
+  update_version: 26.2.2
+  method_id: local_playwright_capture_promotion
+  source_type: local_playwright_capture
+  status: partial
+  candidates_found: 2
+  accepted_reports: 1
+  rejected_reports: 1
+  blocked_reason: ''
+  last_run: '2026-05-21T05:38:24Z'
+  notes: 'Promotes local Playwright candidate captures through deterministic Premiere Pro evidence gates. Rejected candidates: not_a_real_issue_report=1.'

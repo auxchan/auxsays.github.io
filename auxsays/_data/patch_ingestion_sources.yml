@@ -926,7 +926,7 @@
     type: html_changelog
     adapter: adobe_release_notes
     official_url: https://helpx.adobe.com/premiere/desktop/whats-new/release-notes.html
-    secondary_official_url: https://community.adobe.com/announcements-727/welcome-to-premiere-26-2-1557825
+    secondary_official_url: https://community.adobe.com/announcements-727/what-s-new-in-adobe-premiere-26-2-2-may-2026-1560755
     feed_url: null
     api_url: null
     parser_profile: adobe_premiere_release_notes

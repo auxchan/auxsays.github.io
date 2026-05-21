@@ -233,6 +233,7 @@ def promote(
 
     accepted: list[dict[str, Any]] = []
     rejected: list[dict[str, Any]] = []
+    duplicate_existing: list[dict[str, Any]] = []
     listing_cards_found = 0
 
     for capture in capture_rows:
@@ -249,12 +250,14 @@ def promote(
             if duplicate_row(row, existing_ids, existing_urls, accepted):
                 row["counted"] = False
                 row["exclusion_reason"] = "duplicate_existing_evidence"
+                duplicate_existing.append(row)
             if row.get("counted") is True:
                 accepted.append(row)
             else:
                 rejected.append(row)
 
     accepted_versions = {str(row.get("update_version") or "") for row in accepted}
+    duplicate_existing_versions = {str(row.get("update_version") or "") for row in duplicate_existing}
     generated_versions = set(record_by_version)
     unmatched_versions = accepted_versions - generated_versions
     updated_versions: list[str] = []
@@ -265,13 +268,13 @@ def promote(
         evidence_rows_added, _total, _rows = append_evidence_rows(accepted, path=evidence_path)
         health_rows = build_method_health_rows(
             product_id=product_id,
-            accepted=accepted,
+            accepted=[*accepted, *duplicate_existing],
             rejected=rejected,
             generated_versions=generated_versions,
         )
         method_health_changed, _health_total, _health = upsert_method_health(health_rows, path=method_health_path)
         updater = writeback_func or premiere.apply_consensus_writeback
-        for version in sorted(accepted_versions & generated_versions):
+        for version in sorted((accepted_versions | duplicate_existing_versions) & generated_versions):
             if updater(version):
                 updated_versions.append(version)
 
@@ -372,7 +375,7 @@ def listing_card_candidates(
         if host == CREATIVE_COW_HOST:
             window_lines = context_window(lines, index, before=2, after=4)
         else:
-            window_lines = context_window(lines, index, before=7, after=9)
+            window_lines = context_window(lines, index, before=2, after=8)
         window = " ".join(window_lines)
         category = nearest_category(lines, index)
         date_text = nearest_date_text(lines, index)
@@ -543,13 +546,18 @@ def build_method_health_rows(
     rejected: list[dict[str, Any]],
     generated_versions: set[str],
 ) -> list[dict[str, Any]]:
-    versions = sorted({str(row.get("update_version") or "") for row in [*accepted, *rejected] if row.get("update_version")})
+    versions = sorted({str(row.get("update_version") or "") for row in accepted if row.get("update_version")})
     if not versions:
-        versions = [""]
+        versions = sorted({str(row.get("update_version") or "") for row in rejected if row.get("update_version")}) or [""]
     rows: list[dict[str, Any]] = []
     for version in versions:
         accepted_for_version = [row for row in accepted if str(row.get("update_version") or "") == version]
-        rejected_for_version = [row for row in rejected if str(row.get("update_version") or "") == version]
+        rejected_for_version = [
+            row
+            for row in rejected
+            if str(row.get("update_version") or "") == version
+            and str(row.get("exclusion_reason") or "") != "duplicate_existing_evidence"
+        ]
         if accepted_for_version and rejected_for_version:
             status = "partial"
         elif accepted_for_version:
@@ -679,14 +687,14 @@ def nearest_category(lines: list[str], index: int) -> str:
             if 0 <= pos < len(lines):
                 clean = lines[pos].strip()
                 for category in CARD_CATEGORIES:
-                    if clean.lower() == category.lower():
+                    if category.lower() in clean.lower():
                         return category
     return ""
 
 
 def nearest_date_text(lines: list[str], index: int) -> str:
     for distance in range(0, 10):
-        for pos in (index - distance, index + distance):
+        for pos in (index + distance, index - distance):
             if 0 <= pos < len(lines):
                 found = relative_or_absolute_date_text(lines[pos])
                 if found:

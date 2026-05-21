@@ -50,6 +50,11 @@ MONTHS = {
     "december": "12",
 }
 
+PREMIERE_OFFICIAL_CONTEXT_URLS = {
+    "26.2": "https://community.adobe.com/announcements-727/welcome-to-premiere-26-2-1557825",
+    "26.2.2": "https://community.adobe.com/announcements-727/what-s-new-in-adobe-premiere-26-2-2-may-2026-1560755",
+}
+
 
 def _request_options(source: dict[str, Any]) -> dict[str, Any]:
     ingestion = source.get("ingestion", {}) or {}
@@ -235,6 +240,14 @@ def _classified_source_type(source_url: str) -> str:
     return "official-source"
 
 
+def _premiere_release_notes_body(version: str, fallback_body: str) -> str:
+    if version == "26.2.2":
+        return _premiere_2622_release_notes_body()
+    if version == "26.2":
+        return _premiere_262_release_notes_body()
+    return fallback_body
+
+
 def _premiere_262_release_notes_body() -> str:
     return """### Official Release Notes Summary
 
@@ -252,6 +265,19 @@ Adobe’s release notes also list fixed issues for Premiere Pro 26.2, including 
 
 AUXSAYS note: this is an official release-note/fixed-issue summary. Community consensus remains separate and patch-specific."""
 
+
+def _premiere_2622_release_notes_body() -> str:
+    return """### Official Release Notes Summary
+
+AUXSAYS classification: Adobe release notes / fixed-issue source. This section summarizes the official Adobe release notes and official Adobe Community announcement for Premiere Pro 26.2.2. Official Adobe posts are not counted as user consensus evidence.
+
+#### Fixed issue summarized
+
+- Adobe lists May 2026 (version 26.2.2) as a Premiere Pro update.
+- Adobe says this update fixes a critical issue that impacted general stability and could cause Premiere Pro to hang.
+
+AUXSAYS note: this is an official fixed-issue record. Community/user consensus remains separate and patch-specific."""
+
 def _record(
     source: dict[str, Any],
     source_url: str,
@@ -262,6 +288,10 @@ def _record(
 ) -> dict[str, Any]:
     digest = hashlib.sha256((source_url + version + title).encode("utf-8")).hexdigest()[:16]
     source_type = _classified_source_type(source_url)
+    premiere_context_url = PREMIERE_OFFICIAL_CONTEXT_URLS.get(
+        str(version),
+        "https://community.adobe.com/announcements-727/welcome-to-premiere-26-2-1557825",
+    )
     official_sources = [
         {
             "label": "Adobe Premiere Pro release notes",
@@ -272,15 +302,15 @@ def _record(
         },
         {
             "label": "Adobe Premiere Pro community announcement",
-            "url": "https://community.adobe.com/announcements-727/welcome-to-premiere-26-2-1557825",
+            "url": premiere_context_url,
             "source_type": "community_official_post",
             "trust_level": "official",
             "extraction_status": "summary_captured" if source_type == "community_official_post" else "reference_only",
         },
     ] if source.get("product_id") == "adobe-premiere-pro" else []
 
-    if source.get("product_id") == "adobe-premiere-pro" and str(version).startswith("26.2") and source_type == "release_notes":
-        body = _premiere_262_release_notes_body()
+    if source.get("product_id") == "adobe-premiere-pro" and (source_type == "release_notes" or str(version) == "26.2.2"):
+        body = _premiere_release_notes_body(str(version), body)
 
     record = {
         "record_id": f"adobe:{source['product_id']}:{version}:{digest}",
@@ -307,11 +337,17 @@ def _record(
         "official_note_label": "Official release notes" if source_type == "release_notes" else "Official source summary",
         "official_sources": official_sources,
         "capture_status": "captured-from-official-adobe-source",
-        "official_summary": f"Adobe published {source['software']} {version} release information.",
+        "official_summary": _official_summary(source, version),
     }
     if source.get("product_id") == "adobe-premiere-pro" and source.get("ingestion", {}).get("allow_legacy_premiere_pilot_consensus_seed"):
         record.update(_premiere_262_pilot_consensus(version))
     return record
+
+
+def _official_summary(source: dict[str, Any], version: str) -> str:
+    if source.get("product_id") == "adobe-premiere-pro" and str(version) == "26.2.2":
+        return "Adobe published Premiere Pro 26.2.2 as a May 2026 update that fixes a critical general-stability issue that could cause Premiere Pro to hang."
+    return f"Adobe published {source['software']} {version} release information."
 
 
 def fetch(source: dict[str, Any], limit: int = 3) -> list[dict[str, Any]]:

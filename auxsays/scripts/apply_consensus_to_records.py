@@ -902,6 +902,22 @@ def _record_coherence_fields(pid: str, ver: str, count: int, record: dict[str, A
             "source_freshness_note": "",
         }
 
+    if pid == "adobe-premiere-pro":
+        report_word = "report" if count == 1 else "reports"
+        return {
+            "quick_verdict": f"WAIT: {product_label} {ver} has {count} user {report_word} found.",
+            "update_decision_label": "WAIT",
+            "update_decision_body": (
+                f"{_issue_cluster_sentence(themes)} Editors with active deadlines should wait or test on copied projects before moving production work to this build."
+            ),
+            "practical_recommendations": [
+                "Wait if you are in the middle of deadline-sensitive editing work.",
+                "Test on copied projects before moving active client timelines to this version.",
+                "Keep a rollback path available if your current Premiere Pro build is stable.",
+            ],
+            "source_freshness_note": "",
+        }
+
     return {}
 
 

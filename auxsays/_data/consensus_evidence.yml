@@ -2925,3 +2925,32 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: adobe-premiere-pro-26-2-2-embedded-listing-report-card-https-community-adobe-com-t5-premiere-pro-discussions-bd-p-premiere-pro-page-1-in-26-2-2-the-app-would-freeze-whenever-i-needed-to-open-a-drop-down-in-the-menu
+  product_id: adobe-premiere-pro
+  update_version: 26.2.2
+  source_type: adobe_community_listing_card
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/t5/premiere-pro-discussions/bd-p/premiere-pro?page=1
+  parent_title: Adobe Premiere | Community
+  report_title: In 26.2.2, the app would freeze whenever I needed to open a drop-down in the menu.
+  report_text_excerpt: RevealEventsGroup ParticipantBug Reports In 26.2.2, the app would freeze whenever I needed to open a drop-down in the menu. Open for Voting I was using the latest version, 26.2.2. Everything was mostly fine, but whenever I need to click into a drop-down menu, it freezes up....
+  captured_at: '2026-05-21T04:03:16.403Z'
+  target_release_date: '2026-05-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.2.2
+  match_basis: embedded_listing_report_card
+  counted: true
+  exclusion_reason: null
+  issue_theme: application crash or hang
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  capture_method: local_playwright
+  source_date_text: 4 hours ago
+  listing_card_title: In 26.2.2, the app would freeze whenever I needed to open a drop-down in the menu.
+  listing_card_category: Bug Reports
+  listing_card_date_text: 4 hours ago
