@@ -2925,7 +2925,6 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
-
 - id: adobe-premiere-pro-26-2-2-embedded-listing-report-card-https-community-adobe-com-t5-premiere-pro-discussions-bd-p-premiere-pro-page-1-in-26-2-2-the-app-would-freeze-whenever-i-needed-to-open-a-drop-down-in-the-menu
   product_id: adobe-premiere-pro
   update_version: 26.2.2
@@ -2954,7 +2953,6 @@ evidence:
   listing_card_title: In 26.2.2, the app would freeze whenever I needed to open a drop-down in the menu.
   listing_card_category: Bug Reports
   listing_card_date_text: 4 hours ago
-
 - id: adobe-premiere-pro-26-2-2-embedded-listing-report-card-https-community-adobe-com-t5-premiere-pro-discussions-bd-p-premiere-pro-page-1-mask-tool-issues-gaussian-blur-opacity
   product_id: adobe-premiere-pro
   update_version: 26.2.2
@@ -2986,3 +2984,24 @@ evidence:
   listing_card_title: Mask Tool Issues (Gaussian Blur & Opacity)
   listing_card_category: Bug Reports
   listing_card_date_text: 5 hours ago
+- id: obs-studio-32-1-2-github-issue-13452
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13452
+  parent_title: preview projector lags
+  report_title: preview projector lags
+  report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/ph7JzamTkoQUzIO1 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior runs'
+  captured_at: '2026-05-21T19:23:49Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
