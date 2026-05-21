@@ -20,7 +20,7 @@ update_published_at: '2025-12-18T00:00:00Z'
 update_last_checked: '2026-05-14T04:15:50Z'
 source_last_checked: '2026-05-20T20:31:58Z'
 official_body_last_checked: '2026-05-20T20:31:58Z'
-record_last_updated: '2026-05-20T21:10:07.934767Z'
+record_last_updated: '2026-05-21T10:35:56.214258Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -331,7 +331,6 @@ accepted_report_sources:
   workflow_area: render/export
 evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
-- Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 practical_recommendations:
 - Wait if you have active render/export deadlines.
 - Test on copied projects before moving client work to this version.
