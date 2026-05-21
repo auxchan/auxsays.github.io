@@ -2954,3 +2954,35 @@ evidence:
   listing_card_title: In 26.2.2, the app would freeze whenever I needed to open a drop-down in the menu.
   listing_card_category: Bug Reports
   listing_card_date_text: 4 hours ago
+
+- id: adobe-premiere-pro-26-2-2-embedded-listing-report-card-https-community-adobe-com-t5-premiere-pro-discussions-bd-p-premiere-pro-page-1-mask-tool-issues-gaussian-blur-opacity
+  product_id: adobe-premiere-pro
+  update_version: 26.2.2
+  source_type: adobe_community_listing_card
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/t5/premiere-pro-discussions/bd-p/premiere-pro?page=1
+  parent_title: Adobe Premiere | Community
+  report_title: Mask Tool Issues (Gaussian Blur & Opacity)
+  report_text_excerpt: Laurafalcione ParticipantBug Reports Mask Tool Issues (Gaussian Blur & Opacity) Needs More Info IssueOpacity mask tools (pen, rectangle, ellipse) do not appear in Effect Controls for certain MP4 files in Premiere Pro 2026, even though the files are standard H.264 video clips...
+  captured_at: '2026-05-21T04:03:16.403Z'
+  source_date: '2026-05-20'
+  source_date_resolved: '2026-05-20T23:03:16Z'
+  target_release_date: '2026-05-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.2.2
+  match_basis: release_window_inferred
+  version_match_confidence: inferred_release_window
+  counted: true
+  exclusion_reason: null
+  issue_theme: media decode or audio/video issue
+  workflow_area: media playback
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  capture_method: local_playwright
+  source_date_text: 5 hours ago
+  listing_card_title: Mask Tool Issues (Gaussian Blur & Opacity)
+  listing_card_category: Bug Reports
+  listing_card_date_text: 5 hours ago

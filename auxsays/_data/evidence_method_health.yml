@@ -324,12 +324,12 @@ methods:
   method_id: local_playwright_capture_promotion
   source_type: local_playwright_capture
   status: partial
-  candidates_found: 2
-  accepted_reports: 1
-  rejected_reports: 1
+  candidates_found: 29
+  accepted_reports: 22
+  rejected_reports: 7
   blocked_reason: ''
-  last_run: '2026-05-21T05:38:24Z'
-  notes: 'Promotes local Playwright candidate captures through deterministic Premiere Pro evidence gates. Rejected candidates: not_a_real_issue_report=1.'
+  last_run: '2026-05-21T09:16:37Z'
+  notes: 'Promotes local Playwright candidate captures through deterministic Premiere Pro evidence gates. Rejected candidates: not_a_real_issue_report=6, official_announcement_not_user_evidence=1.'
 - product_id: blackmagic-davinci
   update_version: 20.3.3
   method_id: known_watchlist
