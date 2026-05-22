@@ -3,7 +3,7 @@
   "last_results": [
     {
       "adapter": "rss_feed",
-      "duration_ms": 620,
+      "duration_ms": 1804,
       "fetched": 2,
       "product_id": "figma",
       "refreshed": [
@@ -11,20 +11,17 @@
           "action": "freshness-updated",
           "path": "auxsays/updates/generated/2026-05-20-figma-the-figma-agent-is-here.md",
           "record_id": "rss:figma:4052f1c6-a5bb-4d6e-89a7-b31d94bcbccf"
-        },
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-05-18-figma-sections-in-figma-slides.md",
-          "record_id": "rss:figma:bd335822-5b89-4ce0-8ae0-1758197dcd78"
         }
       ],
       "skipped": [],
       "status": "success",
-      "written": []
+      "written": [
+        "auxsays/updates/generated/2026-05-22-figma-bulk-edit-in-figma-buzz.md"
+      ]
     },
     {
       "adapter": "adobe_release_notes",
-      "duration_ms": 25760,
+      "duration_ms": 25751,
       "fetched": 1,
       "product_id": "adobe-premiere-pro",
       "refreshed": [
@@ -40,7 +37,7 @@
     },
     {
       "adapter": "blackmagic_support_downloads",
-      "duration_ms": 694,
+      "duration_ms": 1005,
       "fetched": 2,
       "product_id": "blackmagic-davinci",
       "refreshed": [
@@ -61,7 +58,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 1417,
+      "duration_ms": 1049,
       "fetched": 2,
       "product_id": "obs-studio",
       "refreshed": [
@@ -82,7 +79,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 888,
+      "duration_ms": 702,
       "fetched": 2,
       "product_id": "comfyui",
       "refreshed": [
@@ -103,7 +100,7 @@
     },
     {
       "adapter": "rss_feed",
-      "duration_ms": 438,
+      "duration_ms": 392,
       "fetched": 2,
       "product_id": "github",
       "refreshed": [
@@ -124,7 +121,7 @@
     },
     {
       "adapter": "html_changelog",
-      "duration_ms": 181,
+      "duration_ms": 178,
       "fetched": 0,
       "product_id": "netlify",
       "refreshed": [],
@@ -133,8 +130,8 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-05-22T09:51:36Z",
-  "last_run_started_at": "2026-05-22T09:51:06Z",
+  "last_run_finished_at": "2026-05-22T15:26:44Z",
+  "last_run_started_at": "2026-05-22T15:26:13Z",
   "sources": {
     "adobe-after-effects": {
       "consecutive_failures": 2,
@@ -199,7 +196,7 @@
     "adobe-premiere-pro": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_release_notes",
-      "last_checked_at": "2026-05-22T09:51:06Z",
+      "last_checked_at": "2026-05-22T15:26:15Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -207,8 +204,8 @@
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 25760,
-      "last_success_at": "2026-05-22T09:51:06Z",
+      "last_run_duration_ms": 25751,
+      "last_success_at": "2026-05-22T15:26:15Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "adobe:adobe-premiere-pro:26.2.2:c176cc33bba85978",
@@ -219,7 +216,7 @@
     "blackmagic-davinci": {
       "consecutive_failures": 0,
       "last_adapter": "blackmagic_support_downloads",
-      "last_checked_at": "2026-05-22T09:51:32Z",
+      "last_checked_at": "2026-05-22T15:26:41Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -227,8 +224,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 694,
-      "last_success_at": "2026-05-22T09:51:32Z",
+      "last_run_duration_ms": 1005,
+      "last_success_at": "2026-05-22T15:26:41Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "blackmagic-support:blackmagic-davinci:20.3.3:44720c1f672d4dce9e0fab7df33f928e",
@@ -240,7 +237,7 @@
     "comfyui": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-05-22T09:51:34Z",
+      "last_checked_at": "2026-05-22T15:26:43Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -248,8 +245,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 888,
-      "last_success_at": "2026-05-22T09:51:34Z",
+      "last_run_duration_ms": 702,
+      "last_success_at": "2026-05-22T15:26:43Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:comfyui:326155086",
@@ -263,7 +260,7 @@
     "figma": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-05-22T09:51:06Z",
+      "last_checked_at": "2026-05-22T15:26:13Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -271,10 +268,11 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 620,
-      "last_success_at": "2026-05-22T09:51:06Z",
+      "last_run_duration_ms": 1804,
+      "last_success_at": "2026-05-22T15:26:13Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "rss:figma:cd3d7d0b-e3c0-41b2-b370-a014bf901686",
         "rss:figma:4052f1c6-a5bb-4d6e-89a7-b31d94bcbccf",
         "rss:figma:bd335822-5b89-4ce0-8ae0-1758197dcd78",
         "rss:figma:11173709-f3f3-44ff-8711-ae180a888f29",
@@ -293,7 +291,7 @@
     "github": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-05-22T09:51:35Z",
+      "last_checked_at": "2026-05-22T15:26:44Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -301,8 +299,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 438,
-      "last_success_at": "2026-05-22T09:51:35Z",
+      "last_run_duration_ms": 392,
+      "last_success_at": "2026-05-22T15:26:44Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:github:https://github.blog/changelog/2026-05-19-github-copilot-for-eclipse-is-open-source",
@@ -360,7 +358,7 @@
     "netlify": {
       "consecutive_failures": 0,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-05-22T09:51:35Z",
+      "last_checked_at": "2026-05-22T15:26:44Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -368,15 +366,15 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 181,
-      "last_success_at": "2026-05-22T09:51:35Z",
+      "last_run_duration_ms": 178,
+      "last_success_at": "2026-05-22T15:26:44Z",
       "previous_consecutive_failures": 0,
       "status": "degraded"
     },
     "obs-studio": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-05-22T09:51:33Z",
+      "last_checked_at": "2026-05-22T15:26:42Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -384,8 +382,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 1417,
-      "last_success_at": "2026-05-22T09:51:33Z",
+      "last_run_duration_ms": 1049,
+      "last_success_at": "2026-05-22T15:26:42Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:obs-studio:304830335",

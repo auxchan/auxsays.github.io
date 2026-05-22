@@ -17,8 +17,8 @@ update_version: GitHub Copilot for Eclipse is open source
 update_logo_text: GIT
 update_published_at: '2026-05-21T23:50:38Z'
 update_last_checked: '2026-05-22T04:38:56Z'
-source_last_checked: '2026-05-22T09:51:35Z'
-official_body_last_checked: '2026-05-22T09:51:35Z'
+source_last_checked: '2026-05-22T15:26:44Z'
+official_body_last_checked: '2026-05-22T15:26:44Z'
 record_last_updated: '2026-05-22T04:38:56Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -98,6 +98,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-05-22T09:51:35Z'
+  url: https://github.blog/changelog/2026-05-21-github-copilot-for-eclipse-is-open-source
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-05-22T15:26:44Z'
   url: https://github.blog/changelog/2026-05-21-github-copilot-for-eclipse-is-open-source
   status: captured-from-rss-feed
   body_captured: true
