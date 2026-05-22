@@ -1,8 +1,8 @@
 ---
 layout: aux-update
-title: Figma Bulk edit in Figma Buzz official update breakdown
+title: Figma Do more with grid official update breakdown
 description: Official Figma update record captured from Figma.
-permalink: /updates/figma/figma/bulk-edit-in-figma-buzz/
+permalink: /updates/figma/figma/do-more-with-grid/
 update_entry: true
 company_id: figma
 product_id: figma
@@ -11,28 +11,29 @@ update_product: Figma
 update_category: Design Workflow
 update_type: official-source
 update_source_name: Figma
-update_source_url: https://www.figma.com/release-notes/?title=bulk-edit-figma-buzz
+update_source_url: https://www.figma.com/release-notes/?title=do-more-with-grid
 update_download_url: ''
-update_version: Bulk edit in Figma Buzz
+update_version: Do more with grid
 update_logo_text: FIG
 update_published_at: '2026-05-22T00:00:00.000Z'
-update_last_checked: '2026-05-22T15:26:13Z'
+update_last_checked: '2026-05-22T20:13:34Z'
 source_last_checked: '2026-05-22T20:13:34Z'
 official_body_last_checked: '2026-05-22T20:13:34Z'
-record_last_updated: '2026-05-22T15:26:13Z'
+record_last_updated: '2026-05-22T20:13:34Z'
 patch_file_size: ''
 patch_file_size_note: ''
 patch_file_size_status: pending_adapter_support
 update_status: current
-update_feed_title: Figma Bulk edit in Figma Buzz
-update_detail_title: Figma Bulk edit in Figma Buzz
+update_feed_title: Figma Do more with grid
+update_detail_title: Figma Do more with grid
 update_consensus_label: Insufficient data
 update_report_count: 0
 update_consensus_confidence: Low
-quick_verdict: Figma Bulk edit in Figma Buzz has an official AUXSAYS record. Confirmed patch-specific consensus is deferred
-  until the consensus refresh pipeline is active.
-official_summary: Figma published Figma Bulk edit in Figma Buzz.
-release_summary: Bulk edit and resize campaign assets at scale in Figma Buzz.
+quick_verdict: Figma Do more with grid has an official AUXSAYS record. Confirmed patch-specific consensus is deferred until
+  the consensus refresh pipeline is active.
+official_summary: Figma published Figma Do more with grid.
+release_summary: Grid is generally available and now makes it easier to reorder columns and rows, auto-position items into
+  empty cells, and auto-add or remove rows to fit so you spend less time on manual fixes.
 consensus_report: Confirmed patch-specific consensus collection is deferred. This page currently reflects official-source
   ingestion only.
 evidence_state: official_only
@@ -53,7 +54,7 @@ status_events:
 - at: '2026-05-22T00:00:00.000Z'
   label: Published
   note: Official source entry detected.
-- at: '2026-05-22T15:26:15Z'
+- at: '2026-05-22T20:13:36Z'
   label: Insufficient data
   note: AUXSAYS official-ingestion record initialized.
 official_patch_notes_source_type: rss-feed
@@ -61,7 +62,7 @@ primary_official_source: https://www.figma.com/release-notes/
 fallback_official_sources:
 - https://forum.figma.com/product-updates-3
 official_patch_notes_capture_status: captured-from-rss-feed
-official_patch_notes_source_url: https://www.figma.com/release-notes/?title=bulk-edit-figma-buzz
+official_patch_notes_source_url: https://www.figma.com/release-notes/?title=do-more-with-grid
 official_note_status: official_source_captured
 official_note_label: Official source summary
 official_source_type: rss-feed
@@ -69,17 +70,13 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-05-22T15:26:13Z'
-  url: https://www.figma.com/release-notes/?title=bulk-edit-figma-buzz
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-05-22T20:13:34Z'
-  url: https://www.figma.com/release-notes/?title=bulk-edit-figma-buzz
+  url: https://www.figma.com/release-notes/?title=do-more-with-grid
   status: captured-from-rss-feed
   body_captured: true
   checksums_captured: false
-official_patch_notes_body: Bulk edit and resize campaign assets at scale in Figma Buzz.
+official_patch_notes_body: Grid is generally available and now makes it easier to reorder columns and rows, auto-position
+  items into empty cells, and auto-add or remove rows to fit so you spend less time on manual fixes.
 official_checksums_body: ''
 official_checksums_capture_status: not-present
 ---
