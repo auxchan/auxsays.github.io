@@ -3005,3 +3005,28 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1tjxo83-help-with-fusion-blue-rectangle-effect-af
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1tjxo83/help_with_fusion_blue_rectangle_effect_after_merge/
+  parent_title: Help with Fusion Blue rectangle effect after merge!
+  report_title: Help with Fusion Blue rectangle effect after merge!
+  report_text_excerpt: Help with Fusion Blue rectangle effect after merge! Davinci Resolve Studio Version 20.3.2 Build 9 OS Windows 10 Processor 11th Gen Intel(R) Core(TM) i7-11700 @ 2.50GHz (2.50 GHz) Installed RAM 16.0 GB (15.8 GB usable) Graphics card NVIDIA GeForce RTX 3060 (12 GB) Storage 233...
+  captured_at: '2026-05-22T05:55:12Z'
+  source_date: '2026-05-21'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: install issue
+  workflow_area: installation
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
