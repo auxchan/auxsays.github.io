@@ -3074,3 +3074,53 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1tl9w9q-resolve-keeps-writing-to-c-drive-but-i-ch
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1tl9w9q/resolve_keeps_writing_to_c_drive_but_i_changed/
+  parent_title: 'Resolve Keeps Writing to C: Drive but I changed everything to my D: Drive, including install location'
+  report_title: 'Resolve Keeps Writing to C: Drive but I changed everything to my D: Drive, including install location'
+  report_text_excerpt: 'Resolve Keeps Writing to C: Drive but I changed everything to my D: Drive, including install location Please let me know if I need to provide anything that would help diagnose this issue. I''m currently dealing with a storage problem where Resolve keeps using up space on my C:...'
+  captured_at: '2026-05-23T09:17:54Z'
+  source_date: '2026-05-23'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: install issue
+  workflow_area: installation
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+
+- id: blackmagic-davinci-20-3-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1tl9w9q-resolve-keeps-writing-to-c-drive-but-i-ch
+  product_id: blackmagic-davinci
+  update_version: 20.3.3
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1tl9w9q/resolve_keeps_writing_to_c_drive_but_i_changed/
+  parent_title: 'Resolve Keeps Writing to C: Drive but I changed everything to my D: Drive, including install location'
+  report_title: 'Resolve Keeps Writing to C: Drive but I changed everything to my D: Drive, including install location'
+  report_text_excerpt: 'Resolve Keeps Writing to C: Drive but I changed everything to my D: Drive, including install location Please let me know if I need to provide anything that would help diagnose this issue. I''m currently dealing with a storage problem where Resolve keeps using up space on my C:...'
+  captured_at: '2026-05-23T09:18:30Z'
+  source_date: '2026-05-23'
+  target_release_date: '2026-05-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.3
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: install issue
+  workflow_area: installation
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
