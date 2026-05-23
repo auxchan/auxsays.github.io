@@ -17,8 +17,8 @@ update_version: Bulk edit in Figma Buzz
 update_logo_text: FIG
 update_published_at: '2026-05-22T00:00:00.000Z'
 update_last_checked: '2026-05-22T15:26:13Z'
-source_last_checked: '2026-05-23T08:32:16Z'
-official_body_last_checked: '2026-05-23T08:32:16Z'
+source_last_checked: '2026-05-23T14:04:35Z'
+official_body_last_checked: '2026-05-23T14:04:35Z'
 record_last_updated: '2026-05-22T15:26:13Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -85,6 +85,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-05-23T08:32:16Z'
+  url: https://www.figma.com/release-notes/?title=bulk-edit-figma-buzz
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-05-23T14:04:35Z'
   url: https://www.figma.com/release-notes/?title=bulk-edit-figma-buzz
   status: captured-from-rss-feed
   body_captured: true
