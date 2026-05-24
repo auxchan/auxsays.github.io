@@ -3124,3 +3124,28 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1tm8pas-fix-for-the-silentaudioonaac-bug-on-davin
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1tm8pas/fix_for_the_silentaudioonaac_bug_on_davinci/
+  parent_title: Fix for the silent-audio-on-AAC bug on DaVinci Resolve Linux (no FLAC sibling files this time)
+  report_title: Fix for the silent-audio-on-AAC bug on DaVinci Resolve Linux (no FLAC sibling files this time)
+  report_text_excerpt: Fix for the silent-audio-on-AAC bug on DaVinci Resolve Linux (no FLAC sibling files this time) If you've been editing on DaVinci Resolve Linux for a while you know the silent-audio-on-AAC bug — drop a phone clip or yt-dlp download on the timeline, no waveform, no audio. BMD's...
+  captured_at: '2026-05-24T11:50:18Z'
+  source_date: '2026-05-24'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: linux
+  severity: high
+  sentiment: negative
+  source_weight: 1
