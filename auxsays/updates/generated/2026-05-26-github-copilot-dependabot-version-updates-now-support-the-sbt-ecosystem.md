@@ -17,8 +17,8 @@ update_version: Dependabot version updates now support the sbt ecosystem
 update_logo_text: GIT
 update_published_at: '2026-05-26T16:10:46Z'
 update_last_checked: '2026-05-26T16:12:34Z'
-source_last_checked: '2026-05-26T16:12:34Z'
-official_body_last_checked: '2026-05-26T16:12:34Z'
+source_last_checked: '2026-05-26T20:27:22Z'
+official_body_last_checked: '2026-05-26T20:27:22Z'
 record_last_updated: '2026-05-26T16:12:34Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -75,6 +75,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-05-26T16:12:34Z'
+  url: https://github.blog/changelog/2026-05-26-dependabot-version-updates-now-support-the-sbt-ecosystem
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-05-26T20:27:22Z'
   url: https://github.blog/changelog/2026-05-26-dependabot-version-updates-now-support-the-sbt-ecosystem
   status: captured-from-rss-feed
   body_captured: true
