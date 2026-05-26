@@ -3230,3 +3230,24 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13478
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13478
+  parent_title: Window Capture (XComposite) requires hardware acceleration (errors under software-only Mesa)
+  report_title: Window Capture (XComposite) requires hardware acceleration (errors under software-only Mesa)
+  report_text_excerpt: 'Other ### Other OS Fedora 44 ### OBS Studio Version Other ### OBS Studio Version (Other) 32.1.1 ### OBS Studio Log URL https://obsproject.com/logs/UbhbXfU4Ldn0b8cG ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I expected to be able to select a window and have'
+  captured_at: '2026-05-26T16:55:04Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture regression
+  workflow_area: screen/window capture
+  platform: linux
+  severity: high
+  sentiment: negative
+  source_weight: 1
