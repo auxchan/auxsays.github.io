@@ -3,7 +3,7 @@
   "last_results": [
     {
       "adapter": "rss_feed",
-      "duration_ms": 617,
+      "duration_ms": 582,
       "fetched": 2,
       "product_id": "figma",
       "refreshed": [
@@ -24,7 +24,7 @@
     },
     {
       "adapter": "adobe_release_notes",
-      "duration_ms": 25694,
+      "duration_ms": 25835,
       "fetched": 1,
       "product_id": "adobe-premiere-pro",
       "refreshed": [
@@ -40,7 +40,7 @@
     },
     {
       "adapter": "blackmagic_support_downloads",
-      "duration_ms": 523,
+      "duration_ms": 928,
       "fetched": 2,
       "product_id": "blackmagic-davinci",
       "refreshed": [
@@ -61,7 +61,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 800,
+      "duration_ms": 1004,
       "fetched": 2,
       "product_id": "obs-studio",
       "refreshed": [
@@ -82,7 +82,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 517,
+      "duration_ms": 754,
       "fetched": 2,
       "product_id": "comfyui",
       "refreshed": [
@@ -103,7 +103,7 @@
     },
     {
       "adapter": "rss_feed",
-      "duration_ms": 289,
+      "duration_ms": 403,
       "fetched": 2,
       "product_id": "github",
       "refreshed": [
@@ -124,7 +124,7 @@
     },
     {
       "adapter": "html_changelog",
-      "duration_ms": 107,
+      "duration_ms": 329,
       "fetched": 0,
       "product_id": "netlify",
       "refreshed": [],
@@ -133,8 +133,8 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-05-27T16:14:08Z",
-  "last_run_started_at": "2026-05-27T16:13:39Z",
+  "last_run_finished_at": "2026-05-27T20:30:55Z",
+  "last_run_started_at": "2026-05-27T20:30:25Z",
   "sources": {
     "adobe-after-effects": {
       "consecutive_failures": 2,
@@ -199,7 +199,7 @@
     "adobe-premiere-pro": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_release_notes",
-      "last_checked_at": "2026-05-27T16:13:40Z",
+      "last_checked_at": "2026-05-27T20:30:26Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -207,8 +207,8 @@
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 25694,
-      "last_success_at": "2026-05-27T16:13:40Z",
+      "last_run_duration_ms": 25835,
+      "last_success_at": "2026-05-27T20:30:26Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "adobe:adobe-premiere-pro:26.2.2:c176cc33bba85978",
@@ -219,7 +219,7 @@
     "blackmagic-davinci": {
       "consecutive_failures": 0,
       "last_adapter": "blackmagic_support_downloads",
-      "last_checked_at": "2026-05-27T16:14:05Z",
+      "last_checked_at": "2026-05-27T20:30:52Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -227,8 +227,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 523,
-      "last_success_at": "2026-05-27T16:14:05Z",
+      "last_run_duration_ms": 928,
+      "last_success_at": "2026-05-27T20:30:52Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "blackmagic-support:blackmagic-davinci:20.3.3:44720c1f672d4dce9e0fab7df33f928e",
@@ -240,7 +240,7 @@
     "comfyui": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-05-27T16:14:07Z",
+      "last_checked_at": "2026-05-27T20:30:54Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -248,8 +248,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 517,
-      "last_success_at": "2026-05-27T16:14:07Z",
+      "last_run_duration_ms": 754,
+      "last_success_at": "2026-05-27T20:30:54Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:comfyui:326155086",
@@ -263,7 +263,7 @@
     "figma": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-05-27T16:13:39Z",
+      "last_checked_at": "2026-05-27T20:30:25Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -271,8 +271,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 617,
-      "last_success_at": "2026-05-27T16:13:39Z",
+      "last_run_duration_ms": 582,
+      "last_success_at": "2026-05-27T20:30:25Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:figma:db295edf-534b-497d-8197-ff73a5653c55",
@@ -295,7 +295,7 @@
     "github": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-05-27T16:14:07Z",
+      "last_checked_at": "2026-05-27T20:30:55Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -303,8 +303,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 289,
-      "last_success_at": "2026-05-27T16:14:07Z",
+      "last_run_duration_ms": 403,
+      "last_success_at": "2026-05-27T20:30:55Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:github:https://github.blog/changelog/2026-05-26-github-code-quality-repository-enablement-api",
@@ -369,7 +369,7 @@
     "netlify": {
       "consecutive_failures": 0,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-05-27T16:14:08Z",
+      "last_checked_at": "2026-05-27T20:30:55Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -377,15 +377,15 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 107,
-      "last_success_at": "2026-05-27T16:14:08Z",
+      "last_run_duration_ms": 329,
+      "last_success_at": "2026-05-27T20:30:55Z",
       "previous_consecutive_failures": 0,
       "status": "degraded"
     },
     "obs-studio": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-05-27T16:14:06Z",
+      "last_checked_at": "2026-05-27T20:30:53Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -393,8 +393,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 800,
-      "last_success_at": "2026-05-27T16:14:06Z",
+      "last_run_duration_ms": 1004,
+      "last_success_at": "2026-05-27T20:30:53Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:obs-studio:304830335",
