@@ -17,8 +17,8 @@ update_version: 'GitHub Code Quality: Repository Enablement API'
 update_logo_text: GIT
 update_published_at: '2026-05-26T20:35:06Z'
 update_last_checked: '2026-05-27T04:52:09Z'
-source_last_checked: '2026-05-27T04:52:09Z'
-official_body_last_checked: '2026-05-27T04:52:09Z'
+source_last_checked: '2026-05-27T10:32:32Z'
+official_body_last_checked: '2026-05-27T10:32:32Z'
 record_last_updated: '2026-05-27T04:52:09Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -78,6 +78,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-05-27T04:52:09Z'
+  url: https://github.blog/changelog/2026-05-26-github-code-quality-repository-enablement-api
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-05-27T10:32:32Z'
   url: https://github.blog/changelog/2026-05-26-github-code-quality-repository-enablement-api
   status: captured-from-rss-feed
   body_captured: true
