@@ -3359,3 +3359,48 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+- id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1tqg03a-10bit-alli-244-mov-vlog-file-does-not-ren
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1tqg03a/10bit_alli_244_mov_vlog_file_does_not_render/
+  parent_title: 10bit All-I 2:4:4 .mov VLog file does not render cache (nothing worked!)
+  report_title: 10bit All-I 2:4:4 .mov VLog file does not render cache (nothing worked!)
+  report_text_excerpt: '10bit All-I 2:4:4 .mov VLog file does not render cache (nothing worked!) Hello friends! 👋🏻 - System specs : Nvidia GTX 1650S, Ryzen 5 3600, Win10 - Software ver. : Davinci Resolve Studio 20.3.2 Build 9 - Video Spec : 10 Bit .Mov, 1920x1080, format AVC, profile High 4:2:2 Intra...'
+  captured_at: '2026-05-28T22:10:32Z'
+  source_date: '2026-05-28'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13494
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13494
+  parent_title: Unable to exit OBS Studio via system tray, if window was never visible
+  report_title: Unable to exit OBS Studio via system tray, if window was never visible
+  report_text_excerpt: '### Operating System Info Other ### Other OS Manjaro Linux ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/HZdBWcGjRAOyr5Rp ### OBS Studio Crash Log URL _No response_ ### Expected Behavior When'
+  captured_at: '2026-05-28T22:12:09Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: linux
+  severity: medium
+  sentiment: negative
+  source_weight: 1
