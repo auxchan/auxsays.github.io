@@ -17,8 +17,8 @@ update_version: Copilot Memory has more controls for deletion, scope, and the Co
 update_logo_text: GIT
 update_published_at: '2026-05-26T21:05:28Z'
 update_last_checked: '2026-05-27T04:52:09Z'
-source_last_checked: '2026-05-27T20:30:55Z'
-official_body_last_checked: '2026-05-27T20:30:55Z'
+source_last_checked: '2026-05-28T04:44:33Z'
+official_body_last_checked: '2026-05-28T04:44:33Z'
 record_last_updated: '2026-05-27T04:52:09Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -101,6 +101,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-05-27T20:30:55Z'
+  url: https://github.blog/changelog/2026-05-26-copilot-memory-has-more-controls-for-deletion-scope-and-the-copilot-cli
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-05-28T04:44:33Z'
   url: https://github.blog/changelog/2026-05-26-copilot-memory-has-more-controls-for-deletion-scope-and-the-copilot-cli
   status: captured-from-rss-feed
   body_captured: true
