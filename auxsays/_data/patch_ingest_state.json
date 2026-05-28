@@ -3,10 +3,15 @@
   "last_results": [
     {
       "adapter": "rss_feed",
-      "duration_ms": 1902,
+      "duration_ms": 762,
       "fetched": 2,
       "product_id": "figma",
       "refreshed": [
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-05-28-figma-visually-edit-your-codebase-with-make.md",
+          "record_id": "rss:figma:9b59c8a7-1361-4000-a5a6-5527f2a5e373"
+        },
         {
           "action": "freshness-updated",
           "path": "auxsays/updates/generated/2026-05-22-figma-bulk-edit-in-figma-buzz.md",
@@ -15,13 +20,11 @@
       ],
       "skipped": [],
       "status": "success",
-      "written": [
-        "auxsays/updates/generated/2026-05-28-figma-visually-edit-your-codebase-with-make.md"
-      ]
+      "written": []
     },
     {
       "adapter": "adobe_release_notes",
-      "duration_ms": 25672,
+      "duration_ms": 25772,
       "fetched": 1,
       "product_id": "adobe-premiere-pro",
       "refreshed": [
@@ -37,7 +40,7 @@
     },
     {
       "adapter": "blackmagic_support_downloads",
-      "duration_ms": 482,
+      "duration_ms": 237,
       "fetched": 2,
       "product_id": "blackmagic-davinci",
       "refreshed": [
@@ -58,7 +61,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 1155,
+      "duration_ms": 754,
       "fetched": 2,
       "product_id": "obs-studio",
       "refreshed": [
@@ -79,7 +82,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 858,
+      "duration_ms": 554,
       "fetched": 2,
       "product_id": "comfyui",
       "refreshed": [
@@ -100,7 +103,7 @@
     },
     {
       "adapter": "rss_feed",
-      "duration_ms": 282,
+      "duration_ms": 1360,
       "fetched": 2,
       "product_id": "github",
       "refreshed": [
@@ -108,20 +111,17 @@
           "action": "freshness-updated",
           "path": "auxsays/updates/generated/2026-05-26-github-copilot-copilot-memory-has-more-controls-for-deletion-scope-and-the-copilot-cli.md",
           "record_id": "rss:github:https://github.blog/changelog/2026-05-26-copilot-memory-has-more-controls-for-deletion-scope-and-the-copilot-cli"
-        },
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-05-26-github-copilot-github-code-quality-repository-enablement-api.md",
-          "record_id": "rss:github:https://github.blog/changelog/2026-05-26-github-code-quality-repository-enablement-api"
         }
       ],
       "skipped": [],
       "status": "success",
-      "written": []
+      "written": [
+        "auxsays/updates/generated/2026-05-28-github-copilot-claude-opus-4-8-is-generally-available-for-github-copilot.md"
+      ]
     },
     {
       "adapter": "html_changelog",
-      "duration_ms": 98,
+      "duration_ms": 122,
       "fetched": 0,
       "product_id": "netlify",
       "refreshed": [],
@@ -130,8 +130,8 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-05-28T16:35:27Z",
-  "last_run_started_at": "2026-05-28T16:34:57Z",
+  "last_run_finished_at": "2026-05-28T20:39:33Z",
+  "last_run_started_at": "2026-05-28T20:39:04Z",
   "sources": {
     "adobe-after-effects": {
       "consecutive_failures": 2,
@@ -196,7 +196,7 @@
     "adobe-premiere-pro": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_release_notes",
-      "last_checked_at": "2026-05-28T16:34:59Z",
+      "last_checked_at": "2026-05-28T20:39:04Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -204,8 +204,8 @@
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 25672,
-      "last_success_at": "2026-05-28T16:34:59Z",
+      "last_run_duration_ms": 25772,
+      "last_success_at": "2026-05-28T20:39:04Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "adobe:adobe-premiere-pro:26.2.2:c176cc33bba85978",
@@ -216,7 +216,7 @@
     "blackmagic-davinci": {
       "consecutive_failures": 0,
       "last_adapter": "blackmagic_support_downloads",
-      "last_checked_at": "2026-05-28T16:35:24Z",
+      "last_checked_at": "2026-05-28T20:39:30Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -224,8 +224,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 482,
-      "last_success_at": "2026-05-28T16:35:24Z",
+      "last_run_duration_ms": 237,
+      "last_success_at": "2026-05-28T20:39:30Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "blackmagic-support:blackmagic-davinci:20.3.3:44720c1f672d4dce9e0fab7df33f928e",
@@ -237,7 +237,7 @@
     "comfyui": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-05-28T16:35:26Z",
+      "last_checked_at": "2026-05-28T20:39:31Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -245,8 +245,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 858,
-      "last_success_at": "2026-05-28T16:35:26Z",
+      "last_run_duration_ms": 554,
+      "last_success_at": "2026-05-28T20:39:31Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:comfyui:326155086",
@@ -260,7 +260,7 @@
     "figma": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-05-28T16:34:57Z",
+      "last_checked_at": "2026-05-28T20:39:04Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -268,8 +268,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 1902,
-      "last_success_at": "2026-05-28T16:34:57Z",
+      "last_run_duration_ms": 762,
+      "last_success_at": "2026-05-28T20:39:04Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:figma:9b59c8a7-1361-4000-a5a6-5527f2a5e373",
@@ -293,7 +293,7 @@
     "github": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-05-28T16:35:27Z",
+      "last_checked_at": "2026-05-28T20:39:32Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -301,10 +301,11 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 282,
-      "last_success_at": "2026-05-28T16:35:27Z",
+      "last_run_duration_ms": 1360,
+      "last_success_at": "2026-05-28T20:39:32Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "rss:github:https://github.blog/changelog/2026-05-28-claude-opus-4-8-is-generally-available-for-github-copilot",
         "rss:github:https://github.blog/changelog/2026-05-26-github-code-quality-repository-enablement-api",
         "rss:github:https://github.blog/changelog/2026-05-26-copilot-memory-has-more-controls-for-deletion-scope-and-the-copilot-cli",
         "rss:github:https://github.blog/changelog/2026-05-26-target-copilot-models-to-organizations-with-model-rules",
@@ -367,7 +368,7 @@
     "netlify": {
       "consecutive_failures": 0,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-05-28T16:35:27Z",
+      "last_checked_at": "2026-05-28T20:39:33Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -375,15 +376,15 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 98,
-      "last_success_at": "2026-05-28T16:35:27Z",
+      "last_run_duration_ms": 122,
+      "last_success_at": "2026-05-28T20:39:33Z",
       "previous_consecutive_failures": 0,
       "status": "degraded"
     },
     "obs-studio": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-05-28T16:35:25Z",
+      "last_checked_at": "2026-05-28T20:39:30Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -391,8 +392,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 1155,
-      "last_success_at": "2026-05-28T16:35:25Z",
+      "last_run_duration_ms": 754,
+      "last_success_at": "2026-05-28T20:39:30Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:obs-studio:304830335",

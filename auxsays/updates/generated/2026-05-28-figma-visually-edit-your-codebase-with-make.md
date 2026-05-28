@@ -17,8 +17,8 @@ update_version: Visually edit your codebase with Make
 update_logo_text: FIG
 update_published_at: '2026-05-28T00:00:00.000Z'
 update_last_checked: '2026-05-28T16:34:57Z'
-source_last_checked: '2026-05-28T16:34:57Z'
-official_body_last_checked: '2026-05-28T16:34:57Z'
+source_last_checked: '2026-05-28T20:39:04Z'
+official_body_last_checked: '2026-05-28T20:39:04Z'
 record_last_updated: '2026-05-28T16:34:57Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -71,6 +71,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-05-28T16:34:57Z'
+  url: https://www.figma.com/release-notes/?title=Visually%20edit%20your%20codebase%20with%20Make
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-05-28T20:39:04Z'
   url: https://www.figma.com/release-notes/?title=Visually%20edit%20your%20codebase%20with%20Make
   status: captured-from-rss-feed
   body_captured: true
