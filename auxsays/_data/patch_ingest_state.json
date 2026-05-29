@@ -3,7 +3,7 @@
   "last_results": [
     {
       "adapter": "rss_feed",
-      "duration_ms": 693,
+      "duration_ms": 723,
       "fetched": 2,
       "product_id": "figma",
       "refreshed": [
@@ -24,7 +24,7 @@
     },
     {
       "adapter": "adobe_release_notes",
-      "duration_ms": 25708,
+      "duration_ms": 25459,
       "fetched": 1,
       "product_id": "adobe-premiere-pro",
       "refreshed": [
@@ -40,7 +40,7 @@
     },
     {
       "adapter": "blackmagic_support_downloads",
-      "duration_ms": 406,
+      "duration_ms": 690,
       "fetched": 2,
       "product_id": "blackmagic-davinci",
       "refreshed": [
@@ -61,7 +61,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 981,
+      "duration_ms": 1259,
       "fetched": 2,
       "product_id": "obs-studio",
       "refreshed": [
@@ -82,7 +82,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 567,
+      "duration_ms": 912,
       "fetched": 2,
       "product_id": "comfyui",
       "refreshed": [
@@ -103,20 +103,28 @@
     },
     {
       "adapter": "rss_feed",
-      "duration_ms": 2113,
+      "duration_ms": 389,
       "fetched": 2,
       "product_id": "github",
-      "refreshed": [],
+      "refreshed": [
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-05-28-github-copilot-hard-budget-limits-now-available-for-github-advanced-security.md",
+          "record_id": "rss:github:https://github.blog/changelog/2026-05-28-hard-budget-limits-now-available-for-github-advanced-security"
+        },
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-05-28-github-copilot-codeql-2-25-5-improves-query-accuracy-for-github-actions.md",
+          "record_id": "rss:github:https://github.blog/changelog/2026-05-28-codeql-2-25-5-improves-query-accuracy-for-github-actions"
+        }
+      ],
       "skipped": [],
       "status": "success",
-      "written": [
-        "auxsays/updates/generated/2026-05-28-github-copilot-hard-budget-limits-now-available-for-github-advanced-security.md",
-        "auxsays/updates/generated/2026-05-28-github-copilot-codeql-2-25-5-improves-query-accuracy-for-github-actions.md"
-      ]
+      "written": []
     },
     {
       "adapter": "html_changelog",
-      "duration_ms": 195,
+      "duration_ms": 212,
       "fetched": 0,
       "product_id": "netlify",
       "refreshed": [],
@@ -125,8 +133,8 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-05-29T04:46:37Z",
-  "last_run_started_at": "2026-05-29T04:46:06Z",
+  "last_run_finished_at": "2026-05-29T10:15:56Z",
+  "last_run_started_at": "2026-05-29T10:15:27Z",
   "sources": {
     "adobe-after-effects": {
       "consecutive_failures": 2,
@@ -191,7 +199,7 @@
     "adobe-premiere-pro": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_release_notes",
-      "last_checked_at": "2026-05-29T04:46:07Z",
+      "last_checked_at": "2026-05-29T10:15:28Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -199,8 +207,8 @@
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 25708,
-      "last_success_at": "2026-05-29T04:46:07Z",
+      "last_run_duration_ms": 25459,
+      "last_success_at": "2026-05-29T10:15:28Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "adobe:adobe-premiere-pro:26.2.2:c176cc33bba85978",
@@ -211,7 +219,7 @@
     "blackmagic-davinci": {
       "consecutive_failures": 0,
       "last_adapter": "blackmagic_support_downloads",
-      "last_checked_at": "2026-05-29T04:46:33Z",
+      "last_checked_at": "2026-05-29T10:15:53Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -219,8 +227,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 406,
-      "last_success_at": "2026-05-29T04:46:33Z",
+      "last_run_duration_ms": 690,
+      "last_success_at": "2026-05-29T10:15:53Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "blackmagic-support:blackmagic-davinci:20.3.3:44720c1f672d4dce9e0fab7df33f928e",
@@ -232,7 +240,7 @@
     "comfyui": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-05-29T04:46:34Z",
+      "last_checked_at": "2026-05-29T10:15:55Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -240,8 +248,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 567,
-      "last_success_at": "2026-05-29T04:46:34Z",
+      "last_run_duration_ms": 912,
+      "last_success_at": "2026-05-29T10:15:55Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:comfyui:326155086",
@@ -255,7 +263,7 @@
     "figma": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-05-29T04:46:06Z",
+      "last_checked_at": "2026-05-29T10:15:27Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -263,8 +271,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 693,
-      "last_success_at": "2026-05-29T04:46:06Z",
+      "last_run_duration_ms": 723,
+      "last_success_at": "2026-05-29T10:15:27Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:figma:9b59c8a7-1361-4000-a5a6-5527f2a5e373",
@@ -288,7 +296,7 @@
     "github": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-05-29T04:46:35Z",
+      "last_checked_at": "2026-05-29T10:15:56Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -296,8 +304,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 2113,
-      "last_success_at": "2026-05-29T04:46:35Z",
+      "last_run_duration_ms": 389,
+      "last_success_at": "2026-05-29T10:15:56Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:github:https://github.blog/changelog/2026-05-28-codeql-2-25-5-improves-query-accuracy-for-github-actions",
@@ -365,7 +373,7 @@
     "netlify": {
       "consecutive_failures": 0,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-05-29T04:46:37Z",
+      "last_checked_at": "2026-05-29T10:15:56Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -373,15 +381,15 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 195,
-      "last_success_at": "2026-05-29T04:46:37Z",
+      "last_run_duration_ms": 212,
+      "last_success_at": "2026-05-29T10:15:56Z",
       "previous_consecutive_failures": 0,
       "status": "degraded"
     },
     "obs-studio": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-05-29T04:46:33Z",
+      "last_checked_at": "2026-05-29T10:15:54Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -389,8 +397,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 981,
-      "last_success_at": "2026-05-29T04:46:33Z",
+      "last_run_duration_ms": 1259,
+      "last_success_at": "2026-05-29T10:15:54Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:obs-studio:304830335",
