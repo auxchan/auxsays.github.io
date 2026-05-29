@@ -3404,3 +3404,24 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13495
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13495
+  parent_title: Hang when renaming scene collection (no reproducer but stack trace present)
+  report_title: Hang when renaming scene collection (no reproducer but stack trace present)
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/LMpBKwuLnvmmUIph ### OBS Studio Crash Log URL _No response_ ### Expected Behavior It co'
+  captured_at: '2026-05-29T04:43:32Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
