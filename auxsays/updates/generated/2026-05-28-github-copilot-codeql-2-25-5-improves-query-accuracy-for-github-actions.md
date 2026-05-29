@@ -17,8 +17,8 @@ update_version: CodeQL 2.25.5 improves query accuracy for GitHub Actions
 update_logo_text: GIT
 update_published_at: '2026-05-28T21:09:44Z'
 update_last_checked: '2026-05-29T04:46:35Z'
-source_last_checked: '2026-05-29T16:10:24Z'
-official_body_last_checked: '2026-05-29T16:10:24Z'
+source_last_checked: '2026-05-29T20:39:16Z'
+official_body_last_checked: '2026-05-29T20:39:16Z'
 record_last_updated: '2026-05-29T04:46:35Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -97,6 +97,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-05-29T16:10:24Z'
+  url: https://github.blog/changelog/2026-05-28-codeql-2-25-5-improves-query-accuracy-for-github-actions
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-05-29T20:39:16Z'
   url: https://github.blog/changelog/2026-05-28-codeql-2-25-5-improves-query-accuracy-for-github-actions
   status: captured-from-rss-feed
   body_captured: true
