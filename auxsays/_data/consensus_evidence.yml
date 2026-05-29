@@ -3425,3 +3425,28 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-public-beta-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1tr73il-resolve-21-beta-anyone-else-losing
+  product_id: blackmagic-davinci
+  update_version: 21 Public Beta 1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1tr73il/resolve_21_beta_anyone_else_losing/
+  parent_title: 'Resolve 21 Beta: Anyone else losing shadows/highlights with iPhone DNGs in Camera Raw?'
+  report_title: 'Resolve 21 Beta: Anyone else losing shadows/highlights with iPhone DNGs in Camera Raw?'
+  report_text_excerpt: 'Resolve 21 Beta: Anyone else losing shadows/highlights with iPhone DNGs in Camera Raw? Here is the original iPhone picture for you to test it. I’ve been testing iPhone ProRAW (.dng) stills in the DaVinci Resolve 21 beta, and I’m hitting a massive bottleneck with how the...'
+  captured_at: '2026-05-29T16:54:41Z'
+  source_date: '2026-05-29'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: DaVinci Resolve 21 beta
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: unknown
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
