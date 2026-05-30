@@ -17,8 +17,8 @@ update_version: Copilot usage metrics API adds cohorts for AI adoption
 update_logo_text: GIT
 update_published_at: '2026-05-29T21:03:00Z'
 update_last_checked: '2026-05-30T04:29:11Z'
-source_last_checked: '2026-05-30T14:08:26Z'
-official_body_last_checked: '2026-05-30T14:08:26Z'
+source_last_checked: '2026-05-30T19:43:35Z'
+official_body_last_checked: '2026-05-30T19:43:35Z'
 record_last_updated: '2026-05-30T04:29:11Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -101,6 +101,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-05-30T14:08:26Z'
+  url: https://github.blog/changelog/2026-05-29-copilot-usage-metrics-api-adds-cohorts-for-ai-adoption
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-05-30T19:43:35Z'
   url: https://github.blog/changelog/2026-05-29-copilot-usage-metrics-api-adds-cohorts-for-ai-adoption
   status: captured-from-rss-feed
   body_captured: true
