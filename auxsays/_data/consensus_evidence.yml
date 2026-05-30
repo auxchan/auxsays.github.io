@@ -3491,3 +3491,28 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ts3sc8-hdr-monitoring-in-davinci-resolve-on-mac
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ts3sc8/hdr_monitoring_in_davinci_resolve_on_mac/
+  parent_title: HDR Monitoring in DaVinci Resolve on Mac
+  report_title: HDR Monitoring in DaVinci Resolve on Mac
+  report_text_excerpt: 'HDR Monitoring in DaVinci Resolve on Mac HDR Monitoring in DaVinci Resolve on Mac: Why Your Viewer Doesn’t Match YouTube/QuickTime (and the Fix) Setup: MacBook Pro 14” M2 Max (macOS Tahoe, 64Gb RAM, 2To) DaVinci Resolve Studio 20.3.2 & 21 b40, LG OLED C4 calibrated TV via...'
+  captured_at: '2026-05-30T17:21:29Z'
+  source_date: '2026-05-30'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
