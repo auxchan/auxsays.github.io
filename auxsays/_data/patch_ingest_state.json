@@ -3,7 +3,7 @@
   "last_results": [
     {
       "adapter": "rss_feed",
-      "duration_ms": 1035,
+      "duration_ms": 602,
       "fetched": 2,
       "product_id": "figma",
       "refreshed": [
@@ -24,7 +24,7 @@
     },
     {
       "adapter": "adobe_release_notes",
-      "duration_ms": 25670,
+      "duration_ms": 25818,
       "fetched": 1,
       "product_id": "adobe-premiere-pro",
       "refreshed": [
@@ -40,7 +40,7 @@
     },
     {
       "adapter": "blackmagic_support_downloads",
-      "duration_ms": 249,
+      "duration_ms": 888,
       "fetched": 2,
       "product_id": "blackmagic-davinci",
       "refreshed": [
@@ -61,7 +61,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 927,
+      "duration_ms": 866,
       "fetched": 2,
       "product_id": "obs-studio",
       "refreshed": [
@@ -82,7 +82,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 514,
+      "duration_ms": 773,
       "fetched": 2,
       "product_id": "comfyui",
       "refreshed": [
@@ -103,7 +103,7 @@
     },
     {
       "adapter": "rss_feed",
-      "duration_ms": 393,
+      "duration_ms": 1273,
       "fetched": 2,
       "product_id": "github",
       "refreshed": [
@@ -111,20 +111,17 @@
           "action": "freshness-updated",
           "path": "auxsays/updates/generated/2026-05-28-github-copilot-hard-budget-limits-now-available-for-github-advanced-security.md",
           "record_id": "rss:github:https://github.blog/changelog/2026-05-28-hard-budget-limits-now-available-for-github-advanced-security"
-        },
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-05-28-github-copilot-codeql-2-25-5-improves-query-accuracy-for-github-actions.md",
-          "record_id": "rss:github:https://github.blog/changelog/2026-05-28-codeql-2-25-5-improves-query-accuracy-for-github-actions"
         }
       ],
       "skipped": [],
       "status": "success",
-      "written": []
+      "written": [
+        "auxsays/updates/generated/2026-05-29-github-copilot-copilot-usage-metrics-api-adds-cohorts-for-ai-adoption.md"
+      ]
     },
     {
       "adapter": "html_changelog",
-      "duration_ms": 136,
+      "duration_ms": 388,
       "fetched": 0,
       "product_id": "netlify",
       "refreshed": [],
@@ -133,8 +130,8 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-05-29T20:39:16Z",
-  "last_run_started_at": "2026-05-29T20:38:47Z",
+  "last_run_finished_at": "2026-05-30T04:29:12Z",
+  "last_run_started_at": "2026-05-30T04:28:42Z",
   "sources": {
     "adobe-after-effects": {
       "consecutive_failures": 2,
@@ -199,7 +196,7 @@
     "adobe-premiere-pro": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_release_notes",
-      "last_checked_at": "2026-05-29T20:38:48Z",
+      "last_checked_at": "2026-05-30T04:28:42Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -207,8 +204,8 @@
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 25670,
-      "last_success_at": "2026-05-29T20:38:48Z",
+      "last_run_duration_ms": 25818,
+      "last_success_at": "2026-05-30T04:28:42Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "adobe:adobe-premiere-pro:26.2.2:c176cc33bba85978",
@@ -219,7 +216,7 @@
     "blackmagic-davinci": {
       "consecutive_failures": 0,
       "last_adapter": "blackmagic_support_downloads",
-      "last_checked_at": "2026-05-29T20:39:14Z",
+      "last_checked_at": "2026-05-30T04:29:08Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -227,8 +224,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 249,
-      "last_success_at": "2026-05-29T20:39:14Z",
+      "last_run_duration_ms": 888,
+      "last_success_at": "2026-05-30T04:29:08Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "blackmagic-support:blackmagic-davinci:20.3.3:44720c1f672d4dce9e0fab7df33f928e",
@@ -240,7 +237,7 @@
     "comfyui": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-05-29T20:39:15Z",
+      "last_checked_at": "2026-05-30T04:29:10Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -248,8 +245,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 514,
-      "last_success_at": "2026-05-29T20:39:15Z",
+      "last_run_duration_ms": 773,
+      "last_success_at": "2026-05-30T04:29:10Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:comfyui:326155086",
@@ -263,7 +260,7 @@
     "figma": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-05-29T20:38:47Z",
+      "last_checked_at": "2026-05-30T04:28:42Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -271,8 +268,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 1035,
-      "last_success_at": "2026-05-29T20:38:47Z",
+      "last_run_duration_ms": 602,
+      "last_success_at": "2026-05-30T04:28:42Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:figma:9b59c8a7-1361-4000-a5a6-5527f2a5e373",
@@ -296,7 +293,7 @@
     "github": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-05-29T20:39:16Z",
+      "last_checked_at": "2026-05-30T04:29:11Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -304,10 +301,11 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 393,
-      "last_success_at": "2026-05-29T20:39:16Z",
+      "last_run_duration_ms": 1273,
+      "last_success_at": "2026-05-30T04:29:11Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "rss:github:https://github.blog/changelog/2026-05-29-copilot-usage-metrics-api-adds-cohorts-for-ai-adoption",
         "rss:github:https://github.blog/changelog/2026-05-28-codeql-2-25-5-improves-query-accuracy-for-github-actions",
         "rss:github:https://github.blog/changelog/2026-05-28-hard-budget-limits-now-available-for-github-advanced-security",
         "rss:github:https://github.blog/changelog/2026-05-28-claude-opus-4-8-is-generally-available-for-github-copilot",
@@ -373,7 +371,7 @@
     "netlify": {
       "consecutive_failures": 0,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-05-29T20:39:16Z",
+      "last_checked_at": "2026-05-30T04:29:12Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -381,15 +379,15 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 136,
-      "last_success_at": "2026-05-29T20:39:16Z",
+      "last_run_duration_ms": 388,
+      "last_success_at": "2026-05-30T04:29:12Z",
       "previous_consecutive_failures": 0,
       "status": "degraded"
     },
     "obs-studio": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-05-29T20:39:14Z",
+      "last_checked_at": "2026-05-30T04:29:09Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -397,8 +395,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 927,
-      "last_success_at": "2026-05-29T20:39:14Z",
+      "last_run_duration_ms": 866,
+      "last_success_at": "2026-05-30T04:29:09Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:obs-studio:304830335",
