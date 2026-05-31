@@ -17,8 +17,8 @@ update_version: Hard budget limits now available for GitHub Advanced Security
 update_logo_text: GIT
 update_published_at: '2026-05-28T21:59:05Z'
 update_last_checked: '2026-05-29T04:46:35Z'
-source_last_checked: '2026-05-30T19:43:35Z'
-official_body_last_checked: '2026-05-30T19:43:35Z'
+source_last_checked: '2026-05-31T09:25:57Z'
+official_body_last_checked: '2026-05-31T09:25:57Z'
 record_last_updated: '2026-05-29T04:46:35Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -89,11 +89,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-05-29T20:39:16Z'
-  url: https://github.blog/changelog/2026-05-28-hard-budget-limits-now-available-for-github-advanced-security
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-05-30T04:29:11Z'
   url: https://github.blog/changelog/2026-05-28-hard-budget-limits-now-available-for-github-advanced-security
   status: captured-from-rss-feed
@@ -110,6 +105,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-05-30T19:43:35Z'
+  url: https://github.blog/changelog/2026-05-28-hard-budget-limits-now-available-for-github-advanced-security
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-05-31T09:25:57Z'
   url: https://github.blog/changelog/2026-05-28-hard-budget-limits-now-available-for-github-advanced-security
   status: captured-from-rss-feed
   body_captured: true
