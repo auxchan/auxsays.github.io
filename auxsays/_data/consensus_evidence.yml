@@ -3599,3 +3599,28 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: blackmagic-davinci-20-3-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1tuo0p1-program-crashing-more-often-after-updatin
+  product_id: blackmagic-davinci
+  update_version: 20.3.3
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1tuo0p1/program_crashing_more_often_after_updating_to_2033/
+  parent_title: Program crashing more often after updating to 20.3.3
+  report_title: Program crashing more often after updating to 20.3.3
+  report_text_excerpt: 'Program crashing more often after updating to 20.3.3 I just updated my DaVinci Resolve to 20.3.3 and it''s suddenly crashing more often, every five minutes or so, while editing a project. Is there a fix? Computer Specs: CPU: Intel Core i5 1035G1 @ 1.00GHz RAM: 16.0GB Dual-...'
+  captured_at: '2026-06-02T11:50:15Z'
+  source_date: '2026-06-02'
+  target_release_date: '2026-05-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.3
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
