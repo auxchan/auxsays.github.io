@@ -17,8 +17,8 @@ update_version: Evaluation models in auto for individual plans
 update_logo_text: GIT
 update_published_at: '2026-06-01T16:18:17Z'
 update_last_checked: '2026-06-01T18:17:58Z'
-source_last_checked: '2026-06-02T10:57:26Z'
-official_body_last_checked: '2026-06-02T10:57:26Z'
+source_last_checked: '2026-06-02T16:57:28Z'
+official_body_last_checked: '2026-06-02T16:57:28Z'
 record_last_updated: '2026-06-01T18:17:58Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -83,6 +83,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-06-02T10:57:26Z'
+  url: https://github.blog/changelog/2026-06-01-evaluation-models-in-auto-for-individual-plans
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-06-02T16:57:28Z'
   url: https://github.blog/changelog/2026-06-01-evaluation-models-in-auto-for-individual-plans
   status: captured-from-rss-feed
   body_captured: true
