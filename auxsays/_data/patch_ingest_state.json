@@ -3,7 +3,7 @@
   "last_results": [
     {
       "adapter": "rss_feed",
-      "duration_ms": 714,
+      "duration_ms": 424,
       "fetched": 2,
       "product_id": "figma",
       "refreshed": [
@@ -24,7 +24,7 @@
     },
     {
       "adapter": "adobe_release_notes",
-      "duration_ms": 25636,
+      "duration_ms": 25558,
       "fetched": 1,
       "product_id": "adobe-premiere-pro",
       "refreshed": [
@@ -40,10 +40,15 @@
     },
     {
       "adapter": "blackmagic_support_downloads",
-      "duration_ms": 1426,
+      "duration_ms": 543,
       "fetched": 2,
       "product_id": "blackmagic-davinci",
       "refreshed": [
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-06-03-davinci-resolve-21-0.md",
+          "record_id": "blackmagic-support:blackmagic-davinci:21.0:2cda7ec076ea4b25aaa007fc68a5cbfc"
+        },
         {
           "action": "freshness-updated",
           "path": "auxsays/updates/generated/2026-05-14-davinci-resolve-20-3-3.md",
@@ -52,13 +57,11 @@
       ],
       "skipped": [],
       "status": "success",
-      "written": [
-        "auxsays/updates/generated/2026-06-03-davinci-resolve-21-0.md"
-      ]
+      "written": []
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 844,
+      "duration_ms": 1167,
       "fetched": 2,
       "product_id": "obs-studio",
       "refreshed": [
@@ -79,7 +82,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 426,
+      "duration_ms": 746,
       "fetched": 2,
       "product_id": "comfyui",
       "refreshed": [
@@ -100,10 +103,15 @@
     },
     {
       "adapter": "rss_feed",
-      "duration_ms": 1259,
+      "duration_ms": 331,
       "fetched": 2,
       "product_id": "github",
       "refreshed": [
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-06-02-github-copilot-gpt-4-1-deprecated.md",
+          "record_id": "rss:github:https://github.blog/changelog/2026-06-02-gpt-4-1-deprecated"
+        },
         {
           "action": "freshness-updated",
           "path": "auxsays/updates/generated/2026-06-02-github-copilot-expanded-technical-preview-availability-for-the-github-copilot-app.md",
@@ -112,13 +120,11 @@
       ],
       "skipped": [],
       "status": "success",
-      "written": [
-        "auxsays/updates/generated/2026-06-02-github-copilot-gpt-4-1-deprecated.md"
-      ]
+      "written": []
     },
     {
       "adapter": "html_changelog",
-      "duration_ms": 143,
+      "duration_ms": 154,
       "fetched": 0,
       "product_id": "netlify",
       "refreshed": [],
@@ -127,8 +133,8 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-06-03T05:20:23Z",
-  "last_run_started_at": "2026-06-03T05:19:52Z",
+  "last_run_finished_at": "2026-06-03T11:24:13Z",
+  "last_run_started_at": "2026-06-03T11:23:44Z",
   "sources": {
     "adobe-after-effects": {
       "consecutive_failures": 2,
@@ -193,7 +199,7 @@
     "adobe-premiere-pro": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_release_notes",
-      "last_checked_at": "2026-06-03T05:19:53Z",
+      "last_checked_at": "2026-06-03T11:23:44Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -201,8 +207,8 @@
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 25636,
-      "last_success_at": "2026-06-03T05:19:53Z",
+      "last_run_duration_ms": 25558,
+      "last_success_at": "2026-06-03T11:23:44Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "adobe:adobe-premiere-pro:26.2.2:c176cc33bba85978",
@@ -213,7 +219,7 @@
     "blackmagic-davinci": {
       "consecutive_failures": 0,
       "last_adapter": "blackmagic_support_downloads",
-      "last_checked_at": "2026-06-03T05:20:18Z",
+      "last_checked_at": "2026-06-03T11:24:10Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -221,8 +227,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 1426,
-      "last_success_at": "2026-06-03T05:20:18Z",
+      "last_run_duration_ms": 543,
+      "last_success_at": "2026-06-03T11:24:10Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "blackmagic-support:blackmagic-davinci:21.0:2cda7ec076ea4b25aaa007fc68a5cbfc",
@@ -235,7 +241,7 @@
     "comfyui": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-06-03T05:20:21Z",
+      "last_checked_at": "2026-06-03T11:24:11Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -243,8 +249,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 426,
-      "last_success_at": "2026-06-03T05:20:21Z",
+      "last_run_duration_ms": 746,
+      "last_success_at": "2026-06-03T11:24:11Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:comfyui:332660528",
@@ -259,7 +265,7 @@
     "figma": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-06-03T05:19:52Z",
+      "last_checked_at": "2026-06-03T11:23:44Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -267,8 +273,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 714,
-      "last_success_at": "2026-06-03T05:19:52Z",
+      "last_run_duration_ms": 424,
+      "last_success_at": "2026-06-03T11:23:44Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:figma:682f3ba2-ee9e-4213-807d-f935a7d9a453",
@@ -293,7 +299,7 @@
     "github": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-06-03T05:20:21Z",
+      "last_checked_at": "2026-06-03T11:24:12Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -301,8 +307,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 1259,
-      "last_success_at": "2026-06-03T05:20:21Z",
+      "last_run_duration_ms": 331,
+      "last_success_at": "2026-06-03T11:24:12Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:github:https://github.blog/changelog/2026-06-02-gpt-4-1-deprecated",
@@ -376,7 +382,7 @@
     "netlify": {
       "consecutive_failures": 0,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-06-03T05:20:22Z",
+      "last_checked_at": "2026-06-03T11:24:12Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -384,15 +390,15 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 143,
-      "last_success_at": "2026-06-03T05:20:22Z",
+      "last_run_duration_ms": 154,
+      "last_success_at": "2026-06-03T11:24:12Z",
       "previous_consecutive_failures": 0,
       "status": "degraded"
     },
     "obs-studio": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-06-03T05:20:20Z",
+      "last_checked_at": "2026-06-03T11:24:10Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -400,8 +406,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 844,
-      "last_success_at": "2026-06-03T05:20:20Z",
+      "last_run_duration_ms": 1167,
+      "last_success_at": "2026-06-03T11:24:10Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:obs-studio:304830335",
