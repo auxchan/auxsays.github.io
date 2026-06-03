@@ -3644,3 +3644,28 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: blackmagic-davinci-20-3-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ttprwr-need-help-trying-to-get-projects-back
+  product_id: blackmagic-davinci
+  update_version: 20.3.3
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ttprwr/need_help_trying_to_get_projects_back/
+  parent_title: Need help trying to get projects back
+  report_title: Need help trying to get projects back
+  report_text_excerpt: Need help trying to get projects back Last month my Dell XPS15 9500 of 3 years which I used to edit decided that it was never going to turn back on again, causing me to lose all my projects. This had included unfinished projects I had spent hours upon hours editing. I managed...
+  captured_at: '2026-06-03T12:20:17Z'
+  source_date: '2026-06-01'
+  target_release_date: '2026-05-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.3
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: install issue
+  workflow_area: installation
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
