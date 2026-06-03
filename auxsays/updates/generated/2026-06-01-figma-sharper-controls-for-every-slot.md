@@ -17,8 +17,8 @@ update_version: Sharper controls for every slot
 update_logo_text: FIG
 update_published_at: '2026-06-01T00:00:00.000Z'
 update_last_checked: '2026-06-01T18:17:28Z'
-source_last_checked: '2026-06-02T21:24:50Z'
-official_body_last_checked: '2026-06-02T21:24:50Z'
+source_last_checked: '2026-06-03T05:19:52Z'
+official_body_last_checked: '2026-06-03T05:19:52Z'
 record_last_updated: '2026-06-01T18:17:28Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -69,11 +69,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-06-01T18:17:28Z'
-  url: https://www.figma.com/release-notes/?title=sharper-controls-for-every-slot
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-06-02T05:02:09Z'
   url: https://www.figma.com/release-notes/?title=sharper-controls-for-every-slot
   status: captured-from-rss-feed
@@ -90,6 +85,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-06-02T21:24:50Z'
+  url: https://www.figma.com/release-notes/?title=sharper-controls-for-every-slot
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-06-03T05:19:52Z'
   url: https://www.figma.com/release-notes/?title=sharper-controls-for-every-slot
   status: captured-from-rss-feed
   body_captured: true
