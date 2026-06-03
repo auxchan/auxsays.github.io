@@ -3669,3 +3669,28 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1tvu2zm-help-keyframe-mixer-not-working-in-fusion
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1tvu2zm/help_keyframe_mixer_not_working_in_fusion_page/
+  parent_title: Help Keyframe mixer not working in Fusion page
+  report_title: Help Keyframe mixer not working in Fusion page
+  report_text_excerpt: 'Help Keyframe mixer not working in Fusion page https://reddit.com/link/1tvu2zm/video/j63a2teyc35h1/player I updated to resolve 21 toady and the keyframe mixer in fusion page has gone black and non responsive. What to do? and how do i report this bug? Edit : omg is this magic ,...'
+  captured_at: '2026-06-03T20:39:54Z'
+  source_date: '2026-06-03'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: unknown
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
