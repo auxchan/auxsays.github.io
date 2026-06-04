@@ -3644,7 +3644,6 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
-
 - id: blackmagic-davinci-20-3-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ttprwr-need-help-trying-to-get-projects-back
   product_id: blackmagic-davinci
   update_version: 20.3.3
@@ -3669,7 +3668,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1tvu2zm-help-keyframe-mixer-not-working-in-fusion
   product_id: blackmagic-davinci
   update_version: '21'
@@ -3691,6 +3689,27 @@ evidence:
   issue_theme: unspecified issue
   workflow_area: general DaVinci Resolve workflow
   platform: unknown
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13514
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13514
+  parent_title: OBS does not remember capture card mapping after reboot on macOS.
+  report_title: OBS does not remember capture card mapping after reboot on macOS.
+  report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/KuvOK5PbJZOwwfSB ### OBS Studio Crash Log URL _No response_ ### Expected Behavior When'
+  captured_at: '2026-06-04T07:07:27Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: macos
   severity: medium
   sentiment: moderate
   source_weight: 1
