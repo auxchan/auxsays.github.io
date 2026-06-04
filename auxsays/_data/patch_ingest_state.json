@@ -3,7 +3,7 @@
   "last_results": [
     {
       "adapter": "rss_feed",
-      "duration_ms": 916,
+      "duration_ms": 1401,
       "fetched": 2,
       "product_id": "figma",
       "refreshed": [
@@ -11,20 +11,17 @@
           "action": "freshness-updated",
           "path": "auxsays/updates/generated/2026-06-03-figma-pay-as-you-go-ai-credits-on-the-professional-plan.md",
           "record_id": "rss:figma:8ffcf508-ee53-497d-a98d-fbf1dc326998"
-        },
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-06-03-figma-plan-smarter-with-more-context-in-make.md",
-          "record_id": "rss:figma:e446f424-314a-45ed-a04f-f9dab91c53b4"
         }
       ],
       "skipped": [],
       "status": "success",
-      "written": []
+      "written": [
+        "auxsays/updates/generated/2026-06-04-figma-check-designs-catch-what-s-off-ship-what-s-right.md"
+      ]
     },
     {
       "adapter": "adobe_release_notes",
-      "duration_ms": 26072,
+      "duration_ms": 25749,
       "fetched": 1,
       "product_id": "adobe-premiere-pro",
       "refreshed": [
@@ -40,7 +37,7 @@
     },
     {
       "adapter": "blackmagic_support_downloads",
-      "duration_ms": 781,
+      "duration_ms": 459,
       "fetched": 2,
       "product_id": "blackmagic-davinci",
       "refreshed": [
@@ -61,7 +58,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 1517,
+      "duration_ms": 1217,
       "fetched": 2,
       "product_id": "obs-studio",
       "refreshed": [
@@ -82,7 +79,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 939,
+      "duration_ms": 945,
       "fetched": 2,
       "product_id": "comfyui",
       "refreshed": [
@@ -103,20 +100,25 @@
     },
     {
       "adapter": "rss_feed",
-      "duration_ms": 2331,
+      "duration_ms": 1457,
       "fetched": 2,
       "product_id": "github",
-      "refreshed": [],
+      "refreshed": [
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-06-04-github-copilot-github-copilot-in-visual-studio-may-update.md",
+          "record_id": "rss:github:https://github.blog/changelog/2026-06-02-github-copilot-in-visual-studio-may-update"
+        }
+      ],
       "skipped": [],
       "status": "success",
       "written": [
-        "auxsays/updates/generated/2026-06-04-github-copilot-github-copilot-in-visual-studio-may-update.md",
-        "auxsays/updates/generated/2026-06-04-github-copilot-enterprise-teams-is-now-generally-available.md"
+        "auxsays/updates/generated/2026-06-04-github-copilot-larger-context-windows-and-configurable-reasoning-levels-for-github-copilot.md"
       ]
     },
     {
       "adapter": "html_changelog",
-      "duration_ms": 153,
+      "duration_ms": 154,
       "fetched": 0,
       "product_id": "netlify",
       "refreshed": [],
@@ -125,8 +127,8 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-06-04T15:48:16Z",
-  "last_run_started_at": "2026-06-04T15:47:44Z",
+  "last_run_finished_at": "2026-06-04T20:26:37Z",
+  "last_run_started_at": "2026-06-04T20:26:06Z",
   "sources": {
     "adobe-after-effects": {
       "consecutive_failures": 2,
@@ -191,7 +193,7 @@
     "adobe-premiere-pro": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_release_notes",
-      "last_checked_at": "2026-06-04T15:47:45Z",
+      "last_checked_at": "2026-06-04T20:26:07Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -199,8 +201,8 @@
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 26072,
-      "last_success_at": "2026-06-04T15:47:45Z",
+      "last_run_duration_ms": 25749,
+      "last_success_at": "2026-06-04T20:26:07Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "adobe:adobe-premiere-pro:26.2.2:c176cc33bba85978",
@@ -211,7 +213,7 @@
     "blackmagic-davinci": {
       "consecutive_failures": 0,
       "last_adapter": "blackmagic_support_downloads",
-      "last_checked_at": "2026-06-04T15:48:11Z",
+      "last_checked_at": "2026-06-04T20:26:33Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -219,8 +221,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 781,
-      "last_success_at": "2026-06-04T15:48:11Z",
+      "last_run_duration_ms": 459,
+      "last_success_at": "2026-06-04T20:26:33Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "blackmagic-support:blackmagic-davinci:21.0:2cda7ec076ea4b25aaa007fc68a5cbfc",
@@ -233,7 +235,7 @@
     "comfyui": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-06-04T15:48:13Z",
+      "last_checked_at": "2026-06-04T20:26:35Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -241,8 +243,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 939,
-      "last_success_at": "2026-06-04T15:48:13Z",
+      "last_run_duration_ms": 945,
+      "last_success_at": "2026-06-04T20:26:35Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:comfyui:333872281",
@@ -258,7 +260,7 @@
     "figma": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-06-04T15:47:44Z",
+      "last_checked_at": "2026-06-04T20:26:06Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -266,10 +268,11 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 916,
-      "last_success_at": "2026-06-04T15:47:44Z",
+      "last_run_duration_ms": 1401,
+      "last_success_at": "2026-06-04T20:26:06Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "rss:figma:2ba58709-6032-4792-b2d2-2a590cdfc097",
         "rss:figma:8ffcf508-ee53-497d-a98d-fbf1dc326998",
         "rss:figma:e446f424-314a-45ed-a04f-f9dab91c53b4",
         "rss:figma:682f3ba2-ee9e-4213-807d-f935a7d9a453",
@@ -294,7 +297,7 @@
     "github": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-06-04T15:48:14Z",
+      "last_checked_at": "2026-06-04T20:26:36Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -302,10 +305,11 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 2331,
-      "last_success_at": "2026-06-04T15:48:14Z",
+      "last_run_duration_ms": 1457,
+      "last_success_at": "2026-06-04T20:26:36Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "rss:github:https://github.blog/changelog/2026-06-04-larger-context-windows-and-configurable-reasoning-levels-for-github-copilot",
         "rss:github:https://github.blog/changelog/2026-06-03-enterprise-teams-is-now-generally-available",
         "rss:github:https://github.blog/changelog/2026-06-02-github-copilot-in-visual-studio-may-update",
         "rss:github:https://github.blog/changelog/2026-05-28-github-copilot-in-visual-studio-code-may-releases",
@@ -380,7 +384,7 @@
     "netlify": {
       "consecutive_failures": 0,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-06-04T15:48:16Z",
+      "last_checked_at": "2026-06-04T20:26:37Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -388,15 +392,15 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 153,
-      "last_success_at": "2026-06-04T15:48:16Z",
+      "last_run_duration_ms": 154,
+      "last_success_at": "2026-06-04T20:26:37Z",
       "previous_consecutive_failures": 0,
       "status": "degraded"
     },
     "obs-studio": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-06-04T15:48:11Z",
+      "last_checked_at": "2026-06-04T20:26:33Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -404,8 +408,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 1517,
-      "last_success_at": "2026-06-04T15:48:11Z",
+      "last_run_duration_ms": 1217,
+      "last_success_at": "2026-06-04T20:26:33Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:obs-studio:304830335",
