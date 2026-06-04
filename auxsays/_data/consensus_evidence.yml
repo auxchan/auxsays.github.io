@@ -3713,3 +3713,28 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1twexbu-so-retime-keyframe-behavior-is-completely
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1twexbu/so_retime_keyframe_behavior_is_completely_broken/
+  parent_title: so... retime keyframe behavior is completely broken for everybody, right? (resolve 21)
+  report_title: so... retime keyframe behavior is completely broken for everybody, right? (resolve 21)
+  report_text_excerpt: so... retime keyframe behavior is completely broken for everybody, right? (resolve 21) it's genuinely not even usable lmfao i don't even know how to describe what it's doing but i know it's different. switching back to 20 asapily submitted by /u/Most_Ad_1210 [link] [comments]
+  captured_at: '2026-06-04T17:29:53Z'
+  source_date: '2026-06-04'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: unknown
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
