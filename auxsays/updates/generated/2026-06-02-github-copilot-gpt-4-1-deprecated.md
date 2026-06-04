@@ -17,8 +17,8 @@ update_version: GPT-4.1 deprecated
 update_logo_text: GIT
 update_published_at: '2026-06-02T23:58:52Z'
 update_last_checked: '2026-06-03T05:20:21Z'
-source_last_checked: '2026-06-03T21:31:39Z'
-official_body_last_checked: '2026-06-03T21:31:39Z'
+source_last_checked: '2026-06-04T05:12:42Z'
+official_body_last_checked: '2026-06-04T05:12:42Z'
 record_last_updated: '2026-06-03T05:20:21Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -95,6 +95,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-06-03T21:31:39Z'
+  url: https://github.blog/changelog/2026-06-02-gpt-4-1-deprecated
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-06-04T05:12:42Z'
   url: https://github.blog/changelog/2026-06-02-gpt-4-1-deprecated
   status: captured-from-rss-feed
   body_captured: true
