@@ -17,8 +17,8 @@ update_version: Pay-as-you-go AI credits on the Professional plan
 update_logo_text: FIG
 update_published_at: '2026-06-03T00:00:00.000Z'
 update_last_checked: '2026-06-04T05:12:11Z'
-source_last_checked: '2026-06-05T15:29:31Z'
-official_body_last_checked: '2026-06-05T15:29:31Z'
+source_last_checked: '2026-06-05T20:16:00Z'
+official_body_last_checked: '2026-06-05T20:16:00Z'
 record_last_updated: '2026-06-04T05:12:11Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -69,11 +69,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-06-04T15:47:44Z'
-  url: https://www.figma.com/release-notes/?title=pay-as-you-go-ai-credits-professional-plan
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-06-04T20:26:06Z'
   url: https://www.figma.com/release-notes/?title=pay-as-you-go-ai-credits-professional-plan
   status: captured-from-rss-feed
@@ -90,6 +85,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-06-05T15:29:31Z'
+  url: https://www.figma.com/release-notes/?title=pay-as-you-go-ai-credits-professional-plan
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-06-05T20:16:00Z'
   url: https://www.figma.com/release-notes/?title=pay-as-you-go-ai-credits-professional-plan
   status: captured-from-rss-feed
   body_captured: true
