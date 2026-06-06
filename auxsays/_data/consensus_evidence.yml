@@ -3825,3 +3825,28 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-20-3-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1tyn0cy-linking-proxies-to-full-resolution-not-wo
+  product_id: blackmagic-davinci
+  update_version: 20.3.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1tyn0cy/linking_proxies_to_full_resolution_not_working/
+  parent_title: Linking Proxies to Full resolution not working
+  report_title: Linking Proxies to Full resolution not working
+  report_text_excerpt: 'Linking Proxies to Full resolution not working So I gave this very particular problem with relinking the media, let me explain: I got a project to color-grade and export to a final movie. when i came to relink the media i got this error message:...'
+  captured_at: '2026-06-06T17:43:36Z'
+  source_date: '2026-06-06'
+  target_release_date: '2025-12-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
