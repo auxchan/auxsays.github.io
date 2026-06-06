@@ -1,67 +1,25 @@
 {
-  "last_errors": [],
-  "last_results": [
+  "last_errors": [
     {
       "adapter": "rss_feed",
-      "duration_ms": 1363,
-      "fetched": 2,
-      "product_id": "figma",
-      "refreshed": [
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-06-04-figma-check-designs-catch-what-s-off-ship-what-s-right.md",
-          "record_id": "rss:figma:2ba58709-6032-4792-b2d2-2a590cdfc097"
-        },
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-06-03-figma-pay-as-you-go-ai-credits-on-the-professional-plan.md",
-          "record_id": "rss:figma:8ffcf508-ee53-497d-a98d-fbf1dc326998"
-        }
-      ],
-      "skipped": [],
-      "status": "success",
-      "written": []
+      "error": "no element found: line 1, column 0",
+      "product_id": "figma"
     },
     {
       "adapter": "adobe_release_notes",
-      "duration_ms": 25557,
-      "fetched": 1,
-      "product_id": "adobe-premiere-pro",
-      "refreshed": [
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-05-01-premiere-pro-26-2-2.md",
-          "record_id": "adobe:adobe-premiere-pro:26.2.2:c176cc33bba85978"
-        }
-      ],
-      "skipped": [],
-      "status": "success",
-      "written": []
+      "error": "Timeout while fetching official Adobe source \u2014 The read operation timed out; HTTP 403 while fetching official Adobe source \u2014 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"[source URL]\">\n<HTML><HEAD><META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=iso-8859-1\">\n<TITLE>ERROR: The request could not be satisfied</TITLE>\n</HEAD><BODY>\n<H1>403 ERROR</H1>\n<H2>The request could not be satisfied.</H2>\n<HR noshade size=\"1px\">\nRequest blocked.\nWe can't connect to the server for this app or website at this time. There might be too much traffic or a configuration error. Try again",
+      "product_id": "adobe-premiere-pro"
     },
     {
       "adapter": "blackmagic_support_downloads",
-      "duration_ms": 844,
-      "fetched": 2,
-      "product_id": "blackmagic-davinci",
-      "refreshed": [
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-06-03-davinci-resolve-21-0.md",
-          "record_id": "blackmagic-support:blackmagic-davinci:21.0:2cda7ec076ea4b25aaa007fc68a5cbfc"
-        },
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-05-14-davinci-resolve-20-3-3.md",
-          "record_id": "blackmagic-support:blackmagic-davinci:20.3.3:44720c1f672d4dce9e0fab7df33f928e"
-        }
-      ],
-      "skipped": [],
-      "status": "success",
-      "written": []
-    },
+      "error": "HTTP Error 403: Forbidden",
+      "product_id": "blackmagic-davinci"
+    }
+  ],
+  "last_results": [
     {
       "adapter": "github_releases",
-      "duration_ms": 1064,
+      "duration_ms": 764,
       "fetched": 2,
       "product_id": "obs-studio",
       "refreshed": [
@@ -82,7 +40,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 575,
+      "duration_ms": 430,
       "fetched": 2,
       "product_id": "comfyui",
       "refreshed": [
@@ -103,7 +61,7 @@
     },
     {
       "adapter": "rss_feed",
-      "duration_ms": 306,
+      "duration_ms": 299,
       "fetched": 2,
       "product_id": "github",
       "refreshed": [
@@ -124,7 +82,7 @@
     },
     {
       "adapter": "html_changelog",
-      "duration_ms": 232,
+      "duration_ms": 60,
       "fetched": 0,
       "product_id": "netlify",
       "refreshed": [],
@@ -133,8 +91,8 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-06-06T14:11:29Z",
-  "last_run_started_at": "2026-06-06T14:10:59Z",
+  "last_run_finished_at": "2026-06-06T19:49:07Z",
+  "last_run_started_at": "2026-06-06T19:48:40Z",
   "sources": {
     "adobe-after-effects": {
       "consecutive_failures": 2,
@@ -197,37 +155,37 @@
       "status": "failing"
     },
     "adobe-premiere-pro": {
-      "consecutive_failures": 0,
+      "consecutive_failures": 1,
       "last_adapter": "adobe_release_notes",
-      "last_checked_at": "2026-06-06T14:11:00Z",
-      "last_error": "",
-      "last_error_at": "",
-      "last_error_type": "",
-      "last_health_note": "Fetch succeeded.",
-      "last_records_fetched": 1,
+      "last_checked_at": "2026-06-06T19:49:06Z",
+      "last_error": "Timeout while fetching official Adobe source \u2014 The read operation timed out; HTTP 403 while fetching official Adobe source \u2014 <!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\" \"[source URL]\">\n<HTML><HEAD><META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html; charset=iso-8859-1\">\n<TITLE>ERROR: The request could not be satisfied</TITLE>\n</HEAD><BODY>\n<H1>403 ERROR</H1>\n<H2>The request could not be satisfied.</H2>\n<HR noshade size=\"1px\">\nRequest blocked.\nWe can't connect to the server for this app or website at this time. There might be too much traffic or a configuration error. Try again",
+      "last_error_at": "2026-06-06T19:49:06Z",
+      "last_error_type": "timeout",
+      "last_health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
+      "last_records_fetched": 0,
       "last_records_skipped": 0,
-      "last_records_written": 1,
-      "last_run_duration_ms": 25557,
+      "last_records_written": 0,
+      "last_run_duration_ms": 0,
       "last_success_at": "2026-06-06T14:11:00Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "adobe:adobe-premiere-pro:26.2.2:c176cc33bba85978",
         "adobe:adobe-premiere-pro:26.2:9fa3e1e53c0b275d"
       ],
-      "status": "healthy"
+      "status": "degraded"
     },
     "blackmagic-davinci": {
-      "consecutive_failures": 0,
+      "consecutive_failures": 1,
       "last_adapter": "blackmagic_support_downloads",
-      "last_checked_at": "2026-06-06T14:11:26Z",
-      "last_error": "",
-      "last_error_at": "",
-      "last_error_type": "",
-      "last_health_note": "Fetch succeeded.",
-      "last_records_fetched": 2,
+      "last_checked_at": "2026-06-06T19:49:06Z",
+      "last_error": "HTTP Error 403: Forbidden",
+      "last_error_at": "2026-06-06T19:49:06Z",
+      "last_error_type": "blocked",
+      "last_health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
+      "last_records_fetched": 0,
       "last_records_skipped": 0,
-      "last_records_written": 2,
-      "last_run_duration_ms": 844,
+      "last_records_written": 0,
+      "last_run_duration_ms": 0,
       "last_success_at": "2026-06-06T14:11:26Z",
       "previous_consecutive_failures": 0,
       "seen": [
@@ -236,12 +194,12 @@
         "blackmagic-support:blackmagic-davinci:20.3.1:ea408484da59422794a6764f0cb7f11f",
         "blackmagic-support:blackmagic-davinci:20.3.2:f963b9ccf156459db4ed9c32c39b195e"
       ],
-      "status": "healthy"
+      "status": "degraded"
     },
     "comfyui": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-06-06T14:11:28Z",
+      "last_checked_at": "2026-06-06T19:49:06Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -249,8 +207,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 575,
-      "last_success_at": "2026-06-06T14:11:28Z",
+      "last_run_duration_ms": 430,
+      "last_success_at": "2026-06-06T19:49:06Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:comfyui:333872281",
@@ -264,17 +222,17 @@
       "status": "healthy"
     },
     "figma": {
-      "consecutive_failures": 0,
+      "consecutive_failures": 1,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-06-06T14:10:59Z",
-      "last_error": "",
-      "last_error_at": "",
-      "last_error_type": "",
-      "last_health_note": "Fetch succeeded.",
-      "last_records_fetched": 2,
+      "last_checked_at": "2026-06-06T19:48:40Z",
+      "last_error": "no element found: line 1, column 0",
+      "last_error_at": "2026-06-06T19:48:40Z",
+      "last_error_type": "error",
+      "last_health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
+      "last_records_fetched": 0,
       "last_records_skipped": 0,
-      "last_records_written": 2,
-      "last_run_duration_ms": 1363,
+      "last_records_written": 0,
+      "last_run_duration_ms": 0,
       "last_success_at": "2026-06-06T14:10:59Z",
       "previous_consecutive_failures": 0,
       "seen": [
@@ -298,12 +256,12 @@
         "rss:figma:57dd3e2e-da91-4a70-b924-72fa4c2cd0ba",
         "rss:figma:2490eafb-ecf7-4d76-9ca9-5e4dd193a086"
       ],
-      "status": "healthy"
+      "status": "degraded"
     },
     "github": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-06-06T14:11:28Z",
+      "last_checked_at": "2026-06-06T19:49:07Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -311,8 +269,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 306,
-      "last_success_at": "2026-06-06T14:11:28Z",
+      "last_run_duration_ms": 299,
+      "last_success_at": "2026-06-06T19:49:07Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:github:https://github.blog/changelog/2026-06-05-codeql-2-25-6-adds-swift-6-3-2-support-and-improves-c-coverage",
@@ -394,7 +352,7 @@
     "netlify": {
       "consecutive_failures": 0,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-06-06T14:11:29Z",
+      "last_checked_at": "2026-06-06T19:49:07Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -402,15 +360,15 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 232,
-      "last_success_at": "2026-06-06T14:11:29Z",
+      "last_run_duration_ms": 60,
+      "last_success_at": "2026-06-06T19:49:07Z",
       "previous_consecutive_failures": 0,
       "status": "degraded"
     },
     "obs-studio": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-06-06T14:11:27Z",
+      "last_checked_at": "2026-06-06T19:49:06Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -418,8 +376,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 1064,
-      "last_success_at": "2026-06-06T14:11:27Z",
+      "last_run_duration_ms": 764,
+      "last_success_at": "2026-06-06T19:49:06Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:obs-studio:304830335",
