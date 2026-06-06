@@ -3850,3 +3850,28 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-20-3-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1tykc07-painful-2-person-podcast-workflow-with-re
+  product_id: blackmagic-davinci
+  update_version: 20.3.3
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1tykc07/painful_2_person_podcast_workflow_with_resolve/
+  parent_title: Painful 2 Person Podcast Workflow with Resolve
+  report_title: Painful 2 Person Podcast Workflow with Resolve
+  report_text_excerpt: Painful 2 Person Podcast Workflow with Resolve How are you collaborating on long timeline edits in DaVinci Resolve? We were using Blackmagic Cloud, but hit constant freezes, crashes, and unlinkable footage. Our vids are 1-2 hours long, 3 cameras in h.265, around 150GB per ep....
+  captured_at: '2026-06-06T22:29:50Z'
+  source_date: '2026-06-06'
+  target_release_date: '2026-05-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.3
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
