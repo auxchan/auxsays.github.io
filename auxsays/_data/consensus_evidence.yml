@@ -3800,3 +3800,28 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-20-3-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1tybsea-bug-en-davinci-resolve-2032
+  product_id: blackmagic-davinci
+  update_version: 20.3.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1tybsea/bug_en_davinci_resolve_2032/
+  parent_title: Bug en davinci resolve 20.3.2
+  report_title: Bug en davinci resolve 20.3.2
+  report_text_excerpt: Bug en davinci resolve 20.3.2 Estoy intentando diagnosticar un problema muy extraño en una MacBook Pro M3 Max (36 GB RAM, 1 TB SSD) con DaVinci Resolve Studio 20.3.2. El comportamiento ocurre en todos los proyectos y con cualquier tipo de material, incluso aplicando una...
+  captured_at: '2026-06-06T10:28:11Z'
+  source_date: '2026-06-06'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
