@@ -3935,3 +3935,53 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1u0fi5p-fusion-tab-bug-text-presets-from-power-bi
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1u0fi5p/fusion_tab_bug_text_presets_from_power_bins/
+  parent_title: 'Fusion Tab Bug: Text+ presets from Power Bins getting "infinite" frames (Timeline at 29.97 vs Fusion at 60fps?)'
+  report_title: 'Fusion Tab Bug: Text+ presets from Power Bins getting "infinite" frames (Timeline at 29.97 vs Fusion at 60fps?)'
+  report_text_excerpt: 'Fusion Tab Bug: Text+ presets from Power Bins getting "infinite" frames (Timeline at 29.97 vs Fusion at 60fps?) Hi everyone, I changed my computer this weekend and I''m running into a huge problem in the Fusion tab. I edit a lot of Shorts, so I keep my subtitle animations saved...'
+  captured_at: '2026-06-08T22:55:24Z'
+  source_date: '2026-06-08'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: macos
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+
+- id: blackmagic-davinci-21-0-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1u0ms8b-collaborative-prjct-not-working
+  product_id: blackmagic-davinci
+  update_version: '21.0'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1u0ms8b/collaborative_prjct_not_working/
+  parent_title: Collaborative PRJCT NOT WORKING
+  report_title: Collaborative PRJCT NOT WORKING
+  report_text_excerpt: Collaborative PRJCT NOT WORKING Hey, This is apparently a well documented problem, but no one from BMD seems to address, nor solve, the problem so here I am trying. I'm an editor on a big project for a client where we need collaborative editing across three different users....
+  captured_at: '2026-06-08T22:59:00Z'
+  source_date: '2026-06-08'
+  target_release_date: '2026-06-03'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21.0'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
