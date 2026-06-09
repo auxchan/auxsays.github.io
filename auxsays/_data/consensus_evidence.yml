@@ -4004,3 +4004,100 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1u0fzdo-davinci-resolve-studio-noise-reduction-sl
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1u0fzdo/davinci_resolve_studio_noise_reduction_sliders_do/
+  parent_title: DaVinci Resolve Studio - Noise Reduction sliders do absolutely nothing on active node / transcoded Avid DNxHR clip
+  report_title: DaVinci Resolve Studio - Noise Reduction sliders do absolutely nothing on active node / transcoded Avid DNxHR clip
+  report_text_excerpt: DaVinci Resolve Studio - Noise Reduction sliders do absolutely nothing on active node / transcoded Avid DNxHR clip Full subject DaVinci Resolve Studio 21 (Windows) - Noise Reduction sliders do absolutely nothing on active node of either original clip or transcoded Avid DNxHR...
+  captured_at: '2026-06-09T22:49:56Z'
+  source_date: '2026-06-08'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1tzqxgt-help-text-macro-animation-scales-to-the-f
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1tzqxgt/help_text_macro_animation_scales_to_the_full/
+  parent_title: '[Help] Text macro animation scales to the full composition length inside the Fusion page (Resolve Studio 21)'
+  report_title: '[Help] Text macro animation scales to the full composition length inside the Fusion page (Resolve Studio 21)'
+  report_text_excerpt: '[Help] Text macro animation scales to the full composition length inside the Fusion page (Resolve Studio 21) Hi everyone, I''m having a pretty frustrating issue in DaVinci Resolve Studio 21 with a dynamic text preset (Word by Word style). Just to give you the exact context: I...'
+  captured_at: '2026-06-09T22:49:56Z'
+  source_date: '2026-06-07'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1u10zc4-21-on-ipad-loses-sound-and-waveforms
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1u10zc4/21_on_ipad_loses_sound_and_waveforms/
+  parent_title: 21 on iPad loses sound and waveforms?
+  report_title: 21 on iPad loses sound and waveforms?
+  report_text_excerpt: 21 on iPad loses sound and waveforms? I am experiencing what appears to be a serious audio timeline bug in DaVinci Resolve for iPad 21.0.0.1 on a 12.9" M2 iPad Pro running iPadOS 26.6. The issue occurs in completely new projects and brand-new timelines with freshly imported...
+  captured_at: '2026-06-09T22:49:56Z'
+  source_date: '2026-06-09'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: unknown
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1u0yjc0-crashing-on-render-after-updating-to-21
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1u0yjc0/crashing_on_render_after_updating_to_21/
+  parent_title: Crashing on Render After Updating to 21
+  report_title: Crashing on Render After Updating to 21
+  report_text_excerpt: Crashing on Render After Updating to 21 Hey I have recently updated to 21 because i got the pop up and usually never had problems with updated Resolve, but after the new update every time i want to render something no matter what encoder i use it crashes. My GPU is a RTX...
+  captured_at: '2026-06-09T22:49:56Z'
+  source_date: '2026-06-09'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
