@@ -3,7 +3,7 @@
   "last_results": [
     {
       "adapter": "rss_feed",
-      "duration_ms": 759,
+      "duration_ms": 716,
       "fetched": 2,
       "product_id": "figma",
       "refreshed": [
@@ -24,7 +24,7 @@
     },
     {
       "adapter": "adobe_release_notes",
-      "duration_ms": 25709,
+      "duration_ms": 25744,
       "fetched": 1,
       "product_id": "adobe-premiere-pro",
       "refreshed": [
@@ -40,12 +40,12 @@
     },
     {
       "adapter": "blackmagic_support_downloads",
-      "duration_ms": 712,
+      "duration_ms": 794,
       "fetched": 2,
       "product_id": "blackmagic-davinci",
       "refreshed": [
         {
-          "action": "refreshed",
+          "action": "freshness-updated",
           "path": "auxsays/updates/generated/2026-04-14-davinci-resolve-21.md",
           "record_id": "blackmagic-support:blackmagic-davinci:21:2cda7ec076ea4b25aaa007fc68a5cbfc"
         },
@@ -61,7 +61,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 861,
+      "duration_ms": 893,
       "fetched": 2,
       "product_id": "obs-studio",
       "refreshed": [
@@ -82,7 +82,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 491,
+      "duration_ms": 485,
       "fetched": 2,
       "product_id": "comfyui",
       "refreshed": [
@@ -103,7 +103,7 @@
     },
     {
       "adapter": "rss_feed",
-      "duration_ms": 287,
+      "duration_ms": 1313,
       "fetched": 2,
       "product_id": "github",
       "refreshed": [
@@ -111,20 +111,17 @@
           "action": "freshness-updated",
           "path": "auxsays/updates/generated/2026-06-08-github-copilot-ip-allow-list-coverage-for-emu-namespaces-in-general-availability.md",
           "record_id": "rss:github:https://github.blog/changelog/2026-06-08-ip-allow-list-coverage-for-emu-namespaces-in-general-availability"
-        },
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-06-05-github-copilot-gpt-5-2-and-gpt-5-2-codex-deprecated.md",
-          "record_id": "rss:github:https://github.blog/changelog/2026-06-05-gpt-5-2-and-gpt-5-2-codex-deprecated"
         }
       ],
       "skipped": [],
       "status": "success",
-      "written": []
+      "written": [
+        "auxsays/updates/generated/2026-06-09-github-copilot-periodic-code-scanning-of-inactive-repositories.md"
+      ]
     },
     {
       "adapter": "html_changelog",
-      "duration_ms": 197,
+      "duration_ms": 159,
       "fetched": 0,
       "product_id": "netlify",
       "refreshed": [],
@@ -133,8 +130,8 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-06-09T04:38:58Z",
-  "last_run_started_at": "2026-06-09T04:38:29Z",
+  "last_run_finished_at": "2026-06-09T10:05:12Z",
+  "last_run_started_at": "2026-06-09T10:04:42Z",
   "sources": {
     "adobe-after-effects": {
       "consecutive_failures": 2,
@@ -199,7 +196,7 @@
     "adobe-premiere-pro": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_release_notes",
-      "last_checked_at": "2026-06-09T04:38:30Z",
+      "last_checked_at": "2026-06-09T10:04:42Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -207,8 +204,8 @@
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 25709,
-      "last_success_at": "2026-06-09T04:38:30Z",
+      "last_run_duration_ms": 25744,
+      "last_success_at": "2026-06-09T10:04:42Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "adobe:adobe-premiere-pro:26.2.2:c176cc33bba85978",
@@ -219,7 +216,7 @@
     "blackmagic-davinci": {
       "consecutive_failures": 0,
       "last_adapter": "blackmagic_support_downloads",
-      "last_checked_at": "2026-06-09T04:38:56Z",
+      "last_checked_at": "2026-06-09T10:05:08Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -227,8 +224,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 712,
-      "last_success_at": "2026-06-09T04:38:56Z",
+      "last_run_duration_ms": 794,
+      "last_success_at": "2026-06-09T10:05:08Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "blackmagic-support:blackmagic-davinci:21:2cda7ec076ea4b25aaa007fc68a5cbfc",
@@ -242,7 +239,7 @@
     "comfyui": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-06-09T04:38:57Z",
+      "last_checked_at": "2026-06-09T10:05:10Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -250,8 +247,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 491,
-      "last_success_at": "2026-06-09T04:38:57Z",
+      "last_run_duration_ms": 485,
+      "last_success_at": "2026-06-09T10:05:10Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:comfyui:333872281",
@@ -267,7 +264,7 @@
     "figma": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-06-09T04:38:29Z",
+      "last_checked_at": "2026-06-09T10:04:42Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -275,8 +272,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 759,
-      "last_success_at": "2026-06-09T04:38:29Z",
+      "last_run_duration_ms": 716,
+      "last_success_at": "2026-06-09T10:04:42Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:figma:2ba58709-6032-4792-b2d2-2a590cdfc097",
@@ -304,7 +301,7 @@
     "github": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-06-09T04:38:58Z",
+      "last_checked_at": "2026-06-09T10:05:10Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -312,10 +309,11 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 287,
-      "last_success_at": "2026-06-09T04:38:58Z",
+      "last_run_duration_ms": 1313,
+      "last_success_at": "2026-06-09T10:05:10Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "rss:github:https://github.blog/changelog/2026-06-09-periodic-code-scanning-of-inactive-repositories",
         "rss:github:https://github.blog/changelog/2026-06-08-ip-allow-list-coverage-for-emu-namespaces-in-general-availability",
         "rss:github:https://github.blog/changelog/2026-06-05-codeql-2-25-6-adds-swift-6-3-2-support-and-improves-c-coverage",
         "rss:github:https://github.blog/changelog/2026-06-05-gpt-5-2-and-gpt-5-2-codex-deprecated",
@@ -396,7 +394,7 @@
     "netlify": {
       "consecutive_failures": 0,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-06-09T04:38:58Z",
+      "last_checked_at": "2026-06-09T10:05:12Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -404,15 +402,15 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 197,
-      "last_success_at": "2026-06-09T04:38:58Z",
+      "last_run_duration_ms": 159,
+      "last_success_at": "2026-06-09T10:05:12Z",
       "previous_consecutive_failures": 0,
       "status": "degraded"
     },
     "obs-studio": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-06-09T04:38:57Z",
+      "last_checked_at": "2026-06-09T10:05:09Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -420,8 +418,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 861,
-      "last_success_at": "2026-06-09T04:38:57Z",
+      "last_run_duration_ms": 893,
+      "last_success_at": "2026-06-09T10:05:09Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:obs-studio:304830335",
