@@ -3,7 +3,7 @@
   "last_results": [
     {
       "adapter": "rss_feed",
-      "duration_ms": 693,
+      "duration_ms": 759,
       "fetched": 2,
       "product_id": "figma",
       "refreshed": [
@@ -24,7 +24,7 @@
     },
     {
       "adapter": "adobe_release_notes",
-      "duration_ms": 25817,
+      "duration_ms": 25709,
       "fetched": 1,
       "product_id": "adobe-premiere-pro",
       "refreshed": [
@@ -40,14 +40,14 @@
     },
     {
       "adapter": "blackmagic_support_downloads",
-      "duration_ms": 3389,
+      "duration_ms": 712,
       "fetched": 2,
       "product_id": "blackmagic-davinci",
       "refreshed": [
         {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-06-03-davinci-resolve-21-0.md",
-          "record_id": "blackmagic-support:blackmagic-davinci:21.0:2cda7ec076ea4b25aaa007fc68a5cbfc"
+          "action": "refreshed",
+          "path": "auxsays/updates/generated/2026-04-14-davinci-resolve-21.md",
+          "record_id": "blackmagic-support:blackmagic-davinci:21:2cda7ec076ea4b25aaa007fc68a5cbfc"
         },
         {
           "action": "freshness-updated",
@@ -61,7 +61,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 1295,
+      "duration_ms": 861,
       "fetched": 2,
       "product_id": "obs-studio",
       "refreshed": [
@@ -82,7 +82,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 908,
+      "duration_ms": 491,
       "fetched": 2,
       "product_id": "comfyui",
       "refreshed": [
@@ -103,10 +103,15 @@
     },
     {
       "adapter": "rss_feed",
-      "duration_ms": 913,
+      "duration_ms": 287,
       "fetched": 2,
       "product_id": "github",
       "refreshed": [
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-06-08-github-copilot-ip-allow-list-coverage-for-emu-namespaces-in-general-availability.md",
+          "record_id": "rss:github:https://github.blog/changelog/2026-06-08-ip-allow-list-coverage-for-emu-namespaces-in-general-availability"
+        },
         {
           "action": "freshness-updated",
           "path": "auxsays/updates/generated/2026-06-05-github-copilot-gpt-5-2-and-gpt-5-2-codex-deprecated.md",
@@ -115,13 +120,11 @@
       ],
       "skipped": [],
       "status": "success",
-      "written": [
-        "auxsays/updates/generated/2026-06-08-github-copilot-ip-allow-list-coverage-for-emu-namespaces-in-general-availability.md"
-      ]
+      "written": []
     },
     {
       "adapter": "html_changelog",
-      "duration_ms": 308,
+      "duration_ms": 197,
       "fetched": 0,
       "product_id": "netlify",
       "refreshed": [],
@@ -130,8 +133,8 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-06-08T20:36:28Z",
-  "last_run_started_at": "2026-06-08T20:35:54Z",
+  "last_run_finished_at": "2026-06-09T04:38:58Z",
+  "last_run_started_at": "2026-06-09T04:38:29Z",
   "sources": {
     "adobe-after-effects": {
       "consecutive_failures": 2,
@@ -196,7 +199,7 @@
     "adobe-premiere-pro": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_release_notes",
-      "last_checked_at": "2026-06-08T20:35:55Z",
+      "last_checked_at": "2026-06-09T04:38:30Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -204,8 +207,8 @@
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 25817,
-      "last_success_at": "2026-06-08T20:35:55Z",
+      "last_run_duration_ms": 25709,
+      "last_success_at": "2026-06-09T04:38:30Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "adobe:adobe-premiere-pro:26.2.2:c176cc33bba85978",
@@ -216,7 +219,7 @@
     "blackmagic-davinci": {
       "consecutive_failures": 0,
       "last_adapter": "blackmagic_support_downloads",
-      "last_checked_at": "2026-06-08T20:36:21Z",
+      "last_checked_at": "2026-06-09T04:38:56Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -224,10 +227,11 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 3389,
-      "last_success_at": "2026-06-08T20:36:21Z",
+      "last_run_duration_ms": 712,
+      "last_success_at": "2026-06-09T04:38:56Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "blackmagic-support:blackmagic-davinci:21:2cda7ec076ea4b25aaa007fc68a5cbfc",
         "blackmagic-support:blackmagic-davinci:21.0:2cda7ec076ea4b25aaa007fc68a5cbfc",
         "blackmagic-support:blackmagic-davinci:20.3.3:44720c1f672d4dce9e0fab7df33f928e",
         "blackmagic-support:blackmagic-davinci:20.3.1:ea408484da59422794a6764f0cb7f11f",
@@ -238,7 +242,7 @@
     "comfyui": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-06-08T20:36:26Z",
+      "last_checked_at": "2026-06-09T04:38:57Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -246,8 +250,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 908,
-      "last_success_at": "2026-06-08T20:36:26Z",
+      "last_run_duration_ms": 491,
+      "last_success_at": "2026-06-09T04:38:57Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:comfyui:333872281",
@@ -263,7 +267,7 @@
     "figma": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-06-08T20:35:54Z",
+      "last_checked_at": "2026-06-09T04:38:29Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -271,8 +275,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 693,
-      "last_success_at": "2026-06-08T20:35:54Z",
+      "last_run_duration_ms": 759,
+      "last_success_at": "2026-06-09T04:38:29Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:figma:2ba58709-6032-4792-b2d2-2a590cdfc097",
@@ -300,7 +304,7 @@
     "github": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-06-08T20:36:27Z",
+      "last_checked_at": "2026-06-09T04:38:58Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -308,8 +312,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 913,
-      "last_success_at": "2026-06-08T20:36:27Z",
+      "last_run_duration_ms": 287,
+      "last_success_at": "2026-06-09T04:38:58Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:github:https://github.blog/changelog/2026-06-08-ip-allow-list-coverage-for-emu-namespaces-in-general-availability",
@@ -392,7 +396,7 @@
     "netlify": {
       "consecutive_failures": 0,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-06-08T20:36:27Z",
+      "last_checked_at": "2026-06-09T04:38:58Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -400,15 +404,15 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 308,
-      "last_success_at": "2026-06-08T20:36:27Z",
+      "last_run_duration_ms": 197,
+      "last_success_at": "2026-06-09T04:38:58Z",
       "previous_consecutive_failures": 0,
       "status": "degraded"
     },
     "obs-studio": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-06-08T20:36:24Z",
+      "last_checked_at": "2026-06-09T04:38:57Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -416,8 +420,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 1295,
-      "last_success_at": "2026-06-08T20:36:24Z",
+      "last_run_duration_ms": 861,
+      "last_success_at": "2026-06-09T04:38:57Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:obs-studio:304830335",

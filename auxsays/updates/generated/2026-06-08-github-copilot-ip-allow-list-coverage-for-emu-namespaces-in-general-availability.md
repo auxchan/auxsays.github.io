@@ -17,8 +17,8 @@ update_version: IP allow list coverage for EMU namespaces in general availabilit
 update_logo_text: GIT
 update_published_at: '2026-06-08T16:26:25Z'
 update_last_checked: '2026-06-08T20:36:27Z'
-source_last_checked: '2026-06-08T20:36:27Z'
-official_body_last_checked: '2026-06-08T20:36:27Z'
+source_last_checked: '2026-06-09T04:38:58Z'
+official_body_last_checked: '2026-06-09T04:38:58Z'
 record_last_updated: '2026-06-08T20:36:27Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -77,6 +77,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-06-08T20:36:27Z'
+  url: https://github.blog/changelog/2026-06-08-ip-allow-list-coverage-for-emu-namespaces-in-general-availability
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-06-09T04:38:58Z'
   url: https://github.blog/changelog/2026-06-08-ip-allow-list-coverage-for-emu-namespaces-in-general-availability
   status: captured-from-rss-feed
   body_captured: true

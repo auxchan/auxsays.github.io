@@ -1,8 +1,7 @@
 ---
 layout: aux-update
 title: DaVinci Resolve 21 official update breakdown
-description: Published Apr 14, 2026. This page covers the stable DaVinci Resolve 21 release. Public beta reports
-  are excluded.
+description: Published Apr 14, 2026. This page covers the stable DaVinci Resolve 21 release. Public beta reports are excluded.
 permalink: /updates/blackmagic-design/davinci-resolve/21/
 update_entry: true
 feed_hidden: false
@@ -20,10 +19,9 @@ update_status: current
 update_feed_title: DaVinci Resolve 21
 update_detail_title: DaVinci Resolve 21
 update_consensus_label: Moderate
-update_consensus_summary: 'TEST FIRST: DaVinci Resolve 21 has 6 user reports found. Small sample size. Current reports
-  mention render/export failures and installation problems. Production editors with active export deadlines should
-  wait unless they need a specific fix. Current reports are Reddit-heavy, so production users should test before
-  updating.'
+update_consensus_summary: 'TEST FIRST: DaVinci Resolve 21 has 6 user reports found. Small sample size. Current reports mention
+  render/export failures and installation problems. Production editors with active export deadlines should wait unless they
+  need a specific fix. Current reports are Reddit-heavy, so production users should test before updating.'
 update_report_count: 6
 update_consensus_confidence: Low
 status_change_type: new
@@ -32,21 +30,20 @@ update_brand_id: blackmagic-davinci
 company_id: blackmagic-design
 product_id: blackmagic-davinci
 official_patch_notes_source_type: vendor-release-page
-official_patch_notes_capture_status: official-source-linked-body-not-captured
+official_patch_notes_capture_status: captured-from-official-blackmagic-support-api
 official_source_classification_note: Blackmagic's source is a vendor release page for the DaVinci Resolve 21 announcement.
   AUXSAYS links it as the official source, but has not captured a full structured patch-note body from that page.
 patch_file_size_status: not_provided_by_source
 update_channel_label: Stable / Studio release
 quick_verdict: 'WAIT: DaVinci Resolve 21 has 6 user reports found.'
 update_decision_label: WAIT
-update_decision_body: Current reports mention render/export failures and installation problems. Production editors
-  with active delivery deadlines should wait or test on copied projects.
+update_decision_body: Current reports mention render/export failures and installation problems. Production editors with active
+  delivery deadlines should wait or test on copied projects.
 source_freshness_note: ''
 record_note: This page covers DaVinci Resolve 21. Beta reports are excluded from this record.
 official_summary: DaVinci Resolve 21 is tracked here as the stable/Studio release. Public Beta 1 reports are excluded.
-consensus_report: '6 user reports found for DaVinci Resolve 21. Current reports mention render/export failures and
-  installation problems. Current reports are Reddit-heavy, so production users should test before updating. Sources
-  represented: r/davinciresolve.'
+consensus_report: '6 user reports found for DaVinci Resolve 21. Current reports mention render/export failures and installation
+  problems. Current reports are Reddit-heavy, so production users should test before updating. Sources represented: r/davinciresolve.'
 status_events:
 - at: '2026-04-14T00:00:00Z'
   label: Update released
@@ -102,7 +99,28 @@ status_events:
 legacy_consensus_score: 0
 legacy_consensus_score_percent: 50
 official_patch_notes_source_url: https://www.blackmagicdesign.com/media/release/20260414-01
-official_patch_notes_body: ''
+official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci Resolve Studio 21
+
+  Channel: Stable
+
+  Release date: 2026-06-03
+
+  Platforms listed: Mac OS X, Windows, Linux, Windows ARM
+
+
+  This software update installs the final release of DaVinci Resolve Studio 21 which adds support for new AI tools including
+  IntelliSearch, CineFocus and tools for facial refinement. This update also adds support for the new Photo page for still
+  images, Krokodove toolset to Fusion, new Fairlight folders, plus improvements for keyframing, MultiMaster trim passes, layer
+  list node graphs and more. This version requires a DaVinci Resolve Studio license dongle, Blackmagic Cloud license or software
+  activation code.
+
+
+  Official support page: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
+
+  Official metadata endpoint: https://www.blackmagicdesign.com/api/support/us/downloads.json
+
+
+  AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 release_summary: DaVinci Resolve 21 is the stable/Studio release. Use this page for stable release risk.
 consensus_match_policy: confirmed_patch_specific_reports_v1
 consensus_match_policy_label: Confirmed patch-specific reports only
@@ -116,16 +134,11 @@ official_source_captured: true
 confirmed_patch_specific_report_count: 6
 known_issues_present: null
 official_checksums_body: ''
-source_last_checked: '2026-06-08T20:36:28Z'
-official_body_last_checked: '2026-06-08T20:36:28Z'
+source_last_checked: '2026-06-09T04:38:56Z'
+official_body_last_checked: '2026-06-09T04:38:56Z'
 primary_official_source: https://www.blackmagicdesign.com/media/release/20260414-01
 fallback_official_sources: []
 official_source_attempts:
-- at: '2026-06-07T19:48:40Z'
-  url: https://www.blackmagicdesign.com/media/release/20260414-01
-  status: official-source-parser-failed
-  body_captured: false
-  checksums_captured: false
 - at: '2026-06-08T05:04:15Z'
   url: https://www.blackmagicdesign.com/media/release/20260414-01
   status: official-source-parser-failed
@@ -146,8 +159,13 @@ official_source_attempts:
   status: official-source-parser-failed
   body_captured: false
   checksums_captured: false
+- at: '2026-06-09T04:38:56Z'
+  url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
+  status: captured-from-official-blackmagic-support-api
+  body_captured: true
+  checksums_captured: false
 evidence_last_checked: '2026-06-08T22:55:24Z'
-record_last_updated: '2026-06-08T22:57:38.878467Z'
+record_last_updated: '2026-06-09T04:38:56Z'
 intelligence_stage: pilot
 evidence_samples:
 - source_name: r/davinciresolve
@@ -240,8 +258,7 @@ accepted_report_sources:
 - source_name: r/davinciresolve
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1u0fi5p/fusion_tab_bug_text_presets_from_power_bins/
-  source_title: 'Fusion Tab Bug: Text+ presets from Power Bins getting "infinite" frames (Timeline at 29.97 vs Fusion
-    at 60fps?)'
+  source_title: 'Fusion Tab Bug: Text+ presets from Power Bins getting "infinite" frames (Timeline at 29.97 vs Fusion at 60fps?)'
   source_date: '2026-06-08'
   version_matched: '21'
   patch_version_matched: true
