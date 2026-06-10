@@ -17,8 +17,8 @@ update_version: Dedicated security review command now available in Copilot CLI
 update_logo_text: GIT
 update_published_at: '2026-06-10T11:44:41Z'
 update_last_checked: '2026-06-10T16:10:32Z'
-source_last_checked: '2026-06-10T16:10:32Z'
-official_body_last_checked: '2026-06-10T16:10:32Z'
+source_last_checked: '2026-06-10T20:47:23Z'
+official_body_last_checked: '2026-06-10T20:47:23Z'
 record_last_updated: '2026-06-10T16:10:32Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -81,6 +81,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-06-10T16:10:32Z'
+  url: https://github.blog/changelog/2026-06-10-dedicated-security-review-command-now-available-in-copilot-cli
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-06-10T20:47:23Z'
   url: https://github.blog/changelog/2026-06-10-dedicated-security-review-command-now-available-in-copilot-cli
   status: captured-from-rss-feed
   body_captured: true
