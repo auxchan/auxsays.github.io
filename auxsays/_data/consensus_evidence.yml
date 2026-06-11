@@ -4101,3 +4101,28 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1u2ves0-best-workflow-for-extreme-red-stage-light
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1u2ves0/best_workflow_for_extreme_red_stage_lighting_in/
+  parent_title: '**Best workflow for extreme red stage lighting in DaVinci Resolve 21 Studio — Panasonic V-Log footage**'
+  report_title: '**Best workflow for extreme red stage lighting in DaVinci Resolve 21 Studio — Panasonic V-Log footage**'
+  report_text_excerpt: '**Best workflow for extreme red stage lighting in DaVinci Resolve 21 Studio — Panasonic V-Log footage** https://preview.redd.it/shbk05xi1n6h1.png?width=3024&format=png&auto=webp&s=3c685dce75348ef548d60cf304f9e764d58837f5 Hey everyone, I''m struggling with some concert footage...'
+  captured_at: '2026-06-11T19:49:14Z'
+  source_date: '2026-06-11'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: unknown
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
