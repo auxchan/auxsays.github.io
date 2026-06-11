@@ -3,7 +3,7 @@
   "last_results": [
     {
       "adapter": "rss_feed",
-      "duration_ms": 756,
+      "duration_ms": 2205,
       "fetched": 2,
       "product_id": "figma",
       "refreshed": [
@@ -11,20 +11,17 @@
           "action": "freshness-updated",
           "path": "auxsays/updates/generated/2026-06-10-figma-video-upload-limit-increase.md",
           "record_id": "rss:figma:881e31ba-5938-4f26-b866-6b185875a89c"
-        },
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-06-04-figma-check-designs-catch-what-s-off-ship-what-s-right.md",
-          "record_id": "rss:figma:2ba58709-6032-4792-b2d2-2a590cdfc097"
         }
       ],
       "skipped": [],
       "status": "success",
-      "written": []
+      "written": [
+        "auxsays/updates/generated/2026-06-11-figma-capture-webpages-as-editable-layers-with-the-chrome-extension.md"
+      ]
     },
     {
       "adapter": "adobe_release_notes",
-      "duration_ms": 25780,
+      "duration_ms": 25831,
       "fetched": 1,
       "product_id": "adobe-premiere-pro",
       "refreshed": [
@@ -40,7 +37,7 @@
     },
     {
       "adapter": "blackmagic_support_downloads",
-      "duration_ms": 357,
+      "duration_ms": 824,
       "fetched": 2,
       "product_id": "blackmagic-davinci",
       "refreshed": [
@@ -61,7 +58,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 889,
+      "duration_ms": 950,
       "fetched": 2,
       "product_id": "obs-studio",
       "refreshed": [
@@ -82,7 +79,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 503,
+      "duration_ms": 789,
       "fetched": 2,
       "product_id": "comfyui",
       "refreshed": [
@@ -103,28 +100,20 @@
     },
     {
       "adapter": "rss_feed",
-      "duration_ms": 365,
+      "duration_ms": 2608,
       "fetched": 2,
       "product_id": "github",
-      "refreshed": [
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-06-10-github-copilot-list-view-and-create-discussions-in-github-cli.md",
-          "record_id": "rss:github:https://github.blog/changelog/2026-06-09-list-view-and-create-discussions-in-github-cli"
-        },
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-06-10-github-copilot-manage-sub-issues-types-and-dependencies-from-github-cli.md",
-          "record_id": "rss:github:https://github.blog/changelog/2026-06-09-manage-sub-issues-types-and-dependencies-from-github-cli"
-        }
-      ],
+      "refreshed": [],
       "skipped": [],
       "status": "success",
-      "written": []
+      "written": [
+        "auxsays/updates/generated/2026-06-11-github-copilot-github-agentic-workflows-is-now-in-public-preview.md",
+        "auxsays/updates/generated/2026-06-11-github-copilot-agentic-workflows-no-longer-need-a-personal-access-token.md"
+      ]
     },
     {
       "adapter": "html_changelog",
-      "duration_ms": 191,
+      "duration_ms": 173,
       "fetched": 0,
       "product_id": "netlify",
       "refreshed": [],
@@ -133,8 +122,8 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-06-11T10:59:53Z",
-  "last_run_started_at": "2026-06-11T10:59:24Z",
+  "last_run_finished_at": "2026-06-11T16:31:26Z",
+  "last_run_started_at": "2026-06-11T16:30:53Z",
   "sources": {
     "adobe-after-effects": {
       "consecutive_failures": 2,
@@ -199,7 +188,7 @@
     "adobe-premiere-pro": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_release_notes",
-      "last_checked_at": "2026-06-11T10:59:25Z",
+      "last_checked_at": "2026-06-11T16:30:55Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -207,8 +196,8 @@
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 25780,
-      "last_success_at": "2026-06-11T10:59:25Z",
+      "last_run_duration_ms": 25831,
+      "last_success_at": "2026-06-11T16:30:55Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "adobe:adobe-premiere-pro:26.2.2:c176cc33bba85978",
@@ -219,7 +208,7 @@
     "blackmagic-davinci": {
       "consecutive_failures": 0,
       "last_adapter": "blackmagic_support_downloads",
-      "last_checked_at": "2026-06-11T10:59:51Z",
+      "last_checked_at": "2026-06-11T16:31:21Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -227,8 +216,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 357,
-      "last_success_at": "2026-06-11T10:59:51Z",
+      "last_run_duration_ms": 824,
+      "last_success_at": "2026-06-11T16:31:21Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "blackmagic-support:blackmagic-davinci:21:2cda7ec076ea4b25aaa007fc68a5cbfc",
@@ -242,7 +231,7 @@
     "comfyui": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-06-11T10:59:52Z",
+      "last_checked_at": "2026-06-11T16:31:22Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -250,8 +239,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 503,
-      "last_success_at": "2026-06-11T10:59:52Z",
+      "last_run_duration_ms": 789,
+      "last_success_at": "2026-06-11T16:31:22Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:comfyui:333872281",
@@ -267,7 +256,7 @@
     "figma": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-06-11T10:59:24Z",
+      "last_checked_at": "2026-06-11T16:30:53Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -275,10 +264,11 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 756,
-      "last_success_at": "2026-06-11T10:59:24Z",
+      "last_run_duration_ms": 2205,
+      "last_success_at": "2026-06-11T16:30:53Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "rss:figma:a157f15a-15d6-4c6e-ac1a-d322ad1dbc16",
         "rss:figma:881e31ba-5938-4f26-b866-6b185875a89c",
         "rss:figma:2ba58709-6032-4792-b2d2-2a590cdfc097",
         "rss:figma:8ffcf508-ee53-497d-a98d-fbf1dc326998",
@@ -305,7 +295,7 @@
     "github": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-06-11T10:59:53Z",
+      "last_checked_at": "2026-06-11T16:31:23Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -313,10 +303,12 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 365,
-      "last_success_at": "2026-06-11T10:59:53Z",
+      "last_run_duration_ms": 2608,
+      "last_success_at": "2026-06-11T16:31:23Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "rss:github:https://github.blog/changelog/2026-06-10-agentic-workflows-no-longer-need-a-personal-access-token",
+        "rss:github:https://github.blog/changelog/2026-06-10-github-agentic-workflows-are-now-in-public-preview",
         "rss:github:https://github.blog/changelog/2026-06-09-manage-sub-issues-types-and-dependencies-from-github-cli",
         "rss:github:https://github.blog/changelog/2026-06-09-list-view-and-create-discussions-in-github-cli",
         "rss:github:https://github.blog/changelog/2026-06-10-dedicated-security-review-command-now-available-in-copilot-cli",
@@ -406,7 +398,7 @@
     "netlify": {
       "consecutive_failures": 0,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-06-11T10:59:53Z",
+      "last_checked_at": "2026-06-11T16:31:26Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -414,15 +406,15 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 191,
-      "last_success_at": "2026-06-11T10:59:53Z",
+      "last_run_duration_ms": 173,
+      "last_success_at": "2026-06-11T16:31:26Z",
       "previous_consecutive_failures": 0,
       "status": "degraded"
     },
     "obs-studio": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-06-11T10:59:51Z",
+      "last_checked_at": "2026-06-11T16:31:22Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -430,8 +422,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 889,
-      "last_success_at": "2026-06-11T10:59:51Z",
+      "last_run_duration_ms": 950,
+      "last_success_at": "2026-06-11T16:31:22Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:obs-studio:304830335",
