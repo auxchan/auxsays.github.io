@@ -17,8 +17,8 @@ update_version: Video upload limit increase
 update_logo_text: FIG
 update_published_at: '2026-06-10T00:00:00.000Z'
 update_last_checked: '2026-06-10T16:09:55Z'
-source_last_checked: '2026-06-11T20:38:12Z'
-official_body_last_checked: '2026-06-11T20:38:12Z'
+source_last_checked: '2026-06-12T05:08:18Z'
+official_body_last_checked: '2026-06-12T05:08:18Z'
 record_last_updated: '2026-06-10T16:09:55Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -69,11 +69,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-06-10T20:46:55Z'
-  url: https://www.figma.com/release-notes/?title=video-upload-limit-increase
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-06-11T05:00:50Z'
   url: https://www.figma.com/release-notes/?title=video-upload-limit-increase
   status: captured-from-rss-feed
@@ -90,6 +85,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-06-11T20:38:12Z'
+  url: https://www.figma.com/release-notes/?title=video-upload-limit-increase
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-06-12T05:08:18Z'
   url: https://www.figma.com/release-notes/?title=video-upload-limit-increase
   status: captured-from-rss-feed
   body_captured: true

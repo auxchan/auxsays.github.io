@@ -17,8 +17,8 @@ update_version: Capture webpages as editable layers with the Chrome extension
 update_logo_text: FIG
 update_published_at: '2026-06-11T00:00:00.000Z'
 update_last_checked: '2026-06-11T16:30:53Z'
-source_last_checked: '2026-06-11T20:38:12Z'
-official_body_last_checked: '2026-06-11T20:38:12Z'
+source_last_checked: '2026-06-12T05:08:18Z'
+official_body_last_checked: '2026-06-12T05:08:18Z'
 record_last_updated: '2026-06-11T16:30:53Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -76,6 +76,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-06-11T20:38:12Z'
+  url: https://www.figma.com/release-notes/?title=figma-chrome-extension
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-06-12T05:08:18Z'
   url: https://www.figma.com/release-notes/?title=figma-chrome-extension
   status: captured-from-rss-feed
   body_captured: true
