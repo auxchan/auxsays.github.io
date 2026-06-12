@@ -4004,7 +4004,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1u0fzdo-davinci-resolve-studio-noise-reduction-sl
   product_id: blackmagic-davinci
   update_version: '21'
@@ -4101,7 +4100,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1u2ves0-best-workflow-for-extreme-red-stage-light
   product_id: blackmagic-davinci
   update_version: '21'
@@ -4125,4 +4123,94 @@ evidence:
   platform: unknown
   severity: medium
   sentiment: moderate
+  source_weight: 1
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1u3rzrl-resolve-21-keeps-crashing-on-render
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1u3rzrl/resolve_21_keeps_crashing_on_render/
+  parent_title: Resolve 21 keeps crashing on render
+  report_title: Resolve 21 keeps crashing on render
+  report_text_excerpt: 'Resolve 21 keeps crashing on render I tried all the different encoders, tried switching from CUDA to OpenCL tried a completely new project with new video files, same issue My Specs: CPU: AMD Ryzen 7 5800X3D RAM: 2x32GB Gorsair DDR4 @ 3600mhz Mainboard: Asus Tuf Gaming...'
+  captured_at: '2026-06-12T19:25:39Z'
+  source_date: '2026-06-12'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1u2sm5h-how-to-save-fusion-effect-to-power-bins-w
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1u2sm5h/how_to_save_fusion_effect_to_power_bins_without/
+  parent_title: How to save fusion effect to power bins without it being distorted next time I want to use it?
+  report_title: How to save fusion effect to power bins without it being distorted next time I want to use it?
+  report_text_excerpt: How to save fusion effect to power bins without it being distorted next time I want to use it? So I edit podcast episodes and take make clips from them. I put on the clips this effect that I made in fusion that displays the date the episodes comes out. Now the problem I am...
+  captured_at: '2026-06-12T19:25:39Z'
+  source_date: '2026-06-11'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13547
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13547
+  parent_title: AMF HEVC encoding on Windows is locked to Level 5.1 — cannot set Level 6.2 or High Tier via FFmpeg options
+  report_title: AMF HEVC encoding on Windows is locked to Level 5.1 — cannot set Level 6.2 or High Tier via FFmpeg options
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/DjrlcgkYocbp6DDK ### OBS Studio Crash Log URL _No response_ ### Expected Behavior **Exp'
+  captured_at: '2026-06-12T19:29:59Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13548
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13548
+  parent_title: Mac M2 Ultra Vertical Backtrack hotkey not working when OBS minimized
+  report_title: Mac M2 Ultra Vertical Backtrack hotkey not working when OBS minimized
+  report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/tOaT7O16kIBxic2a ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Expec'
+  captured_at: '2026-06-12T19:29:59Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: hotkey regression
+  workflow_area: keyboard shortcuts
+  platform: macos
+  severity: medium
+  sentiment: negative
   source_weight: 1
