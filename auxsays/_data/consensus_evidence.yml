@@ -4214,3 +4214,28 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-0-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1u41597-using-the-tracker-node-crashes-resolve-st
+  product_id: blackmagic-davinci
+  update_version: '21.0'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1u41597/using_the_tracker_node_crashes_resolve_studio/
+  parent_title: Using the Tracker node crashes Resolve Studio
+  report_title: Using the Tracker node crashes Resolve Studio
+  report_text_excerpt: Using the Tracker node crashes Resolve Studio I updated to Resolve Studio 21 recently, I'm on Linux. I noticed that using the Tracker node crashes Resolve every-time I start tracking. The planar tracker works fine though, the issue is with the "Tracker" node. Anyone else...
+  captured_at: '2026-06-12T23:53:55Z'
+  source_date: '2026-06-12'
+  target_release_date: '2026-06-03'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21.0'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: linux
+  severity: high
+  sentiment: negative
+  source_weight: 1
