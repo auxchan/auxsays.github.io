@@ -17,8 +17,8 @@ update_version: Bot-created pull requests can run workflows if approved
 update_logo_text: GIT
 update_published_at: '2026-06-11T19:00:56Z'
 update_last_checked: '2026-06-11T20:38:40Z'
-source_last_checked: '2026-06-12T10:41:35Z'
-official_body_last_checked: '2026-06-12T10:41:35Z'
+source_last_checked: '2026-06-12T15:43:23Z'
+official_body_last_checked: '2026-06-12T15:43:23Z'
 record_last_updated: '2026-06-11T20:38:40Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -86,6 +86,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-06-12T10:41:35Z'
+  url: https://github.blog/changelog/2026-06-11-bot-created-pull-requests-can-run-workflows-if-approved
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-06-12T15:43:23Z'
   url: https://github.blog/changelog/2026-06-11-bot-created-pull-requests-can-run-workflows-if-approved
   status: captured-from-rss-feed
   body_captured: true
