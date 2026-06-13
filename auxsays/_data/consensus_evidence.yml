@@ -4214,7 +4214,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-0-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1u41597-using-the-tracker-node-crashes-resolve-st
   product_id: blackmagic-davinci
   update_version: '21.0'
@@ -4235,6 +4234,27 @@ evidence:
   exclusion_reason: null
   issue_theme: startup or application crash
   workflow_area: application stability
+  platform: linux
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13552
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13552
+  parent_title: Mouse element dragging issues on the video preview window when using Fractional Scaling
+  report_title: Mouse element dragging issues on the video preview window when using Fractional Scaling
+  report_text_excerpt: '### Operating System Info Other ### Other OS Arch Linux ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/UlpsmzVzckZAkyk4 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The i'
+  captured_at: '2026-06-13T08:35:02Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture regression
+  workflow_area: screen/window capture
   platform: linux
   severity: high
   sentiment: negative
