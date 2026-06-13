@@ -4259,3 +4259,24 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13553
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13553
+  parent_title: YouTube video playback in Chrome/Brave randomly freezes during Window or Display Capture after resizing or focus change
+  report_title: YouTube video playback in Chrome/Brave randomly freezes during Window or Display Capture after resizing or focus change
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/OZsZAifP2igbqLIX ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The b'
+  captured_at: '2026-06-13T14:28:07Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
