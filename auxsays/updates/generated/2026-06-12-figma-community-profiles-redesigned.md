@@ -17,8 +17,8 @@ update_version: Community profiles, redesigned.
 update_logo_text: FIG
 update_published_at: '2026-06-12T00:00:00.000Z'
 update_last_checked: '2026-06-12T20:28:33Z'
-source_last_checked: '2026-06-13T14:29:38Z'
-official_body_last_checked: '2026-06-13T14:29:38Z'
+source_last_checked: '2026-06-13T19:55:38Z'
+official_body_last_checked: '2026-06-13T19:55:38Z'
 record_last_updated: '2026-06-12T20:28:33Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -86,6 +86,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-06-13T14:29:38Z'
+  url: https://www.figma.com/release-notes/?title=community-profiles-redesigned
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-06-13T19:55:38Z'
   url: https://www.figma.com/release-notes/?title=community-profiles-redesigned
   status: captured-from-rss-feed
   body_captured: true
