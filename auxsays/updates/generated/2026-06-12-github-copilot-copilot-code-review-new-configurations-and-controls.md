@@ -17,8 +17,8 @@ update_version: 'Copilot code review: New configurations and controls'
 update_logo_text: GIT
 update_published_at: '2026-06-12T21:37:14Z'
 update_last_checked: '2026-06-13T04:54:47Z'
-source_last_checked: '2026-06-14T14:33:20Z'
-official_body_last_checked: '2026-06-14T14:33:20Z'
+source_last_checked: '2026-06-14T20:00:36Z'
+official_body_last_checked: '2026-06-14T20:00:36Z'
 record_last_updated: '2026-06-13T04:54:47Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -89,11 +89,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-06-13T14:30:07Z'
-  url: https://github.blog/changelog/2026-06-12-copilot-code-review-new-configurations-and-controls
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-06-13T19:56:07Z'
   url: https://github.blog/changelog/2026-06-12-copilot-code-review-new-configurations-and-controls
   status: captured-from-rss-feed
@@ -110,6 +105,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-06-14T14:33:20Z'
+  url: https://github.blog/changelog/2026-06-12-copilot-code-review-new-configurations-and-controls
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-06-14T20:00:36Z'
   url: https://github.blog/changelog/2026-06-12-copilot-code-review-new-configurations-and-controls
   status: captured-from-rss-feed
   body_captured: true
