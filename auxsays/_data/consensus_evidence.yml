@@ -4326,3 +4326,28 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: blackmagic-davinci-21-public-beta-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1u4pcsr-im-having-a-strange-davinci-resolve-studi
+  product_id: blackmagic-davinci
+  update_version: 21 Public Beta 1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1u4pcsr/im_having_a_strange_davinci_resolve_studio/
+  parent_title: I’m having a strange DaVinci Resolve Studio licensing issue and I’m wondering if anyone has encountered this before.
+  report_title: I’m having a strange DaVinci Resolve Studio licensing issue and I’m wondering if anyone has encountered this before.
+  report_text_excerpt: 'I’m having a strange DaVinci Resolve Studio licensing issue and I’m wondering if anyone has encountered this before. Background: Purchased a legitimate DaVinci Resolve Studio license from Toolfarm. Activated successfully on my MacBook Pro M1 and used it without issues. Running...'
+  captured_at: '2026-06-14T06:05:56Z'
+  source_date: '2026-06-13'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: Resolve 21 beta
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
