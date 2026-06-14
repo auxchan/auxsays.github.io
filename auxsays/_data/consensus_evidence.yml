@@ -4301,3 +4301,28 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1u55niv-fusion-fastnoise-displace-mask-hiding-the
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1u55niv/fusion_fastnoise_displace_mask_hiding_the/
+  parent_title: '[Fusion] FastNoise + Displace mask hiding the background image instead of affecting just the masked area. How to fix?'
+  report_title: '[Fusion] FastNoise + Displace mask hiding the background image instead of affecting just the masked area. How to fix?'
+  report_text_excerpt: '[Fusion] FastNoise + Displace mask hiding the background image instead of affecting just the masked area. How to fix? Hi everyone, I need help with a node workflow in Fusion. I''m trying to create a distortion effect using FastNoise and Displace on a character, but I want the...'
+  captured_at: '2026-06-14T00:22:52Z'
+  source_date: '2026-06-13'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
