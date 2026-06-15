@@ -4370,3 +4370,28 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: blackmagic-davinci-21-0-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1u6iivy-weird-bug-i-cant-seem-to-find-a-fix-for-o
+  product_id: blackmagic-davinci
+  update_version: '21.0'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1u6iivy/weird_bug_i_cant_seem_to_find_a_fix_for_on_the/
+  parent_title: Weird bug I can't seem to find a fix for on the internet. Please help.
+  report_title: Weird bug I can't seem to find a fix for on the internet. Please help.
+  report_text_excerpt: Weird bug I can't seem to find a fix for on the internet. Please help. My hardware is Ryzen 9 7950X RTX 5080 32GB DDR5 6000 ​ 4K project, mix of Sony S-LOG and DJI D-LOG footage. Issue also appears in other projects with other codecs. ​ Resolve version is 21.0 submitted by...
+  captured_at: '2026-06-15T19:13:29Z'
+  source_date: '2026-06-15'
+  target_release_date: '2026-06-03'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21.0'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: compatibility issue
+  workflow_area: plugins / codecs
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
