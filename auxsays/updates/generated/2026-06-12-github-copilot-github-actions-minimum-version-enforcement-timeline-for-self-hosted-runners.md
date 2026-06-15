@@ -17,8 +17,8 @@ update_version: 'GitHub Actions: Minimum version enforcement timeline for self-h
 update_logo_text: GIT
 update_published_at: '2026-06-12T16:04:57Z'
 update_last_checked: '2026-06-12T20:29:04Z'
-source_last_checked: '2026-06-15T12:45:11Z'
-official_body_last_checked: '2026-06-15T12:45:11Z'
+source_last_checked: '2026-06-15T21:26:01Z'
+official_body_last_checked: '2026-06-15T21:26:01Z'
 record_last_updated: '2026-06-12T20:29:04Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -130,11 +130,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-06-14T09:57:46Z'
-  url: https://github.blog/changelog/2026-06-12-github-actions-minimum-version-enforcement-timeline-for-self-hosted-runners
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-06-14T14:33:20Z'
   url: https://github.blog/changelog/2026-06-12-github-actions-minimum-version-enforcement-timeline-for-self-hosted-runners
   status: captured-from-rss-feed
@@ -151,6 +146,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-06-15T12:45:11Z'
+  url: https://github.blog/changelog/2026-06-12-github-actions-minimum-version-enforcement-timeline-for-self-hosted-runners
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-06-15T21:26:01Z'
   url: https://github.blog/changelog/2026-06-12-github-actions-minimum-version-enforcement-timeline-for-self-hosted-runners
   status: captured-from-rss-feed
   body_captured: true
