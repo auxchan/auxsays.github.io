@@ -17,8 +17,8 @@ update_version: 'Tab Groups: organize the way you work'
 update_logo_text: FIG
 update_published_at: '2026-06-15T00:00:00.000Z'
 update_last_checked: '2026-06-15T21:25:29Z'
-source_last_checked: '2026-06-15T21:25:29Z'
-official_body_last_checked: '2026-06-15T21:25:29Z'
+source_last_checked: '2026-06-16T11:36:40Z'
+official_body_last_checked: '2026-06-16T11:36:40Z'
 record_last_updated: '2026-06-15T21:25:29Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -71,6 +71,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-06-15T21:25:29Z'
+  url: https://www.figma.com/release-notes/?title=organize-the-way-you-work-with-new-tab-groups
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-06-16T11:36:40Z'
   url: https://www.figma.com/release-notes/?title=organize-the-way-you-work-with-new-tab-groups
   status: captured-from-rss-feed
   body_captured: true
