@@ -17,8 +17,8 @@ update_version: GitHub Code Quality generally available July 20, 2026
 update_logo_text: GIT
 update_published_at: '2026-06-16T16:25:31Z'
 update_last_checked: '2026-06-16T17:24:00Z'
-source_last_checked: '2026-06-16T17:24:00Z'
-official_body_last_checked: '2026-06-16T17:24:00Z'
+source_last_checked: '2026-06-17T05:19:19Z'
+official_body_last_checked: '2026-06-17T05:19:19Z'
 record_last_updated: '2026-06-16T17:24:00Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -91,6 +91,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-06-16T17:24:00Z'
+  url: https://github.blog/changelog/2026-06-16-github-code-quality-generally-available-july-20-2026
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-06-17T05:19:19Z'
   url: https://github.blog/changelog/2026-06-16-github-code-quality-generally-available-july-20-2026
   status: captured-from-rss-feed
   body_captured: true
