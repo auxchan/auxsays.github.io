@@ -1,8 +1,8 @@
 ---
 layout: aux-update
-title: Figma Workspace-level Web Publishing for Make and Sites official update breakdown
+title: Figma AI credit usage API for Enterprise customers official update breakdown
 description: Official Figma update record captured from Figma.
-permalink: /updates/figma/figma/workspace-level-web-publishing-for-make-and-sites/
+permalink: /updates/figma/figma/ai-credit-usage-api-for-enterprise-customers/
 update_entry: true
 company_id: figma
 product_id: figma
@@ -11,29 +11,28 @@ update_product: Figma
 update_category: Design Workflow
 update_type: official-source
 update_source_name: Figma
-update_source_url: https://www.figma.com/release-notes/?title=workspace-level-web-publishing
+update_source_url: https://www.figma.com/release-notes/?title=ai-credit-usage-api-for-enterprise-customers
 update_download_url: ''
-update_version: Workspace-level Web Publishing for Make and Sites
+update_version: AI credit usage API for Enterprise customers
 update_logo_text: FIG
 update_published_at: '2026-06-17T00:00:00.000Z'
-update_last_checked: '2026-06-17T16:07:27Z'
+update_last_checked: '2026-06-17T20:31:26Z'
 source_last_checked: '2026-06-17T20:31:26Z'
 official_body_last_checked: '2026-06-17T20:31:26Z'
-record_last_updated: '2026-06-17T16:07:27Z'
+record_last_updated: '2026-06-17T20:31:26Z'
 patch_file_size: ''
 patch_file_size_note: ''
 patch_file_size_status: pending_adapter_support
 update_status: current
-update_feed_title: Figma Workspace-level Web Publishing for Make and Sites
-update_detail_title: Figma Workspace-level Web Publishing for Make and Sites
+update_feed_title: Figma AI credit usage API for Enterprise customers
+update_detail_title: Figma AI credit usage API for Enterprise customers
 update_consensus_label: Insufficient data
 update_report_count: 0
 update_consensus_confidence: Low
-quick_verdict: Figma Workspace-level Web Publishing for Make and Sites has an official AUXSAYS record. Confirmed patch-specific
+quick_verdict: Figma AI credit usage API for Enterprise customers has an official AUXSAYS record. Confirmed patch-specific
   consensus is deferred until the consensus refresh pipeline is active.
-official_summary: Figma published Figma Workspace-level Web Publishing for Make and Sites.
-release_summary: Starting today, Org admins can now manage web publishing permissions for Make and Sites files at the workspace
-  level
+official_summary: Figma published Figma AI credit usage API for Enterprise customers.
+release_summary: Enterprise customers can now access AI credit usage data programmatically via the new AI usage credit API.
 consensus_report: Confirmed patch-specific consensus collection is deferred. This page currently reflects official-source
   ingestion only.
 evidence_state: official_only
@@ -54,7 +53,7 @@ status_events:
 - at: '2026-06-17T00:00:00.000Z'
   label: Published
   note: Official source entry detected.
-- at: '2026-06-17T16:07:36Z'
+- at: '2026-06-17T20:31:28Z'
   label: Insufficient data
   note: AUXSAYS official-ingestion record initialized.
 official_patch_notes_source_type: rss-feed
@@ -62,7 +61,7 @@ primary_official_source: https://www.figma.com/release-notes/
 fallback_official_sources:
 - https://forum.figma.com/product-updates-3
 official_patch_notes_capture_status: captured-from-rss-feed
-official_patch_notes_source_url: https://www.figma.com/release-notes/?title=workspace-level-web-publishing
+official_patch_notes_source_url: https://www.figma.com/release-notes/?title=ai-credit-usage-api-for-enterprise-customers
 official_note_status: official_source_captured
 official_note_label: Official source summary
 official_source_type: rss-feed
@@ -70,18 +69,13 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-06-17T16:07:27Z'
-  url: https://www.figma.com/release-notes/?title=workspace-level-web-publishing
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-06-17T20:31:26Z'
-  url: https://www.figma.com/release-notes/?title=workspace-level-web-publishing
+  url: https://www.figma.com/release-notes/?title=ai-credit-usage-api-for-enterprise-customers
   status: captured-from-rss-feed
   body_captured: true
   checksums_captured: false
-official_patch_notes_body: Starting today, Org admins can now manage web publishing permissions for Make and Sites files at
-  the workspace level
+official_patch_notes_body: Enterprise customers can now access AI credit usage data programmatically via the new AI usage
+  credit API.
 official_checksums_body: ''
 official_checksums_capture_status: not-present
 ---
