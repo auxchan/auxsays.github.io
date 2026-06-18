@@ -23,7 +23,7 @@ permissions:
   actions: write
 
 concurrency:
-  group: "patch-ingest"
+  group: auxsays-main-writeback
   cancel-in-progress: false
 
 jobs:

@@ -19,6 +19,10 @@ permissions:
   contents: write
   actions: write
 
+concurrency:
+  group: auxsays-main-writeback
+  cancel-in-progress: false
+
 jobs:
   collect:
     runs-on: ubuntu-latest
