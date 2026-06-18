@@ -91,51 +91,6 @@ permalink: /updates/methodology/
     </article>
   </section>
 
-  <section class="panel methodology-source-health reveal-up reveal-delay-2">
-    <div class="eyebrow">Source audit</div>
-    <h2>Current official-ingestion source health</h2>
-    <p>This is a static audit snapshot produced from the ingestion config and the latest GitHub Actions state file. It is meant to show whether official-source monitoring is active, manual watch, needs an adapter, disabled, in error, or unknown. It is not a backend service and it does not represent live community consensus.</p>
-
-    {% assign active_sources = site.data.source_health | where: "status", "Active" %}
-    {% assign manual_watch_sources = site.data.source_health | where: "status", "Manual watch" %}
-    {% assign needs_adapter_sources = site.data.source_health | where: "status", "Needs adapter" %}
-    {% assign disabled_sources = site.data.source_health | where: "status", "Disabled" %}
-    {% assign error_sources = site.data.source_health | where: "status", "Error" %}
-    {% assign unknown_sources = site.data.source_health | where: "status", "Unknown" %}
-    <div class="source-health-summary" aria-label="Source health totals">
-      <div><strong>{{ active_sources.size }}</strong><span>Active</span></div>
-      <div><strong>{{ manual_watch_sources.size }}</strong><span>Manual watch</span></div>
-      <div><strong>{{ needs_adapter_sources.size }}</strong><span>Needs adapter</span></div>
-      <div><strong>{{ disabled_sources.size }}</strong><span>Disabled</span></div>
-      <div><strong>{{ error_sources.size }}</strong><span>Error</span></div>
-      <div><strong>{{ unknown_sources.size }}</strong><span>Unknown</span></div>
-    </div>
-
-    <div class="source-health-table" role="table" aria-label="AUXSAYS official ingestion source-health snapshot">
-      <div class="source-health-row source-health-row--head" role="row">
-        <span>Source</span><span>Software</span><span>Status</span><span>Last run</span><span>Records</span><span>Capabilities</span><span>Last error</span>
-      </div>
-      {% for item in site.data.source_health %}
-      <div class="source-health-row source-health-row--{{ item.status | downcase | replace: ' ', '-' }}" role="row">
-        <span class="source-health-id"><strong>{{ item.source_id }}</strong><em>{{ item.company }}</em></span>
-        <span>{{ item.software }}<small>{{ item.adapter_type }}</small></span>
-        <span><mark class="source-health-status source-health-status--{{ item.status | downcase | replace: ' ', '-' }}">{{ item.status }}</mark><small>{{ item.status_detail }}</small></span>
-        <span>{% if item.last_checked != blank %}{{ item.last_checked }}{% else %}Not checked{% endif %}<small>{% if item.polling_frequency != blank %}Target: {{ item.polling_frequency }}{% endif %}</small></span>
-        <span>{{ item.last_records_fetched }} fetched / {{ item.last_records_written }} written<small>{{ item.last_records_skipped }} skipped · {{ item.consecutive_failures }} failures</small></span>
-        <span class="source-health-capabilities">
-          {% if item.capabilities.release_notes %}<b>notes</b>{% endif %}
-          {% if item.capabilities.version %}<b>version</b>{% endif %}
-          {% if item.capabilities.download_url %}<b>download</b>{% endif %}
-          {% if item.capabilities.file_size %}<b>size</b>{% endif %}
-          {% if item.capabilities.checksum %}<b>checksum</b>{% endif %}
-          {% if item.capabilities.known_issues %}<b>known issues</b>{% endif %}
-        </span>
-        <span>{% if item.last_error_display != blank and item.last_error_display != 'None' %}{{ item.last_error_display }}{% else %}None{% endif %}</span>
-      </div>
-      {% endfor %}
-    </div>
-  </section>
-
   <section class="panel methodology-method-health reveal-up reveal-delay-2">
     <div class="eyebrow">Collector audit</div>
     <h2>Collector / method health telemetry</h2>
@@ -187,5 +142,50 @@ permalink: /updates/methodology/
     {% else %}
     <p>No collector method-health snapshot is available yet.</p>
     {% endif %}
+  </section>
+
+  <section class="panel methodology-source-health reveal-up reveal-delay-2">
+    <div class="eyebrow">Source audit</div>
+    <h2>Current official-ingestion source health</h2>
+    <p>This is a static audit snapshot produced from the ingestion config and the latest GitHub Actions state file. It is meant to show whether official-source monitoring is active, manual watch, needs an adapter, disabled, in error, or unknown. It is not a backend service and it does not represent live community consensus.</p>
+
+    {% assign active_sources = site.data.source_health | where: "status", "Active" %}
+    {% assign manual_watch_sources = site.data.source_health | where: "status", "Manual watch" %}
+    {% assign needs_adapter_sources = site.data.source_health | where: "status", "Needs adapter" %}
+    {% assign disabled_sources = site.data.source_health | where: "status", "Disabled" %}
+    {% assign error_sources = site.data.source_health | where: "status", "Error" %}
+    {% assign unknown_sources = site.data.source_health | where: "status", "Unknown" %}
+    <div class="source-health-summary" aria-label="Source health totals">
+      <div><strong>{{ active_sources.size }}</strong><span>Active</span></div>
+      <div><strong>{{ manual_watch_sources.size }}</strong><span>Manual watch</span></div>
+      <div><strong>{{ needs_adapter_sources.size }}</strong><span>Needs adapter</span></div>
+      <div><strong>{{ disabled_sources.size }}</strong><span>Disabled</span></div>
+      <div><strong>{{ error_sources.size }}</strong><span>Error</span></div>
+      <div><strong>{{ unknown_sources.size }}</strong><span>Unknown</span></div>
+    </div>
+
+    <div class="source-health-table" role="table" aria-label="AUXSAYS official ingestion source-health snapshot">
+      <div class="source-health-row source-health-row--head" role="row">
+        <span>Source</span><span>Software</span><span>Status</span><span>Last run</span><span>Records</span><span>Capabilities</span><span>Last error</span>
+      </div>
+      {% for item in site.data.source_health %}
+      <div class="source-health-row source-health-row--{{ item.status | downcase | replace: ' ', '-' }}" role="row">
+        <span class="source-health-id"><strong>{{ item.source_id }}</strong><em>{{ item.company }}</em></span>
+        <span>{{ item.software }}<small>{{ item.adapter_type }}</small></span>
+        <span><mark class="source-health-status source-health-status--{{ item.status | downcase | replace: ' ', '-' }}">{{ item.status }}</mark><small>{{ item.status_detail }}</small></span>
+        <span>{% if item.last_checked != blank %}{{ item.last_checked }}{% else %}Not checked{% endif %}<small>{% if item.polling_frequency != blank %}Target: {{ item.polling_frequency }}{% endif %}</small></span>
+        <span>{{ item.last_records_fetched }} fetched / {{ item.last_records_written }} written<small>{{ item.last_records_skipped }} skipped · {{ item.consecutive_failures }} failures</small></span>
+        <span class="source-health-capabilities">
+          {% if item.capabilities.release_notes %}<b>notes</b>{% endif %}
+          {% if item.capabilities.version %}<b>version</b>{% endif %}
+          {% if item.capabilities.download_url %}<b>download</b>{% endif %}
+          {% if item.capabilities.file_size %}<b>size</b>{% endif %}
+          {% if item.capabilities.checksum %}<b>checksum</b>{% endif %}
+          {% if item.capabilities.known_issues %}<b>known issues</b>{% endif %}
+        </span>
+        <span>{% if item.last_error_display != blank and item.last_error_display != 'None' %}{{ item.last_error_display }}{% else %}None{% endif %}</span>
+      </div>
+      {% endfor %}
+    </div>
   </section>
 </section>
