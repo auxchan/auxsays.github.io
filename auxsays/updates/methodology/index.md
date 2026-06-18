@@ -135,4 +135,57 @@ permalink: /updates/methodology/
       {% endfor %}
     </div>
   </section>
+
+  <section class="panel methodology-method-health reveal-up reveal-delay-2">
+    <div class="eyebrow">Collector audit</div>
+    <h2>Collector / method health telemetry</h2>
+    <p>This describes collection attempts for community/report evidence. It is not accepted evidence by itself, and it does not change report counts, verdicts, or consensus state.</p>
+    <p>Status values such as <strong>success</strong>, <strong>partial</strong>, <strong>blocked</strong>, <strong>broken</strong>, <strong>stale</strong>, <strong>disabled</strong>, and similar states describe collector or method execution. They do not mean users are reporting patch problems.</p>
+
+    {% assign method_health_rows = site.data.evidence_method_health.methods %}
+    {% if method_health_rows %}
+    {% assign success_methods = method_health_rows | where: "status", "success" %}
+    {% assign partial_methods = method_health_rows | where: "status", "partial" %}
+    {% assign no_result_methods = method_health_rows | where: "status", "no_results" %}
+    {% assign blocked_methods = method_health_rows | where: "status", "blocked" %}
+    {% assign stale_methods = method_health_rows | where: "status", "stale" %}
+    {% assign broken_methods = method_health_rows | where: "status", "broken" %}
+    {% assign low_confidence_methods = method_health_rows | where: "status", "low_confidence" %}
+    {% assign disabled_methods = method_health_rows | where: "status", "disabled" %}
+    {% assign manual_review_methods = method_health_rows | where: "status", "manual_review_needed" %}
+    <div class="source-health-summary method-health-summary" aria-label="Collector method health totals">
+      <div><strong>{{ success_methods.size }}</strong><span>Success</span></div>
+      <div><strong>{{ partial_methods.size }}</strong><span>Partial</span></div>
+      <div><strong>{{ no_result_methods.size }}</strong><span>No results</span></div>
+      <div><strong>{{ blocked_methods.size }}</strong><span>Blocked</span></div>
+      <div><strong>{{ broken_methods.size }}</strong><span>Broken</span></div>
+      <div><strong>{{ stale_methods.size }}</strong><span>Stale</span></div>
+      <div><strong>{{ low_confidence_methods.size }}</strong><span>Low confidence</span></div>
+      <div><strong>{{ disabled_methods.size }}</strong><span>Disabled</span></div>
+      <div><strong>{{ manual_review_methods.size }}</strong><span>Manual review</span></div>
+    </div>
+
+    <div class="source-health-table method-health-table" role="table" aria-label="AUXSAYS collector method-health telemetry">
+      <div class="source-health-row method-health-row source-health-row--head" role="row">
+        <span>Product</span><span>Version</span><span>Method</span><span>Source type</span><span>Status</span><span>Last run</span><span>Candidates</span><span>Accepted</span><span>Public counted</span><span>Notes / block reason</span>
+      </div>
+      {% for item in method_health_rows %}
+      <div class="source-health-row method-health-row method-health-row--{{ item.status | downcase | replace: '_', '-' }}" role="row">
+        <span>{{ item.product_id }}</span>
+        <span>{{ item.update_version }}</span>
+        <span>{{ item.method_id }}</span>
+        <span>{{ item.source_type }}</span>
+        <span><mark class="source-health-status method-health-status--{{ item.status | downcase | replace: '_', '-' }}">{{ item.status | replace: '_', ' ' }}</mark></span>
+        <span>{% if item.last_run != blank %}{{ item.last_run }}{% else %}Not checked{% endif %}</span>
+        <span>{{ item.candidates_found | default: 0 }}</span>
+        <span>{{ item.accepted_candidates | default: 0 }}<small>{{ item.evidence_rows_added | default: 0 }} added</small></span>
+        <span>{{ item.public_counted_reports | default: 0 }}</span>
+        <span>{% if item.blocked_reason != blank %}{{ item.blocked_reason }}{% else %}{{ item.notes }}{% endif %}<small>{% if item.blocked_reason != blank and item.notes != blank %}{{ item.notes }}{% endif %}</small></span>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p>No collector method-health snapshot is available yet.</p>
+    {% endif %}
+  </section>
 </section>

@@ -4383,8 +4383,28 @@ button, input, select, textarea { font: inherit; }
   line-height: 1;
 }
 
+.method-health-summary {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+.method-health-row {
+  grid-template-columns: .9fr .75fr 1.15fr 1.05fr .82fr 1fr .72fr .82fr .82fr 1.55fr;
+  min-width: 1480px;
+}
+
+.method-health-status--success { color: #9af0be; border-color: rgba(70,209,137,.34); background: rgba(70,209,137,.10); }
+.method-health-status--partial,
+.method-health-status--low-confidence,
+.method-health-status--manual-review-needed { color: #f0ca67; border-color: rgba(240,202,103,.34); background: rgba(240,202,103,.10); }
+.method-health-status--blocked,
+.method-health-status--broken { color: #ff9386; border-color: rgba(238,110,95,.38); background: rgba(238,110,95,.10); }
+.method-health-status--stale,
+.method-health-status--no-results { color: #9bdff0; border-color: rgba(95,212,229,.26); background: rgba(95,212,229,.08); }
+.method-health-status--disabled { color: rgba(230,234,236,.64); }
+
 @media (max-width: 760px) {
-  .source-health-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .source-health-summary,
+  .method-health-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 
