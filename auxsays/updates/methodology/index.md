@@ -91,7 +91,7 @@ permalink: /updates/methodology/
     </article>
   </section>
 
-  <section class="panel methodology-method-health reveal-up reveal-delay-2">
+  <section class="panel methodology-method-health">
     <div class="eyebrow">Collector audit</div>
     <h2>Collector / method health telemetry</h2>
     <p>This describes collection attempts for community/report evidence. It is not accepted evidence by itself, and it does not change report counts, verdicts, or consensus state.</p>
