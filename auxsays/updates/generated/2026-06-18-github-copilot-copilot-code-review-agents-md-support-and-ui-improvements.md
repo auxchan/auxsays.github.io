@@ -17,9 +17,9 @@ update_version: 'Copilot code review: AGENTS.md support and UI improvements'
 update_logo_text: GIT
 update_published_at: '2026-06-18T19:11:51Z'
 update_last_checked: '2026-06-18T20:40:50Z'
-source_last_checked: '2026-06-18T20:40:50Z'
-official_body_last_checked: '2026-06-18T20:40:50Z'
-record_last_updated: '2026-06-18T20:40:50Z'
+source_last_checked: '2026-06-18T23:28:04Z'
+official_body_last_checked: '2026-06-18T23:28:04Z'
+record_last_updated: '2026-06-18T23:28:04Z'
 patch_file_size: ''
 patch_file_size_note: ''
 patch_file_size_status: pending_adapter_support
@@ -88,6 +88,11 @@ official_source_attempts:
   status: captured-from-rss-feed
   body_captured: true
   checksums_captured: false
+- at: '2026-06-18T23:28:04Z'
+  url: https://github.blog/changelog/2026-06-18-copilot-code-review-agents-md-support-and-ui-improvements
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
 official_patch_notes_body: "Copilot code review now supports repository-level AGENTS.md files, and it’s easier to request\
   \ a review from Copilot on draft pull requests with the Request button. These changes are all generally available.\n\n\n\
   \ \U0001F4DD AGENTS.md Support\n You can now add an AGENTS.md file at the root of your repository to help shape Copilot\
@@ -101,8 +106,7 @@ official_patch_notes_body: "Copilot code review now supports repository-level AG
   \ for Copilot first.\n\n\n\n\n\n Collapsed Copilot review events on pull request timeline\n On the Conversation tab of your\
   \ pull request, Copilot code review events documented in the timeline can get noisy. We’ve collapsed certain Copilot code\
   \ review timeline events together to help declutter your conversation tab, allowing you to find what matters, quickly.\n\
-  \n\n\n\n\n To learn more, see the Copilot code review documentation .\n\n\n Join the discussion within GitHub Community\
-  \ .\n\n\n\n The post Copilot code review: AGENTS.md support and UI improvements appeared first on The GitHub Blog ."
+  \n\n\n\n\n\n The post Copilot code review: AGENTS.md support and UI improvements appeared first on The GitHub Blog ."
 official_checksums_body: ''
 official_checksums_capture_status: not-present
 ---
