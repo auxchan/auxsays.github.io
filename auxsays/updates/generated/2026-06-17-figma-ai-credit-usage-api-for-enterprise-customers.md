@@ -17,8 +17,8 @@ update_version: AI credit usage API for Enterprise customers
 update_logo_text: FIG
 update_published_at: '2026-06-17T00:00:00.000Z'
 update_last_checked: '2026-06-17T20:31:26Z'
-source_last_checked: '2026-06-18T10:49:01Z'
-official_body_last_checked: '2026-06-18T10:49:01Z'
+source_last_checked: '2026-06-18T15:54:43Z'
+official_body_last_checked: '2026-06-18T15:54:43Z'
 record_last_updated: '2026-06-17T20:31:26Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -80,6 +80,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-06-18T10:49:01Z'
+  url: https://www.figma.com/release-notes/?title=ai-credit-usage-api-for-enterprise-customers
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-06-18T15:54:43Z'
   url: https://www.figma.com/release-notes/?title=ai-credit-usage-api-for-enterprise-customers
   status: captured-from-rss-feed
   body_captured: true

@@ -1,8 +1,7 @@
 ---
 layout: aux-update
 title: DaVinci Resolve 21 official update breakdown
-description: Published Apr 14, 2026. This page covers the stable DaVinci Resolve 21 release. Public beta reports
-  are excluded.
+description: Published Apr 14, 2026. This page covers the stable DaVinci Resolve 21 release. Public beta reports are excluded.
 permalink: /updates/blackmagic-design/davinci-resolve/21/
 update_entry: true
 feed_hidden: false
@@ -20,10 +19,10 @@ update_status: current
 update_feed_title: DaVinci Resolve 21
 update_detail_title: DaVinci Resolve 21
 update_consensus_label: Moderate
-update_consensus_summary: 'TEST FIRST: DaVinci Resolve 21 has 17 user reports found. User reports show a repeat
-  pattern. Current reports mention render/export failures, installation problems, and performance slowdowns. Production
-  editors with active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy,
-  so production users should test before updating.'
+update_consensus_summary: 'TEST FIRST: DaVinci Resolve 21 has 17 user reports found. User reports show a repeat pattern. Current
+  reports mention render/export failures, installation problems, and performance slowdowns. Production editors with active
+  export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy, so production users should
+  test before updating.'
 update_report_count: 17
 update_consensus_confidence: Low-Medium
 status_change_type: new
@@ -39,14 +38,14 @@ patch_file_size_status: not_provided_by_source
 update_channel_label: Stable / Studio release
 quick_verdict: 'WAIT: DaVinci Resolve 21 has 17 user reports found.'
 update_decision_label: WAIT
-update_decision_body: Current reports mention render/export failures, installation problems, and performance slowdowns.
-  Production editors with active delivery deadlines should wait or test on copied projects.
+update_decision_body: Current reports mention render/export failures, installation problems, and performance slowdowns. Production
+  editors with active delivery deadlines should wait or test on copied projects.
 source_freshness_note: ''
 record_note: This page covers DaVinci Resolve 21. Beta reports are excluded from this record.
 official_summary: DaVinci Resolve 21 is tracked here as the stable/Studio release. Public Beta 1 reports are excluded.
-consensus_report: '17 user reports found for DaVinci Resolve 21. Current reports mention render/export failures,
-  installation problems, and performance slowdowns. Current reports are Reddit-heavy, so production users should
-  test before updating. Sources represented: r/davinciresolve.'
+consensus_report: '17 user reports found for DaVinci Resolve 21. Current reports mention render/export failures, installation
+  problems, and performance slowdowns. Current reports are Reddit-heavy, so production users should test before updating.
+  Sources represented: r/davinciresolve.'
 status_events:
 - at: '2026-04-14T00:00:00Z'
   label: Update released
@@ -126,11 +125,11 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   Platforms listed: Mac OS X, Windows, Linux, Windows ARM
 
 
-  This software update installs the final release of DaVinci Resolve Studio 21 which adds support for new AI tools
-  including IntelliSearch, CineFocus and tools for facial refinement. This update also adds support for the new
-  Photo page for still images, Krokodove toolset to Fusion, new Fairlight folders, plus improvements for keyframing,
-  MultiMaster trim passes, layer list node graphs and more. This version requires a DaVinci Resolve Studio license
-  dongle, Blackmagic Cloud license or software activation code.
+  This software update installs the final release of DaVinci Resolve Studio 21 which adds support for new AI tools including
+  IntelliSearch, CineFocus and tools for facial refinement. This update also adds support for the new Photo page for still
+  images, Krokodove toolset to Fusion, new Fairlight folders, plus improvements for keyframing, MultiMaster trim passes, layer
+  list node graphs and more. This version requires a DaVinci Resolve Studio license dongle, Blackmagic Cloud license or software
+  activation code.
 
 
   Official support page: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
@@ -152,16 +151,11 @@ official_source_captured: true
 confirmed_patch_specific_report_count: 17
 known_issues_present: null
 official_checksums_body: ''
-source_last_checked: '2026-06-18T10:49:28Z'
-official_body_last_checked: '2026-06-18T10:49:28Z'
+source_last_checked: '2026-06-18T15:55:09Z'
+official_body_last_checked: '2026-06-18T15:55:09Z'
 primary_official_source: https://www.blackmagicdesign.com/media/release/20260414-01
 fallback_official_sources: []
 official_source_attempts:
-- at: '2026-06-17T11:18:43Z'
-  url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
-  status: captured-from-official-blackmagic-support-api
-  body_captured: true
-  checksums_captured: false
 - at: '2026-06-17T16:08:01Z'
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
   status: captured-from-official-blackmagic-support-api
@@ -178,6 +172,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-06-18T10:49:28Z'
+  url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
+  status: captured-from-official-blackmagic-support-api
+  body_captured: true
+  checksums_captured: false
+- at: '2026-06-18T15:55:09Z'
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
   status: captured-from-official-blackmagic-support-api
   body_captured: true
@@ -212,8 +211,8 @@ evidence_samples:
   outcome: medium
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1tzqxgt/help_text_macro_animation_scales_to_the_full/
-  source_title: '[Help] Text macro animation scales to the full composition length inside the Fusion page (Resolve
-    Studio 21)'
+  source_title: '[Help] Text macro animation scales to the full composition length inside the Fusion page (Resolve Studio
+    21)'
   counted: true
   version_matched: '21'
   patch_version_matched: true
@@ -277,8 +276,7 @@ accepted_report_sources:
 - source_name: r/davinciresolve
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1u0fi5p/fusion_tab_bug_text_presets_from_power_bins/
-  source_title: 'Fusion Tab Bug: Text+ presets from Power Bins getting "infinite" frames (Timeline at 29.97 vs Fusion
-    at 60fps?)'
+  source_title: 'Fusion Tab Bug: Text+ presets from Power Bins getting "infinite" frames (Timeline at 29.97 vs Fusion at 60fps?)'
   source_date: '2026-06-08'
   version_matched: '21'
   patch_version_matched: true
@@ -287,8 +285,8 @@ accepted_report_sources:
 - source_name: r/davinciresolve
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1u0fzdo/davinci_resolve_studio_noise_reduction_sliders_do/
-  source_title: DaVinci Resolve Studio - Noise Reduction sliders do absolutely nothing on active node / transcoded
-    Avid DNxHR clip
+  source_title: DaVinci Resolve Studio - Noise Reduction sliders do absolutely nothing on active node / transcoded Avid DNxHR
+    clip
   source_date: '2026-06-08'
   version_matched: '21'
   patch_version_matched: true
@@ -297,8 +295,8 @@ accepted_report_sources:
 - source_name: r/davinciresolve
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1tzqxgt/help_text_macro_animation_scales_to_the_full/
-  source_title: '[Help] Text macro animation scales to the full composition length inside the Fusion page (Resolve
-    Studio 21)'
+  source_title: '[Help] Text macro animation scales to the full composition length inside the Fusion page (Resolve Studio
+    21)'
   source_date: '2026-06-07'
   version_matched: '21'
   patch_version_matched: true
@@ -352,8 +350,8 @@ accepted_report_sources:
 - source_name: r/davinciresolve
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1u55niv/fusion_fastnoise_displace_mask_hiding_the/
-  source_title: '[Fusion] FastNoise + Displace mask hiding the background image instead of affecting just the masked
-    area. How to fix?'
+  source_title: '[Fusion] FastNoise + Displace mask hiding the background image instead of affecting just the masked area.
+    How to fix?'
   source_date: '2026-06-13'
   version_matched: '21'
   patch_version_matched: true
@@ -371,8 +369,7 @@ accepted_report_sources:
 - source_name: r/davinciresolve
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1u6r77x/exported_h265_video_randomly_freezes_for_a_few/
-  source_title: Exported H.265 video randomly freezes for a few seconds in DaVinci Resolve, but source footage is
-    fine
+  source_title: Exported H.265 video randomly freezes for a few seconds in DaVinci Resolve, but source footage is fine
   source_date: '2026-06-15'
   version_matched: '21'
   patch_version_matched: true
