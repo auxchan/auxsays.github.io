@@ -4457,3 +4457,76 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1u8xc0k-audio-sounds-tinny-in-resolve-21-but-not
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1u8xc0k/audio_sounds_tinny_in_resolve_21_but_not_in_media/
+  parent_title: Audio sounds tinny in Resolve 21 but not in media player.
+  report_title: Audio sounds tinny in Resolve 21 but not in media player.
+  report_text_excerpt: Audio sounds tinny in Resolve 21 but not in media player. My pc has 32 GB RAM, an AMD Ryzen 9 7900X processor, and an NVIDIA GeForce RTX 5070 w/ 12 GB of VRAM, so I don't think it's hitting its limits here. The same sound problem applies to most of the clips in this timeline,...
+  captured_at: '2026-06-18T14:29:07Z'
+  source_date: '2026-06-18'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1u6r77x-exported-h265-video-randomly-freezes-for
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1u6r77x/exported_h265_video_randomly_freezes_for_a_few/
+  parent_title: Exported H.265 video randomly freezes for a few seconds in DaVinci Resolve, but source footage is fine
+  report_title: Exported H.265 video randomly freezes for a few seconds in DaVinci Resolve, but source footage is fine
+  report_text_excerpt: Exported H.265 video randomly freezes for a few seconds in DaVinci Resolve, but source footage is fine Hey, I need help troubleshooting a weird export issue in DaVinci Resolve. I record gameplay footage with OBS at 2560×1440, 60 fps . The original recordings play fine with no...
+  captured_at: '2026-06-18T14:29:07Z'
+  source_date: '2026-06-15'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1u6q50e-davinci-resolve-21-will-not-load-after-a
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1u6q50e/davinci_resolve_21_will_not_load_after_a_reinstall/
+  parent_title: Davinci Resolve 21 will not load after a reinstall.
+  report_title: Davinci Resolve 21 will not load after a reinstall.
+  report_text_excerpt: Davinci Resolve 21 will not load after a reinstall. I posted with a issue recently. As part of getting that sorted, I reinstalled the software. Now the software freezes during loading; always on the Loading Color Page point. I will post my computer stats below. I have...
+  captured_at: '2026-06-18T14:29:07Z'
+  source_date: '2026-06-15'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: install issue
+  workflow_area: installation
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
