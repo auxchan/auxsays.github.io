@@ -51,7 +51,7 @@ Use `--summary` for local human review. It prints category counts and only the r
 
 Use `--json` for automation, CI parsing, or debugging a specific finding that needs full record detail.
 
-`scripts/revalidate_consensus_evidence.py` is a fixture-only dry-run harness for the next revalidation phase. It reads an explicit evidence fixture with `--evidence-file`, filters counted rows by `--product` and `--version`, and classifies rows as malformed, missing a URL, unsupported, pending a source adapter, or structurally ready for future revalidation. It does not fetch URLs, run collectors, write evidence, update generated records, or refresh freshness fields. Live source adapters and guarded writeback are future work.
+`scripts/revalidate_consensus_evidence.py` is the dry-run harness for the next revalidation phase. Without `--live-fetch`, it reads an explicit evidence fixture with `--evidence-file`, filters counted rows by `--product` and `--version`, and classifies rows as malformed, missing a URL, unsupported, pending a source adapter, or structurally ready for future revalidation. In `--live-fetch` mode, `github_issue` is the first supported live source type for OBS GitHub Issue revalidation. That live mode still does not run collectors, write evidence, update generated records, refresh `evidence_last_checked`, or promote anything to live consensus. A later explicit writeback sprint is required before any generated-record freshness field can change.
 
 The audit separates findings into severity categories:
 
