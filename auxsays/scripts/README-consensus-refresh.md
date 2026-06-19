@@ -28,6 +28,23 @@ Every confirmed patch-specific report counts equally. Official forums, dedicated
 
 Official update ingestion remains separate from consensus refresh.
 
+## Local validation setup on Windows
+
+From the repo root, create a local virtual environment and install the shared
+script dependencies:
+
+```powershell
+py -3 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe auxsays\scripts\validate_evidence_method_health.py
+.\.venv\Scripts\python.exe auxsays\scripts\audit_consensus_evidence.py --json --strict
+```
+
+If `py` is not recognized, install or repair Python 3.12+ for Windows and enable
+the Python Launcher, or use the full path to the installed Python executable.
+After venv creation, prefer `.\.venv\Scripts\python.exe` instead of relying on
+global `python`.
+
 `scripts/audit_consensus_evidence.py` compares generated Patch record report counts with the structured rows in `auxsays/_data/consensus_evidence.yml`. It reports records that claim confirmed reports without matching structured evidence, records where evidence exists but counts differ, and missing or stale evidence freshness dates.
 
 The audit separates findings into severity categories:

@@ -17,10 +17,19 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from pathlib import Path
 from typing import Any
 
-import yaml
+try:
+    import yaml
+except ModuleNotFoundError:
+    print(
+        "PyYAML is required. Install dependencies with:\n"
+        ".\\.venv\\Scripts\\python.exe -m pip install -r requirements.txt",
+        file=sys.stderr,
+    )
+    raise SystemExit(1)
 
 ROOT = Path(__file__).resolve().parents[1]
 GENERATED_DIR = ROOT / "updates" / "generated"

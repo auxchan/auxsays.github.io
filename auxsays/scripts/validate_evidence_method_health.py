@@ -13,7 +13,15 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
-import yaml
+try:
+    import yaml
+except ModuleNotFoundError:
+    print(
+        "PyYAML is required. Install dependencies with:\n"
+        ".\\.venv\\Scripts\\python.exe -m pip install -r requirements.txt",
+        file=sys.stderr,
+    )
+    raise SystemExit(1)
 
 DEFAULT_PATH = Path("auxsays/_data/evidence_method_health.yml")
 

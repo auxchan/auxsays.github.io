@@ -22,22 +22,38 @@ They are intentionally disabled until their parser profiles are hardened.
 
 ## Run locally from repo root
 
-```bash
-pip install -r auxsays/scripts/requirements-ingest.txt
-python auxsays/scripts/patch_ingest.py
+On Windows, create a local virtual environment and run scripts through that
+environment instead of relying on a global `python` command:
+
+```powershell
+py -3 -m venv .venv
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+.\.venv\Scripts\python.exe auxsays\scripts\validate_evidence_method_health.py
+.\.venv\Scripts\python.exe auxsays\scripts\audit_consensus_evidence.py --json --strict
+```
+
+If `py` is not recognized, install or repair Python 3.12+ for Windows and enable
+the Python Launcher, or use the full path to the installed Python executable.
+After venv creation, prefer `.\.venv\Scripts\python.exe` instead of relying on
+global `python`.
+
+Official ingestion remains mutating unless run with `--dry-run`:
+
+```powershell
+.\.venv\Scripts\python.exe auxsays\scripts\patch_ingest.py --dry-run
 ```
 
 ## Run a single source
 
-```bash
-python auxsays/scripts/patch_ingest.py --source obs-studio
-python auxsays/scripts/patch_ingest.py --source comfyui
+```powershell
+.\.venv\Scripts\python.exe auxsays\scripts\patch_ingest.py --source obs-studio --dry-run
+.\.venv\Scripts\python.exe auxsays\scripts\patch_ingest.py --source comfyui --dry-run
 ```
 
 ## Dry run
 
-```bash
-python auxsays/scripts/patch_ingest.py --dry-run
+```powershell
+.\.venv\Scripts\python.exe auxsays\scripts\patch_ingest.py --dry-run
 ```
 
 ## Important constraints
