@@ -17,8 +17,8 @@ update_version: Search the web in the Figma design agent
 update_logo_text: FIG
 update_published_at: '2026-06-18T00:00:00.000Z'
 update_last_checked: '2026-06-18T20:40:19Z'
-source_last_checked: '2026-06-18T23:27:35Z'
-official_body_last_checked: '2026-06-18T23:27:35Z'
+source_last_checked: '2026-06-19T05:27:48Z'
+official_body_last_checked: '2026-06-19T05:27:48Z'
 record_last_updated: '2026-06-18T20:40:19Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -76,6 +76,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-06-18T23:27:35Z'
+  url: https://www.figma.com/release-notes/?title=search-the-web-in-the-figma-design-agent
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-06-19T05:27:48Z'
   url: https://www.figma.com/release-notes/?title=search-the-web-in-the-figma-design-agent
   status: captured-from-rss-feed
   body_captured: true
