@@ -51,7 +51,11 @@ Use `--summary` for local human review. It prints category counts and only the r
 
 Use `--json` for automation, CI parsing, or debugging a specific finding that needs full record detail.
 
-`scripts/revalidate_consensus_evidence.py` is the dry-run harness for the next revalidation phase. Without `--live-fetch`, it reads an explicit evidence fixture with `--evidence-file`, filters counted rows by `--product` and `--version`, and classifies rows as malformed, missing a URL, unsupported, pending a source adapter, or structurally ready for future revalidation. In `--live-fetch` mode, `github_issue` is the first supported live source type for OBS GitHub Issue revalidation. That live mode still does not run collectors, write evidence, update generated records, refresh `evidence_last_checked`, or promote anything to live consensus. A later explicit writeback sprint is required before any generated-record freshness field can change.
+`scripts/revalidate_consensus_evidence.py` is the dry-run harness for the next revalidation phase. Without `--live-fetch`, it reads an explicit evidence fixture with `--evidence-file`, filters counted rows by `--product` and `--version`, and classifies rows as malformed, missing a URL, unsupported, pending a source adapter, or structurally ready for future revalidation. In `--live-fetch` mode, `github_issue` is the first supported live source type for OBS GitHub Issue revalidation. Live fetch mode does not run collectors, write evidence rows, change report counts, change verdicts, change evidence state, or promote anything to live consensus.
+
+OBS Studio 32.1.1 has a narrowly guarded generated-record freshness writeback. It requires `--live-fetch`, `--write-generated-freshness`, `--generated-dir`, `--confirm-product obs-studio`, and `--confirm-version 32.1.1` in the same command. The writeback updates only `evidence_last_checked` in `updates/generated/2026-04-02-obs-studio-32-1-1.md`, and only after all 40 counted GitHub Issue rows verify live and the generated record still reports 40 confirmed reports, `evidence_state: pilot_sample`, and `consensus_collection_status: pilot_initial_sample`. This is not consensus promotion and does not update `latest_structured_evidence_captured_at`.
+
+DaVinci Resolve and Adobe Premiere Pro stale report-bearing records remain blocked pending source adapters. Do not refresh their generated-record freshness fields until a real adapter/revalidation path verifies the underlying rows.
 
 The audit separates findings into severity categories:
 

@@ -91,6 +91,60 @@ def github_comment_api(number: int) -> str:
     return f"https://api.github.com/repos/obsproject/obs-studio/issues/comments/{number}"
 
 
+def obs_evidence_fixture(row_count: int = 40, *, product_id: str = "obs-studio", version: str = "32.1.1") -> str:
+    return fixture(*[
+        row_yaml(
+            id=f"obs-{number}",
+            product_id=product_id,
+            update_version=version,
+            source_type="github_issue",
+            source_url=f"https://github.com/obsproject/obs-studio/issues/{1000 + number}",
+        )
+        for number in range(1, row_count + 1)
+    ])
+
+
+def generated_record_text(
+    *,
+    product_id: str = "obs-studio",
+    version: str = "32.1.1",
+    update_report_count: int = 40,
+    confirmed_count: int = 40,
+    consensus_status: str = "pilot_initial_sample",
+    evidence_state: str = "pilot_sample",
+    evidence_last_checked: str = "2026-05-26T16:55:04Z",
+) -> str:
+    return (
+        "---\n"
+        f"product_id: {product_id}\n"
+        f"update_version: {version}\n"
+        f"update_report_count: {update_report_count}\n"
+        f"confirmed_patch_specific_report_count: {confirmed_count}\n"
+        f"consensus_collection_status: {consensus_status}\n"
+        f"evidence_state: {evidence_state}\n"
+        f"evidence_last_checked: '{evidence_last_checked}'\n"
+        "---\n"
+        "Fixture body must remain untouched.\n"
+    )
+
+
+def write_generated_case(base: Path, name: str, text: str | None = None) -> tuple[Path, Path]:
+    generated_dir = base / name
+    generated_dir.mkdir()
+    record_path = generated_dir / revalidate_mod.EXPECTED_WRITEBACK_GENERATED_FILE
+    record_path.write_text(text or generated_record_text(), encoding="utf-8")
+    return generated_dir, record_path
+
+
+def verified_issue_fetch(version: str = "32.1.1", *, missing_issue_number: int | None = None) -> Any:
+    def fake_fetch(url: str) -> Any:
+        issue_number = int(url.rstrip("/").split("/")[-1])
+        if missing_issue_number is not None and issue_number == missing_issue_number:
+            return {"title": "OBS issue without exact version", "body": "No matching patch here."}
+        return {"title": f"OBS Studio {version} exact patch report", "body": "Fixture body."}
+    return fake_fetch
+
+
 def run() -> int:
     print("=" * 60)
     print("Consensus evidence revalidation fixture tests")
@@ -225,6 +279,242 @@ def run() -> int:
 
         live_after = live_path.read_text(encoding="utf-8")
         check("live fixture file remains unchanged", live_before == live_after, live_after)
+
+        writeback_path = tmp_path / "obs_writeback_evidence.yml"
+        writeback_path.write_text(obs_evidence_fixture(), encoding="utf-8")
+        writeback_evidence_before = writeback_path.read_text(encoding="utf-8")
+        generated_dir, record_path = write_generated_case(tmp_path, "generated_success")
+        sibling_path = generated_dir / "unrelated-record.md"
+        sibling_path.write_text(generated_record_text(product_id="other-product", version="9.9.9"), encoding="utf-8")
+        sibling_before = sibling_path.read_text(encoding="utf-8")
+
+        writeback_result = revalidate_mod.revalidate(
+            writeback_path,
+            "obs-studio",
+            "32.1.1",
+            live_fetch=True,
+            fetch_json=verified_issue_fetch(),
+        )
+        writeback = revalidate_mod.guarded_generated_freshness_writeback(
+            writeback_result,
+            generated_dir=generated_dir,
+            confirm_product="obs-studio",
+            confirm_version="32.1.1",
+            timestamp="2099-01-02T03:04:05Z",
+        )
+        record_after = record_path.read_text(encoding="utf-8")
+        check(
+            "all verified rows update fixture generated record",
+            writeback["success"] is True
+            and "evidence_last_checked: '2099-01-02T03:04:05Z'" in record_after
+            and writeback_result["writes_files"] is True
+            and writeback_result["mode"] == revalidate_mod.WRITEBACK_MODE,
+            json.dumps(writeback, indent=2),
+        )
+        check("writeback leaves evidence fixture unchanged", writeback_path.read_text(encoding="utf-8") == writeback_evidence_before, writeback_path.read_text(encoding="utf-8"))
+        check("writeback mutates only intended temp generated record", sibling_path.read_text(encoding="utf-8") == sibling_before, sibling_path.read_text(encoding="utf-8"))
+
+        failed_generated_dir, failed_record_path = write_generated_case(tmp_path, "generated_failed_row")
+        failed_record_before = failed_record_path.read_text(encoding="utf-8")
+        one_failed_result = revalidate_mod.revalidate(
+            writeback_path,
+            "obs-studio",
+            "32.1.1",
+            live_fetch=True,
+            fetch_json=verified_issue_fetch(missing_issue_number=1007),
+        )
+        one_failed_writeback = revalidate_mod.guarded_generated_freshness_writeback(
+            one_failed_result,
+            generated_dir=failed_generated_dir,
+            confirm_product="obs-studio",
+            confirm_version="32.1.1",
+            timestamp="2099-01-02T03:04:05Z",
+        )
+        check(
+            "one failed row blocks writeback",
+            one_failed_writeback["success"] is False
+            and failed_record_path.read_text(encoding="utf-8") == failed_record_before
+            and any("exact_version_failed=1" in reason for reason in one_failed_writeback["guard_failures"]),
+            json.dumps(one_failed_writeback, indent=2),
+        )
+
+        count_mismatch_path = tmp_path / "obs_writeback_39.yml"
+        count_mismatch_path.write_text(obs_evidence_fixture(row_count=39), encoding="utf-8")
+        count_generated_dir, count_record_path = write_generated_case(tmp_path, "generated_count_mismatch")
+        count_record_before = count_record_path.read_text(encoding="utf-8")
+        count_result = revalidate_mod.revalidate(
+            count_mismatch_path,
+            "obs-studio",
+            "32.1.1",
+            live_fetch=True,
+            fetch_json=verified_issue_fetch(),
+        )
+        count_writeback = revalidate_mod.guarded_generated_freshness_writeback(
+            count_result,
+            generated_dir=count_generated_dir,
+            confirm_product="obs-studio",
+            confirm_version="32.1.1",
+            timestamp="2099-01-02T03:04:05Z",
+        )
+        check(
+            "count mismatch blocks writeback",
+            count_writeback["success"] is False
+            and count_record_path.read_text(encoding="utf-8") == count_record_before
+            and any("selected counted rows must total exactly 40" in reason for reason in count_writeback["guard_failures"]),
+            json.dumps(count_writeback, indent=2),
+        )
+
+        wrong_product_path = tmp_path / "obs_writeback_wrong_product.yml"
+        wrong_product_path.write_text(obs_evidence_fixture(product_id="not-obs"), encoding="utf-8")
+        wrong_product_dir, wrong_product_record = write_generated_case(tmp_path, "generated_wrong_product")
+        wrong_product_before = wrong_product_record.read_text(encoding="utf-8")
+        wrong_product_result = revalidate_mod.revalidate(
+            wrong_product_path,
+            "not-obs",
+            "32.1.1",
+            live_fetch=True,
+            fetch_json=verified_issue_fetch(),
+        )
+        wrong_product_writeback = revalidate_mod.guarded_generated_freshness_writeback(
+            wrong_product_result,
+            generated_dir=wrong_product_dir,
+            confirm_product="not-obs",
+            confirm_version="32.1.1",
+            timestamp="2099-01-02T03:04:05Z",
+        )
+        check(
+            "wrong product/version blocks writeback",
+            wrong_product_writeback["success"] is False
+            and wrong_product_record.read_text(encoding="utf-8") == wrong_product_before
+            and any("product must be exactly obs-studio" in reason for reason in wrong_product_writeback["guard_failures"])
+            and any("--confirm-product must be exactly obs-studio" in reason for reason in wrong_product_writeback["guard_failures"]),
+            json.dumps(wrong_product_writeback, indent=2),
+        )
+
+        missing_record_dir = tmp_path / "generated_missing_record"
+        missing_record_dir.mkdir()
+        missing_record_result = revalidate_mod.revalidate(
+            writeback_path,
+            "obs-studio",
+            "32.1.1",
+            live_fetch=True,
+            fetch_json=verified_issue_fetch(),
+        )
+        missing_record_writeback = revalidate_mod.guarded_generated_freshness_writeback(
+            missing_record_result,
+            generated_dir=missing_record_dir,
+            confirm_product="obs-studio",
+            confirm_version="32.1.1",
+            timestamp="2099-01-02T03:04:05Z",
+        )
+        check(
+            "wrong generated file/path blocks writeback",
+            missing_record_writeback["success"] is False
+            and any("expected generated record does not exist" in reason for reason in missing_record_writeback["guard_failures"]),
+            json.dumps(missing_record_writeback, indent=2),
+        )
+
+        report_count_dir, report_count_record = write_generated_case(
+            tmp_path,
+            "generated_report_count_mismatch",
+            generated_record_text(update_report_count=39, confirmed_count=39),
+        )
+        report_count_before = report_count_record.read_text(encoding="utf-8")
+        report_count_result = revalidate_mod.revalidate(
+            writeback_path,
+            "obs-studio",
+            "32.1.1",
+            live_fetch=True,
+            fetch_json=verified_issue_fetch(),
+        )
+        report_count_writeback = revalidate_mod.guarded_generated_freshness_writeback(
+            report_count_result,
+            generated_dir=report_count_dir,
+            confirm_product="obs-studio",
+            confirm_version="32.1.1",
+            timestamp="2099-01-02T03:04:05Z",
+        )
+        check(
+            "report count mismatch blocks writeback",
+            report_count_writeback["success"] is False
+            and report_count_record.read_text(encoding="utf-8") == report_count_before
+            and any("generated record report counts must still be 40" in reason for reason in report_count_writeback["guard_failures"]),
+            json.dumps(report_count_writeback, indent=2),
+        )
+
+        evidence_state_dir, evidence_state_record = write_generated_case(
+            tmp_path,
+            "generated_evidence_state_mismatch",
+            generated_record_text(evidence_state="official_only"),
+        )
+        evidence_state_before = evidence_state_record.read_text(encoding="utf-8")
+        evidence_state_result = revalidate_mod.revalidate(
+            writeback_path,
+            "obs-studio",
+            "32.1.1",
+            live_fetch=True,
+            fetch_json=verified_issue_fetch(),
+        )
+        evidence_state_writeback = revalidate_mod.guarded_generated_freshness_writeback(
+            evidence_state_result,
+            generated_dir=evidence_state_dir,
+            confirm_product="obs-studio",
+            confirm_version="32.1.1",
+            timestamp="2099-01-02T03:04:05Z",
+        )
+        check(
+            "evidence_state not pilot_sample blocks writeback",
+            evidence_state_writeback["success"] is False
+            and evidence_state_record.read_text(encoding="utf-8") == evidence_state_before
+            and any("evidence_state must remain pilot_sample" in reason for reason in evidence_state_writeback["guard_failures"]),
+            json.dumps(evidence_state_writeback, indent=2),
+        )
+
+        consensus_status_dir, consensus_status_record = write_generated_case(
+            tmp_path,
+            "generated_consensus_status_mismatch",
+            generated_record_text(consensus_status="consensus_live"),
+        )
+        consensus_status_before = consensus_status_record.read_text(encoding="utf-8")
+        consensus_status_result = revalidate_mod.revalidate(
+            writeback_path,
+            "obs-studio",
+            "32.1.1",
+            live_fetch=True,
+            fetch_json=verified_issue_fetch(),
+        )
+        consensus_status_writeback = revalidate_mod.guarded_generated_freshness_writeback(
+            consensus_status_result,
+            generated_dir=consensus_status_dir,
+            confirm_product="obs-studio",
+            confirm_version="32.1.1",
+            timestamp="2099-01-02T03:04:05Z",
+        )
+        check(
+            "consensus_collection_status not pilot blocks writeback",
+            consensus_status_writeback["success"] is False
+            and consensus_status_record.read_text(encoding="utf-8") == consensus_status_before
+            and any("consensus_collection_status must remain pilot_initial_sample" in reason for reason in consensus_status_writeback["guard_failures"]),
+            json.dumps(consensus_status_writeback, indent=2),
+        )
+
+        no_live_dir, no_live_record = write_generated_case(tmp_path, "generated_no_live")
+        no_live_before = no_live_record.read_text(encoding="utf-8")
+        no_live_result = revalidate_mod.revalidate(writeback_path, "obs-studio", "32.1.1")
+        no_live_writeback = revalidate_mod.guarded_generated_freshness_writeback(
+            no_live_result,
+            generated_dir=no_live_dir,
+            confirm_product="obs-studio",
+            confirm_version="32.1.1",
+            timestamp="2099-01-02T03:04:05Z",
+        )
+        check(
+            "no --live-fetch blocks writeback",
+            no_live_writeback["success"] is False
+            and no_live_record.read_text(encoding="utf-8") == no_live_before
+            and any("--live-fetch is required" in reason for reason in no_live_writeback["guard_failures"]),
+            json.dumps(no_live_writeback, indent=2),
+        )
 
     print()
     print("=" * 60)

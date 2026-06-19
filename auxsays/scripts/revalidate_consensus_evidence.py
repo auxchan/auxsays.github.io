@@ -3,7 +3,8 @@
 
 Without --live-fetch, this script reads structured evidence from an explicit
 input path, classifies rows for a product/version, and never fetches URLs. With
---live-fetch, it may fetch supported source URLs but still never writes files.
+--live-fetch, it may fetch supported source URLs. Generated freshness writeback
+is available only through an explicit OBS 32.1.1 guard path.
 """
 from __future__ import annotations
 
@@ -26,6 +27,7 @@ except ModuleNotFoundError:  # pragma: no cover - used in lightweight local shel
 
 MODE = "dry_run_fixture_revalidation_no_fetch_no_write"
 LIVE_MODE = "dry_run_live_revalidation_no_write"
+WRITEBACK_MODE = "live_revalidation_guarded_generated_freshness_writeback"
 CLASSIFICATIONS = (
     "pending_source_adapter",
     "unsupported_source_type",
@@ -56,6 +58,12 @@ PENDING_SOURCE_ADAPTER_TYPES = {
 }
 GITHUB_API_ROOT = "https://api.github.com"
 GITHUB_COMMENT_RE = re.compile(r"(?:^|[-_])comment-(\d+)$|issuecomment-(\d+)", flags=re.I)
+EXPECTED_WRITEBACK_PRODUCT = "obs-studio"
+EXPECTED_WRITEBACK_VERSION = "32.1.1"
+EXPECTED_WRITEBACK_COUNTED_ROWS = 40
+EXPECTED_WRITEBACK_GENERATED_FILE = "2026-04-02-obs-studio-32-1-1.md"
+EXPECTED_WRITEBACK_EVIDENCE_STATE = "pilot_sample"
+EXPECTED_WRITEBACK_CONSENSUS_STATUS = "pilot_initial_sample"
 
 
 class SourceFetchError(RuntimeError):
@@ -125,6 +133,54 @@ def load_evidence_rows(path: Path) -> list[dict[str, Any]]:
             return [item for item in evidence if isinstance(item, dict)]
         return []
     return simple_evidence_rows(text)
+
+
+def simple_front_matter_mapping(text: str) -> dict[str, Any]:
+    data: dict[str, Any] = {}
+    lines = text.splitlines()
+    if not lines or lines[0].strip() != "---":
+        raise ValueError("generated record is missing YAML front matter")
+    for raw_line in lines[1:]:
+        if raw_line.strip() == "---":
+            return data
+        if not raw_line.strip() or raw_line.lstrip().startswith("#"):
+            continue
+        if raw_line.startswith((" ", "\t")) or raw_line.lstrip().startswith("- "):
+            continue
+        stripped = raw_line.strip()
+        if ":" not in stripped:
+            continue
+        key, value = stripped.split(":", 1)
+        data[key.strip()] = parse_scalar(value)
+    raise ValueError("generated record front matter is not closed")
+
+
+def load_generated_record_metadata(path: Path) -> dict[str, Any]:
+    return simple_front_matter_mapping(path.read_text(encoding="utf-8"))
+
+
+def utc_timestamp() -> str:
+    return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+
+
+def replace_evidence_last_checked(path: Path, timestamp: str) -> str:
+    text = path.read_text(encoding="utf-8")
+    lines = text.splitlines(keepends=True)
+    in_front_matter = False
+    for index, line in enumerate(lines):
+        if index == 0 and line.strip() == "---":
+            in_front_matter = True
+            continue
+        if in_front_matter and line.strip() == "---":
+            break
+        if in_front_matter and re.match(r"^evidence_last_checked\s*:", line):
+            before = parse_scalar(line.split(":", 1)[1])
+            newline = "\r\n" if line.endswith("\r\n") else "\n" if line.endswith("\n") else ""
+            lines[index] = f"evidence_last_checked: '{timestamp}'{newline}"
+            with path.open("w", encoding="utf-8", newline="") as handle:
+                handle.write("".join(lines))
+            return str(before or "")
+    raise ValueError("generated record is missing evidence_last_checked")
 
 
 def is_counted(row: dict[str, Any]) -> bool:
@@ -359,6 +415,113 @@ def revalidate(
     }
 
 
+def guarded_generated_freshness_writeback(
+    result: dict[str, Any],
+    *,
+    generated_dir: Path | None,
+    confirm_product: str | None,
+    confirm_version: str | None,
+    timestamp: str | None = None,
+) -> dict[str, Any]:
+    failures: list[str] = []
+    writeback: dict[str, Any] = {
+        "attempted": True,
+        "success": False,
+        "guard_failures": failures,
+        "expected_product": EXPECTED_WRITEBACK_PRODUCT,
+        "expected_version": EXPECTED_WRITEBACK_VERSION,
+        "expected_counted_rows": EXPECTED_WRITEBACK_COUNTED_ROWS,
+        "expected_generated_file": EXPECTED_WRITEBACK_GENERATED_FILE,
+    }
+
+    if result.get("product_id") != EXPECTED_WRITEBACK_PRODUCT:
+        failures.append(f"product must be exactly {EXPECTED_WRITEBACK_PRODUCT}")
+    if result.get("update_version") != EXPECTED_WRITEBACK_VERSION:
+        failures.append(f"version must be exactly {EXPECTED_WRITEBACK_VERSION}")
+    if confirm_product != EXPECTED_WRITEBACK_PRODUCT:
+        failures.append(f"--confirm-product must be exactly {EXPECTED_WRITEBACK_PRODUCT}")
+    if confirm_version != EXPECTED_WRITEBACK_VERSION:
+        failures.append(f"--confirm-version must be exactly {EXPECTED_WRITEBACK_VERSION}")
+    if result.get("counted_rows_selected") != EXPECTED_WRITEBACK_COUNTED_ROWS:
+        failures.append(
+            f"selected counted rows must total exactly {EXPECTED_WRITEBACK_COUNTED_ROWS}; "
+            f"found {result.get('counted_rows_selected')}"
+        )
+    if not result.get("fetches_urls"):
+        failures.append("--live-fetch is required in the same command")
+
+    counts = result.get("classification_counts") or {}
+    verified = counts.get("verified", 0)
+    if verified != EXPECTED_WRITEBACK_COUNTED_ROWS:
+        failures.append(
+            f"all selected rows must verify live; verified={verified}, "
+            f"expected={EXPECTED_WRITEBACK_COUNTED_ROWS}"
+        )
+    for name in LIVE_CLASSIFICATIONS:
+        if name == "verified":
+            continue
+        value = counts.get(name, 0)
+        if value:
+            failures.append(f"all selected rows must verify live; {name}={value}")
+
+    record_path: Path | None = None
+    if generated_dir is None:
+        failures.append("--generated-dir is required for generated freshness writeback")
+    else:
+        generated_root = generated_dir.resolve()
+        record_path = (generated_root / EXPECTED_WRITEBACK_GENERATED_FILE).resolve()
+        writeback["generated_record"] = str(record_path)
+        if record_path.name != EXPECTED_WRITEBACK_GENERATED_FILE or record_path.parent != generated_root:
+            failures.append(f"generated record path must resolve to {EXPECTED_WRITEBACK_GENERATED_FILE}")
+        elif not record_path.exists():
+            failures.append(f"expected generated record does not exist: {record_path}")
+        elif not record_path.is_file():
+            failures.append(f"expected generated record is not a file: {record_path}")
+        else:
+            try:
+                metadata = load_generated_record_metadata(record_path)
+            except (OSError, ValueError) as exc:
+                failures.append(f"could not read generated record front matter: {exc}")
+            else:
+                writeback["current_evidence_last_checked"] = metadata.get("evidence_last_checked")
+                if metadata.get("product_id") != EXPECTED_WRITEBACK_PRODUCT:
+                    failures.append(f"generated record product_id must be {EXPECTED_WRITEBACK_PRODUCT}")
+                if metadata.get("update_version") != EXPECTED_WRITEBACK_VERSION:
+                    failures.append(f"generated record update_version must be {EXPECTED_WRITEBACK_VERSION}")
+                update_report_count = metadata.get("update_report_count")
+                confirmed_report_count = metadata.get("confirmed_patch_specific_report_count")
+                if update_report_count != EXPECTED_WRITEBACK_COUNTED_ROWS or confirmed_report_count != EXPECTED_WRITEBACK_COUNTED_ROWS:
+                    failures.append(
+                        "generated record report counts must still be 40; "
+                        f"update_report_count={update_report_count}, "
+                        f"confirmed_patch_specific_report_count={confirmed_report_count}"
+                    )
+                if metadata.get("evidence_state") != EXPECTED_WRITEBACK_EVIDENCE_STATE:
+                    failures.append(f"generated record evidence_state must remain {EXPECTED_WRITEBACK_EVIDENCE_STATE}")
+                if metadata.get("consensus_collection_status") != EXPECTED_WRITEBACK_CONSENSUS_STATUS:
+                    failures.append(
+                        "generated record consensus_collection_status must remain "
+                        f"{EXPECTED_WRITEBACK_CONSENSUS_STATUS}"
+                    )
+
+    if failures:
+        return writeback
+
+    assert record_path is not None
+    after_timestamp = timestamp or utc_timestamp()
+    before_timestamp = replace_evidence_last_checked(record_path, after_timestamp)
+    writeback.update({
+        "success": True,
+        "guard_failures": [],
+        "generated_record": str(record_path),
+        "evidence_last_checked_before": before_timestamp,
+        "evidence_last_checked_after": after_timestamp,
+    })
+    result["writes_files"] = True
+    result["mode"] = WRITEBACK_MODE
+    return writeback
+
+
 def print_summary(result: dict[str, Any]) -> None:
     print("AUXSAYS consensus evidence revalidation dry run")
     print(f"Mode: {result['mode']}")
@@ -372,7 +535,21 @@ def print_summary(result: dict[str, Any]) -> None:
     for name in result.get("classifications") or CLASSIFICATIONS:
         label = name.replace("_", " ")
         print(f"- {label}: {result['classification_counts'].get(name, 0)}")
-    if result.get("fetches_urls"):
+    writeback = result.get("writeback") or {}
+    if writeback.get("attempted"):
+        print("Generated freshness writeback:")
+        if writeback.get("success"):
+            print("- status: success")
+            print(f"- file changed: {writeback.get('generated_record')}")
+            print(f"- evidence_last_checked before: {writeback.get('evidence_last_checked_before')}")
+            print(f"- evidence_last_checked after: {writeback.get('evidence_last_checked_after')}")
+        else:
+            print("- status: blocked")
+            for failure in writeback.get("guard_failures") or []:
+                print(f"- guard failure: {failure}")
+    if result.get("writes_files"):
+        print("Files written: guarded generated freshness update only.")
+    elif result.get("fetches_urls"):
         print("Live fetch enabled. No files written.")
     else:
         print("No URLs fetched. No files written.")
@@ -384,17 +561,36 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--product", required=True, help="Product ID to select.")
     parser.add_argument("--version", required=True, help="Update version to select.")
     parser.add_argument("--live-fetch", action="store_true", help="Fetch supported source URLs and revalidate in dry-run mode.")
+    parser.add_argument(
+        "--write-generated-freshness",
+        action="store_true",
+        help="Guarded OBS 32.1.1 generated-record evidence freshness writeback.",
+    )
+    parser.add_argument("--generated-dir", help="Generated record directory for guarded freshness writeback.")
+    parser.add_argument("--confirm-product", help="Required product confirmation for guarded freshness writeback.")
+    parser.add_argument("--confirm-version", help="Required version confirmation for guarded freshness writeback.")
     output = parser.add_mutually_exclusive_group()
     output.add_argument("--summary", action="store_true", help="Print concise human-readable output.")
     output.add_argument("--json", action="store_true", help="Print machine-readable JSON output.")
     args = parser.parse_args(argv)
 
     result = revalidate(Path(args.evidence_file), args.product, args.version, live_fetch=args.live_fetch)
+    exit_code = 0
+    if args.write_generated_freshness:
+        writeback = guarded_generated_freshness_writeback(
+            result,
+            generated_dir=Path(args.generated_dir) if args.generated_dir else None,
+            confirm_product=args.confirm_product,
+            confirm_version=args.confirm_version,
+        )
+        result["writeback"] = writeback
+        if not writeback.get("success"):
+            exit_code = 1
     if args.json:
         print(json.dumps(result, indent=2, ensure_ascii=False))
     else:
         print_summary(result)
-    return 0
+    return exit_code
 
 
 if __name__ == "__main__":
