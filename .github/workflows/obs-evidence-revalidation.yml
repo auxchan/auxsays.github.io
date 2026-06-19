@@ -1,0 +1,30 @@
+name: OBS Evidence Revalidation Dry Run
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  obs-32-1-1-github-revalidation:
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r auxsays/scripts/requirements-ingest.txt
+
+      # Read-only live source revalidation. This does not write freshness,
+      # commit, push, run strict audit, or promote any record to live consensus.
+      - name: Revalidate OBS Studio 32.1.1 GitHub issue evidence
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: python auxsays/scripts/revalidate_consensus_evidence.py --evidence-file auxsays/_data/consensus_evidence.yml --product obs-studio --version 32.1.1 --summary --live-fetch
