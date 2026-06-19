@@ -51,6 +51,8 @@ Use `--summary` for local human review. It prints category counts and only the r
 
 Use `--json` for automation, CI parsing, or debugging a specific finding that needs full record detail.
 
+`scripts/revalidate_consensus_evidence.py` is a fixture-only dry-run harness for the next revalidation phase. It reads an explicit evidence fixture with `--evidence-file`, filters counted rows by `--product` and `--version`, and classifies rows as malformed, missing a URL, unsupported, pending a source adapter, or structurally ready for future revalidation. It does not fetch URLs, run collectors, write evidence, update generated records, or refresh freshness fields. Live source adapters and guarded writeback are future work.
+
 The audit separates findings into severity categories:
 
 - `integrity_errors`: report-count mismatches, generated report counts without structured evidence, structured evidence without a matching generated record, slug/version mismatches, and core schema problems.
