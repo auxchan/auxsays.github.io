@@ -3,11 +3,14 @@ name: AUXSAYS Consensus Policy Audit
 on:
   workflow_dispatch:
     inputs:
-      run_obs_32_1_1_live_revalidation:
-        description: "Run read-only OBS 32.1.1 GitHub Issue live revalidation"
-        required: false
-        default: false
-        type: boolean
+      mode:
+        description: "Choose strict audit or read-only OBS 32.1.1 GitHub Issue revalidation"
+        required: true
+        default: strict-audit
+        type: choice
+        options:
+          - strict-audit
+          - obs-32-1-1-github-revalidation
 
 permissions:
   contents: read
@@ -24,11 +27,13 @@ jobs:
           python-version: "3.12"
       - name: Install audit dependencies
         run: pip install -r auxsays/scripts/requirements-ingest.txt
+
+      # Read-only live source revalidation. This does not write generated
+      # freshness, commit, push, or promote any record to live consensus.
       - name: Live revalidate OBS Studio 32.1.1 GitHub issue evidence
-        if: ${{ github.event.inputs.run_obs_32_1_1_live_revalidation == 'true' }}
+        if: ${{ github.event.inputs.mode == 'obs-32-1-1-github-revalidation' }}
         env:
           GITHUB_TOKEN: ${{ github.token }}
-          GH_TOKEN: ${{ github.token }}
         run: >
           python auxsays/scripts/revalidate_consensus_evidence.py
           --evidence-file auxsays/_data/consensus_evidence.yml
@@ -36,7 +41,11 @@ jobs:
           --version 32.1.1
           --summary
           --live-fetch
+
       - name: Audit consensus metadata
+        if: ${{ github.event.inputs.mode == 'strict-audit' }}
         run: python auxsays/scripts/consensus_refresh.py --json
+
       - name: Audit generated counts against structured evidence
-        run: python auxsays/scripts/audit_consensus_evidence.py --json --strict
+        if: ${{ github.event.inputs.mode == 'strict-audit' }}
+        run: python auxsays/scripts/audit_consensus_evidence.py --summary --strict
