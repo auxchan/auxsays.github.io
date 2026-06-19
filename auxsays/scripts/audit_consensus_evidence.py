@@ -424,9 +424,52 @@ def print_text(result: dict[str, Any]) -> None:
                 print(f"- {item['path']}: {item['stale_reason']}")
 
 
+def structured_evidence_row_count(result: dict[str, Any]) -> int:
+    total = 0
+    for group in result.get("structured_evidence_groups", []):
+        try:
+            total += int(group.get("structured_evidence_count") or 0)
+        except (TypeError, ValueError):
+            continue
+    return total
+
+
+def print_summary(result: dict[str, Any]) -> None:
+    counts = result.get("category_counts") or {}
+    strict_counts = result.get("strict_failure_categories") or {}
+
+    print("AUXSAYS consensus evidence audit summary")
+    print(f"Records scanned: {result['generated_records_scanned']}")
+    print(f"Records with reports: {len(result['generated_records_with_reports'])}")
+    print(f"Structured evidence groups: {len(result['structured_evidence_groups'])}")
+    print(f"Structured evidence rows: {structured_evidence_row_count(result)}")
+    print()
+    print("Category counts:")
+    print(f"- Integrity errors: {counts.get('integrity_errors', 0)}")
+    print(f"- Evidence freshness errors: {counts.get('evidence_freshness_errors', 0)}")
+    print(f"- Record freshness warnings: {counts.get('record_freshness_warnings', 0)}")
+    print(f"- Source freshness advisories: {counts.get('source_freshness_advisories', 0)}")
+    print()
+    print("Strict failure categories:")
+    print(f"- Integrity errors: {strict_counts.get('integrity_errors', 0)}")
+    print(f"- Evidence freshness errors: {strict_counts.get('evidence_freshness_errors', 0)}")
+    print()
+    print("Affected report-bearing records with evidence freshness errors:")
+    if not result.get("evidence_freshness_errors"):
+        print("- None")
+        return
+    for item in result["evidence_freshness_errors"]:
+        product_id = item.get("product_id") or "unknown-product"
+        version = item.get("update_version") or "unknown-version"
+        reports = item.get("generated_report_count", "unknown")
+        reason = item.get("stale_reason") or item.get("finding") or "evidence_freshness_error"
+        print(f"- {item.get('path')}: {product_id} {version}; reports: {reports}; reason: {reason}")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description="Audit generated report counts against structured consensus evidence.")
     parser.add_argument("--json", action="store_true", help="Print machine-readable JSON.")
+    parser.add_argument("--summary", action="store_true", help="Print concise human-readable category counts.")
     parser.add_argument("--stale-days", type=int, default=DEFAULT_STALE_DAYS, help="Age threshold for stale checked dates.")
     parser.add_argument(
         "--strict",
@@ -438,6 +481,8 @@ def main() -> int:
     result = audit(stale_days=args.stale_days)
     if args.json:
         print(json.dumps(result, indent=2, ensure_ascii=False))
+    elif args.summary:
+        print_summary(result)
     else:
         print_text(result)
 

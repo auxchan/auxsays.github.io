@@ -37,7 +37,7 @@ script dependencies:
 py -3 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.txt
 .\.venv\Scripts\python.exe auxsays\scripts\validate_evidence_method_health.py
-.\.venv\Scripts\python.exe auxsays\scripts\audit_consensus_evidence.py --json --strict
+.\.venv\Scripts\python.exe auxsays\scripts\audit_consensus_evidence.py --summary --strict
 ```
 
 If `py` is not recognized, install or repair Python 3.12+ for Windows and enable
@@ -46,6 +46,10 @@ After venv creation, prefer `.\.venv\Scripts\python.exe` instead of relying on
 global `python`.
 
 `scripts/audit_consensus_evidence.py` compares generated Patch record report counts with the structured rows in `auxsays/_data/consensus_evidence.yml`. It reports records that claim confirmed reports without matching structured evidence, records where evidence exists but counts differ, and missing or stale evidence freshness dates.
+
+Use `--summary` for local human review. It prints category counts and only the report-bearing records affected by evidence freshness failures, instead of pages of JSON.
+
+Use `--json` for automation, CI parsing, or debugging a specific finding that needs full record detail.
 
 The audit separates findings into severity categories:
 
