@@ -4550,3 +4550,45 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13568
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13568
+  parent_title: Game Capture black screen with Tibia client.exe, but Streamlabs captures correctly.
+  report_title: Game Capture black screen with Tibia client.exe, but Streamlabs captures correctly.
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/ieecrAKuVYyAgfun ### OBS Studio Crash Log URL _No response_ ### Expected Behavior OBS G'
+  captured_at: '2026-06-19T15:49:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture regression
+  workflow_area: screen/window capture
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13567
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13567
+  parent_title: Chapter Makers are not saved in Replay Buffer file.
+  report_title: Chapter Makers are not saved in Replay Buffer file.
+  report_text_excerpt: '### Operating System Info Other ### Other OS Arch Linux ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/2I62I14gUdc3cLao ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Chapt'
+  captured_at: '2026-06-19T15:49:22Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: hotkey regression
+  workflow_area: keyboard shortcuts
+  platform: linux
+  severity: medium
+  sentiment: negative
+  source_weight: 1
