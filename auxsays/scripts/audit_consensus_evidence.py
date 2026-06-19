@@ -26,6 +26,13 @@ GENERATED_DIR = ROOT / "updates" / "generated"
 EVIDENCE_PATH = ROOT / "_data" / "consensus_evidence.yml"
 STATE_PATH = ROOT / "_data" / "patch_ingest_state.json"
 DEFAULT_STALE_DAYS = 7
+CORE_EVIDENCE_FIELDS = ("product_id", "update_version", "source_url", "captured_at")
+CORE_RECORD_FIELDS = ("product_id", "update_version")
+
+
+def slugify(value: Any) -> str:
+    text = str(value or "").strip().lower()
+    return re.sub(r"[^a-z0-9]+", "-", text).strip("-")
 
 
 def parse_scalar(value: str) -> Any:
@@ -165,15 +172,49 @@ def is_stale(value: Any, *, now: datetime, stale_days: int) -> bool:
     return (now - parsed).days >= stale_days
 
 
+def strict_has_failures(result: dict[str, Any]) -> bool:
+    return bool(result.get("integrity_errors") or result.get("evidence_freshness_errors"))
+
+
 def audit(stale_days: int = DEFAULT_STALE_DAYS) -> dict[str, Any]:
     now = datetime.now(timezone.utc)
     evidence = load_evidence(EVIDENCE_PATH)
     state = load_state(STATE_PATH)
     source_state_by_product = state.get("sources") if isinstance(state.get("sources"), dict) else {}
     evidence_by_key: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
-    for item in evidence:
+    integrity_errors: list[dict[str, Any]] = []
+    evidence_freshness_errors: list[dict[str, Any]] = []
+    record_freshness_warnings: list[dict[str, Any]] = []
+    source_freshness_advisories: list[dict[str, Any]] = []
+    seen_integrity_errors: set[tuple[str, str, str, str, str]] = set()
+
+    def add_integrity_error(finding: str, item: dict[str, Any]) -> None:
+        key = (
+            finding,
+            str(item.get("path") or ""),
+            str(item.get("product_id") or ""),
+            str(item.get("update_version") or ""),
+            str(item.get("row_index") or item.get("id") or ""),
+        )
+        if key in seen_integrity_errors:
+            return
+        seen_integrity_errors.add(key)
+        integrity_errors.append({"finding": finding, **item})
+
+    for index, item in enumerate(evidence, start=1):
         product_id = str(item.get("product_id") or "").strip()
         version = str(item.get("update_version") or "").strip()
+        missing_fields = [field for field in CORE_EVIDENCE_FIELDS if item.get(field) in (None, "")]
+        if missing_fields:
+            add_integrity_error(
+                "evidence_schema_core_field_error",
+                {
+                    "row_index": index,
+                    "product_id": product_id,
+                    "update_version": version,
+                    "missing_fields": missing_fields,
+                },
+            )
         if product_id and version:
             evidence_by_key[(product_id, version)].append(item)
 
@@ -208,6 +249,12 @@ def audit(stale_days: int = DEFAULT_STALE_DAYS) -> dict[str, Any]:
             "official_checksums_body_populated": bool(checksum_body),
         }
         generated_records.append(item)
+        missing_record_fields = [field for field in CORE_RECORD_FIELDS if not key[0 if field == "product_id" else 1]]
+        if missing_record_fields:
+            add_integrity_error(
+                "generated_record_core_field_error",
+                {**item, "missing_fields": missing_record_fields},
+            )
         if key[0] and key[1]:
             generated_by_key[key] = item
 
@@ -224,23 +271,58 @@ def audit(stale_days: int = DEFAULT_STALE_DAYS) -> dict[str, Any]:
         item["structured_evidence_exists"] = bool(evidence_rows)
         item["latest_structured_evidence_captured_at"] = latest_evidence_checked
         if not evidence_rows:
-            mismatches.append({**item, "mismatch": "generated_reports_missing_structured_evidence"})
+            finding = {**item, "mismatch": "generated_reports_missing_structured_evidence"}
+            mismatches.append(finding)
+            add_integrity_error("generated_reports_missing_structured_evidence", finding)
         elif len(counted_rows) != item["generated_report_count"]:
-            mismatches.append({**item, "mismatch": "generated_report_count_differs_from_structured_evidence"})
+            finding = {**item, "mismatch": "generated_report_count_differs_from_structured_evidence"}
+            mismatches.append(finding)
+            add_integrity_error("generated_report_count_differs_from_structured_evidence", finding)
 
         evidence_checked = item.get("evidence_last_checked")
         if not evidence_checked:
-            stale_records.append({**item, "stale_reason": "missing_evidence_last_checked"})
+            finding = {**item, "stale_reason": "missing_evidence_last_checked"}
+            stale_records.append(finding)
+            evidence_freshness_errors.append({"finding": "missing_evidence_last_checked", **finding})
         elif is_stale(evidence_checked, now=now, stale_days=stale_days):
-            stale_records.append({**item, "stale_reason": "stale_evidence_last_checked"})
+            finding = {**item, "stale_reason": "stale_evidence_last_checked"}
+            stale_records.append(finding)
+            evidence_freshness_errors.append({"finding": "stale_evidence_last_checked", **finding})
+
+    evidence_backed_keys = set(evidence_by_key)
+    for item in generated_records:
+        key = (item["product_id"], item["update_version"])
+        if item["generated_report_count"] <= 0 and key not in evidence_backed_keys:
+            continue
+        version_slug = slugify(item.get("update_version"))
+        location_slug = slugify(" ".join([str(item.get("path") or ""), str(item.get("permalink") or "")]))
+        if version_slug and version_slug not in location_slug:
+            add_integrity_error(
+                "slug_version_mismatch",
+                {
+                    "path": item.get("path"),
+                    "permalink": item.get("permalink"),
+                    "product_id": item.get("product_id"),
+                    "update_version": item.get("update_version"),
+                    "expected_version_slug": version_slug,
+                },
+            )
 
     for item in generated_records:
         if is_stale(item.get("update_last_checked"), now=now, stale_days=stale_days):
-            stale_records.append({**item, "stale_reason": "stale_or_missing_update_last_checked"})
+            stale_reason = "stale_or_missing_update_last_checked"
+            finding = {**item, "stale_reason": stale_reason}
+            stale_records.append(finding)
+            record_freshness_warnings.append({
+                "finding": "missing_update_last_checked" if parse_time(item.get("update_last_checked")) is None else "stale_update_last_checked",
+                **finding,
+            })
         source_checked = parse_time(item.get("source_last_checked"))
         record_checked = parse_time(item.get("update_last_checked"))
         if source_checked and record_checked and source_checked > record_checked:
-            stale_records.append({**item, "stale_reason": "source_checked_after_record_last_checked"})
+            finding = {**item, "stale_reason": "source_checked_after_record_last_checked"}
+            stale_records.append(finding)
+            source_freshness_advisories.append({"finding": "source_checked_after_record_last_checked", **finding})
 
     evidence_without_matching_record: list[dict[str, Any]] = []
     evidence_count_mismatches: list[dict[str, Any]] = []
@@ -248,20 +330,31 @@ def audit(stale_days: int = DEFAULT_STALE_DAYS) -> dict[str, Any]:
         counted_rows = [row for row in rows if row.get("counted") is not False]
         generated = generated_by_key.get(key)
         if not generated:
-            evidence_without_matching_record.append({
+            finding = {
                 "product_id": key[0],
                 "update_version": key[1],
                 "structured_evidence_count": len(counted_rows),
-            })
+            }
+            evidence_without_matching_record.append(finding)
+            add_integrity_error("structured_evidence_without_matching_generated_record", finding)
             continue
         if generated["generated_report_count"] != len(counted_rows):
-            evidence_count_mismatches.append({
+            finding = {
                 "path": generated["path"],
                 "product_id": key[0],
                 "update_version": key[1],
                 "generated_report_count": generated["generated_report_count"],
                 "structured_evidence_count": len(counted_rows),
-            })
+            }
+            evidence_count_mismatches.append(finding)
+            add_integrity_error("generated_report_count_differs_from_structured_evidence", finding)
+
+    category_counts = {
+        "integrity_errors": len(integrity_errors),
+        "evidence_freshness_errors": len(evidence_freshness_errors),
+        "record_freshness_warnings": len(record_freshness_warnings),
+        "source_freshness_advisories": len(source_freshness_advisories),
+    }
 
     return {
         "generated_at": now.isoformat().replace("+00:00", "Z"),
@@ -283,6 +376,15 @@ def audit(stale_days: int = DEFAULT_STALE_DAYS) -> dict[str, Any]:
         "evidence_without_matching_record": evidence_without_matching_record,
         "evidence_count_mismatches": evidence_count_mismatches,
         "stale_records": stale_records,
+        "integrity_errors": integrity_errors,
+        "evidence_freshness_errors": evidence_freshness_errors,
+        "record_freshness_warnings": record_freshness_warnings,
+        "source_freshness_advisories": source_freshness_advisories,
+        "category_counts": category_counts,
+        "strict_failure_categories": {
+            "integrity_errors": len(integrity_errors),
+            "evidence_freshness_errors": len(evidence_freshness_errors),
+        },
     }
 
 
@@ -292,8 +394,11 @@ def print_text(result: dict[str, Any]) -> None:
     print(f"Generated records scanned: {result['generated_records_scanned']}")
     print(f"Generated records with reports: {len(result['generated_records_with_reports'])}")
     print(f"Structured evidence groups: {len(result['structured_evidence_groups'])}")
-    print(f"Mismatches: {len(result['mismatches'])}")
-    print(f"Stale/missing freshness findings: {len(result['stale_records'])}")
+    counts = result.get("category_counts") or {}
+    print(f"Integrity errors: {counts.get('integrity_errors', len(result['mismatches']))}")
+    print(f"Evidence freshness errors: {counts.get('evidence_freshness_errors', 0)}")
+    print(f"Record freshness warnings: {counts.get('record_freshness_warnings', 0)}")
+    print(f"Source freshness advisories: {counts.get('source_freshness_advisories', 0)}")
     if result["mismatches"]:
         print("\nMismatches:")
         for item in result["mismatches"]:
@@ -306,16 +411,28 @@ def print_text(result: dict[str, Any]) -> None:
         for item in result["evidence_without_matching_record"]:
             print(f"- {item['product_id']} {item['update_version']}: {item['structured_evidence_count']} rows")
     if result["stale_records"]:
-        print("\nFreshness findings:")
-        for item in result["stale_records"]:
+        print("\nEvidence freshness errors:")
+        for item in result.get("evidence_freshness_errors", []):
             print(f"- {item['path']}: {item['stale_reason']}")
+        if result.get("record_freshness_warnings"):
+            print("\nRecord freshness warnings:")
+            for item in result["record_freshness_warnings"]:
+                print(f"- {item['path']}: {item['stale_reason']}")
+        if result.get("source_freshness_advisories"):
+            print("\nSource freshness advisories:")
+            for item in result["source_freshness_advisories"]:
+                print(f"- {item['path']}: {item['stale_reason']}")
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Audit generated report counts against structured consensus evidence.")
     parser.add_argument("--json", action="store_true", help="Print machine-readable JSON.")
     parser.add_argument("--stale-days", type=int, default=DEFAULT_STALE_DAYS, help="Age threshold for stale checked dates.")
-    parser.add_argument("--strict", action="store_true", help="Exit non-zero when mismatches or stale freshness findings exist.")
+    parser.add_argument(
+        "--strict",
+        action="store_true",
+        help="Exit non-zero when integrity errors or report-evidence freshness errors exist.",
+    )
     args = parser.parse_args()
 
     result = audit(stale_days=args.stale_days)
@@ -324,7 +441,7 @@ def main() -> int:
     else:
         print_text(result)
 
-    if args.strict and (result["mismatches"] or result["stale_records"] or result["evidence_without_matching_record"]):
+    if args.strict and strict_has_failures(result):
         return 1
     return 0
 

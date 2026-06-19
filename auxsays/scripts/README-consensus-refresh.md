@@ -30,6 +30,15 @@ Official update ingestion remains separate from consensus refresh.
 
 `scripts/audit_consensus_evidence.py` compares generated Patch record report counts with the structured rows in `auxsays/_data/consensus_evidence.yml`. It reports records that claim confirmed reports without matching structured evidence, records where evidence exists but counts differ, and missing or stale evidence freshness dates.
 
+The audit separates findings into severity categories:
+
+- `integrity_errors`: report-count mismatches, generated report counts without structured evidence, structured evidence without a matching generated record, slug/version mismatches, and core schema problems.
+- `evidence_freshness_errors`: missing or stale `evidence_last_checked` on report-bearing records.
+- `record_freshness_warnings`: stale generated-record freshness metadata.
+- `source_freshness_advisories`: source checks that happened after the generated record timestamp.
+
+`--strict` fails on `integrity_errors` and `evidence_freshness_errors`. Broad source-check advisories remain visible without being treated as report-count integrity failures.
+
 This audit is not a collector. It does not fetch Reddit, forums, GitHub Issues, Adobe Community, or any other public community source. A page should say `Live consensus` only after a real collector exists and its structured evidence backs the displayed counts.
 
 `scripts/collect_obs_reports.py` is the first manual pilot collector. It is scoped to OBS Studio 32.1.2 and reads only GitHub Issues from `obsproject/obs-studio`. It is not scheduled and it is not full live consensus.
