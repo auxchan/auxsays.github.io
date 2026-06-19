@@ -2,6 +2,12 @@ name: AUXSAYS Consensus Policy Audit
 
 on:
   workflow_dispatch:
+    inputs:
+      run_obs_32_1_1_live_revalidation:
+        description: "Run read-only OBS 32.1.1 GitHub Issue live revalidation"
+        required: false
+        default: false
+        type: boolean
 
 permissions:
   contents: read
@@ -18,6 +24,18 @@ jobs:
           python-version: "3.12"
       - name: Install audit dependencies
         run: pip install -r auxsays/scripts/requirements-ingest.txt
+      - name: Live revalidate OBS Studio 32.1.1 GitHub issue evidence
+        if: ${{ github.event.inputs.run_obs_32_1_1_live_revalidation == 'true' }}
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          GH_TOKEN: ${{ github.token }}
+        run: >
+          python auxsays/scripts/revalidate_consensus_evidence.py
+          --evidence-file auxsays/_data/consensus_evidence.yml
+          --product obs-studio
+          --version 32.1.1
+          --summary
+          --live-fetch
       - name: Audit consensus metadata
         run: python auxsays/scripts/consensus_refresh.py --json
       - name: Audit generated counts against structured evidence

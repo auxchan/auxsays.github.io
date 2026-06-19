@@ -5,6 +5,7 @@ from __future__ import annotations
 import contextlib
 import io
 import json
+import os
 import sys
 import tempfile
 import traceback
@@ -81,6 +82,40 @@ def run_cli(args: list[str]) -> tuple[int, str]:
     with contextlib.redirect_stdout(output):
         code = revalidate_mod.main(args)
     return code, output.getvalue()
+
+
+@contextlib.contextmanager
+def patched_env(**updates: str | None) -> Any:
+    keys = ("GITHUB_TOKEN", "GH_TOKEN")
+    before = {key: os.environ.get(key) for key in keys}
+    for key in keys:
+        value = updates.get(key, before[key])
+        if value is None:
+            os.environ.pop(key, None)
+        else:
+            os.environ[key] = value
+    try:
+        yield
+    finally:
+        for key, value in before.items():
+            if value is None:
+                os.environ.pop(key, None)
+            else:
+                os.environ[key] = value
+
+
+class FakeResponse:
+    def __init__(self, payload: Any) -> None:
+        self.payload = payload
+
+    def __enter__(self) -> "FakeResponse":
+        return self
+
+    def __exit__(self, exc_type: Any, exc: Any, tb: Any) -> bool:
+        return False
+
+    def read(self) -> bytes:
+        return json.dumps(self.payload).encode("utf-8")
 
 
 def github_issue_api(number: int) -> str:
@@ -203,6 +238,57 @@ def run() -> int:
         after = fixture_path.read_text(encoding="utf-8")
         check("fixture file remains unchanged", before == after, after)
 
+        original_urlopen = revalidate_mod.urllib.request.urlopen
+        captured_authorizations: list[str | None] = []
+
+        def fake_urlopen(req: Any, timeout: int = 30) -> FakeResponse:
+            headers = dict(req.header_items())
+            captured_authorizations.append(headers.get("Authorization"))
+            return FakeResponse({"ok": True})
+
+        try:
+            revalidate_mod.urllib.request.urlopen = fake_urlopen
+            with patched_env(GITHUB_TOKEN="primary-secret-token", GH_TOKEN="fallback-secret-token"):
+                revalidate_mod.request_json("https://api.github.test/repos/example/repo/issues/1")
+            with patched_env(GITHUB_TOKEN=None, GH_TOKEN="fallback-secret-token"):
+                revalidate_mod.request_json("https://api.github.test/repos/example/repo/issues/2")
+            with patched_env(GITHUB_TOKEN=None, GH_TOKEN=None):
+                revalidate_mod.request_json("https://api.github.test/repos/example/repo/issues/3")
+        finally:
+            revalidate_mod.urllib.request.urlopen = original_urlopen
+
+        check("GITHUB_TOKEN authorization header is preferred", captured_authorizations[0] == "Bearer primary-secret-token", json.dumps(captured_authorizations))
+        check("GH_TOKEN authorization header fallback works", captured_authorizations[1] == "Bearer fallback-secret-token", json.dumps(captured_authorizations))
+        check("no token keeps unauthenticated request", captured_authorizations[2] is None, json.dumps(captured_authorizations))
+
+        def fake_rate_limited_urlopen(req: Any, timeout: int = 30) -> FakeResponse:
+            raise revalidate_mod.HTTPError(
+                req.full_url,
+                403,
+                "Forbidden",
+                {"x-ratelimit-remaining": "0", "x-ratelimit-reset": "1234567890"},
+                None,
+            )
+
+        try:
+            revalidate_mod.urllib.request.urlopen = fake_rate_limited_urlopen
+            with patched_env(GITHUB_TOKEN="secret-token-never-print", GH_TOKEN=None):
+                try:
+                    revalidate_mod.request_json("https://api.github.test/repos/example/repo/issues/4")
+                except revalidate_mod.SourceFetchError as exc:
+                    rate_limit_reason = exc.reason
+                else:
+                    rate_limit_reason = "no_error"
+        finally:
+            revalidate_mod.urllib.request.urlopen = original_urlopen
+
+        check(
+            "rate-limit diagnostic is sanitized",
+            rate_limit_reason == "github_rate_limited_until_1234567890"
+            and "secret-token-never-print" not in rate_limit_reason,
+            rate_limit_reason,
+        )
+
         live_path = tmp_path / "live_consensus_evidence_fixture.yml"
         live_text = fixture(
             row_yaml(id="title-match", source_url="https://github.com/obsproject/obs-studio/issues/1"),
@@ -210,6 +296,7 @@ def run() -> int:
             row_yaml(id="comment-match", source_url="https://github.com/obsproject/obs-studio/issues/3#issuecomment-300"),
             row_yaml(id="fetch-failed", source_url="https://github.com/obsproject/obs-studio/issues/4"),
             row_yaml(id="blocked", source_url="https://github.com/obsproject/obs-studio/issues/5"),
+            row_yaml(id="blocked-429", source_url="https://github.com/obsproject/obs-studio/issues/7"),
             row_yaml(id="no-version", source_url="https://github.com/obsproject/obs-studio/issues/6"),
             row_yaml(id="unsupported-live", source_type="reddit_community_report", source_url="https://example.test/reddit/1"),
         )
@@ -223,6 +310,7 @@ def run() -> int:
             github_comment_api(300): {"body": "I can reproduce this on 1.2.3 with the same source."},
             github_issue_api(4): revalidate_mod.SourceFetchError("http_500", status=500),
             github_issue_api(5): revalidate_mod.SourceFetchError("http_403", status=403),
+            github_issue_api(7): revalidate_mod.SourceFetchError("github_rate_limited_until_1234567890", status=429),
             github_issue_api(6): {"title": "Capture issue", "body": "No exact version in fetched content."},
         }
         requested_urls: list[str] = []
@@ -247,17 +335,19 @@ def run() -> int:
         check("GitHub issue body contains target version verifies", live_rows["body-match"]["classification"] == "verified" and live_rows["body-match"].get("live_match_basis") == "issue_body", json.dumps(live_result, indent=2))
         check("GitHub comment body contains target version verifies", live_rows["comment-match"]["classification"] == "verified" and live_rows["comment-match"].get("live_match_basis") == "comment_body", json.dumps(live_result, indent=2))
         check("HTTP failure is fetch_failed", live_rows["fetch-failed"]["classification"] == "fetch_failed", json.dumps(live_result, indent=2))
-        check("403 or 429 is blocked", live_rows["blocked"]["classification"] == "blocked", json.dumps(live_result, indent=2))
+        check("403 or 429 is blocked", live_rows["blocked"]["classification"] == "blocked" and live_rows["blocked-429"]["classification"] == "blocked", json.dumps(live_result, indent=2))
         check("missing exact version in fetched content fails", live_rows["no-version"]["classification"] == "exact_version_failed", json.dumps(live_result, indent=2))
         check("unsupported live source stays unsupported", live_rows["unsupported-live"]["classification"] == "unsupported_source_type", json.dumps(live_result, indent=2))
-        check("live summary includes verified and failure counts", live_counts["verified"] == 3 and live_counts["exact_version_failed"] == 1 and live_counts["fetch_failed"] == 1 and live_counts["blocked"] == 1, json.dumps(live_counts))
+        check("live summary includes verified and failure counts", live_counts["verified"] == 3 and live_counts["exact_version_failed"] == 1 and live_counts["fetch_failed"] == 1 and live_counts["blocked"] == 2, json.dumps(live_counts))
         check("comment URL fetches parent issue and comment", github_issue_api(3) in requested_urls and github_comment_api(300) in requested_urls, json.dumps(requested_urls))
 
         live_summary = io.StringIO()
         with contextlib.redirect_stdout(live_summary):
             revalidate_mod.print_summary(live_result)
         summary_text = live_summary.getvalue()
-        check("live summary output includes verified/failure counts", all(text in summary_text for text in ("verified: 3", "exact version failed: 1", "fetch failed: 1", "blocked: 1", "Live fetch enabled. No files written.")), summary_text)
+        check("live summary output includes verified/failure counts", all(text in summary_text for text in ("verified: 3", "exact version failed: 1", "fetch failed: 1", "blocked: 2", "Live fetch enabled. No files written.")), summary_text)
+        secret_output = summary_text + json.dumps(live_result, indent=2)
+        check("token value never appears in output", "secret-token-never-print" not in secret_output, secret_output)
 
         original_request_json = revalidate_mod.request_json
         try:

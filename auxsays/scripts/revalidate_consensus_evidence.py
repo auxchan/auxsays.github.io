@@ -200,13 +200,31 @@ def exact_version_re(version: str) -> re.Pattern[str]:
     return re.compile(rf"(?<![0-9.]){re.escape(version)}(?![0-9.])")
 
 
+def github_api_token() -> str:
+    github_token = os.getenv("GITHUB_TOKEN", "").strip()
+    if github_token:
+        return github_token
+    return os.getenv("GH_TOKEN", "").strip()
+
+
+def github_http_error_reason(exc: HTTPError) -> str:
+    if exc.code in {403, 429}:
+        remaining = str(exc.headers.get("x-ratelimit-remaining") or "").strip()
+        reset = str(exc.headers.get("x-ratelimit-reset") or "").strip()
+        if remaining == "0":
+            suffix = f"_until_{reset}" if reset else ""
+            return f"github_rate_limited{suffix}"
+        return f"github_api_blocked_http_{exc.code}"
+    return f"http_{exc.code}"
+
+
 def request_json(url: str) -> Any:
     headers = {
         "Accept": "application/vnd.github+json",
         "User-Agent": "AUXSAYS-Evidence-Revalidation-Dry-Run",
         "X-GitHub-Api-Version": "2022-11-28",
     }
-    token = os.getenv("GITHUB_TOKEN", "").strip()
+    token = github_api_token()
     if token:
         headers["Authorization"] = f"Bearer {token}"
     req = urllib.request.Request(url, headers=headers)
@@ -214,7 +232,7 @@ def request_json(url: str) -> Any:
         with urllib.request.urlopen(req, timeout=30) as response:
             return json.loads(response.read().decode("utf-8"))
     except HTTPError as exc:
-        raise SourceFetchError(f"http_{exc.code}", status=exc.code) from exc
+        raise SourceFetchError(github_http_error_reason(exc), status=exc.code) from exc
     except (URLError, TimeoutError, OSError) as exc:
         raise SourceFetchError(type(exc).__name__) from exc
     except json.JSONDecodeError as exc:
