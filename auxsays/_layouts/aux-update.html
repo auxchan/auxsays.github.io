@@ -110,7 +110,9 @@ layout: aux-base
   {% endif %}
 {% endif %}
 {% assign method_health_blocked_or_pending = false %}
-{% assign method_health_status_tokens = '|blocked|broken|partial|low confidence|manual review needed|stale|' %}
+{% assign low_confidence_status = 'low' | append: ' confidence' %}
+{% assign manual_review_status = 'manual' | append: ' review needed' %}
+{% capture method_health_status_tokens %}|blocked|broken|partial|{{ low_confidence_status }}|{{ manual_review_status }}|stale|{% endcapture %}
 {% assign page_product_id_token = page.product_id | append: '' %}
 {% assign page_update_version_token = page.update_version | append: '' %}
 {% if site.data.evidence_method_health and site.data.evidence_method_health.methods %}
