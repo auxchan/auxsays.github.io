@@ -4613,3 +4613,24 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13575
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13575
+  parent_title: IME doesn't work
+  report_title: IME doesn't work
+  report_text_excerpt: 'For example, typing `nihao` directly produces `nihao` instead of Chinese candidates. OBS 32.1.2 does not exhibit this issue. This issue has been verified with Weasel (Rime), Mircosoft Pinyin and sougou pinyin so far. ### Steps to Reproduce 1. Build current master on Windows. 2.'
+  captured_at: '2026-06-20T12:15:13Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
