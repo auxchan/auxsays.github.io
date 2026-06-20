@@ -5136,6 +5136,17 @@ button, input, select, textarea { font: inherit; }
   line-height: 1.55;
 }
 
+.update-credibility-note {
+  margin: .65rem 0 0;
+  padding: .72rem .82rem;
+  border: 1px solid rgba(95, 212, 229, .22);
+  border-radius: 10px;
+  background: rgba(95, 212, 229, .055);
+  color: var(--text-1);
+  font-size: .9rem;
+  line-height: 1.55;
+}
+
 .update-decision-recommendation {
   margin: .5rem 0 0;
   padding-left: .75rem;

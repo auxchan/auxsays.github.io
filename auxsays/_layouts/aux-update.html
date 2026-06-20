@@ -52,10 +52,17 @@ layout: aux-base
 {% assign official_body_clean = page.official_patch_notes_body | default: '' | strip %}
 {% assign official_body_present = false %}
 {% if official_body_clean != blank %}{% assign official_body_present = true %}{% endif %}
+{% assign official_body_key = official_body_clean | downcase %}
+{% assign official_body_polluted = false %}
+{% if official_body_key contains 'showvotefeedback' or official_body_key contains 'function(' or official_body_key contains 'document.' or official_body_key contains 'window.' or official_body_key contains 'queryselector' or official_body_key contains 'content-rating-buttons' %}
+  {% assign official_body_polluted = true %}
+{% endif %}
+{% assign official_body_renderable = false %}
+{% if official_body_present and official_body_polluted == false %}{% assign official_body_renderable = true %}{% endif %}
 {% assign official_captured = false %}
 {% if source_url_present or official_body_present %}{% assign official_captured = true %}{% endif %}
 {% assign official_body_missing_renderable = false %}
-{% if official_body_present == false and source_url_present %}{% assign official_body_missing_renderable = true %}{% endif %}
+{% if official_body_renderable == false and source_url_present and official_body_polluted == false %}{% assign official_body_missing_renderable = true %}{% endif %}
 {% assign collection_status = page.consensus_collection_status | default: 'deferred_official_only' %}
 {% assign evidence_state = 'Insufficient data' %}
 {% assign evidence_state_class = 'insufficient' %}
@@ -72,6 +79,25 @@ layout: aux-base
 {% assign confirmed_report_count = page.confirmed_patch_specific_report_count | default: report_count | plus: 0 %}
 {% assign report_bearing_count = report_count %}
 {% if report_bearing_count == 0 and confirmed_report_count > 0 %}{% assign report_bearing_count = confirmed_report_count %}{% endif %}
+{% assign accepted_report_sources = page.accepted_report_sources %}
+{% if accepted_report_sources == nil or accepted_report_sources.size == 0 %}
+  {% assign accepted_report_sources = page.evidence_samples %}
+{% endif %}
+{% assign has_user_report_sources = false %}
+{% if accepted_report_sources and accepted_report_sources.size > 0 %}{% assign has_user_report_sources = true %}{% endif %}
+{% assign user_report_source_count = 0 %}
+{% if has_user_report_sources %}{% assign user_report_source_count = accepted_report_sources.size | plus: 0 %}{% endif %}
+{% assign evidence_source_type_tokens = '|' %}
+{% assign has_listing_card_evidence = false %}
+{% if has_user_report_sources %}
+  {% for source in accepted_report_sources %}
+    {% assign source_type_key = source.source_type | default: source.source_name | default: '' | downcase | replace: '_', ' ' | replace: '-', ' ' | strip %}
+    {% if source_type_key != blank %}
+      {% capture evidence_source_type_tokens %}{{ evidence_source_type_tokens }}{{ source_type_key }}|{% endcapture %}
+      {% if source_type_key contains 'listing card' %}{% assign has_listing_card_evidence = true %}{% endif %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
 {% assign report_evidence_stale = false %}
 {% if report_bearing_count > 0 %}
   {% if evidence_checked_at == blank %}
@@ -84,7 +110,7 @@ layout: aux-base
   {% endif %}
 {% endif %}
 {% assign method_health_blocked_or_pending = false %}
-{% assign method_health_status_tokens = '|blocked|broken|partial|low-confidence|manual-review-needed|' %}
+{% assign method_health_status_tokens = '|blocked|broken|partial|low confidence|manual review needed|stale|' %}
 {% assign page_product_id_token = page.product_id | append: '' %}
 {% assign page_update_version_token = page.update_version | append: '' %}
 {% if site.data.evidence_method_health and site.data.evidence_method_health.methods %}
@@ -92,10 +118,11 @@ layout: aux-base
     {% assign method_product_id_token = method.product_id | append: '' %}
     {% assign method_update_version_token = method.update_version | append: '' %}
     {% if method_product_id_token == page_product_id_token and method_update_version_token == page_update_version_token %}
-      {% assign method_status = method.status | default: '' | downcase | strip %}
+      {% assign method_status = method.status | default: '' | downcase | replace: '_', ' ' | replace: '-', ' ' | strip %}
       {% assign method_status_token = '|' | append: method_status | append: '|' %}
-      {% assign method_blocked_reason = method.blocked_reason | default: '' | strip %}
-      {% if method_health_status_tokens contains method_status_token or method_blocked_reason != blank %}
+      {% assign method_source_type_key = method.source_type | default: '' | downcase | replace: '_', ' ' | replace: '-', ' ' | strip %}
+      {% assign method_source_type_token = '|' | append: method_source_type_key | append: '|' %}
+      {% if method_health_status_tokens contains method_status_token and evidence_source_type_tokens contains method_source_type_token %}
         {% assign method_health_blocked_or_pending = true %}
       {% endif %}
     {% endif %}
@@ -125,6 +152,9 @@ layout: aux-base
 {% elsif decision_label == blank %}
   {% assign decision_label = 'INSUFFICIENT DATA' %}
 {% endif %}
+{% assign decision_label_key = decision_label | downcase %}
+{% assign show_test_first_context = false %}
+{% if report_bearing_count > 0 and decision_label_key contains 'test first' %}{% assign show_test_first_context = true %}{% endif %}
 {% if official_only_zero_reports %}
   {% assign decision_label = 'INSUFFICIENT DATA' %}
   {% if security_sensitive %}
@@ -226,14 +256,6 @@ layout: aux-base
 {% assign technical_details_renderable = false %}
 {% if checksum_present or file_size_renderable or source_checked_at != blank or official_body_checked_at != blank or page.update_published_at != blank %}{% assign technical_details_renderable = true %}{% endif %}
 {% assign visible_evidence_limit = page.evidence_sample_visible_limit | default: 5 | plus: 0 %}
-{% assign accepted_report_sources = page.accepted_report_sources %}
-{% if accepted_report_sources == nil or accepted_report_sources.size == 0 %}
-  {% assign accepted_report_sources = page.evidence_samples %}
-{% endif %}
-{% assign has_user_report_sources = false %}
-{% if accepted_report_sources and accepted_report_sources.size > 0 %}{% assign has_user_report_sources = true %}{% endif %}
-{% assign user_report_source_count = 0 %}
-{% if has_user_report_sources %}{% assign user_report_source_count = accepted_report_sources.size | plus: 0 %}{% endif %}
 {% assign sources_collapsed_by_default = false %}
 {% if user_report_source_count > 5 %}{% assign sources_collapsed_by_default = true %}{% endif %}
 {% assign has_official_links = false %}
@@ -339,6 +361,7 @@ layout: aux-base
           {% else %}
           <p>Too few reports for a verdict yet.</p>
           {% endif %}
+          {% if show_test_first_context %}<p class="update-credibility-note">This is report-backed caution guidance, not a clean safe signal.</p>{% endif %}
           {% if report_count > 0 and report_count < 3 %}<p>Too few reports for a verdict yet.</p>{% endif %}
           {% if record_note_text != blank %}<p>{{ record_note_text }}</p>{% endif %}
         </div>
@@ -378,8 +401,10 @@ layout: aux-base
         {% endif %}
       </div>
       {% endif %}
-      {% if official_body_present %}
+      {% if official_body_renderable %}
       <div class="official-patch-notes node-bullet-scope">{{ official_body_clean | markdownify }}</div>
+      {% elsif official_body_polluted %}
+      <p class="update-credibility-note">Official body text was not cleanly captured. AUXSAYS is showing structured official additions/fixes where available and links to the source for the full vendor notes.</p>
       {% elsif official_body_missing_renderable %}
       <p>Official source linked, but full patch-note body has not been captured yet.</p>
       {% else %}
@@ -413,6 +438,9 @@ layout: aux-base
       <div class="update-sources-disclosure__body">
       {% if has_user_report_sources %}
       <p class="update-section-intro">User report sources used for the current read.</p>
+      {% if has_listing_card_evidence %}
+      <p class="update-credibility-note">Some preserved report rows came from listing-card evidence rather than durable direct report URLs. AUXSAYS keeps the count visible but treats revalidation as pending until durable source URLs are available.</p>
+      {% endif %}
       <ul class="update-source-list update-source-list--accepted">
         {% for source in accepted_report_sources %}
         {% assign source_title = source.source_title | default: source.title | default: 'User report' %}
