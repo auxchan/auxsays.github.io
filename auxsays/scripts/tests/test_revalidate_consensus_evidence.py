@@ -126,6 +126,10 @@ def github_comment_api(number: int) -> str:
     return f"https://api.github.com/repos/obsproject/obs-studio/issues/comments/{number}"
 
 
+def creativecow_thread_url(slug: str) -> str:
+    return f"https://creativecow.net/forums/thread/{slug}/"
+
+
 def obs_evidence_fixture(row_count: int = 40, *, product_id: str = "obs-studio", version: str = "32.1.1") -> str:
     return fixture(*[
         row_yaml(
@@ -237,6 +241,35 @@ def run() -> int:
 
         after = fixture_path.read_text(encoding="utf-8")
         check("fixture file remains unchanged", before == after, after)
+
+        creativecow_fixture_path = tmp_path / "creativecow_fixture.yml"
+        creativecow_fixture_path.write_text(
+            fixture(
+                row_yaml(
+                    id="creativecow-direct-thread",
+                    source_type="creator_forum_report",
+                    source_url=creativecow_thread_url("ai-magic-mask-not-rendering"),
+                ),
+                row_yaml(
+                    id="creativecow-listing-url",
+                    source_type="creator_forum_report",
+                    source_url="https://creativecow.net/forums/forum/davinci-resolve/",
+                ),
+            ),
+            encoding="utf-8",
+        )
+        creativecow_fixture_result = revalidate_mod.revalidate(creativecow_fixture_path, "fixture-product", "1.2.3")
+        creativecow_fixture_rows = {row["id"]: row for row in creativecow_fixture_result["rows"]}
+        check(
+            "Creative COW direct thread is a revalidation candidate without live fetch",
+            creativecow_fixture_rows["creativecow-direct-thread"]["classification"] == "candidate_for_revalidation",
+            json.dumps(creativecow_fixture_result, indent=2),
+        )
+        check(
+            "Creative COW non-thread URL remains pending without live fetch",
+            creativecow_fixture_rows["creativecow-listing-url"]["classification"] == "pending_source_adapter",
+            json.dumps(creativecow_fixture_result, indent=2),
+        )
 
         original_urlopen = revalidate_mod.urllib.request.urlopen
         captured_authorizations: list[str | None] = []
@@ -369,6 +402,121 @@ def run() -> int:
 
         live_after = live_path.read_text(encoding="utf-8")
         check("live fixture file remains unchanged", live_before == live_after, live_after)
+
+        creativecow_live_path = tmp_path / "creativecow_live_fixture.yml"
+        creativecow_live_text = fixture(
+            row_yaml(
+                id="creativecow-title-match",
+                source_type="creator_forum_report",
+                source_url=creativecow_thread_url("title-match"),
+            ),
+            row_yaml(
+                id="creativecow-body-match",
+                source_type="creator_forum_report",
+                source_url="https://www.creativecow.net/forums/thread/body-match",
+            ),
+            row_yaml(
+                id="creativecow-no-version",
+                source_type="creator_forum_report",
+                source_url=creativecow_thread_url("no-version"),
+            ),
+            row_yaml(
+                id="creativecow-fetch-failed",
+                source_type="creator_forum_report",
+                source_url=creativecow_thread_url("fetch-failed"),
+            ),
+            row_yaml(
+                id="creativecow-blocked-http",
+                source_type="creator_forum_report",
+                source_url=creativecow_thread_url("blocked-http"),
+            ),
+            row_yaml(
+                id="creativecow-blocked-challenge",
+                source_type="creator_forum_report",
+                source_url=creativecow_thread_url("blocked-challenge"),
+            ),
+            row_yaml(
+                id="creativecow-malformed-url",
+                source_type="creator_forum_report",
+                source_url="https://creativecow.net/forums/forum/davinci-resolve/",
+            ),
+        )
+        creativecow_live_path.write_text(creativecow_live_text, encoding="utf-8")
+        creativecow_live_before = creativecow_live_path.read_text(encoding="utf-8")
+        creativecow_responses: dict[str, Any] = {
+            creativecow_thread_url("title-match"): "<html><title>DaVinci Resolve 1.2.3 render issue</title><body>No extra body.</body></html>",
+            creativecow_thread_url("body-match"): "<html><title>DaVinci Resolve thread</title><body>Magic Mask failed after updating to 1.2.3.</body></html>",
+            creativecow_thread_url("no-version"): "<html><title>DaVinci Resolve thread</title><body>This mentions 1.2.30 but not the target patch.</body></html>",
+            creativecow_thread_url("fetch-failed"): revalidate_mod.SourceFetchError("http_500", status=500),
+            creativecow_thread_url("blocked-http"): revalidate_mod.SourceFetchError("http_403", status=403),
+            creativecow_thread_url("blocked-challenge"): "<html><title>Just a moment</title><body>Verify you are human before continuing.</body></html>",
+        }
+        creativecow_requested_urls: list[str] = []
+
+        def fake_fetch_text(url: str) -> str:
+            creativecow_requested_urls.append(url)
+            value = creativecow_responses[url]
+            if isinstance(value, Exception):
+                raise value
+            return value
+
+        creativecow_live_result = revalidate_mod.revalidate(
+            creativecow_live_path,
+            "fixture-product",
+            "1.2.3",
+            live_fetch=True,
+            fetch_text=fake_fetch_text,
+        )
+        creativecow_counts = creativecow_live_result["classification_counts"]
+        creativecow_rows = {row["id"]: row for row in creativecow_live_result["rows"]}
+        check(
+            "Creative COW title contains target version verifies",
+            creativecow_rows["creativecow-title-match"]["classification"] == "verified"
+            and creativecow_rows["creativecow-title-match"].get("live_match_basis") == "creativecow_thread_title",
+            json.dumps(creativecow_live_result, indent=2),
+        )
+        check(
+            "Creative COW body contains target version verifies",
+            creativecow_rows["creativecow-body-match"]["classification"] == "verified"
+            and creativecow_rows["creativecow-body-match"].get("live_match_basis") == "creativecow_thread_text",
+            json.dumps(creativecow_live_result, indent=2),
+        )
+        check(
+            "Creative COW missing exact version fails",
+            creativecow_rows["creativecow-no-version"]["classification"] == "exact_version_failed",
+            json.dumps(creativecow_live_result, indent=2),
+        )
+        check(
+            "Creative COW HTTP failure is fetch_failed",
+            creativecow_rows["creativecow-fetch-failed"]["classification"] == "fetch_failed",
+            json.dumps(creativecow_live_result, indent=2),
+        )
+        check(
+            "Creative COW HTTP block or challenge is blocked",
+            creativecow_rows["creativecow-blocked-http"]["classification"] == "blocked"
+            and creativecow_rows["creativecow-blocked-challenge"]["classification"] == "blocked",
+            json.dumps(creativecow_live_result, indent=2),
+        )
+        check(
+            "Creative COW non-thread URL is malformed in live fetch",
+            creativecow_rows["creativecow-malformed-url"]["classification"] == "malformed_row",
+            json.dumps(creativecow_live_result, indent=2),
+        )
+        check(
+            "Creative COW live counts are reported",
+            creativecow_counts["verified"] == 2
+            and creativecow_counts["exact_version_failed"] == 1
+            and creativecow_counts["fetch_failed"] == 1
+            and creativecow_counts["blocked"] == 2
+            and creativecow_counts["malformed_row"] == 1,
+            json.dumps(creativecow_counts),
+        )
+        check(
+            "Creative COW www URLs are canonicalized before fetch",
+            creativecow_thread_url("body-match") in creativecow_requested_urls,
+            json.dumps(creativecow_requested_urls),
+        )
+        check("Creative COW live fixture file remains unchanged", creativecow_live_path.read_text(encoding="utf-8") == creativecow_live_before, creativecow_live_path.read_text(encoding="utf-8"))
 
         writeback_path = tmp_path / "obs_writeback_evidence.yml"
         writeback_path.write_text(obs_evidence_fixture(), encoding="utf-8")

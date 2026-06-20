@@ -9,6 +9,7 @@ is available only through an explicit OBS 32.1.1 guard path.
 from __future__ import annotations
 
 import argparse
+import html
 import json
 import os
 import re
@@ -47,17 +48,20 @@ CORE_FIELDS = ("product_id", "update_version", "source_type")
 REVALIDATION_CANDIDATE_SOURCE_TYPES = {
     "github_issue",
 }
+CREATIVE_COW_SOURCE_TYPES = {
+    "creativecow_forum_report",
+    "creator_forum_report",
+}
 PENDING_SOURCE_ADAPTER_TYPES = {
     "adobe_community_bug_report",
     "adobe_community_listing_card",
     "blackmagic_forum",
-    "creativecow_forum_report",
-    "creator_forum_report",
     "curated_watchlist",
     "reddit_community_report",
 }
 GITHUB_API_ROOT = "https://api.github.com"
 GITHUB_COMMENT_RE = re.compile(r"(?:^|[-_])comment-(\d+)$|issuecomment-(\d+)", flags=re.I)
+CREATIVE_COW_THREAD_RE = re.compile(r"^/forums/thread/[^/?#]+/?$", flags=re.I)
 EXPECTED_WRITEBACK_PRODUCT = "obs-studio"
 EXPECTED_WRITEBACK_VERSION = "32.1.1"
 EXPECTED_WRITEBACK_COUNTED_ROWS = 40
@@ -197,7 +201,7 @@ def selected_rows(rows: list[dict[str, Any]], product_id: str, update_version: s
 
 
 def exact_version_re(version: str) -> re.Pattern[str]:
-    return re.compile(rf"(?<![0-9.]){re.escape(version)}(?![0-9.])")
+    return re.compile(rf"(?<![0-9.]){re.escape(version)}(?!\.\d|[0-9])")
 
 
 def github_api_token() -> str:
@@ -239,9 +243,64 @@ def request_json(url: str) -> Any:
         raise SourceFetchError("invalid_json_response") from exc
 
 
+def request_text(url: str) -> str:
+    headers = {
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,text/plain;q=0.8,*/*;q=0.5",
+        "User-Agent": "AUXSAYS-Evidence-Revalidation-Dry-Run",
+    }
+    req = urllib.request.Request(url, headers=headers)
+    try:
+        with urllib.request.urlopen(req, timeout=30) as response:
+            charset = response.headers.get_content_charset() or "utf-8"
+            return response.read().decode(charset, "replace")
+    except HTTPError as exc:
+        raise SourceFetchError(f"http_{exc.code}", status=exc.code) from exc
+    except (URLError, TimeoutError, OSError) as exc:
+        raise SourceFetchError(type(exc).__name__) from exc
+
+
 def blocked_fetch_error(exc: SourceFetchError) -> bool:
     reason = exc.reason.lower()
     return exc.status in {403, 429} or "rate" in reason or "blocked" in reason
+
+
+def clean_html(text: str) -> str:
+    text = re.sub(r"(?is)<(script|style|noscript).*?</\1>", " ", text or "")
+    text = re.sub(r"(?is)<br\s*/?>", " ", text)
+    text = re.sub(r"(?is)</p\s*>", " ", text)
+    text = re.sub(r"(?is)<[^>]+>", " ", text)
+    text = html.unescape(text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def html_title(text: str) -> str:
+    for pattern in (
+        r"""<meta[^>]+property=["']og:title["'][^>]+content=["']([^"']+)["']""",
+        r"""<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:title["']""",
+        r"""<title[^>]*>(.*?)</title>""",
+    ):
+        match = re.search(pattern, text or "", flags=re.I | re.S)
+        if match:
+            return clean_html(match.group(1))
+    return ""
+
+
+def blocked_html_reason(text: str) -> str:
+    lowered = clean_html(text).lower()
+    challenge_markers = (
+        "access denied",
+        "browser challenge",
+        "checking your browser",
+        "enable javascript and cookies",
+        "rate limit",
+        "too many requests",
+        "unusual traffic",
+        "verify you are human",
+    )
+    for marker in challenge_markers:
+        if marker in lowered:
+            return marker.replace(" ", "_")
+    return ""
 
 
 def github_comment_id(fragment: str) -> str:
@@ -276,6 +335,17 @@ def parse_github_reference(source_url: str) -> tuple[dict[str, str] | None, str]
                 "comment_id": "",
             }, "")
     return None, "source_url is not a supported GitHub issue URL"
+
+
+def parse_creativecow_thread_reference(source_url: str) -> tuple[str | None, str]:
+    parsed = urllib.parse.urlsplit(source_url)
+    host = parsed.netloc.lower()
+    if host not in {"creativecow.net", "www.creativecow.net"}:
+        return None, "source_url is not a Creative COW thread URL"
+    if not CREATIVE_COW_THREAD_RE.match(parsed.path or ""):
+        return None, "source_url is not a specific Creative COW thread URL"
+    path = parsed.path.rstrip("/") + "/"
+    return urllib.parse.urlunsplit(("https", "creativecow.net", path, "", "")), ""
 
 
 def issue_api_url(reference: dict[str, str]) -> str:
@@ -326,6 +396,17 @@ def exact_version_basis(context: dict[str, str], source_kind: str, version: str)
     return ""
 
 
+def creativecow_exact_version_basis(raw_html: str, version: str) -> str:
+    pattern = exact_version_re(version)
+    title = html_title(raw_html)
+    if pattern.search(title):
+        return "creativecow_thread_title"
+    text = clean_html(raw_html)
+    if pattern.search(text):
+        return "creativecow_thread_text"
+    return ""
+
+
 def classify_row(row: dict[str, Any]) -> tuple[str, str]:
     missing_core = [field for field in CORE_FIELDS if row.get(field) in (None, "")]
     if missing_core:
@@ -338,18 +419,49 @@ def classify_row(row: dict[str, Any]) -> tuple[str, str]:
     source_type = str(row.get("source_type") or "").strip()
     if source_type in REVALIDATION_CANDIDATE_SOURCE_TYPES:
         return ("candidate_for_revalidation", "source type has a fixture-safe adapter contract")
+    if source_type in CREATIVE_COW_SOURCE_TYPES:
+        reference, _ = parse_creativecow_thread_reference(source_url)
+        if reference:
+            return ("candidate_for_revalidation", "Creative COW thread URL has a dry-run adapter contract")
+        return ("pending_source_adapter", "creator forum source is known but this URL is not a supported Creative COW thread")
     if source_type in PENDING_SOURCE_ADAPTER_TYPES:
         return ("pending_source_adapter", "source type is known but has no revalidation adapter in this harness")
     return ("unsupported_source_type", f"unsupported source_type: {source_type}")
 
 
-def live_classify_row(row: dict[str, Any], update_version: str, fetch_json: Any) -> tuple[str, str, str]:
+def live_classify_creativecow_thread(row: dict[str, Any], update_version: str, fetch_text: Any) -> tuple[str, str, str]:
+    source_url = str(row.get("source_url") or "").strip()
+    if not source_url:
+        return ("malformed_row", "source_url is missing", "")
+    reference, parse_error = parse_creativecow_thread_reference(source_url)
+    if reference is None:
+        return ("malformed_row", parse_error, "")
+    try:
+        raw_html = fetch_text(reference)
+    except SourceFetchError as exc:
+        if blocked_fetch_error(exc):
+            return ("blocked", exc.reason, "")
+        return ("fetch_failed", exc.reason, "")
+    if not isinstance(raw_html, str):
+        return ("fetch_failed", "creativecow_thread_payload_not_text", "")
+    blocked_reason = blocked_html_reason(raw_html)
+    if blocked_reason:
+        return ("blocked", blocked_reason, "")
+    basis = creativecow_exact_version_basis(raw_html, update_version)
+    if basis:
+        return ("verified", f"exact version matched in {basis}", basis)
+    return ("exact_version_failed", "target version was not found in fetched Creative COW thread text", "")
+
+
+def live_classify_row(row: dict[str, Any], update_version: str, fetch_json: Any, fetch_text: Any) -> tuple[str, str, str]:
     missing_core = [field for field in CORE_FIELDS if row.get(field) in (None, "")]
     if missing_core:
         return ("malformed_row", "missing core field(s): " + ", ".join(missing_core), "")
     if row.get("patch_version_matched") is not True:
         return ("malformed_row", "patch_version_matched is not true", "")
     source_type = str(row.get("source_type") or "").strip()
+    if source_type in CREATIVE_COW_SOURCE_TYPES:
+        return live_classify_creativecow_thread(row, update_version, fetch_text)
     if source_type != "github_issue":
         return ("unsupported_source_type", f"unsupported source_type for live fetch: {source_type}", "")
     source_url = str(row.get("source_url") or "").strip()
@@ -393,9 +505,12 @@ def revalidate(
     *,
     live_fetch: bool = False,
     fetch_json: Any | None = None,
+    fetch_text: Any | None = None,
 ) -> dict[str, Any]:
     if fetch_json is None:
         fetch_json = request_json
+    if fetch_text is None:
+        fetch_text = request_text
     rows = load_evidence_rows(evidence_file)
     selected = selected_rows(rows, product_id, update_version)
     classified: list[dict[str, Any]] = []
@@ -403,7 +518,7 @@ def revalidate(
     counts = {name: 0 for name in classifications}
     for index, row in enumerate(selected, start=1):
         if live_fetch:
-            classification, reason, match_basis = live_classify_row(row, update_version, fetch_json)
+            classification, reason, match_basis = live_classify_row(row, update_version, fetch_json, fetch_text)
         else:
             classification, reason = classify_row(row)
             match_basis = ""
