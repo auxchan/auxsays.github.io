@@ -120,7 +120,8 @@ layout: aux-base
         </div>
       </div>
 
-      {% assign update_pages = site.pages | where: "update_entry", true | sort: "update_published_at" | reverse %}
+      {% assign all_update_pages = site.pages | where: "update_entry", true %}
+      {% assign update_pages = all_update_pages | where_exp: "item", "item.update_status != 'archived' and item.feed_hidden != true" | sort: "update_published_at" | reverse %}
       {% assign home_patch_limit = 8 %}
       {% assign home_patch_count = 0 %}
       {% assign home_patch_seen = '|' %}
