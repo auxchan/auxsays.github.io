@@ -69,6 +69,48 @@ layout: aux-base
   {% assign evidence_state = 'Official source only' %}
   {% assign evidence_state_class = 'official' %}
 {% endif %}
+{% assign confirmed_report_count = page.confirmed_patch_specific_report_count | default: report_count | plus: 0 %}
+{% assign report_bearing_count = report_count %}
+{% if report_bearing_count == 0 and confirmed_report_count > 0 %}{% assign report_bearing_count = confirmed_report_count %}{% endif %}
+{% assign report_evidence_stale = false %}
+{% if report_bearing_count > 0 %}
+  {% if evidence_checked_at == blank %}
+    {% assign report_evidence_stale = true %}
+  {% else %}
+    {% assign evidence_checked_epoch = evidence_checked_at | date: "%s" | plus: 0 %}
+    {% assign build_epoch = site.time | date: "%s" | plus: 0 %}
+    {% assign evidence_age_seconds = build_epoch | minus: evidence_checked_epoch %}
+    {% if evidence_age_seconds >= 604800 %}{% assign report_evidence_stale = true %}{% endif %}
+  {% endif %}
+{% endif %}
+{% assign method_health_blocked_or_pending = false %}
+{% assign method_health_status_tokens = '|blocked|broken|partial|low-confidence|manual-review-needed|' %}
+{% assign page_product_id_token = page.product_id | append: '' %}
+{% assign page_update_version_token = page.update_version | append: '' %}
+{% if site.data.evidence_method_health and site.data.evidence_method_health.methods %}
+  {% for method in site.data.evidence_method_health.methods %}
+    {% assign method_product_id_token = method.product_id | append: '' %}
+    {% assign method_update_version_token = method.update_version | append: '' %}
+    {% if method_product_id_token == page_product_id_token and method_update_version_token == page_update_version_token %}
+      {% assign method_status = method.status | default: '' | downcase | strip %}
+      {% assign method_status_token = '|' | append: method_status | append: '|' %}
+      {% assign method_blocked_reason = method.blocked_reason | default: '' | strip %}
+      {% if method_health_status_tokens contains method_status_token or method_blocked_reason != blank %}
+        {% assign method_health_blocked_or_pending = true %}
+      {% endif %}
+    {% endif %}
+  {% endfor %}
+{% endif %}
+{% assign source_freshness_note_clean = page.source_freshness_note | default: '' | strip %}
+{% assign source_freshness_note_key = source_freshness_note_clean | downcase %}
+{% assign source_freshness_note_warns = false %}
+{% if source_freshness_note_key contains 'blocked' or source_freshness_note_key contains 'pending' or source_freshness_note_key contains 'stale' %}{% assign source_freshness_note_warns = true %}{% endif %}
+{% assign show_report_freshness_notice = false %}
+{% if report_bearing_count > 0 and evidence_state_class == 'pilot' %}
+  {% if report_evidence_stale or method_health_blocked_or_pending or source_freshness_note_warns %}
+    {% assign show_report_freshness_notice = true %}
+  {% endif %}
+{% endif %}
 {% assign official_only_zero_reports = false %}
 {% if evidence_state == 'Official source only' and report_count == 0 %}{% assign official_only_zero_reports = true %}{% endif %}
 {% assign security_sensitive = false %}
@@ -275,6 +317,13 @@ layout: aux-base
           {% if evidence_checked_at != blank %}<p class="consensus-chart-meta">Last evidence checked: {{ evidence_checked_label }}</p>{% endif %}
         </div>
       </div>
+
+      {% if show_report_freshness_notice %}
+      <aside class="update-evidence-freshness-notice" aria-label="Evidence freshness notice">
+        <strong>Verified report sample: Evidence freshness needs revalidation.</strong>
+        <p>Some collection methods are currently blocked or pending. Report counts are preserved from structured evidence and are not live telemetry.</p>
+      </aside>
+      {% endif %}
 
       <div id="verdict" class="update-decision-box update-decision-box--{{ evidence_state_class }}">
         <div class="update-decision-box__header">

@@ -5110,6 +5110,32 @@ button, input, select, textarea { font: inherit; }
   text-transform: uppercase;
 }
 
+.update-evidence-freshness-notice {
+  display: grid;
+  gap: .35rem;
+  width: min(820px, 100%);
+  margin: .75rem 0 0;
+  padding: .82rem .95rem;
+  border: 1px solid rgba(240, 202, 103, .28);
+  border-radius: 12px;
+  background: rgba(240, 202, 103, .075);
+}
+
+.update-evidence-freshness-notice strong {
+  color: var(--accent-1);
+  font-size: .8rem;
+  line-height: 1.35;
+  text-transform: uppercase;
+  letter-spacing: .095em;
+}
+
+.update-evidence-freshness-notice p {
+  margin: 0;
+  color: var(--text-1);
+  font-size: .9rem;
+  line-height: 1.55;
+}
+
 .update-decision-recommendation {
   margin: .5rem 0 0;
   padding-left: .75rem;
