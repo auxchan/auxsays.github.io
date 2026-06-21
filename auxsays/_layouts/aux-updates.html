@@ -205,6 +205,17 @@ layout: aux-base
       {% assign brand_meta = site.data.update_brands[item.update_brand_id] %}
       {% assign update_product_meta = site.data.patch_products | where: "id", item.product_id | first %}
       {% assign resolved_brand_logo_path = brand_meta.logo_path | default: update_product_meta.logo_path %}
+      {% assign feed_evidence_state = item.evidence_state | default: 'insufficient_data' | downcase | replace: '-', '_' %}
+      {% assign feed_evidence_label = item.evidence_state_label | default: feed_evidence_state | replace: '_', ' ' | capitalize %}
+      {% if feed_evidence_state == 'pilot_sample' or feed_evidence_state == 'static_sample' %}
+        {% assign feed_evidence_label = 'Verified reports' %}
+      {% elsif feed_evidence_state == 'official_only' %}
+        {% assign feed_evidence_label = 'Official source only' %}
+      {% elsif feed_evidence_state == 'consensus_live' %}
+        {% assign feed_evidence_label = 'Live consensus' %}
+      {% elsif feed_evidence_state == 'insufficient_data' %}
+        {% assign feed_evidence_label = 'Insufficient data' %}
+      {% endif %}
       <article class="panel patch-card"
         data-kind="current"
         data-source-id="{{ item.update_brand_id | default: item.update_product | slugify }}"
@@ -240,6 +251,7 @@ layout: aux-base
           </a>
           <span class="patch-status-stack">
             <span class="patch-status patch-status--{{ reaction_class }}">{{ reaction }}</span>
+            <span class="patch-report-count">{{ feed_evidence_label }}</span>
             <span class="patch-report-count">{{ item.update_report_count | default: 0 }} user report{% unless item.update_report_count == 1 %}s{% endunless %}</span>
           </span>
         </div>
@@ -288,6 +300,17 @@ layout: aux-base
         {% assign brand_meta = site.data.update_brands[item.update_brand_id] %}
         {% assign update_product_meta = site.data.patch_products | where: "id", item.product_id | first %}
         {% assign resolved_brand_logo_path = brand_meta.logo_path | default: update_product_meta.logo_path %}
+        {% assign feed_evidence_state = item.evidence_state | default: 'insufficient_data' | downcase | replace: '-', '_' %}
+        {% assign feed_evidence_label = item.evidence_state_label | default: feed_evidence_state | replace: '_', ' ' | capitalize %}
+        {% if feed_evidence_state == 'pilot_sample' or feed_evidence_state == 'static_sample' %}
+          {% assign feed_evidence_label = 'Verified reports' %}
+        {% elsif feed_evidence_state == 'official_only' %}
+          {% assign feed_evidence_label = 'Official source only' %}
+        {% elsif feed_evidence_state == 'consensus_live' %}
+          {% assign feed_evidence_label = 'Live consensus' %}
+        {% elsif feed_evidence_state == 'insufficient_data' %}
+          {% assign feed_evidence_label = 'Insufficient data' %}
+        {% endif %}
         <article class="panel patch-card patch-card--archived"
           data-kind="archived"
           data-source-id="{{ item.update_brand_id | default: item.update_product | slugify }}"
@@ -323,6 +346,7 @@ layout: aux-base
             </a>
             <span class="patch-status-stack">
               <span class="patch-status patch-status--{{ reaction_class }}">{{ reaction }}</span>
+              <span class="patch-report-count">{{ feed_evidence_label }}</span>
               <span class="patch-report-count">{{ item.update_report_count | default: 0 }} user report{% unless item.update_report_count == 1 %}s{% endunless %}</span>
             </span>
           </div>
