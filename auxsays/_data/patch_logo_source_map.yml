@@ -667,43 +667,43 @@ products:
 - id: "anthropic-claude"
   display_name: "Claude"
   company_id: "anthropic"
-  current_local_asset: "/assets/img/patch-logos/anthropic.svg"
+  current_local_asset: "/assets/img/patch-logos/anthropic-claude.png"
   current_asset_exists: true
-  current_is_company_fallback: true
-  current_provenance_status: "current_provenance:company_fallback"
-  desired_local_asset: "/assets/img/patch-logos/anthropic-claude.svg"
+  current_is_company_fallback: false
+  current_provenance_status: "current_provenance:official_app_store_listing"
+  desired_local_asset: "/assets/img/patch-logos/anthropic-claude.png"
   source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://support.claude.com/en/articles/12138966-release-notes"
-  direct_asset_url: ""
-  source_domain: "support.claude.com"
+  preferred_source_type: official_app_store_listing
+  official_source_url: "https://apps.apple.com/us/app/claude-by-anthropic/id6473753684?uo=4"
+  direct_asset_url: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/06/59/49/06594946-0b1b-f865-9c98-3d1629184eec/AppIcon-0-0-1x_U007epad-0-1-85-220.png/512x512bb.png"
+  source_domain: "apps.apple.com"
   source_owner: "Claude"
   official_or_vendor_controlled: true
   fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "anthropic-claude.svg"
-  usage_notes: "Currently uses company fallback in patch_products; product-specific official/vendor source is recorded for later icon selection and local asset review."
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "anthropic-claude.png"
+  usage_notes: "Fetched official Claude app icon from Anthropic's verified App Store listing."
 - id: "google-gemini"
   display_name: "Gemini"
   company_id: "google"
-  current_local_asset: "/assets/img/patch-logos/google.svg"
+  current_local_asset: "/assets/img/patch-logos/google-gemini.png"
   current_asset_exists: true
-  current_is_company_fallback: true
-  current_provenance_status: "current_provenance:company_fallback"
-  desired_local_asset: "/assets/img/patch-logos/google-gemini.svg"
+  current_is_company_fallback: false
+  current_provenance_status: "current_provenance:official_app_store_listing"
+  desired_local_asset: "/assets/img/patch-logos/google-gemini.png"
   source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://gemini.google/updates/"
-  direct_asset_url: ""
-  source_domain: "gemini.google"
+  preferred_source_type: official_app_store_listing
+  official_source_url: "https://apps.apple.com/us/app/google-gemini/id6477489729?uo=4"
+  direct_asset_url: "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/f7/dc/9e/f7dc9ef9-1731-1c66-7e00-ca58d011f1d9/AppIcon-0-0-1x_U007epad-0-0-0-1-0-0-sRGB-0-0-85-220.png/512x512bb.png"
+  source_domain: "apps.apple.com"
   source_owner: "Gemini"
   official_or_vendor_controlled: true
   fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "google-gemini.svg"
-  usage_notes: "Currently uses company fallback in patch_products; product-specific official/vendor source is recorded for later icon selection and local asset review."
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "google-gemini.png"
+  usage_notes: "Fetched official Gemini app icon from Google's verified App Store listing."
 - id: "perplexity"
   display_name: "Perplexity"
   company_id: "perplexity"
@@ -1207,23 +1207,23 @@ products:
 - id: "blender"
   display_name: "Blender"
   company_id: "blender-foundation"
-  current_local_asset: "/assets/img/patch-logos/blender-foundation.svg"
+  current_local_asset: "/assets/img/patch-logos/blender.png"
   current_asset_exists: true
-  current_is_company_fallback: true
-  current_provenance_status: "current_provenance:company_fallback"
-  desired_local_asset: "/assets/img/patch-logos/blender.svg"
+  current_is_company_fallback: false
+  current_provenance_status: "current_provenance:official_brand_kit"
+  desired_local_asset: "/assets/img/patch-logos/blender.png"
   source_status: official_source_identified
-  preferred_source_type: official_download_page
-  official_source_url: "https://www.blender.org/download/releases/"
-  direct_asset_url: ""
+  preferred_source_type: official_brand_kit
+  official_source_url: "https://www.blender.org/about/logo/"
+  direct_asset_url: "https://download.blender.org/branding/blender_logo.png"
   source_domain: "www.blender.org"
   source_owner: "Blender"
   official_or_vendor_controlled: true
   fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "blender.svg"
-  usage_notes: "Currently uses company fallback in patch_products; product-specific official/vendor source is recorded for later icon selection and local asset review."
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "blender.png"
+  usage_notes: "Fetched official Blender logo from Blender Foundation's logo kit."
 - id: "comfyui"
   display_name: "ComfyUI"
   company_id: "comfyui"
@@ -1427,63 +1427,63 @@ products:
 - id: "microsoft-teams"
   display_name: "Microsoft Teams"
   company_id: "microsoft"
-  current_local_asset: "/assets/img/patch-logos/microsoft-teams.svg"
+  current_local_asset: "/assets/img/patch-logos/microsoft-teams.png"
   current_asset_exists: true
   current_is_company_fallback: false
-  current_provenance_status: "current_provenance:manual_curated"
-  desired_local_asset: "/assets/img/patch-logos/microsoft-teams.svg"
+  current_provenance_status: "current_provenance:official_app_store_listing"
+  desired_local_asset: "/assets/img/patch-logos/microsoft-teams.png"
   source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://www.microsoft.com/en-us/microsoft-teams/group-chat-software"
-  direct_asset_url: ""
-  source_domain: "www.microsoft.com"
+  preferred_source_type: official_app_store_listing
+  official_source_url: "https://apps.apple.com/us/app/microsoft-teams/id1113153706?uo=4"
+  direct_asset_url: "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/a6/da/bc/a6dabc80-84fd-648f-ccf3-3c15bdf4c849/AppIcon-0-0-1x_U007epad-0-1-0-0-85-220.png/512x512bb.png"
+  source_domain: "apps.apple.com"
   source_owner: "Microsoft Teams"
   official_or_vendor_controlled: true
   fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "microsoft-teams.svg"
-  usage_notes: "Existing product icon remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "microsoft-teams.png"
+  usage_notes: "Fetched official Teams app icon from Microsoft's verified App Store listing; did not retry the previously blocked Microsoft CDN URL."
 - id: "microsoft-powerpoint"
   display_name: "Microsoft PowerPoint"
   company_id: "microsoft"
-  current_local_asset: "/assets/img/patch-logos/microsoft-powerpoint.svg"
+  current_local_asset: "/assets/img/patch-logos/microsoft-powerpoint.png"
   current_asset_exists: true
   current_is_company_fallback: false
-  current_provenance_status: "current_provenance:manual_curated"
-  desired_local_asset: "/assets/img/patch-logos/microsoft-powerpoint.svg"
+  current_provenance_status: "current_provenance:official_app_store_listing"
+  desired_local_asset: "/assets/img/patch-logos/microsoft-powerpoint.png"
   source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://www.microsoft.com/en-us/microsoft-365/powerpoint"
-  direct_asset_url: ""
-  source_domain: "www.microsoft.com"
+  preferred_source_type: official_app_store_listing
+  official_source_url: "https://apps.apple.com/us/app/microsoft-powerpoint/id586449534?uo=4"
+  direct_asset_url: "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/57/14/55/57145515-156b-a89d-82d3-f6cbacd44607/AppIcon-0-0-1x_U007epad-0-1-0-0-sRGB-0-0-0-85-220.png/512x512bb.png"
+  source_domain: "apps.apple.com"
   source_owner: "Microsoft PowerPoint"
   official_or_vendor_controlled: true
   fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "microsoft-powerpoint.svg"
-  usage_notes: "Existing product icon remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "microsoft-powerpoint.png"
+  usage_notes: "Fetched official PowerPoint app icon from Microsoft's verified App Store listing."
 - id: "microsoft-365-apps"
   display_name: "Microsoft 365 Apps"
   company_id: "microsoft"
-  current_local_asset: "/assets/img/patch-logos/microsoft-365-apps.svg"
+  current_local_asset: "/assets/img/patch-logos/microsoft-365-apps.png"
   current_asset_exists: true
   current_is_company_fallback: false
-  current_provenance_status: "current_provenance:manual_curated"
-  desired_local_asset: "/assets/img/patch-logos/microsoft-365-apps.svg"
+  current_provenance_status: "current_provenance:official_app_store_listing"
+  desired_local_asset: "/assets/img/patch-logos/microsoft-365-apps.png"
   source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://www.microsoft.com/en-us/microsoft-365"
-  direct_asset_url: ""
-  source_domain: "www.microsoft.com"
+  preferred_source_type: official_app_store_listing
+  official_source_url: "https://apps.apple.com/us/app/microsoft-365-copilot/id541164041?uo=4"
+  direct_asset_url: "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/0e/0e/5c/0e0e5c3e-0c49-df72-5800-ff9af51349aa/AppIcon-0-0-1x_U007epad-0-1-0-0-sRGB-0-85-220.png/512x512bb.png"
+  source_domain: "apps.apple.com"
   source_owner: "Microsoft 365 Apps"
   official_or_vendor_controlled: true
   fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "microsoft-365-apps.svg"
-  usage_notes: "Existing product icon remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "microsoft-365-apps.png"
+  usage_notes: "Fetched official Microsoft 365 app icon from Microsoft's verified App Store listing."
 - id: "elgato-stream-deck"
   display_name: "Stream Deck"
   company_id: "elgato"

@@ -17,7 +17,7 @@ anthropic-claude:
   company_label: Anthropic
   source_id: anthropic-claude
   logo_label: Claude
-  logo_path: /assets/img/patch-logos/anthropic.svg
+  logo_path: /assets/img/patch-logos/anthropic-claude.png
 google-gemini:
   company_name: Google
   product_name: Gemini
@@ -27,7 +27,7 @@ google-gemini:
   company_label: Google
   source_id: google-gemini
   logo_label: Gemini
-  logo_path: /assets/img/patch-logos/google.svg
+  logo_path: /assets/img/patch-logos/google-gemini.png
 perplexity:
   company_name: Perplexity
   product_name: Perplexity
@@ -267,7 +267,7 @@ blender:
   company_label: Blender Foundation
   source_id: blender
   logo_label: Blender
-  logo_path: /assets/img/patch-logos/blender-foundation.svg
+  logo_path: /assets/img/patch-logos/blender.png
 comfyui:
   company_name: ComfyUI
   product_name: ComfyUI

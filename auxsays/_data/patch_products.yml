@@ -58,7 +58,7 @@
   signal_notes: Track app updates separately from Claude Code and model launches.
   source_id: anthropic-claude
   logo_label: Claude
-  logo_path: /assets/img/patch-logos/anthropic.svg
+  logo_path: /assets/img/patch-logos/anthropic-claude.png
   company_id: anthropic
   product_id: anthropic-claude
   company_url: /updates/anthropic/
@@ -84,7 +84,7 @@
     miss.
   dossier_note: Claude is tracked for release changes, workflow impact, compatibility
     shifts, stability signals, and community consensus.
-  asset_type: company_fallback
+  asset_type: product_icon
 - id: google-gemini
   company_name: Google
   product_name: Gemini
@@ -103,7 +103,7 @@
     creative updates separately.
   source_id: google-gemini
   logo_label: Gemini
-  logo_path: /assets/img/patch-logos/google.svg
+  logo_path: /assets/img/patch-logos/google-gemini.png
   company_id: google
   product_id: google-gemini
   company_url: /updates/google/
@@ -129,7 +129,7 @@
     miss.
   dossier_note: Gemini is tracked for release changes, workflow impact, compatibility
     shifts, stability signals, and community consensus.
-  asset_type: company_fallback
+  asset_type: product_icon
 - id: perplexity
   company_name: Perplexity
   product_name: Perplexity
@@ -1269,7 +1269,7 @@
     node changes.
   source_id: blender
   logo_label: Blender
-  logo_path: /assets/img/patch-logos/blender-foundation.svg
+  logo_path: /assets/img/patch-logos/blender.png
   company_id: blender-foundation
   product_id: blender
   company_url: /updates/blender-foundation/
@@ -1295,7 +1295,7 @@
     miss.
   dossier_note: Blender is tracked for release changes, workflow impact, compatibility
     shifts, stability signals, and community consensus.
-  asset_type: company_fallback
+  asset_type: product_icon
 - id: comfyui
   company_name: ComfyUI
   product_name: ComfyUI
@@ -1755,7 +1755,7 @@
     screen sharing, tenant/admin impact, and staged rollout.
   source_id: microsoft-teams
   logo_label: Teams
-  logo_path: /assets/img/patch-logos/microsoft-teams.svg
+  logo_path: /assets/img/patch-logos/microsoft-teams.png
   company_id: microsoft
   product_id: microsoft-teams
   company_url: /updates/microsoft/
@@ -1793,7 +1793,7 @@
     media, collaboration, add-ins, and Copilot behavior.
   source_id: microsoft-powerpoint
   logo_label: PowerPoint
-  logo_path: /assets/img/patch-logos/microsoft-powerpoint.svg
+  logo_path: /assets/img/patch-logos/microsoft-powerpoint.png
   company_id: microsoft
   product_id: microsoft-powerpoint
   company_url: /updates/microsoft/
@@ -1833,7 +1833,7 @@
     security updates, feature rollout, add-ins, sync, collaboration, and Copilot behavior.
   source_id: microsoft-365-apps
   logo_label: M365
-  logo_path: /assets/img/patch-logos/microsoft-365-apps.svg
+  logo_path: /assets/img/patch-logos/microsoft-365-apps.png
   company_id: microsoft
   product_id: microsoft-365-apps
   company_url: /updates/microsoft/

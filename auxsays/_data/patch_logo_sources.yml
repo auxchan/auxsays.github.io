@@ -434,29 +434,31 @@ assets:
   fallback_to_company_logo: false
   notes: Official ChatGPT App Store icon from OpenAI's verified app listing.
 - asset_id: anthropic-claude
-  kind: company_fallback
+  kind: product_icon
   owner_name: Claude
-  source_type: company_fallback
-  source_url: /updates/anthropic/
-  local_path: /assets/img/patch-logos/anthropic.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/claude-by-anthropic/id6473753684?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/06/59/49/06594946-0b1b-f865-9c98-3d1629184eec/AppIcon-0-0-1x_U007epad-0-1-85-220.png/512x512bb.png
+  local_path: /assets/img/patch-logos/anthropic-claude.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
-  fallback_to_company_logo: true
-  notes: Explicit fallback to company logo.
+  last_verified_at: '2026-06-21'
+  fallback_to_company_logo: false
+  notes: Official Claude App Store icon from Anthropic's verified app listing.
 - asset_id: google-gemini
-  kind: company_fallback
+  kind: product_icon
   owner_name: Gemini
-  source_type: company_fallback
-  source_url: /updates/google/
-  local_path: /assets/img/patch-logos/google.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/google-gemini/id6477489729?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/f7/dc/9e/f7dc9ef9-1731-1c66-7e00-ca58d011f1d9/AppIcon-0-0-1x_U007epad-0-0-0-1-0-0-sRGB-0-0-85-220.png/512x512bb.png
+  local_path: /assets/img/patch-logos/google-gemini.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
-  fallback_to_company_logo: true
-  notes: Explicit fallback to company logo.
+  last_verified_at: '2026-06-21'
+  fallback_to_company_logo: false
+  notes: Official Gemini App Store icon from Google's verified app listing.
 - asset_id: perplexity
   kind: company_fallback
   owner_name: Perplexity
@@ -761,17 +763,18 @@ assets:
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
 - asset_id: blender
-  kind: company_fallback
+  kind: product_icon
   owner_name: Blender
-  source_type: company_fallback
-  source_url: /updates/blender-foundation/
-  local_path: /assets/img/patch-logos/blender-foundation.svg
+  source_type: official_brand_kit
+  source_url: https://www.blender.org/about/logo/
+  direct_asset_url: https://download.blender.org/branding/blender_logo.png
+  local_path: /assets/img/patch-logos/blender.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
-  fallback_to_company_logo: true
-  notes: Explicit fallback to company logo.
+  last_verified_at: '2026-06-21'
+  fallback_to_company_logo: false
+  notes: Official Blender logo from Blender Foundation's logo kit.
 - asset_id: comfyui
   kind: company_fallback
   owner_name: ComfyUI
@@ -896,39 +899,42 @@ assets:
 - asset_id: microsoft-teams
   kind: product_icon
   owner_name: Microsoft Teams
-  source_type: manual_curated
-  source_url: https://commons.wikimedia.org/wiki/File:Microsoft_Office_Teams_(2019%E2%80%932025).svg
-  local_path: /assets/img/patch-logos/microsoft-teams.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/microsoft-teams/id1113153706?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/a6/da/bc/a6dabc80-84fd-648f-ccf3-3c15bdf4c849/AppIcon-0-0-1x_U007epad-0-1-0-0-85-220.png/512x512bb.png
+  local_path: /assets/img/patch-logos/microsoft-teams.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-21'
   fallback_to_company_logo: false
-  notes: Local Teams product-icon treatment replacing text tile.
+  notes: Official Teams App Store icon from Microsoft's verified app listing.
 - asset_id: microsoft-powerpoint
   kind: product_icon
   owner_name: Microsoft PowerPoint
-  source_type: manual_curated
-  source_url: https://commons.wikimedia.org/wiki/File:Microsoft_Office_PowerPoint_(2019%E2%80%93present).svg
-  local_path: /assets/img/patch-logos/microsoft-powerpoint.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/microsoft-powerpoint/id586449534?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/57/14/55/57145515-156b-a89d-82d3-f6cbacd44607/AppIcon-0-0-1x_U007epad-0-1-0-0-sRGB-0-0-0-85-220.png/512x512bb.png
+  local_path: /assets/img/patch-logos/microsoft-powerpoint.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-21'
   fallback_to_company_logo: false
-  notes: Local PowerPoint product-icon treatment replacing text tile.
+  notes: Official PowerPoint App Store icon from Microsoft's verified app listing.
 - asset_id: microsoft-365-apps
   kind: product_icon
   owner_name: Microsoft 365 Apps
-  source_type: manual_curated
-  source_url: https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks
-  local_path: /assets/img/patch-logos/microsoft-365-apps.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/microsoft-365-copilot/id541164041?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/0e/0e/5c/0e0e5c3e-0c49-df72-5800-ff9af51349aa/AppIcon-0-0-1x_U007epad-0-1-0-0-sRGB-0-85-220.png/512x512bb.png
+  local_path: /assets/img/patch-logos/microsoft-365-apps.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-21'
   fallback_to_company_logo: false
-  notes: Local Microsoft 365 Apps product-icon treatment replacing text tile.
+  notes: Official Microsoft 365 App Store icon from Microsoft's verified app listing.
 - asset_id: elgato-stream-deck
   kind: product_icon
   owner_name: Stream Deck
