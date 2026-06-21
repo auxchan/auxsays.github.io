@@ -421,17 +421,18 @@ assets:
   fallback_to_company_logo: false
   notes: Company-level logo asset.
 - asset_id: openai-chatgpt
-  kind: company_fallback
-  owner_name: ChatGPT / OpenAI
-  source_type: company_fallback
-  source_url: /updates/openai/
-  local_path: /assets/img/patch-logos/openai.svg
+  kind: product_icon
+  owner_name: ChatGPT
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/chatgpt/id6448311069?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/e6/c7/eb/e6c7eb69-ade8-00b8-3454-d359249c6a0a/AppIcon-0-0-1x_U007epad-0-0-0-1-0-P3-85-220.png/512x512bb.png
+  local_path: /assets/img/patch-logos/openai-chatgpt.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
-  fallback_to_company_logo: true
-  notes: Explicit fallback to company logo.
+  last_verified_at: '2026-06-21'
+  fallback_to_company_logo: false
+  notes: Official ChatGPT App Store icon from OpenAI's verified app listing.
 - asset_id: anthropic-claude
   kind: company_fallback
   owner_name: Claude
@@ -579,15 +580,16 @@ assets:
 - asset_id: adobe-photoshop
   kind: product_icon
   owner_name: Photoshop
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/adobe-photoshop.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/adobe-photoshop-photo-editor/id1457771281?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/1b/d5/83/1bd5839c-5152-437e-bc2e-bdf5d282b293/AppIcon-0-0-1x_U007epad-0-1-0-0-85-220.png/512x512bb.png
+  local_path: /assets/img/patch-logos/adobe-photoshop.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-21'
   fallback_to_company_logo: false
-  notes: Product/software icon asset.
+  notes: Official Photoshop App Store icon from Adobe's verified app listing.
 - asset_id: adobe-media-encoder
   kind: product_icon
   owner_name: Media Encoder
@@ -710,17 +712,18 @@ assets:
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
 - asset_id: steam
-  kind: company_fallback
+  kind: product_icon
   owner_name: Steam
-  source_type: company_fallback
-  source_url: /updates/valve/
-  local_path: /assets/img/patch-logos/valve.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/steam-mobile/id495369748?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/7b/be/a9/7bbea9f7-8f0a-19e4-8c04-0cd7d8aab7ff/AppIcon-0-0-1x_U007emarketing-0-8-0-85-220.png/512x512bb.png
+  local_path: /assets/img/patch-logos/steam.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
-  fallback_to_company_logo: true
-  notes: Explicit fallback to company logo.
+  last_verified_at: '2026-06-21'
+  fallback_to_company_logo: false
+  notes: Official Steam Mobile App Store icon from Valve's verified app listing.
 - asset_id: nvidia
   kind: company_fallback
   owner_name: NVIDIA App / GeForce / Studio
@@ -868,15 +871,16 @@ assets:
 - asset_id: adobe-acrobat-reader
   kind: product_icon
   owner_name: Adobe Acrobat Reader
-  source_type: manual_curated
-  source_url: https://www.adobe.com/legal/permissions/trademarks.html
-  local_path: /assets/img/patch-logos/adobe-acrobat-reader.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/acrobat-reader-pdf-editor/id469337564?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/87/e8/a5/87e8a569-b784-f607-85b6-1c249d239d00/ReleaseAppIcon-0-0-1x_U007emarketing-0-8-0-sRGB-85-220.png/512x512bb.png
+  local_path: /assets/img/patch-logos/adobe-acrobat-reader.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-21'
   fallback_to_company_logo: false
-  notes: Local Acrobat product-icon treatment and UI backdrop added.
+  notes: Official Acrobat Reader App Store icon from Adobe's verified app listing.
 - asset_id: microsoft-windows-11
   kind: product_icon
   owner_name: Microsoft Windows
@@ -926,17 +930,18 @@ assets:
   fallback_to_company_logo: false
   notes: Local Microsoft 365 Apps product-icon treatment replacing text tile.
 - asset_id: elgato-stream-deck
-  kind: company_fallback
+  kind: product_icon
   owner_name: Stream Deck
-  source_type: company_fallback
-  source_url: /updates/elgato/
-  local_path: /assets/img/patch-logos/elgato.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/elgato-stream-deck-mobile/id1440014184?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/e9/98/8f/e9988f20-b97b-d532-fcec-a0148f44d098/AppIcon-0-0-1x_U007epad-0-1-0-85-220.png/512x512bb.png
+  local_path: /assets/img/patch-logos/elgato-stream-deck.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
-  fallback_to_company_logo: true
-  notes: Explicit fallback to company logo.
+  last_verified_at: '2026-06-21'
+  fallback_to_company_logo: false
+  notes: Official Stream Deck Mobile App Store icon from Corsair/Elgato's verified app listing.
 - asset_id: elgato-wave-link
   kind: company_fallback
   owner_name: Wave Link

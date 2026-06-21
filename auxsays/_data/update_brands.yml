@@ -6,8 +6,8 @@ openai-chatgpt:
   category_label: AI Tools
   company_label: OpenAI
   source_id: openai-chatgpt
-  logo_label: OpenAI
-  logo_path: /assets/img/patch-logos/openai.svg
+  logo_label: ChatGPT
+  logo_path: /assets/img/patch-logos/openai-chatgpt.png
 anthropic-claude:
   company_name: Anthropic
   product_name: Claude
@@ -137,7 +137,7 @@ adobe-photoshop:
   company_label: Adobe
   source_id: adobe-photoshop
   logo_label: Photoshop
-  logo_path: /assets/img/patch-logos/adobe-photoshop.svg
+  logo_path: /assets/img/patch-logos/adobe-photoshop.png
 adobe-media-encoder:
   company_name: Adobe
   product_name: Media Encoder
@@ -227,7 +227,7 @@ steam:
   company_label: Valve
   source_id: steam
   logo_label: Steam
-  logo_path: /assets/img/patch-logos/valve.svg
+  logo_path: /assets/img/patch-logos/steam.png
 nvidia:
   company_name: NVIDIA
   product_name: NVIDIA App / GeForce / Studio

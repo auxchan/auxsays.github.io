@@ -14,8 +14,8 @@
   signal_notes: Separate model changes, product UI changes, workspace/agent changes,
     and policy/limit changes.
   source_id: openai-chatgpt
-  logo_label: OpenAI
-  logo_path: /assets/img/patch-logos/openai.svg
+  logo_label: ChatGPT
+  logo_path: /assets/img/patch-logos/openai-chatgpt.png
   company_id: openai
   product_id: openai-chatgpt
   company_url: /updates/openai/
@@ -41,7 +41,7 @@
     miss.
   dossier_note: ChatGPT / OpenAI is tracked for release changes, workflow impact,
     compatibility shifts, stability signals, and community consensus.
-  asset_type: company_fallback
+  asset_type: product_icon
 - id: anthropic-claude
   company_name: Anthropic
   product_name: Claude
@@ -597,7 +597,7 @@
     plug-in behavior, color workflow changes, known issues, and fixed issues.
   source_id: adobe-photoshop
   logo_label: Photoshop
-  logo_path: /assets/img/patch-logos/adobe-photoshop.svg
+  logo_path: /assets/img/patch-logos/adobe-photoshop.png
   ui_backdrop_path: /assets/img/software-ui/adobe-photoshop-ui.webp
   company_id: adobe
   product_id: adobe-photoshop
@@ -1092,7 +1092,7 @@
     policy changes.
   source_id: steam
   logo_label: Steam
-  logo_path: /assets/img/patch-logos/valve.svg
+  logo_path: /assets/img/patch-logos/steam.png
   company_id: valve
   product_id: steam
   company_url: /updates/valve/
@@ -1118,7 +1118,7 @@
     miss.
   dossier_note: Steam is tracked for release changes, workflow impact, compatibility
     shifts, stability signals, and community consensus.
-  asset_type: company_fallback
+  asset_type: product_icon
 - id: nvidia
   company_name: NVIDIA
   product_name: NVIDIA App / GeForce / Studio
@@ -1665,7 +1665,7 @@
     enterprise deployment impact.
   source_id: adobe-acrobat-reader
   logo_label: Acrobat
-  logo_path: /assets/img/patch-logos/adobe-acrobat-reader.svg
+  logo_path: /assets/img/patch-logos/adobe-acrobat-reader.png
   company_id: adobe
   product_id: adobe-acrobat-reader
   company_url: /updates/adobe/
@@ -1873,7 +1873,7 @@
     behavior, firmware mismatch, and device reliability.
   source_id: elgato-stream-deck
   logo_label: Stream Deck
-  logo_path: /assets/img/patch-logos/elgato.svg
+  logo_path: /assets/img/patch-logos/elgato-stream-deck.png
   company_id: elgato
   product_id: elgato-stream-deck
   company_url: /updates/elgato/
@@ -1893,7 +1893,7 @@
     update.
   dossier_note: Stream Deck is tracked as a live-production control surface where
     plugin and profile stability matter.
-  asset_type: company_fallback
+  asset_type: product_icon
 - id: elgato-wave-link
   company_name: Elgato
   product_name: Wave Link
