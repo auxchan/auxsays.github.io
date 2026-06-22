@@ -4679,3 +4679,28 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ucntqq-smoothness-on-a-slowed-down-clip
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ucntqq/smoothness_on_a_slowed_down_clip/
+  parent_title: Smoothness on a slowed down clip
+  report_title: Smoothness on a slowed down clip
+  report_text_excerpt: Smoothness on a slowed down clip [May be viewed as a HOTD spoiler but the clip was in the trailer] Im trying to make an edit and want to use slowed down clips, i slowed down this one but it doesnt look smooth. I used motion blur [although the free way by using optical flow and...
+  captured_at: '2026-06-22T17:51:53Z'
+  source_date: '2026-06-22'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
