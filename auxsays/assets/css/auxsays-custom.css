@@ -2731,6 +2731,8 @@ button, input, select, textarea { font: inherit; }
 .patch-intel-shell { width:min(1380px, calc(100vw - 48px)); margin:2rem auto; display:grid; gap:1.25rem; position:relative; z-index:1; }
 .patch-intel-hero, .patch-intel-section { padding:1.35rem 1.45rem; }
 .patch-intel-hero-grid { display:grid; grid-template-columns:minmax(0,1fr) minmax(220px,.32fr); gap:1.25rem; align-items:start; }
+.patch-intel-identity { display:flex; flex-wrap:wrap; gap:.9rem; align-items:center; }
+.patch-intel-logo { flex:0 0 auto; }
 .patch-intel-title { margin:.35rem 0 .7rem; font-size:clamp(2.4rem, 4.2vw, 5rem); line-height:.92; letter-spacing:-.06em; }
 .patch-intel-subtitle { margin:0; max-width:72rem; color:var(--text-1); line-height:1.72; font-size:1.04rem; }
 .patch-intel-stat-card { display:grid; gap:.2rem; padding:1rem; border:1px solid var(--border-subtle); border-radius:20px; background:rgba(255,255,255,.025); }

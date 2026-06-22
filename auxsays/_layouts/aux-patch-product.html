@@ -5,6 +5,7 @@ layout: aux-base
 {% assign product = site.data.patch_products | where: "id", page.product_id | first %}
 {% assign product_updates = site.pages | where: "update_entry", true | where: "product_id", page.product_id | sort: "update_published_at" | reverse %}
 {% assign documented_count = product_updates.size %}
+{% assign resolved_product_logo_path = product.logo_path | default: company.logo_path %}
 {% assign cadence_label = product.cadence | default: '' %}
 {% if cadence_label == 'High' %}
   {% assign cadence_label = 'Frequent updates' %}
@@ -20,7 +21,14 @@ layout: aux-base
     <div class="eyebrow">Software</div>
     <div class="patch-intel-hero-grid">
       <div>
-        <h1 class="patch-intel-title">{{ product.product_name }}</h1>
+        <div class="patch-intel-identity">
+          {% if resolved_product_logo_path %}
+          <span class="patch-source-badge patch-logo-badge patch-logo-badge--has-image patch-product-icon patch-intel-logo">
+            <img src="{% if resolved_product_logo_path contains "://" %}{{ resolved_product_logo_path }}{% else %}{{ resolved_product_logo_path | relative_url }}{% endif %}" alt="{{ product.product_name }} icon" loading="lazy">
+          </span>
+          {% endif %}
+          <h1 class="patch-intel-title">{{ product.product_name }}</h1>
+        </div>
         <p class="patch-intel-subtitle">{{ product.watch_reason }}</p>
         <div class="patch-status-line">
           {% if product_updates.size > 0 %}
