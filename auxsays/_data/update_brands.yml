@@ -37,7 +37,7 @@ perplexity:
   company_label: Perplexity
   source_id: perplexity
   logo_label: Perplexity
-  logo_path: /assets/img/patch-logos/perplexity.svg
+  logo_path: /assets/img/patch-logos/perplexity.png
 midjourney:
   company_name: Midjourney
   product_name: Midjourney
@@ -67,7 +67,7 @@ runway:
   company_label: Runway
   source_id: runway
   logo_label: Runway
-  logo_path: /assets/img/patch-logos/runway.svg
+  logo_path: /assets/img/patch-logos/runway.png
 pika:
   company_name: Pika
   product_name: Pika
@@ -87,7 +87,7 @@ lottiefiles:
   company_label: LottieFiles
   source_id: lottiefiles
   logo_label: LottieFiles
-  logo_path: /assets/img/patch-logos/lottiefiles.svg
+  logo_path: /assets/img/patch-logos/lottiefiles.png
 figma:
   company_name: Figma
   product_name: Figma
@@ -107,7 +107,7 @@ canva:
   company_label: Canva
   source_id: canva
   logo_label: Canva
-  logo_path: /assets/img/patch-logos/canva.svg
+  logo_path: /assets/img/patch-logos/canva.png
 adobe-premiere-pro:
   company_name: Adobe
   product_name: Premiere Pro
@@ -167,7 +167,7 @@ twitch:
   company_label: Twitch
   source_id: twitch
   logo_label: Twitch
-  logo_path: /assets/img/patch-logos/twitch.svg
+  logo_path: /assets/img/patch-logos/twitch.png
 youtube:
   company_name: YouTube
   product_name: YouTube / YouTube Studio
@@ -177,7 +177,7 @@ youtube:
   company_label: YouTube
   source_id: youtube
   logo_label: YouTube
-  logo_path: /assets/img/patch-logos/youtube.svg
+  logo_path: /assets/img/patch-logos/youtube.png
 kick:
   company_name: Kick
   product_name: Kick
@@ -187,7 +187,7 @@ kick:
   company_label: Kick
   source_id: kick
   logo_label: Kick
-  logo_path: /assets/img/patch-logos/kick.svg
+  logo_path: /assets/img/patch-logos/kick.png
 rumble:
   company_name: Rumble
   product_name: Rumble
@@ -197,7 +197,7 @@ rumble:
   company_label: Rumble
   source_id: rumble
   logo_label: Rumble
-  logo_path: /assets/img/patch-logos/rumble.svg
+  logo_path: /assets/img/patch-logos/rumble.png
 epic-unreal:
   company_name: Epic Games
   product_name: Unreal Engine
@@ -207,7 +207,7 @@ epic-unreal:
   company_label: Epic Games
   source_id: epic-unreal
   logo_label: Unreal Engine
-  logo_path: /assets/img/patch-logos/epic-games.svg
+  logo_path: /assets/img/patch-logos/epic-unreal.png
 unity:
   company_name: Unity
   product_name: Unity
@@ -217,7 +217,7 @@ unity:
   company_label: Unity
   source_id: unity
   logo_label: Unity
-  logo_path: /assets/img/patch-logos/unity.svg
+  logo_path: /assets/img/patch-logos/unity.png
 steam:
   company_name: Valve
   product_name: Steam
@@ -297,7 +297,7 @@ github:
   company_label: GitHub
   source_id: github
   logo_label: GitHub / Copilot
-  logo_path: /assets/img/patch-logos/github.svg
+  logo_path: /assets/img/patch-logos/github.png
 cloudflare:
   company_name: Cloudflare
   product_name: Cloudflare
@@ -327,7 +327,7 @@ notion:
   company_label: Notion
   source_id: notion
   logo_label: Notion
-  logo_path: /assets/img/patch-logos/notion.svg
+  logo_path: /assets/img/patch-logos/notion.png
 zapier:
   company_name: Zapier
   product_name: Zapier
@@ -347,7 +347,7 @@ make:
   company_label: Make
   source_id: make
   logo_label: Make
-  logo_path: /assets/img/patch-logos/make.svg
+  logo_path: /assets/img/patch-logos/make.png
 obs-studio:
   company_name: OBS Project
   product_name: OBS Studio

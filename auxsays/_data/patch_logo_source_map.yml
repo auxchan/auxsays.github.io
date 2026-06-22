@@ -707,23 +707,23 @@ products:
 - id: "perplexity"
   display_name: "Perplexity"
   company_id: "perplexity"
-  current_local_asset: "/assets/img/patch-logos/perplexity.svg"
+  current_local_asset: "/assets/img/patch-logos/perplexity.png"
   current_asset_exists: true
-  current_is_company_fallback: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/perplexity.svg"
+  current_is_company_fallback: false
+  current_provenance_status: "current_provenance:official_app_store_listing"
+  desired_local_asset: "/assets/img/patch-logos/perplexity.png"
   source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://www.perplexity.ai/hub/blog"
-  direct_asset_url: ""
-  source_domain: "www.perplexity.ai"
+  preferred_source_type: official_app_store_listing
+  official_source_url: "https://apps.apple.com/us/app/perplexity-ai-search-chat/id1668000334?uo=4"
+  direct_asset_url: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/43/79/4e/43794ee1-9f87-0e0e-04ed-65a83d651633/AppIcon-0-0-1x_U007epad-0-0-0-1-0-0-85-220-0.png/512x512bb.png"
+  source_domain: "apps.apple.com"
   source_owner: "Perplexity"
   official_or_vendor_controlled: true
   fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "perplexity.svg"
-  usage_notes: "Currently uses company fallback in patch_products; product-specific official/vendor source is recorded for later icon selection and local asset review."
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "perplexity.png"
+  usage_notes: "Official Perplexity App Store icon from Perplexity AI Inc."
 - id: "midjourney"
   display_name: "Midjourney"
   company_id: "midjourney"
@@ -767,23 +767,23 @@ products:
 - id: "runway"
   display_name: "Runway"
   company_id: "runway"
-  current_local_asset: "/assets/img/patch-logos/runway.svg"
+  current_local_asset: "/assets/img/patch-logos/runway.png"
   current_asset_exists: true
-  current_is_company_fallback: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/runway.svg"
+  current_is_company_fallback: false
+  current_provenance_status: "current_provenance:official_app_store_listing"
+  desired_local_asset: "/assets/img/patch-logos/runway.png"
   source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://runwayml.com/research/"
-  direct_asset_url: ""
-  source_domain: "runwayml.com"
+  preferred_source_type: official_app_store_listing
+  official_source_url: "https://apps.apple.com/us/app/runwayml/id1665024375?uo=4"
+  direct_asset_url: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/54/23/92/5423923a-400c-1ca7-ad2b-3c6b7793d9a0/AppIcon-0-0-1x_U007ephone-0-1-85-220.png/512x512bb.png"
+  source_domain: "apps.apple.com"
   source_owner: "Runway"
   official_or_vendor_controlled: true
   fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "runway.svg"
-  usage_notes: "Currently uses company fallback in patch_products; product-specific official/vendor source is recorded for later icon selection and local asset review."
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "runway.png"
+  usage_notes: "Official RunwayML App Store icon from Runway AI, Inc."
 - id: "pika"
   display_name: "Pika"
   company_id: "pika"
@@ -807,23 +807,23 @@ products:
 - id: "lottiefiles"
   display_name: "LottieFiles"
   company_id: "lottiefiles"
-  current_local_asset: "/assets/img/patch-logos/lottiefiles.svg"
+  current_local_asset: "/assets/img/patch-logos/lottiefiles.png"
   current_asset_exists: true
-  current_is_company_fallback: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/lottiefiles.svg"
+  current_is_company_fallback: false
+  current_provenance_status: "current_provenance:official_app_store_listing"
+  desired_local_asset: "/assets/img/patch-logos/lottiefiles.png"
   source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://lottiefiles.com/blog"
-  direct_asset_url: ""
-  source_domain: "lottiefiles.com"
+  preferred_source_type: official_app_store_listing
+  official_source_url: "https://apps.apple.com/us/app/lottiefiles-animate-design/id1231821260?uo=4"
+  direct_asset_url: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/37/3d/6c/373d6cfa-a68f-50ca-dd6d-4059253a7b3a/AppIcon-0-0-1x_U007epad-0-1-0-sRGB-85-220.png/512x512bb.png"
+  source_domain: "apps.apple.com"
   source_owner: "LottieFiles"
   official_or_vendor_controlled: true
   fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "lottiefiles.svg"
-  usage_notes: "Currently uses company fallback in patch_products; product-specific official/vendor source is recorded for later icon selection and local asset review."
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "lottiefiles.png"
+  usage_notes: "Official LottieFiles App Store icon from Design Barn Inc."
 - id: "figma"
   display_name: "Figma"
   company_id: "figma"
@@ -847,23 +847,23 @@ products:
 - id: "canva"
   display_name: "Canva"
   company_id: "canva"
-  current_local_asset: "/assets/img/patch-logos/canva.svg"
+  current_local_asset: "/assets/img/patch-logos/canva.png"
   current_asset_exists: true
-  current_is_company_fallback: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/canva.svg"
+  current_is_company_fallback: false
+  current_provenance_status: "current_provenance:official_app_store_listing"
+  desired_local_asset: "/assets/img/patch-logos/canva.png"
   source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://www.canva.com/newsroom/"
-  direct_asset_url: ""
-  source_domain: "www.canva.com"
+  preferred_source_type: official_app_store_listing
+  official_source_url: "https://apps.apple.com/us/app/canva-ai-video-photo-editor/id897446215?uo=4"
+  direct_asset_url: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/54/63/b5/5463b52f-ac99-4be1-6f74-fef35e4e3ce7/AppIcon-0-0-1x_U007epad-0-11-0-85-220.png/512x512bb.png"
+  source_domain: "apps.apple.com"
   source_owner: "Canva"
   official_or_vendor_controlled: true
   fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "canva.svg"
-  usage_notes: "Currently uses company fallback in patch_products; product-specific official/vendor source is recorded for later icon selection and local asset review."
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "canva.png"
+  usage_notes: "Official Canva App Store icon from Canva Pty Ltd."
 - id: "adobe-premiere-pro"
   display_name: "Premiere Pro"
   company_id: "adobe"
@@ -1007,123 +1007,123 @@ products:
 - id: "twitch"
   display_name: "Twitch"
   company_id: "twitch"
-  current_local_asset: "/assets/img/patch-logos/twitch.svg"
+  current_local_asset: "/assets/img/patch-logos/twitch.png"
   current_asset_exists: true
-  current_is_company_fallback: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/twitch.svg"
+  current_is_company_fallback: false
+  current_provenance_status: "current_provenance:official_app_store_listing"
+  desired_local_asset: "/assets/img/patch-logos/twitch.png"
   source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://blog.twitch.tv/"
-  direct_asset_url: ""
-  source_domain: "blog.twitch.tv"
+  preferred_source_type: official_app_store_listing
+  official_source_url: "https://apps.apple.com/us/app/twitch-live-streaming/id460177396?uo=4"
+  direct_asset_url: "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/e6/df/b3/e6dfb315-9c80-4c32-e688-9d38cfabd6d6/TwitchAppIcon-0-0-1x_U007epad-0-1-0-0-0-0-85-220.png/512x512bb.png"
+  source_domain: "apps.apple.com"
   source_owner: "Twitch"
   official_or_vendor_controlled: true
   fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "twitch.svg"
-  usage_notes: "Currently uses company fallback in patch_products; product-specific official/vendor source is recorded for later icon selection and local asset review."
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "twitch.png"
+  usage_notes: "Official Twitch App Store icon from Twitch Interactive, Inc."
 - id: "youtube"
   display_name: "YouTube / YouTube Studio"
   company_id: "youtube"
-  current_local_asset: "/assets/img/patch-logos/youtube.svg"
+  current_local_asset: "/assets/img/patch-logos/youtube.png"
   current_asset_exists: true
-  current_is_company_fallback: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/youtube.svg"
+  current_is_company_fallback: false
+  current_provenance_status: "current_provenance:official_app_store_listing"
+  desired_local_asset: "/assets/img/patch-logos/youtube.png"
   source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://blog.youtube/news-and-events/"
-  direct_asset_url: ""
-  source_domain: "blog.youtube"
+  preferred_source_type: official_app_store_listing
+  official_source_url: "https://apps.apple.com/us/app/youtube-studio/id888530356?uo=4"
+  direct_asset_url: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/6f/9d/42/6f9d4221-c982-47c7-022c-c5bd9daca683/logo_youtube_studio_2024_q4_color-0-0-1x_U007emarketing-0-0-0-7-0-0-0-85-220.png/512x512bb.png"
+  source_domain: "apps.apple.com"
   source_owner: "YouTube / YouTube Studio"
   official_or_vendor_controlled: true
   fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "youtube.svg"
-  usage_notes: "Currently uses company fallback in patch_products; product-specific official/vendor source is recorded for later icon selection and local asset review."
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "youtube.png"
+  usage_notes: "Official YouTube Studio App Store icon from Google LLC."
 - id: "kick"
   display_name: "Kick"
   company_id: "kick"
-  current_local_asset: "/assets/img/patch-logos/kick.svg"
+  current_local_asset: "/assets/img/patch-logos/kick.png"
   current_asset_exists: true
-  current_is_company_fallback: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/kick.svg"
+  current_is_company_fallback: false
+  current_provenance_status: "current_provenance:official_app_store_listing"
+  desired_local_asset: "/assets/img/patch-logos/kick.png"
   source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://kick.com/blog"
-  direct_asset_url: ""
-  source_domain: "kick.com"
+  preferred_source_type: official_app_store_listing
+  official_source_url: "https://apps.apple.com/us/app/kick-live-streaming/id6446202561?uo=4"
+  direct_asset_url: "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/13/3d/b4/133db42d-7ddc-2b91-6fc3-fddbdbc7fe10/AppIcon-0-0-1x_U007epad-0-1-85-220.png/512x512bb.png"
+  source_domain: "apps.apple.com"
   source_owner: "Kick"
   official_or_vendor_controlled: true
   fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "kick.svg"
-  usage_notes: "Currently uses company fallback in patch_products; product-specific official/vendor source is recorded for later icon selection and local asset review."
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "kick.png"
+  usage_notes: "Official Kick App Store icon from Kick Streaming Pty Ltd."
 - id: "rumble"
   display_name: "Rumble"
   company_id: "rumble"
-  current_local_asset: "/assets/img/patch-logos/rumble.svg"
+  current_local_asset: "/assets/img/patch-logos/rumble.png"
   current_asset_exists: true
-  current_is_company_fallback: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/rumble.svg"
+  current_is_company_fallback: false
+  current_provenance_status: "current_provenance:official_app_store_listing"
+  desired_local_asset: "/assets/img/patch-logos/rumble.png"
   source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://corp.rumble.com/blog/"
-  direct_asset_url: ""
-  source_domain: "corp.rumble.com"
+  preferred_source_type: official_app_store_listing
+  official_source_url: "https://apps.apple.com/us/app/rumble-live-streaming-videos/id1518427877?uo=4"
+  direct_asset_url: "https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/79/29/27/792927d1-d828-a73a-0ff5-6adf2cd40b74/AppIcon-0-0-1x_U007emarketing-0-8-0-85-220.png/512x512bb.png"
+  source_domain: "apps.apple.com"
   source_owner: "Rumble"
   official_or_vendor_controlled: true
   fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "rumble.svg"
-  usage_notes: "Currently uses company fallback in patch_products; product-specific official/vendor source is recorded for later icon selection and local asset review."
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "rumble.png"
+  usage_notes: "Official Rumble App Store icon from Rumble Inc."
 - id: "epic-unreal"
   display_name: "Unreal Engine"
   company_id: "epic-games"
-  current_local_asset: "/assets/img/patch-logos/epic-games.svg"
+  current_local_asset: "/assets/img/patch-logos/epic-unreal.png"
   current_asset_exists: true
-  current_is_company_fallback: true
-  current_provenance_status: "current_provenance:company_fallback"
-  desired_local_asset: "/assets/img/patch-logos/epic-unreal.svg"
+  current_is_company_fallback: false
+  current_provenance_status: "current_provenance:official_app_store_listing"
+  desired_local_asset: "/assets/img/patch-logos/epic-unreal.png"
   source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://dev.epicgames.com/documentation/en-us/unreal-engine/whats-new"
-  direct_asset_url: ""
-  source_domain: "dev.epicgames.com"
+  preferred_source_type: official_app_store_listing
+  official_source_url: "https://apps.apple.com/us/app/ue-remote/id1374517532?uo=4"
+  direct_asset_url: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/95/eb/fe/95ebfe05-0169-460a-ab5a-688f7c517859/AppIcon-0-0-1x_U007epad-0-1-85-220.png/512x512bb.png"
+  source_domain: "apps.apple.com"
   source_owner: "Unreal Engine"
   official_or_vendor_controlled: true
   fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "epic-unreal.svg"
-  usage_notes: "Currently uses company fallback in patch_products; product-specific official/vendor source is recorded for later icon selection and local asset review."
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "epic-unreal.png"
+  usage_notes: "Official UE Remote App Store icon from Epic Games International, S.a.r.l."
 - id: "unity"
   display_name: "Unity"
   company_id: "unity"
-  current_local_asset: "/assets/img/patch-logos/unity.svg"
+  current_local_asset: "/assets/img/patch-logos/unity.png"
   current_asset_exists: true
-  current_is_company_fallback: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/unity.svg"
+  current_is_company_fallback: false
+  current_provenance_status: "current_provenance:official_app_store_listing"
+  desired_local_asset: "/assets/img/patch-logos/unity.png"
   source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://unity.com/releases"
-  direct_asset_url: ""
-  source_domain: "unity.com"
+  preferred_source_type: official_app_store_listing
+  official_source_url: "https://apps.apple.com/us/app/unity-remote-5/id871767552?uo=4"
+  direct_asset_url: "https://is1-ssl.mzstatic.com/image/thumb/Purple114/v4/b9/f8/3b/b9f83b43-899e-6c98-e47e-e0bf9f5d0e67/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.png"
+  source_domain: "apps.apple.com"
   source_owner: "Unity"
   official_or_vendor_controlled: true
   fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "unity.svg"
-  usage_notes: "Currently uses company fallback in patch_products; product-specific official/vendor source is recorded for later icon selection and local asset review."
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "unity.png"
+  usage_notes: "Official Unity Remote App Store icon from Unity Technologies ApS."
 - id: "steam"
   display_name: "Steam"
   company_id: "valve"
@@ -1170,7 +1170,7 @@ products:
   current_local_asset: "/assets/img/patch-logos/amd.svg"
   current_asset_exists: true
   current_is_company_fallback: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
+  current_provenance_status: "current_provenance:company_fallback"
   desired_local_asset: "/assets/img/patch-logos/amd.svg"
   source_status: official_source_identified
   preferred_source_type: official_download_page
@@ -1183,7 +1183,7 @@ products:
   auto_fetchable: false
   manual_review_required: true
   recommended_filename: "amd.svg"
-  usage_notes: "Currently uses company fallback in patch_products; product-specific official/vendor source is recorded for later icon selection and local asset review."
+  usage_notes: "Still uses company fallback; no distinct AMD Software/Radeon product icon was verified in this pass."
 - id: "intel-arc"
   display_name: "Intel Graphics / Arc"
   company_id: "intel"
@@ -1267,23 +1267,23 @@ products:
 - id: "github"
   display_name: "GitHub / Copilot"
   company_id: "github"
-  current_local_asset: "/assets/img/patch-logos/github.svg"
+  current_local_asset: "/assets/img/patch-logos/github.png"
   current_asset_exists: true
-  current_is_company_fallback: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/github.svg"
+  current_is_company_fallback: false
+  current_provenance_status: "current_provenance:official_app_store_listing"
+  desired_local_asset: "/assets/img/patch-logos/github.png"
   source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://github.blog/changelog/"
-  direct_asset_url: ""
-  source_domain: "github.blog"
+  preferred_source_type: official_app_store_listing
+  official_source_url: "https://apps.apple.com/us/app/github/id1477376905?uo=4"
+  direct_asset_url: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/52/7f/bf/527fbf40-fa34-f203-98e5-0124d68e4b7d/AppIcon-0-0-1x_U007epad-0-1-P3-85-220.png/512x512bb.png"
+  source_domain: "apps.apple.com"
   source_owner: "GitHub / Copilot"
   official_or_vendor_controlled: true
   fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "github.svg"
-  usage_notes: "Currently uses company fallback in patch_products; product-specific official/vendor source is recorded for later icon selection and local asset review."
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "github.png"
+  usage_notes: "Official GitHub App Store icon from GitHub."
 - id: "cloudflare"
   display_name: "Cloudflare"
   company_id: "cloudflare"
@@ -1327,23 +1327,23 @@ products:
 - id: "notion"
   display_name: "Notion"
   company_id: "notion"
-  current_local_asset: "/assets/img/patch-logos/notion.svg"
+  current_local_asset: "/assets/img/patch-logos/notion.png"
   current_asset_exists: true
-  current_is_company_fallback: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/notion.svg"
+  current_is_company_fallback: false
+  current_provenance_status: "current_provenance:official_app_store_listing"
+  desired_local_asset: "/assets/img/patch-logos/notion.png"
   source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://www.notion.com/releases"
-  direct_asset_url: ""
-  source_domain: "www.notion.com"
+  preferred_source_type: official_app_store_listing
+  official_source_url: "https://apps.apple.com/us/app/notion-notes-tasks-ai/id1232780281?uo=4"
+  direct_asset_url: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/33/88/f8/3388f855-50b2-af6f-fc31-23f4aef296b6/AppIconProd-0-0-1x_U007epad-0-0-0-1-0-0-P3-85-220.png/512x512bb.png"
+  source_domain: "apps.apple.com"
   source_owner: "Notion"
   official_or_vendor_controlled: true
   fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "notion.svg"
-  usage_notes: "Currently uses company fallback in patch_products; product-specific official/vendor source is recorded for later icon selection and local asset review."
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "notion.png"
+  usage_notes: "Official Notion App Store icon from Notion Labs, Incorporated."
 - id: "zapier"
   display_name: "Zapier"
   company_id: "zapier"
@@ -1367,23 +1367,23 @@ products:
 - id: "make"
   display_name: "Make"
   company_id: "make"
-  current_local_asset: "/assets/img/patch-logos/make.svg"
+  current_local_asset: "/assets/img/patch-logos/make.png"
   current_asset_exists: true
-  current_is_company_fallback: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/make.svg"
+  current_is_company_fallback: false
+  current_provenance_status: "current_provenance:official_app_store_listing"
+  desired_local_asset: "/assets/img/patch-logos/make.png"
   source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://www.make.com/en/changelog"
-  direct_asset_url: ""
-  source_domain: "www.make.com"
+  preferred_source_type: official_app_store_listing
+  official_source_url: "https://apps.apple.com/us/app/make-for-ios/id1177073656?uo=4"
+  direct_asset_url: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/33/79/3e/33793e73-366d-1a71-2223-5f28869b981a/AppIcon-0-0-1x_U007emarketing-0-6-0-sRGB-85-220.png/512x512bb.png"
+  source_domain: "apps.apple.com"
   source_owner: "Make"
   official_or_vendor_controlled: true
   fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "make.svg"
-  usage_notes: "Currently uses company fallback in patch_products; product-specific official/vendor source is recorded for later icon selection and local asset review."
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "make.png"
+  usage_notes: "Official Make App Store icon from Celonis s.r.o."
 - id: "adobe-acrobat-reader"
   display_name: "Acrobat / Acrobat Reader"
   company_id: "adobe"

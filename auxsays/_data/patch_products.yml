@@ -146,7 +146,7 @@
   signal_notes: Flag search/index changes, model picker changes, and Pro feature changes.
   source_id: perplexity
   logo_label: Perplexity
-  logo_path: /assets/img/patch-logos/perplexity.svg
+  logo_path: /assets/img/patch-logos/perplexity.png
   company_id: perplexity
   product_id: perplexity
   company_url: /updates/perplexity/
@@ -172,7 +172,7 @@
     miss.
   dossier_note: Perplexity is tracked for release changes, workflow impact, compatibility
     shifts, stability signals, and community consensus.
-  asset_type: company_fallback
+  asset_type: product_icon
 - id: midjourney
   company_name: Midjourney
   product_name: Midjourney
@@ -279,7 +279,7 @@
     limitations.
   source_id: runway
   logo_label: Runway
-  logo_path: /assets/img/patch-logos/runway.svg
+  logo_path: /assets/img/patch-logos/runway.png
   company_id: runway
   product_id: runway
   company_url: /updates/runway/
@@ -305,7 +305,7 @@
     miss.
   dossier_note: Runway is tracked for release changes, workflow impact, compatibility
     shifts, stability signals, and community consensus.
-  asset_type: company_fallback
+  asset_type: product_icon
 - id: pika
   company_name: Pika
   product_name: Pika
@@ -369,7 +369,7 @@
     and plugin changes.
   source_id: lottiefiles
   logo_label: LottieFiles
-  logo_path: /assets/img/patch-logos/lottiefiles.svg
+  logo_path: /assets/img/patch-logos/lottiefiles.png
   company_id: lottiefiles
   product_id: lottiefiles
   company_url: /updates/lottiefiles/
@@ -395,7 +395,7 @@
     miss.
   dossier_note: LottieFiles is tracked for release changes, workflow impact, compatibility
     shifts, stability signals, and community consensus.
-  asset_type: company_fallback
+  asset_type: product_icon
 - id: figma
   company_name: Figma
   product_name: Figma
@@ -459,7 +459,7 @@
     changes.
   source_id: canva
   logo_label: Canva
-  logo_path: /assets/img/patch-logos/canva.svg
+  logo_path: /assets/img/patch-logos/canva.png
   company_id: canva
   product_id: canva
   company_url: /updates/canva/
@@ -485,7 +485,7 @@
     miss.
   dossier_note: Canva is tracked for release changes, workflow impact, compatibility
     shifts, stability signals, and community consensus.
-  asset_type: company_fallback
+  asset_type: product_icon
 - id: adobe-premiere-pro
   company_name: Adobe
   product_name: Premiere Pro
@@ -827,7 +827,7 @@
     changes.
   source_id: twitch
   logo_label: Twitch
-  logo_path: /assets/img/patch-logos/twitch.svg
+  logo_path: /assets/img/patch-logos/twitch.png
   company_id: twitch
   product_id: twitch
   company_url: /updates/twitch/
@@ -853,7 +853,7 @@
     miss.
   dossier_note: Twitch is tracked for release changes, workflow impact, compatibility
     shifts, stability signals, and community consensus.
-  asset_type: company_fallback
+  asset_type: product_icon
 - id: youtube
   company_name: YouTube
   product_name: YouTube / YouTube Studio
@@ -871,7 +871,7 @@
     live, and analytics changes.
   source_id: youtube
   logo_label: YouTube
-  logo_path: /assets/img/patch-logos/youtube.svg
+  logo_path: /assets/img/patch-logos/youtube.png
   company_id: youtube
   product_id: youtube
   company_url: /updates/youtube/
@@ -897,7 +897,7 @@
     miss.
   dossier_note: YouTube / YouTube Studio is tracked for release changes, workflow
     impact, compatibility shifts, stability signals, and community consensus.
-  asset_type: company_fallback
+  asset_type: product_icon
 - id: kick
   company_name: Kick
   product_name: Kick
@@ -915,7 +915,7 @@
     and creator dashboard changes.
   source_id: kick
   logo_label: Kick
-  logo_path: /assets/img/patch-logos/kick.svg
+  logo_path: /assets/img/patch-logos/kick.png
   company_id: kick
   product_id: kick
   company_url: /updates/kick/
@@ -941,7 +941,7 @@
     miss.
   dossier_note: Kick is tracked for release changes, workflow impact, compatibility
     shifts, stability signals, and community consensus.
-  asset_type: company_fallback
+  asset_type: product_icon
 - id: rumble
   company_name: Rumble
   product_name: Rumble
@@ -959,7 +959,7 @@
   signal_notes: Track creator tooling, monetization, live streaming, and policy changes.
   source_id: rumble
   logo_label: Rumble
-  logo_path: /assets/img/patch-logos/rumble.svg
+  logo_path: /assets/img/patch-logos/rumble.png
   company_id: rumble
   product_id: rumble
   company_url: /updates/rumble/
@@ -985,7 +985,7 @@
     miss.
   dossier_note: Rumble is tracked for release changes, workflow impact, compatibility
     shifts, stability signals, and community consensus.
-  asset_type: company_fallback
+  asset_type: product_icon
 - id: epic-unreal
   company_name: Epic Games
   product_name: Unreal Engine
@@ -1004,7 +1004,7 @@
     licensing/business changes.
   source_id: epic-unreal
   logo_label: Unreal Engine
-  logo_path: /assets/img/patch-logos/epic-games.svg
+  logo_path: /assets/img/patch-logos/epic-unreal.png
   company_id: epic-games
   product_id: epic-unreal
   company_url: /updates/epic-games/
@@ -1030,7 +1030,7 @@
     miss.
   dossier_note: Unreal Engine is tracked for release changes, workflow impact, compatibility
     shifts, stability signals, and community consensus.
-  asset_type: company_fallback
+  asset_type: product_icon
 - id: unity
   company_name: Unity
   product_name: Unity
@@ -1048,7 +1048,7 @@
     manager changes.
   source_id: unity
   logo_label: Unity
-  logo_path: /assets/img/patch-logos/unity.svg
+  logo_path: /assets/img/patch-logos/unity.png
   company_id: unity
   product_id: unity
   company_url: /updates/unity/
@@ -1074,7 +1074,7 @@
     miss.
   dossier_note: Unity is tracked for release changes, workflow impact, compatibility
     shifts, stability signals, and community consensus.
-  asset_type: company_fallback
+  asset_type: product_icon
 - id: steam
   company_name: Valve
   product_name: Steam
@@ -1206,7 +1206,7 @@
     miss.
   dossier_note: AMD Software / Radeon is tracked for release changes, workflow impact,
     compatibility shifts, stability signals, and community consensus.
-  asset_type: product_icon
+  asset_type: company_fallback
 - id: intel-arc
   company_name: Intel
   product_name: Intel Graphics / Arc
@@ -1401,7 +1401,7 @@
   signal_notes: Track Pages, Actions, Copilot, security, and workflow automation changes.
   source_id: github
   logo_label: GitHub / Copilot
-  logo_path: /assets/img/patch-logos/github.svg
+  logo_path: /assets/img/patch-logos/github.png
   company_id: github
   product_id: github
   company_url: /updates/github/
@@ -1427,7 +1427,7 @@
     miss.
   dossier_note: GitHub / Copilot is tracked for release changes, workflow impact,
     compatibility shifts, stability signals, and community consensus.
-  asset_type: company_fallback
+  asset_type: product_icon
 - id: cloudflare
   company_name: Cloudflare
   product_name: Cloudflare
@@ -1531,7 +1531,7 @@
     calendar/workspace changes.
   source_id: notion
   logo_label: Notion
-  logo_path: /assets/img/patch-logos/notion.svg
+  logo_path: /assets/img/patch-logos/notion.png
   company_id: notion
   product_id: notion
   company_url: /updates/notion/
@@ -1557,7 +1557,7 @@
     miss.
   dossier_note: Notion is tracked for release changes, workflow impact, compatibility
     shifts, stability signals, and community consensus.
-  asset_type: company_fallback
+  asset_type: product_icon
 - id: zapier
   company_name: Zapier
   product_name: Zapier
@@ -1618,7 +1618,7 @@
   signal_notes: Track modules, reliability, scheduling, pricing, and AI workflow changes.
   source_id: make
   logo_label: Make
-  logo_path: /assets/img/patch-logos/make.svg
+  logo_path: /assets/img/patch-logos/make.png
   company_id: make
   product_id: make
   company_url: /updates/make/
@@ -1644,7 +1644,7 @@
     miss.
   dossier_note: Make is tracked for release changes, workflow impact, compatibility
     shifts, stability signals, and community consensus.
-  asset_type: company_fallback
+  asset_type: product_icon
 - id: adobe-acrobat-reader
   company_name: Adobe
   product_name: Acrobat / Acrobat Reader

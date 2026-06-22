@@ -75,15 +75,16 @@ assets:
 - asset_id: github
   kind: company_logo
   owner_name: GitHub
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/github.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/github/id1477376905?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/52/7f/bf/527fbf40-fa34-f203-98e5-0124d68e4b7d/AppIcon-0-0-1x_U007epad-0-1-P3-85-220.png/512x512bb.png
+  local_path: /assets/img/patch-logos/github.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-21'
   fallback_to_company_logo: false
-  notes: Company-level logo asset.
+  notes: Official GitHub App Store icon from GitHub.
 - asset_id: google
   kind: company_logo
   owner_name: Google
@@ -99,27 +100,29 @@ assets:
 - asset_id: kick
   kind: company_logo
   owner_name: Kick
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/kick.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/kick-live-streaming/id6446202561?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/13/3d/b4/133db42d-7ddc-2b91-6fc3-fddbdbc7fe10/AppIcon-0-0-1x_U007epad-0-1-85-220.png/512x512bb.png
+  local_path: /assets/img/patch-logos/kick.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-21'
   fallback_to_company_logo: false
-  notes: Company-level logo asset.
+  notes: Official Kick App Store icon from Kick Streaming Pty Ltd.
 - asset_id: lottiefiles
   kind: company_logo
   owner_name: LottieFiles
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/lottiefiles.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/lottiefiles-animate-design/id1231821260?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/37/3d/6c/373d6cfa-a68f-50ca-dd6d-4059253a7b3a/AppIcon-0-0-1x_U007epad-0-1-0-sRGB-85-220.png/512x512bb.png
+  local_path: /assets/img/patch-logos/lottiefiles.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-21'
   fallback_to_company_logo: false
-  notes: Company-level logo asset.
+  notes: Official LottieFiles App Store icon from Design Barn Inc.
 - asset_id: midjourney
   kind: company_logo
   owner_name: Midjourney
@@ -171,39 +174,42 @@ assets:
 - asset_id: perplexity
   kind: company_logo
   owner_name: Perplexity
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/perplexity.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/perplexity-ai-search-chat/id1668000334?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/43/79/4e/43794ee1-9f87-0e0e-04ed-65a83d651633/AppIcon-0-0-1x_U007epad-0-0-0-1-0-0-85-220-0.png/512x512bb.png
+  local_path: /assets/img/patch-logos/perplexity.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-21'
   fallback_to_company_logo: false
-  notes: Company-level logo asset.
+  notes: Official Perplexity App Store icon from Perplexity AI Inc.
 - asset_id: runway
   kind: company_logo
   owner_name: Runway
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/runway.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/runwayml/id1665024375?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/54/23/92/5423923a-400c-1ca7-ad2b-3c6b7793d9a0/AppIcon-0-0-1x_U007ephone-0-1-85-220.png/512x512bb.png
+  local_path: /assets/img/patch-logos/runway.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-21'
   fallback_to_company_logo: false
-  notes: Company-level logo asset.
+  notes: Official RunwayML App Store icon from Runway AI, Inc.
 - asset_id: twitch
   kind: company_logo
   owner_name: Twitch
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/twitch.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/twitch-live-streaming/id460177396?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/e6/df/b3/e6dfb315-9c80-4c32-e688-9d38cfabd6d6/TwitchAppIcon-0-0-1x_U007epad-0-1-0-0-0-0-85-220.png/512x512bb.png
+  local_path: /assets/img/patch-logos/twitch.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-21'
   fallback_to_company_logo: false
-  notes: Company-level logo asset.
+  notes: Official Twitch App Store icon from Twitch Interactive, Inc.
 - asset_id: valve
   kind: company_logo
   owner_name: Valve
@@ -219,15 +225,16 @@ assets:
 - asset_id: youtube
   kind: company_logo
   owner_name: YouTube
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/youtube.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/youtube-studio/id888530356?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/6f/9d/42/6f9d4221-c982-47c7-022c-c5bd9daca683/logo_youtube_studio_2024_q4_color-0-0-1x_U007emarketing-0-0-0-7-0-0-0-85-220.png/512x512bb.png
+  local_path: /assets/img/patch-logos/youtube.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-21'
   fallback_to_company_logo: false
-  notes: Company-level logo asset.
+  notes: Official YouTube Studio App Store icon from Google LLC.
 - asset_id: blender-foundation
   kind: company_logo
   owner_name: Blender Foundation
@@ -243,15 +250,16 @@ assets:
 - asset_id: canva
   kind: company_logo
   owner_name: Canva
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/canva.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/canva-ai-video-photo-editor/id897446215?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/54/63/b5/5463b52f-ac99-4be1-6f74-fef35e4e3ce7/AppIcon-0-0-1x_U007epad-0-11-0-85-220.png/512x512bb.png
+  local_path: /assets/img/patch-logos/canva.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-21'
   fallback_to_company_logo: false
-  notes: Company-level logo asset.
+  notes: Official Canva App Store icon from Canva Pty Ltd.
 - asset_id: cloudflare
   kind: company_logo
   owner_name: Cloudflare
@@ -303,15 +311,16 @@ assets:
 - asset_id: make
   kind: company_logo
   owner_name: Make
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/make.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/make-for-ios/id1177073656?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/33/79/3e/33793e73-366d-1a71-2223-5f28869b981a/AppIcon-0-0-1x_U007emarketing-0-6-0-sRGB-85-220.png/512x512bb.png
+  local_path: /assets/img/patch-logos/make.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-21'
   fallback_to_company_logo: false
-  notes: Company-level logo asset.
+  notes: Official Make App Store icon from Celonis s.r.o.
 - asset_id: netlify
   kind: company_logo
   owner_name: Netlify
@@ -327,15 +336,16 @@ assets:
 - asset_id: notion
   kind: company_logo
   owner_name: Notion
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/notion.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/notion-notes-tasks-ai/id1232780281?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/33/88/f8/3388f855-50b2-af6f-fc31-23f4aef296b6/AppIconProd-0-0-1x_U007epad-0-0-0-1-0-0-P3-85-220.png/512x512bb.png
+  local_path: /assets/img/patch-logos/notion.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-21'
   fallback_to_company_logo: false
-  notes: Company-level logo asset.
+  notes: Official Notion App Store icon from Notion Labs, Incorporated.
 - asset_id: pika
   kind: company_logo
   owner_name: Pika
@@ -351,15 +361,16 @@ assets:
 - asset_id: rumble
   kind: company_logo
   owner_name: Rumble
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/rumble.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/rumble-live-streaming-videos/id1518427877?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/79/29/27/792927d1-d828-a73a-0ff5-6adf2cd40b74/AppIcon-0-0-1x_U007emarketing-0-8-0-85-220.png/512x512bb.png
+  local_path: /assets/img/patch-logos/rumble.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-21'
   fallback_to_company_logo: false
-  notes: Company-level logo asset.
+  notes: Official Rumble App Store icon from Rumble Inc.
 - asset_id: stability-ai
   kind: company_logo
   owner_name: Stability AI
@@ -375,15 +386,16 @@ assets:
 - asset_id: unity
   kind: company_logo
   owner_name: Unity
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/unity.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/unity-remote-5/id871767552?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple114/v4/b9/f8/3b/b9f83b43-899e-6c98-e47e-e0bf9f5d0e67/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.png
+  local_path: /assets/img/patch-logos/unity.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-21'
   fallback_to_company_logo: false
-  notes: Company-level logo asset.
+  notes: Official Unity Remote App Store icon from Unity Technologies ApS.
 - asset_id: zapier
   kind: company_logo
   owner_name: Zapier
@@ -460,17 +472,18 @@ assets:
   fallback_to_company_logo: false
   notes: Official Gemini App Store icon from Google's verified app listing.
 - asset_id: perplexity
-  kind: company_fallback
+  kind: product_icon
   owner_name: Perplexity
-  source_type: company_fallback
-  source_url: /updates/perplexity/
-  local_path: /assets/img/patch-logos/perplexity.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/perplexity-ai-search-chat/id1668000334?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/43/79/4e/43794ee1-9f87-0e0e-04ed-65a83d651633/AppIcon-0-0-1x_U007epad-0-0-0-1-0-0-85-220-0.png/512x512bb.png
+  local_path: /assets/img/patch-logos/perplexity.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
-  fallback_to_company_logo: true
-  notes: Explicit fallback to company logo.
+  last_verified_at: '2026-06-21'
+  fallback_to_company_logo: false
+  notes: Official Perplexity App Store icon from Perplexity AI Inc.
 - asset_id: midjourney
   kind: company_fallback
   owner_name: Midjourney
@@ -496,17 +509,18 @@ assets:
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
 - asset_id: runway
-  kind: company_fallback
+  kind: product_icon
   owner_name: Runway
-  source_type: company_fallback
-  source_url: /updates/runway/
-  local_path: /assets/img/patch-logos/runway.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/runwayml/id1665024375?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/54/23/92/5423923a-400c-1ca7-ad2b-3c6b7793d9a0/AppIcon-0-0-1x_U007ephone-0-1-85-220.png/512x512bb.png
+  local_path: /assets/img/patch-logos/runway.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
-  fallback_to_company_logo: true
-  notes: Explicit fallback to company logo.
+  last_verified_at: '2026-06-21'
+  fallback_to_company_logo: false
+  notes: Official RunwayML App Store icon from Runway AI, Inc.
 - asset_id: pika
   kind: company_fallback
   owner_name: Pika
@@ -520,17 +534,18 @@ assets:
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
 - asset_id: lottiefiles
-  kind: company_fallback
+  kind: product_icon
   owner_name: LottieFiles
-  source_type: company_fallback
-  source_url: /updates/lottiefiles/
-  local_path: /assets/img/patch-logos/lottiefiles.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/lottiefiles-animate-design/id1231821260?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/37/3d/6c/373d6cfa-a68f-50ca-dd6d-4059253a7b3a/AppIcon-0-0-1x_U007epad-0-1-0-sRGB-85-220.png/512x512bb.png
+  local_path: /assets/img/patch-logos/lottiefiles.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
-  fallback_to_company_logo: true
-  notes: Explicit fallback to company logo.
+  last_verified_at: '2026-06-21'
+  fallback_to_company_logo: false
+  notes: Official LottieFiles App Store icon from Design Barn Inc.
 - asset_id: figma
   kind: product_icon
   owner_name: Figma
@@ -544,17 +559,18 @@ assets:
   fallback_to_company_logo: false
   notes: Product/software icon asset.
 - asset_id: canva
-  kind: company_fallback
+  kind: product_icon
   owner_name: Canva
-  source_type: company_fallback
-  source_url: /updates/canva/
-  local_path: /assets/img/patch-logos/canva.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/canva-ai-video-photo-editor/id897446215?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/54/63/b5/5463b52f-ac99-4be1-6f74-fef35e4e3ce7/AppIcon-0-0-1x_U007epad-0-11-0-85-220.png/512x512bb.png
+  local_path: /assets/img/patch-logos/canva.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
-  fallback_to_company_logo: true
-  notes: Explicit fallback to company logo.
+  last_verified_at: '2026-06-21'
+  fallback_to_company_logo: false
+  notes: Official Canva App Store icon from Canva Pty Ltd.
 - asset_id: adobe-premiere-pro
   kind: product_icon
   owner_name: Premiere Pro
@@ -642,77 +658,83 @@ assets:
   notes: Local OBS Studio Simple Icons SVG path. Preserved because current live OBS
     icon is visually acceptable.
 - asset_id: twitch
-  kind: company_fallback
+  kind: product_icon
   owner_name: Twitch
-  source_type: company_fallback
-  source_url: /updates/twitch/
-  local_path: /assets/img/patch-logos/twitch.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/twitch-live-streaming/id460177396?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/e6/df/b3/e6dfb315-9c80-4c32-e688-9d38cfabd6d6/TwitchAppIcon-0-0-1x_U007epad-0-1-0-0-0-0-85-220.png/512x512bb.png
+  local_path: /assets/img/patch-logos/twitch.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
-  fallback_to_company_logo: true
-  notes: Explicit fallback to company logo.
+  last_verified_at: '2026-06-21'
+  fallback_to_company_logo: false
+  notes: Official Twitch App Store icon from Twitch Interactive, Inc.
 - asset_id: youtube
-  kind: company_fallback
+  kind: product_icon
   owner_name: YouTube / YouTube Studio
-  source_type: company_fallback
-  source_url: /updates/youtube/
-  local_path: /assets/img/patch-logos/youtube.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/youtube-studio/id888530356?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/6f/9d/42/6f9d4221-c982-47c7-022c-c5bd9daca683/logo_youtube_studio_2024_q4_color-0-0-1x_U007emarketing-0-0-0-7-0-0-0-85-220.png/512x512bb.png
+  local_path: /assets/img/patch-logos/youtube.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
-  fallback_to_company_logo: true
-  notes: Explicit fallback to company logo.
+  last_verified_at: '2026-06-21'
+  fallback_to_company_logo: false
+  notes: Official YouTube Studio App Store icon from Google LLC.
 - asset_id: kick
-  kind: company_fallback
+  kind: product_icon
   owner_name: Kick
-  source_type: company_fallback
-  source_url: /updates/kick/
-  local_path: /assets/img/patch-logos/kick.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/kick-live-streaming/id6446202561?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/13/3d/b4/133db42d-7ddc-2b91-6fc3-fddbdbc7fe10/AppIcon-0-0-1x_U007epad-0-1-85-220.png/512x512bb.png
+  local_path: /assets/img/patch-logos/kick.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
-  fallback_to_company_logo: true
-  notes: Explicit fallback to company logo.
+  last_verified_at: '2026-06-21'
+  fallback_to_company_logo: false
+  notes: Official Kick App Store icon from Kick Streaming Pty Ltd.
 - asset_id: rumble
-  kind: company_fallback
+  kind: product_icon
   owner_name: Rumble
-  source_type: company_fallback
-  source_url: /updates/rumble/
-  local_path: /assets/img/patch-logos/rumble.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/rumble-live-streaming-videos/id1518427877?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/79/29/27/792927d1-d828-a73a-0ff5-6adf2cd40b74/AppIcon-0-0-1x_U007emarketing-0-8-0-85-220.png/512x512bb.png
+  local_path: /assets/img/patch-logos/rumble.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
-  fallback_to_company_logo: true
-  notes: Explicit fallback to company logo.
+  last_verified_at: '2026-06-21'
+  fallback_to_company_logo: false
+  notes: Official Rumble App Store icon from Rumble Inc.
 - asset_id: epic-unreal
-  kind: company_fallback
+  kind: product_icon
   owner_name: Unreal Engine
-  source_type: company_fallback
-  source_url: /updates/epic-games/
-  local_path: /assets/img/patch-logos/epic-games.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/ue-remote/id1374517532?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/95/eb/fe/95ebfe05-0169-460a-ab5a-688f7c517859/AppIcon-0-0-1x_U007epad-0-1-85-220.png/512x512bb.png
+  local_path: /assets/img/patch-logos/epic-unreal.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
-  fallback_to_company_logo: true
-  notes: Explicit fallback to company logo.
+  last_verified_at: '2026-06-21'
+  fallback_to_company_logo: false
+  notes: Official UE Remote App Store icon from Epic Games International, S.a.r.l.
 - asset_id: unity
-  kind: company_fallback
+  kind: product_icon
   owner_name: Unity
-  source_type: company_fallback
-  source_url: /updates/unity/
-  local_path: /assets/img/patch-logos/unity.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/unity-remote-5/id871767552?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple114/v4/b9/f8/3b/b9f83b43-899e-6c98-e47e-e0bf9f5d0e67/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.png
+  local_path: /assets/img/patch-logos/unity.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
-  fallback_to_company_logo: true
-  notes: Explicit fallback to company logo.
+  last_verified_at: '2026-06-21'
+  fallback_to_company_logo: false
+  notes: Official Unity Remote App Store icon from Unity Technologies ApS.
 - asset_id: steam
   kind: product_icon
   owner_name: Steam
@@ -739,17 +761,17 @@ assets:
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
 - asset_id: amd
-  kind: company_logo
+  kind: company_fallback
   owner_name: AMD
-  source_type: simple_icons
-  source_url: https://simpleicons.org/?q=amd
+  source_type: company_fallback
+  source_url: /updates/amd/
   local_path: /assets/img/patch-logos/amd.svg
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
   last_verified_at: '2026-05-01'
-  fallback_to_company_logo: false
-  notes: Local AMD Simple Icons SVG path replacing text badge.
+  fallback_to_company_logo: true
+  notes: Explicit fallback to company logo; no distinct AMD Software/Radeon product icon was verified in this pass.
 - asset_id: intel-arc
   kind: company_fallback
   owner_name: Intel Graphics / Arc
@@ -800,17 +822,18 @@ assets:
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
 - asset_id: github
-  kind: company_fallback
+  kind: product_icon
   owner_name: GitHub / Copilot
-  source_type: company_fallback
-  source_url: /updates/github/
-  local_path: /assets/img/patch-logos/github.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/github/id1477376905?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/52/7f/bf/527fbf40-fa34-f203-98e5-0124d68e4b7d/AppIcon-0-0-1x_U007epad-0-1-P3-85-220.png/512x512bb.png
+  local_path: /assets/img/patch-logos/github.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
-  fallback_to_company_logo: true
-  notes: Explicit fallback to company logo.
+  last_verified_at: '2026-06-21'
+  fallback_to_company_logo: false
+  notes: Official GitHub App Store icon from GitHub.
 - asset_id: cloudflare
   kind: company_fallback
   owner_name: Cloudflare
@@ -836,17 +859,18 @@ assets:
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
 - asset_id: notion
-  kind: company_fallback
+  kind: product_icon
   owner_name: Notion
-  source_type: company_fallback
-  source_url: /updates/notion/
-  local_path: /assets/img/patch-logos/notion.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/notion-notes-tasks-ai/id1232780281?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/33/88/f8/3388f855-50b2-af6f-fc31-23f4aef296b6/AppIconProd-0-0-1x_U007epad-0-0-0-1-0-0-P3-85-220.png/512x512bb.png
+  local_path: /assets/img/patch-logos/notion.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
-  fallback_to_company_logo: true
-  notes: Explicit fallback to company logo.
+  last_verified_at: '2026-06-21'
+  fallback_to_company_logo: false
+  notes: Official Notion App Store icon from Notion Labs, Incorporated.
 - asset_id: zapier
   kind: company_fallback
   owner_name: Zapier
@@ -860,17 +884,18 @@ assets:
   fallback_to_company_logo: true
   notes: Explicit fallback to company logo.
 - asset_id: make
-  kind: company_fallback
+  kind: product_icon
   owner_name: Make
-  source_type: company_fallback
-  source_url: /updates/make/
-  local_path: /assets/img/patch-logos/make.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/make-for-ios/id1177073656?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/33/79/3e/33793e73-366d-1a71-2223-5f28869b981a/AppIcon-0-0-1x_U007emarketing-0-6-0-sRGB-85-220.png/512x512bb.png
+  local_path: /assets/img/patch-logos/make.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
-  fallback_to_company_logo: true
-  notes: Explicit fallback to company logo.
+  last_verified_at: '2026-06-21'
+  fallback_to_company_logo: false
+  notes: Official Make App Store icon from Celonis s.r.o.
 - asset_id: adobe-acrobat-reader
   kind: product_icon
   owner_name: Adobe Acrobat Reader
