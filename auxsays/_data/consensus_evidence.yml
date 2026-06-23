@@ -4704,3 +4704,28 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ucuoyj-i-need-help-with-my-audio-track-and-expor
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ucuoyj/i_need_help_with_my_audio_track_and_export_issue/
+  parent_title: I need help with my audio track and export issue.
+  report_title: I need help with my audio track and export issue.
+  report_text_excerpt: 'I need help with my audio track and export issue. PLEASE READ Hey!! : D I’d ask you to watch the video all the way through before you decide to suggest a solution, since you should understand exactly what I’m trying to achieve. Maybe there’s a solution to the first problem, or...'
+  captured_at: '2026-06-23T18:18:19Z'
+  source_date: '2026-06-22'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
