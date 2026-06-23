@@ -17,8 +17,8 @@ update_version: AI credits consumed per user now in the Copilot usage metrics AP
 update_logo_text: GIT
 update_published_at: '2026-06-19T16:23:29Z'
 update_last_checked: '2026-06-20T04:43:03Z'
-source_last_checked: '2026-06-23T04:32:32Z'
-official_body_last_checked: '2026-06-23T04:32:32Z'
+source_last_checked: '2026-06-23T10:05:49Z'
+official_body_last_checked: '2026-06-23T10:05:49Z'
 record_last_updated: '2026-06-20T04:43:03Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -83,11 +83,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-06-21T14:35:06Z'
-  url: https://github.blog/changelog/2026-06-19-ai-credits-consumed-per-user-now-in-the-copilot-usage-metrics-api
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-06-21T20:06:30Z'
   url: https://github.blog/changelog/2026-06-19-ai-credits-consumed-per-user-now-in-the-copilot-usage-metrics-api
   status: captured-from-rss-feed
@@ -104,6 +99,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-06-23T04:32:32Z'
+  url: https://github.blog/changelog/2026-06-19-ai-credits-consumed-per-user-now-in-the-copilot-usage-metrics-api
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-06-23T10:05:49Z'
   url: https://github.blog/changelog/2026-06-19-ai-credits-consumed-per-user-now-in-the-copilot-usage-metrics-api
   status: captured-from-rss-feed
   body_captured: true
