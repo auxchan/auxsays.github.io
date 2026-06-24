@@ -17,8 +17,8 @@ update_version: Secret scanning adds extended metadata for Replicate secrets
 update_logo_text: GIT
 update_published_at: '2026-06-23T19:50:00Z'
 update_last_checked: '2026-06-24T09:52:58Z'
-source_last_checked: '2026-06-24T15:11:12Z'
-official_body_last_checked: '2026-06-24T15:11:12Z'
+source_last_checked: '2026-06-24T20:13:06Z'
+official_body_last_checked: '2026-06-24T20:13:06Z'
 record_last_updated: '2026-06-24T09:52:58Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -80,6 +80,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-06-24T15:11:12Z'
+  url: https://github.blog/changelog/2026-06-23-secret-scanning-adds-extended-metadata-for-replicate-secrets
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-06-24T20:13:06Z'
   url: https://github.blog/changelog/2026-06-23-secret-scanning-adds-extended-metadata-for-replicate-secrets
   status: captured-from-rss-feed
   body_captured: true

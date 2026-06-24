@@ -3,7 +3,7 @@
   "last_results": [
     {
       "adapter": "rss_feed",
-      "duration_ms": 782,
+      "duration_ms": 2697,
       "fetched": 2,
       "product_id": "figma",
       "refreshed": [
@@ -11,20 +11,17 @@
           "action": "freshness-updated",
           "path": "auxsays/updates/generated/2026-06-18-figma-search-the-web-in-the-figma-design-agent.md",
           "record_id": "rss:figma:cec7ba19-591c-46a1-b1a2-5da55e7be802"
-        },
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-06-17-figma-ai-credit-usage-api-for-enterprise-customers.md",
-          "record_id": "rss:figma:12a9cb85-e994-4ba1-b46b-b51fa43bdd3e"
         }
       ],
       "skipped": [],
       "status": "success",
-      "written": []
+      "written": [
+        "auxsays/updates/generated/2026-06-24-figma-here-s-everything-from-config-2026.md"
+      ]
     },
     {
       "adapter": "adobe_release_notes",
-      "duration_ms": 25604,
+      "duration_ms": 26437,
       "fetched": 1,
       "product_id": "adobe-premiere-pro",
       "refreshed": [
@@ -40,7 +37,7 @@
     },
     {
       "adapter": "blackmagic_support_downloads",
-      "duration_ms": 599,
+      "duration_ms": 842,
       "fetched": 2,
       "product_id": "blackmagic-davinci",
       "refreshed": [
@@ -61,7 +58,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 1173,
+      "duration_ms": 807,
       "fetched": 2,
       "product_id": "obs-studio",
       "refreshed": [
@@ -82,7 +79,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 691,
+      "duration_ms": 462,
       "fetched": 2,
       "product_id": "comfyui",
       "refreshed": [
@@ -103,7 +100,7 @@
     },
     {
       "adapter": "rss_feed",
-      "duration_ms": 578,
+      "duration_ms": 1930,
       "fetched": 2,
       "product_id": "github",
       "refreshed": [
@@ -111,20 +108,17 @@
           "action": "freshness-updated",
           "path": "auxsays/updates/generated/2026-06-23-github-copilot-secret-scanning-adds-extended-metadata-for-replicate-secrets.md",
           "record_id": "rss:github:https://github.blog/changelog/2026-06-23-secret-scanning-adds-extended-metadata-for-replicate-secrets"
-        },
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-06-23-github-copilot-fetch-code-quality-findings-via-rest-api.md",
-          "record_id": "rss:github:https://github.blog/changelog/2026-06-23-fetch-code-quality-findings-via-rest-api"
         }
       ],
       "skipped": [],
       "status": "success",
-      "written": []
+      "written": [
+        "auxsays/updates/generated/2026-06-24-github-copilot-changes-to-model-selection-for-free-and-student-plans.md"
+      ]
     },
     {
       "adapter": "html_changelog",
-      "duration_ms": 164,
+      "duration_ms": 743,
       "fetched": 0,
       "product_id": "netlify",
       "refreshed": [],
@@ -133,8 +127,8 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-06-24T15:11:13Z",
-  "last_run_started_at": "2026-06-24T15:10:43Z",
+  "last_run_finished_at": "2026-06-24T20:13:09Z",
+  "last_run_started_at": "2026-06-24T20:12:35Z",
   "sources": {
     "adobe-after-effects": {
       "consecutive_failures": 2,
@@ -199,7 +193,7 @@
     "adobe-premiere-pro": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_release_notes",
-      "last_checked_at": "2026-06-24T15:10:44Z",
+      "last_checked_at": "2026-06-24T20:12:38Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -207,8 +201,8 @@
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 25604,
-      "last_success_at": "2026-06-24T15:10:44Z",
+      "last_run_duration_ms": 26437,
+      "last_success_at": "2026-06-24T20:12:38Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "adobe:adobe-premiere-pro:26.2.2:c176cc33bba85978",
@@ -219,7 +213,7 @@
     "blackmagic-davinci": {
       "consecutive_failures": 0,
       "last_adapter": "blackmagic_support_downloads",
-      "last_checked_at": "2026-06-24T15:11:10Z",
+      "last_checked_at": "2026-06-24T20:13:04Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -227,8 +221,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 599,
-      "last_success_at": "2026-06-24T15:11:10Z",
+      "last_run_duration_ms": 842,
+      "last_success_at": "2026-06-24T20:13:04Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "blackmagic-support:blackmagic-davinci:21.0.1:a7be1e5732fd4edfb804af3d1f29cf61",
@@ -243,7 +237,7 @@
     "comfyui": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-06-24T15:11:11Z",
+      "last_checked_at": "2026-06-24T20:13:06Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -251,8 +245,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 691,
-      "last_success_at": "2026-06-24T15:11:11Z",
+      "last_run_duration_ms": 462,
+      "last_success_at": "2026-06-24T20:13:06Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:comfyui:343659944",
@@ -271,7 +265,7 @@
     "figma": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-06-24T15:10:43Z",
+      "last_checked_at": "2026-06-24T20:12:35Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -279,10 +273,11 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 782,
-      "last_success_at": "2026-06-24T15:10:43Z",
+      "last_run_duration_ms": 2697,
+      "last_success_at": "2026-06-24T20:12:35Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "rss:figma:8bca1b2b-357e-4244-8697-448f0dada845",
         "rss:figma:cec7ba19-591c-46a1-b1a2-5da55e7be802",
         "rss:figma:12a9cb85-e994-4ba1-b46b-b51fa43bdd3e",
         "rss:figma:2a314040-cf08-4d01-9671-83ceb0fdf03d",
@@ -316,7 +311,7 @@
     "github": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-06-24T15:11:12Z",
+      "last_checked_at": "2026-06-24T20:13:06Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -324,10 +319,11 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 578,
-      "last_success_at": "2026-06-24T15:11:12Z",
+      "last_run_duration_ms": 1930,
+      "last_success_at": "2026-06-24T20:13:06Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "rss:github:https://github.blog/changelog/2026-06-24-changes-to-model-selection-for-free-and-student-plans",
         "rss:github:https://github.blog/changelog/2026-06-23-fetch-code-quality-findings-via-rest-api",
         "rss:github:https://github.blog/changelog/2026-06-23-secret-scanning-adds-extended-metadata-for-replicate-secrets",
         "rss:github:https://github.blog/changelog/2026-06-19-new-features-and-claude-as-agent-provider-preview-in-jetbrains-ides",
@@ -426,15 +422,14 @@
         "rss:github:https://github.blog/changelog/2026-05-05-github-copilot-in-visual-studio-code-april-releases",
         "rss:github:https://github.blog/changelog/2026-05-05-secret-scanning-with-github-mcp-server-is-now-generally-available",
         "rss:github:https://github.blog/changelog/2026-05-06-search-and-filter-bar-for-repository-security-advisories",
-        "rss:github:https://github.blog/changelog/2026-05-05-dependency-scanning-with-github-mcp-server-is-in-public-preview",
-        "rss:github:https://github.blog/changelog/2026-05-05-deprecation-notice-code_scanning_upload-field-will-be-removed-from-rate_limit-api-endpoint"
+        "rss:github:https://github.blog/changelog/2026-05-05-dependency-scanning-with-github-mcp-server-is-in-public-preview"
       ],
       "status": "healthy"
     },
     "netlify": {
       "consecutive_failures": 0,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-06-24T15:11:13Z",
+      "last_checked_at": "2026-06-24T20:13:08Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -442,15 +437,15 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 164,
-      "last_success_at": "2026-06-24T15:11:13Z",
+      "last_run_duration_ms": 743,
+      "last_success_at": "2026-06-24T20:13:08Z",
       "previous_consecutive_failures": 0,
       "status": "degraded"
     },
     "obs-studio": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-06-24T15:11:10Z",
+      "last_checked_at": "2026-06-24T20:13:05Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -458,8 +453,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 1173,
-      "last_success_at": "2026-06-24T15:11:10Z",
+      "last_run_duration_ms": 807,
+      "last_success_at": "2026-06-24T20:13:05Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:obs-studio:304830335",
