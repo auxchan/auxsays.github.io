@@ -4729,3 +4729,28 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-0-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uek2z0-audio-doesnt-work-at-all
+  product_id: blackmagic-davinci
+  update_version: 21.0.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1uek2z0/audio_doesnt_work_at_all/
+  parent_title: Audio doesn't work at all
+  report_title: Audio doesn't work at all
+  report_text_excerpt: 'Audio doesn''t work at all System specifications: Windows RTX 5060 8GB Ryzen 5 5500G DaVinci Resolve 21.0.1 Hello, I''ve been trying to solve this DaVinci Resolve audio issue for more than 5 days and haven''t had any success. I''ve gone through countless forum posts and tutorials,...'
+  captured_at: '2026-06-24T19:04:27Z'
+  source_date: '2026-06-24'
+  target_release_date: '2026-06-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
