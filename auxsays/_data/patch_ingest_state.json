@@ -3,7 +3,7 @@
   "last_results": [
     {
       "adapter": "rss_feed",
-      "duration_ms": 759,
+      "duration_ms": 758,
       "fetched": 2,
       "product_id": "figma",
       "refreshed": [
@@ -24,7 +24,7 @@
     },
     {
       "adapter": "adobe_release_notes",
-      "duration_ms": 25855,
+      "duration_ms": 26062,
       "fetched": 1,
       "product_id": "adobe-premiere-pro",
       "refreshed": [
@@ -40,7 +40,7 @@
     },
     {
       "adapter": "blackmagic_support_downloads",
-      "duration_ms": 908,
+      "duration_ms": 1015,
       "fetched": 2,
       "product_id": "blackmagic-davinci",
       "refreshed": [
@@ -61,7 +61,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 1482,
+      "duration_ms": 1224,
       "fetched": 2,
       "product_id": "obs-studio",
       "refreshed": [
@@ -82,7 +82,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 897,
+      "duration_ms": 637,
       "fetched": 2,
       "product_id": "comfyui",
       "refreshed": [
@@ -103,10 +103,15 @@
     },
     {
       "adapter": "rss_feed",
-      "duration_ms": 2091,
+      "duration_ms": 592,
       "fetched": 2,
       "product_id": "github",
       "refreshed": [
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-06-24-github-copilot-self-service-credential-revocation-for-incident-response.md",
+          "record_id": "rss:github:https://github.blog/changelog/2026-06-24-self-service-credential-revocation-for-incident-response"
+        },
         {
           "action": "freshness-updated",
           "path": "auxsays/updates/generated/2026-06-24-github-copilot-changes-to-model-selection-for-free-and-student-plans.md",
@@ -115,13 +120,11 @@
       ],
       "skipped": [],
       "status": "success",
-      "written": [
-        "auxsays/updates/generated/2026-06-24-github-copilot-self-service-credential-revocation-for-incident-response.md"
-      ]
+      "written": []
     },
     {
       "adapter": "html_changelog",
-      "duration_ms": 217,
+      "duration_ms": 331,
       "fetched": 0,
       "product_id": "netlify",
       "refreshed": [],
@@ -130,8 +133,8 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-06-25T04:36:47Z",
-  "last_run_started_at": "2026-06-25T04:36:15Z",
+  "last_run_finished_at": "2026-06-25T09:46:26Z",
+  "last_run_started_at": "2026-06-25T09:45:56Z",
   "sources": {
     "adobe-after-effects": {
       "consecutive_failures": 2,
@@ -196,7 +199,7 @@
     "adobe-premiere-pro": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_release_notes",
-      "last_checked_at": "2026-06-25T04:36:15Z",
+      "last_checked_at": "2026-06-25T09:45:57Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -204,8 +207,8 @@
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 25855,
-      "last_success_at": "2026-06-25T04:36:15Z",
+      "last_run_duration_ms": 26062,
+      "last_success_at": "2026-06-25T09:45:57Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "adobe:adobe-premiere-pro:26.2.2:c176cc33bba85978",
@@ -216,7 +219,7 @@
     "blackmagic-davinci": {
       "consecutive_failures": 0,
       "last_adapter": "blackmagic_support_downloads",
-      "last_checked_at": "2026-06-25T04:36:41Z",
+      "last_checked_at": "2026-06-25T09:46:23Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -224,8 +227,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 908,
-      "last_success_at": "2026-06-25T04:36:41Z",
+      "last_run_duration_ms": 1015,
+      "last_success_at": "2026-06-25T09:46:23Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "blackmagic-support:blackmagic-davinci:21.0.1:a7be1e5732fd4edfb804af3d1f29cf61",
@@ -240,7 +243,7 @@
     "comfyui": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-06-25T04:36:44Z",
+      "last_checked_at": "2026-06-25T09:46:25Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -248,8 +251,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 897,
-      "last_success_at": "2026-06-25T04:36:44Z",
+      "last_run_duration_ms": 637,
+      "last_success_at": "2026-06-25T09:46:25Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:comfyui:343659944",
@@ -268,7 +271,7 @@
     "figma": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-06-25T04:36:15Z",
+      "last_checked_at": "2026-06-25T09:45:56Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -276,8 +279,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 759,
-      "last_success_at": "2026-06-25T04:36:15Z",
+      "last_run_duration_ms": 758,
+      "last_success_at": "2026-06-25T09:45:56Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:figma:8bca1b2b-357e-4244-8697-448f0dada845",
@@ -314,7 +317,7 @@
     "github": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-06-25T04:36:44Z",
+      "last_checked_at": "2026-06-25T09:46:26Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -322,8 +325,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 2091,
-      "last_success_at": "2026-06-25T04:36:44Z",
+      "last_run_duration_ms": 592,
+      "last_success_at": "2026-06-25T09:46:26Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:github:https://github.blog/changelog/2026-06-24-self-service-credential-revocation-for-incident-response",
@@ -432,7 +435,7 @@
     "netlify": {
       "consecutive_failures": 0,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-06-25T04:36:47Z",
+      "last_checked_at": "2026-06-25T09:46:26Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -440,15 +443,15 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 217,
-      "last_success_at": "2026-06-25T04:36:47Z",
+      "last_run_duration_ms": 331,
+      "last_success_at": "2026-06-25T09:46:26Z",
       "previous_consecutive_failures": 0,
       "status": "degraded"
     },
     "obs-studio": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-06-25T04:36:42Z",
+      "last_checked_at": "2026-06-25T09:46:24Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -456,8 +459,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 1482,
-      "last_success_at": "2026-06-25T04:36:42Z",
+      "last_run_duration_ms": 1224,
+      "last_success_at": "2026-06-25T09:46:24Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:obs-studio:304830335",
