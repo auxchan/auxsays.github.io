@@ -324,7 +324,7 @@
     and app/mobile changes.
   source_id: pika
   logo_label: Pika
-  logo_path: /assets/img/patch-logos/pika.svg
+  logo_path: /assets/img/patch-logos/pika.png
   company_id: pika
   product_id: pika
   company_url: /updates/pika/
@@ -504,7 +504,7 @@
     support, GPU acceleration, captions, known issues, and fixed issues separately.
   source_id: adobe-premiere-pro
   logo_label: Premiere
-  logo_path: /assets/img/patch-logos/adobe-premiere-pro.svg
+  logo_path: /assets/img/patch-logos/adobe-premiere-pro.png
   ui_backdrop_path: /assets/img/software-ui/adobe-premiere-pro-ui.webp
   company_id: adobe
   product_id: adobe-premiere-pro
@@ -644,7 +644,7 @@
     issues.
   source_id: adobe-media-encoder
   logo_label: Media Encoder
-  logo_path: /assets/img/patch-logos/adobe-media-encoder.svg
+  logo_path: /assets/img/patch-logos/adobe.png
   ui_backdrop_path: /assets/img/software-ui/adobe-media-encoder-ui.webp
   company_id: adobe
   product_id: adobe-media-encoder
@@ -691,7 +691,7 @@
     behavior, export behavior, sync issues, known issues, and fixed issues.
   source_id: adobe-lightroom-classic
   logo_label: Lightroom Classic
-  logo_path: /assets/img/patch-logos/adobe-lightroom-classic.svg
+  logo_path: /assets/img/patch-logos/adobe-lightroom-classic.png
   ui_backdrop_path: /assets/img/software-ui/adobe-lightroom-classic-ui.webp
   company_id: adobe
   product_id: adobe-lightroom-classic

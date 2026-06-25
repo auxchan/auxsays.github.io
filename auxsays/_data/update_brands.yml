@@ -77,7 +77,7 @@ pika:
   company_label: Pika
   source_id: pika
   logo_label: Pika
-  logo_path: /assets/img/patch-logos/pika.svg
+  logo_path: /assets/img/patch-logos/pika.png
 lottiefiles:
   company_name: LottieFiles
   product_name: LottieFiles
@@ -117,7 +117,7 @@ adobe-premiere-pro:
   company_label: Adobe
   source_id: adobe-premiere-pro
   logo_label: Premiere
-  logo_path: /assets/img/patch-logos/adobe-premiere-pro.svg
+  logo_path: /assets/img/patch-logos/adobe-premiere-pro.png
 adobe-after-effects:
   company_name: Adobe
   product_name: After Effects
@@ -147,7 +147,7 @@ adobe-media-encoder:
   company_label: Adobe
   source_id: adobe-media-encoder
   logo_label: Media Encoder
-  logo_path: /assets/img/patch-logos/adobe-media-encoder.svg
+  logo_path: /assets/img/patch-logos/adobe.png
 adobe-lightroom-classic:
   company_name: Adobe
   product_name: Lightroom Classic
@@ -157,7 +157,7 @@ adobe-lightroom-classic:
   company_label: Adobe
   source_id: adobe-lightroom-classic
   logo_label: Lightroom Classic
-  logo_path: /assets/img/patch-logos/adobe-lightroom-classic.svg
+  logo_path: /assets/img/patch-logos/adobe-lightroom-classic.png
 twitch:
   company_name: Twitch
   product_name: Twitch

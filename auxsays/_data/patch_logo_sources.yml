@@ -2,15 +2,16 @@ assets:
 - asset_id: adobe
   kind: company_logo
   owner_name: Adobe
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/adobe.svg
+  source_type: simple_icons
+  source_url: https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/adobe.svg
+  direct_asset_url: https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/adobe.svg
+  local_path: /assets/img/patch-logos/adobe.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-24'
   fallback_to_company_logo: false
-  notes: Company-level logo asset.
+  notes: PNG replacement for reviewable Adobe brand mark; Simple Icons fallback used after direct Adobe asset endpoints timed out.
 - asset_id: amd
   kind: company_logo
   owner_name: AMD
@@ -90,16 +91,16 @@ assets:
 - asset_id: google
   kind: company_logo
   owner_name: Google
-  source_type: simple_icons
-  source_url: https://simpleicons.org/icons/google.svg
-  direct_asset_url: https://cdn.simpleicons.org/google
+  source_type: vendor_cdn_from_first_party_page
+  source_url: https://www.gstatic.com/images/branding/product/2x/googleg_96dp.png
+  direct_asset_url: https://www.gstatic.com/images/branding/product/2x/googleg_96dp.png
   local_path: /assets/img/patch-logos/google.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-06-23'
+  last_verified_at: '2026-06-24'
   fallback_to_company_logo: false
-  notes: Replaced fake text badge with Simple Icons brand mark fallback for company identification.
+  notes: Replaced single-color fallback with official Google G PNG from gstatic.
 - asset_id: kick
   kind: company_logo
   owner_name: Kick
@@ -166,15 +167,16 @@ assets:
 - asset_id: openai
   kind: company_logo
   owner_name: OpenAI
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/openai.svg
+  source_type: simple_icons
+  source_url: https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/openai.svg
+  direct_asset_url: https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/openai.svg
+  local_path: /assets/img/patch-logos/openai.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-24'
   fallback_to_company_logo: false
-  notes: Company-level logo asset.
+  notes: Replaced fake text badge with OpenAI mark PNG from Simple Icons fallback; openai.com favicon fetch returned 403.
 - asset_id: perplexity
   kind: company_logo
   owner_name: Perplexity
@@ -204,16 +206,16 @@ assets:
 - asset_id: twitch
   kind: company_logo
   owner_name: Twitch
-  source_type: simple_icons
-  source_url: https://simpleicons.org/icons/twitch.svg
-  direct_asset_url: https://cdn.simpleicons.org/twitch/F4EFE4
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/twitch-live-streaming/id460177396?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/e6/df/b3/e6dfb315-9c80-4c32-e688-9d38cfabd6d6/TwitchAppIcon-0-0-1x_U007epad-0-1-0-0-0-0-85-220.png/512x512bb.png
   local_path: /assets/img/patch-logos/twitch.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-06-23'
+  last_verified_at: '2026-06-24'
   fallback_to_company_logo: false
-  notes: Replaced fake text badge with Simple Icons brand mark fallback for company identification.
+  notes: Restored color Twitch App Store icon instead of monochrome fallback.
 - asset_id: valve
   kind: company_logo
   owner_name: Valve
@@ -224,22 +226,22 @@ assets:
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-06-23'
+  last_verified_at: '2026-06-24'
   fallback_to_company_logo: false
-  notes: Replaced fake text badge with Simple Icons brand mark fallback for company identification.
+  notes: Re-rendered Valve fallback mark as larger PNG for GitHub Desktop/site review.
 - asset_id: youtube
   kind: company_logo
   owner_name: YouTube
-  source_type: simple_icons
-  source_url: https://simpleicons.org/icons/youtube.svg
-  direct_asset_url: https://cdn.simpleicons.org/youtube
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/youtube/id544007664?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/4f/cb/7e/4fcb7e91-05c8-ec7f-31da-8594e37a755e/logo_youtube_2024_q4_color-0-0-1x_U007emarketing-0-0-0-7-0-0-0-85-220.png/512x512bb.jpg
   local_path: /assets/img/patch-logos/youtube.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-06-23'
+  last_verified_at: '2026-06-24'
   fallback_to_company_logo: false
-  notes: Replaced fake text badge with Simple Icons brand mark fallback for company identification.
+  notes: Replaced YouTube Studio-style icon with larger official main YouTube App Store icon from Google LLC.
 - asset_id: blender-foundation
   kind: company_logo
   owner_name: Blender Foundation
@@ -346,28 +348,29 @@ assets:
 - asset_id: notion
   kind: company_logo
   owner_name: Notion
-  source_type: simple_icons
-  source_url: https://simpleicons.org/icons/notion.svg
-  direct_asset_url: https://cdn.simpleicons.org/notion
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/notion-notes-tasks-ai/id1232780281?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/33/88/f8/3388f855-50b2-af6f-fc31-23f4aef296b6/AppIconProd-0-0-1x_U007epad-0-0-0-1-0-0-P3-85-220.png/512x512bb.png
   local_path: /assets/img/patch-logos/notion.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-06-23'
+  last_verified_at: '2026-06-24'
   fallback_to_company_logo: false
-  notes: Replaced fake text badge with Simple Icons brand mark fallback for company identification.
+  notes: Restored official Notion App Store icon so the mark remains visible on dark cards.
 - asset_id: pika
   kind: company_logo
   owner_name: Pika
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/pika.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/pika-video/id6680155400?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/5d/db/35/5ddb355b-9d89-cfac-44c0-b78cc23f77cd/AppIcon-0-1x_U007ephone-0-1-0-85-220-0.png/512x512bb.jpg
+  local_path: /assets/img/patch-logos/pika.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-24'
   fallback_to_company_logo: false
-  notes: Company-level logo asset.
+  notes: Replaced fake text badge/site footer asset with official Pika Video App Store icon from Mellis, Inc.
 - asset_id: rumble
   kind: company_logo
   owner_name: Rumble
@@ -384,42 +387,42 @@ assets:
 - asset_id: stability-ai
   kind: company_logo
   owner_name: Stability AI
-  source_type: vendor_cdn_from_first_party_page
+  source_type: official_site_asset
   source_url: https://stability.ai/
-  direct_asset_url: https://images.squarespace-cdn.com/content/v1/6213c340453c3f502425776e/8346fca1-a188-450e-8c75-e487e0ff3fae/stability-ai-white-dot-logo-mobile.png?format=300w
+  direct_asset_url: https://images.squarespace-cdn.com/content/v1/6213c340453c3f502425776e/4e38b1d7-350c-4fd8-ac08-114a3448f110/Stability-ai-logo-white-dot.png
   local_path: /assets/img/patch-logos/stability-ai.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-06-23'
+  last_verified_at: '2026-06-24'
   fallback_to_company_logo: false
-  notes: Company card uses first-party Stability AI logo asset from stability.ai vendor-controlled Squarespace CDN instead of the fake text badge.
+  notes: Replaced wordmark-only/tiny favicon asset with first-party Stability AI site image asset for clearer card identity.
 - asset_id: unity
   kind: company_logo
   owner_name: Unity
-  source_type: simple_icons
-  source_url: https://simpleicons.org/icons/unity.svg
-  direct_asset_url: https://cdn.simpleicons.org/unity/F4EFE4
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/unity-remote-5/id871767552?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple114/v4/b9/f8/3b/b9f83b43-899e-6c98-e47e-e0bf9f5d0e67/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.png
   local_path: /assets/img/patch-logos/unity.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-06-23'
+  last_verified_at: '2026-06-24'
   fallback_to_company_logo: false
-  notes: Replaced fake text badge with Simple Icons brand mark fallback for company identification.
+  notes: Restored official Unity Remote App Store icon instead of monochrome fallback mark.
 - asset_id: zapier
   kind: company_logo
   owner_name: Zapier
   source_type: simple_icons
   source_url: https://simpleicons.org/icons/zapier.svg
-  direct_asset_url: https://cdn.simpleicons.org/zapier
+  direct_asset_url: https://cdn.simpleicons.org/zapier/FF4F00
   local_path: /assets/img/patch-logos/zapier.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-06-23'
+  last_verified_at: '2026-06-24'
   fallback_to_company_logo: false
-  notes: Replaced fake text badge with Simple Icons brand mark fallback for company identification.
+  notes: Re-rendered Zapier fallback mark larger and orange for visibility.
 - asset_id: microsoft
   kind: company_logo
   owner_name: Microsoft
@@ -539,7 +542,7 @@ assets:
   owner_name: Pika
   source_type: company_fallback
   source_url: /updates/pika/
-  local_path: /assets/img/patch-logos/pika.svg
+  local_path: /assets/img/patch-logos/pika.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
@@ -587,15 +590,16 @@ assets:
 - asset_id: adobe-premiere-pro
   kind: product_icon
   owner_name: Premiere Pro
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/adobe-premiere-pro.svg
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/adobe-premiere-ai-video-editor/id6742757464?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/25/ea/7c/25ea7cb2-c1ed-5734-7389-6aa5e61f3e19/AppIcon_Premiere-0-0-1x_U007epad-0-1-0-0-sRGB-85-220.png/512x512bb.jpg
+  local_path: /assets/img/patch-logos/adobe-premiere-pro.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-24'
   fallback_to_company_logo: false
-  notes: Product/software icon asset.
+  notes: Official Adobe Premiere App Store icon from Adobe Inc.; replaces Simple Icons fallback.
 - asset_id: adobe-after-effects
   kind: product_icon
   owner_name: After Effects
@@ -624,27 +628,28 @@ assets:
 - asset_id: adobe-media-encoder
   kind: product_icon
   owner_name: Media Encoder
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/adobe-media-encoder.svg
+  source_type: company_fallback
+  source_url: https://www.adobe.com/products/media-encoder.html
+  local_path: /assets/img/patch-logos/adobe.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
-  fallback_to_company_logo: false
-  notes: Product/software icon asset.
+  last_verified_at: '2026-06-24'
+  fallback_to_company_logo: true
+  notes: Product-specific Media Encoder icon removed after visual QA; using Adobe company mark until a verified official product icon source is available.
 - asset_id: adobe-lightroom-classic
   kind: product_icon
-  owner_name: Lightroom Classic
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/adobe-lightroom-classic.svg
+  owner_name: Lightroom
+  source_type: official_app_store_listing
+  source_url: https://apps.apple.com/us/app/lightroom-ai-photo-editor/id878783582?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/b6/32/c1/b632c189-46f7-266f-576c-6f1e47c95d05/AppIcon-0-1x_U007ephone-0-1-0-0-85-220-0.png/512x512bb.jpg
+  local_path: /assets/img/patch-logos/adobe-lightroom-classic.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-24'
   fallback_to_company_logo: false
-  notes: Product/software icon asset.
+  notes: Official Lightroom App Store icon from Adobe Inc.; visual QA requested Lightroom mark instead of Lightroom Classic LrC mark.
 - asset_id: blackmagic-davinci
   kind: product_icon
   owner_name: Blackmagic Design / DaVinci Resolve
@@ -687,15 +692,15 @@ assets:
   kind: product_icon
   owner_name: YouTube / YouTube Studio
   source_type: official_app_store_listing
-  source_url: https://apps.apple.com/us/app/youtube-studio/id888530356?uo=4
-  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/6f/9d/42/6f9d4221-c982-47c7-022c-c5bd9daca683/logo_youtube_studio_2024_q4_color-0-0-1x_U007emarketing-0-0-0-7-0-0-0-85-220.png/512x512bb.png
+  source_url: https://apps.apple.com/us/app/youtube/id544007664?uo=4
+  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/4f/cb/7e/4fcb7e91-05c8-ec7f-31da-8594e37a755e/logo_youtube_2024_q4_color-0-0-1x_U007emarketing-0-0-0-7-0-0-0-85-220.png/512x512bb.jpg
   local_path: /assets/img/patch-logos/youtube.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
   last_verified_at: '2026-06-21'
   fallback_to_company_logo: false
-  notes: Official YouTube Studio App Store icon from Google LLC.
+  notes: Official main YouTube App Store icon from Google LLC; used for YouTube / YouTube Studio tracking identity.
 - asset_id: kick
   kind: product_icon
   owner_name: Kick

@@ -6,7 +6,7 @@
   - video-production
   - design-workflow
   summary: Adobe is tracked because changes to Premiere Pro, Acrobat / Reader, After Effects, Photoshop, Media Encoder, and Lightroom Classic can affect creator workflows, production stability, rendering, exports, design assets, and publishing operations.
-  logo_path: /assets/img/patch-logos/adobe.svg
+  logo_path: /assets/img/patch-logos/adobe.png
   company_url: /updates/adobe/
   official_sources:
   - label: Premiere Pro release notes
@@ -255,7 +255,7 @@
   category_keys:
   - ai-tools
   summary: OpenAI tracking focuses on ChatGPT, model changes, product interface changes, workspace behavior, automation, and creator workflow impact.
-  logo_path: /assets/img/patch-logos/openai.svg
+  logo_path: /assets/img/patch-logos/openai.png
   company_url: /updates/openai/
   official_sources:
   - label: ChatGPT release notes
@@ -525,7 +525,7 @@
   category_keys:
   - ai-video
   summary: Pika is tracked because changes to Pika can affect creator workflows, production stability, gaming performance, automation, or publishing operations.
-  logo_path: /assets/img/patch-logos/pika.svg
+  logo_path: /assets/img/patch-logos/pika.png
   company_url: /updates/pika/
   official_sources:
   - label: Pika product site
