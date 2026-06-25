@@ -4704,3 +4704,53 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ucuoyj-i-need-help-with-my-audio-track-and-expor
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ucuoyj/i_need_help_with_my_audio_track_and_export_issue/
+  parent_title: I need help with my audio track and export issue.
+  report_title: I need help with my audio track and export issue.
+  report_text_excerpt: 'I need help with my audio track and export issue. PLEASE READ Hey!! : D I’d ask you to watch the video all the way through before you decide to suggest a solution, since you should understand exactly what I’m trying to achieve. Maybe there’s a solution to the first problem, or...'
+  captured_at: '2026-06-23T18:18:19Z'
+  source_date: '2026-06-22'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+
+- id: blackmagic-davinci-21-0-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uek2z0-audio-doesnt-work-at-all
+  product_id: blackmagic-davinci
+  update_version: 21.0.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1uek2z0/audio_doesnt_work_at_all/
+  parent_title: Audio doesn't work at all
+  report_title: Audio doesn't work at all
+  report_text_excerpt: 'Audio doesn''t work at all System specifications: Windows RTX 5060 8GB Ryzen 5 5500G DaVinci Resolve 21.0.1 Hello, I''ve been trying to solve this DaVinci Resolve audio issue for more than 5 days and haven''t had any success. I''ve gone through countless forum posts and tutorials,...'
+  captured_at: '2026-06-24T19:04:27Z'
+  source_date: '2026-06-24'
+  target_release_date: '2026-06-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
