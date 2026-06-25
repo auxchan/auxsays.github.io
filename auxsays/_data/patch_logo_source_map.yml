@@ -1,7 +1,7 @@
 meta:
   purpose: "Approved source map for AUXSAYS company logos and product/software icons."
   usage_note: "Assets are used for editorial identification only. Trademarks remain with their owners. AUXSAYS does not imply sponsorship, endorsement, affiliation, or partnership."
-  last_reviewed: "2026-06-21"
+  last_reviewed: "2026-06-23"
   source_priority:
     - official_brand_kit
     - official_product_page
@@ -50,58 +50,58 @@ companies:
   usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
 - id: "anthropic"
   display_name: "Anthropic"
-  current_local_asset: "/assets/img/patch-logos/anthropic.svg"
+  current_local_asset: "/assets/img/patch-logos/anthropic.png"
   current_asset_exists: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/anthropic.svg"
-  source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://support.claude.com/en/articles/12138966-release-notes"
-  direct_asset_url: ""
-  source_domain: "support.claude.com"
+  current_provenance_status: "current_provenance:simple_icons"
+  desired_local_asset: "/assets/img/patch-logos/anthropic.png"
+  source_status: local_asset_fetched
+  preferred_source_type: fallback_third_party
+  official_source_url: "https://simpleicons.org/icons/anthropic.svg"
+  direct_asset_url: "https://cdn.simpleicons.org/anthropic"
+  source_domain: "simpleicons.org"
   source_owner: "Anthropic"
-  official_or_vendor_controlled: true
-  fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "anthropic.svg"
-  usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
+  official_or_vendor_controlled: false
+  fallback_source: true
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "anthropic.png"
+  usage_notes: "Replaced fake text badge with Simple Icons brand mark fallback for company identification."
 - id: "blackmagic-design"
   display_name: "Blackmagic Design"
-  current_local_asset: "/assets/img/patch-logos/blackmagic-design.svg"
+  current_local_asset: "/assets/img/patch-logos/blackmagic-design.png"
   current_asset_exists: true
-  current_provenance_status: "current_provenance:manual_curated"
-  desired_local_asset: "/assets/img/patch-logos/blackmagic-design.svg"
-  source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://www.blackmagicdesign.com/media"
-  direct_asset_url: ""
-  source_domain: "www.blackmagicdesign.com"
+  current_provenance_status: "current_provenance:simple_icons"
+  desired_local_asset: "/assets/img/patch-logos/blackmagic-design.png"
+  source_status: local_asset_fetched
+  preferred_source_type: fallback_third_party
+  official_source_url: "https://simpleicons.org/icons/blackmagicdesign.svg"
+  direct_asset_url: "https://cdn.simpleicons.org/blackmagicdesign"
+  source_domain: "simpleicons.org"
   source_owner: "Blackmagic Design"
-  official_or_vendor_controlled: true
-  fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "blackmagic-design.svg"
-  usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
+  official_or_vendor_controlled: false
+  fallback_source: true
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "blackmagic-design.png"
+  usage_notes: "Replaced fake text badge with Simple Icons brand mark fallback for company identification."
 - id: "epic-games"
   display_name: "Epic Games"
-  current_local_asset: "/assets/img/patch-logos/epic-games.svg"
+  current_local_asset: "/assets/img/patch-logos/epic-games.png"
   current_asset_exists: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/epic-games.svg"
-  source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://dev.epicgames.com/documentation/en-us/unreal-engine/whats-new"
-  direct_asset_url: ""
-  source_domain: "dev.epicgames.com"
+  current_provenance_status: "current_provenance:simple_icons"
+  desired_local_asset: "/assets/img/patch-logos/epic-games.png"
+  source_status: local_asset_fetched
+  preferred_source_type: fallback_third_party
+  official_source_url: "https://simpleicons.org/icons/epicgames.svg"
+  direct_asset_url: "https://cdn.simpleicons.org/epicgames/F4EFE4"
+  source_domain: "simpleicons.org"
   source_owner: "Epic Games"
-  official_or_vendor_controlled: true
-  fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "epic-games.svg"
-  usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
+  official_or_vendor_controlled: false
+  fallback_source: true
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "epic-games.png"
+  usage_notes: "Replaced fake text badge with Simple Icons brand mark fallback for company identification."
 - id: "figma"
   display_name: "Figma"
   current_local_asset: "/assets/img/patch-logos/figma.svg"
@@ -122,76 +122,76 @@ companies:
   usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
 - id: "github"
   display_name: "GitHub"
-  current_local_asset: "/assets/img/patch-logos/github.svg"
+  current_local_asset: "/assets/img/patch-logos/github.png"
   current_asset_exists: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/github.svg"
-  source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://github.blog/changelog/"
-  direct_asset_url: ""
-  source_domain: "github.blog"
+  current_provenance_status: "current_provenance:simple_icons"
+  desired_local_asset: "/assets/img/patch-logos/github.png"
+  source_status: local_asset_fetched
+  preferred_source_type: fallback_third_party
+  official_source_url: "https://simpleicons.org/icons/github.svg"
+  direct_asset_url: "https://cdn.simpleicons.org/github/F4EFE4"
+  source_domain: "simpleicons.org"
   source_owner: "GitHub"
-  official_or_vendor_controlled: true
-  fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "github.svg"
-  usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
+  official_or_vendor_controlled: false
+  fallback_source: true
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "github.png"
+  usage_notes: "Replaced fake text badge with Simple Icons brand mark fallback for company identification."
 - id: "google"
   display_name: "Google"
-  current_local_asset: "/assets/img/patch-logos/google.svg"
+  current_local_asset: "/assets/img/patch-logos/google.png"
   current_asset_exists: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/google.svg"
-  source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://gemini.google/updates/"
-  direct_asset_url: ""
-  source_domain: "gemini.google"
+  current_provenance_status: "current_provenance:simple_icons"
+  desired_local_asset: "/assets/img/patch-logos/google.png"
+  source_status: local_asset_fetched
+  preferred_source_type: fallback_third_party
+  official_source_url: "https://simpleicons.org/icons/google.svg"
+  direct_asset_url: "https://cdn.simpleicons.org/google"
+  source_domain: "simpleicons.org"
   source_owner: "Google"
-  official_or_vendor_controlled: true
-  fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "google.svg"
-  usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
+  official_or_vendor_controlled: false
+  fallback_source: true
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "google.png"
+  usage_notes: "Replaced fake text badge with Simple Icons brand mark fallback for company identification."
 - id: "kick"
   display_name: "Kick"
-  current_local_asset: "/assets/img/patch-logos/kick.svg"
+  current_local_asset: "/assets/img/patch-logos/kick.png"
   current_asset_exists: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/kick.svg"
-  source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://kick.com/blog"
-  direct_asset_url: ""
-  source_domain: "kick.com"
+  current_provenance_status: "current_provenance:simple_icons"
+  desired_local_asset: "/assets/img/patch-logos/kick.png"
+  source_status: local_asset_fetched
+  preferred_source_type: fallback_third_party
+  official_source_url: "https://simpleicons.org/icons/kick.svg"
+  direct_asset_url: "https://cdn.simpleicons.org/kick"
+  source_domain: "simpleicons.org"
   source_owner: "Kick"
-  official_or_vendor_controlled: true
-  fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "kick.svg"
-  usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
+  official_or_vendor_controlled: false
+  fallback_source: true
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "kick.png"
+  usage_notes: "Replaced fake text badge with Simple Icons brand mark fallback for company identification."
 - id: "lottiefiles"
   display_name: "LottieFiles"
-  current_local_asset: "/assets/img/patch-logos/lottiefiles.svg"
+  current_local_asset: "/assets/img/patch-logos/lottiefiles.png"
   current_asset_exists: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/lottiefiles.svg"
-  source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://lottiefiles.com/blog"
-  direct_asset_url: ""
-  source_domain: "lottiefiles.com"
+  current_provenance_status: "current_provenance:simple_icons"
+  desired_local_asset: "/assets/img/patch-logos/lottiefiles.png"
+  source_status: local_asset_fetched
+  preferred_source_type: fallback_third_party
+  official_source_url: "https://simpleicons.org/icons/lottiefiles.svg"
+  direct_asset_url: "https://cdn.simpleicons.org/lottiefiles"
+  source_domain: "simpleicons.org"
   source_owner: "LottieFiles"
-  official_or_vendor_controlled: true
-  fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "lottiefiles.svg"
-  usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
+  official_or_vendor_controlled: false
+  fallback_source: true
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "lottiefiles.png"
+  usage_notes: "Replaced fake text badge with Simple Icons brand mark fallback for company identification."
 - id: "midjourney"
   display_name: "Midjourney"
   current_local_asset: "/assets/img/patch-logos/midjourney.svg"
@@ -212,22 +212,22 @@ companies:
   usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
 - id: "nvidia"
   display_name: "NVIDIA"
-  current_local_asset: "/assets/img/patch-logos/nvidia.svg"
+  current_local_asset: "/assets/img/patch-logos/nvidia.png"
   current_asset_exists: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/nvidia.svg"
-  source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://www.nvidia.com/en-us/geforce/news/"
-  direct_asset_url: ""
-  source_domain: "www.nvidia.com"
+  current_provenance_status: "current_provenance:simple_icons"
+  desired_local_asset: "/assets/img/patch-logos/nvidia.png"
+  source_status: local_asset_fetched
+  preferred_source_type: fallback_third_party
+  official_source_url: "https://simpleicons.org/icons/nvidia.svg"
+  direct_asset_url: "https://cdn.simpleicons.org/nvidia"
+  source_domain: "simpleicons.org"
   source_owner: "NVIDIA"
-  official_or_vendor_controlled: true
-  fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "nvidia.svg"
-  usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
+  official_or_vendor_controlled: false
+  fallback_source: true
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "nvidia.png"
+  usage_notes: "Replaced fake text badge with Simple Icons brand mark fallback for company identification."
 - id: "obs-project"
   display_name: "OBS Project"
   current_local_asset: "/assets/img/patch-logos/obs-project.svg"
@@ -266,148 +266,148 @@ companies:
   usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
 - id: "perplexity"
   display_name: "Perplexity"
-  current_local_asset: "/assets/img/patch-logos/perplexity.svg"
+  current_local_asset: "/assets/img/patch-logos/perplexity.png"
   current_asset_exists: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/perplexity.svg"
-  source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://www.perplexity.ai/hub/blog"
-  direct_asset_url: ""
-  source_domain: "www.perplexity.ai"
+  current_provenance_status: "current_provenance:simple_icons"
+  desired_local_asset: "/assets/img/patch-logos/perplexity.png"
+  source_status: local_asset_fetched
+  preferred_source_type: fallback_third_party
+  official_source_url: "https://simpleicons.org/icons/perplexity.svg"
+  direct_asset_url: "https://cdn.simpleicons.org/perplexity"
+  source_domain: "simpleicons.org"
   source_owner: "Perplexity"
-  official_or_vendor_controlled: true
-  fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "perplexity.svg"
-  usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
+  official_or_vendor_controlled: false
+  fallback_source: true
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "perplexity.png"
+  usage_notes: "Replaced fake text badge with Simple Icons brand mark fallback for company identification."
 - id: "runway"
   display_name: "Runway"
-  current_local_asset: "/assets/img/patch-logos/runway.svg"
+  current_local_asset: "/assets/img/patch-logos/runway.png"
   current_asset_exists: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/runway.svg"
-  source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://runwayml.com/research/"
-  direct_asset_url: ""
-  source_domain: "runwayml.com"
+  current_provenance_status: "current_provenance:official_app_store_listing"
+  desired_local_asset: "/assets/img/patch-logos/runway.png"
+  source_status: local_asset_fetched
+  preferred_source_type: official_app_store_listing
+  official_source_url: "https://apps.apple.com/us/app/runwayml/id1665024375?uo=4"
+  direct_asset_url: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/54/23/92/5423923a-400c-1ca7-ad2b-3c6b7793d9a0/AppIcon-0-0-1x_U007ephone-0-1-85-220.png/512x512bb.png"
+  source_domain: "apps.apple.com"
   source_owner: "Runway"
   official_or_vendor_controlled: true
   fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "runway.svg"
-  usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "runway.png"
+  usage_notes: "Company card uses official Runway App Store icon from Runway AI, Inc. instead of the fake text badge."
 - id: "twitch"
   display_name: "Twitch"
-  current_local_asset: "/assets/img/patch-logos/twitch.svg"
+  current_local_asset: "/assets/img/patch-logos/twitch.png"
   current_asset_exists: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/twitch.svg"
-  source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://blog.twitch.tv/"
-  direct_asset_url: ""
-  source_domain: "blog.twitch.tv"
+  current_provenance_status: "current_provenance:simple_icons"
+  desired_local_asset: "/assets/img/patch-logos/twitch.png"
+  source_status: local_asset_fetched
+  preferred_source_type: fallback_third_party
+  official_source_url: "https://simpleicons.org/icons/twitch.svg"
+  direct_asset_url: "https://cdn.simpleicons.org/twitch/F4EFE4"
+  source_domain: "simpleicons.org"
   source_owner: "Twitch"
-  official_or_vendor_controlled: true
-  fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "twitch.svg"
-  usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
+  official_or_vendor_controlled: false
+  fallback_source: true
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "twitch.png"
+  usage_notes: "Replaced fake text badge with Simple Icons brand mark fallback for company identification."
 - id: "valve"
   display_name: "Valve"
-  current_local_asset: "/assets/img/patch-logos/valve.svg"
+  current_local_asset: "/assets/img/patch-logos/valve.png"
   current_asset_exists: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/valve.svg"
-  source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://store.steampowered.com/news/group/4145017"
-  direct_asset_url: ""
-  source_domain: "store.steampowered.com"
+  current_provenance_status: "current_provenance:simple_icons"
+  desired_local_asset: "/assets/img/patch-logos/valve.png"
+  source_status: local_asset_fetched
+  preferred_source_type: fallback_third_party
+  official_source_url: "https://simpleicons.org/icons/valve.svg"
+  direct_asset_url: "https://cdn.simpleicons.org/valve/F4EFE4"
+  source_domain: "simpleicons.org"
   source_owner: "Valve"
-  official_or_vendor_controlled: true
-  fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "valve.svg"
-  usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
+  official_or_vendor_controlled: false
+  fallback_source: true
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "valve.png"
+  usage_notes: "Replaced fake text badge with Simple Icons brand mark fallback for company identification."
 - id: "youtube"
   display_name: "YouTube"
-  current_local_asset: "/assets/img/patch-logos/youtube.svg"
+  current_local_asset: "/assets/img/patch-logos/youtube.png"
   current_asset_exists: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/youtube.svg"
-  source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://blog.youtube/news-and-events/"
-  direct_asset_url: ""
-  source_domain: "blog.youtube"
+  current_provenance_status: "current_provenance:simple_icons"
+  desired_local_asset: "/assets/img/patch-logos/youtube.png"
+  source_status: local_asset_fetched
+  preferred_source_type: fallback_third_party
+  official_source_url: "https://simpleicons.org/icons/youtube.svg"
+  direct_asset_url: "https://cdn.simpleicons.org/youtube"
+  source_domain: "simpleicons.org"
   source_owner: "YouTube"
-  official_or_vendor_controlled: true
-  fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "youtube.svg"
-  usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
+  official_or_vendor_controlled: false
+  fallback_source: true
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "youtube.png"
+  usage_notes: "Replaced fake text badge with Simple Icons brand mark fallback for company identification."
 - id: "blender-foundation"
   display_name: "Blender Foundation"
-  current_local_asset: "/assets/img/patch-logos/blender-foundation.svg"
+  current_local_asset: "/assets/img/patch-logos/blender-foundation.png"
   current_asset_exists: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/blender-foundation.svg"
-  source_status: official_source_identified
-  preferred_source_type: official_download_page
-  official_source_url: "https://www.blender.org/download/releases/"
-  direct_asset_url: ""
-  source_domain: "www.blender.org"
+  current_provenance_status: "current_provenance:simple_icons"
+  desired_local_asset: "/assets/img/patch-logos/blender-foundation.png"
+  source_status: local_asset_fetched
+  preferred_source_type: fallback_third_party
+  official_source_url: "https://simpleicons.org/icons/blender.svg"
+  direct_asset_url: "https://cdn.simpleicons.org/blender/F4EFE4"
+  source_domain: "simpleicons.org"
   source_owner: "Blender Foundation"
-  official_or_vendor_controlled: true
-  fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "blender-foundation.svg"
-  usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
+  official_or_vendor_controlled: false
+  fallback_source: true
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "blender-foundation.png"
+  usage_notes: "Replaced fake text badge with Simple Icons brand mark fallback for company identification."
 - id: "canva"
   display_name: "Canva"
-  current_local_asset: "/assets/img/patch-logos/canva.svg"
+  current_local_asset: "/assets/img/patch-logos/canva.png"
   current_asset_exists: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/canva.svg"
-  source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://www.canva.com/newsroom/"
-  direct_asset_url: ""
-  source_domain: "www.canva.com"
+  current_provenance_status: "current_provenance:official_app_store_listing"
+  desired_local_asset: "/assets/img/patch-logos/canva.png"
+  source_status: local_asset_fetched
+  preferred_source_type: official_app_store_listing
+  official_source_url: "https://apps.apple.com/us/app/canva-ai-video-photo-editor/id897446215?uo=4"
+  direct_asset_url: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/54/63/b5/5463b52f-ac99-4be1-6f74-fef35e4e3ce7/AppIcon-0-0-1x_U007epad-0-11-0-85-220.png/512x512bb.png"
+  source_domain: "apps.apple.com"
   source_owner: "Canva"
   official_or_vendor_controlled: true
   fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "canva.svg"
-  usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "canva.png"
+  usage_notes: "Company card uses official Canva App Store icon from Canva Pty Ltd. instead of the fake text badge."
 - id: "cloudflare"
   display_name: "Cloudflare"
-  current_local_asset: "/assets/img/patch-logos/cloudflare.svg"
+  current_local_asset: "/assets/img/patch-logos/cloudflare.png"
   current_asset_exists: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/cloudflare.svg"
-  source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://blog.cloudflare.com/"
-  direct_asset_url: ""
-  source_domain: "blog.cloudflare.com"
+  current_provenance_status: "current_provenance:simple_icons"
+  desired_local_asset: "/assets/img/patch-logos/cloudflare.png"
+  source_status: local_asset_fetched
+  preferred_source_type: fallback_third_party
+  official_source_url: "https://simpleicons.org/icons/cloudflare.svg"
+  direct_asset_url: "https://cdn.simpleicons.org/cloudflare"
+  source_domain: "simpleicons.org"
   source_owner: "Cloudflare"
-  official_or_vendor_controlled: true
-  fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "cloudflare.svg"
-  usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
+  official_or_vendor_controlled: false
+  fallback_source: true
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "cloudflare.png"
+  usage_notes: "Replaced fake text badge with Simple Icons brand mark fallback for company identification."
 - id: "comfyui"
   display_name: "ComfyUI"
   current_local_asset: "/assets/img/patch-logos/comfyui.svg"
@@ -428,94 +428,94 @@ companies:
   usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
 - id: "hugging-face"
   display_name: "Hugging Face"
-  current_local_asset: "/assets/img/patch-logos/hugging-face.svg"
+  current_local_asset: "/assets/img/patch-logos/hugging-face.png"
   current_asset_exists: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/hugging-face.svg"
-  source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://huggingface.co/blog"
-  direct_asset_url: ""
-  source_domain: "huggingface.co"
+  current_provenance_status: "current_provenance:simple_icons"
+  desired_local_asset: "/assets/img/patch-logos/hugging-face.png"
+  source_status: local_asset_fetched
+  preferred_source_type: fallback_third_party
+  official_source_url: "https://simpleicons.org/icons/huggingface.svg"
+  direct_asset_url: "https://cdn.simpleicons.org/huggingface"
+  source_domain: "simpleicons.org"
   source_owner: "Hugging Face"
-  official_or_vendor_controlled: true
-  fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "hugging-face.svg"
-  usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
+  official_or_vendor_controlled: false
+  fallback_source: true
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "hugging-face.png"
+  usage_notes: "Replaced fake text badge with Simple Icons brand mark fallback for company identification."
 - id: "intel"
   display_name: "Intel"
-  current_local_asset: "/assets/img/patch-logos/intel.svg"
+  current_local_asset: "/assets/img/patch-logos/intel.png"
   current_asset_exists: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/intel.svg"
-  source_status: official_source_identified
-  preferred_source_type: official_download_page
-  official_source_url: "https://www.intel.com/content/www/us/en/download-center/home.html"
-  direct_asset_url: ""
-  source_domain: "www.intel.com"
+  current_provenance_status: "current_provenance:simple_icons"
+  desired_local_asset: "/assets/img/patch-logos/intel.png"
+  source_status: local_asset_fetched
+  preferred_source_type: fallback_third_party
+  official_source_url: "https://simpleicons.org/icons/intel.svg"
+  direct_asset_url: "https://cdn.simpleicons.org/intel/F4EFE4"
+  source_domain: "simpleicons.org"
   source_owner: "Intel"
-  official_or_vendor_controlled: true
-  fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "intel.svg"
-  usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
+  official_or_vendor_controlled: false
+  fallback_source: true
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "intel.png"
+  usage_notes: "Replaced fake text badge with Simple Icons brand mark fallback for company identification."
 - id: "make"
   display_name: "Make"
-  current_local_asset: "/assets/img/patch-logos/make.svg"
+  current_local_asset: "/assets/img/patch-logos/make.png"
   current_asset_exists: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/make.svg"
-  source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://www.make.com/en/changelog"
-  direct_asset_url: ""
-  source_domain: "www.make.com"
+  current_provenance_status: "current_provenance:simple_icons"
+  desired_local_asset: "/assets/img/patch-logos/make.png"
+  source_status: local_asset_fetched
+  preferred_source_type: fallback_third_party
+  official_source_url: "https://simpleicons.org/icons/make.svg"
+  direct_asset_url: "https://cdn.simpleicons.org/make"
+  source_domain: "simpleicons.org"
   source_owner: "Make"
-  official_or_vendor_controlled: true
-  fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "make.svg"
-  usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
+  official_or_vendor_controlled: false
+  fallback_source: true
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "make.png"
+  usage_notes: "Replaced fake text badge with Simple Icons brand mark fallback for company identification."
 - id: "netlify"
   display_name: "Netlify"
-  current_local_asset: "/assets/img/patch-logos/netlify.svg"
+  current_local_asset: "/assets/img/patch-logos/netlify.png"
   current_asset_exists: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/netlify.svg"
-  source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://www.netlify.com/changelog/"
-  direct_asset_url: ""
-  source_domain: "www.netlify.com"
+  current_provenance_status: "current_provenance:simple_icons"
+  desired_local_asset: "/assets/img/patch-logos/netlify.png"
+  source_status: local_asset_fetched
+  preferred_source_type: fallback_third_party
+  official_source_url: "https://simpleicons.org/icons/netlify.svg"
+  direct_asset_url: "https://cdn.simpleicons.org/netlify/F4EFE4"
+  source_domain: "simpleicons.org"
   source_owner: "Netlify"
-  official_or_vendor_controlled: true
-  fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "netlify.svg"
-  usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
+  official_or_vendor_controlled: false
+  fallback_source: true
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "netlify.png"
+  usage_notes: "Replaced fake text badge with Simple Icons brand mark fallback for company identification."
 - id: "notion"
   display_name: "Notion"
-  current_local_asset: "/assets/img/patch-logos/notion.svg"
+  current_local_asset: "/assets/img/patch-logos/notion.png"
   current_asset_exists: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/notion.svg"
-  source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://www.notion.com/releases"
-  direct_asset_url: ""
-  source_domain: "www.notion.com"
+  current_provenance_status: "current_provenance:simple_icons"
+  desired_local_asset: "/assets/img/patch-logos/notion.png"
+  source_status: local_asset_fetched
+  preferred_source_type: fallback_third_party
+  official_source_url: "https://simpleicons.org/icons/notion.svg"
+  direct_asset_url: "https://cdn.simpleicons.org/notion"
+  source_domain: "simpleicons.org"
   source_owner: "Notion"
-  official_or_vendor_controlled: true
-  fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "notion.svg"
-  usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
+  official_or_vendor_controlled: false
+  fallback_source: true
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "notion.png"
+  usage_notes: "Replaced fake text badge with Simple Icons brand mark fallback for company identification."
 - id: "pika"
   display_name: "Pika"
   current_local_asset: "/assets/img/patch-logos/pika.svg"
@@ -536,82 +536,82 @@ companies:
   usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
 - id: "rumble"
   display_name: "Rumble"
-  current_local_asset: "/assets/img/patch-logos/rumble.svg"
+  current_local_asset: "/assets/img/patch-logos/rumble.png"
   current_asset_exists: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/rumble.svg"
-  source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://corp.rumble.com/blog/"
-  direct_asset_url: ""
-  source_domain: "corp.rumble.com"
+  current_provenance_status: "current_provenance:simple_icons"
+  desired_local_asset: "/assets/img/patch-logos/rumble.png"
+  source_status: local_asset_fetched
+  preferred_source_type: fallback_third_party
+  official_source_url: "https://simpleicons.org/icons/rumble.svg"
+  direct_asset_url: "https://cdn.simpleicons.org/rumble"
+  source_domain: "simpleicons.org"
   source_owner: "Rumble"
-  official_or_vendor_controlled: true
-  fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "rumble.svg"
-  usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
+  official_or_vendor_controlled: false
+  fallback_source: true
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "rumble.png"
+  usage_notes: "Replaced fake text badge with Simple Icons brand mark fallback for company identification."
 - id: "stability-ai"
   display_name: "Stability AI"
-  current_local_asset: "/assets/img/patch-logos/stability-ai.svg"
+  current_local_asset: "/assets/img/patch-logos/stability-ai.png"
   current_asset_exists: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/stability-ai.svg"
-  source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://stability.ai/news"
-  direct_asset_url: ""
+  current_provenance_status: "current_provenance:vendor_cdn_from_first_party_page"
+  desired_local_asset: "/assets/img/patch-logos/stability-ai.png"
+  source_status: local_asset_fetched
+  preferred_source_type: vendor_cdn_from_first_party_page
+  official_source_url: "https://stability.ai/"
+  direct_asset_url: "https://images.squarespace-cdn.com/content/v1/6213c340453c3f502425776e/8346fca1-a188-450e-8c75-e487e0ff3fae/stability-ai-white-dot-logo-mobile.png?format=300w"
   source_domain: "stability.ai"
   source_owner: "Stability AI"
   official_or_vendor_controlled: true
   fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "stability-ai.svg"
-  usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "stability-ai.png"
+  usage_notes: "Company card uses first-party Stability AI logo asset from stability.ai vendor-controlled Squarespace CDN instead of the fake text badge."
 - id: "unity"
   display_name: "Unity"
-  current_local_asset: "/assets/img/patch-logos/unity.svg"
+  current_local_asset: "/assets/img/patch-logos/unity.png"
   current_asset_exists: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/unity.svg"
-  source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://unity.com/releases"
-  direct_asset_url: ""
-  source_domain: "unity.com"
+  current_provenance_status: "current_provenance:simple_icons"
+  desired_local_asset: "/assets/img/patch-logos/unity.png"
+  source_status: local_asset_fetched
+  preferred_source_type: fallback_third_party
+  official_source_url: "https://simpleicons.org/icons/unity.svg"
+  direct_asset_url: "https://cdn.simpleicons.org/unity/F4EFE4"
+  source_domain: "simpleicons.org"
   source_owner: "Unity"
-  official_or_vendor_controlled: true
-  fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "unity.svg"
-  usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
+  official_or_vendor_controlled: false
+  fallback_source: true
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "unity.png"
+  usage_notes: "Replaced fake text badge with Simple Icons brand mark fallback for company identification."
 - id: "zapier"
   display_name: "Zapier"
-  current_local_asset: "/assets/img/patch-logos/zapier.svg"
+  current_local_asset: "/assets/img/patch-logos/zapier.png"
   current_asset_exists: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/zapier.svg"
-  source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://zapier.com/blog/updates/"
-  direct_asset_url: ""
-  source_domain: "zapier.com"
+  current_provenance_status: "current_provenance:simple_icons"
+  desired_local_asset: "/assets/img/patch-logos/zapier.png"
+  source_status: local_asset_fetched
+  preferred_source_type: fallback_third_party
+  official_source_url: "https://simpleicons.org/icons/zapier.svg"
+  direct_asset_url: "https://cdn.simpleicons.org/zapier"
+  source_domain: "simpleicons.org"
   source_owner: "Zapier"
-  official_or_vendor_controlled: true
-  fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "zapier.svg"
-  usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
+  official_or_vendor_controlled: false
+  fallback_source: true
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "zapier.png"
+  usage_notes: "Replaced fake text badge with Simple Icons brand mark fallback for company identification."
 - id: "microsoft"
   display_name: "Microsoft"
-  current_local_asset: "/assets/img/patch-logos/microsoft.svg"
+  current_local_asset: "/assets/img/patch-logos/microsoft.png"
   current_asset_exists: true
   current_provenance_status: "current_provenance:manual_curated"
-  desired_local_asset: "/assets/img/patch-logos/microsoft.svg"
+  desired_local_asset: "/assets/img/patch-logos/microsoft.png"
   source_status: official_source_identified
   preferred_source_type: official_brand_kit
   official_source_url: "https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks"
@@ -622,26 +622,26 @@ companies:
   fallback_source: false
   auto_fetchable: false
   manual_review_required: true
-  recommended_filename: "microsoft.svg"
+  recommended_filename: "microsoft.png"
   usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
 - id: "elgato"
   display_name: "Elgato"
-  current_local_asset: "/assets/img/patch-logos/elgato.svg"
+  current_local_asset: "/assets/img/patch-logos/elgato.png"
   current_asset_exists: true
-  current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/elgato.svg"
-  source_status: official_source_identified
-  preferred_source_type: official_product_page
-  official_source_url: "https://help.elgato.com/hc/en-us/sections/5162671529357-Elgato-Stream-Deck-Software-Release-Notes"
-  direct_asset_url: ""
-  source_domain: "help.elgato.com"
+  current_provenance_status: "current_provenance:simple_icons"
+  desired_local_asset: "/assets/img/patch-logos/elgato.png"
+  source_status: local_asset_fetched
+  preferred_source_type: fallback_third_party
+  official_source_url: "https://simpleicons.org/icons/elgato.svg"
+  direct_asset_url: "https://cdn.simpleicons.org/elgato/F4EFE4"
+  source_domain: "simpleicons.org"
   source_owner: "Elgato"
-  official_or_vendor_controlled: true
-  fallback_source: false
-  auto_fetchable: false
-  manual_review_required: true
-  recommended_filename: "elgato.svg"
-  usage_notes: "Existing local company asset remains unchanged; source map records an official/vendor-controlled source for later manual asset review."
+  official_or_vendor_controlled: false
+  fallback_source: true
+  auto_fetchable: true
+  manual_review_required: false
+  recommended_filename: "elgato.png"
+  usage_notes: "Replaced fake text badge with Simple Icons brand mark fallback for company identification."
 
 products:
 - id: "openai-chatgpt"
@@ -747,11 +747,11 @@ products:
 - id: "stability-ai"
   display_name: "Stable Diffusion / Stable Audio"
   company_id: "stability-ai"
-  current_local_asset: "/assets/img/patch-logos/stability-ai.svg"
+  current_local_asset: "/assets/img/patch-logos/stability-ai.png"
   current_asset_exists: true
   current_is_company_fallback: true
   current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/stability-ai.svg"
+  desired_local_asset: "/assets/img/patch-logos/stability-ai.png"
   source_status: official_source_identified
   preferred_source_type: official_product_page
   official_source_url: "https://stability.ai/news"
@@ -762,7 +762,7 @@ products:
   fallback_source: false
   auto_fetchable: false
   manual_review_required: true
-  recommended_filename: "stability-ai.svg"
+  recommended_filename: "stability-ai.png"
   usage_notes: "Currently uses company fallback in patch_products; product-specific official/vendor source is recorded for later icon selection and local asset review."
 - id: "runway"
   display_name: "Runway"
@@ -1147,11 +1147,11 @@ products:
 - id: "nvidia"
   display_name: "NVIDIA App / GeForce / Studio"
   company_id: "nvidia"
-  current_local_asset: "/assets/img/patch-logos/nvidia.svg"
+  current_local_asset: "/assets/img/patch-logos/nvidia.png"
   current_asset_exists: true
   current_is_company_fallback: true
   current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/nvidia.svg"
+  desired_local_asset: "/assets/img/patch-logos/nvidia.png"
   source_status: official_source_identified
   preferred_source_type: official_product_page
   official_source_url: "https://www.nvidia.com/en-us/geforce/news/"
@@ -1162,7 +1162,7 @@ products:
   fallback_source: false
   auto_fetchable: false
   manual_review_required: true
-  recommended_filename: "nvidia.svg"
+  recommended_filename: "nvidia.png"
   usage_notes: "Currently uses company fallback in patch_products; product-specific official/vendor source is recorded for later icon selection and local asset review."
 - id: "amd"
   display_name: "AMD Software / Radeon"
@@ -1187,7 +1187,7 @@ products:
 - id: "intel-arc"
   display_name: "Intel Graphics / Arc"
   company_id: "intel"
-  current_local_asset: "/assets/img/patch-logos/intel.svg"
+  current_local_asset: "/assets/img/patch-logos/intel.png"
   current_asset_exists: true
   current_is_company_fallback: true
   current_provenance_status: "current_provenance:company_fallback"
@@ -1247,11 +1247,11 @@ products:
 - id: "hugging-face"
   display_name: "Hugging Face"
   company_id: "hugging-face"
-  current_local_asset: "/assets/img/patch-logos/hugging-face.svg"
+  current_local_asset: "/assets/img/patch-logos/hugging-face.png"
   current_asset_exists: true
   current_is_company_fallback: true
   current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/hugging-face.svg"
+  desired_local_asset: "/assets/img/patch-logos/hugging-face.png"
   source_status: official_source_identified
   preferred_source_type: official_product_page
   official_source_url: "https://huggingface.co/blog"
@@ -1262,7 +1262,7 @@ products:
   fallback_source: false
   auto_fetchable: false
   manual_review_required: true
-  recommended_filename: "hugging-face.svg"
+  recommended_filename: "hugging-face.png"
   usage_notes: "Currently uses company fallback in patch_products; product-specific official/vendor source is recorded for later icon selection and local asset review."
 - id: "github"
   display_name: "GitHub / Copilot"
@@ -1287,11 +1287,11 @@ products:
 - id: "cloudflare"
   display_name: "Cloudflare"
   company_id: "cloudflare"
-  current_local_asset: "/assets/img/patch-logos/cloudflare.svg"
+  current_local_asset: "/assets/img/patch-logos/cloudflare.png"
   current_asset_exists: true
   current_is_company_fallback: true
   current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/cloudflare.svg"
+  desired_local_asset: "/assets/img/patch-logos/cloudflare.png"
   source_status: official_source_identified
   preferred_source_type: official_product_page
   official_source_url: "https://blog.cloudflare.com/"
@@ -1302,16 +1302,16 @@ products:
   fallback_source: false
   auto_fetchable: false
   manual_review_required: true
-  recommended_filename: "cloudflare.svg"
+  recommended_filename: "cloudflare.png"
   usage_notes: "Currently uses company fallback in patch_products; product-specific official/vendor source is recorded for later icon selection and local asset review."
 - id: "netlify"
   display_name: "Netlify"
   company_id: "netlify"
-  current_local_asset: "/assets/img/patch-logos/netlify.svg"
+  current_local_asset: "/assets/img/patch-logos/netlify.png"
   current_asset_exists: true
   current_is_company_fallback: true
   current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/netlify.svg"
+  desired_local_asset: "/assets/img/patch-logos/netlify.png"
   source_status: official_source_identified
   preferred_source_type: official_product_page
   official_source_url: "https://www.netlify.com/changelog/"
@@ -1322,7 +1322,7 @@ products:
   fallback_source: false
   auto_fetchable: false
   manual_review_required: true
-  recommended_filename: "netlify.svg"
+  recommended_filename: "netlify.png"
   usage_notes: "Currently uses company fallback in patch_products; product-specific official/vendor source is recorded for later icon selection and local asset review."
 - id: "notion"
   display_name: "Notion"
@@ -1347,11 +1347,11 @@ products:
 - id: "zapier"
   display_name: "Zapier"
   company_id: "zapier"
-  current_local_asset: "/assets/img/patch-logos/zapier.svg"
+  current_local_asset: "/assets/img/patch-logos/zapier.png"
   current_asset_exists: true
   current_is_company_fallback: true
   current_provenance_status: "current_provenance:local_curated_or_simple_icons"
-  desired_local_asset: "/assets/img/patch-logos/zapier.svg"
+  desired_local_asset: "/assets/img/patch-logos/zapier.png"
   source_status: official_source_identified
   preferred_source_type: official_product_page
   official_source_url: "https://zapier.com/blog/updates/"
@@ -1362,7 +1362,7 @@ products:
   fallback_source: false
   auto_fetchable: false
   manual_review_required: true
-  recommended_filename: "zapier.svg"
+  recommended_filename: "zapier.png"
   usage_notes: "Currently uses company fallback in patch_products; product-specific official/vendor source is recorded for later icon selection and local asset review."
 - id: "make"
   display_name: "Make"
@@ -1507,7 +1507,7 @@ products:
 - id: "elgato-wave-link"
   display_name: "Wave Link"
   company_id: "elgato"
-  current_local_asset: "/assets/img/patch-logos/elgato.svg"
+  current_local_asset: "/assets/img/patch-logos/elgato.png"
   current_asset_exists: true
   current_is_company_fallback: true
   current_provenance_status: "current_provenance:company_fallback"
@@ -1527,7 +1527,7 @@ products:
 - id: "elgato-camera-hub"
   display_name: "Camera Hub"
   company_id: "elgato"
-  current_local_asset: "/assets/img/patch-logos/elgato.svg"
+  current_local_asset: "/assets/img/patch-logos/elgato.png"
   current_asset_exists: true
   current_is_company_fallback: true
   current_provenance_status: "current_provenance:company_fallback"
@@ -1547,7 +1547,7 @@ products:
 - id: "elgato-4k-capture-utility"
   display_name: "4K Capture Utility"
   company_id: "elgato"
-  current_local_asset: "/assets/img/patch-logos/elgato.svg"
+  current_local_asset: "/assets/img/patch-logos/elgato.png"
   current_asset_exists: true
   current_is_company_fallback: true
   current_provenance_status: "current_provenance:company_fallback"

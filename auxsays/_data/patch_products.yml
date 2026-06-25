@@ -234,7 +234,7 @@
     adoption.
   source_id: stability-ai
   logo_label: Stability
-  logo_path: /assets/img/patch-logos/stability-ai.svg
+  logo_path: /assets/img/patch-logos/stability-ai.png
   company_id: stability-ai
   product_id: stability-ai
   company_url: /updates/stability-ai/
@@ -1136,7 +1136,7 @@
     and known issues.
   source_id: nvidia
   logo_label: NVIDIA
-  logo_path: /assets/img/patch-logos/nvidia.svg
+  logo_path: /assets/img/patch-logos/nvidia.png
   company_id: nvidia
   product_id: nvidia
   company_url: /updates/nvidia/
@@ -1225,7 +1225,7 @@
     compatibility.
   source_id: intel-arc
   logo_label: Intel
-  logo_path: /assets/img/patch-logos/intel.svg
+  logo_path: /assets/img/patch-logos/intel.png
   company_id: intel
   product_id: intel-arc
   company_url: /updates/intel/
@@ -1358,7 +1358,7 @@
     and license shifts.
   source_id: hugging-face
   logo_label: Hugging Face
-  logo_path: /assets/img/patch-logos/hugging-face.svg
+  logo_path: /assets/img/patch-logos/hugging-face.png
   company_id: hugging-face
   product_id: hugging-face
   company_url: /updates/hugging-face/
@@ -1444,7 +1444,7 @@
   signal_notes: Track Pages/Workers, DNS, security, caching, and performance changes.
   source_id: cloudflare
   logo_label: Cloudflare
-  logo_path: /assets/img/patch-logos/cloudflare.svg
+  logo_path: /assets/img/patch-logos/cloudflare.png
   company_id: cloudflare
   product_id: cloudflare
   company_url: /updates/cloudflare/
@@ -1487,7 +1487,7 @@
   signal_notes: Track build limits, deployment, forms, edge, and pricing changes.
   source_id: netlify
   logo_label: Netlify
-  logo_path: /assets/img/patch-logos/netlify.svg
+  logo_path: /assets/img/patch-logos/netlify.png
   company_id: netlify
   product_id: netlify
   company_url: /updates/netlify/
@@ -1575,7 +1575,7 @@
     workflow changes.
   source_id: zapier
   logo_label: Zapier
-  logo_path: /assets/img/patch-logos/zapier.svg
+  logo_path: /assets/img/patch-logos/zapier.png
   company_id: zapier
   product_id: zapier
   company_url: /updates/zapier/
@@ -1912,7 +1912,7 @@
     VST behavior, OBS capture, and Stream Deck integration.
   source_id: elgato-wave-link
   logo_label: Wave Link
-  logo_path: /assets/img/patch-logos/elgato.svg
+  logo_path: /assets/img/patch-logos/elgato.png
   company_id: elgato
   product_id: elgato-wave-link
   company_url: /updates/elgato/
@@ -1950,7 +1950,7 @@
     color controls, and OBS camera reliability.
   source_id: elgato-camera-hub
   logo_label: Camera Hub
-  logo_path: /assets/img/patch-logos/elgato.svg
+  logo_path: /assets/img/patch-logos/elgato.png
   company_id: elgato
   product_id: elgato-camera-hub
   company_url: /updates/elgato/
@@ -1988,7 +1988,7 @@
     recording stability, and capture-card compatibility.
   source_id: elgato-4k-capture-utility
   logo_label: 4K Capture Utility
-  logo_path: /assets/img/patch-logos/elgato.svg
+  logo_path: /assets/img/patch-logos/elgato.png
   company_id: elgato
   product_id: elgato-4k-capture-utility
   company_url: /updates/elgato/

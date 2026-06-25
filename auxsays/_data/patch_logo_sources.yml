@@ -26,40 +26,42 @@ assets:
 - asset_id: anthropic
   kind: company_logo
   owner_name: Anthropic
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/anthropic.svg
+  source_type: simple_icons
+  source_url: https://simpleicons.org/icons/anthropic.svg
+  direct_asset_url: https://cdn.simpleicons.org/anthropic/F4EFE4
+  local_path: /assets/img/patch-logos/anthropic.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-23'
   fallback_to_company_logo: false
-  notes: Company-level logo asset.
+  notes: Replaced fake text badge with Simple Icons brand mark fallback for company identification.
 - asset_id: blackmagic-design
   kind: company_logo
   owner_name: Blackmagic Design
-  source_type: manual_curated
-  source_url: https://simpleicons.org/?q=blackmagic%20design
-  local_path: /assets/img/patch-logos/blackmagic-design.svg
+  source_type: simple_icons
+  source_url: https://simpleicons.org/icons/blackmagicdesign.svg
+  direct_asset_url: https://cdn.simpleicons.org/blackmagicdesign
+  local_path: /assets/img/patch-logos/blackmagic-design.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-23'
   fallback_to_company_logo: false
-  notes: Simplified local Blackmagic Design identifier replacing noisy/manual tri-node
-    tile.
+  notes: Replaced fake text badge with Simple Icons brand mark fallback for company identification.
 - asset_id: epic-games
   kind: company_logo
   owner_name: Epic Games
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/epic-games.svg
+  source_type: simple_icons
+  source_url: https://simpleicons.org/icons/epicgames.svg
+  direct_asset_url: https://cdn.simpleicons.org/epicgames/F4EFE4
+  local_path: /assets/img/patch-logos/epic-games.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-23'
   fallback_to_company_logo: false
-  notes: Company-level logo asset.
+  notes: Replaced fake text badge with Simple Icons brand mark fallback for company identification.
 - asset_id: figma
   kind: company_logo
   owner_name: Figma
@@ -75,54 +77,55 @@ assets:
 - asset_id: github
   kind: company_logo
   owner_name: GitHub
-  source_type: official_app_store_listing
-  source_url: https://apps.apple.com/us/app/github/id1477376905?uo=4
-  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/52/7f/bf/527fbf40-fa34-f203-98e5-0124d68e4b7d/AppIcon-0-0-1x_U007epad-0-1-P3-85-220.png/512x512bb.png
+  source_type: simple_icons
+  source_url: https://simpleicons.org/icons/github.svg
+  direct_asset_url: https://cdn.simpleicons.org/github/F4EFE4
   local_path: /assets/img/patch-logos/github.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-06-21'
+  last_verified_at: '2026-06-23'
   fallback_to_company_logo: false
-  notes: Official GitHub App Store icon from GitHub.
+  notes: Replaced fake text badge with Simple Icons brand mark fallback for company identification.
 - asset_id: google
   kind: company_logo
   owner_name: Google
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/google.svg
+  source_type: simple_icons
+  source_url: https://simpleicons.org/icons/google.svg
+  direct_asset_url: https://cdn.simpleicons.org/google
+  local_path: /assets/img/patch-logos/google.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-23'
   fallback_to_company_logo: false
-  notes: Company-level logo asset.
+  notes: Replaced fake text badge with Simple Icons brand mark fallback for company identification.
 - asset_id: kick
   kind: company_logo
   owner_name: Kick
-  source_type: official_app_store_listing
-  source_url: https://apps.apple.com/us/app/kick-live-streaming/id6446202561?uo=4
-  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/13/3d/b4/133db42d-7ddc-2b91-6fc3-fddbdbc7fe10/AppIcon-0-0-1x_U007epad-0-1-85-220.png/512x512bb.png
+  source_type: simple_icons
+  source_url: https://simpleicons.org/icons/kick.svg
+  direct_asset_url: https://cdn.simpleicons.org/kick
   local_path: /assets/img/patch-logos/kick.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-06-21'
+  last_verified_at: '2026-06-23'
   fallback_to_company_logo: false
-  notes: Official Kick App Store icon from Kick Streaming Pty Ltd.
+  notes: Replaced fake text badge with Simple Icons brand mark fallback for company identification.
 - asset_id: lottiefiles
   kind: company_logo
   owner_name: LottieFiles
-  source_type: official_app_store_listing
-  source_url: https://apps.apple.com/us/app/lottiefiles-animate-design/id1231821260?uo=4
-  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/37/3d/6c/373d6cfa-a68f-50ca-dd6d-4059253a7b3a/AppIcon-0-0-1x_U007epad-0-1-0-sRGB-85-220.png/512x512bb.png
+  source_type: simple_icons
+  source_url: https://simpleicons.org/icons/lottiefiles.svg
+  direct_asset_url: https://cdn.simpleicons.org/lottiefiles
   local_path: /assets/img/patch-logos/lottiefiles.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-06-21'
+  last_verified_at: '2026-06-23'
   fallback_to_company_logo: false
-  notes: Official LottieFiles App Store icon from Design Barn Inc.
+  notes: Replaced fake text badge with Simple Icons brand mark fallback for company identification.
 - asset_id: midjourney
   kind: company_logo
   owner_name: Midjourney
@@ -138,15 +141,16 @@ assets:
 - asset_id: nvidia
   kind: company_logo
   owner_name: NVIDIA
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/nvidia.svg
+  source_type: simple_icons
+  source_url: https://simpleicons.org/icons/nvidia.svg
+  direct_asset_url: https://cdn.simpleicons.org/nvidia
+  local_path: /assets/img/patch-logos/nvidia.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-23'
   fallback_to_company_logo: false
-  notes: Company-level logo asset.
+  notes: Replaced fake text badge with Simple Icons brand mark fallback for company identification.
 - asset_id: obs-project
   kind: company_logo
   owner_name: OBS Project
@@ -174,16 +178,16 @@ assets:
 - asset_id: perplexity
   kind: company_logo
   owner_name: Perplexity
-  source_type: official_app_store_listing
-  source_url: https://apps.apple.com/us/app/perplexity-ai-search-chat/id1668000334?uo=4
-  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/43/79/4e/43794ee1-9f87-0e0e-04ed-65a83d651633/AppIcon-0-0-1x_U007epad-0-0-0-1-0-0-85-220-0.png/512x512bb.png
+  source_type: simple_icons
+  source_url: https://simpleicons.org/icons/perplexity.svg
+  direct_asset_url: https://cdn.simpleicons.org/perplexity
   local_path: /assets/img/patch-logos/perplexity.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-06-21'
+  last_verified_at: '2026-06-23'
   fallback_to_company_logo: false
-  notes: Official Perplexity App Store icon from Perplexity AI Inc.
+  notes: Replaced fake text badge with Simple Icons brand mark fallback for company identification.
 - asset_id: runway
   kind: company_logo
   owner_name: Runway
@@ -194,59 +198,61 @@ assets:
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-06-21'
+  last_verified_at: '2026-06-23'
   fallback_to_company_logo: false
-  notes: Official RunwayML App Store icon from Runway AI, Inc.
+  notes: Company card uses official Runway App Store icon from Runway AI, Inc. instead of the fake text badge.
 - asset_id: twitch
   kind: company_logo
   owner_name: Twitch
-  source_type: official_app_store_listing
-  source_url: https://apps.apple.com/us/app/twitch-live-streaming/id460177396?uo=4
-  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/e6/df/b3/e6dfb315-9c80-4c32-e688-9d38cfabd6d6/TwitchAppIcon-0-0-1x_U007epad-0-1-0-0-0-0-85-220.png/512x512bb.png
+  source_type: simple_icons
+  source_url: https://simpleicons.org/icons/twitch.svg
+  direct_asset_url: https://cdn.simpleicons.org/twitch/F4EFE4
   local_path: /assets/img/patch-logos/twitch.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-06-21'
+  last_verified_at: '2026-06-23'
   fallback_to_company_logo: false
-  notes: Official Twitch App Store icon from Twitch Interactive, Inc.
+  notes: Replaced fake text badge with Simple Icons brand mark fallback for company identification.
 - asset_id: valve
   kind: company_logo
   owner_name: Valve
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/valve.svg
+  source_type: simple_icons
+  source_url: https://simpleicons.org/icons/valve.svg
+  direct_asset_url: https://cdn.simpleicons.org/valve/F4EFE4
+  local_path: /assets/img/patch-logos/valve.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-23'
   fallback_to_company_logo: false
-  notes: Company-level logo asset.
+  notes: Replaced fake text badge with Simple Icons brand mark fallback for company identification.
 - asset_id: youtube
   kind: company_logo
   owner_name: YouTube
-  source_type: official_app_store_listing
-  source_url: https://apps.apple.com/us/app/youtube-studio/id888530356?uo=4
-  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/6f/9d/42/6f9d4221-c982-47c7-022c-c5bd9daca683/logo_youtube_studio_2024_q4_color-0-0-1x_U007emarketing-0-0-0-7-0-0-0-85-220.png/512x512bb.png
+  source_type: simple_icons
+  source_url: https://simpleicons.org/icons/youtube.svg
+  direct_asset_url: https://cdn.simpleicons.org/youtube
   local_path: /assets/img/patch-logos/youtube.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-06-21'
+  last_verified_at: '2026-06-23'
   fallback_to_company_logo: false
-  notes: Official YouTube Studio App Store icon from Google LLC.
+  notes: Replaced fake text badge with Simple Icons brand mark fallback for company identification.
 - asset_id: blender-foundation
   kind: company_logo
   owner_name: Blender Foundation
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/blender-foundation.svg
+  source_type: simple_icons
+  source_url: https://simpleicons.org/icons/blender.svg
+  direct_asset_url: https://cdn.simpleicons.org/blender/F4EFE4
+  local_path: /assets/img/patch-logos/blender-foundation.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-23'
   fallback_to_company_logo: false
-  notes: Company-level logo asset.
+  notes: Replaced fake text badge with Simple Icons brand mark fallback for company identification.
 - asset_id: canva
   kind: company_logo
   owner_name: Canva
@@ -257,21 +263,22 @@ assets:
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-06-21'
+  last_verified_at: '2026-06-23'
   fallback_to_company_logo: false
-  notes: Official Canva App Store icon from Canva Pty Ltd.
+  notes: Company card uses official Canva App Store icon from Canva Pty Ltd. instead of the fake text badge.
 - asset_id: cloudflare
   kind: company_logo
   owner_name: Cloudflare
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/cloudflare.svg
+  source_type: simple_icons
+  source_url: https://simpleicons.org/icons/cloudflare.svg
+  direct_asset_url: https://cdn.simpleicons.org/cloudflare
+  local_path: /assets/img/patch-logos/cloudflare.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-23'
   fallback_to_company_logo: false
-  notes: Company-level logo asset.
+  notes: Replaced fake text badge with Simple Icons brand mark fallback for company identification.
 - asset_id: comfyui
   kind: company_logo
   owner_name: ComfyUI
@@ -287,65 +294,68 @@ assets:
 - asset_id: hugging-face
   kind: company_logo
   owner_name: Hugging Face
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/hugging-face.svg
+  source_type: simple_icons
+  source_url: https://simpleicons.org/icons/huggingface.svg
+  direct_asset_url: https://cdn.simpleicons.org/huggingface
+  local_path: /assets/img/patch-logos/hugging-face.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-23'
   fallback_to_company_logo: false
-  notes: Company-level logo asset.
+  notes: Replaced fake text badge with Simple Icons brand mark fallback for company identification.
 - asset_id: intel
   kind: company_logo
   owner_name: Intel
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/intel.svg
+  source_type: simple_icons
+  source_url: https://simpleicons.org/icons/intel.svg
+  direct_asset_url: https://cdn.simpleicons.org/intel/F4EFE4
+  local_path: /assets/img/patch-logos/intel.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-23'
   fallback_to_company_logo: false
-  notes: Company-level logo asset.
+  notes: Replaced fake text badge with Simple Icons brand mark fallback for company identification.
 - asset_id: make
   kind: company_logo
   owner_name: Make
-  source_type: official_app_store_listing
-  source_url: https://apps.apple.com/us/app/make-for-ios/id1177073656?uo=4
-  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/33/79/3e/33793e73-366d-1a71-2223-5f28869b981a/AppIcon-0-0-1x_U007emarketing-0-6-0-sRGB-85-220.png/512x512bb.png
+  source_type: simple_icons
+  source_url: https://simpleicons.org/icons/make.svg
+  direct_asset_url: https://cdn.simpleicons.org/make
   local_path: /assets/img/patch-logos/make.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-06-21'
+  last_verified_at: '2026-06-23'
   fallback_to_company_logo: false
-  notes: Official Make App Store icon from Celonis s.r.o.
+  notes: Replaced fake text badge with Simple Icons brand mark fallback for company identification.
 - asset_id: netlify
   kind: company_logo
   owner_name: Netlify
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/netlify.svg
+  source_type: simple_icons
+  source_url: https://simpleicons.org/icons/netlify.svg
+  direct_asset_url: https://cdn.simpleicons.org/netlify/F4EFE4
+  local_path: /assets/img/patch-logos/netlify.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-23'
   fallback_to_company_logo: false
-  notes: Company-level logo asset.
+  notes: Replaced fake text badge with Simple Icons brand mark fallback for company identification.
 - asset_id: notion
   kind: company_logo
   owner_name: Notion
-  source_type: official_app_store_listing
-  source_url: https://apps.apple.com/us/app/notion-notes-tasks-ai/id1232780281?uo=4
-  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/33/88/f8/3388f855-50b2-af6f-fc31-23f4aef296b6/AppIconProd-0-0-1x_U007epad-0-0-0-1-0-0-P3-85-220.png/512x512bb.png
+  source_type: simple_icons
+  source_url: https://simpleicons.org/icons/notion.svg
+  direct_asset_url: https://cdn.simpleicons.org/notion
   local_path: /assets/img/patch-logos/notion.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-06-21'
+  last_verified_at: '2026-06-23'
   fallback_to_company_logo: false
-  notes: Official Notion App Store icon from Notion Labs, Incorporated.
+  notes: Replaced fake text badge with Simple Icons brand mark fallback for company identification.
 - asset_id: pika
   kind: company_logo
   owner_name: Pika
@@ -361,77 +371,80 @@ assets:
 - asset_id: rumble
   kind: company_logo
   owner_name: Rumble
-  source_type: official_app_store_listing
-  source_url: https://apps.apple.com/us/app/rumble-live-streaming-videos/id1518427877?uo=4
-  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple221/v4/79/29/27/792927d1-d828-a73a-0ff5-6adf2cd40b74/AppIcon-0-0-1x_U007emarketing-0-8-0-85-220.png/512x512bb.png
+  source_type: simple_icons
+  source_url: https://simpleicons.org/icons/rumble.svg
+  direct_asset_url: https://cdn.simpleicons.org/rumble
   local_path: /assets/img/patch-logos/rumble.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-06-21'
+  last_verified_at: '2026-06-23'
   fallback_to_company_logo: false
-  notes: Official Rumble App Store icon from Rumble Inc.
+  notes: Replaced fake text badge with Simple Icons brand mark fallback for company identification.
 - asset_id: stability-ai
   kind: company_logo
   owner_name: Stability AI
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/stability-ai.svg
+  source_type: vendor_cdn_from_first_party_page
+  source_url: https://stability.ai/
+  direct_asset_url: https://images.squarespace-cdn.com/content/v1/6213c340453c3f502425776e/8346fca1-a188-450e-8c75-e487e0ff3fae/stability-ai-white-dot-logo-mobile.png?format=300w
+  local_path: /assets/img/patch-logos/stability-ai.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-23'
   fallback_to_company_logo: false
-  notes: Company-level logo asset.
+  notes: Company card uses first-party Stability AI logo asset from stability.ai vendor-controlled Squarespace CDN instead of the fake text badge.
 - asset_id: unity
   kind: company_logo
   owner_name: Unity
-  source_type: official_app_store_listing
-  source_url: https://apps.apple.com/us/app/unity-remote-5/id871767552?uo=4
-  direct_asset_url: https://is1-ssl.mzstatic.com/image/thumb/Purple114/v4/b9/f8/3b/b9f83b43-899e-6c98-e47e-e0bf9f5d0e67/AppIcon-0-0-1x_U007emarketing-0-0-0-7-0-0-sRGB-0-0-0-GLES2_U002c0-512MB-85-220-0-0.png/512x512bb.png
+  source_type: simple_icons
+  source_url: https://simpleicons.org/icons/unity.svg
+  direct_asset_url: https://cdn.simpleicons.org/unity/F4EFE4
   local_path: /assets/img/patch-logos/unity.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-06-21'
+  last_verified_at: '2026-06-23'
   fallback_to_company_logo: false
-  notes: Official Unity Remote App Store icon from Unity Technologies ApS.
+  notes: Replaced fake text badge with Simple Icons brand mark fallback for company identification.
 - asset_id: zapier
   kind: company_logo
   owner_name: Zapier
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/zapier.svg
+  source_type: simple_icons
+  source_url: https://simpleicons.org/icons/zapier.svg
+  direct_asset_url: https://cdn.simpleicons.org/zapier
+  local_path: /assets/img/patch-logos/zapier.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-23'
   fallback_to_company_logo: false
-  notes: Company-level logo asset.
+  notes: Replaced fake text badge with Simple Icons brand mark fallback for company identification.
 - asset_id: microsoft
   kind: company_logo
   owner_name: Microsoft
   source_type: manual_curated
   source_url: https://www.microsoft.com/en-us/legal/intellectualproperty/trademarks
-  local_path: /assets/img/patch-logos/microsoft.svg
+  local_path: /assets/img/patch-logos/microsoft.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
   last_verified_at: '2026-05-01'
   fallback_to_company_logo: false
-  notes: Local Microsoft four-square identifier replacing weak text tile.
+  notes: Local Microsoft four-square brand mark without artificial tile/background.
 - asset_id: elgato
   kind: company_logo
   owner_name: Elgato
-  source_type: local_curated_or_simple_icons
-  source_url: https://simpleicons.org/
-  local_path: /assets/img/patch-logos/elgato.svg
+  source_type: simple_icons
+  source_url: https://simpleicons.org/icons/elgato.svg
+  direct_asset_url: https://cdn.simpleicons.org/elgato/F4EFE4
+  local_path: /assets/img/patch-logos/elgato.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
+  last_verified_at: '2026-06-23'
   fallback_to_company_logo: false
-  notes: Company-level logo asset.
+  notes: Replaced fake text badge with Simple Icons brand mark fallback for company identification.
 - asset_id: openai-chatgpt
   kind: product_icon
   owner_name: ChatGPT
@@ -501,7 +514,7 @@ assets:
   owner_name: Stable Diffusion / Stable Audio
   source_type: company_fallback
   source_url: /updates/stability-ai/
-  local_path: /assets/img/patch-logos/stability-ai.svg
+  local_path: /assets/img/patch-logos/stability-ai.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
@@ -753,7 +766,7 @@ assets:
   owner_name: NVIDIA App / GeForce / Studio
   source_type: company_fallback
   source_url: /updates/nvidia/
-  local_path: /assets/img/patch-logos/nvidia.svg
+  local_path: /assets/img/patch-logos/nvidia.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
@@ -777,7 +790,7 @@ assets:
   owner_name: Intel Graphics / Arc
   source_type: company_fallback
   source_url: /updates/intel/
-  local_path: /assets/img/patch-logos/intel.svg
+  local_path: /assets/img/patch-logos/intel.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
@@ -814,7 +827,7 @@ assets:
   owner_name: Hugging Face
   source_type: company_fallback
   source_url: /updates/hugging-face/
-  local_path: /assets/img/patch-logos/hugging-face.svg
+  local_path: /assets/img/patch-logos/hugging-face.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
@@ -839,7 +852,7 @@ assets:
   owner_name: Cloudflare
   source_type: company_fallback
   source_url: /updates/cloudflare/
-  local_path: /assets/img/patch-logos/cloudflare.svg
+  local_path: /assets/img/patch-logos/cloudflare.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
@@ -851,7 +864,7 @@ assets:
   owner_name: Netlify
   source_type: company_fallback
   source_url: /updates/netlify/
-  local_path: /assets/img/patch-logos/netlify.svg
+  local_path: /assets/img/patch-logos/netlify.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
@@ -876,7 +889,7 @@ assets:
   owner_name: Zapier
   source_type: company_fallback
   source_url: /updates/zapier/
-  local_path: /assets/img/patch-logos/zapier.svg
+  local_path: /assets/img/patch-logos/zapier.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
@@ -978,7 +991,7 @@ assets:
   owner_name: Wave Link
   source_type: company_fallback
   source_url: /updates/elgato/
-  local_path: /assets/img/patch-logos/elgato.svg
+  local_path: /assets/img/patch-logos/elgato.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
@@ -990,7 +1003,7 @@ assets:
   owner_name: Camera Hub
   source_type: company_fallback
   source_url: /updates/elgato/
-  local_path: /assets/img/patch-logos/elgato.svg
+  local_path: /assets/img/patch-logos/elgato.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
@@ -1002,7 +1015,7 @@ assets:
   owner_name: 4K Capture Utility
   source_type: company_fallback
   source_url: /updates/elgato/
-  local_path: /assets/img/patch-logos/elgato.svg
+  local_path: /assets/img/patch-logos/elgato.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
