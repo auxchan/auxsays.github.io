@@ -6,11 +6,15 @@ This folder now contains the first official-source ingestion framework for the A
 
 Enabled first-pass adapters:
 
-1. OBS Studio — `github_releases`
-2. ComfyUI — `github_releases`
-3. Figma — `rss_feed`
-4. GitHub / Copilot — `rss_feed`
-5. Netlify — `html_changelog`
+1. OBS Studio - `github_releases`
+2. ComfyUI - `github_releases`
+3. Figma - `rss_feed`
+4. GitHub / Copilot - `rss_feed`
+5. Netlify - `html_changelog`
+6. Elgato Stream Deck - `elgato_help_center`
+7. Elgato Wave Link - `elgato_help_center`
+8. Elgato Camera Hub - `elgato_help_center`
+9. Elgato 4K Capture Utility - `elgato_help_center`
 
 The remaining tracked Company/Software sources are represented in:
 
@@ -19,6 +23,9 @@ auxsays/_data/patch_ingestion_sources.yml
 ```
 
 They are intentionally disabled until their parser profiles are hardened.
+The Elgato Help Center lane is official-source ingestion only. It detects
+vendor release-note articles and does not create user-report evidence,
+community consensus, verdict changes, or report counts.
 
 ## Run locally from repo root
 
@@ -48,6 +55,7 @@ Official ingestion remains mutating unless run with `--dry-run`:
 ```powershell
 .\.venv\Scripts\python.exe auxsays\scripts\patch_ingest.py --source obs-studio --dry-run
 .\.venv\Scripts\python.exe auxsays\scripts\patch_ingest.py --source comfyui --dry-run
+.\.venv\Scripts\python.exe auxsays\scripts\patch_ingest.py --source elgato-stream-deck --dry-run
 ```
 
 ## Dry run
