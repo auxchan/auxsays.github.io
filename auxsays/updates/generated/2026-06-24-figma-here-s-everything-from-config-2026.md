@@ -17,8 +17,8 @@ update_version: Here’s everything from Config 2026
 update_logo_text: FIG
 update_published_at: '2026-06-24T00:00:00.000Z'
 update_last_checked: '2026-06-24T20:12:35Z'
-source_last_checked: '2026-06-25T15:18:23Z'
-official_body_last_checked: '2026-06-25T15:18:23Z'
+source_last_checked: '2026-06-26T04:42:34Z'
+official_body_last_checked: '2026-06-26T04:42:34Z'
 record_last_updated: '2026-06-24T20:12:35Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -85,6 +85,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-06-25T15:18:23Z'
+  url: https://www.figma.com/release-notes/?title=config-2026
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-06-26T04:42:34Z'
   url: https://www.figma.com/release-notes/?title=config-2026
   status: captured-from-rss-feed
   body_captured: true
