@@ -13,7 +13,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: web_search_adapter_disabled_in_phase_a
-  last_run: '2026-06-25T20:25:23Z'
+  last_run: '2026-06-26T01:33:14Z'
   notes: 'Reserved fallback discovery method; no adapter is configured in Phase A. Fetch failures: 1.'
 - product_id: adobe-premiere-pro
   update_version: 26.2.2
@@ -28,7 +28,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:http_403_blocked
-  last_run: '2026-06-25T20:22:48Z'
+  last_run: '2026-06-26T01:29:46Z'
   notes: 'Adobe Community search discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. Search requests are deliberately capped so rate limiting moves the collector to fallback methods instead of retrying the blocked endpoint repeatedly. Fetch failures: 1.'
 - product_id: adobe-premiere-pro
   update_version: 26.2.2
@@ -43,7 +43,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_bug_tab_fetch_failed:rate_limited
-  last_run: '2026-06-25T20:22:48Z'
+  last_run: '2026-06-26T01:29:46Z'
   notes: 'Adobe Community Premiere bug-tab listing discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. Fetch failures: 1.'
 - product_id: adobe-premiere-pro
   update_version: 26.2.2
@@ -58,7 +58,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-06-25T20:22:48Z'
+  last_run: '2026-06-26T01:29:46Z'
   notes: Known Adobe Community bug-report URL recheck discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates.
 - product_id: adobe-premiere-pro
   update_version: 26.2.2
@@ -73,7 +73,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: brave_search_fetch_failed:http_402_error x2
-  last_run: '2026-06-25T20:22:48Z'
+  last_run: '2026-06-26T01:29:46Z'
   notes: 'Brave Search API fallback discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. This method reads BRAVE_SEARCH_API_KEY from the workflow environment, uses it only as an API header, and never logs the token. Fetch failures: 2.'
 - product_id: adobe-premiere-pro
   update_version: 26.2.2
@@ -88,7 +88,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: wayback_brave_search_fetch_failed:http_402_error x2
-  last_run: '2026-06-25T20:22:48Z'
+  last_run: '2026-06-26T01:29:46Z'
   notes: 'Wayback snapshot recheck discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. This method verifies blocked Adobe Community report pages through public Wayback snapshots of the same specific report URL when enough archived text is available. Fetch failures: 2.'
 - product_id: adobe-premiere-pro
   update_version: 26.2.2
@@ -103,7 +103,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: creativecow_forum_index_fetch_failed:browser_challenge
-  last_run: '2026-06-25T20:22:48Z'
+  last_run: '2026-06-26T01:29:46Z'
   notes: 'Creative COW Premiere Pro forum index discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. This non-Adobe source is used only for specific Creative COW Premiere Pro forum threads that explicitly match the same patch/version and concrete-issue gates. Fetch failures: 1.'
 - product_id: adobe-premiere-pro
   update_version: 26.2.2
@@ -118,7 +118,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: creativecow_brave_search_fetch_failed:http_402_error x3
-  last_run: '2026-06-25T20:22:48Z'
+  last_run: '2026-06-26T01:29:46Z'
   notes: 'Creative COW Brave Search fallback discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. This non-Adobe source is used only for specific Creative COW Premiere Pro forum threads that explicitly match the same patch/version and concrete-issue gates. Fetch failures: 3.'
 - product_id: adobe-premiere-pro
   update_version: '26.2'
@@ -133,7 +133,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:http_403_blocked
-  last_run: '2026-06-25T20:21:14Z'
+  last_run: '2026-06-26T01:28:41Z'
   notes: 'Adobe Community search discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. Search requests are deliberately capped so rate limiting moves the collector to fallback methods instead of retrying the blocked endpoint repeatedly. Fetch failures: 1.'
 - product_id: adobe-premiere-pro
   update_version: '26.2'
@@ -148,7 +148,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_bug_tab_fetch_failed:rate_limited
-  last_run: '2026-06-25T20:21:14Z'
+  last_run: '2026-06-26T01:28:41Z'
   notes: 'Adobe Community Premiere bug-tab listing discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. Fetch failures: 1.'
 - product_id: adobe-premiere-pro
   update_version: '26.2'
@@ -163,7 +163,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_known_url_recheck_report_fetch_failed:rate_limited x3
-  last_run: '2026-06-25T20:21:14Z'
+  last_run: '2026-06-26T01:28:41Z'
   notes: 'Known Adobe Community bug-report URL recheck discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. Fetch failures: 3.'
 - product_id: adobe-premiere-pro
   update_version: '26.2'
@@ -178,7 +178,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: brave_search_fetch_failed:http_402_error x4
-  last_run: '2026-06-25T20:21:14Z'
+  last_run: '2026-06-26T01:28:41Z'
   notes: 'Brave Search API fallback discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. This method reads BRAVE_SEARCH_API_KEY from the workflow environment, uses it only as an API header, and never logs the token. Fetch failures: 4.'
 - product_id: adobe-premiere-pro
   update_version: '26.2'
@@ -192,8 +192,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: wayback_no_snapshot; wayback_cdx_fetch_failed:url_error_timed out x2
-  last_run: '2026-06-25T20:21:14Z'
+  blocked_reason: wayback_no_snapshot; wayback_cdx_fetch_failed:TimeoutError; wayback_cdx_fetch_failed:url_error_[Errno 111] Connection refused
+  last_run: '2026-06-26T01:28:41Z'
   notes: 'Wayback snapshot recheck discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. This method verifies blocked Adobe Community report pages through public Wayback snapshots of the same specific report URL when enough archived text is available. Fetch failures: 3.'
 - product_id: adobe-premiere-pro
   update_version: '26.2'
@@ -208,7 +208,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: creativecow_forum_index_fetch_failed:browser_challenge
-  last_run: '2026-06-25T20:21:14Z'
+  last_run: '2026-06-26T01:28:41Z'
   notes: 'Creative COW Premiere Pro forum index discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. This non-Adobe source is used only for specific Creative COW Premiere Pro forum threads that explicitly match the same patch/version and concrete-issue gates. Fetch failures: 1.'
 - product_id: adobe-premiere-pro
   update_version: '26.2'
@@ -223,7 +223,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: creativecow_brave_search_fetch_failed:http_402_error x4
-  last_run: '2026-06-25T20:21:14Z'
+  last_run: '2026-06-26T01:28:41Z'
   notes: 'Creative COW Brave Search fallback discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. This non-Adobe source is used only for specific Creative COW Premiere Pro forum threads that explicitly match the same patch/version and concrete-issue gates. Fetch failures: 4.'
 - product_id: blackmagic-davinci
   update_version: 20.3.1
@@ -238,7 +238,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 1
   blocked_reason: probe_fetch_failed:http_202_aws_waf_challenge x6
-  last_run: '2026-06-25T20:22:51Z'
+  last_run: '2026-06-26T01:29:51Z'
   notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 6. Rejected candidates: missing_exact_patch_version_match=1.'
 - product_id: blackmagic-davinci
   update_version: 20.3.1
@@ -253,23 +253,23 @@ methods:
   accepted_reports: 7
   rejected_reports: 15
   blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]
-  last_run: '2026-06-25T20:22:51Z'
+  last_run: '2026-06-26T01:29:51Z'
   notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 4.'
 - product_id: blackmagic-davinci
   update_version: 20.3.1
   method_id: creative_cow_forum_search
   source_type: creator_forum_report
   status: success
-  candidates_found: 5
+  candidates_found: 4
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 5
+  rejected_reports: 4
   blocked_reason: ''
-  last_run: '2026-06-25T20:22:51Z'
-  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=5.'
+  last_run: '2026-06-26T01:29:51Z'
+  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=4.'
 - product_id: blackmagic-davinci
   update_version: 20.3.1
   method_id: vendor_forum_search
@@ -283,7 +283,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
-  last_run: '2026-06-25T20:22:51Z'
+  last_run: '2026-06-26T01:29:51Z'
   notes: Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
 - product_id: blackmagic-davinci
   update_version: 20.3.1
@@ -298,7 +298,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: web_search_adapter_disabled_in_phase_a
-  last_run: '2026-06-25T20:22:51Z'
+  last_run: '2026-06-26T01:29:51Z'
   notes: 'Reserved fallback discovery method; no adapter is configured in Phase A. Fetch failures: 1.'
 - product_id: blackmagic-davinci
   update_version: 20.3.2
@@ -313,7 +313,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: probe_fetch_failed:http_202_aws_waf_challenge x6; reddit_post_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_post_www_atom=http_429_Too Many Requests:rate_limited;reddit_post_old_atom=http_429_Too Many Requests:rate_limited;reddit_post_www_rss_suffix=http_429_Too Many Requests:rate_limited;reddit_post_old_rss_suffix=http_429_Too Many Requests:rate_limited]
-  last_run: '2026-06-25T20:23:09Z'
+  last_run: '2026-06-26T01:30:11Z'
   notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 7.'
 - product_id: blackmagic-davinci
   update_version: 20.3.2
@@ -328,23 +328,23 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]; reddit_search_feed_fetch_failed:http_429_Too Many Requests x24; reddit_listing_feed_fetch_failed:http_429_Too Many Requests x4
-  last_run: '2026-06-25T20:23:09Z'
+  last_run: '2026-06-26T01:30:11Z'
   notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 32.'
 - product_id: blackmagic-davinci
   update_version: 20.3.2
   method_id: creative_cow_forum_search
   source_type: creator_forum_report
   status: success
-  candidates_found: 5
+  candidates_found: 4
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 5
+  rejected_reports: 4
   blocked_reason: ''
-  last_run: '2026-06-25T20:23:09Z'
-  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=5.'
+  last_run: '2026-06-26T01:30:11Z'
+  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=4.'
 - product_id: blackmagic-davinci
   update_version: 20.3.2
   method_id: vendor_forum_search
@@ -358,7 +358,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
-  last_run: '2026-06-25T20:23:09Z'
+  last_run: '2026-06-26T01:30:11Z'
   notes: Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
 - product_id: blackmagic-davinci
   update_version: 20.3.2
@@ -373,7 +373,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: web_search_adapter_disabled_in_phase_a
-  last_run: '2026-06-25T20:23:09Z'
+  last_run: '2026-06-26T01:30:11Z'
   notes: 'Reserved fallback discovery method; no adapter is configured in Phase A. Fetch failures: 1.'
 - product_id: blackmagic-davinci
   update_version: 21 Public Beta 1
@@ -388,113 +388,113 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: probe_fetch_failed:http_202_aws_waf_challenge x6; reddit_post_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_post_www_atom=http_429_Too Many Requests:rate_limited;reddit_post_old_atom=http_429_Too Many Requests:rate_limited;reddit_post_www_rss_suffix=http_429_Too Many Requests:rate_limited;reddit_post_old_rss_suffix=http_429_Too Many Requests:rate_limited]
-  last_run: '2026-06-25T20:23:23Z'
+  last_run: '2026-06-26T01:30:29Z'
   notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 7.'
 - product_id: blackmagic-davinci
   update_version: 21 Public Beta 1
+  method_id: reddit_search
+  source_type: reddit_community_report
+  status: blocked
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]; reddit_search_feed_fetch_failed:http_429_Too Many Requests x47; reddit_listing_feed_fetch_failed:http_429_Too Many Requests x4
+  last_run: '2026-06-26T01:30:29Z'
+  notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 55.'
+- product_id: blackmagic-davinci
+  update_version: 21 Public Beta 1
+  method_id: creative_cow_forum_search
+  source_type: creator_forum_report
+  status: success
+  candidates_found: 4
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 4
+  blocked_reason: ''
+  last_run: '2026-06-26T01:30:29Z'
+  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=4.'
+- product_id: blackmagic-davinci
+  update_version: 21 Public Beta 1
+  method_id: vendor_forum_search
+  source_type: blackmagic_forum
+  status: blocked
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
+  last_run: '2026-06-26T01:30:29Z'
+  notes: Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
+- product_id: blackmagic-davinci
+  update_version: 21 Public Beta 1
+  method_id: web_search
+  source_type: web_search
+  status: disabled
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: web_search_adapter_disabled_in_phase_a
+  last_run: '2026-06-26T01:30:29Z'
+  notes: 'Reserved fallback discovery method; no adapter is configured in Phase A. Fetch failures: 1.'
+- product_id: blackmagic-davinci
+  update_version: '21'
+  method_id: known_watchlist
+  source_type: curated_watchlist
+  status: partial
+  candidates_found: 1
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 1
+  blocked_reason: probe_fetch_failed:http_202_aws_waf_challenge x6
+  last_run: '2026-06-26T01:32:02Z'
+  notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 6. Rejected candidates: missing_exact_patch_version_match=1.'
+- product_id: blackmagic-davinci
+  update_version: '21'
   method_id: reddit_search
   source_type: reddit_community_report
   status: partial
-  candidates_found: 2
-  accepted_candidates: 2
+  candidates_found: 15
+  accepted_candidates: 1
   duplicate_existing_evidence: 0
-  evidence_rows_added: 2
-  public_counted_reports: 2
-  accepted_reports: 2
-  rejected_reports: 0
+  evidence_rows_added: 1
+  public_counted_reports: 1
+  accepted_reports: 1
+  rejected_reports: 14
   blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]
-  last_run: '2026-06-25T20:23:23Z'
+  last_run: '2026-06-26T01:32:02Z'
   notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 4.'
 - product_id: blackmagic-davinci
-  update_version: 21 Public Beta 1
-  method_id: creative_cow_forum_search
-  source_type: creator_forum_report
-  status: success
-  candidates_found: 5
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 5
-  blocked_reason: ''
-  last_run: '2026-06-25T20:23:23Z'
-  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=5.'
-- product_id: blackmagic-davinci
-  update_version: 21 Public Beta 1
-  method_id: vendor_forum_search
-  source_type: blackmagic_forum
-  status: blocked
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
-  last_run: '2026-06-25T20:23:23Z'
-  notes: Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
-- product_id: blackmagic-davinci
-  update_version: 21 Public Beta 1
-  method_id: web_search
-  source_type: web_search
-  status: disabled
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: web_search_adapter_disabled_in_phase_a
-  last_run: '2026-06-25T20:23:23Z'
-  notes: 'Reserved fallback discovery method; no adapter is configured in Phase A. Fetch failures: 1.'
-- product_id: blackmagic-davinci
-  update_version: '21'
-  method_id: known_watchlist
-  source_type: curated_watchlist
-  status: blocked
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: probe_fetch_failed:http_202_aws_waf_challenge x6; reddit_post_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_post_www_atom=http_429_Too Many Requests:rate_limited;reddit_post_old_atom=http_429_Too Many Requests:rate_limited;reddit_post_www_rss_suffix=http_429_Too Many Requests:rate_limited;reddit_post_old_rss_suffix=http_429_Too Many Requests:rate_limited]
-  last_run: '2026-06-25T20:25:09Z'
-  notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 7.'
-- product_id: blackmagic-davinci
-  update_version: '21'
-  method_id: reddit_search
-  source_type: reddit_community_report
-  status: blocked
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]; reddit_search_feed_fetch_failed:http_429_Too Many Requests x24; reddit_listing_feed_fetch_failed:http_429_Too Many Requests x4
-  last_run: '2026-06-25T20:25:09Z'
-  notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 32.'
-- product_id: blackmagic-davinci
   update_version: '21'
   method_id: creative_cow_forum_search
   source_type: creator_forum_report
   status: success
-  candidates_found: 5
+  candidates_found: 4
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 5
+  rejected_reports: 4
   blocked_reason: ''
-  last_run: '2026-06-25T20:25:09Z'
-  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=5.'
+  last_run: '2026-06-26T01:32:02Z'
+  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=4.'
 - product_id: blackmagic-davinci
   update_version: '21'
   method_id: vendor_forum_search
@@ -508,7 +508,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
-  last_run: '2026-06-25T20:25:09Z'
+  last_run: '2026-06-26T01:32:02Z'
   notes: Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
 - product_id: blackmagic-davinci
   update_version: '21'
@@ -523,23 +523,23 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: web_search_adapter_disabled_in_phase_a
-  last_run: '2026-06-25T20:25:09Z'
+  last_run: '2026-06-26T01:32:02Z'
   notes: 'Reserved fallback discovery method; no adapter is configured in Phase A. Fetch failures: 1.'
 - product_id: blackmagic-davinci
   update_version: 20.3.3
   method_id: known_watchlist
   source_type: curated_watchlist
-  status: blocked
-  candidates_found: 0
+  status: partial
+  candidates_found: 1
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: probe_fetch_failed:http_202_aws_waf_challenge x6; reddit_post_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_post_www_atom=http_429_Too Many Requests:rate_limited;reddit_post_old_atom=http_429_Too Many Requests:rate_limited;reddit_post_www_rss_suffix=http_429_Too Many Requests:rate_limited;reddit_post_old_rss_suffix=http_429_Too Many Requests:rate_limited]
-  last_run: '2026-06-25T20:25:23Z'
-  notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 7.'
+  rejected_reports: 1
+  blocked_reason: probe_fetch_failed:http_202_aws_waf_challenge x6
+  last_run: '2026-06-26T01:33:14Z'
+  notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 6. Rejected candidates: missing_exact_patch_version_match=1.'
 - product_id: blackmagic-davinci
   update_version: 20.3.3
   method_id: reddit_search
@@ -552,24 +552,24 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]; reddit_search_feed_fetch_failed:http_429_Too Many Requests x24; reddit_listing_feed_fetch_failed:http_429_Too Many Requests x4
-  last_run: '2026-06-25T20:25:23Z'
-  notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 32.'
+  blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]; reddit_search_feed_fetch_failed:http_429_Too Many Requests x23; reddit_listing_feed_fetch_failed:http_429_Too Many Requests x4
+  last_run: '2026-06-26T01:33:14Z'
+  notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 31.'
 - product_id: blackmagic-davinci
   update_version: 20.3.3
   method_id: creative_cow_forum_search
   source_type: creator_forum_report
   status: success
-  candidates_found: 5
+  candidates_found: 4
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 5
+  rejected_reports: 4
   blocked_reason: ''
-  last_run: '2026-06-25T20:25:23Z'
-  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=5.'
+  last_run: '2026-06-26T01:33:14Z'
+  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=4.'
 - product_id: blackmagic-davinci
   update_version: 20.3.3
   method_id: vendor_forum_search
@@ -583,7 +583,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
-  last_run: '2026-06-25T20:25:23Z'
+  last_run: '2026-06-26T01:33:14Z'
   notes: Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
 - product_id: obs-studio
   update_version: 32.1.1
@@ -598,22 +598,22 @@ methods:
   accepted_reports: 1
   rejected_reports: 1
   blocked_reason: ''
-  last_run: '2026-06-25T20:28:14Z'
+  last_run: '2026-06-26T01:38:40Z'
   notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
 - product_id: obs-studio
   update_version: 32.1.2
   method_id: github_issues
   source_type: github_issue
   status: success
-  candidates_found: 55
-  accepted_candidates: 53
+  candidates_found: 54
+  accepted_candidates: 52
   duplicate_existing_evidence: 0
-  evidence_rows_added: 53
-  public_counted_reports: 53
-  accepted_reports: 53
+  evidence_rows_added: 52
+  public_counted_reports: 52
+  accepted_reports: 52
   rejected_reports: 2
   blocked_reason: ''
-  last_run: '2026-06-25T20:28:35Z'
+  last_run: '2026-06-26T01:39:00Z'
   notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
 - product_id: obs-studio
   update_version: 32.1.2
@@ -643,28 +643,13 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: probe_fetch_failed:http_202_aws_waf_challenge x6; reddit_post_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_post_www_atom=http_429_Too Many Requests:rate_limited;reddit_post_old_atom=http_429_Too Many Requests:rate_limited;reddit_post_www_rss_suffix=http_429_Too Many Requests:rate_limited;reddit_post_old_rss_suffix=http_429_Too Many Requests:rate_limited]
-  last_run: '2026-06-25T20:25:38Z'
+  last_run: '2026-06-26T01:35:35Z'
   notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 7.'
 - product_id: blackmagic-davinci
   update_version: '21.0'
   method_id: reddit_search
   source_type: reddit_community_report
   status: partial
-  candidates_found: 7
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 7
-  blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]
-  last_run: '2026-06-25T20:25:38Z'
-  notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 4. Rejected candidates: conflicting_davinci_version_context=4, missing_davinci_product_context=1, not_a_real_issue_report=2.'
-- product_id: blackmagic-davinci
-  update_version: '21.0'
-  method_id: creative_cow_forum_search
-  source_type: creator_forum_report
-  status: success
   candidates_found: 5
   accepted_candidates: 0
   duplicate_existing_evidence: 0
@@ -672,9 +657,24 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 5
+  blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]
+  last_run: '2026-06-26T01:35:35Z'
+  notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 4. Rejected candidates: conflicting_davinci_version_context=4, not_a_real_issue_report=1.'
+- product_id: blackmagic-davinci
+  update_version: '21.0'
+  method_id: creative_cow_forum_search
+  source_type: creator_forum_report
+  status: success
+  candidates_found: 4
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 4
   blocked_reason: ''
-  last_run: '2026-06-25T20:25:38Z'
-  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=5.'
+  last_run: '2026-06-26T01:35:35Z'
+  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=4.'
 - product_id: blackmagic-davinci
   update_version: '21.0'
   method_id: vendor_forum_search
@@ -688,7 +688,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
-  last_run: '2026-06-25T20:25:38Z'
+  last_run: '2026-06-26T01:35:35Z'
   notes: Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
 - product_id: blackmagic-davinci
   update_version: '21.0'
@@ -703,7 +703,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: web_search_adapter_disabled_in_phase_a
-  last_run: '2026-06-25T20:25:38Z'
+  last_run: '2026-06-26T01:35:35Z'
   notes: 'Reserved fallback discovery method; no adapter is configured in Phase A. Fetch failures: 1.'
 - product_id: blackmagic-davinci
   update_version: 21.0.1
@@ -718,7 +718,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: probe_fetch_failed:http_202_aws_waf_challenge x6; reddit_post_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_post_www_atom=http_429_Too Many Requests:rate_limited;reddit_post_old_atom=http_429_Too Many Requests:rate_limited;reddit_post_www_rss_suffix=http_429_Too Many Requests:rate_limited;reddit_post_old_rss_suffix=http_429_Too Many Requests:rate_limited]
-  last_run: '2026-06-25T20:27:03Z'
+  last_run: '2026-06-26T01:37:22Z'
   notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 7.'
 - product_id: blackmagic-davinci
   update_version: 21.0.1
@@ -733,23 +733,23 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]; reddit_search_feed_fetch_failed:http_429_Too Many Requests x23; reddit_listing_feed_fetch_failed:http_429_Too Many Requests x4
-  last_run: '2026-06-25T20:27:03Z'
+  last_run: '2026-06-26T01:37:22Z'
   notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 31.'
 - product_id: blackmagic-davinci
   update_version: 21.0.1
   method_id: creative_cow_forum_search
   source_type: creator_forum_report
   status: success
-  candidates_found: 5
+  candidates_found: 4
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 5
+  rejected_reports: 4
   blocked_reason: ''
-  last_run: '2026-06-25T20:27:03Z'
-  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=5.'
+  last_run: '2026-06-26T01:37:22Z'
+  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=4.'
 - product_id: blackmagic-davinci
   update_version: 21.0.1
   method_id: vendor_forum_search
@@ -763,7 +763,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
-  last_run: '2026-06-25T20:27:03Z'
+  last_run: '2026-06-26T01:37:22Z'
   notes: Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
 - product_id: blackmagic-davinci
   update_version: 21.0.1
@@ -778,5 +778,5 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: web_search_adapter_disabled_in_phase_a
-  last_run: '2026-06-25T20:27:03Z'
+  last_run: '2026-06-26T01:37:22Z'
   notes: 'Reserved fallback discovery method; no adapter is configured in Phase A. Fetch failures: 1.'
