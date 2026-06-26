@@ -17,8 +17,8 @@ update_version: 'Copilot code review: Analysis depth and efficiency updates'
 update_logo_text: GIT
 update_published_at: '2026-06-25T21:41:18Z'
 update_last_checked: '2026-06-26T04:43:03Z'
-source_last_checked: '2026-06-26T04:43:03Z'
-official_body_last_checked: '2026-06-26T04:43:03Z'
+source_last_checked: '2026-06-26T09:53:36Z'
+official_body_last_checked: '2026-06-26T09:53:36Z'
 record_last_updated: '2026-06-26T04:43:03Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -84,6 +84,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-06-26T04:43:03Z'
+  url: https://github.blog/changelog/2026-06-25-copilot-code-review-analysis-depth-and-efficiency-updates
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-06-26T09:53:36Z'
   url: https://github.blog/changelog/2026-06-25-copilot-code-review-analysis-depth-and-efficiency-updates
   status: captured-from-rss-feed
   body_captured: true
