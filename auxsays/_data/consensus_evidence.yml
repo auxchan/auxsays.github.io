@@ -4679,7 +4679,6 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
-
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ucntqq-smoothness-on-a-slowed-down-clip
   product_id: blackmagic-davinci
   update_version: '21'
@@ -4704,7 +4703,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ucuoyj-i-need-help-with-my-audio-track-and-expor
   product_id: blackmagic-davinci
   update_version: '21'
@@ -4729,7 +4727,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-0-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uek2z0-audio-doesnt-work-at-all
   product_id: blackmagic-davinci
   update_version: 21.0.1
@@ -4749,6 +4746,51 @@ evidence:
   counted: true
   exclusion_reason: null
   issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-0-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ug2x68-bodydress-retouching-on-handheld-wedding
+  product_id: blackmagic-davinci
+  update_version: 21.0.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ug2x68/bodydress_retouching_on_handheld_wedding_footage/
+  parent_title: Body/dress retouching on handheld wedding footage — tracking keeps failing, what's your workflow?
+  report_title: Body/dress retouching on handheld wedding footage — tracking keeps failing, what's your workflow?
+  report_text_excerpt: Body/dress retouching on handheld wedding footage — tracking keeps failing, what's your workflow? Hey all, I'm editing a proposal clip — a friend of mine proposed to his girlfriend, and while the moment is beautiful, she doesn't love how she looks in some of the shots, so I'm...
+  captured_at: '2026-06-26T16:31:22Z'
+  source_date: '2026-06-26'
+  target_release_date: '2026-06-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: macos
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13595
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13595
+  parent_title: Consumes GPU watts , memory and processing power unnecessarily unless keeps changing process priority
+  report_title: Consumes GPU watts , memory and processing power unnecessarily unless keeps changing process priority
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/CqKgLGpSmRszJmxG ### OBS Studio Crash Log URL _No response_ ### Expected Behavior <img'
+  captured_at: '2026-06-26T16:32:38Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
   workflow_area: application stability
   platform: windows
   severity: high
