@@ -4796,3 +4796,28 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-0-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uh7sl1-davinciresolve-just-crashes-after-selecti
+  product_id: blackmagic-davinci
+  update_version: 21.0.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1uh7sl1/davinciresolve_just_crashes_after_selecting_a/
+  parent_title: DavinciResolve just crashes after selecting a folder to export to (Windows 11)
+  report_title: DavinciResolve just crashes after selecting a folder to export to (Windows 11)
+  report_text_excerpt: DavinciResolve just crashes after selecting a folder to export to (Windows 11) When I was ready to export my projects, I would go into the export tab and select a folder to export it to. This gave me no issues, it was always working, I always managed to export projects like...
+  captured_at: '2026-06-27T19:47:23Z'
+  source_date: '2026-06-27'
+  target_release_date: '2026-06-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
