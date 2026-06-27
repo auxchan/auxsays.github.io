@@ -17,8 +17,8 @@ update_version: 21.0.1
 update_logo_text: DAV
 update_published_at: '2026-06-24T00:00:00Z'
 update_last_checked: '2026-06-24T09:52:52Z'
-source_last_checked: '2026-06-26T20:13:22Z'
-official_body_last_checked: '2026-06-26T20:13:22Z'
+source_last_checked: '2026-06-27T04:28:23Z'
+official_body_last_checked: '2026-06-27T04:28:23Z'
 record_last_updated: '2026-06-26T16:32:14.735505Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
@@ -87,11 +87,6 @@ official_sources:
   trust_level: official
   extraction_status: version_metadata_captured
 official_source_attempts:
-- at: '2026-06-25T15:18:50Z'
-  url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
-  status: captured-from-official-blackmagic-support-api
-  body_captured: true
-  checksums_captured: false
 - at: '2026-06-26T04:43:00Z'
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
   status: captured-from-official-blackmagic-support-api
@@ -108,6 +103,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-06-26T20:13:22Z'
+  url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
+  status: captured-from-official-blackmagic-support-api
+  body_captured: true
+  checksums_captured: false
+- at: '2026-06-27T04:28:23Z'
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
   status: captured-from-official-blackmagic-support-api
   body_captured: true
