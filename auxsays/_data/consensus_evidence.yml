@@ -4870,3 +4870,28 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ui3ldj-how-to-automate-dji-mic-2-workflow-in-dav
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ui3ldj/how_to_automate_dji_mic_2_workflow_in_davinci/
+  parent_title: How to Automate DJI Mic 2 Workflow in DaVinci Resolve 21 (Free Python Script to Delete Empty/Duplicate 2nd Mic Tracks)
+  report_title: How to Automate DJI Mic 2 Workflow in DaVinci Resolve 21 (Free Python Script to Delete Empty/Duplicate 2nd Mic Tracks)
+  report_text_excerpt: How to Automate DJI Mic 2 Workflow in DaVinci Resolve 21 (Free Python Script to Delete Empty/Duplicate 2nd Mic Tracks) https://preview.redd.it/wkq87icu82ah1.png?width=1292&format=png&auto=webp&s=22ed7df55d3b07ba5c8be91235deed63c6e852c0 If you record video with a DJI Mic 2...
+  captured_at: '2026-06-28T21:22:15Z'
+  source_date: '2026-06-28'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: install issue
+  workflow_area: installation
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
