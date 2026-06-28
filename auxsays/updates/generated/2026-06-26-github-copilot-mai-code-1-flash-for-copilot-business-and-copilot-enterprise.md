@@ -17,8 +17,8 @@ update_version: MAI-Code-1-Flash for Copilot Business and Copilot Enterprise
 update_logo_text: GIT
 update_published_at: '2026-06-26T16:35:06Z'
 update_last_checked: '2026-06-26T20:13:28Z'
-source_last_checked: '2026-06-28T09:35:01Z'
-official_body_last_checked: '2026-06-28T09:35:01Z'
+source_last_checked: '2026-06-28T14:18:28Z'
+official_body_last_checked: '2026-06-28T14:18:28Z'
 record_last_updated: '2026-06-26T20:13:28Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -94,6 +94,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-06-28T09:35:01Z'
+  url: https://github.blog/changelog/2026-06-26-mai-code-1-flash-for-copilot-business-and-copilot-enterprise
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-06-28T14:18:28Z'
   url: https://github.blog/changelog/2026-06-26-mai-code-1-flash-for-copilot-business-and-copilot-enterprise
   status: captured-from-rss-feed
   body_captured: true
