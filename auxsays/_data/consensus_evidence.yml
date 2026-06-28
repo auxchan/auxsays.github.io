@@ -4821,3 +4821,52 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ui1kiz-the-fastest-freeze-frame-character-intro
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ui1kiz/the_fastest_freeze_frame_character_intro_effect/
+  parent_title: The FASTEST Freeze Frame Character Intro Effect | DaVinci Resolve 21 Tutorial (Magic Mask edition)
+  report_title: The FASTEST Freeze Frame Character Intro Effect | DaVinci Resolve 21 Tutorial (Magic Mask edition)
+  report_text_excerpt: The FASTEST Freeze Frame Character Intro Effect | DaVinci Resolve 21 Tutorial (Magic Mask edition) submitted by /u/babatudor [link] [comments]
+  captured_at: '2026-06-28T16:39:28Z'
+  source_date: '2026-06-28'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: unknown
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ui00dt-how-to-automatically-trim-and-rippledelet
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ui00dt/how_to_automatically_trim_and_rippledelete_raw/
+  parent_title: How to automatically trim and ripple-delete raw DJI/Camera footage using Clip Markers inside DaVinci Resolve 21 (Zero Bin Clutter)
+  report_title: How to automatically trim and ripple-delete raw DJI/Camera footage using Clip Markers inside DaVinci Resolve 21 (Zero Bin Clutter)
+  report_text_excerpt: How to automatically trim and ripple-delete raw DJI/Camera footage using Clip Markers inside DaVinci Resolve 21 (Zero Bin Clutter) Hey everyone, If you spend hours logging raw footage by dropping multiple markers directly onto source clips in your Media Pool bins before...
+  captured_at: '2026-06-28T16:39:28Z'
+  source_date: '2026-06-28'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
