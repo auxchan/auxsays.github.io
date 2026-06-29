@@ -4796,7 +4796,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-0-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uh7sl1-davinciresolve-just-crashes-after-selecti
   product_id: blackmagic-davinci
   update_version: 21.0.1
@@ -4821,7 +4820,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ui1kiz-the-fastest-freeze-frame-character-intro
   product_id: blackmagic-davinci
   update_version: '21'
@@ -4870,7 +4868,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ui3ldj-how-to-automate-dji-mic-2-workflow-in-dav
   product_id: blackmagic-davinci
   update_version: '21'
@@ -4894,4 +4891,46 @@ evidence:
   platform: windows
   severity: medium
   sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13606
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13606
+  parent_title: display capture preview and recording flickers and ghosting
+  report_title: display capture preview and recording flickers and ghosting
+  report_text_excerpt: 'from x11 and different settings with chatgpts assistance.,OBS Studio: 32.1.2 (also tested 32.1.1 with the same behavior) OS: Bazzite 44 (Fedora Kinoite) Desktop: KDE Plasma 6 (Wayland) Session: Wayland GPU: NVIDIA GeForce RTX 5070 NVIDIA Driver: 610.43.02 PipeWire: 1.6.6 Kernel:'
+  captured_at: '2026-06-29T07:10:40Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13606
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13606
+  parent_title: display capture preview and recording flickers and ghosting
+  report_title: display capture preview and recording flickers and ghosting
+  report_text_excerpt: 've tried everything from x11 and different settings with chatgpts assistance.,OBS Studio: 32.1.2 (also tested 32.1.1 with the same behavior) OS: Bazzite 44 (Fedora Kinoite) Desktop: KDE Plasma 6 (Wayland) Session: Wayland GPU: NVIDIA GeForce RTX 5070 NVIDIA Driver: 610.43.02 Pipe'
+  captured_at: '2026-06-29T07:10:55Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
   source_weight: 1
