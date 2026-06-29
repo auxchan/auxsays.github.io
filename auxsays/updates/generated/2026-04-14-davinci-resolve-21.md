@@ -166,16 +166,11 @@ official_source_captured: true
 confirmed_patch_specific_report_count: 23
 known_issues_present: null
 official_checksums_body: ''
-source_last_checked: '2026-06-29T05:02:16Z'
-official_body_last_checked: '2026-06-29T05:02:16Z'
+source_last_checked: '2026-06-29T11:25:26Z'
+official_body_last_checked: '2026-06-29T11:25:26Z'
 primary_official_source: https://www.blackmagicdesign.com/media/release/20260414-01
 fallback_official_sources: []
 official_source_attempts:
-- at: '2026-06-27T04:28:23Z'
-  url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
-  status: captured-from-official-blackmagic-support-api
-  body_captured: true
-  checksums_captured: false
 - at: '2026-06-27T09:07:22Z'
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
   status: captured-from-official-blackmagic-support-api
@@ -192,6 +187,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-06-29T05:02:16Z'
+  url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
+  status: captured-from-official-blackmagic-support-api
+  body_captured: true
+  checksums_captured: false
+- at: '2026-06-29T11:25:26Z'
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
   status: captured-from-official-blackmagic-support-api
   body_captured: true
