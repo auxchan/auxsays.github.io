@@ -17,8 +17,8 @@ update_version: Track total merges by adoption phase in enterprise and organizat
 update_logo_text: GIT
 update_published_at: '2026-06-26T20:55:03Z'
 update_last_checked: '2026-06-27T04:28:25Z'
-source_last_checked: '2026-06-28T14:18:28Z'
-official_body_last_checked: '2026-06-28T14:18:28Z'
+source_last_checked: '2026-06-29T05:02:18Z'
+official_body_last_checked: '2026-06-29T05:02:18Z'
 record_last_updated: '2026-06-27T04:28:25Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -98,6 +98,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-06-28T14:18:28Z'
+  url: https://github.blog/changelog/2026-06-26-track-total-merges-by-adoption-phase-in-enterprise-and-organization-reports
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-06-29T05:02:18Z'
   url: https://github.blog/changelog/2026-06-26-track-total-merges-by-adoption-phase-in-enterprise-and-organization-reports
   status: captured-from-rss-feed
   body_captured: true
