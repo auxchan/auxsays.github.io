@@ -4934,3 +4934,28 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uizkd7-gpu-failed-to-perform-image-processing-be
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1uizkd7/gpu_failed_to_perform_image_processing_because_of/
+  parent_title: GPU failed to perform image processing because of an error. Error code 1
+  report_title: GPU failed to perform image processing because of an error. Error code 1
+  report_text_excerpt: GPU failed to perform image processing because of an error. Error code 1 Ive been editing, and ive been using a good amount of masking. There were two clips before that I had used the mask tool that worked fine, but on this third one i used a decent amount of points (around...
+  captured_at: '2026-06-29T18:23:52Z'
+  source_date: '2026-06-29'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
