@@ -4959,3 +4959,28 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uif7k8-bug-in-latest-release-farilight-presets-l
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1uif7k8/bug_in_latest_release_farilight_presets_lost_when/
+  parent_title: Bug in latest release, Farilight presets lost when timeline changed
+  report_title: Bug in latest release, Farilight presets lost when timeline changed
+  report_text_excerpt: Bug in latest release, Farilight presets lost when timeline changed Here is a clear, highly technical breakdown of the bug formatted exactly how a Blackmagic Design QA engineer or developer would want to read it. You can copy and paste this directly into your support ticket or...
+  captured_at: '2026-06-30T08:41:06Z'
+  source_date: '2026-06-29'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: compatibility issue
+  workflow_area: plugins / codecs
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
