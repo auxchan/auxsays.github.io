@@ -17,8 +17,8 @@ update_version: Claude Opus 4.8 (fast mode) is now in preview for GitHub Copilot
 update_logo_text: GIT
 update_published_at: '2026-06-29T16:47:16Z'
 update_last_checked: '2026-06-29T20:17:25Z'
-source_last_checked: '2026-06-30T04:36:39Z'
-official_body_last_checked: '2026-06-30T04:36:39Z'
+source_last_checked: '2026-06-30T10:03:10Z'
+official_body_last_checked: '2026-06-30T10:03:10Z'
 record_last_updated: '2026-06-29T20:17:25Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -87,6 +87,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-06-30T04:36:39Z'
+  url: https://github.blog/changelog/2026-06-29-claude-opus-4-8-fast-mode-is-now-in-preview-for-github-copilot
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-06-30T10:03:10Z'
   url: https://github.blog/changelog/2026-06-29-claude-opus-4-8-fast-mode-is-now-in-preview-for-github-copilot
   status: captured-from-rss-feed
   body_captured: true

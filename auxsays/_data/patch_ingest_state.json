@@ -1,20 +1,9 @@
 {
-  "last_errors": [
-    {
-      "adapter": "elgato_help_center",
-      "error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-gIasOtd8d9UkHRJwXRPKoV&#39; &#39;unsafe-eval&#39; [source URL] script-s",
-      "product_id": "elgato-wave-link"
-    },
-    {
-      "adapter": "elgato_help_center",
-      "error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-ZliEhqu0K2HQkmHMHdT1nh&#39; &#39;unsafe-eval&#39; [source URL] script-s",
-      "product_id": "elgato-camera-hub"
-    }
-  ],
+  "last_errors": [],
   "last_results": [
     {
       "adapter": "rss_feed",
-      "duration_ms": 737,
+      "duration_ms": 485,
       "fetched": 2,
       "product_id": "figma",
       "refreshed": [
@@ -35,7 +24,7 @@
     },
     {
       "adapter": "adobe_release_notes",
-      "duration_ms": 25800,
+      "duration_ms": 25841,
       "fetched": 1,
       "product_id": "adobe-premiere-pro",
       "refreshed": [
@@ -51,7 +40,7 @@
     },
     {
       "adapter": "blackmagic_support_downloads",
-      "duration_ms": 682,
+      "duration_ms": 812,
       "fetched": 2,
       "product_id": "blackmagic-davinci",
       "refreshed": [
@@ -72,7 +61,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 1431,
+      "duration_ms": 1528,
       "fetched": 2,
       "product_id": "obs-studio",
       "refreshed": [
@@ -93,7 +82,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 744,
+      "duration_ms": 1052,
       "fetched": 2,
       "product_id": "comfyui",
       "refreshed": [
@@ -114,7 +103,7 @@
     },
     {
       "adapter": "rss_feed",
-      "duration_ms": 487,
+      "duration_ms": 446,
       "fetched": 2,
       "product_id": "github",
       "refreshed": [
@@ -135,7 +124,7 @@
     },
     {
       "adapter": "html_changelog",
-      "duration_ms": 342,
+      "duration_ms": 300,
       "fetched": 0,
       "product_id": "netlify",
       "refreshed": [],
@@ -145,7 +134,7 @@
     },
     {
       "adapter": "elgato_help_center",
-      "duration_ms": 4523,
+      "duration_ms": 5345,
       "fetched": 0,
       "product_id": "elgato-stream-deck",
       "refreshed": [],
@@ -155,7 +144,27 @@
     },
     {
       "adapter": "elgato_help_center",
-      "duration_ms": 4018,
+      "duration_ms": 5754,
+      "fetched": 0,
+      "product_id": "elgato-wave-link",
+      "refreshed": [],
+      "skipped": [],
+      "status": "success",
+      "written": []
+    },
+    {
+      "adapter": "elgato_help_center",
+      "duration_ms": 5617,
+      "fetched": 0,
+      "product_id": "elgato-camera-hub",
+      "refreshed": [],
+      "skipped": [],
+      "status": "success",
+      "written": []
+    },
+    {
+      "adapter": "elgato_help_center",
+      "duration_ms": 5317,
       "fetched": 0,
       "product_id": "elgato-4k-capture-utility",
       "refreshed": [],
@@ -164,8 +173,8 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-06-30T04:36:52Z",
-  "last_run_started_at": "2026-06-30T04:36:10Z",
+  "last_run_finished_at": "2026-06-30T10:03:32Z",
+  "last_run_started_at": "2026-06-30T10:02:40Z",
   "sources": {
     "adobe-after-effects": {
       "consecutive_failures": 2,
@@ -230,7 +239,7 @@
     "adobe-premiere-pro": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_release_notes",
-      "last_checked_at": "2026-06-30T04:36:11Z",
+      "last_checked_at": "2026-06-30T10:02:40Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -238,8 +247,8 @@
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 25800,
-      "last_success_at": "2026-06-30T04:36:11Z",
+      "last_run_duration_ms": 25841,
+      "last_success_at": "2026-06-30T10:02:40Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "adobe:adobe-premiere-pro:26.2.2:c176cc33bba85978",
@@ -250,7 +259,7 @@
     "blackmagic-davinci": {
       "consecutive_failures": 0,
       "last_adapter": "blackmagic_support_downloads",
-      "last_checked_at": "2026-06-30T04:36:36Z",
+      "last_checked_at": "2026-06-30T10:03:06Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -258,8 +267,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 682,
-      "last_success_at": "2026-06-30T04:36:36Z",
+      "last_run_duration_ms": 812,
+      "last_success_at": "2026-06-30T10:03:06Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "blackmagic-support:blackmagic-davinci:21.0.1:a7be1e5732fd4edfb804af3d1f29cf61",
@@ -274,7 +283,7 @@
     "comfyui": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-06-30T04:36:39Z",
+      "last_checked_at": "2026-06-30T10:03:09Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -282,8 +291,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 744,
-      "last_success_at": "2026-06-30T04:36:39Z",
+      "last_run_duration_ms": 1052,
+      "last_success_at": "2026-06-30T10:03:09Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:comfyui:343659944",
@@ -302,7 +311,7 @@
     "elgato-4k-capture-utility": {
       "consecutive_failures": 0,
       "last_adapter": "elgato_help_center",
-      "last_checked_at": "2026-06-30T04:36:48Z",
+      "last_checked_at": "2026-06-30T10:03:27Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -310,25 +319,25 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 4018,
-      "last_success_at": "2026-06-30T04:36:48Z",
+      "last_run_duration_ms": 5317,
+      "last_success_at": "2026-06-30T10:03:27Z",
       "previous_consecutive_failures": 0,
       "seen": [],
       "status": "degraded"
     },
     "elgato-camera-hub": {
-      "consecutive_failures": 1,
+      "consecutive_failures": 0,
       "last_adapter": "elgato_help_center",
-      "last_checked_at": "2026-06-30T04:36:48Z",
-      "last_error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-ZliEhqu0K2HQkmHMHdT1nh&#39; &#39;unsafe-eval&#39; [source URL] script-s",
-      "last_error_at": "2026-06-30T04:36:48Z",
-      "last_error_type": "blocked",
-      "last_health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
+      "last_checked_at": "2026-06-30T10:03:21Z",
+      "last_error": "",
+      "last_error_at": "",
+      "last_error_type": "",
+      "last_health_note": "Fetch succeeded, but no records were extracted. This can mean no new updates or that the parser needs review.",
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 0,
-      "last_success_at": "2026-06-29T20:17:34Z",
+      "last_run_duration_ms": 5617,
+      "last_success_at": "2026-06-30T10:03:21Z",
       "previous_consecutive_failures": 1,
       "seen": [],
       "status": "degraded"
@@ -336,7 +345,7 @@
     "elgato-stream-deck": {
       "consecutive_failures": 0,
       "last_adapter": "elgato_help_center",
-      "last_checked_at": "2026-06-30T04:36:40Z",
+      "last_checked_at": "2026-06-30T10:03:10Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -344,33 +353,33 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 4523,
-      "last_success_at": "2026-06-30T04:36:40Z",
-      "previous_consecutive_failures": 2,
+      "last_run_duration_ms": 5345,
+      "last_success_at": "2026-06-30T10:03:10Z",
+      "previous_consecutive_failures": 0,
       "seen": [],
       "status": "degraded"
     },
     "elgato-wave-link": {
-      "consecutive_failures": 4,
+      "consecutive_failures": 0,
       "last_adapter": "elgato_help_center",
-      "last_checked_at": "2026-06-30T04:36:45Z",
-      "last_error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-gIasOtd8d9UkHRJwXRPKoV&#39; &#39;unsafe-eval&#39; [source URL] script-s",
-      "last_error_at": "2026-06-30T04:36:45Z",
-      "last_error_type": "blocked",
-      "last_health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
+      "last_checked_at": "2026-06-30T10:03:16Z",
+      "last_error": "",
+      "last_error_at": "",
+      "last_error_type": "",
+      "last_health_note": "Fetch succeeded, but no records were extracted. This can mean no new updates or that the parser needs review.",
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 0,
-      "last_success_at": "2026-06-28T14:18:31Z",
-      "previous_consecutive_failures": 1,
+      "last_run_duration_ms": 5754,
+      "last_success_at": "2026-06-30T10:03:16Z",
+      "previous_consecutive_failures": 4,
       "seen": [],
-      "status": "failing"
+      "status": "degraded"
     },
     "figma": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-06-30T04:36:10Z",
+      "last_checked_at": "2026-06-30T10:02:40Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -378,8 +387,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 737,
-      "last_success_at": "2026-06-30T04:36:10Z",
+      "last_run_duration_ms": 485,
+      "last_success_at": "2026-06-30T10:02:40Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:figma:8bca1b2b-357e-4244-8697-448f0dada845",
@@ -416,7 +425,7 @@
     "github": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-06-30T04:36:39Z",
+      "last_checked_at": "2026-06-30T10:03:10Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -424,8 +433,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 487,
-      "last_success_at": "2026-06-30T04:36:39Z",
+      "last_run_duration_ms": 446,
+      "last_success_at": "2026-06-30T10:03:10Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:github:https://github.blog/changelog/2026-06-29-restrict-issue-creation-to-collaborators-only",
@@ -534,7 +543,7 @@
     "netlify": {
       "consecutive_failures": 0,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-06-30T04:36:40Z",
+      "last_checked_at": "2026-06-30T10:03:10Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -542,15 +551,15 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 342,
-      "last_success_at": "2026-06-30T04:36:40Z",
+      "last_run_duration_ms": 300,
+      "last_success_at": "2026-06-30T10:03:10Z",
       "previous_consecutive_failures": 0,
       "status": "degraded"
     },
     "obs-studio": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-06-30T04:36:37Z",
+      "last_checked_at": "2026-06-30T10:03:07Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -558,8 +567,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 1431,
-      "last_success_at": "2026-06-30T04:36:37Z",
+      "last_run_duration_ms": 1528,
+      "last_success_at": "2026-06-30T10:03:07Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:obs-studio:304830335",
