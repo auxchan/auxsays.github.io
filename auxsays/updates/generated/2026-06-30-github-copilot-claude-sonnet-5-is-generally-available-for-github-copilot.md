@@ -17,8 +17,8 @@ update_version: Claude Sonnet 5 is generally available for GitHub Copilot
 update_logo_text: GIT
 update_published_at: '2026-06-30T17:25:51Z'
 update_last_checked: '2026-06-30T20:22:17Z'
-source_last_checked: '2026-06-30T20:22:17Z'
-official_body_last_checked: '2026-06-30T20:22:17Z'
+source_last_checked: '2026-07-01T04:56:22Z'
+official_body_last_checked: '2026-07-01T04:56:22Z'
 record_last_updated: '2026-06-30T20:22:17Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -85,6 +85,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-06-30T20:22:17Z'
+  url: https://github.blog/changelog/2026-06-30-claude-sonnet-5-is-generally-available-for-github-copilot
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-07-01T04:56:22Z'
   url: https://github.blog/changelog/2026-06-30-claude-sonnet-5-is-generally-available-for-github-copilot
   status: captured-from-rss-feed
   body_captured: true
