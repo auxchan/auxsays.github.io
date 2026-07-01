@@ -5003,3 +5003,28 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ukwyid-color-difference-when-exporting-photos
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ukwyid/color_difference_when_exporting_photos/
+  parent_title: Color difference when exporting photos
+  report_title: Color difference when exporting photos
+  report_text_excerpt: Color difference when exporting photos Hi guys! I'm using Davinci Resolve 21 to edit photos, but I'm having a problem that when I export them they become a bit washed and the colors don't look right. I know that exists a configuration in the color management page related to...
+  captured_at: '2026-07-01T22:00:11Z'
+  source_date: '2026-07-01'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
