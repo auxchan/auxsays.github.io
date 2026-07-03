@@ -484,7 +484,7 @@ def scan_evidence_count_alignment(files: list[Path]) -> tuple[list[dict[str, str
         actual = int(data.get("update_report_count") or data.get("confirmed_patch_specific_report_count") or 0)
         if actual != expected:
             add(
-                warnings,
+                errors,
                 path,
                 "generated_report_count_mismatch",
                 f"Generated report count is {actual}, but structured counted evidence has {expected} rows.",
@@ -546,7 +546,7 @@ def main() -> int:
 
     status = {
         "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
-        "mode": "warning-first",
+        "mode": "blocking",
         "records_scanned": len(files),
         "priority_products_checked": len(PRIORITY_PRODUCTS),
         "error_count": len(errors),
