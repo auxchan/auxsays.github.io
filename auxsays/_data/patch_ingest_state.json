@@ -3,7 +3,7 @@
   "last_results": [
     {
       "adapter": "rss_feed",
-      "duration_ms": 530,
+      "duration_ms": 894,
       "fetched": 2,
       "product_id": "figma",
       "refreshed": [
@@ -24,7 +24,7 @@
     },
     {
       "adapter": "adobe_release_notes",
-      "duration_ms": 25815,
+      "duration_ms": 25817,
       "fetched": 1,
       "product_id": "adobe-premiere-pro",
       "refreshed": [
@@ -40,7 +40,7 @@
     },
     {
       "adapter": "blackmagic_support_downloads",
-      "duration_ms": 736,
+      "duration_ms": 660,
       "fetched": 2,
       "product_id": "blackmagic-davinci",
       "refreshed": [
@@ -61,7 +61,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 976,
+      "duration_ms": 1038,
       "fetched": 2,
       "product_id": "obs-studio",
       "refreshed": [
@@ -82,7 +82,7 @@
     },
     {
       "adapter": "github_releases",
-      "duration_ms": 555,
+      "duration_ms": 499,
       "fetched": 2,
       "product_id": "comfyui",
       "refreshed": [
@@ -103,20 +103,28 @@
     },
     {
       "adapter": "rss_feed",
-      "duration_ms": 3462,
+      "duration_ms": 572,
       "fetched": 2,
       "product_id": "github",
-      "refreshed": [],
+      "refreshed": [
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-07-02-github-copilot-improved-accuracy-and-coverage-in-copilot-usage-metrics-reports.md",
+          "record_id": "rss:github:https://github.blog/changelog/2026-07-02-improved-accuracy-and-coverage-in-copilot-usage-metrics-reports"
+        },
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-07-02-github-copilot-upcoming-deprecation-of-gemini-2-5-pro-and-gemini-3-flash.md",
+          "record_id": "rss:github:https://github.blog/changelog/2026-07-02-upcoming-deprecation-of-gemini-2-5-pro-and-gemini-3-flash"
+        }
+      ],
       "skipped": [],
       "status": "success",
-      "written": [
-        "auxsays/updates/generated/2026-07-02-github-copilot-improved-accuracy-and-coverage-in-copilot-usage-metrics-reports.md",
-        "auxsays/updates/generated/2026-07-02-github-copilot-upcoming-deprecation-of-gemini-2-5-pro-and-gemini-3-flash.md"
-      ]
+      "written": []
     },
     {
       "adapter": "html_changelog",
-      "duration_ms": 200,
+      "duration_ms": 189,
       "fetched": 0,
       "product_id": "netlify",
       "refreshed": [],
@@ -126,7 +134,7 @@
     },
     {
       "adapter": "elgato_help_center",
-      "duration_ms": 5160,
+      "duration_ms": 6338,
       "fetched": 0,
       "product_id": "elgato-stream-deck",
       "refreshed": [],
@@ -136,7 +144,7 @@
     },
     {
       "adapter": "elgato_help_center",
-      "duration_ms": 5665,
+      "duration_ms": 5399,
       "fetched": 0,
       "product_id": "elgato-wave-link",
       "refreshed": [],
@@ -146,7 +154,7 @@
     },
     {
       "adapter": "elgato_help_center",
-      "duration_ms": 5298,
+      "duration_ms": 4878,
       "fetched": 0,
       "product_id": "elgato-camera-hub",
       "refreshed": [],
@@ -156,7 +164,7 @@
     },
     {
       "adapter": "elgato_help_center",
-      "duration_ms": 4744,
+      "duration_ms": 4387,
       "fetched": 0,
       "product_id": "elgato-4k-capture-utility",
       "refreshed": [],
@@ -165,8 +173,8 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-07-03T04:12:37Z",
-  "last_run_started_at": "2026-07-03T04:11:44Z",
+  "last_run_finished_at": "2026-07-03T09:37:54Z",
+  "last_run_started_at": "2026-07-03T09:37:03Z",
   "sources": {
     "adobe-after-effects": {
       "consecutive_failures": 2,
@@ -231,7 +239,7 @@
     "adobe-premiere-pro": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_release_notes",
-      "last_checked_at": "2026-07-03T04:11:44Z",
+      "last_checked_at": "2026-07-03T09:37:04Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -239,8 +247,8 @@
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 25815,
-      "last_success_at": "2026-07-03T04:11:44Z",
+      "last_run_duration_ms": 25817,
+      "last_success_at": "2026-07-03T09:37:04Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "adobe:adobe-premiere-pro:26.2.2:c176cc33bba85978",
@@ -251,7 +259,7 @@
     "blackmagic-davinci": {
       "consecutive_failures": 0,
       "last_adapter": "blackmagic_support_downloads",
-      "last_checked_at": "2026-07-03T04:12:10Z",
+      "last_checked_at": "2026-07-03T09:37:30Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -259,8 +267,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 736,
-      "last_success_at": "2026-07-03T04:12:10Z",
+      "last_run_duration_ms": 660,
+      "last_success_at": "2026-07-03T09:37:30Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "blackmagic-support:blackmagic-davinci:21.0.2:76871642674641dcbac137eb5cb46301",
@@ -276,7 +284,7 @@
     "comfyui": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-07-03T04:12:12Z",
+      "last_checked_at": "2026-07-03T09:37:32Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -284,8 +292,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 555,
-      "last_success_at": "2026-07-03T04:12:12Z",
+      "last_run_duration_ms": 499,
+      "last_success_at": "2026-07-03T09:37:32Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:comfyui:347121118",
@@ -305,7 +313,7 @@
     "elgato-4k-capture-utility": {
       "consecutive_failures": 0,
       "last_adapter": "elgato_help_center",
-      "last_checked_at": "2026-07-03T04:12:32Z",
+      "last_checked_at": "2026-07-03T09:37:50Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -313,8 +321,8 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 4744,
-      "last_success_at": "2026-07-03T04:12:32Z",
+      "last_run_duration_ms": 4387,
+      "last_success_at": "2026-07-03T09:37:50Z",
       "previous_consecutive_failures": 0,
       "seen": [],
       "status": "degraded"
@@ -322,7 +330,7 @@
     "elgato-camera-hub": {
       "consecutive_failures": 0,
       "last_adapter": "elgato_help_center",
-      "last_checked_at": "2026-07-03T04:12:27Z",
+      "last_checked_at": "2026-07-03T09:37:45Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -330,8 +338,8 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 5298,
-      "last_success_at": "2026-07-03T04:12:27Z",
+      "last_run_duration_ms": 4878,
+      "last_success_at": "2026-07-03T09:37:45Z",
       "previous_consecutive_failures": 0,
       "seen": [],
       "status": "degraded"
@@ -339,7 +347,7 @@
     "elgato-stream-deck": {
       "consecutive_failures": 0,
       "last_adapter": "elgato_help_center",
-      "last_checked_at": "2026-07-03T04:12:16Z",
+      "last_checked_at": "2026-07-03T09:37:33Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -347,8 +355,8 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 5160,
-      "last_success_at": "2026-07-03T04:12:16Z",
+      "last_run_duration_ms": 6338,
+      "last_success_at": "2026-07-03T09:37:33Z",
       "previous_consecutive_failures": 0,
       "seen": [],
       "status": "degraded"
@@ -356,7 +364,7 @@
     "elgato-wave-link": {
       "consecutive_failures": 0,
       "last_adapter": "elgato_help_center",
-      "last_checked_at": "2026-07-03T04:12:21Z",
+      "last_checked_at": "2026-07-03T09:37:39Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -364,8 +372,8 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 5665,
-      "last_success_at": "2026-07-03T04:12:21Z",
+      "last_run_duration_ms": 5399,
+      "last_success_at": "2026-07-03T09:37:39Z",
       "previous_consecutive_failures": 0,
       "seen": [],
       "status": "degraded"
@@ -373,7 +381,7 @@
     "figma": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-07-03T04:11:44Z",
+      "last_checked_at": "2026-07-03T09:37:03Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -381,8 +389,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 530,
-      "last_success_at": "2026-07-03T04:11:44Z",
+      "last_run_duration_ms": 894,
+      "last_success_at": "2026-07-03T09:37:03Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:figma:8bca1b2b-357e-4244-8697-448f0dada845",
@@ -419,7 +427,7 @@
     "github": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-07-03T04:12:12Z",
+      "last_checked_at": "2026-07-03T09:37:32Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -427,8 +435,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 3462,
-      "last_success_at": "2026-07-03T04:12:12Z",
+      "last_run_duration_ms": 572,
+      "last_success_at": "2026-07-03T09:37:32Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:github:https://github.blog/changelog/2026-07-02-upcoming-deprecation-of-gemini-2-5-pro-and-gemini-3-flash",
@@ -537,7 +545,7 @@
     "netlify": {
       "consecutive_failures": 0,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-07-03T04:12:16Z",
+      "last_checked_at": "2026-07-03T09:37:33Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -545,15 +553,15 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 200,
-      "last_success_at": "2026-07-03T04:12:16Z",
+      "last_run_duration_ms": 189,
+      "last_success_at": "2026-07-03T09:37:33Z",
       "previous_consecutive_failures": 0,
       "status": "degraded"
     },
     "obs-studio": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-07-03T04:12:11Z",
+      "last_checked_at": "2026-07-03T09:37:31Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -561,8 +569,8 @@
       "last_records_fetched": 2,
       "last_records_skipped": 0,
       "last_records_written": 2,
-      "last_run_duration_ms": 976,
-      "last_success_at": "2026-07-03T04:12:11Z",
+      "last_run_duration_ms": 1038,
+      "last_success_at": "2026-07-03T09:37:31Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:obs-studio:304830335",

@@ -17,8 +17,8 @@ update_version: Search the web in the Figma design agent
 update_logo_text: FIG
 update_published_at: '2026-06-18T00:00:00.000Z'
 update_last_checked: '2026-06-18T20:40:19Z'
-source_last_checked: '2026-07-03T04:11:44Z'
-official_body_last_checked: '2026-07-03T04:11:44Z'
+source_last_checked: '2026-07-03T09:37:03Z'
+official_body_last_checked: '2026-07-03T09:37:03Z'
 record_last_updated: '2026-06-18T20:40:19Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -70,11 +70,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-07-01T04:55:52Z'
-  url: https://www.figma.com/release-notes/?title=search-the-web-in-the-figma-design-agent
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-07-01T15:14:13Z'
   url: https://www.figma.com/release-notes/?title=search-the-web-in-the-figma-design-agent
   status: captured-from-rss-feed
@@ -91,6 +86,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-07-03T04:11:44Z'
+  url: https://www.figma.com/release-notes/?title=search-the-web-in-the-figma-design-agent
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-07-03T09:37:03Z'
   url: https://www.figma.com/release-notes/?title=search-the-web-in-the-figma-design-agent
   status: captured-from-rss-feed
   body_captured: true
