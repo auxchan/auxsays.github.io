@@ -5127,3 +5127,52 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-0-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1umkzs4-problem-to-export-fbx-from-blender-to-fus
+  product_id: blackmagic-davinci
+  update_version: 21.0.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1umkzs4/problem_to_export_fbx_from_blender_to_fusion/
+  parent_title: Problem to export fbx from blender to fusion
+  report_title: Problem to export fbx from blender to fusion
+  report_text_excerpt: 'Problem to export fbx from blender to fusion Hi everyone, I''ve been trying to import a simple animated door from Blender into DaVinci Resolve Fusion, but I''m running into a very strange crash. System: - DaVinci Resolve 21.0.2 - Windows 11 - AMD Radeon RX 7800 XT 16GB - 32GB...'
+  captured_at: '2026-07-03T18:57:18Z'
+  source_date: '2026-07-03'
+  target_release_date: '2026-07-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-0-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1um6nyq-moving-projects-between-mac-and-pc
+  product_id: blackmagic-davinci
+  update_version: 21.0.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1um6nyq/moving_projects_between_mac_and_pc/
+  parent_title: Moving projects between Mac and PC
+  report_title: Moving projects between Mac and PC
+  report_text_excerpt: Moving projects between Mac and PC I’m trying to import my project created on Mac into a Pc, but I get error message “unable to import project, failed to import project” I am using Resolve 21.0.2 on both machines. Any idea why this happen? submitted by /u/U_o_g_c [link]...
+  captured_at: '2026-07-03T18:57:18Z'
+  source_date: '2026-07-03'
+  target_release_date: '2026-07-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: macos
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
