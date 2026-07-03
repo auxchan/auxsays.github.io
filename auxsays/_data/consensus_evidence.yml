@@ -5102,3 +5102,28 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-0-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1umjhgo-should-i-upgrade-to-davinci-resolve-2102
+  product_id: blackmagic-davinci
+  update_version: 21.0.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1umjhgo/should_i_upgrade_to_davinci_resolve_2102/
+  parent_title: Should I Upgrade to Davinci Resolve 21.0.2?
+  report_title: Should I Upgrade to Davinci Resolve 21.0.2?
+  report_text_excerpt: Should I Upgrade to Davinci Resolve 21.0.2? What are people's experiences with the new update? I've heard a lot of reports about things crashing and I run Davinci Resolve on my M1 with just 8GB of RAM. I'm doing pretty heavy fusion comps with 70+ node comps in every project....
+  captured_at: '2026-07-03T16:56:17Z'
+  source_date: '2026-07-03'
+  target_release_date: '2026-07-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
