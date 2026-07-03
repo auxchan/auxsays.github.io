@@ -5077,3 +5077,28 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-0-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ulxd8e-really-need-some-datamosh-advice
+  product_id: blackmagic-davinci
+  update_version: 21.0.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ulxd8e/really_need_some_datamosh_advice/
+  parent_title: Really need some Datamosh Advice!!
+  report_title: Really need some Datamosh Advice!!
+  report_text_excerpt: Really need some Datamosh Advice!! Hi everyone! I'm trying to get into datamoshing as a small personal experiment, and I'm looking for a completely free workflow on macOS. I'm using a MacBook Neo and DaVinci Resolve. I first tried following the classic Avidemux tutorials, but...
+  captured_at: '2026-07-03T05:12:09Z'
+  source_date: '2026-07-02'
+  target_release_date: '2026-06-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
