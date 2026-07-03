@@ -20,11 +20,11 @@ update_status: current
 update_feed_title: DaVinci Resolve 21
 update_detail_title: DaVinci Resolve 21
 update_consensus_label: Negative
-update_consensus_summary: 'WAIT: DaVinci Resolve 21 has 26 user reports found. User reports show a repeat pattern.
+update_consensus_summary: 'WAIT: DaVinci Resolve 21 has 28 user reports found. User reports show a repeat pattern.
   Current reports mention render/export failures, installation problems, and performance slowdowns. Production editors
   with active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy, so
   production users should test before updating.'
-update_report_count: 26
+update_report_count: 28
 update_consensus_confidence: Medium
 status_change_type: new
 notification_message: ''
@@ -37,14 +37,14 @@ official_source_classification_note: Blackmagic's source is a vendor release pag
   AUXSAYS links it as the official source, but has not captured a full structured patch-note body from that page.
 patch_file_size_status: not_provided_by_source
 update_channel_label: Stable / Studio release
-quick_verdict: 'WAIT: DaVinci Resolve 21 has 26 user reports found.'
+quick_verdict: 'WAIT: DaVinci Resolve 21 has 28 user reports found.'
 update_decision_label: WAIT
 update_decision_body: Current reports mention render/export failures, installation problems, and performance slowdowns.
   Production editors with active delivery deadlines should wait or test on copied projects.
 source_freshness_note: ''
 record_note: This page covers DaVinci Resolve 21. Beta reports are excluded from this record.
 official_summary: DaVinci Resolve 21 is tracked here as the stable/Studio release. Public Beta 1 reports are excluded.
-consensus_report: '26 user reports found for DaVinci Resolve 21. Current reports mention render/export failures,
+consensus_report: '28 user reports found for DaVinci Resolve 21. Current reports mention render/export failures,
   installation problems, and performance slowdowns. Current reports are Reddit-heavy, so production users should
   test before updating. Sources represented: r/davinciresolve.'
 status_events:
@@ -138,6 +138,9 @@ status_events:
 - at: '2026-07-01T22:02:34.916362Z'
   label: User reports found
   note: User report count updated to 26.
+- at: '2026-07-03T00:35:34.420401Z'
+  label: User reports found
+  note: User report count updated to 28.
 legacy_consensus_score: 0
 legacy_consensus_score_percent: 50
 official_patch_notes_source_url: https://www.blackmagicdesign.com/media/release/20260414-01
@@ -173,7 +176,7 @@ consensus_collection_status: pilot_initial_sample
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 official_source_captured: true
-confirmed_patch_specific_report_count: 26
+confirmed_patch_specific_report_count: 28
 known_issues_present: null
 official_checksums_body: ''
 source_last_checked: '2026-07-01T15:14:39Z'
@@ -206,8 +209,8 @@ official_source_attempts:
   status: captured-from-official-blackmagic-support-api
   body_captured: true
   checksums_captured: false
-evidence_last_checked: '2026-07-01T22:00:11Z'
-record_last_updated: '2026-07-01T22:02:34.916362Z'
+evidence_last_checked: '2026-07-03T00:34:30Z'
+record_last_updated: '2026-07-03T00:35:34.420401Z'
 intelligence_stage: pilot
 evidence_samples:
 - source_name: r/davinciresolve
@@ -490,6 +493,25 @@ accepted_report_sources:
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1ukwyid/color_difference_when_exporting_photos/
   source_title: Color difference when exporting photos
+  source_date: '2026-07-01'
+  version_matched: '21'
+  patch_version_matched: true
+  issue: render/export failures
+  workflow_area: render/export
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ull256/if_you_are_experiencing_crashes_in_resolve_21/
+  source_title: If you are experiencing crashes in Resolve 21, uninstall everything using Revo Uninstaller, perform
+    a full cleanup, and reinstall Resolve 21.
+  source_date: '2026-07-02'
+  version_matched: '21'
+  patch_version_matched: true
+  issue: startup or application crashes in application stability
+  workflow_area: application stability
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ukvckd/davinci_resolve_randomly_freezes_my_entire_windows/
+  source_title: DaVinci Resolve randomly freezes my entire Windows
   source_date: '2026-07-01'
   version_matched: '21'
   patch_version_matched: true

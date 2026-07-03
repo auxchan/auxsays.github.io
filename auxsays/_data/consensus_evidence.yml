@@ -5028,3 +5028,52 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ull256-if-you-are-experiencing-crashes-in-resolv
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ull256/if_you_are_experiencing_crashes_in_resolve_21/
+  parent_title: If you are experiencing crashes in Resolve 21, uninstall everything using Revo Uninstaller, perform a full cleanup, and reinstall Resolve 21.
+  report_title: If you are experiencing crashes in Resolve 21, uninstall everything using Revo Uninstaller, perform a full cleanup, and reinstall Resolve 21.
+  report_text_excerpt: If you are experiencing crashes in Resolve 21, uninstall everything using Revo Uninstaller, perform a full cleanup, and reinstall Resolve 21. I was experiencing crashes with simple tasks like copying and pasting nodes, so completely removing everything with Revo Uninstaller...
+  captured_at: '2026-07-03T00:34:30Z'
+  source_date: '2026-07-02'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ukvckd-davinci-resolve-randomly-freezes-my-entir
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ukvckd/davinci_resolve_randomly_freezes_my_entire_windows/
+  parent_title: DaVinci Resolve randomly freezes my entire Windows
+  report_title: DaVinci Resolve randomly freezes my entire Windows
+  report_text_excerpt: DaVinci Resolve randomly freezes my entire Windows DaVinci Resolve 21 randomly freezes on me, and when it does, my entire Windows (11 Pro) basically locks up. I can move the mouse, but I’m only able to click something every 10–15 seconds before it freezes again. I can’t even...
+  captured_at: '2026-07-03T00:34:30Z'
+  source_date: '2026-07-01'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
