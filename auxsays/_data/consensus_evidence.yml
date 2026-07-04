@@ -5192,3 +5192,28 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-0-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1un9dm8-davinci-resolve-keeps-crashing-to-the-poi
+  product_id: blackmagic-davinci
+  update_version: 21.0.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1un9dm8/davinci_resolve_keeps_crashing_to_the_point_of/
+  parent_title: Davinci Resolve keeps crashing to the point of having to restart my PC
+  report_title: Davinci Resolve keeps crashing to the point of having to restart my PC
+  report_text_excerpt: Davinci Resolve keeps crashing to the point of having to restart my PC I've been trying for weeks now to edit a simple video in DaVinci Resolve, of the onboard video of a race car with a few bit of info overlayed on the top (positions, flags, etc). Not a particularly complex...
+  captured_at: '2026-07-04T22:34:16Z'
+  source_date: '2026-07-04'
+  target_release_date: '2026-07-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: v21.0.2
+  match_basis: exact_version_alias
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
