@@ -175,6 +175,20 @@ def candidate(**overrides: str) -> dict[str, str]:
     return item
 
 
+def reddit_candidate(**overrides: str) -> dict[str, str]:
+    item = {
+        "source_type": "reddit_community_report",
+        "source_name": "r/premierepro",
+        "source_url": "https://www.reddit.com/r/premierepro/comments/abc123/premiere_pro_262_export_crash/",
+        "parent_title": "Premiere Pro 26.2 export crash",
+        "report_title": "Premiere Pro 26.2 export crash",
+        "report_text": "Adobe Premiere Pro 26.2 crashes every time I export my timeline on Windows after updating.",
+        "source_date": "2026-05-05",
+    }
+    item.update(overrides)
+    return item
+
+
 def run() -> int:
     print("=" * 60)
     print("Adobe Premiere Pro collector tests")
@@ -669,6 +683,102 @@ def run() -> int:
         raise AdobeCommunityAccessError("blocked")
     except AdobeCommunityAccessError:
         check("AdobeCommunityAccessError is available for fetch diagnostics", True)
+
+    # --- Reddit consensus discovery for Adobe Premiere Pro -------------------
+    reddit_record = record()
+    reddit_captured = "2026-05-06T00:00:00Z"
+
+    reddit_accepted, reddit_rejected = evaluate_candidates(reddit_record, [reddit_candidate()], reddit_captured)
+    check(
+        "Reddit exact-version Premiere Pro issue is accepted",
+        len(reddit_accepted) == 1 and reddit_accepted[0].get("counted") is True,
+        f"accepted={reddit_accepted!r} rejected={reddit_rejected!r}",
+    )
+    check(
+        "Reddit accepted row preserves reddit source_type",
+        bool(reddit_accepted) and reddit_accepted[0].get("source_type") == "reddit_community_report",
+        f"accepted={reddit_accepted!r}",
+    )
+
+    off_version = reddit_candidate(
+        parent_title="Premiere Pro 25.0 export crash",
+        report_title="Premiere Pro 25.0 export crash",
+        report_text="Adobe Premiere Pro 25.0 crashes when I export on Windows.",
+        source_url="https://www.reddit.com/r/premierepro/comments/off001/premiere_pro_250_export_crash/",
+    )
+    off_accepted, off_rejected = evaluate_candidates(reddit_record, [off_version], reddit_captured)
+    check(
+        "Reddit off-version post is rejected",
+        not off_accepted and bool(off_rejected) and off_rejected[0].get("exclusion_reason") == "missing_exact_patch_version_match",
+        f"accepted={off_accepted!r} rejected={off_rejected!r}",
+    )
+
+    generic = reddit_candidate(
+        parent_title="Premiere Pro 26.2 tutorial question",
+        report_title="Premiere Pro 26.2 tutorial question",
+        report_text="How do I use Premiere Pro 26.2 to add cross dissolves? Looking for a tutorial.",
+        source_url="https://www.reddit.com/r/premierepro/comments/gen001/premiere_pro_262_tutorial/",
+    )
+    generic_accepted, generic_rejected = evaluate_candidates(reddit_record, [generic], reddit_captured)
+    check(
+        "Reddit generic non-issue post is rejected",
+        not generic_accepted and bool(generic_rejected) and generic_rejected[0].get("exclusion_reason") == "not_a_real_issue_report",
+        f"accepted={generic_accepted!r} rejected={generic_rejected!r}",
+    )
+
+    no_product = reddit_candidate(
+        parent_title="Version 26.2 export crash",
+        report_title="Version 26.2 export crash",
+        report_text="Version 26.2 crashes on export every time on Windows after the update.",
+        source_url="https://www.reddit.com/r/editors/comments/np001/version_262_export_crash/",
+    )
+    no_product_accepted, no_product_rejected = evaluate_candidates(reddit_record, [no_product], reddit_captured)
+    check(
+        "Reddit post without Premiere Pro context is rejected",
+        not no_product_accepted and bool(no_product_rejected) and no_product_rejected[0].get("exclusion_reason") == "missing_premiere_product_context",
+        f"accepted={no_product_accepted!r} rejected={no_product_rejected!r}",
+    )
+
+    dup_accepted, _dup_rejected = evaluate_candidates(reddit_record, [reddit_candidate(), reddit_candidate(report_title="dup")], reddit_captured)
+    check(
+        "Reddit duplicate source_url is counted once",
+        len(dup_accepted) == 1,
+        f"accepted={dup_accepted!r}",
+    )
+
+    original_collect = premiere.reddit_source.collect_reddit_candidates
+    try:
+        captured_kwargs: dict[str, object] = {}
+
+        def fake_collect(**kwargs: object) -> list[dict[str, str]]:
+            captured_kwargs.update(kwargs)
+            return [reddit_candidate()]
+
+        premiere.reddit_source.collect_reddit_candidates = fake_collect
+        wiring_errors: list[dict[str, object]] = []
+        wiring_candidates = premiere.reddit_search_candidates(
+            reddit_record,
+            CollectorContext(write=False, since=None, max_pages=1),
+            wiring_errors,
+        )
+        check(
+            "reddit_search_candidates returns discovered candidates",
+            len(wiring_candidates) == 1 and wiring_candidates[0].get("source_type") == "reddit_community_report",
+            f"candidates={wiring_candidates!r}",
+        )
+        check(
+            "reddit_search_candidates targets Premiere subreddits and reddit source_type",
+            captured_kwargs.get("subreddits") == premiere.PREMIERE_REDDIT_SUBREDDITS
+            and captured_kwargs.get("source_type") == "reddit_community_report",
+            f"kwargs_keys={sorted(captured_kwargs)!r} subreddits={captured_kwargs.get('subreddits')!r}",
+        )
+    finally:
+        premiere.reddit_source.collect_reddit_candidates = original_collect
+
+    check(
+        "reddit_search method reports reddit source_type in method health",
+        premiere.method_source_type("reddit_search") == "reddit_community_report",
+    )
 
     print()
     print("=" * 60)
