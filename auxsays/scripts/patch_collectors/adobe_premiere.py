@@ -37,11 +37,15 @@ from .base import (
     utc_now,
 )
 
+from . import reddit_source
+
 PRODUCT_ID = "adobe-premiere-pro"
 SOURCE_TYPE = "adobe_community_bug_report"
 SOURCE_NAME = "Adobe Community Bug Report"
 CREATIVE_COW_SOURCE_TYPE = "creativecow_forum_report"
 CREATIVE_COW_SOURCE_NAME = "Creative COW Premiere Pro Forum"
+REDDIT_SOURCE_TYPE = "reddit_community_report"
+PREMIERE_REDDIT_SUBREDDITS = ("premierepro", "editors", "Adobe")
 ADOBE_SEARCH_URL = "https://community.adobe.com/t5/forums/searchpage/tab/message"
 ADOBE_PREMIERE_BUG_TAB_BASE_URL = "https://community.adobe.com/t5/premiere-pro/ct-p/ct-premiere-pro"
 BRAVE_SEARCH_URL = "https://api.search.brave.com/res/v1/web/search"
@@ -147,6 +151,7 @@ def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[
     method_results: list[dict[str, Any]] = []
 
     for method_id, collector in (
+        ("reddit_search", reddit_search_candidates),
         ("adobe_community_search", adobe_community_search_candidates),
         ("adobe_community_bug_tab_index", adobe_community_bug_tab_candidates),
         ("adobe_community_known_url_recheck", adobe_community_known_url_candidates),
@@ -450,6 +455,8 @@ def health_for_method(record: PatchRecord, captured_at: str, result: dict[str, A
 
 
 def method_source_type(method_id: str) -> str:
+    if method_id == "reddit_search":
+        return REDDIT_SOURCE_TYPE
     if method_id.startswith("creativecow"):
         return CREATIVE_COW_SOURCE_TYPE
     return SOURCE_TYPE
@@ -463,6 +470,7 @@ def method_notes(
     errors: list[dict[str, Any]],
 ) -> str:
     labels = {
+        "reddit_search": "Reddit community search (r/premierepro, r/editors, r/Adobe)",
         "adobe_community_search": "Adobe Community search",
         "adobe_community_bug_tab_index": "Adobe Community Premiere bug-tab listing",
         "adobe_community_known_url_recheck": "Known Adobe Community bug-report URL recheck",
@@ -521,6 +529,39 @@ def search_queries(record: PatchRecord) -> list[str]:
     if version == "26.2":
         queries.append('"Premiere Pro 26.2.0" "Build 65"')
     return dedupe(queries)
+
+
+def premiere_reddit_queries(record: PatchRecord) -> list[str]:
+    version = record.update_version
+    numeric = [version]
+    if re.fullmatch(r"\d+\.\d+", version or ""):
+        numeric.append(f"{version}.0")
+    issue_terms = ("crash", "freeze", "export", "render", "bug")
+    queries: list[str] = []
+    for value in numeric:
+        queries.append(f'"Premiere Pro {value}"')
+    for value in numeric[:1]:
+        for term in issue_terms:
+            queries.append(f'"Premiere Pro {value}" {term}')
+    return dedupe(queries)[:12]
+
+
+def reddit_search_candidates(record: PatchRecord, context: CollectorContext, errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Discover Premiere Pro user reports on Reddit.
+
+    Reuses the shared, product-agnostic reddit_source transport/parse/fallback.
+    Returned candidates are only discovery rows; row_from_candidate still applies
+    the unchanged exact-version / Premiere-Pro-context / concrete-issue / specific-URL
+    / date gates, so off-version and generic posts are rejected downstream.
+    """
+    return reddit_source.collect_reddit_candidates(
+        subreddits=PREMIERE_REDDIT_SUBREDDITS,
+        queries=premiere_reddit_queries(record),
+        context=context,
+        errors=errors,
+        source_type=REDDIT_SOURCE_TYPE,
+        version_hints=[record.update_version, *version_aliases(record.update_version)],
+    )
 
 
 def search_url(query: str, page: int) -> str:
