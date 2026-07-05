@@ -17,8 +17,8 @@ update_version: Improved accuracy and coverage in Copilot usage metrics reports
 update_logo_text: GIT
 update_published_at: '2026-07-02T23:19:06Z'
 update_last_checked: '2026-07-03T04:12:12Z'
-source_last_checked: '2026-07-04T09:02:24Z'
-official_body_last_checked: '2026-07-04T09:02:24Z'
+source_last_checked: '2026-07-05T09:24:12Z'
+official_body_last_checked: '2026-07-05T09:24:12Z'
 record_last_updated: '2026-07-03T04:12:12Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -107,6 +107,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-07-04T09:02:24Z'
+  url: https://github.blog/changelog/2026-07-02-improved-accuracy-and-coverage-in-copilot-usage-metrics-reports
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-07-05T09:24:12Z'
   url: https://github.blog/changelog/2026-07-02-improved-accuracy-and-coverage-in-copilot-usage-metrics-reports
   status: captured-from-rss-feed
   body_captured: true
