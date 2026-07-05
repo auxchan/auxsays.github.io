@@ -3288,18 +3288,18 @@
   company: Microsoft
   software: Microsoft 365 Apps
   public_category: Productivity
-  enabled: false
+  enabled: true
   recommended_priority: P2 manual watch through M365
   ingestion:
     type: html_release_notes
-    adapter: manual_watch
+    adapter: microsoft_office_updates
     official_url: https://learn.microsoft.com/en-us/officeupdates/update-history-microsoft365-apps-by-date
     secondary_official_url: https://learn.microsoft.com/en-us/officeupdates/release-notes-microsoft365-apps
     feed_url: null
     api_url: null
     parser_profile: microsoft_365_apps_update_history
     official_source_type: release_notes
-    source_capture_status: manual_watch
+    source_capture_status: adapter_enabled
     include_prereleases: false
     version_pattern: ^Version (?P<version>[0-9]+).*$
     requires_javascript: false
