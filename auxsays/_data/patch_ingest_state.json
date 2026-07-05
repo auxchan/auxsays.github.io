@@ -1,171 +1,21 @@
 {
-  "last_errors": [
-    {
-      "adapter": "elgato_help_center",
-      "error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-AzyWwWDoYU0oj5wr7gRi7S&#39; &#39;unsafe-eval&#39; [source URL] script-s",
-      "product_id": "elgato-stream-deck"
-    },
-    {
-      "adapter": "elgato_help_center",
-      "error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-ptO3grRtvMOo8e0UMMppyK&#39; &#39;unsafe-eval&#39; [source URL] script-s",
-      "product_id": "elgato-wave-link"
-    }
-  ],
+  "last_errors": [],
   "last_results": [
     {
-      "adapter": "rss_feed",
-      "duration_ms": 517,
-      "fetched": 2,
-      "product_id": "figma",
-      "refreshed": [
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-06-24-figma-here-s-everything-from-config-2026.md",
-          "record_id": "rss:figma:8bca1b2b-357e-4244-8697-448f0dada845"
-        },
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-06-18-figma-search-the-web-in-the-figma-design-agent.md",
-          "record_id": "rss:figma:cec7ba19-591c-46a1-b1a2-5da55e7be802"
-        }
-      ],
-      "skipped": [],
-      "status": "success",
-      "written": []
-    },
-    {
-      "adapter": "adobe_release_notes",
-      "duration_ms": 25574,
+      "adapter": "microsoft_office_updates",
+      "duration_ms": 2138,
       "fetched": 1,
-      "product_id": "adobe-premiere-pro",
-      "refreshed": [
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-05-01-premiere-pro-26-2-2.md",
-          "record_id": "adobe:adobe-premiere-pro:26.2.2:c176cc33bba85978"
-        }
-      ],
-      "skipped": [],
-      "status": "success",
-      "written": []
-    },
-    {
-      "adapter": "blackmagic_support_downloads",
-      "duration_ms": 529,
-      "fetched": 2,
-      "product_id": "blackmagic-davinci",
-      "refreshed": [
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-07-02-davinci-resolve-21-0-2.md",
-          "record_id": "blackmagic-support:blackmagic-davinci:21.0.2:76871642674641dcbac137eb5cb46301"
-        },
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-06-24-davinci-resolve-21-0-1.md",
-          "record_id": "blackmagic-support:blackmagic-davinci:21.0.1:a7be1e5732fd4edfb804af3d1f29cf61"
-        }
-      ],
-      "skipped": [],
-      "status": "success",
-      "written": []
-    },
-    {
-      "adapter": "github_releases",
-      "duration_ms": 1042,
-      "fetched": 2,
-      "product_id": "obs-studio",
-      "refreshed": [
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-04-21-obs-studio-32-1-2.md",
-          "record_id": "github:obs-studio:311922679"
-        },
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-04-02-obs-studio-32-1-1.md",
-          "record_id": "github:obs-studio:304830335"
-        }
-      ],
-      "skipped": [],
-      "status": "success",
-      "written": []
-    },
-    {
-      "adapter": "github_releases",
-      "duration_ms": 632,
-      "fetched": 2,
-      "product_id": "comfyui",
-      "refreshed": [
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-06-30-comfyui-0-27-0.md",
-          "record_id": "github:comfyui:347121118"
-        },
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-06-23-comfyui-0-26-0.md",
-          "record_id": "github:comfyui:343659944"
-        }
-      ],
-      "skipped": [],
-      "status": "success",
-      "written": []
-    },
-    {
-      "adapter": "rss_feed",
-      "duration_ms": 470,
-      "fetched": 2,
-      "product_id": "github",
-      "refreshed": [
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-07-02-github-copilot-improved-accuracy-and-coverage-in-copilot-usage-metrics-reports.md",
-          "record_id": "rss:github:https://github.blog/changelog/2026-07-02-improved-accuracy-and-coverage-in-copilot-usage-metrics-reports"
-        },
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-07-02-github-copilot-upcoming-deprecation-of-gemini-2-5-pro-and-gemini-3-flash.md",
-          "record_id": "rss:github:https://github.blog/changelog/2026-07-02-upcoming-deprecation-of-gemini-2-5-pro-and-gemini-3-flash"
-        }
-      ],
-      "skipped": [],
-      "status": "success",
-      "written": []
-    },
-    {
-      "adapter": "html_changelog",
-      "duration_ms": 293,
-      "fetched": 0,
-      "product_id": "netlify",
+      "product_id": "microsoft-365-apps",
       "refreshed": [],
       "skipped": [],
       "status": "success",
-      "written": []
-    },
-    {
-      "adapter": "elgato_help_center",
-      "duration_ms": 5006,
-      "fetched": 0,
-      "product_id": "elgato-camera-hub",
-      "refreshed": [],
-      "skipped": [],
-      "status": "success",
-      "written": []
-    },
-    {
-      "adapter": "elgato_help_center",
-      "duration_ms": 5177,
-      "fetched": 0,
-      "product_id": "elgato-4k-capture-utility",
-      "refreshed": [],
-      "skipped": [],
-      "status": "success",
-      "written": []
+      "written": [
+        "auxsays/updates/generated/2026-06-30-microsoft-365-apps-2606.md"
+      ]
     }
   ],
-  "last_run_finished_at": "2026-07-04T09:02:42Z",
-  "last_run_started_at": "2026-07-04T09:01:56Z",
+  "last_run_finished_at": "2026-07-05T00:08:00Z",
+  "last_run_started_at": "2026-07-05T00:07:58Z",
   "sources": {
     "adobe-after-effects": {
       "consecutive_failures": 2,
@@ -530,6 +380,25 @@
         "rss:github:https://github.blog/changelog/2026-05-13-new-enterprise-installation-api-now-in-public-preview",
         "rss:github:https://github.blog/changelog/2026-05-13-github-enterprise-server-3-21-release-candidate-is-available",
         "rss:github:https://github.blog/changelog/2026-05-07-start-copilot-cloud-agent-tasks-via-the-rest-api"
+      ],
+      "status": "healthy"
+    },
+    "microsoft-365-apps": {
+      "consecutive_failures": 0,
+      "last_adapter": "microsoft_office_updates",
+      "last_checked_at": "2026-07-05T00:07:58Z",
+      "last_error": "",
+      "last_error_at": "",
+      "last_error_type": "",
+      "last_health_note": "Fetch succeeded.",
+      "last_records_fetched": 1,
+      "last_records_skipped": 0,
+      "last_records_written": 1,
+      "last_run_duration_ms": 2138,
+      "last_success_at": "2026-07-05T00:07:58Z",
+      "previous_consecutive_failures": 0,
+      "seen": [
+        "microsoft:microsoft-365-apps:2606:158fb776252f136f"
       ],
       "status": "healthy"
     },
