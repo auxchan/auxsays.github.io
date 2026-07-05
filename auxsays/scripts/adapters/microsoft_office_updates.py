@@ -30,6 +30,12 @@ from lib.normalize import strip_tags, first_nonempty
 
 ROW_RE = re.compile(r"<tr\b[^>]*>(?P<row>.*?)</tr>", re.I | re.S)
 CELL_RE = re.compile(r"<t[dh]\b[^>]*>(?P<cell>.*?)</t[dh]>", re.I | re.S)
+# Headings + rows in document order, so a parser can skip rows under a given section
+# heading (e.g. "Public preview") without depending on the row text alone.
+SECTION_RE = re.compile(
+    r"<h[1-4]\b[^>]*>(?P<heading>.*?)</h[1-4]>|<tr\b[^>]*>(?P<row>.*?)</tr>",
+    re.I | re.S,
+)
 VERSION_CELL_RE = re.compile(r"\d{3,4}")
 BUILD_CELL_RE = re.compile(r"\d{3,6}\.\d{3,6}")
 DATE_RE = re.compile(
@@ -46,14 +52,18 @@ MONTHS = {
 DEFAULT_CHANNEL = "Current Channel"
 EXCLUDE_CHANNEL_TOKENS = ("preview", "insider", "beta")
 
-# parser_profiles this adapter can parse today (Office update-history family).
-SUPPORTED_PROFILES = {
-    "microsoft_365_apps_update_history",
-    "microsoft_365_powerpoint_release_notes",
-    "microsoft_office_release_notes",
-    "generic",
-    "",
-}
+# Microsoft Teams version-history table rows are
+# [Release year | Release date ("July 01") | Teams version (4-part) | SlimCore version (3-part)].
+# New Teams versions have a >=4-digit first component (e.g. 26163.407.4839.8659), which
+# distinguishes them from the 3-part SlimCore value and from 1.x classic-Teams builds.
+TEAMS_VERSION_RE = re.compile(r"\d{4,6}\.\d{1,6}\.\d{1,6}\.\d{1,6}")
+TEAMS_YEAR_RE = re.compile(r"20\d{2}")
+TEAMS_MONTH_DAY_RE = re.compile(
+    r"\b(January|February|March|April|May|June|July|August|September|October|November|December)"
+    r"\s+(\d{1,2})\b",
+    re.I,
+)
+TEAMS_EXCLUDE_TOKENS = ("preview", "insider", "beta")
 
 
 def _request_options(source: dict[str, Any]) -> dict[str, Any]:
@@ -219,11 +229,155 @@ def _records_from_office_release_notes(
     return records
 
 
+def _teams_published(year: str, month_day: re.Match | None) -> str:
+    """Combine the Teams table's split 'Release year' + 'Month DD' cells into ISO."""
+    if not year or month_day is None:
+        return ""
+    month = MONTHS.get(month_day.group(1).lower(), "01")
+    day = int(month_day.group(2))
+    return f"{year}-{month}-{day:02d}T00:00:00Z"
+
+
+def _teams_record(
+    source: dict[str, Any],
+    source_url: str,
+    version: str,
+    published: str,
+) -> dict[str, Any]:
+    digest = hashlib.sha256((source_url + version).encode("utf-8")).hexdigest()[:16]
+    ingestion = source.get("ingestion", {}) or {}
+    software = source["software"]
+    date_str = published[:10] if published else ""
+
+    official_sources = []
+    for label, url in (
+        ("Microsoft Teams version history", ingestion.get("official_url")),
+        ("What's new in Microsoft Teams", ingestion.get("secondary_official_url")),
+    ):
+        if isinstance(url, str) and url.strip():
+            official_sources.append({
+                "label": label,
+                "url": url.strip(),
+                "source_type": "release_notes",
+                "trust_level": "official",
+                "extraction_status": "summary_captured" if url.strip() == source_url else "reference_only",
+            })
+
+    body = (
+        f"{software} version {version}."
+        + (f" Release date {date_str}." if date_str else "")
+        + " This is the official Microsoft Teams version-history entry"
+        " (learn.microsoft.com/officeupdates/teams-app-versioning)."
+    )
+    official_summary = (
+        f"Microsoft released {software} version {version}"
+        + (f" ({date_str})." if date_str else ".")
+    )
+
+    return {
+        "record_id": f"microsoft:{source['product_id']}:{version}:{digest}",
+        "company_id": source["company_id"],
+        "product_id": source["product_id"],
+        "company": source["company"],
+        "software": software,
+        "category": source.get("public_category"),
+        "version": version,
+        "title": first_nonempty(f"{software} {version}", software),
+        "published_at": published,
+        "source_url": source_url,
+        "official_url": source_url,
+        "download_url": "",
+        "file_size": "",
+        "file_size_status": "not_provided_by_source",
+        "file_size_note": (
+            "Microsoft Teams updates are Microsoft-managed (auto-update); the public version "
+            "history does not expose standalone installer/package size metadata."
+        ),
+        "body": body,
+        "checksums_body": "",
+        "summary": "",
+        "source_type": "release_notes",
+        "official_source_type": "release_notes",
+        "official_note_status": "release_notes_captured",
+        "official_note_label": "Official version history",
+        "official_sources": official_sources,
+        "capture_status": "captured-from-official-microsoft-teams-version-history",
+        "official_summary": official_summary,
+    }
+
+
+def _records_from_teams_version_history(
+    source: dict[str, Any],
+    source_url: str,
+    html: str,
+    limit: int,
+) -> list[dict[str, Any]]:
+    """Pure parser (no network): Teams version-history table rows -> official-only records.
+
+    Rows are [Release year | Release date | Teams version (4-part) | SlimCore version].
+    Cells are matched by shape (not fixed index): the 4-part Teams version, a 4-digit
+    year, and a "Month DD" date are combined; the 3-part SlimCore value and 1.x classic
+    builds are ignored. Returns [] when no version row matches (no fabricated records).
+    """
+    html = html or ""
+    records: list[dict[str, Any]] = []
+    seen_versions: set[str] = set()
+    current_section = ""
+
+    for match in SECTION_RE.finditer(html):
+        heading = match.group("heading")
+        if heading is not None:
+            current_section = re.sub(r"\s+", " ", strip_tags(heading)).strip().lower()
+            continue
+
+        row_html = match.group("row") or ""
+        haystack = f"{current_section} {row_html.lower()}"
+        if any(token in haystack for token in TEAMS_EXCLUDE_TOKENS):
+            continue
+        cells = _row_cells(row_html)
+        if not cells:
+            continue
+
+        version = next((c for c in cells if TEAMS_VERSION_RE.fullmatch(c)), "")
+        if not version or version in seen_versions:
+            continue
+
+        year = next((c for c in cells if TEAMS_YEAR_RE.fullmatch(c)), "")
+        month_day = None
+        for cell in cells:
+            found = TEAMS_MONTH_DAY_RE.search(cell)
+            if found:
+                month_day = found
+                break
+        published = _teams_published(year, month_day)
+
+        seen_versions.add(version)
+        records.append(_teams_record(source, source_url, version, published))
+        if len(records) >= max(1, int(limit)):
+            break
+
+    return records
+
+
+# parser_profile -> pure parser. The M365 Apps / PowerPoint / generic profiles use the
+# update-history table parser; Teams uses the version-history table parser. Unknown
+# profiles are not dispatched (fetch returns []).
+_PROFILE_PARSERS = {
+    "microsoft_365_apps_update_history": _records_from_office_release_notes,
+    "microsoft_365_powerpoint_release_notes": _records_from_office_release_notes,
+    "microsoft_office_release_notes": _records_from_office_release_notes,
+    "generic": _records_from_office_release_notes,
+    "": _records_from_office_release_notes,
+    "microsoft_teams_version_history": _records_from_teams_version_history,
+}
+
+
 def fetch(source: dict[str, Any], limit: int = 3) -> list[dict[str, Any]]:
     ingestion = source.get("ingestion", {}) or {}
     profile = str(ingestion.get("parser_profile") or "").strip()
-    if profile not in SUPPORTED_PROFILES:
-        # Reserved for future Office lanes (e.g. microsoft_teams_version_history).
+    parser = _PROFILE_PARSERS.get(profile)
+    if parser is None:
+        # Unsupported parser_profile (e.g. a future lane not yet implemented).
         return []
 
     options = _request_options(source)
@@ -240,11 +394,11 @@ def fetch(source: dict[str, Any], limit: int = 3) -> list[dict[str, Any]]:
         if not html.strip():
             fetch_errors.append(f"{url}: empty response")
             continue
-        records = _records_from_office_release_notes(source, result.final_url or url, html, limit)
+        records = parser(source, result.final_url or url, html, limit)
         if records:
             return records
-        # Fetched successfully but no conservative version row matched: try the next
-        # official URL rather than emitting a snapshot/bad record.
+        # Fetched OK but no version row matched: try the next official URL rather than
+        # emitting a snapshot/bad record.
 
     # Every candidate URL failed to fetch -> surface as a transport error so source
     # health reflects it. Fetched-but-unparseable pages return [] (graceful).

@@ -3218,18 +3218,18 @@
   company: Microsoft
   software: Microsoft Teams
   public_category: Workplace Critical
-  enabled: false
+  enabled: true
   recommended_priority: P2 manual watch
   ingestion:
     type: html_release_notes
-    adapter: manual_watch
+    adapter: microsoft_office_updates
     official_url: https://learn.microsoft.com/en-us/officeupdates/teams-app-versioning
     secondary_official_url: https://support.microsoft.com/en-us/office/what-s-new-in-microsoft-teams-d7092a6d-c896-424c-b362-a472d5f105de
     feed_url: null
     api_url: null
     parser_profile: microsoft_teams_version_history
     official_source_type: release_notes
-    source_capture_status: manual_watch
+    source_capture_status: adapter_enabled
     include_prereleases: false
     version_pattern: ^(?P<version>[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$
     requires_javascript: false
