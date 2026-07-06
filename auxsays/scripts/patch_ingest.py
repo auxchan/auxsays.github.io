@@ -165,6 +165,26 @@ def refresh_linked_official_bodies(sources: list[dict[str, Any]], args: argparse
         results.append({"path": str(refreshed_path), "action": action, "source_url": source_url})
     return results
 
+def resolve_record_limit(source: dict[str, Any], args: argparse.Namespace) -> int:
+    """Records to request from a source's adapter.
+
+    A source may cap its own output via ``ingestion.record_limit`` (e.g. an OS
+    whose release-health page legitimately lists several current servicing
+    versions). When absent or invalid the global ``--limit`` default applies, so
+    every other source keeps its existing behaviour. The adapter contract is
+    unchanged: fetch(source, limit=N) still returns at most N records.
+    """
+    ingestion = source.get("ingestion", {}) or {}
+    override = ingestion.get("record_limit")
+    if override is None:
+        return args.limit
+    try:
+        value = int(override)
+    except (TypeError, ValueError):
+        return args.limit
+    return value if value > 0 else args.limit
+
+
 def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str, Any]) -> dict[str, Any]:
     product_id = source["product_id"]
     adapter_name = source.get("ingestion", {}).get("adapter") or source.get("ingestion", {}).get("type")
@@ -174,7 +194,7 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
     started = time.monotonic()
     checked_at = utc_now()
     module = adapter_module(adapter_name)
-    records = module.fetch(source, limit=args.limit)
+    records = module.fetch(source, limit=resolve_record_limit(source, args))
     written = []
     skipped = []
     refreshed = []
@@ -250,7 +270,7 @@ def main() -> int:
         try:
             if args.dry_run:
                 adapter_name = source.get("ingestion", {}).get("adapter") or source.get("ingestion", {}).get("type")
-                records = adapter_module(adapter_name).fetch(source, limit=args.limit)
+                records = adapter_module(adapter_name).fetch(source, limit=resolve_record_limit(source, args))
                 results.append({
                     "product_id": source["product_id"],
                     "adapter": adapter_name,
