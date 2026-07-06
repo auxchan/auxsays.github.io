@@ -5192,7 +5192,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-0-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1un9dm8-davinci-resolve-keeps-crashing-to-the-poi
   product_id: blackmagic-davinci
   update_version: 21.0.2
@@ -5215,5 +5214,26 @@ evidence:
   workflow_area: application stability
   platform: unknown
   severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13624
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13624
+  parent_title: 'macOS: Browser source (CEF) crash on CrBrowserMain — EXC_BAD_ACCESS / null write during autorelease pool drain (obs-browser 32.1.2, macOS 26.5.1, Apple Silicon)'
+  report_title: 'macOS: Browser source (CEF) crash on CrBrowserMain — EXC_BAD_ACCESS / null write during autorelease pool drain (obs-browser 32.1.2, macOS 26.5.1, Apple Silicon)'
+  report_text_excerpt: 's and the failing Objective-C selector being `release`. ### Environment - **OBS Studio:** 32.1.2 (24742303888), arm64 native - **macOS:** 26.5.1 (25F80) - **Hardware:** Apple Silicon (Mac16,10) - **Plugin loaded:** `com.obsproject.obs-browser (32.1.2)` — `/Applications/OBS.app/Co'
+  captured_at: '2026-07-06T16:38:10Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: macos
+  severity: medium
   sentiment: negative
   source_weight: 1
