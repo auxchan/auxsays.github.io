@@ -40,6 +40,16 @@ ISO_DATE_RE = re.compile(r"\d{4}-\d{2}-\d{2}")
 SKIP_SERVICING_TOKENS = ("ltsc", "long-term")
 SUPPORTED_PROFILES = {"windows_release_health", "generic", ""}
 
+# --- Known-issues / resolved-issues / safeguard-hold enrichment ---------------
+# Body-only: a deterministic roll-up of each version's official Microsoft Release
+# Health status page is appended to that version's record body. No structured
+# fields, no known_issues_present flag, no consensus fields (Phase 1).
+# A safeguard hold is only recognised when an explicit numeric Safeguard ID sits
+# in the issue row, so generic "safeguard" help-footer links never create a hold.
+SAFEGUARD_ID_RE = re.compile(r"safeguard\s*(?:hold)?\s*(?:id)?\s*[:#]?\s*(\d{6,9})", re.I)
+MAX_ROLLUP_BULLETS = 6
+MAX_SUMMARY_CHARS = 220
+
 
 def _request_options(source: dict[str, Any]) -> dict[str, Any]:
     ingestion = source.get("ingestion", {}) or {}
@@ -251,6 +261,152 @@ def _records_from_windows_release_information(
     return records
 
 
+def _short(text: str, limit: int = MAX_SUMMARY_CHARS) -> str:
+    text = re.sub(r"\s+", " ", text or "").strip()
+    return text if len(text) <= limit else text[: limit - 1].rstrip() + "…"
+
+
+def _known_issues_from_status_page(html: str, version: str) -> list[dict[str, Any]]:
+    """Pure parser (no network): a Release Health status page -> known-issue rows.
+
+    Reads only the "Known issues" summary table (header contains Summary + Status);
+    footer/help tables that merely mention "safeguard" are never touched. Each issue
+    is classified deterministically as active or resolved from its Status cell.
+    Returns [] on any DOM mismatch so a page change never fabricates an issue.
+    """
+    html = html or ""
+    issues: list[dict[str, Any]] = []
+
+    for table in TABLE_RE.finditer(html):
+        rows = list(ROW_RE.finditer(table.group("table")))
+        if not rows:
+            continue
+        header = [c.lower() for c in _row_cells(rows[0].group("row"))]
+        if not header or not (_has(header, "summary") and _has(header, "status")):
+            continue
+
+        i_sum = _col(header, "summary")
+        i_stat = _col(header, "status")
+        i_orig = _col(header, "originating")
+        i_upd = _col(header, "last updated")
+
+        for row in rows[1:]:
+            cells = _row_cells(row.group("row"))
+            if i_sum is None or i_stat is None or i_sum >= len(cells) or i_stat >= len(cells):
+                continue
+            summary = cells[i_sum]
+            status_raw = cells[i_stat]
+            if not summary or not status_raw:
+                continue
+
+            originating = cells[i_orig] if (i_orig is not None and i_orig < len(cells)) else ""
+            last_updated = cells[i_upd] if (i_upd is not None and i_upd < len(cells)) else ""
+
+            resolved = status_raw.strip().lower().startswith("resolved")
+            resolving_match = KB_RE.search(status_raw) if resolved else None
+            build_match = BUILD_RE.search(originating)
+            kb_match = KB_RE.search(originating)
+            safeguard_match = SAFEGUARD_ID_RE.search(f"{summary} {status_raw}")
+
+            issues.append({
+                "summary": summary,
+                "status_raw": status_raw,
+                "state": "resolved" if resolved else "active",
+                "originating_build": build_match.group(0) if build_match else "",
+                "originating_kb": kb_match.group(0) if kb_match else "",
+                "resolving_kb": resolving_match.group(0) if resolving_match else "",
+                "last_updated": last_updated,
+                "safeguard_id": safeguard_match.group(1) if safeguard_match else "",
+            })
+
+        # The known-issues summary table is the first Summary+Status table; stop here.
+        if issues:
+            return issues
+
+    return issues
+
+
+def _originating_label(issue: dict[str, Any]) -> str:
+    build, kb = issue.get("originating_build"), issue.get("originating_kb")
+    if build and kb:
+        return f"OS Build {build} {kb}"
+    if kb:
+        return kb
+    if build:
+        return f"OS Build {build}"
+    return "N/A"
+
+
+def _issue_rollup_text(software: str, version: str, issues: list[dict[str, Any]]) -> str:
+    """Deterministic, official-only body roll-up. Returns "" when there are no issues."""
+    if not issues:
+        return ""
+
+    active = sum(1 for i in issues if i["state"] == "active")
+    resolved = sum(1 for i in issues if i["state"] == "resolved")
+    safeguards = sum(1 for i in issues if i["safeguard_id"])
+
+    lines = [
+        f"Microsoft Release Health status (official) for {software} {version}: "
+        f"{active} active known issue(s), {resolved} resolved, {safeguards} safeguard hold(s). "
+        "Source: official Microsoft Windows release-health status page. This is vendor-published "
+        "operational status, not user reports."
+    ]
+    for issue in issues[:MAX_ROLLUP_BULLETS]:
+        label = "Active" if issue["state"] == "active" else "Resolved"
+        parts = [f"status {issue['status_raw']}", f"originating {_originating_label(issue)}"]
+        if issue["last_updated"]:
+            parts.append(f"last updated {issue['last_updated']}")
+        if issue["resolving_kb"]:
+            parts.append(f"resolved by {issue['resolving_kb']}")
+        if issue["safeguard_id"]:
+            parts.append(f"safeguard ID {issue['safeguard_id']}")
+        lines.append(f"- {label}: {_short(issue['summary'])} — " + "; ".join(parts) + ".")
+
+    extra = len(issues) - MAX_ROLLUP_BULLETS
+    if extra > 0:
+        lines.append(f"- …and {extra} more known issue(s) on the official status page.")
+
+    return "\n".join(lines)
+
+
+def _status_url_for(source: dict[str, Any], version: str) -> str:
+    ingestion = source.get("ingestion", {}) or {}
+    template = ingestion.get("status_url_template")
+    if not isinstance(template, str) or "{version_slug}" not in template or not version:
+        return ""
+    return template.replace("{version_slug}", version.lower())
+
+
+def _enrich_records_with_status(source: dict[str, Any], records: list[dict[str, Any]], options: dict[str, Any]) -> None:
+    """Best-effort, body-only: append each version's Release Health issue roll-up.
+
+    Fetch/parse failures are swallowed per version so the base official record is
+    never dropped or mutated beyond its body. Only record["body"] is touched; no
+    structured/consensus/known_issues fields are added (Phase 1 scope).
+    """
+    ingestion = source.get("ingestion", {}) or {}
+    if not ingestion.get("known_issues_capture"):
+        return
+    software = source.get("software") or ""
+
+    for record in records:
+        version = str(record.get("version") or "")
+        url = _status_url_for(source, version)
+        if not url:
+            continue
+        try:
+            result = fetch_text(url, **options)
+            html = result.text or ""
+        except Exception:  # noqa: BLE001 - best-effort: keep the base record intact
+            continue
+        if not html.strip():
+            continue
+        rollup = _issue_rollup_text(software, version, _known_issues_from_status_page(html, version))
+        if rollup:
+            record["body"] = (str(record.get("body") or "").rstrip() + "\n\n" + rollup).strip()
+
+
 def fetch(source: dict[str, Any], limit: int = 3) -> list[dict[str, Any]]:
     ingestion = source.get("ingestion", {}) or {}
     profile = str(ingestion.get("parser_profile") or "").strip()
@@ -273,6 +429,8 @@ def fetch(source: dict[str, Any], limit: int = 3) -> list[dict[str, Any]]:
             continue
         records = _records_from_windows_release_information(source, result.final_url or url, html, limit)
         if records:
+            # Best-effort body enrichment; never drops or blocks the base records.
+            _enrich_records_with_status(source, records, options)
             return records
         # Fetched OK but no current-version row matched (e.g. the landing/hub page):
         # try the next official URL rather than emitting a snapshot/bad record.
