@@ -132,6 +132,71 @@ AMBIGUOUS_HISTORY_HTML = """
 </table>
 """
 
+STATUS_URL_TEMPLATE = "https://learn.microsoft.com/en-us/windows/release-health/status-windows-11-{version_slug}"
+
+# Mirrors a Release Health status page: a "Known issues" summary table
+# (Summary | Originating update | Status | Last updated) plus a help footer that
+# merely LINKS to a safeguard-holds article (must never create a false hold).
+STATUS_MIXED_HTML = """
+<html><body>
+<h1>Windows 11, version 24H2 known issues and notifications</h1>
+<h2>Known issues</h2>
+<table>
+<tr><th>Summary</th><th>Originating update</th><th>Status</th><th>Last updated</th></tr>
+<tr><td>GIF functionality in the Windows Emoji Panel might become unavailable</td><td>N/A</td><td>Resolved KB5095093</td><td>2026-06-30 10:55 PT</td></tr>
+<tr><td>Audio playback might stop after installing the June update</td><td>OS Build 26100.8655 KB5094126 2026-06-09</td><td>Confirmed</td><td>2026-06-23 10:07 PT</td></tr>
+</table>
+<h2>Report a problem with Windows updates</h2>
+<p>Learn how to <a href="https://support.microsoft.com/topic/kb5006965-how-to-check-information-about-safeguard-holds-affecting-your-device">check safeguard holds affecting your device</a>.</p>
+</body></html>
+"""
+
+# A status page whose single known issue is an actual safeguard hold (explicit ID).
+STATUS_SAFEGUARD_HTML = """
+<html><body>
+<h1>Windows 11, version 23H2 known issues and notifications</h1>
+<h2>Known issues</h2>
+<table>
+<tr><th>Summary</th><th>Originating update</th><th>Status</th><th>Last updated</th></tr>
+<tr><td>Devices with a specific display driver are held from the update. Safeguard ID: 56789012</td><td>OS Build 22631.7219 KB5093998 2026-06-09</td><td>Confirmed</td><td>2026-06-18 20:53 PT</td></tr>
+</table>
+</body></html>
+"""
+
+# A status page with NO known-issues table, only a footer safeguard link.
+STATUS_FOOTER_ONLY_HTML = """
+<html><body>
+<h1>Windows 11, version 26H1 known issues and notifications</h1>
+<p>There are currently no known issues. See <a href="https://support.microsoft.com/topic/kb5006965-safeguard-holds">safeguard holds</a> help.</p>
+</body></html>
+"""
+
+
+class _FakeResult:
+    def __init__(self, text: str, url: str) -> None:
+        self.text = text
+        self.final_url = url
+        self.url = url
+        self.status = 200
+
+
+def _fake_http(url_to_html: dict, raise_on: str = ""):
+    def fake(url, *args, **kwargs):
+        if raise_on and raise_on in url:
+            raise RuntimeError("simulated status-page fetch failure")
+        return _FakeResult(url_to_html.get(url, ""), url)
+    return fake
+
+
+def enriched_source() -> dict[str, object]:
+    src = source()
+    src["ingestion"] = {
+        **src["ingestion"],
+        "known_issues_capture": True,
+        "status_url_template": STATUS_URL_TEMPLATE,
+    }
+    return src
+
 
 def run() -> int:
     print("=" * 60)
@@ -195,6 +260,80 @@ def run() -> int:
     bad_profile = source()
     bad_profile["ingestion"] = {**bad_profile["ingestion"], "parser_profile": "manual_watch"}
     check("fetch() ignores unsupported parser_profile (returns [] offline)", mrh.fetch(bad_profile, limit=3) == [], "unsupported profile")
+
+    # --- Release Health status-page parser (known / resolved / safeguard) ----
+    mixed = mrh._known_issues_from_status_page(STATUS_MIXED_HTML, "24H2")
+    check("status parser returns one row per known issue (2)", len(mixed) == 2, str(len(mixed)))
+    if len(mixed) == 2:
+        resolved_issue, active_issue = mixed[0], mixed[1]
+        check("resolved issue -> state resolved + resolving KB extracted", resolved_issue["state"] == "resolved" and resolved_issue["resolving_kb"] == "KB5095093", str(resolved_issue))
+        check("N/A originating update parsed as empty build+kb", resolved_issue["originating_build"] == "" and resolved_issue["originating_kb"] == "", str(resolved_issue))
+        check("Confirmed issue -> state active, no resolving KB", active_issue["state"] == "active" and active_issue["resolving_kb"] == "", str(active_issue))
+        check("originating OS build and KB parsed", active_issue["originating_build"] == "26100.8655" and active_issue["originating_kb"] == "KB5094126", str(active_issue))
+        check("last_updated captured", active_issue["last_updated"] == "2026-06-23 10:07 PT", str(active_issue.get("last_updated")))
+        check("footer/help safeguard link does NOT create a safeguard hold", all(i["safeguard_id"] == "" for i in mixed), str([i["safeguard_id"] for i in mixed]))
+
+    sg = mrh._known_issues_from_status_page(STATUS_SAFEGUARD_HTML, "23H2")
+    check("safeguard ID captured only when explicitly present in the row", len(sg) == 1 and sg[0]["safeguard_id"] == "56789012", str(sg))
+    check("empty status HTML -> no issues", mrh._known_issues_from_status_page("", "24H2") == [], "empty")
+    check("footer-only status page (no summary table) -> no issues", mrh._known_issues_from_status_page(STATUS_FOOTER_ONLY_HTML, "26H1") == [], "footer-only")
+
+    # --- deterministic roll-up text -----------------------------------------
+    roll1 = mrh._issue_rollup_text("Windows 11", "24H2", mixed)
+    roll2 = mrh._issue_rollup_text("Windows 11", "24H2", mixed)
+    check("roll-up is deterministic (stable across calls)", roll1 == roll2 and roll1 != "", "determinism")
+    check("roll-up header counts active/resolved/safeguard correctly", "1 active known issue(s), 1 resolved, 0 safeguard hold(s)" in roll1, roll1.splitlines()[0] if roll1 else "")
+    check("roll-up labels it official Microsoft Release Health, not user reports", "Microsoft Release Health status (official)" in roll1 and "not user reports" in roll1, roll1.splitlines()[0] if roll1 else "")
+    check("roll-up bullet carries status + originating + last updated + resolving KB", "resolved by KB5095093" in roll1 and "OS Build 26100.8655 KB5094126" in roll1 and "last updated" in roll1, roll1)
+    check("empty issue list -> no roll-up text", mrh._issue_rollup_text("Windows 11", "24H2", []) == "", "empty roll")
+    sg_roll = mrh._issue_rollup_text("Windows 11", "23H2", sg)
+    check("safeguard roll-up counts the hold and shows the ID", "1 safeguard hold(s)" in sg_roll and "safeguard ID 56789012" in sg_roll, sg_roll)
+
+    # --- fetch() body enrichment (offline via monkeypatched HTTP) -----------
+    RELEASE_URL = "https://learn.microsoft.com/en-us/windows/release-health/windows11-release-information"
+    fake_map = {
+        RELEASE_URL: WIN11_HTML,
+        STATUS_URL_TEMPLATE.replace("{version_slug}", "26h1"): STATUS_FOOTER_ONLY_HTML,
+        STATUS_URL_TEMPLATE.replace("{version_slug}", "25h2"): STATUS_MIXED_HTML,
+        STATUS_URL_TEMPLATE.replace("{version_slug}", "24h2"): STATUS_MIXED_HTML,
+    }
+    _orig = mrh.fetch_text
+    try:
+        mrh.fetch_text = _fake_http(fake_map)
+        enriched = mrh.fetch(enriched_source(), limit=6)
+    finally:
+        mrh.fetch_text = _orig
+    by_ver = {r.get("version"): r for r in enriched}
+    check("fetch() still returns the base current versions", set(by_ver) == {"26H1", "25H2", "24H2"}, str(sorted(by_ver)))
+    if "24H2" in by_ver:
+        body24 = str(by_ver["24H2"].get("body"))
+        check("24H2 body enriched with official issue roll-up", "Microsoft Release Health status (official)" in body24 and "1 active known issue(s), 1 resolved" in body24, body24[-160:])
+        check("enriched record stays official-only (no report/consensus/known_issues fields)", by_ver["24H2"].get("report_count") is None and by_ver["24H2"].get("evidence_state") is None and by_ver["24H2"].get("consensus_collection_status") is None and by_ver["24H2"].get("known_issues_present") is None, str({k: by_ver["24H2"].get(k) for k in ("report_count", "evidence_state", "known_issues_present")}))
+    if "26H1" in by_ver:
+        body26 = str(by_ver["26H1"].get("body"))
+        check("26H1 (no known issues) body NOT enriched, base intact", "Microsoft Release Health status (official)" not in body26 and "current General Availability Channel" in body26, body26[-120:])
+
+    # --- status-page fetch failure must leave the base record intact --------
+    _orig2 = mrh.fetch_text
+    try:
+        mrh.fetch_text = _fake_http({RELEASE_URL: WIN11_HTML}, raise_on="status-windows-11")
+        failed = mrh.fetch(enriched_source(), limit=6)
+    finally:
+        mrh.fetch_text = _orig2
+    fby = {r.get("version"): r for r in failed}
+    check("status fetch failure still yields the base records", set(fby) == {"26H1", "25H2", "24H2"}, str(sorted(fby)))
+    if "24H2" in fby:
+        fbody = str(fby["24H2"].get("body"))
+        check("status fetch failure leaves base body unmodified (no roll-up)", "Microsoft Release Health status (official)" not in fbody and "current General Availability Channel" in fbody, fbody[-120:])
+
+    # --- known_issues_capture unset -> no enrichment attempt at all ----------
+    _orig3 = mrh.fetch_text
+    try:
+        mrh.fetch_text = _fake_http({RELEASE_URL: WIN11_HTML}, raise_on="status-windows-11")
+        no_capture = mrh.fetch(source(), limit=6)  # source() has no known_issues_capture
+    finally:
+        mrh.fetch_text = _orig3
+    check("known_issues_capture unset -> no status fetch, base records returned", {r.get("version") for r in no_capture} == {"26H1", "25H2", "24H2"}, str(sorted({r.get("version") for r in no_capture})))
 
     print()
     print("=" * 60)
