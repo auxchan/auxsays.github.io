@@ -157,8 +157,14 @@ layout: aux-base
                 {% if candidate_update_report_count > 0 or candidate_confirmed_report_count > 0 %}
                   {% assign candidate_has_report_signal = true %}
                 {% endif %}
+                {% assign candidate_official_active = candidate.official_active_issue_count | default: 0 | plus: 0 %}
+                {% assign candidate_official_safeguard = candidate.official_safeguard_hold_count | default: 0 | plus: 0 %}
+                {% assign candidate_has_official_issue = false %}
+                {% if candidate_official_active > 0 or candidate_official_safeguard > 0 %}
+                  {% assign candidate_has_official_issue = true %}
+                {% endif %}
                 {% assign candidate_is_meaningful = false %}
-                {% if candidate.homepage_featured == true or candidate_has_report_signal == true or candidate_is_known_issue == true or candidate_evidence_state == 'pilot_sample' or candidate_evidence_state == 'consensus_live' or candidate_intelligence_stage == 'pilot' or candidate_intelligence_stage == 'consensus_live' %}
+                {% if candidate.homepage_featured == true or candidate_has_report_signal == true or candidate_has_official_issue == true or candidate_is_known_issue == true or candidate_evidence_state == 'pilot_sample' or candidate_evidence_state == 'consensus_live' or candidate_intelligence_stage == 'pilot' or candidate_intelligence_stage == 'consensus_live' %}
                   {% assign candidate_is_meaningful = true %}
                 {% endif %}
 
@@ -179,6 +185,9 @@ layout: aux-base
                   {% assign candidate_score = candidate_score | plus: candidate_state_score %}
                   {% if candidate_is_known_issue == true %}
                     {% assign candidate_score = candidate_score | plus: 200000 %}
+                  {% endif %}
+                  {% if candidate_has_official_issue == true %}
+                    {% assign candidate_score = candidate_score | plus: 220000 %}
                   {% endif %}
                   {% if candidate_has_report_signal == true %}
                     {% assign candidate_score = candidate_score | plus: 250000 %}
@@ -223,13 +232,17 @@ layout: aux-base
                   {% assign evidence_label = 'Insufficient data' %}
                 {% endif %}
                 {% assign stage_label = item.intelligence_stage_label | default: item.intelligence_stage | default: '' | replace: '_', ' ' | capitalize %}
+                {% assign item_official_active = item.official_active_issue_count | default: 0 | plus: 0 %}
+                {% assign item_official_safeguard = item.official_safeguard_hold_count | default: 0 | plus: 0 %}
                 <a class="home-patch-item home-patch-item--signal" href="{{ item.url | relative_url }}" data-home-patch-signal>
                   <span class="home-patch-dot home-patch-dot--{{ consensus_key }}" aria-hidden="true"></span>
                   <span class="home-patch-copy">
                     <strong>{{ item.update_feed_title | default: item.update_detail_title | default: item.title }}</strong>
                     <em>
                       {{ consensus_label }}
-                      {% if report_count > 0 %}
+                      {% if item_official_active > 0 or item_official_safeguard > 0 %}
+                        • {% if item_official_active > 0 %}{{ item_official_active }} active Microsoft issue{% unless item_official_active == 1 %}s{% endunless %}{% endif %}{% if item_official_active > 0 and item_official_safeguard > 0 %}, {% endif %}{% if item_official_safeguard > 0 %}{{ item_official_safeguard }} safeguard hold{% unless item_official_safeguard == 1 %}s{% endunless %}{% endif %}
+                      {% elsif report_count > 0 %}
                         • {{ report_count }} reports
                       {% elsif is_known_issue == true %}
                         • known issues

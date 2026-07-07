@@ -337,14 +337,20 @@ def _originating_label(issue: dict[str, Any]) -> str:
     return "N/A"
 
 
+def _issue_counts(issues: list[dict[str, Any]]) -> tuple[int, int, int]:
+    """(active, resolved, safeguard-hold) counts. Safeguard requires an explicit ID."""
+    active = sum(1 for i in issues if i.get("state") == "active")
+    resolved = sum(1 for i in issues if i.get("state") == "resolved")
+    safeguards = sum(1 for i in issues if i.get("safeguard_id"))
+    return active, resolved, safeguards
+
+
 def _issue_rollup_text(software: str, version: str, issues: list[dict[str, Any]]) -> str:
     """Deterministic, official-only body roll-up. Returns "" when there are no issues."""
     if not issues:
         return ""
 
-    active = sum(1 for i in issues if i["state"] == "active")
-    resolved = sum(1 for i in issues if i["state"] == "resolved")
-    safeguards = sum(1 for i in issues if i["safeguard_id"])
+    active, resolved, safeguards = _issue_counts(issues)
 
     lines = [
         f"Microsoft Release Health status (official) for {software} {version}: "
@@ -402,9 +408,17 @@ def _enrich_records_with_status(source: dict[str, Any], records: list[dict[str, 
             continue
         if not html.strip():
             continue
-        rollup = _issue_rollup_text(software, version, _known_issues_from_status_page(html, version))
-        if rollup:
-            record["body"] = (str(record.get("body") or "").rstrip() + "\n\n" + rollup).strip()
+        issues = _known_issues_from_status_page(html, version)
+        if not issues:
+            continue
+        active, resolved, safeguards = _issue_counts(issues)
+        # Official-source signal fields (deterministic counts) — surfaced by the UI as
+        # official Microsoft status, kept separate from consensus/report fields.
+        record["official_active_issue_count"] = active
+        record["official_resolved_issue_count"] = resolved
+        record["official_safeguard_hold_count"] = safeguards
+        record["official_known_issues_present"] = bool(active or safeguards)
+        record["body"] = (str(record.get("body") or "").rstrip() + "\n\n" + _issue_rollup_text(software, version, issues)).strip()
 
 
 def fetch(source: dict[str, Any], limit: int = 3) -> list[dict[str, Any]]:

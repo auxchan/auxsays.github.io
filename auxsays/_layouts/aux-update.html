@@ -368,6 +368,20 @@ layout: aux-base
           {% if record_note_text != blank %}<p>{{ record_note_text }}</p>{% endif %}
         </div>
       </div>
+
+      {% assign official_active = page.official_active_issue_count | default: 0 | plus: 0 %}
+      {% assign official_resolved = page.official_resolved_issue_count | default: 0 | plus: 0 %}
+      {% assign official_safeguard = page.official_safeguard_hold_count | default: 0 | plus: 0 %}
+      {% if official_active > 0 or official_resolved > 0 or official_safeguard > 0 %}
+      <div class="update-verdict-card update-verdict-card--clean update-official-status" aria-label="Official Microsoft Release Health status">
+        <div class="consensus-compact">
+          <span class="update-evidence-summary-line"><strong>Official Microsoft Release Health:</strong>
+            {% if official_active > 0 %}<em class="patch-status patch-status--moderate">{{ official_active }} active known issue{% unless official_active == 1 %}s{% endunless %}</em>{% else %}<em class="patch-status patch-status--insufficient">No active known issues</em>{% endif %}{% if official_safeguard > 0 %} <em class="patch-status patch-status--negative">{{ official_safeguard }} safeguard hold{% unless official_safeguard == 1 %}s{% endunless %}</em>{% endif %}
+          </span>
+          <span class="update-evidence-report-count">{% if official_resolved > 0 %}{{ official_resolved }} resolved · {% endif %}Vendor-published operational status, not user reports.</span>
+        </div>
+      </div>
+      {% endif %}
     </div>
   </section>
 

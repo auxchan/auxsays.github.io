@@ -9,6 +9,17 @@ from .normalize import slugify, utc_now, summarize, normalize_release_notes_body
 
 DEFAULT_CONSENSUS = "Insufficient data"
 
+# Official-source Release Health issue signals: deterministic counts produced by an
+# adapter from a vendor status page. Surfaced in the UI as OFFICIAL vendor status,
+# kept strictly separate from consensus/user-report fields (never derived from
+# reports, never populate complaint_themes, never touch known_issues_present).
+OFFICIAL_ISSUE_FIELDS = (
+    "official_known_issues_present",
+    "official_active_issue_count",
+    "official_resolved_issue_count",
+    "official_safeguard_hold_count",
+)
+
 
 def _file_size_status(record: dict[str, Any]) -> str:
     if record.get("file_size"):
@@ -127,7 +138,7 @@ def build_front_matter(record: dict[str, Any]) -> dict[str, Any]:
         {"at": published, "label": "Published", "note": "Official source entry detected."},
         {"at": utc_now(), "label": consensus_label, "note": "AUXSAYS official-ingestion record initialized."},
     ]
-    return {
+    front = {
         "layout": "aux-update",
         "title": f"{software} {version} official update breakdown",
         "description": f"Official {software} update record captured from {company}.",
@@ -192,6 +203,12 @@ def build_front_matter(record: dict[str, Any]) -> dict[str, Any]:
         "official_checksums_body": checksums_body,
         "official_checksums_capture_status": "captured-from-official-release" if checksums_body else "not-present",
     }
+    # Emit official Release Health issue counts only when the adapter supplied them;
+    # non-issue records (M365/Teams/etc.) never carry these keys.
+    for field in OFFICIAL_ISSUE_FIELDS:
+        if record.get(field) is not None:
+            front[field] = record[field]
+    return front
 
 
 def refresh_existing_record(path: Path, record: dict[str, Any]) -> tuple[Path, str]:
@@ -253,6 +270,14 @@ def refresh_existing_record(path: Path, record: dict[str, Any]) -> tuple[Path, s
         existing["official_checksums_body"] = incoming_checksums
         existing["official_checksums_capture_status"] = "captured-from-official-release"
         material_changed = True
+
+    # Official Release Health issue counts change over time (active -> resolved), so
+    # update-on-change (not setdefault). Only fields the incoming record supplied are
+    # touched; a transient status-page miss leaves the last-known counts intact.
+    for field in OFFICIAL_ISSUE_FIELDS:
+        if field in record and record[field] is not None and existing.get(field) != record[field]:
+            existing[field] = record[field]
+            material_changed = True
 
     if material_changed:
         existing["record_last_updated"] = checked_at
