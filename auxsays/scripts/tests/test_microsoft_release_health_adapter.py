@@ -171,6 +171,19 @@ STATUS_FOOTER_ONLY_HTML = """
 </body></html>
 """
 
+# A status page whose issues are all resolved (should NOT raise an active-issue warning).
+STATUS_RESOLVED_ONLY_HTML = """
+<html><body>
+<h1>Windows 11, version 24H2 known issues and notifications</h1>
+<h2>Known issues</h2>
+<table>
+<tr><th>Summary</th><th>Originating update</th><th>Status</th><th>Last updated</th></tr>
+<tr><td>GIF functionality in the Windows Emoji Panel might become unavailable</td><td>N/A</td><td>Resolved KB5095093</td><td>2026-06-30 10:55 PT</td></tr>
+<tr><td>Deleting a file from the Recycle Bin shows an internal filename</td><td>OS Build 26100.8655 KB5094126</td><td>Resolved KB5095093</td><td>2026-06-23 10:07 PT</td></tr>
+</table>
+</body></html>
+"""
+
 
 class _FakeResult:
     def __init__(self, text: str, url: str) -> None:
@@ -289,6 +302,14 @@ def run() -> int:
     sg_roll = mrh._issue_rollup_text("Windows 11", "23H2", sg)
     check("safeguard roll-up counts the hold and shows the ID", "1 safeguard hold(s)" in sg_roll and "safeguard ID 56789012" in sg_roll, sg_roll)
 
+    # --- deterministic issue counts (drive the official_* fields) ------------
+    check("_issue_counts returns (active, resolved, safeguard) for mixed page", mrh._issue_counts(mixed) == (1, 1, 0), str(mrh._issue_counts(mixed)))
+    check("_issue_counts counts a real safeguard hold", mrh._issue_counts(sg) == (1, 0, 1), str(mrh._issue_counts(sg)))
+    check("_issue_counts of empty list is all zeros", mrh._issue_counts([]) == (0, 0, 0), "empty")
+    resolved_only = mrh._known_issues_from_status_page(STATUS_RESOLVED_ONLY_HTML, "24H2")
+    ra, rr, rs = mrh._issue_counts(resolved_only)
+    check("resolved-only page -> 0 active, present would be False (no active warning)", ra == 0 and rr == 2 and rs == 0 and bool(ra or rs) is False, str((ra, rr, rs)))
+
     # --- fetch() body enrichment (offline via monkeypatched HTTP) -----------
     RELEASE_URL = "https://learn.microsoft.com/en-us/windows/release-health/windows11-release-information"
     fake_map = {
@@ -309,9 +330,13 @@ def run() -> int:
         body24 = str(by_ver["24H2"].get("body"))
         check("24H2 body enriched with official issue roll-up", "Microsoft Release Health status (official)" in body24 and "1 active known issue(s), 1 resolved" in body24, body24[-160:])
         check("enriched record stays official-only (no report/consensus/known_issues fields)", by_ver["24H2"].get("report_count") is None and by_ver["24H2"].get("evidence_state") is None and by_ver["24H2"].get("consensus_collection_status") is None and by_ver["24H2"].get("known_issues_present") is None, str({k: by_ver["24H2"].get(k) for k in ("report_count", "evidence_state", "known_issues_present")}))
+        check("24H2 emits official_* count fields (1 active, 1 resolved, 0 safeguard)", by_ver["24H2"].get("official_active_issue_count") == 1 and by_ver["24H2"].get("official_resolved_issue_count") == 1 and by_ver["24H2"].get("official_safeguard_hold_count") == 0, str({k: by_ver["24H2"].get(k) for k in ("official_active_issue_count", "official_resolved_issue_count", "official_safeguard_hold_count")}))
+        check("24H2 official_known_issues_present true when active issues exist", by_ver["24H2"].get("official_known_issues_present") is True, str(by_ver["24H2"].get("official_known_issues_present")))
+        check("official_* fields never populate known_issues_present or complaint_themes", by_ver["24H2"].get("known_issues_present") is None and by_ver["24H2"].get("complaint_themes") is None, "separation")
     if "26H1" in by_ver:
         body26 = str(by_ver["26H1"].get("body"))
         check("26H1 (no known issues) body NOT enriched, base intact", "Microsoft Release Health status (official)" not in body26 and "current General Availability Channel" in body26, body26[-120:])
+        check("26H1 (no issues parsed) emits NO official_* fields", by_ver["26H1"].get("official_active_issue_count") is None and by_ver["26H1"].get("official_known_issues_present") is None, str(by_ver["26H1"].get("official_active_issue_count")))
 
     # --- status-page fetch failure must leave the base record intact --------
     _orig2 = mrh.fetch_text

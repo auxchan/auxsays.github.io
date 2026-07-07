@@ -251,6 +251,11 @@ layout: aux-base
           </a>
           <span class="patch-status-stack">
             <span class="patch-status patch-status--{{ reaction_class }}">{{ reaction }}</span>
+            {% assign official_active = item.official_active_issue_count | default: 0 | plus: 0 %}
+            {% assign official_safeguard = item.official_safeguard_hold_count | default: 0 | plus: 0 %}
+            {% if official_active > 0 or official_safeguard > 0 %}
+            <span class="patch-status patch-status--moderate patch-status--official-issue" title="Official Microsoft Release Health status — vendor-published, not user reports">⚠ {% if official_active > 0 %}{{ official_active }} active official known issue{% unless official_active == 1 %}s{% endunless %}{% endif %}{% if official_active > 0 and official_safeguard > 0 %} · {% endif %}{% if official_safeguard > 0 %}{{ official_safeguard }} safeguard hold{% unless official_safeguard == 1 %}s{% endunless %}{% endif %}</span>
+            {% endif %}
             <span class="patch-report-count">{{ feed_evidence_label }}</span>
             <span class="patch-report-count">{{ item.update_report_count | default: 0 }} user report{% unless item.update_report_count == 1 %}s{% endunless %}</span>
           </span>
@@ -346,6 +351,11 @@ layout: aux-base
             </a>
             <span class="patch-status-stack">
               <span class="patch-status patch-status--{{ reaction_class }}">{{ reaction }}</span>
+              {% assign official_active = item.official_active_issue_count | default: 0 | plus: 0 %}
+              {% assign official_safeguard = item.official_safeguard_hold_count | default: 0 | plus: 0 %}
+              {% if official_active > 0 or official_safeguard > 0 %}
+              <span class="patch-status patch-status--moderate patch-status--official-issue" title="Official Microsoft Release Health status — vendor-published, not user reports">⚠ {% if official_active > 0 %}{{ official_active }} active official known issue{% unless official_active == 1 %}s{% endunless %}{% endif %}{% if official_active > 0 and official_safeguard > 0 %} · {% endif %}{% if official_safeguard > 0 %}{{ official_safeguard }} safeguard hold{% unless official_safeguard == 1 %}s{% endunless %}{% endif %}</span>
+              {% endif %}
               <span class="patch-report-count">{{ feed_evidence_label }}</span>
               <span class="patch-report-count">{{ item.update_report_count | default: 0 }} user report{% unless item.update_report_count == 1 %}s{% endunless %}</span>
             </span>
