@@ -17,8 +17,8 @@ update_version: Here’s everything from Config 2026
 update_logo_text: FIG
 update_published_at: '2026-06-24T00:00:00.000Z'
 update_last_checked: '2026-06-24T20:12:35Z'
-source_last_checked: '2026-07-06T20:15:42Z'
-official_body_last_checked: '2026-07-06T20:15:42Z'
+source_last_checked: '2026-07-07T04:18:30Z'
+official_body_last_checked: '2026-07-07T04:18:30Z'
 record_last_updated: '2026-06-24T20:12:35Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -69,11 +69,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-07-05T09:23:41Z'
-  url: https://www.figma.com/release-notes/?title=config-2026
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-07-05T14:11:39Z'
   url: https://www.figma.com/release-notes/?title=config-2026
   status: captured-from-rss-feed
@@ -90,6 +85,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-07-06T20:15:42Z'
+  url: https://www.figma.com/release-notes/?title=config-2026
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-07-07T04:18:30Z'
   url: https://www.figma.com/release-notes/?title=config-2026
   status: captured-from-rss-feed
   body_captured: true
