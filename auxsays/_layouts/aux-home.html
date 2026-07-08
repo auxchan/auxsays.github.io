@@ -240,10 +240,10 @@ layout: aux-base
                     <strong>{{ item.update_feed_title | default: item.update_detail_title | default: item.title }}</strong>
                     <em>
                       {{ consensus_label }}
-                      {% if item_official_active > 0 or item_official_safeguard > 0 %}
+                      {% if report_count > 0 %}
+                        • {{ report_count }} confirmed community report{% unless report_count == 1 %}s{% endunless %}
+                      {% elsif item_official_active > 0 or item_official_safeguard > 0 %}
                         • {% if item_official_active > 0 %}{{ item_official_active }} active Microsoft issue{% unless item_official_active == 1 %}s{% endunless %}{% endif %}{% if item_official_active > 0 and item_official_safeguard > 0 %}, {% endif %}{% if item_official_safeguard > 0 %}{{ item_official_safeguard }} safeguard hold{% unless item_official_safeguard == 1 %}s{% endunless %}{% endif %}
-                      {% elsif report_count > 0 %}
-                        • {{ report_count }} reports
                       {% elsif is_known_issue == true %}
                         • known issues
                       {% endif %}
