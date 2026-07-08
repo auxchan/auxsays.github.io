@@ -3,6 +3,8 @@ policy_label: Confirmed patch-specific reports only
 public_summary: Reports are counted only when the specific patch/version is named in the report itself or in the parent discussion title.
 match_required: true
 exclude_low_context: true
+require_concrete_issue: true
+release_date_gate: count_only_on_or_after_release_date_when_known
 equal_weight_reports: true
 valid_match_anchors:
   - exact_version_in_report
@@ -13,6 +15,8 @@ valid_match_anchors:
 reply_inclusion_rule: If the parent thread/page title names the exact patch or version, replies inside that thread are treated as patch-specific unless the reply explicitly shifts to another version or unrelated issue.
 exclusion_rules:
   - Generic software complaints without a specific patch/version anchor.
+  - Reports that name the version but describe no concrete user-facing issue (generic questions such as "is this safe?" or "anyone having issues?", generic dislike, release announcements, and changelog/official-notes text).
+  - Reports dated before the patch release date when the release date is known (pre-release or speculative posts are not counted); reports with no verifiable source date are not counted while the release date is known.
   - General praise posts without a specific patch/version anchor.
   - Driver, OS, plug-in, or hardware issues unless the patch-specific discussion ties them directly to the update being assessed.
   - Replies that explicitly identify a different version, different patch, or unrelated update path.
