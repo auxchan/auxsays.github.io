@@ -123,10 +123,26 @@ layout: aux-base
   </section>
   {% endif %}
 
-  <section class="panel patch-intel-section reveal-up reveal-delay-2">
-    <div class="eyebrow">Tracking rules</div>
+  {%- comment -%} Product-level vendor/official issue signal — secondary to the community history table above {%- endcomment -%}
+  {% assign prod_active = 0 %}
+  {% assign prod_resolved = 0 %}
+  {% assign prod_safeguard = 0 %}
+  {% assign prod_has_data = false %}
+  {% for item in product_updates %}
+    {% if item.official_known_issues_present == true or item.official_known_issues_present == false or item.official_active_issue_count or item.official_resolved_issue_count or item.official_safeguard_hold_count %}{% assign prod_has_data = true %}{% endif %}
+    {% assign it_active = item.official_active_issue_count | default: 0 | plus: 0 %}
+    {% assign it_resolved = item.official_resolved_issue_count | default: 0 | plus: 0 %}
+    {% assign it_safeguard = item.official_safeguard_hold_count | default: 0 | plus: 0 %}
+    {% assign prod_active = prod_active | plus: it_active %}
+    {% assign prod_resolved = prod_resolved | plus: it_resolved %}
+    {% assign prod_safeguard = prod_safeguard | plus: it_safeguard %}
+  {% endfor %}
+  {% include aux-vendor-known-issues.html active=prod_active resolved=prod_resolved safeguard=prod_safeguard has_data=prod_has_data source_url=product.source_url scope='product' %}
+
+  <details class="panel patch-intel-section update-tracking-rules aux-collapsible-card reveal-up reveal-delay-2">
+    <summary>Tracking Rules — tracking scope and evidence rules for this product.</summary>
     <div class="patch-monitor-card"><strong>Signal:</strong> {{ product.signal_notes }}</div>
     <div class="patch-monitor-card"><strong>Impact:</strong> {{ product.impact }}</div>
     <div class="patch-monitor-card"><strong>Status:</strong> {% if product_updates.size > 0 %}{{ product_updates.size }} official patch record{% if product_updates.size != 1 %}s{% endif %} tracked{% else %}{{ product.ingestion_status | default: 'First patch record pending' }}{% endif %}</div>
-  </section>
+  </details>
 </section>

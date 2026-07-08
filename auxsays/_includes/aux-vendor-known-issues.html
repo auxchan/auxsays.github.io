@@ -1,0 +1,35 @@
+{%- comment -%}
+Reusable Vendor Known Issues card (official / vendor Release Health context — never community reports).
+Params:
+  active     (int)  official active known-issue count
+  resolved   (int)  official resolved known-issue count
+  safeguard  (int)  official safeguard-hold count
+  has_data   (bool) whether official issue data was captured at all (release-health records only)
+  source_url (str)  official source link (optional)
+  scope      (str)  'patch' | 'product' (affects wording)
+Behavior: open by default only when active>0 or safeguard>0; collapsed otherwise. Truthful copy —
+never implies the vendor has no issues, never uses "yet", never counted as community reports.
+{%- endcomment -%}
+{%- assign vki_active = include.active | default: 0 | plus: 0 -%}
+{%- assign vki_resolved = include.resolved | default: 0 | plus: 0 -%}
+{%- assign vki_safeguard = include.safeguard | default: 0 | plus: 0 -%}
+{%- assign vki_has_data = include.has_data | default: false -%}
+{%- assign vki_scope = include.scope | default: 'patch' -%}
+{%- assign vki_source = include.source_url -%}
+<details class="panel update-info-card update-vendor-issues aux-collapsible-card"{% if vki_active > 0 or vki_safeguard > 0 %} open{% endif %} aria-label="Vendor known issues (official vendor context, not community reports)">
+  <summary>Vendor Known Issues — {% if vki_active > 0 or vki_safeguard > 0 %}{% if vki_active > 0 %}{{ vki_active }} active vendor-known issue{% unless vki_active == 1 %}s{% endunless %}{% endif %}{% if vki_active > 0 and vki_safeguard > 0 %}, {% endif %}{% if vki_safeguard > 0 %}{{ vki_safeguard }} safeguard hold{% unless vki_safeguard == 1 %}s{% endunless %}{% endif %}{% if vki_scope == 'product' %} across tracked patches{% endif %}{% elsif vki_has_data %}No active vendor-known issues captured from the official source.{% else %}No vendor-known issue data captured for this {{ vki_scope }}.{% endif %}</summary>
+  <div class="update-vendor-issues-body">
+    {% if vki_active > 0 or vki_safeguard > 0 %}
+    <p class="update-vendor-issues-counts">
+      {% if vki_active > 0 %}<em class="patch-status patch-status--moderate">{{ vki_active }} active</em>{% endif %}
+      {% if vki_safeguard > 0 %}<em class="patch-status patch-status--negative">{{ vki_safeguard }} safeguard hold{% unless vki_safeguard == 1 %}s{% endunless %}</em>{% endif %}
+      {% if vki_resolved > 0 %}<em class="patch-status patch-status--insufficient">{{ vki_resolved }} resolved</em>{% endif %}
+    </p>
+    <p>Official vendor Release Health status{% if vki_scope == 'product' %} across tracked patches{% endif %}. <strong>Not counted as community reports.</strong>{% if vki_source %} <a href="{{ vki_source }}">Official source ↗</a>{% endif %}</p>
+    {% elsif vki_has_data %}
+    <p>{% if vki_resolved > 0 %}{{ vki_resolved }} resolved vendor-known issue{% unless vki_resolved == 1 %}s{% endunless %} captured. {% endif %}No active vendor-known issues captured from the official source. <strong>Not counted as community reports.</strong>{% if vki_source %} <a href="{{ vki_source }}">Official source ↗</a>{% endif %}</p>
+    {% else %}
+    <p>AUXSAYS has not captured official issue data for this {{ vki_scope }}. This does not indicate the vendor has no issues. <strong>Not counted as community reports.</strong></p>
+    {% endif %}
+  </div>
+</details>
