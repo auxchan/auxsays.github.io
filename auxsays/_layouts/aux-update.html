@@ -373,7 +373,7 @@ layout: aux-base
       {% assign official_resolved = page.official_resolved_issue_count | default: 0 | plus: 0 %}
       {% assign official_safeguard = page.official_safeguard_hold_count | default: 0 | plus: 0 %}
       {% assign vki_has_data = false %}
-      {% if official_active > 0 or official_resolved > 0 or official_safeguard > 0 or page.official_known_issues_present %}{% assign vki_has_data = true %}{% endif %}
+      {% if page.official_known_issues_present == true or page.official_known_issues_present == false or page.official_active_issue_count or page.official_resolved_issue_count or page.official_safeguard_hold_count %}{% assign vki_has_data = true %}{% endif %}
       {% assign vki_source = page.update_source_url | default: page.official_patch_notes_source_url | default: page.primary_official_source %}
       {% include aux-vendor-known-issues.html active=official_active resolved=official_resolved safeguard=official_safeguard has_data=vki_has_data source_url=vki_source scope='patch' %}
     </div>
@@ -416,9 +416,9 @@ layout: aux-base
       {% elsif official_body_polluted %}
       <p class="update-credibility-note">Official body text was not cleanly captured. AUXSAYS is showing structured official additions/fixes where available and links to the source for the full vendor notes.</p>
       {% elsif official_body_missing_renderable %}
-      <p>Official source linked, but full patch-note body has not been captured yet.</p>
+      <p>Official source linked, but full patch-note body has not been captured.</p>
       {% else %}
-      <p>Official patch-note body has not been captured yet.</p>
+      <p>Official patch-note body has not been captured.</p>
       {% endif %}
     </details>
 

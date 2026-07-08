@@ -129,7 +129,7 @@ layout: aux-base
   {% assign prod_safeguard = 0 %}
   {% assign prod_has_data = false %}
   {% for item in product_updates %}
-    {% if item.official_known_issues_present %}{% assign prod_has_data = true %}{% endif %}
+    {% if item.official_known_issues_present == true or item.official_known_issues_present == false or item.official_active_issue_count or item.official_resolved_issue_count or item.official_safeguard_hold_count %}{% assign prod_has_data = true %}{% endif %}
     {% assign it_active = item.official_active_issue_count | default: 0 | plus: 0 %}
     {% assign it_resolved = item.official_resolved_issue_count | default: 0 | plus: 0 %}
     {% assign it_safeguard = item.official_safeguard_hold_count | default: 0 | plus: 0 %}
@@ -137,7 +137,6 @@ layout: aux-base
     {% assign prod_resolved = prod_resolved | plus: it_resolved %}
     {% assign prod_safeguard = prod_safeguard | plus: it_safeguard %}
   {% endfor %}
-  {% if prod_active > 0 or prod_resolved > 0 or prod_safeguard > 0 %}{% assign prod_has_data = true %}{% endif %}
   {% include aux-vendor-known-issues.html active=prod_active resolved=prod_resolved safeguard=prod_safeguard has_data=prod_has_data source_url=product.source_url scope='product' %}
 
   <details class="panel patch-intel-section update-tracking-rules aux-collapsible-card reveal-up reveal-delay-2">
