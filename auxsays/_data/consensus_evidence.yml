@@ -5258,3 +5258,28 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uqvfmo-davinci-isnt-playing-my-video-anymore
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1uqvfmo/davinci_isnt_playing_my_video_anymore/
+  parent_title: Davinci isn't playing my video anymore
+  report_title: Davinci isn't playing my video anymore
+  report_text_excerpt: Davinci isn't playing my video anymore I'm loosing my mind. I used to be able to edit videos no problem. I'm not doing anything super complex just cutting up my volleyball games to remove dead time. But in the last 24 hours its started having issues. If I hit play nothing...
+  captured_at: '2026-07-08T16:51:23Z'
+  source_date: '2026-07-08'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
