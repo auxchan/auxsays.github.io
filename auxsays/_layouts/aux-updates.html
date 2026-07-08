@@ -257,7 +257,7 @@ layout: aux-base
             <span class="patch-status patch-status--moderate patch-status--official-issue" title="Official Microsoft Release Health status — vendor-published, not user reports">⚠ {% if official_active > 0 %}{{ official_active }} active official known issue{% unless official_active == 1 %}s{% endunless %}{% endif %}{% if official_active > 0 and official_safeguard > 0 %} · {% endif %}{% if official_safeguard > 0 %}{{ official_safeguard }} safeguard hold{% unless official_safeguard == 1 %}s{% endunless %}{% endif %}</span>
             {% endif %}
             <span class="patch-report-count">{{ feed_evidence_label }}</span>
-            <span class="patch-report-count">{{ item.update_report_count | default: 0 }} user report{% unless item.update_report_count == 1 %}s{% endunless %}</span>
+            <span class="patch-report-count">{{ item.update_report_count | default: 0 }} confirmed community report{% unless item.update_report_count == 1 %}s{% endunless %}</span>
           </span>
         </div>
         {% if item.update_feed_title != blank %}
@@ -273,12 +273,12 @@ layout: aux-base
         <p class="patch-card-summary">{{ item.description }}</p>
         {% assign consensus_summary = item.update_consensus_summary | default: item.community_summary %}
         {% if consensus_summary %}
-        {% assign evidence_summary = consensus_summary | replace: 'This is a surfaced user-report sample, not a live telemetry feed.', '' | replace: 'This is a surfaced user-report sample, not a live telemetry feed', '' | replace: 'Confirmed patch-specific consensus collection is deferred until the consensus refresh pipeline is active.', 'No patch-specific user reports found yet.' | replace: 'Confirmed patch-specific consensus is deferred until the consensus refresh pipeline is active.', 'No patch-specific user reports found yet.' | strip %}
+        {% assign evidence_summary = consensus_summary | replace: 'This is a surfaced user-report sample, not a live telemetry feed.', '' | replace: 'This is a surfaced user-report sample, not a live telemetry feed', '' | replace: 'Confirmed patch-specific consensus collection is deferred until the consensus refresh pipeline is active.', 'Community consensus not established.' | replace: 'Confirmed patch-specific consensus is deferred until the consensus refresh pipeline is active.', 'Community consensus not established.' | strip %}
         {% if evidence_summary != blank %}
         <div class="patch-consensus-block">
           <span class="patch-consensus-label">Evidence summary</span>
           <p class="patch-consensus-line">{{ evidence_summary }}</p>
-          <span class="patch-consensus-meta">{{ item.update_report_count | default: 0 }} user report{% unless item.update_report_count == 1 %}s{% endunless %} found</span>
+          <span class="patch-consensus-meta">{{ item.update_report_count | default: 0 }} confirmed community report{% unless item.update_report_count == 1 %}s{% endunless %}</span>
         </div>
         {% endif %}
         {% endif %}
@@ -357,7 +357,7 @@ layout: aux-base
               <span class="patch-status patch-status--moderate patch-status--official-issue" title="Official Microsoft Release Health status — vendor-published, not user reports">⚠ {% if official_active > 0 %}{{ official_active }} active official known issue{% unless official_active == 1 %}s{% endunless %}{% endif %}{% if official_active > 0 and official_safeguard > 0 %} · {% endif %}{% if official_safeguard > 0 %}{{ official_safeguard }} safeguard hold{% unless official_safeguard == 1 %}s{% endunless %}{% endif %}</span>
               {% endif %}
               <span class="patch-report-count">{{ feed_evidence_label }}</span>
-              <span class="patch-report-count">{{ item.update_report_count | default: 0 }} user report{% unless item.update_report_count == 1 %}s{% endunless %}</span>
+              <span class="patch-report-count">{{ item.update_report_count | default: 0 }} confirmed community report{% unless item.update_report_count == 1 %}s{% endunless %}</span>
             </span>
           </div>
           {% if item.update_feed_title != blank %}
@@ -373,12 +373,12 @@ layout: aux-base
           <p class="patch-card-summary">{{ item.description }}</p>
           {% assign consensus_summary = item.update_consensus_summary | default: item.community_summary %}
           {% if consensus_summary %}
-          {% assign evidence_summary = consensus_summary | replace: 'This is a surfaced user-report sample, not a live telemetry feed.', '' | replace: 'This is a surfaced user-report sample, not a live telemetry feed', '' | replace: 'Confirmed patch-specific consensus collection is deferred until the consensus refresh pipeline is active.', 'No patch-specific user reports found yet.' | replace: 'Confirmed patch-specific consensus is deferred until the consensus refresh pipeline is active.', 'No patch-specific user reports found yet.' | strip %}
+          {% assign evidence_summary = consensus_summary | replace: 'This is a surfaced user-report sample, not a live telemetry feed.', '' | replace: 'This is a surfaced user-report sample, not a live telemetry feed', '' | replace: 'Confirmed patch-specific consensus collection is deferred until the consensus refresh pipeline is active.', 'Community consensus not established.' | replace: 'Confirmed patch-specific consensus is deferred until the consensus refresh pipeline is active.', 'Community consensus not established.' | strip %}
           {% if evidence_summary != blank %}
           <div class="patch-consensus-block">
             <span class="patch-consensus-label">Evidence summary</span>
             <p class="patch-consensus-line">{{ evidence_summary }}</p>
-            <span class="patch-consensus-meta">{{ item.update_report_count | default: 0 }} user report{% unless item.update_report_count == 1 %}s{% endunless %} found</span>
+            <span class="patch-consensus-meta">{{ item.update_report_count | default: 0 }} confirmed community report{% unless item.update_report_count == 1 %}s{% endunless %}</span>
           </div>
           {% endif %}
           {% endif %}

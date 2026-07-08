@@ -316,7 +316,7 @@ layout: aux-base
       <div class="update-verdict-card update-verdict-card--clean update-evidence-card" aria-label="User report evidence summary">
         <div class="consensus-compact">
           <span class="update-evidence-summary-line"><strong>Evidence summary:</strong> <em class="consensus-word consensus-word--{{ evidence_metric_class }}">{{ evidence_metric_label }}</em></span>
-          <span class="update-evidence-report-count">{{ report_count }} user report{% unless report_count == 1 %}s{% endunless %} found</span>
+          <span class="update-evidence-report-count">{% if report_count > 0 %}{{ report_count }} user report{% unless report_count == 1 %}s{% endunless %} found{% else %}0 confirmed patch-specific community reports{% endif %}</span>
         </div>
         <div class="consensus-position-graph consensus-position-graph--hero consensus-position-graph--{{ evidence_metric_class }}" style="--consensus-pos: {{ consensus_score_percent }}%;">
           {% if evidence_metric_class == 'insufficient-data' %}
@@ -325,7 +325,7 @@ layout: aux-base
             <span class="consensus-scale-marker"></span>
           </div>
           <div class="consensus-scale-labels consensus-scale-labels--neutral" aria-hidden="true">
-            <span>Not enough reports</span>
+            <span>Community consensus not established</span>
           </div>
           {% else %}
           <div class="consensus-scale" aria-hidden="true">
