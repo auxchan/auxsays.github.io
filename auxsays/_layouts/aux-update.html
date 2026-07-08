@@ -372,16 +372,10 @@ layout: aux-base
       {% assign official_active = page.official_active_issue_count | default: 0 | plus: 0 %}
       {% assign official_resolved = page.official_resolved_issue_count | default: 0 | plus: 0 %}
       {% assign official_safeguard = page.official_safeguard_hold_count | default: 0 | plus: 0 %}
-      {% if official_active > 0 or official_resolved > 0 or official_safeguard > 0 %}
-      <div class="update-verdict-card update-verdict-card--clean update-official-status" aria-label="Official Microsoft Release Health status">
-        <div class="consensus-compact">
-          <span class="update-evidence-summary-line"><strong>Official Microsoft Release Health:</strong>
-            {% if official_active > 0 %}<em class="patch-status patch-status--moderate">{{ official_active }} active known issue{% unless official_active == 1 %}s{% endunless %}</em>{% else %}<em class="patch-status patch-status--insufficient">No active known issues</em>{% endif %}{% if official_safeguard > 0 %} <em class="patch-status patch-status--negative">{{ official_safeguard }} safeguard hold{% unless official_safeguard == 1 %}s{% endunless %}</em>{% endif %}
-          </span>
-          <span class="update-evidence-report-count">{% if official_resolved > 0 %}{{ official_resolved }} resolved · {% endif %}Vendor-published operational status, not user reports.</span>
-        </div>
-      </div>
-      {% endif %}
+      {% assign vki_has_data = false %}
+      {% if official_active > 0 or official_resolved > 0 or official_safeguard > 0 or page.official_known_issues_present %}{% assign vki_has_data = true %}{% endif %}
+      {% assign vki_source = page.update_source_url | default: page.official_patch_notes_source_url | default: page.primary_official_source %}
+      {% include aux-vendor-known-issues.html active=official_active resolved=official_resolved safeguard=official_safeguard has_data=vki_has_data source_url=vki_source scope='patch' %}
     </div>
   </section>
 
@@ -394,8 +388,8 @@ layout: aux-base
   </nav>
 
   <section class="update-content-grid">
-    <article id="official-patch-notes" class="panel update-info-card update-official-details update-order-official-details">
-      <h2>Official Patch Notes</h2>
+    <details id="official-patch-notes" class="panel update-info-card update-official-details update-order-official-details">
+      <summary>Official Patch Notes — {% if official_body_renderable %}vendor release notes captured from the official source{% else %}not captured{% endif %}</summary>
       {% if summary_text != blank %}<p>{{ summary_text }}</p>{% endif %}
       {% if page.official_additions or page.official_fixes %}
       <div class="update-change-grid">
@@ -426,7 +420,7 @@ layout: aux-base
       {% else %}
       <p>Official patch-note body has not been captured yet.</p>
       {% endif %}
-    </article>
+    </details>
 
     {% if technical_details_renderable %}
     <details id="technical-details" class="panel update-info-card update-technical-details update-order-technical">

@@ -3611,6 +3611,27 @@ button, input, select, textarea { font: inherit; }
   text-transform: uppercase;
 }
 
+/* Reusable collapsible context cards (Vendor Known Issues, Tracking Rules).
+   Sentence-case summaries (status text stays readable); reuses the ▸ marker pattern. */
+.aux-collapsible-card summary {
+  list-style: none;
+  cursor: pointer;
+  color: var(--text-1);
+  font-weight: 800;
+}
+.aux-collapsible-card summary::-webkit-details-marker { display: none; }
+.aux-collapsible-card summary::before {
+  content: "\25B8";
+  display: inline-block;
+  margin-right: .55rem;
+  color: var(--cyan-1);
+  transition: transform .22s ease;
+}
+.aux-collapsible-card[open] summary::before { transform: rotate(90deg); }
+.update-vendor-issues[open] { border-left: 2px solid rgba(199,162,85,.5); }
+.update-vendor-issues-body { margin-top: .75rem; color: var(--text-1); line-height: 1.6; }
+.update-vendor-issues-counts { display: flex; gap: .4rem; flex-wrap: wrap; margin: 0 0 .5rem; }
+
 @media (max-width: 860px) {
   .patch-source-card,
   .patch-card,
