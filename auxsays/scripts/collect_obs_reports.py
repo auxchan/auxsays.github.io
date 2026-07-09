@@ -34,9 +34,59 @@ PRODUCT_ID = "obs-studio"
 SOURCE_NAME = "obsproject/obs-studio"
 VERSION_RE = re.compile(r"^\d+(?:\.\d+){1,3}(?:[-+][0-9A-Za-z][0-9A-Za-z.-]*)?$")
 
+# Deterministic "concrete user-facing issue" vocabulary. A candidate that names the
+# exact version but contains none of these problem indicators is treated as a generic
+# complaint / question / announcement and is NOT counted. Kept as a visible, testable
+# keyword list (no AI, no external services); matched against title + scrubbed body only
+# (labels are excluded because they can be auto-applied).
+CONCRETE_ISSUE_TERMS = (
+    "crash", "freeze", "frozen", "freezing", "hang", "hangs", "hanging",
+    "black screen", "green screen", "blue screen", "bsod",
+    "no audio", "no sound", "no video", "no display", "no signal", "no output",
+    "won't start", "wont start", "doesn't start", "does not start", "not starting",
+    "won't launch", "wont launch", "fails to launch", "won't open", "can't open", "cannot open",
+    "won't install", "can't install", "cannot install", "failed to install", "install fail", "installation fail",
+    "won't update", "can't update", "failed to update", "update fail",
+    "fails", "failed", "failing", "failure", "fails to",
+    "not working", "doesn't work", "does not work", "no longer works", "stopped working", "quit working",
+    "broken", "broke", "breaks", "breaking",
+    "regression", "regressed",
+    "error", "errors", "glitch", "artifact", "artifacts",
+    "stutter", "stuttering", "dropped frame", "dropped frames", "drop frames", "frame drop", "skipped frames",
+    "corrupt", "corrupted", "corruption", "data loss",
+    "lag", "laggy", "slowdown", "slow to", "very slow", "extremely slow",
+    "memory leak", "high cpu", "cpu usage", "100% cpu", "gpu usage", "overheat",
+    "incompatible", "not compatible", "compatibility issue",
+    "vulnerability", "exploit", "security issue", "security flaw",
+)
+
+# Word-anchored match: a leading word boundary prevents internal-substring false
+# positives (e.g. "changelog" must not match "hang", "terror" must not match "error")
+# while allowing plural/tense suffixes (crash -> crashes/crashed/crashing).
+CONCRETE_ISSUE_RE = re.compile(r"\b(?:" + "|".join(re.escape(t) for t in CONCRETE_ISSUE_TERMS) + r")", re.I)
+
 
 def utc_now() -> str:
     return datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z")
+
+
+def parse_date(value: Any) -> "datetime.date | None":  # type: ignore[name-defined]
+    """Parse an ISO date/datetime string (e.g. '2026-04-02' or '2026-04-02T00:00:00Z')
+    into a date. Returns None when the value is missing or not a recognizable date —
+    the caller decides how to treat an unknown date (never invents one)."""
+    text = str(value or "").strip()
+    match = re.match(r"(\d{4})-(\d{2})-(\d{2})", text)
+    if not match:
+        return None
+    try:
+        return datetime(int(match.group(1)), int(match.group(2)), int(match.group(3)), tzinfo=timezone.utc).date()
+    except ValueError:
+        return None
+
+
+def issue_source_date(issue: dict[str, Any]):
+    """The report's own date = the GitHub issue creation date (created_at)."""
+    return parse_date(issue.get("created_at"))
 
 
 def slug(value: str) -> str:
@@ -160,6 +210,49 @@ def likely_developer_only(issue: dict[str, Any]) -> bool:
         "mouse cursor",
     )
     return any(term in combined for term in developer_terms) and not any(term in combined for term in end_user_terms)
+
+
+def describes_concrete_issue(issue: dict[str, Any]) -> bool:
+    """True only when the report names a concrete user-facing problem (crash, install/
+    update failure, capture/encoder/audio/hotkey/plugin regression, performance
+    regression, workflow breakage, etc.). Generic questions ("anyone having issues?",
+    "is this safe?"), generic dislike ("this version sucks"), release announcements, and
+    changelog/official-notes text carry no problem indicator and return False."""
+    title, body, labels, scrubbed_body = issue_text(issue)
+    return bool(CONCRETE_ISSUE_RE.search(f"{title} {scrubbed_body}"))
+
+
+def release_date_gate(issue: dict[str, Any], release_date) -> str | None:
+    """Return a rejection reason when a report must be excluded by the release-date
+    gate, else None. A report counts only if its source date is on or after the patch
+    release date. When the release date is unknown, the gate is inactive (no date is
+    invented). When the release date is known but the report has no parseable source
+    date, the report is rejected conservatively (the gate cannot be verified)."""
+    if release_date is None:
+        return None
+    source_date = issue_source_date(issue)
+    if source_date is None:
+        return "missing_source_date"
+    if source_date < release_date:
+        return "before_release_date"
+    return None
+
+
+def evaluate_issue(issue: dict[str, Any], version: str, release_date=None) -> tuple[str | None, str | None]:
+    """Deterministic acceptance decision for one candidate issue.
+    Returns (match_basis, None) when accepted, or (None, rejection_reason) when rejected.
+    Order: exact-version -> developer-only -> generic/no-concrete-issue -> release-date."""
+    basis = match_basis(issue, version)
+    if not basis:
+        return None, "missing_exact_version"
+    if likely_developer_only(issue):
+        return None, "developer_or_build_only"
+    if not describes_concrete_issue(issue):
+        return None, "generic_or_no_concrete_issue"
+    date_reason = release_date_gate(issue, release_date)
+    if date_reason:
+        return None, date_reason
+    return basis, None
 
 
 def classify(issue: dict[str, Any]) -> tuple[str, str, str, str, str]:
@@ -421,21 +514,26 @@ def active_obs_records() -> list[tuple[str, Path]]:
     return records
 
 
-def collect(version: str, since: str | None, max_pages: int) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+def collect(version: str, since: str | None, max_pages: int, release_date=None) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     candidates = [fetch_issue(item) for item in search_issues(version, since, max_pages)]
     accepted: list[dict[str, Any]] = []
     rejected: list[dict[str, Any]] = []
     captured_at = utc_now()
     for issue in candidates:
-        basis = match_basis(issue, version)
-        if not basis:
-            rejected.append({"source_url": issue.get("html_url"), "reason": "missing_exact_version"})
-            continue
-        if likely_developer_only(issue):
-            rejected.append({"source_url": issue.get("html_url"), "reason": "developer_or_build_only"})
+        basis, reason = evaluate_issue(issue, version, release_date)
+        if reason:
+            rejected.append({"source_url": issue.get("html_url"), "reason": reason})
             continue
         accepted.append(evidence_row(issue, version, basis, captured_at))
     return accepted, rejected
+
+
+def release_date_for_record(record_path: Path | None):
+    """Patch release date from the generated record's update_published_at, or None."""
+    if not record_path:
+        return None
+    data, _body = front_matter_parts(record_path)
+    return parse_date(data.get("update_published_at"))
 
 
 def since_from_days(days: int | None) -> str | None:
@@ -467,8 +565,9 @@ def collect_one(
     max_pages: int,
     write: bool,
 ) -> tuple[int, dict[str, Any]]:
+    release_date = release_date_for_record(record_path)
     try:
-        accepted, rejected = collect(version, since, max_pages)
+        accepted, rejected = collect(version, since, max_pages, release_date)
     except Exception as exc:
         return 1, {
             "version": version,
