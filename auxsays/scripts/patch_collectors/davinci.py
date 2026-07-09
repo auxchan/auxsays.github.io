@@ -116,6 +116,7 @@ class SourceAccessError(RuntimeError):
         blocked_signature: str = "",
         endpoint_family: str = "",
         headers_strategy: str = "",
+        retry_after: float | None = None,
     ) -> None:
         super().__init__(reason)
         self.reason = reason
@@ -124,6 +125,7 @@ class SourceAccessError(RuntimeError):
         self.blocked_signature = blocked_signature
         self.endpoint_family = endpoint_family
         self.headers_strategy = headers_strategy
+        self.retry_after = retry_after
 
 # Seed/fallback coverage only: these URLs are calibration examples for the
 # deterministic gates, not the primary long-term DaVinci evidence mechanism.
@@ -280,6 +282,15 @@ def emit_reddit_fetch_diagnostic(
     print(f"[auxsays:diagnostic] {json.dumps(payload, sort_keys=True, ensure_ascii=True)}")
 
 
+# Indirection so tests can stub every sleep on the Reddit path (pacing + backoff)
+# without waiting on the wall clock.
+reddit_sleep = time.sleep
+
+# Transient HTTP statuses eligible for bounded retry/backoff. Deterministic 4xx blocks
+# (401/403/404 etc.) are intentionally excluded — they are not retried.
+REDDIT_TRANSIENT_STATUSES = frozenset({408, 429, 500, 502, 503, 504})
+
+
 def reddit_request_delay() -> float:
     try:
         return max(0.0, float(os.getenv("AUXSAYS_REDDIT_REQUEST_DELAY_SECONDS", "0.35")))
@@ -287,10 +298,86 @@ def reddit_request_delay() -> float:
         return 0.35
 
 
+def reddit_max_retries() -> int:
+    try:
+        return max(0, int(os.getenv("AUXSAYS_REDDIT_MAX_RETRIES", "2")))
+    except ValueError:
+        return 2
+
+
+def reddit_backoff_base_seconds() -> float:
+    try:
+        return max(0.0, float(os.getenv("AUXSAYS_REDDIT_BACKOFF_SECONDS", "1.5")))
+    except ValueError:
+        return 1.5
+
+
+def reddit_backoff_cap_seconds() -> float:
+    try:
+        return max(0.0, float(os.getenv("AUXSAYS_REDDIT_BACKOFF_CAP_SECONDS", "20")))
+    except ValueError:
+        return 20.0
+
+
 def pace_reddit_request() -> None:
     delay = reddit_request_delay()
     if delay > 0:
-        time.sleep(delay)
+        reddit_sleep(delay)
+
+
+def parse_retry_after(headers: Any) -> float | None:
+    """Honor a Reddit Retry-After header (seconds form only); the HTTP-date form falls
+    back to exponential backoff. Returns None when absent/unparseable."""
+    if not headers:
+        return None
+    try:
+        value = headers.get("Retry-After")
+    except AttributeError:
+        return None
+    if value in (None, ""):
+        return None
+    try:
+        return max(0.0, float(str(value).strip()))
+    except (TypeError, ValueError):
+        return None
+
+
+def is_transient_reddit_error(exc: "SourceAccessError") -> bool:
+    """Only transient rate-limit / 5xx / network failures are retried; deterministic
+    blocks (403/challenge/captcha, other 4xx) are not."""
+    if exc.status in REDDIT_TRANSIENT_STATUSES:
+        return True
+    signature = str(exc.blocked_signature or "").lower()
+    reason = str(exc.reason or "").lower()
+    if "rate_limited" in signature or "http_429" in reason or "too many requests" in reason:
+        return True
+    if reason.startswith("network_"):  # URLError/TimeoutError/OSError — treat as transient
+        return True
+    return False
+
+
+def reddit_backoff_delay(exc: "SourceAccessError", attempt: int) -> float:
+    """Deterministic backoff: honor Retry-After (capped), else exponential base*2^attempt (capped)."""
+    cap = reddit_backoff_cap_seconds()
+    if exc.retry_after is not None and exc.retry_after >= 0:
+        return min(cap, exc.retry_after)
+    return min(cap, reddit_backoff_base_seconds() * (2 ** attempt))
+
+
+def request_with_backoff(fetch):
+    """Run a single Reddit request, retrying transient 429/5xx/network failures with a
+    bounded, deterministic backoff (honoring Retry-After up to a cap). Hard blocks are
+    raised immediately so the caller can fail over to the next endpoint / record blocked."""
+    max_retries = reddit_max_retries()
+    attempt = 0
+    while True:
+        try:
+            return fetch()
+        except SourceAccessError as exc:
+            if attempt >= max_retries or not is_transient_reddit_error(exc):
+                raise
+            reddit_sleep(reddit_backoff_delay(exc, attempt))
+            attempt += 1
 
 
 def with_raw_json(url: str) -> str:
@@ -356,6 +443,7 @@ def request_json(url: str, *, endpoint_family: str = "reddit_json") -> Any:
             blocked_signature=signature,
             endpoint_family=endpoint_family,
             headers_strategy=headers_strategy,
+            retry_after=parse_retry_after(exc.headers if exc.headers else None),
         ) from exc
     except (URLError, TimeoutError, OSError) as exc:
         emit_reddit_fetch_diagnostic(
@@ -391,7 +479,7 @@ def request_reddit_json_with_fallback(attempts: list[tuple[str, str]]) -> Any:
     failures: list[dict[str, Any]] = []
     for endpoint_family, url in attempts:
         try:
-            payload = request_json(url, endpoint_family=endpoint_family)
+            payload = request_with_backoff(lambda: request_json(url, endpoint_family=endpoint_family))
             pace_reddit_request()
             return payload
         except SourceAccessError as exc:
@@ -452,6 +540,7 @@ def request_reddit_feed(url: str, *, endpoint_family: str) -> list[dict[str, Any
             blocked_signature=signature,
             endpoint_family=endpoint_family,
             headers_strategy=headers_strategy,
+            retry_after=parse_retry_after(exc.headers if exc.headers else None),
         ) from exc
     except ET.ParseError as exc:
         emit_reddit_fetch_diagnostic(
@@ -493,7 +582,7 @@ def request_reddit_feed_with_fallback(attempts: list[tuple[str, str]]) -> list[d
     failures: list[dict[str, Any]] = []
     for endpoint_family, url in attempts:
         try:
-            candidates = request_reddit_feed(url, endpoint_family=endpoint_family)
+            candidates = request_with_backoff(lambda: request_reddit_feed(url, endpoint_family=endpoint_family))
             pace_reddit_request()
             return candidates
         except SourceAccessError as exc:
@@ -1433,7 +1522,7 @@ def method_status(
         return "no_results"
     if errors:
         reasons = " ".join(str(error.get("reason") or "") for error in errors).lower()
-        if any(token in reasons for token in ("blocked", "challenge", "waf", "captcha", "access_denied")):
+        if any(token in reasons for token in ("blocked", "challenge", "waf", "captcha", "access_denied", "rate_limited", "http_429", "429", "too many requests")):
             return "blocked"
         if "unusable" in reasons or "source_returned_non_forum_content" in reasons or "source_unusable_response" in reasons:
             return "low_confidence"
