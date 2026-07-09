@@ -111,6 +111,31 @@ def run() -> int:
     vocab_ok = {writeback_strength(n) for n in range(0, 200)} <= ALLOWED_TIERS
     check("only sanctioned tier labels are produced", vocab_ok, str({writeback_strength(n) for n in range(0, 200)}))
 
+    # --- product-history layout mirrors the same thresholds -----------------
+    # No Liquid engine is available offline, so statically assert that the
+    # product-history template DERIVES the displayed strength from the row's
+    # report count with this exact table -- rather than rendering the stored
+    # (and possibly stale) update_consensus_confidence field. This guards against
+    # a regression where a 33+ report record still shows Medium.
+    layout = (_REPO / "auxsays" / "_layouts" / "aux-patch-product.html").read_text(encoding="utf-8")
+    check("layout column header reads 'Community evidence strength'",
+          "<span>Community evidence strength</span>" in layout)
+    check("layout derives strength from the report-count source (item.update_report_count)",
+          "{% assign evidence_strength_count = item.update_report_count %}" in layout)
+    check("layout renders the derived strength, not the stale stored field",
+          "<span>{{ evidence_strength }}</span>" in layout
+          and '{{ item.update_consensus_confidence | default: "Low" }}' not in layout)
+    check("layout falls back to the stored field only when the count is missing",
+          'evidence_strength = item.update_consensus_confidence | default: "Insufficient"' in layout)
+    for clause, tier in [
+        ('>= 33 %}{% assign evidence_strength = "High" %}', "High"),
+        ('>= 25 %}{% assign evidence_strength = "Medium" %}', "Medium"),
+        ('>= 8 %}{% assign evidence_strength = "Low-Medium" %}', "Low-Medium"),
+        ('> 0 %}{% assign evidence_strength = "Low" %}', "Low"),
+        ('{% else %}{% assign evidence_strength = "Insufficient" %}{% endif %}', "Insufficient"),
+    ]:
+        check(f"layout threshold clause present: count {tier}", clause in layout, clause)
+
     print()
     print("=" * 60)
     total = _PASS + _FAIL
