@@ -73,6 +73,11 @@ def consensus_label(counts: Counter[str]) -> str:
 
 
 def confidence(total: int) -> str:
+    # Community evidence strength of the confirmed patch-specific report sample.
+    # Mirrors apply_consensus_to_records._confidence; not a patch-safety claim.
+    # Scale: 0 Insufficient | 1-7 Low | 8-24 Low-Medium | 25-32 Medium | 33+ High.
+    if total >= 33:
+        return "High"
     if total >= 25:
         return "Medium"
     if total >= 8:

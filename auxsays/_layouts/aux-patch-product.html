@@ -61,10 +61,10 @@ layout: aux-base
     <div class="section-head section-head--archive">
       <div class="eyebrow">Documented patch history</div>
       <h2>{{ product.product_name }} patch history</h2>
-      <p>Tracked patches appear here with official notes, summary, consensus, reported issues, report count, and confidence rating.</p>
+      <p>Tracked patches appear here with official notes, summary, consensus, reported issues, report count, and community evidence strength.</p>
     </div>
     <div class="patch-version-table">
-      <div class="patch-version-row patch-version-row--head patch-version-row--no-score"><span>Date</span><span>Patch</span><span>Consensus</span><span>Confirmed community reports</span><span>Confidence</span><span>Record</span></div>
+      <div class="patch-version-row patch-version-row--head patch-version-row--no-score"><span>Date</span><span>Patch</span><span>Consensus</span><span>Confirmed community reports</span><span>Community evidence strength</span><span>Record</span></div>
       {% for item in product_updates %}
       {% assign reaction = item.update_consensus_label | default: item.community_reaction | default: 'Insufficient' %}
       <a class="patch-version-row" href="{{ item.url | relative_url }}">
