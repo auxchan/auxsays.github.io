@@ -5283,3 +5283,28 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-0-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ush17a-unable-to-drag-and-move-playhead-in-edit
+  product_id: blackmagic-davinci
+  update_version: 21.0.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ush17a/unable_to_drag_and_move_playhead_in_edit_tab/
+  parent_title: Unable to drag and move play-head in Edit tab
+  report_title: Unable to drag and move play-head in Edit tab
+  report_text_excerpt: Unable to drag and move play-head in Edit tab Title says it. Honestly no idea what causes it, but randomly the play-head will no longer be interactable, not allowing me to move it aside from playing the video or in the keyframes window. The only solution is to restart the...
+  captured_at: '2026-07-10T17:18:55Z'
+  source_date: '2026-07-10'
+  target_release_date: '2026-06-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
