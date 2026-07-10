@@ -192,6 +192,12 @@ def _consensus_label(counts: Counter) -> str:
 
 
 def _confidence(total: int) -> str:
+    # Community evidence strength: how strong the confirmed patch-specific report
+    # sample is for supporting the displayed consensus label. This is NOT a claim
+    # that the patch is safe -- a "High" strength sample can carry a Negative verdict.
+    # Scale: 0 Insufficient | 1-7 Low | 8-24 Low-Medium | 25-32 Medium | 33+ High.
+    if total >= 33:
+        return "High"
     if total >= 25:
         return "Medium"
     if total >= 8:
