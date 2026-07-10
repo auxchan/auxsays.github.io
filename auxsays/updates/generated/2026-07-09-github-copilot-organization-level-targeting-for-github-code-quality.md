@@ -17,8 +17,8 @@ update_version: Organization-level targeting for GitHub Code Quality
 update_logo_text: GIT
 update_published_at: '2026-07-09T15:54:01Z'
 update_last_checked: '2026-07-09T20:08:05Z'
-source_last_checked: '2026-07-10T04:18:32Z'
-official_body_last_checked: '2026-07-10T04:18:32Z'
+source_last_checked: '2026-07-10T09:54:49Z'
+official_body_last_checked: '2026-07-10T09:54:49Z'
 record_last_updated: '2026-07-09T20:08:05Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -83,6 +83,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-07-10T04:18:32Z'
+  url: https://github.blog/changelog/2026-07-09-organization-level-targeting-for-github-code-quality
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-07-10T09:54:49Z'
   url: https://github.blog/changelog/2026-07-09-organization-level-targeting-for-github-code-quality
   status: captured-from-rss-feed
   body_captured: true
