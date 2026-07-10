@@ -17,8 +17,8 @@ update_version: GPT-5.6 is now in Figma Make
 update_logo_text: FIG
 update_published_at: '2026-07-09T00:00:00.000Z'
 update_last_checked: '2026-07-09T20:07:33Z'
-source_last_checked: '2026-07-09T20:07:33Z'
-official_body_last_checked: '2026-07-09T20:07:33Z'
+source_last_checked: '2026-07-10T04:18:02Z'
+official_body_last_checked: '2026-07-10T04:18:02Z'
 record_last_updated: '2026-07-09T20:07:33Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -71,6 +71,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-07-09T20:07:33Z'
+  url: https://www.figma.com/release-notes/?title=gpt-figma-make
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-07-10T04:18:02Z'
   url: https://www.figma.com/release-notes/?title=gpt-figma-make
   status: captured-from-rss-feed
   body_captured: true
