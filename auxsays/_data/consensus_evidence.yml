@@ -5327,3 +5327,28 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ut9xti-edit-page-timeline-zoom-in-and-out-lagg
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ut9xti/edit_page_timeline_zoom_in_and_out_lagg/
+  parent_title: 'Edit Page : Timeline zoom in and out lagg'
+  report_title: 'Edit Page : Timeline zoom in and out lagg'
+  report_text_excerpt: 'Edit Page : Timeline zoom in and out lagg I''ve been working on indie film lately as sound designer. I use Davinci Resolve 21 and for the hardware I use Macbook M1Pro 16gb ram. whenever I''m zooming in timeline edit page always lagg and slow... anyone know how to solve the...'
+  captured_at: '2026-07-11T18:11:22Z'
+  source_date: '2026-07-11'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
