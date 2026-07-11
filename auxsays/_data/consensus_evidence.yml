@@ -5258,7 +5258,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uqvfmo-davinci-isnt-playing-my-video-anymore
   product_id: blackmagic-davinci
   update_version: '21'
@@ -5283,7 +5282,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-0-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ush17a-unable-to-drag-and-move-playhead-in-edit
   product_id: blackmagic-davinci
   update_version: 21.0.1
@@ -5305,6 +5303,27 @@ evidence:
   issue_theme: unspecified issue
   workflow_area: general DaVinci Resolve workflow
   platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13641
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13641
+  parent_title: '"Pause recording" and "Resume recording" keyword shortcut are not working'
+  report_title: '"Pause recording" and "Resume recording" keyword shortcut are not working'
+  report_text_excerpt: 'tem Info Ubuntu 24.04 ### Other OS Linux Mint Cinammon 22.3 x86_64 ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL Archivo > Ajustes > Atajos ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Pause recording functio'
+  captured_at: '2026-07-11T14:03:23Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: linux
   severity: medium
   sentiment: moderate
   source_weight: 1
