@@ -17,8 +17,8 @@ update_version: CodeQL 2.26.0 adds Kotlin 2.4.0 support and AI prompt injection 
 update_logo_text: GIT
 update_published_at: '2026-07-10T20:40:56Z'
 update_last_checked: '2026-07-11T08:16:22Z'
-source_last_checked: '2026-07-11T08:16:22Z'
-official_body_last_checked: '2026-07-11T08:16:22Z'
+source_last_checked: '2026-07-12T08:33:01Z'
+official_body_last_checked: '2026-07-12T08:33:01Z'
 record_last_updated: '2026-07-11T08:16:22Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -95,6 +95,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-07-11T08:16:22Z'
+  url: https://github.blog/changelog/2026-07-10-codeql-2-26-0-adds-kotlin-2-4-0-support-and-ai-prompt-injection-detection
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-07-12T08:33:01Z'
   url: https://github.blog/changelog/2026-07-10-codeql-2-26-0-adds-kotlin-2-4-0-support-and-ai-prompt-injection-detection
   status: captured-from-rss-feed
   body_captured: true
