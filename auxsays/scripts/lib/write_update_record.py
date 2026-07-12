@@ -20,6 +20,18 @@ OFFICIAL_ISSUE_FIELDS = (
     "official_safeguard_hold_count",
 )
 
+# Structured Windows current-patch identity supplied by the release-health adapter.
+# Emitted/refreshed only when the adapter provides them, so non-Windows records never
+# carry these keys. Unlike frozen prose (official_summary/release_summary), these MUST
+# advance when the current KB/build changes so consensus counting always gates Windows
+# user reports against the record's live patch identity (never a stale KB/build).
+WINDOWS_IDENTITY_FIELDS = (
+    "target_feature_version",
+    "target_kb",
+    "target_os_build",
+    "target_release_date",
+)
+
 
 def _file_size_status(record: dict[str, Any]) -> str:
     if record.get("file_size"):
@@ -208,6 +220,10 @@ def build_front_matter(record: dict[str, Any]) -> dict[str, Any]:
     for field in OFFICIAL_ISSUE_FIELDS:
         if record.get(field) is not None:
             front[field] = record[field]
+    # Structured Windows current-patch identity (only present on Windows release-health records).
+    for field in WINDOWS_IDENTITY_FIELDS:
+        if record.get(field) is not None:
+            front[field] = record[field]
     return front
 
 
@@ -275,6 +291,15 @@ def refresh_existing_record(path: Path, record: dict[str, Any]) -> tuple[Path, s
     # update-on-change (not setdefault). Only fields the incoming record supplied are
     # touched; a transient status-page miss leaves the last-known counts intact.
     for field in OFFICIAL_ISSUE_FIELDS:
+        if field in record and record[field] is not None and existing.get(field) != record[field]:
+            existing[field] = record[field]
+            material_changed = True
+
+    # Windows current-patch identity must track the live KB/build: update on change so a
+    # build advance (KB-A/build-A -> KB-B/build-B) never leaves a stale target_* on the
+    # record. Consensus counting gates Windows user reports against these fields, so a
+    # stale value here would be exactly the rollover bug this sprint prevents.
+    for field in WINDOWS_IDENTITY_FIELDS:
         if field in record and record[field] is not None and existing.get(field) != record[field]:
             existing[field] = record[field]
             material_changed = True

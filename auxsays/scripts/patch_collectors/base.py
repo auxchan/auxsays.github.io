@@ -42,6 +42,11 @@ EVIDENCE_FIELDS = (
     "matched_version",
     "match_basis",
     "version_match_confidence",
+    "matched_kb",
+    "matched_os_build",
+    "matched_feature_version",
+    "evidence_valid_for_current_patch",
+    "stale_due_to_patch_rollover",
     "counted",
     "exclusion_reason",
     "issue_theme",
@@ -65,6 +70,11 @@ OPTIONAL_EVIDENCE_FIELDS = {
     "next_release_date",
     "source_date_pass",
     "version_match_confidence",
+    "matched_kb",
+    "matched_os_build",
+    "matched_feature_version",
+    "evidence_valid_for_current_patch",
+    "stale_due_to_patch_rollover",
     "capture_method",
     "source_date_text",
     "listing_card_title",
@@ -400,12 +410,14 @@ def normalize_evidence_row(row: dict[str, Any]) -> dict[str, Any]:
     normalized["source_weight"] = int(normalized.get("source_weight") or 1)
     normalized["counted"] = bool(normalized.get("counted"))
     normalized["patch_version_matched"] = bool(normalized.get("patch_version_matched"))
-    if normalized.get("source_date_pass") not in (True, False, None):
-        normalized["source_date_pass"] = bool(normalized.get("source_date_pass"))
+    for tri_field in ("source_date_pass", "evidence_valid_for_current_patch", "stale_due_to_patch_rollover"):
+        if tri_field in normalized and normalized.get(tri_field) not in (True, False, None):
+            normalized[tri_field] = bool(normalized.get(tri_field))
     for field in EVIDENCE_FIELDS:
         if field not in normalized:
             continue
-        if field in {"source_weight", "counted", "patch_version_matched", "source_date_pass"}:
+        if field in {"source_weight", "counted", "patch_version_matched", "source_date_pass",
+                     "evidence_valid_for_current_patch", "stale_due_to_patch_rollover"}:
             continue
         if normalized[field] is not None:
             normalized[field] = str(normalized[field])
@@ -495,6 +507,16 @@ def source_url_is_specific(url: str) -> bool:
         return path.endswith("viewtopic.php") and bool(query.get("t"))
     if "creativecow.net" in host:
         return bool(re.fullmatch(r"/forums/thread/[^/]+/?", path))
+    if "learn.microsoft.com" in host:
+        # Microsoft Q&A: a specific question thread, e.g. /en-us/answers/questions/2412345/<slug>.
+        return bool(re.search(r"/answers/questions/\d+", path))
+    if "techcommunity.microsoft.com" in host:
+        # Khoros/Aurora thread permalinks: /t5/.../m-p/<id>, /td-p/<id>, or a
+        # /<board>/<slug>/<numeric-message-id> path. Board/search roots are rejected.
+        if re.search(r"/(?:m-p|td-p)/\d+", path):
+            return True
+        segments = [seg for seg in path.strip("/").split("/") if seg]
+        return len(segments) >= 3 and bool(re.search(r"\d{4,}", segments[-1]))
     return not path.rstrip("/").endswith(("/search", "/forums", "/forum")) and path.strip("/") not in {"", "forums", "forum"}
 
 
@@ -537,6 +559,9 @@ def make_evidence_row(
     match_basis: str,
     counted: bool,
     exclusion_reason: str | None,
+    matched_kb: str = "",
+    matched_os_build: str = "",
+    matched_feature_version: str = "",
     issue_theme: str,
     workflow_area: str,
     platform: str,
@@ -561,6 +586,9 @@ def make_evidence_row(
         "patch_version_matched": patch_version_matched,
         "matched_version": matched_version,
         "match_basis": match_basis,
+        "matched_kb": matched_kb,
+        "matched_os_build": matched_os_build,
+        "matched_feature_version": matched_feature_version,
         "counted": counted,
         "exclusion_reason": exclusion_reason,
         "issue_theme": issue_theme,
@@ -592,3 +620,65 @@ def apply_acceptance_gates(row: dict[str, Any], *, report_text: str) -> dict[str
         gated["exclusion_reason"] = None
     gated["source_weight"] = 1
     return normalize_evidence_row(gated)
+
+
+# --- Windows patch-identity gate ---------------------------------------------
+# Windows 11 records are keyed by feature train (24H2/25H2/...), but a patch
+# decision is per cumulative update (KB / OS build). This fail-closed gate lets a
+# Windows report count ONLY for the record's CURRENT patch identity, so evidence for
+# an older KB/build stops counting the moment the record rolls over to a newer one.
+WINDOWS_PRODUCT_ID = "microsoft-windows-11"
+
+
+def windows_identity_gate(row: dict[str, Any], target: dict[str, Any] | None) -> tuple[bool, str | None]:
+    """Return (counts_ok, exclusion_reason) for a Windows evidence row.
+
+    `target` is the generated record's current-patch identity, i.e. its
+    ``target_os_build`` / ``target_kb`` / ``target_feature_version`` /
+    ``target_release_date`` front-matter fields (``update_version`` is accepted as a
+    fallback feature-train value). Matching rules (fail closed):
+
+    - **Primary** — exact OS build (``matched_os_build == target_os_build``). The build
+      is train-specific, so this is unambiguous.
+    - **Secondary** — exact KB *and* matching feature train
+      (``matched_kb == target_kb`` and ``matched_feature_version == target_feature``).
+      A KB can be shared across trains (e.g. 24H2 and 25H2 both ship KB5095093), so KB
+      alone is never sufficient.
+    - Source date must be on/after the current patch's release date when known.
+
+    Any missing identity (on the record or the row), a KB that matches the wrong train,
+    or an identity that no longer matches the record's current target (stale after a
+    KB/build rollover) is excluded — never counted.
+    """
+    target = target or {}
+    target_build = str(target.get("target_os_build") or "").strip()
+    target_kb = str(target.get("target_kb") or "").strip()
+    target_feature = str(target.get("target_feature_version") or target.get("update_version") or "").strip()
+    target_release_date = str(target.get("target_release_date") or "").strip()
+
+    matched_build = str(row.get("matched_os_build") or "").strip()
+    matched_kb = str(row.get("matched_kb") or "").strip()
+    matched_feature = str(row.get("matched_feature_version") or "").strip()
+
+    # Fail closed: the record must expose a current-patch identity to gate against.
+    if not target_build and not target_kb:
+        return False, "windows_record_missing_target_identity"
+    # Fail closed: the row must carry a proven KB/build identity ("latest update",
+    # date-only, and generic reports never populate these).
+    if not matched_build and not matched_kb:
+        return False, "missing_kb_or_build"
+
+    build_ok = bool(target_build and matched_build == target_build)
+    kb_ok = bool(
+        target_kb and matched_kb == target_kb
+        and target_feature and matched_feature == target_feature
+    )
+    if not (build_ok or kb_ok):
+        if matched_kb and matched_kb == target_kb and matched_feature and matched_feature != target_feature:
+            return False, "wrong_feature_train_for_kb"
+        return False, "stale_due_to_patch_rollover"
+
+    if target_release_date and source_date_passes(str(row.get("source_date") or ""), target_release_date) is False:
+        return False, "source_date_before_target_release_date"
+
+    return True, None
