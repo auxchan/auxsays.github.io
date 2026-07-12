@@ -5327,7 +5327,6 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
-
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ut9xti-edit-page-timeline-zoom-in-and-out-lagg
   product_id: blackmagic-davinci
   update_version: '21'
@@ -5349,6 +5348,27 @@ evidence:
   issue_theme: performance regression
   workflow_area: timeline / GPU performance
   platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13642
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13642
+  parent_title: The software crashes when video recording is complete.
+  report_title: The software crashes when video recording is complete.
+  report_text_excerpt: '### Operating System Info Other ### Other OS KDE Linux ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/lWncKhYi1Lu6l47l ### OBS Studio Crash Log URL _No response_ ### Expected Behavior No. #'
+  captured_at: '2026-07-12T04:11:30Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: linux
   severity: medium
   sentiment: negative
   source_weight: 1
