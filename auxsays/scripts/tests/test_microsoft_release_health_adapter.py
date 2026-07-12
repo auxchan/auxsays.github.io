@@ -250,6 +250,16 @@ def run() -> int:
     check("footnote-suffixed LTSC version '24H21' never parsed as a version", all(r.get("version") != "24H21" for r in records), str(versions))
     check("end-of-servicing table never reached (no old 21H2 record)", all(r.get("version") != "21H2" for r in records), str(versions))
 
+    # --- structured current-patch identity (target_* fields) ----------------
+    if len(records) >= 3:
+        first_rec, second_rec, third_rec = records[0], records[1], records[2]
+        check("target_feature_version = feature train (26H1)", first_rec.get("target_feature_version") == "26H1", str(first_rec.get("target_feature_version")))
+        check("target_os_build = latest OS build (28000.2340)", first_rec.get("target_os_build") == "28000.2340", str(first_rec.get("target_os_build")))
+        check("target_kb = unambiguously-mapped KB (KB5095091)", first_rec.get("target_kb") == "KB5095091", str(first_rec.get("target_kb")))
+        check("target_release_date = ISO revision date (2026-06-23)", first_rec.get("target_release_date") == "2026-06-23T00:00:00Z", str(first_rec.get("target_release_date")))
+        check("target_os_build is train-specific (25H2 -> 26200.8737 / KB5095093)", second_rec.get("target_os_build") == "26200.8737" and second_rec.get("target_kb") == "KB5095093", str({k: second_rec.get(k) for k in ("target_os_build", "target_kb")}))
+        check("target_kb empty (never guessed) when build has no unambiguous KB (24H2)", third_rec.get("target_os_build") == "26100.9999" and (third_rec.get("target_kb") or "") == "", str({k: third_rec.get(k) for k in ("target_os_build", "target_kb")}))
+
     limited = mrh._records_from_windows_release_information(source(), URL, WIN11_HTML, 1)
     check("limit respected (limit=1 -> one record, 26H1)", len(limited) == 1 and limited[0].get("version") == "26H1", str([r.get("version") for r in limited]))
 

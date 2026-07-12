@@ -14,9 +14,12 @@ from typing import Any
 
 import yaml
 
+from patch_collectors.base import WINDOWS_PRODUCT_ID, load_front_matter_and_body, windows_identity_gate
+
 ROOT = Path(__file__).resolve().parents[1]
 EVIDENCE_PATH = ROOT / "_data" / "consensus_evidence.yml"
 OUT_PATH = ROOT / "_data" / "consensus_status.json"
+GENERATED_DIR = ROOT / "updates" / "generated"
 VALID_SENTIMENTS = {"positive", "moderate", "negative"}
 VALID_SEVERITIES = {"low", "medium", "high", "critical"}
 PRODUCT_LABELS = {
@@ -292,8 +295,32 @@ def latest_captured_at(items: list[dict[str, Any]]) -> str:
     return max(parsed).isoformat().replace("+00:00", "Z")
 
 
+def windows_target_index() -> dict[tuple[str, str], dict[str, str]]:
+    """Map (product_id, update_version) -> the record's current-patch identity for
+    Windows records, so the fail-closed identity gate can exclude stale/wrong-KB rows."""
+    index: dict[tuple[str, str], dict[str, str]] = {}
+    if not GENERATED_DIR.exists():
+        return index
+    for path in sorted(GENERATED_DIR.glob("*.md")):
+        data, _body = load_front_matter_and_body(path)
+        if data.get("update_entry") is not True or str(data.get("product_id") or "").strip() != WINDOWS_PRODUCT_ID:
+            continue
+        version = str(data.get("update_version") or "").strip()
+        if not version:
+            continue
+        index[(WINDOWS_PRODUCT_ID, version)] = {
+            "target_feature_version": str(data.get("target_feature_version") or "").strip(),
+            "target_kb": str(data.get("target_kb") or "").strip(),
+            "target_os_build": str(data.get("target_os_build") or "").strip(),
+            "target_release_date": str(data.get("target_release_date") or "").strip(),
+            "update_version": version,
+        }
+    return index
+
+
 def main() -> int:
     evidence = load_evidence()
+    windows_targets = windows_target_index()
     groups: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
     excluded: list[dict[str, Any]] = []
 
@@ -318,6 +345,14 @@ def main() -> int:
             item["exclusion_reason"] = item.get("exclusion_reason") or "not_confirmed_patch_specific"
             excluded.append(item)
             continue
+        # Windows-only fail-closed current-patch identity gate: exclude reports whose
+        # matched KB/OS build is not the record's current patch (stale after rollover).
+        if product_id == WINDOWS_PRODUCT_ID:
+            identity_ok, identity_reason = windows_identity_gate(item, windows_targets.get((product_id, version)))
+            if not identity_ok:
+                item["exclusion_reason"] = item.get("exclusion_reason") or identity_reason
+                excluded.append(item)
+                continue
         groups[(product_id, version)].append(item)
 
     aggregate = []

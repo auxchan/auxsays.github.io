@@ -190,6 +190,15 @@ def _record(
         "official_sources": official_sources,
         "capture_status": "captured-from-official-windows-release-health",
         "official_summary": official_summary,
+        # Structured current-patch identity (promoted from the parsed build/KB/date so
+        # consensus counting can gate user reports on the exact current KB/build rather
+        # than the shared feature-train version). OS build is the train-specific primary
+        # identity; KB is secondary (a KB can be shared across trains) and is left empty
+        # when it could not be resolved unambiguously (fail-closed downstream).
+        "target_feature_version": version,
+        "target_kb": kb,
+        "target_os_build": build,
+        "target_release_date": published,
     }
 
 

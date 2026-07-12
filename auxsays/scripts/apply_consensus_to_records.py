@@ -22,6 +22,8 @@ from typing import Any
 
 import yaml
 
+from patch_collectors.base import WINDOWS_PRODUCT_ID, windows_identity_gate
+
 ROOT = Path(__file__).resolve().parents[1]
 GENERATED_DIR = ROOT / "updates" / "generated"
 DEFAULT_EVIDENCE_PATH = ROOT / "_data" / "consensus_evidence.yml"
@@ -176,6 +178,12 @@ def _index_generated_records() -> dict[tuple[str, str], dict[str, Any]]:
                 "notification_message": str(data.get("notification_message") or "").strip(),
                 "update_channel_label": str(data.get("update_channel_label") or "").strip(),
                 "record_note": str(data.get("record_note") or "").strip(),
+                # Structured Windows current-patch identity (empty for non-Windows records);
+                # consensus counting gates Windows user reports against these.
+                "target_feature_version": str(data.get("target_feature_version") or "").strip(),
+                "target_kb": str(data.get("target_kb") or "").strip(),
+                "target_os_build": str(data.get("target_os_build") or "").strip(),
+                "target_release_date": str(data.get("target_release_date") or "").strip(),
             }
     return index
 
@@ -301,7 +309,7 @@ def _evaluate_gates(
     }
 
 
-def _filter_rows(rows: list[dict[str, Any]], *, product_id: str, version: str, is_candidate_mode: bool) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+def _filter_rows(rows: list[dict[str, Any]], *, product_id: str, version: str, is_candidate_mode: bool, record: dict[str, Any] | None = None) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
     included: list[dict[str, Any]] = []
     excluded: list[dict[str, Any]] = []
 
@@ -331,8 +339,20 @@ def _filter_rows(rows: list[dict[str, Any]], *, product_id: str, version: str, i
             if severity and severity not in VALID_SEVERITIES:
                 exc_reason = f"invalid_severity ({severity!r})"
 
+        # Windows-only fail-closed current-patch identity gate: a Windows report counts
+        # only for the record's current KB/OS build, so evidence for an older KB/build
+        # stops counting the moment the record rolls over. Never applied to other products.
+        if exc_reason is None and row_product == WINDOWS_PRODUCT_ID:
+            identity_ok, identity_reason = windows_identity_gate(row, record)
+            if not identity_ok:
+                exc_reason = identity_reason
+
         if exc_reason:
-            excluded.append({**row, "_exclusion_reason": exc_reason})
+            entry = {**row, "_exclusion_reason": exc_reason}
+            if row_product == WINDOWS_PRODUCT_ID:
+                entry["evidence_valid_for_current_patch"] = False
+                entry["stale_due_to_patch_rollover"] = exc_reason == "stale_due_to_patch_rollover"
+            excluded.append(entry)
         else:
             included.append(row)
 
@@ -374,8 +394,8 @@ def _result_for_group(pid: str, ver: str, rows: list[dict[str, Any]], *, is_cand
             "included_rows": [],
         }
 
-    included, excluded = _filter_rows(rows, product_id=pid, version=ver, is_candidate_mode=is_candidate_mode)
     record = records_index.get((pid, ver))
+    included, excluded = _filter_rows(rows, product_id=pid, version=ver, is_candidate_mode=is_candidate_mode, record=record)
     sentiments = Counter(str(r.get("sentiment") or "").lower() for r in included)
     themes = _issue_counter(pid, included)
     count = len(included)
