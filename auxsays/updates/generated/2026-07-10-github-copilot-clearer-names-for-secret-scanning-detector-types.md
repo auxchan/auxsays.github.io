@@ -17,8 +17,8 @@ update_version: Clearer names for secret scanning detector types
 update_logo_text: GIT
 update_published_at: '2026-07-10T20:06:10Z'
 update_last_checked: '2026-07-11T08:16:22Z'
-source_last_checked: '2026-07-12T08:33:01Z'
-official_body_last_checked: '2026-07-12T08:33:01Z'
+source_last_checked: '2026-07-13T09:49:20Z'
+official_body_last_checked: '2026-07-13T09:49:20Z'
 record_last_updated: '2026-07-11T08:16:22Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -88,6 +88,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-07-12T08:33:01Z'
+  url: https://github.blog/changelog/2026-07-10-clearer-names-for-secret-scanning-detector-types
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-07-13T09:49:20Z'
   url: https://github.blog/changelog/2026-07-10-clearer-names-for-secret-scanning-detector-types
   status: captured-from-rss-feed
   body_captured: true
