@@ -9,6 +9,18 @@ in PR #14, so evidence for an older KB/build can never count after a train rolls
 
 Deterministic + repo-owned: no AI, no manual candidate approval. Discovery is
 keyword-anchored (search by exact KB/build); acceptance is a fixed ordered rule set.
+
+Safety — NOT wired to the production runner yet. This collector is intentionally NOT
+registered in run_patch_evidence_collection.py, because the scheduled "Patch Evidence
+Collection" workflow runs that runner in --write mode with no product filter (all
+registered collectors). Leaving it unregistered means the default post-merge behavior
+cannot write Windows Learn Q&A evidence. Observe it first with the read-only dry-run
+below; a later PR can register it behind a default-off gate after dry-run observation.
+
+Read-only local dry-run (never writes evidence or records):
+    cd auxsays/scripts && python -m patch_collectors.microsoft_windows [--update-version 24H2] [--since-days 45]
+It builds a write=False CollectorContext, so append_evidence_rows / apply_consensus_writeback
+are never reached; it only fetches Learn Q&A and prints candidate/acceptance/health JSON.
 """
 from __future__ import annotations
 
@@ -453,3 +465,34 @@ def apply_consensus_writeback(update_version: str) -> bool:
         return False
     _apply_record_fields(record_path, fields)
     return True
+
+
+def _dry_run_main(argv: list[str] | None = None) -> int:
+    """Read-only local dry-run entry point. Hardcodes write=False, so this can NEVER write
+    evidence or generated records — it only fetches Learn Q&A and prints diagnostics."""
+    import argparse
+    import json
+    from datetime import datetime, timedelta, timezone
+
+    parser = argparse.ArgumentParser(description="Windows Learn Q&A collector — read-only dry-run (no writeback).")
+    parser.add_argument("--update-version", action="append", help="Exact Windows update_version filter (e.g. 24H2). Repeatable.")
+    parser.add_argument("--since-days", type=int, help="Optional source-date lower bound relative to today.")
+    parser.add_argument("--max-pages", type=int, default=1)
+    args = parser.parse_args(argv)
+
+    since = None
+    if args.since_days is not None:
+        since = (datetime.now(timezone.utc) - timedelta(days=max(0, args.since_days))).date().isoformat()
+    context = CollectorContext(
+        write=False,  # hardcoded: this entry point can never write
+        since=since,
+        max_pages=args.max_pages,
+        target_versions=set(args.update_version) if args.update_version else None,
+    )
+    results = WindowsLearnQnaCollector().collect(context)
+    print(json.dumps({"mode": "dry-run", "write": False, "products": results}, indent=2, ensure_ascii=False))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(_dry_run_main())

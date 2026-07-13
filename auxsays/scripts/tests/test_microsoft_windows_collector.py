@@ -181,6 +181,43 @@ def run() -> int:
     obs_gate_ok, _ = windows_identity_gate({"matched_os_build": "", "matched_kb": ""}, {"target_os_build": "", "target_kb": ""})
     check("non-Windows/empty identity is not silently counted (fail-closed)", obs_gate_ok is False)
 
+    # --- safety: NOT registered + no writeback by default -------------------
+    import run_patch_evidence_collection as runner
+    check("collector is NOT registered in the production runner (no default Windows writeback)", "microsoft-windows-11" not in runner.COLLECTORS, str(sorted(runner.COLLECTORS)))
+
+    with tempfile.TemporaryDirectory() as d:
+        rec_path = Path(d) / "2026-06-23-windows-11-24h2.md"
+        rec_path.write_text(wur._dump_record(wur.build_front_matter({
+            "company_id": "microsoft", "product_id": "microsoft-windows-11", "company": "Microsoft",
+            "software": "Windows 11", "version": "24H2", "published_at": "2026-06-23T00:00:00Z",
+            "source_url": "https://learn.microsoft.com/en-us/windows/release-health/",
+            "body": "Windows 11 24H2.", "official_summary": "Windows 11 24H2.",
+            "target_feature_version": "24H2", "target_kb": "KB5095093",
+            "target_os_build": "26100.8737", "target_release_date": "2026-06-23T00:00:00Z",
+        })), encoding="utf-8")
+        synthetic = PatchRecord("microsoft-windows-11", "24H2", rec_path, "2026-06-23T00:00:00Z", "current", "Windows 11")
+
+        orig_records = win.generated_records
+        orig_source = win.learn_qna.collect_learn_qna_candidates
+        orig_append = win.append_evidence_rows
+        calls = {"append": 0}
+        try:
+            win.generated_records = lambda pid, tv=None, **k: [synthetic]
+            win.learn_qna.collect_learn_qna_candidates = lambda **k: []  # no network
+            win.append_evidence_rows = lambda rows, *a, **k: (calls.__setitem__("append", calls["append"] + 1), (0, 0, []))[1]
+
+            calls["append"] = 0
+            win.WindowsLearnQnaCollector().collect(SimpleNamespace(write=False, since=None, max_pages=1, target_versions=None))
+            check("dry-run (write=False) NEVER calls append_evidence_rows", calls["append"] == 0, f"append calls={calls['append']}")
+
+            calls["append"] = 0
+            win.WindowsLearnQnaCollector().collect(SimpleNamespace(write=True, since=None, max_pages=1, target_versions=None))
+            check("write path is implemented (write=True reaches append_evidence_rows)", calls["append"] == 1, f"append calls={calls['append']}")
+        finally:
+            win.generated_records = orig_records
+            win.learn_qna.collect_learn_qna_candidates = orig_source
+            win.append_evidence_rows = orig_append
+
     print()
     print("=" * 60)
     total = _PASS + _FAIL
