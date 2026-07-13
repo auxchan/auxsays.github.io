@@ -181,6 +181,70 @@ def run() -> int:
     obs_gate_ok, _ = windows_identity_gate({"matched_os_build": "", "matched_kb": ""}, {"target_os_build": "", "target_kb": ""})
     check("non-Windows/empty identity is not silently counted (fail-closed)", obs_gate_ok is False)
 
+    # --- intent / update-attribution hardening ----------------------------
+    def cr(target, title, body, **kw):
+        r = row_reason(target, title, body, **kw)
+        return r.get("counted"), r.get("exclusion_reason")
+
+    # The 9 genuine observed accepts still count (each is update-attributed A/B/C).
+    genuine = [
+        ("exact-KB install failure", TARGET_25H2, "2026-06 Update (KB5095093) (26200.8737) will not install", "I have been restarting to install this update for over a week with no success."),
+        ("exact-build install failure", TARGET_25H2, "Update failed to install", "2026-06 Preview Update (KB5095093) (26200.8737) failed to install; error 0x80070306."),
+        ("Windows Update not functioning", TARGET_25H2, "WINDOWS UPDATE not functioning", "For 5 days Windows Update not functioning; 2026-06 Preview Update (KB5095093) (26200.8737) keeps failing."),
+        ("failed attempts to run update", TARGET_25H2, "2026-06 update issues", "The problem started when I attempted to run the 2026-06 Preview Update (KB5095093) (26200.8737). After a few failed attempts I contacted support."),
+        ("NAS/VPN broke after update", TARGET_25H2, "After update (KB5095093) I cannot connect to NAS over vpn", "After installing KB5095093 on Windows 11 25H2 my VPN connection broke; I now have no network access to the office NAS shares."),
+        ("File Explorer bug / rollback fixed", TARGET_25H2, "Build 26200.8737 (KB5095093): windows explorer has a blank-window bug", "Win+E repeatedly shows a blank window. Uninstalling KB5095093 fixed it."),
+        ("taskbar tray after update / uninstall fixed", TARGET_25H2, "Problem with KB5095093 update to Win 11 Home", "Windows 11 25H2 Home. The taskbar system tray stopped working after the update. Uninstalling KB5095093 fixed it."),
+        ("face recognition fails after upgrade", TARGET_25H2, "Windows Hello Face Recognition fails after cold boot on Windows 11 25H2 (Build 26200.8737)", "After upgrading to Windows 11 25H2 (26200.8737), Windows Hello face recognition stopped working after a cold boot; it is broken."),
+        ("hypervisor boot hang on exact build", TARGET_25H2, "Windows 11 25H2 (26200.8737): enabling the hypervisor causes a boot hang into Automatic Repair", "On build 26200.8737 enabling the hypervisor causes a boot hang into Automatic Repair."),
+    ]
+    for label, target, title, body in genuine:
+        c, rr = cr(target, title, body)
+        check(f"intent: GENUINE still counts — {label}", c is True and rr is None, f"counted={c} reason={rr}")
+
+    # Shared KB5095093 must not leak to the wrong train.
+    c, rr = cr(TARGET_24H2, "KB5095093 install failure on 25H2", "KB5095093 on Windows 11 25H2 will not install.")
+    check("intent: shared KB5095093 does not leak to 24H2 (post names 25H2)", c is False and rr == "wrong_feature_train_for_kb", f"{c} {rr}")
+
+    # The 5 observed false accepts are now rejected with specific reasons.
+    false_accepts = [
+        ("secure certificate / BIOS config", "Secure Certificate has not been updated to the 2023 version", "Windows 11 25H2 (26200.8737) (KB5095093). Secure boot=on, CSM disabled, TPM 2.0. My secure certificate has not been updated and refresh is slow. Is this a bios setting?", "build_only_in_system_specs"),
+        ("MCT ISO / spam meta", "Very strange Windows 11 MCT .ISO 26200.8653", "This thread was rejected by the system as spam. Build 26200.8737 crashes when I create the MCT ISO.", "meta_or_spam_report"),
+        ("Xbox Game Bar cosmetic / build in specs", "Xbox Game Bar Home widget incorrectly shows Windows OS as a game", "This cosmetic bug is annoying. Edition Windows 11 Pro, OS Build 26200.8737, KB5095093 installed.", "build_only_in_system_specs"),
+        ("point-in-time restore feature question", "Windows 11 Point in time restore feature", "Windows 11 25H2 26200.8737 KB5095093. The 72 hour limit is greyed out and fails to change. Does this mean that at 72 hours Windows won't delete the restore point?", "feature_question_not_regression"),
+        ("intel driver how-to question", "why can't I upgrade the intel graphic driver beyond 32.0.101.6129", "Windows 11 25H2 26200.8737 KB5095093. Why can't I upgrade my Intel graphics driver? The driver crashes constantly.", "driver_update_question_not_windows_patch"),
+    ]
+    for label, title, body, want in false_accepts:
+        c, rr = cr(TARGET_25H2, title, body)
+        check(f"intent: FALSE ACCEPT now rejected — {label}", c is False and rr == want, f"counted={c} reason={rr} want={want}")
+
+    # Broader intent behavior.
+    c, rr = cr(TARGET_25H2, "My PC crashes randomly", "My PC crashes. Windows 11 25H2, OS Build 26200.8737, KB5095093 installed.")
+    check("intent: build only in system-spec block -> build_only_in_system_specs", c is False and rr == "build_only_in_system_specs", f"{c} {rr}")
+    c, rr = cr(TARGET_25H2, "why can't I change this", "Windows 11 25H2 26200.8737 KB5095093. Why can't I change this setting? The app crashes randomly.")
+    check("intent: 'why can't I' with no update-attribution rejected", c is False and rr in ("how_to_question_not_regression", "missing_update_attribution", "build_only_in_system_specs"), f"{c} {rr}")
+    c, rr = cr(TARGET_25H2, "does this mean", "Windows 11 25H2 26200.8737 KB5095093. The toggle is greyed out and the app crashes. Does this mean it is disabled?")
+    check("intent: 'does this mean' with no update-attribution rejected", c is False and rr == "feature_question_not_regression", f"{c} {rr}")
+    c, rr = cr(TARGET_25H2, "printer stopped working after KB", "After installing KB5095093 on Windows 11 25H2 my printer stopped working.")
+    check("intent: update-attributed regression with exact identity counts", c is True and rr is None, f"{c} {rr}")
+    c, rr = cr(TARGET_25H2, "generic support with KB/build", "Windows 11 25H2 26200.8737 KB5095093. How do I open Settings? The app crashes sometimes.")
+    check("intent: generic how-to with KB/build (no attribution) rejected", c is False and rr in ("how_to_question_not_regression", "missing_update_attribution"), f"{c} {rr}")
+
+    # Existing gates remain intact (regression).
+    check("intent: date-only inference still rejected", cr(TARGET_25H2, "Patch Tuesday broke boot", "After June 2026 Patch Tuesday my PC won't boot.")[1] == "date_only_inference")
+    check("intent: vague latest update still rejected", cr(TARGET_25H2, "latest update broke it", "The latest Windows update caused a BSOD.")[1] == "vague_latest_update")
+    check("intent: wrong KB still rejected", cr(TARGET_25H2, "KB5090000 crash", "KB5090000 on Windows 11 25H2 causes a BSOD.")[1] == "wrong_kb_for_current_patch")
+    c, rr = cr(TARGET_25H2, "Build 26200.8737 (KB5095093): boot hang", "On build 26200.8737 enabling the hypervisor causes a boot hang.", date="2026-06-10T00:00:00Z")
+    check("intent: source_date before target_release_date still rejected", c is False and rr == "date_before_release", f"{c} {rr}")
+
+    # Preview-channel gating DEFERRED (documented). The 25H2/24H2 records mark channel only
+    # in prose ("General Availability Channel"); the observed false accepts were NOT
+    # preview-related, so preview_channel_mismatch is intentionally NOT enforced. A
+    # Preview-Update report of the exact current KB/build still counts.
+    # TODO: revisit if a structured channel field is added to Windows records.
+    c, rr = cr(TARGET_25H2, "2026-06 Preview Update (KB5095093) (26200.8737) will not install", "Release Preview Channel: the 2026-06 Preview Update (KB5095093) (26200.8737) will not install.")
+    check("preview-channel DEFERRED: exact-patch Preview-Update install failure still counts (TODO channel gating)", c is True and rr is None, f"{c} {rr}")
+
     # --- safety: NOT registered + no writeback by default -------------------
     import run_patch_evidence_collection as runner
     check("collector is NOT registered in the production runner (no default Windows writeback)", "microsoft-windows-11" not in runner.COLLECTORS, str(sorted(runner.COLLECTORS)))

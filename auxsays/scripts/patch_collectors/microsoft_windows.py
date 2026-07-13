@@ -109,6 +109,84 @@ MONTH_YEAR_RE = re.compile(
     re.I,
 )
 
+# --- intent / update-attribution filter (hardening) --------------------------
+# Identity + concrete-issue + date gates are necessary but NOT sufficient: a post can carry
+# the exact KB/build yet be a question, a config request, a driver how-to, or a meta/spam
+# post rather than a confirmed patch REGRESSION. A row counts only when the issue is
+# ATTRIBUTED to the exact update via one of three deterministic patterns:
+#   A  install/update FAILURE of the exact patch (INSTALL_FAILURE_RE)
+#   B  temporal breakage tied to the update, incl. "uninstalling KB fixed it" (TEMPORAL_REGRESSION_RE)
+#   C  the record's OWN KB/build in the post TITLE next to an issue (build_as_affected_state)
+
+INSTALL_FAILURE_RE = re.compile(
+    r"(?i)\b(?:"
+    r"will\s+not\s+install|won'?t\s+install|wont\s+install|"
+    r"fail(?:ed|s|ing)?\s+to\s+(?:install|update|apply|complete)|"
+    r"cannot\s+install|can'?t\s+install|unable\s+to\s+install|"
+    r"install(?:ation)?\s+(?:fail(?:ed|s|ure|ing)?|error|stuck|loop)|"
+    r"update\s+(?:fail(?:ed|s|ure|ing)?|error|stuck|loop)|"
+    r"update\s+(?:will\s+not|won'?t|wont)\s+(?:install|complete|finish)|"
+    r"update\s+not\s+(?:install\w*|function\w*|complet\w*|working)|"
+    r"windows\s+update\s+not\s+(?:function\w*|working)|"
+    r"updates?\s+fail(?:ed|s|ing)?|"
+    r"stuck\s+(?:install\w*|updat\w*|download\w*)|"
+    r"restart(?:ing|ed)?\s+to\s+install|"
+    r"keeps?\s+(?:fail\w*|restart\w*)\s+to\s+install|"
+    r"failed\s+attempts?\b|"
+    r"rollback\s+loop|"
+    r"error\s+(?:code\s+)?0x[0-9a-f]{4,8}"
+    r")"
+)
+
+TEMPORAL_REGRESSION_RE = re.compile(
+    r"(?i)(?:"
+    r"after\b[^.]{0,45}\b(?:updat\w*|upgrad\w*|install\w*|applied|kb\s?\d{6,7}|build\s?\d{5})|"
+    r"since\b[^.]{0,45}\b(?:updat\w*|upgrad\w*|install\w*|kb\s?\d{6,7})|"
+    r"(?:updat\w*|upgrad\w*|install\w*|kb\s?\d{6,7})\b[^.]{0,45}\b(?:no\s+longer|stopped\s+work\w*|broke|breaks|can'?t|cannot|unable|fails?\b)|"
+    r"immediately\s+after\b[^.]{0,30}\b(?:updat\w*|install\w*|kb)|"
+    r"when\b[^.]{0,45}\b(?:kb\s?\d{6,7}|update)\b[^.]{0,25}\binstall\w*[^.]{0,50}\b(?:no\s+longer|can'?t|cannot|unable|fail\w*|stop\w*|broke)|"
+    r"(?:no\s+longer|stopped)\s+(?:work\w*|respond\w*|abl\w*|connect\w*)\b[^.]{0,50}\b(?:updat\w*|kb\s?\d{6,7})|"
+    r"(?:uninstall\w*|remov\w*|roll\w*\s*back|revert\w*)\b[^.]{0,45}\b(?:kb\s?\d{6,7}|update|patch|it)\b[^.]{0,45}\b(?:fix\w*|resolv\w*|work\w*|solv\w*|help\w*)|"
+    r"(?:fix\w*|resolv\w*|work\w*\s+again|solv\w*)\b[^.]{0,45}\b(?:uninstall\w*|remov\w*|roll\w*\s*back|revert\w*)\b[^.]{0,30}\b(?:kb\s?\d{6,7}|update|patch)|"
+    r"(?:uninstall\w*|remov\w*)\s+(?:the\s+)?(?:kb\s?\d{6,7}|update|patch)\b|"
+    r"go\s+back\s+to\b[^.]{0,30}\b(?:previous\s+build|build\s?\d{5})|"
+    r"roll\w*\s*back\s+to\s+(?:the\s+)?previous\s+build"
+    r")"
+)
+
+META_SPAM_RE = re.compile(
+    r"(?i)(?:rejected\s+(?:by\s+the\s+system\s+)?as\s+spam|flagged\s+as\s+spam|marked\s+as\s+spam|"
+    r"this\s+(?:post|subject|message|thread)\s+(?:was|is|got)\s+(?:rejected|flagged)\b[^.]{0,20}\bspam|"
+    r"very\s+strange\b[^.]{0,40}\biso\b|\bmct\b[^.]{0,15}\biso|media\s+creation\s+tool\b[^.]{0,30}\b(?:strange|weird|issues))"
+)
+
+FEATURE_QUESTION_RE = re.compile(
+    r"(?i)\b(?:does\s+this\s+mean|what\s+does\s+this\s+mean|is\s+there\s+a\s+way\s+to|is\s+it\s+possible\s+to|"
+    r"can\s+(?:someone|anyone)\s+(?:explain|clarify)|is\s+this\s+(?:normal|expected|by\s+design|intended)|"
+    r"what'?s\s+the\s+(?:difference|meaning|point|purpose))\b"
+)
+
+HOWTO_QUESTION_RE = re.compile(
+    r"(?i)\b(?:how\s+do\s+i|how\s+to\b|how\s+can\s+i|why\s+can'?t\s+i|why\s+cant\s+i|where\s+(?:do|is|can)\s+i)\b"
+)
+
+DRIVER_QUESTION_RE = re.compile(
+    r"(?i)(?:"
+    r"(?:intel|nvidia|amd|realtek|geforce|radeon|graphics?|display|chipset|network|wi-?fi|audio)\s+driver|"
+    r"driver\s+(?:version|update|upgrade|beyond)|"
+    r"(?:upgrade|update|install|roll\s*back)\s+(?:the\s+|my\s+)?(?:intel|nvidia|amd|realtek|graphics?|display|audio|chipset)\s+driver"
+    r")"
+)
+
+SYSTEM_SPEC_RE = re.compile(
+    r"(?i)(?:"
+    r"secure\s+boot\s*[=:]|csm\s+(?:support\s+)?(?:enabled|disabled)|\btpm\s*(?:2\.0|version|enabled|:)|"
+    r"\bos\s+build\s*[:=]?\s*\d|\bedition\b\s*[:=]|\bprocessor\b\s*[:=]|installed\s+ram\b|system\s+type\s*[:=]|"
+    r"device\s+specifications?|windows\s+specifications?|vs\.?\s*10\.0\.\d{5}|"
+    r"\bbios\b\s+(?:version|supporting|setting)|dxdiag|systeminfo"
+    r")"
+)
+
 
 # --- helpers -----------------------------------------------------------------
 
@@ -135,13 +213,80 @@ def _other_features(text: str, target_feature: str) -> set[str]:
 
 
 def describes_windows_issue(text: str) -> bool:
-    """A concrete user-facing Windows problem, not a how-to/recommendation question."""
-    has_issue = text_describes_issue(text) or bool(WINDOWS_ISSUE_RE.search(text or ""))
-    if not has_issue:
+    """A concrete user-facing Windows problem, not a how-to/recommendation question.
+
+    An install/update failure or an explicit temporal breakage IS a concrete issue, so
+    those strong signals also qualify (and override a how-to phrasing)."""
+    strong = bool(
+        WINDOWS_ISSUE_RE.search(text or "")
+        or INSTALL_FAILURE_RE.search(text or "")
+        or TEMPORAL_REGRESSION_RE.search(text or "")
+    )
+    if not (text_describes_issue(text) or strong):
         return False
-    if HOW_TO_RE.search(text or "") and not WINDOWS_ISSUE_RE.search(text or ""):
+    if HOW_TO_RE.search(text or "") and not strong:
         return False
     return True
+
+
+def build_as_affected_state(report_title: str, matched_kb: str, matched_os_build: str) -> bool:
+    """Pattern C: the record's OWN current KB/build appears in the post TITLE (the problem
+    statement) next to a concrete issue term -- e.g. 'Build 26200.8737 (KB...): ... bug' or
+    '25H2 (26200.8737): ... boot hang'. A build that only appears in a body system-spec
+    signature never triggers this."""
+    title = report_title or ""
+    id_in_title = bool(
+        (matched_os_build and matched_os_build in title)
+        or (matched_kb and re.search(re.escape(matched_kb), title, re.I))
+    )
+    return bool(id_in_title and (WINDOWS_ISSUE_RE.search(title) or text_describes_issue(title)))
+
+
+def update_attributed(report_text: str, report_title: str, matched_kb: str, matched_os_build: str) -> bool:
+    """True when the concrete issue is attributed to the exact update (pattern A/B/C)."""
+    return bool(
+        INSTALL_FAILURE_RE.search(report_text)
+        or TEMPORAL_REGRESSION_RE.search(report_text)
+        or build_as_affected_state(report_title, matched_kb, matched_os_build)
+    )
+
+
+def build_only_in_system_specs(report_text: str, report_title: str, matched_kb: str, matched_os_build: str) -> bool:
+    """The identity token is present but only in a system-spec/diagnostics context (a spec
+    footer or signature), not in the problem statement."""
+    if build_as_affected_state(report_title, matched_kb, matched_os_build):
+        return False
+    return bool(SYSTEM_SPEC_RE.search(report_text))
+
+
+def windows_intent_reason(report_text: str, report_title: str, matched_kb: str, matched_os_build: str) -> str | None:
+    """Update-attribution / intent filter (runs only after identity + concrete-issue + date
+    gates pass). Returns a rejection reason, or None to count. Rejects meta/spam, driver
+    how-to/upgrade questions, feature/how-to clarification questions, posts where the build
+    appears only in a spec signature, and anything not attributed to the exact update."""
+    if META_SPAM_RE.search(report_text):
+        return "meta_or_spam_report"
+    # A driver-centric upgrade/how-to question is not a Windows-patch regression. Keyed on
+    # the TITLE (the post's primary subject) so a genuine Windows regression that merely
+    # mentions a driver/CPU in its body is not misclassified; still allow explicit temporal
+    # attribution to the Windows update to rescue "after KB..., my driver broke" reports.
+    if DRIVER_QUESTION_RE.search(report_title) and not TEMPORAL_REGRESSION_RE.search(report_text):
+        return "driver_update_question_not_windows_patch"
+    if FEATURE_QUESTION_RE.search(report_text) and not update_attributed(report_text, report_title, matched_kb, matched_os_build):
+        return "feature_question_not_regression"
+    attributed = update_attributed(report_text, report_title, matched_kb, matched_os_build)
+    if HOWTO_QUESTION_RE.search(report_text) and not attributed:
+        return "how_to_question_not_regression"
+    if not attributed:
+        if (matched_kb or matched_os_build) and build_only_in_system_specs(report_text, report_title, matched_kb, matched_os_build):
+            return "build_only_in_system_specs"
+        return "missing_update_attribution"
+    # NOTE (deferred): preview-channel gating. The 25H2/24H2 records mark themselves as
+    # "General Availability Channel" only in prose (no structured channel field), and the
+    # observed false accepts were NOT preview-related, so preview_channel_mismatch is
+    # intentionally NOT enforced here. Preview-Update reports of the exact current KB/build
+    # still count. Revisit if/when a structured channel field exists (see test marker).
+    return None
 
 
 def identity_basis(matched_kb: str, matched_os_build: str, matched_feature: str) -> tuple[bool, str]:
@@ -180,6 +325,7 @@ def windows_learn_qna_reason(
     source_url: str,
     source_date: str,
     report_text: str,
+    report_title: str,
     matched_kb: str,
     matched_os_build: str,
     matched_feature: str,
@@ -223,7 +369,9 @@ def windows_learn_qna_reason(
         if gate_reason == "source_date_before_target_release_date":
             return "date_before_release"
         return gate_reason  # missing_kb_or_build / wrong_feature_train_for_kb / stale_due_to_patch_rollover / windows_record_missing_target_identity
-    return None
+    # Intent / update-attribution hardening: the concrete issue must be attributed to the
+    # exact update (not a question/config/meta post that merely cites the KB/build).
+    return windows_intent_reason(report_text, report_title, matched_kb, matched_os_build)
 
 
 def row_from_candidate(record: PatchRecord, target: dict[str, Any], candidate: dict[str, Any], captured_at: str) -> dict[str, Any]:
@@ -271,7 +419,7 @@ def row_from_candidate(record: PatchRecord, target: dict[str, Any], candidate: d
         row_id=f"{PRODUCT_ID}-{slug(record.update_version)}-{slug(SOURCE_TYPE)}-{slug(str(candidate.get('source_url') or ''))}",
     )
 
-    reason = windows_learn_qna_reason(target, str(candidate.get("source_url") or ""), source_date, report_text, matched_kb, matched_os_build, matched_feature)
+    reason = windows_learn_qna_reason(target, str(candidate.get("source_url") or ""), source_date, report_text, str(candidate.get("report_title") or ""), matched_kb, matched_os_build, matched_feature)
     counted = reason is None
     row["counted"] = counted
     row["exclusion_reason"] = reason
