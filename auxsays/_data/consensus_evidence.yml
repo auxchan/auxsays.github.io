@@ -5372,3 +5372,282 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-0-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uv9myf-davinci-resolve-2102-crashing-on-media-up
+  product_id: blackmagic-davinci
+  update_version: 21.0.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1uv9myf/davinci_resolve_2102_crashing_on_media_upload/
+  parent_title: DaVinci Resolve 21.0.2 Crashing On Media Upload
+  report_title: DaVinci Resolve 21.0.2 Crashing On Media Upload
+  report_text_excerpt: DaVinci Resolve 21.0.2 Crashing On Media Upload Hello, Like in the topic, I am having an issue with media upload. Create new project -> Try to upload any MP4 files -> DVR is asking for framerate change (it does not matter if I change it or not) then Davinci crashes with error...
+  captured_at: '2026-07-14T08:15:51Z'
+  source_date: '2026-07-13'
+  target_release_date: '2026-07-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5943592-2026-06-update-kb5095093-26200-8737-wi
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5943592/2026-06-update-(kb5095093)-(26200-8737)-will-not-i
+  parent_title: 2026-06 Update (KB5095093) (26200.8737) will not install - Microsoft Q&A
+  report_title: 2026-06 Update (KB5095093) (26200.8737) will not install - Microsoft Q&A
+  report_text_excerpt: 2026-06 Update (KB5095093) (26200.8737) will not install - Microsoft Q&A I have been restarting to install this update for over a week with no success. Is there a trick to it?
+  captured_at: '2026-07-14T08:17:58Z'
+  source_date: '2026-07-10'
+  target_release_date: '2026-06-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8737'
+  match_basis: exact_os_build
+  matched_kb: KB5095093
+  matched_os_build: '26200.8737'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5939606-2026-06-preview-update-failed-to-insta
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5939606/2026-06-preview-update-failed-to-install-in-window
+  parent_title: 2026-06 Preview Update failed to install in windows 11 computer - Microsoft Q&A
+  report_title: 2026-06 Preview Update failed to install in windows 11 computer - Microsoft Q&A
+  report_text_excerpt: 2026-06 Preview Update failed to install in windows 11 computer - Microsoft Q&A 2026-06 Preview Update (KB5095093) (26200.8737) failed to install
+  captured_at: '2026-07-14T08:17:58Z'
+  source_date: '2026-07-07'
+  target_release_date: '2026-06-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8737'
+  match_basis: exact_os_build
+  matched_kb: KB5095093
+  matched_os_build: '26200.8737'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5938732-windows-update-not-functioning
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5938732/windows-update-not-functioning
+  parent_title: WINDOWS UPDATE not functioning - Microsoft Q&A
+  report_title: WINDOWS UPDATE not functioning - Microsoft Q&A
+  report_text_excerpt: 'WINDOWS UPDATE not functioning - Microsoft Q&A For the past 5 days, I have clicked on WINDOWS Update but it is not updating at all. This is what I read when the updates fails: 2026-06 Preview Update (KB5095093) (26200.8737) Install error - 0x80070306 Thank you for your...'
+  captured_at: '2026-07-14T08:17:58Z'
+  source_date: '2026-07-06'
+  target_release_date: '2026-06-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8737'
+  match_basis: exact_os_build
+  matched_kb: KB5095093
+  matched_os_build: '26200.8737'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5935689-after-windows-11-pro-update-kb5095093
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5935689/after-windows-11-pro-update-(kb5095093)-today-i-ca
+  parent_title: After windows 11 Pro update (KB5095093) today I cannot connect to shares on my office NAS over vpn - Microsoft Q&A
+  report_title: After windows 11 Pro update (KB5095093) today I cannot connect to shares on my office NAS over vpn - Microsoft Q&A
+  report_text_excerpt: After windows 11 Pro update (KB5095093) today I cannot connect to shares on my office NAS over vpn - Microsoft Q&A I am running Windows 11 Pro 25H2 OS Build 26200.8655. I work from home and access a NAS over a Watchguard Mobile VPN. I have been successfully connecting to the...
+  captured_at: '2026-07-14T08:17:58Z'
+  source_date: '2026-07-05'
+  target_release_date: '2026-06-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5095093
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5095093
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5936734-windows-11-pc-build-26200-8737-kb50950
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5936734/windows-11-pc-build-26200-8737-(kb5095093)-windows
+  parent_title: 'Windows 11 PC: Build 26200.8737 (KB5095093): "windows explorer" has alternating blank-window bug present - Microsoft Q&A'
+  report_title: 'Windows 11 PC: Build 26200.8737 (KB5095093): "windows explorer" has alternating blank-window bug present - Microsoft Q&A'
+  report_text_excerpt: 'Windows 11 PC: Build 26200.8737 (KB5095093): "windows explorer" has alternating blank-window bug present - Microsoft Q&A Win+E keystroke, Close "windows explorer" window, Win+E keystroke, repeat has Blank "windows explorer" window on every 2nd launch. Uninstalled KB5095093. Go...'
+  captured_at: '2026-07-14T08:17:58Z'
+  source_date: '2026-07-03'
+  target_release_date: '2026-06-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8737'
+  match_basis: exact_os_build
+  matched_kb: KB5095093
+  matched_os_build: '26200.8737'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5929223-problem-with-kb5095093-update-to-win-1
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5929223/problem-with-kb5095093-update-to-win-11-home
+  parent_title: Problem with KB5095093 update to Win 11 Home - Microsoft Q&A
+  report_title: Problem with KB5095093 update to Win 11 Home - Microsoft Q&A
+  report_text_excerpt: Problem with KB5095093 update to Win 11 Home - Microsoft Q&A When windows 11 update KB5095093 is installed, I am no longer able to access items in the taskbar system tray. The do not respond to mouse over (date, network, uparrow, etc) If I uninstall the update, it starts works...
+  captured_at: '2026-07-14T08:17:58Z'
+  source_date: '2026-07-02'
+  target_release_date: '2026-06-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8737'
+  match_basis: exact_os_build
+  matched_kb: KB5095093
+  matched_os_build: '26200.8737'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5933035-2026-06-update-issues
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5933035/2026-06-update-issues
+  parent_title: 2026-06 update issues - Microsoft Q&A
+  report_title: 2026-06 update issues - Microsoft Q&A
+  report_text_excerpt: 2026-06 update issues - Microsoft Q&A The problem started last week when I attempted to run the 2026-06 Preview Update (KB 5095093) (26200.8737) update. After a few failed attempts, I contacted Microsoft Support. The tech ran a remote session, and he indicated that I needed to...
+  captured_at: '2026-07-14T08:17:58Z'
+  source_date: '2026-07-02'
+  target_release_date: '2026-06-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8737'
+  match_basis: exact_os_build
+  matched_os_build: '26200.8737'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Windows issue
+  workflow_area: Windows workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5944695-windows-hello-face-recognition-fails-o
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5944695/windows-hello-face-recognition-fails-only-after-co
+  parent_title: Windows Hello Face Recognition fails only after cold boot on Windows 11 25H2 (Build 26200.8737) - Microsoft Q&A
+  report_title: Windows Hello Face Recognition fails only after cold boot on Windows 11 25H2 (Build 26200.8737) - Microsoft Q&A
+  report_text_excerpt: Windows Hello Face Recognition fails only after cold boot on Windows 11 25H2 (Build 26200.8737) - Microsoft Q&A Hello, I'm experiencing a reproducible Windows Hello Face Recognition issue after upgrading to Windows 11 25H2 (Build 26200.8737) . Device ASUS ROG Zephyrus G16...
+  captured_at: '2026-07-14T08:17:58Z'
+  source_date: '2026-07-12'
+  target_release_date: '2026-06-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8737'
+  match_basis: exact_os_build
+  matched_os_build: '26200.8737'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5942024-windows-11-25h2-26200-8737-enabling-th
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5942024/windows-11-25h2-(26200-8737)-enabling-the-hypervis
+  parent_title: 'Windows 11 25H2 (26200.8737): enabling the hypervisor causes a boot hang into Automatic Repair on Ryzen 5 9600X — Linux KVM works on the same hardware - Microsoft Q&A'
+  report_title: 'Windows 11 25H2 (26200.8737): enabling the hypervisor causes a boot hang into Automatic Repair on Ryzen 5 9600X — Linux KVM works on the same hardware - Microsoft Q&A'
+  report_text_excerpt: 'Windows 11 25H2 (26200.8737): enabling the hypervisor causes a boot hang into Automatic Repair on Ryzen 5 9600X — Linux KVM works on the same hardware - Microsoft Q&A Question: Is there a known issue with Windows hypervisor initialization on AMD Zen 5 (Ryzen 9000) CPUs on...'
+  captured_at: '2026-07-14T08:17:58Z'
+  source_date: '2026-07-09'
+  target_release_date: '2026-06-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8737'
+  match_basis: exact_os_build
+  matched_os_build: '26200.8737'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
