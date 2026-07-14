@@ -5651,3 +5651,32 @@ evidence:
   severity: critical
   sentiment: negative
   source_weight: 1
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5945620-2026-06-update-kb5095093-26200-8737-wi
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5945620/2026-06-update-(kb5095093)-(26200-8737)-will-not-i
+  parent_title: 2026-06 Update (KB5095093) (26200.8737) will not install - Microsoft Q&A
+  report_title: 2026-06 Update (KB5095093) (26200.8737) will not install - Microsoft Q&A
+  report_text_excerpt: 2026-06 Update (KB5095093) (26200.8737) will not install - Microsoft Q&A i am trying to install the above update with no success
+  captured_at: '2026-07-14T12:54:27Z'
+  source_date: '2026-07-13'
+  target_release_date: '2026-06-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8737'
+  match_basis: exact_os_build
+  matched_kb: KB5095093
+  matched_os_build: '26200.8737'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
