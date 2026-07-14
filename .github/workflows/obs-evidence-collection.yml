@@ -43,6 +43,8 @@ jobs:
         run: pip install -r auxsays/scripts/requirements-ingest.txt
 
       - name: Collect patch evidence
+        env:
+          AUXSAYS_ENABLE_WINDOWS_LEARN_QNA_WRITEBACK: "true"
         run: |
           args=(--since-days 45 --max-pages 5)
 
@@ -98,7 +100,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add auxsays/_data/consensus_evidence.yml auxsays/_data/evidence_method_health.yml auxsays/updates/generated/*obs-studio*.md auxsays/updates/generated/*davinci*.md auxsays/updates/generated/*premiere-pro*.md
+          git add auxsays/_data/consensus_evidence.yml auxsays/_data/evidence_method_health.yml auxsays/updates/generated/*obs-studio*.md auxsays/updates/generated/*davinci*.md auxsays/updates/generated/*premiere-pro*.md auxsays/updates/generated/*windows-11*.md
           if git diff --cached --quiet; then
             echo "No material evidence changes to commit."
             echo "changed=false" >> "$GITHUB_OUTPUT"
