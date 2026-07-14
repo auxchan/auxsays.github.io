@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -24,6 +25,42 @@ COLLECTORS = {
     "blackmagic-davinci": DavinciCollector,
 }
 
+# --- Windows Learn Q&A: default-off activation gate --------------------------
+# The scheduled "Patch Evidence Collection" workflow runs this module with --write and NO
+# --product-id, so it invokes every REGISTERED collector. To keep the dormant Windows Learn
+# Q&A collector from ever being invoked accidentally by that hourly writeback, it is NOT part
+# of the static COLLECTORS base; it is registered ONLY when an explicit enable flag is set.
+# The default (flag absent) is always "not registered" -> no Windows writeback. No workflow
+# sets this flag; enabling it is a deliberate, separate activation step.
+WINDOWS_LEARN_QNA_PRODUCT_ID = "microsoft-windows-11"
+WINDOWS_LEARN_QNA_ENABLE_ENV = "AUXSAYS_ENABLE_WINDOWS_LEARN_QNA_WRITEBACK"
+
+
+def windows_learn_qna_writeback_enabled(env: dict[str, str] | None = None) -> bool:
+    """Deterministic default-off gate for registering the Windows Learn Q&A collector.
+
+    Returns True ONLY when ``AUXSAYS_ENABLE_WINDOWS_LEARN_QNA_WRITEBACK`` resolves to the
+    exact canonical boolean ``true`` (case-insensitive, surrounding whitespace trimmed).
+    Every other value -- absent, empty, ``false``, ``0``, ``1``, ``yes``, ``on``, or any
+    other string -- returns False. Explicit true-only: this deliberately avoids the classic
+    ``bool(os.getenv(...))`` pitfall where the string ``"false"`` is truthy.
+    """
+    source = os.environ if env is None else env
+    return str(source.get(WINDOWS_LEARN_QNA_ENABLE_ENV, "")).strip().lower() == "true"
+
+
+def build_collectors(env: dict[str, str] | None = None) -> dict[str, Any]:
+    """Return the runtime collector registry: the always-on base plus the Windows Learn Q&A
+    collector IFF its activation flag is explicitly enabled. This is the single place that
+    decides Windows registration, so no scheduled ``--write`` run can reach the collector
+    while the flag is off. The collector class is imported lazily so it is only pulled in
+    when actually enabled."""
+    collectors: dict[str, Any] = dict(COLLECTORS)
+    if windows_learn_qna_writeback_enabled(env):
+        from patch_collectors.microsoft_windows import WindowsLearnQnaCollector
+        collectors[WINDOWS_LEARN_QNA_PRODUCT_ID] = WindowsLearnQnaCollector
+    return collectors
+
 
 def since_from_days(days: int | None) -> str | None:
     if days is None:
@@ -32,12 +69,13 @@ def since_from_days(days: int | None) -> str | None:
 
 
 def main(argv: list[str] | None = None) -> int:
+    collectors = build_collectors()
     parser = argparse.ArgumentParser(description="Run AUXSAYS patch evidence collection.")
     parser.add_argument(
         "--product-id",
         action="append",
-        choices=sorted(COLLECTORS),
-        help="Product to collect. May be passed more than once. Defaults to all Phase A collectors.",
+        choices=sorted(collectors),
+        help="Product to collect. May be passed more than once. Defaults to all registered collectors.",
     )
     parser.add_argument("--update-version", action="append", help="Exact update_version filter. May be passed more than once.")
     mode = parser.add_mutually_exclusive_group()
@@ -48,7 +86,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--max-pages", type=int, default=2)
     args = parser.parse_args(argv)
 
-    product_ids = args.product_id or sorted(COLLECTORS)
+    product_ids = args.product_id or sorted(collectors)
     context = CollectorContext(
         write=bool(args.write),
         since=args.since or since_from_days(args.since_days),
@@ -60,7 +98,7 @@ def main(argv: list[str] | None = None) -> int:
     product_results: list[dict[str, Any]] = []
     method_health: list[dict[str, Any]] = []
     for product_id in product_ids:
-        collector = COLLECTORS[product_id]()
+        collector = collectors[product_id]()
         try:
             results = collector.collect(context)
         except Exception as exc:

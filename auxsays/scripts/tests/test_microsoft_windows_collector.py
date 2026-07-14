@@ -247,7 +247,12 @@ def run() -> int:
 
     # --- safety: NOT registered + no writeback by default -------------------
     import run_patch_evidence_collection as runner
-    check("collector is NOT registered in the production runner (no default Windows writeback)", "microsoft-windows-11" not in runner.COLLECTORS, str(sorted(runner.COLLECTORS)))
+    default_registry = runner.build_collectors({})  # default env: activation flag off
+    check(
+        "collector is NOT registered in the production runner by default (no default Windows writeback)",
+        "microsoft-windows-11" not in runner.COLLECTORS and "microsoft-windows-11" not in default_registry,
+        f"base={sorted(runner.COLLECTORS)} default_runtime={sorted(default_registry)}",
+    )
 
     with tempfile.TemporaryDirectory() as d:
         rec_path = Path(d) / "2026-06-23-windows-11-24h2.md"
