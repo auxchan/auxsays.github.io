@@ -17,8 +17,8 @@ update_version: GitHub Code Quality license estimate in public preview
 update_logo_text: GIT
 update_published_at: '2026-07-13T23:39:22Z'
 update_last_checked: '2026-07-14T08:29:51Z'
-source_last_checked: '2026-07-14T08:29:51Z'
-official_body_last_checked: '2026-07-14T08:29:51Z'
+source_last_checked: '2026-07-14T14:16:30Z'
+official_body_last_checked: '2026-07-14T14:16:30Z'
 record_last_updated: '2026-07-14T08:29:51Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -83,6 +83,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-07-14T08:29:51Z'
+  url: https://github.blog/changelog/2026-07-13-github-code-quality-license-estimate-in-public-preview
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-07-14T14:16:30Z'
   url: https://github.blog/changelog/2026-07-13-github-code-quality-license-estimate-in-public-preview
   status: captured-from-rss-feed
   body_captured: true
