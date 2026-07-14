@@ -5698,3 +5698,101 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uw93ul-issue-with-resolve-21s-playback
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1uw93ul/issue_with_resolve_21s_playback/
+  parent_title: Issue with resolve 21's playback
+  report_title: Issue with resolve 21's playback
+  report_text_excerpt: Issue with resolve 21's playback Been having this issue since today and unsure how to solve it. Essentially, the playback in the software will not work. Video remains still and program becomes really slow. In addition to this i've noticed that resolve is using like 18 GB of...
+  captured_at: '2026-07-14T19:47:10Z'
+  source_date: '2026-07-14'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uw7he8-davinci-crashs-on-fusion-animations
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1uw7he8/davinci_crashs_on_fusion_animations/
+  parent_title: Davinci crashs on fusion animations
+  report_title: Davinci crashs on fusion animations
+  report_text_excerpt: Davinci crashs on fusion animations Hey everyone. I have been issuing for a few weeks a big problem with Davinci that I had never experienced before. Every time I try to look at the animations I create on the fusion page, Davinci just closes. As if it couldn't handle just...
+  captured_at: '2026-07-14T19:47:10Z'
+  source_date: '2026-07-14'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: blackmagic-davinci-21-0-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uw93ul-issue-with-resolve-21s-playback
+  product_id: blackmagic-davinci
+  update_version: 21.0.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1uw93ul/issue_with_resolve_21s_playback/
+  parent_title: Issue with resolve 21's playback
+  report_title: Issue with resolve 21's playback
+  report_text_excerpt: Issue with resolve 21's playback Been having this issue since today and unsure how to solve it. Essentially, the playback in the software will not work. Video remains still and program becomes really slow. In addition to this i've noticed that resolve is using like 18 GB of...
+  captured_at: '2026-07-14T19:53:43Z'
+  source_date: '2026-07-14'
+  target_release_date: '2026-07-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-0-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uw8woi-incorrect-colors-in-project-and-export
+  product_id: blackmagic-davinci
+  update_version: 21.0.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1uw8woi/incorrect_colors_in_project_and_export/
+  parent_title: Incorrect colors in project and export.
+  report_title: Incorrect colors in project and export.
+  report_text_excerpt: Incorrect colors in project and export. Hello, today I noticed my colors aren't the same as I selected in text/solid color, I then noticed all my colors are wrong. The issue is absolutely clearest with solid yellow, it looks less saturated and darker than it should, if I'm...
+  captured_at: '2026-07-14T19:53:43Z'
+  source_date: '2026-07-14'
+  target_release_date: '2026-07-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
