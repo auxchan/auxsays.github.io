@@ -367,7 +367,7 @@ davinci-resolve:
   company_label: Blackmagic Design
   source_id: davinci-resolve
   logo_label: DaVinci
-  logo_path: /assets/img/patch-logos/davinci-resolve.svg
+  logo_path: /assets/img/patch-logos/blackmagic-design.png
 blackmagic-davinci:
   company_name: Blackmagic Design
   product_name: DaVinci Resolve
@@ -377,4 +377,4 @@ blackmagic-davinci:
   company_label: Blackmagic Design
   source_id: blackmagic-davinci
   logo_label: DaVinci Resolve
-  logo_path: /assets/img/patch-logos/blackmagic-davinci.svg
+  logo_path: /assets/img/patch-logos/blackmagic-design.png

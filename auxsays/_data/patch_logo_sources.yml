@@ -651,17 +651,22 @@ assets:
   fallback_to_company_logo: false
   notes: Official Lightroom App Store icon from Adobe Inc.; visual QA requested Lightroom mark instead of Lightroom Classic LrC mark.
 - asset_id: blackmagic-davinci
-  kind: product_icon
+  kind: company_fallback
   owner_name: Blackmagic Design / DaVinci Resolve
-  source_type: manual_curated
-  source_url: https://commons.wikimedia.org/wiki/File:DaVinci_Resolve_17_logo.svg
-  local_path: /assets/img/patch-logos/blackmagic-davinci.svg
+  source_type: simple_icons
+  source_url: https://simpleicons.org/icons/blackmagicdesign.svg
+  direct_asset_url: https://cdn.simpleicons.org/blackmagicdesign
+  local_path: /assets/img/patch-logos/blackmagic-design.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-05-01'
-  fallback_to_company_logo: false
-  notes: Cleaned local DaVinci Resolve product-icon treatment.
+  last_verified_at: '2026-07-14'
+  fallback_to_company_logo: true
+  notes: DaVinci Resolve now uses the Blackmagic Design company mark as an explicit
+    company fallback. The prior hand-drawn product-icon approximation
+    (blackmagic-davinci.svg / davinci-resolve.svg) was retired because it did not match
+    the real product logo and violated logo-system Rule 1 (no hand-drawn approximations).
+    No verified license-compatible DaVinci Resolve product vector is bundled yet.
 - asset_id: obs-studio
   kind: product_icon
   owner_name: OBS Project
