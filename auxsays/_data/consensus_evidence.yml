@@ -5698,7 +5698,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uw93ul-issue-with-resolve-21s-playback
   product_id: blackmagic-davinci
   update_version: '21'
@@ -5747,7 +5746,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-0-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uw93ul-issue-with-resolve-21s-playback
   product_id: blackmagic-davinci
   update_version: 21.0.2
@@ -5794,5 +5792,26 @@ evidence:
   workflow_area: render/export
   platform: unknown
   severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13658
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13658
+  parent_title: OBS freezes when drag&drop any element on the software
+  report_title: OBS freezes when drag&drop any element on the software
+  report_text_excerpt: '### Operating System Info Other ### Other OS CachyOS ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/rCFaEoPoRx3IcQCt ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The o'
+  captured_at: '2026-07-16T09:40:02Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: unknown
+  severity: high
   sentiment: negative
   source_weight: 1
