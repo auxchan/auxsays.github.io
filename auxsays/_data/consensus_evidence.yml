@@ -5836,3 +5836,28 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: blackmagic-davinci-21-0-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uw7he8-davinci-crashs-on-fusion-animations
+  product_id: blackmagic-davinci
+  update_version: 21.0.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1uw7he8/davinci_crashs_on_fusion_animations/
+  parent_title: Davinci crashs on fusion animations
+  report_title: Davinci crashs on fusion animations
+  report_text_excerpt: Davinci crashs on fusion animations Hey everyone. I have been issuing for a few weeks a big problem with Davinci that I had never experienced before. Every time I try to look at the animations I create on the fusion page, Davinci just closes. As if it couldn't handle just...
+  captured_at: '2026-07-16T20:26:11Z'
+  source_date: '2026-07-14'
+  target_release_date: '2026-07-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
