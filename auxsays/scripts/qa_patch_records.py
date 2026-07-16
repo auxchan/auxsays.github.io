@@ -69,6 +69,7 @@ PRIORITY_PRODUCTS = {
     "blackmagic-davinci",
     "adobe-premiere-pro",
     "adobe-acrobat-reader",
+    "adobe-acrobat-pro",
     "microsoft-windows-11",
     "elgato-stream-deck",
     "elgato-wave-link",

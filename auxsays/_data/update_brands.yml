@@ -118,6 +118,26 @@ adobe-premiere-pro:
   source_id: adobe-premiere-pro
   logo_label: Premiere
   logo_path: /assets/img/patch-logos/adobe-premiere-pro.png
+adobe-acrobat-reader:
+  company_name: Adobe
+  product_name: Acrobat Reader
+  badge_text: PDF
+  accent: '#d6ab4e'
+  category_label: Workplace Critical
+  company_label: Adobe
+  source_id: adobe-acrobat-reader
+  logo_label: Reader
+  logo_path: /assets/img/patch-logos/adobe-acrobat-reader.png
+adobe-acrobat-pro:
+  company_name: Adobe
+  product_name: Acrobat Pro
+  badge_text: PDF
+  accent: '#d6ab4e'
+  category_label: Workplace Critical
+  company_label: Adobe
+  source_id: adobe-acrobat-pro
+  logo_label: Acrobat Pro
+  logo_path: /assets/img/patch-logos/adobe.png
 adobe-after-effects:
   company_name: Adobe
   product_name: After Effects

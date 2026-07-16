@@ -14,10 +14,13 @@ Design rules:
   number are turned into records. If the page structure does not match (DOM changed,
   landing page with no table, etc.) the adapter returns [] rather than fabricating a
   record.
-- parser_profile dispatch keeps this file reusable: future Office lanes (e.g.
-  Microsoft Teams version history) can be added as a new branch without a new file.
-  Only the Microsoft 365 Apps / PowerPoint release profiles are implemented in this
-  sprint; other profiles return [].
+- parser_profile dispatch keeps this file reusable across Office lanes without a new
+  file: the Microsoft 365 Apps suite update-history table, the Microsoft Teams version
+  history, and per-app (e.g. PowerPoint) release-note attribution each have a pure parser.
+- App attribution is fail-closed and explicit: a version becomes a record for an individual
+  app (PowerPoint) only when a feature/fixed-issue block names that app (word-boundary) or
+  is explicitly all-Office-apps. Generic suite channel/build rows are never attributed to an
+  individual app -- they stay on the Microsoft 365 Apps (shared servicing) page.
 """
 from __future__ import annotations
 
@@ -64,6 +67,32 @@ TEAMS_MONTH_DAY_RE = re.compile(
     re.I,
 )
 TEAMS_EXCLUDE_TOKENS = ("preview", "insider", "beta")
+
+# --- App attribution (per-app release notes) ---------------------------------
+# Microsoft 365 Apps release notes describe features/fixed issues per version. A change
+# is attributed to a specific app ONLY when that app is named explicitly, or the entry is
+# explicitly all-Office-apps. Generic suite channel/build rows are never attributed to an
+# individual app (they stay on the Microsoft 365 Apps page).
+OFFICE_APP_NAMES = (
+    "powerpoint", "word", "excel", "outlook", "onenote",
+    "access", "publisher", "visio", "project", "teams", "onedrive",
+)
+# Per-version section heading, e.g. "<h2>Version 2606 (Build 20131.20154)</h2>".
+APP_VERSION_HEADING_RE = re.compile(
+    r"<h[1-4]\b[^>]*>[^<]*?\bversion\s+(?P<ver>\d{3,4})\b[^<]*?</h[1-4]>", re.I
+)
+# "Build 20131.20154" inside a section (the precise identity; a bare marketing version is
+# never enough on its own).
+BUILD_IN_TEXT_RE = re.compile(r"build\s+(\d{3,6}\.\d{3,6})", re.I)
+# Feature / fixed-issue blocks within a version section.
+BLOCK_RE = re.compile(r"<(?:li|p)\b[^>]*>(?P<block>.*?)</(?:li|p)>", re.I | re.S)
+# Explicit "applies to every Office app" phrasing -> a per-app record is allowed, with the
+# suite id carried in the applicability list alongside the app id.
+SUITEWIDE_APPLICABILITY_RE = re.compile(
+    r"\b(all (microsoft 365 )?apps|all office apps|across (the )?(microsoft 365|office) apps"
+    r"|every (microsoft 365|office) app|microsoft 365 apps suite)\b",
+    re.I,
+)
 
 
 def _request_options(source: dict[str, Any]) -> dict[str, Any]:
@@ -359,12 +388,179 @@ def _records_from_teams_version_history(
     return records
 
 
-# parser_profile -> pure parser. The M365 Apps / PowerPoint / generic profiles use the
-# update-history table parser; Teams uses the version-history table parser. Unknown
-# profiles are not dispatched (fetch returns []).
+def _target_app(source: dict[str, Any]) -> str:
+    ingestion = source.get("ingestion", {}) or {}
+    app = str(ingestion.get("target_app") or "").strip().lower()
+    if app:
+        return app
+    # Fall back to the last product_id segment, e.g. microsoft-powerpoint -> powerpoint.
+    return str(source.get("product_id") or "").split("-")[-1].strip().lower()
+
+
+def _app_record(
+    source: dict[str, Any],
+    source_url: str,
+    channel: str,
+    version: str,
+    build: str,
+    published: str,
+    target_app: str,
+    entries: list[str],
+    applies_suitewide: bool,
+) -> dict[str, Any]:
+    digest = hashlib.sha256((source_url + version + build + target_app).encode("utf-8")).hexdigest()[:16]
+    ingestion = source.get("ingestion", {}) or {}
+    software = source["software"]
+    version_label = f"Version {version} (Build {build})"
+    date_str = published[:10] if published else ""
+    product_id = source["product_id"]
+
+    # Explicit, auditable applicability. A suite-wide entry additionally lists the shared
+    # servicing product so the common source identity is preserved (never blind duplication).
+    applicability = [product_id]
+    if applies_suitewide and "microsoft-365-apps" not in applicability:
+        applicability.append("microsoft-365-apps")
+    applies_to_label = software + (" + Microsoft 365 Apps (suite-wide)" if applies_suitewide else "")
+
+    official_sources = []
+    for label, url in (
+        (f"{software} release notes", ingestion.get("official_url")),
+        ("Microsoft 365 Apps update history", ingestion.get("secondary_official_url")),
+    ):
+        if isinstance(url, str) and url.strip():
+            official_sources.append({
+                "label": label,
+                "url": url.strip(),
+                "source_type": "release_notes",
+                "trust_level": "official",
+                "extraction_status": "summary_captured" if url.strip() == source_url else "reference_only",
+            })
+
+    joined = " ".join(entries)[:1200]
+    scope = "an all-apps (suite-wide) change" if applies_suitewide else f"a {software}-specific change"
+    body = (
+        f"{software} {version_label} on the {channel}"
+        + (f" (release date {date_str})." if date_str else ".")
+        + f" Official Microsoft 365 Apps release notes attribute {scope} to this version"
+        f" for {software}: {joined}"
+    )
+    official_summary = (
+        f"Microsoft 365 Apps release notes attribute a {software} change to {version_label}"
+        + (f" on the {channel} ({date_str})." if date_str else f" on the {channel}.")
+    )
+
+    return {
+        "record_id": f"microsoft:{product_id}:{version}:{digest}",
+        "company_id": source["company_id"],
+        "product_id": product_id,
+        "company": source["company"],
+        "software": software,
+        "category": source.get("public_category"),
+        "version": version,
+        "title": first_nonempty(f"{software} {version_label}", f"{software} Version {version}"),
+        "published_at": published,
+        "source_url": source_url,
+        "official_url": source_url,
+        "download_url": "",
+        "file_size": "",
+        "file_size_status": "not_provided_by_source",
+        "file_size_note": (
+            "Microsoft 365 Apps updates are Click-to-Run managed; per-app release notes do "
+            "not expose standalone installer/package size metadata."
+        ),
+        "body": body,
+        "checksums_body": "",
+        "summary": "",
+        "source_type": "release_notes",
+        "official_source_type": "release_notes",
+        "official_note_status": "release_notes_captured",
+        "official_note_label": f"Official {software} release notes",
+        "official_sources": official_sources,
+        "capture_status": "captured-from-official-microsoft365-app-release-notes",
+        "official_summary": official_summary,
+        # Structured, precise identity (never keyed by a vague marketing version alone).
+        "target_channel": channel,
+        "target_build": build,
+        "target_app_version": version,
+        # Explicit applicability list + label (auditable; suite-wide items carry the suite id).
+        "applicability": applicability,
+        "applies_to_label": applies_to_label,
+    }
+
+
+def _records_from_office_app_release_notes(
+    source: dict[str, Any],
+    source_url: str,
+    html: str,
+    limit: int,
+) -> list[dict[str, Any]]:
+    """Pure parser (no network): Microsoft 365 Apps per-version release notes -> app-attributed
+    official-only records.
+
+    A version is turned into a record for the target app ONLY when a feature / fixed-issue
+    block in that version's section explicitly names the app (word-boundary) or is explicitly
+    all-Office-apps. Blocks that name only other apps, and generic channel/build rows with no
+    app attribution, never produce a record for this app. Fail closed: a version whose exact
+    version AND build cannot be established is skipped; returns [] on DOM-miss (never fabricates).
+    """
+    html = html or ""
+    ingestion = source.get("ingestion", {}) or {}
+    channel = str(ingestion.get("channel") or DEFAULT_CHANNEL).strip()
+    target_app = _target_app(source)
+    if not target_app:
+        return []
+    app_word = re.compile(rf"(?<![A-Za-z]){re.escape(target_app)}(?![A-Za-z])", re.I)
+
+    heads = list(APP_VERSION_HEADING_RE.finditer(html))
+    records: list[dict[str, Any]] = []
+    seen_versions: set[str] = set()
+
+    for i, match in enumerate(heads):
+        version = match.group("ver")
+        if not version or version in seen_versions:
+            continue
+        section = html[match.start(): heads[i + 1].start() if i + 1 < len(heads) else len(html)]
+
+        build_match = BUILD_IN_TEXT_RE.search(section)
+        build = build_match.group(1) if build_match else ""
+        if not build:
+            continue  # fail closed: require the precise build, not just a marketing version
+
+        published = _date_from_text(re.sub(r"\s+", " ", strip_tags(section)))
+
+        entries: list[str] = []
+        applies_suitewide = False
+        for block in BLOCK_RE.finditer(section):
+            text = re.sub(r"\s+", " ", strip_tags(block.group("block"))).strip()
+            if not text:
+                continue
+            if SUITEWIDE_APPLICABILITY_RE.search(text):
+                entries.append(text)
+                applies_suitewide = True
+            elif app_word.search(text):
+                entries.append(text)
+            # Blocks that name only other Office apps (or no app) are not attributed here.
+
+        if not entries:
+            continue  # no explicit target-app / suite-wide attribution in this version
+
+        seen_versions.add(version)
+        records.append(
+            _app_record(source, source_url, channel, version, build, published, target_app, entries, applies_suitewide)
+        )
+        if len(records) >= max(1, int(limit)):
+            break
+
+    return records
+
+
+# parser_profile -> pure parser. The M365 Apps / generic profiles use the suite update-history
+# table parser; the PowerPoint (per-app) profile uses the app-attribution release-notes parser;
+# Teams uses the version-history table parser. Unknown profiles are not dispatched (fetch returns []).
 _PROFILE_PARSERS = {
     "microsoft_365_apps_update_history": _records_from_office_release_notes,
-    "microsoft_365_powerpoint_release_notes": _records_from_office_release_notes,
+    "microsoft_365_powerpoint_release_notes": _records_from_office_app_release_notes,
+    "microsoft_office_app_release_notes": _records_from_office_app_release_notes,
     "microsoft_office_release_notes": _records_from_office_release_notes,
     "generic": _records_from_office_release_notes,
     "": _records_from_office_release_notes,

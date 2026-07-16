@@ -44,9 +44,12 @@ layout: aux-base
         {% if product_updates.size > 0 %}
         <span>{{ product_updates.size }}</span>
         <em>documented patch records</em>
+        {% elsif product.ingestion_active %}
+        <span>OFFICIAL SOURCE ACTIVE</span>
+        <em>awaiting first attributed record</em>
         {% else %}
-        <span>WATCH</span>
-        <em>monitoring active</em>
+        <span>STAGED</span>
+        <em>official source mapped</em>
         {% endif %}
       </div>
     </div>
