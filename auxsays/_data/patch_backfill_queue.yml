@@ -130,6 +130,28 @@
   coverage_state: active_watch
   documented_update_count: 0
   backfill_status: queued
+- product_id: adobe-acrobat-reader
+  company_id: adobe
+  product_name: Acrobat Reader
+  company_name: Adobe
+  priority: Core
+  category_key: workplace-critical
+  source_url: https://www.adobe.com/devnet-docs/acrobatetk/tools/ReleaseNotesDC/index.html
+  source_label: Acrobat Enterprise release notes
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
+- product_id: adobe-acrobat-pro
+  company_id: adobe
+  product_name: Acrobat Pro
+  company_name: Adobe
+  priority: Core
+  category_key: workplace-critical
+  source_url: https://www.adobe.com/devnet-docs/acrobatetk/tools/ReleaseNotesDC/index.html
+  source_label: Acrobat Enterprise release notes
+  coverage_state: active_watch
+  documented_update_count: 0
+  backfill_status: queued
 - product_id: adobe-after-effects
   company_id: adobe
   product_name: After Effects

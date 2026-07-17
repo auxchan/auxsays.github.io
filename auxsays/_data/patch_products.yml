@@ -1647,7 +1647,7 @@
   asset_type: product_icon
 - id: adobe-acrobat-reader
   company_name: Adobe
-  product_name: Acrobat / Acrobat Reader
+  product_name: Acrobat Reader
   badge_text: PDF
   category_key: workplace-critical
   category_label: Workplace Critical
@@ -1670,12 +1670,14 @@
   product_id: adobe-acrobat-reader
   company_url: /updates/adobe/
   product_url: /updates/adobe/adobe-acrobat-reader/
-  current_status_label: Source map staged
+  current_status_label: Official ingestion active
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: staged
-  coverage_status_label: Source map staged
-  ingestion_status: Adapter staged; official source classified
+  coverage_state: active_watch
+  coverage_status_label: Official ingestion active
+  ingestion_active: true
+  ingestion_status: Shared Acrobat DC official ingestion active (fail-closed); awaiting
+    first attributed record
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -1683,16 +1685,64 @@
   - Individual update pages carry the deeper score, report count, confidence, and
     timeline.
   record_trigger_rules:
-  - New Adobe Acrobat / Reader release-note entry.
-  - Security bulletin or urgent planned update.
+  - New Adobe Acrobat Reader (DC) release-note entry.
+  - Security bulletin or urgent planned update establishing exact version/track.
   - Workflow impact involving PDFs, printing, signatures, forms, browser integration,
     or enterprise deployment.
   - Enough confirmed patch-specific public reports to evaluate install risk.
-  dossier_note: Acrobat / Reader is tracked as a workplace-critical PDF platform where
+  dossier_note: Acrobat Reader is tracked as a workplace-critical PDF platform where
     security updates may be urgent, but fragile form, print, and signature workflows
     still require careful testing.
   asset_type: product_icon
   ui_backdrop_path: /assets/img/software-ui/adobe-acrobat-reader-ui.svg
+- id: adobe-acrobat-pro
+  company_name: Adobe
+  product_name: Acrobat Pro
+  badge_text: PDF
+  category_key: workplace-critical
+  category_label: Workplace Critical
+  priority: Core
+  cadence: High
+  impact: PDF creation, editing, e-signatures, forms, redaction, PDF export/compare,
+    enterprise deployment, and security exposure.
+  watch_reason: Acrobat Pro updates can affect PDF authoring, editing, e-signature,
+    forms, redaction, compare, and security-sensitive PDF handling that offices depend on.
+  source_url: https://www.adobe.com/devnet-docs/acrobatetk/tools/ReleaseNotesDC/index.html
+  source_label: Acrobat Enterprise release notes
+  signal_notes: Track security urgency, Continuous vs Classic track differences, Acrobat
+    Pro authoring/editing behavior, e-signatures, forms, redaction, and enterprise
+    deployment impact.
+  source_id: adobe-acrobat-pro
+  logo_label: Acrobat Pro
+  logo_path: /assets/img/patch-logos/adobe.png
+  company_id: adobe
+  product_id: adobe-acrobat-pro
+  company_url: /updates/adobe/
+  product_url: /updates/adobe/adobe-acrobat-pro/
+  current_status_label: Official ingestion active
+  current_status_score: 0
+  documented_update_count: 0
+  coverage_state: active_watch
+  coverage_status_label: Official ingestion active
+  ingestion_active: true
+  ingestion_status: Shared Acrobat DC official ingestion active (fail-closed); awaiting
+    first attributed record
+  consensus_method:
+  - Official source is treated as the factual baseline.
+  - Community reports are grouped by recurring theme, severity, and frequency.
+  - 'AUXSAYS labels stay quick-readable: Positive, Moderate, Negative, or Insufficient.'
+  - Individual update pages carry the deeper score, report count, confidence, and
+    timeline.
+  record_trigger_rules:
+  - New Adobe Acrobat Pro (DC) release-note entry.
+  - Security bulletin or urgent planned update establishing exact version/track.
+  - Workflow impact involving PDF authoring, editing, e-signatures, forms, redaction,
+    or enterprise deployment.
+  - Enough confirmed patch-specific public reports to evaluate install risk.
+  dossier_note: Acrobat Pro is tracked as a workplace-critical PDF authoring platform
+    where security updates may be urgent, but fragile authoring, form, and signature
+    workflows still require careful testing.
+  asset_type: company_fallback
 - id: microsoft-windows-11
   company_name: Microsoft
   product_name: Windows 11
@@ -1798,13 +1848,15 @@
   product_id: microsoft-powerpoint
   company_url: /updates/microsoft/
   product_url: /updates/microsoft/microsoft-powerpoint/
-  current_status_label: Source map staged
+  current_status_label: Official ingestion active
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: staged
-  coverage_status_label: Source map staged
-  ingestion_status: Manual watch through Microsoft 365 Apps source until product-specific
-    extraction is proven
+  coverage_state: active_watch
+  coverage_status_label: Official ingestion active
+  ingestion_active: true
+  ingestion_status: PowerPoint-attributed official ingestion active (fail-closed); only
+    explicit PowerPoint or explicit suite-wide release-note entries are counted; awaiting
+    first attributed record
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -1822,11 +1874,12 @@
   category_label: Productivity
   priority: Core
   cadence: High
-  impact: Office update channels, security fixes, collaboration, sync, add-ins, Copilot
-    behavior, enterprise rollout, and workplace productivity.
-  watch_reason: Microsoft 365 Apps updates affect the broader Office suite and can
-    change security exposure, collaboration behavior, update-channel rollout, and
-    workplace app reliability.
+  impact: Shared Microsoft 365 Apps servicing -- Current Channel version/build releases,
+    Click-to-Run install/update behavior, suite-wide security fixes, deployment/policy
+    changes, and cross-app regressions not attributable to a single application.
+  watch_reason: Microsoft 365 Apps is the shared servicing/platform layer for the Office
+    desktop suite; app-specific changes are tracked on the individual application pages
+    (e.g. PowerPoint), while channel/build servicing and cross-app changes stay here.
   source_url: https://learn.microsoft.com/en-us/officeupdates/update-history-microsoft365-apps-by-date
   source_label: Microsoft 365 Apps update history
   signal_notes: Track Current Channel, Monthly Enterprise, Semi-Annual Enterprise,
@@ -1838,12 +1891,13 @@
   product_id: microsoft-365-apps
   company_url: /updates/microsoft/
   product_url: /updates/microsoft/microsoft-365-apps/
-  current_status_label: Source map staged
+  current_status_label: Official ingestion active
   current_status_score: 0
-  documented_update_count: 0
-  coverage_state: staged
-  coverage_status_label: Source map staged
-  ingestion_status: Adapter staged; official source classified
+  documented_update_count: 1
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
+  ingestion_active: true
+  ingestion_status: Shared servicing ingestion active (Current Channel version/build history)
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -1851,9 +1905,9 @@
   - New Microsoft 365 Apps release-note entry.
   - Security or non-security update affecting Office desktop apps.
   - Channel-specific rollout with workplace deployment impact.
-  dossier_note: Microsoft 365 Apps is tracked as the broader Office update stream
-    that may include PowerPoint, Word, Excel, Outlook, security, and Copilot-related
-    changes.
+  dossier_note: Microsoft 365 Apps is the shared servicing/platform layer (channel/build
+    releases, Click-to-Run, suite-wide security, cross-app regressions). App-specific
+    changes are attributed to the individual application pages, not duplicated here.
   asset_type: product_icon
 - id: elgato-stream-deck
   company_name: Elgato

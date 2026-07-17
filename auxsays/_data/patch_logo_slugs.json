@@ -44,6 +44,19 @@
     "pr",
     "adobe"
   ],
+  "adobe-acrobat-reader": [
+    "adobeacrobatreader",
+    "acrobatreader",
+    "acrobat",
+    "reader",
+    "adobe"
+  ],
+  "adobe-acrobat-pro": [
+    "adobeacrobatpro",
+    "acrobatpro",
+    "acrobat",
+    "adobe"
+  ],
   "adobe-after-effects": [
     "adobeaftereffects",
     "aftereffects",

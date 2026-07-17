@@ -3146,20 +3146,21 @@
 - company_id: adobe
   product_id: adobe-acrobat-reader
   company: Adobe
-  software: Acrobat / Acrobat Reader
+  software: Adobe Acrobat Reader
   public_category: Workplace Critical
-  enabled: false
-  recommended_priority: P1 needs source-specific adapter
+  enabled: true
+  recommended_priority: P1 shared Acrobat adapter (fail-closed)
   ingestion:
     type: html_release_notes
-    adapter: adobe_release_notes
+    adapter: adobe_acrobat
     official_url: https://www.adobe.com/devnet-docs/acrobatetk/tools/ReleaseNotesDC/index.html
     secondary_official_url: https://helpx.adobe.com/security/products/acrobat.html
     feed_url: null
     api_url: null
-    parser_profile: adobe_acrobat_enterprise_release_notes
+    parser_profile: adobe_acrobat_dc_release_notes
+    applicability: [adobe-acrobat-reader, adobe-acrobat-pro]
     official_source_type: release_notes
-    source_capture_status: needs_adapter
+    source_capture_status: adapter_enabled
     include_prereleases: false
     version_pattern: ^(?P<version>[0-9]+\.[0-9]+\.[0-9]+).*$
     requires_javascript: false
@@ -3167,12 +3168,50 @@
     reliability: High
     breakage_risk: Medium
     polling_frequency: 24h
-    update_detection_method: release-note index diff
+    update_detection_method: Shared Acrobat DC release-note attribution (track + version + release date required; applies to both editions unless explicitly restricted)
     file_size_status_when_missing: creative_cloud_managed
+    request: {timeout_seconds: 40, retries: 2, backoff_seconds: 3, max_bytes: 1500000}
     extractable_fields: {version: true, release_date: true, title: true, release_note_body: true, download_url: false, file_size: false, checksum: false, known_issues: true, platform_specific_installers: false, archived_release_history: true}
-    keywords: [release, update, security, planned update, Acrobat, Reader]
+    keywords: [release, update, security, planned update, Acrobat, Reader, Continuous, Classic]
   generated_record:
     canonical_url_pattern: /updates/adobe/adobe-acrobat-reader/{version_slug}/
+    title_pattern: '{software} {version} official update breakdown'
+  community_future:
+    possible_sources: [Adobe Acrobat community, enterprise deployment reports, Reddit]
+    difficulty: Medium
+    defer_until_official_ingestion_stable: true
+- company_id: adobe
+  product_id: adobe-acrobat-pro
+  company: Adobe
+  software: Adobe Acrobat Pro
+  public_category: Workplace Critical
+  enabled: true
+  recommended_priority: P1 shared Acrobat adapter (fail-closed)
+  ingestion:
+    type: html_release_notes
+    adapter: adobe_acrobat
+    official_url: https://www.adobe.com/devnet-docs/acrobatetk/tools/ReleaseNotesDC/index.html
+    secondary_official_url: https://helpx.adobe.com/security/products/acrobat.html
+    feed_url: null
+    api_url: null
+    parser_profile: adobe_acrobat_dc_release_notes
+    applicability: [adobe-acrobat-reader, adobe-acrobat-pro]
+    official_source_type: release_notes
+    source_capture_status: adapter_enabled
+    include_prereleases: false
+    version_pattern: ^(?P<version>[0-9]+\.[0-9]+\.[0-9]+).*$
+    requires_javascript: false
+    scrape_feasibility: Medium
+    reliability: High
+    breakage_risk: Medium
+    polling_frequency: 24h
+    update_detection_method: Shared Acrobat DC release-note attribution (track + version + release date required; applies to both editions unless explicitly restricted)
+    file_size_status_when_missing: creative_cloud_managed
+    request: {timeout_seconds: 40, retries: 2, backoff_seconds: 3, max_bytes: 1500000}
+    extractable_fields: {version: true, release_date: true, title: true, release_note_body: true, download_url: false, file_size: false, checksum: false, known_issues: true, platform_specific_installers: false, archived_release_history: true}
+    keywords: [release, update, security, planned update, Acrobat, Pro, Continuous, Classic]
+  generated_record:
+    canonical_url_pattern: /updates/adobe/adobe-acrobat-pro/{version_slug}/
     title_pattern: '{software} {version} official update breakdown'
   community_future:
     possible_sources: [Adobe Acrobat community, enterprise deployment reports, Reddit]
@@ -3256,18 +3295,20 @@
   company: Microsoft
   software: Microsoft PowerPoint
   public_category: Productivity
-  enabled: false
-  recommended_priority: P2 manual watch through M365
+  enabled: true
+  recommended_priority: P1 app-attributed official ingestion (fail-closed)
   ingestion:
     type: html_release_notes
-    adapter: manual_watch
+    adapter: microsoft_office_updates
     official_url: https://learn.microsoft.com/en-us/officeupdates/release-notes-microsoft365-apps
     secondary_official_url: https://learn.microsoft.com/en-us/officeupdates/update-history-microsoft365-apps-by-date
     feed_url: null
     api_url: null
     parser_profile: microsoft_365_powerpoint_release_notes
+    target_app: powerpoint
+    channel: Current Channel
     official_source_type: release_notes
-    source_capture_status: manual_watch
+    source_capture_status: adapter_enabled
     include_prereleases: false
     version_pattern: ^Version (?P<version>[0-9]+).*$
     requires_javascript: false
@@ -3275,7 +3316,7 @@
     reliability: Medium
     breakage_risk: Medium
     polling_frequency: 24h
-    update_detection_method: Microsoft 365 Apps release-note product filter
+    update_detection_method: Per-app release-note attribution (explicit PowerPoint or explicit suite-wide only; generic channel/build rows stay on Microsoft 365 Apps)
     file_size_status_when_missing: microsoft_managed
     extractable_fields: {version: true, release_date: true, title: true, release_note_body: true, download_url: false, file_size: false, checksum: false, known_issues: false, platform_specific_installers: false, archived_release_history: true}
     keywords: [PowerPoint, presentation, release, update]

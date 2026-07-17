@@ -932,6 +932,19 @@ assets:
   last_verified_at: '2026-06-21'
   fallback_to_company_logo: false
   notes: Official Acrobat Reader App Store icon from Adobe's verified app listing.
+- asset_id: adobe-acrobat-pro
+  kind: company_fallback
+  owner_name: Adobe Acrobat Pro
+  source_type: company_fallback
+  source_url: https://simpleicons.org/icons/adobe.svg
+  local_path: /assets/img/patch-logos/adobe.png
+  attribution_required: false
+  attribution_note: Used for editorial identification only; trademarks remain with
+    respective owners.
+  last_verified_at: '2026-07-15'
+  fallback_to_company_logo: true
+  notes: Acrobat Pro uses the Adobe company mark as an explicit company fallback until a
+    verified, license-compatible Acrobat Pro product vector is sourced.
 - asset_id: microsoft-windows-11
   kind: product_icon
   owner_name: Microsoft Windows

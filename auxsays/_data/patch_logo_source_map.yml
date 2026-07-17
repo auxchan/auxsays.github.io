@@ -1385,7 +1385,7 @@ products:
   recommended_filename: "make.png"
   usage_notes: "Official Make App Store icon from Celonis s.r.o."
 - id: "adobe-acrobat-reader"
-  display_name: "Acrobat / Acrobat Reader"
+  display_name: "Acrobat Reader"
   company_id: "adobe"
   current_local_asset: "/assets/img/patch-logos/adobe-acrobat-reader.png"
   current_asset_exists: true
@@ -1397,13 +1397,33 @@ products:
   official_source_url: "https://apps.apple.com/us/app/acrobat-reader-pdf-editor/id469337564?uo=4"
   direct_asset_url: "https://is1-ssl.mzstatic.com/image/thumb/Purple211/v4/87/e8/a5/87e8a569-b784-f607-85b6-1c249d239d00/ReleaseAppIcon-0-0-1x_U007emarketing-0-8-0-sRGB-85-220.png/512x512bb.png"
   source_domain: "apps.apple.com"
-  source_owner: "Acrobat / Acrobat Reader"
+  source_owner: "Acrobat Reader"
   official_or_vendor_controlled: true
   fallback_source: false
   auto_fetchable: true
   manual_review_required: false
   recommended_filename: "adobe-acrobat-reader.png"
   usage_notes: "Fetched official Acrobat Reader app icon from Adobe's verified App Store listing."
+- id: "adobe-acrobat-pro"
+  display_name: "Acrobat Pro"
+  company_id: "adobe"
+  current_local_asset: "/assets/img/patch-logos/adobe.png"
+  current_asset_exists: true
+  current_is_company_fallback: true
+  current_provenance_status: "current_provenance:company_fallback"
+  desired_local_asset: "/assets/img/patch-logos/adobe.png"
+  source_status: company_fallback
+  preferred_source_type: official_product_page
+  official_source_url: "https://www.adobe.com/acrobat/pdf-reader.html"
+  direct_asset_url: ""
+  source_domain: "www.adobe.com"
+  source_owner: "Acrobat Pro"
+  official_or_vendor_controlled: true
+  fallback_source: true
+  auto_fetchable: false
+  manual_review_required: true
+  recommended_filename: "adobe.png"
+  usage_notes: "Acrobat Pro uses the Adobe company mark as a company fallback until a verified, license-compatible Acrobat Pro product vector is sourced."
 - id: "microsoft-windows-11"
   display_name: "Windows 11"
   company_id: "microsoft"

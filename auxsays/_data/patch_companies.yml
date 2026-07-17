@@ -5,7 +5,7 @@
   category_keys:
   - video-production
   - design-workflow
-  summary: Adobe is tracked because changes to Premiere Pro, Acrobat / Reader, After Effects, Photoshop, Media Encoder, and Lightroom Classic can affect creator workflows, production stability, rendering, exports, design assets, and publishing operations.
+  summary: Adobe is tracked because changes to Premiere Pro, Acrobat Reader, Acrobat Pro, After Effects, Photoshop, Media Encoder, and Lightroom Classic can affect creator workflows, production stability, rendering, exports, design assets, and publishing operations.
   logo_path: /assets/img/patch-logos/adobe.png
   company_url: /updates/adobe/
   official_sources:
@@ -18,9 +18,12 @@
   - label: Photoshop release notes
     url: https://helpx.adobe.com/photoshop/desktop/whats-new/photoshop-on-desktop-release-notes.html
     product_id: adobe-photoshop
-  - label: Acrobat Enterprise release notes
+  - label: Acrobat Reader release notes
     url: https://www.adobe.com/devnet-docs/acrobatetk/tools/ReleaseNotesDC/index.html
     product_id: adobe-acrobat-reader
+  - label: Acrobat Pro release notes
+    url: https://www.adobe.com/devnet-docs/acrobatetk/tools/ReleaseNotesDC/index.html
+    product_id: adobe-acrobat-pro
   - label: Media Encoder release notes
     url: https://helpx.adobe.com/media-encoder/release-notes.html
     product_id: adobe-media-encoder
@@ -30,7 +33,7 @@
   documented_update_count: 0
   coverage_state: active_watch
   coverage_status_label: Monitoring active
-  tracked_product_count: 6
+  tracked_product_count: 7
   asset_type: company_logo
 - id: amd
   company_name: AMD
@@ -632,9 +635,9 @@
   - label: Microsoft 365 Apps release notes
     url: https://learn.microsoft.com/en-us/officeupdates/release-notes-microsoft365-apps
     product_id: microsoft-powerpoint
-  documented_update_count: 0
-  coverage_state: staged
-  coverage_status_label: Source map staged
+  documented_update_count: 1
+  coverage_state: active_watch
+  coverage_status_label: Monitoring active
   tracked_product_count: 4
   asset_type: company_logo
 - id: elgato

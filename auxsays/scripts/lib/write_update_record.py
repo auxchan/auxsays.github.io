@@ -32,6 +32,39 @@ WINDOWS_IDENTITY_FIELDS = (
     "target_release_date",
 )
 
+# Structured Microsoft 365 Apps (Office) app-release identity, supplied by the office
+# adapter's app-attribution parser. Opt-in: only app-attributed records (e.g. PowerPoint)
+# carry these; the suite update-history lane keeps channel/build in prose only.
+OFFICE_APP_IDENTITY_FIELDS = (
+    "target_channel",
+    "target_build",
+    "target_app_version",
+)
+
+# Structured Adobe Acrobat identity, supplied by the shared adobe_acrobat adapter. Opt-in:
+# only Acrobat records carry these, and they are never inferred across edition/track/
+# platform (fail-closed when any of them cannot be established from the official source).
+ACROBAT_IDENTITY_FIELDS = (
+    "target_track",
+    "target_platform",
+    "target_version",
+    "security_bulletin_id",
+)
+
+# Explicit cross-product applicability: the list of product_ids one official item applies
+# to, plus a human label. Opt-in. Lets a single official item feed several app pages while
+# preserving a common source identity and an auditable applicability list (never blind
+# duplication of the same item as two unrelated patches).
+APPLICABILITY_FIELDS = (
+    "applicability",
+    "applies_to_label",
+)
+
+# All opt-in structured identity/applicability fields the official adapters may supply.
+OPTIONAL_STRUCTURED_FIELDS = (
+    OFFICE_APP_IDENTITY_FIELDS + ACROBAT_IDENTITY_FIELDS + APPLICABILITY_FIELDS
+)
+
 
 def _file_size_status(record: dict[str, Any]) -> str:
     if record.get("file_size"):
@@ -224,6 +257,11 @@ def build_front_matter(record: dict[str, Any]) -> dict[str, Any]:
     for field in WINDOWS_IDENTITY_FIELDS:
         if record.get(field) is not None:
             front[field] = record[field]
+    # Structured Office/Acrobat identity + explicit applicability (only present when the
+    # app-attribution / Acrobat adapters supply them). Additive; other records never carry these.
+    for field in OPTIONAL_STRUCTURED_FIELDS:
+        if record.get(field) is not None:
+            front[field] = record[field]
     return front
 
 
@@ -300,6 +338,13 @@ def refresh_existing_record(path: Path, record: dict[str, Any]) -> tuple[Path, s
     # record. Consensus counting gates Windows user reports against these fields, so a
     # stale value here would be exactly the rollover bug this sprint prevents.
     for field in WINDOWS_IDENTITY_FIELDS:
+        if field in record and record[field] is not None and existing.get(field) != record[field]:
+            existing[field] = record[field]
+            material_changed = True
+
+    # Office/Acrobat structured identity + applicability advance on change so a channel/
+    # build/track/version rollover never leaves a stale identity on the record.
+    for field in OPTIONAL_STRUCTURED_FIELDS:
         if field in record and record[field] is not None and existing.get(field) != record[field]:
             existing[field] = record[field]
             material_changed = True
