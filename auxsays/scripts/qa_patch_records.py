@@ -13,6 +13,7 @@ import yaml
 
 ROOT = Path(__file__).resolve().parents[1]
 GENERATED_DIR = ROOT / "updates" / "generated"
+UPDATES_DIR = ROOT / "updates"
 OUT_PATH = ROOT / "_data" / "qa_status.json"
 PRODUCTS_PATH = ROOT / "_data" / "patch_products.yml"
 SOURCES_PATH = ROOT / "_data" / "patch_ingestion_sources.yml"
@@ -102,7 +103,13 @@ def front_matter(path: Path) -> dict[str, Any]:
 
 
 def add(bucket: list[dict[str, str]], path: Path | str, code: str, message: str) -> None:
-    file_value = str(path.relative_to(ROOT)) if isinstance(path, Path) and path.is_absolute() else str(path)
+    if isinstance(path, Path) and path.is_absolute():
+        try:
+            file_value = str(path.relative_to(ROOT))
+        except ValueError:
+            file_value = str(path)  # fixture/temp path outside the repo (route-integrity tests)
+    else:
+        file_value = str(path)
     bucket.append({"file": file_value, "code": code, "message": message})
 
 
@@ -522,6 +529,100 @@ def scan_priority_source_coverage() -> tuple[list[dict[str, str]], list[dict[str
     return errors, warnings
 
 
+def _landing_route_source(updates_dir: Path, company_id: str, product_id: str) -> Path:
+    """The repo-owned route source that emits the product landing page
+    /updates/<company_id>/<product_id>/ — a hand-authored index.md (layout: aux-patch-product)."""
+    return updates_dir / str(company_id) / str(product_id) / "index.md"
+
+
+def scan_route_integrity(
+    products: Any = None,
+    record_fronts: list[dict[str, Any]] | None = None,
+    updates_dir: Path | None = None,
+) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
+    """Deterministic, blocking route-integrity QA.
+
+    Product landing pages under /updates/<company>/<product>/ are emitted from explicit
+    route-source files (updates/<company>/<product>/index.md). Product catalog rows and
+    generated patch records do NOT create that route. This guards the class of bug where a
+    product is activated (catalog + generated records) but its landing route source is
+    missing, so the product page 404s in production (e.g. adobe-acrobat-pro after PR #21).
+
+    Errors (blocking):
+      - a product declaring a /updates/... landing route has no route-source index.md
+      - a generated record references a product_id not present in the catalog
+      - a generated record's parent product landing route has no route-source index.md
+      - duplicate product_id in the catalog
+      - duplicate landing-page permalink across route-source files
+    Injectable paths/data make this unit-testable with fixtures.
+    """
+    errors: list[dict[str, str]] = []
+    warnings: list[dict[str, str]] = []
+    if products is None:
+        products = load_yaml(PRODUCTS_PATH, [])
+    if updates_dir is None:
+        updates_dir = UPDATES_DIR
+    if record_fronts is None:
+        record_fronts = []
+        for path in sorted((updates_dir / "generated").glob("*.md")):
+            fm = front_matter(path)
+            fm = dict(fm) if isinstance(fm, dict) else {}
+            fm["_path"] = path
+            record_fronts.append(fm)
+
+    # Catalog + duplicate product_id detection.
+    catalog: dict[str, dict[str, Any]] = {}
+    seen_pid: set[str] = set()
+    for prod in products if isinstance(products, list) else []:
+        if not isinstance(prod, dict):
+            continue
+        pid = str(prod.get("product_id") or prod.get("id") or "").strip()
+        if not pid:
+            continue
+        if pid in seen_pid:
+            add(errors, PRODUCTS_PATH, "duplicate_product_id", f"product_id '{pid}' appears more than once in the product catalog.")
+        seen_pid.add(pid)
+        catalog[pid] = prod
+
+    # Every catalog product that declares a /updates/... landing route must have a route source.
+    for pid, prod in catalog.items():
+        product_url = str(prod.get("product_url") or "").strip()
+        company_id = str(prod.get("company_id") or "").strip()
+        if not product_url.startswith("/updates/"):
+            continue
+        if not company_id:
+            add(errors, PRODUCTS_PATH, "product_route_missing_company", f"Product '{pid}' declares landing route '{product_url}' but has no company_id to resolve its route source.")
+            continue
+        src = _landing_route_source(updates_dir, company_id, pid)
+        if not src.exists():
+            add(errors, src, "product_landing_route_missing", f"Product '{pid}' ({company_id}) declares landing route {product_url} but no route source exists. Create updates/{company_id}/{pid}/index.md (layout: aux-patch-product) or /updates/{company_id}/{pid}/ will 404.")
+
+    # Every generated record must map to a catalog product AND an emittable parent route.
+    for fm in record_fronts:
+        pid = str(fm.get("product_id") or "").strip()
+        cid = str(fm.get("company_id") or "").strip()
+        rpath = fm.get("_path") or PRODUCTS_PATH
+        if not pid:
+            continue
+        if pid not in catalog:
+            add(errors, rpath, "record_product_not_in_catalog", f"Generated record product_id '{pid}' is not present in the product catalog.")
+            continue
+        if cid and not _landing_route_source(updates_dir, cid, pid).exists():
+            add(errors, rpath, "record_parent_route_missing", f"Generated record for '{pid}' has no parent product landing page (expected updates/{cid}/{pid}/index.md); its patch pages exist but /updates/{cid}/{pid}/ would 404.")
+
+    # Duplicate landing-page permalinks across route sources.
+    seen_permalinks: dict[str, Path] = {}
+    for idx in sorted(updates_dir.glob("*/*/index.md")):
+        permalink = str(front_matter(idx).get("permalink") or "").strip()
+        if not permalink:
+            continue
+        if permalink in seen_permalinks:
+            add(errors, idx, "duplicate_landing_permalink", f"Landing permalink '{permalink}' is emitted by multiple route sources ({seen_permalinks[permalink]} and {idx}).")
+        seen_permalinks[permalink] = idx
+
+    return errors, warnings
+
+
 def main() -> int:
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     files = sorted(GENERATED_DIR.glob("*.md"))
@@ -542,6 +643,9 @@ def main() -> int:
     errors.extend(e)
     warnings.extend(w)
     e, w = scan_required_record_paths()
+    errors.extend(e)
+    warnings.extend(w)
+    e, w = scan_route_integrity()
     errors.extend(e)
     warnings.extend(w)
 
