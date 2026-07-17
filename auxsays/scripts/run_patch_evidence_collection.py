@@ -18,11 +18,17 @@ from patch_collectors.base import CollectorContext, upsert_method_health  # noqa
 from patch_collectors.adobe_premiere import AdobePremiereCollector  # noqa: E402
 from patch_collectors.davinci import DavinciCollector  # noqa: E402
 from patch_collectors.obs import ObsCollector  # noqa: E402
+from patch_collectors.adobe_acrobat_community import AdobeAcrobatCollector  # noqa: E402
 
 COLLECTORS = {
     "adobe-premiere-pro": AdobePremiereCollector,
     "obs-studio": ObsCollector,
     "blackmagic-davinci": DavinciCollector,
+    # Shared Acrobat community-evidence collector, registered once per edition. The runner
+    # calls COLLECTORS[product_id]() zero-arg, so a factory binds each product_id; writeback
+    # is keyed by (product_id, update_version), so Reader/Pro never cross-contaminate.
+    "adobe-acrobat-reader": lambda: AdobeAcrobatCollector("adobe-acrobat-reader"),
+    "adobe-acrobat-pro": lambda: AdobeAcrobatCollector("adobe-acrobat-pro"),
 }
 
 # --- Windows Learn Q&A: default-off activation gate --------------------------

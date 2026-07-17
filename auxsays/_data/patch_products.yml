@@ -644,18 +644,18 @@
     issues.
   source_id: adobe-media-encoder
   logo_label: Media Encoder
-  logo_path: /assets/img/patch-logos/adobe.png
+  logo_path: /assets/img/patch-logos/adobe-media-encoder.svg
   ui_backdrop_path: /assets/img/software-ui/adobe-media-encoder-ui.webp
   company_id: adobe
   product_id: adobe-media-encoder
   company_url: /updates/adobe/
   product_url: /updates/adobe/adobe-media-encoder/
-  current_status_label: Tracking initialized
+  current_status_label: Source map staged
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
+  coverage_state: staged
+  coverage_status_label: Source map staged
+  ingestion_status: Official adapter staged (disabled); official source classified, not yet monitoring
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.

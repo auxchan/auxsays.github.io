@@ -31,7 +31,7 @@ _ERRORS: list[str] = []
 
 WIN_ID = "microsoft-windows-11"
 FLAG = runner.WINDOWS_LEARN_QNA_ENABLE_ENV
-BASE = ("adobe-premiere-pro", "blackmagic-davinci", "obs-studio")
+BASE = ("adobe-acrobat-pro", "adobe-acrobat-reader", "adobe-premiere-pro", "blackmagic-davinci", "obs-studio")
 
 
 def check(label: str, condition: bool, detail: str = "") -> None:

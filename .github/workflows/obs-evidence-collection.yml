@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       product_id:
-        description: "Optional product_id: obs-studio, blackmagic-davinci, adobe-premiere-pro, or microsoft-windows-11"
+        description: "Optional product_id: obs-studio, blackmagic-davinci, adobe-premiere-pro, adobe-acrobat-reader, adobe-acrobat-pro, or microsoft-windows-11"
         required: false
         type: string
       dry_run:
@@ -52,9 +52,9 @@ jobs:
           product_id="$(printf '%s' "$raw_product_id" | tr -d '\r' | sed -E 's/^[[:space:]]*product_id:[[:space:]]*//' | xargs)"
 
           case "$product_id" in
-            ""|obs-studio|blackmagic-davinci|adobe-premiere-pro|microsoft-windows-11) ;;
+            ""|obs-studio|blackmagic-davinci|adobe-premiere-pro|adobe-acrobat-reader|adobe-acrobat-pro|microsoft-windows-11) ;;
             *)
-              echo "::error::Invalid product_id '$product_id'. Use obs-studio, blackmagic-davinci, adobe-premiere-pro, or microsoft-windows-11."
+              echo "::error::Invalid product_id '$product_id'. Use obs-studio, blackmagic-davinci, adobe-premiere-pro, adobe-acrobat-reader, adobe-acrobat-pro, or microsoft-windows-11."
               exit 2
               ;;
           esac
@@ -100,7 +100,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add auxsays/_data/consensus_evidence.yml auxsays/_data/evidence_method_health.yml auxsays/updates/generated/*obs-studio*.md auxsays/updates/generated/*davinci*.md auxsays/updates/generated/*premiere-pro*.md auxsays/updates/generated/*windows-11*.md
+          git add auxsays/_data/consensus_evidence.yml auxsays/_data/evidence_method_health.yml auxsays/updates/generated/*obs-studio*.md auxsays/updates/generated/*davinci*.md auxsays/updates/generated/*premiere-pro*.md auxsays/updates/generated/*windows-11*.md auxsays/updates/generated/*acrobat*.md
           if git diff --cached --quiet; then
             echo "No material evidence changes to commit."
             echo "changed=false" >> "$GITHUB_OUTPUT"

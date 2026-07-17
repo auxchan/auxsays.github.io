@@ -167,7 +167,7 @@ adobe-media-encoder:
   company_label: Adobe
   source_id: adobe-media-encoder
   logo_label: Media Encoder
-  logo_path: /assets/img/patch-logos/adobe.png
+  logo_path: /assets/img/patch-logos/adobe-media-encoder.svg
 adobe-lightroom-classic:
   company_name: Adobe
   product_name: Lightroom Classic

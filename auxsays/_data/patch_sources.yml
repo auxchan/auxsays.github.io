@@ -473,7 +473,7 @@
     Effects handoff, known issues, and fixed issues.
   source_id: adobe-media-encoder
   logo_label: Media Encoder
-  logo_path: /assets/img/patch-logos/adobe.png
+  logo_path: /assets/img/patch-logos/adobe-media-encoder.svg
   company_id: adobe
   product_id: adobe-media-encoder
   company_url: /updates/adobe/
