@@ -5881,3 +5881,28 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uyc4z4-virtualy-unresolvable-davinci-media-offii
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1uyc4z4/virtualy_unresolvable_davinci_media_offiine_bug/
+  parent_title: Virtualy unresolvable Davinci Media OffIine Bug
+  report_title: Virtualy unresolvable Davinci Media OffIine Bug
+  report_text_excerpt: 'Virtualy unresolvable Davinci Media OffIine Bug Specs: Windows 10, Davinci 21, free, 24fps 1080p footage. All files are in H.264 Before you ask: yes i looked on the sub before positing, and tried every possible solution. Yes all of the files are there. Relinking does nothing....'
+  captured_at: '2026-07-17T06:32:06Z'
+  source_date: '2026-07-16'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
