@@ -17,8 +17,8 @@ update_version: Repository-level GitHub Copilot usage metrics generally availabl
 update_logo_text: GIT
 update_published_at: '2026-07-17T22:05:18Z'
 update_last_checked: '2026-07-18T03:41:31Z'
-source_last_checked: '2026-07-18T08:28:54Z'
-official_body_last_checked: '2026-07-18T08:28:54Z'
+source_last_checked: '2026-07-18T14:02:27Z'
+official_body_last_checked: '2026-07-18T14:02:27Z'
 record_last_updated: '2026-07-18T03:41:31Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -88,6 +88,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-07-18T08:28:54Z'
+  url: https://github.blog/changelog/2026-07-17-repository-level-github-copilot-usage-metrics-generally-available
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-07-18T14:02:27Z'
   url: https://github.blog/changelog/2026-07-17-repository-level-github-copilot-usage-metrics-generally-available
   status: captured-from-rss-feed
   body_captured: true
