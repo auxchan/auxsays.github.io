@@ -147,18 +147,107 @@ def run() -> int:
         since = None
         target_versions = None
     coll = ac.AdobeAcrobatCollector(R)
-    # monkeypatch the two discovery methods to return [] (no network)
+    # monkeypatch ALL THREE discovery methods to return [] (no network)
+    orig_algolia = ac.adobe_community_algolia_search_candidates
     orig_adobe = ac.adobe_community_search_candidates
     orig_reddit = ac.reddit_search_candidates
     try:
+        ac.adobe_community_algolia_search_candidates = lambda *a, **k: []
         ac.adobe_community_search_candidates = lambda *a, **k: []
         ac.reddit_search_candidates = lambda *a, **k: []
         accepted, rejected, health = coll.collect_for_record(REC_R, _NoNet(), CAPTURED)
         method_ids = sorted(h["method_id"] for h in health)
-        check("collect_for_record emits health for BOTH methods", method_ids == ["adobe_community_search", "reddit_search"], str(method_ids))
+        check("collect_for_record emits health for ALL THREE methods",
+              method_ids == ["adobe_community_algolia_search", "adobe_community_search", "reddit_search"], str(method_ids))
         check("zero candidates -> zero accepted, honest no_results health", accepted == [] and all(h["status"] == "no_results" for h in health))
         check("health rows carry the collector product_id", all(h["product_id"] == R for h in health))
     finally:
+        ac.adobe_community_algolia_search_candidates = orig_algolia
+        ac.adobe_community_search_candidates = orig_adobe
+        ac.reddit_search_candidates = orig_reddit
+
+    # === Algolia search-index discovery method (Part F) =====================
+    # Query construction: exact-version + product-constrained, quoted phrases.
+    rq = ac._algolia_search_queries(ac.EDITION_CONFIG[P], VER)
+    check("algolia queries are exact-version + product constrained (quoted)",
+          f'"{VER}" "Acrobat Pro"' in rq and f'"{VER}" "Adobe Acrobat Pro"' in rq and f'"{VER}"' in rq, str(rq))
+    check("algolia query count is capped", len(rq) <= ac.MAX_ALGOLIA_QUERIES)
+
+    # New inSided /questions-{board}/{slug}-{id} thread URLs are accepted as specific.
+    Q_URL = "https://community.adobe.com/questions-9/e-sign-acrobat-pro-desktop-crashes-every-time-i-try-to-add-a-signature-field-1561796"
+    check("new /questions-N/ thread URL is specific", ac.acrobat_url_is_specific(Q_URL) is True)
+    check("legacy /t5/ td-p thread URL still specific", ac.acrobat_url_is_specific(THREAD) is True)
+    check("board root /questions-9 rejected (not a thread)", ac.acrobat_url_is_specific("https://community.adobe.com/questions-9") is False)
+    check("category /acrobat-7 rejected (not a thread)", ac.acrobat_url_is_specific("https://community.adobe.com/acrobat-7") is False)
+    check("topic/show redirect URL rejected (not specific)", ac.acrobat_url_is_specific("https://community.adobe.com/topic/show?tid=1561796&fid=9") is False)
+
+    # Bundle-id edition attribution (com.adobe.Acrobat.Pro == Pro; com.adobe.Reader == Reader).
+    pro_bundle = cand("Adobe Crashing when using the Fill & Sign Option",
+                      f"Every time I select the tab it crashes. I am on Acrobat {VER} and the crash log names com.adobe.Acrobat.Pro as the faulting process. It is up to date.",
+                      url="https://community.adobe.com/questions-9/adobe-crashing-fill-sign-1561211")
+    counted_pb, reason_pb, appl_pb = outcome(REC_P, P, pro_bundle)
+    check("Pro accepted via com.adobe.Acrobat.Pro bundle id (real Pro #1 shape)",
+          counted_pb is True and appl_pb == P, f"counted={counted_pb} reason={reason_pb}")
+    check("same com.adobe.Acrobat.Pro report is NOT counted for Reader (wrong_product)",
+          outcome(REC_R, R, pro_bundle)[1] == "wrong_product")
+    reader_bundle = cand("Reader crash after update",
+                         f"Adobe Acrobat Reader {VER} crashes. Faulting application com.adobe.Reader after the update.",
+                         url="https://community.adobe.com/questions-9/reader-crash-1562000")
+    check("Reader accepted via explicit Acrobat Reader + com.adobe.Reader",
+          outcome(REC_R, R, reader_bundle)[0] is True)
+
+    # A concrete Pro report (title carries edition) accepted (real Pro #2 shape).
+    pro2 = cand("E-Sign / Acrobat Pro Desktop crashes every time I try to add a signature field",
+                f"I use Adobe Pro desktop, version {VER} specifically. When I add a signature field the software freezes then crashes.",
+                url=Q_URL)
+    check("Pro accepted via title 'Acrobat Pro' + crash (real Pro #2 shape)", outcome(REC_P, P, pro2)[0] is True)
+
+    # Ambiguous 'Acrobat DC' with the exact version still fails closed.
+    dc = cand("Acrobat DC (26.001.21529) crashing with eSignatures",
+              f"Acrobat DC {VER} crashes when setting up eSignature and initials fields.",
+              url="https://community.adobe.com/questions-9/acrobat-dc-crashing-esign-1560885")
+    check("ambiguous 'Acrobat DC' exact-version report rejected (generic)",
+          outcome(REC_P, P, dc)[1] == "generic_acrobat_without_edition")
+
+    # A hit with a title but empty body/URL yields no candidate (insufficient content).
+    check("topic with no canonical url -> no candidate", ac._topic_to_candidate({"title": "x", "firstPost": {"content": "<p>y</p>"}}) is None)
+    empty_topic = {"url": Q_URL, "title": "", "firstPost": {"content": ""}}
+    check("topic with url but empty title+body -> no candidate", ac._topic_to_candidate(empty_topic) is None)
+
+    # Duplicate thread (same URL from two getTopics rows) counted once.
+    dupe_topic = {"url": Q_URL, "title": pro2["report_title"], "firstPost": {"content": f"<p>Acrobat Pro {VER} crashes adding a signature field.</p>", "creationDate": "2026-05-15T00:00:00Z"}}
+    orig_creds = ac._algolia_credentials
+    orig_search = ac._algolia_search
+    orig_get = ac._get_topics
+    try:
+        ac._algolia_credentials = lambda errors: {"app_id": "APP", "key": "K", "index": "idx"}
+        ac._algolia_search = lambda creds, query, errors: [{"id": 1561796}]
+        ac._get_topics = lambda ids, errors: [dupe_topic, dupe_topic]
+        cands = ac.adobe_community_algolia_search_candidates(ac.EDITION_CONFIG[P], REC_P, _NoNet(), [])
+        check("duplicate getTopics rows collapse to one candidate", len(cands) == 1, f"n={len(cands)}")
+    finally:
+        ac._algolia_credentials = orig_creds
+        ac._algolia_search = orig_search
+        ac._get_topics = orig_get
+
+    # Search-index blocked -> method 'blocked' (searchToken 403). All methods blocked -> the
+    # collector produces zero accepted with only blocked/broken health (collector_blocked shape).
+    def _boom_token(errors):
+        errors.append({"source_url": ac.ADOBE_SEARCH_TOKEN_URL, "reason": "adobe_search_token_fetch_failed:blocked"})
+        return None
+    try:
+        ac._algolia_credentials = _boom_token
+        ac.adobe_community_search_candidates = lambda *a, **k: []
+        ac.reddit_search_candidates = lambda *a, **k: []
+        # feed the blocked-token error through the real candidates fn to exercise _method_status
+        errs: list = []
+        cands = ac.adobe_community_algolia_search_candidates(ac.EDITION_CONFIG[P], REC_P, _NoNet(), errs)
+        check("searchToken blocked -> algolia yields no candidates + blocked error",
+              cands == [] and any("blocked" in str(e.get("reason", "")) for e in errs))
+        check("algolia _method_status blocked when only a blocked error present",
+              ac._method_status([], [], [], errs) == "blocked", ac._method_status([], [], [], errs))
+    finally:
+        ac._algolia_credentials = orig_creds
         ac.adobe_community_search_candidates = orig_adobe
         ac.reddit_search_candidates = orig_reddit
 

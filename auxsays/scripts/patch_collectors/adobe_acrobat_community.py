@@ -21,9 +21,11 @@ Doctrine (fail-closed, deterministic, no AI/manual dependency):
 """
 from __future__ import annotations
 
+import json
 import re
 import urllib.parse
 import urllib.request
+from datetime import datetime, timezone
 from html import unescape
 from typing import Any
 from urllib.error import HTTPError, URLError
@@ -57,9 +59,26 @@ ADOBE_SEARCH_URL = (
     "https://community.adobe.com/t5/forums/searchpage/tab/message"
     "?advanced=false&allow_punctuation=false&q={query}&page={page}"
 )
+# --- inSided/Algolia keyless JSON discovery (reachable from CI; the /t5 HTML search
+#     endpoint above is CloudFront-blocked from datacenter IPs, but these JSON endpoints
+#     are not). searchToken issues an anonymous, secured Algolia search key; the Algolia
+#     query returns thread hits (topic id + title + body + date); getTopics returns the
+#     authoritative canonical URL + full first-post content for a batch of topic ids.
+ADOBE_SEARCH_TOKEN_URL = "https://community.adobe.com/search/searchToken"
+ADOBE_GET_TOPICS_URL = "https://community.adobe.com/search/getTopics"
+ALGOLIA_QUERY_URL_TMPL = "https://{app_id}-dsn.algolia.net/1/indexes/{index}/query"
+MAX_ALGOLIA_QUERIES = 3
+MAX_ALGOLIA_HITS_PER_QUERY = 8
+MAX_TOPICS_PER_RECORD = 20
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (compatible; AUXSAYS-patch-intelligence/1.0; +https://auxsays.com)",
     "Accept": "text/html,application/xhtml+xml",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Connection": "close",
+}
+JSON_HEADERS = {
+    "User-Agent": HEADERS["User-Agent"],
+    "Accept": "application/json, text/plain, */*",
     "Accept-Language": "en-US,en;q=0.9",
     "Connection": "close",
 }
@@ -67,8 +86,13 @@ MAX_SEARCH_QUERIES = 3
 MAX_SEARCH_PAGES = 1
 
 # --- edition attribution (never inferred) ------------------------------------
-READER_RE = re.compile(r"\b(?:adobe\s+)?acrobat\s+reader(?:\s+dc)?\b|\badobe\s+reader\b|\breader\s+dc\b", re.I)
-PRO_RE = re.compile(r"\b(?:adobe\s+)?acrobat\s+pro(?:\s+dc)?\b|\badobe\s+acrobat\s+dc\s+pro\b", re.I)
+# Explicit product names PLUS the unambiguous macOS bundle identifiers that appear in
+# crash logs (com.adobe.Acrobat.Pro == Acrobat Pro; com.adobe.Reader == Reader). The bundle
+# id is a precise, non-inferred edition signal -- it is NOT a loosening of the exact-edition
+# rule; a Pro crash report often carries com.adobe.Acrobat.Pro but never the literal phrase
+# "Acrobat Pro". Bare "com.adobe.Acrobat" (no .Pro/.Reader) stays ambiguous and is not added.
+READER_RE = re.compile(r"\b(?:adobe\s+)?acrobat\s+reader(?:\s+dc)?\b|\badobe\s+reader\b|\breader\s+dc\b|\bcom\.adobe\.reader\b", re.I)
+PRO_RE = re.compile(r"\b(?:adobe\s+)?acrobat\s+pro(?:\s+dc)?\b|\badobe\s+acrobat\s+dc\s+pro\b|\bcom\.adobe\.acrobat\.pro\b", re.I)
 ACROBAT_BARE_RE = re.compile(r"\b(?:adobe\s+)?acrobat\b", re.I)
 
 EDITION_CONFIG: dict[str, dict[str, Any]] = {
@@ -115,6 +139,10 @@ _GENUINE_FAILURE_RE = re.compile(r"\b(crash|fail|broke|broken|error|corrupt|free
 # --- specific Adobe Community thread/message URL -----------------------------
 _ADOBE_THREAD_RE = re.compile(r"/t5/[^/]+/[^/]+/(?:td-p|m-p|idi-p)/\d+", re.I)
 _ADOBE_BUG_RE = re.compile(r"/bug-reports?[-\w]*/[\w%-]+/\d+", re.I)
+# New inSided platform: a specific thread is /{board}-{boardId}/{slug}-{topicId} (two path
+# segments, trailing numeric topic id). Board roots (/questions-9) and categories (/acrobat-7)
+# have no second slug-id segment and are correctly rejected.
+_ADOBE_QUESTIONS_RE = re.compile(r"^/[a-z][a-z0-9]*-\d+/[a-z0-9%\-]+-\d+/?$", re.I)
 _HREF_RE = re.compile(r'href=["\'](https?://community\.adobe\.com[^"\']+)["\']', re.I)
 _TAG_RE = re.compile(r"(?is)<(script|style|noscript).*?</\1>|<[^>]+>")
 _OG_TITLE_RE = re.compile(r"""<meta\s+property=["']og:title["']\s+content=["']([^"']+)["']""", re.I)
@@ -171,7 +199,7 @@ def acrobat_url_is_specific(url: str) -> bool:
     path = parsed.path.lower()
     if "/announcement" in path or path.rstrip("/").endswith(("/search", "/searchpage")):
         return False
-    return bool(_ADOBE_THREAD_RE.search(path) or _ADOBE_BUG_RE.search(path))
+    return bool(_ADOBE_THREAD_RE.search(path) or _ADOBE_BUG_RE.search(path) or _ADOBE_QUESTIONS_RE.match(path))
 
 
 def _url_specific(url: str, source_type: str) -> bool:
@@ -253,6 +281,27 @@ def _error_is_blocked(exc: Exception) -> bool:
     return any(token in reason for token in ("blocked", "challenge", "captcha", "rate_limited", "http_401", "http_403", "http_429"))
 
 
+def _request_json(url: str, *, headers: dict[str, str], data: bytes | None = None, timeout: int = 30, max_bytes: int = 1200000) -> Any:
+    """GET (or POST when ``data`` is given) a JSON endpoint, raising AcrobatCommunityAccessError
+    with a block/rate-limit/network signature on failure so method health degrades honestly."""
+    method = "POST" if data is not None else "GET"
+    req = urllib.request.Request(url, headers=headers, data=data, method=method)
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as response:
+            status = getattr(response, "status", None)
+            body = response.read(max_bytes).decode("utf-8", errors="replace")
+    except HTTPError as exc:
+        raise AcrobatCommunityAccessError(f"http_{exc.code}_{_blocked_signature('', status=exc.code)}", status=exc.code) from exc
+    except (URLError, TimeoutError, OSError) as exc:
+        raise AcrobatCommunityAccessError(f"network_{type(exc).__name__}") from exc
+    if status in {401, 403, 429}:
+        raise AcrobatCommunityAccessError(_blocked_signature(body, status=status), status=status)
+    try:
+        return json.loads(body)
+    except json.JSONDecodeError as exc:
+        raise AcrobatCommunityAccessError("invalid_json") from exc
+
+
 def _clean_html(html_text: str) -> str:
     return re.sub(r"\s+", " ", unescape(_TAG_RE.sub(" ", html_text or ""))).strip()
 
@@ -322,6 +371,133 @@ def adobe_community_search_candidates(
                     "report_text": text,
                     "source_date": "",
                 })
+    return candidates
+
+
+def _algolia_search_queries(edition: dict[str, Any], version: str) -> list[str]:
+    """Exact-version, product-constrained Algolia queries (quoted so the token is matched as
+    a phrase). No site: operator is needed -- the anonymous searchToken already scopes the
+    index to the Adobe community forums."""
+    queries = [f'"{version}" "{product}"' for product in edition["query_products"]]
+    queries.append(f'"{version}"')
+    return queries[:MAX_ALGOLIA_QUERIES]
+
+
+def _algolia_credentials(errors: list[dict[str, Any]]) -> dict[str, str] | None:
+    """Fetch the anonymous inSided/Algolia search credentials (app id, secured search key,
+    index) from the keyless /search/searchToken endpoint. Returns None (with a recorded error)
+    when the endpoint is blocked or the payload is incomplete."""
+    try:
+        data = _request_json(ADOBE_SEARCH_TOKEN_URL, headers=JSON_HEADERS)
+    except Exception as exc:  # noqa: BLE001
+        errors.append({"source_url": ADOBE_SEARCH_TOKEN_URL, "reason": f"adobe_search_token_fetch_failed:{getattr(exc, 'reason', type(exc).__name__)}"})
+        return None
+    payload = data if isinstance(data, dict) else {}
+    app_id = str(payload.get("client_id") or "").strip()
+    key = str(payload.get("token") or "").strip()
+    indexes = payload.get("availableIndexes")
+    index = str(indexes[0]).strip() if isinstance(indexes, list) and indexes else ""
+    if not (app_id and key and index):
+        errors.append({"source_url": ADOBE_SEARCH_TOKEN_URL, "reason": "adobe_search_token_incomplete"})
+        return None
+    return {"app_id": app_id, "key": key, "index": index}
+
+
+def _algolia_search(creds: dict[str, str], query: str, errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    url = ALGOLIA_QUERY_URL_TMPL.format(app_id=urllib.parse.quote(creds["app_id"]), index=urllib.parse.quote(creds["index"]))
+    headers = {**JSON_HEADERS, "X-Algolia-Application-Id": creds["app_id"], "X-Algolia-API-Key": creds["key"], "Content-Type": "application/json"}
+    body = json.dumps({"params": urllib.parse.urlencode({"query": query, "hitsPerPage": MAX_ALGOLIA_HITS_PER_QUERY})}).encode("utf-8")
+    try:
+        data = _request_json(url, headers=headers, data=body)
+    except Exception as exc:  # noqa: BLE001
+        errors.append({"source_url": url, "reason": f"adobe_algolia_search_failed:{getattr(exc, 'reason', type(exc).__name__)}"})
+        return []
+    hits = data.get("hits") if isinstance(data, dict) else None
+    return [h for h in hits if isinstance(h, dict)] if isinstance(hits, list) else []
+
+
+def _get_topics(topic_ids: list[int], errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Batch-fetch authoritative topic records (canonical URL + full first-post content + date)
+    for the discovered topic ids from the keyless /search/getTopics endpoint."""
+    if not topic_ids:
+        return []
+    params = urllib.parse.urlencode([("topicIds[]", str(tid)) for tid in topic_ids[:MAX_TOPICS_PER_RECORD]])
+    url = f"{ADOBE_GET_TOPICS_URL}?{params}"
+    try:
+        data = _request_json(url, headers=JSON_HEADERS)
+    except Exception as exc:  # noqa: BLE001
+        errors.append({"source_url": ADOBE_GET_TOPICS_URL, "reason": f"adobe_get_topics_failed:{getattr(exc, 'reason', type(exc).__name__)}"})
+        return []
+    return [t for t in data if isinstance(t, dict)] if isinstance(data, list) else []
+
+
+def _unix_to_date(value: Any) -> str:
+    try:
+        return datetime.fromtimestamp(int(value), tz=timezone.utc).date().isoformat()
+    except (TypeError, ValueError, OverflowError, OSError):
+        return ""
+
+
+def _topic_to_candidate(topic: dict[str, Any]) -> dict[str, Any] | None:
+    """Turn one authoritative getTopics record into a discovery candidate. Discovery only --
+    row_from_candidate still applies the unchanged edition/version/URL/date/issue gates."""
+    url = _canonical_url(str(topic.get("url") or ""))
+    if not url:
+        return None
+    first_post = topic.get("firstPost") if isinstance(topic.get("firstPost"), dict) else {}
+    title = str(topic.get("title") or "").strip()
+    body = _clean_html(str(first_post.get("content") or ""))[:6000]
+    if not title and not body:
+        return None
+    source_date = date_part(first_post.get("creationDate")) or _unix_to_date(topic.get("dateAdded") or topic.get("date_added"))
+    return {
+        "source_type": ADOBE_COMMUNITY_SOURCE_TYPE,
+        "source_name": "Adobe Community",
+        "source_url": url,
+        "parent_title": title,
+        "report_title": title,
+        "report_text": f"{title} {body}".strip(),
+        "source_date": source_date,
+    }
+
+
+def adobe_community_algolia_search_candidates(
+    edition: dict[str, Any], record: PatchRecord, context: CollectorContext, errors: list[dict[str, Any]]
+) -> list[dict[str, Any]]:
+    """Keyless, CI-reachable discovery: anonymous Algolia search (exact version + product) to
+    find candidate topic ids, then the getTopics content endpoint for authoritative URL/body/date.
+    Neither endpoint is the CloudFront-blocked /t5 HTML search path. All acceptance gates are
+    applied downstream by row_from_candidate; this method never widens them."""
+    creds = _algolia_credentials(errors)
+    if not creds:
+        return []
+    topic_ids: list[int] = []
+    seen_ids: set[int] = set()
+    for query in _algolia_search_queries(edition, record.update_version):
+        for hit in _algolia_search(creds, query, errors):
+            raw_id = hit.get("id")
+            tid = int(raw_id) if isinstance(raw_id, int) or (isinstance(raw_id, str) and raw_id.isdigit()) else None
+            if tid is not None and tid not in seen_ids:
+                seen_ids.add(tid)
+                topic_ids.append(tid)
+        if len(topic_ids) >= MAX_TOPICS_PER_RECORD:
+            break
+    topic_ids = topic_ids[:MAX_TOPICS_PER_RECORD]
+    if not topic_ids:
+        return []
+    candidates: list[dict[str, Any]] = []
+    seen_urls: set[str] = set()
+    for topic in _get_topics(topic_ids, errors):
+        candidate = _topic_to_candidate(topic)
+        if not candidate:
+            continue
+        url = candidate["source_url"].lower()
+        if url in seen_urls:
+            continue
+        seen_urls.add(url)
+        if context.since and candidate.get("source_date") and date_part(candidate["source_date"]) < context.since:
+            continue
+        candidates.append(candidate)
     return candidates
 
 
@@ -517,6 +693,11 @@ class AdobeAcrobatCollector(ProductCollector):
 
     def collect_for_record(self, record: PatchRecord, context: CollectorContext, captured_at: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
         methods = (
+            # Primary, CI-reachable: keyless inSided/Algolia JSON discovery + getTopics content.
+            ("adobe_community_algolia_search", ADOBE_COMMUNITY_SOURCE_TYPE, adobe_community_algolia_search_candidates),
+            # Fallbacks kept even though they are blocked from CI datacenter IPs (Part D): the
+            # direct /t5 HTML search (CloudFront-blocked) and Reddit (403/429). They degrade to
+            # honest "blocked" health and never widen acceptance.
             ("adobe_community_search", ADOBE_COMMUNITY_SOURCE_TYPE, adobe_community_search_candidates),
             ("reddit_search", REDDIT_SOURCE_TYPE, reddit_search_candidates),
         )
