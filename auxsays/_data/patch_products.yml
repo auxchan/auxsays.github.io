@@ -1678,11 +1678,12 @@
   ingestion_active: true
   ingestion_status: Shared Acrobat DC official ingestion active (fail-closed); awaiting
     first attributed record
-  evidence_collection_status: 'collector_blocked: the community consensus collector is
-    implemented and tested but NOT active. GitHub Actions dry-runs (PR #23) show both
-    discovery methods blocked from CI -- Adobe Community search (HTTP 403 CloudFront) and
-    Reddit (HTTP 403/429) -- so the activation minimum is unmet and registration is gated
-    off by default. No community consensus is being collected; records stay official-only.'
+  evidence_collection_status: 'active: community consensus collection is enabled and reachable
+    from GitHub Actions via Adobe Community''s keyless inSided/Algolia JSON discovery API. The
+    direct /t5 HTML search (CloudFront 403) and Reddit (403/429) remain blocked from CI and
+    serve only as honest fallbacks. PR #23 CI dry-runs confirmed both editions reachable with
+    community reports accepted under the unchanged exact-edition/version/URL/date/issue gates;
+    the scheduled run writes accepted evidence automatically. No hand-authored evidence.'
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -1732,11 +1733,12 @@
   ingestion_active: true
   ingestion_status: Shared Acrobat DC official ingestion active (fail-closed); awaiting
     first attributed record
-  evidence_collection_status: 'collector_blocked: the community consensus collector is
-    implemented and tested but NOT active. GitHub Actions dry-runs (PR #23) show both
-    discovery methods blocked from CI -- Adobe Community search (HTTP 403 CloudFront) and
-    Reddit (HTTP 403/429) -- so the activation minimum is unmet and registration is gated
-    off by default. No community consensus is being collected; records stay official-only.'
+  evidence_collection_status: 'active: community consensus collection is enabled and reachable
+    from GitHub Actions via Adobe Community''s keyless inSided/Algolia JSON discovery API. The
+    direct /t5 HTML search (CloudFront 403) and Reddit (403/429) remain blocked from CI and
+    serve only as honest fallbacks. PR #23 CI dry-runs confirmed both editions reachable with
+    community reports accepted under the unchanged exact-edition/version/URL/date/issue gates;
+    the scheduled run writes accepted evidence automatically. No hand-authored evidence.'
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
