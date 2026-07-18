@@ -628,18 +628,15 @@ assets:
 - asset_id: adobe-media-encoder
   kind: product_icon
   owner_name: Media Encoder
-  source_type: local_curated
+  source_type: company_fallback
   source_url: https://www.adobe.com/products/media-encoder.html
-  local_path: /assets/img/patch-logos/adobe-media-encoder.svg
+  local_path: /assets/img/patch-logos/adobe.png
   attribution_required: false
   attribution_note: Used for editorial identification only; trademarks remain with
     respective owners.
-  last_verified_at: '2026-07-17'
-  fallback_to_company_logo: false
-  notes: Product-specific "Me" tile (AUXSAYS-authored, product-neutral glyph — not Adobe's
-    trademarked brand asset) so Media Encoder no longer shows the generic Adobe company
-    mark. Replace with a verified, license-compatible official Adobe Media Encoder vector
-    when one is available (Simple Icons does not carry adobemediaencoder).
+  last_verified_at: '2026-06-24'
+  fallback_to_company_logo: true
+  notes: Product-specific Media Encoder icon removed after visual QA; using Adobe company mark until a verified official product icon source is available.
 - asset_id: adobe-lightroom-classic
   kind: product_icon
   owner_name: Lightroom

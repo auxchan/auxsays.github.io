@@ -927,23 +927,23 @@ products:
 - id: "adobe-media-encoder"
   display_name: "Media Encoder"
   company_id: "adobe"
-  current_local_asset: "/assets/img/patch-logos/adobe-media-encoder.svg"
+  current_local_asset: "/assets/img/patch-logos/adobe.png"
   current_asset_exists: true
-  current_is_company_fallback: false
-  current_provenance_status: "current_provenance:local_curated"
-  desired_local_asset: "/assets/img/patch-logos/adobe-media-encoder.svg"
-  source_status: local_asset_in_use
+  current_is_company_fallback: true
+  current_provenance_status: "current_provenance:company_fallback"
+  desired_local_asset: "/assets/img/patch-logos/adobe.png"
+  source_status: blocked_pending_source
   preferred_source_type: official_product_page
   official_source_url: "https://www.adobe.com/products/media-encoder.html"
   direct_asset_url: ""
   source_domain: "www.adobe.com"
   source_owner: "Adobe"
   official_or_vendor_controlled: true
-  fallback_source: false
+  fallback_source: true
   auto_fetchable: false
   manual_review_required: true
-  recommended_filename: "adobe-media-encoder.svg"
-  usage_notes: "Product-specific 'Me' tile (AUXSAYS-authored, product-neutral) replaces the generic Adobe company mark. Swap for a verified, license-compatible official Adobe Media Encoder vector when one is available (Simple Icons does not carry adobemediaencoder)."
+  recommended_filename: "adobe.png"
+  usage_notes: "Product-specific Media Encoder icon removed after visual QA; using Adobe company mark until a verified official product icon source is available."
 - id: "adobe-lightroom-classic"
   display_name: "Lightroom"
   company_id: "adobe"

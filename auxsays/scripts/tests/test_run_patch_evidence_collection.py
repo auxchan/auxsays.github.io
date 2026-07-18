@@ -1,13 +1,16 @@
 #!/usr/bin/env python3
-"""Tests for the default-off Windows Learn Q&A activation gate in the shared runner.
+"""Tests for the default-off activation gates in the shared runner.
 
-Offline / hermetic: the gate is exercised with injected env dicts
+Offline / hermetic: the gates are exercised with injected env dicts
 (``build_collectors(env=...)``) so ``os.environ`` is never mutated and no collector is
 instantiated or run. These prove the runner does NOT register ``microsoft-windows-11``
 unless ``AUXSAYS_ENABLE_WINDOWS_LEARN_QNA_WRITEBACK`` is the explicit canonical value
-``true``, that the always-on collectors are unaffected by the flag, that only the intended
-``WindowsLearnQnaCollector`` class is registered when enabled, and that the Windows dry-run
-entry still exposes no ``--write`` flag.
+``true``, that it likewise does NOT register the Acrobat consensus collectors
+(``adobe-acrobat-reader`` / ``adobe-acrobat-pro``) unless ``AUXSAYS_ENABLE_ACROBAT_CONSENSUS``
+is the explicit canonical ``true`` (held off because both discovery methods are blocked from
+CI -- see PR #23), that the always-on collectors are unaffected by either flag, that only the
+intended collector classes are registered when enabled, and that the Windows dry-run entry
+still exposes no ``--write`` flag.
 
 Run with: PYTHONDONTWRITEBYTECODE=1 python auxsays/scripts/tests/test_run_patch_evidence_collection.py
 """
@@ -31,7 +34,9 @@ _ERRORS: list[str] = []
 
 WIN_ID = "microsoft-windows-11"
 FLAG = runner.WINDOWS_LEARN_QNA_ENABLE_ENV
-BASE = ("adobe-acrobat-pro", "adobe-acrobat-reader", "adobe-premiere-pro", "blackmagic-davinci", "obs-studio")
+ACR_FLAG = runner.ACROBAT_CONSENSUS_ENABLE_ENV
+ACR_IDS = runner.ACROBAT_CONSENSUS_PRODUCT_IDS  # ("adobe-acrobat-reader", "adobe-acrobat-pro")
+BASE = ("adobe-premiere-pro", "blackmagic-davinci", "obs-studio")
 
 
 def check(label: str, condition: bool, detail: str = "") -> None:
@@ -144,6 +149,87 @@ def run() -> int:
         except SystemExit as exc:
             raised = exc.code not in (0, None)
     check("Windows dry-run entry exposes NO --write flag (rejects --write)", raised)
+
+    # === Adobe Acrobat consensus: default-off activation gate ================
+    # PR #23 proved both discovery methods (Adobe Community + Reddit) are blocked from CI, so
+    # the Acrobat consensus collectors are held out of the always-on base and registered ONLY
+    # when AUXSAYS_ENABLE_ACROBAT_CONSENSUS is the canonical "true". This mirrors the Windows
+    # gate: a scheduled --write run must never treat Acrobat consensus as active while blocked.
+    print("-" * 60)
+    print("Adobe Acrobat consensus activation-gate tests")
+    print("-" * 60)
+
+    check("Acrobat flag name is AUXSAYS_ENABLE_ACROBAT_CONSENSUS",
+          ACR_FLAG == "AUXSAYS_ENABLE_ACROBAT_CONSENSUS", ACR_FLAG)
+    check("Acrobat product ids are Reader + Pro",
+          tuple(ACR_IDS) == ("adobe-acrobat-reader", "adobe-acrobat-pro"), str(ACR_IDS))
+
+    # static base never carries Acrobat consensus
+    check("static COLLECTORS base contains NEITHER Acrobat edition",
+          all(pid not in runner.COLLECTORS for pid in ACR_IDS), str(sorted(runner.COLLECTORS)))
+
+    # OFF matrix -> neither edition registered
+    acr_off = {
+        "absent": {},
+        "empty string": {ACR_FLAG: ""},
+        "false": {ACR_FLAG: "false"},
+        "False": {ACR_FLAG: "False"},
+        "0": {ACR_FLAG: "0"},
+        "1": {ACR_FLAG: "1"},
+        "yes": {ACR_FLAG: "yes"},
+        "on": {ACR_FLAG: "on"},
+        "whitespace only": {ACR_FLAG: "   "},
+        "the Windows flag (wrong flag)": {FLAG: "true"},
+    }
+    for label, env in acr_off.items():
+        reg = runner.build_collectors(env)
+        check(f"OFF: acrobat flag={label!r} -> NEITHER Acrobat edition registered",
+              all(pid not in reg for pid in ACR_IDS), f"registry={sorted(reg)}")
+
+    # ON matrix -> BOTH editions registered (canonical true only)
+    acr_on = {
+        "true": {ACR_FLAG: "true"},
+        "TRUE": {ACR_FLAG: "TRUE"},
+        "True": {ACR_FLAG: "True"},
+        "  true  (surrounding whitespace)": {ACR_FLAG: "  true  "},
+        "true\\n (trailing newline)": {ACR_FLAG: "true\n"},
+    }
+    for label, env in acr_on.items():
+        reg = runner.build_collectors(env)
+        check(f"ON: acrobat flag={label!r} -> BOTH Acrobat editions registered",
+              all(pid in reg for pid in ACR_IDS), f"registry={sorted(reg)}")
+
+    # gate predicate matches registry behavior
+    check("acrobat gate predicate True only for canonical true",
+          runner.acrobat_consensus_enabled({ACR_FLAG: "true"}) is True
+          and runner.acrobat_consensus_enabled({ACR_FLAG: " TRUE "}) is True
+          and runner.acrobat_consensus_enabled({}) is False
+          and runner.acrobat_consensus_enabled({ACR_FLAG: "false"}) is False
+          and runner.acrobat_consensus_enabled({ACR_FLAG: "1"}) is False)
+
+    # when enabled, each edition binds to a distinct AdobeAcrobatCollector with the right id
+    import patch_collectors.adobe_acrobat_community as acmod
+    acr_reg = runner.build_collectors({ACR_FLAG: "true"})
+    reader_coll = acr_reg["adobe-acrobat-reader"]()
+    pro_coll = acr_reg["adobe-acrobat-pro"]()
+    check("enabled Reader factory yields AdobeAcrobatCollector(product_id=adobe-acrobat-reader)",
+          isinstance(reader_coll, acmod.AdobeAcrobatCollector) and reader_coll.product_id == "adobe-acrobat-reader",
+          str(getattr(reader_coll, "product_id", None)))
+    check("enabled Pro factory yields AdobeAcrobatCollector(product_id=adobe-acrobat-pro)",
+          isinstance(pro_coll, acmod.AdobeAcrobatCollector) and pro_coll.product_id == "adobe-acrobat-pro",
+          str(getattr(pro_coll, "product_id", None)))
+    check("the two enabled factories bind DISTINCT product ids (no closure-capture bug)",
+          reader_coll.product_id != pro_coll.product_id)
+
+    # scheduled-writeback safety: default (--write, no --product-id) cannot target Acrobat
+    default_targets = sorted(runner.build_collectors({}))
+    check("default scheduled run cannot target either Acrobat edition",
+          all(pid not in default_targets for pid in ACR_IDS), str(default_targets))
+
+    # both gates independent + composable
+    both_on = sorted(runner.build_collectors({FLAG: "true", ACR_FLAG: "true"}))
+    check("both flags on -> base + Windows + both Acrobat editions (6 collectors)",
+          both_on == sorted((*BASE, WIN_ID, *ACR_IDS)), str(both_on))
 
     print()
     print("=" * 60)

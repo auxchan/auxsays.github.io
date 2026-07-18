@@ -644,7 +644,7 @@
     issues.
   source_id: adobe-media-encoder
   logo_label: Media Encoder
-  logo_path: /assets/img/patch-logos/adobe-media-encoder.svg
+  logo_path: /assets/img/patch-logos/adobe.png
   ui_backdrop_path: /assets/img/software-ui/adobe-media-encoder-ui.webp
   company_id: adobe
   product_id: adobe-media-encoder
@@ -671,7 +671,7 @@
     miss.
   dossier_note: Media Encoder is tracked for release changes, workflow impact, compatibility
     shifts, stability signals, and community consensus.
-  asset_type: product_icon
+  asset_type: company_fallback
 - id: adobe-lightroom-classic
   company_name: Adobe
   product_name: Lightroom Classic
@@ -1678,6 +1678,11 @@
   ingestion_active: true
   ingestion_status: Shared Acrobat DC official ingestion active (fail-closed); awaiting
     first attributed record
+  evidence_collection_status: 'collector_blocked: the community consensus collector is
+    implemented and tested but NOT active. GitHub Actions dry-runs (PR #23) show both
+    discovery methods blocked from CI -- Adobe Community search (HTTP 403 CloudFront) and
+    Reddit (HTTP 403/429) -- so the activation minimum is unmet and registration is gated
+    off by default. No community consensus is being collected; records stay official-only.'
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -1727,6 +1732,11 @@
   ingestion_active: true
   ingestion_status: Shared Acrobat DC official ingestion active (fail-closed); awaiting
     first attributed record
+  evidence_collection_status: 'collector_blocked: the community consensus collector is
+    implemented and tested but NOT active. GitHub Actions dry-runs (PR #23) show both
+    discovery methods blocked from CI -- Adobe Community search (HTTP 403 CloudFront) and
+    Reddit (HTTP 403/429) -- so the activation minimum is unmet and registration is gated
+    off by default. No community consensus is being collected; records stay official-only.'
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.

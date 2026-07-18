@@ -18,17 +18,11 @@ from patch_collectors.base import CollectorContext, upsert_method_health  # noqa
 from patch_collectors.adobe_premiere import AdobePremiereCollector  # noqa: E402
 from patch_collectors.davinci import DavinciCollector  # noqa: E402
 from patch_collectors.obs import ObsCollector  # noqa: E402
-from patch_collectors.adobe_acrobat_community import AdobeAcrobatCollector  # noqa: E402
 
 COLLECTORS = {
     "adobe-premiere-pro": AdobePremiereCollector,
     "obs-studio": ObsCollector,
     "blackmagic-davinci": DavinciCollector,
-    # Shared Acrobat community-evidence collector, registered once per edition. The runner
-    # calls COLLECTORS[product_id]() zero-arg, so a factory binds each product_id; writeback
-    # is keyed by (product_id, update_version), so Reader/Pro never cross-contaminate.
-    "adobe-acrobat-reader": lambda: AdobeAcrobatCollector("adobe-acrobat-reader"),
-    "adobe-acrobat-pro": lambda: AdobeAcrobatCollector("adobe-acrobat-pro"),
 }
 
 # --- Windows Learn Q&A: default-off activation gate --------------------------
@@ -55,16 +49,56 @@ def windows_learn_qna_writeback_enabled(env: dict[str, str] | None = None) -> bo
     return str(source.get(WINDOWS_LEARN_QNA_ENABLE_ENV, "")).strip().lower() == "true"
 
 
+# --- Adobe Acrobat community consensus: default-off activation gate -----------
+# GitHub Actions dry-runs (2026-07-18, PR #23) proved that BOTH discovery methods are
+# blocked from CI for both editions and every current version: Adobe Community search
+# returns an HTTP 403 CloudFront block, and Reddit returns HTTP 403/429 across every JSON
+# and Atom endpoint. The activation minimum -- at least one method per product completing
+# a dry-run as success or no_results from a reachable source -- is therefore NOT met. The
+# shared Acrobat collector is fully implemented and tested, but registering it in the
+# always-on base would make the hourly scheduled ``--write`` writeback treat Acrobat
+# consensus as active while every source is blocked. So, exactly like the Windows Learn Q&A
+# collector above, it is registered ONLY when an explicit enable flag is set. The default
+# (flag absent) is always "not registered". No workflow sets this flag; turning it on --
+# together with proving a reachable source and re-adding the workflow routing -- is a
+# deliberate, separate activation step.
+ACROBAT_CONSENSUS_PRODUCT_IDS = ("adobe-acrobat-reader", "adobe-acrobat-pro")
+ACROBAT_CONSENSUS_ENABLE_ENV = "AUXSAYS_ENABLE_ACROBAT_CONSENSUS"
+
+
+def acrobat_consensus_enabled(env: dict[str, str] | None = None) -> bool:
+    """Deterministic default-off gate for registering the Acrobat consensus collectors.
+
+    Returns True ONLY when ``AUXSAYS_ENABLE_ACROBAT_CONSENSUS`` resolves to the exact
+    canonical boolean ``true`` (case-insensitive, surrounding whitespace trimmed). Every
+    other value -- absent, empty, ``false``, ``0``, ``1``, ``yes``, ``on`` -- returns False.
+    Explicit true-only, avoiding the ``bool(os.getenv(...))`` pitfall where ``"false"`` is
+    truthy."""
+    source = os.environ if env is None else env
+    return str(source.get(ACROBAT_CONSENSUS_ENABLE_ENV, "")).strip().lower() == "true"
+
+
 def build_collectors(env: dict[str, str] | None = None) -> dict[str, Any]:
-    """Return the runtime collector registry: the always-on base plus the Windows Learn Q&A
+    """Return the runtime collector registry: the always-on base plus each default-off
     collector IFF its activation flag is explicitly enabled. This is the single place that
-    decides Windows registration, so no scheduled ``--write`` run can reach the collector
-    while the flag is off. The collector class is imported lazily so it is only pulled in
-    when actually enabled."""
+    decides registration, so no scheduled ``--write`` run can reach a gated collector while
+    its flag is off. Gated collector classes are imported lazily so they are only pulled in
+    when actually enabled.
+
+    - Windows Learn Q&A: ``AUXSAYS_ENABLE_WINDOWS_LEARN_QNA_WRITEBACK``.
+    - Adobe Acrobat (Reader + Pro) consensus: ``AUXSAYS_ENABLE_ACROBAT_CONSENSUS`` -- held
+      off because both discovery methods are currently blocked from CI (see PR #23)."""
     collectors: dict[str, Any] = dict(COLLECTORS)
     if windows_learn_qna_writeback_enabled(env):
         from patch_collectors.microsoft_windows import WindowsLearnQnaCollector
         collectors[WINDOWS_LEARN_QNA_PRODUCT_ID] = WindowsLearnQnaCollector
+    if acrobat_consensus_enabled(env):
+        # Shared collector, registered once per edition. The runner calls
+        # collectors[product_id]() zero-arg, so a factory binds each product_id; writeback
+        # is keyed by (product_id, update_version), so Reader/Pro never cross-contaminate.
+        from patch_collectors.adobe_acrobat_community import AdobeAcrobatCollector
+        for pid in ACROBAT_CONSENSUS_PRODUCT_IDS:
+            collectors[pid] = lambda p=pid: AdobeAcrobatCollector(p)
     return collectors
 
 
