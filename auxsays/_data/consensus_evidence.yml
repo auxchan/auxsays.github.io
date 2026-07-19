@@ -6010,3 +6010,28 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1v0lrf3-fusion-speed-ramps-gets-laggy
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1v0lrf3/fusion_speed_ramps_gets_laggy/
+  parent_title: Fusion Speed Ramps gets laggy
+  report_title: Fusion Speed Ramps gets laggy
+  report_text_excerpt: Fusion Speed Ramps gets laggy So I am a medium beginner. I did some ok car edits but nothing that would be enough for me. But heres the problem. When I drag the Speed Ramp to something I like like an S Curve, theres always an uneven number of fps that makes my video really...
+  captured_at: '2026-07-19T15:21:31Z'
+  source_date: '2026-07-19'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
