@@ -215,7 +215,7 @@ def run() -> int:
     check("topic with url but empty title+body -> no candidate", ac._topic_to_candidate(empty_topic) is None)
 
     # Duplicate thread (same URL from two getTopics rows) counted once.
-    dupe_topic = {"url": Q_URL, "title": pro2["report_title"], "firstPost": {"content": f"<p>Acrobat Pro {VER} crashes adding a signature field.</p>", "creationDate": "2026-05-15T00:00:00Z"}}
+    dupe_topic = {"url": Q_URL, "title": pro2["report_title"], "firstPost": {"content": f"<p>Acrobat Pro {VER} crashes adding a signature field.</p>", "creationDate": "2026-05-20T00:00:00Z"}}
     orig_creds = ac._algolia_credentials
     orig_search = ac._algolia_search
     orig_get = ac._get_topics
@@ -250,6 +250,149 @@ def run() -> int:
         ac._algolia_credentials = orig_creds
         ac.adobe_community_search_candidates = orig_adobe
         ac.reddit_search_candidates = orig_reddit
+
+    # === Part A: exact-patch discovery window uses the release date, not --since-days =========
+    class _Ctx:
+        def __init__(self, since=None, max_pages=5):
+            self.since = since
+            self.max_pages = max_pages
+            self.target_versions = None
+
+    def _mk_topic(tid, url, title, body, date):
+        return {"id": tid, "url": url, "title": title, "firstPost": {"content": f"<p>{body}</p>", "creationDate": date}}
+
+    def _run_algolia(record, topics, since=None):
+        oc, os_, og = ac._algolia_credentials, ac._algolia_search, ac._get_topics
+        try:
+            ac._algolia_credentials = lambda errors: {"app_id": "A", "key": "K", "index": "i"}
+            ac._algolia_search = lambda creds, q, errors: [{"id": t["id"]} for t in topics]
+            ac._get_topics = lambda ids, errors: list(topics)
+            return ac.adobe_community_algolia_search_candidates(ac.EDITION_CONFIG[record.product_id], record, _Ctx(since=since), [])
+        finally:
+            ac._algolia_credentials, ac._algolia_search, ac._get_topics = oc, os_, og
+
+    # REC_P release = 2026-05-18. A post-release report ~60 days old survives even when the
+    # runner's since window (2026-07-01) would hide it.
+    old_url = "https://community.adobe.com/questions-9/acrobat-pro-crash-after-signature-1560999"
+    post_release = _mk_topic(1560999, old_url, "Acrobat Pro crash", f"Adobe Acrobat Pro {VER} crashes on launch after the update.", "2026-05-20T00:00:00Z")
+    cands = _run_algolia(REC_P, [post_release], since="2026-07-01")
+    check("Part A: post-release report >45d old is still DISCOVERED (since window ignored)", len(cands) == 1, f"n={len(cands)}")
+    acc, _ = ac.evaluate_candidates(P, REC_P, cands, CAPTURED)
+    check("Part A: that discovered post-release report is ACCEPTED end-to-end", len(acc) == 1)
+    check("Part A: workflow's 45-day arg cannot hide a valid exact-patch report",
+          len(_run_algolia(REC_P, [post_release], since="2026-07-15")) == 1)
+
+    pre_release = _mk_topic(1560001, "https://community.adobe.com/questions-9/pre-release-crash-1560001", "x", f"Adobe Acrobat Pro {VER} crashes.", "2026-05-10T00:00:00Z")
+    check("Part A: report dated BEFORE the release date is dropped at discovery", _run_algolia(REC_P, [pre_release]) == [])
+
+    dupe_ids = [_mk_topic(1561796, Q_URL, pro2["report_title"], f"Acrobat Pro {VER} crashes adding a signature field.", "2026-05-20T00:00:00Z")]
+    oc2, os2, og2 = ac._algolia_credentials, ac._algolia_search, ac._get_topics
+    try:
+        ac._algolia_credentials = lambda errors: {"app_id": "A", "key": "K", "index": "i"}
+        ac._algolia_search = lambda creds, q, errors: [{"id": 1561796}, {"id": 1561796}]  # same id twice per query
+        ac._get_topics = lambda ids, errors: dupe_ids
+        check("Part A: duplicate topic ids collapse (one topic fetched)",
+              len(ac.adobe_community_algolia_search_candidates(ac.EDITION_CONFIG[P], REC_P, _Ctx(), [])) == 1)
+        big = [_mk_topic(2000000 + i, f"https://community.adobe.com/questions-9/t-{2000000+i}", "t", f"Adobe Acrobat Pro {VER} crashes.", "2026-05-20T00:00:00Z") for i in range(ac.MAX_TOPICS_PER_RECORD + 8)]
+        ac._algolia_search = lambda creds, q, errors: [{"id": t["id"]} for t in big]
+        ac._get_topics = lambda ids, errors: [t for t in big if t["id"] in set(ids)]
+        capped = ac.adobe_community_algolia_search_candidates(ac.EDITION_CONFIG[P], REC_P, _Ctx(), [])
+        check("Part A: result limit is deterministic (<= MAX_TOPICS_PER_RECORD)", len(capped) <= ac.MAX_TOPICS_PER_RECORD)
+    finally:
+        ac._algolia_credentials, ac._algolia_search, ac._get_topics = oc2, os2, og2
+
+    check("Part A: exact-version queries never widen to unrelated versions",
+          all(VER in q and "26.001.21529" not in q for q in ac._algolia_search_queries(ac.EDITION_CONFIG[P], VER)))
+    check("Part A: empty exact-version results -> honest no_results",
+          ac._method_status([], [], [], []) == "no_results")
+
+    # === Part B: 1627235-shaped classification + shared canonical identity ===================
+    reader_then_pro_license = cand(
+        "Acrobat fails to launch after silent Reader update when user license switches to Pro/Std",
+        (f"We perform a silent update of Adobe Acrobat Reader 64-bit {VER} to all machines. The user then signs in "
+         f"with an Acrobat Pro or Acrobat Standard license and Reader switches to licensed Acrobat mode. After a "
+         f"later silent Reader update, Acrobat fails to launch with method not implemented."),
+        url="https://community.adobe.com/questions-9/acrobat-fails-to-launch-silent-reader-update-1627235")
+    rc, rr, ra = outcome(REC_R, R, reader_then_pro_license)
+    check("Part B: Reader update + later Pro LICENSE transition is Reader-only (accepted for Reader)",
+          rc is True and ra == R, f"counted={rc} reason={rr} appl={ra}")
+    check("Part B: the same thread is NOT Pro evidence (wrong_product)",
+          outcome(REC_P, P, reader_then_pro_license)[1] == "wrong_product")
+
+    shared = cand("Both editions crash on launch after update",
+                  f"Adobe Acrobat Reader {VER} crashes on launch after the update, and Adobe Acrobat Pro {VER} crashes on launch too.",
+                  url="https://community.adobe.com/questions-9/both-reader-and-pro-crash-1563100")
+    sr = ac.row_from_candidate(R, REC_R, {**shared, "source_url": ac._canonical_url(shared["source_url"])}, CAPTURED)
+    sp = ac.row_from_candidate(P, REC_P, {**shared, "source_url": ac._canonical_url(shared["source_url"])}, CAPTURED)
+    check("Part B: explicit shared failure accepted for BOTH", sr["counted"] is True and sp["counted"] is True)
+    check("Part B: shared applicability lists both editions on both paths",
+          sr["applicability"] == f"{R},{P}" and sp["applicability"] == f"{R},{P}")
+    check("Part B: shared evidence has IDENTICAL canonical URL on both product paths", sr["source_url"] == sp["source_url"])
+    check("Part B: shared evidence has IDENTICAL canonical evidence id on both product paths", sr["id"] == sp["id"], f"{sr['id']} vs {sp['id']}")
+    check("Part B: the two shared rows are still per-product (product_id differs, no cross-contamination)",
+          sr["product_id"] == R and sp["product_id"] == P)
+
+    pro_reader_license = cand("Acrobat Pro keeps crashing on launch after opening PDFs",
+                              f"Adobe Acrobat Pro {VER} crashes on launch every time I open a PDF and I lose my work. For context, this account was upgraded from an Adobe Reader entitlement license months ago.",
+                              url="https://community.adobe.com/questions-9/pro-crash-license-1563200")
+    check("Part B: incidental/license-only Reader mention does NOT create Reader evidence",
+          outcome(REC_R, R, pro_reader_license)[1] == "wrong_product")
+    check("Part B: that same report IS valid Pro evidence", outcome(REC_P, P, pro_reader_license)[0] is True)
+
+    # Per-product writeback cannot duplicate the same shared report as unrelated evidence:
+    # within one product the same URL collapses to one row.
+    acc_r, _ = ac.evaluate_candidates(R, REC_R, [shared, {**shared, "report_title": shared["report_title"] + " (repost)"}], CAPTURED)
+    check("Part B: same shared report counts ONCE per product (URL dedup)", len(acc_r) == 1)
+    check("Part B: ambiguous bare 'Acrobat' remains fail-closed",
+          outcome(REC_P, P, cand("Acrobat crash", f"Acrobat {VER} keeps crashing.", url="https://community.adobe.com/questions-9/acrobat-crash-1563300"))[1] == "generic_acrobat_without_edition")
+
+    # === Part D: dynamic searchToken handling + no credential leakage =======================
+    good_token = {"client_id": "APPID123", "token": "SECURED-TOKEN-XYZ", "availableIndexes": ["adobedme-en-unified"]}
+    def _patch_json(fn):
+        o = ac._request_json
+        ac._request_json = fn
+        return o
+    orig_json = ac._request_json
+    try:
+        ac._request_json = lambda url, **k: dict(good_token)
+        creds = ac._algolia_credentials([])
+        check("Part D: token fetched dynamically at runtime -> app id + key + index",
+              creds == {"app_id": "APPID123", "key": "SECURED-TOKEN-XYZ", "index": "adobedme-en-unified"}, str(creds))
+        for label, payload in (("missing app id", {"token": "T", "availableIndexes": ["i"]}),
+                               ("missing token", {"client_id": "A", "availableIndexes": ["i"]}),
+                               ("missing index", {"client_id": "A", "token": "T"}),
+                               ("empty indexes", {"client_id": "A", "token": "T", "availableIndexes": []})):
+            ac._request_json = lambda url, _p=payload, **k: dict(_p)
+            e = []
+            check(f"Part D: {label} -> no creds + recorded error", ac._algolia_credentials(e) is None and len(e) == 1)
+        ac._request_json = lambda url, **k: ["not", "a", "dict"]  # malformed token response
+        e = []
+        check("Part D: malformed token response -> no creds + error (not silent)", ac._algolia_credentials(e) is None and len(e) == 1)
+        # malformed Algolia response (not a dict) -> no hits, error recorded
+        ac._request_json = lambda url, **k: ["unexpected"]
+        e = []
+        check("Part D: malformed Algolia response -> no hits", ac._algolia_search({"app_id": "A", "key": "K", "index": "i"}, "q", e) == [])
+        # malformed getTopics response (not a list) -> empty, no crash
+        ac._request_json = lambda url, **k: {"unexpected": True}
+        check("Part D: malformed getTopics response -> empty list", ac._get_topics([1], []) == [])
+        # transport error -> broken/blocked signal, never silent zero without an error row
+        def _raise(url, **k):
+            raise ac.AcrobatCommunityAccessError("network_TimeoutError")
+        ac._request_json = _raise
+        e = []
+        ac._algolia_credentials(e)
+        check("Part D: token transport failure records an error (visible, not silent)", len(e) == 1 and "search_token" in str(e[0]["reason"]))
+    finally:
+        ac._request_json = orig_json
+
+    # canonical URL preserved from the authoritative topic endpoint
+    canon = ac._topic_to_candidate({"url": "https://community.adobe.com/questions-9/acrobat-pro-crash-1561796", "title": "t",
+                                    "firstPost": {"content": "<p>crash</p>", "creationDate": "2026-05-20T00:00:00Z"}})
+    check("Part D: canonical thread URL preserved from getTopics", canon["source_url"] == "https://community.adobe.com/questions-9/acrobat-pro-crash-1561796")
+    # no secured token leaks into an evidence row
+    leak_row = ac.row_from_candidate(P, REC_P, {**pro2, "source_url": ac._canonical_url(pro2["source_url"])}, CAPTURED)
+    check("Part D: no secured token leaks into evidence row values",
+          not any("SECURED-TOKEN" in str(v) for v in leak_row.values()))
 
     print()
     print("=" * 60)

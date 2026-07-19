@@ -94,6 +94,19 @@ MAX_SEARCH_PAGES = 1
 READER_RE = re.compile(r"\b(?:adobe\s+)?acrobat\s+reader(?:\s+dc)?\b|\badobe\s+reader\b|\breader\s+dc\b|\bcom\.adobe\.reader\b", re.I)
 PRO_RE = re.compile(r"\b(?:adobe\s+)?acrobat\s+pro(?:\s+dc)?\b|\badobe\s+acrobat\s+dc\s+pro\b|\bcom\.adobe\.acrobat\.pro\b", re.I)
 ACROBAT_BARE_RE = re.compile(r"\b(?:adobe\s+)?acrobat\b", re.I)
+# A licensing/entitlement TIER context: an edition name here denotes the license the user
+# holds, not the patched product. E.g. "signs in with an Acrobat Pro or Standard license",
+# "Reader switches to licensed Acrobat mode", "Pro or Standard mode". This lets a report whose
+# only Pro mention is a license state (the failing product being Reader) be classified
+# Reader-only instead of shared. Narrow on purpose -- it does not match a plain "Acrobat Pro
+# crashes" failure report (no license/entitlement/"Pro or Standard" tier language nearby).
+_LICENSE_TIER_RE = re.compile(
+    r"licen[sc]e|licen[sc]ed|subscription|entitlement"
+    r"|acrobat\s+standard|standard\s+or\s+(?:acrobat\s+)?pro|pro\s+or\s+(?:acrobat\s+)?standard"
+    r"|signs?\s+in\s+with|switch(?:es|ed|ing)?\s+to\s+(?:licensed|pro\b|standard)",
+    re.I,
+)
+_LICENSE_WINDOW = 45  # chars of context on each side of an edition mention
 
 EDITION_CONFIG: dict[str, dict[str, Any]] = {
     READER_ID: {
@@ -157,28 +170,44 @@ class AcrobatCommunityAccessError(RuntimeError):
         self.status = status
 
 
+def _has_non_license_mention(text: str, edition_re: "re.Pattern[str]") -> bool:
+    """True when the edition has at least one PRODUCT-level mention -- i.e. a mention that is
+    not merely a licensing/entitlement tier state. If every mention sits in a license context,
+    the edition is not the patched product and is not attributed."""
+    for match in edition_re.finditer(text or ""):
+        window = text[max(0, match.start() - _LICENSE_WINDOW): match.end() + _LICENSE_WINDOW]
+        if not _LICENSE_TIER_RE.search(window):
+            return True
+    return False
+
+
 def acrobat_edition_attribution(text: str, product_id: str) -> tuple[bool, str, str, str | None]:
     """Deterministic, non-inferred edition attribution.
 
     Returns (attributed, matched_alias, applicability_csv, exclusion_reason). A report counts
-    for an edition only when that edition is explicitly named; an explicit both-editions report
-    counts for both; bare Acrobat / bare Reader / opposite edition fail closed.
+    for an edition only when that edition is explicitly named AS THE PATCHED PRODUCT. Merely
+    mentioning an edition as a licensing tier (e.g. "signs in with an Acrobat Pro license",
+    "Reader switches to licensed Acrobat mode") does not attribute the patch failure to it, so
+    a Reader update whose only Pro reference is a later license transition is Reader-only, not
+    shared. Shared applicability requires BOTH editions to have a real product-level mention;
+    bare Acrobat / bare Reader / the opposite edition fail closed.
     """
-    has_reader = bool(READER_RE.search(text or ""))
-    has_pro = bool(PRO_RE.search(text or ""))
-    if has_reader and has_pro:
+    text = text or ""
+    reader_attributed = bool(READER_RE.search(text)) and _has_non_license_mention(text, READER_RE)
+    pro_attributed = bool(PRO_RE.search(text)) and _has_non_license_mention(text, PRO_RE)
+    if reader_attributed and pro_attributed:
         return True, "acrobat reader + acrobat pro", f"{READER_ID},{PRO_ID}", None
     if product_id == READER_ID:
-        if has_reader:
+        if reader_attributed:
             return True, "acrobat reader", READER_ID, None
-        if has_pro:
+        if pro_attributed:
             return False, "", "", "wrong_product"
     if product_id == PRO_ID:
-        if has_pro:
+        if pro_attributed:
             return True, "acrobat pro", PRO_ID, None
-        if has_reader:
+        if reader_attributed:
             return False, "", "", "wrong_product"
-    if ACROBAT_BARE_RE.search(text or ""):
+    if ACROBAT_BARE_RE.search(text):
         return False, "", "", "generic_acrobat_without_edition"
     return False, "", "", "missing_product_attribution"
 
@@ -467,10 +496,20 @@ def adobe_community_algolia_search_candidates(
     """Keyless, CI-reachable discovery: anonymous Algolia search (exact version + product) to
     find candidate topic ids, then the getTopics content endpoint for authoritative URL/body/date.
     Neither endpoint is the CloudFront-blocked /t5 HTML search path. All acceptance gates are
-    applied downstream by row_from_candidate; this method never widens them."""
+    applied downstream by row_from_candidate; this method never widens them.
+
+    Exact-patch lifetime window: this method's lower date bound is the patch's OFFICIAL RELEASE
+    DATE, not the runner's global --since-days lookback. The exact full version already scopes
+    the query to one patch, so the applicable window is [release_date, now]. Using the global
+    45-day cutoff here would hide valid post-release reports for an older-but-current patch
+    (e.g. 26.001.21529, released May 1, whose May 12/15 Pro reports are >45 days old). Reports
+    dated before the release date are still rejected -- both here and, authoritatively, by the
+    source_date gate in row_from_candidate."""
     creds = _algolia_credentials(errors)
     if not creds:
         return []
+    # Authoritative lower bound = the record's official release date (never the global cutoff).
+    release_lower_bound = date_part(record.update_published_at)
     topic_ids: list[int] = []
     seen_ids: set[int] = set()
     for query in _algolia_search_queries(edition, record.update_version):
@@ -495,7 +534,10 @@ def adobe_community_algolia_search_candidates(
         if url in seen_urls:
             continue
         seen_urls.add(url)
-        if context.since and candidate.get("source_date") and date_part(candidate["source_date"]) < context.since:
+        # Discovery pre-filter on the patch's own release date (NOT context.since). Pre-release
+        # candidates are dropped here to avoid processing them; the same rule is re-applied
+        # authoritatively by the source_date gate in row_from_candidate.
+        if release_lower_bound and candidate.get("source_date") and date_part(candidate["source_date"]) < release_lower_bound:
             continue
         candidates.append(candidate)
     return candidates
@@ -555,7 +597,12 @@ def row_from_candidate(product_id: str, record: PatchRecord, candidate: dict[str
         platform=platform,
         severity=severity,
         sentiment=sentiment,
-        row_id=f"{product_id}-{slug(record.update_version)}-{slug(source_type)}-{slug(str(candidate.get('source_url') or ''))}",
+        # Canonical, product-INDEPENDENT evidence id: version + source_type + URL. A genuinely
+        # shared report (applicability = both editions) therefore carries the SAME id and URL on
+        # both the Reader and Pro product paths -- one canonical identity, not two unrelated ones
+        # -- while append_evidence_rows still keys dedup by (product_id, version, url) so each
+        # applicable product stores exactly one row and counts it once.
+        row_id=f"acrobat-{slug(record.update_version)}-{slug(source_type)}-{slug(str(candidate.get('source_url') or ''))}",
     )
     source_date_pass = row.get("source_date_pass")
     if not source_date:
