@@ -650,12 +650,12 @@
   product_id: adobe-media-encoder
   company_url: /updates/adobe/
   product_url: /updates/adobe/adobe-media-encoder/
-  current_status_label: Tracking initialized
+  current_status_label: Source map staged
   current_status_score: 0
   documented_update_count: 0
-  coverage_state: active_watch
-  coverage_status_label: Monitoring active
-  ingestion_status: First patch record pending
+  coverage_state: staged
+  coverage_status_label: Source map staged
+  ingestion_status: Official adapter staged (disabled); official source classified, not yet monitoring
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -671,7 +671,7 @@
     miss.
   dossier_note: Media Encoder is tracked for release changes, workflow impact, compatibility
     shifts, stability signals, and community consensus.
-  asset_type: product_icon
+  asset_type: company_fallback
 - id: adobe-lightroom-classic
   company_name: Adobe
   product_name: Lightroom Classic
@@ -1678,6 +1678,12 @@
   ingestion_active: true
   ingestion_status: Shared Acrobat DC official ingestion active (fail-closed); awaiting
     first attributed record
+  evidence_collection_status: 'active: community consensus collection is enabled and reachable
+    from GitHub Actions via Adobe Community''s keyless inSided/Algolia JSON discovery API. The
+    direct /t5 HTML search (CloudFront 403) and Reddit (403/429) remain blocked from CI and
+    serve only as honest fallbacks. PR #23 CI dry-runs confirmed both editions reachable with
+    community reports accepted under the unchanged exact-edition/version/URL/date/issue gates;
+    the scheduled run writes accepted evidence automatically. No hand-authored evidence.'
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
@@ -1727,6 +1733,12 @@
   ingestion_active: true
   ingestion_status: Shared Acrobat DC official ingestion active (fail-closed); awaiting
     first attributed record
+  evidence_collection_status: 'active: community consensus collection is enabled and reachable
+    from GitHub Actions via Adobe Community''s keyless inSided/Algolia JSON discovery API. The
+    direct /t5 HTML search (CloudFront 403) and Reddit (403/429) remain blocked from CI and
+    serve only as honest fallbacks. PR #23 CI dry-runs confirmed both editions reachable with
+    community reports accepted under the unchanged exact-edition/version/URL/date/issue gates;
+    the scheduled run writes accepted evidence automatically. No hand-authored evidence.'
   consensus_method:
   - Official source is treated as the factual baseline.
   - Community reports are grouped by recurring theme, severity, and frequency.
