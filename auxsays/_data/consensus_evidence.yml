@@ -6035,3 +6035,30 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: acrobat-26-001-21563-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-fails-to-launch-after-silent-reader-update-when-us
+  product_id: adobe-acrobat-reader
+  update_version: 26.001.21563
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-fails-to-launch-after-silent-reader-update-when-user-license-switches-to-pro-std-1627235
+  parent_title: Acrobat fails to launch after silent Reader update when user license switches to Pro/Std
+  report_title: Acrobat fails to launch after silent Reader update when user license switches to Pro/Std
+  report_text_excerpt: Acrobat fails to launch after silent Reader update when user license switches to Pro/Std Hello, We are experiencing an issue with Adobe Acrobat after performing a silent update of Adobe Acrobat Reader 64-bit. Initial installation:...
+  captured_at: '2026-07-19T19:45:13Z'
+  source_date: '2026-06-10'
+  target_release_date: '2026-05-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.001.21563
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
