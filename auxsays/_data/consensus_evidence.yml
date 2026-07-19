@@ -5881,7 +5881,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uyc4z4-virtualy-unresolvable-davinci-media-offii
   product_id: blackmagic-davinci
   update_version: '21'
@@ -5905,4 +5904,46 @@ evidence:
   platform: windows
   severity: medium
   sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13669
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13669
+  parent_title: PipeWire screen capture rejects xe (Intel Arc) dmabuf modifier, falls back to linear (0x0) causing CPU copy at full resolution
+  report_title: PipeWire screen capture rejects xe (Intel Arc) dmabuf modifier, falls back to linear (0x0) causing CPU copy at full resolution
+  report_text_excerpt: 'Other ### Other OS Fedora 44 ### OBS Studio Version Other ### OBS Studio Version (Other) 32.1.1 ### OBS Studio Log URL https://obsproject.com/logs/ejO0itOrXL3oIx1R ### OBS Studio Crash Log URL _No response_ ### Expected Behavior OBS accepts the xe dmabuf modifier and imports fra'
+  captured_at: '2026-07-19T06:58:56Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture regression
+  workflow_area: screen/window capture
+  platform: linux
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13667
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13667
+  parent_title: Check for Updates button not working with update channel set to Beta
+  report_title: Check for Updates button not working with update channel set to Beta
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/mXkHJP79fX6CVK0c ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The "'
+  captured_at: '2026-07-19T06:59:12Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
   source_weight: 1
