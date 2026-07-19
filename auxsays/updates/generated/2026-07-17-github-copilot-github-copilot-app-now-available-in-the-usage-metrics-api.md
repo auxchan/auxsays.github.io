@@ -17,8 +17,8 @@ update_version: GitHub Copilot app now available in the usage metrics API
 update_logo_text: GIT
 update_published_at: '2026-07-17T22:05:11Z'
 update_last_checked: '2026-07-18T03:41:31Z'
-source_last_checked: '2026-07-18T19:49:21Z'
-official_body_last_checked: '2026-07-18T19:49:21Z'
+source_last_checked: '2026-07-19T04:13:16Z'
+official_body_last_checked: '2026-07-19T04:13:16Z'
 record_last_updated: '2026-07-18T03:41:31Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -99,6 +99,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-07-18T19:49:21Z'
+  url: https://github.blog/changelog/2026-07-17-github-copilot-app-now-available-in-the-usage-metrics-api
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-07-19T04:13:16Z'
   url: https://github.blog/changelog/2026-07-17-github-copilot-app-now-available-in-the-usage-metrics-api
   status: captured-from-rss-feed
   body_captured: true
