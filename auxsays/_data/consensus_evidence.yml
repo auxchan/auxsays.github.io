@@ -5947,3 +5947,66 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13670
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13670
+  parent_title: AMD encoder overload cannot be recovered
+  report_title: AMD encoder overload cannot be recovered
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/UNesMqXQoYrNBmGV ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Playi'
+  captured_at: '2026-07-19T12:18:53Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13672
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13672
+  parent_title: Hardware decoding fails silently on high-core-count CPUs, sanitised log files attached
+  report_title: Hardware decoding fails silently on high-core-count CPUs, sanitised log files attached
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL Sanitised log files attached below ### OBS Studio Crash Log URL _No response_ ### Expected Behavior ### Environment'
+  captured_at: '2026-07-19T12:18:53Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13671
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13671
+  parent_title: No indication when a configured audio device no longer exists, sanitised logs attached
+  report_title: No indication when a configured audio device no longer exists, sanitised logs attached
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL I am attaching log files with sanitised paths and file names. ### OBS Studio Crash Log URL _No response_ ### Expect'
+  captured_at: '2026-07-19T12:18:53Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
