@@ -6062,3 +6062,56 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: acrobat-26-001-21529-adobe-community-bug-report-https-community-adobe-com-questions-9-e-sign-acrobat-pro-desktop-crashes-every-time-i-try-to-add
+  product_id: adobe-acrobat-pro
+  update_version: 26.001.21529
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/e-sign-acrobat-pro-desktop-crashes-every-time-i-try-to-add-a-signature-field-1561796
+  parent_title: E-Sign / Acrobat Pro Desktop crashes every time I try to add a signature field.
+  report_title: E-Sign / Acrobat Pro Desktop crashes every time I try to add a signature field.
+  report_text_excerpt: E-Sign / Acrobat Pro Desktop crashes every time I try to add a signature field. I use Adobe Pro desktop version. When I go into E-Sign and add a signature field to the document, the software freezes for a few seconds, then crashes and closes automatically. I get a pop-up error...
+  captured_at: '2026-07-19T19:48:48Z'
+  source_date: '2026-05-15'
+  target_release_date: '2026-05-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.001.21529
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-26-001-21529-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-crashing-when-using-the-fill-sign-option-software-is
+  product_id: adobe-acrobat-pro
+  update_version: 26.001.21529
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-crashing-when-using-the-fill-sign-option-software-is-up-to-date-initial-files-deleted-and-still-won-t-work-1561211
+  parent_title: Adobe Crashing when using the Fill & Sign Option, Software is up to date/initial files deleted and still won't work
+  report_title: Adobe Crashing when using the Fill & Sign Option, Software is up to date/initial files deleted and still won't work
+  report_text_excerpt: Adobe Crashing when using the Fill & Sign Option, Software is up to date/initial files deleted and still won't work I wanted to update my signature and ever since I did that, I have had issues using the Fill-in and Sign function. Every time I select the tab it crashes. I have...
+  captured_at: '2026-07-19T19:48:48Z'
+  source_date: '2026-05-12'
+  target_release_date: '2026-05-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.001.21529
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1

@@ -1050,3 +1050,93 @@ methods:
   blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x6; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked] x3; reddit_feed_fetch_failed:http_429_Too Many Requests x18
   last_run: '2026-07-19T19:45:13Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
+- product_id: adobe-acrobat-pro
+  update_version: 26.001.21529
+  method_id: adobe_community_algolia_search
+  source_type: adobe_community_bug_report
+  status: success
+  candidates_found: 12
+  accepted_candidates: 2
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 2
+  public_counted_reports: 2
+  accepted_reports: 2
+  rejected_reports: 10
+  blocked_reason: ''
+  last_run: '2026-07-19T19:48:48Z'
+  notes: acrobat community collector; edition=adobe-acrobat-pro
+- product_id: adobe-acrobat-pro
+  update_version: 26.001.21529
+  method_id: adobe_community_search
+  source_type: adobe_community_bug_report
+  status: blocked
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: adobe_community_search_fetch_failed:blocked
+  last_run: '2026-07-19T19:48:48Z'
+  notes: acrobat community collector; edition=adobe-acrobat-pro
+- product_id: adobe-acrobat-pro
+  update_version: 26.001.21529
+  method_id: reddit_search
+  source_type: reddit_community_report
+  status: blocked
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x6; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked] x3; reddit_feed_fetch_failed:http_429_Too Many Requests x16
+  last_run: '2026-07-19T19:48:48Z'
+  notes: acrobat community collector; edition=adobe-acrobat-pro
+- product_id: adobe-acrobat-pro
+  update_version: 26.001.21563
+  method_id: adobe_community_algolia_search
+  source_type: adobe_community_bug_report
+  status: no_results
+  candidates_found: 12
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 12
+  blocked_reason: ''
+  last_run: '2026-07-19T19:48:48Z'
+  notes: acrobat community collector; edition=adobe-acrobat-pro
+- product_id: adobe-acrobat-pro
+  update_version: 26.001.21563
+  method_id: adobe_community_search
+  source_type: adobe_community_bug_report
+  status: blocked
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: adobe_community_search_fetch_failed:blocked
+  last_run: '2026-07-19T19:48:48Z'
+  notes: acrobat community collector; edition=adobe-acrobat-pro
+- product_id: adobe-acrobat-pro
+  update_version: 26.001.21563
+  method_id: reddit_search
+  source_type: reddit_community_report
+  status: blocked
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x6; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked] x3; reddit_feed_fetch_failed:http_429_Too Many Requests x18
+  last_run: '2026-07-19T19:48:48Z'
+  notes: acrobat community collector; edition=adobe-acrobat-pro
