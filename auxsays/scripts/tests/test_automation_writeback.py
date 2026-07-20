@@ -9,6 +9,7 @@ Run with: PYTHONDONTWRITEBYTECODE=1 python auxsays/scripts/tests/test_automation
 """
 from __future__ import annotations
 
+import json
 import subprocess
 import sys
 import tempfile
@@ -101,6 +102,51 @@ def cfg(work: Path, **kw) -> aw.WritebackConfig:
                 validate=[PY_OK], max_retries=5, branch="main", remote="origin")
     base.update(kw)
     return aw.WritebackConfig(**base)
+
+
+class Sleeper:
+    """Records requested backoff delays instead of sleeping."""
+    def __init__(self): self.calls: list = []
+    def __call__(self, s): self.calls.append(s)
+
+
+_PAGES_MOCK = r"""
+import os, sys
+counter, fail_until, marker = sys.argv[1], int(sys.argv[2]), sys.argv[3]
+n = (int(open(counter).read()) if os.path.exists(counter) else 0) + 1
+open(counter, "w").write(str(n))
+if n <= fail_until:
+    sys.exit(1)          # simulate a Pages dispatch (or auth) failure
+open(marker, "a").write("x"); sys.exit(0)
+"""
+
+
+def pages_env(tmp: Path):
+    """Return (make_pages_cmd, counter, marker). make_pages_cmd(fail_until) yields a shell
+    command that fails the first `fail_until` invocations then succeeds and touches marker."""
+    script = tmp / "pages_mock.py"; script.write_text(_PAGES_MOCK, encoding="utf-8")
+    counter = tmp / "pages_counter"; marker = tmp / "pages_marker"
+    def make(fail_until: int) -> str:
+        return f'"{sys.executable}" "{script.as_posix()}" "{counter.as_posix()}" {fail_until} "{marker.as_posix()}"'
+    return make, counter, marker
+
+
+def status_cmd(tmp: Path, runs: list) -> str:
+    """A mocked `gh run list` that prints the given pages-run records as JSON."""
+    n = len(list(tmp.glob("status_*.json")))
+    f = tmp / f"status_{n}.json"; f.write_text(json.dumps(runs), encoding="utf-8")
+    return f'"{sys.executable}" -c "import sys;sys.stdout.write(open(r\'{f.as_posix()}\').read())"'
+
+
+def dep_run(sha, branch="main", status="completed", conclusion="success"):
+    return {"databaseId": 1, "headSha": sha, "headBranch": branch, "status": status, "conclusion": conclusion}
+
+
+def push_material(tmp: Path, origin: Path, rel: str, content: str, msg: str) -> str:
+    """A concurrent writer pushes a site-affecting commit to origin/main; returns its SHA."""
+    d = clone(tmp, origin, f"pusher_{rel.replace('/','_')}_{msg.replace(' ','_')}")
+    write(d, rel, content); g(d, "add", "-A"); g(d, "commit", "-m", msg); g(d, "push", "origin", "main")
+    return g(origin, "rev-parse", "main").stdout.strip()
 
 
 def run() -> int:
@@ -264,6 +310,125 @@ def run() -> int:
         r2 = aw.run_writeback(cfg(work, pages_cmd=pages, site_paths=["records/*.md"]))
         check("12 state-only change pushes but does NOT dispatch pages",
               r2.ok and not r2.deploy_changed and not marker.exists(), f"deploy_changed={r2.deploy_changed}")
+
+    # ===== Part H: bounded Pages dispatch + no-change deployment recovery ==================
+
+    # H1/H2: material push; first dispatch fails, second succeeds (deterministic backoff recorded)
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = setup(tmp)
+        mk, counter, marker = pages_env(tmp); slp = Sleeper()
+        write(work, "records/rec-acrobat.md", "H2\n")
+        r = aw.run_writeback(cfg(work, pages_cmd=mk(1), sleep_fn=slp))
+        check("H2 push ok + Pages succeeded on retry", r.ok and r.pages_dispatched and aw.PAGES_DISPATCH_SUCCESS in r.outcomes)
+        check("H2 exactly 2 dispatch attempts", r.pages_attempts == 2, str(r.pages_attempts))
+        check("H2 backoff applied deterministically [5]", r.pages_backoff_applied == [5] and slp.calls == [5], str(r.pages_backoff_applied))
+        check("H2 push not repeated (single commit on main)", origin_head(origin) == r.pushed_sha)
+
+    # H3/H5/H19/H21/H22: material push; all dispatch attempts fail -> deployment_pending, fail visibly
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = setup(tmp)
+        mk, counter, marker = pages_env(tmp); slp = Sleeper()
+        write(work, "records/rec-acrobat.md", "H3\n")
+        r = aw.run_writeback(cfg(work, pages_cmd=mk(99), sleep_fn=slp, pages_max_attempts=3))
+        check("H3 push succeeded (not claimed as push failure)", r.pushed and r.pushed_sha == origin_head(origin))
+        check("H3 deployment_pending set, overall fails visibly", r.deployment_pending and not r.ok)
+        check("H3 pages_dispatch_failed emitted, never success", aw.PAGES_DISPATCH_FAILED in r.outcomes and aw.PAGES_DISPATCH_SUCCESS not in r.outcomes)
+        check("H21 dispatch attempts bounded to max (3)", r.pages_attempts == 3, str(r.pages_attempts))
+        check("H22 backoff sequence deterministic [5,15]", r.pages_backoff_applied == [5, 15] and slp.calls == [5, 15])
+        check("H4 git push not repeated on dispatch failure", origin_head(origin) == r.pushed_sha)
+
+    # H6/H23: later no-change run detects a missing deployment for the current main SHA -> dispatch
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = setup(tmp)
+        M = push_material(tmp, origin, "records/rec-a.md", "site change\n", "Update automated patch evidence")
+        mk, counter, marker = pages_env(tmp)
+        r = aw.run_writeback(cfg(work, pages_cmd=mk(0), deploy_recovery=True,
+                                  recovery_site_paths=["records/*.md"], pages_status_cmd=status_cmd(tmp, [])))
+        check("H6 no_changes + deployment_missing + dispatch success", aw.NO_CHANGES in r.outcomes and aw.DEPLOYMENT_MISSING in r.outcomes and r.pages_dispatched)
+        check("H6 recovery did NOT push or fabricate a commit", not r.pushed and not r.changed and r.local_commit_sha == "")
+        check("H23 recovery targeted current origin/main SHA", r.origin_sha_latest == M, r.origin_sha_latest)
+        check("H6 pages actually invoked (marker written)", marker.exists())
+
+    # H7: later no-change run sees the current main SHA already deployed -> skip dispatch
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = setup(tmp)
+        M = push_material(tmp, origin, "records/rec-a.md", "site change\n", "Update automated patch evidence")
+        mk, counter, marker = pages_env(tmp)
+        r = aw.run_writeback(cfg(work, pages_cmd=mk(0), deploy_recovery=True, recovery_site_paths=["records/*.md"],
+                                  pages_status_cmd=status_cmd(tmp, [dep_run(M)])))
+        check("H7 deployment_current, no dispatch", aw.DEPLOYMENT_CURRENT in r.outcomes and aw.DEPLOYMENT_MISSING not in r.outcomes)
+        check("H7 pages NOT invoked", not marker.exists() and not r.pages_dispatched and r.ok)
+
+    # H8-H11: insufficient deployment evidence for the exact current SHA -> recovery dispatches
+    insufficient = {
+        "H8 older successful SHA": lambda M: [dep_run("deadbeef" * 5)],
+        "H9 success on another branch": lambda M: [dep_run(M, branch="feature/x")],
+        "H10 queued/in-progress run": lambda M: [dep_run(M, status="in_progress", conclusion=None), dep_run(M, status="queued", conclusion=None)],
+        "H11 failed/cancelled run": lambda M: [dep_run(M, conclusion="failure"), dep_run(M, conclusion="cancelled")],
+    }
+    for label, mk_runs in insufficient.items():
+        with tempfile.TemporaryDirectory() as td:
+            tmp = Path(td); origin, work = setup(tmp)
+            M = push_material(tmp, origin, "records/rec-a.md", "s\n", "Update automated patch evidence")
+            mk, counter, marker = pages_env(tmp)
+            r = aw.run_writeback(cfg(work, pages_cmd=mk(0), deploy_recovery=True, recovery_site_paths=["records/*.md"],
+                                      pages_status_cmd=status_cmd(tmp, mk_runs(M))))
+            check(f"{label} is insufficient -> recovery dispatches", aw.DEPLOYMENT_MISSING in r.outcomes and marker.exists())
+
+    # H18: a no-change patch-ingest run does NOT assume site responsibility for a non-owned commit
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = setup(tmp)
+        M = push_material(tmp, origin, "records/rec-a.md", "s\n", "Update automated patch evidence")  # evidence, not ingest
+        mk, counter, marker = pages_env(tmp)
+        r = aw.run_writeback(cfg(work, pages_cmd=mk(0), deploy_recovery=True, recovery_site_paths=["records/*.md"],
+                                  recovery_commit_grep="Ingest official patch records",
+                                  pages_status_cmd=status_cmd(tmp, [])))
+        check("H18 patch-ingest abstains from a non-ingest commit (no dispatch)",
+              aw.DEPLOYMENT_MISSING not in r.outcomes and not marker.exists() and aw.DEPLOYMENT_CURRENT in r.outcomes)
+
+    # H16/H17: patch-ingest site-responsibility distinction (state-only vs generated record)
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = setup(tmp)
+        mk, counter, marker = pages_env(tmp)
+        write(work, "data/consensus_evidence.yml", "evidence:\n  - x\n")  # non-site (state-like)
+        r = aw.run_writeback(cfg(work, pages_cmd=mk(0), site_paths=["records/*.md"]))
+        check("H16 state-only push: changed=true deploy_changed=false no Pages",
+              r.changed and not r.deploy_changed and not marker.exists() and aw.PAGES_DISPATCH_SKIPPED_NO_CHANGES in r.outcomes)
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = setup(tmp)
+        mk, counter, marker = pages_env(tmp)
+        write(work, "records/rec-acrobat.md", "record\n")  # site-affecting
+        r = aw.run_writeback(cfg(work, pages_cmd=mk(0), site_paths=["records/*.md"]))
+        check("H17 generated-record push: changed=true deploy_changed=true Pages dispatched",
+              r.changed and r.deploy_changed and marker.exists() and r.pages_dispatched)
+
+    # H13/H14: failure paths never dispatch Pages (with a real pages_cmd present)
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = setup(tmp)
+        other = clone(tmp, origin, "wc"); push_change(other, "records/rec-shared.md", "wb\nline2\nline3\nline4\nline5\n", "up")
+        mk, counter, marker = pages_env(tmp)
+        write(work, "records/rec-shared.md", "wa\nline2\nline3\nline4\nline5\n")
+        r = aw.run_writeback(cfg(work, pages_cmd=mk(0)))
+        check("H13 rebase conflict never dispatches Pages", r.outcome == aw.REBASE_CONFLICT and not marker.exists())
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = setup(tmp)
+        other = clone(tmp, origin, "wc"); push_change(other, "records/rec-b.md", "up\n", "up")
+        mk, counter, marker = pages_env(tmp)
+        write(work, "records/rec-acrobat.md", "x\n")
+        r = aw.run_writeback(cfg(work, pages_cmd=mk(0), validate=[PY_FAIL]))
+        check("H14 validation failure never dispatches Pages", r.outcome == aw.VALIDATION_FAILED_AFTER_REBASE and not marker.exists())
+
+    # H24: output-contract fields exist and are consistent
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = setup(tmp)
+        mk, counter, marker = pages_env(tmp)
+        write(work, "records/rec-acrobat.md", "out\n")
+        r = aw.run_writeback(cfg(work, pages_cmd=mk(0)))
+        d = r.as_dict()
+        check("H24 output contract keys present", all(k in d for k in ("changed", "deploy_changed", "pushed", "pushed_sha", "deployment_pending")))
+        check("H24 push success -> changed/pushed true, deployment_pending false", d["changed"] and d["pushed"] and not d["deployment_pending"])
+        r2 = aw.run_writeback(cfg(work, pages_cmd=mk(0)))  # now a genuine no-op (no recovery configured)
+        check("H24 no_changes does not set changed=true", r2.outcome == aw.NO_CHANGES and not r2.changed and not r2.pushed)
 
     # 13. Source inspection -> no force-push / ours-theirs USAGE (ignore the docstring/comments,
     # which legitimately document the prohibition).

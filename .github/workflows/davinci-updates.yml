@@ -88,4 +88,5 @@ jobs:
             --validate 'python auxsays/scripts/audit_consensus_evidence.py' \
             --validate 'python auxsays/scripts/validate_evidence_method_health.py' \
             --max-retries 5 \
-            --pages-cmd 'gh workflow run pages.yml --ref main'
+            --pages-cmd 'gh workflow run pages.yml --ref main' \
+            --pages-max-attempts 3 --pages-backoff 5,15

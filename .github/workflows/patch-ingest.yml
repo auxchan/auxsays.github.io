@@ -91,7 +91,11 @@ jobs:
             --validate 'python auxsays/scripts/validate_logo_assets.py' \
             --validate 'python auxsays/scripts/qa_patch_records.py' \
             --max-retries 5 \
-            --pages-cmd 'gh workflow run pages.yml --ref main'
+            --pages-cmd 'gh workflow run pages.yml --ref main' \
+            --pages-max-attempts 3 --pages-backoff 5,15 \
+            --deploy-recovery \
+            --recovery-site-path auxsays/updates/generated \
+            --recovery-commit-grep 'Ingest official patch records'
 
       - name: Mark dry run as unchanged
         if: ${{ github.event.inputs.dry_run == 'true' }}
