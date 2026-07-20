@@ -62,23 +62,15 @@ jobs:
           rm -f auxsays/_data/consensus_status.json
           rm -f auxsays/_data/patch_ingest_state.json
 
-      - name: Commit material promotion changes
-        id: commit
+      - name: Commit material promotion changes (conflict-safe writeback)
         if: ${{ github.event.inputs.promote == 'true' }}
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add auxsays/_data/consensus_evidence.yml
-          git add auxsays/updates/generated/2026-04-14-davinci-resolve-21-public-beta-1.md
-          if git diff --cached --quiet; then
-            echo "No material DaVinci verified promotion changes to commit."
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          git commit -m "Promote verified DaVinci calibration reports"
-          git push origin main
-          echo "changed=true" >> "$GITHUB_OUTPUT"
-
-      - name: Trigger site deploy
-        if: ${{ steps.commit.outputs.changed == 'true' }}
-        run: gh workflow run pages.yml --ref main
+          python auxsays/scripts/lib/automation_writeback.py \
+            --message "Promote verified DaVinci calibration reports" \
+            --allow auxsays/_data/consensus_evidence.yml \
+            --allow auxsays/updates/generated/2026-04-14-davinci-resolve-21-public-beta-1.md \
+            --validate 'python auxsays/scripts/qa_patch_records.py' \
+            --validate 'python auxsays/scripts/audit_consensus_evidence.py' \
+            --validate 'python auxsays/scripts/validate_evidence_method_health.py' \
+            --max-retries 5 \
+            --pages-cmd 'gh workflow run pages.yml --ref main'

@@ -98,22 +98,22 @@ jobs:
           rm -f auxsays/_data/consensus_status.json
           rm -f auxsays/_data/patch_ingest_state.json
 
-      - name: Commit material evidence changes
-        id: commit
+      - name: Commit material evidence changes (conflict-safe writeback)
         if: ${{ github.event.inputs.dry_run != 'true' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add auxsays/_data/consensus_evidence.yml auxsays/_data/evidence_method_health.yml auxsays/updates/generated/*obs-studio*.md auxsays/updates/generated/*davinci*.md auxsays/updates/generated/*premiere-pro*.md auxsays/updates/generated/*windows-11*.md auxsays/updates/generated/*acrobat*.md
-          if git diff --cached --quiet; then
-            echo "No material evidence changes to commit."
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          git commit -m "Update automated patch evidence"
-          git push
-          echo "changed=true" >> "$GITHUB_OUTPUT"
-
-      - name: Trigger site deploy
-        if: ${{ steps.commit.outputs.changed == 'true' }}
-        run: gh workflow run pages.yml --ref main
+          python auxsays/scripts/lib/automation_writeback.py \
+            --message "Update automated patch evidence" \
+            --allow auxsays/_data/consensus_evidence.yml \
+            --allow auxsays/_data/evidence_method_health.yml \
+            --allow 'auxsays/updates/generated/*obs-studio*.md' \
+            --allow 'auxsays/updates/generated/*davinci*.md' \
+            --allow 'auxsays/updates/generated/*premiere-pro*.md' \
+            --allow 'auxsays/updates/generated/*windows-11*.md' \
+            --allow 'auxsays/updates/generated/*acrobat*.md' \
+            --validate 'python auxsays/scripts/qa_patch_records.py' \
+            --validate 'python auxsays/scripts/audit_consensus_evidence.py' \
+            --validate 'python auxsays/scripts/validate_evidence_method_health.py' \
+            --max-retries 5 \
+            --pages-cmd 'gh workflow run pages.yml --ref main'

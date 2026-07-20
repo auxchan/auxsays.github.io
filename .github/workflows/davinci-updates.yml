@@ -76,22 +76,16 @@ jobs:
           rm -f auxsays/_data/consensus_status.json
           rm -f auxsays/_data/patch_ingest_state.json
 
-      - name: Commit material DaVinci evidence changes
-        id: commit
+      - name: Commit material DaVinci evidence changes (conflict-safe writeback)
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add auxsays/_data/consensus_evidence.yml auxsays/_data/evidence_method_health.yml auxsays/updates/generated/*.md
-          if git diff --cached --quiet; then
-            echo "No material DaVinci evidence changes to commit."
-            echo "changed=false" >> "$GITHUB_OUTPUT"
-            exit 0
-          fi
-          git commit -m "Update DaVinci evidence collection"
-          git push
-          echo "changed=true" >> "$GITHUB_OUTPUT"
-
-      - name: Trigger site deploy
-        if: ${{ steps.commit.outputs.changed == 'true' }}
-        run: gh workflow run pages.yml --ref main
+          python auxsays/scripts/lib/automation_writeback.py \
+            --message "Update DaVinci evidence collection" \
+            --allow auxsays/_data/consensus_evidence.yml \
+            --allow auxsays/_data/evidence_method_health.yml \
+            --allow 'auxsays/updates/generated/*.md' \
+            --validate 'python auxsays/scripts/qa_patch_records.py' \
+            --validate 'python auxsays/scripts/audit_consensus_evidence.py' \
+            --validate 'python auxsays/scripts/validate_evidence_method_health.py' \
+            --max-retries 5 \
+            --pages-cmd 'gh workflow run pages.yml --ref main'
