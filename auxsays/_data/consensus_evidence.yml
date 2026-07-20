@@ -6115,3 +6115,28 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-0-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uzxa5d-i-cannot-open-my-spline-window-in-fusion
+  product_id: blackmagic-davinci
+  update_version: 21.0.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1uzxa5d/i_cannot_open_my_spline_window_in_fusion/
+  parent_title: I cannot open my Spline window in Fusion
+  report_title: I cannot open my Spline window in Fusion
+  report_text_excerpt: I cannot open my Spline window in Fusion Since the 21 Update I've been having issues with the Fusion Page. Dual Screen doesn't work or just spawned new Spline windows whenever it felt like it and now I can't get the Spline window to open no matter what I do. I've already tried...
+  captured_at: '2026-07-20T15:38:03Z'
+  source_date: '2026-07-18'
+  target_release_date: '2026-07-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
