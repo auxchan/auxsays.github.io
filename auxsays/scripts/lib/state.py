@@ -12,6 +12,18 @@ import json
 from pathlib import Path
 from typing import Any
 
+# Seen-history retention per source. This MUST be at least as large as the widest
+# candidate scan window any enabled source can use, so that no record identity that
+# is still inside an active scan window is evicted from `seen` and then re-ingested
+# on the next run (which would burn the per-run write budget and churn files).
+#
+# The default scan window is patch_ingest.BACKFILL_SCAN_LIMIT (200); a source may
+# only NARROW it via ingestion.scan_limit (validated to be <= this value), so 200
+# covers every permitted window. Kept as an explicit constant here (rather than
+# imported from patch_ingest) to avoid a circular import; patch_ingest asserts
+# BACKFILL_SCAN_LIMIT <= SEEN_RETENTION so the two cannot silently drift apart.
+SEEN_RETENTION = 200
+
 
 def load_state(path: Path) -> dict[str, Any]:
     if path.exists():
@@ -37,7 +49,7 @@ def mark_seen(state: dict[str, Any], product_id: str, record_id: str) -> None:
     seen = bucket.setdefault("seen", [])
     if record_id not in seen:
         seen.insert(0, record_id)
-        del seen[100:]
+        del seen[SEEN_RETENTION:]
 
 
 def is_seen(state: dict[str, Any], product_id: str, record_id: str) -> bool:

@@ -19,6 +19,12 @@ from urllib.parse import urlparse
 
 import yaml
 
+SCRIPT_DIR = Path(__file__).resolve().parent
+if str(SCRIPT_DIR) not in sys.path:
+    sys.path.insert(0, str(SCRIPT_DIR))
+
+from lib.state import SEEN_RETENTION
+
 DEFAULT_CONFIG = Path("auxsays/_data/patch_ingestion_sources.yml")
 URL_FIELDS = ("official_url", "secondary_official_url", "feed_url", "api_url")
 TRAILING_URL_PUNCTUATION = (":", ";", ",")
@@ -104,6 +110,37 @@ def _validate_entry(errors: list[str], warnings: list[str], source: dict[str, An
     request = ingestion.get("request")
     if request is not None and not isinstance(request, dict):
         errors.append(f"{label}: ingestion.request must be an object when present")
+
+    # Record/scan window contract (see patch_ingest.resolve_scan_limit):
+    #   record_limit = max NEW records written per run;
+    #   scan_limit   = max candidate records the adapter may discover/inspect per run.
+    # A configured scan_limit may only NARROW the default backfill window; it must be a
+    # positive int, at least record_limit, and at most SEEN_RETENTION so the seen ledger
+    # always covers the active scan window. Invalid values fail here (fail-closed).
+    record_limit_raw = ingestion.get("record_limit")
+    record_limit_floor = None
+    if record_limit_raw is not None:
+        if isinstance(record_limit_raw, bool) or not isinstance(record_limit_raw, int) or record_limit_raw <= 0:
+            errors.append(f"{label}: ingestion.record_limit must be a positive integer when present (got {record_limit_raw!r})")
+        else:
+            record_limit_floor = record_limit_raw
+
+    scan_limit_raw = ingestion.get("scan_limit")
+    if scan_limit_raw is not None:
+        if isinstance(scan_limit_raw, bool) or not isinstance(scan_limit_raw, int):
+            errors.append(f"{label}: ingestion.scan_limit must be an integer when present (got {scan_limit_raw!r})")
+        elif scan_limit_raw <= 0:
+            errors.append(f"{label}: ingestion.scan_limit must be a positive integer (got {scan_limit_raw})")
+        elif scan_limit_raw > SEEN_RETENTION:
+            errors.append(
+                f"{label}: ingestion.scan_limit {scan_limit_raw} exceeds seen-history retention "
+                f"{SEEN_RETENTION}; a scan window wider than retention would evict in-window identities"
+            )
+        elif record_limit_floor is not None and scan_limit_raw < record_limit_floor:
+            errors.append(
+                f"{label}: ingestion.scan_limit {scan_limit_raw} is below ingestion.record_limit "
+                f"{record_limit_floor}; the scan window must cover the per-run write budget"
+            )
 
     for field in URL_FIELDS:
         value = ingestion.get(field)

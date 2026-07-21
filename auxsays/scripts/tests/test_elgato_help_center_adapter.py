@@ -2,8 +2,10 @@
 """Tests for Elgato Help Center official release-note ingestion."""
 from __future__ import annotations
 
+import io
 import sys
 import traceback
+from contextlib import redirect_stderr
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -155,6 +157,117 @@ def run() -> int:
     check("official summary is Elgato-specific", record.get("official_summary") == "Elgato published Stream Deck 6.9.1 release notes.", str(record))
     forbidden = {"report_count", "update_report_count", "consensus_label", "consensus_report", "evidence_state", "complaint_themes"}
     check("no consensus/report fields emitted", not (forbidden & set(record)), str(sorted(forbidden & set(record))))
+
+    # === bounded network cost + honest diagnostics (Parts B / C) =================
+    # This adapter issues one HTTP request per discovered article, so its network cost
+    # must be bounded independent of the caller's candidate `limit` (which the runner
+    # can set as wide as the 200 backfill window).
+    def run_fetch(src, limit, section_html, article_map):
+        """Fetch with a request-counting mock. Returns (records, total_http, per_url, stderr)."""
+        responses = {elgato._clean_url(src["ingestion"]["official_url"]): section_html}
+        for url, html in article_map.items():
+            responses[elgato._clean_url(url)] = html
+        per_url: dict[str, int] = {}
+
+        def counting_fetch(url, **_kwargs):
+            clean = elgato._clean_url(url)
+            per_url[clean] = per_url.get(clean, 0) + 1
+            if clean not in responses:
+                raise KeyError(f"unexpected fetch: {clean}")
+            return SimpleNamespace(text=responses[clean])
+
+        original = elgato.fetch_text
+        buf = io.StringIO()
+        try:
+            elgato.fetch_text = counting_fetch
+            with redirect_stderr(buf):
+                recs = elgato.fetch(src, limit=limit)
+        finally:
+            elgato.fetch_text = original
+        return recs, sum(per_url.values()), per_url, buf.getvalue()
+
+    sd = source("elgato-stream-deck")
+
+    def sd_url(i: int) -> str:
+        return f"https://help.elgato.com/hc/en-us/articles/{2000 + i}-Elgato-Stream-Deck-6-{i}-0-Release-Notes"
+
+    def sd_html(i: int) -> str:
+        return (f'<html><head><title>Elgato Stream Deck 6.{i}.0 Release Notes | Elgato</title></head>'
+                f'<body><article><h1>Elgato Stream Deck 6.{i}.0 Release Notes</h1>'
+                f'<time datetime="2026-06-{(i % 27) + 1:02d}T00:00:00Z">d</time>'
+                f'<div class="article-body">Stream Deck 6.{i}.0 notes.</div></article></body></html>')
+
+    # Section page advertising 30 matching Stream Deck release-note articles.
+    many_urls = [sd_url(i) for i in range(30)]
+    many_section = "<html><body>" + "".join(f'<a href="{u}">a</a>' for u in many_urls) + "</body></html>"
+    many_articles = {u: sd_html(i) for i, u in enumerate(many_urls)}
+
+    # 13. request count is bounded to the caller's small candidate budget
+    _r8, total8, per8, _d8 = run_fetch(sd, 8, many_section, many_articles)
+    check("limit=8: article fetches bounded to 8 (+1 section page = 9 total)", total8 == 9, str(total8))
+    check("limit=8: no article page fetched more than once", all(v == 1 for v in per8.values()), str(per8))
+
+    # 14. a caller passing 200 CANNOT cause unbounded article requests (adapter ceiling)
+    r200, total200, _p200, d200 = run_fetch(sd, 200, many_section, many_articles)
+    check("limit=200: article fetches HARD-CAPPED at ARTICLE_SCAN_CEILING, not 30", total200 == 1 + elgato.ARTICLE_SCAN_CEILING, str(total200))
+    check("limit=200: request count independent of the section's link count (bounded, not exhaustive)", total200 < 1 + len(many_urls) and len(r200) <= elgato.ARTICLE_SCAN_CEILING, str((total200, len(r200))))
+
+    # 15. the configured source cap (the limit the runner passes) is honored
+    _r6, total6, _p6, _d6 = run_fetch(sd, 6, many_section, many_articles)
+    check("limit=6: at most 6 article fetches (+1 section = 7 total)", total6 == 7, str(total6))
+
+    # 20. ceiling exhaustion is reported honestly in diagnostics
+    check("diagnostics report ceiling_reached=True when the ceiling bounds the run", "ceiling_reached=True" in d200, d200)
+    check("diagnostics report articles_fetched at the ceiling value", f"articles_fetched={elgato.ARTICLE_SCAN_CEILING}" in d200, d200)
+    check("diagnostics go to stderr with the adapter tag (never fabricated into records)", d200.strip().startswith("[elgato_help_center]"), d200)
+
+    # 16. duplicate article links are fetched once
+    dup = sd_url(0)
+    dup_section = ("<html><body>"
+                   f'<a href="{dup}">one</a>'
+                   f'<a href="{dup}?utm=x#comments">same again</a>'
+                   f'<a href="{sd_url(1)}">two</a>'
+                   "</body></html>")
+    r_dup, _t, per_dup, _d = run_fetch(sd, 8, dup_section, {sd_url(0): sd_html(0), sd_url(1): sd_html(1)})
+    check("duplicate links (after query/fragment cleanup) are fetched exactly once", per_dup.get(elgato._clean_url(dup)) == 1, str(per_dup))
+    check("de-duplicated section still yields 2 distinct records", len(r_dup) == 2, str(len(r_dup)))
+
+    # 17. wrong-domain links are ignored (never fetched)
+    ext = "https://malicious.example.com/hc/en-us/articles/9999-Elgato-Stream-Deck-9-9-9-Release-Notes"
+    wd_section = f'<html><body><a href="{sd_url(0)}">valid</a><a href="{ext}">external</a></body></html>'
+    r_wd, _t, per_wd, _d = run_fetch(sd, 8, wd_section, {sd_url(0): sd_html(0), ext: sd_html(99)})
+    check("wrong-domain article link is never fetched", elgato._clean_url(ext) not in per_wd, str(per_wd))
+    check("only the same-domain article becomes a record", len(r_wd) == 1, str(r_wd))
+
+    # 18. non-matching product articles are fetched but rejected (never fabricated)
+    help_url = "https://help.elgato.com/hc/en-us/articles/5555-How-To-Reset-Your-Device"
+    help_html = ('<html><head><title>How to reset your device | Elgato</title></head>'
+                 '<body><article><h1>How to reset your device</h1>'
+                 '<div class="article-body">general help content</div></article></body></html>')
+    nm_section = f'<html><body><a href="{help_url}">help</a><a href="{sd_url(0)}">release</a></body></html>'
+    r_nm, _t, per_nm, d_nm = run_fetch(sd, 8, nm_section, {help_url: help_html, sd_url(0): sd_html(0)})
+    check("non-matching product article is fetched (inspected) but produces no record", elgato._clean_url(help_url) in per_nm and all("Reset" not in (r.get("title") or "") for r in r_nm), str(r_nm))
+    check("diagnostics count the non-match honestly (nonmatches=1)", "nonmatches=1" in d_nm, d_nm)
+
+    # 19. a matching article after several non-matches is still reachable within the ceiling
+    lead = [f"https://help.elgato.com/hc/en-us/articles/{7000 + i}-How-To-{i}" for i in range(5)]
+    late_section = "<html><body>" + "".join(f'<a href="{u}">n</a>' for u in lead) + f'<a href="{sd_url(0)}">m</a></body></html>'
+    lead_html = ('<html><head><title>How to | Elgato</title></head>'
+                 '<body><article><h1>How to</h1><div class="article-body">x</div></article></body></html>')
+    late_articles = {u: lead_html for u in lead}
+    late_articles[sd_url(0)] = sd_html(0)
+    r_late, _t, _p, _d = run_fetch(sd, 8, late_section, late_articles)
+    check("a matching article after 5 non-matches is still reached within the ceiling", len(r_late) == 1 and r_late[0].get("version") == "6.0.0", str(r_late))
+
+    # 21. no fabricated record on parser/DOM miss (missing version, or empty article DOM)
+    nover_html = ('<html><head><title>Elgato Stream Deck Release Notes | Elgato</title></head>'
+                  '<body><article><h1>Elgato Stream Deck Release Notes</h1>'
+                  '<div class="article-body">No version number here.</div></article></body></html>')
+    r_nv, _t, _p, d_nv = run_fetch(sd, 8, f'<html><body><a href="{sd_url(0)}">a</a></body></html>', {sd_url(0): nover_html})
+    check("article with no extractable version yields NO record (fail-closed)", r_nv == [], str(r_nv))
+    check("parser/version miss counted honestly in diagnostics (parser_misses=1)", "parser_misses=1" in d_nv, d_nv)
+    r_dom, _t, _p, _d = run_fetch(sd, 8, f'<html><body><a href="{sd_url(0)}">a</a></body></html>', {sd_url(0): "<html><body></body></html>"})
+    check("empty/garbage article DOM yields NO fabricated record", r_dom == [], str(r_dom))
 
     print()
     print("=" * 60)

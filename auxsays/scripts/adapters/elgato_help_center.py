@@ -8,10 +8,22 @@ from __future__ import annotations
 
 import hashlib
 import re
+import sys
 from urllib.parse import urljoin, urlparse, urlunparse
 
 from lib.http import fetch_text
 from lib.normalize import strip_tags, normalize_date
+
+# Unlike parse-once adapters, this adapter fetches ONE HTTP page per discovered
+# article, so its network cost scales with how many links it inspects. The runner's
+# candidate scan window (patch_ingest.resolve_scan_limit) can be as wide as 200, so
+# the adapter enforces its OWN deterministic ceiling on article-detail requests that
+# does not depend on the caller's `limit`. Even if a caller passes limit=200, at most
+# ARTICLE_SCAN_CEILING article pages are fetched. Elgato release-note section pages
+# list a single product's notes, so a small ceiling still reaches the recent history
+# while skipping a few non-matching/help articles. Sources also set ingestion.scan_limit
+# (currently 8) to narrow the caller-supplied budget below this backstop.
+ARTICLE_SCAN_CEILING = 12
 
 ARTICLE_PATH = "/hc/en-us/articles/"
 ARTICLE_BODY_RE = re.compile(
@@ -72,7 +84,15 @@ def _is_elgato_article_url(section_url: str, candidate: str) -> bool:
     return not any(part in lowered for part in ("/search", "/sections", "/categories"))
 
 
-def _article_links(section_url: str, html: str, limit: int) -> list[str]:
+def _article_links(section_url: str, html: str, max_links: int) -> list[str]:
+    """Extract at most ``max_links`` distinct, same-domain, article-path links.
+
+    Links are validated (expected Help Center domain + article path) and deduplicated
+    (after query/fragment cleanup) BEFORE any of them is fetched, and extraction stops
+    at ``max_links`` so link discovery — like article fetching — is bounded independent
+    of how much markup the section page contains.
+    """
+    ceiling = max(1, int(max_links))
     links: list[str] = []
     for match in ANCHOR_RE.finditer(html or ""):
         href = (match.group(1) or "").strip()
@@ -81,7 +101,7 @@ def _article_links(section_url: str, html: str, limit: int) -> list[str]:
         absolute = _clean_url(urljoin(section_url, href))
         if _is_elgato_article_url(section_url, absolute) and absolute not in links:
             links.append(absolute)
-        if len(links) >= max(1, limit) * 4:
+        if len(links) >= ceiling:
             break
     return links
 
@@ -170,23 +190,67 @@ def _record(source: dict, article_url: str, title: str, version: str, published:
     }
 
 
+def _emit_diagnostics(source: dict, **counts: object) -> None:
+    """Emit a single structured, parseable diagnostics line to stderr.
+
+    Distinguishes the outcomes an operator needs to tell apart: how many article
+    pages were fetched, how many were accepted, whether the request ceiling was
+    reached, and how many were dropped for request failure, parser/version miss, or
+    product non-match. Never fabricates records; a miss is a drop, not an accept.
+    """
+    fields = " ".join(f"{key}={value}" for key, value in counts.items())
+    print(f"[elgato_help_center] product={source.get('product_id')} {fields}", file=sys.stderr)
+
+
 def fetch(source: dict, limit: int = 3) -> list[dict]:
     ingestion = source.get("ingestion", {}) or {}
     section_url = ingestion["official_url"]
+
+    # Bound article-detail requests deterministically: honour the caller's candidate
+    # budget but never exceed the adapter's own ceiling, regardless of caller input.
+    article_budget = min(max(1, int(limit)), ARTICLE_SCAN_CEILING)
+
+    # One section-page request. A failure here propagates so the source is booked as
+    # failing (transport error), unlike per-article failures which are isolated below.
     section = fetch_text(section_url, **_fetch_options(source)).text
-    links = _article_links(section_url, section, limit)
+    links = _article_links(section_url, section, article_budget)
 
     records: list[dict] = []
+    articles_fetched = 0
+    request_failures = 0
+    parser_misses = 0
+    nonmatches = 0
     for article_url in links:
-        html = fetch_text(article_url, **_fetch_options(source)).text
+        if articles_fetched >= article_budget:
+            break  # explicit request ceiling — never one fetch per discovered anchor
+        try:
+            html = fetch_text(article_url, **_fetch_options(source)).text
+        except Exception:
+            request_failures += 1
+            continue
+        articles_fetched += 1
         title = _title_from_html(html)
         body = _body_from_html(html)
         if not title or not _product_matches(source, title, body):
+            nonmatches += 1
             continue
         version = _version_from_pattern(source, title, body)
         if not version:
+            parser_misses += 1
             continue
         records.append(_record(source, article_url, title, version, _date_from_html(html), body))
-        if len(records) >= limit:
-            break
+
+    ceiling_reached = len(links) >= article_budget
+    _emit_diagnostics(
+        source,
+        article_budget=article_budget,
+        links_found=len(links),
+        articles_fetched=articles_fetched,
+        accepted=len(records),
+        ceiling_reached=ceiling_reached,
+        no_matching_articles=(len(records) == 0),
+        request_failures=request_failures,
+        parser_misses=parser_misses,
+        nonmatches=nonmatches,
+    )
     return records

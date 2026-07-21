@@ -30,7 +30,7 @@ if str(SCRIPT_DIR) not in sys.path:
 
 from lib.http import fetch_text
 from lib.normalize import strip_tags, utc_now
-from lib.state import load_state, save_state, is_seen, mark_seen, update_source_success, update_source_error
+from lib.state import load_state, save_state, is_seen, mark_seen, update_source_success, update_source_error, SEEN_RETENTION
 from lib.write_update_record import refresh_existing_record, write_record
 
 DEFAULT_CONFIG = Path("auxsays/_data/patch_ingestion_sources.yml")
@@ -191,13 +191,48 @@ def resolve_record_limit(source: dict[str, Any], args: argparse.Namespace) -> in
 # pages carry well under this many versions; the adapter still returns at most this count.
 BACKFILL_SCAN_LIMIT = 200
 
+# The seen-history ledger must retain at least one identity per candidate the widest
+# scan window can surface, or in-window records get evicted and re-ingested every run.
+# A configured ingestion.scan_limit may only narrow the window (validation caps it at
+# SEEN_RETENTION), so this invariant guarantees retention covers every permitted window.
+assert BACKFILL_SCAN_LIMIT <= SEEN_RETENTION, (
+    f"BACKFILL_SCAN_LIMIT ({BACKFILL_SCAN_LIMIT}) exceeds seen-history retention "
+    f"({SEEN_RETENTION}); raise lib.state.SEEN_RETENTION to match."
+)
+
 
 def resolve_scan_limit(source: dict[str, Any], args: argparse.Namespace) -> int:
-    """Records to fetch/scan per run: at least the per-run write limit, widened for backfill."""
-    return max(resolve_record_limit(source, args), BACKFILL_SCAN_LIMIT)
+    """Candidate records to fetch/scan per run.
+
+    A run WRITES at most ``record_limit`` new records but SCANS a wider window so
+    older history is backfilled across scheduled runs. The default window is
+    ``max(record_limit, BACKFILL_SCAN_LIMIT)``. A source whose adapter turns the
+    scan window into remote network fan-out (e.g. one HTTP request per discovered
+    article) may NARROW it with ``ingestion.scan_limit``:
+
+    - absent          -> the default backfill window (unchanged behaviour);
+    - a valid int     -> honoured, provided ``record_limit <= scan_limit <= SEEN_RETENTION``;
+    - invalid / out of range -> resolved conservatively to ``record_limit`` (never
+      broadening network activity) and rejected up front by validate_ingestion_sources.
+
+    ``scan_limit`` never exceeds ``SEEN_RETENTION`` (enforced by validation), so the
+    seen ledger always covers whatever window is used.
+    """
+    record_limit = resolve_record_limit(source, args)
+    default_window = max(record_limit, BACKFILL_SCAN_LIMIT)
+    raw = (source.get("ingestion", {}) or {}).get("scan_limit")
+    if raw is None:
+        return default_window
+    try:
+        value = int(raw)
+    except (TypeError, ValueError):
+        return record_limit
+    if value < record_limit or value > SEEN_RETENTION:
+        return record_limit
+    return value
 
 
-def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str, Any]) -> dict[str, Any]:
+def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str, Any], *, write: bool = True) -> dict[str, Any]:
     product_id = source["product_id"]
     adapter_name = source.get("ingestion", {}).get("adapter") or source.get("ingestion", {}).get("type")
     if not adapter_name:
@@ -207,11 +242,14 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
     checked_at = utc_now()
     module = adapter_module(adapter_name)
     per_run_limit = resolve_record_limit(source, args)
-    records = module.fetch(source, limit=resolve_scan_limit(source, args))
+    scan_limit = resolve_scan_limit(source, args)
+    records = module.fetch(source, limit=scan_limit)
+    candidate_count = len(records)
     written = []
     skipped = []
     refreshed = []
     deferred = []
+    would_create = []     # dry-run: unseen records this run WOULD create (no disk/state write)
     new_created = 0       # NEW (not-yet-ingested) records written this run
     refreshed_recent = 0  # already-ingested records refreshed this run (bounded churn)
     for record in records:
@@ -226,6 +264,8 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
         #   - not-yet-ingested records: create at most `per_run_limit` per run and DEFER the
         #     rest to a later scheduled run (so all of them are eventually ingested, and the
         #     newest few never starve the older backlog).
+        # This selection is identical whether writing or dry-running, so a dry-run reports
+        # exactly what a production run at the same scan_limit would create/refresh/defer.
         already_ingested = is_seen(state, product_id, record_id)
         if already_ingested:
             if refreshed_recent >= per_run_limit:
@@ -237,6 +277,14 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
                 deferred.append(record_id)
                 continue
             new_created += 1
+
+        if not write:
+            # Dry-run: record the selection without touching disk or state.
+            if already_ingested:
+                refreshed.append({"record_id": record_id, "action": "would-refresh"})
+            else:
+                would_create.append(record_id)
+            continue
 
         ingestion = source.get("ingestion", {}) or {}
         record["source_last_checked"] = checked_at
@@ -256,21 +304,31 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
             skipped.append({"record_id": record_id, "reason": reason, "path": str(path)})
 
     duration_ms = int((time.monotonic() - started) * 1000)
-    update_source_success(
-        state,
-        product_id,
-        checked_at=checked_at,
-        duration_ms=duration_ms,
-        adapter=adapter_name,
-        fetched=len(records),
-        written=len(written) + len(refreshed),
-        skipped=len(skipped),
-    )
+    if write:
+        update_source_success(
+            state,
+            product_id,
+            checked_at=checked_at,
+            duration_ms=duration_ms,
+            adapter=adapter_name,
+            fetched=candidate_count,
+            written=len(written) + len(refreshed),
+            skipped=len(skipped),
+        )
 
-    return {
+    created_count = len(written) if write else len(would_create)
+    result = {
         "product_id": product_id,
         "adapter": adapter_name,
-        "fetched": len(records),
+        # Resolved ingestion diagnostics (record vs candidate windows are now distinct):
+        "record_limit": per_run_limit,
+        "scan_limit": scan_limit,
+        "candidate_count": candidate_count,
+        "created": created_count,
+        "skipped_existing": len(skipped),
+        "deferred_count": len(deferred),
+        # Detailed lists (kept for existing consumers / state["last_results"]):
+        "fetched": candidate_count,
         "written": written,
         "refreshed": refreshed,
         "skipped": skipped,
@@ -278,6 +336,10 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
         "status": "success",
         "duration_ms": duration_ms,
     }
+    if not write:
+        result["dry_run"] = True
+        result["would_create"] = would_create
+    return result
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Run AUXSAYS official patch ingestion.")
@@ -303,18 +365,10 @@ def main() -> int:
         if not should_run(source, args):
             continue
         try:
-            if args.dry_run:
-                adapter_name = source.get("ingestion", {}).get("adapter") or source.get("ingestion", {}).get("type")
-                records = adapter_module(adapter_name).fetch(source, limit=resolve_record_limit(source, args))
-                results.append({
-                    "product_id": source["product_id"],
-                    "adapter": adapter_name,
-                    "fetched": len(records),
-                    "would_refresh_existing": True,
-                    "sample_titles": [r.get("title") or r.get("version") for r in records],
-                })
-            else:
-                results.append(run_source(source, args, state))
+            # Dry-run and production share run_source (write=False vs True) so a dry-run
+            # scans the SAME resolved candidate window and reports the exact create/refresh/
+            # defer selection a real run would make — while writing no files and no state.
+            results.append(run_source(source, args, state, write=not args.dry_run))
         except Exception as exc:
             product_id = source.get("product_id")
             adapter_name = source.get("ingestion", {}).get("adapter") or source.get("ingestion", {}).get("type") or "unknown"
