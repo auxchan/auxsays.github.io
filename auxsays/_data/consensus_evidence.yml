@@ -6165,3 +6165,55 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: acrobat-24-002-20857-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-reader-gets-crashed-in-edit-and-fillable-feild-1505
+  product_id: adobe-acrobat-reader
+  update_version: 24.002.20857
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-reader-gets-crashed-in-edit-and-fillable-feild-1505693
+  parent_title: Adobe reader gets crashed in edit and fillable feild
+  report_title: Adobe reader gets crashed in edit and fillable feild
+  report_text_excerpt: Adobe reader gets crashed in edit and fillable feild When the PDF is opened for the first time in editable form > We add the data in the pdf and click on the Save button after entering all the data in text inputs. The data gets saved. > Now we close the Adobe Reader & again we...
+  captured_at: '2026-07-21T09:38:48Z'
+  source_date: '2024-06-21'
+  target_release_date: '2024-06-15'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.002.20857
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: form behavior regression
+  workflow_area: forms
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: blackmagic-davinci-20-2-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1opemam-davinci-resolve-studio-2023-mkv-files-aud
+  product_id: blackmagic-davinci
+  update_version: 20.2.3
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1opemam/davinci_resolve_studio_2023_mkv_files_audio_bug/
+  parent_title: Davinci Resolve Studio 20.2.3 .MKV Files [AUDIO BUG]
+  report_title: Davinci Resolve Studio 20.2.3 .MKV Files [AUDIO BUG]
+  report_text_excerpt: Davinci Resolve Studio 20.2.3 .MKV Files [AUDIO BUG] I just updated to the latest version 20.2.3 and Davinci is not reading the audio information from .MKV video files....
+  captured_at: '2026-07-21T09:47:15Z'
+  source_date: '2025-11-05'
+  target_release_date: '2025-11-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.3
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: unknown
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
