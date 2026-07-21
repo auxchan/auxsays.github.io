@@ -256,6 +256,29 @@ def run() -> int:
     check("date-derivation: version+build but NO month/day -> 0 records (fail closed)",
           len(_parse('<h3>Version 2611</h3><p>Version 2611 (Build 20400.20010)</p><ul><li>PowerPoint: fix.</li></ul>')) == 0)
 
+    # --- invalid / impossible date rejection (fail closed; never fabricate) ---
+    check("invalid-date: impossible day 'July 40' -> 0 records",
+          len(_parse('<h3>Version 2607: July 40</h3><p>Version 2607 (Build 20200.20100)</p><ul><li>PowerPoint: fix.</li></ul>')) == 0)
+    check("invalid-date: 'February 30, 2026' full date -> 0 records (no backtrack to Feb 3)",
+          len(_parse('<h3>Version 2602 (Build 19725.20126)</h3><p>Current Channel released February 30, 2026.</p><ul><li>PowerPoint: fix.</li></ul>')) == 0)
+    check("invalid-date: month substring in a word ('Smarch 5') not matched -> 0 records",
+          len(_parse('<h3>Version 2607: Smarch 5</h3><p>Version 2607 (Build 20200.20100)</p><ul><li>PowerPoint: fix.</li></ul>')) == 0)
+    check("invalid-date: malformed YYMM version (month 00) -> 0 records",
+          len(_parse('<h3>Version 2600: July 14</h3><p>Version 2600 (Build 20200.20100)</p><ul><li>PowerPoint: fix.</li></ul>')) == 0)
+    check("unit: _iso_date rejects an impossible day (Feb 30)", mso._iso_date(2026, 2, 30) == "")
+    check("unit: _iso_date accepts a valid date", mso._iso_date(2026, 7, 14) == "2026-07-14T00:00:00Z")
+
+    # --- adjacent release sections: own date + no date/issue leakage ----------
+    adj = _parse('<h3>Version 2607: August 11</h3><p>Version 2607 (Build 20200.20100)</p><ul><li>PowerPoint: crashAlpha.</li></ul>'
+                 '<h3>Version 2606: July 14</h3><p>Version 2606 (Build 20131.20154)</p><ul><li>PowerPoint: crashBeta.</li></ul>')
+    by_ver = {r["version"]: r for r in adj}
+    check("adjacent sections: both PowerPoint versions produced", set(by_ver) == {"2607", "2606"}, str(sorted(by_ver)))
+    check("adjacent sections: v2607 keeps its OWN date (2026-08-11)", (by_ver.get("2607", {}).get("published_at") or "").startswith("2026-08-11"))
+    check("adjacent sections: v2606 keeps its OWN date (2026-07-14)", (by_ver.get("2606", {}).get("published_at") or "").startswith("2026-07-14"))
+    check("adjacent sections: v2607 keeps its OWN build", by_ver.get("2607", {}).get("target_build") == "20200.20100")
+    check("adjacent sections: no issue-text leak (v2607 has crashAlpha, not crashBeta)",
+          "crashAlpha" in (by_ver.get("2607", {}).get("body") or "") and "crashBeta" not in (by_ver.get("2607", {}).get("body") or ""))
+
     print()
     print("=" * 60)
     total = _PASS + _FAIL

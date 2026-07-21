@@ -26,6 +26,7 @@ from __future__ import annotations
 
 import hashlib
 import re
+from datetime import date
 from typing import Any
 
 from lib.http import fetch_text
@@ -42,15 +43,15 @@ SECTION_RE = re.compile(
 VERSION_CELL_RE = re.compile(r"\d{3,4}")
 BUILD_CELL_RE = re.compile(r"\d{3,6}\.\d{3,6}")
 DATE_RE = re.compile(
-    r"(January|February|March|April|May|June|July|August|September|October|November|December)"
+    r"\b(January|February|March|April|May|June|July|August|September|October|November|December)"
     r"\s+(\d{1,2}),\s+(20\d{2})",
     re.I,
 )
 # The Current Channel release-notes page prints a per-version date WITHOUT a year
 # ("Version 2606: July 14"); the year is derived from the 4-digit YYMM version number.
 NO_YEAR_DATE_RE = re.compile(
-    r"(January|February|March|April|May|June|July|August|September|October|November|December)"
-    r"\s+(\d{1,2})(?!,\s*20\d{2})",
+    r"\b(January|February|March|April|May|June|July|August|September|October|November|December)"
+    r"\s+(\d{1,2})\b(?!\d|,\s*20\d{2})",
     re.I,
 )
 MONTHS = {
@@ -124,18 +125,27 @@ def _source_candidates(source: dict[str, Any]) -> list[str]:
     return clean
 
 
+def _iso_date(year: int, month: int, day: int) -> str:
+    """ISO datetime string for a REAL calendar date, else "" — rejects impossible day/month
+    combinations (e.g. day 40, February 30) instead of emitting a fabricated date."""
+    try:
+        return date(year, month, day).isoformat() + "T00:00:00Z"
+    except ValueError:
+        return ""
+
+
 def _date_from_text(text: str) -> str:
-    """Return an ISO date if the text contains a 'Month DD, YYYY' date, else "".
+    """Return an ISO date if the text contains a valid 'Month DD, YYYY' date, else "".
 
     Note: this deliberately returns "" (not normalize_date("")) on no match, because
     normalize_date defaults to now() — which would let a non-date table cell win the
-    per-row date scan.
+    per-row date scan. An impossible day/month (e.g. "March 40, 2026") is also rejected.
     """
     match = DATE_RE.search(text or "")
     if match:
-        month = MONTHS.get(match.group(1).lower(), "01")
-        day = int(match.group(2))
-        return f"{match.group(3)}-{month}-{day:02d}T00:00:00Z"
+        month = MONTHS.get(match.group(1).lower())
+        if month:
+            return _iso_date(int(match.group(3)), int(month), int(match.group(2)))
     return ""
 
 
@@ -161,8 +171,10 @@ def _release_date(section_text: str, version: str) -> str:
         return ""
     day = int(match.group(2))
     version_year, version_month = 2000 + int(version[:2]), int(version[2:])
+    if not 1 <= version_month <= 12:
+        return ""  # malformed YYMM version (no such month) -> cannot anchor the year
     year = version_year + 1 if int(month) < version_month else version_year
-    return f"{year}-{month}-{day:02d}T00:00:00Z"
+    return _iso_date(year, int(month), day)
 
 
 def _row_cells(row_html: str) -> list[str]:
