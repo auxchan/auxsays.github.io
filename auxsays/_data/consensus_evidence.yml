@@ -6451,3 +6451,174 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-20-2-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1nsyjnm-one-specific-effect-makes-dvr-freak-out-f
+  product_id: blackmagic-davinci
+  update_version: 20.2.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1nsyjnm/one_specific_effect_makes_dvr_freak_out_for_some/
+  parent_title: One specific effect makes DVR freak out for some reason???
+  report_title: One specific effect makes DVR freak out for some reason???
+  report_text_excerpt: One specific effect makes DVR freak out for some reason??? I don't know if this is because of my GPU or because of Resolve but I was just looking through the different transitions in the toolbox when this happened. Trying to preview the "Paint On" effect not only slows down my...
+  captured_at: '2026-07-21T18:52:17Z'
+  source_date: '2025-09-28'
+  target_release_date: '2025-09-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ns67ug-help-davinci-resolve-crashes-at-100-proje
+  product_id: blackmagic-davinci
+  update_version: 20.2.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ns67ug/help_davinci_resolve_crashes_at_100_project_load/
+  parent_title: HELP! Davinci Resolve crashes at 100% project load. Other methods not working.
+  report_title: HELP! Davinci Resolve crashes at 100% project load. Other methods not working.
+  report_text_excerpt: HELP! Davinci Resolve crashes at 100% project load. Other methods not working. Title says it all. I've tried exporting and importing, db browser setting timeline to 6. I can't get into my work. I'm on a major deadline and this is my nightmare. Any help would be appreciated Mac...
+  captured_at: '2026-07-21T18:52:17Z'
+  source_date: '2025-09-27'
+  target_release_date: '2025-09-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: blackmagic-davinci-20-2-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1om3no7-forcing-dvr-to-use-a-specific-version-of
+  product_id: blackmagic-davinci
+  update_version: 20.2.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1om3no7/forcing_dvr_to_use_a_specific_version_of_python/
+  parent_title: Forcing DVR to use a specific version of python (in Linux)
+  report_title: Forcing DVR to use a specific version of python (in Linux)
+  report_text_excerpt: Forcing DVR to use a specific version of python (in Linux) I have DaVinci Resolve Studio 20.2.2 on Linux Fedora (I'm aware it's not officially supported, but there are a few known tricks to get it to work without issues). My problem is that after I upgraded to Fedora 43,...
+  captured_at: '2026-07-21T18:55:01Z'
+  source_date: '2025-11-02'
+  target_release_date: '2025-10-15'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: linux
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1om0ws3-help-flickering-on-color-graded-footage-g
+  product_id: blackmagic-davinci
+  update_version: 20.2.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1om0ws3/help_flickering_on_color_graded_footage_going_on/
+  parent_title: Help! Flickering on color graded footage going on and off randomly inside Resolve and in the exported file.
+  report_title: Help! Flickering on color graded footage going on and off randomly inside Resolve and in the exported file.
+  report_text_excerpt: Help! Flickering on color graded footage going on and off randomly inside Resolve and in the exported file. This happens when I'm color grading in Resolve but also with the exported file. It appears that the grade gets removed for a few frames then comes back again on and on,...
+  captured_at: '2026-07-21T18:55:01Z'
+  source_date: '2025-11-01'
+  target_release_date: '2025-10-15'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ol9zqk-info-to-be-aware-of-davinci-resolve-studi
+  product_id: blackmagic-davinci
+  update_version: 20.2.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ol9zqk/info_to_be_aware_of_davinci_resolve_studio/
+  parent_title: Info to Be Aware Of — DaVinci Resolve Studio Requires Lots of VRAM
+  report_title: Info to Be Aware Of — DaVinci Resolve Studio Requires Lots of VRAM
+  report_text_excerpt: Info to Be Aware Of — DaVinci Resolve Studio Requires Lots of VRAM I recently purchased and installed DaVinci Resolve Studio 20.2.2, and immediately none of my projects could be worked on. I purchased the Studio version to use the amazing Magic Mask 2, but my project froze,...
+  captured_at: '2026-07-21T18:55:01Z'
+  source_date: '2025-10-31'
+  target_release_date: '2025-10-15'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: magic mask crash
+  workflow_area: color grading / Magic Mask
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ocupc2-insanely-long-render-times-in-version-202
+  product_id: blackmagic-davinci
+  update_version: 20.2.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ocupc2/insanely_long_render_times_in_version_2022/
+  parent_title: Insanely long render times in Version 20.2.2
+  report_title: Insanely long render times in Version 20.2.2
+  report_text_excerpt: Insanely long render times in Version 20.2.2 PC specs(About 2 years old) RTX4090(Latest studio drivers) Ryzen 7950X 64GB DDR5@6000 WDBlack 4TB NVMeSSD Windows 11 25H2 Build 26200.6901 Davinci Resolve Studio 20.2.2 Build 10 After updating to 20.2.2 render times became insanely...
+  captured_at: '2026-07-21T18:55:01Z'
+  source_date: '2025-10-22'
+  target_release_date: '2025-10-15'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+
+- id: blackmagic-davinci-20-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1t20mlc-resolve-studio-203-crash-on-launch-nobara
+  product_id: blackmagic-davinci
+  update_version: '20.3'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1t20mlc/resolve_studio_203_crash_on_launch_nobara_43/
+  parent_title: Resolve Studio 20.3 Crash on Launch - Nobara 43 - Signal 6 (fusionscript.so / libtbbmalloc)
+  report_title: Resolve Studio 20.3 Crash on Launch - Nobara 43 - Signal 6 (fusionscript.so / libtbbmalloc)
+  report_text_excerpt: Resolve Studio 20.3 Crash on Launch - Nobara 43 - Signal 6 (fusionscript.so / libtbbmalloc) Need help with a constant crash on launch. I'm on Nobara 43 (Fedora 43 base) with an NVIDIA RTX 3050. Resolve kills the process during the splash screen while "Launching main window."...
+  captured_at: '2026-07-21T18:58:06Z'
+  source_date: '2026-05-02'
+  target_release_date: '2025-12-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.3'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
