@@ -46,6 +46,13 @@ DATE_RE = re.compile(
     r"\s+(\d{1,2}),\s+(20\d{2})",
     re.I,
 )
+# The Current Channel release-notes page prints a per-version date WITHOUT a year
+# ("Version 2606: July 14"); the year is derived from the 4-digit YYMM version number.
+NO_YEAR_DATE_RE = re.compile(
+    r"(January|February|March|April|May|June|July|August|September|October|November|December)"
+    r"\s+(\d{1,2})(?!,\s*20\d{2})",
+    re.I,
+)
 MONTHS = {
     "january": "01", "february": "02", "march": "03", "april": "04", "may": "05", "june": "06",
     "july": "07", "august": "08", "september": "09", "october": "10", "november": "11", "december": "12",
@@ -130,6 +137,32 @@ def _date_from_text(text: str) -> str:
         day = int(match.group(2))
         return f"{match.group(3)}-{month}-{day:02d}T00:00:00Z"
     return ""
+
+
+def _release_date(section_text: str, version: str) -> str:
+    """Official release date for a version section, fail-closed.
+
+    Prefers a full 'Month DD, YYYY' date. Falls back to 'Month DD' plus the year DERIVED from
+    the 4-digit YYMM version number, because the Current Channel page prints the per-version
+    date without a year ("Version 2606: July 14"). A release month earlier than the version's
+    own month means the calendar year rolled over (e.g. Version 2512 shipping in January).
+    Returns "" (reject) when neither a full date nor a 'Month DD' + a 4-digit YYMM version can
+    be established -- this never fabricates a date."""
+    full = _date_from_text(section_text)
+    if full:
+        return full
+    if not re.fullmatch(r"\d{4}", version or ""):
+        return ""
+    match = NO_YEAR_DATE_RE.search(section_text or "")
+    if not match:
+        return ""
+    month = MONTHS.get(match.group(1).lower())
+    if not month:
+        return ""
+    day = int(match.group(2))
+    version_year, version_month = 2000 + int(version[:2]), int(version[2:])
+    year = version_year + 1 if int(month) < version_month else version_year
+    return f"{year}-{month}-{day:02d}T00:00:00Z"
 
 
 def _row_cells(row_html: str) -> list[str]:
@@ -526,7 +559,9 @@ def _records_from_office_app_release_notes(
         if not build:
             continue  # fail closed: require the precise build, not just a marketing version
 
-        published = _date_from_text(re.sub(r"\s+", " ", strip_tags(section)))
+        published = _release_date(re.sub(r"\s+", " ", strip_tags(section)), version)
+        if not published:
+            continue  # fail closed: require the official release date (every record must carry one)
 
         entries: list[str] = []
         applies_suitewide = False
