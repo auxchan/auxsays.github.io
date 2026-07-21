@@ -3300,7 +3300,11 @@
   ingestion:
     type: html_release_notes
     adapter: microsoft_office_updates
-    official_url: https://learn.microsoft.com/en-us/officeupdates/release-notes-microsoft365-apps
+    # Primary app-attribution source: the server-rendered Current Channel release-notes page,
+    # which carries per-app "Feature updates"/"Resolved issues" blocks with exact version+build.
+    # (The .../release-notes-microsoft365-apps index page returns a JavaScript shell to the
+    # urllib adapter -> 0 records; current-channel is fully server-rendered and parseable.)
+    official_url: https://learn.microsoft.com/en-us/officeupdates/current-channel
     secondary_official_url: https://learn.microsoft.com/en-us/officeupdates/update-history-microsoft365-apps-by-date
     feed_url: null
     api_url: null

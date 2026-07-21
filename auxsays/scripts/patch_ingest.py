@@ -185,6 +185,18 @@ def resolve_record_limit(source: dict[str, Any], args: argparse.Namespace) -> in
     return value if value > 0 else args.limit
 
 
+# Progressive backfill: a run WRITES at most `record_limit` NEW records, but SCANS a wider
+# window so a source with more history than the per-run limit is ingested across scheduled runs
+# (instead of forever repeating only the newest `record_limit` records). Official release-note
+# pages carry well under this many versions; the adapter still returns at most this count.
+BACKFILL_SCAN_LIMIT = 200
+
+
+def resolve_scan_limit(source: dict[str, Any], args: argparse.Namespace) -> int:
+    """Records to fetch/scan per run: at least the per-run write limit, widened for backfill."""
+    return max(resolve_record_limit(source, args), BACKFILL_SCAN_LIMIT)
+
+
 def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str, Any]) -> dict[str, Any]:
     product_id = source["product_id"]
     adapter_name = source.get("ingestion", {}).get("adapter") or source.get("ingestion", {}).get("type")
@@ -194,15 +206,37 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
     started = time.monotonic()
     checked_at = utc_now()
     module = adapter_module(adapter_name)
-    records = module.fetch(source, limit=resolve_record_limit(source, args))
+    per_run_limit = resolve_record_limit(source, args)
+    records = module.fetch(source, limit=resolve_scan_limit(source, args))
     written = []
     skipped = []
     refreshed = []
+    deferred = []
+    new_created = 0       # NEW (not-yet-ingested) records written this run
+    refreshed_recent = 0  # already-ingested records refreshed this run (bounded churn)
     for record in records:
         record_id = record.get("record_id")
         if not record_id:
             record_id = f"{product_id}:{record.get('source_url') or record.get('title') or record.get('version')}"
             record["record_id"] = record_id
+
+        # State/ordering for progressive backfill (records arrive newest-first):
+        #   - already-ingested records: refresh only the newest `per_run_limit` (keeps their
+        #     freshness current without rewriting the whole history every run);
+        #   - not-yet-ingested records: create at most `per_run_limit` per run and DEFER the
+        #     rest to a later scheduled run (so all of them are eventually ingested, and the
+        #     newest few never starve the older backlog).
+        already_ingested = is_seen(state, product_id, record_id)
+        if already_ingested:
+            if refreshed_recent >= per_run_limit:
+                skipped.append({"record_id": record_id, "reason": "state-seen-outside-refresh-window"})
+                continue
+            refreshed_recent += 1
+        else:
+            if new_created >= per_run_limit:
+                deferred.append(record_id)
+                continue
+            new_created += 1
 
         ingestion = source.get("ingestion", {}) or {}
         record["source_last_checked"] = checked_at
@@ -240,6 +274,7 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
         "written": written,
         "refreshed": refreshed,
         "skipped": skipped,
+        "deferred": deferred,
         "status": "success",
         "duration_ms": duration_ms,
     }

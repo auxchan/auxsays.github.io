@@ -100,6 +100,54 @@ def run() -> int:
     with_override = [r.get("product_id") for r in rows if isinstance(r.get("ingestion"), dict) and "record_limit" in r["ingestion"]]
     check("only microsoft-windows-11 sets a record_limit in the whole config", with_override == ["microsoft-windows-11"], str(with_override))
 
+    # === progressive backfill: a per-run limit must ADVANCE, not repeat the newest N =====
+    # A source with more history than the per-run limit must be ingested across scheduled runs
+    # (run_source scans a wider window and creates at most `per_run_limit` NEW records per run).
+    import tempfile
+    from adapters import microsoft_office_updates as mso
+    check("resolve_scan_limit widens the fetch window beyond the per-run write limit",
+          patch_ingest.resolve_scan_limit(src(), args(2)) >= patch_ingest.BACKFILL_SCAN_LIMIT > 2)
+
+    PP = {"company_id": "microsoft", "product_id": "microsoft-powerpoint", "company": "Microsoft",
+          "software": "Microsoft PowerPoint",
+          "ingestion": {"adapter": "microsoft_office_updates", "parser_profile": "microsoft_365_powerpoint_release_notes",
+                        "target_app": "powerpoint", "channel": "Current Channel",
+                        "official_url": "https://learn.microsoft.com/en-us/officeupdates/current-channel"}}
+    canned = "".join(
+        f'<h3>Version {v}: {mo}</h3><p>Version {v} (Build {b})</p>'
+        f'<h4>Resolved issues</h4><ul><li>PowerPoint: fix for {v}.</li></ul>'
+        for v, b, mo in (("2607", "20200.20100", "August 11"), ("2606", "20131.20154", "July 14"),
+                         ("2605", "20026.20076", "May 20"), ("2604", "19950.20050", "April 8"),
+                         ("2603", "19822.20182", "March 4")))
+    parsed = mso._records_from_office_app_release_notes(PP, PP["ingestion"]["official_url"], canned, 50)
+    check("backfill fixture: 5 unique PowerPoint records parsed", len(parsed) == 5, str([r.get("version") for r in parsed]))
+
+    class _FakeAdapter:
+        @staticmethod
+        def fetch(source, limit=3):
+            return [dict(r) for r in parsed[:max(1, int(limit))]]
+
+    orig_adapter_module = patch_ingest.adapter_module
+    patch_ingest.adapter_module = lambda name: _FakeAdapter
+    try:
+        with tempfile.TemporaryDirectory() as td:
+            a = SimpleNamespace(limit=2, output=Path(td) / "generated", overwrite_existing=False)
+            a.output.mkdir(parents=True, exist_ok=True)
+            state = {"schema_version": 1, "sources": {}, "seen": {}}
+            per_run = [[Path(p).name for p in patch_ingest.run_source(PP, a, state).get("written", [])] for _ in range(6)]
+            all_created = [n for run in per_run for n in run]
+            distinct = set(all_created)
+            check("backfill: run 1 creates the per-run limit (2) newest records", len(per_run[0]) == 2, str(per_run[0]))
+            check("backfill: run 2 advances to 2 DIFFERENT records (no repeat of newest)",
+                  len(per_run[1]) == 2 and not (set(per_run[1]) & set(per_run[0])), str(per_run[:2]))
+            check("backfill: no record is created twice across runs", len(all_created) == len(distinct), str(all_created))
+            check("backfill: all 5 records eventually created", distinct and len(distinct) == 5, str(sorted(distinct)))
+            check("backfill: a later run once exhausted creates 0 new records", per_run[-1] == [], str(per_run[-1]))
+            files = list((a.output).glob("*.md"))
+            check("backfill: exactly 5 generated files on disk (idempotent rerun does not duplicate)", len(files) == 5, str(len(files)))
+    finally:
+        patch_ingest.adapter_module = orig_adapter_module
+
     print()
     print("=" * 60)
     total = _PASS + _FAIL
