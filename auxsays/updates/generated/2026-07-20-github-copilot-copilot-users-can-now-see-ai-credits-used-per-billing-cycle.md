@@ -17,8 +17,8 @@ update_version: Copilot users can now see AI credits used per billing cycle
 update_logo_text: GIT
 update_published_at: '2026-07-20T16:00:14Z'
 update_last_checked: '2026-07-20T19:58:48Z'
-source_last_checked: '2026-07-20T19:58:48Z'
-official_body_last_checked: '2026-07-20T19:58:48Z'
+source_last_checked: '2026-07-21T19:55:30Z'
+official_body_last_checked: '2026-07-21T19:55:30Z'
 record_last_updated: '2026-07-20T19:58:48Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -77,6 +77,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-07-20T19:58:48Z'
+  url: https://github.blog/changelog/2026-07-20-copilot-users-can-now-see-ai-credits-used-per-billing-cycle
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-07-21T19:55:30Z'
   url: https://github.blog/changelog/2026-07-20-copilot-users-can-now-see-ai-credits-used-per-billing-cycle
   status: captured-from-rss-feed
   body_captured: true
