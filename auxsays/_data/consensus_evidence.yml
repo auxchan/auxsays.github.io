@@ -6702,3 +6702,52 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-20-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1s41za2-davinci-resolve-studio-crashes-when-conne
+  product_id: blackmagic-davinci
+  update_version: '20.3'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1s41za2/davinci_resolve_studio_crashes_when_connecting/
+  parent_title: DaVinci Resolve Studio crashes when connecting 5th+ Fusion alpha output as matte in Color page — anyone else?
+  report_title: DaVinci Resolve Studio crashes when connecting 5th+ Fusion alpha output as matte in Color page — anyone else?
+  report_text_excerpt: DaVinci Resolve Studio crashes when connecting 5th+ Fusion alpha output as matte in Color page — anyone else? Hi everyone, I am a CG artist who is also specializing in post-production for CG productions. I've been hitting a frustrating and very reproducible crash in DaVinci...
+  captured_at: '2026-07-21T22:39:31Z'
+  source_date: '2026-03-26'
+  target_release_date: '2025-12-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.3'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1pk75hq-davinci-is-crashing-my-computer-when-pull
+  product_id: blackmagic-davinci
+  update_version: '20.3'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1pk75hq/davinci_is_crashing_my_computer_when_pulling/
+  parent_title: Davinci is crashing my computer when pulling media from multiple drives. Help!
+  report_title: Davinci is crashing my computer when pulling media from multiple drives. Help!
+  report_text_excerpt: Davinci is crashing my computer when pulling media from multiple drives. Help! Hey everyone! I am trying to edit and pull media (up to 6k .r3d files but most just 4K) from different drives connected inside my PC. Any project using media from only one drive works okay, but when...
+  captured_at: '2026-07-21T22:39:31Z'
+  source_date: '2025-12-11'
+  target_release_date: '2025-12-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.3'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
