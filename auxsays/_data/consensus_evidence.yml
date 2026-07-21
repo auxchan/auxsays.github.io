@@ -6217,3 +6217,52 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uzxa5d-i-cannot-open-my-spline-window-in-fusion
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1uzxa5d/i_cannot_open_my_spline_window_in_fusion/
+  parent_title: I cannot open my Spline window in Fusion
+  report_title: I cannot open my Spline window in Fusion
+  report_text_excerpt: I cannot open my Spline window in Fusion Since the 21 Update I've been having issues with the Fusion Page. Dual Screen doesn't work or just spawned new Spline windows whenever it felt like it and now I can't get the Spline window to open no matter what I do. I've already tried...
+  captured_at: '2026-07-21T14:37:21Z'
+  source_date: '2026-07-18'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uzsjs6-scale-issues-with-video-transitions
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1uzsjs6/scale_issues_with_video_transitions/
+  parent_title: Scale issues with video transitions
+  report_title: Scale issues with video transitions
+  report_text_excerpt: Scale issues with video transitions I'm using DaVinci Resolve 21 to edit a video and I wanted to add a transition to the beginning of this title (a compound clip labelled "text"). I chose the "Glow" transition for this video but other transitions have the same problem. When I...
+  captured_at: '2026-07-21T14:37:21Z'
+  source_date: '2026-07-18'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: install issue
+  workflow_area: installation
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1

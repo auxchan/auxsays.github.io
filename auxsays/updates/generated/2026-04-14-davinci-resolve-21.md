@@ -20,11 +20,11 @@ update_status: current
 update_feed_title: DaVinci Resolve 21
 update_detail_title: DaVinci Resolve 21
 update_consensus_label: Negative
-update_consensus_summary: 'WAIT: DaVinci Resolve 21 has 34 user reports found. User reports show a repeat pattern.
-  Current reports mention render/export failures, performance slowdowns, and installation problems. Production editors
+update_consensus_summary: 'WAIT: DaVinci Resolve 21 has 36 user reports found. User reports show a repeat pattern.
+  Current reports mention render/export failures, installation problems, and performance slowdowns. Production editors
   with active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy, so
   production users should test before updating.'
-update_report_count: 34
+update_report_count: 36
 update_consensus_confidence: High
 status_change_type: new
 notification_message: ''
@@ -37,15 +37,15 @@ official_source_classification_note: Blackmagic's source is a vendor release pag
   AUXSAYS links it as the official source, but has not captured a full structured patch-note body from that page.
 patch_file_size_status: not_provided_by_source
 update_channel_label: Stable / Studio release
-quick_verdict: 'WAIT: DaVinci Resolve 21 has 34 user reports found.'
+quick_verdict: 'WAIT: DaVinci Resolve 21 has 36 user reports found.'
 update_decision_label: WAIT
-update_decision_body: Current reports mention render/export failures, performance slowdowns, and installation problems.
+update_decision_body: Current reports mention render/export failures, installation problems, and performance slowdowns.
   Production editors with active delivery deadlines should wait or test on copied projects.
 source_freshness_note: ''
 record_note: This page covers DaVinci Resolve 21. Beta reports are excluded from this record.
 official_summary: DaVinci Resolve 21 is tracked here as the stable/Studio release. Public Beta 1 reports are excluded.
-consensus_report: '34 user reports found for DaVinci Resolve 21. Current reports mention render/export failures,
-  performance slowdowns, and installation problems. Current reports are Reddit-heavy, so production users should
+consensus_report: '36 user reports found for DaVinci Resolve 21. Current reports mention render/export failures,
+  installation problems, and performance slowdowns. Current reports are Reddit-heavy, so production users should
   test before updating. Sources represented: r/davinciresolve.'
 status_events:
 - at: '2026-04-14T00:00:00Z'
@@ -156,6 +156,9 @@ status_events:
 - at: '2026-07-19T15:24:23.090433Z'
   label: User reports found
   note: User report count updated to 34.
+- at: '2026-07-21T14:39:36.077248Z'
+  label: User reports found
+  note: User report count updated to 36.
 legacy_consensus_score: 0
 legacy_consensus_score_percent: 50
 official_patch_notes_source_url: https://www.blackmagicdesign.com/media/release/20260414-01
@@ -191,7 +194,7 @@ consensus_collection_status: pilot_initial_sample
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 official_source_captured: true
-confirmed_patch_specific_report_count: 34
+confirmed_patch_specific_report_count: 36
 known_issues_present: null
 official_checksums_body: ''
 source_last_checked: '2026-07-01T15:14:39Z'
@@ -224,8 +227,8 @@ official_source_attempts:
   status: captured-from-official-blackmagic-support-api
   body_captured: true
   checksums_captured: false
-evidence_last_checked: '2026-07-19T15:21:31Z'
-record_last_updated: '2026-07-19T15:24:23.090433Z'
+evidence_last_checked: '2026-07-21T14:37:21Z'
+record_last_updated: '2026-07-21T14:39:36.077248Z'
 intelligence_stage: pilot
 evidence_samples:
 - source_name: r/davinciresolve
@@ -245,6 +248,14 @@ evidence_samples:
   issue: general workflow reports
   outcome: medium
 - source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1thh603/problem_with_keyframe_tab_in_fusion/
+  source_title: Problem with keyframe tab in fusion
+  counted: true
+  version_matched: '21'
+  patch_version_matched: true
+  issue: installation problems
+  outcome: medium
+- source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1tzqxgt/help_text_macro_animation_scales_to_the_full/
   source_title: '[Help] Text macro animation scales to the full composition length inside the Fusion page (Resolve
     Studio 21)'
@@ -252,14 +263,6 @@ evidence_samples:
   version_matched: '21'
   patch_version_matched: true
   issue: performance slowdowns in timeline / GPU performance
-  outcome: medium
-- source_name: r/davinciresolve
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1thh603/problem_with_keyframe_tab_in_fusion/
-  source_title: Problem with keyframe tab in fusion
-  counted: true
-  version_matched: '21'
-  patch_version_matched: true
-  issue: installation problems
   outcome: medium
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1ucntqq/smoothness_on_a_slowed_down_clip/
@@ -586,6 +589,24 @@ accepted_report_sources:
   patch_version_matched: true
   issue: render/export failures
   workflow_area: render/export
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1uzxa5d/i_cannot_open_my_spline_window_in_fusion/
+  source_title: I cannot open my Spline window in Fusion
+  source_date: '2026-07-18'
+  version_matched: '21'
+  patch_version_matched: true
+  issue: general workflow reports
+  workflow_area: general DaVinci Resolve workflow
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1uzsjs6/scale_issues_with_video_transitions/
+  source_title: Scale issues with video transitions
+  source_date: '2026-07-18'
+  version_matched: '21'
+  patch_version_matched: true
+  issue: installation problems
+  workflow_area: installation
 evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
 - Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
