@@ -6622,3 +6622,83 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: acrobat-23-003-20244-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-pro-keeps-crashing-while-editing-a-document-128431
+  product_id: adobe-acrobat-pro
+  update_version: 23.003.20244
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-pro-keeps-crashing-while-editing-a-document-1284311
+  parent_title: Acrobat Pro keeps crashing while editing a document
+  report_title: Acrobat Pro keeps crashing while editing a document
+  report_text_excerpt: Acrobat Pro keeps crashing while editing a document This is happening on both my home and work computers which were built about the same time and have similar components. I removed and re-installed Acrobat and made sure to check for any updats with no luck. Anything else I...
+  captured_at: '2026-07-21T20:34:56Z'
+  source_date: '2023-08-03'
+  target_release_date: '2023-07-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.003.20244
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: form behavior regression
+  workflow_area: forms
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-23-003-20244-adobe-community-bug-report-https-community-adobe-com-questions-12-update-failed-manually-trying-to-check-for-updates-in-64
+  product_id: adobe-acrobat-reader
+  update_version: 23.003.20244
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/update-failed-manually-trying-to-check-for-updates-in-64-bit-adobe-acrobat-reader-document-cloud-1504262
+  parent_title: '"Update failed” manually trying to check for updates in 64-bit Adobe Acrobat Reader Document Cloud'
+  report_title: '"Update failed” manually trying to check for updates in 64-bit Adobe Acrobat Reader Document Cloud'
+  report_text_excerpt: '"Update failed” manually trying to check for updates in 64-bit Adobe Acrobat Reader Document Cloud I have been installing Adobe Acrobat Reader Document Cloud (AARDC) in my administrator account of a 64-bit Windows 10 Home Edition operating system on a Dell Corporation notebook...'
+  captured_at: '2026-07-21T20:40:10Z'
+  source_date: '2023-07-26'
+  target_release_date: '2023-07-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.003.20244
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: form behavior regression
+  workflow_area: forms
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-23-003-20244-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-acrobat-reader-mui-23-003-20269-corrupted-character
+  product_id: adobe-acrobat-reader
+  update_version: 23.003.20244
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-acrobat-reader-mui-23-003-20269-corrupted-characters-1504358
+  parent_title: Adobe Acrobat Reader MUI 23.003.20269 - corrupted characters
+  report_title: Adobe Acrobat Reader MUI 23.003.20269 - corrupted characters
+  report_text_excerpt: Adobe Acrobat Reader MUI 23.003.20269 - corrupted characters Hello, after update Adobe Acrobat Reader MUI to the latest version 23.003.20269 we have issues with notes created in some PDF file with tool Fill & Sign. Our default system language is 1029=Czech (čeština). When I...
+  captured_at: '2026-07-21T20:40:10Z'
+  source_date: '2023-08-18'
+  target_release_date: '2023-07-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 23.003.20244
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
