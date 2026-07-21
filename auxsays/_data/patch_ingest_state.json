@@ -2,299 +2,40 @@
   "last_errors": [],
   "last_results": [
     {
-      "adapter": "rss_feed",
-      "duration_ms": 789,
-      "fetched": 2,
-      "product_id": "figma",
-      "refreshed": [
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-07-16-figma-bring-code-backed-screens-onto-the-canvas-with-variables-attached.md",
-          "record_id": "rss:figma:5e6a9791-ff5a-42bd-81a9-d9ef8dc8baeb"
-        },
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-07-14-figma-see-ai-credit-usage-in-betas.md",
-          "record_id": "rss:figma:9f6c6958-4c04-414a-8909-90635a1e1a93"
-        }
-      ],
-      "skipped": [],
-      "status": "success",
-      "written": []
-    },
-    {
-      "adapter": "adobe_release_notes",
-      "duration_ms": 25859,
-      "fetched": 1,
-      "product_id": "adobe-premiere-pro",
-      "refreshed": [
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-05-01-premiere-pro-26-2-2.md",
-          "record_id": "adobe:adobe-premiere-pro:26.2.2:c176cc33bba85978"
-        }
-      ],
-      "skipped": [],
-      "status": "success",
-      "written": []
-    },
-    {
-      "adapter": "blackmagic_support_downloads",
-      "duration_ms": 613,
-      "fetched": 2,
-      "product_id": "blackmagic-davinci",
-      "refreshed": [
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-07-02-davinci-resolve-21-0-2.md",
-          "record_id": "blackmagic-support:blackmagic-davinci:21.0.2:76871642674641dcbac137eb5cb46301"
-        },
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-06-24-davinci-resolve-21-0-1.md",
-          "record_id": "blackmagic-support:blackmagic-davinci:21.0.1:a7be1e5732fd4edfb804af3d1f29cf61"
-        }
-      ],
-      "skipped": [],
-      "status": "success",
-      "written": []
-    },
-    {
-      "adapter": "github_releases",
-      "duration_ms": 835,
-      "fetched": 2,
-      "product_id": "obs-studio",
-      "refreshed": [
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-04-21-obs-studio-32-1-2.md",
-          "record_id": "github:obs-studio:311922679"
-        },
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-04-02-obs-studio-32-1-1.md",
-          "record_id": "github:obs-studio:304830335"
-        }
-      ],
-      "skipped": [],
-      "status": "success",
-      "written": []
-    },
-    {
-      "adapter": "github_releases",
-      "duration_ms": 485,
-      "fetched": 2,
-      "product_id": "comfyui",
-      "refreshed": [
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-07-15-comfyui-0-28-0.md",
-          "record_id": "github:comfyui:354232972"
-        },
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-06-30-comfyui-0-27-0.md",
-          "record_id": "github:comfyui:347121118"
-        }
-      ],
-      "skipped": [],
-      "status": "success",
-      "written": []
-    },
-    {
-      "adapter": "rss_feed",
-      "duration_ms": 494,
-      "fetched": 2,
-      "product_id": "github",
-      "refreshed": [
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-07-20-github-copilot-ai-credit-pools-for-cost-centers-in-the-billing-ui.md",
-          "record_id": "rss:github:https://github.blog/changelog/2026-07-20-ai-credit-pools-for-cost-centers-in-the-billing-ui"
-        },
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-07-20-github-copilot-github-code-quality-is-now-generally-available.md",
-          "record_id": "rss:github:https://github.blog/changelog/2026-07-20-github-code-quality-is-now-generally-available"
-        }
-      ],
-      "skipped": [],
-      "status": "success",
-      "written": []
-    },
-    {
-      "adapter": "html_changelog",
-      "duration_ms": 184,
-      "fetched": 0,
-      "product_id": "netlify",
-      "refreshed": [],
-      "skipped": [],
-      "status": "success",
-      "written": []
-    },
-    {
-      "adapter": "adobe_acrobat",
-      "duration_ms": 243,
-      "fetched": 2,
-      "product_id": "adobe-acrobat-reader",
-      "refreshed": [
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-05-18-adobe-acrobat-reader-26-001-21563.md",
-          "record_id": "adobe:adobe-acrobat-reader:continuous:26.001.21563:6328266f8ae55fff"
-        },
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-05-01-adobe-acrobat-reader-26-001-21529.md",
-          "record_id": "adobe:adobe-acrobat-reader:continuous:26.001.21529:813d949ea2ac4f63"
-        }
-      ],
-      "skipped": [],
-      "status": "success",
-      "written": []
-    },
-    {
-      "adapter": "adobe_acrobat",
-      "duration_ms": 34,
-      "fetched": 2,
-      "product_id": "adobe-acrobat-pro",
-      "refreshed": [
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-05-18-adobe-acrobat-pro-26-001-21563.md",
-          "record_id": "adobe:adobe-acrobat-pro:continuous:26.001.21563:ba46b442cb9c0581"
-        },
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-05-01-adobe-acrobat-pro-26-001-21529.md",
-          "record_id": "adobe:adobe-acrobat-pro:continuous:26.001.21529:f568e99ac4bb01db"
-        }
-      ],
-      "skipped": [],
-      "status": "success",
-      "written": []
-    },
-    {
-      "adapter": "microsoft_release_health",
-      "duration_ms": 6667,
-      "fetched": 4,
-      "product_id": "microsoft-windows-11",
-      "refreshed": [
-        {
-          "action": "refreshed",
-          "path": "auxsays/updates/generated/2026-06-23-windows-11-26h1.md",
-          "record_id": "microsoft:microsoft-windows-11:26H1:2408f682500e2953"
-        },
-        {
-          "action": "refreshed",
-          "path": "auxsays/updates/generated/2026-06-23-windows-11-25h2.md",
-          "record_id": "microsoft:microsoft-windows-11:25H2:93be1ef08ab2bb84"
-        },
-        {
-          "action": "refreshed",
-          "path": "auxsays/updates/generated/2026-06-23-windows-11-24h2.md",
-          "record_id": "microsoft:microsoft-windows-11:24H2:15be0a55967056d3"
-        },
-        {
-          "action": "refreshed",
-          "path": "auxsays/updates/generated/2026-06-09-windows-11-23h2.md",
-          "record_id": "microsoft:microsoft-windows-11:23H2:7b6462fef2940dd0"
-        }
-      ],
-      "skipped": [],
-      "status": "success",
-      "written": []
-    },
-    {
       "adapter": "microsoft_office_updates",
-      "duration_ms": 130,
-      "fetched": 2,
-      "product_id": "microsoft-teams",
-      "refreshed": [
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-07-17-microsoft-teams-26183-1901-4874-5228.md",
-          "record_id": "microsoft:microsoft-teams:26183.1901.4874.5228:c56d879171e4dd81"
-        },
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-07-01-microsoft-teams-26163-407-4839-8659.md",
-          "record_id": "microsoft:microsoft-teams:26163.407.4839.8659:614818b363d9b499"
-        }
+      "deferred": [
+        "microsoft:microsoft-powerpoint:2602:fde5bd5ad7b8468f",
+        "microsoft:microsoft-powerpoint:2601:767c660d99178f4f",
+        "microsoft:microsoft-powerpoint:2506:346fca48dc6880cd",
+        "microsoft:microsoft-powerpoint:2504:15f6b1f87eeb28ee",
+        "microsoft:microsoft-powerpoint:2503:e7a4ca13c9edeeeb",
+        "microsoft:microsoft-powerpoint:2502:6935362723a73445",
+        "microsoft:microsoft-powerpoint:2501:114ec1f079449d4b",
+        "microsoft:microsoft-powerpoint:2411:23e8dac6924f750e",
+        "microsoft:microsoft-powerpoint:2410:efa5de6895dd7f44",
+        "microsoft:microsoft-powerpoint:2409:6eee37aea871eea3",
+        "microsoft:microsoft-powerpoint:2408:37806057f21a89f9",
+        "microsoft:microsoft-powerpoint:2407:a4e6b40a28e92e6b",
+        "microsoft:microsoft-powerpoint:2406:ff66665e21e3cf49",
+        "microsoft:microsoft-powerpoint:2405:81f5ad9215147cde",
+        "microsoft:microsoft-powerpoint:2404:80faf12926df1c92",
+        "microsoft:microsoft-powerpoint:2403:f1ca99a5072064e6",
+        "microsoft:microsoft-powerpoint:2312:41734d73c631db0c"
       ],
-      "skipped": [],
-      "status": "success",
-      "written": []
-    },
-    {
-      "adapter": "microsoft_office_updates",
-      "duration_ms": 143,
-      "fetched": 0,
+      "duration_ms": 4010,
+      "fetched": 19,
       "product_id": "microsoft-powerpoint",
       "refreshed": [],
       "skipped": [],
       "status": "success",
-      "written": []
-    },
-    {
-      "adapter": "microsoft_office_updates",
-      "duration_ms": 1823,
-      "fetched": 1,
-      "product_id": "microsoft-365-apps",
-      "refreshed": [
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-06-30-microsoft-365-apps-2606.md",
-          "record_id": "microsoft:microsoft-365-apps:2606:0d838e111b39230d"
-        }
-      ],
-      "skipped": [],
-      "status": "success",
-      "written": []
-    },
-    {
-      "adapter": "elgato_help_center",
-      "duration_ms": 4961,
-      "fetched": 0,
-      "product_id": "elgato-stream-deck",
-      "refreshed": [],
-      "skipped": [],
-      "status": "success",
-      "written": []
-    },
-    {
-      "adapter": "elgato_help_center",
-      "duration_ms": 3686,
-      "fetched": 0,
-      "product_id": "elgato-wave-link",
-      "refreshed": [],
-      "skipped": [],
-      "status": "success",
-      "written": []
-    },
-    {
-      "adapter": "elgato_help_center",
-      "duration_ms": 4862,
-      "fetched": 0,
-      "product_id": "elgato-camera-hub",
-      "refreshed": [],
-      "skipped": [],
-      "status": "success",
-      "written": []
-    },
-    {
-      "adapter": "elgato_help_center",
-      "duration_ms": 3610,
-      "fetched": 0,
-      "product_id": "elgato-4k-capture-utility",
-      "refreshed": [],
-      "skipped": [],
-      "status": "success",
-      "written": []
+      "written": [
+        "auxsays/updates/generated/2026-05-20-microsoft-powerpoint-2605.md",
+        "auxsays/updates/generated/2026-04-14-microsoft-powerpoint-2603.md"
+      ]
     }
   ],
-  "last_run_finished_at": "2026-07-21T03:55:56Z",
-  "last_run_started_at": "2026-07-21T03:55:01Z",
+  "last_run_finished_at": "2026-07-21T05:34:55Z",
+  "last_run_started_at": "2026-07-21T05:34:51Z",
   "sources": {
     "adobe-acrobat-pro": {
       "consecutive_failures": 0,
@@ -731,19 +472,22 @@
     "microsoft-powerpoint": {
       "consecutive_failures": 0,
       "last_adapter": "microsoft_office_updates",
-      "last_checked_at": "2026-07-21T03:55:37Z",
+      "last_checked_at": "2026-07-21T05:34:51Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
-      "last_health_note": "Fetch succeeded, but no records were extracted. This can mean no new updates or that the parser needs review.",
-      "last_records_fetched": 0,
+      "last_health_note": "Fetch succeeded.",
+      "last_records_fetched": 19,
       "last_records_skipped": 0,
-      "last_records_written": 0,
-      "last_run_duration_ms": 143,
-      "last_success_at": "2026-07-21T03:55:37Z",
+      "last_records_written": 2,
+      "last_run_duration_ms": 4010,
+      "last_success_at": "2026-07-21T05:34:51Z",
       "previous_consecutive_failures": 0,
-      "seen": [],
-      "status": "degraded"
+      "seen": [
+        "microsoft:microsoft-powerpoint:2603:2d38636ed627d537",
+        "microsoft:microsoft-powerpoint:2605:68052bed001d6cab"
+      ],
+      "status": "healthy"
     },
     "microsoft-teams": {
       "consecutive_failures": 0,
