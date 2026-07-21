@@ -6010,7 +6010,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1v0lrf3-fusion-speed-ramps-gets-laggy
   product_id: blackmagic-davinci
   update_version: '21'
@@ -6035,7 +6034,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-26-001-21563-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-fails-to-launch-after-silent-reader-update-when-us
   product_id: adobe-acrobat-reader
   update_version: 26.001.21563
@@ -6062,7 +6060,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-26-001-21529-adobe-community-bug-report-https-community-adobe-com-questions-9-e-sign-acrobat-pro-desktop-crashes-every-time-i-try-to-add
   product_id: adobe-acrobat-pro
   update_version: 26.001.21529
@@ -6115,7 +6112,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-0-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uzxa5d-i-cannot-open-my-spline-window-in-fusion
   product_id: blackmagic-davinci
   update_version: 21.0.2
@@ -6140,7 +6136,6 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
-
 - id: blackmagic-davinci-21-0-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1v1vtna-unable-to-initialize-gpu-error-happening
   product_id: blackmagic-davinci
   update_version: 21.0.2
@@ -6165,7 +6160,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-24-002-20857-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-reader-gets-crashed-in-edit-and-fillable-feild-1505
   product_id: adobe-acrobat-reader
   update_version: 24.002.20857
@@ -6192,7 +6186,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-20-2-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1opemam-davinci-resolve-studio-2023-mkv-files-aud
   product_id: blackmagic-davinci
   update_version: 20.2.3
@@ -6217,7 +6210,6 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
-
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uzxa5d-i-cannot-open-my-spline-window-in-fusion
   product_id: blackmagic-davinci
   update_version: '21'
@@ -6263,6 +6255,199 @@ evidence:
   issue_theme: install issue
   workflow_area: installation
   platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-24-002-20854-adobe-community-bug-report-https-community-adobe-com-questions-9-editing-an-annotation-or-comment-changes-the-username-on-a
+  product_id: adobe-acrobat-pro
+  update_version: 24.002.20854
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/editing-an-annotation-or-comment-changes-the-username-on-acrobat-pro-desktop-versions-1296873
+  parent_title: Editing an annotation or comment changes the username on Acrobat Pro Desktop versions
+  report_title: Editing an annotation or comment changes the username on Acrobat Pro Desktop versions
+  report_text_excerpt: 'Editing an annotation or comment changes the username on Acrobat Pro Desktop versions Issue: Editing another user''s comment or annotation in a PDF changes the comment username to the editor instead of maintaining the original user''s name in Desktop versions of Acrobat Pro....'
+  captured_at: '2026-07-21T16:40:07Z'
+  source_date: '2024-09-19'
+  target_release_date: '2024-06-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.002.20854
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: form behavior regression
+  workflow_area: forms
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-24-002-20759-adobe-community-bug-report-https-community-adobe-com-questions-12-reader-s-installation-stuck-at-90-and-exits-with-an-error
+  product_id: adobe-acrobat-reader
+  update_version: 24.002.20759
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/reader-s-installation-stuck-at-90-and-exits-with-an-error-1505570
+  parent_title: Reader's installation stuck at 90% and exits with an error
+  report_title: Reader's installation stuck at 90% and exits with an error
+  report_text_excerpt: 'Reader''s installation stuck at 90% and exits with an error When trying to install Adobe Reader from https://get.adobe.com/reader/otherversions (Windows 11, Language German, 64 Bit distro), installtion gets stuck at 90% and then exits with a generic error: Things tried: 1....'
+  captured_at: '2026-07-21T16:44:36Z'
+  source_date: '2024-05-23'
+  target_release_date: '2024-05-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 24.002.20759
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1o2aeih-rtx-5080-davinci-resolve-freezing-renders
+  product_id: blackmagic-davinci
+  update_version: 20.2.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1o2aeih/rtx_5080_davinci_resolve_freezing_renders_solved/
+  parent_title: 🧠 RTX 5080 + DaVinci Resolve = Freezing Renders — Solved (sort of)
+  report_title: 🧠 RTX 5080 + DaVinci Resolve = Freezing Renders — Solved (sort of)
+  report_text_excerpt: 🧠 RTX 5080 + DaVinci Resolve = Freezing Renders — Solved (sort of) How I spent weeks debugging the RTX 50-series, found the real cause, and why only driver 572.16 actually works Hey everyone, I wanted to share a journey that cost me three weeks, countless tests, and several...
+  captured_at: '2026-07-21T16:55:52Z'
+  source_date: '2025-10-09'
+  target_release_date: '2025-09-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1o0a8i8-render-fails-fusion-comp
+  product_id: blackmagic-davinci
+  update_version: 20.2.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1o0a8i8/render_fails_fusion_comp/
+  parent_title: Render fails fusion comp
+  report_title: Render fails fusion comp
+  report_text_excerpt: 'Render fails fusion comp I have a very simple project I am trying to render. DJI drone footage with a preset grade on the clip. It fails as soon as it gets to the video and says: "Render Job 1 Failed. The Fusion composition at 01:00:00:00 could not be processed successfully."...'
+  captured_at: '2026-07-21T16:55:52Z'
+  source_date: '2025-10-07'
+  target_release_date: '2025-09-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1noccl9-davinci-resolve-2021is-out
+  product_id: blackmagic-davinci
+  update_version: 20.2.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1noccl9/davinci_resolve_2021is_out/
+  parent_title: DaVinci Resolve 20.2.1is out!
+  report_title: DaVinci Resolve 20.2.1is out!
+  report_text_excerpt: DaVinci Resolve 20.2.1is out! The previous update gave me some hard time mostly just performance was slow. So, hoping this one improves it. Also it had an issue where the color page won't work, as in no matter what node value I would change it, it won't register. I had to quit...
+  captured_at: '2026-07-21T16:55:52Z'
+  source_date: '2025-09-23'
+  target_release_date: '2025-09-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uq4pio-subs-regions-problem-what-are-they-for
+  product_id: blackmagic-davinci
+  update_version: 20.2.3
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1uq4pio/subs_regions_problem_what_are_they_for/
+  parent_title: Subs Regions Problem. What are they for?
+  report_title: Subs Regions Problem. What are they for?
+  report_text_excerpt: Subs Regions Problem. What are they for? Hi everyone, I'm new to this sub and I'm having trouble with subs! I don't understand the point of subtitle regions if, when I export the subtitles, it only exports Region 1. It should merge them into a single file. Right? I used...
+  captured_at: '2026-07-21T16:59:58Z'
+  source_date: '2026-07-07'
+  target_release_date: '2025-11-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.3
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1oycbdr-choppy-timeline-and-export
+  product_id: blackmagic-davinci
+  update_version: 20.2.3
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1oycbdr/choppy_timeline_and_export/
+  parent_title: Choppy timeline and export.
+  report_title: Choppy timeline and export.
+  report_text_excerpt: Choppy timeline and export. I have a camera comparison nobody did that I started in Pinnacle Studio 26 2 years ago. I have multiple framerates because I didn't know not to film that way when I shot it two years ago. After some work to fix audio problems, which involved...
+  captured_at: '2026-07-21T16:59:58Z'
+  source_date: '2025-11-16'
+  target_release_date: '2025-11-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.3
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-0-2-github-issue-13559
+  product_id: obs-studio
+  update_version: 32.0.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13559
+  parent_title: macOS OBS Virtual Camera reports max 1920x1080 to Chrome/WebRTC despite AVFoundation capture working at 2560x1440
+  report_title: macOS OBS Virtual Camera reports max 1920x1080 to Chrome/WebRTC despite AVFoundation capture working at 2560x1440
+  report_text_excerpt: ensionsctl reports it as activated enabled. The issue was reproduced with both OBS Studio 32.0.2 Apple Silicon and OBS Studio 32.1.2 Apple Silicon.
+  captured_at: '2026-07-21T17:14:57Z'
+  patch_version_matched: true
+  matched_version: 32.0.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: macos
   severity: medium
   sentiment: negative
   source_weight: 1
