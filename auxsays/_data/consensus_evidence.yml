@@ -6140,3 +6140,28 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: blackmagic-davinci-21-0-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1v1vtna-unable-to-initialize-gpu-error-happening
+  product_id: blackmagic-davinci
+  update_version: 21.0.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1v1vtna/unable_to_initialize_gpu_error_happening_no/
+  parent_title: '"Unable to Initialize GPU" error happening no matter what I try'
+  report_title: '"Unable to Initialize GPU" error happening no matter what I try'
+  report_text_excerpt: '"Unable to Initialize GPU" error happening no matter what I try I recently got a new computer 1 and downloaded the newest version of DaVinci Resolve (21.0.2) onto it. However, no matter what I try, it ALWAYS errors out with the message "Unable to Initialize GPU". It says...'
+  captured_at: '2026-07-21T00:25:52Z'
+  source_date: '2026-07-20'
+  target_release_date: '2026-07-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
