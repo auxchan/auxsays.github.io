@@ -6920,3 +6920,28 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-20-1-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1n9fddt-davici-resolve-crashes-after-starting-a-r
+  product_id: blackmagic-davinci
+  update_version: 20.1.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1n9fddt/davici_resolve_crashes_after_starting_a_recording/
+  parent_title: Davici Resolve crashes after starting a recording with ADR
+  report_title: Davici Resolve crashes after starting a recording with ADR
+  report_text_excerpt: Davici Resolve crashes after starting a recording with ADR Hello, I've recently started using the ADR feature in Davinci to dub over Family Guy in my own language. It's been good to me until today. What happens is when i start recording it does the preroll and starts recording...
+  captured_at: '2026-07-22T04:01:26Z'
+  source_date: '2025-09-05'
+  target_release_date: '2025-08-26'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.1.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
