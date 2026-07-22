@@ -476,6 +476,78 @@ def run() -> int:
         check("Part E(c): reordering still reaches every matching article (URL-keyed, no starvation)", ing == set(positions), str(sorted(ing)))
         check("Part E(c): reordering creates no duplicate files (identity by product+version)", len(list(out.glob("*.md"))) == len(ing), str(len(list(out.glob("*.md")))))
 
+    # === Part F: DENSE-WINDOW convergence hard gate ==============================
+    # 6 matching, version-bearing articles inside the FIRST 8 links (positions 0-5),
+    # plus later matches at 20 and 30. record_limit=2, scan_limit=8.
+    dense_positions = [0, 1, 2, 3, 4, 5, 20, 30]
+    dense_window = {0, 1, 2, 3, 4, 5}
+    urlsD = [prog_url(i) for i in range(40)]
+    matchD = {urlsD[p] for p in dense_positions}
+    respD = prog_responses(urlsD, matchD)
+    with tempfile.TemporaryDirectory() as td:
+        out = Path(td) / "gen"
+        out.mkdir(parents=True)
+        state = {"schema_version": 1, "sources": {}, "seen": {}}
+        snaps = []
+        for _ in range(10):
+            r = prog_run(prog_source(8), respD, state, out)
+            snaps.append({"created": r["created"], "ingested": prog_ingested(out)})
+        ingested = prog_ingested(out)
+        converge_run = next((i + 1 for i, s in enumerate(snaps) if s["ingested"] == set(dense_positions)), None)
+        check("Part F(1): run 1 writes no more than record_limit(2) new records", snaps[0]["created"] <= 2, str(snaps[0]["created"]))
+        check("Part F(2): dense first-window matches (0-5) are NOT permanently lost", dense_window <= ingested, str(sorted(ingested)))
+        check("Part F(3): every valid record from the dense window is eventually generated", dense_window <= ingested and converge_run is not None, str((sorted(ingested), converge_run)))
+        check("Part F(4): later-in-section matches (20,30) remain reachable", {20, 30} <= ingested, str(sorted(ingested)))
+        check("Part F(5): no duplicate generated files", len(list(out.glob("*.md"))) == len(ingested), str(len(list(out.glob("*.md")))))
+        check("Part F(6): reaches a no-new-record steady state", snaps[-1]["created"] == 0, str(snaps[-1]["created"]))
+        # (7) convergence within the first sweep pass — deferred matches are reconsidered on the
+        # NEXT run, not after a full wraparound cycle. 40 links / budget 8 => a sweep is ~5 runs.
+        check("Part F(7): converges within a bounded number of runs (<=8)", converge_run is not None and converge_run <= 8, str(converge_run))
+        check("Part F(7): a deferred dense-window match (pos 5) is generated quickly, not held to a full sweep (<=4 runs)", any(5 in s["ingested"] for s in snaps[:4]), str([sorted(s["ingested"]) for s in snaps[:4]]))
+    # (8) a front insertion DURING dense progression: bounded discovery, older deferred still complete
+    with tempfile.TemporaryDirectory() as td:
+        out = Path(td) / "gen"
+        out.mkdir(parents=True)
+        state = {"schema_version": 1, "sources": {}, "seen": {}}
+        prog_run(prog_source(8), respD, state, out)
+        prog_run(prog_source(8), respD, state, out)  # partway through dense progression
+        new_url = prog_url(888)
+        respDF = prog_responses([new_url] + urlsD, set(matchD) | {new_url})
+        found = None
+        for k in range(1, 9):
+            prog_run(prog_source(8), respDF, state, out)
+            if found is None and 888 in prog_ingested(out):
+                found = k
+        check("Part F(8): a front insertion during dense progression is discovered within bounded runs (<=2)", found is not None and found <= 2, str(found))
+        check("Part F(8): older deferred dense-window records still reach completion", set(dense_positions) <= prog_ingested(out), str(sorted(prog_ingested(out))))
+        check("Part F(8): no permanent replay/starvation (no duplicate files)", len(list(out.glob("*.md"))) == len(prog_ingested(out)), str(len(list(out.glob("*.md")))))
+
+    # === Part G: DISCOVERY-CEILING truncation hard gate ==========================
+    cap = elgato.MAX_DISCOVERED_LINKS
+    big_urls = [prog_url(i) for i in range(cap + 50)]  # 250 valid same-domain links
+    beyond = big_urls[cap + 10]
+    section_html = "<html><body>" + "".join(f'<a href="{u}">a</a>' for u in big_urls) + "</body></html>"
+    retained, total = elgato._discover_article_links(PROG_SECTION_URL, section_html, cap)
+    check("Part G: discovery counts ALL valid links but retains only the cap", total == cap + 50 and len(retained) == cap, str((total, len(retained))))
+    check("Part G: a link beyond the cap is not retained (visibly unreachable, not silently dropped)", beyond not in retained)
+    # reset guard (unit): a truncated section must NOT fake a complete sweep
+    sel_t, wrapped_t, _pt = elgato._select_uninspected(retained, retained, 8, discovery_truncated=True)
+    check("Part G: truncated + all-inspected does NOT reset the ledger (idles)", wrapped_t is False and sel_t == [], str((wrapped_t, len(sel_t))))
+    sel_f, wrapped_f, _pf = elgato._select_uninspected(retained, retained, 8, discovery_truncated=False)
+    check("Part G: non-truncated + all-inspected legitimately resets for re-verify", wrapped_f is True and len(sel_f) == 8, str((wrapped_f, len(sel_f))))
+    # integration: a real run surfaces the truncation fields and stays request-bounded
+    respBig = prog_responses(big_urls, {big_urls[5], beyond})
+    with tempfile.TemporaryDirectory() as td:
+        out = Path(td) / "gen"
+        out.mkdir(parents=True)
+        state = {"schema_version": 1, "sources": {}, "seen": {}}
+        rb = prog_run(prog_source(8), respBig, state, out)
+        d = rb["stderr"]
+        check("Part G: diagnostics expose discovery_truncated=True (never silent)", "discovery_truncated=True" in d, d[:180])
+        check("Part G: diagnostics expose total_discovered and retained_count", f"total_discovered={cap + 50}" in d and f"retained_count={cap}" in d, d[:180])
+        check("Part G: 250 links still cost only 1 section + <=ceiling detail requests", rb["section_reqs"] == 1 and len(rb["detail_reqs"]) <= elgato.ARTICLE_SCAN_CEILING, str((rb["section_reqs"], len(rb["detail_reqs"]))))
+        check("Part G: no record is fabricated for the beyond-cap link (never fetched)", (cap + 10) not in prog_ingested(out), str(sorted(prog_ingested(out))))
+
     print()
     print("=" * 60)
     total = _PASS + _FAIL

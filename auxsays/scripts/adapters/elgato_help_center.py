@@ -99,26 +99,37 @@ def _is_elgato_article_url(section_url: str, candidate: str) -> bool:
     return not any(part in lowered for part in ("/search", "/sections", "/categories"))
 
 
-def _article_links(section_url: str, html: str, max_links: int) -> list[str]:
-    """Extract at most ``max_links`` distinct, same-domain, article-path links.
+def _discover_article_links(section_url: str, html: str, cap: int) -> tuple[list[str], int]:
+    """Discover article links from the section page (regex only, NO HTTP).
 
-    Links are validated (expected Help Center domain + article path) and deduplicated
-    (after query/fragment cleanup) BEFORE any of them is fetched, and extraction stops
-    at ``max_links`` so link discovery — like article fetching — is bounded independent
-    of how much markup the section page contains.
+    Returns ``(retained, total_valid)``. Every distinct, same-domain, article-path link
+    is counted (validated + deduplicated after query/fragment cleanup); the first ``cap``
+    are retained for hydration. ``total_valid > cap`` means discovery was TRUNCATED, which
+    the caller surfaces explicitly (never silently) so that (a) it is not reported as a
+    complete section sweep and (b) links past the cap are visibly unreachable. Counting is
+    bounded by the already-fetched, size-limited section HTML.
     """
-    ceiling = max(1, int(max_links))
-    links: list[str] = []
+    ceiling = max(1, int(cap))
+    retained: list[str] = []
+    seen: set[str] = set()
+    total = 0
     for match in ANCHOR_RE.finditer(html or ""):
         href = (match.group(1) or "").strip()
         if not href or href.startswith(("#", "mailto:", "tel:")):
             continue
         absolute = _clean_url(urljoin(section_url, href))
-        if _is_elgato_article_url(section_url, absolute) and absolute not in links:
-            links.append(absolute)
-        if len(links) >= ceiling:
-            break
-    return links
+        if not _is_elgato_article_url(section_url, absolute) or absolute in seen:
+            continue
+        seen.add(absolute)
+        total += 1
+        if len(retained) < ceiling:
+            retained.append(absolute)
+    return retained, total
+
+
+def _article_links(section_url: str, html: str, max_links: int) -> list[str]:
+    """Backward-compatible wrapper: the retained (bounded) article links only."""
+    return _discover_article_links(section_url, html, max_links)[0]
 
 
 def _title_from_html(html: str) -> str:
@@ -217,18 +228,21 @@ def _emit_diagnostics(source: dict, **counts: object) -> None:
     print(f"[elgato_help_center] product={source.get('product_id')} {fields}", file=sys.stderr)
 
 
-def _select_uninspected(links: list[str], inspected: list[str], budget: int) -> tuple[list[str], bool, int]:
+def _select_uninspected(links: list[str], inspected: list[str], budget: int, discovery_truncated: bool = False) -> tuple[list[str], bool, int]:
     """Choose up to ``budget`` links not yet in ``inspected`` (document order = newest first).
 
     Returns ``(selection, wrapped, pool_size)`` where ``pool_size`` is the number of links
-    eligible this run. If every current link has already been inspected, the sweep is
-    complete: reset (``wrapped=True``) and select from the top so content is periodically
-    re-verified and the budget is never wasted idling. Bounds hold either way.
+    eligible this run. If every RETAINED link has been inspected AND discovery was complete
+    (not truncated), the sweep is genuinely complete: reset (``wrapped=True``) and re-verify
+    from the top. When discovery was TRUNCATED we must NOT reset — doing so would falsely
+    claim a full-section sweep while links past the cap were never inspected — so the run
+    idles (empty selection) and the caller surfaces ``discovery_truncated`` loudly instead.
+    Bounds hold either way.
     """
     inspected_set = set(inspected)
     uninspected = [url for url in links if url not in inspected_set]
     wrapped = False
-    if links and not uninspected:
+    if links and not uninspected and not discovery_truncated:
         uninspected = list(links)
         wrapped = True
     return uninspected[:budget], wrapped, len(uninspected)
@@ -245,14 +259,17 @@ def fetch(source: dict, limit: int = 3, scan_state: dict | None = None) -> list[
     # One section-page request. A failure here propagates so the source is booked as
     # failing (transport error), unlike per-article failures which are isolated below.
     section = fetch_text(section_url, **_fetch_options(source)).text
-    # Cheap discovery: ALL current valid, deduped article links in document order (no HTTP).
-    links = _article_links(section_url, section, MAX_DISCOVERED_LINKS)
+    # Cheap discovery: valid, deduped article links in document order (no HTTP). If the page
+    # advertises more than MAX_DISCOVERED_LINKS valid links, discovery is truncated — surfaced
+    # explicitly below and never treated as a complete sweep.
+    links, total_discovered = _discover_article_links(section_url, section, MAX_DISCOVERED_LINKS)
+    discovery_truncated = total_discovered > MAX_DISCOVERED_LINKS
 
     # Spend the bounded detail-request budget on not-yet-inspected links so successive runs
     # sweep forward instead of re-fetching the same prefix. The ledger is keyed by URL.
     ledger = scan_state if isinstance(scan_state, dict) else {}
     inspected = list(ledger.get("inspected", []))
-    selection, wrapped, pool_size = _select_uninspected(links, inspected, article_budget)
+    selection, wrapped, pool_size = _select_uninspected(links, inspected, article_budget, discovery_truncated)
 
     records: list[dict] = []
     articles_fetched = 0
@@ -300,6 +317,9 @@ def fetch(source: dict, limit: int = 3, scan_state: dict | None = None) -> list[
     _emit_diagnostics(
         source,
         article_budget=article_budget,
+        total_discovered=total_discovered,
+        retained_count=len(links),
+        discovery_truncated=discovery_truncated,
         links_found=len(links),
         candidate_pool=pool_size,
         selected=len(selection),

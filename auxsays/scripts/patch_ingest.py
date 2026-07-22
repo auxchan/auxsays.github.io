@@ -278,6 +278,7 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
     skipped = []
     refreshed = []
     deferred = []
+    deferred_source_urls: set[str] = set()  # URLs of accepted-but-deferred records (see promote below)
     would_create = []     # dry-run: unseen records this run WOULD create (no disk/state write)
     new_created = 0       # NEW (not-yet-ingested) records written this run
     refreshed_recent = 0  # already-ingested records refreshed this run (bounded churn)
@@ -304,6 +305,13 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
         else:
             if new_created >= per_run_limit:
                 deferred.append(record_id)
+                # An accepted-but-unwritten (deferred) record must NOT be recorded as
+                # "inspected" for a per-item-fetch adapter, or it would be skipped until the
+                # next full sweep. Track its source URL so promotion leaves it un-inspected,
+                # making it eligible for creation again on the very next run.
+                deferred_url = record.get("source_url")
+                if deferred_url:
+                    deferred_source_urls.add(deferred_url)
                 continue
             new_created += 1
 
@@ -337,10 +345,15 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
         # Reaching here means the per-source fetch/write loop completed without raising.
         # Promote any staged adapter scan-progression (e.g. the help-center inspected-URL
         # ledger) to its committed key, so a run that failed mid-loop never advances it and
-        # its candidate window is re-processed deterministically on the next run.
+        # its candidate window is re-processed deterministically on the next run. Deferred
+        # (accepted-but-unwritten) records are excluded from the committed ledger so they are
+        # re-fetched and created next run rather than waiting for a full sweep cycle.
         scan = source_state(state, product_id).get("scan")
         if isinstance(scan, dict) and "pending_inspected" in scan:
-            scan["inspected"] = scan.pop("pending_inspected")
+            promoted = scan.pop("pending_inspected")
+            if deferred_source_urls:
+                promoted = [url for url in promoted if url not in deferred_source_urls]
+            scan["inspected"] = promoted
         update_source_success(
             state,
             product_id,
