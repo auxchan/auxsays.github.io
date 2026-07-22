@@ -67,25 +67,26 @@ def _parse(html: str, limit: int = 20):
     return ap._records_from_photoshop_release_notes(_src(), _URL, html, limit)
 
 
-# A representative multi-release page: full-date, month-only, ISO-in-body, 2- and
-# 3-component versions, a bundled Camera Raw mention (must not leak as a record).
+# A representative multi-release page. Release identity (version + date) lives in the
+# HEADING; a full date in a heading yields day precision, a month+year yields month
+# precision. Body prose (bundled Camera Raw / Premiere mentions, fixed-issues) is never
+# parsed for identity, so it can never leak a foreign version or date.
 PAGE = """
 <h1>Photoshop desktop release notes</h1>
 <p>Learn what's new in the latest releases of Photoshop on desktop.</p>
 
-<h2>Photoshop 27.0 (October 2025 release)</h2>
-<p>Release date: October 14, 2025.</p>
+<h2>Photoshop 27.0 (October 14, 2025)</h2>
 <h3>What's new</h3>
 <ul><li>New Firefly-powered features. Camera Raw 17.0 is included. Premiere Pro 25.0 integration.</li></ul>
 
 <h2>Photoshop 26.11 (September 2025 release)</h2>
-<p>Released September 2025.</p>
+<p>Monthly feature update.</p>
 
 <h2>Photoshop 26.10.1 (August 2025 release)</h2>
-<ul><li>Maintenance build. Released on 2025-08-19.</li></ul>
+<ul><li>Maintenance build.</li></ul>
 
 <h2>Photoshop 26.0 (October 2024 release)</h2>
-<p>Release date: October 15, 2024.</p>
+<p>Annual release.</p>
 """
 
 
@@ -105,8 +106,8 @@ def run() -> int:
     check("3. two-component version 27.0 accepted", "27.0" in by_ver)
     check("4. three-component version 26.10.1 accepted", "26.10.1" in by_ver)
 
-    # --- 5-7: date extraction + precision ----------------------------------
-    check("5. full date in body upgrades heading month -> exact day (27.0 = 2025-10-14)",
+    # --- 5-7: date extraction + precision (heading-only) -------------------
+    check("5. full date in heading yields exact day (27.0 = 2025-10-14, day)",
           by_ver["27.0"]["published_at"] == "2025-10-14T00:00:00Z"
           and by_ver["27.0"]["date_precision"] == "day",
           str((by_ver["27.0"]["published_at"], by_ver["27.0"]["date_precision"])))
@@ -114,9 +115,9 @@ def run() -> int:
           by_ver["26.11"]["published_at"] == "2025-09-01T00:00:00Z"
           and by_ver["26.11"]["date_precision"] == "month",
           str((by_ver["26.11"]["published_at"], by_ver["26.11"]["date_precision"])))
-    check("7. ISO date in body completes an otherwise month heading (26.10.1 = 2025-08-19, day)",
-          by_ver["26.10.1"]["published_at"] == "2025-08-19T00:00:00Z"
-          and by_ver["26.10.1"]["date_precision"] == "day",
+    check("7. month heading yields month precision (26.10.1 = 2025-08-01, month)",
+          by_ver["26.10.1"]["published_at"] == "2025-08-01T00:00:00Z"
+          and by_ver["26.10.1"]["date_precision"] == "month",
           str((by_ver["26.10.1"]["published_at"], by_ver["26.10.1"]["date_precision"])))
 
     # --- 8: no cross-product version contamination -------------------------
@@ -194,6 +195,131 @@ def run() -> int:
     check("25b. record emits no report/consensus fields (pipeline derives official_only)",
           rec.get("report_count") is None and rec.get("evidence_state") is None
           and rec.get("update_report_count") is None and rec.get("consensus_label") is None)
+
+    # === Regression: adversarial-verification defects (must stay fail-closed) =========
+    # Each case was an EMPIRICALLY REPRODUCED false positive found by an adversarial review
+    # pass; the parser must now reject (or correctly attribute) every one.
+    print("  --- adversarial-defect regression ---")
+
+    def count(html: str) -> int:
+        return len(_parse(html))
+
+    # D01 / D05 / D11: another product's version must never leak as a Photoshop record when
+    # "Photoshop" merely co-occurs (no Photoshop-anchored version).
+    check("D01. 'Photoshop now opens Illustrator 29.0 files' -> no record",
+          count("<h2>Photoshop now opens Illustrator 29.0 files</h2><p>Released October 2025.</p>") == 0)
+    check("D05. cross-product co-mention ('Photoshop compatibility with After Effects 25.1') -> no record",
+          count("<h3>Photoshop compatibility with After Effects 25.1</h3><p>Released October 14, 2025.</p>") == 0
+          and count("<h3>Photoshop tips: see also Illustrator 29.0</h3><p>Published November 2025.</p>") == 0)
+    check("D11. 'Premiere Pro 26.5 now imports Photoshop layers' -> no record (other product's version)",
+          count("<h2>Premiere Pro 26.5 now imports Photoshop layers (October 2025)</h2>") == 0)
+    check("D01b. a genuine Photoshop-anchored version that merely references another product still records",
+          [r["target_version"] for r in _parse("<h2>Photoshop 26.5 imports Illustrator files (October 2025)</h2>")] == ["26.5"])
+
+    # D02 / D06 / D07 / D09 / D12: a foreign / dependency / older-version / historical date in
+    # surrounding prose must never date an undated release heading (heading-only extraction).
+    check("D02. undated heading + other-product body date -> no record",
+          count("<h2>Photoshop desktop version 26.10</h2><p>Illustrator 29.3 was released on October 9, 2025.</p>") == 0)
+    check("D06. undated heading + system-requirement date -> no record",
+          count("<h2>Adobe Photoshop 27.0</h2><h3>System requirements</h3><p>Requires macOS Sonoma, released September 2024.</p>") == 0)
+    check("D07. undated heading + older-version's date in body -> no record",
+          count("<h2>Adobe Photoshop 26.5</h2><h3>Bug fixes</h3><p>Rolls up fixes first shipped in 26.4 on August 12, 2025.</p>") == 0)
+    check("D09. undated heading + 'supersedes ... shipped on <date>' -> no record",
+          count("<h2>Photoshop version 27.0</h2><p>This build supersedes the previous milestone shipped on March 3, 2024.</p>") == 0)
+    check("D12. undated heading + 'since the <month year> release' -> no record",
+          count("<h2>Photoshop desktop version 26.5</h2><p>New desktop features.</p>"
+                "<h3>Fixed issues</h3><ul><li>Fixed a crash present since the October 2024 release.</li></ul>") == 0)
+
+    # D13: a dated heading must keep its own month; a bugfix date in the body must not
+    # "upgrade" or override it.
+    d13 = _parse("<h2>Photoshop desktop version 26.5 (October 2025)</h2>"
+                 "<h3>Fixed issues</h3><li>Regression introduced on September 3, 2025 has been resolved.</li>")
+    check("D13. dated heading keeps its month; body bugfix date does not override it",
+          len(d13) == 1 and d13[0]["published_at"] == "2025-10-01T00:00:00Z" and d13[0]["date_precision"] == "month",
+          str([(r["target_version"], r["published_at"], r["date_precision"]) for r in d13]))
+
+    # D03: hyphenated / re-spaced beta terms must still be rejected.
+    check("D03. hyphenated/re-spaced prerelease terms are rejected",
+          all(count(h) == 0 for h in (
+              "<h2>Photoshop 26.6 release-candidate, October 2025</h2>",
+              "<h2>Adobe Photoshop 26.5 technology-preview (October 2025)</h2>",
+              "<h2>Adobe Photoshop 26.5 pre release build (October 2025)</h2>")))
+    # D04: additional prerelease synonyms must be rejected. A *bare* "preview" is NOT a beta
+    # marker (it is a common feature word) -- only qualified prerelease forms are.
+    check("D04. alpha / nightly / early access / qualified preview builds are rejected",
+          all(count(h) == 0 for h in (
+              "<h2>Adobe Photoshop 26.5 alpha (October 2025)</h2>",
+              "<h2>Photoshop 27.0 nightly build, October 2025</h2>",
+              "<h2>Photoshop 26.9 Early Access (October 2025)</h2>",
+              "<h2>Adobe Photoshop 26.7 preview build (October 2025)</h2>")))
+    # D08: beta declared only in the body is moot now (undated heading fails closed anyway).
+    check("D08. beta-declared build with body-only date -> no record",
+          count("<h2>Adobe Photoshop 26.8</h2><p>This is a beta prerelease technology preview build. October 2025.</p>") == 0)
+
+    # D10: non-desktop Photoshop variants with intervening words must be rejected.
+    check("D10. 'Photoshop for the web version 26.5' and parenthetical (web)/(iPad) -> no record",
+          count("<h2>Photoshop for the web version 26.5 (October 2025)</h2>") == 0
+          and count("<h2>Photoshop 26.5 (web), October 2025</h2>") == 0
+          and count("<h2>Photoshop 26.5 (iPad) October 2025</h2>") == 0)
+    check("D10b. a genuine desktop release mentioning a 'web export' feature still records",
+          [r["target_version"] for r in _parse("<h2>Photoshop 26.0 adds web export (October 2024 release)</h2>")] == ["26.0"])
+
+    # === Regression: second adversarial pass (structural hardening) ===================
+    print("  --- adversarial-defect regression (round 2) ---")
+
+    # R2-01: positive attribution -- an UNLISTED Adobe product's version must not leak just
+    # because "Photoshop" co-occurs and no denied name matched (deny-lists are never complete).
+    check("R2-01. unlisted Adobe products (InCopy/Aero/Frame.io/Behance) do not leak a version",
+          all(count(h) == 0 for h in (
+              "<h2>InCopy 26.0 shares assets with Photoshop (October 2024)</h2>",
+              "<h2>Adobe Aero 26.0 imports from Photoshop (October 2024)</h2>",
+              "<h2>Frame.io 26.0 review with Photoshop (October 2024)</h2>",
+              "<h2>Behance 26.5 gallery for Photoshop (October 2024)</h2>")))
+    check("R2-01b. only a Photoshop-ANCHORED version is ever accepted (positive attribution)",
+          ap._heading_version("InCopy 26.0 with Photoshop (October 2024)") is None
+          and ap._heading_version("Photoshop 26.0 (October 2024)") == "26.0")
+
+    # R2-02 / R2-05: a co-located historical/superseded date in the heading must not win;
+    # >1 distinct month -> ambiguous -> fail closed.
+    check("R2-02. co-located historical date does not override the release month (fail closed)",
+          all(count(h) == 0 for h in (
+              "<h2>Photoshop 26.5 (fixes issue introduced March 3, 2024) - May 2025 release</h2>",
+              "<h2>Photoshop 26.1 supersedes the January 5, 2024 build, released November 2024</h2>",
+              "<h2>Photoshop 26.2 rolls back 2023-08-15 regression (December 2024 release)</h2>",
+              "<h2>Photoshop 26.0 (October 2024 release) supersedes the July 2, 2024 build</h2>")))
+    check("R2-02b. a day + month of the SAME month is consistent -> day precision (not dropped)",
+          [(r["published_at"], r["date_precision"]) for r in
+           _parse("<h2>Photoshop 27.0 (October 14, 2025) - October 2025 release</h2>")]
+          == [("2025-10-14T00:00:00Z", "day")])
+
+    # R2-04 / R2-08 / R2-09: non-desktop editions (mobile/iPad/web app) never record, even when
+    # the platform word is not adjacent to "Photoshop" or wrapped as "(web app)".
+    check("R2-04/08/09. mobile / 'on the iPad' / '(web app)' editions -> no record",
+          all(count(h) == 0 for h in (
+              "<h2>Photoshop mobile 27.0 released October 2024</h2>",
+              "<h3>Photoshop 26.1 on the iPad (November 2024 release)</h3>",
+              "<h2>Photoshop 26.1 (web app), November 2024</h2>",
+              "<h2>Photoshop 26.5 for Chromebook (October 2025)</h2>")))
+    check("R2-04b. a desktop release with an 'iPad file compatibility' feature still records",
+          [r["target_version"] for r in
+           _parse("<h2>Photoshop 26.0 improves iPad file compatibility (October 2024 release)</h2>")] == ["26.0"])
+
+    # R2-06: plural prerelease forms ("Technology Previews", "sneak peek") are rejected.
+    check("R2-06. plural 'Technology Previews' / 'sneak peek' are rejected",
+          count("<h2>Photoshop 26.0 Technology Previews (October 2024)</h2>") == 0
+          and count("<h2>Photoshop 27.0 sneak peek (October 2025)</h2>") == 0)
+
+    # R2-10: a Unicode (non-breaking) hyphen must not smuggle a prerelease term past the gate.
+    check("R2-10. Unicode-hyphen 'release‑candidate' is rejected",
+          count("<h2>Photoshop 26.8 release‑candidate (June 2025)</h2>") == 0)
+
+    # R2-03 / R2-07 / R2-11 / R2-12 / R2-13: a bare 'preview'/'experimental-feature' style
+    # feature word must NOT drop a genuine dated desktop release (no over-rejection).
+    check("R2-03/13. genuine releases naming an 'AI preview' / 'Generative preview' feature still record",
+          all([r["target_version"] for r in _parse(h)] == [v] for h, v in (
+              ("<h2>Photoshop 26.4: AI preview feature (February 2025)</h2>", "26.4"),
+              ("<h2>Photoshop 26.0 (October 2024 release): Generative preview</h2>", "26.0"),
+              ("<h3>Photoshop 26.4 (February 2025) — AI preview improvements</h3>", "26.4"))))
 
     print()
     print("=" * 60)
