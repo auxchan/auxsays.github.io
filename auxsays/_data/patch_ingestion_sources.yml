@@ -3381,6 +3381,11 @@
     feed_url: null
     api_url: null
     parser_profile: elgato_stream_deck_release_notes
+    # scan_limit caps candidate article-detail fetches: this adapter makes one HTTP
+    # request per discovered article, so the default 200-candidate backfill window would
+    # fan out to dozens of requests. 8 (> record_limit 2) keeps progressive backfill
+    # advancing while bounding network cost (adapter also enforces ARTICLE_SCAN_CEILING).
+    scan_limit: 8
     official_source_type: release_notes
     source_capture_status: adapter_enabled
     include_prereleases: false
@@ -3416,6 +3421,9 @@
     feed_url: null
     api_url: null
     parser_profile: elgato_wave_link_release_notes
+    # scan_limit caps candidate article-detail fetches (one HTTP request per discovered
+    # article); 8 (> record_limit 2) keeps backfill advancing while bounding network cost.
+    scan_limit: 8
     official_source_type: release_notes
     source_capture_status: adapter_enabled
     include_prereleases: false
@@ -3451,6 +3459,9 @@
     feed_url: null
     api_url: null
     parser_profile: elgato_camera_hub_release_notes
+    # scan_limit caps candidate article-detail fetches (one HTTP request per discovered
+    # article); 8 (> record_limit 2) keeps backfill advancing while bounding network cost.
+    scan_limit: 8
     official_source_type: release_notes
     source_capture_status: adapter_enabled
     include_prereleases: false
@@ -3486,6 +3497,9 @@
     feed_url: null
     api_url: null
     parser_profile: elgato_4k_capture_utility_release_notes
+    # scan_limit caps candidate article-detail fetches (one HTTP request per discovered
+    # article); 8 (> record_limit 2) keeps backfill advancing while bounding network cost.
+    scan_limit: 8
     official_source_type: release_notes
     source_capture_status: adapter_enabled
     include_prereleases: false
