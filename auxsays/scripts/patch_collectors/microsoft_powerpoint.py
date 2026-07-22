@@ -260,12 +260,13 @@ def powerpoint_reason(target: dict[str, Any], source_url: str, source_date: str,
     if ANNOUNCE_OR_NOTE_RE.search(combined) and not concrete_issue(combined):
         return "official_announcement_not_user_report", match_basis, build_matched
 
-    # 4. Exact version attribution (with reply-inheritance and drift guard).
+    # 4. Exact version attribution (single-subject, with inheritance + drift/multi-version guards).
     target_in_context = version_in_context(combined, version)
     target_in_title = version_in_context(title_text, version)
     target_in_body = version_in_context(report_body, version)
     other_versions = versions_in_context(combined) - {version}
     other_in_body = versions_in_context(report_body) - {version}
+    other_in_title = versions_in_context(title_text) - {version}
     if not target_in_context:
         if other_versions:
             return "different_version_not_target", match_basis, build_matched
@@ -274,22 +275,36 @@ def powerpoint_reason(target: dict[str, Any], source_url: str, source_date: str,
         if LATEST_RE.search(combined):
             return "vague_latest_update", match_basis, build_matched
         return "missing_powerpoint_version", match_basis, build_matched
-    # Drift: the target version is only inherited from the thread title, but the reply body
-    # clearly names a *different* version in context -> the reply shifted patches.
-    if other_in_body and not target_in_body and target_in_title:
-        return "reply_drifted_to_other_version", match_basis, build_matched
+    # A version-only attribution must name EXACTLY ONE Version YYMM (the target). If the report
+    # also names another version in context, which patch it is about is ambiguous — UNLESS an
+    # exact matching build is present to disambiguate it. Fail closed (precision over recall).
+    if other_versions and not build_check(combined, target_build)[1]:
+        if not target_in_title and other_in_title:
+            return "different_version_in_title", match_basis, build_matched
+        if target_in_title and other_in_body and not target_in_body:
+            return "reply_drifted_to_other_version", match_basis, build_matched
+        return "ambiguous_multiple_versions", match_basis, build_matched
     match_basis = "exact_version_current_channel"
 
     # 5. Channel consistency.
     channel = channel_reason(combined)
     if channel:
         return channel, match_basis, build_matched
-    # 6. Optional full-build cross-check (bonus disambiguator, never required).
+    # 6. Optional full-build cross-check (bonus disambiguator, never required when the
+    #    version identity is already unique). If a build is stated it must match target_build.
     build_reason, build_matched = build_check(combined, target_build)
     if build_reason:
         return build_reason, match_basis, build_matched
     if build_matched:
         match_basis = "exact_version_channel_build"
+    elif target.get("version_ambiguous"):
+        # Exact-patch ambiguity: two or more tracked PowerPoint records share this exact
+        # Version YYMM on a compatible channel, so a version-only report cannot deterministically
+        # identify which patch it is about. Fail closed — an exact matching build (or another
+        # deterministic unique identity) is required. Report-date proximity is NEVER used to pick
+        # between the candidate builds. Parent-title inheritance obeys the same rule (this gate
+        # runs regardless of where the version was found).
+        return "ambiguous_version_needs_build", match_basis, build_matched
     # 7. Date gate — on/after release; pre-release/undated rejected.
     if source_date_passes(source_date, target_release_date) is False:
         return "date_before_release_or_undated", match_basis, build_matched
@@ -363,6 +378,30 @@ def evaluate_candidates(record: PatchRecord, target: dict[str, Any], candidates:
 
 # --- record target + queries -------------------------------------------------
 
+# Hard per-record bound on Learn Q&A search requests (Part F cost control). Each term is one
+# search-RSS request; the shared source hydrates content from the RSS item (no per-thread fetch)
+# and de-duplicates by canonical URL, so total requests per full run = MAX_QUERIES_PER_RECORD x
+# (records selected). No pagination, no per-candidate hydration, no retry multiplier.
+MAX_QUERIES_PER_RECORD = 3
+
+
+def _norm_channel(channel: str) -> str:
+    return re.sub(r"\s+", " ", str(channel or "").strip().lower())
+
+
+def compute_ambiguous_identities(records: list[PatchRecord]) -> set[tuple[str, str]]:
+    """Return the set of (version, normalized-channel) identities carried by MORE THAN ONE
+    tracked PowerPoint record. Computed from the ACTUAL tracked record set (never a hardcoded
+    list): a Version YYMM on a given channel is ambiguous only when two or more records claim
+    it, in which case a version-only community report cannot be attributed to a single patch."""
+    counts: dict[tuple[str, str], int] = {}
+    for record in records:
+        target = record_target(record)
+        key = (target["target_app_version"] or target["update_version"], _norm_channel(target["target_channel"]))
+        counts[key] = counts.get(key, 0) + 1
+    return {key for key, count in counts.items() if count > 1}
+
+
 def record_target(record: PatchRecord) -> dict[str, Any]:
     front, _body = load_front_matter_and_body(record.path)
     return {
@@ -375,9 +414,9 @@ def record_target(record: PatchRecord) -> dict[str, Any]:
 
 
 def search_query_terms(target: dict[str, Any]) -> list[str]:
-    """Exact-version discovery terms. The version is searched with product/version context so
-    the RSS surfaces PowerPoint threads that name the exact patch; the build is an optional
-    extra query (bonus disambiguator), never a prerequisite."""
+    """Exact-version discovery terms (hard-capped at MAX_QUERIES_PER_RECORD). The version is
+    searched with product/version context so the RSS surfaces PowerPoint threads that name the
+    exact patch; the build is an optional extra query (bonus disambiguator), never a prerequisite."""
     version = str(target.get("update_version") or "").strip()
     terms: list[str] = []
     if version:
@@ -386,7 +425,7 @@ def search_query_terms(target: dict[str, Any]) -> list[str]:
     build = str(target.get("target_build") or "").strip()
     if version and build:
         terms.append(f"PowerPoint {build}")
-    return terms
+    return terms[:MAX_QUERIES_PER_RECORD]
 
 
 # --- method health -----------------------------------------------------------
@@ -465,9 +504,10 @@ def reddit_fallback_enabled(env: dict[str, str] | None = None) -> bool:
     return str(source.get(REDDIT_FALLBACK_ENV, "")).strip().lower() == "true"
 
 
-def collect_for_record(record: PatchRecord, context: CollectorContext, env: dict[str, str] | None = None) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
+def collect_for_record(record: PatchRecord, context: CollectorContext, env: dict[str, str] | None = None, version_ambiguous: bool = False) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
     captured_at = utc_now()
     target = record_target(record)
+    target["version_ambiguous"] = version_ambiguous
     query_terms = search_query_terms(target)
     seen: set[str] = set()
 
@@ -531,9 +571,14 @@ class PowerPointLearnQnaCollector(ProductCollector):
 
     def collect(self, context: CollectorContext) -> list[dict[str, Any]]:
         records = generated_records(PRODUCT_ID, context.target_versions)
+        # Exact-patch ambiguity is computed over the FULL tracked record set (unfiltered), so a
+        # --update-version filter can never hide a sibling record that makes a version ambiguous.
+        ambiguous = compute_ambiguous_identities(generated_records(PRODUCT_ID, None))
         results: list[dict[str, Any]] = []
         for record in records:
-            accepted, rejected, health = collect_for_record(record, context)
+            rec_target = record_target(record)
+            version_ambiguous = (rec_target["target_app_version"] or rec_target["update_version"], _norm_channel(rec_target["target_channel"])) in ambiguous
+            accepted, rejected, health = collect_for_record(record, context, version_ambiguous=version_ambiguous)
             result: dict[str, Any] = {
                 "product_id": PRODUCT_ID,
                 "version": record.update_version,

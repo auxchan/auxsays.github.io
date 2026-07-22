@@ -91,6 +91,14 @@ def run() -> int:
     c, r = verdict("PowerPoint Version 2605 issues", "Actually I'm on PowerPoint Version 2603 and that one corrupts my presentation.")
     check("3  rejected: reply drifts to a different version", c is False and r == "reply_drifted_to_other_version", f"{c} {r}")
 
+    # 3b. the title's subject is a DIFFERENT version (target only mentioned in the body) -> rejected
+    c, r = verdict("PowerPoint VBA fails in Microsoft 365 Version 2606", "This started for me on Version 2605 too; PowerPoint crashes on that chart action.")
+    check("3b rejected: title subject is a different version (target only in body)", c is False and r == "different_version_in_title", f"{c} {r}")
+
+    # 3c. multiple versions named with no single title subject -> rejected as ambiguous
+    c, r = verdict("PowerPoint crashing since the update", "I updated PowerPoint Version 2605 and also saw it on Version 2604; it crashes on open.")
+    check("3c rejected: multiple versions named, no single subject -> ambiguous", c is False and r == "ambiguous_multiple_versions", f"{c} {r}")
+
     # 4. bare 2605 with no version context -> rejected
     c, r = verdict("PowerPoint problem", "The 2605 thing keeps crashing on my machine.")
     check("4  rejected: bare four-digit number, no version context", c is False and r == "bare_version_no_context", f"{c} {r}")
@@ -197,6 +205,108 @@ def run() -> int:
     check("25 reddit status: not attempted -> disabled", pp.reddit_method_status(False, [], [], [], []) == "disabled")
     check("25 reddit status: attempted + blocked errors -> blocked", pp.reddit_method_status(True, [], [], [], [{"reason": "reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed"}]) == "blocked")
     check("25 reddit status: attempted, reachable, none -> no_results", pp.reddit_method_status(True, [], [], [], []) == "no_results")
+
+    # === PART D — exact-patch ambiguity (fail-closed when a Version YYMM is not unique) =====
+    def ambig(is_ambiguous: bool, body: str, build: str = "20026.20076") -> tuple:
+        t = dict(TARGET, target_build=build, version_ambiguous=is_ambiguous)
+        c = cand(body, body)
+        r = pp.row_from_candidate(REC, t, c, CAPTURED)
+        return r.get("counted"), r.get("exclusion_reason")
+
+    # D1: exactly one Current Channel record for 2605 -> version-only accepted
+    check("D1 one record for a version: version-only report accepted", ambig(False, "PowerPoint Version 2605 crashes on open.") == (True, None))
+    # D2: two Current Channel records for 2605 with different builds -> version-only rejected
+    check("D2 two records share the version: version-only rejected as ambiguous", ambig(True, "PowerPoint Version 2605 crashes on open.") == (False, "ambiguous_version_needs_build"))
+    # D3: same ambiguous pair, exact matching build present -> accepted
+    check("D3 ambiguous + exact matching build -> accepted", ambig(True, "PowerPoint Version 2605 (Build 20026.20076) crashes on export.") == (True, None))
+    # D4: same pair, mismatched build -> rejected
+    check("D4 ambiguous + mismatched build -> rejected", ambig(True, "PowerPoint Version 2605 build 19999.10000 crashes.") == (False, "build_mismatch"))
+    # D5: same version on a conflicting channel -> rejected
+    check("D5 ambiguous + conflicting channel -> rejected", ambig(True, "PowerPoint Version 2605 on Monthly Enterprise Channel crashes.") == (False, "channel_conflict"))
+    # D6: parent title supplies the version but two builds exist -> rejected unless exact build present
+    parent_only = pp.row_from_candidate(REC, dict(TARGET, version_ambiguous=True), cand("PowerPoint Version 2605 thread", "It crashes on open every time after the update."), CAPTURED)
+    check("D6 parent-title version + ambiguous, no build -> rejected", parent_only.get("counted") is False and parent_only.get("exclusion_reason") == "ambiguous_version_needs_build", str(parent_only.get("exclusion_reason")))
+    parent_build = pp.row_from_candidate(REC, dict(TARGET, version_ambiguous=True), cand("PowerPoint Version 2605 (Build 20026.20076) thread", "It crashes on open every time after the update."), CAPTURED)
+    check("D6 parent-title version + ambiguous, with exact build -> accepted", parent_build.get("counted") is True, str(parent_build.get("exclusion_reason")))
+
+    # D7: adding a second tracked build flips a previously accepted version-only candidate to fail-closed.
+    def _rec(build: str, date: str) -> PatchRecord:
+        import tempfile as _tf
+        f = _tf.NamedTemporaryFile("w", suffix=".md", delete=False, encoding="utf-8")
+        f.write("---\n" + yaml.safe_dump({
+            "update_entry": True, "product_id": "microsoft-powerpoint", "update_product": "Microsoft PowerPoint",
+            "update_status": "current", "update_version": "2605", "target_app_version": "2605",
+            "target_channel": "Current Channel", "target_build": build, "update_published_at": date,
+        }, sort_keys=False) + "---\nb\n")
+        f.close()
+        return PatchRecord("microsoft-powerpoint", "2605", Path(f.name), date, "current", "Microsoft PowerPoint")
+    one_rec = [_rec("20026.20076", "2026-05-20T00:00:00Z")]
+    two_rec = one_rec + [_rec("20026.99999", "2026-05-25T00:00:00Z")]
+    amb_one = pp.compute_ambiguous_identities(one_rec)
+    amb_two = pp.compute_ambiguous_identities(two_rec)
+    key = ("2605", "current channel")
+    check("D7 ambiguity map: one tracked build -> version NOT ambiguous", key not in amb_one, str(amb_one))
+    check("D7 ambiguity map: a second tracked build -> version becomes ambiguous", key in amb_two, str(amb_two))
+    body = "PowerPoint Version 2605 crashes on open."
+    before = pp.row_from_candidate(REC, dict(TARGET, version_ambiguous=(key in amb_one)), cand(body, body), CAPTURED)
+    after = pp.row_from_candidate(REC, dict(TARGET, version_ambiguous=(key in amb_two)), cand(body, body), CAPTURED)
+    check("D7 same version-only candidate: accepted with one record, fail-closed after a second is added",
+          before.get("counted") is True and after.get("counted") is False and after.get("exclusion_reason") == "ambiguous_version_needs_build",
+          f"before={before.get('counted')} after={after.get('exclusion_reason')}")
+    check("D7 ambiguity uses the ACTUAL tracked record set (not a hardcoded list)", pp.compute_ambiguous_identities([]) == set())
+
+    # === PART F — discovery precision + bounded cost ========================================
+    check("F query count is hard-bounded (<= MAX_QUERIES_PER_RECORD)", len(pp.search_query_terms(TARGET)) <= pp.MAX_QUERIES_PER_RECORD and pp.MAX_QUERIES_PER_RECORD <= 3, str(pp.search_query_terms(TARGET)))
+    # duplicate canonical URLs across queries collapse to one hydrated/evaluated report
+    dupes = [cand("PowerPoint Version 2605 crash", "PowerPoint Version 2605 crashes.", url=URL + "/same"),
+             cand("PowerPoint Version 2605 crash (again)", "PowerPoint Version 2605 crashes again.", url=URL + "/same"),
+             cand("PowerPoint Version 2605 export", "PowerPoint Version 2605 fails to export.", url=URL + "/other")]
+    acc_d, rej_d = pp.evaluate_candidates(REC, TARGET, dupes, CAPTURED)
+    check("F duplicate canonical URLs across queries are evaluated once (dedup)", len(acc_d) + len(rej_d) == 2, f"reviewed={len(acc_d)+len(rej_d)}")
+    # request bound: exactly one search request per query term; no pagination, no retry multiplier,
+    # no per-candidate hydration (the RSS item carries the content).
+    with tempfile.TemporaryDirectory() as d:
+        rec_path = Path(d) / "2026-05-20-microsoft-powerpoint-2605.md"
+        rec_path.write_text("---\n" + yaml.safe_dump({
+            "layout": "aux-update", "update_entry": True, "product_id": "microsoft-powerpoint",
+            "update_product": "Microsoft PowerPoint", "update_version": "2605", "update_status": "current",
+            "update_published_at": "2026-05-20T00:00:00Z", "target_channel": "Current Channel",
+            "target_build": "20026.20076", "target_app_version": "2605",
+        }, sort_keys=False) + "---\nbody\n", encoding="utf-8")
+        record = PatchRecord("microsoft-powerpoint", "2605", rec_path, "2026-05-20T00:00:00Z", "current", "Microsoft PowerPoint")
+        fetch_calls = {"n": 0}
+        orig_fetch = pp.learn_qna._fetch_feed_text
+        try:
+            def _counting_fetch(url, **kw):
+                fetch_calls["n"] += 1
+                return (200, "application/rss+xml", "<rss><channel></channel></rss>")
+            pp.learn_qna._fetch_feed_text = _counting_fetch
+            pp.collect_for_record(record, SimpleNamespace(write=False, since=None, max_pages=5, target_versions=None))
+            n_terms = len(pp.search_query_terms(pp.record_target(record)))
+            check("F exactly one Learn Q&A request per query term (no pagination / retry explosion)", fetch_calls["n"] == n_terms and n_terms <= pp.MAX_QUERIES_PER_RECORD, f"fetches={fetch_calls['n']} terms={n_terms}")
+        finally:
+            pp.learn_qna._fetch_feed_text = orig_fetch
+    # no unbounded cross-version explosion: discovery is invoked exactly once per record
+    disc_calls = {"n": 0}
+    orig_disc = pp.learn_qna.collect_learn_qna_candidates
+    orig_recs = pp.generated_records
+    try:
+        pp.learn_qna.collect_learn_qna_candidates = lambda **k: (disc_calls.__setitem__("n", disc_calls["n"] + 1), [])[1]
+        two_recs = [REC, PatchRecord("microsoft-powerpoint", "2603", Path("y.md"), "2026-04-14T00:00:00Z", "current", "Microsoft PowerPoint")]
+        # give both records real front matter via a temp dir so record_target works
+        import tempfile as _tf2
+        with _tf2.TemporaryDirectory() as d2:
+            paths = []
+            for v, dt in (("2605", "2026-05-20T00:00:00Z"), ("2603", "2026-04-14T00:00:00Z")):
+                p = Path(d2) / f"{v}.md"
+                p.write_text("---\n" + yaml.safe_dump({"update_entry": True, "product_id": "microsoft-powerpoint", "update_product": "Microsoft PowerPoint", "update_status": "current", "update_version": v, "target_app_version": v, "target_channel": "Current Channel", "target_build": f"200{v}.1", "update_published_at": dt}, sort_keys=False) + "---\nb\n", encoding="utf-8")
+                paths.append(PatchRecord("microsoft-powerpoint", v, p, dt, "current", "Microsoft PowerPoint"))
+            pp.generated_records = lambda pid, tv=None, **k: paths
+            pp.PowerPointLearnQnaCollector().collect(SimpleNamespace(write=False, since=None, max_pages=5, target_versions=None))
+            check("F cross-version: discovery invoked exactly once per record (no explosion)", disc_calls["n"] == len(paths), f"disc_calls={disc_calls['n']} records={len(paths)}")
+    finally:
+        pp.learn_qna.collect_learn_qna_candidates = orig_disc
+        pp.generated_records = orig_recs
 
     # --- search terms + record target ---------------------------------------
     check("search terms are exact-version PowerPoint queries (no standalone bare number)", pp.search_query_terms(TARGET) == ["PowerPoint 2605", "PowerPoint Version 2605", "PowerPoint 20026.20076"], str(pp.search_query_terms(TARGET)))
