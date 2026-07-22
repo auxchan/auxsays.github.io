@@ -187,9 +187,6 @@ def _record(
     date_precision: str,
 ) -> dict[str, Any]:
     ingestion = source.get("ingestion", {}) or {}
-    software = source.get("software") and f"Adobe {source['software']}" or SOFTWARE_LABEL
-    if str(source.get("software") or "").strip().lower() == "photoshop":
-        software = SOFTWARE_LABEL
     digest = hashlib.sha256(
         (source_url + PRODUCT_ID + version + published).encode("utf-8")
     ).hexdigest()[:16]
