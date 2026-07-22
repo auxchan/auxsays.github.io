@@ -19,36 +19,35 @@ update_published_at: '2025-06-30T00:00:00Z'
 update_last_checked: '2026-07-22T08:47:09Z'
 source_last_checked: '2026-07-22T08:47:09Z'
 official_body_last_checked: '2026-07-22T08:47:09Z'
-record_last_updated: '2026-07-22T08:47:09Z'
+record_last_updated: '2026-07-22T10:08:09.783334Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
 update_status: current
 update_feed_title: DaVinci Resolve 20.0.1
 update_detail_title: DaVinci Resolve 20.0.1
-update_consensus_label: Insufficient data
-update_report_count: 0
+update_consensus_label: Negative
+update_report_count: 1
 update_consensus_confidence: Low
-quick_verdict: DaVinci Resolve 20.0.1 has an official AUXSAYS record. Confirmed patch-specific consensus is deferred until
-  the consensus refresh pipeline is active.
+quick_verdict: 'WAIT: DaVinci Resolve 20.0.1 has 1 user reports found.'
 official_summary: Blackmagic Design lists DaVinci Resolve Studio 20.0.1 in its official support downloads feed.
-release_summary: This software update adds support for more consistent drag and drop behavior of media pool clips, better
-  beat marker detection when resizing music track lengths with AI Music Editor, and improved OpenColorIO consistency in the
-  Fusion viewer. In addition, there is improved node cache retention for color changes and support for Blackmagic RAW 4.6.
-  This version requires a DaVinci Resolve Studio license dongle or software activation code.
-consensus_report: Confirmed patch-specific consensus collection is deferred. This page currently reflects official-source
-  ingestion only.
-evidence_state: official_only
-evidence_state_label: Official source only
-intelligence_stage: official_live
+release_summary: This software update adds support for more consistent drag and drop behavior of media pool clips,
+  better beat marker detection when resizing music track lengths with AI Music Editor, and improved OpenColorIO
+  consistency in the Fusion viewer. In addition, there is improved node cache retention for color changes and support
+  for Blackmagic RAW 4.6. This version requires a DaVinci Resolve Studio license dongle or software activation code.
+consensus_report: '1 user report found for DaVinci Resolve 20.0.1. Current reports mention Magic Mask crashes. Too
+  few reports for a firm verdict yet. Sources represented: r/davinciresolve.'
+evidence_state: pilot_sample
+evidence_state_label: Verified reports
+intelligence_stage: pilot
 official_source_captured: true
-confirmed_patch_specific_report_count: 0
-evidence_last_checked: ''
+confirmed_patch_specific_report_count: 1
+evidence_last_checked: '2026-07-22T10:05:42Z'
 known_issues_present: null
-consensus_collection_status: deferred_official_only
+consensus_collection_status: pilot_initial_sample
 consensus_match_policy: confirmed_patch_specific_reports_v1
 consensus_match_policy_label: Confirmed patch-specific reports only
-consensus_report_count_label: confirmed patch-specific reports
+consensus_report_count_label: user reports found
 consensus_report_weighting: equal_per_confirmed_report
 consensus_low_context_policy: excluded
 complaint_themes: []
@@ -59,6 +58,9 @@ status_events:
 - at: '2026-07-22T08:47:12Z'
   label: Insufficient data
   note: AUXSAYS official-ingestion record initialized.
+- at: '2026-07-22T10:08:09.783334Z'
+  label: User reports found
+  note: User report count updated to 1.
 official_patch_notes_source_type: download_portal
 primary_official_source: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
 fallback_official_sources:
@@ -68,8 +70,8 @@ official_patch_notes_source_url: https://www.blackmagicdesign.com/support/family
 official_note_status: official_source_captured
 official_note_label: Official download portal entry
 official_source_type: download_portal
-official_source_classification_note: Blackmagic's support downloads API is treated as an official download-portal source.
-  It confirms version availability and summary text; community evidence remains separate.
+official_source_classification_note: Blackmagic's support downloads API is treated as an official download-portal
+  source. It confirms version availability and summary text; community evidence remains separate.
 official_sources:
 - label: Blackmagic support downloads
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
@@ -96,10 +98,10 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   Platforms listed: Mac OS X, Windows, Linux, Windows ARM
 
 
-  This software update adds support for more consistent drag and drop behavior of media pool clips, better beat marker detection
-  when resizing music track lengths with AI Music Editor, and improved OpenColorIO consistency in the Fusion viewer. In addition,
-  there is improved node cache retention for color changes and support for Blackmagic RAW 4.6. This version requires a DaVinci
-  Resolve Studio license dongle or software activation code.
+  This software update adds support for more consistent drag and drop behavior of media pool clips, better beat
+  marker detection when resizing music track lengths with AI Music Editor, and improved OpenColorIO consistency
+  in the Fusion viewer. In addition, there is improved node cache retention for color changes and support for Blackmagic
+  RAW 4.6. This version requires a DaVinci Resolve Studio license dongle or software activation code.
 
 
   Official support page: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
@@ -110,4 +112,37 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
+update_consensus_summary: 'WAIT: DaVinci Resolve 20.0.1 has 1 user report found. Small sample size. Current reports
+  mention Magic Mask crashes. Production editors should test on copied projects before moving active work to this
+  version. Too few reports for a firm verdict yet.'
+evidence_samples:
+- source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1mclp35/resolve_2001_magic_mask_update_still_breaks_on/
+  source_title: Resolve 20.0.1 Magic Mask update still breaks on render.
+  counted: true
+  version_matched: 20.0.1
+  patch_version_matched: true
+  issue: Magic Mask crashes in render/export
+  outcome: medium
+evidence_sample_visible_limit: 5
+accepted_report_sources:
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1mclp35/resolve_2001_magic_mask_update_still_breaks_on/
+  source_title: Resolve 20.0.1 Magic Mask update still breaks on render.
+  source_date: '2025-07-29'
+  version_matched: 20.0.1
+  patch_version_matched: true
+  issue: Magic Mask crashes in render/export
+  workflow_area: render/export
+evidence_source_limitations:
+- Too few reports for a firm verdict yet.
+update_decision_label: WAIT
+update_decision_body: Current reports mention Magic Mask crashes. Production editors with active delivery deadlines
+  should wait or test on copied projects.
+practical_recommendations:
+- Wait if you have active render/export deadlines.
+- Test on copied projects before moving client work to this version.
+- Review the sample reports before updating a production workstation.
+source_freshness_note: ''
 ---

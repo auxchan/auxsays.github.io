@@ -6451,7 +6451,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-20-2-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1nsyjnm-one-specific-effect-makes-dvr-freak-out-f
   product_id: blackmagic-davinci
   update_version: 20.2.1
@@ -6500,7 +6499,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-20-2-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1om3no7-forcing-dvr-to-use-a-specific-version-of
   product_id: blackmagic-davinci
   update_version: 20.2.2
@@ -6597,7 +6595,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-20-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1t20mlc-resolve-studio-203-crash-on-launch-nobara
   product_id: blackmagic-davinci
   update_version: '20.3'
@@ -6622,7 +6619,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-23-003-20244-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-pro-keeps-crashing-while-editing-a-document-128431
   product_id: adobe-acrobat-pro
   update_version: 23.003.20244
@@ -6649,7 +6645,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-23-003-20244-adobe-community-bug-report-https-community-adobe-com-questions-12-update-failed-manually-trying-to-check-for-updates-in-64
   product_id: adobe-acrobat-reader
   update_version: 23.003.20244
@@ -6702,7 +6697,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-20-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1s41za2-davinci-resolve-studio-crashes-when-conne
   product_id: blackmagic-davinci
   update_version: '20.3'
@@ -6751,7 +6745,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-20-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1srsu3m-little-bits-of-render-just-killin-me
   product_id: blackmagic-davinci
   update_version: '20.2'
@@ -6920,7 +6913,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-20-1-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1n9fddt-davici-resolve-crashes-after-starting-a-r
   product_id: blackmagic-davinci
   update_version: 20.1.1
@@ -6945,7 +6937,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-21-005-20058-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-keeps-crashing-immediately-upon-opening-1283981
   product_id: adobe-acrobat-pro
   update_version: 21.005.20058
@@ -7024,7 +7015,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-21-005-20058-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-reader-freeze-white-bar-when-open-e-pdf-document-on
   product_id: adobe-acrobat-reader
   update_version: 21.005.20058
@@ -7051,7 +7041,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-21-005-20060-adobe-community-bug-report-https-community-adobe-com-questions-12-error-encountered-while-ber-decoding-digital-signatures-1
   product_id: adobe-acrobat-reader
   update_version: 21.005.20060
@@ -7128,5 +7117,250 @@ evidence:
   workflow_area: application stability
   platform: unknown
   severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-21-005-20048-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-pro-dc-crashes-my-kitchen-design-software-12
+  product_id: adobe-acrobat-pro
+  update_version: 21.005.20048
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-pro-dc-crashes-my-kitchen-design-software-1260777
+  parent_title: Adobe Acrobat Pro DC crashes my Kitchen Design Software
+  report_title: Adobe Acrobat Pro DC crashes my Kitchen Design Software
+  report_text_excerpt: Adobe Acrobat Pro DC crashes my Kitchen Design Software I am having issues with the latest version of Adobe Acrobat Pro DC (32 bit) version 21.005.20048 It is causing my kitchen design software to crash and forcing me to re-set my 'default app' to another PDF reader...
+  captured_at: '2026-07-22T09:37:09Z'
+  source_date: '2021-06-16'
+  target_release_date: '2021-06-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.005.20048
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-21-005-20048-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-and-reader-dc-june-2021-update-release-12605
+  product_id: adobe-acrobat-pro
+  update_version: 21.005.20048
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-and-reader-dc-june-2021-update-release-1260523
+  parent_title: Adobe Acrobat and Reader DC – June 2021 Update Release
+  report_title: Adobe Acrobat and Reader DC – June 2021 Update Release
+  report_text_excerpt: 'Adobe Acrobat and Reader DC – June 2021 Update Release Adobe Acrobat and Reader DC – June 2021 Update Release June Release : Acrobat and Reader DC June release is now available with some amazing new features which enable you to do more. See what’s new in this release. Adobe...'
+  captured_at: '2026-07-22T09:37:09Z'
+  source_date: '2021-06-08'
+  target_release_date: '2021-06-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.005.20048
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader + acrobat pro
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-21-005-20048-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-and-reader-dc-june-2021-update-release-12605
+  product_id: adobe-acrobat-reader
+  update_version: 21.005.20048
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-and-reader-dc-june-2021-update-release-1260523
+  parent_title: Adobe Acrobat and Reader DC – June 2021 Update Release
+  report_title: Adobe Acrobat and Reader DC – June 2021 Update Release
+  report_text_excerpt: 'Adobe Acrobat and Reader DC – June 2021 Update Release Adobe Acrobat and Reader DC – June 2021 Update Release June Release : Acrobat and Reader DC June release is now available with some amazing new features which enable you to do more. See what’s new in this release. Adobe...'
+  captured_at: '2026-07-22T09:47:27Z'
+  source_date: '2021-06-08'
+  target_release_date: '2021-06-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.005.20048
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader + acrobat pro
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-21-005-20054-adobe-community-bug-report-https-community-adobe-com-questions-12-cannot-right-click-on-pdfs-1524012
+  product_id: adobe-acrobat-reader
+  update_version: 21.005.20054
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/cannot-right-click-on-pdfs-1524012
+  parent_title: Cannot right-click on PDFs
+  report_title: Cannot right-click on PDFs
+  report_text_excerpt: Cannot right-click on PDFs I'm an IT professional and lately, some of my users have been unable to right-click on PDFs. Any time they do, their computer freezes, the screen goes blank, then they're back at the desktop. They can open, view, and save PDFs without any issues. But...
+  captured_at: '2026-07-22T09:47:27Z'
+  source_date: '2021-07-12'
+  target_release_date: '2021-06-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.005.20054
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-0-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1mclp35-resolve-2001-magic-mask-update-still-brea
+  product_id: blackmagic-davinci
+  update_version: 20.0.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1mclp35/resolve_2001_magic_mask_update_still_breaks_on/
+  parent_title: Resolve 20.0.1 Magic Mask update still breaks on render.
+  report_title: Resolve 20.0.1 Magic Mask update still breaks on render.
+  report_text_excerpt: Resolve 20.0.1 Magic Mask update still breaks on render. My hand and the Zip disk are supposed to be masked out, and layered above the purple text. In the final render, the mask does not work at all except for the reference frame, which is also broken as you can see in the...
+  captured_at: '2026-07-22T10:05:42Z'
+  source_date: '2025-07-29'
+  target_release_date: '2025-06-30'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.0.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1mwgth8-davinci-resolve-201-render-hangs-at-13-rt
+  product_id: blackmagic-davinci
+  update_version: '20.1'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1mwgth8/davinci_resolve_201_render_hangs_at_13_rtx_3060/
+  parent_title: DaVinci Resolve 20.1 Render Hangs at 13% (RTX 3060 Ti – FIXED)
+  report_title: DaVinci Resolve 20.1 Render Hangs at 13% (RTX 3060 Ti – FIXED)
+  report_text_excerpt: DaVinci Resolve 20.1 Render Hangs at 13% (RTX 3060 Ti – FIXED) 🚨 DaVinci Resolve 20.1 Render Hangs at 13% (RTX 3060 Ti – FIXED) Hi all, I ran into a frustrating issue in Resolve 20.1 where my renders would consistently hang at 13% . Restarting, removing effects, and splitting...
+  captured_at: '2026-07-22T10:08:12Z'
+  source_date: '2025-08-21'
+  target_release_date: '2025-08-07'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.1'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1o7p2ft-fix-rtx-5080-davinci-resolve-render-freez
+  product_id: blackmagic-davinci
+  update_version: '20.2'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1o7p2ft/fix_rtx_5080_davinci_resolve_render_freeze/
+  parent_title: 🧠 [FIX] RTX 5080 + DaVinci Resolve Render Freeze — Confirmed Root Cause and 100% Working Solution
+  report_title: 🧠 [FIX] RTX 5080 + DaVinci Resolve Render Freeze — Confirmed Root Cause and 100% Working Solution
+  report_text_excerpt: 🧠 [FIX] RTX 5080 + DaVinci Resolve Render Freeze — Confirmed Root Cause and 100% Working Solution After weeks of digging through logs, testing every driver, and trying every known fix — I finally found the real cause of the DaVinci Resolve render freezes on RTX 5080. This post...
+  captured_at: '2026-07-22T10:13:12Z'
+  source_date: '2025-10-15'
+  target_release_date: '2025-09-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.2'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1nvgzd6-prefer-proxyprefer-camera-originals-toggl
+  product_id: blackmagic-davinci
+  update_version: '20.2'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1nvgzd6/prefer_proxyprefer_camera_originals_toggle_has_no/
+  parent_title: Prefer Proxy/Prefer Camera Originals Toggle Has No Effect When Render Cache is Enabled
+  report_title: Prefer Proxy/Prefer Camera Originals Toggle Has No Effect When Render Cache is Enabled
+  report_text_excerpt: 'Prefer Proxy/Prefer Camera Originals Toggle Has No Effect When Render Cache is Enabled Hello everyone, I''m encountering a strange issue in Davinci Resolve Studio 20 and couldn''t find any solutions online. Here''s the problem: When Render Cache -> User is enabled and a clip has...'
+  captured_at: '2026-07-22T10:13:12Z'
+  source_date: '2025-10-01'
+  target_release_date: '2025-09-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.2'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ne8v0q-recently-started-trying-to-learn-editing
+  product_id: blackmagic-davinci
+  update_version: '20.2'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ne8v0q/recently_started_trying_to_learn_editing_in/
+  parent_title: Recently started trying to learn editing in Resolve but my video has gone weird and I don't know what I did or how to change it
+  report_title: Recently started trying to learn editing in Resolve but my video has gone weird and I don't know what I did or how to change it
+  report_text_excerpt: Recently started trying to learn editing in Resolve but my video has gone weird and I don't know what I did or how to change it I've tried a few things I've seen online to solve this like changing the render cache to half but its stuck like this. Also I don't know how, why or...
+  captured_at: '2026-07-22T10:13:12Z'
+  source_date: '2025-09-11'
+  target_release_date: '2025-09-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.2'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-0-github-issue-13682
+  product_id: obs-studio
+  update_version: 32.2.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13682
+  parent_title: OBS-Wayland-Hotkeys Plugin Stopped Working Since 32.2.0
+  report_title: OBS-Wayland-Hotkeys Plugin Stopped Working Since 32.2.0
+  report_text_excerpt: '### Operating System Info Other ### Other OS Fedora 44 Kde Plasma ### OBS Studio Version 32.2.0 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/lzBdc4qehCOwb5Ts ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Wayla'
+  captured_at: '2026-07-22T10:41:25Z'
+  patch_version_matched: true
+  matched_version: 32.2.0
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: hotkey regression
+  workflow_area: keyboard shortcuts
+  platform: unknown
+  severity: medium
   sentiment: negative
   source_weight: 1
