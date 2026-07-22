@@ -231,6 +231,51 @@ def run() -> int:
     check("both flags on -> base + Windows + both Acrobat editions (6 collectors)",
           both_on == sorted((*BASE, WIN_ID, *ACR_IDS)), str(both_on))
 
+    # === Microsoft PowerPoint consensus: default-off activation gate ==========
+    # A default-off community-evidence PILOT. It must never be a scheduled writeback target;
+    # registration requires the canonical "true", exactly like the Windows/Acrobat gates.
+    print("-" * 60)
+    print("Microsoft PowerPoint consensus activation-gate tests")
+    print("-" * 60)
+    PP_ID = runner.POWERPOINT_CONSENSUS_PRODUCT_ID
+    PP_FLAG = runner.POWERPOINT_CONSENSUS_ENABLE_ENV
+    import patch_collectors.microsoft_powerpoint as ppmod
+
+    check("PowerPoint flag name is AUXSAYS_ENABLE_POWERPOINT_CONSENSUS", PP_FLAG == "AUXSAYS_ENABLE_POWERPOINT_CONSENSUS", PP_FLAG)
+    check("static COLLECTORS base never contains PowerPoint", PP_ID not in runner.COLLECTORS, str(sorted(runner.COLLECTORS)))
+
+    pp_off = {"absent": {}, "empty": {PP_FLAG: ""}, "false": {PP_FLAG: "false"}, "False": {PP_FLAG: "False"},
+              "0": {PP_FLAG: "0"}, "1": {PP_FLAG: "1"}, "yes": {PP_FLAG: "yes"}, "on": {PP_FLAG: "on"},
+              "whitespace": {PP_FLAG: "  "}, "the Windows flag (wrong flag)": {FLAG: "true"}}
+    for label, env in pp_off.items():
+        check(f"OFF: powerpoint flag={label!r} -> microsoft-powerpoint NOT registered",
+              PP_ID not in runner.build_collectors(env), f"registry={sorted(runner.build_collectors(env))}")
+
+    pp_on = {"true": {PP_FLAG: "true"}, "TRUE": {PP_FLAG: "TRUE"}, "  true  ": {PP_FLAG: "  true  "}, "true\\n": {PP_FLAG: "true\n"}}
+    for label, env in pp_on.items():
+        reg = runner.build_collectors(env)
+        check(f"ON: powerpoint flag={label!r} -> registered as PowerPointLearnQnaCollector",
+              reg.get(PP_ID) is ppmod.PowerPointLearnQnaCollector, f"registry={sorted(reg)}")
+
+    check("powerpoint gate predicate True only for canonical true",
+          runner.powerpoint_consensus_enabled({PP_FLAG: "true"}) is True
+          and runner.powerpoint_consensus_enabled({PP_FLAG: " TRUE "}) is True
+          and runner.powerpoint_consensus_enabled({}) is False
+          and runner.powerpoint_consensus_enabled({PP_FLAG: "false"}) is False
+          and runner.powerpoint_consensus_enabled({PP_FLAG: "1"}) is False)
+
+    # scheduled-writeback safety + no unrelated behavior change
+    check("default scheduled run (--write, no --product-id) cannot target PowerPoint",
+          PP_ID not in sorted(runner.build_collectors({})), str(sorted(runner.build_collectors({}))))
+    reg_pp = runner.build_collectors({PP_FLAG: "true"})
+    check("enabling PowerPoint leaves all base collectors unchanged (Windows rules untouched)",
+          all(reg_pp.get(pid) is runner.COLLECTORS[pid] for pid in runner.COLLECTORS) and WIN_ID not in reg_pp)
+
+    # all three gates independent + composable
+    all_on = sorted(runner.build_collectors({FLAG: "true", ACR_FLAG: "true", PP_FLAG: "true"}))
+    check("all three flags on -> base + Windows + both Acrobat + PowerPoint (7 collectors)",
+          all_on == sorted((*BASE, WIN_ID, *ACR_IDS, PP_ID)), str(all_on))
+
     print()
     print("=" * 60)
     total = _PASS + _FAIL

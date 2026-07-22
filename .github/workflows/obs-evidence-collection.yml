@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       product_id:
-        description: "Optional product_id: obs-studio, blackmagic-davinci, adobe-premiere-pro, adobe-acrobat-reader, adobe-acrobat-pro, or microsoft-windows-11"
+        description: "Optional product_id: obs-studio, blackmagic-davinci, adobe-premiere-pro, adobe-acrobat-reader, adobe-acrobat-pro, microsoft-windows-11, or microsoft-powerpoint (dry_run only)"
         required: false
         type: string
       dry_run:
@@ -49,6 +49,10 @@ jobs:
           # reachable from GitHub Actions (unlike the CloudFront-blocked /t5 search, Reddit,
           # and the dead Brave key), proven by dry-run on the PR branch. See PR #23.
           AUXSAYS_ENABLE_ACROBAT_CONSENSUS: "true"
+          # PowerPoint community-evidence PILOT: registered ONLY for a manual dry_run dispatch,
+          # never for a scheduled or --write run. This lets a maintainer observe the collector
+          # from GitHub Actions (read-only) without activating scheduled production consensus.
+          AUXSAYS_ENABLE_POWERPOINT_CONSENSUS: ${{ github.event.inputs.dry_run == 'true' && 'true' || 'false' }}
         run: |
           args=(--since-days 45 --max-pages 5)
 
@@ -56,12 +60,19 @@ jobs:
           product_id="$(printf '%s' "$raw_product_id" | tr -d '\r' | sed -E 's/^[[:space:]]*product_id:[[:space:]]*//' | xargs)"
 
           case "$product_id" in
-            ""|obs-studio|blackmagic-davinci|adobe-premiere-pro|adobe-acrobat-reader|adobe-acrobat-pro|microsoft-windows-11) ;;
+            ""|obs-studio|blackmagic-davinci|adobe-premiere-pro|adobe-acrobat-reader|adobe-acrobat-pro|microsoft-windows-11|microsoft-powerpoint) ;;
             *)
-              echo "::error::Invalid product_id '$product_id'. Use obs-studio, blackmagic-davinci, adobe-premiere-pro, adobe-acrobat-reader, adobe-acrobat-pro, or microsoft-windows-11."
+              echo "::error::Invalid product_id '$product_id'. Use obs-studio, blackmagic-davinci, adobe-premiere-pro, adobe-acrobat-reader, adobe-acrobat-pro, microsoft-windows-11, or microsoft-powerpoint."
               exit 2
               ;;
           esac
+
+          # PowerPoint is a dry_run-only pilot: refuse a --write run targeting it (belt-and-suspenders;
+          # the enable flag is already gated to dry_run, so it would not be registered anyway).
+          if [ "$product_id" = "microsoft-powerpoint" ] && [ "${{ github.event.inputs.dry_run }}" != "true" ]; then
+            echo "::error::microsoft-powerpoint is a dry_run-only pilot; re-run with dry_run=true."
+            exit 2
+          fi
 
           if [ "$product_id" != "" ]; then
             args+=(--product-id "$product_id")
