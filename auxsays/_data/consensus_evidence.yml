@@ -7364,3 +7364,294 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uz2e4k-exporting-video-always-replicates-same-pe
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1uz2e4k/exporting_video_always_replicates_same_pesky/
+  parent_title: Exporting Video Always Replicates Same Pesky Visual Bug
+  report_title: Exporting Video Always Replicates Same Pesky Visual Bug
+  report_text_excerpt: Exporting Video Always Replicates Same Pesky Visual Bug Every time I export this edit I've made without the same few parts in the video glitches out and looks terrible. Nothing I tried has fixed it. I've exported on all the different encoder options and attempted to change the...
+  captured_at: '2026-07-22T12:25:42Z'
+  source_date: '2026-07-17'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uqazxu-render-smooth-240-fps-recordings
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1uqazxu/render_smooth_240_fps_recordings/
+  parent_title: Render smooth 240 fps recordings
+  report_title: Render smooth 240 fps recordings
+  report_text_excerpt: Render smooth 240 fps recordings I have a really good pc (5070 Ti 16gb VRAM and R7 7800x3d 32gb DDR5 6000 mt/s) so I have no problem with recording quality videos, crystal clear 240fps recordings that look great (I’m recording games). My problem is rendering the videos in an...
+  captured_at: '2026-07-22T12:25:42Z'
+  source_date: '2026-07-07'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ule1ba-my-project-is-flashing-red
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ule1ba/my_project_is_flashing_red/
+  parent_title: My Project is flashing red
+  report_title: My Project is flashing red
+  report_text_excerpt: My Project is flashing red https://reddit.com/link/1ule1ba/video/3k8nj4vtgsah1/player Yo I think my Project is broken so I was just editing a simply project nothing too fancy and everything looked right on Da Vinci Resolve but when i export it looks like this and I'm not sure...
+  captured_at: '2026-07-22T12:25:42Z'
+  source_date: '2026-07-02'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+
+- id: blackmagic-davinci-20-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1o2aeih-rtx-5080-davinci-resolve-freezing-renders
+  product_id: blackmagic-davinci
+  update_version: '20.1'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1o2aeih/rtx_5080_davinci_resolve_freezing_renders_solved/
+  parent_title: 🧠 RTX 5080 + DaVinci Resolve = Freezing Renders — Solved (sort of)
+  report_title: 🧠 RTX 5080 + DaVinci Resolve = Freezing Renders — Solved (sort of)
+  report_text_excerpt: 🧠 RTX 5080 + DaVinci Resolve = Freezing Renders — Solved (sort of) How I spent weeks debugging the RTX 50-series, found the real cause, and why only driver 572.16 actually works Hey everyone, I wanted to share a journey that cost me three weeks, countless tests, and several...
+  captured_at: '2026-07-22T12:26:42Z'
+  source_date: '2025-10-09'
+  target_release_date: '2025-08-07'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.1'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1n7yq4g-timeout-frame-xxxx-dropped-resolve-201
+  product_id: blackmagic-davinci
+  update_version: '20.1'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1n7yq4g/timeout_frame_xxxx_dropped_resolve_201/
+  parent_title: Timeout – Frame xxxx dropped – Resolve 20.1
+  report_title: Timeout – Frame xxxx dropped – Resolve 20.1
+  report_text_excerpt: Timeout – Frame xxxx dropped – Resolve 20.1 Hoping someone has an answer for me, or at least some guidance. I work as an editor and colorist, and I typically curate footage that comes from larger projects. I have to render out the footage at its native resolution– so typically...
+  captured_at: '2026-07-22T12:26:42Z'
+  source_date: '2025-09-04'
+  target_release_date: '2025-08-07'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.1'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1muhe61-davinci-resolve-20-keeps-crashing
+  product_id: blackmagic-davinci
+  update_version: '20.1'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1muhe61/davinci_resolve_20_keeps_crashing/
+  parent_title: Davinci Resolve 20 keeps crashing
+  report_title: Davinci Resolve 20 keeps crashing
+  report_text_excerpt: 'Davinci Resolve 20 keeps crashing Whenever I load an existing project or load a video into a new one it crashes. I''ve tried to unistall the program and that didn''t work. Any ideas? Davinci resolve 20.1 System specs: CPU: 7600x GPU: 7800xt 32g of ram Crash Logs submitted by...'
+  captured_at: '2026-07-22T12:26:42Z'
+  source_date: '2025-08-19'
+  target_release_date: '2025-08-07'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.1'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: blackmagic-davinci-20-2-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1p6sq35-question-how-to-fix-media-offline-error-o
+  product_id: blackmagic-davinci
+  update_version: 20.2.3
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1p6sq35/question_how_to_fix_media_offline_error_on_mac/
+  parent_title: 'Question: How to fix Media Offline Error on Mac?'
+  report_title: 'Question: How to fix Media Offline Error on Mac?'
+  report_text_excerpt: 'Question: How to fix Media Offline Error on Mac? Sorry if this has been asked before. How can I fix this so that I don''t have to relink every time I open my files on Mac? I''ve tried updating source folder, relinking clips individually, clearing render cache, changing render...'
+  captured_at: '2026-07-22T12:32:36Z'
+  source_date: '2025-11-25'
+  target_release_date: '2025-11-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.3
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1p59oms-davinci-resolve-not-launching-on-linux
+  product_id: blackmagic-davinci
+  update_version: 20.2.3
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1p59oms/davinci_resolve_not_launching_on_linux/
+  parent_title: DaVinci Resolve not launching on Linux
+  report_title: DaVinci Resolve not launching on Linux
+  report_text_excerpt: DaVinci Resolve not launching on Linux Hello, I installed DaVinci Resolve Free on Arch Linux through official Linux instructions and the problem is that it won't launch at all. When I tried to install Resolve using AUR methods on terminal, it gave me an error by the following:...
+  captured_at: '2026-07-22T12:32:36Z'
+  source_date: '2025-11-24'
+  target_release_date: '2025-11-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.3
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: install issue
+  workflow_area: installation
+  platform: linux
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ozn0cl-windows-color-managed-hdr-viewers-seconda
+  product_id: blackmagic-davinci
+  update_version: 20.2.3
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ozn0cl/windows_color_managed_hdr_viewers_secondary/
+  parent_title: 'Windows color managed HDR viewers: Secondary window with HDR+SDR dual screen workspace has incorrect gamma, but main window works/transitions correctly between monitors'
+  report_title: 'Windows color managed HDR viewers: Secondary window with HDR+SDR dual screen workspace has incorrect gamma, but main window works/transitions correctly between monitors'
+  report_text_excerpt: 'Windows color managed HDR viewers: Secondary window with HDR+SDR dual screen workspace has incorrect gamma, but main window works/transitions correctly between monitors I have a 1000-nit+ monitor that I use for editing Instagram/YouTube HDR content using the Windows display...'
+  captured_at: '2026-07-22T12:32:36Z'
+  source_date: '2025-11-17'
+  target_release_date: '2025-11-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.3
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1oyzv1h-linux-resolve-2023-edit-page-importing-2
+  product_id: blackmagic-davinci
+  update_version: 20.2.3
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1oyzv1h/linux_resolve_2023_edit_page_importing_2_of_3/
+  parent_title: Linux - Resolve 20.2.3 - Edit Page Importing 2 of 3 audio tracks
+  report_title: Linux - Resolve 20.2.3 - Edit Page Importing 2 of 3 audio tracks
+  report_text_excerpt: Linux - Resolve 20.2.3 - Edit Page Importing 2 of 3 audio tracks Title kinda says the problem, but I just updated to Resolve 20.2.3 on Linux, imported my recordings in the Media Pool on the Edit Page, dragged a 3 track audio clip in and the Edit Page is only pulling in Tracks...
+  captured_at: '2026-07-22T12:32:36Z'
+  source_date: '2025-11-16'
+  target_release_date: '2025-11-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.3
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: linux
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: blackmagic-davinci-20-2-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ovcpm4-snapping-isnt-reacting-magnetically
+  product_id: blackmagic-davinci
+  update_version: 20.2.3
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ovcpm4/snapping_isnt_reacting_magnetically/
+  parent_title: Snapping isn't reacting Magnetically
+  report_title: Snapping isn't reacting Magnetically
+  report_text_excerpt: Snapping isn't reacting Magnetically I'm coming over from FCPX so I'm used to the magnetic timeline. Snapping doesn't work as expected (or at all for me). I have the magnet icon illuminated. I've tried turning it on/off, N keystroke. I delete a clip and it leaves the space,...
+  captured_at: '2026-07-22T12:32:36Z'
+  source_date: '2025-11-12'
+  target_release_date: '2025-11-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.3
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: macos
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: blackmagic-davinci-20-2-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1or7sna-adjustment-clip-cropping-issue
+  product_id: blackmagic-davinci
+  update_version: 20.2.3
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1or7sna/adjustment_clip_cropping_issue/
+  parent_title: Adjustment clip cropping issue
+  report_title: Adjustment clip cropping issue
+  report_text_excerpt: Adjustment clip cropping issue I dont know how to fix this problem and cant seem to find any solutions anywhere. I have a bunch of zoomed in clips in my timeline, and i want to slowly zoom out of them. But when I added a keyframed adjustment clip to zoom out over all of the...
+  captured_at: '2026-07-22T12:32:36Z'
+  source_date: '2025-11-07'
+  target_release_date: '2025-11-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.3
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1

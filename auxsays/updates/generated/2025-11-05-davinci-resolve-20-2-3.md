@@ -19,7 +19,7 @@ update_published_at: '2025-11-05T00:00:00Z'
 update_last_checked: '2026-07-21T08:49:00Z'
 source_last_checked: '2026-07-21T08:49:00Z'
 official_body_last_checked: '2026-07-21T08:49:00Z'
-record_last_updated: '2026-07-21T17:01:33.262990Z'
+record_last_updated: '2026-07-22T12:34:08.289481Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -27,23 +27,24 @@ update_status: current
 update_feed_title: DaVinci Resolve 20.2.3
 update_detail_title: DaVinci Resolve 20.2.3
 update_consensus_label: Negative
-update_report_count: 3
-update_consensus_confidence: Low
-quick_verdict: 'WAIT: DaVinci Resolve 20.2.3 has 3 user reports found.'
+update_report_count: 9
+update_consensus_confidence: Low-Medium
+quick_verdict: 'WAIT: DaVinci Resolve 20.2.3 has 9 user reports found.'
 official_summary: Blackmagic Design lists DaVinci Resolve Studio 20.2.3 in its official support downloads feed.
 release_summary: This software update adds support for up to 4x faster Magic Mask, Depth Map and Super Scale performance
   on Windows Intel GPUs, as well as a new hotkey for the timeline keyframe and curves tray and decode support for
   WEBM and MKV clips with VP8 video codec. In addition, this update adds improved decoding of MP4 clips and MKV
   files, better metadata retention on exported EXRs and support for Blackmagic RAW 5.1. This version requires a
   DaVinci Resolve Studio license dongle, Blackmagic Cloud license or software activation code.
-consensus_report: '3 user reports found for DaVinci Resolve 20.2.3. Current reports mention render/export failures.
-  Current reports are Reddit-heavy, so production users should test before updating. Sources represented: r/davinciresolve.'
+consensus_report: '9 user reports found for DaVinci Resolve 20.2.3. Current reports mention render/export failures,
+  performance slowdowns, and startup or application crashes. Current reports are Reddit-heavy, so production users
+  should test before updating. Sources represented: r/davinciresolve.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
 official_source_captured: true
-confirmed_patch_specific_report_count: 3
-evidence_last_checked: '2026-07-21T16:59:58Z'
+confirmed_patch_specific_report_count: 9
+evidence_last_checked: '2026-07-22T12:32:36Z'
 known_issues_present: null
 consensus_collection_status: pilot_initial_sample
 consensus_match_policy: confirmed_patch_specific_reports_v1
@@ -65,6 +66,9 @@ status_events:
 - at: '2026-07-21T17:01:33.262990Z'
   label: User reports found
   note: User report count updated to 3.
+- at: '2026-07-22T12:34:08.289481Z'
+  label: User reports found
+  note: User report count updated to 9.
 official_patch_notes_source_type: download_portal
 primary_official_source: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
 fallback_official_sources:
@@ -117,10 +121,19 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'WAIT: DaVinci Resolve 20.2.3 has 3 user reports found. Small sample size. Current reports
-  mention render/export failures. Production editors with active export deadlines should wait unless they need a
-  specific fix. Current reports are Reddit-heavy, so production users should test before updating.'
+update_consensus_summary: 'WAIT: DaVinci Resolve 20.2.3 has 9 user reports found. User reports show a repeat pattern.
+  Current reports mention render/export failures, performance slowdowns, and startup or application crashes. Production
+  editors with active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy,
+  so production users should test before updating.'
 evidence_samples:
+- source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1opemam/davinci_resolve_studio_2023_mkv_files_audio_bug/
+  source_title: Davinci Resolve Studio 20.2.3 .MKV Files [AUDIO BUG]
+  counted: true
+  version_matched: 20.2.3
+  patch_version_matched: true
+  issue: general workflow reports
+  outcome: medium
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1uq4pio/subs_regions_problem_what_are_they_for/
   source_title: Subs Regions Problem. What are they for?
@@ -130,12 +143,21 @@ evidence_samples:
   issue: render/export failures
   outcome: medium
 - source_name: r/davinciresolve
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1opemam/davinci_resolve_studio_2023_mkv_files_audio_bug/
-  source_title: Davinci Resolve Studio 20.2.3 .MKV Files [AUDIO BUG]
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ozn0cl/windows_color_managed_hdr_viewers_secondary/
+  source_title: 'Windows color managed HDR viewers: Secondary window with HDR+SDR dual screen workspace has incorrect
+    gamma, but main window works/transitions correctly between monitors'
   counted: true
   version_matched: 20.2.3
   patch_version_matched: true
-  issue: general workflow reports
+  issue: performance slowdowns in timeline / GPU performance
+  outcome: medium
+- source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1p59oms/davinci_resolve_not_launching_on_linux/
+  source_title: DaVinci Resolve not launching on Linux
+  counted: true
+  version_matched: 20.2.3
+  patch_version_matched: true
+  issue: startup or application crashes in installation
   outcome: medium
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1oycbdr/choppy_timeline_and_export/
@@ -174,12 +196,67 @@ accepted_report_sources:
   patch_version_matched: true
   issue: render/export failures
   workflow_area: render/export
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1p6sq35/question_how_to_fix_media_offline_error_on_mac/
+  source_title: 'Question: How to fix Media Offline Error on Mac?'
+  source_date: '2025-11-25'
+  version_matched: 20.2.3
+  patch_version_matched: true
+  issue: render/export failures
+  workflow_area: render/export
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1p59oms/davinci_resolve_not_launching_on_linux/
+  source_title: DaVinci Resolve not launching on Linux
+  source_date: '2025-11-24'
+  version_matched: 20.2.3
+  patch_version_matched: true
+  issue: startup or application crashes in installation
+  workflow_area: installation
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ozn0cl/windows_color_managed_hdr_viewers_secondary/
+  source_title: 'Windows color managed HDR viewers: Secondary window with HDR+SDR dual screen workspace has incorrect
+    gamma, but main window works/transitions correctly between monitors'
+  source_date: '2025-11-17'
+  version_matched: 20.2.3
+  patch_version_matched: true
+  issue: performance slowdowns in timeline / GPU performance
+  workflow_area: timeline / GPU performance
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1oyzv1h/linux_resolve_2023_edit_page_importing_2_of_3/
+  source_title: Linux - Resolve 20.2.3 - Edit Page Importing 2 of 3 audio tracks
+  source_date: '2025-11-16'
+  version_matched: 20.2.3
+  patch_version_matched: true
+  issue: general workflow reports
+  workflow_area: general DaVinci Resolve workflow
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ovcpm4/snapping_isnt_reacting_magnetically/
+  source_title: Snapping isn't reacting Magnetically
+  source_date: '2025-11-12'
+  version_matched: 20.2.3
+  patch_version_matched: true
+  issue: general workflow reports
+  workflow_area: general DaVinci Resolve workflow
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1or7sna/adjustment_clip_cropping_issue/
+  source_title: Adjustment clip cropping issue
+  source_date: '2025-11-07'
+  version_matched: 20.2.3
+  patch_version_matched: true
+  issue: performance slowdowns in timeline / GPU performance
+  workflow_area: timeline / GPU performance
 evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
 - Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 update_decision_label: WAIT
-update_decision_body: Current reports mention render/export failures. Production editors with active delivery deadlines
-  should wait or test on copied projects.
+update_decision_body: Current reports mention render/export failures, performance slowdowns, and startup or application
+  crashes. Production editors with active delivery deadlines should wait or test on copied projects.
 practical_recommendations:
 - Wait if you have active render/export deadlines.
 - Test on copied projects before moving client work to this version.
