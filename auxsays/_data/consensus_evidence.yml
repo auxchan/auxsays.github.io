@@ -7745,3 +7745,200 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-20-0-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1pp3tey-audio-lags-after-exporting-video
+  product_id: blackmagic-davinci
+  update_version: 20.0.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1pp3tey/audio_lags_after_exporting_video/
+  parent_title: Audio lags after exporting video
+  report_title: Audio lags after exporting video
+  report_text_excerpt: Audio lags after exporting video Hello everyone, I'm new here. I just edited a video in DV20 and everything is working fine within the program. However, when I export the video and play it back, there is suddenly a problem with the sound. About 1 second into the exported...
+  captured_at: '2026-07-22T17:09:00Z'
+  source_date: '2025-12-17'
+  target_release_date: '2025-06-30'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.0.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+
+- id: blackmagic-davinci-20-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1mo3t3b-help-i-cant-adjust-quality-settings-anymo
+  product_id: blackmagic-davinci
+  update_version: '20.1'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1mo3t3b/help_i_cant_adjust_quality_settings_anymore_in/
+  parent_title: HELP I can't adjust quality settings anymore in Resolve 20.1
+  report_title: HELP I can't adjust quality settings anymore in Resolve 20.1
+  report_text_excerpt: HELP I can't adjust quality settings anymore in Resolve 20.1 Hey everyone - just updated to Resolve 20.1 (Free version) and now the bitrate option is locked when exporting. The 'Restrict to' setting is completely grayed out.This worked perfectly in older Free versions - did...
+  captured_at: '2026-07-22T17:11:37Z'
+  source_date: '2025-08-12'
+  target_release_date: '2025-08-07'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.1'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+
+- id: blackmagic-davinci-20-1-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1n1nd3s-performance-issues-with-recent-updates
+  product_id: blackmagic-davinci
+  update_version: 20.1.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1n1nd3s/performance_issues_with_recent_updates/
+  parent_title: Performance issues with recent updates
+  report_title: Performance issues with recent updates
+  report_text_excerpt: Performance issues with recent updates With recent updates, I feel performance of my Resolve has degraded to a point where it is basically unusable. As far as I can tell, everything should be fine - my machine is up to spec and has worked perfectly with Resolve for several...
+  captured_at: '2026-07-22T17:13:23Z'
+  source_date: '2025-08-27'
+  target_release_date: '2025-08-26'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.1.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+
+- id: blackmagic-davinci-20-2-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1srsu3m-little-bits-of-render-just-killin-me
+  product_id: blackmagic-davinci
+  update_version: 20.2.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1srsu3m/little_bits_of_render_just_killin_me/
+  parent_title: Little Bits of Render just Killin Me
+  report_title: Little Bits of Render just Killin Me
+  report_text_excerpt: Little Bits of Render just Killin Me - Exports have been failing for me and I almost always find there's one frame that hasn't rendered even if I force it - I find that this is usually a piece of text that was created in another timeline, but copied to this one. - usually the...
+  captured_at: '2026-07-22T17:17:09Z'
+  source_date: '2026-04-21'
+  target_release_date: '2025-10-15'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1p4osmn-video-stutter-only-in-exported-footage-ri
+  product_id: blackmagic-davinci
+  update_version: 20.2.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1p4osmn/video_stutter_only_in_exported_footage_right/
+  parent_title: Video stutter only in exported footage right after a photo overlay being fullscreen
+  report_title: Video stutter only in exported footage right after a photo overlay being fullscreen
+  report_text_excerpt: Video stutter only in exported footage right after a photo overlay being fullscreen So, as the subject implies I have a strange problem where 100% of the time I will have video stutter on my exported footage right after a segment where I'm using a photo as overlay and this...
+  captured_at: '2026-07-22T17:17:09Z'
+  source_date: '2025-11-23'
+  target_release_date: '2025-10-15'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1on105c-planar-track-recent-slowdown
+  product_id: blackmagic-davinci
+  update_version: 20.2.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1on105c/planar_track_recent_slowdown/
+  parent_title: Planar Track Recent Slowdown
+  report_title: Planar Track Recent Slowdown
+  report_text_excerpt: Planar Track Recent Slowdown I have been using play track to stabilise aviation footage - it does a good job within its limitations. The speed of the tracking has been fine, until a few weeks ago where it has become slow. 15fps was normal. Now it starts at that for a few...
+  captured_at: '2026-07-22T17:17:09Z'
+  source_date: '2025-11-03'
+  target_release_date: '2025-10-15'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1oin9us-help-davinci-resolve-will-crash-when-tryi
+  product_id: blackmagic-davinci
+  update_version: 20.2.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1oin9us/help_davinci_resolve_will_crash_when_trying_to/
+  parent_title: Help! Davinci resolve will crash when trying to open any project, however when i create a project it will open then crash.
+  report_title: Help! Davinci resolve will crash when trying to open any project, however when i create a project it will open then crash.
+  report_text_excerpt: Help! Davinci resolve will crash when trying to open any project, however when i create a project it will open then crash. So i came home today ready to edit, only to find out that whenever i open a project in Davinci Resolve it wont load and will crash. I can however make a...
+  captured_at: '2026-07-22T17:17:09Z'
+  source_date: '2025-10-28'
+  target_release_date: '2025-10-15'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1v3gh9s-resolve-21-wont-render-if-my-timeline-con
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1v3gh9s/resolve_21_wont_render_if_my_timeline_contains_a/
+  parent_title: Resolve 21 won’t render if my timeline contains a Compound Clip (Apple M4 Pro)
+  report_title: Resolve 21 won’t render if my timeline contains a Compound Clip (Apple M4 Pro)
+  report_text_excerpt: Resolve 21 won’t render if my timeline contains a Compound Clip (Apple M4 Pro) Hi everyone! I’m new to Reddit, so thanks in advance for any help. I’m running DaVinci Resolve Studio 21 on a MacBook Pro with an Apple M4 Pro running macOS Tahoe 26.5. I’m having a strange problem....
+  captured_at: '2026-07-22T17:24:35Z'
+  source_date: '2026-07-22'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
