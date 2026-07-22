@@ -19,7 +19,7 @@ update_published_at: '2025-09-23T00:00:00Z'
 update_last_checked: '2026-07-21T14:44:45Z'
 source_last_checked: '2026-07-21T14:44:45Z'
 official_body_last_checked: '2026-07-21T14:44:45Z'
-record_last_updated: '2026-07-21T18:54:59.464924Z'
+record_last_updated: '2026-07-22T21:02:38.854621Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -27,23 +27,23 @@ update_status: current
 update_feed_title: DaVinci Resolve 20.2.1
 update_detail_title: DaVinci Resolve 20.2.1
 update_consensus_label: Negative
-update_report_count: 5
+update_report_count: 6
 update_consensus_confidence: Low
-quick_verdict: 'WAIT: DaVinci Resolve 20.2.1 has 5 user reports found.'
+quick_verdict: 'WAIT: DaVinci Resolve 20.2.1 has 6 user reports found.'
 official_summary: Blackmagic Design lists DaVinci Resolve Studio 20.2.1 in its official support downloads feed.
 release_summary: This software update adds more consistent ripple trimming behavior, better copy and paste behaviour
   of attributes, as well as improved track recognition for timeline source editing. This update also improves Apple
   ProRes RAW and Sony ARW clips. This version requires a DaVinci Resolve Studio license dongle, Blackmagic Cloud
   license or software activation code.
-consensus_report: '5 user reports found for DaVinci Resolve 20.2.1. Current reports mention startup or application
-  crashes and render/export failures. Current reports are Reddit-heavy, so production users should test before updating.
+consensus_report: '6 user reports found for DaVinci Resolve 20.2.1. Current reports mention render/export failures
+  and startup or application crashes. Current reports are Reddit-heavy, so production users should test before updating.
   Sources represented: r/davinciresolve.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
 official_source_captured: true
-confirmed_patch_specific_report_count: 5
-evidence_last_checked: '2026-07-21T18:52:17Z'
+confirmed_patch_specific_report_count: 6
+evidence_last_checked: '2026-07-22T20:59:26Z'
 known_issues_present: null
 consensus_collection_status: pilot_initial_sample
 consensus_match_policy: confirmed_patch_specific_reports_v1
@@ -65,6 +65,9 @@ status_events:
 - at: '2026-07-21T18:54:59.464924Z'
   label: User reports found
   note: User report count updated to 5.
+- at: '2026-07-22T21:02:38.854621Z'
+  label: User reports found
+  note: User report count updated to 6.
 official_patch_notes_source_type: download_portal
 primary_official_source: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
 fallback_official_sources:
@@ -116,19 +119,11 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'WAIT: DaVinci Resolve 20.2.1 has 5 user reports found. Small sample size. Current reports
-  mention startup or application crashes and render/export failures. Production editors with active export deadlines
+update_consensus_summary: 'WAIT: DaVinci Resolve 20.2.1 has 6 user reports found. Small sample size. Current reports
+  mention render/export failures and startup or application crashes. Production editors with active export deadlines
   should wait unless they need a specific fix. Current reports are Reddit-heavy, so production users should test
   before updating.'
 evidence_samples:
-- source_name: r/davinciresolve
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1noccl9/davinci_resolve_2021is_out/
-  source_title: DaVinci Resolve 20.2.1is out!
-  counted: true
-  version_matched: 20.2.1
-  patch_version_matched: true
-  issue: startup or application crashes in application stability
-  outcome: high
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1o2aeih/rtx_5080_davinci_resolve_freezing_renders_solved/
   source_title: 🧠 RTX 5080 + DaVinci Resolve = Freezing Renders — Solved (sort of)
@@ -137,6 +132,14 @@ evidence_samples:
   patch_version_matched: true
   issue: render/export failures
   outcome: medium
+- source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1noccl9/davinci_resolve_2021is_out/
+  source_title: DaVinci Resolve 20.2.1is out!
+  counted: true
+  version_matched: 20.2.1
+  patch_version_matched: true
+  issue: startup or application crashes in application stability
+  outcome: high
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1nsyjnm/one_specific_effect_makes_dvr_freak_out_for_some/
   source_title: One specific effect makes DVR freak out for some reason???
@@ -208,11 +211,20 @@ accepted_report_sources:
   patch_version_matched: true
   issue: startup or application crashes in application stability
   workflow_area: application stability
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1o8i6ul/text_blown_out_in_front_of_bright_areas/
+  source_title: Text blown out in front of bright areas
+  source_date: '2025-10-16'
+  version_matched: 20.2.1
+  patch_version_matched: true
+  issue: render/export failures
+  workflow_area: render/export
 evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
 - Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 update_decision_label: WAIT
-update_decision_body: Current reports mention startup or application crashes and render/export failures. Production
+update_decision_body: Current reports mention render/export failures and startup or application crashes. Production
   editors with active delivery deadlines should wait or test on copied projects.
 practical_recommendations:
 - Wait if you have active render/export deadlines.
