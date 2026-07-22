@@ -15,15 +15,30 @@ from lib.http import fetch_text
 from lib.normalize import strip_tags, normalize_date
 
 # Unlike parse-once adapters, this adapter fetches ONE HTTP page per discovered
-# article, so its network cost scales with how many links it inspects. The runner's
-# candidate scan window (patch_ingest.resolve_scan_limit) can be as wide as 200, so
-# the adapter enforces its OWN deterministic ceiling on article-detail requests that
-# does not depend on the caller's `limit`. Even if a caller passes limit=200, at most
-# ARTICLE_SCAN_CEILING article pages are fetched. Elgato release-note section pages
-# list a single product's notes, so a small ceiling still reaches the recent history
-# while skipping a few non-matching/help articles. Sources also set ingestion.scan_limit
-# (currently 8) to narrow the caller-supplied budget below this backstop.
+# article, so its network cost scales with how many links it inspects. Two mechanisms
+# bound and progress that cost:
+#
+# 1. BOUND (per run): the adapter enforces its OWN deterministic ceiling on article-
+#    detail requests, independent of the caller's `limit`. Even if a caller passes
+#    limit=200, at most ARTICLE_SCAN_CEILING article pages are fetched per run. Sources
+#    also set ingestion.scan_limit (currently 8) to narrow the budget below this backstop.
+#
+# 2. PROGRESS (across runs): link DISCOVERY is cheap (regex over the already-fetched
+#    section page, no HTTP), so the adapter discovers ALL current article links, then
+#    spends its bounded detail-request budget only on links it has NOT already inspected,
+#    tracked in a persisted per-source ledger (state["sources"][pid]["scan"]["inspected"]).
+#    Successive runs therefore sweep forward across the whole section instead of forever
+#    re-fetching the same prefix (which starves any match beyond the budget). Already-
+#    inspected links (including already-ingested and non-matching ones) do not re-consume
+#    the budget until the sweep completes and resets. A brand-new link at the front is
+#    un-inspected, so it is picked up on the very next run. The ledger is keyed by URL, so
+#    section reordering neither starves nor duplicates. When every current link has been
+#    inspected the ledger resets for a fresh sweep (re-verifying content, bounded per run).
 ARTICLE_SCAN_CEILING = 12
+
+# Cap on links DISCOVERED from the section page per run (no HTTP — regex only). Bounds the
+# inspected-URL ledger size; Elgato release-note sections list far fewer than this.
+MAX_DISCOVERED_LINKS = 200
 
 ARTICLE_PATH = "/hc/en-us/articles/"
 ARTICLE_BODY_RE = re.compile(
@@ -202,7 +217,24 @@ def _emit_diagnostics(source: dict, **counts: object) -> None:
     print(f"[elgato_help_center] product={source.get('product_id')} {fields}", file=sys.stderr)
 
 
-def fetch(source: dict, limit: int = 3) -> list[dict]:
+def _select_uninspected(links: list[str], inspected: list[str], budget: int) -> tuple[list[str], bool, int]:
+    """Choose up to ``budget`` links not yet in ``inspected`` (document order = newest first).
+
+    Returns ``(selection, wrapped, pool_size)`` where ``pool_size`` is the number of links
+    eligible this run. If every current link has already been inspected, the sweep is
+    complete: reset (``wrapped=True``) and select from the top so content is periodically
+    re-verified and the budget is never wasted idling. Bounds hold either way.
+    """
+    inspected_set = set(inspected)
+    uninspected = [url for url in links if url not in inspected_set]
+    wrapped = False
+    if links and not uninspected:
+        uninspected = list(links)
+        wrapped = True
+    return uninspected[:budget], wrapped, len(uninspected)
+
+
+def fetch(source: dict, limit: int = 3, scan_state: dict | None = None) -> list[dict]:
     ingestion = source.get("ingestion", {}) or {}
     section_url = ingestion["official_url"]
 
@@ -213,22 +245,31 @@ def fetch(source: dict, limit: int = 3) -> list[dict]:
     # One section-page request. A failure here propagates so the source is booked as
     # failing (transport error), unlike per-article failures which are isolated below.
     section = fetch_text(section_url, **_fetch_options(source)).text
-    links = _article_links(section_url, section, article_budget)
+    # Cheap discovery: ALL current valid, deduped article links in document order (no HTTP).
+    links = _article_links(section_url, section, MAX_DISCOVERED_LINKS)
+
+    # Spend the bounded detail-request budget on not-yet-inspected links so successive runs
+    # sweep forward instead of re-fetching the same prefix. The ledger is keyed by URL.
+    ledger = scan_state if isinstance(scan_state, dict) else {}
+    inspected = list(ledger.get("inspected", []))
+    selection, wrapped, pool_size = _select_uninspected(links, inspected, article_budget)
 
     records: list[dict] = []
     articles_fetched = 0
     request_failures = 0
     parser_misses = 0
     nonmatches = 0
-    for article_url in links:
+    newly_inspected: list[str] = []
+    for article_url in selection:
         if articles_fetched >= article_budget:
             break  # explicit request ceiling — never one fetch per discovered anchor
         try:
             html = fetch_text(article_url, **_fetch_options(source)).text
         except Exception:
             request_failures += 1
-            continue
+            continue  # transport failure: NOT marked inspected -> retried next run
         articles_fetched += 1
+        newly_inspected.append(article_url)
         title = _title_from_html(html)
         body = _body_from_html(html)
         if not title or not _product_matches(source, title, body):
@@ -240,17 +281,36 @@ def fetch(source: dict, limit: int = 3) -> list[dict]:
             continue
         records.append(_record(source, article_url, title, version, _date_from_html(html), body))
 
-    ceiling_reached = len(links) >= article_budget
+    # STAGE the ledger advance under "pending_inspected"; the runner promotes it to
+    # "inspected" only when the whole run succeeds (records written + state persisted).
+    # A failed run therefore never advances the committed ledger, so its window is
+    # re-fetched deterministically on restart (no candidate is skipped by a failure).
+    # Most-recent-first, deduped, bounded. On a wrap the sweep restarts from just this
+    # run's URLs. Only successfully-fetched URLs are recorded (request failures retry).
+    if isinstance(scan_state, dict):
+        base = [] if wrapped else inspected
+        merged: list[str] = []
+        seen_urls: set[str] = set()
+        for url in newly_inspected + base:
+            if url not in seen_urls:
+                seen_urls.add(url)
+                merged.append(url)
+        scan_state["pending_inspected"] = merged[:MAX_DISCOVERED_LINKS]
+
     _emit_diagnostics(
         source,
         article_budget=article_budget,
         links_found=len(links),
+        candidate_pool=pool_size,
+        selected=len(selection),
         articles_fetched=articles_fetched,
         accepted=len(records),
-        ceiling_reached=ceiling_reached,
+        ceiling_reached=(pool_size > article_budget),
+        swept_reset=wrapped,
         no_matching_articles=(len(records) == 0),
         request_failures=request_failures,
         parser_misses=parser_misses,
         nonmatches=nonmatches,
+        inspected_ledger=len(scan_state.get("pending_inspected", [])) if isinstance(scan_state, dict) else 0,
     )
     return records

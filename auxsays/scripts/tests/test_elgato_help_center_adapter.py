@@ -3,7 +3,9 @@
 from __future__ import annotations
 
 import io
+import re
 import sys
+import tempfile
 import traceback
 from contextlib import redirect_stderr
 from pathlib import Path
@@ -13,6 +15,113 @@ _REPO = Path(__file__).resolve().parents[3]
 sys.path.insert(0, str(_REPO / "auxsays" / "scripts"))
 
 from adapters import elgato_help_center as elgato
+import patch_ingest
+
+
+# ---- progressive-backfill harness (Parts B/D/E/F) ---------------------------
+# Runs the real patch_ingest.run_source (production-equivalent: seen-gating, the
+# per-source scan ledger, atomic promote) against a mocked section + article pages,
+# with a request counter, so we can prove the sweep advances across runs.
+PROG_SECTION_URL = "https://help.elgato.com/hc/en-us/sections/9000-Elgato-Stream-Deck-Software-Release-Notes"
+
+
+def prog_source(scan_limit: int = 8) -> dict:
+    return {
+        "company_id": "elgato", "product_id": "elgato-stream-deck", "company": "Elgato",
+        "software": "Stream Deck", "public_category": "Streaming Tools",
+        "ingestion": {
+            "adapter": "elgato_help_center", "type": "help_center_release_notes",
+            "official_url": PROG_SECTION_URL,
+            "version_pattern": r"^Elgato Stream Deck (?P<version>[0-9]+(\.[0-9]+)+).*$",
+            "scan_limit": scan_limit,
+        },
+    }
+
+
+def prog_url(i: int) -> str:
+    return f"https://help.elgato.com/hc/en-us/articles/{9000 + i}-item-{i}-Release-Notes"
+
+
+def _match_html(i: int) -> str:
+    return (f'<html><head><title>Elgato Stream Deck 7.{i}.0 Release Notes | Elgato</title></head>'
+            f'<body><article><h1>Elgato Stream Deck 7.{i}.0 Release Notes</h1>'
+            f'<div class="article-body">Stream Deck 7.{i}.0 notes.</div></article></body></html>')
+
+
+_NONMATCH_HTML = ('<html><head><title>Help | Elgato</title></head>'
+                  '<body><article><h1>How to</h1><div class="article-body">general help</div></article></body></html>')
+
+
+def prog_responses(url_list: list[str], match_urls: set[str]) -> dict[str, str]:
+    section = "<html><body>" + "".join(f'<a href="{u}">a</a>' for u in url_list) + "</body></html>"
+    resp = {elgato._clean_url(PROG_SECTION_URL): section}
+    for u in url_list:
+        idx = int(re.search(r"/articles/(\d+)", u).group(1)) - 9000
+        resp[elgato._clean_url(u)] = _match_html(idx) if u in match_urls else _NONMATCH_HTML
+    return resp
+
+
+def prog_run(src: dict, responses: dict, state: dict, output_dir: Path, *,
+             fail_url: str | None = None, fail_write_call: int | None = None) -> dict:
+    """One production-equivalent run_source with a counting mock. Returns per-run data."""
+    reqs: list[str] = []
+    original_fetch = elgato.fetch_text
+    original_write = patch_ingest.write_record
+
+    def counting_fetch(url, **_kwargs):
+        clean = elgato._clean_url(url)
+        reqs.append(clean)
+        if fail_url and clean == fail_url:
+            raise TimeoutError("simulated transport failure")
+        if clean not in responses:
+            raise KeyError(clean)
+        return SimpleNamespace(text=responses[clean])
+
+    if fail_write_call is not None:
+        wc = {"n": 0}
+
+        def failing_write(output, record, overwrite_existing=False):
+            wc["n"] += 1
+            if wc["n"] == fail_write_call:
+                raise RuntimeError("simulated write failure")
+            return original_write(output, record, overwrite_existing=overwrite_existing)
+
+    args = SimpleNamespace(limit=2, output=output_dir, overwrite_existing=False)
+    buf = io.StringIO()
+    raised = None
+    try:
+        elgato.fetch_text = counting_fetch
+        if fail_write_call is not None:
+            patch_ingest.write_record = failing_write
+        with redirect_stderr(buf):
+            try:
+                result = patch_ingest.run_source(src, args, state)
+            except Exception as exc:  # capture write-failure for assertions
+                result = None
+                raised = exc
+    finally:
+        elgato.fetch_text = original_fetch
+        patch_ingest.write_record = original_write
+    detail = [u for u in reqs if "/articles/" in u]
+    scan = state.get("sources", {}).get("elgato-stream-deck", {}).get("scan", {})
+    return {
+        "http": len(reqs), "section_reqs": len(reqs) - len(detail), "detail_reqs": detail,
+        "result": result, "raised": raised, "stderr": buf.getvalue(),
+        "created": (result or {}).get("created"), "skipped_existing": (result or {}).get("skipped_existing"),
+        "deferred": (result or {}).get("deferred_count"),
+        "committed_ledger": list(scan.get("inspected", [])),
+        "pending_ledger": list(scan.get("pending_inspected", [])),
+        "seen": list(state.get("sources", {}).get("elgato-stream-deck", {}).get("seen", [])),
+    }
+
+
+def prog_ingested(output_dir: Path) -> set:
+    got = set()
+    for path in output_dir.glob("*.md"):
+        match = re.search(r"7\.(\d+)\.0", path.read_text(encoding="utf-8"))
+        if match:
+            got.add(int(match.group(1)))
+    return got
 
 _PASS = 0
 _FAIL = 0
@@ -268,6 +377,104 @@ def run() -> int:
     check("parser/version miss counted honestly in diagnostics (parser_misses=1)", "parser_misses=1" in d_nv, d_nv)
     r_dom, _t, _p, _d = run_fetch(sd, 8, f'<html><body><a href="{sd_url(0)}">a</a></body></html>', {sd_url(0): "<html><body></body></html>"})
     check("empty/garbage article DOM yields NO fabricated record", r_dom == [], str(r_dom))
+
+    # === Part B: progressive-backfill reproduction — NO fixed-prefix starvation ====
+    # 40 links; product-matching, version-valid articles at positions 2,6,9,14,21,33.
+    positions = [2, 6, 9, 14, 21, 33]
+    urls40 = [prog_url(i) for i in range(40)]
+    match40 = {urls40[p] for p in positions}
+    resp40 = prog_responses(urls40, match40)
+    with tempfile.TemporaryDirectory() as td:
+        out = Path(td) / "gen"
+        out.mkdir(parents=True)
+        state = {"schema_version": 1, "sources": {}, "seen": {}}
+        runs = [prog_run(prog_source(8), resp40, state, out) for _ in range(6)]
+        ingested = prog_ingested(out)
+        check("Part B: ALL 6 matching positions ingested (not just the first-window 2 and 6)", ingested == set(positions), str(sorted(ingested)))
+        check("Part B: previously-starved positions 9/14/21/33 are now reached", {9, 14, 21, 33} <= ingested, str(sorted(ingested)))
+        check("Part B: every run is bounded to 1 section + <=8 detail requests", all(r["section_reqs"] == 1 and len(r["detail_reqs"]) <= 8 for r in runs), str([(r["section_reqs"], len(r["detail_reqs"])) for r in runs]))
+        check("Part B: run 2 requests DIFFERENT URLs than run 1 (sweep advances; no permanent prefix)", set(runs[0]["detail_reqs"]).isdisjoint(runs[1]["detail_reqs"]), str((sorted(runs[0]["detail_reqs"]), sorted(runs[1]["detail_reqs"]))))
+        check("Part B: no eligible article remains unreachable", (set(positions) - ingested) == set(), str(sorted(set(positions) - ingested)))
+        check("Part B: converges — a later run once swept creates 0 new records", runs[-1]["created"] == 0, str(runs[-1]["created"]))
+        check("Part B: no duplicate generated files", len(list(out.glob("*.md"))) == len(ingested), str(len(list(out.glob("*.md")))))
+
+    # Part F: max requests/run and max successful runs to inspect all 40 links
+    with tempfile.TemporaryDirectory() as td:
+        out = Path(td) / "gen"
+        out.mkdir(parents=True)
+        state = {"schema_version": 1, "sources": {}, "seen": {}}
+        covered: set = set()
+        n_runs = 0
+        max_http = 0
+        while len(covered) < 40 and n_runs < 12:
+            r = prog_run(prog_source(8), resp40, state, out)
+            n_runs += 1
+            covered |= set(r["detail_reqs"])
+            max_http = max(max_http, r["http"])
+        check("Part F: all 40 links inspected within ceil(40/8)=5 successful runs", n_runs <= 5 and len(covered) == 40, f"runs={n_runs} covered={len(covered)}")
+        check("Part F: max HTTP requests per run is 1 section + 8 details = 9", max_http == 9, str(max_http))
+        check("Part F: caller limit=200 still cannot bypass the ceiling (<=1+ceiling)", (lambda rr: rr["http"] <= 1 + elgato.ARTICLE_SCAN_CEILING)(prog_run({**prog_source(8), "ingestion": {**prog_source(8)["ingestion"], "scan_limit": 200}}, resp40, {"schema_version": 1, "sources": {}, "seen": {}}, out)), "limit=200 bounded")
+
+    # === Part D: a new front-inserted article is discovered within a bounded #runs ==
+    with tempfile.TemporaryDirectory() as td:
+        out = Path(td) / "gen"
+        out.mkdir(parents=True)
+        state = {"schema_version": 1, "sources": {}, "seen": {}}
+        for _ in range(6):  # sweep the whole 40-link section first
+            prog_run(prog_source(8), resp40, state, out)
+        before = prog_ingested(out)
+        new_url = prog_url(999)  # brand-new matching article -> version 7.999.0
+        urls41 = [new_url] + urls40
+        resp41 = prog_responses(urls41, set(match40) | {new_url})
+        discovered = None
+        for k in range(1, 4):
+            prog_run(prog_source(8), resp41, state, out)
+            if 999 in prog_ingested(out):
+                discovered = k
+                break
+        check("Part D: a new front article is discovered within a bounded number of runs (<=2)", discovered is not None and discovered <= 2, str(discovered))
+        check("Part D: older already-ingested candidates remain (no cursor reset replaying the window)", before <= prog_ingested(out), str(sorted(prog_ingested(out))))
+        check("Part D: no duplicate files after front insertion", len(list(out.glob("*.md"))) == len(prog_ingested(out)), str(len(list(out.glob("*.md")))))
+
+    # === Part E: failure semantics ==============================================
+    # (a) a detail-request (transport) failure does NOT advance the ledger -> retried next run
+    with tempfile.TemporaryDirectory() as td:
+        out = Path(td) / "gen"
+        out.mkdir(parents=True)
+        state = {"schema_version": 1, "sources": {}, "seen": {}}
+        fail = elgato._clean_url(urls40[2])
+        r1 = prog_run(prog_source(8), resp40, state, out, fail_url=fail)
+        check("Part E(a): a transport-failed URL is NOT recorded in the committed ledger (retryable)", fail not in r1["committed_ledger"], str(fail in r1["committed_ledger"]))
+        check("Part E(a): the failed article is not ingested on the failing run", 2 not in prog_ingested(out), str(sorted(prog_ingested(out))))
+        prog_run(prog_source(8), resp40, state, out)  # next run, no failure
+        check("Part E(a): the failed URL is retried and ingested on the next run", 2 in prog_ingested(out), str(sorted(prog_ingested(out))))
+
+    # (b) a record-write failure does NOT advance successful-ingestion state; deterministic restart
+    with tempfile.TemporaryDirectory() as td:
+        out = Path(td) / "gen"
+        out.mkdir(parents=True)
+        state = {"schema_version": 1, "sources": {}, "seen": {}}
+        r1 = prog_run(prog_source(8), resp40, state, out, fail_write_call=1)  # first record write raises
+        check("Part E(b): a record-write failure propagates out of run_source", isinstance(r1["raised"], RuntimeError))
+        check("Part E(b): write failure does not advance `seen` ingestion state", r1["seen"] == [], str(r1["seen"]))
+        check("Part E(b): write failure does not promote the scan ledger (stays uncommitted)", r1["committed_ledger"] == [], str(r1["committed_ledger"]))
+        r2 = prog_run(prog_source(8), resp40, state, out)  # deterministic restart, no failure
+        check("Part E(b): restart re-processes the same window and ingests the records (no loss)", {2, 6} <= prog_ingested(out), str(sorted(prog_ingested(out))))
+        check("Part E(b): restart creates no duplicate files", len(list(out.glob("*.md"))) == len(prog_ingested(out)), str(len(list(out.glob("*.md")))))
+
+    # (c) section reordering does not create duplicates or permanent starvation
+    with tempfile.TemporaryDirectory() as td:
+        out = Path(td) / "gen"
+        out.mkdir(parents=True)
+        state = {"schema_version": 1, "sources": {}, "seen": {}}
+        prog_run(prog_source(8), resp40, state, out)  # run 1 on original order
+        reordered = list(reversed(urls40))            # section fully reordered
+        resp_rev = prog_responses(reordered, match40)
+        for _ in range(6):
+            prog_run(prog_source(8), resp_rev, state, out)
+        ing = prog_ingested(out)
+        check("Part E(c): reordering still reaches every matching article (URL-keyed, no starvation)", ing == set(positions), str(sorted(ing)))
+        check("Part E(c): reordering creates no duplicate files (identity by product+version)", len(list(out.glob("*.md"))) == len(ing), str(len(list(out.glob("*.md")))))
 
     print()
     print("=" * 60)

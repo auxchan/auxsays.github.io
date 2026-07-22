@@ -14,7 +14,9 @@ This is official-source ingestion only. Confirmed patch-specific consensus is in
 from __future__ import annotations
 
 import argparse
+import copy
 import importlib
+import inspect
 import json
 import sys
 import time
@@ -30,7 +32,7 @@ if str(SCRIPT_DIR) not in sys.path:
 
 from lib.http import fetch_text
 from lib.normalize import strip_tags, utc_now
-from lib.state import load_state, save_state, is_seen, mark_seen, update_source_success, update_source_error, SEEN_RETENTION
+from lib.state import load_state, save_state, is_seen, mark_seen, update_source_success, update_source_error, source_state, SEEN_RETENTION
 from lib.write_update_record import refresh_existing_record, write_record
 
 DEFAULT_CONFIG = Path("auxsays/_data/patch_ingestion_sources.yml")
@@ -232,6 +234,33 @@ def resolve_scan_limit(source: dict[str, Any], args: argparse.Namespace) -> int:
     return value
 
 
+def _adapter_fetch(module: Any, source: dict[str, Any], limit: int, state: dict[str, Any], product_id: str, *, write: bool) -> list[dict[str, Any]]:
+    """Call ``module.fetch``, giving adapters that sweep detail requests across runs a
+    persisted per-source scan-progress dict.
+
+    Adapters whose ``fetch`` accepts a ``scan_state`` parameter (currently the
+    per-article help-center adapter) receive ``state["sources"][product_id]["scan"]`` —
+    a bounded ledger they use to advance across candidates each run instead of forever
+    re-fetching the same prefix. The ledger lives inside the ingestion state, so it is
+    committed atomically with the generated records and the ``seen`` ledger, and a run
+    that never commits never advances it. Adapters without the parameter are called
+    exactly as before. In a dry-run a deep copy is passed, so no progression state is
+    mutated while a dry-run still reports the same candidate selection as production.
+    """
+    fetch = module.fetch
+    try:
+        accepts_scan_state = "scan_state" in inspect.signature(fetch).parameters
+    except (TypeError, ValueError):
+        accepts_scan_state = False
+    if not accepts_scan_state:
+        return fetch(source, limit=limit)
+    if write:
+        scan_state = source_state(state, product_id).setdefault("scan", {})
+    else:
+        scan_state = copy.deepcopy((source_state(state, product_id).get("scan") or {}))
+    return fetch(source, limit=limit, scan_state=scan_state)
+
+
 def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str, Any], *, write: bool = True) -> dict[str, Any]:
     product_id = source["product_id"]
     adapter_name = source.get("ingestion", {}).get("adapter") or source.get("ingestion", {}).get("type")
@@ -243,7 +272,7 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
     module = adapter_module(adapter_name)
     per_run_limit = resolve_record_limit(source, args)
     scan_limit = resolve_scan_limit(source, args)
-    records = module.fetch(source, limit=scan_limit)
+    records = _adapter_fetch(module, source, scan_limit, state, product_id, write=write)
     candidate_count = len(records)
     written = []
     skipped = []
@@ -305,6 +334,13 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
 
     duration_ms = int((time.monotonic() - started) * 1000)
     if write:
+        # Reaching here means the per-source fetch/write loop completed without raising.
+        # Promote any staged adapter scan-progression (e.g. the help-center inspected-URL
+        # ledger) to its committed key, so a run that failed mid-loop never advances it and
+        # its candidate window is re-processed deterministically on the next run.
+        scan = source_state(state, product_id).get("scan")
+        if isinstance(scan, dict) and "pending_inspected" in scan:
+            scan["inspected"] = scan.pop("pending_inspected")
         update_source_success(
             state,
             product_id,
