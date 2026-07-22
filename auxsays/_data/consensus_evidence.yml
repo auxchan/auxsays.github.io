@@ -6945,3 +6945,188 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: acrobat-21-005-20058-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-keeps-crashing-immediately-upon-opening-1283981
+  product_id: adobe-acrobat-pro
+  update_version: 21.005.20058
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-keeps-crashing-immediately-upon-opening-1283981
+  parent_title: Acrobat keeps crashing immediately upon opening
+  report_title: Acrobat keeps crashing immediately upon opening
+  report_text_excerpt: Acrobat keeps crashing immediately upon opening Can anyone help? I have uninstalled and reinstalled multiple times from Creative Cloud, but when I try to open Acrobat on my Mac, it immediately crashes and gives me the following error information:...
+  captured_at: '2026-07-22T06:40:47Z'
+  source_date: '2023-07-24'
+  target_release_date: '2021-07-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.005.20058
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-21-005-20058-adobe-community-bug-report-https-community-adobe-com-questions-9-unable-to-get-new-comments-on-pdfs-shared-for-review-hoste
+  product_id: adobe-acrobat-pro
+  update_version: 21.005.20058
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/unable-to-get-new-comments-on-pdfs-shared-for-review-hosted-on-sharepoint-1288217
+  parent_title: Unable to get new comments on PDFs shared for review hosted on SharePoint
+  report_title: Unable to get new comments on PDFs shared for review hosted on SharePoint
+  report_text_excerpt: 'Unable to get new comments on PDFs shared for review hosted on SharePoint Problem : Comments don’t sync for shared PDFs hosted on SharePoint sites On macOS, when you share a PDF for review by hosting it on SharePoint, the comments don''t sync. Solution: Delete the SharePoint...'
+  captured_at: '2026-07-22T06:40:47Z'
+  source_date: '2023-12-04'
+  target_release_date: '2021-07-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.005.20058
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-21-005-20058-adobe-community-bug-report-https-community-adobe-com-questions-9-can-t-install-acrobat-pro-1261603
+  product_id: adobe-acrobat-pro
+  update_version: 21.005.20058
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/can-t-install-acrobat-pro-1261603
+  parent_title: Can't install acrobat pro
+  report_title: Can't install acrobat pro
+  report_text_excerpt: Can't install acrobat pro After buying a new computer because After Effects suddenly refused to work on the old one, I find I can't install Acrobat Pro on the new machine. Trying to install from the CC desktop app. Everything else installed fine. Acrobat Pro installs to about...
+  captured_at: '2026-07-22T06:40:47Z'
+  source_date: '2021-07-15'
+  target_release_date: '2021-07-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.005.20058
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-21-005-20058-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-reader-freeze-white-bar-when-open-e-pdf-document-on
+  product_id: adobe-acrobat-reader
+  update_version: 21.005.20058
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-reader-freeze-white-bar-when-open-e-pdf-document-on-win-srv-2016-terminalserver-user-session-1524098
+  parent_title: Adobe Reader Freeze - White Bar when open e PDF Document on Win SRV 2016 Terminalserver User Session
+  report_title: Adobe Reader Freeze - White Bar when open e PDF Document on Win SRV 2016 Terminalserver User Session
+  report_text_excerpt: 'Adobe Reader Freeze - White Bar when open e PDF Document on Win SRV 2016 Terminalserver User Session Infrastructure information: - Windows Server 2016 1607 (Build 14393.4530) - Used as a terminal server - Adobe Acrobat Reader DC with version "21.005.20058" used Problem...'
+  captured_at: '2026-07-22T06:47:30Z'
+  source_date: '2021-07-28'
+  target_release_date: '2021-07-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.005.20058
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: form behavior regression
+  workflow_area: forms
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-21-005-20060-adobe-community-bug-report-https-community-adobe-com-questions-12-error-encountered-while-ber-decoding-digital-signatures-1
+  product_id: adobe-acrobat-reader
+  update_version: 21.005.20060
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/error-encountered-while-ber-decoding-digital-signatures-1504325
+  parent_title: Error encountered while BER decoding Digital Signatures
+  report_title: Error encountered while BER decoding Digital Signatures
+  report_text_excerpt: 'Error encountered while BER decoding Digital Signatures Hello, I am facing the issue with signing PDF document with Adobre Acrobat Reader DC version: 21.005.20060 This is the error I am getting: Error during signature verification. Error encountered while BER decoding: When I...'
+  captured_at: '2026-07-22T06:47:30Z'
+  source_date: '2021-08-15'
+  target_release_date: '2021-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.005.20060
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-21-005-20060-adobe-community-bug-report-https-community-adobe-com-questions-12-server2016-rds-farm-21-007-20091-update-error-1524348
+  product_id: adobe-acrobat-reader
+  update_version: 21.005.20060
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/server2016-rds-farm-21-007-20091-update-error-1524348
+  parent_title: Server2016 RDS farm 21.007.20091 update error
+  report_title: Server2016 RDS farm 21.007.20091 update error
+  report_text_excerpt: Server2016 RDS farm 21.007.20091 update error Since the 14th September we have had the following issues after Adobe Reader tried to update itself from 21.005.20060 to 21.007.20091 Server 2016 RDS farm. We get a bit of a mixture of things happening. When opening from the start...
+  captured_at: '2026-07-22T06:47:30Z'
+  source_date: '2021-09-16'
+  target_release_date: '2021-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.005.20060
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: form behavior regression
+  workflow_area: forms
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-21-005-20060-adobe-community-bug-report-https-community-adobe-com-questions-12-disable-online-comments-feature-in-adobe-acrobat-reader-d
+  product_id: adobe-acrobat-reader
+  update_version: 21.005.20060
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/disable-online-comments-feature-in-adobe-acrobat-reader-dc-1524292
+  parent_title: Disable Online Comments feature in Adobe Acrobat Reader DC
+  report_title: Disable Online Comments feature in Adobe Acrobat Reader DC
+  report_text_excerpt: 'Disable Online Comments feature in Adobe Acrobat Reader DC Hi Adobe Team, Can you provide permanent solution to disabled or stop the comment option in adobe reader, due to this features adobe is getting hang and not responding. Product name : Adobe ACrobat Reader DC MUI...'
+  captured_at: '2026-07-22T06:47:30Z'
+  source_date: '2021-09-05'
+  target_release_date: '2021-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.005.20060
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
