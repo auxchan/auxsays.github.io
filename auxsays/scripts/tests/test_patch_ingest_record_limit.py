@@ -96,10 +96,16 @@ def run() -> int:
     check("config: microsoft-teams has NO record_limit (regression guard)", "record_limit" not in (teams.get("ingestion") or {}), str((teams.get("ingestion") or {}).get("record_limit")))
     check("config: microsoft-teams falls back to global limit (2)", resolve(teams, args(2)) == 2, str(resolve(teams, args(2))))
 
-    # --- no other source unexpectedly grew a record_limit -------------------
+    # --- only the two intentional sources declare a record_limit ------------
+    # microsoft-windows-11 (release-health page lists several current servicing versions)
+    # and adobe-photoshop (bounded backfill for the dedicated, staged Photoshop adapter).
     rows = yaml.safe_load(_CONFIG.read_text(encoding="utf-8"))
     with_override = [r.get("product_id") for r in rows if isinstance(r.get("ingestion"), dict) and "record_limit" in r["ingestion"]]
-    check("only microsoft-windows-11 sets a record_limit in the whole config", with_override == ["microsoft-windows-11"], str(with_override))
+    check("only microsoft-windows-11 and adobe-photoshop set a record_limit in the whole config",
+          set(with_override) == {"microsoft-windows-11", "adobe-photoshop"} and len(with_override) == 2,
+          str(with_override))
+    ps_cfg = load_config_source("adobe-photoshop")
+    check("config: adobe-photoshop declares a bounded record_limit (3)", (ps_cfg.get("ingestion") or {}).get("record_limit") == 3, str((ps_cfg.get("ingestion") or {}).get("record_limit")))
 
     # === progressive backfill: a per-run limit must ADVANCE, not repeat the newest N =====
     # A source with more history than the per-run limit must be ingested across scheduled runs
@@ -183,7 +189,15 @@ def run() -> int:
     check("config: 4 enabled Elgato sources use the help-center adapter", len(elgato_rows) == 4, str(len(elgato_rows)))
     check("config: every Elgato source declares scan_limit 8", all((r.get("ingestion") or {}).get("scan_limit") == 8 for r in elgato_rows), str([(r.get("product_id"), (r.get("ingestion") or {}).get("scan_limit")) for r in elgato_rows]))
     check("config: Elgato scan_limit resolves to 8 even under the global 200 backfill default", all(rscan(r, args(2)) == 8 for r in elgato_rows))
-    check("config: no non-Elgato source silently gained a scan_limit", [r.get("product_id") for r in rows if "scan_limit" in (r.get("ingestion") or {})] == [r.get("product_id") for r in elgato_rows], str([r.get("product_id") for r in rows if "scan_limit" in (r.get("ingestion") or {})]))
+    # The 4 Elgato help-center sources plus the single staged adobe-photoshop source are the
+    # ONLY sources that declare a scan_limit; nothing else silently gained one.
+    with_scan = [r.get("product_id") for r in rows if "scan_limit" in (r.get("ingestion") or {})]
+    check("only the Elgato sources and adobe-photoshop declare a scan_limit",
+          set(with_scan) == {r.get("product_id") for r in elgato_rows} | {"adobe-photoshop"}
+          and len(with_scan) == len(elgato_rows) + 1,
+          str(with_scan))
+    check("config: adobe-photoshop scan_limit (25) resolves within [record_limit, SEEN_RETENTION]",
+          rscan(load_config_source("adobe-photoshop"), args(2)) == 25, str(rscan(load_config_source("adobe-photoshop"), args(2))))
 
     # === seen-history retention alignment (Part D) ================================
     # 8. retention covers the full default scan window

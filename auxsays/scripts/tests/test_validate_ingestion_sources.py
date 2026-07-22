@@ -101,6 +101,34 @@ def run() -> int:
     # --- integration: the real, shipped config still validates cleanly -------
     check("real patch_ingestion_sources.yml passes full validation (exit 0)", vis.validate(_CONFIG) == 0)
 
+    # --- integration: Adobe Photoshop source is correctly wired --------------
+    import importlib
+    import yaml
+    entries = yaml.safe_load(_CONFIG.read_text(encoding="utf-8"))
+    ps = next((e for e in entries if e.get("product_id") == "adobe-photoshop"), None)
+    check("adobe-photoshop entry exists", ps is not None)
+    if ps is not None:
+        ing = ps.get("ingestion", {}) or {}
+        check("adobe-photoshop uses the dedicated adobe_photoshop adapter (not the Premiere one)",
+              ing.get("adapter") == "adobe_photoshop", str(ing.get("adapter")))
+        check("adobe-photoshop stays disabled (activation gated on CI source reachability)",
+              ps.get("enabled") is False, str(ps.get("enabled")))
+        check("adobe-photoshop declares a bounded record_limit/scan_limit within the seen window",
+              isinstance(ing.get("record_limit"), int) and isinstance(ing.get("scan_limit"), int)
+              and 0 < ing["record_limit"] <= ing["scan_limit"] <= vis.SEEN_RETENTION,
+              str({"record_limit": ing.get("record_limit"), "scan_limit": ing.get("scan_limit")}))
+        check("adobe-photoshop official_url targets the official Adobe HelpX desktop page",
+              str(ing.get("official_url", "")).startswith("https://helpx.adobe.com/photoshop/"),
+              str(ing.get("official_url")))
+        check("adobe-photoshop source_health_note records the CI-unreachable / staged state",
+              "not reachable" in str(ps.get("source_health_note", "")).lower(),
+              str(ps.get("source_health_note", ""))[:80])
+        mod = importlib.import_module("adapters.adobe_photoshop")
+        check("adobe_photoshop adapter module imports and exposes fetch()",
+              callable(getattr(mod, "fetch", None)))
+        check("adobe_photoshop adapter is inert for a non-Photoshop product id",
+              mod.fetch({"product_id": "obs-studio", "ingestion": {}}, 3) == [])
+
     print()
     print("=" * 60)
     total = _PASS + _FAIL
