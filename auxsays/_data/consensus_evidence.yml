@@ -7942,3 +7942,52 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-20-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1o1qqm4-help-with-using-deltakeyer-while-invertin
+  product_id: blackmagic-davinci
+  update_version: '20.2'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1o1qqm4/help_with_using_deltakeyer_while_inverting_colors/
+  parent_title: Help with using Delta-keyer while inverting colors
+  report_title: Help with using Delta-keyer while inverting colors
+  report_text_excerpt: Help with using Delta-keyer while inverting colors So I have been using the Delta-keyer tool from the fusion page on this green screen footage that I then invert color-wise using the aptly titled "invert color" effect on the edit page. For the most part it gets the job done...
+  captured_at: '2026-07-22T18:47:10Z'
+  source_date: '2025-10-08'
+  target_release_date: '2025-09-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.2'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ng34zf-premiere-user-looking-for-workflow-in-dav
+  product_id: blackmagic-davinci
+  update_version: '20.2'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ng34zf/premiere_user_looking_for_workflow_in_davinci/
+  parent_title: Premiere user looking for workflow in Davinci advice
+  report_title: Premiere user looking for workflow in Davinci advice
+  report_text_excerpt: Premiere user looking for workflow in Davinci advice I moved off Adobe Premiere short while ago and picked up Davinci. It's doing the job but I feel like I am missing something when using it. My habits are mostly Premiere based. So I'd like to describe what I do and maybe...
+  captured_at: '2026-07-22T18:47:10Z'
+  source_date: '2025-09-13'
+  target_release_date: '2025-09-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.2'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1

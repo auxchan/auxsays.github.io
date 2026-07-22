@@ -19,7 +19,7 @@ update_published_at: '2025-09-10T00:00:00Z'
 update_last_checked: '2026-07-21T19:55:13Z'
 source_last_checked: '2026-07-21T19:55:13Z'
 official_body_last_checked: '2026-07-21T19:55:13Z'
-record_last_updated: '2026-07-22T10:16:12.753964Z'
+record_last_updated: '2026-07-22T18:48:47.977277Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -27,24 +27,24 @@ update_status: current
 update_feed_title: DaVinci Resolve 20.2
 update_detail_title: DaVinci Resolve 20.2
 update_consensus_label: Negative
-update_report_count: 10
+update_report_count: 12
 update_consensus_confidence: Low-Medium
-quick_verdict: 'WAIT: DaVinci Resolve 20.2 has 10 user reports found.'
+quick_verdict: 'WAIT: DaVinci Resolve 20.2 has 12 user reports found.'
 official_summary: Blackmagic Design lists DaVinci Resolve Studio 20.2 in its official support downloads feed.
 release_summary: This software update adds support for immersive EXR workflows and streaming immersive content from
   Fusion directly into Apple Vision Pro. In addition, there is improved track patching and ripple trim controls,
   new custom metadata fields and support for playing Apple ProRes RAW. DaVinci Resolve Studio 20.2 also improves
   MultiText alignment and transformation controls in Fusion and adds a new AI Cinematic Haze effect on the color
   page. This version requires a DaVinci Resolve Studio license dongle or software activation code.
-consensus_report: '10 user reports found for DaVinci Resolve 20.2. Current reports mention render/export failures,
+consensus_report: '12 user reports found for DaVinci Resolve 20.2. Current reports mention render/export failures,
   performance slowdowns, and startup or application crashes. Current reports are Reddit-heavy, so production users
   should test before updating. Sources represented: r/davinciresolve.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
 official_source_captured: true
-confirmed_patch_specific_report_count: 10
-evidence_last_checked: '2026-07-22T10:13:12Z'
+confirmed_patch_specific_report_count: 12
+evidence_last_checked: '2026-07-22T18:47:10Z'
 known_issues_present: null
 consensus_collection_status: pilot_initial_sample
 consensus_match_policy: confirmed_patch_specific_reports_v1
@@ -66,6 +66,9 @@ status_events:
 - at: '2026-07-22T10:16:12.753964Z'
   label: User reports found
   note: User report count updated to 10.
+- at: '2026-07-22T18:48:47.977277Z'
+  label: User reports found
+  note: User report count updated to 12.
 official_patch_notes_source_type: download_portal
 primary_official_source: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
 fallback_official_sources:
@@ -118,7 +121,7 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'WAIT: DaVinci Resolve 20.2 has 10 user reports found. User reports show a repeat pattern.
+update_consensus_summary: 'WAIT: DaVinci Resolve 20.2 has 12 user reports found. User reports show a repeat pattern.
   Current reports mention render/export failures, performance slowdowns, and startup or application crashes. Production
   editors with active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy,
   so production users should test before updating.'
@@ -256,6 +259,24 @@ accepted_report_sources:
   source_title: Recently started trying to learn editing in Resolve but my video has gone weird and I don't know
     what I did or how to change it
   source_date: '2025-09-11'
+  version_matched: '20.2'
+  patch_version_matched: true
+  issue: render/export failures
+  workflow_area: render/export
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1o1qqm4/help_with_using_deltakeyer_while_inverting_colors/
+  source_title: Help with using Delta-keyer while inverting colors
+  source_date: '2025-10-08'
+  version_matched: '20.2'
+  patch_version_matched: true
+  issue: render/export failures
+  workflow_area: render/export
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ng34zf/premiere_user_looking_for_workflow_in_davinci/
+  source_title: Premiere user looking for workflow in Davinci advice
+  source_date: '2025-09-13'
   version_matched: '20.2'
   patch_version_matched: true
   issue: render/export failures
