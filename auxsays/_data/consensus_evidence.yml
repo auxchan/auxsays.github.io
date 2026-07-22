@@ -6751,3 +6751,172 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-20-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1srsu3m-little-bits-of-render-just-killin-me
+  product_id: blackmagic-davinci
+  update_version: '20.2'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1srsu3m/little_bits_of_render_just_killin_me/
+  parent_title: Little Bits of Render just Killin Me
+  report_title: Little Bits of Render just Killin Me
+  report_text_excerpt: Little Bits of Render just Killin Me - Exports have been failing for me and I almost always find there's one frame that hasn't rendered even if I force it - I find that this is usually a piece of text that was created in another timeline, but copied to this one. - usually the...
+  captured_at: '2026-07-22T00:24:03Z'
+  source_date: '2026-04-21'
+  target_release_date: '2025-09-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.2'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1sh2dnb-resolve-202-build-13-rtx-5070-ti-slight-u
+  product_id: blackmagic-davinci
+  update_version: '20.2'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1sh2dnb/resolve_202_build_13_rtx_5070_ti_slight_ui/
+  parent_title: 'Resolve 20.2 Build 13 + RTX 5070 Ti: slight UI flicker only when aggressively moving the Qualifier over the Viewer'
+  report_title: 'Resolve 20.2 Build 13 + RTX 5070 Ti: slight UI flicker only when aggressively moving the Qualifier over the Viewer'
+  report_text_excerpt: 'Resolve 20.2 Build 13 + RTX 5070 Ti: slight UI flicker only when aggressively moving the Qualifier over the Viewer Hi, I noticed a very specific issue in DaVinci Resolve Studio 20.2 Build 13 on my desktop with an NVIDIA RTX 5070 Ti. S. O. Windows 11 pro This is not a general...'
+  captured_at: '2026-07-22T00:24:03Z'
+  source_date: '2026-04-09'
+  target_release_date: '2025-09-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.2'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1rvhlmx-audio-problem-after-exporting
+  product_id: blackmagic-davinci
+  update_version: '20.2'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1rvhlmx/audio_problem_after_exporting/
+  parent_title: Audio Problem after Exporting
+  report_title: Audio Problem after Exporting
+  report_text_excerpt: Audio Problem after Exporting So it is a couple of days that i'm experiencing this problem with DaVinci. Shortly my audio are perfectly working inside the software but after the exporting, it works only the video without any audio. The problem i'm experiencing comes from...
+  captured_at: '2026-07-22T00:24:03Z'
+  source_date: '2026-03-16'
+  target_release_date: '2025-09-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.2'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1rnhcy6-problem-audio-after-exporting
+  product_id: blackmagic-davinci
+  update_version: '20.2'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1rnhcy6/problem_audio_after_exporting/
+  parent_title: Problem Audio after exporting
+  report_title: Problem Audio after exporting
+  report_text_excerpt: Problem Audio after exporting So it is a couple of days that i'm experiencing this problem with DaVinci. Shortly my audio are perfectly working inside the software but after the exporting, it works only the video without any audio. I already tried different stuff, including...
+  captured_at: '2026-07-22T00:24:03Z'
+  source_date: '2026-03-07'
+  target_release_date: '2025-09-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.2'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1r4h3yn-a-weird-problem-with-the-microphone-can-a
+  product_id: blackmagic-davinci
+  update_version: '20.2'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1r4h3yn/a_weird_problem_with_the_microphone_can_anyone/
+  parent_title: A weird problem with the microphone, can anyone help?
+  report_title: A weird problem with the microphone, can anyone help?
+  report_text_excerpt: A weird problem with the microphone, can anyone help? Hey guys, I have a very weird problem with my DaVinci Resolve, I tried every option I could find on the internet but nothing helped, may be you can give me some ideas? My setup is Windows 11, Scarlett Solo audio interface...
+  captured_at: '2026-07-22T00:24:03Z'
+  source_date: '2026-02-14'
+  target_release_date: '2025-09-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.2'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: blackmagic-davinci-20-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ppviem-cant-queue-renders-program-crashes-consec
+  product_id: blackmagic-davinci
+  update_version: '20.2'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ppviem/cant_queue_renders_program_crashes_consecutive/
+  parent_title: Can't Queue Renders, Program Crashes - Consecutive long renders crashing at 90-95% in v20.2 (CUDA/OpenGL Interop Error) - Need Help!
+  report_title: Can't Queue Renders, Program Crashes - Consecutive long renders crashing at 90-95% in v20.2 (CUDA/OpenGL Interop Error) - Need Help!
+  report_text_excerpt: Can't Queue Renders, Program Crashes - Consecutive long renders crashing at 90-95% in v20.2 (CUDA/OpenGL Interop Error) - Need Help! Hi everyone, I’m reaching out because I’m hitting a wall with DaVinci Resolve Studio v20.2.2 . I’ve had 6 failed renders this week alone , and...
+  captured_at: '2026-07-22T00:24:03Z'
+  source_date: '2025-12-18'
+  target_release_date: '2025-09-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.2'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1pp0ngc-davinci-resolve-202-crash-almost-every-ti
+  product_id: blackmagic-davinci
+  update_version: '20.2'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1pp0ngc/davinci_resolve_202_crash_almost_every_time_i/
+  parent_title: Davinci Resolve 20.2 Crash Almost Every time I open it
+  report_title: Davinci Resolve 20.2 Crash Almost Every time I open it
+  report_text_excerpt: Davinci Resolve 20.2 Crash Almost Every time I open it So, I have been using the software for some time, and it was working just fine in my Dell PC which has 16 GB RAM and no Dedicated GPU, so my PC was heating so much, but the burden was bearable, then I updated to version...
+  captured_at: '2026-07-22T00:24:03Z'
+  source_date: '2025-12-17'
+  target_release_date: '2025-09-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.2'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
