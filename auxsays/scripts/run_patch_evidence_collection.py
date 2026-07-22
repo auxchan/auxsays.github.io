@@ -78,6 +78,28 @@ def acrobat_consensus_enabled(env: dict[str, str] | None = None) -> bool:
     return str(source.get(ACROBAT_CONSENSUS_ENABLE_ENV, "")).strip().lower() == "true"
 
 
+# --- PowerPoint community consensus: default-off activation gate --------------
+# A default-off community-evidence PILOT. Its Learn Q&A discovery is proven CI-reachable, but
+# it deliberately does NOT activate scheduled production consensus: exactly like the gates
+# above, the collector is registered ONLY when the explicit enable flag resolves to the
+# canonical ``true``. The evidence-collection workflow further gates this flag to a MANUAL
+# dry_run dispatch, so a scheduled ``--write`` never registers or writes PowerPoint evidence.
+POWERPOINT_CONSENSUS_PRODUCT_ID = "microsoft-powerpoint"
+POWERPOINT_CONSENSUS_ENABLE_ENV = "AUXSAYS_ENABLE_POWERPOINT_CONSENSUS"
+
+
+def powerpoint_consensus_enabled(env: dict[str, str] | None = None) -> bool:
+    """Deterministic default-off gate for registering the PowerPoint consensus collector.
+
+    Returns True ONLY when ``AUXSAYS_ENABLE_POWERPOINT_CONSENSUS`` resolves to the exact
+    canonical boolean ``true`` (case-insensitive, surrounding whitespace trimmed). Every other
+    value -- absent, empty, ``false``, ``0``, ``1``, ``yes``, ``on`` -- returns False.
+    Explicit true-only, avoiding the ``bool(os.getenv(...))`` pitfall where ``"false"`` is
+    truthy."""
+    source = os.environ if env is None else env
+    return str(source.get(POWERPOINT_CONSENSUS_ENABLE_ENV, "")).strip().lower() == "true"
+
+
 def build_collectors(env: dict[str, str] | None = None) -> dict[str, Any]:
     """Return the runtime collector registry: the always-on base plus each default-off
     collector IFF its activation flag is explicitly enabled. This is the single place that
@@ -87,7 +109,9 @@ def build_collectors(env: dict[str, str] | None = None) -> dict[str, Any]:
 
     - Windows Learn Q&A: ``AUXSAYS_ENABLE_WINDOWS_LEARN_QNA_WRITEBACK``.
     - Adobe Acrobat (Reader + Pro) consensus: ``AUXSAYS_ENABLE_ACROBAT_CONSENSUS`` -- held
-      off because both discovery methods are currently blocked from CI (see PR #23)."""
+      off because both discovery methods are currently blocked from CI (see PR #23).
+    - Microsoft PowerPoint consensus PILOT: ``AUXSAYS_ENABLE_POWERPOINT_CONSENSUS`` -- default
+      off; the workflow only sets it for a manual dry_run, never a scheduled ``--write``."""
     collectors: dict[str, Any] = dict(COLLECTORS)
     if windows_learn_qna_writeback_enabled(env):
         from patch_collectors.microsoft_windows import WindowsLearnQnaCollector
@@ -99,6 +123,9 @@ def build_collectors(env: dict[str, str] | None = None) -> dict[str, Any]:
         from patch_collectors.adobe_acrobat_community import AdobeAcrobatCollector
         for pid in ACROBAT_CONSENSUS_PRODUCT_IDS:
             collectors[pid] = lambda p=pid: AdobeAcrobatCollector(p)
+    if powerpoint_consensus_enabled(env):
+        from patch_collectors.microsoft_powerpoint import PowerPointLearnQnaCollector
+        collectors[POWERPOINT_CONSENSUS_PRODUCT_ID] = PowerPointLearnQnaCollector
     return collectors
 
 
