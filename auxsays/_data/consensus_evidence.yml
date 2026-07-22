@@ -7364,7 +7364,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uz2e4k-exporting-video-always-replicates-same-pe
   product_id: blackmagic-davinci
   update_version: '20'
@@ -7437,7 +7436,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-20-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1o2aeih-rtx-5080-davinci-resolve-freezing-renders
   product_id: blackmagic-davinci
   update_version: '20.1'
@@ -7510,7 +7508,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-20-2-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1p6sq35-question-how-to-fix-media-offline-error-o
   product_id: blackmagic-davinci
   update_version: 20.2.3
@@ -7653,5 +7650,98 @@ evidence:
   workflow_area: timeline / GPU performance
   platform: unknown
   severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-1-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1n1ohgn-media-offline-10bit-h265-420-whevc-extens
+  product_id: blackmagic-davinci
+  update_version: 20.1.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1n1ohgn/media_offline_10bit_h265_420_whevc_extension/
+  parent_title: Media Off-Line 10bit h.265 4:2:0 w/HEVC extension
+  report_title: Media Off-Line 10bit h.265 4:2:0 w/HEVC extension
+  report_text_excerpt: Media Off-Line 10bit h.265 4:2:0 w/HEVC extension System Specs windows x64 amd ryzen 9 5900x Nvida GTX 980 48gb ram Davinci Resolve 20.1.1 Free I am using a windows PC and I am having a media off-line error, all the research I have seen says that davinci resolve free version...
+  captured_at: '2026-07-22T14:43:37Z'
+  source_date: '2025-08-27'
+  target_release_date: '2025-08-26'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.1.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: compatibility issue
+  workflow_area: plugins / codecs
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1oubva9-davinci-not-responding-mac-studio-m3-ultr
+  product_id: blackmagic-davinci
+  update_version: 20.2.3
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1oubva9/davinci_not_responding_mac_studio_m3_ultra/
+  parent_title: Davinci not responding - Mac Studio M3 Ultra
+  report_title: Davinci not responding - Mac Studio M3 Ultra
+  report_text_excerpt: Davinci not responding - Mac Studio M3 Ultra Since changing to a Mac Studio M3 Ultra, when starting up DR Studio 20.2.3 it is very slow and often not responding, also crashes sometimes. What could I be missing? These issues were not happening with previous Mac. Mac Studio M3...
+  captured_at: '2026-07-22T14:49:25Z'
+  source_date: '2025-11-11'
+  target_release_date: '2025-11-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.3
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1os2u3c-ai-multicam-smartswitch-the-gpu-failed-to
+  product_id: blackmagic-davinci
+  update_version: 20.2.3
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1os2u3c/ai_multicam_smartswitch_the_gpu_failed_to_perform/
+  parent_title: AI Multicam SmartSwitch - "The GPU failed to perform image processing" Error 9 Fix
+  report_title: AI Multicam SmartSwitch - "The GPU failed to perform image processing" Error 9 Fix
+  report_text_excerpt: AI Multicam SmartSwitch - "The GPU failed to perform image processing" Error 9 Fix After trying to use the AI Multicam SmartSwitch feature on about 90 minutes of footage, it would get to 7 seconds left and crash with the "The GPU failed to perform image processing because of...
+  captured_at: '2026-07-22T14:49:25Z'
+  source_date: '2025-11-08'
+  target_release_date: '2025-11-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.3
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13684
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13684
+  parent_title: OBS recording results in a desynced media and 120s of missing frame
+  report_title: OBS recording results in a desynced media and 120s of missing frame
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/MZggB6XYebX9a6Tw ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Recor'
+  captured_at: '2026-07-22T15:06:35Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture regression
+  workflow_area: screen/window capture
+  platform: windows
+  severity: high
   sentiment: negative
   source_weight: 1
