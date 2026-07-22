@@ -2,12 +2,1412 @@
   "last_errors": [],
   "last_results": [
     {
+      "adapter": "rss_feed",
+      "candidate_count": 200,
+      "created": 2,
+      "deferred": [
+        "rss:figma:a8fff997-67ea-4904-9361-c98ffb04703a",
+        "rss:figma:652a2af9-bae3-45d2-afed-840872d6ca40",
+        "rss:figma:7da01d20-8c05-40a5-9293-fc3251369aae",
+        "rss:figma:00bacf5b-d3f2-4b2e-9258-d0ca160da946",
+        "rss:figma:ac28221e-8f76-4d7b-ba10-325f1b88e81f",
+        "rss:figma:b065dee6-8947-4d32-9948-c5f16541e203",
+        "rss:figma:0773b195-761b-4e95-8926-292b195e7abb",
+        "rss:figma:1b67e9b6-9432-4184-9142-a2d7eb51ae05",
+        "rss:figma:66605b27-6ef6-4b09-bd84-8ab95c1da79d",
+        "rss:figma:e3466a13-e77e-4d05-a4f9-a39348c04de4",
+        "rss:figma:f94e8744-2072-4118-b1e9-c623f9ebb292",
+        "rss:figma:d23c6aa6-8f7a-4c1b-a94e-e5a193ecedd8",
+        "rss:figma:97f0cb9c-7fac-4053-a25f-e8cb38a4ee48",
+        "rss:figma:ff78107e-9bc4-4772-92aa-e84c1783720e",
+        "rss:figma:4fb9c300-298f-4d40-9641-bd42f8a88b17",
+        "rss:figma:9fa18c3e-c998-4570-b2b9-821f30b6aba9",
+        "rss:figma:d60a68ff-88fb-433e-bbba-e3411a8d71e4",
+        "rss:figma:f7bcba6a-9969-4f5c-9bb5-24b1b2890260",
+        "rss:figma:15f27bc0-5f90-40ae-975c-647b9ccb5af6",
+        "rss:figma:64f089c6-e011-49af-b1b8-2726d360c673",
+        "rss:figma:f8cf1d61-d6c4-4623-af19-32661b785539",
+        "rss:figma:96d65787-8865-4fc6-995a-34f4dcc0ec75",
+        "rss:figma:f4a850f0-f7c0-4c59-bdbb-3777cf0e5d46",
+        "rss:figma:bd5a2106-a504-4e4b-b0f8-fc3eb7760910",
+        "rss:figma:549e4a41-60eb-4e90-a8e7-db2cba2d536a",
+        "rss:figma:5fff8a8d-e8a7-47af-b504-7a4010a575bc",
+        "rss:figma:01bf840f-dc18-436f-ad15-ce4729bdc99b",
+        "rss:figma:d6b4c8bd-039d-44cf-b6d8-e7ac35485ca2",
+        "rss:figma:2cba687f-77c9-41d6-bf70-b1bb5b983700",
+        "rss:figma:c5cd7490-b8dd-41fd-8d7d-5e6260602e1d",
+        "rss:figma:a3639f30-5b24-46da-94bf-34e401422a81",
+        "rss:figma:bc58f083-ed3d-4880-8bd9-863d6bc49266",
+        "rss:figma:412b6c77-781c-4629-9ecb-9c43a0fa9283",
+        "rss:figma:8aab1e88-1c5d-4fb0-90de-b2afd27bfb9a",
+        "rss:figma:74a2f878-f037-452e-ac45-29d2cf7b06e4",
+        "rss:figma:c0727110-2030-46c6-9b90-c9e60c3aa96a",
+        "rss:figma:e7afa659-749b-40b4-8b90-f68d14e37668",
+        "rss:figma:200195c1-6df1-4447-bd8f-97e5f0eccc43",
+        "rss:figma:4d70588d-3c1d-46ad-af7b-00ba0bdadf4e",
+        "rss:figma:acd2b512-7d58-4ba2-8be4-680aee8f6301",
+        "rss:figma:b45e6a7f-3550-42fc-b8c7-536e32017165",
+        "rss:figma:7b5c59fb-faa1-467c-98cb-661a861b277e",
+        "rss:figma:138d5a45-7a5b-4f91-a77f-e9b09f7dfb90",
+        "rss:figma:23b55f64-ce64-4401-93c1-86d15463c93b",
+        "rss:figma:918415aa-053c-4d65-ab96-6dcd3e8a94ef",
+        "rss:figma:d4932b5e-80e5-4f01-b514-5f4a40d66268",
+        "rss:figma:2d0d9a8b-7cfc-4a64-9e08-a0eb10e26d3c",
+        "rss:figma:380341a8-f48a-43f2-b0e3-541ddb259311",
+        "rss:figma:7b63581c-6179-4e59-9c09-22088ceadf7f",
+        "rss:figma:12322fe0-03ea-4cad-9309-83d7395791aa",
+        "rss:figma:11af7f28-62b7-4149-9e43-2185546e6f0a",
+        "rss:figma:6afde82f-d6f3-44a7-b128-5e7bf662a5d4",
+        "rss:figma:7eb1769d-f049-4bbc-aaed-de4fc3cdceb1",
+        "rss:figma:c9f51333-73e0-4799-bd5a-0f095a91edba",
+        "rss:figma:628f005a-d9a1-4c62-aacf-2e641fe96df8",
+        "rss:figma:d3a7ae9f-8083-41e9-aa51-731eb496cace",
+        "rss:figma:6ced6b7f-00e5-46c1-9ed7-0dc400bda356",
+        "rss:figma:0b61ebfc-dea0-477d-adff-8e6d31b93bad",
+        "rss:figma:bfa45986-4ed2-4e54-812e-20788749abea",
+        "rss:figma:5518ca05-1049-4d59-9241-987f6eda91f9",
+        "rss:figma:668723e6-8158-41d5-870c-d5e905a1577d",
+        "rss:figma:3adff810-6ba8-446d-aff9-3dcfd41464ea",
+        "rss:figma:748edd5a-ac88-403b-9bf9-41a99e332d31",
+        "rss:figma:a695e7f3-a9f5-4189-8fa5-6bd8e137d05c",
+        "rss:figma:d8e265df-1c6b-44cb-9a30-f62ce9e69f10",
+        "rss:figma:afa891c3-6a8f-45d4-9a05-175eb088b617",
+        "rss:figma:0531eabd-e735-45c2-8a40-6f71717b00df",
+        "rss:figma:25ecf51e-c20d-4dbf-80c2-f7e563d1968a",
+        "rss:figma:1783e987-4ce4-48d8-a5b6-b2ede3ae4aab",
+        "rss:figma:67e79efa-0659-4a3c-9669-e7e1fe0cad42",
+        "rss:figma:9d57f4fd-b08b-43d1-a429-8cd26a7f113f",
+        "rss:figma:39b73f46-bae3-449f-8726-e9263c2bf81d",
+        "rss:figma:c1be0c2e-e3f3-4d10-9c5a-0022492c85c1",
+        "rss:figma:1d07bcdf-a8e5-48d2-86fb-f3d6c1877f03",
+        "rss:figma:7e9a8697-8029-4065-a42a-29c6114902a6",
+        "rss:figma:56097089-b982-413a-ad24-090a82e2e983",
+        "rss:figma:9accbc0b-6f08-4c4d-bf09-9e77d8bdd4f4",
+        "rss:figma:0fe453b3-abf6-4005-9a2e-44799998f857",
+        "rss:figma:8f1a060d-0c04-4cb7-b23e-cc6b85bd1dff",
+        "rss:figma:5e98ae79-c1bb-49b4-8046-848ffe0872b1",
+        "rss:figma:e368f728-3880-4451-ae8c-bb11b1159e11",
+        "rss:figma:41caa02e-728f-4db5-ae73-754d4580f9bc",
+        "rss:figma:947a5378-bfb6-4f74-8e61-c3361a9fc2ce",
+        "rss:figma:85b8dac1-87aa-4b05-ab47-273f087faba7",
+        "rss:figma:f7119295-a67f-4c36-af99-75eb14c750a8",
+        "rss:figma:eba9b8e7-fdb1-4f3f-ae11-9a66660b86a5",
+        "rss:figma:eda634b0-7907-4fbe-9f7a-a5b39432132c",
+        "rss:figma:76462df0-a8da-46cd-9a9a-659f26a2bac1",
+        "rss:figma:a0be0e34-d6c9-4346-8895-91f14f3a8957",
+        "rss:figma:439bfbe9-beee-4b1c-87b7-e50eb73f3f37",
+        "rss:figma:7062f581-aab0-47a3-b8e2-95081316150e",
+        "rss:figma:c47b77f2-3ebc-4d9e-b6c3-cb27778e4fe9",
+        "rss:figma:125d0f53-5e1c-44c0-b63a-1ef67c825f82",
+        "rss:figma:d907ae2c-b05a-418d-908b-125c573cf1cb",
+        "rss:figma:44cf1851-bca1-4715-a487-280188d24d63",
+        "rss:figma:f09e83ee-6770-432a-838a-1b991004f114",
+        "rss:figma:bf84100e-829d-4998-a3c6-2625f5c962d3",
+        "rss:figma:5326c4b4-90cf-47e9-a91c-e5207adbd001",
+        "rss:figma:385c15c7-80f9-428b-981d-fb0b9453db52",
+        "rss:figma:4ceed56f-f2e8-47cd-b126-655f6cc6b711",
+        "rss:figma:d8c03eb6-0245-4f3b-b017-375a8bcb6802",
+        "rss:figma:da721b6c-3ff2-4b6f-bf46-8e2c09808221",
+        "rss:figma:b4cc3fb1-ad7f-47d7-9401-3f21eacfc0a0",
+        "rss:figma:6660f3e4-0735-435b-b092-91e4b90209e9",
+        "rss:figma:b0d16880-c992-4018-a945-59894a133980",
+        "rss:figma:94e6baf8-2243-4488-af58-f767e60c2858",
+        "rss:figma:5b3815bf-b45f-4e2e-bce1-12c64a78e025",
+        "rss:figma:df42e363-2be7-41c6-a8b8-31fe854e80f3",
+        "rss:figma:98ac8edc-6a6a-42e1-b2dd-ebec55379bd8",
+        "rss:figma:3e4659bc-ef16-4708-9bd0-df4451bb8f19",
+        "rss:figma:dc12b0f3-e36c-4985-af25-b00b6dc3d3c4",
+        "rss:figma:1f17cc33-9061-4b0f-931e-e31797c2c125",
+        "rss:figma:503d79c7-e748-4953-89f0-bd9a054267f0",
+        "rss:figma:60f5ef70-d716-463d-a1ad-cdcff01787c2",
+        "rss:figma:5923b032-08a3-4fd9-81c8-4f537d66c315",
+        "rss:figma:159ff837-d973-462c-acca-72e596c5e178",
+        "rss:figma:62cae844-6289-4bec-875e-a2e364d29be7",
+        "rss:figma:5261574e-aa08-4673-a441-6798e2d54d1a",
+        "rss:figma:1cbf8e16-980f-4948-b65b-19fef1cc98fb",
+        "rss:figma:48340d62-1048-498d-b49f-3a4c249f1184",
+        "rss:figma:1c34375b-eb1f-4dff-8923-2b518d6c0a02",
+        "rss:figma:51e8af7e-ef46-4690-b499-04f61c1d03b0",
+        "rss:figma:e3af9235-33ed-44dd-8d91-17585c4a24e5",
+        "rss:figma:6a4d8e0e-176c-4da9-9aae-a48060b9d197",
+        "rss:figma:eb9fdd6c-4277-4a5c-9bd0-7cdf7f55aff0",
+        "rss:figma:96be2776-3ca6-49c4-97d3-81007a184b0a",
+        "rss:figma:5fc64c1e-8ca6-4a75-934e-ff542b2c2870",
+        "rss:figma:33686f91-5c87-46e6-af66-4a3481696bdf",
+        "rss:figma:1b5c1a55-640d-4945-89c0-d43ffbd661e6",
+        "rss:figma:7b0461aa-c316-441a-8d26-139c5d74cc86",
+        "rss:figma:183b3da2-3400-4298-b356-a3fae18f0686",
+        "rss:figma:292a0700-1b38-4779-8deb-19c23a9326b6",
+        "rss:figma:c3c5b6ad-1094-4627-b7f0-1caedc77a91a",
+        "rss:figma:1d63df91-e540-477e-beed-0790bacb2103",
+        "rss:figma:23e7e111-8870-4fdb-9707-9fb1b2d7e414",
+        "rss:figma:44b34aa3-3df5-45db-98e8-67c849f46d5f",
+        "rss:figma:5d18bbe5-f3e7-4c58-bea3-096dbea318bf",
+        "rss:figma:207da267-e9a0-4c71-bc9f-957055402a23",
+        "rss:figma:a65c4c2d-5a52-433b-9ad6-ddf48b55aef8",
+        "rss:figma:aa85d2a8-9f27-407f-a4fa-a51a812488f5",
+        "rss:figma:df8f6e53-0e58-4428-8bf1-46577c1b34e7",
+        "rss:figma:cbc0bf2a-8668-436b-8ee4-50b328850307",
+        "rss:figma:ed7aed57-7628-4271-aadd-38ba0ec81d8b",
+        "rss:figma:a6d0812d-b6cd-4c02-88dd-b251d69fd1c4",
+        "rss:figma:53f0080d-24fa-42a9-a225-7bceec4e9e0f",
+        "rss:figma:1c804aa8-388f-4fec-a1e9-65f96fa715b3",
+        "rss:figma:18ac26a5-a776-4038-8577-98fbe3fa81d7",
+        "rss:figma:44497bb1-ef58-468c-b2bc-ded055095a0e",
+        "rss:figma:752e8a7f-d05f-4e66-af0f-5da78b209480",
+        "rss:figma:1b430b33-2667-43fc-b080-62e7692731b5",
+        "rss:figma:0b208943-560a-4bc9-90e3-db9f94b80f12",
+        "rss:figma:109b86a5-f605-43de-9dc9-1cba004ebb36",
+        "rss:figma:33e34a17-098e-42c4-b637-6eab595f9e7a",
+        "rss:figma:94847242-5538-49c8-8ffb-2e9b08e3181d",
+        "rss:figma:2f592369-c798-4cac-a92d-fbf653a1afda",
+        "rss:figma:f40ce245-1722-47da-927f-7d4bcf4d59ec",
+        "rss:figma:9cf34052-8cd2-43ed-b095-164baeef5115",
+        "rss:figma:77129f7c-2440-4a40-b58b-30247615ad82",
+        "rss:figma:e216d3c7-0390-4570-8f94-a5cdf1e85383",
+        "rss:figma:76c29c9e-97e7-403b-8a9c-968583a54f5d"
+      ],
+      "deferred_count": 160,
+      "duration_ms": 5725,
+      "fetched": 200,
+      "product_id": "figma",
+      "record_limit": 2,
+      "refreshed": [
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-07-16-figma-bring-code-backed-screens-onto-the-canvas-with-variables-attached.md",
+          "record_id": "rss:figma:5e6a9791-ff5a-42bd-81a9-d9ef8dc8baeb"
+        },
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-07-14-figma-see-ai-credit-usage-in-betas.md",
+          "record_id": "rss:figma:9f6c6958-4c04-414a-8909-90635a1e1a93"
+        }
+      ],
+      "scan_limit": 200,
+      "skipped": [
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:5854425f-0b17-4254-ab7a-df53d38b5aa3"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:652c2f89-6829-404e-b107-bad38c19c08c"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:8bca1b2b-357e-4244-8697-448f0dada845"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:cec7ba19-591c-46a1-b1a2-5da55e7be802"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:12a9cb85-e994-4ba1-b46b-b51fa43bdd3e"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:2a314040-cf08-4d01-9671-83ceb0fdf03d"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:5bb5e41c-65e9-4025-9704-1105b079f9f6"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:e9f23965-3601-449b-94d8-66a9d9cbd4b0"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:410d92c2-46d5-4c26-bf56-d5cdbe15a81f"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:a157f15a-15d6-4c6e-ac1a-d322ad1dbc16"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:881e31ba-5938-4f26-b866-6b185875a89c"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:2ba58709-6032-4792-b2d2-2a590cdfc097"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:8ffcf508-ee53-497d-a98d-fbf1dc326998"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:e446f424-314a-45ed-a04f-f9dab91c53b4"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:682f3ba2-ee9e-4213-807d-f935a7d9a453"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:9b59c8a7-1361-4000-a5a6-5527f2a5e373"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:cd3d7d0b-e3c0-41b2-b370-a014bf901686"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:db295edf-534b-497d-8197-ff73a5653c55"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:4052f1c6-a5bb-4d6e-89a7-b31d94bcbccf"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:bd335822-5b89-4ce0-8ae0-1758197dcd78"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:11173709-f3f3-44ff-8711-ae180a888f29"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:4e06e0f1-2f46-4787-84eb-f431f16214e4"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:54fa1eaf-a38e-4416-80b8-bf063515723e"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:9de2d329-519d-4e1d-b0ca-f81528c285a8"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:0dcbfd47-b88e-4828-977a-b56b7769f89a"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:9923866c-4511-4991-8536-75f226c095a5"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:03c7b6a9-b36f-41f7-93d9-017e577a76fb"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:5aff1eb4-6095-46fe-8afa-4fbd9885f719"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:2490eafb-ecf7-4d76-9ca9-5e4dd193a086"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:57dd3e2e-da91-4a70-b924-72fa4c2cd0ba"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:f40b1fbe-388a-4834-b8ff-3eb82f38ceac"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:7395f2f3-1017-4585-9500-956a7d7efe89"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:191b33ae-9663-4d0f-b6cf-8535c311d41f"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:4a8cbf4b-d483-4a90-ac84-48949f969a1d"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:fae88fe2-3d5e-4224-93ed-4653f38feb6d"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:feb6b214-4c8a-4a43-be33-26973f64b865"
+        }
+      ],
+      "skipped_existing": 36,
+      "status": "success",
+      "written": [
+        "auxsays/updates/generated/2026-04-02-figma-teach-make-how-your-design-systems-works-with-make-kits.md",
+        "auxsays/updates/generated/2026-04-02-figma-bring-your-own-context-to-figma-make-with-attachments.md"
+      ]
+    },
+    {
+      "adapter": "adobe_release_notes",
+      "candidate_count": 1,
+      "created": 0,
+      "deferred": [],
+      "deferred_count": 0,
+      "duration_ms": 25772,
+      "fetched": 1,
+      "product_id": "adobe-premiere-pro",
+      "record_limit": 2,
+      "refreshed": [
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-05-01-premiere-pro-26-2-2.md",
+          "record_id": "adobe:adobe-premiere-pro:26.2.2:c176cc33bba85978"
+        }
+      ],
+      "scan_limit": 200,
+      "skipped": [],
+      "skipped_existing": 0,
+      "status": "success",
+      "written": []
+    },
+    {
+      "adapter": "blackmagic_support_downloads",
+      "candidate_count": 116,
+      "created": 2,
+      "deferred": [
+        "blackmagic-support:blackmagic-davinci:20.0.1:5065f0e3b4804bb1b3b34301e9a69e01",
+        "blackmagic-support:blackmagic-davinci:20:a6e2bbb59c294d728d131fa21d18676b",
+        "blackmagic-support:blackmagic-davinci:19.1.4:0dc287e90d53499dbeb74c1e9ce09fcd",
+        "blackmagic-support:blackmagic-davinci:19.1.3:9e7d67956ee34e71ad901d9ce1d77b18",
+        "blackmagic-support:blackmagic-davinci:19.1.2:edd40117dc3a424296792d423003eeb1",
+        "blackmagic-support:blackmagic-davinci:19.1.1:5c21e2259634414d8fb88c214f41c917",
+        "blackmagic-support:blackmagic-davinci:19.1:f4f5326b638f4417a7abc6b499bea21d",
+        "blackmagic-support:blackmagic-davinci:19.0.3:bebc956b8ece4405bb44768fc07501bc",
+        "blackmagic-support:blackmagic-davinci:19.0.2:2af2c12e21404370922862ab09c05224",
+        "blackmagic-support:blackmagic-davinci:19.0.1:aa8e03be15e04df3bd2ee8685f67dfcb",
+        "blackmagic-support:blackmagic-davinci:19:cb45c8e75fcc459497f21ecbba3b0174",
+        "blackmagic-support:blackmagic-davinci:18.6.6:160cea7e8da846f280fd30518c91ca57",
+        "blackmagic-support:blackmagic-davinci:18.6.5:3a4601d35e7b4acbb4dfa474f6c38b80",
+        "blackmagic-support:blackmagic-davinci:18.6.4:479f37a4180c4e14b4ab67553d1683c0",
+        "blackmagic-support:blackmagic-davinci:18.6.3:037cad2298034c08a164625a5c15495a",
+        "blackmagic-support:blackmagic-davinci:18.6.2:4c5141025d9a4b479b508f109b2138de",
+        "blackmagic-support:blackmagic-davinci:18.6.1:cdd8d8c6ed1b4a8a818e6934a885e3fd",
+        "blackmagic-support:blackmagic-davinci:18.6:a2156d38f70b4fbba004094c647945db",
+        "blackmagic-support:blackmagic-davinci:18.5.1:eab0e394e81b48bdb66e30ffd0be9e72",
+        "blackmagic-support:blackmagic-davinci:18.5:9576186159cb49dfa8543673859d312d",
+        "blackmagic-support:blackmagic-davinci:18.1.4:69a3995a376441d0ae23711c44370662",
+        "blackmagic-support:blackmagic-davinci:18.1.3:cbfe7c09b9a44ed08ab0e14f29bc262d",
+        "blackmagic-support:blackmagic-davinci:18.1.2:7a1a0b5ffaf34f9588fd46683d40da75",
+        "blackmagic-support:blackmagic-davinci:18.1.1:b7130ebf043448368dbd1ea1be93888d",
+        "blackmagic-support:blackmagic-davinci:18.1:2ff9be8a1a9c4082b1fe977133816b6a",
+        "blackmagic-support:blackmagic-davinci:18.0.4:f230917b91a74d17b1e4ece25c284dbe",
+        "blackmagic-support:blackmagic-davinci:18.0.3:ea3baefaf9af4dc69a8635b85736048d",
+        "blackmagic-support:blackmagic-davinci:18.0.2:5a1d26b868fe40f9b638ae97ee664a56",
+        "blackmagic-support:blackmagic-davinci:18.0.1:6fe65a9e3ccb48e6be7e4db7d1d9866f",
+        "blackmagic-support:blackmagic-davinci:18:feb2e2ace23b48ccbd1b7f1b73f24760",
+        "blackmagic-support:blackmagic-davinci:17.4.6:acf4e4c3c28040cca505e69a365d42a0",
+        "blackmagic-support:blackmagic-davinci:17.4.5:2b00b01bcac44d73b4b20616e0800417",
+        "blackmagic-support:blackmagic-davinci:17.4.4:ab07279b0b07494e808668038145c494",
+        "blackmagic-support:blackmagic-davinci:17.4.3:a29cf086ee72457e96b8c2ae586a3e00",
+        "blackmagic-support:blackmagic-davinci:17.4.2:26a943b801de46b8b330d6cd939d8f1f",
+        "blackmagic-support:blackmagic-davinci:17.4.1:7075d0fb12d6433ea88a0ab56c2b2a3d",
+        "blackmagic-support:blackmagic-davinci:17.4:7298eb09969748e59c8a2cb64062fe72",
+        "blackmagic-support:blackmagic-davinci:17.3.2:e8b376651a8d4f1fb7bb18167325fb7f",
+        "blackmagic-support:blackmagic-davinci:17.3.1:2ddeb7100f9a4de2a61e929f6c8a1cad",
+        "blackmagic-support:blackmagic-davinci:17.3:a1684f702b364371a199e6a57cef3341",
+        "blackmagic-support:blackmagic-davinci:17.2.2:2ce2120562af480988763bc202675380",
+        "blackmagic-support:blackmagic-davinci:17.2.1:11f9b23f14824fd781ab56411706df8a",
+        "blackmagic-support:blackmagic-davinci:17.2:2e107aba152744e0aa77ad3fb9d25986",
+        "blackmagic-support:blackmagic-davinci:17.1.1:697bfa693faa49fbb785b2aedb584a8b",
+        "blackmagic-support:blackmagic-davinci:17.1:568b91dde8e94375834d7fd65f4f8046",
+        "blackmagic-support:blackmagic-davinci:17:a479b83a85f54a8eba4c26acaa878235",
+        "blackmagic-support:blackmagic-davinci:16.2.8:7e8656e2d76240ef8923609655d70fb6",
+        "blackmagic-support:blackmagic-davinci:16.2.7:38c28b76d99b4906ae0e5d51e4952ebc",
+        "blackmagic-support:blackmagic-davinci:16.2.6:fae1e2e2814349c4a85e7b479db0c22c",
+        "blackmagic-support:blackmagic-davinci:16.2.5:39703bbbf19e45be99798a2006e1eb24",
+        "blackmagic-support:blackmagic-davinci:16.2.4:7841ff08dfbd43d4af5e30e3b39eae10",
+        "blackmagic-support:blackmagic-davinci:16.2.3:ca91eb636f944eb2b7ff65ee56db41e5",
+        "blackmagic-support:blackmagic-davinci:16.2.2:0e4dea31c5114b13a5f0d362c6902ed7",
+        "blackmagic-support:blackmagic-davinci:16.2.1:d1150f02c49746d3b9ab51c918db6ebd",
+        "blackmagic-support:blackmagic-davinci:16.2:00e0eb2c5ab94938a1e7088e17b35725",
+        "blackmagic-support:blackmagic-davinci:16.1.2:664b754e19f04eb5afee5cbe034d0594",
+        "blackmagic-support:blackmagic-davinci:16.1.1:2d8aac8091894fba96588e0ca3769ae3",
+        "blackmagic-support:blackmagic-davinci:16.1:1649a7027eed41a1a7633e0dd348195c",
+        "blackmagic-support:blackmagic-davinci:16:33c81e3bd69a417c848f1324b7ffab32",
+        "blackmagic-support:blackmagic-davinci:15.3.1:ad0d8a39dedf419e8beef4a500d83d66",
+        "blackmagic-support:blackmagic-davinci:15.3:a045e94a7e20491da82c329c073db8ad",
+        "blackmagic-support:blackmagic-davinci:15.2.4:360e097c9f9346f2a632825811653354",
+        "blackmagic-support:blackmagic-davinci:15.2.3:b9f352753ebe4cc5a74005e2d053263c",
+        "blackmagic-support:blackmagic-davinci:15.2.2:09b6a86402cd4892b29b33da6eb8075e",
+        "blackmagic-support:blackmagic-davinci:15.2.1:ce1aad63c1d54244b81dd2c892f6b18c",
+        "blackmagic-support:blackmagic-davinci:15.2:cbb06ad3149f470ca07b943485c7ccc4",
+        "blackmagic-support:blackmagic-davinci:15.1.2:cc533de875ed48219f3095a72a0b75b6",
+        "blackmagic-support:blackmagic-davinci:15.1.1:ae1a13678d4443a8b4c72b56e787afe8",
+        "blackmagic-support:blackmagic-davinci:15.1:3fdf6df340d4452888328ae46ad17e3e",
+        "blackmagic-support:blackmagic-davinci:15.0.1:c1bef0ae9882495ebc1a87eb845d3249",
+        "blackmagic-support:blackmagic-davinci:15:35b880b441b54e0cba6669dca7e93779",
+        "blackmagic-support:blackmagic-davinci:14.3.1:773db712738f48c3a893e96d6c77253f",
+        "blackmagic-support:blackmagic-davinci:14.3:fcfd3157e46444cbb3ed228d314167d2",
+        "blackmagic-support:blackmagic-davinci:14.2.1:b25ce87a99b54cf9ae275c18e3308ae3",
+        "blackmagic-support:blackmagic-davinci:14.2:f1fca132cca74aaebc4e588a52b5a755",
+        "blackmagic-support:blackmagic-davinci:14.1.1:1d629fdc2958483fbfde564e8f046175",
+        "blackmagic-support:blackmagic-davinci:14.1:702f18bf874d480d8dc79e626b7ba9bf",
+        "blackmagic-support:blackmagic-davinci:14.0.1:d8e08f30e6d340aaac37fedde2c2e93a",
+        "blackmagic-support:blackmagic-davinci:14:b52ec56608da472e8ba74772333a7f30",
+        "blackmagic-support:blackmagic-davinci:12.5.6:f29ac9e712ca40c08b4a273dd92c3288",
+        "blackmagic-support:blackmagic-davinci:12.5.5:197ab30bbd95468c984e7ededfca0342",
+        "blackmagic-support:blackmagic-davinci:12.5.4:d81f69b472944e79bd5c692b83ff62f6",
+        "blackmagic-support:blackmagic-davinci:12.5.3:16aba80b65694ef48ff970ecff25e53c",
+        "blackmagic-support:blackmagic-davinci:12.5.2:d68f650fbd0d4123a88e389517f440df",
+        "blackmagic-support:blackmagic-davinci:12.5.1:951f064fdf2544f686f82d4fab96c86d",
+        "blackmagic-support:blackmagic-davinci:12.5:73ce205e829c47ad86bd2be43cd3d7fd",
+        "blackmagic-support:blackmagic-davinci:12.3.2:4665e0475c3647ca9a212ba2dac6f5d6",
+        "blackmagic-support:blackmagic-davinci:12.3.1:7be39a1e1bff4e2ab04e7e33c3c40e0d",
+        "blackmagic-support:blackmagic-davinci:12.2:fd1414205ab74cf2a762c19cda75f220",
+        "blackmagic-support:blackmagic-davinci:12.1:6c8eb04e8aa14e32b9d534c249f9ddde",
+        "blackmagic-support:blackmagic-davinci:12.0.1:46b1cde2f8354268a90a352218ab8d8b",
+        "blackmagic-support:blackmagic-davinci:12.0:5e3b5057ee464cfdaf2f50011245aa3a",
+        "blackmagic-support:blackmagic-davinci:11.3.1:f0f3dc19484a474982cc6f8aab7cc923",
+        "blackmagic-support:blackmagic-davinci:11.3:20c6693acb2b4cd598cf64c69057106f",
+        "blackmagic-support:blackmagic-davinci:11.2.1:ac2c6e7981394d13b810de516ef5a0f4",
+        "blackmagic-support:blackmagic-davinci:11.2:2f234fd893c14f44bfdbf16032d02b07",
+        "blackmagic-support:blackmagic-davinci:11.1.3:02d335762390456fb15bf968df608dd6",
+        "blackmagic-support:blackmagic-davinci:11.1.2:027c9883634941809b01f95c305d7eb3",
+        "blackmagic-support:blackmagic-davinci:11.1.1:89764227ded74953a1da7aae95d38fa1",
+        "blackmagic-support:blackmagic-davinci:11.1:a3270e16f79344238dcb0b234e390340",
+        "blackmagic-support:blackmagic-davinci:11:bbbe837a0e804a139d32c66cb0e8ef15",
+        "blackmagic-support:blackmagic-davinci:10.1.5:69c2e474f9994d7cbac255b3e20aabb9"
+      ],
+      "deferred_count": 102,
+      "duration_ms": 5946,
+      "fetched": 116,
+      "product_id": "blackmagic-davinci",
+      "record_limit": 2,
+      "refreshed": [
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-07-02-davinci-resolve-21-0-2.md",
+          "record_id": "blackmagic-support:blackmagic-davinci:21.0.2:76871642674641dcbac137eb5cb46301"
+        },
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-06-24-davinci-resolve-21-0-1.md",
+          "record_id": "blackmagic-support:blackmagic-davinci:21.0.1:a7be1e5732fd4edfb804af3d1f29cf61"
+        }
+      ],
+      "scan_limit": 200,
+      "skipped": [
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "blackmagic-support:blackmagic-davinci:21:2cda7ec076ea4b25aaa007fc68a5cbfc"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "blackmagic-support:blackmagic-davinci:20.3.3:44720c1f672d4dce9e0fab7df33f928e"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "blackmagic-support:blackmagic-davinci:20.3.2:f963b9ccf156459db4ed9c32c39b195e"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "blackmagic-support:blackmagic-davinci:20.3.1:ea408484da59422794a6764f0cb7f11f"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "blackmagic-support:blackmagic-davinci:20.3:03b73b4e07884309948b326912184f86"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "blackmagic-support:blackmagic-davinci:20.2.3:9d5f7fb13cfd446aa384cc26b587061b"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "blackmagic-support:blackmagic-davinci:20.2.2:8cbfe01ecd89473d86a1ecc3c1f90f6e"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "blackmagic-support:blackmagic-davinci:20.2.1:9d8f7a472beb48d3bccb578777d660a2"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "blackmagic-support:blackmagic-davinci:20.2:4593ec0ea9cf4e9899668c0601166220"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "blackmagic-support:blackmagic-davinci:20.1.1:a43f22f783a145d59d942086b18ea312"
+        }
+      ],
+      "skipped_existing": 10,
+      "status": "success",
+      "written": [
+        "auxsays/updates/generated/2026-07-22-davinci-resolve-21-0-3.md",
+        "auxsays/updates/generated/2025-08-07-davinci-resolve-20-1.md"
+      ]
+    },
+    {
+      "adapter": "github_releases",
+      "candidate_count": 14,
+      "created": 2,
+      "deferred": [
+        "github:obs-studio:231929232",
+        "github:obs-studio:230616760",
+        "github:obs-studio:228491418",
+        "github:obs-studio:209059403"
+      ],
+      "deferred_count": 4,
+      "duration_ms": 6235,
+      "fetched": 14,
+      "product_id": "obs-studio",
+      "record_limit": 2,
+      "refreshed": [
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-04-21-obs-studio-32-1-2.md",
+          "record_id": "github:obs-studio:311922679"
+        },
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-04-02-obs-studio-32-1-1.md",
+          "record_id": "github:obs-studio:304830335"
+        }
+      ],
+      "scan_limit": 200,
+      "skipped": [
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "github:obs-studio:294459106"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "github:obs-studio:270138596"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "github:obs-studio:267904532"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "github:obs-studio:256777688"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "github:obs-studio:250426094"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "github:obs-studio:249186170"
+        }
+      ],
+      "skipped_existing": 6,
+      "status": "success",
+      "written": [
+        "auxsays/updates/generated/2026-07-21-obs-studio-32-2-0.md",
+        "auxsays/updates/generated/2025-07-28-obs-studio-31-1-2.md"
+      ]
+    },
+    {
+      "adapter": "github_releases",
+      "candidate_count": 30,
+      "created": 2,
+      "deferred": [
+        "github:comfyui:296471112",
+        "github:comfyui:294307046",
+        "github:comfyui:293718101",
+        "github:comfyui:293644594",
+        "github:comfyui:293569572",
+        "github:comfyui:293401957",
+        "github:comfyui:291113859",
+        "github:comfyui:290028996",
+        "github:comfyui:287525691",
+        "github:comfyui:287377763"
+      ],
+      "deferred_count": 10,
+      "duration_ms": 5860,
+      "fetched": 30,
+      "product_id": "comfyui",
+      "record_limit": 2,
+      "refreshed": [
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-07-15-comfyui-0-28-0.md",
+          "record_id": "github:comfyui:354232972"
+        },
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-06-30-comfyui-0-27-0.md",
+          "record_id": "github:comfyui:347121118"
+        }
+      ],
+      "scan_limit": 200,
+      "skipped": [
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "github:comfyui:343659944"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "github:comfyui:341566347"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "github:comfyui:339902240"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "github:comfyui:333872281"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "github:comfyui:332660528"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "github:comfyui:326155086"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "github:comfyui:322123426"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "github:comfyui:320256380"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "github:comfyui:314258741"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "github:comfyui:310487464"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "github:comfyui:310169471"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "github:comfyui:309137867"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "github:comfyui:308192054"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "github:comfyui:300907822"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "github:comfyui:299840606"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "github:comfyui:299646329"
+        }
+      ],
+      "skipped_existing": 16,
+      "status": "success",
+      "written": [
+        "auxsays/updates/generated/2026-03-15-comfyui-0-17-2.md",
+        "auxsays/updates/generated/2026-03-13-comfyui-0-17-1.md"
+      ]
+    },
+    {
+      "adapter": "rss_feed",
+      "candidate_count": 10,
+      "created": 0,
+      "deferred": [],
+      "deferred_count": 0,
+      "duration_ms": 947,
+      "fetched": 10,
+      "product_id": "github",
+      "record_limit": 2,
+      "refreshed": [
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-07-21-github-copilot-gemini-3-6-flash-is-now-available-in-github-copilot.md",
+          "record_id": "rss:github:https://github.blog/changelog/2026-07-21-gemini-3-6-flash-is-now-available-in-github-copilot"
+        },
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-07-20-github-copilot-ai-credit-pools-for-cost-centers-in-the-billing-ui.md",
+          "record_id": "rss:github:https://github.blog/changelog/2026-07-20-ai-credit-pools-for-cost-centers-in-the-billing-ui"
+        }
+      ],
+      "scan_limit": 200,
+      "skipped": [
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:github:https://github.blog/changelog/2026-07-16-copilot-users-can-now-see-ai-credits-used-per-billing-cycle"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:github:https://github.blog/changelog/2026-07-20-github-code-quality-is-now-generally-available"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:github:https://github.blog/changelog/2026-07-17-repository-level-github-copilot-usage-metrics-generally-available"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:github:https://github.blog/changelog/2026-07-17-github-copilot-app-now-available-in-the-usage-metrics-api"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:github:https://github.blog/changelog/2026-07-17-copilot-code-review-customization-and-configurability-improvements"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:github:https://github.blog/changelog/2026-07-17-github-mobile-fix-pull-request-comments-with-copilot-cloud-agent"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:github:https://github.blog/changelog/2026-07-16-advanced-search-for-projects-is-generally-available"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:github:https://github.blog/changelog/2026-07-16-repository-admins-can-archive-pull-requests"
+        }
+      ],
+      "skipped_existing": 8,
+      "status": "success",
+      "written": []
+    },
+    {
+      "adapter": "html_changelog",
+      "candidate_count": 0,
+      "created": 0,
+      "deferred": [],
+      "deferred_count": 0,
+      "duration_ms": 349,
+      "fetched": 0,
+      "product_id": "netlify",
+      "record_limit": 2,
+      "refreshed": [],
+      "scan_limit": 200,
+      "skipped": [],
+      "skipped_existing": 0,
+      "status": "success",
+      "written": []
+    },
+    {
+      "adapter": "adobe_acrobat",
+      "candidate_count": 74,
+      "created": 2,
+      "deferred": [
+        "adobe:adobe-acrobat-reader:continuous:21.005.20054:0f8d91772b7a31f4",
+        "adobe:adobe-acrobat-reader:continuous:21.005.20048:9320900ebf808fd2",
+        "adobe:adobe-acrobat-reader:continuous:21.001.20155:c9a992c09d293d77",
+        "adobe:adobe-acrobat-reader:continuous:20.013.20074:e30d84b7779366f3",
+        "adobe:adobe-acrobat-reader:continuous:20.009.20074:89e8dbd5799d5bda",
+        "adobe:adobe-acrobat-reader:continuous:20.009.20067:0b7d508f939b8ad6",
+        "adobe:adobe-acrobat-reader:continuous:20.009.20065:6e8f788ff3f7cf00",
+        "adobe:adobe-acrobat-reader:continuous:20.009.20063:40bee0b4f684ec83",
+        "adobe:adobe-acrobat-reader:continuous:20.006.20042:9cdcde34ac8c5dd3",
+        "adobe:adobe-acrobat-reader:continuous:20.006.20034:211bedff007b8772",
+        "adobe:adobe-acrobat-reader:continuous:19.021.20061:c57f083c51faa844",
+        "adobe:adobe-acrobat-reader:continuous:19.021.20058:ab097fb4ab320051",
+        "adobe:adobe-acrobat-reader:continuous:19.021.20056:8bb02f49c6020367",
+        "adobe:adobe-acrobat-reader:continuous:19.021.20049:6fe72a840215ef5b",
+        "adobe:adobe-acrobat-reader:continuous:19.021.20048:45f1294f569abf33",
+        "adobe:adobe-acrobat-reader:continuous:19.021.20047:698ea9dcca40c759",
+        "adobe:adobe-acrobat-reader:continuous:19.012.20040:11a84593d67ae369",
+        "adobe:adobe-acrobat-reader:continuous:19.012.20036:007ba29e7ac7c714",
+        "adobe:adobe-acrobat-reader:continuous:19.012.20035:ab0389b594822eba",
+        "adobe:adobe-acrobat-reader:continuous:19.012.20034:d9e0cf369dfb16f4",
+        "adobe:adobe-acrobat-reader:continuous:19.010.20100:3b02911dd4473a3c",
+        "adobe:adobe-acrobat-reader:continuous:19.010.20099:1848a7000aa4f215",
+        "adobe:adobe-acrobat-reader:continuous:19.010.20098:9247cdeab909790b",
+        "adobe:adobe-acrobat-reader:continuous:19.010.20091:16e6f6cf73204445",
+        "adobe:adobe-acrobat-reader:continuous:19.010.20069:4aad6d0c4e7963b9",
+        "adobe:adobe-acrobat-reader:continuous:19.010.20064:1386a80da96ee518",
+        "adobe:adobe-acrobat-reader:continuous:19.008.20081:5951c22105890eb9",
+        "adobe:adobe-acrobat-reader:continuous:19.008.20080:08e0924cb19d1c93",
+        "adobe:adobe-acrobat-reader:continuous:19.008.20074:bfd9fb241d7adcf8",
+        "adobe:adobe-acrobat-reader:continuous:19.008.20071:aa820eb176497eff",
+        "adobe:adobe-acrobat-reader:continuous:18.011.20063:08806a27d2efe50e",
+        "adobe:adobe-acrobat-reader:continuous:18.011.20058:08ffd3ae7efdeac6",
+        "adobe:adobe-acrobat-reader:continuous:18.011.20055:db1a909ecb10f992",
+        "adobe:adobe-acrobat-reader:continuous:18.011.20040:00ecb47a32af7e71",
+        "adobe:adobe-acrobat-reader:continuous:18.011.20038:8bce4affc66a2c89",
+        "adobe:adobe-acrobat-reader:continuous:18.009.20050:4124393096551db0",
+        "adobe:adobe-acrobat-reader:continuous:18.009.20044:928e76c8c9364457",
+        "adobe:adobe-acrobat-reader:continuous:17.012.20098:0d3c180faee0d733",
+        "adobe:adobe-acrobat-reader:continuous:17.012.20095:76c4a55919303601",
+        "adobe:adobe-acrobat-reader:continuous:17.012.20093:3916845ff53b3535",
+        "adobe:adobe-acrobat-reader:continuous:17.009.20058:7b1748702686d8a7",
+        "adobe:adobe-acrobat-reader:continuous:17.009.20044:31f3870358651649",
+        "adobe:adobe-acrobat-reader:continuous:15.023.20070:5af22f9380102837",
+        "adobe:adobe-acrobat-reader:continuous:15.023.20056:c1d6e1ee7defc853",
+        "adobe:adobe-acrobat-reader:continuous:15.023.20053:8b553f2a8583eeb7",
+        "adobe:adobe-acrobat-reader:continuous:15.020.20042:0c838975277c7ab0",
+        "adobe:adobe-acrobat-reader:continuous:15.020.20039:f4a5a9c61f57cee9",
+        "adobe:adobe-acrobat-reader:continuous:15.017.20053:8f5c2c28f12f719e",
+        "adobe:adobe-acrobat-reader:continuous:15.017.20050:7a6e968a82323a15",
+        "adobe:adobe-acrobat-reader:continuous:15.016.20045:e33c5644ea6b3bdd",
+        "adobe:adobe-acrobat-reader:continuous:15.016.20041:8a384d8c87db7b97",
+        "adobe:adobe-acrobat-reader:continuous:15.016.20039:d45938e563c5b153",
+        "adobe:adobe-acrobat-reader:continuous:15.010.20060:6b176526464e1389",
+        "adobe:adobe-acrobat-reader:continuous:15.010.20059:61ea3962a53fef96",
+        "adobe:adobe-acrobat-reader:continuous:15.010.20056:0624f5d4d6ce7732",
+        "adobe:adobe-acrobat-reader:continuous:15.009.20079:abb49c595d2052fe",
+        "adobe:adobe-acrobat-reader:continuous:15.009.20077:cad78cce2329258e",
+        "adobe:adobe-acrobat-reader:continuous:15.009.20071:5a0349e837ea9f2a",
+        "adobe:adobe-acrobat-reader:continuous:15.009.20069:65858a3c4ee6cddf",
+        "adobe:adobe-acrobat-reader:continuous:15.008.20082:52a0af8d7cde18dd",
+        "adobe:adobe-acrobat-reader:classic:20.004.30006:f1916c28e65cb203",
+        "adobe:adobe-acrobat-reader:classic:20.004.30005:4c9867dda1304738",
+        "adobe:adobe-acrobat-reader:classic:20.001.30025:33d6405f894fa141",
+        "adobe:adobe-acrobat-reader:classic:20.001.30018:62e0d9f3e62daaa7"
+      ],
+      "deferred_count": 64,
+      "duration_ms": 5449,
+      "fetched": 74,
+      "product_id": "adobe-acrobat-reader",
+      "record_limit": 2,
+      "refreshed": [
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-05-18-adobe-acrobat-reader-26-001-21563.md",
+          "record_id": "adobe:adobe-acrobat-reader:continuous:26.001.21563:6328266f8ae55fff"
+        },
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-05-01-adobe-acrobat-reader-26-001-21529.md",
+          "record_id": "adobe:adobe-acrobat-reader:continuous:26.001.21529:813d949ea2ac4f63"
+        }
+      ],
+      "scan_limit": 200,
+      "skipped": [
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "adobe:adobe-acrobat-reader:continuous:24.002.20933:75d5ca9e24237042"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "adobe:adobe-acrobat-reader:continuous:24.002.20857:5e9883752080a820"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "adobe:adobe-acrobat-reader:continuous:24.002.20854:8843fd2fd3ea8318"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "adobe:adobe-acrobat-reader:continuous:24.002.20759:8f1ae756976c788e"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "adobe:adobe-acrobat-reader:continuous:24.002.20736:776d74fc62b9db56"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "adobe:adobe-acrobat-reader:continuous:23.003.20244:ff9994e9055d51ac"
+        }
+      ],
+      "skipped_existing": 6,
+      "status": "success",
+      "written": [
+        "auxsays/updates/generated/2021-07-28-adobe-acrobat-reader-21-005-20060.md",
+        "auxsays/updates/generated/2021-07-13-adobe-acrobat-reader-21-005-20058.md"
+      ]
+    },
+    {
+      "adapter": "adobe_acrobat",
+      "candidate_count": 74,
+      "created": 2,
+      "deferred": [
+        "adobe:adobe-acrobat-pro:continuous:21.005.20054:32225494f7e35cd6",
+        "adobe:adobe-acrobat-pro:continuous:21.005.20048:3addb0272b48e881",
+        "adobe:adobe-acrobat-pro:continuous:21.001.20155:e2109d35a04e0274",
+        "adobe:adobe-acrobat-pro:continuous:20.013.20074:6f33cc66e50563d6",
+        "adobe:adobe-acrobat-pro:continuous:20.009.20074:f7e3ce165729f28f",
+        "adobe:adobe-acrobat-pro:continuous:20.009.20067:677ef6bfebb67c60",
+        "adobe:adobe-acrobat-pro:continuous:20.009.20065:788bb102f369d87e",
+        "adobe:adobe-acrobat-pro:continuous:20.009.20063:8755f6cce5d61287",
+        "adobe:adobe-acrobat-pro:continuous:20.006.20042:00db8373876a287e",
+        "adobe:adobe-acrobat-pro:continuous:20.006.20034:448b4a10fa4c32f5",
+        "adobe:adobe-acrobat-pro:continuous:19.021.20061:924b46f6e203d641",
+        "adobe:adobe-acrobat-pro:continuous:19.021.20058:f6d022384ba9b8ac",
+        "adobe:adobe-acrobat-pro:continuous:19.021.20056:f77344f2a8ee5c2c",
+        "adobe:adobe-acrobat-pro:continuous:19.021.20049:0b30e4698b72b949",
+        "adobe:adobe-acrobat-pro:continuous:19.021.20048:3f067b63b485ee49",
+        "adobe:adobe-acrobat-pro:continuous:19.021.20047:82902591a1ed7587",
+        "adobe:adobe-acrobat-pro:continuous:19.012.20040:0ad509449fa72847",
+        "adobe:adobe-acrobat-pro:continuous:19.012.20036:e66472fc52e7d10e",
+        "adobe:adobe-acrobat-pro:continuous:19.012.20035:466742f62744d404",
+        "adobe:adobe-acrobat-pro:continuous:19.012.20034:0a974477d5be7eac",
+        "adobe:adobe-acrobat-pro:continuous:19.010.20100:ed525ec95dbfdbdd",
+        "adobe:adobe-acrobat-pro:continuous:19.010.20099:01201668d4255858",
+        "adobe:adobe-acrobat-pro:continuous:19.010.20098:561168bb23fcae91",
+        "adobe:adobe-acrobat-pro:continuous:19.010.20091:3bb5a32d433b062c",
+        "adobe:adobe-acrobat-pro:continuous:19.010.20069:48444590e891e358",
+        "adobe:adobe-acrobat-pro:continuous:19.010.20064:ed5ccb98e19cdb7d",
+        "adobe:adobe-acrobat-pro:continuous:19.008.20081:1fec0ef52244205c",
+        "adobe:adobe-acrobat-pro:continuous:19.008.20080:d45c158b7e5cd9cf",
+        "adobe:adobe-acrobat-pro:continuous:19.008.20074:6e4416f3d472f164",
+        "adobe:adobe-acrobat-pro:continuous:19.008.20071:d57306bd44291de0",
+        "adobe:adobe-acrobat-pro:continuous:18.011.20063:dc867fb7dc1fa2e4",
+        "adobe:adobe-acrobat-pro:continuous:18.011.20058:79c77a861acc2e98",
+        "adobe:adobe-acrobat-pro:continuous:18.011.20055:46fb48b2fc9ddf71",
+        "adobe:adobe-acrobat-pro:continuous:18.011.20040:e84ca85c2b9fc68e",
+        "adobe:adobe-acrobat-pro:continuous:18.011.20038:44b6ed78bae93045",
+        "adobe:adobe-acrobat-pro:continuous:18.009.20050:a200329ad5ac0eda",
+        "adobe:adobe-acrobat-pro:continuous:18.009.20044:945391956f7c3a32",
+        "adobe:adobe-acrobat-pro:continuous:17.012.20098:b4ceb0fb3dcc4036",
+        "adobe:adobe-acrobat-pro:continuous:17.012.20095:0d7101af169aa90b",
+        "adobe:adobe-acrobat-pro:continuous:17.012.20093:5a8db44dfc5b4253",
+        "adobe:adobe-acrobat-pro:continuous:17.009.20058:e93d3eacc4d1afae",
+        "adobe:adobe-acrobat-pro:continuous:17.009.20044:d0330a96510b2b39",
+        "adobe:adobe-acrobat-pro:continuous:15.023.20070:57eb421501a80aaa",
+        "adobe:adobe-acrobat-pro:continuous:15.023.20056:c53176f6a8f60cba",
+        "adobe:adobe-acrobat-pro:continuous:15.023.20053:4a3b29c939d001c2",
+        "adobe:adobe-acrobat-pro:continuous:15.020.20042:fdfb8492814677cc",
+        "adobe:adobe-acrobat-pro:continuous:15.020.20039:8db50aaa2cb3096e",
+        "adobe:adobe-acrobat-pro:continuous:15.017.20053:c7eee27c0c2e2b61",
+        "adobe:adobe-acrobat-pro:continuous:15.017.20050:76a011d77eacfa6a",
+        "adobe:adobe-acrobat-pro:continuous:15.016.20045:2499239c79250ddb",
+        "adobe:adobe-acrobat-pro:continuous:15.016.20041:3ceabed9ca20ddd2",
+        "adobe:adobe-acrobat-pro:continuous:15.016.20039:d5b18b11dc420093",
+        "adobe:adobe-acrobat-pro:continuous:15.010.20060:68a0367497fcca3d",
+        "adobe:adobe-acrobat-pro:continuous:15.010.20059:1500e87ab8002cf8",
+        "adobe:adobe-acrobat-pro:continuous:15.010.20056:17955f7a374a2d10",
+        "adobe:adobe-acrobat-pro:continuous:15.009.20079:97e7f2c339af9d24",
+        "adobe:adobe-acrobat-pro:continuous:15.009.20077:ac9397dc1008464c",
+        "adobe:adobe-acrobat-pro:continuous:15.009.20071:ec236f204fea2945",
+        "adobe:adobe-acrobat-pro:continuous:15.009.20069:837b19cacca7f622",
+        "adobe:adobe-acrobat-pro:continuous:15.008.20082:6eb9dd24ba6dfcf2",
+        "adobe:adobe-acrobat-pro:classic:20.004.30006:b3cba30d9477f226",
+        "adobe:adobe-acrobat-pro:classic:20.004.30005:afeb3f63ddbb639c",
+        "adobe:adobe-acrobat-pro:classic:20.001.30025:efee7b4a2c68ba75",
+        "adobe:adobe-acrobat-pro:classic:20.001.30018:0df96a25d383e2b5"
+      ],
+      "deferred_count": 64,
+      "duration_ms": 5315,
+      "fetched": 74,
+      "product_id": "adobe-acrobat-pro",
+      "record_limit": 2,
+      "refreshed": [
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-05-18-adobe-acrobat-pro-26-001-21563.md",
+          "record_id": "adobe:adobe-acrobat-pro:continuous:26.001.21563:ba46b442cb9c0581"
+        },
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-05-01-adobe-acrobat-pro-26-001-21529.md",
+          "record_id": "adobe:adobe-acrobat-pro:continuous:26.001.21529:f568e99ac4bb01db"
+        }
+      ],
+      "scan_limit": 200,
+      "skipped": [
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "adobe:adobe-acrobat-pro:continuous:24.002.20933:f5afb2601ea5db2f"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "adobe:adobe-acrobat-pro:continuous:24.002.20857:ba9052179d9dc120"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "adobe:adobe-acrobat-pro:continuous:24.002.20854:d8bdf0747d03233b"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "adobe:adobe-acrobat-pro:continuous:24.002.20759:a7cf94aa55e04fa6"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "adobe:adobe-acrobat-pro:continuous:24.002.20736:7167e9f685cac3ee"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "adobe:adobe-acrobat-pro:continuous:23.003.20244:bcf03e13b40373f0"
+        }
+      ],
+      "skipped_existing": 6,
+      "status": "success",
+      "written": [
+        "auxsays/updates/generated/2021-07-28-adobe-acrobat-pro-21-005-20060.md",
+        "auxsays/updates/generated/2021-07-13-adobe-acrobat-pro-21-005-20058.md"
+      ]
+    },
+    {
+      "adapter": "microsoft_release_health",
+      "candidate_count": 4,
+      "created": 0,
+      "deferred": [],
+      "deferred_count": 0,
+      "duration_ms": 9230,
+      "fetched": 4,
+      "product_id": "microsoft-windows-11",
+      "record_limit": 6,
+      "refreshed": [
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-06-23-windows-11-26h1.md",
+          "record_id": "microsoft:microsoft-windows-11:26H1:2408f682500e2953"
+        },
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-06-23-windows-11-25h2.md",
+          "record_id": "microsoft:microsoft-windows-11:25H2:93be1ef08ab2bb84"
+        },
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-06-23-windows-11-24h2.md",
+          "record_id": "microsoft:microsoft-windows-11:24H2:15be0a55967056d3"
+        },
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-06-09-windows-11-23h2.md",
+          "record_id": "microsoft:microsoft-windows-11:23H2:7b6462fef2940dd0"
+        }
+      ],
+      "scan_limit": 200,
+      "skipped": [],
+      "skipped_existing": 0,
+      "status": "success",
+      "written": []
+    },
+    {
+      "adapter": "microsoft_office_updates",
+      "candidate_count": 200,
+      "created": 2,
+      "deferred": [
+        "microsoft:microsoft-teams:26015.1401.4272.1018:f0f9d7c9a2d8aa2e",
+        "microsoft:microsoft-teams:26004.403.4267.4118:487dcc4a209100f1",
+        "microsoft:microsoft-teams:25331.1107.4213.8634:c07c5dd34beeb244",
+        "microsoft:microsoft-teams:25306.805.4102.7211:85d9376d9e8b6763",
+        "microsoft:microsoft-teams:25290.302.4044.3989:2d93ce0ab872f011",
+        "microsoft:microsoft-teams:25275.2602.4021.9366:95fbc5e4bc5268da",
+        "microsoft:microsoft-teams:25255.703.3981.5698:49655a64ac0cb75b",
+        "microsoft:microsoft-teams:25240.1603.3956.3103:323854be6ebb440c",
+        "microsoft:microsoft-teams:25227.301.3887.7726:e13a370a7845c1c9",
+        "microsoft:microsoft-teams:25212.2404.3875.1360:8512c0420d0ca080",
+        "microsoft:microsoft-teams:25198.1302.3822.1091:bad508bb7b0e4a95",
+        "microsoft:microsoft-teams:25185.205.3812.7741:6ada2364d5c3f418",
+        "microsoft:microsoft-teams:25163.3001.3726.6503:67929aa69861ed2a",
+        "microsoft:microsoft-teams:25151.505.3727.5755:873e88ea56e17d4c",
+        "microsoft:microsoft-teams:25122.1207.3700.1444:6890429bab3142fd",
+        "microsoft:microsoft-teams:25093.2105.3614.8220:dc2bf61e14b279e6",
+        "microsoft:microsoft-teams:25079.2107.3576.1611:1714f0ae2aabc4e0",
+        "microsoft:microsoft-teams:25072.1704.3539.4369:8f7ac71461a75460",
+        "microsoft:microsoft-teams:25060.203.3471.5023:71e985ba1dec1b04",
+        "microsoft:microsoft-teams:25044.2406.3471.4570:24c99f6898eff8ab",
+        "microsoft:microsoft-teams:25031.1203.3429.7545:99ee5af53954502d",
+        "microsoft:microsoft-teams:25016.1904.3401.2239:20fd2fcb96c55016",
+        "microsoft:microsoft-teams:25007.203.3361.6689:69d0d465b0e7d2a3",
+        "microsoft:microsoft-teams:24335.207.3345.5574:1d4adb082bc9655b",
+        "microsoft:microsoft-teams:24335.204.3298.2649:680b8e4a906ecfac",
+        "microsoft:microsoft-teams:24295.606.3238.6194:cedff6bebbdd3dea",
+        "microsoft:microsoft-teams:24277.3502.3161.3007:acc42319d53dac6a",
+        "microsoft:microsoft-teams:24256.2503.3156.9924:03687d38ad9a4d80",
+        "microsoft:microsoft-teams:24244.507.3125.3475:464a1093b419779a",
+        "microsoft:microsoft-teams:24231.509.3122.5539:0ba7db7bae1b15d1",
+        "microsoft:microsoft-teams:24215.1002.3039.5089:71d5a37b8fd67aed",
+        "microsoft:microsoft-teams:24193.1707.3028.4282:e0f164c77fd96a8c",
+        "microsoft:microsoft-teams:24180.210.3001.6635:e6aaad0b6c53b21d",
+        "microsoft:microsoft-teams:24165.1406.2974.9471:53fac0b3d8a4eafc",
+        "microsoft:microsoft-teams:24152.405.2925.6762:0653061b736a1aa4",
+        "microsoft:microsoft-teams:24137.2012.2930.9819:04c64c7fafc09a88",
+        "microsoft:microsoft-teams:24124.1412.2911.3341:1744e08846e9aa48",
+        "microsoft:microsoft-teams:24102.2214.2869.7475:a33ab95af68c2d92",
+        "microsoft:microsoft-teams:24091.213.2852.3731:064ad6c8b9016882",
+        "microsoft:microsoft-teams:24074.2607.2799.9843:67ffab923e86902f",
+        "microsoft:microsoft-teams:24060.2809.2788.1256:c6d9effa3610b0fa",
+        "microsoft:microsoft-teams:24046.2813.2770.1094:b9a5a70a2a1289bb",
+        "microsoft:microsoft-teams:24033.812.2721.9190:81dd1bcccca75506",
+        "microsoft:microsoft-teams:24004.1304.2655.7488:ef222dac51e861d5",
+        "microsoft:microsoft-teams:23335.208.2601.834:4a6976a01a703dd1",
+        "microsoft:microsoft-teams:23320.3110.2622.1325:46c49e48fdca1e90",
+        "microsoft:microsoft-teams:23306.3408.2576.5406:045b4be0df1bd966",
+        "microsoft:microsoft-teams:23285.3809.2525.961:96aaa5c157536830",
+        "microsoft:microsoft-teams:23272.2708.2452.9689:693c84bb5bca17ad",
+        "microsoft:microsoft-teams:23247.720.2421.8365:68f181fa8a35897c",
+        "microsoft:microsoft-teams:2024.41.01.07:266ba4a5e7364a73",
+        "microsoft:microsoft-teams:2024.39.01.12:90f7f4d1392ca7d2",
+        "microsoft:microsoft-teams:2024.36.01.07:d0855a926ced8b52",
+        "microsoft:microsoft-teams:2024.34.01.10:975e738fb4668580",
+        "microsoft:microsoft-teams:2024.30.01.06:0135ed7ebfd992e5",
+        "microsoft:microsoft-teams:2024.27.01.22:46b913f4096277ad",
+        "microsoft:microsoft-teams:2024.25.01.25:49981ed579406023",
+        "microsoft:microsoft-teams:2024.23.01.5:7a4ce8d37fc14616",
+        "microsoft:microsoft-teams:2024.21.01.9:bcd3f34a7b53b0c9",
+        "microsoft:microsoft-teams:2024.19.01.7:8d3d29586d753e2a",
+        "microsoft:microsoft-teams:26183.1903.4892.4448:37c1e1afb40f473a",
+        "microsoft:microsoft-teams:26163.405.4842.717:daab2f6e21751449",
+        "microsoft:microsoft-teams:26149.1205.4798.6437:5c734b3b5f74ae83",
+        "microsoft:microsoft-teams:26134.1702.4747.7366:5e53a0045ad2cda0",
+        "microsoft:microsoft-teams:26120.3106.4722.3411:0a95e4e85b36ee6f",
+        "microsoft:microsoft-teams:26106.1911.4707.3286:378f14e42693ad65",
+        "microsoft:microsoft-teams:26093.415.4620.1935:67c6644e2fdf1c83",
+        "microsoft:microsoft-teams:26072.521.4595.7966:d33f06d2bd44625e",
+        "microsoft:microsoft-teams:26058.713.4529.5861:1beb538759057cca",
+        "microsoft:microsoft-teams:26043.2016.4478.2773:9e08cd76849da4dc",
+        "microsoft:microsoft-teams:26032.208.4399.5:441fbcdd9ca719ff",
+        "microsoft:microsoft-teams:26015.1706.4351.4392:47ccdbfed00f0c6c",
+        "microsoft:microsoft-teams:26005.213.4315.4117:22323ab59a4fd85c",
+        "microsoft:microsoft-teams:26005.204.4249.1621:d0dc960b05f9f266",
+        "microsoft:microsoft-teams:25332.1210.4188.1171:d6ba3254c30f174a",
+        "microsoft:microsoft-teams:25306.804.4102.7193:34b3841d27db5d47",
+        "microsoft:microsoft-teams:25290.205.4069.4894:222754a247b0141e",
+        "microsoft:microsoft-teams:25275.2601.4002.2815:1049649d0d933764",
+        "microsoft:microsoft-teams:25255.703.3978.7153:30246c6db3be5aa4",
+        "microsoft:microsoft-teams:25241.203.3947.4411:77508f4c672b8744",
+        "microsoft:microsoft-teams:25227.205.3936.6644:c36b712f3ce7b6b3",
+        "microsoft:microsoft-teams:25212.2204.3869.2204:b368c31808817f11",
+        "microsoft:microsoft-teams:25198.1112.3855.2900:ce14fbec04c84141",
+        "microsoft:microsoft-teams:25185.410.3812.8024:f26dc7b33f6ee6f2",
+        "microsoft:microsoft-teams:25163.3611.3774.6315:55b300c499d320ec",
+        "microsoft:microsoft-teams:25153.1010.3727.5483:79807a325f8bbe8f",
+        "microsoft:microsoft-teams:25122.1415.3698.6812:55d77d2f6e5ec9bc",
+        "microsoft:microsoft-teams:25094.310.3616.953:0a5064a0889ea181",
+        "microsoft:microsoft-teams:25072.1611.3570.1995:4a8a9ab279050a64",
+        "microsoft:microsoft-teams:25060.205.3499.6849:a3ec764dee34a6db",
+        "microsoft:microsoft-teams:25044.2208.3471.2155:21910be0317197b8",
+        "microsoft:microsoft-teams:25031.805.3440.5290:299cdd854c0a052b",
+        "microsoft:microsoft-teams:25017.203.3370.1174:2acfdd8ae6383d7d",
+        "microsoft:microsoft-teams:25007.607.3371.8436:325286d8d0194980",
+        "microsoft:microsoft-teams:24335.208.3315.1951:66fce8ad8b14be84",
+        "microsoft:microsoft-teams:24295.605.3225.8804:17b02b91c8f86d64",
+        "microsoft:microsoft-teams:24277.3507.3205.5228:21bb563c78fcba6f",
+        "microsoft:microsoft-teams:24257.205.3165.2029:77761cbc51898147",
+        "microsoft:microsoft-teams:24243.1309.3132.617:cd76aabdc59c0ea8",
+        "microsoft:microsoft-teams:24231.512.3106.6573:05833081c4021440",
+        "microsoft:microsoft-teams:24215.1007.3082.1590:4e6ccabcdb1ad015",
+        "microsoft:microsoft-teams:24193.1805.3040.8975:c2b38dca0aa8dd4d",
+        "microsoft:microsoft-teams:24180.205.2980.1757:cedda816bc2cb168",
+        "microsoft:microsoft-teams:24165.1414.2987.41:db8dc1e7e7e0b53b",
+        "microsoft:microsoft-teams:24152.415.2975.367:d29762c923c628f0",
+        "microsoft:microsoft-teams:24137.2216.2931.2440:d0dbb367ec685ffa",
+        "microsoft:microsoft-teams:24124.2315.2911.3357:ec75febe600874f0",
+        "microsoft:microsoft-teams:24102.2223.2870.9480:486e109264e5d74e",
+        "microsoft:microsoft-teams:24091.214.2846.1452:7f1432643a721d2c",
+        "microsoft:microsoft-teams:24074.2323.2827.4973:ad6cab3221c48700",
+        "microsoft:microsoft-teams:24060.2623.2790.8046:04427343197aab64",
+        "microsoft:microsoft-teams:24033.813.2773.520:58e84c41e623bcea",
+        "microsoft:microsoft-teams:24004.1309.2689.2246:85d946650cfd57cb",
+        "microsoft:microsoft-teams:23335.232.2637.4844:d50b645894206c41",
+        "microsoft:microsoft-teams:23320.3027.2591.1505:8d8166258d04e541",
+        "microsoft:microsoft-teams:23306.3315.2560.6525:2308bbe007e38b4c",
+        "microsoft:microsoft-teams:23285.3607.2525.937:790684c8304e5ad0",
+        "microsoft:microsoft-teams:23272.2707.2453.769:6e77212b970f21fb",
+        "microsoft:microsoft-teams:23257.2620.2442.7817:d24ab5a1a598e4c0",
+        "microsoft:microsoft-teams:2024.04.01.65:633ecc74388469a4",
+        "microsoft:microsoft-teams:2024.04.01.61:d0c472c8d6fbe52b",
+        "microsoft:microsoft-teams:2024.04.01.37:581a89ebdb52263f",
+        "microsoft:microsoft-teams:2024.04.01.57:af2a8b666c2f21ad",
+        "microsoft:microsoft-teams:2023.50.01.07:ec9f9514568a5d6c",
+        "microsoft:microsoft-teams:2023.45.01.17:e18a514c06e6a968",
+        "microsoft:microsoft-teams:2023.43.01.25:697d91e79f22346a",
+        "microsoft:microsoft-teams:2023.38.01.51:c647a364008ff1ee",
+        "microsoft:microsoft-teams:2023.32.01.5:d7b6974d1952001a",
+        "microsoft:microsoft-teams:2023.30.01.14:cb70d8badce6a129",
+        "microsoft:microsoft-teams:2023.25.01.11:3fb47da24f81f9a7",
+        "microsoft:microsoft-teams:2023.21.01.09:e5dd8a2552a1ccb9",
+        "microsoft:microsoft-teams:2023.16.01.04:a3be446cbf51d495",
+        "microsoft:microsoft-teams:2023.13.01.25:cf0906879a6e9f8a",
+        "microsoft:microsoft-teams:2023.09.01.08:dccf8654c7e52757",
+        "microsoft:microsoft-teams:2023.05.01.18:c092a6e8cee36014",
+        "microsoft:microsoft-teams:2022.50.01.12:3c5b40d3ed061368",
+        "microsoft:microsoft-teams:2022.48.01.07:25e58e41f4f779b7",
+        "microsoft:microsoft-teams:2022.44.01.14:29e1e87ac1a572d4",
+        "microsoft:microsoft-teams:2022.39.01.03:11f4f5435f3a3f2b",
+        "microsoft:microsoft-teams:2022.35.01.22:2a6aa6f9d1dd4360",
+        "microsoft:microsoft-teams:2022.30.01.06:9177ceed0d7e857a",
+        "microsoft:microsoft-teams:2022.26.01.15:77f7d6755dbbe8a2",
+        "microsoft:microsoft-teams:2022.22.01.05:3fbc0d54fcc41b3a",
+        "microsoft:microsoft-teams:2022.17.01.08:44ab7fba6e32986b",
+        "microsoft:microsoft-teams:2022.13.01.04:5a2deb3395a43bad",
+        "microsoft:microsoft-teams:2022.09.01.05:2d0efa495b610c3b",
+        "microsoft:microsoft-teams:2024.40.01.07:6edbef39e22af455",
+        "microsoft:microsoft-teams:2024.35.01.10:4badf3f0b64d1438",
+        "microsoft:microsoft-teams:2024.30.01.24:c08bfe1c1d0892ce",
+        "microsoft:microsoft-teams:2024.30.01.17:def5b3789e27dbdf",
+        "microsoft:microsoft-teams:2024.22.01.09:040b95411336367f",
+        "microsoft:microsoft-teams:2024.25.01.13:39a02de245cbb730",
+        "microsoft:microsoft-teams:2024.22.01.03:c80fb60020072fc3",
+        "microsoft:microsoft-teams:2024.13.01.17:d7339459b5a24c48",
+        "microsoft:microsoft-teams:2024.13.01.09:b41fe8fc43369dea",
+        "microsoft:microsoft-teams:2024.09.01.07:70fcd4de8220e6e3",
+        "microsoft:microsoft-teams:2024.05.01.16:b906ed48f334f3dc",
+        "microsoft:microsoft-teams:2024.05.01.05:5b935c9e461351ee",
+        "microsoft:microsoft-teams:2023.50.01.22:f9e3b9d9fefdd67b",
+        "microsoft:microsoft-teams:2023.48.01.07:cf16384ec8d868c1",
+        "microsoft:microsoft-teams:2023.44.01.11:e25c624bf60906c7",
+        "microsoft:microsoft-teams:2023.39.01.18:679cb1687422917c",
+        "microsoft:microsoft-teams:2023.39.01.08:3bde54b8cd3f4699",
+        "microsoft:microsoft-teams:2023.35.01.14:b8b0c0bab907d12c",
+        "microsoft:microsoft-teams:2023.31.01.01:6a6cb06e61b42ad9",
+        "microsoft:microsoft-teams:2023.26.01.03:e42a53eb116e481e",
+        "microsoft:microsoft-teams:2023.22.01.02:87799d5d62abcaf1",
+        "microsoft:microsoft-teams:2023.13.01.19:c9c9b39987ae265e",
+        "microsoft:microsoft-teams:2023.09.01.18:dec1a9ce20dd31c9",
+        "microsoft:microsoft-teams:2023.01.01.02:a6678aa4be935df7",
+        "microsoft:microsoft-teams:2022.46.01.07:812d6c49aa9e8f4b",
+        "microsoft:microsoft-teams:2022.43.01.09:b328948283d666aa",
+        "microsoft:microsoft-teams:2022.43.01.06:fe3bbd46be7a774b",
+        "microsoft:microsoft-teams:2022.40.01.09:8012ad3b83a5fd59",
+        "microsoft:microsoft-teams:2022.38.01.04:01bdf516441b89c7",
+        "microsoft:microsoft-teams:2022.34.01.09:e1cb24206993d3ef",
+        "microsoft:microsoft-teams:2022.34.01.03:60d46379e6899942",
+        "microsoft:microsoft-teams:2022.25.01.01:6f81b326629aa8e7",
+        "microsoft:microsoft-teams:2022.21.01.06:d36cb9d220031a33",
+        "microsoft:microsoft-teams:2022.13.01.08:836365704c048985",
+        "microsoft:microsoft-teams:2026.02.01.06:5ee7a96b8c53fccd",
+        "microsoft:microsoft-teams:2025.49.01.13:92ce1f72623db4f3",
+        "microsoft:microsoft-teams:2025.45.01.3:f4cb45abec3b8176",
+        "microsoft:microsoft-teams:2025.38.01.6:6f20dbe556358709",
+        "microsoft:microsoft-teams:2025.27.01.13:d23df307e452c9bf",
+        "microsoft:microsoft-teams:2025.25.01.13:e751eb3fd26021d0",
+        "microsoft:microsoft-teams:2025.23.01.10:6ae647a34872fd2c",
+        "microsoft:microsoft-teams:2025.19.01.12:40ffab57dd17491f",
+        "microsoft:microsoft-teams:2025.07.01.02:f0a945a370dd2d26"
+      ],
+      "deferred_count": 189,
+      "duration_ms": 5778,
+      "fetched": 200,
+      "product_id": "microsoft-teams",
+      "record_limit": 2,
+      "refreshed": [
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-07-17-microsoft-teams-26183-1901-4874-5228.md",
+          "record_id": "microsoft:microsoft-teams:26183.1901.4874.5228:c56d879171e4dd81"
+        },
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-07-01-microsoft-teams-26163-407-4839-8659.md",
+          "record_id": "microsoft:microsoft-teams:26163.407.4839.8659:614818b363d9b499"
+        }
+      ],
+      "scan_limit": 200,
+      "skipped": [
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "microsoft:microsoft-teams:26149.1804.4788.5681:154db2e4e1943cb7"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "microsoft:microsoft-teams:26134.1610.4759.7759:14a8a16fb372b3af"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "microsoft:microsoft-teams:26120.3106.4725.800:8bff08b053824bcc"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "microsoft:microsoft-teams:26106.2113.4690.1073:d1b2b4d1c56b1b73"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "microsoft:microsoft-teams:26093.311.4599.3126:5a15762792b9afed"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "microsoft:microsoft-teams:26072.608.4595.8484:1df5a84653a4876c"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "microsoft:microsoft-teams:26059.604.4471.2584:404e2b31fb68e483"
+        }
+      ],
+      "skipped_existing": 7,
+      "status": "success",
+      "written": [
+        "auxsays/updates/generated/2026-03-19-microsoft-teams-26043-2109-4484-3337.md",
+        "auxsays/updates/generated/2026-02-19-microsoft-teams-26032-605-4378-6183.md"
+      ]
+    },
+    {
+      "adapter": "microsoft_office_updates",
+      "candidate_count": 19,
+      "created": 2,
+      "deferred": [
+        "microsoft:microsoft-powerpoint:2410:efa5de6895dd7f44",
+        "microsoft:microsoft-powerpoint:2409:6eee37aea871eea3",
+        "microsoft:microsoft-powerpoint:2408:37806057f21a89f9",
+        "microsoft:microsoft-powerpoint:2407:a4e6b40a28e92e6b",
+        "microsoft:microsoft-powerpoint:2406:ff66665e21e3cf49",
+        "microsoft:microsoft-powerpoint:2405:81f5ad9215147cde",
+        "microsoft:microsoft-powerpoint:2404:80faf12926df1c92",
+        "microsoft:microsoft-powerpoint:2403:f1ca99a5072064e6",
+        "microsoft:microsoft-powerpoint:2312:41734d73c631db0c"
+      ],
+      "deferred_count": 9,
+      "duration_ms": 5803,
+      "fetched": 19,
+      "product_id": "microsoft-powerpoint",
+      "record_limit": 2,
+      "refreshed": [
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-05-20-microsoft-powerpoint-2605.md",
+          "record_id": "microsoft:microsoft-powerpoint:2605:68052bed001d6cab"
+        },
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-04-14-microsoft-powerpoint-2603.md",
+          "record_id": "microsoft:microsoft-powerpoint:2603:2d38636ed627d537"
+        }
+      ],
+      "scan_limit": 200,
+      "skipped": [
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "microsoft:microsoft-powerpoint:2602:fde5bd5ad7b8468f"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "microsoft:microsoft-powerpoint:2601:767c660d99178f4f"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "microsoft:microsoft-powerpoint:2506:346fca48dc6880cd"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "microsoft:microsoft-powerpoint:2504:15f6b1f87eeb28ee"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "microsoft:microsoft-powerpoint:2503:e7a4ca13c9edeeeb"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "microsoft:microsoft-powerpoint:2502:6935362723a73445"
+        }
+      ],
+      "skipped_existing": 6,
+      "status": "success",
+      "written": [
+        "auxsays/updates/generated/2025-01-30-microsoft-powerpoint-2501.md",
+        "auxsays/updates/generated/2024-12-05-microsoft-powerpoint-2411.md"
+      ]
+    },
+    {
+      "adapter": "microsoft_office_updates",
+      "candidate_count": 1,
+      "created": 0,
+      "deferred": [],
+      "deferred_count": 0,
+      "duration_ms": 2664,
+      "fetched": 1,
+      "product_id": "microsoft-365-apps",
+      "record_limit": 2,
+      "refreshed": [
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-06-30-microsoft-365-apps-2606.md",
+          "record_id": "microsoft:microsoft-365-apps:2606:0d838e111b39230d"
+        }
+      ],
+      "scan_limit": 200,
+      "skipped": [],
+      "skipped_existing": 0,
+      "status": "success",
+      "written": []
+    },
+    {
       "adapter": "elgato_help_center",
       "candidate_count": 0,
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 5172,
+      "duration_ms": 5795,
       "fetched": 0,
       "product_id": "elgato-stream-deck",
       "record_limit": 2,
@@ -17,26 +1417,79 @@
       "skipped_existing": 0,
       "status": "success",
       "written": []
+    },
+    {
+      "adapter": "elgato_help_center",
+      "candidate_count": 0,
+      "created": 0,
+      "deferred": [],
+      "deferred_count": 0,
+      "duration_ms": 5672,
+      "fetched": 0,
+      "product_id": "elgato-wave-link",
+      "record_limit": 2,
+      "refreshed": [],
+      "scan_limit": 8,
+      "skipped": [],
+      "skipped_existing": 0,
+      "status": "success",
+      "written": []
+    },
+    {
+      "adapter": "elgato_help_center",
+      "candidate_count": 0,
+      "created": 0,
+      "deferred": [],
+      "deferred_count": 0,
+      "duration_ms": 4523,
+      "fetched": 0,
+      "product_id": "elgato-camera-hub",
+      "record_limit": 2,
+      "refreshed": [],
+      "scan_limit": 8,
+      "skipped": [],
+      "skipped_existing": 0,
+      "status": "success",
+      "written": []
+    },
+    {
+      "adapter": "elgato_help_center",
+      "candidate_count": 0,
+      "created": 0,
+      "deferred": [],
+      "deferred_count": 0,
+      "duration_ms": 4389,
+      "fetched": 0,
+      "product_id": "elgato-4k-capture-utility",
+      "record_limit": 2,
+      "refreshed": [],
+      "scan_limit": 8,
+      "skipped": [],
+      "skipped_existing": 0,
+      "status": "success",
+      "written": []
     }
   ],
-  "last_run_finished_at": "2026-07-22T01:51:38Z",
-  "last_run_started_at": "2026-07-22T01:51:33Z",
+  "last_run_finished_at": "2026-07-22T04:21:03Z",
+  "last_run_started_at": "2026-07-22T04:19:18Z",
   "sources": {
     "adobe-acrobat-pro": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_acrobat",
-      "last_checked_at": "2026-07-21T19:55:38Z",
+      "last_checked_at": "2026-07-22T04:20:14Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 74,
-      "last_records_skipped": 4,
+      "last_records_skipped": 6,
       "last_records_written": 4,
-      "last_run_duration_ms": 5013,
-      "last_success_at": "2026-07-21T19:55:38Z",
+      "last_run_duration_ms": 5315,
+      "last_success_at": "2026-07-22T04:20:14Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "adobe:adobe-acrobat-pro:continuous:21.005.20058:869dc198bc9eebe0",
+        "adobe:adobe-acrobat-pro:continuous:21.005.20060:d27dc4e0794dd228",
         "adobe:adobe-acrobat-pro:continuous:23.003.20244:bcf03e13b40373f0",
         "adobe:adobe-acrobat-pro:continuous:24.002.20736:7167e9f685cac3ee",
         "adobe:adobe-acrobat-pro:continuous:24.002.20759:a7cf94aa55e04fa6",
@@ -51,18 +1504,20 @@
     "adobe-acrobat-reader": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_acrobat",
-      "last_checked_at": "2026-07-21T19:55:33Z",
+      "last_checked_at": "2026-07-22T04:20:08Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 74,
-      "last_records_skipped": 4,
+      "last_records_skipped": 6,
       "last_records_written": 4,
-      "last_run_duration_ms": 5244,
-      "last_success_at": "2026-07-21T19:55:33Z",
+      "last_run_duration_ms": 5449,
+      "last_success_at": "2026-07-22T04:20:08Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "adobe:adobe-acrobat-reader:continuous:21.005.20058:e380633000039d1c",
+        "adobe:adobe-acrobat-reader:continuous:21.005.20060:752149a995dbd977",
         "adobe:adobe-acrobat-reader:continuous:23.003.20244:ff9994e9055d51ac",
         "adobe:adobe-acrobat-reader:continuous:24.002.20736:776d74fc62b9db56",
         "adobe:adobe-acrobat-reader:continuous:24.002.20759:8f1ae756976c788e",
@@ -137,7 +1592,7 @@
     "adobe-premiere-pro": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_release_notes",
-      "last_checked_at": "2026-07-21T19:54:48Z",
+      "last_checked_at": "2026-07-22T04:19:23Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -145,8 +1600,8 @@
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 25736,
-      "last_success_at": "2026-07-21T19:54:48Z",
+      "last_run_duration_ms": 25772,
+      "last_success_at": "2026-07-22T04:19:23Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "adobe:adobe-premiere-pro:26.2.2:c176cc33bba85978",
@@ -157,18 +1612,20 @@
     "blackmagic-davinci": {
       "consecutive_failures": 0,
       "last_adapter": "blackmagic_support_downloads",
-      "last_checked_at": "2026-07-21T19:55:13Z",
+      "last_checked_at": "2026-07-22T04:19:49Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
       "last_health_note": "Fetch succeeded.",
-      "last_records_fetched": 115,
-      "last_records_skipped": 8,
+      "last_records_fetched": 116,
+      "last_records_skipped": 10,
       "last_records_written": 4,
-      "last_run_duration_ms": 5067,
-      "last_success_at": "2026-07-21T19:55:13Z",
+      "last_run_duration_ms": 5946,
+      "last_success_at": "2026-07-22T04:19:49Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "blackmagic-support:blackmagic-davinci:20.1:ff03b781b64d4c3cadd5a16fd3ef8a83",
+        "blackmagic-support:blackmagic-davinci:21.0.3:257ac6878ddf40dc8c8b72c3b65c0de3",
         "blackmagic-support:blackmagic-davinci:20.1.1:a43f22f783a145d59d942086b18ea312",
         "blackmagic-support:blackmagic-davinci:20.2:4593ec0ea9cf4e9899668c0601166220",
         "blackmagic-support:blackmagic-davinci:20.2.1:9d8f7a472beb48d3bccb578777d660a2",
@@ -188,18 +1645,20 @@
     "comfyui": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-07-21T19:55:24Z",
+      "last_checked_at": "2026-07-22T04:20:01Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 30,
-      "last_records_skipped": 14,
+      "last_records_skipped": 16,
       "last_records_written": 4,
-      "last_run_duration_ms": 5399,
-      "last_success_at": "2026-07-21T19:55:24Z",
+      "last_run_duration_ms": 5860,
+      "last_success_at": "2026-07-22T04:20:01Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "github:comfyui:296845226",
+        "github:comfyui:297091255",
         "github:comfyui:299646329",
         "github:comfyui:299840606",
         "github:comfyui:300907822",
@@ -224,7 +1683,7 @@
     "elgato-4k-capture-utility": {
       "consecutive_failures": 0,
       "last_adapter": "elgato_help_center",
-      "last_checked_at": "2026-07-21T19:56:44Z",
+      "last_checked_at": "2026-07-22T04:20:59Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -232,16 +1691,28 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 9225,
-      "last_success_at": "2026-07-21T19:56:44Z",
+      "last_run_duration_ms": 4389,
+      "last_success_at": "2026-07-22T04:20:59Z",
       "previous_consecutive_failures": 0,
+      "scan": {
+        "inspected": [
+          "https://help.elgato.com/hc/en-us/articles/41334927598097-Elgato-4K-Capture-Utility-1-7-16-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/35731668493841-Elgato-4K-Capture-Utility-1-7-15-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/31338821199117-Elgato-4K-Capture-Utility-1-7-14-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/28469007355405-Elgato-4K-Capture-Utility-1-7-13-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/26006411476365-Elgato-4K-Capture-Utility-1-7-12-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/23749168389517-Elgato-4K-Capture-Utility-1-7-11-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/15934093783181-Elgato-4K-Capture-Utility-1-7-10-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/10485410242445-Elgato-4K-Capture-Utility-1-7-9-Release-Notes"
+        ]
+      },
       "seen": [],
       "status": "degraded"
     },
     "elgato-camera-hub": {
       "consecutive_failures": 0,
       "last_adapter": "elgato_help_center",
-      "last_checked_at": "2026-07-21T19:56:32Z",
+      "last_checked_at": "2026-07-22T04:20:54Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -249,16 +1720,28 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 12655,
-      "last_success_at": "2026-07-21T19:56:32Z",
+      "last_run_duration_ms": 4523,
+      "last_success_at": "2026-07-22T04:20:54Z",
       "previous_consecutive_failures": 0,
+      "scan": {
+        "inspected": [
+          "https://help.elgato.com/hc/en-us/articles/48767622829969-Elgato-Camera-Hub-2-3-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/43986247050769-Elgato-Camera-Hub-2-2-2-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/39836377175185-Elgato-Camera-Hub-2-2-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/37613456462353-Elgato-Camera-Hub-2-1-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/34177528821265-Elgato-Camera-Hub-2-0-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/30558826393741-Elgato-Camera-Hub-1-11-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/27654330709645-Elgato-Camera-Hub-1-10-1-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/26006270219149-Elgato-Camera-Hub-1-10-Release-Notes"
+        ]
+      },
       "seen": [],
       "status": "degraded"
     },
     "elgato-stream-deck": {
       "consecutive_failures": 0,
       "last_adapter": "elgato_help_center",
-      "last_checked_at": "2026-07-22T01:51:33Z",
+      "last_checked_at": "2026-07-22T04:20:43Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -266,11 +1749,19 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 5172,
-      "last_success_at": "2026-07-22T01:51:33Z",
+      "last_run_duration_ms": 5795,
+      "last_success_at": "2026-07-22T04:20:43Z",
       "previous_consecutive_failures": 0,
       "scan": {
         "inspected": [
+          "https://help.elgato.com/hc/en-us/articles/42210974537233-Elgato-Stream-Deck-7-1-1-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/41533810232721-Elgato-Stream-Deck-7-1-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/40016247300369-Elgato-Stream-Deck-7-0-3-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/39584982438673-Elgato-Stream-Deck-7-0-2-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/39330355624977-Elgato-Stream-Deck-7-0-1-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/38011940576273-Elgato-Stream-Deck-7-0-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/38669303006993-Elgato-Stream-Deck-6-9-1-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/34904105205777-Elgato-Stream-Deck-6-9-Release-Notes",
           "https://help.elgato.com/hc/en-us/articles/48328697898897-Elgato-Stream-Deck-7-5-0-Release-Notes",
           "https://help.elgato.com/hc/en-us/articles/46818420770321-Elgato-Stream-Deck-7-4-2-Release-Notes",
           "https://help.elgato.com/hc/en-us/articles/45744678572817-Elgato-Stream-Deck-7-4-1-Release-Notes",
@@ -287,7 +1778,7 @@
     "elgato-wave-link": {
       "consecutive_failures": 0,
       "last_adapter": "elgato_help_center",
-      "last_checked_at": "2026-07-21T19:56:18Z",
+      "last_checked_at": "2026-07-22T04:20:48Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -295,27 +1786,41 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 13560,
-      "last_success_at": "2026-07-21T19:56:18Z",
+      "last_run_duration_ms": 5672,
+      "last_success_at": "2026-07-22T04:20:48Z",
       "previous_consecutive_failures": 0,
+      "scan": {
+        "inspected": [
+          "https://help.elgato.com/hc/en-us/articles/48965301638033-Elgato-Wave-Link-3-2-6-Windows-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/48602717332369-Elgato-Wave-Link-3-2-2-macOS-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/48564639825041-Elgato-Wave-Link-3-2-5-Windows-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/48522843138065-Elgato-Wave-Link-3-2-1-macOS-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/47883204686097-Elgato-Wave-Link-3-2-4-Windows-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/47603985610897-Elgato-Wave-Link-3-2-3-Windows-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/47329364877969-Elgato-Wave-Link-3-2-2-Windows-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/47196378703633-Elgato-Wave-Link-3-2-1-Windows-Release-Notes"
+        ]
+      },
       "seen": [],
       "status": "degraded"
     },
     "figma": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-07-21T19:54:42Z",
+      "last_checked_at": "2026-07-22T04:19:18Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 200,
-      "last_records_skipped": 34,
+      "last_records_skipped": 36,
       "last_records_written": 4,
-      "last_run_duration_ms": 5765,
-      "last_success_at": "2026-07-21T19:54:42Z",
+      "last_run_duration_ms": 5725,
+      "last_success_at": "2026-07-22T04:19:18Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "rss:figma:97e9e12e-f523-4ff6-87d8-2799421ced10",
+        "rss:figma:0fa9ad6d-adba-44cd-aa20-89ad92881e02",
         "rss:figma:feb6b214-4c8a-4a43-be33-26973f64b865",
         "rss:figma:fae88fe2-3d5e-4224-93ed-4653f38feb6d",
         "rss:figma:4a8cbf4b-d483-4a90-ac84-48949f969a1d",
@@ -360,16 +1865,16 @@
     "github": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-07-21T19:55:30Z",
+      "last_checked_at": "2026-07-22T04:20:07Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 10,
-      "last_records_skipped": 7,
-      "last_records_written": 3,
-      "last_run_duration_ms": 3008,
-      "last_success_at": "2026-07-21T19:55:30Z",
+      "last_records_skipped": 8,
+      "last_records_written": 2,
+      "last_run_duration_ms": 947,
+      "last_success_at": "2026-07-22T04:20:07Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "rss:github:https://github.blog/changelog/2026-07-21-gemini-3-6-flash-is-now-available-in-github-copilot",
@@ -478,7 +1983,7 @@
     "microsoft-365-apps": {
       "consecutive_failures": 0,
       "last_adapter": "microsoft_office_updates",
-      "last_checked_at": "2026-07-21T19:56:02Z",
+      "last_checked_at": "2026-07-22T04:20:40Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -486,8 +1991,8 @@
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 2333,
-      "last_success_at": "2026-07-21T19:56:02Z",
+      "last_run_duration_ms": 2664,
+      "last_success_at": "2026-07-22T04:20:40Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "microsoft:microsoft-365-apps:2606:0d838e111b39230d",
@@ -499,18 +2004,20 @@
     "microsoft-powerpoint": {
       "consecutive_failures": 0,
       "last_adapter": "microsoft_office_updates",
-      "last_checked_at": "2026-07-21T19:55:56Z",
+      "last_checked_at": "2026-07-22T04:20:34Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 19,
-      "last_records_skipped": 4,
+      "last_records_skipped": 6,
       "last_records_written": 4,
-      "last_run_duration_ms": 5231,
-      "last_success_at": "2026-07-21T19:55:56Z",
+      "last_run_duration_ms": 5803,
+      "last_success_at": "2026-07-22T04:20:34Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "microsoft:microsoft-powerpoint:2411:23e8dac6924f750e",
+        "microsoft:microsoft-powerpoint:2501:114ec1f079449d4b",
         "microsoft:microsoft-powerpoint:2502:6935362723a73445",
         "microsoft:microsoft-powerpoint:2503:e7a4ca13c9edeeeb",
         "microsoft:microsoft-powerpoint:2504:15f6b1f87eeb28ee",
@@ -525,18 +2032,20 @@
     "microsoft-teams": {
       "consecutive_failures": 0,
       "last_adapter": "microsoft_office_updates",
-      "last_checked_at": "2026-07-21T19:55:51Z",
+      "last_checked_at": "2026-07-22T04:20:28Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 200,
-      "last_records_skipped": 5,
+      "last_records_skipped": 7,
       "last_records_written": 4,
-      "last_run_duration_ms": 5168,
-      "last_success_at": "2026-07-21T19:55:51Z",
+      "last_run_duration_ms": 5778,
+      "last_success_at": "2026-07-22T04:20:28Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "microsoft:microsoft-teams:26032.605.4378.6183:3d03113431dc2b7e",
+        "microsoft:microsoft-teams:26043.2109.4484.3337:4d42e9912d3e27e1",
         "microsoft:microsoft-teams:26059.604.4471.2584:404e2b31fb68e483",
         "microsoft:microsoft-teams:26072.608.4595.8484:1df5a84653a4876c",
         "microsoft:microsoft-teams:26093.311.4599.3126:5a15762792b9afed",
@@ -552,7 +2061,7 @@
     "microsoft-windows-11": {
       "consecutive_failures": 0,
       "last_adapter": "microsoft_release_health",
-      "last_checked_at": "2026-07-21T19:55:43Z",
+      "last_checked_at": "2026-07-22T04:20:19Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -560,8 +2069,8 @@
       "last_records_fetched": 4,
       "last_records_skipped": 0,
       "last_records_written": 4,
-      "last_run_duration_ms": 8245,
-      "last_success_at": "2026-07-21T19:55:43Z",
+      "last_run_duration_ms": 9230,
+      "last_success_at": "2026-07-22T04:20:19Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "microsoft:microsoft-windows-11:24H2:15be0a55967056d3",
@@ -580,7 +2089,7 @@
     "netlify": {
       "consecutive_failures": 0,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-07-21T19:55:33Z",
+      "last_checked_at": "2026-07-22T04:20:08Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -588,26 +2097,28 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 135,
-      "last_success_at": "2026-07-21T19:55:33Z",
+      "last_run_duration_ms": 349,
+      "last_success_at": "2026-07-22T04:20:08Z",
       "previous_consecutive_failures": 0,
       "status": "degraded"
     },
     "obs-studio": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-07-21T19:55:18Z",
+      "last_checked_at": "2026-07-22T04:19:55Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 14,
-      "last_records_skipped": 4,
+      "last_records_skipped": 6,
       "last_records_written": 4,
-      "last_run_duration_ms": 5741,
-      "last_success_at": "2026-07-21T19:55:18Z",
+      "last_run_duration_ms": 6235,
+      "last_success_at": "2026-07-22T04:19:55Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "github:obs-studio:235305090",
+        "github:obs-studio:357670849",
         "github:obs-studio:249186170",
         "github:obs-studio:250426094",
         "github:obs-studio:256777688",

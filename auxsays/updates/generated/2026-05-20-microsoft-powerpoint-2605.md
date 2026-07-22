@@ -17,8 +17,8 @@ update_version: '2605'
 update_logo_text: MIC
 update_published_at: '2026-05-20T00:00:00Z'
 update_last_checked: '2026-07-21T05:34:51Z'
-source_last_checked: '2026-07-21T19:55:56Z'
-official_body_last_checked: '2026-07-21T19:55:56Z'
+source_last_checked: '2026-07-22T04:20:34Z'
+official_body_last_checked: '2026-07-22T04:20:34Z'
 record_last_updated: '2026-07-21T05:34:51Z'
 patch_file_size: ''
 patch_file_size_note: Microsoft 365 Apps updates are Click-to-Run managed; per-app release notes do not expose standalone
@@ -100,6 +100,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-07-21T19:55:56Z'
+  url: https://learn.microsoft.com/en-us/officeupdates/current-channel
+  status: captured-from-official-microsoft365-app-release-notes
+  body_captured: true
+  checksums_captured: false
+- at: '2026-07-22T04:20:34Z'
   url: https://learn.microsoft.com/en-us/officeupdates/current-channel
   status: captured-from-official-microsoft365-app-release-notes
   body_captured: true
