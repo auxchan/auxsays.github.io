@@ -8132,3 +8132,168 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1tp0ww0-fusion-3d-logo-glow-issue-affecting-backg
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1tp0ww0/fusion_3d_logo_glow_issue_affecting_background/
+  parent_title: Fusion 3D logo glow issue affecting background – correct workflow?
+  report_title: Fusion 3D logo glow issue affecting background – correct workflow?
+  report_text_excerpt: Fusion 3D logo glow issue affecting background – correct workflow? Hi everyone, fusion page of my 3D logo Timeline of my project what it looks like now First of all, i work on macbook pro M1 and OS Tahoe 26.3.1. I’ve just started doing 3D in Fusion in Davinci resolve studio...
+  captured_at: '2026-07-22T22:47:39Z'
+  source_date: '2026-05-27'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1t52qyt-fusion-page-issues-red-nodes-locked-1408x
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1t52qyt/fusion_page_issues_red_nodes_locked_1408x768/
+  parent_title: 'Fusion Page Issues: Red Nodes & Locked 1408x768 Resolution'
+  report_title: 'Fusion Page Issues: Red Nodes & Locked 1408x768 Resolution'
+  report_text_excerpt: 'Fusion Page Issues: Red Nodes & Locked 1408x768 Resolution 1-1 1-2 1-3 2-1 2-2 Hi everyone, I’m running into two persistent issues in DaVinci Resolve and hope someone can help. The Problems: Problem 1: Every time I right-click a clip on the timeline and select " Open in Fusion...'
+  captured_at: '2026-07-22T22:47:39Z'
+  source_date: '2026-05-06'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ssp7xa-davinci-resolve-gpu-render-failing-everyw
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ssp7xa/davinci_resolve_gpu_render_failing_everywhere/
+  parent_title: DaVinci Resolve GPU render failing everywhere (iMac Pro Vega 56). Losing my mind, tried everything
+  report_title: DaVinci Resolve GPU render failing everywhere (iMac Pro Vega 56). Losing my mind, tried everything
+  report_text_excerpt: DaVinci Resolve GPU render failing everywhere (iMac Pro Vega 56). Losing my mind, tried everything I’m honestly at my breaking point with this and I need help because this makes zero sense. I’m a video editor, I use Resolve all the time, and this project was working completely...
+  captured_at: '2026-07-22T22:47:39Z'
+  source_date: '2026-04-22'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1sgvy32-processor-intensive-tasks-general-advice
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1sgvy32/processor_intensive_tasks_general_advice/
+  parent_title: Processor Intensive Tasks General Advice.
+  report_title: Processor Intensive Tasks General Advice.
+  report_text_excerpt: Processor Intensive Tasks General Advice. M1 Pro MacBook Pro 16GB Ram Tahoe - Davinci Resolve Studio 20 - 4k Slog3 Footage mainly Just some general advice, please. I keep my timeline at 1080p when working and only up to 4k for export. General editing, grading, etc I have no...
+  captured_at: '2026-07-22T22:47:39Z'
+  source_date: '2026-04-09'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1seungh-davinci-has-started-to-lag-a-lot-out-of-n
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1seungh/davinci_has_started_to_lag_a_lot_out_of_nowhere/
+  parent_title: Davinci has started to lag a lot out of nowhere
+  report_title: Davinci has started to lag a lot out of nowhere
+  report_text_excerpt: 'Davinci has started to lag a lot out of nowhere Info: DaVinci Resolve Studio 20 Version 20.3 Build 10 Windows 11 MediaArea Text AJA System Test C Drive AJA System Test D Drive Problem: Davinci used to be fluent and I could easily make cuts while editing and it continues...'
+  captured_at: '2026-07-22T22:47:39Z'
+  source_date: '2026-04-07'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1p34673-fps-playback-speed-dropped-out-of-nowhere
+  product_id: blackmagic-davinci
+  update_version: 20.2.3
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1p34673/fps_playback_speed_dropped_out_of_nowhere_1_3_fps/
+  parent_title: FPS Playback speed dropped out of nowhere (1 - 3 FPS)
+  report_title: FPS Playback speed dropped out of nowhere (1 - 3 FPS)
+  report_text_excerpt: 'FPS Playback speed dropped out of nowhere (1 - 3 FPS) I''m stumped. I work with DWAA EXR files / acescg color space, and I''ve never had any issue playing back the files. Only after extensive editing they''ll begin to slow down as expected. My specs: ASUS ProArt Studiobook, RTX...'
+  captured_at: '2026-07-22T22:57:48Z'
+  source_date: '2025-11-21'
+  target_release_date: '2025-11-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.3
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-0-github-issue-13685
+  product_id: obs-studio
+  update_version: 32.2.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13685
+  parent_title: Version 32.2 broke NVENC encoder for legacy graphics cards
+  report_title: Version 32.2 broke NVENC encoder for legacy graphics cards
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.0 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL N/a ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I expected to be able to use OBS the same as I'
+  captured_at: '2026-07-22T23:19:38Z'
+  patch_version_matched: true
+  matched_version: 32.2.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
