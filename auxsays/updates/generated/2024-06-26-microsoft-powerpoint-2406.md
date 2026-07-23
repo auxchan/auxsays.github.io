@@ -1,8 +1,8 @@
 ---
 layout: aux-update
-title: Microsoft PowerPoint 2603 official update breakdown
+title: Microsoft PowerPoint 2406 official update breakdown
 description: Official Microsoft PowerPoint update record captured from Microsoft.
-permalink: /updates/microsoft/microsoft-powerpoint/2603/
+permalink: /updates/microsoft/microsoft-powerpoint/2406/
 update_entry: true
 company_id: microsoft
 product_id: microsoft-powerpoint
@@ -13,31 +13,31 @@ update_type: official-source
 update_source_name: Microsoft
 update_source_url: https://learn.microsoft.com/en-us/officeupdates/current-channel
 update_download_url: ''
-update_version: '2603'
+update_version: '2406'
 update_logo_text: MIC
-update_published_at: '2026-04-14T00:00:00Z'
-update_last_checked: '2026-07-21T05:34:51Z'
+update_published_at: '2024-06-26T00:00:00Z'
+update_last_checked: '2026-07-23T04:52:03Z'
 source_last_checked: '2026-07-23T04:52:03Z'
 official_body_last_checked: '2026-07-23T04:52:03Z'
-record_last_updated: '2026-07-21T05:34:51Z'
+record_last_updated: '2026-07-23T04:52:03Z'
 patch_file_size: ''
 patch_file_size_note: Microsoft 365 Apps updates are Click-to-Run managed; per-app release notes do not expose standalone
   installer/package size metadata.
 patch_file_size_status: not_provided_by_source
 update_status: current
-update_feed_title: Microsoft PowerPoint 2603
-update_detail_title: Microsoft PowerPoint 2603
+update_feed_title: Microsoft PowerPoint 2406
+update_detail_title: Microsoft PowerPoint 2406
 update_consensus_label: Insufficient data
 update_report_count: 0
 update_consensus_confidence: Low
-quick_verdict: Microsoft PowerPoint 2603 has an official AUXSAYS record. Confirmed patch-specific consensus is deferred until
+quick_verdict: Microsoft PowerPoint 2406 has an official AUXSAYS record. Confirmed patch-specific consensus is deferred until
   the consensus refresh pipeline is active.
-official_summary: Microsoft 365 Apps release notes attribute a Microsoft PowerPoint change to Version 2603 (Build 19822.20182)
-  on the Current Channel (2026-04-14).
-release_summary: 'Microsoft PowerPoint Version 2603 (Build 19822.20182) on the Current Channel (release date 2026-04-14).
+official_summary: Microsoft 365 Apps release notes attribute a Microsoft PowerPoint change to Version 2406 (Build 17726.20126)
+  on the Current Channel (2024-06-26).
+release_summary: 'Microsoft PowerPoint Version 2406 (Build 17726.20126) on the Current Channel (release date 2024-06-26).
   Official Microsoft 365 Apps release notes attribute a Microsoft PowerPoint-specific change to this version for Microsoft
-  PowerPoint: Edit your document with Copilot in PowerPoint: Copilot in PowerPoint helps you create, edit, and refine presentations
-  through natural language—right inside your deck. Start a new.'
+  PowerPoint: Use Microsoft Purview to prevent some connected experiences that analyze content: Use a new sensitivity label
+  setting or protection with Double Key Encryption to prevent content.'
 consensus_report: Confirmed patch-specific consensus collection is deferred. This page currently reflects official-source
   ingestion only.
 evidence_state: official_only
@@ -55,10 +55,10 @@ consensus_report_weighting: equal_per_confirmed_report
 consensus_low_context_policy: excluded
 complaint_themes: []
 status_events:
-- at: '2026-04-14T00:00:00Z'
+- at: '2024-06-26T00:00:00Z'
   label: Published
   note: Official source entry detected.
-- at: '2026-07-21T05:34:55Z'
+- at: '2026-07-23T04:52:07Z'
   label: Insufficient data
   note: AUXSAYS official-ingestion record initialized.
 official_patch_notes_source_type: release_notes
@@ -84,44 +84,28 @@ official_sources:
   trust_level: official
   extraction_status: reference_only
 official_source_attempts:
-- at: '2026-07-21T19:55:56Z'
-  url: https://learn.microsoft.com/en-us/officeupdates/current-channel
-  status: captured-from-official-microsoft365-app-release-notes
-  body_captured: true
-  checksums_captured: false
-- at: '2026-07-22T04:20:34Z'
-  url: https://learn.microsoft.com/en-us/officeupdates/current-channel
-  status: captured-from-official-microsoft365-app-release-notes
-  body_captured: true
-  checksums_captured: false
-- at: '2026-07-22T08:47:52Z'
-  url: https://learn.microsoft.com/en-us/officeupdates/current-channel
-  status: captured-from-official-microsoft365-app-release-notes
-  body_captured: true
-  checksums_captured: false
-- at: '2026-07-22T19:48:21Z'
-  url: https://learn.microsoft.com/en-us/officeupdates/current-channel
-  status: captured-from-official-microsoft365-app-release-notes
-  body_captured: true
-  checksums_captured: false
 - at: '2026-07-23T04:52:03Z'
   url: https://learn.microsoft.com/en-us/officeupdates/current-channel
   status: captured-from-official-microsoft365-app-release-notes
   body_captured: true
   checksums_captured: false
-official_patch_notes_body: 'Microsoft PowerPoint Version 2603 (Build 19822.20182) on the Current Channel (release date 2026-04-14).
+official_patch_notes_body: 'Microsoft PowerPoint Version 2406 (Build 17726.20126) on the Current Channel (release date 2024-06-26).
   Official Microsoft 365 Apps release notes attribute a Microsoft PowerPoint-specific change to this version for Microsoft
-  PowerPoint: Edit your document with Copilot in PowerPoint: Copilot in PowerPoint helps you create, edit, and refine presentations
-  through natural language—right inside your deck. Start a new presentation or build on an existing one by asking Copilot
-  to generate slides, update content, improve layouts, and polish design, all while preserving your formatting, structure,
-  and branding. This experience is available with Microsoft 365 Copilot (Basic). In addition, with Microsoft 365 Copilot (Premium),
-  Copilot can also connect to your brand kit to apply branded templates, insert brand-approved images, and check for brand
-  compliance. For more information on licensing, see: What Copilot license do I have | Microsoft Support .'
+  PowerPoint: Use Microsoft Purview to prevent some connected experiences that analyze content: Use a new sensitivity label
+  setting or protection with Double Key Encryption to prevent content within Word, Excel, PowerPoint, and Outlook from being
+  sent to Microsoft for content analysis as a privacy control, even when these are stored in Microsoft’s cloud, such as SharePoint
+  or OneDrive. This helps your organization to optimize your data privacy needs on a per-content basis using the familiar
+  configurations and end-user experiences available with Microsoft Purview. Learn More Use Microsoft Purview to prevent some
+  connected experiences that analyze content: Use a new sensitivity label setting or protection with Double Key Encryption
+  to prevent content within Word, Excel, PowerPoint, and Outlook from being sent to Microsoft for content analysis as a privacy
+  control, even when these are stored in Microsoft’s cloud, such as SharePoint or OneDrive. This helps your organization to
+  optimize your data privacy needs on a per-content basis using the familiar configurations and end-user experiences available
+  with Microsoft Purview. Learn More Use Microsoft Purview to prevent some connected experiences that a'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
 target_channel: Current Channel
-target_build: '19822.20182'
-target_app_version: '2603'
+target_build: '17726.20126'
+target_app_version: '2406'
 applicability:
 - microsoft-powerpoint
 applies_to_label: Microsoft PowerPoint
