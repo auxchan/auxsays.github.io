@@ -8883,3 +8883,83 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: acrobat-20-009-20074-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-on-a-mac-constant-pinwheel-and-not-respondin
+  product_id: adobe-acrobat-pro
+  update_version: 20.009.20074
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-on-a-mac-constant-pinwheel-and-not-responding-1249851
+  parent_title: Adobe Acrobat on a Mac - constant pinwheel and not responding
+  report_title: Adobe Acrobat on a Mac - constant pinwheel and not responding
+  report_text_excerpt: 'Adobe Acrobat on a Mac - constant pinwheel and not responding Good day all, I have a Mac user that keeps getting the pinwheel or a not responding when using Adobe Acrobat. Mac specs: - OS X 10.14.6 (fully updated) - 32GB RAM, 2TB HD with 1.5 TB free space, i9 processor We...'
+  captured_at: '2026-07-23T06:38:20Z'
+  source_date: '2020-07-29'
+  target_release_date: '2020-07-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.009.20074
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-20-009-20067-adobe-community-bug-report-https-community-adobe-com-questions-12-unable-to-install-adobe-acrobat-reader-dc-the-upgrade-pat
+  product_id: adobe-acrobat-reader
+  update_version: 20.009.20067
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/unable-to-install-adobe-acrobat-reader-dc-the-upgrade-patch-cannot-be-installed-1520599
+  parent_title: Unable to install Adobe acrobat reader DC - the upgrade patch cannot be installed...
+  report_title: Unable to install Adobe acrobat reader DC - the upgrade patch cannot be installed...
+  report_text_excerpt: 'Unable to install Adobe acrobat reader DC - the upgrade patch cannot be installed... I am unable to upgrade my Adobe Acrobat Reader DC. Tried different sources like Adobe website ad FTP but always get this error message: "The upgrade Patch cannot be installed by the windows...'
+  captured_at: '2026-07-23T06:52:16Z'
+  source_date: '2020-06-25'
+  target_release_date: '2020-06-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.009.20067
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-20-009-20067-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-reader-20-009-20067-1520429
+  product_id: adobe-acrobat-reader
+  update_version: 20.009.20067
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-reader-20-009-20067-1520429
+  parent_title: Adobe Reader 20.009.20067
+  report_title: Adobe Reader 20.009.20067
+  report_text_excerpt: Adobe Reader 20.009.20067 I have used Adobe for years and it automatically updated to the above issue. It now won't open any documents I have on file, and going straight to the app, will not load at all. Is there a fix for this version of Reader, which does not seem to work
+  captured_at: '2026-07-23T06:52:16Z'
+  source_date: '2020-06-10'
+  target_release_date: '2020-06-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.009.20067
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
