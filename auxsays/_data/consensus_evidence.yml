@@ -9374,3 +9374,158 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: acrobat-19-021-20058-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-pro-dc-stops-responding-when-opened-1243778
+  product_id: adobe-acrobat-pro
+  update_version: 19.021.20058
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-pro-dc-stops-responding-when-opened-1243778
+  parent_title: Acrobat Pro DC Stops Responding when opened.
+  report_title: Acrobat Pro DC Stops Responding when opened.
+  report_text_excerpt: 'Acrobat Pro DC Stops Responding when opened. Every time I open Acrobat Pro DC it freezes and is not-responding. I have uninstalled, ran an AcroCleaner tool, and re-installed. I restarted my computer as well. No luck. It won''t even let me send an error report. OS: Mac OS X -...'
+  captured_at: '2026-07-23T20:18:53Z'
+  source_date: '2020-02-06'
+  target_release_date: '2019-12-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.021.20058
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-19-021-20058-adobe-community-bug-report-https-community-adobe-com-questions-9-19-021-20058-update-fails-on-mac-1243903
+  product_id: adobe-acrobat-reader
+  update_version: 19.021.20058
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/19-021-20058-update-fails-on-mac-1243903
+  parent_title: 19.021.20058 update fails on Mac
+  report_title: 19.021.20058 update fails on Mac
+  report_text_excerpt: 19.021.20058 update fails on Mac I keep getting prompted to update Adobe Reader DC in Managed Software Center but every time I try to update the pending update remains in the queue as if nothing had happened. I use a 2017 MacBook Pro running MacOS High Sierra 10.13.6
+  captured_at: '2026-07-23T20:38:41Z'
+  source_date: '2020-02-11'
+  target_release_date: '2019-12-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.021.20058
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-19-021-20061-adobe-community-bug-report-https-community-adobe-com-questions-9-cannot-open-pdf-in-adobe-reader-on-android-when-opened-fro
+  product_id: adobe-acrobat-reader
+  update_version: 19.021.20061
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/cannot-open-pdf-in-adobe-reader-on-android-when-opened-from-another-application-1242816
+  parent_title: Cannot open PDF in Adobe Reader on Android when opened from another application
+  report_title: Cannot open PDF in Adobe Reader on Android when opened from another application
+  report_text_excerpt: Cannot open PDF in Adobe Reader on Android when opened from another application I've a strange issue here. A PDF won't open on my android mobile in Adobe Reader (version 19.9.1.10848) when accessed from a different application (like Gmail / Chrome / FireFox). The error message...
+  captured_at: '2026-07-23T20:38:41Z'
+  source_date: '2020-01-06'
+  target_release_date: '2019-12-19'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.021.20061
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Acrobat issue
+  workflow_area: Acrobat workflow
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+
+- id: blackmagic-davinci-18-6-6-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1rb4k5o-give-me-some-advice-before-i-give-up-on-d
+  product_id: blackmagic-davinci
+  update_version: 18.6.6
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1rb4k5o/give_me_some_advice_before_i_give_up_on_dr/
+  parent_title: Give me some advice before I give up on DR
+  report_title: Give me some advice before I give up on DR
+  report_text_excerpt: Give me some advice before I give up on DR So I have been trying to get davinci resolve working on my laptop for a few days now. The product seems really good and has everything that I would want and obviously theres a ton of people using it. But I cannot seem to get passed...
+  captured_at: '2026-07-23T21:00:01Z'
+  source_date: '2026-02-21'
+  target_release_date: '2024-03-20'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 18.6.6
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: blackmagic-davinci-19-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1v2wign-davinci-resolve-19-studio-version-causing
+  product_id: blackmagic-davinci
+  update_version: '19'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1v2wign/davinci_resolve_19_studio_version_causing_black/
+  parent_title: Davinci Resolve 19 Studio Version causing black screen of death
+  report_title: Davinci Resolve 19 Studio Version causing black screen of death
+  report_text_excerpt: Davinci Resolve 19 Studio Version causing black screen of death I'm losing my mind here. I did all possible stress tests, did all the updates, drivers, Windows and GPU. I limited FPS to 60 in AMD Adrenaline too, but DaVinci is causing the black screen of death. I cleaned all...
+  captured_at: '2026-07-23T21:02:12Z'
+  source_date: '2026-07-21'
+  target_release_date: '2024-08-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '19'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-19-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uzkqzk-i-need-help-my-davinci-resolve-keeps-cras
+  product_id: blackmagic-davinci
+  update_version: '19'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1uzkqzk/i_need_help_my_davinci_resolve_keeps_crashing/
+  parent_title: 'I Need Help: My Davinci Resolve Keeps Crashing Despite Working Before'
+  report_title: 'I Need Help: My Davinci Resolve Keeps Crashing Despite Working Before'
+  report_text_excerpt: 'I Need Help: My Davinci Resolve Keeps Crashing Despite Working Before Previously my Davinci Resolve worked perfectly fine, I recently got my PC back from the shop just a cleaning, new Windows installation and Driver install. So my PC should be completely up to date. I...'
+  captured_at: '2026-07-23T21:02:12Z'
+  source_date: '2026-07-18'
+  target_release_date: '2024-08-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '19'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
