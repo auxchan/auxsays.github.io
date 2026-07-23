@@ -17,8 +17,8 @@ update_version: New Copilot usage metrics impact dashboard
 update_logo_text: GIT
 update_published_at: '2026-07-22T16:21:47Z'
 update_last_checked: '2026-07-22T19:47:46Z'
-source_last_checked: '2026-07-23T04:51:46Z'
-official_body_last_checked: '2026-07-23T04:51:46Z'
+source_last_checked: '2026-07-23T08:46:55Z'
+official_body_last_checked: '2026-07-23T08:46:55Z'
 record_last_updated: '2026-07-22T19:47:46Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -91,6 +91,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-07-23T04:51:46Z'
+  url: https://github.blog/changelog/2026-07-22-new-copilot-usage-metrics-impact-dashboard
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-07-23T08:46:55Z'
   url: https://github.blog/changelog/2026-07-22-new-copilot-usage-metrics-impact-dashboard
   status: captured-from-rss-feed
   body_captured: true

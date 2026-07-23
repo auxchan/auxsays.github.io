@@ -1,8 +1,8 @@
 ---
 layout: aux-update
-title: Microsoft PowerPoint 2605 official update breakdown
+title: Microsoft PowerPoint 2405 official update breakdown
 description: Official Microsoft PowerPoint update record captured from Microsoft.
-permalink: /updates/microsoft/microsoft-powerpoint/2605/
+permalink: /updates/microsoft/microsoft-powerpoint/2405/
 update_entry: true
 company_id: microsoft
 product_id: microsoft-powerpoint
@@ -13,31 +13,31 @@ update_type: official-source
 update_source_name: Microsoft
 update_source_url: https://learn.microsoft.com/en-us/officeupdates/current-channel
 update_download_url: ''
-update_version: '2605'
+update_version: '2405'
 update_logo_text: MIC
-update_published_at: '2026-05-20T00:00:00Z'
-update_last_checked: '2026-07-21T05:34:51Z'
+update_published_at: '2024-05-30T00:00:00Z'
+update_last_checked: '2026-07-23T08:47:18Z'
 source_last_checked: '2026-07-23T08:47:18Z'
 official_body_last_checked: '2026-07-23T08:47:18Z'
-record_last_updated: '2026-07-21T05:34:51Z'
+record_last_updated: '2026-07-23T08:47:18Z'
 patch_file_size: ''
 patch_file_size_note: Microsoft 365 Apps updates are Click-to-Run managed; per-app release notes do not expose standalone
   installer/package size metadata.
 patch_file_size_status: not_provided_by_source
 update_status: current
-update_feed_title: Microsoft PowerPoint 2605
-update_detail_title: Microsoft PowerPoint 2605
+update_feed_title: Microsoft PowerPoint 2405
+update_detail_title: Microsoft PowerPoint 2405
 update_consensus_label: Insufficient data
 update_report_count: 0
 update_consensus_confidence: Low
-quick_verdict: Microsoft PowerPoint 2605 has an official AUXSAYS record. Confirmed patch-specific consensus is deferred until
+quick_verdict: Microsoft PowerPoint 2405 has an official AUXSAYS record. Confirmed patch-specific consensus is deferred until
   the consensus refresh pipeline is active.
-official_summary: Microsoft 365 Apps release notes attribute a Microsoft PowerPoint change to Version 2605 (Build 20026.20076)
-  on the Current Channel (2026-05-20).
-release_summary: 'Microsoft PowerPoint Version 2605 (Build 20026.20076) on the Current Channel (release date 2026-05-20).
+official_summary: Microsoft 365 Apps release notes attribute a Microsoft PowerPoint change to Version 2405 (Build 17628.20110)
+  on the Current Channel (2024-05-30).
+release_summary: 'Microsoft PowerPoint Version 2405 (Build 17628.20110) on the Current Channel (release date 2024-05-30).
   Official Microsoft 365 Apps release notes attribute a Microsoft PowerPoint-specific change to this version for Microsoft
-  PowerPoint: Fixed an issue where Excel or PowerPoint closed unexpectedly in rare cases while actively coauthoring, particularly
-  when opening a document for the first time.'
+  PowerPoint: Improved experience in changing the source of a linked chart: In a situation where a presentation contains a
+  linked chart, which isn''t only stored at a SharePoint location, but also.'
 consensus_report: Confirmed patch-specific consensus collection is deferred. This page currently reflects official-source
   ingestion only.
 evidence_state: official_only
@@ -55,10 +55,10 @@ consensus_report_weighting: equal_per_confirmed_report
 consensus_low_context_policy: excluded
 complaint_themes: []
 status_events:
-- at: '2026-05-20T00:00:00Z'
+- at: '2024-05-30T00:00:00Z'
   label: Published
   note: Official source entry detected.
-- at: '2026-07-21T05:34:53Z'
+- at: '2026-07-23T08:47:20Z'
   label: Insufficient data
   note: AUXSAYS official-ingestion record initialized.
 official_patch_notes_source_type: release_notes
@@ -84,40 +84,24 @@ official_sources:
   trust_level: official
   extraction_status: reference_only
 official_source_attempts:
-- at: '2026-07-22T04:20:34Z'
-  url: https://learn.microsoft.com/en-us/officeupdates/current-channel
-  status: captured-from-official-microsoft365-app-release-notes
-  body_captured: true
-  checksums_captured: false
-- at: '2026-07-22T08:47:52Z'
-  url: https://learn.microsoft.com/en-us/officeupdates/current-channel
-  status: captured-from-official-microsoft365-app-release-notes
-  body_captured: true
-  checksums_captured: false
-- at: '2026-07-22T19:48:21Z'
-  url: https://learn.microsoft.com/en-us/officeupdates/current-channel
-  status: captured-from-official-microsoft365-app-release-notes
-  body_captured: true
-  checksums_captured: false
-- at: '2026-07-23T04:52:03Z'
-  url: https://learn.microsoft.com/en-us/officeupdates/current-channel
-  status: captured-from-official-microsoft365-app-release-notes
-  body_captured: true
-  checksums_captured: false
 - at: '2026-07-23T08:47:18Z'
   url: https://learn.microsoft.com/en-us/officeupdates/current-channel
   status: captured-from-official-microsoft365-app-release-notes
   body_captured: true
   checksums_captured: false
-official_patch_notes_body: 'Microsoft PowerPoint Version 2605 (Build 20026.20076) on the Current Channel (release date 2026-05-20).
+official_patch_notes_body: 'Microsoft PowerPoint Version 2405 (Build 17628.20110) on the Current Channel (release date 2024-05-30).
   Official Microsoft 365 Apps release notes attribute a Microsoft PowerPoint-specific change to this version for Microsoft
-  PowerPoint: Fixed an issue where Excel or PowerPoint closed unexpectedly in rare cases while actively coauthoring, particularly
-  when opening a document for the first time.'
+  PowerPoint: Improved experience in changing the source of a linked chart: In a situation where a presentation contains a
+  linked chart, which isn''t only stored at a SharePoint location, but also synced to a local folder, when the user tries
+  to change the chart source via File -> Info -> Edit Links to File -> Change Source..., the initial location in the Change
+  Source dialog now shows the current location of the linked chart, instead of the last used location. PowerPoint can now
+  convert the local sync folder location to its corresponding SharePoint URL and preserve it in the file if the user chooses
+  a chart in a local sync folder as the new chart source.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
 target_channel: Current Channel
-target_build: '20026.20076'
-target_app_version: '2605'
+target_build: '17628.20110'
+target_app_version: '2405'
 applicability:
 - microsoft-powerpoint
 applies_to_label: Microsoft PowerPoint
