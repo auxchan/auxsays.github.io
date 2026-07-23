@@ -19,7 +19,7 @@ update_published_at: '2025-05-28T00:00:00Z'
 update_last_checked: '2026-07-22T08:47:09Z'
 source_last_checked: '2026-07-22T08:47:09Z'
 official_body_last_checked: '2026-07-22T08:47:09Z'
-record_last_updated: '2026-07-23T00:50:38.891497Z'
+record_last_updated: '2026-07-23T17:38:02.657147Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -27,24 +27,24 @@ update_status: current
 update_feed_title: DaVinci Resolve 20
 update_detail_title: DaVinci Resolve 20
 update_consensus_label: Negative
-update_report_count: 20
+update_report_count: 21
 update_consensus_confidence: Low-Medium
-quick_verdict: 'WAIT: DaVinci Resolve 20 has 20 user reports found.'
+quick_verdict: 'WAIT: DaVinci Resolve 20 has 21 user reports found.'
 official_summary: Blackmagic Design lists DaVinci Resolve Studio 20 in its official support downloads feed.
 release_summary: This software update installs the final release of DaVinci Resolve Studio 20 which adds support
   for over 100 new features and AI tools such as AI IntelliScript, AI Animated Subtitles, AI Multicam SmartSwitch
   and AI Audio Assistant, as well as keyframe editing, voice over palette, multi layer compositing tools, new optical
   flow vector tools and major updates to Magic Mask and depth map. This version requires a DaVinci Resolve Studio
   license dongle or software activation code.
-consensus_report: '20 user reports found for DaVinci Resolve 20. Current reports mention render/export failures,
+consensus_report: '21 user reports found for DaVinci Resolve 20. Current reports mention render/export failures,
   startup or application crashes, and Magic Mask crashes. Current reports are Reddit-heavy, so production users
   should test before updating. Sources represented: r/davinciresolve.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
 official_source_captured: true
-confirmed_patch_specific_report_count: 20
-evidence_last_checked: '2026-07-23T00:47:58Z'
+confirmed_patch_specific_report_count: 21
+evidence_last_checked: '2026-07-23T17:34:46Z'
 known_issues_present: null
 consensus_collection_status: pilot_initial_sample
 consensus_match_policy: confirmed_patch_specific_reports_v1
@@ -72,6 +72,9 @@ status_events:
 - at: '2026-07-23T00:50:38.891497Z'
   label: User reports found
   note: User report count updated to 20.
+- at: '2026-07-23T17:38:02.657147Z'
+  label: User reports found
+  note: User report count updated to 21.
 official_patch_notes_source_type: download_portal
 primary_official_source: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
 fallback_official_sources:
@@ -124,7 +127,7 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'WAIT: DaVinci Resolve 20 has 20 user reports found. User reports show a repeat pattern.
+update_consensus_summary: 'WAIT: DaVinci Resolve 20 has 21 user reports found. User reports show a repeat pattern.
   Current reports mention render/export failures, startup or application crashes, and Magic Mask crashes. Production
   editors with active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy,
   so production users should test before updating.'
@@ -347,6 +350,15 @@ accepted_report_sources:
   source_url: https://www.reddit.com/r/davinciresolve/comments/1pry7ch/solution_davinci_resolve_20_not_showing_color/
   source_title: 'Solution: Davinci Resolve 20 Not showing Color Parade'
   source_date: '2025-12-21'
+  version_matched: '20'
+  patch_version_matched: true
+  issue: startup or application crashes in application stability
+  workflow_area: application stability
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1soug2i/davinci_resolve_is_crashing_my_pc_and/
+  source_title: Davinci resolve is crashing my PC and bottlenecking my RAM
+  source_date: '2026-04-18'
   version_matched: '20'
   patch_version_matched: true
   issue: startup or application crashes in application stability

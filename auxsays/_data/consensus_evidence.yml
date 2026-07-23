@@ -9132,7 +9132,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-19-1-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1pt8omd-guide-native-davinci-resolve-on-fedora-43
   product_id: blackmagic-davinci
   update_version: 19.1.4
@@ -9157,7 +9156,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-20-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1nle5x0-resolve-crashes-when-i-right-click
   product_id: blackmagic-davinci
   update_version: '20.2'
@@ -9203,6 +9201,176 @@ evidence:
   issue_theme: startup or application crash
   workflow_area: application stability
   platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-20-006-20034-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobate-dc-pro-and-mac-mini-208-1244475
+  product_id: adobe-acrobat-pro
+  update_version: 20.006.20034
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobate-dc-pro-and-mac-mini-208-1244475
+  parent_title: Adobe Acrobate DC Pro and Mac mini 208
+  report_title: Adobe Acrobate DC Pro and Mac mini 208
+  report_text_excerpt: Adobe Acrobate DC Pro and Mac mini 208 Before I had an iMac27 "mid 2011 under OSX 10.13.6 and no problem with Adobe acrobate pro ... quick display, reading customer comments, moving and enlarging pages ... NO WORRIES! Now I have a Mac mini 2018 - 3 GHz Intel Core i5 6 cores -...
+  captured_at: '2026-07-23T16:43:46Z'
+  source_date: '2020-02-29'
+  target_release_date: '2020-02-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.006.20034
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-20-006-20042-adobe-community-bug-report-https-community-adobe-com-questions-9-segmentation-fault-i-can-not-open-acrobat-dc-crashes-right
+  product_id: adobe-acrobat-pro
+  update_version: 20.006.20042
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/segmentation-fault-i-can-not-open-acrobat-dc-crashes-right-away-1247376
+  parent_title: Segmentation fault. I can not open Acrobat DC crashes right away.
+  report_title: Segmentation fault. I can not open Acrobat DC crashes right away.
+  report_text_excerpt: 'Segmentation fault. I can not open Acrobat DC crashes right away. I was not able to open Acrobat DC. It crashes right away. Process: AdobeAcrobat [34338] Path: /Applications/Adobe Acrobat DC/Adobe Acrobat.app/Contents/MacOS/AdobeAcrobat Identifier: com.adobe.Acrobat.Pro...'
+  captured_at: '2026-07-23T16:43:46Z'
+  source_date: '2020-05-14'
+  target_release_date: '2020-03-17'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.006.20042
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-20-006-20034-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-reader-dc-not-opening-in-windows-10-after-last-upda
+  product_id: adobe-acrobat-reader
+  update_version: 20.006.20034
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-reader-dc-not-opening-in-windows-10-after-last-update-20-006-20034-1519319
+  parent_title: Adobe Reader DC not opening in Windows 10 after last update (20.006.20034)
+  report_title: Adobe Reader DC not opening in Windows 10 after last update (20.006.20034)
+  report_text_excerpt: Adobe Reader DC not opening in Windows 10 after last update (20.006.20034) Hi everyone! I'm unable to open any PDF using Adobe Reader DC since the last update (yesterday was OK, but since this afternoon, it's not working anymore), with Windows 10. I tried to uninstall Adobe...
+  captured_at: '2026-07-23T17:01:13Z'
+  source_date: '2020-02-13'
+  target_release_date: '2020-02-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.006.20034
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-20-006-20042-adobe-community-bug-report-https-community-adobe-com-questions-9-pdf-not-displaying-properly-1245719
+  product_id: adobe-acrobat-reader
+  update_version: 20.006.20042
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/pdf-not-displaying-properly-1245719
+  parent_title: PDF not displaying properly
+  report_title: PDF not displaying properly
+  report_text_excerpt: PDF not displaying properly Whenever I open a pdf file and either select some text or hover my mouse over a text field, the text gets corrupted as the image attached. I have tried reinstalling it several times and also repairing the install. Here's some info on my system:...
+  captured_at: '2026-07-23T17:01:13Z'
+  source_date: '2020-04-06'
+  target_release_date: '2020-03-17'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.006.20042
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1soug2i-davinci-resolve-is-crashing-my-pc-and
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1soug2i/davinci_resolve_is_crashing_my_pc_and/
+  parent_title: Davinci resolve is crashing my PC and bottlenecking my RAM
+  report_title: Davinci resolve is crashing my PC and bottlenecking my RAM
+  report_text_excerpt: Davinci resolve is crashing my PC and bottlenecking my RAM There's something about my DaVinci Resolve that is slowly increasing my ram usage over time. I only recently discovered this after Resolve crashed my entire PC 4 times and I've only come to realise now that so long as...
+  captured_at: '2026-07-23T17:34:46Z'
+  source_date: '2026-04-18'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13693
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13693
+  parent_title: Check for updates button not working
+  report_title: Check for updates button not working
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/yT6uWbooFG8i0Wnt ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The p'
+  captured_at: '2026-07-23T18:01:36Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-0-github-issue-13693
+  product_id: obs-studio
+  update_version: 32.2.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13693
+  parent_title: Check for updates button not working
+  report_title: Check for updates button not working
+  report_text_excerpt: 'te available - There is a new update available" and the changelog of the new update (e.g. 32.2.0) ### Current Behavior It did nothing https://github.com/user-attachments/assets/f32923e1-dd00-4a0a-822b-1e4055319b6e ### Steps to Reproduce 1. Open obs 2. Go to "help" 3. Click "Check'
+  captured_at: '2026-07-23T18:01:46Z'
+  patch_version_matched: true
+  matched_version: 32.2.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: windows
   severity: high
   sentiment: negative
   source_weight: 1
