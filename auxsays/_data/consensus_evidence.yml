@@ -9529,3 +9529,76 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-20-2-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1p5zw1a-speed-changes-take-a-long-time-to-be-proc
+  product_id: blackmagic-davinci
+  update_version: 20.2.3
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1p5zw1a/speed_changes_take_a_long_time_to_be_processed/
+  parent_title: Speed changes take a long time to "be processed"
+  report_title: Speed changes take a long time to "be processed"
+  report_text_excerpt: Speed changes take a long time to "be processed" DaVinci Resolve Studio 20.2.3 Build 6 | Windows 11 So what I mean is whenever I adjust clip speed, the audio/visuals of any footage preview gets really wonky, either by lagging/freezing and especially by sound cutting...
+  captured_at: '2026-07-23T23:10:34Z'
+  source_date: '2025-11-25'
+  target_release_date: '2025-11-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.3
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1p1h102-no-frame-available-for-mediaout1
+  product_id: blackmagic-davinci
+  update_version: 20.2.3
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1p1h102/no_frame_available_for_mediaout1/
+  parent_title: No Frame Available for MediaOut1
+  report_title: No Frame Available for MediaOut1
+  report_text_excerpt: 'No Frame Available for MediaOut1 Hey everyone, I’m new to Fusion in DaVinci Resolve and keep running into a problem: I’m getting the “ No frame available for MediaOut1 ” error when working on a text animation I created in Fusion. I built the animation because I wanted...'
+  captured_at: '2026-07-23T23:10:34Z'
+  source_date: '2025-11-19'
+  target_release_date: '2025-11-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.3
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: unknown
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: blackmagic-davinci-20-2-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ovxid5-davinci-resolve-and-png
+  product_id: blackmagic-davinci
+  update_version: 20.2.3
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ovxid5/davinci_resolve_and_png/
+  parent_title: Davinci Resolve and PNG
+  report_title: Davinci Resolve and PNG
+  report_text_excerpt: 'Davinci Resolve and PNG Hello Davinci Resolve community. I have a Mac m1 and have the following problem: when I write text in Affinity 3, for example ABC, and save it as a PNG with a transparent background (standard PNG), and then try to import it into Davinci Resolve Studio...'
+  captured_at: '2026-07-23T23:10:34Z'
+  source_date: '2025-11-13'
+  target_release_date: '2025-11-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.3
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: macos
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
