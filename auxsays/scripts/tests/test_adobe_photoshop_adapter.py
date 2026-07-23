@@ -321,6 +321,48 @@ def run() -> int:
               ("<h2>Photoshop 26.0 (October 2024 release): Generative preview</h2>", "26.0"),
               ("<h3>Photoshop 26.4 (February 2025) — AI preview improvements</h3>", "26.4"))))
 
+    # === Regression: third adversarial pass (validation + completeness) ==============
+    print("  --- adversarial-defect regression (round 3) ---")
+
+    # R3-01: impossible calendar dates must be rejected, not emitted verbatim.
+    check("R3-01. impossible dates (Feb 30 / Nov 31 / day 99 / month 13) -> no record",
+          all(count(h) == 0 for h in (
+              "<h2>Photoshop 26.0 released February 30, 2025</h2>",
+              "<h2>Photoshop 26.2 (November 31, 2024 release)</h2>",
+              "<h2>Photoshop 26.0 (January 99, 2025)</h2>",
+              "<h2>Photoshop 26.0 released 2025-13-45</h2>")))
+    check("R3-01b. a valid date alongside no other date still records at day precision",
+          [(r["published_at"], r["date_precision"]) for r in
+           _parse("<h2>Photoshop 26.0 (February 28, 2025)</h2>")] == [("2025-02-28T00:00:00Z", "day")])
+
+    # R3-02: additional prerelease channel names are rejected.
+    check("R3-02. 'Release Preview' / 'Test Build' / 'Pilot' prerelease headings -> no record",
+          all(count(h) == 0 for h in (
+              "<h2>Photoshop 26.0 Release Preview (October 2025)</h2>",
+              "<h2>Photoshop 26.0 Test Build (October 2025)</h2>",
+              "<h2>Photoshop 26.0 Pilot (October 2025)</h2>")))
+
+    # R3-03 / R3-06 / R3-07: non-desktop availability phrasing anywhere in the heading -> reject.
+    check("R3-03/06/07. 'comes to the web' / 'arrives on iPad' / trailing 'on the web' -> no record",
+          all(count(h) == 0 for h in (
+              "<h2>Photoshop 26.0 comes to the web (October 2025 release)</h2>",
+              "<h2>Photoshop 26.2 arrives on iPad (December 2024 release)</h2>",
+              "<h2>Photoshop 26.1 (November 2024 release) on the web</h2>",
+              "<h2>Photoshop 26.0 is now on iPad (October 2025 release)</h2>")))
+
+    # R3-04 / R3-05 / R3-08 / R3-09: the hardening must NOT over-reject genuine desktop releases.
+    check("R3-04/09. desktop releases describing a 'web export' feature still record",
+          all([r["target_version"] for r in _parse(h)] == [v] for h, v in (
+              ("<h2>Photoshop 26.0 web export (October 2024 release)</h2>", "26.0"),
+              ("<h2>Photoshop 26.3 web export for desktop (January 2025 release)</h2>", "26.3"))))
+    check("R3-05. 'brings early access TO ...' feature phrase does not drop a real release",
+          [r["target_version"] for r in
+           _parse("<h2>Photoshop 26.0 brings early access to new AI tools (October 2024 release)</h2>")] == ["26.0"]
+          and count("<h2>Photoshop 26.9 Early Access (October 2025)</h2>") == 0)
+    check("R3-08. 'Photoshop on desktop 26.2' / 'Photoshop desktop app 26.0' anchor correctly",
+          [r["target_version"] for r in _parse("<h2>Photoshop on desktop 26.2 (December 2024 release)</h2>")] == ["26.2"]
+          and [r["target_version"] for r in _parse("<h2>Photoshop desktop app 26.0 (October 2024 release)</h2>")] == ["26.0"])
+
     print()
     print("=" * 60)
     total = _PASS + _FAIL

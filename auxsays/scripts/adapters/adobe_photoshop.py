@@ -40,6 +40,7 @@ from __future__ import annotations
 
 import hashlib
 import re
+from datetime import date
 from typing import Any
 
 from lib.http import fetch_text
@@ -55,26 +56,29 @@ _VERSION_CORE = r"2[0-9]\.\d{1,2}(?:\.\d{1,2})?"
 STABLE_VERSION_RE = re.compile(rf"^{_VERSION_CORE}$")
 
 # Version anchored explicitly to Photoshop (the ONLY accepted signal). The version must
-# immediately follow "Photoshop" (optionally "desktop"/"version"). Attribution is therefore
-# POSITIVE -- a release is trusted because it is a Photoshop-anchored version, never merely
-# because no denied product name happened to appear (a deny-list can never be exhaustive).
+# immediately follow "Photoshop" (optionally "[on] desktop"/"desktop app"/"version").
+# Attribution is therefore POSITIVE -- a release is trusted because it is a Photoshop-anchored
+# version, never merely because no denied product name happened to appear (a deny-list can
+# never be exhaustive).
 PS_ANCHORED_VERSION_RE = re.compile(
-    rf"Photoshop\s+(?:desktop\s+)?(?:version\s+)?({_VERSION_CORE})\b", re.I
+    rf"Photoshop\s+(?:(?:on\s+)?desktop\s+)?(?:app\s+)?(?:version\s+)?({_VERSION_CORE})\b", re.I
 )
 # A bare desktop-family version token, used ONLY to detect a *second, ambiguous* version in
 # the same heading (never as an acceptance path).
 BARE_VERSION_RE = re.compile(rf"\b({_VERSION_CORE})\b")
 
 PS_ATTRIB_RE = re.compile(r"\bPhotoshop\b", re.I)
-# Non-desktop Photoshop editions -> never a desktop record. The whole heading is screened
-# (not just Photoshop-adjacent text): a non-desktop platform edition named ANYWHERE, or a
-# parenthetical platform tag, disqualifies it. Feature prose ("adds web export", "iPad file
-# compatibility") is NOT matched because the platform word must attach to the product via a
-# leading "Photoshop [version] [on/for [the]]" run, an edition word, or parentheses.
+_NON_DESKTOP_PLATFORM = r"web(?:\s+app)?|browser|iPad(?:OS)?|Android|iOS|mobile|Chromebook|Chrome\s?OS"
+# Non-desktop Photoshop editions -> never a desktop record. Detection is edition/phrase based,
+# NOT version-adjacency based, so it works regardless of where the platform word sits:
+#   (a) an edition named directly after "Photoshop" ("Photoshop web/mobile/iPad", Elements/Express);
+#   (b) an availability phrase anywhere ("comes to the web", "arrives on iPad", "on the web");
+#   (c) a parenthetical platform tag ("(web)", "(web app)", "(iPad)").
+# A feature noun after the version ("26.0 web export", "iPad file compatibility") has no
+# availability connector, so a genuine desktop release keeps recording.
 PS_NON_DESKTOP_RE = re.compile(
-    r"\bPhotoshop\s+(?:desktop\s+)?(?:\d[\d.]*\s+)?(?:(?:on|for)\s+(?:the\s+)?)?"
-    r"(?:web(?:\s+app)?|browser|iPad(?:OS)?|Android|iOS|mobile|Chromebook|Chrome\s?OS)\b"
-    r"|\bPhotoshop\s+(?:Elements|Express)\b"
+    rf"\bPhotoshop\s+(?:{_NON_DESKTOP_PLATFORM}|Elements|Express)\b"
+    rf"|\b(?:on|onto|for|to|in|via)\s+(?:the\s+)?(?:{_NON_DESKTOP_PLATFORM})\b"
     r"|\(\s*(?:web(?:\s+app)?|iPad(?:OS)?|Android|mobile)\b",
     re.I,
 )
@@ -82,16 +86,18 @@ PS_NON_DESKTOP_RE = re.compile(
 # are a class ([\s._-]+) so hyphenated / underscored / re-spaced spellings do not slip past
 # (Unicode dashes are normalised to ASCII in _clean first). A bare "preview" is deliberately
 # NOT a marker (it is a common feature word -- "AI preview", "preview panel"); only qualified
-# prerelease forms count ("technology preview", "preview build", "preview release", ...).
+# prerelease forms count, in either order ("technology preview", "release preview", "preview
+# build"). "early access" is scoped so it labels the build, not a feature verb phrase ("brings
+# early access to ...").
 BETA_RE = re.compile(
     r"\b(?:"
-    r"beta|alpha|nightly|canary|insider|experimental|"
+    r"beta|alpha|nightly|canary|insider|experimental|pilot|"
     r"pre[\s._-]*release(?:s)?|prerelease(?:s)?|"
     r"release[\s._-]+candidate(?:s)?|rc\d?|"
-    r"(?:tech(?:nology)?|developer|dev)[\s._-]+preview(?:s)?|"
+    r"(?:tech(?:nology)?|developer|dev|release)[\s._-]+preview(?:s)?|"
     r"preview[\s._-]+(?:build|release)s?|in[\s._-]+preview\b|"
-    r"sneak[\s._-]+peek(?:s)?|"
-    r"early[\s._-]+access|dev[\s._-]+build"
+    r"test[\s._-]+build|sneak[\s._-]+peek(?:s)?|"
+    r"early[\s._-]+access(?!\s+to\b)|dev[\s._-]+build"
     r")\b",
     re.I,
 )
@@ -168,11 +174,21 @@ def _release_date(text: str) -> tuple[str, str]:
     text = text or ""
     day_dates: set[tuple[str, str, str]] = set()   # (YYYY, MM, DD)
     month_dates: set[tuple[str, str]] = set()      # (YYYY, MM)
+
+    def _add_day(year: str, month: str, day: str) -> None:
+        # Reject impossible calendar dates (Feb 30, month 13, day 99) rather than emitting
+        # the raw digits as an authoritative day-precision timestamp.
+        try:
+            date(int(year), int(month), int(day))
+        except ValueError:
+            return
+        day_dates.add((year, month, day))
+
     for m in DATE_FULL_RE.finditer(text):
         month = MONTHS.get(m.group(1).lower(), "01")
-        day_dates.add((m.group(3), month, f"{int(m.group(2)):02d}"))
+        _add_day(m.group(3), month, f"{int(m.group(2)):02d}")
     for m in DATE_ISO_RE.finditer(text):
-        day_dates.add((m.group(1), m.group(2), m.group(3)))
+        _add_day(m.group(1), m.group(2), m.group(3))
     for m in DATE_MONTH_YEAR_RE.finditer(text):
         month = MONTHS.get(m.group(1).lower(), "01")
         month_dates.add((m.group(2), month))
