@@ -363,6 +363,59 @@ def run() -> int:
           [r["target_version"] for r in _parse("<h2>Photoshop on desktop 26.2 (December 2024 release)</h2>")] == ["26.2"]
           and [r["target_version"] for r in _parse("<h2>Photoshop desktop app 26.0 (October 2024 release)</h2>")] == ["26.0"])
 
+    # === Alternate official URLs + transport fail-closed (fetch-level) ================
+    # The parser is URL-agnostic; the fetch() entry point selects among official_url and
+    # secondary_official_url. It must yield ONE identity per version (never double from two
+    # URLs), and must raise when every configured URL fails transport (so source health
+    # reflects an unreachable source rather than silently reporting "no records").
+    print("  --- alternate official URLs / transport fail-closed ---")
+    from types import SimpleNamespace
+
+    _URL_A = "https://helpx.adobe.com/photoshop/desktop/whats-new/photoshop-on-desktop-release-notes.html"
+    _URL_B = "https://helpx.adobe.com/photoshop/desktop/archive.html"
+    _REL = "<h2>Photoshop 27.0 (October 2025 release)</h2>"
+
+    def _src_two_urls():
+        return {"company_id": "adobe", "product_id": "adobe-photoshop", "company": "Adobe",
+                "software": "Photoshop", "public_category": "Design Workflow",
+                "ingestion": {"official_url": _URL_A, "secondary_official_url": _URL_B}}
+
+    def _with_fetch(mapping, fn):
+        # Patch the module-level fetch_text and clear the process-lifetime cache so each
+        # scenario is independent; restore afterwards.
+        orig = ap.fetch_text
+        ap._FETCH_CACHE.clear()
+        def fake(url, **_kw):
+            if url not in mapping:
+                raise RuntimeError("timeout")
+            return SimpleNamespace(text=mapping[url], final_url=url)
+        ap.fetch_text = fake
+        try:
+            return fn()
+        finally:
+            ap.fetch_text = orig
+            ap._FETCH_CACHE.clear()
+
+    # Same version present on BOTH URLs -> exactly one record, sourced from the primary URL.
+    both = _with_fetch({_URL_A: _REL, _URL_B: _REL},
+                       lambda: ap.fetch(_src_two_urls(), limit=5))
+    check("alt-URL: same version on both official URLs -> one identity (from the primary URL)",
+          len(both) == 1 and both[0]["target_version"] == "27.0" and both[0]["source_url"] == _URL_A,
+          str([(r["target_version"], r["source_url"]) for r in both]))
+    # Primary yields nothing parseable, secondary yields the release -> record from secondary.
+    fallback = _with_fetch({_URL_A: "<p>No releases listed.</p>", _URL_B: _REL},
+                           lambda: ap.fetch(_src_two_urls(), limit=5))
+    check("alt-URL: empty primary falls back to the secondary official URL",
+          len(fallback) == 1 and fallback[0]["source_url"] == _URL_B,
+          str([(r["target_version"], r["source_url"]) for r in fallback]))
+    # Every configured URL fails transport -> fetch RAISES (source health reflects unreachable).
+    raised = False
+    try:
+        _with_fetch({}, lambda: ap.fetch(_src_two_urls(), limit=5))
+    except RuntimeError:
+        raised = True
+    check("alt-URL: all official URLs failing transport -> fetch raises (fail-closed, not silent)", raised)
+
     print()
     print("=" * 60)
     total = _PASS + _FAIL
