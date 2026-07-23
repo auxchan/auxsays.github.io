@@ -8834,3 +8834,52 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: blackmagic-davinci-19-1-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ncsnqk-when-changing-the-position-of-an-image-it
+  product_id: blackmagic-davinci
+  update_version: 19.1.4
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ncsnqk/when_changing_the_position_of_an_image_its_not/
+  parent_title: When changing the position of an image, it's not consistent from image to image
+  report_title: When changing the position of an image, it's not consistent from image to image
+  report_text_excerpt: When changing the position of an image, it's not consistent from image to image https://preview.redd.it/i82eazv5x6of1.png?width=3840&format=png&auto=webp&s=e4456ae10d68c460f3bd779752a9043c10eac3a1...
+  captured_at: '2026-07-23T04:18:09Z'
+  source_date: '2025-09-09'
+  target_release_date: '2025-03-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.1.4
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: blackmagic-davinci-19-1-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1mu2qka-exporting-bins-to-folders-for-client
+  product_id: blackmagic-davinci
+  update_version: 19.1.4
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1mu2qka/exporting_bins_to_folders_for_client/
+  parent_title: Exporting Bins To Folders For Client
+  report_title: Exporting Bins To Folders For Client
+  report_text_excerpt: Exporting Bins To Folders For Client Hi! I am editing a commercial for a client and they want all the raw footage alongside the edits. Problem is, not only does the video and audio need to be synced and the colour grading complete on ALL the footage, but there are a lot of...
+  captured_at: '2026-07-23T04:18:09Z'
+  source_date: '2025-08-18'
+  target_release_date: '2025-03-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.1.4
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
