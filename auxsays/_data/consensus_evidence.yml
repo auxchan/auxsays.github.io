@@ -8297,3 +8297,540 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ta80h5-win-11-davinci-resolve-issue
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ta80h5/win_11_davinci_resolve_issue/
+  parent_title: Win 11 DaVinci Resolve issue
+  report_title: Win 11 DaVinci Resolve issue
+  report_text_excerpt: Win 11 DaVinci Resolve issue So this morning I open DaVinci Resolve to work (using DaVinci Resolve 20). It took longer than usual, so I left and returned but no difference the splash screen was still showing. I clicked it and it crashed. I tried again but the same issue. I...
+  captured_at: '2026-07-23T00:47:58Z'
+  source_date: '2026-05-11'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1t4snpl-keeps-crashing-what-to-fix
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1t4snpl/keeps_crashing_what_to_fix/
+  parent_title: Keeps crashing, what to fix?
+  report_title: Keeps crashing, what to fix?
+  report_text_excerpt: Keeps crashing, what to fix? Hello, been using davinci resolve 20 for a few months now. And lately it keeps on crashing. Already updated my graphics driver and added some ram but whenever I try to add lots of clips in the edit or use some transitions it lags and then crashes....
+  captured_at: '2026-07-23T00:47:58Z'
+  source_date: '2026-05-05'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: magic mask crash
+  workflow_area: color grading / Magic Mask
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1szgkt3-davinci-resolve-20-crashing-when-i-attemp
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1szgkt3/davinci_resolve_20_crashing_when_i_attempt_to/
+  parent_title: Davinci Resolve 20 crashing when I attempt to import footage or open a folder on an external drive
+  report_title: Davinci Resolve 20 crashing when I attempt to import footage or open a folder on an external drive
+  report_text_excerpt: Davinci Resolve 20 crashing when I attempt to import footage or open a folder on an external drive I have hundred of gigs of footage stored on an external hard drive which I have previously used for seamless editing. Now, however, Davinci Resolve 20 enters into the blue...
+  captured_at: '2026-07-23T00:47:58Z'
+  source_date: '2026-04-30'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1svlm8w-davinci-resolve-crashing-from-nowhere-i-s
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1svlm8w/davinci_resolve_crashing_from_nowhere_i_swear_bruh/
+  parent_title: davinci resolve crashing from nowhere i swear bruh
+  report_title: davinci resolve crashing from nowhere i swear bruh
+  report_text_excerpt: davinci resolve crashing from nowhere i swear bruh Randomly davinci resolve started to use 20 gb of ram and crashing after i put like one effect. This happening on a 720p timeline project because the whole timeline was edited on 4k without no problems and i don't understand...
+  captured_at: '2026-07-23T00:47:58Z'
+  source_date: '2026-04-25'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1skmihy-sick-of-the-crashing-how-do-i-fix-it
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1skmihy/sick_of_the_crashing_how_do_i_fix_it/
+  parent_title: Sick of the crashing! How do I fix it
+  report_title: Sick of the crashing! How do I fix it
+  report_text_excerpt: Sick of the crashing! How do I fix it I cant run davinci without it crashing my whole PC in the space of an hour. It's happened multiple times and it's concerning me how it might be impacting my PC. I'm running Davinci resolve 20 how do I stop this from happening! RTX 4060...
+  captured_at: '2026-07-23T00:47:58Z'
+  source_date: '2026-04-13'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1sjtstc-davinci-resolve-is-broken-for-me
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1sjtstc/davinci_resolve_is_broken_for_me/
+  parent_title: Davinci Resolve is broken for me
+  report_title: Davinci Resolve is broken for me
+  report_text_excerpt: Davinci Resolve is broken for me Davinci Resolve is muted, audio won't play. It's not muted, the output device is correct. The meters do not show anything. It crashed a few times. It also is bugged when rendering and takes forever. It's not my specs (I have a 5080). The time...
+  captured_at: '2026-07-23T00:47:58Z'
+  source_date: '2026-04-12'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1rjr2x7-resolve-keeps-crashing-the-minute-i-click
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1rjr2x7/resolve_keeps_crashing_the_minute_i_click_render/
+  parent_title: Resolve keeps crashing the minute I click 'render'
+  report_title: Resolve keeps crashing the minute I click 'render'
+  report_text_excerpt: Resolve keeps crashing the minute I click 'render' I was trying to edit / export some keys plays last night, and I've reached a point where my savings will crash every time I hit render. I have never had any issues, and I use essentially no editing (just lowering the volume...
+  captured_at: '2026-07-23T00:47:58Z'
+  source_date: '2026-03-03'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1qq2k3k-da-vinci-resolve-freeze-during-render-no
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1qq2k3k/da_vinci_resolve_freeze_during_render_no_crashes/
+  parent_title: Da Vinci Resolve freeze during render. No crashes, the render process just drags to a halt.
+  report_title: Da Vinci Resolve freeze during render. No crashes, the render process just drags to a halt.
+  report_text_excerpt: 'Da Vinci Resolve freeze during render. No crashes, the render process just drags to a halt. Hello. I need some help with my da vinci resolve 20 rendering in the free version. I recently bought a fair PC to render long format 4k footage. Specs: 5070ti 16GB Vram 9800x3d 32 GB...'
+  captured_at: '2026-07-23T00:47:58Z'
+  source_date: '2026-01-29'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1qndlqo-problems-with-davinci-resolve-20
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1qndlqo/problems_with_davinci_resolve_20/
+  parent_title: Problems with DaVinci Resolve 20?
+  report_title: Problems with DaVinci Resolve 20?
+  report_text_excerpt: Problems with DaVinci Resolve 20? I'm having problems with DaVinci at the moment. I go to edit a video but the media I use doesn't seem to load properly, I can't add text as it won't show up and when I get annoyed and go to close the program... It crashes Is this a problem...
+  captured_at: '2026-07-23T00:47:58Z'
+  source_date: '2026-01-26'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1qg12m4-fusion-tab-crash-loop
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1qg12m4/fusion_tab_crash_loop/
+  parent_title: Fusion Tab Crash Loop
+  report_title: Fusion Tab Crash Loop
+  report_text_excerpt: Fusion Tab Crash Loop Whenever I try and switch to the Fusion page on a project I am working on right now, it freezes, and the software crashes. Furthermore when I open up the project again it will open on the Fusion page and proceed to freeze and crash. I have to open a new...
+  captured_at: '2026-07-23T00:47:58Z'
+  source_date: '2026-01-18'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1pry7ch-solution-davinci-resolve-20-not-showing-c
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1pry7ch/solution_davinci_resolve_20_not_showing_color/
+  parent_title: 'Solution: Davinci Resolve 20 Not showing Color Parade'
+  report_title: 'Solution: Davinci Resolve 20 Not showing Color Parade'
+  report_text_excerpt: 'Solution: Davinci Resolve 20 Not showing Color Parade I experienced this along with crashing when doing a color page work. Closing Riva Statistics Tuner and MSI Afterburner, and Restarting Resolve solved the problem. submitted by /u/IsopodPatient9523 [link] [comments]'
+  captured_at: '2026-07-23T00:47:58Z'
+  source_date: '2025-12-21'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1n36bvq-windows-davinci-resolve-studio-201-and-20
+  product_id: blackmagic-davinci
+  update_version: '20.1'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1n36bvq/windows_davinci_resolve_studio_201_and_2011_wont/
+  parent_title: Windows Davinci Resolve Studio 20.1 and 20.1.1 won't work with DNxHR 444 anymore
+  report_title: Windows Davinci Resolve Studio 20.1 and 20.1.1 won't work with DNxHR 444 anymore
+  report_text_excerpt: Windows Davinci Resolve Studio 20.1 and 20.1.1 won't work with DNxHR 444 anymore Last working version for me was 20.0.1. Clips now showing red preview and m e d i a o f f l i n e. So I had to downgrade the second time. Same clips, same project in every case. DNxHR 444 is noted...
+  captured_at: '2026-07-23T00:52:09Z'
+  source_date: '2025-08-29'
+  target_release_date: '2025-08-07'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.1'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: compatibility issue
+  workflow_area: plugins / codecs
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1n1cywo-201-reload-project-manager-thumbnails
+  product_id: blackmagic-davinci
+  update_version: '20.1'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1n1cywo/201_reload_project_manager_thumbnails/
+  parent_title: 20.1 – Reload Project Manager thumbnails?
+  report_title: 20.1 – Reload Project Manager thumbnails?
+  report_text_excerpt: 20.1 – Reload Project Manager thumbnails? Hey everyone, I’m working in DaVinci Resolve Studio 20.1 and I’ve run into a small but annoying issue in the Project Manager . Whenever I copy a project (for example, when I have several takes from the same recording session and want...
+  captured_at: '2026-07-23T00:52:09Z'
+  source_date: '2025-08-27'
+  target_release_date: '2025-08-07'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.1'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: unknown
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: blackmagic-davinci-20-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1mtw0mu-resolve-keeps-on-crashing-fusion
+  product_id: blackmagic-davinci
+  update_version: '20.1'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1mtw0mu/resolve_keeps_on_crashing_fusion/
+  parent_title: Resolve keeps on crashing (Fusion)
+  report_title: Resolve keeps on crashing (Fusion)
+  report_text_excerpt: Resolve keeps on crashing (Fusion) What's the deal with Fusion? It constantly crashes, Fusion page final comp doesn't reflect in edit page, sometimes the screen flickers when going from Fusion to Edit page. Resolve is such a great piece of software but it's giving me a hard...
+  captured_at: '2026-07-23T00:52:09Z'
+  source_date: '2025-08-18'
+  target_release_date: '2025-08-07'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.1'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1q4wytk-missing-edit-controls-for-titles-in-edit
+  product_id: blackmagic-davinci
+  update_version: '20.2'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1q4wytk/missing_edit_controls_for_titles_in_edit_mode/
+  parent_title: Missing edit controls for Titles in Edit mode
+  report_title: Missing edit controls for Titles in Edit mode
+  report_text_excerpt: 'Missing edit controls for Titles in Edit mode Symptoms: For some time I have problem with editing text for some Titles (like Text+). In Edit mode there are missing edit controls for text itself and used font (in Title tab). I can edit it only in Fusion tab. Installing upgrades...'
+  captured_at: '2026-07-23T00:56:21Z'
+  source_date: '2026-01-05'
+  target_release_date: '2025-09-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20.2'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: install issue
+  workflow_area: installation
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1pev9jd-davinci-audio-bug-freezes
+  product_id: blackmagic-davinci
+  update_version: 20.2.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1pev9jd/davinci_audio_bug_freezes/
+  parent_title: Davinci audio bug, freezes
+  report_title: Davinci audio bug, freezes
+  report_text_excerpt: Davinci audio bug, freezes I’m currently working on a project that was filmed with a RED Monstro VV 8K, and the audio was recorded with a Zoom F6. Everything went normal. I imported the media in DR and synced the audio via timecode, and I was able to work on it as usual. After...
+  captured_at: '2026-07-23T00:57:36Z'
+  source_date: '2025-12-05'
+  target_release_date: '2025-09-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: macos
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: blackmagic-davinci-20-2-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1nu8csm-audio-not-working-in-the-timeline
+  product_id: blackmagic-davinci
+  update_version: 20.2.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1nu8csm/audio_not_working_in_the_timeline/
+  parent_title: Audio not working in the timeline
+  report_title: Audio not working in the timeline
+  report_text_excerpt: Audio not working in the timeline When I add a video to media pool with audio, it shows an audio icon below the video, but when I create a new timeline with that video, the audio doesn't play. I tried reinstalling davinci, but it still doesn't work. The audio loudness thing on...
+  captured_at: '2026-07-23T00:57:36Z'
+  source_date: '2025-09-30'
+  target_release_date: '2025-09-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: install issue
+  workflow_area: installation
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-2-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ntelng-fusion-page-glitching-and-flickering
+  product_id: blackmagic-davinci
+  update_version: 20.2.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ntelng/fusion_page_glitching_and_flickering/
+  parent_title: fusion page glitching and flickering
+  report_title: fusion page glitching and flickering
+  report_text_excerpt: fusion page glitching and flickering I’m new to learning motion graphics in DaVinci Resolve and I’ve run into an issue. Whenever I’m working in the Fusion page, the preview will randomly start flickering and glitching. It makes it really hard to see what I’m doing. Sometimes...
+  captured_at: '2026-07-23T00:57:36Z'
+  source_date: '2025-09-29'
+  target_release_date: '2025-09-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.2.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: macos
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13686
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13686
+  parent_title: Game Capture failing to capture in some environments due to DLL load changes
+  report_title: Game Capture failing to capture in some environments due to DLL load changes
+  report_text_excerpt: '1 ### Other OS _No response_ ### OBS Studio Version 32.2.0 ### OBS Studio Version (Other) 32.1.2 ### OBS Studio Log URL https://obsproject.com/logs/JyX6lnOVLapTxHeG ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Capturar os jogos sem tela preta ### Current Behav'
+  captured_at: '2026-07-23T01:10:14Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13689
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13689
+  parent_title: Version 32.2 broke NVENC encoder for legacy graphics cards
+  report_title: Version 32.2 broke NVENC encoder for legacy graphics cards
+  report_text_excerpt: 'on. 2. 3. ... ### Anything else we should know? The only fix is to revert back to version 32.1.2 as updating drivers does not fix the issue. If you are a content creator still using a legacy NVIDIA graphics card you are SOL. Continue to use the previous version or switch to an en'
+  captured_at: '2026-07-23T01:10:14Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-2-0-github-issue-13686
+  product_id: obs-studio
+  update_version: 32.2.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13686
+  parent_title: Game Capture failing to capture in some environments due to DLL load changes
+  report_title: Game Capture failing to capture in some environments due to DLL load changes
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.0 ### OBS Studio Version (Other) 32.1.2 ### OBS Studio Log URL https://obsproject.com/logs/JyX6lnOVLapTxHeG ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Capturar os'
+  captured_at: '2026-07-23T01:10:22Z'
+  patch_version_matched: true
+  matched_version: 32.2.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-0-github-issue-13689
+  product_id: obs-studio
+  update_version: 32.2.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13689
+  parent_title: Version 32.2 broke NVENC encoder for legacy graphics cards
+  report_title: Version 32.2 broke NVENC encoder for legacy graphics cards
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.0 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL N/A ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Expected NVENC Encoders to be working and they'
+  captured_at: '2026-07-23T01:10:22Z'
+  patch_version_matched: true
+  matched_version: 32.2.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-2-0-github-issue-13690
+  product_id: obs-studio
+  update_version: 32.2.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13690
+  parent_title: Version 32.2 broke NVENC encoder for legacy graphics cards
+  report_title: Version 32.2 broke NVENC encoder for legacy graphics cards
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.0 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL N/A ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Expected to have the NVENC Encoders, but they'
+  captured_at: '2026-07-23T01:10:22Z'
+  patch_version_matched: true
+  matched_version: 32.2.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1

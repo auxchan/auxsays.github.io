@@ -19,7 +19,7 @@ update_published_at: '2025-09-10T00:00:00Z'
 update_last_checked: '2026-07-21T19:55:13Z'
 source_last_checked: '2026-07-21T19:55:13Z'
 official_body_last_checked: '2026-07-21T19:55:13Z'
-record_last_updated: '2026-07-22T18:48:47.977277Z'
+record_last_updated: '2026-07-23T00:57:34.582758Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -27,24 +27,24 @@ update_status: current
 update_feed_title: DaVinci Resolve 20.2
 update_detail_title: DaVinci Resolve 20.2
 update_consensus_label: Negative
-update_report_count: 12
+update_report_count: 13
 update_consensus_confidence: Low-Medium
-quick_verdict: 'WAIT: DaVinci Resolve 20.2 has 12 user reports found.'
+quick_verdict: 'WAIT: DaVinci Resolve 20.2 has 13 user reports found.'
 official_summary: Blackmagic Design lists DaVinci Resolve Studio 20.2 in its official support downloads feed.
 release_summary: This software update adds support for immersive EXR workflows and streaming immersive content from
   Fusion directly into Apple Vision Pro. In addition, there is improved track patching and ripple trim controls,
   new custom metadata fields and support for playing Apple ProRes RAW. DaVinci Resolve Studio 20.2 also improves
   MultiText alignment and transformation controls in Fusion and adds a new AI Cinematic Haze effect on the color
   page. This version requires a DaVinci Resolve Studio license dongle or software activation code.
-consensus_report: '12 user reports found for DaVinci Resolve 20.2. Current reports mention render/export failures,
+consensus_report: '13 user reports found for DaVinci Resolve 20.2. Current reports mention render/export failures,
   performance slowdowns, and startup or application crashes. Current reports are Reddit-heavy, so production users
   should test before updating. Sources represented: r/davinciresolve.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
 official_source_captured: true
-confirmed_patch_specific_report_count: 12
-evidence_last_checked: '2026-07-22T18:47:10Z'
+confirmed_patch_specific_report_count: 13
+evidence_last_checked: '2026-07-23T00:56:21Z'
 known_issues_present: null
 consensus_collection_status: pilot_initial_sample
 consensus_match_policy: confirmed_patch_specific_reports_v1
@@ -69,6 +69,9 @@ status_events:
 - at: '2026-07-22T18:48:47.977277Z'
   label: User reports found
   note: User report count updated to 12.
+- at: '2026-07-23T00:57:34.582758Z'
+  label: User reports found
+  note: User report count updated to 13.
 official_patch_notes_source_type: download_portal
 primary_official_source: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
 fallback_official_sources:
@@ -121,7 +124,7 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'WAIT: DaVinci Resolve 20.2 has 12 user reports found. User reports show a repeat pattern.
+update_consensus_summary: 'WAIT: DaVinci Resolve 20.2 has 13 user reports found. User reports show a repeat pattern.
   Current reports mention render/export failures, performance slowdowns, and startup or application crashes. Production
   editors with active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy,
   so production users should test before updating.'
@@ -161,13 +164,13 @@ evidence_samples:
   issue: startup or application crashes in application stability
   outcome: high
 - source_name: r/davinciresolve
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1o7p2ft/fix_rtx_5080_davinci_resolve_render_freeze/
-  source_title: 🧠 [FIX] RTX 5080 + DaVinci Resolve Render Freeze — Confirmed Root Cause and 100% Working Solution
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1q4wytk/missing_edit_controls_for_titles_in_edit_mode/
+  source_title: Missing edit controls for Titles in Edit mode
   counted: true
   version_matched: '20.2'
   patch_version_matched: true
-  issue: render/export failures in application stability
-  outcome: high
+  issue: installation problems
+  outcome: medium
 evidence_sample_visible_limit: 5
 accepted_report_sources:
 - source_name: r/davinciresolve
@@ -281,6 +284,15 @@ accepted_report_sources:
   patch_version_matched: true
   issue: render/export failures
   workflow_area: render/export
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1q4wytk/missing_edit_controls_for_titles_in_edit_mode/
+  source_title: Missing edit controls for Titles in Edit mode
+  source_date: '2026-01-05'
+  version_matched: '20.2'
+  patch_version_matched: true
+  issue: installation problems
+  workflow_area: installation
 evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
 - Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
