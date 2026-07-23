@@ -8834,7 +8834,6 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
-
 - id: blackmagic-davinci-19-1-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ncsnqk-when-changing-the-position-of-an-image-it
   product_id: blackmagic-davinci
   update_version: 19.1.4
@@ -8883,7 +8882,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-20-009-20074-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-on-a-mac-constant-pinwheel-and-not-respondin
   product_id: adobe-acrobat-pro
   update_version: 20.009.20074
@@ -8910,7 +8908,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-20-009-20067-adobe-community-bug-report-https-community-adobe-com-questions-12-unable-to-install-adobe-acrobat-reader-dc-the-upgrade-pat
   product_id: adobe-acrobat-reader
   update_version: 20.009.20067
@@ -8961,5 +8958,177 @@ evidence:
   workflow_area: deployment
   platform: unknown
   severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-20-009-20063-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-pro-dc-crashes-when-processing-digital-signatures
+  product_id: adobe-acrobat-pro
+  update_version: 20.009.20063
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-pro-dc-crashes-when-processing-digital-signatures-1249697
+  parent_title: Acrobat Pro DC crashes when processing digital signatures
+  report_title: Acrobat Pro DC crashes when processing digital signatures
+  report_text_excerpt: Acrobat Pro DC crashes when processing digital signatures I have users that are attempting to use Adobe Acrobat DC, Version 20.009.20063, but any time they go to sign a document using a certificate, it shows them their certs, but then crashes before the option to save the...
+  captured_at: '2026-07-23T09:34:29Z'
+  source_date: '2020-07-23'
+  target_release_date: '2020-05-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.009.20063
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-20-009-20063-adobe-community-bug-report-https-community-adobe-com-questions-12-unable-to-install-adobe-acrobat-reader-dc-the-upgrade-pat
+  product_id: adobe-acrobat-reader
+  update_version: 20.009.20063
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/unable-to-install-adobe-acrobat-reader-dc-the-upgrade-patch-cannot-be-installed-1520599
+  parent_title: Unable to install Adobe acrobat reader DC - the upgrade patch cannot be installed...
+  report_title: Unable to install Adobe acrobat reader DC - the upgrade patch cannot be installed...
+  report_text_excerpt: 'Unable to install Adobe acrobat reader DC - the upgrade patch cannot be installed... I am unable to upgrade my Adobe Acrobat Reader DC. Tried different sources like Adobe website ad FTP but always get this error message: "The upgrade Patch cannot be installed by the windows...'
+  captured_at: '2026-07-23T09:48:17Z'
+  source_date: '2020-06-25'
+  target_release_date: '2020-05-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.009.20063
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-20-009-20063-adobe-community-bug-report-https-community-adobe-com-questions-9-forms-edited-inside-of-the-ie-browser-crash-ie-1249707
+  product_id: adobe-acrobat-reader
+  update_version: 20.009.20063
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/forms-edited-inside-of-the-ie-browser-crash-ie-1249707
+  parent_title: Forms edited inside of the IE browser crash IE
+  report_title: Forms edited inside of the IE browser crash IE
+  report_text_excerpt: Forms edited inside of the IE browser crash IE After installing the "Adobe Acrobat Reader 2020 Update 20.009.20063) update, we are seeing forms edited from within the IE 11 browser crash IE. This issue has persisted with the ...20067 update as well and I suspect the same in...
+  captured_at: '2026-07-23T09:48:17Z'
+  source_date: '2020-07-23'
+  target_release_date: '2020-05-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.009.20063
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: form behavior regression
+  workflow_area: forms
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-20-009-20063-adobe-community-bug-report-https-community-adobe-com-questions-12-i-installed-adobe-reader-on-my-mac-but-i-can-not-open-152
+  product_id: adobe-acrobat-reader
+  update_version: 20.009.20063
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/i-installed-adobe-reader-on-my-mac-but-i-can-not-open-1520304
+  parent_title: I installed Adobe Reader on my Mac but I can not open
+  report_title: I installed Adobe Reader on my Mac but I can not open
+  report_text_excerpt: 'I installed Adobe Reader on my Mac but I can not open I installed Adobe Reader on my Mac but I can not open. Here is raport that is generated by my computer. Anyone can help? Process: AdobeReader [11721] Path: /Applications/Adobe Acrobat Reader...'
+  captured_at: '2026-07-23T09:48:17Z'
+  source_date: '2020-05-28'
+  target_release_date: '2020-05-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.009.20063
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-20-009-20065-adobe-community-bug-report-https-community-adobe-com-questions-12-open-multiple-pdfs-in-same-window-no-longer-works-1520277
+  product_id: adobe-acrobat-reader
+  update_version: 20.009.20065
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/open-multiple-pdfs-in-same-window-no-longer-works-1520277
+  parent_title: Open multiple PDFs in same window no longer works
+  report_title: Open multiple PDFs in same window no longer works
+  report_text_excerpt: Open multiple PDFs in same window no longer works I just installed Acrobat Reader DC (20.009.20065). This setting under Preferences\General doesn't work. Even after closing Acrobat and relaunching it, any time I open a PDF, and then via the Window menu and New Window , it...
+  captured_at: '2026-07-23T09:48:17Z'
+  source_date: '2020-05-25'
+  target_release_date: '2020-05-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.009.20065
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13692
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13692
+  parent_title: CoreAudio not loading on 32.2 when DLLs in PATH-referenced folder
+  report_title: CoreAudio not loading on 32.2 when DLLs in PATH-referenced folder
+  report_text_excerpt: 'in a directory referenced by the PATH variable. Since 32.2, CoreAudio fails to load. OBS 32.1.2 log on the same system, showing successful loading of CoreAudio: https://obsproject.com/logs/sCM2O79sPswOI8XW ### Steps to Reproduce 1. Add the CoreAudio DLLs to a directory reference'
+  captured_at: '2026-07-23T10:40:31Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-0-github-issue-13692
+  product_id: obs-studio
+  update_version: 32.2.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13692
+  parent_title: CoreAudio not loading on 32.2 when DLLs in PATH-referenced folder
+  report_title: CoreAudio not loading on 32.2 when DLLs in PATH-referenced folder
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.0 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/ecucaVwBKeEi4dRU ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Apple'
+  captured_at: '2026-07-23T10:40:41Z'
+  patch_version_matched: true
+  matched_version: 32.2.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
   sentiment: negative
   source_weight: 1
