@@ -1113,15 +1113,17 @@
   software: Photoshop
   public_category: Design Workflow
   enabled: false
-  recommended_priority: P1 needs Adobe source-specific adapter validation
+  recommended_priority: P1 dedicated fail-closed adapter staged; activation blocked on official source reachability from CI
   ingestion:
     type: html_changelog
-    adapter: adobe_release_notes
+    adapter: adobe_photoshop
     official_url: https://helpx.adobe.com/photoshop/desktop/whats-new/photoshop-on-desktop-release-notes.html
     secondary_official_url: null
     feed_url: null
     api_url: null
     parser_profile: adobe_photoshop_release_notes
+    record_limit: 3
+    scan_limit: 25
     include_prereleases: false
     version_pattern: ^(v)?(?P<version>[0-9]+(\.[0-9]+)+.*)$
     title_selector: null
@@ -1202,7 +1204,15 @@
     - creator forums
     difficulty: Medium
     defer_until_official_ingestion_stable: true
-  source_health_note: Visible Adobe product retained. Official ingestion remains disabled until this Adobe source has adapter validation.
+  source_health_note: >-
+    Dedicated fail-closed adobe_photoshop adapter is implemented and unit-tested (explicit
+    desktop-Photoshop attribution, exact stable-version extraction, deterministic release
+    date, ambiguity/beta rejection, official-only records). Activation stays disabled because
+    the official HelpX desktop release-notes page is not reachable from datacenter / GitHub
+    Actions egress (connection times out, zero bytes), and no stable official release-history
+    fallback exists that avoids per-version manual curation. enabled flips to true only once an
+    official source is proven reachable in CI and the adapter dry-run is byte-clean. Community
+    consensus is intentionally NOT implemented for Photoshop.
 - company_id: adobe
   product_id: adobe-media-encoder
   company: Adobe

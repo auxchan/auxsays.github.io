@@ -96,10 +96,16 @@ def run() -> int:
     check("config: microsoft-teams has NO record_limit (regression guard)", "record_limit" not in (teams.get("ingestion") or {}), str((teams.get("ingestion") or {}).get("record_limit")))
     check("config: microsoft-teams falls back to global limit (2)", resolve(teams, args(2)) == 2, str(resolve(teams, args(2))))
 
-    # --- no other source unexpectedly grew a record_limit -------------------
+    # --- only the two intentional sources declare a record_limit ------------
+    # microsoft-windows-11 (release-health page lists several current servicing versions)
+    # and adobe-photoshop (bounded backfill for the dedicated, staged Photoshop adapter).
     rows = yaml.safe_load(_CONFIG.read_text(encoding="utf-8"))
     with_override = [r.get("product_id") for r in rows if isinstance(r.get("ingestion"), dict) and "record_limit" in r["ingestion"]]
-    check("only microsoft-windows-11 sets a record_limit in the whole config", with_override == ["microsoft-windows-11"], str(with_override))
+    check("only microsoft-windows-11 and adobe-photoshop set a record_limit in the whole config",
+          set(with_override) == {"microsoft-windows-11", "adobe-photoshop"} and len(with_override) == 2,
+          str(with_override))
+    ps_cfg = load_config_source("adobe-photoshop")
+    check("config: adobe-photoshop declares a bounded record_limit (3)", (ps_cfg.get("ingestion") or {}).get("record_limit") == 3, str((ps_cfg.get("ingestion") or {}).get("record_limit")))
 
     # === progressive backfill: a per-run limit must ADVANCE, not repeat the newest N =====
     # A source with more history than the per-run limit must be ingested across scheduled runs
@@ -183,7 +189,15 @@ def run() -> int:
     check("config: 4 enabled Elgato sources use the help-center adapter", len(elgato_rows) == 4, str(len(elgato_rows)))
     check("config: every Elgato source declares scan_limit 8", all((r.get("ingestion") or {}).get("scan_limit") == 8 for r in elgato_rows), str([(r.get("product_id"), (r.get("ingestion") or {}).get("scan_limit")) for r in elgato_rows]))
     check("config: Elgato scan_limit resolves to 8 even under the global 200 backfill default", all(rscan(r, args(2)) == 8 for r in elgato_rows))
-    check("config: no non-Elgato source silently gained a scan_limit", [r.get("product_id") for r in rows if "scan_limit" in (r.get("ingestion") or {})] == [r.get("product_id") for r in elgato_rows], str([r.get("product_id") for r in rows if "scan_limit" in (r.get("ingestion") or {})]))
+    # The 4 Elgato help-center sources plus the single staged adobe-photoshop source are the
+    # ONLY sources that declare a scan_limit; nothing else silently gained one.
+    with_scan = [r.get("product_id") for r in rows if "scan_limit" in (r.get("ingestion") or {})]
+    check("only the Elgato sources and adobe-photoshop declare a scan_limit",
+          set(with_scan) == {r.get("product_id") for r in elgato_rows} | {"adobe-photoshop"}
+          and len(with_scan) == len(elgato_rows) + 1,
+          str(with_scan))
+    check("config: adobe-photoshop scan_limit (25) resolves within [record_limit, SEEN_RETENTION]",
+          rscan(load_config_source("adobe-photoshop"), args(2)) == 25, str(rscan(load_config_source("adobe-photoshop"), args(2))))
 
     # === seen-history retention alignment (Part D) ================================
     # 8. retention covers the full default scan window
@@ -300,6 +314,49 @@ def run() -> int:
             check("dry-run would_create count matches production created count", rd["created"] == rp["created"])
     finally:
         patch_ingest.adapter_module = orig_mod
+
+    # === Disabled-source dry-run probe safety (patch-ingest workflow) =================
+    # The patch-ingest workflow's *selected-source dry run* passes --all so a staged
+    # (enabled:false) source can be probed read-only for pre-activation reachability. These
+    # tests pin the safety invariants that keep that probe from ever writing a disabled
+    # source in production: the runner never writes a disabled source on the production
+    # (write) path, --all is confined to the dry-run branch, --source restricts the run,
+    # and every write-side step is gated off during a dry run.
+    def _rt(source=None, all=False):
+        return SimpleNamespace(source=source, all=all)
+
+    ps_disabled = {"product_id": "adobe-photoshop", "company_id": "adobe", "enabled": False,
+                   "ingestion": {"adapter": "adobe_photoshop"}}
+    premiere_enabled = {"product_id": "adobe-premiere-pro", "company_id": "adobe", "enabled": True,
+                        "ingestion": {"adapter": "adobe_release_notes"}}
+
+    # Runner: a disabled source is NEVER selected on a production (no --all) path.
+    check("workflow-safety: scheduled run (no source, no --all) skips a disabled source",
+          patch_ingest.should_run(ps_disabled, _rt()) is False)
+    check("workflow-safety: selected-source WRITE path (--source, no --all) skips a disabled source",
+          patch_ingest.should_run(ps_disabled, _rt(source=["adobe-photoshop"])) is False)
+    check("workflow-safety: the disabled-source probe requires --all (only the dry-run branch passes it)",
+          patch_ingest.should_run(ps_disabled, _rt(source=["adobe-photoshop"], all=True)) is True)
+    check("workflow-safety: --all with a DIFFERENT --source does not run the disabled source",
+          patch_ingest.should_run(ps_disabled, _rt(source=["adobe-premiere-pro"], all=True)) is False)
+    check("workflow-safety: an enabled source still runs on the production write path",
+          patch_ingest.should_run(premiere_enabled, _rt(source=["adobe-premiere-pro"])) is True)
+
+    # Workflow YAML: --all is confined to the dry-run branch and every write step is gated.
+    wf_text = (_REPO / ".github" / "workflows" / "patch-ingest.yml").read_text(encoding="utf-8")
+    all_lines = [ln.strip() for ln in wf_text.splitlines() if "patch_ingest.py" in ln and "--all" in ln]
+    check("workflow-safety: every --all invocation in patch-ingest.yml also passes --dry-run",
+          all_lines and all("--dry-run" in ln for ln in all_lines), str(all_lines))
+    write_branch = [ln.strip() for ln in wf_text.splitlines()
+                    if "patch_ingest.py --source" in ln and "--dry-run" not in ln]
+    check("workflow-safety: the selected-source WRITE command never passes --all",
+          write_branch and all("--all" not in ln for ln in write_branch), str(write_branch))
+    for step in ("Validate logo assets before commit", "Run generated record QA before commit",
+                 "Commit generated patch records"):
+        idx = wf_text.find(step)
+        window = wf_text[idx: idx + 240]
+        check(f"workflow-safety: write step '{step[:28]}...' is gated off during a dry run",
+              "dry_run != 'true'" in window, window[:120])
 
     print()
     print("=" * 60)

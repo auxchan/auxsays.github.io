@@ -63,7 +63,12 @@ jobs:
         if: ${{ github.event.inputs.source != '' && github.event.inputs.source != null }}
         run: |
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
-            python auxsays/scripts/patch_ingest.py --source "${{ github.event.inputs.source }}" --dry-run
+            # A selected-source DRY RUN also passes --all so a *staged* (enabled:false) source
+            # can be probed read-only for pre-activation source reachability. The --source filter
+            # still restricts the run to the one selected product; --all only lifts the enabled
+            # gate, and a dry-run writes nothing. The production (write) path below never passes
+            # --all, so a disabled source is never ingested to disk.
+            python auxsays/scripts/patch_ingest.py --source "${{ github.event.inputs.source }}" --all --dry-run
           else
             python auxsays/scripts/patch_ingest.py --source "${{ github.event.inputs.source }}"
           fi
