@@ -9740,3 +9740,198 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-19-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1t3gbod-does-anybody-else-deal-with-this-on-a-reg
+  product_id: blackmagic-davinci
+  update_version: '19'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1t3gbod/does_anybody_else_deal_with_this_on_a_regular/
+  parent_title: Does Anybody Else Deal with This On a Regular Basis? What Am I Doing Wrong?
+  report_title: Does Anybody Else Deal with This On a Regular Basis? What Am I Doing Wrong?
+  report_text_excerpt: Does Anybody Else Deal with This On a Regular Basis? What Am I Doing Wrong? I want to start this by saying, I have managed to use Davinci Resolve to make a video before on one of my channels. I am very pleased with Davinci’s various editing plugins–in terms of visual and audio...
+  captured_at: '2026-07-24T14:54:34Z'
+  source_date: '2026-05-04'
+  target_release_date: '2024-08-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '19'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-19-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ofh22g-cut-page-wont-ripple-edit-bug
+  product_id: blackmagic-davinci
+  update_version: '19'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ofh22g/cut_page_wont_ripple_edit_bug/
+  parent_title: Cut page wont ripple edit bug.
+  report_title: Cut page wont ripple edit bug.
+  report_text_excerpt: 'Cut page wont ripple edit bug. Title: Cut page: Ripple edit on main channel fails after adding clips to additional channels Product & Version: DaVinci Resolve Studio 19 (Windows version Hardware snapshot http://speccy.piriform.com/results/HvfyrQjjcrrmlUxMNUos01W Description:...'
+  captured_at: '2026-07-24T14:54:34Z'
+  source_date: '2025-10-25'
+  target_release_date: '2024-08-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '19'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uctwky-got-tuxedo-drivers-davinci-resolve-studio
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1uctwky/got_tuxedo_drivers_davinci_resolve_studio_fully/
+  parent_title: Got Tuxedo drivers + DaVinci Resolve Studio fully working on Fedora 44 KDE (XMG/Schenker Pro 16 VE M25) . Sharing my scripts
+  report_title: Got Tuxedo drivers + DaVinci Resolve Studio fully working on Fedora 44 KDE (XMG/Schenker Pro 16 VE M25) . Sharing my scripts
+  report_text_excerpt: Got Tuxedo drivers + DaVinci Resolve Studio fully working on Fedora 44 KDE (XMG/Schenker Pro 16 VE M25) . Sharing my scripts After a lot of trial and error getting my XMG Pro 16 VE M25 (Schenker) running properly on Fedora 44 KDE, I automated the whole process into a set of...
+  captured_at: '2026-07-24T15:07:07Z'
+  source_date: '2026-06-22'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: linux
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1tf3jzh-davinci-resolve-randomly-started-crashing
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1tf3jzh/davinci_resolve_randomly_started_crashing_in/
+  parent_title: DaVinci Resolve randomly started crashing. In desperate need of help!
+  report_title: DaVinci Resolve randomly started crashing. In desperate need of help!
+  report_text_excerpt: 'DaVinci Resolve randomly started crashing. In desperate need of help! Hi all! Where to begin? Simply put: video playback in DaVinci Resolve is between 1 to 3 FPS at all times. It doesn''t matter where the video files for that project are stored (either on my NAS over a 10Gb...'
+  captured_at: '2026-07-24T15:07:07Z'
+  source_date: '2026-05-16'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1su1r06-rtx-5060-ti-black-screen-signal-loss-unde
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1su1r06/rtx_5060_ti_black_screen_signal_loss_under_heavy/
+  parent_title: RTX 5060 Ti black screen / signal loss under heavy GPU load in DaVinci Resolve — BIOS update fixed it but still crashing after system restore [Help]
+  report_title: RTX 5060 Ti black screen / signal loss under heavy GPU load in DaVinci Resolve — BIOS update fixed it but still crashing after system restore [Help]
+  report_text_excerpt: 'RTX 5060 Ti black screen / signal loss under heavy GPU load in DaVinci Resolve — BIOS update fixed it but still crashing after system restore [Help] My Build (Brand new, April 2026 — ₹1,46,670): • CPU: AMD Ryzen 9 7900X • GPU: PNY RTX 5060 Ti 16GB GDDR7 • Motherboard: MSI PRO...'
+  captured_at: '2026-07-24T15:07:07Z'
+  source_date: '2026-04-24'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1s7o5yp-windows-gpu-hardware-accelerated-gpu-sche
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1s7o5yp/windows_gpu_hardware_accelerated_gpu_scheduling/
+  parent_title: Windows GPU Hardware Accelerated GPU Scheduling - On or Off with Davinci Resolve?
+  report_title: Windows GPU Hardware Accelerated GPU Scheduling - On or Off with Davinci Resolve?
+  report_text_excerpt: Windows GPU Hardware Accelerated GPU Scheduling - On or Off with Davinci Resolve? Hello everyone - hope you can help. I have a desktop Windows PC with a Nvidia GeForce RTX 3060 12GB GPU. 32GB DDR5 RAM. This is a new PC I've been using to edit videos with in Davinci Resolve...
+  captured_at: '2026-07-24T15:07:07Z'
+  source_date: '2026-03-30'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1nnkml9-stability-concerns-after-getting-rtx-5070
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1nnkml9/stability_concerns_after_getting_rtx_5070_ti/
+  parent_title: Stability concerns after getting RTX 5070 TI.
+  report_title: Stability concerns after getting RTX 5070 TI.
+  report_text_excerpt: Stability concerns after getting RTX 5070 TI. Not the usual Hardware Rant. Let's discuss. I’m experiencing frequent, totally random crashes with DaVinci Resolve Studio 20.2 on an RTX 5070 Ti and possibly other RTX 5000 series GPUs. Here's the situation and things I’ve...
+  captured_at: '2026-07-24T15:07:07Z'
+  source_date: '2025-09-22'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: blackmagic-davinci-20-0-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1m7vwut-power-bin-presets-crashingnot-working
+  product_id: blackmagic-davinci
+  update_version: 20.0.1
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1m7vwut/power_bin_presets_crashingnot_working/
+  parent_title: Power Bin Presets Crashing/Not Working
+  report_title: Power Bin Presets Crashing/Not Working
+  report_text_excerpt: Power Bin Presets Crashing/Not Working Hello everyone, have a problem that has been driving me insane. I have quite a few effects saved in my power bins to reuse in different projects. Just as an example, a 6 frame flash using the color corrector node in fusion. I apply them...
+  captured_at: '2026-07-24T15:09:48Z'
+  source_date: '2025-07-24'
+  target_release_date: '2025-06-30'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.0.1
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
