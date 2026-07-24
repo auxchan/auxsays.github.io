@@ -427,6 +427,35 @@ def run() -> int:
     check("R2-D4. a descriptive sentence mentioning 'classic' does not drop genuine Windows builds",
           _v(_W + "<p>The new Teams app replaces the classic Teams app on Windows.</p>" + _tbl(_GOOD)) == ["26183.1903.4892.4448"])
 
+    # --- Regression: third adversarial pass (table-anchored identity) ----------
+    # Identity is never inherited across a table boundary: each emitting table must sit directly
+    # under a fresh <h4>Windows</h4>. R3-D1: an orphan foreign table whose only marker is its own
+    # header row cannot leak.
+    check("R3-D1. an orphan foreign (GCC) table after the Windows table does not leak",
+          "26201.1500.2500.3500" not in _v(_W + _tbl(_GOOD) + "<table><tr><th>GCC release year</th><th>GCC release date</th><th>GCC version</th></tr><tr><td>2026</td><td>July 20</td><td>26201.1500.2500.3500</td></tr></table>"))
+    # R3-D2: a foreign table separated by prose or an uncaptured tag (span/header/...) cannot leak.
+    check("R3-D2. a foreign table after descriptive prose / a <span> label does not leak",
+          "26203.4444.5555.6666" not in _v(_W + _tbl(_GOOD) + "<p>The table below shows the release history for the iOS mobile version of the client.</p>" + _tbl("<tr><td>2026</td><td>July 22</td><td>26203.4444.5555.6666</td></tr>"))
+          and "26202.1111.2222.3333" not in _v(_W + _tbl(_GOOD) + "<span>Government cloud (GCCH)</span>" + _tbl("<tr><td>2026</td><td>July 22</td><td>26202.1111.2222.3333</td></tr>")))
+    # R3-D3: a ring sub-heading (h5/h6, incl. plural) disarms the following table.
+    check("R3-D3. an <h5>Insiders</h5> sub-heading disarms the following table",
+          "26204.7777.8888.9999" not in _v(_W + "<h5>Insiders</h5>" + _tbl("<tr><td>2026</td><td>July 01</td><td>26204.7777.8888.9999</td></tr>")))
+    # R3-D4: inline ring tokens (RC / TAP / Dev / Nightly / Early Access / no-separator) in a
+    # Windows-table cell are excluded.
+    check("R3-D4. inline RC / TAP / Dev / Nightly / ReleaseCandidate / Early Access rows are excluded",
+          all(T(_W + f"<table><tr><td>2026</td><td>July 01</td><td>26183.1903.4892.4448</td><td>{r}</td></tr></table>") == []
+              for r in ("RC", "TAP", "Dev", "Nightly", "ReleaseCandidate", "Early Access")))
+    # R3-D5: a year-group header row updates the carried year before any early continue, so no
+    # build inherits a neighbouring year-group's year.
+    check("R3-D5. year-group rows date each build with its OWN year (no off-by-a-year)",
+          [(r["version"], r["published_at"]) for r in T(_W + "<table><tr><th>Release year</th><th>Release date</th><th>Teams version</th></tr>"
+                  "<tr><td>2025</td><td>December 01</td><td>25335.1000.2000.3000</td></tr>"
+                  "<tr><td>2026</td><td>January 05</td><td>26005.213.4315.4117</td></tr></table>")]
+          == [("25335.1000.2000.3000", "2025-12-01T00:00:00Z"), ("26005.213.4315.4117", "2026-01-05T00:00:00Z")])
+    # False-negative sanity: a benign caption and benign prose must NOT drop the real table.
+    check("R3-FN. a benign caption / classic-mentioning prose keeps the genuine Windows build",
+          _v(_W + "<table><caption>Windows release history</caption><tr><td>2026</td><td>July 01</td><td>26183.1903.4892.4448</td></tr></table>") == ["26183.1903.4892.4448"])
+
     print()
     print("=" * 60)
     total = _PASS + _FAIL

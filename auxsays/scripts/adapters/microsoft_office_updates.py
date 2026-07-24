@@ -93,27 +93,30 @@ TEAMS_TYPE_HEADING = "new teams app version"                       # h3: reject 
 TEAMS_PLATFORM_HEADING = "windows"                                 # h4 (exact): reject Mac /
                                                                   #   Web / VDI / Mobile and the
                                                                   #   government "Windows (GCC...)"
-# Heading-level-aware tokenizer (the shared SECTION_RE drops the tag level, which the identity
-# hierarchy needs). Captures headings h1-h6, table rows, and intervening BLOCK-LEVEL prose
-# (p/div/li/caption/...), in document order -- the prose blocks let a foreign platform/cloud/
-# ring label placed between tables (e.g. "<p>Public preview builds:</p>", "<h5>Mac</h5>") taint
-# the section so a stale Windows heading cannot leak the next table's foreign builds.
+# Table-anchored tokenizer: headings h1-h6 (to arm/disarm the target identity) and whole
+# <table> blocks (each parsed only when it sits directly under a freshly declared target
+# <h4>Windows</h4>). Identity is therefore never inherited across a table boundary, so an
+# orphan foreign table, a table after prose, or one under an h5/h6 ring sub-heading cannot
+# leak. Rows and caption within an armed table are parsed with the helpers below.
 TEAMS_TOKEN_RE = re.compile(
     r"<(?P<htag>h[1-6])\b[^>]*>(?P<heading>.*?)</h[1-6]>"
-    r"|<tr\b[^>]*>(?P<row>.*?)</tr>"
-    r"|<(?P<btag>p|div|li|caption|figcaption|dt|dd|section|aside|strong|b|em)\b[^>]*>"
-    r"(?P<block>.*?)</(?:p|div|li|caption|figcaption|dt|dd|section|aside|strong|b|em)>",
+    r"|<table\b[^>]*>(?P<table>.*?)</table>",
     re.I | re.S,
 )
+TEAMS_ROW_RE = re.compile(r"<tr\b[^>]*>(?P<row>.*?)</tr>", re.I | re.S)
+TEAMS_CAPTION_RE = re.compile(r"<caption\b[^>]*>(?P<cap>.*?)</caption>", re.I | re.S)
 # A platform / cloud / edition / release-ring label that means "this is NOT the tracked
-# Public-cloud New-Teams Windows-stable identity". Matched against heading AND intervening
-# prose text (word separators as a class so "release candidate"/"release&nbsp;candidate" and
-# "test build" are caught after tag/entity normalisation).
+# Public-cloud New-Teams Windows-stable identity". Used as a defence-in-depth check on an
+# armed table's caption and on each row's normalised cell text (so an inline ring row inside
+# the production table is dropped). Separators are a class and family suffixes are optional so
+# "release-candidate", "Insiders", "Previews", "ReleaseCandidate", "RC", "TAP", "Dev/Nightly
+# ring", etc. are all caught after tag/entity normalisation.
 TEAMS_FOREIGN_SECTION_RE = re.compile(
     r"\b(?:mac(?:os)?|web|browser|vdi|mobile|ios|android|linux|"
     r"gcc|gcch|dod|government|gallatin|sovereign|classic|"
-    r"preview|insider|beta|targeted|"
-    r"release[\s._-]+candidate|test[\s._-]+build|pre[\s._-]*release|canary)\b",
+    r"preview(?:s)?|insider(?:s)?|beta(?:s)?|targeted|"
+    r"release[\s._-]*candidate|test[\s._-]*build|pre[\s._-]*release|canary|"
+    r"nightly|dev|tap|rc|early[\s._-]*access|ring)\b",
     re.I,
 )
 
@@ -450,29 +453,31 @@ def _records_from_teams_version_history(
     limit: int,
 ) -> list[dict[str, Any]]:
     """Pure parser (no network): Teams version-history -> official-only records for a SINGLE
-    identity (New Teams desktop, Windows, Public cloud). Fail-closed.
+    identity (New Teams desktop, Windows, Public cloud). Fail-closed and TABLE-ANCHORED.
 
-    The page interleaves many distinct identities (cloud x New/Classic x platform). A row is
-    considered ONLY while the h2/h3/h4 heading hierarchy is Public cloud -> New Teams app
-    version -> Windows; Mac / Web / VDI / Mobile platforms, Government (GCC/GCCH/DoD) and
-    Sovereign (Gallatin) clouds, and Classic Teams are all skipped so their versions can never
-    be mis-attributed. Within that identity a record is emitted only when the row establishes:
+    The page interleaves many distinct identities (cloud x New/Classic x platform), each its
+    own <table>. Identity is NEVER inherited across a table boundary: a table's rows are parsed
+    only when it sits directly under a freshly declared target heading chain
+    (Public cloud -> New Teams app version -> Windows). Any other heading -- a different
+    platform h4, a new h2/h3 section, or a sub-heading (h5/h6 such as "Insiders" / "Dev ring"),
+    and every already-consumed table -- disarms, so a Mac / Web / VDI / Mobile / Government /
+    Sovereign / Classic / preview table can never leak, even when its only marker is its own
+    header row or when prose separates it from the Windows table. Within the armed Windows
+    table a record is emitted only when the row establishes:
 
-    - exactly one new-Teams Windows version token (5-digit YYDDD build; >1 -> ambiguous, skip);
-    - a calendar-VALID release date built from the split 'Release year' + 'Month DD' cells
-      (undated or impossible-date rows are rejected -- never dated by inference);
-    - not a preview / insider / beta row.
+    - exactly one valid new-Teams Windows build (5-digit YYDDD; >1 -> ambiguous, skip);
+    - a calendar-VALID release date from the split 'Release year' + 'Month DD' cells (the year
+      carries forward across rowspan-grouped rows); undated / impossible-date rows are rejected;
+    - no inline ring/platform marker (checked on the table caption and each row's cell text).
 
-    A version that appears with more than one distinct release date fails visibly: it is
-    dropped rather than silently taking the first. Returns [] when no qualifying row matches.
+    A version that appears with more than one distinct release date fails visibly (dropped).
+    Returns [] when no qualifying row matches.
     """
     html = html or ""
     cap = max(1, int(limit))
     h2 = h3 = h4 = ""
-    tainted = False          # a foreign platform/cloud/ring label seen since the last clean
-                             # Windows heading -> the current table zone is not the target identity
-    current_year = ""        # last 'Release year' seen in the section (carried across rowspan-
-                             # grouped rows that omit the year cell)
+    armed = False                               # a fresh target <h4>Windows</h4> declared and
+                                                # not yet consumed by a table
     order: list[str] = []                       # versions in page order (newest first)
     dates_by_version: dict[str, set[str]] = {}  # version -> distinct release dates seen
 
@@ -483,59 +488,60 @@ def _records_from_teams_version_history(
 
     for match in TEAMS_TOKEN_RE.finditer(html):
         htag = match.group("htag")
-        btag = match.group("btag")
-        if htag is not None or btag is not None:
-            raw = match.group("heading") if htag is not None else match.group("block")
-            text = re.sub(r"\s+", " ", strip_tags(raw)).strip().lower()
-            is_heading = htag is not None
-            level = htag.lower() if is_heading else ""
+        if htag is not None:
+            text = re.sub(r"\s+", " ", strip_tags(match.group("heading"))).strip().lower()
+            level = htag.lower()
             if level in ("h1", "h2"):
-                h2, h3, h4, current_year = (text if level == "h2" else ""), "", "", ""
+                h2, h3, h4 = (text if level == "h2" else ""), "", ""
             elif level == "h3":
-                h3, h4, current_year = text, "", ""
+                h3, h4 = text, ""
             elif level == "h4":
-                h4, current_year = text, ""
-            # h5/h6 do not set the tracked hierarchy.
-            # Taint the zone on a foreign platform/cloud/edition/ring label: any heading (a
-            # section label), or a SHORT label-like prose/caption block (<= 8 words). Long
-            # descriptive prose (e.g. "... replaces the classic Teams app ...") must NOT taint.
-            if TEAMS_FOREIGN_SECTION_RE.search(text) and (is_heading or len(text.split()) <= 8):
-                tainted = True
-            # Re-enter a clean zone ONLY when an h4 heading (re)declares the exact target
-            # identity -- never on a benign sub-heading (h5/h6) that leaves prior state intact.
-            if level == "h4" and _identity_is_target():
-                tainted = False
+                h4 = text
+            # A table is trusted ONLY directly under a fresh target <h4>Windows</h4>; any other
+            # heading (incl. an h5/h6 ring sub-heading) disarms so nothing is inherited.
+            armed = (level == "h4" and _identity_is_target())
             continue
 
-        if tainted or not _identity_is_target():
+        # A <table>...</table> unit.
+        if not armed:
             continue
-        row_html = match.group("row") or ""
-        cells = _row_cells(row_html)
-        if not cells:
-            continue
-        joined = " ".join(cells).lower()
-        if TEAMS_FOREIGN_SECTION_RE.search(joined):
-            continue  # a ring/platform marker in the row's own (normalised) text -> reject
+        armed = False  # identity is consumed by this table, never inherited by a later one
+        table_html = match.group("table") or ""
+        cap_m = TEAMS_CAPTION_RE.search(table_html)
+        if cap_m and TEAMS_FOREIGN_SECTION_RE.search(
+                re.sub(r"\s+", " ", strip_tags(cap_m.group("cap"))).strip().lower()):
+            continue  # a foreign/ring table caption -> skip the whole table
 
-        versions = {c for c in cells if TEAMS_VERSION_RE.fullmatch(c) and _is_new_teams_windows_build(c)}
-        if len(versions) != 1:
-            continue  # zero -> not a valid new-Teams Windows build; >1 -> ambiguous, fail closed
-        version = next(iter(versions))
+        current_year = ""  # 'Release year' carried across rowspan-grouped rows within THIS table
+        for row_match in TEAMS_ROW_RE.finditer(table_html):
+            cells = _row_cells(row_match.group("row"))
+            if not cells:
+                continue
+            # Update the carried year at the TOP of the row (a year-group header row updates it
+            # before any early continue) so no build inherits a neighbouring year-group's year.
+            row_year = next((c for c in cells if TEAMS_YEAR_RE.fullmatch(c)), "")
+            if row_year:
+                current_year = row_year
+            joined = " ".join(cells).lower()
+            if TEAMS_FOREIGN_SECTION_RE.search(joined):
+                continue  # inline ring/platform marker in the row's own (normalised) text
 
-        row_year = next((c for c in cells if TEAMS_YEAR_RE.fullmatch(c)), "")
-        if row_year:
-            current_year = row_year
-        month_days = [m for c in cells for m in TEAMS_MONTH_DAY_RE.finditer(c)]
-        distinct_md = {(m.group(1).lower(), m.group(2)) for m in month_days}
-        if len(distinct_md) > 1:
-            continue  # more than one distinct date in the row -> ambiguous, fail closed
-        published = _teams_published(current_year, month_days[0] if month_days else None)
-        if not published:
-            continue  # fail closed: undated or impossible-date row is never emitted
+            versions = {c for c in cells if TEAMS_VERSION_RE.fullmatch(c) and _is_new_teams_windows_build(c)}
+            if len(versions) != 1:
+                continue  # zero -> not a valid new-Teams Windows build; >1 -> ambiguous
+            version = next(iter(versions))
 
-        if version not in dates_by_version:
-            order.append(version)
-        dates_by_version.setdefault(version, set()).add(published)
+            month_days = [m for c in cells for m in TEAMS_MONTH_DAY_RE.finditer(c)]
+            distinct_md = {(m.group(1).lower(), m.group(2)) for m in month_days}
+            if len(distinct_md) > 1:
+                continue  # more than one distinct date in the row -> ambiguous, fail closed
+            published = _teams_published(current_year, month_days[0] if month_days else None)
+            if not published:
+                continue  # fail closed: undated or impossible-date row is never emitted
+
+            if version not in dates_by_version:
+                order.append(version)
+            dates_by_version.setdefault(version, set()).add(published)
 
     records: list[dict[str, Any]] = []
     for version in order:
