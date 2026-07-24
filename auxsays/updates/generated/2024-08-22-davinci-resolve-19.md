@@ -19,7 +19,7 @@ update_published_at: '2024-08-22T00:00:00Z'
 update_last_checked: '2026-07-23T19:48:59Z'
 source_last_checked: '2026-07-23T19:48:59Z'
 official_body_last_checked: '2026-07-23T19:48:59Z'
-record_last_updated: '2026-07-23T21:04:09.797305Z'
+record_last_updated: '2026-07-24T01:36:10.538487Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -161,6 +161,7 @@ accepted_report_sources:
   workflow_area: application stability
 evidence_source_limitations:
 - Too few reports for a firm verdict yet.
+- Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 update_decision_label: WAIT
 update_decision_body: Current reports mention startup or application crashes. Production editors with active delivery
   deadlines should wait or test on copied projects.
