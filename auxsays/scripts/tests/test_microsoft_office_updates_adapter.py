@@ -407,6 +407,26 @@ def run() -> int:
                   "<tr><td>June 17</td><td>26149.1205.4798.6437</td></tr></table>")
           == ["26183.1903.4892.4448", "26149.1205.4798.6437"])
 
+    # --- Regression: second adversarial pass ----------------------------------
+    # R2-D1: the row ring filter uses the separator-flexible regex, so hyphen/underscore/dot/
+    # no-separator ring tokens in a cell are excluded (not just the single-space literal).
+    check("R2-D1. separator-variant ring tokens in a cell are all excluded",
+          all(T(_W + f"<table><tr><td>2026</td><td>June 05</td><td>26183.1903.4892.4448</td><td>{sep}</td></tr></table>") == []
+              for sep in ("Release-candidate", "release_candidate", "test-build", "test.build", "pre release", "Pre-Release")))
+    # R2-D2: the version must be a real YYDDD build, not just a 5-6 digit shape.
+    check("R2-D2. shape-only look-alikes (6-digit / impossible day-of-year) are rejected",
+          all(T(_W + f"<table><tr><td>2026</td><td>June 05</td><td>{bad}</td></tr></table>") == []
+              for bad in ("123456.1.1.1", "999999.9.9.9", "26999.1.1.1", "26000.1.1.1", "26400.1.1.1")))
+    check("R2-D2b. a genuine YYDDD build (26005 = day 5) is still accepted",
+          _v(_W + "<table><tr><td>2026</td><td>January 05</td><td>26005.213.4315.4117</td></tr></table>") == ["26005.213.4315.4117"])
+    # R2-D3: a benign sub-heading (h5/h6) must not clear a foreign taint.
+    check("R2-D3. a benign <h5> after a foreign <p> label does not clear the taint",
+          "26196.1000.5000.5000" not in _v(_W + _tbl(_GOOD) + "<p>Insider</p><h5>Details</h5>"
+                                            + _tbl("<tr><td>2026</td><td>July 01</td><td>26196.1000.5000.5000</td></tr>")))
+    # R2-D4: descriptive prose that merely mentions a foreign word must NOT taint the section.
+    check("R2-D4. a descriptive sentence mentioning 'classic' does not drop genuine Windows builds",
+          _v(_W + "<p>The new Teams app replaces the classic Teams app on Windows.</p>" + _tbl(_GOOD)) == ["26183.1903.4892.4448"])
+
     print()
     print("=" * 60)
     total = _PASS + _FAIL

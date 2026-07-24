@@ -78,18 +78,13 @@ EXCLUDE_CHANNEL_TOKENS = ("preview", "insider", "beta")
 # New Teams desktop builds use a 5-digit "YYDDD" first component (e.g. 26183.1903.4892.4448).
 # That distinguishes them from the classic-Teams / Web "YYYY.WW.dd.n" 4-digit-year format and
 # from the 3-part SlimCore value -- a secondary guard; the section hierarchy is primary.
-TEAMS_VERSION_RE = re.compile(r"\d{5,6}\.\d{1,6}\.\d{1,6}\.\d{1,6}")
+TEAMS_VERSION_RE = re.compile(r"\d{5}\.\d{1,6}\.\d{1,6}\.\d{1,6}")
 TEAMS_YEAR_RE = re.compile(r"20\d{2}")
 TEAMS_MONTH_DAY_RE = re.compile(
     r"\b(January|February|March|April|May|June|July|August|September|October|November|December)"
     r"\s+(\d{1,2})\b",
     re.I,
 )
-TEAMS_EXCLUDE_TOKENS = (
-    "preview", "insider", "beta", "targeted", "release candidate",
-    "test build", "prerelease", "pre-release", "canary",
-)
-
 # The single tracked identity, matched EXACTLY (not startswith) against the page's h2/h3/h4
 # heading hierarchy, so a ring/edition qualifier ("Public cloud offerings (Preview)") never
 # passes as the production Public-cloud section.
@@ -349,6 +344,16 @@ def _records_from_office_release_notes(
     return records
 
 
+def _is_new_teams_windows_build(version: str) -> bool:
+    """True only for a real new-Teams desktop build number: the first component is a YYDDD
+    stamp (2-digit year + day-of-year 001-366), e.g. 26183 -> 2026, day 183. Rejects shape-only
+    look-alikes such as a day-of-year of 000/400/999 that pass the digit-count regex."""
+    first = version.split(".", 1)[0]
+    if len(first) != 5:
+        return False
+    return 1 <= int(first[2:]) <= 366
+
+
 def _teams_published(year: str, month_day: re.Match | None) -> str:
     """Combine the Teams table's split 'Release year' + 'Month DD' cells into a CALENDAR-
     VALIDATED ISO date, else "". Rejects an impossible day/month (e.g. February 30) instead of
@@ -482,21 +487,23 @@ def _records_from_teams_version_history(
         if htag is not None or btag is not None:
             raw = match.group("heading") if htag is not None else match.group("block")
             text = re.sub(r"\s+", " ", strip_tags(raw)).strip().lower()
-            if htag is not None:
-                level = htag.lower()
-                if level in ("h1", "h2"):
-                    h2, h3, h4 = (text if level == "h2" else ""), "", ""
-                    current_year = ""
-                elif level == "h3":
-                    h3, h4, current_year = text, "", ""
-                elif level == "h4":
-                    h4, current_year = text, ""
-                # h5/h6 do not set the tracked hierarchy but can still taint (below).
-            # Any heading OR intervening prose that names a foreign platform/cloud/edition/ring
-            # taints the zone; entering the exact target identity via a clean heading re-clears it.
-            if TEAMS_FOREIGN_SECTION_RE.search(text):
+            is_heading = htag is not None
+            level = htag.lower() if is_heading else ""
+            if level in ("h1", "h2"):
+                h2, h3, h4, current_year = (text if level == "h2" else ""), "", "", ""
+            elif level == "h3":
+                h3, h4, current_year = text, "", ""
+            elif level == "h4":
+                h4, current_year = text, ""
+            # h5/h6 do not set the tracked hierarchy.
+            # Taint the zone on a foreign platform/cloud/edition/ring label: any heading (a
+            # section label), or a SHORT label-like prose/caption block (<= 8 words). Long
+            # descriptive prose (e.g. "... replaces the classic Teams app ...") must NOT taint.
+            if TEAMS_FOREIGN_SECTION_RE.search(text) and (is_heading or len(text.split()) <= 8):
                 tainted = True
-            elif htag is not None and _identity_is_target():
+            # Re-enter a clean zone ONLY when an h4 heading (re)declares the exact target
+            # identity -- never on a benign sub-heading (h5/h6) that leaves prior state intact.
+            if level == "h4" and _identity_is_target():
                 tainted = False
             continue
 
@@ -507,12 +514,12 @@ def _records_from_teams_version_history(
         if not cells:
             continue
         joined = " ".join(cells).lower()
-        if any(token in joined for token in TEAMS_EXCLUDE_TOKENS):
-            continue  # ring marker in the row's own (normalised) text
+        if TEAMS_FOREIGN_SECTION_RE.search(joined):
+            continue  # a ring/platform marker in the row's own (normalised) text -> reject
 
-        versions = {c for c in cells if TEAMS_VERSION_RE.fullmatch(c)}
+        versions = {c for c in cells if TEAMS_VERSION_RE.fullmatch(c) and _is_new_teams_windows_build(c)}
         if len(versions) != 1:
-            continue  # zero -> not a version row; >1 distinct -> ambiguous, fail closed
+            continue  # zero -> not a valid new-Teams Windows build; >1 -> ambiguous, fail closed
         version = next(iter(versions))
 
         row_year = next((c for c in cells if TEAMS_YEAR_RE.fullmatch(c)), "")
