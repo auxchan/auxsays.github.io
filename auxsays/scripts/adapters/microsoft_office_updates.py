@@ -64,17 +64,63 @@ DEFAULT_CHANNEL = "Current Channel"
 EXCLUDE_CHANNEL_TOKENS = ("preview", "insider", "beta")
 
 # Microsoft Teams version-history table rows are
-# [Release year | Release date ("July 01") | Teams version (4-part) | SlimCore version (3-part)].
-# New Teams versions have a >=4-digit first component (e.g. 26163.407.4839.8659), which
-# distinguishes them from the 3-part SlimCore value and from 1.x classic-Teams builds.
-TEAMS_VERSION_RE = re.compile(r"\d{4,6}\.\d{1,6}\.\d{1,6}\.\d{1,6}")
+# [Release year | Release date ("July 01") | Teams version | SlimCore version (3-part)].
+#
+# The teams-app-versioning page is NOT a single list: it is a hierarchy of DISTINCT product
+# identities -- cloud (Public / Government / Sovereign-Gallatin) x app (New Teams / Classic
+# Teams) x platform (Windows / Mac / Web / VDI / Mobile), each with its own version stream.
+# The SAME calendar release ships different build numbers per platform (e.g. Public New Teams
+# Windows 26183.1903.4892.4448 vs Mac 26183.1901.4874.5228), so a record must be scoped to a
+# SINGLE identity or it misreports a user's patch state. This adapter tracks exactly one:
+# the mainstream New Teams desktop client for Windows in the Public cloud. Every other
+# section is rejected (see _records_from_teams_version_history).
+#
+# New Teams desktop builds use a 5-digit "YYDDD" first component (e.g. 26183.1903.4892.4448).
+# That distinguishes them from the classic-Teams / Web "YYYY.WW.dd.n" 4-digit-year format and
+# from the 3-part SlimCore value -- a secondary guard; the section hierarchy is primary.
+TEAMS_VERSION_RE = re.compile(r"\d{5,6}\.\d{1,6}\.\d{1,6}\.\d{1,6}")
 TEAMS_YEAR_RE = re.compile(r"20\d{2}")
 TEAMS_MONTH_DAY_RE = re.compile(
     r"\b(January|February|March|April|May|June|July|August|September|October|November|December)"
     r"\s+(\d{1,2})\b",
     re.I,
 )
-TEAMS_EXCLUDE_TOKENS = ("preview", "insider", "beta")
+TEAMS_EXCLUDE_TOKENS = (
+    "preview", "insider", "beta", "targeted", "release candidate",
+    "test build", "prerelease", "pre-release", "canary",
+)
+
+# The single tracked identity, matched EXACTLY (not startswith) against the page's h2/h3/h4
+# heading hierarchy, so a ring/edition qualifier ("Public cloud offerings (Preview)") never
+# passes as the production Public-cloud section.
+TEAMS_CLOUD_HEADINGS = ("public cloud", "public cloud offerings")  # h2
+TEAMS_TYPE_HEADING = "new teams app version"                       # h3: reject Classic Teams
+TEAMS_PLATFORM_HEADING = "windows"                                 # h4 (exact): reject Mac /
+                                                                  #   Web / VDI / Mobile and the
+                                                                  #   government "Windows (GCC...)"
+# Heading-level-aware tokenizer (the shared SECTION_RE drops the tag level, which the identity
+# hierarchy needs). Captures headings h1-h6, table rows, and intervening BLOCK-LEVEL prose
+# (p/div/li/caption/...), in document order -- the prose blocks let a foreign platform/cloud/
+# ring label placed between tables (e.g. "<p>Public preview builds:</p>", "<h5>Mac</h5>") taint
+# the section so a stale Windows heading cannot leak the next table's foreign builds.
+TEAMS_TOKEN_RE = re.compile(
+    r"<(?P<htag>h[1-6])\b[^>]*>(?P<heading>.*?)</h[1-6]>"
+    r"|<tr\b[^>]*>(?P<row>.*?)</tr>"
+    r"|<(?P<btag>p|div|li|caption|figcaption|dt|dd|section|aside|strong|b|em)\b[^>]*>"
+    r"(?P<block>.*?)</(?:p|div|li|caption|figcaption|dt|dd|section|aside|strong|b|em)>",
+    re.I | re.S,
+)
+# A platform / cloud / edition / release-ring label that means "this is NOT the tracked
+# Public-cloud New-Teams Windows-stable identity". Matched against heading AND intervening
+# prose text (word separators as a class so "release candidate"/"release&nbsp;candidate" and
+# "test build" are caught after tag/entity normalisation).
+TEAMS_FOREIGN_SECTION_RE = re.compile(
+    r"\b(?:mac(?:os)?|web|browser|vdi|mobile|ios|android|linux|"
+    r"gcc|gcch|dod|government|gallatin|sovereign|classic|"
+    r"preview|insider|beta|targeted|"
+    r"release[\s._-]+candidate|test[\s._-]+build|pre[\s._-]*release|canary)\b",
+    re.I,
+)
 
 # --- App attribution (per-app release notes) ---------------------------------
 # Microsoft 365 Apps release notes describe features/fixed issues per version. A change
@@ -304,12 +350,15 @@ def _records_from_office_release_notes(
 
 
 def _teams_published(year: str, month_day: re.Match | None) -> str:
-    """Combine the Teams table's split 'Release year' + 'Month DD' cells into ISO."""
+    """Combine the Teams table's split 'Release year' + 'Month DD' cells into a CALENDAR-
+    VALIDATED ISO date, else "". Rejects an impossible day/month (e.g. February 30) instead of
+    emitting a fabricated timestamp, and returns "" when either cell is missing (fail closed)."""
     if not year or month_day is None:
         return ""
-    month = MONTHS.get(month_day.group(1).lower(), "01")
-    day = int(month_day.group(2))
-    return f"{year}-{month}-{day:02d}T00:00:00Z"
+    month = MONTHS.get(month_day.group(1).lower())
+    if not month:
+        return ""
+    return _iso_date(int(year), int(month), int(month_day.group(2)))
 
 
 def _teams_record(
@@ -337,14 +386,17 @@ def _teams_record(
                 "extraction_status": "summary_captured" if url.strip() == source_url else "reference_only",
             })
 
+    # Single, explicit, non-inferred identity (New Teams desktop, Windows, Public cloud).
+    identity_label = "New Teams (Windows, Public cloud)"
     body = (
-        f"{software} version {version}."
+        f"{software} {identity_label} version {version}."
         + (f" Release date {date_str}." if date_str else "")
-        + " This is the official Microsoft Teams version-history entry"
+        + " This is the official Microsoft Teams version-history entry for the New Teams"
+        " desktop client on Windows (Public cloud)"
         " (learn.microsoft.com/officeupdates/teams-app-versioning)."
     )
     official_summary = (
-        f"Microsoft released {software} version {version}"
+        f"Microsoft released {software} {identity_label} version {version}"
         + (f" ({date_str})." if date_str else ".")
     )
 
@@ -377,6 +429,12 @@ def _teams_record(
         "official_sources": official_sources,
         "capture_status": "captured-from-official-microsoft-teams-version-history",
         "official_summary": official_summary,
+        # Structured, non-inferred identity so a record never conflates platforms/clouds/editions.
+        "teams_edition": "New Teams",
+        "target_platform": "Windows",
+        "target_channel": "Public cloud (Production)",
+        "target_version": version,
+        "applicability": [source["product_id"]],
     }
 
 
@@ -386,50 +444,100 @@ def _records_from_teams_version_history(
     html: str,
     limit: int,
 ) -> list[dict[str, Any]]:
-    """Pure parser (no network): Teams version-history table rows -> official-only records.
+    """Pure parser (no network): Teams version-history -> official-only records for a SINGLE
+    identity (New Teams desktop, Windows, Public cloud). Fail-closed.
 
-    Rows are [Release year | Release date | Teams version (4-part) | SlimCore version].
-    Cells are matched by shape (not fixed index): the 4-part Teams version, a 4-digit
-    year, and a "Month DD" date are combined; the 3-part SlimCore value and 1.x classic
-    builds are ignored. Returns [] when no version row matches (no fabricated records).
+    The page interleaves many distinct identities (cloud x New/Classic x platform). A row is
+    considered ONLY while the h2/h3/h4 heading hierarchy is Public cloud -> New Teams app
+    version -> Windows; Mac / Web / VDI / Mobile platforms, Government (GCC/GCCH/DoD) and
+    Sovereign (Gallatin) clouds, and Classic Teams are all skipped so their versions can never
+    be mis-attributed. Within that identity a record is emitted only when the row establishes:
+
+    - exactly one new-Teams Windows version token (5-digit YYDDD build; >1 -> ambiguous, skip);
+    - a calendar-VALID release date built from the split 'Release year' + 'Month DD' cells
+      (undated or impossible-date rows are rejected -- never dated by inference);
+    - not a preview / insider / beta row.
+
+    A version that appears with more than one distinct release date fails visibly: it is
+    dropped rather than silently taking the first. Returns [] when no qualifying row matches.
     """
     html = html or ""
-    records: list[dict[str, Any]] = []
-    seen_versions: set[str] = set()
-    current_section = ""
+    cap = max(1, int(limit))
+    h2 = h3 = h4 = ""
+    tainted = False          # a foreign platform/cloud/ring label seen since the last clean
+                             # Windows heading -> the current table zone is not the target identity
+    current_year = ""        # last 'Release year' seen in the section (carried across rowspan-
+                             # grouped rows that omit the year cell)
+    order: list[str] = []                       # versions in page order (newest first)
+    dates_by_version: dict[str, set[str]] = {}  # version -> distinct release dates seen
 
-    for match in SECTION_RE.finditer(html):
-        heading = match.group("heading")
-        if heading is not None:
-            current_section = re.sub(r"\s+", " ", strip_tags(heading)).strip().lower()
+    def _identity_is_target() -> bool:
+        return (h2 in TEAMS_CLOUD_HEADINGS
+                and h3 == TEAMS_TYPE_HEADING
+                and h4 == TEAMS_PLATFORM_HEADING)
+
+    for match in TEAMS_TOKEN_RE.finditer(html):
+        htag = match.group("htag")
+        btag = match.group("btag")
+        if htag is not None or btag is not None:
+            raw = match.group("heading") if htag is not None else match.group("block")
+            text = re.sub(r"\s+", " ", strip_tags(raw)).strip().lower()
+            if htag is not None:
+                level = htag.lower()
+                if level in ("h1", "h2"):
+                    h2, h3, h4 = (text if level == "h2" else ""), "", ""
+                    current_year = ""
+                elif level == "h3":
+                    h3, h4, current_year = text, "", ""
+                elif level == "h4":
+                    h4, current_year = text, ""
+                # h5/h6 do not set the tracked hierarchy but can still taint (below).
+            # Any heading OR intervening prose that names a foreign platform/cloud/edition/ring
+            # taints the zone; entering the exact target identity via a clean heading re-clears it.
+            if TEAMS_FOREIGN_SECTION_RE.search(text):
+                tainted = True
+            elif htag is not None and _identity_is_target():
+                tainted = False
             continue
 
+        if tainted or not _identity_is_target():
+            continue
         row_html = match.group("row") or ""
-        haystack = f"{current_section} {row_html.lower()}"
-        if any(token in haystack for token in TEAMS_EXCLUDE_TOKENS):
-            continue
         cells = _row_cells(row_html)
         if not cells:
             continue
+        joined = " ".join(cells).lower()
+        if any(token in joined for token in TEAMS_EXCLUDE_TOKENS):
+            continue  # ring marker in the row's own (normalised) text
 
-        version = next((c for c in cells if TEAMS_VERSION_RE.fullmatch(c)), "")
-        if not version or version in seen_versions:
-            continue
+        versions = {c for c in cells if TEAMS_VERSION_RE.fullmatch(c)}
+        if len(versions) != 1:
+            continue  # zero -> not a version row; >1 distinct -> ambiguous, fail closed
+        version = next(iter(versions))
 
-        year = next((c for c in cells if TEAMS_YEAR_RE.fullmatch(c)), "")
-        month_day = None
-        for cell in cells:
-            found = TEAMS_MONTH_DAY_RE.search(cell)
-            if found:
-                month_day = found
-                break
-        published = _teams_published(year, month_day)
+        row_year = next((c for c in cells if TEAMS_YEAR_RE.fullmatch(c)), "")
+        if row_year:
+            current_year = row_year
+        month_days = [m for c in cells for m in TEAMS_MONTH_DAY_RE.finditer(c)]
+        distinct_md = {(m.group(1).lower(), m.group(2)) for m in month_days}
+        if len(distinct_md) > 1:
+            continue  # more than one distinct date in the row -> ambiguous, fail closed
+        published = _teams_published(current_year, month_days[0] if month_days else None)
+        if not published:
+            continue  # fail closed: undated or impossible-date row is never emitted
 
-        seen_versions.add(version)
-        records.append(_teams_record(source, source_url, version, published))
-        if len(records) >= max(1, int(limit)):
+        if version not in dates_by_version:
+            order.append(version)
+        dates_by_version.setdefault(version, set()).add(published)
+
+    records: list[dict[str, Any]] = []
+    for version in order:
+        dates = dates_by_version[version]
+        if len(dates) != 1:
+            continue  # same version, conflicting release dates -> fail visibly (drop, don't guess)
+        records.append(_teams_record(source, source_url, version, next(iter(dates))))
+        if len(records) >= cap:
             break
-
     return records
 
 

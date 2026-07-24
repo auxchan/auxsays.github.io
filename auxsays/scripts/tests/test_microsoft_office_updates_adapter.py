@@ -111,34 +111,67 @@ def teams_source() -> dict[str, object]:
 
 TEAMS_URL = "https://learn.microsoft.com/en-us/officeupdates/teams-app-versioning"
 
-# Mirrors the real Teams version-history table:
-# Release year | Release date ("July 01") | Teams version (4-part) | SlimCore version (3-part).
+# Mirrors the REAL teams-app-versioning hierarchy: cloud (h2) x app (h3) x platform (h4),
+# each a distinct identity. Only Public cloud -> New Teams app version -> Windows is tracked.
+# The same calendar release ships a different build per platform (Windows 26183.1903.4892.4448
+# vs Mac 26183.1901.4874.5228), so mis-scoping would misreport a Windows user's patch state.
 TEAMS_HTML = """
 <html><body>
-<h2>New Teams app version</h2>
-<table>
-<thead>
-<tr><th>Release year</th><th>Release date</th><th>Teams version</th><th>SlimCore version</th></tr>
-</thead>
-<tbody>
-<tr><td>2026</td><td>July 01</td><td>26163.407.4839.8659</td><td>2026.22.0</td></tr>
-<tr><td>2026</td><td>June 17</td><td>26149.1804.4788.5681</td><td>2026.20.0</td></tr>
-</tbody>
-</table>
-<h2>Public preview</h2>
-<table>
-<tbody>
-<tr><td>2026</td><td>June 28</td><td>26170.100.4900.1000</td><td>2026.24.0</td></tr>
-</tbody>
-</table>
-<h2>Classic Teams app version</h2>
-<table>
-<tbody>
-<tr><td>2025</td><td>March 03</td><td>1.7.00.16873</td><td></td></tr>
-</tbody>
-</table>
+<h1>Version update history for the new and classic Microsoft Teams app</h1>
+<p>Page last updated: October 2026.</p>
+<h2>Public cloud offerings</h2>
+  <h3>New Teams app version</h3>
+    <h4>Mac</h4>
+    <table><tr><td>2026</td><td>July 03</td><td>26183.1901.4874.5228</td><td>2026.22.0</td></tr></table>
+    <h4>VDI</h4>
+    <table><tr><td>2026</td><td>July 01</td><td>26183.2201.0001.0001</td><td>2026.22.0</td></tr></table>
+    <h4>Web</h4>
+    <table><tr><td>2026</td><td>July 01</td><td>26183.4101.0007.0001</td></tr></table>
+    <h4>Windows</h4>
+    <table>
+    <thead><tr><th>Release year</th><th>Release date</th><th>Teams version</th><th>SlimCore version</th></tr></thead>
+    <tbody>
+    <tr><td>2026</td><td>July 01</td><td>26183.1903.4892.4448</td><td>2026.22.0</td></tr>
+    <tr><td>2026</td><td>June 17</td><td>26149.1205.4798.6437</td><td>2026.20.0</td></tr>
+    <tr><td>2026</td><td>June 03 (Public preview)</td><td>26120.9999.4700.0001</td><td>2026.24.0</td></tr>
+    <tr><td>2026</td><td>February 30</td><td>26100.1000.4600.0002</td><td>2026.10.0</td></tr>
+    <tr><td>2026</td><td></td><td>26090.900.4500.0003</td><td>2026.09.0</td></tr>
+    </tbody>
+    </table>
+  <h3>Classic Teams app version</h3>
+    <h4>Windows</h4>
+    <table><tr><td>2024</td><td>April 09</td><td>2024.04.01.65</td><td></td></tr></table>
+    <h4>Mobile: iOS</h4>
+    <table><tr><td>2026</td><td>February 06</td><td>2026.02.01.06</td><td></td></tr></table>
+    <h4>Mobile: Android</h4>
+    <table><tr><td>2024</td><td>October 03</td><td>2024.40.01.07</td><td></td></tr></table>
+<h2>Government cloud offerings</h2>
+  <h3>New Teams app version</h3>
+    <h4>Windows (GCCH)</h4>
+    <table><tr><td>2026</td><td>July 01</td><td>26163.405.4842.717</td><td>2026.22.0</td></tr></table>
+<h2>Sovereign cloud offerings</h2>
+  <h3>Gallatin</h3>
+    <h4>New Teams app version</h4>
+    <table><tr><td>2026</td><td>July 01</td><td>26163.407.4839.8659</td><td>2026.22.0</td></tr></table>
 </body></html>
 """
+
+# The two records the Windows/Public/New-Teams identity should yield from TEAMS_HTML.
+TEAMS_ACCEPTED = ["26183.1903.4892.4448", "26149.1205.4798.6437"]
+# Everything that must be rejected (other platform/cloud/edition, preview, invalid/undated).
+TEAMS_REJECTED = [
+    "26183.1901.4874.5228",  # Public/New/Mac
+    "26183.2201.0001.0001",  # Public/New/VDI
+    "26183.4101.0007.0001",  # Public/New/Web
+    "26120.9999.4700.0001",  # inline "Public preview" ring row
+    "26100.1000.4600.0002",  # February 30 -> invalid calendar date
+    "26090.900.4500.0003",   # undated row
+    "2024.04.01.65",         # Public/Classic/Windows
+    "2026.02.01.06",         # Public/Classic/Mobile: iOS
+    "2024.40.01.07",         # Public/Classic/Mobile: Android
+    "26163.405.4842.717",    # Government/New/Windows (GCCH)
+    "26163.407.4839.8659",   # Sovereign/Gallatin/New Teams
+]
 
 TEAMS_LANDING_HTML = "<html><body><h1>Version history</h1><p>No version table on this page.</p></body></html>"
 
@@ -177,34 +210,202 @@ def run() -> int:
     check("empty HTML yields no records", mso._records_from_office_release_notes(source(), URL, "", 5) == [], "empty string")
     check("landing page with no table yields no records", mso._records_from_office_release_notes(source(), URL, LANDING_ONLY_HTML, 5) == [], "landing-only")
 
-    # --- Microsoft Teams (microsoft_teams_version_history profile) ------------
+    # --- Microsoft Teams: single-identity, fail-closed official ingestion -----
+    # Identity: New Teams desktop client, Windows, Public cloud. Every other identity on the
+    # teams-app-versioning page (other platforms/clouds/editions, preview/targeted rings) and
+    # every malformed row is rejected.
+    from types import SimpleNamespace
+    from lib.write_update_record import build_front_matter
     check("Teams profile routes to the Teams parser", mso._PROFILE_PARSERS.get("microsoft_teams_version_history") is mso._records_from_teams_version_history)
     check("M365 profile still routes to the M365 parser", mso._PROFILE_PARSERS.get("microsoft_365_apps_update_history") is mso._records_from_office_release_notes)
 
-    teams = mso._records_from_teams_version_history(teams_source(), TEAMS_URL, TEAMS_HTML, 5)
-    check("two GA Teams version rows produce two records", len(teams) == 2, str([r.get("version") for r in teams]))
+    def T(html, limit=50):
+        return mso._records_from_teams_version_history(teams_source(), TEAMS_URL, html, limit)
 
-    if teams:
-        t0 = teams[0]
-        check("newest Teams version is first (26163...)", t0.get("version") == "26163.407.4839.8659", str(t0.get("version")))
-        check("4-part Teams version parsed, SlimCore not mistaken", t0.get("version") == "26163.407.4839.8659", str(t0.get("version")))
-        check("split year + month/day normalized to ISO (2026-07-01)", t0.get("published_at") == "2026-07-01T00:00:00Z", str(t0.get("published_at")))
-        check("Teams title carries software + version", "Microsoft Teams" in str(t0.get("title")) and "26163.407.4839.8659" in str(t0.get("title")), str(t0.get("title")))
-        check("Teams official_summary names the version", "26163.407.4839.8659" in str(t0.get("official_summary")), str(t0.get("official_summary")))
-        check("Teams record official-only: no report/consensus fields", t0.get("report_count") is None and t0.get("update_report_count") is None and t0.get("evidence_state") is None and t0.get("consensus_label") is None, str({k: t0.get(k) for k in ("report_count", "evidence_state", "consensus_label")}))
-        check("Teams record classified as official release_notes", t0.get("source_type") == "release_notes" and t0.get("capture_status") == "captured-from-official-microsoft-teams-version-history", str(t0.get("capture_status")))
+    teams = T(TEAMS_HTML)
+    tvers = [r.get("version") for r in teams]
 
-    if len(teams) >= 2:
-        check("second Teams record is the next GA version (26149...)", teams[1].get("version") == "26149.1804.4788.5681", str(teams[1].get("version")))
+    # H1 / H2: exact stable new-Teams Windows version accepted; full 4-part build preserved.
+    check("H1. exactly the two Windows/Public/New-Teams GA versions are accepted",
+          tvers == TEAMS_ACCEPTED, str(tvers))
+    check("H2. complete multi-component build preserved exactly (26183.1903.4892.4448)",
+          teams and teams[0].get("version") == "26183.1903.4892.4448"
+          and "26183.1903.4892.4448" in str(teams[0].get("title"))
+          and "26183.1903.4892.4448" in str(teams[0].get("official_summary")), str(tvers[:1]))
+    check("H2b. newest is first and dated (2026-07-01)",
+          teams and teams[0].get("published_at") == "2026-07-01T00:00:00Z", str(teams[0].get("published_at") if teams else None))
 
-    check("preview-section Teams row excluded (no 26170...)", all(r.get("version") != "26170.100.4900.1000" for r in teams), str([r.get("version") for r in teams]))
-    check("classic 1.x Teams build excluded", all(not str(r.get("version")).startswith("1.") for r in teams), str([r.get("version") for r in teams]))
+    # H3-H12: every non-target identity / malformed row is rejected.
+    rejected_present = [v for v in TEAMS_REJECTED if v in tvers]
+    check("H3-8/21. Mac / VDI / Web / classic / mobile / government / gallatin / preview rows all rejected",
+          rejected_present == [], str(rejected_present))
+    check("H3. classic Teams version rejected", "2024.04.01.65" not in tvers)
+    check("H4. web-only release rejected", "26183.4101.0007.0001" not in tvers)
+    check("H5. iOS / Android mobile release rejected", "2026.02.01.06" not in tvers and "2024.40.01.07" not in tvers)
+    check("H6. VDI release rejected", "26183.2201.0001.0001" not in tvers)
+    check("H7/H21. public-preview ring row rejected; stable on same page accepted", "26120.9999.4700.0001" not in tvers and "26183.1903.4892.4448" in tvers)
+    check("H8. targeted-release row rejected",
+          T("<h2>Public cloud offerings</h2><h3>New Teams app version</h3><h4>Windows</h4>"
+            "<table><tr><td>2026</td><td>July 08 (Targeted release)</td><td>26190.100.4900.7777</td></tr></table>") == [])
+    check("H9. beta / test build rows rejected",
+          T("<h2>Public cloud offerings</h2><h3>New Teams app version</h3><h4>Windows</h4>"
+            "<table><tr><td>2026</td><td>July 08 (beta)</td><td>26190.100.4900.0001</td></tr>"
+            "<tr><td>2026</td><td>July 09 test build</td><td>26191.100.4900.0002</td></tr></table>") == [])
+    check("H10. service-feature announcement without a client version -> no record",
+          T("<h2>Public cloud offerings</h2><h3>New Teams app version</h3><h4>Windows</h4>"
+            "<p>New meeting features are rolling out.</p><table><tr><td>2026</td><td>July 01</td><td>Feature rollout</td></tr></table>") == [])
+    check("H11. generic Microsoft 365 announcement page -> no Teams records",
+          T("<h1>What's new in Microsoft 365</h1><table><tr><td>Version 2606 (Build 20131.20154)</td><td>July 2026</td></tr></table>") == [])
+    check("H12. another Microsoft app version (Office build) is not a Teams version",
+          T("<h2>Public cloud offerings</h2><h3>New Teams app version</h3><h4>Windows</h4>"
+            "<table><tr><td>2026</td><td>July 01</td><td>20131.20154</td></tr></table>") == [])
 
-    teams_limited = mso._records_from_teams_version_history(teams_source(), TEAMS_URL, TEAMS_HTML, 1)
-    check("Teams limit respected (limit=1 -> one record)", len(teams_limited) == 1 and teams_limited[0].get("version") == "26163.407.4839.8659", str([r.get("version") for r in teams_limited]))
+    # H13-H18: version/date integrity.
+    check("H13. exact version without a date rejected (undated row)", "26090.900.4500.0003" not in tvers)
+    check("H14. a date with no exact Teams version rejected",
+          T("<h2>Public cloud offerings</h2><h3>New Teams app version</h3><h4>Windows</h4>"
+            "<table><tr><td>2026</td><td>July 01</td><td>latest</td></tr></table>") == [])
+    check("H15. invalid calendar date (February 30) rejected", "26100.1000.4600.0002" not in tvers)
+    check("H16. multiple conflicting versions in one row rejected",
+          T("<h2>Public cloud offerings</h2><h3>New Teams app version</h3><h4>Windows</h4>"
+            "<table><tr><td>2026</td><td>July 01</td><td>26190.100.4900.0001 26191.100.4900.0002</td></tr></table>") == [])
+    check("H17. multiple conflicting dates in one row rejected",
+          T("<h2>Public cloud offerings</h2><h3>New Teams app version</h3><h4>Windows</h4>"
+            "<table><tr><td>2026</td><td>July 01</td><td>26190.100.4900.0001</td><td>August 15</td></tr></table>") == [])
+    check("H18. a page-updated date in prose does not date a version row",
+          T("<h2>Public cloud offerings</h2><h3>New Teams app version</h3><h4>Windows</h4>"
+            "<p>Page updated October 2026.</p><table><tr><td>2026</td><td>July 01</td><td>26190.100.4900.0001</td></tr></table>")[0]["published_at"] == "2026-07-01T00:00:00Z")
 
-    check("Teams empty HTML yields no records", mso._records_from_teams_version_history(teams_source(), TEAMS_URL, "", 5) == [], "empty")
-    check("Teams landing page (no version table) yields no records", mso._records_from_teams_version_history(teams_source(), TEAMS_URL, TEAMS_LANDING_HTML, 5) == [], "landing")
+    # H19: alternate official URLs -> one identity; transport failure fail-closed (fetch level).
+    URL_A = TEAMS_URL
+    URL_B = "https://learn.microsoft.com/en-us/officeupdates/teams-archive"
+    def with_fetch(mapping, fn):
+        orig = mso.fetch_text
+        def fake(url, **_kw):
+            if url not in mapping:
+                raise RuntimeError("timeout")
+            return SimpleNamespace(text=mapping[url], final_url=url)
+        mso.fetch_text = fake
+        try:
+            return fn()
+        finally:
+            mso.fetch_text = orig
+    two_url_src = {**teams_source(), "ingestion": {**teams_source()["ingestion"], "secondary_official_url": URL_B}}
+    both = with_fetch({URL_A: TEAMS_HTML, URL_B: TEAMS_HTML}, lambda: mso.fetch(two_url_src, 50))
+    check("H19. same version on two official URLs -> one identity (from the primary URL)",
+          [r["version"] for r in both] == TEAMS_ACCEPTED and all(r["source_url"] == URL_A for r in both), str([(r["version"], r["source_url"]) for r in both]))
+    raised = False
+    try:
+        with_fetch({}, lambda: mso.fetch(two_url_src, 50))
+    except RuntimeError:
+        raised = True
+    check("H19b. all official URLs failing transport -> fetch raises (fail-closed)", raised)
+
+    # H20: same version with conflicting dates -> fail visibly (dropped, not first-wins).
+    conflict = T("<h2>Public cloud offerings</h2><h3>New Teams app version</h3><h4>Windows</h4>"
+                 "<table><tr><td>2026</td><td>July 01</td><td>26190.100.4900.0001</td></tr>"
+                 "<tr><td>2026</td><td>August 15</td><td>26190.100.4900.0001</td></tr></table>")
+    check("H20. same version with conflicting release dates fails visibly (no record)", conflict == [])
+
+    # H22-25: run_source backfill / rerun / dry-run over the Teams parser.
+    import tempfile
+    from pathlib import Path as _P
+    class _TeamsAdapter:
+        @staticmethod
+        def fetch(source, limit=3):
+            return T(TEAMS_HTML, limit)
+    teams_cfg = {"company_id": "microsoft", "product_id": "microsoft-teams", "company": "Microsoft",
+                 "software": "Microsoft Teams", "public_category": "Workplace Critical",
+                 "ingestion": {"adapter": "microsoft_office_updates", "parser_profile": "microsoft_teams_version_history",
+                               "official_url": TEAMS_URL}}
+    import patch_ingest
+    orig_mod = patch_ingest.adapter_module
+    patch_ingest.adapter_module = lambda name: _TeamsAdapter
+    try:
+        with tempfile.TemporaryDirectory() as td:
+            a = SimpleNamespace(limit=1, output=_P(td) / "generated", overwrite_existing=False)
+            a.output.mkdir(parents=True, exist_ok=True)
+            st = {"schema_version": 1, "sources": {}, "seen": {}}
+            r1 = patch_ingest.run_source(teams_cfg, a, st)
+            r2 = patch_ingest.run_source(teams_cfg, a, st)
+            names1 = [_P(p).name for p in r1["written"]]
+            names2 = [_P(p).name for p in r2["written"]]
+            check("H22/H23. rerun does not duplicate; backfill advances to a different record",
+                  len(names1) == 1 and len(names2) == 1 and set(names1).isdisjoint(names2), str((names1, names2)))
+            r3 = patch_ingest.run_source(teams_cfg, a, st)  # both in-window records now created
+            check("H23b. backfill converges (no new records once the window is drained)", r3["created"] == 0, str(r3["created"]))
+            files_before = sorted(f.name for f in a.output.glob("*.md"))
+            # H25: dry-run writes nothing and mutates no state.
+            st_dry = {"schema_version": 1, "sources": {}, "seen": {}}
+            rd = patch_ingest.run_source(teams_cfg, a, st_dry, write=False)
+            check("H25. dry-run creates zero files and marks zero seen-state",
+                  rd.get("dry_run") is True and st_dry.get("sources", {}).get("microsoft-teams", {}).get("seen", []) == []
+                  and sorted(f.name for f in a.output.glob("*.md")) == files_before, str(rd.get("dry_run")))
+    finally:
+        patch_ingest.adapter_module = orig_mod
+
+    # H26: unrelated content / empty / landing -> zero records.
+    check("H26. empty, landing, and non-Teams HTML all yield zero records",
+          T("", 5) == [] and T(TEAMS_LANDING_HTML, 5) == [] and T(UPDATE_HISTORY_HTML, 5) == [])
+
+    # H27: generated record derives official_only with zero reports and carries the identity.
+    t0 = teams[0]
+    front = build_front_matter(t0)
+    check("H27. front matter is official_only with 0 reports",
+          front["evidence_state"] == "official_only" and front["update_report_count"] == 0,
+          str({k: front[k] for k in ("evidence_state", "update_report_count")}))
+    check("H27b. record carries explicit single identity (New Teams / Windows / Public cloud)",
+          t0.get("teams_edition") == "New Teams" and t0.get("target_platform") == "Windows"
+          and str(t0.get("target_channel")).startswith("Public cloud")
+          and t0.get("source_type") == "release_notes"
+          and t0.get("capture_status") == "captured-from-official-microsoft-teams-version-history",
+          str({k: t0.get(k) for k in ("teams_edition", "target_platform", "target_channel")}))
+    blob = " ".join(str(t0.get(k, "")) for k in ("body", "official_summary", "title")).lower()
+    check("H27c. record carries no consensus/community/report language",
+          not any(term in blob for term in ("consensus", "users report", "community", "complaint", "severity")), blob[:120])
+    check("Teams limit respected (limit=1 -> newest only)",
+          [r["version"] for r in T(TEAMS_HTML, 1)] == ["26183.1903.4892.4448"], "limit=1")
+
+    # --- Regression: adversarial identity-leak defects (must stay fail-closed) --
+    _W = "<h2>Public cloud offerings</h2><h3>New Teams app version</h3><h4>Windows</h4>"
+    _tbl = lambda rows: "<table><tr><th>Release year</th><th>Release date</th><th>Teams version</th></tr>" + rows + "</table>"
+    _GOOD = "<tr><td>2026</td><td>July 01</td><td>26183.1903.4892.4448</td></tr>"
+    def _v(h): return [r["version"] for r in T(h)]
+
+    # D1/D3: a foreign platform/cloud/ring label in an UNTRACKED element (h5, p, div, caption)
+    # must taint the zone so a stale Windows heading cannot leak the next table's foreign builds.
+    check("D1. <h5>Mac</h5> delimiter does not leak the following Mac table",
+          "26183.1901.4874.5228" not in _v(_W + _tbl(_GOOD) + "<h5>Mac</h5>" + _tbl("<tr><td>2026</td><td>July 01</td><td>26183.1901.4874.5228</td></tr>")))
+    check("D1. <div>...GCC (Government) builds</div> delimiter does not leak a Government build",
+          "26183.3333.3333.3333" not in _v(_W + _tbl(_GOOD) + "<div>Note: the following are GCC (Government) builds</div>" + _tbl("<tr><td>2026</td><td>July 01</td><td>26183.3333.3333.3333</td></tr>")))
+    check("D1/D3. <p>Public preview (insider) builds:</p> delimiter does not leak an insider build",
+          "26196.1000.5000.5000" not in _v(_W + _tbl(_GOOD) + "<p>Public preview (insider) builds:</p>" + _tbl("<tr><td>2026</td><td>July 01</td><td>26196.1000.5000.5000</td></tr>")))
+    check("D3. a <caption>Insider</caption> on the table taints its rows",
+          T(_W + "<table><caption>Insider</caption><tr><td>2026</td><td>July 01</td><td>26181.1000.4000.4000</td></tr></table>") == [])
+    check("D1b. a benign <p>General availability builds.</p> intro does NOT drop the real table",
+          _v(_W + "<p>General availability builds.</p>" + _tbl(_GOOD)) == ["26183.1903.4892.4448"])
+
+    # D2: exact heading match + heading-level ring exclusion (no startswith over-match).
+    check("D2. 'Public cloud offerings (Preview)' / '- Targeted release' / 'for Government' headings are rejected",
+          all(T(h + "<h3>New Teams app version</h3><h4>Windows</h4>" + _tbl(_GOOD)) == [] for h in (
+              "<h2>Public cloud offerings (Preview)</h2>",
+              "<h2>Public cloud offerings - Targeted release</h2>",
+              "<h2>Public cloud offerings for Government (GCC High)</h2>")))
+
+    # D4: ring token exclusion runs on normalized cell text (survives &nbsp; / inline-tag splits).
+    check("D4. 'Release&nbsp;candidate' ring token in a cell is excluded",
+          T(_W + "<table><tr><td>2026</td><td>July 05</td><td>26183.6666.0001.0001</td><td>Release&nbsp;candidate</td></tr></table>") == [])
+
+    # D5: two dates in a single cell -> ambiguous -> dropped.
+    check("D5. two dates in one cell ('March 03 and March 17') -> no record",
+          T(_W + "<table><tr><td>2026</td><td>March 03 and March 17</td><td>26183.1903.4892.4448</td></tr></table>") == [])
+
+    # D6: rowspan-grouped 'Release year' -> the year carries forward (no false-negative drop).
+    check("D6. rowspan year column carries forward so later rows still record",
+          _v(_W + "<table><tr><th>Release year</th><th>Release date</th><th>New Teams version</th></tr>"
+                  "<tr><td rowspan='2'>2026</td><td>July 01</td><td>26183.1903.4892.4448</td></tr>"
+                  "<tr><td>June 17</td><td>26149.1205.4798.6437</td></tr></table>")
+          == ["26183.1903.4892.4448", "26149.1205.4798.6437"])
 
     print()
     print("=" * 60)
