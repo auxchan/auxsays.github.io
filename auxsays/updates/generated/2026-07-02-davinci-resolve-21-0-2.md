@@ -17,8 +17,8 @@ update_version: 21.0.2
 update_logo_text: DAV
 update_published_at: '2026-07-02T00:00:00Z'
 update_last_checked: '2026-07-02T09:35:52Z'
-source_last_checked: '2026-07-23T19:48:59Z'
-official_body_last_checked: '2026-07-23T19:48:59Z'
+source_last_checked: '2026-07-24T08:45:08Z'
+official_body_last_checked: '2026-07-24T08:45:08Z'
 record_last_updated: '2026-07-24T04:59:47.403129Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
@@ -30,14 +30,13 @@ update_consensus_label: Negative
 update_report_count: 11
 update_consensus_confidence: Low-Medium
 quick_verdict: 'WAIT: DaVinci Resolve 21.0.2 has 11 user reports found.'
-official_summary: Blackmagic Design lists DaVinci Resolve Studio 21.0.2 Update in its official support downloads
-  feed.
-release_summary: This software update adds faster image bypass switching, improved H.265 playback performance on
-  NVIDIA GPUs and better text display in the inspector. This version requires a DaVinci Resolve Studio license dongle,
-  Blackmagic Cloud license or software activation code.
-consensus_report: '11 user reports found for DaVinci Resolve 21.0.2. Current reports mention startup or application
-  crashes, render/export failures, and performance slowdowns. Current reports are Reddit-heavy, so production users
-  should test before updating. Sources represented: r/davinciresolve.'
+official_summary: Blackmagic Design lists DaVinci Resolve Studio 21.0.2 Update in its official support downloads feed.
+release_summary: This software update adds faster image bypass switching, improved H.265 playback performance on NVIDIA GPUs
+  and better text display in the inspector. This version requires a DaVinci Resolve Studio license dongle, Blackmagic Cloud
+  license or software activation code.
+consensus_report: '11 user reports found for DaVinci Resolve 21.0.2. Current reports mention startup or application crashes,
+  render/export failures, and performance slowdowns. Current reports are Reddit-heavy, so production users should test before
+  updating. Sources represented: r/davinciresolve.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
@@ -95,8 +94,8 @@ official_patch_notes_source_url: https://www.blackmagicdesign.com/support/family
 official_note_status: official_source_captured
 official_note_label: Official download portal entry
 official_source_type: download_portal
-official_source_classification_note: Blackmagic's support downloads API is treated as an official download-portal
-  source. It confirms version availability and summary text; community evidence remains separate.
+official_source_classification_note: Blackmagic's support downloads API is treated as an official download-portal source.
+  It confirms version availability and summary text; community evidence remains separate.
 official_sources:
 - label: Blackmagic support downloads
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
@@ -109,11 +108,6 @@ official_sources:
   trust_level: official
   extraction_status: version_metadata_captured
 official_source_attempts:
-- at: '2026-07-22T19:47:26Z'
-  url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
-  status: captured-from-official-blackmagic-support-api
-  body_captured: true
-  checksums_captured: false
 - at: '2026-07-23T04:51:37Z'
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
   status: captured-from-official-blackmagic-support-api
@@ -134,6 +128,11 @@ official_source_attempts:
   status: captured-from-official-blackmagic-support-api
   body_captured: true
   checksums_captured: false
+- at: '2026-07-24T08:45:08Z'
+  url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
+  status: captured-from-official-blackmagic-support-api
+  body_captured: true
+  checksums_captured: false
 official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci Resolve Studio 21.0.2 Update
 
   Channel: Stable
@@ -143,9 +142,9 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   Platforms listed: Mac OS X, Windows, Linux, Windows ARM
 
 
-  This software update adds faster image bypass switching, improved H.265 playback performance on NVIDIA GPUs and
-  better text display in the inspector. This version requires a DaVinci Resolve Studio license dongle, Blackmagic
-  Cloud license or software activation code.
+  This software update adds faster image bypass switching, improved H.265 playback performance on NVIDIA GPUs and better text
+  display in the inspector. This version requires a DaVinci Resolve Studio license dongle, Blackmagic Cloud license or software
+  activation code.
 
 
   Official support page: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
@@ -156,10 +155,10 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'WAIT: DaVinci Resolve 21.0.2 has 11 user reports found. User reports show a repeat pattern.
-  Current reports mention startup or application crashes, render/export failures, and performance slowdowns. Production
-  editors with active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy,
-  so production users should test before updating.'
+update_consensus_summary: 'WAIT: DaVinci Resolve 21.0.2 has 11 user reports found. User reports show a repeat pattern. Current
+  reports mention startup or application crashes, render/export failures, and performance slowdowns. Production editors with
+  active export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy, so production users
+  should test before updating.'
 evidence_samples:
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1umjhgo/should_i_upgrade_to_davinci_resolve_2102/
@@ -296,8 +295,7 @@ accepted_report_sources:
 - source_name: r/davinciresolve
   source_type: reddit community report
   source_url: https://www.reddit.com/r/davinciresolve/comments/1v2ppm3/davinci_resolve_freezes_when_hovering_over/
-  source_title: DaVinci resolve freezes when hovering over / attempting to render clips with lots of keyframes and
-    effects
+  source_title: DaVinci resolve freezes when hovering over / attempting to render clips with lots of keyframes and effects
   source_date: '2026-07-21'
   version_matched: 21.0.2
   patch_version_matched: true
@@ -307,8 +305,8 @@ evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
 - Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 update_decision_label: WAIT
-update_decision_body: Current reports mention startup or application crashes, render/export failures, and performance
-  slowdowns. Production editors with active delivery deadlines should wait or test on copied projects.
+update_decision_body: Current reports mention startup or application crashes, render/export failures, and performance slowdowns.
+  Production editors with active delivery deadlines should wait or test on copied projects.
 practical_recommendations:
 - Wait if you have active render/export deadlines.
 - Test on copied projects before moving client work to this version.

@@ -17,8 +17,8 @@ update_version: Multi-select fields for Projects and Issues in public preview
 update_logo_text: GIT
 update_published_at: '2026-07-23T18:19:14Z'
 update_last_checked: '2026-07-23T19:49:07Z'
-source_last_checked: '2026-07-23T19:49:07Z'
-official_body_last_checked: '2026-07-23T19:49:07Z'
+source_last_checked: '2026-07-24T08:45:16Z'
+official_body_last_checked: '2026-07-24T08:45:16Z'
 record_last_updated: '2026-07-23T19:49:07Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -75,6 +75,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-07-23T19:49:07Z'
+  url: https://github.blog/changelog/2026-07-23-multi-select-fields-for-projects-and-issues-in-public-preview
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-07-24T08:45:16Z'
   url: https://github.blog/changelog/2026-07-23-multi-select-fields-for-projects-and-issues-in-public-preview
   status: captured-from-rss-feed
   body_captured: true
