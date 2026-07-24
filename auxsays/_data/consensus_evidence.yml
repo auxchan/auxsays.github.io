@@ -9602,3 +9602,77 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: blackmagic-davinci-19-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1qydg2s-struggling-with-alpha-channel-output
+  product_id: blackmagic-davinci
+  update_version: '19'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1qydg2s/struggling_with_alpha_channel_output/
+  parent_title: Struggling with alpha channel output
+  report_title: Struggling with alpha channel output
+  report_text_excerpt: Struggling with alpha channel output I am new to resolve (and editing in general), and I feel this is probably a common problem but my google fu has failed me so far. So I am here to ask for help. I created a custom webcam border based off of this tutorial for streaming. But...
+  captured_at: '2026-07-24T04:21:53Z'
+  source_date: '2026-02-07'
+  target_release_date: '2024-08-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '19'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-19-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1pd6oa7-issue-with-hdr-phone-videos
+  product_id: blackmagic-davinci
+  update_version: '19'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1pd6oa7/issue_with_hdr_phone_videos/
+  parent_title: Issue with HDR phone videos
+  report_title: Issue with HDR phone videos
+  report_text_excerpt: Issue with HDR phone videos Hello! I need some help with Davinci regarding HDR videos. Me and my father (who is less tech-literate and until recently had only used Cyberlink Powerdirector) have been trying to get the videos he took to his recent vacation to Istanbul from his...
+  captured_at: '2026-07-24T04:21:53Z'
+  source_date: '2025-12-03'
+  target_release_date: '2024-08-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '19'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+
+- id: blackmagic-davinci-21-0-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1v2ppm3-davinci-resolve-freezes-when-hovering-ove
+  product_id: blackmagic-davinci
+  update_version: 21.0.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1v2ppm3/davinci_resolve_freezes_when_hovering_over/
+  parent_title: DaVinci resolve freezes when hovering over / attempting to render clips with lots of keyframes and effects
+  report_title: DaVinci resolve freezes when hovering over / attempting to render clips with lots of keyframes and effects
+  report_text_excerpt: DaVinci resolve freezes when hovering over / attempting to render clips with lots of keyframes and effects I noticed the gear png breaks even without the color generator effect enabled I am running Resolve 21.0.2 free version I'm using the NVIDIA Studio Driver version 612.62...
+  captured_at: '2026-07-24T04:57:54Z'
+  source_date: '2026-07-21'
+  target_release_date: '2026-07-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
