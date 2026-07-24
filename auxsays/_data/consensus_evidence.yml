@@ -9713,3 +9713,30 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: acrobat-19-021-20049-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-reader-dc-v-19-021-20049-printing-problem-with-mac
+  product_id: adobe-acrobat-reader
+  update_version: 19.021.20049
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-reader-dc-v-19-021-20049-printing-problem-with-mac-mojave-10-14-6-1241332
+  parent_title: Acrobat reader dc v. 19.021.20049 printing problem with mac mojave 10.14.6
+  report_title: Acrobat reader dc v. 19.021.20049 printing problem with mac mojave 10.14.6
+  report_text_excerpt: 'Acrobat reader dc v. 19.021.20049 printing problem with mac mojave 10.14.6 Hi, I am having problems with acrobat reader when printing, with the 2 following messages: "document cannot be printed" followed by: "no pages selected to print". It was fine until i have to downgrage...'
+  captured_at: '2026-07-24T09:54:25Z'
+  source_date: '2019-11-04'
+  target_release_date: '2019-10-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.021.20049
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
