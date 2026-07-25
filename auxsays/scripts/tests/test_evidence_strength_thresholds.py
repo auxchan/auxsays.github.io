@@ -111,30 +111,31 @@ def run() -> int:
     vocab_ok = {writeback_strength(n) for n in range(0, 200)} <= ALLOWED_TIERS
     check("only sanctioned tier labels are produced", vocab_ok, str({writeback_strength(n) for n in range(0, 200)}))
 
-    # --- product-history layout mirrors the same thresholds -----------------
+    # --- product-history table mirrors the same thresholds ------------------
     # No Liquid engine is available offline, so statically assert that the
-    # product-history template DERIVES the displayed strength from the row's
-    # report count with this exact table -- rather than rendering the stored
+    # product-history table row include DERIVES the displayed strength from the
+    # row's report count with this exact table -- rather than rendering the stored
     # (and possibly stale) update_consensus_confidence field. This guards against
-    # a regression where a 33+ report record still shows Medium.
-    layout = (_REPO / "auxsays" / "_layouts" / "aux-patch-product.html").read_text(encoding="utf-8")
-    check("layout column header reads 'Community evidence strength'",
-          "<span>Community evidence strength</span>" in layout)
-    check("layout derives strength from the report-count source (item.update_report_count)",
-          "{% assign evidence_strength_count = item.update_report_count %}" in layout)
-    check("layout renders the derived strength, not the stale stored field",
-          "<span>{{ evidence_strength }}</span>" in layout
-          and '{{ item.update_consensus_confidence | default: "Low" }}' not in layout)
-    check("layout falls back to the stored field only when the count is missing",
-          'evidence_strength = item.update_consensus_confidence | default: "Insufficient"' in layout)
+    # a regression where a 33+ report record still shows Medium. (The table markup
+    # now lives in _includes/patch-table-row.html + _includes/patch-table-head.html.)
+    row = (_REPO / "auxsays" / "_includes" / "patch-table-row.html").read_text(encoding="utf-8")
+    head = (_REPO / "auxsays" / "_includes" / "patch-table-head.html").read_text(encoding="utf-8")
+    check("table header exposes the 'Evidence' strength column", "Evidence" in head and 'data-sort-key="evidence-rank"' in head)
+    check("row derives strength from the report-count source (item.update_report_count)",
+          "{% assign evidence_strength_count = item.update_report_count %}" in row)
+    check("row renders the derived strength, not the stale stored field",
+          "{{ evidence_strength }}" in row
+          and '{{ item.update_consensus_confidence }}' not in row)
+    check("row falls back to the stored field only when the count is missing",
+          'evidence_strength = item.update_consensus_confidence | default: "Insufficient"' in row)
     for clause, tier in [
         ('>= 33 %}{% assign evidence_strength = "High" %}', "High"),
         ('>= 25 %}{% assign evidence_strength = "Medium" %}', "Medium"),
         ('>= 8 %}{% assign evidence_strength = "Low-Medium" %}', "Low-Medium"),
         ('> 0 %}{% assign evidence_strength = "Low" %}', "Low"),
-        ('{% else %}{% assign evidence_strength = "Insufficient" %}{% endif %}', "Insufficient"),
+        ('{% else %}{% assign evidence_strength = "Insufficient" %}', "Insufficient"),
     ]:
-        check(f"layout threshold clause present: count {tier}", clause in layout, clause)
+        check(f"row threshold clause present: count {tier}", clause in row, clause)
 
     print()
     print("=" * 60)

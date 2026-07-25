@@ -1,0 +1,69 @@
+{%- comment -%}
+  One product-history table row. Expects: include.item (a patch record page).
+
+  Emits a semantic <tr> with per-column sort keys as data-* attributes, all derived
+  SERVER-SIDE so the sort JS only orders the emitted values (it never reinterprets text):
+    data-date          -- ISO update_published_at (lexical == chronological)
+    data-version       -- the raw displayed version (JS applies a natural comparator)
+    data-verdict-rank  -- AUXSAYS risk order (0=AVOID .. 7=MANUAL WATCH, 99=unknown-last)
+    data-reports       -- integer confirmed community report count
+    data-evidence-rank -- evidence-strength tier index (0..4) from the report count
+
+  Verdict uses the EXACT deterministic fallback of the patch-detail page (aux-update.html):
+  update_decision_label, else the part before ':' of update_consensus_summary, else of
+  quick_verdict, else INSUFFICIENT DATA; official-source-only with 0 reports -> INSUFFICIENT
+  DATA. Community consensus is a different field and is never substituted for the verdict.
+{%- endcomment -%}
+{% assign item = include.item %}
+{% assign verdict_text = item.quick_verdict %}
+{% assign decision_label = item.update_decision_label %}
+{% if decision_label == blank and item.update_consensus_summary contains ':' %}
+{% assign decision_label = item.update_consensus_summary | split: ':' | first | strip %}
+{% elsif decision_label == blank and verdict_text contains ':' %}
+{% assign decision_label = verdict_text | split: ':' | first | strip %}
+{% elsif decision_label == blank %}
+{% assign decision_label = 'INSUFFICIENT DATA' %}
+{% endif %}
+{% assign report_count_num = item.update_report_count | default: 0 | plus: 0 %}
+{% assign is_official_only = false %}
+{% if item.evidence_state == 'official_only' or item.evidence_state_label == 'Official source only' %}{% assign is_official_only = true %}{% endif %}
+{% if is_official_only and report_count_num == 0 %}{% assign decision_label = 'INSUFFICIENT DATA' %}{% endif %}
+{%- comment -%} Verdict risk order (leading category); unknown -> 99 so it sorts last but stays visible. {%- endcomment -%}
+{% assign vkey = decision_label | upcase %}
+{% assign verdict_rank = 99 %}
+{% if vkey contains 'AVOID' %}{% assign verdict_rank = 0 %}
+{% elsif vkey contains 'WAIT' %}{% assign verdict_rank = 1 %}
+{% elsif vkey contains 'TEST FIRST' %}{% assign verdict_rank = 2 %}
+{% elsif vkey contains 'SECURITY UPDATE' %}{% assign verdict_rank = 3 %}
+{% elsif vkey contains 'SAFE ENOUGH' %}{% assign verdict_rank = 4 %}
+{% elsif vkey contains 'OFFICIAL ONLY' %}{% assign verdict_rank = 5 %}
+{% elsif vkey contains 'INSUFFICIENT DATA' %}{% assign verdict_rank = 6 %}
+{% elsif vkey contains 'MANUAL WATCH' %}{% assign verdict_rank = 7 %}
+{% endif %}
+{%- comment -%}
+  Community evidence strength: derived from the row's confirmed report count using the same
+  thresholds as apply_consensus_to_records._confidence (locked by test_evidence_strength_thresholds).
+  Strength reflects sample size only; it is NOT a statement that the patch is safe. Falls back to
+  the stored field, then Insufficient, only when the count is missing.
+{%- endcomment -%}
+{% assign evidence_strength_count = item.update_report_count %}
+{% if evidence_strength_count == nil %}
+{% assign evidence_strength = item.update_consensus_confidence | default: "Insufficient" %}
+{% assign evidence_rank = 0 %}
+{% else %}
+{% assign evidence_strength_count = evidence_strength_count | plus: 0 %}
+{% if evidence_strength_count >= 33 %}{% assign evidence_strength = "High" %}{% assign evidence_rank = 4 %}
+{% elsif evidence_strength_count >= 25 %}{% assign evidence_strength = "Medium" %}{% assign evidence_rank = 3 %}
+{% elsif evidence_strength_count >= 8 %}{% assign evidence_strength = "Low-Medium" %}{% assign evidence_rank = 2 %}
+{% elsif evidence_strength_count > 0 %}{% assign evidence_strength = "Low" %}{% assign evidence_rank = 1 %}
+{% else %}{% assign evidence_strength = "Insufficient" %}{% assign evidence_rank = 0 %}{% endif %}
+{% endif %}
+{% assign verdict_class = decision_label | downcase | replace: ' ', '-' | replace: ':', '' %}
+<tr class="patch-row" data-date="{{ item.update_published_at }}" data-version="{{ item.update_version | escape }}" data-verdict-rank="{{ verdict_rank }}" data-reports="{{ report_count_num }}" data-evidence-rank="{{ evidence_rank }}">
+<td data-label="Date"><time datetime="{{ item.update_published_at }}">{{ item.update_published_at | date: "%b %-d, %Y" }}</time></td>
+<td data-label="Version" class="patch-cell-version">{{ item.update_version }}</td>
+<td data-label="Verdict"><span class="patch-verdict patch-verdict--rank{{ verdict_rank }}">{{ decision_label }}</span></td>
+<td data-label="Reports" class="patch-cell-num">{{ report_count_num }}</td>
+<td data-label="Evidence"><span class="patch-evidence patch-evidence--rank{{ evidence_rank }}">{{ evidence_strength }}</span></td>
+<td data-label="Details" class="patch-col-details"><a class="patch-details-link" href="{{ item.url | relative_url }}">View patch <span aria-hidden="true">→</span></a></td>
+</tr>
