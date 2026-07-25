@@ -9935,3 +9935,28 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1v5o79j-davinci-resolve-2021-unsupported-gpu-proc
+  product_id: blackmagic-davinci
+  update_version: '20'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1v5o79j/davinci_resolve_2021_unsupported_gpu_processing/
+  parent_title: 'DaVinci Resolve 20/21: "Unsupported GPU Processing Mode" - RX 6600 detected by Windows but not by Resolve'
+  report_title: 'DaVinci Resolve 20/21: "Unsupported GPU Processing Mode" - RX 6600 detected by Windows but not by Resolve'
+  report_text_excerpt: 'DaVinci Resolve 20/21: "Unsupported GPU Processing Mode" - RX 6600 detected by Windows but not by Resolve Hi everyone, I''m trying to run DaVinci Resolve (both 20.2.2 and 21.0.3 Free), but every time I launch it I get this error: "Unsupported GPU Processing Mode" "Please review...'
+  captured_at: '2026-07-25T00:08:19Z'
+  source_date: '2026-07-24'
+  target_release_date: '2025-05-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '20'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
