@@ -3270,8 +3270,8 @@
   company: Microsoft
   software: Microsoft Teams
   public_category: Workplace Critical
-  enabled: true
-  recommended_priority: P2 manual watch
+  enabled: false
+  recommended_priority: P1 identity-scoped adapter staged; re-activation blocked on cleanup of prior mixed-identity records
   ingestion:
     type: html_release_notes
     adapter: microsoft_office_updates
@@ -3281,7 +3281,7 @@
     api_url: null
     parser_profile: microsoft_teams_version_history
     official_source_type: release_notes
-    source_capture_status: adapter_enabled
+    source_capture_status: adapter_staged_identity_scoped
     include_prereleases: false
     version_pattern: ^(?P<version>[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+).*$
     requires_javascript: false
@@ -3300,6 +3300,17 @@
     possible_sources: [Microsoft Tech Community, admin reports, Reddit]
     difficulty: Medium
     defer_until_official_ingestion_stable: true
+  source_health_note: >-
+    Official source (learn.microsoft.com/officeupdates/teams-app-versioning) is CI-reachable
+    (HTTP 200, server-rendered). The Teams parser is now IDENTITY-SCOPED: it emits records only
+    for the single New Teams desktop client on Windows in the Public cloud, rejecting every other
+    platform (Mac / Web / VDI / Mobile), cloud (Government GCC/GCCH/DoD, Sovereign Gallatin), and
+    edition (Classic Teams), plus preview/targeted/beta rings and undated/invalid-date rows.
+    enabled is set to false because the PRIOR (non-identity-scoped) parser mislabeled Mac builds
+    as generic "Microsoft Teams" -- the existing generated records and the seen ledger are the
+    Public/New/Mac stream, not Windows. Re-activation is gated on a controlled cleanup (remove the
+    mislabeled Mac records and reset the Teams seen ledger) so the Windows/Public stream ingests
+    from a clean baseline. Community consensus is intentionally NOT implemented for Teams.
 - company_id: microsoft
   product_id: microsoft-powerpoint
   company: Microsoft

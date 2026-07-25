@@ -129,6 +129,24 @@ def run() -> int:
         check("adobe_photoshop adapter is inert for a non-Photoshop product id",
               mod.fetch({"product_id": "obs-studio", "ingestion": {}}, 3) == [])
 
+    # --- integration: Microsoft Teams source is correctly wired (staged) -----
+    teams = next((e for e in entries if e.get("product_id") == "microsoft-teams"), None)
+    check("microsoft-teams entry exists", teams is not None)
+    if teams is not None:
+        ting = teams.get("ingestion", {}) or {}
+        check("microsoft-teams uses the shared microsoft_office_updates adapter with the Teams profile",
+              ting.get("adapter") == "microsoft_office_updates"
+              and ting.get("parser_profile") == "microsoft_teams_version_history",
+              str((ting.get("adapter"), ting.get("parser_profile"))))
+        check("microsoft-teams is staged disabled (re-activation gated on record cleanup)",
+              teams.get("enabled") is False, str(teams.get("enabled")))
+        check("microsoft-teams official_url targets the official Learn version-history page",
+              str(ting.get("official_url", "")).startswith("https://learn.microsoft.com/en-us/officeupdates/teams-app-versioning"),
+              str(ting.get("official_url")))
+        check("microsoft-teams source_health_note records the identity-scoped/staged state",
+              "identity-scoped" in str(teams.get("source_health_note", "")).lower(),
+              str(teams.get("source_health_note", ""))[:80])
+
     print()
     print("=" * 60)
     total = _PASS + _FAIL
