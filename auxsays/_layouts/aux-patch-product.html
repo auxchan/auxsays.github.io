@@ -60,45 +60,56 @@ layout: aux-base
   </section>
 
   {% if product_updates.size > 0 %}
+  {%- comment -%}
+    Recent vs archived split, computed with a numeric YYYYMM cutoff (never a string compare):
+    Recent = the current Jekyll build year (site.time) PLUS the immediately preceding December;
+    everything earlier is archived, grouped by calendar year (newest first, collapsed). Undated
+    records are surfaced in an explicit group -- never silently dropped. The full product_updates
+    set (and its size, used elsewhere for counts) is unchanged; this is a listing treatment only.
+  {%- endcomment -%}
+  {% assign build_year = site.time | date: '%Y' | plus: 0 %}
+  {% assign recent_boundary = build_year | minus: 1 | times: 100 | plus: 12 %}
+  {% assign dated_updates = product_updates | where_exp: "u", "u.update_published_at" %}
+  {% assign undated_updates = product_updates | where_exp: "u", "u.update_published_at == nil" %}
+  {% assign year_groups = dated_updates | group_by_exp: "u", "u.update_published_at | date: '%Y'" | sort: "name" | reverse %}
   <section class="panel patch-intel-section reveal-up reveal-delay-1">
     <div class="section-head section-head--archive">
       <div class="eyebrow">Documented patch history</div>
       <h2>{{ product.product_name }} patch history</h2>
-      <p>Tracked patches appear here with official notes, summary, consensus, reported issues, report count, and community evidence strength.</p>
+      <p>Recent patches appear first; older patches stay available, grouped by year, with every record and link preserved. Sort any column to compare across the full history.</p>
     </div>
-    <div class="patch-version-table">
-      <div class="patch-version-row patch-version-row--head patch-version-row--no-score"><span>Date</span><span>Patch</span><span>Consensus</span><span>Confirmed community reports</span><span>Community evidence strength</span><span>Record</span></div>
-      {% for item in product_updates %}
-      {% assign reaction = item.update_consensus_label | default: item.community_reaction | default: 'Insufficient' %}
-      {%- comment -%}
-        Community evidence strength is derived from the row's confirmed community report count
-        (item.update_report_count -- the same value shown in the "Confirmed community reports" cell),
-        using the same thresholds as the Python pipeline (apply_consensus_to_records._confidence).
-        This means a row with 33+ reports reads High even when its stored update_consensus_confidence
-        predates the threshold update. Strength reflects the report-sample size only; it is NOT a
-        statement that the patch is safe. A missing count falls back to the stored field, then Insufficient.
-      {%- endcomment -%}
-      {% assign evidence_strength_count = item.update_report_count %}
-      {% if evidence_strength_count == nil %}
-      {% assign evidence_strength = item.update_consensus_confidence | default: "Insufficient" %}
+
+    {% assign recent_count = 0 %}
+    {% capture recent_rows %}{% for item in dated_updates %}{% assign iym = item.update_published_at | date: '%Y%m' | plus: 0 %}{% if iym >= recent_boundary %}{% assign recent_count = recent_count | plus: 1 %}{% include patch-table-row.html item=item %}{% endif %}{% endfor %}{% endcapture %}
+    <div class="patch-history patch-history--recent">
+      <h3 class="patch-group-title">Recent patches</h3>
+      {% if recent_count > 0 %}
+      <div class="patch-table-wrap">
+        <table class="patch-table" data-patch-table>{% include patch-table-head.html %}<tbody>{{ recent_rows }}</tbody></table>
+      </div>
       {% else %}
-      {% assign evidence_strength_count = evidence_strength_count | plus: 0 %}
-      {% if evidence_strength_count >= 33 %}{% assign evidence_strength = "High" %}
-      {% elsif evidence_strength_count >= 25 %}{% assign evidence_strength = "Medium" %}
-      {% elsif evidence_strength_count >= 8 %}{% assign evidence_strength = "Low-Medium" %}
-      {% elsif evidence_strength_count > 0 %}{% assign evidence_strength = "Low" %}
-      {% else %}{% assign evidence_strength = "Insufficient" %}{% endif %}
+      <p class="patch-empty-note">No recent patches. Older patches are archived below.</p>
       {% endif %}
-      <a class="patch-version-row" href="{{ item.url | relative_url }}">
-        <span>{{ item.update_published_at | date: "%b %-d, %Y" }}</span>
-        <span>{{ item.update_version }}</span>
-        <span>{{ reaction }}</span>
-        <span>{{ item.update_report_count | default: 0 }} confirmed</span>
-        <span>{{ evidence_strength }}</span>
-        <span>View patch →</span>
-      </a>
-      {% endfor %}
     </div>
+
+    {% assign has_older = false %}
+    {% capture older_html %}{% for yg in year_groups %}{% assign yr_count = 0 %}{% capture yr_rows %}{% for item in yg.items %}{% assign iym = item.update_published_at | date: '%Y%m' | plus: 0 %}{% if iym < recent_boundary %}{% assign yr_count = yr_count | plus: 1 %}{% include patch-table-row.html item=item %}{% endif %}{% endfor %}{% endcapture %}{% if yr_count > 0 %}{% assign has_older = true %}
+    <details class="aux-collapsible-card patch-archive-year" id="patches-{{ yg.name }}">
+      <summary><span class="patch-archive-year-label">{{ yg.name }}</span> <span class="patch-archive-count">{{ yr_count }} patch{% unless yr_count == 1 %}es{% endunless %}</span></summary>
+      <div class="patch-table-wrap"><table class="patch-table" data-patch-table>{% include patch-table-head.html %}<tbody>{{ yr_rows }}</tbody></table></div>
+    </details>
+    {% endif %}{% endfor %}{% if undated_updates.size > 0 %}{% assign has_older = true %}
+    <details class="aux-collapsible-card patch-archive-year" id="patches-undated">
+      <summary><span class="patch-archive-year-label">Undated</span> <span class="patch-archive-count">{{ undated_updates.size }} patch{% unless undated_updates.size == 1 %}es{% endunless %}</span></summary>
+      <div class="patch-table-wrap"><table class="patch-table" data-patch-table>{% include patch-table-head.html %}<tbody>{% for item in undated_updates %}{% include patch-table-row.html item=item %}{% endfor %}</tbody></table></div>
+    </details>
+    {% endif %}{% endcapture %}
+    {% if has_older %}
+    <div class="patch-history patch-history--older">
+      <h3 class="patch-group-title">Older patches</h3>
+      {{ older_html }}
+    </div>
+    {% endif %}
   </section>
   {% else %}
   <section class="panel patch-intel-section reveal-up reveal-delay-1">
@@ -167,4 +178,8 @@ layout: aux-base
     <div class="patch-monitor-card"><strong>Impact:</strong> {{ product.impact }}</div>
     <div class="patch-monitor-card"><strong>Status:</strong> {% if product_updates.size > 0 %}{{ product_updates.size }} official patch record{% if product_updates.size != 1 %}s{% endif %} tracked{% else %}{{ product.ingestion_status | default: 'First patch record pending' }}{% endif %}</div>
   </details>
+
+  {%- comment -%} Progressive enhancement: sortable column headers + a compact mobile Sort control.
+       Server order (newest-first) and all record links work with this module disabled. {%- endcomment -%}
+  <script type="module" src="{{ '/assets/js/patch-table-sort.mjs' | relative_url }}"></script>
 </section>

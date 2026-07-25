@@ -5469,3 +5469,105 @@ button, input, select, textarea { font: inherit; }
   font-weight: 650;
   text-underline-offset: .18em;
 }
+
+/* ============================================================================
+   Product-history: Recent patches + year-grouped archive, sortable semantic table.
+   Matches the existing patch-version-row visual weight (borders, dark theme, .72rem
+   uppercase headers, ~.85rem row density) without redesigning the page.
+   ========================================================================== */
+.patch-history { margin-top: 1.4rem; }
+.patch-history--older { margin-top: 1.6rem; }
+.patch-group-title {
+  font-size: .74rem; text-transform: uppercase; letter-spacing: .16em;
+  color: var(--text-2); margin: 0 0 .7rem;
+}
+.patch-empty-note { color: var(--text-2); font-size: .92rem; margin: .2rem 0 0; }
+.patch-table-wrap { overflow-x: auto; }
+
+.patch-table { width: 100%; border-collapse: separate; border-spacing: 0 .45rem; }
+.patch-table thead th {
+  text-align: left; padding: .35rem .95rem;
+  color: var(--text-2); font-size: .72rem; text-transform: uppercase; letter-spacing: .12em;
+  font-weight: 600; white-space: nowrap; vertical-align: middle;
+}
+.patch-table thead th.patch-col-details { text-align: right; }
+.patch-sort-btn {
+  appearance: none; background: transparent; border: 0; padding: .2rem 0; margin: 0;
+  color: inherit; font: inherit; text-transform: inherit; letter-spacing: inherit;
+  cursor: pointer; display: inline-flex; align-items: center; gap: .35rem;
+}
+.patch-sort-btn:hover { color: var(--text-0); }
+.patch-sort-btn:focus-visible { outline: 2px solid var(--cyan-1); outline-offset: 3px; border-radius: 4px; }
+.patch-sort-ind::after { content: "\2195"; opacity: .35; font-size: .82em; } /* ↕ idle */
+th[aria-sort="ascending"] .patch-sort-ind::after { content: "\25B2"; opacity: 1; color: var(--cyan-1); }
+th[aria-sort="descending"] .patch-sort-ind::after { content: "\25BC"; opacity: 1; color: var(--cyan-1); }
+th[aria-sort="ascending"] .patch-sort-btn,
+th[aria-sort="descending"] .patch-sort-btn { color: var(--text-0); }
+
+.patch-table tbody tr.patch-row td {
+  padding: .8rem .95rem; vertical-align: middle; color: var(--text-1);
+  background: rgba(255,255,255,.022);
+  border: 1px solid var(--border-subtle); border-left: 0; border-right: 0;
+}
+.patch-table tbody tr.patch-row td:first-child { border-left: 1px solid var(--border-subtle); border-top-left-radius: 14px; border-bottom-left-radius: 14px; }
+.patch-table tbody tr.patch-row td:last-child { border-right: 1px solid var(--border-subtle); border-top-right-radius: 14px; border-bottom-right-radius: 14px; text-align: right; }
+.patch-table tbody tr.patch-row:hover td { border-color: var(--border-strong); color: var(--text-0); }
+.patch-cell-version { font-variant-numeric: tabular-nums; }
+.patch-cell-num { font-variant-numeric: tabular-nums; }
+.patch-details-link { color: var(--cyan-1); font-weight: 600; white-space: nowrap; text-decoration: none; }
+.patch-details-link:hover { text-decoration: underline; }
+
+/* Verdict badge — reuses the established risk-color vocabulary. Colour is not the only
+   signal (the label text is always shown), so it is understandable without colour. */
+.patch-verdict, .patch-evidence {
+  display: inline-block; padding: .22rem .6rem; border-radius: 999px;
+  font-size: .74rem; font-weight: 600; letter-spacing: .01em; white-space: nowrap;
+}
+.patch-verdict--rank0 { background: rgba(184,74,74,.16); color: #ffd7d7; }  /* AVOID */
+.patch-verdict--rank1,
+.patch-verdict--rank2,
+.patch-verdict--rank3 { background: rgba(199,162,85,.16); color: #f7e5bd; } /* WAIT / TEST FIRST / SECURITY UPDATE */
+.patch-verdict--rank4 { background: rgba(59,165,103,.16); color: #d9f7e5; } /* SAFE ENOUGH */
+.patch-verdict--rank5,
+.patch-verdict--rank6,
+.patch-verdict--rank7,
+.patch-verdict--rank99 { background: rgba(126,138,152,.16); color: #dee6ef; } /* OFFICIAL ONLY / INSUFFICIENT / MANUAL WATCH / unknown */
+
+/* Evidence strength is sample-size, not safety — kept neutral (never green-for-High). */
+.patch-evidence { background: rgba(126,138,152,.14); color: var(--text-2); border: 1px solid transparent; }
+.patch-evidence--rank2 { color: #cfd8e2; }
+.patch-evidence--rank3, .patch-evidence--rank4 { color: #dee6ef; border-color: rgba(143,234,244,.28); }
+
+/* Archived year groups — reuse the collapsible-card disclosure pattern. */
+.patch-archive-year { margin-top: .7rem; padding: .3rem .95rem; }
+.patch-archive-year > summary { font-size: .95rem; }
+.patch-archive-year-label { font-weight: 650; color: var(--text-0); }
+.patch-archive-count { color: var(--text-2); font-size: .78rem; margin-left: .5rem; }
+.patch-archive-year[open] > .patch-table-wrap { margin-top: .6rem; }
+
+/* Mobile compact sort control (injected by patch-table-sort.mjs); hidden on desktop. */
+.patch-sort-mobile { display: none; }
+.patch-sort-mobile__label { color: var(--text-2); font-size: .78rem; text-transform: uppercase; letter-spacing: .1em; display: inline-flex; align-items: center; gap: .5rem; }
+.patch-sort-mobile__select {
+  appearance: none; background: var(--bg-2); color: var(--text-0);
+  border: 1px solid var(--border-subtle); border-radius: 10px; padding: .4rem 2rem .4rem .7rem; font: inherit;
+}
+.patch-sort-mobile__dir {
+  appearance: none; background: var(--bg-2); color: var(--cyan-1);
+  border: 1px solid var(--border-subtle); border-radius: 10px; width: 2.4rem; height: 2.4rem; cursor: pointer;
+}
+.patch-sort-mobile__dir::after { content: "\25BC"; }
+.patch-sort-mobile__dir[data-dir="asc"]::after { content: "\25B2"; }
+.patch-sort-mobile__dir:focus-visible,
+.patch-sort-mobile__select:focus-visible { outline: 2px solid var(--cyan-1); outline-offset: 2px; }
+
+@media (max-width: 860px) {
+  .patch-sort-mobile { display: flex; align-items: center; gap: .7rem; margin: 0 0 .9rem; flex-wrap: wrap; }
+  .patch-table { border-spacing: 0; }
+  .patch-table thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; } /* keep headers for AT, hide visually */
+  .patch-table tbody tr.patch-row { display: block; border: 1px solid var(--border-subtle); border-radius: 14px; padding: .35rem .2rem; margin-bottom: .7rem; background: rgba(255,255,255,.022); }
+  .patch-table tbody tr.patch-row td { display: flex; justify-content: space-between; gap: 1rem; align-items: baseline; border: 0; border-radius: 0; padding: .4rem .8rem; text-align: right; }
+  .patch-table tbody tr.patch-row td:last-child { text-align: right; }
+  .patch-table tbody tr.patch-row td::before { content: attr(data-label); color: var(--text-2); font-size: .68rem; text-transform: uppercase; letter-spacing: .1em; text-align: left; }
+  .patch-table tbody tr.patch-row:hover td { border: 0; }
+}
