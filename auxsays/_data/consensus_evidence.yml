@@ -9985,3 +9985,76 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-19-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1t5m9c4-help-im-not-sure-what-im-missing
+  product_id: blackmagic-davinci
+  update_version: '19'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1t5m9c4/help_im_not_sure_what_im_missing/
+  parent_title: Help! I'm not sure what I'm missing
+  report_title: Help! I'm not sure what I'm missing
+  report_text_excerpt: Help! I'm not sure what I'm missing I'm sure I've missed something or I'm an idiot and missing something very silly. But I've been having this issue since Davinci 19. I've tried everything I know to do. I've relinked clips. I've cleared my caches. I've used render caches. I've...
+  captured_at: '2026-07-25T11:37:08Z'
+  source_date: '2026-05-06'
+  target_release_date: '2024-08-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '19'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-19-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1sf309s-os-tahoe-and-sequoia-resolve-19-has-an-in
+  product_id: blackmagic-davinci
+  update_version: '19'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1sf309s/os_tahoe_and_sequoia_resolve_19_has_an_incredibly/
+  parent_title: (OS Tahoe AND Sequoia) Resolve 19 has an incredibly slow startup (sometimes doesn't get past loading screen at all) and freezes 5 minutes into work (needs a force quit). Cannot find a solution anywhere.
+  report_title: (OS Tahoe AND Sequoia) Resolve 19 has an incredibly slow startup (sometimes doesn't get past loading screen at all) and freezes 5 minutes into work (needs a force quit). Cannot find a solution anywhere.
+  report_text_excerpt: (OS Tahoe AND Sequoia) Resolve 19 has an incredibly slow startup (sometimes doesn't get past loading screen at all) and freezes 5 minutes into work (needs a force quit). Cannot find a solution anywhere. I've tried restarting multiple times, updating to Tahoe, deleting Davinci...
+  captured_at: '2026-07-25T11:37:08Z'
+  source_date: '2026-04-07'
+  target_release_date: '2024-08-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '19'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-19-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1p2t6ry-whats-the-problem-here
+  product_id: blackmagic-davinci
+  update_version: '19'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1p2t6ry/whats_the_problem_here/
+  parent_title: What's the problem here?
+  report_title: What's the problem here?
+  report_text_excerpt: What's the problem here? https://reddit.com/link/1p2t6ry/video/oqrqs22akk2g1/player https://reddit.com/link/1p2t6ry/video/pt05n32akk2g1/player I'm a bit lost here. DaVinci jumps to random points in the selected clip, when rendered it doesn't show up. I tired editing from...
+  captured_at: '2026-07-25T11:37:08Z'
+  source_date: '2025-11-21'
+  target_release_date: '2024-08-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '19'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
