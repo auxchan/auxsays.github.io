@@ -9960,3 +9960,28 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-19-1-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1n271hl-video-frame-rate-cannot-speed-up
+  product_id: blackmagic-davinci
+  update_version: 19.1.2
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1n271hl/video_frame_rate_cannot_speed_up/
+  parent_title: Video frame rate - Cannot speed up
+  report_title: Video frame rate - Cannot speed up
+  report_text_excerpt: Video frame rate - Cannot speed up I have a video I edited that when played back is running slow in the Edit tab. When I use Speed Change and make any adjustment there are changes to the video. It adds back scenes that were edited out. I even deleted those scenes and only have...
+  captured_at: '2026-07-25T04:34:24Z'
+  source_date: '2025-08-28'
+  target_release_date: '2024-12-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.1.2
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
