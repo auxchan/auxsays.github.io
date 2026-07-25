@@ -19,7 +19,7 @@ update_published_at: '2024-08-22T00:00:00Z'
 update_last_checked: '2026-07-23T19:48:59Z'
 source_last_checked: '2026-07-23T19:48:59Z'
 official_body_last_checked: '2026-07-23T19:48:59Z'
-record_last_updated: '2026-07-25T11:38:55.474543Z'
+record_last_updated: '2026-07-25T21:54:27.870892Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -27,9 +27,9 @@ update_status: current
 update_feed_title: DaVinci Resolve 19
 update_detail_title: DaVinci Resolve 19
 update_consensus_label: Negative
-update_report_count: 9
+update_report_count: 11
 update_consensus_confidence: Low-Medium
-quick_verdict: 'WAIT: DaVinci Resolve 19 has 9 user reports found.'
+quick_verdict: 'WAIT: DaVinci Resolve 19 has 11 user reports found.'
 official_summary: Blackmagic Design lists DaVinci Resolve Studio 19 in its official support downloads feed.
 release_summary: This software update installs the final release of DaVinci Resolve Studio 19 which adds support
   for new DaVinci Neural Engine AI tools and over 100 feature upgrades including new color grading palettes and
@@ -39,15 +39,15 @@ release_summary: This software update installs the final release of DaVinci Reso
   Replay, live media sync into DaVinci Resolve bins for editing while the camera is recording and the new Organizations
   App in Blackmagic Cloud. This version requires a DaVinci Resolve Studio license dongle or software activation
   code.
-consensus_report: '9 user reports found for DaVinci Resolve 19. Current reports mention render/export failures and
-  startup or application crashes. Current reports are Reddit-heavy, so production users should test before updating.
+consensus_report: '11 user reports found for DaVinci Resolve 19. Current reports mention render/export failures
+  and startup or application crashes. Current reports are Reddit-heavy, so production users should test before updating.
   Sources represented: r/davinciresolve.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
 official_source_captured: true
-confirmed_patch_specific_report_count: 9
-evidence_last_checked: '2026-07-25T11:37:08Z'
+confirmed_patch_specific_report_count: 11
+evidence_last_checked: '2026-07-25T21:51:17Z'
 known_issues_present: null
 consensus_collection_status: pilot_initial_sample
 consensus_match_policy: confirmed_patch_specific_reports_v1
@@ -75,6 +75,9 @@ status_events:
 - at: '2026-07-25T11:38:55.474543Z'
   label: User reports found
   note: User report count updated to 9.
+- at: '2026-07-25T21:54:27.870892Z'
+  label: User reports found
+  note: User report count updated to 11.
 official_patch_notes_source_type: download_portal
 primary_official_source: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
 fallback_official_sources:
@@ -129,19 +132,19 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'WAIT: DaVinci Resolve 19 has 9 user reports found. User reports show a repeat pattern.
+update_consensus_summary: 'WAIT: DaVinci Resolve 19 has 11 user reports found. User reports show a repeat pattern.
   Current reports mention render/export failures and startup or application crashes. Production editors with active
   export deadlines should wait unless they need a specific fix. Current reports are Reddit-heavy, so production
   users should test before updating.'
 evidence_samples:
 - source_name: r/davinciresolve
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1qydg2s/struggling_with_alpha_channel_output/
-  source_title: Struggling with alpha channel output
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1mcyld8/issue_with_black_frames_appearing_in_render/
+  source_title: Issue with black frames appearing in render, possibly from crash zoom effect
   counted: true
   version_matched: '19'
   patch_version_matched: true
-  issue: render/export failures
-  outcome: medium
+  issue: render/export failures in application stability
+  outcome: high
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1v2wign/davinci_resolve_19_studio_version_causing_black/
   source_title: Davinci Resolve 19 Studio Version causing black screen of death
@@ -167,13 +170,13 @@ evidence_samples:
   issue: startup or application crashes in application stability
   outcome: high
 - source_name: r/davinciresolve
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1pd6oa7/issue_with_hdr_phone_videos/
-  source_title: Issue with HDR phone videos
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1paof4k/da_vinci_crashes_when_opening_file_with_h264/
+  source_title: da vinci crashes when opening file with h.264 videos inside
   counted: true
   version_matched: '19'
   patch_version_matched: true
-  issue: render/export failures
-  outcome: medium
+  issue: startup or application crashes in application stability
+  outcome: high
 evidence_sample_visible_limit: 5
 accepted_report_sources:
 - source_name: r/davinciresolve
@@ -258,6 +261,24 @@ accepted_report_sources:
   patch_version_matched: true
   issue: render/export failures
   workflow_area: render/export
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1paof4k/da_vinci_crashes_when_opening_file_with_h264/
+  source_title: da vinci crashes when opening file with h.264 videos inside
+  source_date: '2025-11-30'
+  version_matched: '19'
+  patch_version_matched: true
+  issue: startup or application crashes in application stability
+  workflow_area: application stability
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1mcyld8/issue_with_black_frames_appearing_in_render/
+  source_title: Issue with black frames appearing in render, possibly from crash zoom effect
+  source_date: '2025-07-30'
+  version_matched: '19'
+  patch_version_matched: true
+  issue: render/export failures in application stability
+  workflow_area: application stability
 evidence_source_limitations:
 - Current reports are Reddit-heavy, so production users should test before updating.
 - Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
