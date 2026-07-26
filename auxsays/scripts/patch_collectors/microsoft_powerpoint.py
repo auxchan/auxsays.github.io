@@ -128,6 +128,97 @@ ANNOUNCE_OR_NOTE_RE = re.compile(
     r"new\s+features|version\s+history)\b",
     re.I,
 )
+# Title-anchored announcement / official-note phrases (Part B). When any of these is the SUBJECT
+# of the thread title, the post is an announcement/release discussion, not a user report — and it
+# is rejected even if the body incidentally contains issue vocabulary (crash/bug/error/fix/issue).
+ANNOUNCEMENT_TITLE_RE = re.compile(
+    r"\b(?:"
+    r"microsoft\s+released\s+(?:update|version|build)|released\s+(?:update|version|build)|"
+    r"update\s+released|build\s+released|new\s+update\s+available|now\s+available|is\s+available|"
+    r"current\s+channel\s+(?:update|release)|release\s+notes|what'?s\s+new|new\s+features|"
+    r"announc(?:e|es|ing|ed|ement)|roll(?:ing|s|ed)?[\s-]?out|rollout|version\s+history|"
+    r"fixed\s+issues|known\s+issues|update\s+summary|general\s+availability|change\s*log"
+    r")\b",
+    re.I,
+)
+
+# --- product primacy (Part A) --------------------------------------------------
+# Another Office application is the PRIMARY subject of a title. Unambiguous app names match on a
+# bare word boundary; app names that are also common English words (word/access/project/teams)
+# only count as the app when they carry app context (Microsoft/MS prefix, "<app> app/document/
+# database/...", a leading "<app>:", or "<app> <Version YYMM>"), so a noun like "word spacing"
+# or the verb "access" never trips the gate. This is a structural title/parent-subject test, not
+# a bare deny-list (repo doctrine: use subject structure).
+_UNAMBIGUOUS_OTHER_APP = r"excel|outlook|onenote|publisher|visio"
+_AMBIGUOUS_OTHER_APP = r"word|access|project|teams"
+OTHER_OFFICE_APP_TITLE_RE = re.compile(
+    r"\b(?:" + _UNAMBIGUOUS_OTHER_APP + r")\b"
+    r"|\b(?:microsoft\s+|ms\s+)(?:" + _AMBIGUOUS_OTHER_APP + r")\b"
+    r"|\b(?:" + _AMBIGUOUS_OTHER_APP + r")\s+(?:app|application|document|doc|file|workbook|spreadsheet|database|mailbox|online|server)\b"
+    r"|(?:^|[\s(\[\-])(?:" + _AMBIGUOUS_OTHER_APP + r")\s*[:\-]"
+    r"|\b(?:" + _AMBIGUOUS_OTHER_APP + r")\s+(?:version\s+)?(?:2\d(?:0[1-9]|1[0-2]))\b",
+    re.I,
+)
+
+
+def product_primacy_reason(parent_title: str, report_title: str) -> str | None:
+    """PowerPoint must be the PRIMARY subject via title/parent structure (Part A). Returns an
+    exclusion reason or None.
+
+    Accept the product gate when the report title explicitly names PowerPoint, or a patch-specific
+    parent thread title names PowerPoint and the reply stays on topic. Reject when PowerPoint is
+    absent from both titles (a body-only mention never establishes primacy), when another Office
+    app is the clear subject of the report title without PowerPoint, or when the report title names
+    PowerPoint AND another Office app (multi-application — fail closed)."""
+    parent_title = parent_title or ""
+    report_title = report_title or ""
+    pp_report = bool(POWERPOINT_RE.search(report_title))
+    pp_parent = bool(POWERPOINT_RE.search(parent_title))
+    if not (pp_report or pp_parent):
+        return "product_not_powerpoint"  # PowerPoint is not the titled subject
+    # Reply/title primarily about another Office app (a body mention must not override the title).
+    if OTHER_OFFICE_APP_TITLE_RE.search(report_title) and not pp_report:
+        return "product_not_powerpoint"
+    # Multi-application report title (PowerPoint AND another Office app) -> fail closed.
+    if pp_report and OTHER_OFFICE_APP_TITLE_RE.search(report_title):
+        return "product_not_powerpoint"
+    return None
+
+
+# --- feature-location / regression evidence (Part C) ---------------------------
+# A question that only asks where a feature/menu/command/option went (or how to do something) is
+# not a post-install regression report — unless it also carries deterministic regression evidence
+# tying the change to the exact patch.
+FEATURE_LOCATION_RE = re.compile(
+    r"\b(?:can'?t|cannot|unable\s+to)\s+find\b"
+    r"|\bwhere\s+(?:is|are|did|do|can|has)\b"
+    r"|\bwhere\s+.{0,40}?\bgo(?:ne|es)?\b"
+    r"|\bmissing\s+(?:button|menu|option|feature|command|ribbon|toolbar|icon|tab|setting|function)\b"
+    r"|\b(?:button|menu|option|feature|command|ribbon|toolbar|icon|tab|setting|function)\s+(?:is\s+)?missing\b"
+    r"|\bhow\s+(?:do|can|to|would|should)\s+i\b|\bwhich\s+setting\b"
+    r"|\b\w+\s+function\s+(?:is\s+)?(?:missing|gone|disappear\w*)\b"
+    r"|\b(?:can'?t|cannot|unable\s+to)\s+(?:find|locate|see)\s+(?:the\s+|my\s+)?(?:\w+\s+){0,3}(?:function|feature|button|menu|option|command|tool|setting)\b",
+    re.I,
+)
+# Deterministic evidence that a feature/behavior REGRESSED as a result of the patch/update.
+REGRESSION_EVIDENCE_RE = re.compile(
+    r"\b(?:worked|working|was\s+(?:there|available|fine|present)|used\s+to\s+(?:work|be))\b[^\n]{0,60}?\b(?:before|until|prior\s+to)\b"
+    r"|\b(?:disappear\w*|gone|removed|missing|broke\w*|stopped\s+working|no\s+longer\s+(?:work\w*|available|there)|crash\w*|error|fail\w*)\b[^\n]{0,50}?\b(?:after|since|following|once\s+i)\b[^\n]{0,50}?\b(?:updat\w*|version|patch|install\w*|upgrad\w*|2\d(?:0[1-9]|1[0-2]))\b"
+    r"|\bafter\s+(?:installing|updating|the\s+update|the\s+patch|version|upgrad\w*)\b[^\n]{0,70}?\b(?:crash\w*|error|broke\w*|fail\w*|gone|missing|disappear\w*|no\s+longer|stopped|grey(?:ed)?\s+out|can'?t)\b"
+    r"|\b(?:broke|stopped\s+working|no\s+longer\s+works?|not\s+working|disappeared|greyed?\s+out)\s+(?:right\s+|immediately\s+)?after\b",
+    re.I,
+)
+
+# --- source-content integrity (Part E) -----------------------------------------
+# Learn Q&A supplies only the search-RSS title + description snippet (no full-thread hydration,
+# no replies, no author). Acceptance therefore uses self-contained snippet content; when the
+# decisive version evidence exists only inside a visibly TRUNCATED snippet body (missing context
+# that could flip the meaning), fail closed rather than accept on partial content.
+_TRUNCATION_RE = re.compile(r"(?:…|\.\.\.|\[\s*\.\.\.\s*\]|&hellip;|\bread\s+more\b|\bsee\s+more\b|\bshow\s+more\b)\s*$", re.I)
+
+
+def snippet_truncated(text: str) -> bool:
+    return bool(_TRUNCATION_RE.search((text or "").strip()))
 
 
 # --- version-in-context / drift -------------------------------------------------
@@ -163,6 +254,25 @@ def _bare_version_present(text: str, version: str) -> bool:
     return bool(matched)
 
 
+# A Version YYMM named only as a historical / upgrade SOURCE ("upgraded from 2407 to 2410",
+# "was on 2407", "old version 2407"). Requires an explicit migration verb so a bare "from" or a
+# normal mention is never stripped. Used to keep a migration reference from making the report
+# ambiguous or attributable to the version the user moved AWAY from (Part D).
+HISTORICAL_SOURCE_RE = re.compile(
+    r"\b(?:upgrad\w+\s+from|updat\w+\s+from|migrat\w+\s+from|switch\w+\s+from|mov\w+\s+from|"
+    r"came?\s+from|went\s+from|was\s+(?:on|using|running)|previously\s+(?:on|using|had|ran)|"
+    r"prior\s+version|old(?:er)?\s+version|before\s+(?:updating|installing|the\s+update|upgrad\w+))"
+    r"\s+(?:to\s+)?(?:version\s+)?(?:2\d(?:0[1-9]|1[0-2]))\b",
+    re.I,
+)
+
+
+def _strip_historical(text: str) -> str:
+    """Blank out historical/upgrade-source version phrases so only the version the report is
+    actually ABOUT is considered for multi-version ambiguity."""
+    return HISTORICAL_SOURCE_RE.sub(" ", text or "")
+
+
 # --- channel / build / issue gates ---------------------------------------------
 
 def channel_reason(text: str) -> str | None:
@@ -194,11 +304,20 @@ def build_check(text: str, target_build: str) -> tuple[str | None, bool]:
 
 
 def concrete_issue(text: str) -> bool:
-    """A concrete post-install PowerPoint problem, not a how-to/feature/announcement."""
-    strong = bool(POWERPOINT_ISSUE_RE.search(text or ""))
-    if not (strong or text_describes_issue(text)):
+    """A concrete post-install PowerPoint problem, not a how-to/feature-location/announcement.
+
+    A feature-location ("can't find the compare function", "where did X go", "missing menu") or a
+    how-to/feature-request question counts ONLY when it also carries deterministic regression
+    evidence tying the change to the exact patch (worked before / disappeared after installing /
+    broke after the update) — otherwise it is not a post-install regression (Part C)."""
+    text = text or ""
+    strong = bool(POWERPOINT_ISSUE_RE.search(text))
+    regression = bool(REGRESSION_EVIDENCE_RE.search(text))
+    if FEATURE_LOCATION_RE.search(text) and not (strong or regression):
         return False
-    if HOW_TO_OR_FEATURE_RE.search(text or "") and not strong:
+    if HOW_TO_OR_FEATURE_RE.search(text) and not (strong or regression):
+        return False
+    if not (strong or regression or text_describes_issue(text)):
         return False
     return True
 
@@ -253,20 +372,29 @@ def powerpoint_reason(target: dict[str, Any], source_url: str, source_date: str,
     # 1. Specific report URL (search/category/landing pages are rejected).
     if not source_url_is_specific(source_url):
         return "no_specific_source_url", match_basis, build_matched
-    # 2. Product attribution — PowerPoint must be named (report or parent thread).
-    if not POWERPOINT_RE.search(combined):
-        return "product_not_powerpoint", match_basis, build_matched
-    # 3. Official announcement / release note (not a user report).
+    # 2. Title-anchored announcement / official note (Part B). Runs BEFORE product/version so an
+    #    official release post is rejected as an announcement even when it names another suite/app
+    #    and even when its body carries incidental issue vocabulary (crash/bug/error/fix/issue).
+    if ANNOUNCEMENT_TITLE_RE.search(title_text):
+        return "official_announcement_not_user_report", match_basis, build_matched
+    # 3. Product primacy (Part A) — PowerPoint must be the titled subject; another Office app as the
+    #    title subject (or a multi-application title) fails closed. A body-only mention never counts.
+    primacy = product_primacy_reason(parent_title, report_title)
+    if primacy:
+        return primacy, match_basis, build_matched
+    # 4. Official announcement / release note phrased only in the body (not a user report).
     if ANNOUNCE_OR_NOTE_RE.search(combined) and not concrete_issue(combined):
         return "official_announcement_not_user_report", match_basis, build_matched
 
-    # 4. Exact version attribution (single-subject, with inheritance + drift/multi-version guards).
+    # 5. Exact version attribution (single-subject, with inheritance + drift/multi-version guards).
     target_in_context = version_in_context(combined, version)
     target_in_title = version_in_context(title_text, version)
     target_in_body = version_in_context(report_body, version)
-    other_versions = versions_in_context(combined) - {version}
-    other_in_body = versions_in_context(report_body) - {version}
-    other_in_title = versions_in_context(title_text) - {version}
+    # Other in-context versions, ignoring any named only as a historical/upgrade source, so
+    # "upgraded from 2407 to 2410" is attributable to 2410 only and never counts for 2407 (Part D).
+    other_versions = versions_in_context(_strip_historical(combined)) - {version}
+    other_in_body = versions_in_context(_strip_historical(report_body)) - {version}
+    other_in_title = versions_in_context(_strip_historical(title_text)) - {version}
     if not target_in_context:
         if other_versions:
             return "different_version_not_target", match_basis, build_matched
@@ -286,11 +414,18 @@ def powerpoint_reason(target: dict[str, Any], source_url: str, source_date: str,
         return "ambiguous_multiple_versions", match_basis, build_matched
     match_basis = "exact_version_current_channel"
 
-    # 5. Channel consistency.
+    # 5b. Source-content integrity (Part E) — when the exact version was established ONLY from a
+    #     visibly truncated snippet body (no full-thread hydration is fetched), the missing context
+    #     could flip the meaning, so fail closed rather than accept on partial content. A version in
+    #     the title/parent (self-contained) or a complete snippet is unaffected.
+    if not target_in_title and snippet_truncated(report_body):
+        return "insufficient_source_content", match_basis, build_matched
+
+    # 6. Channel consistency.
     channel = channel_reason(combined)
     if channel:
         return channel, match_basis, build_matched
-    # 6. Optional full-build cross-check (bonus disambiguator, never required when the
+    # 7. Optional full-build cross-check (bonus disambiguator, never required when the
     #    version identity is already unique). If a build is stated it must match target_build.
     build_reason, build_matched = build_check(combined, target_build)
     if build_reason:
@@ -305,10 +440,10 @@ def powerpoint_reason(target: dict[str, Any], source_url: str, source_date: str,
         # between the candidate builds. Parent-title inheritance obeys the same rule (this gate
         # runs regardless of where the version was found).
         return "ambiguous_version_needs_build", match_basis, build_matched
-    # 7. Date gate — on/after release; pre-release/undated rejected.
+    # 8. Date gate — on/after release; pre-release/undated rejected.
     if source_date_passes(source_date, target_release_date) is False:
         return "date_before_release_or_undated", match_basis, build_matched
-    # 8. Concrete post-install issue.
+    # 9. Concrete post-install issue (feature-location/how-to require regression evidence).
     if not concrete_issue(combined):
         return "not_a_concrete_powerpoint_issue", match_basis, build_matched
     return None, match_basis, build_matched
@@ -361,7 +496,14 @@ def row_from_candidate(record: PatchRecord, target: dict[str, Any], candidate: d
     return row
 
 
-def evaluate_candidates(record: PatchRecord, target: dict[str, Any], candidates: list[dict[str, Any]], captured_at: str, seen: set[str] | None = None) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+def evaluate_candidates(record: PatchRecord, target: dict[str, Any], candidates: list[dict[str, Any]], captured_at: str, seen: set[str] | None = None, run_accepted_urls: dict[str, str] | None = None) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Evaluate candidates for one record.
+
+    ``seen`` is a per-record canonical-URL set that de-duplicates the SAME URL across methods
+    within this record (cross-method dedup). ``run_accepted_urls`` is a run-wide map of
+    canonical-URL -> version that enforces cross-VERSION exclusivity (Part D): a single report URL
+    may be attributed to at most one PowerPoint version across the whole run. The two are separate
+    (cross-method dedup vs cross-version exclusivity)."""
     accepted: list[dict[str, Any]] = []
     rejected: list[dict[str, Any]] = []
     seen = seen if seen is not None else set()
@@ -369,9 +511,18 @@ def evaluate_candidates(record: PatchRecord, target: dict[str, Any], candidates:
         url = str(candidate.get("source_url") or "").strip().rstrip("/")
         key = url.lower()
         if not url or key in seen:
-            continue  # run-level canonical-URL dedup (across methods)
+            continue  # per-record cross-method canonical-URL dedup
         seen.add(key)
         row = row_from_candidate(record, target, candidate, captured_at)
+        # Cross-version exclusivity: if this canonical URL was already accepted for a DIFFERENT
+        # version in this run, reject the later attribution as a cross-version duplicate.
+        if row.get("counted") is True and run_accepted_urls is not None:
+            prior = run_accepted_urls.get(key)
+            if prior is not None and prior != record.update_version:
+                row["counted"] = False
+                row["exclusion_reason"] = "cross_version_duplicate"
+            else:
+                run_accepted_urls[key] = record.update_version
         (accepted if row.get("counted") is True else rejected).append(row)
     return accepted, rejected
 
@@ -430,7 +581,7 @@ def search_query_terms(target: dict[str, Any]) -> list[str]:
 
 # --- method health -----------------------------------------------------------
 
-NEAR_MISS_REASONS = {"bare_version_no_context", "different_version_not_target", "build_mismatch", "channel_conflict", "reply_drifted_to_other_version"}
+NEAR_MISS_REASONS = {"bare_version_no_context", "different_version_not_target", "build_mismatch", "channel_conflict", "reply_drifted_to_other_version", "insufficient_source_content"}
 
 
 def rejection_counts(rows: list[dict[str, Any]]) -> dict[str, int]:
@@ -504,7 +655,7 @@ def reddit_fallback_enabled(env: dict[str, str] | None = None) -> bool:
     return str(source.get(REDDIT_FALLBACK_ENV, "")).strip().lower() == "true"
 
 
-def collect_for_record(record: PatchRecord, context: CollectorContext, env: dict[str, str] | None = None, version_ambiguous: bool = False) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
+def collect_for_record(record: PatchRecord, context: CollectorContext, env: dict[str, str] | None = None, version_ambiguous: bool = False, run_accepted_urls: dict[str, str] | None = None) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
     captured_at = utc_now()
     target = record_target(record)
     target["version_ambiguous"] = version_ambiguous
@@ -522,7 +673,7 @@ def collect_for_record(record: PatchRecord, context: CollectorContext, env: dict
             source_type=LEARN_QNA_SOURCE_TYPE,
             source_name=LEARN_QNA_SOURCE_NAME,
         )
-    lq_accepted, lq_rejected = evaluate_candidates(record, target, lq_candidates, captured_at, seen)
+    lq_accepted, lq_rejected = evaluate_candidates(record, target, lq_candidates, captured_at, seen, run_accepted_urls)
     lq_status = learn_qna_method_status(lq_candidates, lq_accepted, lq_rejected, lq_errors)
     lq_notes = (
         "Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. "
@@ -551,7 +702,7 @@ def collect_for_record(record: PatchRecord, context: CollectorContext, env: dict
             source_type=REDDIT_SOURCE_TYPE,
             version_hints=[version] if version else None,
         )
-        rd_accepted, rd_rejected = evaluate_candidates(record, target, rd_candidates, captured_at, seen)
+        rd_accepted, rd_rejected = evaluate_candidates(record, target, rd_candidates, captured_at, seen, run_accepted_urls)
     rd_status = reddit_method_status(rd_attempted, rd_candidates, rd_accepted, rd_rejected, rd_errors)
     rd_notes = (
         f"Reddit community search across {', '.join('r/' + s for s in REDDIT_SUBREDDITS)}. "
@@ -574,11 +725,14 @@ class PowerPointLearnQnaCollector(ProductCollector):
         # Exact-patch ambiguity is computed over the FULL tracked record set (unfiltered), so a
         # --update-version filter can never hide a sibling record that makes a version ambiguous.
         ambiguous = compute_ambiguous_identities(generated_records(PRODUCT_ID, None))
+        # Run-wide canonical-URL -> version map: enforces cross-version exclusivity across every
+        # record in this run (a single report URL is attributed to at most one PowerPoint version).
+        run_accepted_urls: dict[str, str] = {}
         results: list[dict[str, Any]] = []
         for record in records:
             rec_target = record_target(record)
             version_ambiguous = (rec_target["target_app_version"] or rec_target["update_version"], _norm_channel(rec_target["target_channel"])) in ambiguous
-            accepted, rejected, health = collect_for_record(record, context, version_ambiguous=version_ambiguous)
+            accepted, rejected, health = collect_for_record(record, context, version_ambiguous=version_ambiguous, run_accepted_urls=run_accepted_urls)
             result: dict[str, Any] = {
                 "product_id": PRODUCT_ID,
                 "version": record.update_version,
