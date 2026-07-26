@@ -117,6 +117,9 @@ POWERPOINT_ISSUE_RE = re.compile(
 
 HOW_TO_OR_FEATURE_RE = re.compile(
     r"\b(?:how\s+(?:do|to|can|would|should)\b|where\s+(?:is|do|can)\b|is\s+it\s+safe\s+to\b|"
+    # capability / "does the feature exist" / "how do I use it" questions (Part C hardening):
+    r"is\s+it\s+possible\s+to\b|can\s+(?:i|we|you)\s+\w+|i(?:'m|\s+am)\s+trying\s+to\b|"
+    r"does\s+(?:microsoft\s+)?(?:power\s?point|ppt|it|this)\s+(?:support|have|allow|include|offer|let|do)\b|"
     r"should\s+i\s+(?:install|update|upgrade)\b|which\s+version\b|what'?s\s+the\s+best\b|"
     r"feature\s+request|please\s+add|can\s+you\s+add|would\s+like\s+(?:to\s+see|a\s+feature|the\s+ability)|"
     r"is\s+there\s+a\s+way\s+to|how\s+about\s+adding)\b",

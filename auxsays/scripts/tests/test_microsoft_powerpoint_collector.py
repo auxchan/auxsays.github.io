@@ -462,6 +462,18 @@ def run() -> int:
     check("C2 feature disappeared after exact patch (regression evidence) -> accepted", c is True and r is None, f"{c} {r}")
     c, r = verdict("How do I enable dark mode in PowerPoint Version 2605", "How do I enable dark mode in PowerPoint Version 2605? Where is the setting?")
     check("C3 how-to / where-is question, no regression -> rejected", c is False and r == "not_a_concrete_powerpoint_issue", f"{c} {r}")
+    # C4 confirmed live residual FP: capability question ("Can I export…?") with no regression -> rejected
+    c, r = verdict("Can I export a PowerPoint with recordings and online videos to a video?", "In PowerPoint Version 2605 I am trying to create a PowerPoint video with recordings and online videos.")
+    check("C4 capability question 'Can I export…?' (no regression) -> not_a_concrete_powerpoint_issue", c is False and r == "not_a_concrete_powerpoint_issue", f"{c} {r}")
+    # C5 capability-STYLE title WITH explicit exact-version post-update failure -> accepted
+    c, r = verdict("Can I still export to video in PowerPoint after the update?", "Export to video worked before Version 2605 but now it fails with an error immediately after installing PowerPoint Version 2605.")
+    check("C5 capability-style title + explicit exact-version regression -> accepted", c is True and r is None, f"{c} {r}")
+    # C6 'Is it possible to…?' capability question, no regression -> rejected
+    c, r = verdict("Is it possible to embed fonts in PowerPoint Version 2605?", "Is it possible to embed fonts in PowerPoint Version 2605? Just wondering how it works.")
+    check("C6 'Is it possible to…?' capability question -> rejected", c is False and r == "not_a_concrete_powerpoint_issue", f"{c} {r}")
+    # C7 'Does PowerPoint support…?' capability question, no regression -> rejected
+    c, r = verdict("Does PowerPoint support 4K video export in Version 2605?", "Does PowerPoint support 4K video export in Version 2605? I just want to know the capabilities.")
+    check("C7 'Does PowerPoint support…?' capability question -> rejected", c is False and r == "not_a_concrete_powerpoint_issue", f"{c} {r}")
 
     # --- Part E: source-content integrity (snippet-only, fail closed on truncation) ---
     c, r = verdict("PowerPoint crash after update", "PowerPoint crashes on open on Version 2605 and then it also…")
