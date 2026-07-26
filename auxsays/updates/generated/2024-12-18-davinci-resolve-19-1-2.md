@@ -19,7 +19,7 @@ update_published_at: '2024-12-18T00:00:00Z'
 update_last_checked: '2026-07-23T04:51:37Z'
 source_last_checked: '2026-07-23T04:51:37Z'
 official_body_last_checked: '2026-07-23T04:51:37Z'
-record_last_updated: '2026-07-25T04:36:11.742003Z'
+record_last_updated: '2026-07-26T02:20:57.556247Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -27,22 +27,22 @@ update_status: current
 update_feed_title: DaVinci Resolve 19.1.2
 update_detail_title: DaVinci Resolve 19.1.2
 update_consensus_label: Negative
-update_report_count: 1
+update_report_count: 2
 update_consensus_confidence: Low
-quick_verdict: 'WAIT: DaVinci Resolve 19.1.2 has 1 user reports found.'
+quick_verdict: 'WAIT: DaVinci Resolve 19.1.2 has 2 user reports found.'
 official_summary: Blackmagic Design lists DaVinci Resolve Studio 19.1.2 in its official support downloads feed.
 release_summary: This software update adds more reliable dongle recognition on Windows systems, provides better
   playback of audio fades on clips with effects and improves handling of Open EXR metadata capture. In addition,
   there is improved gyro stabilization in certain Blackmagic RAW decode modes and better handling of Fusion compositions
   when disabling macros. This version requires a DaVinci Resolve Studio license dongle or software activation code.
-consensus_report: '1 user report found for DaVinci Resolve 19.1.2. Current reports mention render/export failures.
+consensus_report: '2 user reports found for DaVinci Resolve 19.1.2. Current reports mention render/export failures.
   Too few reports for a firm verdict yet. Sources represented: r/davinciresolve.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
 official_source_captured: true
-confirmed_patch_specific_report_count: 1
-evidence_last_checked: '2026-07-25T04:34:24Z'
+confirmed_patch_specific_report_count: 2
+evidence_last_checked: '2026-07-26T02:18:56Z'
 known_issues_present: null
 consensus_collection_status: pilot_initial_sample
 consensus_match_policy: confirmed_patch_specific_reports_v1
@@ -61,6 +61,9 @@ status_events:
 - at: '2026-07-25T04:36:11.742003Z'
   label: User reports found
   note: User report count updated to 1.
+- at: '2026-07-26T02:20:57.556247Z'
+  label: User reports found
+  note: User report count updated to 2.
 official_patch_notes_source_type: download_portal
 primary_official_source: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
 fallback_official_sources:
@@ -112,13 +115,22 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'WAIT: DaVinci Resolve 19.1.2 has 1 user report found. Small sample size. Current reports
+update_consensus_summary: 'WAIT: DaVinci Resolve 19.1.2 has 2 user reports found. Small sample size. Current reports
   mention render/export failures. Production editors with active export deadlines should wait unless they need a
   specific fix. Too few reports for a firm verdict yet.'
 evidence_samples:
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1n271hl/video_frame_rate_cannot_speed_up/
   source_title: Video frame rate - Cannot speed up
+  counted: true
+  version_matched: 19.1.2
+  patch_version_matched: true
+  issue: render/export failures
+  outcome: medium
+- source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1sf309s/os_tahoe_and_sequoia_resolve_19_has_an_incredibly/
+  source_title: (OS Tahoe AND Sequoia) Resolve 19 has an incredibly slow startup (sometimes doesn't get past loading
+    screen at all) and freezes 5 minutes into work (needs a force quit). Cannot find a solution anywhere.
   counted: true
   version_matched: 19.1.2
   patch_version_matched: true
@@ -131,6 +143,16 @@ accepted_report_sources:
   source_url: https://www.reddit.com/r/davinciresolve/comments/1n271hl/video_frame_rate_cannot_speed_up/
   source_title: Video frame rate - Cannot speed up
   source_date: '2025-08-28'
+  version_matched: 19.1.2
+  patch_version_matched: true
+  issue: render/export failures
+  workflow_area: render/export
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1sf309s/os_tahoe_and_sequoia_resolve_19_has_an_incredibly/
+  source_title: (OS Tahoe AND Sequoia) Resolve 19 has an incredibly slow startup (sometimes doesn't get past loading
+    screen at all) and freezes 5 minutes into work (needs a force quit). Cannot find a solution anywhere.
+  source_date: '2026-04-07'
   version_matched: 19.1.2
   patch_version_matched: true
   issue: render/export failures
