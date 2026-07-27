@@ -6,6 +6,11 @@ layout: aux-base
 {% assign company_updates = site.pages | where: "update_entry", true | where: "company_id", page.company_id | sort: "update_published_at" | reverse %}
 {% assign documented_count = company_updates.size %}
 {% assign resolved_company_logo_path = company.logo_path %}
+{%- comment -%} A Product column is shown only when the vendor tracks more than one product;
+  single-product vendors omit it (identical field semantics, less noise). {%- endcomment -%}
+{% assign vendor_multi = false %}
+{% if products.size > 1 %}{% assign vendor_multi = true %}{% endif %}
+{% assign single_product = products | first %}
 
 <section class="patch-intel-shell">
   <section class="panel patch-intel-hero reveal-up">
@@ -33,6 +38,15 @@ layout: aux-base
         <em>tracked software</em>
       </div>
     </div>
+  </section>
+
+  <section class="panel patch-intel-section reveal-up patch-latest-section">
+    {% include patch-latest-signals.html updates=company_updates products=products show_product=vendor_multi %}
+    {% if vendor_multi == false and single_product %}
+    <div class="patch-latest-cta">
+      <a class="patch-source-link patch-source-link--primary" href="{{ single_product.product_url | relative_url }}">View full {{ single_product.product_name }} patch history →</a>
+    </div>
+    {% endif %}
   </section>
 
   <section class="panel patch-intel-section reveal-up reveal-delay-1">
@@ -98,23 +112,14 @@ layout: aux-base
   {% if company_updates.size > 0 %}
   <section class="panel patch-intel-section reveal-up reveal-delay-2">
     <div class="section-head section-head--archive">
-      <div class="eyebrow">Latest documented records</div>
-      <h2>Documented updates</h2>
-      <p>Documented records include the official patch notes, summary, confirmed patch-specific consensus read, reported issues, confidence level, and status history.</p>
+      <div class="eyebrow">Documented patch history</div>
+      <h2>{{ company.company_name }} patch history</h2>
+      <p>Recent patches appear first; older patches stay available, grouped by year, with every record and link preserved. Sort any column to compare across the full history.</p>
     </div>
-    <div class="patch-version-table">
-      <div class="patch-version-row patch-version-row--head patch-version-row--no-score"><span>Software</span><span>Patch</span><span>Consensus</span><span>Confirmed reports</span><span>Record</span></div>
-      {% for item in company_updates %}
-      {% assign reaction = item.update_consensus_label | default: item.community_reaction | default: 'Insufficient' %}
-      <a class="patch-version-row" href="{{ item.url | relative_url }}">
-        <span>{{ item.update_product }}</span>
-        <span>{{ item.update_version }}</span>
-        <span>{{ reaction }}</span>
-        <span>{{ item.update_report_count | default: 0 }}</span>
-        <span>View patch →</span>
-      </a>
-      {% endfor %}
-    </div>
+    {%- comment -%} Same shared history renderer as the product page: Date / Product / Version /
+      Verdict / Reports / Evidence / Details, numeric-YYYYMM Recent cutoff, year-grouped collapsed
+      archive. Product column only when the vendor tracks more than one product. {%- endcomment -%}
+    {% include patch-history.html updates=company_updates show_product=vendor_multi %}
   </section>
   {% else %}
   <section class="panel patch-intel-section reveal-up reveal-delay-2">
@@ -147,4 +152,8 @@ layout: aux-base
     </div>
   </section>
   {% endif %}
+
+  {%- comment -%} Progressive enhancement: sortable headers + compact mobile Sort control, shared
+       with the product page. Server order (newest-first) and all record links work without it. {%- endcomment -%}
+  <script type="module" src="{{ '/assets/js/patch-table-sort.mjs' | relative_url }}"></script>
 </section>

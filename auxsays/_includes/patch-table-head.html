@@ -1,14 +1,18 @@
 {%- comment -%}
-  Sortable header row for a product-history patch table. Shared by the Recent table and every
-  archived-year table so their sort UI stays identical. Each sortable column is a real <button>
-  inside a <th> that carries aria-sort; the sort JS (patch-table-sort.mjs) toggles direction,
-  updates aria-sort, and reorders <tbody> rows by the row data-* keys. Server-rendered order is
-  newest-first, so Date starts descending and the page is fully usable with JavaScript disabled.
-  "Details" is an action column and is deliberately not sortable.
+  Sortable header row for a patch-history table. Shared by product pages, vendor pages, the
+  Recent table, and every archived-year table so their sort UI stays identical. Each sortable
+  column is a real <button> inside a <th> that carries aria-sort; the sort JS
+  (patch-table-sort.mjs) toggles direction, updates aria-sort, and reorders <tbody> rows by the
+  row data-* keys. Server-rendered order is newest-first, so Date starts descending and the page
+  is fully usable with JavaScript disabled. "Details" is an action column and is not sortable.
+
+  include.show_product (bool): when true, insert a sortable "Product" column after Date — used on
+  vendor pages that list more than one tracked product. Omitted on single-product/product pages.
 {%- endcomment -%}
 <thead>
 <tr>
 <th scope="col" aria-sort="descending"><button type="button" class="patch-sort-btn" data-sort-key="date" data-sort-type="date">Date<span class="patch-sort-ind" aria-hidden="true"></span></button></th>
+{% if include.show_product %}<th scope="col" aria-sort="none"><button type="button" class="patch-sort-btn" data-sort-key="product" data-sort-type="text">Product<span class="patch-sort-ind" aria-hidden="true"></span></button></th>{% endif %}
 <th scope="col" aria-sort="none"><button type="button" class="patch-sort-btn" data-sort-key="version" data-sort-type="version">Version<span class="patch-sort-ind" aria-hidden="true"></span></button></th>
 <th scope="col" aria-sort="none"><button type="button" class="patch-sort-btn" data-sort-key="verdict-rank" data-sort-type="num">Verdict<span class="patch-sort-ind" aria-hidden="true"></span></button></th>
 <th scope="col" aria-sort="none"><button type="button" class="patch-sort-btn" data-sort-key="reports" data-sort-type="num">Reports<span class="patch-sort-ind" aria-hidden="true"></span></button></th>

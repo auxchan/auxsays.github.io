@@ -29,6 +29,10 @@ LAYOUT = (_AUX / "_layouts" / "aux-patch-product.html").read_text(encoding="utf-
 HEAD = (_AUX / "_includes" / "patch-table-head.html").read_text(encoding="utf-8")
 ROW = (_AUX / "_includes" / "patch-table-row.html").read_text(encoding="utf-8")
 JS = (_AUX / "assets" / "js" / "patch-table-sort.mjs").read_text(encoding="utf-8")
+# The Recent/Older orchestration was extracted into the shared patch-history include (used by both
+# the product and vendor layouts). Assertions about that orchestration read it there.
+HISTORY = (_AUX / "_includes" / "patch-history.html").read_text(encoding="utf-8")
+LH = LAYOUT + "\n" + HISTORY  # "in the product page as rendered" = layout + its shared history include
 
 _PASS = 0
 _FAIL = 0
@@ -61,39 +65,42 @@ def run() -> int:
     check("old grid/labels removed (no 'Patch'/'Consensus'/'Confirmed community reports' headers)",
           "patch-version-row--head" not in LAYOUT and "<span>Consensus</span>" not in LAYOUT)
 
+    check("product layout delegates the history to the shared patch-history include",
+          "patch-history.html" in LAYOUT and "show_product=false" in LAYOUT)
+
     # --- Recent window: numeric YYYYMM cutoff (build year + prior December) ---
     check("build year derives from site.time deterministically",
-          "site.time | date: '%Y' | plus: 0" in LAYOUT)
+          "site.time | date: '%Y' | plus: 0" in HISTORY)
     check("recent boundary is numeric YYYYMM = prior-year December (not a string compare)",
-          "| minus: 1 | times: 100 | plus: 12" in LAYOUT)
+          "| minus: 1 | times: 100 | plus: 12" in HISTORY)
     check("row month key is numeric YYYYMM (date '%Y%m' | plus: 0)",
-          "date: '%Y%m' | plus: 0" in LAYOUT)
+          "date: '%Y%m' | plus: 0" in HISTORY)
     check("recent = iym >= recent_boundary; older = iym < recent_boundary",
-          "iym >= recent_boundary" in LAYOUT and "iym < recent_boundary" in LAYOUT)
+          "iym >= recent_boundary" in HISTORY and "iym < recent_boundary" in HISTORY)
     check("no ISO-string >= date comparison is used for the split (constraint 1)",
-          "update_published_at >= " not in LAYOUT.replace("u.update_published_at", "u_field"))
+          "update_published_at >= " not in HISTORY.replace("u.update_published_at", "u_field"))
 
     # --- Archive: year-grouped, newest-first, collapsed, anchored, hides empty --
     check("older records grouped by calendar year via group_by_exp date '%Y'",
-          'group_by_exp: "u", "u.update_published_at | date' in LAYOUT)
-    check("year groups ordered newest to oldest", '| sort: "name" | reverse' in LAYOUT)
+          'group_by_exp: "u", "u.update_published_at | date' in HISTORY)
+    check("year groups ordered newest to oldest", '| sort: "name" | reverse' in HISTORY)
     check("each archived year is a collapsed <details> with a stable #patches-<year> anchor",
-          '<details class="aux-collapsible-card patch-archive-year" id="patches-{{ yg.name }}">' in LAYOUT)
+          '<details class="aux-collapsible-card patch-archive-year" id="patches-{{ yg.name }}">' in HISTORY)
     check("archive year groups are collapsed by default (no 'open' attribute)",
-          'patch-archive-year" id="patches-{{ yg.name }}"> ' not in LAYOUT
-          and 'patch-archive-year"' in LAYOUT and " open>" not in LAYOUT)
-    check("each year group shows its record count", "patch-archive-count" in LAYOUT and "yr_count" in LAYOUT)
+          'patch-archive-year" id="patches-{{ yg.name }}"> ' not in HISTORY
+          and 'patch-archive-year"' in HISTORY and " open>" not in HISTORY)
+    check("each year group shows its record count", "patch-archive-count" in HISTORY and "yr_count" in HISTORY)
     check("archive section is hidden entirely when there are no older records",
-          "{% if has_older %}" in LAYOUT)
+          "{% if has_older %}" in HISTORY)
     check("undated records are surfaced in an explicit group, never silently dropped",
-          'id="patches-undated"' in LAYOUT
-          and 'where_exp: "u", "u.update_published_at == nil"' in LAYOUT)
+          'id="patches-undated"' in HISTORY
+          and 'where_exp: "u", "u.update_published_at == nil"' in HISTORY)
 
     # --- Recent section: title + restrained empty state -----------------------
-    check("recent section titled 'Recent patches'", "Recent patches" in LAYOUT)
-    check("older section titled 'Older patches'", "Older patches" in LAYOUT)
+    check("recent section titled 'Recent patches'", "Recent patches" in HISTORY)
+    check("older section titled 'Older patches'", "Older patches" in HISTORY)
     check("restrained 'No recent patches' state when the recent window is empty",
-          "No recent patches" in LAYOUT and "{% if recent_count > 0 %}" in LAYOUT)
+          "No recent patches" in HISTORY and "{% if recent_count > 0 %}" in HISTORY)
 
     # --- Verdict column derived from the real AUXSAYS decision (not consensus) --
     check("verdict uses update_decision_label with the detail-page fallback chain",
