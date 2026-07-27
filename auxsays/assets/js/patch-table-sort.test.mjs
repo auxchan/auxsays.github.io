@@ -55,7 +55,8 @@ test('version: total order over a mixed real product set', () => {
 
 test('verdict: every allowed category maps to its risk index', () => {
   VERDICT_ORDER.forEach((label, i) => assert.equal(verdictRank(label), i, `${label} -> ${i}`));
-  assert.deepEqual(VERDICT_ORDER.length, 8);
+  assert.deepEqual(VERDICT_ORDER.length, 9);
+  assert.equal(verdictRank('CLEAR'), 8);
 });
 
 test('verdict: real suffix-bearing / cased forms normalise to the leading category', () => {

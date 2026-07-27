@@ -25,7 +25,7 @@ export function compareVersion(a, b) {
 // sorts last while staying visible.
 export const VERDICT_ORDER = [
   'AVOID', 'WAIT', 'TEST FIRST', 'SECURITY UPDATE',
-  'SAFE ENOUGH', 'OFFICIAL ONLY', 'INSUFFICIENT DATA', 'MANUAL WATCH',
+  'SAFE ENOUGH', 'OFFICIAL ONLY', 'INSUFFICIENT DATA', 'MANUAL WATCH', 'CLEAR',
 ];
 export function verdictRank(label) {
   const s = String(label == null ? '' : label).toUpperCase();
