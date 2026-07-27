@@ -5571,3 +5571,20 @@ th[aria-sort="descending"] .patch-sort-btn { color: var(--text-0); }
   .patch-table tbody tr.patch-row td::before { content: attr(data-label); color: var(--text-2); font-size: .68rem; text-transform: uppercase; letter-spacing: .1em; text-align: left; }
   .patch-table tbody tr.patch-row:hover td { border: 0; }
 }
+
+/* --- Vendor page: Latest patch signals summary + shared Product column --- */
+.patch-cell-product a { color: var(--cyan-1); text-decoration: none; font-weight: 600; }
+.patch-cell-product a:hover { text-decoration: underline; }
+.patch-latest-section { padding-bottom: 1.1rem; }
+.patch-latest-signals .section-head { margin-bottom: .9rem; }
+.patch-latest-table { margin-top: .2rem; }
+.patch-latest-staged-list { list-style: none; margin: .8rem 0 0; padding: 0; display: flex; flex-direction: column; gap: .45rem; }
+.patch-latest-staged { display: flex; align-items: center; gap: .7rem; flex-wrap: wrap; font-size: .9rem; color: var(--text-1); }
+.patch-latest-staged__name { font-weight: 600; color: var(--text-0); }
+.patch-latest-staged__link { color: var(--cyan-1); text-decoration: none; }
+.patch-latest-staged__link:hover { text-decoration: underline; }
+.patch-latest-cta { margin-top: 1rem; }
+.patch-latest-cta a { font-size: .95rem; }
+@media (max-width: 860px) {
+  .patch-latest-staged { justify-content: space-between; }
+}

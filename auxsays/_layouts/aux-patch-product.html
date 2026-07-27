@@ -60,56 +60,16 @@ layout: aux-base
   </section>
 
   {% if product_updates.size > 0 %}
-  {%- comment -%}
-    Recent vs archived split, computed with a numeric YYYYMM cutoff (never a string compare):
-    Recent = the current Jekyll build year (site.time) PLUS the immediately preceding December;
-    everything earlier is archived, grouped by calendar year (newest first, collapsed). Undated
-    records are surfaced in an explicit group -- never silently dropped. The full product_updates
-    set (and its size, used elsewhere for counts) is unchanged; this is a listing treatment only.
-  {%- endcomment -%}
-  {% assign build_year = site.time | date: '%Y' | plus: 0 %}
-  {% assign recent_boundary = build_year | minus: 1 | times: 100 | plus: 12 %}
-  {% assign dated_updates = product_updates | where_exp: "u", "u.update_published_at" %}
-  {% assign undated_updates = product_updates | where_exp: "u", "u.update_published_at == nil" %}
-  {% assign year_groups = dated_updates | group_by_exp: "u", "u.update_published_at | date: '%Y'" | sort: "name" | reverse %}
   <section class="panel patch-intel-section reveal-up reveal-delay-1">
     <div class="section-head section-head--archive">
       <div class="eyebrow">Documented patch history</div>
       <h2>{{ product.product_name }} patch history</h2>
       <p>Recent patches appear first; older patches stay available, grouped by year, with every record and link preserved. Sort any column to compare across the full history.</p>
     </div>
-
-    {% assign recent_count = 0 %}
-    {% capture recent_rows %}{% for item in dated_updates %}{% assign iym = item.update_published_at | date: '%Y%m' | plus: 0 %}{% if iym >= recent_boundary %}{% assign recent_count = recent_count | plus: 1 %}{% include patch-table-row.html item=item %}{% endif %}{% endfor %}{% endcapture %}
-    <div class="patch-history patch-history--recent">
-      <h3 class="patch-group-title">Recent patches</h3>
-      {% if recent_count > 0 %}
-      <div class="patch-table-wrap">
-        <table class="patch-table" data-patch-table>{% include patch-table-head.html %}<tbody>{{ recent_rows }}</tbody></table>
-      </div>
-      {% else %}
-      <p class="patch-empty-note">No recent patches. Older patches are archived below.</p>
-      {% endif %}
-    </div>
-
-    {% assign has_older = false %}
-    {% capture older_html %}{% for yg in year_groups %}{% assign yr_count = 0 %}{% capture yr_rows %}{% for item in yg.items %}{% assign iym = item.update_published_at | date: '%Y%m' | plus: 0 %}{% if iym < recent_boundary %}{% assign yr_count = yr_count | plus: 1 %}{% include patch-table-row.html item=item %}{% endif %}{% endfor %}{% endcapture %}{% if yr_count > 0 %}{% assign has_older = true %}
-    <details class="aux-collapsible-card patch-archive-year" id="patches-{{ yg.name }}">
-      <summary><span class="patch-archive-year-label">{{ yg.name }}</span> <span class="patch-archive-count">{{ yr_count }} patch{% unless yr_count == 1 %}es{% endunless %}</span></summary>
-      <div class="patch-table-wrap"><table class="patch-table" data-patch-table>{% include patch-table-head.html %}<tbody>{{ yr_rows }}</tbody></table></div>
-    </details>
-    {% endif %}{% endfor %}{% if undated_updates.size > 0 %}{% assign has_older = true %}
-    <details class="aux-collapsible-card patch-archive-year" id="patches-undated">
-      <summary><span class="patch-archive-year-label">Undated</span> <span class="patch-archive-count">{{ undated_updates.size }} patch{% unless undated_updates.size == 1 %}es{% endunless %}</span></summary>
-      <div class="patch-table-wrap"><table class="patch-table" data-patch-table>{% include patch-table-head.html %}<tbody>{% for item in undated_updates %}{% include patch-table-row.html item=item %}{% endfor %}</tbody></table></div>
-    </details>
-    {% endif %}{% endcapture %}
-    {% if has_older %}
-    <div class="patch-history patch-history--older">
-      <h3 class="patch-group-title">Older patches</h3>
-      {{ older_html }}
-    </div>
-    {% endif %}
+    {%- comment -%} Recent/Older split, verdict + evidence derivation, sortable header, and the
+      year-grouped collapsed archive are all rendered by the shared patch-history include so the
+      product page and the vendor page stay identical. Single-product context -> no Product column. {%- endcomment -%}
+    {% include patch-history.html updates=product_updates show_product=false %}
   </section>
   {% else %}
   <section class="panel patch-intel-section reveal-up reveal-delay-1">

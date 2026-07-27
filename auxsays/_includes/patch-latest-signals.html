@@ -1,0 +1,51 @@
+{%- comment -%}
+  Compact "Latest patch signals" decision summary for a vendor page. Shows ONE latest dated record
+  per tracked product (products ordered by latest release date, newest first), reusing the shared
+  patch-table row so Date/Version/Verdict/Reports/Evidence match the product + patch-detail pages
+  exactly (no duplicated verdict/evidence logic). In each row the Product cell links to that
+  product's full history and Details links to the specific record. Products with no dated records
+  get an honest staged/watch state — never a fabricated patch. This is a decision summary, not a
+  second full history table.
+
+  Params:
+    include.updates  (array) company records, PRE-SORTED newest-first
+    include.products (array) tracked products for this company (patch_products)
+{%- endcomment -%}
+{% assign ls_updates = include.updates %}
+{% assign ls_products = include.products %}
+{% assign ls_show_product = include.show_product %}
+{% assign latest_seen = "|" %}
+{% assign latest_count = 0 %}
+{% capture latest_rows %}{% for item in ls_updates %}{% if item.update_published_at %}{% capture pmark %}|{{ item.product_id }}|{% endcapture %}{% unless latest_seen contains pmark %}{% assign latest_seen = latest_seen | append: item.product_id | append: "|" %}{% assign latest_count = latest_count | plus: 1 %}{% include patch-table-row.html item=item show_product=ls_show_product %}{% endunless %}{% endif %}{% endfor %}{% endcapture %}
+<div class="patch-latest-signals">
+  <div class="section-head section-head--archive">
+    <div class="eyebrow">Latest patch signals</div>
+    <h2>Latest install decision per software</h2>
+    <p>The most recent tracked patch for each product — sorted newest first. Click a product for its full history, or a record for the full breakdown.</p>
+  </div>
+  {% if latest_count > 0 %}
+  <div class="patch-table-wrap">
+    <table class="patch-table patch-latest-table" data-patch-table>{% include patch-table-head.html show_product=ls_show_product %}<tbody>{{ latest_rows }}</tbody></table>
+  </div>
+  {% endif %}
+  {%- comment -%} Honest no-record state, derived from STRUCTURED product/source state -- never
+    inferred from arbitrary human-readable label strings. Authority is the product's ingestion
+    SOURCE `enabled` flag (_data/patch_ingestion_sources.yml, joined by product_id) plus the
+    product `coverage_state` enum:
+      - source enabled            -> "Monitoring active" is honest (collection on, no record yet)
+      - source disabled + staged  -> keep the config-supported staged label (e.g. "Source map staged")
+      - source disabled otherwise -> "Source disabled" (never "Monitoring active", even when a stale
+                                     coverage_status_label says so -- e.g. Photoshop)
+      - no configured source      -> "No configured ingestion source"
+      - anything unrecognized     -> fail closed to restrained "No patch records yet"
+    Zero records is an absence of records, never "no user problems". Data files are NOT modified. {%- endcomment -%}
+  {% capture staged_html %}{% for product in ls_products %}{% capture pmark2 %}|{{ product.id }}|{% endcapture %}{% unless latest_seen contains pmark2 %}{% assign src = site.data.patch_ingestion_sources | where: "product_id", product.id | first %}{% assign src_enabled = false %}{% if src and src.enabled == true %}{% assign src_enabled = true %}{% endif %}{% assign cstate = product.coverage_state | default: '' %}{% if src == nil %}{% assign staged_state = 'No configured ingestion source' %}{% assign staged_pill = 'staged' %}{% elsif src_enabled %}{% assign staged_state = 'Monitoring active — awaiting first record' %}{% assign staged_pill = 'active_watch' %}{% elsif cstate == 'staged' %}{% assign staged_state = product.coverage_status_label | default: 'Source staged — not yet monitoring' %}{% assign staged_pill = 'staged' %}{% elsif cstate == blank %}{% assign staged_state = 'No patch records yet' %}{% assign staged_pill = 'staged' %}{% else %}{% assign staged_state = 'Source disabled — not yet monitoring' %}{% assign staged_pill = 'staged' %}{% endif %}<li class="patch-latest-staged"><span class="patch-latest-staged__name">{{ product.product_name }}</span> <span class="patch-coverage-pill patch-coverage-pill--{{ staged_pill }}">{{ staged_state }}</span> <a class="patch-latest-staged__link" href="{{ product.product_url | relative_url }}">Full history →</a></li>{% endunless %}{% endfor %}{% endcapture %}
+  {% if staged_html contains "patch-latest-staged" %}
+  <ul class="patch-latest-staged-list">
+    {{ staged_html }}
+  </ul>
+  {% endif %}
+  {% if latest_count == 0 and staged_html == blank %}
+  <p class="patch-empty-note">No tracked software yet.</p>
+  {% endif %}
+</div>

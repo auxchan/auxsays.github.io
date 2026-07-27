@@ -67,6 +67,7 @@ export function rowComparator(key, type, dir) {
     let r;
     if (type === 'version') r = compareVersion(va, vb);
     else if (type === 'num') r = numCompare(va, vb);
+    else if (type === 'text') r = _collator.compare(String(va), String(vb)); // Product: natural text
     else r = va < vb ? -1 : va > vb ? 1 : 0; // date: ISO strings sort lexically == chronologically
     if (r !== 0) return r * sign;
     const da = ra.dataset.date || '';
@@ -76,25 +77,26 @@ export function rowComparator(key, type, dir) {
   };
 }
 
-const COLUMNS = [
-  { key: 'date', type: 'date', label: 'Date' },
-  { key: 'version', type: 'version', label: 'Version' },
-  { key: 'verdict-rank', type: 'num', label: 'Verdict' },
-  { key: 'reports', type: 'num', label: 'Reports' },
-  { key: 'evidence-rank', type: 'num', label: 'Evidence' },
-];
-
 export function initPatchTables(root) {
   const scope = root || document;
   const tables = Array.from(scope.querySelectorAll('[data-patch-table]'));
   if (!tables.length) return;
+
+  // Sortable columns are derived from the ACTUAL header buttons, so the same module drives both
+  // the product table and the vendor table (which adds a Product column) with no hardcoded list.
+  const columns = Array.from(tables[0].querySelectorAll('thead [data-sort-key]')).map((b) => ({
+    key: b.dataset.sortKey,
+    type: b.dataset.sortType || 'text',
+    label: (b.textContent || '').trim(),
+  }));
+  if (!columns.length) return;
 
   const state = { key: 'date', dir: 'desc' }; // matches the server-rendered newest-first order
   let mobileSelect = null;
   let mobileDirBtn = null;
 
   const sortAll = () => {
-    const col = COLUMNS.find((c) => c.key === state.key) || COLUMNS[0];
+    const col = columns.find((c) => c.key === state.key) || columns[0];
     const cmp = rowComparator(col.key, col.type, state.dir);
     tables.forEach((table) => {
       const tbody = table.tBodies[0];
@@ -142,7 +144,7 @@ export function initPatchTables(root) {
     lab.append('Sort by ');
     mobileSelect = document.createElement('select');
     mobileSelect.className = 'patch-sort-mobile__select';
-    COLUMNS.forEach((c) => {
+    columns.forEach((c) => {
       const o = document.createElement('option');
       o.value = c.key; o.textContent = c.label;
       mobileSelect.appendChild(o);

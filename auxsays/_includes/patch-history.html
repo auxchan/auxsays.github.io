@@ -1,0 +1,52 @@
+{%- comment -%}
+  Shared Recent/Older patch-history renderer used by BOTH the product layout (aux-patch-product)
+  and the vendor layout (aux-patch-company), so the recent/archive split, verdict derivation,
+  evidence derivation, sortable header, and archive grouping live in ONE place and can never
+  drift between page types.
+
+  Params:
+    include.updates      (array) patch-record pages, PRE-SORTED newest-first (update_published_at | reverse)
+    include.show_product (bool)  add a sortable Product column + cell (multi-product vendor pages)
+
+  Recent = current Jekyll build year (site.time) PLUS the immediately preceding December, via a
+  numeric YYYYMM cutoff (never a string compare). Everything earlier is archived, grouped by
+  calendar year (newest first, collapsed, stable #patches-YYYY anchors, per-year counts). Undated
+  records get an explicit group -- never silently dropped. Every record link is server-rendered.
+{%- endcomment -%}
+{% assign uh_updates = include.updates %}
+{% assign uh_show_product = include.show_product %}
+{% assign build_year = site.time | date: '%Y' | plus: 0 %}
+{% assign recent_boundary = build_year | minus: 1 | times: 100 | plus: 12 %}
+{% assign dated_updates = uh_updates | where_exp: "u", "u.update_published_at" %}
+{% assign undated_updates = uh_updates | where_exp: "u", "u.update_published_at == nil" %}
+{% assign year_groups = dated_updates | group_by_exp: "u", "u.update_published_at | date: '%Y'" | sort: "name" | reverse %}
+{% assign recent_count = 0 %}
+{% capture recent_rows %}{% for item in dated_updates %}{% assign iym = item.update_published_at | date: '%Y%m' | plus: 0 %}{% if iym >= recent_boundary %}{% assign recent_count = recent_count | plus: 1 %}{% include patch-table-row.html item=item show_product=uh_show_product %}{% endif %}{% endfor %}{% endcapture %}
+<div class="patch-history patch-history--recent">
+  <h3 class="patch-group-title">Recent patches</h3>
+  {% if recent_count > 0 %}
+  <div class="patch-table-wrap">
+    <table class="patch-table" data-patch-table>{% include patch-table-head.html show_product=uh_show_product %}<tbody>{{ recent_rows }}</tbody></table>
+  </div>
+  {% else %}
+  <p class="patch-empty-note">No recent patches. Older patches are archived below.</p>
+  {% endif %}
+</div>
+{% assign has_older = false %}
+{% capture older_html %}{% for yg in year_groups %}{% assign yr_count = 0 %}{% capture yr_rows %}{% for item in yg.items %}{% assign iym = item.update_published_at | date: '%Y%m' | plus: 0 %}{% if iym < recent_boundary %}{% assign yr_count = yr_count | plus: 1 %}{% include patch-table-row.html item=item show_product=uh_show_product %}{% endif %}{% endfor %}{% endcapture %}{% if yr_count > 0 %}{% assign has_older = true %}
+<details class="aux-collapsible-card patch-archive-year" id="patches-{{ yg.name }}">
+  <summary><span class="patch-archive-year-label">{{ yg.name }}</span> <span class="patch-archive-count">{{ yr_count }} patch{% unless yr_count == 1 %}es{% endunless %}</span></summary>
+  <div class="patch-table-wrap"><table class="patch-table" data-patch-table>{% include patch-table-head.html show_product=uh_show_product %}<tbody>{{ yr_rows }}</tbody></table></div>
+</details>
+{% endif %}{% endfor %}{% if undated_updates.size > 0 %}{% assign has_older = true %}
+<details class="aux-collapsible-card patch-archive-year" id="patches-undated">
+  <summary><span class="patch-archive-year-label">Undated</span> <span class="patch-archive-count">{{ undated_updates.size }} patch{% unless undated_updates.size == 1 %}es{% endunless %}</span></summary>
+  <div class="patch-table-wrap"><table class="patch-table" data-patch-table>{% include patch-table-head.html show_product=uh_show_product %}<tbody>{% for item in undated_updates %}{% include patch-table-row.html item=item show_product=uh_show_product %}{% endfor %}</tbody></table></div>
+</details>
+{% endif %}{% endcapture %}
+{% if has_older %}
+<div class="patch-history patch-history--older">
+  <h3 class="patch-group-title">Older patches</h3>
+  {{ older_html }}
+</div>
+{% endif %}
