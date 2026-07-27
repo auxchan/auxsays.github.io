@@ -125,9 +125,19 @@ def run() -> int:
     check("latest-summary staged products still link to full history (server-rendered)",
           "patch-latest-staged__link" in LATEST and "product.product_url" in LATEST)
 
-    # 16. honest empty/disabled states (never fabricate 'Monitoring active' for no-record products)
-    check("no-record products never rendered as 'Monitoring active' (neutralized to honest state)",
-          "contains 'active'" in LATEST and "contains 'monitoring'" in LATEST and "No patch records yet" in LATEST)
+    # 16. honest empty/disabled states from STRUCTURED product/source state (not label strings)
+    check("no-record state derives from the ingestion SOURCE enabled flag + coverage_state (structured)",
+          "site.data.patch_ingestion_sources | where: \"product_id\", product.id" in LATEST
+          and "src.enabled == true" in LATEST
+          and "product.coverage_state" in LATEST)
+    check("no-record state does NOT decide from human-readable coverage_status_label strings",
+          "staged_lower" not in LATEST
+          and "downcase" not in LATEST
+          and "coverage_status_label | downcase" not in LATEST)
+    check("disabled source -> 'Source disabled'/'staged' wording, never 'Monitoring active'",
+          "Source disabled" in LATEST and "Monitoring active" in LATEST and "No configured ingestion source" in LATEST)
+    check("unknown state fails closed to restrained neutral wording",
+          "No patch records yet" in LATEST)
 
     # 17. routes: vendor layout does not alter permalinks; uses item.url; loads the shared module
     check("vendor layout preserves record URLs (uses item.url) and loads the shared sort module",
