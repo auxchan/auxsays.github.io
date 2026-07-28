@@ -21,6 +21,13 @@ social:
 
 avatar: "/assets/img/aux-about-portrait.jpg"
 
+# Community-evidence monitoring status (per exact patch, derived from _data/evidence_method_health.yml).
+# A record shows a positive-side monitoring status ONLY when live collector telemetry supports it; any
+# blocked / broken / stale / partial / disabled / future / missing signal fails closed. These tune the
+# thresholds; the model itself lives in _includes/monitoring-status.html and is separate from the verdict.
+monitoring_min_healthy_methods: 2   # fresh, post-release success/no_results methods required for coverage
+monitoring_max_age_days: 14         # a method whose last_run is older than this is not "fresh"
+
 theme: jekyll-theme-chirpy
 
 plugins:

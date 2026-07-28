@@ -258,6 +258,7 @@ layout: aux-base
             {% endif %}
             <span class="patch-report-count">{{ feed_evidence_label }}</span>
             <span class="patch-report-count">{{ item.update_report_count | default: 0 }} confirmed community report{% unless item.update_report_count == 1 %}s{% endunless %}</span>
+            {% include monitoring-status.html mode='feed' product_id=item.product_id version=item.update_version published_at=item.update_published_at report_count=item.update_report_count %}
           </span>
         </div>
         {% if item.update_feed_title != blank %}
@@ -358,6 +359,7 @@ layout: aux-base
               {% endif %}
               <span class="patch-report-count">{{ feed_evidence_label }}</span>
               <span class="patch-report-count">{{ item.update_report_count | default: 0 }} confirmed community report{% unless item.update_report_count == 1 %}s{% endunless %}</span>
+              {% include monitoring-status.html mode='feed' product_id=item.product_id version=item.update_version published_at=item.update_published_at report_count=item.update_report_count %}
             </span>
           </div>
           {% if item.update_feed_title != blank %}

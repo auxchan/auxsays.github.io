@@ -1,0 +1,158 @@
+{%- comment -%}
+  Shared per-patch MONITORING STATUS field. SINGLE SOURCE OF TRUTH for the monitoring axis on every
+  surface (product/vendor history rows, the patch feed, and the patch-detail page). This is an
+  evidence/collection status, NOT a verdict, and it is kept separate from the AUXSAYS verdict.
+
+  Derived ONLY from structured per-exact-patch telemetry in _data/evidence_method_health.yml (EMH),
+  joined on (product_id, update_version). No manual allowlist -- "monitored" means EMH rows exist.
+  It FAILS CLOSED: missing, stale, future, disabled, blocked, broken, partial, low-confidence, or
+  manual-review telemetry can never produce a clean "no reports" read.
+
+  Inputs:
+    include.product_id    -- exact tracked product id
+    include.version       -- exact patch version (numeric YAML versions are string-normalized)
+    include.published_at  -- record release timestamp (ISO); gates post-release runs
+    include.report_count  -- accepted patch-specific community report count
+    include.mode          -- 'full' (detail card) | 'cell' (table cell) | 'feed' (feed line)
+
+  Fail-closed ladder (first match wins):
+    1  no matching rows                                          -> OFFICIAL SOURCE ONLY
+    2  every matching row disabled                               -> OFFICIAL SOURCE ONLY
+    3  no valid, non-future timestamp among usable rows          -> COLLECTION STALE
+    4  valid usable timestamps exist, but none are post-release  -> NOT YET MONITORED
+    5  no fresh post-release usable methods                      -> COLLECTION STALE
+    6  zero healthy methods and a blocked/broken method present  -> COLLECTION BLOCKED
+    7  any degraded telemetry (bad status / partial-disabled / invalid|future ts) -> MONITORING DEGRADED
+    8  healthy methods below minimum                             -> INSUFFICIENT COVERAGE
+    9  accepted reports > 0                                      -> MONITORING ACTIVE
+    10 otherwise                                                 -> NO ACCEPTED PATCH-SPECIFIC REPORTS
+
+  A healthy completed method is: usable (not disabled) AND fresh (0 <= age <= monitoring_max_age_days)
+  AND post-release (last_run >= published_at) AND status success or no_results (the validator gives
+  no_results no failure semantics). Raw blocked_reason is NEVER rendered publicly -- only a
+  normalized, status-derived explanation is shown; the raw diagnostic stays in the repo telemetry.
+{%- endcomment -%}
+{%- assign mon_mode = include.mode | default: 'cell' -%}
+{%- assign mon_ver = include.version | append: '' -%}
+{%- assign mon_reports = include.report_count | default: 0 | plus: 0 -%}
+{%- assign mon_min_healthy = site.monitoring_min_healthy_methods | default: 2 -%}
+{%- assign mon_max_age_days = site.monitoring_max_age_days | default: 14 -%}
+{%- assign mon_max_age_s = mon_max_age_days | times: 86400 -%}
+{%- assign mon_now_s = site.time | date: '%s' | plus: 0 -%}
+{%- assign mon_pub_s = 0 -%}
+{%- if include.published_at != blank -%}{%- assign mon_pub_s = include.published_at | date: '%s' | plus: 0 -%}{%- endif -%}
+{%- assign mon_total = 0 -%}
+{%- assign mon_disabled = 0 -%}
+{%- assign mon_healthy = 0 -%}
+{%- assign mon_fresh_usable = 0 -%}
+{%- assign mon_has_valid_usable_ts = false -%}
+{%- assign mon_has_post_release_valid = false -%}
+{%- assign mon_has_blocked_broken = false -%}
+{%- assign mon_has_degraded_status = false -%}
+{%- assign mon_has_invalid_ts_usable = false -%}
+{%- assign mon_latest_s = 0 -%}
+{%- assign mon_latest_raw = '' -%}
+{%- assign mon_rows = '' -%}
+{%- if site.data.evidence_method_health and site.data.evidence_method_health.methods -%}
+{%- assign mon_rows = site.data.evidence_method_health.methods | where: 'product_id', include.product_id -%}
+{%- endif -%}
+{%- if mon_rows != '' and mon_rows.size > 0 -%}
+{%- for m in mon_rows -%}
+{%- assign m_ver = m.update_version | append: '' -%}
+{%- if m_ver == mon_ver -%}
+{%- assign mon_total = mon_total | plus: 1 -%}
+{%- assign m_status = m.status | default: '' | downcase | strip -%}
+{%- assign m_is_disabled = false -%}
+{%- if m_status == 'disabled' -%}{%- assign m_is_disabled = true -%}{%- assign mon_disabled = mon_disabled | plus: 1 -%}{%- endif -%}
+{%- if m_status == 'blocked' or m_status == 'broken' -%}{%- assign mon_has_blocked_broken = true -%}{%- endif -%}
+{%- if m_status == 'partial' or m_status == 'blocked' or m_status == 'broken' or m_status == 'stale' or m_status == 'low_confidence' or m_status == 'manual_review_needed' -%}{%- assign mon_has_degraded_status = true -%}{%- endif -%}
+{%- assign m_ts_ok = false -%}
+{%- assign m_run_s = 0 -%}
+{%- if m.last_run != blank -%}
+{%- assign m_run_s = m.last_run | date: '%s' | plus: 0 -%}
+{%- if m_run_s <= mon_now_s -%}{%- assign m_ts_ok = true -%}{%- endif -%}
+{%- endif -%}
+{%- unless m_is_disabled -%}
+{%- if m_ts_ok -%}
+{%- assign mon_has_valid_usable_ts = true -%}
+{%- if m_run_s > mon_latest_s -%}{%- assign mon_latest_s = m_run_s -%}{%- assign mon_latest_raw = m.last_run -%}{%- endif -%}
+{%- if m_run_s >= mon_pub_s -%}
+{%- assign mon_has_post_release_valid = true -%}
+{%- assign m_age_s = mon_now_s | minus: m_run_s -%}
+{%- if m_age_s <= mon_max_age_s -%}
+{%- assign mon_fresh_usable = mon_fresh_usable | plus: 1 -%}
+{%- if m_status == 'success' or m_status == 'no_results' -%}{%- assign mon_healthy = mon_healthy | plus: 1 -%}{%- endif -%}
+{%- endif -%}
+{%- endif -%}
+{%- else -%}
+{%- assign mon_has_invalid_ts_usable = true -%}
+{%- endif -%}
+{%- endunless -%}
+{%- endif -%}
+{%- endfor -%}
+{%- endif -%}
+{%- assign mon_partial_disabled = false -%}
+{%- if mon_disabled > 0 and mon_disabled < mon_total -%}{%- assign mon_partial_disabled = true -%}{%- endif -%}
+{%- assign mon_degraded_present = false -%}
+{%- if mon_has_degraded_status or mon_partial_disabled or mon_has_invalid_ts_usable -%}{%- assign mon_degraded_present = true -%}{%- endif -%}
+{%- assign mon_status = 'NO ACCEPTED PATCH-SPECIFIC REPORTS' -%}
+{%- if mon_total == 0 -%}{%- assign mon_status = 'OFFICIAL SOURCE ONLY' -%}
+{%- elsif mon_disabled == mon_total -%}{%- assign mon_status = 'OFFICIAL SOURCE ONLY' -%}
+{%- elsif mon_has_valid_usable_ts == false -%}{%- assign mon_status = 'COLLECTION STALE' -%}
+{%- elsif mon_has_post_release_valid == false -%}{%- assign mon_status = 'NOT YET MONITORED' -%}
+{%- elsif mon_fresh_usable == 0 -%}{%- assign mon_status = 'COLLECTION STALE' -%}
+{%- elsif mon_healthy == 0 and mon_has_blocked_broken -%}{%- assign mon_status = 'COLLECTION BLOCKED' -%}
+{%- elsif mon_degraded_present -%}{%- assign mon_status = 'MONITORING DEGRADED' -%}
+{%- elsif mon_healthy < mon_min_healthy -%}{%- assign mon_status = 'INSUFFICIENT COVERAGE' -%}
+{%- elsif mon_reports > 0 -%}{%- assign mon_status = 'MONITORING ACTIVE' -%}
+{%- else -%}{%- assign mon_status = 'NO ACCEPTED PATCH-SPECIFIC REPORTS' -%}
+{%- endif -%}
+{%- assign mon_status_class = mon_status | downcase | replace: ' ', '-' -%}
+{%- assign mon_latest_label = '' -%}
+{%- if mon_latest_raw != blank -%}{%- assign mon_latest_label = mon_latest_raw | date: "%b %-d, %Y" -%}{%- endif -%}
+{%- if mon_mode == 'cell' -%}
+<span class="patch-monitoring patch-monitoring--{{ mon_status_class }}" title="Community-evidence monitoring status (separate from the verdict)">{{ mon_status }}</span>
+{%- elsif mon_mode == 'feed' -%}
+<span class="patch-card-monitoring"><span class="patch-card-monitoring__label">Monitoring</span> <span class="patch-monitoring patch-monitoring--{{ mon_status_class }}">{{ mon_status }}</span></span>
+{%- else -%}
+<div class="update-monitoring-card update-monitoring-card--{{ mon_status_class }}" aria-label="Community monitoring status">
+  <div class="update-monitoring-card__header">
+    <span class="update-monitoring-eyebrow">Community monitoring</span>
+    <span class="patch-monitoring patch-monitoring--{{ mon_status_class }}">{{ mon_status }}</span>
+  </div>
+  <dl class="update-monitoring-facts">
+    <div class="update-monitoring-fact"><dt>Accepted reports</dt><dd>{{ mon_reports }}</dd></div>
+    <div class="update-monitoring-fact"><dt>Latest evidence run</dt><dd>{% if mon_latest_label != blank %}{{ mon_latest_label }}{% else %}Not recorded{% endif %}</dd></div>
+    <div class="update-monitoring-fact"><dt>Healthy methods</dt><dd>{{ mon_healthy }} fresh (success / no reports) &middot; need {{ mon_min_healthy }}</dd></div>
+  </dl>
+  {%- if mon_rows != '' and mon_rows.size > 0 -%}
+  {%- assign mon_has_method_rows = false -%}
+  {%- for m in mon_rows -%}{%- assign m_ver2 = m.update_version | append: '' -%}{%- if m_ver2 == mon_ver -%}{%- assign mon_has_method_rows = true -%}{%- endif -%}{%- endfor -%}
+  {%- if mon_has_method_rows -%}
+  <ul class="update-monitoring-methods">
+  {%- for m in mon_rows -%}
+  {%- assign m_ver2 = m.update_version | append: '' -%}
+  {%- if m_ver2 == mon_ver -%}
+  {%- assign m_status2 = m.status | default: '' | downcase | strip -%}
+  {%- assign m_expl = 'Status recorded' -%}
+  {%- if m_status2 == 'success' -%}{%- assign m_expl = 'Completed' -%}
+  {%- elsif m_status2 == 'no_results' -%}{%- assign m_expl = 'Checked &mdash; no reports found' -%}
+  {%- elsif m_status2 == 'partial' -%}{%- assign m_expl = 'Partial collection' -%}
+  {%- elsif m_status2 == 'blocked' -%}{%- assign m_expl = 'Source request was blocked' -%}
+  {%- elsif m_status2 == 'broken' -%}{%- assign m_expl = 'Source returned an error' -%}
+  {%- elsif m_status2 == 'stale' -%}{%- assign m_expl = 'Collection stale' -%}
+  {%- elsif m_status2 == 'low_confidence' -%}{%- assign m_expl = 'Low-confidence result' -%}
+  {%- elsif m_status2 == 'manual_review_needed' -%}{%- assign m_expl = 'Source requires manual review' -%}
+  {%- elsif m_status2 == 'disabled' -%}{%- assign m_expl = 'Method disabled' -%}
+  {%- endif -%}
+  {%- assign m_checked = '' -%}
+  {%- if m.last_run != blank -%}{%- assign m_run_s2 = m.last_run | date: '%s' | plus: 0 -%}{%- if m_run_s2 <= mon_now_s -%}{%- assign m_checked = m.last_run | date: "%b %-d, %Y" -%}{%- endif -%}{%- endif -%}
+  <li class="update-monitoring-method update-monitoring-method--{{ m_status2 | replace: '_', '-' }}"><span class="update-monitoring-method__id">{{ m.method_id | escape }}</span> <span class="update-monitoring-method__state">{{ m_expl }}</span>{% if m_checked != blank %} <span class="update-monitoring-method__checked">last checked {{ m_checked }}</span>{% endif %}</li>
+  {%- endif -%}
+  {%- endfor -%}
+  </ul>
+  {%- endif -%}
+  {%- endif -%}
+  <p class="update-monitoring-note">Monitoring reflects community-evidence collection health for this exact release &mdash; an absence of reports is not a safety guarantee, and this is separate from the AUXSAYS verdict.</p>
+</div>
+{%- endif -%}

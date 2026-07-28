@@ -67,6 +67,7 @@
 {% if include.show_product %}{% capture product_page_url %}/updates/{{ item.company_id }}/{{ item.product_id }}/{% endcapture %}<td data-label="Product" class="patch-cell-product"><a href="{{ product_page_url | relative_url }}">{{ product_name }}</a></td>{% endif %}
 <td data-label="Version" class="patch-cell-version">{{ item.update_version }}</td>
 <td data-label="Verdict"><span class="patch-verdict patch-verdict--rank{{ verdict_rank }}">{{ decision_label }}</span></td>
+<td data-label="Monitoring" class="patch-cell-monitoring">{% include monitoring-status.html mode='cell' product_id=item.product_id version=item.update_version published_at=item.update_published_at report_count=item.update_report_count %}</td>
 <td data-label="Reports" class="patch-cell-num">{{ report_count_num }}</td>
 <td data-label="Evidence"><span class="patch-evidence patch-evidence--rank{{ evidence_rank }}">{{ evidence_strength }}</span></td>
 <td data-label="Details" class="patch-col-details"><a class="patch-details-link" href="{{ item.url | relative_url }}">View patch <span aria-hidden="true">→</span></a></td>

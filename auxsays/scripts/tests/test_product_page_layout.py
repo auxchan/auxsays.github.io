@@ -65,6 +65,15 @@ def run() -> int:
     check("old grid/labels removed (no 'Patch'/'Consensus'/'Confirmed community reports' headers)",
           "patch-version-row--head" not in LAYOUT and "<span>Consensus</span>" not in LAYOUT)
 
+    # --- Monitoring column: a SEPARATE, non-sortable axis (never inside the Verdict cell) ------
+    check("Monitoring is a separate, non-sortable column (own <th>, no sort button/key)",
+          'patch-col-monitoring">Monitoring' in HEAD and 'data-sort-key="monitoring' not in HEAD)
+    check("row renders the shared monitoring-status include in its own Monitoring cell",
+          'data-label="Monitoring"' in ROW and "include monitoring-status.html mode='cell'" in ROW)
+    check("Verdict cell holds only the verdict badge (monitoring status is NOT placed in it)",
+          '<td data-label="Verdict"><span class="patch-verdict' in ROW
+          and "monitoring-status.html" not in ROW.split('data-label="Verdict"')[1].split("</td>")[0])
+
     check("product layout delegates the history to the shared patch-history include",
           "patch-history.html" in LAYOUT and "show_product=false" in LAYOUT)
 
