@@ -107,10 +107,8 @@ def run() -> int:
           "item.update_decision_label" in ROW
           and "item.update_consensus_summary contains ':'" in ROW
           and "item.quick_verdict" in ROW)
-    check("official-only + 0 reports resolves to CLEAR (monitored) / OFFICIAL ONLY (not) / too-soon INSUFFICIENT",
-          "is_official_only and report_count_num == 0" in ROW
-          and "site.monitored_products" in ROW
-          and "'CLEAR'" in ROW and "'OFFICIAL ONLY'" in ROW and "'INSUFFICIENT DATA'" in ROW)
+    check("verdict falls back to INSUFFICIENT DATA, and official-only + 0 reports resolves to it",
+          "'INSUFFICIENT DATA'" in ROW and "is_official_only and report_count_num == 0" in ROW)
     check("verdict column never substitutes the community-consensus label",
           "update_consensus_label" not in ROW)
     # explicit risk order AVOID(0) .. MANUAL WATCH(7), unknown(99, still visible)

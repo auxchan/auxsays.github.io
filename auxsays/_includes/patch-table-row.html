@@ -30,25 +30,7 @@
 {% assign report_count_num = item.update_report_count | default: 0 | plus: 0 %}
 {% assign is_official_only = false %}
 {% if item.evidence_state == 'official_only' or item.evidence_state_label == 'Official source only' %}{% assign is_official_only = true %}{% endif %}
-{%- comment -%}
-  Positive/honest verdicts for zero-report official records. The report pipeline collapses
-  "monitored & clean" and "never monitored" into the same fields, so monitoring is decided from
-  the explicit site.monitored_products allowlist (you vouch only for products you actually watch):
-    monitored + >= clear_min_days of field time, 0 reports -> CLEAR (age shown; never "safe")
-    not monitored                                           -> OFFICIAL ONLY (honest: no community watch)
-    monitored but too soon (< clear_min_days)               -> INSUFFICIENT DATA
-  A confirmed report (report_count_num > 0) never reaches here, so a real WAIT/AVOID is instant.
-{%- endcomment -%}
-{% if is_official_only and report_count_num == 0 %}
-{% assign is_monitored = false %}
-{% if site.monitored_products contains item.product_id %}{% assign is_monitored = true %}{% endif %}
-{% assign monitored_days = 0 %}
-{% if item.update_published_at %}{% assign now_s = site.time | date: '%s' | plus: 0 %}{% assign pub_s = item.update_published_at | date: '%s' | plus: 0 %}{% assign monitored_days = now_s | minus: pub_s | divided_by: 86400 %}{% endif %}
-{% assign clear_days = site.clear_min_days | default: 7 %}
-{% if is_monitored and monitored_days >= clear_days %}{% assign decision_label = 'CLEAR' %}
-{% elsif is_monitored == false %}{% assign decision_label = 'OFFICIAL ONLY' %}
-{% else %}{% assign decision_label = 'INSUFFICIENT DATA' %}{% endif %}
-{% endif %}
+{% if is_official_only and report_count_num == 0 %}{% assign decision_label = 'INSUFFICIENT DATA' %}{% endif %}
 {%- comment -%} Verdict risk order (leading category); unknown -> 99 so it sorts last but stays visible. {%- endcomment -%}
 {% assign vkey = decision_label | upcase %}
 {% assign verdict_rank = 99 %}
@@ -60,7 +42,6 @@
 {% elsif vkey contains 'OFFICIAL ONLY' %}{% assign verdict_rank = 5 %}
 {% elsif vkey contains 'INSUFFICIENT DATA' %}{% assign verdict_rank = 6 %}
 {% elsif vkey contains 'MANUAL WATCH' %}{% assign verdict_rank = 7 %}
-{% elsif vkey contains 'CLEAR' %}{% assign verdict_rank = 8 %}
 {% endif %}
 {%- comment -%}
   Community evidence strength: derived from the row's confirmed report count using the same

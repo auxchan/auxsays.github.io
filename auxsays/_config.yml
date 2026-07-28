@@ -21,21 +21,6 @@ social:
 
 avatar: "/assets/img/aux-about-portrait.jpg"
 
-# Positive verdict state ("CLEAR"). A version earns CLEAR only when its product is on the
-# community-monitored list below AND it has been monitored for at least clear_min_days with zero
-# accepted patch-specific reports. The badge shows the monitored age, so a short window still
-# reads honestly ("no confirmed issues in N days of monitoring" — never "safe"). Tune the speed/
-# confidence trade-off by changing clear_min_days (lower = faster verdict, humbler claim).
-# Only products you actually run community collectors for belong here — you vouch for what you watch.
-clear_min_days: 7
-monitored_products:
-  - obs-studio
-  - blackmagic-davinci
-  - adobe-premiere-pro
-  - microsoft-windows-11
-  - adobe-acrobat-reader
-  - adobe-acrobat-pro
-
 theme: jekyll-theme-chirpy
 
 plugins:

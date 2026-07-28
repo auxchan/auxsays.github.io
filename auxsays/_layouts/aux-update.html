@@ -158,27 +158,11 @@ layout: aux-base
 {% assign show_test_first_context = false %}
 {% if report_bearing_count > 0 and decision_label_key contains 'test first' %}{% assign show_test_first_context = true %}{% endif %}
 {% if official_only_zero_reports %}
-  {%- comment -%} Positive/honest verdict for a zero-report official record, mirroring the shared
-    patch-table-row derivation so the record reads identically on the detail, product, and vendor
-    pages. CLEAR only for community-monitored software after clear_min_days; unmonitored reads as
-    OFFICIAL ONLY; monitored-but-too-soon stays INSUFFICIENT DATA. Never claims "safe". {%- endcomment -%}
-  {% assign is_monitored = false %}
-  {% if site.monitored_products contains page.product_id %}{% assign is_monitored = true %}{% endif %}
-  {% assign monitored_days = 0 %}
-  {% if page.update_published_at %}{% assign now_s = site.time | date: '%s' | plus: 0 %}{% assign pub_s = page.update_published_at | date: '%s' | plus: 0 %}{% assign monitored_days = now_s | minus: pub_s | divided_by: 86400 %}{% endif %}
-  {% assign clear_days = site.clear_min_days | default: 7 %}
-  {% if is_monitored and monitored_days >= clear_days %}
-    {% capture decision_body %}No confirmed patch-specific problems after {{ monitored_days }} days of active community monitoring. This is an absence of reports, not a safety guarantee — monitoring continues.{% endcapture %}
-    {% assign decision_label = 'CLEAR' %}
-  {% elsif is_monitored == false %}
-    {% assign decision_label = 'OFFICIAL ONLY' %}
-    {% assign decision_body = 'Official record captured. Community monitoring is not active for this software, so the absence of reports is not evidence of stability.' %}
-  {% elsif security_sensitive %}
-    {% assign decision_label = 'INSUFFICIENT DATA' %}
+  {% assign decision_label = 'INSUFFICIENT DATA' %}
+  {% if security_sensitive %}
     {% assign decision_body = 'Security-sensitive update. Test first if your workflow is fragile, but do not ignore security exposure.' %}
   {% else %}
-    {% assign decision_label = 'INSUFFICIENT DATA' %}
-    {% assign decision_body = 'Monitored, but too soon for a verdict — no confirmed reports yet.' %}
+    {% assign decision_body = 'Too few reports for a verdict yet.' %}
   {% endif %}
 {% endif %}
 {% assign summary_text = page.release_summary | default: page.official_summary | default: page.description %}

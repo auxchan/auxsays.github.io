@@ -5532,7 +5532,6 @@ th[aria-sort="descending"] .patch-sort-btn { color: var(--text-0); }
 .patch-verdict--rank6,
 .patch-verdict--rank7,
 .patch-verdict--rank99 { background: rgba(126,138,152,.16); color: #dee6ef; } /* OFFICIAL ONLY / INSUFFICIENT / MANUAL WATCH / unknown */
-.patch-verdict--rank8 { background: rgba(70,150,210,.18); color: #cfe8ff; } /* CLEAR — calm blue, deliberately NOT green (no safety guarantee) */
 
 /* Evidence strength is sample-size, not safety — kept neutral (never green-for-High). */
 .patch-evidence { background: rgba(126,138,152,.14); color: var(--text-2); border: 1px solid transparent; }
