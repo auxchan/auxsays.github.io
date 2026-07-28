@@ -1,0 +1,27 @@
+{%- comment -%}
+  Patch-alert email capture. FRAMEWORK ONLY: renders nothing until site.newsletter.enabled is
+  true AND site.newsletter.action_url is set, so no form ships and nothing is collected until
+  Buttondown (or any provider) is connected in _config.yml. It's a plain POST form — works with
+  JavaScript disabled, and holds no API key (the embed endpoint is a public subscribe URL).
+
+  Optional include params override the config copy: include.context ('feed' | 'record' | 'page').
+{%- endcomment -%}
+{% assign nl = site.newsletter %}
+{% if nl.enabled and nl.action_url != blank %}
+<section class="aux-newsletter reveal-up" aria-labelledby="aux-nl-heading" data-newsletter-context="{{ include.context | default: 'page' }}">
+  <div class="aux-newsletter-inner">
+    <div class="aux-newsletter-copy">
+      <h2 class="aux-newsletter-heading" id="aux-nl-heading">{{ nl.heading | default: 'Get the verdict before you update' }}</h2>
+      <p class="aux-newsletter-blurb">{{ nl.blurb | default: 'One email when a tracked release crosses into a clear, wait, or avoid verdict. No spam — unsubscribe anytime.' }}</p>
+    </div>
+    <form class="aux-newsletter-form" action="{{ nl.action_url }}" method="post" target="_blank" rel="noopener">
+      <label class="aux-newsletter-label" for="aux-nl-email-{{ include.context | default: 'page' }}">Email address</label>
+      <div class="aux-newsletter-row">
+        <input class="aux-newsletter-input" id="aux-nl-email-{{ include.context | default: 'page' }}" type="email" name="email" required autocomplete="email" inputmode="email" placeholder="you@studio.com">
+        <button class="aux-newsletter-btn" type="submit">Notify me</button>
+      </div>
+      <p class="aux-newsletter-fine">Free while in early access. We store only your email address{% if nl.provider != blank %}, via {{ nl.provider }}{% endif %}.</p>
+    </form>
+  </div>
+</section>
+{% endif %}

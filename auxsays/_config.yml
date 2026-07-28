@@ -21,6 +21,18 @@ social:
 
 avatar: "/assets/img/aux-about-portrait.jpg"
 
+# Patch-alert email capture (framework only). The signup form stays completely
+# inert until BOTH enabled:true AND action_url are set — so nothing collects or
+# sends until you connect Buttondown. No API key lives here; the embed endpoint
+# is a public POST URL. (Automated "verdict changed" sends use a separate GitHub
+# Actions secret, added later.)
+newsletter:
+  enabled: false
+  provider: Buttondown
+  action_url: ""   # after creating the account, paste e.g. https://buttondown.com/api/emails/embed-subscribe/<your-username>
+  heading: "Get the verdict before you update"
+  blurb: "One email when a tracked release crosses into a clear, wait, or avoid verdict. No spam — unsubscribe anytime."
+
 theme: jekyll-theme-chirpy
 
 plugins:

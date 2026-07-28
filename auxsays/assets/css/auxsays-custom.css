@@ -5588,3 +5588,20 @@ th[aria-sort="descending"] .patch-sort-btn { color: var(--text-0); }
 @media (max-width: 860px) {
   .patch-latest-staged { justify-content: space-between; }
 }
+
+/* --- Patch-alert email capture (config-gated; inert until connected) --- */
+.aux-newsletter { margin: 2rem 0 0; padding: 1.4rem 1.5rem; border: 1px solid var(--border-strong); border-radius: 16px; background: linear-gradient(180deg, rgba(143,234,244,.05), rgba(255,255,255,.015)); }
+.aux-newsletter-inner { display: flex; gap: 1.4rem; align-items: center; flex-wrap: wrap; justify-content: space-between; }
+.aux-newsletter-copy { flex: 1 1 15rem; min-width: 0; }
+.aux-newsletter-heading { margin: 0 0 .3rem; font-size: 1.05rem; }
+.aux-newsletter-blurb { margin: 0; color: var(--text-2); font-size: .9rem; }
+.aux-newsletter-form { flex: 1 1 18rem; }
+.aux-newsletter-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.aux-newsletter-row { display: flex; gap: .5rem; }
+.aux-newsletter-input { flex: 1 1 auto; min-width: 0; padding: .6rem .8rem; border: 1px solid var(--border-subtle); border-radius: 10px; background: rgba(0,0,0,.25); color: var(--text-0); font-size: .95rem; }
+.aux-newsletter-input:focus-visible { outline: 2px solid var(--cyan-1); outline-offset: 1px; border-color: var(--cyan-1); }
+.aux-newsletter-btn { flex: 0 0 auto; padding: .6rem 1.1rem; border: 0; border-radius: 10px; background: var(--cyan-1); color: #04222a; font-weight: 700; font-size: .95rem; cursor: pointer; }
+.aux-newsletter-btn:hover { filter: brightness(1.06); }
+.aux-newsletter-btn:focus-visible { outline: 2px solid var(--cyan-1); outline-offset: 2px; }
+.aux-newsletter-fine { margin: .5rem 0 0; color: var(--text-2); font-size: .72rem; }
+@media (max-width: 640px) { .aux-newsletter-row { flex-wrap: wrap; } .aux-newsletter-btn { width: 100%; } }
