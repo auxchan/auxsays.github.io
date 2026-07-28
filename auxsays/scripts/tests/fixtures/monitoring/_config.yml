@@ -1,0 +1,12 @@
+# Minimal, deterministic fixture site for the monitoring-status render test.
+# Fixed clock so freshness/future/stale outcomes are reproducible (site.time = 2026-07-15).
+# published_at for every case = 2026-06-01; max age 14 days -> fresh boundary = 2026-07-01.
+#   FRESH  run = 2026-07-10 (5 days old, post-release)
+#   STALE  run = 2026-06-15 (30 days old, post-release)
+#   PRE    run = 2026-05-15 (pre-release)
+#   FUTURE run = 2026-08-01 (clock skew)
+title: monitoring-fixture
+time: 2026-07-15 00:00:00 +0000
+monitoring_min_healthy_methods: 2
+monitoring_max_age_days: 14
+# No theme / plugins -- keep the fixture build minimal and fast.

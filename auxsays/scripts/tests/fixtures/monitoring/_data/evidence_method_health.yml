@@ -1,0 +1,53 @@
+schema_version: 1
+# Synthetic per-patch method-health rows. Dates keyed to the fixed fixture clock (see _config.yml).
+# Each case is its own product_id so its ladder outcome is isolated. FRESH=2026-07-10,
+# STALE=2026-06-15, PRE=2026-05-15, FUTURE=2026-08-01.
+methods:
+# c1 -> INSUFFICIENT COVERAGE: one fresh success + one stale success (min 2 unmet, no degraded signal)
+- {product_id: c1, update_version: '1.0', method_id: m1, source_type: s, status: success, last_run: '2026-07-10T00:00:00Z'}
+- {product_id: c1, update_version: '1.0', method_id: m2, source_type: s, status: success, last_run: '2026-06-15T00:00:00Z'}
+# c2 -> NO ACCEPTED PATCH-SPECIFIC REPORTS: two fresh no_results, clean
+- {product_id: c2, update_version: '1.0', method_id: m1, source_type: s, status: no_results, last_run: '2026-07-10T00:00:00Z'}
+- {product_id: c2, update_version: '1.0', method_id: m2, source_type: s, status: no_results, last_run: '2026-07-10T00:00:00Z'}
+# c3 -> COLLECTION BLOCKED: fresh blocked + old success (zero healthy, blocked present)
+- {product_id: c3, update_version: '1.0', method_id: m1, source_type: s, status: blocked, last_run: '2026-07-10T00:00:00Z'}
+- {product_id: c3, update_version: '1.0', method_id: m2, source_type: s, status: success, last_run: '2026-06-15T00:00:00Z'}
+# c4 -> MONITORING DEGRADED: two fresh no_results + fresh manual_review_needed (fails closed)
+- {product_id: c4, update_version: '1.0', method_id: m1, source_type: s, status: no_results, last_run: '2026-07-10T00:00:00Z'}
+- {product_id: c4, update_version: '1.0', method_id: m2, source_type: s, status: no_results, last_run: '2026-07-10T00:00:00Z'}
+- {product_id: c4, update_version: '1.0', method_id: m3, source_type: s, status: manual_review_needed, last_run: '2026-07-10T00:00:00Z'}
+# c5 -> MONITORING DEGRADED: two fresh no_results + explicit stale with a RECENT timestamp (fails closed)
+- {product_id: c5, update_version: '1.0', method_id: m1, source_type: s, status: no_results, last_run: '2026-07-10T00:00:00Z'}
+- {product_id: c5, update_version: '1.0', method_id: m2, source_type: s, status: no_results, last_run: '2026-07-10T00:00:00Z'}
+- {product_id: c5, update_version: '1.0', method_id: m3, source_type: s, status: stale, last_run: '2026-07-10T00:00:00Z'}
+# c6 -> NOT YET MONITORED: valid timestamps but all pre-release
+- {product_id: c6, update_version: '1.0', method_id: m1, source_type: s, status: success, last_run: '2026-05-15T00:00:00Z'}
+- {product_id: c6, update_version: '1.0', method_id: m2, source_type: s, status: success, last_run: '2026-05-15T00:00:00Z'}
+# c7 -> INSUFFICIENT COVERAGE: a single fresh success at the two-method threshold
+- {product_id: c7, update_version: '1.0', method_id: m1, source_type: s, status: success, last_run: '2026-07-10T00:00:00Z'}
+# c8 -> MONITORING DEGRADED: fresh success + fresh blocked (degraded precedes insufficient-coverage)
+- {product_id: c8, update_version: '1.0', method_id: m1, source_type: s, status: success, last_run: '2026-07-10T00:00:00Z'}
+- {product_id: c8, update_version: '1.0', method_id: m2, source_type: s, status: blocked, last_run: '2026-07-10T00:00:00Z'}
+# c9 -> MONITORING DEGRADED: two fresh no_results + one disabled (partial-disabled fails closed)
+- {product_id: c9, update_version: '1.0', method_id: m1, source_type: s, status: no_results, last_run: '2026-07-10T00:00:00Z'}
+- {product_id: c9, update_version: '1.0', method_id: m2, source_type: s, status: no_results, last_run: '2026-07-10T00:00:00Z'}
+- {product_id: c9, update_version: '1.0', method_id: m3, source_type: s, status: disabled, last_run: '2026-07-10T00:00:00Z'}
+# c10 -> OFFICIAL SOURCE ONLY: every matching row disabled
+- {product_id: c10, update_version: '1.0', method_id: m1, source_type: s, status: disabled, last_run: '2026-07-10T00:00:00Z'}
+- {product_id: c10, update_version: '1.0', method_id: m2, source_type: s, status: disabled, last_run: '2026-07-10T00:00:00Z'}
+# c11 -> MONITORING DEGRADED: two fresh no_results + one FUTURE-timestamp usable row (other valid telemetry exists)
+- {product_id: c11, update_version: '1.0', method_id: m1, source_type: s, status: no_results, last_run: '2026-07-10T00:00:00Z'}
+- {product_id: c11, update_version: '1.0', method_id: m2, source_type: s, status: no_results, last_run: '2026-07-10T00:00:00Z'}
+- {product_id: c11, update_version: '1.0', method_id: m3, source_type: s, status: success, last_run: '2026-08-01T00:00:00Z'}
+# c12 -> COLLECTION STALE: the only usable row has a FUTURE timestamp (no valid usable telemetry remains)
+- {product_id: c12, update_version: '1.0', method_id: m1, source_type: s, status: success, last_run: '2026-08-01T00:00:00Z'}
+# c13 -> NO ACCEPTED (numeric join): update_version is an UNQUOTED integer 2607; the record queries "2607"
+- {product_id: c13, update_version: 2607, method_id: m1, source_type: s, status: no_results, last_run: '2026-07-10T00:00:00Z'}
+- {product_id: c13, update_version: 2607, method_id: m2, source_type: s, status: no_results, last_run: '2026-07-10T00:00:00Z'}
+# c14 -> MONITORING ACTIVE: healthy coverage but accepted reports > 0 (report_count passed by the driver)
+- {product_id: c14, update_version: '1.0', method_id: m1, source_type: s, status: no_results, last_run: '2026-07-10T00:00:00Z'}
+- {product_id: c14, update_version: '1.0', method_id: m2, source_type: s, status: no_results, last_run: '2026-07-10T00:00:00Z'}
+# c15 -> OFFICIAL SOURCE ONLY: (no rows -- product c15-absent has no EMH rows at all)
+# c16 -> COLLECTION STALE: valid post-release rows but all stale (none fresh)
+- {product_id: c16, update_version: '1.0', method_id: m1, source_type: s, status: success, last_run: '2026-06-15T00:00:00Z'}
+- {product_id: c16, update_version: '1.0', method_id: m2, source_type: s, status: no_results, last_run: '2026-06-15T00:00:00Z'}
