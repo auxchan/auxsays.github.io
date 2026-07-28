@@ -369,6 +369,8 @@ layout: aux-base
         </div>
       </div>
 
+      {% include monitoring-status.html mode='full' product_id=page.product_id version=page.update_version published_at=page.update_published_at report_count=page.update_report_count %}
+
       {% assign official_active = page.official_active_issue_count | default: 0 | plus: 0 %}
       {% assign official_resolved = page.official_resolved_issue_count | default: 0 | plus: 0 %}
       {% assign official_safeguard = page.official_safeguard_hold_count | default: 0 | plus: 0 %}

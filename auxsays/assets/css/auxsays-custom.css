@@ -5588,3 +5588,49 @@ th[aria-sort="descending"] .patch-sort-btn { color: var(--text-0); }
 @media (max-width: 860px) {
   .patch-latest-staged { justify-content: space-between; }
 }
+
+/* --- Monitoring status (separate axis from the Verdict) ---------------------------------------
+   An evidence/collection status derived from per-patch method health. Deliberately NEVER green:
+   the quiet/active states are calm blue (watched, not "safe"), gaps are amber, blocked is red,
+   official-only/not-yet are neutral. Label text is always shown, so colour is not the only signal. */
+.patch-monitoring {
+  display: inline-block; padding: .22rem .6rem; border-radius: 999px;
+  font-size: .72rem; font-weight: 600; letter-spacing: .01em; white-space: nowrap;
+  background: rgba(126,138,152,.16); color: #dee6ef; /* default: neutral */
+}
+.patch-monitoring--official-source-only,
+.patch-monitoring--not-yet-monitored { background: rgba(126,138,152,.16); color: #dee6ef; }        /* neutral */
+.patch-monitoring--collection-stale,
+.patch-monitoring--monitoring-degraded,
+.patch-monitoring--insufficient-coverage { background: rgba(199,162,85,.16); color: #f7e5bd; }      /* caution amber */
+.patch-monitoring--collection-blocked { background: rgba(184,74,74,.16); color: #ffd7d7; }          /* alert red */
+.patch-monitoring--monitoring-active,
+.patch-monitoring--no-accepted-patch-specific-reports { background: rgba(70,150,210,.18); color: #cfe8ff; } /* calm blue, deliberately NOT green */
+.patch-cell-monitoring { white-space: nowrap; }
+
+/* Feed card: a separately labelled monitoring line (distinct from the community-consensus status). */
+.patch-card-monitoring { display: inline-flex; align-items: center; gap: .4rem; }
+.patch-card-monitoring__label { color: var(--text-2); font-size: .68rem; text-transform: uppercase; letter-spacing: .1em; }
+
+/* Patch-detail: the full Monitoring card, sitting below (and distinct from) the AUXSAYS verdict box. */
+.update-monitoring-card {
+  margin: 1rem 0 0; padding: 1rem 1.1rem; border-radius: 14px;
+  background: rgba(255,255,255,.022); border: 1px solid var(--border-subtle);
+}
+.update-monitoring-card__header { display: flex; align-items: center; gap: .7rem; flex-wrap: wrap; }
+.update-monitoring-eyebrow { font-size: .72rem; text-transform: uppercase; letter-spacing: .14em; color: var(--text-2); }
+.update-monitoring-facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: .6rem 1.2rem; margin: .9rem 0 0; }
+.update-monitoring-fact dt { color: var(--text-2); font-size: .68rem; text-transform: uppercase; letter-spacing: .1em; margin: 0; }
+.update-monitoring-fact dd { color: var(--text-0); margin: .15rem 0 0; font-size: .92rem; font-variant-numeric: tabular-nums; }
+.update-monitoring-methods { list-style: none; margin: .9rem 0 0; padding: 0; display: flex; flex-direction: column; gap: .35rem; }
+.update-monitoring-method { display: flex; flex-wrap: wrap; align-items: baseline; gap: .5rem; font-size: .86rem; color: var(--text-1); }
+.update-monitoring-method__id { font-weight: 600; color: var(--text-0); font-variant-numeric: tabular-nums; }
+.update-monitoring-method__state { color: var(--text-1); }
+.update-monitoring-method__checked { color: var(--text-2); font-size: .78rem; }
+.update-monitoring-method--blocked .update-monitoring-method__state,
+.update-monitoring-method--broken .update-monitoring-method__state { color: #ffd7d7; }
+.update-monitoring-method--partial .update-monitoring-method__state,
+.update-monitoring-method--stale .update-monitoring-method__state,
+.update-monitoring-method--low-confidence .update-monitoring-method__state,
+.update-monitoring-method--manual-review-needed .update-monitoring-method__state { color: #f7e5bd; }
+.update-monitoring-note { color: var(--text-2); font-size: .8rem; margin: .9rem 0 0; }
