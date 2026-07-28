@@ -17,8 +17,8 @@ update_version: GitHub Actions holds potentially malicious workflows for approva
 update_logo_text: GIT
 update_published_at: '2026-07-28T11:57:19Z'
 update_last_checked: '2026-07-28T16:19:31Z'
-source_last_checked: '2026-07-28T16:19:31Z'
-official_body_last_checked: '2026-07-28T16:19:31Z'
+source_last_checked: '2026-07-28T20:26:00Z'
+official_body_last_checked: '2026-07-28T20:26:00Z'
 record_last_updated: '2026-07-28T16:19:31Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -78,6 +78,11 @@ official_sources: []
 official_source_attempts:
 - at: '2026-07-28T16:19:31Z'
   url: https://github.blog/changelog/2026-07-28-github-actions-holds-unproven-workflows-for-approval
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-07-28T20:26:00Z'
+  url: https://github.blog/changelog/2026-07-28-github-actions-holds-potentially-malicious-workflows-for-approval
   status: captured-from-rss-feed
   body_captured: true
   checksums_captured: false
