@@ -30,6 +30,34 @@ _AUX = _REPO / "auxsays"
 FIXTURE = _AUX / "scripts" / "tests" / "fixtures" / "monitoring"
 INCLUDE = _AUX / "_includes" / "monitoring-status.html"
 
+# The driver page is written into the temp build at RUNTIME (not committed) so the fixture never
+# renders into the real site: a committed index.html with front matter would be published by the
+# production Jekyll build as a stray /scripts/tests/fixtures/monitoring/ route.
+DRIVER = """---
+layout: null
+published_release: 2026-06-01T00:00:00Z
+cases:
+  - { name: c1,  product_id: c1,         version: "1.0",  reports: 0 }
+  - { name: c2,  product_id: c2,         version: "1.0",  reports: 0 }
+  - { name: c3,  product_id: c3,         version: "1.0",  reports: 0 }
+  - { name: c4,  product_id: c4,         version: "1.0",  reports: 0 }
+  - { name: c5,  product_id: c5,         version: "1.0",  reports: 0 }
+  - { name: c6,  product_id: c6,         version: "1.0",  reports: 0 }
+  - { name: c7,  product_id: c7,         version: "1.0",  reports: 0 }
+  - { name: c8,  product_id: c8,         version: "1.0",  reports: 0 }
+  - { name: c9,  product_id: c9,         version: "1.0",  reports: 0 }
+  - { name: c10, product_id: c10,        version: "1.0",  reports: 0 }
+  - { name: c11, product_id: c11,        version: "1.0",  reports: 0 }
+  - { name: c12, product_id: c12,        version: "1.0",  reports: 0 }
+  - { name: c13, product_id: c13,        version: "2607", reports: 0 }
+  - { name: c14, product_id: c14,        version: "1.0",  reports: 3 }
+  - { name: c15, product_id: c15-absent, version: "1.0",  reports: 0 }
+  - { name: c16, product_id: c16,        version: "1.0",  reports: 0 }
+---
+{% for c in page.cases %}CASE|{{ c.name }}|{% include monitoring-status.html mode='cell' product_id=c.product_id version=c.version published_at=page.published_release report_count=c.reports %}|END
+{% endfor %}
+"""
+
 # Expected monitoring-status CSS class (status lowercased, spaces -> dashes) per fixture case.
 EXPECT = {
     "c1": "insufficient-coverage",                 # fresh success + stale success (min unmet)
@@ -87,6 +115,7 @@ def run() -> int:
         shutil.copytree(FIXTURE, src)
         (src / "_includes").mkdir(exist_ok=True)
         shutil.copy(INCLUDE, src / "_includes" / "monitoring-status.html")
+        (src / "index.html").write_text(DRIVER, encoding="utf-8")  # driver generated here, never committed
         out = work / "_site"
 
         ok, err = _build(src, out)
