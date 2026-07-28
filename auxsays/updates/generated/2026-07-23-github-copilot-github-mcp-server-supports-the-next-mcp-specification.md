@@ -17,8 +17,8 @@ update_version: GitHub MCP Server supports the next MCP specification
 update_logo_text: GIT
 update_published_at: '2026-07-23T20:38:22Z'
 update_last_checked: '2026-07-24T08:45:16Z'
-source_last_checked: '2026-07-24T08:45:16Z'
-official_body_last_checked: '2026-07-24T08:45:16Z'
+source_last_checked: '2026-07-28T05:13:36Z'
+official_body_last_checked: '2026-07-28T05:13:36Z'
 record_last_updated: '2026-07-24T08:45:16Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -89,6 +89,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-07-24T08:45:16Z'
+  url: https://github.blog/changelog/2026-07-23-github-mcp-server-supports-the-next-mcp-specification
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-07-28T05:13:36Z'
   url: https://github.blog/changelog/2026-07-23-github-mcp-server-supports-the-next-mcp-specification
   status: captured-from-rss-feed
   body_captured: true
