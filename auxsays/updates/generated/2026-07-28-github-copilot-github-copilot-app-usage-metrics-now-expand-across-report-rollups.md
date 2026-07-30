@@ -17,8 +17,8 @@ update_version: GitHub Copilot app usage metrics now expand across report rollup
 update_logo_text: GIT
 update_published_at: '2026-07-28T23:35:01Z'
 update_last_checked: '2026-07-29T05:08:20Z'
-source_last_checked: '2026-07-29T14:34:41Z'
-official_body_last_checked: '2026-07-29T14:34:41Z'
+source_last_checked: '2026-07-30T03:47:44Z'
+official_body_last_checked: '2026-07-30T03:47:44Z'
 record_last_updated: '2026-07-29T05:08:20Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -102,6 +102,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-07-29T14:34:41Z'
+  url: https://github.blog/changelog/2026-07-28-github-copilot-app-usage-metrics-now-expand-across-report-rollups
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-07-30T03:47:44Z'
   url: https://github.blog/changelog/2026-07-28-github-copilot-app-usage-metrics-now-expand-across-report-rollups
   status: captured-from-rss-feed
   body_captured: true
