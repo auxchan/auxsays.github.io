@@ -84,6 +84,7 @@ PAGES_DISPATCH_SKIPPED_NO_CHANGES = "pages_dispatch_skipped_no_changes"
 PAGES_DISPATCH_SKIPPED_PUSH_FAILURE = "pages_dispatch_skipped_push_failure"
 DEPLOYMENT_CURRENT = "deployment_current"
 DEPLOYMENT_MISSING = "deployment_missing"
+VALIDATION_FAILED_PRE_COMMIT = "validation_failed_pre_commit"
 
 
 @dataclass
@@ -92,6 +93,7 @@ class WritebackConfig:
     message: str
     allow: list[str]
     validate: list[str] = field(default_factory=list)
+    validate_before_commit: bool = False   # run `validate` against the staged tree BEFORE committing
     site_paths: list[str] = field(default_factory=list)      # subset of allow that affects the site
     max_retries: int = 5
     branch: str = "main"
@@ -401,6 +403,17 @@ def run_writeback(cfg: WritebackConfig) -> WritebackResult:
     result.changed = True
     result.deploy_changed = any(_matches_any(p, cfg.site_paths) for p in staged) if cfg.site_paths else True
 
+    # Transactional gate: validate the STAGED state BEFORE creating any commit, so an invalid
+    # working tree (e.g. left dirty by a partial/failed upstream step) can never be committed. The
+    # git index is the staging area and `git commit` is the atomic replacement; on validation
+    # failure the index is reset and NO commit is created, so tracked files stay byte-identical.
+    if cfg.validate_before_commit and cfg.validate:
+        if not _run_validation(repo, cfg.validate, result):
+            _git(repo, "reset", "-q")
+            _emit(result, VALIDATION_FAILED_PRE_COMMIT)
+            result.outcome = VALIDATION_FAILED_PRE_COMMIT
+            return result
+
     _git(repo, "commit", "-m", cfg.message)
     result.local_commit_sha = _sha(repo, "HEAD")
     result.origin_sha_initial = _sha(repo, f"{cfg.remote}/{cfg.branch}") if _ref_exists(repo, f"{cfg.remote}/{cfg.branch}") else ""
@@ -491,6 +504,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--allow", action="append", default=[])
     parser.add_argument("--site-path", action="append", default=[], dest="site_paths")
     parser.add_argument("--validate", action="append", default=[])
+    parser.add_argument("--validate-before-commit", action="store_true",
+                        help="Run every --validate command against the staged tree BEFORE committing; "
+                             "on failure, reset the index and make no commit (transactional gate).")
     parser.add_argument("--max-retries", type=int, default=5)
     parser.add_argument("--pages-cmd", default=None)
     parser.add_argument("--pages-workflow", default="pages.yml")
@@ -513,6 +529,7 @@ def main(argv: list[str] | None = None) -> int:
     backoff = [int(x) for x in str(args.pages_backoff).split(",") if x.strip()]
     cfg = WritebackConfig(
         repo=Path(args.repo).resolve(), message=args.message, allow=args.allow, validate=args.validate,
+        validate_before_commit=args.validate_before_commit,
         site_paths=args.site_paths, max_retries=args.max_retries, branch=args.branch, remote=args.remote,
         pages_cmd=args.pages_cmd, pages_workflow=args.pages_workflow, pages_ref=args.pages_ref,
         pages_max_attempts=args.pages_max_attempts, pages_backoff=backoff or [5, 15],

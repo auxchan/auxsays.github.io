@@ -22,7 +22,12 @@ from typing import Any
 
 import yaml
 
-from patch_collectors.base import WINDOWS_PRODUCT_ID, windows_identity_gate
+from patch_collectors.base import (
+    WINDOWS_PRODUCT_ID,
+    windows_identity_gate,
+    split_front_matter,
+    atomic_write_text,
+)
 
 ROOT = Path(__file__).resolve().parents[1]
 GENERATED_DIR = ROOT / "updates" / "generated"
@@ -101,13 +106,11 @@ def _load_yaml_list(path: Path) -> list[dict[str, Any]]:
 
 def _load_front_matter_and_body(path: Path) -> tuple[dict[str, Any], str]:
     text = path.read_text(encoding="utf-8")
-    if not text.startswith("---\n"):
+    front, body = split_front_matter(text)
+    if front is None:
         return {}, text
-    parts = text.split("---\n", 2)
-    if len(parts) < 3:
-        return {}, text
-    data = yaml.safe_load(parts[1]) or {}
-    return (data if isinstance(data, dict) else {}, parts[2])
+    data = yaml.safe_load(front) or {}
+    return (data if isinstance(data, dict) else {}, body)
 
 
 def _load_front_matter(path: Path) -> dict[str, Any]:
@@ -117,7 +120,7 @@ def _load_front_matter(path: Path) -> dict[str, Any]:
 
 def _write_front_matter_and_body(path: Path, data: dict[str, Any], body: str) -> None:
     yaml_text = yaml.safe_dump(data, sort_keys=False, allow_unicode=True, width=110)
-    path.write_text("---\n" + yaml_text + "---\n" + body, encoding="utf-8")
+    atomic_write_text(path, "---\n" + yaml_text + "---\n" + body)
 
 
 def _record_count(data: dict[str, Any]) -> int:

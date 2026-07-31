@@ -135,6 +135,73 @@ def since_from_days(days: int | None) -> str | None:
     return (datetime.now(timezone.utc) - timedelta(days=max(0, days))).date().isoformat()
 
 
+_PARSE_ERROR_KINDS = {
+    "ScannerError", "ParserError", "ComposerError", "ReaderError", "YAMLError",
+    "ConstructorError", "EmitterError", "RepresenterError",
+}
+_FETCH_ERROR_KINDS = {
+    "HTTPError", "URLError", "TimeoutError", "ConnectionError", "ConnectionResetError",
+    "ConnectionError", "socket_timeout", "IncompleteRead", "RemoteDisconnected",
+}
+
+
+def normalize_failure_reason(exc: Exception) -> str:
+    """Map a collector exception to a NORMALIZED, safe reason for public/repository-facing output.
+
+    Returns ``<category>:<ExceptionType>`` -- never the raw message, path, URL, header, token, or
+    stack trace (Requirement: no raw exception text in public/repo-facing summaries). The category
+    lets triage distinguish a bad record from a blocked/failed source without leaking specifics."""
+    kind = type(exc).__name__
+    low = kind.lower()
+    if kind in _PARSE_ERROR_KINDS or any(t in low for t in ("yaml", "scanner", "parser", "composer")):
+        category = "record_parse_error"
+    elif kind in _FETCH_ERROR_KINDS or any(t in low for t in ("http", "url", "timeout", "connection", "socket")):
+        category = "source_fetch_error"
+    else:
+        category = "collector_error"
+    return f"{category}:{kind}"
+
+
+def _emit_github_annotation(product_id: str, reason: str) -> None:
+    # GitHub Actions warning annotation: a partial run is loudly visible, never silent.
+    print(f"::warning title=Collector failed (last-known-good retained)::{product_id}: {reason}", flush=True)
+
+
+def _write_github_outputs(outcome: str, writeback_eligible: bool) -> None:
+    out_path = os.environ.get("GITHUB_OUTPUT")
+    if out_path:
+        try:
+            with open(out_path, "a", encoding="utf-8") as handle:
+                handle.write(f"outcome={outcome}\n")
+                handle.write(f"writeback_eligible={'true' if writeback_eligible else 'false'}\n")
+        except OSError:
+            pass
+
+
+def _write_github_summary(outcome: str, writeback_eligible: bool, per_collector: list[dict[str, Any]]) -> None:
+    summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
+    if not summary_path:
+        return
+    icon = {"success": "✅", "partial": "⚠️", "failed": "❌"}.get(outcome, "•")
+    ok = [c for c in per_collector if c["ok"]]
+    bad = [c for c in per_collector if not c["ok"]]
+    try:
+        with open(summary_path, "a", encoding="utf-8") as h:
+            h.write(f"### {icon} Patch evidence collection: **{outcome.upper()}**\n\n")
+            h.write(f"- Writeback of healthy collectors: **{'yes' if writeback_eligible else 'no (nothing succeeded)'}**\n")
+            if bad:
+                h.write(f"- Failed collectors (last-known-good retained, no rows overwritten): "
+                        f"**{', '.join(c['product_id'] for c in bad)}**\n")
+            h.write("\n| Collector | Result | Accepted | Rejected | Health rows | Reason |\n")
+            h.write("|---|---|---|---|---|---|\n")
+            for c in per_collector:
+                res = "ok" if c["ok"] else "FAILED"
+                h.write(f"| {c['product_id']} | {res} | {c['accepted_count']} | {c['rejected_count']} "
+                        f"| {c['method_health_rows']} | {c['failure_reason'] or ''} |\n")
+    except OSError:
+        pass
+
+
 def main(argv: list[str] | None = None) -> int:
     collectors = build_collectors()
     parser = argparse.ArgumentParser(description="Run AUXSAYS patch evidence collection.")
@@ -161,48 +228,82 @@ def main(argv: list[str] | None = None) -> int:
         target_versions=set(args.update_version) if args.update_version else None,
     )
 
-    status = 0
+    # FAIL-SOFT: each collector is isolated. A collector that raises does NOT abort the run and does
+    # NOT contribute any method-health rows -- its last-known-good rows are retained by the keyed
+    # upsert (never overwritten with no_results, never inferred to have found zero reports). Only
+    # successful collectors' rows are merged. Broken telemetry is emitted per exact patch/method
+    # only by a collector that ran far enough to return such a row itself (identity known).
     product_results: list[dict[str, Any]] = []
+    per_collector: list[dict[str, Any]] = []
     method_health: list[dict[str, Any]] = []
+    succeeded_any = False
     for product_id in product_ids:
         collector = collectors[product_id]()
+        ok = True
+        failure_reason: str | None = None
         try:
             results = collector.collect(context)
-        except Exception as exc:
-            status = 1
+        except Exception as exc:  # noqa: BLE001 -- isolate one collector; never crash the run
+            ok = False
+            failure_reason = normalize_failure_reason(exc)
             results = [{
                 "product_id": product_id,
                 "mode": "write" if context.write else "dry-run",
                 "status": "collector_failed",
-                "error": str(exc),
+                "failure_reason": failure_reason,  # normalized; NO raw message/path/token/stack
                 "accepted_count": 0,
                 "rejected_count": 0,
                 "method_health": [],
             }]
+        accepted_count = sum(int(item.get("accepted_count") or 0) for item in results)
+        rejected_count = sum(int(item.get("rejected_count") or 0) for item in results)
+        collector_rows = [row for item in results for row in (item.get("method_health") or []) if isinstance(row, dict)]
+        # Merge health rows ONLY from a collector that did not raise. A raised collector's rows are
+        # discarded so its committed rows survive untouched.
+        if ok:
+            method_health.extend(collector_rows)
+            succeeded_any = True
+        else:
+            _emit_github_annotation(product_id, failure_reason or "collector_error")
+        per_collector.append({
+            "product_id": product_id,
+            "ok": ok,
+            "accepted_count": accepted_count,
+            "rejected_count": rejected_count,
+            "method_health_rows": len(collector_rows) if ok else 0,
+            "failure_reason": failure_reason,
+        })
         product_results.append({
             "product_id": product_id,
             "result_count": len(results),
-            "accepted_count": sum(int(item.get("accepted_count") or 0) for item in results),
-            "rejected_count": sum(int(item.get("rejected_count") or 0) for item in results),
+            "accepted_count": accepted_count,
+            "rejected_count": rejected_count,
             "results": results,
         })
-        for result in results:
-            for row in result.get("method_health") or []:
-                if isinstance(row, dict):
-                    method_health.append(row)
+
+    failed = [c["product_id"] for c in per_collector if not c["ok"]]
+    outcome = "success" if not failed else ("partial" if succeeded_any else "failed")
+    writeback_eligible = succeeded_any  # publish healthy collectors on success OR partial
 
     method_health_changed = 0
     method_health_total = 0
     if context.write and method_health:
         method_health_changed, method_health_total, _rows = upsert_method_health(method_health)
 
+    _write_github_outputs(outcome, writeback_eligible)
+    _write_github_summary(outcome, writeback_eligible, per_collector)
+
     payload = {
         "generated_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
         "mode": "write" if context.write else "dry-run",
+        "outcome": outcome,
+        "writeback_eligible": writeback_eligible,
+        "failed_collectors": failed,
         "since": context.since,
         "max_pages": context.max_pages,
         "product_ids": product_ids,
         "target_versions": sorted(context.target_versions) if context.target_versions else None,
+        "collectors": per_collector,
         "products": product_results,
         "accepted_count": sum(item["accepted_count"] for item in product_results),
         "rejected_count": sum(item["rejected_count"] for item in product_results),
@@ -211,7 +312,10 @@ def main(argv: list[str] | None = None) -> int:
         "method_health_rows_total": method_health_total,
     }
     print(json.dumps(payload, indent=2, ensure_ascii=False))
-    return status
+    # Exit 0 for success AND partial (so healthy collectors publish); non-zero ONLY for a total
+    # failure (nothing succeeded -> nothing safe to write). This is NOT "merely forcing exit 0":
+    # a partial is emitted as outcome=partial + ::warning:: annotations + a job-summary table.
+    return 0 if writeback_eligible else 1
 
 
 if __name__ == "__main__":

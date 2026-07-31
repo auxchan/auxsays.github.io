@@ -86,16 +86,15 @@ def simple_consensus_evidence(text: str) -> list[dict[str, Any]]:
 
 
 def load_front_matter(path: Path) -> dict[str, Any]:
+    from lib.normalize import split_front_matter
     text = path.read_text(encoding="utf-8")
-    if not text.startswith("---\n"):
-        return {}
-    parts = text.split("---\n", 2)
-    if len(parts) < 3:
+    front, _body = split_front_matter(text)
+    if front is None:
         return {}
     if yaml is not None:
-        data = yaml.safe_load(parts[1]) or {}
+        data = yaml.safe_load(front) or {}
         return data if isinstance(data, dict) else {}
-    return simple_yaml_mapping(parts[1])
+    return simple_yaml_mapping(front)
 
 
 def load_evidence(path: Path) -> list[dict[str, Any]]:

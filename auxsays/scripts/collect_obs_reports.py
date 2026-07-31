@@ -25,6 +25,8 @@ from typing import Any
 
 import yaml
 
+from lib.normalize import split_front_matter, atomic_write_text
+
 ROOT = Path(__file__).resolve().parents[1]
 EVIDENCE_PATH = ROOT / "_data" / "consensus_evidence.yml"
 GENERATED_DIR = ROOT / "updates" / "generated"
@@ -378,10 +380,7 @@ def parse_existing_rows(path: Path) -> list[dict[str, Any]]:
 
 def write_evidence_file(path: Path, rows: list[dict[str, Any]]) -> None:
     payload = {"schema_version": 1, "evidence": [normalize_row(row) for row in rows]}
-    path.write_text(
-        yaml.safe_dump(payload, sort_keys=False, allow_unicode=True, width=1000),
-        encoding="utf-8",
-    )
+    atomic_write_text(path, yaml.safe_dump(payload, sort_keys=False, allow_unicode=True, width=1000))
 
 
 def evidence_key(row: dict[str, Any], field: str) -> tuple[str, str, str]:
@@ -423,18 +422,16 @@ def counted_evidence_count(rows: list[dict[str, Any]], version: str) -> int:
 
 def front_matter_parts(path: Path) -> tuple[dict[str, Any], str]:
     text = path.read_text(encoding="utf-8")
-    if not text.startswith("---"):
+    front, body = split_front_matter(text)
+    if front is None:
         return {}, text
-    match = re.match(r"^---\r?\n(.*?)\r?\n---\r?\n?(.*)$", text, flags=re.S)
-    if not match:
-        return {}, text
-    data = yaml.safe_load(match.group(1)) or {}
-    return (data if isinstance(data, dict) else {}), match.group(2)
+    data = yaml.safe_load(front) or {}
+    return (data if isinstance(data, dict) else {}), body
 
 
 def write_front_matter(path: Path, data: dict[str, Any], body: str) -> None:
     front = yaml.safe_dump(data, sort_keys=False, allow_unicode=True, width=1000).strip()
-    path.write_text(f"---\n{front}\n---\n{body}", encoding="utf-8")
+    atomic_write_text(path, f"---\n{front}\n---\n{body}")
 
 
 def report_count(data: dict[str, Any]) -> int:

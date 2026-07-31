@@ -6,7 +6,9 @@ deterministic gates that must pass before a row can count.
 """
 from __future__ import annotations
 
+import os
 import re
+import tempfile
 import textwrap
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -225,20 +227,52 @@ def date_part(value: Any) -> str:
     return parsed.date().isoformat() if parsed else ""
 
 
+def atomic_write_text(path: Path, text: str) -> None:
+    """Write text via a same-directory temp file + ``os.replace`` (atomic on one filesystem), so a
+    crash or exception mid-write can never leave a half-written tracked file. This is the
+    file-level half of the transactional writeback guarantee: a reader either sees the previous
+    complete file or the new complete file, never a truncated one."""
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, tmp = tempfile.mkstemp(dir=str(path.parent), prefix=f".{path.name}.", suffix=".tmp")
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as handle:
+            handle.write(text)
+        os.replace(tmp, path)
+    finally:
+        if os.path.exists(tmp):
+            os.unlink(tmp)
+
+
+def split_front_matter(text: str) -> tuple[str | None, str]:
+    """Split a Jekyll document into (front_matter_yaml_or_None, body). A delimiter is a line whose
+    ENTIRE content is exactly ``---`` (a trailing CR is ignored). Robust against ``-----`` rules,
+    admonitions, and any ``---`` sequence embedded inside a serialized scalar -- unlike
+    ``text.split('---\\n')``, which matches ``---\\n`` as a substring and truncates any value whose
+    line ends in three or more hyphens (the OBS ``release_summary`` / "Hotfix Changes -----" crash).
+    Returns (None, text) when there is no valid front-matter fence."""
+    if not text.startswith("---"):
+        return None, text
+    lines = text.splitlines(keepends=True)
+    if not lines or lines[0].rstrip("\r\n") != "---":
+        return None, text
+    for idx in range(1, len(lines)):
+        if lines[idx].rstrip("\r\n") == "---":
+            return "".join(lines[1:idx]), "".join(lines[idx + 1:])
+    return None, text  # opened but never closed -> treat as no front matter
+
+
 def load_front_matter_and_body(path: Path) -> tuple[dict[str, Any], str]:
     text = path.read_text(encoding="utf-8")
-    if not text.startswith("---\n"):
+    front, body = split_front_matter(text)
+    if front is None:
         return {}, text
-    parts = text.split("---\n", 2)
-    if len(parts) < 3:
-        return {}, text
-    data = yaml.safe_load(parts[1]) or {}
-    return (data if isinstance(data, dict) else {}, parts[2])
+    data = yaml.safe_load(front) or {}
+    return (data if isinstance(data, dict) else {}, body)
 
 
 def write_front_matter_and_body(path: Path, data: dict[str, Any], body: str) -> None:
     front = yaml.safe_dump(data, sort_keys=False, allow_unicode=True, width=1000).strip()
-    path.write_text(f"---\n{front}\n---\n{body}", encoding="utf-8")
+    atomic_write_text(path, f"---\n{front}\n---\n{body}")
 
 
 def generated_records(product_id: str, target_versions: set[str] | None = None, *, include_archived: bool = False) -> list[PatchRecord]:
@@ -284,7 +318,7 @@ def load_evidence(path: Path = EVIDENCE_PATH) -> list[dict[str, Any]]:
 
 def write_evidence_file(rows: list[dict[str, Any]], path: Path = EVIDENCE_PATH) -> None:
     payload = {"schema_version": 1, "evidence": [normalize_evidence_row(row) for row in rows]}
-    path.write_text(yaml.safe_dump(payload, sort_keys=False, allow_unicode=True, width=1000), encoding="utf-8")
+    atomic_write_text(path, yaml.safe_dump(payload, sort_keys=False, allow_unicode=True, width=1000))
 
 
 def normalize_method_health_row(row: dict[str, Any]) -> dict[str, Any]:
@@ -335,7 +369,7 @@ def load_method_health(path: Path = METHOD_HEALTH_PATH) -> list[dict[str, Any]]:
 
 def write_method_health_file(rows: list[dict[str, Any]], path: Path = METHOD_HEALTH_PATH) -> None:
     payload = {"schema_version": 1, "methods": [normalize_method_health_row(row) for row in rows]}
-    path.write_text(yaml.safe_dump(payload, sort_keys=False, allow_unicode=True, width=1000), encoding="utf-8")
+    atomic_write_text(path, yaml.safe_dump(payload, sort_keys=False, allow_unicode=True, width=1000))
 
 
 def method_health_key(row: dict[str, Any]) -> tuple[str, str, str]:
