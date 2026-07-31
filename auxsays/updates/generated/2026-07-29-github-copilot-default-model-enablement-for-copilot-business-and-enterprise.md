@@ -17,8 +17,8 @@ update_version: Default model enablement for Copilot Business and Enterprise
 update_logo_text: GIT
 update_published_at: '2026-07-29T14:01:07Z'
 update_last_checked: '2026-07-30T03:47:44Z'
-source_last_checked: '2026-07-30T09:33:18Z'
-official_body_last_checked: '2026-07-30T09:33:18Z'
+source_last_checked: '2026-07-31T06:49:35Z'
+official_body_last_checked: '2026-07-31T06:49:35Z'
 record_last_updated: '2026-07-30T03:47:44Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -90,6 +90,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-07-30T09:33:18Z'
+  url: https://github.blog/changelog/2026-07-29-default-model-enablement-for-copilot-business-and-enterprise
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-07-31T06:49:35Z'
   url: https://github.blog/changelog/2026-07-29-default-model-enablement-for-copilot-business-and-enterprise
   status: captured-from-rss-feed
   body_captured: true
