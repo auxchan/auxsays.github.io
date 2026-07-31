@@ -17,8 +17,8 @@ update_version: Reference same-repository actions with self-repository syntax
 update_logo_text: GIT
 update_published_at: '2026-07-30T17:39:46Z'
 update_last_checked: '2026-07-31T06:49:35Z'
-source_last_checked: '2026-07-31T09:36:01Z'
-official_body_last_checked: '2026-07-31T09:36:01Z'
+source_last_checked: '2026-07-31T14:40:14Z'
+official_body_last_checked: '2026-07-31T14:40:14Z'
 record_last_updated: '2026-07-31T06:49:35Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -87,6 +87,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-07-31T09:36:01Z'
+  url: https://github.blog/changelog/2026-07-30-reference-same-repository-actions-with-self-repository-syntax
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-07-31T14:40:14Z'
   url: https://github.blog/changelog/2026-07-30-reference-same-repository-actions-with-self-repository-syntax
   status: captured-from-rss-feed
   body_captured: true
