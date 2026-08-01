@@ -37,6 +37,8 @@ def atomic_write_bytes(path: Path, data: bytes) -> None:
     try:
         with os.fdopen(fd, "wb") as handle:
             handle.write(data)
+            handle.flush()
+            os.fsync(handle.fileno())  # durable before the atomic swap (Part H)
         os.replace(tmp, path)
     finally:
         if os.path.exists(tmp):
@@ -55,13 +57,24 @@ class RollbackError(Exception):
     """Rollback did not fully restore the declared surface to its pre-collector state."""
 
 
+class GitUnavailable(Exception):
+    """Git-based mutation detection is unavailable in a context that requires it (production write
+    mode). The transaction is unsafe and the run must hard-abort -- never degrade silently to
+    directory-only detection when Git is required (Part E fail-closed)."""
+
+
 class CollectorTransaction:
-    def __init__(self, repo_root: Path, mutable_roots: list[Path]) -> None:
+    def __init__(self, repo_root: Path, mutable_roots: list[Path], *, require_git: bool = False) -> None:
         self.repo_root = Path(repo_root).resolve()
         self.roots = [Path(r).resolve() for r in mutable_roots]
+        self.require_git = require_git
         self._snapshot: dict[Path, bytes] = {}
         self._existed: set[Path] = set()
         self._git_baseline: set[str] = set()
+
+    def baseline_bytes(self, path: Path) -> bytes | None:
+        """Pre-collector bytes of a path in the declared surface (None if it did not exist)."""
+        return self._snapshot.get(Path(path).resolve())
 
     # --- surface enumeration --------------------------------------------------
     def _iter_root_files(self):
@@ -88,11 +101,19 @@ class CollectorTransaction:
 
     # --- git mutation detection ----------------------------------------------
     def _git_dirty(self) -> set[str]:
-        proc = subprocess.run(
-            ["git", "-C", str(self.repo_root), "status", "--porcelain", "--untracked-files=all"],
-            capture_output=True, text=True,
-        )
+        try:
+            proc = subprocess.run(
+                ["git", "-C", str(self.repo_root), "status", "--porcelain", "--untracked-files=all"],
+                capture_output=True, text=True,
+            )
+        except (FileNotFoundError, OSError) as exc:
+            if self.require_git:
+                raise GitUnavailable(f"git executable unavailable ({type(exc).__name__})") from None
+            return set()
         if proc.returncode != 0:
+            if self.require_git:
+                # Fail closed: no silent degrade to directory-only detection in production write mode.
+                raise GitUnavailable("git status failed (not a work tree or git error)")
             return set()
         paths: set[str] = set()
         for line in proc.stdout.splitlines():

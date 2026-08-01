@@ -21,7 +21,8 @@ from patch_collectors.base import (  # noqa: E402
     EVIDENCE_PATH,
     GENERATED_DIR,
 )
-from lib.collector_txn import CollectorTransaction, UnexpectedMutation  # noqa: E402
+from lib.collector_txn import CollectorTransaction, UnexpectedMutation, GitUnavailable  # noqa: E402
+from lib import collector_ownership as ownership  # noqa: E402
 from patch_collectors.adobe_premiere import AdobePremiereCollector  # noqa: E402
 from patch_collectors.davinci import DavinciCollector  # noqa: E402
 from patch_collectors.obs import ObsCollector  # noqa: E402
@@ -162,6 +163,10 @@ def normalize_failure_reason(exc: Exception) -> str:
     low = kind.lower()
     if kind == "UnexpectedMutation":
         category = "unexpected_mutation"
+    elif kind == "OwnershipViolation":
+        category = "ownership_violation"
+    elif kind == "GitUnavailable":
+        category = "git_unavailable"
     elif kind in _PARSE_ERROR_KINDS or any(t in low for t in ("yaml", "scanner", "parser", "composer")):
         category = "record_parse_error"
     elif kind in _FETCH_ERROR_KINDS or any(t in low for t in ("http", "url", "timeout", "connection", "socket")):
@@ -169,6 +174,39 @@ def normalize_failure_reason(exc: Exception) -> str:
     else:
         category = "collector_error"
     return f"{category}:{kind}"
+
+
+def _failure_result(product_id: str, write: bool, failure_reason: str) -> dict[str, Any]:
+    return {
+        "product_id": product_id,
+        "mode": "write" if write else "dry-run",
+        "status": "collector_failed",
+        "failure_reason": failure_reason,  # normalized; NO raw message/path/token/stack
+        "accepted_count": 0,
+        "rejected_count": 0,
+        "method_health": [],
+    }
+
+
+def _under(path, base) -> bool:
+    from pathlib import Path as _P
+    try:
+        _P(path).resolve().relative_to(_P(base).resolve())
+        return True
+    except ValueError:
+        return False
+
+
+def _validate_ownership(product_id: str, txn, results: list[dict[str, Any]]) -> None:
+    """Semantic ownership gate (Part D): records, evidence, and method-health must all belong to
+    this collector's product + declared methods, or the whole transaction is rolled back."""
+    rows = [row for item in results for row in (item.get("method_health") or []) if isinstance(row, dict)]
+    mutated_records = {p for p in txn.declared_mutations() if _under(p, GENERATED_DIR)}
+    ownership.validate_records(product_id, GENERATED_DIR, mutated_records, txn.baseline_bytes)
+    before = txn.baseline_bytes(EVIDENCE_PATH)
+    after = EVIDENCE_PATH.read_text(encoding="utf-8") if EVIDENCE_PATH.exists() else None
+    ownership.validate_evidence(product_id, before.decode("utf-8") if before is not None else None, after)
+    ownership.validate_method_health(product_id, rows)
 
 
 def _emit_github_annotation(product_id: str, reason: str) -> None:
@@ -256,35 +294,40 @@ def main(argv: list[str] | None = None) -> int:
         # raises -- or writes outside its declared surface -- is fully rolled back and contributes
         # ZERO current-run output. Earlier successful collectors' writes are preserved (they are in
         # this collector's baseline). Exception catching alone is insufficient; this is the isolation.
-        txn = None
-        if context.write:
-            txn = CollectorTransaction(REPO_ROOT, [EVIDENCE_PATH, GENERATED_DIR])
-            txn.begin()
+        # Production write mode REQUIRES git-based mutation detection (require_git=True): if git is
+        # unavailable the transaction is unsafe and the run hard-aborts -- never a silent degrade.
+        txn = CollectorTransaction(REPO_ROOT, [EVIDENCE_PATH, GENERATED_DIR], require_git=True) if context.write else None
         try:
+            if txn is not None:
+                txn.begin()  # raises GitUnavailable (fail closed) if git is missing / not a work tree
             results = collector.collect(context)
             if txn is not None:
                 undeclared = txn.undeclared_mutations()
                 if undeclared:
                     raise UnexpectedMutation(undeclared)
+                # SEMANTIC OWNERSHIP (Part D): a collector may only own its product's records,
+                # evidence, and method-health; a violation rolls back the whole transaction.
+                _validate_ownership(product_id, txn, results)
+        except GitUnavailable as exc:
+            ok = False
+            hard_abort = True  # git-detection unavailable -> unsafe -> refuse writeback for the run
+            failure_reason = normalize_failure_reason(exc)
+            results = [_failure_result(product_id, context.write, failure_reason)]
+            if txn is not None:
+                try:
+                    txn.rollback()
+                except Exception:  # noqa: BLE001
+                    pass
         except Exception as exc:  # noqa: BLE001 -- isolate one collector; never crash the run
             ok = False
             failure_reason = normalize_failure_reason(exc)
-            results = [{
-                "product_id": product_id,
-                "mode": "write" if context.write else "dry-run",
-                "status": "collector_failed",
-                "failure_reason": failure_reason,  # normalized; NO raw message/path/token/stack
-                "accepted_count": 0,
-                "rejected_count": 0,
-                "method_health": [],
-            }]
+            results = [_failure_result(product_id, context.write, failure_reason)]
             if txn is not None:
                 try:
                     txn.rollback()  # restore the surface byte-for-byte; discard ALL of this collector's writes
                 except Exception as rb:  # noqa: BLE001 -- rollback itself failed -> tree state unknown
                     hard_abort = True
                     failure_reason = "rollback_failed:" + type(rb).__name__
-                    _emit_github_annotation(product_id, failure_reason)
         else:
             if txn is not None:
                 txn.commit()  # collector succeeded within its surface -> keep changes as the next baseline
