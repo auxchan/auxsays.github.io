@@ -13,7 +13,10 @@ on:
         default: false
         type: boolean
   schedule:
-    - cron: '17 * * * *'
+    # Temporarily every 4 hours (was hourly) during production recovery: a run can take up to the
+    # 210-min job timeout, so a 4h (240-min) interval guarantees each run finishes before the next
+    # is due -- no overlap and no accumulating queue (reinforced by the concurrency group below).
+    - cron: '17 */4 * * *'
 
 permissions:
   contents: write
@@ -26,9 +29,12 @@ concurrency:
 jobs:
   collect:
     runs-on: ubuntu-latest
-    # Finite job timeout: the collect step is network-bound and could otherwise hang for the
-    # GitHub default (6h). A bounded job fails fast and frees the writeback concurrency slot.
-    timeout-minutes: 30
+    # Finite job timeout that bounds a true runaway WITHOUT cutting off the normal workload.
+    # Historical successful runs took 65-159 min (network-bound retries across all collectors),
+    # so the previous 30 min killed every run. 210 min stays above the observed max with margin,
+    # is under the GitHub 6h default, and (with the every-4-hours cadence below) guarantees a run
+    # finishes well before the next one is due -- no overlap, no accumulating queue.
+    timeout-minutes: 210
     env:
       GITHUB_TOKEN: ${{ github.token }}
       GH_TOKEN: ${{ github.token }}
@@ -46,9 +52,11 @@ jobs:
         run: pip install -r auxsays/scripts/requirements-ingest.txt
 
       - name: Collect patch evidence
-        # Bound the network-bound collection step below the job timeout so a single hung
-        # source cannot consume the whole job budget.
-        timeout-minutes: 20
+        id: collect
+        # Finite step timeout below the job timeout, sized ABOVE the real 65-159 min workload so it
+        # only trips on a genuine per-step hang (not the normal network-bound retry budget). The
+        # earlier 20 min cap was below the real workload and killed the run mid-collection.
+        timeout-minutes: 180
         env:
           AUXSAYS_ENABLE_WINDOWS_LEARN_QNA_WRITEBACK: "true"
           # Acrobat consensus is activated: its keyless inSided/Algolia discovery method is
@@ -93,14 +101,17 @@ jobs:
           python auxsays/scripts/run_patch_evidence_collection.py "${args[@]}"
 
       - name: Build consensus status
+        id: consensus
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: python auxsays/scripts/build_consensus_from_evidence.py
 
       - name: QA patch records
+        id: qa
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: python auxsays/scripts/qa_patch_records.py
 
       - name: Audit consensus evidence
+        id: audit
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: python auxsays/scripts/audit_consensus_evidence.py
 
@@ -116,6 +127,7 @@ jobs:
           rm -f auxsays/_data/patch_ingest_state.json
 
       - name: Commit material evidence changes (conflict-safe writeback)
+        id: writeback
         if: ${{ github.event.inputs.dry_run != 'true' }}
         env:
           GH_TOKEN: ${{ github.token }}
@@ -140,3 +152,42 @@ jobs:
             --recovery-site-path 'auxsays/updates/generated/*' \
             --recovery-site-path auxsays/_data/consensus_evidence.yml \
             --recovery-site-path auxsays/_data/evidence_method_health.yml
+
+      - name: Run summary (pipeline stages)
+        # always() so it reports even when an earlier step failed (e.g. a collect-step timeout,
+        # which trips the 180-min STEP cap first -> this still runs, unlike a job-level timeout).
+        # Reports the downstream stages the collect-step summary can't see: whether collection
+        # reached validation, whether writeback occurred, and whether Pages dispatch occurred.
+        if: ${{ always() && github.event.inputs.dry_run != 'true' }}
+        env:
+          COLLECT: ${{ steps.collect.outcome }}
+          CONSENSUS: ${{ steps.consensus.outcome }}
+          QA: ${{ steps.qa.outcome }}
+          AUDIT: ${{ steps.audit.outcome }}
+          WRITEBACK: ${{ steps.writeback.outcome }}
+          WB_CHANGED: ${{ steps.writeback.outputs.changed }}
+          WB_DEPLOY: ${{ steps.writeback.outputs.deploy_changed }}
+          WB_PUSHED: ${{ steps.writeback.outputs.pushed }}
+          WB_PENDING: ${{ steps.writeback.outputs.deployment_pending }}
+          WB_OUTCOME: ${{ steps.writeback.outputs.outcome }}
+        run: |
+          if [ "$QA" = success ] && [ "$AUDIT" = success ]; then validation="yes"; else validation="no (qa=$QA, audit=$AUDIT)"; fi
+          if [ "$WRITEBACK" != success ]; then
+            writeback="no (writeback step: ${WRITEBACK:-did-not-run})"
+            pages="n/a (writeback step: ${WRITEBACK:-did-not-run})"
+          else
+            if [ "$WB_PUSHED" = true ]; then writeback="yes (pushed; changed=${WB_CHANGED})"; else writeback="no material change"; fi
+            if [ "$WB_DEPLOY" = true ] && [ "$WB_PENDING" = true ]; then pages="attempted, FAILED (deployment_pending)"
+            elif [ "$WB_DEPLOY" = true ]; then pages="dispatched"
+            else pages="not needed (no site-path change)"; fi
+          fi
+          {
+            echo "### 🔎 Pipeline stage summary"
+            echo ""
+            echo "- collect step: **${COLLECT}**"
+            echo "- build consensus: **${CONSENSUS:-skipped}**"
+            echo "- reached validation (QA + audit succeeded): **${validation}**"
+            echo "- writeback occurred: **${writeback}**"
+            echo "- Pages dispatch: **${pages}**"
+            echo "- writeback outcome token: \`${WB_OUTCOME:-n/a}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
