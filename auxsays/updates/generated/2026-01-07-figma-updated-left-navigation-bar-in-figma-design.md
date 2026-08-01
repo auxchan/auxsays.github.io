@@ -1,8 +1,8 @@
 ---
 layout: aux-update
-title: Figma Design closer to CSS with the updated auto layout option official update breakdown
+title: Figma Updated left navigation bar in Figma Design official update breakdown
 description: Official Figma update record captured from Figma.
-permalink: /updates/figma/figma/design-closer-to-css-with-the-updated-auto-layout-option/
+permalink: /updates/figma/figma/updated-left-navigation-bar-in-figma-design/
 update_entry: true
 company_id: figma
 product_id: figma
@@ -11,28 +11,28 @@ update_product: Figma
 update_category: Design Workflow
 update_type: official-source
 update_source_name: Figma
-update_source_url: https://www.figma.com/release-notes/?title=design-closer-to-css-with-the-updated-auto-layout-option
+update_source_url: https://www.figma.com/release-notes/?title=updated-left-navigation-bar-in-figma-design
 update_download_url: ''
-update_version: Design closer to CSS with the updated auto layout option
+update_version: Updated left navigation bar in Figma Design
 update_logo_text: FIG
-update_published_at: '2026-07-24T00:00:00.000Z'
-update_last_checked: '2026-07-28T20:25:17Z'
+update_published_at: '2026-01-07T00:00:00.000Z'
+update_last_checked: '2026-08-01T19:36:43Z'
 source_last_checked: '2026-08-01T19:36:43Z'
 official_body_last_checked: '2026-08-01T19:36:43Z'
-record_last_updated: '2026-07-28T20:25:17Z'
+record_last_updated: '2026-08-01T19:36:43Z'
 patch_file_size: ''
 patch_file_size_note: ''
 patch_file_size_status: pending_adapter_support
 update_status: current
-update_feed_title: Figma Design closer to CSS with the updated auto layout option
-update_detail_title: Figma Design closer to CSS with the updated auto layout option
+update_feed_title: Figma Updated left navigation bar in Figma Design
+update_detail_title: Figma Updated left navigation bar in Figma Design
 update_consensus_label: Insufficient data
 update_report_count: 0
 update_consensus_confidence: Low
-quick_verdict: Figma Design closer to CSS with the updated auto layout option has an official AUXSAYS record. Confirmed patch-specific
+quick_verdict: Figma Updated left navigation bar in Figma Design has an official AUXSAYS record. Confirmed patch-specific
   consensus is deferred until the consensus refresh pipeline is active.
-official_summary: Figma published Figma Design closer to CSS with the updated auto layout option.
-release_summary: Auto layout now works more like CSS, so what you design lines up more closely with what actually gets built.
+official_summary: Figma published Figma Updated left navigation bar in Figma Design.
+release_summary: Refreshed navigation bar and an edge-to-edge variables authoring modal for easier navigation.
 consensus_report: Confirmed patch-specific consensus collection is deferred. This page currently reflects official-source
   ingestion only.
 evidence_state: official_only
@@ -50,10 +50,10 @@ consensus_report_weighting: equal_per_confirmed_report
 consensus_low_context_policy: excluded
 complaint_themes: []
 status_events:
-- at: '2026-07-24T00:00:00.000Z'
+- at: '2026-01-07T00:00:00.000Z'
   label: Published
   note: Official source entry detected.
-- at: '2026-07-28T20:25:22Z'
+- at: '2026-08-01T19:36:48Z'
   label: Insufficient data
   note: AUXSAYS official-ingestion record initialized.
 official_patch_notes_source_type: rss-feed
@@ -61,7 +61,7 @@ primary_official_source: https://www.figma.com/release-notes/
 fallback_official_sources:
 - https://forum.figma.com/product-updates-3
 official_patch_notes_capture_status: captured-from-rss-feed
-official_patch_notes_source_url: https://www.figma.com/release-notes/?title=design-closer-to-css-with-the-updated-auto-layout-option
+official_patch_notes_source_url: https://www.figma.com/release-notes/?title=updated-left-navigation-bar-in-figma-design
 official_note_status: official_source_captured
 official_note_label: Official source summary
 official_source_type: rss-feed
@@ -69,33 +69,12 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-07-31T09:35:12Z'
-  url: https://www.figma.com/release-notes/?title=design-closer-to-css-with-the-updated-auto-layout-option
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
-- at: '2026-07-31T14:39:30Z'
-  url: https://www.figma.com/release-notes/?title=design-closer-to-css-with-the-updated-auto-layout-option
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
-- at: '2026-08-01T08:35:03Z'
-  url: https://www.figma.com/release-notes/?title=design-closer-to-css-with-the-updated-auto-layout-option
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
-- at: '2026-08-01T14:12:00Z'
-  url: https://www.figma.com/release-notes/?title=design-closer-to-css-with-the-updated-auto-layout-option
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-08-01T19:36:43Z'
-  url: https://www.figma.com/release-notes/?title=design-closer-to-css-with-the-updated-auto-layout-option
+  url: https://www.figma.com/release-notes/?title=updated-left-navigation-bar-in-figma-design
   status: captured-from-rss-feed
   body_captured: true
   checksums_captured: false
-official_patch_notes_body: Auto layout now works more like CSS, so what you design lines up more closely with what actually
-  gets built.
+official_patch_notes_body: Refreshed navigation bar and an edge-to-edge variables authoring modal for easier navigation.
 official_checksums_body: ''
 official_checksums_capture_status: not-present
 ---
