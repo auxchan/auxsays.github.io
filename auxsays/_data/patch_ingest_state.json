@@ -1,13 +1,17 @@
 {
-  "last_errors": [],
+  "last_errors": [
+    {
+      "adapter": "blackmagic_support_downloads",
+      "error": "<urlopen error timed out>",
+      "product_id": "blackmagic-davinci"
+    }
+  ],
   "last_results": [
     {
       "adapter": "rss_feed",
       "candidate_count": 200,
       "created": 2,
       "deferred": [
-        "rss:figma:e7afa659-749b-40b4-8b90-f68d14e37668",
-        "rss:figma:200195c1-6df1-4447-bd8f-97e5f0eccc43",
         "rss:figma:4d70588d-3c1d-46ad-af7b-00ba0bdadf4e",
         "rss:figma:acd2b512-7d58-4ba2-8be4-680aee8f6301",
         "rss:figma:b45e6a7f-3550-42fc-b8c7-536e32017165",
@@ -129,8 +133,8 @@
         "rss:figma:9cf34052-8cd2-43ed-b095-164baeef5115",
         "rss:figma:77129f7c-2440-4a40-b58b-30247615ad82"
       ],
-      "deferred_count": 122,
-      "duration_ms": 8639,
+      "deferred_count": 120,
+      "duration_ms": 9259,
       "fetched": 200,
       "product_id": "figma",
       "record_limit": 2,
@@ -443,13 +447,21 @@
         {
           "reason": "state-seen-outside-refresh-window",
           "record_id": "rss:figma:8aab1e88-1c5d-4fb0-90de-b2afd27bfb9a"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:74a2f878-f037-452e-ac45-29d2cf7b06e4"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:c0727110-2030-46c6-9b90-c9e60c3aa96a"
         }
       ],
-      "skipped_existing": 74,
+      "skipped_existing": 76,
       "status": "success",
       "written": [
-        "auxsays/updates/generated/2026-01-23-figma-discovery-pipeline-update-user-prompts-now-included.md",
-        "auxsays/updates/generated/2026-01-22-figma-more-new-features-in-figma-make.md"
+        "auxsays/updates/generated/2026-01-22-figma-embed-your-figma-make-prototypes.md",
+        "auxsays/updates/generated/2026-01-15-figma-enterprise-key-management.md"
       ]
     },
     {
@@ -458,7 +470,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 25968,
+      "duration_ms": 25724,
       "fetched": 1,
       "product_id": "adobe-premiere-pro",
       "record_limit": 2,
@@ -476,301 +488,12 @@
       "written": []
     },
     {
-      "adapter": "blackmagic_support_downloads",
-      "candidate_count": 116,
-      "created": 2,
-      "deferred": [
-        "blackmagic-support:blackmagic-davinci:17.3.1:2ddeb7100f9a4de2a61e929f6c8a1cad",
-        "blackmagic-support:blackmagic-davinci:17.3:a1684f702b364371a199e6a57cef3341",
-        "blackmagic-support:blackmagic-davinci:17.2.2:2ce2120562af480988763bc202675380",
-        "blackmagic-support:blackmagic-davinci:17.2.1:11f9b23f14824fd781ab56411706df8a",
-        "blackmagic-support:blackmagic-davinci:17.2:2e107aba152744e0aa77ad3fb9d25986",
-        "blackmagic-support:blackmagic-davinci:17.1.1:697bfa693faa49fbb785b2aedb584a8b",
-        "blackmagic-support:blackmagic-davinci:17.1:568b91dde8e94375834d7fd65f4f8046",
-        "blackmagic-support:blackmagic-davinci:17:a479b83a85f54a8eba4c26acaa878235",
-        "blackmagic-support:blackmagic-davinci:16.2.8:7e8656e2d76240ef8923609655d70fb6",
-        "blackmagic-support:blackmagic-davinci:16.2.7:38c28b76d99b4906ae0e5d51e4952ebc",
-        "blackmagic-support:blackmagic-davinci:16.2.6:fae1e2e2814349c4a85e7b479db0c22c",
-        "blackmagic-support:blackmagic-davinci:16.2.5:39703bbbf19e45be99798a2006e1eb24",
-        "blackmagic-support:blackmagic-davinci:16.2.4:7841ff08dfbd43d4af5e30e3b39eae10",
-        "blackmagic-support:blackmagic-davinci:16.2.3:ca91eb636f944eb2b7ff65ee56db41e5",
-        "blackmagic-support:blackmagic-davinci:16.2.2:0e4dea31c5114b13a5f0d362c6902ed7",
-        "blackmagic-support:blackmagic-davinci:16.2.1:d1150f02c49746d3b9ab51c918db6ebd",
-        "blackmagic-support:blackmagic-davinci:16.2:00e0eb2c5ab94938a1e7088e17b35725",
-        "blackmagic-support:blackmagic-davinci:16.1.2:664b754e19f04eb5afee5cbe034d0594",
-        "blackmagic-support:blackmagic-davinci:16.1.1:2d8aac8091894fba96588e0ca3769ae3",
-        "blackmagic-support:blackmagic-davinci:16.1:1649a7027eed41a1a7633e0dd348195c",
-        "blackmagic-support:blackmagic-davinci:16:33c81e3bd69a417c848f1324b7ffab32",
-        "blackmagic-support:blackmagic-davinci:15.3.1:ad0d8a39dedf419e8beef4a500d83d66",
-        "blackmagic-support:blackmagic-davinci:15.3:a045e94a7e20491da82c329c073db8ad",
-        "blackmagic-support:blackmagic-davinci:15.2.4:360e097c9f9346f2a632825811653354",
-        "blackmagic-support:blackmagic-davinci:15.2.3:b9f352753ebe4cc5a74005e2d053263c",
-        "blackmagic-support:blackmagic-davinci:15.2.2:09b6a86402cd4892b29b33da6eb8075e",
-        "blackmagic-support:blackmagic-davinci:15.2.1:ce1aad63c1d54244b81dd2c892f6b18c",
-        "blackmagic-support:blackmagic-davinci:15.2:cbb06ad3149f470ca07b943485c7ccc4",
-        "blackmagic-support:blackmagic-davinci:15.1.2:cc533de875ed48219f3095a72a0b75b6",
-        "blackmagic-support:blackmagic-davinci:15.1.1:ae1a13678d4443a8b4c72b56e787afe8",
-        "blackmagic-support:blackmagic-davinci:15.1:3fdf6df340d4452888328ae46ad17e3e",
-        "blackmagic-support:blackmagic-davinci:15.0.1:c1bef0ae9882495ebc1a87eb845d3249",
-        "blackmagic-support:blackmagic-davinci:15:35b880b441b54e0cba6669dca7e93779",
-        "blackmagic-support:blackmagic-davinci:14.3.1:773db712738f48c3a893e96d6c77253f",
-        "blackmagic-support:blackmagic-davinci:14.3:fcfd3157e46444cbb3ed228d314167d2",
-        "blackmagic-support:blackmagic-davinci:14.2.1:b25ce87a99b54cf9ae275c18e3308ae3",
-        "blackmagic-support:blackmagic-davinci:14.2:f1fca132cca74aaebc4e588a52b5a755",
-        "blackmagic-support:blackmagic-davinci:14.1.1:1d629fdc2958483fbfde564e8f046175",
-        "blackmagic-support:blackmagic-davinci:14.1:702f18bf874d480d8dc79e626b7ba9bf",
-        "blackmagic-support:blackmagic-davinci:14.0.1:d8e08f30e6d340aaac37fedde2c2e93a",
-        "blackmagic-support:blackmagic-davinci:14:b52ec56608da472e8ba74772333a7f30",
-        "blackmagic-support:blackmagic-davinci:12.5.6:f29ac9e712ca40c08b4a273dd92c3288",
-        "blackmagic-support:blackmagic-davinci:12.5.5:197ab30bbd95468c984e7ededfca0342",
-        "blackmagic-support:blackmagic-davinci:12.5.4:d81f69b472944e79bd5c692b83ff62f6",
-        "blackmagic-support:blackmagic-davinci:12.5.3:16aba80b65694ef48ff970ecff25e53c",
-        "blackmagic-support:blackmagic-davinci:12.5.2:d68f650fbd0d4123a88e389517f440df",
-        "blackmagic-support:blackmagic-davinci:12.5.1:951f064fdf2544f686f82d4fab96c86d",
-        "blackmagic-support:blackmagic-davinci:12.5:73ce205e829c47ad86bd2be43cd3d7fd",
-        "blackmagic-support:blackmagic-davinci:12.3.2:4665e0475c3647ca9a212ba2dac6f5d6",
-        "blackmagic-support:blackmagic-davinci:12.3.1:7be39a1e1bff4e2ab04e7e33c3c40e0d",
-        "blackmagic-support:blackmagic-davinci:12.2:fd1414205ab74cf2a762c19cda75f220",
-        "blackmagic-support:blackmagic-davinci:12.1:6c8eb04e8aa14e32b9d534c249f9ddde",
-        "blackmagic-support:blackmagic-davinci:12.0.1:46b1cde2f8354268a90a352218ab8d8b",
-        "blackmagic-support:blackmagic-davinci:12.0:5e3b5057ee464cfdaf2f50011245aa3a",
-        "blackmagic-support:blackmagic-davinci:11.3.1:f0f3dc19484a474982cc6f8aab7cc923",
-        "blackmagic-support:blackmagic-davinci:11.3:20c6693acb2b4cd598cf64c69057106f",
-        "blackmagic-support:blackmagic-davinci:11.2.1:ac2c6e7981394d13b810de516ef5a0f4",
-        "blackmagic-support:blackmagic-davinci:11.2:2f234fd893c14f44bfdbf16032d02b07",
-        "blackmagic-support:blackmagic-davinci:11.1.3:02d335762390456fb15bf968df608dd6",
-        "blackmagic-support:blackmagic-davinci:11.1.2:027c9883634941809b01f95c305d7eb3",
-        "blackmagic-support:blackmagic-davinci:11.1.1:89764227ded74953a1da7aae95d38fa1",
-        "blackmagic-support:blackmagic-davinci:11.1:a3270e16f79344238dcb0b234e390340",
-        "blackmagic-support:blackmagic-davinci:11:bbbe837a0e804a139d32c66cb0e8ef15",
-        "blackmagic-support:blackmagic-davinci:10.1.5:69c2e474f9994d7cbac255b3e20aabb9"
-      ],
-      "deferred_count": 64,
-      "duration_ms": 7680,
-      "fetched": 116,
-      "product_id": "blackmagic-davinci",
-      "record_limit": 2,
-      "refreshed": [
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-07-22-davinci-resolve-21-0-3.md",
-          "record_id": "blackmagic-support:blackmagic-davinci:21.0.3:257ac6878ddf40dc8c8b72c3b65c0de3"
-        },
-        {
-          "action": "freshness-updated",
-          "path": "auxsays/updates/generated/2026-07-02-davinci-resolve-21-0-2.md",
-          "record_id": "blackmagic-support:blackmagic-davinci:21.0.2:76871642674641dcbac137eb5cb46301"
-        }
-      ],
-      "scan_limit": 200,
-      "skipped": [
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:21.0.1:a7be1e5732fd4edfb804af3d1f29cf61"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:21:2cda7ec076ea4b25aaa007fc68a5cbfc"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:20.3.3:44720c1f672d4dce9e0fab7df33f928e"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:20.3.2:f963b9ccf156459db4ed9c32c39b195e"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:20.3.1:ea408484da59422794a6764f0cb7f11f"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:20.3:03b73b4e07884309948b326912184f86"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:20.2.3:9d5f7fb13cfd446aa384cc26b587061b"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:20.2.2:8cbfe01ecd89473d86a1ecc3c1f90f6e"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:20.2.1:9d8f7a472beb48d3bccb578777d660a2"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:20.2:4593ec0ea9cf4e9899668c0601166220"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:20.1.1:a43f22f783a145d59d942086b18ea312"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:20.1:ff03b781b64d4c3cadd5a16fd3ef8a83"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:20.0.1:5065f0e3b4804bb1b3b34301e9a69e01"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:20:a6e2bbb59c294d728d131fa21d18676b"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:19.1.4:0dc287e90d53499dbeb74c1e9ce09fcd"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:19.1.3:9e7d67956ee34e71ad901d9ce1d77b18"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:19.1.2:edd40117dc3a424296792d423003eeb1"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:19.1.1:5c21e2259634414d8fb88c214f41c917"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:19.1:f4f5326b638f4417a7abc6b499bea21d"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:19.0.3:bebc956b8ece4405bb44768fc07501bc"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:19.0.2:2af2c12e21404370922862ab09c05224"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:19.0.1:aa8e03be15e04df3bd2ee8685f67dfcb"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:19:cb45c8e75fcc459497f21ecbba3b0174"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:18.6.6:160cea7e8da846f280fd30518c91ca57"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:18.6.5:3a4601d35e7b4acbb4dfa474f6c38b80"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:18.6.4:479f37a4180c4e14b4ab67553d1683c0"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:18.6.3:037cad2298034c08a164625a5c15495a"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:18.6.2:4c5141025d9a4b479b508f109b2138de"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:18.6.1:cdd8d8c6ed1b4a8a818e6934a885e3fd"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:18.6:a2156d38f70b4fbba004094c647945db"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:18.5.1:eab0e394e81b48bdb66e30ffd0be9e72"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:18.5:9576186159cb49dfa8543673859d312d"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:18.1.4:69a3995a376441d0ae23711c44370662"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:18.1.3:cbfe7c09b9a44ed08ab0e14f29bc262d"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:18.1.2:7a1a0b5ffaf34f9588fd46683d40da75"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:18.1.1:b7130ebf043448368dbd1ea1be93888d"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:18.1:2ff9be8a1a9c4082b1fe977133816b6a"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:18.0.4:f230917b91a74d17b1e4ece25c284dbe"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:18.0.3:ea3baefaf9af4dc69a8635b85736048d"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:18.0.2:5a1d26b868fe40f9b638ae97ee664a56"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:18.0.1:6fe65a9e3ccb48e6be7e4db7d1d9866f"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:18:feb2e2ace23b48ccbd1b7f1b73f24760"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:17.4.6:acf4e4c3c28040cca505e69a365d42a0"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:17.4.5:2b00b01bcac44d73b4b20616e0800417"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:17.4.4:ab07279b0b07494e808668038145c494"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:17.4.3:a29cf086ee72457e96b8c2ae586a3e00"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:17.4.2:26a943b801de46b8b330d6cd939d8f1f"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "blackmagic-support:blackmagic-davinci:17.4.1:7075d0fb12d6433ea88a0ab56c2b2a3d"
-        }
-      ],
-      "skipped_existing": 48,
-      "status": "success",
-      "written": [
-        "auxsays/updates/generated/2021-10-22-davinci-resolve-17-4.md",
-        "auxsays/updates/generated/2021-10-08-davinci-resolve-17-3-2.md"
-      ]
-    },
-    {
       "adapter": "github_releases",
       "candidate_count": 14,
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 750,
+      "duration_ms": 935,
       "fetched": 14,
       "product_id": "obs-studio",
       "record_limit": 2,
@@ -847,7 +570,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 546,
+      "duration_ms": 631,
       "fetched": 30,
       "product_id": "comfyui",
       "record_limit": 2,
@@ -986,9 +709,11 @@
       "adapter": "rss_feed",
       "candidate_count": 10,
       "created": 2,
-      "deferred": [],
-      "deferred_count": 0,
-      "duration_ms": 8085,
+      "deferred": [
+        "rss:github:https://github.blog/changelog/2026-07-31-restricting-npm-bypass-2fa-granular-access-tokens"
+      ],
+      "deferred_count": 1,
+      "duration_ms": 9579,
       "fetched": 10,
       "product_id": "github",
       "record_limit": 2,
@@ -1016,26 +741,22 @@
         },
         {
           "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:github:https://github.blog/changelog/2026-07-29-limit-remote-control-to-managed-devices"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:github:https://github.blog/changelog/2026-07-30-github-copilot-in-visual-studio-code-july-2026-releases"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
           "record_id": "rss:github:https://github.blog/changelog/2026-07-29-copilot-code-review-agent-skills-and-mcp-now-generally-available"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "rss:github:https://github.blog/changelog/2026-07-29-default-model-enablement-for-copilot-business-and-enterprise"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "rss:github:https://github.blog/changelog/2026-07-29-codeql-2-26-1-improves-analysis-accuracy-and-framework-coverage"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "rss:github:https://github.blog/changelog/2026-07-28-github-copilot-app-usage-metrics-now-expand-across-report-rollups"
         }
       ],
-      "skipped_existing": 6,
+      "skipped_existing": 5,
       "status": "success",
       "written": [
-        "auxsays/updates/generated/2026-07-30-github-copilot-limit-remote-control-to-managed-devices.md",
-        "auxsays/updates/generated/2026-07-30-github-copilot-github-copilot-in-visual-studio-code-july-2026-releases.md"
+        "auxsays/updates/generated/2026-07-31-github-copilot-gemini-2-5-pro-and-gemini-3-flash-deprecated.md",
+        "auxsays/updates/generated/2026-07-31-github-copilot-enterprise-teams-model-policy-targeting-in-public-preview.md"
       ]
     },
     {
@@ -1044,7 +765,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 225,
+      "duration_ms": 274,
       "fetched": 0,
       "product_id": "netlify",
       "record_limit": 2,
@@ -1060,8 +781,6 @@
       "candidate_count": 74,
       "created": 2,
       "deferred": [
-        "adobe:adobe-acrobat-reader:continuous:17.012.20095:76c4a55919303601",
-        "adobe:adobe-acrobat-reader:continuous:17.012.20093:3916845ff53b3535",
         "adobe:adobe-acrobat-reader:continuous:17.009.20058:7b1748702686d8a7",
         "adobe:adobe-acrobat-reader:continuous:17.009.20044:31f3870358651649",
         "adobe:adobe-acrobat-reader:continuous:15.023.20070:5af22f9380102837",
@@ -1087,8 +806,8 @@
         "adobe:adobe-acrobat-reader:classic:20.001.30025:33d6405f894fa141",
         "adobe:adobe-acrobat-reader:classic:20.001.30018:62e0d9f3e62daaa7"
       ],
-      "deferred_count": 26,
-      "duration_ms": 7869,
+      "deferred_count": 24,
+      "duration_ms": 8683,
       "fetched": 74,
       "product_id": "adobe-acrobat-reader",
       "record_limit": 2,
@@ -1281,13 +1000,21 @@
         {
           "reason": "state-seen-outside-refresh-window",
           "record_id": "adobe:adobe-acrobat-reader:continuous:18.009.20050:4124393096551db0"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "adobe:adobe-acrobat-reader:continuous:18.009.20044:928e76c8c9364457"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "adobe:adobe-acrobat-reader:continuous:17.012.20098:0d3c180faee0d733"
         }
       ],
-      "skipped_existing": 44,
+      "skipped_existing": 46,
       "status": "success",
       "written": [
-        "auxsays/updates/generated/2017-11-14-adobe-acrobat-reader-18-009-20044.md",
-        "auxsays/updates/generated/2017-08-29-adobe-acrobat-reader-17-012-20098.md"
+        "auxsays/updates/generated/2017-08-11-adobe-acrobat-reader-17-012-20095.md",
+        "auxsays/updates/generated/2017-08-08-adobe-acrobat-reader-17-012-20093.md"
       ]
     },
     {
@@ -1295,8 +1022,6 @@
       "candidate_count": 74,
       "created": 2,
       "deferred": [
-        "adobe:adobe-acrobat-pro:continuous:17.012.20095:0d7101af169aa90b",
-        "adobe:adobe-acrobat-pro:continuous:17.012.20093:5a8db44dfc5b4253",
         "adobe:adobe-acrobat-pro:continuous:17.009.20058:e93d3eacc4d1afae",
         "adobe:adobe-acrobat-pro:continuous:17.009.20044:d0330a96510b2b39",
         "adobe:adobe-acrobat-pro:continuous:15.023.20070:57eb421501a80aaa",
@@ -1322,8 +1047,8 @@
         "adobe:adobe-acrobat-pro:classic:20.001.30025:efee7b4a2c68ba75",
         "adobe:adobe-acrobat-pro:classic:20.001.30018:0df96a25d383e2b5"
       ],
-      "deferred_count": 26,
-      "duration_ms": 7580,
+      "deferred_count": 24,
+      "duration_ms": 8449,
       "fetched": 74,
       "product_id": "adobe-acrobat-pro",
       "record_limit": 2,
@@ -1516,13 +1241,21 @@
         {
           "reason": "state-seen-outside-refresh-window",
           "record_id": "adobe:adobe-acrobat-pro:continuous:18.009.20050:a200329ad5ac0eda"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "adobe:adobe-acrobat-pro:continuous:18.009.20044:945391956f7c3a32"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "adobe:adobe-acrobat-pro:continuous:17.012.20098:b4ceb0fb3dcc4036"
         }
       ],
-      "skipped_existing": 44,
+      "skipped_existing": 46,
       "status": "success",
       "written": [
-        "auxsays/updates/generated/2017-11-14-adobe-acrobat-pro-18-009-20044.md",
-        "auxsays/updates/generated/2017-08-29-adobe-acrobat-pro-17-012-20098.md"
+        "auxsays/updates/generated/2017-08-11-adobe-acrobat-pro-17-012-20095.md",
+        "auxsays/updates/generated/2017-08-08-adobe-acrobat-pro-17-012-20093.md"
       ]
     },
     {
@@ -1531,23 +1264,23 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 12839,
+      "duration_ms": 13955,
       "fetched": 4,
       "product_id": "microsoft-windows-11",
       "record_limit": 6,
       "refreshed": [
         {
-          "action": "freshness-updated",
+          "action": "refreshed",
           "path": "auxsays/updates/generated/2026-06-23-windows-11-26h1.md",
           "record_id": "microsoft:microsoft-windows-11:26H1:6982aa71c6e6cc22"
         },
         {
-          "action": "freshness-updated",
+          "action": "refreshed",
           "path": "auxsays/updates/generated/2026-06-23-windows-11-25h2.md",
           "record_id": "microsoft:microsoft-windows-11:25H2:9e5c66432493a020"
         },
         {
-          "action": "freshness-updated",
+          "action": "refreshed",
           "path": "auxsays/updates/generated/2026-06-23-windows-11-24h2.md",
           "record_id": "microsoft:microsoft-windows-11:24H2:199bc19bde441afc"
         },
@@ -1569,7 +1302,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 226,
+      "duration_ms": 220,
       "fetched": 20,
       "product_id": "microsoft-powerpoint",
       "record_limit": 2,
@@ -1670,7 +1403,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 3833,
+      "duration_ms": 4196,
       "fetched": 1,
       "product_id": "microsoft-365-apps",
       "record_limit": 2,
@@ -1693,7 +1426,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 4538,
+      "duration_ms": 4161,
       "fetched": 0,
       "product_id": "elgato-stream-deck",
       "record_limit": 2,
@@ -1710,7 +1443,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 4767,
+      "duration_ms": 3877,
       "fetched": 0,
       "product_id": "elgato-wave-link",
       "record_limit": 2,
@@ -1727,7 +1460,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 3991,
+      "duration_ms": 3582,
       "fetched": 0,
       "product_id": "elgato-camera-hub",
       "record_limit": 2,
@@ -1744,7 +1477,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 4368,
+      "duration_ms": 3098,
       "fetched": 0,
       "product_id": "elgato-4k-capture-utility",
       "record_limit": 2,
@@ -1756,24 +1489,26 @@
       "written": []
     }
   ],
-  "last_run_finished_at": "2026-07-31T14:41:12Z",
-  "last_run_started_at": "2026-07-31T14:39:30Z",
+  "last_run_finished_at": "2026-08-01T08:37:39Z",
+  "last_run_started_at": "2026-08-01T08:35:03Z",
   "sources": {
     "adobe-acrobat-pro": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_acrobat",
-      "last_checked_at": "2026-07-31T14:40:30Z",
+      "last_checked_at": "2026-08-01T08:36:58Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 74,
-      "last_records_skipped": 44,
+      "last_records_skipped": 46,
       "last_records_written": 4,
-      "last_run_duration_ms": 7580,
-      "last_success_at": "2026-07-31T14:40:30Z",
+      "last_run_duration_ms": 8449,
+      "last_success_at": "2026-08-01T08:36:58Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "adobe:adobe-acrobat-pro:continuous:17.012.20093:5a8db44dfc5b4253",
+        "adobe:adobe-acrobat-pro:continuous:17.012.20095:0d7101af169aa90b",
         "adobe:adobe-acrobat-pro:continuous:17.012.20098:b4ceb0fb3dcc4036",
         "adobe:adobe-acrobat-pro:continuous:18.009.20044:945391956f7c3a32",
         "adobe:adobe-acrobat-pro:continuous:18.009.20050:a200329ad5ac0eda",
@@ -1828,18 +1563,20 @@
     "adobe-acrobat-reader": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_acrobat",
-      "last_checked_at": "2026-07-31T14:40:22Z",
+      "last_checked_at": "2026-08-01T08:36:49Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 74,
-      "last_records_skipped": 44,
+      "last_records_skipped": 46,
       "last_records_written": 4,
-      "last_run_duration_ms": 7869,
-      "last_success_at": "2026-07-31T14:40:22Z",
+      "last_run_duration_ms": 8683,
+      "last_success_at": "2026-08-01T08:36:49Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "adobe:adobe-acrobat-reader:continuous:17.012.20093:3916845ff53b3535",
+        "adobe:adobe-acrobat-reader:continuous:17.012.20095:76c4a55919303601",
         "adobe:adobe-acrobat-reader:continuous:17.012.20098:0d3c180faee0d733",
         "adobe:adobe-acrobat-reader:continuous:18.009.20044:928e76c8c9364457",
         "adobe:adobe-acrobat-reader:continuous:18.009.20050:4124393096551db0",
@@ -1954,7 +1691,7 @@
     "adobe-premiere-pro": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_release_notes",
-      "last_checked_at": "2026-07-31T14:39:39Z",
+      "last_checked_at": "2026-08-01T08:35:12Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -1962,8 +1699,8 @@
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 25968,
-      "last_success_at": "2026-07-31T14:39:39Z",
+      "last_run_duration_ms": 25724,
+      "last_success_at": "2026-08-01T08:35:12Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "adobe:adobe-premiere-pro:26.2.2:c176cc33bba85978",
@@ -1972,17 +1709,17 @@
       "status": "healthy"
     },
     "blackmagic-davinci": {
-      "consecutive_failures": 0,
+      "consecutive_failures": 1,
       "last_adapter": "blackmagic_support_downloads",
-      "last_checked_at": "2026-07-31T14:40:05Z",
-      "last_error": "",
-      "last_error_at": "",
-      "last_error_type": "",
-      "last_health_note": "Fetch succeeded.",
-      "last_records_fetched": 116,
-      "last_records_skipped": 48,
-      "last_records_written": 4,
-      "last_run_duration_ms": 7680,
+      "last_checked_at": "2026-08-01T08:36:38Z",
+      "last_error": "<urlopen error timed out>",
+      "last_error_at": "2026-08-01T08:36:38Z",
+      "last_error_type": "timeout",
+      "last_health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
+      "last_records_fetched": 0,
+      "last_records_skipped": 0,
+      "last_records_written": 0,
+      "last_run_duration_ms": 0,
       "last_success_at": "2026-07-31T14:40:05Z",
       "previous_consecutive_failures": 0,
       "seen": [
@@ -2040,12 +1777,12 @@
         "blackmagic-support:blackmagic-davinci:20.3.1:ea408484da59422794a6764f0cb7f11f",
         "blackmagic-support:blackmagic-davinci:20.3.2:f963b9ccf156459db4ed9c32c39b195e"
       ],
-      "status": "healthy"
+      "status": "degraded"
     },
     "comfyui": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-07-31T14:40:13Z",
+      "last_checked_at": "2026-08-01T08:36:39Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -2053,8 +1790,8 @@
       "last_records_fetched": 30,
       "last_records_skipped": 28,
       "last_records_written": 2,
-      "last_run_duration_ms": 546,
-      "last_success_at": "2026-07-31T14:40:13Z",
+      "last_run_duration_ms": 631,
+      "last_success_at": "2026-08-01T08:36:39Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:comfyui:362844608",
@@ -2095,7 +1832,7 @@
     "elgato-4k-capture-utility": {
       "consecutive_failures": 0,
       "last_adapter": "elgato_help_center",
-      "last_checked_at": "2026-07-31T14:41:08Z",
+      "last_checked_at": "2026-08-01T08:37:36Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -2103,11 +1840,15 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 4368,
-      "last_success_at": "2026-07-31T14:41:08Z",
+      "last_run_duration_ms": 3098,
+      "last_success_at": "2026-08-01T08:37:36Z",
       "previous_consecutive_failures": 0,
       "scan": {
         "inspected": [
+          "https://help.elgato.com/hc/en-us/articles/5139020867853-Elgato-4K-Capture-Utility-1-7-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/5139031356301-Elgato-4K-Capture-Utility-1-6-3-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/5139028730253-Elgato-4K-Capture-Utility-1-6-1-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/5139051333901-Elgato-4K-Capture-Utility-1-6-Release-Notes",
           "https://help.elgato.com/hc/en-us/articles/7435639030029-Elgato-4K-Capture-Utility-1-7-8-Release-Notes",
           "https://help.elgato.com/hc/en-us/articles/6422362170125-Elgato-4K-Capture-Utility-1-7-7-Release-Notes",
           "https://help.elgato.com/hc/en-us/articles/6325400390413-Elgato-4K-Capture-Utility-1-7-6-Release-Notes",
@@ -2132,7 +1873,7 @@
     "elgato-camera-hub": {
       "consecutive_failures": 0,
       "last_adapter": "elgato_help_center",
-      "last_checked_at": "2026-07-31T14:41:04Z",
+      "last_checked_at": "2026-08-01T08:37:33Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -2140,11 +1881,16 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 3991,
-      "last_success_at": "2026-07-31T14:41:04Z",
+      "last_run_duration_ms": 3582,
+      "last_success_at": "2026-08-01T08:37:33Z",
       "previous_consecutive_failures": 0,
       "scan": {
         "inspected": [
+          "https://help.elgato.com/hc/en-us/articles/7764575275149-Elgato-Camera-Hub-1-3-Release-Notes-Windows",
+          "https://help.elgato.com/hc/en-us/articles/4888171487373-Elgato-Camera-Hub-1-2-1-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/4888128506637-Elgato-Camera-Hub-1-2-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/4888095192717-Elgato-Camera-Hub-1-1-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/4888058393229-Elgato-Camera-Hub-1-0-Release-Notes",
           "https://help.elgato.com/hc/en-us/articles/13305988298125-Elgato-Camera-Hub-1-5-2-Release-Notes",
           "https://help.elgato.com/hc/en-us/articles/11493015064461-Elgato-Camera-Hub-1-5-1-Release-Notes",
           "https://help.elgato.com/hc/en-us/articles/10343869095565-Elgato-Camera-Hub-1-5-Release-Notes",
@@ -2176,7 +1922,7 @@
     "elgato-stream-deck": {
       "consecutive_failures": 0,
       "last_adapter": "elgato_help_center",
-      "last_checked_at": "2026-07-31T14:40:54Z",
+      "last_checked_at": "2026-08-01T08:37:25Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -2184,11 +1930,17 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 4538,
-      "last_success_at": "2026-07-31T14:40:54Z",
+      "last_run_duration_ms": 4161,
+      "last_success_at": "2026-08-01T08:37:25Z",
       "previous_consecutive_failures": 0,
       "scan": {
         "inspected": [
+          "https://help.elgato.com/hc/en-us/articles/34904105205777-Elgato-Stream-Deck-6-9-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/31646742543249-Elgato-Stream-Deck-6-8-1-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/29844501142801-Elgato-Stream-Deck-6-8-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/29049957581325-Elgato-Stream-Deck-6-7-1-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/28704781966605-Elgato-Stream-Deck-6-7-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/27173657436941-Elgato-Stream-Deck-6-6-1-Release-Notes",
           "https://help.elgato.com/hc/en-us/articles/42580529279377-Elgato-Stream-Deck-7-2-0-Release-Notes",
           "https://help.elgato.com/hc/en-us/articles/42210974537233-Elgato-Stream-Deck-7-1-1-Release-Notes",
           "https://help.elgato.com/hc/en-us/articles/41533810232721-Elgato-Stream-Deck-7-1-Release-Notes",
@@ -2213,7 +1965,7 @@
     "elgato-wave-link": {
       "consecutive_failures": 0,
       "last_adapter": "elgato_help_center",
-      "last_checked_at": "2026-07-31T14:40:59Z",
+      "last_checked_at": "2026-08-01T08:37:29Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -2221,41 +1973,19 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 4767,
-      "last_success_at": "2026-07-31T14:40:59Z",
+      "last_run_duration_ms": 3877,
+      "last_success_at": "2026-08-01T08:37:29Z",
       "previous_consecutive_failures": 0,
       "scan": {
         "inspected": [
-          "https://help.elgato.com/hc/en-us/articles/34672160349841-Elgato-Wave-Link-2-0-6-Release-Notes",
-          "https://help.elgato.com/hc/en-us/articles/32369826899217-Elgato-Wave-Link-2-0-4-Release-Notes",
-          "https://help.elgato.com/hc/en-us/articles/29050473119373-Elgato-Wave-Link-1-11-1-Release-Notes",
-          "https://help.elgato.com/hc/en-us/articles/28706237480077-Elgato-Wave-Link-1-11-Release-Notes",
-          "https://help.elgato.com/hc/en-us/articles/26339909502221-Elgato-Wave-Link-1-10-1-Release-Notes",
-          "https://help.elgato.com/hc/en-us/articles/26005805061901-Elgato-Wave-Link-1-10-Release-Notes",
-          "https://help.elgato.com/hc/en-us/articles/24617926524429-Elgato-Wave-Link-1-9-3-Release-Notes",
-          "https://help.elgato.com/hc/en-us/articles/45962094845329-Elgato-Wave-Link-3-1-Windows-Release-Notes",
-          "https://help.elgato.com/hc/en-us/articles/45544833622801-Elgato-Wave-Link-3-1-0-macOS-Release-Notes",
-          "https://help.elgato.com/hc/en-us/articles/45163765430545-Elgato-Wave-Link-3-0-3-Windows-Release-Notes",
-          "https://help.elgato.com/hc/en-us/articles/45093360744337-Elgato-Wave-Link-3-0-2-Windows-Release-Notes",
-          "https://help.elgato.com/hc/en-us/articles/44864018582161-Elgato-Wave-Link-3-0-1-Windows-Release-Notes",
-          "https://help.elgato.com/hc/en-us/articles/44408452111505-Elgato-Wave-Link-3-0-0-macOS-Release-Notes",
-          "https://help.elgato.com/hc/en-us/articles/44408325264017-Elgato-Wave-Link-3-0-0-Windows-Release-Notes",
-          "https://help.elgato.com/hc/en-us/articles/39080641362705-Elgato-Wave-Link-2-0-7-Release-Notes-macOS",
           "https://help.elgato.com/hc/en-us/articles/49318466620049-Elgato-Wave-Link-3-2-9-Windows-Release-Notes",
-          "https://help.elgato.com/hc/en-us/articles/48564639825041-Elgato-Wave-Link-3-2-5-Windows-Release-Notes",
-          "https://help.elgato.com/hc/en-us/articles/47329364877969-Elgato-Wave-Link-3-2-2-Windows-Release-Notes",
-          "https://help.elgato.com/hc/en-us/articles/47196378703633-Elgato-Wave-Link-3-2-1-Windows-Release-Notes",
-          "https://help.elgato.com/hc/en-us/articles/47158983639825-Elgato-Wave-Link-3-2-macOS-Release-Notes",
-          "https://help.elgato.com/hc/en-us/articles/47156413046289-Elgato-Wave-Link-3-2-Windows-Release-Notes",
-          "https://help.elgato.com/hc/en-us/articles/46621898448017-Elgato-Wave-Link-3-1-1-Windows-Release-Notes",
-          "https://help.elgato.com/hc/en-us/articles/46435080121745-Elgato-Wave-Link-3-1-1-macOS-Release-Notes",
           "https://help.elgato.com/hc/en-us/articles/49089802625809-Elgato-Wave-Link-3-2-8-Windows-Release-Notes",
           "https://help.elgato.com/hc/en-us/articles/49089683395217-Elgato-Wave-Link-3-2-7-Windows-Release-Notes",
           "https://help.elgato.com/hc/en-us/articles/48965301638033-Elgato-Wave-Link-3-2-6-Windows-Release-Notes",
           "https://help.elgato.com/hc/en-us/articles/48602717332369-Elgato-Wave-Link-3-2-2-macOS-Release-Notes",
+          "https://help.elgato.com/hc/en-us/articles/48564639825041-Elgato-Wave-Link-3-2-5-Windows-Release-Notes",
           "https://help.elgato.com/hc/en-us/articles/48522843138065-Elgato-Wave-Link-3-2-1-macOS-Release-Notes",
-          "https://help.elgato.com/hc/en-us/articles/47883204686097-Elgato-Wave-Link-3-2-4-Windows-Release-Notes",
-          "https://help.elgato.com/hc/en-us/articles/47603985610897-Elgato-Wave-Link-3-2-3-Windows-Release-Notes"
+          "https://help.elgato.com/hc/en-us/articles/47883204686097-Elgato-Wave-Link-3-2-4-Windows-Release-Notes"
         ]
       },
       "seen": [],
@@ -2264,18 +1994,20 @@
     "figma": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-07-31T14:39:30Z",
+      "last_checked_at": "2026-08-01T08:35:03Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 200,
-      "last_records_skipped": 74,
+      "last_records_skipped": 76,
       "last_records_written": 4,
-      "last_run_duration_ms": 8639,
-      "last_success_at": "2026-07-31T14:39:30Z",
+      "last_run_duration_ms": 9259,
+      "last_success_at": "2026-08-01T08:35:03Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "rss:figma:200195c1-6df1-4447-bd8f-97e5f0eccc43",
+        "rss:figma:e7afa659-749b-40b4-8b90-f68d14e37668",
         "rss:figma:c0727110-2030-46c6-9b90-c9e60c3aa96a",
         "rss:figma:74a2f878-f037-452e-ac45-29d2cf7b06e4",
         "rss:figma:8aab1e88-1c5d-4fb0-90de-b2afd27bfb9a",
@@ -2360,18 +2092,20 @@
     "github": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-07-31T14:40:14Z",
+      "last_checked_at": "2026-08-01T08:36:39Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 10,
-      "last_records_skipped": 6,
+      "last_records_skipped": 5,
       "last_records_written": 4,
-      "last_run_duration_ms": 8085,
-      "last_success_at": "2026-07-31T14:40:14Z",
+      "last_run_duration_ms": 9579,
+      "last_success_at": "2026-08-01T08:36:39Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "rss:github:https://github.blog/changelog/2026-07-31-enterprise-teams-model-policy-targeting-in-public-preview",
+        "rss:github:https://github.blog/changelog/2026-07-31-gemini-2-5-pro-and-gemini-3-flash-deprecated",
         "rss:github:https://github.blog/changelog/2026-07-30-github-copilot-in-visual-studio-code-july-2026-releases",
         "rss:github:https://github.blog/changelog/2026-07-29-limit-remote-control-to-managed-devices",
         "rss:github:https://github.blog/changelog/2026-07-30-github-copilot-in-visual-studio-july-update",
@@ -2502,7 +2236,7 @@
     "microsoft-365-apps": {
       "consecutive_failures": 0,
       "last_adapter": "microsoft_office_updates",
-      "last_checked_at": "2026-07-31T14:40:51Z",
+      "last_checked_at": "2026-08-01T08:37:20Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -2510,8 +2244,8 @@
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 3833,
-      "last_success_at": "2026-07-31T14:40:51Z",
+      "last_run_duration_ms": 4196,
+      "last_success_at": "2026-08-01T08:37:20Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "microsoft:microsoft-365-apps:2607:03b944d72e34ebb7",
@@ -2525,7 +2259,7 @@
     "microsoft-powerpoint": {
       "consecutive_failures": 0,
       "last_adapter": "microsoft_office_updates",
-      "last_checked_at": "2026-07-31T14:40:50Z",
+      "last_checked_at": "2026-08-01T08:37:20Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -2533,8 +2267,8 @@
       "last_records_fetched": 20,
       "last_records_skipped": 18,
       "last_records_written": 2,
-      "last_run_duration_ms": 226,
-      "last_success_at": "2026-07-31T14:40:50Z",
+      "last_run_duration_ms": 220,
+      "last_success_at": "2026-08-01T08:37:20Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "microsoft:microsoft-powerpoint:2312:41734d73c631db0c",
@@ -2563,7 +2297,7 @@
     "microsoft-windows-11": {
       "consecutive_failures": 0,
       "last_adapter": "microsoft_release_health",
-      "last_checked_at": "2026-07-31T14:40:38Z",
+      "last_checked_at": "2026-08-01T08:37:06Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -2571,8 +2305,8 @@
       "last_records_fetched": 4,
       "last_records_skipped": 0,
       "last_records_written": 4,
-      "last_run_duration_ms": 12839,
-      "last_success_at": "2026-07-31T14:40:38Z",
+      "last_run_duration_ms": 13955,
+      "last_success_at": "2026-08-01T08:37:06Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "microsoft:microsoft-windows-11:24H2:199bc19bde441afc",
@@ -2594,7 +2328,7 @@
     "netlify": {
       "consecutive_failures": 0,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-07-31T14:40:22Z",
+      "last_checked_at": "2026-08-01T08:36:49Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -2602,15 +2336,15 @@
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 225,
-      "last_success_at": "2026-07-31T14:40:22Z",
+      "last_run_duration_ms": 274,
+      "last_success_at": "2026-08-01T08:36:49Z",
       "previous_consecutive_failures": 0,
       "status": "degraded"
     },
     "obs-studio": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-07-31T14:40:13Z",
+      "last_checked_at": "2026-08-01T08:36:38Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -2618,8 +2352,8 @@
       "last_records_fetched": 14,
       "last_records_skipped": 12,
       "last_records_written": 2,
-      "last_run_duration_ms": 750,
-      "last_success_at": "2026-07-31T14:40:13Z",
+      "last_run_duration_ms": 935,
+      "last_success_at": "2026-08-01T08:36:38Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:obs-studio:359586908",
