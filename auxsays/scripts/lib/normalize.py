@@ -3,8 +3,44 @@ from __future__ import annotations
 
 import datetime as dt
 import html
+import os
 import re
+import tempfile
+from pathlib import Path
 from typing import Any
+
+
+def atomic_write_text(path: Path, text: str) -> None:
+    """Write text via a same-directory temp file + ``os.replace`` (atomic on one filesystem), so a
+    crash or exception mid-write never leaves a half-written tracked record. Mirrors
+    ``patch_collectors.base.atomic_write_text`` (kept per-package to avoid a lib->collectors import)."""
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    fd, tmp = tempfile.mkstemp(dir=str(path.parent), prefix=f".{path.name}.", suffix=".tmp")
+    try:
+        with os.fdopen(fd, "w", encoding="utf-8", newline="\n") as handle:
+            handle.write(text)
+        os.replace(tmp, path)
+    finally:
+        if os.path.exists(tmp):
+            os.unlink(tmp)
+
+
+def split_front_matter(text: str) -> tuple[str | None, str]:
+    """Split a Jekyll document into (front_matter_yaml_or_None, body). A delimiter is a line whose
+    ENTIRE content is exactly ``---`` (trailing CR ignored) -- robust against ``-----`` rules,
+    admonitions, and any ``---`` embedded in a serialized scalar, unlike ``text.split('---\\n')``.
+    Mirrors ``patch_collectors.base.split_front_matter``. Returns (None, text) when no fence."""
+    if not text.startswith("---"):
+        return None, text
+    lines = text.splitlines(keepends=True)
+    if not lines or lines[0].rstrip("\r\n") != "---":
+        return None, text
+    for idx in range(1, len(lines)):
+        if lines[idx].rstrip("\r\n") == "---":
+            return "".join(lines[1:idx]), "".join(lines[idx + 1:])
+    return None, text
+
 
 def utc_now() -> str:
     return dt.datetime.utcnow().replace(microsecond=0).isoformat() + "Z"

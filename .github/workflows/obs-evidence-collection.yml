@@ -26,6 +26,9 @@ concurrency:
 jobs:
   collect:
     runs-on: ubuntu-latest
+    # Finite job timeout: the collect step is network-bound and could otherwise hang for the
+    # GitHub default (6h). A bounded job fails fast and frees the writeback concurrency slot.
+    timeout-minutes: 30
     env:
       GITHUB_TOKEN: ${{ github.token }}
       GH_TOKEN: ${{ github.token }}
@@ -43,6 +46,9 @@ jobs:
         run: pip install -r auxsays/scripts/requirements-ingest.txt
 
       - name: Collect patch evidence
+        # Bound the network-bound collection step below the job timeout so a single hung
+        # source cannot consume the whole job budget.
+        timeout-minutes: 20
         env:
           AUXSAYS_ENABLE_WINDOWS_LEARN_QNA_WRITEBACK: "true"
           # Acrobat consensus is activated: its keyless inSided/Algolia discovery method is
@@ -126,6 +132,7 @@ jobs:
             --validate 'python auxsays/scripts/qa_patch_records.py' \
             --validate 'python auxsays/scripts/audit_consensus_evidence.py' \
             --validate 'python auxsays/scripts/validate_evidence_method_health.py' \
+            --validate-before-commit \
             --max-retries 5 \
             --pages-cmd 'gh workflow run pages.yml --ref main' \
             --pages-max-attempts 3 --pages-backoff 5,15 \

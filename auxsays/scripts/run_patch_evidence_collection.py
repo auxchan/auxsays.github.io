@@ -14,7 +14,15 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
-from patch_collectors.base import CollectorContext, upsert_method_health  # noqa: E402
+from patch_collectors.base import (  # noqa: E402
+    CollectorContext,
+    upsert_method_health,
+    ROOT as REPO_ROOT,
+    EVIDENCE_PATH,
+    GENERATED_DIR,
+)
+from lib.collector_txn import CollectorTransaction, UnexpectedMutation, GitUnavailable  # noqa: E402
+from lib import collector_ownership as ownership  # noqa: E402
 from patch_collectors.adobe_premiere import AdobePremiereCollector  # noqa: E402
 from patch_collectors.davinci import DavinciCollector  # noqa: E402
 from patch_collectors.obs import ObsCollector  # noqa: E402
@@ -135,6 +143,112 @@ def since_from_days(days: int | None) -> str | None:
     return (datetime.now(timezone.utc) - timedelta(days=max(0, days))).date().isoformat()
 
 
+_PARSE_ERROR_KINDS = {
+    "ScannerError", "ParserError", "ComposerError", "ReaderError", "YAMLError",
+    "ConstructorError", "EmitterError", "RepresenterError",
+}
+_FETCH_ERROR_KINDS = {
+    "HTTPError", "URLError", "TimeoutError", "ConnectionError", "ConnectionResetError",
+    "ConnectionError", "socket_timeout", "IncompleteRead", "RemoteDisconnected",
+}
+
+
+def normalize_failure_reason(exc: Exception) -> str:
+    """Map a collector exception to a NORMALIZED, safe reason for public/repository-facing output.
+
+    Returns ``<category>:<ExceptionType>`` -- never the raw message, path, URL, header, token, or
+    stack trace (Requirement: no raw exception text in public/repo-facing summaries). The category
+    lets triage distinguish a bad record from a blocked/failed source without leaking specifics."""
+    kind = type(exc).__name__
+    low = kind.lower()
+    if kind == "UnexpectedMutation":
+        category = "unexpected_mutation"
+    elif kind == "OwnershipViolation":
+        category = "ownership_violation"
+    elif kind == "GitUnavailable":
+        category = "git_unavailable"
+    elif kind in _PARSE_ERROR_KINDS or any(t in low for t in ("yaml", "scanner", "parser", "composer")):
+        category = "record_parse_error"
+    elif kind in _FETCH_ERROR_KINDS or any(t in low for t in ("http", "url", "timeout", "connection", "socket")):
+        category = "source_fetch_error"
+    else:
+        category = "collector_error"
+    return f"{category}:{kind}"
+
+
+def _failure_result(product_id: str, write: bool, failure_reason: str) -> dict[str, Any]:
+    return {
+        "product_id": product_id,
+        "mode": "write" if write else "dry-run",
+        "status": "collector_failed",
+        "failure_reason": failure_reason,  # normalized; NO raw message/path/token/stack
+        "accepted_count": 0,
+        "rejected_count": 0,
+        "method_health": [],
+    }
+
+
+def _under(path, base) -> bool:
+    from pathlib import Path as _P
+    try:
+        _P(path).resolve().relative_to(_P(base).resolve())
+        return True
+    except ValueError:
+        return False
+
+
+def _validate_ownership(product_id: str, txn, results: list[dict[str, Any]]) -> None:
+    """Semantic ownership gate (Part D): records, evidence, and method-health must all belong to
+    this collector's product + declared methods, or the whole transaction is rolled back."""
+    rows = [row for item in results for row in (item.get("method_health") or []) if isinstance(row, dict)]
+    mutated_records = {p for p in txn.declared_mutations() if _under(p, GENERATED_DIR)}
+    ownership.validate_records(product_id, GENERATED_DIR, mutated_records, txn.baseline_bytes)
+    before = txn.baseline_bytes(EVIDENCE_PATH)
+    after = EVIDENCE_PATH.read_text(encoding="utf-8") if EVIDENCE_PATH.exists() else None
+    ownership.validate_evidence(product_id, before.decode("utf-8") if before is not None else None, after)
+    ownership.validate_method_health(product_id, rows)
+
+
+def _emit_github_annotation(product_id: str, reason: str) -> None:
+    # GitHub Actions warning annotation: a partial run is loudly visible, never silent.
+    print(f"::warning title=Collector failed (last-known-good retained)::{product_id}: {reason}", flush=True)
+
+
+def _write_github_outputs(outcome: str, writeback_eligible: bool) -> None:
+    out_path = os.environ.get("GITHUB_OUTPUT")
+    if out_path:
+        try:
+            with open(out_path, "a", encoding="utf-8") as handle:
+                handle.write(f"outcome={outcome}\n")
+                handle.write(f"writeback_eligible={'true' if writeback_eligible else 'false'}\n")
+        except OSError:
+            pass
+
+
+def _write_github_summary(outcome: str, writeback_eligible: bool, per_collector: list[dict[str, Any]]) -> None:
+    summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
+    if not summary_path:
+        return
+    icon = {"success": "✅", "partial": "⚠️", "failed": "❌"}.get(outcome, "•")
+    ok = [c for c in per_collector if c["ok"]]
+    bad = [c for c in per_collector if not c["ok"]]
+    try:
+        with open(summary_path, "a", encoding="utf-8") as h:
+            h.write(f"### {icon} Patch evidence collection: **{outcome.upper()}**\n\n")
+            h.write(f"- Writeback of healthy collectors: **{'yes' if writeback_eligible else 'no (nothing succeeded)'}**\n")
+            if bad:
+                h.write(f"- Failed collectors (last-known-good retained, no rows overwritten): "
+                        f"**{', '.join(c['product_id'] for c in bad)}**\n")
+            h.write("\n| Collector | Result | Accepted | Rejected | Health rows | Reason |\n")
+            h.write("|---|---|---|---|---|---|\n")
+            for c in per_collector:
+                res = "ok" if c["ok"] else "FAILED"
+                h.write(f"| {c['product_id']} | {res} | {c['accepted_count']} | {c['rejected_count']} "
+                        f"| {c['method_health_rows']} | {c['failure_reason'] or ''} |\n")
+    except OSError:
+        pass
+
+
 def main(argv: list[str] | None = None) -> int:
     collectors = build_collectors()
     parser = argparse.ArgumentParser(description="Run AUXSAYS patch evidence collection.")
@@ -161,48 +275,117 @@ def main(argv: list[str] | None = None) -> int:
         target_versions=set(args.update_version) if args.update_version else None,
     )
 
-    status = 0
+    # FAIL-SOFT: each collector is isolated. A collector that raises does NOT abort the run and does
+    # NOT contribute any method-health rows -- its last-known-good rows are retained by the keyed
+    # upsert (never overwritten with no_results, never inferred to have found zero reports). Only
+    # successful collectors' rows are merged. Broken telemetry is emitted per exact patch/method
+    # only by a collector that ran far enough to return such a row itself (identity known).
     product_results: list[dict[str, Any]] = []
+    per_collector: list[dict[str, Any]] = []
     method_health: list[dict[str, Any]] = []
+    succeeded_any = False
+    hard_abort = False  # a rollback failure leaves the tree in an unknown state -> refuse writeback
     for product_id in product_ids:
         collector = collectors[product_id]()
+        ok = True
+        failure_reason: str | None = None
+        # Per-collector transaction (write mode only): snapshot the declared mutable surface
+        # (evidence + generated records) BEFORE the collector, so a collector that writes then
+        # raises -- or writes outside its declared surface -- is fully rolled back and contributes
+        # ZERO current-run output. Earlier successful collectors' writes are preserved (they are in
+        # this collector's baseline). Exception catching alone is insufficient; this is the isolation.
+        # Production write mode REQUIRES git-based mutation detection (require_git=True): if git is
+        # unavailable the transaction is unsafe and the run hard-aborts -- never a silent degrade.
+        txn = CollectorTransaction(REPO_ROOT, [EVIDENCE_PATH, GENERATED_DIR], require_git=True) if context.write else None
         try:
+            if txn is not None:
+                txn.begin()  # raises GitUnavailable (fail closed) if git is missing / not a work tree
             results = collector.collect(context)
-        except Exception as exc:
-            status = 1
-            results = [{
-                "product_id": product_id,
-                "mode": "write" if context.write else "dry-run",
-                "status": "collector_failed",
-                "error": str(exc),
-                "accepted_count": 0,
-                "rejected_count": 0,
-                "method_health": [],
-            }]
+            if txn is not None:
+                undeclared = txn.undeclared_mutations()
+                if undeclared:
+                    raise UnexpectedMutation(undeclared)
+                # SEMANTIC OWNERSHIP (Part D): a collector may only own its product's records,
+                # evidence, and method-health; a violation rolls back the whole transaction.
+                _validate_ownership(product_id, txn, results)
+        except GitUnavailable as exc:
+            ok = False
+            hard_abort = True  # git-detection unavailable -> unsafe -> refuse writeback for the run
+            failure_reason = normalize_failure_reason(exc)
+            results = [_failure_result(product_id, context.write, failure_reason)]
+            if txn is not None:
+                try:
+                    txn.rollback()
+                except Exception:  # noqa: BLE001
+                    pass
+        except Exception as exc:  # noqa: BLE001 -- isolate one collector; never crash the run
+            ok = False
+            failure_reason = normalize_failure_reason(exc)
+            results = [_failure_result(product_id, context.write, failure_reason)]
+            if txn is not None:
+                try:
+                    txn.rollback()  # restore the surface byte-for-byte; discard ALL of this collector's writes
+                except Exception as rb:  # noqa: BLE001 -- rollback itself failed -> tree state unknown
+                    hard_abort = True
+                    failure_reason = "rollback_failed:" + type(rb).__name__
+        else:
+            if txn is not None:
+                txn.commit()  # collector succeeded within its surface -> keep changes as the next baseline
+        accepted_count = sum(int(item.get("accepted_count") or 0) for item in results)
+        rejected_count = sum(int(item.get("rejected_count") or 0) for item in results)
+        collector_rows = [row for item in results for row in (item.get("method_health") or []) if isinstance(row, dict)]
+        # Merge health rows ONLY from a collector that did not raise. A raised collector's rows are
+        # discarded so its committed rows survive untouched.
+        if ok:
+            method_health.extend(collector_rows)
+            succeeded_any = True
+        else:
+            _emit_github_annotation(product_id, failure_reason or "collector_error")
+        per_collector.append({
+            "product_id": product_id,
+            "ok": ok,
+            "accepted_count": accepted_count,
+            "rejected_count": rejected_count,
+            "method_health_rows": len(collector_rows) if ok else 0,
+            "failure_reason": failure_reason,
+        })
         product_results.append({
             "product_id": product_id,
             "result_count": len(results),
-            "accepted_count": sum(int(item.get("accepted_count") or 0) for item in results),
-            "rejected_count": sum(int(item.get("rejected_count") or 0) for item in results),
+            "accepted_count": accepted_count,
+            "rejected_count": rejected_count,
             "results": results,
         })
-        for result in results:
-            for row in result.get("method_health") or []:
-                if isinstance(row, dict):
-                    method_health.append(row)
+
+    failed = [c["product_id"] for c in per_collector if not c["ok"]]
+    if hard_abort:
+        # A collector's rollback failed -> the working tree may be inconsistent. Refuse writeback
+        # entirely and report failed; the transactional writeback gate is a second line of defense.
+        outcome = "failed"
+        writeback_eligible = False
+    else:
+        outcome = "success" if not failed else ("partial" if succeeded_any else "failed")
+        writeback_eligible = succeeded_any  # publish healthy collectors on success OR partial
 
     method_health_changed = 0
     method_health_total = 0
     if context.write and method_health:
         method_health_changed, method_health_total, _rows = upsert_method_health(method_health)
 
+    _write_github_outputs(outcome, writeback_eligible)
+    _write_github_summary(outcome, writeback_eligible, per_collector)
+
     payload = {
         "generated_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
         "mode": "write" if context.write else "dry-run",
+        "outcome": outcome,
+        "writeback_eligible": writeback_eligible,
+        "failed_collectors": failed,
         "since": context.since,
         "max_pages": context.max_pages,
         "product_ids": product_ids,
         "target_versions": sorted(context.target_versions) if context.target_versions else None,
+        "collectors": per_collector,
         "products": product_results,
         "accepted_count": sum(item["accepted_count"] for item in product_results),
         "rejected_count": sum(item["rejected_count"] for item in product_results),
@@ -211,7 +394,10 @@ def main(argv: list[str] | None = None) -> int:
         "method_health_rows_total": method_health_total,
     }
     print(json.dumps(payload, indent=2, ensure_ascii=False))
-    return status
+    # Exit 0 for success AND partial (so healthy collectors publish); non-zero ONLY for a total
+    # failure (nothing succeeded -> nothing safe to write). This is NOT "merely forcing exit 0":
+    # a partial is emitted as outcome=partial + ::warning:: annotations + a job-summary table.
+    return 0 if writeback_eligible else 1
 
 
 if __name__ == "__main__":

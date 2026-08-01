@@ -92,13 +92,12 @@ def load_yaml(path: Path, fallback: Any) -> Any:
 
 
 def front_matter(path: Path) -> dict[str, Any]:
+    from lib.normalize import split_front_matter
     text = path.read_text(encoding="utf-8")
-    if not text.startswith("---\n"):
+    front, _body = split_front_matter(text)
+    if front is None:
         return {}
-    parts = text.split("---\n", 2)
-    if len(parts) < 3:
-        return {}
-    data = yaml.safe_load(parts[1])
+    data = yaml.safe_load(front)
     return data if isinstance(data, dict) else {}
 
 

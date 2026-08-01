@@ -5,7 +5,14 @@ from pathlib import Path
 from typing import Any
 import yaml
 
-from .normalize import slugify, utc_now, summarize, normalize_release_notes_body
+from .normalize import (
+    slugify,
+    utc_now,
+    summarize,
+    normalize_release_notes_body,
+    split_front_matter,
+    atomic_write_text,
+)
 
 DEFAULT_CONSENSUS = "Insufficient data"
 
@@ -88,13 +95,11 @@ def output_path(output_dir: Path, record: dict[str, Any]) -> Path:
 
 def _front_matter(path: Path) -> tuple[dict[str, Any], str]:
     text = path.read_text(encoding="utf-8")
-    if not text.startswith("---\n"):
+    front, body = split_front_matter(text)
+    if front is None:
         return {}, text
-    parts = text.split("---\n", 2)
-    if len(parts) < 3:
-        return {}, text
-    data = yaml.safe_load(parts[1]) or {}
-    return data if isinstance(data, dict) else {}, parts[2]
+    data = yaml.safe_load(front) or {}
+    return data if isinstance(data, dict) else {}, body
 
 
 def _dump_record(front: dict[str, Any], body: str = "") -> str:
@@ -355,7 +360,7 @@ def refresh_existing_record(path: Path, record: dict[str, Any]) -> tuple[Path, s
     if existing == original:
         return path, "unchanged"
 
-    path.write_text(_dump_record(existing, body_text), encoding="utf-8")
+    atomic_write_text(path, _dump_record(existing, body_text))
     return path, "refreshed" if material_changed else "freshness-updated"
 
 
@@ -365,5 +370,5 @@ def write_record(output_dir: Path, record: dict[str, Any], overwrite_existing: b
     if path.exists() and not overwrite_existing:
         return refresh_existing_record(path, record)
     front = build_front_matter(record)
-    path.write_text(_dump_record(front), encoding="utf-8")
+    atomic_write_text(path, _dump_record(front))
     return path, "created"

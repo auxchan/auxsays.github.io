@@ -38,13 +38,12 @@ POLICY_ID = "confirmed_patch_specific_reports_v1"
 
 
 def load_front_matter(path: Path) -> dict[str, Any]:
+    from lib.normalize import split_front_matter
     text = path.read_text(encoding="utf-8")
-    if not text.startswith("---\n"):
+    front, _body = split_front_matter(text)
+    if front is None:
         return {}
-    parts = text.split("---\n", 2)
-    if len(parts) < 3:
-        return {}
-    return yaml.safe_load(parts[1]) or {}
+    return yaml.safe_load(front) or {}
 
 
 def classify_record(front: dict[str, Any]) -> dict[str, Any]:
