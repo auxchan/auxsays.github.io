@@ -17,8 +17,8 @@ update_version: New - The editing panel in Figma Make
 update_logo_text: FIG
 update_published_at: '2026-07-30T00:00:00.000Z'
 update_last_checked: '2026-07-31T06:48:50Z'
-source_last_checked: '2026-08-01T08:35:03Z'
-official_body_last_checked: '2026-08-01T08:35:03Z'
+source_last_checked: '2026-08-01T14:12:00Z'
+official_body_last_checked: '2026-08-01T14:12:00Z'
 record_last_updated: '2026-07-31T06:48:50Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -86,6 +86,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-08-01T08:35:03Z'
+  url: https://www.figma.com/release-notes/?title=new-the-editing-panel-in-figma-make
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-08-01T14:12:00Z'
   url: https://www.figma.com/release-notes/?title=new-the-editing-panel-in-figma-make
   status: captured-from-rss-feed
   body_captured: true
