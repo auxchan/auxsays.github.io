@@ -14,7 +14,14 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
-from patch_collectors.base import CollectorContext, upsert_method_health  # noqa: E402
+from patch_collectors.base import (  # noqa: E402
+    CollectorContext,
+    upsert_method_health,
+    ROOT as REPO_ROOT,
+    EVIDENCE_PATH,
+    GENERATED_DIR,
+)
+from lib.collector_txn import CollectorTransaction, UnexpectedMutation  # noqa: E402
 from patch_collectors.adobe_premiere import AdobePremiereCollector  # noqa: E402
 from patch_collectors.davinci import DavinciCollector  # noqa: E402
 from patch_collectors.obs import ObsCollector  # noqa: E402
@@ -153,7 +160,9 @@ def normalize_failure_reason(exc: Exception) -> str:
     lets triage distinguish a bad record from a blocked/failed source without leaking specifics."""
     kind = type(exc).__name__
     low = kind.lower()
-    if kind in _PARSE_ERROR_KINDS or any(t in low for t in ("yaml", "scanner", "parser", "composer")):
+    if kind == "UnexpectedMutation":
+        category = "unexpected_mutation"
+    elif kind in _PARSE_ERROR_KINDS or any(t in low for t in ("yaml", "scanner", "parser", "composer")):
         category = "record_parse_error"
     elif kind in _FETCH_ERROR_KINDS or any(t in low for t in ("http", "url", "timeout", "connection", "socket")):
         category = "source_fetch_error"
@@ -237,12 +246,26 @@ def main(argv: list[str] | None = None) -> int:
     per_collector: list[dict[str, Any]] = []
     method_health: list[dict[str, Any]] = []
     succeeded_any = False
+    hard_abort = False  # a rollback failure leaves the tree in an unknown state -> refuse writeback
     for product_id in product_ids:
         collector = collectors[product_id]()
         ok = True
         failure_reason: str | None = None
+        # Per-collector transaction (write mode only): snapshot the declared mutable surface
+        # (evidence + generated records) BEFORE the collector, so a collector that writes then
+        # raises -- or writes outside its declared surface -- is fully rolled back and contributes
+        # ZERO current-run output. Earlier successful collectors' writes are preserved (they are in
+        # this collector's baseline). Exception catching alone is insufficient; this is the isolation.
+        txn = None
+        if context.write:
+            txn = CollectorTransaction(REPO_ROOT, [EVIDENCE_PATH, GENERATED_DIR])
+            txn.begin()
         try:
             results = collector.collect(context)
+            if txn is not None:
+                undeclared = txn.undeclared_mutations()
+                if undeclared:
+                    raise UnexpectedMutation(undeclared)
         except Exception as exc:  # noqa: BLE001 -- isolate one collector; never crash the run
             ok = False
             failure_reason = normalize_failure_reason(exc)
@@ -255,6 +278,16 @@ def main(argv: list[str] | None = None) -> int:
                 "rejected_count": 0,
                 "method_health": [],
             }]
+            if txn is not None:
+                try:
+                    txn.rollback()  # restore the surface byte-for-byte; discard ALL of this collector's writes
+                except Exception as rb:  # noqa: BLE001 -- rollback itself failed -> tree state unknown
+                    hard_abort = True
+                    failure_reason = "rollback_failed:" + type(rb).__name__
+                    _emit_github_annotation(product_id, failure_reason)
+        else:
+            if txn is not None:
+                txn.commit()  # collector succeeded within its surface -> keep changes as the next baseline
         accepted_count = sum(int(item.get("accepted_count") or 0) for item in results)
         rejected_count = sum(int(item.get("rejected_count") or 0) for item in results)
         collector_rows = [row for item in results for row in (item.get("method_health") or []) if isinstance(row, dict)]
@@ -282,8 +315,14 @@ def main(argv: list[str] | None = None) -> int:
         })
 
     failed = [c["product_id"] for c in per_collector if not c["ok"]]
-    outcome = "success" if not failed else ("partial" if succeeded_any else "failed")
-    writeback_eligible = succeeded_any  # publish healthy collectors on success OR partial
+    if hard_abort:
+        # A collector's rollback failed -> the working tree may be inconsistent. Refuse writeback
+        # entirely and report failed; the transactional writeback gate is a second line of defense.
+        outcome = "failed"
+        writeback_eligible = False
+    else:
+        outcome = "success" if not failed else ("partial" if succeeded_any else "failed")
+        writeback_eligible = succeeded_any  # publish healthy collectors on success OR partial
 
     method_health_changed = 0
     method_health_total = 0

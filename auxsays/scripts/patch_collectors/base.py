@@ -495,12 +495,16 @@ def append_evidence_rows(rows: list[dict[str, Any]], path: Path = EVIDENCE_PATH)
             seen_urls.add(url_key)
         added += 1
     if added:
+        # Atomic append: preserve the existing file bytes EXACTLY and append only the serialized new
+        # rows, then write the whole result via a temp sibling + os.replace. This removes the raw
+        # `open("a")` torn-write hazard (an interruption can no longer leave a partial YAML document)
+        # while keeping the historical bytes untouched (no full reformat). No additions -> no write.
+        appended_rows = existing[-added:]
+        serialized = yaml.safe_dump(appended_rows, sort_keys=False, allow_unicode=True, width=1000)
         if path.exists():
-            appended_rows = existing[-added:]
-            with path.open("a", encoding="utf-8") as handle:
-                if path.stat().st_size > 0:
-                    handle.write("\n")
-                handle.write(yaml.safe_dump(appended_rows, sort_keys=False, allow_unicode=True, width=1000))
+            existing_text = path.read_text(encoding="utf-8")
+            separator = "\n" if existing_text and existing_text.strip() else ""
+            atomic_write_text(path, existing_text + separator + serialized)
         else:
             write_evidence_file(existing, path)
     return added, len(existing), existing
