@@ -6,6 +6,7 @@ import argparse
 import json
 import os
 import sys
+import time
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
@@ -225,25 +226,33 @@ def _write_github_outputs(outcome: str, writeback_eligible: bool) -> None:
             pass
 
 
-def _write_github_summary(outcome: str, writeback_eligible: bool, per_collector: list[dict[str, Any]]) -> None:
+def _write_github_summary(outcome: str, writeback_eligible: bool, per_collector: list[dict[str, Any]],
+                          runtime: dict[str, Any] | None = None) -> None:
     summary_path = os.environ.get("GITHUB_STEP_SUMMARY")
     if not summary_path:
         return
     icon = {"success": "✅", "partial": "⚠️", "failed": "❌"}.get(outcome, "•")
-    ok = [c for c in per_collector if c["ok"]]
     bad = [c for c in per_collector if not c["ok"]]
+    rt = runtime or {}
     try:
         with open(summary_path, "a", encoding="utf-8") as h:
             h.write(f"### {icon} Patch evidence collection: **{outcome.upper()}**\n\n")
-            h.write(f"- Writeback of healthy collectors: **{'yes' if writeback_eligible else 'no (nothing succeeded)'}**\n")
+            if rt:
+                h.write(f"- Total collection runtime: **{rt.get('total_runtime_s', '?')}s**\n")
+                h.write(f"- Collectors attempted / completed / failed: "
+                        f"**{rt.get('attempted', '?')} / {rt.get('completed', '?')} / {rt.get('failed', '?')}**\n")
+            h.write(f"- Collection completed (reached end of run): **yes**\n")
+            h.write(f"- Writeback of healthy collectors recommended: "
+                    f"**{'yes' if writeback_eligible else 'no (nothing succeeded)'}**\n")
             if bad:
                 h.write(f"- Failed collectors (last-known-good retained, no rows overwritten): "
                         f"**{', '.join(c['product_id'] for c in bad)}**\n")
-            h.write("\n| Collector | Result | Accepted | Rejected | Health rows | Reason |\n")
-            h.write("|---|---|---|---|---|---|\n")
+            h.write("\n| Collector | Result | Runtime (s) | Methods | Accepted | Rejected | Health rows | Reason |\n")
+            h.write("|---|---|---|---|---|---|---|---|\n")
             for c in per_collector:
                 res = "ok" if c["ok"] else "FAILED"
-                h.write(f"| {c['product_id']} | {res} | {c['accepted_count']} | {c['rejected_count']} "
+                h.write(f"| {c['product_id']} | {res} | {c.get('duration_s', '?')} | {c.get('methods_attempted', '?')} "
+                        f"| {c['accepted_count']} | {c['rejected_count']} "
                         f"| {c['method_health_rows']} | {c['failure_reason'] or ''} |\n")
     except OSError:
         pass
@@ -285,10 +294,12 @@ def main(argv: list[str] | None = None) -> int:
     method_health: list[dict[str, Any]] = []
     succeeded_any = False
     hard_abort = False  # a rollback failure leaves the tree in an unknown state -> refuse writeback
+    run_started = time.monotonic()
     for product_id in product_ids:
         collector = collectors[product_id]()
         ok = True
         failure_reason: str | None = None
+        collector_started = time.monotonic()
         # Per-collector transaction (write mode only): snapshot the declared mutable surface
         # (evidence + generated records) BEFORE the collector, so a collector that writes then
         # raises -- or writes outside its declared surface -- is fully rolled back and contributes
@@ -331,9 +342,11 @@ def main(argv: list[str] | None = None) -> int:
         else:
             if txn is not None:
                 txn.commit()  # collector succeeded within its surface -> keep changes as the next baseline
+        collector_duration_s = round(time.monotonic() - collector_started, 1)
         accepted_count = sum(int(item.get("accepted_count") or 0) for item in results)
         rejected_count = sum(int(item.get("rejected_count") or 0) for item in results)
         collector_rows = [row for item in results for row in (item.get("method_health") or []) if isinstance(row, dict)]
+        methods_attempted = len({str(row.get("method_id")) for row in collector_rows if row.get("method_id")})
         # Merge health rows ONLY from a collector that did not raise. A raised collector's rows are
         # discarded so its committed rows survive untouched.
         if ok:
@@ -347,6 +360,8 @@ def main(argv: list[str] | None = None) -> int:
             "accepted_count": accepted_count,
             "rejected_count": rejected_count,
             "method_health_rows": len(collector_rows) if ok else 0,
+            "methods_attempted": methods_attempted,
+            "duration_s": collector_duration_s,
             "failure_reason": failure_reason,
         })
         product_results.append({
@@ -357,6 +372,9 @@ def main(argv: list[str] | None = None) -> int:
             "results": results,
         })
 
+    total_runtime_s = round(time.monotonic() - run_started, 1)
+    attempted = len(per_collector)
+    completed = sum(1 for c in per_collector if c["ok"])
     failed = [c["product_id"] for c in per_collector if not c["ok"]]
     if hard_abort:
         # A collector's rollback failed -> the working tree may be inconsistent. Refuse writeback
@@ -372,14 +390,20 @@ def main(argv: list[str] | None = None) -> int:
     if context.write and method_health:
         method_health_changed, method_health_total, _rows = upsert_method_health(method_health)
 
+    runtime = {"total_runtime_s": total_runtime_s, "attempted": attempted,
+               "completed": completed, "failed": len(failed)}
     _write_github_outputs(outcome, writeback_eligible)
-    _write_github_summary(outcome, writeback_eligible, per_collector)
+    _write_github_summary(outcome, writeback_eligible, per_collector, runtime)
 
     payload = {
         "generated_at": datetime.now(timezone.utc).replace(microsecond=0).isoformat().replace("+00:00", "Z"),
         "mode": "write" if context.write else "dry-run",
         "outcome": outcome,
         "writeback_eligible": writeback_eligible,
+        "total_runtime_s": total_runtime_s,
+        "collectors_attempted": attempted,
+        "collectors_completed": completed,
+        "collectors_failed": len(failed),
         "failed_collectors": failed,
         "since": context.since,
         "max_pages": context.max_pages,
