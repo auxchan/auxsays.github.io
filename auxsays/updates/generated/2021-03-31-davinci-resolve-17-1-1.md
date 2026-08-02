@@ -1,8 +1,8 @@
 ---
 layout: aux-update
-title: DaVinci Resolve 21.0.3 official update breakdown
+title: DaVinci Resolve 17.1.1 official update breakdown
 description: Official DaVinci Resolve update record captured from Blackmagic Design.
-permalink: /updates/blackmagic-design/blackmagic-davinci/21-0-3/
+permalink: /updates/blackmagic-design/blackmagic-davinci/17-1-1/
 update_entry: true
 company_id: blackmagic-design
 product_id: blackmagic-davinci
@@ -13,29 +13,31 @@ update_type: official-source
 update_source_name: Blackmagic Design
 update_source_url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
 update_download_url: https://www.blackmagicdesign.com/event/davinciresolvedownload
-update_version: 21.0.3
+update_version: 17.1.1
 update_logo_text: DAV
-update_published_at: '2026-07-22T00:00:00Z'
-update_last_checked: '2026-07-22T04:19:49Z'
+update_published_at: '2021-03-31T00:00:00Z'
+update_last_checked: '2026-08-02T09:37:55Z'
 source_last_checked: '2026-08-02T09:37:55Z'
 official_body_last_checked: '2026-08-02T09:37:55Z'
-record_last_updated: '2026-07-22T04:19:49Z'
+record_last_updated: '2026-08-02T09:37:55Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
 update_status: current
-update_feed_title: DaVinci Resolve 21.0.3
-update_detail_title: DaVinci Resolve 21.0.3
+update_feed_title: DaVinci Resolve 17.1.1
+update_detail_title: DaVinci Resolve 17.1.1
 update_consensus_label: Insufficient data
 update_report_count: 0
 update_consensus_confidence: Low
-quick_verdict: DaVinci Resolve 21.0.3 has an official AUXSAYS record. Confirmed patch-specific consensus is deferred until
+quick_verdict: DaVinci Resolve 17.1.1 has an official AUXSAYS record. Confirmed patch-specific consensus is deferred until
   the consensus refresh pipeline is active.
-official_summary: Blackmagic Design lists DaVinci Resolve Studio 21.0.3 Update in its official support downloads feed.
-release_summary: This software update adds new ease modes for retime speed and frame curves, as well as improved handling
-  of interlaced media, keyframe editing, multicam audio and PSD imports. This update also reinstates QuickSync encode options
-  for older Intel systems and adds a custom install location for encode SDK plugins on Windows ARM. This version requires
-  a DaVinci Resolve Studio license dongle, Blackmagic Cloud license or software activation code.
+official_summary: Blackmagic Design lists DaVinci Resolve Studio 17.1.1 Update in its official support downloads feed.
+release_summary: This software update adds support for hardware accelerated decoding of H.264 10-bit formats on Macs running
+  Apple M1 processors, improves reliability when restoring older database backups as well as adding better audio performance
+  in various playback scenarios. Additionally, this update adds support for Blackmagic RAW clips recorded by Blackmagic Video
+  Assist 12G HDR from Panasonic Lumix S1H cameras, improves functionality for Resolve FX blanking fill, improves scripting
+  API, and formats metadata more accurately when rendering DNxHR clips. This version requires a DaVinci Resolve Studio license
+  dongle or software activation code.
 consensus_report: Confirmed patch-specific consensus collection is deferred. This page currently reflects official-source
   ingestion only.
 evidence_state: official_only
@@ -53,10 +55,10 @@ consensus_report_weighting: equal_per_confirmed_report
 consensus_low_context_policy: excluded
 complaint_themes: []
 status_events:
-- at: '2026-07-22T00:00:00Z'
+- at: '2021-03-31T00:00:00Z'
   label: Published
   note: Official source entry detected.
-- at: '2026-07-22T04:19:52Z'
+- at: '2026-08-02T09:38:04Z'
   label: Insufficient data
   note: AUXSAYS official-ingestion record initialized.
 official_patch_notes_source_type: download_portal
@@ -82,44 +84,26 @@ official_sources:
   trust_level: official
   extraction_status: version_metadata_captured
 official_source_attempts:
-- at: '2026-07-31T09:35:47Z'
-  url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
-  status: captured-from-official-blackmagic-support-api
-  body_captured: true
-  checksums_captured: false
-- at: '2026-07-31T14:40:05Z'
-  url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
-  status: captured-from-official-blackmagic-support-api
-  body_captured: true
-  checksums_captured: false
-- at: '2026-08-01T14:12:34Z'
-  url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
-  status: captured-from-official-blackmagic-support-api
-  body_captured: true
-  checksums_captured: false
-- at: '2026-08-01T19:37:18Z'
-  url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
-  status: captured-from-official-blackmagic-support-api
-  body_captured: true
-  checksums_captured: false
 - at: '2026-08-02T09:37:55Z'
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
   status: captured-from-official-blackmagic-support-api
   body_captured: true
   checksums_captured: false
-official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci Resolve Studio 21.0.3 Update
+official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci Resolve Studio 17.1.1 Update
 
   Channel: Stable
 
-  Release date: 2026-07-22
+  Release date: 2021-03-31
 
-  Platforms listed: Mac OS X, Windows, Linux, Windows ARM
+  Platforms listed: Mac OS X, Windows, Linux
 
 
-  This software update adds new ease modes for retime speed and frame curves, as well as improved handling of interlaced media,
-  keyframe editing, multicam audio and PSD imports. This update also reinstates QuickSync encode options for older Intel systems
-  and adds a custom install location for encode SDK plugins on Windows ARM. This version requires a DaVinci Resolve Studio
-  license dongle, Blackmagic Cloud license or software activation code.
+  This software update adds support for hardware accelerated decoding of H.264 10-bit formats on Macs running Apple M1 processors,
+  improves reliability when restoring older database backups as well as adding better audio performance in various playback
+  scenarios. Additionally, this update adds support for Blackmagic RAW clips recorded by Blackmagic Video Assist 12G HDR from
+  Panasonic Lumix S1H cameras, improves functionality for Resolve FX blanking fill, improves scripting API, and formats metadata
+  more accurately when rendering DNxHR clips. This version requires a DaVinci Resolve Studio license dongle or software activation
+  code.
 
 
   Official support page: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
