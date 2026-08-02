@@ -1,8 +1,8 @@
 ---
 layout: aux-update
-title: Figma New - The editing panel in Figma Make official update breakdown
+title: Figma Publish Buzz Templates with Variable Modes official update breakdown
 description: Official Figma update record captured from Figma.
-permalink: /updates/figma/figma/new-the-editing-panel-in-figma-make/
+permalink: /updates/figma/figma/publish-buzz-templates-with-variable-modes/
 update_entry: true
 company_id: figma
 product_id: figma
@@ -11,29 +11,28 @@ update_product: Figma
 update_category: Design Workflow
 update_type: official-source
 update_source_name: Figma
-update_source_url: https://www.figma.com/release-notes/?title=new-the-editing-panel-in-figma-make
+update_source_url: https://www.figma.com/release-notes/?title=publish-buzz-templates-with-variable-modes
 update_download_url: ''
-update_version: New - The editing panel in Figma Make
+update_version: Publish Buzz Templates with Variable Modes
 update_logo_text: FIG
-update_published_at: '2026-07-30T00:00:00.000Z'
-update_last_checked: '2026-07-31T06:48:50Z'
+update_published_at: '2025-12-11T00:00:00.000Z'
+update_last_checked: '2026-08-02T16:53:05Z'
 source_last_checked: '2026-08-02T16:53:05Z'
 official_body_last_checked: '2026-08-02T16:53:05Z'
-record_last_updated: '2026-07-31T06:48:50Z'
+record_last_updated: '2026-08-02T16:53:05Z'
 patch_file_size: ''
 patch_file_size_note: ''
 patch_file_size_status: pending_adapter_support
 update_status: current
-update_feed_title: Figma New - The editing panel in Figma Make
-update_detail_title: Figma New - The editing panel in Figma Make
+update_feed_title: Figma Publish Buzz Templates with Variable Modes
+update_detail_title: Figma Publish Buzz Templates with Variable Modes
 update_consensus_label: Insufficient data
 update_report_count: 0
 update_consensus_confidence: Low
-quick_verdict: Figma New - The editing panel in Figma Make has an official AUXSAYS record. Confirmed patch-specific consensus
+quick_verdict: Figma Publish Buzz Templates with Variable Modes has an official AUXSAYS record. Confirmed patch-specific consensus
   is deferred until the consensus refresh pipeline is active.
-official_summary: Figma published Figma New - The editing panel in Figma Make.
-release_summary: The new properties panel brings a more direct way to build in Figma Make. Click any element to adjust its
-  properties by hand, or annotate a spot on the screen and let the agent make the change.
+official_summary: Figma published Figma Publish Buzz Templates with Variable Modes.
+release_summary: Learn how to set up configurable templates
 consensus_report: Confirmed patch-specific consensus collection is deferred. This page currently reflects official-source
   ingestion only.
 evidence_state: official_only
@@ -51,10 +50,10 @@ consensus_report_weighting: equal_per_confirmed_report
 consensus_low_context_policy: excluded
 complaint_themes: []
 status_events:
-- at: '2026-07-30T00:00:00.000Z'
+- at: '2025-12-11T00:00:00.000Z'
   label: Published
   note: Official source entry detected.
-- at: '2026-07-31T06:48:55Z'
+- at: '2026-08-02T16:53:15Z'
   label: Insufficient data
   note: AUXSAYS official-ingestion record initialized.
 official_patch_notes_source_type: rss-feed
@@ -62,7 +61,7 @@ primary_official_source: https://www.figma.com/release-notes/
 fallback_official_sources:
 - https://forum.figma.com/product-updates-3
 official_patch_notes_capture_status: captured-from-rss-feed
-official_patch_notes_source_url: https://www.figma.com/release-notes/?title=new-the-editing-panel-in-figma-make
+official_patch_notes_source_url: https://www.figma.com/release-notes/?title=publish-buzz-templates-with-variable-modes
 official_note_status: official_source_captured
 official_note_label: Official source summary
 official_source_type: rss-feed
@@ -70,33 +69,12 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-08-01T08:35:03Z'
-  url: https://www.figma.com/release-notes/?title=new-the-editing-panel-in-figma-make
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
-- at: '2026-08-01T14:12:00Z'
-  url: https://www.figma.com/release-notes/?title=new-the-editing-panel-in-figma-make
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
-- at: '2026-08-01T19:36:43Z'
-  url: https://www.figma.com/release-notes/?title=new-the-editing-panel-in-figma-make
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
-- at: '2026-08-02T09:37:20Z'
-  url: https://www.figma.com/release-notes/?title=new-the-editing-panel-in-figma-make
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-08-02T16:53:05Z'
-  url: https://www.figma.com/release-notes/?title=new-the-editing-panel-in-figma-make
+  url: https://www.figma.com/release-notes/?title=publish-buzz-templates-with-variable-modes
   status: captured-from-rss-feed
   body_captured: true
   checksums_captured: false
-official_patch_notes_body: The new properties panel brings a more direct way to build in Figma Make. Click any element to
-  adjust its properties by hand, or annotate a spot on the screen and let the agent make the change.
+official_patch_notes_body: Learn how to set up configurable templates
 official_checksums_body: ''
 official_checksums_capture_status: not-present
 ---
