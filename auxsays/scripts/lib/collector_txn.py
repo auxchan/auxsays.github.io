@@ -71,6 +71,11 @@ class CollectorTransaction:
         self._snapshot: dict[Path, bytes] = {}
         self._existed: set[Path] = set()
         self._git_baseline: set[str] = set()
+        # Absolute Git top level, resolved in begin() via `git rev-parse --show-toplevel`. git status
+        # reports paths relative to THIS, which is NOT necessarily repo_root: the application root may
+        # be a nested subdirectory (e.g. <top>/auxsays). Interpreting git paths against repo_root would
+        # double the nested segment and misclassify legitimate in-surface writes as UnexpectedMutation.
+        self._git_root: Path | None = None
 
     def baseline_bytes(self, path: Path) -> bytes | None:
         """Pre-collector bytes of a path in the declared surface (None if it did not exist)."""
@@ -86,8 +91,44 @@ class CollectorTransaction:
                     if p.is_file():
                         yield p
 
+    def _resolve_git_root(self) -> Path:
+        """Resolve the actual Git top level explicitly via `git rev-parse --show-toplevel` (never
+        inferred from the application directory). git status/checkout report paths relative to this.
+        Fail closed with GitUnavailable in production write mode if resolution fails, returns an
+        invalid path, or resolves a repository that does not contain the application root. When git
+        is not required (dry-run / unit contexts) and unavailable, fall back to repo_root."""
+        try:
+            proc = subprocess.run(
+                ["git", "-C", str(self.repo_root), "rev-parse", "--show-toplevel"],
+                capture_output=True, text=True,
+            )
+        except (FileNotFoundError, OSError) as exc:
+            if self.require_git:
+                raise GitUnavailable(f"git executable unavailable ({type(exc).__name__})") from None
+            return self.repo_root
+        out = (proc.stdout or "").strip()
+        if proc.returncode != 0 or not out:
+            if self.require_git:
+                raise GitUnavailable("git rev-parse --show-toplevel failed (not a work tree)")
+            return self.repo_root
+        top = Path(out).resolve()
+        if not top.exists():
+            if self.require_git:
+                raise GitUnavailable("git top-level path does not exist")
+            return self.repo_root
+        # The configured application root MUST live inside this Git repository.
+        try:
+            self.repo_root.relative_to(top)
+        except ValueError:
+            if self.require_git:
+                raise GitUnavailable("application root is not inside the resolved git repository")
+            return self.repo_root
+        return top
+
     def _within_roots(self, rel_path: str) -> bool:
-        ap = (self.repo_root / rel_path).resolve()
+        # git-reported paths are relative to the Git top level, not repo_root.
+        base = self._git_root or self.repo_root
+        ap = (base / rel_path).resolve()
         for root in self.roots:
             if root.is_file() or not root.exists():
                 if ap == root:
@@ -101,10 +142,12 @@ class CollectorTransaction:
 
     # --- git mutation detection ----------------------------------------------
     def _git_dirty(self) -> set[str]:
+        # -z (NUL-separated, no quoting/escaping) so paths with spaces or Unicode are handled safely;
+        # bytes + explicit UTF-8 decode avoids platform-codepage corruption of non-ASCII paths.
         try:
             proc = subprocess.run(
-                ["git", "-C", str(self.repo_root), "status", "--porcelain", "--untracked-files=all"],
-                capture_output=True, text=True,
+                ["git", "-C", str(self.repo_root), "status", "--porcelain", "-z", "--untracked-files=all"],
+                capture_output=True,
             )
         except (FileNotFoundError, OSError) as exc:
             if self.require_git:
@@ -115,19 +158,32 @@ class CollectorTransaction:
                 # Fail closed: no silent degrade to directory-only detection in production write mode.
                 raise GitUnavailable("git status failed (not a work tree or git error)")
             return set()
+        fields = proc.stdout.decode("utf-8", "surrogateescape").split("\x00")
         paths: set[str] = set()
-        for line in proc.stdout.splitlines():
-            entry = line[3:] if len(line) > 3 else ""
-            entry = entry.strip()
-            if " -> " in entry:  # rename: take the destination
-                entry = entry.split(" -> ", 1)[1]
-            entry = entry.strip().strip('"')
-            if entry:
-                paths.add(entry)
+        i, n = 0, len(fields)
+        while i < n:
+            entry = fields[i]
+            i += 1
+            if not entry:
+                continue
+            xy = entry[:2]
+            path = entry[3:] if len(entry) > 3 else ""
+            # In -z mode a rename/copy is followed by the ORIGIN path in the next NUL field; flag both
+            # the destination and the origin so a rename into OR out of the roots is detected.
+            if "R" in xy or "C" in xy:
+                origin = fields[i] if i < n else ""
+                i += 1
+                if origin:
+                    paths.add(origin)
+            if path:
+                paths.add(path)
         return paths
 
     # --- lifecycle ------------------------------------------------------------
     def begin(self) -> None:
+        # Resolve the Git top level FIRST so a production write mode with unusable git fails closed
+        # before any state is captured.
+        self._git_root = self._resolve_git_root()
         self._snapshot = {p: p.read_bytes() for p in self._iter_root_files()}
         self._existed = set(self._snapshot)
         self._git_baseline = self._git_dirty()
@@ -161,11 +217,14 @@ class CollectorTransaction:
         for p, data in self._snapshot.items():
             if p not in current or p.read_bytes() != data:
                 atomic_write_bytes(p, data)
-        # restore any undeclared out-of-root mutation from git HEAD (never legitimately changed)
+        # restore any undeclared out-of-root mutation from git HEAD (never legitimately changed).
+        # git status reports git-root-relative paths, so run git FROM the git top level (not the
+        # nested repo_root) or the pathspec would gain a doubled application-directory prefix.
+        git_cwd = str(self._git_root or self.repo_root)
         for rel in self.undeclared_mutations():
-            subprocess.run(["git", "-C", str(self.repo_root), "checkout", "HEAD", "--", rel],
+            subprocess.run(["git", "-C", git_cwd, "checkout", "HEAD", "--", rel],
                            capture_output=True, text=True)
-            subprocess.run(["git", "-C", str(self.repo_root), "clean", "-fdq", "--", rel],
+            subprocess.run(["git", "-C", git_cwd, "clean", "-fdq", "--", rel],
                            capture_output=True, text=True)
         self._assert_restored()
         self._snapshot = {}
