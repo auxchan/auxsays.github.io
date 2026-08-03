@@ -17,8 +17,8 @@ update_version: Enterprise teams model policy targeting in public preview
 update_logo_text: GIT
 update_published_at: '2026-07-31T18:11:50Z'
 update_last_checked: '2026-08-01T08:36:39Z'
-source_last_checked: '2026-08-03T06:54:04Z'
-official_body_last_checked: '2026-08-03T06:54:04Z'
+source_last_checked: '2026-08-03T13:19:03Z'
+official_body_last_checked: '2026-08-03T13:19:03Z'
 record_last_updated: '2026-08-01T08:36:39Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -93,11 +93,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-08-01T19:37:30Z'
-  url: https://github.blog/changelog/2026-07-31-enterprise-teams-model-policy-targeting-in-public-preview
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-08-02T09:38:05Z'
   url: https://github.blog/changelog/2026-07-31-enterprise-teams-model-policy-targeting-in-public-preview
   status: captured-from-rss-feed
@@ -114,6 +109,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-08-03T06:54:04Z'
+  url: https://github.blog/changelog/2026-07-31-enterprise-teams-model-policy-targeting-in-public-preview
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-08-03T13:19:03Z'
   url: https://github.blog/changelog/2026-07-31-enterprise-teams-model-policy-targeting-in-public-preview
   status: captured-from-rss-feed
   body_captured: true

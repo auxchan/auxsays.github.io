@@ -1,8 +1,8 @@
 ---
 layout: aux-update
-title: Figma Design closer to CSS with the updated auto layout option official update breakdown
+title: Figma Multi-brand scale with extended collections official update breakdown
 description: Official Figma update record captured from Figma.
-permalink: /updates/figma/figma/design-closer-to-css-with-the-updated-auto-layout-option/
+permalink: /updates/figma/figma/multi-brand-scale-with-extended-collections/
 update_entry: true
 company_id: figma
 product_id: figma
@@ -11,28 +11,29 @@ update_product: Figma
 update_category: Design Workflow
 update_type: official-source
 update_source_name: Figma
-update_source_url: https://www.figma.com/release-notes/?title=design-closer-to-css-with-the-updated-auto-layout-option
+update_source_url: https://www.figma.com/release-notes/?title=extended-collections
 update_download_url: ''
-update_version: Design closer to CSS with the updated auto layout option
+update_version: Multi-brand scale with extended collections
 update_logo_text: FIG
-update_published_at: '2026-07-24T00:00:00.000Z'
-update_last_checked: '2026-07-28T20:25:17Z'
+update_published_at: '2025-11-20T00:00:00.000Z'
+update_last_checked: '2026-08-03T13:18:17Z'
 source_last_checked: '2026-08-03T13:18:17Z'
 official_body_last_checked: '2026-08-03T13:18:17Z'
-record_last_updated: '2026-07-28T20:25:17Z'
+record_last_updated: '2026-08-03T13:18:17Z'
 patch_file_size: ''
 patch_file_size_note: ''
 patch_file_size_status: pending_adapter_support
 update_status: current
-update_feed_title: Figma Design closer to CSS with the updated auto layout option
-update_detail_title: Figma Design closer to CSS with the updated auto layout option
+update_feed_title: Figma Multi-brand scale with extended collections
+update_detail_title: Figma Multi-brand scale with extended collections
 update_consensus_label: Insufficient data
 update_report_count: 0
 update_consensus_confidence: Low
-quick_verdict: Figma Design closer to CSS with the updated auto layout option has an official AUXSAYS record. Confirmed patch-specific
+quick_verdict: Figma Multi-brand scale with extended collections has an official AUXSAYS record. Confirmed patch-specific
   consensus is deferred until the consensus refresh pipeline is active.
-official_summary: Figma published Figma Design closer to CSS with the updated auto layout option.
-release_summary: Auto layout now works more like CSS, so what you design lines up more closely with what actually gets built.
+official_summary: Figma published Figma Multi-brand scale with extended collections.
+release_summary: A new way to manage and scale multi-brand design systems with extended collections and a new variables authoring
+  experience.
 consensus_report: Confirmed patch-specific consensus collection is deferred. This page currently reflects official-source
   ingestion only.
 evidence_state: official_only
@@ -50,10 +51,10 @@ consensus_report_weighting: equal_per_confirmed_report
 consensus_low_context_policy: excluded
 complaint_themes: []
 status_events:
-- at: '2026-07-24T00:00:00.000Z'
+- at: '2025-11-20T00:00:00.000Z'
   label: Published
   note: Official source entry detected.
-- at: '2026-07-28T20:25:22Z'
+- at: '2026-08-03T13:18:22Z'
   label: Insufficient data
   note: AUXSAYS official-ingestion record initialized.
 official_patch_notes_source_type: rss-feed
@@ -61,7 +62,7 @@ primary_official_source: https://www.figma.com/release-notes/
 fallback_official_sources:
 - https://forum.figma.com/product-updates-3
 official_patch_notes_capture_status: captured-from-rss-feed
-official_patch_notes_source_url: https://www.figma.com/release-notes/?title=design-closer-to-css-with-the-updated-auto-layout-option
+official_patch_notes_source_url: https://www.figma.com/release-notes/?title=extended-collections
 official_note_status: official_source_captured
 official_note_label: Official source summary
 official_source_type: rss-feed
@@ -69,33 +70,13 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-08-02T09:37:20Z'
-  url: https://www.figma.com/release-notes/?title=design-closer-to-css-with-the-updated-auto-layout-option
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
-- at: '2026-08-02T16:53:05Z'
-  url: https://www.figma.com/release-notes/?title=design-closer-to-css-with-the-updated-auto-layout-option
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
-- at: '2026-08-02T20:14:20Z'
-  url: https://www.figma.com/release-notes/?title=design-closer-to-css-with-the-updated-auto-layout-option
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
-- at: '2026-08-03T06:53:15Z'
-  url: https://www.figma.com/release-notes/?title=design-closer-to-css-with-the-updated-auto-layout-option
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-08-03T13:18:17Z'
-  url: https://www.figma.com/release-notes/?title=design-closer-to-css-with-the-updated-auto-layout-option
+  url: https://www.figma.com/release-notes/?title=extended-collections
   status: captured-from-rss-feed
   body_captured: true
   checksums_captured: false
-official_patch_notes_body: Auto layout now works more like CSS, so what you design lines up more closely with what actually
-  gets built.
+official_patch_notes_body: A new way to manage and scale multi-brand design systems with extended collections and a new variables
+  authoring experience.
 official_checksums_body: ''
 official_checksums_capture_status: not-present
 ---
