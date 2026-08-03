@@ -13,10 +13,10 @@ on:
         default: false
         type: boolean
   schedule:
-    # Temporarily every 4 hours (was hourly) during production recovery: a run can take up to the
-    # 210-min job timeout, so a 4h (240-min) interval guarantees each run finishes before the next
-    # is due -- no overlap and no accumulating queue (reinforced by the concurrency group below).
-    - cron: '17 */4 * * *'
+    # Temporary bounded-recovery cadence: every 6 hours (was 4h). A run can take up to the 300-min
+    # job timeout; a 6h (360-min) interval leaves 60 min after the job bound before the next slot is
+    # due -- no overlap and no accumulating queue (reinforced by the concurrency group below).
+    - cron: '17 */6 * * *'
 
 permissions:
   contents: write
@@ -29,12 +29,13 @@ concurrency:
 jobs:
   collect:
     runs-on: ubuntu-latest
-    # Finite job timeout that bounds a true runaway WITHOUT cutting off the normal workload.
-    # Historical successful runs took 65-159 min (network-bound retries across all collectors),
-    # so the previous 30 min killed every run. 210 min stays above the observed max with margin,
-    # is under the GitHub 6h default, and (with the every-4-hours cadence below) guarantees a run
-    # finishes well before the next one is due -- no overlap, no accumulating queue.
-    timeout-minutes: 210
+    # Finite job timeout that bounds a true runaway WITHOUT cutting off the normal workload. The
+    # first post-fix natural run (30743094087) hit the prior 180-min collection-step cap, so the
+    # collection step is raised to 240 min (below); the job is raised to 300 min to leave 60 min
+    # after the collection cap for QA, audit, EMH validation, transactional commit, push, explicit
+    # Pages dispatch, and the final summary. 300 min stays under the GitHub 6h default and, with the
+    # every-6-hours (360-min) cadence below, leaves 60 min before the next slot -- no overlap/queue.
+    timeout-minutes: 300
     env:
       GITHUB_TOKEN: ${{ github.token }}
       GH_TOKEN: ${{ github.token }}
@@ -53,10 +54,12 @@ jobs:
 
       - name: Collect patch evidence
         id: collect
-        # Finite step timeout below the job timeout, sized ABOVE the real 65-159 min workload so it
-        # only trips on a genuine per-step hang (not the normal network-bound retry budget). The
-        # earlier 20 min cap was below the real workload and killed the run mid-collection.
-        timeout-minutes: 180
+        # Finite step timeout below the job timeout. Raised 180 -> 240 min: with the collector-txn
+        # git-root fix (PR #38) the OBS + Acrobat collectors now complete their writeback instead of
+        # rolling back, so the workload grew past the prior 180-min cap. 240 min leaves 60 min under
+        # the 300-min job cap for the downstream validation/writeback/deploy steps. It still trips on
+        # a genuine per-step hang; this sprint does not address collector inefficiency itself.
+        timeout-minutes: 240
         env:
           AUXSAYS_ENABLE_WINDOWS_LEARN_QNA_WRITEBACK: "true"
           # Acrobat consensus is activated: its keyless inSided/Algolia discovery method is
