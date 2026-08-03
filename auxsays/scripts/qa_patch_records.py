@@ -11,6 +11,8 @@ from urllib.parse import urlparse
 
 import yaml
 
+from lib.report_counts import counted_evidence_counts
+
 ROOT = Path(__file__).resolve().parents[1]
 GENERATED_DIR = ROOT / "updates" / "generated"
 UPDATES_DIR = ROOT / "updates"
@@ -153,28 +155,14 @@ def public_record_text(data: dict[str, Any]) -> str:
 
 
 def load_counted_evidence_counts() -> dict[tuple[str, str], int]:
-    counts: dict[tuple[str, str], int] = {}
+    # Delegates to the single authoritative predicate (lib.report_counts.counted_evidence_counts) so
+    # this QA gate and the post-collection reconciliation count evidence IDENTICALLY and can never
+    # diverge -- that shared definition is what makes update_report_count == final counted evidence.
     payload = load_yaml(EVIDENCE_PATH, [])
-    if isinstance(payload, dict):
-        rows = payload.get("evidence") or []
-    else:
-        rows = payload
+    rows = payload.get("evidence") if isinstance(payload, dict) else payload
     if not isinstance(rows, list):
-        return counts
-    for row in rows:
-        if not isinstance(row, dict):
-            continue
-        product_id = str(row.get("product_id") or "").strip()
-        version = str(row.get("update_version") or "").strip()
-        if not product_id or not version:
-            continue
-        if row.get("counted") is False:
-            continue
-        if row.get("patch_version_matched") is not True:
-            continue
-        key = (product_id, version)
-        counts[key] = counts.get(key, 0) + 1
-    return counts
+        return {}
+    return counted_evidence_counts(rows)
 
 
 def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]:

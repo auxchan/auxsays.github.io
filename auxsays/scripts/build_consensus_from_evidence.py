@@ -15,6 +15,7 @@ from typing import Any
 import yaml
 
 from patch_collectors.base import WINDOWS_PRODUCT_ID, load_front_matter_and_body, windows_identity_gate
+from lib.report_counts import reconcile_record_counts
 
 ROOT = Path(__file__).resolve().parents[1]
 EVIDENCE_PATH = ROOT / "_data" / "consensus_evidence.yml"
@@ -321,6 +322,16 @@ def windows_target_index() -> dict[tuple[str, str], dict[str, str]]:
 
 def main() -> int:
     evidence = load_evidence()
+    # AUTHORITATIVE RECONCILIATION (runs after all collectors, before QA): make every generated
+    # record's update_report_count equal the final counted evidence for its exact (product_id,
+    # version), using the same predicate QA enforces. Idempotent -- an already-aligned tree writes
+    # nothing. This closes the generated_report_count_mismatch (record showed 4 while structured
+    # evidence had 14) at one place instead of trusting each collector's per-run count.
+    reconciled, reconciled_detail = reconcile_record_counts(evidence, GENERATED_DIR)
+    if reconciled:
+        print(f"Reconciled report counts on {reconciled} record(s) to final counted evidence.")
+        for d in reconciled_detail:
+            print(f"  {d['record']}: {d['product_id']} {d['version']} {d['before']} -> {d['after']}")
     windows_targets = windows_target_index()
     groups: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
     excluded: list[dict[str, Any]] = []
