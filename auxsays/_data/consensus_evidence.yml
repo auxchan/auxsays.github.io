@@ -10132,3 +10132,202 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5965489-keep-getting-install-error-25h2-os-bui
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5965489/keep-getting-install-error-25h2-os-build-26200-897
+  parent_title: Keep getting install error. 25H2 (OS Build 26200.8973) - Microsoft Q&A
+  report_title: Keep getting install error. 25H2 (OS Build 26200.8973) - Microsoft Q&A
+  report_text_excerpt: Keep getting install error. 25H2 (OS Build 26200.8973) - Microsoft Q&A Why does 2026-07 Preview Update (KB5101684) (26200.8973) keep getting Install error - 0x800f0991? It keeps having a red light on my bottom desktop tool bar and a Windows Update window has explanation mark...
+  captured_at: '2026-08-04T23:29:55Z'
+  source_date: '2026-08-03'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8973'
+  match_basis: exact_os_build
+  matched_kb: KB5101684
+  matched_os_build: '26200.8973'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5962540-2026-07-preview-update-kb5101684-26200
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5962540/2026-07-preview-update-kb5101684-26200-8973-causes
+  parent_title: 2026-07 Preview Update (KB5101684) (26200.8973) causes laptop to lockup and not turn off when I shut it down - Microsoft Q&A
+  report_title: 2026-07 Preview Update (KB5101684) (26200.8973) causes laptop to lockup and not turn off when I shut it down - Microsoft Q&A
+  report_text_excerpt: 2026-07 Preview Update (KB5101684) (26200.8973) causes laptop to lockup and not turn off when I shut it down - Microsoft Q&A This update is an issue. it installed fine. system seems to work ok, but when I go to shut down - sometimes - the laptop hangs up, screen goes black as...
+  captured_at: '2026-08-04T23:29:55Z'
+  source_date: '2026-08-02'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8973'
+  match_basis: exact_os_build
+  matched_kb: KB5101684
+  matched_os_build: '26200.8973'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5961591-mirroring-from-phone-to-pc-lagging-dis
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5961591/mirroring-from-phone-to-pc-lagging-display
+  parent_title: 'Mirroring from Phone to PC: Lagging Display - Microsoft Q&A'
+  report_title: 'Mirroring from Phone to PC: Lagging Display - Microsoft Q&A'
+  report_text_excerpt: 'Mirroring from Phone to PC: Lagging Display - Microsoft Q&A In the past two weeks, I have lost the capability to work on my phone via both Phone Link and Samsung Flow. The response time of using my PC mouse and keyboard is far, far behind. The lag makes the option to mirror...'
+  captured_at: '2026-08-04T23:29:55Z'
+  source_date: '2026-08-01'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8973'
+  match_basis: exact_os_build
+  matched_kb: KB5101684
+  matched_os_build: '26200.8973'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: display regression
+  workflow_area: display / graphics
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5961757-title-windows-kits-folder-disappeared
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5961757/title-windows-kits-folder-disappeared-and-microsof
+  parent_title: 'Title: Windows Kits folder disappeared and Microsoft GameInput folder location changed after Windows 11 update KB5101684 - Microsoft Q&A'
+  report_title: 'Title: Windows Kits folder disappeared and Microsoft GameInput folder location changed after Windows 11 update KB5101684 - Microsoft Q&A'
+  report_text_excerpt: 'Title: Windows Kits folder disappeared and Microsoft GameInput folder location changed after Windows 11 update KB5101684 - Microsoft Q&A Hello everyone,I would like to ask about a folder location change that occurred on my Windows 11 system. This morning at around 11:53 AM, I...'
+  captured_at: '2026-08-04T23:29:55Z'
+  source_date: '2026-07-31'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5101684
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5101684
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5964428-sql-server-2022-database-engine-recove
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5964428/sql-server-2022-database-engine-recovery-handle-fa
+  parent_title: SQL Server 2022 Database Engine Recovery Handle Failed on Clean Windows 11 Installation - Microsoft Q&A
+  report_title: SQL Server 2022 Database Engine Recovery Handle Failed on Clean Windows 11 Installation - Microsoft Q&A
+  report_text_excerpt: 'SQL Server 2022 Database Engine Recovery Handle Failed on Clean Windows 11 Installation - Microsoft Q&A Hello, I am unable to install SQL Server 2022 (Express and Developer) on my Windows 11 Home laptop. Every installation fails with the following error: Wait on the Database...'
+  captured_at: '2026-08-04T23:29:55Z'
+  source_date: '2026-08-03'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8973'
+  match_basis: exact_os_build
+  matched_os_build: '26200.8973'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5960137-windows-11-build-26200-8973-25h2-langu
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5960137/windows-11-build-26200-8973-25h2-language-pack-err
+  parent_title: 'Windows 11 Build 26200.8973 (25H2) Language Pack Error: Mixed English and Vietnamese UI, DISM/CAB failing to fix - Microsoft Q&A'
+  report_title: 'Windows 11 Build 26200.8973 (25H2) Language Pack Error: Mixed English and Vietnamese UI, DISM/CAB failing to fix - Microsoft Q&A'
+  report_text_excerpt: 'Windows 11 Build 26200.8973 (25H2) Language Pack Error: Mixed English and Vietnamese UI, DISM/CAB failing to fix - Microsoft Q&A Hi everyone, I am currently running Windows 11 Pro Build 26200.8973 (Version 25H2) . My PC is NOT enrolled in the Windows Insider Program. However,...'
+  captured_at: '2026-08-04T23:29:55Z'
+  source_date: '2026-08-01'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8973'
+  match_basis: exact_os_build
+  matched_os_build: '26200.8973'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: microsoft-windows-11-26h1-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5962557-windows-update-upgraded-my-windows-11
+  product_id: microsoft-windows-11
+  update_version: 26H1
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5962557/windows-update-upgraded-my-windows-11-enterprise-i
+  parent_title: Windows Update upgraded my Windows 11 Enterprise installation to an expiring Insider Preview build after unenrolling from Windows Insider - Microsoft Q&A
+  report_title: Windows Update upgraded my Windows 11 Enterprise installation to an expiring Insider Preview build after unenrolling from Windows Insider - Microsoft Q&A
+  report_text_excerpt: Windows Update upgraded my Windows 11 Enterprise installation to an expiring Insider Preview build after unenrolling from Windows Insider - Microsoft Q&A Hi, I'm trying to determine whether this is expected behavior or whether there is a supported way to recover without...
+  captured_at: '2026-08-04T23:30:03Z'
+  source_date: '2026-08-02'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '28000.2608'
+  match_basis: exact_os_build
+  matched_os_build: '28000.2608'
+  matched_feature_version: 26H1
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
