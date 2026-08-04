@@ -17,8 +17,8 @@ update_version: Enterprise team specialization for managed settings
 update_logo_text: GIT
 update_published_at: '2026-08-03T22:55:29Z'
 update_last_checked: '2026-08-03T23:57:20Z'
-source_last_checked: '2026-08-03T23:57:20Z'
-official_body_last_checked: '2026-08-03T23:57:20Z'
+source_last_checked: '2026-08-04T07:29:13Z'
+official_body_last_checked: '2026-08-04T07:29:13Z'
 record_last_updated: '2026-08-03T23:57:20Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -99,6 +99,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-08-03T23:57:20Z'
+  url: https://github.blog/changelog/2026-08-03-enterprise-team-specialization-for-managed-settings
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-08-04T07:29:13Z'
   url: https://github.blog/changelog/2026-08-03-enterprise-team-specialization-for-managed-settings
   status: captured-from-rss-feed
   body_captured: true
