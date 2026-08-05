@@ -17,8 +17,8 @@ update_version: Get organized with nested folders
 update_logo_text: FIG
 update_published_at: '2026-08-03T00:00:00.000Z'
 update_last_checked: '2026-08-03T18:12:21Z'
-source_last_checked: '2026-08-05T07:30:47Z'
-official_body_last_checked: '2026-08-05T07:30:47Z'
+source_last_checked: '2026-08-05T12:51:49Z'
+official_body_last_checked: '2026-08-05T12:51:49Z'
 record_last_updated: '2026-08-03T18:12:21Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -70,11 +70,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-08-03T23:56:32Z'
-  url: https://www.figma.com/release-notes/?title=get-organized-with-nested-folders
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-08-04T07:28:25Z'
   url: https://www.figma.com/release-notes/?title=get-organized-with-nested-folders
   status: captured-from-rss-feed
@@ -91,6 +86,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-08-05T07:30:47Z'
+  url: https://www.figma.com/release-notes/?title=get-organized-with-nested-folders
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-08-05T12:51:49Z'
   url: https://www.figma.com/release-notes/?title=get-organized-with-nested-folders
   status: captured-from-rss-feed
   body_captured: true
