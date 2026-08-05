@@ -100,6 +100,20 @@ def run() -> int:
     deleted = gen / "gone.md"  # never created -> deletion
     expect_code("rec undeclared deletion", lambda: o.validate_records("obs-studio", gen, {deleted}, lambda p: None), "undeclared_deletion")
 
+    # --- PUBLIC-SAFETY: a hostile product_id/version cannot leak paths/urls/tokens/newlines/ctrl ---
+    hostile = o.OwnershipViolation("raw http://x /home/runner/a.md token=xyz",
+                                   code="evidence_version_unresolved", surface="evidence",
+                                   product_id="obs\nHACK", version="1.0\nSECRET=ab\r\x07https://evil.com\t/home/runner/p.md")
+    pr = hostile.public_reason()
+    leaks = [b for b in ("SECRET", "https", "evil", "HACK", "/home", "/runner", ".md", "token", "xyz", "\n", "\r", "\x07", "\t") if b in pr]
+    check("public-safety: hostile product/version fully redacted", leaks == [] and "product=invalid" in pr and "version=invalid" in pr, f"leaks={leaks} pr={pr!r}")
+    check("public-safety: normalize of hostile violation is code-only", runner.normalize_failure_reason(hostile) == "ownership_violation:evidence_version_unresolved")
+    # legit slugs are preserved (diagnostic keeps value for real ids/versions)
+    legit = o.OwnershipViolation("x", code="record_version_unresolved", surface="record", product_id="adobe-acrobat-pro", version="26.001.21563")
+    check("public-safety: legit slug product/version preserved", legit.public_reason() == "code=record_version_unresolved surface=record product=adobe-acrobat-pro version=26.001.21563")
+    # over-long / non-slug-first-char values are rejected too
+    check("public-safety: over-long value redacted", o.OwnershipViolation("x", code="c", surface="s", version="a" * 100).public_reason().endswith("version=invalid"))
+
     # --- non-ownership normalize unchanged; legit input still accepted ---
     check("non-ownership normalize unchanged", runner.normalize_failure_reason(ValueError("x")) == "collector_error:ValueError")
     try:

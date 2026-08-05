@@ -13,10 +13,22 @@ control point -- adding a genuinely new method to a collector requires updating 
 """
 from __future__ import annotations
 
+import re
 from pathlib import Path
 from typing import Any
 
 import yaml
+
+# A product_id / version rendered into a public diagnostic is either a clean slug or nothing. Product
+# ids and versions are deterministic slugs (obs-studio, 31.0.3); anything else -- a value carrying a
+# newline, control char, url, absolute path, whitespace, or a token -- is NOT emitted at all (replaced
+# by a fixed marker), so no fragment of a hostile source value can leak through the diagnostic line.
+_SLUG = re.compile(r"\A[A-Za-z0-9][A-Za-z0-9._-]{0,47}\Z")
+
+
+def _safe_token(value: Any) -> str:
+    s = str(value)
+    return s if _SLUG.fullmatch(s) else ("-" if s == "" else "invalid")
 
 from patch_collectors.base import (
     VALID_METHOD_HEALTH_STATUSES,
@@ -88,12 +100,14 @@ class OwnershipViolation(Exception):
         self.version = version
 
     def public_reason(self) -> str:
-        """Bounded, public-safe one-liner for logs/summaries: no path/url/token/exception text."""
-        parts = [f"code={self.code}", f"surface={self.surface or '-'}"]
+        """Bounded, public-safe one-liner for logs/summaries. Every field is reduced to a slug-safe,
+        length-capped token, so no path/url/token/newline/control-char/exception text can leak even
+        if a hostile source injected one into a product_id or version."""
+        parts = [f"code={_safe_token(self.code)}", f"surface={_safe_token(self.surface) if self.surface else '-'}"]
         if self.product_id:
-            parts.append(f"product={self.product_id}")
+            parts.append(f"product={_safe_token(self.product_id)}")
         if self.version:
-            parts.append(f"version={self.version}")
+            parts.append(f"version={_safe_token(self.version)}")
         return " ".join(parts)
 
 
