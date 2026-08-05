@@ -165,7 +165,10 @@ def normalize_failure_reason(exc: Exception) -> str:
     if kind == "UnexpectedMutation":
         category = "unexpected_mutation"
     elif kind == "OwnershipViolation":
-        category = "ownership_violation"
+        # Surface the PUBLIC-SAFE structured rule code (e.g. ownership_violation:record_version_
+        # unresolved) instead of the bare type, so a production run reveals WHICH ownership rule
+        # failed without leaking the raw message/path/url. Falls back to the type if code is absent.
+        return f"ownership_violation:{getattr(exc, 'code', None) or 'unspecified'}"
     elif kind == "GitUnavailable":
         category = "git_unavailable"
     elif kind in _PARSE_ERROR_KINDS or any(t in low for t in ("yaml", "scanner", "parser", "composer")):
@@ -333,6 +336,10 @@ def main(argv: list[str] | None = None) -> int:
             ok = False
             failure_reason = normalize_failure_reason(exc)
             results = [_failure_result(product_id, context.write, failure_reason)]
+            if type(exc).__name__ == "OwnershipViolation" and hasattr(exc, "public_reason"):
+                # bounded, public-safe structured diagnostic so the exact rule/surface/target is
+                # visible in logs on the next run (no path/url/token/exception text).
+                print(f"[auxsays:ownership] {product_id}: {exc.public_reason()}", flush=True)
             if txn is not None:
                 try:
                     txn.rollback()  # restore the surface byte-for-byte; discard ALL of this collector's writes

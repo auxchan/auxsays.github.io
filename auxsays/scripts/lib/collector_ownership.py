@@ -70,7 +70,35 @@ ALLOWED_SOURCE_TYPES: dict[str, set[str]] = {
 
 
 class OwnershipViolation(Exception):
-    """A collector produced a record, evidence row, or method-health row it does not own."""
+    """A collector produced a record, evidence row, or method-health row it does not own.
+
+    Carries a PUBLIC-SAFE structured reason so a production run can report WHICH rule failed for WHICH
+    collector without leaking anything sensitive. ``code`` is a fixed slug (e.g. record_version_
+    unresolved); ``surface`` is record|evidence|method_health; ``product_id``/``version`` are the
+    collector identity + normalized target version. The free-text ``args[0]`` message may still name a
+    record basename / evidence id for local tests, but the runner surfaces ONLY (code, surface,
+    product_id, version) -- never a raw path, url, token, header, or stack trace."""
+
+    def __init__(self, message: str, *, code: str = "unspecified", surface: str = "",
+                 product_id: str = "", version: str = "") -> None:
+        super().__init__(message)
+        self.code = code
+        self.surface = surface
+        self.product_id = product_id
+        self.version = version
+
+    def public_reason(self) -> str:
+        """Bounded, public-safe one-liner for logs/summaries: no path/url/token/exception text."""
+        parts = [f"code={self.code}", f"surface={self.surface or '-'}"]
+        if self.product_id:
+            parts.append(f"product={self.product_id}")
+        if self.version:
+            parts.append(f"version={self.version}")
+        return " ".join(parts)
+
+
+def _violation(code: str, message: str, *, surface: str, product_id: str = "", version: str = "") -> "OwnershipViolation":
+    return OwnershipViolation(message, code=code, surface=surface, product_id=product_id, version=version)
 
 
 def allowed_methods(product_id: str) -> set[str]:
@@ -109,33 +137,38 @@ def validate_records(product_id: str, generated_dir: Path, mutated: set[Path],
         exists_now = path.exists()
         if not exists_now:
             # Deletion: collectors REFRESH records, they never delete. Any deletion is a violation.
-            raise OwnershipViolation(f"collector '{product_id}' deleted a generated record: {path.name}")
+            raise _violation("undeclared_deletion", f"collector '{product_id}' deleted a generated record: {path.name}",
+                             surface="record", product_id=product_id)
         text = path.read_text(encoding="utf-8", errors="replace")
         front, _body = split_front_matter(text)
         if front is None:
-            raise OwnershipViolation(f"collector '{product_id}' wrote a non-record file under generated/: {path.name}")
+            raise _violation("record_non_record_file", f"collector '{product_id}' wrote a non-record file under generated/: {path.name}",
+                             surface="record", product_id=product_id)
         try:
             data = yaml.safe_load(front) or {}
         except yaml.YAMLError:
-            raise OwnershipViolation(f"collector '{product_id}' wrote malformed record front matter: {path.name}")
+            raise _violation("record_malformed_front_matter", f"collector '{product_id}' wrote malformed record front matter: {path.name}",
+                             surface="record", product_id=product_id)
         if not isinstance(data, dict) or data.get("update_entry") is not True:
-            raise OwnershipViolation(f"collector '{product_id}' wrote a non-update record under generated/: {path.name}")
+            raise _violation("record_non_update", f"collector '{product_id}' wrote a non-update record under generated/: {path.name}",
+                             surface="record", product_id=product_id)
         rec_pid = str(data.get("product_id") or "").strip()
         if rec_pid != product_id:
-            raise OwnershipViolation(
-                f"collector '{product_id}' mutated a '{rec_pid or 'unknown'}'-owned record: {path.name}")
+            raise _violation("record_product_mismatch", f"collector '{product_id}' mutated a '{rec_pid or 'unknown'}'-owned record: {path.name}",
+                             surface="record", product_id=product_id)
         version = str(data.get("update_version") or "").strip()
         if not version:
-            raise OwnershipViolation(f"collector '{product_id}' record has no update_version: {path.name}")
+            raise _violation("record_version_missing", f"collector '{product_id}' record has no update_version: {path.name}",
+                             surface="record", product_id=product_id)
         # Identity must match the deterministic writer's permalink shape /updates/<company>/<product>/<slug>/
         permalink = str(data.get("permalink") or "")
         if f"/{product_id}/" not in permalink:
-            raise OwnershipViolation(
-                f"collector '{product_id}' record permalink identity mismatch: {permalink!r} ({path.name})")
+            raise _violation("record_permalink_mismatch", f"collector '{product_id}' record permalink identity mismatch: {permalink!r} ({path.name})",
+                             surface="record", product_id=product_id, version=version)
         # A collector refreshes existing records; a version with no pre-existing record is suspect.
         if version not in existing_versions:
-            raise OwnershipViolation(
-                f"collector '{product_id}' record version {version} does not resolve to an existing patch record")
+            raise _violation("record_version_unresolved", f"collector '{product_id}' record version {version} does not resolve to an existing patch record",
+                             surface="record", product_id=product_id, version=version)
 
 
 # --- consensus evidence --------------------------------------------------------
@@ -148,11 +181,13 @@ def validate_evidence(product_id: str, before_text: str | None, after_text: str 
     # Existing rows are immutable: present, identical, never deleted.
     for bid, brow in before_ids.items():
         if bid not in after_ids:
-            raise OwnershipViolation(f"collector '{product_id}' deleted existing evidence row {bid}")
+            raise _violation("evidence_existing_row_deleted", f"collector '{product_id}' deleted existing evidence row {bid}",
+                             surface="evidence", product_id=product_id)
         if after_ids[bid] != brow:
-            raise OwnershipViolation(f"collector '{product_id}' modified existing evidence row {bid}")
+            raise _violation("evidence_existing_row_modified", f"collector '{product_id}' modified existing evidence row {bid}",
+                             surface="evidence", product_id=product_id)
     if len(after) < len(before):
-        raise OwnershipViolation(f"collector '{product_id}' removed evidence rows")
+        raise _violation("evidence_rows_removed", f"collector '{product_id}' removed evidence rows", surface="evidence", product_id=product_id)
 
     existing_versions = _existing_versions(product_id)
     permitted_sources = allowed_source_types(product_id)
@@ -165,24 +200,28 @@ def validate_evidence(product_id: str, before_text: str | None, after_text: str 
             continue  # unchanged existing row
         pid = str(row.get("product_id") or "").strip()
         if pid != product_id:
-            raise OwnershipViolation(f"collector '{product_id}' appended cross-product evidence for '{pid}'")
+            raise _violation("evidence_product_mismatch", f"collector '{product_id}' appended cross-product evidence for '{pid}'",
+                             surface="evidence", product_id=product_id)
         version = str(row.get("update_version") or "").strip()
         if version not in existing_versions:
-            raise OwnershipViolation(
-                f"collector '{product_id}' appended evidence for unresolved version {version}")
+            raise _violation("evidence_version_unresolved", f"collector '{product_id}' appended evidence for unresolved version {version}",
+                             surface="evidence", product_id=product_id, version=version)
         source_type = str(row.get("source_type") or "").strip()
         if not source_type:
-            raise OwnershipViolation(f"collector '{product_id}' appended evidence with no source identity (id={rid})")
+            raise _violation("evidence_missing_source", f"collector '{product_id}' appended evidence with no source identity (id={rid})",
+                             surface="evidence", product_id=product_id, version=version)
         if source_type not in permitted_sources:
-            raise OwnershipViolation(
-                f"collector '{product_id}' appended evidence with unauthorized source '{source_type}' (id={rid})")
+            raise _violation("evidence_unauthorized_source", f"collector '{product_id}' appended evidence with unauthorized source '{source_type}' (id={rid})",
+                             surface="evidence", product_id=product_id, version=version)
         if not rid:
-            raise OwnershipViolation(f"collector '{product_id}' appended an evidence row with no id")
+            raise _violation("evidence_missing_id", f"collector '{product_id}' appended an evidence row with no id", surface="evidence", product_id=product_id, version=version)
         if rid in seen_ids:
-            raise OwnershipViolation(f"collector '{product_id}' appended a duplicate evidence id {rid}")
+            raise _violation("evidence_duplicate_id", f"collector '{product_id}' appended a duplicate evidence id {rid}",
+                             surface="evidence", product_id=product_id, version=version)
         url = str(row.get("source_url") or "")
         if url and url in seen_urls and row.get("match_basis") != "embedded_listing_report_card":
-            raise OwnershipViolation(f"collector '{product_id}' appended a duplicate evidence url {url}")
+            raise _violation("evidence_duplicate_url", f"collector '{product_id}' appended a duplicate evidence url {url}",
+                             surface="evidence", product_id=product_id, version=version)
         seen_ids.add(rid)
         if url:
             seen_urls.add(url)
@@ -194,17 +233,21 @@ def validate_method_health(product_id: str, rows: list[dict[str, Any]]) -> None:
     existing_versions = _existing_versions(product_id)
     for row in rows:
         if not isinstance(row, dict):
-            raise OwnershipViolation(f"collector '{product_id}' returned a non-dict method-health row")
+            raise _violation("method_health_non_dict", f"collector '{product_id}' returned a non-dict method-health row",
+                             surface="method_health", product_id=product_id)
         pid = str(row.get("product_id") or "").strip()
         if pid != product_id:
-            raise OwnershipViolation(f"collector '{product_id}' returned method-health for '{pid}'")
+            raise _violation("method_health_product_mismatch", f"collector '{product_id}' returned method-health for '{pid}'",
+                             surface="method_health", product_id=product_id)
         method = str(row.get("method_id") or "").strip()
         if method not in permitted:
-            raise OwnershipViolation(f"collector '{product_id}' returned unauthorized method_id '{method}'")
+            raise _violation("method_not_allowed", f"collector '{product_id}' returned unauthorized method_id '{method}'",
+                             surface="method_health", product_id=product_id)
         version = str(row.get("update_version") or "").strip()
         if version not in existing_versions:
-            raise OwnershipViolation(
-                f"collector '{product_id}' returned method-health for unresolved version {version}")
+            raise _violation("method_health_version_unresolved", f"collector '{product_id}' returned method-health for unresolved version {version}",
+                             surface="method_health", product_id=product_id, version=version)
         status = str(row.get("status") or "").strip()
         if status not in VALID_METHOD_HEALTH_STATUSES:
-            raise OwnershipViolation(f"collector '{product_id}' returned non-canonical status '{status}'")
+            raise _violation("method_health_noncanonical_status", f"collector '{product_id}' returned non-canonical status '{status}'",
+                             surface="method_health", product_id=product_id, version=version)
