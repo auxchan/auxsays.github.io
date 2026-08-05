@@ -10331,3 +10331,52 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-21-0-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1v7rvwo-resolve-is-using-all-my-ram-128gb-and-lag
+  product_id: blackmagic-davinci
+  update_version: 21.0.3
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1v7rvwo/resolve_is_using_all_my_ram_128gb_and_lagging/
+  parent_title: Resolve is using all my RAM (128GB) and lagging
+  report_title: Resolve is using all my RAM (128GB) and lagging
+  report_text_excerpt: 'Resolve is using all my RAM (128GB) and lagging I have a reasonable spec''d Windows 11 machine dedicated toDavinci Resolve 21.0.3 build 7 (Studio): Intel Core i7 (13700K) 128 GB DDR5 (6k) GeForce RTX 5070Ti (16GB) GPU 10Gbit Network to my media NAS server (also 10Gbit) NvMe...'
+  captured_at: '2026-08-05T23:32:20Z'
+  source_date: '2026-07-27'
+  target_release_date: '2026-07-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.3
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: timeline / GPU performance
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-0-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1v7jx8b-why-when-i-import-an-fbx-model-it-just-do
+  product_id: blackmagic-davinci
+  update_version: 21.0.3
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1v7jx8b/why_when_i_import_an_fbx_model_it_just_doesnt/
+  parent_title: why when i import an fbx model, it just doesn't appear?
+  report_title: why when i import an fbx model, it just doesn't appear?
+  report_text_excerpt: why when i import an fbx model, it just doesn't appear? ive sorta got the hang of the 3d space stuff, but some models like this one just.. don't appear visible, and it's not a size issue either, that too and i also connected it to a merge3d > renderer3d > mediaout whatever but...
+  captured_at: '2026-08-05T23:32:20Z'
+  source_date: '2026-07-26'
+  target_release_date: '2026-07-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 21.0.3
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
