@@ -32,6 +32,7 @@ def _safe_token(value: Any) -> str:
 
 from patch_collectors.base import (
     VALID_METHOD_HEALTH_STATUSES,
+    evidence_key,
     split_front_matter,
     generated_records,
 )
@@ -79,6 +80,33 @@ ALLOWED_SOURCE_TYPES: dict[str, set[str]] = {
     "microsoft-windows-11": {"microsoft_learn_qna"},
     "microsoft-powerpoint": {"microsoft_learn_qna", "reddit_community_report"},
 }
+
+# Per-product allowed permalink route slug(s). A record's public permalink is the canonical shape
+# /updates/<company>/<product-slug>/<version-slug>/; the product-slug USUALLY equals product_id, but a
+# few products legitimately publish under more than one established route slug (DaVinci Resolve's
+# records live under BOTH /blackmagic-davinci/ and /davinci-resolve/). This is the single explicit
+# authority for those exceptions -- any product not listed permits EXACTLY its own product_id. There is
+# no substring, alias, or display-name inference: validation compares the exact parsed product-slug
+# path segment (see _permalink_product_slug) against this allowlist.
+ALLOWED_PERMALINK_SLUGS: dict[str, set[str]] = {
+    "blackmagic-davinci": {"blackmagic-davinci", "davinci-resolve"},
+}
+
+
+def allowed_permalink_slugs(product_id: str) -> set[str]:
+    return ALLOWED_PERMALINK_SLUGS.get(product_id, {product_id})
+
+
+def _permalink_product_slug(permalink: str) -> str | None:
+    """Return the product-slug segment of a canonical update permalink
+    (/updates/<company>/<product>/<version>/ -> the third path segment), or None if the permalink is
+    not that shape. Exact-segment parse: a deceptive path such as /updates/davinci-resolve/evil/1/ or
+    /updates/x/davinci-resolve-fake/1/ never yields 'davinci-resolve' as the product slug, so
+    segment-position spoofing and substring look-alikes are rejected."""
+    segments = [seg for seg in str(permalink or "").split("/") if seg]
+    if len(segments) < 3 or segments[0] != "updates":
+        return None
+    return segments[2]
 
 
 class OwnershipViolation(Exception):
@@ -174,9 +202,14 @@ def validate_records(product_id: str, generated_dir: Path, mutated: set[Path],
         if not version:
             raise _violation("record_version_missing", f"collector '{product_id}' record has no update_version: {path.name}",
                              surface="record", product_id=product_id)
-        # Identity must match the deterministic writer's permalink shape /updates/<company>/<product>/<slug>/
+        # Identity must match the deterministic writer's permalink shape /updates/<company>/<product>/<slug>/.
+        # The product-slug segment must be one this product is explicitly allowed to publish under (its
+        # own product_id, or an entry in ALLOWED_PERMALINK_SLUGS). Exact parsed-segment match only -- no
+        # substring/alias inference -- so another product using this slug, a DaVinci record under an
+        # unrelated slug, and deceptive substring paths are all rejected.
         permalink = str(data.get("permalink") or "")
-        if f"/{product_id}/" not in permalink:
+        slug = _permalink_product_slug(permalink)
+        if slug is None or slug not in allowed_permalink_slugs(product_id):
             raise _violation("record_permalink_mismatch", f"collector '{product_id}' record permalink identity mismatch: {permalink!r} ({path.name})",
                              surface="record", product_id=product_id, version=version)
         # A collector refreshes existing records; a version with no pre-existing record is suspect.
@@ -205,9 +238,18 @@ def validate_evidence(product_id: str, before_text: str | None, after_text: str 
 
     existing_versions = _existing_versions(product_id)
     permitted_sources = allowed_source_types(product_id)
-    # Dedup universe = existing ids/urls; each added row must be unique and owned.
+    # Dedup universe = existing ids/urls; each added row must be unique and owned. The duplicate-URL
+    # identity is the SAME key the append/dedup authority uses (base.evidence_key): the triple
+    # (product_id, exact update_version, normalize_url(source_url)) -- NOT the url alone. A url-alone
+    # key over-rejected legitimately shared source URLs across distinct (product, version) rows
+    # (run 31015586517 false positive on obs/acrobat-pro/acrobat-reader). Embedded listing report cards
+    # are exempt from the url set exactly as append_evidence_rows exempts them.
     seen_ids = set(before_ids)
-    seen_urls = {str(r.get("source_url") or "") for r in before if r.get("source_url")}
+    seen_urls = {
+        evidence_key(r, "source_url")
+        for r in before
+        if r.get("source_url") and r.get("match_basis") != "embedded_listing_report_card"
+    }
     for row in after:
         rid = str(row.get("id") or "")
         if rid in before_ids:
@@ -233,12 +275,13 @@ def validate_evidence(product_id: str, before_text: str | None, after_text: str 
             raise _violation("evidence_duplicate_id", f"collector '{product_id}' appended a duplicate evidence id {rid}",
                              surface="evidence", product_id=product_id, version=version)
         url = str(row.get("source_url") or "")
-        if url and url in seen_urls and row.get("match_basis") != "embedded_listing_report_card":
-            raise _violation("evidence_duplicate_url", f"collector '{product_id}' appended a duplicate evidence url {url}",
-                             surface="evidence", product_id=product_id, version=version)
+        if url and row.get("match_basis") != "embedded_listing_report_card":
+            url_key = evidence_key(row, "source_url")
+            if url_key in seen_urls:
+                raise _violation("evidence_duplicate_url", f"collector '{product_id}' appended a duplicate evidence url {url}",
+                                 surface="evidence", product_id=product_id, version=version)
+            seen_urls.add(url_key)
         seen_ids.add(rid)
-        if url:
-            seen_urls.add(url)
 
 
 # --- method health -------------------------------------------------------------
