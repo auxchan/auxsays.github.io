@@ -17,8 +17,8 @@ update_version: 21.0.3
 update_logo_text: DAV
 update_published_at: '2026-07-22T00:00:00Z'
 update_last_checked: '2026-07-22T04:19:49Z'
-source_last_checked: '2026-08-05T12:52:24Z'
-official_body_last_checked: '2026-08-05T12:52:24Z'
+source_last_checked: '2026-08-06T13:15:07Z'
+official_body_last_checked: '2026-08-06T13:15:07Z'
 record_last_updated: '2026-08-05T23:35:19.805917Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
@@ -30,15 +30,13 @@ update_consensus_label: Negative
 update_report_count: 2
 update_consensus_confidence: Low
 quick_verdict: 'WAIT: DaVinci Resolve 21.0.3 has 2 user reports found.'
-official_summary: Blackmagic Design lists DaVinci Resolve Studio 21.0.3 Update in its official support downloads
-  feed.
-release_summary: This software update adds new ease modes for retime speed and frame curves, as well as improved
-  handling of interlaced media, keyframe editing, multicam audio and PSD imports. This update also reinstates QuickSync
-  encode options for older Intel systems and adds a custom install location for encode SDK plugins on Windows ARM.
-  This version requires a DaVinci Resolve Studio license dongle, Blackmagic Cloud license or software activation
-  code.
-consensus_report: '2 user reports found for DaVinci Resolve 21.0.3. Current reports mention performance slowdowns
-  and render/export failures. Too few reports for a firm verdict yet. Sources represented: r/davinciresolve.'
+official_summary: Blackmagic Design lists DaVinci Resolve Studio 21.0.3 Update in its official support downloads feed.
+release_summary: This software update adds new ease modes for retime speed and frame curves, as well as improved handling
+  of interlaced media, keyframe editing, multicam audio and PSD imports. This update also reinstates QuickSync encode options
+  for older Intel systems and adds a custom install location for encode SDK plugins on Windows ARM. This version requires
+  a DaVinci Resolve Studio license dongle, Blackmagic Cloud license or software activation code.
+consensus_report: '2 user reports found for DaVinci Resolve 21.0.3. Current reports mention performance slowdowns and render/export
+  failures. Too few reports for a firm verdict yet. Sources represented: r/davinciresolve.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
@@ -72,8 +70,8 @@ official_patch_notes_source_url: https://www.blackmagicdesign.com/support/family
 official_note_status: official_source_captured
 official_note_label: Official download portal entry
 official_source_type: download_portal
-official_source_classification_note: Blackmagic's support downloads API is treated as an official download-portal
-  source. It confirms version availability and summary text; community evidence remains separate.
+official_source_classification_note: Blackmagic's support downloads API is treated as an official download-portal source.
+  It confirms version availability and summary text; community evidence remains separate.
 official_sources:
 - label: Blackmagic support downloads
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
@@ -86,11 +84,6 @@ official_sources:
   trust_level: official
   extraction_status: version_metadata_captured
 official_source_attempts:
-- at: '2026-08-04T07:29:02Z'
-  url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
-  status: captured-from-official-blackmagic-support-api
-  body_captured: true
-  checksums_captured: false
 - at: '2026-08-04T13:06:52Z'
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
   status: captured-from-official-blackmagic-support-api
@@ -111,6 +104,11 @@ official_source_attempts:
   status: captured-from-official-blackmagic-support-api
   body_captured: true
   checksums_captured: false
+- at: '2026-08-06T13:15:07Z'
+  url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
+  status: captured-from-official-blackmagic-support-api
+  body_captured: true
+  checksums_captured: false
 official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci Resolve Studio 21.0.3 Update
 
   Channel: Stable
@@ -120,10 +118,10 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   Platforms listed: Mac OS X, Windows, Linux, Windows ARM
 
 
-  This software update adds new ease modes for retime speed and frame curves, as well as improved handling of interlaced
-  media, keyframe editing, multicam audio and PSD imports. This update also reinstates QuickSync encode options
-  for older Intel systems and adds a custom install location for encode SDK plugins on Windows ARM. This version
-  requires a DaVinci Resolve Studio license dongle, Blackmagic Cloud license or software activation code.
+  This software update adds new ease modes for retime speed and frame curves, as well as improved handling of interlaced media,
+  keyframe editing, multicam audio and PSD imports. This update also reinstates QuickSync encode options for older Intel systems
+  and adds a custom install location for encode SDK plugins on Windows ARM. This version requires a DaVinci Resolve Studio
+  license dongle, Blackmagic Cloud license or software activation code.
 
 
   Official support page: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
@@ -134,9 +132,9 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'WAIT: DaVinci Resolve 21.0.3 has 2 user reports found. Small sample size. Current reports
-  mention performance slowdowns and render/export failures. Production editors with active export deadlines should
-  wait unless they need a specific fix. Too few reports for a firm verdict yet.'
+update_consensus_summary: 'WAIT: DaVinci Resolve 21.0.3 has 2 user reports found. Small sample size. Current reports mention
+  performance slowdowns and render/export failures. Production editors with active export deadlines should wait unless they
+  need a specific fix. Too few reports for a firm verdict yet.'
 evidence_samples:
 - source_name: r/davinciresolve
   source_url: https://www.reddit.com/r/davinciresolve/comments/1v7rvwo/resolve_is_using_all_my_ram_128gb_and_lagging/
@@ -178,8 +176,8 @@ evidence_source_limitations:
 - Too few reports for a firm verdict yet.
 - Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 update_decision_label: WAIT
-update_decision_body: Current reports mention performance slowdowns and render/export failures. Production editors
-  with active delivery deadlines should wait or test on copied projects.
+update_decision_body: Current reports mention performance slowdowns and render/export failures. Production editors with active
+  delivery deadlines should wait or test on copied projects.
 practical_recommendations:
 - Wait if you have active render/export deadlines.
 - Test on copied projects before moving client work to this version.
