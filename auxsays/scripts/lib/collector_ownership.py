@@ -98,13 +98,25 @@ def allowed_permalink_slugs(product_id: str) -> set[str]:
 
 
 def _permalink_product_slug(permalink: str) -> str | None:
-    """Return the product-slug segment of a canonical update permalink
-    (/updates/<company>/<product>/<version>/ -> the third path segment), or None if the permalink is
-    not that shape. Exact-segment parse: a deceptive path such as /updates/davinci-resolve/evil/1/ or
-    /updates/x/davinci-resolve-fake/1/ never yields 'davinci-resolve' as the product slug, so
-    segment-position spoofing and substring look-alikes are rejected."""
-    segments = [seg for seg in str(permalink or "").split("/") if seg]
-    if len(segments) < 3 or segments[0] != "updates":
+    """Return the product-slug segment of a canonical update permalink, or None if `permalink` is not
+    EXACTLY the shape /updates/<company>/<product>/<version>/ -- a leading slash, then four non-empty
+    path segments, and at most a single trailing slash. The shape is validated strictly, never repaired:
+    a missing or extra segment, an empty segment from a repeated slash (//), a non-'updates' root, a
+    traversal ('..'), or an encoded-slash / encoded-traversal / query / fragment artifact all fail to
+    yield a product slug. Combined with the exact-set membership check in validate_records, this makes
+    segment-position spoofing and substring look-alikes (davinci-resolve-fake, blackmagic-davinci-extra)
+    impossible to smuggle through -- the product slug is only ever the literal 3rd segment of a
+    well-formed canonical path."""
+    p = str(permalink or "")
+    if not p.startswith("/updates/"):
+        return None
+    body = p[1:]                       # drop the leading slash -> 'updates/<co>/<prod>/<ver>[/]'
+    if body.endswith("/"):
+        body = body[:-1]               # tolerate exactly one trailing slash (the canonical form)
+    segments = body.split("/")
+    # Exactly updates/<company>/<product>/<version>; any empty segment (a repeated slash) or a wrong
+    # segment count is a malformed/ambiguous path and is rejected rather than collapsed or repaired.
+    if len(segments) != 4 or any(seg == "" for seg in segments) or segments[0] != "updates":
         return None
     return segments[2]
 

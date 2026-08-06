@@ -262,6 +262,36 @@ def run() -> int:
                 lambda: o.validate_records(OBS, gen, {gen / "never-created.md"}, lambda q: None),
                 "undeclared_deletion")
 
+    # --- F13-F21: strict canonical-shape parsing (Part F.7 malformed/deceptive permalink matrix) ---
+    # Each of these permalinks must be rejected; the parser must not repair, collapse, or smuggle.
+    expect_code("F13 substring suffix slug (blackmagic-davinci-extra) rejected",
+                check_rec(DV, "f13.md", "21", "/updates/blackmagic-design/blackmagic-davinci-extra/21/"),
+                "record_permalink_mismatch")
+    expect_code("F14 extra inserted segment rejected",
+                check_rec(DV, "f14.md", "21", "/updates/x/blackmagic-design/davinci-resolve/21/"),
+                "record_permalink_mismatch")
+    expect_code("F15 missing product segment rejected",
+                check_rec(DV, "f15.md", "21", "/updates/blackmagic-design/21/"),
+                "record_permalink_mismatch")
+    expect_code("F16 path traversal rejected",
+                check_rec(DV, "f16.md", "21", "/updates/blackmagic-design/../davinci-resolve/21/"),
+                "record_permalink_mismatch")
+    expect_code("F17 encoded slash rejected",
+                check_rec(DV, "f17.md", "21", "/updates/blackmagic-design/davinci%2Fresolve/21/"),
+                "record_permalink_mismatch")
+    expect_code("F18 encoded traversal rejected",
+                check_rec(DV, "f18.md", "21", "/updates/blackmagic-design/%2E%2E/davinci-resolve/21/"),
+                "record_permalink_mismatch")
+    expect_code("F19 repeated slash rejected (not collapsed)",
+                check_rec(DV, "f19.md", "21", "/updates//blackmagic-design/davinci-resolve/21/"),
+                "record_permalink_mismatch")
+    expect_code("F20 query-string trick rejected",
+                check_rec(DV, "f20.md", "21", "/updates/blackmagic-design/davinci-resolve/21/?x=1"),
+                "record_permalink_mismatch")
+    expect_code("F21 fragment trick rejected",
+                check_rec(DV, "f21.md", "21", "/updates/blackmagic-design/davinci-resolve/21/#f"),
+                "record_permalink_mismatch")
+
     # ============================ PART D: behavioral equivalence ============================
     # ~22 UNRELATED ownership scenarios must still raise their identical code -- only E2/E3 and F1/F2
     # (the two proven false positives) change behavior. If any code here drifts, the fix is too broad.
