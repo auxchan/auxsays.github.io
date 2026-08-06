@@ -19,36 +19,35 @@ update_published_at: '2021-10-22T00:00:00Z'
 update_last_checked: '2026-07-31T14:40:05Z'
 source_last_checked: '2026-07-31T14:40:05Z'
 official_body_last_checked: '2026-07-31T14:40:05Z'
-record_last_updated: '2026-07-31T14:40:05Z'
+record_last_updated: '2026-08-06T06:39:21.894702Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
 update_status: current
 update_feed_title: DaVinci Resolve 17.4
 update_detail_title: DaVinci Resolve 17.4
-update_consensus_label: Insufficient data
-update_report_count: 0
+update_consensus_label: Negative
+update_report_count: 1
 update_consensus_confidence: Low
-quick_verdict: DaVinci Resolve 17.4 has an official AUXSAYS record. Confirmed patch-specific consensus is deferred until the
-  consensus refresh pipeline is active.
+quick_verdict: 'WAIT: DaVinci Resolve 17.4 has 1 user reports found.'
 official_summary: Blackmagic Design lists DaVinci Resolve Studio 17.4 Update in its official support downloads feed.
-release_summary: In addition to the features in the free version, the Studio update adds Dropbox Replay integration, switching
-  capability for multicam angles with DaVinci Resolve Speed Editor, and support for ACES 1.3 including gamut compression.
-  It also includes a new film halation Resolve FX and faster decodes and encodes for Windows Intel systems. This version requires
-  a DaVinci Resolve Studio license dongle or software activation code.
-consensus_report: Confirmed patch-specific consensus collection is deferred. This page currently reflects official-source
-  ingestion only.
-evidence_state: official_only
-evidence_state_label: Official source only
-intelligence_stage: official_live
+release_summary: In addition to the features in the free version, the Studio update adds Dropbox Replay integration,
+  switching capability for multicam angles with DaVinci Resolve Speed Editor, and support for ACES 1.3 including
+  gamut compression. It also includes a new film halation Resolve FX and faster decodes and encodes for Windows
+  Intel systems. This version requires a DaVinci Resolve Studio license dongle or software activation code.
+consensus_report: '1 user report found for DaVinci Resolve 17.4. Current reports mention render/export failures.
+  Too few reports for a firm verdict yet. Sources represented: r/davinciresolve.'
+evidence_state: pilot_sample
+evidence_state_label: Verified reports
+intelligence_stage: pilot
 official_source_captured: true
-confirmed_patch_specific_report_count: 0
-evidence_last_checked: ''
+confirmed_patch_specific_report_count: 1
+evidence_last_checked: '2026-08-06T06:37:47Z'
 known_issues_present: null
-consensus_collection_status: deferred_official_only
+consensus_collection_status: pilot_initial_sample
 consensus_match_policy: confirmed_patch_specific_reports_v1
 consensus_match_policy_label: Confirmed patch-specific reports only
-consensus_report_count_label: confirmed patch-specific reports
+consensus_report_count_label: user reports found
 consensus_report_weighting: equal_per_confirmed_report
 consensus_low_context_policy: excluded
 complaint_themes: []
@@ -59,6 +58,9 @@ status_events:
 - at: '2026-07-31T14:40:09Z'
   label: Insufficient data
   note: AUXSAYS official-ingestion record initialized.
+- at: '2026-08-06T06:39:21.894702Z'
+  label: User reports found
+  note: User report count updated to 1.
 official_patch_notes_source_type: download_portal
 primary_official_source: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
 fallback_official_sources:
@@ -68,8 +70,8 @@ official_patch_notes_source_url: https://www.blackmagicdesign.com/support/family
 official_note_status: official_source_captured
 official_note_label: Official download portal entry
 official_source_type: download_portal
-official_source_classification_note: Blackmagic's support downloads API is treated as an official download-portal source.
-  It confirms version availability and summary text; community evidence remains separate.
+official_source_classification_note: Blackmagic's support downloads API is treated as an official download-portal
+  source. It confirms version availability and summary text; community evidence remains separate.
 official_sources:
 - label: Blackmagic support downloads
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
@@ -96,10 +98,10 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   Platforms listed: Mac OS X, Windows, Linux
 
 
-  In addition to the features in the free version, the Studio update adds Dropbox Replay integration, switching capability
-  for multicam angles with DaVinci Resolve Speed Editor, and support for ACES 1.3 including gamut compression. It also includes
-  a new film halation Resolve FX and faster decodes and encodes for Windows Intel systems. This version requires a DaVinci
-  Resolve Studio license dongle or software activation code.
+  In addition to the features in the free version, the Studio update adds Dropbox Replay integration, switching
+  capability for multicam angles with DaVinci Resolve Speed Editor, and support for ACES 1.3 including gamut compression.
+  It also includes a new film halation Resolve FX and faster decodes and encodes for Windows Intel systems. This
+  version requires a DaVinci Resolve Studio license dongle or software activation code.
 
 
   Official support page: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
@@ -110,4 +112,38 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
+update_consensus_summary: 'WAIT: DaVinci Resolve 17.4 has 1 user report found. Small sample size. Current reports
+  mention render/export failures. Production editors with active export deadlines should wait unless they need a
+  specific fix. Too few reports for a firm verdict yet.'
+evidence_samples:
+- source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1se7o7g/use_tracker_data_independently/
+  source_title: Use Tracker data independently
+  counted: true
+  version_matched: '17.4'
+  patch_version_matched: true
+  issue: render/export failures
+  outcome: medium
+evidence_sample_visible_limit: 5
+accepted_report_sources:
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1se7o7g/use_tracker_data_independently/
+  source_title: Use Tracker data independently
+  source_date: '2026-04-06'
+  version_matched: '17.4'
+  patch_version_matched: true
+  issue: render/export failures
+  workflow_area: render/export
+evidence_source_limitations:
+- Too few reports for a firm verdict yet.
+- Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
+update_decision_label: WAIT
+update_decision_body: Current reports mention render/export failures. Production editors with active delivery deadlines
+  should wait or test on copied projects.
+practical_recommendations:
+- Wait if you have active render/export deadlines.
+- Test on copied projects before moving client work to this version.
+- Review the sample reports before updating a production workstation.
+source_freshness_note: ''
 ---

@@ -10380,3 +10380,28 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-17-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1se7o7g-use-tracker-data-independently
+  product_id: blackmagic-davinci
+  update_version: '17.4'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1se7o7g/use_tracker_data_independently/
+  parent_title: Use Tracker data independently
+  report_title: Use Tracker data independently
+  report_text_excerpt: Use Tracker data independently https://preview.redd.it/wb5gnshepntg1.png?width=1920&format=png&auto=webp&s=f5ac6449f27e2d9b51acd5f15cc87357d694f2f9 Hi, I work in davinci resolve 17.4 free on Win10 I have a video footage - recorded on a tripod, without zoom, or any camera...
+  captured_at: '2026-08-06T06:37:47Z'
+  source_date: '2026-04-06'
+  target_release_date: '2021-10-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '17.4'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
