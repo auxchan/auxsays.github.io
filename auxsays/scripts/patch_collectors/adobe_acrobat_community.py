@@ -31,6 +31,16 @@ from typing import Any
 from urllib.error import HTTPError, URLError
 
 from . import reddit_source
+from . import runtime_budget as rb
+
+# Active RuntimeBudget for the collector currently running (set by AdobeAcrobatCollector.collect). Safe as
+# a module global because collectors run strictly serially (no concurrent repository writes / requests).
+_ACTIVE_BUDGET: Any = None
+
+
+def _set_active_budget(budget: Any) -> None:
+    global _ACTIVE_BUDGET
+    _ACTIVE_BUDGET = budget
 from .base import (
     CollectorContext,
     EVIDENCE_PATH,
@@ -267,7 +277,33 @@ def acrobat_classify(text: str) -> tuple[str, str, str, str, str]:
 
 # --- HTTP (Adobe Community) ---------------------------------------------------
 
+def _bounded_fetch(url: str, *, budget: Any, headers: dict[str, str], data: bytes | None, method: str | None,
+                   max_bytes: int, family: str) -> tuple[int, str, str]:
+    """Hard-bounded (total wall-clock deadline, byte-capped) Acrobat Community/Algolia fetch. Converts a
+    method-budget breach into an AcrobatCommunityAccessError so it flows through the existing degradation
+    path (method-health survives)."""
+    try:
+        budget.note_request()
+    except rb.MethodBudgetExhausted as exc:
+        raise AcrobatCommunityAccessError(f"budget_{exc.reason}") from exc
+    try:
+        resp = rb.bounded_request(url, budget=budget, endpoint_family=family, headers=headers, data=data, method=method, max_bytes=max_bytes)
+    except rb.RequestDeadlineExceeded as exc:
+        raise AcrobatCommunityAccessError("request_deadline") from exc
+    except rb.BudgetError as exc:
+        raise AcrobatCommunityAccessError(f"network_{exc.reason}") from exc
+    content_type = resp.headers.get("Content-Type", "") if resp.headers is not None else ""
+    return resp.status, content_type, resp.body.decode("utf-8", errors="replace")
+
+
 def _request_text(url: str, timeout: int = 30, max_bytes: int = 800000) -> str:
+    if _ACTIVE_BUDGET is not None:
+        status, content_type, body = _bounded_fetch(url, budget=_ACTIVE_BUDGET, headers=HEADERS, data=None,
+                                                    method=None, max_bytes=max_bytes, family="adobe_community_html")
+        signature = _blocked_signature(body, status=status, content_type=content_type)
+        if signature != "none":
+            raise AcrobatCommunityAccessError(signature, status=status)
+        return body
     req = urllib.request.Request(url, headers=HEADERS)
     try:
         with urllib.request.urlopen(req, timeout=timeout) as response:
@@ -314,6 +350,15 @@ def _request_json(url: str, *, headers: dict[str, str], data: bytes | None = Non
     """GET (or POST when ``data`` is given) a JSON endpoint, raising AcrobatCommunityAccessError
     with a block/rate-limit/network signature on failure so method health degrades honestly."""
     method = "POST" if data is not None else "GET"
+    if _ACTIVE_BUDGET is not None:
+        status, _content_type, body = _bounded_fetch(url, budget=_ACTIVE_BUDGET, headers=headers, data=data,
+                                                     method=method, max_bytes=max_bytes, family="adobe_algolia")
+        if status in {401, 403, 429}:
+            raise AcrobatCommunityAccessError(_blocked_signature(body, status=status), status=status)
+        try:
+            return json.loads(body)
+        except json.JSONDecodeError as exc:
+            raise AcrobatCommunityAccessError("invalid_json") from exc
     req = urllib.request.Request(url, headers=headers, data=data, method=method)
     try:
         with urllib.request.urlopen(req, timeout=timeout) as response:
@@ -712,7 +757,25 @@ class AdobeAcrobatCollector(ProductCollector):
         captured_at = utc_now()
         results: list[dict[str, Any]] = []
         records = generated_records(self.product_id, context.target_versions, include_archived=bool(context.target_versions))
+        budget = getattr(context, "budget", None)
+        _set_active_budget(budget)  # bounds every Acrobat Community/Algolia/Reddit request in this collector
+        try:
+            return self._collect_records(records, context, captured_at, budget, results)
+        finally:
+            _set_active_budget(None)
+
+    def _collect_records(self, records: Any, context: CollectorContext, captured_at: str, budget: Any,
+                         results: list[dict[str, Any]]) -> list[dict[str, Any]]:
         for record in records:
+            # Bounded stop: once the collector's discovery budget (deadline minus the reserved
+            # finalization tail) is spent, stop processing further records and return what we have. This
+            # is a NORMAL partial outcome -- prior records' evidence + health survive; the collector
+            # commits. (The hard collector deadline breach -> CollectorBudgetExhausted is the emergency
+            # backstop, raised by the runner, that rolls back.)
+            if budget is not None and budget.collector_finalize_expired():
+                rb.emit("collector_budget_stop", product_id=self.product_id,
+                        remaining_records=len(records) - len(results), reason="collector_finalize")
+                break
             accepted, rejected, method_health = self.collect_for_record(record, context, captured_at)
             result: dict[str, Any] = {
                 "product_id": self.product_id,
@@ -752,8 +815,11 @@ class AdobeAcrobatCollector(ProductCollector):
         all_rejected: list[dict[str, Any]] = []
         method_health: list[dict[str, Any]] = []
         accepted_urls: set[str] = set()
+        budget = getattr(context, "budget", None)
         for method_id, source_type, fn in methods:
             errors: list[dict[str, Any]] = []
+            if budget is not None:
+                budget.start_method(method_id)  # per-method deadline (capped by remaining collector-finalize)
             candidates = fn(self.edition, record, context, errors)
             accepted, rejected = evaluate_candidates(self.product_id, record, candidates, captured_at)
             for row in accepted:
