@@ -398,6 +398,28 @@ def run() -> int:
     bx = rb.RuntimeBudget(rb.BudgetConfig(run_collection_deadline=0), clock=lambda: 5.0)
     ck("G2 run reserve: run_expired stops starting new collectors (downstream reachable)", bx.run_expired())
 
+    # === H. Part F: Acrobat active-budget + run-budget isolation (finally-reset, no leak) ============
+    print("\n-- H. active-budget isolation (no state leak between invocations) --")
+    from patch_collectors import adobe_acrobat_community as aac
+    ck("H1 Acrobat _ACTIVE_BUDGET defaults None at import", aac._ACTIVE_BUDGET is None)
+    orig_gr = aac.generated_records
+    aac.generated_records = lambda *a, **k: (_ for _ in ()).throw(RuntimeError("boom"))
+    try:
+        class _Ctx:
+            write = False; since = None; max_pages = 1; target_versions = None; budget = rb.RuntimeBudget()
+        raised = False
+        try:
+            aac.AdobeAcrobatCollector("adobe-acrobat-reader").collect(_Ctx())
+        except RuntimeError:
+            raised = True
+        ck("H2 collect() resets _ACTIVE_BUDGET even when it raises (finally on all exits)",
+           raised and aac._ACTIVE_BUDGET is None)
+    finally:
+        aac.generated_records = orig_gr
+    rb.set_run_budget(rb.RuntimeBudget()); had = rb.get_run_budget() is not None
+    rb.set_run_budget(None)
+    ck("H3 set_run_budget(None) clears the run-level active budget (test isolation)", had and rb.get_run_budget() is None)
+
     print()
     print("=" * 74)
     total = _PASS + _FAIL

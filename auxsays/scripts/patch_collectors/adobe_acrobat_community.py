@@ -754,12 +754,15 @@ class AdobeAcrobatCollector(ProductCollector):
         self.edition = EDITION_CONFIG[product_id]
 
     def collect(self, context: CollectorContext) -> list[dict[str, Any]]:
-        captured_at = utc_now()
-        results: list[dict[str, Any]] = []
-        records = generated_records(self.product_id, context.target_versions, include_archived=bool(context.target_versions))
         budget = getattr(context, "budget", None)
         _set_active_budget(budget)  # bounds every Acrobat Community/Algolia/Reddit request in this collector
+        # The finally resets on EVERY exit -- success, ordinary bounded termination, ownership violation,
+        # any exception, or a collector-deadline breach -- so a second Acrobat invocation (Reader then Pro)
+        # can never inherit the first's active budget. Serial execution makes this module global safe.
         try:
+            captured_at = utc_now()
+            results: list[dict[str, Any]] = []
+            records = generated_records(self.product_id, context.target_versions, include_archived=bool(context.target_versions))
             return self._collect_records(records, context, captured_at, budget, results)
         finally:
             _set_active_budget(None)
