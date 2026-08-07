@@ -48,6 +48,7 @@ from .base import (
     windows_identity_gate,
 )
 from . import microsoft_learn_qna_source as learn_qna
+from . import runtime_budget as rb
 
 PRODUCT_ID = WINDOWS_PRODUCT_ID
 METHOD_ID = "learn_qna_search_rss"
@@ -560,6 +561,10 @@ class WindowsLearnQnaCollector(ProductCollector):
         records = generated_records(PRODUCT_ID, context.target_versions)
         results: list[dict[str, Any]] = []
         for record in records:
+            _b = rb.get_run_budget()
+            if _b is not None and _b.collector_finalize_expired():
+                rb.emit("collector_budget_stop", product_id=PRODUCT_ID, reason="collector_finalize")
+                break
             accepted, rejected, health = collect_for_record(record, context)
             result: dict[str, Any] = {
                 "product_id": PRODUCT_ID,

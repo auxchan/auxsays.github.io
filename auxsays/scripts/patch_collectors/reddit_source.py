@@ -28,6 +28,7 @@ from typing import Any
 from urllib.error import HTTPError, URLError
 
 from .base import date_part
+from . import runtime_budget as rb
 
 REDDIT_USER_AGENT = os.getenv(
     "AUXSAYS_REDDIT_USER_AGENT",
@@ -60,6 +61,7 @@ class SourceAccessError(RuntimeError):
         blocked_signature: str = "",
         endpoint_family: str = "",
         headers_strategy: str = "",
+        retry_after: float | None = None,
     ) -> None:
         super().__init__(reason)
         self.reason = reason
@@ -68,6 +70,7 @@ class SourceAccessError(RuntimeError):
         self.blocked_signature = blocked_signature
         self.endpoint_family = endpoint_family
         self.headers_strategy = headers_strategy
+        self.retry_after = retry_after
 
 
 def error_reason(exc: Exception) -> str:
@@ -315,7 +318,84 @@ def reddit_failure_summary(failures: list[dict[str, Any]]) -> str:
     return "all_reddit_endpoint_attempts_failed[" + ";".join(pieces[:4]) + "]"
 
 
-def request_reddit_json_with_fallback(attempts: list[tuple[str, str]]) -> Any:
+def _bounded_json(url: str, *, budget: "rb.RuntimeBudget", endpoint_family: str) -> Any:
+    """Bounded (hard total wall-clock deadline, byte-capped) Reddit JSON fetch + classify + diagnostic.
+    Raises SourceAccessError on block/rate-limit/network/parse; MethodBudgetExhausted (NORMAL) if a
+    method-level bound is hit."""
+    budget.note_request()
+    headers = dict(JSON_HEADERS)
+    token = os.getenv("REDDIT_BEARER_TOKEN")
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    strategy = reddit_headers_strategy(headers)
+    request_url = with_raw_json(url)
+    try:
+        resp = rb.bounded_request(request_url, budget=budget, endpoint_family=endpoint_family, headers=headers)
+    except rb.RequestDeadlineExceeded as exc:
+        emit_reddit_fetch_diagnostic(url=request_url, endpoint_family=endpoint_family, status=None,
+                                     content_type="", signature="request_deadline", headers_strategy=strategy)
+        raise SourceAccessError("request_deadline", blocked_signature="request_deadline",
+                                endpoint_family=endpoint_family, headers_strategy=strategy) from exc
+    except rb.BudgetError as exc:
+        emit_reddit_fetch_diagnostic(url=request_url, endpoint_family=endpoint_family, status=None,
+                                     content_type="", signature=exc.reason, headers_strategy=strategy)
+        raise SourceAccessError(f"network_{exc.reason}", blocked_signature=exc.reason,
+                                endpoint_family=endpoint_family, headers_strategy=strategy) from exc
+    text = resp.body.decode("utf-8", errors="replace")
+    hdrs = dict(resp.headers.items()) if resp.headers is not None else {}
+    content_type = hdrs.get("content-type", hdrs.get("Content-Type", ""))
+    status = resp.status
+    signature = blocked_signature(text[:4000], status=status, content_type=content_type, headers=hdrs)
+    emit_reddit_fetch_diagnostic(url=request_url, endpoint_family=endpoint_family, status=status,
+                                 content_type=content_type, signature=signature, headers_strategy=strategy)
+    retry_after = rb.parse_retry_after(resp.headers)
+    if status in (401, 403) or signature in ("blocked", "browser_challenge", "captcha_challenge"):
+        raise SourceAccessError(f"http_{status}", status=status, content_type=content_type,
+                                blocked_signature=signature or "blocked", endpoint_family=endpoint_family,
+                                headers_strategy=strategy, retry_after=retry_after)
+    if status == 429 or signature == "rate_limited":
+        raise SourceAccessError("rate_limited", status=status or 429, content_type=content_type,
+                                blocked_signature="rate_limited", endpoint_family=endpoint_family,
+                                headers_strategy=strategy, retry_after=retry_after)
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError as exc:
+        raise SourceAccessError("json_decode_failed", status=status, content_type=content_type,
+                                blocked_signature="parse", endpoint_family=endpoint_family,
+                                headers_strategy=strategy) from exc
+
+
+def _bounded_json_fallback(attempts: list[tuple[str, str]], *, budget: "rb.RuntimeBudget") -> Any:
+    """Bounded fallback policy: primary attempt; on a definitive 403/challenge try at most ONE documented
+    alternate then terminate blocked; on 429 perform one bounded Retry-After retry of the SAME endpoint
+    then terminate. At most 2 network attempts per logical discovery. MethodBudgetExhausted propagates."""
+    if not attempts:
+        return None
+    fam0, url0 = attempts[0]
+    try:
+        return _bounded_json(url0, budget=budget, endpoint_family=fam0)
+    except SourceAccessError as exc:
+        sig = (exc.blocked_signature or "").lower()
+        if exc.status == 429 or "rate_limited" in sig:
+            delay = budget.note_backoff(rb.backoff_delay(budget.cfg, 0, exc.retry_after))
+            if delay > 0:
+                time.sleep(delay)
+            try:
+                return _bounded_json(url0, budget=budget, endpoint_family=fam0)
+            except SourceAccessError:
+                return None  # second 429/block -> terminate as blocked/partial
+        if len(attempts) > 1:  # one documented alternate for a definitive block / network / parse
+            fam1, url1 = attempts[1]
+            try:
+                return _bounded_json(url1, budget=budget, endpoint_family=fam1)
+            except SourceAccessError:
+                return None
+        return None
+
+
+def request_reddit_json_with_fallback(attempts: list[tuple[str, str]], *, budget: "rb.RuntimeBudget | None" = None) -> Any:
+    if budget is not None:
+        return _bounded_json_fallback(attempts, budget=budget)
     failures: list[dict[str, Any]] = []
     for endpoint_family, url in attempts:
         try:
@@ -335,7 +415,48 @@ def request_reddit_json_with_fallback(attempts: list[tuple[str, str]]) -> Any:
     raise SourceAccessError(reddit_failure_summary(failures), status=failures[0].get("status") if failures else None)
 
 
-def request_reddit_feed(url: str, *, endpoint_family: str, source_type: str, source_name: str) -> list[dict[str, Any]]:
+def _bounded_feed(url: str, *, budget: "rb.RuntimeBudget", endpoint_family: str, source_type: str, source_name: str) -> list[dict[str, Any]]:
+    """Bounded (hard total wall-clock deadline, byte-capped) Reddit feed fetch + parse + diagnostic."""
+    budget.note_request()
+    strategy = "reddit_descriptive_ua_feed"
+    try:
+        resp = rb.bounded_request(url, budget=budget, endpoint_family=endpoint_family, headers=dict(FEED_HEADERS))
+    except rb.RequestDeadlineExceeded as exc:
+        emit_reddit_fetch_diagnostic(url=url, endpoint_family=endpoint_family, status=None, content_type="",
+                                     signature="request_deadline", headers_strategy=strategy, parsed_as_feed=False, candidate_count=0)
+        raise SourceAccessError("request_deadline", blocked_signature="request_deadline",
+                                endpoint_family=endpoint_family, headers_strategy=strategy) from exc
+    except rb.BudgetError as exc:
+        emit_reddit_fetch_diagnostic(url=url, endpoint_family=endpoint_family, status=None, content_type="",
+                                     signature=exc.reason, headers_strategy=strategy, parsed_as_feed=False, candidate_count=0)
+        raise SourceAccessError(f"network_{exc.reason}", blocked_signature=exc.reason,
+                                endpoint_family=endpoint_family, headers_strategy=strategy) from exc
+    text = resp.body.decode("utf-8", errors="replace")
+    hdrs = dict(resp.headers.items()) if resp.headers is not None else {}
+    content_type = hdrs.get("content-type", hdrs.get("Content-Type", ""))
+    status = resp.status
+    if status in (401, 403) or status == 429:
+        signature = "rate_limited" if status == 429 else (blocked_signature(text[:4000], status=status, content_type=content_type, headers=hdrs) or "blocked")
+        emit_reddit_fetch_diagnostic(url=url, endpoint_family=endpoint_family, status=status, content_type=content_type,
+                                     signature=signature, headers_strategy=strategy, parsed_as_feed=False, candidate_count=0)
+        raise SourceAccessError(f"http_{status}", status=status, content_type=content_type, blocked_signature=signature,
+                                endpoint_family=endpoint_family, headers_strategy=strategy, retry_after=rb.parse_retry_after(resp.headers))
+    try:
+        candidates = reddit_feed_candidates(text, source_type=source_type, source_name=source_name)
+    except ET.ParseError as exc:
+        emit_reddit_fetch_diagnostic(url=url, endpoint_family=endpoint_family, status=None, content_type="",
+                                     signature=f"feed_parse_failed:{type(exc).__name__}", headers_strategy=strategy, parsed_as_feed=False, candidate_count=0)
+        raise SourceAccessError(f"feed_parse_failed:{type(exc).__name__}", blocked_signature="parse",
+                                endpoint_family=endpoint_family, headers_strategy=strategy) from exc
+    signature = blocked_signature(text[:4000], status=status, content_type=content_type, headers=hdrs)
+    emit_reddit_fetch_diagnostic(url=url, endpoint_family=endpoint_family, status=status, content_type=content_type,
+                                 signature=signature, headers_strategy=strategy, parsed_as_feed=True, candidate_count=len(candidates))
+    return candidates
+
+
+def request_reddit_feed(url: str, *, endpoint_family: str, source_type: str, source_name: str, budget: "rb.RuntimeBudget | None" = None) -> list[dict[str, Any]]:
+    if budget is not None:
+        return _bounded_feed(url, budget=budget, endpoint_family=endpoint_family, source_type=source_type, source_name=source_name)
     headers = dict(FEED_HEADERS)
     headers_strategy = "reddit_descriptive_ua_feed"
     request = urllib.request.Request(url, headers=headers)
@@ -632,15 +753,32 @@ def collect_reddit_candidates(
     results: list[dict[str, Any]] = []
     seen: set[str] = set()
     hints = [str(h or "").strip().lower() for h in (version_hints or []) if str(h or "").strip()]
+    budget = getattr(context, "budget", None)
+    if budget is not None:
+        budget.start_method("reddit_search")
     for raw_sub in list(subreddits or []):
         subreddit = str(raw_sub or "").strip().strip("/")
         if not subreddit:
             continue
         source_name = f"r/{subreddit}"
-        _collect_search(subreddit, queries, context, errors, results, seen, source_type, source_name)
-        _collect_listing(subreddit, context, errors, results, seen, source_type, source_name, hints)
-        _collect_feed(subreddit, queries, context, errors, results, seen, source_type, source_name, hints)
+        # A method-level budget breach (deadline / request cap / cumulative backoff) is a NORMAL bounded
+        # outcome: stop discovery and let the caller record terminal method-health. Never propagate.
+        try:
+            _collect_search(subreddit, queries, context, errors, results, seen, source_type, source_name)
+            _collect_listing(subreddit, context, errors, results, seen, source_type, source_name, hints)
+            _collect_feed(subreddit, queries, context, errors, results, seen, source_type, source_name, hints)
+        except rb.MethodBudgetExhausted as exc:
+            errors.append({"reason": f"reddit_budget:{exc.reason}", "source_url": source_name})
+            break
     return results
+
+
+def _fallback(attempts: list[tuple[str, str]], budget: Any) -> Any:
+    """Call request_reddit_json_with_fallback, preserving the exact no-budget positional signature so
+    existing callers/tests that monkeypatch it (fake taking only ``attempts``) keep working."""
+    if budget is not None:
+        return request_reddit_json_with_fallback(attempts, budget=budget)
+    return request_reddit_json_with_fallback(attempts)
 
 
 def _collect_search(
@@ -653,6 +791,7 @@ def _collect_search(
     source_type: str,
     source_name: str,
 ) -> None:
+    budget = getattr(context, "budget", None)
     seen_queries: set[str] = set()
     consecutive_failures = 0
     for query in queries:
@@ -666,13 +805,18 @@ def _collect_search(
             if after:
                 params["after"] = after
             try:
-                payload = request_reddit_json_with_fallback(_search_attempts(subreddit, query, params))
+                payload = _fallback(_search_attempts(subreddit, query, params), budget)
+            except rb.MethodBudgetExhausted:
+                raise  # NORMAL bounded stop -> handled by collect_reddit_candidates
             except Exception as exc:
                 errors.append({
                     "query": query,
                     "source_url": f"{search_url(subreddit)}?{urllib.parse.urlencode(params)}",
                     "reason": f"reddit_search_fetch_failed:{error_reason(exc)}",
                 })
+                consecutive_failures += 1
+                break
+            if payload is None:  # bounded fallback terminated the logical request (blocked/rate-limited)
                 consecutive_failures += 1
                 break
             consecutive_failures = 0
@@ -688,6 +832,45 @@ def _collect_search(
             break
 
 
+def _fetch_listing_raw(
+    subreddit: str,
+    context: Any,
+    errors: list[dict[str, Any]],
+    source_type: str,
+    source_name: str,
+    budget: Any,
+) -> list[dict[str, Any]]:
+    """Fetch the version-INVARIANT subreddit ``new`` listing (unfiltered candidates). Cached per Acrobat
+    collector invocation so it is fetched once, not once per patch record (the proven O(records) defect)."""
+    raw: list[dict[str, Any]] = []
+    after: str | None = None
+    for _page in range(max(1, int(getattr(context, "max_pages", 1) or 1))):
+        params = {"limit": "100"}
+        if after:
+            params["after"] = after
+        try:
+            payload = _fallback(_listing_attempts(subreddit, params), budget)
+        except rb.MethodBudgetExhausted:
+            raise
+        except Exception as exc:
+            errors.append({
+                "source_url": f"{listing_url(subreddit)}?{urllib.parse.urlencode(params)}",
+                "reason": f"reddit_listing_fetch_failed:{error_reason(exc)}",
+            })
+            break
+        if payload is None:
+            break
+        children = (((payload or {}).get("data") or {}).get("children") or [])
+        for child in children:
+            data = child.get("data") if isinstance(child, dict) else None
+            if isinstance(data, dict):
+                raw.append(reddit_candidate(data, source_type=source_type, source_name=source_name))
+        after = ((payload or {}).get("data") or {}).get("after")
+        if not after:
+            break
+    return raw
+
+
 def _collect_listing(
     subreddit: str,
     context: Any,
@@ -698,34 +881,21 @@ def _collect_listing(
     source_name: str,
     hints: list[str],
 ) -> None:
+    budget = getattr(context, "budget", None)
     since = getattr(context, "since", None)
-    after: str | None = None
-    for _page in range(max(1, int(getattr(context, "max_pages", 1) or 1))):
-        params = {"limit": "100"}
-        if after:
-            params["after"] = after
-        try:
-            payload = request_reddit_json_with_fallback(_listing_attempts(subreddit, params))
-        except Exception as exc:
-            errors.append({
-                "source_url": f"{listing_url(subreddit)}?{urllib.parse.urlencode(params)}",
-                "reason": f"reddit_listing_fetch_failed:{error_reason(exc)}",
-            })
-            break
-        children = (((payload or {}).get("data") or {}).get("children") or [])
-        for child in children:
-            data = child.get("data") if isinstance(child, dict) else None
-            if not isinstance(data, dict):
-                continue
-            candidate = reddit_candidate(data, source_type=source_type, source_name=source_name)
-            if since and candidate.get("source_date") and date_part(candidate.get("source_date")) < since:
-                continue
-            if not _matches_hint(candidate, hints):
-                continue
-            _add(results, seen, candidate)
-        after = ((payload or {}).get("data") or {}).get("after")
-        if not after:
-            break
+    cache_key = f"reddit_listing_raw:{subreddit}"
+    if budget is not None and budget.cache_has(cache_key):
+        raw = budget.cache_get(cache_key)  # version-invariant reuse (NOT a suppressed retry)
+    else:
+        raw = _fetch_listing_raw(subreddit, context, errors, source_type, source_name, budget)
+        if budget is not None:
+            budget.cache_put(cache_key, raw)
+    for candidate in raw:
+        if since and candidate.get("source_date") and date_part(candidate.get("source_date")) < since:
+            continue
+        if not _matches_hint(candidate, hints):
+            continue
+        _add(results, seen, candidate)
 
 
 def _collect_feed(
@@ -739,6 +909,7 @@ def _collect_feed(
     source_name: str,
     hints: list[str],
 ) -> None:
+    budget = getattr(context, "budget", None)
     since = getattr(context, "since", None)
     attempts: list[tuple[str, str]] = []
     for query in queries[:6]:
@@ -746,7 +917,9 @@ def _collect_feed(
     attempts.extend(_listing_feed_attempts(subreddit))
     for family, url in attempts:
         try:
-            feed_candidates = request_reddit_feed(url, endpoint_family=family, source_type=source_type, source_name=source_name)
+            feed_candidates = request_reddit_feed(url, endpoint_family=family, source_type=source_type, source_name=source_name, budget=budget)
+        except rb.MethodBudgetExhausted:
+            raise
         except Exception as exc:
             errors.append({
                 "source_url": url,

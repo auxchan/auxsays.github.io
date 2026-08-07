@@ -179,6 +179,10 @@ class CollectorContext:
     since: str | None
     max_pages: int
     target_versions: set[str] | None = None
+    # Optional RuntimeBudget (patch_collectors.runtime_budget.RuntimeBudget). When present, budget-aware
+    # collectors bound every network request/method/collector by a hard wall-clock deadline. Left None by
+    # callers/tests that do not need bounding (behavior unchanged).
+    budget: Any = None
 
 
 class ProductCollector:

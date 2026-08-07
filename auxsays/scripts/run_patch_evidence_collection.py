@@ -24,6 +24,7 @@ from patch_collectors.base import (  # noqa: E402
 )
 from lib.collector_txn import CollectorTransaction, UnexpectedMutation, GitUnavailable  # noqa: E402
 from lib import collector_ownership as ownership  # noqa: E402
+from patch_collectors import runtime_budget as rb  # noqa: E402
 from patch_collectors.adobe_premiere import AdobePremiereCollector  # noqa: E402
 from patch_collectors.davinci import DavinciCollector  # noqa: E402
 from patch_collectors.obs import ObsCollector  # noqa: E402
@@ -173,6 +174,8 @@ def normalize_failure_reason(exc: Exception) -> str:
         category = "git_unavailable"
     elif kind in _PARSE_ERROR_KINDS or any(t in low for t in ("yaml", "scanner", "parser", "composer")):
         category = "record_parse_error"
+    elif kind == "CollectorBudgetExhausted":
+        category = "collector_budget_exhausted"
     elif kind in _FETCH_ERROR_KINDS or any(t in low for t in ("http", "url", "timeout", "connection", "socket")):
         category = "source_fetch_error"
     else:
@@ -280,11 +283,14 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     product_ids = args.product_id or sorted(collectors)
+    budget = rb.RuntimeBudget()
+    rb.set_run_budget(budget)  # cleared after the collector loop; lets DaVinci/OBS/Windows/Premiere total-bound their body reads via bounded_read
     context = CollectorContext(
         write=bool(args.write),
         since=args.since or since_from_days(args.since_days),
         max_pages=args.max_pages,
         target_versions=set(args.update_version) if args.update_version else None,
+        budget=budget,
     )
 
     # FAIL-SOFT: each collector is isolated. A collector that raises does NOT abort the run and does
@@ -299,6 +305,14 @@ def main(argv: list[str] | None = None) -> int:
     hard_abort = False  # a rollback failure leaves the tree in an unknown state -> refuse writeback
     run_started = time.monotonic()
     for product_id in product_ids:
+        # Run-level reserve: once the run collection deadline is spent, stop STARTING new collectors so
+        # reconciliation / QA / consensus-audit / EMH / transactional writeback stay reachable inside the
+        # workflow step. Not-yet-run collectors keep their last-known-good rows (keyed upsert, fail-soft).
+        if budget.run_expired():
+            rb.emit("run_budget_stop", reason="run_collection_deadline", not_started=product_id)
+            break
+        budget.start_collector(product_id)
+        rb.emit("collector_start", product_id=product_id, remaining_run_s=round(budget.remaining_run(), 1))
         collector = collectors[product_id]()
         ok = True
         failure_reason: str | None = None
@@ -343,13 +357,15 @@ def main(argv: list[str] | None = None) -> int:
             if txn is not None:
                 try:
                     txn.rollback()  # restore the surface byte-for-byte; discard ALL of this collector's writes
-                except Exception as rb:  # noqa: BLE001 -- rollback itself failed -> tree state unknown
+                except Exception as rollback_exc:  # noqa: BLE001 -- rollback itself failed -> tree state unknown
                     hard_abort = True
-                    failure_reason = "rollback_failed:" + type(rb).__name__
+                    failure_reason = "rollback_failed:" + type(rollback_exc).__name__
         else:
             if txn is not None:
                 txn.commit()  # collector succeeded within its surface -> keep changes as the next baseline
         collector_duration_s = round(time.monotonic() - collector_started, 1)
+        rb.emit("collector_end", product_id=product_id, ok=ok, duration_s=collector_duration_s,
+                failure_reason=failure_reason)
         accepted_count = sum(int(item.get("accepted_count") or 0) for item in results)
         rejected_count = sum(int(item.get("rejected_count") or 0) for item in results)
         collector_rows = [row for item in results for row in (item.get("method_health") or []) if isinstance(row, dict)]
@@ -379,6 +395,7 @@ def main(argv: list[str] | None = None) -> int:
             "results": results,
         })
 
+    rb.set_run_budget(None)  # clear the module-global active budget (test isolation; next run sets its own)
     total_runtime_s = round(time.monotonic() - run_started, 1)
     attempted = len(per_collector)
     completed = sum(1 for c in per_collector if c["ok"])

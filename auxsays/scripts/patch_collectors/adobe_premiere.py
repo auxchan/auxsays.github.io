@@ -6,6 +6,7 @@ pipeline. It never treats Adobe official notes or broad forum/search pages as
 community consensus.
 """
 from __future__ import annotations
+from . import runtime_budget as rb
 
 import html
 import json
@@ -117,6 +118,10 @@ class AdobePremiereCollector(ProductCollector):
         records = generated_records(PRODUCT_ID, context.target_versions, include_archived=bool(context.target_versions))
         results: list[dict[str, Any]] = []
         for record in records:
+            _b = rb.get_run_budget()
+            if _b is not None and _b.collector_finalize_expired():
+                rb.emit("collector_budget_stop", product_id=PRODUCT_ID, reason="collector_finalize")
+                break
             accepted, rejected, method_health = collect_for_record(record, context)
             result: dict[str, Any] = {
                 "product_id": PRODUCT_ID,
@@ -910,10 +915,10 @@ def canonical_evidence_url(url: str) -> str:
 def request_text(url: str, timeout: int = 30, max_bytes: int = 800000) -> str:
     req = urllib.request.Request(url, headers=HEADERS)
     try:
-        with urllib.request.urlopen(req, timeout=timeout) as response:
+        with urllib.request.urlopen(req, timeout=rb.request_timeout(rb.get_run_budget(), timeout)) as response:
             status = getattr(response, "status", None)
             content_type = response.headers.get("Content-Type", "")
-            body = response.read(max_bytes).decode("utf-8", errors="replace")
+            body = rb.bounded_read(response, budget=rb.get_run_budget(), endpoint_family="premiere", max_bytes=max_bytes).decode("utf-8", errors="replace")
     except HTTPError as exc:
         try:
             body = exc.read(12000).decode("utf-8", errors="replace")
@@ -937,9 +942,9 @@ def request_json(url: str, *, api_key: str, timeout: int = 30, max_bytes: int = 
     }
     req = urllib.request.Request(url, headers=headers)
     try:
-        with urllib.request.urlopen(req, timeout=timeout) as response:
+        with urllib.request.urlopen(req, timeout=rb.request_timeout(rb.get_run_budget(), timeout)) as response:
             status = getattr(response, "status", None)
-            body = response.read(max_bytes).decode("utf-8", errors="replace")
+            body = rb.bounded_read(response, budget=rb.get_run_budget(), endpoint_family="premiere", max_bytes=max_bytes).decode("utf-8", errors="replace")
     except HTTPError as exc:
         raise BraveSearchAccessError(f"http_{exc.code}_{brave_status_reason(exc.code)}", status=exc.code) from exc
     except URLError as exc:
@@ -962,9 +967,9 @@ def request_public_json(url: str, timeout: int = 30, max_bytes: int = 800000) ->
     }
     req = urllib.request.Request(url, headers=headers)
     try:
-        with urllib.request.urlopen(req, timeout=timeout) as response:
+        with urllib.request.urlopen(req, timeout=rb.request_timeout(rb.get_run_budget(), timeout)) as response:
             status = getattr(response, "status", None)
-            body = response.read(max_bytes).decode("utf-8", errors="replace")
+            body = rb.bounded_read(response, budget=rb.get_run_budget(), endpoint_family="premiere", max_bytes=max_bytes).decode("utf-8", errors="replace")
     except HTTPError as exc:
         raise WaybackAccessError(f"http_{exc.code}_{brave_status_reason(exc.code)}", status=exc.code) from exc
     except URLError as exc:

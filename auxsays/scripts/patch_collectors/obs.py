@@ -10,6 +10,7 @@ from typing import Any
 import collect_obs_reports as legacy_obs
 
 from .base import CollectorContext, ProductCollector, method_health_row, utc_now
+from . import runtime_budget as rb
 
 
 class ObsCollector(ProductCollector):
@@ -24,6 +25,10 @@ class ObsCollector(ProductCollector):
 
         results: list[dict[str, Any]] = []
         for version in versions:
+            _b = rb.get_run_budget()
+            if _b is not None and _b.collector_finalize_expired():
+                rb.emit("collector_budget_stop", product_id=self.product_id, reason="collector_finalize")
+                break
             if not legacy_obs.valid_update_version(version):
                 results.append({
                     "product_id": self.product_id,
