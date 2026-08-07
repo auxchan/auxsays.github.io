@@ -284,6 +284,7 @@ def main(argv: list[str] | None = None) -> int:
 
     product_ids = args.product_id or sorted(collectors)
     budget = rb.RuntimeBudget()
+    rb.set_run_budget(budget)  # cleared after the collector loop; lets DaVinci/OBS/Windows/Premiere total-bound their body reads via bounded_read
     context = CollectorContext(
         write=bool(args.write),
         since=args.since or since_from_days(args.since_days),
@@ -394,6 +395,7 @@ def main(argv: list[str] | None = None) -> int:
             "results": results,
         })
 
+    rb.set_run_budget(None)  # clear the module-global active budget (test isolation; next run sets its own)
     total_runtime_s = round(time.monotonic() - run_started, 1)
     attempted = len(per_collector)
     completed = sum(1 for c in per_collector if c["ok"])

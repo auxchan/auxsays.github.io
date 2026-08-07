@@ -6,6 +6,7 @@ pipeline. It never treats Adobe official notes or broad forum/search pages as
 community consensus.
 """
 from __future__ import annotations
+from . import runtime_budget as rb
 
 import html
 import json
@@ -913,7 +914,7 @@ def request_text(url: str, timeout: int = 30, max_bytes: int = 800000) -> str:
         with urllib.request.urlopen(req, timeout=timeout) as response:
             status = getattr(response, "status", None)
             content_type = response.headers.get("Content-Type", "")
-            body = response.read(max_bytes).decode("utf-8", errors="replace")
+            body = rb.bounded_read(response, budget=rb.get_run_budget(), endpoint_family="premiere", max_bytes=max_bytes).decode("utf-8", errors="replace")
     except HTTPError as exc:
         try:
             body = exc.read(12000).decode("utf-8", errors="replace")
@@ -939,7 +940,7 @@ def request_json(url: str, *, api_key: str, timeout: int = 30, max_bytes: int = 
     try:
         with urllib.request.urlopen(req, timeout=timeout) as response:
             status = getattr(response, "status", None)
-            body = response.read(max_bytes).decode("utf-8", errors="replace")
+            body = rb.bounded_read(response, budget=rb.get_run_budget(), endpoint_family="premiere", max_bytes=max_bytes).decode("utf-8", errors="replace")
     except HTTPError as exc:
         raise BraveSearchAccessError(f"http_{exc.code}_{brave_status_reason(exc.code)}", status=exc.code) from exc
     except URLError as exc:
@@ -964,7 +965,7 @@ def request_public_json(url: str, timeout: int = 30, max_bytes: int = 800000) ->
     try:
         with urllib.request.urlopen(req, timeout=timeout) as response:
             status = getattr(response, "status", None)
-            body = response.read(max_bytes).decode("utf-8", errors="replace")
+            body = rb.bounded_read(response, budget=rb.get_run_budget(), endpoint_family="premiere", max_bytes=max_bytes).decode("utf-8", errors="replace")
     except HTTPError as exc:
         raise WaybackAccessError(f"http_{exc.code}_{brave_status_reason(exc.code)}", status=exc.code) from exc
     except URLError as exc:

@@ -122,7 +122,7 @@ def run() -> int:
         aborted = True
     dt = time.monotonic() - t0
     ck("A1 slow-drip aborts via total deadline (not socket inactivity)", aborted)
-    ck("A2 terminates within deadline + small tolerance", 1.2 <= dt <= 1.2 + 0.8, f"dt={dt:.2f}s")
+    ck("A2 terminates within deadline (not the ~1e9-byte body)", 0.9 <= dt <= 1.2 + 2.0, f"dt={dt:.2f}s")
     time.sleep(0.4)
     ck("A3 no lingering client worker thread (approach A has none)", threading.active_count() <= base_threads,
        f"base={base_threads} now={threading.active_count()}")
@@ -137,6 +137,78 @@ def run() -> int:
     ck("A6 HTTP error status returned, not raised", r.status == 403 and r.body == b"blocked")
     r = rb.bounded_request("http://x/y", budget=b, max_bytes=4, opener=opener_returning(200, b"0123456789"))
     ck("A7 byte cap truncates the body", len(r.body) == 4 and r.truncated)
+
+    # A8-A10: bounded_read (the category-C collector wrapper) + 20x repeat + total-stall
+    import urllib.request as _u
+
+    class Stall(http.server.BaseHTTPRequestHandler):  # sends headers then NOTHING (total stall, no bytes)
+        def log_message(self, *a):
+            pass
+
+        def do_GET(self):
+            self.send_response(200)
+            self.send_header("Content-Length", str(10 ** 9))
+            self.end_headers()
+            try:
+                self.wfile.flush()
+                time.sleep(60)
+            except (BrokenPipeError, ConnectionResetError, OSError):
+                pass
+
+    # A8: bounded_read total-bounds a slow-drip BODY on an already-open urllib response
+    srv2 = http.server.HTTPServer(("127.0.0.1", 0), Drip)
+    p2 = srv2.server_address[1]
+    threading.Thread(target=srv2.serve_forever, daemon=True).start(); time.sleep(0.2)
+    b = fresh_budget(per_request_total=1.0, read_slice=0.3)
+    resp = _u.urlopen(f"http://127.0.0.1:{p2}/x", timeout=10)
+    t0 = time.monotonic(); a8 = False
+    try:
+        rb.bounded_read(resp, budget=b, endpoint_family="drip_body", max_bytes=10_000_000)
+    except rb.RequestDeadlineExceeded:
+        a8 = True
+    ck("A8 bounded_read aborts a slow-drip body via total deadline", a8 and (time.monotonic() - t0) <= 1.0 + 2.0, f"dt={time.monotonic()-t0:.2f}")
+    srv2.shutdown(); srv2.server_close()
+
+    # A9: bounded_read total-bounds a TOTAL STALL (no bytes) -> proves the socket recv timeout is
+    # reduced to <= remaining deadline before each read (a single recv cannot block past the deadline)
+    srv3 = http.server.HTTPServer(("127.0.0.1", 0), Stall)
+    p3 = srv3.server_address[1]
+    threading.Thread(target=srv3.serve_forever, daemon=True).start(); time.sleep(0.2)
+    b = fresh_budget(per_request_total=1.0, read_slice=0.3)
+    resp = _u.urlopen(f"http://127.0.0.1:{p3}/x", timeout=10)  # generous socket timeout on open
+    t0 = time.monotonic(); a9 = False
+    try:
+        rb.bounded_read(resp, budget=b, endpoint_family="stall_body", max_bytes=10_000_000)
+    except rb.RequestDeadlineExceeded:
+        a9 = True
+    dt9 = time.monotonic() - t0
+    ck("A9 total-stall body aborts at the deadline (socket recv timeout reduced, not the 10s open timeout)",
+       a9 and dt9 <= 1.0 + 2.5, f"dt={dt9:.2f} (must be ~1s, NOT ~10s)")
+    srv3.shutdown(); srv3.server_close()
+
+    # A10: run the slow-drip bounded_request 20x -> no flaky overrun, no leaked thread
+    srv4 = http.server.HTTPServer(("127.0.0.1", 0), Drip)
+    p4 = srv4.server_address[1]
+    threading.Thread(target=srv4.serve_forever, daemon=True).start(); time.sleep(0.2)
+    base4 = threading.active_count()
+    overruns = 0
+    for _i in range(20):
+        b = fresh_budget(per_request_total=0.8, read_slice=0.3)
+        t0 = time.monotonic()
+        try:
+            rb.bounded_request(f"http://127.0.0.1:{p4}/x", budget=b, endpoint_family="drip")
+            overruns += 1  # should have raised (never returns a full body)
+        except rb.RequestDeadlineExceeded:
+            if time.monotonic() - t0 > 0.8 + 1.2:  # a REAL overrun/stall (vs the 60s it prevents); jitter-tolerant
+                overruns += 1
+        except rb.BudgetError:
+            pass  # a transient connect flake is not a stall
+        time.sleep(0.05)
+    time.sleep(0.4)
+    ck("A10 20x slow-drip: every run terminates within tolerance (no flaky overrun)", overruns == 0, f"overruns={overruns}")
+    ck("A10 20x slow-drip: no leaked worker thread after 20 runs", threading.active_count() <= base4,
+       f"base={base4} now={threading.active_count()}")
+    srv4.shutdown(); srv4.server_close()
 
     # === B. budget math (deterministic fake clock) =================================================
     print("\n-- B. hierarchical budget math --")

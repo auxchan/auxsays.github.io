@@ -17,6 +17,7 @@ Determinism / safety:
   product collector's method health is honest instead of crashing.
 """
 from __future__ import annotations
+from . import runtime_budget as rb
 
 import html
 import os
@@ -154,7 +155,7 @@ def _fetch_feed_text(url: str, *, timeout: int = 30, max_bytes: int = 1_500_000)
     request = urllib.request.Request(url, headers=FEED_HEADERS)
     try:
         with urllib.request.urlopen(request, timeout=timeout) as response:
-            raw = response.read(max_bytes)
+            raw = rb.bounded_read(response, budget=rb.get_run_budget(), endpoint_family="windows_learn", max_bytes=max_bytes)
             status = int(getattr(response, "status", 200) or 200)
             content_type = response.headers.get("content-type", "")
             charset = response.headers.get_content_charset() or "utf-8"

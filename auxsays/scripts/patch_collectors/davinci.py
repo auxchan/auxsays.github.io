@@ -5,6 +5,7 @@ that can be fetched and checked deterministically. Ambiguous candidates remain
 rejected; accepted rows are written only after exact-version/date/report gates.
 """
 from __future__ import annotations
+from . import runtime_budget as rb
 
 import html
 import json
@@ -399,7 +400,7 @@ def request_json(url: str, *, endpoint_family: str = "reddit_json") -> Any:
     request = urllib.request.Request(request_url, headers=headers)
     try:
         with urllib.request.urlopen(request, timeout=30) as response:
-            raw = response.read()
+            raw = rb.bounded_read(response, budget=rb.get_run_budget(), endpoint_family="davinci_json")
             content_type = response.headers.get("content-type", "")
             status = int(getattr(response, "status", 200) or 200)
             charset = response.headers.get_content_charset() or "utf-8"
@@ -501,7 +502,7 @@ def request_reddit_feed(url: str, *, endpoint_family: str) -> list[dict[str, Any
     request = urllib.request.Request(url, headers=headers)
     try:
         with urllib.request.urlopen(request, timeout=30) as response:
-            raw = response.read(1_000_000)
+            raw = rb.bounded_read(response, budget=rb.get_run_budget(), endpoint_family="davinci_feed", max_bytes=1_000_000)
             content_type = response.headers.get("content-type", "")
             status = int(getattr(response, "status", 200) or 200)
             charset = response.headers.get_content_charset() or "utf-8"
@@ -602,7 +603,7 @@ def request_text(url: str) -> str:
     request = urllib.request.Request(url, headers=TEXT_HEADERS)
     try:
         with urllib.request.urlopen(request, timeout=30) as response:
-            raw = response.read(500_000)
+            raw = rb.bounded_read(response, budget=rb.get_run_budget(), endpoint_family="davinci_web", max_bytes=500_000)
             content_type = response.headers.get("content-type", "")
             status = response.status
     except HTTPError as exc:

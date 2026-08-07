@@ -172,6 +172,13 @@ class RuntimeBudget:
         self._collector_deadline_at = min(now + self.cfg.collector_deadline, self._run_deadline_at)
         self._collector_finalize_at = self._collector_deadline_at - self.cfg.collector_finalize_reserve
         self._invariant_cache = {}
+        # Initialize method state to the collector default so request_deadline()/note_request() are valid
+        # even for collectors that never call start_method (e.g. DaVinci/OBS/Windows via bounded_read):
+        # remaining_method then equals remaining_collector_finalize until a real start_method narrows it.
+        self._method_deadline_at = self._collector_finalize_at
+        self._method_requests = 0
+        self._method_backoff_total = 0.0
+        self.method_id = ""
 
     def remaining_collector(self) -> float:
         return self._collector_deadline_at - self._clock()
@@ -310,18 +317,20 @@ def bounded_request(
         truncated = False
         read1 = getattr(resp, "read1", None)
         while len(buf) < max_bytes:
-            if remaining() <= 0:
+            left = remaining()
+            if left <= 0:
                 truncated = True
                 raise RequestDeadlineExceeded(endpoint_family, elapsed())
+            # Shrink the socket recv timeout to the remaining total so a SINGLE read1 cannot block past
+            # the deadline (read1 returns after one underlying recv -> prompt on a slow drip). A recv that
+            # times out means the deadline was reached (a total stall) -> abort; never re-read the socket.
+            _reduce_sock_timeout(resp, left)
             want = min(_CHUNK, max_bytes - len(buf))
             try:
-                # read1 returns after a single underlying socket read (prompt on a slow drip); the socket
-                # timeout (set at open) bounds each recv, and the deadline check bounds the total.
                 chunk = read1(want) if read1 is not None else resp.read(1)
             except (socket.timeout, TimeoutError):
-                if remaining() <= 0:
-                    raise RequestDeadlineExceeded(endpoint_family, elapsed())
-                continue
+                truncated = True
+                raise RequestDeadlineExceeded(endpoint_family, elapsed())
             except (urllib.error.URLError, OSError) as exc:
                 raise BudgetError(f"network_{type(exc).__name__}", reason="network", health="broken") from exc
             if not chunk:
@@ -335,6 +344,81 @@ def bounded_request(
             resp.close()
         except Exception:  # noqa: BLE001
             pass
+
+
+# --- run-level active budget + a total-read bound for collectors that keep their own urlopen ---------
+_RUN_BUDGET: "RuntimeBudget | None" = None
+
+
+def set_run_budget(budget: "RuntimeBudget | None") -> None:
+    """Set (or clear) the run's active RuntimeBudget. The runner sets it once (finally-cleared) so any
+    collector transport can total-bound its body reads via bounded_read. Safe as a module global because
+    collectors run strictly serially -- there is no concurrent network discovery."""
+    global _RUN_BUDGET
+    _RUN_BUDGET = budget
+
+
+def get_run_budget() -> "RuntimeBudget | None":
+    return _RUN_BUDGET
+
+
+def _reduce_sock_timeout(resp: Any, timeout: float) -> None:
+    """Best-effort: shrink the underlying socket's recv timeout so a single read cannot block past the
+    remaining deadline. Silent no-op on objects without an accessible socket (e.g. test fakes)."""
+    try:
+        resp.fp.raw._sock.settimeout(max(0.001, timeout))  # CPython HTTPResponse -> BufferedReader -> SocketIO
+    except Exception:  # noqa: BLE001
+        pass
+
+
+def bounded_read(resp: Any, *, budget: "RuntimeBudget | None" = None, endpoint_family: str = "",
+                 max_bytes: int | None = None) -> bytes:
+    """Total-wall-clock-bounded body read of an ALREADY-OPEN urllib response. Reads with ``read1`` against
+    a total monotonic deadline = min(per_request_total, remaining_collector_finalize), shrinking the socket
+    recv timeout before each read, regaining control between chunks, and CLOSING the response when the
+    deadline expires -- so a slow-drip / never-ending body is terminated and the collector's socket is
+    released. Byte-capped. With ``budget=None`` it behaves like the plain ``resp.read(max_bytes)`` the
+    collector used before (backward compatible). This is the smallest safe total-read bound for collectors
+    that keep their own urlopen + classification (DaVinci / OBS / Windows / Premiere-non-Reddit)."""
+    if budget is None:
+        return resp.read() if max_bytes is None else resp.read(max_bytes)
+    cfg = budget.cfg
+    cap = cfg.max_bytes if max_bytes is None else max_bytes
+    total = min(cfg.per_request_total, budget.remaining_collector_finalize())
+    start = budget.now()
+    if total <= 0:
+        try:
+            resp.close()
+        except Exception:  # noqa: BLE001
+            pass
+        raise RequestDeadlineExceeded(endpoint_family, 0.0)
+    read1 = getattr(resp, "read1", None)
+    buf = bytearray()
+    try:
+        while len(buf) < cap:
+            left = total - (budget.now() - start)
+            if left <= 0:
+                raise RequestDeadlineExceeded(endpoint_family, budget.now() - start)
+            # recv timeout = remaining total, so a single read1 cannot block past the deadline; a recv
+            # timeout means the deadline was reached (total stall) -> abort, never re-read the socket.
+            _reduce_sock_timeout(resp, left)
+            want = min(_CHUNK, cap - len(buf))
+            try:
+                chunk = read1(want) if read1 is not None else resp.read(want)
+            except (socket.timeout, TimeoutError):
+                raise RequestDeadlineExceeded(endpoint_family, budget.now() - start)
+            except OSError as exc:
+                raise BudgetError(f"network_{type(exc).__name__}", reason="network", health="broken") from exc
+            if not chunk:
+                break
+            buf += chunk
+        return bytes(buf)
+    except (RequestDeadlineExceeded, BudgetError):
+        try:
+            resp.close()
+        except Exception:  # noqa: BLE001
+            pass
+        raise
 
 
 # --- retry / backoff / classification helpers ------------------------------------------------------

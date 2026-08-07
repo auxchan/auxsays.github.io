@@ -10,6 +10,7 @@ OBS participates in the same automated evidence framework as other products
 without changing its production behavior.
 """
 from __future__ import annotations
+from patch_collectors import runtime_budget as rb
 
 import argparse
 import json
@@ -107,7 +108,7 @@ def request_json(url: str) -> Any:
         headers["Authorization"] = f"Bearer {token}"
     req = urllib.request.Request(url, headers=headers)
     with urllib.request.urlopen(req, timeout=30) as response:
-        return json.loads(response.read().decode("utf-8"))
+        return json.loads(rb.bounded_read(response, budget=rb.get_run_budget(), endpoint_family="obs_github").decode("utf-8"))
 
 
 def search_issues(version: str, since: str | None, max_pages: int) -> list[dict[str, Any]]:
