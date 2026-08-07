@@ -177,6 +177,10 @@ class DavinciCollector(ProductCollector):
         records = generated_records(PRODUCT_ID, context.target_versions, include_archived=bool(context.target_versions))
         results: list[dict[str, Any]] = []
         for record in records:
+            _b = rb.get_run_budget()
+            if _b is not None and _b.collector_finalize_expired():
+                rb.emit("collector_budget_stop", product_id=PRODUCT_ID, reason="collector_finalize")
+                break
             accepted, rejected, method_health = collect_for_record(record, context)
             result: dict[str, Any] = {
                 "product_id": PRODUCT_ID,
@@ -372,12 +376,20 @@ def request_with_backoff(fetch):
     max_retries = reddit_max_retries()
     attempt = 0
     while True:
+        _b = rb.get_run_budget()
+        if _b is not None and _b.collector_finalize_expired():
+            # collector budget spent -> skip the request entirely (no connect) so the in-flight record's
+            # remaining requests collapse to ~0 instead of each taking a shrinking connect timeout.
+            raise SourceAccessError("budget_expired", blocked_signature="budget_expired")
         try:
             return fetch()
         except SourceAccessError as exc:
             if attempt >= max_retries or not is_transient_reddit_error(exc):
                 raise
-            reddit_sleep(reddit_backoff_delay(exc, attempt))
+            _b = rb.get_run_budget()
+            if _b is not None and _b.collector_finalize_expired():
+                raise  # budget spent -> stop retrying (never sleep past the collector deadline)
+            reddit_sleep(rb.budget_capped_sleep(reddit_backoff_delay(exc, attempt), _b))
             attempt += 1
 
 
@@ -399,7 +411,7 @@ def request_json(url: str, *, endpoint_family: str = "reddit_json") -> Any:
     request_url = with_raw_json(url)
     request = urllib.request.Request(request_url, headers=headers)
     try:
-        with urllib.request.urlopen(request, timeout=30) as response:
+        with urllib.request.urlopen(request, timeout=rb.request_timeout(rb.get_run_budget(), 30)) as response:
             raw = rb.bounded_read(response, budget=rb.get_run_budget(), endpoint_family="davinci_json")
             content_type = response.headers.get("content-type", "")
             status = int(getattr(response, "status", 200) or 200)
@@ -501,7 +513,7 @@ def request_reddit_feed(url: str, *, endpoint_family: str) -> list[dict[str, Any
     headers_strategy = "reddit_descriptive_ua_feed"
     request = urllib.request.Request(url, headers=headers)
     try:
-        with urllib.request.urlopen(request, timeout=30) as response:
+        with urllib.request.urlopen(request, timeout=rb.request_timeout(rb.get_run_budget(), 30)) as response:
             raw = rb.bounded_read(response, budget=rb.get_run_budget(), endpoint_family="davinci_feed", max_bytes=1_000_000)
             content_type = response.headers.get("content-type", "")
             status = int(getattr(response, "status", 200) or 200)
@@ -602,7 +614,7 @@ def request_reddit_feed_with_fallback(attempts: list[tuple[str, str]]) -> list[d
 def request_text(url: str) -> str:
     request = urllib.request.Request(url, headers=TEXT_HEADERS)
     try:
-        with urllib.request.urlopen(request, timeout=30) as response:
+        with urllib.request.urlopen(request, timeout=rb.request_timeout(rb.get_run_budget(), 30)) as response:
             raw = rb.bounded_read(response, budget=rb.get_run_budget(), endpoint_family="davinci_web", max_bytes=500_000)
             content_type = response.headers.get("content-type", "")
             status = response.status

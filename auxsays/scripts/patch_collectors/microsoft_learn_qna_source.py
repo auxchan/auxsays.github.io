@@ -154,7 +154,7 @@ def _fetch_feed_text(url: str, *, timeout: int = 30, max_bytes: int = 1_500_000)
     LearnQnaAccessError on any HTTP/network failure. Tests monkeypatch THIS function."""
     request = urllib.request.Request(url, headers=FEED_HEADERS)
     try:
-        with urllib.request.urlopen(request, timeout=timeout) as response:
+        with urllib.request.urlopen(request, timeout=rb.request_timeout(rb.get_run_budget(), timeout)) as response:
             raw = rb.bounded_read(response, budget=rb.get_run_budget(), endpoint_family="windows_learn", max_bytes=max_bytes)
             status = int(getattr(response, "status", 200) or 200)
             content_type = response.headers.get("content-type", "")

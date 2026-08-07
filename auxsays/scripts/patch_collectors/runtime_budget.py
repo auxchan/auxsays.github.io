@@ -362,6 +362,29 @@ def get_run_budget() -> "RuntimeBudget | None":
     return _RUN_BUDGET
 
 
+def request_timeout(budget: "RuntimeBudget | None", default: float) -> float:
+    """A connect/socket timeout bounded by the remaining collector budget: min(default, remaining
+    collector-finalize). Once the budget is spent it returns a tiny value so a hung connect fails fast
+    instead of blocking for `default` seconds. With no budget it returns `default` unchanged (backward
+    compatible). Use this for urlopen(timeout=...) in collectors that keep their own transport so the
+    CONNECT/header phase -- not just the body read -- is bounded by the collector deadline."""
+    if budget is None:
+        return default
+    # Cap by per_request_total AND remaining collector-finalize: a single connect can never exceed one
+    # request's budget, and shrinks to ~0 as the collector deadline nears (hung connect fails fast). The
+    # default finalize reserve (== per_request_total) absorbs one in-flight request so the collector stays
+    # within its hard deadline.
+    return max(0.1, min(default, budget.cfg.per_request_total, budget.remaining_collector_finalize()))
+
+
+def budget_capped_sleep(seconds: float, budget: "RuntimeBudget | None") -> float:
+    """Cap a backoff sleep by the remaining collector-finalize budget (never sleep past the deadline).
+    Returns the actual (capped, non-negative) sleep. With no budget it returns `seconds` unchanged."""
+    if budget is None:
+        return max(0.0, seconds)
+    return max(0.0, min(seconds, budget.remaining_collector_finalize()))
+
+
 def _reduce_sock_timeout(resp: Any, timeout: float) -> None:
     """Best-effort: shrink the underlying socket's recv timeout so a single read cannot block past the
     remaining deadline. Silent no-op on objects without an accessible socket (e.g. test fakes)."""

@@ -118,6 +118,10 @@ class AdobePremiereCollector(ProductCollector):
         records = generated_records(PRODUCT_ID, context.target_versions, include_archived=bool(context.target_versions))
         results: list[dict[str, Any]] = []
         for record in records:
+            _b = rb.get_run_budget()
+            if _b is not None and _b.collector_finalize_expired():
+                rb.emit("collector_budget_stop", product_id=PRODUCT_ID, reason="collector_finalize")
+                break
             accepted, rejected, method_health = collect_for_record(record, context)
             result: dict[str, Any] = {
                 "product_id": PRODUCT_ID,
@@ -911,7 +915,7 @@ def canonical_evidence_url(url: str) -> str:
 def request_text(url: str, timeout: int = 30, max_bytes: int = 800000) -> str:
     req = urllib.request.Request(url, headers=HEADERS)
     try:
-        with urllib.request.urlopen(req, timeout=timeout) as response:
+        with urllib.request.urlopen(req, timeout=rb.request_timeout(rb.get_run_budget(), timeout)) as response:
             status = getattr(response, "status", None)
             content_type = response.headers.get("Content-Type", "")
             body = rb.bounded_read(response, budget=rb.get_run_budget(), endpoint_family="premiere", max_bytes=max_bytes).decode("utf-8", errors="replace")
@@ -938,7 +942,7 @@ def request_json(url: str, *, api_key: str, timeout: int = 30, max_bytes: int = 
     }
     req = urllib.request.Request(url, headers=headers)
     try:
-        with urllib.request.urlopen(req, timeout=timeout) as response:
+        with urllib.request.urlopen(req, timeout=rb.request_timeout(rb.get_run_budget(), timeout)) as response:
             status = getattr(response, "status", None)
             body = rb.bounded_read(response, budget=rb.get_run_budget(), endpoint_family="premiere", max_bytes=max_bytes).decode("utf-8", errors="replace")
     except HTTPError as exc:
@@ -963,7 +967,7 @@ def request_public_json(url: str, timeout: int = 30, max_bytes: int = 800000) ->
     }
     req = urllib.request.Request(url, headers=headers)
     try:
-        with urllib.request.urlopen(req, timeout=timeout) as response:
+        with urllib.request.urlopen(req, timeout=rb.request_timeout(rb.get_run_budget(), timeout)) as response:
             status = getattr(response, "status", None)
             body = rb.bounded_read(response, budget=rb.get_run_budget(), endpoint_family="premiere", max_bytes=max_bytes).decode("utf-8", errors="replace")
     except HTTPError as exc:

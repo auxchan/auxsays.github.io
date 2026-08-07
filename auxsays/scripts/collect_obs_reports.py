@@ -107,7 +107,7 @@ def request_json(url: str) -> Any:
     if token:
         headers["Authorization"] = f"Bearer {token}"
     req = urllib.request.Request(url, headers=headers)
-    with urllib.request.urlopen(req, timeout=30) as response:
+    with urllib.request.urlopen(req, timeout=rb.request_timeout(rb.get_run_budget(), 30)) as response:
         return json.loads(rb.bounded_read(response, budget=rb.get_run_budget(), endpoint_family="obs_github").decode("utf-8"))
 
 
