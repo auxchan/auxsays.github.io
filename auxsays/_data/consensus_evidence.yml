@@ -9713,7 +9713,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-19-021-20049-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-reader-dc-v-19-021-20049-printing-problem-with-mac
   product_id: adobe-acrobat-reader
   update_version: 19.021.20049
@@ -9740,7 +9739,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-19-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1t3gbod-does-anybody-else-deal-with-this-on-a-reg
   product_id: blackmagic-davinci
   update_version: '19'
@@ -9789,7 +9787,6 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
-
 - id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1uctwky-got-tuxedo-drivers-davinci-resolve-studio
   product_id: blackmagic-davinci
   update_version: '20'
@@ -9910,7 +9907,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-20-0-1-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1m7vwut-power-bin-presets-crashingnot-working
   product_id: blackmagic-davinci
   update_version: 20.0.1
@@ -9935,7 +9931,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1v5o79j-davinci-resolve-2021-unsupported-gpu-proc
   product_id: blackmagic-davinci
   update_version: '20'
@@ -9960,7 +9955,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-19-1-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1n271hl-video-frame-rate-cannot-speed-up
   product_id: blackmagic-davinci
   update_version: 19.1.2
@@ -9985,7 +9979,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-19-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1t5m9c4-help-im-not-sure-what-im-missing
   product_id: blackmagic-davinci
   update_version: '19'
@@ -10058,7 +10051,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-19-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1paof4k-da-vinci-crashes-when-opening-file-with-h
   product_id: blackmagic-davinci
   update_version: '19'
@@ -10107,7 +10099,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-19-1-2-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1sf309s-os-tahoe-and-sequoia-resolve-19-has-an-in
   product_id: blackmagic-davinci
   update_version: 19.1.2
@@ -10132,7 +10123,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5965489-keep-getting-install-error-25h2-os-bui
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -10302,7 +10292,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-windows-11-26h1-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5962557-windows-update-upgraded-my-windows-11
   product_id: microsoft-windows-11
   update_version: 26H1
@@ -10331,7 +10320,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-21-0-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1v7rvwo-resolve-is-using-all-my-ram-128gb-and-lag
   product_id: blackmagic-davinci
   update_version: 21.0.3
@@ -10380,7 +10368,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-17-4-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1se7o7g-use-tracker-data-independently
   product_id: blackmagic-davinci
   update_version: '17.4'
@@ -10404,4 +10391,1399 @@ evidence:
   platform: unknown
   severity: medium
   sentiment: negative
+  source_weight: 1
+- id: acrobat-15-008-20082-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-pro-dc-installation-failed-windows-10-1241280
+  product_id: adobe-acrobat-pro
+  update_version: 15.008.20082
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-pro-dc-installation-failed-windows-10-1241280
+  parent_title: Acrobat Pro DC - Installation Failed (Windows 10)
+  report_title: Acrobat Pro DC - Installation Failed (Windows 10)
+  report_text_excerpt: Acrobat Pro DC - Installation Failed (Windows 10) Hi, I cannot get this to install on my Surface Pro 2 running Windows 10. I did have it working fine but uninstalled it a few weeks ago due to a lack of internal storage, however I now need it again (and there's enough storage)....
+  captured_at: '2026-08-07T00:14:09Z'
+  source_date: '2015-08-16'
+  target_release_date: '2015-07-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.008.20082
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-010-20056-adobe-community-bug-report-https-community-adobe-com-questions-18-windows-7-scanner-that-works-with-photoshop-fine-crashes
+  product_id: adobe-acrobat-pro
+  update_version: 15.010.20056
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-18/windows-7-scanner-that-works-with-photoshop-fine-crashes-with-latest-acrobat-pro-dc-605820
+  parent_title: Windows 7, Scanner that works with Photoshop fine, crashes with latest Acrobat Pro DC
+  report_title: Windows 7, Scanner that works with Photoshop fine, crashes with latest Acrobat Pro DC
+  report_text_excerpt: Windows 7, Scanner that works with Photoshop fine, crashes with latest Acrobat Pro DC I'm running Windows 7 and my scanner is a "Kodak esp 3.2" - Which is connected both wirelessly and by USB cable to my powerful HP 840 server machine. No issues with the scanner - Photoshop CC...
+  captured_at: '2026-08-07T00:14:09Z'
+  source_date: '2016-02-05'
+  target_release_date: '2016-01-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.010.20056
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-010-20060-adobe-community-bug-report-https-community-adobe-com-questions-18-acrobat-pro-dc-crashes-on-save-after-font-encoding-proble
+  product_id: adobe-acrobat-pro
+  update_version: 15.010.20060
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-18/acrobat-pro-dc-crashes-on-save-after-font-encoding-problems-602078
+  parent_title: Acrobat pro DC crashes on Save, after font encoding problems
+  report_title: Acrobat pro DC crashes on Save, after font encoding problems
+  report_text_excerpt: 'Acrobat pro DC crashes on Save, after font encoding problems This is from crash report. Mac El Capitan Process: AdobeAcrobat [2111] Path: /Applications/Adobe Acrobat DC/Adobe Acrobat.app/Contents/MacOS/AdobeAcrobat Identifier: com.adobe.Acrobat.Pro Version: 15.010.20060...'
+  captured_at: '2026-08-07T00:14:09Z'
+  source_date: '2016-04-27'
+  target_release_date: '2016-03-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.010.20060
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: form behavior regression
+  workflow_area: forms
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-016-20039-adobe-community-bug-report-https-community-adobe-com-questions-624-offline-exception-grant-process-fails-acrobat-dc-pro-con
+  product_id: adobe-acrobat-pro
+  update_version: 15.016.20039
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-624/offline-exception-grant-process-fails-acrobat-dc-pro-continuous-track-customization-wizard-15-0-16-20039-673521
+  parent_title: Offline Exception grant process fails - Acrobat DC pro Continuous Track / Customization Wizard 15.0.16.20039
+  report_title: Offline Exception grant process fails - Acrobat DC pro Continuous Track / Customization Wizard 15.0.16.20039
+  report_text_excerpt: 'Offline Exception grant process fails - Acrobat DC pro Continuous Track / Customization Wizard 15.0.16.20039 Scenario: We would like to change from Acrobat Pro DC Classic Track to Continuous Track. I have already prepared the AIP including the patches but I fail to make a new...'
+  captured_at: '2026-08-07T00:14:09Z'
+  source_date: '2016-09-02'
+  target_release_date: '2016-05-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.016.20039
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-016-20045-adobe-community-bug-report-https-community-adobe-com-questions-18-acrobat-pro-dc-printing-causes-crashes-and-other-issues-6
+  product_id: adobe-acrobat-pro
+  update_version: 15.016.20045
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-18/acrobat-pro-dc-printing-causes-crashes-and-other-issues-608200
+  parent_title: Acrobat pro DC printing causes crashes and other issues
+  report_title: Acrobat pro DC printing causes crashes and other issues
+  report_text_excerpt: Acrobat pro DC printing causes crashes and other issues My client installed dc pro on several of their machines several months back and have reported to me today that since then they get issues when trying to print. Some times the program will freeze or just close on them when...
+  captured_at: '2026-08-07T00:14:09Z'
+  source_date: '2016-07-08'
+  target_release_date: '2016-06-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.016.20045
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-017-20053-adobe-community-bug-report-https-community-adobe-com-questions-18-acrobat-dc-crash-when-open-tracker-598255
+  product_id: adobe-acrobat-pro
+  update_version: 15.017.20053
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-18/acrobat-dc-crash-when-open-tracker-598255
+  parent_title: acrobat dc crash when open tracker
+  report_title: acrobat dc crash when open tracker
+  report_text_excerpt: acrobat dc crash when open tracker I have this problem on more aplle mac with osx 10.11.6. Acrobar crash every time i try to open tracker. I had disabled "Displays have separate Spaces" on the Mission Control Preference panel. i had trashed the acrobat preferences, but every...
+  captured_at: '2026-08-07T00:14:09Z'
+  source_date: '2016-08-12'
+  target_release_date: '2016-08-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.017.20053
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: form behavior regression
+  workflow_area: forms
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-023-20053-adobe-community-bug-report-https-community-adobe-com-questions-9-i-am-installing-acrobat-pro-dc-on-my-mac-and-when-extracti
+  product_id: adobe-acrobat-pro
+  update_version: 15.023.20053
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/i-am-installing-acrobat-pro-dc-on-my-mac-and-when-extracting-the-installation-fails-1266104
+  parent_title: I am installing Acrobat Pro DC on my MAC and when extracting the installation fails.
+  report_title: I am installing Acrobat Pro DC on my MAC and when extracting the installation fails.
+  report_text_excerpt: 'I am installing Acrobat Pro DC on my MAC and when extracting the installation fails. I am installing Acrobat Pro DC on my MAC and when extracting the installation fails. Log File below: Please help! Exit Code: 7 Please see specific errors below for troubleshooting. For...'
+  captured_at: '2026-08-07T00:14:09Z'
+  source_date: '2017-01-31'
+  target_release_date: '2017-01-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.023.20053
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-023-20053-adobe-community-bug-report-https-community-adobe-com-questions-624-acrobat-plugin-causes-problems-in-word-2016-673808
+  product_id: adobe-acrobat-pro
+  update_version: 15.023.20053
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-624/acrobat-plugin-causes-problems-in-word-2016-673808
+  parent_title: Acrobat plugin causes problems in Word 2016
+  report_title: Acrobat plugin causes problems in Word 2016
+  report_text_excerpt: Acrobat plugin causes problems in Word 2016 We are about to migrate about 2000 computers to Office 2016. We have a problem when Office 2016 and Acrobat Pro are both installed. We'll submit it to both Microsoft and Adobe. The problem occurs when Acrobat Pro is present and the...
+  captured_at: '2026-08-07T00:14:09Z'
+  source_date: '2017-01-13'
+  target_release_date: '2017-01-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.023.20053
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-17-009-20044-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-dc-hangs-rdsh-1306751
+  product_id: adobe-acrobat-pro
+  update_version: 17.009.20044
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-dc-hangs-rdsh-1306751
+  parent_title: Adobe Acrobat DC hangs - RDSH
+  report_title: Adobe Acrobat DC hangs - RDSH
+  report_text_excerpt: Adobe Acrobat DC hangs - RDSH One of our customer having issues with Adobe Acrobat DC Pro. The application hangs or crashes many times a day. They are mainly working with PDF files and are pretty frustrated having this problem with a paid product. Adobe Acrobat DC...
+  captured_at: '2026-08-07T00:14:09Z'
+  source_date: '2017-06-23'
+  target_release_date: '2017-04-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 17.009.20044
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-17-009-20044-adobe-community-bug-report-https-community-adobe-com-questions-624-acrobat-pro-2017-mac-install-issues-674643
+  product_id: adobe-acrobat-pro
+  update_version: 17.009.20044
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-624/acrobat-pro-2017-mac-install-issues-674643
+  parent_title: Acrobat Pro 2017 Mac Install Issues
+  report_title: Acrobat Pro 2017 Mac Install Issues
+  report_text_excerpt: Acrobat Pro 2017 Mac Install Issues I used Customization Wizard 17.009.20044 to make an installer with my serial number embedded into it, however during testing with JAMF Pro on 10.11 and 10.12 I get the following error in install.log Dec 1 14:46:11 csa-mj-1011x...
+  captured_at: '2026-08-07T00:14:09Z'
+  source_date: '2017-12-01'
+  target_release_date: '2017-04-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 17.009.20044
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-17-009-20044-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-pro-dc-reinstall-fails-1304351
+  product_id: adobe-acrobat-pro
+  update_version: 17.009.20044
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-pro-dc-reinstall-fails-1304351
+  parent_title: Acrobat Pro DC reinstall fails
+  report_title: Acrobat Pro DC reinstall fails
+  report_text_excerpt: 'Acrobat Pro DC reinstall fails I''m trying to reinstall Acrobat Pro DC (Mac), and when I try to do this from the Creative Cloud app, I can start the installation process, but it ultimately fails. Here''s the error message I get: Exit Code: 7 Please see specific errors below for...'
+  captured_at: '2026-08-07T00:14:09Z'
+  source_date: '2017-05-11'
+  target_release_date: '2017-04-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 17.009.20044
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-17-009-20058-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-pro-dc-crashing-1310422
+  product_id: adobe-acrobat-pro
+  update_version: 17.009.20058
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-pro-dc-crashing-1310422
+  parent_title: Adobe Acrobat Pro DC crashing
+  report_title: Adobe Acrobat Pro DC crashing
+  report_text_excerpt: Adobe Acrobat Pro DC crashing Hi @9264381 I've some troubles since a few days. My Acrobat Pro DC crashes all the time after a few minutes (even also when I'm doing nothing and the program is just running without any other activities on my mac), and I don't no why! This is the...
+  captured_at: '2026-08-07T00:14:09Z'
+  source_date: '2017-09-03'
+  target_release_date: '2017-07-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 17.009.20058
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-17-012-20093-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-acrobat-reader-dc-crashing-when-opening-july-2017-i
+  product_id: adobe-acrobat-pro
+  update_version: 17.012.20093
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-acrobat-reader-dc-crashing-when-opening-july-2017-i-9-form-1510679
+  parent_title: Adobe Acrobat Reader DC Crashing when Opening July 2017 I-9 Form
+  report_title: Adobe Acrobat Reader DC Crashing when Opening July 2017 I-9 Form
+  report_text_excerpt: 'Adobe Acrobat Reader DC Crashing when Opening July 2017 I-9 Form Reader version: Adobe Acrobat Reader DC (17.012.20093) OS: Win 10, Win 7 I-9 File: Employment Eligibility Verification | USCIS Beginning yesterday (08-09-17), we began to have a problem with opening the I-9 form...'
+  captured_at: '2026-08-07T00:14:09Z'
+  source_date: '2017-08-09'
+  target_release_date: '2017-08-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 17.012.20093
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader + acrobat pro
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: form behavior regression
+  workflow_area: forms
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-17-012-20093-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-pro-dc-installation-issue-1309913
+  product_id: adobe-acrobat-pro
+  update_version: 17.012.20093
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-pro-dc-installation-issue-1309913
+  parent_title: Adobe Acrobat Pro DC Installation Issue!
+  report_title: Adobe Acrobat Pro DC Installation Issue!
+  report_text_excerpt: 'Adobe Acrobat Pro DC Installation Issue! I was installing this program onto my Windows 8 Laptop and I got this error message: Error Encountered Error 1722. There is a problem with this Windows Installer package. A program run as part of the setup did not finish as expected....'
+  captured_at: '2026-08-07T00:14:09Z'
+  source_date: '2017-09-16'
+  target_release_date: '2017-08-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 17.012.20093
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-17-012-20098-adobe-community-bug-report-https-community-adobe-com-questions-12-sign-document-option-is-disabled-unavailable-greyed-out-i
+  product_id: adobe-acrobat-pro
+  update_version: 17.012.20098
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/sign-document-option-is-disabled-unavailable-greyed-out-in-pdf-forms-and-files-unable-to-digitally-sign-pdf-forms-and-files-1511247
+  parent_title: Sign Document option is "disabled/unavailable/greyed out" in PDF Forms and Files. Unable to Digitally Sign PDF Forms and Files.
+  report_title: Sign Document option is "disabled/unavailable/greyed out" in PDF Forms and Files. Unable to Digitally Sign PDF Forms and Files.
+  report_text_excerpt: Sign Document option is "disabled/unavailable/greyed out" in PDF Forms and Files. Unable to Digitally Sign PDF Forms and Files. Hello, I'm facing a strange problem, I'm unable to sign any PDF Forms and Files downloaded from MCA Website ( Ministry Of Corporate Affairs -...
+  captured_at: '2026-08-07T00:14:09Z'
+  source_date: '2017-10-01'
+  target_release_date: '2017-08-29'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 17.012.20098
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader + acrobat pro
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-17-012-20098-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-pro-dc-installation-failure-error-exit-code-7-mac
+  product_id: adobe-acrobat-pro
+  update_version: 17.012.20098
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-pro-dc-installation-failure-error-exit-code-7-mac-os-sierra-1312349
+  parent_title: 'Acrobat Pro DC installation failure || Error: Exit Code 7|| Mac OS Sierra'
+  report_title: 'Acrobat Pro DC installation failure || Error: Exit Code 7|| Mac OS Sierra'
+  report_text_excerpt: 'Acrobat Pro DC installation failure || Error: Exit Code 7|| Mac OS Sierra ACROBAT DC fails to install on new iMac 2017 with Sierra I am having very serious problems with installing Acrobat on my brand new iMac 21.5" retina. Acrobat DC fails to install through the Creative...'
+  captured_at: '2026-08-07T00:14:09Z'
+  source_date: '2017-11-13'
+  target_release_date: '2017-08-29'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 17.012.20098
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader + acrobat pro
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-18-009-20044-adobe-community-bug-report-https-community-adobe-com-questions-12-blank-white-page-when-pdf-opened-1512271
+  product_id: adobe-acrobat-pro
+  update_version: 18.009.20044
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/blank-white-page-when-pdf-opened-1512271
+  parent_title: Blank white page when PDF opened
+  report_title: Blank white page when PDF opened
+  report_text_excerpt: 'Blank white page when PDF opened In relation to this: Users unable to open PDF''s after recent Adobe Reader DC update 18.009.20044 / Re: Blank PDF then hang on exit and the patch here: Acrobat Help | Release notes | Acrobat DC and Acrobat Reader DC | Update I have this issue...'
+  captured_at: '2026-08-07T00:14:09Z'
+  source_date: '2017-11-30'
+  target_release_date: '2017-11-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 18.009.20044
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader + acrobat pro
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-18-011-20038-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-dc-pro-freeze-for-several-seconds-minutes-13
+  product_id: adobe-acrobat-pro
+  update_version: 18.011.20038
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-dc-pro-freeze-for-several-seconds-minutes-1316821
+  parent_title: Adobe Acrobat DC Pro Freeze for several seconds / minutes.
+  report_title: Adobe Acrobat DC Pro Freeze for several seconds / minutes.
+  report_text_excerpt: Adobe Acrobat DC Pro Freeze for several seconds / minutes. Hello, since installing Adobe Acrobat DC pro, I have random " does not respond" notifications, these solve their selves in seconds/minutes. version installed = 18.011.20038 computer info Hewlett-Packard / ProBook 650...
+  captured_at: '2026-08-07T00:14:09Z'
+  source_date: '2018-03-30'
+  target_release_date: '2018-02-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 18.011.20038
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-18-011-20040-adobe-community-bug-report-https-community-adobe-com-questions-9-osx-10-13-4-acrobat-pro-not-working-1228160
+  product_id: adobe-acrobat-pro
+  update_version: 18.011.20040
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/osx-10-13-4-acrobat-pro-not-working-1228160
+  parent_title: OSX 10.13.4 - Acrobat Pro NOT WORKING
+  report_title: OSX 10.13.4 - Acrobat Pro NOT WORKING
+  report_text_excerpt: OSX 10.13.4 - Acrobat Pro NOT WORKING Hi, My Acrobat Pro won't start up on my MacBook Pro 13" 2017 USB-C model. I run OSX 10.13.4 and Version 18.011.20040 on my Acrobat Pro. Everytime i start the program up, then it minimize and won't respond at all. Under "Job list" it...
+  captured_at: '2026-08-07T00:14:09Z'
+  source_date: '2018-06-07'
+  target_release_date: '2018-05-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 18.011.20040
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader + acrobat pro
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-18-011-20055-adobe-community-bug-report-https-community-adobe-com-questions-9-when-i-try-to-use-acrobat-pro-i-get-this-on-my-mac-1231405
+  product_id: adobe-acrobat-pro
+  update_version: 18.011.20055
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/when-i-try-to-use-acrobat-pro-i-get-this-on-my-mac-1231405
+  parent_title: when I try to use acrobat pro i get this on my mac.
+  report_title: when I try to use acrobat pro i get this on my mac.
+  report_text_excerpt: 'when I try to use acrobat pro i get this on my mac. Exit Code: 7 Please see specific errors below for troubleshooting. For example, ERROR: DW003, DW006 ... -------------------------------------- Summary -------------------------------------- - 0 fatal error(s), 2 error(s)...'
+  captured_at: '2026-08-07T00:14:09Z'
+  source_date: '2018-09-19'
+  target_release_date: '2018-07-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 18.011.20055
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-19-008-20071-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-pro-19-008-20071-crashes-when-opened-1293901
+  product_id: adobe-acrobat-pro
+  update_version: 19.008.20071
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-pro-19-008-20071-crashes-when-opened-1293901
+  parent_title: Adobe Acrobat PRO 19.008.20071 crashes when opened
+  report_title: Adobe Acrobat PRO 19.008.20071 crashes when opened
+  report_text_excerpt: Adobe Acrobat PRO 19.008.20071 crashes when opened Every time I open it it automatically closes. If there is a PDF file it closes after a few seconds. Can't work. Cada vez que lo abro automaticamente se cierra. Si habro un fichero PDF se cierra a los pocos segundos. No se...
+  captured_at: '2026-08-07T00:14:09Z'
+  source_date: '2024-06-11'
+  target_release_date: '2018-10-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.008.20071
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-19-008-20074-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-dc-won-t-open-after-updating-to-mac-os-mojav
+  product_id: adobe-acrobat-pro
+  update_version: 19.008.20074
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-dc-won-t-open-after-updating-to-mac-os-mojave-1232109
+  parent_title: Adobe Acrobat DC won't open after updating to Mac OS Mojave
+  report_title: Adobe Acrobat DC won't open after updating to Mac OS Mojave
+  report_text_excerpt: Adobe Acrobat DC won't open after updating to Mac OS Mojave I just updated to the new Mac OS operating system. I can't launch Adobe Acrobat or view any PDF files and MUST access my files ASAP. It was fine before the update. I uninstalled and reinstalled and still get the...
+  captured_at: '2026-08-07T00:14:09Z'
+  source_date: '2018-10-17'
+  target_release_date: '2018-10-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.008.20074
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-19-010-20064-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-pro-dc-crashes-every-time-i-create-a-new-doc
+  product_id: adobe-acrobat-pro
+  update_version: 19.010.20064
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-pro-dc-crashes-every-time-i-create-a-new-document-with-the-scanner-1233783
+  parent_title: Adobe Acrobat Pro DC crashes every time I create a new document with the scanner
+  report_title: Adobe Acrobat Pro DC crashes every time I create a new document with the scanner
+  report_text_excerpt: Adobe Acrobat Pro DC crashes every time I create a new document with the scanner (1) I have tried re-installing the program and restarting my computer multiple times. (2) The program crashes for any kind of scanning job as soon as the scan finishes (3) The crash is basically...
+  captured_at: '2026-08-07T00:14:09Z'
+  source_date: '2018-12-20'
+  target_release_date: '2018-12-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.010.20064
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-19-010-20091-adobe-community-bug-report-https-community-adobe-com-questions-624-unable-to-install-acrobat-pro-dc-2019-676141
+  product_id: adobe-acrobat-pro
+  update_version: 19.010.20091
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-624/unable-to-install-acrobat-pro-dc-2019-676141
+  parent_title: Unable to install Acrobat Pro DC 2019
+  report_title: Unable to install Acrobat Pro DC 2019
+  report_text_excerpt: Unable to install Acrobat Pro DC 2019 Hi, We're unable to install Adobe Acrobat Pro DC 2019 on certain devices. We're using an SCCM silent installation, and on about 10% of the installations the installation fails with a 0x5(5) error in SCCM. This happens mostly when the Adobe...
+  captured_at: '2026-08-07T00:14:09Z'
+  source_date: '2019-07-17'
+  target_release_date: '2019-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.010.20091
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: form behavior regression
+  workflow_area: forms
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-19-010-20098-adobe-community-bug-report-https-community-adobe-com-questions-9-constant-crashes-in-acrobat-pro-dc-for-mac-19-010-0200x-12
+  product_id: adobe-acrobat-pro
+  update_version: 19.010.20098
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/constant-crashes-in-acrobat-pro-dc-for-mac-19-010-0200x-1236822
+  parent_title: Constant Crashes in Acrobat Pro DC for Mac 19.010.0200x
+  report_title: Constant Crashes in Acrobat Pro DC for Mac 19.010.0200x
+  report_text_excerpt: 'Constant Crashes in Acrobat Pro DC for Mac 19.010.0200x We''ve got a user experiencing daily crashes of Acrobat DC, starting in early February, continuing with latest update 19.010.20098. Logs are basically identical to the issue described in a few other threads here: Process:...'
+  captured_at: '2026-08-07T00:14:09Z'
+  source_date: '2019-03-12'
+  target_release_date: '2019-02-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.010.20098
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-19-010-20100-adobe-community-bug-report-https-community-adobe-com-questions-643-framemaker-2019-save-as-pdf-not-working-print-to-pdf-wor
+  product_id: adobe-acrobat-pro
+  update_version: 19.010.20100
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-643/framemaker-2019-save-as-pdf-not-working-print-to-pdf-works-sometimes-749024
+  parent_title: FrameMaker 2019 Save as PDF not working.  Print to PDF works sometimes
+  report_title: FrameMaker 2019 Save as PDF not working.  Print to PDF works sometimes
+  report_text_excerpt: FrameMaker 2019 Save as PDF not working. Print to PDF works sometimes Hello, I am using Adobe FrameMaker 2019 with version 15.0.3.603 (latest version) and Acrobat Pro DC with version 19.010.20100 (latest version) - and the Save As PDF menu does not work in FrameMaker . I have...
+  captured_at: '2026-08-07T00:14:09Z'
+  source_date: '2019-05-06'
+  target_release_date: '2019-04-16'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.010.20100
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-19-012-20034-adobe-community-bug-report-https-community-adobe-com-questions-9-mac-monterey-adobeacrobat-crash-1278118
+  product_id: adobe-acrobat-pro
+  update_version: 19.012.20034
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/mac-monterey-adobeacrobat-crash-1278118
+  parent_title: MAc Monterey AdobeAcrobat crash
+  report_title: MAc Monterey AdobeAcrobat crash
+  report_text_excerpt: 'MAc Monterey AdobeAcrobat crash New user to Adobe Pro. App crashes evrytime making it unusable. Translated Report (Full Report Below) ------------------------------------- Incident Identifier: 7375E9F4-9205-41DE-9D96-6EF365A9434D CrashReporter Key:...'
+  captured_at: '2026-08-07T00:14:09Z'
+  source_date: '2023-01-19'
+  target_release_date: '2019-05-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.012.20034
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-19-012-20034-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-not-responding-afp-file-share-1237820
+  product_id: adobe-acrobat-pro
+  update_version: 19.012.20034
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-not-responding-afp-file-share-1237820
+  parent_title: Acrobat »not responding« - AFP file share
+  report_title: Acrobat »not responding« - AFP file share
+  report_text_excerpt: Acrobat »not responding« - AFP file share Hi' We are having a problem regarding Acrobat DC when opening .pdf's from an AFP file share. It's completely random - Sometimes we can open 50 .pdf's before Acrobat is crashing, other times 3.pdf's. It' started happening when updating...
+  captured_at: '2026-08-07T00:14:09Z'
+  source_date: '2019-06-17'
+  target_release_date: '2019-05-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.012.20034
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-19-012-20035-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-freezes-when-combining-pdf-and-word-1238397
+  product_id: adobe-acrobat-pro
+  update_version: 19.012.20035
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-freezes-when-combining-pdf-and-word-1238397
+  parent_title: Acrobat Freezes when combining PDF and Word
+  report_title: Acrobat Freezes when combining PDF and Word
+  report_text_excerpt: Acrobat Freezes when combining PDF and Word Hi All, I am also having issues with Adobe Acrobat Pro version 19.012.20035, trying to combine a few PDF files and a Word Document All files are small in file size less than 1MB each, Tried to copy the file from Network share to...
+  captured_at: '2026-08-07T00:14:09Z'
+  source_date: '2019-08-13'
+  target_release_date: '2019-06-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.012.20035
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-20-004-30005-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-and-reader-dc-june-2021-update-release-12605
+  product_id: adobe-acrobat-pro
+  update_version: 20.004.30005
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-and-reader-dc-june-2021-update-release-1260523
+  parent_title: Adobe Acrobat and Reader DC – June 2021 Update Release
+  report_title: Adobe Acrobat and Reader DC – June 2021 Update Release
+  report_text_excerpt: 'Adobe Acrobat and Reader DC – June 2021 Update Release Adobe Acrobat and Reader DC – June 2021 Update Release June Release : Acrobat and Reader DC June release is now available with some amazing new features which enable you to do more. See what’s new in this release. Adobe...'
+  captured_at: '2026-08-07T00:14:09Z'
+  source_date: '2021-06-08'
+  target_release_date: '2021-06-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.004.30005
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader + acrobat pro
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1vehzuk-issue-with-linked-audiovideo-when-exporti
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1vehzuk/issue_with_linked_audiovideo_when_exporting_xml/
+  parent_title: Issue with linked audio/video when exporting XML from DaVinci Resolve to Premiere Pro
+  report_title: Issue with linked audio/video when exporting XML from DaVinci Resolve to Premiere Pro
+  report_text_excerpt: Issue with linked audio/video when exporting XML from DaVinci Resolve to Premiere Pro Hello! I've encountered an issue. I wanted to use "Ripple Delete Silence" in DaVinci Resolve to help me cut my video faster and then export it via XML to Premiere Pro, since I am more...
+  captured_at: '2026-08-07T03:41:10Z'
+  source_date: '2026-08-03'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1ve00ll-davinci-resolve-21-free-version
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1ve00ll/davinci_resolve_21_free_version/
+  parent_title: DaVinci Resolve 21 (Free Version)
+  report_title: DaVinci Resolve 21 (Free Version)
+  report_text_excerpt: DaVinci Resolve 21 (Free Version) when using DaVinci Resolve i have multiple crashes due to ram issues I've been having this issue for years and never figured it out from updating drivers limiting the ram in Davinci (does not work) i have 32GB ram and nearly maxes out or it...
+  captured_at: '2026-08-07T03:41:10Z'
+  source_date: '2026-08-03'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: startup or application crash
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1vbx2ti-davinci-resolve-out-of-gpu-memory
+  product_id: blackmagic-davinci
+  update_version: '21'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1vbx2ti/davinci_resolve_out_of_gpu_memory/
+  parent_title: Davinci resolve out of gpu memory
+  report_title: Davinci resolve out of gpu memory
+  report_text_excerpt: Davinci resolve out of gpu memory Solved i have a problem with davinci resolve on cachyos, linux. problem being “your gpu memory is full” even when simply adding a png. Before I get into the details I want to note that this problem never occurred on windows, not even during...
+  captured_at: '2026-08-07T03:41:10Z'
+  source_date: '2026-07-31'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '21'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: blackmagic-davinci-20-3-3-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1vga3zc-render-error-of-short-film
+  product_id: blackmagic-davinci
+  update_version: 20.3.3
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1vga3zc/render_error_of_short_film/
+  parent_title: render error of short film
+  report_title: render error of short film
+  report_text_excerpt: 'render error of short film hi all, my indie film got into its first festival, so i need to render out the film with the final Colour Grade from my DP. he graded it in 20.3.3 and gave me the .drp file -- i installed 20.3.3 Studio on my laptop LAPTOP SPECS: AMD ryzen 7 7745HX,...'
+  captured_at: '2026-08-07T03:43:21Z'
+  source_date: '2026-08-05'
+  target_release_date: '2026-05-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 20.3.3
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5966064-windows-11-25h2-kernel-pool-leak-fmfn
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5966064/windows-11-25h2-kernel-pool-leak-fmfn-and-file-all
+  parent_title: 'Windows 11 25H2 kernel pool leak: FMfn and File allocations retained after cold path operations - Microsoft Q&A'
+  report_title: 'Windows 11 25H2 kernel pool leak: FMfn and File allocations retained after cold path operations - Microsoft Q&A'
+  report_text_excerpt: 'Windows 11 25H2 kernel pool leak: FMfn and File allocations retained after cold path operations - Microsoft Q&A I am investigating a repeatable kernel pool retention issue on Windows 11 Pro 25H2, build 26200.8973, with 32 GB RAM. The machine continuously accumulates paged and...'
+  captured_at: '2026-08-07T03:52:54Z'
+  source_date: '2026-08-05'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8973'
+  match_basis: exact_os_build
+  matched_kb: KB5101684
+  matched_os_build: '26200.8973'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5965983-windows-11-component-store-cbs-winsxs
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5965983/windows-11-component-store-cbs-winsxs-corruption-o
+  parent_title: 'Windows 11: Component Store (CBS/WinSxS) Corruption Occurs Within Days After Clean Installation - Microsoft Q&A'
+  report_title: 'Windows 11: Component Store (CBS/WinSxS) Corruption Occurs Within Days After Clean Installation - Microsoft Q&A'
+  report_text_excerpt: 'Windows 11: Component Store (CBS/WinSxS) Corruption Occurs Within Days After Clean Installation - Microsoft Q&A Windows Version: Windows 11 Home Build: 26200.8973 License: Retail Hardware: ASUS PRIME B550M‑K ARGB Ryzen 5 5600X 32GB DDR4 RTX 4060 Samsung 990 Pro (latest...'
+  captured_at: '2026-08-07T03:52:54Z'
+  source_date: '2026-08-06'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8973'
+  match_basis: exact_os_build
+  matched_os_build: '26200.8973'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-31-1-2-github-issue-13711
+  product_id: obs-studio
+  update_version: 31.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13711
+  parent_title: Opening Image Source Properties or changing image file causes rendering lag and skipped rendering frames on macOS (Apple Silicon)
+  report_title: Opening Image Source Properties or changing image file causes rendering lag and skipped rendering frames on macOS (Apple Silicon)
+  report_text_excerpt: '(Apple Silicon) • MacBook Pro M3 Max • 36 GB RAM OBS versions tested: • 32.2.1 (64-bit) • 31.1.2 The issue occurs in both versions. Output settings: • Apple Hardware H.264 • 1920 × 1080 • 7500 kbps • Tested at both 59.94 FPS and 29.97 FPS Image information: • PNG or JPG • Approxi'
+  captured_at: '2026-08-07T03:54:19Z'
+  patch_version_matched: true
+  matched_version: 31.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-0-github-issue-13713
+  product_id: obs-studio
+  update_version: 32.1.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13713
+  parent_title: Still processing video, even with no video input and no video output
+  report_title: Still processing video, even with no video input and no video output
+  report_text_excerpt: '10 ### Other OS _No response_ ### OBS Studio Version Other ### OBS Studio Version (Other) 32.1.0 ### OBS Studio Log URL https://obsproject.com/logs/LuEIVRnSawr5ON1x ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I''ve set it up so there''s no video input and no vi'
+  captured_at: '2026-08-07T03:55:28Z'
+  patch_version_matched: true
+  matched_version: 32.1.0
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-1-github-issue-13719
+  product_id: obs-studio
+  update_version: 32.1.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13719
+  parent_title: 'Regression: Automatic Display Capture now selects DXGI instead of Windows Graphics Capture on Windows 10'
+  report_title: 'Regression: Automatic Display Capture now selects DXGI instead of Windows Graphics Capture on Windows 10'
+  report_text_excerpt: '10 ### Other OS _No response_ ### OBS Studio Version Other ### OBS Studio Version (Other) 32.1.1 ### OBS Studio Log URL https://obsproject.com/logs/vfI3zzp5apHXIXGH ### OBS Studio Crash Log URL _No response_ ### Expected Behavior When Display Capture is set to Automatic, OBS shou'
+  captured_at: '2026-08-07T03:55:42Z'
+  patch_version_matched: true
+  matched_version: 32.1.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13746
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13746
+  parent_title: OBS crashes after starting an existing scheduled YouTube broadcast — YouTubeStreamCheckThread / Qt6Core.dll
+  report_title: OBS crashes after starting an existing scheduled YouTube broadcast — YouTubeStreamCheckThread / Qt6Core.dll
+  report_text_excerpt: Bo2BmF The issue also reproduced in Safe Mode, with a newly created clean profile, on OBS 32.1.2 and 32.2.1, after Windows and NVIDIA driver updates, and with all audio monitoring disabled.
+  captured_at: '2026-08-07T03:56:02Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13760
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13760
+  parent_title: 'OBS UI Deceives Users: Silent Encoder Crash Faked a 5-Hour Recording with ZERO Warnings'
+  report_title: 'OBS UI Deceives Users: Silent Encoder Crash Faked a 5-Hour Recording with ZERO Warnings'
+  report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://drive.google.com/drive/folders/15VviMyzWC3NHW_zTtJnWAcNX9JvbAavc?hl=ar ### OBS Studio Crash Log URL _No res'
+  captured_at: '2026-08-07T03:56:02Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13716
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13716
+  parent_title: OBS 32.2.1 fails to run on MacOS X 12.7.6 and closes immediately
+  report_title: OBS 32.2.1 fails to run on MacOS X 12.7.6 and closes immediately
+  report_text_excerpt: 'and double-click the app to run it. ... ### Anything else we should know? I downgraded to 32.1.2, which doesn''t have this problem.'
+  captured_at: '2026-08-07T03:56:02Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: macos
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13708
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13708
+  parent_title: QSV (Intel oneVPL/msdk) fails with MFX_ERR_NOT_FOUND in 32.2.0, works in 32.1.2 (Linux, snap, Intel Iris Xe / Raptor Lake-P)
+  report_title: QSV (Intel oneVPL/msdk) fails with MFX_ERR_NOT_FOUND in 32.2.0, works in 32.1.2 (Linux, snap, Intel Iris Xe / Raptor Lake-P)
+  report_text_excerpt: QSV (Intel oneVPL/msdk) fails with MFX_ERR_NOT_FOUND in 32.2.0, works in 32.1.2 (Linux, snap, Intel Iris Xe / Raptor Lake-P)
+  captured_at: '2026-08-07T03:56:02Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: linux
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-2-0-github-issue-13708
+  product_id: obs-studio
+  update_version: 32.2.0
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13708
+  parent_title: QSV (Intel oneVPL/msdk) fails with MFX_ERR_NOT_FOUND in 32.2.0, works in 32.1.2 (Linux, snap, Intel Iris Xe / Raptor Lake-P)
+  report_title: QSV (Intel oneVPL/msdk) fails with MFX_ERR_NOT_FOUND in 32.2.0, works in 32.1.2 (Linux, snap, Intel Iris Xe / Raptor Lake-P)
+  report_text_excerpt: QSV (Intel oneVPL/msdk) fails with MFX_ERR_NOT_FOUND in 32.2.0, works in 32.1.2 (Linux, snap, Intel Iris Xe / Raptor Lake-P)
+  captured_at: '2026-08-07T03:56:20Z'
+  patch_version_matched: true
+  matched_version: 32.2.0
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: linux
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-2-1-github-issue-13746
+  product_id: obs-studio
+  update_version: 32.2.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13746
+  parent_title: OBS crashes after starting an existing scheduled YouTube broadcast — YouTubeStreamCheckThread / Qt6Core.dll
+  report_title: OBS crashes after starting an existing scheduled YouTube broadcast — YouTubeStreamCheckThread / Qt6Core.dll
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) 32.2.1 64-bit ### OBS Studio Log URL https://obsproject.com/logs/V3hUBjeVxctBGSC3 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior OBS s'
+  captured_at: '2026-08-07T03:56:38Z'
+  patch_version_matched: true
+  matched_version: 32.2.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-1-github-issue-13736
+  product_id: obs-studio
+  update_version: 32.2.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13736
+  parent_title: clicking menu bar icon crashes the app
+  report_title: clicking menu bar icon crashes the app
+  report_text_excerpt: '# Operating System Info Other ### Other OS macOS 27.0 beta 2 and 4 ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/OrCFFpBvBpfhqR2j ### OBS Studio Crash Log URL link above + [problem details from macOS'
+  captured_at: '2026-08-07T03:56:38Z'
+  patch_version_matched: true
+  matched_version: 32.2.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: macos
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-2-1-github-issue-13711
+  product_id: obs-studio
+  update_version: 32.2.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13711
+  parent_title: Opening Image Source Properties or changing image file causes rendering lag and skipped rendering frames on macOS (Apple Silicon)
+  report_title: Opening Image Source Properties or changing image file causes rendering lag and skipped rendering frames on macOS (Apple Silicon)
+  report_text_excerpt: '### Operating System Info Other ### Other OS Mac OS Tahoe 26.5.2 ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/VlQeIe0h9fsAPRJh ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Openi'
+  captured_at: '2026-08-07T03:56:38Z'
+  patch_version_matched: true
+  matched_version: 32.2.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-1-github-issue-13724
+  product_id: obs-studio
+  update_version: 32.2.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13724
+  parent_title: OBS Studio Freezes Up When Exiting Program When 1st Razer Kiyo Configure Video Screen Is Open
+  report_title: OBS Studio Freezes Up When Exiting Program When 1st Razer Kiyo Configure Video Screen Is Open
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/qAWX5EDe3TH2kxhc https://obsproject.com/logs/QstSyO3j1BdnABY3 ### OBS Studio Crash Log'
+  captured_at: '2026-08-07T03:56:38Z'
+  patch_version_matched: true
+  matched_version: 32.2.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-1-github-issue-13700
+  product_id: obs-studio
+  update_version: 32.2.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13700
+  parent_title: HDR live streaming does not support AV1 encoding
+  report_title: HDR live streaming does not support AV1 encoding
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/dSBxuvA2hO1doyOs ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Altho'
+  captured_at: '2026-08-07T03:56:38Z'
+  patch_version_matched: true
+  matched_version: 32.2.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-2-1-github-issue-13755
+  product_id: obs-studio
+  update_version: 32.2.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13755
+  parent_title: Crash (EXC_BAD_ACCESS in Qt event dispatch) after ScreenCaptureKit stream disconnect (-3805) during long-running session on macOS 26
+  report_title: Crash (EXC_BAD_ACCESS in Qt event dispatch) after ScreenCaptureKit stream disconnect (-3805) during long-running session on macOS 26
+  report_text_excerpt: 'ting System Info macOS 26 ### Other OS macOS 26.5.2 (25F84, Tahoe) ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL (Relevant log excerpt included below; session log available on request) ### OBS Studio Crash Log URL https://obspro'
+  captured_at: '2026-08-07T03:56:38Z'
+  patch_version_matched: true
+  matched_version: 32.2.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture regression
+  workflow_area: screen/window capture
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-1-github-issue-13739
+  product_id: obs-studio
+  update_version: 32.2.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13739
+  parent_title: Browser Source audio control causes excessive WindowServer CPU usage on Intel macOS Tahoe
+  report_title: Browser Source audio control causes excessive WindowServer CPU usage on Intel macOS Tahoe
+  report_text_excerpt: '### Operating System Info macOS 26 ### Other OS _No response_ ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/rUnt628GBmlbGq83 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior ## Ex'
+  captured_at: '2026-08-07T03:56:38Z'
+  patch_version_matched: true
+  matched_version: 32.2.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-1-github-issue-13716
+  product_id: obs-studio
+  update_version: 32.2.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13716
+  parent_title: OBS 32.2.1 fails to run on MacOS X 12.7.6 and closes immediately
+  report_title: OBS 32.2.1 fails to run on MacOS X 12.7.6 and closes immediately
+  report_text_excerpt: '### Operating System Info macOS 12 ### Other OS _No response_ ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL No log file because running doesn''t work ### OBS Studio Crash Log URL _No response_ ### Expected Behavior OBS runs'
+  captured_at: '2026-08-07T03:56:38Z'
+  patch_version_matched: true
+  matched_version: 32.2.1
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: macos
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-2-1-github-issue-13744
+  product_id: obs-studio
+  update_version: 32.2.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13744
+  parent_title: 'Flatpak: Camera portal fails with ''no more input formats'' for I420-only V4L2 devices, but direct V4L2 source works'
+  report_title: 'Flatpak: Camera portal fails with ''no more input formats'' for I420-only V4L2 devices, but direct V4L2 source works'
+  report_text_excerpt: 'Linux Mint 22.3 (XFCE), kernel 7.0.0-28-generic (Ubuntu 24.04 HWE) ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/543fa1XYpnsOONJm ### OBS Studio Crash Log URL _No response_ ### Expected Behavior A V4L'
+  captured_at: '2026-08-07T03:56:38Z'
+  patch_version_matched: true
+  matched_version: 32.2.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture regression
+  workflow_area: screen/window capture
+  platform: linux
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-1-github-issue-13726
+  product_id: obs-studio
+  update_version: 32.2.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13726
+  parent_title: Crash when duplicating/renaming a pre-29 profile
+  report_title: Crash when duplicating/renaming a pre-29 profile
+  report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/crashes/OY4t36xaKePG6phv ### OBS Studio Crash Log URL https://obsproject.com/logs/crash'
+  captured_at: '2026-08-07T03:56:38Z'
+  patch_version_matched: true
+  matched_version: 32.2.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-1-github-issue-13704
+  product_id: obs-studio
+  update_version: 32.2.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13704
+  parent_title: Crash when adding Display Capture on Snapdragon X (ARM64) - dxgi.dll exception c000001d
+  report_title: Crash when adding Display Capture on Snapdragon X (ARM64) - dxgi.dll exception c000001d
+  report_text_excerpt: 'Operating System Info Windows 11 ### Other OS Snapdragon X (ARM64) ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) 32.2.1 ### OBS Studio Log URL https://ideas.obsproject.com/ ### OBS Studio Crash Log URL _No response_ ### Expected Behavior log file -------------- <de'
+  captured_at: '2026-08-07T03:56:38Z'
+  patch_version_matched: true
+  matched_version: 32.2.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-1-github-issue-13725
+  product_id: obs-studio
+  update_version: 32.2.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13725
+  parent_title: 'Audio Monitoring "Monitor Only" bug: Audio is still heard when the source is muted on Windows'
+  report_title: 'Audio Monitoring "Monitor Only" bug: Audio is still heard when the source is muted on Windows'
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL na ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Hi everyone! I am experiencing an issue with th'
+  captured_at: '2026-08-07T03:56:38Z'
+  patch_version_matched: true
+  matched_version: 32.2.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-1-github-issue-13750
+  product_id: obs-studio
+  update_version: 32.2.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13750
+  parent_title: Obs panic after enter libnvidia-eglcore
+  report_title: Obs panic after enter libnvidia-eglcore
+  report_text_excerpt: '### Operating System Info Other ### Other OS ArchLinux ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/YpMsvo4Jiu7uvB37 ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I hop'
+  captured_at: '2026-08-07T03:56:38Z'
+  patch_version_matched: true
+  matched_version: 32.2.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture regression
+  workflow_area: screen/window capture
+  platform: linux
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-1-github-issue-13729
+  product_id: obs-studio
+  update_version: 32.2.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13729
+  parent_title: Flatpak dumps core if ran in NixOS from desktop file, but works in command line exec
+  report_title: Flatpak dumps core if ran in NixOS from desktop file, but works in command line exec
+  report_text_excerpt: '### Operating System Info Other ### Other OS NixOS ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/ioKIxndNQ8FnaxZe ### OBS Studio Crash Log URL _No response_ ### Expected Behavior Well,'
+  captured_at: '2026-08-07T03:56:38Z'
+  patch_version_matched: true
+  matched_version: 32.2.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: linux
+  severity: medium
+  sentiment: moderate
   source_weight: 1
