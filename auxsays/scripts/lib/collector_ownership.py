@@ -171,8 +171,15 @@ def _parse_evidence(text: str | None) -> list[dict[str, Any]]:
     return [r for r in (rows or []) if isinstance(r, dict)]
 
 
-def _evidence_by_id(rows: list[dict[str, Any]]) -> dict[str, dict[str, Any]]:
-    return {str(r.get("id")): r for r in rows if r.get("id")}
+def _evidence_by_id(rows: list[dict[str, Any]]) -> dict[tuple[str, str, str], dict[str, Any]]:
+    # Row identity is the SAME key the append/dedup authority uses (base.evidence_key): the triple
+    # (product_id, exact update_version, id). Keying by the id STRING alone conflated two legitimately
+    # distinct rows that share an id string across editions -- Reader and Pro share the DC build number
+    # and the acrobat evidence id omits the edition, so the same Adobe post yields the same id string for
+    # both. That produced a FALSE evidence_existing_row_modified when the Reader collector appended its
+    # row after Pro had committed the same-id-string row (natural run 31234793893). Using the append
+    # authority's triple keeps the two rows distinct (Reader's is a new row, not a mutation of Pro's).
+    return {evidence_key(r, "id"): r for r in rows if r.get("id")}
 
 
 def _existing_versions(product_id: str) -> set[str]:
@@ -237,13 +244,15 @@ def validate_evidence(product_id: str, before_text: str | None, after_text: str 
     before_ids = _evidence_by_id(before)
     after_ids = _evidence_by_id(after)
 
-    # Existing rows are immutable: present, identical, never deleted.
-    for bid, brow in before_ids.items():
-        if bid not in after_ids:
-            raise _violation("evidence_existing_row_deleted", f"collector '{product_id}' deleted existing evidence row {bid}",
+    # Existing rows are immutable: present, identical, never deleted. Identity = the append authority's
+    # (product_id, version, id) triple, so a genuine change to the SAME row still rejects while a
+    # different edition's same-id-string row is correctly treated as a distinct (new) row.
+    for bkey, brow in before_ids.items():
+        if bkey not in after_ids:
+            raise _violation("evidence_existing_row_deleted", f"collector '{product_id}' deleted existing evidence row {brow.get('id')}",
                              surface="evidence", product_id=product_id)
-        if after_ids[bid] != brow:
-            raise _violation("evidence_existing_row_modified", f"collector '{product_id}' modified existing evidence row {bid}",
+        if after_ids[bkey] != brow:
+            raise _violation("evidence_existing_row_modified", f"collector '{product_id}' modified existing evidence row {brow.get('id')}",
                              surface="evidence", product_id=product_id)
     if len(after) < len(before):
         raise _violation("evidence_rows_removed", f"collector '{product_id}' removed evidence rows", surface="evidence", product_id=product_id)
@@ -264,8 +273,9 @@ def validate_evidence(product_id: str, before_text: str | None, after_text: str 
     }
     for row in after:
         rid = str(row.get("id") or "")
-        if rid in before_ids:
-            continue  # unchanged existing row
+        rkey = evidence_key(row, "id")  # (product_id, version, id) -- the append authority's identity
+        if rkey in before_ids:
+            continue  # unchanged existing row (same product_id + version + id)
         pid = str(row.get("product_id") or "").strip()
         if pid != product_id:
             raise _violation("evidence_product_mismatch", f"collector '{product_id}' appended cross-product evidence for '{pid}'",
@@ -283,7 +293,7 @@ def validate_evidence(product_id: str, before_text: str | None, after_text: str 
                              surface="evidence", product_id=product_id, version=version)
         if not rid:
             raise _violation("evidence_missing_id", f"collector '{product_id}' appended an evidence row with no id", surface="evidence", product_id=product_id, version=version)
-        if rid in seen_ids:
+        if rkey in seen_ids:
             raise _violation("evidence_duplicate_id", f"collector '{product_id}' appended a duplicate evidence id {rid}",
                              surface="evidence", product_id=product_id, version=version)
         url = str(row.get("source_url") or "")
@@ -293,7 +303,7 @@ def validate_evidence(product_id: str, before_text: str | None, after_text: str 
                 raise _violation("evidence_duplicate_url", f"collector '{product_id}' appended a duplicate evidence url {url}",
                                  surface="evidence", product_id=product_id, version=version)
             seen_urls.add(url_key)
-        seen_ids.add(rid)
+        seen_ids.add(rkey)
 
 
 # --- method health -------------------------------------------------------------
