@@ -11812,3 +11812,28 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: blackmagic-davinci-16-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1s70jkk-why-is-resolve-not-rendering-my-image-par
+  product_id: blackmagic-davinci
+  update_version: '16'
+  source_type: reddit_community_report
+  source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1s70jkk/why_is_resolve_not_rendering_my_image_particles/
+  parent_title: why is resolve not rendering my image particles and throwing this error at me??
+  report_title: why is resolve not rendering my image particles and throwing this error at me??
+  report_text_excerpt: why is resolve not rendering my image particles and throwing this error at me?? https://preview.redd.it/6pwpnyx1l0sg1.png?width=1920&format=png&auto=webp&s=c713d9ec77d85f33e558d5ca977b11e69769142a...
+  captured_at: '2026-08-08T20:06:53Z'
+  source_date: '2026-03-29'
+  target_release_date: '2019-08-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '16'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: render/export failure
+  workflow_area: render/export
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1

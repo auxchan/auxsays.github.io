@@ -19,7 +19,7 @@ update_published_at: '2019-08-09T00:00:00Z'
 update_last_checked: '2026-08-04T13:06:52Z'
 source_last_checked: '2026-08-04T13:06:52Z'
 official_body_last_checked: '2026-08-04T13:06:52Z'
-record_last_updated: '2026-08-08T03:25:03.021338Z'
+record_last_updated: '2026-08-08T20:09:17.552241Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
@@ -27,23 +27,23 @@ update_status: current
 update_feed_title: DaVinci Resolve 16
 update_detail_title: DaVinci Resolve 16
 update_consensus_label: Negative
-update_report_count: 1
+update_report_count: 2
 update_consensus_confidence: Low
-quick_verdict: 'WAIT: DaVinci Resolve 16 has 1 user reports found.'
+quick_verdict: 'WAIT: DaVinci Resolve 16 has 2 user reports found.'
 official_summary: Blackmagic Design lists DaVinci Resolve Studio 16 in its official support downloads feed.
 release_summary: This software installs the full shipping version of DaVinci Resolve 16 Studio which features the
   new Cut page along with over a hundred new tools, features and improvements such as the DaVinci Neural Engine,
   facial recognition, speed warp retiming, adjustment clips, GPU accelerated scopes, new Resolve FX, faster Fusion
   performance, elastic wave audio alignment, new Fairlight FX, immersive 3D audio support and more. This version
   requires a DaVinci Resolve license dongle or software activation code.
-consensus_report: '1 user report found for DaVinci Resolve 16. Current reports mention plugin issues. Too few reports
-  for a firm verdict yet. Sources represented: Creative COW DaVinci Resolve.'
+consensus_report: '2 user reports found for DaVinci Resolve 16. Current reports mention plugin issues and render/export
+  failures. Too few reports for a firm verdict yet. Sources represented: Creative COW DaVinci Resolve and r/davinciresolve.'
 evidence_state: pilot_sample
 evidence_state_label: Verified reports
 intelligence_stage: pilot
 official_source_captured: true
-confirmed_patch_specific_report_count: 1
-evidence_last_checked: '2026-08-08T03:24:18Z'
+confirmed_patch_specific_report_count: 2
+evidence_last_checked: '2026-08-08T20:06:53Z'
 known_issues_present: null
 consensus_collection_status: pilot_initial_sample
 consensus_match_policy: confirmed_patch_specific_reports_v1
@@ -62,6 +62,9 @@ status_events:
 - at: '2026-08-08T03:25:03.021338Z'
   label: User reports found
   note: User report count updated to 1.
+- at: '2026-08-08T20:09:17.552241Z'
+  label: User reports found
+  note: User report count updated to 2.
 official_patch_notes_source_type: download_portal
 primary_official_source: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
 fallback_official_sources:
@@ -114,9 +117,9 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'WAIT: DaVinci Resolve 16 has 1 user report found. Small sample size. Current reports
-  mention plugin issues. Production editors should test on copied projects before moving active work to this version.
-  Too few reports for a firm verdict yet.'
+update_consensus_summary: 'WAIT: DaVinci Resolve 16 has 2 user reports found. Small sample size. Current reports
+  mention plugin issues and render/export failures. Production editors with active export deadlines should wait
+  unless they need a specific fix. Too few reports for a firm verdict yet.'
 evidence_samples:
 - source_name: Creative COW DaVinci Resolve
   source_url: https://creativecow.net/forums/thread/failed-backup/
@@ -125,6 +128,14 @@ evidence_samples:
   version_matched: '16'
   patch_version_matched: true
   issue: plugin issues in plugins / codecs
+  outcome: medium
+- source_name: r/davinciresolve
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1s70jkk/why_is_resolve_not_rendering_my_image_particles/
+  source_title: why is resolve not rendering my image particles and throwing this error at me??
+  counted: true
+  version_matched: '16'
+  patch_version_matched: true
+  issue: render/export failures
   outcome: medium
 evidence_sample_visible_limit: 5
 accepted_report_sources:
@@ -137,12 +148,21 @@ accepted_report_sources:
   patch_version_matched: true
   issue: plugin issues in plugins / codecs
   workflow_area: plugins / codecs
+- source_name: r/davinciresolve
+  source_type: reddit community report
+  source_url: https://www.reddit.com/r/davinciresolve/comments/1s70jkk/why_is_resolve_not_rendering_my_image_particles/
+  source_title: why is resolve not rendering my image particles and throwing this error at me??
+  source_date: '2026-03-29'
+  version_matched: '16'
+  patch_version_matched: true
+  issue: render/export failures
+  workflow_area: render/export
 evidence_source_limitations:
 - Too few reports for a firm verdict yet.
 - Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
 update_decision_label: WAIT
-update_decision_body: Current reports mention plugin issues. Production editors with active delivery deadlines should
-  wait or test on copied projects.
+update_decision_body: Current reports mention plugin issues and render/export failures. Production editors with
+  active delivery deadlines should wait or test on copied projects.
 practical_recommendations:
 - Wait if you have active render/export deadlines.
 - Test on copied projects before moving client work to this version.
