@@ -144,11 +144,13 @@ def run() -> int:
                     [], [erow("x", "adobe-acrobat-pro", "20.004.30005", U, "adobe_community_bug_report")])),
                 "evidence_product_mismatch")
 
-    # E5 duplicate id (two NEW rows sharing an id) -> still rejected.
-    expect_code("E5 duplicate evidence id still rejected",
+    # E5 duplicate id (two NEW rows with the SAME (product, version, id) identity) -> still rejected.
+    # (Identity is the append authority's (product_id, version, id) triple; the acrobat id encodes the
+    # version, so a real duplicate has the same version too.)
+    expect_code("E5 duplicate evidence id (same product+version) still rejected",
                 lambda: o.validate_evidence(OBS, *ev(
                     [], [erow("dup", OBS, "32.2.0", U, "github_issue"),
-                         erow("dup", OBS, "31.0.3", "https://github.com/obsproject/obs-studio/issues/901", "github_issue")])),
+                         erow("dup", OBS, "32.2.0", "https://github.com/obsproject/obs-studio/issues/901", "github_issue")])),
                 "evidence_duplicate_id")
 
     # E6 existing row modified -> still rejected.
