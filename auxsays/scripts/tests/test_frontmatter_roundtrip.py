@@ -32,6 +32,7 @@ from lib import write_update_record  # noqa: E402
 from lib.normalize import split_front_matter as normalize_split  # noqa: E402
 import apply_consensus_to_records as apply_consensus  # noqa: E402
 import collect_obs_reports  # noqa: E402
+import patch_ingest  # noqa: E402
 
 # Every hazardous shape the requirement calls out.
 SHAPES = {
@@ -99,6 +100,14 @@ def run() -> int:
             except Exception as exc:  # noqa: BLE001
                 check(f"[{name}] {reader_name}: value round-trips (semantic compare)", False,
                       f"raised {type(exc).__name__}: {exc}")
+        # Front-only readers (return just the mapping; the body is discarded by design).
+        try:
+            data = patch_ingest.load_front_matter(path)
+            check(f"[{name}] patch_ingest.load_front_matter: value round-trips (semantic compare)",
+                  data.get("release_summary") == value, f"got {data.get('release_summary')!r}")
+        except Exception as exc:  # noqa: BLE001
+            check(f"[{name}] patch_ingest.load_front_matter: value round-trips (semantic compare)", False,
+                  f"raised {type(exc).__name__}: {exc}")
 
     # split_front_matter unit behaviour (both copies must agree and be delimiter-line-exact).
     for splitter_name, splitter in (("base", split_front_matter), ("normalize", normalize_split)):
@@ -111,9 +120,12 @@ def run() -> int:
         f4, b4 = splitter("---\nx: 1\n---\n")
         check(f"{splitter_name}: empty body after fence", f4 is not None and b4 == "")
 
-    # Old-bug shape: base's split must NOT be the fragile substring splitter anymore.
+    # Old-bug shape: no production reader may still use the fragile substring splitter.
     import inspect
-    src = inspect.getsource(base.load_front_matter_and_body) + inspect.getsource(apply_consensus._load_front_matter_and_body) + inspect.getsource(write_update_record._front_matter)
+    src = (inspect.getsource(base.load_front_matter_and_body)
+           + inspect.getsource(apply_consensus._load_front_matter_and_body)
+           + inspect.getsource(write_update_record._front_matter)
+           + inspect.getsource(patch_ingest.load_front_matter))
     check("no reader still uses the fragile text.split('---\\n', 2)", 'split("---\\n"' not in src)
 
     print()
