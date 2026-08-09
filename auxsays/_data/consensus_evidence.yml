@@ -11837,3 +11837,1302 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: acrobat-15-008-20082-adobe-community-bug-report-https-community-adobe-com-questions-12-acrobat-reader-dc-pages-printing-blank-instead-of-selecte
+  product_id: adobe-acrobat-reader
+  update_version: 15.008.20082
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/acrobat-reader-dc-pages-printing-blank-instead-of-selected-coupons-1507132
+  parent_title: Acrobat Reader DC - Pages Printing Blank Instead of Selected Coupons
+  report_title: Acrobat Reader DC - Pages Printing Blank Instead of Selected Coupons
+  report_text_excerpt: Acrobat Reader DC - Pages Printing Blank Instead of Selected Coupons When I attempt to print coupons from U.S. corporate websites who are using Acrobat Reader DC and smartsource.com, the pages eject from the HP printer blank. I'm using Windows 7, Firefox 42.0, Acrobat Reader...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2015-11-23'
+  target_release_date: '2015-07-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.008.20082
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-15-010-20056-adobe-community-bug-report-https-community-adobe-com-questions-18-unable-to-install-adobe-reader-dc-604616
+  product_id: adobe-acrobat-reader
+  update_version: 15.010.20056
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-18/unable-to-install-adobe-reader-dc-604616
+  parent_title: Unable to install Adobe Reader DC
+  report_title: Unable to install Adobe Reader DC
+  report_text_excerpt: 'Unable to install Adobe Reader DC Exit Code: 7 Please see specific errors below for troubleshooting. For example, ERROR: DW003, DW071 ... -------------------------------------- Summary -------------------------------------- - 0 fatal error(s), 2 error(s) ----------- Payload:...'
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2016-03-05'
+  target_release_date: '2016-01-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.010.20056
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-010-20056-adobe-community-bug-report-https-community-adobe-com-questions-18-how-to-resolve-error-on-install-of-acrobat-dc-606700
+  product_id: adobe-acrobat-reader
+  update_version: 15.010.20056
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-18/how-to-resolve-error-on-install-of-acrobat-dc-606700
+  parent_title: How to resolve error on install of Acrobat DC
+  report_title: How to resolve error on install of Acrobat DC
+  report_text_excerpt: How to resolve error on install of Acrobat DC Hello Everyone, Thank you for any help you can provide. I am unable to install a trial version of Adobe Acrobat DC via Creative Cloud. I have read possible solutions here on this forum and on other forums. These have included clear...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2016-01-19'
+  target_release_date: '2016-01-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.010.20056
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: form behavior regression
+  workflow_area: forms
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-15-016-20039-adobe-community-bug-report-https-community-adobe-com-questions-12-installing-reader-dc-15-016-20039-using-sccm-2012-1507227
+  product_id: adobe-acrobat-reader
+  update_version: 15.016.20039
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/installing-reader-dc-15-016-20039-using-sccm-2012-1507227
+  parent_title: Installing Reader DC 15.016.20039 using SCCM 2012
+  report_title: Installing Reader DC 15.016.20039 using SCCM 2012
+  report_text_excerpt: Installing Reader DC 15.016.20039 using SCCM 2012 I'm having an issue pushing out Reader DC 15.016.20039 using an application package I created with SCCM 2012R2. I believe I've narrowed down the issue to the Command-Line syntax I'm using. I'm trying to install Reader with an...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2016-05-20'
+  target_release_date: '2016-05-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.016.20039
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: form behavior regression
+  workflow_area: forms
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-15-016-20041-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-reader-crashes-mac-uninstalled-now-cannot-re
+  product_id: adobe-acrobat-reader
+  update_version: 15.016.20041
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-reader-crashes-mac-uninstalled-now-cannot-reinstall-1245654
+  parent_title: Adobe Acrobat Reader crashes (Mac) uninstalled & now cannot reinstall
+  report_title: Adobe Acrobat Reader crashes (Mac) uninstalled & now cannot reinstall
+  report_text_excerpt: 'Adobe Acrobat Reader crashes (Mac) uninstalled & now cannot reinstall Mac OS X 10.9.5, Safari 9.1.1 I had Adobe Acrobat Reader DC v. 15.016.20041 (According to the crash report) Kept crashing: “The last time you opened Acrobat Reader, it unexpectedly quit while reopening...'
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2016-05-28'
+  target_release_date: '2016-05-19'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.016.20041
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-15-016-20045-adobe-community-bug-report-https-community-adobe-com-questions-12-acrobat-reader-crashes-after-digitally-signing-a-document
+  product_id: adobe-acrobat-reader
+  update_version: 15.016.20045
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/acrobat-reader-crashes-after-digitally-signing-a-document-1507238
+  parent_title: Acrobat Reader crashes after digitally signing a document
+  report_title: Acrobat Reader crashes after digitally signing a document
+  report_text_excerpt: Acrobat Reader crashes after digitally signing a document Hi there, until a week ago (or so) I used to digitally sign .pdf documents created with MS Word and exported as .pdf file before sending them by e-mail. I was using two different computers for this (a notebook and a...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2016-06-07'
+  target_release_date: '2016-06-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.016.20045
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-15-017-20050-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-reader-dc-font-pack-won-t-install-1510462
+  product_id: adobe-acrobat-reader
+  update_version: 15.017.20050
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-reader-dc-font-pack-won-t-install-1510462
+  parent_title: Adobe Reader DC Font Pack won't install
+  report_title: Adobe Reader DC Font Pack won't install
+  report_text_excerpt: 'Adobe Reader DC Font Pack won''t install Hi I''m getting the following error when installing the Extended Asian Language font pack for Adobe Acrobat Reader DC (Continuous) Event Log Product: Chinese Simplified Fonts Support For Adobe Reader X -- This installer requires Adobe...'
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2017-06-20'
+  target_release_date: '2016-07-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.017.20050
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-017-20050-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-acrobat-dc-can-t-uninstall-then-reinstall-1507815
+  product_id: adobe-acrobat-reader
+  update_version: 15.017.20050
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-acrobat-dc-can-t-uninstall-then-reinstall-1507815
+  parent_title: Adobe Acrobat DC can't uninstall then reinstall
+  report_title: Adobe Acrobat DC can't uninstall then reinstall
+  report_text_excerpt: Adobe Acrobat DC can't uninstall then reinstall OSX 10.12.1 Safari 10.0.1 In Safari tried to open a PDF from a reputable website. I was told I had to open Acrobat DC and accept end user agreement. Couldn't figure out how to find user agreement. Solution suggested online was to...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2016-11-29'
+  target_release_date: '2016-07-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.017.20050
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-15-020-20039-adobe-community-bug-report-https-community-adobe-com-questions-12-failed-to-patch-from-15-020-20039-to-15-020-2042-1510656
+  product_id: adobe-acrobat-reader
+  update_version: 15.020.20039
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/failed-to-patch-from-15-020-20039-to-15-020-2042-1510656
+  parent_title: Failed to patch from 15.020.20039 to 15.020.2042
+  report_title: Failed to patch from 15.020.20039 to 15.020.2042
+  report_text_excerpt: Failed to patch from 15.020.20039 to 15.020.2042 I work in a secure environment (isolated lan) with strict version control. Currently have have Acrobat Reader DC installed and can't seem to patch it beyond 15.020.20039 (released Oct. 11, 2016). The following planned and...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2017-08-09'
+  target_release_date: '2016-10-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.020.20039
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-020-20039-adobe-community-bug-report-https-community-adobe-com-questions-624-adobe-acrobat-reader-dc-crash-on-launch-673695
+  product_id: adobe-acrobat-reader
+  update_version: 15.020.20039
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-624/adobe-acrobat-reader-dc-crash-on-launch-673695
+  parent_title: Adobe Acrobat Reader DC - Crash on launch
+  report_title: Adobe Acrobat Reader DC - Crash on launch
+  report_text_excerpt: 'Adobe Acrobat Reader DC - Crash on launch DOWNLOADED FILE : AcroRdrDC1502020039_en_US.exe OPERATING SYSTEM : Windows 10 Enterprise (amd64), Windows 8.1 Enterprise (amd64), Windows 7 Enterprise SP1 (amd64) The installer includes both the primary MSI (acroread.msi, version...'
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2016-12-12'
+  target_release_date: '2016-10-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.020.20039
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-020-20039-adobe-community-bug-report-https-community-adobe-com-questions-12-error-message-please-advice-x86-84-native-1507757
+  product_id: adobe-acrobat-reader
+  update_version: 15.020.20039
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/error-message-please-advice-x86-84-native-1507757
+  parent_title: Error message - Please advice - X86-84 (Native)
+  report_title: Error message - Please advice - X86-84 (Native)
+  report_text_excerpt: 'Error message - Please advice - X86-84 (Native) Process: AdobeReader [6379] Path: /Applications/Adobe Acrobat Reader DC.app/Contents/MacOS/AdobeReader Identifier: com.adobe.Reader Version: 15.020.20039 (15.020.20039) Code Type: X86-64 (Native) Parent Process: ??? [1]...'
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2016-12-14'
+  target_release_date: '2016-10-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.020.20039
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-020-20039-adobe-community-bug-report-https-community-adobe-com-questions-12-acrobat-reader-dc-1507550
+  product_id: adobe-acrobat-reader
+  update_version: 15.020.20039
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/acrobat-reader-dc-1507550
+  parent_title: Acrobat Reader DC
+  report_title: Acrobat Reader DC
+  report_text_excerpt: Acrobat Reader DC Windows 8.1 Enterprise Acrobat Reader DC 15.020.20039 Administrator User Abnormalities/issues... If I install Reader via the downloaded exe, everything appears to function without error or issue. If I install Reader via the extracted installer (acroread.msi),...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2016-12-16'
+  target_release_date: '2016-10-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.020.20039
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-020-20039-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-acrobat-reader-dc-15-020-20039-not-responding-15074
+  product_id: adobe-acrobat-reader
+  update_version: 15.020.20039
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-acrobat-reader-dc-15-020-20039-not-responding-1507424
+  parent_title: Adobe Acrobat Reader DC 15.020.20039 (Not responding)
+  report_title: Adobe Acrobat Reader DC 15.020.20039 (Not responding)
+  report_text_excerpt: Adobe Acrobat Reader DC 15.020.20039 (Not responding) Adobe Acrobat Reader DC 15.020.20039 (Not responding) I have already used the Cleaner uninstalled and reinstalled. I have cleared the checkmark for Enable Protected Mode at Startup. Prior to that I tried a system restore,...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2016-11-07'
+  target_release_date: '2016-10-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.020.20039
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-15-020-20042-adobe-community-bug-report-https-community-adobe-com-questions-12-acrobat-reader-dc-crashes-when-attempting-to-search-the-d
+  product_id: adobe-acrobat-reader
+  update_version: 15.020.20042
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/acrobat-reader-dc-crashes-when-attempting-to-search-the-document-1508082
+  parent_title: Acrobat Reader DC crashes when attempting to search the document
+  report_title: Acrobat Reader DC crashes when attempting to search the document
+  report_text_excerpt: 'Acrobat Reader DC crashes when attempting to search the document Acrobat Support, please can you help me solve this problem? I have version 15.020.20042 running on Windows 7, 64 bit. *Every time* I search a document it crashes with this log: Problem signature: Problem Event...'
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2016-12-27'
+  target_release_date: '2016-11-03'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.020.20042
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-15-023-20053-adobe-community-bug-report-https-community-adobe-com-questions-12-acrobat-reader-dc-adobe-acrobat-reader-has-stopped-workin
+  product_id: adobe-acrobat-reader
+  update_version: 15.023.20053
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/acrobat-reader-dc-adobe-acrobat-reader-has-stopped-working-1508463
+  parent_title: Acrobat Reader DC - "Adobe Acrobat Reader has stopped working"
+  report_title: Acrobat Reader DC - "Adobe Acrobat Reader has stopped working"
+  report_text_excerpt: Acrobat Reader DC - "Adobe Acrobat Reader has stopped working" Good morning. I am currently running Acrobat Reader DC version 15.023.20053 (this is the free reader). I am running Windows 10. I am constatnly receiving an error message from Windows when I try to open a PDF,...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2017-01-16'
+  target_release_date: '2017-01-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.023.20053
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-15-023-20056-adobe-community-bug-report-https-community-adobe-com-questions-12-perfomance-problems-hiding-acrobat-reader-in-internet-exp
+  product_id: adobe-acrobat-reader
+  update_version: 15.023.20056
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/perfomance-problems-hiding-acrobat-reader-in-internet-explorer-1509081
+  parent_title: Perfomance problems hiding acrobat reader in Internet Explorer
+  report_title: Perfomance problems hiding acrobat reader in Internet Explorer
+  report_text_excerpt: Perfomance problems hiding acrobat reader in Internet Explorer Hi, We develop a web based application that use Acrobat reader to display document content. In som scenarios we hide/Unload the iframe containing the Pdf file (And the reader). This operation takes about 15 seconds...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2017-02-10'
+  target_release_date: '2017-01-19'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.023.20056
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: form behavior regression
+  workflow_area: forms
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-15-023-20070-adobe-community-bug-report-https-community-adobe-com-questions-12-unable-to-save-a-checked-out-pdf-back-to-sharepoint-site
+  product_id: adobe-acrobat-reader
+  update_version: 15.023.20070
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/unable-to-save-a-checked-out-pdf-back-to-sharepoint-site-1509745
+  parent_title: Unable to save a checked out PDF back to Sharepoint site
+  report_title: Unable to save a checked out PDF back to Sharepoint site
+  report_text_excerpt: Unable to save a checked out PDF back to Sharepoint site Hi, We've recently come across a problem with saving markup changes to PDF's in a particular subsite of an internal Sharepoint farm. We get an error message that "Adobe Acrobat Reader DC cannot access the network. Please...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2017-04-10'
+  target_release_date: '2017-02-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.023.20070
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-023-20070-adobe-community-bug-report-https-community-adobe-com-questions-12-acrobat-reader-dc-crashes-at-first-opening-1509795
+  product_id: adobe-acrobat-reader
+  update_version: 15.023.20070
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/acrobat-reader-dc-crashes-at-first-opening-1509795
+  parent_title: Acrobat Reader DC Crashes at first opening
+  report_title: Acrobat Reader DC Crashes at first opening
+  report_text_excerpt: Acrobat Reader DC Crashes at first opening Hi! I'm working for the government of Quebec in Canada. We are trying to distribute Acrobat Reader DC on our computers but it crashes at first opening and creates 2 shortcuts in Start Menu. Currently, the version installed is...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2017-05-10'
+  target_release_date: '2017-02-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.023.20070
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-15-023-20070-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-reader-15-23-20070-19033-15-023-20070-crash-on-rds
+  product_id: adobe-acrobat-reader
+  update_version: 15.023.20070
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-reader-15-23-20070-19033-15-023-20070-crash-on-rds-session-host-1509382
+  parent_title: Adobe Reader 15.23.20070.19033/15.023.20070 Crash on RDS Session Host
+  report_title: Adobe Reader 15.23.20070.19033/15.023.20070 Crash on RDS Session Host
+  report_text_excerpt: 'Adobe Reader 15.23.20070.19033/15.023.20070 Crash on RDS Session Host Reader has been crashing multiple times per day with the following error on our RDS Session Hosts running Windows Server 2012 R2: Faulting application name : AcroRd32.exe, version: 15.23.20070.19033, time...'
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2017-03-01'
+  target_release_date: '2017-02-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 15.023.20070
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-17-009-20044-adobe-community-bug-report-https-community-adobe-com-questions-12-symantec-dlp-blocking-save-to-usb-or-network-share-causes
+  product_id: adobe-acrobat-reader
+  update_version: 17.009.20044
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/symantec-dlp-blocking-save-to-usb-or-network-share-causes-acrobat-to-crash-1510199
+  parent_title: Symantec DLP blocking save to USB or Network Share causes Acrobat to Crash
+  report_title: Symantec DLP blocking save to USB or Network Share causes Acrobat to Crash
+  report_text_excerpt: Symantec DLP blocking save to USB or Network Share causes Acrobat to Crash Hello Experts! I am a DLP support engineering with Symantec DLP and we are noting a crash on Adobe Acrobat Reader DC when DLP blocks a save to USB through Adobe. Adobe Acrobat Reader DC (17.009.20044)...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2017-05-23'
+  target_release_date: '2017-04-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 17.009.20044
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-17-009-20044-adobe-community-bug-report-https-community-adobe-com-questions-9-printing-pdf-fillable-form-results-in-plugin-error-on-mac
+  product_id: adobe-acrobat-reader
+  update_version: 17.009.20044
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/printing-pdf-fillable-form-results-in-plugin-error-on-mac-osx-10-12-1300375
+  parent_title: Printing PDF fillable form results in Plugin Error on MAC OSX 10.12
+  report_title: Printing PDF fillable form results in Plugin Error on MAC OSX 10.12
+  report_text_excerpt: Printing PDF fillable form results in Plugin Error on MAC OSX 10.12 The fillable PDF form in Adobe Reader DC has a Print Button, clicking the print button results in a black screen with the error message Plugin Error Opening the form on Safari using Adobe Reader DC, here is...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2017-04-26'
+  target_release_date: '2017-04-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 17.009.20044
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-17-009-20044-adobe-community-bug-report-https-community-adobe-com-questions-12-unable-to-save-as-after-update-to-reader-dc-17-009-20044
+  product_id: adobe-acrobat-reader
+  update_version: 17.009.20044
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/unable-to-save-as-after-update-to-reader-dc-17-009-20044-1509769
+  parent_title: Unable to SAVE AS after update to Reader DC 17.009.20044
+  report_title: Unable to SAVE AS after update to Reader DC 17.009.20044
+  report_text_excerpt: Unable to SAVE AS after update to Reader DC 17.009.20044 completed updates to Reader DC 17.009.20044 and when trying to SAVE AS, window opens but nothing inside of window...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2017-04-18'
+  target_release_date: '2017-04-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 17.009.20044
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-17-012-20093-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-acrobat-reader-dc-crashing-when-opening-july-2017-i
+  product_id: adobe-acrobat-reader
+  update_version: 17.012.20093
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-acrobat-reader-dc-crashing-when-opening-july-2017-i-9-form-1510679
+  parent_title: Adobe Acrobat Reader DC Crashing when Opening July 2017 I-9 Form
+  report_title: Adobe Acrobat Reader DC Crashing when Opening July 2017 I-9 Form
+  report_text_excerpt: 'Adobe Acrobat Reader DC Crashing when Opening July 2017 I-9 Form Reader version: Adobe Acrobat Reader DC (17.012.20093) OS: Win 10, Win 7 I-9 File: Employment Eligibility Verification | USCIS Beginning yesterday (08-09-17), we began to have a problem with opening the I-9 form...'
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2017-08-09'
+  target_release_date: '2017-08-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 17.012.20093
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader + acrobat pro
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: form behavior regression
+  workflow_area: forms
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-17-012-20093-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-reader-freezing-on-mac-1511098
+  product_id: adobe-acrobat-reader
+  update_version: 17.012.20093
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-reader-freezing-on-mac-1511098
+  parent_title: Adobe Reader Freezing on Mac
+  report_title: Adobe Reader Freezing on Mac
+  report_text_excerpt: Adobe Reader Freezing on Mac Every time I download and open a PDF, Adobe Reader totally freezes with nothing but a spinning ball. I deleted Adobe (even though it was up to date) and re-downloaded it, only to have the same issue. It is Adobe Acrobat Reader DC (Version...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2017-09-26'
+  target_release_date: '2017-08-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 17.012.20093
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-17-012-20093-adobe-community-bug-report-https-community-adobe-com-questions-12-xfa-forms-problem-after-update-of-acrobat-reader-from-8-8
+  product_id: adobe-acrobat-reader
+  update_version: 17.012.20093
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/xfa-forms-problem-after-update-of-acrobat-reader-from-8-8-2017-1510809
+  parent_title: XFA forms problem after update of Acrobat Reader from 8.8.2017
+  report_title: XFA forms problem after update of Acrobat Reader from 8.8.2017
+  report_text_excerpt: XFA forms problem after update of Acrobat Reader from 8.8.2017 We have problem with our xfa forms after update of Adobe Reader from 8.8.2017. Problem is with Reader 11.0.21 and Reader DC 17.012.20093 too. Reader crashes very often now. It seems that there is some problem with...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2017-08-10'
+  target_release_date: '2017-08-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 17.012.20093
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: form behavior regression
+  workflow_area: forms
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-17-012-20095-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-acrobat-reader-dc-for-mac-crashes-all-the-time-1510
+  product_id: adobe-acrobat-reader
+  update_version: 17.012.20095
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-acrobat-reader-dc-for-mac-crashes-all-the-time-1510994
+  parent_title: Adobe Acrobat Reader DC for Mac crashes all the time
+  report_title: Adobe Acrobat Reader DC for Mac crashes all the time
+  report_text_excerpt: Adobe Acrobat Reader DC for Mac crashes all the time Hi, I have been using Acrobat Reader DC for 3 years. But I have never experienced this issue so far. Recently I updated the Reader to the newest version. Then, it starts to crash every time I tried to open any PDF file....
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2017-08-17'
+  target_release_date: '2017-08-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 17.012.20095
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-17-012-20098-adobe-community-bug-report-https-community-adobe-com-questions-9-unable-to-print-from-acrobat-reader-prints-come-out-as-bla
+  product_id: adobe-acrobat-reader
+  update_version: 17.012.20098
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/unable-to-print-from-acrobat-reader-prints-come-out-as-blank-1312161
+  parent_title: Unable to print from Acrobat Reader - prints come out as blank
+  report_title: Unable to print from Acrobat Reader - prints come out as blank
+  report_text_excerpt: 'Unable to print from Acrobat Reader - prints come out as blank I''m using adobe reader dc (version: 17.012.20098) and I have a PDF document, but it prints come out as blank (there is no problem if I choose print as image) All printer driver and adobe reader dc are latest. How...'
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2017-11-08'
+  target_release_date: '2017-08-29'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 17.012.20098
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-17-012-20098-adobe-community-bug-report-https-community-adobe-com-questions-12-sign-document-option-is-disabled-unavailable-greyed-out-i
+  product_id: adobe-acrobat-reader
+  update_version: 17.012.20098
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/sign-document-option-is-disabled-unavailable-greyed-out-in-pdf-forms-and-files-unable-to-digitally-sign-pdf-forms-and-files-1511247
+  parent_title: Sign Document option is "disabled/unavailable/greyed out" in PDF Forms and Files. Unable to Digitally Sign PDF Forms and Files.
+  report_title: Sign Document option is "disabled/unavailable/greyed out" in PDF Forms and Files. Unable to Digitally Sign PDF Forms and Files.
+  report_text_excerpt: Sign Document option is "disabled/unavailable/greyed out" in PDF Forms and Files. Unable to Digitally Sign PDF Forms and Files. Hello, I'm facing a strange problem, I'm unable to sign any PDF Forms and Files downloaded from MCA Website ( Ministry Of Corporate Affairs -...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2017-10-01'
+  target_release_date: '2017-08-29'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 17.012.20098
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader + acrobat pro
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-17-012-20098-adobe-community-bug-report-https-community-adobe-com-questions-12-pdf-printing-issue-on-terminal-server-1512861
+  product_id: adobe-acrobat-reader
+  update_version: 17.012.20098
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/pdf-printing-issue-on-terminal-server-1512861
+  parent_title: Pdf printing issue on Terminal Server
+  report_title: Pdf printing issue on Terminal Server
+  report_text_excerpt: Pdf printing issue on Terminal Server Dear We have an issue with printing pdf's on our terminal server environment. From time to time a user is not able to print any pdf's from acrobat reader. Doesn't matter which printer he uses. Printing from other software like MS Office...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2018-02-07'
+  target_release_date: '2017-08-29'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 17.012.20098
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-18-009-20044-adobe-community-bug-report-https-community-adobe-com-questions-12-acrobat-reader-dc-there-was-an-error-opening-this-documen
+  product_id: adobe-acrobat-reader
+  update_version: 18.009.20044
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/acrobat-reader-dc-there-was-an-error-opening-this-document-failed-to-load-an-application-resource-internal-error-1512140
+  parent_title: Acrobat Reader DC "There was an error opening this document. Failed to load an application resource (internal error)."
+  report_title: Acrobat Reader DC "There was an error opening this document. Failed to load an application resource (internal error)."
+  report_text_excerpt: Acrobat Reader DC "There was an error opening this document. Failed to load an application resource (internal error)." Currently experiencing an issue with Adobe Acrobat Reader DC (18.009.20044) and Adobe Acrobat DC (218.009.20044). When opening documents that have been...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2017-11-29'
+  target_release_date: '2017-11-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 18.009.20044
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-18-009-20044-adobe-community-bug-report-https-community-adobe-com-questions-12-neozhidannoe-zavershenie-raboty-programmy-acrobat-reader
+  product_id: adobe-acrobat-reader
+  update_version: 18.009.20044
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/neozhidannoe-zavershenie-raboty-programmy-acrobat-reader-1513068
+  parent_title: Неожиданное завершение работы программы Acrobat Reader
+  report_title: Неожиданное завершение работы программы Acrobat Reader
+  report_text_excerpt: 'Неожиданное завершение работы программы Acrobat Reader Не могу запустить программу после установки, сразу выдается сообщение "Неожиданное завершение работы программы Acrobat Reader". Переустановка не помогает. Сведения о проблеме: Process: AdobeReader [8417] Path:...'
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2018-02-01'
+  target_release_date: '2017-11-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 18.009.20044
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-18-009-20044-adobe-community-bug-report-https-community-adobe-com-questions-12-users-unable-to-open-pdf-s-after-recent-adobe-reader-dc-u
+  product_id: adobe-acrobat-reader
+  update_version: 18.009.20044
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/users-unable-to-open-pdf-s-after-recent-adobe-reader-dc-update-18-009-20044-1511973
+  parent_title: Users unable to open PDF's after recent Adobe Reader DC update 18.009.20044
+  report_title: Users unable to open PDF's after recent Adobe Reader DC update 18.009.20044
+  report_text_excerpt: Users unable to open PDF's after recent Adobe Reader DC update 18.009.20044 I work in IT support and have had a number of users complaining over the last 4 days that they are unable to open PDF's using Reader, this seems to be when they open an email attachment that causes the...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2017-11-20'
+  target_release_date: '2017-11-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 18.009.20044
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-18-009-20044-adobe-community-bug-report-https-community-adobe-com-questions-12-some-pdfs-are-shown-as-blank-and-application-wont-start-u
+  product_id: adobe-acrobat-reader
+  update_version: 18.009.20044
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/some-pdfs-are-shown-as-blank-and-application-wont-start-unless-kill-the-dead-ones-first-1512057
+  parent_title: some pdfs are shown as blank, and application wont start unless kill the dead ones first
+  report_title: some pdfs are shown as blank, and application wont start unless kill the dead ones first
+  report_text_excerpt: some pdfs are shown as blank, and application wont start unless kill the dead ones first Some pfs work, some dont. The ones which don't open work fine when viewed in the pdf previewer in outlook and also in chrome no problem, so its not the PDF, its that adobe reader has bugs....
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2017-11-28'
+  target_release_date: '2017-11-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 18.009.20044
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-18-011-20038-adobe-community-bug-report-https-community-adobe-com-questions-12-acrord32-exe-not-closing-on-xenapp-terminal-server-151356
+  product_id: adobe-acrobat-reader
+  update_version: 18.011.20038
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/acrord32-exe-not-closing-on-xenapp-terminal-server-1513568
+  parent_title: AcroRd32.exe Not closing on Xenapp Terminal Server
+  report_title: AcroRd32.exe Not closing on Xenapp Terminal Server
+  report_text_excerpt: AcroRd32.exe Not closing on Xenapp Terminal Server We have a server 2016 terminal server running Xenapp 7.15 LTSR and an issue we seem to be having is adobe acrobat reader pinning the CPU. I wait for an email alert from vmware stating the server has high CPU usage and sure...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2018-03-28'
+  target_release_date: '2018-02-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 18.011.20038
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: performance regression
+  workflow_area: performance
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-18-011-20038-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-reader-18-011-20038-crashes-when-first-opened-15130
+  product_id: adobe-acrobat-reader
+  update_version: 18.011.20038
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-reader-18-011-20038-crashes-when-first-opened-1513013
+  parent_title: Adobe Reader 18.011.20038 Crashes When first opened
+  report_title: Adobe Reader 18.011.20038 Crashes When first opened
+  report_text_excerpt: Adobe Reader 18.011.20038 Crashes When first opened Adobe Rader 18.011.20038 crashes when first opened. I check the event log and this is what is showed. I have uninstalled and re-installed and that will fix the issue for a few days but it always starts crashing evently. I...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2018-02-27'
+  target_release_date: '2018-02-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 18.011.20038
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-18-011-20040-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-reader-dc-installation-error-a-program-run-as-part
+  product_id: adobe-acrobat-reader
+  update_version: 18.011.20040
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-reader-dc-installation-error-a-program-run-as-part-of-the-setup-did-not-finish-as-expected-1514488
+  parent_title: 'Adobe Reader DC Installation Error: A program run as part of the setup did not finish as expected.'
+  report_title: 'Adobe Reader DC Installation Error: A program run as part of the setup did not finish as expected.'
+  report_text_excerpt: 'Adobe Reader DC Installation Error: A program run as part of the setup did not finish as expected. Hi There, when I try to install Adobe Reader DC (AcroRdrDC1801120040_de_DE.exe) the following Error occures: There is a problem with the windwos installer package. A program run...'
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2018-07-26'
+  target_release_date: '2018-05-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 18.011.20040
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-18-011-20055-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-not-responding-when-attaching-pdf-to-email-1
+  product_id: adobe-acrobat-reader
+  update_version: 18.011.20055
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-not-responding-when-attaching-pdf-to-email-1230080
+  parent_title: Adobe Acrobat Not Responding When Attaching PDF To Email
+  report_title: Adobe Acrobat Not Responding When Attaching PDF To Email
+  report_text_excerpt: 'Adobe Acrobat Not Responding When Attaching PDF To Email I''m apart of an IT team and some users are experiencing an issue when they try and send there PDF to Outlook. Installed version: Adobe Acrobat Reader DC (18.011.20055). When clicking the envelope and clicking send file...'
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2018-08-08'
+  target_release_date: '2018-07-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 18.011.20055
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-18-011-20058-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-acrobat-reader-freezes-when-i-highlight-1514908
+  product_id: adobe-acrobat-reader
+  update_version: 18.011.20058
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-acrobat-reader-freezes-when-i-highlight-1514908
+  parent_title: Adobe Acrobat Reader freezes when I highlight
+  report_title: Adobe Acrobat Reader freezes when I highlight
+  report_text_excerpt: Adobe Acrobat Reader freezes when I highlight Hi! First of all, I apologize for my bad english, I'm not a native english speaker. I'm a university student, so I have to use PDF a lot. Recently i've been having a problem with Acrobat when I try to highlight something; the...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2018-08-16'
+  target_release_date: '2018-08-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 18.011.20058
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-19-008-20071-adobe-community-bug-report-https-community-adobe-com-questions-12-printing-issue-that-arose-with-new-reader-dc-19-008-20071
+  product_id: adobe-acrobat-reader
+  update_version: 19.008.20071
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/printing-issue-that-arose-with-new-reader-dc-19-008-20071-1515131
+  parent_title: Printing issue that arose with new Reader DC 19.008.20071
+  report_title: Printing issue that arose with new Reader DC 19.008.20071
+  report_text_excerpt: Printing issue that arose with new Reader DC 19.008.20071 Within a few hours of yesterdays update, one of our users reported a printing issue from the new version (19.008.20071) of Adobe Reader DC. The issue relates to printing a full page image PDF. True text based PDF files,...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2018-10-02'
+  target_release_date: '2018-10-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.008.20071
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-19-008-20071-adobe-community-bug-report-https-community-adobe-com-questions-12-microsoft-outlook-2013-2016-not-working-after-19-008-2007
+  product_id: adobe-acrobat-reader
+  update_version: 19.008.20071
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/microsoft-outlook-2013-2016-not-working-after-19-008-20071-update-1515016
+  parent_title: Microsoft Outlook 2013 & 2016 not working after 19.008.20071 update
+  report_title: Microsoft Outlook 2013 & 2016 not working after 19.008.20071 update
+  report_text_excerpt: Microsoft Outlook 2013 & 2016 not working after 19.008.20071 update Our organization is practically dead in the water because of this automatic update. Every time a user tries to click the "New Email" button in Outlook, the client automatically freezes and has to be closed...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2018-10-05'
+  target_release_date: '2018-10-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.008.20071
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-19-008-20071-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-acrobat-reader-dc-19-008-20071-prints-my-pdfs-as-mo
+  product_id: adobe-acrobat-reader
+  update_version: 19.008.20071
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-acrobat-reader-dc-19-008-20071-prints-my-pdfs-as-mostly-blank-pages-on-my-brother-hl-2070-wireless-printer-1515121
+  parent_title: Adobe Acrobat Reader DC (19.008.20071) prints my pdfs as mostly blank pages on my Brother HL 2070 wireless printer
+  report_title: Adobe Acrobat Reader DC (19.008.20071) prints my pdfs as mostly blank pages on my Brother HL 2070 wireless printer
+  report_text_excerpt: Adobe Acrobat Reader DC (19.008.20071) prints my pdfs as mostly blank pages on my Brother HL 2070 wireless printer For some reason, Adobe Reader DC is no longer printing my pdfs to my wireless Brother HL 2070 printer. It either prints blank pages or it prints just the very top...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2018-10-06'
+  target_release_date: '2018-10-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.008.20071
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-19-008-20074-adobe-community-bug-report-https-community-adobe-com-questions-12-multiple-acrord32-1515920
+  product_id: adobe-acrobat-reader
+  update_version: 19.008.20074
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/multiple-acrord32-1515920
+  parent_title: Multiple Acrord32
+  report_title: Multiple Acrord32
+  report_text_excerpt: Multiple Acrord32 Hello, since updating to the latest patch of Adobe Reader DC 19.008.20074, we have noticed that on our Windows 7 machines. Our workflow is such that we are opening/closing and emailing pdfs all day long. At certain points through out the day we will get a...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2018-10-29'
+  target_release_date: '2018-10-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.008.20074
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Acrobat issue
+  workflow_area: Acrobat workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-19-008-20074-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-acrobat-reader-dc-19-008-20074-printing-blank-pages
+  product_id: adobe-acrobat-reader
+  update_version: 19.008.20074
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-acrobat-reader-dc-19-008-20074-printing-blank-pages-1515223
+  parent_title: Adobe Acrobat Reader DC 19.008.20074 printing blank pages
+  report_title: Adobe Acrobat Reader DC 19.008.20074 printing blank pages
+  report_text_excerpt: Adobe Acrobat Reader DC 19.008.20074 printing blank pages I was able to print any pdf file just fine, but since the new update when I try to print any pdf's it only prints blank pages.
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2018-10-11'
+  target_release_date: '2018-10-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.008.20074
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-19-008-20080-adobe-community-bug-report-https-community-adobe-com-questions-12-crashes-adobe-acrobat-reader-19-008-20080-1515714
+  product_id: adobe-acrobat-reader
+  update_version: 19.008.20080
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/crashes-adobe-acrobat-reader-19-008-20080-1515714
+  parent_title: Crashes Adobe Acrobat Reader 19.008.20080
+  report_title: Crashes Adobe Acrobat Reader 19.008.20080
+  report_text_excerpt: Crashes Adobe Acrobat Reader 19.008.20080 After last update i can run Adobe Acrobat Reader DC 19.008.20080
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2018-11-05'
+  target_release_date: '2018-10-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.008.20080
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-19-008-20080-adobe-community-bug-report-https-community-adobe-com-questions-12-unable-to-open-pdf-after-updating-to-macos-mojave-version
+  product_id: adobe-acrobat-reader
+  update_version: 19.008.20080
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/unable-to-open-pdf-after-updating-to-macos-mojave-version-10-14-1516124
+  parent_title: Unable to open pdf after updating to MacOS Mojave version 10.14
+  report_title: Unable to open pdf after updating to MacOS Mojave version 10.14
+  report_text_excerpt: Unable to open pdf after updating to MacOS Mojave version 10.14 Hi team, After updating my MAC I cannot use adobe anymore. I can see my pdf in preview but I cannot open them with Adobe Reader. Can you please give me a hand? Thank you, Jacobo These is the specific error:...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2018-11-05'
+  target_release_date: '2018-10-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.008.20080
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-19-008-20080-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-dc-reader-version-19-008-20080-causing-ie-to-crash
+  product_id: adobe-acrobat-reader
+  update_version: 19.008.20080
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-dc-reader-version-19-008-20080-causing-ie-to-crash-in-windows-2016-server-citrix-xenapp-environment-1515684
+  parent_title: Adobe DC Reader version 19.008.20080 causing IE to crash in Windows 2016 server Citrix XenApp environment
+  report_title: Adobe DC Reader version 19.008.20080 causing IE to crash in Windows 2016 server Citrix XenApp environment
+  report_text_excerpt: Adobe DC Reader version 19.008.20080 causing IE to crash in Windows 2016 server Citrix XenApp environment Hi there, within the last few weeks post the automatic update of Adobe DC Reader in our Citrix farm, we have had many users complain that IE crashes when trying to view a...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2018-11-14'
+  target_release_date: '2018-10-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.008.20080
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-19-008-20081-adobe-community-bug-report-https-community-adobe-com-questions-12-internet-explorer-add-on-freezing-ie-or-not-opening-pdf-1
+  product_id: adobe-acrobat-reader
+  update_version: 19.008.20081
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/internet-explorer-add-on-freezing-ie-or-not-opening-pdf-1515662
+  parent_title: Internet Explorer Add on freezing IE or not opening pdf
+  report_title: Internet Explorer Add on freezing IE or not opening pdf
+  report_text_excerpt: Internet Explorer Add on freezing IE or not opening pdf Is anyone else experiencing an issue with adobe reader ver 19.008.20081 where a pdf fails to open in Internet Explorer with the add on enabled. If I disable the add on the pdf will launch in the application. Previous...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2018-11-13'
+  target_release_date: '2018-11-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.008.20081
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Acrobat issue
+  workflow_area: Acrobat workflow
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-19-008-20081-adobe-community-bug-report-https-community-adobe-com-questions-624-enterprise-clients-receiving-issue-afer-19-008-20081-ado
+  product_id: adobe-acrobat-reader
+  update_version: 19.008.20081
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-624/enterprise-clients-receiving-issue-afer-19-008-20081-adobe-acrobat-dc-update-675664
+  parent_title: Enterprise clients receiving issue afer 19.008.20081 Adobe Acrobat DC update
+  report_title: Enterprise clients receiving issue afer 19.008.20081 Adobe Acrobat DC update
+  report_text_excerpt: Enterprise clients receiving issue afer 19.008.20081 Adobe Acrobat DC update Hello, We have seen an uptick in issues with the Nov 13th update related to "Out of memory exception issues" I have read in other threads that you require us to turn on logging to capture info that...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2018-11-28'
+  target_release_date: '2018-11-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.008.20081
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-19-010-20064-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-reader-19-010-20064-crashes-on-startup-on-rds-15163
+  product_id: adobe-acrobat-reader
+  update_version: 19.010.20064
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-reader-19-010-20064-crashes-on-startup-on-rds-1516326
+  parent_title: Adobe Reader 19.010.20064 crashes on startup on RDS
+  report_title: Adobe Reader 19.010.20064 crashes on startup on RDS
+  report_text_excerpt: Adobe Reader 19.010.20064 crashes on startup on RDS Hello, Two of my W2016 RDS session host servers auto updated their Adobe Reader DC today and it broke, within several seconds after starting it up it crashes, this is very similar to a previous problem which occurred a number...
+  captured_at: '2026-08-09T02:47:52Z'
+  source_date: '2018-12-11'
+  target_release_date: '2018-12-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.010.20064
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
