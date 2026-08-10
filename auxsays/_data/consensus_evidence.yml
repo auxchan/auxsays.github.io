@@ -11787,7 +11787,6 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
-
 - id: blackmagic-davinci-16-creator-forum-report-https-creativecow-net-forums-thread-failed-backup
   product_id: blackmagic-davinci
   update_version: '16'
@@ -11812,7 +11811,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-16-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1s70jkk-why-is-resolve-not-rendering-my-image-par
   product_id: blackmagic-davinci
   update_version: '16'
@@ -11837,7 +11835,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-15-008-20082-adobe-community-bug-report-https-community-adobe-com-questions-12-acrobat-reader-dc-pages-printing-blank-instead-of-selecte
   product_id: adobe-acrobat-reader
   update_version: 15.008.20082
@@ -11864,7 +11861,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-15-010-20056-adobe-community-bug-report-https-community-adobe-com-questions-18-unable-to-install-adobe-reader-dc-604616
   product_id: adobe-acrobat-reader
   update_version: 15.010.20056
@@ -11917,7 +11913,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-15-016-20039-adobe-community-bug-report-https-community-adobe-com-questions-12-installing-reader-dc-15-016-20039-using-sccm-2012-1507227
   product_id: adobe-acrobat-reader
   update_version: 15.016.20039
@@ -11944,7 +11939,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-15-016-20041-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-reader-crashes-mac-uninstalled-now-cannot-re
   product_id: adobe-acrobat-reader
   update_version: 15.016.20041
@@ -11971,7 +11965,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-15-016-20045-adobe-community-bug-report-https-community-adobe-com-questions-12-acrobat-reader-crashes-after-digitally-signing-a-document
   product_id: adobe-acrobat-reader
   update_version: 15.016.20045
@@ -11998,7 +11991,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-15-017-20050-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-reader-dc-font-pack-won-t-install-1510462
   product_id: adobe-acrobat-reader
   update_version: 15.017.20050
@@ -12051,7 +12043,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-15-020-20039-adobe-community-bug-report-https-community-adobe-com-questions-12-failed-to-patch-from-15-020-20039-to-15-020-2042-1510656
   product_id: adobe-acrobat-reader
   update_version: 15.020.20039
@@ -12182,7 +12173,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-15-020-20042-adobe-community-bug-report-https-community-adobe-com-questions-12-acrobat-reader-dc-crashes-when-attempting-to-search-the-d
   product_id: adobe-acrobat-reader
   update_version: 15.020.20042
@@ -12209,7 +12199,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-15-023-20053-adobe-community-bug-report-https-community-adobe-com-questions-12-acrobat-reader-dc-adobe-acrobat-reader-has-stopped-workin
   product_id: adobe-acrobat-reader
   update_version: 15.023.20053
@@ -12236,7 +12225,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-15-023-20056-adobe-community-bug-report-https-community-adobe-com-questions-12-perfomance-problems-hiding-acrobat-reader-in-internet-exp
   product_id: adobe-acrobat-reader
   update_version: 15.023.20056
@@ -12263,7 +12251,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-15-023-20070-adobe-community-bug-report-https-community-adobe-com-questions-12-unable-to-save-a-checked-out-pdf-back-to-sharepoint-site
   product_id: adobe-acrobat-reader
   update_version: 15.023.20070
@@ -12342,7 +12329,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-17-009-20044-adobe-community-bug-report-https-community-adobe-com-questions-12-symantec-dlp-blocking-save-to-usb-or-network-share-causes
   product_id: adobe-acrobat-reader
   update_version: 17.009.20044
@@ -12421,7 +12407,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-17-012-20093-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-acrobat-reader-dc-crashing-when-opening-july-2017-i
   product_id: adobe-acrobat-reader
   update_version: 17.012.20093
@@ -12500,7 +12485,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-17-012-20095-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-acrobat-reader-dc-for-mac-crashes-all-the-time-1510
   product_id: adobe-acrobat-reader
   update_version: 17.012.20095
@@ -12527,7 +12511,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-17-012-20098-adobe-community-bug-report-https-community-adobe-com-questions-9-unable-to-print-from-acrobat-reader-prints-come-out-as-bla
   product_id: adobe-acrobat-reader
   update_version: 17.012.20098
@@ -12606,7 +12589,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-18-009-20044-adobe-community-bug-report-https-community-adobe-com-questions-12-acrobat-reader-dc-there-was-an-error-opening-this-documen
   product_id: adobe-acrobat-reader
   update_version: 18.009.20044
@@ -12711,7 +12693,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-18-011-20038-adobe-community-bug-report-https-community-adobe-com-questions-12-acrord32-exe-not-closing-on-xenapp-terminal-server-151356
   product_id: adobe-acrobat-reader
   update_version: 18.011.20038
@@ -12764,7 +12745,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-18-011-20040-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-reader-dc-installation-error-a-program-run-as-part
   product_id: adobe-acrobat-reader
   update_version: 18.011.20040
@@ -12791,7 +12771,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-18-011-20055-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-not-responding-when-attaching-pdf-to-email-1
   product_id: adobe-acrobat-reader
   update_version: 18.011.20055
@@ -12818,7 +12797,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-18-011-20058-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-acrobat-reader-freezes-when-i-highlight-1514908
   product_id: adobe-acrobat-reader
   update_version: 18.011.20058
@@ -12845,7 +12823,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-19-008-20071-adobe-community-bug-report-https-community-adobe-com-questions-12-printing-issue-that-arose-with-new-reader-dc-19-008-20071
   product_id: adobe-acrobat-reader
   update_version: 19.008.20071
@@ -12924,7 +12901,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-19-008-20074-adobe-community-bug-report-https-community-adobe-com-questions-12-multiple-acrord32-1515920
   product_id: adobe-acrobat-reader
   update_version: 19.008.20074
@@ -12977,7 +12953,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-19-008-20080-adobe-community-bug-report-https-community-adobe-com-questions-12-crashes-adobe-acrobat-reader-19-008-20080-1515714
   product_id: adobe-acrobat-reader
   update_version: 19.008.20080
@@ -13056,7 +13031,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-19-008-20081-adobe-community-bug-report-https-community-adobe-com-questions-12-internet-explorer-add-on-freezing-ie-or-not-opening-pdf-1
   product_id: adobe-acrobat-reader
   update_version: 19.008.20081
@@ -13109,7 +13083,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-19-010-20064-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-reader-19-010-20064-crashes-on-startup-on-rds-15163
   product_id: adobe-acrobat-reader
   update_version: 19.010.20064
@@ -13135,4 +13108,285 @@ evidence:
   platform: unknown
   severity: high
   sentiment: negative
+  source_weight: 1
+- id: acrobat-19-010-20098-adobe-community-bug-report-https-community-adobe-com-questions-12-acrobat-reader-can-t-open-files-annotated-with-apple-prod
+  product_id: adobe-acrobat-reader
+  update_version: 19.010.20098
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/acrobat-reader-can-t-open-files-annotated-with-apple-product-1517235
+  parent_title: Acrobat Reader can't open files annotated with Apple product
+  report_title: Acrobat Reader can't open files annotated with Apple product
+  report_text_excerpt: Acrobat Reader can't open files annotated with Apple product Here's the scenario. 1.) student scans and submits homework. 2.) teacher adds annotations to the PDF to "grade" the work. 3.) teacher submits updated PDF. The student's original PDF scan opens fine. We are unable to...
+  captured_at: '2026-08-10T02:52:52Z'
+  source_date: '2019-03-08'
+  target_release_date: '2019-02-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.010.20098
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-19-010-20098-adobe-community-bug-report-https-community-adobe-com-questions-12-april-2019-reader-dc-update-fails-1517299
+  product_id: adobe-acrobat-reader
+  update_version: 19.010.20098
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/april-2019-reader-dc-update-fails-1517299
+  parent_title: April 2019 Reader DC update fails
+  report_title: April 2019 Reader DC update fails
+  report_text_excerpt: April 2019 Reader DC update fails The automatic update has failed twice. I currently have Reader DC version 19.010.20098, which installed automatically 2/27/2019. I tried installing the latest version directly from the Adobe website and that also failed. I tried uninstalling...
+  captured_at: '2026-08-10T02:52:52Z'
+  source_date: '2019-04-12'
+  target_release_date: '2019-02-21'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.010.20098
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-19-012-20034-adobe-community-bug-report-https-community-adobe-com-questions-12-reader-install-fails-with-error-1721-1517705
+  product_id: adobe-acrobat-reader
+  update_version: 19.012.20034
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/reader-install-fails-with-error-1721-1517705
+  parent_title: Reader Install fails with Error 1721
+  report_title: Reader Install fails with Error 1721
+  report_text_excerpt: Reader Install fails with Error 1721 Updates to Reader have been failing for about 2 months. Today I uninstalled Reader and tried to reinstall it per the instructions on the Troubleshooting page. On the first attempt thru Firefox it appeared to be 99% complete then failed with...
+  captured_at: '2026-08-10T02:52:52Z'
+  source_date: '2019-05-31'
+  target_release_date: '2019-05-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.012.20034
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: form behavior regression
+  workflow_area: forms
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-19-012-20034-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-acrobat-reader-dc-becomes-unresponsive-when-launchi
+  product_id: adobe-acrobat-reader
+  update_version: 19.012.20034
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-acrobat-reader-dc-becomes-unresponsive-when-launching-and-closing-files-1518421
+  parent_title: Adobe Acrobat Reader DC becomes unresponsive when launching and closing files
+  report_title: Adobe Acrobat Reader DC becomes unresponsive when launching and closing files
+  report_text_excerpt: Adobe Acrobat Reader DC becomes unresponsive when launching and closing files Adobe Acrobat Reader DC 19.012.20034 Windows 10 Issue initially occurred a couple months ago after opening a specific PDF file which caused (I assume) the appdata files to become corrupted....
+  captured_at: '2026-08-10T02:52:52Z'
+  source_date: '2019-10-10'
+  target_release_date: '2019-05-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.012.20034
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-19-012-20034-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-reader-19-012-20034-cpu-hang-1517665
+  product_id: adobe-acrobat-reader
+  update_version: 19.012.20034
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-reader-19-012-20034-cpu-hang-1517665
+  parent_title: Adobe Reader 19.012.20034 CPU hang
+  report_title: Adobe Reader 19.012.20034 CPU hang
+  report_text_excerpt: Adobe Reader 19.012.20034 CPU hang Lately (in the last 1-2 weeks) we have been getting CPU alerts on Windows RDS servers (until now W2K16). Upon inspecting we find a number of AcroRd32.exe processes (typical 1-4) using a full CPU (fx 25% in a 4 CPU server). Looking at CPU Time...
+  captured_at: '2026-08-10T02:52:52Z'
+  source_date: '2019-05-24'
+  target_release_date: '2019-05-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.012.20034
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: form behavior regression
+  workflow_area: forms
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-19-012-20035-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-acrobat-reader-dc-search-find-functionality-crtr-f
+  product_id: adobe-acrobat-reader
+  update_version: 19.012.20035
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-acrobat-reader-dc-search-find-functionality-crtr-f-does-not-work-anymore-1518017
+  parent_title: Adobe Acrobat Reader DC search/find functionality (Crtr F) does not work anymore
+  report_title: Adobe Acrobat Reader DC search/find functionality (Crtr F) does not work anymore
+  report_text_excerpt: Adobe Acrobat Reader DC search/find functionality (Crtr F) does not work anymore Issue Adobe Acrobat Reader DC search/find functionality within pdf files does not work anymore. Doesn’t matter whether I try keyboard Ctrl F, or the look-up button in the document The issue is not...
+  captured_at: '2026-08-10T02:52:52Z'
+  source_date: '2019-08-13'
+  target_release_date: '2019-06-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.012.20035
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-19-012-20040-adobe-community-bug-report-https-community-adobe-com-questions-12-aip-plugin-for-adobe-acrobat-reader-not-installing-151838
+  product_id: adobe-acrobat-reader
+  update_version: 19.012.20040
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/aip-plugin-for-adobe-acrobat-reader-not-installing-1518385
+  parent_title: AIP plugin for Adobe Acrobat Reader not installing
+  report_title: AIP plugin for Adobe Acrobat Reader not installing
+  report_text_excerpt: AIP plugin for Adobe Acrobat Reader not installing Hello everyone I work as an IT support at a IT company. Several of my clients are now experiencing issues when downloading the Azure Information Protection (AIP) plugin for Adobe Acrobat Reader. They are running version...
+  captured_at: '2026-08-10T02:52:52Z'
+  source_date: '2019-10-07'
+  target_release_date: '2019-08-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.012.20040
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: form behavior regression
+  workflow_area: forms
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-19-012-20040-adobe-community-bug-report-https-community-adobe-com-questions-12-not-responding-after-upgrade-adobe-acrobat-reader-dc-19-0
+  product_id: adobe-acrobat-reader
+  update_version: 19.012.20040
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/not-responding-after-upgrade-adobe-acrobat-reader-dc-19-012-20040-upgrading-to-19-021-20047-1518668
+  parent_title: '''Not Responding'' After upgrade.  Adobe Acrobat Reader DC - 19.012.20040 upgrading to 19.021.20047'
+  report_title: '''Not Responding'' After upgrade.  Adobe Acrobat Reader DC - 19.012.20040 upgrading to 19.021.20047'
+  report_text_excerpt: '''Not Responding'' After upgrade. Adobe Acrobat Reader DC - 19.012.20040 upgrading to 19.021.20047 Adobe Acrobat Reader DC - 19.012.20040 upgrading to Adobe Acrobat Reader DC - 19.021.20047 All users were working ok while on 19.012.20040, but since we upgradged to 19.021.20047...'
+  captured_at: '2026-08-10T02:52:52Z'
+  source_date: '2019-11-05'
+  target_release_date: '2019-08-22'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.012.20040
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-19-021-20047-adobe-community-bug-report-https-community-adobe-com-questions-12-embedded-pdf-viewing-generates-error-0-521-and-crashes-in
+  product_id: adobe-acrobat-reader
+  update_version: 19.021.20047
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/embedded-pdf-viewing-generates-error-0-521-and-crashes-internet-explorer-1518646
+  parent_title: Embedded PDF viewing generates error 0:521 and crashes Internet Explorer
+  report_title: Embedded PDF viewing generates error 0:521 and crashes Internet Explorer
+  report_text_excerpt: Embedded PDF viewing generates error 0:521 and crashes Internet Explorer Hello, We have at least 3 users that are affected by the issue in the Subject line. All machines are running Windows 10 Enterprise 64-bit with version 19.021.20047 of Adobe Acrobat Reader DC. I've also...
+  captured_at: '2026-08-10T02:52:52Z'
+  source_date: '2019-11-01'
+  target_release_date: '2019-10-15'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.021.20047
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-19-021-20047-adobe-community-bug-report-https-community-adobe-com-questions-12-not-responding-after-upgrade-adobe-acrobat-reader-dc-19-0
+  product_id: adobe-acrobat-reader
+  update_version: 19.021.20047
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/not-responding-after-upgrade-adobe-acrobat-reader-dc-19-012-20040-upgrading-to-19-021-20047-1518668
+  parent_title: '''Not Responding'' After upgrade.  Adobe Acrobat Reader DC - 19.012.20040 upgrading to 19.021.20047'
+  report_title: '''Not Responding'' After upgrade.  Adobe Acrobat Reader DC - 19.012.20040 upgrading to 19.021.20047'
+  report_text_excerpt: '''Not Responding'' After upgrade. Adobe Acrobat Reader DC - 19.012.20040 upgrading to 19.021.20047 Adobe Acrobat Reader DC - 19.012.20040 upgrading to Adobe Acrobat Reader DC - 19.021.20047 All users were working ok while on 19.012.20040, but since we upgradged to 19.021.20047...'
+  captured_at: '2026-08-10T02:52:52Z'
+  source_date: '2019-11-05'
+  target_release_date: '2019-10-15'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 19.021.20047
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-1-github-issue-13772
+  product_id: obs-studio
+  update_version: 32.2.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13772
+  parent_title: 'Problem with CBR not working properly on Video Encoder: Amd Hw H.264 in streaming'
+  report_title: 'Problem with CBR not working properly on Video Encoder: Amd Hw H.264 in streaming'
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/crashes/YOZFCy4NKl5Y2x4B ### OBS Studio Crash Log URL _No response_ ### Expected Behavi'
+  captured_at: '2026-08-10T03:45:25Z'
+  patch_version_matched: true
+  matched_version: 32.2.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
   source_weight: 1
