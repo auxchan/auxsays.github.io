@@ -38,6 +38,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          # Resolve the ref when Checkout actually runs -- after this job has waited out the shared
+          # auxsays-main-writeback concurrency queue -- instead of the trigger-time SHA the default
+          # pins. A queued job otherwise starts from a base the winning writeback has already moved
+          # past, so its refresh of the same generated records diverges and the shared-path rebase
+          # check correctly refuses (runs 31330673821, 31350261730). github.ref (not a literal
+          # branch) keeps workflow_dispatch against another branch or tag working.
+          ref: ${{ github.ref }}
 
       - name: Setup Python
         uses: actions/setup-python@v6
