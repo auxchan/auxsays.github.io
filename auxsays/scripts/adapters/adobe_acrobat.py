@@ -33,11 +33,22 @@ from lib.normalize import strip_tags, first_nonempty
 # DC versions look like 24.005.20320 (Continuous) or 20.005.30748 (Classic 2020).
 ACROBAT_VERSION_RE = re.compile(r"\b(\d{2}\.\d{3}\.\d{4,6})\b")
 TRACK_RE = re.compile(r"\b(Continuous|Classic)\b", re.I)
+# A heading that declares a release track this adapter cannot NAME (e.g. "Adobe Acrobat 2024
+# Track"). It must not be silently ignored: leaving ``current_track`` at the previous section's
+# value publishes that section's releases under the wrong track. Naming these tracks requires
+# source evidence we do not have, so the heading clears the inherited track and its releases
+# fail closed instead (see the track/version/date guard in _parse_records).
+UNNAMED_TRACK_HEADING_RE = re.compile(r"\bTrack\b", re.I)
 PLATFORM_WIN_RE = re.compile(r"\b(Windows|Win32|Win64)\b", re.I)
 PLATFORM_MAC_RE = re.compile(r"\b(macOS|Mac ?OS|Macintosh)\b", re.I)
 APSB_RE = re.compile(r"\bAPSB\d{2}-\d{2,3}\b", re.I)
+# The ETK release notes write dates both in full ("January 5, 2026") and abbreviated ("Jan 5,
+# 2026", "Sept 9, 2026", "Oct. 14, 2026") form. Accepting only full names silently discarded every
+# abbreviated row: _date_from_text returned "" and the fail-closed guard in _parse_records dropped
+# the release. "May" was the sole survivor because its abbreviation equals its full name.
 DATE_MONTH_RE = re.compile(
-    r"(January|February|March|April|May|June|July|August|September|October|November|December)"
+    r"\b(Jan(?:uary)?|Feb(?:ruary)?|Mar(?:ch)?|Apr(?:il)?|May|Jun(?:e)?|Jul(?:y)?|Aug(?:ust)?"
+    r"|Sep(?:t|tember)?|Oct(?:ober)?|Nov(?:ember)?|Dec(?:ember)?)\.?"
     r"\s+(\d{1,2}),\s+(20\d{2})",
     re.I,
 )
@@ -45,6 +56,9 @@ DATE_ISO_RE = re.compile(r"(20\d{2})-(\d{2})-(\d{2})")
 MONTHS = {
     "january": "01", "february": "02", "march": "03", "april": "04", "may": "05", "june": "06",
     "july": "07", "august": "08", "september": "09", "october": "10", "november": "11", "december": "12",
+    # Abbreviated forms emitted by the same source ("sept" as well as "sep").
+    "jan": "01", "feb": "02", "mar": "03", "apr": "04", "jun": "06", "jul": "07",
+    "aug": "08", "sep": "09", "sept": "09", "oct": "10", "nov": "11", "dec": "12",
 }
 # Headings (set the current track/platform section) or table rows / list items (a release).
 SECTION_TOKEN_RE = re.compile(
@@ -88,8 +102,11 @@ def _source_candidates(source: dict[str, Any]) -> list[str]:
 def _date_from_text(text: str) -> str:
     match = DATE_MONTH_RE.search(text or "")
     if match:
-        month = MONTHS.get(match.group(1).lower(), "01")
-        return f"{match.group(3)}-{month}-{int(match.group(2)):02d}T00:00:00Z"
+        # Fail closed rather than defaulting to January: an unmapped month token would publish a
+        # confidently wrong release date, which is worse than dropping the row.
+        month = MONTHS.get(match.group(1).lower().rstrip("."))
+        if month:
+            return f"{match.group(3)}-{month}-{int(match.group(2)):02d}T00:00:00Z"
     iso = DATE_ISO_RE.search(text or "")
     if iso:
         return f"{iso.group(1)}-{iso.group(2)}-{iso.group(3)}T00:00:00Z"
@@ -242,6 +259,10 @@ def _records_from_acrobat_release_notes(
             tmatch = TRACK_RE.search(htext)
             if tmatch:
                 current_track = tmatch.group(1)
+            elif UNNAMED_TRACK_HEADING_RE.search(htext):
+                # Track section we cannot name: clear the inherited track so its releases fail
+                # closed instead of inheriting the previous section's track label.
+                current_track = ""
             if PLATFORM_WIN_RE.search(htext) or PLATFORM_MAC_RE.search(htext):
                 current_platform = _platforms(htext)
             continue
