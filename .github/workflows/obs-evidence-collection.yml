@@ -43,6 +43,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7
+        with:
+          # Resolve the ref when Checkout actually runs -- after this job has waited out the shared
+          # auxsays-main-writeback concurrency queue -- instead of the trigger-time SHA the default
+          # pins. Cron drift decides which lane queues, so this lane needs the same fresh base as
+          # patch-ingest: whichever job runs second must build on the winner's writeback. github.ref
+          # (not a literal branch) keeps workflow_dispatch against another branch or tag working.
+          ref: ${{ github.ref }}
 
       - name: Setup Python
         uses: actions/setup-python@v6
