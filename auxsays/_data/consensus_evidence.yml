@@ -13390,7 +13390,6 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5970143-store-start-menu-and-aad-brokerplugin
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -13419,4 +13418,25 @@ evidence:
   platform: windows
   severity: critical
   sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13773
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13773
+  parent_title: FFmpeg VAAPI encoder fails to start when profile contains a stale vaapi_device path
+  report_title: FFmpeg VAAPI encoder fails to start when profile contains a stale vaapi_device path
+  report_text_excerpt: ', x86_64, AMD Renoir (Radeon Vega) iGPU ### Other OS _No response_ ### OBS Studio Version 32.1.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/WG8xbiO8m0utxiBB ### OBS Studio Crash Log URL _No response_ ### Expected Behavior If th'
+  captured_at: '2026-08-10T20:28:50Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: linux
+  severity: medium
+  sentiment: moderate
   source_weight: 1
