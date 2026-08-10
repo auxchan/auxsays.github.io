@@ -13390,3 +13390,33 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5970143-store-start-menu-and-aad-brokerplugin
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5970143/store-start-menu-and-aad-brokerplugin-all-crash-in
+  parent_title: Store, Start menu and AAD BrokerPlugin all crash in twinapi.appcore.dll (0xc0000409) — 25H2 26200.8875, survives two in-place upgrades - Microsoft Q&A
+  report_title: Store, Start menu and AAD BrokerPlugin all crash in twinapi.appcore.dll (0xc0000409) — 25H2 26200.8875, survives two in-place upgrades - Microsoft Q&A
+  report_text_excerpt: 'Store, Start menu and AAD BrokerPlugin all crash in twinapi.appcore.dll (0xc0000409) — 25H2 26200.8875, survives two in-place upgrades - Microsoft Q&A Summary: On a clean, unmanaged consumer device, multiple unrelated UWP packages crash at the same offset inside . Two in-place...'
+  captured_at: '2026-08-10T14:59:07Z'
+  source_date: '2026-08-08'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8973'
+  match_basis: exact_os_build
+  matched_kb: KB5101684
+  matched_os_build: '26200.8973'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
