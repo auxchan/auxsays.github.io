@@ -17,8 +17,8 @@ update_version: AI credit user limits and credit requests
 update_logo_text: FIG
 update_published_at: '2026-08-05T00:00:00.000Z'
 update_last_checked: '2026-08-06T13:14:31Z'
-source_last_checked: '2026-08-11T03:48:07Z'
-official_body_last_checked: '2026-08-11T03:48:07Z'
+source_last_checked: '2026-08-11T08:51:47Z'
+official_body_last_checked: '2026-08-11T08:51:47Z'
 record_last_updated: '2026-08-06T13:14:31Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -80,6 +80,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-08-11T03:48:07Z'
+  url: https://www.figma.com/release-notes/?title=ai-credit-user-limits
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-08-11T08:51:47Z'
   url: https://www.figma.com/release-notes/?title=ai-credit-user-limits
   status: captured-from-rss-feed
   body_captured: true
