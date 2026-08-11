@@ -86,14 +86,20 @@ class _AuthStrippingRedirectHandler(urllib.request.HTTPRedirectHandler):
 _OPENER = urllib.request.build_opener(_AuthStrippingRedirectHandler())
 
 
-def _headers(extra: dict[str, str] | None = None, *, include_auth: bool = False) -> dict[str, str]:
-    """Generic request headers. UNAUTHENTICATED by default.
+def _headers(extra: dict[str, str] | None = None) -> dict[str, str]:
+    """Generic request headers. STRUCTURALLY INCAPABLE of carrying repository credentials.
 
-    ``include_auth`` previously defaulted to True, so every fetch_text/fetch_json call
-    attached ``Authorization: Bearer $GITHUB_TOKEN`` whenever the variable was present --
-    and production workflows put it in the job environment. Vendor documentation, community
-    and forum requests therefore received the repository token. Authentication is now opt-in
-    and destination-scoped; callers ask for it and the destination must be approved.
+    This builder used to take ``include_auth`` (defaulting to True) and read GITHUB_TOKEN, so
+    every fetch_text/fetch_json call attached ``Authorization: Bearer $GITHUB_TOKEN`` whenever
+    the variable was present -- and production workflows put it in the job environment. Vendor
+    documentation, community and forum requests therefore received the repository token.
+
+    Merely flipping that default would leave the primitive able to recreate the defect, so the
+    parameter and the token read are GONE. This function cannot mint an Authorization header;
+    it has no access to the token. Authentication lives only in fetch_text(), which knows the
+    destination URL and can validate it (see _github_auth_allowed). A caller may still pass an
+    explicit ``extra`` header, which is the caller's own value, never a credential this module
+    fabricated.
     """
     headers = {
         "User-Agent": USER_AGENT,
@@ -101,9 +107,6 @@ def _headers(extra: dict[str, str] | None = None, *, include_auth: bool = False)
         "Accept-Language": "en-US,en;q=0.9",
         "Cache-Control": "no-cache",
     }
-    token = os.getenv("GITHUB_TOKEN")
-    if token and include_auth:
-        headers["Authorization"] = f"Bearer {token}"
     if extra:
         headers.update({str(k): str(v) for k, v in extra.items() if v is not None})
     return headers
@@ -142,7 +145,9 @@ def _curl_fetch_text(
     *,
     max_bytes: int | None = None,
 ) -> FetchResult:
-    request_headers = _headers(headers, include_auth=False)
+    # Generic curl stays credential-free: _headers() cannot mint one, and the argv builder
+    # below additionally drops any Authorization a caller passed explicitly.
+    request_headers = _headers(headers)
     cmd = [
         "curl",
         "--location",

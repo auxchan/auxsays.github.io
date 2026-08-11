@@ -19,6 +19,7 @@ Run: PYTHONDONTWRITEBYTECODE=1 python auxsays/scripts/tests/test_http_credential
 """
 from __future__ import annotations
 
+import inspect
 import os
 import sys
 import threading
@@ -91,12 +92,37 @@ def run() -> int:  # noqa: PLR0915
     prior_hosts = auxhttp.GITHUB_AUTH_HOSTS
     os.environ["GITHUB_TOKEN"] = TOKEN
     try:
-        # --- default header contract -------------------------------------
-        check("_headers() attaches NO Authorization by default (token in env)",
+        # --- PERMANENT INVARIANT: the generic builder cannot mint credentials ----
+        # Stronger than "defaults to off": _headers() has no access to the token at all, so a
+        # future caller cannot re-enable the original leak through this primitive.
+        check("_headers() contains NO Authorization with GITHUB_TOKEN in the environment",
               "Authorization" not in auxhttp._headers(),
               str(sorted(auxhttp._headers())))
-        check("_headers(include_auth=True) still opts in explicitly",
-              auxhttp._headers(include_auth=True).get("Authorization") == f"Bearer {TOKEN}")
+        check("no argument can make _headers() attach a credential (no include_auth parameter)",
+              "include_auth" not in inspect.signature(auxhttp._headers).parameters,
+              str(inspect.signature(auxhttp._headers)))
+        # Assert on the COMPILED code object, not the source text: a docstring that merely
+        # explains the old defect must not satisfy or break this invariant.
+        _code = auxhttp._headers.__code__
+        check("_headers() cannot read the environment (no getenv/os in its code object)",
+              "getenv" not in _code.co_names and "os" not in _code.co_names,
+              f"co_names={_code.co_names}")
+        # co_consts[0] is the docstring, which legitimately explains the old defect; exclude it
+        # so the invariant tests executable constants only.
+        _doc = auxhttp._headers.__doc__ or ""
+        _live_consts = [c for c in _code.co_consts if isinstance(c, str) and c != _doc]
+        check("_headers() has no GITHUB_TOKEN constant among its executable constants",
+              not any("GITHUB_TOKEN" in c for c in _live_consts),
+              f"consts={_live_consts[:6]}")
+        check("_headers() cannot fabricate Authorization for ANY extra-header input",
+              all("Authorization" not in auxhttp._headers(extra)
+                  for extra in ({}, {"Accept": "text/html"}, {"X-Thing": "1"})))
+        check("only fetch_text reads the token, and only after the destination gate",
+              (lambda src: "GITHUB_TOKEN" in src and src.index("_github_auth_allowed") < src.index("GITHUB_TOKEN"))
+              (inspect.getsource(auxhttp.fetch_text)))
+        check("an explicitly supplied Authorization is the caller's own value, still not fabricated",
+              auxhttp._headers({"Authorization": "Bearer CALLER-SUPPLIED"}).get("Authorization")
+              == "Bearer CALLER-SUPPLIED")
 
         # --- exact host matching -----------------------------------------
         for url, allowed, why in (
