@@ -13440,3 +13440,32 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5970905-windows-update-download-error-0x800705
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5970905/windows-update-download-error-0x800705b9-2026-07-p
+  parent_title: Windows update Download error - 0x800705b9   2026-07 Preview Update (KB5101684) (26200.8973) retry - results repeat retry - Microsoft Q&A
+  report_title: Windows update Download error - 0x800705b9   2026-07 Preview Update (KB5101684) (26200.8973) retry - results repeat retry - Microsoft Q&A
+  report_text_excerpt: Windows update Download error - 0x800705b9 2026-07 Preview Update (KB5101684) (26200.8973) retry - results repeat retry - Microsoft Q&A Windows update Download error - 0x800705b9 2026-07 Preview Update (KB5101684) (26200.8973) retry - results repeat retry
+  captured_at: '2026-08-11T14:51:48Z'
+  source_date: '2026-08-10'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8973'
+  match_basis: exact_os_build
+  matched_kb: KB5101684
+  matched_os_build: '26200.8973'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
