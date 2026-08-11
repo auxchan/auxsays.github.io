@@ -17,8 +17,8 @@ update_version: Copilot on web expands conversation controls
 update_logo_text: GIT
 update_published_at: '2026-08-10T14:27:04Z'
 update_last_checked: '2026-08-10T20:32:15Z'
-source_last_checked: '2026-08-11T14:58:45Z'
-official_body_last_checked: '2026-08-11T14:58:45Z'
+source_last_checked: '2026-08-11T20:33:49Z'
+official_body_last_checked: '2026-08-11T20:33:49Z'
 record_last_updated: '2026-08-10T20:32:15Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -94,6 +94,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-08-11T14:58:45Z'
+  url: https://github.blog/changelog/2026-08-10-copilot-on-web-expands-conversation-controls
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-08-11T20:33:49Z'
   url: https://github.blog/changelog/2026-08-10-copilot-on-web-expands-conversation-controls
   status: captured-from-rss-feed
   body_captured: true
