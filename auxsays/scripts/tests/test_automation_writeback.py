@@ -138,8 +138,42 @@ def status_cmd(tmp: Path, runs: list) -> str:
     return f'"{sys.executable}" -c "import sys;sys.stdout.write(open(r\'{f.as_posix()}\').read())"'
 
 
-def dep_run(sha, branch="main", status="completed", conclusion="success"):
-    return {"databaseId": 1, "headSha": sha, "headBranch": branch, "status": status, "conclusion": conclusion}
+def dep_run(sha, branch="main", status="completed", conclusion="success", db=1):
+    return {"databaseId": db, "headSha": sha, "headBranch": branch, "status": status, "conclusion": conclusion}
+
+
+# A stateful `gh run list` mock for BUILD-outcome confirmation: it resolves origin/main at query
+# time (so the run's headSha matches the just-pushed SHA without the test knowing it in advance),
+# returns `pre_runs` on the FIRST invocation (the pre-dispatch id snapshot) and `post_runs` on every
+# later invocation (the confirmation polls). A run whose headSha is the literal "SELF" is rewritten
+# to the live origin/main SHA. This models: before dispatch the new build does not exist; after
+# dispatch it appears and progresses to a terminal state.
+_SEQ_STATUS_MOCK = r"""
+import json, os, subprocess, sys
+counter, origin, pre_tpl, post_tpl = sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4]
+sha = subprocess.run(["git", "-C", origin, "rev-parse", "main"], capture_output=True, text=True).stdout.strip()
+n = (int(open(counter).read()) if os.path.exists(counter) else 0) + 1
+open(counter, "w").write(str(n))
+runs = json.loads(open(pre_tpl if n == 1 else post_tpl).read())
+for r in runs:
+    if r.get("headSha") == "SELF":
+        r["headSha"] = sha
+sys.stdout.write(json.dumps(runs))
+"""
+
+
+def seq_status_cmd(tmp: Path, origin: Path, pre_runs: list, post_runs: list, tag: str) -> tuple[str, Path]:
+    """Return (cmd, counter). `cmd` yields pre_runs once then post_runs; counter is the per-call
+    tally file (absent => the status command was never invoked)."""
+    script = tmp / "seq_status.py"
+    if not script.exists():
+        script.write_text(_SEQ_STATUS_MOCK, encoding="utf-8")
+    pre = tmp / f"seqpre_{tag}.json"; pre.write_text(json.dumps(pre_runs), encoding="utf-8")
+    post = tmp / f"seqpost_{tag}.json"; post.write_text(json.dumps(post_runs), encoding="utf-8")
+    counter = tmp / f"seqc_{tag}"
+    cmd = (f'"{sys.executable}" "{script.as_posix()}" "{counter.as_posix()}" '
+           f'"{origin.as_posix()}" "{pre.as_posix()}" "{post.as_posix()}"')
+    return cmd, counter
 
 
 def push_material(tmp: Path, origin: Path, rel: str, content: str, msg: str) -> str:
@@ -268,7 +302,9 @@ def run() -> int:
         push_change(other, "records/rec-ingest.md", "ingest UPDATED\n", "patch-ingest record")
         write(work, "data/consensus_evidence.yml", "schema_version: 1\nevidence:\n  - id: e1\n")
         write(work, "records/rec-acrobat.md", "acrobat evidence\n")
-        r = aw.run_writeback(cfg(work))
+        # this pushes a site-affecting record, so (per the GAP-3 contract) it must configure a Pages
+        # command; PY_OK is an always-succeeding stand-in dispatch that keeps the test offline.
+        r = aw.run_writeback(cfg(work, pages_cmd=PY_OK))
         check("9 evidence rebased over unrelated ingest record", r.ok and r.outcome == aw.PUSH_SUCCESS_AFTER_RETRY, r.outcome)
         check("9 ingest record preserved", "ingest UPDATED" in read_origin(origin, "records/rec-ingest.md"))
         check("9 evidence change present", "id: e1" in read_origin(origin, "data/consensus_evidence.yml"))
@@ -429,6 +465,95 @@ def run() -> int:
         check("H24 push success -> changed/pushed true, deployment_pending false", d["changed"] and d["pushed"] and not d["deployment_pending"])
         r2 = aw.run_writeback(cfg(work, pages_cmd=mk(0)))  # now a genuine no-op (no recovery configured)
         check("H24 no_changes does not set changed=true", r2.outcome == aw.NO_CHANGES and not r2.changed and not r2.pushed)
+
+    # ===== Part J: missing-pages-cmd guard (GAP 3) + BUILD-outcome confirmation (GAP 1) ==========
+
+    # J1 (GAP 3): a site-affecting push with NO --pages-cmd must FAIL loudly (a github.token push
+    # does not trigger pages.yml, so it would silently never deploy) -- never a silent exit 0.
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = setup(tmp)
+        write(work, "records/rec-acrobat.md", "site change with no pages cmd\n")
+        r = aw.run_writeback(cfg(work, pages_cmd=None))
+        check("J1 deploy_changed + no pages_cmd -> loud token", aw.DEPLOY_CHANGED_NO_PAGES_CMD in r.outcomes)
+        check("J1 fails visibly (ok False, deployment_pending True)", (not r.ok) and r.deployment_pending)
+        check("J1 push itself still succeeded (revision on origin)", r.pushed and r.pushed_sha == origin_head(origin))
+        check("J1 change present on origin", "site change with no pages cmd" in read_origin(origin, "records/rec-acrobat.md"))
+        check("J1 nothing dispatched", not r.pages_dispatched and r.pages_attempts == 0)
+
+    # J2 (GAP 3): the guard is scoped to deploy_changed -> a NON-site (state-only) push with no
+    # --pages-cmd and declared site_paths is legitimate and must NOT fail.
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = setup(tmp)
+        write(work, "data/evidence_method_health.yml", "schema_version: 1\nmethods:\n  - z\n")
+        r = aw.run_writeback(cfg(work, pages_cmd=None, site_paths=["records/*.md"]))
+        check("J2 state-only push, no pages_cmd -> no fail (deploy_changed False)",
+              r.ok and r.pushed and not r.deploy_changed and aw.DEPLOY_CHANGED_NO_PAGES_CMD not in r.outcomes)
+
+    # J3 (GAP 1): confirm build ON -> dispatched build reaches terminal SUCCESS -> pages_build_confirmed
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = setup(tmp)
+        mk, counter, marker = pages_env(tmp); slp = Sleeper()
+        status, scount = seq_status_cmd(tmp, origin, pre_runs=[], post_runs=[dep_run("SELF", db=200)], tag="ok")
+        write(work, "records/rec-acrobat.md", "confirm success\n")
+        r = aw.run_writeback(cfg(work, pages_cmd=mk(0), pages_confirm_build=True, pages_status_cmd=status,
+                                  pages_confirm_attempts=3, pages_confirm_interval=7, sleep_fn=slp))
+        check("J3 build confirmed success", r.pages_build_outcome == "confirmed" and aw.PAGES_BUILD_CONFIRMED in r.outcomes)
+        check("J3 overall ok, not pending", r.ok and not r.deployment_pending and r.pages_dispatched)
+        check("J3 resolved without polling-sleep", slp.calls == [], str(slp.calls))
+
+    # J4 (GAP 1): dispatched build reaches terminal NON-success -> pages_build_failed, fail visibly
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = setup(tmp)
+        mk, counter, marker = pages_env(tmp); slp = Sleeper()
+        status, scount = seq_status_cmd(tmp, origin, pre_runs=[],
+                                        post_runs=[dep_run("SELF", conclusion="failure", db=200)], tag="fail")
+        write(work, "records/rec-acrobat.md", "confirm failure\n")
+        r = aw.run_writeback(cfg(work, pages_cmd=mk(0), pages_confirm_build=True, pages_status_cmd=status,
+                                  pages_confirm_attempts=3, pages_confirm_interval=7, sleep_fn=slp))
+        check("J4 build failure surfaced", r.pages_build_outcome == "failed" and aw.PAGES_BUILD_FAILED in r.outcomes)
+        check("J4 pushed but fails visibly (deployment_pending, ok False)",
+              r.pushed and r.pushed_sha == origin_head(origin) and r.deployment_pending and not r.ok)
+        check("J4 build success never claimed", aw.PAGES_BUILD_CONFIRMED not in r.outcomes)
+
+    # J5 (GAP 1): a STALE same-SHA failed run (e.g. an earlier build a recovery re-dispatches) is
+    # isolated by the pre-dispatch id snapshot -> the NEW successful run is what confirms.
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = setup(tmp)
+        mk, counter, marker = pages_env(tmp); slp = Sleeper()
+        stale = dep_run("SELF", conclusion="failure", db=100)
+        status, scount = seq_status_cmd(tmp, origin, pre_runs=[stale],
+                                        post_runs=[stale, dep_run("SELF", db=200)], tag="stale")
+        write(work, "records/rec-acrobat.md", "stale isolation\n")
+        r = aw.run_writeback(cfg(work, pages_cmd=mk(0), pages_confirm_build=True, pages_status_cmd=status,
+                                  pages_confirm_attempts=3, pages_confirm_interval=7, sleep_fn=slp))
+        check("J5 stale same-SHA failed run does NOT trigger a false build failure",
+              r.pages_build_outcome == "confirmed" and aw.PAGES_BUILD_FAILED not in r.outcomes and r.ok)
+
+    # J6 (GAP 1): build never reaches a terminal state within the poll budget -> pages_build_unconfirmed
+    # (NOT a failure: confirmation is delegated to the next --deploy-recovery cycle).
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = setup(tmp)
+        mk, counter, marker = pages_env(tmp); slp = Sleeper()
+        status, scount = seq_status_cmd(tmp, origin, pre_runs=[],
+                                        post_runs=[dep_run("SELF", status="in_progress", conclusion=None, db=200)], tag="unconf")
+        write(work, "records/rec-acrobat.md", "never terminal\n")
+        r = aw.run_writeback(cfg(work, pages_cmd=mk(0), pages_confirm_build=True, pages_status_cmd=status,
+                                  pages_confirm_attempts=3, pages_confirm_interval=7, sleep_fn=slp))
+        check("J6 unconfirmed does not fail the run", r.pages_build_outcome == "unconfirmed" and aw.PAGES_BUILD_UNCONFIRMED in r.outcomes)
+        check("J6 push preserved, not pending, ok", r.ok and not r.deployment_pending and r.pushed)
+        check("J6 polled to the bounded limit with deterministic interval", slp.calls == [7, 7], str(slp.calls))
+
+    # J7 (GAP 1): OFF by default -> build confirmation is delegated (no tokens, no status query at all)
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = setup(tmp)
+        mk, counter, marker = pages_env(tmp)
+        status, scount = seq_status_cmd(tmp, origin, pre_runs=[dep_run("SELF", db=1)],
+                                        post_runs=[dep_run("SELF", db=1)], tag="off")
+        write(work, "records/rec-acrobat.md", "confirm off\n")
+        r = aw.run_writeback(cfg(work, pages_cmd=mk(0), pages_status_cmd=status))  # pages_confirm_build defaults False
+        check("J7 default off -> dispatched, no build tokens", r.pages_dispatched and r.pages_build_outcome == ""
+              and not any(t in r.outcomes for t in (aw.PAGES_BUILD_CONFIRMED, aw.PAGES_BUILD_FAILED, aw.PAGES_BUILD_UNCONFIRMED)))
+        check("J7 default off -> status command never queried (delegated)", not scount.exists())
 
     # 13. Source inspection -> no force-push / ours-theirs USAGE (ignore the docstring/comments,
     # which legitimately document the prohibition).
