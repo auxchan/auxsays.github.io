@@ -32,6 +32,7 @@ from lib import write_update_record  # noqa: E402
 from lib.normalize import split_front_matter as normalize_split  # noqa: E402
 import apply_consensus_to_records as apply_consensus  # noqa: E402
 import collect_obs_reports  # noqa: E402
+import patch_ingest  # noqa: E402
 
 # Every hazardous shape the requirement calls out.
 SHAPES = {
@@ -99,6 +100,69 @@ def run() -> int:
             except Exception as exc:  # noqa: BLE001
                 check(f"[{name}] {reader_name}: value round-trips (semantic compare)", False,
                       f"raised {type(exc).__name__}: {exc}")
+        # Dict-only readers return front matter only (no body). patch_ingest scans EVERY generated
+        # record via refresh_linked_official_bodies -- regardless of which lane wrote it -- so its reader
+        # must survive the same hazardous shapes as the tuple readers above.
+        for reader_name, reader in {"patch_ingest.load_front_matter": patch_ingest.load_front_matter}.items():
+            try:
+                data = reader(path)
+                check(f"[{name}] {reader_name}: value round-trips (semantic compare)",
+                      data.get("release_summary") == value, f"got {data.get('release_summary')!r}")
+            except Exception as exc:  # noqa: BLE001
+                check(f"[{name}] {reader_name}: value round-trips (semantic compare)", False,
+                      f"raised {type(exc).__name__}: {exc}")
+
+    # --- Exact-shape regression: the 2025-07-28-obs-studio-31-1-2.md production crash --------------
+    # yaml.safe_dump(width=120) folded release_summary's "Hotfix Changes ---------------------" hyphen-run
+    # onto a continuation line ENDING in "---" while the single quote was still open. The fragile substring
+    # split matched that in-scalar "---\n" as the closing fence and truncated the block mid-scalar ->
+    # yaml.scanner.ScannerError "found unexpected end of stream". These are the exact hazardous bytes as
+    # emitted for that record (the fold position is context-sensitive, so we pin the serialized form
+    # rather than re-dump and hope pyyaml folds identically).
+    _HAZARD = (
+        "---\n"
+        "layout: aux-update\n"
+        "update_entry: true\n"
+        "product_id: obs-studio\n"
+        "update_version: 31.1.2\n"
+        "release_summary: '> [!IMPORTANT] > The code signing certificate for OBS has been updated. This may impact game capture\n"
+        "  compatibility with some anti-cheat solutions with this OBS update. If you are a game or anti-cheat developer please\n"
+        "  see https://obsproject.com/kb/capture-hook-certificate-update for more information. 31.1.2 Hotfix Changes ---------------------\n"
+        "  Fixed an issue in OBS Studio 31.1.0 and 31.1.1 causing Multitrack Video to.'\n"
+        "---\n"
+        "BODY LINE\n"
+    )
+    _HAZARD_SUMMARY = (
+        "> [!IMPORTANT] > The code signing certificate for OBS has been updated. This may impact game capture "
+        "compatibility with some anti-cheat solutions with this OBS update. If you are a game or anti-cheat developer please "
+        "see https://obsproject.com/kb/capture-hook-certificate-update for more information. 31.1.2 Hotfix Changes --------------------- "
+        "Fixed an issue in OBS Studio 31.1.0 and 31.1.1 causing Multitrack Video to."
+    )
+    hz_path = Path(tempfile.mkdtemp(prefix="fm-hazard-")) / "2025-07-28-obs-studio-31-1-2.md"
+    hz_path.write_text(_HAZARD, encoding="utf-8", newline="")
+    tuple_readers = {
+        "base.load_front_matter_and_body": base.load_front_matter_and_body,
+        "write_update_record._front_matter": write_update_record._front_matter,
+        "apply_consensus._load_front_matter_and_body": apply_consensus._load_front_matter_and_body,
+        "collect_obs_reports.front_matter_parts": collect_obs_reports.front_matter_parts,
+    }
+    for reader_name, reader in tuple_readers.items():
+        try:
+            data, body = reader(hz_path)
+            check(f"[obs-31-1-2 hazard] {reader_name}: no crash + value recovered",
+                  data.get("release_summary") == _HAZARD_SUMMARY, f"got {data.get('release_summary')!r}")
+            check(f"[obs-31-1-2 hazard] {reader_name}: body recovered (in-scalar '---' is not a fence)",
+                  body == "BODY LINE\n", f"got {body!r}")
+        except Exception as exc:  # noqa: BLE001
+            check(f"[obs-31-1-2 hazard] {reader_name}: no crash + value recovered", False,
+                  f"raised {type(exc).__name__}: {exc}")
+    try:
+        pi = patch_ingest.load_front_matter(hz_path)
+        check("[obs-31-1-2 hazard] patch_ingest.load_front_matter: no crash + value recovered",
+              pi.get("release_summary") == _HAZARD_SUMMARY, f"got {pi.get('release_summary')!r}")
+    except Exception as exc:  # noqa: BLE001
+        check("[obs-31-1-2 hazard] patch_ingest.load_front_matter: no crash + value recovered", False,
+              f"raised {type(exc).__name__}: {exc}")
 
     # split_front_matter unit behaviour (both copies must agree and be delimiter-line-exact).
     for splitter_name, splitter in (("base", split_front_matter), ("normalize", normalize_split)):
@@ -113,7 +177,10 @@ def run() -> int:
 
     # Old-bug shape: base's split must NOT be the fragile substring splitter anymore.
     import inspect
-    src = inspect.getsource(base.load_front_matter_and_body) + inspect.getsource(apply_consensus._load_front_matter_and_body) + inspect.getsource(write_update_record._front_matter)
+    src = (inspect.getsource(base.load_front_matter_and_body)
+           + inspect.getsource(apply_consensus._load_front_matter_and_body)
+           + inspect.getsource(write_update_record._front_matter)
+           + inspect.getsource(patch_ingest.load_front_matter))
     check("no reader still uses the fragile text.split('---\\n', 2)", 'split("---\\n"' not in src)
 
     print()

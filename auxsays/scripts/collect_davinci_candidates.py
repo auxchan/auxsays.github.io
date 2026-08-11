@@ -28,6 +28,7 @@ ROOT = SCRIPT_DIR.parents[0]
 if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
+from lib.normalize import split_front_matter  # noqa: E402
 from lib.normalize_davinci_version import normalize_davinci_version  # noqa: E402
 
 PRODUCT_ID = "blackmagic-davinci"
@@ -297,14 +298,16 @@ def simple_yaml_items(path: Path, list_key: str) -> list[dict[str, Any]]:
 
 
 def front_matter(path: Path) -> dict[str, Any]:
+    # Isolate the front-matter block with the shared robust splitter (fences only on a line whose
+    # ENTIRE content is exactly "---"), then keep this tool's dependency-free top-level-scalar parser.
+    # The old text.split("---\n", 2) matched "---\n" as a substring and could close the block on an
+    # in-scalar hyphen-run continuation line ending in "---" (the OBS release_summary hazard).
     text = path.read_text(encoding="utf-8")
-    if not text.startswith("---\n"):
-        return {}
-    parts = text.split("---\n", 2)
-    if len(parts) < 3:
+    front, _body = split_front_matter(text)
+    if front is None:
         return {}
     data: dict[str, Any] = {}
-    for raw_line in parts[1].splitlines():
+    for raw_line in front.splitlines():
         if raw_line.startswith((" ", "-")) or ":" not in raw_line:
             continue
         key, value = raw_line.split(":", 1)

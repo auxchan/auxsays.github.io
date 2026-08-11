@@ -31,7 +31,7 @@ if str(SCRIPT_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPT_DIR))
 
 from lib.http import fetch_text
-from lib.normalize import strip_tags, utc_now
+from lib.normalize import split_front_matter, strip_tags, utc_now
 from lib.state import load_state, save_state, is_seen, mark_seen, update_source_success, update_source_error, source_state, SEEN_RETENTION
 from lib.write_update_record import refresh_existing_record, write_record
 
@@ -75,13 +75,17 @@ def adapter_module(adapter_name: str):
 
 
 def load_front_matter(path: Path) -> dict[str, Any]:
+    # Delegate to the shared robust splitter (lib.normalize.split_front_matter), which fences only on
+    # a line whose ENTIRE content is exactly "---". The former reader split on a bare three-hyphen +
+    # newline substring, so it closed the block on an in-scalar hyphen-run continuation line ending in
+    # "---" (e.g. an OBS release_summary whose single-quoted value folds a "Hotfix Changes ----------"
+    # hyphen-run onto such a line), truncating the front matter mid-scalar -> yaml ScannerError. This
+    # reader is byte-compatible with every generated record and matches consensus_refresh/audit_consensus.
     text = path.read_text(encoding="utf-8")
-    if not text.startswith("---\n"):
+    front, _body = split_front_matter(text)
+    if front is None:
         return {}
-    parts = text.split("---\n", 2)
-    if len(parts) < 3:
-        return {}
-    data = yaml.safe_load(parts[1]) or {}
+    data = yaml.safe_load(front) or {}
     return data if isinstance(data, dict) else {}
 
 
