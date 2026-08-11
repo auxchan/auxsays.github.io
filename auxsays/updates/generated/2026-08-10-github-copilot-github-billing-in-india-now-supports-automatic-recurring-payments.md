@@ -17,8 +17,8 @@ update_version: GitHub billing in India now supports automatic recurring payment
 update_logo_text: GIT
 update_published_at: '2026-08-10T14:00:58Z'
 update_last_checked: '2026-08-10T20:32:15Z'
-source_last_checked: '2026-08-10T20:32:15Z'
-official_body_last_checked: '2026-08-10T20:32:15Z'
+source_last_checked: '2026-08-11T03:48:47Z'
+official_body_last_checked: '2026-08-11T03:48:47Z'
 record_last_updated: '2026-08-10T20:32:15Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -76,6 +76,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-08-10T20:32:15Z'
+  url: https://github.blog/changelog/2026-08-10-github-billing-in-india-now-supports-automatic-recurring-payments
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-08-11T03:48:47Z'
   url: https://github.blog/changelog/2026-08-10-github-billing-in-india-now-supports-automatic-recurring-payments
   status: captured-from-rss-feed
   body_captured: true
