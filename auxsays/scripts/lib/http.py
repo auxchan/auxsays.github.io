@@ -6,6 +6,7 @@ import os
 import subprocess
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 from dataclasses import dataclass
 from typing import Any
@@ -28,7 +29,72 @@ class FetchResult:
     final_url: str
 
 
-def _headers(extra: dict[str, str] | None = None, *, include_auth: bool = True) -> dict[str, str]:
+# Hosts that may receive the GitHub token, as an EXACT netloc match. Derived from the only
+# production callers that need GitHub authentication: fetch_json() for GitHub's REST API
+# (github_releases adapter's ingestion.api_url and revalidate_consensus_evidence's
+# issue/comment lookups). Deliberately NOT a substring test: "api.github.com.evil.example"
+# and "github.com" must both fail. Vendor documentation fetches are never authenticated.
+GITHUB_AUTH_HOSTS = frozenset({"api.github.com"})
+
+
+def _netloc(url: str) -> str:
+    """Lowercased host of a URL, port and credentials stripped. '' when unparseable."""
+    try:
+        host = urllib.parse.urlsplit(url).netloc.lower()
+    except ValueError:
+        return ""
+    if "@" in host:
+        host = host.rsplit("@", 1)[1]
+    if host.startswith("["):  # IPv6 literal
+        return host.split("]", 1)[0] + "]"
+    return host.split(":", 1)[0]
+
+
+def _github_auth_allowed(url: str) -> bool:
+    """True only for an exact approved-host match on an https URL."""
+    try:
+        scheme = urllib.parse.urlsplit(url).scheme.lower()
+    except ValueError:
+        return False
+    return scheme == "https" and _netloc(url) in GITHUB_AUTH_HOSTS
+
+
+def _strip_authorization(request: urllib.request.Request) -> None:
+    for key in [k for k in request.headers if str(k).lower() == "authorization"]:
+        del request.headers[key]
+    for key in [k for k in request.unredirected_hdrs if str(k).lower() == "authorization"]:
+        del request.unredirected_hdrs[key]
+
+
+class _AuthStrippingRedirectHandler(urllib.request.HTTPRedirectHandler):
+    """Never forward the GitHub token off an approved host.
+
+    Defence in depth. The token is attached with add_unredirected_header(), and urllib's
+    HTTPRedirectHandler rebuilds the redirected request from req.headers only -- so an
+    unredirected header is already not forwarded. This handler additionally strips any
+    Authorization header from the redirected request whenever the new URL is not an
+    approved host, so a future change that switches to a normal header cannot leak.
+    """
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):  # noqa: D102
+        new_request = super().redirect_request(req, fp, code, msg, headers, newurl)
+        if new_request is not None and not _github_auth_allowed(newurl):
+            _strip_authorization(new_request)
+        return new_request
+
+
+_OPENER = urllib.request.build_opener(_AuthStrippingRedirectHandler())
+
+
+def _headers(extra: dict[str, str] | None = None, *, include_auth: bool = False) -> dict[str, str]:
+    """Generic request headers. UNAUTHENTICATED by default.
+
+    ``include_auth`` previously defaulted to True, so every fetch_text/fetch_json call
+    attached ``Authorization: Bearer $GITHUB_TOKEN`` whenever the variable was present --
+    and production workflows put it in the job environment. Vendor documentation, community
+    and forum requests therefore received the repository token. Authentication is now opt-in
+    and destination-scoped; callers ask for it and the destination must be approved.
+    """
     headers = {
         "User-Agent": USER_AGENT,
         "Accept": "application/json, application/xml, text/xml, text/html;q=0.9, */*;q=0.8",
@@ -125,6 +191,7 @@ def fetch_text(
     backoff_seconds: float = 2.0,
     max_bytes: int | None = None,
     curl_fallback: bool | None = None,
+    authenticate: bool = False,
 ) -> FetchResult:
     """Fetch text with small, explicit reliability controls.
 
@@ -135,14 +202,27 @@ def fetch_text(
     Adobe HelpX sometimes stalls from GitHub Actions before returning any body
     bytes. For Adobe URLs only, a narrow curl fallback can be enabled by the
     adapter/source config. This is not a generic scraping fallback.
+
+    `authenticate` is a REQUEST, not a guarantee: the GitHub token is attached only when
+    the destination is an approved host (GITHUB_AUTH_HOSTS, exact match, https). Every
+    other destination -- vendor documentation, community, forum, anything config-driven --
+    is fetched unauthenticated. The token is attached as an unredirected header and the
+    opener strips Authorization on any redirect that leaves an approved host.
     """
     last_exc: Exception | None = None
     attempts = max(1, int(retries) + 1)
+    send_auth = bool(authenticate) and _github_auth_allowed(url)
 
     for attempt in range(attempts):
         req = urllib.request.Request(url, headers=_headers(headers))
+        if send_auth:
+            token = os.getenv("GITHUB_TOKEN")
+            if token:
+                # Unredirected: urllib rebuilds a redirected request from req.headers only,
+                # so this is never forwarded off the approved host.
+                req.add_unredirected_header("Authorization", f"Bearer {token}")
         try:
-            with urllib.request.urlopen(req, timeout=timeout) as resp:
+            with _OPENER.open(req, timeout=timeout) as resp:
                 raw = _read_response(resp, max_bytes=max_bytes)
                 charset = resp.headers.get_content_charset() or "utf-8"
                 text = raw.decode(charset, errors="replace")
@@ -180,5 +260,17 @@ def fetch_text(
 
 
 def fetch_json(url: str, timeout: int = 30) -> Any:
-    result = fetch_text(url, timeout=timeout, headers={"Accept": "application/vnd.github+json, application/json"})
+    """Fetch JSON. Authentication is requested but applies ONLY to approved GitHub hosts.
+
+    This helper serves GitHub's REST API (higher authenticated rate limits). Because the
+    URL is config-driven (``ingestion.api_url``), a non-GitHub destination must never be
+    handed the token -- ``authenticate=True`` is a request that fetch_text validates
+    against GITHUB_AUTH_HOSTS.
+    """
+    result = fetch_text(
+        url,
+        timeout=timeout,
+        headers={"Accept": "application/vnd.github+json, application/json"},
+        authenticate=True,
+    )
     return json.loads(result.text)
