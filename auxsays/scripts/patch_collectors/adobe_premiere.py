@@ -156,6 +156,7 @@ def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[
     method_results: list[dict[str, Any]] = []
 
     for method_id, collector in (
+        ("adobe_community_algolia_search", adobe_community_algolia_search_candidates),
         ("reddit_search", reddit_search_candidates),
         ("adobe_community_search", adobe_community_search_candidates),
         ("adobe_community_bug_tab_index", adobe_community_bug_tab_candidates),
@@ -201,6 +202,203 @@ def adobe_community_search_candidates(record: PatchRecord, context: CollectorCon
             if not links:
                 break
             candidates.extend(candidates_from_report_links(links, context, errors, seen_urls, "adobe_community_search"))
+    return candidates
+
+
+# --- Adobe Community keyless JSON discovery (Algolia + getTopics) -------------------------
+# Premiere's own measured supply on this chain: 269 mixed-board candidates -> 160 passing the
+# Bug-Report URL gate -> 100 version-anchored -> 30 unique accepted rows. Discovery is scoped to
+# Premiere's category AND the Bug Reports board, which matters for correctness rather than
+# efficiency: an official Adobe announcement passes source_url_is_specific, text_describes_issue
+# AND premiere_strong_issue_match, so only SPECIFIC_ADOBE_BUG_URL_RE stands between it and
+# consensus acceptance -- and Announcements live inside Premiere's own category. Scoping the
+# board structurally keeps announcements out of the funnel entirely, before acceptance runs.
+ALGOLIA_TOKEN_URL = "https://community.adobe.com/search/searchToken"
+ALGOLIA_QUERY_URL_TMPL = "https://{app_id}-dsn.algolia.net/1/indexes/{index}/query"
+COMMUNITY_GET_TOPICS_URL = "https://community.adobe.com/search/getTopics"
+PREMIERE_CATEGORY_ID = "726"          # "Adobe Premiere"; sibling products are distinct categories
+PREMIERE_BUG_REPORTS_FORUM_ID = "728"  # user Bug Reports board (NOT announcements-727)
+# getTopics silently truncates a long topicIds[] request at about 25 ids -- no error, no signal.
+# Chunk well under that so supply can never be lost invisibly.
+GET_TOPICS_CHUNK = 20
+MAX_ALGOLIA_HITS_PER_QUERY = 100
+MAX_ALGOLIA_PAGES = 2
+MAX_TOPIC_IDS_PER_RECORD = 120
+MAX_QUERIES_PER_RECORD = 4
+
+
+def request_public_json_post(
+    url: str,
+    payload: bytes,
+    *,
+    headers: dict[str, str],
+    timeout: int = 30,
+    max_bytes: int = 800000,
+) -> Any:
+    """POST JSON through Premiere's own runtime-bounded transport.
+
+    Deliberately NOT lib.http and NOT Acrobat's helpers: Acrobat's _request_json reads a module
+    global (_ACTIVE_BUDGET) that only AdobeAcrobatCollector sets, so calling it from here would
+    silently drop out of the runtime budget and reintroduce the unbounded-read class of defect.
+    """
+    req = urllib.request.Request(url, data=payload, headers=headers, method="POST")
+    try:
+        with urllib.request.urlopen(req, timeout=rb.request_timeout(rb.get_run_budget(), timeout)) as response:
+            status = getattr(response, "status", None)
+            body = rb.bounded_read(response, budget=rb.get_run_budget(), endpoint_family="premiere", max_bytes=max_bytes).decode("utf-8", errors="replace")
+    except HTTPError as exc:
+        raise AdobeCommunityAccessError(f"http_{exc.code}_{brave_status_reason(exc.code)}", status=exc.code) from exc
+    except URLError as exc:
+        raise AdobeCommunityAccessError(f"url_error_{getattr(exc, 'reason', exc)}") from exc
+    if status in {401, 403, 429}:
+        raise AdobeCommunityAccessError(f"http_{status}_{brave_status_reason(status)}", status=status)
+    try:
+        return json.loads(body)
+    except json.JSONDecodeError as exc:
+        raise AdobeCommunityAccessError("invalid_json") from exc
+
+
+def algolia_credentials() -> dict[str, str]:
+    payload = request_public_json(ALGOLIA_TOKEN_URL)
+    if not isinstance(payload, dict):
+        raise AdobeCommunityAccessError("searchtoken_unexpected_shape")
+    app_id = str(payload.get("client_id") or "").strip()
+    token = str(payload.get("token") or "").strip()
+    indexes = payload.get("availableIndexes") or []
+    index = str(indexes[0]).strip() if isinstance(indexes, list) and indexes else ""
+    if not (app_id and token and index):
+        raise AdobeCommunityAccessError("searchtoken_incomplete")
+    return {"app_id": app_id, "token": token, "index": index}
+
+
+def algolia_premiere_bug_topic_ids(creds: dict[str, str], query: str) -> list[int]:
+    """Board-scoped discovery: Premiere category AND the Bug Reports board only."""
+    url = ALGOLIA_QUERY_URL_TMPL.format(app_id=creds["app_id"], index=creds["index"])
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "User-Agent": HEADERS["User-Agent"],
+        "X-Algolia-Application-Id": creds["app_id"],
+        "X-Algolia-API-Key": creds["token"],
+    }
+    found: list[int] = []
+    for page in range(MAX_ALGOLIA_PAGES):
+        params = urllib.parse.urlencode({
+            "query": query,
+            "hitsPerPage": MAX_ALGOLIA_HITS_PER_QUERY,
+            "page": page,
+            "facetFilters": json.dumps([
+                [f"category:{PREMIERE_CATEGORY_ID}"],
+                [f"forum:{PREMIERE_BUG_REPORTS_FORUM_ID}"],
+            ]),
+            "attributesToHighlight": "",
+        })
+        data = request_public_json_post(url, json.dumps({"params": params}).encode("utf-8"), headers=headers)
+        hits = data.get("hits") if isinstance(data, dict) else None
+        if not isinstance(hits, list) or not hits:
+            break
+        for hit in hits:
+            raw = hit.get("id") if isinstance(hit, dict) else None
+            try:
+                found.append(int(str(raw)))
+            except (TypeError, ValueError):
+                continue
+        if len(hits) < MAX_ALGOLIA_HITS_PER_QUERY:
+            break
+    return found
+
+
+def community_topics(topic_ids: list[int]) -> list[dict[str, Any]]:
+    """Resolve topics in deterministic bounded chunks (see GET_TOPICS_CHUNK)."""
+    ordered = sorted({int(t) for t in topic_ids})[:MAX_TOPIC_IDS_PER_RECORD]
+    topics: list[dict[str, Any]] = []
+    for start in range(0, len(ordered), GET_TOPICS_CHUNK):
+        chunk = ordered[start:start + GET_TOPICS_CHUNK]
+        params = urllib.parse.urlencode([("topicIds[]", str(t)) for t in chunk])
+        payload = request_public_json(f"{COMMUNITY_GET_TOPICS_URL}?{params}")
+        if isinstance(payload, list):
+            topics.extend(item for item in payload if isinstance(item, dict))
+    return topics
+
+
+def topic_to_candidate(topic: dict[str, Any]) -> dict[str, str] | None:
+    """Mirror adobe_bug_report_candidate's contract from authoritative getTopics JSON."""
+    canonical = canonical_adobe_url(str(topic.get("url") or ""))
+    if not canonical or not adobe_report_url_is_specific(canonical):
+        return None
+    title = str(topic.get("title") or "").strip()
+    first_post = topic.get("firstPost") if isinstance(topic.get("firstPost"), dict) else {}
+    text = clean_html(str(first_post.get("content") or ""))
+    if not (title and text):
+        return None
+    return {
+        "source_type": SOURCE_TYPE,
+        "source_name": SOURCE_NAME,
+        "source_url": canonical,
+        "archive_url": "",
+        "parent_title": title,
+        "report_title": title,
+        "report_text": text[:6000],
+        "source_date": str(first_post.get("creationDate") or "").strip(),
+    }
+
+
+def adobe_community_algolia_search_candidates(record: PatchRecord, context: CollectorContext, errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Keyless Adobe Community discovery for Premiere, scoped to the Bug Reports board.
+
+    Discovery only. Every accepted row still passes the unchanged Premiere gates: exact product,
+    exact patch version, specific report URL, report date vs release date, and a concrete
+    user-facing issue.
+    """
+    try:
+        creds = algolia_credentials()
+    except Exception as exc:  # noqa: BLE001
+        errors.append({"source_url": ALGOLIA_TOKEN_URL, "reason": f"adobe_community_algolia_search_token_failed:{error_reason(exc)}"})
+        return []
+
+    version = str(record.update_version or "").strip()
+    if not version:
+        return []
+    # Query the bare version plus Premiere's own alias forms (e.g. 26.2 -> 26.2.0), deduped and
+    # capped so a record can never fan out into an unbounded number of Algolia requests.
+    queries: list[str] = []
+    for token in [version, *version_aliases(version)]:
+        token = str(token).strip()
+        if token and token not in queries:
+            queries.append(token)
+    queries = queries[:MAX_QUERIES_PER_RECORD]
+
+    topic_ids: list[int] = []
+    for query in queries:
+        try:
+            topic_ids.extend(algolia_premiere_bug_topic_ids(creds, query))
+        except Exception as exc:  # noqa: BLE001
+            errors.append({"source_url": ALGOLIA_QUERY_URL_TMPL.format(app_id=creds["app_id"], index=creds["index"]),
+                           "reason": f"adobe_community_algolia_search_query_failed:{error_reason(exc)}"})
+            if error_is_blocked(exc):
+                return []
+    if not topic_ids:
+        return []
+
+    try:
+        topics = community_topics(topic_ids)
+    except Exception as exc:  # noqa: BLE001
+        errors.append({"source_url": COMMUNITY_GET_TOPICS_URL, "reason": f"adobe_community_algolia_search_topics_failed:{error_reason(exc)}"})
+        return []
+
+    candidates: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for topic in topics:
+        candidate = topic_to_candidate(topic)
+        if not candidate:
+            continue
+        key = candidate["source_url"].lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        if context.since and candidate.get("source_date") and date_part(candidate["source_date"]) < context.since:
+            continue
+        candidates.append(candidate)
     return candidates
 
 
@@ -475,6 +673,7 @@ def method_notes(
     errors: list[dict[str, Any]],
 ) -> str:
     labels = {
+        "adobe_community_algolia_search": "Adobe Community keyless JSON search, Premiere Bug Reports board",
         "reddit_search": "Reddit community search (r/premierepro, r/editors, r/Adobe)",
         "adobe_community_search": "Adobe Community search",
         "adobe_community_bug_tab_index": "Adobe Community Premiere bug-tab listing",
