@@ -17,8 +17,8 @@ update_version: GitHub Enterprise Server 3.22 release candidate
 update_logo_text: GIT
 update_published_at: '2026-08-11T20:26:26Z'
 update_last_checked: '2026-08-12T03:59:07Z'
-source_last_checked: '2026-08-12T15:02:44Z'
-official_body_last_checked: '2026-08-12T15:02:44Z'
+source_last_checked: '2026-08-12T20:43:03Z'
+official_body_last_checked: '2026-08-12T20:43:03Z'
 record_last_updated: '2026-08-12T03:59:07Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -107,6 +107,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-08-12T15:02:44Z'
+  url: https://github.blog/changelog/2026-08-11-github-enterprise-server-3-22-release-candidate
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-08-12T20:43:03Z'
   url: https://github.blog/changelog/2026-08-11-github-enterprise-server-3-22-release-candidate
   status: captured-from-rss-feed
   body_captured: true
