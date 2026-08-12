@@ -3396,17 +3396,17 @@
   recommended_priority: P1 needs source-specific adapter
   ingestion:
     type: help_center_release_notes
-    adapter: elgato_help_center
+    adapter: zendesk_help_center
     official_url: https://help.elgato.com/hc/en-us/sections/5162671529357-Elgato-Stream-Deck-Software-Release-Notes
     secondary_official_url: null
     feed_url: null
-    api_url: null
+    # Documented anonymous Zendesk Help Center API for the section above. One paginated
+    # JSON request lists every release-note article (exact titles, ISO created_at, draft
+    # flags), replacing the per-article HTML fan-out the retired elgato_help_center
+    # adapter needed (whose theme-DOM title extraction broke against the live theme).
+    api_url: https://help.elgato.com/api/v2/help_center/en-us/sections/5162671529357/articles.json?per_page=100&sort_by=created_at&sort_order=desc
     parser_profile: elgato_stream_deck_release_notes
-    # scan_limit caps candidate article-detail fetches: this adapter makes one HTTP
-    # request per discovered article, so the default 200-candidate backfill window would
-    # fan out to dozens of requests. 8 (> record_limit 2) keeps progressive backfill
-    # advancing while bounding network cost (adapter also enforces ARTICLE_SCAN_CEILING).
-    scan_limit: 8
+    product_terms: [stream deck]
     official_source_type: release_notes
     source_capture_status: adapter_enabled
     include_prereleases: false
@@ -3414,9 +3414,9 @@
     requires_javascript: false
     scrape_feasibility: High
     reliability: High
-    breakage_risk: Medium
+    breakage_risk: Low
     polling_frequency: 12h
-    update_detection_method: Help Center section/article diff
+    update_detection_method: Zendesk Help Center API section/article diff
     file_size_status_when_missing: download_portal_only
     extractable_fields: {version: true, release_date: true, title: true, release_note_body: true, download_url: true, file_size: false, checksum: false, known_issues: false, platform_specific_installers: true, archived_release_history: true}
     keywords: [Stream Deck, release notes, plugin, OBS, firmware]
@@ -3436,15 +3436,17 @@
   recommended_priority: P1 needs source-specific adapter
   ingestion:
     type: help_center_release_notes
-    adapter: elgato_help_center
+    adapter: zendesk_help_center
     official_url: https://help.elgato.com/hc/en-us/sections/4913442828941-Wave-Link-Release-Notes
     secondary_official_url: null
     feed_url: null
-    api_url: null
+    # Documented anonymous Zendesk Help Center API for the section above (see the
+    # elgato-stream-deck entry for why the API replaced per-article HTML scraping).
+    # Wave Link publishes platform-split articles (separate macOS/Windows release notes
+    # for one version); the adapter keeps one record per version deterministically.
+    api_url: https://help.elgato.com/api/v2/help_center/en-us/sections/4913442828941/articles.json?per_page=100&sort_by=created_at&sort_order=desc
     parser_profile: elgato_wave_link_release_notes
-    # scan_limit caps candidate article-detail fetches (one HTTP request per discovered
-    # article); 8 (> record_limit 2) keeps backfill advancing while bounding network cost.
-    scan_limit: 8
+    product_terms: [wave link]
     official_source_type: release_notes
     source_capture_status: adapter_enabled
     include_prereleases: false
@@ -3452,9 +3454,9 @@
     requires_javascript: false
     scrape_feasibility: High
     reliability: High
-    breakage_risk: Medium
+    breakage_risk: Low
     polling_frequency: 12h
-    update_detection_method: Help Center section/article diff
+    update_detection_method: Zendesk Help Center API section/article diff
     file_size_status_when_missing: download_portal_only
     extractable_fields: {version: true, release_date: true, title: true, release_note_body: true, download_url: true, file_size: false, checksum: false, known_issues: false, platform_specific_installers: true, archived_release_history: true}
     keywords: [Wave Link, release notes, audio routing, OBS, VST]
@@ -3474,15 +3476,15 @@
   recommended_priority: P1 needs source-specific adapter
   ingestion:
     type: help_center_release_notes
-    adapter: elgato_help_center
+    adapter: zendesk_help_center
     official_url: https://help.elgato.com/hc/en-us/sections/4880787756941-Elgato-Camera-Hub-Release-Notes
     secondary_official_url: null
     feed_url: null
-    api_url: null
+    # Documented anonymous Zendesk Help Center API for the section above (see the
+    # elgato-stream-deck entry for why the API replaced per-article HTML scraping).
+    api_url: https://help.elgato.com/api/v2/help_center/en-us/sections/4880787756941/articles.json?per_page=100&sort_by=created_at&sort_order=desc
     parser_profile: elgato_camera_hub_release_notes
-    # scan_limit caps candidate article-detail fetches (one HTTP request per discovered
-    # article); 8 (> record_limit 2) keeps backfill advancing while bounding network cost.
-    scan_limit: 8
+    product_terms: [camera hub]
     official_source_type: release_notes
     source_capture_status: adapter_enabled
     include_prereleases: false
@@ -3490,9 +3492,9 @@
     requires_javascript: false
     scrape_feasibility: High
     reliability: High
-    breakage_risk: Medium
+    breakage_risk: Low
     polling_frequency: 12h
-    update_detection_method: Help Center section/article diff
+    update_detection_method: Zendesk Help Center API section/article diff
     file_size_status_when_missing: download_portal_only
     extractable_fields: {version: true, release_date: true, title: true, release_note_body: true, download_url: true, file_size: false, checksum: false, known_issues: false, platform_specific_installers: true, archived_release_history: true}
     keywords: [Camera Hub, release notes, Facecam, firmware, Prompter]
@@ -3512,15 +3514,15 @@
   recommended_priority: P1 needs source-specific adapter
   ingestion:
     type: help_center_release_notes
-    adapter: elgato_help_center
+    adapter: zendesk_help_center
     official_url: https://help.elgato.com/hc/en-us/sections/5126053814029-Elgato-4K-Capture-Utility-Release-Notes
     secondary_official_url: null
     feed_url: null
-    api_url: null
+    # Documented anonymous Zendesk Help Center API for the section above (see the
+    # elgato-stream-deck entry for why the API replaced per-article HTML scraping).
+    api_url: https://help.elgato.com/api/v2/help_center/en-us/sections/5126053814029/articles.json?per_page=100&sort_by=created_at&sort_order=desc
     parser_profile: elgato_4k_capture_utility_release_notes
-    # scan_limit caps candidate article-detail fetches (one HTTP request per discovered
-    # article); 8 (> record_limit 2) keeps backfill advancing while bounding network cost.
-    scan_limit: 8
+    product_terms: [4k capture utility, 4k capture]
     official_source_type: release_notes
     source_capture_status: adapter_enabled
     include_prereleases: false
@@ -3528,9 +3530,9 @@
     requires_javascript: false
     scrape_feasibility: High
     reliability: High
-    breakage_risk: Medium
+    breakage_risk: Low
     polling_frequency: 12h
-    update_detection_method: Help Center section/article diff
+    update_detection_method: Zendesk Help Center API section/article diff
     file_size_status_when_missing: download_portal_only
     extractable_fields: {version: true, release_date: true, title: true, release_note_body: true, download_url: true, file_size: false, checksum: false, known_issues: false, platform_specific_installers: true, archived_release_history: true}
     keywords: [4K Capture Utility, release notes, 4K X, firmware, HDR]

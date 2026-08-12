@@ -183,19 +183,22 @@ def run() -> int:
     check("scan_limit above SEEN_RETENTION resolves conservatively (not widened past retention)", rscan(src_scan(state_mod.SEEN_RETENTION + 50), args(2)) == 2, str(rscan(src_scan(state_mod.SEEN_RETENTION + 50), args(2))))
     check("any resolved scan_limit is <= SEEN_RETENTION (retention always covers the window)", all(rscan(s, args(2)) <= state_mod.SEEN_RETENTION for s in (src_scan(), src_scan(8), src_scan(1), src_scan("x"))))
 
-    # 15. real config: every enabled Elgato source declares scan_limit 8 and resolves to 8
+    # 15. real config: the 4 enabled Elgato sources use the Zendesk API adapter. One
+    # paginated JSON request lists a whole section, so they no longer need a scan_limit
+    # (the per-article HTML fan-out the narrowed window bounded is gone) and instead
+    # resolve to the default 200-candidate backfill window at one request per run.
     rows = yaml.safe_load(_CONFIG.read_text(encoding="utf-8"))
-    elgato_rows = [r for r in rows if (r.get("ingestion") or {}).get("adapter") == "elgato_help_center"]
-    check("config: 4 enabled Elgato sources use the help-center adapter", len(elgato_rows) == 4, str(len(elgato_rows)))
-    check("config: every Elgato source declares scan_limit 8", all((r.get("ingestion") or {}).get("scan_limit") == 8 for r in elgato_rows), str([(r.get("product_id"), (r.get("ingestion") or {}).get("scan_limit")) for r in elgato_rows]))
-    check("config: Elgato scan_limit resolves to 8 even under the global 200 backfill default", all(rscan(r, args(2)) == 8 for r in elgato_rows))
-    # The 4 Elgato help-center sources plus the single staged adobe-photoshop source are the
-    # ONLY sources that declare a scan_limit; nothing else silently gained one.
+    elgato_rows = [r for r in rows if (r.get("ingestion") or {}).get("adapter") == "zendesk_help_center"]
+    check("config: 4 enabled Elgato sources use the zendesk_help_center adapter", len(elgato_rows) == 4 and all(str(r.get("product_id", "")).startswith("elgato-") for r in elgato_rows), str([(r.get("product_id")) for r in elgato_rows]))
+    check("config: Elgato zendesk sources declare no scan_limit (single-request adapter)", all("scan_limit" not in (r.get("ingestion") or {}) for r in elgato_rows), str([(r.get("product_id"), (r.get("ingestion") or {}).get("scan_limit")) for r in elgato_rows]))
+    check("config: Elgato sources resolve to the default 200 backfill window", all(rscan(r, args(2)) == 200 for r in elgato_rows), str([rscan(r, args(2)) for r in elgato_rows]))
+    check("config: every Elgato source pins the documented same-host Zendesk API endpoint",
+          all(str((r.get("ingestion") or {}).get("api_url", "")).startswith("https://help.elgato.com/api/v2/help_center/en-us/sections/") for r in elgato_rows),
+          str([(r.get("product_id"), (r.get("ingestion") or {}).get("api_url")) for r in elgato_rows]))
+    # The single staged adobe-photoshop source is now the ONLY source that declares a
+    # scan_limit; nothing else silently gained one.
     with_scan = [r.get("product_id") for r in rows if "scan_limit" in (r.get("ingestion") or {})]
-    check("only the Elgato sources and adobe-photoshop declare a scan_limit",
-          set(with_scan) == {r.get("product_id") for r in elgato_rows} | {"adobe-photoshop"}
-          and len(with_scan) == len(elgato_rows) + 1,
-          str(with_scan))
+    check("only adobe-photoshop declares a scan_limit", with_scan == ["adobe-photoshop"], str(with_scan))
     check("config: adobe-photoshop scan_limit (25) resolves within [record_limit, SEEN_RETENTION]",
           rscan(load_config_source("adobe-photoshop"), args(2)) == 25, str(rscan(load_config_source("adobe-photoshop"), args(2))))
 
