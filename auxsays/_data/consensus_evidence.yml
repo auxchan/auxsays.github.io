@@ -13440,7 +13440,6 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5970905-windows-update-download-error-0x800705
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -13468,4 +13467,46 @@ evidence:
   platform: windows
   severity: critical
   sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-1-github-issue-13779
+  product_id: obs-studio
+  update_version: 32.2.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13779
+  parent_title: When resizing or fullscreening OBS it crashes my pc (hardlock)
+  report_title: When resizing or fullscreening OBS it crashes my pc (hardlock)
+  report_text_excerpt: '### Operating System Info Other ### Other OS Fedora 44 KDE ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/h8PEmp3vsgRsoD9W ### OBS Studio Crash Log URL _No response_ ### Expected Behavior when'
+  captured_at: '2026-08-12T03:56:41Z'
+  patch_version_matched: true
+  matched_version: 32.2.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: unknown
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-2-1-github-issue-13778
+  product_id: obs-studio
+  update_version: 32.2.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13778
+  parent_title: obs web browser not working
+  report_title: obs web browser not working
+  report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/OnJGVZFusYOgsw2D ### OBS Studio Crash Log URL _No response_ ### Expected Behavior i use'
+  captured_at: '2026-08-12T03:56:41Z'
+  patch_version_matched: true
+  matched_version: 32.2.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
   source_weight: 1
