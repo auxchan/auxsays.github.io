@@ -17,8 +17,8 @@ update_version: Copilot memory and Ollama in GitHub Copilot for JetBrains
 update_logo_text: GIT
 update_published_at: '2026-08-11T20:15:55Z'
 update_last_checked: '2026-08-11T20:33:49Z'
-source_last_checked: '2026-08-12T09:13:38Z'
-official_body_last_checked: '2026-08-12T09:13:38Z'
+source_last_checked: '2026-08-12T15:02:44Z'
+official_body_last_checked: '2026-08-12T15:02:44Z'
 record_last_updated: '2026-08-11T20:33:49Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -107,6 +107,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-08-12T09:13:38Z'
+  url: https://github.blog/changelog/2026-08-11-copilot-memory-and-ollama-in-github-copilot-for-jetbrains
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-08-12T15:02:44Z'
   url: https://github.blog/changelog/2026-08-11-copilot-memory-and-ollama-in-github-copilot-for-jetbrains
   status: captured-from-rss-feed
   body_captured: true
