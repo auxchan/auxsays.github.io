@@ -190,6 +190,16 @@ def reddit_candidate(**overrides: str) -> dict[str, str]:
 
 
 def run() -> int:
+    # This suite is OFFLINE and deterministic: the orchestration tests drive collect_for_record
+    # end to end while stubbing only premiere.request_text. The Adobe Community keyless JSON
+    # discovery method uses request_public_json / request_public_json_post instead, so leaving it
+    # live would let real network results change accepted-row counts here. Neutralise it for the
+    # whole module (its own behaviour is covered by the focused Algolia test file); the method's
+    # error path is what runs, so the fallback-ordering assertions stay meaningful.
+    premiere.algolia_credentials = lambda: (_ for _ in ()).throw(
+        premiere.AdobeCommunityAccessError("offline_test_no_algolia")
+    )
+
     print("=" * 60)
     print("Adobe Premiere Pro collector tests")
     print("=" * 60)

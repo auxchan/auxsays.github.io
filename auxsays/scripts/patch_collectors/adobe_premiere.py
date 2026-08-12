@@ -309,8 +309,16 @@ def algolia_premiere_bug_topic_ids(creds: dict[str, str], query: str) -> list[in
 
 
 def community_topics(topic_ids: list[int]) -> list[dict[str, Any]]:
-    """Resolve topics in deterministic bounded chunks (see GET_TOPICS_CHUNK)."""
-    ordered = sorted({int(t) for t in topic_ids})[:MAX_TOPIC_IDS_PER_RECORD]
+    """Resolve topics in deterministic bounded chunks (see GET_TOPICS_CHUNK).
+
+    NEWEST-FIRST is load-bearing, not cosmetic. Adobe topic ids are broadly chronological, so
+    capping an ascending sort keeps the OLDEST ids and silently discards the newest -- which the
+    collector's since-window then rejects wholesale, reporting no_results while recent reports
+    existed. Select the newest ids under the cap, then resolve them in ascending order so the
+    request sequence stays deterministic.
+    """
+    unique = sorted({int(t) for t in topic_ids}, reverse=True)[:MAX_TOPIC_IDS_PER_RECORD]
+    ordered = sorted(unique)
     topics: list[dict[str, Any]] = []
     for start in range(0, len(ordered), GET_TOPICS_CHUNK):
         chunk = ordered[start:start + GET_TOPICS_CHUNK]
