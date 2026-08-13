@@ -17,8 +17,8 @@ update_version: Agent Plugins 1.0 in VS Code, Copilot CLI, and the Copilot app
 update_logo_text: GIT
 update_published_at: '2026-08-12T18:39:11Z'
 update_last_checked: '2026-08-12T20:43:03Z'
-source_last_checked: '2026-08-13T14:56:50Z'
-official_body_last_checked: '2026-08-13T14:56:50Z'
+source_last_checked: '2026-08-13T20:28:29Z'
+official_body_last_checked: '2026-08-13T20:28:29Z'
 record_last_updated: '2026-08-12T20:43:03Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -110,6 +110,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-08-13T14:56:50Z'
+  url: https://github.blog/changelog/2026-08-12-agent-plugins-1-0-in-vs-code-copilot-cli-and-the-copilot-app
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-08-13T20:28:29Z'
   url: https://github.blog/changelog/2026-08-12-agent-plugins-1-0-in-vs-code-copilot-cli-and-the-copilot-app
   status: captured-from-rss-feed
   body_captured: true
