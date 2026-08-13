@@ -1,8 +1,8 @@
 ---
 layout: aux-update
-title: DaVinci Resolve 21.0.4 official update breakdown
+title: DaVinci Resolve 12.5 official update breakdown
 description: Official DaVinci Resolve update record captured from Blackmagic Design.
-permalink: /updates/blackmagic-design/blackmagic-davinci/21-0-4/
+permalink: /updates/blackmagic-design/blackmagic-davinci/12-5/
 update_entry: true
 company_id: blackmagic-design
 product_id: blackmagic-davinci
@@ -13,29 +13,28 @@ update_type: official-source
 update_source_name: Blackmagic Design
 update_source_url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
 update_download_url: https://www.blackmagicdesign.com/event/davinciresolvedownload
-update_version: 21.0.4
+update_version: '12.5'
 update_logo_text: DAV
-update_published_at: '2026-08-05T00:00:00Z'
-update_last_checked: '2026-08-05T07:31:23Z'
+update_published_at: '2016-06-08T00:00:00Z'
+update_last_checked: '2026-08-13T04:05:07Z'
 source_last_checked: '2026-08-13T04:05:07Z'
 official_body_last_checked: '2026-08-13T04:05:07Z'
-record_last_updated: '2026-08-05T07:31:23Z'
+record_last_updated: '2026-08-13T04:05:07Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
 update_status: current
-update_feed_title: DaVinci Resolve 21.0.4
-update_detail_title: DaVinci Resolve 21.0.4
+update_feed_title: DaVinci Resolve 12.5
+update_detail_title: DaVinci Resolve 12.5
 update_consensus_label: Insufficient data
 update_report_count: 0
 update_consensus_confidence: Low
-quick_verdict: DaVinci Resolve 21.0.4 has an official AUXSAYS record. Confirmed patch-specific consensus is deferred until
-  the consensus refresh pipeline is active.
-official_summary: Blackmagic Design lists DaVinci Resolve Studio 21.0.4 Update in its official support downloads feed.
-release_summary: This software update adds support for relinking proxy clips with different formats, support for additional
-  X-OCN formats, the ability to use API scripting to review selected clips on the timeline and improved realtime playback
-  on timelines with a large cache. This version requires a DaVinci Resolve Studio license dongle, Blackmagic Cloud license
-  or software activation code.
+quick_verdict: DaVinci Resolve 12.5 has an official AUXSAYS record. Confirmed patch-specific consensus is deferred until the
+  consensus refresh pipeline is active.
+official_summary: Blackmagic Design lists DaVinci Resolve 12.5 in its official support downloads feed.
+release_summary: This software installs the free version of DaVinci Resolve 12.5. With over 1,000 enhancements and 250 new
+  features, DaVinci Resolve 12.5 is the world’s most advanced editing and color grading system for independent users working
+  on SD, HD and Ultra HD projects. Technical support is available via the Blackmagic Design community forums.
 consensus_report: Confirmed patch-specific consensus collection is deferred. This page currently reflects official-source
   ingestion only.
 evidence_state: official_only
@@ -53,10 +52,10 @@ consensus_report_weighting: equal_per_confirmed_report
 consensus_low_context_policy: excluded
 complaint_themes: []
 status_events:
-- at: '2026-08-05T00:00:00Z'
+- at: '2016-06-08T00:00:00Z'
   label: Published
   note: Official source entry detected.
-- at: '2026-08-05T07:31:29Z'
+- at: '2026-08-13T04:05:13Z'
   label: Insufficient data
   note: AUXSAYS official-ingestion record initialized.
 official_patch_notes_source_type: download_portal
@@ -82,44 +81,23 @@ official_sources:
   trust_level: official
   extraction_status: version_metadata_captured
 official_source_attempts:
-- at: '2026-08-12T03:58:51Z'
-  url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
-  status: captured-from-official-blackmagic-support-api
-  body_captured: true
-  checksums_captured: false
-- at: '2026-08-12T09:13:24Z'
-  url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
-  status: captured-from-official-blackmagic-support-api
-  body_captured: true
-  checksums_captured: false
-- at: '2026-08-12T15:02:31Z'
-  url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
-  status: captured-from-official-blackmagic-support-api
-  body_captured: true
-  checksums_captured: false
-- at: '2026-08-12T20:42:51Z'
-  url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
-  status: captured-from-official-blackmagic-support-api
-  body_captured: true
-  checksums_captured: false
 - at: '2026-08-13T04:05:07Z'
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
   status: captured-from-official-blackmagic-support-api
   body_captured: true
   checksums_captured: false
-official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci Resolve Studio 21.0.4 Update
+official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci Resolve 12.5
 
   Channel: Stable
 
-  Release date: 2026-08-05
+  Release date: 2016-06-08
 
-  Platforms listed: Mac OS X, Windows, Linux, Windows ARM
+  Platforms listed: Mac OS X, Windows
 
 
-  This software update adds support for relinking proxy clips with different formats, support for additional X-OCN formats,
-  the ability to use API scripting to review selected clips on the timeline and improved realtime playback on timelines with
-  a large cache. This version requires a DaVinci Resolve Studio license dongle, Blackmagic Cloud license or software activation
-  code.
+  This software installs the free version of DaVinci Resolve 12.5. With over 1,000 enhancements and 250 new features, DaVinci
+  Resolve 12.5 is the world’s most advanced editing and color grading system for independent users working on SD, HD and Ultra
+  HD projects. Technical support is available via the Blackmagic Design community forums.
 
 
   Official support page: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
