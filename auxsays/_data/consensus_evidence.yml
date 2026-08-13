@@ -13510,3 +13510,24 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+- id: obs-studio-32-2-1-github-issue-13783
+  product_id: obs-studio
+  update_version: 32.2.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13783
+  parent_title: 'Pipewire: video capture pipe disconnects when video format/framerate is changed'
+  report_title: 'Pipewire: video capture pipe disconnects when video format/framerate is changed'
+  report_text_excerpt: 'Info Other ### Other OS Pop OS 24.04 (Ubuntu base, running Gnome) ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/r4HUFKIJJFhOB43z ### OBS Studio Crash Log URL _No response_ ### Expected Behavior I can'
+  captured_at: '2026-08-13T04:02:24Z'
+  patch_version_matched: true
+  matched_version: 32.2.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
