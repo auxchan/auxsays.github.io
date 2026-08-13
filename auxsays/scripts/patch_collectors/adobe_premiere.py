@@ -12,6 +12,7 @@ import html
 import json
 import os
 import re
+import time
 import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
@@ -168,6 +169,8 @@ def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[
     ):
         errors: list[dict[str, Any]] = []
         candidates = collector(record, context, errors)
+        # Collectors run sequentially, so module telemetry belongs to the call just made.
+        telemetry = dict(_ALGOLIA_TELEMETRY) if method_id == "adobe_community_algolia_search" else {}
         accepted, rejected = evaluate_candidates(record, candidates, captured_at)
         method_results.append({
             "method_id": method_id,
@@ -175,6 +178,7 @@ def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[
             "accepted": accepted,
             "rejected": rejected,
             "errors": errors,
+            "telemetry": telemetry,
         })
 
     accepted = merge_rows_by_url([row for result in method_results for row in result["accepted"]])
@@ -214,6 +218,10 @@ def adobe_community_search_candidates(record: PatchRecord, context: CollectorCon
 # consensus acceptance -- and Announcements live inside Premiere's own category. Scoping the
 # board structurally keeps announcements out of the funnel entirely, before acceptance runs.
 ALGOLIA_TOKEN_URL = "https://community.adobe.com/search/searchToken"
+# Pin the verified index by exact name. Positional selection (availableIndexes[0]) would
+# silently follow Adobe if they reorder or add indexes, changing which corpus we search
+# without any signal. Absent / empty / malformed -> fail closed.
+ALGOLIA_INDEX = "adobedme-en-unified"
 ALGOLIA_QUERY_URL_TMPL = "https://{app_id}-dsn.algolia.net/1/indexes/{index}/query"
 COMMUNITY_GET_TOPICS_URL = "https://community.adobe.com/search/getTopics"
 PREMIERE_CATEGORY_ID = "726"          # "Adobe Premiere"; sibling products are distinct categories
@@ -225,6 +233,11 @@ MAX_ALGOLIA_HITS_PER_QUERY = 100
 MAX_ALGOLIA_PAGES = 2
 MAX_TOPIC_IDS_PER_RECORD = 120
 MAX_QUERIES_PER_RECORD = 4
+# Selection basis is recorded in telemetry so the ordering rule is auditable in the log.
+# Algolia hits carry date_added (unix seconds), a real timestamp available BEFORE getTopics
+# hydration, so selection is authoritative rather than an id-ordering heuristic.
+TOPIC_SELECTION_BASIS = "algolia_date_added_descending"
+_ALGOLIA_TELEMETRY: dict[str, Any] = {}
 
 
 def request_public_json_post(
@@ -259,16 +272,26 @@ def request_public_json_post(
 
 
 def algolia_credentials() -> dict[str, str]:
+    """Fetch anonymous Algolia credentials and pin the verified index by EXACT name.
+
+    The index is never chosen positionally: it must appear, by exact equality, anywhere in
+    availableIndexes. Missing, empty or malformed lists fail closed rather than falling back to
+    some other Adobe corpus. No token value is ever placed in a diagnostic.
+    """
     payload = request_public_json(ALGOLIA_TOKEN_URL)
     if not isinstance(payload, dict):
         raise AdobeCommunityAccessError("searchtoken_unexpected_shape")
     app_id = str(payload.get("client_id") or "").strip()
     token = str(payload.get("token") or "").strip()
-    indexes = payload.get("availableIndexes") or []
-    index = str(indexes[0]).strip() if isinstance(indexes, list) and indexes else ""
-    if not (app_id and token and index):
+    if not (app_id and token):
         raise AdobeCommunityAccessError("searchtoken_incomplete")
-    return {"app_id": app_id, "token": token, "index": index}
+    indexes = payload.get("availableIndexes")
+    if not isinstance(indexes, list) or not indexes:
+        raise AdobeCommunityAccessError("searchtoken_index_unavailable")
+    available = {str(name).strip() for name in indexes if isinstance(name, (str, int))}
+    if ALGOLIA_INDEX not in available:
+        raise AdobeCommunityAccessError("searchtoken_index_unavailable")
+    return {"app_id": app_id, "token": token, "index": ALGOLIA_INDEX}
 
 
 def algolia_premiere_bug_topic_ids(creds: dict[str, str], query: str) -> list[int]:
@@ -281,7 +304,8 @@ def algolia_premiere_bug_topic_ids(creds: dict[str, str], query: str) -> list[in
         "X-Algolia-Application-Id": creds["app_id"],
         "X-Algolia-API-Key": creds["token"],
     }
-    found: list[int] = []
+    found: list[tuple[int, int]] = []
+    pages = 0
     for page in range(MAX_ALGOLIA_PAGES):
         params = urllib.parse.urlencode({
             "query": query,
@@ -294,39 +318,45 @@ def algolia_premiere_bug_topic_ids(creds: dict[str, str], query: str) -> list[in
             "attributesToHighlight": "",
         })
         data = request_public_json_post(url, json.dumps({"params": params}).encode("utf-8"), headers=headers)
+        pages += 1
         hits = data.get("hits") if isinstance(data, dict) else None
         if not isinstance(hits, list) or not hits:
             break
         for hit in hits:
-            raw = hit.get("id") if isinstance(hit, dict) else None
-            try:
-                found.append(int(str(raw)))
-            except (TypeError, ValueError):
+            if not isinstance(hit, dict):
                 continue
+            try:
+                topic_id = int(str(hit.get("id")))
+            except (TypeError, ValueError):
+                continue  # malformed hit id: ignore, never guess
+            try:
+                added = int(hit.get("date_added") or 0)
+            except (TypeError, ValueError):
+                added = 0
+            found.append((topic_id, added))
         if len(hits) < MAX_ALGOLIA_HITS_PER_QUERY:
             break
-    return found
+    return found, pages
 
 
-def community_topics(topic_ids: list[int]) -> list[dict[str, Any]]:
-    """Resolve topics in deterministic bounded chunks (see GET_TOPICS_CHUNK).
+def community_topics(topic_ids: list[int]) -> tuple[list[dict[str, Any]], int]:
+    """Resolve topics in deterministic bounded chunks; returns (topics, request_count).
 
-    NEWEST-FIRST is load-bearing, not cosmetic. Adobe topic ids are broadly chronological, so
-    capping an ascending sort keeps the OLDEST ids and silently discards the newest -- which the
-    collector's since-window then rejects wholesale, reporting no_results while recent reports
-    existed. Select the newest ids under the cap, then resolve them in ascending order so the
-    request sequence stays deterministic.
+    getTopics silently truncates a long topicIds[] request around 25 ids -- no error, no signal --
+    so chunks stay at GET_TOPICS_CHUNK. Ids arrive already selected and are resolved in ascending
+    order so the request sequence is deterministic.
     """
-    unique = sorted({int(t) for t in topic_ids}, reverse=True)[:MAX_TOPIC_IDS_PER_RECORD]
-    ordered = sorted(unique)
+    ordered = sorted({int(t) for t in topic_ids})
     topics: list[dict[str, Any]] = []
+    requests = 0
     for start in range(0, len(ordered), GET_TOPICS_CHUNK):
         chunk = ordered[start:start + GET_TOPICS_CHUNK]
         params = urllib.parse.urlencode([("topicIds[]", str(t)) for t in chunk])
         payload = request_public_json(f"{COMMUNITY_GET_TOPICS_URL}?{params}")
+        requests += 1
         if isinstance(payload, list):
             topics.extend(item for item in payload if isinstance(item, dict))
-    return topics
+    return topics, requests
 
 
 def topic_to_candidate(topic: dict[str, Any]) -> dict[str, str] | None:
@@ -354,44 +384,92 @@ def topic_to_candidate(topic: dict[str, Any]) -> dict[str, str] | None:
 def adobe_community_algolia_search_candidates(record: PatchRecord, context: CollectorContext, errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
     """Keyless Adobe Community discovery for Premiere, scoped to the Bug Reports board.
 
-    Discovery only. Every accepted row still passes the unchanged Premiere gates: exact product,
-    exact patch version, specific report URL, report date vs release date, and a concrete
-    user-facing issue.
+    Discovery only. Every accepted row still passes the unchanged Premiere gates. Bounded
+    discovery is fully accounted for: HTTP counts are ACTUAL requests (never logical query
+    terms), and any loss to MAX_TOPIC_IDS_PER_RECORD is reported rather than silent.
     """
+    global _ALGOLIA_TELEMETRY
+    started = time.monotonic()
+    tel: dict[str, Any] = {
+        "search_token_request_count": 0,
+        "algolia_query_count": 0,
+        "algolia_page_request_count": 0,
+        "gettopics_request_count": 0,
+        "total_http_request_count": 0,
+        "discovered_topic_ids": 0,
+        "unique_topic_ids": 0,
+        "selected_topic_ids": 0,
+        "truncated_topic_ids": 0,
+        "topic_selection_basis": TOPIC_SELECTION_BASIS,
+        "method_duration_ms": 0,
+    }
+    _ALGOLIA_TELEMETRY = tel
+
+    def _finish() -> None:
+        tel["method_duration_ms"] = int((time.monotonic() - started) * 1000)
+        tel["total_http_request_count"] = (
+            tel["search_token_request_count"] + tel["algolia_page_request_count"] + tel["gettopics_request_count"]
+        )
+        rb.emit("premiere_algolia_discovery", product_id=PRODUCT_ID, version=str(record.update_version), **tel)
+
     try:
         creds = algolia_credentials()
+        tel["search_token_request_count"] = 1
     except Exception as exc:  # noqa: BLE001
+        tel["search_token_request_count"] = 1
         errors.append({"source_url": ALGOLIA_TOKEN_URL, "reason": f"adobe_community_algolia_search_token_failed:{error_reason(exc)}"})
+        _finish()
         return []
 
     version = str(record.update_version or "").strip()
     if not version:
+        _finish()
         return []
-    # Query the bare version plus Premiere's own alias forms (e.g. 26.2 -> 26.2.0), deduped and
-    # capped so a record can never fan out into an unbounded number of Algolia requests.
     queries: list[str] = []
     for token in [version, *version_aliases(version)]:
         token = str(token).strip()
         if token and token not in queries:
             queries.append(token)
     queries = queries[:MAX_QUERIES_PER_RECORD]
+    tel["algolia_query_count"] = len(queries)
 
-    topic_ids: list[int] = []
+    hits: list[tuple[int, int]] = []
     for query in queries:
         try:
-            topic_ids.extend(algolia_premiere_bug_topic_ids(creds, query))
+            found, pages = algolia_premiere_bug_topic_ids(creds, query)
+            tel["algolia_page_request_count"] += pages
+            hits.extend(found)
         except Exception as exc:  # noqa: BLE001
+            tel["algolia_page_request_count"] += 1
             errors.append({"source_url": ALGOLIA_QUERY_URL_TMPL.format(app_id=creds["app_id"], index=creds["index"]),
                            "reason": f"adobe_community_algolia_search_query_failed:{error_reason(exc)}"})
             if error_is_blocked(exc):
+                _finish()
                 return []
-    if not topic_ids:
+    tel["discovered_topic_ids"] = len(hits)
+    if not hits:
+        _finish()
         return []
 
+    # Keep the newest date_added per topic id, then select newest-first under the cap. The cap is
+    # permitted; losing supply to it silently is not, so the shortfall is reported as truncation.
+    newest: dict[int, int] = {}
+    for topic_id, added in hits:
+        if added >= newest.get(topic_id, -1):
+            newest[topic_id] = added
+    tel["unique_topic_ids"] = len(newest)
+    ranked = sorted(newest.items(), key=lambda kv: (-kv[1], -kv[0]))
+    selected = [topic_id for topic_id, _added in ranked[:MAX_TOPIC_IDS_PER_RECORD]]
+    tel["selected_topic_ids"] = len(selected)
+    tel["truncated_topic_ids"] = max(0, len(newest) - len(selected))
+
     try:
-        topics = community_topics(topic_ids)
+        topics, chunk_requests = community_topics(selected)
+        tel["gettopics_request_count"] = chunk_requests
     except Exception as exc:  # noqa: BLE001
+        tel["gettopics_request_count"] += 1
         errors.append({"source_url": COMMUNITY_GET_TOPICS_URL, "reason": f"adobe_community_algolia_search_topics_failed:{error_reason(exc)}"})
+        _finish()
         return []
 
     candidates: list[dict[str, Any]] = []
@@ -407,6 +485,7 @@ def adobe_community_algolia_search_candidates(record: PatchRecord, context: Coll
         if context.since and candidate.get("source_date") and date_part(candidate["source_date"]) < context.since:
             continue
         candidates.append(candidate)
+    _finish()
     return candidates
 
 
@@ -650,12 +729,22 @@ def health_for_method(record: PatchRecord, captured_at: str, result: dict[str, A
     errors = list(result["errors"])
     blocked_reason = blocked_reason_from_errors(errors)
     notes = method_notes(method_id, candidates, accepted, rejected, errors)
+    telemetry = dict(result.get("telemetry") or {})
+    status = adobe_community_method_status(candidates, accepted, rejected, errors)
+    if telemetry:
+        # Extra keys are discarded by normalize_method_health_row, so completeness/runtime
+        # accounting is surfaced in free-text notes (and via rb.emit in the run log).
+        notes = f"{notes} [{telemetry_note(telemetry)}]"
+        # A capped pass found evidence but did NOT see all of its supply: downgrade a clean
+        # run to partial. Never upgrade, and never mask a blocked/broken diagnosis.
+        if int(telemetry.get("truncated_topic_ids") or 0) > 0 and status in {"success", "no_results"}:
+            status = "partial"
     return method_health_row(
         product_id=PRODUCT_ID,
         update_version=record.update_version,
         method_id=method_id,
         source_type=method_source_type(method_id),
-        status=adobe_community_method_status(candidates, accepted, rejected, errors),
+        status=status,
         candidates_found=len(candidates),
         accepted_reports=len(accepted),
         rejected_reports=len(rejected),
@@ -663,6 +752,17 @@ def health_for_method(record: PatchRecord, captured_at: str, result: dict[str, A
         last_run=captured_at,
         notes=notes,
     )
+
+
+def telemetry_note(telemetry: dict[str, Any]) -> str:
+    """Deterministic compact telemetry for the health row free-text notes."""
+    order = (
+        "search_token_request_count", "algolia_query_count", "algolia_page_request_count",
+        "gettopics_request_count", "total_http_request_count", "discovered_topic_ids",
+        "unique_topic_ids", "selected_topic_ids", "truncated_topic_ids",
+        "topic_selection_basis", "method_duration_ms",
+    )
+    return " ".join(f"{k}={telemetry.get(k)}" for k in order if k in telemetry)
 
 
 def method_source_type(method_id: str) -> str:
