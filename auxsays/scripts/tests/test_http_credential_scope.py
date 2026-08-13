@@ -24,6 +24,8 @@ import os
 import sys
 import threading
 import traceback
+import urllib.parse
+import urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 
@@ -120,6 +122,15 @@ def run() -> int:  # noqa: PLR0915
         check("only fetch_text reads the token, and only after the destination gate",
               (lambda src: "GITHUB_TOKEN" in src and src.index("_github_auth_allowed") < src.index("GITHUB_TOKEN"))
               (inspect.getsource(auxhttp.fetch_text)))
+        check("the origin gate reads no environment variable (cannot consult the token)",
+              "getenv" not in auxhttp._github_auth_allowed.__code__.co_names
+              and "environ" not in auxhttp._github_auth_allowed.__code__.co_names,
+              f"co_names={auxhttp._github_auth_allowed.__code__.co_names}")
+        check("the gate authorizes from parsed URL components, not a normalized netloc string",
+              (lambda src: "urlsplit" in src
+               and all(w in src for w in ("hostname", "username", "password", "port"))
+               and "_netloc" not in src)(inspect.getsource(auxhttp._github_auth_allowed)),
+              "gate must not approve a host after discarding userinfo/port")
         check("an explicitly supplied Authorization is the caller's own value, still not fabricated",
               auxhttp._headers({"Authorization": "Bearer CALLER-SUPPLIED"}).get("Authorization")
               == "Bearer CALLER-SUPPLIED")
@@ -137,10 +148,80 @@ def run() -> int:  # noqa: PLR0915
             ("http://api.github.com/x", False, "plain http is refused"),
             ("https://API.GITHUB.COM/x", True, "case-insensitive host"),
             ("https://api.github.com:443/x", True, "explicit default port"),
-            ("https://user@api.github.com/x", True, "userinfo stripped"),
+            ("https://user@api.github.com/x", False, "userinfo is a noncanonical authority"),
         ):
             check(f"github auth {'allowed' if allowed else 'refused'} for {why}",
                   auxhttp._github_auth_allowed(url) is allowed, url)
+
+        # --- exact APPROVED HTTPS ORIGIN, not merely an approved hostname -
+        # The gate decides whether a repository-scoped token may leave the process, so it must
+        # authorize a canonical origin (https + api.github.com + no userinfo + default port).
+        # Discarding userinfo or a nondefault port and then approving the surviving hostname is
+        # too permissive: :444 and user@ are different destinations from the approved one.
+        for url, allowed, why in (
+            ("https://api.github.com/x", True, "canonical origin"),
+            ("https://api.github.com:443/x", True, "explicit default port 443"),
+            ("https://API.GITHUB.COM/x", True, "case-insensitive host"),
+            ("https://api.github.com:444/x", False, "nondefault port 444"),
+            ("https://api.github.com:12345/x", False, "nondefault port 12345"),
+            ("https://api.github.com:65535/x", False, "nondefault port 65535"),
+            ("https://api.github.com:0/x", False, "port 0"),
+            ("https://user@api.github.com/x", False, "userinfo"),
+            ("https://user:password@api.github.com/x", False, "userinfo with password"),
+            ("https://:password@api.github.com/x", False, "password-only userinfo"),
+            ("https://user@api.github.com:444/x", False, "userinfo AND nondefault port"),
+            ("https://api.github.com.evil.example/x", False, "suffix-appended lookalike"),
+            ("http://api.github.com/x", False, "plain http"),
+        ):
+            try:
+                verdict = auxhttp._github_auth_allowed(url)
+                escaped = ""
+            except Exception as exc:  # noqa: BLE001 - a raising gate is itself the defect
+                verdict, escaped = None, f"{type(exc).__name__}: {exc}"
+            check(f"exact-origin gate {'ALLOWS' if allowed else 'REFUSES'} {why}",
+                  verdict is allowed, f"{url} -> {verdict!r} {escaped}")
+
+        # A malformed port must fail closed WITHOUT an exception escaping the gate: callers
+        # treat a raise as a crash, not as a refusal.
+        for bad in ("https://api.github.com:notaport/x", "https://api.github.com:-1/x",
+                    "https://api.github.com:99999999999999/x", "https://api.github.com:44 4/x"):
+            try:
+                verdict = auxhttp._github_auth_allowed(bad)
+                raised = False
+            except Exception:  # noqa: BLE001
+                verdict, raised = None, True
+            check(f"malformed port fails closed with no exception escape: {bad.split('//')[1][:34]}",
+                  verdict is False and not raised, f"verdict={verdict!r} raised={raised}")
+
+        # --- the redirect gate must be the SAME rule, not a parallel one ---
+        def _redirect_keeps_auth(newurl: str):
+            """True when the redirected request still carries Authorization anywhere."""
+            handler = auxhttp._AuthStrippingRedirectHandler()
+            req = urllib.request.Request("https://api.github.com/start")
+            # add_header (not add_unredirected_header) so stock urllib WOULD forward it; this
+            # isolates our handler's stripping instead of measuring urllib's own behaviour.
+            req.add_header("Authorization", "Bearer REDIRECT-PROBE")
+            new = handler.redirect_request(req, None, 302, "Found", {}, newurl)
+            if new is None:
+                return False
+            keys = [str(k).lower() for k in list(new.headers) + list(new.unredirected_hdrs)]
+            return "authorization" in keys
+
+        check("redirect to a third party STRIPS Authorization",
+              _redirect_keeps_auth("https://attacker.example/collect") is False)
+        check("redirect to api.github.com:444 STRIPS Authorization (same origin rule)",
+              _redirect_keeps_auth("https://api.github.com:444/x") is False)
+        check("redirect to a userinfo authority STRIPS Authorization",
+              _redirect_keeps_auth("https://user@api.github.com/x") is False)
+        check("redirect to http://api.github.com STRIPS Authorization",
+              _redirect_keeps_auth("http://api.github.com/x") is False)
+        check("redirect to the canonical origin may KEEP Authorization",
+              _redirect_keeps_auth("https://api.github.com/next") is True)
+        check("redirect to the explicit default port may KEEP Authorization",
+              _redirect_keeps_auth("https://api.github.com:443/next") is True)
+        check("the redirect handler calls the one shared gate (no parallel rule)",
+              "_github_auth_allowed" in
+              inspect.getsource(auxhttp._AuthStrippingRedirectHandler.redirect_request))
 
         # --- on the wire: generic fetch is unauthenticated ----------------
         _Recorder.received.clear()
@@ -155,11 +236,26 @@ def run() -> int:  # noqa: PLR0915
         check("authenticate=True is REFUSED for a non-approved host (wire-verified)",
               got["authorization"] is None, f"got {got['authorization']!r}")
 
+        # --- wire proof: approved HOSTNAME is not enough ------------------
+        # The loopback server listens on http and a nondefault port. With its hostname added to
+        # the approved set and the REAL gate in force, authenticate=True must still send nothing:
+        # a fail-closed origin check, measured on the wire rather than asserted about the helper.
+        auxhttp.GITHUB_AUTH_HOSTS = frozenset({"127.0.0.1"})
+        try:
+            _Recorder.received.clear()
+            auxhttp.fetch_json(f"{base}/repos/x/y/releases")
+            got = _Recorder.received[-1]
+            check("approved hostname on a NONDEFAULT PORT gets no token (wire-verified)",
+                  got["authorization"] is None, f"got {got['authorization']!r}")
+        finally:
+            auxhttp.GITHUB_AUTH_HOSTS = prior_hosts
+
         # --- on the wire: approved host does receive it -------------------
         auxhttp.GITHUB_AUTH_HOSTS = frozenset({"127.0.0.1"})
         # https is required by the real gate; relax only the scheme check for the loopback test
         real_gate = auxhttp._github_auth_allowed
-        auxhttp._github_auth_allowed = lambda u: auxhttp._netloc(u) in auxhttp.GITHUB_AUTH_HOSTS
+        auxhttp._github_auth_allowed = (
+            lambda u: urllib.parse.urlsplit(u).hostname in auxhttp.GITHUB_AUTH_HOSTS)
         try:
             _Recorder.received.clear()
             auxhttp.fetch_json(f"{base}/repos/x/y/releases")
