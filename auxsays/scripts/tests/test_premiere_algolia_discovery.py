@@ -276,6 +276,74 @@ def run() -> int:  # noqa: PLR0915
               not any("lib.http" in line or "lib import http" in line for line in imports),
               str([l for l in imports if "http" in l]))
 
+
+        # ================= PATCH-IDENTITY AUTHORITY (P0 false-positive) =================
+        # A 26.3 regression report that says "works in 26.2" is evidence about 26.3, never
+        # evidence that 26.2 is defective. Identity comes from the most authoritative statement.
+        def ident(target, *, parent="", title="", body=""):
+            return pp.premiere_patch_identity(
+                {"parent_title": parent, "report_title": title, "report_text": body}, target)
+
+        def counted(target, *, title="", body="", url="https://community.adobe.com/bug-reports-728/x-1"):
+            cand = {"source_type": pp.SOURCE_TYPE, "source_name": pp.SOURCE_NAME, "source_url": url,
+                    "archive_url": "", "parent_title": title, "report_title": title,
+                    "report_text": body, "source_date": "2026-07-20T00:00:00+0000"}
+            return pp.row_from_candidate(record(target), cand, "2026-08-13T00:00:00Z")
+
+        T1 = "Premiere Pro 26.3 Export button does nothing; UI tabs become unclickable after clicking Export"
+        B1 = "Product/Version: Adobe Premiere Pro 26.3. This is a regression; works in 26.2. Export crashes."
+        ok, basis, reason = ident("26.2", title=T1, body=B1)
+        check("ID-1 title 26.3 + body 'works in 26.2', target 26.2 => REJECT",
+              (not ok) and reason == "conflicting_premiere_title_version", f"{ok=} {basis=} {reason=}")
+        row = counted("26.2", title=T1, body=B1)
+        check("ID-1b the 26.2 row is not counted and names the identity reason",
+              row.get("counted") is not True and row.get("exclusion_reason") == "conflicting_premiere_title_version",
+              str({k: row.get(k) for k in ("counted", "exclusion_reason", "patch_version_matched")}))
+        ok2, _b2, _r2 = ident("26.3", title=T1, body=B1)
+        check("ID-2 same report, target 26.3 => identity PASS", ok2)
+
+        T3 = "Premiere Pro 26.3 Project Errors and Logitech MX Creative Console Compatibility Issue"
+        B3 = "Problem version: Premiere Pro 26.3\nWorking version: Premiere Pro 26.2\nReverting to 26.2 resolves it."
+        ok3, _b3, r3 = ident("26.2", title=T3, body=B3)
+        check("ID-3 explicit problem 26.3 / working 26.2, target 26.2 => REJECT", (not ok3) and r3, f"{ok3=} {r3=}")
+        check("ID-4 same, target 26.3 => identity PASS", ident("26.3", title=T3, body=B3)[0])
+
+        check("ID-5 no title version, body says 26.2 crashes => fallback PASS",
+              ident("26.2", title="Export fails after update", body="Premiere Pro 26.2 crashes during export.")[0])
+        ok6, b6, r6 = ident("26.2", title="Export fails after update",
+                            body="Problem version: Premiere Pro 26.3\nWorking version: Premiere Pro 26.2")
+        check("ID-6 no title version, declared problem 26.3, target 26.2 => REJECT",
+              (not ok6) and r6 == "conflicting_premiere_problem_version", f"{ok6=} {b6=} {r6=}")
+        check("ID-7 same body, target 26.3 => identity PASS",
+              ident("26.3", title="Export fails after update",
+                    body="Problem version: Premiere Pro 26.3\nWorking version: Premiere Pro 26.2")[0])
+
+        T8 = "Premiere Pro 26.2.2 / 26.3.0 Text Style strokes lost on export"
+        check("ID-8 multi-version title, target 26.2.2 => may PASS", ident("26.2.2", title=T8)[0])
+        check("ID-9 multi-version title, target 26.3.0 => may PASS", ident("26.3.0", title=T8)[0])
+        check("ID-9b multi-version title, unrelated target 26.1 => REJECT", not ident("26.1", title=T8)[0])
+
+        check("ID-10 title 26.3 + incidental historical 26.2 mention, target 26.2 => REJECT",
+              not ident("26.2", title="Premiere Pro 26.3 timeline corruption",
+                        body="I have used Premiere Pro 26.2 for a year without issue. Now it corrupts projects.")[0])
+
+        check("ID-11 26.2 is not satisfied by 26.2.2 (no prefix matching)",
+              not pp._version_in("26.2", ["26.2.2"]) and pp._version_in("26.2", ["26.2.0"])
+              and pp._version_in("26.2.2", ["26.2.2"]))
+        check("ID-11b title-extracted versions are exact tokens",
+              pp.premiere_versions_in_title("Premiere Pro 26.2.2 crash") == ["26.2.2"],
+              str(pp.premiere_versions_in_title("Premiere Pro 26.2.2 crash")))
+
+        b65 = "Premiere Pro 26.2 Build 65 crashes on launch every time."
+        check("ID-12 BUILD 65 handling unchanged",
+              pp.premiere_build_65_context(b65, "26.2") and pp.premiere_version_match(b65, "26.2")[0]
+              and ident("26.2", title="Crash on launch", body=b65)[0])
+
+        check("ID-13 control-only mention cannot establish identity",
+              not ident("26.2", title="Crash after update", body="I reverted to 26.2 and it was fine.")[0])
+        check("ID-14 no versions anywhere => fallback defers to text matching (no false reject)",
+              ident("26.2", title="Export crash", body="Export crashes constantly since the update.")[0])
+
         # --- notes surface -------------------------------------------------------
         row = health(tel_trunc)
         check("telemetry appears in health notes", "truncated_topic_ids=80" in row["notes"] and "topic_selection_basis=" in row["notes"],

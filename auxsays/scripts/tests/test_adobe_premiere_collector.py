@@ -189,6 +189,12 @@ def reddit_candidate(**overrides: str) -> dict[str, str]:
     return item
 
 
+# NOTE on off-version rejection reasons: a report whose TITLE explicitly names a different
+# Premiere version (e.g. "Premiere Pro 25.0 export crash" against the 26.2 record) is now
+# rejected by the Premiere patch-identity authority with conflicting_premiere_title_version,
+# which is strictly more precise than the generic missing_exact_patch_version_match. The
+# assertions below therefore accept either reason; the substantive requirement -- that the row
+# is NOT counted -- is unchanged.
 def run() -> int:
     # This suite is OFFLINE and deterministic: the orchestration tests drive collect_for_record
     # end to end while stubbing only premiere.request_text. The Adobe Community keyless JSON
@@ -622,7 +628,7 @@ def run() -> int:
         },
         "2026-05-20T00:00:00Z",
     )
-    check("Creative COW wrong version is rejected", creative_wrong_version.get("counted") is False and creative_wrong_version.get("exclusion_reason") == "missing_exact_patch_version_match", f"reason={creative_wrong_version.get('exclusion_reason')!r}")
+    check("Creative COW wrong version is rejected", creative_wrong_version.get("counted") is False and creative_wrong_version.get("exclusion_reason") in {"missing_exact_patch_version_match", "conflicting_premiere_title_version"}, f"reason={creative_wrong_version.get('exclusion_reason')!r}")
 
     original_request_text = premiere.request_text
     try:
@@ -719,7 +725,7 @@ def run() -> int:
     off_accepted, off_rejected = evaluate_candidates(reddit_record, [off_version], reddit_captured)
     check(
         "Reddit off-version post is rejected",
-        not off_accepted and bool(off_rejected) and off_rejected[0].get("exclusion_reason") == "missing_exact_patch_version_match",
+        not off_accepted and bool(off_rejected) and off_rejected[0].get("exclusion_reason") in {"missing_exact_patch_version_match", "conflicting_premiere_title_version"},
         f"accepted={off_accepted!r} rejected={off_rejected!r}",
     )
 

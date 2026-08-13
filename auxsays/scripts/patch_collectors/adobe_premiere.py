@@ -1096,6 +1096,14 @@ def row_from_candidate(record: PatchRecord, candidate: dict[str, Any], captured_
         str(candidate.get("report_text") or ""),
     ])
     matched, matched_version, basis = premiere_version_match(report_text, record.update_version)
+    # Patch-identity authority runs BEFORE final acceptance: an exact token elsewhere in the
+    # report cannot outrank an explicit statement that a DIFFERENT version is the problem.
+    identity_ok, identity_basis, identity_reason = premiere_patch_identity(candidate, record.update_version)
+    if matched and not identity_ok:
+        matched, matched_version = False, ""
+        basis = identity_basis
+    elif matched and identity_basis != "premiere_text_fallback":
+        basis = f"{basis}+{identity_basis}"
     theme, workflow_area, platform, severity, sentiment = classify(report_text)
     source_date = date_part(candidate.get("source_date"))
     archive_url = str(candidate.get("archive_url") or "").strip()
@@ -1128,6 +1136,9 @@ def row_from_candidate(record: PatchRecord, candidate: dict[str, Any], captured_
     if not source_date:
         row["source_date_pass"] = None
     gated = apply_acceptance_gates(row, report_text=report_text)
+    if identity_reason and gated.get("counted") is not True:
+        # Name the real cause rather than the generic missing-version reason.
+        gated["exclusion_reason"] = identity_reason
     if archive_url:
         gated["archive_url"] = archive_url
     if gated.get("counted") is True and str(gated.get("source_type") or "") == SOURCE_TYPE and not adobe_report_url_is_specific(str(gated.get("source_url") or "")):
@@ -1149,6 +1160,122 @@ def row_from_candidate(record: PatchRecord, candidate: dict[str, Any], captured_
         gated["counted"] = False
         gated["exclusion_reason"] = "not_a_real_issue_report"
     return gated
+
+
+# --- Premiere patch-identity authority -----------------------------------------------------
+# An exact version token appearing anywhere in a report is NOT sufficient patch identity. A
+# report about a 26.3 regression routinely says "works in 26.2" or "reverted to 26.2", and the
+# combined parent_title + report_title + report_text match then satisfied the 26.2 record --
+# counting a 26.3 defect as evidence against 26.2. Identity is therefore resolved from the most
+# authoritative statement available, before final version acceptance. Shared exact_version_match
+# is untouched; this layer only decides WHICH text may establish identity.
+PREMIERE_VERSION_TOKEN_RE = re.compile(
+    r"\b(?:adobe\s+)?premiere(?:\s+pro)?\s+v?(\d{2}\.\d+(?:\.\d+)?)(?![\d.])",
+    flags=re.I,
+)
+# A bare version list that follows an explicit Premiere mention, e.g.
+# "Premiere Pro 26.2.2 / 26.3.0 Text Style strokes lost" -> both are explicitly affected.
+PREMIERE_EXTRA_VERSION_RE = re.compile(r"(?:\s*[/,]\s*|\s+and\s+)v?(\d{2}\.\d+(?:\.\d+)?)(?![\d.])", flags=re.I)
+# Labelled AFFIRMATIVE problem declarations. Conservative and deterministic.
+PREMIERE_PROBLEM_LABEL_RE = re.compile(
+    r"(?:product\s*/\s*version|problem\s+version|affected\s+version|broken\s+(?:in|version)|"
+    r"premiere\s+pro\s+version|version\s+affected)\s*[:\-]\s*(?:adobe\s+)?(?:premiere(?:\s+pro)?\s+)?v?(\d{2}\.\d+(?:\.\d+)?)(?![\d.])",
+    flags=re.I,
+)
+# Comparison/control versions. These are the versions that WORK, so they can never establish
+# identity for a defect record.
+PREMIERE_CONTROL_LABEL_RE = re.compile(
+    r"(?:working\s+version|works\s+(?:in|on|fine\s+(?:in|on))|reverted?\s+(?:back\s+)?to|"
+    r"rolled\s+back\s+to|rollback\s+to|downgraded?\s+to|back\s+to|workaround|"
+    r"resolved\s+by\s+installing)\s*[:\-]?\s*(?:adobe\s+)?(?:premiere(?:\s+pro)?\s+)?v?(\d{2}\.\d+(?:\.\d+)?)(?![\d.])",
+    flags=re.I,
+)
+
+
+def premiere_versions_in_title(title: str) -> list[str]:
+    """Explicit Premiere version identity stated in a title, including multi-version titles."""
+    text = str(title or "")
+    found: list[str] = []
+    for match in PREMIERE_VERSION_TOKEN_RE.finditer(text):
+        version = match.group(1)
+        if version not in found:
+            found.append(version)
+        # Absorb an immediately following bare version list ("26.2.2 / 26.3.0").
+        tail = text[match.end():]
+        offset = 0
+        while True:
+            extra = PREMIERE_EXTRA_VERSION_RE.match(tail[offset:])
+            if not extra:
+                break
+            if extra.group(1) not in found:
+                found.append(extra.group(1))
+            offset += extra.end()
+    return found
+
+
+def premiere_declared_problem_versions(body: str) -> list[str]:
+    """Versions declared as the PROBLEM version by a labelled statement."""
+    found: list[str] = []
+    for match in PREMIERE_PROBLEM_LABEL_RE.finditer(str(body or "")):
+        if match.group(1) not in found:
+            found.append(match.group(1))
+    return found
+
+
+def premiere_control_versions(body: str) -> list[str]:
+    """Versions named as working/rollback targets. Never identity for a defect."""
+    found: list[str] = []
+    for match in PREMIERE_CONTROL_LABEL_RE.finditer(str(body or "")):
+        if match.group(1) not in found:
+            found.append(match.group(1))
+    return found
+
+
+def _version_in(target: str, versions: list[str]) -> bool:
+    """Exact version equality, plus the X.Y <-> X.Y.0 equivalence Premiere already uses.
+
+    Never a prefix test: 26.2 must not be satisfied by 26.2.2.
+    """
+    target = str(target or "").strip()
+    if not target:
+        return False
+    equivalents = {target}
+    if re.fullmatch(r"\d+\.\d+", target):
+        equivalents.add(f"{target}.0")
+    if target.endswith(".0"):
+        equivalents.add(target[:-2])
+    return any(str(v).strip() in equivalents for v in versions)
+
+
+def premiere_patch_identity(candidate: dict[str, Any], target_version: str) -> tuple[bool, str, str]:
+    """Resolve whether a report can establish patch identity for target_version.
+
+    Returns (ok, basis, exclusion_reason). Authority order:
+      1. explicit Premiere version(s) in a title      -> target must be among them
+      2. labelled affirmative problem-version(s)      -> target must be among them
+      3. otherwise                                    -> defer to the existing text matching
+    """
+    titles = " ".join([str(candidate.get("parent_title") or ""), str(candidate.get("report_title") or "")])
+    title_versions = premiere_versions_in_title(titles)
+    if title_versions:
+        if _version_in(target_version, title_versions):
+            return True, "premiere_title_version_identity", ""
+        return False, "premiere_title_version_identity", "conflicting_premiere_title_version"
+
+    body = str(candidate.get("report_text") or "")
+    declared = premiere_declared_problem_versions(body)
+    if declared:
+        if _version_in(target_version, declared):
+            return True, "premiere_declared_problem_version", ""
+        return False, "premiere_declared_problem_version", "conflicting_premiere_problem_version"
+
+    # No authoritative statement: a control-only mention must not establish identity either.
+    controls = premiere_control_versions(body)
+    if controls and _version_in(target_version, controls):
+        body_without_controls = PREMIERE_CONTROL_LABEL_RE.sub(" ", body)
+        if not premiere_version_match(body_without_controls, target_version)[0]:
+            return False, "premiere_control_version_only", "conflicting_premiere_problem_version"
+    return True, "premiere_text_fallback", ""
 
 
 def premiere_version_match(text: str, version: str) -> tuple[bool, str, str]:
