@@ -172,6 +172,14 @@ def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[
         # Collectors run sequentially, so module telemetry belongs to the call just made.
         telemetry = dict(_ALGOLIA_TELEMETRY) if method_id == "adobe_community_algolia_search" else {}
         accepted, rejected = evaluate_candidates(record, candidates, captured_at)
+        for row in accepted:
+            # Emit the row's real, deterministic basis so an audit never has to infer it.
+            rb.emit("premiere_accepted_identity", product_id=PRODUCT_ID,
+                    version=str(record.update_version), method_id=method_id,
+                    source_url=str(row.get("source_url") or ""),
+                    report_title=str(row.get("report_title") or "")[:180],
+                    match_basis=str(row.get("match_basis") or ""),
+                    matched_version=str(row.get("matched_version") or ""))
         method_results.append({
             "method_id": method_id,
             "candidates": candidates,
@@ -1170,16 +1178,16 @@ def row_from_candidate(record: PatchRecord, candidate: dict[str, Any], captured_
 # authoritative statement available, before final version acceptance. Shared exact_version_match
 # is untouched; this layer only decides WHICH text may establish identity.
 PREMIERE_VERSION_TOKEN_RE = re.compile(
-    r"\b(?:adobe\s+)?premiere(?:\s+pro)?\s+v?(\d{2}\.\d+(?:\.\d+)?)(?![\d.])",
+    r"\b(?:adobe\s+)?premiere(?:\s+pro)?\s+v?(\d{2}\.\d+(?:\.\d+)?)(?!\.?\d)",
     flags=re.I,
 )
 # A bare version list that follows an explicit Premiere mention, e.g.
 # "Premiere Pro 26.2.2 / 26.3.0 Text Style strokes lost" -> both are explicitly affected.
-PREMIERE_EXTRA_VERSION_RE = re.compile(r"(?:\s*[/,]\s*|\s+and\s+)v?(\d{2}\.\d+(?:\.\d+)?)(?![\d.])", flags=re.I)
+PREMIERE_EXTRA_VERSION_RE = re.compile(r"(?:\s*[/,]\s*|\s+and\s+)v?(\d{2}\.\d+(?:\.\d+)?)(?!\.?\d)", flags=re.I)
 # Labelled AFFIRMATIVE problem declarations. Conservative and deterministic.
 PREMIERE_PROBLEM_LABEL_RE = re.compile(
     r"(?:product\s*/\s*version|problem\s+version|affected\s+version|broken\s+(?:in|version)|"
-    r"premiere\s+pro\s+version|version\s+affected)\s*[:\-]\s*(?:adobe\s+)?(?:premiere(?:\s+pro)?\s+)?v?(\d{2}\.\d+(?:\.\d+)?)(?![\d.])",
+    r"premiere\s+pro\s+version|version\s+affected)\s*[:\-]\s*(?:adobe\s+)?(?:premiere(?:\s+pro)?\s+)?v?(\d{2}\.\d+(?:\.\d+)?)(?!\.?\d)",
     flags=re.I,
 )
 # Comparison/control versions. These are the versions that WORK, so they can never establish
@@ -1187,8 +1195,32 @@ PREMIERE_PROBLEM_LABEL_RE = re.compile(
 PREMIERE_CONTROL_LABEL_RE = re.compile(
     r"(?:working\s+version|works\s+(?:in|on|fine\s+(?:in|on))|reverted?\s+(?:back\s+)?to|"
     r"rolled\s+back\s+to|rollback\s+to|downgraded?\s+to|back\s+to|workaround|"
-    r"resolved\s+by\s+installing)\s*[:\-]?\s*(?:adobe\s+)?(?:premiere(?:\s+pro)?\s+)?v?(\d{2}\.\d+(?:\.\d+)?)(?![\d.])",
+    r"resolved\s+by\s+installing)\s*[:\-]?\s*(?:adobe\s+)?(?:premiere(?:\s+pro)?\s+)?v?(\d{2}\.\d+(?:\.\d+)?)(?!\.?\d)",
     flags=re.I,
+)
+
+
+# Control phrasing where the version comes FIRST: "26.2 was stable", "26.2 works fine".
+# Deliberately narrow: the adjective only counts when it directly follows a syntactically valid
+# Premiere version token, so words like "stable" or "fine" are never classified on their own.
+PREMIERE_CONTROL_POSTFIX_RE = re.compile(
+    r"(?:adobe\s+)?(?:premiere(?:\s+pro)?\s+)?v?(\d{2}\.\d+(?:\.\d+)?)(?!\.?\d)\s+"
+    r"(?:still\s+)?(?:works?(?:\s+(?:fine|well|ok|okay|correctly|perfectly))?|working(?:\s+fine)?|"
+    r"is\s+(?:working|stable|fine|ok|okay|unaffected|unaffected\s+by\s+this)|"
+    r"was\s+(?:working|stable|fine|ok|okay|unaffected)|"
+    r"had\s+no\s+(?:issues?|problems?)|remains?\s+stable|ran\s+fine)",
+    flags=re.I,
+)
+# "no issue in 26.2", "no problems on Premiere Pro 26.2"
+PREMIERE_CONTROL_NEGATED_RE = re.compile(
+    r"(?:no|without|zero)\s+(?:issues?|problems?|crashes?|errors?)\s+(?:in|on|with|under)\s+"
+    r"(?:adobe\s+)?(?:premiere(?:\s+pro)?\s+)?v?(\d{2}\.\d+(?:\.\d+)?)(?!\.?\d)",
+    flags=re.I,
+)
+PREMIERE_CONTROL_PATTERNS = (
+    PREMIERE_CONTROL_LABEL_RE,
+    PREMIERE_CONTROL_POSTFIX_RE,
+    PREMIERE_CONTROL_NEGATED_RE,
 )
 
 
@@ -1223,12 +1255,26 @@ def premiere_declared_problem_versions(body: str) -> list[str]:
 
 
 def premiere_control_versions(body: str) -> list[str]:
-    """Versions named as working/rollback targets. Never identity for a defect."""
+    """Versions named as working / rollback / unaffected. Never identity for a defect.
+
+    Covers both directions: labelled ("Working version: 26.2", "reverted to 26.2") and
+    version-first ("26.2 was stable", "26.2 works fine", "no issue in 26.2").
+    """
+    text = str(body or "")
     found: list[str] = []
-    for match in PREMIERE_CONTROL_LABEL_RE.finditer(str(body or "")):
-        if match.group(1) not in found:
-            found.append(match.group(1))
+    for pattern in PREMIERE_CONTROL_PATTERNS:
+        for match in pattern.finditer(text):
+            if match.group(1) not in found:
+                found.append(match.group(1))
     return found
+
+
+def premiere_strip_control_clauses(body: str) -> str:
+    """Remove every control clause so only affirmative context can establish identity."""
+    text = str(body or "")
+    for pattern in PREMIERE_CONTROL_PATTERNS:
+        text = pattern.sub(" ", text)
+    return text
 
 
 def _version_in(target: str, versions: list[str]) -> bool:
@@ -1269,12 +1315,16 @@ def premiere_patch_identity(candidate: dict[str, Any], target_version: str) -> t
             return True, "premiere_declared_problem_version", ""
         return False, "premiere_declared_problem_version", "conflicting_premiere_problem_version"
 
-    # No authoritative statement: a control-only mention must not establish identity either.
+    # No authoritative statement. A target named ONLY as the version that works cannot establish
+    # defect identity, so strip every control clause and require the target to survive on its own
+    # affirmative context. If it does, the report genuinely implicates the target as well.
     controls = premiere_control_versions(body)
     if controls and _version_in(target_version, controls):
-        body_without_controls = PREMIERE_CONTROL_LABEL_RE.sub(" ", body)
-        if not premiere_version_match(body_without_controls, target_version)[0]:
+        residual = premiere_strip_control_clauses(body)
+        titles_and_residual = f"{titles} {residual}"
+        if not premiere_version_match(titles_and_residual, target_version)[0]:
             return False, "premiere_control_version_only", "conflicting_premiere_problem_version"
+        return True, "premiere_affirmative_after_control", ""
     return True, "premiere_text_fallback", ""
 
 

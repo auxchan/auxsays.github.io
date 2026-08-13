@@ -339,6 +339,61 @@ def run() -> int:  # noqa: PLR0915
               pp.premiere_build_65_context(b65, "26.2") and pp.premiere_version_match(b65, "26.2")[0]
               and ident("26.2", title="Crash on launch", body=b65)[0])
 
+
+        # ===== RESIDUAL FALLBACK CLASS: target used only as a comparison/control version =====
+        # No title version, no labelled Problem/Affected declaration -- the defect belongs to the
+        # OTHER version and the target is merely named as the one that works.
+        ADV = [
+            ("ADV-1 '26.3 crashes / 26.2 was stable'",
+             "Export regression after update",
+             "Premiere Pro 26.3 crashes every time I export.\nPremiere Pro 26.2 was stable."),
+            ("ADV-2 '26.3 is broken / 26.2 works fine'",
+             "Export regression after update",
+             "Premiere Pro 26.3 is broken.\nPremiere Pro 26.2 works fine."),
+            ("ADV-3 '26.3 crashes / no issue in 26.2'",
+             "Export regression after update",
+             "Premiere Pro 26.3 crashes.\nNo issue in Premiere Pro 26.2."),
+            ("ADV-4 '26.3 crashes / 26.2 was unaffected'",
+             "Export regression after update",
+             "Premiere Pro 26.3 crashes.\n26.2 was unaffected."),
+        ]
+        for label, title, body in ADV:
+            ok_t, basis_t, reason_t = ident("26.2", title=title, body=body)
+            check(f"{label} => target 26.2 REJECT", not ok_t, f"{basis_t=} {reason_t=}")
+            row_t = counted("26.2", title=title, body=body)
+            check(f"{label} => 26.2 row not counted", row_t.get("counted") is not True,
+                  str({k: row_t.get(k) for k in ("counted", "exclusion_reason", "match_basis")}))
+            check(f"ADV-5 {label} => target 26.3 may PASS", ident("26.3", title=title, body=body)[0])
+
+        check("ADV-6 control phrase AND separate affirmative affected phrase => may PASS",
+              ident("26.2", title="Export regression",
+                    body="Premiere Pro 26.3 crashes. Premiere Pro 26.2 was stable at first, "
+                         "but Premiere Pro 26.2 now crashes on export too.")[0])
+
+        # ===== LIVE ROWS THAT MUST STAY VALID =====
+        check("LIVE-7 .kys report: '26.2 (same issue)' stays valid",
+              ident("26.2", title="Premiere Pro reports Adobe Premiere Pro defaults kys is invalid",
+                    body="Premiere Pro 26.3 (latest)\nPremiere Pro 26.2 (same issue)\n"
+                         "Beta crashes when opening keyboard shortcuts.")[0])
+        check("LIVE-8 New Index: reporter is using 26.2.2 while experiencing the slowdown",
+              ident("26.2.2", title="New Index panel slows Premiere a lot",
+                    body="I am using Premiere Pro 26.2.2 and the new Index panel slows everything down.")[0])
+        ok9, basis9, _r9 = ident("26.2.2", title="CUDA issue in Premiere's console",
+                                 body="Premiere Pro version: 26.2.2\nCUDA errors fill the console.")
+        check("LIVE-9 CUDA reports premiere_declared_problem_version",
+              ok9 and basis9 == "premiere_declared_problem_version", f"{ok9=} {basis9=}")
+        ts_title = "Text Style: second and subsequent strokes are lost when saving to My Styles (26.2.2 / 26.3.0)"
+        ok10, basis10, _r10 = ident("26.2.2", title=ts_title,
+                                    body="Reproduced on Premiere Pro 26.2.2 and 26.3.0.")
+        check("LIVE-10 Text Style reports the ACTUAL basis the code used (no Premiere-prefixed title version)",
+              ok10 and basis10 in {"premiere_text_fallback", "premiere_title_version_identity",
+                                   "premiere_declared_problem_version"},
+              f"actual basis={basis10!r}")
+        print(f"        [LIVE-10 actual identity basis = {basis10!r}]")
+
+        check("ADV-11 shared exact_version_match untouched",
+              "def exact_version_match" not in (_SCRIPTS / "patch_collectors" / "adobe_premiere.py").read_text(encoding="utf-8"))
+
         check("ID-13 control-only mention cannot establish identity",
               not ident("26.2", title="Crash after update", body="I reverted to 26.2 and it was fine.")[0])
         check("ID-14 no versions anywhere => fallback defers to text matching (no false reject)",
