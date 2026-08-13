@@ -370,6 +370,52 @@ def run() -> int:  # noqa: PLR0915
                     body="Premiere Pro 26.3 crashes. Premiere Pro 26.2 was stable at first, "
                          "but Premiere Pro 26.2 now crashes on export too.")[0])
 
+
+        # ===== TITLE-CONTROL GAP: a control clause inside the TITLE =====
+        # Control stripping previously applied to the body only, so a title naming both versions
+        # ("26.3 crashes -- 26.2 works fine") made 26.2 look explicitly affected.
+        TC_TITLE = "Premiere Pro 26.3 crashes \u2014 Premiere Pro 26.2 works fine"
+        ok_tc, basis_tc, reason_tc = ident("26.2", title=TC_TITLE, body="Export dies on 26.3.")
+        check("TC-1 title '26.3 crashes -- 26.2 works fine' => target 26.2 REJECT",
+              not ok_tc, f"{basis_tc=} {reason_tc=}")
+        row_tc = counted("26.2", title=TC_TITLE, body="Export dies on 26.3.")
+        check("TC-1b that 26.2 row is not counted", row_tc.get("counted") is not True,
+              str({k: row_tc.get(k) for k in ("counted", "exclusion_reason", "match_basis")}))
+        check("TC-2 same title => target 26.3 identity may PASS",
+              ident("26.3", title=TC_TITLE, body="Export dies on 26.3.")[0])
+
+        TC2 = "Premiere Pro 26.3 broken; Premiere Pro 26.2 was stable"
+        check("TC-3 title '26.3 broken; 26.2 was stable' => target 26.2 REJECT",
+              not ident("26.2", title=TC2, body="Broken since the update.")[0])
+
+        # Guard against over-stripping: here the FIRST clause is affirmative for 26.2.
+        TC3 = "Premiere Pro 26.2 crashes; Premiere Pro 26.3 works fine"
+        check("TC-4 title '26.2 crashes; 26.3 works fine' => target 26.2 PASS",
+              ident("26.2", title=TC3, body="Crashes on launch.")[0])
+        check("TC-5 same title => target 26.3 REJECT",
+              not ident("26.3", title=TC3, body="Crashes on launch.")[0])
+
+        # ===== the seven live titles must keep classifying exactly as they do today =====
+        LIVE_TITLES = [
+            ("26.2", "Premiere Pro reports \u201cAdobe Premiere Pro Defaults.kys\u201d is invalid on every clean installation and Beta crashes when opening Keyboard Shortcuts",
+             "Premiere Pro 26.3 (latest)\nPremiere Pro 26.2 (same issue)"),
+            ("26.2", "Premiere Pro 26.2.0 corrupts WAV source offsets after reopening a project. Cut external audio loses synchronization when 50 fps footage is combined with WAV files using 25 fps timecode",
+             "Build 65. Premiere Pro 26.2.0 corrupts offsets."),
+            ("26.2", "Premiere Pro 26.2 - Native Camera Shake effect causes Program Monitor offset in Multicam view while export renders correctly",
+             "Premiere Pro 26.2 shows the offset in Multicam view."),
+            ("26.2.2", "New Index panel slows Premiere a lot",
+             "I am using Premiere Pro 26.2.2 and the new Index panel slows everything down."),
+            ("26.2.2", "Cuda issue in Premiere's console",
+             "Premiere Pro version: 26.2.2\nCUDA errors fill the console."),
+            ("26.2.2", "Memory leak issue in premiere pro with specific triggers.",
+             "Premiere Pro 26.2.2 leaks memory with specific triggers."),
+            ("26.2.2", "Text Style: second and subsequent strokes are lost when saving to My Styles (26.2.2 / 26.3.0)",
+             "Reproduced on Premiere Pro 26.2.2 and 26.3.0."),
+        ]
+        for tgt, ttl, bdy in LIVE_TITLES:
+            ok_l, basis_l, reason_l = ident(tgt, title=ttl, body=bdy)
+            check(f"LIVE-KEEP {tgt} :: {ttl[:52]}...", ok_l, f"{basis_l=} {reason_l=}")
+
         # ===== LIVE ROWS THAT MUST STAY VALID =====
         check("LIVE-7 .kys report: '26.2 (same issue)' stays valid",
               ident("26.2", title="Premiere Pro reports Adobe Premiere Pro defaults kys is invalid",

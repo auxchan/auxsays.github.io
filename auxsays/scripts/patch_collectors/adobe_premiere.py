@@ -1302,11 +1302,25 @@ def premiere_patch_identity(candidate: dict[str, Any], target_version: str) -> t
       3. otherwise                                    -> defer to the existing text matching
     """
     titles = " ".join([str(candidate.get("parent_title") or ""), str(candidate.get("report_title") or "")])
-    title_versions = premiere_versions_in_title(titles)
+    # Control clauses appear in TITLES too: "Premiere Pro 26.3 crashes -- Premiere Pro 26.2 works
+    # fine" would otherwise list 26.2 as explicitly affected. Strip control clauses from the title
+    # with the same grammar used on the body, then derive title identity from what remains, so a
+    # version named only as the one that works can never establish defect identity.
+    residual_titles = premiere_strip_control_clauses(titles)
+    title_versions = premiere_versions_in_title(residual_titles)
     if title_versions:
         if _version_in(target_version, title_versions):
             return True, "premiere_title_version_identity", ""
         return False, "premiere_title_version_identity", "conflicting_premiere_title_version"
+    if premiere_versions_in_title(titles):
+        # Every version in the title sat inside a control clause. That is not authority for the
+        # target, but it is also not proof against it -- defer to the labelled-declaration and
+        # fallback tiers below, which may still find affirmative body context.
+        if _version_in(target_version, premiere_control_versions(titles)) \
+                and not premiere_declared_problem_versions(str(candidate.get("report_text") or "")):
+            residual_body = premiere_strip_control_clauses(str(candidate.get("report_text") or ""))
+            if not premiere_version_match(residual_body, target_version)[0]:
+                return False, "premiere_title_control_version_only", "conflicting_premiere_title_version"
 
     body = str(candidate.get("report_text") or "")
     declared = premiere_declared_problem_versions(body)
