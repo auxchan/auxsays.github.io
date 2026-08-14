@@ -13552,7 +13552,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5973125-ngcctnrsvc-crashes-3-times-in-ucrtbase
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -13581,7 +13580,6 @@ evidence:
   severity: critical
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5973125-ngcctnrsvc-crashes-3-times-in-ucrtbase
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -13637,4 +13635,46 @@ evidence:
   platform: windows
   severity: critical
   sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-1-2-github-issue-13785
+  product_id: obs-studio
+  update_version: 32.1.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13785
+  parent_title: WebM-VP9 codec no longer loads with BGRA format
+  report_title: WebM-VP9 codec no longer loads with BGRA format
+  report_text_excerpt: seen in steps 5 and 6. Comment explains that this behavior worked as intended on version 32.1.2, with using an older installation being a fix. I would rather have this fixed in the future over relying on an older version of OBS, so I'm creating this issue. Log Analyzer shows `Wr
+  captured_at: '2026-08-14T03:50:48Z'
+  patch_version_matched: true
+  matched_version: 32.1.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
+- id: obs-studio-32-2-1-github-issue-13785
+  product_id: obs-studio
+  update_version: 32.2.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13785
+  parent_title: WebM-VP9 codec no longer loads with BGRA format
+  report_title: WebM-VP9 codec no longer loads with BGRA format
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/RjWarc0cQzcjYMtE ### OBS Studio Crash Log URL _No response_ ### Expected Behavior WebM-'
+  captured_at: '2026-08-14T03:51:34Z'
+  patch_version_matched: true
+  matched_version: 32.2.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general OBS workflow
+  platform: windows
+  severity: medium
+  sentiment: moderate
   source_weight: 1
