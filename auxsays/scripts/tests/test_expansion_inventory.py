@@ -64,6 +64,14 @@ DIMS_PROOF = ("local_reachable", "actions_reachable", "structure_proven",
               "patch_specificity_proven", "supply_proven", "production_proven")
 # prod-enabled has committed records -> official path A; prod-disabled has none.
 RECORD_COUNTS = {"prod-enabled": 12}
+# Records are HISTORY; path A also needs a current healthy official signal.
+SOURCE_HEALTH = [
+    {"product_id": "prod-enabled", "status": "Healthy"},
+    {"product_id": "prod-disabled", "status": "Staged"},
+]
+# collector_ownership.ALLOWED_METHODS equivalent: a consensus method must be REGISTERED to be
+# claimable as operational.
+REGISTERED = {"prod-enabled": {"method-a"}}
 
 
 def proof(**over):
@@ -106,7 +114,7 @@ SOURCES = {
     "audit_diversification_states": {k: "-" for k in vei.AUDIT_DIVERSIFICATION_STATES},
     "product_source_audit": {
         "prod-enabled": {
-            "official": {"state": "production_source_present", "current_methods": ["adapter-x"],
+            "official": {"state": "production_source_present", "current_methods": ["x"],
                          "pending_methods": [], "opportunity_ids": ["opp-official"],
                          "diversification_state": "opportunities_identified"},
             "consensus": {"state": "production_source_present", "current_methods": ["method-a"],
@@ -218,9 +226,16 @@ def run_validator(sources: dict, candidates: dict, products=None, ingestion=None
             saved[attr] = getattr(vei, attr)
             setattr(vei, attr, p)
         prior_counts = vei.generated_record_counts
-        # Existing-official-proof (path A) is measured from committed records. Inject a fixed map so
-        # the synthetic fixtures do not depend on the real repo's 670 records.
+        prior_registered = vei.registered_consensus_methods
+        prior_health_file = vei.SOURCE_HEALTH_FILE
+        # Path A is measured from the repo: committed records, enabled adapter config, current
+        # official health, registered consensus methods. Inject fixed values so the synthetic
+        # fixtures do not depend on the real repo's 670 records and 47 products.
         vei.generated_record_counts = lambda: dict(RECORD_COUNTS)
+        vei.registered_consensus_methods = lambda: {k: set(v) for k, v in REGISTERED.items()}
+        health_path = d / "health.yml"
+        health_path.write_text(yaml.safe_dump(SOURCE_HEALTH, sort_keys=False), encoding="utf-8")
+        vei.SOURCE_HEALTH_FILE = health_path
         try:
             buf = io.StringIO()
             with redirect_stdout(buf):
@@ -228,6 +243,8 @@ def run_validator(sources: dict, candidates: dict, products=None, ingestion=None
             return rc, buf.getvalue()
         finally:
             vei.generated_record_counts = prior_counts
+            vei.registered_consensus_methods = prior_registered
+            vei.SOURCE_HEALTH_FILE = prior_health_file
             for attr, prior in saved.items():
                 setattr(vei, attr, prior)
 
@@ -815,6 +832,109 @@ def run() -> int:  # noqa: PLR0915
         check(f"SCOPE {cid}: scope split recorded rather than the vendor written off",
               c0.get("product_scope") == "scope_split_required" and bool(c0.get("scope_split_note")),
               str(c0.get("product_scope")))
+
+
+    # =====================================================================================
+    # FINAL READINESS ANCHOR -- history is not health, and methods are anchored to the repo
+    # =====================================================================================
+    # Path A previously accepted "enabled + records". Records are HISTORY: a lane that produced
+    # them can be Failing today. Only a current healthy signal proves a working official lane.
+    s6, c6 = copy.deepcopy(SOURCES), copy.deepcopy(CANDIDATES)
+    prior_health = list(SOURCE_HEALTH)
+    try:
+        SOURCE_HEALTH[:] = [{"product_id": "prod-enabled", "status": "Failing"},
+                            {"product_id": "prod-disabled", "status": "Staged"}]
+        # source_health now contradicts the audit's healthy claim as well as path A.
+        c6["candidates"][0]["readiness"] = "prove_source"
+        lane(s6, "prod-enabled", "official")["state"] = "production_source_degraded"
+        rc9, out9 = run_validator(s6, c6)
+        check("records + 'Failing' health => official path unproven, readiness drops to prove_source",
+              rc9 == 0 and "ready_to_build=0" in out9, out9[-500:])
+
+        SOURCE_HEALTH[:] = [{"product_id": "prod-enabled", "status": "Manual watch"},
+                            {"product_id": "prod-disabled", "status": "Staged"}]
+        rc10, out10 = run_validator(s6, c6)
+        check("records + 'Manual watch' health => official path unproven (DaVinci's shape)",
+              rc10 == 0 and "ready_to_build=0" in out10, out10[-400:])
+
+        SOURCE_HEALTH[:] = [{"product_id": "prod-disabled", "status": "Staged"}]
+        rc11, out11 = run_validator(s6, c6)
+        check("records with NO health row at all => official path unproven (absence is not a pass)",
+              rc11 == 0 and "ready_to_build=0" in out11, out11[-400:])
+
+        # The audit may not claim a healthy production source the repo books unhealthy.
+        SOURCE_HEALTH[:] = [{"product_id": "prod-enabled", "status": "Failing"},
+                            {"product_id": "prod-disabled", "status": "Staged"}]
+        s7, c7 = copy.deepcopy(SOURCES), copy.deepcopy(CANDIDATES)
+        c7["candidates"][0]["readiness"] = "prove_source"
+        rc12, out12 = run_validator(s7, c7)
+        check("audit 'production_source_present' contradicting Failing health is rejected",
+              rc12 == 1 and "contradicts source_health" in out12, out12[-400:])
+    finally:
+        SOURCE_HEALTH[:] = prior_health
+
+    # --- current_methods anchored to real repo config -----------------------------------
+    must_fail("an official current_method that is not the configured adapter is rejected",
+              lambda s: lane(s, "prod-enabled", "official").update(current_methods=["not-the-adapter"]),
+              target="sources", needle="is not the configured adapter")
+    must_fail("an official current_method on a product with no ENABLED ingestion is rejected",
+              lambda s: lane(s, "prod-disabled", "official").update(
+                  state="production_source_present", current_methods=["y"],
+                  diversification_state="needs_source_research"),
+              target="sources", needle="no ENABLED ingestion source")
+    must_fail("a consensus current_method that is not registered in ALLOWED_METHODS is rejected",
+              lambda s: lane(s, "prod-enabled", "consensus").update(current_methods=["method-ghost"]),
+              target="sources", needle="not registered in collector_ownership.ALLOWED_METHODS")
+    must_fail("an already-registered consensus method cannot be listed as PENDING",
+              lambda s: lane(s, "prod-enabled", "consensus").update(pending_methods=["method-a"]),
+              target="sources", needle="already registered -- it is current, not pending")
+    must_fail("the enabled official adapter cannot be listed as PENDING",
+              lambda s: lane(s, "prod-enabled", "official").update(pending_methods=["x"]),
+              target="sources", needle="is the enabled adapter -- it is current, not pending")
+
+    # --- the committed inventory, against the REAL repo anchors --------------------------
+    real_health = vei.official_health_by_product()
+    real_counts = vei.generated_record_counts()
+    real_cfg = vei.official_config_by_product()
+    real_reg = vei.registered_consensus_methods()
+    real_enabled = {p for p, cfg in real_cfg.items() if cfg["enabled"]}
+    real_by_id = {o["opportunity_id"]: o for o in real_src["opportunities"]}
+
+    def path_a(pid):
+        return vei.official_path_proof({"candidate_id": pid, "opportunity_refs": []},
+                                       real_by_id, real_enabled, real_counts, TODAY, real_health)
+
+    ok_prem, why_prem = path_a("adobe-premiere-pro")
+    check("ANCHOR premiere: degraded official lane FAILS path A despite 2 committed records",
+          not ok_prem and "history is not health" in why_prem
+          and real_health.get("adobe-premiere-pro") == "failing", f"{ok_prem} {why_prem}")
+    ok_dav, why_dav = path_a("blackmagic-davinci")
+    check("ANCHOR davinci: Manual-watch official lane FAILS path A despite 106 records",
+          not ok_dav and "history is not health" in why_dav, f"{ok_dav} {why_dav}")
+    ok_pp, why_pp = path_a("microsoft-powerpoint")
+    check("ANCHOR powerpoint: 20 records with no health row FAILS path A",
+          not ok_pp and "no current official health signal" in why_pp, f"{ok_pp} {why_pp}")
+    ok_cu, _ = path_a("comfyui")
+    check("ANCHOR comfyui: enabled + records + Healthy PASSES path A",
+          ok_cu and real_health.get("comfyui") == "healthy", str(real_health.get("comfyui")))
+
+    check("ANCHOR every committed official current_method is the product's enabled adapter",
+          all(m == real_cfg.get(pid, {}).get("adapter") and real_cfg.get(pid, {}).get("enabled")
+              for pid, v in real_audit.items() for m in v["official"]["current_methods"]),
+          str({pid: v["official"]["current_methods"] for pid, v in real_audit.items()
+               if v["official"]["current_methods"]
+               and v["official"]["current_methods"][0] != real_cfg.get(pid, {}).get("adapter")}))
+    check("ANCHOR every committed consensus current_method is registered in ALLOWED_METHODS",
+          all(m in real_reg.get(pid, set())
+              for pid, v in real_audit.items() for m in v["consensus"]["current_methods"]),
+          str({pid: sorted(set(v["consensus"]["current_methods"]) - real_reg.get(pid, set()))
+               for pid, v in real_audit.items()
+               if set(v["consensus"]["current_methods"]) - real_reg.get(pid, set())}))
+    check("ANCHOR premiere's pending Algolia method is genuinely NOT yet registered",
+          "adobe_community_algolia_search" not in real_reg.get("adobe-premiere-pro", set())
+          and real_audit["adobe-premiere-pro"]["consensus"]["pending_methods"]
+          == ["adobe_community_algolia_search"],
+          str(sorted(real_reg.get("adobe-premiere-pro", set()))))
 
     print()
     print("=" * 66)

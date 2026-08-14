@@ -41,10 +41,19 @@ WHAT THIS PINS (and why each rule exists):
   `no_viable_source_found` means NO viable source exists for that lane; "we have one and cannot
   find another" is diversification debt and lives in `diversification_state`.
 
-* THE OFFICIAL PATH MUST BE PROVEN, NOT SCORED. `official_source_quality >= 3` is an estimate.
-  ready_to_build additionally needs product-specific official proof: either enabled ingestion with
-  committed records (measured from the repo, not asserted here), or a referenced official-lane
-  opportunity proven end to end. Same-vendor precedent never counts.
+* THE OFFICIAL PATH MUST BE PROVEN, NOT SCORED, AND HISTORY IS NOT HEALTH.
+  `official_source_quality >= 3` is an estimate. ready_to_build additionally needs
+  product-specific official proof: either enabled ingestion WITH committed records AND a current
+  healthy `source_health.yml` signal, or a referenced official-lane opportunity proven end to end.
+  Records alone are history: adobe-premiere-pro has 2 committed records and books `Failing`, and
+  blackmagic-davinci has 106 with official ingestion on `Manual watch`. A product with no health
+  row at all also fails -- absence of a signal is not a pass. Same-vendor precedent never counts.
+
+* AUDIT METHODS ARE ANCHORED TO REPO CONFIG. `current_methods` are checked against ground truth:
+  official against the enabled ingestion adapter, consensus against
+  collector_ownership.ALLOWED_METHODS. `pending_methods` must NOT already be registered/enabled --
+  something the repo already runs is current, not pending. Otherwise `current_methods` is prose
+  and every state derived from it inherits the fiction.
 
 * PROBE BEFORE PRODUCTION. An unproven source's next action must be a measurement. A plan whose
   leading action is registration contradicts the status that says the source is unproven.
@@ -68,6 +77,14 @@ SOURCES_FILE = _DATA / "expansion_source_opportunities.yml"
 CANDIDATES_FILE = _DATA / "expansion_product_candidates.yml"
 PRODUCTS_FILE = _DATA / "patch_products.yml"
 INGESTION_FILE = _DATA / "patch_ingestion_sources.yml"
+SOURCE_HEALTH_FILE = _DATA / "source_health.yml"
+
+# Official-lane health, as the repo books it. Only an explicit healthy signal proves a working
+# official lane: committed records are HISTORY, and a lane that produced records last month can be
+# Failing today (adobe-premiere-pro) or not running unattended at all (blackmagic-davinci, Manual
+# watch). A MISSING health row is not a pass either -- absence of a signal cannot prove health.
+HEALTHY_OFFICIAL_STATUSES = {"healthy"}
+UNHEALTHY_OFFICIAL_STATUSES = {"degraded", "failing", "manual watch", "staged"}
 
 OPPORTUNITY_REQUIRED = (
     "opportunity_id", "product_ids", "source_name", "source_type", "lane",
@@ -212,23 +229,38 @@ def official_path_proof(
     enabled_products: set[str],
     record_counts: dict[str, int],
     today: _dt.date,
+    official_health: dict[str, str] | None = None,
 ) -> tuple[bool, str]:
     """Is there PRODUCT-SPECIFIC proof of a working official path? (satisfied, reason_if_not)
 
     Two ways in, mirroring how the repo actually establishes an official lane:
 
-      A. EXISTING PRODUCTION PROOF -- ingestion enabled for this product AND generated records
-         exist. Measured from the repo, not from authored planning fields, so it cannot be
-         asserted into existence by editing this inventory.
+      A. EXISTING PRODUCTION PROOF -- ingestion ENABLED for this product, committed records, AND a
+         CURRENT healthy official signal in `_data/source_health.yml`.
       B. A REFERENCED OFFICIAL OPPORTUNITY proven end to end for this product.
 
     A score of `official_source_quality >= 3` with an acceptable confidence is necessary but was
     never sufficient: it is an estimate, and estimating that a vendor "probably has release notes"
     says nothing about whether a parser works from an Actions runner.
+
+    HISTORY IS NOT HEALTH. Records alone used to satisfy path A, which let a lane the repo itself
+    books as broken read as proven: adobe-premiere-pro is enabled with 2 committed records and
+    source_health `Failing`, and blackmagic-davinci has 106 records with official ingestion on
+    `Manual watch` -- neither is a working unattended official path. A product with no health row
+    at all also fails: no signal is not a pass.
     """
     cid = str(candidate.get("candidate_id"))
+    health = (official_health or {})
     if cid in enabled_products and record_counts.get(cid, 0) > 0:
-        return True, ""
+        status = health.get(cid, "")
+        if status in HEALTHY_OFFICIAL_STATUSES:
+            return True, ""
+        if not status:
+            return False, (f"official path unproven: {record_counts.get(cid, 0)} committed records "
+                           "are history, and there is no current official health signal for this "
+                           "product (absent from source_health.yml)")
+        return False, (f"official path unproven: ingestion is enabled with committed records, but "
+                       f"current official health is {status!r} -- history is not health")
     refs = candidate.get("opportunity_refs") or []
     official = [opportunities[r] for r in refs
                 if r in opportunities and opportunities[r].get("lane") == "official"]
@@ -247,12 +279,14 @@ def derive_readiness(
     today: _dt.date | None = None,
     enabled_products: set[str] | None = None,
     record_counts: dict[str, int] | None = None,
+    official_health: dict[str, str] | None = None,
 ) -> tuple[str, list[str]]:
     """Deterministically derive readiness. FAILS CLOSED: anything unproven means not ready.
 
     ready_to_build requires ALL of:
       1. a deterministic OFFICIAL path -- official_source_quality >= 3 AND product-specific
-         official proof (see official_path_proof), because a score is an estimate;
+         official proof (see official_path_proof), because a score is an estimate and committed
+         records are history rather than current health;
       2. exact version identity plausibly enforceable -- version_identifiability >= 4;
       3. a deterministic CONSENSUS discovery path -- a referenced consensus opportunity whose
          structure is proven;
@@ -275,7 +309,8 @@ def derive_readiness(
     if score("official_source_quality") < 3:
         reasons.append("no deterministic official path (official_source_quality < 3)")
     ok_official, why = official_path_proof(
-        candidate, opportunities, enabled_products or set(), record_counts or {}, today)
+        candidate, opportunities, enabled_products or set(), record_counts or {}, today,
+        official_health or {})
     if not ok_official:
         reasons.append(why)
     if score("version_identifiability") < 4:
@@ -334,6 +369,56 @@ GENERATED_DIR = _REPO / "auxsays" / "updates" / "generated"
 _PRODUCT_ID_RE = __import__("re").compile(r"^product_id:\s*['\"]?([\w\-\.]+)", 8)  # re.M
 
 
+def official_health_by_product() -> dict[str, str]:
+    """Lowercased official-lane health status per product, from `_data/source_health.yml`.
+
+    Products absent from that file (both Acrobats, the four Elgato products, 365-apps, PowerPoint,
+    Teams, Windows 11 at the time of writing) map to '' -- no signal, which is NOT health.
+    """
+    if not SOURCE_HEALTH_FILE.exists():
+        return {}
+    rows = yaml.safe_load(SOURCE_HEALTH_FILE.read_text(encoding="utf-8"))
+    rows = rows if isinstance(rows, list) else (rows or {}).get("sources", [])
+    return {str(r.get("product_id")): str(r.get("status") or "").strip().lower()
+            for r in rows if isinstance(r, dict) and r.get("product_id")}
+
+
+def official_config_by_product() -> dict[str, dict[str, Any]]:
+    """Enabled flag + configured adapter per product, from `_data/patch_ingestion_sources.yml`.
+
+    The audit's official `current_methods` are anchored to THIS, so the inventory cannot claim an
+    official method the repo does not actually run.
+    """
+    rows = yaml.safe_load(INGESTION_FILE.read_text(encoding="utf-8"))
+    rows = rows if isinstance(rows, list) else (rows or {}).get("sources", [])
+    out: dict[str, dict[str, Any]] = {}
+    for r in rows:
+        if not isinstance(r, dict) or not r.get("product_id"):
+            continue
+        ingestion = r.get("ingestion") or {}
+        out[str(r["product_id"])] = {
+            "enabled": bool(r.get("enabled")),
+            "adapter": str(ingestion.get("adapter") or ""),
+        }
+    return out
+
+
+def registered_consensus_methods() -> dict[str, set[str]]:
+    """Per-product registered consensus method ids, from collector_ownership.ALLOWED_METHODS.
+
+    The audit's consensus `current_methods` are anchored to THIS: a method that is not registered
+    cannot be operational, whatever the planning data says.
+    """
+    scripts = str(_REPO / "auxsays" / "scripts")
+    if scripts not in sys.path:
+        sys.path.insert(0, scripts)
+    try:
+        from lib.collector_ownership import ALLOWED_METHODS  # noqa: PLC0415
+    except Exception:  # noqa: BLE001 - a missing manifest must not silently disable the anchor
+        return {}
+    return {str(k): {str(m) for m in v} for k, v in ALLOWED_METHODS.items()}
+
+
 def generated_record_counts() -> dict[str, int]:
     """Records actually committed per product_id -- ground truth for existing official proof.
 
@@ -355,6 +440,9 @@ def validate() -> int:  # noqa: PLR0912, PLR0915 - one linear pass keeps the rul
     warnings: list[str] = []
     today = _today()
     record_counts = generated_record_counts()
+    official_health = official_health_by_product()
+    official_config = official_config_by_product()
+    registered_methods = registered_consensus_methods()
 
     products = _load(PRODUCTS_FILE)
     plist = products if isinstance(products, list) else products.get("products", [])
@@ -559,7 +647,44 @@ def validate() -> int:  # noqa: PLR0912, PLR0915 - one linear pass keeps the rul
                 else:
                     same_lane_refs.append(ref)
 
+            # ANCHOR CURRENT METHODS TO THE REPO. A lane may not claim an operational method the
+            # repo does not actually run: official against the enabled ingestion config, consensus
+            # against collector_ownership.ALLOWED_METHODS. Without this, `current_methods` is just
+            # prose and every downstream state built on it inherits the fiction.
+            cfg = official_config.get(pid, {})
+            for method in lists["current_methods"]:
+                method = str(method)
+                if lane == "official":
+                    if not cfg.get("enabled"):
+                        errors.append(f"product_source_audit[{pid}].official: claims current method "
+                                      f"{method!r} but the product has no ENABLED ingestion source")
+                    elif method != cfg.get("adapter"):
+                        errors.append(f"product_source_audit[{pid}].official: current method "
+                                      f"{method!r} is not the configured adapter "
+                                      f"{cfg.get('adapter')!r}")
+                elif method not in registered_methods.get(pid, set()):
+                    errors.append(f"product_source_audit[{pid}].consensus: current method "
+                                  f"{method!r} is not registered in "
+                                  "collector_ownership.ALLOWED_METHODS, so it cannot be operational")
+            # And the inverse for PENDING: something already registered is not pending.
+            for method in lists["pending_methods"]:
+                method = str(method)
+                if lane == "consensus" and method in registered_methods.get(pid, set()):
+                    errors.append(f"product_source_audit[{pid}].consensus: pending method "
+                                  f"{method!r} is already registered -- it is current, not pending")
+                if lane == "official" and cfg.get("enabled") and method == cfg.get("adapter"):
+                    errors.append(f"product_source_audit[{pid}].official: pending method "
+                                  f"{method!r} is the enabled adapter -- it is current, not pending")
+
             has_source = bool(lists["current_methods"]) or bool(lists["pending_methods"])
+            # HISTORY IS NOT HEALTH. A lane the repo books Degraded/Failing/Manual watch may not be
+            # recorded as a healthy production source.
+            if lane == "official" and state == "production_source_present":
+                status = official_health.get(pid, "")
+                if status in UNHEALTHY_OFFICIAL_STATUSES:
+                    errors.append(f"product_source_audit[{pid}].official: "
+                                  f"'production_source_present' contradicts source_health "
+                                  f"{status!r} -- use 'production_source_degraded'")
             if state in ("production_source_present", "production_source_degraded") \
                     and not lists["current_methods"]:
                 errors.append(f"product_source_audit[{pid}].{lane}: state {state!r} requires at "
@@ -766,7 +891,7 @@ def validate() -> int:  # noqa: PLR0912, PLR0915 - one linear pass keeps the rul
         if stored_readiness not in READINESS_VALUES:
             errors.append(f"{cid}: readiness {c.get('readiness')!r} is not allowed")
         derived, reasons = derive_readiness(
-            c, by_id, today, enabled_ingestion_products, record_counts)
+            c, by_id, today, enabled_ingestion_products, record_counts, official_health)
         # A prove_source plan whose next action is production wiring contradicts itself: the point
         # of prove_source is that the source is not proven yet.
         if derived != "ready_to_build":
