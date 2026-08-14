@@ -62,6 +62,8 @@ INGESTION = [
 ]
 DIMS_PROOF = ("local_reachable", "actions_reachable", "structure_proven",
               "patch_specificity_proven", "supply_proven", "production_proven")
+# prod-enabled has committed records -> official path A; prod-disabled has none.
+RECORD_COUNTS = {"prod-enabled": 12}
 
 
 def proof(**over):
@@ -100,9 +102,26 @@ SOURCES = {
         "fw-any": {"lane": "any", "contract": "unknown", "reuse_note": "-"},
     },
     "strategic_priority_products": ["prod-enabled"],
+    "audit_lane_states": {k: "-" for k in vei.AUDIT_LANE_STATES},
+    "audit_diversification_states": {k: "-" for k in vei.AUDIT_DIVERSIFICATION_STATES},
     "product_source_audit": {
-        "prod-enabled": {"state": "opportunities_identified",
-                         "opportunity_ids": ["opp-ready", "opp-local"], "notes": "-"},
+        "prod-enabled": {
+            "official": {"state": "production_source_present", "current_methods": ["adapter-x"],
+                         "pending_methods": [], "opportunity_ids": ["opp-official"],
+                         "diversification_state": "opportunities_identified"},
+            "consensus": {"state": "production_source_present", "current_methods": ["method-a"],
+                          "pending_methods": [], "opportunity_ids": ["opp-ready", "opp-local"],
+                          "diversification_state": "opportunities_identified"},
+        },
+        # Every configured product must be covered, including the uninteresting one.
+        "prod-disabled": {
+            "official": {"state": "needs_source_research", "current_methods": [],
+                         "pending_methods": [], "opportunity_ids": [],
+                         "diversification_state": "not_applicable"},
+            "consensus": {"state": "opportunities_identified", "current_methods": [],
+                          "pending_methods": [], "opportunity_ids": ["opp-local"],
+                          "diversification_state": "not_applicable"},
+        },
     },
     "opportunities": [
         # Fully proven: the only shape that may support ready_to_build.
@@ -112,7 +131,11 @@ SOURCES = {
             status="viable", recheck_after_days=14),
         # Honest partial: local + structure proven, Actions never measured.
         opportunity("opp-local"),
-        opportunity("opp-official", lane="official", framework="fw-official"),
+        # Fully proven OFFICIAL opportunity: satisfies official path B without any enabled ingestion.
+        opportunity("opp-official", lane="official", framework="fw-official", proof=proof(
+            local_reachable="proven", actions_reachable="proven", structure_proven="proven",
+            patch_specificity_proven="proven", supply_proven="proven", production_proven="proven"),
+            status="viable", recheck_after_days=14),
     ],
 }
 
@@ -170,8 +193,8 @@ CANDIDATES = {
     },
     "repo_states": {"untracked": "u", "configured_disabled": "c", "tracked_official_only": "t"},
     "candidates": [
-        candidate("prod-enabled", 5, repo_state="tracked_official_only", refs=["opp-ready"],
-                  readiness="ready_to_build", tier="A"),
+        candidate("prod-enabled", 5, repo_state="tracked_official_only",
+                  refs=["opp-ready", "opp-official"], readiness="ready_to_build", tier="A"),
         candidate("prod-disabled", 5, repo_state="configured_disabled", refs=["opp-local"],
                   readiness="prove_source", tier="A"),
         candidate("brand-new", 1, repo_state="untracked", refs=[], readiness="defer", tier="C"),
@@ -194,12 +217,17 @@ def run_validator(sources: dict, candidates: dict, products=None, ingestion=None
             p.write_text(yaml.safe_dump(payload, sort_keys=False), encoding="utf-8")
             saved[attr] = getattr(vei, attr)
             setattr(vei, attr, p)
+        prior_counts = vei.generated_record_counts
+        # Existing-official-proof (path A) is measured from committed records. Inject a fixed map so
+        # the synthetic fixtures do not depend on the real repo's 670 records.
+        vei.generated_record_counts = lambda: dict(RECORD_COUNTS)
         try:
             buf = io.StringIO()
             with redirect_stdout(buf):
                 rc = vei.validate()
             return rc, buf.getvalue()
         finally:
+            vei.generated_record_counts = prior_counts
             for attr, prior in saved.items():
                 setattr(vei, attr, prior)
 
@@ -226,6 +254,10 @@ def must_pass(label, fn, target="candidates", needle=""):
 
 def opp(s, oid):
     return next(o for o in s["opportunities"] if o["opportunity_id"] == oid)
+
+
+def lane(s, pid, which):
+    return s["product_source_audit"][pid][which]
 
 
 def run() -> int:  # noqa: PLR0915
@@ -344,36 +376,6 @@ def run() -> int:  # noqa: PLR0915
     # =====================================================================================
     # SOURCE AUDIT
     # =====================================================================================
-    must_fail("(10) a missing enabled-product audit entry is rejected",
-              lambda s: s["product_source_audit"].pop("prod-enabled"),
-              target="sources", needle="missing entry for enabled-ingestion product")
-    must_fail("a missing STRATEGIC product audit entry is rejected",
-              lambda s: (s["product_source_audit"].pop("prod-enabled"),
-                         s.__setitem__("strategic_priority_products", ["prod-enabled"])),
-              target="sources", needle="missing entry for")
-    must_fail("(11) an invalid audit state is rejected",
-              lambda s: s["product_source_audit"]["prod-enabled"].update(state="looking_into_it"),
-              target="sources", needle="state 'looking_into_it' invalid")
-    must_fail("(12) a dangling opportunity id in an audit entry is rejected",
-              lambda s: s["product_source_audit"]["prod-enabled"].update(
-                  opportunity_ids=["opp-does-not-exist"]),
-              target="sources", needle="references unknown opportunity")
-    must_fail("(13) opportunities_identified with zero opportunities is rejected",
-              lambda s: s["product_source_audit"]["prod-enabled"].update(opportunity_ids=[]),
-              target="sources", needle="requires at least one referenced opportunity")
-    must_pass("needs_source_research with zero opportunities is valid (no invented coverage)",
-              lambda s: s["product_source_audit"]["prod-enabled"].update(
-                  state="needs_source_research", opportunity_ids=[]),
-              target="sources")
-    must_pass("no_viable_source_found with references is valid",
-              lambda s: s["product_source_audit"]["prod-enabled"].update(
-                  state="no_viable_source_found"),
-              target="sources")
-    must_fail("an audit entry for an unknown product is rejected",
-              lambda s: s["product_source_audit"].update({"ghost": {"state": "needs_source_research",
-                                                                    "opportunity_ids": []}}),
-              target="sources", needle="unknown product_id")
-
     # =====================================================================================
     # PRIORITY vs READINESS
     # =====================================================================================
@@ -600,6 +602,165 @@ def run() -> int:  # noqa: PLR0915
               lambda c: c["readiness_model"].pop("ready_to_build_requires"),
               needle="must list the derivation gates")
 
+
+    # =====================================================================================
+    # LANE-SPECIFIC SOURCE AUDIT (official and consensus fail independently)
+    # =====================================================================================
+    must_fail("a product-level audit 'state' is no longer valid",
+              lambda s: s["product_source_audit"]["prod-enabled"].update(state="opportunities_identified"),
+              target="sources", needle="audited separately")
+    must_fail("a missing official lane block is rejected",
+              lambda s: s["product_source_audit"]["prod-enabled"].pop("official"),
+              target="sources", needle="missing 'official' lane block")
+    must_fail("a missing consensus lane block is rejected",
+              lambda s: s["product_source_audit"]["prod-enabled"].pop("consensus"),
+              target="sources", needle="missing 'consensus' lane block")
+
+    # THE PREMIERE DEFECT: a lane with a pending working source cannot be no_viable_source_found.
+    must_fail("no_viable_source_found is rejected when a PENDING source is known (Premiere defect)",
+              lambda s: lane(s, "prod-enabled", "consensus").update(
+                  state="no_viable_source_found", current_methods=[],
+                  pending_methods=["method-pending"], opportunity_ids=[],
+                  diversification_state="needs_source_research"),
+              target="sources", needle="'no_viable_source_found' is false while a current or pending")
+    # THE DAVINCI DEFECT: one working source plus no second source is diversification debt.
+    must_fail("no_viable_source_found is rejected when an OPERATIONAL source exists (DaVinci defect)",
+              lambda s: lane(s, "prod-enabled", "consensus").update(
+                  state="no_viable_source_found", diversification_state="needs_source_research"),
+              target="sources", needle="diversification_state 'no_viable_additional_source_found'")
+    must_pass("one operational source + no second source is diversification debt, and validates",
+              lambda s: lane(s, "prod-enabled", "consensus").update(
+                  state="production_source_present",
+                  diversification_state="no_viable_additional_source_found"),
+              target="sources")
+    must_fail("needs_source_research is rejected when a source already exists",
+              lambda s: lane(s, "prod-enabled", "consensus").update(state="needs_source_research"),
+              target="sources", needle="contradicts an existing current/pending method")
+    must_fail("a lane claiming a production source with no current_methods is rejected",
+              lambda s: lane(s, "prod-enabled", "consensus").update(current_methods=[]),
+              target="sources", needle="requires at least one current_methods")
+    must_fail("pending_production_source with no pending_methods is rejected",
+              lambda s: lane(s, "prod-disabled", "consensus").update(
+                  state="pending_production_source"),
+              target="sources", needle="requires at least one pending_methods")
+
+    # THE WINDOWS 11 DEFECT: an official-lane opportunity cannot close a consensus gap.
+    must_fail("a consensus lane cannot be satisfied by an OFFICIAL-lane opportunity (Win11 defect)",
+              lambda s: lane(s, "prod-disabled", "consensus").update(
+                  opportunity_ids=["opp-official"]),
+              target="sources", needle="cannot satisfy the consensus lane")
+    must_fail("an official lane cannot be satisfied by a CONSENSUS-lane opportunity",
+              lambda s: lane(s, "prod-enabled", "official").update(opportunity_ids=["opp-ready"]),
+              target="sources", needle="cannot satisfy the official lane")
+    must_fail("opportunities_identified with only a wrong-lane opportunity is rejected",
+              lambda s: lane(s, "prod-disabled", "consensus").update(
+                  state="opportunities_identified", opportunity_ids=["opp-official"]),
+              target="sources", needle="requires at least one consensus-lane opportunity")
+
+    must_fail("an invalid audit lane state is rejected",
+              lambda s: lane(s, "prod-enabled", "official").update(state="looking_into_it"),
+              target="sources", needle="state 'looking_into_it' invalid")
+    must_fail("an invalid diversification_state is rejected",
+              lambda s: lane(s, "prod-enabled", "official").update(diversification_state="fine"),
+              target="sources", needle="diversification_state 'fine' invalid")
+    must_fail("diversification cannot be not_applicable when a source exists",
+              lambda s: lane(s, "prod-enabled", "official").update(
+                  diversification_state="not_applicable"),
+              target="sources", needle="cannot be 'not_applicable'")
+    must_fail("diversification must be not_applicable when no source exists",
+              lambda s: lane(s, "prod-disabled", "official").update(
+                  diversification_state="needs_source_research"),
+              target="sources", needle="must be 'not_applicable'")
+    must_fail("a dangling audit opportunity reference is rejected",
+              lambda s: lane(s, "prod-enabled", "consensus").update(
+                  opportunity_ids=["opp-ghost"]),
+              target="sources", needle="references unknown opportunity")
+
+    # EVERY configured product must be audited -- no permanent warning class.
+    must_fail("a missing audit entry for ANY configured product is an ERROR, not a warning",
+              lambda s: s["product_source_audit"].pop("prod-disabled"),
+              target="sources", needle="missing entry for configured product prod-disabled")
+    must_pass("needs_source_research with an empty list is valid coverage for a quiet product",
+              lambda s: s["product_source_audit"].__setitem__("prod-disabled", {
+                  "official": {"state": "needs_source_research", "current_methods": [],
+                               "pending_methods": [], "opportunity_ids": [],
+                               "diversification_state": "not_applicable"},
+                  "consensus": {"state": "needs_source_research", "current_methods": [],
+                                "pending_methods": [], "opportunity_ids": [],
+                                "diversification_state": "not_applicable"}}),
+              target="sources")
+    must_fail("a drifted audit-state vocabulary is rejected",
+              lambda s: s["audit_lane_states"].pop("no_viable_source_found"),
+              target="sources", needle="audit_lane_states must declare")
+
+    # =====================================================================================
+    # OFFICIAL PATH MUST BE PROVEN, NOT INFERRED
+    # =====================================================================================
+    check("baseline ready candidate uses official path A (enabled ingestion + records)",
+          run_validator(SOURCES, CANDIDATES)[0] == 0)
+
+    def official_inferred(c):
+        """Perfect scores, high confidence, proven consensus -- but no official proof at all."""
+        c["candidates"][0].update(repo_state="untracked", candidate_id="inferred-official",
+                                  opportunity_refs=["opp-ready"], readiness="ready_to_build")
+    must_fail("ready_to_build is refused when the official path is only INFERRED",
+              official_inferred, needle="no product-specific official proof")
+
+    def official_opportunity_unproven(s):
+        s_official = opp(s, "opp-official")
+        s_official["proof"].update(patch_specificity_proven="unknown", production_proven="unknown")
+    s2, c2 = copy.deepcopy(SOURCES), copy.deepcopy(CANDIDATES)
+    official_opportunity_unproven(s2)
+    c2["candidates"][0].update(repo_state="untracked", candidate_id="untracked-b",
+                               opportunity_refs=["opp-ready", "opp-official"])
+    rc5, out5 = run_validator(s2, c2)
+    check("ready_to_build is refused when the referenced official opportunity is unproven",
+          rc5 == 1 and "official path is inferred, not proven" in out5, out5[-400:])
+
+    s3, c3 = copy.deepcopy(SOURCES), copy.deepcopy(CANDIDATES)
+    c3["candidates"][0].update(repo_state="untracked", candidate_id="untracked-c",
+                               opportunity_refs=["opp-ready", "opp-official"])
+    rc6, out6 = run_validator(s3, c3)
+    check("POSITIVE: production-proven official + fully proven consensus reaches ready_to_build "
+          "with NO enabled ingestion (path B)",
+          rc6 == 0 and "ready_to_build=1" in out6, out6[-500:])
+
+    s4, c4 = copy.deepcopy(SOURCES), copy.deepcopy(CANDIDATES)
+    opp(s4, "opp-official")["last_checked"] = ANCIENT
+    c4["candidates"][0].update(repo_state="untracked", candidate_id="untracked-d",
+                               opportunity_refs=["opp-ready", "opp-official"])
+    rc7, out7 = run_validator(s4, c4)
+    check("a stale official measurement cannot satisfy the official path",
+          rc7 == 1 and "official path is inferred, not proven" in out7, out7[-400:])
+
+    def precedent_official(s):
+        o = opp(s, "opp-official")
+        o["transport_precedent"] = "this adapter is production-proven for another product"
+        o["proof"].update(actions_reachable="unknown", patch_specificity_proven="unknown",
+                          production_proven="unknown")
+    s5, c5 = copy.deepcopy(SOURCES), copy.deepcopy(CANDIDATES)
+    precedent_official(s5)
+    c5["candidates"][0].update(repo_state="untracked", candidate_id="untracked-e",
+                               opportunity_refs=["opp-ready", "opp-official"])
+    rc8, out8 = run_validator(s5, c5)
+    check("same-vendor transport precedent cannot satisfy the official path",
+          rc8 == 1 and "official path is inferred, not proven" in out8, out8[-400:])
+
+    # =====================================================================================
+    # PROBE BEFORE PRODUCTION
+    # =====================================================================================
+    must_fail("a prove_source candidate cannot recommend production registration",
+              lambda c: c["candidates"][1].update(
+                  recommended_next_step="Register the method in collector_ownership and dry-run."),
+              needle="must be a probe")
+    must_fail("an unproven opportunity cannot make registration its next experiment",
+              lambda s: opp(s, "opp-local").update(
+                  next_experiment="Register `x` in ALLOWED_METHODS then measure."),
+              target="sources", needle="it must be a probe")
+    must_pass("a ready_to_build candidate MAY recommend registration",
+              lambda c: c["candidates"][0].update(
+                  recommended_next_step="Register the proven method in collector_ownership."))
+
     # --- calibration cases the corrections named explicitly -------------------------------
     real_cand = yaml.safe_load(vei.CANDIDATES_FILE.read_text(encoding="utf-8"))
     by_cid = {c["candidate_id"]: c for c in real_cand["candidates"]}
@@ -610,6 +771,30 @@ def run() -> int:  # noqa: PLR0915
     check("CALIBRATION comfyui: NOT ready_to_build while patch identity is unmeasured",
           cu.get("readiness") == "prove_source" and bool(cu.get("readiness_blockers")),
           str(cu.get("readiness")))
+    check("CALIBRATION comfyui: next step is a PROBE, not production registration",
+          "PROBE FIRST" in str(cu.get("recommended_next_step"))
+          and "collector ownership" in str(cu.get("recommended_next_step")).lower()
+          and not any(p in str(cu.get("recommended_next_step")).lower()
+                      for p in ("register the", "allowed_methods")),
+          str(cu.get("recommended_next_step"))[:160])
+    real_audit = real_src["product_source_audit"]
+    check("CALIBRATION premiere consensus: pending_production_source, NOT no_viable_source_found",
+          real_audit["adobe-premiere-pro"]["consensus"]["state"] == "pending_production_source"
+          and "adobe_community_algolia_search" in
+          real_audit["adobe-premiere-pro"]["consensus"]["pending_methods"],
+          str(real_audit["adobe-premiere-pro"]["consensus"]["state"]))
+    check("CALIBRATION davinci consensus: operational source + diversification debt",
+          real_audit["blackmagic-davinci"]["consensus"]["state"] == "production_source_present"
+          and real_audit["blackmagic-davinci"]["consensus"]["diversification_state"]
+          == "no_viable_additional_source_found",
+          str(real_audit["blackmagic-davinci"]["consensus"]))
+    check("CALIBRATION windows-11: the official-lane opportunity is filed under the OFFICIAL lane",
+          real_audit["microsoft-windows-11"]["official"]["opportunity_ids"]
+          == ["microsoft-365-message-center-and-release-health"]
+          and real_audit["microsoft-windows-11"]["consensus"]["opportunity_ids"] == [],
+          str(real_audit["microsoft-windows-11"]))
+    check("COVERAGE: all 47 configured products are source-audited",
+          len(real_audit) == 47, str(len(real_audit)))
     check("CALIBRATION comfyui: consensus/automation evidence is not claimed as measured",
           cu.get("score_basis", {}).get("consensus_source_quality", {}).get("confidence")
           in {"low", "unproven"},

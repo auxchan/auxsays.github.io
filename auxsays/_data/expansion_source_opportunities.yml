@@ -196,192 +196,774 @@ deferred_follow_ups:
       functionality unchanged.
     scope_note: Must be its own tiny PR. Not mixed into expansion-inventory-foundation.
 
-# PER-PRODUCT SOURCE AUDIT. Answers "what source research remains for this product?" for
-# every enabled-ingestion product and every declared strategic product. A product with no
-# opportunity row must say so explicitly (needs_source_research) rather than vanishing into
-# a warning. Opportunities are never invented to satisfy coverage: an empty list with
-# needs_source_research is the honest answer and validates cleanly.
+# PER-PRODUCT, PER-LANE SOURCE AUDIT. Answers "what sources do we have, what is missing,
+# and where should we keep looking?" for EVERY configured product -- all 47, so the
+# products least likely to be remembered cannot decay into an ignorable warning.
+#
+# OFFICIAL and CONSENSUS are audited SEPARATELY because they fail independently, and
+# because a single product-level status produced flatly contradictory records: Premiere was
+# labelled no_viable_source_found while its own notes described PR #51 as a working path.
+#
+# `no_viable_source_found` means literally NO viable source is known for that lane. It may
+# never mean "we have one source and cannot find a second" -- that is diversification debt
+# and lives in `diversification_state`. The validator enforces the distinction: a lane with
+# any current or pending method cannot be no_viable_source_found.
+#
+# `opportunity_ids` in a lane must reference opportunities of THAT lane. An official-lane
+# opportunity can never close a consensus gap (the microsoft-windows-11 defect).
+#
+# Opportunities are never invented to satisfy coverage: needs_source_research with an empty
+# list is the honest answer and validates cleanly.
+audit_lane_states:
+  production_source_present: A method is operational in production for this lane today.
+  production_source_degraded: >-
+    Configured and executing, but yielding no records or no evidence -- running is not the
+    same as working.
+  pending_production_source: >-
+    A source is proven but not yet in production (for example, sitting in an open PR).
+  opportunities_identified: No operational or pending source, but a same-lane opportunity exists.
+  needs_source_research: No operational source, no pending source, no same-lane opportunity.
+  no_viable_source_found: Researched, and NO viable source exists for this lane at all.
+audit_diversification_states:
+  sufficient: Multiple independent sources already carry this lane.
+  opportunities_identified: A second-source candidate is identified but unproven.
+  needs_source_research: One source exists and no alternative has been researched.
+  no_viable_additional_source_found: >-
+    A source exists, and additional sources were researched and found non-viable. This is
+    diversification debt, NOT an absence of sources.
+  not_applicable: No source exists yet, so diversification is not yet the question.
 product_source_audit:
-  obs-studio:
-    state: opportunities_identified
-    opportunity_ids:
-      - obs-forum-xenforo-rss
-    notes: >-
-      github_issues succeeds and supplies 100% of the 174 accepted rows. The XenForo feed is the
-      diversification candidate; until it lands, this product has a single-source dependency.
-  blackmagic-davinci:
-    state: no_viable_source_found
-    opportunity_ids:
-      - blackmagic-forum-phpbb
-      - reddit-search-json
-    notes: >-
-      Both identified sources are measured non-viable as diversification: the vendor forum is
-      challenge-gated (202/zero bytes) and Reddit already supplies 226 of 235 rows, so it is the
-      concentration risk rather than a fix for it. Genuine research remains.
-  adobe-premiere-pro:
-    state: no_viable_source_found
-    opportunity_ids:
-      - wayback-archive-recheck
-      - brave-search-api
-      - vendor-sitemap-delta
-    notes: >-
-      Every identified non-Algolia source is broken, pending a policy decision, or blocked by the
-      HelpX CI transport question. The Algolia lane on PR #51 is the only working path.
-  adobe-acrobat-reader:
-    state: needs_source_research
-    opportunity_ids: []
-    notes: >-
-      Algolia supplies 100% of the 83 accepted rows and no second source has been probed. This is
-      an unresearched single-source dependency, not a satisfied product.
-  adobe-acrobat-pro:
-    state: needs_source_research
-    opportunity_ids: []
-    notes: >-
-      Same as adobe-acrobat-reader: 45 accepted rows, all from one source, no alternative probed.
-  microsoft-windows-11:
-    state: opportunities_identified
-    opportunity_ids:
-      - microsoft-365-message-center-and-release-health
-    notes: >-
-      Official path proven. Consensus is 100% learn_qna_search_rss (24 rows); no second consensus
-      source has been probed, so diversification research is still outstanding.
-  microsoft-powerpoint:
-    state: opportunities_identified
-    opportunity_ids:
-      - microsoft-learn-qna-powerpoint
-      - microsoft-365-message-center-and-release-health
-    notes: >-
-      OBSERVABILITY GAP, not a source gap: two consensus methods are registered and
-      evidence_method_health.yml holds zero rows for this product, so we cannot tell whether the
-      lane never runs, crashes, or runs and finds nothing. Diagnose before sourcing.
-  microsoft-365-apps:
-    state: opportunities_identified
-    opportunity_ids:
-      - microsoft-365-message-center-and-release-health
-    notes: >-
-      Official ingestion enabled (2 records). No consensus method registered at all.
-  microsoft-teams:
-    state: opportunities_identified
-    opportunity_ids:
-      - microsoft-365-message-center-and-release-health
-    notes: >-
-      Configured, disabled. The identity-scoped parser staged on PR #29 was never validated live.
-  adobe-photoshop:
-    state: opportunities_identified
-    opportunity_ids:
-      - adobe-algolia-photoshop
-      - vendor-sitemap-delta
-    notes: >-
-      Community supply measured (4573 docs). Blocked on OFFICIAL transport: helpx.adobe.com is
-      CI-unreachable with the root cause unresolved, so PR #28 was correctly refused activation.
-  adobe-lightroom-classic:
-    state: opportunities_identified
-    opportunity_ids:
-      - adobe-algolia-lightroom-classic
-      - vendor-sitemap-delta
-    notes: >-
-      Largest measured staged-Adobe community supply (6520). Same official-transport blocker.
-  adobe-after-effects:
-    state: opportunities_identified
-    opportunity_ids:
-      - adobe-algolia-after-effects
-      - vendor-sitemap-delta
-    notes: >-
-      Community supply measured (1610). Same official-transport blocker.
-  adobe-media-encoder:
-    state: opportunities_identified
-    opportunity_ids:
-      - adobe-algolia-media-encoder
-      - vendor-sitemap-delta
-    notes: >-
-      Community supply measured at 296 lifetime documents and recorded as a FAILED supply proof; a
-      lane here would likely report no_results indefinitely.
-  elgato-stream-deck:
-    state: opportunities_identified
-    opportunity_ids:
-      - elgato-zendesk-community-posts
-    notes: >-
-      Official ingestion enabled but produces zero records; no consensus method registered.
-  elgato-wave-link:
-    state: opportunities_identified
-    opportunity_ids:
-      - elgato-zendesk-community-posts
-    notes: >-
-      Same as elgato-stream-deck; one community-posts opportunity would serve all four.
-  elgato-camera-hub:
-    state: opportunities_identified
-    opportunity_ids:
-      - elgato-zendesk-community-posts
-    notes: >-
-      Same as elgato-stream-deck.
-  elgato-4k-capture-utility:
-    state: opportunities_identified
-    opportunity_ids:
-      - elgato-zendesk-community-posts
-    notes: >-
-      Same as elgato-stream-deck.
-  comfyui:
-    state: opportunities_identified
-    opportunity_ids:
-      - comfyui-github-issues
-    notes: >-
-      35 official-only records. The GitHub Issues path is transport-proven but its patch
-      specificity and supply for ComfyUI are unmeasured.
-  figma:
-    state: opportunities_identified
-    opportunity_ids:
-      - figma-zendesk-help-center
-      - figma-community-forum
-    notes: >-
-      132 official-only records. The community forum's JSON contract is measured absent
-      (latest.json/search.json 404), so the consensus path is unresolved.
-  github:
-    state: opportunities_identified
-    opportunity_ids:
-      - github-product-changelog-consensus
-    notes: >-
-      206 official-only records -- the largest population in the repo. Nothing probed, and the
-      product-scope question (service vs GitHub Desktop) comes first.
   openai-chatgpt:
-    state: opportunities_identified
-    opportunity_ids:
-      - openai-community-discourse
-    notes: >-
-      Community supply is rich and version identity is the blocker, not the source. Resolve the
-      scope question (web service vs desktop app) before sourcing.
-  netlify:
-    state: needs_source_research
-    opportunity_ids: []
-    notes: >-
-      Official ingestion enabled and Degraded with zero records extracted. No source research
-      done.
-  blender:
-    state: opportunities_identified
-    opportunity_ids:
-      - blender-devtalk-discourse
-    notes: >-
-      Configured, disabled. devtalk is developer-facing; the projects.blender.org tracker is the
-      better-fit surface and is unprobed.
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      opportunity_ids:
+        - openai-community-discourse
+      diversification_state: not_applicable
+  anthropic-claude:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  google-gemini:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  perplexity:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  midjourney:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  stability-ai:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  runway:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  pika:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  lottiefiles:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  figma:
+    official:
+      state: production_source_present
+      current_methods:
+        - rss_feed
+      pending_methods: []
+      opportunity_ids:
+        - figma-zendesk-help-center
+      diversification_state: opportunities_identified
+    consensus:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      opportunity_ids:
+        - figma-community-forum
+      diversification_state: not_applicable
+  canva:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  adobe-premiere-pro:
+    official:
+      state: production_source_degraded
+      current_methods:
+        - adobe_release_notes
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: no_viable_additional_source_found
+      notes: >-
+        adobe_release_notes is enabled and has produced 2 records, but source_health books this
+        product Failing, so the lane is degraded rather than healthy. Alternative official
+        surfaces are blocked by the HelpX CI transport question.
+    consensus:
+      state: pending_production_source
+      current_methods: []
+      pending_methods:
+        - adobe_community_algolia_search
+      opportunity_ids:
+        - reddit-search-json
+        - wayback-archive-recheck
+        - brave-search-api
+      diversification_state: opportunities_identified
+      notes: >-
+        PR #51 proves the keyless Adobe Community Algolia lane with 7 accepted patch-specific rows
+        in CI run 31680213911, but it is not merged, so no consensus method is operational yet.
+        This is a PENDING production source -- explicitly NOT no_viable_source_found, which would
+        be false. Diversification beyond that single lane is still unresearched.
+  adobe-after-effects:
+    official:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      opportunity_ids:
+        - vendor-sitemap-delta
+      diversification_state: not_applicable
+    consensus:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      opportunity_ids:
+        - adobe-algolia-after-effects
+      diversification_state: not_applicable
+  adobe-photoshop:
+    official:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      opportunity_ids:
+        - vendor-sitemap-delta
+      diversification_state: not_applicable
+    consensus:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      opportunity_ids:
+        - adobe-algolia-photoshop
+      diversification_state: not_applicable
+  adobe-media-encoder:
+    official:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      opportunity_ids:
+        - vendor-sitemap-delta
+      diversification_state: not_applicable
+    consensus:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      opportunity_ids:
+        - adobe-algolia-media-encoder
+      diversification_state: not_applicable
+  adobe-lightroom-classic:
+    official:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      opportunity_ids:
+        - vendor-sitemap-delta
+      diversification_state: not_applicable
+    consensus:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      opportunity_ids:
+        - adobe-algolia-lightroom-classic
+      diversification_state: not_applicable
+  blackmagic-davinci:
+    official:
+      state: production_source_degraded
+      current_methods:
+        - blackmagic_support_downloads
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: needs_source_research
+      notes: >-
+        source_health books official ingestion as Manual watch: 106 records exist but automated
+        official ingestion is not active. That is the largest manual dependency in the repo.
+    consensus:
+      state: production_source_present
+      current_methods:
+        - creative_cow_forum_search
+        - known_watchlist
+        - reddit_search
+      pending_methods: []
+      opportunity_ids:
+        - blackmagic-forum-phpbb
+        - reddit-search-json
+      diversification_state: no_viable_additional_source_found
+      notes: >-
+        Three methods are operational and supply 235 accepted rows -- so a viable consensus source
+        certainly exists. What FAILED is diversification: 226 of 235 rows are Reddit, and the
+        vendor's own forum is measured challenge-gated (202 / zero-byte body). That is
+        diversification debt, recorded as no_viable_additional_source_found, not an absence of any
+        source.
+  obs-studio:
+    official:
+      state: production_source_present
+      current_methods:
+        - github_releases
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: needs_source_research
+    consensus:
+      state: production_source_present
+      current_methods:
+        - github_issues
+      pending_methods: []
+      opportunity_ids:
+        - obs-forum-xenforo-rss
+      diversification_state: opportunities_identified
+      notes: >-
+        github_issues is operational and supplies 100% of the 174 accepted rows. The XenForo feed
+        is an identified consensus-lane diversification candidate.
+  twitch:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  youtube:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  kick:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  rumble:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  epic-unreal:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
   unity:
-    state: opportunities_identified
-    opportunity_ids:
-      - unity-discussions-discourse
-    notes: >-
-      Configured, disabled. Discourse instance answers; release-stream scope must be defined.
-  nvidia:
-    state: opportunities_identified
-    opportunity_ids:
-      - nvidia-developer-forums-discourse
-    notes: >-
-      Configured, disabled. The measured Discourse instance is developer-facing and may be the
-      wrong board for GeForce driver regressions.
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      opportunity_ids:
+        - unity-discussions-discourse
+      diversification_state: not_applicable
   steam:
-    state: opportunities_identified
-    opportunity_ids:
-      - steam-news-api
-    notes: >-
-      Configured, disabled. The measured API returns per-GAME news; the product is the client, so
-      patch specificity is recorded as failed.
+    official:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      opportunity_ids:
+        - steam-news-api
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  nvidia:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      opportunity_ids:
+        - nvidia-developer-forums-discourse
+      diversification_state: not_applicable
+  amd:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  intel-arc:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  blender:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      opportunity_ids:
+        - blender-devtalk-discourse
+      diversification_state: not_applicable
+  comfyui:
+    official:
+      state: production_source_present
+      current_methods:
+        - github_releases
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: needs_source_research
+    consensus:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      opportunity_ids:
+        - comfyui-github-issues
+      diversification_state: not_applicable
+  hugging-face:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  github:
+    official:
+      state: production_source_present
+      current_methods:
+        - rss_feed
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: needs_source_research
+    consensus:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      opportunity_ids:
+        - github-product-changelog-consensus
+      diversification_state: not_applicable
+  cloudflare:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  netlify:
+    official:
+      state: production_source_degraded
+      current_methods:
+        - html_changelog
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: needs_source_research
+      notes: >-
+        Ingestion is enabled and executes, but source_health books Degraded with zero records
+        extracted -- a degraded production source, not a healthy one.
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  notion:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  zapier:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  make:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  adobe-acrobat-reader:
+    official:
+      state: production_source_present
+      current_methods:
+        - adobe_acrobat
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: needs_source_research
+    consensus:
+      state: production_source_present
+      current_methods:
+        - adobe_community_algolia_search
+      pending_methods: []
+      opportunity_ids:
+        - reddit-search-json
+      diversification_state: opportunities_identified
+      notes: >-
+        adobe_community_algolia_search is operational (83 accepted rows) and is the only source.
+        No second consensus source has been probed -- unresearched diversification, not absence.
+  adobe-acrobat-pro:
+    official:
+      state: production_source_present
+      current_methods:
+        - adobe_acrobat
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: needs_source_research
+    consensus:
+      state: production_source_present
+      current_methods:
+        - adobe_community_algolia_search
+      pending_methods: []
+      opportunity_ids:
+        - reddit-search-json
+      diversification_state: opportunities_identified
+      notes: >-
+        As adobe-acrobat-reader: 45 accepted rows from one source, no alternative probed.
+  microsoft-windows-11:
+    official:
+      state: production_source_present
+      current_methods:
+        - microsoft_release_health
+      pending_methods: []
+      opportunity_ids:
+        - microsoft-365-message-center-and-release-health
+      diversification_state: opportunities_identified
+    consensus:
+      state: production_source_present
+      current_methods:
+        - learn_qna_search_rss
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: needs_source_research
+      notes: >-
+        learn_qna_search_rss is operational (24 accepted rows) and is the ONLY consensus source.
+        No consensus-lane opportunity has been identified yet -- the Microsoft 365
+        message-center/release-health row is an OFFICIAL-lane opportunity and cannot close a
+        consensus diversification gap.
+  microsoft-teams:
+    official:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      opportunity_ids:
+        - microsoft-365-message-center-and-release-health
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  microsoft-powerpoint:
+    official:
+      state: production_source_present
+      current_methods:
+        - microsoft_office_updates
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: needs_source_research
+    consensus:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      opportunity_ids:
+        - reddit-search-json
+        - microsoft-learn-qna-powerpoint
+      diversification_state: not_applicable
+      notes: >-
+        Two methods are registered in ALLOWED_METHODS and evidence_method_health.yml holds ZERO
+        rows for this product, so nothing is operational and nothing is known to fail. The
+        consensus-lane opportunity exists but the first action is an observability diagnosis.
+  microsoft-365-apps:
+    official:
+      state: production_source_present
+      current_methods:
+        - microsoft_office_updates
+      pending_methods: []
+      opportunity_ids:
+        - microsoft-365-message-center-and-release-health
+      diversification_state: opportunities_identified
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  elgato-stream-deck:
+    official:
+      state: production_source_degraded
+      current_methods:
+        - elgato_help_center
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: needs_source_research
+      notes: >-
+        Enabled and executing but producing zero records; PR #52 replaces the HTML parser with the
+        Zendesk Help Center articles API.
+    consensus:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      opportunity_ids:
+        - elgato-zendesk-community-posts
+      diversification_state: not_applicable
+      notes: >-
+        No consensus method registered. The Zendesk COMMUNITY POSTS opportunity would serve all
+        four Elgato products; it is a different endpoint family from the official articles API.
+  elgato-wave-link:
+    official:
+      state: production_source_degraded
+      current_methods:
+        - elgato_help_center
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: needs_source_research
+      notes: >-
+        Enabled and executing but producing zero records; PR #52 replaces the HTML parser with the
+        Zendesk Help Center articles API.
+    consensus:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      opportunity_ids:
+        - elgato-zendesk-community-posts
+      diversification_state: not_applicable
+      notes: >-
+        No consensus method registered. The Zendesk COMMUNITY POSTS opportunity would serve all
+        four Elgato products; it is a different endpoint family from the official articles API.
+  elgato-camera-hub:
+    official:
+      state: production_source_degraded
+      current_methods:
+        - elgato_help_center
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: needs_source_research
+      notes: >-
+        Enabled and executing but producing zero records; PR #52 replaces the HTML parser with the
+        Zendesk Help Center articles API.
+    consensus:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      opportunity_ids:
+        - elgato-zendesk-community-posts
+      diversification_state: not_applicable
+      notes: >-
+        No consensus method registered. The Zendesk COMMUNITY POSTS opportunity would serve all
+        four Elgato products; it is a different endpoint family from the official articles API.
+  elgato-4k-capture-utility:
+    official:
+      state: production_source_degraded
+      current_methods:
+        - elgato_help_center
+      pending_methods: []
+      opportunity_ids: []
+      diversification_state: needs_source_research
+      notes: >-
+        Enabled and executing but producing zero records; PR #52 replaces the HTML parser with the
+        Zendesk Help Center articles API.
+    consensus:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      opportunity_ids:
+        - elgato-zendesk-community-posts
+      diversification_state: not_applicable
+      notes: >-
+        No consensus method registered. The Zendesk COMMUNITY POSTS opportunity would serve all
+        four Elgato products; it is a different endpoint family from the official articles API.
 
 opportunities:
 
@@ -829,13 +1411,16 @@ opportunities:
     expected_supply: high
     reuse_scope: [comfyui]
     shared_framework: github_issues
-    status: production_candidate
+    status: acceptance_probe_needed
     blocking_unknowns:
       - ComfyUI releases are frequent and versions are tag-like; confirm issue bodies name them.
       - 'PR #49 must be in main first -- any lane whose transport touches `lib.http` inherits the credential-egress defect until the exact-origin gate lands.'
     next_experiment: >-
-      Register `github_issues` for comfyui in `collector_ownership.ALLOWED_METHODS`, then dry-run
-      one release window and count accepted rows under the unchanged acceptance gates.
+      Isolated product-specific acceptance probe, NOT registration: run the existing github_issues
+      primitive over one ComfyUI release window, measure exact-version density, apply the unchanged
+      acceptance gates, and record accepted/rejected counts with exclusion reasons and health
+      behaviour. Registration in `collector_ownership.ALLOWED_METHODS` is a separate task that
+      happens only after that probe succeeds.
     notes: >-
       comfyui already has 35 official_only records from the proven `github_releases` adapter and
       zero consensus rows. Same vendor, same platform, already-successful method: the lowest-risk

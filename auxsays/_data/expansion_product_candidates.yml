@@ -222,8 +222,13 @@ candidates:
     known_sources: [github_releases (implemented, 35 records), comfyui-github-issues (transport_proven)]
     blocking_unknowns: [Version-token density in issue bodies is unmeasured.]
     recommended_next_step: >-
-      Register the already-successful `github_issues` method for comfyui and dry-run one release
-      window. No new transport, no new adapter, no new health vocabulary.
+      PROBE FIRST, in isolation, with no production registration: drive the existing github_issues
+      primitive against one ComfyUI release window offline, measure exact-version token density in
+      issue titles and bodies, run the real acceptance gates, and capture accepted/rejected counts
+      with their exclusion reasons plus method-health and runtime-budget behaviour. Only if that
+      demonstrates patch identity and adequate supply should a SEPARATE implementation task wire
+      the method into collector ownership and the workflow. The obs-studio success is transport
+      precedent, not ComfyUI proof, so registering first would be building on an assumption.
 
   - candidate_id: microsoft-powerpoint
     product_name: Microsoft PowerPoint

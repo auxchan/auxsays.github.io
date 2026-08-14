@@ -32,9 +32,22 @@ WHAT THIS PINS (and why each rule exists):
   `score_basis` with an explicit confidence. A high number with low/unproven evidence cannot
   manufacture `ready_to_build`.
 
-* EXPLICIT SOURCE-AUDIT COVERAGE. Every enabled-ingestion product and every declared strategic
-  product must have a `product_source_audit` entry, so "no source research done yet" is a stated
-  state rather than an absence nobody notices.
+* EXPLICIT, LANE-SPECIFIC SOURCE-AUDIT COVERAGE. Every CONFIGURED product carries an audit entry
+  -- not just the enabled or strategic ones -- because a validator that permanently reports the
+  same warnings teaches everyone to ignore warnings, and the products it would skip are exactly
+  the ones most likely to be forgotten. OFFICIAL and CONSENSUS are audited separately: they fail
+  independently, and one shared status produced contradictory records (Premiere read
+  `no_viable_source_found` while its own notes described PR #51's Algolia lane as working).
+  `no_viable_source_found` means NO viable source exists for that lane; "we have one and cannot
+  find another" is diversification debt and lives in `diversification_state`.
+
+* THE OFFICIAL PATH MUST BE PROVEN, NOT SCORED. `official_source_quality >= 3` is an estimate.
+  ready_to_build additionally needs product-specific official proof: either enabled ingestion with
+  committed records (measured from the repo, not asserted here), or a referenced official-lane
+  opportunity proven end to end. Same-vendor precedent never counts.
+
+* PROBE BEFORE PRODUCTION. An unproven source's next action must be a measurement. A plan whose
+  leading action is registration contradicts the status that says the source is unproven.
 
 Run: PYTHONDONTWRITEBYTECODE=1 python auxsays/scripts/validate_expansion_inventory.py
 Exit 0 clean, 1 on any error.
@@ -79,10 +92,54 @@ CONFIDENCE_VALUES = ("high", "medium", "low", "unproven")
 READY_CONFIDENCES = {"high", "medium"}
 
 READINESS_VALUES = ("ready_to_build", "prove_source", "defer")
-AUDIT_STATES = (
-    "opportunities_identified", "needs_source_research",
-    "no_viable_source_found", "production_sources_sufficient",
+
+# OFFICIAL and CONSENSUS are audited separately: they fail independently, and one shared status
+# produced flatly contradictory records (adobe-premiere-pro read `no_viable_source_found` while its
+# own notes described PR #51's Algolia lane as a working path).
+AUDIT_LANES = ("official", "consensus")
+AUDIT_LANE_STATES = (
+    "production_source_present", "production_source_degraded", "pending_production_source",
+    "opportunities_identified", "needs_source_research", "no_viable_source_found",
 )
+# States that assert a source exists now or is proven-and-waiting.
+AUDIT_STATES_WITH_SOURCE = {
+    "production_source_present", "production_source_degraded", "pending_production_source",
+}
+AUDIT_DIVERSIFICATION_STATES = (
+    "sufficient", "opportunities_identified", "needs_source_research",
+    "no_viable_additional_source_found", "not_applicable",
+)
+AUDIT_LANE_REQUIRED = ("state", "current_methods", "pending_methods", "opportunity_ids",
+                       "diversification_state")
+# An unproven thing's next action must be a MEASUREMENT. If the plan reads as production wiring,
+# it contradicts the very status that says the source is unproven.
+PRODUCTION_ACTIVATION_PHRASES = (
+    "register the", "register `", "allowed_methods", "collector_ownership",
+    "collector ownership", "activate the method", "enable the method", "wire it into production",
+)
+# Deliberately ORDER-AWARE rather than a bare substring test. A correct plan may legitimately name
+# registration as the step that happens AFTER the probe ("probe first ... registration is a
+# separate task"), and flagging that would push authors into wording games instead of better plans.
+# What must not happen is activation being the LEADING action.
+MEASUREMENT_PHRASES = (
+    "probe", "measure", "dry-run", "dry run", "sample", "count", "diagnose", "enumerate",
+    "trace", "verify", "decide", "policy", "confirm",
+)
+
+
+def leading_action_is_activation(text: str) -> str | None:
+    """The activation phrase that precedes any measurement verb, or None."""
+    low = str(text or "").lower()
+    activation = [(low.index(p), p) for p in PRODUCTION_ACTIVATION_PHRASES if p in low]
+    if not activation:
+        return None
+    first_activation, phrase = min(activation)
+    measurement = [low.index(p) for p in MEASUREMENT_PHRASES if p in low]
+    if measurement and min(measurement) < first_activation:
+        return None
+    return phrase
+
+
 PRODUCT_SCOPES = (
     "generic_cloud_service", "installable_desktop_client", "installable_mobile_client",
     "separately_versioned_application", "scope_split_required",
@@ -132,15 +189,70 @@ def freshness_of(opportunity: dict[str, Any], today: _dt.date | None = None) -> 
     return FRESHNESS_CURRENT, f"measured {age}d ago, recheck window {window}d"
 
 
+def _opportunity_proof_complete(o: dict[str, Any], today: _dt.date) -> bool:
+    """True only when THIS opportunity is proven end to end for its own product.
+
+    Same bar for both lanes. Deliberately excludes `transport_precedent`: proof that a transport
+    works for a different product can never satisfy this.
+    """
+    proof = o.get("proof") or {}
+    if str(proof.get("structure_proven")) != "proven":
+        return False
+    if str(proof.get("actions_reachable")) != "proven" \
+            and str(proof.get("production_proven")) != "proven":
+        return False
+    if str(proof.get("patch_specificity_proven")) != "proven":
+        return False
+    return freshness_of(o, today)[0] == FRESHNESS_CURRENT
+
+
+def official_path_proof(
+    candidate: dict[str, Any],
+    opportunities: dict[str, dict[str, Any]],
+    enabled_products: set[str],
+    record_counts: dict[str, int],
+    today: _dt.date,
+) -> tuple[bool, str]:
+    """Is there PRODUCT-SPECIFIC proof of a working official path? (satisfied, reason_if_not)
+
+    Two ways in, mirroring how the repo actually establishes an official lane:
+
+      A. EXISTING PRODUCTION PROOF -- ingestion enabled for this product AND generated records
+         exist. Measured from the repo, not from authored planning fields, so it cannot be
+         asserted into existence by editing this inventory.
+      B. A REFERENCED OFFICIAL OPPORTUNITY proven end to end for this product.
+
+    A score of `official_source_quality >= 3` with an acceptable confidence is necessary but was
+    never sufficient: it is an estimate, and estimating that a vendor "probably has release notes"
+    says nothing about whether a parser works from an Actions runner.
+    """
+    cid = str(candidate.get("candidate_id"))
+    if cid in enabled_products and record_counts.get(cid, 0) > 0:
+        return True, ""
+    refs = candidate.get("opportunity_refs") or []
+    official = [opportunities[r] for r in refs
+                if r in opportunities and opportunities[r].get("lane") == "official"]
+    if not official:
+        return False, ("no product-specific official proof: not an enabled-ingestion product with "
+                       "records, and no official-lane opportunity referenced")
+    if any(_opportunity_proof_complete(o, today) for o in official):
+        return True, ""
+    return False, ("official path is inferred, not proven: no referenced official opportunity has "
+                   "structure + Actions/production + patch specificity proven and current")
+
+
 def derive_readiness(
     candidate: dict[str, Any],
     opportunities: dict[str, dict[str, Any]],
     today: _dt.date | None = None,
+    enabled_products: set[str] | None = None,
+    record_counts: dict[str, int] | None = None,
 ) -> tuple[str, list[str]]:
     """Deterministically derive readiness. FAILS CLOSED: anything unproven means not ready.
 
     ready_to_build requires ALL of:
-      1. a deterministic OFFICIAL path -- official_source_quality >= 3;
+      1. a deterministic OFFICIAL path -- official_source_quality >= 3 AND product-specific
+         official proof (see official_path_proof), because a score is an estimate;
       2. exact version identity plausibly enforceable -- version_identifiability >= 4;
       3. a deterministic CONSENSUS discovery path -- a referenced consensus opportunity whose
          structure is proven;
@@ -162,6 +274,10 @@ def derive_readiness(
 
     if score("official_source_quality") < 3:
         reasons.append("no deterministic official path (official_source_quality < 3)")
+    ok_official, why = official_path_proof(
+        candidate, opportunities, enabled_products or set(), record_counts or {}, today)
+    if not ok_official:
+        reasons.append(why)
     if score("version_identifiability") < 4:
         reasons.append("exact version identity not plausibly enforceable (version_identifiability < 4)")
 
@@ -174,20 +290,24 @@ def derive_readiness(
         def proven(o: dict[str, Any], dim: str) -> bool:
             return str((o.get("proof") or {}).get(dim)) == "proven"
 
-        structural = [o for o in consensus if proven(o, "structure_proven")]
-        if not structural:
-            reasons.append("no referenced consensus opportunity with structure_proven")
-        runnable = [o for o in structural
-                    if proven(o, "actions_reachable") or proven(o, "production_proven")]
-        if structural and not runnable:
-            reasons.append("consensus transport is not Actions-proven or production-proven "
-                           "(transport precedent elsewhere does not count)")
-        identified = [o for o in runnable if proven(o, "patch_specificity_proven")]
-        if runnable and not identified:
-            reasons.append("consensus patch specificity unproven for this product")
-        fresh = [o for o in identified if freshness_of(o, today)[0] == FRESHNESS_CURRENT]
-        if identified and not fresh:
-            reasons.append("supporting proof is stale")
+        # Same end-to-end bar as the official lane (official_path_proof), reported dimension by
+        # dimension so the unmet gate is named rather than just denied.
+        if not any(_opportunity_proof_complete(o, today) for o in consensus):
+            structural = [o for o in consensus if proven(o, "structure_proven")]
+            if not structural:
+                reasons.append("no referenced consensus opportunity with structure_proven")
+            else:
+                runnable = [o for o in structural
+                            if proven(o, "actions_reachable") or proven(o, "production_proven")]
+                if not runnable:
+                    reasons.append("consensus transport is not Actions-proven or production-proven "
+                                   "(transport precedent elsewhere does not count)")
+                else:
+                    identified = [o for o in runnable if proven(o, "patch_specificity_proven")]
+                    if not identified:
+                        reasons.append("consensus patch specificity unproven for this product")
+                    else:
+                        reasons.append("supporting proof is stale")
 
     if candidate.get("readiness_blockers"):
         reasons.append(f"{len(candidate['readiness_blockers'])} declared readiness blocker(s)")
@@ -210,10 +330,31 @@ def derive_readiness(
     return "ready_to_build", []
 
 
+GENERATED_DIR = _REPO / "auxsays" / "updates" / "generated"
+_PRODUCT_ID_RE = __import__("re").compile(r"^product_id:\s*['\"]?([\w\-\.]+)", 8)  # re.M
+
+
+def generated_record_counts() -> dict[str, int]:
+    """Records actually committed per product_id -- ground truth for existing official proof.
+
+    Measured from the repo rather than read from this inventory, so `ready_to_build` cannot be
+    obtained by asserting a healthy official lane in planning data.
+    """
+    counts: dict[str, int] = {}
+    if not GENERATED_DIR.exists():
+        return counts
+    for path in GENERATED_DIR.rglob("*.md"):
+        match = _PRODUCT_ID_RE.search(path.read_text(encoding="utf-8", errors="replace"))
+        if match:
+            counts[match.group(1)] = counts.get(match.group(1), 0) + 1
+    return counts
+
+
 def validate() -> int:  # noqa: PLR0912, PLR0915 - one linear pass keeps the rules readable
     errors: list[str] = []
     warnings: list[str] = []
     today = _today()
+    record_counts = generated_record_counts()
 
     products = _load(PRODUCTS_FILE)
     plist = products if isinstance(products, list) else products.get("products", [])
@@ -315,6 +456,15 @@ def validate() -> int:  # noqa: PLR0912, PLR0915 - one linear pass keeps the rul
                 warnings.append(f"{oid}: transport_precedent recorded alongside unproven patch "
                                 "specificity -- precedent must not be read as product proof")
 
+        # An unproven opportunity's next experiment must be a MEASUREMENT. Same rule as candidate
+        # recommendations: planning that starts by wiring an unproven source into production
+        # contradicts the very status that says it is unproven.
+        if isinstance(proof, dict) and str(proof.get("patch_specificity_proven")) != "proven":
+            hit = leading_action_is_activation(o.get("next_experiment"))
+            if hit:
+                errors.append(f"{oid}: patch specificity is unproven but next_experiment reads as "
+                              f"production activation ({hit!r}) -- it must be a probe")
+
         # --- freshness ---
         state, detail = freshness_of(o, today)
         if state == FRESHNESS_STALE:
@@ -342,11 +492,21 @@ def validate() -> int:  # noqa: PLR0912, PLR0915 - one linear pass keeps the rul
                 if str(pid) not in configured_products:
                     errors.append(f"{oid}: {key} references unknown product_id {pid!r}")
 
-    # --- product source audit -------------------------------------------------------------
+    # --- product source audit: LANE-SPECIFIC, and every configured product covered ---------
+    declared_lane_states = src.get("audit_lane_states") or {}
+    declared_div_states = src.get("audit_diversification_states") or {}
+    for key, declared, expected in (("audit_lane_states", declared_lane_states, AUDIT_LANE_STATES),
+                                    ("audit_diversification_states", declared_div_states,
+                                     AUDIT_DIVERSIFICATION_STATES)):
+        if not isinstance(declared, dict) or set(declared) != set(expected):
+            errors.append(f"{key} must declare exactly {sorted(expected)} "
+                          f"(declared {sorted(declared) if isinstance(declared, dict) else declared})")
+
     if not isinstance(audit, dict):
-        errors.append("product_source_audit must be a mapping of product_id -> audit entry")
+        errors.append("product_source_audit must be a mapping of product_id -> per-lane audit")
         audit = {}
-    audit_state_counts: dict[str, int] = {}
+    audit_state_counts: dict[str, dict[str, int]] = {lane: {} for lane in AUDIT_LANES}
+    div_counts: dict[str, int] = {}
     for pid, entry in audit.items():
         pid = str(pid)
         if pid not in configured_products:
@@ -354,32 +514,94 @@ def validate() -> int:  # noqa: PLR0912, PLR0915 - one linear pass keeps the rul
         if not isinstance(entry, dict):
             errors.append(f"product_source_audit[{pid}]: entry must be a mapping")
             continue
-        state = str(entry.get("state"))
-        if state not in AUDIT_STATES:
-            errors.append(f"product_source_audit[{pid}]: state {entry.get('state')!r} invalid")
-        audit_state_counts[state] = audit_state_counts.get(state, 0) + 1
-        refs = entry.get("opportunity_ids")
-        if refs is None or not isinstance(refs, list):
-            errors.append(f"product_source_audit[{pid}]: opportunity_ids must be a list")
-            continue
-        for ref in refs:
-            if str(ref) not in by_id:
-                errors.append(f"product_source_audit[{pid}]: references unknown opportunity {ref!r}")
-        if state == "opportunities_identified" and not refs:
-            errors.append(f"product_source_audit[{pid}]: state 'opportunities_identified' requires "
-                          "at least one referenced opportunity")
+        if "state" in entry:
+            errors.append(f"product_source_audit[{pid}]: a single product-level 'state' is no longer "
+                          "valid -- official and consensus are audited separately")
+        for lane in AUDIT_LANES:
+            block = entry.get(lane)
+            if not isinstance(block, dict):
+                errors.append(f"product_source_audit[{pid}]: missing '{lane}' lane block")
+                continue
+            for field in AUDIT_LANE_REQUIRED:
+                if field not in block:
+                    errors.append(f"product_source_audit[{pid}].{lane}: missing '{field}'")
+            state = str(block.get("state"))
+            if state not in AUDIT_LANE_STATES:
+                errors.append(f"product_source_audit[{pid}].{lane}: state "
+                              f"{block.get('state')!r} invalid")
+            audit_state_counts[lane][state] = audit_state_counts[lane].get(state, 0) + 1
 
-    for pid in sorted(enabled_ingestion_products):
-        if pid not in audit:
-            errors.append(f"product_source_audit: missing entry for enabled-ingestion product {pid}")
+            lists = {}
+            bad_list = False
+            for field in ("current_methods", "pending_methods", "opportunity_ids"):
+                value = block.get(field)
+                if not isinstance(value, list):
+                    errors.append(f"product_source_audit[{pid}].{lane}: {field} must be a list")
+                    bad_list = True
+                    lists[field] = []
+                else:
+                    lists[field] = value
+            if bad_list:
+                continue
+
+            # Referenced opportunities must exist AND belong to THIS lane. An official-lane row can
+            # never close a consensus gap -- the microsoft-windows-11 defect.
+            same_lane_refs = []
+            for ref in lists["opportunity_ids"]:
+                ref = str(ref)
+                if ref not in by_id:
+                    errors.append(f"product_source_audit[{pid}].{lane}: references unknown "
+                                  f"opportunity {ref!r}")
+                elif by_id[ref].get("lane") != lane:
+                    errors.append(f"product_source_audit[{pid}].{lane}: opportunity {ref!r} is a "
+                                  f"{by_id[ref].get('lane')!r}-lane opportunity and cannot satisfy "
+                                  f"the {lane} lane")
+                else:
+                    same_lane_refs.append(ref)
+
+            has_source = bool(lists["current_methods"]) or bool(lists["pending_methods"])
+            if state in ("production_source_present", "production_source_degraded") \
+                    and not lists["current_methods"]:
+                errors.append(f"product_source_audit[{pid}].{lane}: state {state!r} requires at "
+                              "least one current_methods entry")
+            if state == "pending_production_source" and not lists["pending_methods"]:
+                errors.append(f"product_source_audit[{pid}].{lane}: 'pending_production_source' "
+                              "requires at least one pending_methods entry")
+            if state == "opportunities_identified" and not same_lane_refs:
+                errors.append(f"product_source_audit[{pid}].{lane}: 'opportunities_identified' "
+                              f"requires at least one {lane}-lane opportunity")
+            # THE SEMANTIC RULE. "no viable source found" means no viable source exists for this
+            # lane. It may never mean "we have one and cannot find another" -- that is
+            # diversification debt and belongs in diversification_state.
+            if state == "no_viable_source_found" and has_source:
+                errors.append(f"product_source_audit[{pid}].{lane}: 'no_viable_source_found' is "
+                              "false while a current or pending method exists -- use "
+                              "diversification_state 'no_viable_additional_source_found' instead")
+            if state == "needs_source_research" and has_source:
+                errors.append(f"product_source_audit[{pid}].{lane}: 'needs_source_research' "
+                              "contradicts an existing current/pending method")
+
+            div = str(block.get("diversification_state"))
+            if div not in AUDIT_DIVERSIFICATION_STATES:
+                errors.append(f"product_source_audit[{pid}].{lane}: diversification_state "
+                              f"{block.get('diversification_state')!r} invalid")
+            div_counts[div] = div_counts.get(div, 0) + 1
+            if has_source and div == "not_applicable":
+                errors.append(f"product_source_audit[{pid}].{lane}: a source exists, so "
+                              "diversification_state cannot be 'not_applicable'")
+            if not has_source and div != "not_applicable":
+                errors.append(f"product_source_audit[{pid}].{lane}: no source exists, so "
+                              f"diversification_state must be 'not_applicable' (got {div!r})")
+
+    # EVERY configured product must be audited. A validator that permanently reports the same
+    # warnings teaches everyone to ignore warnings, and the products it would skip are exactly the
+    # ones most likely to be forgotten. needs_source_research with an empty list is the honest
+    # answer and costs nothing.
+    for pid in sorted(configured_products - set(audit)):
+        errors.append(f"product_source_audit: missing entry for configured product {pid}")
     for pid in [str(p) for p in strategic]:
         if pid not in configured_products:
             errors.append(f"strategic_priority_products: {pid} is not a configured product")
-        elif pid not in audit:
-            errors.append(f"product_source_audit: missing entry for strategic product {pid}")
-    for pid in sorted(configured_products - set(audit)):
-        warnings.append(f"product_source_audit: no entry for configured product {pid} "
-                        "(disabled and not declared strategic)")
 
     # ---------------- product candidates ------------------------------------------------
     cand = _load(CANDIDATES_FILE)
@@ -543,7 +765,15 @@ def validate() -> int:  # noqa: PLR0912, PLR0915 - one linear pass keeps the rul
         stored_readiness = str(c.get("readiness"))
         if stored_readiness not in READINESS_VALUES:
             errors.append(f"{cid}: readiness {c.get('readiness')!r} is not allowed")
-        derived, reasons = derive_readiness(c, by_id, today)
+        derived, reasons = derive_readiness(
+            c, by_id, today, enabled_ingestion_products, record_counts)
+        # A prove_source plan whose next action is production wiring contradicts itself: the point
+        # of prove_source is that the source is not proven yet.
+        if derived != "ready_to_build":
+            hit = leading_action_is_activation(c.get("recommended_next_step"))
+            if hit:
+                errors.append(f"{cid}: readiness is {derived!r} but recommended_next_step reads as "
+                              f"production activation ({hit!r}) -- the next action must be a probe")
         if stored_readiness != derived:
             errors.append(f"{cid}: stored readiness {stored_readiness!r} != derived {derived!r}"
                           + (f" -- unmet: {reasons[0]}" if reasons else ""))
@@ -569,9 +799,13 @@ def validate() -> int:  # noqa: PLR0912, PLR0915 - one linear pass keeps the rul
           + "  ".join(f"{k}={readiness_counts.get(k, 0)}" for k in READINESS_VALUES))
     print(f"  product scope: {scope_counts}")
     print(f"  support lifecycle: {lifecycle_counts}")
-    print(f"  source-audit entries: {len(audit)}  states: {audit_state_counts}")
+    print(f"  source-audit coverage: {len(audit)}/{len(configured_products)} configured products")
+    print(f"    official lane : {audit_state_counts['official']}")
+    print(f"    consensus lane: {audit_state_counts['consensus']}")
+    print(f"    diversification: {div_counts}")
     print(f"  configured products: {len(configured_products)}   "
           f"enabled-ingestion products: {len(enabled_ingestion_products)}   "
+          f"products with generated records: {len(record_counts)}   "
           f"declared strategic: {len(strategic)}")
     for w in warnings:
         print(f"  WARN  {w}")
