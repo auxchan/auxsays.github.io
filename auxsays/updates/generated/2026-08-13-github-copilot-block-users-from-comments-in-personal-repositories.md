@@ -17,8 +17,8 @@ update_version: Block users from comments in personal repositories
 update_logo_text: GIT
 update_published_at: '2026-08-13T19:02:46Z'
 update_last_checked: '2026-08-13T20:28:29Z'
-source_last_checked: '2026-08-14T03:54:24Z'
-official_body_last_checked: '2026-08-14T03:54:24Z'
+source_last_checked: '2026-08-14T09:00:48Z'
+official_body_last_checked: '2026-08-14T09:00:48Z'
 record_last_updated: '2026-08-13T20:28:29Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -80,6 +80,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-08-14T03:54:24Z'
+  url: https://github.blog/changelog/2026-08-13-block-users-from-comments-in-personal-repositories
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-08-14T09:00:48Z'
   url: https://github.blog/changelog/2026-08-13-block-users-from-comments-in-personal-repositories
   status: captured-from-rss-feed
   body_captured: true

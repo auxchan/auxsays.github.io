@@ -1,8 +1,8 @@
 ---
 layout: aux-update
-title: DaVinci Resolve 21.0.4 official update breakdown
+title: DaVinci Resolve 11.3 official update breakdown
 description: Official DaVinci Resolve update record captured from Blackmagic Design.
-permalink: /updates/blackmagic-design/blackmagic-davinci/21-0-4/
+permalink: /updates/blackmagic-design/blackmagic-davinci/11-3/
 update_entry: true
 company_id: blackmagic-design
 product_id: blackmagic-davinci
@@ -13,29 +13,27 @@ update_type: official-source
 update_source_name: Blackmagic Design
 update_source_url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
 update_download_url: https://www.blackmagicdesign.com/event/davinciresolvedownload
-update_version: 21.0.4
+update_version: '11.3'
 update_logo_text: DAV
-update_published_at: '2026-08-05T00:00:00Z'
-update_last_checked: '2026-08-05T07:31:23Z'
+update_published_at: '2015-03-30T00:00:00Z'
+update_last_checked: '2026-08-14T09:00:35Z'
 source_last_checked: '2026-08-14T09:00:35Z'
 official_body_last_checked: '2026-08-14T09:00:35Z'
-record_last_updated: '2026-08-05T07:31:23Z'
+record_last_updated: '2026-08-14T09:00:35Z'
 patch_file_size: ''
 patch_file_size_note: Blackmagic support-download metadata does not expose installer file size.
 patch_file_size_status: not_provided_by_source
 update_status: current
-update_feed_title: DaVinci Resolve 21.0.4
-update_detail_title: DaVinci Resolve 21.0.4
+update_feed_title: DaVinci Resolve 11.3
+update_detail_title: DaVinci Resolve 11.3
 update_consensus_label: Insufficient data
 update_report_count: 0
 update_consensus_confidence: Low
-quick_verdict: DaVinci Resolve 21.0.4 has an official AUXSAYS record. Confirmed patch-specific consensus is deferred until
-  the consensus refresh pipeline is active.
-official_summary: Blackmagic Design lists DaVinci Resolve Studio 21.0.4 Update in its official support downloads feed.
-release_summary: This software update adds support for relinking proxy clips with different formats, support for additional
-  X-OCN formats, the ability to use API scripting to review selected clips on the timeline and improved realtime playback
-  on timelines with a large cache. This version requires a DaVinci Resolve Studio license dongle, Blackmagic Cloud license
-  or software activation code.
+quick_verdict: DaVinci Resolve 11.3 has an official AUXSAYS record. Confirmed patch-specific consensus is deferred until the
+  consensus refresh pipeline is active.
+official_summary: Blackmagic Design lists DaVinci Resolve 11.3 in its official support downloads feed.
+release_summary: This software update includes support for ARRI Alexa 65 and Panasonic V35 IDT cameras, new ACES 1.0 support,
+  DNxHR MXF and Sony XAVC Intra encoding enhancements as well as general performance improvements.
 consensus_report: Confirmed patch-specific consensus collection is deferred. This page currently reflects official-source
   ingestion only.
 evidence_state: official_only
@@ -53,10 +51,10 @@ consensus_report_weighting: equal_per_confirmed_report
 consensus_low_context_policy: excluded
 complaint_themes: []
 status_events:
-- at: '2026-08-05T00:00:00Z'
+- at: '2015-03-30T00:00:00Z'
   label: Published
   note: Official source entry detected.
-- at: '2026-08-05T07:31:29Z'
+- at: '2026-08-14T09:00:41Z'
   label: Insufficient data
   note: AUXSAYS official-ingestion record initialized.
 official_patch_notes_source_type: download_portal
@@ -82,44 +80,22 @@ official_sources:
   trust_level: official
   extraction_status: version_metadata_captured
 official_source_attempts:
-- at: '2026-08-13T04:05:07Z'
-  url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
-  status: captured-from-official-blackmagic-support-api
-  body_captured: true
-  checksums_captured: false
-- at: '2026-08-13T14:56:36Z'
-  url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
-  status: captured-from-official-blackmagic-support-api
-  body_captured: true
-  checksums_captured: false
-- at: '2026-08-13T20:28:18Z'
-  url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
-  status: captured-from-official-blackmagic-support-api
-  body_captured: true
-  checksums_captured: false
-- at: '2026-08-14T03:54:12Z'
-  url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
-  status: captured-from-official-blackmagic-support-api
-  body_captured: true
-  checksums_captured: false
 - at: '2026-08-14T09:00:35Z'
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
   status: captured-from-official-blackmagic-support-api
   body_captured: true
   checksums_captured: false
-official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci Resolve Studio 21.0.4 Update
+official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci Resolve 11.3
 
   Channel: Stable
 
-  Release date: 2026-08-05
+  Release date: 2015-03-30
 
-  Platforms listed: Mac OS X, Windows, Linux, Windows ARM
+  Platforms listed: Mac OS X, Windows, Linux
 
 
-  This software update adds support for relinking proxy clips with different formats, support for additional X-OCN formats,
-  the ability to use API scripting to review selected clips on the timeline and improved realtime playback on timelines with
-  a large cache. This version requires a DaVinci Resolve Studio license dongle, Blackmagic Cloud license or software activation
-  code.
+  This software update includes support for ARRI Alexa 65 and Panasonic V35 IDT cameras, new ACES 1.0 support, DNxHR MXF and
+  Sony XAVC Intra encoding enhancements as well as general performance improvements.
 
 
   Official support page: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
