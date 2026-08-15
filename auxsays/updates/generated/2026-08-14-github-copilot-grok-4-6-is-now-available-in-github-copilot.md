@@ -17,8 +17,8 @@ update_version: Grok 4.6 is now available in GitHub Copilot
 update_logo_text: GIT
 update_published_at: '2026-08-14T16:17:46Z'
 update_last_checked: '2026-08-14T20:22:26Z'
-source_last_checked: '2026-08-15T02:58:20Z'
-official_body_last_checked: '2026-08-15T02:58:20Z'
+source_last_checked: '2026-08-15T08:08:43Z'
+official_body_last_checked: '2026-08-15T08:08:43Z'
 record_last_updated: '2026-08-14T20:22:26Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -87,6 +87,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-08-15T02:58:20Z'
+  url: https://github.blog/changelog/2026-08-14-grok-4-6-is-now-available-in-github-copilot
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-08-15T08:08:43Z'
   url: https://github.blog/changelog/2026-08-14-grok-4-6-is-now-available-in-github-copilot
   status: captured-from-rss-feed
   body_captured: true
