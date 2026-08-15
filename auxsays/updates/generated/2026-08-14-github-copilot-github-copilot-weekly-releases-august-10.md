@@ -17,8 +17,8 @@ update_version: GitHub Copilot weekly releases — August 10
 update_logo_text: GIT
 update_published_at: '2026-08-14T03:15:56Z'
 update_last_checked: '2026-08-14T20:22:26Z'
-source_last_checked: '2026-08-14T20:22:26Z'
-official_body_last_checked: '2026-08-14T20:22:26Z'
+source_last_checked: '2026-08-15T02:58:20Z'
+official_body_last_checked: '2026-08-15T02:58:20Z'
 record_last_updated: '2026-08-14T20:22:26Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -89,6 +89,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-08-14T20:22:26Z'
+  url: https://github.blog/changelog/2026-08-13-github-copilot-weekly-releases-august-10
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-08-15T02:58:20Z'
   url: https://github.blog/changelog/2026-08-13-github-copilot-weekly-releases-august-10
   status: captured-from-rss-feed
   body_captured: true
