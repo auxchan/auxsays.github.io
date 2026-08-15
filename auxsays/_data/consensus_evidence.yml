@@ -13699,3 +13699,28 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: blackmagic-davinci-11-creator-forum-report-https-creativecow-net-forums-thread-failed-backup
+  product_id: blackmagic-davinci
+  update_version: '11'
+  source_type: creator_forum_report
+  source_name: Creative COW DaVinci Resolve
+  source_url: https://creativecow.net/forums/thread/failed-backup/
+  parent_title: Creative Communities of the World Forums
+  report_title: Creative Communities of the World Forums
+  report_text_excerpt: Failed backup - DaVinci Resolve - Creative COW FORUMS Adobe After Effects Adobe After Effects Expressions Adobe Premiere Pro A.I. Apple Final Cut Pro Apple Motion Avid Media Composer Blackmagic Fusion Blender Creative Community Conversations DaVinci Resolve Maxon Cinema 4D...
+  captured_at: '2026-08-15T13:41:19Z'
+  source_date: '2026-07-30'
+  target_release_date: '2014-08-06'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '11'
+  match_basis: exact_version_text
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified issue
+  workflow_area: general DaVinci Resolve workflow
+  platform: macos
+  severity: medium
+  sentiment: moderate
+  source_weight: 1
