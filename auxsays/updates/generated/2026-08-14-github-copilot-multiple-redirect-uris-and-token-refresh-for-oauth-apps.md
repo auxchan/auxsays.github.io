@@ -17,8 +17,8 @@ update_version: Multiple redirect URIs and token refresh for OAuth apps
 update_logo_text: GIT
 update_published_at: '2026-08-14T22:43:44Z'
 update_last_checked: '2026-08-15T02:58:20Z'
-source_last_checked: '2026-08-15T19:59:07Z'
-official_body_last_checked: '2026-08-15T19:59:07Z'
+source_last_checked: '2026-08-16T03:09:05Z'
+official_body_last_checked: '2026-08-16T03:09:05Z'
 record_last_updated: '2026-08-15T02:58:20Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -111,6 +111,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-08-15T19:59:07Z'
+  url: https://github.blog/changelog/2026-08-14-multiple-redirect-uris-and-token-refresh-for-oauth-apps
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-08-16T03:09:05Z'
   url: https://github.blog/changelog/2026-08-14-multiple-redirect-uris-and-token-refresh-for-oauth-apps
   status: captured-from-rss-feed
   body_captured: true
