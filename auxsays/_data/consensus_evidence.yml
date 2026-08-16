@@ -13699,7 +13699,6 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
-
 - id: blackmagic-davinci-11-creator-forum-report-https-creativecow-net-forums-thread-failed-backup
   product_id: blackmagic-davinci
   update_version: '11'
@@ -13723,4 +13722,54 @@ evidence:
   platform: macos
   severity: medium
   sentiment: moderate
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5975976-windows-11-25h2-recall-still-missing-a
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5975976/windows-11-25h2-recall-still-missing-after-august
+  parent_title: Windows 11 25H2 Recall still missing after August cumulative update KB5121003 — AIX/CoreAI installed but Recall won't launch - Microsoft Q&A
+  report_title: Windows 11 25H2 Recall still missing after August cumulative update KB5121003 — AIX/CoreAI installed but Recall won't launch - Microsoft Q&A
+  report_text_excerpt: 'Windows 11 25H2 Recall still missing after August cumulative update KB5121003 — AIX/CoreAI installed but Recall won''t launch - Microsoft Q&A Hello, I am trying to troubleshoot a Recall (Preview) issue on my HP Copilot+ PC. System configuration HP Copilot+ PC CPU: AMD Ryzen AI...'
+  captured_at: '2026-08-16T14:02:11Z'
+  source_date: '2026-08-16'
+  target_release_date: '2026-08-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9168'
+  match_basis: exact_os_build
+  matched_kb: KB5121003
+  matched_os_build: '26200.9168'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-1-github-issue-13793
+  product_id: obs-studio
+  update_version: 32.2.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13793
+  parent_title: Failed to initialize NVENC because of outdated driver for obs flatpak
+  report_title: Failed to initialize NVENC because of outdated driver for obs flatpak
+  report_text_excerpt: '### Operating System Info Other ### Other OS Debian forky/sid ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) flatpak 32.2.1 ### OBS Studio Log URL https://obsproject.com/logs/Zr4a9mRjo4hkbkuF ### OBS Studio Crash Log URL _No response_ ### Expected Behavior NVEN'
+  captured_at: '2026-08-16T14:07:23Z'
+  patch_version_matched: true
+  matched_version: 32.2.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: linux
+  severity: medium
+  sentiment: negative
   source_weight: 1
