@@ -13773,3 +13773,108 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5976660-windows-11-latest-security-patch-is-fa
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5976660/windows-11-latest-security-patch-is-failing
+  parent_title: Windows 11 latest security patch is failing - Microsoft Q&A
+  report_title: Windows 11 latest security patch is failing - Microsoft Q&A
+  report_text_excerpt: Windows 11 latest security patch is failing - Microsoft Q&A I have been on a lot of forums giving me fixes and completed every single one of them. I followed the instructions to the letter. and they took a lot of time I had my EFI file at 100 mb, and found Win11 needs more, so...
+  captured_at: '2026-08-17T14:07:55Z'
+  source_date: '2026-08-16'
+  target_release_date: '2026-08-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9168'
+  match_basis: exact_os_build
+  matched_kb: KB5121003
+  matched_os_build: '26200.9168'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5976649-windows-insider-build-26220-9022-keeps
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5976649/windows-insider-build-26220-9022-keeps-failing-to
+  parent_title: Windows Insider Build 26220.9022 Keeps Failing to Install and Rolls Back to 26200.9168 - Microsoft Q&A
+  report_title: Windows Insider Build 26220.9022 Keeps Failing to Install and Rolls Back to 26200.9168 - Microsoft Q&A
+  report_text_excerpt: 'Windows Insider Build 26220.9022 Keeps Failing to Install and Rolls Back to 26200.9168 - Microsoft Q&A Hello Windows Insider Team, I need help with a serious installation problem affecting my Windows 11 Pro Insider device. My current installed OS build is: Windows 11 Pro —...'
+  captured_at: '2026-08-17T14:07:55Z'
+  source_date: '2026-08-16'
+  target_release_date: '2026-08-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9168'
+  match_basis: exact_os_build
+  matched_kb: KB5121003
+  matched_os_build: '26200.9168'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5976594-windows-update-not-installing
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5976594/windows-update-not-installing
+  parent_title: WINDOWS UPDATE NOT INSTALLING - Microsoft Q&A
+  report_title: WINDOWS UPDATE NOT INSTALLING - Microsoft Q&A
+  report_text_excerpt: WINDOWS UPDATE NOT INSTALLING - Microsoft Q&A 2026-08 SECURITY UPDATE (KB5121003) (26200.9168) KEEPS SAYIN SOMETHING DIDN'T GO HAS PLANNED DON'T WORRY UNDOING CHANGES. IT DOES THIS A FEW TIMES BEFORE MY PC STARTS UP.
+  captured_at: '2026-08-17T14:07:55Z'
+  source_date: '2026-08-16'
+  target_release_date: '2026-08-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9168'
+  match_basis: exact_os_build
+  matched_kb: KB5121003
+  matched_os_build: '26200.9168'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-1-github-issue-13798
+  product_id: obs-studio
+  update_version: 32.2.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13798
+  parent_title: The hotkey for muting audio monitoring no longer works.
+  report_title: The hotkey for muting audio monitoring no longer works.
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.1 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/toGNwbBlB5Zmc5NG ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The h'
+  captured_at: '2026-08-17T14:14:23Z'
+  patch_version_matched: true
+  matched_version: 32.2.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
