@@ -4,7 +4,7 @@ Status reflects both artifacts and authority. Taylor approved all seven Foundati
 
 ## Current phase
 
-Phase 2 — Contract / Design Drafting only. Creation and review of Phase-2 contracts/design decisions are authorized; React/UI implementation, dependencies, Jekyll/workflow changes, and deployment remain unauthorized until the required Phase-2 contracts are approved.
+Phase 2 — UI Shell Implementation. Taylor approved the BINDING UI/UX and Motion/Interaction contracts and O-001C/O-001D architecture on 2026-08-17. A subsequent scoped task may implement the contract-valid synthetic UI shell and approved minimal Jekyll/Pages integration after exact-version dependency verification. This approval task itself stops before implementation; deployment and Phase-3 ingestion/data/model work remain unauthorized.
 
 ## Phase-1 deliverables
 
@@ -31,12 +31,29 @@ Phase 2 — Contract / Design Drafting only. Creation and review of Phase-2 cont
 | F-019 | Phase-2 dependency/license review | Repository Integration | Phase-2 dependency approval | Complete candidate review | `PHASE2_DEPENDENCY_LICENSE_REVIEW.md` | Re-audit exact installs required |
 | F-020 | Known unknowns | Foundation contracts | Phase-specific decisions | Complete draft | `RISKS.md`, `DECISIONS.md` | O-001A–O-001D and O-002 visible |
 
+## Phase-2 design deliverables
+
+| ID | Name | Required authority | Blocks what | Status | Artifact / path | Review result |
+|---|---|---|---|---|---|---|
+| P2-001 | UI/UX contract | Taylor contract promotion | UI shell implementation | BINDING 1.0.0 | `contracts/UI_UX_CONTRACT.md` | Taylor-approved 2026-08-17 after external review corrections |
+| P2-002 | Motion/Interaction contract | Taylor contract promotion | UI interaction implementation | BINDING 1.0.0 | `contracts/MOTION_INTERACTION_CONTRACT.md` | Taylor-approved 2026-08-17 after external review correction |
+| P2-003 | Component/module architecture | UI/UX contract | Application structure | Design complete | `PHASE2_UI_IMPLEMENTATION_DESIGN.md` §1 | Proportional V1 boundary proposed |
+| P2-004 | Canonical query-state routing | D-008; UI/UX contract | Router/state implementation | Design complete | `PHASE2_UI_IMPLEMENTATION_DESIGN.md` §2 | Direct/refresh/history rules defined |
+| P2-005 | Public fixture design | Public Data Interface; UI/UX contract | Fixture implementation | Design complete | `PHASE2_UI_IMPLEMENTATION_DESIGN.md` §3 | No schema amendment identified |
+| P2-006 | Tokens/responsive/accessibility | UI/UX and Motion contracts | Presentation implementation | Design complete | `PHASE2_UI_IMPLEMENTATION_DESIGN.md` §§4–5 | Isolation and proof plan defined |
+| P2-007 | Package location | D-007 | App package creation | RESOLVED design choice | `DECISIONS.md` O-001A | `systems-monitor/app/`; not created |
+| P2-008 | Package manager/lockfile | Repository conventions | Dependency installation | RESOLVED design choice | `DECISIONS.md` O-001B | npm/package-local lockfile; not created |
+| P2-009 | Build-output ownership | Taylor O-001C | Build/Jekyll composition | ACCEPTED / RESOLVED | `PHASE2_UI_IMPLEMENTATION_DESIGN.md` §8 | Taylor-approved architecture; not implemented |
+| P2-010 | Pages integration | Taylor O-001D | Workflow modification | ACCEPTED / RESOLVED | `PHASE2_UI_IMPLEMENTATION_DESIGN.md` §9 | Taylor-approved architecture; not implemented |
+| P2-011 | Chart library | UI accessibility/performance proof | Chart implementation | RESOLVED design choice | `DECISIONS.md` O-002; design §10 | Recharts; exact-version proof required before install |
+| P2-012 | Performance and test plan | Phase-2 contracts | Acceptance implementation | Design complete | `PHASE2_UI_IMPLEMENTATION_DESIGN.md` §§11–12 | No tests/code created |
+
 ## Phase progression
 
 | Phase | Contract prerequisite | Implementation outcome | Gate |
 |---|---|---|---|
 | 1 Foundation | Current Master/task | Binding governance and boundaries | PASS — Taylor-approved after external review |
-| 2 UI Shell | Foundation contracts BINDING; UI/Motion contracts must be approved before implementation | Current authorization is contract/design drafting; later isolated three-view shell uses contract-valid, clearly labeled fixtures | UI architecture/accessibility/routing checks |
+| 2 UI Shell | Foundation and UI/Motion contracts BINDING; O-001C/O-001D approved | Current authorization is a subsequent scoped isolated three-view shell using contract-valid, unmistakable fixtures | UI architecture/accessibility/routing/comprehension checks |
 | 3 Data Integrity | Data/Source/Ontology contracts approved | Authoritative ingestion, bitemporal storage, source health, publishable snapshots | Gate A |
 | 4 Closed Vertical Slice | State/Dependency/Hidden Dependency/Allocation contracts approved | Observation-to-industry-effect proof | Gate B |
 | 5 Forecasting/Accountability | Forecast/Scenario/Calibration contracts approved | Baselines, forecasts, uncertainty, replay, attribution | Gate C |
@@ -45,4 +62,4 @@ Phase 2 — Contract / Design Drafting only. Creation and review of Phase-2 cont
 
 ## Next authorized work
 
-Draft and review the Phase-2 `UI_UX_CONTRACT.md`, `MOTION_INTERACTION_CONTRACT.md`, and other Master-required design/decision artifacts. O-001A through O-001D and O-002 remain open under their recorded authority classifications. **Do not implement the UI, install dependencies, or modify Jekyll/Pages integration until the required Phase-2 contracts and decisions are approved.**
+Begin a subsequent scoped Phase-2 UI-shell implementation task under the BINDING contracts and accepted decisions. Before installation, verify exact dependency versions; then implement only the isolated synthetic shell, D-008 routing, scoped styling/accessibility/responsive behavior, Recharts/Trace boundaries, approved minimal Jekyll/Pages integration, and Phase-2 tests. **Do not begin Phase-3 ingestion/data/model work, factual forecasts, deployment, or any implementation within this approval/commit task.**

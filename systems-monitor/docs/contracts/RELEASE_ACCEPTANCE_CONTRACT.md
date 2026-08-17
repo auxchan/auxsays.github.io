@@ -2,20 +2,20 @@
 
 ```text
 Contract: Systems Monitor Release and Capability-Gate Contract
-Version: 1.0.0
+Version: 1.0.1
 Status: BINDING
 Parent Master Spec: V4.1
 Depends On: PRODUCT_CONTRACT.md, REPOSITORY_INTEGRATION_CONTRACT.md, ARCHITECTURE_CONTRACT.md, INFRASTRUCTURE_CONTRACT.md, PUBLIC_DATA_INTERFACE_CONTRACT.md, SECURITY_INGESTION_CONTRACT.md
 Supersedes: None
 Approved By: Taylor
 Approved At: 2026-08-17
-Content Hash: 5461536537AF5E8376B55023EED2ECA93792B11876E639B0681C35175C039C6D
+Content Hash: 2DB99655785D614FC3BFCD6E8CBA2B95654513C13BA81B66A6BA185452F0D08D
 Last Updated: 2026-08-17
 ```
 
 ## Authority / Status
 
-Governing Master sections: §61–64.1, §64.2–64.12, §66–70. This BINDING contract is current capability-gate and release authority. Phase-1 approval authorizes Phase-2 contract/design drafting only; it does not authorize UI implementation, public release, or deployment.
+Governing Master sections: §61–64.1, §64.2–64.12, §66–70. This BINDING contract is current capability-gate and release authority. Taylor’s Phase-2 UI/Motion approval authorizes subsequent scoped UI-shell implementation, but not Phase-3 ingestion/data/model work, factual predictive claims, public release, or deployment.
 
 ## Purpose
 
@@ -62,7 +62,7 @@ Each gate remains `NOT EVALUATED` until its phase supplies evidence. Partial suc
 4. Contract index parses as YAML and records version/status/sections/dependencies/blocks.
 5. Seven required Foundation contracts were created and externally reviewed as `DRAFT`; no engineering agent self-approved or promoted them. After Phase-1 review passes, Taylor may promote them, and that authorized promotion does not invalidate the historical Phase-1 acceptance evidence.
 6. Product, repository/routing, architecture/infrastructure, public payload, security, and release boundaries are coherent.
-7. Decisions D-001 through D-010 are recorded as ACCEPTED; O-001A through O-001D and O-002 remain visible and unresolved under their recorded authority classifications.
+7. Decisions D-001 through D-010 are recorded as ACCEPTED. At Phase-1 acceptance, O-001A through O-001D and O-002 were visible and unresolved under their authority classifications; later authorized phases may resolve engineering choices and Taylor decisions without invalidating this historical Phase-1 acceptance evidence.
 8. Phase-2 candidate licenses are reviewed without installing dependencies.
 9. No Phase-2+ application/ingestion/model/cloud implementation exists.
 10. Existing AUXSAYS/Patch Feed source, generated/state files, workflow behavior, deployment, and `main` remain unchanged.
@@ -71,7 +71,7 @@ Each gate remains `NOT EVALUATED` until its phase supplies evidence. Partial suc
 
 ## Phase-1 acceptance result
 
-**PASS — 2026-08-17.** Recorded after the Taylor-authorized corrections, first-binding promotion metadata, and required Foundation validation checks passed. This advances authority only to Phase-2 contract/design drafting; UI implementation and deployment remain unauthorized until their applicable contracts and decisions are approved.
+**PASS — 2026-08-17.** Recorded after the Taylor-authorized corrections, first-binding promotion metadata, and required Foundation validation checks passed. Historically this advanced authority only to Phase-2 contract/design drafting. Taylor subsequently approved the BINDING UI/Motion contracts and O-001C/O-001D, advancing current authority to a separately scoped Phase-2 UI-shell implementation task; deployment remains separately gated.
 
 ## Interfaces / Dependencies
 
@@ -91,12 +91,13 @@ All Foundation contracts feed Phase-1 review. Later Testing/UI/Data/Model contra
 - A failed Phase-1 criterion is reported `FAIL`; an external prerequisite preventing evaluation is `BLOCKED`; unevaluated later gates remain `NOT EVALUATED`.
 - Only affected scope pauses; unaffected Foundation corrections may continue.
 
-## Risks / Open Decisions
+## Risks / Decision Lifecycle
 
-- R-001 intentionally blocks Phase 2 until review. O-001A and O-001B must be resolved as engineering implementation choices before their affected work; O-001C and O-001D require Taylor approval before build-output or Pages-workflow integration.
+- R-001 historically blocked Phase 2 until Foundation review and is now closed. O-001A/O-001B/O-002 were resolved through authorized Phase-2 design; O-001C/O-001D were accepted/resolved by Taylor on 2026-08-17. Their implementation remains subject to this contract’s objective acceptance gates and the scoped-task boundary.
 
 ## Version / Approval / Change History
 
+- 1.0.1 (2026-08-17): Taylor-authorized compatible BINDING amendment making Phase-1 decision/risk wording lifecycle-safe after legitimate Phase-2 resolutions; no release or capability gate was weakened.
 - 1.0.0 (2026-08-17): First BINDING version approved by Taylor after the Phase-1 external review and authorized correction pass.
 - 0.1.2 (2026-08-17): Corrected Phase-1 acceptance lifecycle language and recorded Taylor approval of D-007/D-008. Remains DRAFT pending final validation and promotion.
 - 0.1.1 (2026-08-17): Replaced the former combined open-decision reference with O-001A through O-001D and their existing authority classifications. Remains DRAFT.

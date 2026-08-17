@@ -6,7 +6,7 @@ parent_master:
   source_sha256: "08895B471909DC600FC6AA5F373E2D6E16F457580A9BA141363ED210676397EA"
 approval_authority: Taylor
 phase_1_status: PASS
-current_authorized_work: Phase 2 contract/design drafting only; UI implementation requires approved Phase-2 contracts
+current_authorized_work: Phase 2 UI shell implementation in a subsequent scoped task; exact-version dependency verification required; Phase 3 and deployment unauthorized
 approved_foundation_decisions: [D-001, D-002, D-003, D-004, D-005, D-006, D-007, D-008, D-009, D-010]
 post_v4_1_requirements:
   - id: D-009
@@ -36,11 +36,11 @@ contracts:
     blocks: ["Phase 2 contract approval", "all substantive product implementation"]
   - id: repository_integration
     path: contracts/REPOSITORY_INTEGRATION_CONTRACT.md
-    version: "1.0.0"
+    version: "1.0.1"
     status: BINDING
     approved_by: Taylor
     approved_at: "2026-08-17"
-    content_hash: "023458A03025616105F787C47454C0F2997CEE3CEFD2F4D9D1BC9198DD275632"
+    content_hash: "0AB85F8F5869430F80A0782EAF84F40E1D8E8C45E1CE974F09904C7EFD7FEA92"
     parent_master_version: "V4.1"
     governing_master_sections: ["§0.2–0.3", "§35.1–35.3", "§38.1–39", "§60", "§64.2–64.12", "§66–67", "§69"]
     depends_on: [product]
@@ -96,13 +96,37 @@ contracts:
     blocks: ["production ingestion", "external document extraction", "public exports"]
   - id: release_acceptance
     path: contracts/RELEASE_ACCEPTANCE_CONTRACT.md
-    version: "1.0.0"
+    version: "1.0.1"
     status: BINDING
     approved_by: Taylor
     approved_at: "2026-08-17"
-    content_hash: "5461536537AF5E8376B55023EED2ECA93792B11876E639B0681C35175C039C6D"
+    content_hash: "2DB99655785D614FC3BFCD6E8CBA2B95654513C13BA81B66A6BA185452F0D08D"
     parent_master_version: "V4.1"
     governing_master_sections: ["§61–64.1", "§64.2–64.12", "§66–70"]
     depends_on: [product, repository_integration, architecture, infrastructure, public_data_interface, security_ingestion]
     blocked_by: []
     blocks: ["Phase promotion", "public release", "public predictive claims"]
+  - id: ui_ux
+    path: contracts/UI_UX_CONTRACT.md
+    version: "1.0.0"
+    status: BINDING
+    approved_by: Taylor
+    approved_at: "2026-08-17"
+    content_hash: "537BC054E57980F5DD1177F5C2534F89476772D82F70DF3BDD06DC3333E8CB05"
+    parent_master_version: "V4.1"
+    governing_master_sections: ["§2–3", "§38–59", "§61", "§63", "§67 Phase 2", "§69"]
+    depends_on: [product, repository_integration, architecture, public_data_interface, release_acceptance]
+    blocked_by: []
+    blocks: ["public UI shell acceptance"]
+  - id: motion_interaction
+    path: contracts/MOTION_INTERACTION_CONTRACT.md
+    version: "1.0.0"
+    status: BINDING
+    approved_by: Taylor
+    approved_at: "2026-08-17"
+    content_hash: "5B4EB9039259333E269B974B72107765A2E47F268A2E77A9BA490925E5E0548F"
+    parent_master_version: "V4.1"
+    governing_master_sections: ["§46–52", "§56–58", "§61", "§63", "§69"]
+    depends_on: [product, ui_ux, release_acceptance]
+    blocked_by: []
+    blocks: ["public UI shell interaction acceptance"]

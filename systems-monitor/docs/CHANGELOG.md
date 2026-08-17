@@ -1,5 +1,22 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-17 — Phase-2 UI contract approval
+
+- Corrected the externally reviewed UI/UX design to require the dynamic Current Year / Next Year / +3 Years horizons, producer-supplied Top-10 near-tie/cutoff stability semantics, comprehension testing, the BINDING PDI fixture envelope, restored human-capital/demand/relationship/predictive-evidence meanings, and complete search semantics.
+- Corrected Motion/Interaction hover/focus/pinned detail so Top-10 and predictive analytical information remains keyboard/touch equivalent and never hover-only.
+- Taylor accepted/resolved O-001C and O-001D, approving uncommitted hashed build ownership, bounded manifest-aware Jekyll composition, and the existing single Pages/Jekyll artifact architecture without modifying any application, Jekyll, or workflow file.
+- Promoted UI/UX and Motion/Interaction to first-binding version `1.0.0` with Taylor approval and canonical hashes.
+- Applied Taylor-authorized compatible `1.0.1` amendments only to Repository Integration and Release Acceptance to remove stale decision/risk lifecycle wording without changing repository architecture or weakening any release gate.
+- Advanced current authority to a subsequent scoped Phase-2 UI-shell implementation task. Dependency exact-version proof remains mandatory; Phase-3 ingestion/data/model work, factual claims, deployment, push, and merge remain unauthorized/unperformed.
+
+## 2026-08-17 — Phase-2 UI/UX design draft
+
+- Drafted `UI_UX_CONTRACT.md` and `MOTION_INTERACTION_CONTRACT.md` at version `0.1.0`, both `DRAFT` and awaiting Taylor review.
+- Added one coherent implementation-design record covering component architecture, D-008 query state, fixture design, token/style isolation, responsive/accessibility behavior, performance budgets, and tests.
+- Resolved engineering choices O-001A (`systems-monitor/app/`), O-001B (npm with a package-local committed lockfile), and O-002 (Recharts subject to exact-install proof) without creating packages or installing dependencies.
+- Kept O-001C and O-001D OPEN as Taylor approval decisions and recorded minimal proposals for uncommitted manifest-aware output and single-job Pages integration; no Jekyll or workflow file changed.
+- Recorded Phase-2 risks and deliverables. No Foundation contract, Master, application, dependency, deployment, Patch Feed, cloud-provider, or public economic/forecast claim changed or was created.
+
 ## 2026-08-17 — Phase-1 Foundation approval
 
 - Taylor accepted D-007 and D-008, establishing the Systems Monitor repository ownership boundary and query-parameter routing baseline.

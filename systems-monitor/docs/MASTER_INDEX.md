@@ -15,8 +15,21 @@ These requirements were established during final Foundation review after V4.1. T
 
 | Decision | Post-V4.1 requirement | Current authoritative records |
 |---|---|---|
-| D-009 | Four-hour maximum MVP base system-evaluation heartbeat plus source-specific cadence, known-release-aware checks, material-change triggers, affected-state recomputation, and cadence-relative freshness | `DECISIONS.md`; DRAFT Infrastructure and Public Data Interface contracts |
-| D-010 | Compute-once/read-many and measured, bounded recurring infrastructure/API cost governance | `DECISIONS.md`; DRAFT Infrastructure contract |
+| D-009 | Four-hour maximum MVP base system-evaluation heartbeat plus source-specific cadence, known-release-aware checks, material-change triggers, affected-state recomputation, and cadence-relative freshness | `DECISIONS.md`; BINDING Infrastructure and Public Data Interface contracts |
+| D-010 | Compute-once/read-many and measured, bounded recurring infrastructure/API cost governance | `DECISIONS.md`; BINDING Infrastructure contract |
+
+## Phase-2 design artifact routing
+
+| Design concern | Phase-2 artifact | Master / binding context |
+|---|---|---|
+| Application/view/navigation contract | `contracts/UI_UX_CONTRACT.md` | §2–3, §38–59, §63, §69; Product and Repository Integration contracts |
+| Motion and interaction grammar | `contracts/MOTION_INTERACTION_CONTRACT.md` | §46–52, §56–58, §69; Product and Release Acceptance contracts |
+| Component and data/view-model boundaries | `PHASE2_UI_IMPLEMENTATION_DESIGN.md` §1 | §37.1, §59–60; Architecture and Public Data Interface contracts |
+| Canonical query-state routing | `PHASE2_UI_IMPLEMENTATION_DESIGN.md` §2 | §38.1, §52; D-008 and Repository Integration RI-004 |
+| Contract-valid synthetic fixture | `PHASE2_UI_IMPLEMENTATION_DESIGN.md` §3 | §3, §37.1, §55; Public Data Interface contract |
+| Tokens, responsive, accessibility | `PHASE2_UI_IMPLEMENTATION_DESIGN.md` §§4–5 | §40–42, §46–50, §56–57, §69 |
+| O-001A/B/C/D and O-002 | `DECISIONS.md`; `PHASE2_UI_IMPLEMENTATION_DESIGN.md` §§6–10 | §38.1–38.2, §58–60, §67 Phase 2 |
+| Performance and tests | `PHASE2_UI_IMPLEMENTATION_DESIGN.md` §§11–12 | §58, §61, §63; Release Acceptance contract |
 
 ## Product and public experience
 
@@ -159,11 +172,11 @@ These requirements were established during final Foundation review after V4.1. T
 | Phase | Read first | Do not start before |
 |---|---|---|
 | 1 Foundation | §0.2–0.3, §34.1–35.5, §37.1, §38.1–38.2, §64.1–64.12, §66–68 | Current task authorization |
-| 2 UI Shell | §2, §38–59, §67 Phase 2, §69 | Required Foundation contracts approved; UI/Motion contracts drafted and approved |
+| 2 UI Shell | §2, §38–59, §67 Phase 2, §69 | PASS for implementation authority — Foundation and UI/Motion contracts BINDING; O-001C/O-001D Taylor-approved; use a scoped implementation task |
 | 3 Data Integrity | §27–32, §34–37.1, §67 Phase 3 | Data/Source/Ontology contracts approved |
 | 4 State/Dependency/Allocation | §6–14, §20–20.1, §67 Phase 4 | State/Dependency/Hidden Dependency/Allocation contracts approved |
 | 5 Forecasting | §15–21, §55.1–55.2, §67 Phase 5 | Forecast/Scenario/Calibration contracts approved and prior gates passed |
 | 6 Human Capital/Events | §22–26.3, §33–33.1, §67 Phase 6 | Subsystem contracts approved |
 | 7 Launch Hardening | §52.1–64.1, §67 Phase 7, §70 | Applicable gates and release contract passed |
 
-Current authorization after Foundation approval is Phase-2 contract/design drafting only. `UI_UX_CONTRACT.md`, `MOTION_INTERACTION_CONTRACT.md`, and applicable decisions must be reviewed and approved before UI implementation.
+Current authorization after Taylor’s Phase-2 approval is **Phase 2 — UI Shell Implementation** in a subsequent scoped task under the BINDING UI/UX and Motion/Interaction contracts and accepted O-001A–O-001D/O-002 decisions. Exact dependency versions require verification before installation. Deployment and Phase-3 ingestion/data/model work remain unauthorized.

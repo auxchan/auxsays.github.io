@@ -1,7 +1,7 @@
 # AUXSAYS Repository Facts for Systems Monitor
 
 - Inspected: 2026-08-17
-- Validated commit: `adae22a5d6e9f506b5b1fd6868a0690434bea233`
+- Validated commit for Phase-2 drafting: `5180e6bf86e376be6b3d61f01e23e7322f19b1fc`
 - Validation branch: `codex/systems-monitor-foundation`, based on local `main`
 - Repository remote: `https://github.com/auxchan/auxsays.github.io.git`
 
@@ -49,11 +49,15 @@ Revalidate facts whose cited files changed after the validated commit.
 - **D-007 (ACCEPTED):** Repository-root `systems-monitor/` is the Systems Monitor-owned area for documentation and future isolated product source, configuration, and tests; the Jekyll-served public surface remains under `auxsays/systems-monitor/`.
 - **D-008 (ACCEPTED):** `/systems-monitor/` is the durable pathname and supported application state uses validated, canonical query parameters unless a future approved contract amendment changes the routing strategy.
 
+## RESOLVED PHASE-2 REPOSITORY CHOICES
+
+- O-001A: future isolated package at `systems-monitor/app/`; O-001B: npm with a package-local committed lockfile. No package or lockfile exists yet.
+- O-001C (Taylor-approved): Systems-Monitor-owned content-hashed output is generated uncommitted through approved bounded staging/composition paths.
+- O-001D (Taylor-approved): future integration retains the existing single Pages build job and one Jekyll artifact, with UI build before Jekyll and UI static-site validation before upload. No workflow/Jekyll change exists yet.
+- O-002: Recharts family selected without installation; exact-version installed-tree license/security/accessibility/interaction/touch/bundle proof remains mandatory.
+
 ## UNKNOWN — establish in the affected phase
 
-- Exact Phase-2 package location, package manager, lockfile strategy, and build-output ownership.
-- Exact approved Pages workflow change and whether UI build artifacts are generated only in CI or committed.
-- Chart library selection after accessibility/interaction/bundle proof.
 - Final fonts and self-hosting/subsetting strategy.
 - Permanent analytics/cloud provider, secrets service, durable store, scheduler, and public API/payload host; selection is intentionally deferred.
 - Whether site-wide CSP can be made restrictive without first refactoring existing cdnjs/Google Analytics usage.

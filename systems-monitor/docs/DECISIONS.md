@@ -92,33 +92,47 @@ Accepted decisions are authoritative below approved/BINDING contracts and above 
 - Affected contracts: Infrastructure, Public Data Interface, Release Acceptance
 - Supersedes: None
 
-## Open decisions
+## Phase-2 engineering choices and open approval decisions
 
 ### O-001A — React application/package location
 
 - Classification: ENGINEERING IMPLEMENTATION CHOICE
-- Status: OPEN — engineering must resolve this within the approved repository boundary before Phase-2 implementation
-- Rationale: The exact package location is an ordinary implementation choice when it stays within the approved product and repository boundaries and does not alter public behavior or deployment authority.
+- Status: RESOLVED — 2026-08-17 design choice; not implemented
+- Selected choice: One isolated React/TypeScript package at repository-relative `systems-monitor/app/`.
+- Rationale: D-007 assigns `systems-monitor/` to product-owned source/config/tests, while `auxsays/package.json` is an existing site-tools package. Isolation avoids mixing dependency and ownership boundaries.
+- Affected future paths: `systems-monitor/app/package.json`, `systems-monitor/app/package-lock.json`, `systems-monitor/app/src/`, `systems-monitor/app/tests/`, and package-local config/scripts.
+- Compatibility implications: Commands and config must be repo-relative, work on Windows and Ubuntu/Node 24, emit `/systems-monitor/`-safe URLs, and avoid Patch Feed imports. No path was created by this decision.
 
 ### O-001B — Package-manager and lockfile strategy
 
 - Classification: ENGINEERING IMPLEMENTATION CHOICE
-- Status: OPEN — engineering must resolve this before adding Phase-2 dependencies
-- Rationale: Selecting a package manager and committed lockfile is an implementation choice governed by repository conventions, reproducibility, and CI compatibility.
+- Status: RESOLVED — 2026-08-17 design choice; not implemented
+- Selected choice: npm with one committed `systems-monitor/app/package-lock.json`; future CI uses package-local `npm ci`.
+- Rationale: Node/npm already exists in the Pages environment, so this adds no package-manager bootstrap or repository-root workspace and gives deterministic isolated installs.
+- Affected future paths: `systems-monitor/app/package.json`, its lockfile, and package-local scripts/config.
+- Compatibility implications: Pin supported Node/npm behavior, align with current Node 24 CI, and do not create a repository-root lockfile or merge app dependencies into `auxsays/package.json`. Exact dependency versions require a fresh audit before authorized installation.
 
 ### O-001C — Build-output ownership/location
 
 - Classification: TAYLOR APPROVAL DECISION
-- Status: OPEN — Taylor approval is required before build-output integration
+- Status: ACCEPTED / RESOLVED — TAYLOR APPROVAL, 2026-08-17; design approval only
 - Rationale: Whether build output is committed or CI-generated, and where it is published, materially affects repository ownership and the Jekyll publication boundary.
+- Approved choice: React/TypeScript source remains `systems-monitor/app/`. Systems Monitor owns clean, uncommitted, content-hashed output staged at `systems-monitor/.build/ui/`; a bounded manifest-aware step may temporarily populate only `auxsays/systems-monitor/assets/` and `auxsays/_includes/generated/systems-monitor-assets.html`; Jekyll owns final composition into `auxsays/_site/systems-monitor/`.
+- Guardrails: future ignore rules cover generated paths; cleanup deletes only explicitly Systems-Monitor-owned generated paths; manifest validation rejects missing, unreferenced, wrong-base, or stale artifacts before upload; build failure leaves the last valid site live. No path or output was created by this approval.
+- Alternatives considered: committed built output; fixed unhashed assets; post-Jekyll SPA overlay; separate artifact job. See `PHASE2_UI_IMPLEMENTATION_DESIGN.md` §8.
 
 ### O-001D — GitHub Pages workflow integration
 
 - Classification: TAYLOR APPROVAL DECISION
-- Status: OPEN — Taylor approval is required before modifying the Pages workflow
+- Status: ACCEPTED / RESOLVED — TAYLOR APPROVAL, 2026-08-17; architecture approval only
 - Rationale: Workflow integration changes deployment behavior and repository automation; Phase 1 authorizes neither a workflow change nor a production-site change.
+- Approved choice: retain the existing single Pages build job and one Jekyll-produced artifact. Future scoped implementation may run package-local `npm ci` and Systems Monitor build/composition before Jekyll, then Systems-Monitor-specific static-site validation before the existing artifact upload. Failure blocks upload/deploy and leaves the prior valid release live; existing Patch Feed generation/validation remains intact.
+- Rollback and future paths: remove only narrowly approved Systems Monitor install/build/verify and Jekyll attachment changes. Affected paths are `.github/workflows/pages.yml`, `.gitignore`, `systems-monitor/app/` package/config/scripts, and the minimal `auxsays/systems-monitor/` attachment plus generated include/assets paths. No workflow or Jekyll file was changed by this approval. See design §9.
 
 ### O-002 — Phase-2 chart candidate
 
-- Status: OPEN — required before chart implementation, not before Phase-2 contract drafting
-- Decision needed: Select a chart library only after an accessibility, interaction, bundle-size, maintenance, and license proof.
+- Classification: ENGINEERING IMPLEMENTATION CHOICE
+- Status: RESOLVED — 2026-08-17 design choice: Recharts for Phase-2 charts; exact version remains implementation-time verification
+- Selected choice: Recharts, because its React/TypeScript composition, responsive/reference primitives, default Recharts 3 accessibility layer, and documented keyboard data-point navigation best match the focused V1 shell.
+- Alternative: Apache ECharts remains viable for later large/complex visualization, but its documented ARIA capability is opt-in and does not establish equivalent keyboard data-point navigation for this requirement set.
+- Conditions: Do not install until exact-version license/transitive/security, React compatibility, accessibility, touch, customization, annotation, bundle, and performance proofs pass. Reopen and return the tradeoff to Taylor if they fail. Research is recorded in `PHASE2_UI_IMPLEMENTATION_DESIGN.md` §10.

@@ -19,16 +19,16 @@ Always read this file before Systems Monitor work. The authoritative source is `
 15. Public publication must be atomic; a failed refresh leaves the last valid snapshot live.
 16. Core operation must not depend on continuous external LLM availability, and LLM output may not directly mutate accepted production relationships.
 
-Current authorized work: **Phase 2 — Contract / Design Drafting only**.
+Current authorized work: **Phase 2 — UI Shell Implementation**, beginning only after the correction/promotion documentation commit completes successfully and within a subsequent scoped implementation task.
 
-Authorized now: create and review `UI_UX_CONTRACT.md`, `MOTION_INTERACTION_CONTRACT.md`, and other Phase-2 design/decision artifacts required by the Master.
+Authorized in that subsequent task: `systems-monitor/app/`, package-local npm manifest/lockfile, exact-version-verified approved frontend dependencies, contract-valid synthetic fixtures, React shell/views/components, D-008 routing/query state, scoped styles/tokens, accessibility/responsive behavior, approved Recharts integration, bounded Trace, minimal approved Jekyll/Pages integration, and Phase-2 tests.
 
-**DO NOT BEGIN UI IMPLEMENTATION UNTIL THE REQUIRED PHASE-2 CONTRACTS ARE REVIEWED AND APPROVED.** Foundation approval does not authorize React setup, dependencies, application files, Jekyll/workflow changes, or deployment.
+**THIS APPROVAL TASK ENDS BEFORE IMPLEMENTATION.** Phase-2 implementation must follow the BINDING UI/UX and Motion/Interaction contracts, the accepted O-001A–O-001D/O-002 decisions, exact-version dependency verification, and a separately scoped task. Deployment, Phase-3 ingestion/data/model work, and factual economic/forecast claims remain unauthorized.
 
-Open decisions remain unresolved:
+Current Phase-2 decision state:
 
-- O-001A — `OPEN`, engineering implementation choice: React application/package location.
-- O-001B — `OPEN`, engineering implementation choice: package-manager and lockfile strategy.
-- O-001C — `OPEN`, Taylor approval decision: build-output ownership/location.
-- O-001D — `OPEN`, Taylor approval decision: GitHub Pages workflow integration.
-- O-002 — `OPEN`: chart-library decision required before chart implementation.
+- O-001A — `RESOLVED`, engineering implementation choice: isolated React/TypeScript package at `systems-monitor/app/` (design only; not created).
+- O-001B — `RESOLVED`, engineering implementation choice: npm with a package-local committed lockfile (design only; not created).
+- O-001C — `ACCEPTED / RESOLVED`, Taylor approval 2026-08-17: uncommitted hashed Systems Monitor output with bounded manifest-aware Jekyll composition.
+- O-001D — `ACCEPTED / RESOLVED`, Taylor approval 2026-08-17: retain one Pages build job and one Jekyll artifact with bounded UI build/validation integration.
+- O-002 — `RESOLVED`, engineering implementation choice: Recharts for Phase-2 charts, subject to exact-version/license/security/accessibility/bundle verification before any authorized install.
