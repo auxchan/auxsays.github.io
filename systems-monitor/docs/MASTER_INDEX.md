@@ -1,0 +1,169 @@
+# Master Specification Index — V4.1
+
+This is a routing map, not a substitute specification. Retrieve the listed sections from `MASTER_SPEC.md`; do not infer requirements from this index alone.
+
+## Approved Foundation decision routing
+
+| Decision | Accepted baseline | Governing records |
+|---|---|---|
+| D-007 | Repository-root `systems-monitor/` owns Systems Monitor documentation and future isolated product source/configuration/tests; the Jekyll-served surface remains under `auxsays/systems-monitor/` | `DECISIONS.md`; Repository Integration and Architecture contracts |
+| D-008 | `/systems-monitor/` is the durable pathname with validated/canonical query-parameter application state unless a future approved amendment changes it | `DECISIONS.md`; Repository Integration RI-004 |
+
+## Post-V4.1 Taylor review requirements — pending Master consolidation
+
+These requirements were established during final Foundation review after V4.1. They are authoritative as recorded decisions but are not represented as existing V4.1 text; do not cite `MASTER_SPEC.md` as their source.
+
+| Decision | Post-V4.1 requirement | Current authoritative records |
+|---|---|---|
+| D-009 | Four-hour maximum MVP base system-evaluation heartbeat plus source-specific cadence, known-release-aware checks, material-change triggers, affected-state recomputation, and cadence-relative freshness | `DECISIONS.md`; DRAFT Infrastructure and Public Data Interface contracts |
+| D-010 | Compute-once/read-many and measured, bounded recurring infrastructure/API cost governance | `DECISIONS.md`; DRAFT Infrastructure contract |
+
+## Product and public experience
+
+| Concept | Authoritative V4.1 sections |
+|---|---|
+| Product definition and non-dashboard purpose | §0 |
+| V4/V4.1 architectural and governance upgrades | §0.1, §72 |
+| AUXSAYS/Patch Feed/Systems Monitor boundary and public route | §0.2 |
+| Infrastructure decision boundary and cloud deferral | §0.3 |
+| User questions / product outcomes | §1, §70–71 |
+| Summary / Verified Data / Outlook | §2–2.3 |
+| OBS / CALC / FCST / SCEN | §3 |
+| Ten employment driver systems | §4–4.10 |
+| Employment outcomes | §5 |
+| Progressive Top 10 navigation | §38 |
+| Shared application shell | §39 |
+| Search and exploration | §53 |
+| UX writing | §64 |
+| Non-negotiable UX/UI rules | §69 |
+
+## Data, sources, time, and semantics
+
+| Concept | Authoritative V4.1 sections |
+|---|---|
+| Authoritative source tiers | §27 |
+| Source Registry | §28 |
+| Source health and freshness | §29–30 |
+| Vintages and revisions | §31 |
+| Bitemporal valid/knowledge time | §31.1 |
+| Mixed-frequency as-of state | §31.2 |
+| Taxonomy / ontology / crosswalks | §31.3 |
+| Company/facility entity resolution | §31.4 |
+| Geographic semantics | §31.5 |
+| Machine-enforced data rights | §31.6 |
+| Universal observation schema | §32 |
+| Configuration over hardcoding | §37 |
+| Public Data Interface / view-model | §37.1 |
+
+## Analytical and model systems
+
+| Concept | Authoritative V4.1 sections |
+|---|---|
+| Physical-economy inputs | §6 |
+| Supply-use / input-output backbone | §6.1 |
+| External shocks | §7 |
+| Analytical engine sequence | §8 |
+| Informative / State Engine | §9 |
+| Dependency edge semantics | §10 |
+| Pressure propagation | §11 |
+| Probabilistic propagation and typed uncertainty | §11.1 |
+| Lagged feedback | §11.2 |
+| Common-cause / double counting | §11.3 |
+| Hidden dependencies | §11.4–11.10 |
+| Hidden-dependency criticality | §11.5 |
+| Time to Survive / Time to Recover | §11.6 |
+| Multi-tier suppliers/facilities | §11.7 |
+| Reverse dependency / failure-mode discovery | §11.8 |
+| Candidate dependency promotion | §11.9, §20 |
+| Converging / contradictory evidence | §12 |
+| Market allocation / demand-share movement | §13–13.1 |
+| Supply response and adaptation | §14 |
+| Forecasting and ensembles | §15–16 |
+| Forecast object contracts | §16.1 |
+| Naive baseline competition | §16.2 |
+| Forecast revision attribution | §16.3 |
+| Scenarios and probability-aware events | §17–18 |
+| Calibration / model registry / regime change | §19–19.2 |
+| Established methodology adoption | §20.1 |
+| Historical backtesting | §21 |
+| Human capital | §22–26.3 |
+| Event intelligence | §33 |
+| Public-official positioning signal (experimental/non-blocking) | §33.1 |
+
+## Security and operational integrity
+
+| Concept | Authoritative V4.1 sections |
+|---|---|
+| Core AI independence | §34 |
+| External content zero instruction authority | §34.1 |
+| Least-privilege LLM/document extraction | §34.2 |
+| Hashing, caching, AI budgets | §34.3 |
+| Bounded discovery | §34.4 |
+| SSRF/network safety | §34.5 |
+| Hostile documents/archives | §34.6 |
+| Path traversal | §34.7 |
+| XSS/rendering safety | §34.8 |
+| SQL/config-expression injection | §34.9 |
+| Spreadsheet formula injection | §34.10 |
+| GitHub/repository security | §34.11 |
+| Public-data security boundary | §35.3 |
+| Atomic public snapshot publishing | §35.4 |
+| Idempotency, retries, concurrency | §35.5 |
+| Monitor observability | §62 |
+
+## Architecture, repository, UI, and delivery
+
+| Concept | Authoritative V4.1 sections |
+|---|---|
+| Backend pipeline | §35 |
+| Presentation/compute/storage separation | §35.1 |
+| Provider-neutral infrastructure | §35.2 |
+| Collector separation rule | §36 |
+| GitHub Pages/Jekyll routing | §38.1 |
+| Windows/Linux compatibility | §38.2 |
+| Visual direction / color / typography | §40–42 |
+| View layouts | §43–45 |
+| Charts / hover / focus / motion / transitions | §46–50 |
+| Focused Trace Mode and breadcrumbs | §51–52 |
+| Ranking stability / comprehension testing | §52.1–52.2 |
+| Source health / evidence UX | §54–55.2 |
+| Responsive / accessibility / performance | §56–58 |
+| Suggested React architecture | §59 |
+| Suggested repository shape | §60 |
+| Tests | §61 |
+| Error/degraded states | §63 |
+
+## Governance, phases, and gates
+
+| Concept | Authoritative V4.1 sections |
+|---|---|
+| Capability gates A–E | §64.1 |
+| Contract-governed framework | §64.2 |
+| Authority chain and conflicts | §64.3 |
+| Contract statuses / Taylor approval | §64.4 |
+| Lean contract structure / profiles | §64.5 |
+| Contract inventory | §64.6 |
+| Just-in-time contract creation | §64.7 |
+| Contract amendment | §64.8 |
+| Agent working-context protocol | §64.9 |
+| Decisions, risks, roadmap, changelog | §64.10 |
+| Contract references in artifacts | §64.11 |
+| Governance success | §64.12 |
+| Initial vertical slice | §65 |
+| Required phases 0–7 | §66 |
+| Engineering Deliverable Registry | §67 |
+| Non-negotiable methodology rules | §68 |
+
+## Phase routing
+
+| Phase | Read first | Do not start before |
+|---|---|---|
+| 1 Foundation | §0.2–0.3, §34.1–35.5, §37.1, §38.1–38.2, §64.1–64.12, §66–68 | Current task authorization |
+| 2 UI Shell | §2, §38–59, §67 Phase 2, §69 | Required Foundation contracts approved; UI/Motion contracts drafted and approved |
+| 3 Data Integrity | §27–32, §34–37.1, §67 Phase 3 | Data/Source/Ontology contracts approved |
+| 4 State/Dependency/Allocation | §6–14, §20–20.1, §67 Phase 4 | State/Dependency/Hidden Dependency/Allocation contracts approved |
+| 5 Forecasting | §15–21, §55.1–55.2, §67 Phase 5 | Forecast/Scenario/Calibration contracts approved and prior gates passed |
+| 6 Human Capital/Events | §22–26.3, §33–33.1, §67 Phase 6 | Subsystem contracts approved |
+| 7 Launch Hardening | §52.1–64.1, §67 Phase 7, §70 | Applicable gates and release contract passed |
+
+Current authorization after Foundation approval is Phase-2 contract/design drafting only. `UI_UX_CONTRACT.md`, `MOTION_INTERACTION_CONTRACT.md`, and applicable decisions must be reviewed and approved before UI implementation.
