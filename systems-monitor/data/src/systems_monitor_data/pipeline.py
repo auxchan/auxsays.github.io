@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from .normalize import normalize_bls, normalize_dol_xml
-from .publication import canonical_bytes, export_public_pdi_candidate, validate_internal_review_model
+from .publication import canonical_bytes, export_publication_candidate, validate_internal_review_model
 from .raw import RawStore
 from .registry import Registry
 from .retrieval import BoundedRetriever, RequestBudget, bls_request_body
@@ -127,7 +127,7 @@ def candidate_from_observations(observations: list, *, generated_at: str) -> dic
 
 def public_candidate_from_observations(observations: list, *, generated_at: str) -> tuple[dict, dict]:
     internal = candidate_from_observations(observations, generated_at=generated_at)
-    return internal, export_public_pdi_candidate(internal)
+    return internal, export_publication_candidate(internal)
 
 
 def write_review_candidate(path: Path, candidate: dict) -> str:

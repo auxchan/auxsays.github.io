@@ -1,4 +1,4 @@
-import type { HorizonId, NavigationNode, PrimaryView, PublicSnapshot } from "../data/publicSnapshotTypes";
+import type { HorizonId, NavigationNode, PrimaryView, SnapshotViewModel } from "../data/publicSnapshotTypes";
 
 export interface RouteState {
   view: PrimaryView;
@@ -14,7 +14,7 @@ export interface RouteState {
 export const canonicalParameterOrder = ["view", "system", "path", "horizon", "scenario", "geo", "range"] as const;
 const views = new Set<PrimaryView>(["summary", "verified", "outlook"]);
 
-function defaultState(snapshot: PublicSnapshot): RouteState {
+function defaultState(snapshot: SnapshotViewModel): RouteState {
   return {
     view: "summary",
     system: snapshot.systems[0].slug,
@@ -38,7 +38,7 @@ function childrenForPath(system: NavigationNode, path: string[]): { valid: strin
   return { valid, truncated: false };
 }
 
-export function parseRoute(search: string, snapshot: PublicSnapshot): { state: RouteState; canonicalSearch: string } {
+export function parseRoute(search: string, snapshot: SnapshotViewModel): { state: RouteState; canonicalSearch: string } {
   const defaults = defaultState(snapshot);
   const params = new URLSearchParams(search);
   const state: RouteState = { ...defaults };
@@ -87,7 +87,7 @@ export function parseRoute(search: string, snapshot: PublicSnapshot): { state: R
   return { state, canonicalSearch: serializeRoute(state, snapshot) };
 }
 
-export function serializeRoute(state: RouteState, snapshot: PublicSnapshot): string {
+export function serializeRoute(state: RouteState, snapshot: SnapshotViewModel): string {
   const defaults = defaultState(snapshot);
   const params = new URLSearchParams();
   if (state.view !== defaults.view) params.set("view", state.view);
@@ -103,7 +103,7 @@ export function serializeRoute(state: RouteState, snapshot: PublicSnapshot): str
   return value ? `?${value}` : "";
 }
 
-export function findSelectedNode(snapshot: PublicSnapshot, route: RouteState): NavigationNode {
+export function findSelectedNode(snapshot: SnapshotViewModel, route: RouteState): NavigationNode {
   let node = snapshot.systems.find((system) => system.slug === route.system) ?? snapshot.systems[0];
   for (const segment of route.path) {
     node = node.children?.find((child) => child.slug === segment) ?? node;
@@ -111,7 +111,7 @@ export function findSelectedNode(snapshot: PublicSnapshot, route: RouteState): N
   return node;
 }
 
-export function breadcrumbNodes(snapshot: PublicSnapshot, route: RouteState): NavigationNode[] {
+export function breadcrumbNodes(snapshot: SnapshotViewModel, route: RouteState): NavigationNode[] {
   const root = snapshot.systems.find((system) => system.slug === route.system) ?? snapshot.systems[0];
   const nodes = [root];
   let current = root;

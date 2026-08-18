@@ -1,5 +1,11 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-18 — Gate-A candidate/activation clarification
+
+- Applied Taylor's narrow Phase-3 design clarification without changing PDI 1.0.0: pre-activation candidates are immutable build artifacts without `publishedAt`; local activation materializes and validates a distinct immutable PDI snapshot with the actual activation time before pointer update.
+- Replaced embedded public hierarchy objects with `childRefs[]` plus a namespaced node registry. The UI derives nested children only through a post-validation ViewModelFactory.
+- Added separate candidate/active-PDI validators and failure, rights, immutability, hierarchy, and local activation regressions. No AUXSAYS.com activation, Phase-4 work, push, merge, or deployment occurred.
+
 ## 2026-08-18 — Gate-A PDI boundary correction
 
 - Reclassified the former factual candidate as an internal factual review model and added an explicit exporter that produces a BINDING PDI 1.0.0 factual candidate with required snapshot metadata and deduplicated source/provenance references.

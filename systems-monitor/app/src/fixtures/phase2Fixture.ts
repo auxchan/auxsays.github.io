@@ -1,7 +1,7 @@
 import type {
   ForecastRecord,
   MetricRecord,
-  NavigationNode,
+  PublicNavigationNode,
   PublicSnapshot,
   RankedHumanCapitalItem,
   StateType
@@ -9,7 +9,7 @@ import type {
 
 const allViews = ["summary", "verified", "outlook"] as const;
 
-function rankedNode(prefix: string, rank: number, depth: number): NavigationNode {
+function rankedNode(prefix: string, rank: number, depth: number): PublicNavigationNode {
   const boundary = depth === 1 && rank >= 10;
   return {
     id: `fixture-${prefix}-${rank}`,
@@ -21,6 +21,7 @@ function rankedNode(prefix: string, rank: number, depth: number): NavigationNode
     nearTie: boundary,
     nearCutoff: depth === 1 && rank === 11,
     stateSummaryRefs: [rank % 2 === 0 ? "fixture-metric-calc" : "fixture-metric-obs"],
+    childRefs: [],
     availableViews: [...allViews]
   };
 }
@@ -31,15 +32,19 @@ const levelThree = Array.from({ length: 10 }, (_, index) =>
 
 const levelTwo = Array.from({ length: 11 }, (_, index) => {
   const node = rankedNode("driver", index + 1, 1);
-  if (index === 0) node.children = levelThree;
+  if (index === 0) node.childRefs = levelThree.map((child) => child.id);
   return node;
 });
 
-const systems: NavigationNode[] = Array.from({ length: 10 }, (_, index) => {
+const systems: PublicNavigationNode[] = Array.from({ length: 10 }, (_, index) => {
   const node = rankedNode("system", index + 1, 0);
-  if (index === 0) node.children = levelTwo;
+  if (index === 0) node.childRefs = levelTwo.map((child) => child.id);
   return node;
 });
+
+const navigationNodes = Object.fromEntries(
+  [...levelTwo, ...levelThree].map((node) => [node.id, node])
+);
 
 const periods = ["P-5", "P-4", "P-3", "P-2", "P-1", "P0"];
 
@@ -290,6 +295,7 @@ export const phase2Fixture: PublicSnapshot = {
     "auxsays.phase2.ranges": [
       { id: "fixture-6-period", label: "6 synthetic periods" },
       { id: "fixture-3-period", label: "3 synthetic periods" }
-    ]
+    ],
+    "auxsays.phase2.navigationNodes": navigationNodes
   }
 };

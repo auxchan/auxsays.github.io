@@ -21,13 +21,22 @@ python scripts/run_data.py collect --local-root local
 
 The command records official artifacts locally, validates and normalizes the
 six enabled observations, writes a clearly classified internal review model,
-exports and validates a separate PDI 1.0.0 candidate, and does not activate it.
+exports and validates a separate pre-activation candidate targeting PDI 1.0.0,
+and does not publicly activate it. The candidate contains no `publishedAt`.
 
 Rebuild the committed PDI review artifact deterministically from the committed
 internal review model:
 
 ```text
 python scripts/build_review_candidate.py
+```
+
+Create a bounded local-only activation proof. This materializes a distinct PDI
+snapshot with the actual local activation time through a temporary local
+pointer; it does not activate AUXSAYS.com:
+
+```text
+python scripts/build_local_activation_proof.py
 ```
 
 Print the one-line browser-console loader for local factual UI review:

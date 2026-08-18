@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import copy
+from datetime import datetime, timezone
 import hashlib
 import json
 import os
@@ -64,30 +66,65 @@ def validate_internal_review_model(candidate: dict[str, Any]) -> None:
     _secret_guard(candidate)
 
 
-def validate_factual_candidate(candidate: dict[str, Any]) -> None:
-    """Validate the immutable public-interface candidate, not the internal review model."""
-    if candidate.get("schemaVersion") != "1.0.0":
-        raise CandidateError("unsupported schemaVersion")
-    if candidate.get("contractVersion") != "1.0.0":
-        raise CandidateError("missing or unsupported contractVersion")
-    snapshot = candidate.get("snapshot")
-    if not isinstance(snapshot, dict):
-        raise CandidateError("snapshot metadata is required")
-    required_snapshot = {"id", "evaluatedAt", "generatedAt", "publishedAt", "asOf", "sourceSnapshotId", "publicationClass"}
-    if not required_snapshot.issubset(snapshot):
-        raise CandidateError("snapshot metadata is incomplete")
-    if snapshot.get("publicationClass") != "factual":
-        raise CandidateError("publicationClass must be factual")
-    if not isinstance(snapshot.get("sourceSnapshotId"), str) or not snapshot["sourceSnapshotId"]:
-        raise CandidateError("sourceSnapshotId is required")
-    for field in ("evaluatedAt", "generatedAt", "publishedAt", "asOf"):
-        _iso_time(snapshot.get(field), f"snapshot.{field}")
+def _validate_public_hierarchy(payload: dict[str, Any]) -> None:
+    systems = payload.get("systems")
+    extensions = payload.get("extensions")
+    if not isinstance(systems, list) or not systems:
+        raise CandidateError("public systems are required")
+    if not isinstance(extensions, dict):
+        raise CandidateError("extensions are required")
+    registry = extensions.get("auxsays.phase2.navigationNodes")
+    if not isinstance(registry, dict):
+        raise CandidateError("public navigation-node registry is required")
+    roots: dict[str, dict[str, Any]] = {}
+    for node in systems:
+        if not isinstance(node, dict) or not isinstance(node.get("id"), str):
+            raise CandidateError("malformed public system node")
+        if node["id"] in roots or node["id"] in registry:
+            raise CandidateError("duplicate public navigation node ID")
+        roots[node["id"]] = node
+    for node_id, node in registry.items():
+        if not isinstance(node, dict) or node.get("id") != node_id:
+            raise CandidateError("malformed public navigation-node registry")
+    all_nodes = {**roots, **registry}
+    for node in all_nodes.values():
+        if "children" in node:
+            raise CandidateError("embedded public children are prohibited; use childRefs")
+        refs = node.get("childRefs")
+        if not isinstance(refs, list):
+            raise CandidateError("public navigation node childRefs are required")
+        if len(refs) != len(set(refs)):
+            raise CandidateError("duplicate public child reference")
+        if any(reference not in all_nodes for reference in refs):
+            raise CandidateError("missing public child reference")
+
+    visiting: set[str] = set()
+    visited: set[str] = set()
+
+    def visit(node_id: str) -> None:
+        if node_id in visiting:
+            raise CandidateError("cyclic public child reference")
+        if node_id in visited:
+            return
+        visiting.add(node_id)
+        for reference in all_nodes[node_id]["childRefs"]:
+            visit(reference)
+        visiting.remove(node_id)
+        visited.add(node_id)
+
+    for root_id in roots:
+        visit(root_id)
+    if set(registry) - visited:
+        raise CandidateError("unreachable public navigation node")
+
+
+def _validate_factual_payload(payload: dict[str, Any]) -> None:
     for collection in ("systems", "events"):
-        if not isinstance(candidate.get(collection), list):
+        if not isinstance(payload.get(collection), list):
             raise CandidateError(f"{collection} must be an array")
-    if not isinstance(candidate.get("sources"), dict) or not candidate["sources"]:
+    if not isinstance(payload.get("sources"), dict) or not payload["sources"]:
         raise CandidateError("deduplicated sources are required")
-    extensions = candidate.get("extensions")
+    extensions = payload.get("extensions")
     if not isinstance(extensions, dict):
         raise CandidateError("extensions are required")
     metrics = extensions.get("auxsays.phase2.metrics")
@@ -98,7 +135,7 @@ def validate_factual_candidate(candidate: dict[str, Any]) -> None:
     provenance = extensions.get("auxsays.phase3.provenance")
     if not isinstance(provenance, dict) or not provenance:
         raise CandidateError("deduplicated provenance registry is required")
-    for source_id, source in candidate["sources"].items():
+    for source_id, source in payload["sources"].items():
         if not isinstance(source, dict) or source.get("sourceId") != source_id:
             raise CandidateError("malformed source reference")
         if source.get("publicDisplayAllowed") is not True:
@@ -117,14 +154,14 @@ def validate_factual_candidate(candidate: dict[str, Any]) -> None:
             raise CandidateError("metric sourceRefs are required")
         if not isinstance(metric["provenanceRefs"], list) or not metric["provenanceRefs"]:
             raise CandidateError("metric provenanceRefs are required")
-        if any(reference not in candidate["sources"] for reference in metric["sourceRefs"]):
+        if any(reference not in payload["sources"] for reference in metric["sourceRefs"]):
             raise CandidateError("metric has malformed source reference")
         if any(reference not in provenance for reference in metric["provenanceRefs"]):
             raise CandidateError("metric has malformed provenance reference")
     for provenance_id, record in provenance.items():
         if not isinstance(record, dict) or record.get("id") != provenance_id:
             raise CandidateError("malformed provenance record")
-        if record.get("sourceId") not in candidate["sources"]:
+        if record.get("sourceId") not in payload["sources"]:
             raise CandidateError("provenance source reference is invalid")
         if not isinstance(record.get("seriesIds"), list) or not record["seriesIds"]:
             raise CandidateError("provenance series IDs are required")
@@ -132,17 +169,77 @@ def validate_factual_candidate(candidate: dict[str, Any]) -> None:
             _iso_time(record.get(field), f"provenance.{field}")
         if not (parse_utc(record["publishedAt"]) <= parse_utc(record["retrievedAt"]) <= parse_utc(record["acceptedAt"])):
             raise CandidateError("impossible provenance temporal ordering")
-    if candidate.get("events"):
+    if payload.get("events"):
         raise CandidateError("factual first slice cannot contain events")
-    outlook = candidate.get("outlook")
+    outlook = payload.get("outlook")
     if not isinstance(outlook, dict) or outlook.get("status") != "unavailable_not_yet_supported":
         raise CandidateError("factual Outlook must be explicitly unavailable")
     for field in ("forecasts", "industries", "occupations", "demandAllocation"):
         if outlook.get(field) != []:
             raise CandidateError("factual first slice cannot contain Outlook claims")
-    if "synthetic test" in json.dumps(candidate).lower():
+    _validate_public_hierarchy(payload)
+    if "synthetic test" in json.dumps(payload).lower():
         raise CandidateError("fixture claim found in factual candidate")
+    _secret_guard(payload)
+
+
+def validate_publication_candidate(candidate: dict[str, Any]) -> None:
+    if candidate.get("artifactType") != "PDI_PUBLICATION_CANDIDATE":
+        raise CandidateError("artifact is not a pre-activation publication candidate")
+    if "snapshot" in candidate or "publishedAt" in candidate:
+        raise CandidateError("pre-activation candidate cannot claim active PDI metadata")
+    metadata = candidate.get("candidate")
+    if not isinstance(metadata, dict):
+        raise CandidateError("candidate metadata is required")
+    required = {"id", "targetSchemaVersion", "targetContractVersion", "evaluatedAt", "generatedAt", "asOf", "sourceSnapshotId", "publicationClass", "validationProfile", "payloadSha256"}
+    if not required.issubset(metadata):
+        raise CandidateError("candidate metadata is incomplete")
+    if "publishedAt" in metadata:
+        raise CandidateError("pre-activation candidate cannot contain publishedAt")
+    if metadata.get("targetSchemaVersion") != "1.0.0":
+        raise CandidateError("unsupported target schemaVersion")
+    if metadata.get("targetContractVersion") != "1.0.0":
+        raise CandidateError("unsupported target contractVersion")
+    if metadata.get("publicationClass") != "factual":
+        raise CandidateError("candidate publicationClass must be factual")
+    if metadata.get("validationProfile") != "pdi-1.0.0-factual-pre-activation-v1":
+        raise CandidateError("unsupported candidate validation profile")
+    if not isinstance(metadata.get("sourceSnapshotId"), str) or not metadata["sourceSnapshotId"]:
+        raise CandidateError("candidate sourceSnapshotId is required")
+    for field in ("evaluatedAt", "generatedAt", "asOf"):
+        _iso_time(metadata.get(field), f"candidate.{field}")
+    payload = candidate.get("payload")
+    if not isinstance(payload, dict):
+        raise CandidateError("candidate payload is required")
+    _validate_factual_payload(payload)
+    expected_hash = hashlib.sha256(canonical_bytes(payload)).hexdigest()
+    if metadata.get("payloadSha256") != expected_hash:
+        raise CandidateError("candidate payload hash mismatch")
     _secret_guard(candidate)
+
+
+def validate_active_pdi_snapshot(snapshot_document: dict[str, Any]) -> None:
+    if snapshot_document.get("schemaVersion") != "1.0.0":
+        raise CandidateError("unsupported schemaVersion")
+    if snapshot_document.get("contractVersion") != "1.0.0":
+        raise CandidateError("missing or unsupported contractVersion")
+    snapshot = snapshot_document.get("snapshot")
+    if not isinstance(snapshot, dict):
+        raise CandidateError("snapshot metadata is required")
+    required_snapshot = {"id", "evaluatedAt", "generatedAt", "publishedAt", "asOf", "sourceSnapshotId", "publicationClass"}
+    if not required_snapshot.issubset(snapshot):
+        raise CandidateError("active PDI snapshot metadata is incomplete")
+    if snapshot.get("publicationClass") != "factual":
+        raise CandidateError("publicationClass must be factual")
+    if not isinstance(snapshot.get("sourceSnapshotId"), str) or not snapshot["sourceSnapshotId"]:
+        raise CandidateError("sourceSnapshotId is required")
+    for field in ("evaluatedAt", "generatedAt", "publishedAt", "asOf"):
+        _iso_time(snapshot.get(field), f"snapshot.{field}")
+    if parse_utc(snapshot["publishedAt"]) < parse_utc(snapshot["generatedAt"]):
+        raise CandidateError("publishedAt cannot precede snapshot generation")
+    payload = {key: snapshot_document.get(key) for key in ("systems", "sources", "events", "outlook", "extensions")}
+    _validate_factual_payload(payload)
+    _secret_guard(snapshot_document)
 
 
 SOURCE_PUBLIC_METADATA = {
@@ -177,8 +274,8 @@ SOURCE_PUBLIC_METADATA = {
 }
 
 
-def export_public_pdi_candidate(internal: dict[str, Any]) -> dict[str, Any]:
-    """Explicit boundary from normalized review evidence to the BINDING PDI."""
+def export_publication_candidate(internal: dict[str, Any]) -> dict[str, Any]:
+    """Build an immutable pre-activation artifact without claiming PDI activation."""
     validate_internal_review_model(internal)
     metrics: list[dict[str, Any]] = []
     sources: dict[str, dict[str, Any]] = {}
@@ -245,34 +342,27 @@ def export_public_pdi_candidate(internal: dict[str, Any]) -> dict[str, Any]:
         source["observationTime"] = max(row["observationPeriod"] for row in source_metrics)
         source["publishedAt"] = max(source_metrics, key=lambda row: parse_utc(row["publicTime"]))["publicTime"]
         source["retrievedAt"] = max(source_metrics, key=lambda row: parse_utc(row["retrievedTime"]))["retrievedTime"]
-    snapshot_time = internal["generatedAt"]
-    candidate = {
-        "schemaVersion": "1.0.0",
-        "contractVersion": "1.0.0",
-        "snapshot": {
-            "id": "factual-gate-a-candidate-2026-08-18",
-            "evaluatedAt": snapshot_time,
-            "generatedAt": snapshot_time,
-            "publishedAt": snapshot_time,
-            "asOf": max(metric["acceptedTime"] for metric in internal["metrics"]),
-            "sourceSnapshotId": "phase3-normalized-six-indicator-2026-08-18",
-            "publicationClass": "factual",
-        },
+    navigation_nodes = {
+        metric["id"]: {
+            "id": metric["id"],
+            "slug": metric["id"].lower().replace("_", "-"),
+            "label": metric["label"],
+            "rank": index + 1,
+            "stateSummaryRefs": [metric["id"]],
+            "childRefs": [],
+            "availableViews": ["summary", "verified"],
+        }
+        for index, metric in enumerate(metrics)
+    }
+    payload = {
         "systems": [{
             "id": "us-labor",
             "slug": "us-labor",
             "label": "U.S. Labor System",
             "rank": 1,
             "stateSummaryRefs": [metric["id"] for metric in metrics],
+            "childRefs": [metric["id"] for metric in metrics],
             "availableViews": ["summary", "verified", "outlook"],
-            "children": [{
-                "id": metric["id"],
-                "slug": metric["id"].lower().replace("_", "-"),
-                "label": metric["label"],
-                "rank": index + 1,
-                "stateSummaryRefs": [metric["id"]],
-                "availableViews": ["summary", "verified"],
-            } for index, metric in enumerate(metrics)],
         }],
         "sources": sources,
         "events": [],
@@ -291,6 +381,7 @@ def export_public_pdi_candidate(internal: dict[str, Any]) -> dict[str, Any]:
             "auxsays.phase2.fixtureVariants": [],
             "auxsays.phase2.geographies": [{"id": "US", "label": "United States"}],
             "auxsays.phase2.ranges": [{"id": "latest", "label": "Latest available observation"}],
+            "auxsays.phase2.navigationNodes": navigation_nodes,
             "auxsays.phase3.provenance": provenance,
             "auxsays.phase3.sourceHealth": {
                 source_id: {
@@ -301,44 +392,99 @@ def export_public_pdi_candidate(internal: dict[str, Any]) -> dict[str, Any]:
                 }
                 for source_id in sources
             },
-            "auxsays.phase3.activation": {"status": "LOCAL_REVIEW_ONLY_NOT_PUBLICLY_ACTIVATED"},
         },
     }
-    validate_factual_candidate(candidate)
+    snapshot_time = internal["generatedAt"]
+    candidate = {
+        "artifactType": "PDI_PUBLICATION_CANDIDATE",
+        "candidate": {
+            "id": "factual-gate-a-candidate-2026-08-18",
+            "targetSchemaVersion": "1.0.0",
+            "targetContractVersion": "1.0.0",
+            "evaluatedAt": snapshot_time,
+            "generatedAt": snapshot_time,
+            "asOf": max(metric["acceptedTime"] for metric in internal["metrics"]),
+            "sourceSnapshotId": "phase3-normalized-six-indicator-2026-08-18",
+            "publicationClass": "factual",
+            "validationProfile": "pdi-1.0.0-factual-pre-activation-v1",
+            "payloadSha256": hashlib.sha256(canonical_bytes(payload)).hexdigest(),
+        },
+        "payload": payload,
+    }
+    validate_publication_candidate(candidate)
     return candidate
+
+
+def materialize_active_pdi_snapshot(candidate: dict[str, Any], *, activated_at: str) -> dict[str, Any]:
+    validate_publication_candidate(candidate)
+    _iso_time(activated_at, "activated_at")
+    metadata = candidate["candidate"]
+    if parse_utc(activated_at) < parse_utc(metadata["generatedAt"]):
+        raise CandidateError("activation cannot precede candidate generation")
+    snapshot_id = f"factual-active-{activated_at.replace(':', '-').replace('.', '-')}-{metadata['payloadSha256'][:12]}"
+    document = {
+        "schemaVersion": metadata["targetSchemaVersion"],
+        "contractVersion": metadata["targetContractVersion"],
+        "snapshot": {
+            "id": snapshot_id,
+            "evaluatedAt": metadata["evaluatedAt"],
+            "generatedAt": metadata["generatedAt"],
+            "publishedAt": activated_at,
+            "asOf": metadata["asOf"],
+            "sourceSnapshotId": metadata["sourceSnapshotId"],
+            "publicationClass": metadata["publicationClass"],
+        },
+        **copy.deepcopy(candidate["payload"]),
+    }
+    validate_active_pdi_snapshot(document)
+    return document
 
 
 class AtomicPublisher:
     def __init__(self, root: Path):
         self.root = root
+        self.candidates = root / "candidates"
         self.objects = root / "objects"
         self.pointer = root / "current.json"
+        self.candidates.mkdir(parents=True, exist_ok=True)
         self.objects.mkdir(parents=True, exist_ok=True)
 
+    @staticmethod
+    def _write_immutable(path: Path, payload: bytes) -> None:
+        if path.exists():
+            return
+        descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
+        with os.fdopen(descriptor, "wb") as stream:
+            stream.write(payload)
+            stream.flush()
+            os.fsync(stream.fileno())
+
     def stage(self, candidate: dict[str, Any]) -> tuple[str, Path]:
-        validate_factual_candidate(candidate)
+        validate_publication_candidate(candidate)
         payload = canonical_bytes(candidate)
         digest = hashlib.sha256(payload).hexdigest()
-        path = self.objects / f"{digest}.json"
-        if not path.exists():
-            descriptor = os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)
-            with os.fdopen(descriptor, "wb") as stream:
-                stream.write(payload)
-                stream.flush()
-                os.fsync(stream.fileno())
+        path = self.candidates / f"{digest}.json"
+        self._write_immutable(path, payload)
         return digest, path
 
-    def activate_local(self, digest: str, *, rights_allowed: bool = True) -> None:
-        candidate_path = self.objects / f"{digest}.json"
+    def activate_local(self, digest: str, *, rights_allowed: bool = True, activated_at: str | None = None) -> tuple[str, Path]:
+        candidate_path = self.candidates / f"{digest}.json"
         if not candidate_path.exists():
             raise CandidateError("candidate object does not exist")
         candidate = json.loads(candidate_path.read_text(encoding="utf-8"))
-        validate_factual_candidate(candidate)
+        validate_publication_candidate(candidate)
         if not rights_allowed:
             raise CandidateError("current publication rights prohibit activation")
+        activation_time = activated_at or datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")
+        active_snapshot = materialize_active_pdi_snapshot(candidate, activated_at=activation_time)
+        active_payload = canonical_bytes(active_snapshot)
+        active_digest = hashlib.sha256(active_payload).hexdigest()
+        active_path = self.objects / f"{active_digest}.json"
+        self._write_immutable(active_path, active_payload)
         temporary = self.root / f".current.{os.getpid()}.{uuid.uuid4().hex}.tmp"
-        temporary.write_text(json.dumps({"sha256": digest, "relativePath": f"objects/{digest}.json"}, sort_keys=True) + "\n", encoding="utf-8")
+        temporary.write_text(json.dumps({"sha256": active_digest, "relativePath": f"objects/{active_digest}.json"}, sort_keys=True) + "\n", encoding="utf-8")
         os.replace(temporary, self.pointer)
+        return active_digest, active_path
 
     def withdraw(self, cause: str) -> None:
         temporary = self.root / f".current.{os.getpid()}.{uuid.uuid4().hex}.tmp"

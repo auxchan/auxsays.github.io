@@ -64,7 +64,7 @@ Phase 3 — Data Integrity implementation, limited to the Taylor-approved six-in
 | P3-010 | Atomic/idempotent publication design | Data/Infrastructure contracts | Factual activation | Approved design | `PHASE3_DATA_INTEGRITY_DESIGN.md` §7 | Candidate failure vs current-rights withdrawal; atomic pointer |
 | P3-011 | Exact vertical slice | All four Phase-3 contracts; O-003/O-004 | Gate A | Approved design | `PHASE3_DATA_INTEGRITY_DESIGN.md` §8 | Six labor indicators; Tier-A DOL revision proof |
 | P3-012 | Test plan | Testing contract | Gate A evidence | Approved design | `PHASE3_DATA_INTEGRITY_DESIGN.md` §9 | Deterministic matrix; no dependencies installed |
-| P3-013 | Correct factual PDI export boundary | Public Data Interface / Architecture contracts | Taylor Gate-A review | Implemented; review pending | `data/review/GATE_A_EVIDENCE.md` | Prior internal-shaped false PASS corrected; PDI candidate and regression evidence complete |
+| P3-013 | Correct factual publication boundary | Public Data Interface / Architecture contracts | Taylor Gate-A review | Implemented; review pending | `data/review/GATE_A_EVIDENCE.md` | Internal model, pre-activation candidate, and active PDI are distinct; `childRefs[]` transport enforced |
 
 ## Phase progression
 

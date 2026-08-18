@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { phase2Fixture } from "../src/fixtures/phase2Fixture";
 import { publicPayloadHasIndependentFixtureFlag, validatePublicSnapshot } from "../src/data/validatePublicSnapshot";
+import { createSnapshotViewModel } from "../src/data/snapshotViewModelFactory";
 
 describe("Phase-2 public fixture", () => {
   it("validates the complete typed public envelope", () => {
@@ -9,10 +10,11 @@ describe("Phase-2 public fixture", () => {
   });
 
   it("exercises hierarchy, ranking, horizons, states, timing, and trace boundaries", () => {
-    expect(phase2Fixture.systems).toHaveLength(10);
-    expect(phase2Fixture.systems[0].children).toHaveLength(11);
-    expect(phase2Fixture.systems[0].children?.[0].children).toHaveLength(10);
-    expect(phase2Fixture.systems[0].children?.slice(9, 11).every((item) => item.nearTie)).toBe(true);
+    const view = createSnapshotViewModel(validatePublicSnapshot(phase2Fixture));
+    expect(view.systems).toHaveLength(10);
+    expect(view.systems[0].children).toHaveLength(11);
+    expect(view.systems[0].children?.[0].children).toHaveLength(10);
+    expect(view.systems[0].children?.slice(9, 11).every((item) => item.nearTie)).toBe(true);
     expect(new Set(phase2Fixture.outlook.forecasts.map((item) => item.stateType))).toEqual(new Set(["FCST", "SCEN"]));
     expect(new Set(phase2Fixture.outlook.horizons.map((item) => item.id))).toEqual(new Set(["current-year", "next-year", "plus-3-years"]));
     expect(new Set(Object.values(phase2Fixture.sources).map((item) => item.freshness))).toEqual(new Set(["current", "delayed", "stale"]));
@@ -22,6 +24,13 @@ describe("Phase-2 public fixture", () => {
 
   it("rejects an independent public isFixture flag", () => {
     expect(() => validatePublicSnapshot({ ...phase2Fixture, isFixture: true })).toThrow(/isFixture/);
+  });
+
+  it("rejects embedded public children and resolves childRefs only after validation", () => {
+    const invalid = structuredClone(phase2Fixture) as unknown as { systems: Array<Record<string, unknown>> };
+    invalid.systems[0].children = [];
+    expect(() => validatePublicSnapshot(invalid)).toThrow(/embedded children/);
+    expect(createSnapshotViewModel(phase2Fixture).systems[0].children).toHaveLength(11);
   });
 
   it("contains every required degraded-state fixture variant", () => {

@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
-import type { PublicSnapshot } from "../data/publicSnapshotTypes";
+import type { SnapshotViewModel } from "../data/publicSnapshotTypes";
 import { parseRoute, serializeRoute, type RouteState } from "./routeSchema";
 
-export function useRouteState(snapshot: PublicSnapshot) {
+export function useRouteState(snapshot: SnapshotViewModel) {
   const initial = parseRoute(window.location.search, snapshot);
   const [route, setRoute] = useState<RouteState>(initial.state);
 

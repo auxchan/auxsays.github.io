@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import type { FixtureVariant, NavigationNode, PrimaryView, PublicSnapshot } from "../data/publicSnapshotTypes";
+import type { FixtureVariant, NavigationNode, PrimaryView, SnapshotViewModel } from "../data/publicSnapshotTypes";
 import { breadcrumbNodes, type RouteState } from "../state/routeSchema";
 import { FactualCandidateNotice, FixtureNotice, FreshnessLabel } from "../shared/Semantic";
 
@@ -16,7 +16,7 @@ export function SystemRail({ systems, selected, onSelect, factual = false }: { s
   return <aside className="sm-system-rail" aria-label={factual ? "Factual systems" : "Core synthetic systems"}><span className="sm-eyebrow">{factual ? "Factual first slice" : "10 core systems"}</span><ol>{systems.map((system) => <li key={system.id}><button type="button" className={selected === system.slug ? "is-selected" : ""} aria-current={selected === system.slug ? "true" : undefined} onClick={() => onSelect(system.slug)}><span>{String(system.rank).padStart(2, "0")}</span>{system.label.replace("SYNTHETIC TEST ", "")}</button></li>)}</ol></aside>;
 }
 
-export function ContextBreadcrumbs({ snapshot, route, onPath }: { snapshot: PublicSnapshot; route: RouteState; onPath: (path: string[]) => void }) {
+export function ContextBreadcrumbs({ snapshot, route, onPath }: { snapshot: SnapshotViewModel; route: RouteState; onPath: (path: string[]) => void }) {
   const nodes = breadcrumbNodes(snapshot, route);
   return <nav className="sm-breadcrumbs" aria-label="Selected hierarchy"><ol><li><button type="button" onClick={() => onPath([])}>Systems</button></li>{nodes.map((node, index) => <li key={node.id}><span aria-hidden="true">/</span><button type="button" aria-current={index === nodes.length - 1 ? "page" : undefined} onClick={() => onPath(index === 0 ? [] : route.path.slice(0, index))}>{node.label.replace("SYNTHETIC TEST ", "")}</button></li>)}</ol></nav>;
 }
@@ -33,7 +33,7 @@ interface SearchResult {
   path?: string[];
 }
 
-function collectNodes(snapshot: PublicSnapshot): SearchResult[] {
+function collectNodes(snapshot: SnapshotViewModel): SearchResult[] {
   const results: SearchResult[] = [];
   const factual = snapshot.snapshot.publicationClass === "factual";
   function walk(node: NavigationNode, system: string, path: string[]) {
@@ -54,14 +54,14 @@ function collectNodes(snapshot: PublicSnapshot): SearchResult[] {
   return results;
 }
 
-export function ExploreSearch({ snapshot, onSelect }: { snapshot: PublicSnapshot; onSelect: (result: SearchResult) => void }) {
+export function ExploreSearch({ snapshot, onSelect }: { snapshot: SnapshotViewModel; onSelect: (result: SearchResult) => void }) {
   const [query, setQuery] = useState("");
   const all = useMemo(() => collectNodes(snapshot), [snapshot]);
   const results = query.trim().length < 2 ? [] : all.filter((item) => `${item.label} ${item.type} ${item.context}`.toLowerCase().includes(query.toLowerCase())).slice(0, 8);
   return <div className="sm-search"><label htmlFor="systems-monitor-search">{snapshot.snapshot.publicationClass === "factual" ? "Explore factual observations" : "Explore synthetic entities"}</label><div><input id="systems-monitor-search" type="search" value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Search systems, sources, occupations…" autoComplete="off" /><kbd>/</kbd></div>{results.length > 0 && <ul aria-label="Search results">{results.map((result) => <li key={result.id}><button type="button" onClick={() => { onSelect(result); setQuery(""); }}><strong>{result.label}</strong><span>{result.type} · {result.context}</span><small>{result.state} · {result.freshness} · {result.view} available</small></button></li>)}</ul>}</div>;
 }
 
-export function SystemHealthSummary({ snapshot, variant, setVariant }: { snapshot: PublicSnapshot; variant: FixtureVariant; setVariant: (variant: FixtureVariant) => void }) {
+export function SystemHealthSummary({ snapshot, variant, setVariant }: { snapshot: SnapshotViewModel; variant: FixtureVariant; setVariant: (variant: FixtureVariant) => void }) {
   const sources = Object.values(snapshot.sources);
   const factual = snapshot.snapshot.publicationClass === "factual";
   return <section className="sm-health" aria-labelledby="sm-health-title"><div><span className="sm-eyebrow">System heartbeat</span><h2 id="sm-health-title">State current <span>{factual ? "Local factual candidate evaluated" : "Fixture evaluated"}</span></h2></div><details className="sm-health-details" open><summary>System context details</summary><dl><div><dt>Evaluated</dt><dd>{snapshot.snapshot.evaluatedAt}</dd></div><div><dt>Sources current</dt><dd>{sources.filter((source) => source.freshness === "current").length} / {sources.length}</dd></div><div><dt>Observations</dt><dd>{factual ? `${snapshot.extensions["auxsays.phase2.metrics"].length} factual OBS records` : "1 synthetic record"}</dd></div><div><dt>Activation</dt><dd>{factual ? "Local review only" : "Fixture only"}</dd></div><div><dt>Next expected release</dt><dd>{sources[0].nextExpectedReleaseAt}</dd></div></dl><div className="sm-source-pulse">{sources.map((source) => <span key={source.sourceId}><FreshnessLabel state={source.freshness} /> {source.dataset}</span>)}</div></details>{!factual && <label className="sm-variant-control">Fixture state lab<select value={variant} onChange={(event) => setVariant(event.target.value as FixtureVariant)}>{snapshot.extensions["auxsays.phase2.fixtureVariants"].map((item) => <option value={item} key={item}>{item}</option>)}</select></label>}</section>;
@@ -69,7 +69,7 @@ export function SystemHealthSummary({ snapshot, variant, setVariant }: { snapsho
 
 export function AppShell({ children, snapshot, route, navigate, variant, setVariant }: {
   children: React.ReactNode;
-  snapshot: PublicSnapshot;
+  snapshot: SnapshotViewModel;
   route: RouteState;
   navigate: (next: RouteState | ((current: RouteState) => RouteState), replace?: boolean) => void;
   variant: FixtureVariant;

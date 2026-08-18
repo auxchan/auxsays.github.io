@@ -56,7 +56,7 @@ export interface MetricRecord {
   method?: string;
 }
 
-export interface NavigationNode {
+export interface PublicNavigationNode {
   id: string;
   slug: string;
   label: string;
@@ -66,7 +66,11 @@ export interface NavigationNode {
   nearTie?: boolean;
   nearCutoff?: boolean;
   stateSummaryRefs: string[];
+  childRefs: string[];
   availableViews: PrimaryView[];
+}
+
+export interface NavigationNode extends Omit<PublicNavigationNode, "childRefs"> {
   children?: NavigationNode[];
 }
 
@@ -183,7 +187,7 @@ export interface PublicSnapshot {
   schemaVersion: "1.0.0";
   contractVersion: "1.0.0";
   snapshot: SnapshotMetadata;
-  systems: NavigationNode[];
+  systems: PublicNavigationNode[];
   sources: Record<string, SourceRecord>;
   events: Array<{
     id: string;
@@ -207,8 +211,32 @@ export interface PublicSnapshot {
     "auxsays.phase2.fixtureVariants": FixtureVariant[];
     "auxsays.phase2.geographies": Array<{ id: string; label: string }>;
     "auxsays.phase2.ranges": Array<{ id: string; label: string }>;
+    "auxsays.phase2.navigationNodes": Record<string, PublicNavigationNode>;
     "auxsays.phase3.provenance"?: Record<string, ProvenanceRecord>;
     "auxsays.phase3.sourceHealth"?: Record<string, SourceHealthRecord>;
-    "auxsays.phase3.activation"?: { status: "LOCAL_REVIEW_ONLY_NOT_PUBLICLY_ACTIVATED" };
   };
 }
+
+export type PublicationCandidatePayload = Pick<PublicSnapshot, "systems" | "sources" | "events" | "outlook" | "extensions">;
+
+export interface PublicationCandidate {
+  artifactType: "PDI_PUBLICATION_CANDIDATE";
+  candidate: {
+    id: string;
+    targetSchemaVersion: "1.0.0";
+    targetContractVersion: "1.0.0";
+    evaluatedAt: string;
+    generatedAt: string;
+    asOf: string;
+    sourceSnapshotId: string;
+    publicationClass: "factual";
+    validationProfile: "pdi-1.0.0-factual-pre-activation-v1";
+    payloadSha256: string;
+  };
+  payload: PublicationCandidatePayload;
+}
+
+export type SnapshotViewModel = Omit<PublicSnapshot, "snapshot" | "systems"> & {
+  snapshot: Omit<SnapshotMetadata, "publishedAt"> & { publishedAt?: string };
+  systems: NavigationNode[];
+};

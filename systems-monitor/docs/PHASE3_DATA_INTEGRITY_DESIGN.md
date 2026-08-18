@@ -2,11 +2,11 @@
 
 ```text
 Artifact: Phase-3 Data Integrity Design
-Version: 1.0.0
+Version: 1.0.1
 Status: APPROVED — GOVERNED BY BINDING PHASE-3 CONTRACTS
 Parent Master Spec: V4.1
 Governing Contracts: DATA_CONTRACT.md, SOURCE_CONTRACT.md, ONTOLOGY_CROSSWALK_CONTRACT.md, TESTING_CONTRACT.md
-Last Updated: 2026-08-17
+Last Updated: 2026-08-18
 ```
 
 This is the approved design boundary for a later scoped Phase-3 implementation. This approval task creates no collector, API call, downloaded data, dependency, database, Parquet file, scheduled job, factual public snapshot, forecast, or deployment. Gate-A evidence and separate factual-activation approval remain required before public activation.
@@ -184,9 +184,10 @@ Immutable semantic history does not force retention of prohibited bytes. Require
 
 ## 7. Atomic publication and idempotency
 
-- Candidate snapshot ID is derived from schema/contract versions, knowledge cutoff, sorted publishable record identities, and content hashes.
-- Generation writes a complete immutable candidate, then validates schema, rights, provenance, publication class, referential integrity, hashes, and compatibility.
-- Activation changes one current-manifest pointer only after all checks pass. Readers load the pointer and one immutable snapshot; partial candidates are unreachable.
+- A pre-activation publication candidate is a distinct immutable build artifact, not an activated PDI snapshot. Its ID is derived from target schema/contract versions, knowledge cutoff, sorted publishable record identities, and content hashes. It contains no `publishedAt` activation claim.
+- Generation writes the complete candidate payload, then pre-publication validation checks target versions, rights, provenance, publication class, typed claims, hierarchy/reference integrity, source-snapshot identity, hashes, and PDI publishability.
+- Successful activation revalidates candidate eligibility, materializes a new immutable PDI 1.0.0 snapshot, sets `snapshot.publishedAt` to the actual activation time, validates that completed PDI snapshot, and only then atomically changes the current-manifest pointer. Candidate and active snapshot are distinct immutable artifacts; partial candidates remain unreachable.
+- Failed activation creates no active PDI snapshot, adds no fabricated publication time, and leaves the prior pointer unchanged when that prior snapshot remains valid. Readers load the pointer and one immutable active snapshot.
 - A complete fixture snapshot (`publicationClass: fixture`) and a complete factual snapshot (`publicationClass: factual`) are separate alternatives. Factual snapshots contain rights-cleared `OBS` and approved deterministic `CALC` only; no fixture `FCST`, `SCEN`, rankings, or synthetic claims. Unsupported Outlook is explicitly unavailable/not yet supported. Test harnesses may switch snapshots but never merge their claim sets.
 - An identical source object/input/config/code snapshot produces the same logical output and does not create duplicate observations or public activations. A separate official publication/release remains a distinct knowledge event even when its value is unchanged.
 - Runs use a deterministic idempotency key, bounded retries with backoff, and one concurrency lease per source/release window. A retry may resume or safely repeat immutable stages.
@@ -203,7 +204,7 @@ The future, separately authorized implementation must prove:
 3. Gate-A revision proof uses an original DOL Weekly Claims release containing an advance value and the subsequent original DOL release containing its revised value, with separate source identities/hashes and independently proven official publication times. Synthetic corrections remain edge fixtures only.
 4. Current-truth returns the DOL revision; `PUBLICLY_AVAILABLE_AS_OF` before the later release returns the advance value; `OPERATIONALLY_KNOWN_AS_OF` reflects the actual AUXSAYS retrieval/validation lag.
 5. Weekly and monthly values build an as-of state without future leakage and expose age/freshness.
-6. A complete rights-cleared `publicationClass: factual` candidate conforms to the BINDING Public Data Interface, contains `OBS`/approved deterministic `CALC` only, and uses unavailable/not-yet-supported Outlook. It remains unactivated until separate Gate-A/activation approval.
+6. A complete rights-cleared pre-activation candidate contains all information required to materialize a BINDING PDI 1.0.0 snapshot, passes PDI publishability checks, contains `OBS`/approved deterministic `CALC` only, and uses unavailable/not-yet-supported Outlook. It is not itself an activated PDI snapshot and contains no `publishedAt`; public activation remains separately governed.
 7. The same run repeated creates no duplicate versions or activation and performs no work when D-009 evaluation finds no due/material change.
 8. All work runs locally or in an already-approved bounded environment. No cloud provider, commercial source, model, or recurring paid service is required.
 9. Local development may switch between the complete fixture and complete factual candidates through the unchanged Public Data Interface; it never replaces individual fixture claims in place or mixes classes. No real `FCST`, `SCEN`, ranking, propagation, industry forecast, or occupation forecast is introduced.
@@ -223,7 +224,7 @@ Success is measurable only when the Data Integrity contracts are BINDING and Gat
 | Rights/security | Independent analytical/model-training/commercial/export/retention/public permissions; terms fingerprints/recheck; candidate failure; current revocation/withdrawal; governed deletion; URL/body/header secret redaction; hostile inputs |
 | Crosswalk | Version/effective dates, many-to-many weights, unresolved candidates, geography/unit incompatibility, supersession |
 | Idempotency/concurrency | Exact-object retry versus same-value distinct release, retry after each stage, overlapping workers, lease expiry, deterministic outputs |
-| Publication | Separate complete fixture/factual snapshots; no factual `FCST`/`SCEN`; candidate-only failure; current-rights revocation; atomic replacement/withdrawal; reader never mixes snapshots |
+| Publication | Distinct immutable candidate/active artifacts; candidate has no `publishedAt`; activation assigns actual time to a completed PDI snapshot before pointer update; `childRefs[]` integrity; no factual `FCST`/`SCEN`; candidate-only failure; current-rights revocation; atomic replacement/withdrawal; reader never mixes snapshots |
 | Gate-A factual revision | Original DOL advance/subsequent-revision release pair, proven publication times, immutable identities/hashes, current/publicly-available/operational queries; no ALFRED |
 | Reproducibility | Clean Windows and Linux execution from pinned code/config/fixtures produces matching logical results and provenance |
 | Cost | Bounded request/storage/runtime counters demonstrate D-010 compute-once/read-many and no paid dependency requirement |
@@ -240,5 +241,6 @@ No acceptance test may call an uncontrolled external endpoint. Network integrati
 
 ## 11. Review and change history
 
+- 1.0.1 (2026-08-18): Taylor-authorized clarification that a pre-activation publication candidate is not an activated PDI snapshot, carries no `publishedAt`, and is materialized as a distinct immutable PDI 1.0.0 snapshot with actual activation time before atomic pointer update. Public hierarchy follows `childRefs[]`; no BINDING contract changed.
 - 1.0.0 (2026-08-17): Taylor-approved design after external-review corrections: O-003 accepted, O-004 rejected, FRED/ALFRED removed, DOL revision proof selected, dual replay semantics, snapshot separation, current-rights withdrawal, governed deletion, expanded rights, operational limits, and credential redaction.
 - 0.1.0 (2026-08-17): Initial Phase-3 review design. DRAFT; no implementation authority.

@@ -1,4 +1,4 @@
-import type { PublicSnapshot, StateType } from "./publicSnapshotTypes";
+import type { PublicationCandidate, PublicationCandidatePayload, PublicNavigationNode, PublicSnapshot, StateType } from "./publicSnapshotTypes";
 
 const stateTypes = new Set<StateType>(["OBS", "CALC", "FCST", "SCEN"]);
 const requiredHorizons = new Set(["current-year", "next-year", "plus-3-years"]);
@@ -30,8 +30,43 @@ function validateSnapshotMetadata(candidate: PublicSnapshot) {
   }
 }
 
-function validateFactual(candidate: PublicSnapshot) {
-  assert(candidate.snapshot.id.startsWith("factual-"), "factual snapshot ID must be factual-namespaced");
+function validatePublicHierarchy(payload: PublicationCandidatePayload) {
+  assert(Array.isArray(payload.systems) && payload.systems.length > 0, "public systems are required");
+  const registry = payload.extensions?.["auxsays.phase2.navigationNodes"];
+  assert(isRecord(registry), "public navigation-node registry is required");
+  const roots = new Map<string, PublicNavigationNode>();
+  for (const node of payload.systems) {
+    assert(typeof node.id === "string" && node.id.length > 0, "public system node ID is required");
+    assert(!roots.has(node.id) && !(node.id in registry), "duplicate public navigation node ID");
+    roots.set(node.id, node);
+  }
+  const allNodes = new Map<string, PublicNavigationNode>(roots);
+  for (const [nodeId, nodeValue] of Object.entries(registry)) {
+    const node = nodeValue as PublicNavigationNode;
+    assert(node.id === nodeId, `navigation registry key mismatch for ${nodeId}`);
+    allNodes.set(nodeId, node);
+  }
+  for (const [nodeId, node] of allNodes) {
+    assert(!Object.prototype.hasOwnProperty.call(node, "children"), `embedded children are prohibited for ${nodeId}`);
+    assert(Array.isArray(node.childRefs), `childRefs are required for ${nodeId}`);
+    assert(new Set(node.childRefs).size === node.childRefs.length, `duplicate childRefs for ${nodeId}`);
+    assert(node.childRefs.every((reference) => allNodes.has(reference)), `missing childRef for ${nodeId}`);
+  }
+  const visiting = new Set<string>();
+  const visited = new Set<string>();
+  function visit(nodeId: string) {
+    assert(!visiting.has(nodeId), `cyclic childRefs at ${nodeId}`);
+    if (visited.has(nodeId)) return;
+    visiting.add(nodeId);
+    for (const reference of allNodes.get(nodeId)!.childRefs) visit(reference);
+    visiting.delete(nodeId);
+    visited.add(nodeId);
+  }
+  for (const rootId of roots.keys()) visit(rootId);
+  assert(Object.keys(registry).every((nodeId) => visited.has(nodeId)), "unreachable public navigation node");
+}
+
+function validateFactualPayload(candidate: PublicationCandidatePayload) {
   assert(Array.isArray(candidate.systems) && candidate.systems.length > 0, "factual systems are required");
   assert(isRecord(candidate.sources) && Object.keys(candidate.sources).length > 0, "factual sources are required");
   assert(Array.isArray(candidate.events) && candidate.events.length === 0, "factual first slice cannot contain events");
@@ -73,6 +108,29 @@ function validateFactual(candidate: PublicSnapshot) {
   }
   const serialized = JSON.stringify(candidate).toLowerCase();
   assert(!serialized.includes("synthetic test"), "factual snapshot contains fixture claims");
+  validatePublicHierarchy(candidate);
+}
+
+export function validatePublicationCandidate(value: unknown): PublicationCandidate {
+  assert(value && typeof value === "object", "candidate envelope must be an object");
+  const candidate = value as PublicationCandidate;
+  assert(candidate.artifactType === "PDI_PUBLICATION_CANDIDATE", "artifact must be a pre-activation publication candidate");
+  assert(!Object.prototype.hasOwnProperty.call(candidate, "snapshot"), "candidate cannot masquerade as an active PDI snapshot");
+  assert(isRecord(candidate.candidate), "candidate metadata is required");
+  assert(!Object.prototype.hasOwnProperty.call(candidate.candidate, "publishedAt"), "candidate cannot claim publishedAt");
+  assert(candidate.candidate.id.startsWith("factual-"), "candidate ID must be factual-namespaced");
+  assert(candidate.candidate.targetSchemaVersion === "1.0.0", "unsupported target schemaVersion");
+  assert(candidate.candidate.targetContractVersion === "1.0.0", "unsupported target contractVersion");
+  assert(candidate.candidate.publicationClass === "factual", "candidate publicationClass must be factual");
+  assert(candidate.candidate.validationProfile === "pdi-1.0.0-factual-pre-activation-v1", "unsupported candidate validation profile");
+  assert(typeof candidate.candidate.sourceSnapshotId === "string" && candidate.candidate.sourceSnapshotId.length > 0, "candidate sourceSnapshotId is required");
+  assert(/^[a-f0-9]{64}$/i.test(candidate.candidate.payloadSha256), "candidate payloadSha256 is invalid");
+  for (const field of ["evaluatedAt", "generatedAt", "asOf"] as const) {
+    assert(isIsoTime(candidate.candidate[field]), `candidate.${field} must be ISO time`);
+  }
+  assert(isRecord(candidate.payload), "candidate payload is required");
+  validateFactualPayload(candidate.payload);
+  return candidate;
 }
 
 export function validatePublicSnapshot(value: unknown): PublicSnapshot {
@@ -84,15 +142,19 @@ export function validatePublicSnapshot(value: unknown): PublicSnapshot {
   assert(candidate.snapshot?.publicationClass === "fixture" || candidate.snapshot?.publicationClass === "factual", "publicationClass must be fixture or factual");
   assert(!containsForbiddenFixtureFlag(candidate), "public isFixture field is prohibited");
   if (candidate.snapshot.publicationClass === "factual") {
-    validateFactual(candidate);
+    assert(candidate.snapshot.id.startsWith("factual-"), "factual snapshot ID must be factual-namespaced");
+    assert(Date.parse(candidate.snapshot.publishedAt) >= Date.parse(candidate.snapshot.generatedAt), "publishedAt cannot precede generation");
+    validateFactualPayload(candidate);
     return candidate;
   }
+  validatePublicHierarchy(candidate);
   assert(candidate.snapshot.id.startsWith("fixture-"), "snapshot ID must be fixture-namespaced");
   assert(candidate.systems.length === 10, "exactly ten top-level fixture systems required");
   assert(candidate.systems.every((system) => system.label.startsWith("SYNTHETIC TEST")), "system labels must be unmistakably synthetic");
-  const firstChildren = candidate.systems[0]?.children ?? [];
+  const registry = candidate.extensions["auxsays.phase2.navigationNodes"];
+  const firstChildren = candidate.systems[0]?.childRefs.map((reference) => registry[reference]) ?? [];
   assert(firstChildren.length >= 11, "fixture requires Top 10 plus a View All boundary candidate");
-  assert((firstChildren[0]?.children ?? []).length === 10, "fixture requires full 10 -> 10 -> 10 path");
+  assert(firstChildren[0].childRefs.length === 10, "fixture requires full 10 -> 10 -> 10 path");
   assert(firstChildren[9]?.nearTie === true && firstChildren[10]?.nearTie === true, "rank 10/11 near tie required");
   assert(firstChildren[10]?.nearCutoff === true, "rank 11 near-cutoff state required");
   const metrics = candidate.extensions?.["auxsays.phase2.metrics"];
