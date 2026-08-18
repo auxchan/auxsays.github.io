@@ -1,5 +1,22 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-17 — Phase-3 Data Integrity contract approval
+
+- Taylor accepted O-003: eight bounded registry indicators, with only six labor indicators and BLS CES/CPS/JOLTS plus DOL Weekly Claims in the first implementation slice; CPI-U and real GDP remain follow-on.
+- Taylor rejected O-004 and prohibited FRED/ALFRED pipeline use under current official terms covering software/system or machine-learning use and storage/cache/archive/database incorporation; no substitute aggregator was selected.
+- Replaced ALFRED Gate-A dependence with an original Tier-A DOL Weekly Claims advance/subsequent-revision release pair and independently proven publication times.
+- Corrected public-availability versus AUXSAYS retrieval/system-acceptance replay, same-value republication identity, snapshot-wide fixture/factual separation, current-rights atomic withdrawal, governed retention deletion/tombstones, independent analytical/model/commercial/export rights, terms fingerprints/rechecks, source quotas/limits/credential renewal, and URL/body/header secret redaction.
+- Promoted Data, Source, Ontology/Crosswalk, and Testing contracts to Taylor-approved BINDING 1.0.0 with canonical hashes; preserved 0.1.0 DRAFT history and did not amend `MASTER_SPEC.md` or any existing BINDING Phase-1/2 contract.
+- Advanced authority to the bounded Phase-3 implementation scope only. No API was called, data downloaded, dependency installed, database/Parquet created, factual snapshot activated, Phase-4/model work started, or push/merge/deploy performed.
+
+## 2026-08-17 — Phase-3 Data Integrity contract/design draft
+
+- Drafted `DATA_CONTRACT.md`, `SOURCE_CONTRACT.md`, `ONTOLOGY_CROSSWALK_CONTRACT.md`, and `TESTING_CONTRACT.md` at version `0.1.0`; all remain `DRAFT` pending Taylor review and promotion.
+- Created one coherent review design covering an MVP/LATER/DEFERRED source inventory, eight-indicator registry, six-indicator labor vertical slice, source health, logical bitemporal storage, versioned crosswalks, machine-enforced rights, atomic publication, idempotency, and Gate-A tests.
+- Recorded O-003/O-004 as OPEN Taylor approval decisions for initial scope and limited Tier-B ALFRED vintage evidence; no decision was accepted by engineering.
+- Updated contract/master indexes, guardrails, risks, roadmap, and authorization language without changing `MASTER_SPEC.md` or any BINDING contract.
+- No dependency was installed; no endpoint/API was called for data; no collector, downloaded dataset, database/Parquet file, job, factual snapshot, model, forecast, Phase-4 artifact, application/deployment/Patch Feed change, push, merge, or deploy occurred.
+
 ## 2026-08-17 — Phase-2 MVP Human UI QA closure
 
 - Taylor recorded the final Phase-2 verdict as **TECHNICAL IMPLEMENTATION: PASS** and **HUMAN UI/COMPREHENSION: PASS FOR MVP — VISUAL POLISH DEFERRED**.

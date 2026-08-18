@@ -4,6 +4,7 @@
 - Approved Phase-2 implementation base: `0cd8c2182cc93e339f857c82711f014b83b79292`
 - Implementation branch: `codex/systems-monitor-ui-shell`
 - Phase-2 correction HEAD accepted by Taylor for MVP: `7f1a64aa5dcdde652663e8673c8ef75dfb86473d`
+- Phase-2 closure commit before Phase-3 approval: `f0002b2e6d6f15f602c5fd1f7c1d66c158643275`
 - Repository remote: `https://github.com/auxchan/auxsays.github.io.git`
 
 Revalidate facts whose cited files changed after the validated commit.
@@ -65,6 +66,14 @@ Revalidate facts whose cited files changed after the validated commit.
 - TypeScript and 29 automated tests passed; existing ingestion-source, Patch Feed, consensus, and logo validations passed.
 - Windows Jekyll integration/static validation passed with an uncommitted `timezone: false` override because the existing local bundle lacks `tzinfo`; Ubuntu Pages uses the committed configuration. No deployment was performed.
 - The Round-1 correction commit `7f1a64a` raised measured typography floors, reduced visible copy, refined hierarchy/surfaces, passed 29 tests and local build/Jekyll/browser validation, and was accepted by Taylor as **PASS FOR MVP — VISUAL POLISH DEFERRED**. Hosted GitHub Actions execution remains an operational pre-merge/deployment proof obligation.
+
+## PHASE-3 APPROVED DATA-INTEGRITY BOUNDARY
+
+- Data, Source, Ontology/Crosswalk, and Testing contracts are Taylor-approved BINDING 1.0.0.
+- O-003 accepts eight bounded registry indicators and a six-indicator first slice using only BLS CES/CPS/JOLTS and DOL Weekly Claims. CPI-U and real GDP are follow-on registry items.
+- O-004 rejects FRED/ALFRED pipeline use under current terms; it is not an ingestion, archive, cross-check, fallback, replay, database/cache, model-feature, or training source.
+- Preferred Gate-A factual revision proof is an original DOL Weekly Claims advance release followed by the original subsequent release containing the revised value, with proven publication times and retained permitted provenance.
+- Phase-3 implementation authority ends before factual public activation and Phase 4. No API call, data download, dependency install, database/Parquet creation, public activation, push, merge, or deploy occurred in the approval task.
 
 ## UNKNOWN — establish in the affected phase
 

@@ -6,8 +6,11 @@ parent_master:
   source_sha256: "08895B471909DC600FC6AA5F373E2D6E16F457580A9BA141363ED210676397EA"
 approval_authority: Taylor
 phase_1_status: PASS
-current_authorized_work: Phase 2 UI shell implementation in a subsequent scoped task; exact-version dependency verification required; Phase 3 and deployment unauthorized
+current_authorized_work: Phase 3 Data Integrity implementation limited to six labor indicators using BLS CES/CPS/JOLTS and DOL Weekly Claims; FRED/ALFRED, CPI/GDP ingestion, factual public activation, Phase 4, push, merge, and deployment unauthorized
 approved_foundation_decisions: [D-001, D-002, D-003, D-004, D-005, D-006, D-007, D-008, D-009, D-010]
+phase_3_contract_status: PASS
+approved_phase_3_decisions: [O-003]
+rejected_phase_3_decisions: [O-004]
 post_v4_1_requirements:
   - id: D-009
     summary: Four-hour maximum MVP system-evaluation heartbeat with source-specific, release-aware, material-change behavior
@@ -130,3 +133,51 @@ contracts:
     depends_on: [product, ui_ux, release_acceptance]
     blocked_by: []
     blocks: ["public UI shell interaction acceptance"]
+  - id: data
+    path: contracts/DATA_CONTRACT.md
+    version: "1.0.0"
+    status: BINDING
+    approved_by: Taylor
+    approved_at: "2026-08-17"
+    content_hash: "78903F61546F7B27035ED28F3FA676C34D98347CE854AF5C0FD23F3CC1908237"
+    parent_master_version: "V4.1"
+    governing_master_sections: ["§27–32", "§35–37.1", "§61", "§64.1–64.12", "§65", "§67 Phase 3", "§68"]
+    depends_on: [architecture, infrastructure, public_data_interface, security_ingestion]
+    blocked_by: []
+    blocks: ["factual public activation until Gate A", "Phase 4 data use until later authorization"]
+  - id: source
+    path: contracts/SOURCE_CONTRACT.md
+    version: "1.0.0"
+    status: BINDING
+    approved_by: Taylor
+    approved_at: "2026-08-17"
+    content_hash: "9B7C0A51D5B1A7BA892DD7582230BDB2920A533417C20AE17C16A56AE8034FB1"
+    parent_master_version: "V4.1"
+    governing_master_sections: ["§27–31", "§34.1–36", "§37", "§61", "§64.1–64.12", "§65", "§67 Phase 3", "§68"]
+    depends_on: [architecture, infrastructure, security_ingestion, data]
+    blocked_by: []
+    blocks: ["FRED/ALFRED use", "CPI/GDP first-slice ingestion", "factual activation until Gate A"]
+  - id: ontology_crosswalk
+    path: contracts/ONTOLOGY_CROSSWALK_CONTRACT.md
+    version: "1.0.0"
+    status: BINDING
+    approved_by: Taylor
+    approved_at: "2026-08-17"
+    content_hash: "3322E9890E3DBFDC2597A092034A6E3DC9D0C4D5603AD89517684FE1F46D874B"
+    parent_master_version: "V4.1"
+    governing_master_sections: ["§31.1–31.6", "§32", "§37", "§61", "§64.1–64.12", "§65", "§67 Phase 3", "§68"]
+    depends_on: [data, source]
+    blocked_by: []
+    blocks: ["broad taxonomy/crosswalk implementation", "Gate A until evidence"]
+  - id: testing
+    path: contracts/TESTING_CONTRACT.md
+    version: "1.0.0"
+    status: BINDING
+    approved_by: Taylor
+    approved_at: "2026-08-17"
+    content_hash: "02BA2C0BB63FA2534C14BCCB33A3346D59B6BCFF6B366A8F23D882D311FB7835"
+    parent_master_version: "V4.1"
+    governing_master_sections: ["§29–32", "§34.1–35.5", "§38.2", "§61–64.1", "§64.2–64.12", "§65", "§67 Phase 3", "§68"]
+    depends_on: [data, source, ontology_crosswalk, security_ingestion, release_acceptance]
+    blocked_by: []
+    blocks: ["Gate A PASS until all required evidence", "factual public activation"]

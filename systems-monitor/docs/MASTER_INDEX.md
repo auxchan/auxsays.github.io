@@ -31,6 +31,22 @@ These requirements were established during final Foundation review after V4.1. T
 | O-001A/B/C/D and O-002 | `DECISIONS.md`; `PHASE2_UI_IMPLEMENTATION_DESIGN.md` §§6–10 | §38.1–38.2, §58–60, §67 Phase 2 |
 | Performance and tests | `PHASE2_UI_IMPLEMENTATION_DESIGN.md` §§11–12 | §58, §61, §63; Release Acceptance contract |
 
+## Phase-3 Data Integrity BINDING routing
+
+| Design concern | Phase-3 authoritative artifact | Master / binding context |
+|---|---|---|
+| Canonical observations, revisions, bitemporal reads, and publication | `contracts/DATA_CONTRACT.md` | §31–32, §35–37.1; Architecture, Infrastructure, Public Data Interface, Security Ingestion |
+| Source priority, registry, health, cadence, and collection boundary | `contracts/SOURCE_CONTRACT.md` | §27–31, §34.1–36; D-009/D-010 |
+| Versioned semantics and source-to-canonical mappings | `contracts/ONTOLOGY_CROSSWALK_CONTRACT.md` | §31.1–31.6, §32, §37 |
+| Gate-A test evidence | `contracts/TESTING_CONTRACT.md` | §61–64.1; Release Acceptance and Security Ingestion |
+| Source inventory and bounded indicator registry | `PHASE3_DATA_INTEGRITY_DESIGN.md` §§1–2 | §27–30, §65, §67 Phase 3 |
+| Storage, rights, atomicity, and idempotency | `PHASE3_DATA_INTEGRITY_DESIGN.md` §§3–7 | §31–32, §35.3–35.5, §68 |
+| Exact first vertical slice and test matrix | `PHASE3_DATA_INTEGRITY_DESIGN.md` §§8–10 | §61, §64.1, §65, §67 Phase 3 |
+| Resolved Phase-3 scope/rights decisions | `DECISIONS.md` O-003/O-004 | §27, §31, §64.4–64.8 |
+| Publicly-available vs operationally-known replay | Data DAT-003; Ontology ONT-004/014; Testing TST-005; design §4 | §31–31.2, §61, §68 |
+| Current-rights withdrawal and governed deletion | Data DAT-013/019/020; Testing TST-008/012; design §§6–7 | §31.6, §35.4–35.5, §61 |
+| First-slice source boundary and FRED/ALFRED prohibition | Source SRC-001/018/019; `DECISIONS.md` O-003/O-004; design §§1, 8 | §27–31 plus Taylor project decisions |
+
 ## Product and public experience
 
 | Concept | Authoritative V4.1 sections |
@@ -173,10 +189,10 @@ These requirements were established during final Foundation review after V4.1. T
 |---|---|---|
 | 1 Foundation | §0.2–0.3, §34.1–35.5, §37.1, §38.1–38.2, §64.1–64.12, §66–68 | Current task authorization |
 | 2 UI Shell | §2, §38–59, §67 Phase 2, §69 | PASS for implementation authority — Foundation and UI/Motion contracts BINDING; O-001C/O-001D Taylor-approved; use a scoped implementation task |
-| 3 Data Integrity | §27–32, §34–37.1, §67 Phase 3 | Data/Source/Ontology contracts approved |
+| 3 Data Integrity | §27–32, §34–37.1, §61, §67 Phase 3; four BINDING Phase-3 contracts | First-slice implementation authorized only for BLS CES/CPS/JOLTS + DOL claims and six accepted indicators; Gate A/activation approval still required |
 | 4 State/Dependency/Allocation | §6–14, §20–20.1, §67 Phase 4 | State/Dependency/Hidden Dependency/Allocation contracts approved |
 | 5 Forecasting | §15–21, §55.1–55.2, §67 Phase 5 | Forecast/Scenario/Calibration contracts approved and prior gates passed |
 | 6 Human Capital/Events | §22–26.3, §33–33.1, §67 Phase 6 | Subsystem contracts approved |
 | 7 Launch Hardening | §52.1–64.1, §67 Phase 7, §70 | Applicable gates and release contract passed |
 
-Current authorization after Taylor’s Phase-2 approval is **Phase 2 — UI Shell Implementation** in a subsequent scoped task under the BINDING UI/UX and Motion/Interaction contracts and accepted O-001A–O-001D/O-002 decisions. Exact dependency versions require verification before installation. Deployment and Phase-3 ingestion/data/model work remain unauthorized.
+Current authorization is **Phase 3 — Data Integrity implementation**, limited to BLS CES/CPS/JOLTS and DOL Weekly Claims for payrolls, U-3 unemployment, participation, initial claims, job openings, and hires. FRED/ALFRED and CPI/GDP ingestion are unauthorized. Current official endpoint/rights/limits discovery, bounded retrieval, local analytical storage evaluation, normalization, dual replay, health, DOL revision proof, idempotency, factual `OBS`/approved `CALC` candidate generation, and deterministic tests are allowed. Factual public activation, Phase 4+, permanent cloud, paid APIs, push, merge, and deployment remain unauthorized.

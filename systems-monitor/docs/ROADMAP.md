@@ -4,7 +4,7 @@ Status reflects both artifacts and authority. Taylor approved all seven Foundati
 
 ## Current phase
 
-Phase 3 — Data Integrity contract/design drafting only. Phase-2 technical implementation passed, and Taylor closed Human UI QA as **PASS FOR MVP — VISUAL POLISH DEFERRED**. The deferred polish debt remains tracked in R-018 and the Phase-2 QA record. Production ingestion/data implementation, deployment, and later-phase model work remain unauthorized.
+Phase 3 — Data Integrity implementation, limited to the Taylor-approved six-indicator first slice using BLS CES/CPS/JOLTS and DOL Weekly Claims. All four Phase-3 contracts are BINDING. FRED/ALFRED and CPI/GDP ingestion are not authorized; factual public activation still requires Gate-A/activation approval. Phase-2 deferred polish remains tracked in R-018.
 
 ## Phase-1 deliverables
 
@@ -48,13 +48,30 @@ Phase 3 — Data Integrity contract/design drafting only. Phase-2 technical impl
 | P2-011 | Chart library | UI accessibility/performance proof | Chart implementation | Implemented | `DEPENDENCY_VERIFICATION.md` | Recharts 3.10.1 gate passes with HTML/table equivalence |
 | P2-012 | Performance and test plan | Phase-2 contracts | Acceptance implementation | Complete for MVP | `systems-monitor/app/tests/` | 29 tests, production measurement, and Taylor MVP Human UI QA pass |
 
+## Phase-3 design deliverables
+
+| ID | Name | Required authority | Blocks what | Status | Artifact / path | Review result |
+|---|---|---|---|---|---|---|
+| P3-001 | Data contract | Taylor contract promotion | Data/storage implementation | BINDING 1.0.0 | `contracts/DATA_CONTRACT.md` | Taylor-approved 2026-08-17 after external-review corrections |
+| P3-002 | Source contract | Taylor contract promotion | Collector/source-health implementation | BINDING 1.0.0 | `contracts/SOURCE_CONTRACT.md` | Taylor-approved 2026-08-17; FRED/ALFRED prohibited |
+| P3-003 | Ontology/Crosswalk contract | Taylor contract promotion | Canonical mapping implementation | BINDING 1.0.0 | `contracts/ONTOLOGY_CROSSWALK_CONTRACT.md` | Taylor-approved 2026-08-17 |
+| P3-004 | Testing contract | Taylor contract promotion | Phase-3 test implementation / Gate A evidence | BINDING 1.0.0 | `contracts/TESTING_CONTRACT.md` | Taylor-approved 2026-08-17; DOL revision proof required |
+| P3-005 | Source inventory | Source contract; O-003/O-004 | Source enablement | Approved design | `PHASE3_DATA_INTEGRITY_DESIGN.md` §§1, 10 | First slice BLS/DOL only; CPI/BEA follow-on; FRED/ALFRED unauthorized |
+| P3-006 | Indicator registry | Data/Source contracts; O-003 | Normalization scope | Approved design | `PHASE3_DATA_INTEGRITY_DESIGN.md` §2 | Eight accepted; six enabled in first slice |
+| P3-007 | Storage/bitemporal design | Data contract | Storage implementation | Approved design | `PHASE3_DATA_INTEGRITY_DESIGN.md` §§3–4 | Dual replay semantics; logical/provider-neutral only |
+| P3-008 | Crosswalk architecture | Ontology/Crosswalk contract | Canonical mappings | Approved design | `PHASE3_DATA_INTEGRITY_DESIGN.md` §5 | Initial scope limited to slice semantics |
+| P3-009 | Rights enforcement plan | Data/Source/Security contracts | Factual publication | Approved design | `PHASE3_DATA_INTEGRITY_DESIGN.md` §6 | Independent rights, revocation/withdrawal, deletion/tombstone |
+| P3-010 | Atomic/idempotent publication design | Data/Infrastructure contracts | Factual activation | Approved design | `PHASE3_DATA_INTEGRITY_DESIGN.md` §7 | Candidate failure vs current-rights withdrawal; atomic pointer |
+| P3-011 | Exact vertical slice | All four Phase-3 contracts; O-003/O-004 | Gate A | Approved design | `PHASE3_DATA_INTEGRITY_DESIGN.md` §8 | Six labor indicators; Tier-A DOL revision proof |
+| P3-012 | Test plan | Testing contract | Gate A evidence | Approved design | `PHASE3_DATA_INTEGRITY_DESIGN.md` §9 | Deterministic matrix; no dependencies installed |
+
 ## Phase progression
 
 | Phase | Contract prerequisite | Implementation outcome | Gate |
 |---|---|---|---|
 | 1 Foundation | Current Master/task | Binding governance and boundaries | PASS — Taylor-approved after external review |
 | 2 UI Shell | Foundation and UI/Motion contracts BINDING; O-001C/O-001D approved | Isolated three-view shell using contract-valid, unmistakable fixtures | PASS for MVP — technical PASS and Taylor Human UI QA PASS; polish deferred |
-| 3 Data Integrity | Data/Source/Ontology/Testing contracts approved | Contract/design drafting is current authority; implementation later provides authoritative ingestion, bitemporal storage, source health, and publishable snapshots | Gate A |
+| 3 Data Integrity | Data/Source/Ontology/Testing contracts BINDING | Six-indicator BLS/DOL implementation may provide registry, retrieval, bitemporal storage, health, DOL revision proof, and factual candidate; no public activation before later approval | Gate A |
 | 4 Closed Vertical Slice | State/Dependency/Hidden Dependency/Allocation contracts approved | Observation-to-industry-effect proof | Gate B |
 | 5 Forecasting/Accountability | Forecast/Scenario/Calibration contracts approved | Baselines, forecasts, uncertainty, replay, attribution | Gate C |
 | 6 Human Capital/Events | Subsystem contracts approved | Three occupation proof cases and bounded event/experimental work | Gate D |
@@ -62,4 +79,4 @@ Phase 3 — Data Integrity contract/design drafting only. Phase-2 technical impl
 
 ## Next authorized work
 
-Draft the Phase-3 Data, Source, Ontology/Crosswalk, and Testing contracts plus the bounded source/indicator/storage/rights/vertical-slice design package. All new contracts remain `DRAFT` until Taylor promotion. **Do not implement collectors, storage, schedules, public factual replacement, forecasts, push, merge, or deployment.**
+Implement only the approved Phase-3 six-indicator BLS CES/CPS/JOLTS and DOL Weekly Claims slice under the four BINDING contracts. Current endpoint/rights/limits discovery, bounded retrieval, local raw/Parquet/DuckDB-or-equivalent evaluation, normalization, dual replay, source health, DOL revision proof, idempotency, factual candidate, and deterministic tests are authorized. **Do not use FRED/ALFRED, ingest CPI/GDP, activate factual data publicly, begin forecasts/Phase 4, choose cloud, buy an API, push, merge, or deploy without later authorization.**

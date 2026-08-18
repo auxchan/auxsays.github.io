@@ -97,19 +97,19 @@ Accepted decisions are authoritative below approved/BINDING contracts and above 
 ### O-001A — React application/package location
 
 - Classification: ENGINEERING IMPLEMENTATION CHOICE
-- Status: RESOLVED — 2026-08-17 design choice; not implemented
+- Status: RESOLVED / IMPLEMENTED — 2026-08-17
 - Selected choice: One isolated React/TypeScript package at repository-relative `systems-monitor/app/`.
 - Rationale: D-007 assigns `systems-monitor/` to product-owned source/config/tests, while `auxsays/package.json` is an existing site-tools package. Isolation avoids mixing dependency and ownership boundaries.
-- Affected future paths: `systems-monitor/app/package.json`, `systems-monitor/app/package-lock.json`, `systems-monitor/app/src/`, `systems-monitor/app/tests/`, and package-local config/scripts.
+- Implemented paths: `systems-monitor/app/package.json`, `systems-monitor/app/package-lock.json`, `systems-monitor/app/src/`, `systems-monitor/app/tests/`, and package-local config/scripts.
 - Compatibility implications: Commands and config must be repo-relative, work on Windows and Ubuntu/Node 24, emit `/systems-monitor/`-safe URLs, and avoid Patch Feed imports. No path was created by this decision.
 
 ### O-001B — Package-manager and lockfile strategy
 
 - Classification: ENGINEERING IMPLEMENTATION CHOICE
-- Status: RESOLVED — 2026-08-17 design choice; not implemented
+- Status: RESOLVED / IMPLEMENTED — 2026-08-17
 - Selected choice: npm with one committed `systems-monitor/app/package-lock.json`; future CI uses package-local `npm ci`.
 - Rationale: Node/npm already exists in the Pages environment, so this adds no package-manager bootstrap or repository-root workspace and gives deterministic isolated installs.
-- Affected future paths: `systems-monitor/app/package.json`, its lockfile, and package-local scripts/config.
+- Implemented paths: `systems-monitor/app/package.json`, its lockfile, and package-local scripts/config.
 - Compatibility implications: Pin supported Node/npm behavior, align with current Node 24 CI, and do not create a repository-root lockfile or merge app dependencies into `auxsays/package.json`. Exact dependency versions require a fresh audit before authorized installation.
 
 ### O-001C — Build-output ownership/location
@@ -132,7 +132,29 @@ Accepted decisions are authoritative below approved/BINDING contracts and above 
 ### O-002 — Phase-2 chart candidate
 
 - Classification: ENGINEERING IMPLEMENTATION CHOICE
-- Status: RESOLVED — 2026-08-17 design choice: Recharts for Phase-2 charts; exact version remains implementation-time verification
+- Status: RESOLVED / IMPLEMENTED — 2026-08-17: Recharts 3.10.1 passed exact-version verification
 - Selected choice: Recharts, because its React/TypeScript composition, responsive/reference primitives, default Recharts 3 accessibility layer, and documented keyboard data-point navigation best match the focused V1 shell.
 - Alternative: Apache ECharts remains viable for later large/complex visualization, but its documented ARIA capability is opt-in and does not establish equivalent keyboard data-point navigation for this requirement set.
-- Conditions: Do not install until exact-version license/transitive/security, React compatibility, accessibility, touch, customization, annotation, bundle, and performance proofs pass. Reopen and return the tradeoff to Taylor if they fail. Research is recorded in `PHASE2_UI_IMPLEMENTATION_DESIGN.md` §10.
+- Evidence: Exact-version license/transitive/security, React compatibility, accessibility, touch, customization, annotation, bundle, and performance proofs passed in the Phase-2 implementation records. Reopen and return the tradeoff to Taylor if a material regression later fails those requirements.
+
+## Phase-3 approval decisions
+
+### O-003 — Initial Data Integrity scope
+
+- Classification: TAYLOR APPROVAL DECISION
+- Status: ACCEPTED / RESOLVED — TAYLOR APPROVAL, 2026-08-17
+- Approved choice: Bound the initial registry to eight indicators: total nonfarm payrolls, U-3 unemployment, labor-force participation, initial claims, job openings, hires, CPI-U all items, and real GDP. The first implementation slice enables only the first six labor indicators from BLS CES/CPS/JOLTS and DOL Weekly Claims.
+- Reason: The slice is small enough to prove registry, health, revisions, bitemporal and mixed-frequency semantics, rights, idempotency, and factual-candidate publication without entering Phase 4 or forecasting.
+- Affected draft contracts: Data, Source, Ontology/Crosswalk, Testing
+- Follow-on boundary: CPI-U and real GDP remain approved registry items but are not first-slice ingestion requirements. Expansion beyond eight indicators requires subsequent approved scope.
+- Implementation effect: The six-indicator first slice may begin only after all four governing contracts are BINDING; factual public activation still requires Gate-A/activation approval.
+
+### O-004 — Tier-B ALFRED historical-vintage evidence
+
+- Classification: TAYLOR APPROVAL DECISION
+- Status: RESOLVED — REJECTED / NOT AUTHORIZED — TAYLOR, 2026-08-17
+- Rejected choice: FRED/ALFRED may not be used as an ingestion, archival/vintage, stored cross-check, numerical fallback, historical replay, model-feature/training, database, compilation, archive, or cache source under current terms.
+- Reason: Independent recheck of the official FRED Services/API terms on 2026-08-17 found prohibitions on software/system or machine-learning use and storing/caching/archiving/database incorporation that are materially incompatible with the planned AUXSAYS pipeline.
+- Affected contracts: Data, Source, Testing
+- Replacement proof: Gate A uses an original Tier-A DOL Weekly Claims advance release and the subsequent original release containing the revised value, with independently proven publication times and immutable provenance.
+- Reconsideration: Only explicit written permission or materially changed terms, a fresh rights review, and a new Taylor decision may reopen project use. No substitute aggregator is authorized by this rejection.
