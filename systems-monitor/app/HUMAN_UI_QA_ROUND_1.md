@@ -1,8 +1,16 @@
 # Phase-2 Human UI QA — Correction Round 1
 
-Status: **CORRECTIONS APPLIED — TAYLOR RE-REVIEW REQUIRED**
+Status: **PASS FOR MVP — VISUAL POLISH DEFERRED**
 
-Human verdict received: **CORRECTIONS REQUIRED**. This round does not claim PASS.
+Taylor final MVP verdict: **PASS FOR MVP — VISUAL POLISH DEFERRED**. The prior correction-round verdict was **CORRECTIONS REQUIRED**; the documented correction commit and review evidence closed that blocking gate without declaring the interface visually final.
+
+## Final Taylor disposition
+
+- Technical implementation: **PASS**.
+- Human UI/comprehension: **PASS FOR MVP — VISUAL POLISH DEFERRED**.
+- The prior blocked human acceptance gate is closed by explicit Taylor decision.
+- Hosted GitHub Actions execution remains pre-merge/deployment evidence, not a blocker to Phase-3 contract/design drafting.
+- No deployment is authorized by this acceptance.
 
 ## Review findings and disposition
 
@@ -65,6 +73,8 @@ Generated review evidence is local and intentionally not tracked under `systems-
 - `07-summary-mobile-390x844.jpg`
 - `08-outlook-mobile-390x844.jpg`
 
-## Re-review gate
+## Deferred non-blocking visual/product debt
 
-Taylor should re-review typography, chart readability, forecast-inspector hierarchy, rail scanning, copy density, and overall fidelity to the available textual visual direction. Exact mockup comparison cannot be closed until the authoritative image asset is supplied.
+The following remain visible refinement debt and must not be interpreted as completed or deleted: closer fidelity to the intended/reference mockup direction; further reduction of unnecessary visible copy; continued improvement to information density and progressive disclosure; additional typography refinement; stronger panel/inspector hierarchy; further mobile presentation refinement; higher-end visual polish; and a possible later dedicated UI refinement pass using another implementation agent/tool.
+
+These items are not Phase-3 blockers unless a later change creates a genuine readability, accessibility, semantic, or functional regression. Exact mockup comparison remains unavailable until an authoritative image asset is supplied.

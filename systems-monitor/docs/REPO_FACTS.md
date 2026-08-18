@@ -3,6 +3,7 @@
 - Inspected: 2026-08-17
 - Approved Phase-2 implementation base: `0cd8c2182cc93e339f857c82711f014b83b79292`
 - Implementation branch: `codex/systems-monitor-ui-shell`
+- Phase-2 correction HEAD accepted by Taylor for MVP: `7f1a64aa5dcdde652663e8673c8ef75dfb86473d`
 - Repository remote: `https://github.com/auxchan/auxsays.github.io.git`
 
 Revalidate facts whose cited files changed after the validated commit.
@@ -54,7 +55,7 @@ Revalidate facts whose cited files changed after the validated commit.
 - O-001A/O-001B implemented: isolated npm package and package-local committed lockfile at `systems-monitor/app/`.
 - O-001C implemented: Systems-Monitor-owned content-hashed output is generated uncommitted through exact bounded staging/composition paths with safe cleanup and manifest/output equality checks.
 - O-001D implemented: the existing single Pages build job builds/validates the UI before Jekyll and verifies the final static route before artifact upload.
-- O-002 implementation proof passed for Recharts 3.10.1 with explicit native point controls and table equivalents; manual assistive-technology/comprehension acceptance remains pending.
+- O-002 implementation proof passed for Recharts 3.10.1 with explicit native point controls and table equivalents; Taylor accepted Human UI/comprehension for MVP with further polish deferred.
 
 ## PHASE-2 IMPLEMENTATION EVIDENCE
 
@@ -63,6 +64,7 @@ Revalidate facts whose cited files changed after the validated commit.
 - Production output on 2026-08-17: eight content-hashed assets, 630,953 raw bytes, 183,867 gzip bytes, and 155,406 Brotli bytes.
 - TypeScript and 29 automated tests passed; existing ingestion-source, Patch Feed, consensus, and logo validations passed.
 - Windows Jekyll integration/static validation passed with an uncommitted `timezone: false` override because the existing local bundle lacks `tzinfo`; Ubuntu Pages uses the committed configuration. No deployment was performed.
+- The Round-1 correction commit `7f1a64a` raised measured typography floors, reduced visible copy, refined hierarchy/surfaces, passed 29 tests and local build/Jekyll/browser validation, and was accepted by Taylor as **PASS FOR MVP — VISUAL POLISH DEFERRED**. Hosted GitHub Actions execution remains an operational pre-merge/deployment proof obligation.
 
 ## UNKNOWN — establish in the affected phase
 

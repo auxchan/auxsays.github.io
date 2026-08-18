@@ -19,11 +19,11 @@ Always read this file before Systems Monitor work. The authoritative source is `
 15. Public publication must be atomic; a failed refresh leaves the last valid snapshot live.
 16. Core operation must not depend on continuous external LLM availability, and LLM output may not directly mutate accepted production relationships.
 
-Current authorized work: **Phase 2 — UI Shell Implementation**, beginning only after the correction/promotion documentation commit completes successfully and within a subsequent scoped implementation task.
+Current authorized work: **Phase 3 — Data Integrity contract/design drafting only**, after Taylor accepted the Phase-2 technical implementation and Human UI QA for MVP with visual polish deferred.
 
-Authorized in that subsequent task: `systems-monitor/app/`, package-local npm manifest/lockfile, exact-version-verified approved frontend dependencies, contract-valid synthetic fixtures, React shell/views/components, D-008 routing/query state, scoped styles/tokens, accessibility/responsive behavior, approved Recharts integration, bounded Trace, minimal approved Jekyll/Pages integration, and Phase-2 tests.
+Authorized now: governance/evidence closure; DRAFT `DATA_CONTRACT.md`, `SOURCE_CONTRACT.md`, `ONTOLOGY_CROSSWALK_CONTRACT.md`, and `TESTING_CONTRACT.md`; and a small coherent Phase-3 design package for source inventory, bounded indicator registry, storage/bitemporal semantics, data rights, atomic publication, vertical slice, and tests.
 
-**THIS APPROVAL TASK ENDS BEFORE IMPLEMENTATION.** Phase-2 implementation must follow the BINDING UI/UX and Motion/Interaction contracts, the accepted O-001A–O-001D/O-002 decisions, exact-version dependency verification, and a separately scoped task. Deployment, Phase-3 ingestion/data/model work, and factual economic/forecast claims remain unauthorized.
+**THIS AUTHORITY ENDS BEFORE PHASE-3 IMPLEMENTATION.** Do not create collectors, fetch/download real data, add dependencies, create databases/datasets/jobs/APIs, modify deployment, replace fixtures, or create real forecasts/models. Taylor alone may promote the four Phase-3 contracts. Phase-2 visual debt remains deferred and non-blocking unless later work creates a real regression.
 
 Current Phase-2 decision state:
 

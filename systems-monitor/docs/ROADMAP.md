@@ -4,7 +4,7 @@ Status reflects both artifacts and authority. Taylor approved all seven Foundati
 
 ## Current phase
 
-Phase 2 — UI Shell Implementation. The authorized technical shell, synthetic fixture, tests, and minimal Jekyll/Pages integration are implemented on `codex/systems-monitor-ui-shell`. Automated/local technical validation passes; Taylor human UI/comprehension review remains PENDING. Deployment and Phase-3 ingestion/data/model work remain unauthorized.
+Phase 3 — Data Integrity contract/design drafting only. Phase-2 technical implementation passed, and Taylor closed Human UI QA as **PASS FOR MVP — VISUAL POLISH DEFERRED**. The deferred polish debt remains tracked in R-018 and the Phase-2 QA record. Production ingestion/data implementation, deployment, and later-phase model work remain unauthorized.
 
 ## Phase-1 deliverables
 
@@ -40,21 +40,21 @@ Phase 2 — UI Shell Implementation. The authorized technical shell, synthetic f
 | P2-003 | Component/module architecture | UI/UX contract | Application structure | Implemented | `systems-monitor/app/src/` | Proportional shared shell + lazy views/Trace |
 | P2-004 | Canonical query-state routing | D-008; UI/UX contract | Router/state implementation | Implemented | `systems-monitor/app/src/state/` | Canonical/direct/history/invalid-path tests pass |
 | P2-005 | Public fixture design | Public Data Interface; UI/UX contract | Fixture implementation | Implemented | `systems-monitor/app/src/fixtures/` | Runtime schema and fixture-boundary tests pass |
-| P2-006 | Tokens/responsive/accessibility | UI/UX and Motion contracts | Presentation implementation | Technical proof complete | `systems-monitor/app/src/styles.css` | Isolation/tests/browser proof pass; human QA pending |
+| P2-006 | Tokens/responsive/accessibility | UI/UX and Motion contracts | Presentation implementation | Complete for MVP | `systems-monitor/app/src/styles.css` | Technical proof and Taylor MVP Human UI QA pass; polish deferred |
 | P2-007 | Package location | D-007 | App package creation | Implemented | `systems-monitor/app/` | Isolated package exists |
 | P2-008 | Package manager/lockfile | Repository conventions | Dependency installation | Implemented | `systems-monitor/app/package-lock.json` | Exact npm lock committed locally |
 | P2-009 | Build-output ownership | Taylor O-001C | Build/Jekyll composition | Implemented | `systems-monitor/app/scripts/` | Safe clean, hashed manifest/output equality, ignored composition pass |
 | P2-010 | Pages integration | Taylor O-001D | Workflow modification | Implemented locally | `.github/workflows/pages.yml` | Single-job order retained; hosted run awaits future push |
 | P2-011 | Chart library | UI accessibility/performance proof | Chart implementation | Implemented | `DEPENDENCY_VERIFICATION.md` | Recharts 3.10.1 gate passes with HTML/table equivalence |
-| P2-012 | Performance and test plan | Phase-2 contracts | Acceptance implementation | Implemented | `systems-monitor/app/tests/` | 29 tests and production measurement pass; human QA pending |
+| P2-012 | Performance and test plan | Phase-2 contracts | Acceptance implementation | Complete for MVP | `systems-monitor/app/tests/` | 29 tests, production measurement, and Taylor MVP Human UI QA pass |
 
 ## Phase progression
 
 | Phase | Contract prerequisite | Implementation outcome | Gate |
 |---|---|---|---|
 | 1 Foundation | Current Master/task | Binding governance and boundaries | PASS — Taylor-approved after external review |
-| 2 UI Shell | Foundation and UI/Motion contracts BINDING; O-001C/O-001D approved | Current authorization is a subsequent scoped isolated three-view shell using contract-valid, unmistakable fixtures | UI architecture/accessibility/routing/comprehension checks |
-| 3 Data Integrity | Data/Source/Ontology contracts approved | Authoritative ingestion, bitemporal storage, source health, publishable snapshots | Gate A |
+| 2 UI Shell | Foundation and UI/Motion contracts BINDING; O-001C/O-001D approved | Isolated three-view shell using contract-valid, unmistakable fixtures | PASS for MVP — technical PASS and Taylor Human UI QA PASS; polish deferred |
+| 3 Data Integrity | Data/Source/Ontology/Testing contracts approved | Contract/design drafting is current authority; implementation later provides authoritative ingestion, bitemporal storage, source health, and publishable snapshots | Gate A |
 | 4 Closed Vertical Slice | State/Dependency/Hidden Dependency/Allocation contracts approved | Observation-to-industry-effect proof | Gate B |
 | 5 Forecasting/Accountability | Forecast/Scenario/Calibration contracts approved | Baselines, forecasts, uncertainty, replay, attribution | Gate C |
 | 6 Human Capital/Events | Subsystem contracts approved | Three occupation proof cases and bounded event/experimental work | Gate D |
@@ -62,4 +62,4 @@ Phase 2 — UI Shell Implementation. The authorized technical shell, synthetic f
 
 ## Next authorized work
 
-Complete Taylor's Phase-2 human visual/comprehension review using `systems-monitor/app/HUMAN_QA_CHECKLIST.md`, then make only resulting Phase-2 corrections if authorized. **Do not begin Phase-3 ingestion/data/model work, factual forecasts, push, merge, or deployment.**
+Draft the Phase-3 Data, Source, Ontology/Crosswalk, and Testing contracts plus the bounded source/indicator/storage/rights/vertical-slice design package. All new contracts remain `DRAFT` until Taylor promotion. **Do not implement collectors, storage, schedules, public factual replacement, forecasts, push, merge, or deployment.**
