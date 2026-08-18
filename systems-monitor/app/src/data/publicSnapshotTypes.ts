@@ -1,6 +1,6 @@
 export type StateType = "OBS" | "CALC" | "FCST" | "SCEN";
 export type PrimaryView = "summary" | "verified" | "outlook";
-export type FreshnessState = "current" | "delayed" | "stale";
+export type FreshnessState = "current" | "delayed" | "stale" | "unavailable" | "schema_format_changed" | "validation_failed" | "rights_blocked";
 export type RelationshipClass = "Direct" | "Statistical" | "Modeled" | "Hypothesis";
 export type HorizonId = "current-year" | "next-year" | "plus-3-years";
 
@@ -47,7 +47,7 @@ export interface MetricRecord {
   label: string;
   value: number;
   displayValue: string;
-  unit: "synthetic-index-points";
+  unit: string;
   validTime: string;
   sourceRefs: string[];
   provenanceRefs: string[];

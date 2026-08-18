@@ -22,9 +22,10 @@ interface ChartFrameProps {
   data: MetricPoint[];
   unit: string;
   pressures?: { positive: string; offsetting: string };
+  publicationClass?: "fixture" | "factual";
 }
 
-export function ChartFrame({ title, description, stateType, data, unit, pressures }: ChartFrameProps) {
+export function ChartFrame({ title, description, stateType, data, unit, pressures, publicationClass = "fixture" }: ChartFrameProps) {
   const id = useId().replaceAll(":", "");
   const reducedMotion = useReducedMotion();
   const [selected, setSelected] = useState(data.at(-1) ?? data[0]);
@@ -60,7 +61,7 @@ export function ChartFrame({ title, description, stateType, data, unit, pressure
           <YAxis tick={{ fill: "var(--aux-sm-text-muted)", fontSize: 13 }} tickLine={false} axisLine={false} width={42} />
           <Tooltip contentStyle={{ background: "#101a2a", border: "1px solid #2d445d", borderRadius: 0, fontSize: 14 }} labelStyle={{ color: "#e8f4f6" }} />
           {chartData.some((point) => point.range) && <Area dataKey="range" stroke="none" fill="var(--aux-sm-chart-range)" fillOpacity={0.32} isAnimationActive={!reducedMotion} />}
-          <ReferenceLine x={chartData.at(-1)?.displayPeriod} stroke="var(--aux-sm-line-reference)" strokeDasharray="2 4" label={{ value: "Current fixture", fill: "var(--aux-sm-text-muted)", fontSize: 12 }} />
+          <ReferenceLine x={chartData.at(-1)?.displayPeriod} stroke="var(--aux-sm-line-reference)" strokeDasharray="2 4" label={{ value: publicationClass === "factual" ? "Latest observation" : "Current fixture", fill: "var(--aux-sm-text-muted)", fontSize: 12 }} />
           <Line dataKey="value" type="monotone" stroke="var(--aux-sm-chart-primary)" strokeWidth={3} dot={{ r: 4, fill: "var(--aux-sm-canvas)", strokeWidth: 2 }} activeDot={{ r: 6 }} isAnimationActive={!reducedMotion} />
         </ComposedChart>
       </div>
@@ -71,7 +72,7 @@ export function ChartFrame({ title, description, stateType, data, unit, pressure
       <details className="sm-data-table">
         <summary>Data table</summary>
         <div className="sm-table-scroll" role="region" aria-label={`${title} table`} tabIndex={0}>
-          <table><caption>{title} — synthetic fixture values</caption><thead><tr><th>Period</th><th>State</th><th>Value</th><th>Range</th></tr></thead><tbody>{data.map((point) => <tr key={point.period}><th scope="row">{point.displayPeriod}</th><td><DataStateLabel state={stateType} /></td><td>{point.value} {unit}</td><td>{point.rangeLow === undefined ? "Not applicable" : `${point.rangeLow}–${point.rangeHigh} ${unit}`}</td></tr>)}</tbody></table>
+          <table><caption>{title} — {publicationClass === "factual" ? "local factual candidate values" : "synthetic fixture values"}</caption><thead><tr><th>Period</th><th>State</th><th>Value</th><th>Range</th></tr></thead><tbody>{data.map((point) => <tr key={point.period}><th scope="row">{point.displayPeriod}</th><td><DataStateLabel state={stateType} /></td><td>{point.value} {unit}</td><td>{point.rangeLow === undefined ? "Not applicable" : `${point.rangeLow}–${point.rangeHigh} ${unit}`}</td></tr>)}</tbody></table>
         </div>
       </details>
     </section>

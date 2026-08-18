@@ -22,8 +22,18 @@ export function validatePublicSnapshot(value: unknown): PublicSnapshot {
   const candidate = value as PublicSnapshot;
   assert(candidate.schemaVersion === "1.0.0", "unsupported schemaVersion");
   assert(candidate.contractVersion === "1.0.0", "unsupported contractVersion");
-  assert(candidate.snapshot?.publicationClass === "fixture", "Phase-2 payload must be fixture");
+  assert(candidate.snapshot?.publicationClass === "fixture" || candidate.snapshot?.publicationClass === "factual", "publicationClass must be fixture or factual");
   assert(!containsForbiddenFixtureFlag(candidate), "public isFixture field is prohibited");
+  if (candidate.snapshot.publicationClass === "factual") {
+    assert(candidate.snapshot.id.startsWith("factual-local-"), "factual snapshot must be local-review namespaced");
+    const metrics = candidate.extensions?.["auxsays.phase2.metrics"];
+    assert(Array.isArray(metrics) && metrics.length === 6, "factual first slice requires six observations");
+    assert(metrics.every((metric) => metric.stateType === "OBS"), "factual first slice permits OBS only");
+    assert(candidate.events.length === 0, "factual first slice cannot contain events");
+    assert(candidate.outlook.forecasts.length === 0 && candidate.outlook.industries.length === 0 && candidate.outlook.occupations.length === 0 && candidate.outlook.demandAllocation.length === 0, "factual first slice cannot contain Outlook or ranking claims");
+    assert(Object.values(candidate.sources).every((source) => source.publicDisplayAllowed && !source.provider.startsWith("SYNTHETIC TEST")), "factual sources must be rights-cleared original authorities");
+    return candidate;
+  }
   assert(candidate.snapshot.id.startsWith("fixture-"), "snapshot ID must be fixture-namespaced");
   for (const field of ["evaluatedAt", "generatedAt", "publishedAt", "asOf"] as const) {
     assert(isIsoTime(candidate.snapshot[field]), `snapshot.${field} must be ISO time`);

@@ -17,7 +17,9 @@ export function FreshnessLabel({ state }: { state: FreshnessState }) {
 function allowlistedUrl(value: string): string | null {
   try {
     const url = new URL(value, "https://auxsays.com");
-    if (url.protocol !== "https:" || url.hostname !== "auxsays.com") return null;
+    const host = url.hostname.toLowerCase();
+    const allowed = host === "auxsays.com" || host.endsWith(".bls.gov") || host === "bls.gov" || host.endsWith(".dol.gov") || host === "dol.gov" || host.endsWith(".doleta.gov") || host === "doleta.gov";
+    if (url.protocol !== "https:" || !allowed || url.username || url.password) return null;
     return url.toString();
   } catch {
     return null;
@@ -32,4 +34,8 @@ export function SourceEvidenceLink({ href, children }: { href: string; children:
 
 export function FixtureNotice({ compact = false }: { compact?: boolean }) {
   return <div className={compact ? "sm-fixture-notice sm-fixture-notice--compact" : "sm-fixture-notice"} role="note"><strong>SYNTHETIC TEST DATA</strong><span>NOT A PUBLIC CLAIM</span></div>;
+}
+
+export function FactualCandidateNotice({ compact = false }: { compact?: boolean }) {
+  return <div className={compact ? "sm-fixture-notice sm-fixture-notice--compact" : "sm-fixture-notice"} role="note"><strong>LOCAL FACTUAL CANDIDATE</strong><span>NOT PUBLICLY ACTIVATED · HUMAN QA PENDING</span></div>;
 }
