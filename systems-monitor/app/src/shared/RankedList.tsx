@@ -4,7 +4,7 @@ import type { NavigationNode, RankedHumanCapitalItem } from "../data/publicSnaps
 type RankedItem = NavigationNode | RankedHumanCapitalItem;
 
 function itemValue(item: RankedItem) {
-  return "displayValue" in item ? item.displayValue : `${item.stateSummaryRefs.length} synthetic state references`;
+  return "displayValue" in item ? item.displayValue : `${item.stateSummaryRefs.length} state references`;
 }
 
 export function RankedList({
@@ -27,12 +27,12 @@ export function RankedList({
         {visible.map((item) => (
           <li key={item.id} className={item.nearTie ? "is-near-tie" : ""}>
             <div className="sm-rank-number">#{item.rank}</div>
-            <div className="sm-rank-copy"><strong>{item.label}</strong><span>{itemValue(item)}</span><small>Prior #{item.priorRank ?? "—"}{item.nearTie ? " · Near tie" : ""}{item.nearCutoff ? " · Near cutoff" : ""} · Fixture evidence</small></div>
+            <div className="sm-rank-copy"><strong>{item.label.replace("SYNTHETIC TEST ", "")}</strong><span>{itemValue(item)}</span><small>Prior #{item.priorRank ?? "—"}{item.nearTie ? " · Near tie" : ""}{item.nearCutoff ? " · Near cutoff" : ""}</small></div>
             {onSelect && <button type="button" onClick={() => onSelect(item)} aria-label={`${selectionLabel} ${item.label}`}>{selectionLabel}</button>}
           </li>
         ))}
       </ol>
-      {items.length > 10 && <button className="sm-view-all" type="button" onClick={() => setViewAll((value) => !value)}>{viewAll ? "Show Top 10" : `View All ${items.length}`}<span>Ranks 10 and 11 are supplied as effectively tied in this fixture.</span></button>}
+      {items.length > 10 && <button className="sm-view-all" type="button" onClick={() => setViewAll((value) => !value)}>{viewAll ? "Show Top 10" : `View All ${items.length}`}<span>Ranks 10–11 are effectively tied.</span></button>}
     </section>
   );
 }

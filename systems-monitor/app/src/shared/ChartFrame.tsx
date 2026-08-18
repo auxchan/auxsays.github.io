@@ -1,7 +1,7 @@
 import { useEffect, useId, useMemo, useState } from "react";
 import { Area, CartesianGrid, ComposedChart, Line, ReferenceLine, Tooltip, XAxis, YAxis } from "recharts";
 import type { MetricPoint, StateType } from "../data/publicSnapshotTypes";
-import { DataStateLabel, FixtureNotice } from "./Semantic";
+import { DataStateLabel } from "./Semantic";
 
 function useReducedMotion() {
   const [reduced, setReduced] = useState(() => window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false);
@@ -39,7 +39,7 @@ export function ChartFrame({ title, description, stateType, data, unit, pressure
         <div><span className="sm-eyebrow">Primary analytical view</span><h3 id={`${id}-title`}>{title}</h3></div>
         <DataStateLabel state={stateType} />
       </div>
-      <p id={`${id}-description`} className="sm-chart-description">{description}</p>
+      <p id={`${id}-description`} className="sm-sr-only">{description}</p>
       <p className="sm-chart-selection" aria-live="polite"><strong>{selected?.displayPeriod}</strong> · {selected?.value} {unit}</p>
       <div className="sm-chart-visual">
         <ComposedChart
@@ -56,11 +56,11 @@ export function ChartFrame({ title, description, stateType, data, unit, pressure
           }}
         >
           <CartesianGrid stroke="var(--aux-sm-line-grid)" strokeDasharray="3 6" vertical={false} />
-          <XAxis dataKey="displayPeriod" tick={{ fill: "var(--aux-sm-text-muted)", fontSize: 11 }} tickLine={false} axisLine={{ stroke: "var(--aux-sm-line)" }} />
-          <YAxis tick={{ fill: "var(--aux-sm-text-muted)", fontSize: 11 }} tickLine={false} axisLine={false} width={38} />
-          <Tooltip contentStyle={{ background: "#101a2a", border: "1px solid #2d445d", borderRadius: 4 }} labelStyle={{ color: "#e8f4f6" }} />
+          <XAxis dataKey="displayPeriod" tick={{ fill: "var(--aux-sm-text-muted)", fontSize: 13 }} tickLine={false} axisLine={{ stroke: "var(--aux-sm-line)" }} />
+          <YAxis tick={{ fill: "var(--aux-sm-text-muted)", fontSize: 13 }} tickLine={false} axisLine={false} width={42} />
+          <Tooltip contentStyle={{ background: "#101a2a", border: "1px solid #2d445d", borderRadius: 0, fontSize: 14 }} labelStyle={{ color: "#e8f4f6" }} />
           {chartData.some((point) => point.range) && <Area dataKey="range" stroke="none" fill="var(--aux-sm-chart-range)" fillOpacity={0.32} isAnimationActive={!reducedMotion} />}
-          <ReferenceLine x={chartData.at(-1)?.displayPeriod} stroke="var(--aux-sm-line-reference)" strokeDasharray="2 4" label={{ value: "Current fixture", fill: "var(--aux-sm-text-muted)", fontSize: 10 }} />
+          <ReferenceLine x={chartData.at(-1)?.displayPeriod} stroke="var(--aux-sm-line-reference)" strokeDasharray="2 4" label={{ value: "Current fixture", fill: "var(--aux-sm-text-muted)", fontSize: 12 }} />
           <Line dataKey="value" type="monotone" stroke="var(--aux-sm-chart-primary)" strokeWidth={3} dot={{ r: 4, fill: "var(--aux-sm-canvas)", strokeWidth: 2 }} activeDot={{ r: 6 }} isAnimationActive={!reducedMotion} />
         </ComposedChart>
       </div>
@@ -69,12 +69,11 @@ export function ChartFrame({ title, description, stateType, data, unit, pressure
       </div>
       {pressures && <p className="sm-chart-pressure"><strong>Strongest positive:</strong> {pressures.positive} <span aria-hidden="true">·</span> <strong>Strongest offset:</strong> {pressures.offsetting}</p>}
       <details className="sm-data-table">
-        <summary>View accessible data table</summary>
+        <summary>Data table</summary>
         <div className="sm-table-scroll" role="region" aria-label={`${title} table`} tabIndex={0}>
           <table><caption>{title} — synthetic fixture values</caption><thead><tr><th>Period</th><th>State</th><th>Value</th><th>Range</th></tr></thead><tbody>{data.map((point) => <tr key={point.period}><th scope="row">{point.displayPeriod}</th><td><DataStateLabel state={stateType} /></td><td>{point.value} {unit}</td><td>{point.rangeLow === undefined ? "Not applicable" : `${point.rangeLow}–${point.rangeHigh} ${unit}`}</td></tr>)}</tbody></table>
         </div>
       </details>
-      <FixtureNotice compact />
     </section>
   );
 }

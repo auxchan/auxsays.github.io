@@ -1,6 +1,8 @@
 # Phase-2 Human UI / Comprehension Review
 
-Status: **PENDING TAYLOR REVIEW**
+Status: **ROUND-1 CORRECTIONS APPLIED — TAYLOR RE-REVIEW REQUIRED**
+
+The first Taylor visual review returned **CORRECTIONS REQUIRED**. The focused typography, hierarchy, surface, chart-label, rail-readability, and progressive-disclosure corrections are implemented and technically validated. A human PASS is not claimed; Taylor re-review remains the acceptance gate. See `HUMAN_UI_QA_ROUND_1.md` for measurements, copy audit, reference status, and screenshot evidence.
 
 Run the production build and Jekyll preview, then review `/systems-monitor/` at desktop and narrow/mobile widths. Record PASS/FAIL and one short note for each item.
 

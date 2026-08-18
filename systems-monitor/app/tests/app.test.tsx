@@ -20,13 +20,14 @@ describe("Systems Monitor shell", () => {
   it("navigates views and writes URL state", async () => {
     renderApp();
     fireEvent.click(await screen.findByRole("button", { name: /Outlook/ }));
-    expect(await screen.findByRole("heading", { name: /Ranges, evidence/ })).toBeTruthy();
+    expect(await screen.findByRole("heading", { name: /Ranges with evidence/ })).toBeTruthy();
     expect(window.location.search).toBe("?view=outlook");
     fireEvent.click(screen.getByRole("button", { name: /Next Year/ }));
     expect(window.location.search).toContain("horizon=next-year");
-    fireEvent.click(screen.getByRole("button", { name: /Open bounded Trace/ }));
-    expect(await screen.findByRole("heading", { name: "Synthetic relationship path" })).toBeTruthy();
-    expect(screen.getAllByRole("button", { name: /SYNTHETIC TEST/ }).length).toBeGreaterThanOrEqual(6);
+    fireEvent.click(screen.getByRole("button", { name: /Open Trace/ }));
+    const traceHeading = await screen.findByRole("heading", { name: "Synthetic relationship path" });
+    const trace = traceHeading.closest("section") as HTMLElement;
+    expect(within(trace).getAllByRole("button", { name: /OBS|CALC|FCST|SCEN/ })).toHaveLength(6);
   });
 
   it("drills through ranked hierarchy and supports browser history", async () => {
@@ -63,7 +64,7 @@ describe("Systems Monitor shell", () => {
   it("exposes View All, near-cutoff context, full hierarchy, and breadcrumbs", async () => {
     renderApp();
     fireEvent.click(await screen.findByRole("button", { name: /View All 11/ }));
-    expect(screen.getByText("SYNTHETIC TEST DRIVER 11")).toBeTruthy();
+    expect(screen.getByText("DRIVER 11")).toBeTruthy();
     expect(screen.getByText(/Prior #11 · Near tie · Near cutoff/)).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: /Drill in SYNTHETIC TEST DRIVER 01/ }));
     fireEvent.click(await screen.findByRole("button", { name: /Drill in SYNTHETIC TEST FACTOR 01/ }));
@@ -76,7 +77,7 @@ describe("Systems Monitor shell", () => {
     renderApp();
     const chart = await screen.findByRole("region", { name: "Synthetic state trajectory" });
     expect(within(chart).getAllByRole("button", { name: /Synthetic period/ })).toHaveLength(6);
-    fireEvent.click(within(chart).getByText("View accessible data table"));
+    fireEvent.click(within(chart).getByText("Data table"));
     expect(within(chart).getByRole("table", { name: /synthetic fixture values/ })).toBeTruthy();
   });
 

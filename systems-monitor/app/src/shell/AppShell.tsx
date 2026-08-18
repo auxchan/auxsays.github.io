@@ -4,12 +4,12 @@ import { breadcrumbNodes, type RouteState } from "../state/routeSchema";
 import { FixtureNotice, FreshnessLabel } from "../shared/Semantic";
 
 export function PrimaryViewSwitcher({ view, onChange }: { view: PrimaryView; onChange: (view: PrimaryView) => void }) {
-  const views: Array<[PrimaryView, string, string]> = [
-    ["summary", "Summary", "Current state and context"],
-    ["verified", "Verified Data", "Evidence and provenance"],
-    ["outlook", "Outlook", "Synthetic forecast ranges"]
+  const views: Array<[PrimaryView, string]> = [
+    ["summary", "Summary"],
+    ["verified", "Verified Data"],
+    ["outlook", "Outlook"]
   ];
-  return <nav className="sm-view-switcher" aria-label="Systems Monitor views">{views.map(([id, label, detail]) => <button key={id} type="button" aria-current={view === id ? "page" : undefined} className={view === id ? "is-active" : ""} onClick={() => onChange(id)}><strong>{label}</strong><span>{detail}</span></button>)}</nav>;
+  return <nav className="sm-view-switcher" aria-label="Systems Monitor views">{views.map(([id, label]) => <button key={id} type="button" aria-current={view === id ? "page" : undefined} className={view === id ? "is-active" : ""} onClick={() => onChange(id)}><strong>{label}</strong></button>)}</nav>;
 }
 
 export function SystemRail({ systems, selected, onSelect }: { systems: NavigationNode[]; selected: string; onSelect: (slug: string) => void }) {
@@ -71,5 +71,5 @@ export function AppShell({ children, snapshot, route, navigate, variant, setVari
   variant: FixtureVariant;
   setVariant: (variant: FixtureVariant) => void;
 }) {
-  return <div className="sm-app-shell"><a className="sm-skip" href="#systems-monitor-content">Skip to analysis</a><FixtureNotice /><header className="sm-product-header"><div><a className="sm-parent-brand" href="/">AUXSAYS <span>/ U.S. Systems Monitor</span></a><p>Evidence-led system context and synthetic predictive UI proof.</p></div><ExploreSearch snapshot={snapshot} onSelect={(result) => navigate((current) => ({ ...current, view: result.view, system: result.system ?? current.system, path: result.path ?? [] }))} /></header><PrimaryViewSwitcher view={route.view} onChange={(view) => navigate((current) => ({ ...current, view, horizon: view === "outlook" ? current.horizon : "current-year", scenario: view === "outlook" ? current.scenario : "baseline" }))} /><ContextBreadcrumbs snapshot={snapshot} route={route} onPath={(path) => navigate((current) => ({ ...current, path }))} />{route.notice && <p className="sm-route-notice" role="status">{route.notice}</p>}<SystemHealthSummary snapshot={snapshot} variant={variant} setVariant={setVariant} /><div className="sm-workspace"><SystemRail systems={snapshot.systems} selected={route.system} onSelect={(system) => navigate((current) => ({ ...current, system, path: [] }))} /><main id="systems-monitor-content" className="sm-view-region" tabIndex={-1}>{children}</main></div></div>;
+  return <div className="sm-app-shell"><a className="sm-skip" href="#systems-monitor-content">Skip to analysis</a><FixtureNotice /><header className="sm-product-header"><div><a className="sm-parent-brand" href="/">AUXSAYS <span>/ U.S. Systems Monitor</span></a></div><ExploreSearch snapshot={snapshot} onSelect={(result) => navigate((current) => ({ ...current, view: result.view, system: result.system ?? current.system, path: result.path ?? [] }))} /></header><PrimaryViewSwitcher view={route.view} onChange={(view) => navigate((current) => ({ ...current, view, horizon: view === "outlook" ? current.horizon : "current-year", scenario: view === "outlook" ? current.scenario : "baseline" }))} /><ContextBreadcrumbs snapshot={snapshot} route={route} onPath={(path) => navigate((current) => ({ ...current, path }))} />{route.notice && <p className="sm-route-notice" role="status">{route.notice}</p>}<SystemHealthSummary snapshot={snapshot} variant={variant} setVariant={setVariant} /><div className="sm-workspace"><SystemRail systems={snapshot.systems} selected={route.system} onSelect={(system) => navigate((current) => ({ ...current, system, path: [] }))} /><main id="systems-monitor-content" className="sm-view-region" tabIndex={-1}>{children}</main></div></div>;
 }
