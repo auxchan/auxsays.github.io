@@ -1,8 +1,8 @@
 # AUXSAYS Repository Facts for Systems Monitor
 
 - Inspected: 2026-08-17
-- Validated commit for Phase-2 drafting: `5180e6bf86e376be6b3d61f01e23e7322f19b1fc`
-- Validation branch: `codex/systems-monitor-foundation`, based on local `main`
+- Approved Phase-2 implementation base: `0cd8c2182cc93e339f857c82711f014b83b79292`
+- Implementation branch: `codex/systems-monitor-ui-shell`
 - Repository remote: `https://github.com/auxchan/auxsays.github.io.git`
 
 Revalidate facts whose cited files changed after the validated commit.
@@ -16,21 +16,21 @@ Revalidate facts whose cited files changed after the validated commit.
 - The site uses Jekyll `~> 4.4`, the Chirpy theme, and Jekyll SEO/Sitemap/Archives/Include Cache plugins (`auxsays/Gemfile`, `auxsays/_config.yml`).
 - Site URL is `https://auxsays.com` with `baseurl: ""` (`auxsays/_config.yml`).
 - Global custom presentation is primarily `auxsays/_layouts/aux-base.html`, `auxsays/assets/css/auxsays-custom.css`, and `auxsays/assets/js/auxsays.js`.
-- The global layout currently renders Home, About Aux, Articles, and Patch Feed navigation. It loads Chirpy CSS, one site-wide custom CSS file, Google Analytics, Lottie from cdnjs, and the site-wide JavaScript file.
+- The global layout renders Home, About Aux, Articles, Patch Feed, and the narrowly added Systems Monitor route. It loads Chirpy CSS, one site-wide custom CSS file, Google Analytics, Lottie from cdnjs, and the site-wide JavaScript file.
 - Existing CSS contains duplicated selector blocks and global rules. A future React surface needs a scoped root/namespaced styles rather than assuming clean global isolation.
 
 ### Deployment and Actions
 
 - Production deploys from pushes to `main` or manual dispatch through `.github/workflows/pages.yml`.
 - The Pages job runs on Ubuntu, sets up Ruby 3.3, Node 24, and Python 3.12, generates source health, validates logo assets and patch records, runs `bundle exec jekyll build --trace`, and uploads `auxsays/_site`.
-- The current Pages workflow does not install/build a React application.
+- The single Pages build job now installs and validates the package-local Systems Monitor application before Jekyll, verifies its static route/assets after Jekyll, and retains the existing artifact/deploy job relationship.
 - Additional workflows are Patch Feed/evidence automation: `consensus-audit.yml`, `davinci-updates.yml`, `obs-evidence-collection.yml`, `obs-evidence-revalidation.yml`, `obs-updates.yml`, `patch-ingest.yml`, and `promote-davinci-verified-reports.yml`.
 - Repository instructions prohibit changing the Pages pipeline without explicit instruction and warn that workflow-generated durable records may require a pull before a later push.
 
 ### Current tooling
 
-- `auxsays/package.json` is an ESM private tooling package, not a frontend application package.
-- Existing Node dev dependencies are Playwright and Simple Icons; there is no React, TypeScript, Vite, Motion, charting, Graphology, Sigma, or frontend test dependency installed on the validated commit.
+- `auxsays/package.json` remains an ESM private tooling package, not a frontend application package.
+- The isolated `systems-monitor/app/` npm package contains exact React 19.2.8, React DOM 19.2.8, React Is 19.2.8, and Recharts 3.10.1 production dependencies plus package-local TypeScript/Vite/Vitest/testing dependencies and lockfile. No root package/lockfile, Motion, Graphology, or Sigma dependency was created.
 - `auxsays/Gemfile` governs Jekyll/Ruby dependencies.
 - `.gitignore` excludes Jekyll output, Node modules, local Ruby dependencies, Python caches, and specified generated/status artifacts.
 
@@ -51,10 +51,18 @@ Revalidate facts whose cited files changed after the validated commit.
 
 ## RESOLVED PHASE-2 REPOSITORY CHOICES
 
-- O-001A: future isolated package at `systems-monitor/app/`; O-001B: npm with a package-local committed lockfile. No package or lockfile exists yet.
-- O-001C (Taylor-approved): Systems-Monitor-owned content-hashed output is generated uncommitted through approved bounded staging/composition paths.
-- O-001D (Taylor-approved): future integration retains the existing single Pages build job and one Jekyll artifact, with UI build before Jekyll and UI static-site validation before upload. No workflow/Jekyll change exists yet.
-- O-002: Recharts family selected without installation; exact-version installed-tree license/security/accessibility/interaction/touch/bundle proof remains mandatory.
+- O-001A/O-001B implemented: isolated npm package and package-local committed lockfile at `systems-monitor/app/`.
+- O-001C implemented: Systems-Monitor-owned content-hashed output is generated uncommitted through exact bounded staging/composition paths with safe cleanup and manifest/output equality checks.
+- O-001D implemented: the existing single Pages build job builds/validates the UI before Jekyll and verifies the final static route before artifact upload.
+- O-002 implementation proof passed for Recharts 3.10.1 with explicit native point controls and table equivalents; manual assistive-technology/comprehension acceptance remains pending.
+
+## PHASE-2 IMPLEMENTATION EVIDENCE
+
+- `systems-monitor/app/` implements the validated fixture, canonical query state, three lazy primary views, bounded lazy Trace, responsive/scoped styling, and automated tests.
+- `auxsays/systems-monitor/index.html` is the only product route attachment; generated assets/include and `_site` stay ignored.
+- Production output on 2026-08-17: eight content-hashed assets, 628,747 raw bytes, 183,436 gzip bytes, and 155,036 Brotli bytes.
+- TypeScript and 28 automated tests passed; existing ingestion-source, Patch Feed, consensus, and logo validations passed.
+- Windows Jekyll integration/static validation passed with an uncommitted `timezone: false` override because the existing local bundle lacks `tzinfo`; Ubuntu Pages uses the committed configuration. No deployment was performed.
 
 ## UNKNOWN — establish in the affected phase
 
