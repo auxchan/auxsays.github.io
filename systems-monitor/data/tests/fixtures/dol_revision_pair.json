@@ -1,0 +1,47 @@
+{
+  "evidence_status": "FACTUAL_ORIGINAL_AUTHORITY",
+  "reviewed_at": "2026-08-18",
+  "indicator_id": "US_LABOR_INITIAL_UI_CLAIMS",
+  "valid_time": "2024-03-02",
+  "release_a": {
+    "indicator_id": "US_LABOR_INITIAL_UI_CLAIMS",
+    "source_id": "dol-ui-claims",
+    "source_series_id": "DOL-UI-SA-INITIAL",
+    "release_id": "DOL-UI-2024-03-07",
+    "artifact_sha256": "2759aeb9fc6ef115d865012745d82e7ee024b5c1be0f5b73a37016fcd8d2cb5e",
+    "artifact_byte_length": 536784,
+    "value": 217000,
+    "unit": "claims",
+    "geography": "US",
+    "valid_time": "2024-03-02",
+    "public_time": "2024-03-07T13:30:00Z",
+    "retrieved_time": "2026-08-18T19:42:49.122042Z",
+    "accepted_time": "2026-08-18T19:42:49.122042Z",
+    "vintage_id": "advance-2024-03-07",
+    "revision_number": 0,
+    "supersedes_observation_id": null,
+    "provenance_url": "https://www.dol.gov/sites/dolgov/files/OPA/newsreleases/ui-claims/20240471.pdf",
+    "verified_text": "week ending March 2; advance seasonally adjusted initial claims 217,000"
+  },
+  "release_b": {
+    "indicator_id": "US_LABOR_INITIAL_UI_CLAIMS",
+    "source_id": "dol-ui-claims",
+    "source_series_id": "DOL-UI-SA-INITIAL",
+    "release_id": "DOL-UI-2024-03-14",
+    "artifact_sha256": "314084cfb6bba80f30b36c9b6755563d3090e0669c94bd540f11b1ce33f517d7",
+    "artifact_byte_length": 660777,
+    "value": 210000,
+    "unit": "claims",
+    "geography": "US",
+    "valid_time": "2024-03-02",
+    "public_time": "2024-03-14T12:30:00Z",
+    "retrieved_time": "2026-08-18T19:42:49.438114Z",
+    "accepted_time": "2026-08-18T19:42:49.438114Z",
+    "vintage_id": "revision-2024-03-14",
+    "revision_number": 1,
+    "supersedes_observation_id": "AUTO",
+    "provenance_url": "https://www.dol.gov/sites/dolgov/files/OPA/newsreleases/ui-claims/20240527.pdf",
+    "verified_text": "previous week's level revised down from 217,000 to 210,000"
+  }
+}
+
