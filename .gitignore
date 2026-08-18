@@ -30,3 +30,7 @@ auxsays/tools/local-playwright-capture/logs/
 auxsays/tools/local-playwright-capture/dist/
 auxsays/tools/local-playwright-capture/*.zip
 auxsays/tools/local-playwright-capture/*.exe
+# Systems Monitor — deterministic local/CI build products
+systems-monitor/.build/
+auxsays/systems-monitor/assets/
+auxsays/_includes/generated/systems-monitor-assets.html

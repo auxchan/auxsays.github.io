@@ -45,6 +45,7 @@
           <a href="{{ '/about/' | relative_url }}" {% if page.url contains '/about/' %}class="is-active"{% endif %}>About Aux</a>
           <a href="{{ '/articles/' | relative_url }}" {% if page.url contains '/articles/' or page.layout == 'aux-post' %}class="is-active"{% endif %}>Articles</a>
           <a href="{{ '/updates/' | relative_url }}" {% if page.url contains '/updates/' or page.layout == 'aux-update' or page.layout == 'aux-updates' %}class="is-active"{% endif %}>Patch Feed</a>
+          <a href="{{ '/systems-monitor/' | relative_url }}" {% if page.url contains '/systems-monitor/' %}class="is-active"{% endif %}>Systems Monitor</a>
         </nav>
       </div>
     </header>
