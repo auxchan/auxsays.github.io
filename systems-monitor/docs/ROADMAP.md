@@ -46,7 +46,7 @@ Phase 2 — UI Shell Implementation. The authorized technical shell, synthetic f
 | P2-009 | Build-output ownership | Taylor O-001C | Build/Jekyll composition | Implemented | `systems-monitor/app/scripts/` | Safe clean, hashed manifest/output equality, ignored composition pass |
 | P2-010 | Pages integration | Taylor O-001D | Workflow modification | Implemented locally | `.github/workflows/pages.yml` | Single-job order retained; hosted run awaits future push |
 | P2-011 | Chart library | UI accessibility/performance proof | Chart implementation | Implemented | `DEPENDENCY_VERIFICATION.md` | Recharts 3.10.1 gate passes with HTML/table equivalence |
-| P2-012 | Performance and test plan | Phase-2 contracts | Acceptance implementation | Implemented | `systems-monitor/app/tests/` | 28 tests and production measurement pass; human QA pending |
+| P2-012 | Performance and test plan | Phase-2 contracts | Acceptance implementation | Implemented | `systems-monitor/app/tests/` | 29 tests and production measurement pass; human QA pending |
 
 ## Phase progression
 

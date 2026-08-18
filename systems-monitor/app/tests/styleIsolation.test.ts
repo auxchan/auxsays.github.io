@@ -19,6 +19,8 @@ describe("style isolation", () => {
     expect(css).toContain("@media (max-width: 780px)");
     expect(css).toContain("@media (max-width: 520px)");
     expect(css).toMatch(/min-height:\s*44px/);
+    expect(css).toContain(".sm-inspector--mobile[open]");
+    expect(css).toContain("--aux-sm-z-sheet");
   });
 
   it("does not import Patch Feed or global AUXSAYS internals", () => {

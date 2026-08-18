@@ -60,8 +60,8 @@ Revalidate facts whose cited files changed after the validated commit.
 
 - `systems-monitor/app/` implements the validated fixture, canonical query state, three lazy primary views, bounded lazy Trace, responsive/scoped styling, and automated tests.
 - `auxsays/systems-monitor/index.html` is the only product route attachment; generated assets/include and `_site` stay ignored.
-- Production output on 2026-08-17: eight content-hashed assets, 628,747 raw bytes, 183,436 gzip bytes, and 155,036 Brotli bytes.
-- TypeScript and 28 automated tests passed; existing ingestion-source, Patch Feed, consensus, and logo validations passed.
+- Production output on 2026-08-17: eight content-hashed assets, 630,953 raw bytes, 183,867 gzip bytes, and 155,406 Brotli bytes.
+- TypeScript and 29 automated tests passed; existing ingestion-source, Patch Feed, consensus, and logo validations passed.
 - Windows Jekyll integration/static validation passed with an uncommitted `timezone: false` override because the existing local bundle lacks `tzinfo`; Ubuntu Pages uses the committed configuration. No deployment was performed.
 
 ## UNKNOWN — establish in the affected phase

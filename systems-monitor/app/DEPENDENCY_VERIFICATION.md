@@ -26,7 +26,7 @@ Verified 2026-08-17 for `systems-monitor/app/` on Node `24.16.0` and npm `11.13.
 - Responsive: Recharts' responsive chart mode is used inside bounded product containers.
 - Reference/annotation: `ReferenceLine` marks the current fixture boundary.
 - Dark theme: chart colors use scoped `--aux-sm-*` tokens.
-- Bundle: production output measured at 183,436 gzip bytes across all eight application assets, below the 368,640-byte gzip gate.
+- Bundle: production output measured at 183,867 gzip bytes across all eight application assets, below the 368,640-byte gzip gate.
 - Maintenance/status: 3.10.1 was the current stable npm release at verification time and supports React 19 and the installed Node runtime.
 
 Authoritative upstream references used for the interaction review:

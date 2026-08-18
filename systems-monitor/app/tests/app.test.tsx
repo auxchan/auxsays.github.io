@@ -89,6 +89,20 @@ describe("Systems Monitor shell", () => {
     expect(screen.getAllByText(/expected-opening units/).length).toBeGreaterThan(0);
   });
 
+  it("provides native collapsible context and mobile evidence-sheet controls", async () => {
+    renderApp("?view=verified");
+    const context = await screen.findByText("System context details");
+    const contextDetails = context.closest("details") as HTMLDetailsElement;
+    expect(contextDetails.open).toBe(true);
+    fireEvent.click(context);
+    expect(contextDetails.open).toBe(false);
+    const sheetSummary = screen.getByText("Source inspector", { selector: "summary" });
+    const sheet = sheetSummary.closest("details") as HTMLDetailsElement;
+    expect(sheet.open).toBe(false);
+    fireEvent.click(sheetSummary);
+    expect(sheet.open).toBe(true);
+  });
+
   it.each([
     ["delayed", "Source delayed"],
     ["stale", "Source stale"],

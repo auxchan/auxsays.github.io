@@ -3,7 +3,7 @@
 ## 2026-08-17 — Phase-2 UI shell implementation
 
 - Implemented the isolated `systems-monitor/app/` React/TypeScript/npm package with exact locked dependencies, runtime-valid synthetic fixture, three primary views, canonical query routing, progressive hierarchy/search, bounded HTML/SVG Trace, scoped responsive styling, and explicit accessibility alternatives.
-- Passed the Recharts 3.10.1 exact-version gate, zero-vulnerability audit, 44-record production license inventory, TypeScript, 28 automated tests, and production performance/manifest checks.
+- Passed the Recharts 3.10.1 exact-version gate, zero-vulnerability audit, 44-record production license inventory, TypeScript, 29 automated tests, and production performance/manifest checks.
 - Added the minimal `/systems-monitor/` Jekyll root, one parent navigation link, ignored content-hashed asset composition, static-route verifier, and approved single Pages build-job ordering.
 - Passed existing source, Patch Feed, consensus, logo, local Jekyll (with uncommitted Windows timezone override), and final static route/asset validation. No deployment occurred.
 - Recorded implementation evidence only; no BINDING contract or `MASTER_SPEC.md` content changed. Human UI/comprehension and assistive-technology review remain PENDING; Phase 3 remains unauthorized.
