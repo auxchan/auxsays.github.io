@@ -6,15 +6,20 @@ import unittest
 from pathlib import Path
 
 from _support import PACKAGE_ROOT
-from systems_monitor_data.publication import AtomicPublisher, CandidateError, validate_factual_candidate
+from systems_monitor_data.publication import AtomicPublisher, CandidateError, export_public_pdi_candidate, validate_factual_candidate, validate_internal_review_model
 from systems_monitor_data.telemetry import RunTelemetry, append_telemetry
 
 
 def candidate():
-    metrics = []
-    for number in range(6):
-        metrics.append({"id":f"M{number}","label":f"Metric {number}","stateType":"OBS","value":"1","unit":"percent","observationPeriod":"2026-07","sourceId":"bls-cps","sourceLabel":"BLS","publicTime":"2026-08-01T00:00:00Z","retrievedTime":"2026-08-01T00:01:00Z","acceptedTime":"2026-08-01T00:02:00Z","sourceHealth":"current","provenanceUrl":"https://www.bls.gov/","artifactSha256":"a"*64,"vintageId":"v1","rightsState":"ALLOW"})
-    return {"schemaVersion":"x","publicationClass":"factual","activationStatus":"LOCAL_REVIEW_ONLY_NOT_PUBLICLY_ACTIVATED","metrics":metrics,"forecasts":[],"scenarios":[],"rankings":[],"events":[],"outlook":{"status":"unavailable_not_yet_supported"}}
+    return json.loads((PACKAGE_ROOT / "review" / "factual-snapshot-candidate.json").read_text(encoding="utf-8"))
+
+
+def internal_review_model():
+    return json.loads((PACKAGE_ROOT / "review" / "internal-factual-review-model.json").read_text(encoding="utf-8"))
+
+
+def old_incorrect_candidate():
+    return {"schemaVersion":"phase3-factual-candidate-1.0.0","publicationClass":"factual","activationStatus":"LOCAL_REVIEW_ONLY_NOT_PUBLICLY_ACTIVATED","generatedAt":"2026-08-18T19:46:00Z","geography":"US","metrics":[],"forecasts":[],"scenarios":[],"rankings":[],"events":[],"outlook":{"status":"unavailable_not_yet_supported"}}
 
 
 class PublicationTelemetryTests(unittest.TestCase):
@@ -28,21 +33,63 @@ class PublicationTelemetryTests(unittest.TestCase):
     def test_factual_candidate_valid(self):
         validate_factual_candidate(candidate())
 
+    def test_internal_review_model_is_explicit_and_exportable(self):
+        internal = internal_review_model()
+        validate_internal_review_model(internal)
+        self.assertEqual(candidate(), export_public_pdi_candidate(internal))
+
+    def test_old_incorrect_candidate_shape_fails_pdi(self):
+        with self.assertRaises(CandidateError): validate_factual_candidate(old_incorrect_candidate())
+
     def test_fixture_rejected(self):
-        value = candidate(); value["publicationClass"] = "fixture"
+        value = candidate(); value["snapshot"]["publicationClass"] = "fixture"
         with self.assertRaises(CandidateError): validate_factual_candidate(value)
 
     def test_forecast_rejected(self):
-        value = candidate(); value["metrics"][0]["stateType"] = "FCST"
+        value = candidate(); value["extensions"]["auxsays.phase2.metrics"][0]["stateType"] = "FCST"
         with self.assertRaises(CandidateError): validate_factual_candidate(value)
 
     def test_synthetic_collection_rejected(self):
-        value = candidate(); value["rankings"] = [{"x": 1}]
+        value = candidate(); value["outlook"]["occupations"] = [{"label": "SYNTHETIC TEST"}]
         with self.assertRaises(CandidateError): validate_factual_candidate(value)
 
     def test_unknown_rights_rejected(self):
-        value = candidate(); value["metrics"][0]["rightsState"] = "UNKNOWN"
+        value = candidate(); value["sources"]["bls-cps"]["publicDisplayAllowed"] = False
         with self.assertRaises(CandidateError): validate_factual_candidate(value)
+
+    def test_contract_version_required(self):
+        value = candidate(); del value["contractVersion"]
+        with self.assertRaises(CandidateError): validate_factual_candidate(value)
+
+    def test_snapshot_metadata_required(self):
+        value = candidate(); del value["snapshot"]["publishedAt"]
+        with self.assertRaises(CandidateError): validate_factual_candidate(value)
+
+    def test_source_snapshot_identity_required(self):
+        value = candidate(); value["snapshot"]["sourceSnapshotId"] = ""
+        with self.assertRaises(CandidateError): validate_factual_candidate(value)
+
+    def test_source_reference_required(self):
+        value = candidate(); value["extensions"]["auxsays.phase2.metrics"][0]["sourceRefs"] = ["missing"]
+        with self.assertRaises(CandidateError): validate_factual_candidate(value)
+
+    def test_provenance_reference_required(self):
+        value = candidate(); value["extensions"]["auxsays.phase2.metrics"][0]["provenanceRefs"] = ["missing"]
+        with self.assertRaises(CandidateError): validate_factual_candidate(value)
+
+    def test_official_bls_publication_times_are_separate(self):
+        provenance = candidate()["extensions"]["auxsays.phase3.provenance"].values()
+        ces = next(record for record in provenance if record["sourceId"] == "bls-ces")
+        jolts = next(record for record in provenance if record["sourceId"] == "bls-jolts")
+        self.assertEqual("2026-08-07T12:30:00Z", ces["publishedAt"])
+        self.assertEqual("2026-08-04T14:00:00Z", jolts["publishedAt"])
+        self.assertNotEqual(ces["publishedAt"], ces["retrievedAt"])
+
+    def test_dol_xml_lag_is_not_masked(self):
+        health = candidate()["extensions"]["auxsays.phase3.sourceHealth"]["dol-ui-claims"]
+        self.assertEqual("current", health["observationFreshness"])
+        self.assertEqual("stale", health["retrievalPathHealth"])
+        self.assertIn("2026-07-18", health["retrievalPathReason"])
 
     def test_atomic_pointer_activation(self):
         digest, _ = self.publisher.stage(candidate())
@@ -52,7 +99,7 @@ class PublicationTelemetryTests(unittest.TestCase):
     def test_failed_candidate_preserves_pointer(self):
         digest, _ = self.publisher.stage(candidate()); self.publisher.activate_local(digest)
         before = self.publisher.pointer.read_bytes()
-        invalid = candidate(); invalid["metrics"] = []
+        invalid = candidate(); invalid["extensions"]["auxsays.phase2.metrics"] = []
         with self.assertRaises(CandidateError): self.publisher.stage(invalid)
         self.assertEqual(before, self.publisher.pointer.read_bytes())
 
@@ -87,4 +134,3 @@ class PublicationTelemetryTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-

@@ -1,138 +1,456 @@
 {
-  "activationStatus": "LOCAL_REVIEW_ONLY_NOT_PUBLICLY_ACTIVATED",
+  "contractVersion": "1.0.0",
   "events": [],
-  "forecasts": [],
-  "generatedAt": "2026-08-18T19:46:00Z",
-  "geography": "US",
-  "metrics": [
-    {
-      "acceptedTime": "2026-08-18T19:46:00Z",
-      "artifactSha256": "cd8b57f7de01b03b4558f2f7d83fb79e2d336859e1b7a39c91c23dbd43ef98e0",
-      "id": "US_LABOR_TOTAL_NONFARM_PAYROLLS",
-      "label": "Total nonfarm payroll employment",
-      "observationPeriod": "2026-07",
-      "provenanceUrl": "https://api.bls.gov/publicAPI/v2/timeseries/data/",
-      "publicationTimeKind": "conservative_retrieval_bound",
-      "publicTime": "2026-08-18T19:44:00.899016Z",
-      "retrievedTime": "2026-08-18T19:44:00.899016Z",
-      "revisionNumber": 0,
-      "rightsState": "ALLOW",
-      "sourceHealth": "current",
-      "sourceId": "bls-ces",
-      "sourceLabel": "U.S. Bureau of Labor Statistics — Current Employment Statistics",
-      "stateType": "OBS",
-      "unit": "thousands of persons",
-      "value": "158858",
-      "vintageId": "bls-retrieval-2026-08-18T19:44:00.899016Z"
+  "extensions": {
+    "auxsays.phase2.fixtureVariants": [],
+    "auxsays.phase2.geographies": [
+      {
+        "id": "US",
+        "label": "United States"
+      }
+    ],
+    "auxsays.phase2.metrics": [
+      {
+        "direction": "flat",
+        "displayValue": "158,858 thousands of persons",
+        "id": "US_LABOR_TOTAL_NONFARM_PAYROLLS",
+        "label": "Total nonfarm payroll employment",
+        "method": "seasonally adjusted; official; vintage bls-retrieval-2026-08-18T19:44:00.899016Z; revision 0",
+        "provenanceRefs": [
+          "prov-bls-ces-bls-retrieval-2026-08-18T19-44-00-899016Z"
+        ],
+        "series": [
+          {
+            "displayPeriod": "2026-07",
+            "period": "2026-07",
+            "value": 158858
+          }
+        ],
+        "sourceRefs": [
+          "bls-ces"
+        ],
+        "stateType": "OBS",
+        "unit": "thousands of persons",
+        "validTime": "2026-07",
+        "value": 158858
+      },
+      {
+        "direction": "flat",
+        "displayValue": "4.1 percent",
+        "id": "US_LABOR_U3_UNEMPLOYMENT_RATE",
+        "label": "U-3 unemployment rate",
+        "method": "seasonally adjusted; official; vintage bls-retrieval-2026-08-18T19:44:00.899016Z; revision 0",
+        "provenanceRefs": [
+          "prov-bls-cps-bls-retrieval-2026-08-18T19-44-00-899016Z"
+        ],
+        "series": [
+          {
+            "displayPeriod": "2026-07",
+            "period": "2026-07",
+            "value": 4.1
+          }
+        ],
+        "sourceRefs": [
+          "bls-cps"
+        ],
+        "stateType": "OBS",
+        "unit": "percent",
+        "validTime": "2026-07",
+        "value": 4.1
+      },
+      {
+        "direction": "flat",
+        "displayValue": "61.4 percent",
+        "id": "US_LABOR_FORCE_PARTICIPATION_RATE",
+        "label": "Labor-force participation rate",
+        "method": "seasonally adjusted; official; vintage bls-retrieval-2026-08-18T19:44:00.899016Z; revision 0",
+        "provenanceRefs": [
+          "prov-bls-cps-bls-retrieval-2026-08-18T19-44-00-899016Z"
+        ],
+        "series": [
+          {
+            "displayPeriod": "2026-07",
+            "period": "2026-07",
+            "value": 61.4
+          }
+        ],
+        "sourceRefs": [
+          "bls-cps"
+        ],
+        "stateType": "OBS",
+        "unit": "percent",
+        "validTime": "2026-07",
+        "value": 61.4
+      },
+      {
+        "direction": "flat",
+        "displayValue": "209,000 claims",
+        "id": "US_LABOR_INITIAL_UI_CLAIMS",
+        "label": "Initial unemployment-insurance claims",
+        "method": "seasonally adjusted; official; vintage DOL-UI-2026-08-13-advance; revision 0",
+        "provenanceRefs": [
+          "prov-dol-ui-claims-DOL-UI-2026-08-13-advance"
+        ],
+        "series": [
+          {
+            "displayPeriod": "2026-08-08",
+            "period": "2026-08-08",
+            "value": 209000
+          }
+        ],
+        "sourceRefs": [
+          "dol-ui-claims"
+        ],
+        "stateType": "OBS",
+        "unit": "claims",
+        "validTime": "2026-08-08",
+        "value": 209000
+      },
+      {
+        "direction": "flat",
+        "displayValue": "7,359 thousands",
+        "id": "US_LABOR_JOB_OPENINGS",
+        "label": "Job openings",
+        "method": "seasonally adjusted; official; vintage bls-retrieval-2026-08-18T19:44:00.899016Z; revision 0",
+        "provenanceRefs": [
+          "prov-bls-jolts-bls-retrieval-2026-08-18T19-44-00-899016Z"
+        ],
+        "series": [
+          {
+            "displayPeriod": "2026-06",
+            "period": "2026-06",
+            "value": 7359
+          }
+        ],
+        "sourceRefs": [
+          "bls-jolts"
+        ],
+        "stateType": "OBS",
+        "unit": "thousands",
+        "validTime": "2026-06",
+        "value": 7359
+      },
+      {
+        "direction": "flat",
+        "displayValue": "5,348 thousands",
+        "id": "US_LABOR_HIRES",
+        "label": "Hires",
+        "method": "seasonally adjusted; official; vintage bls-retrieval-2026-08-18T19:44:00.899016Z; revision 0",
+        "provenanceRefs": [
+          "prov-bls-jolts-bls-retrieval-2026-08-18T19-44-00-899016Z"
+        ],
+        "series": [
+          {
+            "displayPeriod": "2026-06",
+            "period": "2026-06",
+            "value": 5348
+          }
+        ],
+        "sourceRefs": [
+          "bls-jolts"
+        ],
+        "stateType": "OBS",
+        "unit": "thousands",
+        "validTime": "2026-06",
+        "value": 5348
+      }
+    ],
+    "auxsays.phase2.ranges": [
+      {
+        "id": "latest",
+        "label": "Latest available observation"
+      }
+    ],
+    "auxsays.phase2.trace": {
+      "edges": [],
+      "nodes": []
     },
-    {
-      "acceptedTime": "2026-08-18T19:46:00Z",
-      "artifactSha256": "cd8b57f7de01b03b4558f2f7d83fb79e2d336859e1b7a39c91c23dbd43ef98e0",
-      "id": "US_LABOR_U3_UNEMPLOYMENT_RATE",
-      "label": "U-3 unemployment rate",
-      "observationPeriod": "2026-07",
-      "provenanceUrl": "https://api.bls.gov/publicAPI/v2/timeseries/data/",
-      "publicationTimeKind": "conservative_retrieval_bound",
-      "publicTime": "2026-08-18T19:44:00.899016Z",
-      "retrievedTime": "2026-08-18T19:44:00.899016Z",
-      "revisionNumber": 0,
-      "rightsState": "ALLOW",
-      "sourceHealth": "current",
-      "sourceId": "bls-cps",
-      "sourceLabel": "U.S. Bureau of Labor Statistics — Current Population Survey",
-      "stateType": "OBS",
-      "unit": "percent",
-      "value": "4.1",
-      "vintageId": "bls-retrieval-2026-08-18T19:44:00.899016Z"
+    "auxsays.phase3.activation": {
+      "status": "LOCAL_REVIEW_ONLY_NOT_PUBLICLY_ACTIVATED"
     },
-    {
-      "acceptedTime": "2026-08-18T19:46:00Z",
-      "artifactSha256": "cd8b57f7de01b03b4558f2f7d83fb79e2d336859e1b7a39c91c23dbd43ef98e0",
-      "id": "US_LABOR_FORCE_PARTICIPATION_RATE",
-      "label": "Labor-force participation rate",
-      "observationPeriod": "2026-07",
-      "provenanceUrl": "https://api.bls.gov/publicAPI/v2/timeseries/data/",
-      "publicationTimeKind": "conservative_retrieval_bound",
-      "publicTime": "2026-08-18T19:44:00.899016Z",
-      "retrievedTime": "2026-08-18T19:44:00.899016Z",
-      "revisionNumber": 0,
-      "rightsState": "ALLOW",
-      "sourceHealth": "current",
-      "sourceId": "bls-cps",
-      "sourceLabel": "U.S. Bureau of Labor Statistics — Current Population Survey",
-      "stateType": "OBS",
-      "unit": "percent",
-      "value": "61.4",
-      "vintageId": "bls-retrieval-2026-08-18T19:44:00.899016Z"
+    "auxsays.phase3.provenance": {
+      "prov-bls-ces-bls-retrieval-2026-08-18T19-44-00-899016Z": {
+        "acceptedAt": "2026-08-18T19:46:00Z",
+        "artifactSha256": "cd8b57f7de01b03b4558f2f7d83fb79e2d336859e1b7a39c91c23dbd43ef98e0",
+        "evidenceUrl": "https://api.bls.gov/publicAPI/v2/timeseries/data/",
+        "id": "prov-bls-ces-bls-retrieval-2026-08-18T19-44-00-899016Z",
+        "publicationTimeKind": "official",
+        "publishedAt": "2026-08-07T12:30:00Z",
+        "retrievedAt": "2026-08-18T19:44:00.899016Z",
+        "revisionNumber": 0,
+        "seriesIds": [
+          "CES0000000001"
+        ],
+        "sourceId": "bls-ces",
+        "vintageId": "bls-retrieval-2026-08-18T19:44:00.899016Z"
+      },
+      "prov-bls-cps-bls-retrieval-2026-08-18T19-44-00-899016Z": {
+        "acceptedAt": "2026-08-18T19:46:00Z",
+        "artifactSha256": "cd8b57f7de01b03b4558f2f7d83fb79e2d336859e1b7a39c91c23dbd43ef98e0",
+        "evidenceUrl": "https://api.bls.gov/publicAPI/v2/timeseries/data/",
+        "id": "prov-bls-cps-bls-retrieval-2026-08-18T19-44-00-899016Z",
+        "publicationTimeKind": "official",
+        "publishedAt": "2026-08-07T12:30:00Z",
+        "retrievedAt": "2026-08-18T19:44:00.899016Z",
+        "revisionNumber": 0,
+        "seriesIds": [
+          "LNS14000000",
+          "LNS11300000"
+        ],
+        "sourceId": "bls-cps",
+        "vintageId": "bls-retrieval-2026-08-18T19:44:00.899016Z"
+      },
+      "prov-bls-jolts-bls-retrieval-2026-08-18T19-44-00-899016Z": {
+        "acceptedAt": "2026-08-18T19:46:00Z",
+        "artifactSha256": "cd8b57f7de01b03b4558f2f7d83fb79e2d336859e1b7a39c91c23dbd43ef98e0",
+        "evidenceUrl": "https://api.bls.gov/publicAPI/v2/timeseries/data/",
+        "id": "prov-bls-jolts-bls-retrieval-2026-08-18T19-44-00-899016Z",
+        "publicationTimeKind": "official",
+        "publishedAt": "2026-08-04T14:00:00Z",
+        "retrievedAt": "2026-08-18T19:44:00.899016Z",
+        "revisionNumber": 0,
+        "seriesIds": [
+          "JTS000000000000000JOL",
+          "JTS000000000000000HIL"
+        ],
+        "sourceId": "bls-jolts",
+        "vintageId": "bls-retrieval-2026-08-18T19:44:00.899016Z"
+      },
+      "prov-dol-ui-claims-DOL-UI-2026-08-13-advance": {
+        "acceptedAt": "2026-08-18T19:46:00Z",
+        "artifactSha256": "7f046fea52e4b60b13c45c2a868b199ff9fe448e7289add2ff9300abd9cb0fa3",
+        "evidenceUrl": "https://www.dol.gov/ui/data.pdf",
+        "id": "prov-dol-ui-claims-DOL-UI-2026-08-13-advance",
+        "publicationTimeKind": "official",
+        "publishedAt": "2026-08-13T12:30:00Z",
+        "retrievedAt": "2026-08-18T19:44:22.485403Z",
+        "revisionNumber": 0,
+        "seriesIds": [
+          "DOL-UI-SA-INITIAL"
+        ],
+        "sourceId": "dol-ui-claims",
+        "vintageId": "DOL-UI-2026-08-13-advance"
+      }
     },
-    {
-      "acceptedTime": "2026-08-18T19:46:00Z",
-      "artifactSha256": "7f046fea52e4b60b13c45c2a868b199ff9fe448e7289add2ff9300abd9cb0fa3",
-      "id": "US_LABOR_INITIAL_UI_CLAIMS",
-      "label": "Initial unemployment-insurance claims",
-      "observationPeriod": "2026-08-08",
-      "provenanceUrl": "https://www.dol.gov/ui/data.pdf",
-      "publicationTimeKind": "official",
-      "publicTime": "2026-08-13T12:30:00Z",
-      "retrievedTime": "2026-08-18T19:44:22.485403Z",
-      "revisionNumber": 0,
-      "rightsState": "ALLOW",
-      "sourceHealth": "current",
-      "sourceId": "dol-ui-claims",
-      "sourceLabel": "U.S. Department of Labor — UI Weekly Claims",
-      "stateType": "OBS",
-      "unit": "claims",
-      "value": "209000",
-      "vintageId": "DOL-UI-2026-08-13-advance"
-    },
-    {
-      "acceptedTime": "2026-08-18T19:46:00Z",
-      "artifactSha256": "cd8b57f7de01b03b4558f2f7d83fb79e2d336859e1b7a39c91c23dbd43ef98e0",
-      "id": "US_LABOR_JOB_OPENINGS",
-      "label": "Job openings",
-      "observationPeriod": "2026-06",
-      "provenanceUrl": "https://api.bls.gov/publicAPI/v2/timeseries/data/",
-      "publicationTimeKind": "conservative_retrieval_bound",
-      "publicTime": "2026-08-18T19:44:00.899016Z",
-      "retrievedTime": "2026-08-18T19:44:00.899016Z",
-      "revisionNumber": 0,
-      "rightsState": "ALLOW",
-      "sourceHealth": "current",
-      "sourceId": "bls-jolts",
-      "sourceLabel": "U.S. Bureau of Labor Statistics — JOLTS",
-      "stateType": "OBS",
-      "unit": "thousands",
-      "value": "7359",
-      "vintageId": "bls-retrieval-2026-08-18T19:44:00.899016Z"
-    },
-    {
-      "acceptedTime": "2026-08-18T19:46:00Z",
-      "artifactSha256": "cd8b57f7de01b03b4558f2f7d83fb79e2d336859e1b7a39c91c23dbd43ef98e0",
-      "id": "US_LABOR_HIRES",
-      "label": "Hires",
-      "observationPeriod": "2026-06",
-      "provenanceUrl": "https://api.bls.gov/publicAPI/v2/timeseries/data/",
-      "publicationTimeKind": "conservative_retrieval_bound",
-      "publicTime": "2026-08-18T19:44:00.899016Z",
-      "retrievedTime": "2026-08-18T19:44:00.899016Z",
-      "revisionNumber": 0,
-      "rightsState": "ALLOW",
-      "sourceHealth": "current",
-      "sourceId": "bls-jolts",
-      "sourceLabel": "U.S. Bureau of Labor Statistics — JOLTS",
-      "stateType": "OBS",
-      "unit": "thousands",
-      "value": "5348",
-      "vintageId": "bls-retrieval-2026-08-18T19:44:00.899016Z"
+    "auxsays.phase3.sourceHealth": {
+      "bls-ces": {
+        "observationFreshness": "current",
+        "observationFreshnessReason": "July 2026 observation is current relative to the official monthly Employment Situation cadence",
+        "retrievalPathHealth": "current",
+        "retrievalPathReason": "BLS Public Data API returned the reviewed observation"
+      },
+      "bls-cps": {
+        "observationFreshness": "current",
+        "observationFreshnessReason": "July 2026 observation is current relative to the official monthly Employment Situation cadence",
+        "retrievalPathHealth": "current",
+        "retrievalPathReason": "BLS Public Data API returned the reviewed observation"
+      },
+      "bls-jolts": {
+        "observationFreshness": "current",
+        "observationFreshnessReason": "June 2026 observation is current relative to the official monthly JOLTS cadence",
+        "retrievalPathHealth": "current",
+        "retrievalPathReason": "BLS Public Data API returned the reviewed observation"
+      },
+      "dol-ui-claims": {
+        "observationFreshness": "current",
+        "observationFreshnessReason": "The verified official DOL PDF covers week ending 2026-08-08",
+        "retrievalPathHealth": "stale",
+        "retrievalPathReason": "The automated structured XML endpoint lags the official PDF and ends at week ending 2026-07-18"
+      }
     }
-  ],
+  },
   "outlook": {
+    "demandAllocation": [],
+    "forecasts": [],
+    "horizons": [],
+    "industries": [],
     "message": "Forecast unavailable / not yet supported",
+    "occupations": [],
     "status": "unavailable_not_yet_supported"
   },
-  "publicationClass": "factual",
-  "rankings": [],
-  "scenarios": [],
-  "schemaVersion": "phase3-factual-candidate-1.0.0"
+  "schemaVersion": "1.0.0",
+  "snapshot": {
+    "asOf": "2026-08-18T19:46:00Z",
+    "evaluatedAt": "2026-08-18T19:46:00Z",
+    "generatedAt": "2026-08-18T19:46:00Z",
+    "id": "factual-gate-a-candidate-2026-08-18",
+    "publicationClass": "factual",
+    "publishedAt": "2026-08-18T19:46:00Z",
+    "sourceSnapshotId": "phase3-normalized-six-indicator-2026-08-18"
+  },
+  "sources": {
+    "bls-ces": {
+      "attributionRequired": true,
+      "authorityTier": "TIER_A_ORIGINAL_AUTHORITY",
+      "dataset": "Current Employment Statistics",
+      "freshness": "current",
+      "freshnessEvaluatedAt": "2026-08-18T19:46:00Z",
+      "freshnessReason": "July 2026 observation is current relative to the official monthly Employment Situation cadence",
+      "methodologyUrl": "https://www.bls.gov/opub/hom/ces/home.htm",
+      "nextExpectedReleaseAt": "See current BLS release calendar",
+      "observationTime": "2026-07",
+      "provider": "U.S. Bureau of Labor Statistics",
+      "publicDisplayAllowed": true,
+      "publishedAt": "2026-08-07T12:30:00Z",
+      "retrievedAt": "2026-08-18T19:44:00.899016Z",
+      "revision": "revision 0",
+      "sourceId": "bls-ces",
+      "vintage": "bls-retrieval-2026-08-18T19:44:00.899016Z"
+    },
+    "bls-cps": {
+      "attributionRequired": true,
+      "authorityTier": "TIER_A_ORIGINAL_AUTHORITY",
+      "dataset": "Current Population Survey labor-force statistics",
+      "freshness": "current",
+      "freshnessEvaluatedAt": "2026-08-18T19:46:00Z",
+      "freshnessReason": "July 2026 observation is current relative to the official monthly Employment Situation cadence",
+      "methodologyUrl": "https://www.bls.gov/opub/hom/cps/calculation.htm",
+      "nextExpectedReleaseAt": "See current BLS release calendar",
+      "observationTime": "2026-07",
+      "provider": "U.S. Bureau of Labor Statistics",
+      "publicDisplayAllowed": true,
+      "publishedAt": "2026-08-07T12:30:00Z",
+      "retrievedAt": "2026-08-18T19:44:00.899016Z",
+      "revision": "revision 0",
+      "sourceId": "bls-cps",
+      "vintage": "bls-retrieval-2026-08-18T19:44:00.899016Z"
+    },
+    "bls-jolts": {
+      "attributionRequired": true,
+      "authorityTier": "TIER_A_ORIGINAL_AUTHORITY",
+      "dataset": "Job Openings and Labor Turnover Survey",
+      "freshness": "current",
+      "freshnessEvaluatedAt": "2026-08-18T19:46:00Z",
+      "freshnessReason": "June 2026 observation is current relative to the official monthly JOLTS cadence",
+      "methodologyUrl": "https://www.bls.gov/opub/hom/jlt/presentation.htm",
+      "nextExpectedReleaseAt": "See current BLS release calendar",
+      "observationTime": "2026-06",
+      "provider": "U.S. Bureau of Labor Statistics",
+      "publicDisplayAllowed": true,
+      "publishedAt": "2026-08-04T14:00:00Z",
+      "retrievedAt": "2026-08-18T19:44:00.899016Z",
+      "revision": "revision 0",
+      "sourceId": "bls-jolts",
+      "vintage": "bls-retrieval-2026-08-18T19:44:00.899016Z"
+    },
+    "dol-ui-claims": {
+      "attributionRequired": true,
+      "authorityTier": "TIER_A_ORIGINAL_AUTHORITY",
+      "dataset": "Unemployment Insurance Weekly Claims",
+      "freshness": "current",
+      "freshnessEvaluatedAt": "2026-08-18T19:46:00Z",
+      "freshnessReason": "The verified official DOL PDF covers week ending 2026-08-08",
+      "methodologyUrl": "https://oui.doleta.gov/unemploy/claims.asp",
+      "nextExpectedReleaseAt": "Thursday 08:30 ET",
+      "observationTime": "2026-08-08",
+      "provider": "U.S. Department of Labor, Employment and Training Administration",
+      "publicDisplayAllowed": true,
+      "publishedAt": "2026-08-13T12:30:00Z",
+      "retrievedAt": "2026-08-18T19:44:22.485403Z",
+      "revision": "revision 0",
+      "sourceId": "dol-ui-claims",
+      "vintage": "DOL-UI-2026-08-13-advance"
+    }
+  },
+  "systems": [
+    {
+      "availableViews": [
+        "summary",
+        "verified",
+        "outlook"
+      ],
+      "children": [
+        {
+          "availableViews": [
+            "summary",
+            "verified"
+          ],
+          "id": "US_LABOR_TOTAL_NONFARM_PAYROLLS",
+          "label": "Total nonfarm payroll employment",
+          "rank": 1,
+          "slug": "us-labor-total-nonfarm-payrolls",
+          "stateSummaryRefs": [
+            "US_LABOR_TOTAL_NONFARM_PAYROLLS"
+          ]
+        },
+        {
+          "availableViews": [
+            "summary",
+            "verified"
+          ],
+          "id": "US_LABOR_U3_UNEMPLOYMENT_RATE",
+          "label": "U-3 unemployment rate",
+          "rank": 2,
+          "slug": "us-labor-u3-unemployment-rate",
+          "stateSummaryRefs": [
+            "US_LABOR_U3_UNEMPLOYMENT_RATE"
+          ]
+        },
+        {
+          "availableViews": [
+            "summary",
+            "verified"
+          ],
+          "id": "US_LABOR_FORCE_PARTICIPATION_RATE",
+          "label": "Labor-force participation rate",
+          "rank": 3,
+          "slug": "us-labor-force-participation-rate",
+          "stateSummaryRefs": [
+            "US_LABOR_FORCE_PARTICIPATION_RATE"
+          ]
+        },
+        {
+          "availableViews": [
+            "summary",
+            "verified"
+          ],
+          "id": "US_LABOR_INITIAL_UI_CLAIMS",
+          "label": "Initial unemployment-insurance claims",
+          "rank": 4,
+          "slug": "us-labor-initial-ui-claims",
+          "stateSummaryRefs": [
+            "US_LABOR_INITIAL_UI_CLAIMS"
+          ]
+        },
+        {
+          "availableViews": [
+            "summary",
+            "verified"
+          ],
+          "id": "US_LABOR_JOB_OPENINGS",
+          "label": "Job openings",
+          "rank": 5,
+          "slug": "us-labor-job-openings",
+          "stateSummaryRefs": [
+            "US_LABOR_JOB_OPENINGS"
+          ]
+        },
+        {
+          "availableViews": [
+            "summary",
+            "verified"
+          ],
+          "id": "US_LABOR_HIRES",
+          "label": "Hires",
+          "rank": 6,
+          "slug": "us-labor-hires",
+          "stateSummaryRefs": [
+            "US_LABOR_HIRES"
+          ]
+        }
+      ],
+      "id": "us-labor",
+      "label": "U.S. Labor System",
+      "rank": 1,
+      "slug": "us-labor",
+      "stateSummaryRefs": [
+        "US_LABOR_TOTAL_NONFARM_PAYROLLS",
+        "US_LABOR_U3_UNEMPLOYMENT_RATE",
+        "US_LABOR_FORCE_PARTICIPATION_RATE",
+        "US_LABOR_INITIAL_UI_CLAIMS",
+        "US_LABOR_JOB_OPENINGS",
+        "US_LABOR_HIRES"
+      ]
+    }
+  ]
 }
-

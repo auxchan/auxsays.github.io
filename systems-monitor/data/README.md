@@ -20,7 +20,15 @@ python scripts/run_data.py collect --local-root local
 ```
 
 The command records official artifacts locally, validates and normalizes the
-six enabled observations, writes a review candidate, and does not activate it.
+six enabled observations, writes a clearly classified internal review model,
+exports and validates a separate PDI 1.0.0 candidate, and does not activate it.
+
+Rebuild the committed PDI review artifact deterministically from the committed
+internal review model:
+
+```text
+python scripts/build_review_candidate.py
+```
 
 Print the one-line browser-console loader for local factual UI review:
 

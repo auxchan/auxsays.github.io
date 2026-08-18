@@ -17,27 +17,77 @@ function isIsoTime(value: unknown): value is string {
   return typeof value === "string" && !Number.isNaN(Date.parse(value));
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
+function validateSnapshotMetadata(candidate: PublicSnapshot) {
+  assert(isRecord(candidate.snapshot), "snapshot metadata is required");
+  assert(typeof candidate.snapshot.id === "string" && candidate.snapshot.id.length > 0, "snapshot.id is required");
+  assert(typeof candidate.snapshot.sourceSnapshotId === "string" && candidate.snapshot.sourceSnapshotId.length > 0, "snapshot.sourceSnapshotId is required");
+  for (const field of ["evaluatedAt", "generatedAt", "publishedAt", "asOf"] as const) {
+    assert(isIsoTime(candidate.snapshot[field]), `snapshot.${field} must be ISO time`);
+  }
+}
+
+function validateFactual(candidate: PublicSnapshot) {
+  assert(candidate.snapshot.id.startsWith("factual-"), "factual snapshot ID must be factual-namespaced");
+  assert(Array.isArray(candidate.systems) && candidate.systems.length > 0, "factual systems are required");
+  assert(isRecord(candidate.sources) && Object.keys(candidate.sources).length > 0, "factual sources are required");
+  assert(Array.isArray(candidate.events) && candidate.events.length === 0, "factual first slice cannot contain events");
+  const metrics = candidate.extensions?.["auxsays.phase2.metrics"];
+  assert(Array.isArray(metrics) && metrics.length === 6, "factual first slice requires six observations");
+  assert(metrics.every((metric) => metric.stateType === "OBS"), "factual first slice permits OBS only");
+  assert(candidate.outlook?.status === "unavailable_not_yet_supported", "factual Outlook must be explicitly unavailable");
+  assert(Array.isArray(candidate.outlook.horizons) && candidate.outlook.horizons.length === 0, "factual first slice cannot carry forecast horizons");
+  assert(candidate.outlook.forecasts.length === 0 && candidate.outlook.industries.length === 0 && candidate.outlook.occupations.length === 0 && candidate.outlook.demandAllocation.length === 0, "factual first slice cannot contain Outlook or ranking claims");
+  assert(candidate.extensions["auxsays.phase2.fixtureVariants"].length === 0, "factual snapshot cannot contain fixture variants");
+  const provenance = candidate.extensions["auxsays.phase3.provenance"];
+  assert(isRecord(provenance) && Object.keys(provenance).length > 0, "deduplicated factual provenance is required");
+  for (const [sourceId, source] of Object.entries(candidate.sources)) {
+    assert(source.sourceId === sourceId, `source key mismatch for ${sourceId}`);
+    assert(source.publicDisplayAllowed === true && !source.provider.startsWith("SYNTHETIC TEST"), "factual sources must be rights-cleared original authorities");
+    assert(typeof source.observationTime === "string" && source.observationTime.length > 0, `source ${sourceId} observationTime is required`);
+    for (const field of ["publishedAt", "retrievedAt", "freshnessEvaluatedAt"] as const) {
+      assert(isIsoTime(source[field]), `source ${sourceId}.${field} must be ISO time`);
+    }
+  }
+  for (const metric of metrics) {
+    assert(typeof metric.id === "string" && typeof metric.validTime === "string", "factual metric identity and validTime are required");
+    assert(Number.isFinite(metric.value) && typeof metric.displayValue === "string" && typeof metric.unit === "string", `metric ${metric.id} value fields are invalid`);
+    assert(Array.isArray(metric.sourceRefs) && metric.sourceRefs.length > 0, `metric ${metric.id} sourceRefs are required`);
+    assert(Array.isArray(metric.provenanceRefs) && metric.provenanceRefs.length > 0, `metric ${metric.id} provenanceRefs are required`);
+    assert(metric.sourceRefs.every((reference) => reference in candidate.sources), `metric ${metric.id} has malformed sourceRefs`);
+    assert(metric.provenanceRefs.every((reference) => reference in provenance), `metric ${metric.id} has malformed provenanceRefs`);
+  }
+  for (const [provenanceId, record] of Object.entries(provenance)) {
+    assert(record.id === provenanceId, `provenance key mismatch for ${provenanceId}`);
+    assert(record.sourceId in candidate.sources, `provenance ${provenanceId} has invalid sourceId`);
+    assert(Array.isArray(record.seriesIds) && record.seriesIds.length > 0 && record.seriesIds.every((seriesId) => typeof seriesId === "string" && seriesId.length > 0), `provenance ${provenanceId} requires exact series IDs`);
+    assert(/^https:\/\//.test(record.evidenceUrl), `provenance ${provenanceId} evidence URL is invalid`);
+    assert(/^[a-f0-9]{64}$/i.test(record.artifactSha256), `provenance ${provenanceId} artifact hash is invalid`);
+    for (const field of ["publishedAt", "retrievedAt", "acceptedAt"] as const) {
+      assert(isIsoTime(record[field]), `provenance ${provenanceId}.${field} must be ISO time`);
+    }
+    assert(Date.parse(record.publishedAt) <= Date.parse(record.retrievedAt) && Date.parse(record.retrievedAt) <= Date.parse(record.acceptedAt), `provenance ${provenanceId} has impossible temporal ordering`);
+  }
+  const serialized = JSON.stringify(candidate).toLowerCase();
+  assert(!serialized.includes("synthetic test"), "factual snapshot contains fixture claims");
+}
+
 export function validatePublicSnapshot(value: unknown): PublicSnapshot {
   assert(value && typeof value === "object", "envelope must be an object");
   const candidate = value as PublicSnapshot;
   assert(candidate.schemaVersion === "1.0.0", "unsupported schemaVersion");
   assert(candidate.contractVersion === "1.0.0", "unsupported contractVersion");
+  validateSnapshotMetadata(candidate);
   assert(candidate.snapshot?.publicationClass === "fixture" || candidate.snapshot?.publicationClass === "factual", "publicationClass must be fixture or factual");
   assert(!containsForbiddenFixtureFlag(candidate), "public isFixture field is prohibited");
   if (candidate.snapshot.publicationClass === "factual") {
-    assert(candidate.snapshot.id.startsWith("factual-local-"), "factual snapshot must be local-review namespaced");
-    const metrics = candidate.extensions?.["auxsays.phase2.metrics"];
-    assert(Array.isArray(metrics) && metrics.length === 6, "factual first slice requires six observations");
-    assert(metrics.every((metric) => metric.stateType === "OBS"), "factual first slice permits OBS only");
-    assert(candidate.events.length === 0, "factual first slice cannot contain events");
-    assert(candidate.outlook.forecasts.length === 0 && candidate.outlook.industries.length === 0 && candidate.outlook.occupations.length === 0 && candidate.outlook.demandAllocation.length === 0, "factual first slice cannot contain Outlook or ranking claims");
-    assert(Object.values(candidate.sources).every((source) => source.publicDisplayAllowed && !source.provider.startsWith("SYNTHETIC TEST")), "factual sources must be rights-cleared original authorities");
+    validateFactual(candidate);
     return candidate;
   }
   assert(candidate.snapshot.id.startsWith("fixture-"), "snapshot ID must be fixture-namespaced");
-  for (const field of ["evaluatedAt", "generatedAt", "publishedAt", "asOf"] as const) {
-    assert(isIsoTime(candidate.snapshot[field]), `snapshot.${field} must be ISO time`);
-  }
   assert(candidate.systems.length === 10, "exactly ten top-level fixture systems required");
   assert(candidate.systems.every((system) => system.label.startsWith("SYNTHETIC TEST")), "system labels must be unmistakably synthetic");
   const firstChildren = candidate.systems[0]?.children ?? [];

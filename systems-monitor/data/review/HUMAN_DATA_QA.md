@@ -6,26 +6,27 @@ This is a local review artifact. The factual candidate is not activated on
 AUXSAYS.com. Taylor should compare each row with the original authority linked
 below and confirm value, unit, period, timing, and revision state.
 
-| Indicator | Displayed value | Unit | Observation period | Source | Public time | Retrieved | Accepted | Vintage/revision | Health |
-|---|---:|---|---|---|---|---|---|---|---|
-| Total nonfarm payroll employment | 158,858 | thousands of persons | 2026-07 | BLS CES `CES0000000001` | conservative retrieval bound: 2026-08-18 19:44:00Z | 2026-08-18 19:44:00Z | 2026-08-18 19:46:00Z | retrieval vintage / 0 | current |
-| U-3 unemployment | 4.1 | percent | 2026-07 | BLS CPS `LNS14000000` | conservative retrieval bound: 2026-08-18 19:44:00Z | 2026-08-18 19:44:00Z | 2026-08-18 19:46:00Z | retrieval vintage / 0 | current |
-| Labor-force participation | 61.4 | percent | 2026-07 | BLS CPS `LNS11300000` | conservative retrieval bound: 2026-08-18 19:44:00Z | 2026-08-18 19:44:00Z | 2026-08-18 19:46:00Z | retrieval vintage / 0 | current |
-| Initial UI claims | 209,000 | claims | week ending 2026-08-08 | DOL Weekly Claims | 2026-08-13 12:30:00Z | 2026-08-18 19:44:22Z | 2026-08-18 19:46:00Z | advance / 0 | current |
-| Job openings | 7,359 | thousands | 2026-06 | BLS JOLTS `JTS000000000000000JOL` | conservative retrieval bound: 2026-08-18 19:44:00Z | 2026-08-18 19:44:00Z | 2026-08-18 19:46:00Z | retrieval vintage / 0 | current |
-| Hires | 5,348 | thousands | 2026-06 | BLS JOLTS `JTS000000000000000HIL` | conservative retrieval bound: 2026-08-18 19:44:00Z | 2026-08-18 19:44:00Z | 2026-08-18 19:46:00Z | retrieval vintage / 0 | current |
+| Indicator | Value / unit | Period | Official source / series | Official release | AUXSAYS retrieved / accepted | Version / health |
+|---|---|---|---|---|---|---|
+| Total nonfarm payroll employment | 158,858 thousand persons | 2026-07 | BLS CES `CES0000000001` | 2026-08-07 12:30Z | 2026-08-18 19:44:00Z / 19:46:00Z | revision 0; current |
+| U-3 unemployment | 4.1 percent | 2026-07 | BLS CPS `LNS14000000` | 2026-08-07 12:30Z | 2026-08-18 19:44:00Z / 19:46:00Z | revision 0; current |
+| Labor-force participation | 61.4 percent | 2026-07 | BLS CPS `LNS11300000` | 2026-08-07 12:30Z | 2026-08-18 19:44:00Z / 19:46:00Z | revision 0; current |
+| Initial UI claims | 209,000 claims | week ending 2026-08-08 | DOL `DOL-UI-SA-INITIAL` | 2026-08-13 12:30Z | 2026-08-18 19:44:22Z / 19:46:00Z | advance; observation current; XML path stale at 2026-07-18 |
+| Job openings | 7,359 thousand | 2026-06 | BLS JOLTS `JTS000000000000000JOL` | 2026-08-04 14:00Z | 2026-08-18 19:44:00Z / 19:46:00Z | revision 0; current |
+| Hires | 5,348 thousand | 2026-06 | BLS JOLTS `JTS000000000000000HIL` | 2026-08-04 14:00Z | 2026-08-18 19:44:00Z / 19:46:00Z | revision 0; current |
 
 ## Original evidence
 
 - BLS API: `https://api.bls.gov/publicAPI/v2/timeseries/data/`
+  - Employment Situation July 2026 schedule: `https://www.bls.gov/schedule/2026/home.htm`
+  - JOLTS release schedule: `https://www.bls.gov/schedule/news_release/jolts.htm`
   - retained runtime artifact SHA-256: `cd8b57f7de01b03b4558f2f7d83fb79e2d336859e1b7a39c91c23dbd43ef98e0`
 - Current DOL release: `https://www.dol.gov/ui/data.pdf`
   - retained runtime artifact SHA-256: `7f046fea52e4b60b13c45c2a868b199ff9fe448e7289add2ff9300abd9cb0fa3`
 
-BLS's current download does not independently prove each observation's
-historical release time. The candidate therefore uses retrieval time as a
-conservative public-availability bound and does not backdate from the
-observation month.
+The official BLS schedules establish 08:30 ET for the July Employment
+Situation and 10:00 ET for June JOLTS. These source-publication times remain
+separate from AUXSAYS retrieval and acceptance.
 
 ## Factual DOL revision proof
 
@@ -55,8 +56,8 @@ the ignored `local/` runtime boundary.
    repository root and paste its one-line output into browser developer tools.
 3. The command reloads the page. This switch is honored only by Vite development
    mode.
-4. Confirm Summary and Verified Data display six factual OBS records and
-   official provenance.
+4. Confirm Summary and Verified Data display the six rows above with reachable
+   original evidence and no wall of provenance text.
 5. Confirm Outlook says `Forecast unavailable / not yet supported` and shows no
    forecast, scenario, rankings, events, or synthetic claims.
 6. Remove the key to restore the Phase-2 fixture:

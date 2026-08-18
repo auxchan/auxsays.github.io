@@ -147,6 +147,27 @@ export interface TraceModel {
   edges: TraceEdge[];
 }
 
+export interface ProvenanceRecord {
+  id: string;
+  sourceId: string;
+  seriesIds: string[];
+  evidenceUrl: string;
+  artifactSha256: string;
+  publishedAt: string;
+  retrievedAt: string;
+  acceptedAt: string;
+  publicationTimeKind: "official" | "conservative_retrieval_bound";
+  vintageId: string;
+  revisionNumber: number;
+}
+
+export interface SourceHealthRecord {
+  observationFreshness: FreshnessState;
+  observationFreshnessReason: string;
+  retrievalPathHealth: FreshnessState;
+  retrievalPathReason: string;
+}
+
 export type FixtureVariant =
   | "normal"
   | "loading"
@@ -172,6 +193,8 @@ export interface PublicSnapshot {
     sourceRefs: string[];
   }>;
   outlook: {
+    status?: "unavailable_not_yet_supported";
+    message?: string;
     horizons: Array<{ id: HorizonId; label: string }>;
     forecasts: ForecastRecord[];
     industries: RankedHumanCapitalItem[];
@@ -184,5 +207,8 @@ export interface PublicSnapshot {
     "auxsays.phase2.fixtureVariants": FixtureVariant[];
     "auxsays.phase2.geographies": Array<{ id: string; label: string }>;
     "auxsays.phase2.ranges": Array<{ id: string; label: string }>;
+    "auxsays.phase3.provenance"?: Record<string, ProvenanceRecord>;
+    "auxsays.phase3.sourceHealth"?: Record<string, SourceHealthRecord>;
+    "auxsays.phase3.activation"?: { status: "LOCAL_REVIEW_ONLY_NOT_PUBLICLY_ACTIVATED" };
   };
 }

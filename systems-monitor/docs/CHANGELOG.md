@@ -1,5 +1,11 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-18 — Gate-A PDI boundary correction
+
+- Reclassified the former factual candidate as an internal factual review model and added an explicit exporter that produces a BINDING PDI 1.0.0 factual candidate with required snapshot metadata and deduplicated source/provenance references.
+- Corrected the false-PASS validation boundary: both Python and TypeScript validators now reject the old internal-shaped payload and enforce contract version, snapshot semantics, OBS-only factual content, rights, times, and references.
+- Reverified official BLS publication times, separated them from retrieval/acceptance, and represented the current DOL PDF observation separately from the stale automated XML path. Added concise Gate-A and pending human-QA evidence; no public activation or Phase-4 work occurred.
+
 ## 2026-08-18 — Phase-3 Data Integrity first-slice implementation
 
 - Added the isolated standard-library-only `systems-monitor/data/` package with exact BLS CES/CPS/JOLTS and DOL Weekly Claims source, indicator, rights, and first-slice mapping registries.

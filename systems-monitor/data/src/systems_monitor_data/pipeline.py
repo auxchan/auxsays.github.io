@@ -8,7 +8,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 from .normalize import normalize_bls, normalize_dol_xml
-from .publication import canonical_bytes, validate_factual_candidate
+from .publication import canonical_bytes, export_public_pdi_candidate, validate_internal_review_model
 from .raw import RawStore
 from .registry import Registry
 from .retrieval import BoundedRetriever, RequestBudget, bls_request_body
@@ -67,14 +67,22 @@ class FirstSlicePipeline:
 
 
 def candidate_from_observations(observations: list, *, generated_at: str) -> dict:
+    series_ids = {
+        "US_LABOR_TOTAL_NONFARM_PAYROLLS": "CES0000000001",
+        "US_LABOR_U3_UNEMPLOYMENT_RATE": "LNS14000000",
+        "US_LABOR_FORCE_PARTICIPATION_RATE": "LNS11300000",
+        "US_LABOR_INITIAL_UI_CLAIMS": "DOL-UI-SA-INITIAL",
+        "US_LABOR_JOB_OPENINGS": "JTS000000000000000JOL",
+        "US_LABOR_HIRES": "JTS000000000000000HIL",
+    }
     metrics = []
     for observation in observations:
-        source_health = "current"
+        observation_freshness = "current"
         if observation.source_id == "dol-ui-claims":
             observation_date = datetime.fromisoformat(observation.valid_time).replace(tzinfo=timezone.utc)
             generated = datetime.fromisoformat(generated_at.replace("Z", "+00:00"))
             if (generated - observation_date).days > 14:
-                source_health = "stale"
+                observation_freshness = "stale"
         metrics.append({
             "id": observation.indicator_id,
             "label": observation.indicator_id.replace("US_LABOR_", "").replace("_", " ").title(),
@@ -83,6 +91,7 @@ def candidate_from_observations(observations: list, *, generated_at: str) -> dic
             "unit": observation.unit,
             "observationPeriod": observation.valid_time,
             "sourceId": observation.source_id,
+            "sourceSeriesId": series_ids[observation.indicator_id],
             "sourceLabel": observation.source_id,
             "publicTime": observation.public_time,
             "retrievedTime": observation.retrieved_time,
@@ -90,14 +99,18 @@ def candidate_from_observations(observations: list, *, generated_at: str) -> dic
             "publicationTimeKind": observation.publication_time_kind,
             "vintageId": observation.vintage_id,
             "revisionNumber": observation.revision_number,
-            "sourceHealth": source_health,
+            "observationFreshness": observation_freshness,
+            "observationFreshnessReason": "cadence-relative observation evaluation",
+            "retrievalPathHealth": observation_freshness,
+            "retrievalPathReason": "automated collector result",
             "rightsState": observation.rights_state,
             "provenanceUrl": observation.provenance_url,
             "artifactSha256": observation.artifact_sha256,
+            "seasonalAdjustment": "seasonally adjusted",
         })
     candidate = {
-        "schemaVersion": "phase3-factual-candidate-1.0.0",
-        "publicationClass": "factual",
+        "schemaVersion": "phase3-internal-review-model-1.0.0",
+        "artifactClass": "internal_factual_review_model",
         "activationStatus": "LOCAL_REVIEW_ONLY_NOT_PUBLICLY_ACTIVATED",
         "generatedAt": generated_at,
         "geography": "US",
@@ -108,8 +121,13 @@ def candidate_from_observations(observations: list, *, generated_at: str) -> dic
         "events": [],
         "outlook": {"status": "unavailable_not_yet_supported", "message": "Forecast unavailable / not yet supported"},
     }
-    validate_factual_candidate(candidate)
+    validate_internal_review_model(candidate)
     return candidate
+
+
+def public_candidate_from_observations(observations: list, *, generated_at: str) -> tuple[dict, dict]:
+    internal = candidate_from_observations(observations, generated_at=generated_at)
+    return internal, export_public_pdi_candidate(internal)
 
 
 def write_review_candidate(path: Path, candidate: dict) -> str:

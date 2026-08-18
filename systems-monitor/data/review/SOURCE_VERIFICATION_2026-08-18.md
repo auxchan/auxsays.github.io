@@ -26,6 +26,13 @@ This review note records why the four source families were enabled.
 - Current JOLTS code structure was verified against
   `https://www.bls.gov/jlt/jlt_series_changes.htm`. The enabled level series are
   `JTS000000000000000JOL` and `JTS000000000000000HIL`.
+- Official publication-time evidence was reverified before the Gate-A PDI
+  correction. The BLS 2026 schedule records the July Employment Situation at
+  08:30 ET on 2026-08-07 (`2026-08-07T12:30:00Z`), covering CES
+  `CES0000000001` and CPS `LNS14000000` / `LNS11300000`. The official JOLTS
+  schedule records June 2026 at 10:00 ET on 2026-08-04
+  (`2026-08-04T14:00:00Z`), covering `JTS000000000000000JOL` and
+  `JTS000000000000000HIL`. AUXSAYS retrieval and acceptance remain separate.
 
 ## DOL Weekly Claims
 
