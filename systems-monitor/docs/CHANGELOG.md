@@ -1,5 +1,13 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-18 — Phase-3 Data Integrity first-slice implementation
+
+- Added the isolated standard-library-only `systems-monitor/data/` package with exact BLS CES/CPS/JOLTS and DOL Weekly Claims source, indicator, rights, and first-slice mapping registries.
+- Implemented bounded HTTPS/SSRF/redirect/size/retry controls, credential redaction, immutable hashed raw capture, strict BLS/DOL normalization, independent valid/public/retrieved/accepted times, SQLite dual as-of queries, cadence-aware health, D-009 heartbeat logic, idempotent runs, telemetry, atomic local publication, rights withdrawal, and deletion tombstones.
+- Added factual original-authority DOL revision evidence for week ending 2024-03-02 (217,000 advance to 210,000 revised), deterministic replay/security/rights/storage/publication tests, and measured local cost/performance evidence.
+- Added a six-OBS factual snapshot candidate and local-development-only UI injection. Fixture remains the deployed/default class; factual Outlook shows `Forecast unavailable / not yet supported` and no factual candidate was publicly activated.
+- Recorded current official-source/terms review and the Taylor human QA artifact with `HUMAN_DATA_QA = PENDING`. Master and all BINDING contracts remain unchanged; CPI/GDP ingestion, forecasting, Phase 4, cloud/paid infrastructure, push, merge, and deploy did not occur.
+
 ## 2026-08-17 — Phase-3 Data Integrity contract approval
 
 - Taylor accepted O-003: eight bounded registry indicators, with only six labor indicators and BLS CES/CPS/JOLTS plus DOL Weekly Claims in the first implementation slice; CPI-U and real GDP remain follow-on.

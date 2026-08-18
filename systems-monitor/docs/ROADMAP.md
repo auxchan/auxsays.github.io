@@ -80,3 +80,9 @@ Phase 3 — Data Integrity implementation, limited to the Taylor-approved six-in
 ## Next authorized work
 
 Implement only the approved Phase-3 six-indicator BLS CES/CPS/JOLTS and DOL Weekly Claims slice under the four BINDING contracts. Current endpoint/rights/limits discovery, bounded retrieval, local raw/Parquet/DuckDB-or-equivalent evaluation, normalization, dual replay, source health, DOL revision proof, idempotency, factual candidate, and deterministic tests are authorized. **Do not use FRED/ALFRED, ingest CPI/GDP, activate factual data publicly, begin forecasts/Phase 4, choose cloud, buy an API, push, merge, or deploy without later authorization.**
+
+## Phase-3 first-slice implementation checkpoint — 2026-08-18
+
+Implemented locally for technical review: four source registries; eight indicator entries with six enabled; operation-specific rights; bounded secure retrieval; immutable raw capture; normalized temporal versions; SQLite latest/public/known queries; factual DOL revision replay; cadence-aware health and four-hour evaluation semantics; atomic local candidate/withdrawal; deletion tombstones; idempotency/concurrency/telemetry tests; a separate factual candidate; and a local-only factual UI mode.
+
+Remaining Gate-A/Phase-3 closure work: technical evidence review, Taylor factual-data QA (`PENDING`), Gate-A readiness review, and any correction pass. Factual public activation and Phase 4 remain unauthorized.

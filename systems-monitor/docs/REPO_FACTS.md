@@ -84,3 +84,11 @@ Revalidate facts whose cited files changed after the validated commit.
 ## Reinspection triggers
 
 Reinspect only the affected facts when `AGENTS.md`, `.github/workflows/pages.yml`, `auxsays/_config.yml`, `auxsays/Gemfile`, `auxsays/package.json`, `auxsays/_layouts/aux-base.html`, global CSS/JS, or deployment branch policy changes.
+
+## PHASE-3 FIRST-SLICE IMPLEMENTATION EVIDENCE — 2026-08-18
+
+- `systems-monitor/data/` is an isolated Python 3.11+ package with no third-party runtime dependency. It uses standard-library bounded HTTPS retrieval, content-addressed local raw capture, SQLite, deterministic validation/tests, and atomic local candidate pointers. Recurring infrastructure/data cost is $0.
+- The source registry enables only BLS CES, BLS CPS, BLS JOLTS, and DOL Weekly Claims. It records reviewed 2026-08-18 official endpoints, current operational limits, cadence/revisions, methodology/terms/rights evidence, parser versions, and a 2027-02-18 terms recheck. The indicator registry has exactly eight entries; the approved six labor observations are enabled and CPI-U/real GDP remain disabled follow-on entries.
+- Factual DOL evidence uses original 2024-03-07 and 2024-03-14 weekly-release PDFs for week ending 2024-03-02: advance 217,000, revised 210,000. Their hashes, publication/retrieval/acceptance times, revision link, and dual replay results are retained in a bounded committed test fixture; original bytes remain in the ignored local runtime boundary.
+- `data/review/factual-snapshot-candidate.json` is a complete six-OBS factual candidate for local review only. It has no forecast, scenario, synthetic ranking/event, or public activation. The UI remains fixture-default and accepts a factual candidate only through a Vite-development local injection; factual Outlook is explicitly unavailable.
+- `HUMAN_DATA_QA = PENDING`. Phase 3 is not closed and Phase 4 is not authorized. No cloud, paid API, permanent scheduler/service, push, merge, or deployment was introduced by this implementation.

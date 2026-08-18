@@ -29,3 +29,12 @@
 | R-025 | Blocking | Third-party aggregator/API terms may prohibit software/system use, storage, caching, archiving, database incorporation, modeling, commercial use, export, or redistribution even when underlying series originated from a public authority. | High if assumed | Contract breach, forced deletion/withdrawal, and invalid replay/model evidence. | Never infer rights from upstream public provenance; fingerprint/recheck service and series-owner terms by operation. O-004 rejects FRED/ALFRED under current terms; use original BLS/DOL sources and atomically withdraw affected current content if rights later change. | Data-rights owner | Data, Source, Testing, Security Ingestion | Open — blocks any affected source |
 
 Taylor approved all four corrected Phase-3 Data Integrity contracts as BINDING, accepted O-003, and rejected O-004/FRED-ALFRED use. Current authority advances to the six-indicator Phase-3 implementation scope only. R-020/R-022/R-023/R-025 and Gate-A evidence still block factual public activation; CPI/GDP ingestion, forecasts/models, Phase 4, push, merge, and deployment remain unauthorized.
+
+## Phase-3 implementation evidence — 2026-08-18
+
+- R-019 is mitigated for the enabled slice by current official-source review, versioned registries/parsers, strict schema validation, and fail-safe health states. Ongoing drift monitoring remains required.
+- R-020 is mitigated locally by independent operation decisions, UNKNOWN fail-closed behavior, dated rights evidence/recheck, atomic current withdrawal, and deletion/tombstone tests. Taylor rights review remains a release gate.
+- R-021 factual Gate-A evidence is implemented using two original DOL releases; external technical review remains pending.
+- R-022 dual public/operational as-of replay and future-revision leakage tests are implemented; Taylor factual QA remains pending.
+- R-023 immutable candidate, idempotency, failed-validation pointer preservation, concurrency, rights withdrawal, and tombstone tests are implemented locally. No public activation has been attempted.
+- R-005/R-006 local candidate validation and retrieval security now have first-slice implementation evidence; public activation and hosted-operation review remain open.
