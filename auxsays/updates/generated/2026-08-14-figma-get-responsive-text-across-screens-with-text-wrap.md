@@ -17,8 +17,8 @@ update_version: Get responsive text across screens with text wrap
 update_logo_text: FIG
 update_published_at: '2026-08-14T00:00:00.000Z'
 update_last_checked: '2026-08-14T20:21:37Z'
-source_last_checked: '2026-08-18T02:59:25Z'
-official_body_last_checked: '2026-08-18T02:59:25Z'
+source_last_checked: '2026-08-18T08:11:31Z'
+official_body_last_checked: '2026-08-18T08:11:31Z'
 record_last_updated: '2026-08-14T20:21:37Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -70,11 +70,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-08-17T03:04:03Z'
-  url: https://www.figma.com/release-notes/?title=get-responsive-text-across-screens-with-text-wrap
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-08-17T08:26:31Z'
   url: https://www.figma.com/release-notes/?title=get-responsive-text-across-screens-with-text-wrap
   status: captured-from-rss-feed
@@ -91,6 +86,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-08-18T02:59:25Z'
+  url: https://www.figma.com/release-notes/?title=get-responsive-text-across-screens-with-text-wrap
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-08-18T08:11:31Z'
   url: https://www.figma.com/release-notes/?title=get-responsive-text-across-screens-with-text-wrap
   status: captured-from-rss-feed
   body_captured: true
