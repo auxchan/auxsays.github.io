@@ -41,6 +41,13 @@ WHAT THIS PINS (and why each rule exists):
   `no_viable_source_found` means NO viable source exists for that lane; "we have one and cannot
   find another" is diversification debt and lives in `diversification_state`.
 
+* CONFIGURATION IS NOT EXECUTION. A method can be fully wired -- enabled adapter, or registered in
+  collector_ownership.ALLOWED_METHODS -- and still never have run. `configured_unobserved` says
+  exactly that and asserts neither success nor failure; `unobserved_methods` exposes the individual
+  wired methods with no health observation even when the lane as a whole is working (both Acrobats).
+  Both are DERIVED from repo telemetry here, never taken on the YAML's word, and an unobserved lane
+  can never be ready_to_build.
+
 * THE OFFICIAL PATH MUST BE PROVEN, NOT SCORED, AND HISTORY IS NOT HEALTH.
   `official_source_quality >= 3` is an estimate. ready_to_build additionally needs
   product-specific official proof: either enabled ingestion WITH committed records AND a current
@@ -78,6 +85,7 @@ CANDIDATES_FILE = _DATA / "expansion_product_candidates.yml"
 PRODUCTS_FILE = _DATA / "patch_products.yml"
 INGESTION_FILE = _DATA / "patch_ingestion_sources.yml"
 SOURCE_HEALTH_FILE = _DATA / "source_health.yml"
+METHOD_HEALTH_FILE = _DATA / "evidence_method_health.yml"
 
 # Official-lane health, as the repo books it. Only an explicit healthy signal proves a working
 # official lane: committed records are HISTORY, and a lane that produced records last month can be
@@ -115,19 +123,31 @@ READINESS_VALUES = ("ready_to_build", "prove_source", "defer")
 # own notes described PR #51's Algolia lane as a working path).
 AUDIT_LANES = ("official", "consensus")
 AUDIT_LANE_STATES = (
-    "production_source_present", "production_source_degraded", "pending_production_source",
-    "opportunities_identified", "needs_source_research", "no_viable_source_found",
+    "production_source_present", "production_source_degraded", "configured_unobserved",
+    "pending_production_source", "opportunities_identified", "needs_source_research",
+    "no_viable_source_found",
 )
 # States that assert a source exists now or is proven-and-waiting.
 AUDIT_STATES_WITH_SOURCE = {
-    "production_source_present", "production_source_degraded", "pending_production_source",
+    "production_source_present", "production_source_degraded", "configured_unobserved",
+    "pending_production_source",
 }
+# Wiring exists: the repo is configured to run something for this lane.
+AUDIT_STATES_WIRED = {
+    "production_source_present", "production_source_degraded", "configured_unobserved",
+}
+# Execution has actually been OBSERVED. Only these may carry a real diversification judgement --
+# an unobserved method is never an independent proven source.
+AUDIT_STATES_OBSERVED = {"production_source_present", "production_source_degraded"}
+# Consensus health statuses that make a method usable. Anything else that HAS a row is observed
+# but unusable (degraded); NO row at all is unobserved, which is a different fact entirely.
+USABLE_CONSENSUS_STATUSES = {"success", "partial"}
 AUDIT_DIVERSIFICATION_STATES = (
     "sufficient", "opportunities_identified", "needs_source_research",
     "no_viable_additional_source_found", "not_applicable",
 )
-AUDIT_LANE_REQUIRED = ("state", "current_methods", "pending_methods", "opportunity_ids",
-                       "diversification_state")
+AUDIT_LANE_REQUIRED = ("state", "current_methods", "pending_methods", "unobserved_methods",
+                       "opportunity_ids", "diversification_state")
 # An unproven thing's next action must be a MEASUREMENT. If the plan reads as production wiring,
 # it contradicts the very status that says the source is unproven.
 PRODUCTION_ACTIVATION_PHRASES = (
@@ -280,6 +300,7 @@ def derive_readiness(
     enabled_products: set[str] | None = None,
     record_counts: dict[str, int] | None = None,
     official_health: dict[str, str] | None = None,
+    unobserved_lanes: bool = False,
 ) -> tuple[str, list[str]]:
     """Deterministically derive readiness. FAILS CLOSED: anything unproven means not ready.
 
@@ -344,6 +365,8 @@ def derive_readiness(
                     else:
                         reasons.append("supporting proof is stale")
 
+    if unobserved_lanes:
+        reasons.append("a lane is configured_unobserved: wired but never observed to execute")
     if candidate.get("readiness_blockers"):
         reasons.append(f"{len(candidate['readiness_blockers'])} declared readiness blocker(s)")
     if candidate.get("product_scope") == "scope_split_required":
@@ -419,6 +442,71 @@ def registered_consensus_methods() -> dict[str, set[str]]:
     return {str(k): {str(m) for m in v} for k, v in ALLOWED_METHODS.items()}
 
 
+def observed_consensus_methods() -> tuple[dict[str, set[str]], dict[str, set[str]]]:
+    """(methods with ANY health row, methods with a USABLE row) per product.
+
+    Derived from `_data/evidence_method_health.yml`. The distinction is the whole point of
+    `configured_unobserved`: a method with no row has never been seen to run, which is not the same
+    as a method whose rows say blocked/broken. Generated records are deliberately NOT consulted --
+    they are historical output and prove nothing about present execution.
+    """
+    rows: dict[str, set[str]] = {}
+    usable: dict[str, set[str]] = {}
+    if not METHOD_HEALTH_FILE.exists():
+        return rows, usable
+    doc = yaml.safe_load(METHOD_HEALTH_FILE.read_text(encoding="utf-8")) or {}
+    entries = doc.get("methods", doc) if isinstance(doc, dict) else doc
+    for row in entries or []:
+        if not isinstance(row, dict):
+            continue
+        pid = str(row.get("product_id"))
+        mid = str(row.get("method_id"))
+        rows.setdefault(pid, set()).add(mid)
+        if str(row.get("status")) in USABLE_CONSENSUS_STATUSES:
+            usable.setdefault(pid, set()).add(mid)
+    return rows, usable
+
+
+def derive_lane_wiring(
+    pid: str,
+    lane: str,
+    official_config: dict[str, dict[str, Any]],
+    official_health: dict[str, str],
+    registered: dict[str, set[str]],
+    health_rows: dict[str, set[str]],
+    health_usable: dict[str, set[str]],
+) -> dict[str, Any]:
+    """What the REPO says about this lane: wired methods, unobserved subset, derived state.
+
+    Nothing here reads the planning YAML, so authored data cannot manufacture an unobserved claim
+    or hide a real one.
+    """
+    if lane == "official":
+        cfg = official_config.get(pid, {})
+        wired = [cfg["adapter"]] if cfg.get("enabled") and cfg.get("adapter") else []
+        status = official_health.get(pid, "")
+        # No source-health row => execution never observed. A row saying Failing/Degraded/Manual
+        # watch IS an observation, and means degraded rather than unobserved.
+        unobserved = list(wired) if (wired and not status) else []
+        usable = bool(wired) and status in HEALTHY_OFFICIAL_STATUSES
+        observed_bad = bool(wired) and status in UNHEALTHY_OFFICIAL_STATUSES
+    else:
+        wired = sorted(registered.get(pid, set()))
+        unobserved = sorted(set(wired) - health_rows.get(pid, set()))
+        usable = bool(health_usable.get(pid, set()) & set(wired))
+        observed_bad = bool(wired) and not usable and bool(set(wired) & health_rows.get(pid, set()))
+
+    if wired and unobserved and len(unobserved) == len(wired):
+        state = "configured_unobserved"
+    elif wired and usable:
+        state = "production_source_present"
+    elif wired and observed_bad:
+        state = "production_source_degraded"
+    else:
+        state = ""  # not wired: the state is an authored judgement, not derivable
+    return {"wired": wired, "unobserved": unobserved, "derived_state": state}
+
+
 def generated_record_counts() -> dict[str, int]:
     """Records actually committed per product_id -- ground truth for existing official proof.
 
@@ -443,6 +531,7 @@ def validate() -> int:  # noqa: PLR0912, PLR0915 - one linear pass keeps the rul
     official_health = official_health_by_product()
     official_config = official_config_by_product()
     registered_methods = registered_consensus_methods()
+    health_rows, health_usable = observed_consensus_methods()
 
     products = _load(PRODUCTS_FILE)
     plist = products if isinstance(products, list) else products.get("products", [])
@@ -594,6 +683,7 @@ def validate() -> int:  # noqa: PLR0912, PLR0915 - one linear pass keeps the rul
         errors.append("product_source_audit must be a mapping of product_id -> per-lane audit")
         audit = {}
     audit_state_counts: dict[str, dict[str, int]] = {lane: {} for lane in AUDIT_LANES}
+    unobserved_lane_count = 0
     div_counts: dict[str, int] = {}
     for pid, entry in audit.items():
         pid = str(pid)
@@ -621,7 +711,7 @@ def validate() -> int:  # noqa: PLR0912, PLR0915 - one linear pass keeps the rul
 
             lists = {}
             bad_list = False
-            for field in ("current_methods", "pending_methods", "opportunity_ids"):
+            for field in ("current_methods", "pending_methods", "unobserved_methods", "opportunity_ids"):
                 value = block.get(field)
                 if not isinstance(value, list):
                     errors.append(f"product_source_audit[{pid}].{lane}: {field} must be a list")
@@ -647,11 +737,13 @@ def validate() -> int:  # noqa: PLR0912, PLR0915 - one linear pass keeps the rul
                 else:
                     same_lane_refs.append(ref)
 
-            # ANCHOR CURRENT METHODS TO THE REPO. A lane may not claim an operational method the
-            # repo does not actually run: official against the enabled ingestion config, consensus
-            # against collector_ownership.ALLOWED_METHODS. Without this, `current_methods` is just
-            # prose and every downstream state built on it inherits the fiction.
+            # ANCHOR THE LANE TO THE REPO, AND DERIVE RATHER THAN TRUST. `current_methods` must
+            # mirror actual wiring, `unobserved_methods` must equal the repo-derived unobserved
+            # subset, and where wiring exists the state itself is derived. Without this the lane is
+            # prose and every downstream judgement inherits the fiction.
             cfg = official_config.get(pid, {})
+            derived = derive_lane_wiring(pid, lane, official_config, official_health,
+                                         registered_methods, health_rows, health_usable)
             for method in lists["current_methods"]:
                 method = str(method)
                 if lane == "official":
@@ -666,6 +758,35 @@ def validate() -> int:  # noqa: PLR0912, PLR0915 - one linear pass keeps the rul
                     errors.append(f"product_source_audit[{pid}].consensus: current method "
                                   f"{method!r} is not registered in "
                                   "collector_ownership.ALLOWED_METHODS, so it cannot be operational")
+            if sorted(str(m) for m in lists["current_methods"]) != sorted(derived["wired"]):
+                errors.append(f"product_source_audit[{pid}].{lane}: current_methods "
+                              f"{sorted(str(m) for m in lists['current_methods'])} != repo wiring "
+                              f"{sorted(derived['wired'])}")
+
+            # --- unobserved_methods: derived, never trusted ---
+            unobs = lists["unobserved_methods"]
+            declared = sorted(str(m) for m in unobs)
+            actual = sorted(derived["unobserved"])
+            for method in declared:
+                if method not in derived["wired"]:
+                    errors.append(f"product_source_audit[{pid}].{lane}: unobserved_methods lists "
+                                  f"{method!r}, which is not current repo wiring for this lane")
+                elif method not in actual:
+                    errors.append(f"product_source_audit[{pid}].{lane}: {method!r} HAS an "
+                                  "authoritative health observation and cannot be listed as "
+                                  "unobserved")
+            for method in actual:
+                if method not in declared:
+                    errors.append(f"product_source_audit[{pid}].{lane}: {method!r} is wired with NO "
+                                  "health observation and must appear in unobserved_methods")
+
+            # --- derived state wins wherever wiring exists ---
+            if derived["derived_state"] and state != derived["derived_state"]:
+                errors.append(f"product_source_audit[{pid}].{lane}: state {state!r} != repo-derived "
+                              f"{derived['derived_state']!r}")
+            if state == "configured_unobserved" and not lists["current_methods"]:
+                errors.append(f"product_source_audit[{pid}].{lane}: 'configured_unobserved' requires "
+                              "at least one current method -- it means wired but never observed")
             # And the inverse for PENDING: something already registered is not pending.
             for method in lists["pending_methods"]:
                 method = str(method)
@@ -676,6 +797,8 @@ def validate() -> int:  # noqa: PLR0912, PLR0915 - one linear pass keeps the rul
                     errors.append(f"product_source_audit[{pid}].official: pending method "
                                   f"{method!r} is the enabled adapter -- it is current, not pending")
 
+            if lists["unobserved_methods"]:
+                unobserved_lane_count += 1
             has_source = bool(lists["current_methods"]) or bool(lists["pending_methods"])
             # HISTORY IS NOT HEALTH. A lane the repo books Degraded/Failing/Manual watch may not be
             # recorded as a healthy production source.
@@ -685,8 +808,7 @@ def validate() -> int:  # noqa: PLR0912, PLR0915 - one linear pass keeps the rul
                     errors.append(f"product_source_audit[{pid}].official: "
                                   f"'production_source_present' contradicts source_health "
                                   f"{status!r} -- use 'production_source_degraded'")
-            if state in ("production_source_present", "production_source_degraded") \
-                    and not lists["current_methods"]:
+            if state in AUDIT_STATES_OBSERVED and not lists["current_methods"]:
                 errors.append(f"product_source_audit[{pid}].{lane}: state {state!r} requires at "
                               "least one current_methods entry")
             if state == "pending_production_source" and not lists["pending_methods"]:
@@ -711,12 +833,16 @@ def validate() -> int:  # noqa: PLR0912, PLR0915 - one linear pass keeps the rul
                 errors.append(f"product_source_audit[{pid}].{lane}: diversification_state "
                               f"{block.get('diversification_state')!r} invalid")
             div_counts[div] = div_counts.get(div, 0) + 1
-            if has_source and div == "not_applicable":
-                errors.append(f"product_source_audit[{pid}].{lane}: a source exists, so "
+            # Diversification only becomes a question once execution has been OBSERVED. An
+            # unobserved or pending lane has not established that its FIRST source works, so
+            # calling it single-source debt would be premature.
+            if state in AUDIT_STATES_OBSERVED and div == "not_applicable":
+                errors.append(f"product_source_audit[{pid}].{lane}: execution is observed, so "
                               "diversification_state cannot be 'not_applicable'")
-            if not has_source and div != "not_applicable":
-                errors.append(f"product_source_audit[{pid}].{lane}: no source exists, so "
-                              f"diversification_state must be 'not_applicable' (got {div!r})")
+            if state not in AUDIT_STATES_OBSERVED and div != "not_applicable":
+                errors.append(f"product_source_audit[{pid}].{lane}: execution is not observed "
+                              f"({state}), so diversification_state must be 'not_applicable' "
+                              f"(got {div!r})")
 
     # EVERY configured product must be audited. A validator that permanently reports the same
     # warnings teaches everyone to ignore warnings, and the products it would skip are exactly the
@@ -890,8 +1016,13 @@ def validate() -> int:  # noqa: PLR0912, PLR0915 - one linear pass keeps the rul
         stored_readiness = str(c.get("readiness"))
         if stored_readiness not in READINESS_VALUES:
             errors.append(f"{cid}: readiness {c.get('readiness')!r} is not allowed")
+        cid_audit = audit.get(cid) or {}
+        cid_unobserved = any(
+            (cid_audit.get(ln) or {}).get("state") == "configured_unobserved"
+            for ln in AUDIT_LANES)
         derived, reasons = derive_readiness(
-            c, by_id, today, enabled_ingestion_products, record_counts, official_health)
+            c, by_id, today, enabled_ingestion_products, record_counts, official_health,
+            cid_unobserved)
         # A prove_source plan whose next action is production wiring contradicts itself: the point
         # of prove_source is that the source is not proven yet.
         if derived != "ready_to_build":
@@ -928,6 +1059,9 @@ def validate() -> int:  # noqa: PLR0912, PLR0915 - one linear pass keeps the rul
     print(f"    official lane : {audit_state_counts['official']}")
     print(f"    consensus lane: {audit_state_counts['consensus']}")
     print(f"    diversification: {div_counts}")
+    print(f"    lanes carrying unobserved_methods: {unobserved_lane_count}"
+          f"   fully-unobserved lanes: {audit_state_counts['official'].get('configured_unobserved', 0)}"
+          f" official + {audit_state_counts['consensus'].get('configured_unobserved', 0)} consensus")
     print(f"  configured products: {len(configured_products)}   "
           f"enabled-ingestion products: {len(enabled_ingestion_products)}   "
           f"products with generated records: {len(record_counts)}   "

@@ -72,6 +72,10 @@ SOURCE_HEALTH = [
 # collector_ownership.ALLOWED_METHODS equivalent: a consensus method must be REGISTERED to be
 # claimable as operational.
 REGISTERED = {"prod-enabled": {"method-a"}}
+# evidence_method_health.yml equivalent. A method with NO row here has never been observed to
+# execute, which is a different fact from a row that says blocked/broken.
+HEALTH_ROWS = {"prod-enabled": {"method-a"}}
+HEALTH_USABLE = {"prod-enabled": {"method-a"}}
 
 
 def proof(**over):
@@ -115,19 +119,22 @@ SOURCES = {
     "product_source_audit": {
         "prod-enabled": {
             "official": {"state": "production_source_present", "current_methods": ["x"],
-                         "pending_methods": [], "opportunity_ids": ["opp-official"],
+                         "pending_methods": [], "unobserved_methods": [],
+                         "opportunity_ids": ["opp-official"],
                          "diversification_state": "opportunities_identified"},
             "consensus": {"state": "production_source_present", "current_methods": ["method-a"],
-                          "pending_methods": [], "opportunity_ids": ["opp-ready", "opp-local"],
+                          "pending_methods": [], "unobserved_methods": [],
+                          "opportunity_ids": ["opp-ready", "opp-local"],
                           "diversification_state": "opportunities_identified"},
         },
         # Every configured product must be covered, including the uninteresting one.
         "prod-disabled": {
             "official": {"state": "needs_source_research", "current_methods": [],
-                         "pending_methods": [], "opportunity_ids": [],
+                         "pending_methods": [], "unobserved_methods": [], "opportunity_ids": [],
                          "diversification_state": "not_applicable"},
             "consensus": {"state": "opportunities_identified", "current_methods": [],
-                          "pending_methods": [], "opportunity_ids": ["opp-local"],
+                          "pending_methods": [], "unobserved_methods": [],
+                          "opportunity_ids": ["opp-local"],
                           "diversification_state": "not_applicable"},
         },
     },
@@ -233,6 +240,10 @@ def run_validator(sources: dict, candidates: dict, products=None, ingestion=None
         # fixtures do not depend on the real repo's 670 records and 47 products.
         vei.generated_record_counts = lambda: dict(RECORD_COUNTS)
         vei.registered_consensus_methods = lambda: {k: set(v) for k, v in REGISTERED.items()}
+        prior_observed = vei.observed_consensus_methods
+        vei.observed_consensus_methods = lambda: (
+            {k: set(v) for k, v in HEALTH_ROWS.items()},
+            {k: set(v) for k, v in HEALTH_USABLE.items()})
         health_path = d / "health.yml"
         health_path.write_text(yaml.safe_dump(SOURCE_HEALTH, sort_keys=False), encoding="utf-8")
         vei.SOURCE_HEALTH_FILE = health_path
@@ -244,6 +255,7 @@ def run_validator(sources: dict, candidates: dict, products=None, ingestion=None
         finally:
             vei.generated_record_counts = prior_counts
             vei.registered_consensus_methods = prior_registered
+            vei.observed_consensus_methods = prior_observed
             vei.SOURCE_HEALTH_FILE = prior_health_file
             for attr, prior in saved.items():
                 setattr(vei, attr, prior)
@@ -259,6 +271,19 @@ def must_fail(label, fn, target="candidates", needle=""):
     s, c = _apply(fn, target)
     rc, out = run_validator(s, c)
     ok = rc == 1 and (needle in out if needle else True)
+    check(label, ok, f"rc={rc}\n{out.strip()[-500:]}")
+
+
+def both(label, fn, expect_rc, needle=""):
+    """Mutate sources AND candidates together.
+
+    Needed because repo-derived state is cross-cutting: removing a health observation changes a
+    lane's derived state AND blocks readiness, so an honest fixture has to move both.
+    """
+    s, c = copy.deepcopy(SOURCES), copy.deepcopy(CANDIDATES)
+    fn(s, c)
+    rc, out = run_validator(s, c)
+    ok = rc == expect_rc and (needle in out if needle else True)
     check(label, ok, f"rc={rc}\n{out.strip()[-500:]}")
 
 
@@ -680,11 +705,11 @@ def run() -> int:  # noqa: PLR0915
     must_fail("an invalid diversification_state is rejected",
               lambda s: lane(s, "prod-enabled", "official").update(diversification_state="fine"),
               target="sources", needle="diversification_state 'fine' invalid")
-    must_fail("diversification cannot be not_applicable when a source exists",
+    must_fail("diversification cannot be not_applicable once execution IS observed",
               lambda s: lane(s, "prod-enabled", "official").update(
                   diversification_state="not_applicable"),
               target="sources", needle="cannot be 'not_applicable'")
-    must_fail("diversification must be not_applicable when no source exists",
+    must_fail("diversification must be not_applicable while execution is NOT observed",
               lambda s: lane(s, "prod-disabled", "official").update(
                   diversification_state="needs_source_research"),
               target="sources", needle="must be 'not_applicable'")
@@ -700,11 +725,11 @@ def run() -> int:  # noqa: PLR0915
     must_pass("needs_source_research with an empty list is valid coverage for a quiet product",
               lambda s: s["product_source_audit"].__setitem__("prod-disabled", {
                   "official": {"state": "needs_source_research", "current_methods": [],
-                               "pending_methods": [], "opportunity_ids": [],
-                               "diversification_state": "not_applicable"},
+                               "pending_methods": [], "unobserved_methods": [],
+                               "opportunity_ids": [], "diversification_state": "not_applicable"},
                   "consensus": {"state": "needs_source_research", "current_methods": [],
-                                "pending_methods": [], "opportunity_ids": [],
-                                "diversification_state": "not_applicable"}}),
+                                "pending_methods": [], "unobserved_methods": [],
+                                "opportunity_ids": [], "diversification_state": "not_applicable"}}),
               target="sources")
     must_fail("a drifted audit-state vocabulary is rejected",
               lambda s: s["audit_lane_states"].pop("no_viable_source_found"),
@@ -795,11 +820,29 @@ def run() -> int:  # noqa: PLR0915
                       for p in ("register the", "allowed_methods")),
           str(cu.get("recommended_next_step"))[:160])
     real_audit = real_src["product_source_audit"]
-    check("CALIBRATION premiere consensus: pending_production_source, NOT no_viable_source_found",
-          real_audit["adobe-premiere-pro"]["consensus"]["state"] == "pending_production_source"
-          and "adobe_community_algolia_search" in
-          real_audit["adobe-premiere-pro"]["consensus"]["pending_methods"],
-          str(real_audit["adobe-premiere-pro"]["consensus"]["state"]))
+    # DURABLE, not temporal: assert the STATE MACHINE, never a specific PR's merge status. These
+    # hold whether or not #51 is merged, because both sides are derived from the same repo truth.
+    real_cfg = vei.official_config_by_product()
+    real_reg = vei.registered_consensus_methods()
+    real_health = vei.official_health_by_product()
+
+    def lane_truth(pid, ln):
+        return vei.derive_lane_wiring(pid, ln, real_cfg, real_health, real_reg,
+                                      *vei.observed_consensus_methods())
+
+    for pid in sorted(real_audit):
+        for ln in ("official", "consensus"):
+            truth = lane_truth(pid, ln)
+            blk = real_audit[pid][ln]
+            if truth["derived_state"]:
+                check(f"STATE MACHINE {pid}.{ln}: state == repo-derived "
+                      f"{truth['derived_state']}",
+                      blk["state"] == truth["derived_state"],
+                      f"stored={blk['state']!r} derived={truth['derived_state']!r}")
+            check(f"STATE MACHINE {pid}.{ln}: unobserved_methods == repo-derived",
+                  sorted(blk["unobserved_methods"]) == sorted(truth["unobserved"]),
+                  f"stored={sorted(blk['unobserved_methods'])} "
+                  f"derived={sorted(truth['unobserved'])}")
     check("CALIBRATION davinci consensus: operational source + diversification debt",
           real_audit["blackmagic-davinci"]["consensus"]["state"] == "production_source_present"
           and real_audit["blackmagic-davinci"]["consensus"]["diversification_state"]
@@ -858,9 +901,16 @@ def run() -> int:  # noqa: PLR0915
               rc10 == 0 and "ready_to_build=0" in out10, out10[-400:])
 
         SOURCE_HEALTH[:] = [{"product_id": "prod-disabled", "status": "Staged"}]
-        rc11, out11 = run_validator(s6, c6)
-        check("records with NO health row at all => official path unproven (absence is not a pass)",
-              rc11 == 0 and "ready_to_build=0" in out11, out11[-400:])
+
+        def _no_health(s, c):
+            # With no health row the official lane is UNOBSERVED, not degraded -- so the fixture
+            # must say so, and readiness must fall.
+            lane(s, "prod-enabled", "official").update(
+                state="configured_unobserved", unobserved_methods=["x"],
+                diversification_state="not_applicable")
+            c["candidates"][0]["readiness"] = "prove_source"
+        both("records with NO health row at all => official path unproven (absence is not a pass)",
+             _no_health, 0, "ready_to_build=0")
 
         # The audit may not claim a healthy production source the repo books unhealthy.
         SOURCE_HEALTH[:] = [{"product_id": "prod-enabled", "status": "Failing"},
@@ -891,6 +941,144 @@ def run() -> int:  # noqa: PLR0915
     must_fail("the enabled official adapter cannot be listed as PENDING",
               lambda s: lane(s, "prod-enabled", "official").update(pending_methods=["x"]),
               target="sources", needle="is the enabled adapter -- it is current, not pending")
+
+
+    # =====================================================================================
+    # CONFIGURED-BUT-UNOBSERVED: configuration is not execution, execution is not health
+    # =====================================================================================
+    def swap(**kw):
+        """Temporarily replace fixture dicts (they are read inside run_validator)."""
+        saved = {k: dict(globals()[k]) for k in kw}
+        for k, v in kw.items():
+            globals()[k].clear()
+            globals()[k].update(v)
+        return saved
+
+    def restore(saved):
+        for k, v in saved.items():
+            globals()[k].clear()
+            globals()[k].update(v)
+
+    # (1) registered + zero health => configured_unobserved is VALID
+    saved = swap(HEALTH_ROWS={}, HEALTH_USABLE={})
+    try:
+        def _unobserved_consensus(s, c):
+            lane(s, "prod-enabled", "consensus").update(
+                state="configured_unobserved", unobserved_methods=["method-a"],
+                diversification_state="not_applicable")
+            c["candidates"][0]["readiness"] = "prove_source"
+        both("(1) a registered method with ZERO health rows is configured_unobserved",
+             _unobserved_consensus, 0)
+        # (4) omitted from unobserved_methods => ERROR
+        must_fail("(4) a wired zero-health method omitted from unobserved_methods is rejected",
+                  lambda s: lane(s, "prod-enabled", "consensus").update(
+                      state="configured_unobserved", unobserved_methods=[],
+                      diversification_state="not_applicable"),
+                  target="sources", needle="must appear in unobserved_methods")
+        # (11) diversification must be not_applicable
+        must_fail("(11) configured_unobserved requires diversification_state not_applicable",
+                  lambda s: lane(s, "prod-enabled", "consensus").update(
+                      state="configured_unobserved", unobserved_methods=["method-a"],
+                      diversification_state="needs_source_research"),
+                  target="sources", needle="must be 'not_applicable'")
+        # (12) an unobserved lane can never be ready_to_build
+        s8, c8 = copy.deepcopy(SOURCES), copy.deepcopy(CANDIDATES)
+        lane(s8, "prod-enabled", "consensus").update(
+            state="configured_unobserved", unobserved_methods=["method-a"],
+            diversification_state="not_applicable")
+        rc13, out13 = run_validator(s8, c8)
+        check("(12) an unobserved lane blocks ready_to_build",
+              rc13 == 1 and "configured_unobserved: wired but never observed" in out13,
+              out13[-400:])
+    finally:
+        restore(saved)
+
+    # (2) configured_unobserved with no current method => ERROR
+    saved = swap(REGISTERED={}, HEALTH_ROWS={}, HEALTH_USABLE={})
+    try:
+        must_fail("(2) configured_unobserved with empty current_methods is rejected",
+                  lambda s: lane(s, "prod-enabled", "consensus").update(
+                      state="configured_unobserved", current_methods=[], unobserved_methods=[],
+                      opportunity_ids=[], diversification_state="not_applicable"),
+                  target="sources", needle="requires at least one current method")
+    finally:
+        restore(saved)
+
+    # (3) configured_unobserved while a health row EXISTS => derived state disagrees
+    must_fail("(3) configured_unobserved is rejected when a health observation exists",
+              lambda s: lane(s, "prod-enabled", "consensus").update(
+                  state="configured_unobserved", diversification_state="not_applicable"),
+              target="sources", needle="!= repo-derived 'production_source_present'")
+
+    # (5) invented unobserved method that is not wired => ERROR
+    must_fail("(5) an unobserved_methods entry that is not repo wiring is rejected",
+              lambda s: lane(s, "prod-enabled", "consensus").update(
+                  unobserved_methods=["method-imaginary"]),
+              target="sources", needle="not current repo wiring")
+
+    # (6) observed method left in unobserved_methods => ERROR
+    must_fail("(6) a method WITH a health observation cannot be listed as unobserved",
+              lambda s: lane(s, "prod-enabled", "consensus").update(
+                  unobserved_methods=["method-a"]),
+              target="sources", needle="cannot be listed as")
+
+    # (7) enabled official adapter + no source_health row => official unobserved
+    prior_health = list(SOURCE_HEALTH)
+    try:
+        SOURCE_HEALTH[:] = [{"product_id": "prod-disabled", "status": "Staged"}]
+        def _official_unobserved(s, c):
+            lane(s, "prod-enabled", "official").update(
+                state="configured_unobserved", unobserved_methods=["x"],
+                diversification_state="not_applicable")
+            c["candidates"][0]["readiness"] = "prove_source"
+        both("(7) enabled official adapter with NO source_health row is unobserved",
+             _official_unobserved, 0)
+        must_fail("(7b) that same lane cannot claim production_source_present",
+                  lambda s: None, target="sources", needle="!= repo-derived")
+        # (9) enabled + failing row => degraded, NOT unobserved
+        SOURCE_HEALTH[:] = [{"product_id": "prod-enabled", "status": "Failing"},
+                            {"product_id": "prod-disabled", "status": "Staged"}]
+        def _official_failing(s, c):
+            lane(s, "prod-enabled", "official").update(
+                state="production_source_degraded", unobserved_methods=[],
+                diversification_state="needs_source_research")
+            c["candidates"][0]["readiness"] = "prove_source"
+        both("(9) enabled official adapter with a Failing row is degraded, not unobserved",
+             _official_failing, 0)
+        must_fail("(9b) a Failing official lane cannot be configured_unobserved",
+                  lambda s: lane(s, "prod-enabled", "official").update(
+                      state="configured_unobserved", unobserved_methods=["x"],
+                      diversification_state="not_applicable"),
+                  target="sources", needle="not current repo wiring" if False else "repo-derived")
+    finally:
+        SOURCE_HEALTH[:] = prior_health
+
+    # (8) enabled official adapter + healthy row => NOT unobserved (baseline already asserts the
+    # positive; pin the negative too)
+    must_fail("(8) a Healthy official lane cannot list its adapter as unobserved",
+              lambda s: lane(s, "prod-enabled", "official").update(unobserved_methods=["x"]),
+              target="sources", needle="cannot be listed as")
+
+    # (10) MIXED lane: one observed-usable + one registered-zero-health
+    saved = swap(REGISTERED={"prod-enabled": {"method-a", "method-b"}})
+    try:
+        must_pass("(10) a mixed lane stays production_source_present and exposes only the "
+                  "unobserved method",
+                  lambda s: lane(s, "prod-enabled", "consensus").update(
+                      current_methods=["method-a", "method-b"],
+                      unobserved_methods=["method-b"]),
+                  target="sources")
+        must_fail("(10b) the mixed lane may not hide its unobserved method",
+                  lambda s: lane(s, "prod-enabled", "consensus").update(
+                      current_methods=["method-a", "method-b"], unobserved_methods=[]),
+                  target="sources", needle="must appear in unobserved_methods")
+        must_fail("(10c) the mixed lane may not omit a wired method from current_methods",
+                  lambda s: lane(s, "prod-enabled", "consensus").update(
+                      current_methods=["method-a"], unobserved_methods=[]),
+                  target="sources", needle="!= repo wiring")
+    finally:
+        restore(saved)
+
 
     # --- the committed inventory, against the REAL repo anchors --------------------------
     real_health = vei.official_health_by_product()
@@ -930,11 +1118,25 @@ def run() -> int:  # noqa: PLR0915
           str({pid: sorted(set(v["consensus"]["current_methods"]) - real_reg.get(pid, set()))
                for pid, v in real_audit.items()
                if set(v["consensus"]["current_methods"]) - real_reg.get(pid, set())}))
-    check("ANCHOR premiere's pending Algolia method is genuinely NOT yet registered",
-          "adobe_community_algolia_search" not in real_reg.get("adobe-premiere-pro", set())
-          and real_audit["adobe-premiere-pro"]["consensus"]["pending_methods"]
-          == ["adobe_community_algolia_search"],
-          str(sorted(real_reg.get("adobe-premiere-pro", set()))))
+    # DURABLE: the Algolia method must be represented consistently with its ACTUAL registration
+    # status, and can never simply vanish. Pre-#51 it is pending; post-#51 it is a current method
+    # that is initially unobserved. Both are asserted by the same rule.
+    _pc = real_audit["adobe-premiere-pro"]["consensus"]
+    _algolia = "adobe_community_algolia_search"
+    _registered = _algolia in real_reg.get("adobe-premiere-pro", set())
+    _rows, _ = vei.observed_consensus_methods()
+    _observed = _algolia in _rows.get("adobe-premiere-pro", set())
+    if _registered:
+        check("STATE MACHINE premiere Algolia: registered => current, and unobserved until health",
+              _algolia in _pc["current_methods"]
+              and _algolia not in _pc["pending_methods"]
+              and (_observed or _algolia in _pc["unobserved_methods"]),
+              f"registered observed={_observed} block={_pc}")
+    else:
+        check("STATE MACHINE premiere Algolia: not registered => pending, never current",
+              _algolia in _pc["pending_methods"] and _algolia not in _pc["current_methods"]
+              and _algolia not in _pc["unobserved_methods"],
+              f"block={_pc}")
 
     print()
     print("=" * 66)

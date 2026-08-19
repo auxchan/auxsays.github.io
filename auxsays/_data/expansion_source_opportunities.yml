@@ -196,54 +196,72 @@ deferred_follow_ups:
       functionality unchanged.
     scope_note: Must be its own tiny PR. Not mixed into expansion-inventory-foundation.
 
-# PER-PRODUCT, PER-LANE SOURCE AUDIT. Answers "what sources do we have, what is missing,
-# and where should we keep looking?" for EVERY configured product -- all 47, so the
-# products least likely to be remembered cannot decay into an ignorable warning.
+# PER-PRODUCT, PER-LANE SOURCE AUDIT. Answers "what sources do we have, what is missing, and where
+# should we keep looking?" for EVERY configured product -- all 47.
 #
-# OFFICIAL and CONSENSUS are audited SEPARATELY because they fail independently, and
-# because a single product-level status produced flatly contradictory records: Premiere was
-# labelled no_viable_source_found while its own notes described PR #51 as a working path.
+# OFFICIAL and CONSENSUS are audited SEPARATELY because they fail independently.
 #
-# `no_viable_source_found` means literally NO viable source is known for that lane. It may
-# never mean "we have one source and cannot find a second" -- that is diversification debt
-# and lives in `diversification_state`. The validator enforces the distinction: a lane with
-# any current or pending method cannot be no_viable_source_found.
+# CONFIGURATION IS NOT EXECUTION, AND EXECUTION IS NOT HEALTH. `current_methods` lists what the repo
+# is actually WIRED to run: the enabled ingestion adapter for official, every method registered in
+# collector_ownership.ALLOWED_METHODS for consensus. Being wired says nothing about whether it has
+# ever executed. `unobserved_methods` names the wired methods for which NO authoritative health
+# observation exists, and `configured_unobserved` is the lane state when EVERY wired method is in
+# that condition. The integration rehearsal proved this state is unavoidable: the moment PR #51
+# registers adobe_community_algolia_search for Premiere the method stops being pending, yet it has
+# never run -- so calling the lane present or degraded would both assert an execution that has not
+# happened. It is also not hypothetical: microsoft-powerpoint is in exactly this state today.
 #
-# `opportunity_ids` in a lane must reference opportunities of THAT lane. An official-lane
-# opportunity can never close a consensus gap (the microsoft-windows-11 defect).
+# `no_viable_source_found` means literally NO viable source is known for that lane. It may never
+# mean "we have one source and cannot find a second" -- that is diversification debt and lives in
+# `diversification_state`, which stays `not_applicable` until execution has actually been observed.
 #
-# Opportunities are never invented to satisfy coverage: needs_source_research with an empty
-# list is the honest answer and validates cleanly.
+# `opportunity_ids` in a lane must reference opportunities of THAT lane. Opportunities are never
+# invented to satisfy coverage: needs_source_research with an empty list is the honest answer.
 audit_lane_states:
-  production_source_present: A method is operational in production for this lane today.
+  production_source_present: >-
+    Wiring exists AND at least one wired method has an observed usable execution (success/partial
+    for consensus, Healthy for official). The lane may still carry unobserved_methods.
   production_source_degraded: >-
-    Configured and executing, but yielding no records or no evidence -- running is not the
-    same as working.
+    Wiring exists AND execution has been OBSERVED to be unusable (only blocked/broken/no_results
+    rows, or Failing/Degraded/Manual-watch health), with no usable observed method. Observed-bad,
+    not merely unproven. The lane may still carry unobserved_methods.
+  configured_unobserved: >-
+    Repo-owned production wiring exists for at least one current method, but NO authoritative health
+    observation exists for ANY of them, so execution has never been seen. This asserts neither
+    success nor failure nor blocked nor no_results -- strictly configured, not yet observed. It
+    blocks readiness, and transitions deterministically to present or degraded as soon as health
+    appears.
   pending_production_source: >-
-    A source is proven but not yet in production (for example, sitting in an open PR).
-  opportunities_identified: No operational or pending source, but a same-lane opportunity exists.
-  needs_source_research: No operational source, no pending source, no same-lane opportunity.
+    A method is NOT yet production-wired/registered, but proven work is waiting to be integrated
+    (typically an open PR).
+  opportunities_identified: No wiring and no pending source, but a same-lane opportunity exists.
+  needs_source_research: No wiring, no pending source, no same-lane opportunity.
   no_viable_source_found: Researched, and NO viable source exists for this lane at all.
 audit_diversification_states:
-  sufficient: Multiple independent sources already carry this lane.
+  sufficient: Multiple independent OBSERVED sources already carry this lane.
   opportunities_identified: A second-source candidate is identified but unproven.
-  needs_source_research: One source exists and no alternative has been researched.
+  needs_source_research: One observed source exists and no alternative has been researched.
   no_viable_additional_source_found: >-
-    A source exists, and additional sources were researched and found non-viable. This is
-    diversification debt, NOT an absence of sources.
-  not_applicable: No source exists yet, so diversification is not yet the question.
+    An observed source exists, and additional sources were researched and found non-viable.
+    Diversification debt, NOT an absence of sources.
+  not_applicable: >-
+    Execution has not been observed yet (unobserved, pending, or no source at all), so
+    diversification is not yet the question. An unobserved method never counts as an independent
+    proven source.
 product_source_audit:
   openai-chatgpt:
     official:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
     consensus:
       state: opportunities_identified
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids:
         - openai-community-discourse
       diversification_state: not_applicable
@@ -252,12 +270,14 @@ product_source_audit:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
     consensus:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
   google-gemini:
@@ -265,12 +285,14 @@ product_source_audit:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
     consensus:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
   perplexity:
@@ -278,12 +300,14 @@ product_source_audit:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
     consensus:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
   midjourney:
@@ -291,12 +315,14 @@ product_source_audit:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
     consensus:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
   stability-ai:
@@ -304,12 +330,14 @@ product_source_audit:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
     consensus:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
   runway:
@@ -317,12 +345,14 @@ product_source_audit:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
     consensus:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
   pika:
@@ -330,12 +360,14 @@ product_source_audit:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
     consensus:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
   lottiefiles:
@@ -343,12 +375,14 @@ product_source_audit:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
     consensus:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
   figma:
@@ -357,6 +391,7 @@ product_source_audit:
       current_methods:
         - rss_feed
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids:
         - figma-zendesk-help-center
       diversification_state: opportunities_identified
@@ -364,6 +399,7 @@ product_source_audit:
       state: opportunities_identified
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids:
         - figma-community-forum
       diversification_state: not_applicable
@@ -372,12 +408,14 @@ product_source_audit:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
     consensus:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
   adobe-premiere-pro:
@@ -386,32 +424,47 @@ product_source_audit:
       current_methods:
         - adobe_release_notes
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: no_viable_additional_source_found
       notes: >-
-        adobe_release_notes is enabled and has produced 2 records, but source_health books this
-        product Failing, so the lane is degraded rather than healthy. Alternative official
-        surfaces are blocked by the HelpX CI transport question.
+        adobe_release_notes is enabled and has produced records, but source_health books this
+        product Failing -- observed failure, so degraded. Alternative official surfaces are
+        blocked by the HelpX CI transport question.
     consensus:
-      state: pending_production_source
-      current_methods: []
+      state: production_source_degraded
+      current_methods:
+        - adobe_community_bug_tab_index
+        - adobe_community_known_url_recheck
+        - adobe_community_search
+        - brave_search_api
+        - creativecow_brave_search
+        - creativecow_forum_index
+        - known_watchlist
+        - reddit_search
+        - wayback_snapshot_recheck
       pending_methods:
         - adobe_community_algolia_search
+      unobserved_methods:
+        - known_watchlist
       opportunity_ids:
         - reddit-search-json
         - wayback-archive-recheck
         - brave-search-api
       diversification_state: opportunities_identified
       notes: >-
-        PR #51 proves the keyless Adobe Community Algolia lane with 7 accepted patch-specific rows
-        in CI run 31680213911, but it is not merged, so no consensus method is operational yet.
-        This is a PENDING production source -- explicitly NOT no_viable_source_found, which would
-        be false. Diversification beyond that single lane is still unresearched.
+        Nine methods are REGISTERED, so this lane is wired -- but not one books success or
+        partial: five blocked, three broken, one no_results. That is OBSERVED failure, so the lane
+        is degraded rather than unobserved. known_watchlist is registered with ZERO health rows
+        and is therefore listed under unobserved_methods. PR #51's adobe_community_algolia_search
+        is NOT yet registered on main, so it stays a pending method; once it registers it becomes
+        a current method that is initially UNOBSERVED, not automatically healthy.
   adobe-after-effects:
     official:
       state: opportunities_identified
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids:
         - vendor-sitemap-delta
       diversification_state: not_applicable
@@ -419,6 +472,7 @@ product_source_audit:
       state: opportunities_identified
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids:
         - adobe-algolia-after-effects
       diversification_state: not_applicable
@@ -427,6 +481,7 @@ product_source_audit:
       state: opportunities_identified
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids:
         - vendor-sitemap-delta
       diversification_state: not_applicable
@@ -434,6 +489,7 @@ product_source_audit:
       state: opportunities_identified
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids:
         - adobe-algolia-photoshop
       diversification_state: not_applicable
@@ -442,6 +498,7 @@ product_source_audit:
       state: opportunities_identified
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids:
         - vendor-sitemap-delta
       diversification_state: not_applicable
@@ -449,6 +506,7 @@ product_source_audit:
       state: opportunities_identified
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids:
         - adobe-algolia-media-encoder
       diversification_state: not_applicable
@@ -457,6 +515,7 @@ product_source_audit:
       state: opportunities_identified
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids:
         - vendor-sitemap-delta
       diversification_state: not_applicable
@@ -464,6 +523,7 @@ product_source_audit:
       state: opportunities_identified
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids:
         - adobe-algolia-lightroom-classic
       diversification_state: not_applicable
@@ -473,58 +533,69 @@ product_source_audit:
       current_methods:
         - blackmagic_support_downloads
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: needs_source_research
       notes: >-
-        source_health books official ingestion as Manual watch: 106 records exist but automated
-        official ingestion is not active. That is the largest manual dependency in the repo.
+        source_health books official ingestion as Manual watch: records exist but unattended
+        official ingestion is not actually working. Observed, and observed-bad -- degraded, not
+        unobserved.
     consensus:
       state: production_source_present
       current_methods:
         - creative_cow_forum_search
         - known_watchlist
         - reddit_search
+        - vendor_forum_search
+        - web_search
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids:
         - blackmagic-forum-phpbb
         - reddit-search-json
       diversification_state: no_viable_additional_source_found
       notes: >-
-        Three methods are operational and supply 235 accepted rows -- so a viable consensus source
-        certainly exists. What FAILED is diversification: 226 of 235 rows are Reddit, and the
-        vendor's own forum is measured challenge-gated (202 / zero-byte body). That is
-        diversification debt, recorded as no_viable_additional_source_found, not an absence of any
-        source.
+        All five registered methods have health rows and three are usable, supplying the largest
+        evidence population in the repo, so nothing here is unobserved. What FAILED is
+        diversification: the vast majority of rows are Reddit and the vendor forum is measured
+        challenge-gated (202 / zero-byte body). Diversification debt, not absence of a source.
   obs-studio:
     official:
       state: production_source_present
       current_methods:
         - github_releases
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: needs_source_research
+      notes: >-
+        github_releases is enabled and source_health books it Healthy -- observed and usable.
     consensus:
       state: production_source_present
       current_methods:
         - github_issues
+        - known_watchlist
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids:
         - obs-forum-xenforo-rss
       diversification_state: opportunities_identified
       notes: >-
-        github_issues is operational and supplies 100% of the 174 accepted rows. The XenForo feed
-        is an identified consensus-lane diversification candidate.
+        github_issues is registered and observed usable, supplying effectively all accepted rows.
+        The XenForo feed is an identified consensus-lane diversification candidate.
   twitch:
     official:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
     consensus:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
   youtube:
@@ -532,12 +603,14 @@ product_source_audit:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
     consensus:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
   kick:
@@ -545,12 +618,14 @@ product_source_audit:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
     consensus:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
   rumble:
@@ -558,12 +633,14 @@ product_source_audit:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
     consensus:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
   epic-unreal:
@@ -571,12 +648,14 @@ product_source_audit:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
     consensus:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
   unity:
@@ -584,12 +663,14 @@ product_source_audit:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
     consensus:
       state: opportunities_identified
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids:
         - unity-discussions-discourse
       diversification_state: not_applicable
@@ -598,6 +679,7 @@ product_source_audit:
       state: opportunities_identified
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids:
         - steam-news-api
       diversification_state: not_applicable
@@ -605,6 +687,7 @@ product_source_audit:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
   nvidia:
@@ -612,12 +695,14 @@ product_source_audit:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
     consensus:
       state: opportunities_identified
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids:
         - nvidia-developer-forums-discourse
       diversification_state: not_applicable
@@ -626,12 +711,14 @@ product_source_audit:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
     consensus:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
   intel-arc:
@@ -639,12 +726,14 @@ product_source_audit:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
     consensus:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
   blender:
@@ -652,12 +741,14 @@ product_source_audit:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
     consensus:
       state: opportunities_identified
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids:
         - blender-devtalk-discourse
       diversification_state: not_applicable
@@ -667,12 +758,14 @@ product_source_audit:
       current_methods:
         - github_releases
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: needs_source_research
     consensus:
       state: opportunities_identified
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids:
         - comfyui-github-issues
       diversification_state: not_applicable
@@ -681,12 +774,14 @@ product_source_audit:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
     consensus:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
   github:
@@ -695,12 +790,14 @@ product_source_audit:
       current_methods:
         - rss_feed
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: needs_source_research
     consensus:
       state: opportunities_identified
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids:
         - github-product-changelog-consensus
       diversification_state: not_applicable
@@ -709,12 +806,14 @@ product_source_audit:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
     consensus:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
   netlify:
@@ -723,15 +822,17 @@ product_source_audit:
       current_methods:
         - html_changelog
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: needs_source_research
       notes: >-
-        Ingestion is enabled and executes, but source_health books Degraded with zero records
-        extracted -- a degraded production source, not a healthy one.
+        Ingestion is enabled and source_health books Degraded with zero records extracted:
+        observed, and observed-bad. Degraded, not unobserved.
     consensus:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
   notion:
@@ -739,12 +840,14 @@ product_source_audit:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
     consensus:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
   zapier:
@@ -752,12 +855,14 @@ product_source_audit:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
     consensus:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
   make:
@@ -765,77 +870,114 @@ product_source_audit:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
     consensus:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
   adobe-acrobat-reader:
     official:
-      state: production_source_present
+      state: configured_unobserved
       current_methods:
         - adobe_acrobat
       pending_methods: []
+      unobserved_methods:
+        - adobe_acrobat
       opportunity_ids: []
-      diversification_state: needs_source_research
+      diversification_state: not_applicable
+      notes: >-
+        adobe_acrobat is the enabled adapter and has produced records, but no source_health row
+        exists, so official execution health is unobserved.
     consensus:
       state: production_source_present
       current_methods:
         - adobe_community_algolia_search
+        - adobe_community_bug_tab_index
+        - adobe_community_known_url_recheck
+        - adobe_community_search
+        - reddit_search
       pending_methods: []
+      unobserved_methods:
+        - adobe_community_bug_tab_index
+        - adobe_community_known_url_recheck
       opportunity_ids:
         - reddit-search-json
-      diversification_state: opportunities_identified
+      diversification_state: needs_source_research
       notes: >-
-        adobe_community_algolia_search is operational (83 accepted rows) and is the only source.
-        No second consensus source has been probed -- unresearched diversification, not absence.
+        MIXED LANE CALIBRATION. adobe_community_algolia_search is registered and observed usable,
+        so the lane is production_source_present. Two further registered methods --
+        adobe_community_bug_tab_index and adobe_community_known_url_recheck -- have ZERO health
+        rows and are exposed in unobserved_methods rather than being silently counted as working.
+        They do NOT count as independent proven sources for diversification.
   adobe-acrobat-pro:
     official:
-      state: production_source_present
+      state: configured_unobserved
       current_methods:
         - adobe_acrobat
       pending_methods: []
+      unobserved_methods:
+        - adobe_acrobat
       opportunity_ids: []
-      diversification_state: needs_source_research
+      diversification_state: not_applicable
+      notes: >-
+        adobe_acrobat is the enabled adapter and has produced records, but no source_health row
+        exists, so official execution health is unobserved.
     consensus:
       state: production_source_present
       current_methods:
         - adobe_community_algolia_search
+        - adobe_community_bug_tab_index
+        - adobe_community_known_url_recheck
+        - adobe_community_search
+        - reddit_search
       pending_methods: []
+      unobserved_methods:
+        - adobe_community_bug_tab_index
+        - adobe_community_known_url_recheck
       opportunity_ids:
         - reddit-search-json
-      diversification_state: opportunities_identified
+      diversification_state: needs_source_research
       notes: >-
-        As adobe-acrobat-reader: 45 accepted rows from one source, no alternative probed.
+        As adobe-acrobat-reader: one observed usable method plus two registered-but-never-observed
+        methods exposed in unobserved_methods.
   microsoft-windows-11:
     official:
-      state: production_source_present
+      state: configured_unobserved
       current_methods:
         - microsoft_release_health
       pending_methods: []
+      unobserved_methods:
+        - microsoft_release_health
       opportunity_ids:
         - microsoft-365-message-center-and-release-health
-      diversification_state: opportunities_identified
+      diversification_state: not_applicable
+      notes: >-
+        microsoft_release_health is the enabled adapter and has produced records, but this product
+        has NO row in source_health.yml, so execution health is unobserved. Records are historical
+        output and never prove present health.
     consensus:
       state: production_source_present
       current_methods:
         - learn_qna_search_rss
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: needs_source_research
       notes: >-
-        learn_qna_search_rss is operational (24 accepted rows) and is the ONLY consensus source.
-        No consensus-lane opportunity has been identified yet -- the Microsoft 365
-        message-center/release-health row is an OFFICIAL-lane opportunity and cannot close a
-        consensus diversification gap.
+        learn_qna_search_rss is registered AND observed usable, and is the only consensus source.
+        No consensus-lane opportunity has been identified -- the Microsoft 365 message-center row
+        is an OFFICIAL-lane opportunity and cannot close a consensus diversification gap.
   microsoft-teams:
     official:
       state: opportunities_identified
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids:
         - microsoft-365-message-center-and-release-health
       diversification_state: not_applicable
@@ -843,58 +985,84 @@ product_source_audit:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
   microsoft-powerpoint:
     official:
-      state: production_source_present
+      state: configured_unobserved
       current_methods:
         - microsoft_office_updates
       pending_methods: []
+      unobserved_methods:
+        - microsoft_office_updates
       opportunity_ids: []
-      diversification_state: needs_source_research
+      diversification_state: not_applicable
+      notes: >-
+        microsoft_office_updates is enabled with records, but no source_health row exists --
+        execution health is unobserved.
     consensus:
-      state: opportunities_identified
-      current_methods: []
+      state: configured_unobserved
+      current_methods:
+        - learn_qna_search_rss
+        - reddit_search
       pending_methods: []
+      unobserved_methods:
+        - learn_qna_search_rss
+        - reddit_search
       opportunity_ids:
         - reddit-search-json
         - microsoft-learn-qna-powerpoint
       diversification_state: not_applicable
       notes: >-
-        Two methods are registered in ALLOWED_METHODS and evidence_method_health.yml holds ZERO
-        rows for this product, so nothing is operational and nothing is known to fail. The
-        consensus-lane opportunity exists but the first action is an observability diagnosis.
+        CALIBRATION CASE. Both registered methods have ZERO rows in evidence_method_health.yml, so
+        the lane is wired and entirely unobserved: we cannot tell whether it never runs, crashes,
+        or runs and finds nothing. configured_unobserved states exactly that and claims neither
+        success nor failure. The first action is an observability diagnosis, not sourcing.
   microsoft-365-apps:
     official:
-      state: production_source_present
+      state: configured_unobserved
       current_methods:
         - microsoft_office_updates
       pending_methods: []
+      unobserved_methods:
+        - microsoft_office_updates
       opportunity_ids:
         - microsoft-365-message-center-and-release-health
-      diversification_state: opportunities_identified
+      diversification_state: not_applicable
+      notes: >-
+        microsoft_office_updates is enabled with records, but no source_health row exists --
+        execution health is unobserved.
     consensus:
       state: needs_source_research
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids: []
       diversification_state: not_applicable
+      notes: >-
+        No consensus method is registered at all, so nothing is wired and nothing can be
+        unobserved.
   elgato-stream-deck:
     official:
-      state: production_source_degraded
+      state: configured_unobserved
       current_methods:
         - elgato_help_center
       pending_methods: []
+      unobserved_methods:
+        - elgato_help_center
       opportunity_ids: []
-      diversification_state: needs_source_research
+      diversification_state: not_applicable
       notes: >-
-        Enabled and executing but producing zero records; PR #52 replaces the HTML parser with the
-        Zendesk Help Center articles API.
+        elgato_help_center is the enabled adapter but this product has no source_health row and no
+        generated records, so its official execution is UNOBSERVED -- and it cannot be called
+        degraded either, because no failing observation exists. PR #52 would replace the HTML
+        parser with the Zendesk Help Center ARTICLES API.
     consensus:
       state: opportunities_identified
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids:
         - elgato-zendesk-community-posts
       diversification_state: not_applicable
@@ -903,19 +1071,24 @@ product_source_audit:
         four Elgato products; it is a different endpoint family from the official articles API.
   elgato-wave-link:
     official:
-      state: production_source_degraded
+      state: configured_unobserved
       current_methods:
         - elgato_help_center
       pending_methods: []
+      unobserved_methods:
+        - elgato_help_center
       opportunity_ids: []
-      diversification_state: needs_source_research
+      diversification_state: not_applicable
       notes: >-
-        Enabled and executing but producing zero records; PR #52 replaces the HTML parser with the
-        Zendesk Help Center articles API.
+        elgato_help_center is the enabled adapter but this product has no source_health row and no
+        generated records, so its official execution is UNOBSERVED -- and it cannot be called
+        degraded either, because no failing observation exists. PR #52 would replace the HTML
+        parser with the Zendesk Help Center ARTICLES API.
     consensus:
       state: opportunities_identified
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids:
         - elgato-zendesk-community-posts
       diversification_state: not_applicable
@@ -924,19 +1097,24 @@ product_source_audit:
         four Elgato products; it is a different endpoint family from the official articles API.
   elgato-camera-hub:
     official:
-      state: production_source_degraded
+      state: configured_unobserved
       current_methods:
         - elgato_help_center
       pending_methods: []
+      unobserved_methods:
+        - elgato_help_center
       opportunity_ids: []
-      diversification_state: needs_source_research
+      diversification_state: not_applicable
       notes: >-
-        Enabled and executing but producing zero records; PR #52 replaces the HTML parser with the
-        Zendesk Help Center articles API.
+        elgato_help_center is the enabled adapter but this product has no source_health row and no
+        generated records, so its official execution is UNOBSERVED -- and it cannot be called
+        degraded either, because no failing observation exists. PR #52 would replace the HTML
+        parser with the Zendesk Help Center ARTICLES API.
     consensus:
       state: opportunities_identified
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids:
         - elgato-zendesk-community-posts
       diversification_state: not_applicable
@@ -945,19 +1123,24 @@ product_source_audit:
         four Elgato products; it is a different endpoint family from the official articles API.
   elgato-4k-capture-utility:
     official:
-      state: production_source_degraded
+      state: configured_unobserved
       current_methods:
         - elgato_help_center
       pending_methods: []
+      unobserved_methods:
+        - elgato_help_center
       opportunity_ids: []
-      diversification_state: needs_source_research
+      diversification_state: not_applicable
       notes: >-
-        Enabled and executing but producing zero records; PR #52 replaces the HTML parser with the
-        Zendesk Help Center articles API.
+        elgato_help_center is the enabled adapter but this product has no source_health row and no
+        generated records, so its official execution is UNOBSERVED -- and it cannot be called
+        degraded either, because no failing observation exists. PR #52 would replace the HTML
+        parser with the Zendesk Help Center ARTICLES API.
     consensus:
       state: opportunities_identified
       current_methods: []
       pending_methods: []
+      unobserved_methods: []
       opportunity_ids:
         - elgato-zendesk-community-posts
       diversification_state: not_applicable
