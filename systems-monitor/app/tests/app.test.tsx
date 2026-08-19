@@ -83,6 +83,7 @@ describe("Systems Monitor shell", () => {
 
   it("shows all three dynamic horizons and evidence semantics", async () => {
     renderApp("?view=outlook");
+    expect((await screen.findAllByText("SYNTHETIC TEST DATA")).length).toBeGreaterThan(0);
     expect(await screen.findByRole("button", { name: /Current Year/ })).toBeTruthy();
     expect(screen.getByRole("button", { name: /Next Year/ })).toBeTruthy();
     expect(screen.getByRole("button", { name: /\+3 Years/ })).toBeTruthy();

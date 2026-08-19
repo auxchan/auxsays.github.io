@@ -5,7 +5,7 @@
     "evaluatedAt": "2026-08-18T19:46:00Z",
     "generatedAt": "2026-08-18T19:46:00Z",
     "id": "factual-gate-a-candidate-2026-08-18",
-    "payloadSha256": "c1df0cab6a9b9bedbd18dc3c04de40223be98edb8209108a0981cee0c54f1aa7",
+    "payloadSha256": "407358a5a4d6ecd77993706fb502207418ab6f768c79958889333b05fc2843b2",
     "publicationClass": "factual",
     "sourceSnapshotId": "phase3-normalized-six-indicator-2026-08-18",
     "targetContractVersion": "1.0.0",
@@ -42,6 +42,9 @@
           "sourceRefs": [
             "bls-ces"
           ],
+          "sourceSeriesIds": [
+            "CES0000000001"
+          ],
           "stateType": "OBS",
           "unit": "thousands of persons",
           "validTime": "2026-07",
@@ -65,6 +68,9 @@
           ],
           "sourceRefs": [
             "bls-cps"
+          ],
+          "sourceSeriesIds": [
+            "LNS14000000"
           ],
           "stateType": "OBS",
           "unit": "percent",
@@ -90,6 +96,9 @@
           "sourceRefs": [
             "bls-cps"
           ],
+          "sourceSeriesIds": [
+            "LNS11300000"
+          ],
           "stateType": "OBS",
           "unit": "percent",
           "validTime": "2026-07",
@@ -113,6 +122,9 @@
           ],
           "sourceRefs": [
             "dol-ui-claims"
+          ],
+          "sourceSeriesIds": [
+            "DOL-UI-SA-INITIAL"
           ],
           "stateType": "OBS",
           "unit": "claims",
@@ -138,6 +150,9 @@
           "sourceRefs": [
             "bls-jolts"
           ],
+          "sourceSeriesIds": [
+            "JTS000000000000000JOL"
+          ],
           "stateType": "OBS",
           "unit": "thousands",
           "validTime": "2026-06",
@@ -161,6 +176,9 @@
           ],
           "sourceRefs": [
             "bls-jolts"
+          ],
+          "sourceSeriesIds": [
+            "JTS000000000000000HIL"
           ],
           "stateType": "OBS",
           "unit": "thousands",
@@ -328,6 +346,45 @@
           "vintageId": "DOL-UI-2026-08-13-advance"
         }
       },
+      "auxsays.phase3.revisionEvidence": [
+        {
+          "asKnown": {
+            "cutoff": "2024-03-10T23:59:59Z",
+            "displayValue": "217,000 claims",
+            "value": 217000
+          },
+          "id": "dol-ui-initial-claims-2024-03-02-revision-proof",
+          "indicatorId": "US_LABOR_INITIAL_UI_CLAIMS",
+          "label": "Initial claims — week ending March 2, 2024",
+          "latestRevisedTruth": {
+            "displayValue": "210,000 claims",
+            "value": 210000
+          },
+          "releases": [
+            {
+              "artifactSha256": "2759aeb9fc6ef115d865012745d82e7ee024b5c1be0f5b73a37016fcd8d2cb5e",
+              "displayValue": "217,000 claims",
+              "evidenceUrl": "https://www.dol.gov/sites/dolgov/files/OPA/newsreleases/ui-claims/20240471.pdf",
+              "label": "Advance release — March 7",
+              "publishedAt": "2024-03-07T13:30:00Z",
+              "releaseId": "DOL-UI-2024-03-07",
+              "value": 217000
+            },
+            {
+              "artifactSha256": "314084cfb6bba80f30b36c9b6755563d3090e0669c94bd540f11b1ce33f517d7",
+              "displayValue": "210,000 claims",
+              "evidenceUrl": "https://www.dol.gov/sites/dolgov/files/OPA/newsreleases/ui-claims/20240527.pdf",
+              "label": "Revised release — March 14",
+              "publishedAt": "2024-03-14T12:30:00Z",
+              "releaseId": "DOL-UI-2024-03-14",
+              "value": 210000
+            }
+          ],
+          "seriesId": "DOL-UI-SA-INITIAL",
+          "sourceId": "dol-ui-claims",
+          "validTime": "2024-03-02"
+        }
+      ],
       "auxsays.phase3.sourceHealth": {
         "bls-ces": {
           "observationFreshness": "current",

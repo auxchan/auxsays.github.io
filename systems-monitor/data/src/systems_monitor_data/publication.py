@@ -147,17 +147,21 @@ def _validate_factual_payload(payload: dict[str, Any]) -> None:
             else:
                 _iso_time(source.get(field), f"source.{field}")
     for metric in metrics:
-        required = {"id", "stateType", "label", "value", "displayValue", "unit", "validTime", "sourceRefs", "provenanceRefs"}
+        required = {"id", "stateType", "label", "value", "displayValue", "unit", "validTime", "sourceRefs", "sourceSeriesIds", "provenanceRefs"}
         if not required.issubset(metric):
             raise CandidateError(f"incomplete PDI metric: {metric.get('id')}")
         if not isinstance(metric["sourceRefs"], list) or not metric["sourceRefs"]:
             raise CandidateError("metric sourceRefs are required")
         if not isinstance(metric["provenanceRefs"], list) or not metric["provenanceRefs"]:
             raise CandidateError("metric provenanceRefs are required")
+        if not isinstance(metric["sourceSeriesIds"], list) or len(metric["sourceSeriesIds"]) != 1:
+            raise CandidateError("factual metric requires one exact source series ID")
         if any(reference not in payload["sources"] for reference in metric["sourceRefs"]):
             raise CandidateError("metric has malformed source reference")
         if any(reference not in provenance for reference in metric["provenanceRefs"]):
             raise CandidateError("metric has malformed provenance reference")
+        if any(metric["sourceSeriesIds"][0] not in provenance[reference]["seriesIds"] for reference in metric["provenanceRefs"]):
+            raise CandidateError("metric source series ID is absent from provenance")
     for provenance_id, record in provenance.items():
         if not isinstance(record, dict) or record.get("id") != provenance_id:
             raise CandidateError("malformed provenance record")
@@ -169,6 +173,26 @@ def _validate_factual_payload(payload: dict[str, Any]) -> None:
             _iso_time(record.get(field), f"provenance.{field}")
         if not (parse_utc(record["publishedAt"]) <= parse_utc(record["retrievedAt"]) <= parse_utc(record["acceptedAt"])):
             raise CandidateError("impossible provenance temporal ordering")
+    revision_evidence = extensions.get("auxsays.phase3.revisionEvidence")
+    if not isinstance(revision_evidence, list) or len(revision_evidence) != 1:
+        raise CandidateError("one factual DOL revision proof is required")
+    proof = revision_evidence[0]
+    if proof.get("sourceId") not in payload["sources"] or proof.get("seriesId") != "DOL-UI-SA-INITIAL":
+        raise CandidateError("DOL revision proof source or series is invalid")
+    releases = proof.get("releases")
+    if not isinstance(releases, list) or len(releases) != 2:
+        raise CandidateError("DOL revision proof requires advance and revised releases")
+    for release in releases:
+        _iso_time(release.get("publishedAt"), "revisionEvidence.release.publishedAt")
+        if not isinstance(release.get("evidenceUrl"), str) or not release["evidenceUrl"].startswith("https://www.dol.gov/"):
+            raise CandidateError("DOL revision evidence URL is invalid")
+        if not isinstance(release.get("artifactSha256"), str) or len(release["artifactSha256"]) != 64:
+            raise CandidateError("DOL revision artifact hash is invalid")
+    if [release.get("value") for release in releases] != [217000, 210000]:
+        raise CandidateError("DOL revision proof values are invalid")
+    _iso_time(proof.get("asKnown", {}).get("cutoff"), "revisionEvidence.asKnown.cutoff")
+    if proof.get("asKnown", {}).get("value") != 217000 or proof.get("latestRevisedTruth", {}).get("value") != 210000:
+        raise CandidateError("DOL replay semantics are invalid")
     if payload.get("events"):
         raise CandidateError("factual first slice cannot contain events")
     outlook = payload.get("outlook")
@@ -274,6 +298,45 @@ SOURCE_PUBLIC_METADATA = {
 }
 
 
+DOL_REVISION_REPLAY_EVIDENCE = {
+    "id": "dol-ui-initial-claims-2024-03-02-revision-proof",
+    "indicatorId": "US_LABOR_INITIAL_UI_CLAIMS",
+    "sourceId": "dol-ui-claims",
+    "seriesId": "DOL-UI-SA-INITIAL",
+    "validTime": "2024-03-02",
+    "label": "Initial claims — week ending March 2, 2024",
+    "releases": [
+        {
+            "label": "Advance release — March 7",
+            "releaseId": "DOL-UI-2024-03-07",
+            "publishedAt": "2024-03-07T13:30:00Z",
+            "value": 217000,
+            "displayValue": "217,000 claims",
+            "evidenceUrl": "https://www.dol.gov/sites/dolgov/files/OPA/newsreleases/ui-claims/20240471.pdf",
+            "artifactSha256": "2759aeb9fc6ef115d865012745d82e7ee024b5c1be0f5b73a37016fcd8d2cb5e",
+        },
+        {
+            "label": "Revised release — March 14",
+            "releaseId": "DOL-UI-2024-03-14",
+            "publishedAt": "2024-03-14T12:30:00Z",
+            "value": 210000,
+            "displayValue": "210,000 claims",
+            "evidenceUrl": "https://www.dol.gov/sites/dolgov/files/OPA/newsreleases/ui-claims/20240527.pdf",
+            "artifactSha256": "314084cfb6bba80f30b36c9b6755563d3090e0669c94bd540f11b1ce33f517d7",
+        },
+    ],
+    "asKnown": {
+        "cutoff": "2024-03-10T23:59:59Z",
+        "value": 217000,
+        "displayValue": "217,000 claims",
+    },
+    "latestRevisedTruth": {
+        "value": 210000,
+        "displayValue": "210,000 claims",
+    },
+}
+
+
 def export_publication_candidate(internal: dict[str, Any]) -> dict[str, Any]:
     """Build an immutable pre-activation artifact without claiming PDI activation."""
     validate_internal_review_model(internal)
@@ -331,6 +394,7 @@ def export_publication_candidate(internal: dict[str, Any]) -> dict[str, Any]:
             "unit": metric["unit"],
             "validTime": metric["observationPeriod"],
             "sourceRefs": [source_id],
+            "sourceSeriesIds": [metric["sourceSeriesId"]],
             "provenanceRefs": [provenance_id],
             "direction": "flat",
             "series": [{"period": metric["observationPeriod"], "displayPeriod": metric["observationPeriod"], "value": numeric_value}],
@@ -392,6 +456,7 @@ def export_publication_candidate(internal: dict[str, Any]) -> dict[str, Any]:
                 }
                 for source_id in sources
             },
+            "auxsays.phase3.revisionEvidence": [copy.deepcopy(DOL_REVISION_REPLAY_EVIDENCE)],
         },
     }
     snapshot_time = internal["generatedAt"]

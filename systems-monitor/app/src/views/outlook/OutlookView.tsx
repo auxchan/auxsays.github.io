@@ -15,7 +15,7 @@ function ForecastInspectorContent({ forecast }: { forecast: ForecastRecord }) {
 export default function OutlookView({ snapshot, route, navigate, variant }: ViewProps) {
   const [traceOpen, setTraceOpen] = useState(false);
   if (snapshot.snapshot.publicationClass === "factual") {
-    return <div className="sm-view sm-view--outlook"><header className="sm-view-header"><div><span className="sm-eyebrow">Outlook / Factual mode</span><h1 data-route-heading tabIndex={-1}>Forecast unavailable / not yet supported</h1></div></header><FactualCandidateNotice compact /><ErrorState title="Forecast unavailable / not yet supported" detail="Phase 3 contains observed factual labor data only. No synthetic forecast, scenario, ranking, event, or human-capital prediction is substituted." /></div>;
+    return <div className="sm-view sm-view--outlook"><header className="sm-view-header"><div><span className="sm-eyebrow">Outlook / Factual mode</span><h1 data-route-heading tabIndex={-1}>Forecast unavailable / not yet supported</h1></div></header><FactualCandidateNotice compact /><ErrorState title="Forecast unavailable / not yet supported" detail="Phase 3 contains observed factual labor data only. Forecasting is not yet supported." fixtureDisclosure={false} /></div>;
   }
   const forecast = snapshot.outlook.forecasts.find((item) => item.horizon === route.horizon && item.scenario === route.scenario) ?? snapshot.outlook.forecasts[0];
   const scenarios = [...new Set(snapshot.outlook.forecasts.map((item) => item.scenario))];

@@ -1,10 +1,22 @@
 # Phase-3 factual-data human QA
 
-`HUMAN_DATA_QA = PENDING`
+`HUMAN_DATA_QA ROUND 2 = CORRECTIONS APPLIED — TAYLOR RE-REVIEW REQUIRED`
 
 This is a local review artifact. The factual candidate is not activated on
 AUXSAYS.com. Taylor should compare each row with the original authority linked
 below and confirm value, unit, period, timing, and revision state.
+
+## Verdict history
+
+- **Round 1 — FAIL.** Official series IDs were not visible; original factual
+  evidence links were not reachable; factual Outlook retained a
+  synthetic-fixture disclaimer; and the DOL revision proof was absent from the
+  UI.
+- **Round 2 — corrections applied; Taylor re-review required.** Verified Data
+  now exposes per-observation series IDs, separately labeled source/data and
+  methodology links, and a progressive DOL replay proof. Factual Outlook no
+  longer reuses fixture-only warning content. This record does **not** claim
+  Human Data QA PASS.
 
 | Indicator | Value / unit | Period | Official source / series | Official release | AUXSAYS retrieved / accepted | Version / health |
 |---|---|---|---|---|---|---|
@@ -51,14 +63,23 @@ the ignored `local/` runtime boundary.
 
 ## Local UI review
 
-1. Run the existing app development server.
-2. Run `python systems-monitor/data/scripts/print_local_ui_loader.py` from the
-   repository root and paste its one-line output into browser developer tools.
-3. The command reloads the page. This switch is honored only by Vite development
-   mode.
-4. Confirm Summary and Verified Data display the six rows above with reachable
-   original evidence and no wall of provenance text.
+1. Open the prepared local factual-candidate preview supplied in the review
+   handoff. No JSON, SQLite, console, or developer-tools inspection is required.
+2. Confirm Summary and Verified Data display the six rows above with reachable
+   original evidence and concise, collapsible provenance details.
+3. Confirm every factual row identifies its exact official series ID and keeps
+   source/data evidence distinct from methodology.
+4. Expand the DOL revision/replay example and confirm both original releases,
+   `217,000` as known March 10, and `210,000` as latest revised truth.
 5. Confirm Outlook says `Forecast unavailable / not yet supported` and shows no
    forecast, scenario, rankings, events, or synthetic claims.
-6. Remove the key to restore the Phase-2 fixture:
-   `localStorage.removeItem("auxsays.localFactualCandidate")`.
+
+## Deferred master-system UI debt
+
+Taylor's broader concern that the current experience feels like a factor
+inspector rather than an interconnected master system is accepted but is not a
+Phase-3 blocker. System-level overview, cross-system interconnectivity,
+dependency navigation, cascade/propagation inspection, stronger hierarchy, and
+the comprehensive UI/UX overhaul remain deferred until governed State,
+Dependency, and Allocation relationship data exists. Decorative relationship
+lines must not be fabricated in advance of that machinery.

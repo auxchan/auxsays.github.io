@@ -1,6 +1,6 @@
 # Gate-A evidence — corrected candidate
 
-Status: `GATE A OPEN`; `HUMAN_DATA_QA = PENDING`; no public activation.
+Status: `GATE A OPEN`; `HUMAN_DATA_QA ROUND 2 = CORRECTIONS APPLIED — TAYLOR RE-REVIEW REQUIRED`; no public activation.
 
 ## Factual slice and public boundary
 
@@ -10,11 +10,11 @@ Status: `GATE A OPEN`; `HUMAN_DATA_QA = PENDING`; no public activation.
 - Internal evidence: `internal-factual-review-model.json`.
 - Pre-activation candidate targeting PDI 1.0.0:
   `factual-snapshot-candidate.json`; SHA-256
-  `5E7AB8146E10987E109ECF8505B4586FE6E4FAABE17873B988E726766D92388E`.
+  `2261866B6187F599A492E289EA7BD845A20DB766DF0C93CEDFFDF1C54D865C57`.
   It contains no `snapshot` or `publishedAt` activation claim.
 - Local activation test materialized the distinct immutable PDI snapshot
-  `local-active-pdi-test-snapshot.json` at `2026-08-18T23:09:35.452742Z`;
-  SHA-256 `F479DF1A254065757A3DAE2AE6FDDD6BA40E550E5B184BBD70A8CD7B110A647C`.
+  `local-active-pdi-test-snapshot.json` at `2026-08-18T23:55:46.897033Z`;
+  SHA-256 `6D034EECA1DA5CD863A23BB0B7D6AA2C060F553AFBAEC2B8B2D10922ED5902D0`.
   This was temporary local pointer evidence, not AUXSAYS.com activation.
 - Public hierarchy uses `childRefs[]` plus a namespaced node registry; the UI
   derives nested children only after candidate/PDI validation.
@@ -25,6 +25,10 @@ Status: `GATE A OPEN`; `HUMAN_DATA_QA = PENDING`; no public activation.
   copied generation time into `snapshot.publishedAt` without activation.
 - Candidate payload is OBS-only; events and forecast/ranking collections are empty;
   Outlook is explicitly unavailable.
+- The Round-2 factual UI exposes one exact official series ID and original
+  evidence link per observation, labels methodology separately, removes the
+  fixture-only Outlook warning, and presents the DOL replay proof through
+  progressive disclosure. Taylor re-review remains required; no PASS is claimed.
 
 ## Source, time, replay, and rights evidence
 
@@ -42,10 +46,10 @@ Status: `GATE A OPEN`; `HUMAN_DATA_QA = PENDING`; no public activation.
 
 ## Measured validation and operating envelope
 
-- `python -m unittest discover -s tests -v`: 90/90 passed in 0.460 seconds.
-- `npm test`: 66/66 passed in 9.96 seconds; `npm run typecheck`: passed.
+- `python -m unittest discover -s tests -v`: 93/93 passed in 0.495 seconds.
+- `npm test`: 74/74 passed in 9.33 seconds; `npm run typecheck`: passed.
 - `npm run build` and `npm run verify:site`: passed; eight hashed assets,
-  186,346 gzip bytes against the 368,640-byte budget.
+  187,524 gzip bytes against the 368,640-byte budget.
 - Idempotent capture, concurrent activation, candidate-failure pointer
   preservation, security allowlisting/redaction, dual replay, and rights tests
   passed.
@@ -53,6 +57,7 @@ Status: `GATE A OPEN`; `HUMAN_DATA_QA = PENDING`; no public activation.
   Current ignored local evidence footprint remains bounded; recurring
   data/infrastructure cost remains $0.
 
-Remaining evidence: Taylor must complete `HUMAN_DATA_QA.md`; hosted/runtime
+Remaining evidence: Taylor must complete Human Data QA Round 2 in
+`HUMAN_DATA_QA.md`; hosted/runtime
 public activation remains unauthorized and was not performed. Gate A and Phase
 3 remain open; Phase 4 is locked.

@@ -65,6 +65,7 @@ Phase 3 — Data Integrity implementation, limited to the Taylor-approved six-in
 | P3-011 | Exact vertical slice | All four Phase-3 contracts; O-003/O-004 | Gate A | Approved design | `PHASE3_DATA_INTEGRITY_DESIGN.md` §8 | Six labor indicators; Tier-A DOL revision proof |
 | P3-012 | Test plan | Testing contract | Gate A evidence | Approved design | `PHASE3_DATA_INTEGRITY_DESIGN.md` §9 | Deterministic matrix; no dependencies installed |
 | P3-013 | Correct factual publication boundary | Public Data Interface / Architecture contracts | Taylor Gate-A review | Implemented; review pending | `data/review/GATE_A_EVIDENCE.md` | Internal model, pre-activation candidate, and active PDI are distinct; `childRefs[]` transport enforced |
+| P3-014 | Human Data QA evidence surface | Taylor Gate-A human review | Phase-3 closure | Round-2 corrections applied; Taylor re-review required | `data/review/HUMAN_DATA_QA.md` | Series IDs, original evidence, factual Outlook isolation, and DOL replay proof corrected without claiming PASS |
 
 ## Phase progression
 
@@ -86,4 +87,11 @@ Implement only the approved Phase-3 six-indicator BLS CES/CPS/JOLTS and DOL Week
 
 Implemented locally for technical review: four source registries; eight indicator entries with six enabled; operation-specific rights; bounded secure retrieval; immutable raw capture; normalized temporal versions; SQLite latest/public/known queries; factual DOL revision replay; cadence-aware health and four-hour evaluation semantics; atomic local candidate/withdrawal; deletion tombstones; idempotency/concurrency/telemetry tests; a separate factual candidate; and a local-only factual UI mode.
 
-Remaining Gate-A/Phase-3 closure work: technical evidence review, Taylor factual-data QA (`PENDING`), Gate-A readiness review, and any correction pass. Factual public activation and Phase 4 remain unauthorized.
+Remaining Gate-A/Phase-3 closure work: Taylor Human Data QA Round 2 (`CORRECTIONS APPLIED — RE-REVIEW REQUIRED`) and the resulting Gate-A closure decision. Factual public activation and Phase 4 remain unauthorized.
+
+The requested master-system overview and visible interconnectivity are deferred
+design inputs, not Phase-3 presentation work. Phase 4 contract/design drafting
+must first define governed State, Dependency, and Allocation relationships;
+later UI work may then cover relationship navigation, propagation/cascade
+inspection, stronger hierarchy, and a comprehensive systems-level overview
+using real relationship evidence rather than decorative links.

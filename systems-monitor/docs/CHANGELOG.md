@@ -1,5 +1,20 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-18 — Phase-3 Human Data QA final minimal correction
+
+- Corrected only the four Round-1 human-QA failures: per-observation official
+  series visibility, original evidence links distinct from methodology,
+  factual-only Outlook disclosure, and an inspectable DOL 217,000 → 210,000
+  revision/replay example with both original releases.
+- Recorded `HUMAN_DATA_QA ROUND 1 = FAIL` and `ROUND 2 = CORRECTIONS APPLIED —
+  TAYLOR RE-REVIEW REQUIRED`; no PASS or Phase-3 closure is claimed.
+- Deferred master-system overview, cross-system interconnectivity,
+  dependency/propagation navigation, hierarchy overhaul, and comprehensive
+  UI/UX redesign until real governed relationship data exists.
+- `MASTER_SPEC.md` and all BINDING contracts remain unchanged. No Phase-4
+  implementation, forecast, source expansion, public activation, push, merge,
+  or deployment occurred.
+
 ## 2026-08-18 — Gate-A candidate/activation clarification
 
 - Applied Taylor's narrow Phase-3 design clarification without changing PDI 1.0.0: pre-activation candidates are immutable build artifacts without `publishedAt`; local activation materializes and validates a distinct immutable PDI snapshot with the actual activation time before pointer update.

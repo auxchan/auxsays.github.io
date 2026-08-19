@@ -108,6 +108,35 @@ class PublicationTelemetryTests(unittest.TestCase):
             "US_LABOR_HIRES": 5348,
         }, {metric["id"]: metric["value"] for metric in metrics})
 
+    def test_every_metric_maps_to_one_official_series_and_evidence(self):
+        value = candidate()
+        provenance = value["payload"]["extensions"]["auxsays.phase3.provenance"]
+        expected = {
+            "US_LABOR_TOTAL_NONFARM_PAYROLLS": "CES0000000001",
+            "US_LABOR_U3_UNEMPLOYMENT_RATE": "LNS14000000",
+            "US_LABOR_FORCE_PARTICIPATION_RATE": "LNS11300000",
+            "US_LABOR_INITIAL_UI_CLAIMS": "DOL-UI-SA-INITIAL",
+            "US_LABOR_JOB_OPENINGS": "JTS000000000000000JOL",
+            "US_LABOR_HIRES": "JTS000000000000000HIL",
+        }
+        for metric in value["payload"]["extensions"]["auxsays.phase2.metrics"]:
+            self.assertEqual([expected[metric["id"]]], metric["sourceSeriesIds"])
+            for reference in metric["provenanceRefs"]:
+                self.assertIn(metric["sourceSeriesIds"][0], provenance[reference]["seriesIds"])
+                self.assertTrue(provenance[reference]["evidenceUrl"].startswith("https://"))
+
+    def test_dol_revision_evidence_has_both_releases_and_replay_answers(self):
+        proof = candidate()["payload"]["extensions"]["auxsays.phase3.revisionEvidence"][0]
+        self.assertEqual("2024-03-02", proof["validTime"])
+        self.assertEqual([217000, 210000], [release["value"] for release in proof["releases"]])
+        self.assertEqual(["20240471.pdf", "20240527.pdf"], [release["evidenceUrl"].rsplit("/", 1)[-1] for release in proof["releases"]])
+        self.assertEqual(217000, proof["asKnown"]["value"])
+        self.assertEqual(210000, proof["latestRevisedTruth"]["value"])
+
+    def test_missing_metric_series_mapping_is_rejected(self):
+        value = candidate(); del value["payload"]["extensions"]["auxsays.phase2.metrics"][0]["sourceSeriesIds"]
+        with self.assertRaises(CandidateError): validate_publication_candidate(value)
+
     def test_atomic_pointer_activation(self):
         candidate_digest, candidate_path = self.publisher.stage(candidate())
         active_digest, active_path = self.publisher.activate_local(candidate_digest, activated_at="2026-08-19T00:00:00Z")
@@ -125,7 +154,7 @@ class PublicationTelemetryTests(unittest.TestCase):
     def test_committed_local_active_pdi_proof_validates(self):
         proof = active_proof()
         validate_active_pdi_snapshot(proof)
-        self.assertEqual("2026-08-18T23:09:35.452742Z", proof["snapshot"]["publishedAt"])
+        self.assertEqual("2026-08-18T23:55:46.897033Z", proof["snapshot"]["publishedAt"])
 
     def test_materialized_snapshot_is_distinct_and_immutable(self):
         before = copy.deepcopy(candidate())

@@ -91,9 +91,11 @@ function validateFactualPayload(candidate: PublicationCandidatePayload) {
     assert(typeof metric.id === "string" && typeof metric.validTime === "string", "factual metric identity and validTime are required");
     assert(Number.isFinite(metric.value) && typeof metric.displayValue === "string" && typeof metric.unit === "string", `metric ${metric.id} value fields are invalid`);
     assert(Array.isArray(metric.sourceRefs) && metric.sourceRefs.length > 0, `metric ${metric.id} sourceRefs are required`);
+    assert(Array.isArray(metric.sourceSeriesIds) && metric.sourceSeriesIds.length === 1 && metric.sourceSeriesIds.every((seriesId) => typeof seriesId === "string" && seriesId.length > 0), `metric ${metric.id} requires one exact source series ID`);
     assert(Array.isArray(metric.provenanceRefs) && metric.provenanceRefs.length > 0, `metric ${metric.id} provenanceRefs are required`);
     assert(metric.sourceRefs.every((reference) => reference in candidate.sources), `metric ${metric.id} has malformed sourceRefs`);
     assert(metric.provenanceRefs.every((reference) => reference in provenance), `metric ${metric.id} has malformed provenanceRefs`);
+    assert(metric.provenanceRefs.every((reference) => provenance[reference].seriesIds.includes(metric.sourceSeriesIds![0])), `metric ${metric.id} source series ID is absent from provenance`);
   }
   for (const [provenanceId, record] of Object.entries(provenance)) {
     assert(record.id === provenanceId, `provenance key mismatch for ${provenanceId}`);
@@ -106,6 +108,14 @@ function validateFactualPayload(candidate: PublicationCandidatePayload) {
     }
     assert(Date.parse(record.publishedAt) <= Date.parse(record.retrievedAt) && Date.parse(record.retrievedAt) <= Date.parse(record.acceptedAt), `provenance ${provenanceId} has impossible temporal ordering`);
   }
+  const revisionEvidence = candidate.extensions["auxsays.phase3.revisionEvidence"];
+  assert(Array.isArray(revisionEvidence) && revisionEvidence.length === 1, "one factual DOL revision proof is required");
+  const proof = revisionEvidence[0];
+  assert(proof.sourceId in candidate.sources && proof.seriesId === "DOL-UI-SA-INITIAL", "DOL revision proof source or series is invalid");
+  assert(Array.isArray(proof.releases) && proof.releases.length === 2, "DOL revision proof requires advance and revised releases");
+  assert(proof.releases.every((release) => isIsoTime(release.publishedAt) && /^https:\/\/www\.dol\.gov\//.test(release.evidenceUrl) && /^[a-f0-9]{64}$/i.test(release.artifactSha256)), "DOL revision release evidence is invalid");
+  assert(proof.releases[0].value === 217000 && proof.releases[1].value === 210000, "DOL revision proof values are invalid");
+  assert(isIsoTime(proof.asKnown.cutoff) && proof.asKnown.value === 217000 && proof.latestRevisedTruth.value === 210000, "DOL replay semantics are invalid");
   const serialized = JSON.stringify(candidate).toLowerCase();
   assert(!serialized.includes("synthetic test"), "factual snapshot contains fixture claims");
   validatePublicHierarchy(candidate);

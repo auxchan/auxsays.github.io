@@ -50,6 +50,7 @@ export interface MetricRecord {
   unit: string;
   validTime: string;
   sourceRefs: string[];
+  sourceSeriesIds?: string[];
   provenanceRefs: string[];
   direction: "up" | "down" | "flat";
   series: MetricPoint[];
@@ -172,6 +173,35 @@ export interface SourceHealthRecord {
   retrievalPathReason: string;
 }
 
+export interface RevisionEvidenceRelease {
+  label: string;
+  releaseId: string;
+  publishedAt: string;
+  value: number;
+  displayValue: string;
+  evidenceUrl: string;
+  artifactSha256: string;
+}
+
+export interface RevisionReplayEvidence {
+  id: string;
+  indicatorId: string;
+  sourceId: string;
+  seriesId: string;
+  validTime: string;
+  label: string;
+  releases: RevisionEvidenceRelease[];
+  asKnown: {
+    cutoff: string;
+    value: number;
+    displayValue: string;
+  };
+  latestRevisedTruth: {
+    value: number;
+    displayValue: string;
+  };
+}
+
 export type FixtureVariant =
   | "normal"
   | "loading"
@@ -214,6 +244,7 @@ export interface PublicSnapshot {
     "auxsays.phase2.navigationNodes": Record<string, PublicNavigationNode>;
     "auxsays.phase3.provenance"?: Record<string, ProvenanceRecord>;
     "auxsays.phase3.sourceHealth"?: Record<string, SourceHealthRecord>;
+    "auxsays.phase3.revisionEvidence"?: RevisionReplayEvidence[];
   };
 }
 

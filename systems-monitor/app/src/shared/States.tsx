@@ -2,8 +2,8 @@ export function LoadingState() {
   return <section className="sm-state-panel" role="status" aria-live="polite"><span className="sm-loading-mark" aria-hidden="true" /><h2>Loading synthetic fixture</h2><p>No placeholder values are displayed while the contract-valid snapshot is checked.</p></section>;
 }
 
-export function ErrorState({ title = "Snapshot unavailable", detail = "The synthetic fixture could not be activated. No substitute conclusion is shown." }: { title?: string; detail?: string }) {
-  return <section className="sm-state-panel sm-state-panel--error" role="alert"><h2>{title}</h2><p>{detail}</p><strong>SYNTHETIC TEST DATA — NOT A PUBLIC CLAIM</strong></section>;
+export function ErrorState({ title = "Snapshot unavailable", detail = "The synthetic fixture could not be activated. No substitute conclusion is shown.", fixtureDisclosure = true }: { title?: string; detail?: string; fixtureDisclosure?: boolean }) {
+  return <section className="sm-state-panel sm-state-panel--error" role="alert"><h2>{title}</h2><p>{detail}</p>{fixtureDisclosure && <strong>SYNTHETIC TEST DATA — NOT A PUBLIC CLAIM</strong>}</section>;
 }
 
 export function DegradedState({ variant }: { variant: string }) {
