@@ -60,3 +60,19 @@ economy-wide production evidence.
 - R-022 dual public/operational as-of replay and future-revision leakage tests are implemented and accepted at Gate A; regression protection remains required.
 - R-023 immutable candidate, idempotency, failed-validation pointer preservation, concurrency, rights withdrawal, and tombstone tests are implemented locally. No public activation has been attempted.
 - R-005/R-006 local candidate validation and retrieval security now have first-slice implementation evidence accepted at Gate A; public activation and hosted-operation review remain open.
+
+## Phase-4A implementation evidence — 2026-08-19
+
+- R-028 is mitigated for the six direct proof mappings by external deterministic
+  acceptance rules and lifecycle tests; it remains open for Phase-4B structural
+  relationships and Gate B.
+- R-029 cycle/termination mechanics pass finite depth/round/budget and explicit
+  `cycle_rejected` tests; later structural solver evidence remains open.
+- R-030 common-cause identity and no-naive-sum mechanics pass synthetic tests;
+  real structural overlap evidence remains Phase-4B-required.
+- R-032/R-033 are mitigated for the review candidate by explicit
+  `LIMITED_ENGINE_PROOF`, unsupported domains, OBS/CALC separation, immutable
+  derivations, and a public-safe allowlist. Human Phase-4A QA remains PENDING.
+- R-034 retains the $0 standard-library/local posture. R-035 through R-037 remain
+  fully open because no structural source, BEA data, or real behavioral evidence
+  was retrieved or implemented.

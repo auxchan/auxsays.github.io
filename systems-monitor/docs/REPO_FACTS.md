@@ -147,3 +147,21 @@ Reinspect only the affected facts when `AGENTS.md`, `.github/workflows/pages.yml
 - Gate B remains OPEN. Phase-4B structural ingestion, BEA retrieval/ingestion,
   new sources, Phase 5, public activation, deployment, and the deferred major
   UI/UX overhaul remain unauthorized.
+
+## PHASE-4A ENGINE / LABOR-STATE PROOF — 2026-08-19
+
+- The existing `systems-monitor/data/` standard-library package now implements
+  dual-replay State assembly, explicit reference semantics, six deterministic
+  direct OBS-to-state relationships, external rule-based lifecycle promotion,
+  bounded propagation/cycle rejection/common-cause bookkeeping, synthetic
+  mechanics/allocation proof, immutable CALC derivations, and a public-safe
+  limited read model.
+- The factual run uses exactly the six accepted Phase-3 labor OBS values and
+  produces six CALC identity-mapped state components. No indicator-to-indicator
+  causality, coefficient, forecast, scenario, or structural-economy claim exists.
+- `systems-monitor/state/review/` contains the deterministic candidate plus
+  technical evidence and `HUMAN_PHASE4A_QA = PENDING` instructions. Coverage is
+  `LIMITED_ENGINE_PROOF`; Gate B remains OPEN and Phase-4B remains locked.
+- Final local evidence: 170 Python tests and 76 UI regressions pass; review build
+  4.694 ms, peak traced memory 295,060 bytes, candidate 52,525 bytes, recurring
+  infrastructure/API cost $0, and no dependency added.

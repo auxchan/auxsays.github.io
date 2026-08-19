@@ -1,5 +1,19 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-19 — Phase-4A Engine / Labor-State Proof implementation
+
+- Added standard-library State, relationship lifecycle, bounded propagation,
+  common-cause, allocation, derivation, and master-read-model modules to the
+  existing Systems Monitor data package; no dependency was added.
+- Used only the six accepted Phase-3 labor OBS inputs. Added six direct,
+  non-causal OBS-to-state mappings with external deterministic acceptance rules,
+  six reproducible CALC states, and versioned depth-3/eight-round configuration.
+- Added 76 Phase-4A tests and deterministic technical/human review artifacts.
+  Final regression totals are 170 Python tests and 76 unchanged UI tests.
+- Coverage is `LIMITED_ENGINE_PROOF`; Human Phase-4A QA is PENDING and Gate B is
+  OPEN. No BEA/new-source ingestion, Phase-4B, Phase 5, UI overhaul, public
+  activation, dependency install, push, merge, or deployment occurred.
+
 ## 2026-08-19 — Phase-4 contract approval and Phase-4A authorization
 
 - Taylor accepted/resolved O-005 and promoted State Model, Dependency
