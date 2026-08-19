@@ -1,24 +1,773 @@
 {
   "last_errors": [
     {
-      "adapter": "rss_feed",
-      "error": "HTTP 500 while fetching official source \u2014 ",
-      "product_id": "figma"
+      "adapter": "elgato_help_center",
+      "error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-qj0FAmp01ZRpzjH1QcChKw&#39; &#39;unsafe-eval&#39; [source URL] script-s",
+      "product_id": "elgato-stream-deck"
     },
     {
-      "adapter": "html_changelog",
-      "error": "HTTP 500 while fetching official source \u2014 ",
-      "product_id": "netlify"
+      "adapter": "elgato_help_center",
+      "error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-t02n8pP2q6RYYRLtIiCIXL&#39; &#39;unsafe-eval&#39; [source URL] script-s",
+      "product_id": "elgato-wave-link"
+    },
+    {
+      "adapter": "elgato_help_center",
+      "error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-veGLpqq7HNRC0MwXCP76Of&#39; &#39;unsafe-eval&#39; [source URL] script-s",
+      "product_id": "elgato-camera-hub"
+    },
+    {
+      "adapter": "elgato_help_center",
+      "error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-f9lJ2PgStNXGfOJZDcYfss&#39; &#39;unsafe-eval&#39; [source URL] script-s",
+      "product_id": "elgato-4k-capture-utility"
     }
   ],
   "last_results": [
+    {
+      "adapter": "rss_feed",
+      "candidate_count": 200,
+      "created": 2,
+      "deferred": [
+        "rss:figma:5fc64c1e-8ca6-4a75-934e-ff542b2c2870",
+        "rss:figma:33686f91-5c87-46e6-af66-4a3481696bdf",
+        "rss:figma:1b5c1a55-640d-4945-89c0-d43ffbd661e6",
+        "rss:figma:7b0461aa-c316-441a-8d26-139c5d74cc86",
+        "rss:figma:183b3da2-3400-4298-b356-a3fae18f0686",
+        "rss:figma:292a0700-1b38-4779-8deb-19c23a9326b6",
+        "rss:figma:c3c5b6ad-1094-4627-b7f0-1caedc77a91a",
+        "rss:figma:1d63df91-e540-477e-beed-0790bacb2103",
+        "rss:figma:23e7e111-8870-4fdb-9707-9fb1b2d7e414",
+        "rss:figma:44b34aa3-3df5-45db-98e8-67c849f46d5f",
+        "rss:figma:5d18bbe5-f3e7-4c58-bea3-096dbea318bf",
+        "rss:figma:207da267-e9a0-4c71-bc9f-957055402a23",
+        "rss:figma:a65c4c2d-5a52-433b-9ad6-ddf48b55aef8",
+        "rss:figma:aa85d2a8-9f27-407f-a4fa-a51a812488f5",
+        "rss:figma:df8f6e53-0e58-4428-8bf1-46577c1b34e7",
+        "rss:figma:cbc0bf2a-8668-436b-8ee4-50b328850307",
+        "rss:figma:ed7aed57-7628-4271-aadd-38ba0ec81d8b",
+        "rss:figma:a6d0812d-b6cd-4c02-88dd-b251d69fd1c4",
+        "rss:figma:53f0080d-24fa-42a9-a225-7bceec4e9e0f",
+        "rss:figma:1c804aa8-388f-4fec-a1e9-65f96fa715b3",
+        "rss:figma:18ac26a5-a776-4038-8577-98fbe3fa81d7",
+        "rss:figma:44497bb1-ef58-468c-b2bc-ded055095a0e",
+        "rss:figma:752e8a7f-d05f-4e66-af0f-5da78b209480",
+        "rss:figma:1b430b33-2667-43fc-b080-62e7692731b5",
+        "rss:figma:0b208943-560a-4bc9-90e3-db9f94b80f12",
+        "rss:figma:109b86a5-f605-43de-9dc9-1cba004ebb36"
+      ],
+      "deferred_count": 26,
+      "duration_ms": 13053,
+      "fetched": 200,
+      "product_id": "figma",
+      "record_limit": 2,
+      "refreshed": [
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-08-17-figma-recommend-resources-you-want-users-to-discover-and-use.md",
+          "record_id": "rss:figma:dece0d00-5f03-4a5d-aa04-3b0fad21b5eb"
+        },
+        {
+          "action": "freshness-updated",
+          "path": "auxsays/updates/generated/2026-08-14-figma-get-responsive-text-across-screens-with-text-wrap.md",
+          "record_id": "rss:figma:fdeb868a-690e-4286-9075-bc4d7fb7f1f9"
+        }
+      ],
+      "scan_limit": 200,
+      "skipped": [
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:c6056d47-fcc7-497d-aa75-ee928836bfe4"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:7c62f604-a99e-491a-8650-5f5051b0fd1d"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:fd02781b-b3df-47a0-a7a3-deb0dfe32816"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:f402636b-a94b-40a4-b4ee-423ad6c1c1d7"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:eb9640f0-f58c-4b93-9fe9-4a211c4ca5c5"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:66fa0007-dc18-4de6-bb5f-372c91092758"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:5e6a9791-ff5a-42bd-81a9-d9ef8dc8baeb"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:9f6c6958-4c04-414a-8909-90635a1e1a93"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:5854425f-0b17-4254-ab7a-df53d38b5aa3"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:652c2f89-6829-404e-b107-bad38c19c08c"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:8bca1b2b-357e-4244-8697-448f0dada845"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:cec7ba19-591c-46a1-b1a2-5da55e7be802"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:12a9cb85-e994-4ba1-b46b-b51fa43bdd3e"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:2a314040-cf08-4d01-9671-83ceb0fdf03d"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:5bb5e41c-65e9-4025-9704-1105b079f9f6"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:e9f23965-3601-449b-94d8-66a9d9cbd4b0"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:410d92c2-46d5-4c26-bf56-d5cdbe15a81f"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:a157f15a-15d6-4c6e-ac1a-d322ad1dbc16"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:881e31ba-5938-4f26-b866-6b185875a89c"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:2ba58709-6032-4792-b2d2-2a590cdfc097"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:8ffcf508-ee53-497d-a98d-fbf1dc326998"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:e446f424-314a-45ed-a04f-f9dab91c53b4"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:682f3ba2-ee9e-4213-807d-f935a7d9a453"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:9b59c8a7-1361-4000-a5a6-5527f2a5e373"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:cd3d7d0b-e3c0-41b2-b370-a014bf901686"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:db295edf-534b-497d-8197-ff73a5653c55"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:4052f1c6-a5bb-4d6e-89a7-b31d94bcbccf"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:bd335822-5b89-4ce0-8ae0-1758197dcd78"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:11173709-f3f3-44ff-8711-ae180a888f29"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:4e06e0f1-2f46-4787-84eb-f431f16214e4"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:54fa1eaf-a38e-4416-80b8-bf063515723e"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:9de2d329-519d-4e1d-b0ca-f81528c285a8"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:0dcbfd47-b88e-4828-977a-b56b7769f89a"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:9923866c-4511-4991-8536-75f226c095a5"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:03c7b6a9-b36f-41f7-93d9-017e577a76fb"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:5aff1eb4-6095-46fe-8afa-4fbd9885f719"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:2490eafb-ecf7-4d76-9ca9-5e4dd193a086"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:57dd3e2e-da91-4a70-b924-72fa4c2cd0ba"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:f40b1fbe-388a-4834-b8ff-3eb82f38ceac"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:7395f2f3-1017-4585-9500-956a7d7efe89"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:191b33ae-9663-4d0f-b6cf-8535c311d41f"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:4a8cbf4b-d483-4a90-ac84-48949f969a1d"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:fae88fe2-3d5e-4224-93ed-4653f38feb6d"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:feb6b214-4c8a-4a43-be33-26973f64b865"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:0fa9ad6d-adba-44cd-aa20-89ad92881e02"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:97e9e12e-f523-4ff6-87d8-2799421ced10"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:a8fff997-67ea-4904-9361-c98ffb04703a"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:652a2af9-bae3-45d2-afed-840872d6ca40"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:7da01d20-8c05-40a5-9293-fc3251369aae"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:00bacf5b-d3f2-4b2e-9258-d0ca160da946"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:ac28221e-8f76-4d7b-ba10-325f1b88e81f"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:b065dee6-8947-4d32-9948-c5f16541e203"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:0773b195-761b-4e95-8926-292b195e7abb"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:1b67e9b6-9432-4184-9142-a2d7eb51ae05"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:66605b27-6ef6-4b09-bd84-8ab95c1da79d"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:e3466a13-e77e-4d05-a4f9-a39348c04de4"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:f94e8744-2072-4118-b1e9-c623f9ebb292"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:d23c6aa6-8f7a-4c1b-a94e-e5a193ecedd8"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:97f0cb9c-7fac-4053-a25f-e8cb38a4ee48"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:ff78107e-9bc4-4772-92aa-e84c1783720e"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:4fb9c300-298f-4d40-9641-bd42f8a88b17"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:9fa18c3e-c998-4570-b2b9-821f30b6aba9"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:d60a68ff-88fb-433e-bbba-e3411a8d71e4"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:f7bcba6a-9969-4f5c-9bb5-24b1b2890260"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:15f27bc0-5f90-40ae-975c-647b9ccb5af6"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:64f089c6-e011-49af-b1b8-2726d360c673"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:f8cf1d61-d6c4-4623-af19-32661b785539"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:96d65787-8865-4fc6-995a-34f4dcc0ec75"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:f4a850f0-f7c0-4c59-bdbb-3777cf0e5d46"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:bd5a2106-a504-4e4b-b0f8-fc3eb7760910"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:549e4a41-60eb-4e90-a8e7-db2cba2d536a"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:5fff8a8d-e8a7-47af-b504-7a4010a575bc"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:01bf840f-dc18-436f-ad15-ce4729bdc99b"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:d6b4c8bd-039d-44cf-b6d8-e7ac35485ca2"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:2cba687f-77c9-41d6-bf70-b1bb5b983700"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:c5cd7490-b8dd-41fd-8d7d-5e6260602e1d"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:a3639f30-5b24-46da-94bf-34e401422a81"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:bc58f083-ed3d-4880-8bd9-863d6bc49266"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:412b6c77-781c-4629-9ecb-9c43a0fa9283"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:8aab1e88-1c5d-4fb0-90de-b2afd27bfb9a"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:74a2f878-f037-452e-ac45-29d2cf7b06e4"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:c0727110-2030-46c6-9b90-c9e60c3aa96a"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:e7afa659-749b-40b4-8b90-f68d14e37668"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:200195c1-6df1-4447-bd8f-97e5f0eccc43"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:4d70588d-3c1d-46ad-af7b-00ba0bdadf4e"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:acd2b512-7d58-4ba2-8be4-680aee8f6301"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:b45e6a7f-3550-42fc-b8c7-536e32017165"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:7b5c59fb-faa1-467c-98cb-661a861b277e"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:138d5a45-7a5b-4f91-a77f-e9b09f7dfb90"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:23b55f64-ce64-4401-93c1-86d15463c93b"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:918415aa-053c-4d65-ab96-6dcd3e8a94ef"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:d4932b5e-80e5-4f01-b514-5f4a40d66268"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:2d0d9a8b-7cfc-4a64-9e08-a0eb10e26d3c"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:380341a8-f48a-43f2-b0e3-541ddb259311"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:7b63581c-6179-4e59-9c09-22088ceadf7f"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:12322fe0-03ea-4cad-9309-83d7395791aa"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:11af7f28-62b7-4149-9e43-2185546e6f0a"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:6afde82f-d6f3-44a7-b128-5e7bf662a5d4"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:7eb1769d-f049-4bbc-aaed-de4fc3cdceb1"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:c9f51333-73e0-4799-bd5a-0f095a91edba"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:628f005a-d9a1-4c62-aacf-2e641fe96df8"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:d3a7ae9f-8083-41e9-aa51-731eb496cace"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:6ced6b7f-00e5-46c1-9ed7-0dc400bda356"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:0b61ebfc-dea0-477d-adff-8e6d31b93bad"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:bfa45986-4ed2-4e54-812e-20788749abea"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:5518ca05-1049-4d59-9241-987f6eda91f9"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:668723e6-8158-41d5-870c-d5e905a1577d"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:3adff810-6ba8-446d-aff9-3dcfd41464ea"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:748edd5a-ac88-403b-9bf9-41a99e332d31"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:a695e7f3-a9f5-4189-8fa5-6bd8e137d05c"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:d8e265df-1c6b-44cb-9a30-f62ce9e69f10"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:afa891c3-6a8f-45d4-9a05-175eb088b617"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:0531eabd-e735-45c2-8a40-6f71717b00df"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:25ecf51e-c20d-4dbf-80c2-f7e563d1968a"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:1783e987-4ce4-48d8-a5b6-b2ede3ae4aab"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:67e79efa-0659-4a3c-9669-e7e1fe0cad42"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:9d57f4fd-b08b-43d1-a429-8cd26a7f113f"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:39b73f46-bae3-449f-8726-e9263c2bf81d"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:c1be0c2e-e3f3-4d10-9c5a-0022492c85c1"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:1d07bcdf-a8e5-48d2-86fb-f3d6c1877f03"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:7e9a8697-8029-4065-a42a-29c6114902a6"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:56097089-b982-413a-ad24-090a82e2e983"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:9accbc0b-6f08-4c4d-bf09-9e77d8bdd4f4"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:0fe453b3-abf6-4005-9a2e-44799998f857"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:8f1a060d-0c04-4cb7-b23e-cc6b85bd1dff"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:5e98ae79-c1bb-49b4-8046-848ffe0872b1"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:e368f728-3880-4451-ae8c-bb11b1159e11"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:41caa02e-728f-4db5-ae73-754d4580f9bc"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:947a5378-bfb6-4f74-8e61-c3361a9fc2ce"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:85b8dac1-87aa-4b05-ab47-273f087faba7"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:f7119295-a67f-4c36-af99-75eb14c750a8"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:eba9b8e7-fdb1-4f3f-ae11-9a66660b86a5"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:eda634b0-7907-4fbe-9f7a-a5b39432132c"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:76462df0-a8da-46cd-9a9a-659f26a2bac1"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:a0be0e34-d6c9-4346-8895-91f14f3a8957"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:439bfbe9-beee-4b1c-87b7-e50eb73f3f37"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:7062f581-aab0-47a3-b8e2-95081316150e"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:c47b77f2-3ebc-4d9e-b6c3-cb27778e4fe9"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:125d0f53-5e1c-44c0-b63a-1ef67c825f82"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:d907ae2c-b05a-418d-908b-125c573cf1cb"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:44cf1851-bca1-4715-a487-280188d24d63"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:f09e83ee-6770-432a-838a-1b991004f114"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:bf84100e-829d-4998-a3c6-2625f5c962d3"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:5326c4b4-90cf-47e9-a91c-e5207adbd001"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:385c15c7-80f9-428b-981d-fb0b9453db52"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:4ceed56f-f2e8-47cd-b126-655f6cc6b711"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:d8c03eb6-0245-4f3b-b017-375a8bcb6802"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:da721b6c-3ff2-4b6f-bf46-8e2c09808221"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:b4cc3fb1-ad7f-47d7-9401-3f21eacfc0a0"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:6660f3e4-0735-435b-b092-91e4b90209e9"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:b0d16880-c992-4018-a945-59894a133980"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:94e6baf8-2243-4488-af58-f767e60c2858"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:5b3815bf-b45f-4e2e-bce1-12c64a78e025"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:df42e363-2be7-41c6-a8b8-31fe854e80f3"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:98ac8edc-6a6a-42e1-b2dd-ebec55379bd8"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:3e4659bc-ef16-4708-9bd0-df4451bb8f19"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:dc12b0f3-e36c-4985-af25-b00b6dc3d3c4"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:1f17cc33-9061-4b0f-931e-e31797c2c125"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:503d79c7-e748-4953-89f0-bd9a054267f0"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:60f5ef70-d716-463d-a1ad-cdcff01787c2"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:5923b032-08a3-4fd9-81c8-4f537d66c315"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:159ff837-d973-462c-acca-72e596c5e178"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:62cae844-6289-4bec-875e-a2e364d29be7"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:5261574e-aa08-4673-a441-6798e2d54d1a"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:1cbf8e16-980f-4948-b65b-19fef1cc98fb"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:48340d62-1048-498d-b49f-3a4c249f1184"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:1c34375b-eb1f-4dff-8923-2b518d6c0a02"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:51e8af7e-ef46-4690-b499-04f61c1d03b0"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:e3af9235-33ed-44dd-8d91-17585c4a24e5"
+        },
+        {
+          "reason": "state-seen-outside-refresh-window",
+          "record_id": "rss:figma:6a4d8e0e-176c-4da9-9aae-a48060b9d197"
+        }
+      ],
+      "skipped_existing": 170,
+      "status": "success",
+      "written": [
+        "auxsays/updates/generated/2025-02-11-figma-library-analytics-api.md",
+        "auxsays/updates/generated/2025-02-10-figma-new-export-setting-detailed-or-basic-image-sampling.md"
+      ]
+    },
     {
       "adapter": "adobe_release_notes",
       "candidate_count": 1,
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 25901,
+      "duration_ms": 25854,
       "fetched": 1,
       "product_id": "adobe-premiere-pro",
       "record_limit": 2,
@@ -41,7 +790,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 581,
+      "duration_ms": 709,
       "fetched": 117,
       "product_id": "blackmagic-davinci",
       "record_limit": 2,
@@ -530,7 +1279,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 641,
+      "duration_ms": 1270,
       "fetched": 15,
       "product_id": "obs-studio",
       "record_limit": 2,
@@ -611,7 +1360,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 408,
+      "duration_ms": 877,
       "fetched": 30,
       "product_id": "comfyui",
       "record_limit": 2,
@@ -749,10 +1498,12 @@
     {
       "adapter": "rss_feed",
       "candidate_count": 10,
-      "created": 0,
-      "deferred": [],
-      "deferred_count": 0,
-      "duration_ms": 794,
+      "created": 2,
+      "deferred": [
+        "rss:github:https://github.blog/changelog/2026-08-18-credential-revocation-and-deauthorization-by-token-type"
+      ],
+      "deferred_count": 1,
+      "duration_ms": 12270,
       "fetched": 10,
       "product_id": "github",
       "record_limit": 2,
@@ -789,32 +1540,157 @@
         {
           "reason": "state-seen-outside-refresh-window",
           "record_id": "rss:github:https://github.blog/changelog/2026-08-12-agent-plugins-1-0-in-vs-code-copilot-cli-and-the-copilot-app"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "rss:github:https://github.blog/changelog/2026-08-12-rule-insights-for-organizations-in-public-preview"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "rss:github:https://github.blog/changelog/2026-08-11-github-enterprise-server-3-22-release-candidate"
-        },
-        {
-          "reason": "state-seen-outside-refresh-window",
-          "record_id": "rss:github:https://github.blog/changelog/2026-08-11-copilot-memory-and-ollama-in-github-copilot-for-jetbrains"
         }
       ],
-      "skipped_existing": 8,
+      "skipped_existing": 5,
+      "status": "success",
+      "written": [
+        "auxsays/updates/generated/2026-08-19-github-copilot-track-organization-code-quality-trends.md",
+        "auxsays/updates/generated/2026-08-18-github-copilot-enterprise-managed-settings-in-github-copilot-for-jetbrains.md"
+      ]
+    },
+    {
+      "adapter": "html_changelog",
+      "candidate_count": 0,
+      "created": 0,
+      "deferred": [],
+      "deferred_count": 0,
+      "duration_ms": 478,
+      "fetched": 0,
+      "product_id": "netlify",
+      "record_limit": 2,
+      "refreshed": [],
+      "scan_limit": 200,
+      "skipped": [],
+      "skipped_existing": 0,
       "status": "success",
       "written": []
     },
     {
       "adapter": "adobe_acrobat",
-      "candidate_count": 74,
-      "created": 0,
-      "deferred": [],
-      "deferred_count": 0,
-      "duration_ms": 300,
-      "fetched": 74,
+      "candidate_count": 192,
+      "created": 2,
+      "deferred": [
+        "adobe:adobe-acrobat-reader:continuous:26.001.21745:ddf3c4976d1af213",
+        "adobe:adobe-acrobat-reader:continuous:26.001.21691:a4a73b9bcad703b0",
+        "adobe:adobe-acrobat-reader:continuous:26.001.21677:b7e6de04d5829b08",
+        "adobe:adobe-acrobat-reader:continuous:26.001.21662:0afbb65ae9f0225a",
+        "adobe:adobe-acrobat-reader:continuous:26.001.21651:3900421ed1552775",
+        "adobe:adobe-acrobat-reader:continuous:26.001.21483:eecc04e7adebff74",
+        "adobe:adobe-acrobat-reader:continuous:26.001.21431:c904cd0fed7cdd41",
+        "adobe:adobe-acrobat-reader:continuous:26.001.21411:003893ad1aa19232",
+        "adobe:adobe-acrobat-reader:continuous:26.001.21367:81a5c91c5fc58658",
+        "adobe:adobe-acrobat-reader:continuous:26.001.21346:ce77d6cb6ec27132",
+        "adobe:adobe-acrobat-reader:continuous:25.001.21288:a1804bd8eea6fc53",
+        "adobe:adobe-acrobat-reader:continuous:25.001.21265:57cec8b0c60eda7b",
+        "adobe:adobe-acrobat-reader:continuous:25.001.21223:6a47133151bfcefa",
+        "adobe:adobe-acrobat-reader:continuous:25.001.21208:10b701d4b1cfc7b3",
+        "adobe:adobe-acrobat-reader:continuous:25.001.21184:c2277dd71516ab73",
+        "adobe:adobe-acrobat-reader:continuous:25.001.21111:c7225d8ce59d6db9",
+        "adobe:adobe-acrobat-reader:continuous:25.001.21078:377ba8c6997d8dfa",
+        "adobe:adobe-acrobat-reader:continuous:25.001.20997:2a7fa2ea6fb8bbb7",
+        "adobe:adobe-acrobat-reader:continuous:25.001.20982:d34d046700d66a8c",
+        "adobe:adobe-acrobat-reader:continuous:25.001.20937:31c30c3297b1ebd8",
+        "adobe:adobe-acrobat-reader:continuous:25.001.20918:80e2b42e63381c2f",
+        "adobe:adobe-acrobat-reader:continuous:25.001.20813:6981f442ae9d264a",
+        "adobe:adobe-acrobat-reader:continuous:25.001.20756:c32a6340d24a4fc7",
+        "adobe:adobe-acrobat-reader:continuous:25.001.20744:d0356a7a9a22b5b9",
+        "adobe:adobe-acrobat-reader:continuous:25.001.20693:9bfbf572179610a6",
+        "adobe:adobe-acrobat-reader:continuous:25.001.20643:16e891f4eab5fd3d",
+        "adobe:adobe-acrobat-reader:continuous:25.001.20630:70448c1cdfe7e513",
+        "adobe:adobe-acrobat-reader:continuous:25.001.20623:8b25def7b5adb059",
+        "adobe:adobe-acrobat-reader:continuous:25.001.20577:fea8ac4d77e487fe",
+        "adobe:adobe-acrobat-reader:continuous:25.001.20566:da102e187569ce15",
+        "adobe:adobe-acrobat-reader:continuous:25.001.20521:84f503a5295fe759",
+        "adobe:adobe-acrobat-reader:continuous:25.001.20458:3aa1fe8598e4c21d",
+        "adobe:adobe-acrobat-reader:continuous:25.001.20432:02fd78bb190f31a2",
+        "adobe:adobe-acrobat-reader:continuous:25.001.20428:91a6e8e85b6f8798",
+        "adobe:adobe-acrobat-reader:continuous:24.005.20421:e2fd906ce6f5d23a",
+        "adobe:adobe-acrobat-reader:continuous:24.005.20414:2aa3133a917f8980",
+        "adobe:adobe-acrobat-reader:continuous:24.005.20320:52f68b531934a09c",
+        "adobe:adobe-acrobat-reader:continuous:24.005.20307:0acf2f65f140ac23",
+        "adobe:adobe-acrobat-reader:continuous:24.004.20272:eb09bb3f7c8b6268",
+        "adobe:adobe-acrobat-reader:continuous:24.004.20243:65a7e0e27848043f",
+        "adobe:adobe-acrobat-reader:continuous:24.003.20180:2adf790fef668b73",
+        "adobe:adobe-acrobat-reader:continuous:24.003.20121:f28421ea1fb73700",
+        "adobe:adobe-acrobat-reader:continuous:24.003.20112:5c3d9cb86ebceafd",
+        "adobe:adobe-acrobat-reader:continuous:24.003.20054:16dccc59fc2d2826",
+        "adobe:adobe-acrobat-reader:continuous:24.002.21005:d469f1702bb7a72e",
+        "adobe:adobe-acrobat-reader:continuous:24.002.20991:351301adb6981c0d",
+        "adobe:adobe-acrobat-reader:continuous:24.002.20687:3a374b228e67c11f",
+        "adobe:adobe-acrobat-reader:continuous:24.001.20643:cbd3d8018867ed8d",
+        "adobe:adobe-acrobat-reader:continuous:24.001.20615:61fefccfaecd359a",
+        "adobe:adobe-acrobat-reader:continuous:24.001.20604:f5597118df9480ad",
+        "adobe:adobe-acrobat-reader:continuous:23.008.20555:291255bb8ee7f2e3",
+        "adobe:adobe-acrobat-reader:continuous:23.008.20533:35e8855cee07e6ea",
+        "adobe:adobe-acrobat-reader:continuous:23.008.20470:bbbb1f8426560045",
+        "adobe:adobe-acrobat-reader:continuous:23.008.20458:bb23d52685273951",
+        "adobe:adobe-acrobat-reader:continuous:23.006.20380:f650516d19f65f64",
+        "adobe:adobe-acrobat-reader:continuous:23.006.20360:7505c8a6fbd81719",
+        "adobe:adobe-acrobat-reader:continuous:23.006.20320:7850119fcafff370",
+        "adobe:adobe-acrobat-reader:continuous:23.003.20284:84983336caf8f144",
+        "adobe:adobe-acrobat-reader:continuous:23.003.20269:b230c85a63a9702e",
+        "adobe:adobe-acrobat-reader:continuous:23.003.20215:ae69006e1f7e157b",
+        "adobe:adobe-acrobat-reader:continuous:23.003.20201:776761424e988e4c",
+        "adobe:adobe-acrobat-reader:continuous:23.001.20143:53e216e3d1038f2a",
+        "adobe:adobe-acrobat-reader:continuous:23.001.20093:6f4453a06e142d69",
+        "adobe:adobe-acrobat-reader:continuous:22.003.20322:19adac5c572861ca",
+        "adobe:adobe-acrobat-reader:continuous:22.003.20314:df8847b5f59df2a0",
+        "adobe:adobe-acrobat-reader:continuous:22.003.20310:abe92c895b7db1f6",
+        "adobe:adobe-acrobat-reader:continuous:22.003.20282:f7d99a50cba70a49",
+        "adobe:adobe-acrobat-reader:continuous:22.003.20263:6494062aeee23e8a",
+        "adobe:adobe-acrobat-reader:continuous:22.003.20258:72a43d7371b4cda2",
+        "adobe:adobe-acrobat-reader:continuous:22.002.20212:4ae5dc5179174f85",
+        "adobe:adobe-acrobat-reader:continuous:22.002.20191:645e66285250f24d",
+        "adobe:adobe-acrobat-reader:continuous:22.001.20169:32affd8fa0eb59bd",
+        "adobe:adobe-acrobat-reader:continuous:22.001.20142:e471860771af10b0",
+        "adobe:adobe-acrobat-reader:continuous:22.001.20117:08fb5552c9c57f21",
+        "adobe:adobe-acrobat-reader:continuous:22.001.20085:1fa9333b9be1c681",
+        "adobe:adobe-acrobat-reader:continuous:21.011.20039:617de7b4dca64c60",
+        "adobe:adobe-acrobat-reader:continuous:21.007.20099:2d126295fbec853b",
+        "adobe:adobe-acrobat-reader:continuous:21.007.20095:f300ebc024ac86fa",
+        "adobe:adobe-acrobat-reader:continuous:21.007.20091:eca34a9d872d784f",
+        "adobe:adobe-acrobat-reader:continuous:21.001.20145:697c9af2d88700e3",
+        "adobe:adobe-acrobat-reader:continuous:21.001.20142:17dcc40d0dbd311f",
+        "adobe:adobe-acrobat-reader:continuous:21.001.20140:6d8327210358a195",
+        "adobe:adobe-acrobat-reader:continuous:21.001.20138:4bd1bf6c4558f776",
+        "adobe:adobe-acrobat-reader:continuous:21.001.20135:393513cbb4a1d11c",
+        "adobe:adobe-acrobat-reader:continuous:20.013.20066:7a294777260ed976",
+        "adobe:adobe-acrobat-reader:continuous:20.013.20064:cb768d9fb19d8ff5",
+        "adobe:adobe-acrobat-reader:continuous:20.012.20048:93f6448d4db81ab1",
+        "adobe:adobe-acrobat-reader:continuous:20.012.20043:eba3347e7b7e6628",
+        "adobe:adobe-acrobat-reader:continuous:20.012.20041:0357bae0ed4b5847",
+        "adobe:adobe-acrobat-reader:classic:20.005.30838:346e2e90abf43b56",
+        "adobe:adobe-acrobat-reader:classic:20.005.30803:197d20e998256d97",
+        "adobe:adobe-acrobat-reader:classic:20.005.30774:3fb4f6dc6656db81",
+        "adobe:adobe-acrobat-reader:classic:20.005.30763:7c8e588b85fc8ac7",
+        "adobe:adobe-acrobat-reader:classic:20.005.30748:fecc1710e4c5b3f9",
+        "adobe:adobe-acrobat-reader:classic:20.005.30730:5feb00d0ef566cbf",
+        "adobe:adobe-acrobat-reader:classic:20.005.30710:96003a3fd3e960e2",
+        "adobe:adobe-acrobat-reader:classic:20.005.30680:a7cfabed820a8f16",
+        "adobe:adobe-acrobat-reader:classic:20.005.30655:d1b8d6d9cc52c202",
+        "adobe:adobe-acrobat-reader:classic:20.005.30574:cf11496255b7de95",
+        "adobe:adobe-acrobat-reader:classic:20.005.30539:331d5278742a7dbb",
+        "adobe:adobe-acrobat-reader:classic:20.005.30524:2ab0e2983355638e",
+        "adobe:adobe-acrobat-reader:classic:20.005.30467:89bafd008f6e4278",
+        "adobe:adobe-acrobat-reader:classic:20.005.30441:e0ce1542e57ea174",
+        "adobe:adobe-acrobat-reader:classic:20.005.30436:ce573b5281d96be9",
+        "adobe:adobe-acrobat-reader:classic:20.005.30418:69d83e1eb2e977ad",
+        "adobe:adobe-acrobat-reader:classic:20.005.30407:e47a37593159b962",
+        "adobe:adobe-acrobat-reader:classic:20.005.30381:400872b03129b1c3",
+        "adobe:adobe-acrobat-reader:classic:20.005.30362:0742035a422fc23b",
+        "adobe:adobe-acrobat-reader:classic:20.005.30334:88098e45c397e7cc",
+        "adobe:adobe-acrobat-reader:classic:20.005.30314:07677d2d7bc32280",
+        "adobe:adobe-acrobat-reader:classic:20.004.30020:4791a81226699bf6",
+        "adobe:adobe-acrobat-reader:classic:20.004.30017:3fe0ee93e2207432",
+        "adobe:adobe-acrobat-reader:classic:20.004.30015:9da1dc137178b3c5",
+        "adobe:adobe-acrobat-reader:classic:20.001.30020:1d5db79e330f2fb5",
+        "adobe:adobe-acrobat-reader:classic:20.001.30010:36ec7028470755e4",
+        "adobe:adobe-acrobat-reader:classic:20.001.30005:5c78a035e36b5b93"
+      ],
+      "deferred_count": 116,
+      "duration_ms": 12468,
+      "fetched": 192,
       "product_id": "adobe-acrobat-reader",
       "record_limit": 2,
       "refreshed": [
@@ -1122,16 +1998,136 @@
       ],
       "skipped_existing": 72,
       "status": "success",
-      "written": []
+      "written": [
+        "auxsays/updates/generated/2026-08-11-adobe-acrobat-reader-26-001-21789.md",
+        "auxsays/updates/generated/2026-08-01-adobe-acrobat-reader-26-001-21771.md"
+      ]
     },
     {
       "adapter": "adobe_acrobat",
-      "candidate_count": 74,
-      "created": 0,
-      "deferred": [],
-      "deferred_count": 0,
-      "duration_ms": 42,
-      "fetched": 74,
+      "candidate_count": 192,
+      "created": 2,
+      "deferred": [
+        "adobe:adobe-acrobat-pro:continuous:26.001.21745:368f5010e0bd3f7d",
+        "adobe:adobe-acrobat-pro:continuous:26.001.21691:1dcc315ecabf840f",
+        "adobe:adobe-acrobat-pro:continuous:26.001.21677:fe93e0331c641c83",
+        "adobe:adobe-acrobat-pro:continuous:26.001.21662:7df101ed365f50ac",
+        "adobe:adobe-acrobat-pro:continuous:26.001.21651:feda18bb9a3d1cd9",
+        "adobe:adobe-acrobat-pro:continuous:26.001.21483:3f995d7a783d4d9e",
+        "adobe:adobe-acrobat-pro:continuous:26.001.21431:7b63e2c3763e47fa",
+        "adobe:adobe-acrobat-pro:continuous:26.001.21411:e36155c14e6327a0",
+        "adobe:adobe-acrobat-pro:continuous:26.001.21367:848a7be774bab3e6",
+        "adobe:adobe-acrobat-pro:continuous:26.001.21346:831e0e17c6c4a6e1",
+        "adobe:adobe-acrobat-pro:continuous:25.001.21288:f6e77381f05e8449",
+        "adobe:adobe-acrobat-pro:continuous:25.001.21265:b7291c23ec9eef4a",
+        "adobe:adobe-acrobat-pro:continuous:25.001.21223:3db72fe8cb350396",
+        "adobe:adobe-acrobat-pro:continuous:25.001.21208:662dec5f646a956f",
+        "adobe:adobe-acrobat-pro:continuous:25.001.21184:f471639648675fce",
+        "adobe:adobe-acrobat-pro:continuous:25.001.21111:c9fc9ad8a2018cd8",
+        "adobe:adobe-acrobat-pro:continuous:25.001.21078:6c43dfb8bd158668",
+        "adobe:adobe-acrobat-pro:continuous:25.001.20997:89563258892f1303",
+        "adobe:adobe-acrobat-pro:continuous:25.001.20982:eaae7e2b998db775",
+        "adobe:adobe-acrobat-pro:continuous:25.001.20937:88983c1d63d534e5",
+        "adobe:adobe-acrobat-pro:continuous:25.001.20918:595e241151c8526b",
+        "adobe:adobe-acrobat-pro:continuous:25.001.20813:d2ada0d3e294c8b6",
+        "adobe:adobe-acrobat-pro:continuous:25.001.20756:8e2d09d54ba530f0",
+        "adobe:adobe-acrobat-pro:continuous:25.001.20744:89b630f8dab1fe94",
+        "adobe:adobe-acrobat-pro:continuous:25.001.20693:dd4a90f6af98f244",
+        "adobe:adobe-acrobat-pro:continuous:25.001.20643:2bd3334916e72390",
+        "adobe:adobe-acrobat-pro:continuous:25.001.20630:685c427827141737",
+        "adobe:adobe-acrobat-pro:continuous:25.001.20623:3c0674b7c27217e6",
+        "adobe:adobe-acrobat-pro:continuous:25.001.20577:2f1e000501367708",
+        "adobe:adobe-acrobat-pro:continuous:25.001.20566:368c22f4bd3fd4c0",
+        "adobe:adobe-acrobat-pro:continuous:25.001.20521:24f3c8e38b0d5b81",
+        "adobe:adobe-acrobat-pro:continuous:25.001.20458:b6238557130a0e69",
+        "adobe:adobe-acrobat-pro:continuous:25.001.20432:e4c227676a856a65",
+        "adobe:adobe-acrobat-pro:continuous:25.001.20428:bc9cccaf95cd1e54",
+        "adobe:adobe-acrobat-pro:continuous:24.005.20421:b09bcd16aadd3e91",
+        "adobe:adobe-acrobat-pro:continuous:24.005.20414:7f09f2e60fb26134",
+        "adobe:adobe-acrobat-pro:continuous:24.005.20320:fd6f7802601f61d8",
+        "adobe:adobe-acrobat-pro:continuous:24.005.20307:d12debb1a85fd1b0",
+        "adobe:adobe-acrobat-pro:continuous:24.004.20272:0bf04eb3add012c5",
+        "adobe:adobe-acrobat-pro:continuous:24.004.20243:e10fddda5de77416",
+        "adobe:adobe-acrobat-pro:continuous:24.003.20180:9c1fb17c97c3d6bd",
+        "adobe:adobe-acrobat-pro:continuous:24.003.20121:28957a78a75bf3b9",
+        "adobe:adobe-acrobat-pro:continuous:24.003.20112:b38248148d0b756c",
+        "adobe:adobe-acrobat-pro:continuous:24.003.20054:6d3b5242f0b752fc",
+        "adobe:adobe-acrobat-pro:continuous:24.002.21005:c8a003b10c0a6ee9",
+        "adobe:adobe-acrobat-pro:continuous:24.002.20991:854a287c0d99f247",
+        "adobe:adobe-acrobat-pro:continuous:24.002.20687:99e3dbe96a551880",
+        "adobe:adobe-acrobat-pro:continuous:24.001.20643:11152a156c8440a0",
+        "adobe:adobe-acrobat-pro:continuous:24.001.20615:33631c797f5c48dd",
+        "adobe:adobe-acrobat-pro:continuous:24.001.20604:872597093ccd1f4e",
+        "adobe:adobe-acrobat-pro:continuous:23.008.20555:dad1f50788b5edb2",
+        "adobe:adobe-acrobat-pro:continuous:23.008.20533:460eeb6f16596001",
+        "adobe:adobe-acrobat-pro:continuous:23.008.20470:934736ee4809f85d",
+        "adobe:adobe-acrobat-pro:continuous:23.008.20458:941051caf28bcb10",
+        "adobe:adobe-acrobat-pro:continuous:23.006.20380:56f6949379a3809f",
+        "adobe:adobe-acrobat-pro:continuous:23.006.20360:2c8bfdb87c49c55e",
+        "adobe:adobe-acrobat-pro:continuous:23.006.20320:d4aa0899d3377114",
+        "adobe:adobe-acrobat-pro:continuous:23.003.20284:f31e1dbe2d6be0ff",
+        "adobe:adobe-acrobat-pro:continuous:23.003.20269:3e68ac81426cd3da",
+        "adobe:adobe-acrobat-pro:continuous:23.003.20215:475cc15917ac3ba6",
+        "adobe:adobe-acrobat-pro:continuous:23.003.20201:b3f84c9fd9413a85",
+        "adobe:adobe-acrobat-pro:continuous:23.001.20143:294c153593f619b9",
+        "adobe:adobe-acrobat-pro:continuous:23.001.20093:d833f39ce40ae72c",
+        "adobe:adobe-acrobat-pro:continuous:22.003.20322:d948833e6ab58108",
+        "adobe:adobe-acrobat-pro:continuous:22.003.20314:9a50d76ec9ae54a1",
+        "adobe:adobe-acrobat-pro:continuous:22.003.20310:3cb970ad48d9ed70",
+        "adobe:adobe-acrobat-pro:continuous:22.003.20282:aa5ebedbb6b9e791",
+        "adobe:adobe-acrobat-pro:continuous:22.003.20263:4fea6621c367ddf2",
+        "adobe:adobe-acrobat-pro:continuous:22.003.20258:eaa34432e5a751ca",
+        "adobe:adobe-acrobat-pro:continuous:22.002.20212:8fa7288f360967d9",
+        "adobe:adobe-acrobat-pro:continuous:22.002.20191:bf076e21c139f995",
+        "adobe:adobe-acrobat-pro:continuous:22.001.20169:98644788bd67d190",
+        "adobe:adobe-acrobat-pro:continuous:22.001.20142:dd696128603363b4",
+        "adobe:adobe-acrobat-pro:continuous:22.001.20117:cefd281af8618d9c",
+        "adobe:adobe-acrobat-pro:continuous:22.001.20085:f8ae7226b4134b37",
+        "adobe:adobe-acrobat-pro:continuous:21.011.20039:7663db0023c254f9",
+        "adobe:adobe-acrobat-pro:continuous:21.007.20099:ecb6b8c08a1f0561",
+        "adobe:adobe-acrobat-pro:continuous:21.007.20095:78902b9240a03bbb",
+        "adobe:adobe-acrobat-pro:continuous:21.007.20091:163fc7cf547ba300",
+        "adobe:adobe-acrobat-pro:continuous:21.001.20145:105baab1d51b53ff",
+        "adobe:adobe-acrobat-pro:continuous:21.001.20142:442668f3e965e674",
+        "adobe:adobe-acrobat-pro:continuous:21.001.20140:86d2e6d4ee8b3288",
+        "adobe:adobe-acrobat-pro:continuous:21.001.20138:ba8e5c38fdb43dae",
+        "adobe:adobe-acrobat-pro:continuous:21.001.20135:1c3a654607a5f21b",
+        "adobe:adobe-acrobat-pro:continuous:20.013.20066:8431bb96c3a3d6d6",
+        "adobe:adobe-acrobat-pro:continuous:20.013.20064:ce0f36650589e8f9",
+        "adobe:adobe-acrobat-pro:continuous:20.012.20048:95dc505825490e0c",
+        "adobe:adobe-acrobat-pro:continuous:20.012.20043:b570e30147c3b958",
+        "adobe:adobe-acrobat-pro:continuous:20.012.20041:44f769b8aa806fec",
+        "adobe:adobe-acrobat-pro:classic:20.005.30838:3a00624babf87609",
+        "adobe:adobe-acrobat-pro:classic:20.005.30803:ef212c9ae5c67ed6",
+        "adobe:adobe-acrobat-pro:classic:20.005.30774:b28526e9867ca574",
+        "adobe:adobe-acrobat-pro:classic:20.005.30763:d7f48ecf8050f650",
+        "adobe:adobe-acrobat-pro:classic:20.005.30748:dccaf7c6419f6dc5",
+        "adobe:adobe-acrobat-pro:classic:20.005.30730:a70c7404e690dae4",
+        "adobe:adobe-acrobat-pro:classic:20.005.30710:395f035eb71a526b",
+        "adobe:adobe-acrobat-pro:classic:20.005.30680:6ac6e3c92b0dc4b7",
+        "adobe:adobe-acrobat-pro:classic:20.005.30655:3cd1f1578bf70382",
+        "adobe:adobe-acrobat-pro:classic:20.005.30574:9b055f6dff7a4968",
+        "adobe:adobe-acrobat-pro:classic:20.005.30539:b8a1528b9750e325",
+        "adobe:adobe-acrobat-pro:classic:20.005.30524:b796007257bd056e",
+        "adobe:adobe-acrobat-pro:classic:20.005.30467:1a90c80ee6094467",
+        "adobe:adobe-acrobat-pro:classic:20.005.30441:39e691b5661e4833",
+        "adobe:adobe-acrobat-pro:classic:20.005.30436:2afed83a7f72a0c8",
+        "adobe:adobe-acrobat-pro:classic:20.005.30418:d770ae1f6cf14cd9",
+        "adobe:adobe-acrobat-pro:classic:20.005.30407:89cbb6ba67e19d4b",
+        "adobe:adobe-acrobat-pro:classic:20.005.30381:52f41f15f476c729",
+        "adobe:adobe-acrobat-pro:classic:20.005.30362:5e75c4e3ba48c0fd",
+        "adobe:adobe-acrobat-pro:classic:20.005.30334:eb4ca4ff70aea640",
+        "adobe:adobe-acrobat-pro:classic:20.005.30314:acd828443f695944",
+        "adobe:adobe-acrobat-pro:classic:20.004.30020:5f226d1e6246025e",
+        "adobe:adobe-acrobat-pro:classic:20.004.30017:8a522b3ebf4a4a75",
+        "adobe:adobe-acrobat-pro:classic:20.004.30015:190816c3d5e6e6ab",
+        "adobe:adobe-acrobat-pro:classic:20.001.30020:27393254e3caff2c",
+        "adobe:adobe-acrobat-pro:classic:20.001.30010:a1e9e735727cc324",
+        "adobe:adobe-acrobat-pro:classic:20.001.30005:b660c55386b878a9"
+      ],
+      "deferred_count": 116,
+      "duration_ms": 12338,
+      "fetched": 192,
       "product_id": "adobe-acrobat-pro",
       "record_limit": 2,
       "refreshed": [
@@ -1439,7 +2435,10 @@
       ],
       "skipped_existing": 72,
       "status": "success",
-      "written": []
+      "written": [
+        "auxsays/updates/generated/2026-08-11-adobe-acrobat-pro-26-001-21789.md",
+        "auxsays/updates/generated/2026-08-01-adobe-acrobat-pro-26-001-21771.md"
+      ]
     },
     {
       "adapter": "microsoft_release_health",
@@ -1447,7 +2446,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 18156,
+      "duration_ms": 19967,
       "fetched": 4,
       "product_id": "microsoft-windows-11",
       "record_limit": 6,
@@ -1485,7 +2484,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 137,
+      "duration_ms": 274,
       "fetched": 20,
       "product_id": "microsoft-powerpoint",
       "record_limit": 2,
@@ -1586,7 +2585,7 @@
       "created": 0,
       "deferred": [],
       "deferred_count": 0,
-      "duration_ms": 5189,
+      "duration_ms": 5650,
       "fetched": 1,
       "product_id": "microsoft-365-apps",
       "record_limit": 2,
@@ -1602,94 +2601,28 @@
       "skipped_existing": 0,
       "status": "success",
       "written": []
-    },
-    {
-      "adapter": "elgato_help_center",
-      "candidate_count": 0,
-      "created": 0,
-      "deferred": [],
-      "deferred_count": 0,
-      "duration_ms": 5573,
-      "fetched": 0,
-      "product_id": "elgato-stream-deck",
-      "record_limit": 2,
-      "refreshed": [],
-      "scan_limit": 8,
-      "skipped": [],
-      "skipped_existing": 0,
-      "status": "success",
-      "written": []
-    },
-    {
-      "adapter": "elgato_help_center",
-      "candidate_count": 0,
-      "created": 0,
-      "deferred": [],
-      "deferred_count": 0,
-      "duration_ms": 4262,
-      "fetched": 0,
-      "product_id": "elgato-wave-link",
-      "record_limit": 2,
-      "refreshed": [],
-      "scan_limit": 8,
-      "skipped": [],
-      "skipped_existing": 0,
-      "status": "success",
-      "written": []
-    },
-    {
-      "adapter": "elgato_help_center",
-      "candidate_count": 0,
-      "created": 0,
-      "deferred": [],
-      "deferred_count": 0,
-      "duration_ms": 4078,
-      "fetched": 0,
-      "product_id": "elgato-camera-hub",
-      "record_limit": 2,
-      "refreshed": [],
-      "scan_limit": 8,
-      "skipped": [],
-      "skipped_existing": 0,
-      "status": "success",
-      "written": []
-    },
-    {
-      "adapter": "elgato_help_center",
-      "candidate_count": 0,
-      "created": 0,
-      "deferred": [],
-      "deferred_count": 0,
-      "duration_ms": 4561,
-      "fetched": 0,
-      "product_id": "elgato-4k-capture-utility",
-      "record_limit": 2,
-      "refreshed": [],
-      "scan_limit": 8,
-      "skipped": [],
-      "skipped_existing": 0,
-      "status": "success",
-      "written": []
     }
   ],
-  "last_run_finished_at": "2026-08-18T20:05:55Z",
-  "last_run_started_at": "2026-08-18T20:04:44Z",
+  "last_run_finished_at": "2026-08-19T16:47:15Z",
+  "last_run_started_at": "2026-08-19T16:45:30Z",
   "sources": {
     "adobe-acrobat-pro": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_acrobat",
-      "last_checked_at": "2026-08-18T20:05:13Z",
+      "last_checked_at": "2026-08-19T16:46:37Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
       "last_health_note": "Fetch succeeded.",
-      "last_records_fetched": 74,
+      "last_records_fetched": 192,
       "last_records_skipped": 72,
-      "last_records_written": 2,
-      "last_run_duration_ms": 42,
-      "last_success_at": "2026-08-18T20:05:13Z",
+      "last_records_written": 4,
+      "last_run_duration_ms": 12338,
+      "last_success_at": "2026-08-19T16:46:37Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "adobe:adobe-acrobat-pro:continuous:26.001.21771:3c9cf62a36c9b83b",
+        "adobe:adobe-acrobat-pro:continuous:26.001.21789:becd8336a55bfcb1",
         "adobe:adobe-acrobat-pro:classic:20.001.30018:0df96a25d383e2b5",
         "adobe:adobe-acrobat-pro:classic:20.001.30025:efee7b4a2c68ba75",
         "adobe:adobe-acrobat-pro:classic:20.004.30005:afeb3f63ddbb639c",
@@ -1770,18 +2703,20 @@
     "adobe-acrobat-reader": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_acrobat",
-      "last_checked_at": "2026-08-18T20:05:12Z",
+      "last_checked_at": "2026-08-19T16:46:24Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
       "last_health_note": "Fetch succeeded.",
-      "last_records_fetched": 74,
+      "last_records_fetched": 192,
       "last_records_skipped": 72,
-      "last_records_written": 2,
-      "last_run_duration_ms": 300,
-      "last_success_at": "2026-08-18T20:05:12Z",
+      "last_records_written": 4,
+      "last_run_duration_ms": 12468,
+      "last_success_at": "2026-08-19T16:46:24Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "adobe:adobe-acrobat-reader:continuous:26.001.21771:f9c9f6ab48102a4c",
+        "adobe:adobe-acrobat-reader:continuous:26.001.21789:cc95ca2f3cae4a6f",
         "adobe:adobe-acrobat-reader:classic:20.001.30018:62e0d9f3e62daaa7",
         "adobe:adobe-acrobat-reader:classic:20.001.30025:33d6405f894fa141",
         "adobe:adobe-acrobat-reader:classic:20.004.30005:4c9867dda1304738",
@@ -1922,7 +2857,7 @@
     "adobe-premiere-pro": {
       "consecutive_failures": 0,
       "last_adapter": "adobe_release_notes",
-      "last_checked_at": "2026-08-18T20:04:44Z",
+      "last_checked_at": "2026-08-19T16:45:43Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -1930,8 +2865,8 @@
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 25901,
-      "last_success_at": "2026-08-18T20:04:44Z",
+      "last_run_duration_ms": 25854,
+      "last_success_at": "2026-08-19T16:45:43Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "adobe:adobe-premiere-pro:26.2.2:c176cc33bba85978",
@@ -1942,7 +2877,7 @@
     "blackmagic-davinci": {
       "consecutive_failures": 0,
       "last_adapter": "blackmagic_support_downloads",
-      "last_checked_at": "2026-08-18T20:05:10Z",
+      "last_checked_at": "2026-08-19T16:46:09Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -1950,8 +2885,8 @@
       "last_records_fetched": 117,
       "last_records_skipped": 115,
       "last_records_written": 2,
-      "last_run_duration_ms": 581,
-      "last_success_at": "2026-08-18T20:05:10Z",
+      "last_run_duration_ms": 709,
+      "last_success_at": "2026-08-19T16:46:09Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "blackmagic-support:blackmagic-davinci:10.1.5:69c2e474f9994d7cbac255b3e20aabb9",
@@ -2078,7 +3013,7 @@
     "comfyui": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-08-18T20:05:11Z",
+      "last_checked_at": "2026-08-19T16:46:11Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -2086,8 +3021,8 @@
       "last_records_fetched": 30,
       "last_records_skipped": 28,
       "last_records_written": 2,
-      "last_run_duration_ms": 408,
-      "last_success_at": "2026-08-18T20:05:11Z",
+      "last_run_duration_ms": 877,
+      "last_success_at": "2026-08-19T16:46:11Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:comfyui:370196467",
@@ -2130,17 +3065,17 @@
       "status": "healthy"
     },
     "elgato-4k-capture-utility": {
-      "consecutive_failures": 0,
+      "consecutive_failures": 1,
       "last_adapter": "elgato_help_center",
-      "last_checked_at": "2026-08-18T20:05:50Z",
-      "last_error": "",
-      "last_error_at": "",
-      "last_error_type": "",
-      "last_health_note": "Fetch succeeded, but no records were extracted. This can mean no new updates or that the parser needs review.",
+      "last_checked_at": "2026-08-19T16:47:15Z",
+      "last_error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-f9lJ2PgStNXGfOJZDcYfss&#39; &#39;unsafe-eval&#39; [source URL] script-s",
+      "last_error_at": "2026-08-19T16:47:15Z",
+      "last_error_type": "blocked",
+      "last_health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 4561,
+      "last_run_duration_ms": 0,
       "last_success_at": "2026-08-18T20:05:50Z",
       "previous_consecutive_failures": 1,
       "scan": {
@@ -2159,17 +3094,17 @@
       "status": "degraded"
     },
     "elgato-camera-hub": {
-      "consecutive_failures": 0,
+      "consecutive_failures": 1,
       "last_adapter": "elgato_help_center",
-      "last_checked_at": "2026-08-18T20:05:46Z",
-      "last_error": "",
-      "last_error_at": "",
-      "last_error_type": "",
-      "last_health_note": "Fetch succeeded, but no records were extracted. This can mean no new updates or that the parser needs review.",
+      "last_checked_at": "2026-08-19T16:47:15Z",
+      "last_error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-veGLpqq7HNRC0MwXCP76Of&#39; &#39;unsafe-eval&#39; [source URL] script-s",
+      "last_error_at": "2026-08-19T16:47:15Z",
+      "last_error_type": "blocked",
+      "last_health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 4078,
+      "last_run_duration_ms": 0,
       "last_success_at": "2026-08-18T20:05:46Z",
       "previous_consecutive_failures": 0,
       "scan": {
@@ -2204,17 +3139,17 @@
       "status": "degraded"
     },
     "elgato-stream-deck": {
-      "consecutive_failures": 0,
+      "consecutive_failures": 1,
       "last_adapter": "elgato_help_center",
-      "last_checked_at": "2026-08-18T20:05:36Z",
-      "last_error": "",
-      "last_error_at": "",
-      "last_error_type": "",
-      "last_health_note": "Fetch succeeded, but no records were extracted. This can mean no new updates or that the parser needs review.",
+      "last_checked_at": "2026-08-19T16:47:15Z",
+      "last_error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-qj0FAmp01ZRpzjH1QcChKw&#39; &#39;unsafe-eval&#39; [source URL] script-s",
+      "last_error_at": "2026-08-19T16:47:15Z",
+      "last_error_type": "blocked",
+      "last_health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 5573,
+      "last_run_duration_ms": 0,
       "last_success_at": "2026-08-18T20:05:36Z",
       "previous_consecutive_failures": 0,
       "scan": {
@@ -2249,17 +3184,17 @@
       "status": "degraded"
     },
     "elgato-wave-link": {
-      "consecutive_failures": 0,
+      "consecutive_failures": 1,
       "last_adapter": "elgato_help_center",
-      "last_checked_at": "2026-08-18T20:05:42Z",
-      "last_error": "",
-      "last_error_at": "",
-      "last_error_type": "",
-      "last_health_note": "Fetch succeeded, but no records were extracted. This can mean no new updates or that the parser needs review.",
+      "last_checked_at": "2026-08-19T16:47:15Z",
+      "last_error": "HTTP 403 while fetching official source \u2014 <!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"><meta name=\"robots\" content=\"noindex,nofollow\"><meta name=\"viewport\" content=\"width=device-width,initial-scale=1\"><meta http-equiv=\"content-security-policy\" content=\"default-src &#39;none&#39;; script-src &#39;nonce-t02n8pP2q6RYYRLtIiCIXL&#39; &#39;unsafe-eval&#39; [source URL] script-s",
+      "last_error_at": "2026-08-19T16:47:15Z",
+      "last_error_type": "blocked",
+      "last_health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 4262,
+      "last_run_duration_ms": 0,
       "last_success_at": "2026-08-18T20:05:42Z",
       "previous_consecutive_failures": 0,
       "scan": {
@@ -2278,20 +3213,22 @@
       "status": "degraded"
     },
     "figma": {
-      "consecutive_failures": 1,
+      "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-08-18T20:04:44Z",
-      "last_error": "HTTP 500 while fetching official source \u2014 ",
-      "last_error_at": "2026-08-18T20:04:44Z",
-      "last_error_type": "error",
-      "last_health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
-      "last_records_fetched": 0,
-      "last_records_skipped": 0,
-      "last_records_written": 0,
-      "last_run_duration_ms": 0,
-      "last_success_at": "2026-08-18T14:16:49Z",
-      "previous_consecutive_failures": 0,
+      "last_checked_at": "2026-08-19T16:45:30Z",
+      "last_error": "",
+      "last_error_at": "",
+      "last_error_type": "",
+      "last_health_note": "Fetch succeeded.",
+      "last_records_fetched": 200,
+      "last_records_skipped": 170,
+      "last_records_written": 4,
+      "last_run_duration_ms": 13053,
+      "last_success_at": "2026-08-19T16:45:30Z",
+      "previous_consecutive_failures": 1,
       "seen": [
+        "rss:figma:96be2776-3ca6-49c4-97d3-81007a184b0a",
+        "rss:figma:eb9fdd6c-4277-4a5c-9bd0-7cdf7f55aff0",
         "rss:figma:6a4d8e0e-176c-4da9-9aae-a48060b9d197",
         "rss:figma:e3af9235-33ed-44dd-8d91-17585c4a24e5",
         "rss:figma:51e8af7e-ef46-4690-b499-04f61c1d03b0",
@@ -2465,23 +3402,25 @@
         "rss:figma:57dd3e2e-da91-4a70-b924-72fa4c2cd0ba",
         "rss:figma:2490eafb-ecf7-4d76-9ca9-5e4dd193a086"
       ],
-      "status": "degraded"
+      "status": "healthy"
     },
     "github": {
       "consecutive_failures": 0,
       "last_adapter": "rss_feed",
-      "last_checked_at": "2026-08-18T20:05:12Z",
+      "last_checked_at": "2026-08-19T16:46:12Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
       "last_health_note": "Fetch succeeded.",
       "last_records_fetched": 10,
-      "last_records_skipped": 8,
-      "last_records_written": 2,
-      "last_run_duration_ms": 794,
-      "last_success_at": "2026-08-18T20:05:12Z",
+      "last_records_skipped": 5,
+      "last_records_written": 4,
+      "last_run_duration_ms": 12270,
+      "last_success_at": "2026-08-19T16:46:12Z",
       "previous_consecutive_failures": 0,
       "seen": [
+        "rss:github:https://github.blog/changelog/2026-08-18-enterprise-managed-settings-in-github-copilot-for-jetbrains",
+        "rss:github:https://github.blog/changelog/2026-08-19-track-organization-code-quality-trends",
         "rss:github:https://github.blog/changelog/2026-08-14-multiple-redirect-uris-and-token-refresh-for-oauth-apps",
         "rss:github:https://github.blog/changelog/2026-08-13-github-copilot-weekly-releases-august-10",
         "rss:github:https://github.blog/changelog/2026-08-14-grok-4-6-is-now-available-in-github-copilot",
@@ -2646,7 +3585,7 @@
     "microsoft-365-apps": {
       "consecutive_failures": 0,
       "last_adapter": "microsoft_office_updates",
-      "last_checked_at": "2026-08-18T20:05:31Z",
+      "last_checked_at": "2026-08-19T16:47:09Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -2654,8 +3593,8 @@
       "last_records_fetched": 1,
       "last_records_skipped": 0,
       "last_records_written": 1,
-      "last_run_duration_ms": 5189,
-      "last_success_at": "2026-08-18T20:05:31Z",
+      "last_run_duration_ms": 5650,
+      "last_success_at": "2026-08-19T16:47:09Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "microsoft:microsoft-365-apps:2607:1146649b2819b682",
@@ -2671,7 +3610,7 @@
     "microsoft-powerpoint": {
       "consecutive_failures": 0,
       "last_adapter": "microsoft_office_updates",
-      "last_checked_at": "2026-08-18T20:05:31Z",
+      "last_checked_at": "2026-08-19T16:47:09Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -2679,8 +3618,8 @@
       "last_records_fetched": 20,
       "last_records_skipped": 18,
       "last_records_written": 2,
-      "last_run_duration_ms": 137,
-      "last_success_at": "2026-08-18T20:05:31Z",
+      "last_run_duration_ms": 274,
+      "last_success_at": "2026-08-19T16:47:09Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "microsoft:microsoft-powerpoint:2312:41734d73c631db0c",
@@ -2709,7 +3648,7 @@
     "microsoft-windows-11": {
       "consecutive_failures": 0,
       "last_adapter": "microsoft_release_health",
-      "last_checked_at": "2026-08-18T20:05:13Z",
+      "last_checked_at": "2026-08-19T16:46:49Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -2717,8 +3656,8 @@
       "last_records_fetched": 4,
       "last_records_skipped": 0,
       "last_records_written": 4,
-      "last_run_duration_ms": 18156,
-      "last_success_at": "2026-08-18T20:05:13Z",
+      "last_run_duration_ms": 19967,
+      "last_success_at": "2026-08-19T16:46:49Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "microsoft:microsoft-windows-11:23H2:10c42f1c1fb24014",
@@ -2742,25 +3681,25 @@
       "status": "healthy"
     },
     "netlify": {
-      "consecutive_failures": 1,
+      "consecutive_failures": 0,
       "last_adapter": "html_changelog",
-      "last_checked_at": "2026-08-18T20:05:12Z",
-      "last_error": "HTTP 500 while fetching official source \u2014 ",
-      "last_error_at": "2026-08-18T20:05:12Z",
-      "last_error_type": "error",
-      "last_health_note": "Fetch failed. Review source availability, adapter timeout, or parser behavior.",
+      "last_checked_at": "2026-08-19T16:46:24Z",
+      "last_error": "",
+      "last_error_at": "",
+      "last_error_type": "",
+      "last_health_note": "Fetch succeeded, but no records were extracted. This can mean no new updates or that the parser needs review.",
       "last_records_fetched": 0,
       "last_records_skipped": 0,
       "last_records_written": 0,
-      "last_run_duration_ms": 0,
-      "last_success_at": "2026-08-18T14:17:31Z",
-      "previous_consecutive_failures": 0,
+      "last_run_duration_ms": 478,
+      "last_success_at": "2026-08-19T16:46:24Z",
+      "previous_consecutive_failures": 1,
       "status": "degraded"
     },
     "obs-studio": {
       "consecutive_failures": 0,
       "last_adapter": "github_releases",
-      "last_checked_at": "2026-08-18T20:05:10Z",
+      "last_checked_at": "2026-08-19T16:46:09Z",
       "last_error": "",
       "last_error_at": "",
       "last_error_type": "",
@@ -2768,8 +3707,8 @@
       "last_records_fetched": 15,
       "last_records_skipped": 13,
       "last_records_written": 2,
-      "last_run_duration_ms": 641,
-      "last_success_at": "2026-08-18T20:05:10Z",
+      "last_run_duration_ms": 1270,
+      "last_success_at": "2026-08-19T16:46:09Z",
       "previous_consecutive_failures": 0,
       "seen": [
         "github:obs-studio:370856907",
