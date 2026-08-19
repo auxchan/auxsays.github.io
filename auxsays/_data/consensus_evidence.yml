@@ -13997,3 +13997,24 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+- id: obs-studio-32-2-2-github-issue-13807
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13807
+  parent_title: OBS 32.2.2 crashes when closing/removing YouTube Live Control Panel dock on Windows 11
+  report_title: OBS 32.2.2 crashes when closing/removing YouTube Live Control Panel dock on Windows 11
+  report_text_excerpt: '11 ### Other OS _No response_ ### OBS Studio Version Other ### OBS Studio Version (Other) 32.2.2 (64 bit) ### OBS Studio Log URL https://obsproject.com/logs/uj1igMSt8So8nWRx ### OBS Studio Crash Log URL https://obsproject.com/logs/crashes/SpBnGSDOhNMlBngV ### Expected Behavior Ao'
+  captured_at: '2026-08-19T20:02:23Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: title
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
