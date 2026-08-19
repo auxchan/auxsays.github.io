@@ -10,11 +10,11 @@ Status: `GATE A OPEN`; `HUMAN_DATA_QA ROUND 2 = CORRECTIONS APPLIED — TAYLOR R
 - Internal evidence: `internal-factual-review-model.json`.
 - Pre-activation candidate targeting PDI 1.0.0:
   `factual-snapshot-candidate.json`; SHA-256
-  `2261866B6187F599A492E289EA7BD845A20DB766DF0C93CEDFFDF1C54D865C57`.
+  `91AB68EB5DF12374D5D7CC81931E65AF5D95C7FFC40E2E45372A46951F5D3D66`.
   It contains no `snapshot` or `publishedAt` activation claim.
 - Local activation test materialized the distinct immutable PDI snapshot
-  `local-active-pdi-test-snapshot.json` at `2026-08-18T23:55:46.897033Z`;
-  SHA-256 `6D034EECA1DA5CD863A23BB0B7D6AA2C060F553AFBAEC2B8B2D10922ED5902D0`.
+  `local-active-pdi-test-snapshot.json` at `2026-08-19T01:35:09.664540Z`;
+  SHA-256 `B98EB22CE44A8B71924B8B02FBBA2D6619CF81146137D29F2C8F22EB7BF64232`.
   This was temporary local pointer evidence, not AUXSAYS.com activation.
 - Public hierarchy uses `childRefs[]` plus a namespaced node registry; the UI
   derives nested children only after candidate/PDI validation.
@@ -25,9 +25,10 @@ Status: `GATE A OPEN`; `HUMAN_DATA_QA ROUND 2 = CORRECTIONS APPLIED — TAYLOR R
   copied generation time into `snapshot.publishedAt` without activation.
 - Candidate payload is OBS-only; events and forecast/ranking collections are empty;
   Outlook is explicitly unavailable.
-- The Round-2 factual UI exposes one exact official series ID and original
-  evidence link per observation, labels methodology separately, removes the
-  fixture-only Outlook warning, and presents the DOL replay proof through
+- The Round-2 factual UI exposes one exact official series ID and series-specific
+  original-authority evidence link per observation, retains the generic BLS API
+  only as machine-retrieval provenance, labels methodology separately, removes
+  the fixture-only Outlook warning, and presents the DOL replay proof through
   progressive disclosure. Taylor re-review remains required; no PASS is claimed.
 
 ## Source, time, replay, and rights evidence
@@ -46,10 +47,10 @@ Status: `GATE A OPEN`; `HUMAN_DATA_QA ROUND 2 = CORRECTIONS APPLIED — TAYLOR R
 
 ## Measured validation and operating envelope
 
-- `python -m unittest discover -s tests -v`: 93/93 passed in 0.495 seconds.
-- `npm test`: 74/74 passed in 9.33 seconds; `npm run typecheck`: passed.
+- `python -m unittest discover -s tests -v`: 94/94 passed in 0.489 seconds.
+- `npm test`: 76/76 passed in 9.85 seconds; `npm run typecheck`: passed.
 - `npm run build` and `npm run verify:site`: passed; eight hashed assets,
-  187,524 gzip bytes against the 368,640-byte budget.
+  187,744 gzip bytes against the 368,640-byte budget.
 - Idempotent capture, concurrent activation, candidate-failure pointer
   preservation, security allowlisting/redaction, dual replay, and rights tests
   passed.

@@ -279,6 +279,9 @@
         "publishedAt": "2026-08-07T12:30:00Z",
         "retrievedAt": "2026-08-18T19:44:00.899016Z",
         "revisionNumber": 0,
+        "seriesEvidenceUrls": {
+          "CES0000000001": "https://data.bls.gov/timeseries/CES0000000001"
+        },
         "seriesIds": [
           "CES0000000001"
         ],
@@ -294,6 +297,10 @@
         "publishedAt": "2026-08-07T12:30:00Z",
         "retrievedAt": "2026-08-18T19:44:00.899016Z",
         "revisionNumber": 0,
+        "seriesEvidenceUrls": {
+          "LNS11300000": "https://data.bls.gov/timeseries/LNS11300000",
+          "LNS14000000": "https://data.bls.gov/timeseries/LNS14000000"
+        },
         "seriesIds": [
           "LNS14000000",
           "LNS11300000"
@@ -310,6 +317,10 @@
         "publishedAt": "2026-08-04T14:00:00Z",
         "retrievedAt": "2026-08-18T19:44:00.899016Z",
         "revisionNumber": 0,
+        "seriesEvidenceUrls": {
+          "JTS000000000000000HIL": "https://data.bls.gov/timeseries/JTS000000000000000HIL",
+          "JTS000000000000000JOL": "https://data.bls.gov/timeseries/JTS000000000000000JOL"
+        },
         "seriesIds": [
           "JTS000000000000000JOL",
           "JTS000000000000000HIL"
@@ -326,6 +337,9 @@
         "publishedAt": "2026-08-13T12:30:00Z",
         "retrievedAt": "2026-08-18T19:44:22.485403Z",
         "revisionNumber": 0,
+        "seriesEvidenceUrls": {
+          "DOL-UI-SA-INITIAL": "https://www.dol.gov/ui/data.pdf"
+        },
         "seriesIds": [
           "DOL-UI-SA-INITIAL"
         ],
@@ -413,9 +427,9 @@
     "asOf": "2026-08-18T19:46:00Z",
     "evaluatedAt": "2026-08-18T19:46:00Z",
     "generatedAt": "2026-08-18T19:46:00Z",
-    "id": "factual-active-2026-08-18T23-55-46-897033Z-407358a5a4d6",
+    "id": "factual-active-2026-08-19T01-35-09-664540Z-34b64e88d23e",
     "publicationClass": "factual",
-    "publishedAt": "2026-08-18T23:55:46.897033Z",
+    "publishedAt": "2026-08-19T01:35:09.664540Z",
     "sourceSnapshotId": "phase3-normalized-six-indicator-2026-08-18"
   },
   "sources": {

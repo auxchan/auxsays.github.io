@@ -5,7 +5,7 @@
     "evaluatedAt": "2026-08-18T19:46:00Z",
     "generatedAt": "2026-08-18T19:46:00Z",
     "id": "factual-gate-a-candidate-2026-08-18",
-    "payloadSha256": "407358a5a4d6ecd77993706fb502207418ab6f768c79958889333b05fc2843b2",
+    "payloadSha256": "34b64e88d23ed7889e01aa66447a1d2b67140e90693adf760c17f1d2de47aa4b",
     "publicationClass": "factual",
     "sourceSnapshotId": "phase3-normalized-six-indicator-2026-08-18",
     "targetContractVersion": "1.0.0",
@@ -292,6 +292,9 @@
           "publishedAt": "2026-08-07T12:30:00Z",
           "retrievedAt": "2026-08-18T19:44:00.899016Z",
           "revisionNumber": 0,
+          "seriesEvidenceUrls": {
+            "CES0000000001": "https://data.bls.gov/timeseries/CES0000000001"
+          },
           "seriesIds": [
             "CES0000000001"
           ],
@@ -307,6 +310,10 @@
           "publishedAt": "2026-08-07T12:30:00Z",
           "retrievedAt": "2026-08-18T19:44:00.899016Z",
           "revisionNumber": 0,
+          "seriesEvidenceUrls": {
+            "LNS11300000": "https://data.bls.gov/timeseries/LNS11300000",
+            "LNS14000000": "https://data.bls.gov/timeseries/LNS14000000"
+          },
           "seriesIds": [
             "LNS14000000",
             "LNS11300000"
@@ -323,6 +330,10 @@
           "publishedAt": "2026-08-04T14:00:00Z",
           "retrievedAt": "2026-08-18T19:44:00.899016Z",
           "revisionNumber": 0,
+          "seriesEvidenceUrls": {
+            "JTS000000000000000HIL": "https://data.bls.gov/timeseries/JTS000000000000000HIL",
+            "JTS000000000000000JOL": "https://data.bls.gov/timeseries/JTS000000000000000JOL"
+          },
           "seriesIds": [
             "JTS000000000000000JOL",
             "JTS000000000000000HIL"
@@ -339,6 +350,9 @@
           "publishedAt": "2026-08-13T12:30:00Z",
           "retrievedAt": "2026-08-18T19:44:22.485403Z",
           "revisionNumber": 0,
+          "seriesEvidenceUrls": {
+            "DOL-UI-SA-INITIAL": "https://www.dol.gov/ui/data.pdf"
+          },
           "seriesIds": [
             "DOL-UI-SA-INITIAL"
           ],

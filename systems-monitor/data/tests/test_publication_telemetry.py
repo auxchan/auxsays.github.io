@@ -108,22 +108,32 @@ class PublicationTelemetryTests(unittest.TestCase):
             "US_LABOR_HIRES": 5348,
         }, {metric["id"]: metric["value"] for metric in metrics})
 
-    def test_every_metric_maps_to_one_official_series_and_evidence(self):
+    def test_every_metric_maps_to_one_official_series_and_human_evidence(self):
         value = candidate()
         provenance = value["payload"]["extensions"]["auxsays.phase3.provenance"]
         expected = {
-            "US_LABOR_TOTAL_NONFARM_PAYROLLS": "CES0000000001",
-            "US_LABOR_U3_UNEMPLOYMENT_RATE": "LNS14000000",
-            "US_LABOR_FORCE_PARTICIPATION_RATE": "LNS11300000",
-            "US_LABOR_INITIAL_UI_CLAIMS": "DOL-UI-SA-INITIAL",
-            "US_LABOR_JOB_OPENINGS": "JTS000000000000000JOL",
-            "US_LABOR_HIRES": "JTS000000000000000HIL",
+            "US_LABOR_TOTAL_NONFARM_PAYROLLS": ("CES0000000001", "https://data.bls.gov/timeseries/CES0000000001"),
+            "US_LABOR_U3_UNEMPLOYMENT_RATE": ("LNS14000000", "https://data.bls.gov/timeseries/LNS14000000"),
+            "US_LABOR_FORCE_PARTICIPATION_RATE": ("LNS11300000", "https://data.bls.gov/timeseries/LNS11300000"),
+            "US_LABOR_INITIAL_UI_CLAIMS": ("DOL-UI-SA-INITIAL", "https://www.dol.gov/ui/data.pdf"),
+            "US_LABOR_JOB_OPENINGS": ("JTS000000000000000JOL", "https://data.bls.gov/timeseries/JTS000000000000000JOL"),
+            "US_LABOR_HIRES": ("JTS000000000000000HIL", "https://data.bls.gov/timeseries/JTS000000000000000HIL"),
         }
         for metric in value["payload"]["extensions"]["auxsays.phase2.metrics"]:
-            self.assertEqual([expected[metric["id"]]], metric["sourceSeriesIds"])
+            series_id, evidence_url = expected[metric["id"]]
+            self.assertEqual([series_id], metric["sourceSeriesIds"])
             for reference in metric["provenanceRefs"]:
-                self.assertIn(metric["sourceSeriesIds"][0], provenance[reference]["seriesIds"])
-                self.assertTrue(provenance[reference]["evidenceUrl"].startswith("https://"))
+                self.assertIn(series_id, provenance[reference]["seriesIds"])
+                self.assertEqual(evidence_url, provenance[reference]["seriesEvidenceUrls"][series_id])
+        bls_records = [record for record in provenance.values() if record["sourceId"].startswith("bls-")]
+        self.assertTrue(all(record["evidenceUrl"] == "https://api.bls.gov/publicAPI/v2/timeseries/data/" for record in bls_records))
+
+    def test_generic_retrieval_endpoint_cannot_be_human_series_evidence(self):
+        value = candidate()
+        record = next(item for item in value["payload"]["extensions"]["auxsays.phase3.provenance"].values() if item["sourceId"] == "bls-ces")
+        record["seriesEvidenceUrls"]["CES0000000001"] = record["evidenceUrl"]
+        with self.assertRaises(CandidateError):
+            validate_publication_candidate(value)
 
     def test_dol_revision_evidence_has_both_releases_and_replay_answers(self):
         proof = candidate()["payload"]["extensions"]["auxsays.phase3.revisionEvidence"][0]
@@ -154,7 +164,7 @@ class PublicationTelemetryTests(unittest.TestCase):
     def test_committed_local_active_pdi_proof_validates(self):
         proof = active_proof()
         validate_active_pdi_snapshot(proof)
-        self.assertEqual("2026-08-18T23:55:46.897033Z", proof["snapshot"]["publishedAt"])
+        self.assertEqual("2026-08-19T01:35:09.664540Z", proof["snapshot"]["publishedAt"])
 
     def test_materialized_snapshot_is_distinct_and_immutable(self):
         before = copy.deepcopy(candidate())

@@ -16,6 +16,16 @@ class CandidateError(ValueError):
     pass
 
 
+SERIES_HUMAN_EVIDENCE_URLS = {
+    "CES0000000001": "https://data.bls.gov/timeseries/CES0000000001",
+    "LNS14000000": "https://data.bls.gov/timeseries/LNS14000000",
+    "LNS11300000": "https://data.bls.gov/timeseries/LNS11300000",
+    "JTS000000000000000JOL": "https://data.bls.gov/timeseries/JTS000000000000000JOL",
+    "JTS000000000000000HIL": "https://data.bls.gov/timeseries/JTS000000000000000HIL",
+    "DOL-UI-SA-INITIAL": "https://www.dol.gov/ui/data.pdf",
+}
+
+
 def canonical_bytes(candidate: dict[str, Any]) -> bytes:
     return (json.dumps(candidate, indent=2, sort_keys=True, ensure_ascii=False) + "\n").encode("utf-8")
 
@@ -169,6 +179,15 @@ def _validate_factual_payload(payload: dict[str, Any]) -> None:
             raise CandidateError("provenance source reference is invalid")
         if not isinstance(record.get("seriesIds"), list) or not record["seriesIds"]:
             raise CandidateError("provenance series IDs are required")
+        evidence_urls = record.get("seriesEvidenceUrls")
+        if not isinstance(evidence_urls, dict) or set(evidence_urls) != set(record["seriesIds"]):
+            raise CandidateError("provenance requires one human evidence URL per series ID")
+        for series_id in record["seriesIds"]:
+            expected_url = SERIES_HUMAN_EVIDENCE_URLS.get(series_id)
+            if expected_url is None or evidence_urls.get(series_id) != expected_url:
+                raise CandidateError("provenance human evidence URL does not identify the exact official series")
+        if not isinstance(record.get("evidenceUrl"), str) or not record["evidenceUrl"].startswith("https://"):
+            raise CandidateError("provenance retrieval endpoint is invalid")
         for field in ("publishedAt", "retrievedAt", "acceptedAt"):
             _iso_time(record.get(field), f"provenance.{field}")
         if not (parse_utc(record["publishedAt"]) <= parse_utc(record["retrievedAt"]) <= parse_utc(record["acceptedAt"])):
@@ -355,6 +374,7 @@ def export_publication_candidate(internal: dict[str, Any]) -> dict[str, Any]:
                 "id": provenance_id,
                 "sourceId": source_id,
                 "seriesIds": [],
+                "seriesEvidenceUrls": {},
                 "evidenceUrl": metric["provenanceUrl"],
                 "artifactSha256": metric["artifactSha256"],
                 "publishedAt": metric["publicTime"],
@@ -366,6 +386,10 @@ def export_publication_candidate(internal: dict[str, Any]) -> dict[str, Any]:
             }
         if metric["sourceSeriesId"] not in provenance[provenance_id]["seriesIds"]:
             provenance[provenance_id]["seriesIds"].append(metric["sourceSeriesId"])
+        human_evidence_url = SERIES_HUMAN_EVIDENCE_URLS.get(metric["sourceSeriesId"])
+        if human_evidence_url is None:
+            raise CandidateError(f"unregistered human evidence URL: {metric['sourceSeriesId']}")
+        provenance[provenance_id]["seriesEvidenceUrls"][metric["sourceSeriesId"]] = human_evidence_url
         if source_id not in sources:
             sources[source_id] = {
                 "sourceId": source_id,

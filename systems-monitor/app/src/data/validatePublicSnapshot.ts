@@ -2,6 +2,14 @@ import type { PublicationCandidate, PublicationCandidatePayload, PublicNavigatio
 
 const stateTypes = new Set<StateType>(["OBS", "CALC", "FCST", "SCEN"]);
 const requiredHorizons = new Set(["current-year", "next-year", "plus-3-years"]);
+const seriesEvidenceUrls: Record<string, string> = {
+  CES0000000001: "https://data.bls.gov/timeseries/CES0000000001",
+  LNS14000000: "https://data.bls.gov/timeseries/LNS14000000",
+  LNS11300000: "https://data.bls.gov/timeseries/LNS11300000",
+  JTS000000000000000JOL: "https://data.bls.gov/timeseries/JTS000000000000000JOL",
+  JTS000000000000000HIL: "https://data.bls.gov/timeseries/JTS000000000000000HIL",
+  "DOL-UI-SA-INITIAL": "https://www.dol.gov/ui/data.pdf"
+};
 
 function assert(condition: unknown, message: string): asserts condition {
   if (!condition) throw new Error(`Invalid public snapshot: ${message}`);
@@ -101,7 +109,9 @@ function validateFactualPayload(candidate: PublicationCandidatePayload) {
     assert(record.id === provenanceId, `provenance key mismatch for ${provenanceId}`);
     assert(record.sourceId in candidate.sources, `provenance ${provenanceId} has invalid sourceId`);
     assert(Array.isArray(record.seriesIds) && record.seriesIds.length > 0 && record.seriesIds.every((seriesId) => typeof seriesId === "string" && seriesId.length > 0), `provenance ${provenanceId} requires exact series IDs`);
-    assert(/^https:\/\//.test(record.evidenceUrl), `provenance ${provenanceId} evidence URL is invalid`);
+    assert(isRecord(record.seriesEvidenceUrls) && Object.keys(record.seriesEvidenceUrls).length === record.seriesIds.length, `provenance ${provenanceId} requires one human evidence URL per series ID`);
+    assert(record.seriesIds.every((seriesId) => record.seriesEvidenceUrls[seriesId] === seriesEvidenceUrls[seriesId]), `provenance ${provenanceId} human evidence URL must identify the exact official series`);
+    assert(/^https:\/\//.test(record.evidenceUrl), `provenance ${provenanceId} retrieval endpoint is invalid`);
     assert(/^[a-f0-9]{64}$/i.test(record.artifactSha256), `provenance ${provenanceId} artifact hash is invalid`);
     for (const field of ["publishedAt", "retrievedAt", "acceptedAt"] as const) {
       assert(isIsoTime(record[field]), `provenance ${provenanceId}.${field} must be ISO time`);

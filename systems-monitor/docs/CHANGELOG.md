@@ -1,5 +1,15 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-18 — Phase-3 human evidence-link micro-correction
+
+- Added exact official BLS series-report URLs as distinct human evidence while
+  retaining the generic official BLS POST API endpoint as machine retrieval
+  provenance; DOL current and revision evidence URLs remain unchanged.
+- Strengthened Python and TypeScript validation plus record-level UI tests to
+  enforce each series ID's exact human evidence target and methodology boundary.
+- `HUMAN_DATA_QA ROUND 2` remains `CORRECTIONS APPLIED — TAYLOR RE-REVIEW
+  REQUIRED`; Gate A and Phase 3 remain open, and Phase 4 remains locked.
+
 ## 2026-08-18 — Phase-3 Human Data QA final minimal correction
 
 - Corrected only the four Round-1 human-QA failures: per-observation official

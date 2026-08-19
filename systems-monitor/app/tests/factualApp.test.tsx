@@ -46,12 +46,19 @@ describe("local factual UI mode", () => {
     fireEvent.click(screen.getByRole("button", { name: "Verified Data" }));
     await screen.findByRole("heading", { name: "Observed factual evidence — local review candidate" });
     const records = screen.getByRole("region", { name: "Factual observation records" });
-    for (const seriesId of ["CES0000000001", "LNS14000000", "LNS11300000", "DOL-UI-SA-INITIAL", "JTS000000000000000JOL", "JTS000000000000000HIL"]) {
-      expect(within(records).getByText(seriesId)).toBeTruthy();
+    const expected = new Map([
+      ["Total nonfarm payroll employment", ["CES0000000001", "https://data.bls.gov/timeseries/CES0000000001"]],
+      ["U-3 unemployment rate", ["LNS14000000", "https://data.bls.gov/timeseries/LNS14000000"]],
+      ["Labor-force participation rate", ["LNS11300000", "https://data.bls.gov/timeseries/LNS11300000"]],
+      ["Initial unemployment-insurance claims", ["DOL-UI-SA-INITIAL", "https://www.dol.gov/ui/data.pdf"]],
+      ["Job openings", ["JTS000000000000000JOL", "https://data.bls.gov/timeseries/JTS000000000000000JOL"]],
+      ["Hires", ["JTS000000000000000HIL", "https://data.bls.gov/timeseries/JTS000000000000000HIL"]]
+    ]);
+    for (const [label, [seriesId, evidenceUrl]] of expected) {
+      const row = within(records).getByRole("row", { name: new RegExp(label) });
+      expect(within(row).getByText(seriesId)).toBeTruthy();
+      expect(within(row).getByRole("link", { name: "Open original evidence" }).getAttribute("href")).toBe(evidenceUrl);
     }
-    const evidenceLinks = within(records).getAllByRole("link", { name: "Open original evidence" });
-    expect(evidenceLinks).toHaveLength(6);
-    expect(evidenceLinks.map((link) => link.getAttribute("href"))).toContain("https://www.dol.gov/ui/data.pdf");
     expect(screen.getAllByText("Source / data evidence").length).toBeGreaterThan(0);
     expect(screen.getAllByText("Methodology").length).toBeGreaterThan(0);
     expect(screen.getAllByRole("link", { name: "Open official methodology", hidden: true }).length).toBeGreaterThan(0);

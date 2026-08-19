@@ -30,7 +30,7 @@ describe("Phase-3 factual public PDI candidate", () => {
 
   it("cannot masquerade as an active PDI snapshot", () => {
     expect(() => validatePublicSnapshot(candidate())).toThrow(/schemaVersion/);
-    expect(validatePublicSnapshot(structuredClone(activeProof) as unknown as PublicSnapshot).snapshot.publishedAt).toBe("2026-08-18T23:55:46.897033Z");
+    expect(validatePublicSnapshot(structuredClone(activeProof) as unknown as PublicSnapshot).snapshot.publishedAt).toBe("2026-08-19T01:35:09.664540Z");
   });
 
   it("rejects the exact pre-correction internal review shape", () => {
@@ -114,22 +114,25 @@ describe("Phase-3 factual public PDI candidate", () => {
     expect(series).toEqual(new Set(["CES0000000001", "LNS14000000", "LNS11300000", "JTS000000000000000JOL", "JTS000000000000000HIL", "DOL-UI-SA-INITIAL"]));
   });
 
-  it("maps every factual metric to one official series and reachable evidence", () => {
+  it("maps every factual metric to one exact official series and human evidence page", () => {
     const value = candidate();
     const provenance = value.payload.extensions["auxsays.phase3.provenance"] ?? {};
     const expected = new Map([
-      ["US_LABOR_TOTAL_NONFARM_PAYROLLS", "CES0000000001"],
-      ["US_LABOR_U3_UNEMPLOYMENT_RATE", "LNS14000000"],
-      ["US_LABOR_FORCE_PARTICIPATION_RATE", "LNS11300000"],
-      ["US_LABOR_INITIAL_UI_CLAIMS", "DOL-UI-SA-INITIAL"],
-      ["US_LABOR_JOB_OPENINGS", "JTS000000000000000JOL"],
-      ["US_LABOR_HIRES", "JTS000000000000000HIL"]
+      ["US_LABOR_TOTAL_NONFARM_PAYROLLS", ["CES0000000001", "https://data.bls.gov/timeseries/CES0000000001"]],
+      ["US_LABOR_U3_UNEMPLOYMENT_RATE", ["LNS14000000", "https://data.bls.gov/timeseries/LNS14000000"]],
+      ["US_LABOR_FORCE_PARTICIPATION_RATE", ["LNS11300000", "https://data.bls.gov/timeseries/LNS11300000"]],
+      ["US_LABOR_INITIAL_UI_CLAIMS", ["DOL-UI-SA-INITIAL", "https://www.dol.gov/ui/data.pdf"]],
+      ["US_LABOR_JOB_OPENINGS", ["JTS000000000000000JOL", "https://data.bls.gov/timeseries/JTS000000000000000JOL"]],
+      ["US_LABOR_HIRES", ["JTS000000000000000HIL", "https://data.bls.gov/timeseries/JTS000000000000000HIL"]]
     ]);
     for (const metric of value.payload.extensions["auxsays.phase2.metrics"]) {
-      expect(metric.sourceSeriesIds).toEqual([expected.get(metric.id)]);
+      const [seriesId, evidenceUrl] = expected.get(metric.id)!;
+      expect(metric.sourceSeriesIds).toEqual([seriesId]);
       expect(metric.provenanceRefs.every((reference) => provenance[reference].seriesIds.includes(metric.sourceSeriesIds![0]))).toBe(true);
-      expect(metric.provenanceRefs.every((reference) => provenance[reference].evidenceUrl.startsWith("https://"))).toBe(true);
+      expect(metric.provenanceRefs.every((reference) => provenance[reference].seriesEvidenceUrls[seriesId] === evidenceUrl)).toBe(true);
     }
+    const blsRecords = Object.values(provenance).filter((record) => record.sourceId.startsWith("bls-"));
+    expect(blsRecords.every((record) => record.evidenceUrl === "https://api.bls.gov/publicAPI/v2/timeseries/data/")).toBe(true);
   });
 
   it("carries the real DOL revision pair and both replay answers", () => {
@@ -148,6 +151,13 @@ describe("Phase-3 factual public PDI candidate", () => {
     const value = candidate();
     delete value.payload.extensions["auxsays.phase2.metrics"][0].sourceSeriesIds;
     expect(() => validatePublicationCandidate(value)).toThrow(/source series ID/);
+  });
+
+  it("rejects a generic retrieval endpoint used as human series evidence", () => {
+    const value = candidate();
+    const record = Object.values(value.payload.extensions["auxsays.phase3.provenance"] ?? {}).find((item) => item.sourceId === "bls-ces")!;
+    record.seriesEvidenceUrls.CES0000000001 = record.evidenceUrl;
+    expect(() => validatePublicationCandidate(value)).toThrow(/human evidence URL/);
   });
 
   it("uses childRefs publicly and derives nested children only in the view model", () => {

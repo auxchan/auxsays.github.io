@@ -14,9 +14,11 @@ below and confirm value, unit, period, timing, and revision state.
   UI.
 - **Round 2 — corrections applied; Taylor re-review required.** Verified Data
   now exposes per-observation series IDs, separately labeled source/data and
-  methodology links, and a progressive DOL replay proof. Factual Outlook no
-  longer reuses fixture-only warning content. This record does **not** claim
-  Human Data QA PASS.
+  methodology links, and a progressive DOL replay proof. The human evidence
+  links target each exact official BLS series page while the BLS API remains
+  recorded as retrieval provenance. Factual Outlook no longer reuses
+  fixture-only warning content. This record does **not** claim Human Data QA
+  PASS.
 
 | Indicator | Value / unit | Period | Official source / series | Official release | AUXSAYS retrieved / accepted | Version / health |
 |---|---|---|---|---|---|---|
@@ -29,7 +31,12 @@ below and confirm value, unit, period, timing, and revision state.
 
 ## Original evidence
 
-- BLS API: `https://api.bls.gov/publicAPI/v2/timeseries/data/`
+- BLS retrieval API: `https://api.bls.gov/publicAPI/v2/timeseries/data/`
+  - Payrolls: `https://data.bls.gov/timeseries/CES0000000001`
+  - U-3 unemployment: `https://data.bls.gov/timeseries/LNS14000000`
+  - Participation: `https://data.bls.gov/timeseries/LNS11300000`
+  - Job openings: `https://data.bls.gov/timeseries/JTS000000000000000JOL`
+  - Hires: `https://data.bls.gov/timeseries/JTS000000000000000HIL`
   - Employment Situation July 2026 schedule: `https://www.bls.gov/schedule/2026/home.htm`
   - JOLTS release schedule: `https://www.bls.gov/schedule/news_release/jolts.htm`
   - retained runtime artifact SHA-256: `cd8b57f7de01b03b4558f2f7d83fb79e2d336859e1b7a39c91c23dbd43ef98e0`

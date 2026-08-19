@@ -156,6 +156,7 @@ export interface ProvenanceRecord {
   id: string;
   sourceId: string;
   seriesIds: string[];
+  seriesEvidenceUrls: Record<string, string>;
   evidenceUrl: string;
   artifactSha256: string;
   publishedAt: string;
