@@ -146,6 +146,78 @@ def run() -> int:
             qa.ROOT = original_root
             qa.EVIDENCE_PATH = original_evidence_path
 
+
+    # =====================================================================================
+    # FIELD-AWARE PUBLIC INTERNAL-TERM GATE
+    #
+    # Production ingestion was blocked by a false positive: GitHub's own changelog entry
+    # "Enterprise managed settings in GitHub Copilot for JetBrains" describes configuring
+    # OpenTelemetry "including the collector endpoint, protocol, service name, ...". That
+    # vendor prose lands verbatim in `release_summary` (rss_feed -> record["summary"] ->
+    # write_update_record), and the gate flattened every public field into one blob before
+    # substring-matching the bare term "collector", so a generic English word in a vendor
+    # release note read as AUXSAYS implementation leakage and failed the whole run.
+    #
+    # The gate must stay: "collector" in AUXSAYS-AUTHORED public prose is still a defect.
+    # Only the proven vendor-derived field may carry it.
+    # =====================================================================================
+    def findings_for(data):
+        """All public_internal_term findings for a record-like dict."""
+        return qa.internal_term_findings(data, "rec.md")
+
+    VENDOR = "Improved garbage collector performance and reduced allocation churn."
+
+    # A. the real-world false positive: vendor prose in release_summary must PASS
+    check("A. vendor 'collector' prose in release_summary raises no internal-term error",
+          findings_for({"release_summary": VENDOR}) == [],
+          f"findings={findings_for({'release_summary': VENDOR})}")
+
+    # B. AUXSAYS-authored quick_verdict must still FAIL
+    check("B. 'collector' in AUXSAYS-authored quick_verdict is still an error",
+          len(findings_for({"quick_verdict": "Collector execution failed for this update."})) == 1,
+          str(findings_for({"quick_verdict": "Collector execution failed for this update."})))
+
+    # C. another AUXSAYS-authored field must still FAIL
+    for field in ("update_consensus_summary", "record_note", "update_decision_body",
+                  "consensus_report", "community_summary", "practical_recommendations",
+                  "evidence_source_limitations", "source_freshness_note", "description"):
+        check(f"C. 'collector' in AUXSAYS-authored {field} is still an error",
+              len(findings_for({field: "The collector produced these rows."})) == 1,
+              f"{field}: {findings_for({field: 'The collector produced these rows.'})}")
+
+    # D. a different banned term inside the exempt field must STILL fail -- the exemption is
+    #    per-term, never a blanket pass for the field.
+    check("D. 'writeback' inside release_summary is still an error",
+          len(findings_for({"release_summary": "Vendor notes mention writeback behaviour."})) == 1,
+          str(findings_for({"release_summary": "Vendor notes mention writeback behaviour."})))
+
+    # E. other unambiguous internal terms inside the exempt field still fail
+    for term in ("candidate rows", "source_weight", "consensus_evidence.yml",
+                 "promoted evidence rows", "deterministically accepted"):
+        check(f"E. '{term}' inside release_summary is still an error",
+              len(findings_for({"release_summary": f"Upstream text mentioning {term} here."})) == 1,
+              f"{term}: {findings_for({'release_summary': f'Upstream text mentioning {term} here.'})}")
+
+    # F. diagnostics name BOTH the offending field and the term
+    msg = " ".join(str(m) for m in findings_for({"quick_verdict": "collector failed"}))
+    check("F. the finding identifies the offending field and the term",
+          "quick_verdict" in msg and "collector" in msg, msg)
+
+    # G. the exemption is scoped to ONE field: collector in official_summary still fails,
+    #    because rss_feed does not populate it -- write_update_record substitutes
+    #    AUXSAYS-authored fallback prose there.
+    check("G. 'collector' in official_summary is still an error (AUXSAYS-authored fallback)",
+          len(findings_for({"official_summary": "Collector run for this build."})) == 1,
+          str(findings_for({"official_summary": "Collector run for this build."})))
+
+    # H. the real production string, end to end, must pass
+    REAL = ("Admins can now configure OpenTelemetry for Copilot in JetBrains IDEs, including "
+            "the collector endpoint, protocol, service name, resource attributes and headers.")
+    check("H. the exact production GitHub changelog string passes in release_summary",
+          findings_for({"release_summary": REAL}) == [], str(findings_for({"release_summary": REAL})))
+    check("H2. the same string in quick_verdict still fails",
+          len(findings_for({"quick_verdict": REAL})) == 1, str(findings_for({"quick_verdict": REAL})))
+
     print()
     print("=" * 60)
     total = _PASS + _FAIL
