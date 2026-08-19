@@ -2,23 +2,23 @@
 
 ```text
 Contract: Systems Monitor Dependency Relationship Contract
-Version: 0.1.1
-Status: DRAFT
+Version: 1.0.0
+Status: BINDING
 Parent Master Spec: V4.1
 Depends On: ARCHITECTURE_CONTRACT.md, DATA_CONTRACT.md, SOURCE_CONTRACT.md, ONTOLOGY_CROSSWALK_CONTRACT.md, SECURITY_INGESTION_CONTRACT.md, STATE_MODEL_CONTRACT.md
 Supersedes: None
-Approved By: —
-Approved At: —
-Content Hash: PENDING — DRAFT
+Approved By: Taylor
+Approved At: 2026-08-19
+Content Hash: B217E77459179454675CB1C07C60B78A07964F582B2E2642219216C0A7B90DA0
 Last Updated: 2026-08-19
 ```
 
 ## Authority / Status
 
 Governing Master sections: §6–6.1, §8, §10–12, §20–20.1, §31.3–31.5,
-§34.1–34.4, §51, §64.1, §67 Phase 4, and §68. This DRAFT creates no
-accepted production relationship and authorizes no discovery, graph build,
-source ingestion, causal claim, propagation, or public activation.
+§34.1–34.4, §51, §64.1, §67 Phase 4, and §68. This BINDING contract authorizes
+only the approved Phase-4A proof relationships. It creates no Phase-4B source
+authorization, public graph, forecast, Gate-B closure, or deployment authority.
 
 ## Purpose
 
@@ -208,7 +208,7 @@ unknown—rather than treating correlation or adjacency as causality.
 Correlation-as-causation; unknown-as-zero; auto-promotion; unversioned edges;
 hidden evidence; manually fabricated whole-economy graphs; current mappings in
 historical replay without eligibility; LLM production authority; uncontrolled
-recursive discovery; whole-graph public dumping; BEA ingestion from this DRAFT.
+recursive discovery; whole-graph public dumping; BEA ingestion under this scope.
 
 ## Failure / Degraded States
 
@@ -237,9 +237,9 @@ propagation.
 
 ## Risks / Open Decisions
 
-- O-006 accepts the Phase-4A inputs and initial traversal profile only. O-005
-  contract promotion and a later bounded Phase-4B source/slice authorization are
-  still required before relationship implementation.
+- O-006 accepts the Phase-4A inputs and initial traversal profile only. O-005 is
+  accepted/resolved for Phase-4A; a later bounded Phase-4B source/slice
+  authorization is still required before structural relationship implementation.
 - Structural BEA tables, rights, editions, crosswalks, and import mechanics
   require a later scoped source/integration approval.
 - See R-012, R-026, R-028, R-030, R-031, and R-032.
@@ -253,6 +253,8 @@ and independent of core runtime AI availability.
 
 ## Version / Approval / Change History
 
+- 1.0.0 (2026-08-19): Taylor promoted the externally reviewed contract to
+  BINDING and authorized only the Phase-4A Engine / Labor-State Proof.
 - 0.1.1 (2026-08-19): External-review correction making Phase-4B authoritative
   structural proof Gate-B-required, adding deterministic rule-based structural
   promotion, and separating direct from total requirements. Remains DRAFT.

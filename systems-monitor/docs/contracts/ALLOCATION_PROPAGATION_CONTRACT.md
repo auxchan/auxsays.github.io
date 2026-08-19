@@ -2,22 +2,23 @@
 
 ```text
 Contract: Systems Monitor Allocation and Propagation Contract
-Version: 0.1.1
-Status: DRAFT
+Version: 1.0.0
+Status: BINDING
 Parent Master Spec: V4.1
 Depends On: ARCHITECTURE_CONTRACT.md, DATA_CONTRACT.md, STATE_MODEL_CONTRACT.md, DEPENDENCY_RELATIONSHIP_CONTRACT.md, DERIVATION_TRANSPARENCY_CONTRACT.md
 Supersedes: None
-Approved By: —
-Approved At: —
-Content Hash: PENDING — DRAFT
+Approved By: Taylor
+Approved At: 2026-08-19
+Content Hash: 895AF860B5C83999A9A7E36C2175790D6FA3F164C3682EF62F330DD2F3B66C01
 Last Updated: 2026-08-19
 ```
 
 ## Authority / Status
 
 Governing Master sections: §7–14, §20–20.1, §31.3–31.5, §34.1–34.4,
-§51, §64.1, §67 Phase 4, and §68. This DRAFT authorizes no propagation,
-allocation, calculated public output, forecast, scenario, or implementation.
+§51, §64.1, §67 Phase 4, and §68. This BINDING contract authorizes only the
+approved Phase-4A bounded mechanics proof. It authorizes no Phase-4B structural
+work, Gate-B closure, public output, forecasting, or deployment.
 
 ## Purpose
 
@@ -197,8 +198,9 @@ Exact storage and serialization remain implementation choices after approval.
 ## Risks / Open Decisions
 
 - O-006 accepts depth 3/eight rounds only for the configurable Phase-4A proof
-  profile. O-005 contract promotion, Phase-4B scope, transmission/materiality
-  semantics, and any later cycle solver still require applicable approval.
+  profile. O-005 is accepted/resolved for Phase-4A; Phase-4B scope,
+  transmission/materiality semantics, and any later cycle solver still require
+  applicable approval.
 - Quantitative calibration remains evidence-dependent; ordinal output is the
   safe default where calibration is absent.
 - See R-027 through R-034.
@@ -212,6 +214,8 @@ core runtime dependency.
 
 ## Version / Approval / Change History
 
+- 1.0.0 (2026-08-19): Taylor promoted the externally reviewed contract to
+  BINDING and authorized only the Phase-4A Engine / Labor-State Proof.
 - 0.1.1 (2026-08-19): External-review correction accepting only the initial
   Phase-4A bounded profile and requiring authoritative Phase-4B structural and
   behavioral Gate-B evidence, including direct/total double-count protection.

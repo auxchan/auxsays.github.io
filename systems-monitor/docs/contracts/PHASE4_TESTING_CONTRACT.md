@@ -2,14 +2,14 @@
 
 ```text
 Contract: Systems Monitor Phase-4 Testing Contract
-Version: 0.1.1
-Status: DRAFT
+Version: 1.0.0
+Status: BINDING
 Parent Master Spec: V4.1
 Depends On: TESTING_CONTRACT.md, RELEASE_ACCEPTANCE_CONTRACT.md, STATE_MODEL_CONTRACT.md, DEPENDENCY_RELATIONSHIP_CONTRACT.md, ALLOCATION_PROPAGATION_CONTRACT.md, DERIVATION_TRANSPARENCY_CONTRACT.md
 Supersedes: None
-Approved By: —
-Approved At: —
-Content Hash: PENDING — DRAFT
+Approved By: Taylor
+Approved At: 2026-08-19
+Content Hash: 7618D7ACA4E4F9097F83F8E0940CA3135D16C5B4C51935E1947E6A19BEDB397B
 Last Updated: 2026-08-19
 ```
 
@@ -17,9 +17,9 @@ Last Updated: 2026-08-19
 
 Governing Master sections: §9–14, §20–20.1, §31.3–31.5, §51, §64.1,
 §67 Phase 4, and §68, subordinate to the BINDING Testing and Release Acceptance
-Contracts. This DRAFT defines future Gate-B evidence; it authorizes no tests
-against live sources, dependency installation, implementation, gate closure, or
-self-approval.
+Contracts. This BINDING contract authorizes the approved Phase-4A mechanics
+tests and evidence. It authorizes no live-source retrieval, Phase-4B
+implementation, dependency installation, Gate-B closure, or self-approval.
 
 ## Purpose
 
@@ -242,14 +242,17 @@ PASS, independent evidence review, human QA, and Taylor approval are distinct.
 
 ## Risks / Open Decisions
 
-- **OPEN DECISION:** Taylor must approve the Gate-B test matrix and human QA scope
-  after the five Phase-4 contracts are reviewed.
+- Phase-4A Human QA remains pending; Gate-B review remains separately gated on
+  the required Phase-4B authoritative structural proof and Taylor approval.
 - Representative graph size/performance budgets remain a later evidence-driven
   implementation choice.
 - See R-027 through R-034.
 
 ## Version / Approval / Change History
 
+- 1.0.0 (2026-08-19): Taylor promoted the externally reviewed contract to
+  BINDING and authorized only the Phase-4A Engine / Labor-State Proof; Gate B
+  remains OPEN.
 - 0.1.1 (2026-08-19): External-review correction splitting Phase-4A mechanics
   from required Phase-4B authoritative structural evidence; adds deterministic
   structural promotion, direct/total semantics, real behavioral proof, coverage,

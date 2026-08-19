@@ -98,9 +98,9 @@ Reinspect only the affected facts when `AGENTS.md`, `.github/workflows/pages.yml
   2026-08-18. Phase 3 Data Integrity is CLOSED. The evidence proves the bounded
   six-observation data-integrity slice; it does not activate factual data or
   claim forecasting, dependency/allocation modeling, or employment prediction.
-- Phase 4 is authorized for contract/design drafting only. No Phase-4
-  implementation, new ingestion, cloud/paid service, factual activation, push,
-  merge, or deployment is authorized.
+- Phase 4A Engine / Labor-State Proof implementation is authorized under five
+  BINDING 1.0.0 contracts. Phase-4B, new ingestion, cloud/paid service, factual
+  activation, push, merge, and deployment remain unauthorized.
 - Deferred product debt includes the master/interconnectivity experience and
   clear derivation transparency for `OBS`/`CALC`/`FCST`/`SCEN`; these are design
   inputs, not authorization to redesign the UI.
@@ -137,3 +137,13 @@ Reinspect only the affected facts when `AGENTS.md`, `.github/workflows/pages.yml
   separate. No parser, crosswalk data, relationship dataset, engine/CALC/UI code,
   dependency, graph/cloud infrastructure, factual activation, Phase-5 work,
   workflow/deployment, Patch Feed file, push, merge, or deployment changed.
+
+## PHASE-4 CONTRACT APPROVAL — 2026-08-19
+
+- Taylor accepted/resolved O-005 and promoted all five corrected Phase-4
+  contracts from DRAFT 0.1.1 to BINDING 1.0.0.
+- The approval authorizes only Phase-4A Engine / Labor-State Proof implementation
+  with the O-006 six-input, depth-3, eight-round configurable proof profile.
+- Gate B remains OPEN. Phase-4B structural ingestion, BEA retrieval/ingestion,
+  new sources, Phase 5, public activation, deployment, and the deferred major
+  UI/UX overhaul remain unauthorized.

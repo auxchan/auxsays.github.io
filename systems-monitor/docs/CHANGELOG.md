@@ -1,5 +1,16 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-19 — Phase-4 contract approval and Phase-4A authorization
+
+- Taylor accepted/resolved O-005 and promoted State Model, Dependency
+  Relationship, Allocation/Propagation, Derivation Transparency, and Phase-4
+  Testing from DRAFT 0.1.1 to BINDING 1.0.0 with canonical hashes.
+- Authorized only Phase-4A Engine / Labor-State Proof implementation under
+  O-006's configurable six-input, depth-3, eight-round initial proof profile.
+- Gate B remains OPEN; Phase-4B/BEA/new-source ingestion, Phase 5, public
+  activation, deployment, and the deferred major UI/UX overhaul remain
+  unauthorized. `MASTER_SPEC.md` and all prior BINDING contracts are unchanged.
+
 ## 2026-08-19 — Phase-4 structural Gate-B external-review correction
 
 - Corrected all five Phase-4 contracts and the integrated design to DRAFT 0.1.1;

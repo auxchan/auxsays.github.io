@@ -9,10 +9,10 @@ phase_1_status: PASS
 phase_3_status: CLOSED
 phase_3_gate: PASS
 phase_3_human_data_qa: PASS
-current_authorized_work: Phase 4 State / Dependency / Allocation contract and design drafting only; implementation, new ingestion, dependencies, factual public activation, UI overhaul, forecasting, push, merge, and deployment unauthorized
+current_authorized_work: Phase 4A Engine / Labor-State Proof implementation only; Phase 4B, new ingestion, dependencies, Gate-B closure, factual public activation, UI overhaul, forecasting, push, merge, and deployment unauthorized
 approved_foundation_decisions: [D-001, D-002, D-003, D-004, D-005, D-006, D-007, D-008, D-009, D-010]
 phase_3_contract_status: PASS
-phase_4_contract_status: DRAFT_REVIEW_REQUIRED
+phase_4_contract_status: BINDING_1_0_0
 phase_4_gate_b: OPEN_REQUIRES_PHASE_4B_AUTHORITATIVE_STRUCTURAL_PROOF
 phase_4a_profile_decision: O-006_ACCEPTED_INITIAL_PROFILE_ONLY
 approved_phase_3_decisions: [O-003]
@@ -189,61 +189,61 @@ contracts:
     blocks: ["Phase-3 regression obligations", "factual public activation requires separate approval"]
   - id: state_model
     path: contracts/STATE_MODEL_CONTRACT.md
-    version: "0.1.1"
-    status: DRAFT
-    approved_by: null
-    approved_at: null
-    content_hash: "PENDING — DRAFT"
+    version: "1.0.0"
+    status: BINDING
+    approved_by: Taylor
+    approved_at: "2026-08-19"
+    content_hash: "325C0E317A217A9DD93EF921FD203D08CD4CD978F22703906D1CB5CDF298E78A"
     parent_master_version: "V4.1"
     governing_master_sections: ["§3", "§6–9", "§20–20.1", "§31.3–31.5", "§37.1", "§51", "§64.1", "§67 Phase 4", "§68"]
     depends_on: [product, architecture, data, source, ontology_crosswalk, public_data_interface]
-    blocked_by: ["Taylor contract review and promotion"]
-    blocks: ["Phase 4 state implementation until O-005 promotion", "Gate B until Phase 4B authoritative structural proof"]
+    blocked_by: []
+    blocks: ["Gate B until Phase 4B authoritative structural proof"]
   - id: dependency_relationship
     path: contracts/DEPENDENCY_RELATIONSHIP_CONTRACT.md
-    version: "0.1.1"
-    status: DRAFT
-    approved_by: null
-    approved_at: null
-    content_hash: "PENDING — DRAFT"
+    version: "1.0.0"
+    status: BINDING
+    approved_by: Taylor
+    approved_at: "2026-08-19"
+    content_hash: "B217E77459179454675CB1C07C60B78A07964F582B2E2642219216C0A7B90DA0"
     parent_master_version: "V4.1"
     governing_master_sections: ["§6–6.1", "§8", "§10–12", "§20–20.1", "§31.3–31.5", "§34.1–34.4", "§51", "§64.1", "§67 Phase 4", "§68"]
     depends_on: [architecture, data, source, ontology_crosswalk, security_ingestion, state_model]
-    blocked_by: ["Taylor contract review and promotion"]
-    blocks: ["Phase 4 relationship implementation until O-005 promotion", "Gate B until accepted authoritative structural relationships"]
+    blocked_by: []
+    blocks: ["Gate B until accepted authoritative structural relationships"]
   - id: derivation_transparency
     path: contracts/DERIVATION_TRANSPARENCY_CONTRACT.md
-    version: "0.1.1"
-    status: DRAFT
-    approved_by: null
-    approved_at: null
-    content_hash: "PENDING — DRAFT"
+    version: "1.0.0"
+    status: BINDING
+    approved_by: Taylor
+    approved_at: "2026-08-19"
+    content_hash: "642AA05144644CBB84F739D37F71EACB01D0108877A3672A22A1A5C68C8EF938"
     parent_master_version: "V4.1"
     governing_master_sections: ["§3", "§8", "§20–20.1", "§31.3–31.5", "§37.1", "§51", "§64.1", "§67 Phase 4", "§68"]
     depends_on: [public_data_interface, data, source, ontology_crosswalk, state_model, dependency_relationship]
-    blocked_by: ["Taylor contract review and promotion"]
-    blocks: ["Phase 4 calculated/public derivation implementation until O-005 promotion", "Gate B until complete Phase-4B structural derivation"]
+    blocked_by: []
+    blocks: ["Gate B until complete Phase-4B structural derivation"]
   - id: allocation_propagation
     path: contracts/ALLOCATION_PROPAGATION_CONTRACT.md
-    version: "0.1.1"
-    status: DRAFT
-    approved_by: null
-    approved_at: null
-    content_hash: "PENDING — DRAFT"
+    version: "1.0.0"
+    status: BINDING
+    approved_by: Taylor
+    approved_at: "2026-08-19"
+    content_hash: "895AF860B5C83999A9A7E36C2175790D6FA3F164C3682EF62F330DD2F3B66C01"
     parent_master_version: "V4.1"
     governing_master_sections: ["§7–14", "§20–20.1", "§31.3–31.5", "§34.1–34.4", "§51", "§64.1", "§67 Phase 4", "§68"]
     depends_on: [architecture, data, state_model, dependency_relationship, derivation_transparency]
-    blocked_by: ["Taylor contract review and promotion"]
-    blocks: ["Phase 4 propagation/allocation implementation until O-005 promotion", "Gate B until real structural behavioral evidence"]
+    blocked_by: []
+    blocks: ["Gate B until real structural behavioral evidence"]
   - id: phase4_testing
     path: contracts/PHASE4_TESTING_CONTRACT.md
-    version: "0.1.1"
-    status: DRAFT
-    approved_by: null
-    approved_at: null
-    content_hash: "PENDING — DRAFT"
+    version: "1.0.0"
+    status: BINDING
+    approved_by: Taylor
+    approved_at: "2026-08-19"
+    content_hash: "7618D7ACA4E4F9097F83F8E0940CA3135D16C5B4C51935E1947E6A19BEDB397B"
     parent_master_version: "V4.1"
     governing_master_sections: ["§9–14", "§20–20.1", "§31.3–31.5", "§51", "§64.1", "§67 Phase 4", "§68"]
     depends_on: [testing, release_acceptance, state_model, dependency_relationship, allocation_propagation, derivation_transparency]
-    blocked_by: ["Taylor contract review and promotion", "authorized Phase 4 implementation and evidence"]
+    blocked_by: ["Phase 4B authoritative structural implementation and evidence", "Phase-4A and Phase-4B Human QA and Taylor Gate-B approval"]
     blocks: ["Gate B PASS until Phase-4A mechanics and Phase-4B authoritative structural evidence, Human QA, and Taylor approval"]

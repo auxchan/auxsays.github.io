@@ -43,14 +43,14 @@
 Taylor approved Human Data QA Round 2 and Gate A; Phase 3 is CLOSED. The local
 evidence mitigates R-019 through R-023 for the bounded first slice, but ongoing
 source/rights/regression controls still apply. Factual public activation remains
-separately unauthorized. Current authority is Phase-4 contract/design drafting
-only; implementation, new ingestion, forecasting, push, merge, and deployment
-remain unauthorized.
+separately unauthorized. Current authority is the bounded Phase-4A Engine /
+Labor-State Proof only; Phase-4B, new ingestion, forecasting, push, merge, and
+deployment remain unauthorized.
 
-The five Phase-4 contracts and integrated design are DRAFT review artifacts.
-R-028 through R-037 are open and prevent treating the draft package, its six
-labor mappings, or its proposed run limits as implementation or production
-authority.
+The five Phase-4 contracts are BINDING 1.0.0 and authorize the bounded Phase-4A
+proof. R-028 through R-037 remain open for Gate B and prevent treating the six
+labor mappings, synthetic mechanics, or initial run limits as structural or
+economy-wide production evidence.
 
 ## Phase-3 implementation evidence — 2026-08-18
 

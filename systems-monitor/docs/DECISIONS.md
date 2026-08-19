@@ -159,16 +159,19 @@ Accepted decisions are authoritative below approved/BINDING contracts and above 
 - Replacement proof: Gate A uses an original Tier-A DOL Weekly Claims advance release and the subsequent original release containing the revised value, with independently proven publication times and immutable provenance.
 - Reconsideration: Only explicit written permission or materially changed terms, a fresh rights review, and a new Taylor decision may reopen project use. No substitute aggregator is authorized by this rejection.
 
-## Phase-4 open decisions
+## Phase-4 approval decisions
 
 ### O-005 — Promote the Phase-4 contract package
 
 - Classification: TAYLOR APPROVAL DECISION
-- Status: OPEN
-- Decision required: Approve, correct, or reject DRAFT 0.1.1 State Model,
-  Dependency Relationship, Allocation/Propagation, Derivation Transparency, and
-  Phase-4 Testing contracts before any implementation.
-- Boundary: Draft presence and index validity confer no implementation authority.
+- Status: ACCEPTED / RESOLVED — TAYLOR, 2026-08-19
+- Approved choice: Promote the externally reviewed State Model, Dependency
+  Relationship, Allocation/Propagation, Derivation Transparency, and Phase-4
+  Testing contracts from DRAFT 0.1.1 to BINDING 1.0.0 and authorize only the
+  Phase-4A Engine / Labor-State Proof implementation.
+- Boundary: Gate B remains OPEN. Phase-4B structural ingestion, new-source
+  ingestion, forecasting, public activation, deployment, and the deferred major
+  UI/UX overhaul remain unauthorized.
 
 ### O-006 — Approve the first Phase-4 proof slice and run profile
 
@@ -194,4 +197,4 @@ Accepted decisions are authoritative below approved/BINDING contracts and above 
   library only if approved requirements and evidence show existing tooling is
   insufficient, followed by license/security/cost review.
 - Boundary: No dependency or permanent graph/cloud infrastructure is selected by
-  the DRAFT design.
+  the approved Phase-4A scope.

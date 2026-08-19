@@ -2,24 +2,23 @@
 
 ```text
 Contract: Systems Monitor State Model Contract
-Version: 0.1.1
-Status: DRAFT
+Version: 1.0.0
+Status: BINDING
 Parent Master Spec: V4.1
 Depends On: PRODUCT_CONTRACT.md, ARCHITECTURE_CONTRACT.md, DATA_CONTRACT.md, SOURCE_CONTRACT.md, ONTOLOGY_CROSSWALK_CONTRACT.md, PUBLIC_DATA_INTERFACE_CONTRACT.md
 Supersedes: None
-Approved By: —
-Approved At: —
-Content Hash: PENDING — DRAFT
+Approved By: Taylor
+Approved At: 2026-08-19
+Content Hash: 325C0E317A217A9DD93EF921FD203D08CD4CD978F22703906D1CB5CDF298E78A
 Last Updated: 2026-08-19
 ```
 
 ## Authority / Status
 
 Governing Master sections: §3, §8–9, §11.1, §31.1–31.5, §32, §37.1,
-§64.1, §67 Phase 4, and §68. This DRAFT is review material only. It does not
-authorize State Engine implementation, a relationship dataset, a `CALC`
-publication, factual activation, forecasting, or deployment. Taylor alone may
-promote it.
+§64.1, §67 Phase 4, and §68. This BINDING contract authorizes the approved
+Phase-4A Engine / Labor-State Proof. It does not authorize Phase-4B ingestion,
+Gate-B closure, factual activation, forecasting, or deployment.
 
 ## Purpose
 
@@ -164,7 +163,7 @@ It does not answer what will happen next.
 Future-data leakage; hidden imputation; unknown-as-zero; unversioned baselines;
 generic confidence percentages; correlation presented as causation; state
 presented as forecast; source `OBS` relabeled as AUXSAYS `CALC`; raw-table public
-access; unbounded computation; public activation from this DRAFT.
+access; unbounded computation; public activation from this contract.
 
 ## Failure / Degraded States
 
@@ -190,8 +189,8 @@ access; unbounded computation; public activation from this DRAFT.
 ## Risks / Open Decisions
 
 - O-006 accepts only the six labor observations and configurable/versioned depth
-  3/eight-round Phase-4A proof profile. Contract promotion and implementation
-  authority remain pending under O-005.
+  3/eight-round Phase-4A proof profile. O-005 is accepted/resolved and Phase-4A
+  implementation is authorized; Phase-4B and Gate-B closure remain unauthorized.
 - Threshold calibration and historical window selection remain reviewable
   implementation design choices, not permission to fabricate precision.
 - See R-022, R-027, R-028, R-031, and R-032.
@@ -205,6 +204,8 @@ public display independently.
 
 ## Version / Approval / Change History
 
+- 1.0.0 (2026-08-19): Taylor promoted the externally reviewed contract to
+  BINDING and authorized only the Phase-4A Engine / Labor-State Proof.
 - 0.1.1 (2026-08-19): External-review correction distinguishing Phase-4A engine
   proof from required Phase-4B authoritative structural proof and adding honest
   coverage metadata. Remains DRAFT; no implementation or ingestion authority.

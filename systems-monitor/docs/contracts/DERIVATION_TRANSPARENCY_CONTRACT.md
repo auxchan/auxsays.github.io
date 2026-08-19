@@ -2,22 +2,23 @@
 
 ```text
 Contract: Systems Monitor Derivation Transparency Contract
-Version: 0.1.1
-Status: DRAFT
+Version: 1.0.0
+Status: BINDING
 Parent Master Spec: V4.1
 Depends On: PUBLIC_DATA_INTERFACE_CONTRACT.md, DATA_CONTRACT.md, SOURCE_CONTRACT.md, ONTOLOGY_CROSSWALK_CONTRACT.md, STATE_MODEL_CONTRACT.md, DEPENDENCY_RELATIONSHIP_CONTRACT.md
 Supersedes: None
-Approved By: —
-Approved At: —
-Content Hash: PENDING — DRAFT
+Approved By: Taylor
+Approved At: 2026-08-19
+Content Hash: 642AA05144644CBB84F739D37F71EACB01D0108877A3672A22A1A5C68C8EF938
 Last Updated: 2026-08-19
 ```
 
 ## Authority / Status
 
 Governing Master sections: §3, §8, §20–20.1, §31.3–31.5, §37.1, §51,
-§64.1, §67 Phase 4, and §68. This DRAFT authorizes no calculated, forecast,
-scenario, Trace, or public output.
+§64.1, §67 Phase 4, and §68. This BINDING contract authorizes structured
+derivations only for the approved Phase-4A proof. It authorizes no Phase-4B,
+forecast, scenario, Trace, public, or deployed output.
 
 ## Purpose
 
@@ -163,8 +164,8 @@ contract approval and must conform to the BINDING Public Data Interface.
 
 ## Risks / Open Decisions
 
-- **OPEN DECISION:** Taylor must approve the public summary/deep-detail boundary
-  and first Phase-4 derivation schema before implementation.
+- O-005 is accepted/resolved and the Phase-4A structured derivation scope is
+  approved. Public summary/deep-detail UI remains deferred.
 - The deferred master-view UI must reduce cognitive load without concealing
   claim class, limitations, evidence, or calculation logic.
 - See R-027, R-031, R-033, and R-034.
@@ -178,6 +179,8 @@ substitute for structured reproduction.
 
 ## Version / Approval / Change History
 
+- 1.0.0 (2026-08-19): Taylor promoted the externally reviewed contract to
+  BINDING and authorized only the Phase-4A Engine / Labor-State Proof.
 - 0.1.1 (2026-08-19): External-review correction adding structural relationship,
   source, crosswalk, generation/acceptance, propagation, behavioral, and coverage
   derivation requirements. Remains DRAFT; no output authority.
