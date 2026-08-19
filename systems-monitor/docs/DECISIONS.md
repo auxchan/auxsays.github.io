@@ -165,7 +165,7 @@ Accepted decisions are authoritative below approved/BINDING contracts and above 
 
 - Classification: TAYLOR APPROVAL DECISION
 - Status: OPEN
-- Decision required: Approve, correct, or reject DRAFT 0.1.0 State Model,
+- Decision required: Approve, correct, or reject DRAFT 0.1.1 State Model,
   Dependency Relationship, Allocation/Propagation, Derivation Transparency, and
   Phase-4 Testing contracts before any implementation.
 - Boundary: Draft presence and index validity confer no implementation authority.
@@ -173,12 +173,17 @@ Accepted decisions are authoritative below approved/BINDING contracts and above 
 ### O-006 — Approve the first Phase-4 proof slice and run profile
 
 - Classification: TAYLOR APPROVAL DECISION
-- Status: OPEN
-- Decision required: Approve/correct the six-observation labor-state proof,
-  reference/vocabulary rules, relationship candidates and causal restraint,
-  propagation bounds/cycle/common-cause behavior, and Gate-B evidence plan.
-- Boundary: No candidate relationship is ACCEPTED, no state or allocation has
-  been calculated, and no future employment claim is authorized.
+- Status: ACCEPTED / RESOLVED — TAYLOR, 2026-08-19 — INITIAL PROOF PROFILE ONLY
+- Approved choice: The six factual labor indicators are Phase-4A engine-proof
+  inputs. Initial maximum propagation depth is 3 and initial maximum propagation
+  rounds is 8.
+- Configuration boundary: Both limits are configurable, versioned,
+  reproducible, finite, and measurable test/calibration settings—not permanent
+  economic constants. Longer paths are not declared economically irrelevant.
+- Gate boundary: Phase 4A cannot pass Gate B alone. Gate B requires Phase-4B
+  original-authority structural I/O evidence and all corrected acceptance
+  requirements. O-006 does not promote a contract or authorize implementation,
+  ingestion, relationships, calculations, publication, UI work, or deployment.
 
 ### O-007 — Select Phase-4 storage and graph structures
 

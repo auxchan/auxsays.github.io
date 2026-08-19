@@ -2,7 +2,7 @@
 
 ```text
 Contract: Systems Monitor State Model Contract
-Version: 0.1.0
+Version: 0.1.1
 Status: DRAFT
 Parent Master Spec: V4.1
 Depends On: PRODUCT_CONTRACT.md, ARCHITECTURE_CONTRACT.md, DATA_CONTRACT.md, SOURCE_CONTRACT.md, ONTOLOGY_CROSSWALK_CONTRACT.md, PUBLIC_DATA_INTERFACE_CONTRACT.md
@@ -10,7 +10,7 @@ Supersedes: None
 Approved By: —
 Approved At: —
 Content Hash: PENDING — DRAFT
-Last Updated: 2026-08-18
+Last Updated: 2026-08-19
 ```
 
 ## Authority / Status
@@ -39,7 +39,9 @@ It does not answer what will happen next.
   constraints, capacity/headroom, buffers/inventory, and geography.
 - Versioned state outputs, derivation references, and a public-safe current-state
   read-model boundary.
-- Design of the bounded six-observation U.S. labor proof slice.
+- Phase-4A design for the bounded six-observation U.S. labor engine proof.
+- Phase-4B state attachment to an authoritative structural-economy subset and
+  explicit structural-coverage metadata required before Gate B.
 
 ## Explicitly Out of Scope
 
@@ -119,10 +121,22 @@ It does not answer what will happen next.
   separation pressure, employment stock/change, and labor-capacity constraints
   as `CALC` only when the approved method and inputs justify them. It may not
   label them forecasts.
-- **BINDING REQUIREMENT STM-020:** The first implementation slice, if later
-  authorized, uses only the already approved six labor observations and a
-  bounded historical/reference window. It cannot imply coverage of the whole
-  U.S. economy.
+- **BINDING REQUIREMENT STM-020:** Phase 4A, if later authorized, uses only the
+  already approved six labor observations and a bounded historical/reference
+  window to prove State Engine mechanics. It cannot imply coverage of the whole
+  U.S. economy and cannot satisfy Gate B by itself regardless of automated test
+  count.
+- **BINDING REQUIREMENT STM-021:** Gate B additionally requires Phase 4B to
+  attach rights-cleared current/as-of observations to nodes in a validated
+  original-authority structural I/O subset. The exact observations, structural
+  source, versions, and mappings require later authorized discovery/intake; BEA
+  Real GDP/NIPA is separate and is not implicitly authorized.
+- **BINDING REQUIREMENT STM-022:** Every state/master read model declares
+  `structuralCoverageState`, covered and unsupported domains, accepted and
+  candidate relationship counts, evidence mix, stale/degraded structural inputs,
+  and derivation completeness. Phase-4A is labeled `LIMITED_ENGINE_PROOF`;
+  Phase-4B may claim only its validated bounded domain. Sparse coverage must not
+  appear economy-wide.
 
 ## Interfaces / Dependencies
 
@@ -170,11 +184,14 @@ access; unbounded computation; public activation from this DRAFT.
 5. `OBS` is visibly source-owned; every `CALC` is reproducible.
 6. Public read-model fixtures contain no raw/internal table leakage or
    `FCST`/`SCEN` semantics.
+7. Phase-4A and Phase-4B coverage labels remain explicit, and Phase-4A cannot
+   satisfy the authoritative structural-backbone requirements of Gate B.
 
 ## Risks / Open Decisions
 
-- **OPEN DECISION:** Taylor must approve the initial labor-state vocabulary,
-  reference rules, and proof-slice scope before implementation.
+- O-006 accepts only the six labor observations and configurable/versioned depth
+  3/eight-round Phase-4A proof profile. Contract promotion and implementation
+  authority remain pending under O-005.
 - Threshold calibration and historical window selection remain reviewable
   implementation design choices, not permission to fabricate precision.
 - See R-022, R-027, R-028, R-031, and R-032.
@@ -188,6 +205,9 @@ public display independently.
 
 ## Version / Approval / Change History
 
+- 0.1.1 (2026-08-19): External-review correction distinguishing Phase-4A engine
+  proof from required Phase-4B authoritative structural proof and adding honest
+  coverage metadata. Remains DRAFT; no implementation or ingestion authority.
 - 0.1.0 (2026-08-18): Initial Phase-4 review draft. No implementation authority.
 
 ## Amendment protocol

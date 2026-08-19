@@ -2,7 +2,7 @@
 
 ```text
 Contract: Systems Monitor Allocation and Propagation Contract
-Version: 0.1.0
+Version: 0.1.1
 Status: DRAFT
 Parent Master Spec: V4.1
 Depends On: ARCHITECTURE_CONTRACT.md, DATA_CONTRACT.md, STATE_MODEL_CONTRACT.md, DEPENDENCY_RELATIONSHIP_CONTRACT.md, DERIVATION_TRANSPARENCY_CONTRACT.md
@@ -10,7 +10,7 @@ Supersedes: None
 Approved By: —
 Approved At: —
 Content Hash: PENDING — DRAFT
-Last Updated: 2026-08-18
+Last Updated: 2026-08-19
 ```
 
 ## Authority / Status
@@ -58,9 +58,11 @@ ingestion, public activation, and a runtime graph implementation.
 ### Bounded traversal and stopping
 
 - **AP-005 — Finite traversal.** Traversal is iterative and bounded. The proposed
-  first-slice profile declares `maxDepth = 3`, `maxRounds = 8`, and explicit
-  contribution/path/node budgets. These values are DRAFT review defaults, not
-  production authority.
+  Phase-4A proof profile declares `maxDepth = 3`, `maxRounds = 8`, and explicit
+  contribution/path/node budgets. O-006 accepts these only as the initial test/
+  calibration profile. They are configurable, versioned, reproducible, finite,
+  and measurable—not permanent economic constants or proof that longer paths
+  are immaterial. Production settings require later structural evidence.
 - **AP-006 — Stop rules.** A branch stops when no eligible relationship remains,
   its materiality falls below the versioned unit-aware threshold, it reaches a
   declared boundary, or any depth/round/path/node budget is reached. The reason
@@ -147,6 +149,25 @@ ingestion, public activation, and a runtime graph implementation.
 - **AP-026 — Fail closed.** Invalid units, unauthorized relationships, future-
   dated knowledge, missing required evidence, unsupported precision, exceeded
   limits, cycle violations, and non-convergence fail or degrade explicitly.
+- **AP-027 — Two-stage proof.** Phase 4A may prove deterministic propagation
+  mechanics with the accepted six labor inputs but cannot satisfy Gate B.
+  Phase 4B must run one bounded original-authority structural slice using only
+  eligible `ACCEPTED` relationships and attach current/as-of observations.
+- **AP-028 — Structural role safety.** Direct-requirement edges may traverse only
+  under their approved structural role. Total-requirement values are non-
+  recursive benchmarks/attribution inputs unless a separately approved role
+  proves no overlap. A run that combines overlapping total contribution with
+  recursively accumulated direct paths is rejected or explicitly reconciled.
+- **AP-029 — Behavioral Gate-B evidence.** Gate B requires real accepted
+  structural evidence—not schema presence alone—for at least one lag that changes
+  current-state treatment, one applicable buffer that changes transmission, one
+  eligible substitute or evidence-backed no-substitute result, and one common-
+  cause overlap whose reconciliation changes or bounds attribution. Synthetic
+  fixtures supplement but cannot be the only proof.
+- **AP-030 — Structural capacity and allocation.** The Phase-4B slice records
+  supported capacity/headroom/saturation and current allocation/residual behavior
+  where applicable. Missing evidence stays unknown. Employment output is current
+  exposure only, never future hiring or job prediction.
 
 ## Required Logical Records
 
@@ -170,11 +191,14 @@ Exact storage and serialization remain implementation choices after approval.
 4. Common-cause tests prevent naive double counting and preserve components.
 5. Allocations reconcile where conservation applies and expose residuals.
 6. Every output has a bounded reproducible CALC derivation.
+7. Direct/total structural roles cannot double count, and Phase-4B behavioral
+   evidence demonstrates lag, buffer, substitution, and common-cause handling.
 
 ## Risks / Open Decisions
 
-- **OPEN DECISION:** Taylor must approve the first run profile, transmission
-  semantics, materiality rules, and any later cycle solver before implementation.
+- O-006 accepts depth 3/eight rounds only for the configurable Phase-4A proof
+  profile. O-005 contract promotion, Phase-4B scope, transmission/materiality
+  semantics, and any later cycle solver still require applicable approval.
 - Quantitative calibration remains evidence-dependent; ordinal output is the
   safe default where calibration is absent.
 - See R-027 through R-034.
@@ -188,6 +212,10 @@ core runtime dependency.
 
 ## Version / Approval / Change History
 
+- 0.1.1 (2026-08-19): External-review correction accepting only the initial
+  Phase-4A bounded profile and requiring authoritative Phase-4B structural and
+  behavioral Gate-B evidence, including direct/total double-count protection.
+  Remains DRAFT; no runtime authority.
 - 0.1.0 (2026-08-18): Initial Phase-4 review draft. No runtime authority.
 
 ## Amendment protocol

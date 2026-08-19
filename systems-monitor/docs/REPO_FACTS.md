@@ -118,3 +118,22 @@ Reinspect only the affected facts when `AGENTS.md`, `.github/workflows/pages.yml
   output, new ingestion, dependency, UI/application, workflow/deployment, or
   Patch Feed file was created or changed. Existing BINDING contracts and the
   authoritative Master Spec remain unchanged.
+
+## PHASE-4 STRUCTURAL GATE-B CORRECTION — 2026-08-19
+
+- External review found the six-labor-observation design adequate for engine
+  mechanics but insufficient for BINDING Gate B's authoritative I/O backbone.
+  The five contracts and integrated design are corrected to DRAFT 0.1.1.
+- Phase 4A is the limited labor engine proof. O-006 accepts six labor inputs,
+  maximum depth 3, and maximum eight rounds only as configurable/versioned test
+  and calibration settings. Phase 4A cannot pass Gate B.
+- Phase 4B requires a bounded original-authority structural I/O proof before Gate
+  B, including deterministic accepted relationships, direct/total semantics,
+  current observations, real behavioral evidence, current employment exposure,
+  complete derivation, performance/cost evidence, and honest coverage. The
+  construction-oriented domain is a selection candidate subject to future exact
+  authoritative source/table/rights/schema/crosswalk validation.
+- No BEA file was discovered/retrieved/ingested, and Real GDP/NIPA remains
+  separate. No parser, crosswalk data, relationship dataset, engine/CALC/UI code,
+  dependency, graph/cloud infrastructure, factual activation, Phase-5 work,
+  workflow/deployment, Patch Feed file, push, merge, or deployment changed.

@@ -2,7 +2,7 @@
 
 ```text
 Contract: Systems Monitor Dependency Relationship Contract
-Version: 0.1.0
+Version: 0.1.1
 Status: DRAFT
 Parent Master Spec: V4.1
 Depends On: ARCHITECTURE_CONTRACT.md, DATA_CONTRACT.md, SOURCE_CONTRACT.md, ONTOLOGY_CROSSWALK_CONTRACT.md, SECURITY_INGESTION_CONTRACT.md, STATE_MODEL_CONTRACT.md
@@ -10,7 +10,7 @@ Supersedes: None
 Approved By: —
 Approved At: —
 Content Hash: PENDING — DRAFT
-Last Updated: 2026-08-18
+Last Updated: 2026-08-19
 ```
 
 ## Authority / Status
@@ -33,7 +33,8 @@ unknown—rather than treating correlation or adjacency as causality.
 - Structural economic baseline, physical and hidden dependencies, criticality,
   substitutability, buffers/capacity, TTS/TTR, and common-cause identity.
 - Candidate relationship discovery/promotion and bounded focused Trace inputs.
-- Design-only labor proof-slice relationships.
+- Design-only Phase-4A labor proof relationships and the required Phase-4B
+  authoritative structural proof boundary.
 
 ## Explicitly Out of Scope
 
@@ -46,10 +47,14 @@ unknown—rather than treating correlation or adjacency as causality.
 - **BINDING REQUIREMENT DR-001:** Every edge has stable `edgeId`, source and
   target node IDs, direction, polarity/sign, relationship type, plain-language
   mechanism, geography, effective interval, definition version, lifecycle
-  status, evidence/provenance references, and reviewer/approval state.
-- **BINDING REQUIREMENT DR-002:** Edge lifecycle is explicit: `CANDIDATE`,
-  `EXPERIMENTAL`, `ACCEPTED`, `DEPRECATED`, or `REJECTED`. Only an approved
-  eligible version may participate in production state/propagation.
+  status, knowledge/publication eligibility, evidence/provenance references,
+  source dataset/table/matrix and classification identities when structural,
+  crosswalk/version, derivation and acceptance rules, and approval state.
+- **BINDING REQUIREMENT DR-002:** Edge lifecycle is explicit: `CANDIDATE` →
+  `VALIDATED` → `ACCEPTED`, followed when applicable by `SUPERSEDED` or
+  `INVALIDATED`. `EXPERIMENTAL` and `REJECTED` may be retained as non-production
+  review dispositions. Only an eligible `ACCEPTED` version may participate in
+  production current-state propagation. Candidate-only relationships cannot satisfy Gate B.
 - **BINDING REQUIREMENT DR-003:** Evidence class is one of `DIRECT`,
   `STRUCTURAL`, `STATISTICAL`, `MODELED`, or `HYPOTHESIS`. Definitional and
   structural relationships remain distinguishable from statistical and modeled
@@ -88,15 +93,19 @@ unknown—rather than treating correlation or adjacency as causality.
   Old accepted versions are never silently rewritten.
 - **BINDING REQUIREMENT DR-012:** The structural economic skeleton should be
   populated from rights-cleared authoritative Supply-Use/Input-Output/direct and
-  total requirements structures where applicable. BEA structure is a baseline,
-  not the complete current dynamic system or a fixed causal coefficient.
+  total requirements structures where applicable. An original-authority BEA
+  structural subset is required Phase-4B evidence before Gate B, not optional
+  later expansion. BEA Real GDP/NIPA remains separate and unauthorized by this
+  requirement. BEA structure is a baseline, not the complete current dynamic
+  system or a fixed causal coefficient.
 - **BINDING REQUIREMENT DR-013:** Dynamic state may qualify structural edges with
   observed prices, capacity, inventory, imports, geography, energy, water,
   transportation, labor, credit, policy, substitution, concentration, and
   event/shock state only through separately governed inputs and methods.
 - **BINDING REQUIREMENT DR-014:** Do not manually author a whole-economy graph of
   arbitrary edges. Large-scale graph population requires an approved structural
-  import/crosswalk plan, rights review, and deterministic validation.
+  source/crosswalk/transformation plan, rights review, deterministic generation,
+  validation, acceptance rule, and versioned writeback.
 - **BINDING REQUIREMENT DR-015:** Criticality is decomposable and cannot equal
   procurement spend or dollar-flow rank alone. It may consider necessity,
   substitutability, supplier/geographic concentration, qualification,
@@ -120,10 +129,16 @@ unknown—rather than treating correlation or adjacency as causality.
   LLM/agent/document extraction may later create only schema-valid `CANDIDATE`
   records with provenance, corroboration state, deterministic validation result,
   bounded review, and no production write or self-promotion capability.
-- **BINDING REQUIREMENT DR-021:** Candidate promotion requires eligible evidence,
-  mechanism, compatible source/target semantics, corroboration appropriate to
-  class, security/rights review, deterministic tests, and the configured human
-  approval. Rejection/deprecation preserves audit history.
+- **BINDING REQUIREMENT DR-021:** Governance approves structural sources,
+  transformation/table semantics, classifications/crosswalks, coefficient and
+  filtering rules, deterministic validation, relationship-generation rules, and
+  the acceptance gate. Repository-owned deterministic code may then materialize
+  `ACCEPTED` authoritative structural edges automatically when every governed
+  rule passes; manual per-edge approval is not required. Ambiguous mappings,
+  inferred/LLM edges, weak statistical hypotheses, and unsupported causal claims
+  remain `CANDIDATE` until their applicable promotion rule succeeds. All
+  promotion/writeback is deterministic, auditable, and reproducible without an
+  external AI subscription.
 - **BINDING REQUIREMENT DR-022:** A focused Trace request returns a bounded
   reference-based subgraph with relationship type, direction, sign, evidence,
   lag when supported, competing/offsetting paths, and derivation references. It
@@ -131,13 +146,41 @@ unknown—rather than treating correlation or adjacency as causality.
 - **BINDING REQUIREMENT DR-023:** Hostile labels, URLs, metadata, or evidence
   cannot execute code, alter governance, supply queries/paths, or promote an
   edge. Identifiers and storage keys are generated/validated.
-- **BINDING REQUIREMENT DR-024:** The first Phase-4 proof slice may define only
-  4–8 bounded labor observation-to-state relationships with credible source or
-  methodology evidence. Unsupported causal links between the six indicators are
-  prohibited.
+- **BINDING REQUIREMENT DR-024:** Phase 4A may define only 4–8 bounded labor
+  observation-to-state relationships with credible source or methodology
+  evidence. Unsupported causal links between the six indicators are prohibited.
+  Phase 4A proves software mechanics only and cannot pass Gate B.
 - **BINDING REQUIREMENT DR-025:** A relationship contract/version is necessary
   but not sufficient for propagation. Allocation/Propagation separately governs
   eligibility, cycles, bounds, contribution accounting, and outputs.
+- **BINDING REQUIREMENT DR-026:** Phase 4B must prove one bounded real structural
+  domain using an original-authority structural source, validated source/table/
+  matrix and classification versions, deterministic relationship generation,
+  accepted versioned edges, current observations attached to structural nodes,
+  and a current employment-exposure connection. Synthetic fixtures may test
+  mechanics but cannot satisfy this factual Gate-B evidence.
+- **BINDING REQUIREMENT DR-027:** Every structural matrix/product declares one
+  exact non-duplicative computational role before use. `DIRECT REQUIREMENTS`
+  represent immediate input requirements and may become direct topology/edges
+  after validation. `TOTAL REQUIREMENTS` already include indirect upstream
+  requirements and must not be recursively traversed as ordinary direct edges
+  when that topology also represents the indirect paths.
+- **BINDING REQUIREMENT DR-028:** Supply/Use data may support structural input/
+  output quantities and transformation; market-share structures may support
+  governed commodity/industry distribution; total requirements may support
+  benchmark, validation, decomposition, or separately defined non-recursive
+  attribution. These are proposed role classes, not assumptions: authoritative
+  documentation and approved transformation semantics determine the exact role.
+- **BINDING REQUIREMENT DR-029:** A configuration combining recursively traversed
+  direct-requirement paths with overlapping total-requirement contribution is
+  rejected or reconciled under an explicit tested rule. Where mathematically
+  appropriate, accumulated direct paths may be compared with the total-
+  requirements benchmark; discrepancies outside tolerance fail visibly.
+- **BINDING REQUIREMENT DR-030:** Before any structural source is implemented,
+  intake must verify the current official source, exact dataset/table/version,
+  access artifact, rights/terms fingerprint and operation permissions, schema,
+  units, publication/vintage, taxonomy/classification, crosswalk, health,
+  deterministic parser, security boundary, and bounded scope approval.
 
 ## Interfaces / Dependencies
 
@@ -185,11 +228,18 @@ propagation.
 5. Common-cause/origin identity and focused bounded Trace references survive
    serialization.
 6. No edge uses unsupported causal or numeric precision.
+7. Deterministic structural generation can progress through VALIDATED to
+   ACCEPTED without per-edge manual review only under an approved acceptance
+   rule, while ambiguous/inferred candidates remain non-production.
+8. Direct and total requirements have separate declared roles; double-counting
+   configurations reject/reconcile and real authoritative Phase-4B evidence is
+   required before Gate B.
 
 ## Risks / Open Decisions
 
-- **OPEN DECISION:** Taylor must approve the first-slice edge definitions and
-  promotion authority before any relationship implementation.
+- O-006 accepts the Phase-4A inputs and initial traversal profile only. O-005
+  contract promotion and a later bounded Phase-4B source/slice authorization are
+  still required before relationship implementation.
 - Structural BEA tables, rights, editions, crosswalks, and import mechanics
   require a later scoped source/integration approval.
 - See R-012, R-026, R-028, R-030, R-031, and R-032.
@@ -203,6 +253,9 @@ and independent of core runtime AI availability.
 
 ## Version / Approval / Change History
 
+- 0.1.1 (2026-08-19): External-review correction making Phase-4B authoritative
+  structural proof Gate-B-required, adding deterministic rule-based structural
+  promotion, and separating direct from total requirements. Remains DRAFT.
 - 0.1.0 (2026-08-18): Initial Phase-4 review draft. No relationship authority.
 
 ## Amendment protocol

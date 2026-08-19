@@ -1,5 +1,25 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-19 — Phase-4 structural Gate-B external-review correction
+
+- Corrected all five Phase-4 contracts and the integrated design to DRAFT 0.1.1;
+  no contract was promoted and no implementation authority was created.
+- Split Phase-4 evidence into Phase 4A labor-based engine proof and Phase 4B
+  authoritative structural proof. Phase 4A cannot pass Gate B alone; a bounded
+  original-source BEA Supply/Use/Input-Output subset is required before Gate B,
+  while BEA Real GDP/NIPA remains separate and unauthorized.
+- Resolved O-006 as Taylor's initial configurable/versioned Phase-4A profile:
+  six labor inputs, maximum depth 3, and maximum eight rounds. These are test/
+  calibration limits, not permanent economic constants.
+- Added CANDIDATE→VALIDATED→ACCEPTED→SUPERSEDED/INVALIDATED lifecycle,
+  deterministic rule-based acceptance for authoritative structural edges,
+  direct-versus-total requirements roles/double-count protection, real behavioral
+  Gate-B evidence, construction-oriented bounded slice criteria, structural
+  coverage metadata, complete structural CALC derivation, and 32 Gate-B criteria.
+- Preserved the $0/no-new-dependency/no-cloud/no-core-LLM posture. No BEA/new-
+  source retrieval or ingestion, relationship data, code, CALC output, UI,
+  factual activation, Phase 5, push, merge, or deployment occurred.
+
 ## 2026-08-18 — Phase-4 State / Dependency / Allocation contract and design draft
 
 - Created five review-only DRAFT 0.1.0 contracts for State Model, Dependency

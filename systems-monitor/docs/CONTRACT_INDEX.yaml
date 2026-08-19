@@ -13,6 +13,8 @@ current_authorized_work: Phase 4 State / Dependency / Allocation contract and de
 approved_foundation_decisions: [D-001, D-002, D-003, D-004, D-005, D-006, D-007, D-008, D-009, D-010]
 phase_3_contract_status: PASS
 phase_4_contract_status: DRAFT_REVIEW_REQUIRED
+phase_4_gate_b: OPEN_REQUIRES_PHASE_4B_AUTHORITATIVE_STRUCTURAL_PROOF
+phase_4a_profile_decision: O-006_ACCEPTED_INITIAL_PROFILE_ONLY
 approved_phase_3_decisions: [O-003]
 rejected_phase_3_decisions: [O-004]
 post_v4_1_requirements:
@@ -187,7 +189,7 @@ contracts:
     blocks: ["Phase-3 regression obligations", "factual public activation requires separate approval"]
   - id: state_model
     path: contracts/STATE_MODEL_CONTRACT.md
-    version: "0.1.0"
+    version: "0.1.1"
     status: DRAFT
     approved_by: null
     approved_at: null
@@ -196,10 +198,10 @@ contracts:
     governing_master_sections: ["§3", "§6–9", "§20–20.1", "§31.3–31.5", "§37.1", "§51", "§64.1", "§67 Phase 4", "§68"]
     depends_on: [product, architecture, data, source, ontology_crosswalk, public_data_interface]
     blocked_by: ["Taylor contract review and promotion"]
-    blocks: ["Phase 4 state implementation", "Gate B"]
+    blocks: ["Phase 4 state implementation until O-005 promotion", "Gate B until Phase 4B authoritative structural proof"]
   - id: dependency_relationship
     path: contracts/DEPENDENCY_RELATIONSHIP_CONTRACT.md
-    version: "0.1.0"
+    version: "0.1.1"
     status: DRAFT
     approved_by: null
     approved_at: null
@@ -208,10 +210,10 @@ contracts:
     governing_master_sections: ["§6–6.1", "§8", "§10–12", "§20–20.1", "§31.3–31.5", "§34.1–34.4", "§51", "§64.1", "§67 Phase 4", "§68"]
     depends_on: [architecture, data, source, ontology_crosswalk, security_ingestion, state_model]
     blocked_by: ["Taylor contract review and promotion"]
-    blocks: ["Phase 4 relationship implementation", "Gate B"]
+    blocks: ["Phase 4 relationship implementation until O-005 promotion", "Gate B until accepted authoritative structural relationships"]
   - id: derivation_transparency
     path: contracts/DERIVATION_TRANSPARENCY_CONTRACT.md
-    version: "0.1.0"
+    version: "0.1.1"
     status: DRAFT
     approved_by: null
     approved_at: null
@@ -220,10 +222,10 @@ contracts:
     governing_master_sections: ["§3", "§8", "§20–20.1", "§31.3–31.5", "§37.1", "§51", "§64.1", "§67 Phase 4", "§68"]
     depends_on: [public_data_interface, data, source, ontology_crosswalk, state_model, dependency_relationship]
     blocked_by: ["Taylor contract review and promotion"]
-    blocks: ["Phase 4 calculated/public derivation implementation", "Gate B"]
+    blocks: ["Phase 4 calculated/public derivation implementation until O-005 promotion", "Gate B until complete Phase-4B structural derivation"]
   - id: allocation_propagation
     path: contracts/ALLOCATION_PROPAGATION_CONTRACT.md
-    version: "0.1.0"
+    version: "0.1.1"
     status: DRAFT
     approved_by: null
     approved_at: null
@@ -232,10 +234,10 @@ contracts:
     governing_master_sections: ["§7–14", "§20–20.1", "§31.3–31.5", "§34.1–34.4", "§51", "§64.1", "§67 Phase 4", "§68"]
     depends_on: [architecture, data, state_model, dependency_relationship, derivation_transparency]
     blocked_by: ["Taylor contract review and promotion"]
-    blocks: ["Phase 4 propagation/allocation implementation", "Gate B"]
+    blocks: ["Phase 4 propagation/allocation implementation until O-005 promotion", "Gate B until real structural behavioral evidence"]
   - id: phase4_testing
     path: contracts/PHASE4_TESTING_CONTRACT.md
-    version: "0.1.0"
+    version: "0.1.1"
     status: DRAFT
     approved_by: null
     approved_at: null
@@ -244,4 +246,4 @@ contracts:
     governing_master_sections: ["§9–14", "§20–20.1", "§31.3–31.5", "§51", "§64.1", "§67 Phase 4", "§68"]
     depends_on: [testing, release_acceptance, state_model, dependency_relationship, allocation_propagation, derivation_transparency]
     blocked_by: ["Taylor contract review and promotion", "authorized Phase 4 implementation and evidence"]
-    blocks: ["Gate B PASS"]
+    blocks: ["Gate B PASS until Phase-4A mechanics and Phase-4B authoritative structural evidence, Human QA, and Taylor approval"]

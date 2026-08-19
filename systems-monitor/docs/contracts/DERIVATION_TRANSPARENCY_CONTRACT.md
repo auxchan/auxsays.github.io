@@ -2,7 +2,7 @@
 
 ```text
 Contract: Systems Monitor Derivation Transparency Contract
-Version: 0.1.0
+Version: 0.1.1
 Status: DRAFT
 Parent Master Spec: V4.1
 Depends On: PUBLIC_DATA_INTERFACE_CONTRACT.md, DATA_CONTRACT.md, SOURCE_CONTRACT.md, ONTOLOGY_CROSSWALK_CONTRACT.md, STATE_MODEL_CONTRACT.md, DEPENDENCY_RELATIONSHIP_CONTRACT.md
@@ -10,7 +10,7 @@ Supersedes: None
 Approved By: —
 Approved At: —
 Content Hash: PENDING — DRAFT
-Last Updated: 2026-08-18
+Last Updated: 2026-08-19
 ```
 
 ## Authority / Status
@@ -117,6 +117,23 @@ ingestion, forecasting, scenarios, or Phase-4 runtime implementation.
 - **DT-021 — Honest absence.** Missing evidence, inputs, calibration, or retained
   artifacts is explicit. The system cannot fabricate a derivation, downgrade a
   CALC to OBS, or silently omit warnings to obtain a publishable shape.
+- **DT-022 — Structural derivation.** A Phase-4 structural CALC additionally
+  records every accepted relationship ID/version, original structural source and
+  dataset/table/matrix/version, source classification IDs, target classification
+  IDs, crosswalk/version, declared direct/total/Supply/Use/market-share
+  computational role, relationship-generation and acceptance-rule versions,
+  propagation profile/config, buffer/substitution/lag rules applied, common-
+  cause reconciliation, and material intermediate contributions.
+- **DT-023 — Proof and coverage identity.** Public/internal derivation declares
+  whether it belongs to `PHASE_4A_LIMITED_ENGINE_PROOF` or
+  `PHASE_4B_STRUCTURAL_PROOF`, its covered/unsupported domains, structural-input
+  health, and derivation completeness. A sparse or Phase-4A graph cannot imply
+  authoritative economy-wide coverage.
+- **DT-024 — Automated authority trace.** When repository-owned deterministic
+  rules automatically materialize an accepted authoritative structural edge,
+  derivation retains the approved source/transformation/crosswalk/generation/
+  validation/acceptance rule versions and run/writeback identity. Manual judgment
+  is not substituted silently, and external AI is not required for reproduction.
 
 ## Required Interfaces
 
@@ -139,6 +156,10 @@ contract approval and must conform to the BINDING Public Data Interface.
 4. Derivation is immutable, acyclic, bounded, rights-aware, and public-allowlisted.
 5. Tests reject missing references, future knowledge, secret/path leakage,
    recursive explosion, fabricated evidence, and hidden degraded state.
+6. Structural CALC fixtures expose exact relationship/source/crosswalk/config
+   versions, direct/total role, behavioral adjustments, reconciliation, and
+   honest Phase-4A/4B coverage.
+7. Every structural CALC includes accepted relationship IDs/versions and structural-source, crosswalk, and configuration versions.
 
 ## Risks / Open Decisions
 
@@ -157,6 +178,9 @@ substitute for structured reproduction.
 
 ## Version / Approval / Change History
 
+- 0.1.1 (2026-08-19): External-review correction adding structural relationship,
+  source, crosswalk, generation/acceptance, propagation, behavioral, and coverage
+  derivation requirements. Remains DRAFT; no output authority.
 - 0.1.0 (2026-08-18): Initial Phase-4 review draft. No output authority.
 
 ## Amendment protocol

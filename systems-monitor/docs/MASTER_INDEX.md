@@ -206,9 +206,21 @@ These requirements were established during final Foundation review after V4.1. T
 | Gate-B semantic evidence and human review | `contracts/PHASE4_TESTING_CONTRACT.md` |
 | Integrated architecture, proof slice, source expansion, risks | `PHASE4_STATE_DEPENDENCY_ALLOCATION_DESIGN.md` |
 
+### Phase-4 proof-stage routing
+
+| Stage | Purpose | Gate-B effect |
+|---|---|---|
+| Phase 4A — Engine / Labor-State Proof | Six accepted labor observations prove current/as-of State, OBS/CALC derivation, relationship lifecycle, bounded traversal, cycle termination, common-cause bookkeeping, and read-model mechanics under O-006's initial depth-3/eight-round profile | Cannot pass Gate B alone |
+| Phase 4B — Authoritative Structural Proof | One bounded original-authority structural I/O subset proves deterministic accepted relationships, direct/total roles, current node observations, real lag/buffer/substitution/common-cause behavior, allocation/employment exposure, derivation, and honest coverage | Required before Gate B can pass |
+
+BEA Supply/Use/Input-Output structural evidence is Gate-B-required design scope,
+but no retrieval or ingestion is authorized. BEA Real GDP/NIPA remains separate.
+O-005 is OPEN; O-006 is ACCEPTED/RESOLVED only for the initial configurable
+Phase-4A proof profile; O-007 remains deferred.
+
 Current authorization is **Phase 4 — State / Dependency / Allocation contract
 and design drafting only**. Phase 3 is CLOSED with Gate A and Human Data QA
 Round 2 PASS, but factual public activation was not performed. Taylor must review
-and promote the five DRAFT contracts before implementation. New ingestion,
+and promote the five DRAFT 0.1.1 contracts before implementation. New ingestion,
 dependencies, calculated Phase-4 output, major UI work, forecasting, push, merge,
 and deployment remain unauthorized.

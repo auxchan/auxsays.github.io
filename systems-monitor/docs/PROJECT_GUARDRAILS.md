@@ -29,9 +29,24 @@ The five review artifacts are `contracts/STATE_MODEL_CONTRACT.md`,
 `contracts/DEPENDENCY_RELATIONSHIP_CONTRACT.md`,
 `contracts/ALLOCATION_PROPAGATION_CONTRACT.md`,
 `contracts/DERIVATION_TRANSPARENCY_CONTRACT.md`, and
-`contracts/PHASE4_TESTING_CONTRACT.md`. All are DRAFT 0.1.0. Their proposed
+`contracts/PHASE4_TESTING_CONTRACT.md`. All are DRAFT 0.1.1. Their proposed
 state vocabulary, labor mappings, relationship semantics, run limits, source
 expansion, and Gate-B plan are review candidates—not accepted production facts.
+
+Phase 4 has two evidence stages. Phase 4A uses the six accepted labor
+observations to prove engine mechanics under O-006's initial configurable depth-3
+and eight-round limits; it cannot pass Gate B. Phase 4B must prove one bounded
+original-authority structural I/O subset, deterministic accepted relationships,
+direct/total role safety, real lag/buffer/substitution/common-cause behavior,
+current employment exposure, complete derivation, and honest structural coverage.
+This is a design requirement only: no BEA/new-source retrieval or ingestion is
+authorized, and BEA Real GDP/NIPA is not structural-I/O authorization.
+
+Production must be repository-owned and self-sustaining. Taylor/governance may
+approve authoritative source/transformation/crosswalk/generation/acceptance
+rules; deterministic code may later materialize qualifying accepted structural
+edges without manual per-edge approval. Ambiguous/inferred/LLM candidates remain
+non-production, and no external AI subscription may be a live dependency.
 
 **THIS AUTHORITY ENDS BEFORE PHASE-4 IMPLEMENTATION.** Do not write engine code, create relationship datasets, ingest BEA or any new source, calculate state/pressure/allocation outputs, redesign the UI, implement master/Trace views, forecast, activate factual data publicly, install dependencies, choose permanent cloud/paid infrastructure, modify deployment, push, merge, or deploy. Master-system and derivation/explanation UI debt remain deferred design inputs, not implementation authority.
 

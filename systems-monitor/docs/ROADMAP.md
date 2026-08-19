@@ -71,18 +71,20 @@ Phase 4 — State / Dependency / Allocation contract and implementation-design d
 
 | ID | Name | Required authority | Blocks what | Status | Artifact / path | Review result |
 |---|---|---|---|---|---|---|
-| P4-001 | State Model contract | Taylor promotion | State implementation | DRAFT 0.1.0 | `contracts/STATE_MODEL_CONTRACT.md` | External review required |
-| P4-002 | Dependency Relationship contract | Taylor promotion | Relationship graph implementation | DRAFT 0.1.0 | `contracts/DEPENDENCY_RELATIONSHIP_CONTRACT.md` | External review required |
-| P4-003 | Allocation/Propagation contract | Taylor promotion | Propagation/allocation implementation | DRAFT 0.1.0 | `contracts/ALLOCATION_PROPAGATION_CONTRACT.md` | External review required |
-| P4-004 | Derivation Transparency contract | Taylor promotion | CALC/public derivation implementation | DRAFT 0.1.0 | `contracts/DERIVATION_TRANSPARENCY_CONTRACT.md` | External review required |
-| P4-005 | Phase-4 Testing contract | Taylor promotion | Gate-B implementation/evidence | DRAFT 0.1.0 | `contracts/PHASE4_TESTING_CONTRACT.md` | External review required |
-| P4-006 | Integrated implementation design | Five promoted contracts plus scoped authorization | Phase-4 engineering | DRAFT 0.1.0 | `PHASE4_STATE_DEPENDENCY_ALLOCATION_DESIGN.md` | External review required; no implementation authority |
-| P4-007 | Current/as-of state semantics | State Model promotion; O-006 | First proof slice | Designed only | Design §§4–5, 12 | Six labor mappings are candidates only |
-| P4-008 | Relationship/criticality model | Dependency promotion; O-006 | Graph proof | Designed only | Design §6 | BEA is future candidate; no ingestion |
-| P4-009 | Bounded propagation/common cause | Allocation/Propagation promotion; O-006 | Run proof | Designed only | Design §§7–8 | Proposed limits/cycle strategy require approval |
+| P4-001 | State Model contract | Taylor promotion | State implementation | DRAFT 0.1.1 | `contracts/STATE_MODEL_CONTRACT.md` | Corrected external review required |
+| P4-002 | Dependency Relationship contract | Taylor promotion | Relationship graph implementation | DRAFT 0.1.1 | `contracts/DEPENDENCY_RELATIONSHIP_CONTRACT.md` | Corrected external review required |
+| P4-003 | Allocation/Propagation contract | Taylor promotion | Propagation/allocation implementation | DRAFT 0.1.1 | `contracts/ALLOCATION_PROPAGATION_CONTRACT.md` | Corrected external review required |
+| P4-004 | Derivation Transparency contract | Taylor promotion | CALC/public derivation implementation | DRAFT 0.1.1 | `contracts/DERIVATION_TRANSPARENCY_CONTRACT.md` | Corrected external review required |
+| P4-005 | Phase-4 Testing contract | Taylor promotion | Gate-B implementation/evidence | DRAFT 0.1.1 | `contracts/PHASE4_TESTING_CONTRACT.md` | Corrected external review required |
+| P4-006 | Integrated implementation design | Five promoted contracts plus scoped authorization | Phase-4 engineering | DRAFT 0.1.1 | `PHASE4_STATE_DEPENDENCY_ALLOCATION_DESIGN.md` | 4A/4B correction complete; no implementation authority |
+| P4-007 | Phase-4A current/as-of labor engine proof | State Model promotion; O-006 accepted profile; scoped authorization | Engine proof, not Gate B | Designed only | Design §§4–5, 12 | Six labor inputs, depth 3, eight rounds; configurable/versioned; cannot pass Gate B |
+| P4-008 | Phase-4B authoritative structural relationship proof | Five contract promotions; bounded source/slice approval | Gate B | Required design only | Design §§6, 13–15 | Original-authority BEA structural subset required; no ingestion |
+| P4-009 | Bounded propagation/common-cause behavior | Allocation/Propagation promotion; Phase-4B evidence | Gate B | Designed only | Design §§7–8, 13 | Real accepted lag/buffer/substitution/common-cause proof required |
 | P4-010 | Allocation/employment boundary | Allocation/Propagation promotion; O-006 | Allocation proof | Designed only | Design §9 | Current/as-of CALC only; no forecast |
 | P4-011 | Derivation/master-view read model | Derivation promotion; O-006 | Explainable public candidate | Designed only | Design §§10–11 | UI overhaul deferred |
-| P4-012 | Gate-B evidence matrix | Testing promotion; authorized implementation | Gate B | Designed only — Gate B OPEN | Design §14; Phase-4 Testing contract | No self-pass; human/Taylor review required |
+| P4-012 | Gate-B evidence matrix | Testing promotion; authorized Phase-4A and 4B implementation | Gate B | Designed only — Gate B OPEN | Design §15; Phase-4 Testing contract | Authoritative backbone + 32 criteria + Human QA/Taylor approval required |
+| P4-013 | Direct/total requirements role and double-count proof | Dependency/Testing promotion; Phase-4B source approval | Gate B | Required design only | Design §6.3; contracts DR-027–029 | Total requirements cannot recursively duplicate direct topology |
+| P4-014 | Structural coverage/read-model honesty | State/Derivation/Testing promotion | Gate B/public-read candidate | Required design only | Design §11 | Sparse graph cannot imply economy-wide coverage |
 
 ## Phase progression
 
@@ -91,7 +93,7 @@ Phase 4 — State / Dependency / Allocation contract and implementation-design d
 | 1 Foundation | Current Master/task | Binding governance and boundaries | PASS — Taylor-approved after external review |
 | 2 UI Shell | Foundation and UI/Motion contracts BINDING; O-001C/O-001D approved | Isolated three-view shell using contract-valid, unmistakable fixtures | PASS for MVP — technical PASS and Taylor Human UI QA PASS; polish deferred |
 | 3 Data Integrity | Data/Source/Ontology/Testing contracts BINDING | Six-indicator BLS/DOL implementation with provenance, dual replay, health, revision proof, and validated factual candidate; no public activation | PASS — Gate A and Human Data QA Round 2 |
-| 4 Closed Vertical Slice | Five Phase-4 contracts promoted by Taylor plus scoped implementation authorization | Current/as-of state-to-allocation/employment-consequence proof without forecast semantics | Gate B — OPEN / not attempted |
+| 4 Closed Vertical Slice | Five Phase-4 contracts promoted by Taylor plus separately scoped Phase-4A and Phase-4B implementation authority | Phase-4A labor engine mechanics plus Phase-4B original-authority structural I/O, real behavioral propagation, allocation/current employment exposure, derivation, and coverage proof | Gate B — OPEN / Phase 4A alone insufficient |
 | 5 Forecasting/Accountability | Forecast/Scenario/Calibration contracts approved | Baselines, forecasts, uncertainty, replay, attribution | Gate C |
 | 6 Human Capital/Events | Subsystem contracts approved | Three occupation proof cases and bounded event/experimental work | Gate D |
 | 7 Launch Hardening | Release contract and all applicable contracts approved | Evidence inspectors, scorecard, rights/security/accessibility/performance/operations | Gate E |
@@ -109,6 +111,12 @@ After this draft, the next permitted action is external review and one
 consolidated correction/promotion decision for O-005/O-006. O-007 remains an
 engineering choice deferred until contract promotion and scoped implementation
 authority.
+
+O-006 is now ACCEPTED/RESOLVED only for the Phase-4A six-labor-input,
+depth-3/eight-round configurable proof profile. The next review decision is
+O-005 promotion/correction of the five DRAFT 0.1.1 contracts. Any future Phase-4B
+implementation also requires a bounded original-source structural intake/slice
+authorization; Phase 4A cannot close Gate B.
 
 ## Phase-3 first-slice implementation checkpoint — 2026-08-18
 
