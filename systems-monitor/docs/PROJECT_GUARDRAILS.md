@@ -25,6 +25,14 @@ Phase 3 Data Integrity is CLOSED with `HUMAN_DATA_QA ROUND 2 = PASS` and `GATE A
 
 Authorized drafting may create DRAFT State Model, Dependency Relationship, Allocation/Propagation, Derivation Transparency, and Phase-4 Testing contracts plus one coherent implementation design. Taylor alone may promote them. The design must preserve current/as-of state versus forecasting, typed evidence, bounded deterministic propagation, common-cause control, substitution/buffers/capacity, reproducible derivation, and a public-safe master-view read model.
 
+The five review artifacts are `contracts/STATE_MODEL_CONTRACT.md`,
+`contracts/DEPENDENCY_RELATIONSHIP_CONTRACT.md`,
+`contracts/ALLOCATION_PROPAGATION_CONTRACT.md`,
+`contracts/DERIVATION_TRANSPARENCY_CONTRACT.md`, and
+`contracts/PHASE4_TESTING_CONTRACT.md`. All are DRAFT 0.1.0. Their proposed
+state vocabulary, labor mappings, relationship semantics, run limits, source
+expansion, and Gate-B plan are review candidates—not accepted production facts.
+
 **THIS AUTHORITY ENDS BEFORE PHASE-4 IMPLEMENTATION.** Do not write engine code, create relationship datasets, ingest BEA or any new source, calculate state/pressure/allocation outputs, redesign the UI, implement master/Trace views, forecast, activate factual data publicly, install dependencies, choose permanent cloud/paid infrastructure, modify deployment, push, merge, or deploy. Master-system and derivation/explanation UI debt remain deferred design inputs, not implementation authority.
 
 Current Phase-2 decision state:

@@ -189,10 +189,26 @@ These requirements were established during final Foundation review after V4.1. T
 |---|---|---|
 | 1 Foundation | §0.2–0.3, §34.1–35.5, §37.1, §38.1–38.2, §64.1–64.12, §66–68 | Current task authorization |
 | 2 UI Shell | §2, §38–59, §67 Phase 2, §69 | PASS for implementation authority — Foundation and UI/Motion contracts BINDING; O-001C/O-001D Taylor-approved; use a scoped implementation task |
-| 3 Data Integrity | §27–32, §34–37.1, §61, §67 Phase 3; four BINDING Phase-3 contracts | First-slice implementation authorized only for BLS CES/CPS/JOLTS + DOL claims and six accepted indicators; Gate A/activation approval still required |
-| 4 State/Dependency/Allocation | §6–14, §20–20.1, §67 Phase 4 | State/Dependency/Hidden Dependency/Allocation contracts approved |
+| 3 Data Integrity | §27–32, §34–37.1, §61, §67 Phase 3; four BINDING Phase-3 contracts | CLOSED — Gate A and Human Data QA Round 2 PASS; factual public activation remains separate and unauthorized |
+| 4 State/Dependency/Allocation | §6–14, §20–20.1, §67 Phase 4 | Drafting only: five Phase-4 contracts and design require Taylor review/promotion before implementation |
 | 5 Forecasting | §15–21, §55.1–55.2, §67 Phase 5 | Forecast/Scenario/Calibration contracts approved and prior gates passed |
 | 6 Human Capital/Events | §22–26.3, §33–33.1, §67 Phase 6 | Subsystem contracts approved |
 | 7 Launch Hardening | §52.1–64.1, §67 Phase 7, §70 | Applicable gates and release contract passed |
 
-Current authorization is **Phase 3 — Data Integrity implementation**, limited to BLS CES/CPS/JOLTS and DOL Weekly Claims for payrolls, U-3 unemployment, participation, initial claims, job openings, and hires. FRED/ALFRED and CPI/GDP ingestion are unauthorized. Current official endpoint/rights/limits discovery, bounded retrieval, local analytical storage evaluation, normalization, dual replay, health, DOL revision proof, idempotency, factual `OBS`/approved `CALC` candidate generation, and deterministic tests are allowed. Factual public activation, Phase 4+, permanent cloud, paid APIs, push, merge, and deployment remain unauthorized.
+## Phase-4 DRAFT routing
+
+| Review question | DRAFT authority / design |
+|---|---|
+| Current/as-of State, mixed-frequency evidence, reference and replay | `contracts/STATE_MODEL_CONTRACT.md` |
+| Relationship identity, evidence, lifecycle, criticality, hidden/common cause | `contracts/DEPENDENCY_RELATIONSHIP_CONTRACT.md` |
+| Bounded propagation, cycles, materiality, substitution, allocation | `contracts/ALLOCATION_PROPAGATION_CONTRACT.md` |
+| OBS/CALC derivation, reproduction, bounded explanation/public boundary | `contracts/DERIVATION_TRANSPARENCY_CONTRACT.md` |
+| Gate-B semantic evidence and human review | `contracts/PHASE4_TESTING_CONTRACT.md` |
+| Integrated architecture, proof slice, source expansion, risks | `PHASE4_STATE_DEPENDENCY_ALLOCATION_DESIGN.md` |
+
+Current authorization is **Phase 4 — State / Dependency / Allocation contract
+and design drafting only**. Phase 3 is CLOSED with Gate A and Human Data QA
+Round 2 PASS, but factual public activation was not performed. Taylor must review
+and promote the five DRAFT contracts before implementation. New ingestion,
+dependencies, calculated Phase-4 output, major UI work, forecasting, push, merge,
+and deployment remain unauthorized.

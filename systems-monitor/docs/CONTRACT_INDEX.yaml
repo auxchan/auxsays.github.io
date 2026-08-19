@@ -6,9 +6,13 @@ parent_master:
   source_sha256: "08895B471909DC600FC6AA5F373E2D6E16F457580A9BA141363ED210676397EA"
 approval_authority: Taylor
 phase_1_status: PASS
-current_authorized_work: Phase 3 Data Integrity implementation limited to six labor indicators using BLS CES/CPS/JOLTS and DOL Weekly Claims; FRED/ALFRED, CPI/GDP ingestion, factual public activation, Phase 4, push, merge, and deployment unauthorized
+phase_3_status: CLOSED
+phase_3_gate: PASS
+phase_3_human_data_qa: PASS
+current_authorized_work: Phase 4 State / Dependency / Allocation contract and design drafting only; implementation, new ingestion, dependencies, factual public activation, UI overhaul, forecasting, push, merge, and deployment unauthorized
 approved_foundation_decisions: [D-001, D-002, D-003, D-004, D-005, D-006, D-007, D-008, D-009, D-010]
 phase_3_contract_status: PASS
+phase_4_contract_status: DRAFT_REVIEW_REQUIRED
 approved_phase_3_decisions: [O-003]
 rejected_phase_3_decisions: [O-004]
 post_v4_1_requirements:
@@ -156,7 +160,7 @@ contracts:
     governing_master_sections: ["§27–31", "§34.1–36", "§37", "§61", "§64.1–64.12", "§65", "§67 Phase 3", "§68"]
     depends_on: [architecture, infrastructure, security_ingestion, data]
     blocked_by: []
-    blocks: ["FRED/ALFRED use", "CPI/GDP first-slice ingestion", "factual activation until Gate A"]
+    blocks: ["FRED/ALFRED use", "CPI/GDP first-slice ingestion", "factual activation until separate approval"]
   - id: ontology_crosswalk
     path: contracts/ONTOLOGY_CROSSWALK_CONTRACT.md
     version: "1.0.0"
@@ -168,7 +172,7 @@ contracts:
     governing_master_sections: ["§31.1–31.6", "§32", "§37", "§61", "§64.1–64.12", "§65", "§67 Phase 3", "§68"]
     depends_on: [data, source]
     blocked_by: []
-    blocks: ["broad taxonomy/crosswalk implementation", "Gate A until evidence"]
+    blocks: ["broad taxonomy/crosswalk implementation", "Phase 4+ crosswalk expansion until scoped approval"]
   - id: testing
     path: contracts/TESTING_CONTRACT.md
     version: "1.0.0"
@@ -180,4 +184,64 @@ contracts:
     governing_master_sections: ["§29–32", "§34.1–35.5", "§38.2", "§61–64.1", "§64.2–64.12", "§65", "§67 Phase 3", "§68"]
     depends_on: [data, source, ontology_crosswalk, security_ingestion, release_acceptance]
     blocked_by: []
-    blocks: ["Gate A PASS until all required evidence", "factual public activation"]
+    blocks: ["Phase-3 regression obligations", "factual public activation requires separate approval"]
+  - id: state_model
+    path: contracts/STATE_MODEL_CONTRACT.md
+    version: "0.1.0"
+    status: DRAFT
+    approved_by: null
+    approved_at: null
+    content_hash: "PENDING — DRAFT"
+    parent_master_version: "V4.1"
+    governing_master_sections: ["§3", "§6–9", "§20–20.1", "§31.3–31.5", "§37.1", "§51", "§64.1", "§67 Phase 4", "§68"]
+    depends_on: [product, architecture, data, source, ontology_crosswalk, public_data_interface]
+    blocked_by: ["Taylor contract review and promotion"]
+    blocks: ["Phase 4 state implementation", "Gate B"]
+  - id: dependency_relationship
+    path: contracts/DEPENDENCY_RELATIONSHIP_CONTRACT.md
+    version: "0.1.0"
+    status: DRAFT
+    approved_by: null
+    approved_at: null
+    content_hash: "PENDING — DRAFT"
+    parent_master_version: "V4.1"
+    governing_master_sections: ["§6–6.1", "§8", "§10–12", "§20–20.1", "§31.3–31.5", "§34.1–34.4", "§51", "§64.1", "§67 Phase 4", "§68"]
+    depends_on: [architecture, data, source, ontology_crosswalk, security_ingestion, state_model]
+    blocked_by: ["Taylor contract review and promotion"]
+    blocks: ["Phase 4 relationship implementation", "Gate B"]
+  - id: derivation_transparency
+    path: contracts/DERIVATION_TRANSPARENCY_CONTRACT.md
+    version: "0.1.0"
+    status: DRAFT
+    approved_by: null
+    approved_at: null
+    content_hash: "PENDING — DRAFT"
+    parent_master_version: "V4.1"
+    governing_master_sections: ["§3", "§8", "§20–20.1", "§31.3–31.5", "§37.1", "§51", "§64.1", "§67 Phase 4", "§68"]
+    depends_on: [public_data_interface, data, source, ontology_crosswalk, state_model, dependency_relationship]
+    blocked_by: ["Taylor contract review and promotion"]
+    blocks: ["Phase 4 calculated/public derivation implementation", "Gate B"]
+  - id: allocation_propagation
+    path: contracts/ALLOCATION_PROPAGATION_CONTRACT.md
+    version: "0.1.0"
+    status: DRAFT
+    approved_by: null
+    approved_at: null
+    content_hash: "PENDING — DRAFT"
+    parent_master_version: "V4.1"
+    governing_master_sections: ["§7–14", "§20–20.1", "§31.3–31.5", "§34.1–34.4", "§51", "§64.1", "§67 Phase 4", "§68"]
+    depends_on: [architecture, data, state_model, dependency_relationship, derivation_transparency]
+    blocked_by: ["Taylor contract review and promotion"]
+    blocks: ["Phase 4 propagation/allocation implementation", "Gate B"]
+  - id: phase4_testing
+    path: contracts/PHASE4_TESTING_CONTRACT.md
+    version: "0.1.0"
+    status: DRAFT
+    approved_by: null
+    approved_at: null
+    content_hash: "PENDING — DRAFT"
+    parent_master_version: "V4.1"
+    governing_master_sections: ["§9–14", "§20–20.1", "§31.3–31.5", "§51", "§64.1", "§67 Phase 4", "§68"]
+    depends_on: [testing, release_acceptance, state_model, dependency_relationship, allocation_propagation, derivation_transparency]
+    blocked_by: ["Taylor contract review and promotion", "authorized Phase 4 implementation and evidence"]
+    blocks: ["Gate B PASS"]

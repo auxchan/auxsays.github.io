@@ -67,6 +67,23 @@ Phase 4 — State / Dependency / Allocation contract and implementation-design d
 | P3-013 | Correct factual publication boundary | Public Data Interface / Architecture contracts | Taylor Gate-A review | Complete — Gate A PASS | `data/review/GATE_A_EVIDENCE.md` | Internal model, pre-activation candidate, and active PDI are distinct; `childRefs[]` transport enforced |
 | P3-014 | Human Data QA evidence surface | Taylor Gate-A human review | Phase-3 closure | PASS | `data/review/HUMAN_DATA_QA.md` | Taylor approved exact series/evidence, factual Outlook isolation, and DOL replay proof |
 
+## Phase-4 design deliverables
+
+| ID | Name | Required authority | Blocks what | Status | Artifact / path | Review result |
+|---|---|---|---|---|---|---|
+| P4-001 | State Model contract | Taylor promotion | State implementation | DRAFT 0.1.0 | `contracts/STATE_MODEL_CONTRACT.md` | External review required |
+| P4-002 | Dependency Relationship contract | Taylor promotion | Relationship graph implementation | DRAFT 0.1.0 | `contracts/DEPENDENCY_RELATIONSHIP_CONTRACT.md` | External review required |
+| P4-003 | Allocation/Propagation contract | Taylor promotion | Propagation/allocation implementation | DRAFT 0.1.0 | `contracts/ALLOCATION_PROPAGATION_CONTRACT.md` | External review required |
+| P4-004 | Derivation Transparency contract | Taylor promotion | CALC/public derivation implementation | DRAFT 0.1.0 | `contracts/DERIVATION_TRANSPARENCY_CONTRACT.md` | External review required |
+| P4-005 | Phase-4 Testing contract | Taylor promotion | Gate-B implementation/evidence | DRAFT 0.1.0 | `contracts/PHASE4_TESTING_CONTRACT.md` | External review required |
+| P4-006 | Integrated implementation design | Five promoted contracts plus scoped authorization | Phase-4 engineering | DRAFT 0.1.0 | `PHASE4_STATE_DEPENDENCY_ALLOCATION_DESIGN.md` | External review required; no implementation authority |
+| P4-007 | Current/as-of state semantics | State Model promotion; O-006 | First proof slice | Designed only | Design §§4–5, 12 | Six labor mappings are candidates only |
+| P4-008 | Relationship/criticality model | Dependency promotion; O-006 | Graph proof | Designed only | Design §6 | BEA is future candidate; no ingestion |
+| P4-009 | Bounded propagation/common cause | Allocation/Propagation promotion; O-006 | Run proof | Designed only | Design §§7–8 | Proposed limits/cycle strategy require approval |
+| P4-010 | Allocation/employment boundary | Allocation/Propagation promotion; O-006 | Allocation proof | Designed only | Design §9 | Current/as-of CALC only; no forecast |
+| P4-011 | Derivation/master-view read model | Derivation promotion; O-006 | Explainable public candidate | Designed only | Design §§10–11 | UI overhaul deferred |
+| P4-012 | Gate-B evidence matrix | Testing promotion; authorized implementation | Gate B | Designed only — Gate B OPEN | Design §14; Phase-4 Testing contract | No self-pass; human/Taylor review required |
+
 ## Phase progression
 
 | Phase | Contract prerequisite | Implementation outcome | Gate |
@@ -74,7 +91,7 @@ Phase 4 — State / Dependency / Allocation contract and implementation-design d
 | 1 Foundation | Current Master/task | Binding governance and boundaries | PASS — Taylor-approved after external review |
 | 2 UI Shell | Foundation and UI/Motion contracts BINDING; O-001C/O-001D approved | Isolated three-view shell using contract-valid, unmistakable fixtures | PASS for MVP — technical PASS and Taylor Human UI QA PASS; polish deferred |
 | 3 Data Integrity | Data/Source/Ontology/Testing contracts BINDING | Six-indicator BLS/DOL implementation with provenance, dual replay, health, revision proof, and validated factual candidate; no public activation | PASS — Gate A and Human Data QA Round 2 |
-| 4 Closed Vertical Slice | State/Dependency/Derivation/Allocation/Testing contracts promoted by Taylor | Current/as-of state-to-allocation/employment-consequence proof without forecast semantics | Gate B — not yet attempted |
+| 4 Closed Vertical Slice | Five Phase-4 contracts promoted by Taylor plus scoped implementation authorization | Current/as-of state-to-allocation/employment-consequence proof without forecast semantics | Gate B — OPEN / not attempted |
 | 5 Forecasting/Accountability | Forecast/Scenario/Calibration contracts approved | Baselines, forecasts, uncertainty, replay, attribution | Gate C |
 | 6 Human Capital/Events | Subsystem contracts approved | Three occupation proof cases and bounded event/experimental work | Gate D |
 | 7 Launch Hardening | Release contract and all applicable contracts approved | Evidence inspectors, scorecard, rights/security/accessibility/performance/operations | Gate E |
@@ -87,6 +104,11 @@ ingest any source, calculate a Phase-4 output, activate factual data publicly,
 redesign the UI, forecast, install dependencies, choose cloud/paid services,
 push, merge, or deploy.** Taylor must review and promote the DRAFT contracts
 before implementation.
+
+After this draft, the next permitted action is external review and one
+consolidated correction/promotion decision for O-005/O-006. O-007 remains an
+engineering choice deferred until contract promotion and scoped implementation
+authority.
 
 ## Phase-3 first-slice implementation checkpoint — 2026-08-18
 

@@ -104,3 +104,17 @@ Reinspect only the affected facts when `AGENTS.md`, `.github/workflows/pages.yml
 - Deferred product debt includes the master/interconnectivity experience and
   clear derivation transparency for `OBS`/`CALC`/`FCST`/`SCEN`; these are design
   inputs, not authorization to redesign the UI.
+
+## PHASE-4 CONTRACT/DESIGN DRAFT — 2026-08-18
+
+- Branch `codex/systems-monitor-state-dependency-design` was created directly
+  from Phase-3 closure commit `bab19662046e70c1c1b963e40aa48bae55d233ea`.
+- Five Phase-4 contracts exist only as DRAFT 0.1.0 review artifacts: State Model,
+  Dependency Relationship, Allocation/Propagation, Derivation Transparency, and
+  Phase-4 Testing. `PHASE4_STATE_DEPENDENCY_ALLOCATION_DESIGN.md` integrates
+  their current/as-of boundary, proof slice, source-expansion map, Gate-B plan,
+  risks, and $0/no-new-dependency posture.
+- No Phase-4 runtime source, relationship dataset, state/propagation/allocation
+  output, new ingestion, dependency, UI/application, workflow/deployment, or
+  Patch Feed file was created or changed. Existing BINDING contracts and the
+  authoritative Master Spec remain unchanged.

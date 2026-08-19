@@ -158,3 +158,35 @@ Accepted decisions are authoritative below approved/BINDING contracts and above 
 - Affected contracts: Data, Source, Testing
 - Replacement proof: Gate A uses an original Tier-A DOL Weekly Claims advance release and the subsequent original release containing the revised value, with independently proven publication times and immutable provenance.
 - Reconsideration: Only explicit written permission or materially changed terms, a fresh rights review, and a new Taylor decision may reopen project use. No substitute aggregator is authorized by this rejection.
+
+## Phase-4 open decisions
+
+### O-005 — Promote the Phase-4 contract package
+
+- Classification: TAYLOR APPROVAL DECISION
+- Status: OPEN
+- Decision required: Approve, correct, or reject DRAFT 0.1.0 State Model,
+  Dependency Relationship, Allocation/Propagation, Derivation Transparency, and
+  Phase-4 Testing contracts before any implementation.
+- Boundary: Draft presence and index validity confer no implementation authority.
+
+### O-006 — Approve the first Phase-4 proof slice and run profile
+
+- Classification: TAYLOR APPROVAL DECISION
+- Status: OPEN
+- Decision required: Approve/correct the six-observation labor-state proof,
+  reference/vocabulary rules, relationship candidates and causal restraint,
+  propagation bounds/cycle/common-cause behavior, and Gate-B evidence plan.
+- Boundary: No candidate relationship is ACCEPTED, no state or allocation has
+  been calculated, and no future employment claim is authorized.
+
+### O-007 — Select Phase-4 storage and graph structures
+
+- Classification: ENGINEERING IMPLEMENTATION CHOICE
+- Status: OPEN — DEFERRED UNTIL CONTRACT PROMOTION AND IMPLEMENTATION AUTHORITY
+- Choice later: Select exact standard data structures, SQLite/file schemas,
+  canonical serialization, indexes, and measured performance budgets. Propose a
+  library only if approved requirements and evidence show existing tooling is
+  insufficient, followed by license/security/cost review.
+- Boundary: No dependency or permanent graph/cloud infrastructure is selected by
+  the DRAFT design.

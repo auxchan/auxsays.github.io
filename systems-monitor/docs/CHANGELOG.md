@@ -1,5 +1,21 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-18 — Phase-4 State / Dependency / Allocation contract and design draft
+
+- Created five review-only DRAFT 0.1.0 contracts for State Model, Dependency
+  Relationship, Allocation/Propagation, Derivation Transparency, and Phase-4
+  Testing; none is promoted or implementation-authoritative.
+- Added one coherent design for current/as-of state, typed evidence, governed
+  relationship lifecycle, criticality/TTS/TTR, bounded deterministic propagation,
+  cycles/common cause, substitution/buffers/capacity, current allocation,
+  reproducible OBS/CALC derivation, a public-safe master-view read-model boundary,
+  and a six-observation labor proof candidate.
+- Recorded O-005 through O-007 and R-028 through R-034, updated routing and
+  deliverables, and preserved the $0/no-new-dependency posture.
+- `MASTER_SPEC.md` and every existing BINDING contract remain unchanged. No
+  Phase-4 implementation, ingestion, calculation, UI overhaul, factual public
+  activation, dependency install, push, merge, or deployment occurred.
+
 ## 2026-08-18 — Phase-3 Data Integrity closure
 
 - Recorded Taylor's explicit `HUMAN_DATA_QA ROUND 2 = PASS`, `GATE A = PASS`,
