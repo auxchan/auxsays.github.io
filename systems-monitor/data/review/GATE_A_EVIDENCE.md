@@ -1,6 +1,6 @@
-# Gate-A evidence — corrected candidate
+# Gate-A evidence — PASS
 
-Status: `GATE A OPEN`; `HUMAN_DATA_QA ROUND 2 = CORRECTIONS APPLIED — TAYLOR RE-REVIEW REQUIRED`; no public activation.
+Status: `GATE A = PASS`; `HUMAN_DATA_QA ROUND 2 = PASS`; `PHASE 3 DATA INTEGRITY = CLOSED`; no public activation.
 
 ## Factual slice and public boundary
 
@@ -29,7 +29,7 @@ Status: `GATE A OPEN`; `HUMAN_DATA_QA ROUND 2 = CORRECTIONS APPLIED — TAYLOR R
   original-authority evidence link per observation, retains the generic BLS API
   only as machine-retrieval provenance, labels methodology separately, removes
   the fixture-only Outlook warning, and presents the DOL replay proof through
-  progressive disclosure. Taylor re-review remains required; no PASS is claimed.
+  progressive disclosure. Taylor approved the corrected evidence surface.
 
 ## Source, time, replay, and rights evidence
 
@@ -58,7 +58,8 @@ Status: `GATE A OPEN`; `HUMAN_DATA_QA ROUND 2 = CORRECTIONS APPLIED — TAYLOR R
   Current ignored local evidence footprint remains bounded; recurring
   data/infrastructure cost remains $0.
 
-Remaining evidence: Taylor must complete Human Data QA Round 2 in
-`HUMAN_DATA_QA.md`; hosted/runtime
-public activation remains unauthorized and was not performed. Gate A and Phase
-3 remain open; Phase 4 is locked.
+Taylor's 2026-08-18 verdict closes Gate A and Phase 3. This proves the bounded
+data-integrity capability; it does not claim forecasting, dependency or
+allocation modeling, employment prediction, or Phase-4 implementation.
+Hosted/runtime factual activation remains separately unauthorized and was not
+performed. Phase 4 may proceed to contract/design drafting only.

@@ -1,5 +1,20 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-18 — Phase-3 Data Integrity closure
+
+- Recorded Taylor's explicit `HUMAN_DATA_QA ROUND 2 = PASS`, `GATE A = PASS`,
+  and `PHASE 3 DATA INTEGRITY = CLOSED` verdict after the corrected evidence
+  links and DOL revision/replay proof passed external and human review.
+- Preserved the distinction between Gate-A approval and factual public
+  activation; no factual snapshot was activated and no forecasting,
+  dependency/allocation modeling, or employment prediction is claimed.
+- Retained deferred master-system/interconnectivity debt and added
+  derivation/explanation-transparency debt for visible `OBS`/`CALC`/`FCST`/`SCEN`
+  meaning and bounded reproducible traces.
+- Advanced authority only to Phase-4 contract/design drafting. Phase-4
+  implementation, UI overhaul, new ingestion, push, merge, and deployment
+  remain unauthorized.
+
 ## 2026-08-18 — Phase-3 human evidence-link micro-correction
 
 - Added exact official BLS series-report URLs as distinct human evidence while

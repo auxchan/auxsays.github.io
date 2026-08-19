@@ -4,7 +4,7 @@ Status reflects both artifacts and authority. Taylor approved all seven Foundati
 
 ## Current phase
 
-Phase 3 — Data Integrity implementation, limited to the Taylor-approved six-indicator first slice using BLS CES/CPS/JOLTS and DOL Weekly Claims. All four Phase-3 contracts are BINDING. FRED/ALFRED and CPI/GDP ingestion are not authorized; factual public activation still requires Gate-A/activation approval. Phase-2 deferred polish remains tracked in R-018.
+Phase 4 — State / Dependency / Allocation contract and implementation-design drafting only. Phase 3 Data Integrity is CLOSED with Human Data QA Round 2 PASS and Gate A PASS. Factual public activation, Phase-4 implementation, new-source ingestion, forecasting, deployment, and the deferred UI overhaul remain unauthorized. Deferred product debt is tracked in R-018, R-026, and R-027.
 
 ## Phase-1 deliverables
 
@@ -64,8 +64,8 @@ Phase 3 — Data Integrity implementation, limited to the Taylor-approved six-in
 | P3-010 | Atomic/idempotent publication design | Data/Infrastructure contracts | Factual activation | Approved design | `PHASE3_DATA_INTEGRITY_DESIGN.md` §7 | Candidate failure vs current-rights withdrawal; atomic pointer |
 | P3-011 | Exact vertical slice | All four Phase-3 contracts; O-003/O-004 | Gate A | Approved design | `PHASE3_DATA_INTEGRITY_DESIGN.md` §8 | Six labor indicators; Tier-A DOL revision proof |
 | P3-012 | Test plan | Testing contract | Gate A evidence | Approved design | `PHASE3_DATA_INTEGRITY_DESIGN.md` §9 | Deterministic matrix; no dependencies installed |
-| P3-013 | Correct factual publication boundary | Public Data Interface / Architecture contracts | Taylor Gate-A review | Implemented; review pending | `data/review/GATE_A_EVIDENCE.md` | Internal model, pre-activation candidate, and active PDI are distinct; `childRefs[]` transport enforced |
-| P3-014 | Human Data QA evidence surface | Taylor Gate-A human review | Phase-3 closure | Round-2 corrections applied; Taylor re-review required | `data/review/HUMAN_DATA_QA.md` | Series IDs, original evidence, factual Outlook isolation, and DOL replay proof corrected without claiming PASS |
+| P3-013 | Correct factual publication boundary | Public Data Interface / Architecture contracts | Taylor Gate-A review | Complete — Gate A PASS | `data/review/GATE_A_EVIDENCE.md` | Internal model, pre-activation candidate, and active PDI are distinct; `childRefs[]` transport enforced |
+| P3-014 | Human Data QA evidence surface | Taylor Gate-A human review | Phase-3 closure | PASS | `data/review/HUMAN_DATA_QA.md` | Taylor approved exact series/evidence, factual Outlook isolation, and DOL replay proof |
 
 ## Phase progression
 
@@ -73,21 +73,27 @@ Phase 3 — Data Integrity implementation, limited to the Taylor-approved six-in
 |---|---|---|---|
 | 1 Foundation | Current Master/task | Binding governance and boundaries | PASS — Taylor-approved after external review |
 | 2 UI Shell | Foundation and UI/Motion contracts BINDING; O-001C/O-001D approved | Isolated three-view shell using contract-valid, unmistakable fixtures | PASS for MVP — technical PASS and Taylor Human UI QA PASS; polish deferred |
-| 3 Data Integrity | Data/Source/Ontology/Testing contracts BINDING | Six-indicator BLS/DOL implementation may provide registry, retrieval, bitemporal storage, health, DOL revision proof, and factual candidate; no public activation before later approval | Gate A |
-| 4 Closed Vertical Slice | State/Dependency/Hidden Dependency/Allocation contracts approved | Observation-to-industry-effect proof | Gate B |
+| 3 Data Integrity | Data/Source/Ontology/Testing contracts BINDING | Six-indicator BLS/DOL implementation with provenance, dual replay, health, revision proof, and validated factual candidate; no public activation | PASS — Gate A and Human Data QA Round 2 |
+| 4 Closed Vertical Slice | State/Dependency/Derivation/Allocation/Testing contracts promoted by Taylor | Current/as-of state-to-allocation/employment-consequence proof without forecast semantics | Gate B — not yet attempted |
 | 5 Forecasting/Accountability | Forecast/Scenario/Calibration contracts approved | Baselines, forecasts, uncertainty, replay, attribution | Gate C |
 | 6 Human Capital/Events | Subsystem contracts approved | Three occupation proof cases and bounded event/experimental work | Gate D |
 | 7 Launch Hardening | Release contract and all applicable contracts approved | Evidence inspectors, scorecard, rights/security/accessibility/performance/operations | Gate E |
 
 ## Next authorized work
 
-Implement only the approved Phase-3 six-indicator BLS CES/CPS/JOLTS and DOL Weekly Claims slice under the four BINDING contracts. Current endpoint/rights/limits discovery, bounded retrieval, local raw/Parquet/DuckDB-or-equivalent evaluation, normalization, dual replay, source health, DOL revision proof, idempotency, factual candidate, and deterministic tests are authorized. **Do not use FRED/ALFRED, ingest CPI/GDP, activate factual data publicly, begin forecasts/Phase 4, choose cloud, buy an API, push, merge, or deploy without later authorization.**
+Draft only the five Phase-4 contracts and one coherent State / Dependency /
+Allocation implementation design. **Do not implement engines or relationships,
+ingest any source, calculate a Phase-4 output, activate factual data publicly,
+redesign the UI, forecast, install dependencies, choose cloud/paid services,
+push, merge, or deploy.** Taylor must review and promote the DRAFT contracts
+before implementation.
 
 ## Phase-3 first-slice implementation checkpoint — 2026-08-18
 
 Implemented locally for technical review: four source registries; eight indicator entries with six enabled; operation-specific rights; bounded secure retrieval; immutable raw capture; normalized temporal versions; SQLite latest/public/known queries; factual DOL revision replay; cadence-aware health and four-hour evaluation semantics; atomic local candidate/withdrawal; deletion tombstones; idempotency/concurrency/telemetry tests; a separate factual candidate; and a local-only factual UI mode.
 
-Remaining Gate-A/Phase-3 closure work: Taylor Human Data QA Round 2 (`CORRECTIONS APPLIED — RE-REVIEW REQUIRED`) and the resulting Gate-A closure decision. Factual public activation and Phase 4 remain unauthorized.
+Taylor approved `HUMAN_DATA_QA ROUND 2 = PASS` and `GATE A = PASS`; Phase 3 is
+CLOSED. Factual public activation was not performed and remains unauthorized.
 
 The requested master-system overview and visible interconnectivity are deferred
 design inputs, not Phase-3 presentation work. Phase 4 contract/design drafting
@@ -95,3 +101,10 @@ must first define governed State, Dependency, and Allocation relationships;
 later UI work may then cover relationship navigation, propagation/cascade
 inspection, stronger hierarchy, and a comprehensive systems-level overview
 using real relationship evidence rather than decorative links.
+
+Future explanation behavior must also make every material claim's derivation
+class obvious: source-owned `OBS`, deterministic AUXSAYS `CALC`, future `FCST`,
+or conditional `SCEN`. Derived claims must eventually expose bounded inputs,
+algorithm/configuration versions, snapshot/cutoff, assumptions, typed evidence,
+uncertainty, and trace references. The Phase-4 package designs the enabling data
+boundary; it does not authorize the visual overhaul.

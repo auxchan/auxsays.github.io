@@ -94,4 +94,13 @@ Reinspect only the affected facts when `AGENTS.md`, `.github/workflows/pages.yml
 - Local activation tests revalidate the candidate, materialize a distinct immutable PDI 1.0.0 snapshot with the actual local activation time, validate it, and atomically update only a temporary local pointer. `data/review/local-active-pdi-test-snapshot.json` is review evidence, not an AUXSAYS.com activation. Public hierarchy uses `childRefs[]`; the frontend derives nested children only after validation.
 - Gate-A evidence records two superseded false claims: the original internal-shaped payload was mislabeled PDI-valid, and its replacement used generation time as `publishedAt` despite no activation. Both regression boundaries are now explicit; old candidate SHA `0D463A590921B5652F7D095DE52468937D4B74CB62DC7933C040D89CDF926B9B` is superseded.
 - Current DOL evidence distinguishes a current PDF-verified observation for week ending 2026-08-08 from a stale automated XML retrieval path ending 2026-07-18; no automated PDF parser is claimed.
-- `HUMAN_DATA_QA = PENDING`. Phase 3 is not closed and Phase 4 is not authorized. No cloud, paid API, permanent scheduler/service, push, merge, or deployment was introduced by this implementation.
+- Taylor approved `HUMAN_DATA_QA ROUND 2 = PASS` and `GATE A = PASS` on
+  2026-08-18. Phase 3 Data Integrity is CLOSED. The evidence proves the bounded
+  six-observation data-integrity slice; it does not activate factual data or
+  claim forecasting, dependency/allocation modeling, or employment prediction.
+- Phase 4 is authorized for contract/design drafting only. No Phase-4
+  implementation, new ingestion, cloud/paid service, factual activation, push,
+  merge, or deployment is authorized.
+- Deferred product debt includes the master/interconnectivity experience and
+  clear derivation transparency for `OBS`/`CALC`/`FCST`/`SCEN`; these are design
+  inputs, not authorization to redesign the UI.

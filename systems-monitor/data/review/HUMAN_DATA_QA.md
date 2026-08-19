@@ -1,10 +1,10 @@
 # Phase-3 factual-data human QA
 
-`HUMAN_DATA_QA ROUND 2 = CORRECTIONS APPLIED — TAYLOR RE-REVIEW REQUIRED`
+`HUMAN_DATA_QA ROUND 2 = PASS`
 
-This is a local review artifact. The factual candidate is not activated on
-AUXSAYS.com. Taylor should compare each row with the original authority linked
-below and confirm value, unit, period, timing, and revision state.
+This is a local review artifact. Taylor approved the corrected factual evidence
+surface on 2026-08-18. The factual candidate is not activated on AUXSAYS.com;
+Human Data QA approval and factual public activation remain separate decisions.
 
 ## Verdict history
 
@@ -12,13 +12,22 @@ below and confirm value, unit, period, timing, and revision state.
   evidence links were not reachable; factual Outlook retained a
   synthetic-fixture disclaimer; and the DOL revision proof was absent from the
   UI.
-- **Round 2 — corrections applied; Taylor re-review required.** Verified Data
+- **Round 2 — PASS.** Verified Data
   now exposes per-observation series IDs, separately labeled source/data and
   methodology links, and a progressive DOL replay proof. The human evidence
   links target each exact official BLS series page while the BLS API remains
   recorded as retrieval provenance. Factual Outlook no longer reuses
-  fixture-only warning content. This record does **not** claim Human Data QA
-  PASS.
+  fixture-only warning content. Taylor explicitly approved this evidence and
+  comprehension boundary for Gate A.
+
+## Taylor verdict
+
+- `HUMAN_DATA_QA ROUND 2: PASS`
+- `GATE A: PASS`
+- `PHASE 3 DATA INTEGRITY: CLOSED`
+- Phase 4 is authorized for contract/design drafting only. Phase-4
+  implementation, factual public activation, deployment, and the deferred major
+  UI/UX overhaul remain unauthorized.
 
 | Indicator | Value / unit | Period | Official source / series | Official release | AUXSAYS retrieved / accepted | Version / health |
 |---|---|---|---|---|---|---|
@@ -90,3 +99,12 @@ dependency navigation, cascade/propagation inspection, stronger hierarchy, and
 the comprehensive UI/UX overhaul remain deferred until governed State,
 Dependency, and Allocation relationship data exists. Decorative relationship
 lines must not be fabricated in advance of that machinery.
+
+The review also established deferred derivation/explanation-transparency debt.
+The MVP evidence surface does not yet make `OBS` (official source observation),
+`CALC` (deterministic AUXSAYS calculation), `FCST` (forecast), and `SCEN`
+(conditional scenario) sufficiently self-explanatory to a normal user. Future
+authorized work must expose inputs, derivation/model identity and version,
+source snapshot, cutoff, assumptions, evidence class, uncertainty, and bounded
+trace references for derived claims. This is a Phase-4 data/read-model design
+input, not a reason to reopen Phase 3 or authorize the UI overhaul.
