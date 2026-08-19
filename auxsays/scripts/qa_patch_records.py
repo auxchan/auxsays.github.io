@@ -47,6 +47,26 @@ BANNED_PUBLIC_TERMS = {
     "collector",
     "candidate rows",
 }
+# Per-term, per-field exemptions for the internal-language gate.
+#
+# Most banned terms are unambiguous AUXSAYS implementation vocabulary and are rejected in every
+# public field. "collector" is different: it is also an ordinary English word that vendors use in
+# their own release notes. GitHub's changelog entry "Enterprise managed settings in GitHub Copilot
+# for JetBrains" describes configuring OpenTelemetry "including the collector endpoint, protocol,
+# service name, resource attributes and headers", and that vendor prose lands verbatim in
+# `release_summary` (rss_feed sets record["summary"], which write_update_record copies to
+# release_summary). Flattening every public field into one blob before matching therefore failed
+# the whole ingestion run on a legitimate upstream sentence.
+#
+# The exemption is deliberately as narrow as the evidence: ONE term, ONE field, and only because
+# `release_summary` is the single public field proven to carry source-authored vendor prose on that
+# path. `official_summary` is NOT exempt -- rss_feed leaves it unset and write_update_record
+# substitutes AUXSAYS-authored fallback text there. Every other banned term still applies inside
+# `release_summary`, and "collector" is still rejected in every AUXSAYS-authored field, so genuine
+# implementation leakage in decision/consensus language remains a blocking defect.
+BANNED_TERM_FIELD_EXEMPTIONS: dict[str, frozenset[str]] = {
+    "collector": frozenset({"release_summary"}),
+}
 PUBLIC_TEXT_FIELDS = {
     "description",
     "update_consensus_summary",
@@ -154,6 +174,33 @@ def public_record_text(data: dict[str, Any]) -> str:
     return " ".join(flatten_text(data.get(field)) for field in sorted(PUBLIC_TEXT_FIELDS))
 
 
+def internal_term_findings(data: dict[str, Any], path: str) -> list[dict[str, Any]]:
+    """Banned internal terms in public fields, checked FIELD BY FIELD.
+
+    Field provenance matters twice over: it decides whether a per-term exemption applies (see
+    BANNED_TERM_FIELD_EXEMPTIONS), and it tells whoever reads the failure which field to look at.
+    The previous implementation flattened all PUBLIC_TEXT_FIELDS into one string before matching,
+    so it could do neither -- a vendor's ordinary use of "collector" failed the run, and the error
+    named no field.
+    """
+    findings: list[dict[str, Any]] = []
+    for field in sorted(PUBLIC_TEXT_FIELDS):
+        text = flatten_text(data.get(field)).lower()
+        if not text:
+            continue
+        for term in sorted(BANNED_PUBLIC_TERMS):
+            if term not in text:
+                continue
+            if field in BANNED_TERM_FIELD_EXEMPTIONS.get(term, frozenset()):
+                continue
+            findings.append({
+                "path": path,
+                "code": "public_internal_term",
+                "message": (f"Public-facing field '{field}' contains internal term '{term}'."),
+            })
+    return findings
+
+
 def load_counted_evidence_counts() -> dict[tuple[str, str], int]:
     # Delegates to the single authoritative predicate (lib.report_counts.counted_evidence_counts) so
     # this QA gate and the post-collection reconciliation count evidence IDENTICALLY and can never
@@ -203,10 +250,10 @@ def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]
     public_text = public_record_text(data)
     if ("Pilot" + " sample") in public_text or ("pilot" + " sample") in public_text:
         add(errors, path, "public_pilot_sample_wording", "Public-facing generated record data still contains obsolete pilot-sample wording. Use 'Verified reports' for the evidence-state label.")
-    public_text_lower = public_text.lower()
-    for term in sorted(BANNED_PUBLIC_TERMS):
-        if term in public_text_lower:
-            add(errors, path, "public_internal_term", f"Public-facing generated fields contain internal term '{term}'.")
+    for finding in internal_term_findings(data, path):
+        # Same error code as before so dashboards and workflow parsers need no vocabulary
+        # migration; only the message gained the field name.
+        add(errors, path, finding["code"], finding["message"])
     if re.search(r"https?://\S+;\s*https?://", public_text):
         add(errors, path, "raw_source_urls_in_public_prose", "Public-facing generated prose appears to dump raw source URLs; use source objects/lists instead.")
 
