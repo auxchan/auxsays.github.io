@@ -1,7 +1,7 @@
 [project]
 name = "auxsays-systems-monitor-data"
-version = "0.1.0"
-description = "AUXSAYS Systems Monitor Phase-3 data integrity first slice"
+version = "0.2.0"
+description = "AUXSAYS Systems Monitor Phase-3 data integrity and Phase-4A state-engine proof"
 requires-python = ">=3.11"
 dependencies = []
 

@@ -1,4 +1,3 @@
-"""AUXSAYS Phase-3 data integrity package."""
+"""AUXSAYS Systems Monitor deterministic data and state engines."""
 
-__version__ = "0.1.0"
-
+__version__ = "0.2.0"

@@ -1,7 +1,8 @@
-# Systems Monitor data integrity package
+# Systems Monitor deterministic data and state package
 
-This package implements the Phase-3 six-indicator labor-data slice. It uses
-only the Python standard library and local SQLite/content-addressed files.
+This package implements the Phase-3 six-indicator labor-data slice and the
+Phase-4A state/relationship/propagation/derivation engine proof. It uses only the
+Python standard library and local SQLite/content-addressed files.
 
 Runtime data belongs under `local/` and is ignored by git. The committed
 `review/` files are bounded review evidence and are never the public website's
@@ -44,3 +45,13 @@ Print the one-line browser-console loader for local factual UI review:
 ```text
 python scripts/print_local_ui_loader.py
 ```
+
+Build the deterministic local-only Phase-4A review candidate from the committed
+Phase-3 factual review model (no network access or public activation):
+
+```text
+python scripts/build_phase4a_review.py
+```
+
+The Phase-4A candidate is explicitly `LIMITED_ENGINE_PROOF`, contains only OBS
+and CALC records, and is not Gate-B evidence or a public data activation.
