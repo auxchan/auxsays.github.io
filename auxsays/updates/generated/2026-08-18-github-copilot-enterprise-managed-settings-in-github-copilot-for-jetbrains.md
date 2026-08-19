@@ -17,8 +17,8 @@ update_version: Enterprise managed settings in GitHub Copilot for JetBrains
 update_logo_text: GIT
 update_published_at: '2026-08-18T23:33:07Z'
 update_last_checked: '2026-08-19T16:46:12Z'
-source_last_checked: '2026-08-19T16:46:12Z'
-official_body_last_checked: '2026-08-19T16:46:12Z'
+source_last_checked: '2026-08-19T20:05:14Z'
+official_body_last_checked: '2026-08-19T20:05:14Z'
 record_last_updated: '2026-08-19T16:46:12Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -89,6 +89,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-08-19T16:46:12Z'
+  url: https://github.blog/changelog/2026-08-18-enterprise-managed-settings-in-github-copilot-for-jetbrains
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-08-19T20:05:14Z'
   url: https://github.blog/changelog/2026-08-18-enterprise-managed-settings-in-github-copilot-for-jetbrains
   status: captured-from-rss-feed
   body_captured: true
