@@ -430,6 +430,290 @@ def run() -> int:
         r2 = aw.run_writeback(cfg(work, pages_cmd=mk(0)))  # now a genuine no-op (no recovery configured)
         check("H24 no_changes does not set changed=true", r2.outcome == aw.NO_CHANGES and not r2.changed and not r2.pushed)
 
+    # ===== Part S: staged-tree equivalence -- VALIDATED TREE == COMMITTED TREE ============
+    # `git add -- <allow>` builds the candidate in the INDEX, but validators are ordinary
+    # subprocesses reading the WORKING TREE. Anything the tree holds and the candidate does not
+    # can therefore make a validator pass on state git will never publish. These cases pin the
+    # fail-closed gate that removes that gap, and pin the transients that must still be tolerated.
+
+    def s_setup(tmp: Path):
+        """Origin + work seeded with a COHERENT pair (evidence_count 0 / record_count 0) and a
+        .gitignore, mirroring the real lanes where every transient artefact is ignored."""
+        origin, work = setup(tmp)
+        g(work, "config", "user.name", "bot"); g(work, "config", "user.email", "bot@x")
+        seedS = clone(tmp, origin, "seedS")
+        write(seedS, "data/consensus_evidence.yml", "evidence_count: 0\n")
+        write(seedS, "records/rec-obs.md", "record_count: 0\n")
+        write(seedS, ".gitignore", "qa_status.json\nconsensus_status.json\n")
+        g(seedS, "add", "-A"); g(seedS, "commit", "-m", "coherent pair"); g(seedS, "push", "origin", "main")
+        g(work, "fetch", "origin", "main"); g(work, "reset", "--hard", "origin/main")
+        return origin, work
+
+    def coherence(tmp: Path, target: Path) -> str:
+        """A stand-in for qa_patch_records.scan_evidence_count_alignment: passes only when the
+        evidence count and the generated-record count agree in whatever tree it is pointed at."""
+        v = tmp / "coherence.py"
+        if not v.exists():
+            v.write_text(_COHERENCE_SCRIPT, encoding="utf-8")
+        return f'"{sys.executable}" "{v.as_posix()}" "{target.as_posix()}"'
+
+    # S1. THE DEFECT: allowed evidence staged + an UNALLOWED record modified in the working tree.
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = s_setup(tmp)
+        vcmd = coherence(tmp, work)
+        before = origin_head(origin)
+        write(work, "data/consensus_evidence.yml", "evidence_count: 1\n")   # allowed -> staged
+        write(work, "records/rec-obs.md", "record_count: 1\n")              # NOT allowed
+        pre = subprocess.run(vcmd, shell=True, capture_output=True)
+        check("S1 the working tree is coherent, so the validator passes when run there",
+              pre.returncode == 0)
+        r = aw.run_writeback(cfg(work, allow=["data/consensus_evidence.yml"],
+                                 validate=[vcmd], validate_before_commit=True, pages_cmd=None))
+        check("S1 REFUSED with unstaged_changed_path", r.outcome == aw.UNSTAGED_CHANGED_PATH, r.outcome)
+        check("S1 the unallowed record is named in the outcome",
+              "records/rec-obs.md" in r.conflicting_paths, str(r.conflicting_paths))
+        check("S1 validation was NOT executed", r.validation == [], str(r.validation))
+        check("S1 no commit was created", g(work, "rev-parse", "HEAD").stdout.strip() == before)
+        check("S1 nothing pushed", r.pushed is False)
+        check("S1 origin byte-identical", origin_head(origin) == before)
+        check("S1 index reset -- nothing left staged",
+              g(work, "diff", "--cached", "--name-only").stdout.strip() == "")
+        check("S1 the mutation is NOT discarded (left visible for diagnosis, never stashed)",
+              "record_count: 1" in (work / "records" / "rec-obs.md").read_text(encoding="utf-8"))
+        # Demonstrate the defect itself: committing only the allowed half yields a revision the
+        # very same validator rejects -- which is what main received before this gate existed.
+        g(work, "add", "--", "data/consensus_evidence.yml")
+        g(work, "commit", "-m", "allowed half only (defect demonstration)")
+        ver = tmp / "verifyS1"; g(tmp, "clone", "-q", str(work), str(ver))
+        post = subprocess.run(coherence(tmp, ver), shell=True, capture_output=True)
+        check("S1 DEFECT PROVEN: committing only the allowed half yields an INCOHERENT revision",
+              post.returncode != 0)
+
+    # S2. Allowed material only, clean remainder -> validation runs and the commit lands.
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = s_setup(tmp)
+        vcmd = coherence(tmp, work)
+        before = origin_head(origin)
+        write(work, "data/consensus_evidence.yml", "evidence_count: 1\n")
+        write(work, "records/rec-obs.md", "record_count: 1\n")
+        r = aw.run_writeback(cfg(work, allow=["data/consensus_evidence.yml", "records/*.md"],
+                                 validate=[vcmd], validate_before_commit=True, pages_cmd=None))
+        check("S2 normal writeback still succeeds when the candidate covers the mutation",
+              r.pushed is True, r.outcome)
+        check("S2 origin advanced", origin_head(origin) != before)
+        check("S2 validation actually ran", len(r.validation) == 1, str(r.validation))
+        ver = tmp / "verifyS2"; g(tmp, "clone", "-q", str(origin), str(ver))
+        check("S2 the COMMITTED revision is coherent",
+              subprocess.run(coherence(tmp, ver), shell=True, capture_output=True).returncode == 0)
+
+    # S3. Unallowed tracked DELETION -> refused (the real lanes' `rm -f` of tracked _data files).
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = s_setup(tmp)
+        before = origin_head(origin)
+        write(work, "data/consensus_evidence.yml", "evidence_count: 1\n")
+        (work / "records" / "rec-obs.md").unlink()
+        r = aw.run_writeback(cfg(work, allow=["data/consensus_evidence.yml"], pages_cmd=None))
+        check("S3 unallowed tracked DELETION is refused", r.outcome == aw.UNSTAGED_CHANGED_PATH, r.outcome)
+        check("S3 the deleted path is named", "records/rec-obs.md" in r.conflicting_paths,
+              str(r.conflicting_paths))
+        check("S3 origin unchanged", origin_head(origin) == before)
+
+    # S4. Unallowed NON-IGNORED UNTRACKED file -> refused. This is the sharpest case: a brand-new
+    # generated record for a product outside --allow is readable by QA and never committed.
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = s_setup(tmp)
+        before = origin_head(origin)
+        write(work, "data/consensus_evidence.yml", "evidence_count: 1\n")
+        write(work, "records/rec-newproduct.md", "record_count: 1\n")
+        r = aw.run_writeback(cfg(work, allow=["data/consensus_evidence.yml"], pages_cmd=None))
+        check("S4 unallowed untracked file is refused", r.outcome == aw.UNSTAGED_CHANGED_PATH, r.outcome)
+        check("S4 the untracked path is named", "records/rec-newproduct.md" in r.conflicting_paths,
+              str(r.conflicting_paths))
+        check("S4 origin unchanged", origin_head(origin) == before)
+
+    # S5. IGNORED untracked transients must NOT refuse -- every real lane produces these.
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = s_setup(tmp)
+        before = origin_head(origin)
+        write(work, "data/consensus_evidence.yml", "evidence_count: 1\n")
+        write(work, "records/rec-obs.md", "record_count: 1\n")
+        write(work, "qa_status.json", '{"status":"transient"}\n')
+        write(work, "consensus_status.json", '{"status":"transient"}\n')
+        r = aw.run_writeback(cfg(work, allow=["data/consensus_evidence.yml", "records/*.md"],
+                                 pages_cmd=None))
+        check("S5 gitignored transients do NOT trigger a refusal", r.pushed is True, r.outcome)
+        check("S5 origin advanced", origin_head(origin) != before)
+
+    # S6. Validator failure still blocks the commit (pre-existing gate intact).
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = s_setup(tmp)
+        before = origin_head(origin)
+        write(work, "data/consensus_evidence.yml", "evidence_count: 1\n")
+        r = aw.run_writeback(cfg(work, allow=["data/consensus_evidence.yml"],
+                                 validate=[PY_FAIL], validate_before_commit=True, pages_cmd=None))
+        check("S6 validator failure -> validation_failed_pre_commit",
+              r.outcome == aw.VALIDATION_FAILED_PRE_COMMIT, r.outcome)
+        check("S6 no commit reached origin", origin_head(origin) == before)
+
+    # S7. PRECEDENCE: a forbidden path that actually reaches the index still reports the existing
+    # staged-path outcome, not the new one -- the old protection is unchanged.
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = s_setup(tmp)
+        write(work, "_site/index.html", "<html></html>\n")
+        r = aw.run_writeback(cfg(work, allow=["_site/*"], pages_cmd=None))
+        check("S7 forbidden STAGED path keeps unexpected_changed_path (precedence preserved)",
+              r.outcome == aw.UNEXPECTED_CHANGED_PATH, r.outcome)
+
+    # S8. An allowed NEW file is staged by the pathspec and must NOT read as residual untracked.
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = s_setup(tmp)
+        before = origin_head(origin)
+        write(work, "records/rec-brandnew.md", "record_count: 0\n")
+        r = aw.run_writeback(cfg(work, allow=["records/*.md"], pages_cmd=None))
+        check("S8 an allowed NEW file commits normally (not mistaken for residual)",
+              r.pushed is True, r.outcome)
+        check("S8 the new file reached origin",
+              "record_count" in read_origin(origin, "records/rec-brandnew.md"))
+        check("S8 origin advanced", origin_head(origin) != before)
+
+    # S9. Multiple allowed paths -> all validated and all committed together.
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = s_setup(tmp)
+        vcmd = coherence(tmp, work)
+        write(work, "data/consensus_evidence.yml", "evidence_count: 2\n")
+        write(work, "records/rec-obs.md", "record_count: 2\n")
+        write(work, "data/evidence_method_health.yml", "schema_version: 1\nmethods:\n  - z\n")
+        r = aw.run_writeback(cfg(work, allow=["data/consensus_evidence.yml", "records/*.md",
+                                              "data/evidence_method_health.yml"],
+                                 validate=[vcmd], validate_before_commit=True, pages_cmd=None))
+        check("S9 multiple allowed paths commit together", r.pushed is True, r.outcome)
+        committed = set(g(origin, "show", "--name-only", "--pretty=format:", "main").stdout.split())
+        check("S9 every allowed mutation is in the commit",
+              {"data/consensus_evidence.yml", "records/rec-obs.md",
+               "data/evidence_method_health.yml"} <= committed, str(sorted(committed)))
+        ver = tmp / "verifyS9"; g(tmp, "clone", "-q", str(origin), str(ver))
+        check("S9 the committed revision is coherent",
+              subprocess.run(coherence(tmp, ver), shell=True, capture_output=True).returncode == 0)
+
+    # S10. THE RETRY PATH IS LOAD-BEARING. Residual appearing after the first gate must still be
+    # caught on the post-rebase revalidation -- an untracked file survives a clean rebase.
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = s_setup(tmp)
+        other = clone(tmp, origin, "workB")
+        hook_script = tmp / "residual_drift.py"
+        hook_script.write_text(_RESIDUAL_DRIFT_SCRIPT, encoding="utf-8")
+        hook = (f'"{sys.executable}" "{hook_script.as_posix()}" '
+                f'"{other.as_posix()}" "{work.as_posix()}"')
+        before = origin_head(origin)
+        write(work, "data/consensus_evidence.yml", "evidence_count: 1\n")
+        r = aw.run_writeback(cfg(work, allow=["data/consensus_evidence.yml"],
+                                 test_hook_before_push=hook, test_hook_fires=1,
+                                 max_retries=5, pages_cmd=None))
+        check("S10 post-rebase residual is refused on the retry path",
+              r.outcome == aw.UNSTAGED_CHANGED_PATH, r.outcome)
+        check("S10 the late untracked path is named",
+              any("rec-late" in p for p in r.conflicting_paths), str(r.conflicting_paths))
+        check("S10 nothing was pushed by this run", r.pushed is False)
+        check("S10 only the concurrent writer's commit is on origin",
+              origin_head(origin) != before and
+              "evidence_count: 1" not in read_origin(origin, "data/consensus_evidence.yml"))
+
+    # S11. No-change deployment recovery is unchanged by the gate.
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = s_setup(tmp)
+        make_pages, _counter, marker = pages_env(tmp)
+        sha = origin_head(origin)
+        g(work, "fetch", "origin", "main"); g(work, "reset", "--hard", "origin/main")
+        r = aw.run_writeback(cfg(work, allow=["records/*.md"], pages_cmd=make_pages(0),
+                                 deploy_recovery=True, recovery_site_paths=["records/*.md"],
+                                 pages_status_cmd=status_cmd(tmp, [dep_run(sha, conclusion="failure")]),
+                                 sleep_fn=Sleeper()))
+        check("S11 clean no-change run still reports no_changes", r.outcome == aw.NO_CHANGES, r.outcome)
+        check("S11 deployment recovery still dispatched Pages", marker.exists())
+
+    # S12. Pages dispatch on a normal material push is unchanged.
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = s_setup(tmp)
+        make_pages, counter, marker = pages_env(tmp)
+        write(work, "records/rec-obs.md", "record_count: 0\npages\n")
+        r = aw.run_writeback(cfg(work, allow=["records/*.md"], site_paths=["records/*.md"],
+                                 pages_cmd=make_pages(0), sleep_fn=Sleeper()))
+        check("S12 material push still dispatches Pages exactly once",
+              r.pushed is True and r.pages_dispatched is True and counter.read_text().strip() == "1",
+              f"{r.outcome} attempts={r.pages_attempts}")
+
+    # S13. The measured PowerPoint half-promotion is now unreachable: evidence + health allowed,
+    # the product's generated record NOT allowed -- exactly the production --allow list shape.
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = s_setup(tmp)
+        vcmd = coherence(tmp, work)
+        before = origin_head(origin)
+        write(work, "data/consensus_evidence.yml", "evidence_count: 1\n")          # allowed
+        write(work, "data/evidence_method_health.yml", "schema_version: 1\nmethods:\n  - ppt\n")
+        write(work, "records/rec-obs.md", "record_count: 1\n")                     # NOT allowed
+        r = aw.run_writeback(cfg(work, allow=["data/consensus_evidence.yml",
+                                              "data/evidence_method_health.yml"],
+                                 validate=[vcmd], validate_before_commit=True, pages_cmd=None))
+        check("S13 half-promotion refused: evidence+health cannot land without the record",
+              r.outcome == aw.UNSTAGED_CHANGED_PATH, r.outcome)
+        check("S13 origin never received the evidence half", origin_head(origin) == before)
+        check("S13 no half-promoted revision exists",
+              "evidence_count: 1" not in read_origin(origin, "data/consensus_evidence.yml"))
+
+    # S14. The measured real-lane residue -- two TRACKED files deleted by the cleanup step and
+    # absent from every --allow list -- is refused, which is why the caller cleanup had to change
+    # from `rm -f` to a restore. Without that caller fix these lanes would refuse every run.
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = s_setup(tmp)
+        seedT = clone(tmp, origin, "seedT")
+        write(seedT, "data/source_health.yml", "generated: telemetry\n")
+        write(seedT, "data/patch_ingest_state.json", '{"sources":{}}\n')
+        g(seedT, "add", "-A"); g(seedT, "commit", "-m", "tracked transients"); g(seedT, "push", "origin", "main")
+        g(work, "fetch", "origin", "main"); g(work, "reset", "--hard", "origin/main")
+        write(work, "data/consensus_evidence.yml", "evidence_count: 1\n")
+        (work / "data" / "source_health.yml").unlink()          # the old `rm -f`
+        (work / "data" / "patch_ingest_state.json").unlink()    # the old `rm -f`
+        r = aw.run_writeback(cfg(work, allow=["data/consensus_evidence.yml"], pages_cmd=None))
+        check("S14 the old `rm -f` of tracked files would refuse the run",
+              r.outcome == aw.UNSTAGED_CHANGED_PATH, r.outcome)
+        check("S14 both deleted tracked files are named",
+              {"data/source_health.yml", "data/patch_ingest_state.json"} <= set(r.conflicting_paths),
+              str(r.conflicting_paths))
+        # the replacement cleanup restores them instead, and the run proceeds normally
+        g(work, "checkout", "--", "data/source_health.yml", "data/patch_ingest_state.json")
+        r2 = aw.run_writeback(cfg(work, allow=["data/consensus_evidence.yml"], pages_cmd=None))
+        check("S14 restoring them instead lets the writeback proceed", r2.pushed is True, r2.outcome)
+
+    # S15. The complete refusal contract, with a REAL pages_cmd present: residual paths reported,
+    # validation not executed, no commit, no push, no Pages dispatch, and ok=False so the CLI
+    # exits non-zero and the workflow step fails visibly rather than passing quietly.
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td); origin, work = s_setup(tmp)
+        make_pages, counter, marker = pages_env(tmp)
+        before = origin_head(origin)
+        write(work, "data/consensus_evidence.yml", "evidence_count: 1\n")   # allowed
+        write(work, "records/rec-obs.md", "record_count: 1\n")              # NOT allowed
+        r = aw.run_writeback(cfg(work, allow=["data/consensus_evidence.yml"],
+                                 site_paths=["data/consensus_evidence.yml"],
+                                 validate=[PY_OK], validate_before_commit=True,
+                                 pages_cmd=make_pages(0), sleep_fn=Sleeper()))
+        check("S15 outcome is unstaged_changed_path", r.outcome == aw.UNSTAGED_CHANGED_PATH, r.outcome)
+        check("S15 residual paths are reported for diagnosis", r.conflicting_paths == ["records/rec-obs.md"],
+              str(r.conflicting_paths))
+        check("S15 validation not executed", r.validation == [])
+        check("S15 commit not created", g(work, "rev-parse", "HEAD").stdout.strip() == before)
+        check("S15 push not attempted", r.pushed is False and r.pushed_sha == "")
+        check("S15 origin unchanged", origin_head(origin) == before)
+        check("S15 Pages NOT dispatched", not marker.exists() and r.pages_dispatched is False
+              and r.pages_attempts == 0)
+        check("S15 ok=False -> CLI exits non-zero (step fails visibly)", r.ok is False)
+        check("S15 the summary payload carries the residual paths",
+              bool(r.as_dict().get("conflicting_paths")))
+        check("S15 no silent cleanup: the mutation is still on disk",
+              "record_count: 1" in (work / "records" / "rec-obs.md").read_text(encoding="utf-8"))
+        check("S15 no unallowed path was auto-added to the index",
+              g(work, "diff", "--cached", "--name-only").stdout.strip() == "")
+
     # 13. Source inspection -> no force-push / ours-theirs USAGE (ignore the docstring/comments,
     # which legitimately document the prohibition).
     import ast
@@ -450,6 +734,40 @@ def run() -> int:
             print(f"  - {e}")
     print("=" * 64)
     return 0 if _FAIL == 0 else 1
+
+
+_COHERENCE_SCRIPT = r"""
+import re, sys, pathlib
+repo = pathlib.Path(sys.argv[1])
+def count(rel, key):
+    fp = repo / rel
+    if not fp.exists():
+        return 0
+    m = re.search(key + r":\s*(\d+)", fp.read_text(encoding="utf-8"))
+    return int(m.group(1)) if m else 0
+# Stand-in for qa_patch_records.scan_evidence_count_alignment: the evidence count and the
+# generated-record count must agree in whichever tree this is pointed at.
+sys.exit(0 if count("data/consensus_evidence.yml", "evidence_count")
+              == count("records/rec-obs.md", "record_count") else 1)
+"""
+
+_RESIDUAL_DRIFT_SCRIPT = r"""
+import os, subprocess, sys
+other, work = sys.argv[1], sys.argv[2]
+def g(repo, *a):
+    subprocess.run(["git", "-C", repo, *a], check=True, capture_output=True)
+# A concurrent writer advances origin so the next attempt must rebase...
+g(other, "fetch", "origin", "main"); g(other, "reset", "--hard", "origin/main")
+g(other, "config", "user.name", "drift"); g(other, "config", "user.email", "drift@x")
+p = os.path.join(other, "records", "rec-drift.md")
+os.makedirs(os.path.dirname(p), exist_ok=True)
+open(p, "a", encoding="utf-8").write("drift\n")
+g(other, "add", "-A"); g(other, "commit", "-m", "concurrent drift"); g(other, "push", "origin", "main")
+# ...and a late, non-ignored UNTRACKED file appears in the bot's tree AFTER the first gate.
+# An untracked file does not block `git rebase`, so only the post-rebase gate can catch it.
+late = os.path.join(work, "records", "rec-late.md")
+open(late, "w", encoding="utf-8").write("record_count: 99\n")
+"""
 
 
 _DRIFT_SCRIPT = r"""
