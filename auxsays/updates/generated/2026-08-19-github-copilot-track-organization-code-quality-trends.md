@@ -17,8 +17,8 @@ update_version: Track organization code quality trends
 update_logo_text: GIT
 update_published_at: '2026-08-19T12:56:57Z'
 update_last_checked: '2026-08-19T16:46:12Z'
-source_last_checked: '2026-08-20T03:01:37Z'
-official_body_last_checked: '2026-08-20T03:01:37Z'
+source_last_checked: '2026-08-20T08:17:25Z'
+official_body_last_checked: '2026-08-20T08:17:25Z'
 record_last_updated: '2026-08-19T16:46:12Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -92,6 +92,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-08-20T03:01:37Z'
+  url: https://github.blog/changelog/2026-08-19-track-organization-code-quality-trends
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-08-20T08:17:25Z'
   url: https://github.blog/changelog/2026-08-19-track-organization-code-quality-trends
   status: captured-from-rss-feed
   body_captured: true

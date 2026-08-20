@@ -17,8 +17,8 @@ update_version: CodeQL 2.26.3 improves GitHub Actions queries and JavaScript mod
 update_logo_text: GIT
 update_published_at: '2026-08-19T21:09:30Z'
 update_last_checked: '2026-08-20T03:01:37Z'
-source_last_checked: '2026-08-20T03:01:37Z'
-official_body_last_checked: '2026-08-20T03:01:37Z'
+source_last_checked: '2026-08-20T08:17:25Z'
+official_body_last_checked: '2026-08-20T08:17:25Z'
 record_last_updated: '2026-08-20T03:01:37Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -100,6 +100,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-08-20T03:01:37Z'
+  url: https://github.blog/changelog/2026-08-19-codeql-2-26-3-improves-github-actions-queries-and-javascript-modeling
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-08-20T08:17:25Z'
   url: https://github.blog/changelog/2026-08-19-codeql-2-26-3-improves-github-actions-queries-and-javascript-modeling
   status: captured-from-rss-feed
   body_captured: true

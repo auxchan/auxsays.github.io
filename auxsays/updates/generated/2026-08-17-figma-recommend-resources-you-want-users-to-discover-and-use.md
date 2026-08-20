@@ -17,8 +17,8 @@ update_version: Recommend resources you want users to discover and use
 update_logo_text: FIG
 update_published_at: '2026-08-17T00:00:00.000Z'
 update_last_checked: '2026-08-17T20:05:19Z'
-source_last_checked: '2026-08-20T03:01:02Z'
-official_body_last_checked: '2026-08-20T03:01:02Z'
+source_last_checked: '2026-08-20T08:16:47Z'
+official_body_last_checked: '2026-08-20T08:16:47Z'
 record_last_updated: '2026-08-17T20:05:19Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -70,11 +70,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-08-18T08:11:31Z'
-  url: https://www.figma.com/release-notes/?title=recommend-resources-you-want-users-to-discover-and-use
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-08-18T14:16:49Z'
   url: https://www.figma.com/release-notes/?title=recommend-resources-you-want-users-to-discover-and-use
   status: captured-from-rss-feed
@@ -91,6 +86,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-08-20T03:01:02Z'
+  url: https://www.figma.com/release-notes/?title=recommend-resources-you-want-users-to-discover-and-use
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-08-20T08:16:47Z'
   url: https://www.figma.com/release-notes/?title=recommend-resources-you-want-users-to-discover-and-use
   status: captured-from-rss-feed
   body_captured: true
