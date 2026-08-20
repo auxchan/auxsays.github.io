@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
-"""PowerPoint production-readiness gates.
+"""PowerPoint prerequisite hardening -- NOT production readiness completion.
 
-PowerPoint consensus is production-DISABLED and stays that way; these tests pin the contracts a
-future activation depends on, so activation becomes a config decision rather than a discovery of
-latent breakage:
+PowerPoint consensus is production-DISABLED and stays that way. These tests pin a few contracts
+and, just as importantly, PIN THE GAPS that still block activation. Activation is NOT a config
+flip: the production promotion chain is not wired for PowerPoint, and the identity model still
+needs migration. Both are asserted below as known-blocking, so nobody can read this suite as
+"PowerPoint is ready".
 
   * ownership   -- every method_id the collector can emit is authorized. This is the sharp one: a
                    Reddit health row is emitted on EVERY collection (status "disabled" when the
@@ -14,16 +16,22 @@ latent breakage:
   * identity    -- the record/evidence/permalink keys are (product_id, update_version) with no
                    build component, so two PowerPoint-attributed builds under one YYMM collide.
                    Pinned as a KNOWN LIMIT here; migrating production records is out of scope.
-  * promotion   -- evidence -> record is the existing generic apply_consensus_to_records engine,
-                   not a PowerPoint-specific scorer.
-  * half-promotion -- evidence=1 with record count=0 must be refused by the writeback validator.
-  * writeback   -- the existing generated-record path covers PowerPoint and nothing unrelated.
+  * promotion   -- the generic apply_consensus_to_records engine COULD serve PowerPoint, but no
+                   production step invokes it for PowerPoint today. Pinned as NOT WIRED.
+  * half-promotion -- evidence=1 with record count=0 must be refused by the validator.
+  * writeback   -- BLOCKING GAP: automation_writeback's --allow list is the commit permission
+                   list and has no PowerPoint entry, while consensus_evidence.yml and
+                   evidence_method_health.yml do. Activating today would commit evidence and
+                   health while silently dropping the record mutation -- landing main in exactly
+                   the half-promoted state the validator exists to prevent, because validation
+                   runs against the working tree where the record IS mutated.
 
 Run: PYTHONDONTWRITEBYTECODE=1 python auxsays/scripts/tests/test_powerpoint_production_readiness.py
 """
 from __future__ import annotations
 
 import fnmatch
+import re
 import sys
 import traceback
 from pathlib import Path
@@ -153,6 +161,12 @@ def run() -> int:  # noqa: PLR0915
     # =====================================================================================
     # 4. PROMOTION ENGINE -- reuse, not a new PowerPoint scorer
     # =====================================================================================
+    # The engine exists and is generic, but nothing invokes it for PowerPoint in production.
+    check("BLOCKING GAP: no production step invokes consensus promotion for PowerPoint",
+          "apply_consensus_to_records" not in
+          (_REPO / ".github" / "workflows" / "obs-evidence-collection.yml").read_text(
+              encoding="utf-8"),
+          "if this fails the chain became wired and the PR body must be updated")
     check("the generic promotion engine exposes a product filter",
           hasattr(ac, "_index_generated_records") and hasattr(ac, "main"),
           "apply_consensus_to_records")
@@ -255,36 +269,47 @@ def run() -> int:  # noqa: PLR0915
               encoding="utf-8"))
 
     # =====================================================================================
-    # 6. WRITEBACK PATH SCOPING
+    # 6. WRITEBACK COMMIT PERMISSION -- the BLOCKING gap
+    #
+    # automation_writeback stages with `git add -- *--allow` and then refuses any staged path that
+    # matches no --allow pattern, so --allow IS the commit permission list. --recovery-site-path is
+    # a DIFFERENT thing: it only decides whether a no-change run still needs a Pages dispatch. An
+    # earlier revision of this PR conflated the two and wrongly claimed PowerPoint was covered.
     # =====================================================================================
     wf = (_REPO / ".github" / "workflows" / "obs-evidence-collection.yml").read_text(
         encoding="utf-8")
-    check("the generated-record writeback path is declared",
-          "auxsays/updates/generated/*" in wf)
-    pattern = "auxsays/updates/generated/*"
-    should_match = [
-        "auxsays/updates/generated/2026-07-23-microsoft-powerpoint-2607.md",
-        "auxsays/updates/generated/2026-05-20-microsoft-powerpoint-2605.md",
-    ]
-    for path in should_match:
-        check(f"writeback path MATCHES intended record: {Path(path).name}",
-              fnmatch.fnmatch(path, pattern), path)
-    outside = [
-        "auxsays/_data/patch_ingestion_sources.yml",
-        "auxsays/_data/source_health.yml",
-        "auxsays/scripts/patch_collectors/microsoft_powerpoint.py",
-        ".github/workflows/obs-evidence-collection.yml",
-    ]
-    for path in outside:
-        check(f"writeback path does NOT match non-record file: {Path(path).name}",
-              not fnmatch.fnmatch(path, pattern), path)
+    allow_patterns = re.findall(r"--allow\s+'?([^'\s\\]+)'?", wf)
+    check("the evidence workflow declares an --allow commit permission list",
+          len(allow_patterns) >= 5, str(allow_patterns))
 
-    # Product scoping is enforced by ownership (validate_records), not by the glob: prove a
-    # sibling Microsoft product's record is not claimable by the PowerPoint collector.
-    other = "auxsays/updates/generated/2026-07-23-microsoft-365-apps-2607.md"
-    check("a Microsoft 365 Apps record is a DIFFERENT product_id, not PowerPoint's to mutate",
-          "microsoft-365-apps" != PRODUCT and fnmatch.fnmatch(other, pattern),
-          "glob is product-agnostic by design; ownership.validate_records enforces product scope")
+    def committable(path: str) -> bool:
+        return any(fnmatch.fnmatch(path, p) for p in allow_patterns)
+
+    ppt_record = "auxsays/updates/generated/2026-07-23-microsoft-powerpoint-2607.md"
+    check("BLOCKING GAP: a PowerPoint generated record is NOT committable today",
+          not committable(ppt_record),
+          f"{ppt_record} vs {allow_patterns}")
+    check("but PowerPoint structured evidence IS committable",
+          committable("auxsays/_data/consensus_evidence.yml"))
+    check("and PowerPoint method health IS committable",
+          committable("auxsays/_data/evidence_method_health.yml"))
+    check("=> activating today would land main HALF-PROMOTED (evidence committed, record dropped)",
+          committable("auxsays/_data/consensus_evidence.yml") and not committable(ppt_record))
+
+    for product, sample in (("obs-studio", "auxsays/updates/generated/2026-07-21-obs-studio-32-2-0.md"),
+                            ("davinci", "auxsays/updates/generated/2026-07-22-davinci-resolve-21-0-3.md"),
+                            ("acrobat", "auxsays/updates/generated/2026-08-11-adobe-acrobat-reader-26-001.md")):
+        check(f"already-live product remains committable: {product}", committable(sample), sample)
+
+    check("--recovery-site-path is NOT commit permission (distinct flag)",
+          "--recovery-site-path" in wf and "--recovery-site-path" not in
+          " ".join(f"--allow {p}" for p in allow_patterns))
+    check("the deploy-recovery glob would match a PowerPoint record, which is why the two were "
+          "conflated -- recovery != permission",
+          fnmatch.fnmatch(ppt_record, "auxsays/updates/generated/*")
+          and not committable(ppt_record))
+
+    # Per-product scope, once an --allow entry exists, is still enforced by ownership.
     check("record ownership validation exists to enforce per-product scope",
           hasattr(ownership, "validate_records"))
 
