@@ -60,7 +60,13 @@ LEARN_QNA_METHOD_ID = "learn_qna_search_rss"
 LEARN_QNA_SOURCE_TYPE = "microsoft_learn_qna"
 LEARN_QNA_SOURCE_NAME = "Microsoft Learn Q&A"
 
-REDDIT_METHOD_ID = "reddit_community_search"
+# Canonical repo-wide Reddit method id. It MUST equal the entry in
+# collector_ownership.ALLOWED_METHODS["microsoft-powerpoint"], because every collection emits a
+# Reddit health row (status "disabled" when the fallback is off) and _validate_ownership runs
+# INSIDE the write transaction: an unauthorized method_id would roll back the whole
+# transaction, discarding the valid Learn Q&A rows with it. Every other product that searches
+# Reddit (davinci, premiere, both Acrobats) already uses this exact id.
+REDDIT_METHOD_ID = "reddit_search"
 REDDIT_SOURCE_TYPE = "reddit_community_report"
 REDDIT_SOURCE_NAME = "Reddit"
 REDDIT_SUBREDDITS = ("powerpoint", "microsoft365", "Office365")
@@ -226,20 +232,38 @@ def snippet_truncated(text: str) -> bool:
 
 # --- version-in-context / drift -------------------------------------------------
 
-def version_in_context(text: str, version: str) -> bool:
+def version_in_context(text: str, version: str, target_build: str = "") -> bool:
     """True when ``version`` (a Version YYMM) appears with an explicit version/product context,
     e.g. 'Version 2605', 'PowerPoint 2605', 'Microsoft PowerPoint Version 2605', or
-    '2605 (Build ...)'. A bare four-digit number with no such context never qualifies."""
+    '2605 (Build ...)'. A bare four-digit number with no such context never qualifies.
+
+    EXACT-BUILD NOTATION. Microsoft's own compatibility tables write the pair without the literal
+    word "build" -- "Office 2607 (20228.20110)" -- which none of the forms above accept, so a
+    report naming PowerPoint in its title and the exact target build in its body was rejected as
+    ``bare_version_no_context``. That notation now qualifies, but ONLY when ``target_build`` is
+    supplied AND the parenthesised build is exactly it. This is strictly stronger evidence than a
+    bare version, not weaker: the report has to state the full build this record was cut from.
+    "Office 2607" alone still does NOT qualify, and a wrong build (2607 (20228.20200)) does not
+    either. No date-proximity inference is used anywhere.
+    """
     v = re.escape(str(version or "").strip())
     if not v:
         return False
-    return bool(
-        re.search(rf"\b(?:version|ver\.?|build\s+version)\s+(?:no\.?\s*)?{v}\b", text, re.I)
-        or re.search(rf"\bpower\s?point\s+(?:version\s+)?{v}\b", text, re.I)
-        or re.search(rf"\bmicrosoft\s+365\s+(?:apps\s+)?(?:version\s+)?{v}\b", text, re.I)
-        or re.search(rf"\bcurrent\s+channel\b[^\n]{{0,25}}\b{v}\b", text, re.I)
-        or re.search(rf"(?<![0-9.]){v}(?![0-9.])\s*\(\s*build", text, re.I)
-    )
+    if re.search(rf"\b(?:version|ver\.?|build\s+version)\s+(?:no\.?\s*)?{v}\b", text, re.I):
+        return True
+    if re.search(rf"\bpower\s?point\s+(?:version\s+)?{v}\b", text, re.I):
+        return True
+    if re.search(rf"\bmicrosoft\s+365\s+(?:apps\s+)?(?:version\s+)?{v}\b", text, re.I):
+        return True
+    if re.search(rf"\bcurrent\s+channel\b[^\n]{{0,25}}\b{v}\b", text, re.I):
+        return True
+    if re.search(rf"(?<![0-9.]){v}(?![0-9.])\s*\(\s*build", text, re.I):
+        return True
+    build = str(target_build or "").strip()
+    if build and re.search(rf"(?<![0-9.]){v}(?![0-9.])\s*\(\s*{re.escape(build)}(?![0-9.])",
+                           text, re.I):
+        return True
+    return False
 
 
 def versions_in_context(text: str) -> set[str]:
@@ -390,9 +414,9 @@ def powerpoint_reason(target: dict[str, Any], source_url: str, source_date: str,
         return "official_announcement_not_user_report", match_basis, build_matched
 
     # 5. Exact version attribution (single-subject, with inheritance + drift/multi-version guards).
-    target_in_context = version_in_context(combined, version)
-    target_in_title = version_in_context(title_text, version)
-    target_in_body = version_in_context(report_body, version)
+    target_in_context = version_in_context(combined, version, target_build)
+    target_in_title = version_in_context(title_text, version, target_build)
+    target_in_body = version_in_context(report_body, version, target_build)
     # Other in-context versions, ignoring any named only as a historical/upgrade source, so
     # "upgraded from 2407 to 2410" is attributable to 2410 only and never counts for 2407 (Part D).
     other_versions = versions_in_context(_strip_historical(combined)) - {version}
@@ -465,7 +489,7 @@ def row_from_candidate(record: PatchRecord, target: dict[str, Any], candidate: d
     reason, match_basis, build_matched = powerpoint_reason(
         target, source_url, source_date, parent_title, report_title, report_body,
     )
-    version_matched = version_in_context(combined, version)
+    version_matched = version_in_context(combined, version, str(target.get("target_build") or ""))
     matched_version = version if version_matched else ""
     theme, workflow_area, platform, severity, sentiment = classify(combined)
 
