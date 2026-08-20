@@ -14018,3 +14018,24 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+- id: obs-studio-32-2-1-github-issue-13809
+  product_id: obs-studio
+  update_version: 32.2.1
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13809
+  parent_title: Crash (NULL deref) in screencast-portal.c start() when a delayed portal SelectSources response arrives after the session is gone
+  report_title: Crash (NULL deref) in screencast-portal.c start() when a delayed portal SelectSources response arrives after the session is gone
+  report_text_excerpt: 'op-portal-hyprland 1.4.1, glib2 2.88.3, NVIDIA RTX 4090 (610.57.04) ## OBS Studio version 32.2.1 (Arch `extra` 32.2.1-7). The unguarded call is still present in current master. ## Expected behavior If the ScreenCast portal responds to SelectSources after the capture''s session has'
+  captured_at: '2026-08-20T08:14:13Z'
+  patch_version_matched: true
+  matched_version: 32.2.1
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: plugin compatibility
+  workflow_area: plugins
+  platform: linux
+  severity: medium
+  sentiment: negative
+  source_weight: 1
