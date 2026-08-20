@@ -28,6 +28,11 @@ the freshly generated changes:
   * after a confirmed successful material push, dispatch Pages with bounded retries and
     deterministic backoff; on final dispatch failure set deployment_pending and fail visibly
     while preserving pushed / pushed_sha (a deployment-dispatch failure is NOT a push failure)
+  * a site-affecting push with NO configured Pages command fails loudly (a github.token push does
+    not trigger pages.yml, so a missing --pages-cmd would silently never deploy) -- never exit 0
+  * OPTIONALLY (opt-in ``pages_confirm_build``) poll the just-created pages run to a terminal state
+    and surface a BUILD failure, since a successful dispatch is not a successful deploy; when off,
+    build-outcome confirmation is delegated to the next deployment-recovery cycle
 
 It never force-pushes, never uses ``--ours``/``--theirs`` or ``-X ours``/``-X theirs``, and
 never silently resolves a conflict on a shared generated/evidence/state/catalog file.
@@ -85,6 +90,12 @@ PAGES_DISPATCH_SKIPPED_PUSH_FAILURE = "pages_dispatch_skipped_push_failure"
 DEPLOYMENT_CURRENT = "deployment_current"
 DEPLOYMENT_MISSING = "deployment_missing"
 VALIDATION_FAILED_PRE_COMMIT = "validation_failed_pre_commit"
+# opt-in Pages BUILD-outcome confirmation (a successful dispatch is NOT a successful deploy)
+PAGES_BUILD_CONFIRMED = "pages_build_confirmed"
+PAGES_BUILD_FAILED = "pages_build_failed"
+PAGES_BUILD_UNCONFIRMED = "pages_build_unconfirmed"
+# a site-affecting revision was pushed but the lane configured no Pages dispatch command
+DEPLOY_CHANGED_NO_PAGES_CMD = "deploy_changed_no_pages_cmd"
 
 
 @dataclass
@@ -103,6 +114,12 @@ class WritebackConfig:
     pages_ref: str = "main"
     pages_max_attempts: int = 3
     pages_backoff: list[int] = field(default_factory=lambda: [5, 15])  # delay after attempts 1,2
+    # opt-in: after a confirmed dispatch, poll the just-created pages run to a terminal state and
+    # surface a BUILD failure (dispatch rc==0 confirms only the DISPATCH, never the build/deploy).
+    # When off (default), build-outcome confirmation is delegated to the next --deploy-recovery cycle.
+    pages_confirm_build: bool = False
+    pages_confirm_attempts: int = 20            # poll iterations before giving up (-> unconfirmed)
+    pages_confirm_interval: int = 30            # seconds between polls (via sleep_fn)
     author_name: str = "github-actions[bot]"
     author_email: str = "41898282+github-actions[bot]@users.noreply.github.com"
     # no-change deployment recovery
@@ -136,6 +153,7 @@ class WritebackResult:
     pages_attempts: int = 0
     pages_backoff_applied: list[int] = field(default_factory=list)
     pages_dispatched: bool = False
+    pages_build_outcome: str = ""   # "" (not checked) | confirmed | failed | unconfirmed
     ok: bool = False
 
     def as_dict(self) -> dict:
@@ -143,7 +161,7 @@ class WritebackResult:
             "outcome", "outcomes", "changed", "deploy_changed", "pushed", "deployment_pending",
             "checkout_sha", "origin_sha_initial", "origin_sha_latest", "local_commit_sha",
             "rebased_commit_sha", "pushed_sha", "retry_number", "conflicting_paths", "validation",
-            "pages_attempts", "pages_backoff_applied", "pages_dispatched", "ok",
+            "pages_attempts", "pages_backoff_applied", "pages_dispatched", "pages_build_outcome", "ok",
         )}
 
 
@@ -250,12 +268,66 @@ def _sha_deployed(cfg: WritebackConfig, sha: str) -> bool:
     return False
 
 
+def _run_ids_for_sha(cfg: WritebackConfig, sha: str) -> set[str]:
+    """databaseIds of the pages runs already recorded for this exact SHA on the target branch.
+    Snapshotted BEFORE a dispatch so build confirmation can isolate the NEWLY created run from a
+    stale same-SHA run (e.g. an earlier FAILED build for a SHA that --deploy-recovery re-dispatches)."""
+    runs, ok = _pages_runs(cfg)
+    if not ok:
+        return set()
+    return {str(run.get("databaseId")) for run in runs
+            if str(run.get("headSha")) == sha and str(run.get("headBranch")) == cfg.pages_ref}
+
+
+def _confirm_pages_build(cfg: WritebackConfig, result: WritebackResult, sha: str, pre_ids: set[str]) -> None:
+    """After a confirmed dispatch, optionally poll the just-created pages run to a terminal state
+    and surface a BUILD failure. `pre_ids` are the run ids that already existed for `sha` before
+    this dispatch, so a stale same-SHA run can never be mistaken for the new build. Only runs whose
+    id is NOT in `pre_ids` are considered. On a terminal success -> pages_build_confirmed; on a
+    terminal non-success -> pages_build_failed (deployment_pending + fail visibly). Poll exhausted
+    without a terminal new run -> pages_build_unconfirmed (NOT a failure: delegated to the next
+    --deploy-recovery cycle, which re-dispatches if `sha` is still not a completed+success deploy).
+    When `pages_confirm_build` is off (default) this is a no-op and confirmation is delegated."""
+    if not cfg.pages_confirm_build:
+        return
+    for attempt in range(1, cfg.pages_confirm_attempts + 1):
+        runs, ok = _pages_runs(cfg)
+        if ok:
+            new_completed = [
+                run for run in runs
+                if str(run.get("databaseId")) not in pre_ids
+                and str(run.get("headSha")) == sha
+                and str(run.get("headBranch")) == cfg.pages_ref
+                and str(run.get("status")) == "completed"
+            ]
+            if any(str(run.get("conclusion")) == "success" for run in new_completed):
+                result.pages_build_outcome = "confirmed"
+                _emit(result, PAGES_BUILD_CONFIRMED)
+                return
+            if new_completed:  # terminal, non-success -> a dispatched-but-FAILED build
+                result.pages_build_outcome = "failed"
+                _emit(result, PAGES_BUILD_FAILED)
+                result.deployment_pending = True
+                result.ok = False
+                _write_build_failure_summary(cfg, sha)
+                return
+        if attempt < cfg.pages_confirm_attempts:
+            cfg.sleep_fn(cfg.pages_confirm_interval)
+    result.pages_build_outcome = "unconfirmed"
+    _emit(result, PAGES_BUILD_UNCONFIRMED)
+
+
 def _dispatch_pages_bounded(cfg: WritebackConfig, result: WritebackResult, pushed_sha: str) -> bool:
     """Dispatch Pages with bounded retries and deterministic backoff. Returns True on a
     confirmed dispatch; on final failure sets deployment_pending, records the pending
     deployment to the step summary, and returns False. Never repeats the git push, never
-    creates a commit, never force-pushes."""
+    creates a commit, never force-pushes.
+
+    A returned True confirms only the DISPATCH. When ``pages_confirm_build`` is enabled the
+    just-created build is then polled to a terminal state; a failed build sets deployment_pending
+    and clears ok while STILL returning True (the dispatch itself did happen)."""
     origin_sha = _sha(cfg.repo, f"{cfg.remote}/{cfg.branch}") if _ref_exists(cfg.repo, f"{cfg.remote}/{cfg.branch}") else pushed_sha
+    pre_ids = _run_ids_for_sha(cfg, pushed_sha) if cfg.pages_confirm_build else set()
     for attempt in range(1, cfg.pages_max_attempts + 1):
         result.pages_attempts = attempt
         proc = subprocess.run(cfg.pages_cmd, shell=True, cwd=str(cfg.repo), capture_output=True, text=True)
@@ -265,6 +337,7 @@ def _dispatch_pages_bounded(cfg: WritebackConfig, result: WritebackResult, pushe
         if proc.returncode == 0:
             result.pages_dispatched = True
             _emit(result, PAGES_DISPATCH_SUCCESS)
+            _confirm_pages_build(cfg, result, pushed_sha, pre_ids)
             return True
         sys.stderr.write(f"pages dispatch attempt {attempt} failed rc={proc.returncode}: {proc.stderr.strip()}\n")
         if attempt < cfg.pages_max_attempts:
@@ -292,6 +365,38 @@ def _write_step_summary(cfg: WritebackConfig, pushed_sha: str, origin_sha: str) 
                     f"- workflow: `{cfg.pages_workflow}` ref `{cfg.pages_ref}`\n")
             h.write(f"- recover: `gh workflow run {cfg.pages_workflow} --ref {cfg.pages_ref}` "
                     "(or the next scheduled recovery run will redeploy it automatically).\n")
+    except OSError:
+        pass
+
+
+def _write_build_failure_summary(cfg: WritebackConfig, sha: str) -> None:
+    path = os.environ.get("GITHUB_STEP_SUMMARY")
+    if not path:
+        return
+    try:
+        with open(path, "a", encoding="utf-8") as h:
+            h.write("### ⚠️ Deployment build failed\n\n")
+            h.write("The content push SUCCEEDED and the Pages dispatch SUCCEEDED, but the dispatched "
+                    "build reached a terminal non-success state, so the pushed revision is not deployed.\n\n")
+            h.write(f"- sha: `{sha}`\n- workflow: `{cfg.pages_workflow}` ref `{cfg.pages_ref}`\n")
+            h.write(f"- recover: `gh workflow run {cfg.pages_workflow} --ref {cfg.pages_ref}` "
+                    "(or the next scheduled recovery run will redeploy it automatically).\n")
+    except OSError:
+        pass
+
+
+def _write_missing_pages_cmd_summary(cfg: WritebackConfig, sha: str) -> None:
+    path = os.environ.get("GITHUB_STEP_SUMMARY")
+    if not path:
+        return
+    try:
+        with open(path, "a", encoding="utf-8") as h:
+            h.write("### ⚠️ Site change pushed with no Pages dispatch configured\n\n")
+            h.write("A site-affecting revision was pushed but this lane configured NO `--pages-cmd`. A "
+                    "`github.token` push does NOT trigger `pages.yml`, so the revision would silently "
+                    "never deploy. This lane is misconfigured: add `--pages-cmd` (and, for self-healing, "
+                    "`--deploy-recovery`).\n\n")
+            h.write(f"- pushed_sha: `{sha}`\n- branch: `{cfg.branch}`\n")
     except OSError:
         pass
 
@@ -463,7 +568,17 @@ def run_writeback(cfg: WritebackConfig) -> WritebackResult:
             result.outcome = token
             result.ok = True
             # dispatch Pages ONLY after a confirmed site-affecting push
-            if cfg.pages_cmd and result.deploy_changed:
+            if result.deploy_changed and not cfg.pages_cmd:
+                # Site-affecting revision pushed, but this lane configured NO --pages-cmd -> nothing
+                # dispatches Pages. A github.token push does NOT trigger pages.yml (on: push is inert
+                # for the bot actor: 0 of 176 bot commits ever produced an event=push pages run), so
+                # the revision would silently never deploy. Fail loudly instead of exiting 0, so a
+                # missing dispatch can never pass silently -- a future lane cannot forget --pages-cmd.
+                _emit(result, DEPLOY_CHANGED_NO_PAGES_CMD)
+                result.deployment_pending = True
+                result.ok = False
+                _write_missing_pages_cmd_summary(cfg, result.pushed_sha)
+            elif cfg.pages_cmd and result.deploy_changed:
                 if not _dispatch_pages_bounded(cfg, result, result.pushed_sha):
                     result.ok = False  # pushed, but deployment pending -> fail visibly
             elif cfg.pages_cmd:
@@ -513,6 +628,13 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--pages-ref", default="main")
     parser.add_argument("--pages-max-attempts", type=int, default=3)
     parser.add_argument("--pages-backoff", default="5,15", help="comma-separated seconds after attempts 1,2,...")
+    parser.add_argument("--pages-confirm-build", action="store_true",
+                        help="After a successful dispatch, poll the just-created pages run to a terminal "
+                             "state and fail visibly if the build did not succeed (dispatch != deploy). "
+                             "When off (default), build-outcome confirmation is delegated to the next "
+                             "--deploy-recovery cycle.")
+    parser.add_argument("--pages-confirm-attempts", type=int, default=20)
+    parser.add_argument("--pages-confirm-interval", type=int, default=30)
     parser.add_argument("--deploy-recovery", action="store_true")
     parser.add_argument("--recovery-site-path", action="append", default=[], dest="recovery_site_paths")
     parser.add_argument("--recovery-commit-grep", default=None)
@@ -533,6 +655,8 @@ def main(argv: list[str] | None = None) -> int:
         site_paths=args.site_paths, max_retries=args.max_retries, branch=args.branch, remote=args.remote,
         pages_cmd=args.pages_cmd, pages_workflow=args.pages_workflow, pages_ref=args.pages_ref,
         pages_max_attempts=args.pages_max_attempts, pages_backoff=backoff or [5, 15],
+        pages_confirm_build=args.pages_confirm_build, pages_confirm_attempts=args.pages_confirm_attempts,
+        pages_confirm_interval=args.pages_confirm_interval,
         deploy_recovery=args.deploy_recovery, recovery_site_paths=args.recovery_site_paths,
         recovery_commit_grep=args.recovery_commit_grep, pages_status_cmd=args.pages_status_cmd,
         author_name=args.author_name, author_email=args.author_email,
