@@ -17,8 +17,8 @@ update_version: Windows 11 arm64 VS2026 image generally available
 update_logo_text: GIT
 update_published_at: '2026-08-20T17:52:38Z'
 update_last_checked: '2026-08-20T20:09:53Z'
-source_last_checked: '2026-08-20T20:09:53Z'
-official_body_last_checked: '2026-08-20T20:09:53Z'
+source_last_checked: '2026-08-21T03:04:45Z'
+official_body_last_checked: '2026-08-21T03:04:45Z'
 record_last_updated: '2026-08-20T20:09:53Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -80,6 +80,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-08-20T20:09:53Z'
+  url: https://github.blog/changelog/2026-08-20-windows-11-arm64-vs2026-image-generally-available
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-08-21T03:04:45Z'
   url: https://github.blog/changelog/2026-08-20-windows-11-arm64-vs2026-image-generally-available
   status: captured-from-rss-feed
   body_captured: true
