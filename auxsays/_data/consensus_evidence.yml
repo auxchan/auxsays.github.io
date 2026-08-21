@@ -14064,3 +14064,89 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
+
+- id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5981187-remote-audio-with-rdp-broken-after-ins
+  product_id: microsoft-windows-11
+  update_version: 24H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5981187/remote-audio-with-rdp-broken-after-installing-win1
+  parent_title: Remote Audio with RDP Broken After Installing Win11 Security Updates - Microsoft Q&A
+  report_title: Remote Audio with RDP Broken After Installing Win11 Security Updates - Microsoft Q&A
+  report_text_excerpt: 'Remote Audio with RDP Broken After Installing Win11 Security Updates - Microsoft Q&A Client OS: Windows 11 24H2 (HP ZBook Fury 15.6 G8) Issue: KB5121003 breaks outgoing RDP virtual audio redirection across all target VMs. Verification: Uninstalling KB5121003 fixes it;...'
+  captured_at: '2026-08-21T14:11:46Z'
+  source_date: '2026-08-21'
+  target_release_date: '2026-08-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5121003
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5121003
+  matched_feature_version: 24H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5980571-registry-state-mismatch-after-kb512100
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5980571/registry-state-mismatch-after-kb5121003-installati
+  parent_title: Registry state mismatch after KB5121003 installation - Microsoft Q&A
+  report_title: Registry state mismatch after KB5121003 installation - Microsoft Q&A
+  report_text_excerpt: Registry state mismatch after KB5121003 installation - Microsoft Q&A Hello Microsoft Support Team, I am reaching out regarding an observed behavior with the installation of KB5121003 on Windows 11 25H2. After deploying KB5121003, the system build version correctly updated to...
+  captured_at: '2026-08-21T14:11:56Z'
+  source_date: '2026-08-20'
+  target_release_date: '2026-08-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9168'
+  match_basis: exact_os_build
+  matched_kb: KB5121003
+  matched_os_build: '26200.9168'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5981040-why-did-my-bluetooth-stop-working-afte
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5981040/why-did-my-bluetooth-stop-working-after-win-11-upd
+  parent_title: Why Did My Bluetooth Stop Working After Win 11 Update - Microsoft Q&A
+  report_title: Why Did My Bluetooth Stop Working After Win 11 Update - Microsoft Q&A
+  report_text_excerpt: Why Did My Bluetooth Stop Working After Win 11 Update - Microsoft Q&A Why Did My Bluetooth Stop Working After Win 11 Update? How do I report this as a problem? Edition Windows 11 Pro Version 25H2 Installed on ‎8/‎16/‎2026 OS build 26200.9168 Experience Windows Feature...
+  captured_at: '2026-08-21T14:11:56Z'
+  source_date: '2026-08-20'
+  target_release_date: '2026-08-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9168'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9168'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
