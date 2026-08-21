@@ -18,9 +18,9 @@ update_version: Pinning saved views to the repository issues sidebar is generall
 update_logo_text: GIT
 update_published_at: '2026-08-20T23:29:34Z'
 update_last_checked: '2026-08-21T03:04:45Z'
-source_last_checked: '2026-08-21T14:19:02Z'
-official_body_last_checked: '2026-08-21T14:19:02Z'
-record_last_updated: '2026-08-21T03:04:45Z'
+source_last_checked: '2026-08-21T20:06:14Z'
+official_body_last_checked: '2026-08-21T20:06:14Z'
+record_last_updated: '2026-08-21T20:06:14Z'
 patch_file_size: ''
 patch_file_size_note: ''
 patch_file_size_status: pending_adapter_support
@@ -92,13 +92,19 @@ official_source_attempts:
   status: captured-from-rss-feed
   body_captured: true
   checksums_captured: false
+- at: '2026-08-21T20:06:14Z'
+  url: https://github.blog/changelog/2026-08-20-pin-projects-views-and-milestones-to-the-repository-sidebar
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
 official_patch_notes_body: "Pinning saved views to the repository issues sidebar\n\n\n\n\n\n You can now pin saved views ⁠\
   \ to the repository issues sidebar, making the views you use most just one click away, even when the sidebar is collapsed.\n\
   \n\n Other Improvements\n\n\n\n\n\n You can now see profile avatars for reactions on issues.\n\n\n\n\n\n\n\n You can now\
-  \ adjust the Issues Dashboard density to see more issues at once\n\n\n The issue dependency REST API endpoints (blocked_by,\
-  \ blocking, and relates_to) now filter results based on the token’s granted scope.\n\n\n Join the discussion within GitHub\
-  \ Community .\n\n\n\n The post Pinning saved views to the repository issues sidebar is generally available and more appeared\
-  \ first on The GitHub Blog ."
+  \ adjust the Issues Dashboard density to see more issues at once\n\n\n\n\n\n\n\n You can now hide closed sub-issues, making\
+  \ it easier to focus on the work that’s still open.\n\n\n The issue dependency REST API endpoints (blocked_by, blocking,\
+  \ and relates_to) now filter results based on the token’s granted scope.\n\n\n Join the discussion within GitHub Community\
+  \ .\n\n\n\n The post Pinning saved views to the repository issues sidebar is generally available and more appeared first\
+  \ on The GitHub Blog ."
 official_checksums_body: ''
 official_checksums_capture_status: not-present
 ---
