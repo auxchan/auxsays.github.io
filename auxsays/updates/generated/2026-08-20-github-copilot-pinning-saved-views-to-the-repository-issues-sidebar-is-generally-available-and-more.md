@@ -18,8 +18,8 @@ update_version: Pinning saved views to the repository issues sidebar is generall
 update_logo_text: GIT
 update_published_at: '2026-08-20T23:29:34Z'
 update_last_checked: '2026-08-21T03:04:45Z'
-source_last_checked: '2026-08-21T08:18:35Z'
-official_body_last_checked: '2026-08-21T08:18:35Z'
+source_last_checked: '2026-08-21T14:19:02Z'
+official_body_last_checked: '2026-08-21T14:19:02Z'
 record_last_updated: '2026-08-21T03:04:45Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -83,6 +83,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-08-21T08:18:35Z'
+  url: https://github.blog/changelog/2026-08-20-pin-projects-views-and-milestones-to-the-repository-sidebar
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-08-21T14:19:02Z'
   url: https://github.blog/changelog/2026-08-20-pin-projects-views-and-milestones-to-the-repository-sidebar
   status: captured-from-rss-feed
   body_captured: true
