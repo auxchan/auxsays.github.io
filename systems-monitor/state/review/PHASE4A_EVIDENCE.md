@@ -4,7 +4,7 @@ Status: **TECHNICAL PASS / HUMAN_PHASE4A_QA PENDING / GATE B OPEN**
 
 ## Build identity
 
-- Candidate: `phase4a-candidate:f57427ac74998686110595fb80febf37890ef208061d79667d006c0d42dd8e49`
+- Candidate: `phase4a-candidate:0b3836b23eed52985b746606c0c6bf75d536f885ecb653322af435758be6f5ea`
 - Source snapshot: `sha256:8695c5ddc59aa1de4cf0083212c146fe105181beca1749346752d6f5134283a6`
 - State run: `state-run:4628b1f96d955855fa8844da3ad55f66b7a45ec429a92ca2a31d8de5865e8bbe`
 - State engine: `state-engine-1.0.0`
@@ -30,11 +30,17 @@ Status: **TECHNICAL PASS / HUMAN_PHASE4A_QA PENDING / GATE B OPEN**
 - The read model exposes 6 OBS + 6 CALC, derivation references, six accepted/zero
   candidate relationships, unsupported domains, `LIMITED_ENGINE_PROOF`, and
   `DEGRADED_SOURCE_PATH` for the stale DOL XML path.
+- Every OBS preserves three distinct evidence layers: machine acquisition
+  provenance, exact human-readable original evidence, and source methodology.
+  The five BLS observations retain the generic BLS API URL only as acquisition
+  provenance and expose their exact `data.bls.gov/timeseries/<series>` pages as
+  human evidence. Regression tests prohibit substituting the API endpoint for
+  those evidence pages.
 
 The exact six OBS and six CALC outputs are listed concisely in
 `PHASE4A_HUMAN_QA.md`; the complete machine record is
 `phase4a-read-model-candidate.json` (SHA-256
-`F67DE627E85568B256877B6DF24F89F6B2DB4841B8FFFD17194A4D44598A5F0D`).
+`68155D23A3D8535F3946EC1AB0BFAB9E6BE093736C148A2F8B28DFBE2693C2E9`).
 
 ## Replay / baseline evidence
 
@@ -65,9 +71,9 @@ Synthetic mechanics are architecture proof only, not U.S. economic evidence.
 
 ## Tests
 
-- `python -m unittest discover -s tests -v`: **170 passed** (Phase-3 + Phase-4A).
+- `python -m unittest discover -s tests -v`: **175 passed** (Phase-3 + Phase-4A).
 - `npm test -- --run --reporter verbose`: **76 passed** (unchanged Phase-2/3 UI regressions).
-- Phase-4A subset: **76 passed**.
+- Phase-4A subset: **81 passed**.
 - Security cases reject external self-promotion, unsupported causality, hostile
   algorithm strings, geography/unit mismatch, secret/storage-shaped output,
   and markup/control-character escape.
@@ -77,11 +83,11 @@ Synthetic mechanics are architecture proof only, not U.S. economic evidence.
 
 ## Performance / cost
 
-- Measured final local review build: 4.694 ms.
-- Peak traced Python memory: 295,060 bytes.
+- Measured final local review build: 4.868 ms.
+- Peak traced Python memory: 310,083 bytes.
 - Relationships/traversals/contributions: 6 / 6 / 6.
 - Max depth/rounds reached: 1 / 1.
-- Review candidate size / local storage growth: 52,525 bytes; no runtime DB added.
+- Review candidate size / local storage growth: 55,511 bytes; no runtime DB added.
 - Recurring infrastructure/API cost: **$0**.
 - Dependencies added: **none**; Python standard library and existing local package only.
 

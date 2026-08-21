@@ -39,6 +39,9 @@ def build_master_read_model(
             "freshness": state.get("freshness"),
             "auxsaysCalculation": state.get("auxsaysCalculation"),
             "derivationRef": state.get("derivationRef"),
+            "acquisitionProvenanceUrl": state.get("acquisitionProvenanceUrl"),
+            "evidenceUrl": state.get("evidenceUrl"),
+            "methodologyUrl": state.get("methodologyUrl"),
         })
     relationship_summaries = [{
         "edgeId": edge["edgeId"],

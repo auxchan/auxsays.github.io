@@ -9,21 +9,12 @@ from pathlib import Path
 from typing import Any
 import uuid
 
+from .evidence import SERIES_HUMAN_EVIDENCE_URLS, SOURCE_METHODOLOGY_URLS
 from .models import parse_utc
 
 
 class CandidateError(ValueError):
     pass
-
-
-SERIES_HUMAN_EVIDENCE_URLS = {
-    "CES0000000001": "https://data.bls.gov/timeseries/CES0000000001",
-    "LNS14000000": "https://data.bls.gov/timeseries/LNS14000000",
-    "LNS11300000": "https://data.bls.gov/timeseries/LNS11300000",
-    "JTS000000000000000JOL": "https://data.bls.gov/timeseries/JTS000000000000000JOL",
-    "JTS000000000000000HIL": "https://data.bls.gov/timeseries/JTS000000000000000HIL",
-    "DOL-UI-SA-INITIAL": "https://www.dol.gov/ui/data.pdf",
-}
 
 
 def canonical_bytes(candidate: dict[str, Any]) -> bytes:
@@ -290,28 +281,28 @@ SOURCE_PUBLIC_METADATA = {
         "provider": "U.S. Bureau of Labor Statistics",
         "dataset": "Current Employment Statistics",
         "authorityTier": "TIER_A_ORIGINAL_AUTHORITY",
-        "methodologyUrl": "https://www.bls.gov/opub/hom/ces/home.htm",
+        "methodologyUrl": SOURCE_METHODOLOGY_URLS["bls-ces"],
         "nextExpectedReleaseAt": "See current BLS release calendar",
     },
     "bls-cps": {
         "provider": "U.S. Bureau of Labor Statistics",
         "dataset": "Current Population Survey labor-force statistics",
         "authorityTier": "TIER_A_ORIGINAL_AUTHORITY",
-        "methodologyUrl": "https://www.bls.gov/opub/hom/cps/calculation.htm",
+        "methodologyUrl": SOURCE_METHODOLOGY_URLS["bls-cps"],
         "nextExpectedReleaseAt": "See current BLS release calendar",
     },
     "bls-jolts": {
         "provider": "U.S. Bureau of Labor Statistics",
         "dataset": "Job Openings and Labor Turnover Survey",
         "authorityTier": "TIER_A_ORIGINAL_AUTHORITY",
-        "methodologyUrl": "https://www.bls.gov/opub/hom/jlt/presentation.htm",
+        "methodologyUrl": SOURCE_METHODOLOGY_URLS["bls-jolts"],
         "nextExpectedReleaseAt": "See current BLS release calendar",
     },
     "dol-ui-claims": {
         "provider": "U.S. Department of Labor, Employment and Training Administration",
         "dataset": "Unemployment Insurance Weekly Claims",
         "authorityTier": "TIER_A_ORIGINAL_AUTHORITY",
-        "methodologyUrl": "https://oui.doleta.gov/unemploy/claims.asp",
+        "methodologyUrl": SOURCE_METHODOLOGY_URLS["dol-ui-claims"],
         "nextExpectedReleaseAt": "Thursday 08:30 ET",
     },
 }

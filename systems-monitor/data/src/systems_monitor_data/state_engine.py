@@ -5,6 +5,7 @@ from decimal import Decimal
 from typing import Any
 
 from .derivation import stable_id
+from .evidence import evidence_links
 from .models import parse_utc
 
 
@@ -117,6 +118,7 @@ class StateEngine:
             "vintageId": metric.get("vintageId"),
             "revisionNumber": metric.get("revisionNumber", 0),
         }
+        links = evidence_links(metric["sourceId"], metric["sourceSeriesId"], metric["provenanceUrl"])
         return {
             "stateId": stable_id("obs-state", identity),
             "nodeId": f"indicator:{metric['id']}",
@@ -140,7 +142,7 @@ class StateEngine:
             "seasonalAdjustment": metric["seasonalAdjustment"],
             "geography": "US",
             "rightsState": metric["rightsState"],
-            "evidenceUrl": metric["provenanceUrl"],
+            **links,
             "artifactSha256": metric["artifactSha256"],
             "carriedForward": period_date < evaluated.date(),
         }

@@ -5,6 +5,7 @@ from pathlib import Path
 
 from _support import CONFIG, PACKAGE_ROOT
 from systems_monitor_data.derivation import calculate, create_derivation, reproduce
+from systems_monitor_data.evidence import SERIES_HUMAN_EVIDENCE_URLS, SOURCE_METHODOLOGY_URLS
 from systems_monitor_data.phase4a import build_phase4a_candidate
 from systems_monitor_data.state_engine import StateEngine, previous_eligible, select_as_of
 
@@ -72,6 +73,23 @@ class Phase4StateTests(unittest.TestCase):
         for state in self.run_state()["states"]:
             self.assertEqual("OBS", state["stateType"])
             self.assertEqual("NONE", state["auxsaysCalculation"])
+
+    def test_bls_machine_and_human_evidence_are_separate(self):
+        states = [row for row in self.run_state()["states"] if row["sourceId"].startswith("bls-")]
+        self.assertEqual(5, len(states))
+        for state in states:
+            self.assertEqual("https://api.bls.gov/publicAPI/v2/timeseries/data/", state["acquisitionProvenanceUrl"])
+            self.assertEqual(SERIES_HUMAN_EVIDENCE_URLS[state["sourceSeriesId"]], state["evidenceUrl"])
+            self.assertNotEqual(state["acquisitionProvenanceUrl"], state["evidenceUrl"])
+
+    def test_methodology_reference_is_preserved_for_every_obs(self):
+        for state in self.run_state()["states"]:
+            self.assertEqual(SOURCE_METHODOLOGY_URLS[state["sourceId"]], state["methodologyUrl"])
+
+    def test_generic_bls_api_is_never_human_evidence(self):
+        for state in self.run_state()["states"]:
+            if state["sourceId"].startswith("bls-"):
+                self.assertTrue(state["evidenceUrl"].startswith("https://data.bls.gov/timeseries/"))
 
     def test_unknown_replay_mode_fails(self):
         with self.assertRaises(ValueError):

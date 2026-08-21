@@ -165,3 +165,18 @@ Reinspect only the affected facts when `AGENTS.md`, `.github/workflows/pages.yml
 - Final local evidence: 170 Python tests and 76 UI regressions pass; review build
   4.694 ms, peak traced memory 295,060 bytes, candidate 52,525 bytes, recurring
   infrastructure/API cost $0, and no dependency added.
+
+## PHASE-4A EVIDENCE-LINK MICRO-CORRECTION — 2026-08-21
+
+- Phase-4A OBS and the limited read model now preserve the generic BLS API URL
+  as machine acquisition provenance, the exact BLS series-report URL as human
+  evidence, and the applicable BLS/DOL methodology URL as a distinct reference.
+- Five regressions enforce the exact five BLS series mappings, reject the generic
+  API as human evidence, and verify all three evidence layers in the read model.
+- The regenerated candidate retains the same six factual OBS values, six CALC
+  identity mappings, bounded propagation behavior, and `LIMITED_ENGINE_PROOF`
+  scope. No calculation, propagation, allocation, UI, source ingestion, or
+  contract content changed.
+- Final micro-correction evidence: 175 Python tests and 76 unchanged UI tests
+  pass. `HUMAN_PHASE4A_QA` remains PENDING, Gate B remains OPEN, and no Phase-4B
+  or BEA discovery/intake work began.

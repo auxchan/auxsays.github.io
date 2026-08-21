@@ -1,5 +1,18 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-21 — Phase-4A evidence-link micro-correction
+
+- Separated observation evidence into machine acquisition provenance, exact
+  human-readable original evidence, and source methodology without changing
+  State calculations, relationship acceptance, propagation, allocation, or UI.
+- Restored the five exact BLS series-report URLs in the Phase-4A OBS/read model
+  while retaining the generic BLS API endpoint only as acquisition provenance.
+- Added five regression tests and regenerated the deterministic review candidate.
+  Final totals are 175 Python tests and 76 unchanged UI tests.
+- `HUMAN_PHASE4A_QA` remains PENDING and Gate B remains OPEN. Phase 4B/BEA
+  discovery or ingestion, Phase 5, public activation, push, merge, and deployment
+  did not occur.
+
 ## 2026-08-19 — Phase-4A Engine / Labor-State Proof implementation
 
 - Added standard-library State, relationship lifecycle, bounded propagation,

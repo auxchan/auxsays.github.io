@@ -8,14 +8,14 @@ Coverage: **LIMITED_ENGINE_PROOF**
 
 ## Factual OBS inputs
 
-| Observation | Value | Period | Series | Freshness / retrieval path |
-|---|---:|---|---|---|
-| Total nonfarm payroll employment | 158,858 thousand persons | 2026-07 | CES0000000001 | current / current |
-| U-3 unemployment rate | 4.1% | 2026-07 | LNS14000000 | current / current |
-| Labor-force participation rate | 61.4% | 2026-07 | LNS11300000 | current / current |
-| Initial unemployment-insurance claims | 209,000 claims | week ending 2026-08-08 | DOL-UI-SA-INITIAL | current / stale XML path |
-| Job openings | 7,359 thousand | 2026-06 | JTS000000000000000JOL | current / current |
-| Hires | 5,348 thousand | 2026-06 | JTS000000000000000HIL | current / current |
+| Observation | Value | Period | Series | Human evidence | Freshness / retrieval path |
+|---|---:|---|---|---|---|
+| Total nonfarm payroll employment | 158,858 thousand persons | 2026-07 | CES0000000001 | `data.bls.gov/timeseries/CES0000000001` | current / current |
+| U-3 unemployment rate | 4.1% | 2026-07 | LNS14000000 | `data.bls.gov/timeseries/LNS14000000` | current / current |
+| Labor-force participation rate | 61.4% | 2026-07 | LNS11300000 | `data.bls.gov/timeseries/LNS11300000` | current / current |
+| Initial unemployment-insurance claims | 209,000 claims | week ending 2026-08-08 | DOL-UI-SA-INITIAL | `dol.gov/ui/data.pdf` | current / stale XML path |
+| Job openings | 7,359 thousand | 2026-06 | JTS000000000000000JOL | `data.bls.gov/timeseries/JTS000000000000000JOL` | current / current |
+| Hires | 5,348 thousand | 2026-06 | JTS000000000000000HIL | `data.bls.gov/timeseries/JTS000000000000000HIL` | current / current |
 
 For all six: `stateType = OBS`; `AUXSAYS calculation = NONE`.
 
@@ -53,9 +53,11 @@ about labor, a company, an industry, or the U.S. economy.
 ## Taylor check
 
 1. Confirm the six OBS values/periods/series above match the accepted Phase-3 evidence.
-2. Confirm every CALC says exactly which OBS it maps and that the value/unit did not change.
-3. Confirm the DOL observation remains current while the XML retrieval path remains visibly stale.
-4. Confirm no relationship claims one labor indicator caused another.
-5. Confirm coverage says `LIMITED_ENGINE_PROOF`, Gate B OPEN, and no FCST/SCEN.
+2. Confirm each BLS human-evidence URL ends in its exact series ID, not the generic API endpoint.
+3. Confirm acquisition provenance and methodology remain separately available for all six OBS.
+4. Confirm every CALC says exactly which OBS it maps and that the value/unit did not change.
+5. Confirm the DOL observation remains current while the XML retrieval path remains visibly stale.
+6. Confirm no relationship claims one labor indicator caused another.
+7. Confirm coverage says `LIMITED_ENGINE_PROOF`, Gate B OPEN, and no FCST/SCEN.
 
 Review candidate: `phase4a-read-model-candidate.json`.

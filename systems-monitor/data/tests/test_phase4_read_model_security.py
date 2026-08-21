@@ -42,6 +42,20 @@ class Phase4ReadModelTests(unittest.TestCase):
         self.assertEqual(6, len(self.model["derivationRefs"]))
         self.assertTrue(all(row.get("derivationRef") for row in self.model["stateComponents"] if row["stateType"] == "CALC"))
 
+    def test_obs_read_model_preserves_three_evidence_layers(self):
+        observations = [row for row in self.model["stateComponents"] if row["stateType"] == "OBS"]
+        self.assertEqual(6, len(observations))
+        for row in observations:
+            self.assertTrue(row["acquisitionProvenanceUrl"].startswith("https://"))
+            self.assertTrue(row["evidenceUrl"].startswith("https://"))
+            self.assertTrue(row["methodologyUrl"].startswith("https://"))
+
+    def test_bls_read_model_opens_exact_series_page(self):
+        for row in self.model["stateComponents"]:
+            if row["stateType"] == "OBS" and "api.bls.gov" in row["acquisitionProvenanceUrl"]:
+                self.assertTrue(row["evidenceUrl"].startswith("https://data.bls.gov/timeseries/"))
+                self.assertNotEqual(row["acquisitionProvenanceUrl"], row["evidenceUrl"])
+
     def test_relationship_counts_are_accurate(self):
         self.assertEqual(6, self.model["acceptedRelationshipCount"])
         self.assertEqual(0, self.model["candidateRelationshipCount"])
