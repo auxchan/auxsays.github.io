@@ -14,6 +14,7 @@ from systems_monitor_data.phase4b_live import (
     LIVE_BLOCKED,
     LiveBeaAcceptanceRunner,
     LiveBeaBlocked,
+    _structural_coverage,
     main,
 )
 
@@ -100,6 +101,13 @@ class Phase4bLiveRunnerTests(unittest.TestCase):
         self.assertEqual(10, result["nodeCount"])
         self.assertEqual(0, result["structuralCalculationCount"])
         self.assertEqual("BLOCKED_STRUCTURAL_HANDOFF_UNPROVEN", result["gateBStatus"])
+        candidate = json.loads(Path(result["candidatePath"]).read_text(encoding="utf-8"))
+        self.assertEqual("LIMITED_ENGINE_PROOF", candidate["structuralCoverageState"])
+        self.assertTrue(candidate["acceptedDirectStructuralEvidence"])
+        self.assertEqual("BLOCKED_STRUCTURAL_HANDOFF_UNPROVEN", candidate["structuralExecutionStatus"])
+        self.assertFalse(candidate["structuralProofRequirements"]["executableMultiStagePath"])
+        self.assertFalse(candidate["structuralProofRequirements"]["factualCommonCauseProof"])
+        self.assertFalse(candidate["structuralProofRequirements"]["structuralEmploymentExposureCalc"])
         self.assertFalse(result["topologyCheck"]["pathAExecutable"])
         self.assertFalse(result["topologyCheck"]["pathBExecutable"])
         self.assertEqual("NON_RECURSIVE_BENCHMARK_ONLY", result["directTotalBenchmark"]["totalRole"])
@@ -112,6 +120,38 @@ class Phase4bLiveRunnerTests(unittest.TestCase):
         self.assertEqual("NOT_GENERATED", result["structuralEmploymentExposure"]["status"])
         self.assertIsNone(result["replay"]["publicBefore"])
         self.assertIsNotNone(result["replay"]["publicAtArtifactId"])
+
+    def test_direct_cells_alone_cannot_promote_bounded_structural_coverage(self):
+        coverage = _structural_coverage(
+            accepted_relationships=[{"edgeId": "accepted-direct-cell"}],
+            topology_check={"pathAExecutable": False, "pathBExecutable": False},
+            common_cause_status="BLOCKED_HANDOFF_UNPROVEN",
+            employment_exposure_status="NOT_GENERATED",
+            structural_execution_status="BLOCKED_STRUCTURAL_HANDOFF_UNPROVEN",
+        )
+        self.assertTrue(coverage["acceptedDirectStructuralEvidence"])
+        self.assertEqual("LIMITED_ENGINE_PROOF", coverage["structuralCoverageState"])
+        self.assertEqual("BLOCKED_STRUCTURAL_HANDOFF_UNPROVEN", coverage["structuralExecutionStatus"])
+        self.assertNotEqual("BOUNDED_STRUCTURAL_PROOF", coverage["structuralCoverageState"])
+
+    def test_bounded_coverage_requires_paths_common_cause_and_employment_calc(self):
+        base = {
+            "accepted_relationships": [{"edgeId": "accepted-direct-cell"}],
+            "topology_check": {"pathAExecutable": True, "pathBExecutable": True},
+            "structural_execution_status": "BLOCKED_GATE_B_EVIDENCE_INCOMPLETE",
+        }
+        without_common_cause = _structural_coverage(
+            **base,
+            common_cause_status="NOT_AVAILABLE",
+            employment_exposure_status="GENERATED",
+        )
+        without_exposure = _structural_coverage(
+            **base,
+            common_cause_status="PROVEN",
+            employment_exposure_status="NOT_GENERATED",
+        )
+        self.assertEqual("LIMITED_ENGINE_PROOF", without_common_cause["structuralCoverageState"])
+        self.assertEqual("LIMITED_ENGINE_PROOF", without_exposure["structuralCoverageState"])
 
     def test_secret_is_absent_from_results_and_all_persisted_text(self):
         result = self.runner(FakeBeaTransport(), {"AUXSAYS_BEA_USER_ID": TEST_USER_ID}).run()

@@ -212,6 +212,36 @@ def _benchmark_summary(direct_cells: list, total_cells: list, topology_artifact:
     }
 
 
+def _structural_coverage(
+    *,
+    accepted_relationships: list[dict[str, Any]],
+    topology_check: dict[str, Any],
+    common_cause_status: str,
+    employment_exposure_status: str,
+    structural_execution_status: str,
+) -> dict[str, Any]:
+    """Keep accepted direct evidence distinct from an executable proof."""
+    requirements = {
+        "acceptedDirectStructuralEvidence": bool(accepted_relationships),
+        "executableMultiStagePath": bool(
+            topology_check.get("pathAExecutable") and topology_check.get("pathBExecutable")
+        ),
+        "factualCommonCauseProof": common_cause_status == "PROVEN",
+        "structuralEmploymentExposureCalc": employment_exposure_status == "GENERATED",
+    }
+    bounded_proof = all(requirements.values())
+    return {
+        "structuralCoverageState": (
+            "BOUNDED_STRUCTURAL_PROOF" if bounded_proof else "LIMITED_ENGINE_PROOF"
+        ),
+        "acceptedDirectStructuralEvidence": requirements["acceptedDirectStructuralEvidence"],
+        "structuralExecutionStatus": (
+            "EXECUTABLE_BOUNDED_STRUCTURAL_PROOF" if bounded_proof else structural_execution_status
+        ),
+        "structuralProofRequirements": requirements,
+    }
+
+
 def _attach_current_observations(observations: list[dict[str, Any]], attachment_config: dict[str, Any], accepted: list[dict[str, Any]]) -> list[dict[str, Any]]:
     nodes = {node for edge in accepted for node in (edge["sourceNode"], edge["targetNode"])}
     by_series = {str(row.get("seriesId") or row.get("series_id")): row for row in observations}
@@ -370,6 +400,23 @@ class LiveBeaAcceptanceRunner:
         current_attachments = _attach_current_observations(base_candidate["currentObservations"], attachments_config, accepted)
         replay = _replay_proof([topology_artifact, benchmark_artifact], accepted_time)
         retained_bytes = sum(len(body) for body in (table_safe, year_safe, topology_safe, benchmark_safe))
+        common_cause_result = {
+            "status": topology_check["commonCauseProofStatus"],
+            "reconciliation": None,
+            "reason": "No accepted industry-to-commodity handoff exists; synthetic reconciliation is not substituted.",
+        }
+        structural_employment_exposure = {
+            "status": "NOT_GENERATED",
+            "reason": "No accepted executable path and no approved OBS-to-structural-pressure transformation.",
+            "claimClass": "CALC_ABSENT",
+        }
+        coverage = _structural_coverage(
+            accepted_relationships=accepted,
+            topology_check=topology_check,
+            common_cause_status=common_cause_result["status"],
+            employment_exposure_status=structural_employment_exposure["status"],
+            structural_execution_status=gate_status,
+        )
 
         run_core = {
             "schemaVersion": "phase4b-live-bea-run-1.0.0",
@@ -391,16 +438,9 @@ class LiveBeaAcceptanceRunner:
             "currentObservations": base_candidate["currentObservations"],
             "currentStateAttachments": current_attachments,
             "behavioralEvidence": base_candidate["behavioralEvidence"],
-            "commonCauseResult": {
-                "status": topology_check["commonCauseProofStatus"],
-                "reconciliation": None,
-                "reason": "No accepted industry-to-commodity handoff exists; synthetic reconciliation is not substituted.",
-            },
-            "structuralEmploymentExposure": {
-                "status": "NOT_GENERATED",
-                "reason": "No accepted executable path and no approved OBS-to-structural-pressure transformation.",
-                "claimClass": "CALC_ABSENT",
-            },
+            "commonCauseResult": common_cause_result,
+            "structuralEmploymentExposure": structural_employment_exposure,
+            **coverage,
             "replay": replay,
             "crosswalk": bridge_record,
             "requestMetrics": {
@@ -448,7 +488,7 @@ class LiveBeaAcceptanceRunner:
         candidate = base_candidate
         candidate.pop("candidateId", None)
         candidate.update({
-            "structuralCoverageState": "BOUNDED_STRUCTURAL_PROOF",
+            **coverage,
             "sourceHealth": {**candidate["sourceHealth"], "beaInputOutput": "VERIFIED_LIVE_ACCEPTED_RELATIONSHIPS"},
             "acceptedRelationships": accepted,
             "rejectedRelationshipCount": len(rejected),
