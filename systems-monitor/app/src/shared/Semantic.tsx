@@ -18,7 +18,7 @@ function allowlistedUrl(value: string): string | null {
   try {
     const url = new URL(value, "https://auxsays.com");
     const host = url.hostname.toLowerCase();
-    const allowed = host === "auxsays.com" || host.endsWith(".bls.gov") || host === "bls.gov" || host.endsWith(".dol.gov") || host === "dol.gov" || host.endsWith(".doleta.gov") || host === "doleta.gov";
+    const allowed = host === "auxsays.com" || host.endsWith(".bls.gov") || host === "bls.gov" || host.endsWith(".dol.gov") || host === "dol.gov" || host.endsWith(".doleta.gov") || host === "doleta.gov" || host.endsWith(".eia.gov") || host === "eia.gov";
     if (url.protocol !== "https:" || !allowed || url.username || url.password) return null;
     return url.toString();
   } catch {
@@ -37,5 +37,5 @@ export function FixtureNotice({ compact = false }: { compact?: boolean }) {
 }
 
 export function FactualCandidateNotice({ compact = false }: { compact?: boolean }) {
-  return <div className={compact ? "sm-fixture-notice sm-fixture-notice--compact" : "sm-fixture-notice"} role="note"><strong>LOCAL FACTUAL CANDIDATE</strong><span>NOT PUBLICLY ACTIVATED · HUMAN QA ROUND 2 PENDING</span></div>;
+  return <div className={compact ? "sm-fixture-notice sm-fixture-notice--compact" : "sm-fixture-notice"} role="note"><strong>LOCAL FACTUAL CANDIDATE</strong><span>NOT PUBLICLY ACTIVATED · HUMAN QA PENDING</span></div>;
 }

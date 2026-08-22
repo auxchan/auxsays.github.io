@@ -1,5 +1,20 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-22 — Phase-4B status semantics and local UI checkpoint
+
+- Corrected the live-runner read model so accepted direct BEA cells alone retain
+  `LIMITED_ENGINE_PROOF`; `BOUNDED_STRUCTURAL_PROOF` now requires executable
+  multi-stage paths, factual common-cause proof, and a structural employment-
+  exposure CALC.
+- Added separate direct-evidence and structural-execution fields plus regression
+  coverage preventing Gate-B consumers from inferring completed proof from
+  direct cells alone.
+- Added a local-only governed Phase-4B UI checkpoint with three current `OBS`,
+  zero structural `CALC`, zero current accepted paths, progressive evidence
+  detail, an honest BEA credential block, bounded-coverage copy, and no forecast.
+- Human Phase-4B UI QA remains pending. Gate B remains open, Phase 5 remains
+  locked, and no public activation or deployment occurred.
+
 ## 2026-08-22 — Phase-4B live BEA acceptance runner
 
 - Wired the existing BEA client, `GetParameterValues` resolvers, bounded HTTPS

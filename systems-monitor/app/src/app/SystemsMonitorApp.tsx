@@ -15,16 +15,16 @@ class AppErrorBoundary extends Component<{ children: React.ReactNode }, { error:
 }
 
 function ValidatedApp() {
-  const { snapshot, variant, setVariant } = useSnapshot();
+  const { snapshot, phase4b, variant, setVariant } = useSnapshot();
   const { route, navigate } = useRouteState(snapshot);
   if (variant === "loading") return <LoadingState />;
   if (variant === "snapshot-unavailable") return <ErrorState />;
   const view = route.view === "verified"
-    ? <VerifiedDataView snapshot={snapshot} route={route} navigate={navigate} variant={variant} />
+    ? <VerifiedDataView snapshot={snapshot} phase4b={phase4b} route={route} navigate={navigate} variant={variant} />
     : route.view === "outlook"
-      ? <OutlookView snapshot={snapshot} route={route} navigate={navigate} variant={variant} />
-      : <SummaryView snapshot={snapshot} route={route} navigate={navigate} variant={variant} />;
-  return <AppShell snapshot={snapshot} route={route} navigate={navigate} variant={variant} setVariant={setVariant}><DegradedState variant={variant} /><Suspense fallback={<LoadingState />}>{view}</Suspense></AppShell>;
+      ? <OutlookView snapshot={snapshot} phase4b={phase4b} route={route} navigate={navigate} variant={variant} />
+      : <SummaryView snapshot={snapshot} phase4b={phase4b} route={route} navigate={navigate} variant={variant} />;
+  return <AppShell snapshot={snapshot} phase4b={phase4b} route={route} navigate={navigate} variant={variant} setVariant={setVariant}><DegradedState variant={variant} /><Suspense fallback={<LoadingState />}>{view}</Suspense></AppShell>;
 }
 
 export function SystemsMonitorApp() {

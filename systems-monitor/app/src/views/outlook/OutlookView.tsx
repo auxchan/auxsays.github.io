@@ -12,10 +12,10 @@ function ForecastInspectorContent({ forecast }: { forecast: ForecastRecord }) {
   return <><span className="sm-eyebrow">Forecast inspector</span><h2>{forecast.displayRange}</h2><p className="sm-inspector-range-label">Selected synthetic range · <DataStateLabel state={forecast.stateType} /></p><dl>{Object.entries(forecast.evidence).map(([key, value]) => <div key={key}><dt>{key.replaceAll(/([A-Z])/g, " $1")}</dt><dd>{value}</dd></div>)}</dl><details className="sm-inspector-details"><summary>Prior change and assumptions</summary><h3>Prior-forecast change</h3><p>{forecast.changeAttribution}</p><h3>Active assumptions</h3><ul>{forecast.assumptions.map((item) => <li key={item}>{item}</li>)}</ul></details></>;
 }
 
-export default function OutlookView({ snapshot, route, navigate, variant }: ViewProps) {
+export default function OutlookView({ snapshot, phase4b, route, navigate, variant }: ViewProps) {
   const [traceOpen, setTraceOpen] = useState(false);
   if (snapshot.snapshot.publicationClass === "factual") {
-    return <div className="sm-view sm-view--outlook"><header className="sm-view-header"><div><span className="sm-eyebrow">Outlook / Factual mode</span><h1 data-route-heading tabIndex={-1}>Forecast unavailable / not yet supported</h1></div></header><FactualCandidateNotice compact /><ErrorState title="Forecast unavailable / not yet supported" detail="Phase 3 contains observed factual labor data only. Forecasting is not yet supported." fixtureDisclosure={false} /></div>;
+    return <div className="sm-view sm-view--outlook"><header className="sm-view-header"><div><span className="sm-eyebrow">Outlook / Factual mode</span><h1 data-route-heading tabIndex={-1}>Forecast unavailable / not yet supported</h1></div></header>{!phase4b && <FactualCandidateNotice compact />}<ErrorState title="Forecast unavailable / not yet supported" detail={phase4b ? "No forecast has been produced. Phase 4 is current-state structural work, Gate B remains open, and Phase 5 forecasting is locked." : "Observed factual data is available. Forecasting is not yet supported."} fixtureDisclosure={false} /></div>;
   }
   const forecast = snapshot.outlook.forecasts.find((item) => item.horizon === route.horizon && item.scenario === route.scenario) ?? snapshot.outlook.forecasts[0];
   const scenarios = [...new Set(snapshot.outlook.forecasts.map((item) => item.scenario))];

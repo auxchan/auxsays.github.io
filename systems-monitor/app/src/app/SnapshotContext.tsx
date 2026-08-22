@@ -2,10 +2,12 @@ import { createContext, useContext, useMemo, useState } from "react";
 import { validatePublicationCandidate, validatePublicSnapshot } from "../data/validatePublicSnapshot";
 import type { FixtureVariant, SnapshotViewModel } from "../data/publicSnapshotTypes";
 import { createCandidateViewModel, createSnapshotViewModel } from "../data/snapshotViewModelFactory";
+import { validatePhase4bReadModel, type Phase4bReadModel } from "../data/phase4bReadModel";
 import { phase2Fixture } from "../fixtures/phase2Fixture";
 
 interface SnapshotContextValue {
   snapshot: SnapshotViewModel;
+  phase4b?: Phase4bReadModel;
   variant: FixtureVariant;
   setVariant: (variant: FixtureVariant) => void;
 }
@@ -21,8 +23,13 @@ export function SnapshotProvider({ children }: { children: React.ReactNode }) {
     }
     return createSnapshotViewModel(validatePublicSnapshot(localCandidate ?? phase2Fixture));
   }, []);
+  const phase4b = useMemo(() => {
+    if (!import.meta.env.DEV) return undefined;
+    const stored = window.localStorage.getItem("auxsays.localPhase4bState");
+    return stored ? validatePhase4bReadModel(JSON.parse(stored)) : undefined;
+  }, []);
   const [variant, setVariant] = useState<FixtureVariant>("normal");
-  return <SnapshotContext.Provider value={{ snapshot, variant, setVariant }}>{children}</SnapshotContext.Provider>;
+  return <SnapshotContext.Provider value={{ snapshot, phase4b, variant, setVariant }}>{children}</SnapshotContext.Provider>;
 }
 
 export function useSnapshot() {
