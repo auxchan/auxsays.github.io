@@ -1,5 +1,17 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-21 — Phase-4A Human QA closure
+
+- Taylor recorded `HUMAN_PHASE4A_QA = PASS` and approved the bounded Phase-4A
+  Engine / Labor-State Proof as COMPLETE.
+- Preserved candidate identity
+  `phase4a-candidate:0b3836b23eed52985b746606c0c6bf75d536f885ecb653322af435758be6f5ea`
+  and artifact SHA-256
+  `68155D23A3D8535F3946EC1AB0BFAB9E6BE093736C148A2F8B28DFBE2693C2E9`.
+- Coverage remains `LIMITED_ENGINE_PROOF` and Gate B remains OPEN. The closure
+  does not claim real structural-economy propagation, forecasting, FCST, SCEN,
+  public activation, merge, push, or deployment.
+
 ## 2026-08-21 — Phase-4A evidence-link micro-correction
 
 - Separated observation evidence into machine acquisition provenance, exact

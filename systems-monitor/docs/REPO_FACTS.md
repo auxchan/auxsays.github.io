@@ -180,3 +180,14 @@ Reinspect only the affected facts when `AGENTS.md`, `.github/workflows/pages.yml
 - Final micro-correction evidence: 175 Python tests and 76 unchanged UI tests
   pass. `HUMAN_PHASE4A_QA` remains PENDING, Gate B remains OPEN, and no Phase-4B
   or BEA discovery/intake work began.
+
+## PHASE-4A CLOSURE — 2026-08-21
+
+- Taylor approved `HUMAN_PHASE4A_QA = PASS`; Phase 4A Engine / Labor-State Proof
+  is COMPLETE. The final candidate identity is
+  `phase4a-candidate:0b3836b23eed52985b746606c0c6bf75d536f885ecb653322af435758be6f5ea`
+  and its artifact SHA-256 is
+  `68155D23A3D8535F3946EC1AB0BFAB9E6BE093736C148A2F8B28DFBE2693C2E9`.
+- `structuralCoverageState` remains `LIMITED_ENGINE_PROOF`; Gate B remains OPEN.
+  No structural-economy, real dependency-propagation, forecast, FCST, SCEN, or
+  public-activation claim follows from this closure.

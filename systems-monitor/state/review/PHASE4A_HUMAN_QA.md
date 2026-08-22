@@ -1,6 +1,11 @@
 # Phase-4A Human QA
 
-`HUMAN_PHASE4A_QA = PENDING`
+`HUMAN_PHASE4A_QA = PASS`
+
+Taylor approved this bounded Human QA on 2026-08-21. Phase 4A Engine /
+Labor-State Proof is COMPLETE. Gate B remains OPEN and the candidate retains
+`LIMITED_ENGINE_PROOF`; this approval does not establish structural-economy
+coverage, real dependency propagation, forecasting, FCST, or SCEN.
 
 Coverage: **LIMITED_ENGINE_PROOF**
 
@@ -50,14 +55,14 @@ Synthetic input 10 units, synthetic buffer absorbs 4 units:
 This fixture proves typed `PARTIALLY_ABSORBED` handling only. It is not a claim
 about labor, a company, an industry, or the U.S. economy.
 
-## Taylor check
+## Taylor approval record
 
-1. Confirm the six OBS values/periods/series above match the accepted Phase-3 evidence.
-2. Confirm each BLS human-evidence URL ends in its exact series ID, not the generic API endpoint.
-3. Confirm acquisition provenance and methodology remain separately available for all six OBS.
-4. Confirm every CALC says exactly which OBS it maps and that the value/unit did not change.
-5. Confirm the DOL observation remains current while the XML retrieval path remains visibly stale.
-6. Confirm no relationship claims one labor indicator caused another.
-7. Confirm coverage says `LIMITED_ENGINE_PROOF`, Gate B OPEN, and no FCST/SCEN.
+Taylor confirmed the six OBS values/periods/series, exact human-evidence links,
+separate acquisition and methodology references, unchanged identity CALCs,
+current DOL observation with stale XML retrieval-path disclosure, non-causal
+relationship boundary, limited coverage label, Gate B OPEN state, and absence
+of FCST/SCEN.
 
 Review candidate: `phase4a-read-model-candidate.json`.
+Candidate identity: `phase4a-candidate:0b3836b23eed52985b746606c0c6bf75d536f885ecb653322af435758be6f5ea`.
+Candidate SHA-256: `68155D23A3D8535F3946EC1AB0BFAB9E6BE093736C148A2F8B28DFBE2693C2E9`.

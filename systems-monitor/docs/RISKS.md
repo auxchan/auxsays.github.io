@@ -72,7 +72,8 @@ economy-wide production evidence.
   real structural overlap evidence remains Phase-4B-required.
 - R-032/R-033 are mitigated for the review candidate by explicit
   `LIMITED_ENGINE_PROOF`, unsupported domains, OBS/CALC separation, immutable
-  derivations, and a public-safe allowlist. Human Phase-4A QA remains PENDING.
+  derivations, and a public-safe allowlist. Taylor approved Human Phase-4A QA on
+  2026-08-21; these risks remain open for Phase-4B structural proof and Gate B.
 - R-034 retains the $0 standard-library/local posture. R-035 through R-037 remain
   fully open because no structural source, BEA data, or real behavioral evidence
   was retrieved or implemented.

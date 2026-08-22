@@ -1,6 +1,6 @@
 # Phase-4A Technical Evidence
 
-Status: **TECHNICAL PASS / HUMAN_PHASE4A_QA PENDING / GATE B OPEN**
+Status: **TECHNICAL PASS / HUMAN_PHASE4A_QA PASS / PHASE 4A COMPLETE / GATE B OPEN**
 
 ## Build identity
 
@@ -93,8 +93,8 @@ Synthetic mechanics are architecture proof only, not U.S. economic evidence.
 
 ## Gate-B remaining requirements
 
-Gate B cannot close from this evidence. Phase 4B still requires a separately
-authorized bounded source-discovery/intake sprint, then exact original-authority
+Taylor approved Human Phase-4A QA on 2026-08-21 and Phase 4A is COMPLETE. Gate B
+cannot close from this evidence. Phase 4B still requires exact original-authority
 BEA Supply/Use/Input-Output dataset/table/version/rights/schema/parser/crosswalk
 approval before ingestion. It must prove real structural direct-versus-total
 role safety, accepted structural relationships, current structural node state,

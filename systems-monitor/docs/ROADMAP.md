@@ -4,9 +4,9 @@ Status reflects both artifacts and authority. Taylor approved all seven Foundati
 
 ## Current phase
 
-Phase 4A — Engine / Labor-State Proof implementation only. Phase 3 Data
-Integrity is CLOSED with Human Data QA Round 2 PASS and Gate A PASS. Gate B
-remains OPEN. Phase-4B, new-source ingestion, factual public activation,
+Phase 4A — Engine / Labor-State Proof is COMPLETE with Technical PASS and Taylor
+Human QA PASS. Phase 3 Data Integrity is CLOSED with Gate A PASS. Gate B remains
+OPEN. Phase-4B production ingestion/implementation, factual public activation,
 forecasting, deployment, and the deferred UI overhaul remain unauthorized.
 
 ## Phase-1 deliverables
@@ -80,12 +80,12 @@ forecasting, deployment, and the deferred UI overhaul remain unauthorized.
 | P4-004 | Derivation Transparency contract | Taylor promotion | CALC/public derivation implementation | BINDING 1.0.0 | `contracts/DERIVATION_TRANSPARENCY_CONTRACT.md` | Taylor-approved 2026-08-19 |
 | P4-005 | Phase-4 Testing contract | Taylor promotion | Gate-B implementation/evidence | BINDING 1.0.0 | `contracts/PHASE4_TESTING_CONTRACT.md` | Taylor-approved 2026-08-19; Gate B OPEN |
 | P4-006 | Integrated implementation design | Five promoted contracts plus scoped authorization | Phase-4 engineering | Approved 0.1.1 design | `PHASE4_STATE_DEPENDENCY_ALLOCATION_DESIGN.md` | Phase-4A authorized; Phase-4B locked |
-| P4-007 | Phase-4A current/as-of labor engine proof | State Model; O-006 accepted profile; scoped authorization | Engine proof, not Gate B | Implemented / Human QA pending | `data/src/systems_monitor_data/`; `state/review/` | 170 Python + 76 UI tests pass; LIMITED_ENGINE_PROOF; cannot pass Gate B |
+| P4-007 | Phase-4A current/as-of labor engine proof | State Model; O-006 accepted profile; scoped authorization | Engine proof, not Gate B | COMPLETE / Human QA PASS | `data/src/systems_monitor_data/`; `state/review/` | 175 Python + 76 UI tests pass; LIMITED_ENGINE_PROOF; cannot pass Gate B |
 | P4-008 | Phase-4B authoritative structural relationship proof | Five contract promotions; bounded source/slice approval | Gate B | Required design only | Design §§6, 13–15 | Original-authority BEA structural subset required; no ingestion |
 | P4-009 | Bounded propagation/common-cause behavior | Allocation/Propagation promotion; Phase-4B evidence | Gate B | Designed only | Design §§7–8, 13 | Real accepted lag/buffer/substitution/common-cause proof required |
 | P4-010 | Allocation/employment boundary | Allocation/Propagation; O-006 | Allocation proof | Mechanics implemented only | `data/src/systems_monitor_data/allocation.py` | Synthetic conservation proof; no real employment model or forecast |
 | P4-011 | Derivation/master-view read model | Derivation; O-006 | Explainable public candidate | Phase-4A candidate implemented | `state/review/phase4a-read-model-candidate.json` | Public-safe limited proof; UI overhaul deferred |
-| P4-012 | Gate-B evidence matrix | Testing; authorized Phase-4A and 4B implementation | Gate B | Phase-4A technical PASS / Human QA pending / Gate B OPEN | `state/review/PHASE4A_EVIDENCE.md` | Phase-4B authoritative backbone + remaining criteria + Human QA/Taylor approval required |
+| P4-012 | Gate-B evidence matrix | Testing; separately authorized Phase-4A/4B scopes | Gate B | Phase-4A technical + Human QA PASS / Gate B OPEN | `state/review/PHASE4A_EVIDENCE.md` | Phase-4B authoritative backbone + remaining criteria + Taylor Gate-B approval required |
 | P4-013 | Direct/total requirements role and double-count proof | Dependency/Testing promotion; Phase-4B source approval | Gate B | Required design only | Design §6.3; contracts DR-027–029 | Total requirements cannot recursively duplicate direct topology |
 | P4-014 | Structural coverage/read-model honesty | State/Derivation/Testing promotion | Gate B/public-read candidate | Required design only | Design §11 | Sparse graph cannot imply economy-wide coverage |
 
@@ -103,16 +103,11 @@ forecasting, deployment, and the deferred UI overhaul remain unauthorized.
 
 ## Next authorized work
 
-Implement only the deterministic Phase-4A Engine / Labor-State Proof using the
-six accepted Phase-3 labor observations and O-006's configurable depth-3,
-eight-round profile. Produce technical and `HUMAN_PHASE4A_QA = PENDING` evidence.
-
-Do not ingest any new source, retrieve/ingest BEA, implement Phase-4B, claim Gate
-B, activate factual data publicly, redesign the UI, forecast, install
-dependencies, choose cloud/paid services, push, merge, or deploy. O-007 remains
-an engineering choice constrained to standard-library/local structures. Any
-future Phase-4B work requires a bounded structural source-discovery/intake
-authorization; Phase 4A cannot close Gate B.
+Phase 4A is closed. Gate B remains OPEN and requires separately governed
+Phase-4B authoritative structural evidence. No Phase-4B production ingestion,
+accepted structural relationship generation, propagation implementation,
+factual public activation, UI redesign, forecast, paid/cloud service, push,
+merge, or deployment is authorized by the Phase-4A closure.
 
 ## Phase-3 first-slice implementation checkpoint — 2026-08-18
 
