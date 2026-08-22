@@ -1,7 +1,7 @@
 # Phase-4B Human QA
 
 Status: **HUMAN_PHASE4B_QA = PENDING**  
-Reason: **Live BEA metadata and matrix acceptance are blocked by missing external credential.**
+Reason: **The live runner is implemented, but BEA metadata and matrix acceptance remain blocked by the missing external credential.**
 
 ## Ready to inspect now
 
@@ -13,6 +13,7 @@ Reason: **Live BEA metadata and matrix acceptance are blocked by missing externa
 | Capacity | EIA refinery utilization | `97.2%`, week ending Aug. 14, 2026 |
 | Coverage | Bounded energy/refining/utilities/transport | Explicit; not whole economy |
 | Forecast boundary | No `FCST`, `SCEN`, jobs gained/lost | PASS |
+| Live runner | Executable, secret-safe, fail-closed | READY; actual invocation returned `BLOCKED_LIVE_BEA_CREDENTIAL` |
 
 ## Must be available before Taylor can pass QA
 

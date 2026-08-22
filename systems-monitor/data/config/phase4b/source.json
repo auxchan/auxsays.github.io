@@ -11,6 +11,7 @@
   "aggregation": "SUMMARY_71",
   "redefinitionBasis": "AFTER_REDEFINITIONS",
   "priceBasis": "PRODUCERS_PRICES",
+  "unit": "Coefficient",
   "topology": {
     "productToken": "CxIDRAR",
     "requiredTitleTerms": ["Direct Requirements", "After Redefinitions", "Summary"],

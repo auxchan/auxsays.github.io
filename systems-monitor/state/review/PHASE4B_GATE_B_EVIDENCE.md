@@ -1,6 +1,6 @@
 # Phase-4B Gate-B Evidence
 
-Status: **BLOCKED — LIVE BEA CREDENTIAL / ACCEPTANCE RUN REQUIRED**  
+Status: **LIVE RUNNER READY / EXECUTION BLOCKED — BEA CREDENTIAL REQUIRED**
 Human QA: **PENDING**  
 Gate B: **OPEN**  
 Activation: **LOCAL REVIEW ONLY**
@@ -10,6 +10,7 @@ Activation: **LOCAL REVIEW ONLY**
 | Surface | Result | Evidence |
 |---|---|---|
 | BEA metadata method | PASS | `InputOutput` uses `GetParameterValues` for `TableID` and `Year`; no production TableID is hard-coded |
+| Live orchestration | PASS | `data/run_phase4b_live.py` wires metadata → resolved products → bounded data → sanitized immutable capture → parser → generation → promotion → review artifacts |
 | BEA secret handling | PASS | External 36-character `AUXSAYS_BEA_USER_ID`; URL redaction and malformed-key tests |
 | BEA parser | PASS | Strict bounded JSON envelope, table/year/unit identity, COMMODITY/INDUSTRY namespaces, duplicate rejection, missing-is-not-zero |
 | Direct vs. total | PASS | `CxIDRAR` topology; `IxCTRAR` non-recursive benchmark only; double-count configuration fails |
@@ -61,9 +62,21 @@ API but is not endorsed or certified by BEA.”
 
 This is the required fail-closed behavior, not a Gate-B pass.
 
+The executable invocation is:
+
+```text
+python systems-monitor/data/run_phase4b_live.py --data-root systems-monitor/data --review-root systems-monitor/state/review
+```
+
+The real no-credential invocation returned `BLOCKED_LIVE_BEA_CREDENTIAL` with
+exit code 2. It made no BEA request and created no live evidence or candidate.
+On a credentialed run, BEA response envelopes are canonicalized with echoed
+UserID fields redacted before immutable persistence; the secret-bearing wire
+response exists only inside the request boundary.
+
 ## Tests and performance
 
-- Python data/state suite: **194 passed**.
+- Python data/state suite: **205 passed**.
 - UI regression suite: **76 passed**.
 - Candidate build: approximately **139 ms** local wall time.
 - Read-model candidate: **4,682 bytes**.
@@ -72,9 +85,10 @@ This is the required fail-closed behavior, not a Gate-B pass.
 
 ## Required closure action
 
-Supply the BEA UserID only through `AUXSAYS_BEA_USER_ID`, then run the bounded
-live metadata/retrieval acceptance path. External review must verify the exact
-live TableIDs, 2024 availability, accepted 12–40 direct relationships, factual
+Supply the BEA UserID only through `AUXSAYS_BEA_USER_ID`, then execute the
+implemented bounded live metadata/retrieval acceptance path. External review
+must verify the exact live TableIDs, 2024 availability, accepted 12–40 direct
+relationships, factual
 484 convergence/common-cause behavior, and the resulting ordinal current
 employment-exposure CALC. Taylor must then perform Human Phase-4B QA. Gate B
 must remain open until both steps pass.

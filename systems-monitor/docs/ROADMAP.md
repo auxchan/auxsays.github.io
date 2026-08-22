@@ -12,9 +12,11 @@ overhaul remain unauthorized.
 The Phase-4B source-discovery/intake sprint is complete. Taylor accepted O-008
 and authorized the bounded 2024 BEA summary-level energy implementation with
 NAICS 484 Truck Transportation as the downstream employment endpoint. The
-non-live adapter/parser/crosswalk/EIA/BLS/replay implementation now exists, but
-live BEA TableID resolution and accepted structural CALCs remain blocked until
-the external BEA UserID is supplied.
+non-live adapter/parser/crosswalk/EIA/BLS/replay implementation now exists. The
+executable live acceptance runner also exists and fails closed before network or
+filesystem mutation when its external BEA UserID is absent. Live BEA TableID
+resolution and accepted structural CALCs remain blocked until that credential
+is supplied through the approved environment variable.
 
 ## Phase-1 deliverables
 

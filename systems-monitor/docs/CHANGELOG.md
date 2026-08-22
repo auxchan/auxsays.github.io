@@ -1,5 +1,20 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-22 — Phase-4B live BEA acceptance runner
+
+- Wired the existing BEA client, `GetParameterValues` resolvers, bounded HTTPS
+  retrieval, strict parser, immutable evidence store, crosswalk, structural
+  generator, and deterministic promotion into one executable live runner.
+- The runner accepts the BEA UserID only from `AUXSAYS_BEA_USER_ID`, redacts the
+  credential from URLs and echoed response envelopes, and fails before network
+  or filesystem mutation when the variable is absent.
+- Added explicit current EIA/BLS context-only attachments, direct/total role
+  evidence, conservative replay proof, topology/handoff checks, and tests that
+  prohibit fixture promotion or unsupported structural CALCs.
+- The live runner was executed without a credential and returned
+  `BLOCKED_LIVE_BEA_CREDENTIAL`. No live TableID, matrix, relationship, CALC, or
+  Gate-B promotion was fabricated. Human QA remains pending and Phase 5 locked.
+
 ## 2026-08-21 — Phase-4B closed-slice implementation candidate
 
 - Added strict standard-library adapters for BEA InputOutput metadata/data,

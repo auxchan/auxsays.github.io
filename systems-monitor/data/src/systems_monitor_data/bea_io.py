@@ -106,6 +106,35 @@ def redact_bea_url(url: str) -> str:
     return urlunsplit((parts.scheme, parts.netloc, parts.path, "&".join(query), parts.fragment))
 
 
+def sanitize_bea_response(body: bytes) -> bytes:
+    """Return a canonical evidence envelope with echoed credentials redacted."""
+    try:
+        payload = json.loads(body)
+    except (UnicodeDecodeError, json.JSONDecodeError) as error:
+        raise BeaApiError("BEA response is not valid JSON") from error
+    if not isinstance(payload, dict) or payload.get("fixtureClass"):
+        raise BeaApiError("test fixture payload cannot enter live BEA evidence")
+
+    def redact(value: Any) -> Any:
+        if isinstance(value, dict):
+            parameter_name = str(value.get("ParameterName") or "").casefold()
+            result = {}
+            for key, child in value.items():
+                if key.casefold() in SECRET_QUERY_KEYS:
+                    result[key] = "REDACTED"
+                elif key == "ParameterValue" and parameter_name in SECRET_QUERY_KEYS:
+                    result[key] = "REDACTED"
+                else:
+                    result[key] = redact(child)
+            return result
+        if isinstance(value, list):
+            return [redact(item) for item in value]
+        return value
+
+    sanitized = redact(payload)
+    return json.dumps(sanitized, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+
+
 def _results(payload: dict[str, Any]) -> dict[str, Any]:
     try:
         results = payload["BEAAPI"]["Results"]
@@ -169,6 +198,8 @@ def parse_input_output_data(
     expected_table_id: str,
     expected_year: str,
     expected_unit: str,
+    row_namespace: str = "COMMODITY",
+    column_namespace: str = "INDUSTRY",
     max_rows: int = 20_000,
 ) -> list[BeaCell]:
     if not expected_table_id.isdigit() or not re.fullmatch(r"\d{4}", expected_year):
@@ -209,7 +240,13 @@ def parse_input_output_data(
             raise BeaApiError("BEA coefficient is not numeric") from error
         if not value.is_finite() or value < 0:
             raise BeaApiError("BEA coefficient is outside the accepted domain")
-        cell = BeaCell(row_code, row_label, column_code, column_label, str(value), year, table_id, unit)
+        if row_namespace not in {"COMMODITY", "INDUSTRY"} or column_namespace not in {"COMMODITY", "INDUSTRY"} or row_namespace == column_namespace:
+            raise BeaApiError("BEA matrix namespaces are invalid")
+        cell = BeaCell(
+            row_code, row_label, column_code, column_label, str(value), year,
+            table_id, unit, row_namespace=row_namespace,
+            column_namespace=column_namespace,
+        )
         if cell.identity in identities:
             raise BeaApiError("BEA data contains a duplicate source-cell identity")
         identities.add(cell.identity)
@@ -227,15 +264,19 @@ class BeaInputOutputClient:
         self._budget = budget or BeaRequestBudget()
 
     def _url(self, **parameters: str) -> str:
-        query = {"UserID": self._user_id, "DataSetName": BEA_DATASET, **parameters}
+        query = {"UserID": self._user_id, "DataSetName": BEA_DATASET, "ResultFormat": "JSON", **parameters}
         return f"{BEA_API_ENDPOINT}?{urlencode(query)}"
 
     def parameter_values(self, parameter_name: str) -> tuple[list[BeaParameterValue], str]:
+        values, _, safe_url = self.parameter_values_artifact(parameter_name)
+        return values, safe_url
+
+    def parameter_values_artifact(self, parameter_name: str) -> tuple[list[BeaParameterValue], bytes, str]:
         if parameter_name not in {"TableID", "Year"}:
             raise BeaApiError("InputOutput metadata discovery is limited to TableID and Year")
         url = self._url(method=PARAMETER_METHOD, ParameterName=parameter_name)
         body = self._fetch(url)
-        return parse_parameter_values(body), redact_bea_url(url)
+        return parse_parameter_values(body), body, redact_bea_url(url)
 
     def data(self, table_id: str, year: str) -> tuple[bytes, str]:
         if not table_id.isdigit() or not re.fullmatch(r"\d{4}", year):
