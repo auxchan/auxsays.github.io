@@ -7,6 +7,7 @@ import { useRouteState } from "../state/useRouteState";
 const SummaryView = lazy(() => import("../views/summary/SummaryView"));
 const VerifiedDataView = lazy(() => import("../views/verified/VerifiedDataView"));
 const OutlookView = lazy(() => import("../views/outlook/OutlookView"));
+const MotionQaHarness = lazy(() => import("../views/motion/MotionQaHarness").then((module) => ({ default: module.MotionQaHarness })));
 
 class AppErrorBoundary extends Component<{ children: React.ReactNode }, { error: Error | null }> {
   state = { error: null } as { error: Error | null };
@@ -15,16 +16,18 @@ class AppErrorBoundary extends Component<{ children: React.ReactNode }, { error:
 }
 
 function ValidatedApp() {
-  const { snapshot, phase4b, variant, setVariant } = useSnapshot();
+  const { snapshot, phase4b, motionQa, variant, setVariant } = useSnapshot();
   const { route, navigate } = useRouteState(snapshot);
   if (variant === "loading") return <LoadingState />;
   if (variant === "snapshot-unavailable") return <ErrorState />;
-  const view = route.view === "verified"
+  const view = motionQa
+    ? <MotionQaHarness model={motionQa} route={route} />
+    : route.view === "verified"
     ? <VerifiedDataView snapshot={snapshot} phase4b={phase4b} route={route} navigate={navigate} variant={variant} />
     : route.view === "outlook"
       ? <OutlookView snapshot={snapshot} phase4b={phase4b} route={route} navigate={navigate} variant={variant} />
       : <SummaryView snapshot={snapshot} phase4b={phase4b} route={route} navigate={navigate} variant={variant} />;
-  return <AppShell snapshot={snapshot} phase4b={phase4b} route={route} navigate={navigate} variant={variant} setVariant={setVariant}><DegradedState variant={variant} /><Suspense fallback={<LoadingState />}>{view}</Suspense></AppShell>;
+  return <AppShell snapshot={snapshot} phase4b={phase4b} motionQa={motionQa} route={route} navigate={navigate} variant={variant} setVariant={setVariant}><DegradedState variant={variant} /><Suspense fallback={<LoadingState />}>{view}</Suspense></AppShell>;
 }
 
 export function SystemsMonitorApp() {

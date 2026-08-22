@@ -1,0 +1,59 @@
+{
+  "schemaVersion": "phase4-motion-qa-read-model-1.0.0",
+  "publicationClass": "fixture",
+  "fixtureType": "TEST_FIXTURE",
+  "activationStatus": "DEVELOPMENT_ONLY_MOTION_QA",
+  "candidateEligibility": "NEVER_ACCEPTED_NEVER_PUBLISHED",
+  "title": "Synthetic structural motion topology",
+  "coverage": {
+    "scope": "MOTION_QA_ONLY",
+    "nodeCount": 9,
+    "relationshipCount": 12,
+    "factualRelationshipCount": 0,
+    "acceptedRelationshipCount": 0
+  },
+  "sourceHealth": {
+    "structuralEvidence": "TEST_FIXTURE_NOT_A_SOURCE",
+    "factualCandidate": "UNCHANGED",
+    "gateB": "OPEN_UNCHANGED"
+  },
+  "humanMotionQa": "PENDING",
+  "gateBStatus": "OPEN_UNCHANGED",
+  "phase5Status": "LOCKED",
+  "nodes": [
+    { "id": "fixture-origin", "label": "Upstream signal", "kind": "ORIGIN", "currentState": "SIGNAL_READY", "derivationRef": "fixture-derivation:origin", "x": 75, "y": 310 },
+    { "id": "fixture-producer", "label": "Producer alpha", "kind": "PRODUCER", "currentState": "IDLE", "derivationRef": "fixture-derivation:producer", "x": 220, "y": 310 },
+    { "id": "fixture-buffer", "label": "Buffer stage", "kind": "BUFFER", "currentState": "IDLE", "derivationRef": "fixture-derivation:buffer", "x": 365, "y": 310 },
+    { "id": "fixture-branch-a", "label": "Branch alpha", "kind": "BRANCH", "currentState": "IDLE", "derivationRef": "fixture-derivation:branch-a", "x": 520, "y": 175 },
+    { "id": "fixture-branch-b", "label": "Branch beta", "kind": "BRANCH", "currentState": "IDLE", "derivationRef": "fixture-derivation:branch-b", "x": 520, "y": 445 },
+    { "id": "fixture-junction", "label": "Shared target", "kind": "RECONVERGENCE", "currentState": "IDLE", "derivationRef": "fixture-derivation:junction", "x": 675, "y": 310 },
+    { "id": "fixture-transport", "label": "Transport stage", "kind": "TRANSPORT", "currentState": "IDLE", "derivationRef": "fixture-derivation:transport", "x": 810, "y": 310 },
+    { "id": "fixture-downstream", "label": "Downstream use", "kind": "DOWNSTREAM", "currentState": "IDLE", "derivationRef": "fixture-derivation:downstream", "x": 925, "y": 205 },
+    { "id": "fixture-employment", "label": "Employment exposure", "kind": "EXPOSURE", "currentState": "IDLE", "derivationRef": "fixture-derivation:employment", "x": 925, "y": 430 }
+  ],
+  "relationships": [
+    { "id": "fixture-edge-01", "from": "fixture-origin", "to": "fixture-producer", "outcome": "TRANSMITTED", "mechanism": "Synthetic direct transmission", "evidenceClass": "TEST_FIXTURE", "originId": "fixture-origin-shock-01", "commonCauseId": null, "derivationRef": "fixture-derivation:edge-01", "status": "TEST_FIXTURE", "stopReason": null },
+    { "id": "fixture-edge-02", "from": "fixture-producer", "to": "fixture-buffer", "outcome": "PARTIALLY_ABSORBED", "mechanism": "Synthetic buffer retention", "evidenceClass": "TEST_FIXTURE", "originId": "fixture-origin-shock-01", "commonCauseId": null, "derivationRef": "fixture-derivation:edge-02", "status": "TEST_FIXTURE", "stopReason": null },
+    { "id": "fixture-edge-03", "from": "fixture-buffer", "to": "fixture-branch-a", "outcome": "DELAYED", "mechanism": "Synthetic delayed branch", "evidenceClass": "TEST_FIXTURE", "originId": "fixture-origin-shock-01", "commonCauseId": "fixture-common-cause-01", "derivationRef": "fixture-derivation:edge-03", "status": "TEST_FIXTURE", "stopReason": null },
+    { "id": "fixture-edge-04", "from": "fixture-buffer", "to": "fixture-branch-b", "outcome": "AMPLIFIED", "mechanism": "Synthetic amplified branch", "evidenceClass": "TEST_FIXTURE", "originId": "fixture-origin-shock-01", "commonCauseId": "fixture-common-cause-01", "derivationRef": "fixture-derivation:edge-04", "status": "TEST_FIXTURE", "stopReason": null },
+    { "id": "fixture-edge-05", "from": "fixture-branch-a", "to": "fixture-junction", "outcome": "TRANSMITTED", "mechanism": "Synthetic branch reconvergence", "evidenceClass": "TEST_FIXTURE", "originId": "fixture-origin-shock-01", "commonCauseId": "fixture-common-cause-01", "derivationRef": "fixture-derivation:edge-05", "status": "TEST_FIXTURE", "stopReason": null },
+    { "id": "fixture-edge-06", "from": "fixture-branch-b", "to": "fixture-junction", "outcome": "TRANSMITTED", "mechanism": "Synthetic branch reconvergence", "evidenceClass": "TEST_FIXTURE", "originId": "fixture-origin-shock-01", "commonCauseId": "fixture-common-cause-01", "derivationRef": "fixture-derivation:edge-06", "status": "TEST_FIXTURE", "stopReason": null },
+    { "id": "fixture-edge-07", "from": "fixture-junction", "to": "fixture-transport", "outcome": "PARTIALLY_ABSORBED", "mechanism": "Synthetic downstream buffer", "evidenceClass": "TEST_FIXTURE", "originId": "fixture-origin-shock-01", "commonCauseId": "fixture-common-cause-01", "derivationRef": "fixture-derivation:edge-07", "status": "TEST_FIXTURE", "stopReason": null },
+    { "id": "fixture-edge-08", "from": "fixture-transport", "to": "fixture-downstream", "outcome": "TRANSMITTED", "mechanism": "Synthetic downstream transfer", "evidenceClass": "TEST_FIXTURE", "originId": "fixture-origin-shock-01", "commonCauseId": "fixture-common-cause-01", "derivationRef": "fixture-derivation:edge-08", "status": "TEST_FIXTURE", "stopReason": null },
+    { "id": "fixture-edge-09", "from": "fixture-downstream", "to": "fixture-employment", "outcome": "DELAYED", "mechanism": "Synthetic lagged exposure", "evidenceClass": "TEST_FIXTURE", "originId": "fixture-origin-shock-01", "commonCauseId": "fixture-common-cause-01", "derivationRef": "fixture-derivation:edge-09", "status": "TEST_FIXTURE", "stopReason": null },
+    { "id": "fixture-edge-10", "from": "fixture-producer", "to": "fixture-downstream", "outcome": "BLOCKED", "mechanism": "Synthetic constrained route", "evidenceClass": "TEST_FIXTURE", "originId": "fixture-origin-shock-01", "commonCauseId": null, "derivationRef": "fixture-derivation:edge-10", "status": "TEST_FIXTURE", "stopReason": "TEST_CAPACITY_CONSTRAINT" },
+    { "id": "fixture-edge-11", "from": "fixture-buffer", "to": "fixture-employment", "outcome": "ABSORBED", "mechanism": "Synthetic fully absorbed route", "evidenceClass": "TEST_FIXTURE", "originId": "fixture-origin-shock-01", "commonCauseId": null, "derivationRef": "fixture-derivation:edge-11", "status": "TEST_FIXTURE", "stopReason": "TEST_BUFFER_ABSORPTION" },
+    { "id": "fixture-edge-12", "from": "fixture-origin", "to": "fixture-transport", "outcome": "UNKNOWN", "mechanism": "Synthetic unresolved route", "evidenceClass": "TEST_FIXTURE", "originId": "fixture-origin-shock-02", "commonCauseId": null, "derivationRef": "fixture-derivation:edge-12", "status": "TEST_FIXTURE", "stopReason": "TEST_EVIDENCE_UNKNOWN" }
+  ],
+  "paths": [
+    { "id": "fixture-path-primary", "label": "Primary cascade", "originId": "fixture-origin-shock-01", "commonCauseId": null, "steps": [["fixture-edge-01"], ["fixture-edge-02"], ["fixture-edge-03"], ["fixture-edge-05"], ["fixture-edge-07"], ["fixture-edge-08"], ["fixture-edge-09"]], "stopReason": "COMPLETE_TEST_PATH" },
+    { "id": "fixture-path-common-origin", "label": "Branch + reconvergence", "originId": "fixture-origin-shock-01", "commonCauseId": "fixture-common-cause-01", "steps": [["fixture-edge-01"], ["fixture-edge-02"], ["fixture-edge-03", "fixture-edge-04"], ["fixture-edge-05", "fixture-edge-06"], ["fixture-edge-07"], ["fixture-edge-08"], ["fixture-edge-09"]], "stopReason": "COMMON_ORIGIN_RECONCILED_ONCE" },
+    { "id": "fixture-path-blocked", "label": "Blocked route", "originId": "fixture-origin-shock-01", "commonCauseId": null, "steps": [["fixture-edge-01"], ["fixture-edge-10"]], "stopReason": "TEST_CAPACITY_CONSTRAINT" },
+    { "id": "fixture-path-absorbed", "label": "Absorbed route", "originId": "fixture-origin-shock-01", "commonCauseId": null, "steps": [["fixture-edge-01"], ["fixture-edge-02"], ["fixture-edge-11"]], "stopReason": "TEST_BUFFER_ABSORPTION" },
+    { "id": "fixture-path-unknown", "label": "Unknown route", "originId": "fixture-origin-shock-02", "commonCauseId": null, "steps": [["fixture-edge-12"]], "stopReason": "TEST_EVIDENCE_UNKNOWN" }
+  ],
+  "derivations": [
+    { "id": "fixture-derivation:origin", "claimClass": "TEST_FIXTURE", "description": "Synthetic trigger for motion sequencing only." },
+    { "id": "fixture-derivation:common-origin", "claimClass": "TEST_FIXTURE", "description": "Two visual paths retain one origin and reconverge without double activation." }
+  ]
+}

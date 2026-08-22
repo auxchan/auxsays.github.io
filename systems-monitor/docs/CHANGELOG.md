@@ -1,5 +1,22 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-22 — Development-only structural Motion QA harness
+
+- Added a loopback-only, development-server Motion QA loader and a bounded
+  `TEST_FIXTURE` structural read model with nine nodes, twelve relationships,
+  origin/common-cause identity, path steps, derivation placeholders, and every
+  governed transmission outcome.
+- Added user-controlled causal playback, pause/replay/step controls, rapid path
+  interruption, branch/reconvergence behavior, node focus/inspector states,
+  a complete text alternative, and reduced-motion manual operation.
+- Added synthetic relationship inspection under Verified Data and a locked
+  Outlook boundary without creating a fourth production navigation mode.
+- The fixture is `NEVER_ACCEPTED_NEVER_PUBLISHED`, has zero factual/accepted
+  relationships, and is unavailable to production builds. No BEA retrieval,
+  factual candidate, Gate-B evidence, forecast, or publication state changed.
+- `HUMAN_PHASE4_MOTION_QA` remains PENDING. Gate B remains open and Phase 5
+  remains locked.
+
 ## 2026-08-22 — Phase-4B local experience redesign candidate
 
 - Replaced the dense Phase-4B dashboard shell with a visual, scan-first local

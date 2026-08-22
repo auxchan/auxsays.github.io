@@ -3,11 +3,13 @@ import { validatePublicationCandidate, validatePublicSnapshot } from "../data/va
 import type { FixtureVariant, SnapshotViewModel } from "../data/publicSnapshotTypes";
 import { createCandidateViewModel, createSnapshotViewModel } from "../data/snapshotViewModelFactory";
 import { validatePhase4bReadModel, type Phase4bReadModel } from "../data/phase4bReadModel";
+import { validateMotionQaReadModel, type MotionQaReadModel } from "../data/motionQaReadModel";
 import { phase2Fixture } from "../fixtures/phase2Fixture";
 
 interface SnapshotContextValue {
   snapshot: SnapshotViewModel;
   phase4b?: Phase4bReadModel;
+  motionQa?: MotionQaReadModel;
   variant: FixtureVariant;
   setVariant: (variant: FixtureVariant) => void;
 }
@@ -28,8 +30,13 @@ export function SnapshotProvider({ children }: { children: React.ReactNode }) {
     const stored = window.localStorage.getItem("auxsays.localPhase4bState");
     return stored ? validatePhase4bReadModel(JSON.parse(stored)) : undefined;
   }, []);
+  const motionQa = useMemo(() => {
+    if (!import.meta.env.DEV) return undefined;
+    const stored = window.localStorage.getItem("auxsays.localMotionQaState");
+    return stored ? validateMotionQaReadModel(JSON.parse(stored)) : undefined;
+  }, []);
   const [variant, setVariant] = useState<FixtureVariant>("normal");
-  return <SnapshotContext.Provider value={{ snapshot, phase4b, variant, setVariant }}>{children}</SnapshotContext.Provider>;
+  return <SnapshotContext.Provider value={{ snapshot, phase4b, motionQa, variant, setVariant }}>{children}</SnapshotContext.Provider>;
 }
 
 export function useSnapshot() {

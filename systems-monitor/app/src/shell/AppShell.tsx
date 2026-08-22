@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 import type { FixtureVariant, NavigationNode, PrimaryView, SnapshotViewModel } from "../data/publicSnapshotTypes";
 import type { Phase4bReadModel } from "../data/phase4bReadModel";
+import type { MotionQaReadModel } from "../data/motionQaReadModel";
 import { breadcrumbNodes, type RouteState } from "../state/routeSchema";
 import { FactualCandidateNotice, FixtureNotice, FreshnessLabel } from "../shared/Semantic";
 import { SystemIcon } from "../shared/SystemIcon";
@@ -74,16 +75,31 @@ export function SystemHealthSummary({ snapshot, phase4b, variant, setVariant }: 
   </section>;
 }
 
-export function AppShell({ children, snapshot, phase4b, route, navigate, variant, setVariant }: {
+export function AppShell({ children, snapshot, phase4b, motionQa, route, navigate, variant, setVariant }: {
   children: React.ReactNode;
   snapshot: SnapshotViewModel;
   phase4b?: Phase4bReadModel;
+  motionQa?: MotionQaReadModel;
   route: RouteState;
   navigate: (next: RouteState | ((current: RouteState) => RouteState), replace?: boolean) => void;
   variant: FixtureVariant;
   setVariant: (variant: FixtureVariant) => void;
 }) {
   const factual = snapshot.snapshot.publicationClass === "factual";
+  if (motionQa) {
+    return <div className="sm-app-shell sm-app-shell--immersive sm-app-shell--motion-qa">
+      <a className="sm-skip" href="#systems-monitor-content">Skip to motion test</a>
+      <div className="sm-motion-warning" role="status"><SystemIcon name="database" size={18} /><strong>MOTION QA — SYNTHETIC TEST DATA</strong><span>Not economic evidence · never publishable</span></div>
+      <header className="sm-immersive-header">
+        <a className="sm-immersive-brand" href="/"><span className="sm-brand-mark"><SystemIcon name="network" size={20} /></span><span><strong>AUXSAYS</strong><small>Structural Motion Lab</small></span></a>
+        <div className="sm-review-status" aria-label="Motion review status"><span><i aria-hidden="true" />Development only</span><span>Human QA pending</span></div>
+      </header>
+      <PrimaryViewSwitcher view={route.view} onChange={(view) => navigate((current) => ({ ...current, view, horizon: view === "outlook" ? current.horizon : "current-year", scenario: view === "outlook" ? current.scenario : "baseline" }))} />
+      {route.notice && <p className="sm-route-notice" role="status">{route.notice}</p>}
+      <main id="systems-monitor-content" className="sm-view-region sm-view-region--immersive" tabIndex={-1}>{children}</main>
+      <footer className="sm-immersive-footer"><span>TEST_FIXTURE · development motion harness</span><span>Gate B open · Phase 5 locked</span></footer>
+    </div>;
+  }
   if (factual && phase4b) {
     return <div className="sm-app-shell sm-app-shell--immersive">
       <a className="sm-skip" href="#systems-monitor-content">Skip to analysis</a>
