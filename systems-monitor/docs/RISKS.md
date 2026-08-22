@@ -39,6 +39,9 @@
 | R-035 | Blocking | Structural source/table semantics, direct versus total requirements, or commodity/industry crosswalks may be misclassified or combined, causing indirect effects to be recursively double counted. | Medium | Invalid accepted relationships and materially overstated propagation. | Exact original source/table/matrix/classification/crosswalk/version and computational role; direct topology separated from total benchmark/non-recursive roles; reject/reconcile overlap; benchmark/tolerance and misclassification tests. | Structural Data/Ontology owner | Dependency Relationship, Ontology/Crosswalk, Phase-4 Testing | Open — blocks Phase-4B/Gate B |
 | R-036 | Blocking | Substitution, buffer/inventory, capacity, or lag schema fields may be populated from stale, narrative, or unsupported evidence and still appear behaviorally proven. | Medium | False attenuation/amplification, unavailable substitutes, and incorrect current-state timing. | Gate B requires real accepted evidence where each behavior changes/bounds the result; record age/health/rights and qualification/capacity/lead-time semantics; unknown is not zero; synthetic fixtures cannot be sole proof. | Propagation/Source owner | Allocation/Propagation, Source, Phase-4 Testing | Open — blocks Gate B |
 | R-037 | High | BEA structural scope may be conflated with BEA Real GDP/NIPA or treated as permission to retrieve/ingest broad data before exact source, rights, schema, and scope approval. | Medium | Unauthorized source expansion, invalid rights assumptions, and incorrect structural claims. | Require separate original-authority Supply/Use/I-O intake with exact dataset/table/version, terms fingerprint, parser/taxonomy/crosswalk/security review, and bounded authorization; Real GDP/NIPA remains separate. | Structural Data/Source owner | Data, Source, Dependency Relationship, Phase-4 Design | Open — blocks source implementation |
+| R-038 | Blocking | BEA API automation requires a credential and live integer table metadata, while interactive selector tokens are not API `TableID` values and the interactive site disallows general automated access. | High if guessed or scraped | Broken retrieval, terms/access violation, stale schema, or silently wrong table. | Use only the allowlisted BEA API for future automation; provision the key outside repo/logs; discover dataset/parameter/table/year values from live metadata; quarantine drift; never scrape the interactive app or guess integer IDs. | Structural Data/Security owner | Source, Security Ingestion, Phase-4 Testing | Open — blocks Phase-4B ingestion |
+| R-039 | Blocking | Reviewed BEA API terms do not expressly resolve immutable local raw retention, public generated-relationship datasets, or raw bulk redistribution. | Medium | Rights breach, forced withdrawal/deletion, or inability to publish auditable structural results. | Keep each operation UNKNOWN and fail closed; obtain written BEA clarification or design an approved path that does not perform the unresolved operation; fingerprint terms and attribution. | Data-rights owner | Data, Source, Security Ingestion, Dependency Relationship | Open — blocks affected operations |
+| R-040 | Blocking | BEA industry/commodity classifications and BLS 2022 NAICS may differ by vintage or require many-to-many/fractional mapping even when summary codes look identical. | Medium | Wrong employment exposure or loss of commodity/industry identity. | Safely inspect/hash/version the official BEA concordance; record both classification vintages; represent fractional/many-to-many coverage; reject unresolved mappings; do not hand-author mappings. | Ontology/Crosswalk owner | Ontology/Crosswalk, State, Phase-4 Testing | Open — blocks employment linkage acceptance |
 
 Taylor approved Human Data QA Round 2 and Gate A; Phase 3 is CLOSED. The local
 evidence mitigates R-019 through R-023 for the bounded first slice, but ongoing
@@ -74,6 +77,21 @@ economy-wide production evidence.
   `LIMITED_ENGINE_PROOF`, unsupported domains, OBS/CALC separation, immutable
   derivations, and a public-safe allowlist. Taylor approved Human Phase-4A QA on
   2026-08-21; these risks remain open for Phase-4B structural proof and Gate B.
-- R-034 retains the $0 standard-library/local posture. R-035 through R-037 remain
-  fully open because no structural source, BEA data, or real behavioral evidence
-  was retrieved or implemented.
+- At Phase-4A closure, R-034 retained the $0 standard-library/local posture and
+  R-035 through R-037 remained fully open because structural discovery and
+  implementation had not begun.
+
+## Phase-4B source discovery evidence — 2026-08-21
+
+- R-035 is narrowed by verified current BEA product roles: after-redefinitions
+  Direct Requirements are the recommended direct topology source and Total
+  Requirements are benchmark-only. It remains blocking until API schema and
+  deterministic transformation tests pass.
+- R-036 has original-authority candidates: EIA petroleum/natural-gas stocks and
+  refinery utilization support buffer/capacity; lag and substitution remain
+  only partially supported and no behavioral coefficient is accepted.
+- R-037 is narrowed by an explicit BEA I/O intake and recommended energy slice.
+  No production retrieval, parser, data, or edge was created.
+- R-038 through R-040 record the live API credential/table-ID, rights, and
+  classification blockers discovered in the sprint. O-008 remains OPEN and Gate
+  B remains OPEN.

@@ -198,3 +198,24 @@ Accepted decisions are authoritative below approved/BINDING contracts and above 
   insufficient, followed by license/security/cost review.
 - Boundary: No dependency or permanent graph/cloud infrastructure is selected by
   the approved Phase-4A scope.
+
+### O-008 — Approve the Phase-4B structural source and bounded vertical slice
+
+- Classification: TAYLOR APPROVAL DECISION
+- Status: OPEN / RECOMMENDED — 2026-08-21
+- Recommended choice: Use BEA annual 2024, 71-summary-category,
+  after-redefinitions Direct Requirements (`CxIDRAR` interactive product token)
+  as the future direct-topology source for a bounded energy
+  supply/refining/utilities/transport proof. Use Industry-by-Commodity Total
+  Requirements (`IxCTRAR`) only as a non-recursive benchmark/validation control.
+- Companion evidence: EIA weekly petroleum stocks/refinery utilization and
+  natural-gas storage, plus BLS CES `CES1021100001` for current NAICS 211
+  employment exposure.
+- Approval dependencies: provision a BEA API key outside the repository; resolve
+  current API integer table IDs from live metadata; close or explicitly deny
+  UNKNOWN retention/derived-publication/redistribution rights; validate the
+  current BEA-to-BLS NAICS crosswalk; choose the final 484/486 downstream node.
+- Boundary: Approval of this decision would select the source/slice design. It
+  would not by itself authorize production retrieval, parsing, accepted
+  relationship generation, propagation, public activation, Gate-B closure,
+  Phase 5, UI work, push, merge, or deployment.

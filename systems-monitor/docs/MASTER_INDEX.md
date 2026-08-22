@@ -190,7 +190,7 @@ These requirements were established during final Foundation review after V4.1. T
 | 1 Foundation | §0.2–0.3, §34.1–35.5, §37.1, §38.1–38.2, §64.1–64.12, §66–68 | Current task authorization |
 | 2 UI Shell | §2, §38–59, §67 Phase 2, §69 | PASS for implementation authority — Foundation and UI/Motion contracts BINDING; O-001C/O-001D Taylor-approved; use a scoped implementation task |
 | 3 Data Integrity | §27–32, §34–37.1, §61, §67 Phase 3; four BINDING Phase-3 contracts | CLOSED — Gate A and Human Data QA Round 2 PASS; factual public activation remains separate and unauthorized |
-| 4 State/Dependency/Allocation | §6–14, §20–20.1, §67 Phase 4 | Phase-4A only: five contracts are BINDING 1.0.0; Phase-4B and Gate-B closure remain separately gated |
+| 4 State/Dependency/Allocation | §6–14, §20–20.1, §67 Phase 4 | Phase 4A COMPLETE; Phase-4B discovery/intake complete; production implementation and Gate-B closure remain separately gated |
 | 5 Forecasting | §15–21, §55.1–55.2, §67 Phase 5 | Forecast/Scenario/Calibration contracts approved and prior gates passed |
 | 6 Human Capital/Events | §22–26.3, §33–33.1, §67 Phase 6 | Subsystem contracts approved |
 | 7 Launch Hardening | §52.1–64.1, §67 Phase 7, §70 | Applicable gates and release contract passed |
@@ -205,6 +205,9 @@ These requirements were established during final Foundation review after V4.1. T
 | OBS/CALC derivation, reproduction, bounded explanation/public boundary | `contracts/DERIVATION_TRANSPARENCY_CONTRACT.md` |
 | Gate-B semantic evidence and human review | `contracts/PHASE4_TESTING_CONTRACT.md` |
 | Integrated architecture, proof slice, source expansion, risks | `PHASE4_STATE_DEPENDENCY_ALLOCATION_DESIGN.md` |
+| Current BEA access, products, rights, semantics, and blockers | `PHASE4B_STRUCTURAL_SOURCE_DISCOVERY.md`; `BEA_IO_SOURCE_INTAKE_CANDIDATE.md` |
+| Recommended bounded structural domain and companion sources | `PHASE4B_VERTICAL_SLICE_CANDIDATE.md` |
+| Reproducible official-source observations and 38-check matrix | `PHASE4B_SOURCE_DISCOVERY_EVIDENCE.md` |
 
 ### Phase-4 proof-stage routing
 
@@ -213,13 +216,16 @@ These requirements were established during final Foundation review after V4.1. T
 | Phase 4A — Engine / Labor-State Proof | Six accepted labor observations prove current/as-of State, OBS/CALC derivation, relationship lifecycle, bounded traversal, cycle termination, common-cause bookkeeping, and read-model mechanics under O-006's initial depth-3/eight-round profile | Cannot pass Gate B alone |
 | Phase 4B — Authoritative Structural Proof | One bounded original-authority structural I/O subset proves deterministic accepted relationships, direct/total roles, current node observations, real lag/buffer/substitution/common-cause behavior, allocation/employment exposure, derivation, and honest coverage | Required before Gate B can pass |
 
-BEA Supply/Use/Input-Output structural evidence is Gate-B-required design scope,
-but no retrieval or ingestion is authorized. BEA Real GDP/NIPA remains separate.
+BEA Supply/Use/Input-Output structural evidence is Gate-B-required design scope.
+The authorized discovery/intake sprint verified current official access,
+products, semantics, rights boundaries, and a recommended bounded energy slice;
+production retrieval/ingestion remains unauthorized. BEA Real GDP/NIPA remains separate.
 O-005 is ACCEPTED/RESOLVED with all five contracts BINDING 1.0.0; O-006 is
 ACCEPTED/RESOLVED only for the initial configurable Phase-4A proof profile;
 O-007 remains deferred.
 
-Current authorization is **Phase 4A — Engine / Labor-State Proof implementation
-only**. Phase 3 is CLOSED with Gate A and Human Data QA Round 2 PASS, but factual
-public activation was not performed. Phase-4B, new ingestion, dependencies,
-major UI work, forecasting, push, merge, and deployment remain unauthorized.
+Current authorization is **Phase-4B structural source discovery/intake only**.
+Phase 4A is COMPLETE with Human QA PASS and `LIMITED_ENGINE_PROOF`; Gate B remains
+OPEN. Production ingestion, accepted structural relationships, structural
+propagation, dependencies, major UI work, forecasting, public activation, push,
+merge, and deployment remain unauthorized.

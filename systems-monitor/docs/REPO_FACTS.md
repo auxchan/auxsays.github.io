@@ -191,3 +191,23 @@ Reinspect only the affected facts when `AGENTS.md`, `.github/workflows/pages.yml
 - `structuralCoverageState` remains `LIMITED_ENGINE_PROOF`; Gate B remains OPEN.
   No structural-economy, real dependency-propagation, forecast, FCST, SCEN, or
   public-activation claim follows from this closure.
+
+## PHASE-4B STRUCTURAL SOURCE DISCOVERY — 2026-08-21
+
+- Branch `codex/systems-monitor-structural-source-discovery` begins at the
+  Phase-4A closure commit `02beff0557fc37e67282a58bde7fd7f9be73156d`.
+- Live official discovery verified BEA's current annual 2024, 71-summary I/O
+  products, current interactive tokens, API credential/metadata route, export
+  families, direct/total semantics, annual September cadence, and access/rights
+  boundaries. No matrix export was retained.
+- The review-only candidate recommends a bounded energy
+  supply/refining/utilities/transport slice. Direct Requirements are proposed as
+  the future topology source and Total Requirements as a non-recursive benchmark.
+- EIA weekly petroleum/natural-gas evidence and BLS CES `CES1021100001` are
+  proposed current-state/employment companions. No new source configuration,
+  ingestion, parser, scheduler, raw capture, accepted relationship, CALC,
+  propagation, UI, publication, dependency, or deployment exists.
+- O-008 is OPEN / RECOMMENDED. BEA API integer table IDs, unresolved rights
+  dimensions, concordance-vintage validation, and final downstream selection
+  block production authorization. Gate B remains OPEN and recurring cost remains
+  $0.

@@ -1,5 +1,21 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-21 — Phase-4B structural source discovery/intake
+
+- Completed live official-source discovery without implementing ingestion.
+  Verified BEA's current annual 71-summary-category 2024 I/O surface, API
+  credential/metadata route, current product tokens, direct-versus-total
+  semantics, official export families, cadence, and access boundaries.
+- Recommended a bounded energy supply/refining/utilities/transport proof using
+  after-redefinitions Direct Requirements for future topology and Total
+  Requirements only as a non-recursive benchmark. O-008 remains OPEN and
+  Taylor approval is required.
+- Recorded EIA current-state candidates and exact BLS CES `CES1021100001`
+  employment evidence, plus explicit UNKNOWN rights/API/crosswalk blockers.
+- Added four review-only discovery/intake documents. No BEA data was retained,
+  no parser, scheduler, accepted edge, propagation, UI, publication, dependency,
+  BINDING contract, or `MASTER_SPEC.md` content changed. Gate B remains OPEN.
+
 ## 2026-08-21 — Phase-4A Human QA closure
 
 - Taylor recorded `HUMAN_PHASE4A_QA = PASS` and approved the bounded Phase-4A
