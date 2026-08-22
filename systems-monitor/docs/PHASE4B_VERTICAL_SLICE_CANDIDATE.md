@@ -1,6 +1,6 @@
 # Phase-4B Vertical Slice Candidate
 
-Status: **RECOMMENDED / TAYLOR APPROVAL REQUIRED**
+Status: **APPROVED BY O-008 / IMPLEMENTATION AUTHORIZED**
 
 Date: **2026-08-21**
 
@@ -10,9 +10,9 @@ This is a bounded implementation candidate. It contains no accepted
 relationships, production source records, parser output, propagation result,
 forecast, or Gate-B claim.
 
-## 1. Decision recommendation
+## 1. Approved decision
 
-Approve an initial annual-2024, BEA 71-summary-category structural proof using
+Implement an initial annual-2024, BEA 71-summary-category structural proof using
 after-redefinitions Direct Requirements as the topology source and
 Industry-by-Commodity Total Requirements as a non-recursive benchmark. Attach
 only the minimum EIA and BLS current-state evidence needed to exercise real
@@ -60,12 +60,12 @@ may validate or bound a direct-path result but may not be recursively traversed.
 | N09 | Utilities industry | Structural industry | BEA `22` | Annual 2024 |
 | N10 | Petroleum and coal products industry | Structural industry | BEA `324` | Annual 2024 |
 | N11 | Truck transportation industry | Structural downstream | BEA `484` | Annual 2024 |
-| N12 | Oil and gas extraction employment | Current employment endpoint | BLS `CES1021100001`, NAICS 211 | Monthly, thousands, SA |
+| N12 | Truck transportation employment | Current downstream employment endpoint | BLS `CES4348400001`, NAICS 484 | Monthly, thousands, SA |
 
-Pipeline transportation industry `486` is the recommended first reserve node.
-Taylor may substitute it for N11 if the implementation-time common-cause and
-employment linkage tests are stronger. The node set must remain within the
-approved bound.
+Pipeline transportation industry `486` is an optional upstream/reserve node and
+must not replace 484 without a separately validated and approved convergence
+case. CES `CES1021100001` / NAICS 211 may be retained as an optional origin
+employment state, not the sole Gate-B endpoint.
 
 ## 5. Proposed relationship envelope
 
@@ -109,12 +109,13 @@ in this document is accepted for propagation.
 
 ### BLS Current Employment Statistics
 
-- Exact series: `CES1021100001`.
-- Title: All employees, thousands, oil and gas extraction, seasonally adjusted.
-- NAICS: 211; cadence monthly.
-- Human evidence: `https://data.bls.gov/timeseries/CES1021100001`.
-- Mapping: BEA summary industry 211 through the versioned BEA concordance to BLS
-  2022 NAICS 211.
+- Exact downstream series: `CES4348400001`.
+- Title: All employees, thousands, truck transportation, seasonally adjusted.
+- NAICS: 484; cadence monthly.
+- Human evidence: `https://data.bls.gov/timeseries/CES4348400001`.
+- Mapping: BEA summary industry 484 through the versioned BEA concordance to BLS
+  2022 NAICS 484.
+- Optional origin series: `CES1021100001`, NAICS 211.
 - No new BLS retrieval or configuration was created.
 
 ## 7. Behavioral proof plan
@@ -169,15 +170,15 @@ Recurring cost: **$0**. BEA, EIA, and BLS access is free. Use repository-owned
 code and existing SQLite/versioned-file mechanisms; no paid API, graph SaaS,
 managed database, or LLM runtime dependency.
 
-## 11. Required Taylor decisions
+## 11. Implementation constraints
 
-- Approve/reject the energy domain and 71-summary 2024 first proof.
-- Approve/reject `CxIDRAR` as topology and `IxCTRAR` as benchmark-only.
-- Choose N11 truck transportation or reserve 486 pipeline transportation.
-- Approve external secret provisioning for BEA and any selected EIA API keys.
-- Decide whether unresolved BEA retention/derived-publication rights require
-  written confirmation before implementation (recommended: yes).
-- Authorize a later bounded implementation only after those decisions and exact
-  API metadata/crosswalk validation.
+- Preserve `CxIDRAR` as topology and `IxCTRAR` as benchmark-only.
+- Preserve N11 truck transportation as the approved convergence target; 486 is
+  optional upstream/reserve only.
+- Provision BEA and any selected EIA API keys externally; never commit/log them.
+- Apply the approved public-domain/API attribution posture, deny raw bulk
+  redistribution, and fail closed on product-specific/third-party restrictions.
+- Keep live acceptance blocked until exact API metadata and crosswalk validation
+  pass.
 
-Until then this candidate is non-active and Gate B remains OPEN.
+Gate B remains OPEN pending technical evidence and Taylor Human QA.

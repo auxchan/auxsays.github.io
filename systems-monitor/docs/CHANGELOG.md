@@ -1,5 +1,20 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-21 — O-008 approval and Phase-4B implementation authority
+
+- Taylor accepted/resolved O-008 for the bounded 2024 BEA 71-summary energy
+  slice, `CxIDRAR` direct topology, and `IxCTRAR` non-recursive benchmark.
+- Resolved the downstream target as BEA/NAICS 484 Truck Transportation with BLS
+  CES `CES4348400001`; 211 is optional origin state and 486 is optional upstream.
+- Corrected InputOutput metadata discovery to `GetParameterValues` for `TableID`
+  and `Year`, without guessing any current API IDs.
+- Adopted the BEA public-domain/API rights posture with attribution/terms
+  fingerprint, clear AUXSAYS derivation, raw bulk redistribution denied/not
+  required, and interactive scraping denied.
+- Authorized bounded Phase-4B implementation. Gate-B approval, public
+  activation, Phase 5, forecasting, major UI work, push, merge, and deployment
+  remain unauthorized.
+
 ## 2026-08-21 — Phase-4B structural source discovery/intake
 
 - Completed live official-source discovery without implementing ingestion.

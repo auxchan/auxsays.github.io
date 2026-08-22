@@ -18,7 +18,7 @@ Candidate source ID: `bea_io_annual_summary_after_redefinitions`
 | Human discovery route | BEA I/O interactive applications and official export catalogs |
 | Authentication | Registered 36-character BEA API `UserID`; not requested in this sprint |
 | Formats | API JSON/XML; interactive/download exports CSV/XLS/ZIP depending product |
-| Metadata discovery | API `GETDATASETLIST`, `GETPARAMETERLIST`, and `GETPARAMETERVALUESFILTERED` |
+| Metadata discovery | API `GetDatasetList`, `GetParameterList`, and `GetParameterValues` for `TableID` and `Year` |
 | API table IDs | **UNKNOWN** until credentialed live metadata discovery; never guess |
 | Current annual year | 2024, verified live on 2026-08-21 |
 | Current annual aggregation | 71 summary industry/commodity groups |
@@ -78,19 +78,18 @@ authorizes an automated export route.
 |---|---|---|
 | Automated API retrieval | `ALLOW` | API ToS and `/api/` robots allowance, subject to key and limits |
 | Automated interactive/export scraping | `DENY` | `robots.txt` disallows `/` except `/api/` |
-| Local raw retention | `UNKNOWN` | API ToS does not expressly settle immutable long-term raw retention; obtain written BEA clarification |
+| Local raw retention | `ALLOW_WITH_ATTRIBUTION_AND_TERMS_FINGERPRINT` | BEA-produced information is public domain unless specifically restricted; retain terms/source identity |
 | Transformation and analysis | `ALLOW` | API ToS permits services that search, display, analyze, retrieve, and view, with no false representation |
-| Publication of derived relationship records | `UNKNOWN` | Analysis is allowed, but derived-dataset publication is not explicit; obtain written clarification |
+| Publication of derived relationship records | `ALLOW_WITH_ATTRIBUTION_AND_CLEAR_AUXSAYS_DERIVATION` | Type records as AUXSAYS CALC/derived data, cite BEA, and avoid endorsement claims |
 | Public display of BEA data | `ALLOW` | Subject to attribution, accurate representation, and no endorsement claim |
-| Raw bulk redistribution | `UNKNOWN` | Not expressly approved in reviewed terms; fail closed |
+| Raw bulk redistribution | `DENY_NOT_REQUIRED` | AUXSAYS does not require a raw BEA bulk-redistribution product |
 | Attribution | `REQUIRED` | “This product uses the Bureau of Economic Analysis (BEA) Data API but is not endorsed or certified by BEA.” |
 | Credential sharing/logging | `DENY` | Key is a secret; external secret store only; never repository/log/ZIP |
 
-Rights fingerprint inputs for future intake must include the API ToS PDF, API
-guide, `robots.txt`, BEA citation guidance, retrieval time, and hashes of any
-retained terms evidence. Written confirmation should be requested from
-`IndustryEconomicAccounts@bea.gov` or the BEA API support channel for the three
-UNKNOWN dimensions.
+Rights fingerprint inputs must include the BEA website reproduction policy, API
+ToS PDF, API guide, `robots.txt`, citation guidance, retrieval time, and hashes
+of retained terms evidence. Product-specific restrictions or third-party
+material override the general posture and fail the affected operation closed.
 
 ## Rate, schema, and security controls
 
@@ -154,14 +153,10 @@ because a coefficient is nonzero.
 ## Open questions blocking activation
 
 1. Current API integer `TableID` values and exact JSON/XML schema.
-2. Whether BEA authorizes immutable local raw retention.
-3. Whether BEA authorizes public generated-relationship datasets and raw bulk
-   redistribution; otherwise design a public read model that cites but does not
-   redistribute restricted source structure.
-4. Exact current BEA classification/NAICS vintage contained in the linked
+2. Exact current BEA classification/NAICS vintage contained in the linked
    concordance and the required BLS 2022 NAICS bridge.
-5. Final selected transport target and table subset.
-6. Retention/deletion response if terms change.
+3. Exact bounded API table subset after live metadata discovery.
+4. Retention/deletion response if terms or product-specific restrictions change.
 
 No candidate becomes active until these questions and Taylor authorization are
 resolved through the BINDING Source, Data, Ontology/Crosswalk, Relationship, and

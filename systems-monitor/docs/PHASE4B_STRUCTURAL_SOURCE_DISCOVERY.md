@@ -14,7 +14,7 @@ relationship set, or authorization to ingest data.
 
 ## 1. Result
 
-The recommended first Phase-4B structural domain is a bounded **energy supply,
+The approved first Phase-4B structural domain is a bounded **energy supply,
 refining, utilities, and transport** slice at BEA's current annual summary
 level. The future topology source should be the after-redefinitions **Direct
 Requirements** matrix. The corresponding **Total Requirements,
@@ -147,7 +147,7 @@ Proposed nodes:
 | Utilities industry | BEA summary `22` | CONFIRMED classification |
 | Petroleum and coal products industry | BEA summary `324` | CONFIRMED classification |
 | Truck or pipeline transportation industry | BEA summary `484` or `486` | PROPOSED; final target requires Taylor choice |
-| Current oil-and-gas extraction employment | BLS CES `CES1021100001`, NAICS 211 | CONFIRMED endpoint; no ingestion |
+| Current truck-transportation employment | BLS CES `CES4348400001`, NAICS 484 | APPROVED downstream endpoint; no ingestion yet |
 
 The live 2024 summary Direct Requirements matrix includes, among other cells,
 commodity 211 into industry 324 (`0.5633060`), commodity 211 into industry 22
@@ -164,12 +164,12 @@ Minimum future companion sources:
 |---|---|---|---|---|
 | Petroleum stocks and refinery utilization | U.S. EIA | Weekly Petroleum Status Report tables | Weekly, normally Wednesday | Buffer/capacity state for 211/324 |
 | Natural-gas storage | U.S. EIA | Weekly Natural Gas Storage Report | Weekly, normally Thursday | Buffer state for 211/22 |
-| Current employment | U.S. BLS | CES `CES1021100001` | Monthly | NAICS 211 employment exposure endpoint |
+| Current employment | U.S. BLS | CES `CES4348400001` | Monthly | NAICS 484 downstream employment exposure endpoint |
 
-The BLS series page was verified live: “All employees, thousands, oil and gas
-extraction, seasonally adjusted,” NAICS 211. The future BEA summary 211 to BLS
-NAICS 211 link appears direct at this level, but must still be produced through
-a versioned authoritative concordance rather than a handwritten mapping.
+The approved downstream BLS series is “All employees, thousands, truck
+transportation, seasonally adjusted,” `CES4348400001`, NAICS 484. The 211 series
+may remain an origin companion. Each link must be produced through a versioned
+authoritative concordance rather than a handwritten mapping.
 BEA-to-BLS mappings that aggregate, split, or cross classification vintages must
 retain fractional/many-to-many semantics or remain UNKNOWN.
 
@@ -227,12 +227,12 @@ ambiguous rights, or unexplained row/column drift fail closed.
 ## 11. Rights, security, and cost
 
 The multidimensional rights result is in `BEA_IO_SOURCE_INTAKE_CANDIDATE.md`.
-In summary: API retrieval and analysis/display are allowed under the BEA API
-terms with attribution and no implied endorsement; automated interactive-site
-scraping is disallowed by `robots.txt`; local raw retention, raw bulk
-redistribution, and publication of generated relationship datasets are
-**UNKNOWN** pending explicit written clarification. Unknown dimensions fail
-closed.
+In summary: API retrieval, immutable retention of BEA-produced data,
+analysis/transformation, clearly typed AUXSAYS-derived relationship publication,
+and public display are allowed with attribution, terms fingerprint, and no
+endorsement claim. Automated interactive-site scraping is denied; raw bulk
+redistribution is `DENY_NOT_REQUIRED`. Product-specific/third-party restrictions
+override and fail the affected operation closed.
 
 All official sources identified are free. The proposed recurring
 infrastructure/API cost remains **$0**. No commercial data, managed graph store,
@@ -240,19 +240,12 @@ paid API, cloud database, or runtime AI dependency is selected.
 
 ## 12. Open blockers
 
-1. Taylor approval of the energy slice, summary level, and product roles.
-2. A BEA API key provisioned as an external secret; never committed or logged.
-3. Live API metadata capture of current integer `TableID` values and schemas.
-4. Written BEA clarification for local raw retention, generated-relationship
-   publication, and raw bulk redistribution, or explicit DENY designs that do
-   not require those operations.
-5. Safe inspection and versioning of the current BEA concordance, plus explicit
+1. A BEA API key provisioned as an external secret; never committed or logged.
+2. Live API metadata capture through `GetParameterValues` of current integer
+   `TableID` values, years, and schemas.
+3. Safe inspection and versioning of the current BEA concordance, plus explicit
    NAICS-vintage compatibility with BLS 2022 NAICS.
-6. Selection of the final downstream transport target and exact current EIA/Fed
-   series needed for Gate-B behavior tests.
-7. A separately authorized production implementation sprint for bounded
-   retrieval, immutable evidence, parsing, crosswalk, candidate generation,
-   validation, and tests.
+4. Exact current EIA/Fed series needed for Gate-B behavior tests.
 
 Until those are resolved, there is no authorization to ingest BEA data or
 generate accepted structural relationships.

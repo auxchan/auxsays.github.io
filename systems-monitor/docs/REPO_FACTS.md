@@ -207,7 +207,22 @@ Reinspect only the affected facts when `AGENTS.md`, `.github/workflows/pages.yml
   proposed current-state/employment companions. No new source configuration,
   ingestion, parser, scheduler, raw capture, accepted relationship, CALC,
   propagation, UI, publication, dependency, or deployment exists.
-- O-008 is OPEN / RECOMMENDED. BEA API integer table IDs, unresolved rights
-  dimensions, concordance-vintage validation, and final downstream selection
-  block production authorization. Gate B remains OPEN and recurring cost remains
-  $0.
+- At discovery completion O-008 was OPEN / RECOMMENDED; live API table IDs,
+  concordance-vintage validation, and downstream selection were unresolved.
+  The subsequent approval below supersedes that decision state.
+
+## O-008 APPROVAL — 2026-08-21
+
+- Taylor accepted/resolved O-008 and authorized the bounded Phase-4B closed
+  vertical slice on a new `codex/systems-monitor-structural-engine` branch.
+- Approved structure: BEA 2024, 71-summary, after-redefinitions `CxIDRAR` direct
+  topology with `IxCTRAR` benchmark-only; 484 Truck Transportation is the
+  downstream convergence target and BLS `CES4348400001` is the employment OBS.
+- InputOutput metadata must use `GetParameterValues` for `TableID` and `Year`.
+  No BEA credential is stored in the repository and no current API ID may be
+  guessed.
+- BEA-produced API retention, analysis, clearly attributed AUXSAYS-derived
+  relationship publication, and display are allowed; raw bulk redistribution
+  and interactive scraping are denied. Product-specific restrictions fail closed.
+- Gate B remains OPEN pending technical evidence and Taylor Human QA. Phase 5,
+  public activation, deployment, major UI work, push, and merge remain locked.

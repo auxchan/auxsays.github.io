@@ -224,8 +224,8 @@ O-005 is ACCEPTED/RESOLVED with all five contracts BINDING 1.0.0; O-006 is
 ACCEPTED/RESOLVED only for the initial configurable Phase-4A proof profile;
 O-007 remains deferred.
 
-Current authorization is **Phase-4B structural source discovery/intake only**.
+Current authorization is **bounded Phase-4B closed vertical slice implementation only**.
 Phase 4A is COMPLETE with Human QA PASS and `LIMITED_ENGINE_PROOF`; Gate B remains
-OPEN. Production ingestion, accepted structural relationships, structural
-propagation, dependencies, major UI work, forecasting, public activation, push,
-merge, and deployment remain unauthorized.
+OPEN. O-008 is ACCEPTED/RESOLVED for the 2024 BEA summary-level energy slice and
+484 downstream employment endpoint. Gate-B approval, major UI work, forecasting,
+public activation, push, merge, and deployment remain unauthorized.

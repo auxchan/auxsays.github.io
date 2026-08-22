@@ -31,7 +31,8 @@ matrix was retained.
 | E-4B-015 | [EIA natural-gas data](https://www.eia.gov/naturalgas/data.php) | Weekly working-gas storage and capacity data families | Live 2026-08-21 |
 | E-4B-016 | [EIA API v2 documentation](https://www.eia.gov/opendata/documentation.php) | API hierarchy, facets, metadata, key requirement | v2.1.12, March 2026 |
 | E-4B-017 | [EIA reuse](https://www.eia.gov/about/copyrights_reuse.php) | EIA-produced content generally public domain; attribution requested | Live 2026-08-21 |
-| E-4B-018 | [BLS CES series](https://data.bls.gov/timeseries/CES1021100001) | Exact NAICS 211 employment endpoint, unit and adjustment | Extracted 2026-08-21 |
+| E-4B-018 | [BLS CES 484 series](https://data.bls.gov/timeseries/CES4348400001) | Exact downstream NAICS 484 employment endpoint, unit and adjustment | Verified for O-008 amendment 2026-08-21 |
+| E-4B-018A | [BLS CES 211 series](https://data.bls.gov/timeseries/CES1021100001) | Optional origin NAICS 211 employment state | Extracted 2026-08-21 |
 | E-4B-019 | [BLS current NAICS](https://www.bls.gov/ces/naics/home.htm) | CES current classification posture | 2022 NAICS |
 | E-4B-020 | [Census construction spending](https://www.census.gov/construction/c30/c30index.html) | Monthly construction alternative | Current 2026-08-21 |
 | E-4B-021 | [BTS TSI](https://www.bts.gov/learn-about-bts-and-our-work/statistical-methods-and-policies/tsi-frequently-asked-questions) | Monthly freight-volume alternative and coverage | Official methodology |
@@ -69,7 +70,7 @@ topology and a common-origin case. They are not accepted relationship records.
   redefinitions, unit, and classification vintage are material schema fields.
 - Interactive tokens are not API integer `TableID` values.
 - API table identifiers remain UNKNOWN until a registered key permits live
-  `GETPARAMETERVALUESFILTERED` discovery.
+  `GetParameterValues` discovery for `TableID` and `Year`.
 - BEA current summary tables use 71 categories. Detailed benchmark tables use
   402 industries; 138 underlying-summary and 15-sector views also exist.
 - The first proof chooses summary, not maximum detail, for crosswalk stability
@@ -77,12 +78,13 @@ topology and a common-origin case. They are not accepted relationship records.
 
 ## 4. Rights and access evidence
 
-The API is the only approved candidate for scheduled automation. BEA API terms
+The API is the only approved candidate for scheduled automation. BEA-produced
+information is public domain unless specifically restricted, and the API terms
 allow search/display/analysis/retrieval/view use subject to attribution, access
-limits, accuracy, and no implied endorsement. General interactive application
-automation is disallowed by robots. Local immutable retention, public generated
-relationship publication, and raw bulk redistribution remain UNKNOWN and must
-fail closed until written evidence resolves them.
+limits, accurate representation, and no implied endorsement. General
+interactive application automation is disallowed by robots. Immutable retention
+and clearly typed AUXSAYS-derived relationship publication are allowed with
+attribution/terms fingerprint; raw bulk redistribution is denied as not required.
 
 No credential was created, requested, exposed, or committed. No source secret
 appears in this evidence package.
@@ -114,18 +116,18 @@ backdated into an earlier knowledge state.
 | 9 | Direct semantics match BEA | PASS | E-4B-007/009 |
 | 10 | Total semantics match BEA | PASS | E-4B-008/009 |
 | 11 | Direct/total roles avoid double count | PASS | Direct topology; total non-recursive benchmark |
-| 12 | Rights dimensions recorded | PASS | Intake rights matrix; UNKNOWN retained |
+| 12 | Rights dimensions recorded | PASS | Intake rights matrix; raw bulk redistribution denied/not required |
 | 13 | Credential requirement recorded | PASS | Registered BEA `UserID`; no key requested |
 | 14 | Update/revision behavior recorded | PASS | Annual September/current-release evidence |
 | 15 | Selected domain has actual structural data | PASS | Live 211/22/324/484/486 cells |
 | 16 | Proposed slice fits bounded size | PASS | 12 nodes, expected 18–26 relationships |
-| 17 | Employment linkage authoritative | PASS | BLS `CES1021100001`, NAICS 211 |
+| 17 | Employment linkage authoritative | PASS | BLS `CES4348400001`, downstream NAICS 484; 211 optional origin state |
 | 18 | Buffer evidence status recorded | PASS | EIA stocks/storage: SUPPORTED |
 | 19 | Substitution evidence status recorded | PASS | PARTIALLY_SUPPORTED; technical proof open |
 | 20 | Lag evidence status recorded | PASS | PARTIALLY_SUPPORTED; no invented duration |
 | 21 | Capacity evidence status recorded | PASS | EIA/Fed candidates: SUPPORTED |
 | 22 | Common-cause case grounded in topology | PASS | 211 -> 324/22 -> 484 cells |
-| 23 | Unsupported areas remain UNKNOWN | PASS | API IDs, rights, crosswalk/technical substitution |
+| 23 | Unsupported areas remain UNKNOWN | PASS | API IDs, crosswalk and technical substitution remain explicit |
 | 24 | No production BEA ingestion | PASS | Documentation-only diff |
 | 25 | No accepted structural edges | PASS | No relationship data/config created |
 | 26 | No parser implemented | PASS | No runtime code changed |

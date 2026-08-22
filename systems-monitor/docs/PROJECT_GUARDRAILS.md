@@ -19,7 +19,7 @@ Always read this file before Systems Monitor work. The authoritative source is `
 15. Public publication/withdrawal must be atomic. A failed candidate leaves the prior snapshot live only while it remains valid under current security and rights rules; applicable revocation requires atomic rights-safe replacement/unavailable activation or withdrawal.
 16. Core operation must not depend on continuous external LLM availability, and LLM output may not directly mutate accepted production relationships.
 
-Current authorized work: **Phase-4B structural source discovery/intake only**.
+Current authorized work: **bounded Phase-4B closed vertical slice implementation only**.
 
 Phase 3 Data Integrity is CLOSED with `HUMAN_DATA_QA ROUND 2 = PASS` and `GATE A = PASS`. The Data, Source, Ontology/Crosswalk, and Testing contracts remain BINDING 1.0.0. Factual public activation was not performed and remains separately unauthorized.
 
@@ -32,10 +32,11 @@ The five review artifacts are `contracts/STATE_MODEL_CONTRACT.md`,
 `contracts/DEPENDENCY_RELATIONSHIP_CONTRACT.md`,
 `contracts/ALLOCATION_PROPAGATION_CONTRACT.md`,
 `contracts/DERIVATION_TRANSPARENCY_CONTRACT.md`, and
-`contracts/PHASE4_TESTING_CONTRACT.md`. All are BINDING 1.0.0. The current
-authority permits live official-source discovery and bounded temporary metadata
-or export inspection needed to design Phase 4B. It does not authorize production
-structural ingestion, accepted relationships, propagation, or Gate-B closure.
+`contracts/PHASE4_TESTING_CONTRACT.md`. All are BINDING 1.0.0. O-008 is
+ACCEPTED/RESOLVED and authorizes only the bounded 2024 BEA summary-level energy
+slice, 484 downstream employment endpoint, exact supporting current evidence,
+deterministic structural generation, propagation, derivation, and Gate-B review
+artifacts. Gate-B approval remains Taylor-only.
 
 Phase 4 has two evidence stages. Phase 4A uses the six accepted labor
 observations to prove engine mechanics under O-006's initial configurable depth-3
@@ -43,10 +44,10 @@ and eight-round limits; it cannot pass Gate B. Phase 4B must prove one bounded
 original-authority structural I/O subset, deterministic accepted relationships,
 direct/total role safety, real lag/buffer/substitution/common-cause behavior,
 current employment exposure, complete derivation, and honest structural coverage.
-Discovery selected a recommended energy slice and current BEA product roles;
-production retrieval/ingestion remains blocked on Taylor approval, API metadata,
-rights, and crosswalk validation. BEA Real GDP/NIPA is not structural-I/O
-authorization.
+The approved direct topology product is `CxIDRAR`; `IxCTRAR` is a non-recursive
+benchmark only. Metadata must use `GetParameterValues`; live table IDs must not
+be guessed. The downstream convergence/employment target is NAICS 484 with BLS
+CES `CES4348400001`. BEA Real GDP/NIPA is not structural-I/O authorization.
 
 Production must be repository-owned and self-sustaining. Taylor/governance may
 approve authoritative source/transformation/crosswalk/generation/acceptance
@@ -54,12 +55,10 @@ rules; deterministic code may later materialize qualifying accepted structural
 edges without manual per-edge approval. Ambiguous/inferred/LLM candidates remain
 non-production, and no external AI subscription may be a live dependency.
 
-**THIS AUTHORITY ENDS WITH PHASE-4B DISCOVERY/INTAKE DOCUMENTATION.** Do not
-implement a BEA/new-source parser, collector, scheduler, immutable capture,
-accepted structural relationship, structural propagation, or publication. Do
-not claim Gate B, redesign the UI, forecast, activate factual data publicly,
-install dependencies, choose permanent cloud/paid infrastructure, modify
-deployment, push, merge, or deploy.
+**THIS AUTHORITY ENDS WITH THE BOUNDED PHASE-4B TECHNICAL AND HUMAN-REVIEW
+CANDIDATE.** Do not mark Gate B PASS, redesign the UI, forecast, create FCST or
+SCEN, activate factual data publicly, expand to the whole economy, choose paid
+or cloud infrastructure, modify deployment, push, merge, or deploy.
 
 Current Phase-2 decision state:
 

@@ -202,20 +202,31 @@ Accepted decisions are authoritative below approved/BINDING contracts and above 
 ### O-008 — Approve the Phase-4B structural source and bounded vertical slice
 
 - Classification: TAYLOR APPROVAL DECISION
-- Status: OPEN / RECOMMENDED — 2026-08-21
-- Recommended choice: Use BEA annual 2024, 71-summary-category,
+- Status: ACCEPTED / RESOLVED — TAYLOR, 2026-08-21
+- Approved choice: Use BEA annual 2024, 71-summary-category,
   after-redefinitions Direct Requirements (`CxIDRAR` interactive product token)
-  as the future direct-topology source for a bounded energy
+  as the direct-topology source for a bounded energy
   supply/refining/utilities/transport proof. Use Industry-by-Commodity Total
   Requirements (`IxCTRAR`) only as a non-recursive benchmark/validation control.
 - Companion evidence: EIA weekly petroleum stocks/refinery utilization and
-  natural-gas storage, plus BLS CES `CES1021100001` for current NAICS 211
-  employment exposure.
-- Approval dependencies: provision a BEA API key outside the repository; resolve
-  current API integer table IDs from live metadata; close or explicitly deny
-  UNKNOWN retention/derived-publication/redistribution rights; validate the
-  current BEA-to-BLS NAICS crosswalk; choose the final 484/486 downstream node.
-- Boundary: Approval of this decision would select the source/slice design. It
-  would not by itself authorize production retrieval, parsing, accepted
-  relationship generation, propagation, public activation, Gate-B closure,
-  Phase 5, UI work, push, merge, or deployment.
+  natural-gas storage, plus BLS CES `CES4348400001` for current NAICS 484 Truck
+  Transportation employment exposure. CES `CES1021100001` / NAICS 211 may remain
+  an origin-state companion but is not the sole Gate-B endpoint.
+- Structural target: BEA/NAICS 484 Truck Transportation is the downstream
+  convergence target. 486 Pipeline Transportation may be an optional upstream
+  or reserve node only where validated topology supports it.
+- Metadata decision: Use `GetParameterValues` for `TableID` and `Year` discovery
+  in the `InputOutput` API dataset. Do not assume filtered parameter discovery
+  and do not hard-code Appendix examples.
+- Rights decision: API retrieval, immutable retention of BEA-produced API data,
+  transformation/analysis, AUXSAYS-derived relationship publication, and public
+  display are allowed with the applicable attribution, terms fingerprint, clear
+  AUXSAYS derivation, and no endorsement claim. Raw bulk redistribution is
+  `DENY_NOT_REQUIRED`; interactive application scraping is denied; scheduled
+  retrieval is API-only. Product-specific or third-party restrictions override
+  and fail the affected operation closed.
+- Implementation authority: A bounded Phase-4B closed-vertical-slice
+  implementation is authorized under the five BINDING Phase-4 contracts.
+- Boundary: Gate-B approval, public activation, deployment, Phase 5,
+  forecasting/SCEN, occupation forecasting, whole-economy expansion, major UI
+  work, paid services, push, merge, and deployment remain unauthorized.
