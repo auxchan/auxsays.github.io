@@ -1,4 +1,4 @@
-import { cleanup, fireEvent, render, screen, within } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it } from "vitest";
 import phase4bCandidate from "../../state/review/phase4b-read-model-candidate.json";
 import { SnapshotProvider } from "../src/app/SnapshotContext";
@@ -20,44 +20,52 @@ describe("Phase-4B local factual checkpoint", () => {
     window.localStorage.clear();
   });
 
-  it("keeps OBS, relationships, and structural CALC visually distinct", async () => {
+  it("keeps measured signals, relationships, and calculations distinct without jargon repetition", async () => {
     render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
-    expect(await screen.findByRole("heading", { name: "Energy-to-transport system state" })).toBeTruthy();
-    expect(screen.getByText("3 factual observations")).toBeTruthy();
-    expect(screen.getByText("Official measurements").previousElementSibling?.textContent).toBe("3");
-    expect(screen.getByText("AUXSAYS structural calculations").previousElementSibling?.textContent).toBe("0");
-    expect(screen.getByText("Accepted structural relationships").previousElementSibling?.textContent).toBe("0");
-    expect(screen.getByRole("heading", { name: "Awaiting authoritative BEA acceptance" })).toBeTruthy();
+    expect(await screen.findByRole("heading", { name: /Energy pressure\.\s*Made legible\./ })).toBeTruthy();
+    expect(screen.getByRole("button", { name: /428\.815 million barrels/ })).toBeTruthy();
+    expect(screen.getByRole("button", { name: /97\.2%/ })).toBeTruthy();
+    expect(screen.getByRole("button", { name: /1,465\.1 thousand.*Truck transportation employment/ })).toBeTruthy();
+    expect(screen.getByText("3 signals ready")).toBeTruthy();
+    expect(screen.getByText("No system result yet")).toBeTruthy();
+    expect(screen.getByText("0 calculations · 0 accepted paths")).toBeTruthy();
+    expect(screen.queryByText("OBS")).toBeNull();
     expect(screen.queryByRole("img", { name: /structural path/i })).toBeNull();
   });
 
   it("presents the credential state as an analytical block, not an app error", async () => {
     render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
-    await screen.findByRole("heading", { name: "Energy-to-transport system state" });
-    expect(screen.getByText("Structural relationships pending")).toBeTruthy();
-    expect(screen.getByText("Official BEA structural data has not yet been accepted.")).toBeTruthy();
+    await screen.findByRole("heading", { name: /Energy pressure\.\s*Made legible\./ });
+    expect(screen.getByText("Connections pending")).toBeTruthy();
+    expect(screen.getByText("Official BEA structure has not been accepted yet, so no arrows are drawn.")).toBeTruthy();
     expect(screen.queryByText("Application error")).toBeNull();
   });
 
   it("exposes exact Phase-4B evidence with details on demand", async () => {
     render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
-    await screen.findByRole("heading", { name: "Energy-to-transport system state" });
+    await screen.findByRole("heading", { name: /Energy pressure\.\s*Made legible\./ });
     fireEvent.click(screen.getByRole("button", { name: "Verified Data" }));
-    const records = await screen.findByRole("region", { name: "Phase-4B factual observation evidence" });
-    expect(within(records).getAllByRole("row")).toHaveLength(4);
-    expect(within(records).getAllByText("OBS")).toHaveLength(3);
-    expect(within(records).getAllByRole("link", { name: "Open original evidence" })).toHaveLength(3);
-    expect(screen.getByText("0 structural CALC")).toBeTruthy();
+    expect(await screen.findByRole("heading", { name: /Trust the number\.\s*Trace the source\./ })).toBeTruthy();
+    expect(screen.getByText("3 records")).toBeTruthy();
+    const crudeSummary = screen.getByText("U.S. commercial crude oil stocks excluding SPR");
+    fireEvent.click(crudeSummary);
+    expect(crudeSummary.closest("details")?.open).toBe(true);
+    expect(screen.getAllByText("Official measurement")).toHaveLength(3);
+    expect(screen.getAllByText("AUXSAYS calculation")).toHaveLength(3);
+    expect(screen.getAllByText("None")).toHaveLength(3);
+    expect(screen.getAllByRole("link", { name: /Open original evidence/ })[0].getAttribute("href")).toContain("eia.gov");
+    expect(screen.queryByText("OBS")).toBeNull();
   });
 
   it("keeps Outlook empty and Phase 5 locked", async () => {
     render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
-    await screen.findByRole("heading", { name: "Energy-to-transport system state" });
+    await screen.findByRole("heading", { name: /Energy pressure\.\s*Made legible\./ });
     fireEvent.click(screen.getByRole("button", { name: "Outlook" }));
-    expect(await screen.findAllByRole("heading", { name: "Forecast unavailable / not yet supported" })).toHaveLength(2);
-    expect(screen.getByText(/No forecast has been produced/)).toBeTruthy();
-    expect(screen.getByText(/Phase 5 forecasting is locked/)).toBeTruthy();
+    expect(await screen.findByRole("heading", { name: /The forecast begins\s*after the model earns it\./ })).toBeTruthy();
+    expect(screen.getByText(/Current-state evidence is live/)).toBeTruthy();
+    expect(screen.getByText("Phase 5 locked")).toBeTruthy();
     expect(document.body.textContent).not.toContain("Scenario alpha");
+    expect(document.body.textContent).not.toContain("FCST");
   });
 });
 

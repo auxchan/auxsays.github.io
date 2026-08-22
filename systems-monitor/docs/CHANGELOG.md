@@ -1,5 +1,20 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-22 — Phase-4B local experience redesign candidate
+
+- Replaced the dense Phase-4B dashboard shell with a visual, scan-first local
+  experience organized around current signals, the structural-model boundary,
+  and progressive evidence disclosure.
+- Removed repeated `OBS` / `CALC` jargon from the primary journey, introduced
+  semantic system icons, and retained exact claim identity in plain language.
+- Rebuilt Verified Data as an Evidence Room with concise closed cards and exact
+  source, series, methodology, and acquisition detail available on demand.
+- Reframed Outlook as a minimal visual lock state with its technical boundary
+  collapsed until requested.
+- No analytical facts, relationships, calculations, contracts, forecasts, or
+  publication state changed. Human Phase-4B UI QA remains pending, Gate B
+  remains open, and Phase 5 remains locked.
+
 ## 2026-08-22 — Phase-4B status semantics and local UI checkpoint
 
 - Corrected the live-runner read model so accepted direct BEA cells alone retain

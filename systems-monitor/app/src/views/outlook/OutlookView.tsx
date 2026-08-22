@@ -4,6 +4,7 @@ import { DataStateLabel, FactualCandidateNotice } from "../../shared/Semantic";
 import { RankedList } from "../../shared/RankedList";
 import { ErrorState, LoadingState } from "../../shared/States";
 import type { ForecastRecord, HorizonId } from "../../data/publicSnapshotTypes";
+import { SystemIcon } from "../../shared/SystemIcon";
 import type { ViewProps } from "../viewProps";
 
 const TraceMode = lazy(() => import("../trace/TraceMode"));
@@ -14,6 +15,9 @@ function ForecastInspectorContent({ forecast }: { forecast: ForecastRecord }) {
 
 export default function OutlookView({ snapshot, phase4b, route, navigate, variant }: ViewProps) {
   const [traceOpen, setTraceOpen] = useState(false);
+  if (snapshot.snapshot.publicationClass === "factual" && phase4b) {
+    return <div className="sm-view sm-view--outlook sm-view--outlook-locked"><section className="sm-outlook-lock"><div className="sm-outlook-lock__halo" aria-hidden="true"><span><SystemIcon name="lock" size={44} /></span></div><span className="sm-kicker"><i aria-hidden="true" />Outlook</span><h1 data-route-heading tabIndex={-1}>The forecast begins<br /><em>after the model earns it.</em></h1><p>Current-state evidence is live. Structural proof is not complete, so AUXSAYS will not manufacture an answer.</p><div className="sm-outlook-status"><span><SystemIcon name="check" size={17} />Official signals ready</span><span><SystemIcon name="lock" size={17} />Gate B open</span><span><SystemIcon name="network" size={17} />Phase 5 locked</span></div><details className="sm-technical-drawer"><summary>Why is forecasting unavailable? <span>Peel back the boundary</span></summary><div><p>The current candidate contains observed measurements only. It has no accepted structural path, structural calculation, scenario, or forecast.</p></div></details></section></div>;
+  }
   if (snapshot.snapshot.publicationClass === "factual") {
     return <div className="sm-view sm-view--outlook"><header className="sm-view-header"><div><span className="sm-eyebrow">Outlook / Factual mode</span><h1 data-route-heading tabIndex={-1}>Forecast unavailable / not yet supported</h1></div></header>{!phase4b && <FactualCandidateNotice compact />}<ErrorState title="Forecast unavailable / not yet supported" detail={phase4b ? "No forecast has been produced. Phase 4 is current-state structural work, Gate B remains open, and Phase 5 forecasting is locked." : "Observed factual data is available. Forecasting is not yet supported."} fixtureDisclosure={false} /></div>;
   }

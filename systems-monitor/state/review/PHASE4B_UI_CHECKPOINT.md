@@ -8,18 +8,21 @@ Gate B: **OPEN**
 
 Phase 5: **LOCKED**
 
-## What this checkpoint shows
+## What this redesign shows
 
-- Three official `OBS` records: EIA commercial crude excluding SPR, EIA
-  refinery utilization, and BLS truck-transportation employment.
-- Zero accepted factual structural relationships in the current non-live
-  candidate.
-- Zero Phase-4B structural `CALC` records.
-- `BLOCKED_LIVE_BEA_CREDENTIAL` as an analytical source-acceptance state, not
-  an application error.
-- Bounded energy/refining/utilities/transport work in progress, explicitly not
-  whole-economy structural proof.
-- No forecasts or scenarios.
+- A scan-first Summary that leads with three official measurements and visual
+  signal identities instead of record-type jargon or a wall of provenance.
+- Selectable signal cards that reveal one focused evidence layer at a time.
+- A truthful structural-model empty state: three inputs are ready, while zero
+  relationships and zero structural calculations mean no arrows or system
+  result are drawn.
+- A progressive Evidence Room where exact source, series, methodology, machine
+  acquisition provenance, earlier Gate-A evidence, and source health remain
+  available on demand.
+- A visually distinct Outlook boundary that keeps forecasting locked without
+  filling the screen with repeated warnings.
+- No forecasts, scenarios, accepted structural paths, or invented analytical
+  results.
 
 ## Local review
 
@@ -40,34 +43,33 @@ equivalent manual fallback. Neither loader is included in the production build.
 
 ## Human visual QA checklist
 
-1. Can I identify the current `OBS` immediately?
-2. Is it obvious AUXSAYS has not produced a structural `CALC`?
-3. Is the blocked BEA state understandable?
-4. Can I reach exact evidence without cluttering the main view?
-5. Is bounded coverage obvious?
-6. Does the page still feel like isolated metric cards?
-7. Is there a believable future home for dependency/cascade visualization?
-8. Is visible text concise?
-9. Does Outlook avoid fake forecasting?
+1. Do the three current measurements make sense within a few seconds?
+2. Can I select a signal and understand its value, period, and publisher?
+3. Does “Peel back details” make deeper evidence easy to reach?
+4. Is it obvious that the structural model has inputs but no accepted
+   connections or system result yet?
+5. Does the page avoid repeated `OBS` / `CALC` jargon in the primary journey?
+6. Can I expand an Evidence Room card and reach original evidence,
+   methodology, and machine-acquisition provenance?
+7. Are earlier Gate-A records and technical source health available without
+   dominating the page?
+8. Does the experience remain usable on a narrow screen without horizontal
+   overflow?
+9. Does Outlook avoid fake forecasting and explain the lock only on demand?
 10. Does anything imply structural proof that does not exist?
 
-## Deferred UI critique
+## Deliberate boundaries
 
-- The current shell still inherits a generic dashboard/card vocabulary. The
-  new structural area gives dependencies a clear future home, but no arrows are
-  drawn until accepted factual paths exist.
-- The navigation rail remains anchored to the earlier labor-factor hierarchy,
-  so the overall product can still feel like an isolated factor inspector.
-- Summary is now scan-first, but the global candidate notice, breadcrumbs,
-  heartbeat, rail, and view header still create more vertical chrome than the
-  mature structural product should need.
-- Evidence access is strong and progressively disclosed in Verified Data; its
-  tables are information-dense and will need a better small-screen pattern in
-  the deferred major redesign.
-- `OBS` versus `CALC`, source acceptance, coverage, and Outlook unavailability
-  are now explicit. Source-health detail is intentionally behind disclosure.
-- The three-stage structural frame is only a truthful empty-state scaffold. It
-  should become an interactive dependency/cascade canvas only after real
-  accepted relationships exist.
+- The redesign uses the current governed Phase-4B read model; it does not add
+  or hard-code analytical facts.
+- The structural canvas remains an empty-state scaffold. It can become an
+  interactive dependency/cascade experience only after real accepted
+  relationships exist.
+- Compact “Gate B open” and local-review status remain visible because this is
+  a review candidate, while detailed technical state stays collapsed.
+- The earlier labor evidence remains available as a secondary archive rather
+  than competing with the current Phase-4B journey.
+- This is a local candidate only. It does not authorize public activation,
+  deployment, Gate-B closure, or Phase-5 forecasting.
 
 Taylor must record PASS or corrections. This file does not promote Gate B.

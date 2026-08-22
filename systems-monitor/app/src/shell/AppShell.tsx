@@ -3,6 +3,7 @@ import type { FixtureVariant, NavigationNode, PrimaryView, SnapshotViewModel } f
 import type { Phase4bReadModel } from "../data/phase4bReadModel";
 import { breadcrumbNodes, type RouteState } from "../state/routeSchema";
 import { FactualCandidateNotice, FixtureNotice, FreshnessLabel } from "../shared/Semantic";
+import { SystemIcon } from "../shared/SystemIcon";
 
 export function PrimaryViewSwitcher({ view, onChange }: { view: PrimaryView; onChange: (view: PrimaryView) => void }) {
   const views: Array<[PrimaryView, string]> = [
@@ -83,5 +84,18 @@ export function AppShell({ children, snapshot, phase4b, route, navigate, variant
   setVariant: (variant: FixtureVariant) => void;
 }) {
   const factual = snapshot.snapshot.publicationClass === "factual";
+  if (factual && phase4b) {
+    return <div className="sm-app-shell sm-app-shell--immersive">
+      <a className="sm-skip" href="#systems-monitor-content">Skip to analysis</a>
+      <header className="sm-immersive-header">
+        <a className="sm-immersive-brand" href="/"><span className="sm-brand-mark"><SystemIcon name="network" size={20} /></span><span><strong>AUXSAYS</strong><small>U.S. Systems Monitor</small></span></a>
+        <div className="sm-review-status" aria-label="Review status"><span><i aria-hidden="true" />Local factual review</span><span>Gate B open</span></div>
+      </header>
+      <PrimaryViewSwitcher view={route.view} onChange={(view) => navigate((current) => ({ ...current, view, horizon: view === "outlook" ? current.horizon : "current-year", scenario: view === "outlook" ? current.scenario : "baseline" }))} />
+      {route.notice && <p className="sm-route-notice" role="status">{route.notice}</p>}
+      <main id="systems-monitor-content" className="sm-view-region sm-view-region--immersive" tabIndex={-1}>{children}</main>
+      <footer className="sm-immersive-footer"><span>Local candidate · not publicly activated</span><span>Human review pending</span></footer>
+    </div>;
+  }
   return <div className="sm-app-shell"><a className="sm-skip" href="#systems-monitor-content">Skip to analysis</a>{factual ? <FactualCandidateNotice /> : <FixtureNotice />}<header className="sm-product-header"><div><a className="sm-parent-brand" href="/">AUXSAYS <span>/ U.S. Systems Monitor</span></a></div><ExploreSearch snapshot={snapshot} onSelect={(result) => navigate((current) => ({ ...current, view: result.view, system: result.system ?? current.system, path: result.path ?? [] }))} /></header><PrimaryViewSwitcher view={route.view} onChange={(view) => navigate((current) => ({ ...current, view, horizon: view === "outlook" ? current.horizon : "current-year", scenario: view === "outlook" ? current.scenario : "baseline" }))} /><ContextBreadcrumbs snapshot={snapshot} route={route} onPath={(path) => navigate((current) => ({ ...current, path }))} />{route.notice && <p className="sm-route-notice" role="status">{route.notice}</p>}<SystemHealthSummary snapshot={snapshot} phase4b={phase4b} variant={variant} setVariant={setVariant} /><div className="sm-workspace"><SystemRail systems={snapshot.systems} selected={route.system} factual={factual} onSelect={(system) => navigate((current) => ({ ...current, system, path: [] }))} /><main id="systems-monitor-content" className="sm-view-region" tabIndex={-1}>{children}</main></div></div>;
 }
