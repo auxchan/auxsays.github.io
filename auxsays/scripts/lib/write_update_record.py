@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any
 import yaml
 
+from .patch_identity import permalink_path, record_version_slug
 from .normalize import (
     slugify,
     utc_now,
@@ -83,8 +84,10 @@ def _file_size_status(record: dict[str, Any]) -> str:
     return "pending_adapter_support"
 
 def record_slug(record: dict[str, Any]) -> str:
+    """Filename version component. Build-aware products append their exact build so two builds
+    under one YYMM cannot collide on one filename; every other product is unchanged."""
     version = record.get("version") or record.get("title") or record.get("record_id")
-    return slugify(version)
+    return record_version_slug(version, record.get("target_build"), record.get("product_id"))
 
 def output_path(output_dir: Path, record: dict[str, Any]) -> Path:
     published = str(record.get("published_at") or utc_now())
@@ -192,7 +195,11 @@ def build_front_matter(record: dict[str, Any]) -> dict[str, Any]:
         "layout": "aux-update",
         "title": f"{software} {version} official update breakdown",
         "description": f"Official {software} update record captured from {company}.",
-        "permalink": f"/updates/{record['company_id']}/{record['product_id']}/{version_slug}/",
+        # Canonical public URL. Version-only products keep the established four-segment shape;
+        # a build-aware product gains one exact-build segment, so two builds under one YYMM are
+        # two distinct public pages instead of silently sharing one.
+        "permalink": permalink_path(record["company_id"], record["product_id"], version,
+                                    record.get("target_build")),
         "update_entry": True,
         "company_id": record["company_id"],
         "product_id": record["product_id"],

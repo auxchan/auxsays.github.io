@@ -152,7 +152,7 @@ def run() -> int:
     print("=" * 68)
 
     # Control version resolution deterministically (decouple from the live repo).
-    o._existing_versions = lambda pid: set(SEEDED_VERSIONS.get(pid, set()))
+    o._existing_patch_keys = lambda pid: {(pid, v, "") for v in SEEDED_VERSIONS.get(pid, set())}
 
     self_rec = "2026-01-01-obs-studio-31-0-3.md"
     other_rec = "2026-01-01-adobe-premiere-pro-26-2.md"

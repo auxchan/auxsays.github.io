@@ -3,9 +3,15 @@
 
 PowerPoint consensus is production-DISABLED and stays that way. These tests pin a few contracts
 and, just as importantly, PIN THE GAPS that still block activation. Activation is NOT a config
-flip: the production promotion chain is not wired for PowerPoint, and the identity model still
-needs migration. Both are asserted below as known-blocking, so nobody can read this suite as
-"PowerPoint is ready".
+flip: the production promotion chain is not wired for PowerPoint, no workflow --allow entry lets a
+PowerPoint record be committed, and the enable flag is off. Those are asserted below as
+known-blocking, so nobody can read this suite as "PowerPoint is ready".
+
+BUILD-AWARE IDENTITY IS COMPLETE. What used to be pinned here as a known limit -- record, evidence,
+grouping and permalink keys carrying no build -- is now a positive guarantee: identity is the triple
+(product_id, update_version, target_build), and two builds under one YYMM are two records with two
+URLs. The exhaustive collision proof lives in test_powerpoint_build_identity.py; this suite pins
+that the migration landed and did not quietly re-open an activation gate.
 
   * ownership   -- every method_id the collector can emit is authorized. This is the sharp one: a
                    Reddit health row is emitted on EVERY collection (status "disabled" when the
@@ -13,7 +19,7 @@ needs migration. Both are asserted below as known-blocking, so nobody can read t
                    one unauthorized id would roll back the valid Learn Q&A rows too.
   * exact build -- Microsoft's own "Office 2607 (20228.20110)" notation counts, but only for the
                    exact target build. Never the bare "Office 2607".
-  * identity    -- the record/evidence/permalink keys are (product_id, update_version) with no
+  * identity    -- COMPLETE: record/evidence/permalink keys are (product_id, update_version,
                    build component, so two PowerPoint-attributed builds under one YYMM collide.
                    Pinned as a KNOWN LIMIT here; migrating production records is out of scope.
   * promotion   -- the generic apply_consensus_to_records engine COULD serve PowerPoint, but no
@@ -46,6 +52,8 @@ import patch_collectors.microsoft_powerpoint as ppt  # noqa: E402
 from lib import collector_ownership as ownership  # noqa: E402
 
 PRODUCT = "microsoft-powerpoint"
+# The exact Current Channel build of the 2607 record: the second half of its patch identity.
+BUILD = "20228.20110"
 _PASS = 0
 _FAIL = 0
 _ERRORS: list[str] = []
@@ -62,9 +70,13 @@ def check(label: str, condition: bool, detail: str = "") -> None:
         print(f"  FAIL  {label}" + (f"\n        {detail}" if detail else ""))
 
 
-def health_row(method_id: str, version: str = "2607", status: str = "no_results") -> dict:
+def health_row(method_id: str, version: str = "2607", status: str = "no_results",
+               target_build: str = BUILD) -> dict:
+    """A method-health row for the EXACT patch. Health identity is
+    (product_id, update_version, target_build, method_id) for a build-aware product, and ownership
+    resolves that exact patch -- a YYMM that merely exists is no longer sufficient."""
     return {"product_id": PRODUCT, "method_id": method_id, "update_version": version,
-            "status": status}
+            "target_build": target_build, "status": status}
 
 
 def authorized(rows: list[dict]) -> tuple[bool, str]:
@@ -73,6 +85,14 @@ def authorized(rows: list[dict]) -> tuple[bool, str]:
         return True, ""
     except Exception as exc:  # noqa: BLE001 - the violation message is the assertion
         return False, str(exc)
+
+
+def _raises(fn) -> bool:
+    try:
+        fn()
+    except Exception:
+        return True
+    return False
 
 
 def run() -> int:  # noqa: PLR0915
@@ -144,19 +164,57 @@ def run() -> int:  # noqa: PLR0915
           not ctx("On 2026-07-23 we saw 2607 crash", V, B))
 
     # =====================================================================================
-    # 3. IDENTITY -- multi-build under one YYMM collides (KNOWN LIMIT, migration out of scope)
+    # 3. IDENTITY -- BUILD-AWARE IDENTITY = COMPLETE
     # =====================================================================================
+    # Multiple Current Channel builds can ship under one YYMM, so identity is the triple
+    # (product_id, update_version, target_build). Two builds are two records at two URLs. The
+    # exhaustive per-consumer collision proof is test_powerpoint_build_identity.py; these are the
+    # end-state guarantees that must never silently regress.
+    from lib import patch_identity as pi  # noqa: PLC0415
     from patch_collectors.base import evidence_key  # noqa: PLC0415
-    key = evidence_key({"product_id": PRODUCT, "update_version": "2603", "id": "abc"}, "id")
-    check("structured evidence key carries NO build component (documents the limit)",
-          key == (PRODUCT, "2603", "abc"), str(key))
+    check("PowerPoint is registered as a build-aware product", pi.is_build_aware(PRODUCT))
+    key_a = evidence_key({"product_id": PRODUCT, "update_version": "2603",
+                          "target_build": "19822.20182", "id": "abc"}, "id")
+    key_b = evidence_key({"product_id": PRODUCT, "update_version": "2603",
+                          "target_build": "19822.20168", "id": "abc"}, "id")
+    check("structured evidence key CARRIES the exact build", key_a[2] == "19822.20182", str(key_a))
+    check("two builds sharing one report id do NOT collide", key_a != key_b)
+    check("missing target_build fails CLOSED for PowerPoint",
+          _raises(lambda: pi.require_build(PRODUCT, "2603", "")))
+
     import apply_consensus_to_records as ac  # noqa: PLC0415
     idx = ac._index_generated_records()
     ppt_keys = [k for k in idx if k[0] == PRODUCT]
-    check("generated-record index is keyed (product_id, update_version) only",
-          all(len(k) == 2 for k in ppt_keys) and bool(ppt_keys), str(ppt_keys[:2]))
-    check("one record per tracked YYMM today, so no LIVE collision exists",
-          len(ppt_keys) == len({k[1] for k in ppt_keys}), str(len(ppt_keys)))
+    check("generated-record index is keyed by the identity TRIPLE",
+          bool(ppt_keys) and all(len(k) == 3 for k in ppt_keys), str(ppt_keys[:2]))
+    check("every live PowerPoint record carries an exact build in its key",
+          all(k[2] for k in ppt_keys), str([k for k in ppt_keys if not k[2]][:3]))
+    check("no two PowerPoint records share an identity key", len(ppt_keys) == len(set(ppt_keys)))
+
+    # The promotion index deliberately does not carry permalinks, so read them from the records.
+    ppt_records = [v for k, v in idx.items() if k[0] == PRODUCT]
+    permalinks = []
+    for _r in ppt_records:
+        _text = Path(_r["abs_path"]).read_text(encoding="utf-8")
+        _m = re.search(r"^permalink:\s*(\S+)", _text, re.M)
+        permalinks.append(_m.group(1).strip() if _m else "")
+    check("every PowerPoint permalink is build-aware (five segments)",
+          all(len([x for x in p.strip("/").split("/") if x]) == 5 for p in permalinks),
+          str([p for p in permalinks if len([x for x in p.strip("/").split("/") if x]) != 5][:3]))
+    check("no two PowerPoint records share a public permalink",
+          len(permalinks) == len(set(permalinks)))
+    check("the version-only URL is owned by a landing page, not by any record",
+          all(not p.rstrip("/").endswith(f"/{PRODUCT}/{k[1]}")
+              for p, k in zip(permalinks, [k for k in idx if k[0] == PRODUCT])))
+    landing_dir = _REPO / "auxsays" / "updates" / "microsoft" / "microsoft-powerpoint"
+    landings = sorted(p for p in landing_dir.glob("*/index.md"))
+    check("every migrated YYMM keeps a resolving version landing page",
+          len(landings) == len({k[1] for k in ppt_keys}), f"{len(landings)} landings vs {len({k[1] for k in ppt_keys})} versions")
+
+    # Non-PowerPoint products must be untouched by the shared primitive.
+    for other in ("obs-studio", "blackmagic-davinci", "adobe-acrobat-reader", "microsoft-windows-11"):
+        check(f"{other} identity keeps an EMPTY build slot (semantically unchanged)",
+              pi.patch_key(other, "1.0") == (other, "1.0", ""))
 
     # =====================================================================================
     # 4. PROMOTION ENGINE -- reuse, not a new PowerPoint scorer
@@ -191,13 +249,14 @@ def run() -> int:  # noqa: PLR0915
                 "update_entry: true\n"
                 f"product_id: {PRODUCT}\n"
                 "update_version: '2607'\n"
+                f"target_build: '{BUILD}'\n"
                 f"update_report_count: {count}\n"
                 "evidence_state: official_only\n"
                 "---\n\nbody\n", encoding="utf-8")
 
         original = qa.load_counted_evidence_counts
         try:
-            qa.load_counted_evidence_counts = lambda: {(PRODUCT, "2607"): 1}
+            qa.load_counted_evidence_counts = lambda: {(PRODUCT, "2607", BUILD): 1}
 
             write_record(0)
             errors, warnings = qa.scan_evidence_count_alignment([rec])
@@ -220,11 +279,11 @@ def run() -> int:  # noqa: PLR0915
 
     # --- the full promotion chain, on temp fixtures only ---
     from lib.report_counts import counted_evidence_counts, reconcile_record_counts  # noqa: PLC0415
-    row = {"product_id": PRODUCT, "update_version": "2607", "counted": True,
+    row = {"product_id": PRODUCT, "update_version": "2607", "target_build": BUILD, "counted": True,
            "patch_version_matched": True, "id": "e1",
            "source_url": "https://learn.microsoft.com/en-us/answers/questions/5975138/x"}
     check("promotion counts only patch-matched evidence (exact-patch doctrine)",
-          counted_evidence_counts([row]) == {(PRODUCT, "2607"): 1}
+          counted_evidence_counts([row]) == {(PRODUCT, "2607", BUILD): 1}
           and counted_evidence_counts([{**row, "patch_version_matched": False}]) == {},
           str(counted_evidence_counts([row])))
     with tempfile.TemporaryDirectory() as td2:
@@ -236,6 +295,7 @@ def run() -> int:  # noqa: PLR0915
                 "update_entry: true",
                 f"product_id: {PRODUCT}",
                 "update_version: '2607'",
+                f"target_build: '{BUILD}'",
                 "update_report_count: 0",
                 "evidence_state: official_only",
                 "---",
@@ -245,7 +305,7 @@ def run() -> int:  # noqa: PLR0915
             ]), encoding="utf-8")
         original2 = qa.load_counted_evidence_counts
         try:
-            qa.load_counted_evidence_counts = lambda: {(PRODUCT, "2607"): 1}
+            qa.load_counted_evidence_counts = lambda: {(PRODUCT, "2607", BUILD): 1}
             before_errors, _ = qa.scan_evidence_count_alignment([rec2])
             changed, detail = reconcile_record_counts([row], tmp2)
             after_text = rec2.read_text(encoding="utf-8")

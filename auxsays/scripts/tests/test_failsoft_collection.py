@@ -119,12 +119,12 @@ def run() -> int:
     changed, total, rows = base.upsert_method_health([_row("prodA", "no_results")], emh)
     after = {base.method_health_key(r): r for r in base.load_method_health(emh)}
     check("failed collector's committed row is RETAINED byte-for-byte (last-known-good)",
-          after[("prodB", "1.0", "m1")] == before[("prodB", "1.0", "m1")])
+          after[("prodB", "1.0", "", "m1")] == before[("prodB", "1.0", "", "m1")])
     check("successful collector's row is updated by the merge",
-          after[("prodA", "1.0", "m1")]["status"] == "no_results")
+          after[("prodA", "1.0", "", "m1")]["status"] == "no_results")
     check("no fabricated rows for the failed collector (row count unchanged)", total == 2)
     check("failed collector never gets a no_results it didn't report",
-          after[("prodB", "1.0", "m1")]["status"] == "success")
+          after[("prodB", "1.0", "", "m1")]["status"] == "success")
 
     # --- runner outcomes + visibility (Req 3), all in dry-run (no write) --------
     rc, payload, out, summary, output = _run_main(

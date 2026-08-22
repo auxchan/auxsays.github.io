@@ -10,7 +10,7 @@ names the record's exact Version YYMM in context, is channel-consistent with the
 a specific report URL, and describes a concrete post-install PowerPoint problem.
 
 PowerPoint is NOT Windows: one Version YYMM maps to exactly one Current-Channel build, so
-this collector keys on the version (with an *optional* build cross-check) and MUST NOT copy
+this collector keys on the exact patch identity (version AND exact build) and MUST NOT copy
 the Windows KB / OS-build / servicing-train identity gate. The full Click-to-Run build is a
 bonus disambiguator, never a prerequisite (repo doctrine — AGENTS.md "Confirmed report rule"
 — counts on the exact version/patch, not the build).
@@ -34,6 +34,7 @@ import os
 import re
 from typing import Any
 
+from lib.patch_identity import is_build_aware, patch_key
 from .base import (
     CollectorContext,
     PatchRecord,
@@ -459,6 +460,14 @@ def powerpoint_reason(target: dict[str, Any], source_url: str, source_date: str,
         return build_reason, match_basis, build_matched
     if build_matched:
         match_basis = "exact_version_channel_build"
+    elif is_build_aware(PRODUCT_ID):
+        # Canonical PowerPoint patch identity is (product_id, update_version, target_build).
+        # A report that names only the YYMM therefore does NOT identify a patch, even when
+        # AUXSAYS happens to track a single build under that version today: stamping this
+        # record's build onto it would manufacture exact-build evidence by inference, and the
+        # next build released under the same YYMM would retroactively make that attribution
+        # wrong. Fail closed -- the report must state the exact build itself.
+        return "missing_exact_build", match_basis, build_matched
     elif target.get("version_ambiguous"):
         # Exact-patch ambiguity: two or more tracked PowerPoint records share this exact
         # Version YYMM on a compatible channel, so a version-only report cannot deterministically
@@ -520,6 +529,11 @@ def row_from_candidate(record: PatchRecord, target: dict[str, Any], candidate: d
     )
     row["counted"] = reason is None
     row["exclusion_reason"] = reason
+    # Durable exact-build attribution. Set ONLY from the build this report actually named and
+    # that matched the target (build_matched); never copied from the record just because the
+    # YYMM lined up. A row that did not name the exact build carries no build and therefore
+    # cannot be counted as exact-build evidence downstream.
+    row["target_build"] = str(target.get("target_build") or "").strip() if build_matched else ""
     return row
 
 
@@ -528,7 +542,7 @@ def evaluate_candidates(record: PatchRecord, target: dict[str, Any], candidates:
 
     ``seen`` is a per-record canonical-URL set that de-duplicates the SAME URL across methods
     within this record (cross-method dedup). ``run_accepted_urls`` is a run-wide map of
-    canonical-URL -> version that enforces cross-VERSION exclusivity (Part D): a single report URL
+    canonical-URL -> canonical PATCH IDENTITY that enforces cross-PATCH exclusivity (Part D): a single report URL
     may be attributed to at most one PowerPoint version across the whole run. The two are separate
     (cross-method dedup vs cross-version exclusivity)."""
     accepted: list[dict[str, Any]] = []
@@ -544,12 +558,19 @@ def evaluate_candidates(record: PatchRecord, target: dict[str, Any], candidates:
         # Cross-version exclusivity: if this canonical URL was already accepted for a DIFFERENT
         # version in this run, reject the later attribution as a cross-version duplicate.
         if row.get("counted") is True and run_accepted_urls is not None:
+            # Exclusivity is per exact PATCH, not per YYMM. Two PowerPoint builds can share a
+            # version, so comparing versions alone would let one report URL be attributed to BOTH
+            # builds -- two distinct patches -- in a single run. Compare the canonical patch
+            # identity instead. (The exact-build acceptance gate already makes this hard to reach;
+            # this keeps the exclusivity contract itself correct rather than relying on that.)
+            identity = "|".join(patch_key(record.product_id, record.update_version,
+                                          row.get("target_build")))
             prior = run_accepted_urls.get(key)
-            if prior is not None and prior != record.update_version:
+            if prior is not None and prior != identity:
                 row["counted"] = False
                 row["exclusion_reason"] = "cross_version_duplicate"
             else:
-                run_accepted_urls[key] = record.update_version
+                run_accepted_urls[key] = identity
         (accepted if row.get("counted") is True else rejected).append(row)
     return accepted, rejected
 
@@ -663,6 +684,9 @@ def health_row(record: PatchRecord, method_id: str, source_type: str, status: st
     return method_health_row(
         product_id=PRODUCT_ID,
         update_version=record.update_version,
+        # Health is per exact patch: 2603/build-A learn_qna=success and 2603/build-B
+        # learn_qna=blocked are two different facts and must not overwrite one another.
+        target_build=record.target_build,
         method_id=method_id,
         source_type=source_type,
         status=status,
