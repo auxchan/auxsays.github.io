@@ -25,7 +25,7 @@ matrix was retained.
 | E-4B-009 | [BEA concepts/methods](https://www.bea.gov/index.php/resources/methodologies/concepts-methods-io-accounts) | Authoritative matrix derivation and semantics | Live 2026-08-21 |
 | E-4B-010 | [BEA 2025 annual update](https://apps.bea.gov/scb/issues/2025/11-november/1125-nea-annual-update.htm) | Annual update released 2025-09-25; revised 2020–2024 | Published 2025-11-19 |
 | E-4B-011 | [BEA citation guidance](https://www.bea.gov/help/guidelines-for-citing-bea) | Title/link/access date and vintage guidance | Live 2026-08-21 |
-| E-4B-012 | [BEA concordance](https://www.bea.gov/system/files/2023-10/BEA-Industry-and-Commodity-Codes-and-NAICS-Concordance.xlsx) | Official BEA industry/commodity-to-NAICS mapping source | Current linked workbook |
+| E-4B-012 | [BEA concordance](https://www.bea.gov/sites/default/files/2023-10/BEA-Industry-and-Commodity-Codes-and-NAICS-Concordance.xlsx) | Official BEA industry/commodity-to-NAICS mapping source | Current linked workbook; retained hash verified in Phase-4B implementation |
 | E-4B-013 | [EIA WPSR](https://www.eia.gov/petroleum/supply/weekly/) | Weekly petroleum stocks, refinery inputs/utilization, production/import evidence | Week ending 2026-08-14 at review |
 | E-4B-014 | [EIA WPSR schedule](https://www.eia.gov/petroleum/supply/weekly/schedule.php) | Normal Wednesday publication and holiday timing | Live 2026-08-21 |
 | E-4B-015 | [EIA natural-gas data](https://www.eia.gov/naturalgas/data.php) | Weekly working-gas storage and capacity data families | Live 2026-08-21 |

@@ -6,11 +6,15 @@ Status reflects both artifacts and authority. Taylor approved all seven Foundati
 
 Phase 4A — Engine / Labor-State Proof is COMPLETE with Technical PASS and Taylor
 Human QA PASS. Phase 3 Data Integrity is CLOSED with Gate A PASS. Gate B remains
-OPEN. Phase-4B production ingestion/implementation, factual public activation,
-forecasting, deployment, and the deferred UI overhaul remain unauthorized.
+OPEN. Taylor authorized the bounded Phase-4B closed-slice implementation;
+factual public activation, forecasting, deployment, and the deferred UI
+overhaul remain unauthorized.
 The Phase-4B source-discovery/intake sprint is complete. Taylor accepted O-008
 and authorized the bounded 2024 BEA summary-level energy implementation with
-NAICS 484 Truck Transportation as the downstream employment endpoint.
+NAICS 484 Truck Transportation as the downstream employment endpoint. The
+non-live adapter/parser/crosswalk/EIA/BLS/replay implementation now exists, but
+live BEA TableID resolution and accepted structural CALCs remain blocked until
+the external BEA UserID is supplied.
 
 ## Phase-1 deliverables
 

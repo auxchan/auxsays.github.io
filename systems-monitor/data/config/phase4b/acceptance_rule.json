@@ -1,0 +1,14 @@
+{
+  "ruleId": "BEA_CXIDRAR_ENERGY_2024_V1",
+  "version": "1.0.0",
+  "authority": "TAYLOR_O008",
+  "acceptedAt": "2026-08-21T00:00:00Z",
+  "sourceDataset": "InputOutput",
+  "sourceProduct": "CxIDRAR",
+  "economicYear": "2024",
+  "aggregation": "SUMMARY_71",
+  "redefinitionBasis": "AFTER_REDEFINITIONS",
+  "allowedCodes": ["211", "22", "324", "484", "486", "493"],
+  "minimumDirectCoefficient": "0.0000001",
+  "automaticPromotion": "ONLY_AFTER_LIVE_METADATA_SCHEMA_CROSSWALK_RIGHTS_VALIDATION"
+}

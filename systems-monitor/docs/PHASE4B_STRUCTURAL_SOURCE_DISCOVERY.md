@@ -43,7 +43,7 @@ publication, deployment, or BINDING contract changed.
 | [BEA Data API](https://apps.bea.gov/api/data) | `InputOutput` dataset; JSON/XML; metadata methods expose datasets, parameters, and parameter values | Required future machine route | Registered 36-character `UserID` required |
 | Official ZIP exports | Current product-family ZIP links resolve; reviewed via bounded metadata/HEAD only | Human/manual contingency and schema comparison | Automated use not approved in this sprint |
 | [Concepts and Methods](https://www.bea.gov/index.php/resources/methodologies/concepts-methods-io-accounts) | Current official semantic authority | Methodology | ALLOW |
-| [Industry/commodity concordance](https://www.bea.gov/system/files/2023-10/BEA-Industry-and-Commodity-Codes-and-NAICS-Concordance.xlsx) | Current linked BEA-to-NAICS concordance | Future versioned crosswalk input | Inspect safely; no macros/formulas executed |
+| [Industry/commodity concordance](https://www.bea.gov/sites/default/files/2023-10/BEA-Industry-and-Commodity-Codes-and-NAICS-Concordance.xlsx) | Current linked BEA-to-NAICS concordance | Future versioned crosswalk input | Inspect safely; no macros/formulas executed |
 
 The API user guide reviewed on 2026-08-21 documents a 100-requests-per-minute,
 100-MB-per-minute, and 30-errors-per-minute limit, with `Retry-After` behavior.

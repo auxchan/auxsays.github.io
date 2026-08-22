@@ -1,5 +1,19 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-21 — Phase-4B closed-slice implementation candidate
+
+- Added strict standard-library adapters for BEA InputOutput metadata/data,
+  the official BEA-to-NAICS concordance, EIA WPSR tables 2/4, and BLS CES
+  `CES4348400001`.
+- Retained bounded official BEA concordance, EIA weekly, and BLS 484 evidence
+  with hashes, attribution, and separate machine/evidence/methodology routes.
+- Added the versioned 2017-to-2022 NAICS 484 bridge, deterministic structural
+  edge generation, direct-requirement propagation calibration, replay
+  selection, and Phase-4B candidate/read-model tests.
+- Live BEA TableIDs and accepted structural relationships remain deliberately
+  absent because `AUXSAYS_BEA_USER_ID` was not available. Gate B remains open,
+  Human Phase-4B QA remains pending, and Phase 5 remains locked.
+
 ## 2026-08-21 — O-008 approval and Phase-4B implementation authority
 
 - Taylor accepted/resolved O-008 for the bounded 2024 BEA 71-summary energy

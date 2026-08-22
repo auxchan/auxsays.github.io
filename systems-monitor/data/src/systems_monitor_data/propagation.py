@@ -139,14 +139,29 @@ class PropagationEngine:
                     stop_reasons.add("incompatible_units")
                     continue
                 value = _decimal(state["value"])
+                if edge.get("calibration") == "DIRECT_REQUIREMENT_COEFFICIENT":
+                    coefficient = _decimal(edge.get("directCoefficient"))
+                    if coefficient < 0:
+                        stop_reasons.add("invalid_direct_coefficient")
+                        continue
+                    transmitted_value = value * coefficient
+                    disposition = "BEA_DIRECT_REQUIREMENT_COEFFICIENT"
+                elif edge.get("calibration") == "NONE_IDENTITY_ONLY" or (
+                    edge.get("calibration") is None and edge.get("evidenceClass") == "TEST_FIXTURE"
+                ):
+                    transmitted_value = value
+                    disposition = "TEST_FIXTURE_IDENTITY_MAPPING" if edge.get("calibration") is None else "DIRECT_IDENTITY_MAPPING"
+                else:
+                    stop_reasons.add("unsupported_calibration")
+                    continue
                 threshold = _decimal(self.profile["materiality"]["thresholds"][edge["stateFamily"]])
-                if abs(value) < threshold:
+                if abs(transmitted_value) < threshold:
                     stop_reasons.add("below_materiality")
                     continue
                 new_path_edges = [*path_edges, f"{edge['edgeId']}@{edge['version']}"]
                 path_id = stable_id("path", {"origin": origin_id, "edges": new_path_edges})
                 contribution = {
-                    "contributionId": stable_id("contribution", {"pathId": path_id, "target": edge["targetNode"], "value": str(value)}),
+                    "contributionId": stable_id("contribution", {"pathId": path_id, "target": edge["targetNode"], "value": str(transmitted_value)}),
                     "originStateId": origin_id,
                     "commonCauseId": common_cause_id,
                     "pathId": path_id,
@@ -156,8 +171,9 @@ class PropagationEngine:
                     "polarity": edge["polarity"],
                     "evidenceClass": edge["evidenceClass"],
                     "outcome": "TRANSMITTED",
-                    "disposition": "DIRECT_IDENTITY_MAPPING",
-                    "value": str(value),
+                    "disposition": disposition,
+                    "directCoefficient": edge.get("directCoefficient"),
+                    "value": str(transmitted_value),
                     "unit": edge["targetUnit"],
                     "depth": depth + 1,
                     "round": round_number + 1,
@@ -177,7 +193,7 @@ class PropagationEngine:
                 queue.append(({
                     "stateId": contribution["contributionId"],
                     "nodeId": edge["targetNode"],
-                    "value": str(value),
+                    "value": str(transmitted_value),
                     "unit": edge["targetUnit"],
                 }, depth + 1, round_number + 1, new_path_edges, origin_id, common_cause_id))
             if {"node_budget", "path_budget", "contribution_budget"} & stop_reasons:

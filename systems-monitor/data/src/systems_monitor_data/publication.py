@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 import hashlib
 import json
 import os
+import threading
 from pathlib import Path
 from typing import Any
 import uuid
@@ -526,6 +527,7 @@ class AtomicPublisher:
         self.candidates = root / "candidates"
         self.objects = root / "objects"
         self.pointer = root / "current.json"
+        self._pointer_lock = threading.Lock()
         self.candidates.mkdir(parents=True, exist_ok=True)
         self.objects.mkdir(parents=True, exist_ok=True)
 
@@ -561,12 +563,14 @@ class AtomicPublisher:
         active_digest = hashlib.sha256(active_payload).hexdigest()
         active_path = self.objects / f"{active_digest}.json"
         self._write_immutable(active_path, active_payload)
-        temporary = self.root / f".current.{os.getpid()}.{uuid.uuid4().hex}.tmp"
-        temporary.write_text(json.dumps({"sha256": active_digest, "relativePath": f"objects/{active_digest}.json"}, sort_keys=True) + "\n", encoding="utf-8")
-        os.replace(temporary, self.pointer)
+        with self._pointer_lock:
+            temporary = self.root / f".current.{os.getpid()}.{uuid.uuid4().hex}.tmp"
+            temporary.write_text(json.dumps({"sha256": active_digest, "relativePath": f"objects/{active_digest}.json"}, sort_keys=True) + "\n", encoding="utf-8")
+            os.replace(temporary, self.pointer)
         return active_digest, active_path
 
     def withdraw(self, cause: str) -> None:
-        temporary = self.root / f".current.{os.getpid()}.{uuid.uuid4().hex}.tmp"
-        temporary.write_text(json.dumps({"status": "UNAVAILABLE", "cause": cause}, sort_keys=True) + "\n", encoding="utf-8")
-        os.replace(temporary, self.pointer)
+        with self._pointer_lock:
+            temporary = self.root / f".current.{os.getpid()}.{uuid.uuid4().hex}.tmp"
+            temporary.write_text(json.dumps({"status": "UNAVAILABLE", "cause": cause}, sort_keys=True) + "\n", encoding="utf-8")
+            os.replace(temporary, self.pointer)

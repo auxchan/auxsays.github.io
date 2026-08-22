@@ -66,7 +66,12 @@ class BoundedRetriever:
                 last_error = exc
                 if attempt == self.max_attempts:
                     break
-                self.sleeper(min(2 ** (attempt - 1), 4))
+                retry_after = None
+                if isinstance(exc, urllib.error.HTTPError) and exc.code == 429:
+                    raw_retry_after = exc.headers.get("Retry-After") if exc.headers else None
+                    if raw_retry_after and raw_retry_after.isdigit():
+                        retry_after = min(int(raw_retry_after), 60)
+                self.sleeper(retry_after if retry_after is not None else min(2 ** (attempt - 1), 4))
         raise RuntimeError(f"bounded retrieval failed after {self.max_attempts} attempts for {sanitize_url(url)}: {type(last_error).__name__}") from last_error
 
     def _request(self, url: str, method: str, body: bytes | None, headers: dict[str, str], expected_types: tuple[str, ...]) -> tuple[bytes, str, str]:

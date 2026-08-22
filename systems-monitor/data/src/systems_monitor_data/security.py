@@ -4,8 +4,8 @@ import ipaddress
 import socket
 from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
-ALLOWED_HOSTS = {"api.bls.gov", "www.dol.gov", "oui.doleta.gov"}
-SECRET_KEYS = {"registrationkey", "api_key", "apikey", "token", "key", "authorization"}
+ALLOWED_HOSTS = {"api.bls.gov", "www.dol.gov", "oui.doleta.gov", "apps.bea.gov", "ir.eia.gov"}
+SECRET_KEYS = {"registrationkey", "userid", "user_id", "api_key", "apikey", "token", "key", "authorization"}
 
 
 def sanitize_url(url: str) -> str:

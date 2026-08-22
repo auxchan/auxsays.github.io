@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "phase4b-source-evidence-1.0.0",
+  "sourceArtifactId": "bls-ces:CES4348400001:2026-08",
+  "authority": "U.S. Bureau of Labor Statistics",
+  "seriesId": "CES4348400001",
+  "seriesTitle": "All employees, thousands, truck transportation, seasonally adjusted",
+  "naicsCode": "484",
+  "naicsVintage": "2022_NAICS",
+  "acquisitionUrl": "https://api.bls.gov/publicAPI/v2/timeseries/data/",
+  "evidenceUrl": "https://data.bls.gov/timeseries/CES4348400001",
+  "methodologyUrl": "https://www.bls.gov/ces/",
+  "retrievedTime": "2026-08-22T04:44:50Z",
+  "acceptedTime": "2026-08-22T04:44:50Z",
+  "contentSha256": "4D64C6EB7E1D0E764812002EFB2301B980D2B249159D7099AEBF573B497D28FE",
+  "byteLength": 807,
+  "latestObservation": {"period": "2026-07", "value": "1465.1", "unit": "thousands", "publicationClass": "PRELIMINARY"},
+  "rightsState": "ALLOW"
+}
