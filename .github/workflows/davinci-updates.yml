@@ -71,10 +71,15 @@ jobs:
           rm -rf auxsays/_site node_modules .jekyll-cache
           find . -type d -name __pycache__ -prune -exec rm -rf {} +
           find . -type f -name '*.pyc' -delete
-          rm -f auxsays/_data/source_health.yml
           rm -f auxsays/_data/qa_status.json
           rm -f auxsays/_data/consensus_status.json
-          rm -f auxsays/_data/patch_ingest_state.json
+          # source_health.yml and patch_ingest_state.json are TRACKED and are in no --allow entry
+          # for this lane, so `rm -f` left an unstaged tracked DELETION: material the writeback
+          # validators could observe while the commit omitted it (audit_consensus_evidence.py
+          # reads patch_ingest_state.json for source-freshness state). Restore the committed
+          # content instead -- the tree the validators read is then exactly the tree that gets
+          # committed, which is what automation_writeback now enforces fail-closed.
+          git checkout -- auxsays/_data/source_health.yml auxsays/_data/patch_ingest_state.json
 
       - name: Commit material DaVinci evidence changes (conflict-safe writeback)
         if: ${{ github.event.inputs.dry_run != 'true' }}

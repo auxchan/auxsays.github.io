@@ -20,6 +20,9 @@ This module performs, against an ALREADY-checked-out repo whose working tree alr
 the freshly generated changes:
 
   * stage ONLY explicitly permitted pathspecs; reject any unexpected/forbidden staged path
+  * refuse the whole run when the working tree holds material the commit candidate does not
+    (unstaged tracked change/deletion, or a non-ignored untracked file), so the state a validator
+    reads is always the state that gets committed: VALIDATED TREE == COMMITTED TREE
   * empty staged diff -> no_changes; then, IFF deploy-recovery is enabled for this workflow,
     verify the current main SHA is deployed and re-dispatch Pages if not (never on every run)
   * create the bot commit; fetch origin/<branch> immediately before each push; rebase the
@@ -85,6 +88,7 @@ PAGES_DISPATCH_SKIPPED_PUSH_FAILURE = "pages_dispatch_skipped_push_failure"
 DEPLOYMENT_CURRENT = "deployment_current"
 DEPLOYMENT_MISSING = "deployment_missing"
 VALIDATION_FAILED_PRE_COMMIT = "validation_failed_pre_commit"
+UNSTAGED_CHANGED_PATH = "unstaged_changed_path"
 
 
 @dataclass
@@ -196,6 +200,54 @@ def _emit(result: WritebackResult, token: str) -> None:
 def _staged_paths(repo: Path) -> list[str]:
     out = _git(repo, "diff", "--cached", "--name-only").stdout
     return [ln.strip() for ln in out.splitlines() if ln.strip()]
+
+
+def _residual_paths(repo: Path) -> list[str]:
+    """Repository material the working tree holds that the commit candidate does NOT.
+
+    After ``git add -- <allow>`` the index IS the candidate commit, but ``_run_validation``
+    launches ordinary subprocesses that read the WORKING TREE. Anything present there and absent
+    from the candidate -- an unstaged modification or deletion of a tracked file, or a non-ignored
+    untracked file -- is material a validator can consume while ``git commit`` silently omits it.
+    That is exactly how a validator can pass on a state that never reaches ``main``:
+    evidence staged + an unallowed generated record modified in the working tree reads as a
+    coherent pair, while the commit publishes only the evidence half.
+
+    ``git status --porcelain`` already excludes .gitignore'd paths. That exclusion is deliberate
+    and measured: the genuinely transient artefacts these lanes produce (``_site``,
+    ``__pycache__``, ``*.pyc``, ``qa_status.json``, ``consensus_status.json``) are all ignored,
+    and any of them that somehow reached the index would still be refused by ``_is_forbidden``.
+    """
+    out = _git(repo, "status", "--porcelain").stdout
+    residual: list[str] = []
+    for line in out.splitlines():
+        if len(line) < 4:
+            continue
+        index_state, worktree_state, path = line[0], line[1], line[3:].strip()
+        if " -> " in path:          # rename/copy: the working-tree side is the destination
+            path = path.split(" -> ", 1)[1].strip()
+        path = path.strip('"')
+        if index_state == "?" and worktree_state == "?":
+            residual.append(path)   # untracked AND not ignored
+        elif worktree_state != " ":
+            residual.append(path)   # tracked, differs between working tree and index
+    return sorted(set(residual))
+
+
+def _refuse_residual(cfg: WritebackConfig, result: WritebackResult, reset_index: bool) -> bool:
+    """Fail-closed equivalence gate. True when residual material was found and the writeback must
+    stop: no validation, no commit, no push, no Pages dispatch. The working tree is deliberately
+    left untouched so the unexpected mutation stays visible for diagnosis -- it is never stashed,
+    reset or otherwise hidden, because a collector defect must not be silently absorbed."""
+    residual = _residual_paths(cfg.repo)
+    if not residual:
+        return False
+    if reset_index:
+        _git(cfg.repo, "reset", "-q")
+    result.conflicting_paths = residual
+    _emit(result, UNSTAGED_CHANGED_PATH)
+    result.outcome = UNSTAGED_CHANGED_PATH
+    return True
 
 
 def _commit_paths(repo: Path, commit: str) -> list[str]:
@@ -393,6 +445,14 @@ def run_writeback(cfg: WritebackConfig) -> WritebackResult:
         result.outcome = UNEXPECTED_CHANGED_PATH
         return result
 
+    # Equivalence gate. Everything below -- validation, the commit, the push -- assumes the
+    # working tree the validators read is the tree that will be committed. Enforce that here,
+    # BEFORE the first validator runs, rather than assuming it. This also covers the no-change
+    # branch: "nothing to commit" while a generated record sits modified in the working tree is a
+    # silently discarded mutation, not a quiet run.
+    if _refuse_residual(cfg, result, reset_index=True):
+        return result
+
     if not staged:
         _emit(result, NO_CHANGES)
         result.outcome = NO_CHANGES
@@ -403,9 +463,13 @@ def run_writeback(cfg: WritebackConfig) -> WritebackResult:
     result.changed = True
     result.deploy_changed = any(_matches_any(p, cfg.site_paths) for p in staged) if cfg.site_paths else True
 
-    # Transactional gate: validate the STAGED state BEFORE creating any commit, so an invalid
-    # working tree (e.g. left dirty by a partial/failed upstream step) can never be committed. The
-    # git index is the staging area and `git commit` is the atomic replacement; on validation
+    # Transactional gate: validate BEFORE creating any commit, so an invalid tree (e.g. left
+    # dirty by a partial/failed upstream step) can never be committed. The validators still run as
+    # ordinary subprocesses against the working tree -- the guarantee that this equals the staged
+    # candidate comes from the equivalence gate above, which refused the run if the two could
+    # differ. Without that gate this comment overstated what the implementation delivered: a
+    # validator could pass on working-tree-only material that `git commit` would then omit.
+    # The git index is the staging area and `git commit` is the atomic replacement; on validation
     # failure the index is reset and NO commit is created, so tracked files stay byte-identical.
     if cfg.validate_before_commit and cfg.validate:
         if not _run_validation(repo, cfg.validate, result):
@@ -433,6 +497,12 @@ def run_writeback(cfg: WritebackConfig) -> WritebackResult:
                 return result
             rebased = True
             result.rebased_commit_sha = _sha(repo, "HEAD")
+            # Same invariant on the retry path. A tracked modification would already have made
+            # `git rebase` itself fail, but a non-ignored UNTRACKED file survives a clean rebase,
+            # stays readable by the revalidation below, and is still never committed -- so the
+            # post-rebase validation needs the identical gate, not a weaker one.
+            if _refuse_residual(cfg, result, reset_index=False):
+                return result
             if cfg.validate:
                 if not _run_validation(repo, cfg.validate, result):
                     _git(repo, "reset", "--hard", result.local_commit_sha, check=False)
@@ -448,6 +518,11 @@ def run_writeback(cfg: WritebackConfig) -> WritebackResult:
                 _emit(result, UNEXPECTED_CHANGED_PATH)
                 result.outcome = UNEXPECTED_CHANGED_PATH
                 return result
+
+        # Final equivalence assertion: a validator (or any step between validation and here)
+        # must not have introduced material that the pushed commit will not carry.
+        if _refuse_residual(cfg, result, reset_index=False):
+            return result
 
         if cfg.test_hook_before_push and fires < cfg.test_hook_fires:
             fires += 1
