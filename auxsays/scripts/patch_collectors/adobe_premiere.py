@@ -12,6 +12,7 @@ import html
 import json
 import os
 import re
+import time
 import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
@@ -156,6 +157,7 @@ def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[
     method_results: list[dict[str, Any]] = []
 
     for method_id, collector in (
+        ("adobe_community_algolia_search", adobe_community_algolia_search_candidates),
         ("reddit_search", reddit_search_candidates),
         ("adobe_community_search", adobe_community_search_candidates),
         ("adobe_community_bug_tab_index", adobe_community_bug_tab_candidates),
@@ -167,13 +169,24 @@ def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[
     ):
         errors: list[dict[str, Any]] = []
         candidates = collector(record, context, errors)
+        # Collectors run sequentially, so module telemetry belongs to the call just made.
+        telemetry = dict(_ALGOLIA_TELEMETRY) if method_id == "adobe_community_algolia_search" else {}
         accepted, rejected = evaluate_candidates(record, candidates, captured_at)
+        for row in accepted:
+            # Emit the row's real, deterministic basis so an audit never has to infer it.
+            rb.emit("premiere_accepted_identity", product_id=PRODUCT_ID,
+                    version=str(record.update_version), method_id=method_id,
+                    source_url=str(row.get("source_url") or ""),
+                    report_title=str(row.get("report_title") or "")[:180],
+                    match_basis=str(row.get("match_basis") or ""),
+                    matched_version=str(row.get("matched_version") or ""))
         method_results.append({
             "method_id": method_id,
             "candidates": candidates,
             "accepted": accepted,
             "rejected": rejected,
             "errors": errors,
+            "telemetry": telemetry,
         })
 
     accepted = merge_rows_by_url([row for result in method_results for row in result["accepted"]])
@@ -201,6 +214,286 @@ def adobe_community_search_candidates(record: PatchRecord, context: CollectorCon
             if not links:
                 break
             candidates.extend(candidates_from_report_links(links, context, errors, seen_urls, "adobe_community_search"))
+    return candidates
+
+
+# --- Adobe Community keyless JSON discovery (Algolia + getTopics) -------------------------
+# Premiere's own measured supply on this chain: 269 mixed-board candidates -> 160 passing the
+# Bug-Report URL gate -> 100 version-anchored -> 30 unique accepted rows. Discovery is scoped to
+# Premiere's category AND the Bug Reports board, which matters for correctness rather than
+# efficiency: an official Adobe announcement passes source_url_is_specific, text_describes_issue
+# AND premiere_strong_issue_match, so only SPECIFIC_ADOBE_BUG_URL_RE stands between it and
+# consensus acceptance -- and Announcements live inside Premiere's own category. Scoping the
+# board structurally keeps announcements out of the funnel entirely, before acceptance runs.
+ALGOLIA_TOKEN_URL = "https://community.adobe.com/search/searchToken"
+# Pin the verified index by exact name. Positional selection (availableIndexes[0]) would
+# silently follow Adobe if they reorder or add indexes, changing which corpus we search
+# without any signal. Absent / empty / malformed -> fail closed.
+ALGOLIA_INDEX = "adobedme-en-unified"
+ALGOLIA_QUERY_URL_TMPL = "https://{app_id}-dsn.algolia.net/1/indexes/{index}/query"
+COMMUNITY_GET_TOPICS_URL = "https://community.adobe.com/search/getTopics"
+PREMIERE_CATEGORY_ID = "726"          # "Adobe Premiere"; sibling products are distinct categories
+PREMIERE_BUG_REPORTS_FORUM_ID = "728"  # user Bug Reports board (NOT announcements-727)
+# getTopics silently truncates a long topicIds[] request at about 25 ids -- no error, no signal.
+# Chunk well under that so supply can never be lost invisibly.
+GET_TOPICS_CHUNK = 20
+MAX_ALGOLIA_HITS_PER_QUERY = 100
+MAX_ALGOLIA_PAGES = 2
+MAX_TOPIC_IDS_PER_RECORD = 120
+MAX_QUERIES_PER_RECORD = 4
+# Selection basis is recorded in telemetry so the ordering rule is auditable in the log.
+# Algolia hits carry date_added (unix seconds), a real timestamp available BEFORE getTopics
+# hydration, so selection is authoritative rather than an id-ordering heuristic.
+TOPIC_SELECTION_BASIS = "algolia_date_added_descending"
+_ALGOLIA_TELEMETRY: dict[str, Any] = {}
+
+
+def request_public_json_post(
+    url: str,
+    payload: bytes,
+    *,
+    headers: dict[str, str],
+    timeout: int = 30,
+    max_bytes: int = 800000,
+) -> Any:
+    """POST JSON through Premiere's own runtime-bounded transport.
+
+    Deliberately NOT lib.http and NOT Acrobat's helpers: Acrobat's _request_json reads a module
+    global (_ACTIVE_BUDGET) that only AdobeAcrobatCollector sets, so calling it from here would
+    silently drop out of the runtime budget and reintroduce the unbounded-read class of defect.
+    """
+    req = urllib.request.Request(url, data=payload, headers=headers, method="POST")
+    try:
+        with urllib.request.urlopen(req, timeout=rb.request_timeout(rb.get_run_budget(), timeout)) as response:
+            status = getattr(response, "status", None)
+            body = rb.bounded_read(response, budget=rb.get_run_budget(), endpoint_family="premiere", max_bytes=max_bytes).decode("utf-8", errors="replace")
+    except HTTPError as exc:
+        raise AdobeCommunityAccessError(f"http_{exc.code}_{brave_status_reason(exc.code)}", status=exc.code) from exc
+    except URLError as exc:
+        raise AdobeCommunityAccessError(f"url_error_{getattr(exc, 'reason', exc)}") from exc
+    if status in {401, 403, 429}:
+        raise AdobeCommunityAccessError(f"http_{status}_{brave_status_reason(status)}", status=status)
+    try:
+        return json.loads(body)
+    except json.JSONDecodeError as exc:
+        raise AdobeCommunityAccessError("invalid_json") from exc
+
+
+def algolia_credentials() -> dict[str, str]:
+    """Fetch anonymous Algolia credentials and pin the verified index by EXACT name.
+
+    The index is never chosen positionally: it must appear, by exact equality, anywhere in
+    availableIndexes. Missing, empty or malformed lists fail closed rather than falling back to
+    some other Adobe corpus. No token value is ever placed in a diagnostic.
+    """
+    payload = request_public_json(ALGOLIA_TOKEN_URL)
+    if not isinstance(payload, dict):
+        raise AdobeCommunityAccessError("searchtoken_unexpected_shape")
+    app_id = str(payload.get("client_id") or "").strip()
+    token = str(payload.get("token") or "").strip()
+    if not (app_id and token):
+        raise AdobeCommunityAccessError("searchtoken_incomplete")
+    indexes = payload.get("availableIndexes")
+    if not isinstance(indexes, list) or not indexes:
+        raise AdobeCommunityAccessError("searchtoken_index_unavailable")
+    available = {str(name).strip() for name in indexes if isinstance(name, (str, int))}
+    if ALGOLIA_INDEX not in available:
+        raise AdobeCommunityAccessError("searchtoken_index_unavailable")
+    return {"app_id": app_id, "token": token, "index": ALGOLIA_INDEX}
+
+
+def algolia_premiere_bug_topic_ids(creds: dict[str, str], query: str) -> list[int]:
+    """Board-scoped discovery: Premiere category AND the Bug Reports board only."""
+    url = ALGOLIA_QUERY_URL_TMPL.format(app_id=creds["app_id"], index=creds["index"])
+    headers = {
+        "Accept": "application/json",
+        "Content-Type": "application/json",
+        "User-Agent": HEADERS["User-Agent"],
+        "X-Algolia-Application-Id": creds["app_id"],
+        "X-Algolia-API-Key": creds["token"],
+    }
+    found: list[tuple[int, int]] = []
+    pages = 0
+    for page in range(MAX_ALGOLIA_PAGES):
+        params = urllib.parse.urlencode({
+            "query": query,
+            "hitsPerPage": MAX_ALGOLIA_HITS_PER_QUERY,
+            "page": page,
+            "facetFilters": json.dumps([
+                [f"category:{PREMIERE_CATEGORY_ID}"],
+                [f"forum:{PREMIERE_BUG_REPORTS_FORUM_ID}"],
+            ]),
+            "attributesToHighlight": "",
+        })
+        data = request_public_json_post(url, json.dumps({"params": params}).encode("utf-8"), headers=headers)
+        pages += 1
+        hits = data.get("hits") if isinstance(data, dict) else None
+        if not isinstance(hits, list) or not hits:
+            break
+        for hit in hits:
+            if not isinstance(hit, dict):
+                continue
+            try:
+                topic_id = int(str(hit.get("id")))
+            except (TypeError, ValueError):
+                continue  # malformed hit id: ignore, never guess
+            try:
+                added = int(hit.get("date_added") or 0)
+            except (TypeError, ValueError):
+                added = 0
+            found.append((topic_id, added))
+        if len(hits) < MAX_ALGOLIA_HITS_PER_QUERY:
+            break
+    return found, pages
+
+
+def community_topics(topic_ids: list[int]) -> tuple[list[dict[str, Any]], int]:
+    """Resolve topics in deterministic bounded chunks; returns (topics, request_count).
+
+    getTopics silently truncates a long topicIds[] request around 25 ids -- no error, no signal --
+    so chunks stay at GET_TOPICS_CHUNK. Ids arrive already selected and are resolved in ascending
+    order so the request sequence is deterministic.
+    """
+    ordered = sorted({int(t) for t in topic_ids})
+    topics: list[dict[str, Any]] = []
+    requests = 0
+    for start in range(0, len(ordered), GET_TOPICS_CHUNK):
+        chunk = ordered[start:start + GET_TOPICS_CHUNK]
+        params = urllib.parse.urlencode([("topicIds[]", str(t)) for t in chunk])
+        payload = request_public_json(f"{COMMUNITY_GET_TOPICS_URL}?{params}")
+        requests += 1
+        if isinstance(payload, list):
+            topics.extend(item for item in payload if isinstance(item, dict))
+    return topics, requests
+
+
+def topic_to_candidate(topic: dict[str, Any]) -> dict[str, str] | None:
+    """Mirror adobe_bug_report_candidate's contract from authoritative getTopics JSON."""
+    canonical = canonical_adobe_url(str(topic.get("url") or ""))
+    if not canonical or not adobe_report_url_is_specific(canonical):
+        return None
+    title = str(topic.get("title") or "").strip()
+    first_post = topic.get("firstPost") if isinstance(topic.get("firstPost"), dict) else {}
+    text = clean_html(str(first_post.get("content") or ""))
+    if not (title and text):
+        return None
+    return {
+        "source_type": SOURCE_TYPE,
+        "source_name": SOURCE_NAME,
+        "source_url": canonical,
+        "archive_url": "",
+        "parent_title": title,
+        "report_title": title,
+        "report_text": text[:6000],
+        "source_date": str(first_post.get("creationDate") or "").strip(),
+    }
+
+
+def adobe_community_algolia_search_candidates(record: PatchRecord, context: CollectorContext, errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    """Keyless Adobe Community discovery for Premiere, scoped to the Bug Reports board.
+
+    Discovery only. Every accepted row still passes the unchanged Premiere gates. Bounded
+    discovery is fully accounted for: HTTP counts are ACTUAL requests (never logical query
+    terms), and any loss to MAX_TOPIC_IDS_PER_RECORD is reported rather than silent.
+    """
+    global _ALGOLIA_TELEMETRY
+    started = time.monotonic()
+    tel: dict[str, Any] = {
+        "search_token_request_count": 0,
+        "algolia_query_count": 0,
+        "algolia_page_request_count": 0,
+        "gettopics_request_count": 0,
+        "total_http_request_count": 0,
+        "discovered_topic_ids": 0,
+        "unique_topic_ids": 0,
+        "selected_topic_ids": 0,
+        "truncated_topic_ids": 0,
+        "topic_selection_basis": TOPIC_SELECTION_BASIS,
+        "method_duration_ms": 0,
+    }
+    _ALGOLIA_TELEMETRY = tel
+
+    def _finish() -> None:
+        tel["method_duration_ms"] = int((time.monotonic() - started) * 1000)
+        tel["total_http_request_count"] = (
+            tel["search_token_request_count"] + tel["algolia_page_request_count"] + tel["gettopics_request_count"]
+        )
+        rb.emit("premiere_algolia_discovery", product_id=PRODUCT_ID, version=str(record.update_version), **tel)
+
+    try:
+        creds = algolia_credentials()
+        tel["search_token_request_count"] = 1
+    except Exception as exc:  # noqa: BLE001
+        tel["search_token_request_count"] = 1
+        errors.append({"source_url": ALGOLIA_TOKEN_URL, "reason": f"adobe_community_algolia_search_token_failed:{error_reason(exc)}"})
+        _finish()
+        return []
+
+    version = str(record.update_version or "").strip()
+    if not version:
+        _finish()
+        return []
+    queries: list[str] = []
+    for token in [version, *version_aliases(version)]:
+        token = str(token).strip()
+        if token and token not in queries:
+            queries.append(token)
+    queries = queries[:MAX_QUERIES_PER_RECORD]
+    tel["algolia_query_count"] = len(queries)
+
+    hits: list[tuple[int, int]] = []
+    for query in queries:
+        try:
+            found, pages = algolia_premiere_bug_topic_ids(creds, query)
+            tel["algolia_page_request_count"] += pages
+            hits.extend(found)
+        except Exception as exc:  # noqa: BLE001
+            tel["algolia_page_request_count"] += 1
+            errors.append({"source_url": ALGOLIA_QUERY_URL_TMPL.format(app_id=creds["app_id"], index=creds["index"]),
+                           "reason": f"adobe_community_algolia_search_query_failed:{error_reason(exc)}"})
+            if error_is_blocked(exc):
+                _finish()
+                return []
+    tel["discovered_topic_ids"] = len(hits)
+    if not hits:
+        _finish()
+        return []
+
+    # Keep the newest date_added per topic id, then select newest-first under the cap. The cap is
+    # permitted; losing supply to it silently is not, so the shortfall is reported as truncation.
+    newest: dict[int, int] = {}
+    for topic_id, added in hits:
+        if added >= newest.get(topic_id, -1):
+            newest[topic_id] = added
+    tel["unique_topic_ids"] = len(newest)
+    ranked = sorted(newest.items(), key=lambda kv: (-kv[1], -kv[0]))
+    selected = [topic_id for topic_id, _added in ranked[:MAX_TOPIC_IDS_PER_RECORD]]
+    tel["selected_topic_ids"] = len(selected)
+    tel["truncated_topic_ids"] = max(0, len(newest) - len(selected))
+
+    try:
+        topics, chunk_requests = community_topics(selected)
+        tel["gettopics_request_count"] = chunk_requests
+    except Exception as exc:  # noqa: BLE001
+        tel["gettopics_request_count"] += 1
+        errors.append({"source_url": COMMUNITY_GET_TOPICS_URL, "reason": f"adobe_community_algolia_search_topics_failed:{error_reason(exc)}"})
+        _finish()
+        return []
+
+    candidates: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for topic in topics:
+        candidate = topic_to_candidate(topic)
+        if not candidate:
+            continue
+        key = candidate["source_url"].lower()
+        if key in seen:
+            continue
+        seen.add(key)
+        if context.since and candidate.get("source_date") and date_part(candidate["source_date"]) < context.since:
+            continue
+        candidates.append(candidate)
+    _finish()
     return candidates
 
 
@@ -444,12 +737,22 @@ def health_for_method(record: PatchRecord, captured_at: str, result: dict[str, A
     errors = list(result["errors"])
     blocked_reason = blocked_reason_from_errors(errors)
     notes = method_notes(method_id, candidates, accepted, rejected, errors)
+    telemetry = dict(result.get("telemetry") or {})
+    status = adobe_community_method_status(candidates, accepted, rejected, errors)
+    if telemetry:
+        # Extra keys are discarded by normalize_method_health_row, so completeness/runtime
+        # accounting is surfaced in free-text notes (and via rb.emit in the run log).
+        notes = f"{notes} [{telemetry_note(telemetry)}]"
+        # A capped pass found evidence but did NOT see all of its supply: downgrade a clean
+        # run to partial. Never upgrade, and never mask a blocked/broken diagnosis.
+        if int(telemetry.get("truncated_topic_ids") or 0) > 0 and status in {"success", "no_results"}:
+            status = "partial"
     return method_health_row(
         product_id=PRODUCT_ID,
         update_version=record.update_version,
         method_id=method_id,
         source_type=method_source_type(method_id),
-        status=adobe_community_method_status(candidates, accepted, rejected, errors),
+        status=status,
         candidates_found=len(candidates),
         accepted_reports=len(accepted),
         rejected_reports=len(rejected),
@@ -457,6 +760,17 @@ def health_for_method(record: PatchRecord, captured_at: str, result: dict[str, A
         last_run=captured_at,
         notes=notes,
     )
+
+
+def telemetry_note(telemetry: dict[str, Any]) -> str:
+    """Deterministic compact telemetry for the health row free-text notes."""
+    order = (
+        "search_token_request_count", "algolia_query_count", "algolia_page_request_count",
+        "gettopics_request_count", "total_http_request_count", "discovered_topic_ids",
+        "unique_topic_ids", "selected_topic_ids", "truncated_topic_ids",
+        "topic_selection_basis", "method_duration_ms",
+    )
+    return " ".join(f"{k}={telemetry.get(k)}" for k in order if k in telemetry)
 
 
 def method_source_type(method_id: str) -> str:
@@ -475,6 +789,7 @@ def method_notes(
     errors: list[dict[str, Any]],
 ) -> str:
     labels = {
+        "adobe_community_algolia_search": "Adobe Community keyless JSON search, Premiere Bug Reports board",
         "reddit_search": "Reddit community search (r/premierepro, r/editors, r/Adobe)",
         "adobe_community_search": "Adobe Community search",
         "adobe_community_bug_tab_index": "Adobe Community Premiere bug-tab listing",
@@ -789,6 +1104,14 @@ def row_from_candidate(record: PatchRecord, candidate: dict[str, Any], captured_
         str(candidate.get("report_text") or ""),
     ])
     matched, matched_version, basis = premiere_version_match(report_text, record.update_version)
+    # Patch-identity authority runs BEFORE final acceptance: an exact token elsewhere in the
+    # report cannot outrank an explicit statement that a DIFFERENT version is the problem.
+    identity_ok, identity_basis, identity_reason = premiere_patch_identity(candidate, record.update_version)
+    if matched and not identity_ok:
+        matched, matched_version = False, ""
+        basis = identity_basis
+    elif matched and identity_basis != "premiere_text_fallback":
+        basis = f"{basis}+{identity_basis}"
     theme, workflow_area, platform, severity, sentiment = classify(report_text)
     source_date = date_part(candidate.get("source_date"))
     archive_url = str(candidate.get("archive_url") or "").strip()
@@ -821,6 +1144,9 @@ def row_from_candidate(record: PatchRecord, candidate: dict[str, Any], captured_
     if not source_date:
         row["source_date_pass"] = None
     gated = apply_acceptance_gates(row, report_text=report_text)
+    if identity_reason and gated.get("counted") is not True:
+        # Name the real cause rather than the generic missing-version reason.
+        gated["exclusion_reason"] = identity_reason
     if archive_url:
         gated["archive_url"] = archive_url
     if gated.get("counted") is True and str(gated.get("source_type") or "") == SOURCE_TYPE and not adobe_report_url_is_specific(str(gated.get("source_url") or "")):
@@ -842,6 +1168,178 @@ def row_from_candidate(record: PatchRecord, candidate: dict[str, Any], captured_
         gated["counted"] = False
         gated["exclusion_reason"] = "not_a_real_issue_report"
     return gated
+
+
+# --- Premiere patch-identity authority -----------------------------------------------------
+# An exact version token appearing anywhere in a report is NOT sufficient patch identity. A
+# report about a 26.3 regression routinely says "works in 26.2" or "reverted to 26.2", and the
+# combined parent_title + report_title + report_text match then satisfied the 26.2 record --
+# counting a 26.3 defect as evidence against 26.2. Identity is therefore resolved from the most
+# authoritative statement available, before final version acceptance. Shared exact_version_match
+# is untouched; this layer only decides WHICH text may establish identity.
+PREMIERE_VERSION_TOKEN_RE = re.compile(
+    r"\b(?:adobe\s+)?premiere(?:\s+pro)?\s+v?(\d{2}\.\d+(?:\.\d+)?)(?!\.?\d)",
+    flags=re.I,
+)
+# A bare version list that follows an explicit Premiere mention, e.g.
+# "Premiere Pro 26.2.2 / 26.3.0 Text Style strokes lost" -> both are explicitly affected.
+PREMIERE_EXTRA_VERSION_RE = re.compile(r"(?:\s*[/,]\s*|\s+and\s+)v?(\d{2}\.\d+(?:\.\d+)?)(?!\.?\d)", flags=re.I)
+# Labelled AFFIRMATIVE problem declarations. Conservative and deterministic.
+PREMIERE_PROBLEM_LABEL_RE = re.compile(
+    r"(?:product\s*/\s*version|problem\s+version|affected\s+version|broken\s+(?:in|version)|"
+    r"premiere\s+pro\s+version|version\s+affected)\s*[:\-]\s*(?:adobe\s+)?(?:premiere(?:\s+pro)?\s+)?v?(\d{2}\.\d+(?:\.\d+)?)(?!\.?\d)",
+    flags=re.I,
+)
+# Comparison/control versions. These are the versions that WORK, so they can never establish
+# identity for a defect record.
+PREMIERE_CONTROL_LABEL_RE = re.compile(
+    r"(?:working\s+version|works\s+(?:in|on|fine\s+(?:in|on))|reverted?\s+(?:back\s+)?to|"
+    r"rolled\s+back\s+to|rollback\s+to|downgraded?\s+to|back\s+to|workaround|"
+    r"resolved\s+by\s+installing)\s*[:\-]?\s*(?:adobe\s+)?(?:premiere(?:\s+pro)?\s+)?v?(\d{2}\.\d+(?:\.\d+)?)(?!\.?\d)",
+    flags=re.I,
+)
+
+
+# Control phrasing where the version comes FIRST: "26.2 was stable", "26.2 works fine".
+# Deliberately narrow: the adjective only counts when it directly follows a syntactically valid
+# Premiere version token, so words like "stable" or "fine" are never classified on their own.
+PREMIERE_CONTROL_POSTFIX_RE = re.compile(
+    r"(?:adobe\s+)?(?:premiere(?:\s+pro)?\s+)?v?(\d{2}\.\d+(?:\.\d+)?)(?!\.?\d)\s+"
+    r"(?:still\s+)?(?:works?(?:\s+(?:fine|well|ok|okay|correctly|perfectly))?|working(?:\s+fine)?|"
+    r"is\s+(?:working|stable|fine|ok|okay|unaffected|unaffected\s+by\s+this)|"
+    r"was\s+(?:working|stable|fine|ok|okay|unaffected)|"
+    r"had\s+no\s+(?:issues?|problems?)|remains?\s+stable|ran\s+fine)",
+    flags=re.I,
+)
+# "no issue in 26.2", "no problems on Premiere Pro 26.2"
+PREMIERE_CONTROL_NEGATED_RE = re.compile(
+    r"(?:no|without|zero)\s+(?:issues?|problems?|crashes?|errors?)\s+(?:in|on|with|under)\s+"
+    r"(?:adobe\s+)?(?:premiere(?:\s+pro)?\s+)?v?(\d{2}\.\d+(?:\.\d+)?)(?!\.?\d)",
+    flags=re.I,
+)
+PREMIERE_CONTROL_PATTERNS = (
+    PREMIERE_CONTROL_LABEL_RE,
+    PREMIERE_CONTROL_POSTFIX_RE,
+    PREMIERE_CONTROL_NEGATED_RE,
+)
+
+
+def premiere_versions_in_title(title: str) -> list[str]:
+    """Explicit Premiere version identity stated in a title, including multi-version titles."""
+    text = str(title or "")
+    found: list[str] = []
+    for match in PREMIERE_VERSION_TOKEN_RE.finditer(text):
+        version = match.group(1)
+        if version not in found:
+            found.append(version)
+        # Absorb an immediately following bare version list ("26.2.2 / 26.3.0").
+        tail = text[match.end():]
+        offset = 0
+        while True:
+            extra = PREMIERE_EXTRA_VERSION_RE.match(tail[offset:])
+            if not extra:
+                break
+            if extra.group(1) not in found:
+                found.append(extra.group(1))
+            offset += extra.end()
+    return found
+
+
+def premiere_declared_problem_versions(body: str) -> list[str]:
+    """Versions declared as the PROBLEM version by a labelled statement."""
+    found: list[str] = []
+    for match in PREMIERE_PROBLEM_LABEL_RE.finditer(str(body or "")):
+        if match.group(1) not in found:
+            found.append(match.group(1))
+    return found
+
+
+def premiere_control_versions(body: str) -> list[str]:
+    """Versions named as working / rollback / unaffected. Never identity for a defect.
+
+    Covers both directions: labelled ("Working version: 26.2", "reverted to 26.2") and
+    version-first ("26.2 was stable", "26.2 works fine", "no issue in 26.2").
+    """
+    text = str(body or "")
+    found: list[str] = []
+    for pattern in PREMIERE_CONTROL_PATTERNS:
+        for match in pattern.finditer(text):
+            if match.group(1) not in found:
+                found.append(match.group(1))
+    return found
+
+
+def premiere_strip_control_clauses(body: str) -> str:
+    """Remove every control clause so only affirmative context can establish identity."""
+    text = str(body or "")
+    for pattern in PREMIERE_CONTROL_PATTERNS:
+        text = pattern.sub(" ", text)
+    return text
+
+
+def _version_in(target: str, versions: list[str]) -> bool:
+    """Exact version equality, plus the X.Y <-> X.Y.0 equivalence Premiere already uses.
+
+    Never a prefix test: 26.2 must not be satisfied by 26.2.2.
+    """
+    target = str(target or "").strip()
+    if not target:
+        return False
+    equivalents = {target}
+    if re.fullmatch(r"\d+\.\d+", target):
+        equivalents.add(f"{target}.0")
+    if target.endswith(".0"):
+        equivalents.add(target[:-2])
+    return any(str(v).strip() in equivalents for v in versions)
+
+
+def premiere_patch_identity(candidate: dict[str, Any], target_version: str) -> tuple[bool, str, str]:
+    """Resolve whether a report can establish patch identity for target_version.
+
+    Returns (ok, basis, exclusion_reason). Authority order:
+      1. explicit Premiere version(s) in a title      -> target must be among them
+      2. labelled affirmative problem-version(s)      -> target must be among them
+      3. otherwise                                    -> defer to the existing text matching
+    """
+    titles = " ".join([str(candidate.get("parent_title") or ""), str(candidate.get("report_title") or "")])
+    # Control clauses appear in TITLES too: "Premiere Pro 26.3 crashes -- Premiere Pro 26.2 works
+    # fine" would otherwise list 26.2 as explicitly affected. Strip control clauses from the title
+    # with the same grammar used on the body, then derive title identity from what remains, so a
+    # version named only as the one that works can never establish defect identity.
+    residual_titles = premiere_strip_control_clauses(titles)
+    title_versions = premiere_versions_in_title(residual_titles)
+    if title_versions:
+        if _version_in(target_version, title_versions):
+            return True, "premiere_title_version_identity", ""
+        return False, "premiere_title_version_identity", "conflicting_premiere_title_version"
+    if premiere_versions_in_title(titles):
+        # Every version in the title sat inside a control clause. That is not authority for the
+        # target, but it is also not proof against it -- defer to the labelled-declaration and
+        # fallback tiers below, which may still find affirmative body context.
+        if _version_in(target_version, premiere_control_versions(titles)) \
+                and not premiere_declared_problem_versions(str(candidate.get("report_text") or "")):
+            residual_body = premiere_strip_control_clauses(str(candidate.get("report_text") or ""))
+            if not premiere_version_match(residual_body, target_version)[0]:
+                return False, "premiere_title_control_version_only", "conflicting_premiere_title_version"
+
+    body = str(candidate.get("report_text") or "")
+    declared = premiere_declared_problem_versions(body)
+    if declared:
+        if _version_in(target_version, declared):
+            return True, "premiere_declared_problem_version", ""
+        return False, "premiere_declared_problem_version", "conflicting_premiere_problem_version"
+
+    # No authoritative statement. A target named ONLY as the version that works cannot establish
+    # defect identity, so strip every control clause and require the target to survive on its own
+    # affirmative context. If it does, the report genuinely implicates the target as well.
+    controls = premiere_control_versions(body)
+    if controls and _version_in(target_version, controls):
+        residual = premiere_strip_control_clauses(body)
+        titles_and_residual = f"{titles} {residual}"
+        if not premiere_version_match(titles_and_residual, target_version)[0]:
+            return False, "premiere_control_version_only", "conflicting_premiere_problem_version"
+        return True, "premiere_affirmative_after_control", ""
+    return True, "premiere_text_fallback", ""
 
 
 def premiere_version_match(text: str, version: str) -> tuple[bool, str, str]:
