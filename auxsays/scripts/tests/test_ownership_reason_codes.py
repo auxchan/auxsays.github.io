@@ -66,7 +66,7 @@ def erow(rid, pid="obs-studio", ver="1", url="http://x/1", st="github_issue", ma
 
 
 def run() -> int:
-    o._existing_versions = lambda pid: {"1"}  # deterministic version resolution
+    o._existing_patch_keys = lambda pid: {(pid, "1", "")}  # deterministic patch resolution
     print("=" * 66)
     print("Ownership structured reason codes")
     print("=" * 66)

@@ -106,7 +106,7 @@ def rec(gen: Path, name: str, pid: str, ver: str, permalink: str) -> Path:
 
 
 def run() -> int:
-    o._existing_versions = lambda pid: set(VERSIONS.get(pid, set()))
+    o._existing_patch_keys = lambda pid: {(pid, v, "") for v in VERSIONS.get(pid, set())}
     gen = Path(tempfile.mkdtemp(prefix="ownfix-")) / "generated"
     gen.mkdir()
 

@@ -111,7 +111,7 @@ def run() -> int:
             counts = qa.load_counted_evidence_counts()
             check(
                 "only counted+patch-matched rows are counted (3 of 5 raw rows)",
-                counts.get(("obs-studio", "32.1.2")) == 3,
+                counts.get(("obs-studio", "32.1.2", "")) == 3,
                 f"counts={counts}",
             )
 

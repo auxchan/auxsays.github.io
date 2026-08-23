@@ -189,12 +189,19 @@ def validate(path: Path = DEFAULT_PATH) -> int:
             _validate_counter(errors, row_index=row_index, row=row, field=field)
         _validate_counter_relationships(errors, row_index=row_index, row=row)
 
+        # Duplicate detection must use the CANONICAL health identity, which includes the exact
+        # build for a build-aware product. Keyed on (product, version, method) alone, two
+        # legitimate PowerPoint rows -- 2603/build-A and 2603/build-B -- would be rejected as a
+        # duplicate. The build slot is empty for every other product, so their duplicate
+        # detection is unchanged.
         key = (
             str(row.get("product_id") or "").strip(),
             str(row.get("update_version") or "").strip(),
+            str(row.get("target_build") or "").strip(),
             str(row.get("method_id") or "").strip(),
         )
-        if all(key):
+        # product / version / method are required; the build slot is legitimately empty.
+        if key[0] and key[1] and key[3]:
             first_row = seen_keys.get(key)
             if first_row is not None:
                 _add_error(

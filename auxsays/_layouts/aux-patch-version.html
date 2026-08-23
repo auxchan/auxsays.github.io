@@ -1,0 +1,50 @@
+---
+layout: aux-base
+---
+{%- comment -%}
+  Version landing page for a BUILD-AWARE product.
+
+  Microsoft 365 Apps can ship several Current Channel builds under one YYMM version, so for those
+  products a YYMM is not a patch identity -- each exact build is its own record at
+  /updates/<company>/<product>/<version>/<build>/. This page owns the version-only URL that those
+  records used to occupy, so an already-public link keeps resolving instead of 404ing, and it lists
+  every build tracked under that version rather than silently picking one.
+
+  It is NOT a patch record: it carries no `update_entry`, so record scanners, QA count alignment,
+  consensus grouping and the patch feed never see it.
+{%- endcomment -%}
+{% assign company = site.data.patch_companies | where: "id", page.company_id | first %}
+{% assign product = site.data.patch_products | where: "id", page.product_id | first %}
+{% assign builds = site.pages | where: "update_entry", true | where: "product_id", page.product_id | where: "update_version", page.update_version | sort: "target_build" | reverse %}
+
+<article class="panel patch-version-landing">
+  <header class="patch-version-landing__head">
+    <p class="patch-version-landing__eyebrow">
+      <a href="{{ '/updates/' | append: page.company_id | append: '/' | append: page.product_id | append: '/' | relative_url }}">{{ product.product_name | default: page.product_id }}</a>
+    </p>
+    <h1>{{ product.product_name | default: page.product_id }} {{ page.update_version }}</h1>
+    <p class="patch-version-landing__lede">
+      Version {{ page.update_version }} covers {{ builds.size }} tracked build{% if builds.size != 1 %}s{% endif %}.
+      {{ company.company_name | default: 'The vendor' }} can ship more than one build under a single
+      version, so each exact build has its own patch record below.
+    </p>
+  </header>
+
+  {% if builds.size > 0 %}
+    <ul class="patch-version-landing__builds">
+      {% for item in builds %}
+        <li class="patch-version-landing__build">
+          <a href="{{ item.url | relative_url }}">
+            <span class="patch-version-landing__build-id">Build {{ item.target_build }}</span>
+            <span class="patch-version-landing__build-meta">
+              {% if item.update_published_at != blank %}{{ item.update_published_at | date: "%Y-%m-%d" }}{% endif %}
+              {% if item.target_channel != blank %} &middot; {{ item.target_channel }}{% endif %}
+            </span>
+          </a>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p class="patch-version-landing__empty">No build records are tracked under this version yet.</p>
+  {% endif %}
+</article>

@@ -22,6 +22,7 @@ from pathlib import Path
 from typing import Any, Iterable
 
 from patch_collectors.base import load_front_matter_and_body, write_front_matter_and_body
+from .patch_identity import patch_key, require_build
 
 
 def counted_evidence_counts(evidence_rows: Iterable[dict[str, Any]]) -> dict[tuple[str, str], int]:
@@ -42,7 +43,14 @@ def counted_evidence_counts(evidence_rows: Iterable[dict[str, Any]]) -> dict[tup
             continue
         if row.get("patch_version_matched") is not True:
             continue
-        key = (product_id, version)
+        # Fail closed. This is the AUTHORITATIVE counted-evidence predicate -- QA alignment and
+        # record reconciliation both read it. A counted, patch-matched row for a build-aware
+        # product that carries no exact build cannot be attributed to any build-specific record;
+        # bucketing it under (product, version, "") would create an orphan count that silently
+        # never reconciles onto anything. Refuse instead of inventing that bucket.
+        require_build(product_id, version, row.get("target_build"),
+                      f"counted evidence row {row.get('id') or row.get('source_url')!r}")
+        key = patch_key(product_id, version, row.get("target_build"))
         counts[key] = counts.get(key, 0) + 1
     return counts
 
@@ -85,7 +93,7 @@ def reconcile_record_counts(evidence_rows: Iterable[dict[str, Any]], generated_d
         version = str(data.get("update_version") or "").strip()
         if not product_id or not version:
             continue
-        n = counts.get((product_id, version), 0)
+        n = counts.get(patch_key(product_id, version, data.get("target_build")), 0)
         new_state = evidence_state_for(n)
         new_status = collection_status_for(n)
         cur_state = str(data.get("evidence_state") or "")

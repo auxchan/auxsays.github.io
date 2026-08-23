@@ -80,11 +80,11 @@ def run() -> int:
     print("=" * 60)
 
     # 1. exact Version 2605 + a concrete PowerPoint issue -> accepted
-    c, r = verdict("PowerPoint Version 2605 crashes", "After installing PowerPoint Version 2605 it crashes when I open a deck.")
+    c, r = verdict("PowerPoint Version 2605 crashes", "After installing PowerPoint Version 2605 (Build 20026.20076) it crashes when I open a deck.")
     check("1  accepted: exact Version 2605 + PowerPoint issue", c is True and r is None, f"{c} {r}")
 
     # 2. exact version in the patch-specific parent title, concrete reply -> accepted by inheritance
-    c, r = verdict("Microsoft PowerPoint Version 2605 problem thread", "The presentation crashes every time I start a slideshow after the update.")
+    c, r = verdict("Microsoft PowerPoint Version 2605 (Build 20026.20076) problem thread", "The presentation crashes every time I start a slideshow after the update.")
     check("2  accepted: exact version in parent title, concrete reply (inheritance)", c is True and r is None, f"{c} {r}")
 
     # 3. reply drifts to another version -> rejected
@@ -117,7 +117,7 @@ def run() -> int:
         check(f"7  rejected: {app}-only report (PowerPoint not named)", c is False and r == "product_not_powerpoint", f"{c} {r}")
 
     # 8. exact Version YYMM + compatible Current Channel context -> accepted
-    c, r = verdict("PowerPoint Version 2605 on Current Channel", "Current Channel Version 2605: PowerPoint crashes when opening any file.")
+    c, r = verdict("PowerPoint Version 2605 on Current Channel", "Current Channel Version 2605 (Build 20026.20076): PowerPoint crashes when opening any file.")
     check("8  accepted: exact version with compatible Current Channel context", c is True and r is None, f"{c} {r}")
 
     # 9. explicit conflicting channel -> rejected
@@ -133,11 +133,11 @@ def run() -> int:
     check("11 rejected: mismatched full build", c is False and r == "build_mismatch", f"{c} {r}")
 
     # 12. report before official release -> rejected
-    c, r = verdict("PowerPoint Version 2605 crash", "PowerPoint Version 2605 crashes on open.", date="2026-05-01T00:00:00Z")
+    c, r = verdict("PowerPoint Version 2605 crash", "PowerPoint Version 2605 (Build 20026.20076) crashes on open.", date="2026-05-01T00:00:00Z")
     check("12 rejected: report dated before official release", c is False and r == "date_before_release_or_undated", f"{c} {r}")
 
     # 13. report on the release date -> accepted
-    c, r = verdict("PowerPoint Version 2605 crash", "PowerPoint Version 2605 crashes on open.", date="2026-05-20T00:00:00Z")
+    c, r = verdict("PowerPoint Version 2605 crash", "PowerPoint Version 2605 (Build 20026.20076) crashes on open.", date="2026-05-20T00:00:00Z")
     check("13 accepted: report on the release date", c is True and r is None, f"{c} {r}")
 
     # 14. search / category URL -> rejected
@@ -145,7 +145,7 @@ def run() -> int:
     check("14 rejected: non-specific search/category URL", c is False and r == "no_specific_source_url", f"{c} {r}")
 
     # 15. specific Learn Q&A question URL, all gates pass -> accepted
-    c, r = verdict("PowerPoint Version 2605 crash", "PowerPoint Version 2605 crashes on open.", url="https://learn.microsoft.com/en-us/answers/questions/9988776/powerpoint-2605")
+    c, r = verdict("PowerPoint Version 2605 crash", "PowerPoint Version 2605 (Build 20026.20076) crashes on open.", url="https://learn.microsoft.com/en-us/answers/questions/9988776/powerpoint-2605")
     check("15 accepted: specific Learn Q&A question URL with all gates passing", c is True and r is None, f"{c} {r}")
 
     # 16. official Microsoft announcement -> rejected
@@ -154,31 +154,31 @@ def run() -> int:
 
     # 17. concrete crash / corruption / slideshow / save / export / add-in / performance -> accepted
     concrete = [
-        ("crash", "PowerPoint Version 2605 crashes immediately on launch."),
-        ("presentation corruption", "PowerPoint Version 2605 corrupts my presentation; the file is damaged and won't open."),
-        ("slideshow failure", "PowerPoint Version 2605: slideshow fails to start and shows a black screen."),
-        ("save failure", "PowerPoint Version 2605 cannot save; I get a save error and lost my work."),
-        ("export problem", "PowerPoint Version 2605 fails to export to PDF, export error every time."),
-        ("add-in incompatibility", "PowerPoint Version 2605 broke my add-in; the add-in is not working and crashes."),
-        ("performance regression", "PowerPoint Version 2605 is very slow now, huge performance regression."),
+        ("crash", "PowerPoint Version 2605 (Build 20026.20076) crashes immediately on launch."),
+        ("presentation corruption", "PowerPoint Version 2605 (Build 20026.20076) corrupts my presentation; the file is damaged and won't open."),
+        ("slideshow failure", "PowerPoint Version 2605 (Build 20026.20076): slideshow fails to start and shows a black screen."),
+        ("save failure", "PowerPoint Version 2605 (Build 20026.20076) cannot save; I get a save error and lost my work."),
+        ("export problem", "PowerPoint Version 2605 (Build 20026.20076) fails to export to PDF, export error every time."),
+        ("add-in incompatibility", "PowerPoint Version 2605 (Build 20026.20076) broke my add-in; the add-in is not working and crashes."),
+        ("performance regression", "PowerPoint Version 2605 (Build 20026.20076) is very slow now, huge performance regression."),
     ]
     for label, body in concrete:
         c, r = verdict(f"PowerPoint Version 2605 {label}", body)
         check(f"17 accepted: concrete {label}", c is True and r is None, f"{c} {r}")
 
     # 18. feature request / general question -> rejected
-    c, r = verdict("PowerPoint Version 2605 feature", "In PowerPoint Version 2605, please add a proper dark mode. Feature request.")
+    c, r = verdict("PowerPoint Version 2605 feature", "In PowerPoint Version 2605 (Build 20026.20076), please add a proper dark mode. Feature request.")
     check("18 rejected: feature request / general question (no concrete issue)", c is False and r == "not_a_concrete_powerpoint_issue", f"{c} {r}")
 
     # 19. duplicate canonical URL -> counted once
-    d1 = cand("PowerPoint Version 2605 crash", "PowerPoint Version 2605 crashes on open.", url=URL + "/dup")
-    d2 = cand("PowerPoint Version 2605 crash (repost)", "PowerPoint Version 2605 crashes on open again.", url=URL + "/dup")
+    d1 = cand("PowerPoint Version 2605 crash", "PowerPoint Version 2605 (Build 20026.20076) crashes on open.", url=URL + "/dup")
+    d2 = cand("PowerPoint Version 2605 crash (repost)", "PowerPoint Version 2605 (Build 20026.20076) crashes on open again.", url=URL + "/dup")
     acc, rej = pp.evaluate_candidates(REC, TARGET, [d1, d2], CAPTURED)
     check("19 duplicate canonical URL counted once (dedup)", len(acc) == 1, f"accepted={len(acc)} rejected={len(rej)}")
 
     # 20. two independent replies in a patch-specific thread -> counted separately
-    t1 = cand("PowerPoint Version 2605 save crash", "PowerPoint Version 2605 crashes when I save.", url=URL + "/reply-a")
-    t2 = cand("PowerPoint Version 2605 export fail", "PowerPoint Version 2605 fails to export to PDF.", url=URL + "/reply-b")
+    t1 = cand("PowerPoint Version 2605 save crash", "PowerPoint Version 2605 (Build 20026.20076) crashes when I save.", url=URL + "/reply-a")
+    t2 = cand("PowerPoint Version 2605 export fail", "PowerPoint Version 2605 (Build 20026.20076) fails to export to PDF.", url=URL + "/reply-b")
     acc2, rej2 = pp.evaluate_candidates(REC, TARGET, [t1, t2], CAPTURED)
     check("20 two independent concrete reports counted separately", len(acc2) == 2, f"accepted={len(acc2)}")
 
@@ -213,10 +213,15 @@ def run() -> int:
         r = pp.row_from_candidate(REC, t, c, CAPTURED)
         return r.get("counted"), r.get("exclusion_reason")
 
-    # D1: exactly one Current Channel record for 2605 -> version-only accepted
-    check("D1 one record for a version: version-only report accepted", ambig(False, "PowerPoint Version 2605 crashes on open.") == (True, None))
-    # D2: two Current Channel records for 2605 with different builds -> version-only rejected
-    check("D2 two records share the version: version-only rejected as ambiguous", ambig(True, "PowerPoint Version 2605 crashes on open.") == (False, "ambiguous_version_needs_build"))
+    # D1/D2: canonical PowerPoint identity is (product_id, update_version, target_build), so a
+    # version-only report is not exact-build evidence REGARDLESS of how many records currently
+    # share the YYMM. Previously D1 accepted it whenever AUXSAYS happened to track a single build;
+    # that made acceptance depend on our own coverage rather than on what the report actually said,
+    # and the next build released under the same YYMM would have made the attribution wrong.
+    check("D1 one record for a version: version-only STILL rejected (identity needs the build)",
+          ambig(False, "PowerPoint Version 2605 crashes on open.") == (False, "missing_exact_build"))
+    check("D2 two records share the version: version-only rejected",
+          ambig(True, "PowerPoint Version 2605 crashes on open.") == (False, "missing_exact_build"))
     # D3: same ambiguous pair, exact matching build present -> accepted
     check("D3 ambiguous + exact matching build -> accepted", ambig(True, "PowerPoint Version 2605 (Build 20026.20076) crashes on export.") == (True, None))
     # D4: same pair, mismatched build -> rejected
@@ -225,7 +230,7 @@ def run() -> int:
     check("D5 ambiguous + conflicting channel -> rejected", ambig(True, "PowerPoint Version 2605 on Monthly Enterprise Channel crashes.") == (False, "channel_conflict"))
     # D6: parent title supplies the version but two builds exist -> rejected unless exact build present
     parent_only = pp.row_from_candidate(REC, dict(TARGET, version_ambiguous=True), cand("PowerPoint Version 2605 thread", "It crashes on open every time after the update."), CAPTURED)
-    check("D6 parent-title version + ambiguous, no build -> rejected", parent_only.get("counted") is False and parent_only.get("exclusion_reason") == "ambiguous_version_needs_build", str(parent_only.get("exclusion_reason")))
+    check("D6 parent-title version, no build -> rejected", parent_only.get("counted") is False and parent_only.get("exclusion_reason") == "missing_exact_build", str(parent_only.get("exclusion_reason")))
     parent_build = pp.row_from_candidate(REC, dict(TARGET, version_ambiguous=True), cand("PowerPoint Version 2605 (Build 20026.20076) thread", "It crashes on open every time after the update."), CAPTURED)
     check("D6 parent-title version + ambiguous, with exact build -> accepted", parent_build.get("counted") is True, str(parent_build.get("exclusion_reason")))
 
@@ -250,8 +255,10 @@ def run() -> int:
     body = "PowerPoint Version 2605 crashes on open."
     before = pp.row_from_candidate(REC, dict(TARGET, version_ambiguous=(key in amb_one)), cand(body, body), CAPTURED)
     after = pp.row_from_candidate(REC, dict(TARGET, version_ambiguous=(key in amb_two)), cand(body, body), CAPTURED)
-    check("D7 same version-only candidate: accepted with one record, fail-closed after a second is added",
-          before.get("counted") is True and after.get("counted") is False and after.get("exclusion_reason") == "ambiguous_version_needs_build",
+    check("D7 same version-only candidate: fail-closed both before and after a second build exists",
+          before.get("counted") is False and after.get("counted") is False
+          and before.get("exclusion_reason") == "missing_exact_build"
+          and after.get("exclusion_reason") == "missing_exact_build",
           f"before={before.get('counted')} after={after.get('exclusion_reason')}")
     check("D7 ambiguity uses the ACTUAL tracked record set (not a hardcoded list)", pp.compute_ambiguous_identities([]) == set())
 
@@ -328,7 +335,7 @@ def run() -> int:
         orig_rd = pp.reddit_source.collect_reddit_candidates
         try:
             def _lq_ok(*, queries, context, errors, source_type, source_name):
-                return [cand("PowerPoint Version 2605 crash", "PowerPoint Version 2605 crashes on open.", url=URL + "/ok"),
+                return [cand("PowerPoint Version 2605 crash", "PowerPoint Version 2605 (Build 20026.20076) crashes on open.", url=URL + "/ok"),
                         cand("How do I update PowerPoint 2605?", "How do I update to PowerPoint Version 2605 safely?", url=URL + "/howto")]
             pp.learn_qna.collect_learn_qna_candidates = _lq_ok
             pp.reddit_source.collect_reddit_candidates = lambda **k: []  # not attempted by default anyway
@@ -433,17 +440,17 @@ def run() -> int:
     c, r = verdict("Word App: Printing Issue in Normal Mode for One User on Shared Computer",
                    "Mainly Microsoft Word crashes when printing, though PowerPoint Version 2605 is also installed.")
     check("A1 Word-primary title + incidental PowerPoint body -> product_not_powerpoint", c is False and r == "product_not_powerpoint", f"{c} {r}")
-    c, r = verdict("PowerPoint Version 2605 crashes when printing", "PowerPoint Version 2605 crashes when printing a deck.")
+    c, r = verdict("PowerPoint Version 2605 (Build 20026.20076) crashes when printing", "PowerPoint Version 2605 (Build 20026.20076) crashes when printing a deck.")
     check("A2 PowerPoint-primary title -> accepted", c is True and r is None, f"{c} {r}")
     c, r = verdict("Microsoft 365 problem after this month's patch", "After the patch PowerPoint Version 2605 crashes on open for me.")
     check("A3 generic Microsoft 365 title, PowerPoint only in body -> product_not_powerpoint", c is False and r == "product_not_powerpoint", f"{c} {r}")
     c, r = verdict("PowerPoint and Microsoft Word both crash after Version 2605", "PowerPoint and Microsoft Word both crash after installing Version 2605.")
     check("A4 multi-application title (PowerPoint + Word) -> fail closed", c is False and r == "product_not_powerpoint", f"{c} {r}")
-    c, r = vr("Microsoft PowerPoint Version 2605 crash thread", "Same problem here", "Same here, it crashes on open every single time.")
+    c, r = vr("Microsoft PowerPoint Version 2605 (Build 20026.20076) crash thread", "Same problem here", "Same here, it crashes on open every single time.")
     check("A5 PowerPoint parent + on-topic reply -> accepted (inheritance)", c is True and r is None, f"{c} {r}")
     c, r = vr("PowerPoint Version 2605 crash thread", "Excel Version 2605 crash", "Actually my Microsoft Excel crashes on save, not PowerPoint.")
     check("A6 PowerPoint parent but Excel-primary reply -> product_not_powerpoint", c is False and r == "product_not_powerpoint", f"{c} {r}")
-    c, r = verdict("PowerPoint changes my word spacing after Version 2605", "After Version 2605 PowerPoint changes my word spacing and the text renders wrong.")
+    c, r = verdict("PowerPoint changes my word spacing after Version 2605 (Build 20026.20076)", "After Version 2605 (Build 20026.20076) PowerPoint changes my word spacing and the text renders wrong.")
     check("A7 'word' as a common noun (not the app) does not trip the multi-app gate -> accepted", c is True and r is None, f"{c} {r}")
 
     # --- Part B: announcement / official-note rejection (title-anchored) --------
@@ -456,29 +463,29 @@ def run() -> int:
     check("B3 'what's new / now available' announcement -> rejected", c is False and r == "official_announcement_not_user_report", f"{c} {r}")
 
     # --- Part C: feature-location / how-to rejection ---------------------------
-    c, r = verdict("i can't find my compare function in power point", "In PowerPoint Version 2605 i can't find my compare function anymore.")
+    c, r = verdict("i can't find my compare function in power point", "In PowerPoint Version 2605 (Build 20026.20076) i can't find my compare function anymore.")
     check("C1 'can't find my compare function' feature question -> not_a_concrete_powerpoint_issue", c is False and r == "not_a_concrete_powerpoint_issue", f"{c} {r}")
-    c, r = verdict("Compare function missing in PowerPoint", "The compare function disappeared immediately after installing PowerPoint Version 2605; it worked before the update.")
+    c, r = verdict("Compare function missing in PowerPoint", "The compare function disappeared immediately after installing PowerPoint Version 2605 (Build 20026.20076); it worked before the update.")
     check("C2 feature disappeared after exact patch (regression evidence) -> accepted", c is True and r is None, f"{c} {r}")
-    c, r = verdict("How do I enable dark mode in PowerPoint Version 2605", "How do I enable dark mode in PowerPoint Version 2605? Where is the setting?")
+    c, r = verdict("How do I enable dark mode in PowerPoint Version 2605 (Build 20026.20076)", "How do I enable dark mode in PowerPoint Version 2605 (Build 20026.20076)? Where is the setting?")
     check("C3 how-to / where-is question, no regression -> rejected", c is False and r == "not_a_concrete_powerpoint_issue", f"{c} {r}")
     # C4 confirmed live residual FP: capability question ("Can I export…?") with no regression -> rejected
-    c, r = verdict("Can I export a PowerPoint with recordings and online videos to a video?", "In PowerPoint Version 2605 I am trying to create a PowerPoint video with recordings and online videos.")
+    c, r = verdict("Can I export a PowerPoint with recordings and online videos to a video?", "In PowerPoint Version 2605 (Build 20026.20076) I am trying to create a PowerPoint video with recordings and online videos.")
     check("C4 capability question 'Can I export…?' (no regression) -> not_a_concrete_powerpoint_issue", c is False and r == "not_a_concrete_powerpoint_issue", f"{c} {r}")
     # C5 capability-STYLE title WITH explicit exact-version post-update failure -> accepted
-    c, r = verdict("Can I still export to video in PowerPoint after the update?", "Export to video worked before Version 2605 but now it fails with an error immediately after installing PowerPoint Version 2605.")
+    c, r = verdict("Can I still export to video in PowerPoint after the update?", "Export to video worked before Version 2605 (Build 20026.20076) but now it fails with an error immediately after installing PowerPoint Version 2605.")
     check("C5 capability-style title + explicit exact-version regression -> accepted", c is True and r is None, f"{c} {r}")
     # C6 'Is it possible to…?' capability question, no regression -> rejected
-    c, r = verdict("Is it possible to embed fonts in PowerPoint Version 2605?", "Is it possible to embed fonts in PowerPoint Version 2605? Just wondering how it works.")
+    c, r = verdict("Is it possible to embed fonts in PowerPoint Version 2605 (Build 20026.20076)?", "Is it possible to embed fonts in PowerPoint Version 2605 (Build 20026.20076)? Just wondering how it works.")
     check("C6 'Is it possible to…?' capability question -> rejected", c is False and r == "not_a_concrete_powerpoint_issue", f"{c} {r}")
     # C7 'Does PowerPoint support…?' capability question, no regression -> rejected
-    c, r = verdict("Does PowerPoint support 4K video export in Version 2605?", "Does PowerPoint support 4K video export in Version 2605? I just want to know the capabilities.")
+    c, r = verdict("Does PowerPoint support 4K video export in Version 2605 (Build 20026.20076)?", "Does PowerPoint support 4K video export in Version 2605 (Build 20026.20076)? I just want to know the capabilities.")
     check("C7 'Does PowerPoint support…?' capability question -> rejected", c is False and r == "not_a_concrete_powerpoint_issue", f"{c} {r}")
 
     # --- Part E: source-content integrity (snippet-only, fail closed on truncation) ---
     c, r = verdict("PowerPoint crash after update", "PowerPoint crashes on open on Version 2605 and then it also…")
     check("E1 exact version only inside a truncated snippet body -> insufficient_source_content", c is False and r == "insufficient_source_content", f"{c} {r}")
-    c, r = verdict("PowerPoint Version 2605 crash", "PowerPoint Version 2605 crashes on open and then it also…")
+    c, r = verdict("PowerPoint Version 2605 (Build 20026.20076) crash", "PowerPoint Version 2605 (Build 20026.20076) crashes on open and then it also…")
     check("E2 version in the (self-contained) title, truncated body -> still accepted", c is True and r is None, f"{c} {r}")
 
     # --- Part D: cross-version / exact-patch exclusivity -----------------------
@@ -493,11 +500,12 @@ def run() -> int:
     SHARED = "https://learn.microsoft.com/en-us/answers/questions/700001/powerpoint-crash"
 
     run_map: dict = {}
-    cD = cand("PowerPoint Version 2410 crashes on open", "PowerPoint Version 2410 crashes on open every time after the update.", url=SHARED)
+    cD = cand("PowerPoint Version 2410 (Build 18129.20158) crashes on open", "PowerPoint Version 2410 (Build 18129.20158) crashes on open every time after the update.", url=SHARED)
     a10, _j = pp.evaluate_candidates(R10, T10, [dict(cD)], CAPTURED, set(), run_map)
     a07, j07 = pp.evaluate_candidates(R07, T07, [dict(cD)], CAPTURED, set(), run_map)
     check("D1 one URL (subject 2410) accepts for 2410 only, 2407 rejects", len(a10) == 1 and len(a07) == 0, f"2410={len(a10)} 2407={len(a07)} r={[x.get('exclusion_reason') for x in j07]}")
-    check("D1 run map attributes the URL to exactly one version (2410)", run_map.get(SHARED.lower()) == "2410", str(run_map))
+    check("D1 run map attributes the URL to exactly one PATCH (2410 + its exact build)",
+          run_map.get(SHARED.lower()) == "microsoft-powerpoint|2410|18129.20158", str(run_map))
 
     run_map2: dict = {}
     cAmb = cand("PowerPoint crash", "Seen on PowerPoint Version 2410 and also PowerPoint Version 2407; it crashes on open.", url=SHARED + "/amb")
@@ -512,14 +520,14 @@ def run() -> int:
     check("D3 exact matching build disambiguates: 2410 accepts, 2407 rejects", len(d10) == 1 and len(d07) == 0, f"2410={len(d10)} 2407={len(d07)}")
 
     run_map4: dict = {}
-    cUpg = cand("PowerPoint crashes after upgrade", "I upgraded from Version 2407 to PowerPoint Version 2410 and now it crashes on open after installing Version 2410.", url=SHARED + "/upg")
+    cUpg = cand("PowerPoint crashes after upgrade", "I upgraded from Version 2407 (Build 17830.20138) to PowerPoint Version 2410 (Build 18129.20158) and now it crashes on open after installing Version 2410 (Build 18129.20158).", url=SHARED + "/upg")
     e10, _ = pp.evaluate_candidates(R10, T10, [dict(cUpg)], CAPTURED, set(), run_map4)
     e07, _ = pp.evaluate_candidates(R07, T07, [dict(cUpg)], CAPTURED, set(), run_map4)
     check("D4 historical 'upgraded from 2407 to 2410' -> 2410 accepts, 2407 rejects", len(e10) == 1 and len(e07) == 0, f"2410={len(e10)} 2407={len(e07)}")
 
-    run_map5 = {SHARED.lower(): "2410"}
+    run_map5 = {SHARED.lower(): "microsoft-powerpoint|2410|18129.20158"}
     R11, T11 = _rec("2411", "2024-12-05T00:00:00Z"), _tgt("2411", "18227.20152", "2024-12-05T00:00:00Z")
-    cReuse = cand("PowerPoint Version 2411 crashes", "PowerPoint Version 2411 crashes on open after the update.", url=SHARED)
+    cReuse = cand("PowerPoint Version 2411 (Build 18227.20152) crashes", "PowerPoint Version 2411 (Build 18227.20152) crashes on open after the update.", url=SHARED)
     f11, j11 = pp.evaluate_candidates(R11, T11, [dict(cReuse)], CAPTURED, set(), run_map5)
     check("D5 same canonical URL cannot re-count for a second version -> cross_version_duplicate", len(f11) == 0 and any(x.get("exclusion_reason") == "cross_version_duplicate" for x in j11), f"acc={len(f11)} rej={[x.get('exclusion_reason') for x in j11]}")
 
