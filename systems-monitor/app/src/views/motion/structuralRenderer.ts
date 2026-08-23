@@ -277,21 +277,23 @@ function drawNodeShape(context: CanvasRenderingContext2D, node: MotionQaNode, st
   context.strokeStyle = active || hovered || selected ? visual.accent : `${visual.accent}99`;
   context.lineWidth = 1.7;
   if (node.kind === "INPUT") {
-    context.beginPath(); context.arc(0, 0, 12, 0, Math.PI * 2); context.fill(); context.stroke();
+    context.beginPath(); context.arc(0, 0, 18, 0, Math.PI * 2); context.fill(); context.stroke();
   } else if (node.kind === "INDUSTRY") {
-    roundedRect(context, -19, -19, 38, 38, 12); context.fill(); context.stroke();
+    roundedRect(context, -22, -22, 44, 44, 13); context.fill(); context.stroke();
   } else if (node.kind === "BUFFER") {
-    roundedRect(context, -18, -25, 36, 50, 14); context.fill(); context.stroke();
-    context.save(); roundedRect(context, -13, -20, 26, 40, 9); context.clip();
+    roundedRect(context, -21, -28, 42, 56, 15); context.fill(); context.stroke();
+    context.save(); roundedRect(context, -15, -22, 30, 44, 10); context.clip();
     context.fillStyle = active ? "rgba(121,231,206,.58)" : "rgba(94,130,143,.28)";
     const fillY = active ? -3 - pulse * 4 : 9;
-    context.fillRect(-13, fillY, 26, 26); context.restore();
+    context.fillRect(-15, fillY, 30, 29); context.restore();
   } else if (node.kind === "TRANSFER") {
-    roundedRect(context, -10, -25, 20, 50, 9); context.fill(); context.stroke();
+    if (visual.symbol === "freight") roundedRect(context, -25, -19, 50, 38, 13);
+    else roundedRect(context, -21, -21, 42, 42, 14);
+    context.fill(); context.stroke();
   } else if (node.kind === "HUMAN_CAPITAL") {
-    roundedRect(context, -25, -16, 50, 32, 16); context.fill(); context.stroke();
+    roundedRect(context, -29, -20, 58, 40, 18); context.fill(); context.stroke();
   } else {
-    context.beginPath(); context.arc(0, 0, 18, 0, Math.PI * 2); context.fill(); context.stroke();
+    context.beginPath(); context.arc(0, 0, 21, 0, Math.PI * 2); context.fill(); context.stroke();
   }
   drawNodeSymbol(context, visual.symbol, visual.accent);
   context.restore();

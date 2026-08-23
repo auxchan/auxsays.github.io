@@ -39,6 +39,31 @@ and give the graph a professional node-workspace camera. The candidate now:
 - exposes compact keyboard-accessible zoom/reset controls while reduced-motion
   mode keeps connectors static.
 
+## Taylor follow-up — factor guide and scroll containment
+
+Taylor approved leaning further into the node-workspace direction and requested
+more icon breathing room, a premium left-side factor explanation, and reliable
+page-scroll containment while the pointer is inside the workspace.
+
+The candidate now enlarges every node shell and hit target around its inner
+symbol. Selecting a factor unfolds a color-coordinated guide from the far left
+without covering the graph. The guide uses a concise, plain-language structure:
+
+1. what the factor is;
+2. what it tracks;
+3. why it matters; and
+4. why each directly connected factor is present and how the relationship runs.
+
+Connection counts are derived from the model. The guide does not invent or pad
+to ten connections when fewer are available. It excludes derivation IDs and
+internal implementation jargon from the primary explanation while retaining a
+short synthetic-prototype boundary. The explanation copy remains in the guarded
+development-only `TEST_FIXTURE` read model and is absent from production assets.
+
+Wheel events over the graph are captured by a non-passive listener and converted
+only into cursor-anchored zoom. Wheel events over the guide are contained and
+scroll only that guide. Neither surface can scroll the surrounding page.
+
 ## Safety boundary
 
 - Fixture class: `TEST_FIXTURE`
@@ -111,6 +136,18 @@ http://127.0.0.1:4174/systems-monitor/?view=summary
     and no browser autoscroll UI appears.
 17. **Viewport recovery:** use the compact controls to zoom and reset. Confirm
     the overview can always be recovered in one action.
+18. **Icon breathing room:** inspect all nine node shells at overview and focused
+    depths. Confirm every symbol is centered, legible, and evenly padded.
+19. **Factor guide:** select Storage, Utilities, Freight, and Employment. Confirm
+    the guide unfolds from the far left, the graph makes room without being
+    covered, and content changes cleanly between selections.
+20. **Explanation quality:** confirm definition, tracking, impact, and connection
+    reasons are succinct and understandable without technical knowledge.
+21. **Truthful connection count:** confirm each guide reports only its real direct
+    fixture connections and does not pad the list to ten.
+22. **Scroll containment:** wheel over the graph, the guide, and then the page.
+    Confirm the graph zooms, the guide scrolls internally, and the page scrolls
+    only when the pointer leaves the workspace.
 
 ## Taylor checklist
 
@@ -139,6 +176,10 @@ http://127.0.0.1:4174/systems-monitor/?view=summary
 22. Do color and symbol together make each factor easier to locate and remember?
 23. Does wheel zoom feel anchored, bounded, and predictable?
 24. Does middle-button panning feel like a professional node workspace?
+25. Does the guide unfold with a premium, deliberate transition?
+26. Does the guide feel educational rather than like another technical panel?
+27. Are the connection explanations short, useful, and visually scannable?
+28. Can the user move between factors without being inundated by text?
 
 Taylor must record PASS or corrections. This R&D record does not approve Motion
 QA, factual relationships, Gate B, Phase 5, public activation, or deployment.

@@ -98,10 +98,15 @@ describe("development-only structural Motion QA harness", () => {
     await screen.findByRole("heading", { name: /See the system\.\s*Follow the pressure\./ });
     const node = screen.getByRole("button", { name: /Product Storage Capacity.*Enter this system/ });
     fireEvent.keyDown(node, { key: "Enter" });
-    expect(screen.getByRole("complementary", { name: "Selected synthetic node inspector" })).toBeTruthy();
-    expect(screen.getByText("fixture-derivation:buffer")).toBeTruthy();
+    const guide = screen.getByRole("complementary", { name: "Selected factor guide" });
+    expect(guide.getAttribute("data-connected-count")).toBe("4");
+    expect(screen.getByRole("heading", { name: "What it tracks" })).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "Why it matters" })).toBeTruthy();
+    expect(screen.getByRole("heading", { name: "Why these 4 connections are here" })).toBeTruthy();
+    expect(guide.textContent).toContain("Inventory capacity that holds product between production and use");
+    expect(guide.textContent).not.toContain("fixture-derivation");
     fireEvent.keyDown(window, { key: "Escape" });
-    expect(screen.queryByRole("complementary", { name: "Selected synthetic node inspector" })).toBeNull();
+    expect(screen.queryByRole("complementary", { name: "Selected factor guide" })).toBeNull();
   });
 
   it("preserves the three primary views without introducing a production navigation item", async () => {
@@ -213,15 +218,17 @@ describe("development-only structural Motion QA harness", () => {
     expect(document.querySelector('[data-motion-node-id="fixture-branch-b"]')?.getAttribute("data-motion-state")).toBe("AMPLIFYING");
   });
 
-  it("docks node context without covering the graph and reports live motion state", async () => {
+  it("unfolds node guidance at the far left and reports plain-language live state", async () => {
     await renderReducedHarness();
     stepPath("Branch + reconvergence", 3);
     const node = screen.getByRole("button", { name: /Industrial Utilities.*DELAYING.*Enter this system/ });
     fireEvent.click(node);
-    const inspector = screen.getByRole("complementary", { name: "Selected synthetic node inspector" });
-    expect(inspector.parentElement?.classList.contains("sm-viz-instrument")).toBe(true);
-    expect(inspector.getAttribute("data-selected-node-id")).toBe("fixture-branch-a");
-    expect(screen.getByText(/DELAYING/)).toBeTruthy();
+    const guide = screen.getByRole("complementary", { name: "Selected factor guide" });
+    expect(guide.parentElement?.classList.contains("sm-viz-workspace")).toBe(true);
+    expect(guide.parentElement?.firstElementChild).toBe(guide);
+    expect(guide.getAttribute("data-selected-node-id")).toBe("fixture-branch-a");
+    expect(guide.textContent).toContain("INFRASTRUCTURE · Waiting");
+    expect(guide.textContent).toContain("Why these 2 connections are here");
   });
 
   it("suppresses explanatory helpers in label-independent QA without breaking controls", async () => {
@@ -311,7 +318,9 @@ describe("development-only structural Motion QA harness", () => {
     await renderReducedHarness();
     const surface = document.querySelector<HTMLElement>(".sm-viz-surface")!;
     expect(surface.dataset.viewportZoom).toBe("1.000");
-    fireEvent.wheel(surface, { deltaY: -180, clientX: 320, clientY: 240 });
+    const zoomEvent = new WheelEvent("wheel", { deltaY: -180, clientX: 320, clientY: 240, bubbles: true, cancelable: true });
+    expect(fireEvent(surface, zoomEvent)).toBe(false);
+    expect(zoomEvent.defaultPrevented).toBe(true);
     expect(Number(surface.dataset.viewportZoom)).toBeGreaterThan(1);
 
     fireEvent.pointerDown(surface, { button: 0, pointerId: 4, clientX: 100, clientY: 100 });
@@ -328,6 +337,20 @@ describe("development-only structural Motion QA harness", () => {
     expect(surface.dataset.viewportZoom).toBe("1.000");
     expect(surface.dataset.viewportPanX).toBe("0");
     expect(surface.dataset.viewportPanY).toBe("0");
+  });
+
+  it("contains wheel scrolling inside the open factor guide", async () => {
+    await renderReducedHarness();
+    fireEvent.click(screen.getByRole("button", { name: /Product Storage Capacity.*Enter this system/ }));
+    const guide = screen.getByRole("complementary", { name: "Selected factor guide" }) as HTMLElement;
+    expect(guide.scrollTop).toBe(0);
+    const guideWheel = new WheelEvent("wheel", { deltaY: 140, bubbles: true, cancelable: true });
+    expect(fireEvent(guide, guideWheel)).toBe(false);
+    expect(guideWheel.defaultPrevented).toBe(true);
+    expect(guide.scrollTop).toBe(140);
+    expect(document.querySelector(".sm-viz-workspace")?.classList.contains("has-guide")).toBe(true);
+    fireEvent.click(screen.getByRole("button", { name: "Close factor guide" }));
+    expect(screen.queryByRole("complementary", { name: "Selected factor guide" })).toBeNull();
   });
 
   it("keeps route geometry and camera focus anchored to read-model coordinates", () => {
@@ -350,10 +373,10 @@ describe("development-only structural Motion QA harness", () => {
     expect(screen.getByRole("navigation", { name: "Structural exploration history" }).textContent).toContain("Refining");
     fireEvent.click(screen.getByRole("button", { name: /Product Storage Capacity.*Enter this system/ }));
     expect(document.querySelector('.sm-viz-surface')?.getAttribute("data-focus-depth")).toBe("2");
-    expect(screen.getByRole("complementary", { name: "Selected synthetic node inspector" }).textContent).toContain("Product Storage Capacity");
+    expect(screen.getByRole("complementary", { name: "Selected factor guide" }).textContent).toContain("Product Storage Capacity");
     fireEvent.click(screen.getByRole("button", { name: "Refining" }));
     expect(document.querySelector('.sm-viz-surface')?.getAttribute("data-focus-depth")).toBe("1");
-    expect(screen.getByRole("complementary", { name: "Selected synthetic node inspector" }).textContent).toContain("Petroleum Refining");
+    expect(screen.getByRole("complementary", { name: "Selected factor guide" }).textContent).toContain("Petroleum Refining");
   });
 
   it("does not pad sparse neighborhoods and bounds crowded relationship display", () => {
@@ -416,7 +439,7 @@ describe("development-only structural Motion QA harness", () => {
     expect(trail.querySelector('[aria-current="location"]')?.textContent).toBe("Utilities");
     expect(trail.querySelectorAll("button")).toHaveLength(3);
     expect(trail.textContent).not.toContain("Refining");
-    expect(screen.getAllByRole("complementary", { name: "Selected synthetic node inspector" })).toHaveLength(1);
+    expect(screen.getAllByRole("complementary", { name: "Selected factor guide" })).toHaveLength(1);
     expect(document.querySelector('[data-motion-node-id="fixture-branch-a"]')?.getAttribute("aria-pressed")).toBe("true");
   });
 

@@ -10,6 +10,7 @@ export interface MotionQaNode {
   displayRank: number;
   currentState: string;
   derivationRef: string;
+  insight: { definition: string; tracks: string; impact: string };
   x: number;
   y: number;
 }
@@ -20,6 +21,7 @@ export interface MotionQaRelationship {
   to: string;
   outcome: MotionOutcome;
   mechanism: string;
+  plainLanguage: string;
   evidenceClass: "TEST_FIXTURE";
   originId: string;
   commonCauseId: string | null;
@@ -83,7 +85,8 @@ export function validateMotionQaReadModel(value: unknown): MotionQaReadModel {
     if (!Number.isFinite(x) || !Number.isFinite(y)) throw new Error("Motion QA node coordinates must be finite");
     const displayRank = Number(node.displayRank);
     if (!Number.isInteger(displayRank) || displayRank < 1) throw new Error("Motion QA node displayRank must be a positive integer");
-    return { id: string(node.id, "node.id"), label: string(node.label, "node.label"), overviewLabel: string(node.overviewLabel, "node.overviewLabel"), detailLabel: string(node.detailLabel, "node.detailLabel"), kind: string(node.kind, "node.kind"), displayRank, currentState: string(node.currentState, "node.currentState"), derivationRef: string(node.derivationRef, "node.derivationRef"), x, y };
+    const insight = object(node.insight, "node.insight");
+    return { id: string(node.id, "node.id"), label: string(node.label, "node.label"), overviewLabel: string(node.overviewLabel, "node.overviewLabel"), detailLabel: string(node.detailLabel, "node.detailLabel"), kind: string(node.kind, "node.kind"), displayRank, currentState: string(node.currentState, "node.currentState"), derivationRef: string(node.derivationRef, "node.derivationRef"), insight: { definition: string(insight.definition, "node.insight.definition"), tracks: string(insight.tracks, "node.insight.tracks"), impact: string(insight.impact, "node.insight.impact") }, x, y };
   });
   if (nodes.length < 6 || nodes.length > 10 || Number(coverage.nodeCount) !== nodes.length) throw new Error("Motion QA topology must contain 6–10 nodes");
   const nodeIds = new Set(nodes.map((node) => node.id));
@@ -94,7 +97,7 @@ export function validateMotionQaReadModel(value: unknown): MotionQaReadModel {
     if (edge.status !== "TEST_FIXTURE" || edge.evidenceClass !== "TEST_FIXTURE" || !allowedOutcomes.has(outcome)) throw new Error("Every Motion QA relationship must remain a supported TEST_FIXTURE outcome");
     const from = string(edge.from, "relationship.from"); const to = string(edge.to, "relationship.to");
     if (!nodeIds.has(from) || !nodeIds.has(to) || from === to) throw new Error("Motion QA relationship endpoints are invalid");
-    return { id: string(edge.id, "relationship.id"), from, to, outcome: outcome as MotionOutcome, mechanism: string(edge.mechanism, "relationship.mechanism"), evidenceClass: "TEST_FIXTURE" as const, originId: string(edge.originId, "relationship.originId"), commonCauseId: edge.commonCauseId === null ? null : string(edge.commonCauseId, "relationship.commonCauseId"), derivationRef: string(edge.derivationRef, "relationship.derivationRef"), status: "TEST_FIXTURE" as const, stopReason: edge.stopReason === null ? null : string(edge.stopReason, "relationship.stopReason") };
+    return { id: string(edge.id, "relationship.id"), from, to, outcome: outcome as MotionOutcome, mechanism: string(edge.mechanism, "relationship.mechanism"), plainLanguage: string(edge.plainLanguage, "relationship.plainLanguage"), evidenceClass: "TEST_FIXTURE" as const, originId: string(edge.originId, "relationship.originId"), commonCauseId: edge.commonCauseId === null ? null : string(edge.commonCauseId, "relationship.commonCauseId"), derivationRef: string(edge.derivationRef, "relationship.derivationRef"), status: "TEST_FIXTURE" as const, stopReason: edge.stopReason === null ? null : string(edge.stopReason, "relationship.stopReason") };
   });
   if (relationships.length < 8 || relationships.length > 14 || Number(coverage.relationshipCount) !== relationships.length) throw new Error("Motion QA topology must contain 8–14 fixture relationships");
   const representedOutcomes = new Set(relationships.map((edge) => edge.outcome));

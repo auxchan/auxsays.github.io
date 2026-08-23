@@ -50,11 +50,13 @@
 [data-aux-product="systems-monitor"] .sm-viz-breadcrumbs button:focus-visible { color: #c2f7e9; outline: 1px solid rgba(130, 239, 213, .42); }
 [data-aux-product="systems-monitor"] .sm-viz-breadcrumbs button[aria-current="location"] { color: #dffff6; }
 
-[data-aux-product="systems-monitor"] .sm-viz-surface { position: relative; height: clamp(32rem, 58vw, 48rem); min-height: 32rem; overflow: hidden; cursor: grab; isolation: isolate; }
+[data-aux-product="systems-monitor"] .sm-viz-workspace { display: grid; grid-template-columns: 0 minmax(0, 1fr); min-width: 0; background: #05121a; transition: grid-template-columns 460ms cubic-bezier(.22, 1, .36, 1); }
+[data-aux-product="systems-monitor"] .sm-viz-workspace.has-guide { grid-template-columns: 21rem minmax(0, 1fr); }
+[data-aux-product="systems-monitor"] .sm-viz-surface { position: relative; min-width: 0; height: clamp(32rem, 58vw, 48rem); min-height: 32rem; overflow: hidden; overscroll-behavior: contain; cursor: grab; isolation: isolate; }
 [data-aux-product="systems-monitor"] .sm-viz-surface.is-panning { cursor: grabbing; user-select: none; }
 [data-aux-product="systems-monitor"] .sm-viz-canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; pointer-events: none; }
 [data-aux-product="systems-monitor"] .sm-viz-node-layer { position: absolute; z-index: 3; inset: 0; pointer-events: none; }
-[data-aux-product="systems-monitor"] .sm-viz-node-label { position: absolute; width: 2.75rem; height: 2.75rem; padding: 0; border: 0; border-radius: 50%; background: transparent; color: #c5d8d7; cursor: pointer; pointer-events: auto; transform: translate(-50%, -50%); transition: left 520ms cubic-bezier(.2,.7,.2,1), top 520ms cubic-bezier(.2,.7,.2,1), opacity 220ms ease, color 220ms ease, transform 180ms ease; }
+[data-aux-product="systems-monitor"] .sm-viz-node-label { position: absolute; width: 3.5rem; height: 3.5rem; padding: 0; border: 0; border-radius: 50%; background: transparent; color: #c5d8d7; cursor: pointer; pointer-events: auto; transform: translate(-50%, -50%); transition: left 520ms cubic-bezier(.2,.7,.2,1), top 520ms cubic-bezier(.2,.7,.2,1), opacity 220ms ease, color 220ms ease, transform 180ms ease; }
 [data-aux-product="systems-monitor"] .sm-viz-node-label > span { position: absolute; left: calc(50% + var(--label-x)); top: calc(50% + var(--label-y)); display: grid; width: var(--label-width); min-height: 1.65rem; place-content: center; padding: .28rem .48rem; border: 1px solid transparent; border-radius: .48rem; background: rgba(4, 16, 23, .54); box-shadow: 0 5px 22px rgba(0, 0, 0, .16); line-height: 1.1; text-align: center; transform: translate(-50%, -50%); transition: left 520ms cubic-bezier(.2,.7,.2,1), top 520ms cubic-bezier(.2,.7,.2,1), opacity 180ms ease, border-color 180ms ease, background 180ms ease; }
 [data-aux-product="systems-monitor"] .sm-viz-node-label b { overflow: hidden; font-size: .67rem; font-weight: 690; text-overflow: ellipsis; white-space: nowrap; }
 [data-aux-product="systems-monitor"] .sm-viz-node-label small { max-height: 0; margin-top: 0; overflow: hidden; color: #63828b; font-size: .45rem; font-weight: 750; letter-spacing: .09em; text-transform: uppercase; opacity: 0; transition: max-height 180ms ease, margin 180ms ease, opacity 180ms ease; }
@@ -94,30 +96,43 @@
 [data-aux-product="systems-monitor"] .sm-viz-legend i.is-constraint { background: #ff7d77; }
 [data-aux-product="systems-monitor"] .sm-viz-legend i.is-amplified { height: .3rem; background: #ffd07a; box-shadow: 0 0 8px rgba(255, 208, 122, .46); }
 
-[data-aux-product="systems-monitor"] .sm-viz-inspector { position: relative; z-index: 6; display: grid; grid-template-columns: minmax(12rem, .7fr) minmax(26rem, 2fr) auto; gap: 1.4rem; align-items: center; min-height: 8rem; padding: 1rem 1.2rem; border-top: 1px solid rgba(130, 239, 213, .26); background: linear-gradient(90deg, rgba(10, 34, 42, .97), rgba(6, 22, 31, .97)); box-shadow: 0 -20px 60px rgba(0, 0, 0, .24); animation: aux-sm-viz-context-in 360ms ease-out both; }
-[data-aux-product="systems-monitor"] .sm-viz-inspector__lead > span,
-[data-aux-product="systems-monitor"] .sm-viz-context-flow span { color: #6e918f; font-size: .55rem; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; }
-[data-aux-product="systems-monitor"] .sm-viz-inspector__lead h2 { margin: .25rem 0; color: #e6f8f4; font-size: 1.35rem; }
-[data-aux-product="systems-monitor"] .sm-viz-inspector__lead p { margin: 0; color: #769097; font-size: .62rem; }
-[data-aux-product="systems-monitor"] .sm-viz-context-flow { display: grid; grid-template-columns: minmax(0, 1fr) 1.5rem minmax(0, 1fr) 1.5rem minmax(0, 1fr); align-items: center; gap: .5rem; }
-[data-aux-product="systems-monitor"] .sm-viz-context-flow > div { display: grid; gap: .25rem; min-width: 0; }
-[data-aux-product="systems-monitor"] .sm-viz-context-flow strong { overflow: hidden; color: #aabfbe; font-size: .68rem; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
-[data-aux-product="systems-monitor"] .sm-viz-context-flow .is-current strong { color: #b7ffed; }
-[data-aux-product="systems-monitor"] .sm-viz-context-flow > i { height: 1px; background: linear-gradient(90deg, rgba(130,239,213,.15), rgba(130,239,213,.7)); }
-[data-aux-product="systems-monitor"] .sm-viz-inspector__actions { display: grid; justify-items: end; gap: .5rem; }
-[data-aux-product="systems-monitor"] .sm-viz-inspector__actions span { max-width: 13rem; overflow: hidden; color: #59737e; font-size: .56rem; text-overflow: ellipsis; white-space: nowrap; }
-[data-aux-product="systems-monitor"] .sm-viz-inspector__actions button { min-height: 2.4rem; padding: .45rem .7rem; border: 1px solid rgba(130, 239, 213, .3); border-radius: .55rem; background: rgba(130, 239, 213, .08); color: #b7ffed; cursor: pointer; font-size: .66rem; }
+[data-aux-product="systems-monitor"] .sm-node-guide { position: relative; z-index: 6; width: 100%; min-width: 0; height: clamp(32rem, 58vw, 48rem); max-height: 48rem; overflow: hidden auto; overscroll-behavior: contain; border-right: 1px solid transparent; background: linear-gradient(155deg, rgba(9, 29, 38, .99), rgba(5, 18, 27, .99)); box-shadow: 22px 0 70px rgba(0, 0, 0, 0); opacity: 0; pointer-events: none; transform: translateX(-2.5rem); transition: opacity 280ms ease, transform 460ms cubic-bezier(.22, 1, .36, 1), border-color 360ms ease, box-shadow 460ms ease; scrollbar-color: rgba(130, 239, 213, .24) transparent; scrollbar-width: thin; }
+[data-aux-product="systems-monitor"] .sm-node-guide.is-open { min-width: 21rem; border-color: color-mix(in srgb, var(--guide-accent, #82efd5) 28%, transparent); box-shadow: 22px 0 70px rgba(0, 0, 0, .28); opacity: 1; pointer-events: auto; transform: translateX(0); }
+[data-aux-product="systems-monitor"] .sm-node-guide__inner { min-width: 21rem; padding: 1.2rem 1.15rem 1.35rem; animation: aux-sm-node-guide-content 440ms 90ms cubic-bezier(.22, 1, .36, 1) both; }
+[data-aux-product="systems-monitor"] .sm-node-guide__header { display: grid; grid-template-columns: 3.2rem minmax(0, 1fr) 2rem; align-items: center; gap: .75rem; padding-bottom: 1rem; border-bottom: 1px solid rgba(139, 177, 184, .12); }
+[data-aux-product="systems-monitor"] .sm-node-guide__symbol { display: grid; width: 3.2rem; height: 3.2rem; place-items: center; border: 1px solid color-mix(in srgb, var(--guide-accent) 60%, transparent); border-radius: 1rem; background: var(--guide-fill); color: var(--guide-accent); box-shadow: inset 0 1px rgba(255, 255, 255, .04), 0 0 28px color-mix(in srgb, var(--guide-accent) 12%, transparent); }
+[data-aux-product="systems-monitor"] .sm-node-guide__symbol svg { width: 1.55rem; height: 1.55rem; }
+[data-aux-product="systems-monitor"] .sm-node-guide__header small { color: var(--guide-accent); font-size: .52rem; font-weight: 800; letter-spacing: .1em; text-transform: uppercase; }
+[data-aux-product="systems-monitor"] .sm-node-guide__header h2 { margin: .22rem 0 0; color: #effaf8; font-size: 1rem; line-height: 1.15; }
+[data-aux-product="systems-monitor"] .sm-node-guide__header button { display: grid; width: 2rem; height: 2rem; place-items: center; padding: 0; border: 0; border-radius: .55rem; background: transparent; color: #72909a; cursor: pointer; font-size: 1.1rem; }
+[data-aux-product="systems-monitor"] .sm-node-guide__header button:hover,
+[data-aux-product="systems-monitor"] .sm-node-guide__header button:focus-visible { background: rgba(255,255,255,.05); color: #e7faf5; outline: none; }
+[data-aux-product="systems-monitor"] .sm-node-guide__definition { margin: 1.1rem 0; color: #c4d7d5; font-size: .78rem; font-weight: 560; line-height: 1.55; }
+[data-aux-product="systems-monitor"] .sm-node-guide section { margin-top: 1rem; }
+[data-aux-product="systems-monitor"] .sm-node-guide section h3 { margin: 0 0 .34rem; color: #738f98; font-size: .54rem; font-weight: 800; letter-spacing: .11em; text-transform: uppercase; }
+[data-aux-product="systems-monitor"] .sm-node-guide section > p { margin: 0; color: #8da5aa; font-size: .67rem; line-height: 1.55; }
+[data-aux-product="systems-monitor"] .sm-node-guide__connections { padding-top: 1rem; border-top: 1px solid rgba(139, 177, 184, .12); }
+[data-aux-product="systems-monitor"] .sm-node-guide__connections > div { display: flex; justify-content: space-between; align-items: end; gap: .75rem; }
+[data-aux-product="systems-monitor"] .sm-node-guide__connections > div h3 { max-width: 11rem; color: #a9c2c2; font-size: .58rem; line-height: 1.4; }
+[data-aux-product="systems-monitor"] .sm-node-guide__connections > div span { flex: 0 0 auto; color: #5f7c86; font-size: .49rem; }
+[data-aux-product="systems-monitor"] .sm-node-guide__connections ol { display: grid; gap: .48rem; margin: .65rem 0 0; padding: 0; list-style: none; }
+[data-aux-product="systems-monitor"] .sm-node-guide__connections li { display: grid; gap: .2rem; padding: .65rem .7rem; border: 1px solid rgba(139, 177, 184, .12); border-radius: .72rem; background: rgba(2, 13, 19, .35); }
+[data-aux-product="systems-monitor"] .sm-node-guide__connections li > span { color: var(--guide-accent); font-size: .46rem; font-weight: 780; letter-spacing: .08em; text-transform: uppercase; }
+[data-aux-product="systems-monitor"] .sm-node-guide__connections strong { color: #d6e5e2; font-size: .66rem; }
+[data-aux-product="systems-monitor"] .sm-node-guide__connections p { margin: 0; color: #789198; font-size: .6rem; line-height: 1.45; }
+[data-aux-product="systems-monitor"] .sm-node-guide footer { margin-top: 1rem; color: #4f6d77; font-size: .5rem; }
 
 [data-aux-product="systems-monitor"] .sm-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
-@keyframes aux-sm-viz-context-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes aux-sm-node-guide-content { from { opacity: 0; transform: translateX(-.75rem); } to { opacity: 1; transform: translateX(0); } }
 
 @media (max-width: 1080px) {
   [data-aux-product="systems-monitor"] .sm-motion-page-header--renderer { grid-template-columns: 1fr; }
   [data-aux-product="systems-monitor"] .sm-motion-page-header--renderer p { justify-self: start; margin-top: 1.2rem; }
   [data-aux-product="systems-monitor"] .sm-viz-console { grid-template-columns: 1fr; }
   [data-aux-product="systems-monitor"] .sm-viz-playback { justify-content: flex-start; flex-wrap: wrap; }
-  [data-aux-product="systems-monitor"] .sm-viz-inspector { grid-template-columns: 1fr; }
-  [data-aux-product="systems-monitor"] .sm-viz-inspector__actions { justify-items: start; }
+  [data-aux-product="systems-monitor"] .sm-viz-workspace.has-guide { grid-template-columns: 18.5rem minmax(0, 1fr); }
+  [data-aux-product="systems-monitor"] .sm-node-guide.is-open,
+  [data-aux-product="systems-monitor"] .sm-node-guide__inner { min-width: 18.5rem; }
 }
 
 @media (max-width: 700px) {
@@ -130,12 +145,17 @@
   [data-aux-product="systems-monitor"] .sm-viz-node-label b { font-size: .6rem; }
   [data-aux-product="systems-monitor"] .sm-viz-readout { display: grid; }
   [data-aux-product="systems-monitor"] .sm-viz-legend { overflow-x: auto; }
-  [data-aux-product="systems-monitor"] .sm-viz-context-flow { grid-template-columns: 1fr; }
-  [data-aux-product="systems-monitor"] .sm-viz-context-flow > i { display: none; }
+  [data-aux-product="systems-monitor"] .sm-viz-workspace,
+  [data-aux-product="systems-monitor"] .sm-viz-workspace.has-guide { position: relative; grid-template-columns: minmax(0, 1fr); }
+  [data-aux-product="systems-monitor"] .sm-node-guide { position: absolute; inset: 0 auto 0 0; width: min(19rem, 88vw); }
+  [data-aux-product="systems-monitor"] .sm-node-guide.is-open,
+  [data-aux-product="systems-monitor"] .sm-node-guide__inner { min-width: min(19rem, 88vw); }
 }
 
 @media (prefers-reduced-motion: reduce) {
   [data-aux-product="systems-monitor"] .sm-viz-node-label { transition: none; }
   [data-aux-product="systems-monitor"] .sm-viz-node-label > span { transition: none; }
-  [data-aux-product="systems-monitor"] .sm-viz-inspector { animation: none; }
+  [data-aux-product="systems-monitor"] .sm-viz-workspace,
+  [data-aux-product="systems-monitor"] .sm-node-guide,
+  [data-aux-product="systems-monitor"] .sm-node-guide__inner { transition: none; animation: none; }
 }

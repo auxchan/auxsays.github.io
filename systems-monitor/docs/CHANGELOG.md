@@ -1,5 +1,25 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-23 — Structural Surface factor-guide correction
+
+- Enlarged node shells and interactive hit targets so all nine distinct inner
+  symbols have consistent visual breathing room.
+- Replaced the bottom technical inspector with a premium animated left-side
+  factor guide that makes room within the same graph workspace.
+- Added concise plain-language definitions, tracking focus, impact, and a reason
+  for every direct connected factor; counts come from the model and are never
+  padded to an arbitrary number.
+- Kept that explanatory copy inside the guarded development-only `TEST_FIXTURE`
+  read model; the production fixture-leak scan remains clean.
+- Removed derivation identifiers and internal implementation jargon from the
+  primary selected-factor experience while keeping the synthetic-prototype
+  boundary explicit.
+- Added non-passive graph wheel capture and contained guide scrolling so the
+  surrounding page cannot move while the pointer is inside either surface.
+- Human spatial-renderer QA and Motion QA remain PENDING. No fixture topology,
+  calculation, factual/BEA work, Gate-B evidence, Phase-5 work, public
+  activation, or deployment changed.
+
 ## 2026-08-23 — Structural Surface node-workspace interaction correction
 
 - Restored restrained animated light along governed visible Explore connectors;

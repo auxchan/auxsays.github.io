@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { MotionOutcome, MotionQaNode, MotionQaReadModel } from "../../data/motionQaReadModel";
+import type { MotionOutcome, MotionQaReadModel } from "../../data/motionQaReadModel";
 import { SystemIcon } from "../../shared/SystemIcon";
 import type { RouteState } from "../../state/routeSchema";
 import { CanvasStructuralSurface } from "./CanvasStructuralSurface";
+import { NodeInsightPanel } from "./NodeInsightPanel";
 import { resolveSpatialViewport } from "./spatialNavigation";
 import "./motionRenderer.css";
 
@@ -25,18 +26,6 @@ function useReducedMotion() {
     return () => media.removeEventListener("change", update);
   }, []);
   return reduced;
-}
-
-function NodeRelationshipContext({ model, node }: { model: MotionQaReadModel; node: MotionQaNode }) {
-  const upstream = model.relationships.filter((edge) => edge.to === node.id).map((edge) => model.nodes.find((item) => item.id === edge.from)?.label).filter(Boolean);
-  const downstream = model.relationships.filter((edge) => edge.from === node.id).map((edge) => model.nodes.find((item) => item.id === edge.to)?.label).filter(Boolean);
-  return <div className="sm-viz-context-flow">
-    <div><span>Upstream</span><strong>{upstream.length ? upstream.join(" · ") : "Origin point"}</strong></div>
-    <i aria-hidden="true" />
-    <div className="is-current"><span>Current node</span><strong>{node.label}</strong></div>
-    <i aria-hidden="true" />
-    <div><span>Downstream</span><strong>{downstream.length ? downstream.join(" · ") : "Terminal exposure"}</strong></div>
-  </div>;
 }
 
 function MotionGraph({ model }: { model: MotionQaReadModel }) {
@@ -173,13 +162,11 @@ function MotionGraph({ model }: { model: MotionQaReadModel }) {
         <div className="sm-viz-status"><span><i aria-hidden="true" />{traceMode ? "Trace" : "Explore"}</span><span>{viewport.visibleRelationshipIds.size} links shown{viewport.additionalRelationshipCount ? ` / ${viewport.additionalRelationshipCount} additional` : ""}</span></div>
       </header>
       <nav className="sm-viz-breadcrumbs" aria-label="Structural exploration history"><button type="button" aria-current={!selectedNode ? "location" : undefined} onClick={() => navigateToDepth(0)}>Synthetic system</button>{focusHistory.map((nodeId, index) => { const node = nodes.get(nodeId); return node ? <span key={`${nodeId}-${index}`}><i aria-hidden="true">›</i><button type="button" aria-current={index === focusHistory.length - 1 ? "location" : undefined} onClick={() => navigateToDepth(index + 1)}>{node.label}</button></span> : null; })}</nav>
-      <CanvasStructuralSurface model={model} path={path} currentEdges={surfaceCurrentEdges} completedEdgeIds={surfaceCompletedEdgeIds} pathEdgeIds={surfacePathEdgeIds} nodeStates={surfaceNodeStates} selectedNodeId={selectedNodeId} focusDepth={focusHistory.length} viewport={viewport} traceMode={traceMode} reducedMotion={reducedMotion} reconciliationTargetId={traceMode ? reconciliationTargetId : null} onSelectNode={selectNode} />
+      <div className={`sm-viz-workspace ${selectedNode ? "has-guide" : ""}`}>
+        <NodeInsightPanel model={model} node={selectedNode ?? null} state={selectedNode ? nodeStates.get(selectedNode.id) ?? selectedNode.currentState : "IDLE"} onClose={() => navigateToDepth(0)} />
+        <CanvasStructuralSurface model={model} path={path} currentEdges={surfaceCurrentEdges} completedEdgeIds={surfaceCompletedEdgeIds} pathEdgeIds={surfacePathEdgeIds} nodeStates={surfaceNodeStates} selectedNodeId={selectedNodeId} focusDepth={focusHistory.length} viewport={viewport} traceMode={traceMode} reducedMotion={reducedMotion} reconciliationTargetId={traceMode ? reconciliationTargetId : null} onSelectNode={selectNode} />
+      </div>
       {traceMode && <div className="sm-viz-readout" hidden={labelsHidden}><p className="sm-motion-live" role="status" aria-live="polite" hidden={labelsHidden}>{currentSummary}</p><div className="sm-viz-legend sm-motion-legend" aria-label="Transmission outcome legend" hidden={labelsHidden}><span><i className="is-flow" />Flow</span><span><i className="is-hold" />Hold</span><span><i className="is-constraint" />Constraint</span><span><i className="is-amplified" />Amplification</span></div></div>}
-      {selectedNode && <aside className="sm-viz-inspector" aria-label="Selected synthetic node inspector" data-selected-node-id={selectedNode.id}>
-        <div className="sm-viz-inspector__lead"><span>Inside this system</span><h2>{selectedNode.detailLabel}</h2><p>{selectedNode.kind.replaceAll("_", " ")} · {nodeStates.get(selectedNode.id) ?? "IDLE"} · TEST_FIXTURE</p></div>
-        <NodeRelationshipContext model={model} node={selectedNode} />
-        <div className="sm-viz-inspector__actions"><span>{selectedNode.derivationRef}</span><button type="button" onClick={() => navigateToDepth(Math.max(0, focusHistory.length - 1))}>Back one level</button></div>
-      </aside>}
     </section>
 
     <details className="sm-motion-list"><summary>Open the structured path record <span>{path.steps.flat().length} fixture relationships</span></summary><ol>{path.steps.map((step, index) => <li key={`${path.id}-${index}`}><strong>Step {index + 1}</strong>{step.map((edgeId) => { const edge = edges.get(edgeId)!; return <span key={edge.id}>{nodes.get(edge.from)?.label} → {nodes.get(edge.to)?.label}<b>{outcomeLabels[edge.outcome]}</b><small>{edge.mechanism}{edge.commonCauseId ? ` · shared origin ${edge.commonCauseId}` : ""}</small></span>; })}</li>)}</ol></details>

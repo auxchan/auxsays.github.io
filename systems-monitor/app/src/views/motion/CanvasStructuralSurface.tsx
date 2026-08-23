@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent, type WheelEvent as ReactWheelEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import type { MotionQaNode, MotionQaPath, MotionQaReadModel, MotionQaRelationship } from "../../data/motionQaReadModel";
 import { applyStructuralViewport, CanvasStructuralRenderer, createStructuralCamera, projectNode, zoomStructuralViewportAt, type StructuralViewportTransform } from "./structuralRenderer";
 import { layoutSpatialLabels, layoutSpatialNodes, nextNodeInDirection, type SpatialViewport } from "./spatialNavigation";
@@ -31,6 +31,8 @@ export function CanvasStructuralSurface({ model, path, currentEdges, completedEd
   const panSession = useRef<{ pointerId: number; startX: number; startY: number; panX: number; panY: number } | null>(null);
   const wheelTimer = useRef<number | null>(null);
   const [size, setSize] = useState({ width: 1000, height: 620 });
+  const sizeRef = useRef(size);
+  sizeRef.current = size;
   const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
   const [viewportTransform, setViewportTransform] = useState<StructuralViewportTransform>(DEFAULT_VIEWPORT);
   const [panning, setPanning] = useState(false);
@@ -63,6 +65,22 @@ export function CanvasStructuralSurface({ model, path, currentEdges, completedEd
   useEffect(() => () => { if (wheelTimer.current !== null) window.clearTimeout(wheelTimer.current); }, []);
 
   useEffect(() => {
+    const host = hostRef.current;
+    if (!host) return;
+    const lockPageAndZoom = (event: WheelEvent) => {
+      event.preventDefault();
+      const currentSize = sizeRef.current;
+      const bounds = host.getBoundingClientRect();
+      setWheelActive(true);
+      if (wheelTimer.current !== null) window.clearTimeout(wheelTimer.current);
+      setViewportTransform((current) => zoomStructuralViewportAt(current, event.clientX - bounds.left, event.clientY - bounds.top, currentSize.width, currentSize.height, Math.exp(-event.deltaY * 0.00135)));
+      wheelTimer.current = window.setTimeout(() => setWheelActive(false), 140);
+    };
+    host.addEventListener("wheel", lockPageAndZoom, { passive: false });
+    return () => host.removeEventListener("wheel", lockPageAndZoom);
+  }, []);
+
+  useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas || typeof CanvasRenderingContext2D === "undefined") return;
     let context: CanvasRenderingContext2D | null = null;
@@ -91,15 +109,6 @@ export function CanvasStructuralSurface({ model, path, currentEdges, completedEd
     setViewportTransform((current) => zoomStructuralViewportAt(current, x, y, size.width, size.height, factor));
   }
 
-  function handleWheel(event: ReactWheelEvent<HTMLDivElement>) {
-    event.preventDefault();
-    const bounds = event.currentTarget.getBoundingClientRect();
-    setWheelActive(true);
-    if (wheelTimer.current !== null) window.clearTimeout(wheelTimer.current);
-    zoomAt(Math.exp(-event.deltaY * 0.00135), event.clientX - bounds.left, event.clientY - bounds.top);
-    wheelTimer.current = window.setTimeout(() => setWheelActive(false), 140);
-  }
-
   function handlePointerDown(event: ReactPointerEvent<HTMLDivElement>) {
     if (event.button !== 1) return;
     event.preventDefault();
@@ -122,7 +131,7 @@ export function CanvasStructuralSurface({ model, path, currentEdges, completedEd
     setPanning(false);
   }
 
-  return <div ref={hostRef} className={`sm-viz-surface ${panning || wheelActive ? "is-manipulating" : ""} ${panning ? "is-panning" : ""}`} data-structural-renderer="canvas-rd" data-trace-mode={traceMode} data-focus-depth={focusDepth} data-visible-relationship-count={viewport.visibleRelationshipIds.size} data-hovered-node-id={hoveredNodeId ?? ""} data-connector-motion={reducedMotion ? "static" : traceMode ? "trace" : "ambient"} data-viewport-zoom={viewportTransform.zoom.toFixed(3)} data-viewport-pan-x={Math.round(viewportTransform.panX)} data-viewport-pan-y={Math.round(viewportTransform.panY)} onWheel={handleWheel} onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={endPan} onPointerCancel={endPan} onMouseDown={(event) => { if (event.button === 1) event.preventDefault(); }} onAuxClick={(event) => { if (event.button === 1) event.preventDefault(); }}>
+  return <div ref={hostRef} className={`sm-viz-surface ${panning || wheelActive ? "is-manipulating" : ""} ${panning ? "is-panning" : ""}`} data-structural-renderer="canvas-rd" data-trace-mode={traceMode} data-focus-depth={focusDepth} data-visible-relationship-count={viewport.visibleRelationshipIds.size} data-hovered-node-id={hoveredNodeId ?? ""} data-connector-motion={reducedMotion ? "static" : traceMode ? "trace" : "ambient"} data-viewport-zoom={viewportTransform.zoom.toFixed(3)} data-viewport-pan-x={Math.round(viewportTransform.panX)} data-viewport-pan-y={Math.round(viewportTransform.panY)} onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={endPan} onPointerCancel={endPan} onMouseDown={(event) => { if (event.button === 1) event.preventDefault(); }} onAuxClick={(event) => { if (event.button === 1) event.preventDefault(); }}>
     <canvas ref={canvasRef} className="sm-viz-canvas" role="img" aria-label="Synthetic structural pressure surface with spatial neighborhoods and continuous routed dependencies" data-renderer-surface="canvas" />
     <p className="sm-sr-only">The canvas is supplemented by keyboard-accessible node controls and a complete structured relationship list. Mouse wheel zooms. Hold the middle mouse button and drag to pan.</p>
     <div className="sm-viz-node-layer" aria-label="Synthetic structural nodes">{spatialNodes.map((node) => {
