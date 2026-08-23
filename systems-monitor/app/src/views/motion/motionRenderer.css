@@ -50,20 +50,21 @@
 [data-aux-product="systems-monitor"] .sm-viz-breadcrumbs button:focus-visible { color: #c2f7e9; outline: 1px solid rgba(130, 239, 213, .42); }
 [data-aux-product="systems-monitor"] .sm-viz-breadcrumbs button[aria-current="location"] { color: #dffff6; }
 
-[data-aux-product="systems-monitor"] .sm-viz-surface { position: relative; height: clamp(32rem, 58vw, 48rem); min-height: 32rem; overflow: hidden; isolation: isolate; }
-[data-aux-product="systems-monitor"] .sm-viz-canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; }
+[data-aux-product="systems-monitor"] .sm-viz-surface { position: relative; height: clamp(32rem, 58vw, 48rem); min-height: 32rem; overflow: hidden; cursor: grab; isolation: isolate; }
+[data-aux-product="systems-monitor"] .sm-viz-surface.is-panning { cursor: grabbing; user-select: none; }
+[data-aux-product="systems-monitor"] .sm-viz-canvas { position: absolute; inset: 0; display: block; width: 100%; height: 100%; pointer-events: none; }
 [data-aux-product="systems-monitor"] .sm-viz-node-layer { position: absolute; z-index: 3; inset: 0; pointer-events: none; }
 [data-aux-product="systems-monitor"] .sm-viz-node-label { position: absolute; width: 2.75rem; height: 2.75rem; padding: 0; border: 0; border-radius: 50%; background: transparent; color: #c5d8d7; cursor: pointer; pointer-events: auto; transform: translate(-50%, -50%); transition: left 520ms cubic-bezier(.2,.7,.2,1), top 520ms cubic-bezier(.2,.7,.2,1), opacity 220ms ease, color 220ms ease, transform 180ms ease; }
 [data-aux-product="systems-monitor"] .sm-viz-node-label > span { position: absolute; left: calc(50% + var(--label-x)); top: calc(50% + var(--label-y)); display: grid; width: var(--label-width); min-height: 1.65rem; place-content: center; padding: .28rem .48rem; border: 1px solid transparent; border-radius: .48rem; background: rgba(4, 16, 23, .54); box-shadow: 0 5px 22px rgba(0, 0, 0, .16); line-height: 1.1; text-align: center; transform: translate(-50%, -50%); transition: left 520ms cubic-bezier(.2,.7,.2,1), top 520ms cubic-bezier(.2,.7,.2,1), opacity 180ms ease, border-color 180ms ease, background 180ms ease; }
 [data-aux-product="systems-monitor"] .sm-viz-node-label b { overflow: hidden; font-size: .67rem; font-weight: 690; text-overflow: ellipsis; white-space: nowrap; }
 [data-aux-product="systems-monitor"] .sm-viz-node-label small { max-height: 0; margin-top: 0; overflow: hidden; color: #63828b; font-size: .45rem; font-weight: 750; letter-spacing: .09em; text-transform: uppercase; opacity: 0; transition: max-height 180ms ease, margin 180ms ease, opacity 180ms ease; }
-[data-aux-product="systems-monitor"] .sm-viz-node-label.is-neighborhood { opacity: .62; }
+[data-aux-product="systems-monitor"] .sm-viz-node-label.is-neighborhood { color: var(--node-accent, #c5d8d7); opacity: .72; }
 [data-aux-product="systems-monitor"] .sm-viz-node-label.is-path { opacity: .82; }
 [data-aux-product="systems-monitor"] .sm-viz-node-label.is-context-hidden { pointer-events: none; opacity: 0; }
 [data-aux-product="systems-monitor"] .sm-viz-node-label.is-active,
 [data-aux-product="systems-monitor"] .sm-viz-node-label.is-selected { color: #f0fffb; opacity: 1; }
 [data-aux-product="systems-monitor"] .sm-viz-node-label.is-hovered { z-index: 3; color: #eefff9; opacity: 1; transform: translate(-50%, -50%) scale(1.045); }
-[data-aux-product="systems-monitor"] .sm-viz-node-label.is-hovered > span { border-color: rgba(130, 239, 213, .55); background: rgba(7, 31, 37, .94); box-shadow: 0 12px 38px rgba(0, 0, 0, .34), 0 0 20px rgba(130, 239, 213, .12); }
+[data-aux-product="systems-monitor"] .sm-viz-node-label.is-hovered > span { border-color: var(--node-accent, #82efd5); background: var(--node-fill, rgba(7, 31, 37, .94)); box-shadow: 0 12px 38px rgba(0, 0, 0, .34), 0 0 20px color-mix(in srgb, var(--node-accent, #82efd5) 24%, transparent); }
 [data-aux-product="systems-monitor"] .sm-viz-node-label.is-selected > span { border-color: rgba(130, 239, 213, .34); background: rgba(7, 30, 36, .9); box-shadow: 0 10px 34px rgba(0, 0, 0, .3); }
 [data-aux-product="systems-monitor"] .sm-viz-node-label.is-label-suppressed > span { opacity: 0; }
 [data-aux-product="systems-monitor"] .sm-viz-node-label.is-label-suppressed:hover > span,
@@ -75,6 +76,14 @@
 [data-aux-product="systems-monitor"] .sm-viz-node-label:focus-visible { outline: 1px solid rgba(130, 239, 213, .76); outline-offset: 3px; }
 [data-aux-product="systems-monitor"] .sm-viz-surface[data-trace-mode="true"] .sm-viz-node-label:not(.is-path):not(.is-selected) { opacity: .12; }
 [data-aux-product="systems-monitor"] button.sm-viz-node-label.is-context-hidden { pointer-events: none; opacity: 0; }
+[data-aux-product="systems-monitor"] .sm-viz-surface.is-manipulating .sm-viz-node-label,
+[data-aux-product="systems-monitor"] .sm-viz-surface.is-manipulating .sm-viz-node-label > span { transition: none; }
+
+[data-aux-product="systems-monitor"] .sm-viz-viewport-controls { position: absolute; z-index: 5; right: .8rem; bottom: .8rem; display: inline-flex; align-items: center; gap: .18rem; padding: .22rem; border: 1px solid rgba(116, 171, 182, .2); border-radius: .62rem; background: rgba(4, 16, 23, .82); box-shadow: 0 8px 28px rgba(0, 0, 0, .25); backdrop-filter: blur(14px); cursor: default; }
+[data-aux-product="systems-monitor"] .sm-viz-viewport-controls button { display: grid; width: 2rem; height: 2rem; place-items: center; padding: 0; border: 0; border-radius: .42rem; background: transparent; color: #85a2aa; cursor: pointer; font: inherit; font-size: .9rem; }
+[data-aux-product="systems-monitor"] .sm-viz-viewport-controls button:hover,
+[data-aux-product="systems-monitor"] .sm-viz-viewport-controls button:focus-visible { background: rgba(130, 239, 213, .1); color: #cafff1; outline: none; }
+[data-aux-product="systems-monitor"] .sm-viz-viewport-controls output { min-width: 2.75rem; color: #718c94; font-size: .57rem; font-variant-numeric: tabular-nums; text-align: center; }
 
 [data-aux-product="systems-monitor"] .sm-viz-readout { position: relative; z-index: 4; display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 3.25rem; padding: .65rem 1.1rem; border-top: 1px solid rgba(116, 171, 182, .15); background: rgba(5, 18, 26, .9); }
 [data-aux-product="systems-monitor"] .sm-viz-readout .sm-motion-live { min-height: 0; padding: 0; border: 0; color: #a8d8cc; }

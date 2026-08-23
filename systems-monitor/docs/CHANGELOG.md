@@ -1,5 +1,22 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-23 — Structural Surface node-workspace interaction correction
+
+- Restored restrained animated light along governed visible Explore connectors;
+  this ambient navigational motion is separate from Trace's semantic signal
+  playback and is disabled under reduced motion.
+- Added coordinated role colors and nine distinct line symbols for the synthetic
+  source, production, storage, utility, fuel, distribution, freight, demand,
+  and employment factors.
+- Added cursor-anchored wheel zoom bounded to 70–240%, middle-button drag pan,
+  and compact accessible zoom/reset controls.
+- Kept ordinary click selection separate from pan, preserved the short spatial
+  trail and visible-relationship cap, and retained the zero-ghost-geometry
+  focused composition.
+- Human spatial-renderer QA and Motion QA remain PENDING. No fixture topology,
+  calculation, factual/BEA work, Gate-B evidence, Phase-5 work, public
+  activation, or deployment changed.
+
 ## 2026-08-23 — Structural Surface focused-Explore correction
 
 - Recorded Taylor's rejection of the prior visually convoluted focused

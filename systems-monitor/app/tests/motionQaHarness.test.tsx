@@ -4,7 +4,7 @@ import motionFixture from "../fixtures/motion-qa-read-model.json";
 import { SnapshotProvider } from "../src/app/SnapshotContext";
 import { SystemsMonitorApp } from "../src/app/SystemsMonitorApp";
 import { motionOutcomes, validateMotionQaReadModel } from "../src/data/motionQaReadModel";
-import { createStructuralCamera, interpolateCamera, outcomeTravel, projectNode, sampleRelationship } from "../src/views/motion/structuralRenderer";
+import { applyStructuralViewport, createStructuralCamera, interpolateCamera, MAX_STRUCTURAL_ZOOM, MIN_STRUCTURAL_ZOOM, outcomeTravel, projectNode, sampleRelationship, zoomStructuralViewportAt } from "../src/views/motion/structuralRenderer";
 import { layoutSpatialLabels, layoutSpatialNodes, MAX_VISIBLE_RELATIONSHIPS, nextNodeInDirection, resolveSpatialViewport } from "../src/views/motion/spatialNavigation";
 import { candidate } from "./factualCandidate.test";
 
@@ -120,6 +120,7 @@ describe("development-only structural Motion QA harness", () => {
 
   it("disables causal autoplay when reduced motion is requested", async () => {
     await renderReducedHarness();
+    expect(document.querySelector(".sm-viz-surface")?.getAttribute("data-connector-motion")).toBe("static");
     fireEvent.click(screen.getByRole("button", { name: /Petroleum Refining.*Enter this system/ }));
     expect(document.querySelector('.sm-viz-surface')?.getAttribute("data-focus-depth")).toBe("1");
     fireEvent.click(screen.getByRole("button", { name: "Trace" }));
@@ -289,6 +290,46 @@ describe("development-only structural Motion QA harness", () => {
     expect(node.getAttribute("data-hovered")).toBe("false");
   });
 
+  it("assigns every synthetic factor a unique symbol and a coordinated role color", async () => {
+    await renderReducedHarness();
+    const nodes = [...document.querySelectorAll<HTMLElement>("[data-motion-node-id]")];
+    expect(nodes).toHaveLength(9);
+    expect(new Set(nodes.map((node) => node.dataset.nodeSymbol)).size).toBe(9);
+    expect(new Set(nodes.map((node) => node.dataset.nodeRole))).toEqual(new Set(["SOURCE", "PRODUCTION", "BUFFER", "INFRASTRUCTURE", "DEMAND", "HUMAN"]));
+    expect(nodes.every((node) => node.style.getPropertyValue("--node-accent").startsWith("#"))).toBe(true);
+  });
+
+  it("uses ambient connector motion in Explore and preserves static reduced motion", async () => {
+    render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
+    await screen.findByRole("heading", { name: /See the system\.\s*Follow the pressure\./ });
+    expect(document.querySelector(".sm-viz-surface")?.getAttribute("data-connector-motion")).toBe("ambient");
+    fireEvent.click(screen.getByRole("button", { name: "Trace" }));
+    expect(document.querySelector(".sm-viz-surface")?.getAttribute("data-connector-motion")).toBe("trace");
+  });
+
+  it("zooms under the mouse wheel, pans only with the middle button, and resets", async () => {
+    await renderReducedHarness();
+    const surface = document.querySelector<HTMLElement>(".sm-viz-surface")!;
+    expect(surface.dataset.viewportZoom).toBe("1.000");
+    fireEvent.wheel(surface, { deltaY: -180, clientX: 320, clientY: 240 });
+    expect(Number(surface.dataset.viewportZoom)).toBeGreaterThan(1);
+
+    fireEvent.pointerDown(surface, { button: 0, pointerId: 4, clientX: 100, clientY: 100 });
+    fireEvent.pointerMove(surface, { button: 0, pointerId: 4, clientX: 180, clientY: 160 });
+    expect(surface.dataset.viewportPanX).not.toBe("80");
+
+    fireEvent.pointerDown(surface, { button: 1, pointerId: 7, clientX: 100, clientY: 100 });
+    fireEvent.pointerMove(surface, { button: 1, pointerId: 7, clientX: 180, clientY: 160 });
+    fireEvent.pointerUp(surface, { button: 1, pointerId: 7, clientX: 180, clientY: 160 });
+    expect(Number(surface.dataset.viewportPanX)).toBeGreaterThan(0);
+    expect(Number(surface.dataset.viewportPanY)).toBeGreaterThan(0);
+
+    fireEvent.click(screen.getByRole("button", { name: "Reset graph view" }));
+    expect(surface.dataset.viewportZoom).toBe("1.000");
+    expect(surface.dataset.viewportPanX).toBe("0");
+    expect(surface.dataset.viewportPanY).toBe("0");
+  });
+
   it("keeps route geometry and camera focus anchored to read-model coordinates", () => {
     const model = validateMotionQaReadModel(motionFixture);
     const nodes = new Map(model.nodes.map((node) => [node.id, node]));
@@ -395,6 +436,15 @@ describe("development-only structural Motion QA harness", () => {
     const midpoint = interpolateCamera(overview, target, .5);
     expect(midpoint.scale).toBeGreaterThan(overview.scale);
     expect(midpoint.scale).toBeLessThan(target.scale);
+  });
+
+  it("keeps cursor-anchored zoom deterministic and bounded", () => {
+    const start = { zoom: 1, panX: 0, panY: 0 };
+    const zoomed = zoomStructuralViewportAt(start, 250, 180, 1000, 620, 1.5);
+    expect(zoomed).toEqual({ zoom: 1.5, panX: 125, panY: 65 });
+    expect(zoomStructuralViewportAt(start, 500, 310, 1000, 620, 99).zoom).toBe(MAX_STRUCTURAL_ZOOM);
+    expect(zoomStructuralViewportAt(start, 500, 310, 1000, 620, 0.001).zoom).toBe(MIN_STRUCTURAL_ZOOM);
+    expect(applyStructuralViewport({ scale: 1, offsetX: 0, offsetY: 0 }, 1000, 620, zoomed)).toEqual({ scale: 1.5, offsetX: -125, offsetY: -90 });
   });
 
   it("encodes outcome physics without changing terminal semantics", () => {

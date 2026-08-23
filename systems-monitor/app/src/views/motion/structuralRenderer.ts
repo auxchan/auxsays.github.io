@@ -1,10 +1,20 @@
 import type { MotionOutcome, MotionQaNode, MotionQaReadModel, MotionQaRelationship } from "../../data/motionQaReadModel";
+import { resolveStructuralNodeVisual, type StructuralNodeSymbol } from "./structuralVisualLanguage";
 
 export interface StructuralCamera {
   scale: number;
   offsetX: number;
   offsetY: number;
 }
+
+export interface StructuralViewportTransform {
+  zoom: number;
+  panX: number;
+  panY: number;
+}
+
+export const MIN_STRUCTURAL_ZOOM = 0.7;
+export const MAX_STRUCTURAL_ZOOM = 2.4;
 
 export interface StructuralRenderState {
   model: MotionQaReadModel;
@@ -14,6 +24,7 @@ export interface StructuralRenderState {
   nodeStates: Map<string, string>;
   selectedNodeId: string | null;
   hoveredNodeId: string | null;
+  viewportTransform: StructuralViewportTransform;
   cameraFocusNodeId: string | null;
   focusDepth: number;
   visibleNodeIds: Set<string>;
@@ -79,6 +90,28 @@ export function interpolateCamera(from: StructuralCamera, to: StructuralCamera, 
 
 export function projectNode(node: MotionQaNode, camera: StructuralCamera): Point {
   return { x: camera.offsetX + node.x * camera.scale, y: camera.offsetY + node.y * camera.scale };
+}
+
+export function applyStructuralViewport(camera: StructuralCamera, width: number, height: number, viewport: StructuralViewportTransform): StructuralCamera {
+  const centerX = width / 2;
+  const centerY = height / 2;
+  return {
+    scale: camera.scale * viewport.zoom,
+    offsetX: centerX + (camera.offsetX - centerX) * viewport.zoom + viewport.panX,
+    offsetY: centerY + (camera.offsetY - centerY) * viewport.zoom + viewport.panY
+  };
+}
+
+export function zoomStructuralViewportAt(viewport: StructuralViewportTransform, x: number, y: number, width: number, height: number, factor: number): StructuralViewportTransform {
+  const zoom = Math.max(MIN_STRUCTURAL_ZOOM, Math.min(MAX_STRUCTURAL_ZOOM, viewport.zoom * factor));
+  const ratio = zoom / viewport.zoom;
+  const centerX = width / 2;
+  const centerY = height / 2;
+  return {
+    zoom,
+    panX: x - centerX - (x - centerX - viewport.panX) * ratio,
+    panY: y - centerY - (y - centerY - viewport.panY) * ratio
+  };
 }
 
 export function sampleRelationship(edge: MotionQaRelationship, nodes: Map<string, MotionQaNode>, count = 64): Point[] {
@@ -191,23 +224,57 @@ function roundedRect(context: CanvasRenderingContext2D, x: number, y: number, wi
   context.roundRect(x, y, width, height, radius);
 }
 
+function drawNodeSymbol(context: CanvasRenderingContext2D, symbol: StructuralNodeSymbol, accent: string) {
+  context.save();
+  context.strokeStyle = accent;
+  context.fillStyle = accent;
+  context.lineWidth = 1.65;
+  context.lineCap = "round";
+  context.lineJoin = "round";
+  context.globalAlpha = 0.94;
+  context.beginPath();
+  if (symbol === "drop") {
+    context.moveTo(0, -7); context.bezierCurveTo(6, -1, 7, 4, 0, 8); context.bezierCurveTo(-7, 4, -6, -1, 0, -7); context.stroke();
+  } else if (symbol === "refinery") {
+    context.moveTo(-8, 8); context.lineTo(-8, -4); context.lineTo(-3, -4); context.lineTo(-3, 8); context.moveTo(1, 8); context.lineTo(1, -8); context.lineTo(6, -8); context.lineTo(6, 8); context.moveTo(-10, 8); context.lineTo(9, 8); context.stroke();
+  } else if (symbol === "tank") {
+    context.ellipse(0, -6, 8, 3, 0, 0, Math.PI * 2); context.moveTo(-8, -6); context.lineTo(-8, 6); context.ellipse(0, 6, 8, 3, 0, 0, Math.PI); context.moveTo(8, -6); context.lineTo(8, 6); context.stroke();
+  } else if (symbol === "bolt") {
+    context.moveTo(2, -9); context.lineTo(-5, 1); context.lineTo(0, 1); context.lineTo(-2, 9); context.lineTo(6, -2); context.lineTo(1, -2); context.closePath(); context.stroke();
+  } else if (symbol === "flame") {
+    context.moveTo(1, -9); context.bezierCurveTo(7, -2, 7, 5, 0, 9); context.bezierCurveTo(-7, 5, -5, -1, -1, -5); context.bezierCurveTo(-1, -1, 2, 1, 3, 4); context.stroke();
+  } else if (symbol === "split") {
+    context.moveTo(-8, 0); context.lineTo(-1, 0); context.moveTo(-1, 0); context.lineTo(6, -7); context.moveTo(-1, 0); context.lineTo(6, 7); context.moveTo(6, -7); context.lineTo(3, -7); context.moveTo(6, -7); context.lineTo(6, -4); context.moveTo(6, 7); context.lineTo(3, 7); context.moveTo(6, 7); context.lineTo(6, 4); context.stroke();
+  } else if (symbol === "freight") {
+    context.rect(-9, -5, 12, 9); context.moveTo(3, -2); context.lineTo(7, -2); context.lineTo(10, 2); context.lineTo(10, 4); context.lineTo(3, 4); context.moveTo(-6, 7); context.arc(-6, 5, 2, 0, Math.PI * 2); context.moveTo(9, 7); context.arc(7, 5, 2, 0, Math.PI * 2); context.stroke();
+  } else if (symbol === "factory") {
+    context.moveTo(-9, 8); context.lineTo(-9, -3); context.lineTo(-3, 1); context.lineTo(-3, -3); context.lineTo(3, 1); context.lineTo(3, -8); context.lineTo(8, -8); context.lineTo(8, 8); context.closePath(); context.moveTo(-5, 5); context.lineTo(-5, 3); context.moveTo(0, 5); context.lineTo(0, 3); context.stroke();
+  } else if (symbol === "people") {
+    context.moveTo(-5, -7); context.arc(-5, -5, 2, 0, Math.PI * 2); context.moveTo(5, -7); context.arc(5, -5, 2, 0, Math.PI * 2); context.moveTo(-9, 8); context.bezierCurveTo(-9, 1, -1, 1, -1, 8); context.moveTo(1, 8); context.bezierCurveTo(1, 1, 9, 1, 9, 8); context.stroke();
+  } else {
+    context.arc(0, 0, 7, 0, Math.PI * 2); context.moveTo(-7, 0); context.lineTo(7, 0); context.moveTo(0, -7); context.lineTo(0, 7); context.stroke();
+  }
+  context.restore();
+}
+
 function drawNodeShape(context: CanvasRenderingContext2D, node: MotionQaNode, state: string, selected: boolean, hovered: boolean, phase: number) {
   const active = state !== "IDLE" && state !== "SIGNAL_READY";
+  const visual = resolveStructuralNodeVisual(node);
   const pulse = 0.5 + Math.sin(phase * Math.PI * 2) * 0.5;
   context.save();
   context.translate(node.x, node.y);
   if (hovered) context.scale(1.06, 1.06);
   context.globalAlpha = 1;
   if (selected || hovered || active) {
-    context.strokeStyle = selected ? "#a8ffe8" : hovered ? "#8ef4dc" : state === "DELAYING" ? "#efbc69" : state === "AMPLIFYING" ? "#ffd07a" : "#79e7ce";
+    context.strokeStyle = selected ? "#f3fff9" : hovered ? visual.accent : state === "DELAYING" ? "#efbc69" : state === "AMPLIFYING" ? "#ffd07a" : visual.accent;
     context.lineWidth = selected ? 2.2 : hovered ? 1.8 : 1.5;
     context.shadowColor = context.strokeStyle;
     context.shadowBlur = selected ? 28 : hovered ? 19 : 16 + pulse * 8;
     context.beginPath(); context.arc(0, 0, selected ? 40 : hovered ? 35 : 33 + pulse * 3, 0, Math.PI * 2); context.stroke();
   }
   context.shadowBlur = 0;
-  context.fillStyle = active ? "#163b3a" : "#0d202a";
-  context.strokeStyle = active ? "#76d9c5" : "#47636f";
+  context.fillStyle = active || hovered || selected ? visual.fill : "#0d202a";
+  context.strokeStyle = active || hovered || selected ? visual.accent : `${visual.accent}99`;
   context.lineWidth = 1.7;
   if (node.kind === "INPUT") {
     context.beginPath(); context.arc(0, 0, 12, 0, Math.PI * 2); context.fill(); context.stroke();
@@ -226,6 +293,7 @@ function drawNodeShape(context: CanvasRenderingContext2D, node: MotionQaNode, st
   } else {
     context.beginPath(); context.arc(0, 0, 18, 0, Math.PI * 2); context.fill(); context.stroke();
   }
+  drawNodeSymbol(context, visual.symbol, visual.accent);
   context.restore();
 }
 
@@ -291,7 +359,7 @@ export class CanvasStructuralRenderer implements StructuralRenderer {
     }
     const cameraProgress = state.reducedMotion ? 1 : (state.nowMs - this.cameraStartedAt) / 520;
     this.camera = state.reducedMotion || !this.cameraFrom || !this.cameraTarget ? targetCamera : interpolateCamera(this.cameraFrom, this.cameraTarget, cameraProgress);
-    const camera = this.camera;
+    const camera = applyStructuralViewport(this.camera, this.width, this.height, state.viewportTransform);
     const rawProgress = state.reducedMotion ? 1 : Math.min(1, state.elapsedMs / 680);
     const phase = state.reducedMotion ? 0.35 : (state.elapsedMs % 1800) / 1800;
 
@@ -311,7 +379,7 @@ export class CanvasStructuralRenderer implements StructuralRenderer {
     context.translate(camera.offsetX, camera.offsetY);
     context.scale(camera.scale, camera.scale);
 
-    for (const edge of state.model.relationships) {
+    for (const [edgeIndex, edge] of state.model.relationships.entries()) {
       if (!state.visibleRelationshipIds.has(edge.id)) continue;
       const points = sampleRelationship(edge, nodes);
       const isPath = state.pathEdgeIds.has(edge.id);
@@ -328,6 +396,22 @@ export class CanvasStructuralRenderer implements StructuralRenderer {
       context.lineWidth = 1.15;
       context.stroke();
       if (isPath || !state.traceMode) drawArrow(context, points, 0.9, isPath ? "#719d9f" : isHoverRelated && state.hoveredNodeId ? "#79d8c7" : "#486a75", isPath ? 0.68 : isHoverRelated && state.hoveredNodeId ? 0.7 : 0.36);
+      if (!state.traceMode && !state.reducedMotion) {
+        const glint = ((state.nowMs / (isHoverRelated && state.hoveredNodeId ? 1350 : 2500)) + edgeIndex * 0.137) % 1;
+        const start = Math.max(0, glint - (isHoverRelated && state.hoveredNodeId ? 0.16 : 0.08));
+        const hoveredNode = state.hoveredNodeId ? nodes.get(state.hoveredNodeId) : undefined;
+        const glintColor = hoveredNode && isHoverRelated ? resolveStructuralNodeVisual(hoveredNode).accent : "#75c9bd";
+        context.save();
+        context.lineCap = "round";
+        context.shadowColor = glintColor;
+        context.shadowBlur = isHoverRelated && state.hoveredNodeId ? 15 : 7;
+        context.globalAlpha = isHoverRelated && state.hoveredNodeId ? 0.88 : 0.3;
+        context.strokeStyle = glintColor;
+        context.lineWidth = isHoverRelated && state.hoveredNodeId ? 3.2 : 1.7;
+        tracePoints(context, points, start, glint);
+        context.stroke();
+        context.restore();
+      }
     }
 
     for (const edge of state.currentEdges) {

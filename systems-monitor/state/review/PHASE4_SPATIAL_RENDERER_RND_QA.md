@@ -15,12 +15,29 @@ controls, and factors did not provide a useful hover response. That judgment is
 recorded as a visual **FAIL** for the prior composition; it does not promote or
 resolve Human QA.
 
-This correction makes Explore a static spatial-navigation mode, removes all
+This correction makes Explore structurally static (no causal playback), removes all
 geometry outside the governed visible relationship set, limits the navigation
 trail to the current and immediately previous focus, and gives pointer and
 keyboard focus a coordinated factor/incident-link preview. Synthetic route
 selection, playback, status readout, and motion legend now appear only in
 Trace.
+
+## Taylor follow-up — navigable node workspace candidate
+
+Taylor found the cleaned composition directionally better but asked to restore
+the sense that the system is alive, make factor roles and identities readable,
+and give the graph a professional node-workspace camera. The candidate now:
+
+- runs restrained ambient light along only the governed visible connectors in
+  Explore; this is navigational motion, not a causal or factual claim;
+- assigns coordinated colors to source, production, buffer, infrastructure,
+  demand, and human-impact roles;
+- draws a unique intuitive line symbol for every synthetic factor;
+- zooms around the cursor with the mouse wheel, bounded to 70–240%;
+- pans only while the middle mouse button is held; ordinary clicks retain node
+  selection and cannot begin a pan; and
+- exposes compact keyboard-accessible zoom/reset controls while reduced-motion
+  mode keeps connectors static.
 
 ## Safety boundary
 
@@ -81,6 +98,19 @@ http://127.0.0.1:4174/systems-monitor/?view=summary
     and current focus.
 12. **Explore/Trace boundary:** confirm Explore has no route controls, running
     signal, outcome legend, or motion readout. Confirm those return in Trace.
+13. **Connector life:** confirm Explore connectors carry a restrained traveling
+    light without reading as a factual shock, and hovered incident links become
+    distinctly brighter.
+14. **Node language:** confirm role colors feel coordinated and all nine symbols
+    are recognizable enough to distinguish the factors before reading labels.
+15. **Wheel zoom:** place the cursor over several parts of the graph and scroll
+    in/out. Confirm the point under the cursor remains visually anchored and
+    page scrolling resumes outside the graph.
+16. **Middle-drag pan:** hold the middle mouse button and drag in several
+    directions. Confirm it feels immediate, ordinary left click still selects,
+    and no browser autoscroll UI appears.
+17. **Viewport recovery:** use the compact controls to zoom and reset. Confirm
+    the overview can always be recovered in one action.
 
 ## Taylor checklist
 
@@ -105,6 +135,10 @@ http://127.0.0.1:4174/systems-monitor/?view=summary
 19. Does factor hover communicate "this is interactive" and preview its local
     importance before committing to a click?
 20. Is the short navigation trail clearer than the rejected accumulated path?
+21. Does the connector lighting restore energy without restoring clutter?
+22. Do color and symbol together make each factor easier to locate and remember?
+23. Does wheel zoom feel anchored, bounded, and predictable?
+24. Does middle-button panning feel like a professional node workspace?
 
 Taylor must record PASS or corrections. This R&D record does not approve Motion
 QA, factual relationships, Gate B, Phase 5, public activation, or deployment.
