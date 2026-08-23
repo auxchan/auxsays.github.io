@@ -1,5 +1,23 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-22 — Motion QA Round-2 semantic correction
+
+- Corrected blocked and fully absorbed signals to terminate before inactive
+  destination nodes, with distinct restrained barrier and absorption-sink
+  treatments.
+- Added behavior-first partial absorption, delayed hold, amplification,
+  transmitted, and unresolved motion states plus static reduced-motion
+  equivalents.
+- Added a persistent common-origin signature, single reconciliation event,
+  stronger directional affordances, interaction-only live node states, and a
+  graph-reserved contextual inspector rail.
+- Added a development label-independent QA control and regression coverage for
+  terminal behavior, attenuation, delay, strengthening, origin identity,
+  direction, node state, reduced motion, and explanatory-copy suppression.
+- `HUMAN_PHASE4_MOTION_QA` remains PENDING. No BEA retrieval, factual
+  relationship, Gate-B evidence, Phase-5 work, public activation, or deployment
+  occurred.
+
 ## 2026-08-22 — Development-only structural Motion QA harness
 
 - Added a loopback-only, development-server Motion QA loader and a bounded

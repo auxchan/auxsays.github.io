@@ -22,6 +22,31 @@ model: nodes, relationships, path steps, origin IDs, common-cause IDs,
 transmission outcomes, current states, evidence classes, derivation references,
 coverage, source health, and stop reasons.
 
+## Round-2 semantic correction
+
+Round 2 changes the motion grammar without changing fixture evidence or the
+production application architecture:
+
+- `TRANSMITTED` uses one neutral directional signal and activates its target.
+- `PARTIALLY_ABSORBED` separates an absorbed component from a thinner surviving
+  continuation; only the surviving component reaches and activates the target.
+- `DELAYED` visibly advances to a hold marker, waits, then resumes. Its static
+  equivalent exposes `WAITING` / `DELAYING` state.
+- `AMPLIFIED` widens and strengthens downstream instead of using the delayed
+  hold language.
+- `BLOCKED` collides with a restrained barrier before the target. The target
+  remains inactive.
+- `ABSORBED` contracts into a sink before the downstream target. The target
+  remains inactive.
+- `UNKNOWN` stops at an unresolved boundary and makes no definite downstream
+  activation claim.
+- One persistent origin signature follows the common-origin path through split
+  and one reconciliation event.
+
+Node state and the contextual inspector now use interaction-only motion states,
+not factual economic state. The inspector occupies a reserved rail beside the
+network on wide screens and a connected region below it on narrower screens.
+
 ## Evidence isolation
 
 - The fixture is stored at
@@ -62,51 +87,71 @@ The loader redirects to:
 http://127.0.0.1:4174/systems-monitor/?view=summary
 ```
 
+Fixture path selectors:
+
+```text
+[data-motion-fixture-selector="fixture-path-blocked"]
+[data-motion-fixture-selector="fixture-path-absorbed"]
+[data-motion-fixture-selector="fixture-path-primary"]
+[data-motion-fixture-selector="fixture-path-common-origin"]
+```
+
+Label-independent QA selector:
+
+```text
+#motion-label-independent-qa
+```
+
+The control is labeled **Hide explanation**. It removes the status sentence and
+legend while retaining node labels, motion controls, keyboard interaction, and
+the outcome graphics.
+
 The persistent banner must read:
 
 ```text
 MOTION QA — SYNTHETIC TEST DATA
 ```
 
-## Suggested review sequence
+## Round-2 suggested review sequence
 
-1. Let **Branch + reconvergence** play. Confirm the signal is transmitted,
-   partially absorbed, then split into delayed and amplified branches before
-   the shared target activates once.
-2. Select **Primary cascade**, press **Replay**, then pause and use
-   **Step forward**.
-3. Select **Absorbed route** and confirm motion stops at the absorbed outcome.
-4. Select **Blocked route** and confirm the route visibly stops as blocked.
-5. Select **Unknown route** and confirm unresolved evidence does not look like
-   successful transmission.
-6. During playback, rapidly change paths and select a node. Confirm stale
-   playback does not continue and the inspector opens immediately.
-7. Close the inspector with its button, then reopen a node with the keyboard
-   and press Escape. Focus should return to the selected node.
-8. Open **Verified Data**, expand several relationship records, then open
-   **Outlook**. Confirm the fixture boundary persists and no forecast appears.
-9. Repeat with the operating system's reduced-motion preference enabled.
-   Autoplay must be disabled while manual steps retain all meaning.
-10. At a narrow browser width, confirm the graph is contained in a labeled,
-    keyboard-focusable horizontal viewport and the page itself does not scroll
-    horizontally.
+1. Select **Blocked route**. Confirm the signal meets a barrier before the
+   downstream node and that node never activates.
+2. Select **Absorbed route**. Confirm the signal contracts into a sink before
+   Employment exposure and does not activate it.
+3. Select **Primary cascade**, pause, and step twice. Confirm partial absorption
+   visibly separates a contained component from a thinner continuation.
+4. Continue one step. Confirm the delayed signal advances, visibly waits, and
+   identifies the receiving node as `DELAYING` when inspected.
+5. Select **Branch + reconvergence** and step three times. Compare the amplified
+   branch with the delayed branch: one strengthens while the other waits.
+6. Replay **Branch + reconvergence**. Follow the persistent origin signature
+   through one split and one reconciliation at Shared target.
+7. Rapidly switch among several paths. Confirm no previous signal remains
+   current and playback immediately adopts the final selection.
+8. During playback, select a node. Confirm the graph makes the connection clear,
+   the inspector does not cover the network, and Escape restores focus.
+9. Press **Hide explanation** and repeat blocked, absorbed, partial, delayed,
+   and amplified checks using only the motion grammar and node labels.
+10. Enable the operating system's reduced-motion preference. Confirm autoplay
+    is disabled and manual steps preserve all terminal, hold, attenuation,
+    strengthening, origin, direction, and node-state meanings.
 
-## Human Motion QA checklist
+## Human Motion QA Round-2 checklist
 
-1. Does propagation motion make the direction obvious?
-2. Can I tell where a signal starts and ends?
-3. Can I distinguish transmitted, delayed, partially absorbed, absorbed,
-   blocked, amplified, and unknown states?
-4. Does branching and reconvergence make sense?
-5. Does common-origin behavior avoid looking like two independent shocks?
-6. Does selection remain responsive during playback?
-7. Does focused node inspection feel like navigating a system rather than a
-   dashboard?
-8. Are Summary, Verified Data, and Outlook transitions restrained enough?
-9. Is there too much movement?
-10. Does reduced-motion presentation preserve every material meaning?
-11. Does the motion feel premium and analytical rather than gimmicky?
-12. Do dependency relationships have a convincing visual home?
+1. Can I distinguish blocked from absorbed without reading text?
+2. Does blocked visibly stop before the destination?
+3. Does fully absorbed disappear or terminate before downstream activation?
+4. Can I visually see that partial absorption leaves a smaller continuation?
+5. Does delayed visibly wait?
+6. Does amplified visibly strengthen rather than wait?
+7. Can I follow one origin through branch and reconvergence?
+8. Does reconvergence look like one event with multiple paths?
+9. Is direction obvious without relying on left-to-right layout?
+10. Does the inspector feel connected to the selected node?
+11. Does node state remain semantically correct during motion?
+12. Can I understand the core outcome with explanatory copy hidden?
+13. Does reduced-motion preserve the same meaning?
+14. Does the system still feel restrained and analytical?
 
 Taylor must record PASS or corrections. This file does not close Gate B,
 authorize Phase 5, or authorize public activation or deployment.
