@@ -3,6 +3,7 @@ import type { MotionOutcome, MotionQaNode, MotionQaReadModel } from "../../data/
 import { SystemIcon } from "../../shared/SystemIcon";
 import type { RouteState } from "../../state/routeSchema";
 import { CanvasStructuralSurface } from "./CanvasStructuralSurface";
+import { resolveSpatialViewport } from "./spatialNavigation";
 import "./motionRenderer.css";
 
 const outcomeLabels: Record<MotionOutcome, string> = {
@@ -44,15 +45,16 @@ function MotionGraph({ model }: { model: MotionQaReadModel }) {
   const [stepIndex, setStepIndex] = useState(-1);
   const [playing, setPlaying] = useState(!reducedMotion);
   const [labelsHidden, setLabelsHidden] = useState(false);
-  const [traceMode, setTraceMode] = useState(true);
-  const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
+  const [traceMode, setTraceMode] = useState(false);
+  const [focusHistory, setFocusHistory] = useState<string[]>([]);
   const restoreFocus = useRef<HTMLButtonElement | null>(null);
+  const cameraResumeTimer = useRef<number | null>(null);
   const path = model.paths.find((item) => item.id === pathId) ?? model.paths[0];
   const nodes = useMemo(() => new Map(model.nodes.map((node) => [node.id, node])), [model.nodes]);
   const edges = useMemo(() => new Map(model.relationships.map((edge) => [edge.id, edge])), [model.relationships]);
   const currentEdgeIds = new Set(stepIndex >= 0 ? path.steps[stepIndex] : []);
   const completedEdgeIds = new Set(path.steps.slice(0, Math.max(0, stepIndex)).flat());
-  const pathEdgeIds = new Set(path.steps.flat());
+  const pathEdgeIds = useMemo(() => new Set(path.steps.flat()), [path]);
   const currentEdges = [...currentEdgeIds].map((id) => edges.get(id)!).filter(Boolean);
   const hasDelayHold = currentEdges.some((edge) => edge.outcome === "DELAYED");
   const reconciliationTargets = new Set(currentEdges.map((edge) => edge.to));
@@ -71,7 +73,9 @@ function MotionGraph({ model }: { model: MotionQaReadModel }) {
     else if (edge.outcome === "AMPLIFIED") nodeStates.set(edge.to, "AMPLIFYING");
     else if (!terminalOutcomes.has(edge.outcome)) nodeStates.set(edge.to, "ACTIVE");
   });
+  const selectedNodeId = focusHistory.at(-1) ?? null;
   const selectedNode = selectedNodeId ? nodes.get(selectedNodeId) : undefined;
+  const viewport = useMemo(() => resolveSpatialViewport(model, selectedNodeId, traceMode ? pathEdgeIds : new Set()), [model, selectedNodeId, traceMode, pathEdgeIds]);
 
   useEffect(() => {
     if (!playing || reducedMotion) return;
@@ -86,11 +90,13 @@ function MotionGraph({ model }: { model: MotionQaReadModel }) {
     setStepIndex(-1);
   }, [reducedMotion]);
 
+  useEffect(() => () => { if (cameraResumeTimer.current !== null) window.clearTimeout(cameraResumeTimer.current); }, []);
+
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
       if (event.key === "Escape" && selectedNodeId) {
-        setSelectedNodeId(null);
-        restoreFocus.current?.focus();
+        setFocusHistory((current) => current.slice(0, -1));
+        window.requestAnimationFrame(() => restoreFocus.current?.focus());
       }
     };
     window.addEventListener("keydown", onKey);
@@ -101,12 +107,28 @@ function MotionGraph({ model }: { model: MotionQaReadModel }) {
     setPathId(nextPathId);
     setStepIndex(-1);
     setPlaying(!reducedMotion);
-    setSelectedNodeId(null);
+    if (cameraResumeTimer.current !== null) window.clearTimeout(cameraResumeTimer.current);
   }
 
   function selectNode(nodeId: string, target: HTMLButtonElement) {
     restoreFocus.current = target;
-    setSelectedNodeId((current) => current === nodeId ? null : nodeId);
+    if (selectedNodeId === nodeId) return;
+    const shouldResume = playing && !reducedMotion;
+    setPlaying(false);
+    if (cameraResumeTimer.current !== null) window.clearTimeout(cameraResumeTimer.current);
+    setFocusHistory((current) => {
+      const existing = current.indexOf(nodeId);
+      return existing >= 0 ? current.slice(0, existing + 1) : [...current, nodeId];
+    });
+    if (shouldResume) cameraResumeTimer.current = window.setTimeout(() => setPlaying(true), 540);
+  }
+
+  function navigateToDepth(depth: number) {
+    const shouldResume = playing && !reducedMotion;
+    setPlaying(false);
+    if (cameraResumeTimer.current !== null) window.clearTimeout(cameraResumeTimer.current);
+    setFocusHistory((current) => current.slice(0, depth));
+    if (shouldResume) cameraResumeTimer.current = window.setTimeout(() => setPlaying(true), 540);
   }
 
   const currentSummary = stepIndex < 0
@@ -120,7 +142,7 @@ function MotionGraph({ model }: { model: MotionQaReadModel }) {
         <button type="button" className="is-primary" onClick={() => setPlaying((current) => !current)} disabled={reducedMotion || stepIndex >= path.steps.length - 1}>{playing ? "Pause" : "Play"}</button>
         <button type="button" onClick={() => { setStepIndex(-1); setPlaying(!reducedMotion); }}>Replay</button>
         <button type="button" onClick={() => { setPlaying(false); setStepIndex((current) => Math.min(path.steps.length - 1, current + 1)); }}>Step forward</button>
-        <button type="button" className="sm-viz-trace-toggle" aria-pressed={traceMode} onClick={() => setTraceMode((current) => !current)}>Trace mode</button>
+        <div className="sm-viz-mode-switch" role="group" aria-label="Structural surface mode"><button type="button" aria-pressed={!traceMode} onClick={() => setTraceMode(false)}>Explore</button><button type="button" aria-pressed={traceMode} onClick={() => setTraceMode(true)}>Trace</button></div>
         <button id="motion-label-independent-qa" type="button" aria-pressed={labelsHidden} data-motion-label-independent-qa onClick={() => setLabelsHidden((current) => !current)}>{labelsHidden ? "Show explanation" : "Hide explanation"}</button>
         <span>{reducedMotion ? "Reduced motion · manual steps" : playing ? "Live transmission" : "Paused"}</span>
       </div>
@@ -128,15 +150,16 @@ function MotionGraph({ model }: { model: MotionQaReadModel }) {
 
     <section className={`sm-viz-instrument ${selectedNode ? "has-focus" : ""}`} aria-label="Spatial structural motion prototype" data-label-independent={labelsHidden}>
       <header className="sm-viz-instrument__header">
-        <div><span>Structural surface / R&amp;D 01</span><strong>{path.label}</strong></div>
-        <div className="sm-viz-status"><span><i aria-hidden="true" />{traceMode ? "Trace isolated" : "Full topology"}</span><span>{path.stopReason.replaceAll("_", " ")}</span></div>
+        <div><span>Structural surface / R&amp;D 02</span><strong>{selectedNode ? selectedNode.detailLabel : "Synthetic system overview"}</strong></div>
+        <div className="sm-viz-status"><span><i aria-hidden="true" />{traceMode ? "Trace" : "Explore"}</span><span>{viewport.visibleRelationshipIds.size} links shown{viewport.additionalRelationshipCount ? ` / ${viewport.additionalRelationshipCount} additional` : ""}</span></div>
       </header>
-      <CanvasStructuralSurface model={model} path={path} currentEdges={currentEdges} completedEdgeIds={completedEdgeIds} pathEdgeIds={pathEdgeIds} nodeStates={nodeStates} selectedNodeId={selectedNodeId} traceMode={traceMode} reducedMotion={reducedMotion} reconciliationTargetId={reconciliationTargetId} onSelectNode={selectNode} />
+      <nav className="sm-viz-breadcrumbs" aria-label="Structural exploration history"><button type="button" aria-current={!selectedNode ? "location" : undefined} onClick={() => navigateToDepth(0)}>Synthetic system</button>{focusHistory.map((nodeId, index) => { const node = nodes.get(nodeId); return node ? <span key={`${nodeId}-${index}`}><i aria-hidden="true">›</i><button type="button" aria-current={index === focusHistory.length - 1 ? "location" : undefined} onClick={() => navigateToDepth(index + 1)}>{node.label}</button></span> : null; })}</nav>
+      <CanvasStructuralSurface model={model} path={path} currentEdges={currentEdges} completedEdgeIds={completedEdgeIds} pathEdgeIds={pathEdgeIds} nodeStates={nodeStates} selectedNodeId={selectedNodeId} focusDepth={focusHistory.length} viewport={viewport} traceMode={traceMode} reducedMotion={reducedMotion} reconciliationTargetId={reconciliationTargetId} onSelectNode={selectNode} />
       <div className="sm-viz-readout" hidden={labelsHidden}><p className="sm-motion-live" role="status" aria-live="polite" hidden={labelsHidden}>{currentSummary}</p><div className="sm-viz-legend sm-motion-legend" aria-label="Transmission outcome legend" hidden={labelsHidden}><span><i className="is-flow" />Flow</span><span><i className="is-hold" />Hold</span><span><i className="is-constraint" />Constraint</span><span><i className="is-amplified" />Amplification</span></div></div>
       {selectedNode && <aside className="sm-viz-inspector" aria-label="Selected synthetic node inspector" data-selected-node-id={selectedNode.id}>
-        <div className="sm-viz-inspector__lead"><span>Inside this system</span><h2>{selectedNode.label}</h2><p>{selectedNode.kind.replaceAll("_", " ")} · {nodeStates.get(selectedNode.id) ?? "IDLE"} · TEST_FIXTURE</p></div>
+        <div className="sm-viz-inspector__lead"><span>Inside this system</span><h2>{selectedNode.detailLabel}</h2><p>{selectedNode.kind.replaceAll("_", " ")} · {nodeStates.get(selectedNode.id) ?? "IDLE"} · TEST_FIXTURE</p></div>
         <NodeRelationshipContext model={model} node={selectedNode} />
-        <div className="sm-viz-inspector__actions"><span>{selectedNode.derivationRef}</span><button type="button" onClick={() => { setSelectedNodeId(null); restoreFocus.current?.focus(); }}>Back to whole system</button></div>
+        <div className="sm-viz-inspector__actions"><span>{selectedNode.derivationRef}</span><button type="button" onClick={() => navigateToDepth(Math.max(0, focusHistory.length - 1))}>Back one level</button></div>
       </aside>}
     </section>
 

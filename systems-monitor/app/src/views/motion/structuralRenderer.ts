@@ -13,9 +13,14 @@ export interface StructuralRenderState {
   pathEdgeIds: Set<string>;
   nodeStates: Map<string, string>;
   selectedNodeId: string | null;
+  cameraFocusNodeId: string | null;
+  focusDepth: number;
+  visibleNodeIds: Set<string>;
+  visibleRelationshipIds: Set<string>;
   traceMode: boolean;
   reducedMotion: boolean;
   elapsedMs: number;
+  nowMs: number;
   reconciliationTargetId: string | null;
   commonOriginNodeId: string | null;
 }
@@ -44,9 +49,9 @@ const outcomeColors: Record<MotionOutcome, string> = {
   UNKNOWN: "#8196a2"
 };
 
-export function createStructuralCamera(width: number, height: number, selected?: MotionQaNode): StructuralCamera {
+export function createStructuralCamera(width: number, height: number, selected?: MotionQaNode, focusDepth = 0): StructuralCamera {
   const baseScale = Math.min((width - 52) / DESIGN_WIDTH, (height - 44) / DESIGN_HEIGHT);
-  const scale = baseScale * (selected ? 1.16 : 1);
+  const scale = baseScale * (selected ? Math.min(1.3, 1.16 + Math.max(0, focusDepth - 1) * 0.06) : 1);
   if (selected) {
     return {
       scale,
@@ -58,6 +63,16 @@ export function createStructuralCamera(width: number, height: number, selected?:
     scale,
     offsetX: (width - DESIGN_WIDTH * scale) / 2,
     offsetY: (height - DESIGN_HEIGHT * scale) / 2
+  };
+}
+
+export function interpolateCamera(from: StructuralCamera, to: StructuralCamera, progress: number): StructuralCamera {
+  const clamped = Math.max(0, Math.min(1, progress));
+  const eased = 1 - (1 - clamped) ** 3;
+  return {
+    scale: from.scale + (to.scale - from.scale) * eased,
+    offsetX: from.offsetX + (to.offsetX - from.offsetX) * eased,
+    offsetY: from.offsetY + (to.offsetY - from.offsetY) * eased
   };
 }
 
@@ -192,33 +207,22 @@ function drawNodeShape(context: CanvasRenderingContext2D, node: MotionQaNode, st
   context.fillStyle = active ? "#163b3a" : "#0d202a";
   context.strokeStyle = active ? "#76d9c5" : "#47636f";
   context.lineWidth = 1.7;
-  if (node.kind === "ORIGIN") {
-    context.beginPath(); context.moveTo(0, -17); context.lineTo(17, 0); context.lineTo(0, 17); context.lineTo(-17, 0); context.closePath(); context.fill(); context.stroke();
-    context.fillStyle = "#8cf3d9"; context.beginPath(); context.arc(0, 0, 4, 0, Math.PI * 2); context.fill();
-  } else if (node.kind === "PRODUCER") {
-    roundedRect(context, -26, -14, 52, 28, 8); context.fill(); context.stroke();
-    context.beginPath(); context.moveTo(-15, 0); context.lineTo(15, 0); context.stroke();
+  if (node.kind === "INPUT") {
+    context.beginPath(); context.arc(0, 0, 12, 0, Math.PI * 2); context.fill(); context.stroke();
+  } else if (node.kind === "INDUSTRY") {
+    roundedRect(context, -19, -19, 38, 38, 12); context.fill(); context.stroke();
   } else if (node.kind === "BUFFER") {
-    roundedRect(context, -19, -30, 38, 60, 15); context.fill(); context.stroke();
-    context.save(); roundedRect(context, -14, -24, 28, 48, 10); context.clip();
+    roundedRect(context, -18, -25, 36, 50, 14); context.fill(); context.stroke();
+    context.save(); roundedRect(context, -13, -20, 26, 40, 9); context.clip();
     context.fillStyle = active ? "rgba(121,231,206,.58)" : "rgba(94,130,143,.28)";
     const fillY = active ? -3 - pulse * 4 : 9;
-    context.fillRect(-14, fillY, 28, 30); context.restore();
-    context.beginPath(); context.moveTo(-12, fillY); context.lineTo(12, fillY); context.stroke();
-  } else if (node.kind === "BRANCH") {
-    context.beginPath(); context.arc(0, 0, 11, 0, Math.PI * 2); context.fill(); context.stroke();
-    context.beginPath(); context.moveTo(-25, 0); context.lineTo(-10, 0); context.moveTo(8, -7); context.lineTo(23, -19); context.moveTo(8, 7); context.lineTo(23, 19); context.stroke();
-  } else if (node.kind === "RECONVERGENCE") {
-    context.beginPath(); context.moveTo(-25, -14); context.lineTo(-9, 0); context.lineTo(-25, 14); context.moveTo(25, -14); context.lineTo(9, 0); context.lineTo(25, 14); context.stroke();
-    context.beginPath(); context.arc(0, 0, 7, 0, Math.PI * 2); context.fill(); context.stroke();
-  } else if (node.kind === "TRANSPORT") {
-    for (let x = -20; x <= 8; x += 14) { context.beginPath(); context.moveTo(x, -13); context.lineTo(x + 13, 0); context.lineTo(x, 13); context.stroke(); }
-  } else if (node.kind === "DOWNSTREAM") {
-    context.beginPath(); context.moveTo(-20, -20); context.lineTo(-20, 20); context.lineTo(14, 20); context.moveTo(-20, -20); context.lineTo(14, -20); context.stroke();
-    context.beginPath(); context.arc(8, 0, 6, 0, Math.PI * 2); context.fill();
+    context.fillRect(-13, fillY, 26, 26); context.restore();
+  } else if (node.kind === "TRANSFER") {
+    roundedRect(context, -10, -25, 20, 50, 9); context.fill(); context.stroke();
+  } else if (node.kind === "HUMAN_CAPITAL") {
+    roundedRect(context, -25, -16, 50, 32, 16); context.fill(); context.stroke();
   } else {
-    roundedRect(context, -26, -22, 52, 44, 13); context.fill(); context.stroke();
-    for (const x of [-12, 0, 12]) { context.beginPath(); context.arc(x, 0, 3.5, 0, Math.PI * 2); context.fillStyle = x === 0 && active ? "#ffd07a" : "#6f8e99"; context.fill(); }
+    context.beginPath(); context.arc(0, 0, 18, 0, Math.PI * 2); context.fill(); context.stroke();
   }
   context.restore();
 }
@@ -229,6 +233,16 @@ export class CanvasStructuralRenderer implements StructuralRenderer {
   private width = 1;
   private height = 1;
   private density = 1;
+  private camera: StructuralCamera | null = null;
+  private cameraFrom: StructuralCamera | null = null;
+  private cameraTarget: StructuralCamera | null = null;
+  private cameraKey = "";
+  private cameraStartedAt = 0;
+  private layoutCurrent: Map<string, Point> | null = null;
+  private layoutFrom: Map<string, Point> | null = null;
+  private layoutTarget: Map<string, Point> | null = null;
+  private layoutKey = "";
+  private layoutStartedAt = 0;
 
   constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
     this.canvas = canvas;
@@ -245,12 +259,39 @@ export class CanvasStructuralRenderer implements StructuralRenderer {
 
   render(state: StructuralRenderState) {
     const context = this.context;
-    const nodes = new Map(state.model.nodes.map((node) => [node.id, node]));
-    const selected = state.selectedNodeId ? nodes.get(state.selectedNodeId) : undefined;
-    const camera = createStructuralCamera(this.width, this.height, selected);
+    const targetPositions = new Map(state.model.nodes.map((node) => [node.id, { x: node.x, y: node.y }]));
+    const nextLayoutKey = `${state.selectedNodeId ?? "overview"}:${state.focusDepth}:${[...state.visibleRelationshipIds].sort().join(",")}`;
+    if (!this.layoutCurrent) this.layoutCurrent = targetPositions;
+    if (nextLayoutKey !== this.layoutKey) {
+      this.layoutFrom = new Map(this.layoutCurrent);
+      this.layoutTarget = targetPositions;
+      this.layoutStartedAt = state.nowMs;
+      this.layoutKey = nextLayoutKey;
+    }
+    const layoutProgress = state.reducedMotion ? 1 : Math.max(0, Math.min(1, (state.nowMs - this.layoutStartedAt) / 520));
+    const layoutEased = 1 - (1 - layoutProgress) ** 3;
+    this.layoutCurrent = new Map(state.model.nodes.map((node) => {
+      const from = this.layoutFrom?.get(node.id) ?? targetPositions.get(node.id)!;
+      const to = this.layoutTarget?.get(node.id) ?? targetPositions.get(node.id)!;
+      return [node.id, { x: from.x + (to.x - from.x) * layoutEased, y: from.y + (to.y - from.y) * layoutEased }];
+    }));
+    const renderNodes = state.model.nodes.map((node) => ({ ...node, ...this.layoutCurrent!.get(node.id)! }));
+    const nodes = new Map(renderNodes.map((node) => [node.id, node]));
+    const selectedTarget = state.cameraFocusNodeId ? state.model.nodes.find((node) => node.id === state.cameraFocusNodeId) : undefined;
+    const targetCamera = createStructuralCamera(this.width, this.height, selectedTarget, state.focusDepth);
+    const nextCameraKey = `${state.selectedNodeId ?? "overview"}:${state.focusDepth}:${Math.round(this.width)}:${Math.round(this.height)}`;
+    if (!this.camera) this.camera = targetCamera;
+    if (nextCameraKey !== this.cameraKey) {
+      this.cameraFrom = this.camera;
+      this.cameraTarget = targetCamera;
+      this.cameraStartedAt = state.nowMs;
+      this.cameraKey = nextCameraKey;
+    }
+    const cameraProgress = state.reducedMotion ? 1 : (state.nowMs - this.cameraStartedAt) / 520;
+    this.camera = state.reducedMotion || !this.cameraFrom || !this.cameraTarget ? targetCamera : interpolateCamera(this.cameraFrom, this.cameraTarget, cameraProgress);
+    const camera = this.camera;
     const rawProgress = state.reducedMotion ? 1 : Math.min(1, state.elapsedMs / 680);
     const phase = state.reducedMotion ? 0.35 : (state.elapsedMs % 1800) / 1800;
-    const connected = new Set(state.selectedNodeId ? state.model.relationships.filter((edge) => edge.from === state.selectedNodeId || edge.to === state.selectedNodeId).map((edge) => edge.id) : []);
 
     context.setTransform(this.density, 0, 0, this.density, 0, 0);
     context.clearRect(0, 0, this.width, this.height);
@@ -272,8 +313,8 @@ export class CanvasStructuralRenderer implements StructuralRenderer {
       const points = sampleRelationship(edge, nodes);
       const isPath = state.pathEdgeIds.has(edge.id);
       const isComplete = state.completedEdgeIds.has(edge.id);
-      const isRelated = !state.selectedNodeId || connected.has(edge.id);
-      const alpha = !isRelated ? 0.045 : state.traceMode ? (isPath ? 0.52 : 0.055) : isPath ? 0.4 : 0.13;
+      const isRelated = state.visibleRelationshipIds.has(edge.id);
+      const alpha = !isRelated ? 0.022 : state.traceMode ? (isPath ? 0.6 : 0.04) : isPath ? 0.36 : 0.16;
       tracePoints(context, points);
       context.strokeStyle = isComplete ? "rgba(105,198,178,.55)" : `rgba(86,132,145,${alpha})`;
       context.lineWidth = isPath ? 8 : 5;
@@ -322,8 +363,8 @@ export class CanvasStructuralRenderer implements StructuralRenderer {
     }
 
     const pathNodes = new Set(state.model.relationships.filter((edge) => state.pathEdgeIds.has(edge.id)).flatMap((edge) => [edge.from, edge.to]));
-    for (const node of state.model.nodes) {
-      const related = !state.selectedNodeId || node.id === state.selectedNodeId || state.model.relationships.some((edge) => connected.has(edge.id) && (edge.from === node.id || edge.to === node.id));
+    for (const node of renderNodes) {
+      const related = state.visibleNodeIds.has(node.id);
       const visible = !state.traceMode || pathNodes.has(node.id);
       drawNodeShape(context, node, state.nodeStates.get(node.id) ?? "IDLE", state.selectedNodeId === node.id, related && visible, phase);
     }

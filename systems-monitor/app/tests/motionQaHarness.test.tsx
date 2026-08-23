@@ -4,7 +4,8 @@ import motionFixture from "../fixtures/motion-qa-read-model.json";
 import { SnapshotProvider } from "../src/app/SnapshotContext";
 import { SystemsMonitorApp } from "../src/app/SystemsMonitorApp";
 import { motionOutcomes, validateMotionQaReadModel } from "../src/data/motionQaReadModel";
-import { createStructuralCamera, outcomeTravel, projectNode, sampleRelationship } from "../src/views/motion/structuralRenderer";
+import { createStructuralCamera, interpolateCamera, outcomeTravel, projectNode, sampleRelationship } from "../src/views/motion/structuralRenderer";
+import { layoutSpatialLabels, layoutSpatialNodes, MAX_VISIBLE_RELATIONSHIPS, nextNodeInDirection, resolveSpatialViewport } from "../src/views/motion/spatialNavigation";
 import { candidate } from "./factualCandidate.test";
 
 const standardMatchMedia = (query: string) => ({ matches: false, media: query, onchange: null, addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {}, dispatchEvent: () => false });
@@ -45,6 +46,8 @@ describe("development-only structural Motion QA harness", () => {
     expect(new Set(model.relationships.map((edge) => edge.outcome))).toEqual(new Set(motionOutcomes));
     expect(model.coverage).toMatchObject({ factualRelationshipCount: 0, acceptedRelationshipCount: 0 });
     expect(model.candidateEligibility).toBe("NEVER_ACCEPTED_NEVER_PUBLISHED");
+    expect(model.nodes.map((node) => node.label)).toEqual(expect.arrayContaining(["Crude Supply", "Refining", "Storage", "Freight Network", "Employment"]));
+    expect(model.nodes.map((node) => node.kind)).not.toEqual(expect.arrayContaining(["ORIGIN", "BRANCH", "RECONVERGENCE"]));
   });
 
   it("rejects factual, accepted, or gate-changing fixture shapes", () => {
@@ -66,7 +69,7 @@ describe("development-only structural Motion QA harness", () => {
     expect(await screen.findByRole("heading", { name: /See the system\.\s*Follow the pressure\./ })).toBeTruthy();
     expect(screen.getByText("MOTION QA — SYNTHETIC TEST DATA")).toBeTruthy();
     expect(screen.getByRole("img", { name: /Synthetic structural pressure surface/ })).toBeTruthy();
-    expect(screen.getByRole("button", { name: /Upstream signal.*Enter this system/ })).toBeTruthy();
+    expect(screen.getByRole("button", { name: /Commercial Crude Supply.*Enter this system/ })).toBeTruthy();
     expect(document.querySelector('[data-structural-renderer="canvas-rd"]')).toBeTruthy();
     expect(screen.getByRole("button", { name: "Pause" })).toBeTruthy();
     expect(screen.getAllByText(/TEST_FIXTURE/).length).toBeGreaterThan(0);
@@ -88,7 +91,7 @@ describe("development-only structural Motion QA harness", () => {
   it("opens node detail by keyboard and closes it with Escape", async () => {
     render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
     await screen.findByRole("heading", { name: /See the system\.\s*Follow the pressure\./ });
-    const node = screen.getByRole("button", { name: /Buffer stage.*Enter this system/ });
+    const node = screen.getByRole("button", { name: /Product Storage Capacity.*Enter this system/ });
     fireEvent.keyDown(node, { key: "Enter" });
     expect(screen.getByRole("complementary", { name: "Selected synthetic node inspector" })).toBeTruthy();
     expect(screen.getByText("fixture-derivation:buffer")).toBeTruthy();
@@ -99,7 +102,8 @@ describe("development-only structural Motion QA harness", () => {
   it("preserves the three primary views without introducing a production navigation item", async () => {
     render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
     await screen.findByRole("heading", { name: /See the system\.\s*Follow the pressure\./ });
-    expect(screen.getAllByRole("navigation")).toHaveLength(1);
+    expect(screen.getAllByRole("navigation", { name: "Systems Monitor views" })).toHaveLength(1);
+    expect(screen.getByRole("navigation", { name: "Structural exploration history" })).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: "Verified Data" }));
     expect(await screen.findByRole("heading", { name: /Inspect the choreography\.\s*Not the economy\./ })).toBeTruthy();
     expect(screen.getByText("12 test records")).toBeTruthy();
@@ -112,6 +116,9 @@ describe("development-only structural Motion QA harness", () => {
   it("disables causal autoplay when reduced motion is requested", async () => {
     await renderReducedHarness();
     expect(screen.getByText("Reduced motion · manual steps")).toBeTruthy();
+    expect((screen.getByRole("button", { name: "Play" }) as HTMLButtonElement).disabled).toBe(true);
+    fireEvent.click(screen.getByRole("button", { name: /Petroleum Refining.*Enter this system/ }));
+    expect(document.querySelector('.sm-viz-surface')?.getAttribute("data-focus-depth")).toBe("1");
     expect((screen.getByRole("button", { name: "Play" }) as HTMLButtonElement).disabled).toBe(true);
     fireEvent.click(screen.getByRole("button", { name: "Step forward" }));
     expect(screen.getByText(/step 1 of 7/i)).toBeTruthy();
@@ -202,7 +209,7 @@ describe("development-only structural Motion QA harness", () => {
   it("docks node context without covering the graph and reports live motion state", async () => {
     await renderReducedHarness();
     stepPath("Branch + reconvergence", 3);
-    const node = screen.getByRole("button", { name: /Branch alpha.*DELAYING.*Enter this system/ });
+    const node = screen.getByRole("button", { name: /Industrial Utilities.*DELAYING.*Enter this system/ });
     fireEvent.click(node);
     const inspector = screen.getByRole("complementary", { name: "Selected synthetic node inspector" });
     expect(inspector.parentElement?.classList.contains("sm-viz-instrument")).toBe(true);
@@ -217,7 +224,7 @@ describe("development-only structural Motion QA harness", () => {
     expect(toggle.getAttribute("aria-pressed")).toBe("true");
     expect((document.querySelector(".sm-motion-live") as HTMLElement).hidden).toBe(true);
     expect((document.querySelector(".sm-motion-legend") as HTMLElement).hidden).toBe(true);
-    expect(screen.getByText("Upstream signal")).toBeTruthy();
+    expect(screen.getByText("Supply")).toBeTruthy();
     fireEvent.click(screen.getByRole("button", { name: "Blocked route" }));
     expect(screen.getByRole("button", { name: "Show explanation" })).toBeTruthy();
   });
@@ -241,10 +248,12 @@ describe("development-only structural Motion QA harness", () => {
     expect(document.querySelector(".sm-motion-network")).toBeNull();
     expect(document.querySelector('[data-renderer-surface="canvas"]')).toBeTruthy();
     expect(document.querySelectorAll(".sm-viz-node-label")).toHaveLength(9);
-    const trace = screen.getByRole("button", { name: "Trace mode" });
-    expect(trace.getAttribute("aria-pressed")).toBe("true");
-    fireEvent.click(trace);
+    const trace = screen.getByRole("button", { name: "Trace" });
     expect(trace.getAttribute("aria-pressed")).toBe("false");
+    fireEvent.click(trace);
+    expect(trace.getAttribute("aria-pressed")).toBe("true");
+    expect(document.querySelector('.sm-viz-surface')?.getAttribute("data-trace-mode")).toBe("true");
+    expect(Number(document.querySelector('.sm-viz-surface')?.getAttribute("data-visible-relationship-count"))).toBeLessThanOrEqual(MAX_VISIBLE_RELATIONSHIPS);
   });
 
   it("keeps route geometry and camera focus anchored to read-model coordinates", () => {
@@ -258,6 +267,99 @@ describe("development-only structural Motion QA harness", () => {
     const projected = projectNode(selected, camera);
     expect(projected.x).toBeCloseTo(500);
     expect(projected.y).toBeCloseTo(297.6);
+  });
+
+  it("enters deterministic first- and second-level neighborhoods and restores the parent", async () => {
+    await renderReducedHarness();
+    fireEvent.click(screen.getByRole("button", { name: /Petroleum Refining.*Enter this system/ }));
+    expect(document.querySelector('.sm-viz-surface')?.getAttribute("data-focus-depth")).toBe("1");
+    expect(screen.getByRole("navigation", { name: "Structural exploration history" }).textContent).toContain("Refining");
+    fireEvent.click(screen.getByRole("button", { name: /Product Storage Capacity.*Enter this system/ }));
+    expect(document.querySelector('.sm-viz-surface')?.getAttribute("data-focus-depth")).toBe("2");
+    expect(screen.getByRole("complementary", { name: "Selected synthetic node inspector" }).textContent).toContain("Product Storage Capacity");
+    fireEvent.click(screen.getByRole("button", { name: "Refining" }));
+    expect(document.querySelector('.sm-viz-surface')?.getAttribute("data-focus-depth")).toBe("1");
+    expect(screen.getByRole("complementary", { name: "Selected synthetic node inspector" }).textContent).toContain("Petroleum Refining");
+  });
+
+  it("does not pad sparse neighborhoods and bounds crowded relationship display", () => {
+    const model = validateMotionQaReadModel(motionFixture);
+    const sparse = resolveSpatialViewport(model, "fixture-employment", new Set());
+    expect(sparse.availableRelationshipCount).toBe(2);
+    expect(sparse.visibleRelationshipIds.size).toBe(2);
+    expect(sparse.additionalRelationshipCount).toBe(0);
+    const localLayout = layoutSpatialNodes(model, resolveSpatialViewport(model, "fixture-producer", new Set()));
+    expect(localLayout.find((node) => node.id === "fixture-producer")).toMatchObject({ x: 500, y: 310 });
+    expect(localLayout.find((node) => node.id === "fixture-origin")?.x).toBeLessThan(500);
+    expect(localLayout.find((node) => node.id === "fixture-downstream")?.x).toBeGreaterThan(500);
+
+    const crowded = {
+      ...model,
+      relationships: Array.from({ length: 12 }, (_, index) => ({ ...model.relationships[index % model.relationships.length], id: `fixture-ranked-${String(index).padStart(2, "0")}`, from: "fixture-buffer", to: index % 2 ? "fixture-branch-a" : "fixture-branch-b" }))
+    };
+    const bounded = resolveSpatialViewport(crowded, "fixture-buffer", new Set());
+    expect(bounded.visibleRelationshipIds.size).toBe(MAX_VISIBLE_RELATIONSHIPS);
+    expect(bounded.additionalRelationshipCount).toBe(2);
+    expect([...bounded.visibleRelationshipIds].every((id) => crowded.relationships.some((edge) => edge.id === id))).toBe(true);
+  });
+
+  it("uses depth-aware label priority, protects the selected label, and suppresses collisions", () => {
+    const model = validateMotionQaReadModel(motionFixture);
+    const camera = createStructuralCamera(1000, 620);
+    const allNodes = new Set(model.nodes.map((node) => node.id));
+    const overview = layoutSpatialLabels({ nodes: model.nodes, camera, width: 1000, height: 620, focusDepth: 0, selectedNodeId: null, visibleNodeIds: allNodes, traceNodeIds: new Set() });
+    expect(overview.map((label) => label.text)).toContain("Supply");
+    expect(overview.map((label) => label.text)).not.toContain("Commercial Crude Supply");
+
+    const focusedCamera = createStructuralCamera(420, 420, model.nodes.find((node) => node.id === "fixture-buffer"), 2);
+    const focused = layoutSpatialLabels({ nodes: model.nodes, camera: focusedCamera, width: 420, height: 420, focusDepth: 2, selectedNodeId: "fixture-buffer", visibleNodeIds: allNodes, traceNodeIds: new Set() });
+    const selected = focused.find((label) => label.nodeId === "fixture-buffer")!;
+    expect(selected).toMatchObject({ text: "Product Storage Capacity", priority: "PRIMARY", suppressed: false });
+    const shown = focused.filter((label) => !label.suppressed);
+    for (let left = 0; left < shown.length; left += 1) for (let right = left + 1; right < shown.length; right += 1) {
+      const a = shown[left]; const b = shown[right];
+      const overlaps = Math.abs(a.x - b.x) < (a.width + b.width) / 2 && Math.abs(a.y - b.y) < (a.height + b.height) / 2;
+      expect(overlaps).toBe(false);
+    }
+  });
+
+  it("keeps node type separate from live interaction state", async () => {
+    await renderReducedHarness();
+    const buffer = document.querySelector('[data-motion-node-id="fixture-buffer"]');
+    expect(buffer?.getAttribute("data-node-type")).toBe("BUFFER");
+    stepPath("Primary cascade", 2);
+    expect(buffer?.getAttribute("data-node-type")).toBe("BUFFER");
+    expect(buffer?.getAttribute("data-motion-state")).toBe("ACTIVE");
+    expect(motionFixture.nodes.find((node) => node.id === "fixture-buffer")?.currentState).toBe("IDLE");
+  });
+
+  it("cancels stale spatial intent during rapid focus changes", async () => {
+    await renderReducedHarness();
+    fireEvent.click(screen.getByRole("button", { name: /Petroleum Refining.*Enter this system/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Product Storage Capacity.*Enter this system/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Industrial Utilities.*Enter this system/ }));
+    const trail = screen.getByRole("navigation", { name: "Structural exploration history" });
+    expect(trail.querySelector('[aria-current="location"]')?.textContent).toBe("Utilities");
+    expect(screen.getAllByRole("complementary", { name: "Selected synthetic node inspector" })).toHaveLength(1);
+    expect(document.querySelector('[data-motion-node-id="fixture-branch-a"]')?.getAttribute("aria-pressed")).toBe("true");
+  });
+
+  it("supports directional keyboard focus inside the visible neighborhood", () => {
+    const model = validateMotionQaReadModel(motionFixture);
+    const visible = new Set(model.nodes.map((node) => node.id));
+    expect(nextNodeInDirection(model.nodes, visible, "fixture-origin", "ArrowRight")).toBe("fixture-producer");
+    expect(nextNodeInDirection(model.nodes, visible, "fixture-buffer", "ArrowUp")).toBe("fixture-branch-a");
+  });
+
+  it("interpolates camera position without overshoot and snaps under reduced motion", () => {
+    const overview = createStructuralCamera(1000, 620);
+    const model = validateMotionQaReadModel(motionFixture);
+    const target = createStructuralCamera(1000, 620, model.nodes.find((node) => node.id === "fixture-buffer"), 2);
+    expect(interpolateCamera(overview, target, 0)).toEqual(overview);
+    expect(interpolateCamera(overview, target, 1)).toEqual(target);
+    const midpoint = interpolateCamera(overview, target, .5);
+    expect(midpoint.scale).toBeGreaterThan(overview.scale);
+    expect(midpoint.scale).toBeLessThan(target.scale);
   });
 
   it("encodes outcome physics without changing terminal semantics", () => {

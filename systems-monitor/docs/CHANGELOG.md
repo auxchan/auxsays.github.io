@@ -1,5 +1,21 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-23 — Structural Surface R&D Round 2 spatial navigation
+
+- Added deterministic overview-to-neighborhood-to-neighborhood exploration with
+  bounded ten-relationship display, spatial breadcrumbs, back navigation, and
+  interruptible 520 ms camera/layout transitions.
+- Added map-like label levels, explicit priority, bounded collision placement,
+  lower-priority suppression, realistic synthetic fixture names, and a selected
+  label that cannot be suppressed.
+- Replaced arbitrary internal glyphs with a restrained broad-type form grammar;
+  live interaction state remains visually stronger than type.
+- Separated Explore from Trace, retained the docked inspector, added directional
+  keyboard movement, and preserved reduced-motion/manual-step behavior.
+- All relationships remain `TEST_FIXTURE / NEVER_ACCEPTED_NEVER_PUBLISHED` with
+  zero accepted/factual relationships. Human spatial-renderer QA and Motion QA
+  remain PENDING; Gate B and Phase 5 remain unchanged.
+
 ## 2026-08-23 — Premium structural renderer R&D prototype
 
 - Replaced the development Motion QA SVG viewport with a renderer abstraction

@@ -21,15 +21,15 @@
   "gateBStatus": "OPEN_UNCHANGED",
   "phase5Status": "LOCKED",
   "nodes": [
-    { "id": "fixture-origin", "label": "Upstream signal", "kind": "ORIGIN", "currentState": "SIGNAL_READY", "derivationRef": "fixture-derivation:origin", "x": 75, "y": 310 },
-    { "id": "fixture-producer", "label": "Producer alpha", "kind": "PRODUCER", "currentState": "IDLE", "derivationRef": "fixture-derivation:producer", "x": 220, "y": 310 },
-    { "id": "fixture-buffer", "label": "Buffer stage", "kind": "BUFFER", "currentState": "IDLE", "derivationRef": "fixture-derivation:buffer", "x": 365, "y": 310 },
-    { "id": "fixture-branch-a", "label": "Branch alpha", "kind": "BRANCH", "currentState": "IDLE", "derivationRef": "fixture-derivation:branch-a", "x": 520, "y": 175 },
-    { "id": "fixture-branch-b", "label": "Branch beta", "kind": "BRANCH", "currentState": "IDLE", "derivationRef": "fixture-derivation:branch-b", "x": 520, "y": 445 },
-    { "id": "fixture-junction", "label": "Shared target", "kind": "RECONVERGENCE", "currentState": "IDLE", "derivationRef": "fixture-derivation:junction", "x": 675, "y": 310 },
-    { "id": "fixture-transport", "label": "Transport stage", "kind": "TRANSPORT", "currentState": "IDLE", "derivationRef": "fixture-derivation:transport", "x": 810, "y": 310 },
-    { "id": "fixture-downstream", "label": "Downstream use", "kind": "DOWNSTREAM", "currentState": "IDLE", "derivationRef": "fixture-derivation:downstream", "x": 925, "y": 205 },
-    { "id": "fixture-employment", "label": "Employment exposure", "kind": "EXPOSURE", "currentState": "IDLE", "derivationRef": "fixture-derivation:employment", "x": 925, "y": 430 }
+    { "id": "fixture-origin", "label": "Crude Supply", "overviewLabel": "Supply", "detailLabel": "Commercial Crude Supply", "kind": "INPUT", "displayRank": 1, "currentState": "SIGNAL_READY", "derivationRef": "fixture-derivation:origin", "x": 75, "y": 310 },
+    { "id": "fixture-producer", "label": "Refining", "overviewLabel": "Refining", "detailLabel": "Petroleum Refining", "kind": "INDUSTRY", "displayRank": 2, "currentState": "IDLE", "derivationRef": "fixture-derivation:producer", "x": 220, "y": 310 },
+    { "id": "fixture-buffer", "label": "Storage", "overviewLabel": "Storage", "detailLabel": "Product Storage Capacity", "kind": "BUFFER", "displayRank": 3, "currentState": "IDLE", "derivationRef": "fixture-derivation:buffer", "x": 365, "y": 310 },
+    { "id": "fixture-branch-a", "label": "Utilities", "overviewLabel": "Utilities", "detailLabel": "Industrial Utilities", "kind": "SYSTEM", "displayRank": 6, "currentState": "IDLE", "derivationRef": "fixture-derivation:branch-a", "x": 520, "y": 175 },
+    { "id": "fixture-branch-b", "label": "Fuel Supply", "overviewLabel": "Fuel", "detailLabel": "Refined Fuel Supply", "kind": "SYSTEM", "displayRank": 4, "currentState": "IDLE", "derivationRef": "fixture-derivation:branch-b", "x": 520, "y": 445 },
+    { "id": "fixture-junction", "label": "Distribution", "overviewLabel": "Distribution", "detailLabel": "Product Distribution", "kind": "TRANSFER", "displayRank": 5, "currentState": "IDLE", "derivationRef": "fixture-derivation:junction", "x": 675, "y": 310 },
+    { "id": "fixture-transport", "label": "Freight Network", "overviewLabel": "Freight", "detailLabel": "Freight Transportation Network", "kind": "TRANSFER", "displayRank": 7, "currentState": "IDLE", "derivationRef": "fixture-derivation:transport", "x": 810, "y": 310 },
+    { "id": "fixture-downstream", "label": "Industrial Demand", "overviewLabel": "Industry", "detailLabel": "Industrial End Demand", "kind": "INDUSTRY", "displayRank": 8, "currentState": "IDLE", "derivationRef": "fixture-derivation:downstream", "x": 925, "y": 205 },
+    { "id": "fixture-employment", "label": "Employment", "overviewLabel": "Employment", "detailLabel": "Current Employment Exposure", "kind": "HUMAN_CAPITAL", "displayRank": 9, "currentState": "IDLE", "derivationRef": "fixture-derivation:employment", "x": 925, "y": 430 }
   ],
   "relationships": [
     { "id": "fixture-edge-01", "from": "fixture-origin", "to": "fixture-producer", "outcome": "TRANSMITTED", "mechanism": "Synthetic direct transmission", "evidenceClass": "TEST_FIXTURE", "originId": "fixture-origin-shock-01", "commonCauseId": null, "derivationRef": "fixture-derivation:edge-01", "status": "TEST_FIXTURE", "stopReason": null },

@@ -4,7 +4,10 @@ export type MotionOutcome = typeof motionOutcomes[number];
 export interface MotionQaNode {
   id: string;
   label: string;
+  overviewLabel: string;
+  detailLabel: string;
   kind: string;
+  displayRank: number;
   currentState: string;
   derivationRef: string;
   x: number;
@@ -78,7 +81,9 @@ export function validateMotionQaReadModel(value: unknown): MotionQaReadModel {
     const node = object(raw, `nodes[${index}]`);
     const x = Number(node.x); const y = Number(node.y);
     if (!Number.isFinite(x) || !Number.isFinite(y)) throw new Error("Motion QA node coordinates must be finite");
-    return { id: string(node.id, "node.id"), label: string(node.label, "node.label"), kind: string(node.kind, "node.kind"), currentState: string(node.currentState, "node.currentState"), derivationRef: string(node.derivationRef, "node.derivationRef"), x, y };
+    const displayRank = Number(node.displayRank);
+    if (!Number.isInteger(displayRank) || displayRank < 1) throw new Error("Motion QA node displayRank must be a positive integer");
+    return { id: string(node.id, "node.id"), label: string(node.label, "node.label"), overviewLabel: string(node.overviewLabel, "node.overviewLabel"), detailLabel: string(node.detailLabel, "node.detailLabel"), kind: string(node.kind, "node.kind"), displayRank, currentState: string(node.currentState, "node.currentState"), derivationRef: string(node.derivationRef, "node.derivationRef"), x, y };
   });
   if (nodes.length < 6 || nodes.length > 10 || Number(coverage.nodeCount) !== nodes.length) throw new Error("Motion QA topology must contain 6–10 nodes");
   const nodeIds = new Set(nodes.map((node) => node.id));
