@@ -13,6 +13,7 @@ export interface StructuralRenderState {
   pathEdgeIds: Set<string>;
   nodeStates: Map<string, string>;
   selectedNodeId: string | null;
+  hoveredNodeId: string | null;
   cameraFocusNodeId: string | null;
   focusDepth: number;
   visibleNodeIds: Set<string>;
@@ -190,18 +191,19 @@ function roundedRect(context: CanvasRenderingContext2D, x: number, y: number, wi
   context.roundRect(x, y, width, height, radius);
 }
 
-function drawNodeShape(context: CanvasRenderingContext2D, node: MotionQaNode, state: string, selected: boolean, related: boolean, phase: number) {
+function drawNodeShape(context: CanvasRenderingContext2D, node: MotionQaNode, state: string, selected: boolean, hovered: boolean, phase: number) {
   const active = state !== "IDLE" && state !== "SIGNAL_READY";
   const pulse = 0.5 + Math.sin(phase * Math.PI * 2) * 0.5;
   context.save();
   context.translate(node.x, node.y);
-  context.globalAlpha = related ? 1 : 0.16;
-  if (selected || active) {
-    context.strokeStyle = selected ? "#a8ffe8" : state === "DELAYING" ? "#efbc69" : state === "AMPLIFYING" ? "#ffd07a" : "#79e7ce";
-    context.lineWidth = selected ? 2.2 : 1.5;
+  if (hovered) context.scale(1.06, 1.06);
+  context.globalAlpha = 1;
+  if (selected || hovered || active) {
+    context.strokeStyle = selected ? "#a8ffe8" : hovered ? "#8ef4dc" : state === "DELAYING" ? "#efbc69" : state === "AMPLIFYING" ? "#ffd07a" : "#79e7ce";
+    context.lineWidth = selected ? 2.2 : hovered ? 1.8 : 1.5;
     context.shadowColor = context.strokeStyle;
-    context.shadowBlur = selected ? 28 : 16 + pulse * 8;
-    context.beginPath(); context.arc(0, 0, selected ? 40 : 33 + pulse * 3, 0, Math.PI * 2); context.stroke();
+    context.shadowBlur = selected ? 28 : hovered ? 19 : 16 + pulse * 8;
+    context.beginPath(); context.arc(0, 0, selected ? 40 : hovered ? 35 : 33 + pulse * 3, 0, Math.PI * 2); context.stroke();
   }
   context.shadowBlur = 0;
   context.fillStyle = active ? "#163b3a" : "#0d202a";
@@ -310,24 +312,26 @@ export class CanvasStructuralRenderer implements StructuralRenderer {
     context.scale(camera.scale, camera.scale);
 
     for (const edge of state.model.relationships) {
+      if (!state.visibleRelationshipIds.has(edge.id)) continue;
       const points = sampleRelationship(edge, nodes);
       const isPath = state.pathEdgeIds.has(edge.id);
       const isComplete = state.completedEdgeIds.has(edge.id);
-      const isRelated = state.visibleRelationshipIds.has(edge.id);
-      const alpha = !isRelated ? 0.022 : state.traceMode ? (isPath ? 0.6 : 0.04) : isPath ? 0.36 : 0.16;
+      const isHoverRelated = !state.hoveredNodeId || edge.from === state.hoveredNodeId || edge.to === state.hoveredNodeId;
+      const alpha = state.traceMode ? (isPath ? 0.6 : 0.04) : isHoverRelated ? 0.34 : 0.07;
       tracePoints(context, points);
       context.strokeStyle = isComplete ? "rgba(105,198,178,.55)" : `rgba(86,132,145,${alpha})`;
-      context.lineWidth = isPath ? 8 : 5;
+      context.lineWidth = isPath ? 8 : isHoverRelated && state.hoveredNodeId ? 6.5 : 5;
       context.lineCap = "round";
       context.stroke();
       tracePoints(context, points);
       context.strokeStyle = isComplete ? "rgba(146,237,215,.52)" : `rgba(126,170,180,${alpha * 1.25})`;
       context.lineWidth = 1.15;
       context.stroke();
-      if (isRelated && (isPath || !state.traceMode)) drawArrow(context, points, 0.9, isPath ? "#719d9f" : "#486a75", isPath ? 0.68 : 0.28);
+      if (isPath || !state.traceMode) drawArrow(context, points, 0.9, isPath ? "#719d9f" : isHoverRelated && state.hoveredNodeId ? "#79d8c7" : "#486a75", isPath ? 0.68 : isHoverRelated && state.hoveredNodeId ? 0.7 : 0.36);
     }
 
     for (const edge of state.currentEdges) {
+      if (!state.visibleRelationshipIds.has(edge.id)) continue;
       const points = sampleRelationship(edge, nodes);
       const travel = outcomeTravel(edge.outcome, rawProgress);
       const color = outcomeColors[edge.outcome];
@@ -353,20 +357,21 @@ export class CanvasStructuralRenderer implements StructuralRenderer {
       if (!["BLOCKED", "ABSORBED", "UNKNOWN"].includes(edge.outcome)) drawArrow(context, points, Math.max(0.15, Math.min(0.95, travel)), color, 0.92);
     }
 
-    if (state.commonOriginNodeId) {
+    if (state.traceMode && state.commonOriginNodeId && state.visibleNodeIds.has(state.commonOriginNodeId)) {
       const origin = nodes.get(state.commonOriginNodeId)!;
       context.save(); context.translate(origin.x, origin.y); context.strokeStyle = "rgba(137,246,220,.72)"; context.lineWidth = 1.5; context.setLineDash([2, 5]); context.beginPath(); context.arc(0, 0, 43 + phase * 3, 0, Math.PI * 2); context.stroke(); context.restore();
     }
-    if (state.reconciliationTargetId) {
+    if (state.traceMode && state.reconciliationTargetId && state.visibleNodeIds.has(state.reconciliationTargetId)) {
       const target = nodes.get(state.reconciliationTargetId)!;
       context.save(); context.translate(target.x, target.y); context.strokeStyle = "rgba(255,208,122,.85)"; context.lineWidth = 2; context.beginPath(); context.arc(0, 0, 42 - phase * 5, 0, Math.PI * 2); context.stroke(); context.restore();
     }
 
     const pathNodes = new Set(state.model.relationships.filter((edge) => state.pathEdgeIds.has(edge.id)).flatMap((edge) => [edge.from, edge.to]));
     for (const node of renderNodes) {
-      const related = state.visibleNodeIds.has(node.id);
-      const visible = !state.traceMode || pathNodes.has(node.id);
-      drawNodeShape(context, node, state.nodeStates.get(node.id) ?? "IDLE", state.selectedNodeId === node.id, related && visible, phase);
+      if (!state.visibleNodeIds.has(node.id)) continue;
+      const visible = !state.traceMode || pathNodes.has(node.id) || state.selectedNodeId === node.id;
+      if (!visible) continue;
+      drawNodeShape(context, node, state.nodeStates.get(node.id) ?? "IDLE", state.selectedNodeId === node.id, state.hoveredNodeId === node.id, phase);
     }
     context.restore();
   }

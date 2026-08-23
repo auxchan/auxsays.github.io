@@ -26,6 +26,7 @@ export function CanvasStructuralSurface({ model, path, currentEdges, completedEd
   const nodeButtons = useRef(new Map<string, HTMLButtonElement>());
   const stepStartedAt = useRef(0);
   const [size, setSize] = useState({ width: 1000, height: 620 });
+  const [hoveredNodeId, setHoveredNodeId] = useState<string | null>(null);
   const spatialNodes = useMemo(() => traceMode ? model.nodes.map((node) => ({ ...node })) : layoutSpatialNodes(model, viewport), [model, viewport, traceMode]);
   const spatialModel = useMemo(() => ({ ...model, nodes: spatialNodes }), [model, spatialNodes]);
   const nodes = useMemo(() => new Map(spatialNodes.map((node) => [node.id, node])), [spatialNodes]);
@@ -69,14 +70,14 @@ export function CanvasStructuralSurface({ model, path, currentEdges, completedEd
     renderer.resize(size.width, size.height, window.devicePixelRatio || 1);
     let frame = 0;
     const draw = (now: number) => {
-      renderer.render({ model: spatialModel, currentEdges, completedEdgeIds, pathEdgeIds, nodeStates, selectedNodeId, cameraFocusNodeId: traceMode ? null : selectedNodeId, focusDepth: traceMode ? 0 : focusDepth, visibleNodeIds: viewport.visibleNodeIds, visibleRelationshipIds: viewport.visibleRelationshipIds, traceMode, reducedMotion, elapsedMs: reducedMotion ? 900 : now - stepStartedAt.current, nowMs: now, reconciliationTargetId, commonOriginNodeId });
+      renderer.render({ model: spatialModel, currentEdges, completedEdgeIds, pathEdgeIds, nodeStates, selectedNodeId, hoveredNodeId, cameraFocusNodeId: traceMode ? null : selectedNodeId, focusDepth: traceMode ? 0 : focusDepth, visibleNodeIds: viewport.visibleNodeIds, visibleRelationshipIds: viewport.visibleRelationshipIds, traceMode, reducedMotion, elapsedMs: reducedMotion ? 900 : now - stepStartedAt.current, nowMs: now, reconciliationTargetId, commonOriginNodeId });
       if (!reducedMotion) frame = window.requestAnimationFrame(draw);
     };
     draw(performance.now());
     return () => window.cancelAnimationFrame(frame);
-  }, [spatialModel, currentEdges, completedEdgeIds, pathEdgeIds, nodeStates, selectedNodeId, focusDepth, viewport.visibleNodeIds, viewport.visibleRelationshipIds, traceMode, reducedMotion, reconciliationTargetId, commonOriginNodeId, size]);
+  }, [spatialModel, currentEdges, completedEdgeIds, pathEdgeIds, nodeStates, selectedNodeId, hoveredNodeId, focusDepth, viewport.visibleNodeIds, viewport.visibleRelationshipIds, traceMode, reducedMotion, reconciliationTargetId, commonOriginNodeId, size]);
 
-  return <div ref={hostRef} className="sm-viz-surface" data-structural-renderer="canvas-rd" data-trace-mode={traceMode} data-focus-depth={focusDepth} data-visible-relationship-count={viewport.visibleRelationshipIds.size}>
+  return <div ref={hostRef} className="sm-viz-surface" data-structural-renderer="canvas-rd" data-trace-mode={traceMode} data-focus-depth={focusDepth} data-visible-relationship-count={viewport.visibleRelationshipIds.size} data-hovered-node-id={hoveredNodeId ?? ""}>
     <canvas ref={canvasRef} className="sm-viz-canvas" role="img" aria-label="Synthetic structural pressure surface with spatial neighborhoods and continuous routed dependencies" data-renderer-surface="canvas" />
     <p className="sm-sr-only">The canvas is supplemented by keyboard-accessible node controls and a complete structured relationship list.</p>
     <div className="sm-viz-node-layer" aria-label="Synthetic structural nodes">{spatialNodes.map((node) => {
@@ -87,7 +88,8 @@ export function CanvasStructuralSurface({ model, path, currentEdges, completedEd
       const onPath = pathNodes.has(node.id);
       const visible = viewport.visibleNodeIds.has(node.id);
       const style = { left: point.x, top: point.y, "--label-x": `${(label?.x ?? point.x) - point.x}px`, "--label-y": `${(label?.y ?? point.y + 31) - point.y}px`, "--label-width": `${label?.width ?? 120}px` } as CSSProperties;
-      return <button key={node.id} ref={(element) => { if (element) nodeButtons.current.set(node.id, element); else nodeButtons.current.delete(node.id); }} type="button" style={style} className={`sm-viz-node-label is-${node.kind.toLowerCase()} ${selectedNodeId === node.id ? "is-selected" : ""} ${active ? "is-active" : ""} ${onPath ? "is-path" : ""} ${visible ? "is-neighborhood" : "is-context-hidden"} ${label?.suppressed ? "is-label-suppressed" : ""}`} aria-label={`${node.detailLabel}. ${state}. Enter this system.`} aria-pressed={selectedNodeId === node.id} aria-hidden={!visible} tabIndex={visible ? 0 : -1} data-motion-node-id={node.id} data-motion-state={state} data-motion-active={active} data-node-type={node.kind} data-label-level={focusDepth} data-label-priority={label?.priority ?? "DETAIL"} data-label-suppressed={label?.suppressed ?? true} onClick={(event) => onSelectNode(node.id, event.currentTarget)} onKeyDown={(event) => {
+      const hovered = hoveredNodeId === node.id;
+      return <button key={node.id} ref={(element) => { if (element) nodeButtons.current.set(node.id, element); else nodeButtons.current.delete(node.id); }} type="button" style={style} className={`sm-viz-node-label is-${node.kind.toLowerCase()} ${selectedNodeId === node.id ? "is-selected" : ""} ${hovered ? "is-hovered" : ""} ${active ? "is-active" : ""} ${onPath ? "is-path" : ""} ${visible ? "is-neighborhood" : "is-context-hidden"} ${label?.suppressed ? "is-label-suppressed" : ""}`} aria-label={`${node.detailLabel}. ${state}. Enter this system.`} aria-pressed={selectedNodeId === node.id} aria-hidden={!visible} tabIndex={visible ? 0 : -1} data-motion-node-id={node.id} data-motion-state={state} data-motion-active={active} data-node-type={node.kind} data-hovered={hovered} data-label-level={focusDepth} data-label-priority={label?.priority ?? "DETAIL"} data-label-suppressed={label?.suppressed ?? true} onPointerEnter={() => setHoveredNodeId(node.id)} onPointerLeave={() => setHoveredNodeId((current) => current === node.id ? null : current)} onFocus={() => setHoveredNodeId(node.id)} onBlur={() => setHoveredNodeId((current) => current === node.id ? null : current)} onClick={(event) => onSelectNode(node.id, event.currentTarget)} onKeyDown={(event) => {
         if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onSelectNode(node.id, event.currentTarget); return; }
         if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) {
           event.preventDefault();
@@ -99,6 +101,6 @@ export function CanvasStructuralSurface({ model, path, currentEdges, completedEd
     <div className="sm-viz-semantic-state" hidden>{currentEdges.map((edge) => {
       const terminal = ["BLOCKED", "ABSORBED", "UNKNOWN"].includes(edge.outcome);
       return <span key={edge.id} className="sm-motion-current-signal sm-motion-signal is-current" data-motion-edge-id={edge.id} data-motion-outcome={edge.outcome} data-direction="forward" data-origin-id={edge.originId} data-signal-terminates={terminal ? "before-destination" : "at-destination"} data-motion-component={edge.outcome === "PARTIALLY_ABSORBED" ? "surviving" : undefined} data-motion-phase={edge.outcome === "DELAYED" ? "WAITING" : undefined} data-motion-strength={edge.outcome === "AMPLIFIED" ? "stronger" : undefined} data-motion-terminal={edge.outcome === "BLOCKED" ? "BLOCKED" : edge.outcome === "ABSORBED" ? "ABSORBED" : edge.outcome === "UNKNOWN" ? "UNRESOLVED" : undefined} />;
-    })}{currentEdges.some((edge) => edge.outcome === "PARTIALLY_ABSORBED") && <span data-motion-component="absorbed" />}{currentEdges.some((edge) => edge.outcome === "AMPLIFIED") && <span className="sm-motion-amplified-halo" />}{commonOriginNodeId && <span className="sm-motion-origin-token" data-origin-id={path.originId} data-anchor-node-id={commonOriginNodeId} />}{reconciliationTargetId && <span data-common-origin-reconciliation="single" data-anchor-node-id={reconciliationTargetId} />}</div>
+    })}{currentEdges.some((edge) => edge.outcome === "PARTIALLY_ABSORBED") && <span data-motion-component="absorbed" />}{currentEdges.some((edge) => edge.outcome === "AMPLIFIED") && <span className="sm-motion-amplified-halo" />}{traceMode && commonOriginNodeId && <span className="sm-motion-origin-token" data-origin-id={path.originId} data-anchor-node-id={commonOriginNodeId} />}{traceMode && reconciliationTargetId && <span data-common-origin-reconciliation="single" data-anchor-node-id={reconciliationTargetId} />}</div>
   </div>;
 }

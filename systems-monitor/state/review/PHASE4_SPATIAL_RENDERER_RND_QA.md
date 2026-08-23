@@ -6,6 +6,22 @@ This review covers only the development-only structural renderer, spatial
 navigation, label hierarchy, node grammar, and Explore/Trace interaction.
 `HUMAN_PHASE4_MOTION_QA` remains **PENDING**.
 
+## Taylor correction state — prior composition rejected
+
+Taylor rejected the prior Round-2 composition as visually convoluted. The
+focused surface retained unrelated ghost geometry, deep navigation accumulated
+an overlong click-history trail, Explore competed with the synthetic motion
+controls, and factors did not provide a useful hover response. That judgment is
+recorded as a visual **FAIL** for the prior composition; it does not promote or
+resolve Human QA.
+
+This correction makes Explore a static spatial-navigation mode, removes all
+geometry outside the governed visible relationship set, limits the navigation
+trail to the current and immediately previous focus, and gives pointer and
+keyboard focus a coordinated factor/incident-link preview. Synthetic route
+selection, playback, status readout, and motion legend now appear only in
+Trace.
+
 ## Safety boundary
 
 - Fixture class: `TEST_FIXTURE`
@@ -58,6 +74,13 @@ http://127.0.0.1:4174/systems-monitor/?view=summary
 9. **Reduced motion:** enable the operating-system reduced-motion preference.
    Confirm navigation updates almost immediately, breadcrumbs preserve history,
    and manual motion stepping retains all outcome meanings.
+10. **Hover preview:** without selecting a factor, hover it. Confirm its node,
+    label, and immediate visible links strengthen while the rest recedes.
+11. **Deep navigation:** select at least four successive factors. Confirm the
+    trail never becomes a long click history and contains only root, previous,
+    and current focus.
+12. **Explore/Trace boundary:** confirm Explore has no route controls, running
+    signal, outcome legend, or motion readout. Confirm those return in Trace.
 
 ## Taylor checklist
 
@@ -78,6 +101,10 @@ http://127.0.0.1:4174/systems-monitor/?view=summary
 15. Does the experience still feel like a flowchart or node editor?
 16. Is there visible text that does not earn its space?
 17. Does the interface feel more like navigating a living system?
+18. Are unrelated ghost nodes and paths completely absent from focused Explore?
+19. Does factor hover communicate "this is interactive" and preview its local
+    importance before committing to a click?
+20. Is the short navigation trail clearer than the rejected accumulated path?
 
 Taylor must record PASS or corrections. This R&D record does not approve Motion
 QA, factual relationships, Gate B, Phase 5, public activation, or deployment.

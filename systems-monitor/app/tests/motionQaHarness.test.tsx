@@ -18,6 +18,8 @@ async function renderReducedHarness() {
 }
 
 function stepPath(pathName: string, steps: number) {
+  const trace = screen.getByRole("button", { name: "Trace" });
+  if (trace.getAttribute("aria-pressed") !== "true") fireEvent.click(trace);
   fireEvent.click(screen.getByRole("button", { name: pathName }));
   const step = screen.getByRole("button", { name: "Step forward" });
   for (let index = 0; index < steps; index += 1) fireEvent.click(step);
@@ -71,7 +73,9 @@ describe("development-only structural Motion QA harness", () => {
     expect(screen.getByRole("img", { name: /Synthetic structural pressure surface/ })).toBeTruthy();
     expect(screen.getByRole("button", { name: /Commercial Crude Supply.*Enter this system/ })).toBeTruthy();
     expect(document.querySelector('[data-structural-renderer="canvas-rd"]')).toBeTruthy();
-    expect(screen.getByRole("button", { name: "Pause" })).toBeTruthy();
+    expect(screen.getByRole("button", { name: "Explore" }).getAttribute("aria-pressed")).toBe("true");
+    expect(screen.getByText("Hover to preview. Select to enter.")).toBeTruthy();
+    expect(screen.queryByRole("button", { name: "Play" })).toBeNull();
     expect(screen.getAllByText(/TEST_FIXTURE/).length).toBeGreaterThan(0);
     expect(document.body.textContent).not.toContain("ACCEPTED structural relationship");
   });
@@ -79,6 +83,7 @@ describe("development-only structural Motion QA harness", () => {
   it("accepts rapid path changes without replaying stale selection state", async () => {
     render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
     await screen.findByRole("heading", { name: /See the system\.\s*Follow the pressure\./ });
+    fireEvent.click(screen.getByRole("button", { name: "Trace" }));
     const blocked = screen.getByRole("button", { name: "Blocked route" });
     const absorbed = screen.getByRole("button", { name: "Absorbed route" });
     fireEvent.click(blocked);
@@ -115,10 +120,10 @@ describe("development-only structural Motion QA harness", () => {
 
   it("disables causal autoplay when reduced motion is requested", async () => {
     await renderReducedHarness();
-    expect(screen.getByText("Reduced motion · manual steps")).toBeTruthy();
-    expect((screen.getByRole("button", { name: "Play" }) as HTMLButtonElement).disabled).toBe(true);
     fireEvent.click(screen.getByRole("button", { name: /Petroleum Refining.*Enter this system/ }));
     expect(document.querySelector('.sm-viz-surface')?.getAttribute("data-focus-depth")).toBe("1");
+    fireEvent.click(screen.getByRole("button", { name: "Trace" }));
+    expect(screen.getByText("Reduced motion · manual steps")).toBeTruthy();
     expect((screen.getByRole("button", { name: "Play" }) as HTMLButtonElement).disabled).toBe(true);
     fireEvent.click(screen.getByRole("button", { name: "Step forward" }));
     expect(screen.getByText(/step 1 of 7/i)).toBeTruthy();
@@ -192,6 +197,7 @@ describe("development-only structural Motion QA harness", () => {
 
   it("preserves explicit directional affordances independent of graph layout", async () => {
     await renderReducedHarness();
+    fireEvent.click(screen.getByRole("button", { name: "Trace" }));
     fireEvent.click(screen.getByRole("button", { name: "Step forward" }));
     const current = document.querySelector(".sm-motion-signal.is-current");
     expect(document.querySelector('[data-structural-renderer="canvas-rd"]')).toBeTruthy();
@@ -219,6 +225,7 @@ describe("development-only structural Motion QA harness", () => {
 
   it("suppresses explanatory helpers in label-independent QA without breaking controls", async () => {
     await renderReducedHarness();
+    fireEvent.click(screen.getByRole("button", { name: "Trace" }));
     const toggle = screen.getByRole("button", { name: "Hide explanation" });
     fireEvent.click(toggle);
     expect(toggle.getAttribute("aria-pressed")).toBe("true");
@@ -254,6 +261,32 @@ describe("development-only structural Motion QA harness", () => {
     expect(trace.getAttribute("aria-pressed")).toBe("true");
     expect(document.querySelector('.sm-viz-surface')?.getAttribute("data-trace-mode")).toBe("true");
     expect(Number(document.querySelector('.sm-viz-surface')?.getAttribute("data-visible-relationship-count"))).toBeLessThanOrEqual(MAX_VISIBLE_RELATIONSHIPS);
+  });
+
+  it("keeps Explore static and separates synthetic motion controls into Trace", async () => {
+    await renderReducedHarness();
+    expect(document.querySelectorAll(".sm-motion-current-signal")).toHaveLength(0);
+    expect(document.querySelector(".sm-motion-origin-token")).toBeNull();
+    expect(document.querySelector(".sm-viz-readout")).toBeNull();
+    expect(screen.queryByRole("button", { name: "Step forward" })).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "Trace" }));
+    expect(screen.getByRole("button", { name: "Step forward" })).toBeTruthy();
+    expect(screen.getByText("Follow one synthetic route.")).toBeTruthy();
+  });
+
+  it("previews a factor on hover and focus without selecting it", async () => {
+    await renderReducedHarness();
+    const node = screen.getByRole("button", { name: /Petroleum Refining.*Enter this system/ });
+    fireEvent.pointerEnter(node);
+    expect(document.querySelector(".sm-viz-surface")?.getAttribute("data-hovered-node-id")).toBe("fixture-producer");
+    expect(node.getAttribute("data-hovered")).toBe("true");
+    expect(node.getAttribute("aria-pressed")).toBe("false");
+    fireEvent.pointerLeave(node);
+    expect(document.querySelector(".sm-viz-surface")?.getAttribute("data-hovered-node-id")).toBe("");
+    fireEvent.focus(node);
+    expect(node.getAttribute("data-hovered")).toBe("true");
+    fireEvent.blur(node);
+    expect(node.getAttribute("data-hovered")).toBe("false");
   });
 
   it("keeps route geometry and camera focus anchored to read-model coordinates", () => {
@@ -340,6 +373,8 @@ describe("development-only structural Motion QA harness", () => {
     fireEvent.click(screen.getByRole("button", { name: /Industrial Utilities.*Enter this system/ }));
     const trail = screen.getByRole("navigation", { name: "Structural exploration history" });
     expect(trail.querySelector('[aria-current="location"]')?.textContent).toBe("Utilities");
+    expect(trail.querySelectorAll("button")).toHaveLength(3);
+    expect(trail.textContent).not.toContain("Refining");
     expect(screen.getAllByRole("complementary", { name: "Selected synthetic node inspector" })).toHaveLength(1);
     expect(document.querySelector('[data-motion-node-id="fixture-branch-a"]')?.getAttribute("aria-pressed")).toBe("true");
   });

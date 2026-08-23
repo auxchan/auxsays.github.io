@@ -1,5 +1,20 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-23 — Structural Surface focused-Explore correction
+
+- Recorded Taylor's rejection of the prior visually convoluted focused
+  composition; Human spatial-renderer QA and Motion QA remain PENDING.
+- Made Explore a static navigation surface and moved all synthetic route,
+  playback, live-status, legend, and causal-motion behavior into Trace.
+- Removed unrelated ghost geometry from focused rendering and kept only the
+  deterministic governed visible relationship set.
+- Limited navigation context to root, previous focus, and current focus instead
+  of accumulating a long click-history breadcrumb.
+- Added coordinated pointer/keyboard factor preview: the hovered factor and its
+  immediate visible relationships strengthen while surrounding context recedes.
+- No calculation, propagation semantic, fixture topology, factual/BEA work,
+  Gate-B evidence, Phase-5 work, public activation, or deployment changed.
+
 ## 2026-08-23 — Structural Surface R&D Round 2 spatial navigation
 
 - Added deterministic overview-to-neighborhood-to-neighborhood exploration with
