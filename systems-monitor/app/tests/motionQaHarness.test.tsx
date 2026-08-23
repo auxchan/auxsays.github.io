@@ -234,4 +234,51 @@ describe("development-only structural Motion QA harness", () => {
       expect(document.querySelector(`[data-motion-terminal="${terminal}"]`)).toBeTruthy();
     }
   });
+
+  it("keeps route positioning on outer groups and animation transforms on inner markers", async () => {
+    await renderReducedHarness();
+
+    const cases = [
+      ["Absorbed route", 3, '[data-motion-terminal="ABSORBED"]', ".sm-motion-outcome-marker.is-absorbed"],
+      ["Primary cascade", 2, '.sm-motion-marker-position[data-motion-component="absorbed"]', ".sm-motion-outcome-marker.is-partially-absorbed"],
+      ["Branch + reconvergence", 3, '.sm-motion-marker-position[data-motion-strength="stronger"]', ".sm-motion-outcome-marker.is-amplified"]
+    ] as const;
+
+    for (const [pathName, steps, outerSelector, innerSelector] of cases) {
+      stepPath(pathName, steps);
+      const outer = document.querySelector(outerSelector);
+      const inner = outer?.querySelector(innerSelector);
+      expect(outer?.getAttribute("data-position-owner")).toBe("outer");
+      expect(outer?.getAttribute("transform")).toMatch(/^translate\(.+\) rotate\(.+\)$/);
+      expect(inner?.getAttribute("data-animation-owner")).toBe("inner");
+      expect(inner?.hasAttribute("transform")).toBe(false);
+    }
+  });
+
+  it("anchors origin and reconciliation animation inside their governed node coordinates", async () => {
+    await renderReducedHarness();
+    stepPath("Branch + reconvergence", 3);
+    const originPosition = document.querySelector(".sm-motion-origin-position");
+    expect(originPosition?.getAttribute("transform")).toBe("translate(75 310)");
+    expect(originPosition?.getAttribute("data-position-owner")).toBe("outer");
+    expect(originPosition?.querySelector(".sm-motion-origin-token")?.getAttribute("data-animation-owner")).toBe("inner");
+
+    fireEvent.click(screen.getByRole("button", { name: "Step forward" }));
+    const reconciliationPosition = document.querySelector(".sm-motion-reconciliation-position");
+    expect(reconciliationPosition?.getAttribute("transform")).toBe("translate(675 310)");
+    expect(reconciliationPosition?.getAttribute("data-position-owner")).toBe("outer");
+    expect(reconciliationPosition?.querySelector(".sm-motion-reconciliation")?.getAttribute("data-animation-owner")).toBe("inner");
+  });
+
+  it("uses more visible path arrows and local terminal direction chevrons", async () => {
+    await renderReducedHarness();
+    const topologyArrow = document.querySelector("#sm-motion-arrow");
+    const activeArrow = document.querySelector("#sm-motion-arrow-active");
+    expect(Number(topologyArrow?.getAttribute("markerWidth"))).toBeGreaterThanOrEqual(9);
+    expect(Number(activeArrow?.getAttribute("markerWidth"))).toBeGreaterThan(Number(topologyArrow?.getAttribute("markerWidth")));
+    expect(document.querySelectorAll('.sm-motion-topology-edge[marker-end="url(#sm-motion-arrow)"]')).toHaveLength(12);
+
+    stepPath("Blocked route", 2);
+    expect(document.querySelector('[data-motion-terminal="BLOCKED"] .sm-motion-terminal-chevron')).toBeTruthy();
+  });
 });

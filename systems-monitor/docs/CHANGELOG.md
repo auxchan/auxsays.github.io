@@ -1,5 +1,18 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-23 — Motion QA Round-3 SVG marker-positioning microfix
+
+- Separated SVG transform ownership so outer groups retain route/node
+  translation and rotation while nested marker artwork owns visual animation.
+- Corrected absorbed, partial-absorption, amplified, persistent-origin, and
+  reconciliation graphics to remain attached to their governed coordinates.
+- Increased arrowhead visibility and added restrained local direction chevrons
+  for terminal signals without changing topology or outcome semantics.
+- Added focused regression coverage for transform ownership, route coordinates,
+  origin/reconciliation anchors, and directional affordances.
+- `HUMAN_PHASE4_MOTION_QA` remains PENDING. No BEA retrieval, factual data,
+  Gate-B evidence, Phase-5 work, public activation, or deployment occurred.
+
 ## 2026-08-22 — Motion QA Round-2 semantic correction
 
 - Corrected blocked and fully absorbed signals to terminate before inactive

@@ -47,6 +47,24 @@ Node state and the contextual inspector now use interaction-only motion states,
 not factual economic state. The inspector occupies a reserved rail beside the
 network on wide screens and a connected region below it on narrower screens.
 
+## Round-3 SVG marker-positioning microfix
+
+Round-3 keeps the approved Round-2 state machine unchanged and corrects only
+SVG transform ownership:
+
+- outer SVG groups exclusively own route/node translation and edge rotation;
+- nested marker groups exclusively own scale, contraction, expansion, recoil,
+  pulse, and opacity animation;
+- absorbed, partial-absorption, amplified, origin, and reconciliation graphics
+  therefore retain their governed spatial coordinates during animation;
+- blocked, absorbed, and unresolved terminal treatments include a small local
+  direction chevron without implying arrival at the destination;
+- topology and active arrowheads are slightly larger and higher contrast while
+  remaining subordinate to the analytical graph.
+
+No motion-state meaning, inspector behavior, graph topology, fixture scenario,
+factual data, or approval state changed.
+
 ## Evidence isolation
 
 - The fixture is stored at
@@ -152,6 +170,22 @@ MOTION QA — SYNTHETIC TEST DATA
 12. Can I understand the core outcome with explanatory copy hidden?
 13. Does reduced-motion preserve the same meaning?
 14. Does the system still feel restrained and analytical?
+
+## Human Motion QA Round-3 checklist
+
+Use **Hide explanation** and answer only these six questions:
+
+1. Can blocked and absorbed be distinguished immediately with explanations
+   hidden?
+2. Does partial absorption visibly show where the missing portion was absorbed?
+3. Does amplified visibly strengthen at the correct spatial point?
+4. Does one persistent origin remain visually attached to the true origin
+   through split?
+5. Does reconciliation occur visually at the true shared target?
+6. Is direction obvious enough on curved and terminal paths without relying on
+   layout?
+
+Do not reopen inspector or rapid-switching review unless a regression appears.
 
 Taylor must record PASS or corrections. This file does not close Gate B,
 authorize Phase 5, or authorize public activation or deployment.

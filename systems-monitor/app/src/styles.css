@@ -504,8 +504,8 @@
 [data-aux-product="systems-monitor"] .sm-motion-stage__header span { color: var(--aux-sm-text-muted); font-size: .64rem; letter-spacing: .09em; text-transform: uppercase; }
 [data-aux-product="systems-monitor"] .sm-motion-stage__header strong { color: var(--aux-sm-ink); font-size: .8rem; }
 [data-aux-product="systems-monitor"] .sm-motion-network { display: block; width: 100%; height: auto; min-height: 32rem; }
-[data-aux-product="systems-monitor"] .sm-motion-arrow path { fill: #6a8793; }
-[data-aux-product="systems-monitor"] .sm-motion-arrow.is-active path { fill: var(--aux-sm-accent); }
+[data-aux-product="systems-monitor"] .sm-motion-arrow path { fill: #8aa6b1; stroke: #07131c; stroke-width: .45; }
+[data-aux-product="systems-monitor"] .sm-motion-arrow.is-active path { fill: #9af0dc; stroke: #17322f; stroke-width: .35; }
 [data-aux-product="systems-monitor"] .sm-motion-topology-edge { fill: none; stroke: #46606d; stroke-width: 2; opacity: .2; transition: opacity 180ms ease-out, stroke-width 180ms ease-out; vector-effect: non-scaling-stroke; }
 [data-aux-product="systems-monitor"] .sm-motion-topology-edge.is-path { opacity: .42; }
 [data-aux-product="systems-monitor"] .sm-motion-topology-edge.is-complete { stroke: #6f9b95; stroke-width: 3; opacity: .72; }
@@ -523,7 +523,13 @@
 [data-aux-product="systems-monitor"] .sm-motion-signal.is-blocked { stroke: #e87e77; stroke-width: 5; animation: aux-sm-motion-blocked 620ms ease-out both; }
 [data-aux-product="systems-monitor"] .sm-motion-signal.is-absorbed { stroke: #a1afb4; stroke-width: 5; animation: aux-sm-motion-absorbed 680ms ease-in both; }
 [data-aux-product="systems-monitor"] .sm-motion-signal.is-unknown { stroke: #81939d; stroke-width: 3; animation: aux-sm-motion-unknown 620ms ease-out both; }
+[data-aux-product="systems-monitor"] .sm-motion-marker-position,
+[data-aux-product="systems-monitor"] .sm-motion-origin-position,
+[data-aux-product="systems-monitor"] .sm-motion-reconciliation-position { pointer-events: none; }
 [data-aux-product="systems-monitor"] .sm-motion-outcome-marker { pointer-events: none; }
+[data-aux-product="systems-monitor"] .sm-motion-outcome-marker,
+[data-aux-product="systems-monitor"] .sm-motion-origin-token,
+[data-aux-product="systems-monitor"] .sm-motion-reconciliation { transform-box: fill-box; transform-origin: center; }
 [data-aux-product="systems-monitor"] .sm-motion-outcome-marker line,
 [data-aux-product="systems-monitor"] .sm-motion-outcome-marker path,
 [data-aux-product="systems-monitor"] .sm-motion-outcome-marker circle { fill: none; stroke: currentColor; stroke-width: 3; vector-effect: non-scaling-stroke; }
@@ -540,6 +546,7 @@
 [data-aux-product="systems-monitor"] .sm-motion-outcome-marker.is-delayed circle { fill: #e2ae58; }
 [data-aux-product="systems-monitor"] .sm-motion-outcome-marker.is-amplified { color: #f0c36e; animation: aux-sm-motion-amplifier 680ms ease-out both; }
 [data-aux-product="systems-monitor"] .sm-motion-outcome-marker.is-unknown { color: #81939d; }
+[data-aux-product="systems-monitor"] .sm-motion-terminal-chevron { fill: none; stroke-width: 3.5; }
 [data-aux-product="systems-monitor"] .sm-motion-nodes > g { cursor: pointer; outline: none; transition: opacity 180ms ease-out, transform 220ms ease-out; }
 [data-aux-product="systems-monitor"] .sm-motion-nodes > g > circle:first-child { fill: #0c1b26; stroke: #476371; stroke-width: 2; vector-effect: non-scaling-stroke; }
 [data-aux-product="systems-monitor"] .sm-motion-node-core { fill: #66818c; stroke: #071019; stroke-width: 4; vector-effect: non-scaling-stroke; }
