@@ -88,6 +88,28 @@ Human review should confirm:
 4. selection feels like a purposeful close-up rather than a disappearing filter;
 5. the portrait helps explain the factor without overwhelming the short copy.
 
+## Taylor follow-up — blended real-world context
+
+Taylor approved using appropriately licensed real-world imagery for selected
+factor closeups provided it does not read as an out-of-place stock-photo card.
+The petroleum-refining, product-distribution, and freight-transportation guides
+now use reviewed public-domain or CC0 images as subdued environmental
+backplates. A site-matched cyan/indigo grade, lowered saturation and brightness,
+strong radial edge fade, grid/texture overlays, and the existing factor symbol
+keep each image inside the established visual system.
+
+The original source and rights credit remain one concise link below the guide.
+Images are available only from an exact loopback-development allowlist and are
+not bundled into production. They illustrate the factor category; they are not
+evidence for the synthetic relationships.
+
+Human review should additionally confirm:
+
+1. imagery feels integrated with the site rather than pasted into a rectangle;
+2. the factor icon and title remain visually primary;
+3. the subject remains recognizable through the grade and edge fade; and
+4. the credit is reachable without adding clutter to the main explanation.
+
 ## Safety boundary
 
 - Fixture class: `TEST_FIXTURE`

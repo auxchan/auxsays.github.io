@@ -113,8 +113,12 @@
 [data-aux-product="systems-monitor"] .sm-node-guide__portrait { position: relative; display: grid; height: 10.5rem; margin: 1.1rem 0 1.35rem; overflow: hidden; place-items: center; border: 1px solid color-mix(in srgb, var(--guide-accent) 28%, transparent); border-radius: 1.2rem; background: radial-gradient(circle at 50% 44%, color-mix(in srgb, var(--guide-accent) 19%, transparent), transparent 38%), linear-gradient(145deg, color-mix(in srgb, var(--guide-fill) 92%, #0d2832 8%), rgba(2, 12, 19, .94)); box-shadow: inset 0 1px rgba(255,255,255,.04), 0 18px 44px rgba(0,0,0,.24); isolation: isolate; }
 [data-aux-product="systems-monitor"] .sm-node-guide__portrait::before,
 [data-aux-product="systems-monitor"] .sm-node-guide__portrait::after { position: absolute; content: ""; pointer-events: none; }
-[data-aux-product="systems-monitor"] .sm-node-guide__portrait::before { inset: 0; background-image: linear-gradient(color-mix(in srgb, var(--guide-accent) 8%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--guide-accent) 8%, transparent) 1px, transparent 1px); background-size: 1.7rem 1.7rem; mask-image: linear-gradient(to bottom, rgba(0,0,0,.8), transparent 82%); }
-[data-aux-product="systems-monitor"] .sm-node-guide__portrait::after { inset: 1.3rem; border: 1px solid color-mix(in srgb, var(--guide-accent) 16%, transparent); opacity: .34; }
+[data-aux-product="systems-monitor"] .sm-node-guide__portrait::before { z-index: 1; inset: 0; background-image: radial-gradient(ellipse at 50% 42%, transparent 22%, rgba(1, 10, 17, .22) 60%, rgba(1, 9, 15, .88) 100%), linear-gradient(155deg, color-mix(in srgb, var(--guide-accent) 18%, transparent), rgba(13, 25, 61, .38) 54%, rgba(2, 12, 19, .68)), linear-gradient(color-mix(in srgb, var(--guide-accent) 8%, transparent) 1px, transparent 1px), linear-gradient(90deg, color-mix(in srgb, var(--guide-accent) 8%, transparent) 1px, transparent 1px); background-size: auto, auto, 1.7rem 1.7rem, 1.7rem 1.7rem; }
+[data-aux-product="systems-monitor"] .sm-node-guide__portrait::after { z-index: 1; inset: 1.3rem; border: 1px solid color-mix(in srgb, var(--guide-accent) 16%, transparent); opacity: .34; }
+[data-aux-product="systems-monitor"] .sm-node-guide__photo { position: absolute; z-index: 0; inset: -7%; background-image: var(--guide-photo); background-position: 50% 50%; background-size: cover; filter: grayscale(.42) sepia(.16) hue-rotate(130deg) saturate(.78) contrast(1.2) brightness(.62); opacity: .62; transform: scale(1.04); -webkit-mask-image: radial-gradient(ellipse at 50% 44%, #000 24%, rgba(0,0,0,.92) 53%, rgba(0,0,0,.48) 73%, transparent 96%); mask-image: radial-gradient(ellipse at 50% 44%, #000 24%, rgba(0,0,0,.92) 53%, rgba(0,0,0,.48) 73%, transparent 96%); animation: aux-sm-photo-drift 16s ease-in-out infinite alternate; pointer-events: none; }
+[data-aux-product="systems-monitor"] [data-factor-portrait="refinery"] .sm-node-guide__photo { background-position: 50% 58%; }
+[data-aux-product="systems-monitor"] [data-factor-portrait="freight"] .sm-node-guide__photo { background-position: 52% 52%; }
+[data-aux-product="systems-monitor"] [data-factor-portrait="split"] .sm-node-guide__photo { background-position: 50% 47%; }
 [data-aux-product="systems-monitor"] [data-factor-portrait="drop"]::after { inset: 1rem 2.3rem; border-radius: 48% 52% 55% 45%; background: radial-gradient(ellipse at 50% 78%, transparent 30%, color-mix(in srgb, var(--guide-accent) 26%, transparent) 31% 32%, transparent 33% 47%, color-mix(in srgb, var(--guide-accent) 18%, transparent) 48% 49%, transparent 50%); transform: rotate(-8deg); }
 [data-aux-product="systems-monitor"] [data-factor-portrait="refinery"]::after,
 [data-aux-product="systems-monitor"] [data-factor-portrait="factory"]::after { inset: 2rem 1.2rem 1.2rem 52%; border: 0; border-bottom: 1px solid color-mix(in srgb, var(--guide-accent) 42%, transparent); background: repeating-linear-gradient(90deg, color-mix(in srgb, var(--guide-accent) 24%, transparent) 0 .22rem, transparent .22rem 1.35rem); clip-path: polygon(0 100%,0 45%,20% 45%,20% 15%,34% 15%,34% 68%,52% 68%,52% 32%,70% 32%,70% 0,84% 0,84% 55%,100% 55%,100% 100%); }
@@ -125,12 +129,12 @@
 [data-aux-product="systems-monitor"] [data-factor-portrait="freight"]::after { inset: 1.1rem -1rem; border: 0; background: repeating-linear-gradient(-18deg, transparent 0 1.1rem, color-mix(in srgb, var(--guide-accent) 24%, transparent) 1.15rem 1.24rem, transparent 1.3rem 2.3rem); transform: translateX(12%) skewX(-14deg); }
 [data-aux-product="systems-monitor"] [data-factor-portrait="people"]::after { inset: .9rem 1.4rem; border: 0; background: radial-gradient(circle at 18% 25%, color-mix(in srgb, var(--guide-accent) 34%, transparent) 0 .22rem, transparent .25rem), radial-gradient(circle at 80% 24%, color-mix(in srgb, var(--guide-accent) 34%, transparent) 0 .22rem, transparent .25rem), radial-gradient(circle at 12% 76%, color-mix(in srgb, var(--guide-accent) 28%, transparent) 0 .18rem, transparent .21rem), radial-gradient(circle at 86% 72%, color-mix(in srgb, var(--guide-accent) 28%, transparent) 0 .18rem, transparent .21rem); }
 [data-aux-product="systems-monitor"] [data-factor-portrait="system"]::after { inset: 1.1rem 2.2rem; border-radius: 50%; background: linear-gradient(transparent 49.5%, color-mix(in srgb, var(--guide-accent) 28%, transparent) 50% 50.8%, transparent 51%), linear-gradient(90deg, transparent 49.5%, color-mix(in srgb, var(--guide-accent) 28%, transparent) 50% 50.8%, transparent 51%); }
-[data-aux-product="systems-monitor"] .sm-node-guide__orbit { position: absolute; border: 1px solid color-mix(in srgb, var(--guide-accent) 30%, transparent); border-radius: 50%; box-shadow: 0 0 25px color-mix(in srgb, var(--guide-accent) 10%, transparent); }
+[data-aux-product="systems-monitor"] .sm-node-guide__orbit { position: absolute; z-index: 2; border: 1px solid color-mix(in srgb, var(--guide-accent) 38%, transparent); border-radius: 50%; box-shadow: 0 0 25px color-mix(in srgb, var(--guide-accent) 14%, transparent); }
 [data-aux-product="systems-monitor"] .sm-node-guide__orbit--outer { width: 8rem; height: 8rem; animation: aux-sm-factor-orbit 12s linear infinite; }
 [data-aux-product="systems-monitor"] .sm-node-guide__orbit--inner { width: 5.9rem; height: 5.9rem; border-style: dashed; animation: aux-sm-factor-orbit 8s linear reverse infinite; }
-[data-aux-product="systems-monitor"] .sm-node-guide__portrait-symbol { position: relative; z-index: 2; display: grid; width: 5rem; height: 5rem; place-items: center; border: 1px solid color-mix(in srgb, var(--guide-accent) 72%, white 8%); border-radius: 1.45rem; background: var(--guide-fill); color: var(--guide-accent); box-shadow: inset 0 1px rgba(255,255,255,.08), 0 0 42px color-mix(in srgb, var(--guide-accent) 30%, transparent); }
+[data-aux-product="systems-monitor"] .sm-node-guide__portrait-symbol { position: relative; z-index: 3; display: grid; width: 5rem; height: 5rem; place-items: center; border: 1px solid color-mix(in srgb, var(--guide-accent) 76%, white 8%); border-radius: 1.45rem; background: color-mix(in srgb, var(--guide-fill) 92%, rgba(2,12,19,.94)); color: var(--guide-accent); box-shadow: inset 0 1px rgba(255,255,255,.1), 0 0 42px color-mix(in srgb, var(--guide-accent) 34%, transparent), 0 12px 32px rgba(0,0,0,.38); backdrop-filter: blur(5px); }
 [data-aux-product="systems-monitor"] .sm-node-guide__portrait-symbol svg { width: 2.7rem; height: 2.7rem; }
-[data-aux-product="systems-monitor"] .sm-node-guide__portrait-label { position: absolute; z-index: 2; right: .8rem; bottom: .72rem; display: grid; justify-items: end; }
+[data-aux-product="systems-monitor"] .sm-node-guide__portrait-label { position: absolute; z-index: 4; right: .8rem; bottom: .72rem; display: grid; justify-items: end; text-shadow: 0 2px 10px rgba(0,0,0,.9); }
 [data-aux-product="systems-monitor"] .sm-node-guide__portrait-label small { color: #71919a; font-size: .61rem; font-weight: 780; letter-spacing: .08em; text-transform: uppercase; }
 [data-aux-product="systems-monitor"] .sm-node-guide__portrait-label strong { margin-top: .16rem; color: #d8ebe7; font-size: .76rem; }
 [data-aux-product="systems-monitor"] .sm-node-guide__definition { margin: 1.25rem 0; color: #d3e2df; font-size: 1rem; font-weight: 580; line-height: 1.55; }
@@ -146,11 +150,15 @@
 [data-aux-product="systems-monitor"] .sm-node-guide__connections li > span { color: var(--guide-accent); font-size: .61rem; font-weight: 780; letter-spacing: .08em; text-transform: uppercase; }
 [data-aux-product="systems-monitor"] .sm-node-guide__connections strong { color: #e0ece9; font-size: .92rem; }
 [data-aux-product="systems-monitor"] .sm-node-guide__connections p { margin: 0; color: #97adb1; font-size: .84rem; line-height: 1.52; }
-[data-aux-product="systems-monitor"] .sm-node-guide footer { margin-top: 1.25rem; color: #6a858e; font-size: .64rem; }
+[data-aux-product="systems-monitor"] .sm-node-guide footer { display: grid; gap: .38rem; margin-top: 1.25rem; color: #6a858e; font-size: .64rem; line-height: 1.45; }
+[data-aux-product="systems-monitor"] .sm-node-guide footer a { width: fit-content; color: color-mix(in srgb, var(--guide-accent) 68%, #8ca4aa); text-decoration: none; }
+[data-aux-product="systems-monitor"] .sm-node-guide footer a:hover,
+[data-aux-product="systems-monitor"] .sm-node-guide footer a:focus-visible { color: #dffaf4; text-decoration: underline; outline: none; }
 
 [data-aux-product="systems-monitor"] .sm-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 @keyframes aux-sm-node-guide-content { from { opacity: 0; transform: translateX(-.75rem); } to { opacity: 1; transform: translateX(0); } }
 @keyframes aux-sm-factor-orbit { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@keyframes aux-sm-photo-drift { from { transform: scale(1.04) translate3d(-.5%, -.35%, 0); } to { transform: scale(1.1) translate3d(.7%, .45%, 0); } }
 
 @media (max-width: 1080px) {
   [data-aux-product="systems-monitor"] .sm-motion-page-header--renderer { grid-template-columns: 1fr; }
@@ -186,4 +194,5 @@
   [data-aux-product="systems-monitor"] .sm-node-guide,
   [data-aux-product="systems-monitor"] .sm-node-guide__inner { transition: none; animation: none; }
   [data-aux-product="systems-monitor"] .sm-node-guide__orbit { animation: none; }
+  [data-aux-product="systems-monitor"] .sm-node-guide__photo { animation: none; }
 }

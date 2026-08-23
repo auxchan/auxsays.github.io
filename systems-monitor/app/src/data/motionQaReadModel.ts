@@ -11,6 +11,13 @@ export interface MotionQaNode {
   currentState: string;
   derivationRef: string;
   insight: { definition: string; tracks: string; impact: string };
+  portrait?: {
+    imageUrl: string;
+    alt: string;
+    sourcePage: string;
+    license: "PUBLIC_DOMAIN" | "CC0_1_0";
+    credit: string;
+  };
   x: number;
   y: number;
 }
@@ -72,6 +79,18 @@ function array(value: unknown, label: string): unknown[] {
   return value;
 }
 
+function portrait(value: unknown): MotionQaNode["portrait"] {
+  if (value === undefined) return undefined;
+  const candidate = object(value, "node.portrait");
+  const imageUrl = string(candidate.imageUrl, "node.portrait.imageUrl");
+  const sourcePage = string(candidate.sourcePage, "node.portrait.sourcePage");
+  const license = string(candidate.license, "node.portrait.license");
+  if (!/^\/systems-monitor\/__local-review\/media\/[a-z0-9-]+\.jpg$/.test(imageUrl)) throw new Error("Motion QA portraits must use an approved local-review image");
+  if (!sourcePage.startsWith("https://commons.wikimedia.org/wiki/File:")) throw new Error("Motion QA portrait source must be an exact Wikimedia Commons file page");
+  if (license !== "PUBLIC_DOMAIN" && license !== "CC0_1_0") throw new Error("Motion QA portrait license must be public domain or CC0");
+  return { imageUrl, alt: string(candidate.alt, "node.portrait.alt"), sourcePage, license, credit: string(candidate.credit, "node.portrait.credit") };
+}
+
 export function validateMotionQaReadModel(value: unknown): MotionQaReadModel {
   const model = object(value, "Motion QA read model");
   if (model.schemaVersion !== "phase4-motion-qa-read-model-1.0.0" || model.publicationClass !== "fixture" || model.fixtureType !== "TEST_FIXTURE") throw new Error("Motion QA must remain an explicit TEST_FIXTURE");
@@ -86,7 +105,7 @@ export function validateMotionQaReadModel(value: unknown): MotionQaReadModel {
     const displayRank = Number(node.displayRank);
     if (!Number.isInteger(displayRank) || displayRank < 1) throw new Error("Motion QA node displayRank must be a positive integer");
     const insight = object(node.insight, "node.insight");
-    return { id: string(node.id, "node.id"), label: string(node.label, "node.label"), overviewLabel: string(node.overviewLabel, "node.overviewLabel"), detailLabel: string(node.detailLabel, "node.detailLabel"), kind: string(node.kind, "node.kind"), displayRank, currentState: string(node.currentState, "node.currentState"), derivationRef: string(node.derivationRef, "node.derivationRef"), insight: { definition: string(insight.definition, "node.insight.definition"), tracks: string(insight.tracks, "node.insight.tracks"), impact: string(insight.impact, "node.insight.impact") }, x, y };
+    return { id: string(node.id, "node.id"), label: string(node.label, "node.label"), overviewLabel: string(node.overviewLabel, "node.overviewLabel"), detailLabel: string(node.detailLabel, "node.detailLabel"), kind: string(node.kind, "node.kind"), displayRank, currentState: string(node.currentState, "node.currentState"), derivationRef: string(node.derivationRef, "node.derivationRef"), insight: { definition: string(insight.definition, "node.insight.definition"), tracks: string(insight.tracks, "node.insight.tracks"), impact: string(insight.impact, "node.insight.impact") }, portrait: portrait(node.portrait), x, y };
   });
   if (nodes.length < 6 || nodes.length > 10 || Number(coverage.nodeCount) !== nodes.length) throw new Error("Motion QA topology must contain 6–10 nodes");
   const nodeIds = new Set(nodes.map((node) => node.id));

@@ -1,5 +1,20 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-23 — Licensed factor-imagery treatment
+
+- Added three public-domain/CC0 environmental images for petroleum refining,
+  product distribution, and freight transportation inside the local-only
+  structural `TEST_FIXTURE` closeups.
+- Blended each image into the established visual language with a cyan/indigo
+  color grade, lowered brightness and saturation, strong edge fade, texture
+  overlays, and the existing factor symbol/rings retained above the image.
+- Added concise visible credit/source links and a repository attribution record;
+  the fixture validator rejects remote or unsafe image routes.
+- Served the three reviewed files from an exact loopback-only development allowlist rather than
+  production assets. They remain illustrative context, not relationship evidence.
+- Human spatial-renderer QA and Motion QA remain PENDING. Gate B, Phase 5, public
+  activation, and deployment remain unchanged.
+
 ## 2026-08-23 — Structural Surface educational close-up correction
 
 - Increased factor-guide typography across definitions, explanations, and direct

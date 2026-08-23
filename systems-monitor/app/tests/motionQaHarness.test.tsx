@@ -50,6 +50,9 @@ describe("development-only structural Motion QA harness", () => {
     expect(model.candidateEligibility).toBe("NEVER_ACCEPTED_NEVER_PUBLISHED");
     expect(model.nodes.map((node) => node.label)).toEqual(expect.arrayContaining(["Crude Supply", "Refining", "Storage", "Freight Network", "Employment"]));
     expect(model.nodes.map((node) => node.kind)).not.toEqual(expect.arrayContaining(["ORIGIN", "BRANCH", "RECONVERGENCE"]));
+    expect(model.nodes.find((node) => node.id === "fixture-producer")?.portrait).toMatchObject({ imageUrl: "/systems-monitor/__local-review/media/petroleum-refining-public-domain.jpg", license: "PUBLIC_DOMAIN" });
+    expect(model.nodes.find((node) => node.id === "fixture-junction")?.portrait).toMatchObject({ imageUrl: "/systems-monitor/__local-review/media/distribution-port-public-domain.jpg", license: "PUBLIC_DOMAIN" });
+    expect(model.nodes.find((node) => node.id === "fixture-transport")?.portrait).toMatchObject({ imageUrl: "/systems-monitor/__local-review/media/freight-intermodal-cc0.jpg", license: "CC0_1_0" });
   });
 
   it("rejects factual, accepted, or gate-changing fixture shapes", () => {
@@ -64,6 +67,12 @@ describe("development-only structural Motion QA harness", () => {
     const gateChange = structuredClone(motionFixture) as unknown as Record<string, unknown>;
     gateChange.gateBStatus = "PASS";
     expect(() => validateMotionQaReadModel(gateChange)).toThrow(/cannot change approval gates/);
+
+    const remotePortrait = structuredClone(motionFixture) as unknown as { nodes: Array<{ portrait?: { imageUrl: string } }> };
+    const portraitNode = remotePortrait.nodes.find((node) => node.portrait);
+    if (!portraitNode?.portrait) throw new Error("Expected fixture portrait");
+    portraitNode.portrait.imageUrl = "https://example.com/unreviewed-photo.jpg";
+    expect(() => validateMotionQaReadModel(remotePortrait)).toThrow(/approved local-review image/);
   });
 
   it("renders an unmistakable synthetic boundary and a controllable graph", async () => {
@@ -109,6 +118,18 @@ describe("development-only structural Motion QA harness", () => {
     expect(guide.textContent).not.toContain("fixture-derivation");
     fireEvent.keyDown(window, { key: "Escape" });
     expect(screen.queryByRole("complementary", { name: "Selected factor guide" })).toBeNull();
+  });
+
+  it("keeps licensed imagery subordinate to the factor symbol and exposes exact credit", async () => {
+    render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
+    await screen.findByRole("heading", { name: /See the system\.\s*Follow the pressure\./ });
+    fireEvent.click(screen.getByRole("button", { name: /Petroleum Refining.*Enter this system/ }));
+    const guide = screen.getByRole("complementary", { name: "Selected factor guide" });
+    expect(guide.querySelector('[data-factor-portrait="refinery"]')?.getAttribute("data-has-photo")).toBe("true");
+    expect(screen.getByRole("img", { name: /Dusk view of a petroleum refinery/ })).toBeTruthy();
+    expect(guide.querySelector(".sm-node-guide__portrait-symbol svg")).toBeTruthy();
+    const credit = screen.getByRole("link", { name: /Carol M\. Highsmith.*Public domain/ });
+    expect(credit.getAttribute("href")).toBe("https://commons.wikimedia.org/wiki/File:Industrial-720706_640.jpg");
   });
 
   it("preserves the three primary views without introducing a production navigation item", async () => {
