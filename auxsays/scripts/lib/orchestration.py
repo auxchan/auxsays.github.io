@@ -93,6 +93,15 @@ class OrchestrationState:
     receipts: dict[str, dict[str, Any]] = field(default_factory=dict)
     attempt_counts: dict[str, int] = field(default_factory=dict)
     node_events: list[dict[str, Any]] = field(default_factory=list)
+    # Durable discovery-dedup state. These exist because the collector's acceptance authority
+    # depends on them: ``seen_urls_by_patch`` is the per-record cross-METHOD canonical-URL dedup
+    # set, and ``accepted_url_owners`` is the run-wide canonical-URL -> patch-identity map that
+    # enforces cross-PATCH exclusivity. Held only in memory they would reset on resume, so a
+    # resumed run could process a URL twice or attach one report to two patches -- i.e. resumed
+    # execution would not be semantically identical to uninterrupted execution. Persisted as
+    # sorted lists / plain maps: deterministic, minimal, no transport internals.
+    seen_urls_by_patch: dict[str, list[str]] = field(default_factory=dict)
+    accepted_url_owners: dict[str, str] = field(default_factory=dict)
     terminal: str = ""                      # set to DONE / ERROR / BLOCKED when the run ends
     checkpoint_version: int = CHECKPOINT_VERSION
 

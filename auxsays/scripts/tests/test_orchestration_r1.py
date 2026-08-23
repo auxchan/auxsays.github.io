@@ -144,6 +144,12 @@ def make_pipeline(repo: Path, ckpt: Path, *, write: bool, primary: FakeMethod,
                   authorities: dict | None = None, writeback=None) -> orch.Pipeline:
     auth = authorities or {"promote": lambda: {"rc": 0}, "qa": lambda: {"rc": 0},
                            "audit": lambda: {"rc": 0}}
+    # A write-capable pipeline MUST be given a transactional writeback authority; the graph
+    # refuses to run otherwise (fixture L proves that). Fixtures inject a stand-in -- explicitly
+    # permitted -- so the write path is exercised without a real commit. Production binds the
+    # existing lib.automation_writeback authority instead.
+    if write and writeback is None:
+        writeback = lambda: {"outcome": "push_success_first_attempt", "pages_dispatched": True}  # noqa: E731
     return orch.Pipeline(
         repo, [PRODUCT], write=write, checkpoint_dir=ckpt,
         evidence_path=repo / "auxsays" / "_data" / "consensus_evidence.yml",
@@ -381,6 +387,158 @@ def run() -> int:  # noqa: PLR0915
                if ln.strip().startswith(("import ", "from "))
                and any(t in ln for t in ("langchain", "langgraph", "openai", "anthropic"))]
         check(f"K {module} imports no AI/provider packages", not bad, str(bad))
+
+    # ---- L. write mode without writeback/allow configuration -> BLOCKED, nothing mutated ----
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td)
+        repo = make_fixture_repo(tmp, [BUILD_A])
+        before = g(repo, "status", "--porcelain").stdout
+        before_tree = g(repo, "rev-parse", "HEAD^{tree}").stdout.strip()
+        primary = FakeMethod("learn_qna_search_rss", "microsoft_learn_qna",
+                             {BUILD_A: [report_candidate(BUILD_A)]})
+        fallback = FakeMethod("reddit_search", "reddit_community_report", {})
+        p = orch.Pipeline(
+            repo, [PRODUCT], write=True, checkpoint_dir=tmp / "ckpt",
+            evidence_path=repo / "auxsays" / "_data" / "consensus_evidence.yml",
+            health_path=repo / "auxsays" / "_data" / "evidence_method_health.yml",
+            generated_dir=repo / "auxsays" / "updates" / "generated",
+            methods={"learn_qna_search_rss": primary, "reddit_search": fallback},
+            authorities={"promote": lambda: {"rc": 0}, "qa": lambda: {"rc": 0},
+                         "audit": lambda: {"rc": 0}},
+            capability={"reddit_search": False},
+            allow_patterns=[],            # <- not configured
+            writeback=None,               # <- not configured
+            context=SimpleNamespace(write=True, since=None, max_pages=1, target_versions=None))
+        state = p.run()
+        check("L write mode with no writeback/allow terminates BLOCKED",
+              state.terminal == BLOCKED, f"{state.terminal} {state.failures}")
+        check("L the failure names both missing pieces",
+              any(f["reason"] == "write_mode_unconfigured"
+                  and "writeback_authority" in f["detail"] and "allow_patterns" in f["detail"]
+                  for f in state.failures), str(state.failures))
+        check("L it blocked BEFORE any discovery ran", primary.calls == 0, f"calls={primary.calls}")
+        check("L no mutating node executed",
+              not state.evidence_changes and not state.health_changes
+              and not state.promotion_changes, str(state.evidence_changes))
+        check("L working tree byte-identical (nothing mutated)",
+              g(repo, "status", "--porcelain").stdout == before
+              and g(repo, "rev-parse", "HEAD^{tree}").stdout.strip() == before_tree)
+        check("L evidence/health files were never created",
+              not (repo / "auxsays" / "_data" / "consensus_evidence.yml").exists()
+              and not (repo / "auxsays" / "_data" / "evidence_method_health.yml").exists())
+
+    # ---- M. reconciliation is scoped: unrelated product record untouched --------------------
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td)
+        repo = make_fixture_repo(tmp, [BUILD_A])
+        gen = repo / "auxsays" / "updates" / "generated"
+        # A deliberately MISMATCHED unrelated record: count 7 with zero evidence. An unscoped
+        # reconciliation would rewrite it to 0.
+        unrelated = gen / "2026-07-21-obs-studio-32-2-0.md"
+        unrelated.write_text("\n".join([
+            "---", "layout: aux-update", "update_entry: true", "product_id: obs-studio",
+            "update_version: '32.2.0'", "permalink: /updates/obs-project/obs-studio/32-2-0/",
+            "update_report_count: 7", "confirmed_patch_specific_report_count: 7",
+            "evidence_state: community_reported", "update_published_at: '2026-07-21T00:00:00Z'",
+            "update_status: current", "update_product: OBS Studio", "---", "", "body", "",
+        ]), encoding="utf-8")
+        unrelated_before = unrelated.read_bytes()
+        g(repo, "add", "-A"); g(repo, "commit", "-m", "unrelated mismatched record")
+        primary = FakeMethod("learn_qna_search_rss", "microsoft_learn_qna",
+                             {BUILD_A: [report_candidate(BUILD_A)]})
+        fallback = FakeMethod("reddit_search", "reddit_community_report", {})
+        p = make_pipeline(repo, tmp / "ckpt", write=True, primary=primary, fallback=fallback,
+                          writeback=lambda: {"outcome": "push_success_first_attempt"})
+        state = p.run()
+        check("M PowerPoint orchestration run completes DONE", state.terminal == DONE,
+              str(state.failures))
+        ppt_text = next(fp.read_text(encoding="utf-8") for fp in gen.glob("*.md")
+                        if BUILD_A.replace(".", "-") in fp.name)
+        check("M PowerPoint build A WAS reconciled to its own report",
+              "update_report_count: 1" in ppt_text)
+        check("M unrelated non-PowerPoint record is BYTE-IDENTICAL",
+              unrelated.read_bytes() == unrelated_before,
+              "an unscoped reconciliation rewrote a product this run never collected")
+        # and the authority's default (no scope) still walks everything, unchanged
+        from lib.report_counts import reconcile_record_counts as _rrc  # noqa: PLC0415
+        changed_all, _ = _rrc([], gen)
+        check("M authority default (product_ids=None) still reconciles ALL products",
+              changed_all >= 1 and "update_report_count: 0" in unrelated.read_text(encoding="utf-8"),
+              f"changed={changed_all}")
+
+    # ---- N. resume preserves URL dedup + cross-patch ownership ------------------------------
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td)
+        repo = make_fixture_repo(tmp, [BUILD_A, BUILD_B])
+        shared = URL + "-shared"
+        # Primary accepts the shared URL for build A. Fallback later offers the SAME url for A
+        # (must be deduped) and for B (must be refused as cross-patch duplicate).
+        primary = FakeMethod("learn_qna_search_rss", "microsoft_learn_qna",
+                             {BUILD_A: [report_candidate(BUILD_A, shared)]},
+                             status_override=None)
+        fallback = FakeMethod("reddit_search", "reddit_community_report",
+                              {BUILD_A: [report_candidate(BUILD_A, shared)],
+                               BUILD_B: [report_candidate(BUILD_B, shared)]})
+        crash = {"armed": True}
+
+        def finalize_crash_once():
+            if crash["armed"]:
+                crash["armed"] = False
+                raise RuntimeError("simulated crash after discovery, before finalize")
+            return {"rc": 0}
+
+        p = make_pipeline(repo, tmp / "ckpt", write=False, primary=primary, fallback=fallback,
+                          authorities={"promote": finalize_crash_once, "qa": lambda: {"rc": 0},
+                                       "audit": lambda: {"rc": 0}})
+        state1 = p.run()
+        check("N first run crashed after discovery", state1.terminal == ERROR)
+        check("N dedup state was CHECKPOINTED (not runtime-only)",
+              bool(state1.seen_urls_by_patch) and bool(state1.accepted_url_owners),
+              f"seen={state1.seen_urls_by_patch} owners={state1.accepted_url_owners}")
+        key_a = "|".join(pi.patch_key(PRODUCT, VERSION, BUILD_A))
+        check("N run-wide ownership recorded build A as the URL owner",
+              key_a in set(state1.accepted_url_owners.values()),
+              str(state1.accepted_url_owners))
+        # fresh Pipeline object -> proves restoration comes from the checkpoint, not memory
+        p2 = make_pipeline(repo, tmp / "ckpt", write=False, primary=primary, fallback=fallback)
+        state2 = p2.run(resume_run_id=state1.run_id)
+        check("N resumed run completes DONE", state2.terminal == DONE, str(state2.failures))
+        fb_rows = [r for r in state2.method_results if r["role"] == "fallback"]
+        a_rows = [r for r in fb_rows if r["patch_key"] == key_a]
+        check("N fallback URL already seen by primary is NOT processed twice for build A",
+              all(len(r["accepted_rows"]) == 0 for r in a_rows),
+              str([(r["patch_key"], len(r["accepted_rows"])) for r in fb_rows]))
+        check("N build A still holds exactly one accepted report after resume",
+              state2.accepted_counts.get(key_a) == 1, str(state2.accepted_counts))
+        key_b = "|".join(pi.patch_key(PRODUCT, VERSION, BUILD_B))
+        check("N the same URL cannot attach to a SECOND patch after resume",
+              state2.accepted_counts.get(key_b, 0) == 0
+              and state2.rejection_counts.get("cross_version_duplicate", 0) >= 1,
+              f"counts={state2.accepted_counts} reasons={state2.rejection_counts}")
+
+    # ---- O. unsupported product fails closed ------------------------------------------------
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td)
+        repo = make_fixture_repo(tmp, [BUILD_A])
+        primary = FakeMethod("learn_qna_search_rss", "microsoft_learn_qna", {})
+        fallback = FakeMethod("reddit_search", "reddit_community_report", {})
+        p = orch.Pipeline(
+            repo, ["obs-studio"], write=False, checkpoint_dir=tmp / "ckpt",
+            evidence_path=repo / "auxsays" / "_data" / "consensus_evidence.yml",
+            health_path=repo / "auxsays" / "_data" / "evidence_method_health.yml",
+            generated_dir=repo / "auxsays" / "updates" / "generated",
+            methods={"learn_qna_search_rss": primary, "reddit_search": fallback},
+            authorities={"promote": lambda: {"rc": 0}, "qa": lambda: {"rc": 0},
+                         "audit": lambda: {"rc": 0}},
+            capability={"reddit_search": False}, allow_patterns=["auxsays/_data/*"],
+            context=SimpleNamespace(write=False, since=None, max_pages=1, target_versions=None))
+        state = p.run()
+        check("O a product with no R1 method adapter terminates BLOCKED, not DONE",
+              state.terminal == BLOCKED, f"{state.terminal} {state.failures}")
+        check("O the failure names the unsupported product",
+              any(f["reason"] == "unsupported_product" and "obs-studio" in f["detail"]
+                  for f in state.failures), str(state.failures))
+        check("O no discovery ran for the unsupported product", primary.calls == 0)
 
     print()
     print("=" * 70)

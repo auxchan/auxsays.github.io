@@ -119,20 +119,58 @@ class Pipeline:
         self.writeback = writeback
         self.context = context or CollectorContext(write=self.write, since=None, max_pages=1)
         self.checkpointer = JsonCheckpointer(checkpoint_dir, repo_root=self.repo_root)
-        # Runtime-only (never serialized): PatchRecord objects keyed by patch_key string.
+        # PatchRecord objects are genuinely runtime-only (rebuilt by DISCOVER_PATCH_TARGETS on
+        # resume). The URL dedup set and the run-wide ownership map are NOT: they are mirrored
+        # into serializable state fields and restored before any remaining discovery runs.
         self._records: dict[str, Any] = {}
         self._run_urls: dict[str, str] = {}
         self._seen: dict[str, set[str]] = {}
 
+    # ---- durable discovery-dedup state -------------------------------------
+
+    def _restore_url_state(self, state: OrchestrationState) -> None:
+        """Rehydrate the dedup set / ownership map from checkpointed state."""
+        self._seen = {k: set(v) for k, v in (state.seen_urls_by_patch or {}).items()}
+        self._run_urls = dict(state.accepted_url_owners or {})
+
+    def _persist_url_state(self, state: OrchestrationState) -> None:
+        state.seen_urls_by_patch = {k: sorted(v) for k, v in self._seen.items()}
+        state.accepted_url_owners = dict(self._run_urls)
+
     # ---- nodes -------------------------------------------------------------
 
     def verify_repo_state(self, state: OrchestrationState) -> OrchestrationState:
+        self._restore_url_state(state)   # resume: rehydrate dedup/ownership before any discovery
         head = subprocess.run(["git", "-C", str(self.repo_root), "rev-parse", "HEAD"],
                               capture_output=True, text=True)
         state.base_main_sha = head.stdout.strip() if head.returncode == 0 else "no-git"
         porcelain = subprocess.run(["git", "-C", str(self.repo_root), "status", "--porcelain"],
                                    capture_output=True, text=True).stdout.strip()
         state.method_plan["repo_dirty"] = bool(porcelain)
+
+        # GATE 1 -- write mode must be fully configured BEFORE any mutating node. The mutating
+        # nodes are FINALIZE_EVIDENCE, RECONCILE_COUNTS and PROMOTE; all of them come after this
+        # one, so refusing here guarantees the working tree is untouched. A write run without a
+        # transactional writeback authority and an explicit allow surface could mutate durable
+        # state and then terminate DONE having committed nothing -- durable mutation with no
+        # transaction and no commit permission is exactly what must never happen.
+        if self.write:
+            missing = []
+            if self.writeback is None:
+                missing.append("writeback_authority")
+            if not self.allow_patterns:
+                missing.append("allow_patterns")
+            if missing:
+                state.method_plan["write_config_missing"] = missing
+                state.fail("VERIFY_REPO_STATE", "write_mode_unconfigured", ",".join(missing))
+
+        # GATE 2 -- R1 only has a real method adapter for products with a declared plan. Running
+        # an empty plan and reporting DONE would claim a product was orchestrated when nothing
+        # ran. Fail closed instead; this does not touch production collectors.
+        unsupported = [p for p in self.product_ids if not plan_methods(p).get("primary")]
+        if unsupported:
+            state.method_plan["unsupported_products"] = unsupported
+            state.fail("VERIFY_REPO_STATE", "unsupported_product", ",".join(unsupported))
         return state
 
     def discover_patch_targets(self, state: OrchestrationState) -> OrchestrationState:
@@ -159,6 +197,7 @@ class Pipeline:
                 self._records[key] = record
                 self._seen.setdefault(key, set())
         state.patch_targets = targets
+        self._persist_url_state(state)
         return state
 
     def plan_methods_node(self, state: OrchestrationState) -> OrchestrationState:
@@ -215,6 +254,9 @@ class Pipeline:
                     + int(health.get("candidates_found") or 0)
                 for r, n in reasons.items():
                     state.rejection_counts[r] = state.rejection_counts.get(r, 0) + n
+                # Mirror the authority-mutated dedup/ownership state into the checkpoint after
+                # every method, so a crash between methods still resumes with them intact.
+                self._persist_url_state(state)
         state.receipt(node, identity, {"methods": len(state.method_results)})
         return state
 
@@ -298,7 +340,11 @@ class Pipeline:
             return state
         if self.write:
             rows = load_evidence(self.evidence_path) if self.evidence_path.exists() else []
-            changed, details = reconcile_record_counts(rows, self.generated_dir)
+            # Scoped to the products THIS run actually collected for. Without the scope the
+            # authority walks every generated record, so a pre-existing mismatch on an unrelated
+            # product could be rewritten by a run that never collected it.
+            changed, details = reconcile_record_counts(rows, self.generated_dir,
+                                                       product_ids=set(self.product_ids))
             state.promotion_changes["reconciled"] = changed
         else:
             state.promotion_changes["reconciled"] = 0
@@ -338,8 +384,13 @@ class Pipeline:
                                     "base": state.base_main_sha})
         if state.has_receipt("WRITEBACK", identity):
             return state
-        if not self.write or self.writeback is None:
-            state.writeback_result["outcome"] = "skipped_dry_run" if not self.write else "no_writeback_configured"
+        if not self.write:
+            state.writeback_result["outcome"] = "skipped_dry_run"
+        elif self.writeback is None:
+            # Unreachable: VERIFY_REPO_STATE blocks an unconfigured write run before any mutating
+            # node. Kept as a hard assertion so a future refactor cannot reintroduce a write run
+            # that mutates durable state and then terminates DONE having committed nothing.
+            raise RuntimeError("write mode reached WRITEBACK with no writeback authority configured")
         else:
             result = self.writeback()
             state.writeback_result.update(result)
@@ -371,12 +422,17 @@ class Pipeline:
              "WRITEBACK", "DEPLOY", "RECEIPT"]
 
     def router(self, node: str, state: OrchestrationState) -> str:
-        if node == "VERIFY_REPO_STATE" and self.write and state.method_plan.get("repo_dirty") \
-                and not self.allow_patterns:
-            # Fail closed: a dirty tree in write mode with no declared allow surface would be
-            # refused by the writeback equivalence gate anyway; block early and say so.
-            state.fail(node, "dirty_tree_write_mode")
-            return BLOCKED
+        if node == "VERIFY_REPO_STATE":
+            # Every fail-closed precondition is evaluated in the node; routing to BLOCKED here
+            # happens BEFORE DISCOVER_PATCH_TARGETS and therefore before any mutating node.
+            if state.method_plan.get("write_config_missing") \
+                    or state.method_plan.get("unsupported_products"):
+                return BLOCKED
+            if self.write and state.method_plan.get("repo_dirty") and not self.allow_patterns:
+                # A dirty tree in write mode with no declared allow surface would be refused by
+                # the writeback equivalence gate anyway; block early and say so.
+                state.fail(node, "dirty_tree_write_mode")
+                return BLOCKED
         if node == "CHECK_ACCEPTED_EVIDENCE":
             decisions = state.method_plan.get("fallback_decisions") or {}
             ran_fallback = any(r["role"] == "fallback" for r in state.method_results)
