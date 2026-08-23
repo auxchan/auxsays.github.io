@@ -104,6 +104,8 @@ describe("development-only structural Motion QA harness", () => {
     expect(screen.getByRole("heading", { name: "Why it matters" })).toBeTruthy();
     expect(screen.getByRole("heading", { name: "Why these 4 connections are here" })).toBeTruthy();
     expect(guide.textContent).toContain("Inventory capacity that holds product between production and use");
+    expect(guide.querySelector('[data-factor-portrait="tank"]')).toBeTruthy();
+    expect(node.querySelector('[data-selected-node-anchor="visible"]')).toBeTruthy();
     expect(guide.textContent).not.toContain("fixture-derivation");
     fireEvent.keyDown(window, { key: "Escape" });
     expect(screen.queryByRole("complementary", { name: "Selected factor guide" })).toBeNull();
@@ -409,6 +411,8 @@ describe("development-only structural Motion QA harness", () => {
     expect(overview.map((label) => label.text)).not.toContain("Commercial Crude Supply");
 
     const focusedCamera = createStructuralCamera(420, 420, model.nodes.find((node) => node.id === "fixture-buffer"), 2);
+    const overviewCamera = createStructuralCamera(420, 420);
+    expect(focusedCamera.scale).toBeGreaterThan(overviewCamera.scale * 1.45);
     const focused = layoutSpatialLabels({ nodes: model.nodes, camera: focusedCamera, width: 420, height: 420, focusDepth: 2, selectedNodeId: "fixture-buffer", visibleNodeIds: allNodes, traceNodeIds: new Set() });
     const selected = focused.find((label) => label.nodeId === "fixture-buffer")!;
     expect(selected).toMatchObject({ text: "Product Storage Capacity", priority: "PRIMARY", suppressed: false });

@@ -1,5 +1,19 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-23 — Structural Surface educational close-up correction
+
+- Increased factor-guide typography across definitions, explanations, and direct
+  relationship cards so the guide reads comfortably at normal browser scale.
+- Added a large, symbol-specific selected-factor portrait with layered spatial
+  depth, restrained motion, and an immediate direct-connection count.
+- Strengthened the graph camera fly-in and added a persistent DOM-backed selected
+  node anchor so a chosen factor cannot visually disappear during canvas/layout
+  transitions.
+- Kept portraits code-native and conceptual inside the guarded `TEST_FIXTURE`
+  harness; no stock imagery, factual evidence, or economic claim was introduced.
+- Human spatial-renderer QA and Motion QA remain PENDING. Gate B, Phase 5, public
+  activation, and deployment remain unchanged.
+
 ## 2026-08-23 — Structural Surface factor-guide correction
 
 - Enlarged node shells and interactive hit targets so all nine distinct inner

@@ -64,6 +64,30 @@ Wheel events over the graph are captured by a non-passive listener and converted
 only into cursor-anchored zoom. Wheel events over the guide are contained and
 scroll only that guide. Neither surface can scroll the surrounding page.
 
+## Taylor follow-up — educational close-up and legibility
+
+Taylor found the factor-guide direction strong but rejected its very small text
+and reported that the selected node/icon could disappear during selection. The
+candidate now uses materially larger guide typography and a large visual factor
+portrait. Each portrait reuses that factor's distinct symbol in an atmospheric,
+code-native scene that teaches category and connectedness without pretending a
+synthetic factor is factual evidence or relying on generic stock photography.
+
+Selection now triggers a stronger camera fly-in. A DOM-backed selected-node
+anchor remains present above the animated canvas throughout the layout and panel
+transition, so the chosen factor stays visible, colored, and identifiable even
+while the network repositions. The canvas node also receives a larger selected
+render and halo. Reduced-motion mode keeps the same visual hierarchy without the
+orbit or fly-in animation.
+
+Human review should confirm:
+
+1. the guide is comfortably readable at 100% browser zoom;
+2. every factor portrait is visually distinct and relevant to its role;
+3. the selected graph node remains visible from click through settled layout;
+4. selection feels like a purposeful close-up rather than a disappearing filter;
+5. the portrait helps explain the factor without overwhelming the short copy.
+
 ## Safety boundary
 
 - Fixture class: `TEST_FIXTURE`

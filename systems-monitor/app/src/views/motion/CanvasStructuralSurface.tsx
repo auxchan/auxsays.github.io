@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerE
 import type { MotionQaNode, MotionQaPath, MotionQaReadModel, MotionQaRelationship } from "../../data/motionQaReadModel";
 import { applyStructuralViewport, CanvasStructuralRenderer, createStructuralCamera, projectNode, zoomStructuralViewportAt, type StructuralViewportTransform } from "./structuralRenderer";
 import { layoutSpatialLabels, layoutSpatialNodes, nextNodeInDirection, type SpatialViewport } from "./spatialNavigation";
+import { StructuralNodeIcon } from "./StructuralNodeIcon";
 import { resolveStructuralNodeVisual } from "./structuralVisualLanguage";
 
 const DEFAULT_VIEWPORT: StructuralViewportTransform = { zoom: 1, panX: 0, panY: 0 };
@@ -151,7 +152,7 @@ export function CanvasStructuralSurface({ model, path, currentEdges, completedEd
           const nextId = nextNodeInDirection(spatialNodes, viewport.visibleNodeIds, node.id, event.key as "ArrowLeft" | "ArrowRight" | "ArrowUp" | "ArrowDown");
           if (nextId) nodeButtons.current.get(nextId)?.focus();
         }
-      }}><span><b>{label?.text ?? node.label}</b><small>{focusDepth > 0 ? node.kind.replaceAll("_", " ") : ""}</small></span></button>;
+      }}><i className="sm-viz-node-anchor" aria-hidden="true" data-selected-node-anchor={selectedNodeId === node.id ? "visible" : undefined}><StructuralNodeIcon symbol={visual.symbol} /></i><span><b>{label?.text ?? node.label}</b><small>{focusDepth > 0 ? node.kind.replaceAll("_", " ") : ""}</small></span></button>;
     })}</div>
     <div className="sm-viz-viewport-controls" aria-label="Graph viewport controls" onPointerDown={(event) => event.stopPropagation()}>
       <button type="button" aria-label="Zoom out" onClick={() => zoomAt(0.85)}>−</button>

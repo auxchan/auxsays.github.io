@@ -63,7 +63,7 @@ const outcomeColors: Record<MotionOutcome, string> = {
 
 export function createStructuralCamera(width: number, height: number, selected?: MotionQaNode, focusDepth = 0): StructuralCamera {
   const baseScale = Math.min((width - 52) / DESIGN_WIDTH, (height - 44) / DESIGN_HEIGHT);
-  const scale = baseScale * (selected ? Math.min(1.3, 1.16 + Math.max(0, focusDepth - 1) * 0.06) : 1);
+  const scale = baseScale * (selected ? Math.min(1.58, 1.42 + Math.max(0, focusDepth - 1) * 0.08) : 1);
   if (selected) {
     return {
       scale,
@@ -263,7 +263,8 @@ function drawNodeShape(context: CanvasRenderingContext2D, node: MotionQaNode, st
   const pulse = 0.5 + Math.sin(phase * Math.PI * 2) * 0.5;
   context.save();
   context.translate(node.x, node.y);
-  if (hovered) context.scale(1.06, 1.06);
+  if (selected) context.scale(1.13, 1.13);
+  else if (hovered) context.scale(1.06, 1.06);
   context.globalAlpha = 1;
   if (selected || hovered || active) {
     context.strokeStyle = selected ? "#f3fff9" : hovered ? visual.accent : state === "DELAYING" ? "#efbc69" : state === "AMPLIFYING" ? "#ffd07a" : visual.accent;
