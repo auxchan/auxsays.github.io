@@ -53,6 +53,9 @@ describe("development-only structural Motion QA harness", () => {
     expect(model.nodes.find((node) => node.id === "fixture-producer")?.portrait).toMatchObject({ imageUrl: "/systems-monitor/__local-review/media/petroleum-refining-public-domain.jpg", license: "PUBLIC_DOMAIN" });
     expect(model.nodes.find((node) => node.id === "fixture-junction")?.portrait).toMatchObject({ imageUrl: "/systems-monitor/__local-review/media/distribution-port-public-domain.jpg", license: "PUBLIC_DOMAIN" });
     expect(model.nodes.find((node) => node.id === "fixture-transport")?.portrait).toMatchObject({ imageUrl: "/systems-monitor/__local-review/media/freight-intermodal-cc0.jpg", license: "CC0_1_0" });
+    expect(model.nodes.every((node) => node.portrait.imageUrl.startsWith("/systems-monitor/__local-review/media/"))).toBe(true);
+    expect(new Set(model.nodes.map((node) => node.portrait.imageUrl)).size).toBe(model.nodes.length);
+    expect(model.nodes.every((node) => node.portrait.sourcePage.startsWith("https://commons.wikimedia.org/wiki/File:"))).toBe(true);
   });
 
   it("rejects factual, accepted, or gate-changing fixture shapes", () => {
@@ -73,6 +76,10 @@ describe("development-only structural Motion QA harness", () => {
     if (!portraitNode?.portrait) throw new Error("Expected fixture portrait");
     portraitNode.portrait.imageUrl = "https://example.com/unreviewed-photo.jpg";
     expect(() => validateMotionQaReadModel(remotePortrait)).toThrow(/approved local-review image/);
+
+    const missingPortrait = structuredClone(motionFixture) as unknown as { nodes: Array<{ portrait?: unknown }> };
+    delete missingPortrait.nodes[0].portrait;
+    expect(() => validateMotionQaReadModel(missingPortrait)).toThrow(/Every Motion QA node must include approved portrait imagery/);
   });
 
   it("renders an unmistakable synthetic boundary and a controllable graph", async () => {

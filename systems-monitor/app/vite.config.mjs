@@ -6,9 +6,15 @@ const factualCandidatePath = resolve(import.meta.dirname, "../data/review/factua
 const phase4bCandidatePath = resolve(import.meta.dirname, "../state/review/phase4b-read-model-candidate.json");
 const motionQaFixturePath = resolve(import.meta.dirname, "fixtures/motion-qa-read-model.json");
 const motionQaMedia = new Map([
+  ["commercial-crude-supply-public-domain.jpg", resolve(import.meta.dirname, "fixtures/media/commercial-crude-supply-public-domain.jpg")],
   ["petroleum-refining-public-domain.jpg", resolve(import.meta.dirname, "fixtures/media/petroleum-refining-public-domain.jpg")],
+  ["product-storage-public-domain.jpg", resolve(import.meta.dirname, "fixtures/media/product-storage-public-domain.jpg")],
+  ["industrial-utilities-public-domain.jpg", resolve(import.meta.dirname, "fixtures/media/industrial-utilities-public-domain.jpg")],
+  ["refined-fuel-supply-public-domain.jpg", resolve(import.meta.dirname, "fixtures/media/refined-fuel-supply-public-domain.jpg")],
   ["freight-intermodal-cc0.jpg", resolve(import.meta.dirname, "fixtures/media/freight-intermodal-cc0.jpg")],
-  ["distribution-port-public-domain.jpg", resolve(import.meta.dirname, "fixtures/media/distribution-port-public-domain.jpg")]
+  ["distribution-port-public-domain.jpg", resolve(import.meta.dirname, "fixtures/media/distribution-port-public-domain.jpg")],
+  ["industrial-demand-public-domain.jpg", resolve(import.meta.dirname, "fixtures/media/industrial-demand-public-domain.jpg")],
+  ["employment-exposure-public-domain.jpg", resolve(import.meta.dirname, "fixtures/media/employment-exposure-public-domain.jpg")]
 ]);
 
 function localPhase4bCheckpoint() {

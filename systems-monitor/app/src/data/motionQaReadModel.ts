@@ -11,7 +11,7 @@ export interface MotionQaNode {
   currentState: string;
   derivationRef: string;
   insight: { definition: string; tracks: string; impact: string };
-  portrait?: {
+  portrait: {
     imageUrl: string;
     alt: string;
     sourcePage: string;
@@ -80,7 +80,7 @@ function array(value: unknown, label: string): unknown[] {
 }
 
 function portrait(value: unknown): MotionQaNode["portrait"] {
-  if (value === undefined) return undefined;
+  if (value === undefined) throw new Error("Every Motion QA node must include approved portrait imagery");
   const candidate = object(value, "node.portrait");
   const imageUrl = string(candidate.imageUrl, "node.portrait.imageUrl");
   const sourcePage = string(candidate.sourcePage, "node.portrait.sourcePage");

@@ -119,6 +119,12 @@
 [data-aux-product="systems-monitor"] [data-factor-portrait="refinery"] .sm-node-guide__photo { background-position: 50% 58%; }
 [data-aux-product="systems-monitor"] [data-factor-portrait="freight"] .sm-node-guide__photo { background-position: 52% 52%; }
 [data-aux-product="systems-monitor"] [data-factor-portrait="split"] .sm-node-guide__photo { background-position: 50% 47%; }
+[data-aux-product="systems-monitor"] [data-factor-portrait="drop"] .sm-node-guide__photo { background-position: 60% 48%; }
+[data-aux-product="systems-monitor"] [data-factor-portrait="tank"] .sm-node-guide__photo { background-position: 50% 43%; }
+[data-aux-product="systems-monitor"] [data-factor-portrait="bolt"] .sm-node-guide__photo { background-position: 52% 58%; }
+[data-aux-product="systems-monitor"] [data-factor-portrait="flame"] .sm-node-guide__photo { background-position: 50% 53%; }
+[data-aux-product="systems-monitor"] [data-factor-portrait="factory"] .sm-node-guide__photo { background-position: 50% 47%; }
+[data-aux-product="systems-monitor"] [data-factor-portrait="people"] .sm-node-guide__photo { background-position: 48% 45%; }
 [data-aux-product="systems-monitor"] [data-factor-portrait="drop"]::after { inset: 1rem 2.3rem; border-radius: 48% 52% 55% 45%; background: radial-gradient(ellipse at 50% 78%, transparent 30%, color-mix(in srgb, var(--guide-accent) 26%, transparent) 31% 32%, transparent 33% 47%, color-mix(in srgb, var(--guide-accent) 18%, transparent) 48% 49%, transparent 50%); transform: rotate(-8deg); }
 [data-aux-product="systems-monitor"] [data-factor-portrait="refinery"]::after,
 [data-aux-product="systems-monitor"] [data-factor-portrait="factory"]::after { inset: 2rem 1.2rem 1.2rem 52%; border: 0; border-bottom: 1px solid color-mix(in srgb, var(--guide-accent) 42%, transparent); background: repeating-linear-gradient(90deg, color-mix(in srgb, var(--guide-accent) 24%, transparent) 0 .22rem, transparent .22rem 1.35rem); clip-path: polygon(0 100%,0 45%,20% 45%,20% 15%,34% 15%,34% 68%,52% 68%,52% 32%,70% 32%,70% 0,84% 0,84% 55%,100% 55%,100% 100%); }

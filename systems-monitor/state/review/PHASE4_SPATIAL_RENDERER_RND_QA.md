@@ -2,6 +2,8 @@
 
 Status: **PENDING HUMAN VISUAL QA**
 
+Licensed factor-imagery treatment: **PASS — Taylor, 2026-08-23**
+
 This review covers only the development-only structural renderer, spatial
 navigation, label hierarchy, node grammar, and Explore/Trace interaction.
 `HUMAN_PHASE4_MOTION_QA` remains **PENDING**.
@@ -109,6 +111,16 @@ Human review should additionally confirm:
 2. the factor icon and title remain visually primary;
 3. the subject remains recognizable through the grade and edge fade; and
 4. the credit is reachable without adding clutter to the main explanation.
+
+Taylor passed that four-part licensed-imagery treatment test. The approved
+blend is now applied to every current factor. This is a subtest PASS only;
+overall spatial-renderer and Motion QA remain pending.
+
+The renderer now enforces a future-node media gate: a new node is invalid until
+it supplies a distinct reviewed local image plus plain alt text, exact source
+page, license classification, and credit. The loopback server must also add the
+file to its explicit allowlist. Tests reject missing imagery and surface
+duplicate coverage during review.
 
 ## Safety boundary
 

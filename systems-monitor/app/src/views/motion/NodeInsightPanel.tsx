@@ -47,8 +47,8 @@ export function NodeInsightPanel({ model, node, state, onClose }: { model: Motio
         <button type="button" aria-label="Close factor guide" onClick={onClose}>×</button>
       </header>
 
-      <div className="sm-node-guide__portrait" data-factor-portrait={visual.symbol} data-has-photo={displayNode.portrait ? "true" : "false"}>
-        {displayNode.portrait && <span className="sm-node-guide__photo" role="img" aria-label={displayNode.portrait.alt} style={{ "--guide-photo": `url(${displayNode.portrait.imageUrl})` } as CSSProperties} />}
+      <div className="sm-node-guide__portrait" data-factor-portrait={visual.symbol} data-has-photo="true">
+        <span className="sm-node-guide__photo" role="img" aria-label={displayNode.portrait.alt} style={{ "--guide-photo": `url(${displayNode.portrait.imageUrl})` } as CSSProperties} />
         <span className="sm-node-guide__orbit sm-node-guide__orbit--outer" aria-hidden="true" />
         <span className="sm-node-guide__orbit sm-node-guide__orbit--inner" aria-hidden="true" />
         <span className="sm-node-guide__portrait-symbol"><StructuralNodeIcon symbol={visual.symbol} /></span>
@@ -71,7 +71,7 @@ export function NodeInsightPanel({ model, node, state, onClose }: { model: Motio
 
       <footer>
         <span>Prototype explanation · synthetic relationships only</span>
-        {displayNode.portrait && <a href={displayNode.portrait.sourcePage} target="_blank" rel="noreferrer">Photo: {displayNode.portrait.credit} · {displayNode.portrait.license === "CC0_1_0" ? "CC0 1.0" : "Public domain"}</a>}
+        <a href={displayNode.portrait.sourcePage} target="_blank" rel="noreferrer">Photo: {displayNode.portrait.credit} · {displayNode.portrait.license === "CC0_1_0" ? "CC0 1.0" : "Public domain"}</a>
       </footer>
     </div>}
   </aside>;

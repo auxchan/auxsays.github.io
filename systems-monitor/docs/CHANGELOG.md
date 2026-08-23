@@ -1,5 +1,21 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-23 — Complete factor-imagery coverage and future-node gate
+
+- Recorded Taylor's PASS for the licensed-photo blending test while retaining
+  overall Human spatial-renderer QA and Motion QA as PENDING.
+- Added reviewed public-domain imagery for commercial crude supply, product
+  storage, industrial utilities, refined-fuel supply, industrial end demand,
+  and current employment exposure; all nine current factors now have distinct
+  environmental closeups.
+- Made portrait metadata mandatory in the renderer's TypeScript model and
+  runtime fixture validator. Any future node using this renderer must provide
+  a reviewed local image, alt text, exact source page, license, and credit.
+- Expanded the exact loopback-only media allowlist and added regression tests
+  for complete, unique coverage and rejection of image-less new nodes.
+- No factual relationship, calculation, Gate-B evidence, Phase-5 work, public
+  activation, production imagery, or deployment changed.
+
 ## 2026-08-23 — Licensed factor-imagery treatment
 
 - Added three public-domain/CC0 environmental images for petroleum refining,
