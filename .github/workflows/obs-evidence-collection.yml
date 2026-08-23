@@ -125,6 +125,24 @@ jobs:
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: python auxsays/scripts/audit_consensus_evidence.py
 
+      - name: Promote PowerPoint consensus to build-aware records
+        # Scoped to microsoft-powerpoint via --product-id: no other product's promotion behaviour
+        # changes. The engine is the existing generic one; identity is the canonical triple
+        # (product_id, update_version, target_build), so evidence for one Current Channel build
+        # can only ever reconcile onto that build's own record. Runs after QA/audit so it never
+        # promotes onto a tree those gates rejected. No-ops when PowerPoint has no evidence.
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          python auxsays/scripts/apply_consensus_to_records.py \
+            --product-id microsoft-powerpoint \
+            --write-all --confirm-write
+
+      - name: Re-run QA after PowerPoint promotion
+        # Promotion mutates report counts; re-validate before anything is staged so a
+        # half-promoted tree cannot reach the writeback.
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: python auxsays/scripts/qa_patch_records.py
+
       - name: Remove transient validation output
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: |
@@ -156,6 +174,7 @@ jobs:
             --allow 'auxsays/updates/generated/*premiere-pro*.md' \
             --allow 'auxsays/updates/generated/*windows-11*.md' \
             --allow 'auxsays/updates/generated/*acrobat*.md' \
+            --allow 'auxsays/updates/generated/*powerpoint*.md' \
             --validate 'python auxsays/scripts/qa_patch_records.py' \
             --validate 'python auxsays/scripts/audit_consensus_evidence.py' \
             --validate 'python auxsays/scripts/validate_evidence_method_health.py' \
