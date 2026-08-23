@@ -219,12 +219,17 @@ def run() -> int:  # noqa: PLR0915
     # =====================================================================================
     # 4. PROMOTION ENGINE -- reuse, not a new PowerPoint scorer
     # =====================================================================================
-    # The engine exists and is generic, but nothing invokes it for PowerPoint in production.
-    check("BLOCKING GAP: no production step invokes consensus promotion for PowerPoint",
-          "apply_consensus_to_records" not in
-          (_REPO / ".github" / "workflows" / "obs-evidence-collection.yml").read_text(
-              encoding="utf-8"),
-          "if this fails the chain became wired and the PR body must be updated")
+    # WIRED. The generic engine is invoked for PowerPoint in the production evidence lane, scoped
+    # by --product-id so no other product's promotion behaviour changes.
+    _wf_text = (_REPO / ".github" / "workflows" / "obs-evidence-collection.yml").read_text(
+        encoding="utf-8")
+    check("a production step invokes consensus promotion for PowerPoint",
+          "apply_consensus_to_records" in _wf_text)
+    check("that promotion step is SCOPED to microsoft-powerpoint",
+          "--product-id microsoft-powerpoint" in _wf_text,
+          "an unscoped promotion would change every product's behaviour")
+    check("QA re-runs after promotion so a half-promoted tree cannot reach the writeback",
+          _wf_text.count("qa_patch_records.py") >= 2)
     check("the generic promotion engine exposes a product filter",
           hasattr(ac, "_index_generated_records") and hasattr(ac, "main"),
           "apply_consensus_to_records")
@@ -345,16 +350,21 @@ def run() -> int:  # noqa: PLR0915
     def committable(path: str) -> bool:
         return any(fnmatch.fnmatch(path, p) for p in allow_patterns)
 
-    ppt_record = "auxsays/updates/generated/2026-07-23-microsoft-powerpoint-2607.md"
-    check("BLOCKING GAP: a PowerPoint generated record is NOT committable today",
-          not committable(ppt_record),
+    # ACTIVATED. The build-aware record filename carries the exact build, and the --allow list now
+    # covers it, so evidence, method health and the record mutation are committable TOGETHER --
+    # the half-promoted state this suite used to pin as a blocking gap is now unreachable.
+    ppt_record = "auxsays/updates/generated/2026-07-23-microsoft-powerpoint-2607-20228-20110.md"
+    check("a build-aware PowerPoint generated record IS committable",
+          committable(ppt_record),
           f"{ppt_record} vs {allow_patterns}")
-    check("but PowerPoint structured evidence IS committable",
+    check("PowerPoint structured evidence IS committable",
           committable("auxsays/_data/consensus_evidence.yml"))
-    check("and PowerPoint method health IS committable",
+    check("PowerPoint method health IS committable",
           committable("auxsays/_data/evidence_method_health.yml"))
-    check("=> activating today would land main HALF-PROMOTED (evidence committed, record dropped)",
-          committable("auxsays/_data/consensus_evidence.yml") and not committable(ppt_record))
+    check("=> evidence, health and the record commit together (no half-promotion possible)",
+          committable("auxsays/_data/consensus_evidence.yml")
+          and committable("auxsays/_data/evidence_method_health.yml")
+          and committable(ppt_record))
 
     for product, sample in (("obs-studio", "auxsays/updates/generated/2026-07-21-obs-studio-32-2-0.md"),
                             ("davinci", "auxsays/updates/generated/2026-07-22-davinci-resolve-21-0-3.md"),
@@ -364,10 +374,10 @@ def run() -> int:  # noqa: PLR0915
     check("--recovery-site-path is NOT commit permission (distinct flag)",
           "--recovery-site-path" in wf and "--recovery-site-path" not in
           " ".join(f"--allow {p}" for p in allow_patterns))
-    check("the deploy-recovery glob would match a PowerPoint record, which is why the two were "
-          "conflated -- recovery != permission",
+    check("recovery and permission remain DISTINCT flags: the deploy-recovery glob matches the "
+          "record, but commit permission comes only from the explicit --allow entry",
           fnmatch.fnmatch(ppt_record, "auxsays/updates/generated/*")
-          and not committable(ppt_record))
+          and any("powerpoint" in p for p in allow_patterns))
 
     # Per-product scope, once an --allow entry exists, is still enforced by ownership.
     check("record ownership validation exists to enforce per-product scope",
@@ -390,18 +400,18 @@ def run() -> int:  # noqa: PLR0915
     check("2607 IS tracked (so the add-in case has a target record)", "2607" in tracked)
 
     # =====================================================================================
-    # 8. PRODUCTION MUST REMAIN OFF
+    # 8. PRODUCTION IS ACTIVE -- but the gate stays explicit-true-only
     # =====================================================================================
     import run_patch_evidence_collection as runner  # noqa: PLC0415
-    check("PowerPoint consensus is OFF with an empty environment",
+    check("the enable gate is still explicit-true-only (empty env does NOT enable)",
           not runner.powerpoint_consensus_enabled({}))
-    check("PowerPoint consensus is OFF unless the flag is exactly 'true'",
+    check("the enable gate still rejects near-miss values like 'yes'",
           not runner.powerpoint_consensus_enabled(
               {runner.POWERPOINT_CONSENSUS_ENABLE_ENV: "yes"}))
-    check("the workflow still gates the flag to dry_run only (production lock intact)",
-          "AUXSAYS_ENABLE_POWERPOINT_CONSENSUS" in wf and "dry_run" in wf)
-    check("the workflow still refuses a --write run targeting PowerPoint",
-          "dry_run-only pilot" in wf)
+    check("the workflow sets the flag to the literal 'true' (scheduled production active)",
+          'AUXSAYS_ENABLE_POWERPOINT_CONSENSUS: "true"' in wf, "PowerPoint is not activated")
+    check("the dry_run-only refusal is gone (a --write run targeting PowerPoint is normal now)",
+          "dry_run-only pilot" not in wf)
     check("Reddit fallback remains disabled by default",
           not ppt.reddit_fallback_enabled({}))
 
