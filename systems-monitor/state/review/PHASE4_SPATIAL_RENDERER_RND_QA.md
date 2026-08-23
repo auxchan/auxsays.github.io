@@ -6,6 +6,8 @@ Licensed factor-imagery treatment: **PASS — Taylor, 2026-08-23**
 
 Connector-hover easing and Home navigation: **PENDING HUMAN VISUAL QA**
 
+Node-color connector lighting correction: **PENDING HUMAN VISUAL QA**
+
 This review covers only the development-only structural renderer, spatial
 navigation, label hierarchy, node grammar, and Explore/Trace interaction.
 `HUMAN_PHASE4_MOTION_QA` remains **PENDING**.
@@ -154,6 +156,14 @@ structural relationships, and no structural calculations. Adding values to the
 synthetic nodes now would visually overstate the evidence. Existing governed
 factual labor observations remain separate until an authoritative node mapping
 and accepted structural read model exist.
+
+## Taylor correction — connector light color, not speed
+
+Taylor's first visual check found that the connector lights accelerated briefly
+instead of visibly fading into the selected factor's palette. The hover-speed
+coupling has been removed. Glints now retain one constant travel period and
+constant trail length; the connector rails, arrows, glints, and glow ease into
+the hovered node's accent color and ease back to the ambient palette on exit.
 
 ## Local review
 

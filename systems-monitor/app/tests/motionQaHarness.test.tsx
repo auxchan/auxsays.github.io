@@ -4,7 +4,7 @@ import motionFixture from "../fixtures/motion-qa-read-model.json";
 import { SnapshotProvider } from "../src/app/SnapshotContext";
 import { SystemsMonitorApp } from "../src/app/SystemsMonitorApp";
 import { motionOutcomes, validateMotionQaReadModel } from "../src/data/motionQaReadModel";
-import { applyStructuralViewport, createStructuralCamera, easeConnectorHover, interpolateCamera, MAX_STRUCTURAL_ZOOM, MIN_STRUCTURAL_ZOOM, outcomeTravel, projectNode, sampleRelationship, zoomStructuralViewportAt } from "../src/views/motion/structuralRenderer";
+import { applyStructuralViewport, blendConnectorColor, connectorGlintProgress, createStructuralCamera, easeConnectorHover, interpolateCamera, MAX_STRUCTURAL_ZOOM, MIN_STRUCTURAL_ZOOM, outcomeTravel, projectNode, sampleRelationship, zoomStructuralViewportAt } from "../src/views/motion/structuralRenderer";
 import { layoutSpatialLabels, layoutSpatialNodes, MAX_VISIBLE_RELATIONSHIPS, nextNodeInDirection, resolveSpatialViewport } from "../src/views/motion/spatialNavigation";
 import { candidate } from "./factualCandidate.test";
 
@@ -353,6 +353,16 @@ describe("development-only structural Motion QA harness", () => {
     expect(laterFrame).toBeGreaterThan(firstFrame);
     expect(laterFrame).toBeLessThan(1);
     expect(easeConnectorHover(0, 1, 16, true)).toBe(1);
+  });
+
+  it("fades connector lighting into the node accent without changing travel timing", () => {
+    expect(blendConnectorColor("#75c9bd", "#f0b768", 0)).toBe("rgb(117, 201, 189)");
+    expect(blendConnectorColor("#75c9bd", "#f0b768", 0.5)).toBe("rgb(179, 192, 147)");
+    expect(blendConnectorColor("#75c9bd", "#f0b768", 1)).toBe("rgb(240, 183, 104)");
+    expect(blendConnectorColor("#568491", "#f0b768", 0.5, 0.34)).toBe("rgba(163, 158, 125, 0.34)");
+    expect(connectorGlintProgress(0, 0)).toBe(0);
+    expect(connectorGlintProgress(1250, 0)).toBe(0.5);
+    expect(connectorGlintProgress(2500, 0)).toBe(0);
   });
 
   it("zooms under the mouse wheel, pans only with the middle button, and resets", async () => {

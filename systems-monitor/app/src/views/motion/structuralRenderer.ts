@@ -15,12 +15,30 @@ export interface StructuralViewportTransform {
 
 export const MIN_STRUCTURAL_ZOOM = 0.7;
 export const MAX_STRUCTURAL_ZOOM = 2.4;
+export const CONNECTOR_GLINT_PERIOD_MS = 2500;
 
 export function easeConnectorHover(current: number, target: number, elapsedMs: number, reducedMotion = false) {
   if (reducedMotion) return target;
   const safeElapsed = Math.max(0, elapsedMs);
-  const blend = 1 - Math.exp(-safeElapsed / 145);
+  const blend = 1 - Math.exp(-safeElapsed / 180);
   return current + (target - current) * blend;
+}
+
+export function blendConnectorColor(from: string, to: string, progress: number, alpha = 1) {
+  const read = (value: string) => {
+    const match = /^#([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i.exec(value);
+    return match ? [Number.parseInt(match[1], 16), Number.parseInt(match[2], 16), Number.parseInt(match[3], 16)] : [117, 201, 189];
+  };
+  const start = read(from);
+  const end = read(to);
+  const amount = Math.max(0, Math.min(1, progress));
+  const channels = start.map((channel, index) => Math.round(channel + (end[index] - channel) * amount));
+  const opacity = Math.max(0, Math.min(1, alpha));
+  return opacity < 1 ? `rgba(${channels[0]}, ${channels[1]}, ${channels[2]}, ${opacity})` : `rgb(${channels[0]}, ${channels[1]}, ${channels[2]})`;
+}
+
+export function connectorGlintProgress(nowMs: number, edgeIndex: number) {
+  return ((nowMs / CONNECTOR_GLINT_PERIOD_MS) + edgeIndex * 0.137) % 1;
 }
 
 export interface StructuralRenderState {
@@ -323,7 +341,7 @@ export class CanvasStructuralRenderer implements StructuralRenderer {
   private layoutTarget: Map<string, Point> | null = null;
   private layoutKey = "";
   private layoutStartedAt = 0;
-  private readonly hoverVisuals = new Map<string, { alpha: number; emphasis: number }>();
+  private readonly hoverVisuals = new Map<string, { alpha: number; emphasis: number; accent: string }>();
   private lastRenderAt = 0;
 
   constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
@@ -400,30 +418,33 @@ export class CanvasStructuralRenderer implements StructuralRenderer {
       const isPath = state.pathEdgeIds.has(edge.id);
       const isComplete = state.completedEdgeIds.has(edge.id);
       const isHoverRelated = !state.hoveredNodeId || edge.from === state.hoveredNodeId || edge.to === state.hoveredNodeId;
-      const previousHover = this.hoverVisuals.get(edge.id) ?? { alpha: 0.34, emphasis: 0 };
+      const hoveredNode = state.hoveredNodeId ? nodes.get(state.hoveredNodeId) : undefined;
+      const previousHover = this.hoverVisuals.get(edge.id) ?? { alpha: 0.34, emphasis: 0, accent: "#75c9bd" };
       const targetHover = state.hoveredNodeId ? { alpha: isHoverRelated ? 0.34 : 0.07, emphasis: isHoverRelated ? 1 : 0 } : { alpha: 0.34, emphasis: 0 };
       const hoverVisual = state.traceMode ? previousHover : {
         alpha: easeConnectorHover(previousHover.alpha, targetHover.alpha, frameElapsed, state.reducedMotion),
-        emphasis: easeConnectorHover(previousHover.emphasis, targetHover.emphasis, frameElapsed, state.reducedMotion)
+        emphasis: easeConnectorHover(previousHover.emphasis, targetHover.emphasis, frameElapsed, state.reducedMotion),
+        accent: hoveredNode && isHoverRelated ? resolveStructuralNodeVisual(hoveredNode).accent : previousHover.accent
       };
       if (!state.traceMode) this.hoverVisuals.set(edge.id, hoverVisual);
       const alpha = state.traceMode ? (isPath ? 0.6 : 0.04) : hoverVisual.alpha;
+      const primaryColor = blendConnectorColor("#568491", hoverVisual.accent, hoverVisual.emphasis, alpha);
+      const innerColor = blendConnectorColor("#7eaab4", hoverVisual.accent, hoverVisual.emphasis, alpha * 1.25);
+      const arrowColor = blendConnectorColor("#486a75", hoverVisual.accent, hoverVisual.emphasis);
+      const glintColor = blendConnectorColor("#75c9bd", hoverVisual.accent, hoverVisual.emphasis);
       tracePoints(context, points);
-      context.strokeStyle = isComplete ? "rgba(105,198,178,.55)" : `rgba(86,132,145,${alpha})`;
+      context.strokeStyle = isComplete ? "rgba(105,198,178,.55)" : primaryColor;
       context.lineWidth = isPath ? 8 : 5 + hoverVisual.emphasis * 1.5;
       context.lineCap = "round";
       context.stroke();
       tracePoints(context, points);
-      context.strokeStyle = isComplete ? "rgba(146,237,215,.52)" : `rgba(126,170,180,${alpha * 1.25})`;
+      context.strokeStyle = isComplete ? "rgba(146,237,215,.52)" : innerColor;
       context.lineWidth = 1.15;
       context.stroke();
-      const arrowColor = `rgb(${Math.round(72 + 49 * hoverVisual.emphasis)}, ${Math.round(106 + 110 * hoverVisual.emphasis)}, ${Math.round(117 + 82 * hoverVisual.emphasis)})`;
       if (isPath || !state.traceMode) drawArrow(context, points, 0.9, isPath ? "#719d9f" : arrowColor, isPath ? 0.68 : 0.36 + hoverVisual.emphasis * 0.34);
       if (!state.traceMode && !state.reducedMotion) {
-        const glint = ((state.nowMs / (2500 - hoverVisual.emphasis * 1150)) + edgeIndex * 0.137) % 1;
-        const start = Math.max(0, glint - (0.08 + hoverVisual.emphasis * 0.08));
-        const hoveredNode = state.hoveredNodeId ? nodes.get(state.hoveredNodeId) : undefined;
-        const glintColor = hoveredNode && isHoverRelated ? resolveStructuralNodeVisual(hoveredNode).accent : "#75c9bd";
+        const glint = connectorGlintProgress(state.nowMs, edgeIndex);
+        const start = Math.max(0, glint - 0.08);
         context.save();
         context.lineCap = "round";
         context.shadowColor = glintColor;

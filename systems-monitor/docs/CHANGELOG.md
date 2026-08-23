@@ -1,5 +1,15 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-23 — Node-color connector-light correction
+
+- Removed hover-driven connector-light acceleration. Hover no longer changes
+  glint travel speed or trail length.
+- Connector rails, arrows, moving lights, and their glow now ease from the
+  ambient palette into the hovered node's own accent color, then ease back out.
+- Preserved the existing relationship-selection and reduced-motion semantics.
+- Added exact color-blending regression coverage. Human visual QA remains
+  PENDING.
+
 ## 2026-08-23 — Connector easing and core-factor Home control
 
 - Replaced the binary Explore-hover connector jump with a frame-smoothed fade
