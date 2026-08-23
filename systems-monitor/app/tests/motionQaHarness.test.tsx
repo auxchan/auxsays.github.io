@@ -4,6 +4,7 @@ import motionFixture from "../fixtures/motion-qa-read-model.json";
 import { SnapshotProvider } from "../src/app/SnapshotContext";
 import { SystemsMonitorApp } from "../src/app/SystemsMonitorApp";
 import { motionOutcomes, validateMotionQaReadModel } from "../src/data/motionQaReadModel";
+import { createStructuralCamera, outcomeTravel, projectNode, sampleRelationship } from "../src/views/motion/structuralRenderer";
 import { candidate } from "./factualCandidate.test";
 
 const standardMatchMedia = (query: string) => ({ matches: false, media: query, onchange: null, addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {}, dispatchEvent: () => false });
@@ -12,7 +13,7 @@ const reducedMatchMedia = (query: string) => ({ matches: query.includes("prefers
 async function renderReducedHarness() {
   Object.defineProperty(window, "matchMedia", { writable: true, value: reducedMatchMedia });
   render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
-  await screen.findByRole("heading", { name: /Watch pressure\s*move through a system\./ });
+  await screen.findByRole("heading", { name: /See the system\.\s*Follow the pressure\./ });
 }
 
 function stepPath(pathName: string, steps: number) {
@@ -62,10 +63,11 @@ describe("development-only structural Motion QA harness", () => {
 
   it("renders an unmistakable synthetic boundary and a controllable graph", async () => {
     render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
-    expect(await screen.findByRole("heading", { name: /Watch pressure\s*move through a system\./ })).toBeTruthy();
+    expect(await screen.findByRole("heading", { name: /See the system\.\s*Follow the pressure\./ })).toBeTruthy();
     expect(screen.getByText("MOTION QA — SYNTHETIC TEST DATA")).toBeTruthy();
-    expect(screen.getByRole("img", { name: /Synthetic structural motion test network/ })).toBeTruthy();
-    expect(screen.getByRole("button", { name: /Upstream signal.*Open fixture inspector/ })).toBeTruthy();
+    expect(screen.getByRole("img", { name: /Synthetic structural pressure surface/ })).toBeTruthy();
+    expect(screen.getByRole("button", { name: /Upstream signal.*Enter this system/ })).toBeTruthy();
+    expect(document.querySelector('[data-structural-renderer="canvas-rd"]')).toBeTruthy();
     expect(screen.getByRole("button", { name: "Pause" })).toBeTruthy();
     expect(screen.getAllByText(/TEST_FIXTURE/).length).toBeGreaterThan(0);
     expect(document.body.textContent).not.toContain("ACCEPTED structural relationship");
@@ -73,7 +75,7 @@ describe("development-only structural Motion QA harness", () => {
 
   it("accepts rapid path changes without replaying stale selection state", async () => {
     render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
-    await screen.findByRole("heading", { name: /Watch pressure\s*move through a system\./ });
+    await screen.findByRole("heading", { name: /See the system\.\s*Follow the pressure\./ });
     const blocked = screen.getByRole("button", { name: "Blocked route" });
     const absorbed = screen.getByRole("button", { name: "Absorbed route" });
     fireEvent.click(blocked);
@@ -85,8 +87,8 @@ describe("development-only structural Motion QA harness", () => {
 
   it("opens node detail by keyboard and closes it with Escape", async () => {
     render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
-    await screen.findByRole("heading", { name: /Watch pressure\s*move through a system\./ });
-    const node = screen.getByRole("button", { name: /Buffer stage.*Open fixture inspector/ });
+    await screen.findByRole("heading", { name: /See the system\.\s*Follow the pressure\./ });
+    const node = screen.getByRole("button", { name: /Buffer stage.*Enter this system/ });
     fireEvent.keyDown(node, { key: "Enter" });
     expect(screen.getByRole("complementary", { name: "Selected synthetic node inspector" })).toBeTruthy();
     expect(screen.getByText("fixture-derivation:buffer")).toBeTruthy();
@@ -96,7 +98,7 @@ describe("development-only structural Motion QA harness", () => {
 
   it("preserves the three primary views without introducing a production navigation item", async () => {
     render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
-    await screen.findByRole("heading", { name: /Watch pressure\s*move through a system\./ });
+    await screen.findByRole("heading", { name: /See the system\.\s*Follow the pressure\./ });
     expect(screen.getAllByRole("navigation")).toHaveLength(1);
     fireEvent.click(screen.getByRole("button", { name: "Verified Data" }));
     expect(await screen.findByRole("heading", { name: /Inspect the choreography\.\s*Not the economy\./ })).toBeTruthy();
@@ -144,7 +146,7 @@ describe("development-only structural Motion QA harness", () => {
     const absorbed = document.querySelectorAll('[data-motion-component="absorbed"]');
     const destination = document.querySelector('[data-motion-node-id="fixture-buffer"]');
     expect(surviving).toBeTruthy();
-    expect(absorbed.length).toBeGreaterThanOrEqual(2);
+    expect(absorbed).toHaveLength(1);
     expect(destination?.getAttribute("data-motion-active")).toBe("true");
     expect(destination?.getAttribute("data-motion-state")).toBe("ACTIVE");
   });
@@ -185,9 +187,8 @@ describe("development-only structural Motion QA harness", () => {
     await renderReducedHarness();
     fireEvent.click(screen.getByRole("button", { name: "Step forward" }));
     const current = document.querySelector(".sm-motion-signal.is-current");
-    expect(document.querySelector("#sm-motion-arrow")).toBeTruthy();
+    expect(document.querySelector('[data-structural-renderer="canvas-rd"]')).toBeTruthy();
     expect(current?.getAttribute("data-direction")).toBe("forward");
-    expect(current?.getAttribute("marker-end")).toBe("url(#sm-motion-arrow-active)");
   });
 
   it("never reports IDLE for nodes participating in the active split", async () => {
@@ -201,12 +202,12 @@ describe("development-only structural Motion QA harness", () => {
   it("docks node context without covering the graph and reports live motion state", async () => {
     await renderReducedHarness();
     stepPath("Branch + reconvergence", 3);
-    const node = screen.getByRole("button", { name: /Branch alpha.*DELAYING.*Open fixture inspector/ });
+    const node = screen.getByRole("button", { name: /Branch alpha.*DELAYING.*Enter this system/ });
     fireEvent.click(node);
     const inspector = screen.getByRole("complementary", { name: "Selected synthetic node inspector" });
-    expect(inspector.parentElement?.classList.contains("sm-motion-workbench")).toBe(true);
+    expect(inspector.parentElement?.classList.contains("sm-viz-instrument")).toBe(true);
     expect(inspector.getAttribute("data-selected-node-id")).toBe("fixture-branch-a");
-    expect(screen.getByText("DELAYING")).toBeTruthy();
+    expect(screen.getByText(/DELAYING/)).toBeTruthy();
   });
 
   it("suppresses explanatory helpers in label-independent QA without breaking controls", async () => {
@@ -235,50 +236,36 @@ describe("development-only structural Motion QA harness", () => {
     }
   });
 
-  it("keeps route positioning on outer groups and animation transforms on inner markers", async () => {
+  it("replaces the SVG viewport with a renderer abstraction and spatial Trace Mode", async () => {
     await renderReducedHarness();
-
-    const cases = [
-      ["Absorbed route", 3, '[data-motion-terminal="ABSORBED"]', ".sm-motion-outcome-marker.is-absorbed"],
-      ["Primary cascade", 2, '.sm-motion-marker-position[data-motion-component="absorbed"]', ".sm-motion-outcome-marker.is-partially-absorbed"],
-      ["Branch + reconvergence", 3, '.sm-motion-marker-position[data-motion-strength="stronger"]', ".sm-motion-outcome-marker.is-amplified"]
-    ] as const;
-
-    for (const [pathName, steps, outerSelector, innerSelector] of cases) {
-      stepPath(pathName, steps);
-      const outer = document.querySelector(outerSelector);
-      const inner = outer?.querySelector(innerSelector);
-      expect(outer?.getAttribute("data-position-owner")).toBe("outer");
-      expect(outer?.getAttribute("transform")).toMatch(/^translate\(.+\) rotate\(.+\)$/);
-      expect(inner?.getAttribute("data-animation-owner")).toBe("inner");
-      expect(inner?.hasAttribute("transform")).toBe(false);
-    }
+    expect(document.querySelector(".sm-motion-network")).toBeNull();
+    expect(document.querySelector('[data-renderer-surface="canvas"]')).toBeTruthy();
+    expect(document.querySelectorAll(".sm-viz-node-label")).toHaveLength(9);
+    const trace = screen.getByRole("button", { name: "Trace mode" });
+    expect(trace.getAttribute("aria-pressed")).toBe("true");
+    fireEvent.click(trace);
+    expect(trace.getAttribute("aria-pressed")).toBe("false");
   });
 
-  it("anchors origin and reconciliation animation inside their governed node coordinates", async () => {
-    await renderReducedHarness();
-    stepPath("Branch + reconvergence", 3);
-    const originPosition = document.querySelector(".sm-motion-origin-position");
-    expect(originPosition?.getAttribute("transform")).toBe("translate(75 310)");
-    expect(originPosition?.getAttribute("data-position-owner")).toBe("outer");
-    expect(originPosition?.querySelector(".sm-motion-origin-token")?.getAttribute("data-animation-owner")).toBe("inner");
-
-    fireEvent.click(screen.getByRole("button", { name: "Step forward" }));
-    const reconciliationPosition = document.querySelector(".sm-motion-reconciliation-position");
-    expect(reconciliationPosition?.getAttribute("transform")).toBe("translate(675 310)");
-    expect(reconciliationPosition?.getAttribute("data-position-owner")).toBe("outer");
-    expect(reconciliationPosition?.querySelector(".sm-motion-reconciliation")?.getAttribute("data-animation-owner")).toBe("inner");
+  it("keeps route geometry and camera focus anchored to read-model coordinates", () => {
+    const model = validateMotionQaReadModel(motionFixture);
+    const nodes = new Map(model.nodes.map((node) => [node.id, node]));
+    const samples = sampleRelationship(model.relationships[10], nodes);
+    expect(samples[0]).toEqual({ x: 365, y: 310 });
+    expect(samples.at(-1)).toEqual({ x: 925, y: 430 });
+    const selected = nodes.get("fixture-buffer")!;
+    const camera = createStructuralCamera(1000, 620, selected);
+    const projected = projectNode(selected, camera);
+    expect(projected.x).toBeCloseTo(500);
+    expect(projected.y).toBeCloseTo(297.6);
   });
 
-  it("uses more visible path arrows and local terminal direction chevrons", async () => {
-    await renderReducedHarness();
-    const topologyArrow = document.querySelector("#sm-motion-arrow");
-    const activeArrow = document.querySelector("#sm-motion-arrow-active");
-    expect(Number(topologyArrow?.getAttribute("markerWidth"))).toBeGreaterThanOrEqual(9);
-    expect(Number(activeArrow?.getAttribute("markerWidth"))).toBeGreaterThan(Number(topologyArrow?.getAttribute("markerWidth")));
-    expect(document.querySelectorAll('.sm-motion-topology-edge[marker-end="url(#sm-motion-arrow)"]')).toHaveLength(12);
-
-    stepPath("Blocked route", 2);
-    expect(document.querySelector('[data-motion-terminal="BLOCKED"] .sm-motion-terminal-chevron')).toBeTruthy();
+  it("encodes outcome physics without changing terminal semantics", () => {
+    expect(outcomeTravel("BLOCKED", 1)).toBeCloseTo(.76);
+    expect(outcomeTravel("ABSORBED", 1)).toBeCloseTo(.7);
+    expect(outcomeTravel("UNKNOWN", 1)).toBeCloseTo(.58);
+    expect(outcomeTravel("DELAYED", .6)).toBeCloseTo(.52);
+    expect(outcomeTravel("DELAYED", 1)).toBeCloseTo(1);
+    expect(outcomeTravel("AMPLIFIED", 1)).toBeCloseTo(1);
   });
 });

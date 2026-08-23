@@ -1,5 +1,21 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-23 — Premium structural renderer R&D prototype
+
+- Replaced the development Motion QA SVG viewport with a renderer abstraction
+  and a canvas-based art-direction prototype while preserving the existing
+  synthetic read model and motion state machine.
+- Added continuous routed conduits, pressure-envelope transmission, distinct
+  structural node forms, sparse HTML labels, Trace Mode, and camera-based node
+  focus with an upstream/current/downstream context strip.
+- Preserved blocked, absorbed, partial, delayed, amplified, common-origin,
+  reconciliation, keyboard, structured-text, and reduced-motion semantics.
+- Added no third-party renderer dependency; PixiJS/WebGL remains a replaceable
+  future candidate if the visual direction passes Human QA.
+- `HUMAN_PHASE4_MOTION_QA` remains PENDING. No BEA retrieval, factual
+  relationship, Gate-B evidence, Phase-5 work, public activation, or deployment
+  occurred.
+
 ## 2026-08-23 — Motion QA Round-3 SVG marker-positioning microfix
 
 - Separated SVG transform ownership so outer groups retain route/node

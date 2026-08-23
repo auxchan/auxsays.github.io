@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { MotionOutcome, MotionQaNode, MotionQaReadModel, MotionQaRelationship } from "../../data/motionQaReadModel";
+import type { MotionOutcome, MotionQaNode, MotionQaReadModel } from "../../data/motionQaReadModel";
 import { SystemIcon } from "../../shared/SystemIcon";
 import type { RouteState } from "../../state/routeSchema";
+import { CanvasStructuralSurface } from "./CanvasStructuralSurface";
+import "./motionRenderer.css";
 
 const outcomeLabels: Record<MotionOutcome, string> = {
   TRANSMITTED: "Transmitted",
@@ -24,42 +26,16 @@ function useReducedMotion() {
   return reduced;
 }
 
-function edgePath(edge: MotionQaRelationship, nodes: Map<string, MotionQaNode>) {
-  const from = nodes.get(edge.from)!; const to = nodes.get(edge.to)!;
-  const midpoint = (from.x + to.x) / 2;
-  return `M ${from.x} ${from.y} C ${midpoint} ${from.y}, ${midpoint} ${to.y}, ${to.x} ${to.y}`;
-}
-
-function edgePoint(edge: MotionQaRelationship, nodes: Map<string, MotionQaNode>, progress: number) {
-  const from = nodes.get(edge.from)!; const to = nodes.get(edge.to)!;
-  const midpoint = (from.x + to.x) / 2;
-  const inverse = 1 - progress;
-  const x = inverse ** 3 * from.x + 3 * inverse ** 2 * progress * midpoint + 3 * inverse * progress ** 2 * midpoint + progress ** 3 * to.x;
-  const y = inverse ** 3 * from.y + 3 * inverse ** 2 * progress * from.y + 3 * inverse * progress ** 2 * to.y + progress ** 3 * to.y;
-  const dx = 3 * inverse ** 2 * (midpoint - from.x) + 3 * inverse * progress * (midpoint - midpoint) + 3 * progress ** 2 * (to.x - midpoint);
-  const dy = 3 * inverse ** 2 * (from.y - from.y) + 3 * inverse * progress * (to.y - from.y) + 3 * progress ** 2 * (to.y - to.y);
-  return { x, y, angle: Math.atan2(dy, dx) * 180 / Math.PI };
-}
-
-function labelLines(label: string) {
-  const words = label.split(" ");
-  if (words.length < 3) return [label];
-  const split = Math.ceil(words.length / 2);
-  return [words.slice(0, split).join(" "), words.slice(split).join(" ")];
-}
-
-function OutcomeMarker({ edge, nodes }: { edge: MotionQaRelationship; nodes: Map<string, MotionQaNode> }) {
-  const progress = edge.outcome === "BLOCKED" ? .76 : edge.outcome === "ABSORBED" ? .7 : edge.outcome === "UNKNOWN" ? .58 : edge.outcome === "PARTIALLY_ABSORBED" ? .67 : edge.outcome === "DELAYED" ? .78 : .72;
-  const point = edgePoint(edge, nodes, progress);
-  const transform = `translate(${point.x} ${point.y}) rotate(${point.angle})`;
-
-  if (edge.outcome === "BLOCKED") return <g className="sm-motion-marker-position" transform={transform} data-motion-terminal="BLOCKED" data-position-owner="outer" aria-hidden="true"><g className="sm-motion-outcome-marker is-blocked" data-animation-owner="inner"><path className="sm-motion-terminal-chevron" d="M-27 -6 -18 0 -27 6" /><line x1="0" y1="-18" x2="0" y2="18" /><line x1="6" y1="-13" x2="6" y2="13" /><circle className="sm-motion-collision" cx="-9" r="5" /></g></g>;
-  if (edge.outcome === "ABSORBED") return <g className="sm-motion-marker-position" transform={transform} data-motion-terminal="ABSORBED" data-position-owner="outer" aria-hidden="true"><g className="sm-motion-outcome-marker is-absorbed" data-animation-owner="inner"><path className="sm-motion-terminal-chevron" d="M-31 -6 -22 0 -31 6" /><circle r="18" /><circle r="10" /><circle className="sm-motion-sink" r="4" /></g></g>;
-  if (edge.outcome === "PARTIALLY_ABSORBED") return <g className="sm-motion-marker-position" transform={transform} data-motion-component="absorbed" data-position-owner="outer" aria-hidden="true"><g className="sm-motion-outcome-marker is-partially-absorbed" data-animation-owner="inner"><path d="M-2 -13 C11 -8 11 8 -2 13" /><circle cx="2" r="4" /></g></g>;
-  if (edge.outcome === "DELAYED") return <g className="sm-motion-marker-position" transform={transform} data-motion-phase="WAITING" data-position-owner="outer" aria-hidden="true"><g className="sm-motion-outcome-marker is-delayed" data-animation-owner="inner"><line x1="0" y1="-13" x2="0" y2="13" /><line x1="7" y1="-13" x2="7" y2="13" /><circle cx="-8" r="4" /></g></g>;
-  if (edge.outcome === "AMPLIFIED") return <g className="sm-motion-marker-position" transform={transform} data-motion-strength="stronger" data-position-owner="outer" aria-hidden="true"><g className="sm-motion-outcome-marker is-amplified" data-animation-owner="inner"><path d="M-10 -7 L3 0 -10 7" /><path d="M0 -11 L17 0 0 11" /></g></g>;
-  if (edge.outcome === "UNKNOWN") return <g className="sm-motion-marker-position" transform={transform} data-motion-terminal="UNRESOLVED" data-position-owner="outer" aria-hidden="true"><g className="sm-motion-outcome-marker is-unknown" data-animation-owner="inner"><path className="sm-motion-terminal-chevron" d="M-31 -6 -22 0 -31 6" /><path d="M-13 0 A13 13 0 0 1 8 -10" /><path d="M8 10 A13 13 0 0 1 -5 12" /><circle cx="13" cy="-3" r="2" /></g></g>;
-  return <g className="sm-motion-marker-position" transform={transform} data-position-owner="outer" aria-hidden="true"><g className="sm-motion-outcome-marker is-transmitted" data-animation-owner="inner"><circle r="5" /></g></g>;
+function NodeRelationshipContext({ model, node }: { model: MotionQaReadModel; node: MotionQaNode }) {
+  const upstream = model.relationships.filter((edge) => edge.to === node.id).map((edge) => model.nodes.find((item) => item.id === edge.from)?.label).filter(Boolean);
+  const downstream = model.relationships.filter((edge) => edge.from === node.id).map((edge) => model.nodes.find((item) => item.id === edge.to)?.label).filter(Boolean);
+  return <div className="sm-viz-context-flow">
+    <div><span>Upstream</span><strong>{upstream.length ? upstream.join(" · ") : "Origin point"}</strong></div>
+    <i aria-hidden="true" />
+    <div className="is-current"><span>Current node</span><strong>{node.label}</strong></div>
+    <i aria-hidden="true" />
+    <div><span>Downstream</span><strong>{downstream.length ? downstream.join(" · ") : "Terminal exposure"}</strong></div>
+  </div>;
 }
 
 function MotionGraph({ model }: { model: MotionQaReadModel }) {
@@ -68,9 +44,9 @@ function MotionGraph({ model }: { model: MotionQaReadModel }) {
   const [stepIndex, setStepIndex] = useState(-1);
   const [playing, setPlaying] = useState(!reducedMotion);
   const [labelsHidden, setLabelsHidden] = useState(false);
+  const [traceMode, setTraceMode] = useState(true);
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
-  const [inspectorOpen, setInspectorOpen] = useState(false);
-  const restoreFocus = useRef<SVGGElement | null>(null);
+  const restoreFocus = useRef<HTMLButtonElement | null>(null);
   const path = model.paths.find((item) => item.id === pathId) ?? model.paths[0];
   const nodes = useMemo(() => new Map(model.nodes.map((node) => [node.id, node])), [model.nodes]);
   const edges = useMemo(() => new Map(model.relationships.map((edge) => [edge.id, edge])), [model.relationships]);
@@ -82,9 +58,6 @@ function MotionGraph({ model }: { model: MotionQaReadModel }) {
   const reconciliationTargets = new Set(currentEdges.map((edge) => edge.to));
   const reconciliationTargetId = currentEdges.length > 1 && reconciliationTargets.size === 1 ? currentEdges[0].to : null;
   const terminalOutcomes = new Set<MotionOutcome>(["BLOCKED", "ABSORBED", "UNKNOWN"]);
-  const affectedNodeIds = new Set(currentEdges.filter((edge) => !terminalOutcomes.has(edge.outcome)).map((edge) => edge.to));
-  const sourceNodeIds = new Set(currentEdges.map((edge) => edge.from));
-  if (stepIndex < 0) affectedNodeIds.add(model.relationships.find((edge) => edge.id === path.steps[0][0])?.from ?? model.nodes[0].id);
   const nodeStates = new Map(model.nodes.map((node) => [node.id, node.currentState]));
   completedEdgeIds.forEach((edgeId) => {
     const edge = edges.get(edgeId);
@@ -99,7 +72,6 @@ function MotionGraph({ model }: { model: MotionQaReadModel }) {
     else if (!terminalOutcomes.has(edge.outcome)) nodeStates.set(edge.to, "ACTIVE");
   });
   const selectedNode = selectedNodeId ? nodes.get(selectedNodeId) : undefined;
-  const connectedEdgeIds = new Set(selectedNodeId ? model.relationships.filter((edge) => edge.from === selectedNodeId || edge.to === selectedNodeId).map((edge) => edge.id) : []);
 
   useEffect(() => {
     if (!playing || reducedMotion) return;
@@ -116,27 +88,25 @@ function MotionGraph({ model }: { model: MotionQaReadModel }) {
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      if (event.key === "Escape" && inspectorOpen) {
-        setInspectorOpen(false);
+      if (event.key === "Escape" && selectedNodeId) {
+        setSelectedNodeId(null);
         restoreFocus.current?.focus();
       }
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [inspectorOpen]);
+  }, [selectedNodeId]);
 
   function choosePath(nextPathId: string) {
     setPathId(nextPathId);
     setStepIndex(-1);
     setPlaying(!reducedMotion);
     setSelectedNodeId(null);
-    setInspectorOpen(false);
   }
 
-  function selectNode(nodeId: string, target: SVGGElement) {
+  function selectNode(nodeId: string, target: HTMLButtonElement) {
     restoreFocus.current = target;
-    setSelectedNodeId(nodeId);
-    setInspectorOpen(true);
+    setSelectedNodeId((current) => current === nodeId ? null : nodeId);
   }
 
   const currentSummary = stepIndex < 0
@@ -144,58 +114,33 @@ function MotionGraph({ model }: { model: MotionQaReadModel }) {
     : `${path.label}, step ${stepIndex + 1} of ${path.steps.length}: ${currentEdges.map((edge) => outcomeLabels[edge.outcome]).join(" and ")}.`;
 
   return <>
-    <section className="sm-motion-controls" aria-label="Motion QA playback controls">
-      <div className="sm-motion-paths" role="group" aria-label="Synthetic test paths">{model.paths.map((item) => <button key={item.id} type="button" className={path.id === item.id ? "is-selected" : ""} aria-pressed={path.id === item.id} data-motion-fixture-selector={item.id} onClick={() => choosePath(item.id)}>{item.label}</button>)}</div>
-      <div className="sm-motion-playback">
-        <button type="button" onClick={() => setPlaying((current) => !current)} disabled={reducedMotion || stepIndex >= path.steps.length - 1}>{playing ? "Pause" : "Play"}</button>
+    <section className="sm-viz-console" aria-label="Motion QA playback controls">
+      <div className="sm-viz-route-strip" role="group" aria-label="Synthetic test paths"><span>Test route</span>{model.paths.map((item) => <button key={item.id} type="button" className={path.id === item.id ? "is-selected" : ""} aria-pressed={path.id === item.id} data-motion-fixture-selector={item.id} onClick={() => choosePath(item.id)}>{item.label}</button>)}</div>
+      <div className="sm-viz-playback">
+        <button type="button" className="is-primary" onClick={() => setPlaying((current) => !current)} disabled={reducedMotion || stepIndex >= path.steps.length - 1}>{playing ? "Pause" : "Play"}</button>
         <button type="button" onClick={() => { setStepIndex(-1); setPlaying(!reducedMotion); }}>Replay</button>
         <button type="button" onClick={() => { setPlaying(false); setStepIndex((current) => Math.min(path.steps.length - 1, current + 1)); }}>Step forward</button>
-        <button id="motion-label-independent-qa" type="button" className="sm-motion-label-toggle" aria-pressed={labelsHidden} data-motion-label-independent-qa onClick={() => setLabelsHidden((current) => !current)}>{labelsHidden ? "Show explanation" : "Hide explanation"}</button>
-        <span>{reducedMotion ? "Reduced motion · manual steps" : playing ? "Playing" : "Paused"}</span>
+        <button type="button" className="sm-viz-trace-toggle" aria-pressed={traceMode} onClick={() => setTraceMode((current) => !current)}>Trace mode</button>
+        <button id="motion-label-independent-qa" type="button" aria-pressed={labelsHidden} data-motion-label-independent-qa onClick={() => setLabelsHidden((current) => !current)}>{labelsHidden ? "Show explanation" : "Hide explanation"}</button>
+        <span>{reducedMotion ? "Reduced motion · manual steps" : playing ? "Live transmission" : "Paused"}</span>
       </div>
     </section>
 
-    <div className={`sm-motion-workbench ${inspectorOpen ? "has-inspector" : ""}`}>
-    <div className="sm-motion-stage" role="region" aria-label="Scrollable synthetic structural motion graph" tabIndex={0} data-label-independent={labelsHidden}>
-      <div className="sm-motion-stage__header"><div><span>Active test path</span><strong>{path.label}</strong></div><div><span>Stop condition</span><strong>{path.stopReason.replaceAll("_", " ")}</strong></div></div>
-      <svg className="sm-motion-network" viewBox="0 0 1000 620" role="img" aria-labelledby="motion-graph-title motion-graph-description">
-        <title id="motion-graph-title">Synthetic structural motion test network</title>
-        <desc id="motion-graph-description">Nine synthetic nodes and twelve test-only relationships. Playback and the structured list communicate the same transmission states.</desc>
-        <defs><marker id="sm-motion-arrow" className="sm-motion-arrow" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="9.5" markerHeight="9.5" orient="auto"><path d="M0 0 10 5 0 10 2.8 5Z" /></marker><marker id="sm-motion-arrow-active" className="sm-motion-arrow is-active" viewBox="0 0 10 10" refX="8.6" refY="5" markerWidth="10.5" markerHeight="10.5" orient="auto"><path d="M0 0 10 5 0 10 2.8 5Z" /></marker></defs>
-        <g className="sm-motion-edges">{model.relationships.map((edge) => {
-          const state = completedEdgeIds.has(edge.id) ? "is-complete" : pathEdgeIds.has(edge.id) ? "is-path" : "is-context";
-          const focus = selectedNodeId ? connectedEdgeIds.has(edge.id) ? "is-connected" : "is-unrelated" : "";
-          return <path key={edge.id} d={edgePath(edge, nodes)} className={`sm-motion-topology-edge ${state} ${focus}`} markerEnd="url(#sm-motion-arrow)" data-motion-edge-id={edge.id} data-direction="forward" />;
-        })}{currentEdges.map((edge) => {
-          const outcomeClass = edge.outcome.toLowerCase().replaceAll("_", "-");
-          const reachesDestination = !terminalOutcomes.has(edge.outcome);
-          return <g key={`signal-${edge.id}`} className="sm-motion-current-signal" data-origin-id={edge.originId}>
-            {edge.outcome === "PARTIALLY_ABSORBED" && <path d={edgePath(edge, nodes)} pathLength="100" className="sm-motion-absorbed-component" data-motion-component="absorbed" />}
-            {edge.outcome === "AMPLIFIED" && <path d={edgePath(edge, nodes)} pathLength="100" className="sm-motion-amplified-halo" aria-hidden="true" />}
-            <path d={edgePath(edge, nodes)} pathLength="100" className={`sm-motion-signal is-current is-${outcomeClass}`} markerEnd={reachesDestination ? "url(#sm-motion-arrow-active)" : undefined} data-motion-edge-id={edge.id} data-motion-outcome={edge.outcome} data-direction="forward" data-signal-terminates={reachesDestination ? "at-destination" : "before-destination"} data-motion-component={edge.outcome === "PARTIALLY_ABSORBED" ? "surviving" : undefined} data-motion-phase={edge.outcome === "DELAYED" ? "WAITING" : undefined} data-motion-strength={edge.outcome === "AMPLIFIED" ? "stronger" : undefined} />
-            <OutcomeMarker edge={edge} nodes={nodes} />
-          </g>;
-        })}</g>
-        <g className="sm-motion-nodes">{model.nodes.map((node) => {
-          const lines = labelLines(node.label);
-          const selected = selectedNodeId === node.id;
-          const affected = affectedNodeIds.has(node.id);
-          const participating = sourceNodeIds.has(node.id);
-          const visualState = nodeStates.get(node.id) ?? "IDLE";
-          const related = !selectedNodeId || node.id === selectedNodeId || model.relationships.some((edge) => connectedEdgeIds.has(edge.id) && (edge.from === node.id || edge.to === node.id));
-          return <g key={node.id} transform={`translate(${node.x} ${node.y})`} role="button" tabIndex={0} aria-label={`${node.label}. ${node.kind}. ${visualState}. Open fixture inspector.`} aria-pressed={selected} data-motion-node-id={node.id} data-motion-state={visualState} data-motion-active={affected || participating} className={`${selected ? "is-selected" : ""} ${affected ? "is-affected" : ""} ${participating ? "is-participating" : ""} is-state-${visualState.toLowerCase()} ${related ? "" : "is-unrelated"}`} onClick={(event) => selectNode(node.id, event.currentTarget)} onKeyDown={(event) => { if (event.key === "Enter" || event.key === " ") { event.preventDefault(); selectNode(node.id, event.currentTarget); } }}><circle r="42" /><circle className="sm-motion-node-core" r="9" /><text textAnchor="middle" y="58">{lines.map((line, index) => <tspan x="0" dy={index ? "15" : "0"} key={line}>{line}</tspan>)}</text></g>;
-        })}</g>
-        {path.commonCauseId && (() => { const origin = nodes.get(model.relationships.find((edge) => edge.id === path.steps[0][0])!.from)!; return <g className="sm-motion-origin-position" transform={`translate(${origin.x} ${origin.y})`} data-origin-id={path.originId} data-position-owner="outer" aria-hidden="true"><g className="sm-motion-origin-token" data-origin-id={path.originId} data-animation-owner="inner"><circle r="51" /><path d="M-6 0 0-6 6 0 0 6Z" /></g></g>; })()}
-        {path.commonCauseId && reconciliationTargetId && (() => { const junction = nodes.get(reconciliationTargetId)!; return <g className="sm-motion-reconciliation-position" transform={`translate(${junction.x} ${junction.y})`} data-common-origin-reconciliation="single" data-origin-id={path.originId} data-position-owner="outer" aria-hidden="true"><g className="sm-motion-reconciliation" data-animation-owner="inner"><circle r="52" /><path d="M-7 0 0-7 7 0 0 7Z" /></g></g>; })()}
-      </svg>
-      <p className="sm-motion-live" role="status" aria-live="polite" hidden={labelsHidden}>{currentSummary}</p>
-      <div className="sm-motion-legend" aria-label="Transmission outcome legend" hidden={labelsHidden}>{Object.entries(outcomeLabels).map(([outcome, label]) => <span key={outcome} className={`is-${outcome.toLowerCase().replaceAll("_", "-")}`}><i aria-hidden="true" />{label}</span>)}</div>
-    </div>
+    <section className={`sm-viz-instrument ${selectedNode ? "has-focus" : ""}`} aria-label="Spatial structural motion prototype" data-label-independent={labelsHidden}>
+      <header className="sm-viz-instrument__header">
+        <div><span>Structural surface / R&amp;D 01</span><strong>{path.label}</strong></div>
+        <div className="sm-viz-status"><span><i aria-hidden="true" />{traceMode ? "Trace isolated" : "Full topology"}</span><span>{path.stopReason.replaceAll("_", " ")}</span></div>
+      </header>
+      <CanvasStructuralSurface model={model} path={path} currentEdges={currentEdges} completedEdgeIds={completedEdgeIds} pathEdgeIds={pathEdgeIds} nodeStates={nodeStates} selectedNodeId={selectedNodeId} traceMode={traceMode} reducedMotion={reducedMotion} reconciliationTargetId={reconciliationTargetId} onSelectNode={selectNode} />
+      <div className="sm-viz-readout" hidden={labelsHidden}><p className="sm-motion-live" role="status" aria-live="polite" hidden={labelsHidden}>{currentSummary}</p><div className="sm-viz-legend sm-motion-legend" aria-label="Transmission outcome legend" hidden={labelsHidden}><span><i className="is-flow" />Flow</span><span><i className="is-hold" />Hold</span><span><i className="is-constraint" />Constraint</span><span><i className="is-amplified" />Amplification</span></div></div>
+      {selectedNode && <aside className="sm-viz-inspector" aria-label="Selected synthetic node inspector" data-selected-node-id={selectedNode.id}>
+        <div className="sm-viz-inspector__lead"><span>Inside this system</span><h2>{selectedNode.label}</h2><p>{selectedNode.kind.replaceAll("_", " ")} · {nodeStates.get(selectedNode.id) ?? "IDLE"} · TEST_FIXTURE</p></div>
+        <NodeRelationshipContext model={model} node={selectedNode} />
+        <div className="sm-viz-inspector__actions"><span>{selectedNode.derivationRef}</span><button type="button" onClick={() => { setSelectedNodeId(null); restoreFocus.current?.focus(); }}>Back to whole system</button></div>
+      </aside>}
+    </section>
 
-    {inspectorOpen && selectedNode && <aside className="sm-motion-inspector" aria-label="Selected synthetic node inspector" data-selected-node-id={selectedNode.id}><div><span>Connected node</span><button type="button" onClick={() => { setInspectorOpen(false); restoreFocus.current?.focus(); }}>Close</button></div><h2>{selectedNode.label}</h2><dl><div><dt>Kind</dt><dd>{selectedNode.kind}</dd></div><div><dt>Motion state</dt><dd>{nodeStates.get(selectedNode.id) ?? "IDLE"}</dd></div><div><dt>Upstream</dt><dd>{model.relationships.filter((edge) => edge.to === selectedNode.id).length}</dd></div><div><dt>Downstream</dt><dd>{model.relationships.filter((edge) => edge.from === selectedNode.id).length}</dd></div><div><dt>Evidence</dt><dd>TEST_FIXTURE</dd></div><div><dt>Derivation</dt><dd>{selectedNode.derivationRef}</dd></div></dl><p>Interaction state only. No value or relationship is economic evidence.</p></aside>}
-    </div>
-
-    <details className="sm-motion-list"><summary>Read the complete path without animation <span>{path.steps.flat().length} fixture relationships</span></summary><ol>{path.steps.map((step, index) => <li key={`${path.id}-${index}`}><strong>Step {index + 1}</strong>{step.map((edgeId) => { const edge = edges.get(edgeId)!; return <span key={edge.id}>{nodes.get(edge.from)?.label} → {nodes.get(edge.to)?.label}<b>{outcomeLabels[edge.outcome]}</b><small>{edge.mechanism}{edge.commonCauseId ? ` · shared origin ${edge.commonCauseId}` : ""}</small></span>; })}</li>)}</ol></details>
+    <details className="sm-motion-list"><summary>Open the structured path record <span>{path.steps.flat().length} fixture relationships</span></summary><ol>{path.steps.map((step, index) => <li key={`${path.id}-${index}`}><strong>Step {index + 1}</strong>{step.map((edgeId) => { const edge = edges.get(edgeId)!; return <span key={edge.id}>{nodes.get(edge.from)?.label} → {nodes.get(edge.to)?.label}<b>{outcomeLabels[edge.outcome]}</b><small>{edge.mechanism}{edge.commonCauseId ? ` · shared origin ${edge.commonCauseId}` : ""}</small></span>; })}</li>)}</ol></details>
   </>;
 }
 
@@ -210,5 +155,5 @@ function MotionOutlook() {
 export function MotionQaHarness({ model, route }: { model: MotionQaReadModel; route: RouteState }) {
   if (route.view === "verified") return <MotionEvidence model={model} />;
   if (route.view === "outlook") return <MotionOutlook />;
-  return <div className="sm-motion-view" key="summary"><header className="sm-motion-page-header"><span>Structural motion laboratory</span><h1 data-route-heading tabIndex={-1}>Watch pressure<br /><em>move through a system.</em></h1><p>A compact synthetic topology for testing direction, interruption, branching, and focus. No economic claim is being made.</p></header><MotionGraph model={model} /></div>;
+  return <div className="sm-motion-view sm-motion-view--renderer-rd" key="summary"><header className="sm-motion-page-header sm-motion-page-header--renderer"><span>Visual renderer laboratory</span><h1 data-route-heading tabIndex={-1}>See the system.<br /><em>Follow the pressure.</em></h1><p>One synthetic network. Continuous geometry, spatial focus, and physics-led motion—without making an economic claim.</p></header><MotionGraph model={model} /></div>;
 }

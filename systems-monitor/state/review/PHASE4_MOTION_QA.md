@@ -22,6 +22,29 @@ model: nodes, relationships, path steps, origin IDs, common-cause IDs,
 transmission outcomes, current states, evidence classes, derivation references,
 coverage, source health, and stop reasons.
 
+## Premium renderer R&D replacement
+
+The current development prototype is an art-direction replacement for the SVG
+engineering viewport, not a production visual baseline or factual integration.
+
+- React continues to own navigation, controls, sparse labels, keyboard access,
+  focus, the spatial context strip, and the structured text alternative.
+- A renderer interface now owns the structural surface. Its first implementation
+  uses an instrumented canvas with continuous conduits, pressure envelopes,
+  localized luminance, and topology-specific node forms.
+- The read model, governed outcomes, playback sequence, common-origin identity,
+  manual stepping, reduced-motion behavior, and fixture isolation are unchanged.
+- Trace Mode suppresses unrelated infrastructure without deleting it.
+- Selecting a node changes the camera focus and exposes upstream, current-node,
+  and downstream context inside the instrument instead of opening a detached
+  dashboard card.
+- No third-party renderer dependency was added during this art-direction proof;
+  the abstraction remains replaceable by PixiJS/WebGL if this visual direction
+  is approved for a deeper renderer evaluation.
+
+The old SVG artwork is no longer rendered by the Motion QA surface. This does
+not promote the canvas implementation into the production application.
+
 ## Round-2 semantic correction
 
 Round 2 changes the motion grammar without changing fixture evidence or the
@@ -186,6 +209,26 @@ Use **Hide explanation** and answer only these six questions:
    layout?
 
 Do not reopen inspector or rapid-switching review unless a regression appears.
+
+## Premium renderer R&D visual review
+
+Keep `HUMAN_PHASE4_MOTION_QA = PENDING` and judge this prototype separately:
+
+1. Does a still frame look materially more distinctive and premium than the
+   prior circles-and-lines viewport?
+2. Can direction and hierarchy be understood before reading every label?
+3. Do node forms read as different structural roles rather than repeated icons?
+4. Does Trace Mode make one route understandable without erasing context?
+5. Do blocked, absorbed, delayed, partial, and amplified pressure behaviors feel
+   physical rather than like animated diagram strokes?
+6. Does selecting a node feel like entering a system, with useful upstream and
+   downstream context?
+7. Does the surface remain restrained rather than becoming neon or decorative?
+8. Does reduced-motion manual stepping preserve the same spatial meaning?
+
+Approval of this renderer R&D direction would authorize only a deeper renderer
+prototype/integration design. It would not approve factual relationships,
+Gate B, Phase 5, public activation, or deployment.
 
 Taylor must record PASS or corrections. This file does not close Gate B,
 authorize Phase 5, or authorize public activation or deployment.
