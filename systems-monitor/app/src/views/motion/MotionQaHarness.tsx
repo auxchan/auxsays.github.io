@@ -139,6 +139,14 @@ function MotionGraph({ model }: { model: MotionQaReadModel }) {
     setPlaying(!reducedMotion);
   }
 
+  function goHome() {
+    if (cameraResumeTimer.current !== null) window.clearTimeout(cameraResumeTimer.current);
+    setTraceMode(false);
+    setPlaying(false);
+    setStepIndex(-1);
+    setFocusHistory([]);
+  }
+
   const currentSummary = stepIndex < 0
     ? `${path.label} ready at its origin.`
     : `${path.label}, step ${stepIndex + 1} of ${path.steps.length}: ${currentEdges.map((edge) => outcomeLabels[edge.outcome]).join(" and ")}.`;
@@ -164,7 +172,7 @@ function MotionGraph({ model }: { model: MotionQaReadModel }) {
       <nav className="sm-viz-breadcrumbs" aria-label="Structural exploration history"><button type="button" aria-current={!selectedNode ? "location" : undefined} onClick={() => navigateToDepth(0)}>Synthetic system</button>{focusHistory.map((nodeId, index) => { const node = nodes.get(nodeId); return node ? <span key={`${nodeId}-${index}`}><i aria-hidden="true">›</i><button type="button" aria-current={index === focusHistory.length - 1 ? "location" : undefined} onClick={() => navigateToDepth(index + 1)}>{node.label}</button></span> : null; })}</nav>
       <div className={`sm-viz-workspace ${selectedNode ? "has-guide" : ""}`}>
         <NodeInsightPanel model={model} node={selectedNode ?? null} state={selectedNode ? nodeStates.get(selectedNode.id) ?? selectedNode.currentState : "IDLE"} onClose={() => navigateToDepth(0)} />
-        <CanvasStructuralSurface model={model} path={path} currentEdges={surfaceCurrentEdges} completedEdgeIds={surfaceCompletedEdgeIds} pathEdgeIds={surfacePathEdgeIds} nodeStates={surfaceNodeStates} selectedNodeId={selectedNodeId} focusDepth={focusHistory.length} viewport={viewport} traceMode={traceMode} reducedMotion={reducedMotion} reconciliationTargetId={traceMode ? reconciliationTargetId : null} onSelectNode={selectNode} />
+        <CanvasStructuralSurface model={model} path={path} currentEdges={surfaceCurrentEdges} completedEdgeIds={surfaceCompletedEdgeIds} pathEdgeIds={surfacePathEdgeIds} nodeStates={surfaceNodeStates} selectedNodeId={selectedNodeId} focusDepth={focusHistory.length} viewport={viewport} traceMode={traceMode} reducedMotion={reducedMotion} reconciliationTargetId={traceMode ? reconciliationTargetId : null} onSelectNode={selectNode} onHome={goHome} />
       </div>
       {traceMode && <div className="sm-viz-readout" hidden={labelsHidden}><p className="sm-motion-live" role="status" aria-live="polite" hidden={labelsHidden}>{currentSummary}</p><div className="sm-viz-legend sm-motion-legend" aria-label="Transmission outcome legend" hidden={labelsHidden}><span><i className="is-flow" />Flow</span><span><i className="is-hold" />Hold</span><span><i className="is-constraint" />Constraint</span><span><i className="is-amplified" />Amplification</span></div></div>}
     </section>

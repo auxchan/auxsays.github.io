@@ -21,9 +21,10 @@ interface CanvasStructuralSurfaceProps {
   reducedMotion: boolean;
   reconciliationTargetId: string | null;
   onSelectNode: (nodeId: string, target: HTMLButtonElement) => void;
+  onHome: () => void;
 }
 
-export function CanvasStructuralSurface({ model, path, currentEdges, completedEdgeIds, pathEdgeIds, nodeStates, selectedNodeId, focusDepth, viewport, traceMode, reducedMotion, reconciliationTargetId, onSelectNode }: CanvasStructuralSurfaceProps) {
+export function CanvasStructuralSurface({ model, path, currentEdges, completedEdgeIds, pathEdgeIds, nodeStates, selectedNodeId, focusDepth, viewport, traceMode, reducedMotion, reconciliationTargetId, onSelectNode, onHome }: CanvasStructuralSurfaceProps) {
   const hostRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rendererRef = useRef<CanvasStructuralRenderer | null>(null);
@@ -155,6 +156,7 @@ export function CanvasStructuralSurface({ model, path, currentEdges, completedEd
       }}><i className="sm-viz-node-anchor" aria-hidden="true" data-selected-node-anchor={selectedNodeId === node.id ? "visible" : undefined}><StructuralNodeIcon symbol={visual.symbol} /></i><span><b>{label?.text ?? node.label}</b><small>{focusDepth > 0 ? node.kind.replaceAll("_", " ") : ""}</small></span></button>;
     })}</div>
     <div className="sm-viz-viewport-controls" aria-label="Graph viewport controls" onPointerDown={(event) => event.stopPropagation()}>
+      <button type="button" className="is-home" aria-label="Home — show all core factors" onClick={() => { setViewportTransform(DEFAULT_VIEWPORT); setHoveredNodeId(null); onHome(); }}><span aria-hidden="true">⌂</span><b>Home</b></button>
       <button type="button" aria-label="Zoom out" onClick={() => zoomAt(0.85)}>−</button>
       <output aria-label="Graph zoom level">{Math.round(viewportTransform.zoom * 100)}%</output>
       <button type="button" aria-label="Zoom in" onClick={() => zoomAt(1.18)}>+</button>

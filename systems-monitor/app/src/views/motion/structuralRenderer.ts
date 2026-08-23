@@ -16,6 +16,13 @@ export interface StructuralViewportTransform {
 export const MIN_STRUCTURAL_ZOOM = 0.7;
 export const MAX_STRUCTURAL_ZOOM = 2.4;
 
+export function easeConnectorHover(current: number, target: number, elapsedMs: number, reducedMotion = false) {
+  if (reducedMotion) return target;
+  const safeElapsed = Math.max(0, elapsedMs);
+  const blend = 1 - Math.exp(-safeElapsed / 145);
+  return current + (target - current) * blend;
+}
+
 export interface StructuralRenderState {
   model: MotionQaReadModel;
   currentEdges: MotionQaRelationship[];
@@ -316,6 +323,8 @@ export class CanvasStructuralRenderer implements StructuralRenderer {
   private layoutTarget: Map<string, Point> | null = null;
   private layoutKey = "";
   private layoutStartedAt = 0;
+  private readonly hoverVisuals = new Map<string, { alpha: number; emphasis: number }>();
+  private lastRenderAt = 0;
 
   constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
     this.canvas = canvas;
@@ -332,6 +341,8 @@ export class CanvasStructuralRenderer implements StructuralRenderer {
 
   render(state: StructuralRenderState) {
     const context = this.context;
+    const frameElapsed = this.lastRenderAt ? state.nowMs - this.lastRenderAt : 16.67;
+    this.lastRenderAt = state.nowMs;
     const targetPositions = new Map(state.model.nodes.map((node) => [node.id, { x: node.x, y: node.y }]));
     const nextLayoutKey = `${state.selectedNodeId ?? "overview"}:${state.focusDepth}:${[...state.visibleRelationshipIds].sort().join(",")}`;
     if (!this.layoutCurrent) this.layoutCurrent = targetPositions;
@@ -382,35 +393,44 @@ export class CanvasStructuralRenderer implements StructuralRenderer {
     context.translate(camera.offsetX, camera.offsetY);
     context.scale(camera.scale, camera.scale);
 
+    if (state.traceMode) this.hoverVisuals.clear();
     for (const [edgeIndex, edge] of state.model.relationships.entries()) {
       if (!state.visibleRelationshipIds.has(edge.id)) continue;
       const points = sampleRelationship(edge, nodes);
       const isPath = state.pathEdgeIds.has(edge.id);
       const isComplete = state.completedEdgeIds.has(edge.id);
       const isHoverRelated = !state.hoveredNodeId || edge.from === state.hoveredNodeId || edge.to === state.hoveredNodeId;
-      const alpha = state.traceMode ? (isPath ? 0.6 : 0.04) : isHoverRelated ? 0.34 : 0.07;
+      const previousHover = this.hoverVisuals.get(edge.id) ?? { alpha: 0.34, emphasis: 0 };
+      const targetHover = state.hoveredNodeId ? { alpha: isHoverRelated ? 0.34 : 0.07, emphasis: isHoverRelated ? 1 : 0 } : { alpha: 0.34, emphasis: 0 };
+      const hoverVisual = state.traceMode ? previousHover : {
+        alpha: easeConnectorHover(previousHover.alpha, targetHover.alpha, frameElapsed, state.reducedMotion),
+        emphasis: easeConnectorHover(previousHover.emphasis, targetHover.emphasis, frameElapsed, state.reducedMotion)
+      };
+      if (!state.traceMode) this.hoverVisuals.set(edge.id, hoverVisual);
+      const alpha = state.traceMode ? (isPath ? 0.6 : 0.04) : hoverVisual.alpha;
       tracePoints(context, points);
       context.strokeStyle = isComplete ? "rgba(105,198,178,.55)" : `rgba(86,132,145,${alpha})`;
-      context.lineWidth = isPath ? 8 : isHoverRelated && state.hoveredNodeId ? 6.5 : 5;
+      context.lineWidth = isPath ? 8 : 5 + hoverVisual.emphasis * 1.5;
       context.lineCap = "round";
       context.stroke();
       tracePoints(context, points);
       context.strokeStyle = isComplete ? "rgba(146,237,215,.52)" : `rgba(126,170,180,${alpha * 1.25})`;
       context.lineWidth = 1.15;
       context.stroke();
-      if (isPath || !state.traceMode) drawArrow(context, points, 0.9, isPath ? "#719d9f" : isHoverRelated && state.hoveredNodeId ? "#79d8c7" : "#486a75", isPath ? 0.68 : isHoverRelated && state.hoveredNodeId ? 0.7 : 0.36);
+      const arrowColor = `rgb(${Math.round(72 + 49 * hoverVisual.emphasis)}, ${Math.round(106 + 110 * hoverVisual.emphasis)}, ${Math.round(117 + 82 * hoverVisual.emphasis)})`;
+      if (isPath || !state.traceMode) drawArrow(context, points, 0.9, isPath ? "#719d9f" : arrowColor, isPath ? 0.68 : 0.36 + hoverVisual.emphasis * 0.34);
       if (!state.traceMode && !state.reducedMotion) {
-        const glint = ((state.nowMs / (isHoverRelated && state.hoveredNodeId ? 1350 : 2500)) + edgeIndex * 0.137) % 1;
-        const start = Math.max(0, glint - (isHoverRelated && state.hoveredNodeId ? 0.16 : 0.08));
+        const glint = ((state.nowMs / (2500 - hoverVisual.emphasis * 1150)) + edgeIndex * 0.137) % 1;
+        const start = Math.max(0, glint - (0.08 + hoverVisual.emphasis * 0.08));
         const hoveredNode = state.hoveredNodeId ? nodes.get(state.hoveredNodeId) : undefined;
         const glintColor = hoveredNode && isHoverRelated ? resolveStructuralNodeVisual(hoveredNode).accent : "#75c9bd";
         context.save();
         context.lineCap = "round";
         context.shadowColor = glintColor;
-        context.shadowBlur = isHoverRelated && state.hoveredNodeId ? 15 : 7;
-        context.globalAlpha = isHoverRelated && state.hoveredNodeId ? 0.88 : 0.3;
+        context.shadowBlur = 7 + hoverVisual.emphasis * 8;
+        context.globalAlpha = 0.3 + hoverVisual.emphasis * 0.58;
         context.strokeStyle = glintColor;
-        context.lineWidth = isHoverRelated && state.hoveredNodeId ? 3.2 : 1.7;
+        context.lineWidth = 1.7 + hoverVisual.emphasis * 1.5;
         tracePoints(context, points, start, glint);
         context.stroke();
         context.restore();

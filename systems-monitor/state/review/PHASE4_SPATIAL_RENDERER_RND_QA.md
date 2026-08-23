@@ -4,6 +4,8 @@ Status: **PENDING HUMAN VISUAL QA**
 
 Licensed factor-imagery treatment: **PASS — Taylor, 2026-08-23**
 
+Connector-hover easing and Home navigation: **PENDING HUMAN VISUAL QA**
+
 This review covers only the development-only structural renderer, spatial
 navigation, label hierarchy, node grammar, and Explore/Trace interaction.
 `HUMAN_PHASE4_MOTION_QA` remains **PENDING**.
@@ -133,6 +135,25 @@ duplicate coverage during review.
 
 The labels are realistic synthetic names for typography and navigation review.
 They are not claims about the U.S. economy.
+
+## Taylor follow-up — connector easing, Home, and numbers boundary
+
+Taylor found the connector emphasis too abrupt on factor hover and requested a
+clear route back to the full core-factor viewpoint. Explore connectors now ease
+between baseline and focused states rather than changing opacity, thickness,
+arrows, and glow in one frame. Reduced-motion mode keeps the same semantics
+without an animated ramp.
+
+A visible Home control now performs the complete reset: leave Trace, stop fixture
+playback, close the factor guide, clear navigation depth, restore default zoom
+and pan, and show the full core-factor overview.
+
+Real structural numbers were deliberately not added in this UI correction. The
+current Phase-4B candidate reports `BLOCKED_LIVE_BEA_CREDENTIAL`, zero accepted
+structural relationships, and no structural calculations. Adding values to the
+synthetic nodes now would visually overstate the evidence. Existing governed
+factual labor observations remain separate until an authoritative node mapping
+and accepted structural read model exist.
 
 ## Local review
 

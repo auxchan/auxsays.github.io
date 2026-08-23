@@ -1,5 +1,21 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-23 — Connector easing and core-factor Home control
+
+- Replaced the binary Explore-hover connector jump with a frame-smoothed fade
+  for line opacity, width, arrow brightness, glint speed, and glow intensity.
+- Added a visible Home control to the graph viewport. It closes factor detail,
+  exits Trace, clears playback, resets zoom/pan, and restores the complete
+  core-factor overview in one action.
+- Kept reduced-motion behavior deterministic and immediate, and added regression
+  coverage for both the easing curve and full Home-state reset.
+- Did not place real structural numbers on the synthetic renderer. The current
+  Phase-4B candidate remains blocked on live BEA credentials with zero accepted
+  structural relationships and no structural CALCs; factual labor observations
+  remain available only in their governed factual surface.
+- Human spatial-renderer QA and Motion QA remain PENDING. Gate B, Phase 5,
+  public activation, and deployment remain unchanged.
+
 ## 2026-08-23 — Complete factor-imagery coverage and future-node gate
 
 - Recorded Taylor's PASS for the licensed-photo blending test while retaining

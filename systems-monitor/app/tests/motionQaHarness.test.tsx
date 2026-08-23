@@ -4,7 +4,7 @@ import motionFixture from "../fixtures/motion-qa-read-model.json";
 import { SnapshotProvider } from "../src/app/SnapshotContext";
 import { SystemsMonitorApp } from "../src/app/SystemsMonitorApp";
 import { motionOutcomes, validateMotionQaReadModel } from "../src/data/motionQaReadModel";
-import { applyStructuralViewport, createStructuralCamera, interpolateCamera, MAX_STRUCTURAL_ZOOM, MIN_STRUCTURAL_ZOOM, outcomeTravel, projectNode, sampleRelationship, zoomStructuralViewportAt } from "../src/views/motion/structuralRenderer";
+import { applyStructuralViewport, createStructuralCamera, easeConnectorHover, interpolateCamera, MAX_STRUCTURAL_ZOOM, MIN_STRUCTURAL_ZOOM, outcomeTravel, projectNode, sampleRelationship, zoomStructuralViewportAt } from "../src/views/motion/structuralRenderer";
 import { layoutSpatialLabels, layoutSpatialNodes, MAX_VISIBLE_RELATIONSHIPS, nextNodeInDirection, resolveSpatialViewport } from "../src/views/motion/spatialNavigation";
 import { candidate } from "./factualCandidate.test";
 
@@ -344,6 +344,17 @@ describe("development-only structural Motion QA harness", () => {
     expect(document.querySelector(".sm-viz-surface")?.getAttribute("data-connector-motion")).toBe("trace");
   });
 
+  it("eases connector emphasis instead of snapping on hover", () => {
+    expect(easeConnectorHover(0, 1, 0)).toBe(0);
+    const firstFrame = easeConnectorHover(0, 1, 16);
+    expect(firstFrame).toBeGreaterThan(0);
+    expect(firstFrame).toBeLessThan(0.2);
+    const laterFrame = easeConnectorHover(firstFrame, 1, 160);
+    expect(laterFrame).toBeGreaterThan(firstFrame);
+    expect(laterFrame).toBeLessThan(1);
+    expect(easeConnectorHover(0, 1, 16, true)).toBe(1);
+  });
+
   it("zooms under the mouse wheel, pans only with the middle button, and resets", async () => {
     await renderReducedHarness();
     const surface = document.querySelector<HTMLElement>(".sm-viz-surface")!;
@@ -367,6 +378,26 @@ describe("development-only structural Motion QA harness", () => {
     expect(surface.dataset.viewportZoom).toBe("1.000");
     expect(surface.dataset.viewportPanX).toBe("0");
     expect(surface.dataset.viewportPanY).toBe("0");
+  });
+
+  it("returns selection, mode, and camera to the complete core-factor home view", async () => {
+    await renderReducedHarness();
+    const surface = document.querySelector<HTMLElement>(".sm-viz-surface")!;
+    fireEvent.click(screen.getByRole("button", { name: /Product Storage Capacity.*Enter this system/ }));
+    expect(surface.dataset.focusDepth).toBe("1");
+    fireEvent.click(screen.getByRole("button", { name: "Trace" }));
+    const zoomEvent = new WheelEvent("wheel", { deltaY: -180, clientX: 320, clientY: 240, bubbles: true, cancelable: true });
+    fireEvent(surface, zoomEvent);
+    expect(Number(surface.dataset.viewportZoom)).toBeGreaterThan(1);
+
+    fireEvent.click(screen.getByRole("button", { name: "Home — show all core factors" }));
+    expect(surface.dataset.focusDepth).toBe("0");
+    expect(surface.dataset.viewportZoom).toBe("1.000");
+    expect(surface.dataset.viewportPanX).toBe("0");
+    expect(surface.dataset.viewportPanY).toBe("0");
+    expect(surface.dataset.traceMode).toBe("false");
+    expect(screen.queryByRole("complementary", { name: "Selected factor guide" })).toBeNull();
+    expect(screen.getByText("Synthetic system overview")).toBeTruthy();
   });
 
   it("contains wheel scrolling inside the open factor guide", async () => {
