@@ -714,14 +714,13 @@ def reddit_fallback_enabled(env: dict[str, str] | None = None) -> bool:
     return str(source.get(REDDIT_FALLBACK_ENV, "")).strip().lower() == "true"
 
 
-def collect_for_record(record: PatchRecord, context: CollectorContext, env: dict[str, str] | None = None, version_ambiguous: bool = False, run_accepted_urls: dict[str, str] | None = None) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
-    captured_at = utc_now()
-    target = record_target(record)
-    target["version_ambiguous"] = version_ambiguous
-    query_terms = search_query_terms(target)
-    seen: set[str] = set()
+def run_primary_method(record: PatchRecord, target: dict[str, Any], context: CollectorContext, seen: set[str], run_accepted_urls: dict[str, str] | None, captured_at: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]], dict[str, Any]]:
+    """PRIMARY — Microsoft Learn Q&A (proven CI-reachable, keyless).
 
-    # PRIMARY — Microsoft Learn Q&A (proven CI-reachable, keyless).
+    Extracted from collect_for_record so the orchestration control plane can invoke exactly the
+    production method path; collect_for_record composes this same function. Acceptance gates are
+    unchanged and identical for every method."""
+    query_terms = search_query_terms(target)
     lq_errors: list[dict[str, Any]] = []
     lq_candidates: list[dict[str, Any]] = []
     if query_terms:
@@ -742,16 +741,23 @@ def collect_for_record(record: PatchRecord, context: CollectorContext, env: dict
         + "Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, "
         "carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue."
     )
-    health = [health_row(record, LEARN_QNA_METHOD_ID, LEARN_QNA_SOURCE_TYPE, lq_status, lq_candidates, lq_accepted, lq_rejected, lq_errors, captured_at, lq_notes)]
+    row = health_row(record, LEARN_QNA_METHOD_ID, LEARN_QNA_SOURCE_TYPE, lq_status, lq_candidates, lq_accepted, lq_rejected, lq_errors, captured_at, lq_notes)
+    return lq_accepted, lq_rejected, row
 
-    # FALLBACK — Reddit (documented CI-blocked, PR #23). Attempted only behind an explicit
-    # flag; honestly reported as "disabled" otherwise. Same acceptance gates, never required.
-    rd_attempted = reddit_fallback_enabled(env)
+
+def run_fallback_method(record: PatchRecord, target: dict[str, Any], context: CollectorContext, seen: set[str], run_accepted_urls: dict[str, str] | None, captured_at: str, attempted: bool) -> tuple[list[dict[str, Any]], list[dict[str, Any]], dict[str, Any]]:
+    """FALLBACK — Reddit (documented CI-blocked, PR #23).
+
+    ``attempted`` is the production capability gate decision (reddit_fallback_enabled); when
+    False the method is honestly reported as "disabled" and nothing is fetched. Same acceptance
+    gates as the primary, never weakened. Extracted from collect_for_record for the orchestration
+    control plane; collect_for_record composes this same function."""
+    query_terms = search_query_terms(target)
     rd_errors: list[dict[str, Any]] = []
     rd_candidates: list[dict[str, Any]] = []
     rd_accepted: list[dict[str, Any]] = []
     rd_rejected: list[dict[str, Any]] = []
-    if rd_attempted and query_terms:
+    if attempted and query_terms:
         version = str(target.get("update_version") or "").strip()
         rd_candidates = reddit_source.collect_reddit_candidates(
             subreddits=REDDIT_SUBREDDITS,
@@ -762,14 +768,29 @@ def collect_for_record(record: PatchRecord, context: CollectorContext, env: dict
             version_hints=[version] if version else None,
         )
         rd_accepted, rd_rejected = evaluate_candidates(record, target, rd_candidates, captured_at, seen, run_accepted_urls)
-    rd_status = reddit_method_status(rd_attempted, rd_candidates, rd_accepted, rd_rejected, rd_errors)
+    rd_status = reddit_method_status(attempted, rd_candidates, rd_accepted, rd_rejected, rd_errors)
     rd_notes = (
         f"Reddit community search across {', '.join('r/' + s for s in REDDIT_SUBREDDITS)}. "
         + ("Fallback disabled by default (documented CI-blocked, PR #23); enable with "
-           f"{REDDIT_FALLBACK_ENV}=true. Not required for the pilot." if not rd_attempted
+           f"{REDDIT_FALLBACK_ENV}=true. Not required for the pilot." if not attempted
            else f"Candidates {len(rd_candidates)}, accepted {len(rd_accepted)}, rejected {len(rd_rejected)}. Same acceptance gates as Learn Q&A.")
     )
-    health.append(health_row(record, REDDIT_METHOD_ID, REDDIT_SOURCE_TYPE, rd_status, rd_candidates, rd_accepted, rd_rejected, rd_errors, captured_at, rd_notes))
+    row = health_row(record, REDDIT_METHOD_ID, REDDIT_SOURCE_TYPE, rd_status, rd_candidates, rd_accepted, rd_rejected, rd_errors, captured_at, rd_notes)
+    return rd_accepted, rd_rejected, row
+
+
+def collect_for_record(record: PatchRecord, context: CollectorContext, env: dict[str, str] | None = None, version_ambiguous: bool = False, run_accepted_urls: dict[str, str] | None = None) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
+    captured_at = utc_now()
+    target = record_target(record)
+    target["version_ambiguous"] = version_ambiguous
+    seen: set[str] = set()
+
+    lq_accepted, lq_rejected, lq_health = run_primary_method(record, target, context, seen, run_accepted_urls, captured_at)
+    health = [lq_health]
+
+    rd_attempted = reddit_fallback_enabled(env)
+    rd_accepted, rd_rejected, rd_health = run_fallback_method(record, target, context, seen, run_accepted_urls, captured_at, rd_attempted)
+    health.append(rd_health)
 
     accepted = lq_accepted + rd_accepted
     rejected = lq_rejected + rd_rejected
