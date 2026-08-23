@@ -154,7 +154,9 @@ def run() -> int:
         })), encoding="utf-8")
 
         def index_for(target):
-            return {(WINDOWS_PRODUCT_ID, "24H2"): {
+            # Identity is the canonical triple; Windows is not build-aware, so its build slot is
+            # empty and its grouping/lookup semantics are unchanged.
+            return {(WINDOWS_PRODUCT_ID, "24H2", ""): {
                 "path": rec_path.name, "abs_path": rec_path,
                 "product_id": WINDOWS_PRODUCT_ID, "update_version": "24H2",
                 "evidence_state": "official_only", "legacy_manual_report_count": None,

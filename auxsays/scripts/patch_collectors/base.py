@@ -13,6 +13,8 @@ import textwrap
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
+
+from lib.patch_identity import key_from as patch_key_from, require_build
 from typing import Any, Iterable
 from urllib.parse import parse_qs, urlparse
 
@@ -64,10 +66,17 @@ EVIDENCE_FIELDS = (
     "listing_card_title",
     "listing_card_category",
     "listing_card_date_text",
+    # Exact vendor build. Part of the DURABLE schema, not a transient annotation: for a
+    # build-aware product the canonical patch identity is (product_id, update_version,
+    # target_build), so a row that loses its build here can no longer be attributed to the
+    # patch it was accepted for. Optional (and empty) for every product without a build
+    # contract -- see lib.patch_identity.BUILD_AWARE_PRODUCTS.
+    "target_build",
 )
 
 OPTIONAL_EVIDENCE_FIELDS = {
     "archive_url",
+    "target_build",
     "source_date",
     "source_date_resolved",
     "target_release_date",
@@ -91,6 +100,10 @@ OPTIONAL_EVIDENCE_FIELDS = {
 METHOD_HEALTH_FIELDS = (
     "product_id",
     "update_version",
+    # Method health is patch identity too: 2603/build-A learn_qna=success and
+    # 2603/build-B learn_qna=blocked are two different facts about two different patches.
+    # Empty for every product without a build contract, so their health identity is unchanged.
+    "target_build",
     "method_id",
     "source_type",
     "status",
@@ -171,6 +184,10 @@ class PatchRecord:
     update_published_at: str
     update_status: str
     update_product: str
+    # Exact vendor build from the record's front matter. Empty for every product without a build
+    # contract; for a build-aware product it is the second half of this record's patch identity,
+    # and collectors must attribute evidence and method health to it rather than to the YYMM.
+    target_build: str = ""
 
 
 @dataclass(frozen=True)
@@ -304,6 +321,7 @@ def generated_records(product_id: str, target_versions: set[str] | None = None, 
             update_published_at=str(data.get("update_published_at") or "").strip(),
             update_status=status,
             update_product=str(data.get("update_product") or product_id).strip(),
+            target_build=str(data.get("target_build") or "").strip(),
         ))
     return records
 
@@ -378,12 +396,14 @@ def write_method_health_file(rows: list[dict[str, Any]], path: Path = METHOD_HEA
     atomic_write_text(path, yaml.safe_dump(payload, sort_keys=False, allow_unicode=True, width=1000))
 
 
-def method_health_key(row: dict[str, Any]) -> tuple[str, str, str]:
-    return (
-        str(row.get("product_id") or "").strip(),
-        str(row.get("update_version") or "").strip(),
-        str(row.get("method_id") or "").strip(),
-    )
+def method_health_key(row: dict[str, Any]) -> tuple[str, str, str, str]:
+    """Method-health identity = canonical patch identity + method.
+
+    The build slot is '' for every product without a build contract, so their rows keep the exact
+    identity they had. For a build-aware product two builds under one YYMM are two health rows and
+    neither can overwrite the other."""
+    product_id, version, build = patch_key_from(row)
+    return (product_id, version, build, str(row.get("method_id") or "").strip())
 
 
 def upsert_method_health(rows: list[dict[str, Any]], path: Path = METHOD_HEALTH_PATH) -> tuple[int, int, list[dict[str, Any]]]:
@@ -393,7 +413,11 @@ def upsert_method_health(rows: list[dict[str, Any]], path: Path = METHOD_HEALTH_
     for row in rows:
         normalized = normalize_method_health_row(row)
         key = method_health_key(normalized)
-        if not all(key):
+        # The REQUIRED identity components are product, version and method. The build slot is
+        # legitimately empty for every product without a build contract, so `all(key)` would drop
+        # each of their rows -- guard the required components explicitly instead.
+        product_id, version, _build, method_id = key
+        if not (product_id and version and method_id):
             continue
         current_idx = index.get(key)
         if current_idx is None:
@@ -413,6 +437,7 @@ def method_health_row(
     product_id: str,
     update_version: str,
     method_id: str,
+    target_build: str = "",
     source_type: str,
     status: str,
     candidates_found: int,
@@ -429,6 +454,7 @@ def method_health_row(
     return normalize_method_health_row({
         "product_id": product_id,
         "update_version": update_version,
+        "target_build": target_build,
         "method_id": method_id,
         "source_type": source_type,
         "status": status,
@@ -468,12 +494,16 @@ def normalize_evidence_row(row: dict[str, Any]) -> dict[str, Any]:
     return normalized
 
 
-def evidence_key(row: dict[str, Any], key_field: str) -> tuple[str, str, str]:
-    return (
-        str(row.get("product_id") or "").strip(),
-        str(row.get("update_version") or "").strip(),
-        normalize_url(str(row.get(key_field) or "")),
-    )
+def evidence_key(row: dict[str, Any], key_field: str) -> tuple[str, str, str, str]:
+    """Append/dedup identity for a structured evidence row.
+
+    The first three components are the canonical patch identity (``lib.patch_identity.key_from``),
+    whose build slot is '' for every product without a build contract -- so this stays semantically
+    identical for OBS/DaVinci/Premiere/Acrobat/Windows. For a build-aware product the exact build
+    participates, so two reports sharing a source URL and YYMM but naming DIFFERENT builds are two
+    rows, while two discoveries of the same report for the SAME build still deduplicate."""
+    product_id, version, build = patch_key_from(row)
+    return (product_id, version, build, normalize_url(str(row.get(key_field) or "")))
 
 
 def append_evidence_rows(rows: list[dict[str, Any]], path: Path = EVIDENCE_PATH) -> tuple[int, int, list[dict[str, Any]]]:
@@ -487,6 +517,15 @@ def append_evidence_rows(rows: list[dict[str, Any]], path: Path = EVIDENCE_PATH)
     added = 0
     for row in rows:
         normalized = normalize_evidence_row(row)
+        # Fail closed at the durable boundary: a COUNTED row for a build-aware product must carry
+        # the exact build it was accepted for. Persisting a counted row without one would create
+        # evidence that names a version but no patch -- unattributable to any build-specific
+        # record, and silently uncounted by every build-aware consumer downstream. Uncounted rows
+        # (rejected candidates, audit trail) are allowed to have no build.
+        if normalized.get("counted") is not False:
+            require_build(normalized.get("product_id"), normalized.get("update_version"),
+                          normalized.get("target_build"),
+                          f"counted evidence row {normalized.get('id') or normalized.get('source_url')!r}")
         id_key = evidence_key(normalized, "id")
         url_key = evidence_key(normalized, "source_url")
         url_duplicate = (

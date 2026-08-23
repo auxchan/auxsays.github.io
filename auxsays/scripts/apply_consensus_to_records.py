@@ -15,6 +15,7 @@ import json
 import re
 import sys
 from collections import Counter, defaultdict
+from lib.patch_identity import patch_key
 from copy import deepcopy
 from datetime import datetime, timezone
 from pathlib import Path
@@ -154,8 +155,12 @@ def _latest_captured_at(rows: list[dict[str, Any]]) -> str:
     return max(parsed).isoformat().replace("+00:00", "Z")
 
 
-def _index_generated_records() -> dict[tuple[str, str], dict[str, Any]]:
-    index: dict[tuple[str, str], dict[str, Any]] = {}
+def _index_generated_records() -> dict[tuple[str, str, str], dict[str, Any]]:
+    """Index generated records by canonical patch identity.
+
+    Keyed by the identity triple rather than (product_id, version): for a build-aware product two
+    records under one YYMM are two distinct keys, so the second no longer overwrites the first."""
+    index: dict[tuple[str, str, str], dict[str, Any]] = {}
     for path in sorted(GENERATED_DIR.glob("*.md")):
         data = _load_front_matter(path)
         if not data.get("update_entry"):
@@ -163,7 +168,7 @@ def _index_generated_records() -> dict[tuple[str, str], dict[str, Any]]:
         product_id = str(data.get("product_id") or "").strip()
         version = str(data.get("update_version") or "").strip()
         if product_id and version:
-            index[(product_id, version)] = {
+            index[patch_key(product_id, version, data.get("target_build"))] = {
                 "path": str(path.relative_to(ROOT)),
                 "abs_path": path,
                 "product_id": product_id,
@@ -362,17 +367,22 @@ def _filter_rows(rows: list[dict[str, Any]], *, product_id: str, version: str, i
     return included, excluded
 
 
-def _group_rows(rows: list[dict[str, Any]], *, is_candidate_mode: bool) -> dict[tuple[str, str], list[dict[str, Any]]]:
-    groups: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+def _group_rows(rows: list[dict[str, Any]], *, is_candidate_mode: bool) -> dict[tuple[str, str, str], list[dict[str, Any]]]:
+    """Group evidence rows by canonical patch identity.
+
+    For a build-aware product the exact build participates, so evidence naming build A and evidence
+    naming build B under one YYMM form two independent groups and can never aggregate into a single
+    promotion decision."""
+    groups: dict[tuple[str, str, str], list[dict[str, Any]]] = defaultdict(list)
     for row in rows:
         pid = str(row.get("product_id") or "").strip()
         ver = _row_version(row, is_candidate_mode=is_candidate_mode)
         if pid:
-            groups[(pid, ver)].append(row)
+            groups[patch_key(pid, ver, row.get("target_build"))].append(row)
     return groups
 
 
-def _result_for_group(pid: str, ver: str, rows: list[dict[str, Any]], *, is_candidate_mode: bool, records_index: dict[tuple[str, str], dict[str, Any]], write_requested: bool = False) -> dict[str, Any]:
+def _result_for_group(pid: str, ver: str, rows: list[dict[str, Any]], *, is_candidate_mode: bool, records_index: dict[tuple[str, str, str], dict[str, Any]], write_requested: bool = False, build: str = "") -> dict[str, Any]:
     if not ver:
         return {
             "product_id": pid,
@@ -397,7 +407,14 @@ def _result_for_group(pid: str, ver: str, rows: list[dict[str, Any]], *, is_cand
             "included_rows": [],
         }
 
-    record = records_index.get((pid, ver))
+    # Exact-identity lookup. For a build-aware product this selects ONLY the record whose
+    # target_build matches this evidence group; there is deliberately no fallback to a version-only
+    # key, so evidence with a missing or wrong build finds no record rather than promoting onto a
+    # sibling build's page.
+    record = records_index.get(patch_key(pid, ver, build))
+    # Diagnostic + writeback results are read back (and printed) per group; carrying the build
+    # keeps two same-YYMM PowerPoint groups distinguishable in the output, not just internally.
+    result_build = str(build or "")
     included, excluded = _filter_rows(rows, product_id=pid, version=ver, is_candidate_mode=is_candidate_mode, record=record)
     sentiments = Counter(str(r.get("sentiment") or "").lower() for r in included)
     themes = _issue_counter(pid, included)
@@ -415,6 +432,9 @@ def _result_for_group(pid: str, ver: str, rows: list[dict[str, Any]], *, is_cand
     return {
         "product_id": pid,
         "update_version": ver,
+        # Exact build travels with the result so two same-YYMM PowerPoint groups stay
+        # distinguishable in diagnostics and in anything that reads a promotion result back.
+        "target_build": result_build,
         "matched_generated_record_path": record["path"] if record else None,
         "evidence_row_count": len(rows),
         "included_candidate_count": count,
@@ -959,7 +979,8 @@ def run_dry_run(*, evidence_path: Path, product_id_filter: str | None, is_candid
     groups = _group_rows(all_rows, is_candidate_mode=is_candidate_mode)
     if product_id_filter:
         groups = {k: v for k, v in groups.items() if k[0] == product_id_filter}
-    return [_result_for_group(pid, ver, rows, is_candidate_mode=is_candidate_mode, records_index=records_index, write_requested=write_requested) for (pid, ver), rows in sorted(groups.items())]
+    return [_result_for_group(pid, ver, rows, is_candidate_mode=is_candidate_mode, records_index=records_index, write_requested=write_requested, build=build)
+            for (pid, ver, build), rows in sorted(groups.items())]
 
 
 def _payload(results: list[dict[str, Any]], *, evidence_path: Path, is_candidate_mode: bool, product_id_filter: str | None, version_filter: str | None, records_index: dict[tuple[str, str], dict[str, Any]], write_mode_active: bool) -> dict[str, Any]:

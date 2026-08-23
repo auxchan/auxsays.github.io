@@ -11,6 +11,8 @@ from urllib.parse import urlparse
 
 import yaml
 
+from lib.patch_identity import patch_key
+
 from lib.report_counts import counted_evidence_counts
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -519,7 +521,7 @@ def scan_evidence_count_alignment(files: list[Path]) -> tuple[list[dict[str, str
         version = str(data.get("update_version") or "").strip()
         if not product_id or not version:
             continue
-        key = (product_id, version)
+        key = patch_key(product_id, version, data.get("target_build"))
         if key not in evidence_counts:
             continue
         expected = evidence_counts[key]

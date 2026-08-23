@@ -108,7 +108,7 @@ def snap_tree(top: Path) -> dict[str, str]:
 
 def run_owned(app, ev, gen, product_id, body, *, method_health=None, require_git=True):
     """Mirror the runner: txn.begin -> body -> undeclared check -> ownership -> rollback/commit."""
-    o._existing_versions = lambda pid: set(SEEDED.get(pid, set()))
+    o._existing_patch_keys = lambda pid: {(pid, v, "") for v in SEEDED.get(pid, set())}
     try:
         txn = CollectorTransaction(app, [ev, gen], require_git=require_git)
         txn.begin()

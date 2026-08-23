@@ -97,28 +97,59 @@ def allowed_permalink_slugs(product_id: str) -> set[str]:
     return ALLOWED_PERMALINK_SLUGS.get(product_id, {product_id})
 
 
+def _permalink_segments(permalink: str) -> list[str] | None:
+    """Return the parsed segments of a canonical update permalink, or None when `permalink` is not
+    EXACTLY /updates/<company>/<product>/<version>/ or /updates/<company>/<product>/<version>/<build>/
+    -- a leading slash, then four (or, for a build-aware product, five) non-empty path segments, and
+    at most a single trailing slash. The shape is validated strictly, never repaired: a missing or
+    extra segment, an empty segment from a repeated slash (//), a non-'updates' root, a traversal
+    ('..'), or an encoded-slash / encoded-traversal / query / fragment artifact all fail.
+
+    The optional fifth segment is NOT a general relaxation: `validate_records` requires exactly five
+    segments for a build-aware product and exactly four for every other product, and additionally
+    requires the fifth to equal that record's own target_build. So the accepted shape per product is
+    still exactly one, and segment-position spoofing gains nothing."""
+    p = str(permalink or "")
+    if not p.startswith("/updates/"):
+        return None
+    body = p[1:]
+    if body.endswith("/"):
+        body = body[:-1]
+    segments = body.split("/")
+    if len(segments) not in (4, 5) or any(seg == "" for seg in segments) or segments[0] != "updates":
+        return None
+    # A query or fragment artifact used to be rejected implicitly, because '/updates/a/b/c/?x=1'
+    # split into FIVE segments and only four were allowed. Now that a fifth (build) segment is a
+    # legitimate shape for build-aware products, that implicit rejection is gone and these must be
+    # refused explicitly -- a canonical record permalink is a pure path, never a URL with a query
+    # string, fragment, or percent-encoding.
+    if ".." in segments or any(("%" in seg) or ("?" in seg) or ("#" in seg) for seg in segments):
+        return None
+    return segments
+
+
 def _permalink_product_slug(permalink: str) -> str | None:
     """Return the product-slug segment of a canonical update permalink, or None if `permalink` is not
-    EXACTLY the shape /updates/<company>/<product>/<version>/ -- a leading slash, then four non-empty
-    path segments, and at most a single trailing slash. The shape is validated strictly, never repaired:
+    a well-formed canonical path. The shape is validated strictly, never repaired:
     a missing or extra segment, an empty segment from a repeated slash (//), a non-'updates' root, a
     traversal ('..'), or an encoded-slash / encoded-traversal / query / fragment artifact all fail to
     yield a product slug. Combined with the exact-set membership check in validate_records, this makes
     segment-position spoofing and substring look-alikes (davinci-resolve-fake, blackmagic-davinci-extra)
     impossible to smuggle through -- the product slug is only ever the literal 3rd segment of a
     well-formed canonical path."""
-    p = str(permalink or "")
-    if not p.startswith("/updates/"):
-        return None
-    body = p[1:]                       # drop the leading slash -> 'updates/<co>/<prod>/<ver>[/]'
-    if body.endswith("/"):
-        body = body[:-1]               # tolerate exactly one trailing slash (the canonical form)
-    segments = body.split("/")
-    # Exactly updates/<company>/<product>/<version>; any empty segment (a repeated slash) or a wrong
-    # segment count is a malformed/ambiguous path and is rejected rather than collapsed or repaired.
-    if len(segments) != 4 or any(seg == "" for seg in segments) or segments[0] != "updates":
-        return None
-    return segments[2]
+    segments = _permalink_segments(permalink)
+    return segments[2] if segments else None
+
+
+def _permalink_build_segment(permalink: str) -> str:
+    """The exact-build segment of a build-aware permalink, or '' when the path carries none."""
+    segments = _permalink_segments(permalink)
+    if not segments or len(segments) != 5:
+        return ""
+    return segments[4]
+
+
+from .patch_identity import is_build_aware, normalize_build, patch_key
 
 
 class OwnershipViolation(Exception):
@@ -182,10 +213,27 @@ def _evidence_by_id(rows: list[dict[str, Any]]) -> dict[tuple[str, str, str], di
     return {evidence_key(r, "id"): r for r in rows if r.get("id")}
 
 
-def _existing_versions(product_id: str) -> set[str]:
-    # str-normalize: YAML may parse a version as float (26.2) in one place and string ('26.2') in
-    # another; comparing normalized strings on BOTH sides avoids false-rejecting legitimate rows.
-    return {str(r.update_version).strip() for r in generated_records(product_id, include_archived=True)}
+def _existing_patch_keys(product_id: str) -> set[tuple[str, str, str]]:
+    """The exact canonical patch identities this product actually has records for.
+
+    For a version-only product this is just its versions with an empty build slot, so membership
+    is identical to the version-only check this replaced. For a build-aware product it is the
+    EXACT (version, build) pairs: a YYMM that exists is no longer sufficient, because a sibling
+    build under the same YYMM is a different patch that this row may not belong to."""
+    return {
+        patch_key(product_id, str(r.update_version).strip(), getattr(r, "target_build", ""))
+        for r in generated_records(product_id, include_archived=True)
+    }
+
+
+def _patch_resolves(product_id: str, version: str, target_build: str,
+                    existing_keys: set[tuple[str, str, str]]) -> bool:
+    """True when (product, version, build) names a patch that exists.
+
+    Build-aware products get NO version-only fallback: a missing build cannot resolve (it does not
+    name a patch at all) and a wrong build cannot resolve (it names a patch that does not exist).
+    Non-build-aware products are unaffected -- their build slot is always empty on both sides."""
+    return patch_key(product_id, version, target_build) in existing_keys
 
 
 # --- generated records ---------------------------------------------------------
@@ -193,7 +241,7 @@ def validate_records(product_id: str, generated_dir: Path, mutated: set[Path],
                      baseline_bytes) -> None:
     """`mutated` are paths under updates/generated/ this collector changed. baseline_bytes(path)
     returns the pre-collector bytes (None if the path did not exist)."""
-    existing_versions = _existing_versions(product_id)
+    existing_keys = _existing_patch_keys(product_id)
     for path in mutated:
         exists_now = path.exists()
         if not exists_now:
@@ -231,8 +279,29 @@ def validate_records(product_id: str, generated_dir: Path, mutated: set[Path],
         if slug is None or slug not in allowed_permalink_slugs(product_id):
             raise _violation("record_permalink_mismatch", f"collector '{product_id}' record permalink identity mismatch: {permalink!r} ({path.name})",
                              surface="record", product_id=product_id, version=version)
-        # A collector refreshes existing records; a version with no pre-existing record is suspect.
-        if version not in existing_versions:
+        # Exact-build identity. A build-aware product publishes at
+        # /updates/<co>/<product>/<version>/<build>/ and the build segment must be THIS record's own
+        # target_build -- so a record cannot claim another build's URL, and a missing build fails
+        # closed rather than silently falling back to the version-only URL that a sibling build may
+        # already own. Every other product must still be exactly four segments.
+        record_build = normalize_build(data.get("target_build"))
+        permalink_build = _permalink_build_segment(permalink)
+        if is_build_aware(product_id):
+            if not record_build:
+                raise _violation("record_build_missing", f"collector '{product_id}' record has no exact target_build: {path.name}",
+                                 surface="record", product_id=product_id, version=version)
+            if permalink_build != record_build:
+                raise _violation("record_permalink_build_mismatch", f"collector '{product_id}' record permalink build {permalink_build!r} does not match target_build {record_build!r} ({path.name})",
+                                 surface="record", product_id=product_id, version=version)
+        elif permalink_build:
+            raise _violation("record_permalink_build_unexpected", f"collector '{product_id}' is not build-aware but its permalink carries a build segment: {permalink!r} ({path.name})",
+                             surface="record", product_id=product_id, version=version)
+
+        # A collector refreshes existing records; a patch with no pre-existing record is suspect.
+        # For a build-aware product this resolves the EXACT (version, build), so refreshing a
+        # sibling build that has no record of its own is rejected rather than accepted because the
+        # YYMM happens to exist.
+        if not _patch_resolves(product_id, version, record_build, existing_keys):
             raise _violation("record_version_unresolved", f"collector '{product_id}' record version {version} does not resolve to an existing patch record",
                              surface="record", product_id=product_id, version=version)
 
@@ -257,7 +326,7 @@ def validate_evidence(product_id: str, before_text: str | None, after_text: str 
     if len(after) < len(before):
         raise _violation("evidence_rows_removed", f"collector '{product_id}' removed evidence rows", surface="evidence", product_id=product_id)
 
-    existing_versions = _existing_versions(product_id)
+    existing_keys = _existing_patch_keys(product_id)
     permitted_sources = allowed_source_types(product_id)
     # Dedup universe = existing ids/urls; each added row must be unique and owned. The duplicate-URL
     # identity is the SAME key the append/dedup authority uses (base.evidence_key): the triple
@@ -281,7 +350,7 @@ def validate_evidence(product_id: str, before_text: str | None, after_text: str 
             raise _violation("evidence_product_mismatch", f"collector '{product_id}' appended cross-product evidence for '{pid}'",
                              surface="evidence", product_id=product_id)
         version = str(row.get("update_version") or "").strip()
-        if version not in existing_versions:
+        if not _patch_resolves(product_id, version, row.get("target_build"), existing_keys):
             raise _violation("evidence_version_unresolved", f"collector '{product_id}' appended evidence for unresolved version {version}",
                              surface="evidence", product_id=product_id, version=version)
         source_type = str(row.get("source_type") or "").strip()
@@ -309,7 +378,7 @@ def validate_evidence(product_id: str, before_text: str | None, after_text: str 
 # --- method health -------------------------------------------------------------
 def validate_method_health(product_id: str, rows: list[dict[str, Any]]) -> None:
     permitted = allowed_methods(product_id)
-    existing_versions = _existing_versions(product_id)
+    existing_keys = _existing_patch_keys(product_id)
     for row in rows:
         if not isinstance(row, dict):
             raise _violation("method_health_non_dict", f"collector '{product_id}' returned a non-dict method-health row",
@@ -323,7 +392,7 @@ def validate_method_health(product_id: str, rows: list[dict[str, Any]]) -> None:
             raise _violation("method_not_allowed", f"collector '{product_id}' returned unauthorized method_id '{method}'",
                              surface="method_health", product_id=product_id)
         version = str(row.get("update_version") or "").strip()
-        if version not in existing_versions:
+        if not _patch_resolves(product_id, version, row.get("target_build"), existing_keys):
             raise _violation("method_health_version_unresolved", f"collector '{product_id}' returned method-health for unresolved version {version}",
                              surface="method_health", product_id=product_id, version=version)
         status = str(row.get("status") or "").strip()

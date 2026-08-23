@@ -8,6 +8,7 @@ from __future__ import annotations
 import json
 import re
 from collections import Counter, defaultdict
+from lib.patch_identity import patch_key
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -333,7 +334,9 @@ def main() -> int:
         for d in reconciled_detail:
             print(f"  {d['record']}: {d['product_id']} {d['version']} {d['before']} -> {d['after']}")
     windows_targets = windows_target_index()
-    groups: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+    # Grouped by canonical patch identity: a build-aware product's two builds under one YYMM are
+    # two independent groups, so one build's reports can never move the other's counts or summary.
+    groups: dict[tuple[str, str, str], list[dict[str, Any]]] = defaultdict(list)
     excluded: list[dict[str, Any]] = []
 
     for item in evidence:
@@ -365,16 +368,20 @@ def main() -> int:
                 item["exclusion_reason"] = item.get("exclusion_reason") or identity_reason
                 excluded.append(item)
                 continue
-        groups[(product_id, version)].append(item)
+        groups[patch_key(product_id, version, item.get("target_build"))].append(item)
 
     aggregate = []
-    for (product_id, version), items in sorted(groups.items()):
+    for (product_id, version, _build), items in sorted(groups.items()):  # noqa: B007
         sentiments = Counter(str(item.get("sentiment")).lower() for item in items)
         severities = Counter(str(item.get("severity") or "low").lower() for item in items)
         themes = issue_counter(product_id, items)
         aggregate.append({
             "product_id": product_id,
             "update_version": version,
+            # The aggregate is a SERIALIZED artifact: without the build, two PowerPoint builds
+            # under one YYMM are indistinguishable to anything reading it back, which is exactly
+            # the collapse this identity exists to prevent. Empty for version-only products.
+            "target_build": _build,
             "report_count": len(items),
             "positive_count": sentiments["positive"],
             "moderate_count": sentiments["moderate"],
