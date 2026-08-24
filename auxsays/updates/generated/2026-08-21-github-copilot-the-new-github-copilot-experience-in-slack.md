@@ -17,8 +17,8 @@ update_version: The new GitHub Copilot experience in Slack
 update_logo_text: GIT
 update_published_at: '2026-08-21T16:07:15Z'
 update_last_checked: '2026-08-21T20:06:14Z'
-source_last_checked: '2026-08-24T14:05:51Z'
-official_body_last_checked: '2026-08-24T14:05:51Z'
+source_last_checked: '2026-08-24T19:54:41Z'
+official_body_last_checked: '2026-08-24T19:54:41Z'
 record_last_updated: '2026-08-21T20:06:14Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -95,11 +95,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-08-23T13:54:27Z'
-  url: https://github.blog/changelog/2026-08-21-the-new-github-copilot-experience-in-slack
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-08-23T19:38:09Z'
   url: https://github.blog/changelog/2026-08-21-the-new-github-copilot-experience-in-slack
   status: captured-from-rss-feed
@@ -116,6 +111,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-08-24T14:05:51Z'
+  url: https://github.blog/changelog/2026-08-21-the-new-github-copilot-experience-in-slack
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-08-24T19:54:41Z'
   url: https://github.blog/changelog/2026-08-21-the-new-github-copilot-experience-in-slack
   status: captured-from-rss-feed
   body_captured: true
