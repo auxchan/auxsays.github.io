@@ -50,20 +50,20 @@ import re
 from dataclasses import dataclass, field
 from typing import Any, Callable
 
+from .build_claims import (
+    BUILD_TOKEN_RE, ROLE_AMBIGUOUS, ROLE_CURRENT_FAILING, ROLE_ROLLBACK_PREVIOUS, BuildClaim,
+    build_tokens, extract_build_claims, role_counts, select_current_failing_build,
+    single_named_build,
+)
 from .source_segments import (
     PARSE_OK, SEGMENT_ANSWER, SEGMENT_QUESTION, SourceSegment, ThreadSegments,
     learn_qna_question_id, parse_learn_qna_thread,
 )
 
-# Full Click-to-Run build, e.g. 20228.20110.
-#
-# The trailing guard is `(?!\d)(?!\.\d)`, not `(?![0-9.])`. The stricter form fails on a build that
-# ENDS A SENTENCE -- "I'm on Build 19822.20182." -- because the full stop is itself in the excluded
-# class, so a legitimately stated build went unseen. Both forms still refuse a longer dotted version
-# ("16.0.20228.20110" is not a Click-to-Run build), which is what the guard is actually for.
-# This widens DETECTION only: a detected build must still be stated explicitly, in the reporter's
-# own segment, and match the record's target_build before anything can be counted.
-BUILD_RE = re.compile(r"(?<![0-9.])(\d{4,6}\.\d{4,6})(?!\d)(?!\.\d)")
+# The build token and the role classifier both live in lib.build_claims, which the collector's
+# acceptance gate reads too -- one primitive, so the resolver can never see a build the authority
+# cannot, and a role can never be judged two different ways.
+BUILD_RE = BUILD_TOKEN_RE
 
 # The rejection reason this stage is allowed to act on. Anything else is not_applicable: a report
 # rejected for being about another product, another version, an announcement, a bad URL or a
@@ -113,6 +113,10 @@ class ResolutionOutcome:
     segment_author_name: str = ""
     segments_discovered: int = 0
     cross_segment_builds: list[str] = field(default_factory=list)
+    # Every build the origin segment named, with the role its own author gave it, and the counts
+    # per role -- so a role-attributed acceptance is diagnosable without re-reading the source.
+    build_claims: list[dict[str, Any]] = field(default_factory=list)
+    role_counts: dict[str, int] = field(default_factory=dict)
     # Whitespace-normalized excerpt of the segment text -- NOT a byte-exact source slice.
     provenance_excerpt: str = ""
     detail: str = ""
@@ -170,11 +174,7 @@ def _excerpt(text: str, build: str, width: int = 160) -> str:
 
 def find_explicit_builds(text: str) -> list[str]:
     """Distinct full builds explicitly present in the text, in first-appearance order."""
-    seen: list[str] = []
-    for match in BUILD_RE.findall(text or ""):
-        if match not in seen:
-            seen.append(match)
-    return seen
+    return build_tokens(text)
 
 
 def origin_segment(thread: ThreadSegments, candidate: dict[str, Any]) -> SourceSegment | None:
@@ -298,10 +298,13 @@ def resolve_candidate(candidate: dict[str, Any], rejection_reason: str, *,
         budget.receipts[url] = prior
         return prior
 
-    builds = find_explicit_builds(segment.segment_text)
+    claims = extract_build_claims(segment.segment_text)
+    builds = [c.build for c in claims]
     elsewhere = [b for seg in thread.segments if seg.segment_key != segment.segment_key
-                 for b in find_explicit_builds(seg.segment_text)]
+                 for b in build_tokens(seg.segment_text)]
     outcome.cross_segment_builds = sorted(set(elsewhere))
+    outcome.build_claims = [c.as_dict() for c in claims]
+    outcome.role_counts = role_counts(claims)
 
     if not builds:
         if outcome.cross_segment_builds:
@@ -313,18 +316,33 @@ def resolve_candidate(candidate: dict[str, Any], rejection_reason: str, *,
         else:
             outcome.resolution_result = NO_EXPLICIT_BUILD
             outcome.detail = "this reporter's own segment states no full build"
-    elif len(builds) > 1:
-        # Two or more distinct builds in the reporter's OWN segment: which one they are actually
-        # running is not demonstrated. Picking either would be inference, so nothing resolves.
-        outcome.resolution_result = CONFLICTING_BUILD
-        outcome.resolved_build = ""
-        outcome.detail = f"conflicting builds stated in this segment: {', '.join(builds)}"
-    else:
+    elif len(set(builds)) == 1:
+        # One build named: nothing to disambiguate, so this behaves exactly as it always has.
         outcome.explicit_build_found = True
         outcome.resolved_build = builds[0]
         outcome.resolution_result = RESOLVED_EXACT_BUILD
         outcome.resolution_match_basis = f"explicit_build_in_own_{segment.segment_type}_segment"
         outcome.provenance_excerpt = _excerpt(segment.segment_text, builds[0])
+    else:
+        # Several builds in the reporter's OWN segment. Their author may have said which is which:
+        # "on 2607 (Build A) it crashes, I rolled back to Build B and it works" names A as current
+        # and B as previous. Only the author's own explicit role language decides, and only when
+        # exactly one build is shown current and none is left unclassified.
+        selected, basis, refusal = select_current_failing_build(claims)
+        if selected:
+            outcome.explicit_build_found = True
+            outcome.resolved_build = selected
+            outcome.resolution_result = RESOLVED_EXACT_BUILD
+            outcome.resolution_match_basis = (
+                f"explicit_role_{basis}_in_own_{segment.segment_type}_segment")
+            outcome.provenance_excerpt = _excerpt(segment.segment_text, selected)
+            outcome.detail = ("role-attributed: "
+                              + "; ".join(f"{c.build}={c.role}" for c in claims))
+        else:
+            outcome.resolution_result = CONFLICTING_BUILD
+            outcome.resolved_build = ""
+            outcome.detail = (f"{refusal}: "
+                              + "; ".join(f"{c.build}={c.role}" for c in claims))
 
     budget.receipts[segment.segment_key] = outcome
     budget.receipts[url] = outcome
@@ -332,7 +350,9 @@ def resolve_candidate(candidate: dict[str, Any], rejection_reason: str, *,
 
 
 def independent_reports(candidate: dict[str, Any], *, budget: ResolutionBudget,
-                        exclude_segment_key: str = "") -> list[IndependentReport]:
+                        exclude_segment_key: str = "",
+                        issue_predicate: Callable[[str], bool] | None = None,
+                        ) -> list[IndependentReport]:
     """Reply segments of an ALREADY-FETCHED thread that qualify as reports in their own right.
 
     Requires, per segment: not machine-generated, exactly one explicit build stated by that segment
@@ -349,8 +369,17 @@ def independent_reports(candidate: dict[str, Any], *, budget: ResolutionBudget,
     for segment in thread.answers():
         if segment.segment_key == exclude_segment_key or segment.machine_generated:
             continue
-        builds = find_explicit_builds(segment.segment_text)
-        if len(builds) != 1 or not segment.segment_url:
+        # The reply must describe the problem ITSELF. Otherwise a bare "I'm on Build X" would become
+        # evidence by borrowing the concrete issue from the question title -- the reply's build is
+        # its own, but the issue would be somebody else's. ``issue_predicate`` is injected so this
+        # module stays independent of the product collectors; production binds the real gate.
+        if issue_predicate is not None and not issue_predicate(segment.segment_text):
+            continue
+        claims = extract_build_claims(segment.segment_text)
+        # Same rule as the origin segment: one build named, or several with exactly one shown
+        # current by this reply's OWN author. Never a build this reply merely quotes from elsewhere.
+        build = single_named_build(claims) or select_current_failing_build(claims)[0]
+        if not build or not segment.segment_url:
             continue
         reply = dict(candidate)
         reply.update({
@@ -365,8 +394,8 @@ def independent_reports(candidate: dict[str, Any], *, budget: ResolutionBudget,
         found.append(IndependentReport(
             candidate=reply, segment_key=segment.segment_key, segment_url=segment.segment_url,
             author_id=segment.author_id, author_name=segment.author_name,
-            explicit_build=builds[0],
-            provenance_excerpt=_excerpt(segment.segment_text, builds[0]),
+            explicit_build=build,
+            provenance_excerpt=_excerpt(segment.segment_text, build),
         ))
     return found
 
