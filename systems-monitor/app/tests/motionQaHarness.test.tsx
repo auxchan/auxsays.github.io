@@ -467,6 +467,21 @@ describe("development-only structural Motion QA harness", () => {
     expect(surface.dataset.viewportPanY).toBe("0");
   });
 
+  it("expands the complete node workspace and exposes a clear exit state", async () => {
+    await renderReducedHarness();
+    const surface = document.querySelector<HTMLElement>(".sm-viz-surface")!;
+    const workspace = document.querySelector<HTMLElement>(".sm-viz-workspace")!;
+    const enter = screen.getByRole("button", { name: "Enter full screen" });
+    expect(enter.getAttribute("aria-pressed")).toBe("false");
+    fireEvent.click(enter);
+    expect(workspace.classList.contains("is-fullscreen-fallback")).toBe(true);
+    expect(surface.dataset.fullscreen).toBe("true");
+    expect(screen.getByRole("button", { name: "Exit full screen" }).getAttribute("aria-pressed")).toBe("true");
+    fireEvent.keyDown(window, { key: "Escape" });
+    expect(workspace.classList.contains("is-fullscreen-fallback")).toBe(false);
+    expect(surface.dataset.fullscreen).toBe("false");
+  });
+
   it("returns selection, mode, and camera to the complete core-factor reset view", async () => {
     await renderReducedHarness();
     const surface = document.querySelector<HTMLElement>(".sm-viz-surface")!;

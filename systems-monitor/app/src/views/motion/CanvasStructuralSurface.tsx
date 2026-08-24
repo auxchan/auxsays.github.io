@@ -44,6 +44,8 @@ export function CanvasStructuralSurface({ model, path, currentEdges, completedEd
   const [viewportTransform, setViewportTransform] = useState<StructuralViewportTransform>(DEFAULT_VIEWPORT);
   const [panning, setPanning] = useState(false);
   const [wheelActive, setWheelActive] = useState(false);
+  const [isFullscreen, setIsFullscreen] = useState(false);
+  const [fullscreenFallback, setFullscreenFallback] = useState(false);
   const spatialNodes = useMemo(() => layoutEmploymentOrbit(model), [model]);
   const spatialModel = useMemo(() => ({ ...model, nodes: spatialNodes }), [model, spatialNodes]);
   const nodes = useMemo(() => new Map(spatialNodes.map((node) => [node.id, node])), [spatialNodes]);
@@ -72,6 +74,30 @@ export function CanvasStructuralSurface({ model, path, currentEdges, completedEd
   }, []);
 
   useEffect(() => () => { if (wheelTimer.current !== null) window.clearTimeout(wheelTimer.current); }, []);
+
+  useEffect(() => {
+    const update = () => {
+      const workspace = hostRef.current?.closest(".sm-viz-workspace");
+      setIsFullscreen(document.fullscreenElement === workspace);
+    };
+    document.addEventListener("fullscreenchange", update);
+    return () => document.removeEventListener("fullscreenchange", update);
+  }, []);
+
+  useEffect(() => {
+    const workspace = hostRef.current?.closest<HTMLElement>(".sm-viz-workspace");
+    workspace?.classList.toggle("is-fullscreen-fallback", fullscreenFallback);
+    if (!fullscreenFallback) return () => workspace?.classList.remove("is-fullscreen-fallback");
+    const previousOverflow = document.documentElement.style.overflow;
+    document.documentElement.style.overflow = "hidden";
+    const closeOnEscape = (event: KeyboardEvent) => { if (event.key === "Escape") setFullscreenFallback(false); };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => {
+      workspace?.classList.remove("is-fullscreen-fallback");
+      document.documentElement.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", closeOnEscape);
+    };
+  }, [fullscreenFallback]);
 
   useEffect(() => {
     const host = hostRef.current;
@@ -158,7 +184,20 @@ export function CanvasStructuralSurface({ model, path, currentEdges, completedEd
     resetSurface();
   }
 
-  return <div ref={hostRef} className={`sm-viz-surface ${panning || wheelActive ? "is-manipulating" : ""} ${panning ? "is-panning" : ""}`} data-structural-renderer="canvas-rd" data-layout-mode="employment-concentric-orbit" data-orbit-geometry="eight-around-one" data-depth-field={reducedMotion ? "static" : "spring-parallax"} data-depth-particle-count={spatialNodes.length * STRUCTURAL_PARTICLES_PER_NODE} data-camera-motion="stable-map-swing-focus" data-context-factor-count={contextFactorLayouts.length} data-selected-context-factor-id={selectedContextFactorId ?? ""} data-trace-mode={traceMode} data-focus-depth={focusDepth} data-visible-relationship-count={viewport.visibleRelationshipIds.size} data-visible-relationship-ids={[...viewport.visibleRelationshipIds].join(" ")} data-hovered-node-id={hoveredNodeId ?? ""} data-connector-motion={reducedMotion ? "static" : traceMode ? "trace" : "ambient"} data-viewport-zoom={viewportTransform.zoom.toFixed(3)} data-viewport-pan-x={Math.round(viewportTransform.panX)} data-viewport-pan-y={Math.round(viewportTransform.panY)} onDoubleClick={handleDoubleClick} onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerLeave={() => { if (!panSession.current) parallaxTarget.current = { x: 0, y: 0 }; }} onPointerUp={endPan} onPointerCancel={endPan} onMouseDown={(event) => { if (event.button === 1) event.preventDefault(); }} onAuxClick={(event) => { if (event.button === 1) event.preventDefault(); }}>
+  async function toggleFullscreen() {
+    const workspace = hostRef.current?.closest<HTMLElement>(".sm-viz-workspace");
+    if (!workspace) return;
+    if (fullscreenFallback) { setFullscreenFallback(false); return; }
+    if (document.fullscreenElement) { await document.exitFullscreen(); return; }
+    if (workspace.requestFullscreen) {
+      try { await workspace.requestFullscreen(); return; } catch { /* use the local fallback below */ }
+    }
+    setFullscreenFallback(true);
+  }
+
+  const fullscreenActive = isFullscreen || fullscreenFallback;
+
+  return <div ref={hostRef} className={`sm-viz-surface ${panning || wheelActive ? "is-manipulating" : ""} ${panning ? "is-panning" : ""}`} data-structural-renderer="canvas-rd" data-layout-mode="employment-concentric-orbit" data-orbit-geometry="eight-around-one" data-fullscreen={fullscreenActive} data-depth-field={reducedMotion ? "static" : "spring-parallax"} data-depth-particle-count={spatialNodes.length * STRUCTURAL_PARTICLES_PER_NODE} data-camera-motion="stable-map-swing-focus" data-context-factor-count={contextFactorLayouts.length} data-selected-context-factor-id={selectedContextFactorId ?? ""} data-trace-mode={traceMode} data-focus-depth={focusDepth} data-visible-relationship-count={viewport.visibleRelationshipIds.size} data-visible-relationship-ids={[...viewport.visibleRelationshipIds].join(" ")} data-hovered-node-id={hoveredNodeId ?? ""} data-connector-motion={reducedMotion ? "static" : traceMode ? "trace" : "ambient"} data-viewport-zoom={viewportTransform.zoom.toFixed(3)} data-viewport-pan-x={Math.round(viewportTransform.panX)} data-viewport-pan-y={Math.round(viewportTransform.panY)} onDoubleClick={handleDoubleClick} onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerLeave={() => { if (!panSession.current) parallaxTarget.current = { x: 0, y: 0 }; }} onPointerUp={endPan} onPointerCancel={endPan} onMouseDown={(event) => { if (event.button === 1) event.preventDefault(); }} onAuxClick={(event) => { if (event.button === 1) event.preventDefault(); }}>
     <canvas ref={canvasRef} className="sm-viz-canvas" role="img" aria-label="Synthetic structural pressure surface with spatial neighborhoods and continuous routed dependencies" data-renderer-surface="canvas" />
     <p className="sm-sr-only">The canvas is supplemented by keyboard-accessible node controls and a complete structured relationship list. Mouse wheel zooms. Hold the middle mouse button and drag to pan.</p>
     <svg className="sm-viz-context-links" width={size.width} height={size.height} aria-hidden="true">{contextFactorLayouts.map((factor) => {
@@ -203,6 +242,7 @@ export function CanvasStructuralSurface({ model, path, currentEdges, completedEd
       <button type="button" aria-label="Zoom out" onClick={() => zoomAt(0.85)}>−</button>
       <output aria-label="Graph zoom level">{Math.round(viewportTransform.zoom * 100)}%</output>
       <button type="button" aria-label="Zoom in" onClick={() => zoomAt(1.18)}>+</button>
+      <button type="button" className="is-fullscreen" aria-label={fullscreenActive ? "Exit full screen" : "Enter full screen"} aria-pressed={fullscreenActive} onClick={() => void toggleFullscreen()}><span aria-hidden="true">⛶</span><b>{fullscreenActive ? "Exit" : "Full screen"}</b></button>
     </div>
     <div className="sm-viz-semantic-state" hidden>{currentEdges.map((edge) => {
       const terminal = ["BLOCKED", "ABSORBED", "UNKNOWN"].includes(edge.outcome);

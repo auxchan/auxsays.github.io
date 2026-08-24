@@ -20,6 +20,8 @@ Symmetrical sublayer orbit and dedicated information guides: **PENDING HUMAN VIS
 
 True concentric nine-node orbital composition: **PENDING HUMAN VISUAL QA**
 
+Full-screen structural workspace control: **PENDING HUMAN VISUAL QA**
+
 This review covers only the development-only structural renderer, spatial
 navigation, label hierarchy, node grammar, and Explore/Trace interaction.
 `HUMAN_PHASE4_MOTION_QA` remains **PENDING**.
@@ -316,6 +318,18 @@ not compete with relationship evidence. Automated and live-preview checks
 confirm all eight core factors share the same screen radius and all eighteen
 sublayer targets remain collision-free.
 
+## Taylor addition — full-screen structural workspace
+
+Taylor requested a full-screen action directly on the interface. The viewport
+controls now include a labeled Full screen button. It expands the complete node
+workspace rather than only the canvas, preserving the factor guide, Reset,
+zoom, pan, node inspection, and sublayer interaction in one uninterrupted view.
+
+The control changes to Exit while active. Native browser fullscreen is used
+when available; an in-page full-window fallback preserves the same layout when
+the API is unavailable or denied. Escape exits the fallback, and native
+fullscreen retains the browser's standard Escape behavior.
+
 ## Local review
 
 ```text
@@ -410,6 +424,9 @@ http://127.0.0.1:4174/systems-monitor/?view=summary
    eight core factors read as equally spaced positions on one circular ring.
 31. **Outer orbit:** confirm every sublayer pair reads as part of a second
    concentric band, with adequate label separation at the top and bottom.
+32. **Full screen:** enter full screen, select a core factor and a sublayer,
+   zoom and pan, then Exit. Confirm the whole workspace remains usable and the
+   original page layout returns cleanly.
 
 ## Taylor checklist
 

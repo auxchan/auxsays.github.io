@@ -109,9 +109,19 @@
 [data-aux-product="systems-monitor"] .sm-viz-viewport-controls button.is-reset { display: inline-flex; width: auto; min-width: 4.4rem; gap: .34rem; padding: 0 .58rem; border-right: 1px solid rgba(116, 171, 182, .16); border-radius: .42rem .2rem .2rem .42rem; }
 [data-aux-product="systems-monitor"] .sm-viz-viewport-controls button.is-reset span { font-size: 1rem; line-height: 1; }
 [data-aux-product="systems-monitor"] .sm-viz-viewport-controls button.is-reset b { font-size: .59rem; font-weight: 760; letter-spacing: .04em; }
+[data-aux-product="systems-monitor"] .sm-viz-viewport-controls button.is-fullscreen { display: inline-flex; width: auto; min-width: 5.7rem; gap: .34rem; margin-left: .08rem; padding: 0 .58rem; border-left: 1px solid rgba(116, 171, 182, .16); border-radius: .2rem .42rem .42rem .2rem; }
+[data-aux-product="systems-monitor"] .sm-viz-viewport-controls button.is-fullscreen span { font-size: 1rem; line-height: 1; }
+[data-aux-product="systems-monitor"] .sm-viz-viewport-controls button.is-fullscreen b { font-size: .59rem; font-weight: 760; letter-spacing: .04em; }
 [data-aux-product="systems-monitor"] .sm-viz-viewport-controls button:hover,
 [data-aux-product="systems-monitor"] .sm-viz-viewport-controls button:focus-visible { background: rgba(130, 239, 213, .1); color: #cafff1; outline: none; }
 [data-aux-product="systems-monitor"] .sm-viz-viewport-controls output { min-width: 2.75rem; color: #718c94; font-size: .57rem; font-variant-numeric: tabular-nums; text-align: center; }
+[data-aux-product="systems-monitor"] .sm-viz-workspace:fullscreen,
+[data-aux-product="systems-monitor"] .sm-viz-workspace.is-fullscreen-fallback { width: 100vw; height: 100vh; max-width: none; max-height: none; background: #041018; }
+[data-aux-product="systems-monitor"] .sm-viz-workspace.is-fullscreen-fallback { position: fixed; z-index: 9999; inset: 0; }
+[data-aux-product="systems-monitor"] .sm-viz-workspace:fullscreen .sm-viz-surface,
+[data-aux-product="systems-monitor"] .sm-viz-workspace.is-fullscreen-fallback .sm-viz-surface { height: 100vh; min-height: 100vh; max-height: none; }
+[data-aux-product="systems-monitor"] .sm-viz-workspace:fullscreen .sm-node-guide,
+[data-aux-product="systems-monitor"] .sm-viz-workspace.is-fullscreen-fallback .sm-node-guide { height: 100vh; max-height: none; }
 
 [data-aux-product="systems-monitor"] .sm-viz-readout { position: relative; z-index: 4; display: flex; align-items: center; justify-content: space-between; gap: 1rem; min-height: 3.25rem; padding: .65rem 1.1rem; border-top: 1px solid rgba(116, 171, 182, .15); background: rgba(5, 18, 26, .9); }
 [data-aux-product="systems-monitor"] .sm-viz-readout .sm-motion-live { min-height: 0; padding: 0; border: 0; color: #a8d8cc; }

@@ -1,5 +1,17 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-23 — Full-screen structural workspace control
+
+- Added a clearly labeled Full screen action to the graph viewport controls.
+- Expands the complete node workspace so the canvas, selected-factor guide,
+  zoom, pan, Reset, and inspection interactions remain available together.
+- Changes to an explicit Exit control while expanded and supports Escape.
+- Uses the browser Fullscreen API when available, with a full-window local
+  fallback when it is unavailable or denied.
+- No node layout, relationship, factual data, accepted evidence, or production
+  activation state changed. Human spatial-renderer and Motion QA remain
+  PENDING.
+
 ## 2026-08-23 — True concentric nine-node orbital composition
 
 - Replaced the loosely orbital overview with a strict eight-around-one radial
