@@ -77,13 +77,22 @@ def _as_int(value: Any) -> int:
         return 0
 
 
-def reconcile_record_counts(evidence_rows: Iterable[dict[str, Any]], generated_dir: Path) -> tuple[int, list[dict[str, Any]]]:
+def reconcile_record_counts(evidence_rows: Iterable[dict[str, Any]], generated_dir: Path,
+                            product_ids: set[str] | None = None) -> tuple[int, list[dict[str, Any]]]:
     """One authoritative reconciliation: after all collectors + consensus, set every update record's
     ``update_report_count`` (and the count-derived state fields) to the final counted evidence for its
     exact (product_id, version). Idempotent -- an already-aligned tree produces zero writes. Returns
     (changed_count, [details]). Never merges across products; never touches records that already match.
+
+    ``product_ids`` OPTIONALLY narrows the records this call may touch. ``None`` (the default, and
+    what every existing production caller passes) means "every product", preserving the whole-tree
+    behaviour exactly. A caller that only ran ONE product's collection -- e.g. an orchestration run
+    scoped to microsoft-powerpoint -- passes its own product set so a pre-existing mismatch on an
+    unrelated product's record cannot be silently rewritten by a run that never collected for it.
+    The algorithm is unchanged; this only restricts which records are eligible.
     """
     counts = counted_evidence_counts(evidence_rows)
+    scope = {str(p).strip() for p in product_ids} if product_ids is not None else None
     changed: list[dict[str, Any]] = []
     for path in sorted(Path(generated_dir).glob("*.md")):
         data, body = load_front_matter_and_body(path)
@@ -92,6 +101,8 @@ def reconcile_record_counts(evidence_rows: Iterable[dict[str, Any]], generated_d
         product_id = str(data.get("product_id") or "").strip()
         version = str(data.get("update_version") or "").strip()
         if not product_id or not version:
+            continue
+        if scope is not None and product_id not in scope:
             continue
         n = counts.get(patch_key(product_id, version, data.get("target_build")), 0)
         new_state = evidence_state_for(n)
