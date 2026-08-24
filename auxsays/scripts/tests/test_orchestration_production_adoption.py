@@ -42,7 +42,7 @@ from lib import context_resolution as cr  # noqa: E402
 from lib import patch_identity as pi  # noqa: E402
 from lib.orchestration import BLOCKED, DONE  # noqa: E402
 from patch_collectors import microsoft_powerpoint as ppt  # noqa: E402
-from patch_collectors.base import method_health_row  # noqa: E402
+from patch_collectors.base import VALID_METHOD_HEALTH_STATUSES, method_health_row  # noqa: E402
 
 PRODUCT = "microsoft-powerpoint"
 VERSION = "2603"
@@ -469,6 +469,13 @@ def run() -> int:  # noqa: PLR0915
         check("CR the run still terminates DONE", state.terminal == DONE, str(state.failures))
         check("CR accepted_counts reflects the resolved report",
               state.accepted_counts.get(key, 0) >= 1, str(state.accepted_counts))
+        crres = [r for r in state.method_results if r["role"] == "context_resolution"]
+        check("CR emits a method-health row for the stage", len(crres) == 1 and crres[0]["health_row"])
+        if crres:
+            hs = crres[0]["health_row"].get("status")
+            check("CR a stage that resolved something reports success", hs == "success", str(hs))
+            check("CR the status survives normalization unchanged",
+                  hs in VALID_METHOD_HEALTH_STATUSES, str(hs))
 
     with tempfile.TemporaryDirectory() as td:
         tmp = Path(td)
@@ -518,6 +525,13 @@ def run() -> int:  # noqa: PLR0915
         check("CR no counted row was produced at all",
               all(not res["accepted_rows"] for res in state.method_results
                   if res["role"] == "context_resolution"), str(info))
+        # A working stage that simply found no usable build must NOT report itself broken.
+        crres = [r for r in state.method_results if r["role"] == "context_resolution"]
+        hs = crres[0]["health_row"].get("status") if crres else None
+        check("CR 'the source stated no usable build' is low_confidence, not broken",
+              hs == "low_confidence", str(hs))
+        check("CR the reported status is in the shared vocabulary",
+              hs in VALID_METHOD_HEALTH_STATUSES, str(hs))
 
     # ================= ZERO AI =================
     print("\n[doctrine] the production path requires no AI of any kind")
