@@ -1,5 +1,22 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-23 — Employment-centered orbital overview and faster reset navigation
+
+- Reorganized the persistent visual map around Employment as its central anchor,
+  with the other eight core factors distributed in a deliberate surrounding
+  orbit. This is a navigation layout only; it does not assert causal primacy.
+- Prioritized both visible synthetic relationships into Employment in the
+  bounded overview so the central factor is not presented as disconnected.
+- Renamed the single overview-recovery action from Home to Reset, removed the
+  redundant secondary reset control, and added empty-space double-click as an
+  immediate full reset of selection, mode, zoom, pan, hover, and parallax.
+- Increased parallax spring response and damping so pointer depth follows with
+  less perceptible lag while retaining bounded movement and reduced-motion
+  behavior.
+- No fixture facts, relationship semantics, factual values, accepted evidence,
+  or production UI were changed. Human spatial-renderer and Motion QA remain
+  PENDING.
+
 ## 2026-08-23 — Stable-map camera swing and legible sublayers
 
 - Replaced focus-time node relayout with a stable map coordinate system. Core

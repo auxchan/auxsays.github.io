@@ -100,9 +100,9 @@
 
 [data-aux-product="systems-monitor"] .sm-viz-viewport-controls { position: absolute; z-index: 5; right: .8rem; bottom: .8rem; display: inline-flex; align-items: center; gap: .18rem; padding: .22rem; border: 1px solid rgba(116, 171, 182, .2); border-radius: .62rem; background: rgba(4, 16, 23, .82); box-shadow: 0 8px 28px rgba(0, 0, 0, .25); backdrop-filter: blur(14px); cursor: default; }
 [data-aux-product="systems-monitor"] .sm-viz-viewport-controls button { display: grid; width: 2rem; height: 2rem; place-items: center; padding: 0; border: 0; border-radius: .42rem; background: transparent; color: #85a2aa; cursor: pointer; font: inherit; font-size: .9rem; }
-[data-aux-product="systems-monitor"] .sm-viz-viewport-controls button.is-home { display: inline-flex; width: auto; min-width: 4.4rem; gap: .34rem; padding: 0 .58rem; border-right: 1px solid rgba(116, 171, 182, .16); border-radius: .42rem .2rem .2rem .42rem; }
-[data-aux-product="systems-monitor"] .sm-viz-viewport-controls button.is-home span { font-size: 1rem; line-height: 1; }
-[data-aux-product="systems-monitor"] .sm-viz-viewport-controls button.is-home b { font-size: .59rem; font-weight: 760; letter-spacing: .04em; }
+[data-aux-product="systems-monitor"] .sm-viz-viewport-controls button.is-reset { display: inline-flex; width: auto; min-width: 4.4rem; gap: .34rem; padding: 0 .58rem; border-right: 1px solid rgba(116, 171, 182, .16); border-radius: .42rem .2rem .2rem .42rem; }
+[data-aux-product="systems-monitor"] .sm-viz-viewport-controls button.is-reset span { font-size: 1rem; line-height: 1; }
+[data-aux-product="systems-monitor"] .sm-viz-viewport-controls button.is-reset b { font-size: .59rem; font-weight: 760; letter-spacing: .04em; }
 [data-aux-product="systems-monitor"] .sm-viz-viewport-controls button:hover,
 [data-aux-product="systems-monitor"] .sm-viz-viewport-controls button:focus-visible { background: rgba(130, 239, 213, .1); color: #cafff1; outline: none; }
 [data-aux-product="systems-monitor"] .sm-viz-viewport-controls output { min-width: 2.75rem; color: #718c94; font-size: .57rem; font-variant-numeric: tabular-nums; text-align: center; }

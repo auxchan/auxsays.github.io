@@ -1,7 +1,7 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type MouseEvent as ReactMouseEvent, type PointerEvent as ReactPointerEvent } from "react";
 import type { MotionQaNode, MotionQaPath, MotionQaReadModel, MotionQaRelationship } from "../../data/motionQaReadModel";
 import { applyStructuralViewport, CanvasStructuralRenderer, createStructuralCamera, projectNode, resolveStructuralDepths, resolveStructuralDepthVisual, STRUCTURAL_PARTICLES_PER_NODE, zoomStructuralViewportAt, type StructuralViewportTransform } from "./structuralRenderer";
-import { layoutSpatialLabels, nextNodeInDirection, type SpatialViewport } from "./spatialNavigation";
+import { layoutEmploymentOrbit, layoutSpatialLabels, nextNodeInDirection, type SpatialViewport } from "./spatialNavigation";
 import { StructuralNodeIcon } from "./StructuralNodeIcon";
 import { layoutStructuralContextFactors } from "./structuralContextFactors";
 import { resolveStructuralNodeVisual } from "./structuralVisualLanguage";
@@ -22,10 +22,10 @@ interface CanvasStructuralSurfaceProps {
   reducedMotion: boolean;
   reconciliationTargetId: string | null;
   onSelectNode: (nodeId: string, target: HTMLButtonElement) => void;
-  onHome: () => void;
+  onReset: () => void;
 }
 
-export function CanvasStructuralSurface({ model, path, currentEdges, completedEdgeIds, pathEdgeIds, nodeStates, selectedNodeId, focusDepth, viewport, traceMode, reducedMotion, reconciliationTargetId, onSelectNode, onHome }: CanvasStructuralSurfaceProps) {
+export function CanvasStructuralSurface({ model, path, currentEdges, completedEdgeIds, pathEdgeIds, nodeStates, selectedNodeId, focusDepth, viewport, traceMode, reducedMotion, reconciliationTargetId, onSelectNode, onReset }: CanvasStructuralSurfaceProps) {
   const hostRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const rendererRef = useRef<CanvasStructuralRenderer | null>(null);
@@ -41,7 +41,7 @@ export function CanvasStructuralSurface({ model, path, currentEdges, completedEd
   const [viewportTransform, setViewportTransform] = useState<StructuralViewportTransform>(DEFAULT_VIEWPORT);
   const [panning, setPanning] = useState(false);
   const [wheelActive, setWheelActive] = useState(false);
-  const spatialNodes = useMemo(() => model.nodes.map((node) => ({ ...node })), [model]);
+  const spatialNodes = useMemo(() => layoutEmploymentOrbit(model), [model]);
   const spatialModel = useMemo(() => ({ ...model, nodes: spatialNodes }), [model, spatialNodes]);
   const nodes = useMemo(() => new Map(spatialNodes.map((node) => [node.id, node])), [spatialNodes]);
   const selectedNode = selectedNodeId ? nodes.get(selectedNodeId) : undefined;
@@ -142,7 +142,20 @@ export function CanvasStructuralSurface({ model, path, currentEdges, completedEd
     setPanning(false);
   }
 
-  return <div ref={hostRef} className={`sm-viz-surface ${panning || wheelActive ? "is-manipulating" : ""} ${panning ? "is-panning" : ""}`} data-structural-renderer="canvas-rd" data-depth-field={reducedMotion ? "static" : "spring-parallax"} data-depth-particle-count={spatialNodes.length * STRUCTURAL_PARTICLES_PER_NODE} data-camera-motion="stable-map-swing-focus" data-context-factor-count={contextFactorLayouts.length} data-trace-mode={traceMode} data-focus-depth={focusDepth} data-visible-relationship-count={viewport.visibleRelationshipIds.size} data-visible-relationship-ids={[...viewport.visibleRelationshipIds].join(" ")} data-hovered-node-id={hoveredNodeId ?? ""} data-connector-motion={reducedMotion ? "static" : traceMode ? "trace" : "ambient"} data-viewport-zoom={viewportTransform.zoom.toFixed(3)} data-viewport-pan-x={Math.round(viewportTransform.panX)} data-viewport-pan-y={Math.round(viewportTransform.panY)} onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerLeave={() => { if (!panSession.current) parallaxTarget.current = { x: 0, y: 0 }; }} onPointerUp={endPan} onPointerCancel={endPan} onMouseDown={(event) => { if (event.button === 1) event.preventDefault(); }} onAuxClick={(event) => { if (event.button === 1) event.preventDefault(); }}>
+  function resetSurface() {
+    setViewportTransform(DEFAULT_VIEWPORT);
+    setHoveredNodeId(null);
+    parallaxTarget.current = { x: 0, y: 0 };
+    onReset();
+  }
+
+  function handleDoubleClick(event: ReactMouseEvent<HTMLDivElement>) {
+    if ((event.target as HTMLElement).closest("button, a, input, textarea, select, summary")) return;
+    event.preventDefault();
+    resetSurface();
+  }
+
+  return <div ref={hostRef} className={`sm-viz-surface ${panning || wheelActive ? "is-manipulating" : ""} ${panning ? "is-panning" : ""}`} data-structural-renderer="canvas-rd" data-layout-mode="employment-orbit" data-depth-field={reducedMotion ? "static" : "spring-parallax"} data-depth-particle-count={spatialNodes.length * STRUCTURAL_PARTICLES_PER_NODE} data-camera-motion="stable-map-swing-focus" data-context-factor-count={contextFactorLayouts.length} data-trace-mode={traceMode} data-focus-depth={focusDepth} data-visible-relationship-count={viewport.visibleRelationshipIds.size} data-visible-relationship-ids={[...viewport.visibleRelationshipIds].join(" ")} data-hovered-node-id={hoveredNodeId ?? ""} data-connector-motion={reducedMotion ? "static" : traceMode ? "trace" : "ambient"} data-viewport-zoom={viewportTransform.zoom.toFixed(3)} data-viewport-pan-x={Math.round(viewportTransform.panX)} data-viewport-pan-y={Math.round(viewportTransform.panY)} onDoubleClick={handleDoubleClick} onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerLeave={() => { if (!panSession.current) parallaxTarget.current = { x: 0, y: 0 }; }} onPointerUp={endPan} onPointerCancel={endPan} onMouseDown={(event) => { if (event.button === 1) event.preventDefault(); }} onAuxClick={(event) => { if (event.button === 1) event.preventDefault(); }}>
     <canvas ref={canvasRef} className="sm-viz-canvas" role="img" aria-label="Synthetic structural pressure surface with spatial neighborhoods and continuous routed dependencies" data-renderer-surface="canvas" />
     <p className="sm-sr-only">The canvas is supplemented by keyboard-accessible node controls and a complete structured relationship list. Mouse wheel zooms. Hold the middle mouse button and drag to pan.</p>
     <svg className="sm-viz-context-links" width={size.width} height={size.height} aria-hidden="true">{contextFactorLayouts.map((factor) => {
@@ -169,7 +182,7 @@ export function CanvasStructuralSurface({ model, path, currentEdges, completedEd
       const visible = viewport.visibleNodeIds.has(node.id);
       const visual = resolveStructuralNodeVisual(node);
       const hovered = hoveredNodeId === node.id;
-      const depthVisual = resolveStructuralDepthVisual(structuralDepths.get(node.id) ?? 0, hovered || selectedNodeId === node.id || active);
+      const depthVisual = resolveStructuralDepthVisual(structuralDepths.get(node.id) ?? 0, hovered || selectedNodeId === node.id || active || (!selectedNodeId && node.id === "fixture-employment"));
       const style = { left: point.x, top: point.y, "--label-x": `${(label?.x ?? point.x) - point.x}px`, "--label-y": `${(label?.y ?? point.y + 31) - point.y}px`, "--label-width": `${label?.width ?? 120}px`, "--node-accent": visual.accent, "--node-fill": visual.fill, "--node-depth-scale": depthVisual.scale, "--node-depth-opacity": depthVisual.opacity } as CSSProperties;
       return <button key={node.id} ref={(element) => { if (element) nodeButtons.current.set(node.id, element); else nodeButtons.current.delete(node.id); }} type="button" style={style} className={`sm-viz-node-label is-${node.kind.toLowerCase()} ${selectedNodeId === node.id ? "is-selected" : ""} ${hovered ? "is-hovered" : ""} ${active ? "is-active" : ""} ${onPath ? "is-path" : ""} ${visible ? "is-neighborhood" : "is-context-hidden"} ${label?.suppressed ? "is-label-suppressed" : ""}`} aria-label={`${node.detailLabel}. ${state}. Enter this system.`} aria-pressed={selectedNodeId === node.id} aria-hidden={!visible} tabIndex={visible ? 0 : -1} data-motion-node-id={node.id} data-motion-state={state} data-motion-active={active} data-node-type={node.kind} data-node-role={visual.role} data-node-symbol={visual.symbol} data-visual-depth={structuralDepths.get(node.id) ?? 0} data-hovered={hovered} data-label-level={focusDepth} data-label-priority={label?.priority ?? "DETAIL"} data-label-suppressed={label?.suppressed ?? true} onPointerEnter={() => setHoveredNodeId(node.id)} onPointerLeave={() => setHoveredNodeId((current) => current === node.id ? null : current)} onFocus={() => setHoveredNodeId(node.id)} onBlur={() => setHoveredNodeId((current) => current === node.id ? null : current)} onClick={(event) => onSelectNode(node.id, event.currentTarget)} onKeyDown={(event) => {
         if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onSelectNode(node.id, event.currentTarget); return; }
@@ -181,11 +194,10 @@ export function CanvasStructuralSurface({ model, path, currentEdges, completedEd
       }}><i className="sm-viz-node-anchor" aria-hidden="true" data-selected-node-anchor={selectedNodeId === node.id ? "visible" : undefined}><StructuralNodeIcon symbol={visual.symbol} /></i><span><b>{label?.text ?? node.label}</b><small>{focusDepth > 0 ? node.kind.replaceAll("_", " ") : ""}</small></span></button>;
     })}</div>
     <div className="sm-viz-viewport-controls" aria-label="Graph viewport controls" onPointerDown={(event) => event.stopPropagation()}>
-      <button type="button" className="is-home" aria-label="Home — show all core factors" onClick={() => { setViewportTransform(DEFAULT_VIEWPORT); setHoveredNodeId(null); parallaxTarget.current = { x: 0, y: 0 }; onHome(); }}><span aria-hidden="true">⌂</span><b>Home</b></button>
+      <button type="button" className="is-reset" aria-label="Reset — show all core factors" onClick={resetSurface}><span aria-hidden="true">↺</span><b>Reset</b></button>
       <button type="button" aria-label="Zoom out" onClick={() => zoomAt(0.85)}>−</button>
       <output aria-label="Graph zoom level">{Math.round(viewportTransform.zoom * 100)}%</output>
       <button type="button" aria-label="Zoom in" onClick={() => zoomAt(1.18)}>+</button>
-      <button type="button" aria-label="Reset graph view" onClick={() => setViewportTransform(DEFAULT_VIEWPORT)}>⌖</button>
     </div>
     <div className="sm-viz-semantic-state" hidden>{currentEdges.map((edge) => {
       const terminal = ["BLOCKED", "ABSORBED", "UNKNOWN"].includes(edge.outcome);

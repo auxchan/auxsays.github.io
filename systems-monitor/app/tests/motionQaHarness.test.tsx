@@ -5,7 +5,7 @@ import { SnapshotProvider } from "../src/app/SnapshotContext";
 import { SystemsMonitorApp } from "../src/app/SystemsMonitorApp";
 import { motionOutcomes, validateMotionQaReadModel } from "../src/data/motionQaReadModel";
 import { applyStructuralViewport, blendConnectorColor, connectorGlintProgress, createStructuralCamera, easeConnectorHover, interpolateCamera, MAX_STRUCTURAL_ZOOM, MIN_STRUCTURAL_ZOOM, outcomeTravel, projectNode, resolveStructuralDepths, resolveStructuralDepthVisual, sampleRelationship, stepSpringParallax, zoomStructuralViewportAt } from "../src/views/motion/structuralRenderer";
-import { layoutSpatialLabels, layoutSpatialNodes, MAX_VISIBLE_RELATIONSHIPS, nextNodeInDirection, resolveSpatialViewport } from "../src/views/motion/spatialNavigation";
+import { layoutEmploymentOrbit, layoutSpatialLabels, layoutSpatialNodes, MAX_VISIBLE_RELATIONSHIPS, nextNodeInDirection, resolveSpatialViewport } from "../src/views/motion/spatialNavigation";
 import { candidate } from "./factualCandidate.test";
 
 const standardMatchMedia = (query: string) => ({ matches: false, media: query, onchange: null, addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {}, dispatchEvent: () => false });
@@ -308,7 +308,9 @@ describe("development-only structural Motion QA harness", () => {
     expect(surface.dataset.contextFactorCount).toBe("18");
     expect(surface.dataset.depthParticleCount).toBe("72");
     expect(surface.dataset.cameraMotion).toBe("stable-map-swing-focus");
+    expect(surface.dataset.layoutMode).toBe("employment-orbit");
     expect(surface.dataset.visibleRelationshipIds).toContain("fixture-edge-09");
+    expect(surface.dataset.visibleRelationshipIds).toContain("fixture-edge-11");
     expect(factors).toHaveLength(18);
     expect(new Set(factors.map((factor) => factor.dataset.contextFactorDepth)).size).toBeGreaterThan(4);
     const utilization = document.querySelector<HTMLButtonElement>('[data-context-factor-id="context-utilization"]')!;
@@ -432,13 +434,13 @@ describe("development-only structural Motion QA harness", () => {
     expect(Number(surface.dataset.viewportPanX)).toBeGreaterThan(0);
     expect(Number(surface.dataset.viewportPanY)).toBeGreaterThan(0);
 
-    fireEvent.click(screen.getByRole("button", { name: "Reset graph view" }));
+    fireEvent.click(screen.getByRole("button", { name: "Reset — show all core factors" }));
     expect(surface.dataset.viewportZoom).toBe("1.000");
     expect(surface.dataset.viewportPanX).toBe("0");
     expect(surface.dataset.viewportPanY).toBe("0");
   });
 
-  it("returns selection, mode, and camera to the complete core-factor home view", async () => {
+  it("returns selection, mode, and camera to the complete core-factor reset view", async () => {
     await renderReducedHarness();
     const surface = document.querySelector<HTMLElement>(".sm-viz-surface")!;
     fireEvent.click(screen.getByRole("button", { name: /Product Storage Capacity.*Enter this system/ }));
@@ -448,7 +450,7 @@ describe("development-only structural Motion QA harness", () => {
     fireEvent(surface, zoomEvent);
     expect(Number(surface.dataset.viewportZoom)).toBeGreaterThan(1);
 
-    fireEvent.click(screen.getByRole("button", { name: "Home — show all core factors" }));
+    fireEvent.click(screen.getByRole("button", { name: "Reset — show all core factors" }));
     expect(surface.dataset.focusDepth).toBe("0");
     expect(surface.dataset.viewportZoom).toBe("1.000");
     expect(surface.dataset.viewportPanX).toBe("0");
@@ -456,6 +458,21 @@ describe("development-only structural Motion QA harness", () => {
     expect(surface.dataset.traceMode).toBe("false");
     expect(screen.queryByRole("complementary", { name: "Selected factor guide" })).toBeNull();
     expect(screen.getByText("Synthetic system overview")).toBeTruthy();
+
+    fireEvent.click(screen.getByRole("button", { name: /Petroleum Refining.*Enter this system/ }));
+    expect(surface.dataset.focusDepth).toBe("1");
+    fireEvent.doubleClick(surface);
+    expect(surface.dataset.focusDepth).toBe("0");
+    expect(surface.dataset.viewportZoom).toBe("1.000");
+    expect(screen.queryByRole("complementary", { name: "Selected factor guide" })).toBeNull();
+  });
+
+  it("keeps Employment central in one stable orbital overview", () => {
+    const model = validateMotionQaReadModel(motionFixture);
+    const orbit = layoutEmploymentOrbit(model);
+    const employment = orbit.find((node) => node.id === "fixture-employment")!;
+    expect(employment).toMatchObject({ x: 520, y: 310 });
+    expect(orbit.filter((node) => node.id !== employment.id).every((node) => Math.hypot(node.x - employment.x, node.y - employment.y) > 150)).toBe(true);
   });
 
   it("contains wheel scrolling inside the open factor guide", async () => {

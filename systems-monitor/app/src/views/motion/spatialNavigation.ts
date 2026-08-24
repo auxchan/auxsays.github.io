@@ -4,6 +4,22 @@ import { projectNode } from "./structuralRenderer";
 
 export const MAX_VISIBLE_RELATIONSHIPS = 10;
 
+const employmentOrbitPositions: Record<string, Point> = {
+  "fixture-origin": { x: 120, y: 310 },
+  "fixture-producer": { x: 235, y: 160 },
+  "fixture-buffer": { x: 390, y: 105 },
+  "fixture-branch-a": { x: 590, y: 100 },
+  "fixture-downstream": { x: 875, y: 225 },
+  "fixture-transport": { x: 790, y: 430 },
+  "fixture-junction": { x: 600, y: 500 },
+  "fixture-branch-b": { x: 360, y: 515 },
+  "fixture-employment": { x: 520, y: 310 }
+};
+
+export function layoutEmploymentOrbit(model: MotionQaReadModel): MotionQaNode[] {
+  return model.nodes.map((node) => ({ ...node, ...(employmentOrbitPositions[node.id] ?? {}) }));
+}
+
 export interface SpatialViewport {
   focusNodeId: string | null;
   visibleNodeIds: Set<string>;

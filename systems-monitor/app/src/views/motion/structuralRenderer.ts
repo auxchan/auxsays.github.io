@@ -92,8 +92,8 @@ export function resolveStructuralDepthVisual(depth: number, emphasized = false):
 export function stepSpringParallax(current: SpringParallaxState, target: Point, elapsedMs: number, reducedMotion = false): SpringParallaxState {
   if (reducedMotion) return { position: { x: 0, y: 0 }, velocity: { x: 0, y: 0 } };
   const elapsed = Math.max(0, Math.min(50, elapsedMs)) / 1000;
-  const stiffness = 32;
-  const damping = Math.exp(-8.5 * elapsed);
+  const stiffness = 110;
+  const damping = Math.exp(-12.5 * elapsed);
   const velocity = {
     x: (current.velocity.x + (target.x - current.position.x) * stiffness * elapsed) * damping,
     y: (current.velocity.y + (target.y - current.position.y) * stiffness * elapsed) * damping
@@ -615,7 +615,7 @@ export class CanvasStructuralRenderer implements StructuralRenderer {
       if (!state.visibleNodeIds.has(node.id)) continue;
       const visible = !state.traceMode || pathNodes.has(node.id) || state.selectedNodeId === node.id;
       if (!visible) continue;
-      const emphasized = state.selectedNodeId === node.id || state.hoveredNodeId === node.id || (state.traceMode && pathNodes.has(node.id));
+      const emphasized = state.selectedNodeId === node.id || state.hoveredNodeId === node.id || (!state.selectedNodeId && node.id === "fixture-employment") || (state.traceMode && pathNodes.has(node.id));
       const depthVisual = resolveStructuralDepthVisual(structuralDepths.get(node.id) ?? 0, emphasized);
       drawNodeShape(context, node, state.nodeStates.get(node.id) ?? "IDLE", state.selectedNodeId === node.id, state.hoveredNodeId === node.id, phase, depthVisual);
     }

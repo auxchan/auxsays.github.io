@@ -14,6 +14,8 @@ Interface-first overview and explicit underlying factors: **PENDING HUMAN VISUAL
 
 Stable-map camera swing and legible sublayers: **PENDING HUMAN VISUAL QA**
 
+Employment-centered orbital overview and Reset behavior: **PENDING HUMAN VISUAL QA**
+
 This review covers only the development-only structural renderer, spatial
 navigation, label hierarchy, node grammar, and Explore/Trace interaction.
 `HUMAN_PHASE4_MOTION_QA` remains **PENDING**.
@@ -240,6 +242,30 @@ This remains a synthetic visual laboratory. The stronger depth cues and camera
 motion do not represent factual magnitude, causal strength, or accepted
 structural evidence.
 
+## Taylor correction — Employment-centered orbit and immediate reset
+
+Taylor found the overview organization insufficiently coherent, the parallax
+response too delayed, and the Home terminology less accurate than Reset. Taylor
+also requested the familiar spatial shortcut of double-clicking empty space to
+recover the complete overview.
+
+The persistent visual map now places Employment at its center and arranges the
+other eight core factors around it as an orbital navigation composition. Both
+governed synthetic relationships into Employment remain visible within the
+ten-link overview limit. This makes the human-impact endpoint visually central
+without changing the fixture graph or claiming that Employment is the causal
+origin of the system.
+
+The single recovery control is now named Reset and performs a complete reset of
+selection, Trace mode, camera focus, zoom, pan, hover emphasis, and parallax.
+Double-clicking empty graph space performs the same action; interactive controls
+are excluded so their normal double-click behavior cannot trigger it. The former
+duplicate icon-only reset control was removed.
+
+The parallax spring is materially more responsive and more strongly damped,
+reducing cursor lag without increasing its bounded travel. Reduced-motion mode
+continues to disable parallax movement.
+
 ## Local review
 
 ```text
@@ -310,8 +336,17 @@ http://127.0.0.1:4174/systems-monitor/?view=summary
 21. **Truthful connection count:** confirm each guide reports only its real direct
     fixture connections and does not pad the list to ten.
 22. **Scroll containment:** wheel over the graph, the guide, and then the page.
-    Confirm the graph zooms, the guide scrolls internally, and the page scrolls
-    only when the pointer leaves the workspace.
+   Confirm the graph zooms, the guide scrolls internally, and the page scrolls
+   only when the pointer leaves the workspace.
+23. **Orbital overview:** confirm Employment reads as the stable central anchor,
+   all other core factors remain easy to locate around it, and both visible
+   incoming Employment relationships are legible.
+24. **Reset recovery:** enter a factor, enable Trace, zoom, and pan; then use
+   Reset. Repeat and double-click empty graph space. Confirm both routes restore
+   the same complete overview in one action.
+25. **Parallax response:** move the pointer through the graph and confirm the
+   depth field responds promptly, settles quickly, and does not trail the cursor
+   with the prior sluggish feel.
 
 ## Taylor checklist
 
