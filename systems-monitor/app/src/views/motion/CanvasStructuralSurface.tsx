@@ -3,6 +3,7 @@ import type { MotionQaNode, MotionQaPath, MotionQaReadModel, MotionQaRelationshi
 import { applyStructuralViewport, CanvasStructuralRenderer, createStructuralCamera, projectNode, resolveStructuralDepths, resolveStructuralDepthVisual, zoomStructuralViewportAt, type StructuralViewportTransform } from "./structuralRenderer";
 import { layoutSpatialLabels, layoutSpatialNodes, nextNodeInDirection, type SpatialViewport } from "./spatialNavigation";
 import { StructuralNodeIcon } from "./StructuralNodeIcon";
+import { layoutStructuralContextFactors } from "./structuralContextFactors";
 import { resolveStructuralNodeVisual } from "./structuralVisualLanguage";
 
 const DEFAULT_VIEWPORT: StructuralViewportTransform = { zoom: 1, panX: 0, panY: 0 };
@@ -51,6 +52,7 @@ export function CanvasStructuralSurface({ model, path, currentEdges, completedEd
   const labelPlacements = useMemo(() => layoutSpatialLabels({ nodes: spatialNodes, camera, width: size.width, height: size.height, focusDepth, selectedNodeId, visibleNodeIds: viewport.visibleNodeIds, traceNodeIds: pathNodes }), [spatialNodes, camera, size, focusDepth, selectedNodeId, viewport.visibleNodeIds, pathNodes]);
   const labels = useMemo(() => new Map(labelPlacements.map((placement) => [placement.nodeId, placement])), [labelPlacements]);
   const structuralDepths = useMemo(() => resolveStructuralDepths(spatialModel, traceMode ? null : selectedNodeId), [spatialModel, traceMode, selectedNodeId]);
+  const contextFactorLayouts = useMemo(() => layoutStructuralContextFactors(spatialNodes, camera, structuralDepths, viewport.visibleNodeIds), [spatialNodes, camera, structuralDepths, viewport.visibleNodeIds]);
 
   useEffect(() => {
     const host = hostRef.current;
@@ -140,9 +142,24 @@ export function CanvasStructuralSurface({ model, path, currentEdges, completedEd
     setPanning(false);
   }
 
-  return <div ref={hostRef} className={`sm-viz-surface ${panning || wheelActive ? "is-manipulating" : ""} ${panning ? "is-panning" : ""}`} data-structural-renderer="canvas-rd" data-depth-field={reducedMotion ? "static" : "spring-parallax"} data-trace-mode={traceMode} data-focus-depth={focusDepth} data-visible-relationship-count={viewport.visibleRelationshipIds.size} data-hovered-node-id={hoveredNodeId ?? ""} data-connector-motion={reducedMotion ? "static" : traceMode ? "trace" : "ambient"} data-viewport-zoom={viewportTransform.zoom.toFixed(3)} data-viewport-pan-x={Math.round(viewportTransform.panX)} data-viewport-pan-y={Math.round(viewportTransform.panY)} onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerLeave={() => { if (!panSession.current) parallaxTarget.current = { x: 0, y: 0 }; }} onPointerUp={endPan} onPointerCancel={endPan} onMouseDown={(event) => { if (event.button === 1) event.preventDefault(); }} onAuxClick={(event) => { if (event.button === 1) event.preventDefault(); }}>
+  return <div ref={hostRef} className={`sm-viz-surface ${panning || wheelActive ? "is-manipulating" : ""} ${panning ? "is-panning" : ""}`} data-structural-renderer="canvas-rd" data-depth-field={reducedMotion ? "static" : "spring-parallax"} data-context-factor-count={contextFactorLayouts.length} data-trace-mode={traceMode} data-focus-depth={focusDepth} data-visible-relationship-count={viewport.visibleRelationshipIds.size} data-visible-relationship-ids={[...viewport.visibleRelationshipIds].join(" ")} data-hovered-node-id={hoveredNodeId ?? ""} data-connector-motion={reducedMotion ? "static" : traceMode ? "trace" : "ambient"} data-viewport-zoom={viewportTransform.zoom.toFixed(3)} data-viewport-pan-x={Math.round(viewportTransform.panX)} data-viewport-pan-y={Math.round(viewportTransform.panY)} onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerLeave={() => { if (!panSession.current) parallaxTarget.current = { x: 0, y: 0 }; }} onPointerUp={endPan} onPointerCancel={endPan} onMouseDown={(event) => { if (event.button === 1) event.preventDefault(); }} onAuxClick={(event) => { if (event.button === 1) event.preventDefault(); }}>
     <canvas ref={canvasRef} className="sm-viz-canvas" role="img" aria-label="Synthetic structural pressure surface with spatial neighborhoods and continuous routed dependencies" data-renderer-surface="canvas" />
     <p className="sm-sr-only">The canvas is supplemented by keyboard-accessible node controls and a complete structured relationship list. Mouse wheel zooms. Hold the middle mouse button and drag to pan.</p>
+    <svg className="sm-viz-context-links" width={size.width} height={size.height} aria-hidden="true">{contextFactorLayouts.map((factor) => {
+      const parentActive = selectedNodeId === factor.parentNodeId || hoveredNodeId === factor.parentNodeId;
+      const parent = nodes.get(factor.parentNodeId);
+      const visual = parent ? resolveStructuralNodeVisual(parent) : null;
+      return <line key={factor.id} x1={factor.parentX} y1={factor.parentY} x2={factor.x} y2={factor.y} className={parentActive ? "is-active" : ""} style={{ "--context-accent": visual?.accent ?? "#82efd5" } as CSSProperties} />;
+    })}</svg>
+    <div className="sm-viz-context-layer" aria-label="Synthetic underlying factor previews">{contextFactorLayouts.map((factor) => {
+      const parent = nodes.get(factor.parentNodeId);
+      if (!parent) return null;
+      const parentActive = selectedNodeId === factor.parentNodeId || hoveredNodeId === factor.parentNodeId;
+      const visual = resolveStructuralNodeVisual(parent);
+      const depthVisual = resolveStructuralDepthVisual(factor.visualDepth, parentActive);
+      const factorStyle = { left: factor.x, top: factor.y, "--context-accent": visual.accent, "--context-scale": depthVisual.scale, "--context-opacity": depthVisual.opacity } as CSSProperties;
+      return <button key={factor.id} type="button" style={factorStyle} className={parentActive ? "is-parent-active" : ""} aria-label={`${factor.label}, synthetic underlying factor for ${parent.detailLabel}. Open parent factor.`} aria-hidden={!parentActive} tabIndex={parentActive ? 0 : -1} data-context-factor-id={factor.id} data-context-parent-id={factor.parentNodeId} data-context-factor-depth={factor.visualDepth} onPointerEnter={() => setHoveredNodeId(factor.parentNodeId)} onPointerLeave={() => setHoveredNodeId((current) => current === factor.parentNodeId ? null : current)} onFocus={() => setHoveredNodeId(factor.parentNodeId)} onBlur={() => setHoveredNodeId((current) => current === factor.parentNodeId ? null : current)} onClick={() => { const parentButton = nodeButtons.current.get(factor.parentNodeId); if (parentButton) onSelectNode(factor.parentNodeId, parentButton); }}><i aria-hidden="true" /><span>{factor.label}</span></button>;
+    })}</div>
     <div className="sm-viz-node-layer" aria-label="Synthetic structural nodes">{spatialNodes.map((node) => {
       const point = projectNode(node, camera);
       const label = labels.get(node.id);

@@ -10,6 +10,8 @@ Node-color connector lighting correction: **PENDING HUMAN VISUAL QA**
 
 Layered depth and spring-parallax exploration field: **PENDING HUMAN VISUAL QA**
 
+Interface-first overview and explicit underlying factors: **PENDING HUMAN VISUAL QA**
+
 This review covers only the development-only structural renderer, spatial
 navigation, label hierarchy, node grammar, and Explore/Trace interaction.
 `HUMAN_PHASE4_MOTION_QA` remains **PENDING**.
@@ -182,6 +184,32 @@ response uses a damped spring and shallow per-layer displacement to create depth
 without behaving like decorative confetti. Reduced-motion mode freezes the
 field. These layers are explicitly visual R&D and do not encode factual
 magnitude, importance, accepted relationships, or hidden economic observations.
+
+## Taylor correction — show the underlying system
+
+Taylor correctly found that the first depth pass still looked essentially like
+the prior nine-node graph: particles and optical depth implied complexity, but
+there were no actual subordinate factors to explore. Taylor also found
+Employment visually isolated and the large Summary headline disproportionate
+to a page whose primary purpose is the structural interface.
+
+The corrected candidate now renders 18 explicit synthetic subordinate factors,
+two for every core node. They are smaller and more translucent than the core
+system, connected to their parent by quiet tethers, and become fully readable
+on hover or keyboard focus. Selecting one opens its parent factor closeup, where
+the same two names appear under a short **Underlying factors** explanation. This
+is navigable information architecture, not a particle-only depth suggestion.
+
+The 10-link overview cap now preserves the selected primary route before filling
+remaining slots. That keeps the governed delayed `Industry → Employment`
+fixture relationship visible in the common-origin overview and prevents
+Employment from appearing disconnected.
+
+The visible marketing-style Summary hero has been removed from this laboratory;
+its route heading remains screen-reader accessible. The graph is placed directly
+after the compact product navigation, while Explore/Trace and playback controls
+now follow the interface. No factual subfactor values or relationships were
+invented for this visual correction.
 
 ## Local review
 

@@ -1,5 +1,22 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-23 — Interface-first overview and explicit underlying factors
+
+- Removed the oversized visible Summary hero from the development structural
+  laboratory and moved Explore/Trace controls below the network. The accessible
+  route heading remains, while the graph now becomes the immediate page focus.
+- Added 18 explicit synthetic underlying-factor nodes: two for each of the nine
+  core factors. They render as smaller, translucent context points with parent
+  tethers, become fully legible on hover/focus, and open the corresponding core
+  factor guide on selection.
+- Added each selected core factor's two underlying factors to its concise guide
+  so the visual layer and explanation layer agree.
+- Preserved the common-origin path when applying the 10-link overview cap. The
+  delayed Industry-to-Employment relationship is now included, so Employment
+  is not presented as an isolated endpoint.
+- No factual values, accepted relationships, or Phase-4B evidence were added.
+  Human spatial-renderer and Motion QA remain PENDING.
+
 ## 2026-08-23 — Layered structural depth and spring-parallax field
 
 - Added a development-only visual-depth system for the structural surface.

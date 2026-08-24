@@ -301,6 +301,31 @@ describe("development-only structural Motion QA harness", () => {
     expect(Number(document.querySelector('.sm-viz-surface')?.getAttribute("data-visible-relationship-count"))).toBeLessThanOrEqual(MAX_VISIBLE_RELATIONSHIPS);
   });
 
+  it("shows real synthetic underlying factors and lets them open their parent factor", async () => {
+    await renderReducedHarness();
+    const surface = document.querySelector<HTMLElement>(".sm-viz-surface")!;
+    const factors = [...document.querySelectorAll<HTMLButtonElement>("[data-context-factor-id]")];
+    expect(surface.dataset.contextFactorCount).toBe("18");
+    expect(surface.dataset.visibleRelationshipIds).toContain("fixture-edge-09");
+    expect(factors).toHaveLength(18);
+    expect(new Set(factors.map((factor) => factor.dataset.contextFactorDepth)).size).toBeGreaterThan(4);
+    const utilization = document.querySelector<HTMLButtonElement>('[data-context-factor-id="context-utilization"]')!;
+    fireEvent.pointerEnter(utilization);
+    expect(surface.dataset.hoveredNodeId).toBe("fixture-producer");
+    expect(utilization.getAttribute("aria-hidden")).toBe("false");
+    fireEvent.click(utilization);
+    expect(screen.getByRole("complementary", { name: "Selected factor guide" }).textContent).toContain("Refinery utilization");
+    expect(screen.getByRole("complementary", { name: "Selected factor guide" }).textContent).toContain("Maintenance capacity");
+  });
+
+  it("keeps the primary delayed route visibly connected to Employment in overview", () => {
+    const model = validateMotionQaReadModel(motionFixture);
+    const path = model.paths.find((candidate) => candidate.id === "fixture-path-common-origin")!;
+    const overview = resolveSpatialViewport(model, null, new Set(path.steps.flat()));
+    expect(overview.visibleRelationshipIds.has("fixture-edge-09")).toBe(true);
+    expect(overview.visibleNodeIds.has("fixture-employment")).toBe(true);
+  });
+
   it("keeps Explore static and separates synthetic motion controls into Trace", async () => {
     await renderReducedHarness();
     expect(document.querySelectorAll(".sm-motion-current-signal")).toHaveLength(0);

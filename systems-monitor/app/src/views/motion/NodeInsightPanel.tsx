@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type CSSProperties } from "react";
 import type { MotionQaNode, MotionQaReadModel } from "../../data/motionQaReadModel";
 import { StructuralNodeIcon } from "./StructuralNodeIcon";
+import { contextFactorsForNode } from "./structuralContextFactors";
 import { resolveStructuralNodeVisual } from "./structuralVisualLanguage";
 
 const stateLabels: Record<string, string> = {
@@ -39,6 +40,7 @@ export function NodeInsightPanel({ model, node, state, onClose }: { model: Motio
   const copy = displayNode?.insight ?? null;
   const visual = displayNode ? resolveStructuralNodeVisual(displayNode) : null;
   const relationships = displayNode ? model.relationships.filter((edge) => edge.from === displayNode.id || edge.to === displayNode.id) : [];
+  const underlyingFactors = displayNode ? contextFactorsForNode(displayNode.id) : [];
 
   return <aside ref={panelRef} className={`sm-node-guide ${node ? "is-open" : ""}`} aria-label="Selected factor guide" aria-hidden={!node} data-selected-node-id={displayNode?.id ?? ""} data-connected-count={relationships.length} style={visual ? { "--guide-accent": visual.accent, "--guide-fill": visual.fill } as CSSProperties : undefined}>
     {displayNode && copy && visual && <div className="sm-node-guide__inner" key={displayNode.id}>
@@ -59,6 +61,8 @@ export function NodeInsightPanel({ model, node, state, onClose }: { model: Motio
 
       <section><h3>What it tracks</h3><p>{copy.tracks}</p></section>
       <section><h3>Why it matters</h3><p>{copy.impact}</p></section>
+
+      <section className="sm-node-guide__underlying"><h3>Underlying factors</h3><ul>{underlyingFactors.map((factor) => <li key={factor.id}>{factor.label}</li>)}</ul></section>
 
       <section className="sm-node-guide__connections">
         <div><h3>Why these {relationships.length} connections are here</h3><span>Only direct links shown</span></div>
