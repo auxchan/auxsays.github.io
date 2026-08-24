@@ -17,8 +17,8 @@ update_version: Responsive spacing across design and CSS
 update_logo_text: FIG
 update_published_at: '2026-08-21T00:00:00.000Z'
 update_last_checked: '2026-08-21T20:05:31Z'
-source_last_checked: '2026-08-24T02:52:23Z'
-official_body_last_checked: '2026-08-24T02:52:23Z'
+source_last_checked: '2026-08-24T08:11:41Z'
+official_body_last_checked: '2026-08-24T08:11:41Z'
 record_last_updated: '2026-08-21T20:05:31Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -70,11 +70,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-08-23T03:11:28Z'
-  url: https://www.figma.com/release-notes/?title=responsive-spacing
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-08-23T08:11:43Z'
   url: https://www.figma.com/release-notes/?title=responsive-spacing
   status: captured-from-rss-feed
@@ -91,6 +86,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-08-24T02:52:23Z'
+  url: https://www.figma.com/release-notes/?title=responsive-spacing
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-08-24T08:11:41Z'
   url: https://www.figma.com/release-notes/?title=responsive-spacing
   status: captured-from-rss-feed
   body_captured: true
