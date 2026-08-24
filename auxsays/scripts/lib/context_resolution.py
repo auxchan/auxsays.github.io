@@ -55,8 +55,15 @@ from .source_segments import (
     learn_qna_question_id, parse_learn_qna_thread,
 )
 
-# Full Click-to-Run build, e.g. 20228.20110 (matches the collector's own BUILD_RE shape).
-BUILD_RE = re.compile(r"(?<![0-9.])(\d{4,6}\.\d{4,6})(?![0-9.])")
+# Full Click-to-Run build, e.g. 20228.20110.
+#
+# The trailing guard is `(?!\d)(?!\.\d)`, not `(?![0-9.])`. The stricter form fails on a build that
+# ENDS A SENTENCE -- "I'm on Build 19822.20182." -- because the full stop is itself in the excluded
+# class, so a legitimately stated build went unseen. Both forms still refuse a longer dotted version
+# ("16.0.20228.20110" is not a Click-to-Run build), which is what the guard is actually for.
+# This widens DETECTION only: a detected build must still be stated explicitly, in the reporter's
+# own segment, and match the record's target_build before anything can be counted.
+BUILD_RE = re.compile(r"(?<![0-9.])(\d{4,6}\.\d{4,6})(?!\d)(?!\.\d)")
 
 # The rejection reason this stage is allowed to act on. Anything else is not_applicable: a report
 # rejected for being about another product, another version, an announcement, a bad URL or a

@@ -110,6 +110,20 @@ def powerpoint_consensus_enabled(env: dict[str, str] | None = None) -> bool:
     return str(source.get(POWERPOINT_CONSENSUS_ENABLE_ENV, "")).strip().lower() == "true"
 
 
+ORCHESTRATED_PRODUCTS_ENV = "AUXSAYS_ORCHESTRATED_PRODUCTS"
+
+
+def orchestrated_products(env: dict[str, str] | None = None) -> set[str]:
+    """Products whose collection is owned by the orchestration graph, not by this runner.
+
+    Comma-separated product ids. A product listed here is removed from the collector registry so
+    the legacy path physically cannot collect it -- the single-authoritative-path guarantee is
+    structural, not a convention."""
+    source = os.environ if env is None else env
+    raw = str(source.get(ORCHESTRATED_PRODUCTS_ENV, "") or "")
+    return {p.strip() for p in raw.split(",") if p.strip()}
+
+
 def build_collectors(env: dict[str, str] | None = None) -> dict[str, Any]:
     """Return the runtime collector registry: the always-on base plus each default-off
     collector IFF its activation flag is explicitly enabled. This is the single place that
@@ -136,6 +150,12 @@ def build_collectors(env: dict[str, str] | None = None) -> dict[str, Any]:
     if powerpoint_consensus_enabled(env):
         from patch_collectors.microsoft_powerpoint import PowerPointLearnQnaCollector
         collectors[POWERPOINT_CONSENSUS_PRODUCT_ID] = PowerPointLearnQnaCollector
+    # NO DOUBLE COLLECTION. A product driven by the orchestration graph is REMOVED from this
+    # registry, so the legacy path cannot also collect it in the same run. Enforcing it here rather
+    # than by workflow discipline means there is exactly one authoritative execution path per
+    # product no matter how the runner is invoked -- including an explicit --product-id.
+    for product_id in orchestrated_products(env):
+        collectors.pop(product_id, None)
     return collectors
 
 
@@ -270,7 +290,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--product-id",
         action="append",
-        choices=sorted(collectors),
+        # Orchestrated products stay ACCEPTABLE on the CLI even though this runner will not collect
+        # them: the workflow forwards a dispatch input verbatim, and moving a product to the graph
+        # must not turn a previously valid invocation into an argument error. They are skipped with
+        # a notice below instead.
+        choices=sorted(set(collectors) | orchestrated_products()),
         help="Product to collect. May be passed more than once. Defaults to all registered collectors.",
     )
     parser.add_argument("--update-version", action="append", help="Exact update_version filter. May be passed more than once.")
@@ -283,6 +307,19 @@ def main(argv: list[str] | None = None) -> int:
     args = parser.parse_args(argv)
 
     product_ids = args.product_id or sorted(collectors)
+    # An EXPLICIT --product-id for a product the orchestration graph owns is not an error and is
+    # certainly not a reason to collect it here anyway -- that would be the double collection the
+    # exclusion exists to prevent. Drop it with a visible notice; the graph's own job collects it.
+    orchestrated = orchestrated_products() & set(product_ids)
+    if orchestrated:
+        for product_id in sorted(orchestrated):
+            print(f"::notice title=Orchestrated lane::{product_id} is collected by the "
+                  f"orchestration graph, not this runner; skipping here.", flush=True)
+        product_ids = [p for p in product_ids if p not in orchestrated]
+    if not product_ids:
+        print("[auxsays] nothing to collect in this runner (all requested products are "
+              "orchestrated).", flush=True)
+        return 0
     budget = rb.RuntimeBudget()
     rb.set_run_budget(budget)  # cleared after the collector loop; lets DaVinci/OBS/Windows/Premiere total-bound their body reads via bounded_read
     context = CollectorContext(

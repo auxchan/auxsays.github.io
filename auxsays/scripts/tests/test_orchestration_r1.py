@@ -354,8 +354,28 @@ def run() -> int:  # noqa: PLR0915
     check("J non-PowerPoint products get the empty default plan (no orchestrated fallback)",
           plan == {"primary": [], "fallback": [], "fallback_when": []}, str(plan))
     runner_src = (_REPO / "auxsays" / "scripts" / "run_patch_evidence_collection.py").read_text(encoding="utf-8")
+    # The invariant is a DEPENDENCY one: the production runner must not depend on the orchestration
+    # layer, so removing that layer can never break the proven lane. Asserted on real imports rather
+    # than on the presence of a word -- since R2 the runner names the orchestrated products it must
+    # refuse to register, which is a reference to the concept, not a dependency on the code.
+    import ast as _ast
+    _imported = {n.module or "" for n in _ast.walk(_ast.parse(runner_src))
+                 if isinstance(n, _ast.ImportFrom)} | {
+        a.name for n in _ast.walk(_ast.parse(runner_src)) if isinstance(n, _ast.Import)
+        for a in n.names}
     check("J production runner does NOT import the orchestration layer",
-          "orchestration" not in runner_src and "method_routing" not in runner_src)
+          not any(m.split(".")[0] in {"orchestration", "method_routing", "orchestrate_evidence_run"}
+                  or m in {"lib.orchestration", "lib.method_routing"} for m in _imported),
+          str(sorted(_imported)))
+    probe = subprocess.run(
+        [sys.executable, "-c",
+         "import sys; sys.path.insert(0, sys.argv[1]); import run_patch_evidence_collection; "
+         "print([m for m in sys.modules if 'orchestrat' in m or m.endswith('method_routing')])",
+         str(_REPO / "auxsays" / "scripts")],
+        capture_output=True, text=True, cwd=str(_REPO))
+    check("J importing the production runner does not pull in the orchestrator",
+          probe.returncode == 0 and probe.stdout.strip() == "[]",
+          f"rc={probe.returncode} loaded={probe.stdout.strip()} {probe.stderr.strip()[-200:]}")
     check("J collect_for_record keeps its production signature (composition refactor only)",
           callable(getattr(ppt, "collect_for_record", None))
           and callable(getattr(ppt, "run_primary_method", None))

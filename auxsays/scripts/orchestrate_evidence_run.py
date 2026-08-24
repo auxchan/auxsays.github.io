@@ -9,14 +9,21 @@ the PowerPoint collector's own method functions, ``normalize_evidence_row`` /
 here re-implements acceptance, counting, promotion, validation or writeback logic, and nothing
 here requires AI: the module imports only the standard library plus repo-owned code.
 
-This pilot is NOT wired into the production workflow in R1. The production evidence lane keeps
-its proven step sequence; this layer exists so multi-method discovery, fallback justification and
-pipeline state are explicit, checkpointable and diagnosable before any workflow adoption.
+PRODUCTION ADOPTION (R2). This is now the authoritative execution path for the PowerPoint lane.
+The legacy multi-product runner REFUSES to register any product named in
+``AUXSAYS_ORCHESTRATED_PRODUCTS``, so one product can never be collected by both paths in one run
+-- the guarantee lives in the collector registry, not in workflow discipline. A write-enabled run
+binds the REAL ``lib.automation_writeback`` authority (there is no second writeback
+implementation) with this lane's own allow surface, and the validation ordering the production
+workflow proved is preserved node-for-node: collect -> reconcile -> promote -> QA -> audit ->
+transactional writeback -> deploy, with the writeback authority re-validating the STAGED tree
+before it commits, so no state can be committed that was not the state validated.
 
 Lifecycle (linear, with one bounded fallback loop and explicit BLOCKED/ERROR terminals):
 
   VERIFY_REPO_STATE -> DISCOVER_PATCH_TARGETS -> PLAN_METHODS -> RUN_PRIMARY_METHODS
     -> NORMALIZE_CANDIDATES -> VERIFY_CANDIDATES -> CHECK_ACCEPTED_EVIDENCE
+    -> [RESOLVE_CONTEXT -> NORMALIZE -> VERIFY -> CHECK]        (only for missing_exact_build)
     -> [RUN_FALLBACK_METHODS -> NORMALIZE -> VERIFY -> CHECK]   (at most once)
     -> FINALIZE_EVIDENCE -> RECONCILE_COUNTS -> PROMOTE -> QA -> AUDIT
     -> PREPARE_WRITEBACK -> WRITEBACK -> DEPLOY -> RECEIPT -> DONE
@@ -29,6 +36,7 @@ import json
 import subprocess
 import sys
 import uuid
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Callable
 
@@ -39,12 +47,13 @@ from lib.orchestration import (  # noqa: E402
     BLOCKED, DONE, Graph, JsonCheckpointer, OrchestrationState, inputs_identity,
     run_summary, utc_now,
 )
+from lib import context_resolution as cr  # noqa: E402
 from lib.method_routing import fallback_justified, plan_methods  # noqa: E402
 from lib.patch_identity import is_build_aware, patch_key, require_build  # noqa: E402
 from lib.report_counts import reconcile_record_counts  # noqa: E402
 from patch_collectors.base import (  # noqa: E402
     CollectorContext, append_evidence_rows, generated_records, load_evidence,
-    normalize_evidence_row, upsert_method_health,
+    method_health_row, normalize_evidence_row, upsert_method_health,
 )
 
 
@@ -69,6 +78,76 @@ def default_authorities(repo_root: Path, product_id: str, write: bool) -> dict[s
         "qa": lambda: _script(repo_root, "qa_patch_records.py"),
         "audit": lambda: _script(repo_root, "audit_consensus_evidence.py"),
     }
+
+
+# The PowerPoint lane's own commit surface and validation commands -- the SAME strings the proven
+# production workflow passes to the writeback authority, kept in one place so the orchestrated lane
+# and the workflow cannot drift apart.
+POWERPOINT_ALLOW = [
+    "auxsays/_data/consensus_evidence.yml",
+    "auxsays/_data/evidence_method_health.yml",
+    "auxsays/updates/generated/*powerpoint*.md",
+]
+PRODUCTION_VALIDATE = [
+    "python auxsays/scripts/qa_patch_records.py",
+    "python auxsays/scripts/audit_consensus_evidence.py",
+    "python auxsays/scripts/validate_evidence_method_health.py",
+]
+
+
+def default_writeback(repo_root: Path, allow: list[str], *, message: str,
+                      pages_cmd: str | None = "gh workflow run pages.yml --ref main",
+                      max_retries: int = 5) -> Callable[[], dict[str, Any]]:
+    """Bind the REAL ``lib.automation_writeback`` authority. There is no second implementation.
+
+    ``run_writeback`` owns staging against the allow list, the PR #57 equivalence gate (the tree it
+    validated is byte-identical to the tree it commits), rebase-on-conflict, push to main and the
+    bounded Pages dispatch. This function only supplies configuration; it decides nothing."""
+    from lib import automation_writeback as awb  # noqa: PLC0415
+
+    def _writeback() -> dict[str, Any]:
+        cfg = awb.WritebackConfig(
+            repo=Path(repo_root), message=message, allow=list(allow),
+            validate=list(PRODUCTION_VALIDATE), validate_before_commit=True,
+            site_paths=list(allow), max_retries=max_retries, pages_cmd=pages_cmd,
+            deploy_recovery=True, recovery_site_paths=list(allow),
+        )
+        return awb.run_writeback(cfg).as_dict()
+
+    return _writeback
+
+
+def default_context_fetch() -> Callable[[str], tuple[str, str]]:
+    """Bind the shared Learn Q&A transport for same-thread context resolution.
+
+    Returns RAW HTML: the segment model reads the page's schema.org structured data, which is how
+    a build is attributed to the author who actually stated it."""
+    import urllib.error  # noqa: PLC0415
+    import urllib.request  # noqa: PLC0415
+
+    from patch_collectors import microsoft_learn_qna_source as learn  # noqa: PLC0415
+
+    def _fetch(url: str) -> tuple[str, str]:
+        req = urllib.request.Request(url, headers={
+            "User-Agent": learn.LEARN_QNA_USER_AGENT,
+            "Accept": "text/html,application/xhtml+xml;q=0.9,*/*;q=0.8",
+            "Accept-Language": "en-US,en;q=0.9",
+        })
+        try:
+            with urllib.request.urlopen(req, timeout=30) as resp:
+                body = resp.read(1_500_000).decode("utf-8", errors="replace")
+                if resp.status != 200:
+                    return "", "broken"
+                low = body.lower()
+                if "captcha" in low or "access denied" in low or "request blocked" in low:
+                    return "", "blocked"
+                return body, "ok"
+        except urllib.error.HTTPError as exc:
+            return "", "blocked" if exc.code in (401, 403, 429) else "broken"
+        except Exception:  # noqa: BLE001 -- transport failure is telemetry, not a crash
+            return "", "broken"
+
+    return _fetch
 
 
 def default_powerpoint_methods() -> dict[str, Callable[..., tuple]]:
@@ -104,7 +183,9 @@ class Pipeline:
                  allow_patterns: list[str] | None = None,
                  writeback: Callable[..., dict[str, Any]] | None = None,
                  env: dict[str, str] | None = None,
-                 context: CollectorContext | None = None) -> None:
+                 context: CollectorContext | None = None,
+                 context_fetch: Callable[[str], tuple[str, str]] | None = None,
+                 context_max_fetches: int = 8) -> None:
         self.repo_root = Path(repo_root)
         self.product_ids = list(product_ids)
         self.write = bool(write)
@@ -118,6 +199,8 @@ class Pipeline:
         self.allow_patterns = allow_patterns or []
         self.writeback = writeback
         self.context = context or CollectorContext(write=self.write, since=None, max_pages=1)
+        self.context_fetch = context_fetch
+        self.context_max_fetches = int(context_max_fetches)
         self.checkpointer = JsonCheckpointer(checkpoint_dir, repo_root=self.repo_root)
         # PatchRecord objects are genuinely runtime-only (rebuilt by DISCOVER_PATCH_TARGETS on
         # resume). The URL dedup set and the run-wide ownership map are NOT: they are mirrored
@@ -125,6 +208,9 @@ class Pipeline:
         self._records: dict[str, Any] = {}
         self._run_urls: dict[str, str] = {}
         self._seen: dict[str, set[str]] = {}
+        # Whether THIS execution is a resume. A new write run demands a clean tree; a resume may
+        # legitimately meet a tree its own checkpointed mutation already dirtied.
+        self._resuming = False
 
     # ---- durable discovery-dedup state -------------------------------------
 
@@ -145,8 +231,13 @@ class Pipeline:
                               capture_output=True, text=True)
         state.base_main_sha = head.stdout.strip() if head.returncode == 0 else "no-git"
         porcelain = subprocess.run(["git", "-C", str(self.repo_root), "status", "--porcelain"],
-                                   capture_output=True, text=True).stdout.strip()
-        state.method_plan["repo_dirty"] = bool(porcelain)
+                                   capture_output=True, text=True).stdout
+        # Slice the RAW output: porcelain is 'XY<space>PATH', so the first line's leading status
+        # space is significant. Stripping first would eat it and shift that one path by a character.
+        dirty_paths = [ln[3:].strip() for ln in porcelain.splitlines() if len(ln) > 3]
+        state.method_plan["repo_dirty"] = bool(porcelain.strip())
+        state.method_plan["dirty_paths"] = dirty_paths
+        state.method_plan["resuming"] = self._resuming
 
         # GATE 1 -- write mode must be fully configured BEFORE any mutating node. The mutating
         # nodes are FINALIZE_EVIDENCE, RECONCILE_COUNTS and PROMOTE; all of them come after this
@@ -163,6 +254,26 @@ class Pipeline:
             if missing:
                 state.method_plan["write_config_missing"] = missing
                 state.fail("VERIFY_REPO_STATE", "write_mode_unconfigured", ",".join(missing))
+
+            # GATE 1b -- CLEAN START / VALID RESUME. A NEW write run must begin from a clean
+            # worktree: pre-existing edits would be swept into this lane's commit, and the
+            # writeback's equivalence gate would then refuse mid-run after durable mutation had
+            # already happened. A RESUME is different: its own checkpointed FINALIZE/PROMOTE
+            # legitimately dirtied the tree, and aborting there would strand exactly the recovery
+            # case checkpoints exist for. So a resume is allowed to proceed dirty -- but only
+            # within its declared allow surface, which is the same boundary the commit obeys.
+            if dirty_paths:
+                if not self._resuming:
+                    state.method_plan["dirty_on_fresh_write"] = dirty_paths[:20]
+                    state.fail("VERIFY_REPO_STATE", "dirty_tree_fresh_write_run",
+                               ",".join(dirty_paths[:5]))
+                else:
+                    outside = [p for p in dirty_paths
+                               if not any(fnmatch.fnmatch(p, pat) for pat in self.allow_patterns)]
+                    if outside:
+                        state.method_plan["resume_dirty_outside_allow"] = outside[:20]
+                        state.fail("VERIFY_REPO_STATE", "resume_dirty_outside_allow",
+                                   ",".join(outside[:5]))
 
         # GATE 2 -- R1 only has a real method adapter for products with a declared plan. Running
         # an empty plan and reporting DONE would claim a product was orchestrated when nothing
@@ -249,6 +360,11 @@ class Pipeline:
                     "status": health.get("status"),
                     "accepted_rows": accepted, "rejected_count": len(rejected),
                     "rejection_reasons": reasons, "health_row": health,
+                    # Retained ONLY for the reason context resolution may act on. A rejected row
+                    # is a lossless candidate (it carries parent_title/report_title/report_text/
+                    # source_url/source_date), so the resolver never has to re-discover anything.
+                    "resolvable_rows": [dict(r) for r in rejected
+                                        if r.get("exclusion_reason") == cr.RESOLVABLE_REASON],
                 })
                 state.candidate_counts[key] = state.candidate_counts.get(key, 0) \
                     + int(health.get("candidates_found") or 0)
@@ -309,6 +425,120 @@ class Pipeline:
                 decisions[key] = {"justified": justified, "reason": reason}
             state.method_plan["fallback_decisions"] = decisions
             state.method_plan["fallback_evaluated"] = True
+        return state
+
+    def resolve_context(self, state: OrchestrationState) -> OrchestrationState:
+        """Segment-scoped exact-build resolution for candidates rejected missing_exact_build ONLY.
+
+        Reads more of the SAME report -- the thread the candidate's own URL points at -- attributes
+        a build strictly to the segment whose author stated it, and re-presents the candidate to the
+        UNCHANGED acceptance authority. It never infers, never borrows a build from another
+        participant, and never consults an unrelated page. A qualifying reply is evaluated as its
+        OWN candidate rather than pasted onto somebody else's report; a machine-generated reply is
+        never offered at all."""
+        from patch_collectors import microsoft_powerpoint as ppt  # noqa: PLC0415
+
+        pending = [(res, row) for res in state.method_results
+                   for row in (res.get("resolvable_rows") or [])]
+        identity = inputs_identity({"urls": sorted(str(r.get("source_url")) for _, r in pending)})
+        if state.has_receipt("RESOLVE_CONTEXT", identity):
+            return state
+        if not pending or self.context_fetch is None:
+            state.method_plan["context_resolution"] = {
+                "attempted": 0, "reason": "no resolvable candidates" if not pending
+                else "no context transport bound"}
+            # Mark done on EVERY exit path. The router sends CHECK_ACCEPTED_EVIDENCE here whenever
+            # resolvable rows exist, and the second pass returns to CHECK; without the flag on the
+            # no-op path the graph would revisit this node until max_steps and terminate ERROR.
+            state.method_plan["context_resolution_done"] = True
+            state.receipt("RESOLVE_CONTEXT", identity, {"attempted": 0})
+            return state
+
+        budget = cr.ResolutionBudget(max_fetches=self.context_max_fetches)
+        captured_at = utc_now()
+        outcomes: list[dict[str, Any]] = []
+        resolved_rows: list[dict[str, Any]] = []
+        independent_rows: list[dict[str, Any]] = []
+
+        for result, row in pending:
+            key = result["patch_key"]
+            record = self._records.get(key)
+            if record is None:
+                continue
+            target = {"update_version": key.split("|")[1], "target_build": key.split("|")[2],
+                      "target_release_date": getattr(record, "update_published_at", ""),
+                      "version_ambiguous": False}
+            candidate = {k: row.get(k) for k in ("source_url", "source_date", "source_type",
+                                                 "source_name", "parent_title", "report_title",
+                                                 "report_text")}
+            outcome = cr.resolve_candidate(candidate, cr.RESOLVABLE_REASON,
+                                           fetch_thread=self.context_fetch, budget=budget)
+            entry = outcome.as_dict()
+            entry["patch_key"] = key
+
+            if outcome.resolution_result == cr.RESOLVED_EXACT_BUILD:
+                rerun = ppt.row_from_candidate(record, target,
+                                               cr.augmented_candidate(candidate, outcome),
+                                               captured_at)
+                entry["reevaluated_counted"] = rerun.get("counted")
+                entry["reevaluated_reason"] = rerun.get("exclusion_reason")
+                if rerun.get("counted") is True:
+                    resolved_rows.append(rerun)
+
+            # A reply that stands on its own is judged on its own merits, never merged into the
+            # original poster's report. No extra fetch: this reads the thread already fetched.
+            for report in cr.independent_reports(candidate, budget=budget,
+                                                 exclude_segment_key=outcome.segment_key):
+                url_key = str(report.segment_url).strip().rstrip("/").lower()
+                if url_key in self._seen.setdefault(key, set()):
+                    continue
+                self._seen[key].add(url_key)
+                own = ppt.row_from_candidate(record, target, report.candidate, captured_at)
+                entry.setdefault("independent_reports", []).append({
+                    "segment_url": report.segment_url, "author_id": report.author_id,
+                    "explicit_build": report.explicit_build, "counted": own.get("counted"),
+                    "reason": own.get("exclusion_reason")})
+                if own.get("counted") is True:
+                    independent_rows.append(own)
+            outcomes.append(entry)
+
+        if outcomes:
+            # Land as a distinct method result so identity, health and provenance stay separable
+            # from the primary discovery that produced the original candidates. Health is emitted
+            # even when nothing resolved -- an honest zero is the point of the telemetry.
+            key = pending[0][0]["patch_key"]
+            blocked = sum(1 for o in outcomes if o["resolution_result"]
+                          in (cr.FETCH_BLOCKED, cr.FETCH_BROKEN))
+            state.method_results.append({
+                "method_id": cr.METHOD_ID, "role": "context_resolution",
+                "patch_key": key, "attempted": True, "fallback_reason": "",
+                "status": "blocked" if blocked and blocked == len(outcomes) else "ok",
+                "accepted_rows": resolved_rows + independent_rows,
+                "rejected_count": 0, "rejection_reasons": {}, "resolvable_rows": [],
+                "health_row": method_health_row(
+                    product_id=key.split("|")[0], update_version=key.split("|")[1],
+                    target_build=key.split("|")[2], method_id=cr.METHOD_ID,
+                    source_type="microsoft_learn_qna",
+                    status="blocked" if blocked and blocked == len(outcomes) else "ok",
+                    candidates_found=len(outcomes),
+                    accepted_reports=len(resolved_rows) + len(independent_rows),
+                    rejected_reports=len(outcomes) - len(resolved_rows),
+                    blocked_reason="context_fetch_blocked" if blocked == len(outcomes) else None,
+                    last_run=captured_at,
+                    notes=f"segment-scoped exact-build resolution; fetches={budget.fetched}"),
+            })
+        state.method_plan["context_resolution"] = {
+            "attempted": len(outcomes), "fetches": budget.fetched,
+            "resolved": sum(1 for o in outcomes
+                            if o["resolution_result"] == cr.RESOLVED_EXACT_BUILD),
+            "accepted_after_reeval": len(resolved_rows),
+            "independent_accepted": len(independent_rows),
+            "outcomes": outcomes,
+        }
+        state.method_plan["context_resolution_done"] = True
+        self._persist_url_state(state)
+        state.receipt("RESOLVE_CONTEXT", identity, {"attempted": len(outcomes),
+                                                    "fetches": budget.fetched})
         return state
 
     def finalize_evidence(self, state: OrchestrationState) -> OrchestrationState:
@@ -417,16 +647,34 @@ class Pipeline:
 
     ORDER = ["VERIFY_REPO_STATE", "DISCOVER_PATCH_TARGETS", "PLAN_METHODS",
              "RUN_PRIMARY_METHODS", "NORMALIZE_CANDIDATES", "VERIFY_CANDIDATES",
-             "CHECK_ACCEPTED_EVIDENCE", "RUN_FALLBACK_METHODS", "FINALIZE_EVIDENCE",
-             "RECONCILE_COUNTS", "PROMOTE", "QA", "AUDIT", "PREPARE_WRITEBACK",
-             "WRITEBACK", "DEPLOY", "RECEIPT"]
+             "CHECK_ACCEPTED_EVIDENCE", "RESOLVE_CONTEXT", "RUN_FALLBACK_METHODS",
+             "FINALIZE_EVIDENCE", "RECONCILE_COUNTS", "PROMOTE", "QA", "AUDIT",
+             "PREPARE_WRITEBACK", "WRITEBACK", "DEPLOY", "RECEIPT"]
+
+    # The production validation ordering the live workflow proved, asserted rather than assumed:
+    # nothing durable is written before discovery finishes, promotion never precedes the evidence
+    # it promotes, QA and audit always run on the promoted tree, and the transactional writeback is
+    # the last thing before deploy. A refactor that reorders these fails the invariant, not a run.
+    VALIDATION_ORDER = ["FINALIZE_EVIDENCE", "RECONCILE_COUNTS", "PROMOTE", "QA", "AUDIT",
+                        "PREPARE_WRITEBACK", "WRITEBACK", "DEPLOY"]
+
+    @classmethod
+    def assert_validation_ordering(cls) -> None:
+        positions = [cls.ORDER.index(node) for node in cls.VALIDATION_ORDER]
+        if positions != sorted(positions):
+            raise AssertionError(f"production validation ordering violated: {cls.VALIDATION_ORDER}")
+        mutating = cls.ORDER.index("FINALIZE_EVIDENCE")
+        if cls.ORDER.index("VERIFY_REPO_STATE") >= mutating:
+            raise AssertionError("preconditions must be verified before any mutating node")
 
     def router(self, node: str, state: OrchestrationState) -> str:
         if node == "VERIFY_REPO_STATE":
             # Every fail-closed precondition is evaluated in the node; routing to BLOCKED here
             # happens BEFORE DISCOVER_PATCH_TARGETS and therefore before any mutating node.
             if state.method_plan.get("write_config_missing") \
-                    or state.method_plan.get("unsupported_products"):
+                    or state.method_plan.get("unsupported_products") \
+                    or state.method_plan.get("dirty_on_fresh_write") \
+                    or state.method_plan.get("resume_dirty_outside_allow"):
                 return BLOCKED
             if self.write and state.method_plan.get("repo_dirty") and not self.allow_patterns:
                 # A dirty tree in write mode with no declared allow surface would be refused by
@@ -434,13 +682,20 @@ class Pipeline:
                 state.fail(node, "dirty_tree_write_mode")
                 return BLOCKED
         if node == "CHECK_ACCEPTED_EVIDENCE":
+            # CONDITIONAL context resolution: entered ONLY when discovery actually produced
+            # missing_exact_build rejections, and at most once. Any other rejection reason routes
+            # straight past it -- a report refused for product, version, date, URL or
+            # non-concrete-issue is never made countable by looking at its page.
+            resolvable = any(res.get("resolvable_rows") for res in state.method_results)
+            if resolvable and not state.method_plan.get("context_resolution_done"):
+                return "RESOLVE_CONTEXT"
             decisions = state.method_plan.get("fallback_decisions") or {}
             ran_fallback = any(r["role"] == "fallback" for r in state.method_results)
             if any(d.get("justified") for d in decisions.values()) and not ran_fallback:
                 return "RUN_FALLBACK_METHODS"
             return "FINALIZE_EVIDENCE"
-        if node == "RUN_FALLBACK_METHODS":
-            return "NORMALIZE_CANDIDATES"  # bounded second pass over fallback rows
+        if node in ("RUN_FALLBACK_METHODS", "RESOLVE_CONTEXT"):
+            return "NORMALIZE_CANDIDATES"  # bounded second pass over the new rows
         if node == "QA" and state.qa_result.get("rc", 0) != 0:
             state.fail(node, "qa_failed", str(state.qa_result))
             return BLOCKED
@@ -460,6 +715,7 @@ class Pipeline:
             "NORMALIZE_CANDIDATES": self.normalize_candidates,
             "VERIFY_CANDIDATES": self.verify_candidates,
             "CHECK_ACCEPTED_EVIDENCE": self.check_accepted_evidence,
+            "RESOLVE_CONTEXT": self.resolve_context,
             "RUN_FALLBACK_METHODS": self.run_fallback_methods,
             "FINALIZE_EVIDENCE": self.finalize_evidence,
             "RECONCILE_COUNTS": self.reconcile_counts,
@@ -471,6 +727,7 @@ class Pipeline:
             "DEPLOY": self.deploy,
             "RECEIPT": self.receipt_node,
         }
+        self.assert_validation_ordering()
         return Graph(nodes, self.router, checkpointer=self.checkpointer,
                      max_steps=64, max_attempts_per_node=3)
 
@@ -482,7 +739,9 @@ class Pipeline:
             if state is None:
                 raise FileNotFoundError(f"no checkpoint for run {resume_run_id}")
             state.attempt_counts = {}  # attempt bounds apply per execution, not per lifetime
+            self._resuming = True
         else:
+            self._resuming = False
             state = OrchestrationState(run_id=uuid.uuid4().hex[:12], trigger=trigger,
                                        product_ids=list(self.product_ids))
         return self.build().run(state, "VERIFY_REPO_STATE")
@@ -495,10 +754,36 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--checkpoint-dir", required=True,
                         help="MUST be outside the repo tree (or git-ignored); refused otherwise.")
     parser.add_argument("--resume", default=None, help="run_id of a checkpoint to resume")
+    parser.add_argument("--message", default="Update automated patch evidence",
+                        help="commit message for the writeback authority")
+    parser.add_argument("--no-pages", action="store_true", default=False,
+                        help="do not dispatch Pages (controlled proofs)")
+    parser.add_argument("--no-context-resolution", action="store_true", default=False,
+                        help="skip same-thread exact-build context resolution")
+    parser.add_argument("--max-pages", type=int, default=5)
+    parser.add_argument("--since-days", type=int, default=45)
     args = parser.parse_args(argv)
     repo_root = SCRIPT_DIR.parents[1]
-    pipeline = Pipeline(repo_root, args.product_id or ["microsoft-powerpoint"],
-                        write=args.write, checkpoint_dir=Path(args.checkpoint_dir))
+    product_ids = args.product_id or ["microsoft-powerpoint"]
+
+    # PRODUCTION BINDING. A write run gets the REAL writeback authority and this lane's own allow
+    # surface; there is no second writeback implementation and no default that could commit outside
+    # the declared surface. A dry run binds neither, and VERIFY_REPO_STATE keeps write mode from
+    # ever starting unconfigured.
+    allow = list(POWERPOINT_ALLOW) if product_ids == ["microsoft-powerpoint"] else []
+    writeback = default_writeback(
+        repo_root, allow, message=args.message,
+        pages_cmd=None if args.no_pages else "gh workflow run pages.yml --ref main",
+    ) if (args.write and allow) else None
+
+    since = (datetime.now(timezone.utc) - timedelta(days=max(0, args.since_days))).date().isoformat()
+    pipeline = Pipeline(repo_root, product_ids,
+                        write=args.write, checkpoint_dir=Path(args.checkpoint_dir),
+                        allow_patterns=allow, writeback=writeback,
+                        context=CollectorContext(write=args.write, since=since,
+                                                 max_pages=args.max_pages),
+                        context_fetch=None if args.no_context_resolution
+                        else default_context_fetch())
     state = pipeline.run(resume_run_id=args.resume)
     print(json.dumps(run_summary(state), indent=1, sort_keys=True, default=str))
     return 0 if state.terminal == DONE else 1

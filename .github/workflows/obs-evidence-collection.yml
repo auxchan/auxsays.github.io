@@ -80,6 +80,11 @@ jobs:
           # product and its generated records have their own writeback --allow, so evidence, method
           # health and the record mutation commit together or not at all.
           AUXSAYS_ENABLE_POWERPOINT_CONSENSUS: "true"
+          # NO DOUBLE COLLECTION. PowerPoint is driven by the repo-owned orchestration graph in the
+          # dedicated job below, so it is REMOVED from this runner's collector registry. The
+          # exclusion is enforced inside build_collectors(), not by this step's arguments, so the
+          # legacy path cannot collect PowerPoint even under an explicit --product-id.
+          AUXSAYS_ORCHESTRATED_PRODUCTS: "microsoft-powerpoint"
         run: |
           args=(--since-days 45 --max-pages 5)
 
@@ -224,4 +229,83 @@ jobs:
             echo "- writeback occurred: **${writeback}**"
             echo "- Pages dispatch: **${pages}**"
             echo "- writeback outcome token: \`${WB_OUTCOME:-n/a}\`"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  powerpoint-orchestrated:
+    # The PowerPoint lane, driven by the repo-owned deterministic orchestration graph. This is the
+    # ONLY path that collects PowerPoint: the legacy runner above refuses to register it (see
+    # AUXSAYS_ORCHESTRATED_PRODUCTS), so no product is ever collected twice in one run.
+    #
+    # `needs: collect` serialises the two lanes. The workflow-level concurrency group only
+    # serialises RUNS, not jobs within a run, and both lanes commit to main -- running them in
+    # parallel would race two writebacks against the same branch. Sequencing costs a few minutes
+    # and removes the race entirely.
+    #
+    # The graph invokes the SAME authorities the lane above uses -- the PowerPoint collector's own
+    # method functions, the evidence/health appenders, reconcile_record_counts,
+    # apply_consensus_to_records, qa_patch_records, audit_consensus_evidence and
+    # lib.automation_writeback. It re-implements none of them, and requires no AI.
+    needs: collect
+    if: ${{ always() && needs.collect.result != 'cancelled' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+        with:
+          # Fresh base AFTER the collect lane's writeback landed, so this lane rebases onto it
+          # rather than racing it.
+          ref: ${{ github.ref }}
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r auxsays/scripts/requirements-ingest.txt
+
+      - name: Run the PowerPoint evidence graph
+        id: graph
+        env:
+          # Checkpoints live OUTSIDE the repo tree; the checkpointer refuses an in-repo directory
+          # that is not git-ignored, so a checkpoint can never be swept into a commit.
+          AUXSAYS_CHECKPOINT_DIR: ${{ runner.temp }}/auxsays-orchestration
+        run: |
+          mode=(--write)
+          if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then mode=(); fi
+
+          python auxsays/scripts/orchestrate_evidence_run.py \
+            --product-id microsoft-powerpoint \
+            --checkpoint-dir "$AUXSAYS_CHECKPOINT_DIR" \
+            --message "Update automated patch evidence (PowerPoint)" \
+            --since-days 45 --max-pages 5 \
+            "${mode[@]}" | tee "$RUNNER_TEMP/graph-summary.json"
+
+      - name: Graph summary
+        if: ${{ always() }}
+        env:
+          GRAPH: ${{ steps.graph.outcome }}
+        run: |
+          summary="$RUNNER_TEMP/graph-summary.json"
+          {
+            echo "### 🕸️ PowerPoint orchestration graph"
+            echo ""
+            echo "- graph step: **${GRAPH}**"
+            if [ -s "$summary" ]; then
+              echo "- terminal: **$(python -c "import json,sys;print(json.load(open(sys.argv[1])).get('terminal','?'))" "$summary" 2>/dev/null || echo '?')**"
+              echo ""
+              echo '<details><summary>run summary</summary>'
+              echo ""
+              echo '```json'
+              cat "$summary"
+              echo '```'
+              echo ""
+              echo '</details>'
+            else
+              echo "- no run summary was produced"
+            fi
           } >> "$GITHUB_STEP_SUMMARY"
