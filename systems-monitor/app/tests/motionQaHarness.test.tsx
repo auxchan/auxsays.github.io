@@ -5,7 +5,7 @@ import { SnapshotProvider } from "../src/app/SnapshotContext";
 import { SystemsMonitorApp } from "../src/app/SystemsMonitorApp";
 import { motionOutcomes, validateMotionQaReadModel } from "../src/data/motionQaReadModel";
 import { applyStructuralViewport, blendConnectorColor, connectorGlintProgress, createStructuralCamera, easeConnectorHover, interpolateCamera, MAX_STRUCTURAL_ZOOM, MIN_STRUCTURAL_ZOOM, outcomeTravel, projectNode, resolveStructuralDepths, resolveStructuralDepthVisual, sampleRelationship, stepSpringParallax, zoomStructuralViewportAt } from "../src/views/motion/structuralRenderer";
-import { layoutEmploymentOrbit, layoutSpatialLabels, layoutSpatialNodes, MAX_VISIBLE_RELATIONSHIPS, nextNodeInDirection, resolveSpatialViewport } from "../src/views/motion/spatialNavigation";
+import { EMPLOYMENT_ORBIT_RADIUS, layoutEmploymentOrbit, layoutSpatialLabels, layoutSpatialNodes, MAX_VISIBLE_RELATIONSHIPS, nextNodeInDirection, resolveSpatialViewport } from "../src/views/motion/spatialNavigation";
 import { layoutStructuralContextFactors, structuralContextFactors } from "../src/views/motion/structuralContextFactors";
 import { candidate } from "./factualCandidate.test";
 
@@ -309,7 +309,8 @@ describe("development-only structural Motion QA harness", () => {
     expect(surface.dataset.contextFactorCount).toBe("18");
     expect(surface.dataset.depthParticleCount).toBe("72");
     expect(surface.dataset.cameraMotion).toBe("stable-map-swing-focus");
-    expect(surface.dataset.layoutMode).toBe("employment-orbit");
+    expect(surface.dataset.layoutMode).toBe("employment-concentric-orbit");
+    expect(surface.dataset.orbitGeometry).toBe("eight-around-one");
     expect(surface.dataset.visibleRelationshipIds).toContain("fixture-edge-09");
     expect(surface.dataset.visibleRelationshipIds).toContain("fixture-edge-11");
     expect(factors).toHaveLength(18);
@@ -493,12 +494,16 @@ describe("development-only structural Motion QA harness", () => {
     expect(screen.queryByRole("complementary", { name: "Selected factor guide" })).toBeNull();
   });
 
-  it("keeps Employment central in one stable orbital overview", () => {
+  it("keeps Employment central with eight core factors at equal radius and 45-degree intervals", () => {
     const model = validateMotionQaReadModel(motionFixture);
     const orbit = layoutEmploymentOrbit(model);
     const employment = orbit.find((node) => node.id === "fixture-employment")!;
     expect(employment).toMatchObject({ x: 520, y: 310 });
-    expect(orbit.filter((node) => node.id !== employment.id).every((node) => Math.hypot(node.x - employment.x, node.y - employment.y) > 150)).toBe(true);
+    const outer = orbit.filter((node) => node.id !== employment.id);
+    expect(outer).toHaveLength(8);
+    expect(outer.every((node) => Math.abs(Math.hypot(node.x - employment.x, node.y - employment.y) - EMPLOYMENT_ORBIT_RADIUS) < 0.002)).toBe(true);
+    const octants = outer.map((node) => Math.round(((Math.atan2(node.y - employment.y, node.x - employment.x) + Math.PI * 2) % (Math.PI * 2)) / (Math.PI / 4))).sort((a, b) => a - b);
+    expect(octants).toEqual([0, 1, 2, 3, 4, 5, 6, 7]);
   });
 
   it("contains wheel scrolling inside the open factor guide", async () => {

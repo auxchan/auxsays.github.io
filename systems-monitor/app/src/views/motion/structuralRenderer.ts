@@ -434,6 +434,55 @@ function drawDepthField(context: CanvasRenderingContext2D, nodes: MotionQaNode[]
   }
 }
 
+function drawConcentricOrbitGuides(context: CanvasRenderingContext2D, nodes: MotionQaNode[], selectedNodeId: string | null, traceMode: boolean) {
+  if (selectedNodeId || traceMode) return;
+  const center = nodes.find((node) => node.id === "fixture-employment");
+  const orbitNodes = nodes.filter((node) => node.id !== "fixture-employment");
+  if (!center || orbitNodes.length < 3) return;
+  const radius = orbitNodes.reduce((sum, node) => sum + Math.hypot(node.x - center.x, node.y - center.y), 0) / orbitNodes.length;
+
+  context.save();
+  const glow = context.createRadialGradient(center.x, center.y, 18, center.x, center.y, radius * 1.48);
+  glow.addColorStop(0, "rgba(225,117,190,.075)");
+  glow.addColorStop(0.34, "rgba(107,231,205,.018)");
+  glow.addColorStop(0.68, "rgba(107,231,205,.026)");
+  glow.addColorStop(1, "rgba(107,231,205,0)");
+  context.fillStyle = glow;
+  context.beginPath();
+  context.arc(center.x, center.y, radius * 1.48, 0, Math.PI * 2);
+  context.fill();
+
+  context.lineWidth = 0.75;
+  for (const node of orbitNodes) {
+    context.strokeStyle = "rgba(126,202,196,.045)";
+    context.setLineDash([2, 9]);
+    context.beginPath();
+    context.moveTo(center.x, center.y);
+    context.lineTo(node.x, node.y);
+    context.stroke();
+  }
+
+  context.setLineDash([]);
+  context.strokeStyle = "rgba(126,225,209,.085)";
+  context.lineWidth = 1;
+  context.beginPath();
+  context.arc(center.x, center.y, radius, 0, Math.PI * 2);
+  context.stroke();
+
+  context.setLineDash([2, 7]);
+  context.strokeStyle = "rgba(126,225,209,.045)";
+  context.beginPath();
+  context.arc(center.x, center.y, Math.hypot(radius + 88, 54), 0, Math.PI * 2);
+  context.stroke();
+
+  context.setLineDash([]);
+  context.strokeStyle = "rgba(225,117,190,.14)";
+  context.beginPath();
+  context.arc(center.x, center.y, 64, 0, Math.PI * 2);
+  context.stroke();
+  context.restore();
+}
+
 export class CanvasStructuralRenderer implements StructuralRenderer {
   private readonly canvas: HTMLCanvasElement;
   private readonly context: CanvasRenderingContext2D;
@@ -523,6 +572,7 @@ export class CanvasStructuralRenderer implements StructuralRenderer {
     context.scale(camera.scale, camera.scale);
 
     const structuralDepths = resolveStructuralDepths(state.model, state.traceMode ? null : state.selectedNodeId);
+    drawConcentricOrbitGuides(context, renderNodes, state.selectedNodeId, state.traceMode);
     drawDepthField(context, renderNodes, structuralDepths, state.nowMs, this.parallax.position, state.reducedMotion);
 
     if (state.traceMode) this.hoverVisuals.clear();

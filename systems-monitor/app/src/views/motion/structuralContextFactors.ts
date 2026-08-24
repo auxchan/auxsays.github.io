@@ -1,5 +1,6 @@
 import type { MotionQaNode } from "../../data/motionQaReadModel";
 import { projectNode, type StructuralCamera } from "./structuralRenderer";
+import { EMPLOYMENT_ORBIT_CENTER } from "./spatialNavigation";
 
 export interface StructuralContextFactor {
   id: string;
@@ -53,15 +54,15 @@ export function layoutStructuralContextFactors(nodes: MotionQaNode[], camera: St
   return structuralContextFactors.flatMap((factor): PositionedStructuralContextFactor[] => {
     const parent = nodeMap.get(factor.parentNodeId);
     if (!parent || !visibleNodeIds.has(parent.id)) return [];
-    const deltaX = parent.x - 520;
-    const deltaY = parent.y - 310;
+    const deltaX = parent.x - EMPLOYMENT_ORBIT_CENTER.x;
+    const deltaY = parent.y - EMPLOYMENT_ORBIT_CENTER.y;
     const distance = Math.hypot(deltaX, deltaY);
     const outwardX = distance < 1 ? 0 : deltaX / distance;
     const outwardY = distance < 1 ? 1 : deltaY / distance;
     const tangentX = -outwardY;
     const tangentY = outwardX;
-    const factorX = parent.x + outwardX * 88 + tangentX * factor.slot * 42;
-    const factorY = parent.y + outwardY * 88 + tangentY * factor.slot * 42;
+    const factorX = parent.x + outwardX * 88 + tangentX * factor.slot * 54;
+    const factorY = parent.y + outwardY * 88 + tangentY * factor.slot * 54;
     const parentPoint = projectNode(parent, camera);
     const factorPoint = projectNode({ ...parent, x: factorX, y: factorY }, camera);
     return [{ ...factor, x: factorPoint.x, y: factorPoint.y, parentX: parentPoint.x, parentY: parentPoint.y, visualDepth: Math.min(10, (depths.get(parent.id) ?? 0) + factor.depthOffset) }];

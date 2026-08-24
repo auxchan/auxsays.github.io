@@ -1,5 +1,20 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-23 — True concentric nine-node orbital composition
+
+- Replaced the loosely orbital overview with a strict eight-around-one radial
+  composition: Employment remains fixed at center while the other eight core
+  factors occupy equal-radius positions at exact 45-degree intervals.
+- Aligned each core factor's two sublayers to a second outward concentric band
+  and widened tangent spacing so the top, bottom, and side pairs remain visually
+  balanced without target collisions.
+- Added restrained center, core-ring, sublayer-ring, and radial guide geometry
+  behind the network so the orbital hierarchy is visible at a glance.
+- Preserved the graph's fixture relationships, node identities, selection
+  behavior, camera focus, and reduced-motion boundary. No factual values,
+  accepted relationships, or production UI were changed. Human
+  spatial-renderer and Motion QA remain PENDING.
+
 ## 2026-08-23 — Symmetrical sublayer orbit and dedicated factor guides
 
 - Replaced the eighteen tiny dot-style sublayers with 60-pixel interaction

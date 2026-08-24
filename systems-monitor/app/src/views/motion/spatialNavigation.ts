@@ -3,17 +3,19 @@ import type { Point, StructuralCamera } from "./structuralRenderer";
 import { projectNode } from "./structuralRenderer";
 
 export const MAX_VISIBLE_RELATIONSHIPS = 10;
+export const EMPLOYMENT_ORBIT_CENTER: Point = { x: 520, y: 310 };
+export const EMPLOYMENT_ORBIT_RADIUS = 200;
 
 const employmentOrbitPositions: Record<string, Point> = {
-  "fixture-origin": { x: 120, y: 310 },
-  "fixture-producer": { x: 235, y: 160 },
-  "fixture-buffer": { x: 390, y: 105 },
-  "fixture-branch-a": { x: 590, y: 100 },
-  "fixture-downstream": { x: 875, y: 225 },
-  "fixture-transport": { x: 790, y: 430 },
-  "fixture-junction": { x: 600, y: 500 },
-  "fixture-branch-b": { x: 360, y: 515 },
-  "fixture-employment": { x: 520, y: 310 }
+  "fixture-origin": { x: 320, y: 310 },
+  "fixture-producer": { x: 378.579, y: 168.579 },
+  "fixture-buffer": { x: 520, y: 110 },
+  "fixture-branch-a": { x: 661.421, y: 168.579 },
+  "fixture-downstream": { x: 720, y: 310 },
+  "fixture-transport": { x: 661.421, y: 451.421 },
+  "fixture-junction": { x: 520, y: 510 },
+  "fixture-branch-b": { x: 378.579, y: 451.421 },
+  "fixture-employment": EMPLOYMENT_ORBIT_CENTER
 };
 
 export function layoutEmploymentOrbit(model: MotionQaReadModel): MotionQaNode[] {

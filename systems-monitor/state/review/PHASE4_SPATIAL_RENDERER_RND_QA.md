@@ -18,6 +18,8 @@ Employment-centered orbital overview and Reset behavior: **PENDING HUMAN VISUAL 
 
 Symmetrical sublayer orbit and dedicated information guides: **PENDING HUMAN VISUAL QA**
 
+True concentric nine-node orbital composition: **PENDING HUMAN VISUAL QA**
+
 This review covers only the development-only structural renderer, spatial
 navigation, label hierarchy, node grammar, and Explore/Trace interaction.
 `HUMAN_PHASE4_MOTION_QA` remains **PENDING**.
@@ -294,6 +296,26 @@ parent and selected sublayer separately. All eighteen explanations are
 development-only TEST_FIXTURE educational copy; they are not factual data,
 accepted structural relationships, or public claims.
 
+## Taylor correction — strict concentric core-node composition
+
+Taylor found the overall node map still only loosely orbital and requested a
+more circular, symmetrical, and concentric composition.
+
+Employment remains the stable center. The eight other core factors now occupy
+one exact-radius ring at 45-degree intervals, following the existing structural
+sequence around the circle. Each core factor's two sublayers sit on a second
+outward band with equal radial distance and matched tangent spacing. This
+creates a clear visual hierarchy of center, core orbit, and underlying-factor
+orbit without changing any relationship or suggesting that screen position is
+an economic magnitude.
+
+The overview renderer now draws restrained concentric guides: a small
+Employment halo, the core-factor ring, the outer sublayer ring, and faint radial
+spokes. These guides disappear during focused navigation and Trace so they do
+not compete with relationship evidence. Automated and live-preview checks
+confirm all eight core factors share the same screen radius and all eighteen
+sublayer targets remain collision-free.
+
 ## Local review
 
 ```text
@@ -384,6 +406,10 @@ http://127.0.0.1:4174/systems-monitor/?view=summary
    impact, and parent-relationship explanation.
 29. **Parent return:** use View the parent factor from a sublayer guide and
    confirm the panel changes to the parent without an unnecessary camera jump.
+30. **Concentric overview:** confirm Employment is visually centered and all
+   eight core factors read as equally spaced positions on one circular ring.
+31. **Outer orbit:** confirm every sublayer pair reads as part of a second
+   concentric band, with adequate label separation at the top and bottom.
 
 ## Taylor checklist
 
