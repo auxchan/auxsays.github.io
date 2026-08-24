@@ -488,7 +488,8 @@ class Pipeline:
             # A reply that stands on its own is judged on its own merits, never merged into the
             # original poster's report. No extra fetch: this reads the thread already fetched.
             for report in cr.independent_reports(candidate, budget=budget,
-                                                 exclude_segment_key=outcome.segment_key):
+                                                 exclude_segment_key=outcome.segment_key,
+                                                 issue_predicate=ppt.concrete_issue):
                 url_key = str(report.segment_url).strip().rstrip("/").lower()
                 if url_key in self._seen.setdefault(key, set()):
                     continue
@@ -540,12 +541,30 @@ class Pipeline:
                     last_run=captured_at,
                     notes=f"segment-scoped exact-build resolution; fetches={budget.fetched}"),
             })
+        # Role-attribution telemetry: enough to tell WHY a candidate resolved or did not, without
+        # re-reading the source. No hidden semantic resolution -- every count here is the sum of
+        # explicit author claims the classifier recorded per build.
+        def _role_total(role: str) -> int:
+            return sum((o.get("role_counts") or {}).get(role, 0) for o in outcomes)
+
+        resolved_total = sum(1 for o in outcomes
+                             if o["resolution_result"] == cr.RESOLVED_EXACT_BUILD)
         state.method_plan["context_resolution"] = {
             "attempted": len(outcomes), "fetches": budget.fetched,
-            "resolved": sum(1 for o in outcomes
-                            if o["resolution_result"] == cr.RESOLVED_EXACT_BUILD),
+            "resolved": resolved_total,
             "accepted_after_reeval": len(resolved_rows),
             "independent_accepted": len(independent_rows),
+            # role attribution
+            "builds_found": sum(len(o.get("build_claims") or []) for o in outcomes),
+            "current_failing_claims": _role_total(cr.ROLE_CURRENT_FAILING),
+            "rollback_claims": _role_total(cr.ROLE_ROLLBACK_PREVIOUS),
+            "ambiguous_claims": _role_total(cr.ROLE_AMBIGUOUS),
+            "resolved_by_explicit_role": sum(
+                1 for o in outcomes
+                if o["resolution_result"] == cr.RESOLVED_EXACT_BUILD
+                and str(o.get("resolution_match_basis") or "").startswith("explicit_role_")),
+            "rejected_conflicting_role": sum(
+                1 for o in outcomes if o["resolution_result"] == cr.CONFLICTING_BUILD),
             "outcomes": outcomes,
         }
         state.method_plan["context_resolution_done"] = True

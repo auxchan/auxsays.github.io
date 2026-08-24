@@ -37,6 +37,9 @@ import os
 import re
 from typing import Any
 
+from lib.build_claims import (
+    BUILD_TOKEN_RE, extract_build_claims, select_current_failing_build, single_named_build,
+)
 from lib.patch_identity import is_build_aware, patch_key
 from .base import (
     CollectorContext,
@@ -85,7 +88,12 @@ REDDIT_FALLBACK_ENV = "AUXSAYS_POWERPOINT_REDDIT_FALLBACK"
 YYMM_RE = re.compile(r"(?<![0-9.])(2\d(?:0[1-9]|1[0-2]))(?![0-9.])")
 # Full Click-to-Run build, e.g. 20026.20076 (5 digits . 5 digits). REQUIRED for counted
 # evidence: it is the second half of this product's canonical patch identity.
-BUILD_RE = re.compile(r"(?<![0-9.])(\d{4,6}\.\d{4,6})(?![0-9.])")
+#
+# Sourced from lib.build_claims so this authority and the context-resolution stage read builds
+# through ONE primitive. The previous local copy used a `(?![0-9.])` trailing guard, which missed a
+# build that ends a sentence ("Build 19822.20182.") because the full stop is itself in the excluded
+# class -- a legitimately stated build went unseen by the gate that requires it.
+BUILD_RE = BUILD_TOKEN_RE
 
 POWERPOINT_RE = re.compile(r"\b(?:microsoft\s+)?power\s?point\b", re.I)
 # Other Office apps — only matters to reject app-only reports that never name PowerPoint.
@@ -325,17 +333,33 @@ def channel_reason(text: str) -> str | None:
 def build_check(text: str, target_build: str) -> tuple[str | None, bool]:
     """Full-build cross-check. Returns (exclusion_reason_or_None, build_matched).
 
-    If one or more full builds are named and the record's exact build is not among them, the
-    report describes a DIFFERENT patch and is rejected. If none is named, ``build_matched`` is
-    False and the caller refuses the report with ``missing_exact_build`` -- the exact build is a
-    prerequisite for counted evidence, not a bonus."""
-    builds = set(BUILD_RE.findall(text or ""))
-    if not builds:
+    ONE build named: the report has nothing to disambiguate, so it matches the target or it does
+    not -- exactly as before the role classifier existed.
+
+    SEVERAL builds named: which one the report is ABOUT decides, and only the author's own explicit
+    language may say. "On 2607 (Build A) it crashes, I rolled back to Build B and it works" names A
+    as current and B as previous; the report is about A. Previously any named build satisfying the
+    target was enough, so that report also counted as evidence for B -- a build its author said was
+    WORKING. Now the target must be the build shown current/failing.
+
+    If no build is named, ``build_matched`` is False and the caller refuses the report with
+    ``missing_exact_build`` -- the exact build is a prerequisite for counted evidence, not a bonus.
+    If several are named and none is deterministically shown current, the report also carries no
+    usable build: ``missing_exact_build`` again, which is what makes it eligible for same-segment
+    context resolution rather than silently accepted or silently mismatched."""
+    claims = extract_build_claims(text or "")
+    if not claims:
         return None, False
     target = str(target_build or "").strip()
-    if target and target in builds:
-        return None, True
-    return "build_mismatch", False
+
+    named = single_named_build(claims)
+    if named:
+        return (None, True) if target and named == target else ("build_mismatch", False)
+
+    selected, _basis, _refusal = select_current_failing_build(claims)
+    if not selected:
+        return None, False
+    return (None, True) if target and selected == target else ("build_mismatch", False)
 
 
 def concrete_issue(text: str) -> bool:

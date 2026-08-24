@@ -184,9 +184,11 @@ def run() -> int:
     check("C carries no build", not after.get("target_build"))
 
     # --- D: two builds inside the reporter's own segment ---------------------
-    print("\n[D] two conflicting builds inside the reporter's own segment")
-    page = qapage(f"On {VERSION} (Build {BUILD}) it crashes; rolling back to Build "
-                  f"{OTHER_BUILD} works.")
+    # R3 note: two builds are no longer automatically a conflict. When the author explicitly says
+    # which is which, the source has answered the question -- see test_powerpoint_build_roles.py.
+    # A conflict is now two builds whose roles the author did NOT distinguish.
+    print("\n[D] two builds the author did NOT distinguish")
+    page = qapage(f"Seen on Build {BUILD} and Build {OTHER_BUILD} in our estate.")
     out, _, cand = resolve(page)
     check("D result is conflicting_build", out.resolution_result == cr.CONFLICTING_BUILD, out.detail)
     check("D chooses NO build", out.resolved_build == "" and out.explicit_build_found is False)
@@ -194,6 +196,19 @@ def run() -> int:
           BUILD in out.detail and OTHER_BUILD in out.detail, out.detail)
     after = row(cr.augmented_candidate(cand, out))
     check("D stays uncounted", after.get("counted") is False)
+
+    print("\n[D2] the SAME two builds, with the author's roles stated -> resolves")
+    page = qapage(f"On {VERSION} (Build {BUILD}) it crashes; rolling back to Build "
+                  f"{OTHER_BUILD} works.")
+    out, _, cand = resolve(page)
+    check("D2 resolves the build the author called current",
+          out.resolution_result == cr.RESOLVED_EXACT_BUILD and out.resolved_build == BUILD,
+          out.detail)
+    check("D2 the rollback build is not selected", out.resolved_build != OTHER_BUILD)
+    check("D2 the basis names explicit role attribution",
+          out.resolution_match_basis.startswith("explicit_role_"), out.resolution_match_basis)
+    check("D2 ACCEPTED by the unchanged authority",
+          row(cr.augmented_candidate(cand, out)).get("counted") is True)
 
     # --- E: fetch blocked / broken / unparseable -----------------------------
     print("\n[E] context fetch blocked, broken, and structurally unparseable")
