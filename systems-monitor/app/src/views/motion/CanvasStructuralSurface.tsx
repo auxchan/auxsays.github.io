@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import type { MotionQaNode, MotionQaPath, MotionQaReadModel, MotionQaRelationship } from "../../data/motionQaReadModel";
-import { applyStructuralViewport, CanvasStructuralRenderer, createStructuralCamera, projectNode, zoomStructuralViewportAt, type StructuralViewportTransform } from "./structuralRenderer";
+import { applyStructuralViewport, CanvasStructuralRenderer, createStructuralCamera, projectNode, resolveStructuralDepths, resolveStructuralDepthVisual, zoomStructuralViewportAt, type StructuralViewportTransform } from "./structuralRenderer";
 import { layoutSpatialLabels, layoutSpatialNodes, nextNodeInDirection, type SpatialViewport } from "./spatialNavigation";
 import { StructuralNodeIcon } from "./StructuralNodeIcon";
 import { resolveStructuralNodeVisual } from "./structuralVisualLanguage";
@@ -32,6 +32,7 @@ export function CanvasStructuralSurface({ model, path, currentEdges, completedEd
   const stepStartedAt = useRef(0);
   const panSession = useRef<{ pointerId: number; startX: number; startY: number; panX: number; panY: number } | null>(null);
   const wheelTimer = useRef<number | null>(null);
+  const parallaxTarget = useRef({ x: 0, y: 0 });
   const [size, setSize] = useState({ width: 1000, height: 620 });
   const sizeRef = useRef(size);
   sizeRef.current = size;
@@ -49,6 +50,7 @@ export function CanvasStructuralSurface({ model, path, currentEdges, completedEd
   const commonOriginNodeId = path.commonCauseId ? model.relationships.find((edge) => edge.id === path.steps[0][0])?.from ?? null : null;
   const labelPlacements = useMemo(() => layoutSpatialLabels({ nodes: spatialNodes, camera, width: size.width, height: size.height, focusDepth, selectedNodeId, visibleNodeIds: viewport.visibleNodeIds, traceNodeIds: pathNodes }), [spatialNodes, camera, size, focusDepth, selectedNodeId, viewport.visibleNodeIds, pathNodes]);
   const labels = useMemo(() => new Map(labelPlacements.map((placement) => [placement.nodeId, placement])), [labelPlacements]);
+  const structuralDepths = useMemo(() => resolveStructuralDepths(spatialModel, traceMode ? null : selectedNodeId), [spatialModel, traceMode, selectedNodeId]);
 
   useEffect(() => {
     const host = hostRef.current;
@@ -100,7 +102,7 @@ export function CanvasStructuralSurface({ model, path, currentEdges, completedEd
     renderer.resize(size.width, size.height, window.devicePixelRatio || 1);
     let frame = 0;
     const draw = (now: number) => {
-      renderer.render({ model: spatialModel, currentEdges, completedEdgeIds, pathEdgeIds, nodeStates, selectedNodeId, hoveredNodeId, viewportTransform, cameraFocusNodeId: traceMode ? null : selectedNodeId, focusDepth: traceMode ? 0 : focusDepth, visibleNodeIds: viewport.visibleNodeIds, visibleRelationshipIds: viewport.visibleRelationshipIds, traceMode, reducedMotion, elapsedMs: reducedMotion ? 900 : now - stepStartedAt.current, nowMs: now, reconciliationTargetId, commonOriginNodeId });
+      renderer.render({ model: spatialModel, currentEdges, completedEdgeIds, pathEdgeIds, nodeStates, selectedNodeId, hoveredNodeId, viewportTransform, cameraFocusNodeId: traceMode ? null : selectedNodeId, focusDepth: traceMode ? 0 : focusDepth, visibleNodeIds: viewport.visibleNodeIds, visibleRelationshipIds: viewport.visibleRelationshipIds, traceMode, reducedMotion, elapsedMs: reducedMotion ? 900 : now - stepStartedAt.current, nowMs: now, reconciliationTargetId, commonOriginNodeId, parallaxTarget: parallaxTarget.current });
       if (!reducedMotion) frame = window.requestAnimationFrame(draw);
     };
     draw(performance.now());
@@ -120,6 +122,11 @@ export function CanvasStructuralSurface({ model, path, currentEdges, completedEd
   }
 
   function handlePointerMove(event: ReactPointerEvent<HTMLDivElement>) {
+    const bounds = event.currentTarget.getBoundingClientRect();
+    parallaxTarget.current = {
+      x: Math.max(-1, Math.min(1, ((event.clientX - bounds.left) / bounds.width - 0.5) * 2)),
+      y: Math.max(-1, Math.min(1, ((event.clientY - bounds.top) / bounds.height - 0.5) * 2))
+    };
     const session = panSession.current;
     if (!session || session.pointerId !== event.pointerId) return;
     event.preventDefault();
@@ -133,7 +140,7 @@ export function CanvasStructuralSurface({ model, path, currentEdges, completedEd
     setPanning(false);
   }
 
-  return <div ref={hostRef} className={`sm-viz-surface ${panning || wheelActive ? "is-manipulating" : ""} ${panning ? "is-panning" : ""}`} data-structural-renderer="canvas-rd" data-trace-mode={traceMode} data-focus-depth={focusDepth} data-visible-relationship-count={viewport.visibleRelationshipIds.size} data-hovered-node-id={hoveredNodeId ?? ""} data-connector-motion={reducedMotion ? "static" : traceMode ? "trace" : "ambient"} data-viewport-zoom={viewportTransform.zoom.toFixed(3)} data-viewport-pan-x={Math.round(viewportTransform.panX)} data-viewport-pan-y={Math.round(viewportTransform.panY)} onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerUp={endPan} onPointerCancel={endPan} onMouseDown={(event) => { if (event.button === 1) event.preventDefault(); }} onAuxClick={(event) => { if (event.button === 1) event.preventDefault(); }}>
+  return <div ref={hostRef} className={`sm-viz-surface ${panning || wheelActive ? "is-manipulating" : ""} ${panning ? "is-panning" : ""}`} data-structural-renderer="canvas-rd" data-depth-field={reducedMotion ? "static" : "spring-parallax"} data-trace-mode={traceMode} data-focus-depth={focusDepth} data-visible-relationship-count={viewport.visibleRelationshipIds.size} data-hovered-node-id={hoveredNodeId ?? ""} data-connector-motion={reducedMotion ? "static" : traceMode ? "trace" : "ambient"} data-viewport-zoom={viewportTransform.zoom.toFixed(3)} data-viewport-pan-x={Math.round(viewportTransform.panX)} data-viewport-pan-y={Math.round(viewportTransform.panY)} onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerLeave={() => { if (!panSession.current) parallaxTarget.current = { x: 0, y: 0 }; }} onPointerUp={endPan} onPointerCancel={endPan} onMouseDown={(event) => { if (event.button === 1) event.preventDefault(); }} onAuxClick={(event) => { if (event.button === 1) event.preventDefault(); }}>
     <canvas ref={canvasRef} className="sm-viz-canvas" role="img" aria-label="Synthetic structural pressure surface with spatial neighborhoods and continuous routed dependencies" data-renderer-surface="canvas" />
     <p className="sm-sr-only">The canvas is supplemented by keyboard-accessible node controls and a complete structured relationship list. Mouse wheel zooms. Hold the middle mouse button and drag to pan.</p>
     <div className="sm-viz-node-layer" aria-label="Synthetic structural nodes">{spatialNodes.map((node) => {
@@ -144,9 +151,10 @@ export function CanvasStructuralSurface({ model, path, currentEdges, completedEd
       const onPath = pathNodes.has(node.id);
       const visible = viewport.visibleNodeIds.has(node.id);
       const visual = resolveStructuralNodeVisual(node);
-      const style = { left: point.x, top: point.y, "--label-x": `${(label?.x ?? point.x) - point.x}px`, "--label-y": `${(label?.y ?? point.y + 31) - point.y}px`, "--label-width": `${label?.width ?? 120}px`, "--node-accent": visual.accent, "--node-fill": visual.fill } as CSSProperties;
       const hovered = hoveredNodeId === node.id;
-      return <button key={node.id} ref={(element) => { if (element) nodeButtons.current.set(node.id, element); else nodeButtons.current.delete(node.id); }} type="button" style={style} className={`sm-viz-node-label is-${node.kind.toLowerCase()} ${selectedNodeId === node.id ? "is-selected" : ""} ${hovered ? "is-hovered" : ""} ${active ? "is-active" : ""} ${onPath ? "is-path" : ""} ${visible ? "is-neighborhood" : "is-context-hidden"} ${label?.suppressed ? "is-label-suppressed" : ""}`} aria-label={`${node.detailLabel}. ${state}. Enter this system.`} aria-pressed={selectedNodeId === node.id} aria-hidden={!visible} tabIndex={visible ? 0 : -1} data-motion-node-id={node.id} data-motion-state={state} data-motion-active={active} data-node-type={node.kind} data-node-role={visual.role} data-node-symbol={visual.symbol} data-hovered={hovered} data-label-level={focusDepth} data-label-priority={label?.priority ?? "DETAIL"} data-label-suppressed={label?.suppressed ?? true} onPointerEnter={() => setHoveredNodeId(node.id)} onPointerLeave={() => setHoveredNodeId((current) => current === node.id ? null : current)} onFocus={() => setHoveredNodeId(node.id)} onBlur={() => setHoveredNodeId((current) => current === node.id ? null : current)} onClick={(event) => onSelectNode(node.id, event.currentTarget)} onKeyDown={(event) => {
+      const depthVisual = resolveStructuralDepthVisual(structuralDepths.get(node.id) ?? 0, hovered || selectedNodeId === node.id || active);
+      const style = { left: point.x, top: point.y, "--label-x": `${(label?.x ?? point.x) - point.x}px`, "--label-y": `${(label?.y ?? point.y + 31) - point.y}px`, "--label-width": `${label?.width ?? 120}px`, "--node-accent": visual.accent, "--node-fill": visual.fill, "--node-depth-scale": depthVisual.scale, "--node-depth-opacity": depthVisual.opacity } as CSSProperties;
+      return <button key={node.id} ref={(element) => { if (element) nodeButtons.current.set(node.id, element); else nodeButtons.current.delete(node.id); }} type="button" style={style} className={`sm-viz-node-label is-${node.kind.toLowerCase()} ${selectedNodeId === node.id ? "is-selected" : ""} ${hovered ? "is-hovered" : ""} ${active ? "is-active" : ""} ${onPath ? "is-path" : ""} ${visible ? "is-neighborhood" : "is-context-hidden"} ${label?.suppressed ? "is-label-suppressed" : ""}`} aria-label={`${node.detailLabel}. ${state}. Enter this system.`} aria-pressed={selectedNodeId === node.id} aria-hidden={!visible} tabIndex={visible ? 0 : -1} data-motion-node-id={node.id} data-motion-state={state} data-motion-active={active} data-node-type={node.kind} data-node-role={visual.role} data-node-symbol={visual.symbol} data-visual-depth={structuralDepths.get(node.id) ?? 0} data-hovered={hovered} data-label-level={focusDepth} data-label-priority={label?.priority ?? "DETAIL"} data-label-suppressed={label?.suppressed ?? true} onPointerEnter={() => setHoveredNodeId(node.id)} onPointerLeave={() => setHoveredNodeId((current) => current === node.id ? null : current)} onFocus={() => setHoveredNodeId(node.id)} onBlur={() => setHoveredNodeId((current) => current === node.id ? null : current)} onClick={(event) => onSelectNode(node.id, event.currentTarget)} onKeyDown={(event) => {
         if (event.key === "Enter" || event.key === " ") { event.preventDefault(); onSelectNode(node.id, event.currentTarget); return; }
         if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) {
           event.preventDefault();
@@ -156,7 +164,7 @@ export function CanvasStructuralSurface({ model, path, currentEdges, completedEd
       }}><i className="sm-viz-node-anchor" aria-hidden="true" data-selected-node-anchor={selectedNodeId === node.id ? "visible" : undefined}><StructuralNodeIcon symbol={visual.symbol} /></i><span><b>{label?.text ?? node.label}</b><small>{focusDepth > 0 ? node.kind.replaceAll("_", " ") : ""}</small></span></button>;
     })}</div>
     <div className="sm-viz-viewport-controls" aria-label="Graph viewport controls" onPointerDown={(event) => event.stopPropagation()}>
-      <button type="button" className="is-home" aria-label="Home — show all core factors" onClick={() => { setViewportTransform(DEFAULT_VIEWPORT); setHoveredNodeId(null); onHome(); }}><span aria-hidden="true">⌂</span><b>Home</b></button>
+      <button type="button" className="is-home" aria-label="Home — show all core factors" onClick={() => { setViewportTransform(DEFAULT_VIEWPORT); setHoveredNodeId(null); parallaxTarget.current = { x: 0, y: 0 }; onHome(); }}><span aria-hidden="true">⌂</span><b>Home</b></button>
       <button type="button" aria-label="Zoom out" onClick={() => zoomAt(0.85)}>−</button>
       <output aria-label="Graph zoom level">{Math.round(viewportTransform.zoom * 100)}%</output>
       <button type="button" aria-label="Zoom in" onClick={() => zoomAt(1.18)}>+</button>

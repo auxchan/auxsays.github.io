@@ -8,6 +8,8 @@ Connector-hover easing and Home navigation: **PENDING HUMAN VISUAL QA**
 
 Node-color connector lighting correction: **PENDING HUMAN VISUAL QA**
 
+Layered depth and spring-parallax exploration field: **PENDING HUMAN VISUAL QA**
+
 This review covers only the development-only structural renderer, spatial
 navigation, label hierarchy, node grammar, and Explore/Trace interaction.
 `HUMAN_PHASE4_MOTION_QA` remains **PENDING**.
@@ -164,6 +166,22 @@ instead of visibly fading into the selected factor's palette. The hover-speed
 coupling has been removed. Glints now retain one constant travel period and
 constant trail length; the connector rails, arrows, glints, and glow ease into
 the hovered node's accent color and ease back to the ambient palette on exit.
+
+## Taylor exploration direction — layered depth
+
+Taylor requested a cleaner first read that still signals substantial depth
+beyond the foreground. The development surface now derives a bounded visual
+depth from non-terminal fixture graph distance. Deeper factors become gradually
+smaller and more translucent; selection, hover, and active states restore full
+emphasis. Blocked, absorbed, and unknown routes are excluded from overview depth
+ranking so they do not visually promote a downstream factor as though pressure
+successfully reached it.
+
+A sparse deterministic particle field occupies optical layers 2–10. Its pointer
+response uses a damped spring and shallow per-layer displacement to create depth
+without behaving like decorative confetti. Reduced-motion mode freezes the
+field. These layers are explicitly visual R&D and do not encode factual
+magnitude, importance, accepted relationships, or hidden economic observations.
 
 ## Local review
 

@@ -1,5 +1,21 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-23 — Layered structural depth and spring-parallax field
+
+- Added a development-only visual-depth system for the structural surface.
+  Overview depth follows non-terminal graph distance from the fixture origin;
+  blocked, absorbed, and unknown routes do not pull downstream factors forward.
+- Deeper factors progressively reduce in scale and opacity through bounded
+  levels 0–10. Hovered, active, and selected factors return to full emphasis.
+- Added a sparse, deterministic particle field around the network. Pointer
+  response uses a damped spring so layers move with restrained parallax instead
+  of following the cursor rigidly.
+- Disabled parallax movement under reduced motion while retaining the static
+  depth hierarchy.
+- This is optical hierarchy for the synthetic visual laboratory, not factual
+  magnitude, economic importance, or an accepted structural claim.
+- Human spatial-renderer and Motion QA remain PENDING.
+
 ## 2026-08-23 — Node-color connector-light correction
 
 - Removed hover-driven connector-light acceleration. Hover no longer changes

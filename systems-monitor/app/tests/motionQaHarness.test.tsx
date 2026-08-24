@@ -4,7 +4,7 @@ import motionFixture from "../fixtures/motion-qa-read-model.json";
 import { SnapshotProvider } from "../src/app/SnapshotContext";
 import { SystemsMonitorApp } from "../src/app/SystemsMonitorApp";
 import { motionOutcomes, validateMotionQaReadModel } from "../src/data/motionQaReadModel";
-import { applyStructuralViewport, blendConnectorColor, connectorGlintProgress, createStructuralCamera, easeConnectorHover, interpolateCamera, MAX_STRUCTURAL_ZOOM, MIN_STRUCTURAL_ZOOM, outcomeTravel, projectNode, sampleRelationship, zoomStructuralViewportAt } from "../src/views/motion/structuralRenderer";
+import { applyStructuralViewport, blendConnectorColor, connectorGlintProgress, createStructuralCamera, easeConnectorHover, interpolateCamera, MAX_STRUCTURAL_ZOOM, MIN_STRUCTURAL_ZOOM, outcomeTravel, projectNode, resolveStructuralDepths, resolveStructuralDepthVisual, sampleRelationship, stepSpringParallax, zoomStructuralViewportAt } from "../src/views/motion/structuralRenderer";
 import { layoutSpatialLabels, layoutSpatialNodes, MAX_VISIBLE_RELATIONSHIPS, nextNodeInDirection, resolveSpatialViewport } from "../src/views/motion/spatialNavigation";
 import { candidate } from "./factualCandidate.test";
 
@@ -363,6 +363,27 @@ describe("development-only structural Motion QA harness", () => {
     expect(connectorGlintProgress(0, 0)).toBe(0);
     expect(connectorGlintProgress(1250, 0)).toBe(0.5);
     expect(connectorGlintProgress(2500, 0)).toBe(0);
+  });
+
+  it("layers deeper structural nodes without turning visual depth into factual magnitude", () => {
+    const depths = resolveStructuralDepths(motionFixture as never);
+    expect(depths.get("fixture-origin")).toBe(0);
+    expect(depths.get("fixture-producer")).toBe(1);
+    expect(depths.get("fixture-transport")).toBe(5);
+    expect(depths.get("fixture-employment")).toBe(7);
+    expect(resolveStructuralDepthVisual(0)).toEqual({ scale: 1, opacity: 0.92 });
+    expect(resolveStructuralDepthVisual(10)).toEqual({ scale: 0.72, opacity: 0.46 });
+    expect(resolveStructuralDepthVisual(10, true)).toEqual({ scale: 1, opacity: 1 });
+  });
+
+  it("uses a damped parallax spring and disables it for reduced motion", () => {
+    const initial = { position: { x: 0, y: 0 }, velocity: { x: 0, y: 0 } };
+    const moved = stepSpringParallax(initial, { x: 1, y: -1 }, 16);
+    expect(moved.position.x).toBeGreaterThan(0);
+    expect(moved.position.x).toBeLessThan(1);
+    expect(moved.position.y).toBeLessThan(0);
+    expect(stepSpringParallax(moved, { x: 1, y: -1 }, 16).position.x).toBeGreaterThan(moved.position.x);
+    expect(stepSpringParallax(moved, { x: 1, y: -1 }, 16, true)).toEqual(initial);
   });
 
   it("zooms under the mouse wheel, pans only with the middle button, and resets", async () => {

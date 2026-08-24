@@ -17,6 +17,16 @@ export const MIN_STRUCTURAL_ZOOM = 0.7;
 export const MAX_STRUCTURAL_ZOOM = 2.4;
 export const CONNECTOR_GLINT_PERIOD_MS = 2500;
 
+export interface StructuralDepthVisual {
+  scale: number;
+  opacity: number;
+}
+
+export interface SpringParallaxState {
+  position: Point;
+  velocity: Point;
+}
+
 export function easeConnectorHover(current: number, target: number, elapsedMs: number, reducedMotion = false) {
   if (reducedMotion) return target;
   const safeElapsed = Math.max(0, elapsedMs);
@@ -41,6 +51,57 @@ export function connectorGlintProgress(nowMs: number, edgeIndex: number) {
   return ((nowMs / CONNECTOR_GLINT_PERIOD_MS) + edgeIndex * 0.137) % 1;
 }
 
+export function resolveStructuralDepths(model: MotionQaReadModel, focusNodeId: string | null = null) {
+  const nodeIds = new Set(model.nodes.map((node) => node.id));
+  const adjacency = new Map(model.nodes.map((node) => [node.id, [] as string[]]));
+  const inbound = new Set<string>();
+  for (const edge of model.relationships) {
+    if (!nodeIds.has(edge.from) || !nodeIds.has(edge.to)) continue;
+    if (!focusNodeId && ["BLOCKED", "ABSORBED", "UNKNOWN"].includes(edge.outcome)) continue;
+    adjacency.get(edge.from)!.push(edge.to);
+    inbound.add(edge.to);
+    if (focusNodeId) adjacency.get(edge.to)!.push(edge.from);
+  }
+  const origins = focusNodeId && nodeIds.has(focusNodeId)
+    ? [focusNodeId]
+    : model.nodes.filter((node) => !inbound.has(node.id)).sort((left, right) => left.displayRank - right.displayRank).map((node) => node.id);
+  if (!origins.length && model.nodes.length) origins.push([...model.nodes].sort((left, right) => left.displayRank - right.displayRank)[0].id);
+  const depths = new Map<string, number>();
+  const queue = origins.map((nodeId) => ({ nodeId, depth: 0 }));
+  while (queue.length) {
+    const current = queue.shift()!;
+    if ((depths.get(current.nodeId) ?? Number.POSITIVE_INFINITY) <= current.depth) continue;
+    depths.set(current.nodeId, current.depth);
+    for (const nextId of adjacency.get(current.nodeId) ?? []) queue.push({ nodeId: nextId, depth: Math.min(10, current.depth + 1) });
+  }
+  model.nodes.forEach((node) => { if (!depths.has(node.id)) depths.set(node.id, Math.min(10, Math.max(1, node.displayRank - 1))); });
+  return depths;
+}
+
+export function resolveStructuralDepthVisual(depth: number, emphasized = false): StructuralDepthVisual {
+  if (emphasized) return { scale: 1, opacity: 1 };
+  const bounded = Math.max(0, Math.min(10, depth));
+  return {
+    scale: Math.max(0.72, 1 - bounded * 0.038),
+    opacity: Math.max(0.46, 0.92 - bounded * 0.052)
+  };
+}
+
+export function stepSpringParallax(current: SpringParallaxState, target: Point, elapsedMs: number, reducedMotion = false): SpringParallaxState {
+  if (reducedMotion) return { position: { x: 0, y: 0 }, velocity: { x: 0, y: 0 } };
+  const elapsed = Math.max(0, Math.min(50, elapsedMs)) / 1000;
+  const stiffness = 32;
+  const damping = Math.exp(-8.5 * elapsed);
+  const velocity = {
+    x: (current.velocity.x + (target.x - current.position.x) * stiffness * elapsed) * damping,
+    y: (current.velocity.y + (target.y - current.position.y) * stiffness * elapsed) * damping
+  };
+  return {
+    position: { x: current.position.x + velocity.x * elapsed, y: current.position.y + velocity.y * elapsed },
+    velocity
+  };
+}
+
 export interface StructuralRenderState {
   model: MotionQaReadModel;
   currentEdges: MotionQaRelationship[];
@@ -60,6 +121,7 @@ export interface StructuralRenderState {
   nowMs: number;
   reconciliationTargetId: string | null;
   commonOriginNodeId: string | null;
+  parallaxTarget: Point;
 }
 
 export interface StructuralRenderer {
@@ -282,15 +344,16 @@ function drawNodeSymbol(context: CanvasRenderingContext2D, symbol: StructuralNod
   context.restore();
 }
 
-function drawNodeShape(context: CanvasRenderingContext2D, node: MotionQaNode, state: string, selected: boolean, hovered: boolean, phase: number) {
+function drawNodeShape(context: CanvasRenderingContext2D, node: MotionQaNode, state: string, selected: boolean, hovered: boolean, phase: number, depthVisual: StructuralDepthVisual) {
   const active = state !== "IDLE" && state !== "SIGNAL_READY";
   const visual = resolveStructuralNodeVisual(node);
   const pulse = 0.5 + Math.sin(phase * Math.PI * 2) * 0.5;
   context.save();
   context.translate(node.x, node.y);
+  context.scale(depthVisual.scale, depthVisual.scale);
   if (selected) context.scale(1.13, 1.13);
   else if (hovered) context.scale(1.06, 1.06);
-  context.globalAlpha = 1;
+  context.globalAlpha = depthVisual.opacity;
   if (selected || hovered || active) {
     context.strokeStyle = selected ? "#f3fff9" : hovered ? visual.accent : state === "DELAYING" ? "#efbc69" : state === "AMPLIFYING" ? "#ffd07a" : visual.accent;
     context.lineWidth = selected ? 2.2 : hovered ? 1.8 : 1.5;
@@ -325,6 +388,38 @@ function drawNodeShape(context: CanvasRenderingContext2D, node: MotionQaNode, st
   context.restore();
 }
 
+function seededUnit(seed: string) {
+  let hash = 2166136261;
+  for (let index = 0; index < seed.length; index += 1) hash = Math.imul(hash ^ seed.charCodeAt(index), 16777619);
+  return (hash >>> 0) / 4294967295;
+}
+
+function drawDepthField(context: CanvasRenderingContext2D, nodes: MotionQaNode[], depths: Map<string, number>, nowMs: number, parallax: Point, reducedMotion: boolean) {
+  for (const node of nodes) {
+    const visual = resolveStructuralNodeVisual(node);
+    const structuralDepth = depths.get(node.id) ?? 0;
+    context.save();
+    context.fillStyle = visual.accent;
+    context.shadowColor = visual.accent;
+    for (let index = 0; index < 4; index += 1) {
+      const seed = `${node.id}:${index}`;
+      const layer = Math.min(10, Math.max(2, structuralDepth + 2 + Math.floor(seededUnit(`${seed}:layer`) * 7)));
+      const baseAngle = seededUnit(`${seed}:angle`) * Math.PI * 2;
+      const drift = reducedMotion ? 0 : nowMs * (0.000012 + seededUnit(`${seed}:speed`) * 0.000016) * (index % 2 ? -1 : 1);
+      const radius = 44 + seededUnit(`${seed}:radius`) * 112;
+      const x = node.x + Math.cos(baseAngle + drift) * radius + parallax.x * layer * 2.2;
+      const y = node.y + Math.sin(baseAngle + drift) * radius * 0.58 + parallax.y * layer * 1.65;
+      const particleRadius = Math.max(0.45, 1.45 - layer * 0.075);
+      context.globalAlpha = Math.max(0.025, 0.092 - layer * 0.006);
+      context.shadowBlur = Math.max(1, 6 - layer * 0.35);
+      context.beginPath();
+      context.arc(x, y, particleRadius, 0, Math.PI * 2);
+      context.fill();
+    }
+    context.restore();
+  }
+}
+
 export class CanvasStructuralRenderer implements StructuralRenderer {
   private readonly canvas: HTMLCanvasElement;
   private readonly context: CanvasRenderingContext2D;
@@ -343,6 +438,7 @@ export class CanvasStructuralRenderer implements StructuralRenderer {
   private layoutStartedAt = 0;
   private readonly hoverVisuals = new Map<string, { alpha: number; emphasis: number; accent: string }>();
   private lastRenderAt = 0;
+  private parallax: SpringParallaxState = { position: { x: 0, y: 0 }, velocity: { x: 0, y: 0 } };
 
   constructor(canvas: HTMLCanvasElement, context: CanvasRenderingContext2D) {
     this.canvas = canvas;
@@ -361,6 +457,7 @@ export class CanvasStructuralRenderer implements StructuralRenderer {
     const context = this.context;
     const frameElapsed = this.lastRenderAt ? state.nowMs - this.lastRenderAt : 16.67;
     this.lastRenderAt = state.nowMs;
+    this.parallax = stepSpringParallax(this.parallax, state.parallaxTarget, frameElapsed, state.reducedMotion);
     const targetPositions = new Map(state.model.nodes.map((node) => [node.id, { x: node.x, y: node.y }]));
     const nextLayoutKey = `${state.selectedNodeId ?? "overview"}:${state.focusDepth}:${[...state.visibleRelationshipIds].sort().join(",")}`;
     if (!this.layoutCurrent) this.layoutCurrent = targetPositions;
@@ -411,12 +508,17 @@ export class CanvasStructuralRenderer implements StructuralRenderer {
     context.translate(camera.offsetX, camera.offsetY);
     context.scale(camera.scale, camera.scale);
 
+    const structuralDepths = resolveStructuralDepths(state.model, state.traceMode ? null : state.selectedNodeId);
+    drawDepthField(context, renderNodes, structuralDepths, state.nowMs, this.parallax.position, state.reducedMotion);
+
     if (state.traceMode) this.hoverVisuals.clear();
     for (const [edgeIndex, edge] of state.model.relationships.entries()) {
       if (!state.visibleRelationshipIds.has(edge.id)) continue;
       const points = sampleRelationship(edge, nodes);
       const isPath = state.pathEdgeIds.has(edge.id);
       const isComplete = state.completedEdgeIds.has(edge.id);
+      const edgeDepth = ((structuralDepths.get(edge.from) ?? 0) + (structuralDepths.get(edge.to) ?? 0)) / 2;
+      const edgeDepthVisual = resolveStructuralDepthVisual(edgeDepth, isPath || isComplete);
       const isHoverRelated = !state.hoveredNodeId || edge.from === state.hoveredNodeId || edge.to === state.hoveredNodeId;
       const hoveredNode = state.hoveredNodeId ? nodes.get(state.hoveredNodeId) : undefined;
       const previousHover = this.hoverVisuals.get(edge.id) ?? { alpha: 0.34, emphasis: 0, accent: "#75c9bd" };
@@ -427,14 +529,14 @@ export class CanvasStructuralRenderer implements StructuralRenderer {
         accent: hoveredNode && isHoverRelated ? resolveStructuralNodeVisual(hoveredNode).accent : previousHover.accent
       };
       if (!state.traceMode) this.hoverVisuals.set(edge.id, hoverVisual);
-      const alpha = state.traceMode ? (isPath ? 0.6 : 0.04) : hoverVisual.alpha;
+      const alpha = (state.traceMode ? (isPath ? 0.6 : 0.04) : hoverVisual.alpha) * edgeDepthVisual.opacity;
       const primaryColor = blendConnectorColor("#568491", hoverVisual.accent, hoverVisual.emphasis, alpha);
       const innerColor = blendConnectorColor("#7eaab4", hoverVisual.accent, hoverVisual.emphasis, alpha * 1.25);
       const arrowColor = blendConnectorColor("#486a75", hoverVisual.accent, hoverVisual.emphasis);
       const glintColor = blendConnectorColor("#75c9bd", hoverVisual.accent, hoverVisual.emphasis);
       tracePoints(context, points);
       context.strokeStyle = isComplete ? "rgba(105,198,178,.55)" : primaryColor;
-      context.lineWidth = isPath ? 8 : 5 + hoverVisual.emphasis * 1.5;
+      context.lineWidth = isPath ? 8 : (5 + hoverVisual.emphasis * 1.5) * edgeDepthVisual.scale;
       context.lineCap = "round";
       context.stroke();
       tracePoints(context, points);
@@ -499,7 +601,9 @@ export class CanvasStructuralRenderer implements StructuralRenderer {
       if (!state.visibleNodeIds.has(node.id)) continue;
       const visible = !state.traceMode || pathNodes.has(node.id) || state.selectedNodeId === node.id;
       if (!visible) continue;
-      drawNodeShape(context, node, state.nodeStates.get(node.id) ?? "IDLE", state.selectedNodeId === node.id, state.hoveredNodeId === node.id, phase);
+      const emphasized = state.selectedNodeId === node.id || state.hoveredNodeId === node.id || (state.traceMode && pathNodes.has(node.id));
+      const depthVisual = resolveStructuralDepthVisual(structuralDepths.get(node.id) ?? 0, emphasized);
+      drawNodeShape(context, node, state.nodeStates.get(node.id) ?? "IDLE", state.selectedNodeId === node.id, state.hoveredNodeId === node.id, phase, depthVisual);
     }
     context.restore();
   }
