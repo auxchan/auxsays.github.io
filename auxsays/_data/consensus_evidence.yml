@@ -14150,3 +14150,30 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: microsoft-powerpoint-2607-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5975138-version-2607-powerpoint-crashing-when
+  product_id: microsoft-powerpoint
+  update_version: '2607'
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5975138/version-2607-powerpoint-crashing-when-using-an-add
+  parent_title: Version 2607 - PowerPoint Crashing when using an Add-In for Polling Feedback - Microsoft Q&A
+  report_title: Version 2607 - PowerPoint Crashing when using an Add-In for Polling Feedback - Microsoft Q&A
+  report_text_excerpt: '[segment context from https://learn.microsoft.com/en-us/answers/questions/5975138/version-2607-powerpoint-crashing-when-using-an-add: 131.20154) it is working again, whilst the first Version of Version 2607 (Build 20228.20110) is not working. Using a different PC with the...'
+  captured_at: '2026-08-24T14:04:05Z'
+  source_date: '2026-08-17'
+  target_release_date: '2026-07-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '2607'
+  match_basis: exact_version_channel_build
+  applicability: microsoft-powerpoint
+  counted: true
+  exclusion_reason: null
+  issue_theme: add-in incompatibility
+  workflow_area: add-ins
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '20228.20110'
