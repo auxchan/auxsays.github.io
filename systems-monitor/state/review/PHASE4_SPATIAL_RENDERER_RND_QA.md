@@ -16,6 +16,8 @@ Stable-map camera swing and legible sublayers: **PENDING HUMAN VISUAL QA**
 
 Employment-centered orbital overview and Reset behavior: **PENDING HUMAN VISUAL QA**
 
+Symmetrical sublayer orbit and dedicated information guides: **PENDING HUMAN VISUAL QA**
+
 This review covers only the development-only structural renderer, spatial
 navigation, label hierarchy, node grammar, and Explore/Trace interaction.
 `HUMAN_PHASE4_MOTION_QA` remains **PENDING**.
@@ -266,6 +268,32 @@ The parallax spring is materially more responsive and more strongly damped,
 reducing cursor lag without increasing its bounded travel. Reduced-motion mode
 continues to disable parallax movement.
 
+## Taylor correction — sublayer scale, symmetry, and information depth
+
+Taylor found the sublayers still too small, visually scattered, and
+functionally incomplete because selecting one merely reopened its parent guide.
+
+The eighteen sublayers now use 60-pixel pointer and keyboard targets with
+distinct line icons, materially larger labels, and stronger tethers. Each
+parent's two sublayers are computed as a matched pair on the outward side of
+the Employment-centered orbital layout. Their distance from the parent and
+their tangent spacing are equal, replacing the prior collection of unrelated
+manual offsets with one consistent visual grammar.
+
+Every sublayer now owns a concise guide state containing:
+
+1. a plain-language definition;
+2. what the sublayer tracks;
+3. why it matters;
+4. how it relates to its parent core factor; and
+5. a direct action back to the parent factor guide.
+
+The guide retains the parent's licensed contextual image and role color while
+displaying a distinct sublayer icon and identity. The breadcrumb records the
+parent and selected sublayer separately. All eighteen explanations are
+development-only TEST_FIXTURE educational copy; they are not factual data,
+accepted structural relationships, or public claims.
+
 ## Local review
 
 ```text
@@ -347,6 +375,15 @@ http://127.0.0.1:4174/systems-monitor/?view=summary
 25. **Parallax response:** move the pointer through the graph and confirm the
    depth field responds promptly, settles quickly, and does not trail the cursor
    with the prior sluggish feel.
+26. **Sublayer scale:** confirm all eighteen sublayers are easy to see and select
+   at the default overview without precision clicking.
+27. **Sublayer symmetry:** confirm each core factor's two sublayers read as one
+   balanced outward-facing pair rather than scattered annotations.
+28. **Sublayer guide:** select Refinery utilization, Grid reliability, Truck
+   capacity, and Hours worked. Confirm each opens its own definition, tracking,
+   impact, and parent-relationship explanation.
+29. **Parent return:** use View the parent factor from a sublayer guide and
+   confirm the panel changes to the parent without an unnecessary camera jump.
 
 ## Taylor checklist
 

@@ -6,6 +6,7 @@ import { SystemsMonitorApp } from "../src/app/SystemsMonitorApp";
 import { motionOutcomes, validateMotionQaReadModel } from "../src/data/motionQaReadModel";
 import { applyStructuralViewport, blendConnectorColor, connectorGlintProgress, createStructuralCamera, easeConnectorHover, interpolateCamera, MAX_STRUCTURAL_ZOOM, MIN_STRUCTURAL_ZOOM, outcomeTravel, projectNode, resolveStructuralDepths, resolveStructuralDepthVisual, sampleRelationship, stepSpringParallax, zoomStructuralViewportAt } from "../src/views/motion/structuralRenderer";
 import { layoutEmploymentOrbit, layoutSpatialLabels, layoutSpatialNodes, MAX_VISIBLE_RELATIONSHIPS, nextNodeInDirection, resolveSpatialViewport } from "../src/views/motion/spatialNavigation";
+import { layoutStructuralContextFactors, structuralContextFactors } from "../src/views/motion/structuralContextFactors";
 import { candidate } from "./factualCandidate.test";
 
 const standardMatchMedia = (query: string) => ({ matches: false, media: query, onchange: null, addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {}, dispatchEvent: () => false });
@@ -301,7 +302,7 @@ describe("development-only structural Motion QA harness", () => {
     expect(Number(document.querySelector('.sm-viz-surface')?.getAttribute("data-visible-relationship-count"))).toBeLessThanOrEqual(MAX_VISIBLE_RELATIONSHIPS);
   });
 
-  it("shows real synthetic underlying factors and lets them open their parent factor", async () => {
+  it("shows legible synthetic sublayers with their own information panels", async () => {
     await renderReducedHarness();
     const surface = document.querySelector<HTMLElement>(".sm-viz-surface")!;
     const factors = [...document.querySelectorAll<HTMLButtonElement>("[data-context-factor-id]")];
@@ -312,14 +313,39 @@ describe("development-only structural Motion QA harness", () => {
     expect(surface.dataset.visibleRelationshipIds).toContain("fixture-edge-09");
     expect(surface.dataset.visibleRelationshipIds).toContain("fixture-edge-11");
     expect(factors).toHaveLength(18);
+    expect(factors.every((factor) => factor.querySelector("svg"))).toBe(true);
     expect(new Set(factors.map((factor) => factor.dataset.contextFactorDepth)).size).toBeGreaterThan(4);
     const utilization = document.querySelector<HTMLButtonElement>('[data-context-factor-id="context-utilization"]')!;
     fireEvent.pointerEnter(utilization);
     expect(surface.dataset.hoveredNodeId).toBe("fixture-producer");
-    expect(utilization.getAttribute("aria-hidden")).toBe("false");
+    expect(utilization.tabIndex).toBe(0);
     fireEvent.click(utilization);
-    expect(screen.getByRole("complementary", { name: "Selected factor guide" }).textContent).toContain("Refinery utilization");
-    expect(screen.getByRole("complementary", { name: "Selected factor guide" }).textContent).toContain("Maintenance capacity");
+    const guide = screen.getByRole("complementary", { name: "Selected factor guide" });
+    expect(guide.getAttribute("data-selected-context-factor-id")).toBe("context-utilization");
+    expect(guide.textContent).toContain("Refinery utilization");
+    expect(guide.textContent).toContain("The share of available refining capacity currently in use.");
+    expect(guide.textContent).toContain("How it connects to Refining");
+    expect(surface.dataset.selectedContextFactorId).toBe("context-utilization");
+    fireEvent.click(screen.getByRole("button", { name: "View the parent factor" }));
+    expect(guide.getAttribute("data-selected-context-factor-id")).toBe("");
+    expect(guide.textContent).toContain("Petroleum Refining");
+    expect(guide.textContent).toContain("Maintenance capacity");
+  });
+
+  it("keeps every sublayer informative and arranges each pair symmetrically outside its parent", () => {
+    expect(structuralContextFactors).toHaveLength(18);
+    expect(structuralContextFactors.every((factor) => Object.values(factor.insight).every((value) => value.trim().length > 24))).toBe(true);
+    const model = validateMotionQaReadModel(motionFixture);
+    const orbit = layoutEmploymentOrbit(model);
+    const camera = createStructuralCamera(1000, 620);
+    const layouts = layoutStructuralContextFactors(orbit, camera, resolveStructuralDepths({ ...model, nodes: orbit }), new Set(orbit.map((node) => node.id)));
+    for (const parent of orbit) {
+      const pair = layouts.filter((factor) => factor.parentNodeId === parent.id);
+      expect(pair).toHaveLength(2);
+      const projectedParent = projectNode(parent, camera);
+      const distances = pair.map((factor) => Math.hypot(factor.x - projectedParent.x, factor.y - projectedParent.y));
+      expect(Math.abs(distances[0] - distances[1])).toBeLessThan(0.01);
+    }
   });
 
   it("keeps the primary delayed route visibly connected to Employment in overview", () => {

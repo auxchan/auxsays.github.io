@@ -5,6 +5,7 @@ import type { RouteState } from "../../state/routeSchema";
 import { CanvasStructuralSurface } from "./CanvasStructuralSurface";
 import { NodeInsightPanel } from "./NodeInsightPanel";
 import { resolveSpatialViewport } from "./spatialNavigation";
+import { structuralContextFactors } from "./structuralContextFactors";
 import "./motionRenderer.css";
 
 const outcomeLabels: Record<MotionOutcome, string> = {
@@ -36,6 +37,7 @@ function MotionGraph({ model }: { model: MotionQaReadModel }) {
   const [labelsHidden, setLabelsHidden] = useState(false);
   const [traceMode, setTraceMode] = useState(false);
   const [focusHistory, setFocusHistory] = useState<string[]>([]);
+  const [selectedContextFactorId, setSelectedContextFactorId] = useState<string | null>(null);
   const restoreFocus = useRef<HTMLButtonElement | null>(null);
   const cameraResumeTimer = useRef<number | null>(null);
   const path = model.paths.find((item) => item.id === pathId) ?? model.paths[0];
@@ -65,6 +67,7 @@ function MotionGraph({ model }: { model: MotionQaReadModel }) {
   });
   const selectedNodeId = focusHistory.at(-1) ?? null;
   const selectedNode = selectedNodeId ? nodes.get(selectedNodeId) : undefined;
+  const selectedContextFactor = structuralContextFactors.find((factor) => factor.id === selectedContextFactorId) ?? null;
   const viewport = useMemo(() => resolveSpatialViewport(model, selectedNodeId, selectedNodeId ? new Set() : overviewEdgeIds), [model, selectedNodeId, overviewEdgeIds]);
   const exploreNodeStates = useMemo(() => new Map(model.nodes.map((node) => [node.id, node.currentState])), [model.nodes]);
   const surfaceCurrentEdges = traceMode ? currentEdges : [];
@@ -89,6 +92,11 @@ function MotionGraph({ model }: { model: MotionQaReadModel }) {
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
+      if (event.key === "Escape" && selectedContextFactorId) {
+        setSelectedContextFactorId(null);
+        window.requestAnimationFrame(() => restoreFocus.current?.focus());
+        return;
+      }
       if (event.key === "Escape" && selectedNodeId) {
         setFocusHistory((current) => current.slice(0, -1));
         window.requestAnimationFrame(() => restoreFocus.current?.focus());
@@ -96,7 +104,7 @@ function MotionGraph({ model }: { model: MotionQaReadModel }) {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [selectedNodeId]);
+  }, [selectedNodeId, selectedContextFactorId]);
 
   function choosePath(nextPathId: string) {
     setPathId(nextPathId);
@@ -107,6 +115,7 @@ function MotionGraph({ model }: { model: MotionQaReadModel }) {
 
   function selectNode(nodeId: string, target: HTMLButtonElement) {
     restoreFocus.current = target;
+    setSelectedContextFactorId(null);
     if (selectedNodeId === nodeId) return;
     const shouldResume = playing && !reducedMotion;
     setPlaying(false);
@@ -119,10 +128,26 @@ function MotionGraph({ model }: { model: MotionQaReadModel }) {
     if (shouldResume) cameraResumeTimer.current = window.setTimeout(() => setPlaying(true), 540);
   }
 
+  function selectContextFactor(factorId: string, parentNodeId: string, target: HTMLButtonElement) {
+    restoreFocus.current = target;
+    const shouldResume = playing && !reducedMotion;
+    setPlaying(false);
+    if (cameraResumeTimer.current !== null) window.clearTimeout(cameraResumeTimer.current);
+    setFocusHistory((current) => {
+      if (current.at(-1) === parentNodeId) return current;
+      const existing = current.indexOf(parentNodeId);
+      if (existing >= 0) return current.slice(0, existing + 1);
+      return current.length < 2 ? [...current, parentNodeId] : [current.at(-1)!, parentNodeId];
+    });
+    setSelectedContextFactorId(factorId);
+    if (shouldResume) cameraResumeTimer.current = window.setTimeout(() => setPlaying(true), 540);
+  }
+
   function navigateToDepth(depth: number) {
     const shouldResume = playing && !reducedMotion;
     setPlaying(false);
     if (cameraResumeTimer.current !== null) window.clearTimeout(cameraResumeTimer.current);
+    setSelectedContextFactorId(null);
     setFocusHistory((current) => current.slice(0, depth));
     if (shouldResume) cameraResumeTimer.current = window.setTimeout(() => setPlaying(true), 540);
   }
@@ -145,6 +170,7 @@ function MotionGraph({ model }: { model: MotionQaReadModel }) {
     setTraceMode(false);
     setPlaying(false);
     setStepIndex(-1);
+    setSelectedContextFactorId(null);
     setFocusHistory([]);
   }
 
@@ -155,13 +181,13 @@ function MotionGraph({ model }: { model: MotionQaReadModel }) {
   return <>
     <section className={`sm-viz-instrument ${selectedNode ? "has-focus" : ""}`} aria-label="Spatial structural motion prototype" data-label-independent={labelsHidden}>
       <header className="sm-viz-instrument__header">
-        <div><span>Structural surface / R&amp;D 02</span><strong>{selectedNode ? selectedNode.detailLabel : "Synthetic system overview"}</strong></div>
+        <div><span>Structural surface / R&amp;D 02</span><strong>{selectedContextFactor?.label ?? (selectedNode ? selectedNode.detailLabel : "Synthetic system overview")}</strong></div>
         <div className="sm-viz-status"><span><i aria-hidden="true" />{traceMode ? "Trace" : "Explore"}</span><span>{viewport.visibleRelationshipIds.size} links shown{viewport.additionalRelationshipCount ? ` / ${viewport.additionalRelationshipCount} additional` : ""}</span></div>
       </header>
-      <nav className="sm-viz-breadcrumbs" aria-label="Structural exploration history"><button type="button" aria-current={!selectedNode ? "location" : undefined} onClick={() => navigateToDepth(0)}>Synthetic system</button>{focusHistory.map((nodeId, index) => { const node = nodes.get(nodeId); return node ? <span key={`${nodeId}-${index}`}><i aria-hidden="true">›</i><button type="button" aria-current={index === focusHistory.length - 1 ? "location" : undefined} onClick={() => navigateToDepth(index + 1)}>{node.label}</button></span> : null; })}</nav>
+      <nav className="sm-viz-breadcrumbs" aria-label="Structural exploration history"><button type="button" aria-current={!selectedNode ? "location" : undefined} onClick={() => navigateToDepth(0)}>Synthetic system</button>{focusHistory.map((nodeId, index) => { const node = nodes.get(nodeId); return node ? <span key={`${nodeId}-${index}`}><i aria-hidden="true">›</i><button type="button" aria-current={index === focusHistory.length - 1 && !selectedContextFactor ? "location" : undefined} onClick={() => navigateToDepth(index + 1)}>{node.label}</button></span> : null; })}{selectedContextFactor && <span><i aria-hidden="true">›</i><button type="button" aria-current="location">{selectedContextFactor.label}</button></span>}</nav>
       <div className={`sm-viz-workspace ${selectedNode ? "has-guide" : ""}`}>
-        <NodeInsightPanel model={model} node={selectedNode ?? null} state={selectedNode ? nodeStates.get(selectedNode.id) ?? selectedNode.currentState : "IDLE"} onClose={() => navigateToDepth(0)} />
-        <CanvasStructuralSurface model={model} path={path} currentEdges={surfaceCurrentEdges} completedEdgeIds={surfaceCompletedEdgeIds} pathEdgeIds={surfacePathEdgeIds} nodeStates={surfaceNodeStates} selectedNodeId={selectedNodeId} focusDepth={focusHistory.length} viewport={viewport} traceMode={traceMode} reducedMotion={reducedMotion} reconciliationTargetId={traceMode ? reconciliationTargetId : null} onSelectNode={selectNode} onReset={resetView} />
+        <NodeInsightPanel model={model} node={selectedNode ?? null} contextFactor={selectedContextFactor} state={selectedNode ? nodeStates.get(selectedNode.id) ?? selectedNode.currentState : "IDLE"} onClose={() => navigateToDepth(0)} onSelectParent={() => setSelectedContextFactorId(null)} />
+        <CanvasStructuralSurface model={model} path={path} currentEdges={surfaceCurrentEdges} completedEdgeIds={surfaceCompletedEdgeIds} pathEdgeIds={surfacePathEdgeIds} nodeStates={surfaceNodeStates} selectedNodeId={selectedNodeId} selectedContextFactorId={selectedContextFactorId} focusDepth={focusHistory.length} viewport={viewport} traceMode={traceMode} reducedMotion={reducedMotion} reconciliationTargetId={traceMode ? reconciliationTargetId : null} onSelectNode={selectNode} onSelectContextFactor={selectContextFactor} onReset={resetView} />
       </div>
       {traceMode && <div className="sm-viz-readout" hidden={labelsHidden}><p className="sm-motion-live" role="status" aria-live="polite" hidden={labelsHidden}>{currentSummary}</p><div className="sm-viz-legend sm-motion-legend" aria-label="Transmission outcome legend" hidden={labelsHidden}><span><i className="is-flow" />Flow</span><span><i className="is-hold" />Hold</span><span><i className="is-constraint" />Constraint</span><span><i className="is-amplified" />Amplification</span></div></div>}
     </section>

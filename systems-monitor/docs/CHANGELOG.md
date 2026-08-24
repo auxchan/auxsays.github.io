@@ -1,5 +1,23 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-23 — Symmetrical sublayer orbit and dedicated factor guides
+
+- Replaced the eighteen tiny dot-style sublayers with 60-pixel interaction
+  targets, distinct line icons, larger labels, and stronger parent tethers.
+- Recalculated every two-factor sublayer group as a matched pair positioned
+  outward from its parent on the Employment-centered orbit. Pair distance and
+  spacing are deterministic rather than hand-scattered around the canvas.
+- Added a dedicated information state for every sublayer: plain-language
+  definition, what it tracks, why it matters, and how it relates to its parent
+  core factor. Selecting a sublayer now opens that information instead of
+  redirecting to the generic parent panel.
+- Added sublayer selection emphasis, breadcrumb identity, unique iconography,
+  parent-photo context treatment, and a direct return to the parent guide.
+- All new explanatory copy remains inside the development-only TEST_FIXTURE
+  laboratory. No factual values, accepted relationships, evidence, or
+  production UI were changed. Human spatial-renderer and Motion QA remain
+  PENDING.
+
 ## 2026-08-23 — Employment-centered orbital overview and faster reset navigation
 
 - Reorganized the persistent visual map around Employment as its central anchor,
