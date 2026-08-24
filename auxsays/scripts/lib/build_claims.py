@@ -79,6 +79,11 @@ BASIS_CONTRADICTORY = "contradictory_role_claims"
 # named", so it cannot slip through the single-build shortcut below.
 _NON_NAMING_BASES = frozenset({BASIS_FOREIGN_APP_CRASH_RECORD})
 
+# Roles that POSITIVELY establish a build is not the one the report is about. "Only one build is
+# named" means nothing is numerically ambiguous; it does not overrule the author having said the
+# build was the one they rolled back TO, or the one on somebody else's machine.
+_NON_CURRENT_ROLES = frozenset({ROLE_ROLLBACK_PREVIOUS, ROLE_REFERENCE_OTHER})
+
 # --- cue grammars ------------------------------------------------------------
 # Every cue must be EXPLICIT author language sitting in the same clause as the build. `%B` is
 # substituted with the specific build being classified, so a cue can never be credited to a build
@@ -338,14 +343,25 @@ def select_current_failing_build(claims: list[BuildClaim]) -> tuple[str, str, st
 
 
 def single_named_build(claims: list[BuildClaim]) -> str:
-    """The build named by a text that names exactly one, regardless of role.
+    """The one build a single-build text is ABOUT, or nothing.
 
-    A report that mentions one build has nothing to disambiguate: there is no competing build to
-    pick wrongly. This keeps every existing single-build report behaving exactly as before the role
-    classifier existed.
+    A report that mentions one build has nothing NUMERICALLY to disambiguate, so an unlabelled
+    single build behaves exactly as it did before the role classifier existed. But "only one build
+    exists" is not a licence to ignore what the author said about it. If the classifier positively
+    established that build as the one they rolled back TO, or as one running on somebody else's
+    machine, or if they said two contradictory things about it, then the report demonstrates no
+    current/failing build at all -- and being the only candidate does not make it one.
 
     A build that was never actually NAMED -- one that exists only inside another application's crash
-    record -- does not count as the report's build. Otherwise an Excel fault block would satisfy
-    PowerPoint's exact-build requirement through this shortcut."""
+    record -- likewise does not count. Otherwise an Excel fault block would satisfy PowerPoint's
+    exact-build requirement through this shortcut."""
     builds = {c.build for c in claims if c.match_basis not in _NON_NAMING_BASES}
-    return next(iter(builds)) if len(builds) == 1 else ""
+    if len(builds) != 1:
+        return ""
+    build = next(iter(builds))
+    for claim in claims:
+        if claim.build != build:
+            continue
+        if claim.role in _NON_CURRENT_ROLES or claim.match_basis == BASIS_CONTRADICTORY:
+            return ""
+    return build

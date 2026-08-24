@@ -316,13 +316,23 @@ def resolve_candidate(candidate: dict[str, Any], rejection_reason: str, *,
         else:
             outcome.resolution_result = NO_EXPLICIT_BUILD
             outcome.detail = "this reporter's own segment states no full build"
-    elif len(set(builds)) == 1:
-        # One build named: nothing to disambiguate, so this behaves exactly as it always has.
+    elif single_named_build(claims):
+        # One build named and nothing said to rule it out: behaves exactly as it always has.
+        named = single_named_build(claims)
         outcome.explicit_build_found = True
-        outcome.resolved_build = builds[0]
+        outcome.resolved_build = named
         outcome.resolution_result = RESOLVED_EXACT_BUILD
         outcome.resolution_match_basis = f"explicit_build_in_own_{segment.segment_type}_segment"
-        outcome.provenance_excerpt = _excerpt(segment.segment_text, builds[0])
+        outcome.provenance_excerpt = _excerpt(segment.segment_text, named)
+    elif len(set(builds)) == 1:
+        # The ONLY build named, and its own author positively placed it somewhere other than the
+        # current/failing role -- rolled back to, on another machine, or contradicted. Being the
+        # only candidate does not make it the one the report is about, and inventing an unstated
+        # current build is exactly what this stage may not do. Nothing resolves.
+        outcome.resolution_result = NO_EXPLICIT_BUILD
+        outcome.resolved_build = ""
+        outcome.detail = ("the only build named is explicitly not the current/failing one: "
+                          + "; ".join(f"{c.build}={c.role}({c.match_basis})" for c in claims))
     else:
         # Several builds in the reporter's OWN segment. Their author may have said which is which:
         # "on 2607 (Build A) it crashes, I rolled back to Build B and it works" names A as current

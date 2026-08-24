@@ -309,8 +309,10 @@ def run() -> int:  # noqa: PLR0915
               (r.get("counted") is True) == expect, str(r.get("exclusion_reason")))
     check("L a lone build with NO role language still counts (nothing to disambiguate)",
           row(f"PowerPoint {VERSION} crashes on save. Build {BUILD}.").get("counted") is True)
-    check("L single_named_build reports the one build regardless of role",
-          bc.single_named_build(bc.extract_build_claims(f"rolled back to {BUILD}")) == BUILD)
+    check("L the shortcut still returns a lone build with no role stated",
+          bc.single_named_build(bc.extract_build_claims(f"Build {BUILD}.")) == BUILD)
+    check("L but NOT a lone build the author placed elsewhere (see O/P/Q)",
+          bc.single_named_build(bc.extract_build_claims(f"rolled back to {BUILD}")) == "")
 
     # ================= M: other products =================
     print("\n[M] non-PowerPoint products are untouched")
@@ -348,6 +350,96 @@ def run() -> int:  # noqa: PLR0915
     check("N the primitive imports only the standard library",
           "import openai" not in src and "langgraph" not in src.lower()
           and "anthropic" not in src.lower())
+
+    # ============ O-S: the single-build shortcut respects roles ============
+    # "Only one build is named" means nothing is NUMERICALLY ambiguous. It does not overrule the
+    # author having positively placed that build somewhere other than the current/failing role.
+    print("\n[O] a single ROLLBACK build must not satisfy the exact-build gate")
+    text_o = (f"PowerPoint Version {VERSION} keeps crashing on save. "
+              f"I rolled back to Build {BUILD} and everything works.")
+    claims = bc.extract_build_claims(text_o)
+    check("O the build is classified rollback_previous",
+          [c.role for c in claims] == [bc.ROLE_ROLLBACK_PREVIOUS],
+          str([(c.build, c.role) for c in claims]))
+    check("O single_named_build refuses it", bc.single_named_build(claims) == "")
+    check("O build_check reports no usable build",
+          ppt.build_check(text_o, BUILD) == (None, False), str(ppt.build_check(text_o, BUILD)))
+    o_row = row(text_o)
+    check("O the authority does NOT count it", o_row.get("counted") is False, str(o_row))
+    check("O refused as missing_exact_build",
+          o_row.get("exclusion_reason") == "missing_exact_build", str(o_row.get("exclusion_reason")))
+    check("O no build is stamped on the row", not o_row.get("target_build"))
+
+    print("\n[P] a single REFERENCE-OTHER build must not satisfy the exact-build gate")
+    text_p = (f"PowerPoint Version {VERSION} crashes on save for me. "
+              f"A different PC on Build {BUILD} works fine.")
+    claims = bc.extract_build_claims(text_p)
+    check("P the build is classified reference_other",
+          [c.role for c in claims] == [bc.ROLE_REFERENCE_OTHER],
+          str([(c.build, c.role) for c in claims]))
+    check("P single_named_build refuses it", bc.single_named_build(claims) == "")
+    p_row = row(text_p)
+    check("P the authority does NOT count it", p_row.get("counted") is False, str(p_row))
+    check("P refused as missing_exact_build",
+          p_row.get("exclusion_reason") == "missing_exact_build", str(p_row.get("exclusion_reason")))
+
+    print("\n[Q] a single build with CONTRADICTORY claims must not satisfy the gate")
+    text_q = (f"PowerPoint Version {VERSION}: Build {BUILD} crashes on save, "
+              f"but I rolled back to Build {BUILD} and it works again.")
+    claims = bc.extract_build_claims(text_q)
+    check("Q the build is ambiguous on the contradictory basis",
+          [(c.role, c.match_basis) for c in claims]
+          == [(bc.ROLE_AMBIGUOUS, bc.BASIS_CONTRADICTORY)],
+          str([(c.build, c.role, c.match_basis) for c in claims]))
+    check("Q single_named_build refuses it", bc.single_named_build(claims) == "")
+    q_row = row(text_q)
+    check("Q the authority does NOT count it", q_row.get("counted") is False, str(q_row))
+
+    print("\n[R] a single CURRENT/FAILING build is accepted when the other gates pass")
+    text_r = (f"PowerPoint Version {VERSION} (Build {BUILD}) crashes on save every time "
+              f"since the update.")
+    claims = bc.extract_build_claims(text_r)
+    check("R the build is classified current_failing",
+          [c.role for c in claims] == [bc.ROLE_CURRENT_FAILING],
+          str([(c.build, c.role) for c in claims]))
+    check("R single_named_build returns it", bc.single_named_build(claims) == BUILD)
+    r_row = row(text_r)
+    check("R the authority COUNTS it", r_row.get("counted") is True, str(r_row))
+    check("R the row carries the exact build", r_row.get("target_build") == BUILD)
+
+    print("\n[S] an ordinary legacy single-build report is unchanged")
+    text_s = (f"PowerPoint {VERSION} crashes on save after the update. Build {BUILD}.")
+    claims = bc.extract_build_claims(text_s)
+    check("S no role is stated, so the build stays ambiguous/no_role_stated",
+          [(c.role, c.match_basis) for c in claims]
+          == [(bc.ROLE_AMBIGUOUS, bc.BASIS_NO_ROLE_STATED)],
+          str([(c.build, c.role, c.match_basis) for c in claims]))
+    check("S the legacy shortcut still returns it", bc.single_named_build(claims) == BUILD)
+    s_row = row(text_s)
+    check("S the authority still COUNTS it", s_row.get("counted") is True, str(s_row))
+    check("S the row carries the exact build", s_row.get("target_build") == BUILD)
+    check("S a legacy single build that is NOT the target still mismatches",
+          ppt.build_check(f"PowerPoint {VERSION} crashes. Build {THIRD}.", BUILD)
+          == ("build_mismatch", False))
+
+    print("\n[O/P/Q via context resolution] resolution cannot revive them either")
+    for label, body in (("O rollback", text_o), ("P reference", text_p), ("Q contradictory", text_q)):
+        out, budget, cand = resolve(qapage(body))
+        check(f"{label}: the stage does not report a resolved build",
+              out.resolution_result != cr.RESOLVED_EXACT_BUILD and out.resolved_build == "",
+              f"{out.resolution_result} {out.resolved_build} :: {out.detail}")
+        after = row_from(cr.augmented_candidate(cand, out))
+        check(f"{label}: still not counted after resolution", after.get("counted") is False,
+              str(after.get("exclusion_reason")))
+        check(f"{label}: no build reaches the row", not after.get("target_build"))
+
+    print("\n[R via context resolution] a single current build still resolves and counts")
+    out, budget, cand = resolve(qapage(text_r))
+    check("R resolves through the stage",
+          out.resolution_result == cr.RESOLVED_EXACT_BUILD and out.resolved_build == BUILD,
+          f"{out.resolution_result} {out.detail}")
+    check("R counts after re-evaluation",
+          row_from(cr.augmented_candidate(cand, out)).get("counted") is True)
 
     # ================= fail-closed doctrine =================
     print("\n[doctrine] what role attribution must never do")
