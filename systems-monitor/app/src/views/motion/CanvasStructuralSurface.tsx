@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties, type PointerEvent as ReactPointerEvent } from "react";
 import type { MotionQaNode, MotionQaPath, MotionQaReadModel, MotionQaRelationship } from "../../data/motionQaReadModel";
-import { applyStructuralViewport, CanvasStructuralRenderer, createStructuralCamera, projectNode, resolveStructuralDepths, resolveStructuralDepthVisual, zoomStructuralViewportAt, type StructuralViewportTransform } from "./structuralRenderer";
-import { layoutSpatialLabels, layoutSpatialNodes, nextNodeInDirection, type SpatialViewport } from "./spatialNavigation";
+import { applyStructuralViewport, CanvasStructuralRenderer, createStructuralCamera, projectNode, resolveStructuralDepths, resolveStructuralDepthVisual, STRUCTURAL_PARTICLES_PER_NODE, zoomStructuralViewportAt, type StructuralViewportTransform } from "./structuralRenderer";
+import { layoutSpatialLabels, nextNodeInDirection, type SpatialViewport } from "./spatialNavigation";
 import { StructuralNodeIcon } from "./StructuralNodeIcon";
 import { layoutStructuralContextFactors } from "./structuralContextFactors";
 import { resolveStructuralNodeVisual } from "./structuralVisualLanguage";
@@ -41,7 +41,7 @@ export function CanvasStructuralSurface({ model, path, currentEdges, completedEd
   const [viewportTransform, setViewportTransform] = useState<StructuralViewportTransform>(DEFAULT_VIEWPORT);
   const [panning, setPanning] = useState(false);
   const [wheelActive, setWheelActive] = useState(false);
-  const spatialNodes = useMemo(() => traceMode ? model.nodes.map((node) => ({ ...node })) : layoutSpatialNodes(model, viewport), [model, viewport, traceMode]);
+  const spatialNodes = useMemo(() => model.nodes.map((node) => ({ ...node })), [model]);
   const spatialModel = useMemo(() => ({ ...model, nodes: spatialNodes }), [model, spatialNodes]);
   const nodes = useMemo(() => new Map(spatialNodes.map((node) => [node.id, node])), [spatialNodes]);
   const selectedNode = selectedNodeId ? nodes.get(selectedNodeId) : undefined;
@@ -142,7 +142,7 @@ export function CanvasStructuralSurface({ model, path, currentEdges, completedEd
     setPanning(false);
   }
 
-  return <div ref={hostRef} className={`sm-viz-surface ${panning || wheelActive ? "is-manipulating" : ""} ${panning ? "is-panning" : ""}`} data-structural-renderer="canvas-rd" data-depth-field={reducedMotion ? "static" : "spring-parallax"} data-context-factor-count={contextFactorLayouts.length} data-trace-mode={traceMode} data-focus-depth={focusDepth} data-visible-relationship-count={viewport.visibleRelationshipIds.size} data-visible-relationship-ids={[...viewport.visibleRelationshipIds].join(" ")} data-hovered-node-id={hoveredNodeId ?? ""} data-connector-motion={reducedMotion ? "static" : traceMode ? "trace" : "ambient"} data-viewport-zoom={viewportTransform.zoom.toFixed(3)} data-viewport-pan-x={Math.round(viewportTransform.panX)} data-viewport-pan-y={Math.round(viewportTransform.panY)} onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerLeave={() => { if (!panSession.current) parallaxTarget.current = { x: 0, y: 0 }; }} onPointerUp={endPan} onPointerCancel={endPan} onMouseDown={(event) => { if (event.button === 1) event.preventDefault(); }} onAuxClick={(event) => { if (event.button === 1) event.preventDefault(); }}>
+  return <div ref={hostRef} className={`sm-viz-surface ${panning || wheelActive ? "is-manipulating" : ""} ${panning ? "is-panning" : ""}`} data-structural-renderer="canvas-rd" data-depth-field={reducedMotion ? "static" : "spring-parallax"} data-depth-particle-count={spatialNodes.length * STRUCTURAL_PARTICLES_PER_NODE} data-camera-motion="stable-map-swing-focus" data-context-factor-count={contextFactorLayouts.length} data-trace-mode={traceMode} data-focus-depth={focusDepth} data-visible-relationship-count={viewport.visibleRelationshipIds.size} data-visible-relationship-ids={[...viewport.visibleRelationshipIds].join(" ")} data-hovered-node-id={hoveredNodeId ?? ""} data-connector-motion={reducedMotion ? "static" : traceMode ? "trace" : "ambient"} data-viewport-zoom={viewportTransform.zoom.toFixed(3)} data-viewport-pan-x={Math.round(viewportTransform.panX)} data-viewport-pan-y={Math.round(viewportTransform.panY)} onPointerDown={handlePointerDown} onPointerMove={handlePointerMove} onPointerLeave={() => { if (!panSession.current) parallaxTarget.current = { x: 0, y: 0 }; }} onPointerUp={endPan} onPointerCancel={endPan} onMouseDown={(event) => { if (event.button === 1) event.preventDefault(); }} onAuxClick={(event) => { if (event.button === 1) event.preventDefault(); }}>
     <canvas ref={canvasRef} className="sm-viz-canvas" role="img" aria-label="Synthetic structural pressure surface with spatial neighborhoods and continuous routed dependencies" data-renderer-surface="canvas" />
     <p className="sm-sr-only">The canvas is supplemented by keyboard-accessible node controls and a complete structured relationship list. Mouse wheel zooms. Hold the middle mouse button and drag to pan.</p>
     <svg className="sm-viz-context-links" width={size.width} height={size.height} aria-hidden="true">{contextFactorLayouts.map((factor) => {

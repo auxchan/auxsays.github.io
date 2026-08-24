@@ -16,6 +16,8 @@ export interface StructuralViewportTransform {
 export const MIN_STRUCTURAL_ZOOM = 0.7;
 export const MAX_STRUCTURAL_ZOOM = 2.4;
 export const CONNECTOR_GLINT_PERIOD_MS = 2500;
+export const STRUCTURAL_CAMERA_TRANSITION_MS = 760;
+export const STRUCTURAL_PARTICLES_PER_NODE = 8;
 
 export interface StructuralDepthVisual {
   scale: number;
@@ -150,7 +152,7 @@ const outcomeColors: Record<MotionOutcome, string> = {
 
 export function createStructuralCamera(width: number, height: number, selected?: MotionQaNode, focusDepth = 0): StructuralCamera {
   const baseScale = Math.min((width - 52) / DESIGN_WIDTH, (height - 44) / DESIGN_HEIGHT);
-  const scale = baseScale * (selected ? Math.min(1.58, 1.42 + Math.max(0, focusDepth - 1) * 0.08) : 1);
+  const scale = baseScale * (selected ? Math.min(1.82, 1.64 + Math.max(0, focusDepth - 1) * 0.08) : 1);
   if (selected) {
     return {
       scale,
@@ -167,11 +169,17 @@ export function createStructuralCamera(width: number, height: number, selected?:
 
 export function interpolateCamera(from: StructuralCamera, to: StructuralCamera, progress: number): StructuralCamera {
   const clamped = Math.max(0, Math.min(1, progress));
-  const eased = 1 - (1 - clamped) ** 3;
+  const eased = clamped * clamped * (3 - 2 * clamped);
+  const deltaX = to.offsetX - from.offsetX;
+  const deltaY = to.offsetY - from.offsetY;
+  const distance = Math.hypot(deltaX, deltaY);
+  const arc = Math.sin(Math.PI * clamped) * Math.min(34, distance * 0.055);
+  const normalX = distance ? -deltaY / distance : 0;
+  const normalY = distance ? deltaX / distance : 0;
   return {
     scale: from.scale + (to.scale - from.scale) * eased,
-    offsetX: from.offsetX + (to.offsetX - from.offsetX) * eased,
-    offsetY: from.offsetY + (to.offsetY - from.offsetY) * eased
+    offsetX: from.offsetX + deltaX * eased + normalX * arc,
+    offsetY: from.offsetY + deltaY * eased + normalY * arc
   };
 }
 
@@ -401,17 +409,23 @@ function drawDepthField(context: CanvasRenderingContext2D, nodes: MotionQaNode[]
     context.save();
     context.fillStyle = visual.accent;
     context.shadowColor = visual.accent;
-    for (let index = 0; index < 4; index += 1) {
+    context.strokeStyle = visual.accent;
+    context.lineWidth = 0.65;
+    context.globalAlpha = Math.max(0.03, 0.075 - structuralDepth * 0.004);
+    context.beginPath();
+    context.ellipse(node.x + parallax.x * 5, node.y + parallax.y * 3.5, 72, 36, -0.18, 0, Math.PI * 2);
+    context.stroke();
+    for (let index = 0; index < STRUCTURAL_PARTICLES_PER_NODE; index += 1) {
       const seed = `${node.id}:${index}`;
       const layer = Math.min(10, Math.max(2, structuralDepth + 2 + Math.floor(seededUnit(`${seed}:layer`) * 7)));
       const baseAngle = seededUnit(`${seed}:angle`) * Math.PI * 2;
-      const drift = reducedMotion ? 0 : nowMs * (0.000012 + seededUnit(`${seed}:speed`) * 0.000016) * (index % 2 ? -1 : 1);
-      const radius = 44 + seededUnit(`${seed}:radius`) * 112;
-      const x = node.x + Math.cos(baseAngle + drift) * radius + parallax.x * layer * 2.2;
-      const y = node.y + Math.sin(baseAngle + drift) * radius * 0.58 + parallax.y * layer * 1.65;
-      const particleRadius = Math.max(0.45, 1.45 - layer * 0.075);
-      context.globalAlpha = Math.max(0.025, 0.092 - layer * 0.006);
-      context.shadowBlur = Math.max(1, 6 - layer * 0.35);
+      const drift = reducedMotion ? 0 : nowMs * (0.000018 + seededUnit(`${seed}:speed`) * 0.000025) * (index % 2 ? -1 : 1);
+      const radius = 38 + seededUnit(`${seed}:radius`) * 124;
+      const x = node.x + Math.cos(baseAngle + drift) * radius + parallax.x * layer * 3.8;
+      const y = node.y + Math.sin(baseAngle + drift) * radius * 0.58 + parallax.y * layer * 2.9;
+      const particleRadius = Math.max(0.8, 2.2 - layer * 0.105);
+      context.globalAlpha = Math.max(0.065, 0.18 - layer * 0.01);
+      context.shadowBlur = Math.max(3, 10 - layer * 0.5);
       context.beginPath();
       context.arc(x, y, particleRadius, 0, Math.PI * 2);
       context.fill();
@@ -486,7 +500,7 @@ export class CanvasStructuralRenderer implements StructuralRenderer {
       this.cameraStartedAt = state.nowMs;
       this.cameraKey = nextCameraKey;
     }
-    const cameraProgress = state.reducedMotion ? 1 : (state.nowMs - this.cameraStartedAt) / 520;
+    const cameraProgress = state.reducedMotion ? 1 : (state.nowMs - this.cameraStartedAt) / STRUCTURAL_CAMERA_TRANSITION_MS;
     this.camera = state.reducedMotion || !this.cameraFrom || !this.cameraTarget ? targetCamera : interpolateCamera(this.cameraFrom, this.cameraTarget, cameraProgress);
     const camera = applyStructuralViewport(this.camera, this.width, this.height, state.viewportTransform);
     const rawProgress = state.reducedMotion ? 1 : Math.min(1, state.elapsedMs / 680);

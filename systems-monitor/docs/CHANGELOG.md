@@ -1,5 +1,21 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-23 — Stable-map camera swing and legible sublayers
+
+- Replaced focus-time node relayout with a stable map coordinate system. Core
+  factors retain their spatial relationships while the camera performs a
+  760-millisecond curved zoom-and-pan into the selected factor.
+- Converted the factor guide to a left-side overlay so opening it no longer
+  compresses or repeatedly resizes the graph during the camera move.
+- Enlarged each subordinate-factor target to 44 CSS pixels, enlarged its visual
+  marker and label, and strengthened its tether to the parent core factor.
+- Increased the deterministic depth field from four to eight particles per core
+  node, added restrained orbital guides, and increased spring-parallax travel so
+  depth is perceptible rather than merely encoded.
+- Preserved reduced-motion behavior, fixed overview coordinates, relationship
+  semantics, and the development-only synthetic boundary.
+- Human spatial-renderer and Motion QA remain PENDING.
+
 ## 2026-08-23 — Interface-first overview and explicit underlying factors
 
 - Removed the oversized visible Summary hero from the development structural

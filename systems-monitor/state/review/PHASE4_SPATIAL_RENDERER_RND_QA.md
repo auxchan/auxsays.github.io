@@ -12,6 +12,8 @@ Layered depth and spring-parallax exploration field: **PENDING HUMAN VISUAL QA**
 
 Interface-first overview and explicit underlying factors: **PENDING HUMAN VISUAL QA**
 
+Stable-map camera swing and legible sublayers: **PENDING HUMAN VISUAL QA**
+
 This review covers only the development-only structural renderer, spatial
 navigation, label hierarchy, node grammar, and Explore/Trace interaction.
 `HUMAN_PHASE4_MOTION_QA` remains **PENDING**.
@@ -210,6 +212,33 @@ its route heading remains screen-reader accessible. The graph is placed directly
 after the compact product navigation, while Explore/Trace and playback controls
 now follow the interface. No factual subfactor values or relationships were
 invented for this visual correction.
+
+## Taylor correction — legibility, parallax, and camera continuity
+
+Taylor found the subordinate factors too small to read or select reliably, the
+particle/parallax field effectively invisible, and the selected-factor behavior
+closer to a graph relayout than a camera moving through one persistent space.
+
+The subordinate controls now provide a 44-pixel target while retaining a smaller
+visual hierarchy than the nine core factors. Their markers, labels, and parent
+tethers are materially stronger at rest and receive full emphasis on hover,
+focus, or parent selection.
+
+The deterministic field now draws eight depth particles per core node plus a
+quiet orbital guide. Particle size, alpha, glow, drift, and spring-parallax
+travel were raised to a visible but bounded range. Reduced motion continues to
+freeze drift and parallax while preserving the static depth cues.
+
+Most importantly, selection no longer recalculates the node map around a new
+center. The model retains one stable coordinate system. A 760-millisecond
+curved camera interpolation zooms and pans toward the selected factor, while
+the detail guide slides over the left edge without changing canvas width. This
+borrows the useful interaction principle of a hierarchical galaxy map—entering
+a closer level of one continuous space—without copying game artwork or UI.
+
+This remains a synthetic visual laboratory. The stronger depth cues and camera
+motion do not represent factual magnitude, causal strength, or accepted
+structural evidence.
 
 ## Local review
 

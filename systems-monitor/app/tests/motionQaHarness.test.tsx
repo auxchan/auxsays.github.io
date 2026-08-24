@@ -306,6 +306,8 @@ describe("development-only structural Motion QA harness", () => {
     const surface = document.querySelector<HTMLElement>(".sm-viz-surface")!;
     const factors = [...document.querySelectorAll<HTMLButtonElement>("[data-context-factor-id]")];
     expect(surface.dataset.contextFactorCount).toBe("18");
+    expect(surface.dataset.depthParticleCount).toBe("72");
+    expect(surface.dataset.cameraMotion).toBe("stable-map-swing-focus");
     expect(surface.dataset.visibleRelationshipIds).toContain("fixture-edge-09");
     expect(factors).toHaveLength(18);
     expect(new Set(factors.map((factor) => factor.dataset.contextFactorDepth)).size).toBeGreaterThan(4);
