@@ -507,23 +507,36 @@ class Pipeline:
             # from the primary discovery that produced the original candidates. Health is emitted
             # even when nothing resolved -- an honest zero is the point of the telemetry.
             key = pending[0][0]["patch_key"]
-            blocked = sum(1 for o in outcomes if o["resolution_result"]
-                          in (cr.FETCH_BLOCKED, cr.FETCH_BROKEN))
+            accepted_rows = resolved_rows + independent_rows
+            blocked = sum(1 for o in outcomes if o["resolution_result"] == cr.FETCH_BLOCKED)
+            broken = sum(1 for o in outcomes if o["resolution_result"] == cr.FETCH_BROKEN)
+            # Status must come from the SHARED vocabulary; anything outside it is normalized to
+            # "broken", which would report a healthy stage as a failure. "The source stated no
+            # usable build" is low_confidence, not broken -- a working method finding nothing.
+            if blocked and blocked + broken == len(outcomes):
+                status = "blocked"
+            elif broken and blocked + broken == len(outcomes):
+                status = "broken"
+            elif accepted_rows:
+                status = "success"
+            elif blocked or broken:
+                status = "partial"
+            else:
+                status = "low_confidence"
             state.method_results.append({
                 "method_id": cr.METHOD_ID, "role": "context_resolution",
                 "patch_key": key, "attempted": True, "fallback_reason": "",
-                "status": "blocked" if blocked and blocked == len(outcomes) else "ok",
-                "accepted_rows": resolved_rows + independent_rows,
+                "status": status,
+                "accepted_rows": accepted_rows,
                 "rejected_count": 0, "rejection_reasons": {}, "resolvable_rows": [],
                 "health_row": method_health_row(
                     product_id=key.split("|")[0], update_version=key.split("|")[1],
                     target_build=key.split("|")[2], method_id=cr.METHOD_ID,
-                    source_type="microsoft_learn_qna",
-                    status="blocked" if blocked and blocked == len(outcomes) else "ok",
+                    source_type="microsoft_learn_qna", status=status,
                     candidates_found=len(outcomes),
-                    accepted_reports=len(resolved_rows) + len(independent_rows),
+                    accepted_reports=len(accepted_rows),
                     rejected_reports=len(outcomes) - len(resolved_rows),
-                    blocked_reason="context_fetch_blocked" if blocked == len(outcomes) else None,
+                    blocked_reason="context_fetch_blocked" if blocked else None,
                     last_run=captured_at,
                     notes=f"segment-scoped exact-build resolution; fetches={budget.fetched}"),
             })
