@@ -14039,7 +14039,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: blackmagic-davinci-15-creator-forum-report-https-creativecow-net-forums-thread-failed-backup
   product_id: blackmagic-davinci
   update_version: '15'
@@ -14064,7 +14063,6 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
-
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5981187-remote-audio-with-rdp-broken-after-ins
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -14093,7 +14091,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5980571-registry-state-mismatch-after-kb512100
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -14150,7 +14147,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-powerpoint-2607-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5975138-version-2607-powerpoint-crashing-when
   product_id: microsoft-powerpoint
   update_version: '2607'
@@ -14177,3 +14173,24 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '20228.20110'
+- id: obs-studio-32-2-2-github-issue-13823
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13823
+  parent_title: 'PipeWire camera source: out.linesize[i] never set for planes > 0 — NV12 renders green'
+  report_title: 'PipeWire camera source: out.linesize[i] never set for planes > 0 — NV12 renders green'
+  report_text_excerpt: 'g System Info Other ### Other OS Linux Mint 22 (Ubuntu 24.04 base) ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/L9kCrW6cSQPcC08g ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The c'
+  captured_at: '2026-08-25T19:48:25Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: camera/source regression
+  workflow_area: camera source workflow
+  platform: linux
+  severity: medium
+  sentiment: negative
+  source_weight: 1
