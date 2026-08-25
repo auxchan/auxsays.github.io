@@ -59,4 +59,15 @@ evidence_state_label: Official source only
 official_source_captured: true
 confirmed_patch_specific_report_count: 0
 known_issues_present: null
+source_last_checked: '2026-08-25T02:43:49Z'
+official_body_last_checked: '2026-08-25T02:43:49Z'
+primary_official_source: https://www.figma.com/release-notes/
+fallback_official_sources:
+- https://forum.figma.com/product-updates-3
+official_source_attempts:
+- at: '2026-08-25T02:43:49Z'
+  url: https://www.figma.com/release-notes/?title=performance-improvements-to-make-your-workflows-faster
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
 ---
