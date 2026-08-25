@@ -58,4 +58,15 @@ evidence_state_label: Official source only
 official_source_captured: true
 confirmed_patch_specific_report_count: 0
 known_issues_present: null
+source_last_checked: '2026-08-25T08:02:22Z'
+official_body_last_checked: '2026-08-25T08:02:22Z'
+primary_official_source: https://www.figma.com/release-notes/
+fallback_official_sources:
+- https://forum.figma.com/product-updates-3
+official_source_attempts:
+- at: '2026-08-25T08:02:22Z'
+  url: https://www.figma.com/release-notes/?title=quality-of-life-updates-in-figjam
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
 ---

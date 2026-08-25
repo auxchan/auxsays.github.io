@@ -45,7 +45,7 @@ official_patch_notes_source_type: rss-feed
 official_patch_notes_capture_status: captured-from-rss-feed
 official_patch_notes_source_url: https://www.figma.com/release-notes/?title=figjam-is-your-coding-agents-whiteboard-now
 official_patch_notes_body: With new MCP tool updates and FigJam skills, you can now generate architecture diagrams, ERDs,
-  and more in FigJam directly from your coding agent â€” including into files you're already working in.
+  and more in FigJam directly from your coding agent — including into files you're already working in.
 official_checksums_body: ''
 official_checksums_capture_status: not-present
 consensus_match_policy: confirmed_patch_specific_reports_v1
@@ -59,4 +59,16 @@ evidence_state_label: Official source only
 official_source_captured: true
 confirmed_patch_specific_report_count: 0
 known_issues_present: null
+source_last_checked: '2026-08-25T08:02:22Z'
+official_body_last_checked: '2026-08-25T08:02:22Z'
+primary_official_source: https://www.figma.com/release-notes/
+fallback_official_sources:
+- https://forum.figma.com/product-updates-3
+official_source_attempts:
+- at: '2026-08-25T08:02:22Z'
+  url: https://www.figma.com/release-notes/?title=figjam-is-your-coding-agents-whiteboard-now
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+record_last_updated: '2026-08-25T08:02:22Z'
 ---
