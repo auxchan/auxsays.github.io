@@ -142,14 +142,22 @@ def _permalink_product_slug(permalink: str) -> str | None:
 
 
 def _permalink_build_segment(permalink: str) -> str:
-    """The exact-build segment of a build-aware permalink, or '' when the path carries none."""
+    """The exact-build segment of a build-aware permalink, or '' when the path carries none.
+
+    Delegates to the identity authority so the official-ingest write path and this validator read
+    the build out of a permalink the same way. The stricter shape/ownership parsing above still
+    runs first, so a hostile permalink is rejected before this is ever consulted."""
     segments = _permalink_segments(permalink)
     if not segments or len(segments) != 5:
         return ""
-    return segments[4]
+    return _identity_permalink_build_segment(permalink)
 
 
-from .patch_identity import is_build_aware, normalize_build, patch_key
+from .patch_identity import (
+    REASON_BUILD_MISSING, REASON_PERMALINK_BUILD_MISMATCH, REASON_PERMALINK_BUILD_UNEXPECTED,
+    build_identity_reason, is_build_aware, normalize_build, patch_key,
+)
+from .patch_identity import permalink_build_segment as _identity_permalink_build_segment
 
 
 class OwnershipViolation(Exception):
@@ -286,14 +294,16 @@ def validate_records(product_id: str, generated_dir: Path, mutated: set[Path],
         # already own. Every other product must still be exactly four segments.
         record_build = normalize_build(data.get("target_build"))
         permalink_build = _permalink_build_segment(permalink)
-        if is_build_aware(product_id):
-            if not record_build:
-                raise _violation("record_build_missing", f"collector '{product_id}' record has no exact target_build: {path.name}",
-                                 surface="record", product_id=product_id, version=version)
-            if permalink_build != record_build:
-                raise _violation("record_permalink_build_mismatch", f"collector '{product_id}' record permalink build {permalink_build!r} does not match target_build {record_build!r} ({path.name})",
-                                 surface="record", product_id=product_id, version=version)
-        elif permalink_build:
+        # The rule itself lives in the identity authority; the official-ingest write path applies
+        # the SAME function before writing. Only the violation message is lane-specific.
+        build_reason = build_identity_reason(product_id, version, record_build, permalink)
+        if build_reason == REASON_BUILD_MISSING:
+            raise _violation("record_build_missing", f"collector '{product_id}' record has no exact target_build: {path.name}",
+                             surface="record", product_id=product_id, version=version)
+        if build_reason == REASON_PERMALINK_BUILD_MISMATCH:
+            raise _violation("record_permalink_build_mismatch", f"collector '{product_id}' record permalink build {permalink_build!r} does not match target_build {record_build!r} ({path.name})",
+                             surface="record", product_id=product_id, version=version)
+        if build_reason == REASON_PERMALINK_BUILD_UNEXPECTED:
             raise _violation("record_permalink_build_unexpected", f"collector '{product_id}' is not build-aware but its permalink carries a build segment: {permalink!r} ({path.name})",
                              surface="record", product_id=product_id, version=version)
 
