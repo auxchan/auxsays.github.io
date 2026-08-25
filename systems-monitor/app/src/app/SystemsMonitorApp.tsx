@@ -12,7 +12,7 @@ const MotionQaHarness = lazy(() => import("../views/motion/MotionQaHarness").the
 class AppErrorBoundary extends Component<{ children: React.ReactNode }, { error: Error | null }> {
   state = { error: null } as { error: Error | null };
   static getDerivedStateFromError(error: Error) { return { error }; }
-  render() { return this.state.error ? <ErrorState title="Fixture validation failed" detail={this.state.error.message} /> : this.props.children; }
+  render() { return this.state.error ? <ErrorState title="Systems Monitor data validation failed" detail={this.state.error.message} /> : this.props.children; }
 }
 
 function ValidatedApp() {

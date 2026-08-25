@@ -36,6 +36,6 @@ export function FixtureNotice({ compact = false }: { compact?: boolean }) {
   return <div className={compact ? "sm-fixture-notice sm-fixture-notice--compact" : "sm-fixture-notice"} role="note"><strong>SYNTHETIC TEST DATA</strong><span>NOT A PUBLIC CLAIM</span></div>;
 }
 
-export function FactualCandidateNotice({ compact = false }: { compact?: boolean }) {
-  return <div className={compact ? "sm-fixture-notice sm-fixture-notice--compact" : "sm-fixture-notice"} role="note"><strong>LOCAL FACTUAL CANDIDATE</strong><span>NOT PUBLICLY ACTIVATED · HUMAN QA PENDING</span></div>;
+export function FactualCandidateNotice({ compact = false, active = false }: { compact?: boolean; active?: boolean }) {
+  return <div className={compact ? "sm-fixture-notice sm-fixture-notice--compact" : "sm-fixture-notice"} role="note"><strong>{active ? "LOCAL FACTUAL SNAPSHOT" : "LOCAL FACTUAL CANDIDATE"}</strong><span>{active ? "LOCAL REVIEW · HUMAN QA PENDING" : "NOT PUBLICLY ACTIVATED · HUMAN QA PENDING"}</span></div>;
 }

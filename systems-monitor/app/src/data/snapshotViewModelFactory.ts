@@ -5,6 +5,7 @@ import type {
   PublicSnapshot,
   SnapshotViewModel
 } from "./publicSnapshotTypes";
+import { attachLaborMarketHierarchy } from "./laborMarketReadModel";
 
 function resolveNodes(roots: PublicNavigationNode[], registry: Record<string, PublicNavigationNode>): NavigationNode[] {
   function resolve(node: PublicNavigationNode): NavigationNode {
@@ -16,15 +17,15 @@ function resolveNodes(roots: PublicNavigationNode[], registry: Record<string, Pu
 }
 
 export function createSnapshotViewModel(snapshot: PublicSnapshot): SnapshotViewModel {
-  return {
+  return attachLaborMarketHierarchy({
     ...snapshot,
     systems: resolveNodes(snapshot.systems, snapshot.extensions["auxsays.phase2.navigationNodes"])
-  };
+  });
 }
 
 export function createCandidateViewModel(candidate: PublicationCandidate): SnapshotViewModel {
   const metadata = candidate.candidate;
-  return {
+  return attachLaborMarketHierarchy({
     schemaVersion: metadata.targetSchemaVersion,
     contractVersion: metadata.targetContractVersion,
     snapshot: {
@@ -37,5 +38,5 @@ export function createCandidateViewModel(candidate: PublicationCandidate): Snaps
     },
     ...candidate.payload,
     systems: resolveNodes(candidate.payload.systems, candidate.payload.extensions["auxsays.phase2.navigationNodes"])
-  };
+  });
 }

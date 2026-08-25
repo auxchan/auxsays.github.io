@@ -164,7 +164,7 @@ describe("Phase-3 factual public PDI candidate", () => {
     const value = candidate();
     expect(value.payload.systems[0].childRefs).toHaveLength(6);
     expect(value.payload.systems[0]).not.toHaveProperty("children");
-    expect(createCandidateViewModel(validatePublicationCandidate(value)).systems[0].children).toHaveLength(6);
+    expect(createCandidateViewModel(validatePublicationCandidate(value)).systems[0].children).toHaveLength(10);
   });
 
   it("rejects embedded public children", () => {

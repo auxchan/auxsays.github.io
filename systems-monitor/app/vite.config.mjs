@@ -26,6 +26,18 @@ function localPhase4bCheckpoint() {
       const loopbackOnly = host === "127.0.0.1" || host === "localhost" || host === "::1";
       server.middlewares.use((request, response, next) => {
         const pathname = (request.url ?? "").split("?", 1)[0];
+        if (pathname.endsWith("/__local-review/workstream1a")) {
+          if (!loopbackOnly) {
+            response.statusCode = 403;
+            response.end("Workstream 1A review requires a loopback-only development server.");
+            return;
+          }
+          response.statusCode = 200;
+          response.setHeader("Content-Type", "text/html; charset=utf-8");
+          response.setHeader("Cache-Control", "no-store");
+          response.end(`<!doctype html><meta charset="utf-8"><title>Loading Workstream 1A</title><script>location.replace("/systems-monitor/?view=summary#workstream1a");</script>`);
+          return;
+        }
         const mediaPrefix = "/systems-monitor/__local-review/media/";
         if (pathname.startsWith(mediaPrefix)) {
           if (!loopbackOnly) {

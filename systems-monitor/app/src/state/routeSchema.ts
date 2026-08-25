@@ -52,7 +52,7 @@ export function parseRoute(search: string, snapshot: SnapshotViewModel): { state
 
   const requestedSystem = params.get("system");
   const selectedSystem = snapshot.systems.find((system) => system.slug === requestedSystem) ?? snapshot.systems[0];
-  if (requestedSystem && selectedSystem.slug !== requestedSystem) notices.push("Requested system is unavailable; the default synthetic system is shown.");
+  if (requestedSystem && selectedSystem.slug !== requestedSystem) notices.push("Requested system is unavailable; the default system is shown.");
   state.system = selectedSystem.slug;
 
   const requestedPath = (params.get("path") ?? "").split("/").filter(Boolean);

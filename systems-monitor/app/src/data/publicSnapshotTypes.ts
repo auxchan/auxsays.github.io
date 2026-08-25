@@ -203,6 +203,36 @@ export interface RevisionReplayEvidence {
   };
 }
 
+export interface LaborMarketCanonicalFactor {
+  id: string;
+  slug: string;
+  label: string;
+  definition: string;
+  tracks: string;
+  impact: string;
+  availability: "populated" | "not_yet_enabled";
+  metricRef?: string;
+  candidateSeriesId?: string;
+}
+
+export interface LaborMarketHierarchyPlacement {
+  id: string;
+  parentId: "outcome:labor-market-state";
+  canonicalFactorId: string;
+  level: "Sub-A";
+  order: number;
+  role: "hierarchy";
+}
+
+export interface LaborMarketHierarchyExtension {
+  version: "1.0.0";
+  outcome: { id: "outcome:labor-market-state"; label: "Labor Market" };
+  taxonomy: { approved: 10; defined: number; status: "TAXONOMY_COMPLETE" | "TAXONOMY_INCOMPLETE" };
+  dataCoverage: { populated: number; defined: number };
+  canonicalFactors: Record<string, LaborMarketCanonicalFactor>;
+  placements: LaborMarketHierarchyPlacement[];
+}
+
 export type FixtureVariant =
   | "normal"
   | "loading"
@@ -246,6 +276,7 @@ export interface PublicSnapshot {
     "auxsays.phase3.provenance"?: Record<string, ProvenanceRecord>;
     "auxsays.phase3.sourceHealth"?: Record<string, SourceHealthRecord>;
     "auxsays.phase3.revisionEvidence"?: RevisionReplayEvidence[];
+    "auxsays.workstream1.factorHierarchy"?: LaborMarketHierarchyExtension;
   };
 }
 

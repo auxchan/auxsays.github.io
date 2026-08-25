@@ -790,3 +790,75 @@
   [data-aux-product="systems-monitor"] *::before,
   [data-aux-product="systems-monitor"] *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 }
+
+/* Workstream 1A factual Labor Market shell. Tethers express hierarchy only. */
+[data-aux-product="systems-monitor"] .sm-labor-header { display: flex; align-items: end; justify-content: space-between; gap: 2rem; padding: .4rem 0 1rem; }
+[data-aux-product="systems-monitor"] .sm-labor-header h1 { margin: .15rem 0 0; font-size: clamp(2.4rem, 5vw, 4.6rem); line-height: .95; letter-spacing: -.055em; }
+[data-aux-product="systems-monitor"] .sm-labor-coverage { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: .55rem; }
+[data-aux-product="systems-monitor"] .sm-labor-coverage span { display: grid; min-width: 9.5rem; padding: .7rem .9rem; border: 1px solid var(--aux-sm-line); border-radius: .75rem; color: var(--aux-sm-text-muted); font-size: .72rem; }
+[data-aux-product="systems-monitor"] .sm-labor-coverage strong { color: var(--aux-sm-ink); font-size: 1rem; }
+[data-aux-product="systems-monitor"] .sm-labor-context { max-width: 46rem; margin: 0 0 1rem; color: var(--aux-sm-text-muted); font-size: .84rem; }
+[data-aux-product="systems-monitor"] .sm-labor-workbench { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; align-items: start; }
+[data-aux-product="systems-monitor"] .sm-labor-workbench.has-inspector { grid-template-columns: minmax(20rem, .52fr) minmax(38rem, 1.25fr); }
+[data-aux-product="systems-monitor"] .sm-labor-inspector { position: sticky; top: 1rem; max-height: calc(100vh - 3rem); overflow: auto; padding: 1.15rem; border: 1px solid rgba(121, 229, 205, .3); border-radius: 1rem; background: linear-gradient(160deg, rgba(14, 32, 43, .98), rgba(6, 18, 28, .98)); box-shadow: 0 24px 70px rgba(0, 0, 0, .28); animation: aux-sm-labor-inspector-in 240ms cubic-bezier(.2,.8,.2,1); }
+[data-aux-product="systems-monitor"] .sm-labor-inspector__head { display: flex; justify-content: space-between; gap: 1rem; align-items: start; padding-bottom: 1rem; border-bottom: 1px solid var(--aux-sm-line); }
+[data-aux-product="systems-monitor"] .sm-labor-inspector__head span,
+[data-aux-product="systems-monitor"] .sm-labor-inspector h3 { color: var(--aux-sm-accent); font-size: .68rem; letter-spacing: .12em; text-transform: uppercase; }
+[data-aux-product="systems-monitor"] .sm-labor-inspector__head h2 { margin: .3rem 0 0; font-size: clamp(1.55rem, 2.5vw, 2.35rem); line-height: 1.05; }
+[data-aux-product="systems-monitor"] .sm-labor-inspector__head button { width: 2.6rem; height: 2.6rem; border: 1px solid var(--aux-sm-line); border-radius: 50%; color: var(--aux-sm-text); background: transparent; font-size: 1.45rem; cursor: pointer; }
+[data-aux-product="systems-monitor"] .sm-labor-inspector section { padding: 1rem 0; border-bottom: 1px solid var(--aux-sm-line); }
+[data-aux-product="systems-monitor"] .sm-labor-inspector section > p { color: var(--aux-sm-text); font-size: .94rem; line-height: 1.55; }
+[data-aux-product="systems-monitor"] .sm-labor-inspector dl { display: grid; gap: .8rem; margin: .85rem 0 0; }
+[data-aux-product="systems-monitor"] .sm-labor-inspector dt { color: var(--aux-sm-text-muted); font-size: .68rem; text-transform: uppercase; }
+[data-aux-product="systems-monitor"] .sm-labor-inspector dd { margin: .2rem 0 0; overflow-wrap: anywhere; color: var(--aux-sm-ink); font-size: .86rem; line-height: 1.45; }
+[data-aux-product="systems-monitor"] .sm-labor-reading > span { display: block; color: var(--aux-sm-text-muted); font-size: .7rem; text-transform: uppercase; }
+[data-aux-product="systems-monitor"] .sm-labor-reading > strong { display: block; margin: .35rem 0; overflow-wrap: anywhere; color: var(--aux-sm-ink); font-size: 1.7rem; line-height: 1.12; }
+[data-aux-product="systems-monitor"] .sm-labor-reading > p { margin: .35rem 0 .7rem; }
+[data-aux-product="systems-monitor"] .sm-labor-evidence-actions { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: 1rem; }
+[data-aux-product="systems-monitor"] .sm-labor-evidence-actions a { padding: .65rem .78rem; border: 1px solid rgba(121, 229, 205, .3); border-radius: .6rem; color: var(--aux-sm-accent); font-weight: 700; text-decoration: none; }
+[data-aux-product="systems-monitor"] .sm-labor-timing { margin-top: .9rem; border: 1px solid var(--aux-sm-line); border-radius: .7rem; }
+[data-aux-product="systems-monitor"] .sm-labor-timing summary { min-height: 44px; padding: .75rem; cursor: pointer; color: var(--aux-sm-text); font-size: .8rem; font-weight: 700; }
+[data-aux-product="systems-monitor"] .sm-labor-timing dl { padding: 0 .75rem .75rem; }
+[data-aux-product="systems-monitor"] .sm-labor-unavailable > span { color: #f0c784; font-weight: 800; }
+[data-aux-product="systems-monitor"] .sm-labor-orbit { position: relative; min-height: clamp(43rem, 72vh, 56rem); overflow: hidden; border: 1px solid var(--aux-sm-line); border-radius: 1.15rem; background: radial-gradient(circle at 50% 50%, rgba(91, 219, 191, .09), transparent 24%), radial-gradient(circle at 50% 50%, transparent 0 34%, rgba(57, 119, 137, .08) 34.2% 34.5%, transparent 34.8%), linear-gradient(rgba(39, 91, 106, .045) 1px, transparent 1px), linear-gradient(90deg, rgba(39, 91, 106, .045) 1px, transparent 1px), #071722; background-size: auto, auto, 3rem 3rem, 3rem 3rem, auto; }
+[data-aux-product="systems-monitor"] .sm-labor-tethers { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+[data-aux-product="systems-monitor"] .sm-labor-tethers line { stroke: rgba(111, 202, 190, .18); stroke-width: .16; stroke-dasharray: .7 1.1; vector-effect: non-scaling-stroke; }
+[data-aux-product="systems-monitor"] .sm-labor-core { position: absolute; z-index: 2; left: 50%; top: 50%; translate: -50% -50%; display: grid; place-items: center; width: 10.5rem; height: 10.5rem; padding: 1rem; border: 1px solid rgba(126, 239, 213, .72); border-radius: 50%; color: var(--aux-sm-ink); background: radial-gradient(circle, rgba(30, 91, 88, .96), rgba(8, 30, 39, .98) 67%); box-shadow: 0 0 0 1rem rgba(84, 224, 195, .025), 0 0 3rem rgba(55, 213, 185, .16); cursor: pointer; }
+[data-aux-product="systems-monitor"] .sm-labor-core span { font-size: 1.18rem; font-weight: 850; }
+[data-aux-product="systems-monitor"] .sm-labor-core strong { color: var(--aux-sm-accent); font-size: .76rem; }
+[data-aux-product="systems-monitor"] .sm-labor-core small { color: var(--aux-sm-text-muted); }
+[data-aux-product="systems-monitor"] .sm-labor-factor-layer { position: absolute; inset: 0; }
+[data-aux-product="systems-monitor"] .sm-labor-factor-layer button { position: absolute; z-index: 3; left: var(--labor-x); top: var(--labor-y); translate: -50% -50%; display: grid; align-content: center; justify-items: center; width: clamp(8.4rem, 12vw, 11.25rem); min-height: 6.3rem; padding: .72rem .7rem; border: 1px solid rgba(103, 186, 183, .28); border-radius: 1rem; color: var(--aux-sm-text); background: linear-gradient(150deg, rgba(12, 36, 47, .96), rgba(7, 21, 31, .97)); box-shadow: 0 12px 30px rgba(0, 0, 0, .2); cursor: pointer; opacity: 0; animation: aux-sm-labor-node-in 360ms cubic-bezier(.2,.8,.2,1) forwards; animation-delay: var(--labor-delay); transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease, background 160ms ease; }
+[data-aux-product="systems-monitor"] .sm-labor-factor-layer button::before { content: ""; position: absolute; inset: -.28rem; border: 1px solid transparent; border-radius: 1.18rem; }
+[data-aux-product="systems-monitor"] .sm-labor-factor-layer button:hover,
+[data-aux-product="systems-monitor"] .sm-labor-factor-layer button:focus-visible { z-index: 5; transform: scale(1.055); border-color: rgba(126, 239, 213, .8); background: linear-gradient(150deg, rgba(18, 54, 62, .99), rgba(8, 26, 37, .99)); box-shadow: 0 0 2rem rgba(77, 219, 190, .22); outline: none; }
+[data-aux-product="systems-monitor"] .sm-labor-factor-layer button:focus-visible::before { border-color: #fff; }
+[data-aux-product="systems-monitor"] .sm-labor-factor-layer button.is-selected { z-index: 4; border-color: var(--aux-sm-accent); box-shadow: 0 0 0 .22rem rgba(126, 239, 213, .12), 0 0 2.4rem rgba(77, 219, 190, .25); }
+[data-aux-product="systems-monitor"] .sm-labor-factor-layer button.is-unavailable { border-style: dashed; opacity: .72; }
+[data-aux-product="systems-monitor"] .sm-labor-factor-layer button > i { width: .52rem; height: .52rem; margin-bottom: .45rem; border-radius: 50%; background: var(--aux-sm-accent); box-shadow: 0 0 .8rem var(--aux-sm-accent); }
+[data-aux-product="systems-monitor"] .sm-labor-factor-layer button.is-unavailable > i { background: #82959c; box-shadow: none; }
+[data-aux-product="systems-monitor"] .sm-labor-factor-layer button > span { color: var(--aux-sm-ink); font-size: .82rem; font-weight: 800; text-align: center; }
+[data-aux-product="systems-monitor"] .sm-labor-factor-layer button > strong { max-width: 100%; margin-top: .32rem; color: var(--aux-sm-accent); font-size: .74rem; line-height: 1.25; text-align: center; }
+[data-aux-product="systems-monitor"] .sm-labor-factor-layer button > small { margin-top: .2rem; color: var(--aux-sm-text-muted); font-size: .64rem; text-align: center; }
+
+@keyframes aux-sm-labor-node-in { from { opacity: 0; transform: scale(.88); } to { opacity: 1; transform: scale(1); } }
+@keyframes aux-sm-labor-inspector-in { from { opacity: 0; transform: translateX(-18px); } to { opacity: 1; transform: translateX(0); } }
+
+@media (max-width: 1080px) {
+  [data-aux-product="systems-monitor"] .sm-labor-workbench.has-inspector { grid-template-columns: 1fr; }
+  [data-aux-product="systems-monitor"] .sm-labor-inspector { position: relative; top: auto; max-height: none; }
+}
+
+@media (max-width: 780px) {
+  [data-aux-product="systems-monitor"] .sm-labor-header { display: grid; }
+  [data-aux-product="systems-monitor"] .sm-labor-coverage { justify-content: flex-start; }
+  [data-aux-product="systems-monitor"] .sm-labor-orbit { min-height: 0; padding: .75rem; overflow: visible; }
+  [data-aux-product="systems-monitor"] .sm-labor-tethers,
+  [data-aux-product="systems-monitor"] .sm-labor-core { display: none; }
+  [data-aux-product="systems-monitor"] .sm-labor-factor-layer { position: static; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem; }
+  [data-aux-product="systems-monitor"] .sm-labor-factor-layer button { position: relative; left: auto; top: auto; translate: none; width: 100%; min-height: 7rem; }
+}
+
+@media (max-width: 520px) {
+  [data-aux-product="systems-monitor"] .sm-labor-factor-layer { grid-template-columns: 1fr; }
+}

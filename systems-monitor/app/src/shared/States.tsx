@@ -1,5 +1,5 @@
 export function LoadingState() {
-  return <section className="sm-state-panel" role="status" aria-live="polite"><span className="sm-loading-mark" aria-hidden="true" /><h2>Loading synthetic fixture</h2><p>No placeholder values are displayed while the contract-valid snapshot is checked.</p></section>;
+  return <section className="sm-state-panel" role="status" aria-live="polite"><span className="sm-loading-mark" aria-hidden="true" /><h2>Loading Systems Monitor data</h2><p>No placeholder values are displayed while the contract-valid snapshot is checked.</p></section>;
 }
 
 export function ErrorState({ title = "Snapshot unavailable", detail = "The synthetic fixture could not be activated. No substitute conclusion is shown.", fixtureDisclosure = true }: { title?: string; detail?: string; fixtureDisclosure?: boolean }) {

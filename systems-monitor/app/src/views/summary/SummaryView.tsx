@@ -6,6 +6,7 @@ import { RankedList } from "../../shared/RankedList";
 import { findSelectedNode } from "../../state/routeSchema";
 import type { NavigationNode } from "../../data/publicSnapshotTypes";
 import type { ViewProps } from "../viewProps";
+import { LaborMarketShell } from "./LaborMarketShell";
 
 function displayObservation(value: string, unit: string) {
   if (unit === "million_barrels") return `${value} million barrels`;
@@ -36,6 +37,7 @@ export default function SummaryView({ snapshot, phase4b, route, navigate, varian
         <section className="sm-truth-rail" aria-label="Claim identity"><div><SystemIcon name="check" size={18} /><span><strong>Measured</strong> by official sources</span></div><div><SystemIcon name="lock" size={18} /><span><strong>Calculated</strong> nothing structural yet</span></div><div><SystemIcon name="arrow" size={18} /><span><strong>Forecasting</strong> begins after Gate B</span></div></section>
       </div>;
     }
+    if (snapshot.snapshot.publishedAt) return <LaborMarketShell snapshot={snapshot} phase4b={phase4b} route={route} navigate={navigate} variant={variant} />;
     const primary = metrics[0];
     return <div className="sm-view sm-view--summary"><header className="sm-view-header"><div><span className="sm-eyebrow">Summary / Local factual mode</span><h1 data-route-heading tabIndex={-1}>U.S. labor observations</h1></div><div className="sm-current-state"><DataStateLabel state="OBS" /><strong>Factual candidate</strong><span>As known {snapshot.snapshot.asOf}</span></div></header><FactualCandidateNotice compact /><div className="sm-primary-layout"><ChartFrame title={primary.label} description="Latest rights-cleared factual observation in the local Phase-3 review candidate." stateType="OBS" data={primary.series} unit={primary.unit} publicationClass="factual" /><aside className="sm-kpis" aria-label="Factual labor observations">{metrics.slice(0, 4).map((metric) => <article key={metric.id}><DataStateLabel state="OBS" /><strong>{metric.displayValue}</strong><span>{metric.label} · {metric.validTime}</span></article>)}</aside></div><section className="sm-evidence-table" aria-labelledby="factual-observations"><div className="sm-section-heading"><div><span className="sm-eyebrow">Rights-cleared OBS only</span><h2 id="factual-observations">Six-indicator first slice</h2></div></div><div className="sm-table-scroll" role="region" aria-label="Factual labor observations" tabIndex={0}><table><thead><tr><th>Indicator</th><th>Value</th><th>Observation period</th><th>Source</th></tr></thead><tbody>{metrics.map((metric) => <tr key={metric.id}><th scope="row">{metric.label}</th><td>{metric.displayValue}</td><td>{metric.validTime}</td><td>{metric.sourceRefs.join(", ")}</td></tr>)}</tbody></table></div></section></div>;
   }

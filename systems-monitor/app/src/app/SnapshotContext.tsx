@@ -5,6 +5,7 @@ import { createCandidateViewModel, createSnapshotViewModel } from "../data/snaps
 import { validatePhase4bReadModel, type Phase4bReadModel } from "../data/phase4bReadModel";
 import { validateMotionQaReadModel, type MotionQaReadModel } from "../data/motionQaReadModel";
 import { phase2Fixture } from "../fixtures/phase2Fixture";
+import activeFactualSnapshot from "../../../data/review/local-active-pdi-test-snapshot.json";
 
 interface SnapshotContextValue {
   snapshot: SnapshotViewModel;
@@ -17,21 +18,23 @@ interface SnapshotContextValue {
 const SnapshotContext = createContext<SnapshotContextValue | null>(null);
 
 export function SnapshotProvider({ children }: { children: React.ReactNode }) {
+  const workstream1aReview = window.location.hash === "#workstream1a";
   const snapshot = useMemo(() => {
-    const storedCandidate = import.meta.env.DEV ? window.localStorage.getItem("auxsays.localFactualCandidate") : null;
-    const localCandidate = window.__AUXSAYS_LOCAL_FACTUAL_SNAPSHOT__ ?? (storedCandidate ? JSON.parse(storedCandidate) : undefined);
+    const storedCandidate = import.meta.env.DEV && !workstream1aReview ? window.localStorage.getItem("auxsays.localFactualCandidate") : null;
+    const localCandidate = workstream1aReview ? undefined : window.__AUXSAYS_LOCAL_FACTUAL_SNAPSHOT__ ?? (storedCandidate ? JSON.parse(storedCandidate) : undefined);
     if (localCandidate && typeof localCandidate === "object" && "artifactType" in localCandidate) {
       return createCandidateViewModel(validatePublicationCandidate(localCandidate));
     }
-    return createSnapshotViewModel(validatePublicSnapshot(localCandidate ?? phase2Fixture));
+    const defaultSnapshot = import.meta.env.MODE === "test" && !workstream1aReview ? phase2Fixture : activeFactualSnapshot;
+    return createSnapshotViewModel(validatePublicSnapshot((localCandidate ?? defaultSnapshot) as unknown));
   }, []);
   const phase4b = useMemo(() => {
-    if (!import.meta.env.DEV) return undefined;
+    if (!import.meta.env.DEV || workstream1aReview) return undefined;
     const stored = window.localStorage.getItem("auxsays.localPhase4bState");
     return stored ? validatePhase4bReadModel(JSON.parse(stored)) : undefined;
   }, []);
   const motionQa = useMemo(() => {
-    if (!import.meta.env.DEV) return undefined;
+    if (!import.meta.env.DEV || workstream1aReview) return undefined;
     const stored = window.localStorage.getItem("auxsays.localMotionQaState");
     return stored ? validateMotionQaReadModel(JSON.parse(stored)) : undefined;
   }, []);
