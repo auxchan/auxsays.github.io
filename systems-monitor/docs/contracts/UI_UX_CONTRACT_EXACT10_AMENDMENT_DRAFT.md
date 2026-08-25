@@ -2,19 +2,21 @@
 
 ```text
 Proposal: UXA-001 Exact-10 / View-All / Multi-Placement Amendment
-Proposal Version: 0.1.0
-Status: DRAFT / PROPOSED FOR TAYLOR REVIEW / NOT BINDING
-Date: 2026-08-24
+Proposal Version: 0.1.1
+Status: SUPERSEDED HISTORICAL PROPOSAL / NOT BINDING
+Date: 2026-08-25
 Targets: UI_UX_CONTRACT.md 1.0.0 — UX-003 and UX-006
 Implementation authority: NONE
 Promotion authority: Taylor only
+Disposition: UXA-001 approved and promoted into UI_UX_CONTRACT.md 1.0.1
 ```
 
 ## 1. Purpose and narrow scope
 
-Resolve the conflict between current BINDING UI/UX semantics and the approved
-product requirement for exact-ten hierarchy placement. This proposal changes
-only:
+This historical proposal recorded the conflict between UI/UX 1.0.0 and the
+approved exact-ten hierarchy requirement. Taylor approved UXA-001 on 2026-08-25
+and promoted its authoritative semantics into BINDING UI/UX 1.0.1. The proposal
+was limited to:
 
 - exact child-placement cardinality;
 - incomplete-taxonomy behavior;
@@ -23,11 +25,11 @@ only:
 - hierarchy-versus-structural-relationship separation needed by those changes;
 - bounded progressive disclosure and non-spatial access.
 
-It does not modify the current BINDING contract body and is not effective until
-Taylor approves the applicable contract amendment. It does not redesign color,
-typography, camera timing, renderer architecture, node art, motion grammar,
-inspector behavior, mobile composition, primary modes, or unrelated
-accessibility rules.
+This artifact does not modify or supersede the BINDING contract and is retained
+only as review history. UI/UX 1.0.1 is authoritative. The promotion did not
+redesign color, typography, camera timing, renderer architecture, node art,
+motion grammar, inspector behavior, mobile composition, primary modes, or
+unrelated accessibility rules.
 
 ## 2. Existing conflict
 
@@ -46,8 +48,9 @@ Taylor's product requirement is now exact cardinality:
   placements;
 - record 11+ may not remain an additional hierarchy child under View All.
 
-The requirements cannot be silently reinterpreted. A BINDING amendment is
-required before exact-ten implementation.
+The requirements could not be silently reinterpreted. UI/UX 1.0.1 now supplies
+the required BINDING amendment. Exact-ten implementation remains separately
+authorized.
 
 ## 3. Proposed replacement for UX-003
 
@@ -207,14 +210,12 @@ PDI-010 compatibility, that work must return with a specific amendment request.
 
 ```text
 Decision ID: UXA-001
-Status: RECOMMENDED / OPEN
-Recommendation: Approve the narrow exact-ten amendment semantics and authorize
-                preparation of the corresponding versioned UI/UX contract
-                amendment in a later promotion task.
+Status: APPROVED / PROMOTED — TAYLOR, 2026-08-25
+Result: Narrow exact-ten amendment semantics promoted into BINDING UI/UX 1.0.1.
 ```
 
-Rationale: exact-ten and child-11/View-All semantics cannot coexist with the
-current BINDING wording without explicit amendment. Canonical-factor
+Rationale: exact-ten and child-11/View-All semantics could not coexist with the
+former BINDING wording without explicit amendment. Canonical-factor
 multi-placement prevents the hierarchy correction from duplicating analytical
 truth.
 
@@ -225,17 +226,16 @@ Rejected alternatives:
 - duplicate canonical factors/claims for each parent;
 - broaden this amendment into a general UI redesign.
 
-Implementation consequence: none until a separately authorized promoted
-contract and implementation sprint.
+Implementation consequence: none until a separately authorized Workstream-1
+implementation sprint.
 
-Contract consequence: current `UI_UX_CONTRACT.md` 1.0.0 remains BINDING and
-unchanged. Taylor must approve the exact amendment/version. This draft has no
-authority to supersede UX-003 or UX-006.
+Contract consequence: `UI_UX_CONTRACT.md` 1.0.1 is BINDING and supersedes the
+affected 1.0.0 semantics. This historical proposal has no independent authority.
 
 ## 13. Recommendation
 
-**READY FOR TAYLOR CONTRACT/TAXONOMY DECISION, subject to correction-package
-validation.**
+**SUPERSEDED BY BINDING UI/UX CONTRACT 1.0.1.**
 
 Do not implement exact-ten UI behavior, canonical registries, renderer changes,
-or Workstream 1 from this draft alone.
+or Workstream 1 from this historical artifact. Separate implementation
+authorization remains required.

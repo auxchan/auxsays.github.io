@@ -2,10 +2,10 @@
 
 ```text
 Profile: Live-State Presentation Profile
-Version: 0.1.1
+Version: 0.1.2
 Status: DRAFT / PROPOSED FOR REVIEW / NOT BINDING
-Date: 2026-08-24
-Authority: Workstream-0 drafting authorization only
+Date: 2026-08-25
+Authority: Workstream-0 profile drafting plus Taylor-approved FAC-001/UXA-001 references
 Implementation authority: NONE
 ```
 
@@ -431,9 +431,10 @@ creates none and does not change Gate B.
 | Taxonomy completeness versus current-data coverage | Candidate additive namespaced extension | Keep dimensions separate |
 | Related-record collections | Candidate additive namespaced extension | Must not redefine `childRefs[]` silently |
 | Item-level `publicationClass` | Conflicts with PDI snapshot ownership | Prohibited |
-| Exact-ten/View All behavior | Conflicts with current BINDING UX-003/UX-006 interpretation | Requires later scoped UI/UX amendment |
+| Exact-ten/View All behavior | Governed by BINDING UI/UX 1.0.1 UX-003/UX-006/UX-060–UX-062 | Preserve canonical truth, exact-ten placement, and related-record distinctions |
 
-No BINDING contract or schema is changed. PDI `extensions` permits namespaced
+This profile does not amend a BINDING contract or schema. UI/UX 1.0.1 was
+separately Taylor-approved and promoted. PDI `extensions` permits namespaced
 additive candidates that do not override core semantics, but actual public
 schema activation requires separate review and compatibility tests.
 
@@ -504,10 +505,10 @@ Before any public activation, tests must prove:
 
 ## 23. Recommendation
 
-**APPROVE PROFILE FOR EXTERNAL REVIEW.**
+**RETAIN AS DRAFT PRESENTATION PROFILE — NO IMPLEMENTATION AUTHORITY.**
 
-External review should resolve display-mapping vocabulary, the six reference
-families, exact field ownership, and the BINDING UI/UX amendment needed for
-exact-ten/View All semantics. Do not implement Workstream 1, manifest polling,
-UI changes, source changes, BEA work, Gate-B closure, forecasting, activation,
-or deployment from this draft alone.
+External review should still resolve display-mapping vocabulary, the six
+reference families, and exact field ownership. Exact-ten/View All authority is
+now BINDING in UI/UX 1.0.1. Do not implement Workstream 1, manifest polling, UI
+changes, source changes, BEA work, Gate-B closure, forecasting, activation, or
+deployment from this draft alone.

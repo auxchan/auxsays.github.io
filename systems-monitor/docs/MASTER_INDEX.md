@@ -22,7 +22,7 @@ These requirements were established during final Foundation review after V4.1. T
 
 | Design concern | Phase-2 artifact | Master / binding context |
 |---|---|---|
-| Application/view/navigation contract | `contracts/UI_UX_CONTRACT.md` | §2–3, §38–59, §63, §69; Product and Repository Integration contracts |
+| Application/view/navigation contract | `contracts/UI_UX_CONTRACT.md` 1.0.1 | §2–3, §38–59, §63, §69; Product and Repository Integration contracts; UXA-001 |
 | Motion and interaction grammar | `contracts/MOTION_INTERACTION_CONTRACT.md` | §46–52, §56–58, §69; Product and Release Acceptance contracts |
 | Component and data/view-model boundaries | `PHASE2_UI_IMPLEMENTATION_DESIGN.md` §1 | §37.1, §59–60; Architecture and Public Data Interface contracts |
 | Canonical query-state routing | `PHASE2_UI_IMPLEMENTATION_DESIGN.md` §2 | §38.1, §52; D-008 and Repository Integration RI-004 |
@@ -30,6 +30,19 @@ These requirements were established during final Foundation review after V4.1. T
 | Tokens, responsive, accessibility | `PHASE2_UI_IMPLEMENTATION_DESIGN.md` §§4–5 | §40–42, §46–50, §56–57, §69 |
 | O-001A/B/C/D and O-002 | `DECISIONS.md`; `PHASE2_UI_IMPLEMENTATION_DESIGN.md` §§6–10 | §38.1–38.2, §58–60, §67 Phase 2 |
 | Performance and tests | `PHASE2_UI_IMPLEMENTATION_DESIGN.md` §§11–12 | §58, §61, §63; Release Acceptance contract |
+
+## Workstream-0 hierarchy governance routing
+
+| Decision / concern | Approved authority | Current effect |
+|---|---|---|
+| EMP-001 Labor Market parent | `DECISIONS.md`; `FACTOR_HIERARCHY_PROFILE.md` 1.0.0 | `outcome:labor-market-state` / “Labor Market” is the approved outcome branch; not an eleventh Core or permanent center |
+| EMP-002 exact-ten Labor Market set | `DECISIONS.md`; `FACTOR_HIERARCHY_PROFILE.md` 1.0.0 | Conceptually `TAXONOMY_COMPLETE`; six factors source-backed and four intake-pending, so current data coverage remains partial |
+| EMP-003 Industry Employment Exposure | `DECISIONS.md`; Phase-4 BINDING contracts | Structural-exposure attachment and Trace/related `CALC`, not a Labor Market Sub-A |
+| FAC-001 canonical factor / placement | `DECISIONS.md`; `FACTOR_HIERARCHY_PROFILE.md` 1.0.0 | Canonical analytical identity is separate from navigational placement and parentage |
+| UXA-001 exact-ten UI/UX | BINDING `contracts/UI_UX_CONTRACT.md` 1.0.1 | Exact-ten placements, incomplete-taxonomy behavior, related-record View All, multi-placement deduplication, and hierarchy/structural separation |
+
+These approvals complete Workstream-0 governance. They do not begin Workstream
+1, source intake, factual activation, Gate-B closure, Phase 5, or deployment.
 
 ## Phase-3 Data Integrity BINDING routing
 
@@ -60,7 +73,7 @@ These requirements were established during final Foundation review after V4.1. T
 | OBS / CALC / FCST / SCEN | §3 |
 | Ten employment driver systems | §4–4.10 |
 | Employment outcomes | §5 |
-| Progressive Top 10 navigation | §38 |
+| Progressive exact-ten navigation | §38; BINDING UI/UX 1.0.1 UX-003/UX-006 |
 | Shared application shell | §39 |
 | Search and exploration | §53 |
 | UX writing | §64 |
@@ -224,8 +237,10 @@ O-005 is ACCEPTED/RESOLVED with all five contracts BINDING 1.0.0; O-006 is
 ACCEPTED/RESOLVED only for the initial configurable Phase-4A proof profile;
 O-007 remains deferred.
 
-Current authorization is **bounded Phase-4B closed vertical slice implementation only**.
 Phase 4A is COMPLETE with Human QA PASS and `LIMITED_ENGINE_PROOF`; Gate B remains
-OPEN. O-008 is ACCEPTED/RESOLVED for the 2024 BEA summary-level energy slice and
-484 downstream employment endpoint. Gate-B approval, major UI work, forecasting,
-public activation, push, merge, and deployment remain unauthorized.
+OPEN. O-008 remains ACCEPTED/RESOLVED for the 2024 BEA summary-level energy slice
+and 484 downstream employment endpoint. Current Workstream-0 governance is
+complete and the next eligible action is a separately authorized Workstream-1
+live factual Labor Market shell. Workstream 1, additional source intake, Gate-B
+approval, Phase 5, forecasting, public activation, push, merge, and deployment
+remain unauthorized by the governance-promotion task.

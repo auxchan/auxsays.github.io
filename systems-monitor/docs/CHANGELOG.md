@@ -1,5 +1,29 @@
 # Systems Monitor Governance Changelog
 
+## 2026-08-25 — Workstream-0 hierarchy approval and exact-ten UI/UX promotion
+
+- Taylor approved EMP-001, establishing `outcome:labor-market-state` / “Labor
+  Market” as the first factual outcome branch without making it an eleventh Core
+  or permanent spatial center.
+- Taylor approved EMP-002's exact-ten canonical factor set with Total
+  Separations corrected to primary Labor Market placement and secondary/contextual
+  Layoffs & Job Destruction placement. The taxonomy is conceptually complete;
+  current coverage remains partial because four factor sources are not enabled.
+- Taylor approved EMP-003's structural-exposure attachment/Trace disposition and
+  FAC-001's separation of canonical analytical identity from hierarchy placement
+  and navigation parentage.
+- Promoted UXA-001 into BINDING UI/UX Contract 1.0.1, replacing at-most-ten and
+  child-11+ View All semantics with exact-ten placements, explicit
+  `TAXONOMY_INCOMPLETE`, non-hierarchy related-record View All, multi-placement
+  truth preservation, hierarchy/structural separation, and equivalent bounded
+  access. The draft amendment is retained as superseded review history.
+- Updated the contract/master indexes, decisions ledger, profiles, canonical
+  contract hash, and governance routing. The Public Data Interface and every
+  other BINDING contract remain unchanged.
+- Workstream 0 governance is complete. Workstream 1, source intake, Gate-B
+  closure, Phase 5, public activation, push, merge, and deployment were not
+  authorized or performed by this task.
+
 ## 2026-08-23 — Full-screen structural workspace control
 
 - Added a clearly labeled Full screen action to the graph viewport controls.

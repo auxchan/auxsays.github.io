@@ -9,7 +9,9 @@ phase_1_status: PASS
 phase_3_status: CLOSED
 phase_3_gate: PASS
 phase_3_human_data_qa: PASS
-current_authorized_work: Phase 4A Engine / Labor-State Proof implementation only; Phase 4B, new ingestion, dependencies, Gate-B closure, factual public activation, UI overhaul, forecasting, push, merge, and deployment unauthorized
+current_authorized_work: Workstream 0 governance complete; Workstream 1 live factual Labor Market shell is the next eligible separately authorized task; source intake, Gate-B closure, Phase 5, public activation, push, merge, and deployment remain unauthorized
+workstream_0_governance_status: COMPLETE
+workstream_0_approved_decisions: [EMP-001, EMP-002, EMP-003, FAC-001, UXA-001]
 approved_foundation_decisions: [D-001, D-002, D-003, D-004, D-005, D-006, D-007, D-008, D-009, D-010]
 phase_3_contract_status: PASS
 phase_4_contract_status: BINDING_1_0_0
@@ -117,11 +119,11 @@ contracts:
     blocks: ["Phase promotion", "public release", "public predictive claims"]
   - id: ui_ux
     path: contracts/UI_UX_CONTRACT.md
-    version: "1.0.0"
+    version: "1.0.1"
     status: BINDING
     approved_by: Taylor
-    approved_at: "2026-08-17"
-    content_hash: "537BC054E57980F5DD1177F5C2534F89476772D82F70DF3BDD06DC3333E8CB05"
+    approved_at: "2026-08-25"
+    content_hash: "CB817AF9DE40070FB65128DAD611822EC6E290E6F4103A16EA627C75DDBCF180"
     parent_master_version: "V4.1"
     governing_master_sections: ["§2–3", "§38–59", "§61", "§63", "§67 Phase 2", "§69"]
     depends_on: [product, repository_integration, architecture, public_data_interface, release_acceptance]

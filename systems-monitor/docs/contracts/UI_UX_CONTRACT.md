@@ -2,20 +2,20 @@
 
 ```text
 Contract: Systems Monitor UI/UX Contract
-Version: 1.0.0
+Version: 1.0.1
 Status: BINDING
 Parent Master Spec: V4.1
 Depends On: Product 1.0.0; Repository Integration 1.0.1; Architecture 1.0.0; Public Data Interface 1.0.0; Release Acceptance 1.0.1
 Supersedes: None
 Approved By: Taylor
-Approved At: 2026-08-17
-Content Hash: 537BC054E57980F5DD1177F5C2534F89476772D82F70DF3BDD06DC3333E8CB05
-Last Updated: 2026-08-17
+Approved At: 2026-08-25
+Content Hash: CB817AF9DE40070FB65128DAD611822EC6E290E6F4103A16EA627C75DDBCF180
+Last Updated: 2026-08-25
 ```
 
 ## Authority / Status
 
-Governing Master sections: §2–3, §38–59, §61, §63, §67 Phase 2, and §69, plus accepted decisions D-006, D-008, and D-009. This BINDING contract is Taylor-approved Phase-2 UI/UX authority. It permits only a subsequently scoped UI-shell implementation task; it does not authorize Phase-3 data/model work, factual public claims, or deployment by itself.
+Governing Master sections: §2–3, §38–59, §61, §63, §67 Phase 2, and §69, plus accepted decisions D-006, D-008, D-009, EMP-001 through EMP-003, FAC-001, and UXA-001. This BINDING contract is Taylor-approved UI/UX authority. Its exact-ten amendment is governance authority only and does not begin Workstream 1, source intake, factual activation, forecasting, or deployment.
 
 ## Purpose and scope
 
@@ -27,12 +27,15 @@ Out of scope are data ingestion, production analytics or forecasts, schema expan
 
 - **BINDING REQUIREMENT UX-001:** The durable public route is `/systems-monitor/`. The application mounts in a product-scoped root within the existing AUXSAYS global shell and remains isolated from Patch Feed code, data, models, generated records, and styling.
 - **BINDING REQUIREMENT UX-002:** The three and only three primary modes are Summary, Verified Data, and Outlook. A semantic mode switcher identifies the current mode and remains in a consistent shell position.
-- **BINDING REQUIREMENT UX-003:** Progressive `10 -> 10 -> 10` drill-down is the primary hierarchy. Each level shows at most ten defensible ranked children, preserves the parent context, and provides View All when more defensible items exist. It never invents children to fill a list.
+- **BINDING REQUIREMENT UX-003:** Progressive `10 -> 10 -> 10` drill-down is the primary hierarchy. Every taxonomy-complete approved Core/outcome parent contains exactly ten approved Sub-A hierarchy placements, and every taxonomy-complete approved Sub-A placement contains exactly ten approved Sub-B hierarchy placements. Exact ten is an acceptance requirement, not permission to invent filler. A branch with fewer than ten approved canonical factors and placements is explicitly `TAXONOMY_INCOMPLETE` and may not present itself as complete. Each transition preserves parent context, and the UI never renders the theoretical complete registry simultaneously.
 - **BINDING REQUIREMENT UX-004:** Breadcrumbs expose the selected hierarchy path, make prior levels directly reachable, and announce hierarchy changes to assistive technology. Back/forward restores the same canonical, shareable state under D-008.
 - **BINDING REQUIREMENT UX-005:** Selected system and hierarchy path persist across primary modes when valid. Mode-specific state is retained only where meaningful and is not allowed to alter the meaning of another mode.
-- **BINDING REQUIREMENT UX-006:** View All replaces the ranked subset in the same hierarchy context with a bounded, searchable/sortable list. It does not open a graph and preserves the relationship between the displayed Top 10 and nearby candidates, including supported near-tie and near-cutoff states.
+- **BINDING REQUIREMENT UX-006:** View All remains in the selected hierarchy context but never exposes hierarchy child placement 11 or later. It opens a bounded, searchable, sortable, accessible collection of explicitly labeled non-hierarchy related records, which may include related indicators, supporting or alternate series, geography records, evidence, histories, source/method records, and other payload-backed list/search records. Related records do not affect exact-ten completeness, order, parentage, or analytical roll-up merely by appearing in View All, and the UI preserves a route back to the selected exact-ten context.
 - **BINDING REQUIREMENT UX-007:** Search is an exploration aid over payload-backed labels and identifiers. When present in the payload it may locate indicators, commodities, industries, occupations, companies, facilities, geographies, sources, and events. Results expose available type, hierarchy path/context, current information state, freshness, and view availability; selection navigates to a valid application state. No entity or relationship may be invented, and search is not a substitute for hierarchy navigation.
 - **BINDING REQUIREMENT UX-008:** A focused Trace Mode may explain a selected path. A giant all-economy graph is never the landing state or default interaction.
+- **BINDING REQUIREMENT UX-060:** A hierarchy placement references one canonical factor identity. One canonical factor may have multiple justified placements, but placement cannot create or alter an `OBS`, `CALC`, `FCST`, or `SCEN` claim; duplicate source evidence, provenance, or derivation; create independent analytical state; or change value, reference, revision, rights, or publication authority. Placement owns navigation parentage and may affect only navigation, surrounding context, a justified display-label override, and related-record suggestions.
+- **BINDING REQUIREMENT UX-061:** Hierarchy membership and tethers mean semantic organization/navigation only. They remain visually and semantically distinct from accepted structural dependency relationships and active propagation and cannot imply causation, direction, weight, lag, exposure, or Gate-B evidence.
+- **BINDING REQUIREMENT UX-062:** The spatial hierarchy has an equivalent keyboard-, touch-, and assistive-technology-operable bounded list/search path. That path distinguishes exact-ten hierarchy placements, non-hierarchy related records, and evidence; preserves parent context and canonical claim identity; and does not require hover, animation, color, or spatial position to understand membership.
 
 The shared shell contains the AUXSAYS/global relationship, product title, primary-mode switcher, persistent context/breadcrumbs, data-state and fixture treatment, system health, and view content. Systems Monitor does not replace or intercept Patch Feed navigation.
 
@@ -115,8 +118,8 @@ The shared shell contains the AUXSAYS/global relationship, product title, primar
 
 ## Ranking stability and boundary transparency
 
-- **BINDING REQUIREMENT UX-057:** Top-10 presentation must not imply that adjacent ranks are meaningfully different when the supplied analytical evidence says they are indistinguishable. Supported near ties, near-cutoff state, prior rank, and rank change are communicated explicitly.
-- **BINDING REQUIREMENT UX-058:** Genuine material rank changes must not be visually hidden to manufacture cosmetic stability. View All preserves boundary context between the displayed Top 10 and nearby candidates.
+- **BINDING REQUIREMENT UX-057:** When a payload-backed related-record or analytical ranking is presented, the UI must not imply that adjacent ranks are meaningfully different when supplied evidence says they are indistinguishable. Supported near ties, near-cutoff state, prior rank, and rank change are communicated explicitly. These ranking semantics do not create hierarchy child placement 11+.
+- **BINDING REQUIREMENT UX-058:** Genuine material rank changes in a ranked related-record or analytical collection must not be visually hidden to manufacture cosmetic stability. View All may preserve supported boundary context within that collection while keeping it explicitly separate from exact-ten hierarchy membership.
 - **BINDING REQUIREMENT UX-059:** Ranking hysteresis/stability computation belongs to the analytical producer unless a later approved contract explicitly assigns it elsewhere. The frontend consumes and faithfully presents `rankState`, `nearTie`, `nearCutoff`, `priorRank`, or equivalent approved public-payload semantics; it does not invent production ranking logic.
 
 ## Implementation freedom
@@ -127,24 +130,26 @@ The shared shell contains the AUXSAYS/global relationship, product title, primar
 
 ## Acceptance criteria
 
-1. The three modes, hierarchy, breadcrumbs, context persistence, View All, search, direct loads, refresh, and back/forward meet the canonical routing design.
+1. The three modes, exact-ten hierarchy, breadcrumbs, context persistence, related-record View All, search, direct loads, refresh, and back/forward meet the canonical routing design; incomplete branches remain explicit and no child placement 11+ appears.
 2. Summary, Verified Data, Outlook, and Trace satisfy their information and evidence boundaries with a contract-valid fixture.
 3. `OBS`, `CALC`, `FCST`, `SCEN`, fixture state, timing dimensions, degraded states, and source-aware freshness are distinct in visual and assistive output.
 4. Desktop, tablet, and mobile compositions pass defined responsive cases without hiding evidence or uncertainty.
 5. Keyboard, focus, chart alternative, contrast, touch equivalence, and reduced-motion tests pass.
 6. Systems Monitor styles and events do not alter Patch Feed or unrelated AUXSAYS pages.
-7. Representative fixture-UI comprehension testing records task completion, user errors, abandoned drill-downs, source/evidence inspection success, hierarchy-navigation success, information-state misunderstandings, and forecast/uncertainty misunderstandings. Users must be able to identify information state, represented period, source, forecast-change attribution when present, uncertainty/evidence meaning, reversal conditions, direct-versus-modeled relationships, hierarchy return, and whether ranks 10/11 are materially different or effectively tied when supplied evidence says they are indistinguishable.
+7. Representative fixture-UI comprehension testing records task completion, user errors, abandoned drill-downs, source/evidence inspection success, hierarchy-navigation success, information-state misunderstandings, and forecast/uncertainty misunderstandings. Users must be able to identify information state, represented period, source, forecast-change attribution when present, uncertainty/evidence meaning, reversal conditions, direct-versus-modeled relationships, hierarchy return, hierarchy-versus-related-record membership, and whether adjacent records in an explicitly ranked related/analytical collection are materially different or effectively tied when supplied evidence says they are indistinguishable.
 8. No production dependency, application/Jekyll/workflow change, public claim, or deployment occurs outside a separately scoped implementation/release task and its required verification.
 
 ## Risks / approved decisions
 
 - **APPROVED DECISION O-001C — Taylor, 2026-08-17:** Systems Monitor owns uncommitted, content-hashed generated output and the bounded manifest-aware Jekyll composition paths recorded in `DECISIONS.md`.
 - **APPROVED DECISION O-001D — Taylor, 2026-08-17:** retain one Pages build job and one Jekyll artifact with package-local pre-Jekyll build/composition and post-Jekyll validation when implementation is separately authorized.
+- **APPROVED DECISION UXA-001 — Taylor, 2026-08-25:** exact-ten hierarchy placement, incomplete-taxonomy behavior, non-hierarchy related-record View All, canonical-factor multi-placement, hierarchy/structural separation, and equivalent bounded access are BINDING. Workstream 1 remains separately authorized.
 - Final font files and self-hosting/subsetting remain implementation-time dependency/licensing work.
-- No Public Data Interface amendment was found necessary for this draft; focused-trace and test-variant metadata fit namespaced `extensions` and existing public records.
+- No Public Data Interface amendment is required by UI/UX 1.0.1. Canonical-factor/placement registries, exact-ten completeness, related-record collections, focused-trace, and test-variant metadata fit future compatible namespaced `extensions` and existing public records without changing snapshot-level publication authority.
 
 ## Version / approval / change history
 
+- `1.0.1` (2026-08-25): Taylor-authorized narrow BINDING amendment replacing at-most-ten and child-11+ View All semantics with exact-ten placement cardinality, explicit `TAXONOMY_INCOMPLETE`, related-record View All, canonical-factor multi-placement without duplicate analytical truth, hierarchy/structural separation, and equivalent bounded access. No application, data, PDI, source, Gate-B, forecasting, activation, or deployment authority was added.
 - `1.0.0` (2026-08-17): First BINDING version approved by Taylor after external review and the authorized horizon, ranking, comprehension, fixture-envelope, product-semantic, search, and interaction corrections.
 - `0.1.0` (2026-08-17): Initial Phase-2 review draft. Not approved.
 

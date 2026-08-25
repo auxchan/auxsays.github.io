@@ -92,6 +92,68 @@ Accepted decisions are authoritative below approved/BINDING contracts and above 
 - Affected contracts: Infrastructure, Public Data Interface, Release Acceptance
 - Supersedes: None
 
+## Workstream-0 hierarchy and exact-ten governance decisions
+
+### EMP-001 — Labor Market outcome parent
+
+- Classification: TAYLOR APPROVAL DECISION
+- Status: APPROVED / RESOLVED — TAYLOR, 2026-08-25
+- Approved choice: Use canonical parent `outcome:labor-market-state` with public
+  label “Labor Market” for current U.S. employment, unemployment/slack,
+  participation, employer demand, entry/exit flows, utilization, and
+  compensation.
+- Boundary: Labor Market is an outcome/state branch, not an eleventh national
+  driver Core and not automatically the permanent spatial center.
+
+### EMP-002 — Labor Market exact-ten Sub-A taxonomy
+
+- Classification: TAYLOR APPROVAL DECISION
+- Status: APPROVED / RESOLVED — TAYLOR, 2026-08-25
+- Approved choice: Payroll Employment, U-3 Unemployment, Labor-Force
+  Participation, Initial Claims, Job Openings, Hires, Average Weekly Hours,
+  Average Hourly Earnings, Total Separations, and Employment-Population Ratio
+  are the exact ten canonical Labor Market Sub-A factors.
+- Required correction applied: Total Separations is primary under Labor Market
+  because it combines quits, layoffs/discharges, and other separations. Layoffs
+  & Job Destruction is secondary/contextual; layoffs/discharges remain
+  related/Sub-B records.
+- Completeness: the taxonomy is conceptually complete. Current data coverage is
+  partial because four factors remain intake-pending. This decision authorizes
+  no source retrieval or factual claim.
+
+### EMP-003 — Current Industry Employment Exposure disposition
+
+- Classification: TAYLOR APPROVAL DECISION
+- Status: APPROVED / RESOLVED — TAYLOR, 2026-08-25
+- Approved choice: Model Current Industry Employment Exposure as a
+  structural-exposure attachment and Trace/related analytical result associated
+  with canonical industry/employment factors, not as one of the ten Labor
+  Market Sub-A factors.
+- Boundary: It remains a Phase-4 `CALC` dependent on accepted structural
+  evidence, cutoff, configuration, coverage, and derivation.
+
+### FAC-001 — Canonical factor and hierarchy placement
+
+- Classification: TAYLOR APPROVAL DECISION
+- Status: APPROVED / RESOLVED — TAYLOR, 2026-08-25
+- Approved choice: One canonical factor owns analytical/economic identity; one
+  hierarchy placement owns a navigational/contextual occurrence and parentage.
+  Multiple placements may reference one factor without duplicating claims,
+  evidence, provenance, derivations, or analytical state.
+- PDI impact: compatible through a future additive namespaced extension; no PDI
+  amendment is authorized or required by this decision.
+
+### UXA-001 — Exact-ten UI/UX amendment
+
+- Classification: TAYLOR APPROVAL DECISION
+- Status: APPROVED / PROMOTED — TAYLOR, 2026-08-25
+- Approved choice: Promote exact-ten placement cardinality, explicit
+  `TAXONOMY_INCOMPLETE`, non-hierarchy related-record View All,
+  canonical-factor multi-placement, hierarchy/structural separation, and
+  equivalent bounded access into BINDING UI/UX Contract 1.0.1.
+- Boundary: Workstream 1 implementation, source intake, Gate-B closure, Phase 5,
+  public activation, and deployment remain separately authorized.
+
 ## Phase-2 engineering choices and open approval decisions
 
 ### O-001A — React application/package location
