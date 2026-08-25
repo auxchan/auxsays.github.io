@@ -5,7 +5,9 @@ from pathlib import Path
 from typing import Any
 import yaml
 
-from .patch_identity import permalink_path, record_version_slug
+from .patch_identity import (
+    assert_build_identity, identity_build, is_build_aware, permalink_path, record_version_slug,
+)
 from .normalize import (
     slugify,
     utc_now,
@@ -110,6 +112,18 @@ def _dump_record(front: dict[str, Any], body: str = "") -> str:
 
 
 def _matching_existing_path(output_dir: Path, record: dict[str, Any]) -> Path | None:
+    """The existing record this incoming record refreshes, or None to create a new one.
+
+    The exact canonical filename is tried first. The scan below exists because that filename embeds
+    the publication DATE: when a vendor corrects a release date the expected name changes, and
+    without the scan the same patch would be written twice. It matches on identity, not on filename.
+
+    For a BUILD-AWARE product the identity includes the exact build. Matching on version alone here
+    meant an incoming sibling build resolved to a DIFFERENT build's record and refreshed it --
+    ``target_build`` advanced to the sibling while the filename and permalink stayed behind, leaving
+    a record whose declared build no longer matched the evidence keyed to it. Version-only products
+    are unaffected: their build slot is always '' on both sides, so the comparison is a no-op and
+    date-drift refresh behaves exactly as it always has."""
     expected = output_path(output_dir, record)
     if expected.exists():
         return expected
@@ -119,12 +133,17 @@ def _matching_existing_path(output_dir: Path, record: dict[str, Any]) -> Path | 
     if not product_id or not version:
         return None
 
+    build_aware = is_build_aware(product_id)
+    incoming_build = identity_build(record, product_id)
     for path in sorted(output_dir.glob("*.md")):
         front, _ = _front_matter(path)
         if str(front.get("product_id") or "").strip() != product_id:
             continue
-        if str(front.get("update_version") or "").strip() == version:
-            return path
+        if str(front.get("update_version") or "").strip() != version:
+            continue
+        if build_aware and identity_build(front, product_id) != incoming_build:
+            continue  # a sibling build is a DIFFERENT patch, never this record
+        return path
     return None
 
 
@@ -277,6 +296,19 @@ def build_front_matter(record: dict[str, Any]) -> dict[str, Any]:
     return front
 
 
+def _assert_record_consistent(path: Path, front: dict[str, Any]) -> None:
+    """Refuse a record whose target_build, canonical permalink and canonical filename disagree.
+
+    Uses the identity authority's shared rule -- the same one the consensus lane's ownership
+    validator delegates to -- so official ingestion and consensus cannot hold two different notions
+    of a valid build-aware record."""
+    assert_build_identity(
+        front.get("product_id"), front.get("update_version"), front.get("target_build"),
+        front.get("permalink"), path.name,
+        detail=f"generated record {path.name}",
+    )
+
+
 def refresh_existing_record(path: Path, record: dict[str, Any]) -> tuple[Path, str]:
     existing, body_text = _front_matter(path)
     if not existing:
@@ -364,6 +396,14 @@ def refresh_existing_record(path: Path, record: dict[str, Any]) -> tuple[Path, s
     if material_changed:
         existing["record_last_updated"] = checked_at
 
+    # STRUCTURAL GATE. The merged record must describe ONE build. This catches both an already-
+    # corrupt record on disk and any future path that lets an incoming build advance in place --
+    # ``target_build`` is identity for a build-aware product, so it can never move while the
+    # filename and permalink stay behind. Checked BEFORE the write, and before the unchanged
+    # early-return: a record that is already inconsistent must be refused even when this refresh
+    # would have changed nothing, otherwise the corruption is silently accepted every run.
+    _assert_record_consistent(path, existing)
+
     if existing == original:
         return path, "unchanged"
 
@@ -377,5 +417,7 @@ def write_record(output_dir: Path, record: dict[str, Any], overwrite_existing: b
     if path.exists() and not overwrite_existing:
         return refresh_existing_record(path, record)
     front = build_front_matter(record)
+    # Same structural gate on the create path: nothing inconsistent is ever written.
+    _assert_record_consistent(path, front)
     atomic_write_text(path, _dump_record(front))
     return path, "created"

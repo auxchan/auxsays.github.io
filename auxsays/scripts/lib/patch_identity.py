@@ -146,6 +146,87 @@ def permalink_path(company_id: Any, product_id: Any, update_version: Any,
     return f"/updates/{company}/{pid}/{version_slug}/{build}/"
 
 
+# --- structural consistency of a written record -------------------------------------------
+#
+# A build-aware record states its build in three places -- the ``target_build`` field, the canonical
+# permalink's build segment, and the canonical filename slug. They are produced from one identity,
+# so any disagreement means the record was assembled from two different identities and is corrupt.
+#
+# The reason vocabulary is shared with the consensus lane's ownership validator, which delegates to
+# ``build_identity_reason`` below. ONE definition of "a valid build-aware record", enforced in both
+# lanes, so the two can never drift into subtly different notions of validity.
+REASON_BUILD_MISSING = "record_build_missing"
+REASON_PERMALINK_BUILD_MISMATCH = "record_permalink_build_mismatch"
+REASON_PERMALINK_BUILD_UNEXPECTED = "record_permalink_build_unexpected"
+REASON_FILENAME_BUILD_MISMATCH = "record_filename_build_mismatch"
+
+BUILD_IDENTITY_REASONS = frozenset({
+    REASON_BUILD_MISSING, REASON_PERMALINK_BUILD_MISMATCH,
+    REASON_PERMALINK_BUILD_UNEXPECTED, REASON_FILENAME_BUILD_MISMATCH,
+})
+
+
+class InconsistentBuildIdentity(Exception):
+    """A record's build, permalink and filename disagree.
+
+    Raised on the WRITE path so an inconsistent record never reaches the canonical generated
+    directory, rather than being written and detected afterwards. Carries the structured ``reason``
+    so a production run can report which rule failed without guessing."""
+
+    def __init__(self, reason: str, detail: str = "") -> None:
+        self.reason = str(reason or "")
+        self.detail = detail
+        super().__init__(f"{self.reason}: {detail}" if detail else self.reason)
+
+
+def permalink_build_segment(permalink: Any) -> str:
+    """The exact-build segment of a build-aware permalink, or '' when the path carries none.
+
+    A canonical record permalink is ``/updates/<company>/<product>/<version>/`` for a version-only
+    product and one segment longer for a build-aware one. Anything that is not exactly five clean
+    segments carries no build segment as far as this function is concerned; callers that need the
+    stricter shape/ownership rules apply them separately."""
+    text = str(permalink or "").split("?", 1)[0].split("#", 1)[0]
+    segments = [seg for seg in text.split("/") if seg]
+    if len(segments) != 5 or segments[0] != "updates":
+        return ""
+    return segments[4]
+
+
+def build_identity_reason(product_id: Any, update_version: Any, target_build: Any,
+                          permalink: Any, filename: Any = "") -> str:
+    """'' when the record's build identity is internally consistent, else the reason it is not.
+
+    ``filename`` is optional: pass it to also verify the canonical filename slug carries this
+    record's own build. A non-build-aware product must carry NO build segment -- otherwise it would
+    be claiming a URL shape whose extra segment nothing owns."""
+    pid = str(product_id or "").strip()
+    build = normalize_build(target_build)
+    permalink_build = permalink_build_segment(permalink)
+
+    if not is_build_aware(pid):
+        return REASON_PERMALINK_BUILD_UNEXPECTED if permalink_build else ""
+    if not build:
+        return REASON_BUILD_MISSING
+    if permalink_build != build:
+        return REASON_PERMALINK_BUILD_MISMATCH
+    name = str(filename or "").strip()
+    if name and record_version_slug(update_version, build, pid) not in name:
+        return REASON_FILENAME_BUILD_MISMATCH
+    return ""
+
+
+def assert_build_identity(product_id: Any, update_version: Any, target_build: Any,
+                          permalink: Any, filename: Any = "", detail: str = "") -> None:
+    """Fail closed when a record's build identity is inconsistent."""
+    reason = build_identity_reason(product_id, update_version, target_build, permalink, filename)
+    if reason:
+        raise InconsistentBuildIdentity(
+            reason,
+            detail or f"{product_id} {update_version} build={normalize_build(target_build)!r} "
+                      f"permalink={str(permalink)!r} filename={str(filename)!r}")
+
+
 def version_landing_path(company_id: Any, product_id: Any, update_version: Any) -> str:
     """The YYMM landing URL that a build-aware product's old version-only URL becomes.
 
