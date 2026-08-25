@@ -2,9 +2,9 @@
 
 ```text
 Profile: Live-State Presentation Profile
-Version: 0.1.0
+Version: 0.1.1
 Status: DRAFT / PROPOSED FOR REVIEW / NOT BINDING
-Date: 2026-08-23
+Date: 2026-08-24
 Authority: Workstream-0 drafting authorization only
 Implementation authority: NONE
 ```
@@ -37,6 +37,24 @@ concise public wording + progressive evidence disclosure
 Frontend code may format an approved label; it may not choose the baseline,
 infer desirability, invent a threshold, average disagreement away, recalculate
 freshness from page age, or turn missing evidence into neutral.
+
+### 2.1 Canonical analytical truth versus hierarchy placement
+
+Analytical truth belongs to the canonical material claim, source evidence,
+state profile, and derivation—not to a hierarchy placement.
+
+One canonical factor may appear in multiple justified navigation contexts. All
+placements reference the same eligible `OBS`/`CALC` value and claim class at the
+named snapshot/cutoff. A placement cannot independently change analytical
+state, reference calculation, direction, stability, freshness, revision,
+coverage evidence, provenance, rights, or derivation.
+
+A placement may supply context, a justified short label, and related-record
+suggestions. Contextual wording may vary only through an already-governed,
+versioned presentation mapping compatible with the same canonical state and
+reference. One placement cannot independently describe that state as
+“Supportive” while another calls it “Critical.” Multiple placements create no
+duplicate observation, source record, CALC, or publication authority.
 
 Authority: `STATE_MODEL_CONTRACT.md` STM-004–STM-010, STM-013–STM-018;
 `DERIVATION_TRANSPARENCY_CONTRACT.md` DT-001–DT-010, DT-013–DT-018;
@@ -407,7 +425,8 @@ creates none and does not change Gate B.
 | Snapshot evaluation/generation/activation/as-of/publication class | Existing PDI snapshot metadata | Reuse exact semantics |
 | Cadence-aware source freshness/methodology/rights | Existing PDI source reference | Reuse and present progressively |
 | Evidence, coverage, regime dimensions | Existing typed uncertainty/evidence approach | Reference approved fields; no generic confidence |
-| Direction/condition/stability display mapping IDs and labels | Candidate additive namespaced extension | Review schema names and compatibility later |
+| Canonical factor registry and hierarchy placement registry | Candidate additive namespaced extension | Placements reference one canonical analytical truth; review schema names later |
+| Direction/condition/stability display mapping IDs and labels | Candidate additive namespaced extension | Mapping remains canonical-state/profile authority, not placement-owned truth |
 | Reference-profile identity and “compared with” summary | Candidate additive namespaced extension or CALC derivation reference | Avoid duplicating analytical authority |
 | Taxonomy completeness versus current-data coverage | Candidate additive namespaced extension | Keep dimensions separate |
 | Related-record collections | Candidate additive namespaced extension | Must not redefine `childRefs[]` silently |
@@ -471,6 +490,9 @@ Before any public activation, tests must prove:
 - frontend cannot change reference, direction, condition, or freshness;
 - direction and desirability remain separate for opposite-polarity indicators;
 - each display label traces to a governed analytical state and mapping version;
+- every placement of one canonical factor resolves to the same eligible claim,
+  state, reference, and provenance at a named snapshot/cutoff;
+- placement metadata cannot create, duplicate, or contradict analytical truth;
 - revisions preserve earlier as-of truth;
 - source-relative delayed/stale behavior follows cadence;
 - taxonomy completeness and current coverage cannot substitute for each other;

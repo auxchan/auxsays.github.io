@@ -2,9 +2,9 @@
 
 ```text
 Profile: Factor Hierarchy Profile
-Version: 0.1.0
+Version: 0.2.0
 Status: DRAFT / PROPOSED FOR REVIEW / NOT BINDING
-Date: 2026-08-23
+Date: 2026-08-24
 Authority: Workstream-0 drafting authorization only
 Implementation authority: NONE
 ```
@@ -40,7 +40,7 @@ Example:
 ```text
 INFORMATION HIERARCHY
 
-Employment Outcome
+Labor Market State
 ├─ Payroll Employment
 ├─ Unemployment
 ├─ Labor-Force Participation
@@ -70,6 +70,21 @@ AP-011, AP-024–AP-025.
 
 ## C. Core, Sub-A, and Sub-B definitions
 
+### Canonical factor
+
+One versioned economic/system concept with one canonical identity, definition,
+ontology posture, claim eligibility, source/derivation eligibility, unit and
+geography semantics, cadence, reference/state-profile posture, evidence
+identity, effective interval, knowledge interval, and status. A canonical
+factor has no mandatory permanent navigation parent.
+
+### Hierarchy placement
+
+One versioned navigational occurrence of a canonical factor. A placement owns
+its parent placement, hierarchy level, navigation role, context-justified label
+override, exact-ten order/rank, child placement references, and related-record
+references. It does not own or alter analytical truth.
+
 ### Core driver system
 
 A Master-defined top-level system that materially helps explain current U.S.
@@ -85,14 +100,15 @@ eleventh Core driver.
 
 ### Sub-A factor
 
-One of exactly ten semantically distinct, parent-justified components beneath
-an approved Core or approved outcome branch. A Sub-A factor must be meaningful
-without relying on its screen position.
+One of exactly ten semantically distinct, parent-justified canonical factors
+referenced by Sub-A placements beneath an approved Core or outcome branch. A
+factor must remain meaningful outside any one screen position.
 
 ### Sub-B factor
 
-One of exactly ten coherent sibling components beneath an approved Sub-A. The
-ten siblings must share one declared decomposition basis.
+One of exactly ten coherent canonical factors referenced by Sub-B placements
+beneath an approved Sub-A placement. The ten siblings share one declared
+decomposition basis.
 
 ### Related record
 
@@ -105,13 +121,13 @@ hierarchy children.
 Draft decision LD-001 is resolved as a product requirement:
 
 1. Every approved Core or approved outcome branch has exactly ten Sub-A
-   hierarchy children.
-2. Every approved Sub-A has exactly ten Sub-B hierarchy children.
+   hierarchy placements.
+2. Every approved Sub-A placement has exactly ten Sub-B hierarchy placements.
 3. “Up to ten” is not the target state.
 4. Exactly ten is not permission to manufacture filler.
-5. A branch is not complete until every required factor is defensibly defined,
-   distinct, parent-justified, evidence-capable, cadence-aware, reference-aware,
-   and versioned.
+5. A branch is not complete until every required canonical factor and placement
+   is defensibly defined, distinct, parent-justified, evidence-capable,
+   cadence-aware, reference-aware, and versioned.
 6. If only seven defensible factors exist, the taxonomy is incomplete; three
    neutral placeholders are prohibited.
 7. The complete registry may contain hundreds of factors, but the UI never
@@ -135,8 +151,8 @@ profile records the proposal and does not amend either contract.
 
 | State | Definition | Public posture |
 |---|---|---|
-| `TAXONOMY_COMPLETE` | All required 10 Sub-A and 10 Sub-B-per-Sub-A concepts are approved and versioned | Eligible for complete hierarchy representation, subject to data and activation authority |
-| `TAXONOMY_INCOMPLETE` | One or more required concept definitions or parent/child justifications are missing or unapproved | Must not appear complete; no filler |
+| `TAXONOMY_COMPLETE` | All required canonical concepts and exact-ten placements are approved and versioned | Eligible for complete hierarchy representation, subject to data and activation authority |
+| `TAXONOMY_INCOMPLETE` | One or more required concepts, placements, or parent/child justifications are missing or unapproved | Must not appear complete; no filler |
 | `DATA_COMPLETE` | Every required current claim is eligible at the snapshot cutoff | May support a complete-data statement |
 | `DATA_PARTIAL` | Taxonomy is complete but one or more source/derivation records are unavailable, stale under policy, rights-blocked, or ineligible | Show exact coverage and reasons |
 | `DATA_SPARSE` | Too little eligible evidence exists for a representative headline | Suppress or qualify headline state |
@@ -151,8 +167,8 @@ Unavailable is not zero.
 
 ## F. Related records versus hierarchy children
 
-An exact-ten parent has exactly ten hierarchy child IDs. “View All” cannot add
-child 11 while retaining an exact-ten claim.
+An exact-ten parent placement has exactly ten hierarchy child placements. “View
+All” cannot add child placement 11 while retaining an exact-ten claim.
 
 Additional records belong to explicitly typed collections such as:
 
@@ -208,51 +224,170 @@ factor profiles rather than reverse-engineering a taxonomy from the renderer.
 - Whether any public labels should be shortened without changing Master meaning.
 - How to decompose the broad tenth Core coherently into exactly ten Sub-A
   factors without producing a miscellaneous bucket.
-- Whether the whole-system spatial center is Employment Outcome, a neutral
+- Whether the whole-system spatial center is Labor Market State, a neutral
   system hub, or a context-dependent selection. Employment is not frozen as the
   permanent center in this profile.
 
-## H. Employment first-branch rationale
+## H. EMP-001 — Labor Market State parent semantics
 
-Employment is the first factual hierarchy-design branch because six
-original-authority national observations already exist with provenance, rights,
-revision, cadence, replay, and factual-candidate evidence. It is an outcome
-branch defined by Master Spec §5, not automatic proof that it is the permanent
-visual center or an additional driver Core.
+### Alternatives evaluated
 
-The branch may contain both source-owned `OBS` factors and future AUXSAYS
-`CALC` factors only when claim class remains explicit. Proximity in one
-hierarchy never converts a CALC into official data.
+| Option | Result | Reason |
+|---|---|---|
+| Employment | Rejected as too narrow | The candidate children include unemployment, participation, labor demand, turnover, utilization, and compensation—not only employment outcomes |
+| Labor Market State | **Recommended** | Names the broader current-state question shared by all ten candidate dimensions without converting them into causal peers |
+| Employment & Labor Market | Rejected | Less precise than Labor Market State and risks treating Employment as both parent and one child concept |
 
-## I. Employment exact-10 Sub-A candidate dictionary
+### Recommended parent
 
-This is a candidate dictionary, not source enablement or approval. Items 1–6
-reuse existing governed observations. Items 7–9 identify plausible official BLS
-series but still require registry, rights, semantics, and intake review. Item 10
-is blocked on accepted Phase-4B evidence.
+```text
+Canonical parent ID: outcome:labor-market-state
+Short public label: Labor Market
+Status: EMP-001 RECOMMENDED / OPEN FOR TAYLOR DECISION
+```
 
-| # | ID / label | Definition and first-level justification | Claim eligibility | Likely authoritative source / exact known series | Unit / geography / cadence | Candidate reference family (no threshold) | Readiness / risks | Recommendation |
-|---:|---|---|---|---|---|---|---|---|
-| 1 | `employment:payroll-employment` / Payroll Employment | Number of employees on U.S. nonfarm establishment payrolls; direct realized-employment level | `OBS` | BLS CES `CES0000000001` (existing) | Thousands of persons; U.S.; monthly; SA | Previous eligible month for direction; same month prior year and fixed historical distribution for context | Source-backed; preliminary and benchmark revisions must remain visible | `ACCEPT_CANDIDATE` |
-| 2 | `employment:unemployment` / U-3 Unemployment | Share of the civilian labor force unemployed under the official U-3 definition; core labor-slack outcome | `OBS` | BLS CPS `LNS14000000` (existing) | Percent; U.S.; monthly; SA | Previous eligible month; rolling historical distribution; no assumed “natural rate” | Source-backed; rising numeric direction is not favorable; population controls/seasonal revisions matter | `ACCEPT_CANDIDATE` |
-| 3 | `employment:participation` / Labor-Force Participation | Share of the civilian noninstitutional population in the labor force; engagement/availability outcome | `OBS` | BLS CPS `LNS11300000` (existing) | Percent; U.S.; monthly; SA | Previous eligible month; same month prior year; governed fixed period with demographic context | Source-backed; higher/lower is not universally good without composition context | `ACCEPT_CANDIDATE` |
-| 4 | `employment:initial-claims` / Initial Claims | New unemployment-insurance claims during the week; early entry-flow evidence of job loss | `OBS` | DOL ETA `DOL-UI-SA-INITIAL` (existing) | Claims; U.S.; weekly; SA | Previous eligible week; evidence-backed four-week average; same week prior year | Source-backed; advance/revised values and XML/PDF path health remain separate | `ACCEPT_CANDIDATE` |
-| 5 | `employment:job-openings` / Job Openings | Open positions employers are actively recruiting to fill; unmet labor-demand stock | `OBS` | BLS JOLTS `JTS000000000000000JOL` (existing AUXSAYS identity) | Thousands; U.S.; monthly; SA | Previous eligible month; same month prior year; openings rate only as a distinct related series | Source-backed; level changes with economy size and revisions | `ACCEPT_CANDIDATE` |
-| 6 | `employment:hires` / Hires | Additions to payroll during the month; realized hiring flow | `OBS` | BLS JOLTS `JTS000000000000000HIL` (existing AUXSAYS identity) | Thousands; U.S.; monthly; SA | Previous eligible month; same month prior year; hires rate only as a distinct related series | Source-backed; hires are gross flows, not net job growth | `ACCEPT_CANDIDATE` |
-| 7 | `employment:hours-worked` / Average Weekly Hours | Average paid weekly hours for all employees in total private industry; intensive-margin labor utilization that can move before headcount | Future `OBS` candidate | BLS CES `CES0500000002`; official CES Series Report and Handbook require intake verification | Hours per week; U.S. total private; monthly; SA | Previous eligible month; same month prior year; rolling historical distribution | Exact series is official and plausible, but it is not enabled in the current source/indicator registry | `RESEARCH_REQUIRED` |
-| 8 | `employment:earnings` / Average Hourly Earnings | Gross average hourly earnings of all employees in total private industry; realized nominal compensation level | Future `OBS` candidate | BLS CES `CES0500000003`; official Series Report identifies monthly SA total-private AHE | Dollars per hour; U.S. total private; monthly; SA | Month-over-month and year-over-year nominal change; real-wage interpretation requires a separately approved price input | Exact series is plausible but not enabled; composition effects mean it is not a pure wage-rate measure | `RESEARCH_REQUIRED` |
-| 9 | `employment:separations` / Total Separations | Workers leaving payroll through quits, layoffs/discharges, and other separations; gross employment-exit flow | Future `OBS` candidate | BLS JOLTS `JTS00000000TSL` candidate; BLS defines total separations as quits + layoffs/discharges + other separations | Thousands; U.S. total nonfarm; monthly; SA | Previous eligible month; same month prior year; components remain related/Sub-B candidates, not interchangeable | Exact current series identity must be reconciled with AUXSAYS's longer JOLTS identifier convention and enabled through governed intake | `RESEARCH_REQUIRED` |
-| 10 | `employment:industry-exposure` / Current Industry Employment Exposure | Current, not future, employment quantity exposed through accepted structural relationships and present state | Future `CALC` only | BEA direct requirements + approved Make/Market-Share handoff + BLS industry employment; initial endpoint candidate `CES4348400001` | Governed ordinal or supported employment unit; U.S./industry; mixed source cadence | Current accepted structural snapshot versus prior comparable accepted snapshot; factor-specific derivation | Blocked: live BEA credential/run, accepted relationships, common-cause/coverage proof, and Gate-B QA remain open | `RESEARCH_REQUIRED / BLOCKED` |
+Definition: the current U.S. condition of employment, unemployment/slack,
+labor-force engagement, employer demand, workforce entry/exit flows, labor
+utilization, and realized compensation, described through separately governed
+canonical factor states.
 
-Official research references for candidate confirmation:
+Question answered: **What is happening across the U.S. labor market now?**
+
+Eligible first-level concepts are stable national labor-market stock, rate,
+flow, utilization, or compensation measures that materially help answer that
+question. Excluded concepts include macroeconomic drivers such as GDP or credit,
+individual structural dependency paths, transient exposure run results, future
+forecasts/scenarios, geographies/industries that belong at a coherent Sub-B
+level, and source/evidence records.
+
+Overlap with Employer Labor Demand, Layoffs & Job Destruction, Labor Costs &
+Wages, and Labor Supply is intentional but controlled: those Core branches are
+primary driver contexts; Labor Market is a secondary outcome/state context.
+Canonical factors are not duplicated. A placement under Labor Market does not
+change their value, claim class, state, reference, or provenance.
+
+The branch is the first factual hierarchy-design branch because six
+original-authority national observations already have governed provenance,
+rights, revision, cadence, replay, and candidate evidence. It is not an
+eleventh driver Core and is not automatically the permanent visual center.
+
+## I. EMP-002 — Labor Market exact-10 Sub-A candidate dictionary
+
+This is a candidate placement dictionary, not source enablement or approval.
+The ten concepts are defensible as major current labor-market dimensions under
+the recommended broader parent, but the branch remains `TAXONOMY_INCOMPLETE`
+until Taylor approves EMP-001/EMP-002 and the canonical factor/placement
+definitions. Source intake remains a separate coverage question: after taxonomy
+approval, the branch could be `TAXONOMY_COMPLETE` while the four not-yet-enabled
+claims make current data coverage partial.
+
+| # | Canonical factor / definition | Primary placement | Secondary Labor Market placement | Eligibility / source posture | Readiness | Recommendation |
+|---:|---|---|---|---|---|---|
+| 1 | `factor:payroll-employment` — employees on U.S. nonfarm establishment payrolls; realized employment level | Labor Market State | Not secondary; this is its primary outcome placement | `OBS`; BLS CES `CES0000000001` enabled | `SOURCE_BACKED` | `RECOMMENDED` |
+| 2 | `factor:u3-unemployment` — official U-3 unemployed share of the civilian labor force; labor slack outcome | Labor Market State | Not secondary | `OBS`; BLS CPS `LNS14000000` enabled | `SOURCE_BACKED` | `RECOMMENDED` |
+| 3 | `factor:labor-force-participation` — civilian noninstitutional population share in the labor force; labor engagement | Labor Supply Core | Valid secondary placement in Labor Market State | `OBS`; BLS CPS `LNS11300000` enabled | `SOURCE_BACKED` | `RECOMMENDED` |
+| 4 | `factor:initial-ui-claims` — new unemployment-insurance claims; early job-loss entry flow | Layoffs & Job Destruction Core | Valid secondary placement in Labor Market State | `OBS`; DOL `DOL-UI-SA-INITIAL` enabled | `SOURCE_BACKED` | `RECOMMENDED` |
+| 5 | `factor:job-openings` — positions employers are actively recruiting to fill; unmet labor-demand stock | Employer Labor Demand Core | Valid secondary placement in Labor Market State | `OBS`; BLS JOLTS `JTS000000000000000JOL` enabled | `SOURCE_BACKED` | `RECOMMENDED` |
+| 6 | `factor:hires` — additions to payroll during the month; gross realized hiring flow | Employer Labor Demand Core | Valid secondary placement in Labor Market State | `OBS`; BLS JOLTS `JTS000000000000000HIL` enabled | `SOURCE_BACKED` | `RECOMMENDED` |
+| 7 | `factor:average-weekly-hours-total-private` — average paid weekly hours of all total-private employees; intensive-margin labor utilization | Employer Labor Demand Core | Valid secondary placement in Labor Market State | Future `OBS`; BLS CES `CES0500000002`, not enabled | `RESEARCH_REQUIRED` | `RECOMMENDED CANDIDATE` |
+| 8 | `factor:average-hourly-earnings-total-private` — gross average hourly earnings of total-private employees; nominal realized compensation | Labor Costs & Wages Core | Valid secondary placement in Labor Market State | Future `OBS`; BLS CES `CES0500000003`, not enabled | `RESEARCH_REQUIRED` | `RECOMMENDED CANDIDATE` |
+| 9 | `factor:total-separations-total-nonfarm` — gross employment exits comprising quits, layoffs/discharges, and other separations | Layoffs & Job Destruction Core | Valid secondary placement in Labor Market State | Future `OBS`; official BLS JOLTS concept known, exact current machine identity unresolved | `RESEARCH_REQUIRED` | `RECOMMENDED CANDIDATE` |
+| 10 | `factor:employment-population-ratio` — employed share of the civilian noninstitutional population age 16+; broad realized employment reach | Labor Market State | Not secondary | Future `OBS`; BLS CPS `LNS12300000`, not enabled | `RESEARCH_REQUIRED` | `RECOMMENDED CANDIDATE` |
+
+All ten are canonical factor concepts rather than source records. The first six
+are currently source-backed; four remain research-required. Therefore **ten
+semantically defensible children now exist as a recommended candidate set**, but
+the exact-ten branch is **not yet an approved complete taxonomy and is not ready
+for complete public representation**. If Taylor approves the taxonomy before
+the four source intakes are enabled, the correct posture is complete taxonomy
+with partial data coverage—not an incomplete taxonomy.
+
+### First-level sibling-coherence and related-record test
+
+Each candidate is a direct first-level Labor Market concept because it describes
+one distinct national stock, rate, flow, utilization, compensation, or realized
+employment dimension. The peers are not interchangeable: each answers a
+different part of the parent question without becoming a source, geography,
+industry slice, or structural path result.
+
+| Factor | Direct-child / peer rationale | Related-record alternative |
+|---|---|---|
+| Payroll Employment | Realized employment stock; complements rather than duplicates household rates or employer flows | Detailed industries, revisions, and alternate household employment remain related/Sub-B records |
+| U-3 Unemployment | Official slack rate among labor-force participants; distinct from employment reach and participation | U-1–U-6 and demographic/geographic breakdowns remain related/Sub-B records |
+| Labor-Force Participation | Labor-supply engagement rate; distinct from whether participants are employed | Age/sex/race and prime-age alternatives remain related/Sub-B records |
+| Initial Claims | High-frequency entry flow into insured unemployment; distinct from monthly employment and turnover stocks | Continued claims, four-week average, state detail, and release evidence remain related records |
+| Job Openings | Unfilled employer-demand stock; distinct from realized hires | Openings rate and industry detail remain related/Sub-B records |
+| Hires | Gross realized employer-entry flow; distinct from net payroll change and openings | Hires rate and industry detail remain related/Sub-B records |
+| Average Weekly Hours | Intensive-margin labor utilization; distinct from headcount and compensation | Production-worker hours and industry detail remain related/Sub-B candidates |
+| Average Hourly Earnings | Nominal realized compensation level; distinct from labor quantity and employer-demand flows | Real-wage calculations, production-worker earnings, and industry detail remain separate related/CALC records |
+| Total Separations | Gross employer-exit flow; complements gross hires without equating to layoffs alone | Quits, layoffs/discharges, other separations, rates, and industry detail remain related/Sub-B records |
+| Employment-Population Ratio | Broad realized employment reach in the working-age civilian population; distinct denominator from U-3 and participation | Demographic, age-specific, and geography ratios remain related/Sub-B records |
+
+None is better reduced to a related record at the parent level. Their narrower
+variants are related/Sub-B candidates. Primary placement under another driver
+Core for factors 3–9 resolves overlap without duplicating their secondary Labor
+Market placement or analytical truth.
+
+Official research references:
 
 - BLS CES Handbook: `https://www.bls.gov/opub/hom/ces/home.htm`
-- BLS series evidence: `https://data.bls.gov/timeseries/CES0500000002`
-- BLS series evidence: `https://data.bls.gov/timeseries/CES0500000003`
+- Hours evidence: `https://data.bls.gov/timeseries/CES0500000002`
+- Earnings evidence: `https://data.bls.gov/timeseries/CES0500000003`
 - BLS JOLTS Handbook: `https://www.bls.gov/opub/hom/jlt/home.htm`
-- BLS JOLTS candidate evidence: `https://data.bls.gov/timeseries/JTS00000000TSL`
+- Employment–population ratio evidence: `https://data.bls.gov/timeseries/LNS12300000`
 
-No record in this table enables retrieval or makes a factual claim.
+No record in this table enables retrieval or makes a new factual claim.
+
+### EMP-003 — Current Industry Employment Exposure disposition
+
+**RECOMMENDED disposition: D — structural-exposure attachment associated with
+canonical industry/employment factors, surfaced through focused Trace and
+related analytical records.**
+
+It is not a stable Sub-A factor. It is a current/as-of `CALC` result whose
+identity depends on a structural snapshot, accepted relationships, selected
+industry/path, propagation configuration, coverage, cutoff, and derivation. A
+new run can create a different result identity. Treating it as a peer of nine
+official measurement concepts would obscure its transient calculated nature.
+
+The attachment may have a reusable analytical result family and link to the
+canonical employment/industry factors, but it remains blocked pending the live
+BEA run, accepted factual relationships, behavioral/common-cause evidence, and
+Gate-B/Human QA. This sprint generates no CALC.
+
+### Hours and earnings multi-placement test
+
+| Factor | Canonical identity | Primary placement | Secondary placement | Placement consequence |
+|---|---|---|---|---|
+| Average Weekly Hours | `factor:average-weekly-hours-total-private` | Employer Labor Demand | Labor Market State | Navigation/context only; same CES OBS, state, reference profile, and provenance |
+| Average Hourly Earnings | `factor:average-hourly-earnings-total-private` | Labor Costs & Wages | Labor Market State | Navigation/context only; same CES OBS, state, reference profile, and provenance |
+
+Hours is primarily an employer utilization/demand measure. Earnings is
+primarily a labor-cost/compensation measure. Both materially help summarize
+labor-market state, so a secondary placement is justified. Neither creates a
+second observation or context-specific analytical truth.
+
+### JOLTS Total Separations identity reconciliation
+
+The canonical economic concept is known:
+
+```text
+factor:total-separations-total-nonfarm
+→ BLS JOLTS total nonfarm total separations, level, thousands, seasonally adjusted
+→ human-readable official series evidence identity
+→ exact official machine acquisition identity
+→ normalized canonical source record
+```
+
+Current official source material supports the human-facing legacy identity
+`JTS00000000TSL`. The repository's enabled JOLTS conventions use a longer
+machine-form identity for openings and hires. This sprint does not guess the
+corresponding longer Total Separations ID. Future governed intake must retrieve
+current official metadata, record both representations when authoritative,
+define a deterministic normalization rule, prove they represent the same
+series, and retain source-native identity. Status:
+`CANONICAL_CONCEPT_KNOWN / EXACT_CURRENT_MACHINE_IDENTITY_UNRESOLVED /
+RESEARCH_REQUIRED`.
 
 ## J. Sub-B coherence rules
 
@@ -373,15 +508,20 @@ summarize one declared coverage dimension, but the inspector must name it.
 
 ## P. Versioning and effective-time requirements
 
-Factor and hierarchy changes are append-only versions. Each version records:
+Canonical-factor and hierarchy-placement changes are append-only but separately
+versioned. Each canonical factor version records:
 
 - identity and profile version;
 - status and approval state;
 - effective interval;
 - system-known/accepted interval;
-- parent and ordered child identities;
 - definition/ontology/source/derivation references;
 - supersession reason and compatibility impact.
+
+Each placement version separately records canonical factor reference, parent
+placement, level, role, context label, exact-ten order/rank, child placement
+references, related-record references, effective/knowledge intervals, and
+supersession. Repositioning a factor does not create or revise an observation.
 
 Historical replay selects the hierarchy and mappings eligible under the named
 replay mode/cutoff. A current taxonomy cannot be silently backdated.
@@ -391,9 +531,9 @@ replay mode/cutoff. A current taxonomy cannot be silently backdated.
 ```text
 WHOLE SYSTEM
 → select Core or Outcome context
-→ selected context + exactly 10 Sub-A
+→ selected context placement + exactly 10 Sub-A placements
 → select Sub-A
-→ selected Sub-A + exactly 10 Sub-B
+→ selected Sub-A placement + exactly 10 Sub-B placements
 → select Sub-B
 → evidence/measurement focus
 ```
@@ -426,24 +566,93 @@ accepted, the relationship reaches `ACCEPTED`, applicable Gate-B evidence
 exists, and Human QA passes. The current accepted factual structural
 relationship count remains zero.
 
-## S. Proposed factor-record fields and PDI compatibility
+## S. FAC-001 canonical-factor and hierarchy-placement model
 
 Field names remain draft.
 
+### Layer 1 — canonical factor
+
+Conceptually owns or references:
+
+```text
+canonicalFactorId
+canonicalDefinition
+ontologyIdentity/version
+trackedConcept
+claimEligibility
+sourceEligibility
+derivationEligibility
+unitSemantics
+geographySemantics
+cadence
+referenceProfileRef
+factorStateProfileEligibility
+evidenceIdentity
+effectiveInterval
+knowledge/versionInterval
+status/version
+```
+
+It has no mandatory navigation `parentId`. Any canonical concept taxonomy
+relationships must use separately named ontology relation types; they cannot be
+overloaded as public navigation parentage.
+
+### Layer 2 — hierarchy placement
+
+Conceptually owns:
+
+```text
+placementId
+canonicalFactorId
+parentPlacementId
+hierarchyLevel
+navigationRole
+displayLabelOverride (only when justified)
+exactTenOrderOrRank
+childPlacementRefs
+relatedRecordRefs
+effective/versionInterval
+```
+
+A placement owns parentage. Multiple placements can reference one canonical
+factor. A placement may change navigation, context, a justified short label, and
+related-record suggestions. It may not independently change value, claim class,
+analytical state, reference calculation, source provenance, derivation truth,
+rights, revision, or publication authority.
+
+### Multi-placement deduplication invariant
+
+```text
+one canonical factor
+→ one eligible canonical OBS/CALC state at a named snapshot/cutoff
+→ one source/provenance or derivation truth
+→ one or more navigation placements referencing that truth
+```
+
+Two placements cannot generate two economic identities or contradictory states.
+One placement cannot call the same canonical state “Supportive” while another
+independently calls it “Critical.” Any contextual display wording must come from
+an already-governed presentation profile that is compatible with the same
+canonical state and reference.
+
+### PDI compatibility assessment
+
 | Candidate field group | Compatibility assessment |
 |---|---|
-| `nodeId`, `label`, child references, ranking/context, available views | Existing PDI navigation-node concepts; reuse exact approved names where practical |
-| claim state, value/unit, valid time, source/provenance refs | Existing PDI material-item concepts; claims remain `OBS`/`CALC`/`FCST`/`SCEN` |
-| source identity, cadence, freshness, methodology, rights context | Existing PDI/source-reference and Source Contract concepts |
-| `parentId`, `level`, `definition`, `trackedConcept`, `childJustification`, `ontologyRef`, profile references, taxonomy status/version | Candidate additive namespaced hierarchy extension; requires schema compatibility review |
+| canonical claim state, value/unit/time, source/provenance refs | Existing PDI material-item concepts; claims remain `OBS`/`CALC`/`FCST`/`SCEN` |
+| navigation node ID/label, child references, rank/context, available views | Existing PDI navigation-node concepts can represent placement-like records |
+| source identity, cadence, freshness, methodology, rights context | Existing PDI/source-reference concepts |
+| canonical factor registry and placement registry | Candidate additive namespaced extension; no current PDI requirement forbids reference-based multi-placement |
+| `parentPlacementId`, `hierarchyLevel`, navigation role, context label, factor/placement version | Candidate additive namespaced placement extension; names require later schema review |
 | taxonomy completeness, current-data coverage, related-record collections | Candidate additive namespaced extension; must not override core evidence/coverage semantics |
-| `effectiveTime`, `knowledgeTime` on taxonomy versions | Internal/candidate profile requirement; public exposure should use existing temporal vocabulary and avoid ambiguous duplicates |
 | item-level `publicationClass` | Prohibited; snapshot owns publication class under PDI-008 |
-| exact-ten enforcement and View All redefinition | BINDING UI/UX amendment candidate; do not implement under current UX-003/UX-006 wording |
+| exact-ten enforcement and View All redefinition | Requires the separately drafted BINDING UI/UX amendment; no PDI amendment is presently identified |
 
 No PDI body is amended. A namespaced additive extension appears technically
-plausible under PDI `extensions`, but runtime schema design and compatibility
-tests belong to a later authorized sprint.
+compatible under PDI-010 and the namespaced `extensions` boundary, provided it
+does not override core claim/source/publication semantics. Runtime names,
+schema, validation, and compatibility tests belong to a later authorized
+sprint. **FAC-001 status: RECOMMENDED / OPEN.**
 
 ### Candidate factor-state profile requirements
 
@@ -471,7 +680,17 @@ There is no generic `average(children)` or universal score. Unsupported weights
 are prohibited. Use a factor-specific evidence-supported ordinal rule or return
 `MIXED`, `PARTIAL`, `UNKNOWN`, or no headline state as permitted by authority.
 
-## T. Open decisions and recommendation
+## T. Decision candidates, open decisions, and recommendation
+
+### Correction-round decision candidates
+
+| ID / status | Recommendation and rationale | Rejected alternatives | Implementation consequence | Contract consequence |
+|---|---|---|---|---|
+| EMP-001 — `RECOMMENDED / OPEN` | Use `outcome:labor-market-state` / “Labor Market”; it coherently covers stocks, rates, flows, utilization, and compensation | Narrow Employment; vague Employment & Labor Market | Future placements use the broader parent; no UI work now | No current BINDING body changed; Taylor taxonomy decision required |
+| EMP-002 — `RECOMMENDED / OPEN` | Use the revised ten canonical factors/placements; six source-backed, four research-required | Preserve Industry Exposure as child; force filler; treat all factors as primary in one branch | Branch remains incomplete until factor/placement approval; source intake separately controls data coverage | Later exact-ten amendment must govern placement cardinality |
+| EMP-003 — `RECOMMENDED / OPEN` | Industry Employment Exposure is a structural-exposure attachment surfaced in Trace/related analysis | Canonical Sub-A; peer official-looking measurement | No CALC generated; future result references canonical employment/industry factors | Existing CALC/relationship/derivation contracts continue to govern |
+| FAC-001 — `RECOMMENDED / OPEN` | Separate one canonical factor from one-or-more hierarchy placements | Permanent parent on factor; duplicated factor per branch | Future registry/read model can deduplicate claims and evidence | Additive PDI extension appears compatible; exact schema later |
+| UXA-001 — `RECOMMENDED / OPEN` | Narrow DRAFT amendment replaces at-most/View-All hierarchy semantics with exact-ten placements and non-hierarchy related records | Silent reinterpretation; broad UI redesign | No implementation until Taylor approves/promotes applicable amendment | Current BINDING UI/UX body remains unchanged |
 
 ### Workstream decision posture
 
@@ -485,24 +704,23 @@ are prohibited. Use a factor-specific evidence-supported ordinal rule or return
 | LD-006 PDI extension | Prefer compatible namespaced additive extension; review only |
 | LD-007 Core headline condition | Requires complete taxonomy, sufficient eligible evidence, and factor-specific rules |
 | LD-008 factual connectors | Accepted relationships plus applicable Gate-B/Human QA only |
-| LD-009 first factual branch | Employment Outcome |
+| LD-009 first factual branch | Labor Market State outcome branch (EMP-001 open) |
 | LD-010 activation | Local QA → technical/external audit → Taylor Human QA → factual activation authorization → deployment authorization |
 
 ### Remaining open decisions
 
-1. Approve or correct the Master-defined Core labels/definitions for public use.
-2. Approve Employment's exact-ten candidate set or replace weak candidates.
-3. Resolve the JOLTS canonical ID representation before source enablement.
-4. Decide a coherent Sub-B decomposition separately for each Employment Sub-A.
-5. Decide Employment's permanent spatial role only after the taxonomy is
-   approved.
-6. Scope the necessary UI/UX contract amendment for exact-ten/View All semantics.
+1. Taylor decision on EMP-001, EMP-002, EMP-003, FAC-001, and UXA-001.
+2. Exact current JOLTS Total Separations machine identity before source intake.
+3. Ontology/source/reference profiles for the four research-required factors.
+4. A coherent Sub-B decomposition separately for each approved Sub-A.
+5. Permanent spatial-center role only after the taxonomy is approved.
+6. Later schema names and compatibility tests for factor/placement registries.
 
 ### Recommendation
 
-**APPROVE PROFILE FOR EXTERNAL REVIEW.**
+**READY FOR TAYLOR CONTRACT/TAXONOMY DECISION, subject to correction-package
+validation.**
 
-External review should focus on the hierarchy/graph separation, exact-ten
-contract conflict, Master-defined Core taxonomy, Employment exact-ten sibling
-coherence, and whether the proposed extension boundary preserves existing PDI
-authority. Do not begin Workstream 1 from this draft alone.
+Taylor should decide the five correction-round candidates together so the
+factor model, exact-ten placement semantics, and narrow amendment remain
+consistent. Do not begin Workstream 1 from this draft alone.
