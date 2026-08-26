@@ -17,8 +17,8 @@ update_version: Push rules in rulesets now support path exceptions
 update_logo_text: GIT
 update_published_at: '2026-08-25T17:40:15Z'
 update_last_checked: '2026-08-25T19:55:07Z'
-source_last_checked: '2026-08-25T19:55:07Z'
-official_body_last_checked: '2026-08-25T19:55:07Z'
+source_last_checked: '2026-08-26T02:53:12Z'
+official_body_last_checked: '2026-08-26T02:53:12Z'
 record_last_updated: '2026-08-25T19:55:07Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -81,6 +81,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-08-25T19:55:07Z'
+  url: https://github.blog/changelog/2026-08-25-push-rules-in-rulesets-now-support-path-exceptions
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-08-26T02:53:12Z'
   url: https://github.blog/changelog/2026-08-25-push-rules-in-rulesets-now-support-path-exceptions
   status: captured-from-rss-feed
   body_captured: true
