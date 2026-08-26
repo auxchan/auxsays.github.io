@@ -159,14 +159,18 @@ def rendered_rows(rows: list[dict], *, page_text: str | None = None) -> list[str
         r".*?\n      </div>)", out, re.S)
 
 
-def from_main(repo_path: str) -> str | None:
-    """A file's content as it exists on `main`, or None (shallow/single-branch checkout).
+def without_build_label(page_text: str) -> str:
+    """The page with the build sub-label removed -- a synthetic PRE-FIX template.
 
-    Callers MUST skip() rather than short-circuit a check to True when this returns None: a
-    comparison against main that silently evaporates reads as a pass while verifying nothing."""
-    proc = subprocess.run(["git", "show", f"main:{repo_path}"],
-                          capture_output=True, text=True, cwd=str(_REPO))
-    return proc.stdout if proc.returncode == 0 and proc.stdout else None
+    Non-vacuity used to be proven by rendering `git show main:...`. That is self-invalidating: once
+    the fix merges, `main` IS the fixed template and the comparison silently inverts (it failed on
+    main immediately after PR #67 landed). Deriving the pre-fix template from the current one keeps
+    the proof true forever and needs no git at all."""
+    stripped = re.sub(r"\{%-?\s*if\s+[a-z_]+\s*!=\s*(?:''|\"\")\s*-?%\}.*?"
+                      r"\{%-?\s*endif\s*-?%\}", "", page_text, flags=re.S)
+    stripped = re.sub(r"\{%-?\s*unless\s+[a-z_]+\s*==\s*(?:''|\"\")\s*-?%\}.*?"
+                      r"\{%-?\s*endunless\s*-?%\}", "", stripped, flags=re.S)
+    return stripped
 
 
 def identity_of(row_html: str) -> str:
@@ -202,14 +206,11 @@ def run() -> int:
         for b in (B110, B124, B158, B190):
             check(f"M1 build {b} is stated on exactly one row",
                   sum(1 for r in rows if b in r) == 1)
-        # The pre-fix behaviour, proven against main's own template rather than asserted.
-        old_page = from_main("auxsays/updates/methodology/index.md")
-        if old_page is None:
-            skip("M1 (vs main)", "main's copy of the page is unavailable in this checkout")
-        else:
-            old_ids = {identity_of(r) for r in rendered_rows(FOUR, page_text=old_page)}
-            check("M1 this is a real fix: main collapsed the four to ONE identity",
-                  len(old_ids) == 1, str(old_ids))
+        # Non-vacuity, proven by rendering rather than asserted: strip the build sub-label out of
+        # THIS template and the four siblings collapse to a single identity again.
+        old_ids = {identity_of(r) for r in rendered_rows(FOUR, page_text=without_build_label(PAGE))}
+        check("M1 this is a real fix: without the build label the four collapse to ONE identity",
+              len(old_ids) == 1, str(old_ids))
 
     # ---------- M2: the same method across siblings ----------
     print("\n[M2] the same method on every sibling stays attributable")
@@ -270,13 +271,11 @@ def run() -> int:
                        method="adobe_community"),
         ]
         new_rows = rendered_rows(version_only)
-        old_page = from_main("auxsays/updates/methodology/index.md")
-        old_rows = rendered_rows(version_only, page_text=old_page) if old_page else None
-        if old_rows is None:
-            skip("M5 (vs main)", "main's copy of the page is unavailable in this checkout")
-        else:
-            check("M5 byte-identical to main for version-only products", new_rows == old_rows,
-                  f"new={new_rows[0][:90]!r}")
+        # A version-only product must render exactly as it would with no build label in the template
+        # at all -- i.e. the change is provably invisible to the 1075 rows that have no build.
+        old_rows = rendered_rows(version_only, page_text=without_build_label(PAGE))
+        check("M5 byte-identical to a template with no build label at all", new_rows == old_rows,
+              f"new={new_rows[0][:90]!r}")
         for label, rendered in zip(("davinci", "acrobat"), new_rows):
             # The Version cell is the second <span> of the row.
             version_cell = re.findall(r"<span>.*?</span>", rendered, re.S)[1]
@@ -288,7 +287,7 @@ def run() -> int:
         # `!= blank` no-op on blocked_reason, reported as backlog and deliberately not touched here.
         # Assert it is unchanged rather than pretending this fix cleaned it up.
         if old_rows is not None:
-            check("M5 the pre-existing Notes-cell <small> behaviour is untouched",
+            check("M5 the Notes-cell <small> behaviour is untouched by this change",
                   [r.count("<small></small>") for r in new_rows]
                   == [r.count("<small></small>") for r in old_rows])
 
@@ -420,24 +419,30 @@ def run() -> int:
         skip("history (render)", "no Ruby/liquid")
     else:
         frag_new = version_cell_fragment(ROW)
-        old_row = from_main("auxsays/_includes/patch-table-row.html")
-        frag_old = version_cell_fragment(old_row) if old_row else None
+        # The PRE-FIX fragment, reconstructed rather than fetched from git: put the always-true
+        # `!= blank` guard back. Comparing against `main` would be self-invalidating once this
+        # merges, and would silently start comparing the fix against itself.
+        frag_old = re.sub(r"([a-z_]+)\s*!=\s*(?:''|\"\")", r"\1 != blank", frag_new)
+        check("history: the pre-fix fragment really is the buggy one",
+              "!= blank" in frag_old and "!= ''" not in frag_old, frag_old[:120])
         ppt_item = {"update_version": "2607", "target_build": B110}
         dav_item = {"update_version": "21.0.4", "target_build": ""}
         acr_item = {"update_version": "26.001.21529"}
 
         def cells(text, item):
-            """The rendered data-version + Version <td>. main's fragment has no assign line, so
-            blank lines are dropped -- what is compared is the emitted HTML, not template layout."""
+            """The rendered data-version + Version <td>; blank lines dropped so what is compared is
+            the emitted HTML rather than incidental template layout."""
             out = liquid_render(text, {"item": item}) or ""
             return "\n".join(ln for ln in out.splitlines() if ln.strip())
 
         new_ppt = cells(frag_new, ppt_item)
-        if frag_old is None:
-            skip("history (vs main)", "main's copy of the include is unavailable in this checkout")
-        else:
-            check("history: a build-aware row is BYTE-IDENTICAL to main",
-                  new_ppt == cells(frag_old, ppt_item), new_ppt)
+        # A build-aware row is unaffected by the guard change: the old always-true guard and the new
+        # emptiness guard both fire when a build is actually present.
+        check("history: a build-aware row renders identically under the OLD buggy guard",
+              new_ppt == cells(frag_old, ppt_item), new_ppt)
+        # ...and the version-only case is exactly where they diverge, which is the whole defect.
+        check("history: the OLD guard really did emit a dangling 'Build ' for a version-only row",
+              "Build </span>" in cells(frag_old, dav_item), cells(frag_old, dav_item))
         check("history: it still states the build and the sort key still carries it",
               f"Build {B110}" in new_ppt and f'data-version="2607.{B110}"' in new_ppt, new_ppt)
 
