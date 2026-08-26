@@ -1,6 +1,6 @@
 import type { StructuralSurfaceNode } from "../../data/motionQaReadModel";
 
-export type StructuralNodeSymbol = "drop" | "refinery" | "tank" | "bolt" | "flame" | "split" | "freight" | "factory" | "people" | "system" | "briefcase" | "unemployment" | "participation" | "claims" | "openings" | "hire" | "clock" | "earnings" | "separations" | "ratio";
+export type StructuralNodeSymbol = "drop" | "refinery" | "tank" | "bolt" | "flame" | "split" | "freight" | "factory" | "people" | "system" | "labor-market" | "briefcase" | "unemployment" | "participation" | "claims" | "openings" | "hire" | "clock" | "earnings" | "separations" | "ratio";
 
 export interface StructuralNodeVisual {
   accent: string;
@@ -19,7 +19,7 @@ const visuals: Record<string, StructuralNodeVisual> = {
   "fixture-transport": { accent: "#78aaff", fill: "#1d2e48", role: "INFRASTRUCTURE", symbol: "freight" },
   "fixture-downstream": { accent: "#f08d79", fill: "#3b2422", role: "DEMAND", symbol: "factory" },
   "fixture-employment": { accent: "#e998d2", fill: "#3b2437", role: "HUMAN", symbol: "people" },
-  "outcome:labor-market-state": { accent: "#e998d2", fill: "#3b2437", role: "HUMAN", symbol: "people" },
+  "outcome:labor-market-state": { accent: "#e998d2", fill: "#3b2437", role: "HUMAN", symbol: "labor-market" },
   "factor:payroll-employment": { accent: "#82efd5", fill: "#173a35", role: "HUMAN", symbol: "briefcase" },
   "factor:u3-unemployment": { accent: "#f08d79", fill: "#3b2422", role: "HUMAN", symbol: "unemployment" },
   "factor:labor-force-participation": { accent: "#78aaff", fill: "#1d2e48", role: "HUMAN", symbol: "participation" },

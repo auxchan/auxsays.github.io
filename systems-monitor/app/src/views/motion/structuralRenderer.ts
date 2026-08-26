@@ -347,12 +347,14 @@ function drawNodeSymbol(context: CanvasRenderingContext2D, symbol: StructuralNod
     context.moveTo(-9, 8); context.lineTo(-9, -3); context.lineTo(-3, 1); context.lineTo(-3, -3); context.lineTo(3, 1); context.lineTo(3, -8); context.lineTo(8, -8); context.lineTo(8, 8); context.closePath(); context.moveTo(-5, 5); context.lineTo(-5, 3); context.moveTo(0, 5); context.lineTo(0, 3); context.stroke();
   } else if (symbol === "people") {
     context.moveTo(-5, -7); context.arc(-5, -5, 2, 0, Math.PI * 2); context.moveTo(5, -7); context.arc(5, -5, 2, 0, Math.PI * 2); context.moveTo(-9, 8); context.bezierCurveTo(-9, 1, -1, 1, -1, 8); context.moveTo(1, 8); context.bezierCurveTo(1, 1, 9, 1, 9, 8); context.stroke();
+  } else if (symbol === "labor-market") {
+    context.arc(0, 0, 3, 0, Math.PI * 2); context.moveTo(-5, -8); context.arc(-7, -8, 2, 0, Math.PI * 2); context.moveTo(9, -8); context.arc(7, -8, 2, 0, Math.PI * 2); context.moveTo(2, 9); context.arc(0, 9, 2, 0, Math.PI * 2); context.moveTo(-5.5, -6.5); context.lineTo(-2, -2); context.moveTo(5.5, -6.5); context.lineTo(2, -2); context.moveTo(0, 3); context.lineTo(0, 7); context.stroke();
   } else if (symbol === "briefcase") {
     context.rect(-9, -4, 18, 12); context.moveTo(-4, -4); context.lineTo(-4, -8); context.lineTo(4, -8); context.lineTo(4, -4); context.moveTo(-9, 1); context.lineTo(9, 1); context.stroke();
   } else if (symbol === "unemployment") {
     context.arc(0, -5, 3, 0, Math.PI * 2); context.moveTo(-7, 8); context.bezierCurveTo(-7, 0, 7, 0, 7, 8); context.moveTo(-9, -1); context.lineTo(-4, -1); context.stroke();
   } else if (symbol === "participation") {
-    context.arc(-4, -5, 2.5, 0, Math.PI * 2); context.moveTo(6.5, -5); context.arc(4, -5, 2.5, 0, Math.PI * 2); context.moveTo(-9, 8); context.bezierCurveTo(-9, 1, 1, 1, 1, 8); context.moveTo(-1, 8); context.bezierCurveTo(-1, 1, 9, 1, 9, 8); context.stroke();
+    context.arc(-6, -6, 2, 0, Math.PI * 2); context.moveTo(2, -7); context.arc(0, -7, 2, 0, Math.PI * 2); context.moveTo(8, -6); context.arc(6, -6, 2, 0, Math.PI * 2); context.moveTo(-6, -2); context.lineTo(-6, 7); context.moveTo(0, -3); context.lineTo(0, 8); context.moveTo(6, -2); context.lineTo(6, 7); context.moveTo(-9, 1); context.lineTo(-3, 1); context.moveTo(-3, 0); context.lineTo(3, 0); context.moveTo(3, 1); context.lineTo(9, 1); context.moveTo(-8, 9); context.lineTo(8, 9); context.stroke();
   } else if (symbol === "claims") {
     context.rect(-7, -9, 14, 18); context.moveTo(-4, -4); context.lineTo(4, -4); context.moveTo(-4, 0); context.lineTo(4, 0); context.moveTo(-4, 4); context.lineTo(2, 4); context.stroke();
   } else if (symbol === "openings") {

@@ -102,6 +102,8 @@ describe("Workstream 1A factual Labor Market UI", () => {
     expect(surface.getAttribute("data-relationship-semantics")).toBe("hierarchy-navigation-only");
     expect(surface.getAttribute("data-orbit-geometry")).toBe("10-around-one");
     expect(surface.getAttribute("data-visible-relationship-count")).toBe("10");
+    expect(map.querySelector('[data-motion-node-id="outcome:labor-market-state"]')?.getAttribute("data-node-symbol")).toBe("labor-market");
+    expect(map.querySelector('[data-motion-node-id="factor:labor-force-participation"]')?.getAttribute("data-node-symbol")).toBe("participation");
     expect(map.querySelector("marker, [data-motion-edge-id], [data-relationship-class]")).toBeNull();
   });
 
