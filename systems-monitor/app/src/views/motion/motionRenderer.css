@@ -200,6 +200,27 @@
 [data-aux-product="systems-monitor"] .sm-node-guide footer a:hover,
 [data-aux-product="systems-monitor"] .sm-node-guide footer a:focus-visible { color: #dffaf4; text-decoration: underline; outline: none; }
 
+/* Workstream 1A factual content inside the established structural renderer. */
+[data-aux-product="systems-monitor"] .sm-labor-structural-view .sm-viz-instrument { margin-top: .35rem; }
+[data-aux-product="systems-monitor"] .sm-labor-hierarchy-readout p { margin: 0; color: #a7c0c2; font-size: .78rem; }
+[data-aux-product="systems-monitor"] .sm-labor-hierarchy-readout p strong { color: #e4f5f1; }
+[data-aux-product="systems-monitor"] .sm-labor-hierarchy-readout > span { color: #6f8f96; font-size: .7rem; }
+[data-aux-product="systems-monitor"] .sm-node-guide dl { display: grid; gap: .65rem; margin: .75rem 0 0; }
+[data-aux-product="systems-monitor"] .sm-node-guide dl > div { display: grid; grid-template-columns: 7rem minmax(0, 1fr); gap: .75rem; align-items: baseline; }
+[data-aux-product="systems-monitor"] .sm-node-guide dt { color: #78949b; font-size: .65rem; font-weight: 760; letter-spacing: .065em; text-transform: uppercase; }
+[data-aux-product="systems-monitor"] .sm-node-guide dd { margin: 0; overflow-wrap: anywhere; color: #d1e2de; font-size: .82rem; line-height: 1.45; }
+[data-aux-product="systems-monitor"] .sm-labor-factual-reading > strong { display: block; margin: .3rem 0; color: #f1fff9; font-size: 1.45rem; line-height: 1.15; }
+[data-aux-product="systems-monitor"] .sm-labor-evidence-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .9rem; }
+[data-aux-product="systems-monitor"] .sm-labor-evidence-actions a { padding: .56rem .68rem; border: 1px solid color-mix(in srgb, var(--guide-accent) 32%, transparent); border-radius: .55rem; color: color-mix(in srgb, var(--guide-accent) 82%, white 12%); font-size: .73rem; font-weight: 750; text-decoration: none; }
+[data-aux-product="systems-monitor"] .sm-labor-evidence-actions a:hover,
+[data-aux-product="systems-monitor"] .sm-labor-evidence-actions a:focus-visible { border-color: color-mix(in srgb, var(--guide-accent) 70%, white 8%); background: color-mix(in srgb, var(--guide-accent) 8%, transparent); outline: none; }
+[data-aux-product="systems-monitor"] .sm-labor-timing { margin-top: 1rem; border: 1px solid rgba(139,177,184,.14); border-radius: .75rem; }
+[data-aux-product="systems-monitor"] .sm-labor-timing summary { min-height: 44px; padding: .72rem .8rem; color: #a9bfbe; cursor: pointer; font-size: .76rem; font-weight: 720; }
+[data-aux-product="systems-monitor"] .sm-labor-timing dl { padding: 0 .8rem .8rem; }
+[data-aux-product="systems-monitor"] .sm-labor-unavailable > strong { display: block; margin-bottom: .42rem; color: #efc37e; font-size: 1.05rem; }
+[data-aux-product="systems-monitor"] .sm-viz-surface[data-relationship-semantics="hierarchy-navigation-only"] .sm-viz-node-label.is-unavailable { opacity: .62; }
+[data-aux-product="systems-monitor"] .sm-viz-surface[data-relationship-semantics="hierarchy-navigation-only"] .sm-viz-node-label.is-unavailable .sm-viz-node-anchor { border-style: dashed; filter: saturate(.55); }
+
 [data-aux-product="systems-monitor"] .sm-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 @keyframes aux-sm-node-guide-content { from { opacity: 0; transform: translateX(-.75rem); } to { opacity: 1; transform: translateX(0); } }
 @keyframes aux-sm-factor-orbit { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }

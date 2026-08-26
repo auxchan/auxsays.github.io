@@ -1,4 +1,4 @@
-import type { MotionQaNode } from "../../data/motionQaReadModel";
+import type { StructuralSurfaceNode } from "../../data/motionQaReadModel";
 import { projectNode, type StructuralCamera } from "./structuralRenderer";
 import { EMPLOYMENT_ORBIT_CENTER } from "./spatialNavigation";
 
@@ -49,9 +49,9 @@ export function contextFactorsForNode(nodeId: string) {
   return structuralContextFactors.filter((factor) => factor.parentNodeId === nodeId);
 }
 
-export function layoutStructuralContextFactors(nodes: MotionQaNode[], camera: StructuralCamera, depths: Map<string, number>, visibleNodeIds: Set<string>) {
+export function layoutStructuralContextFactors(nodes: StructuralSurfaceNode[], camera: StructuralCamera, depths: Map<string, number>, visibleNodeIds: Set<string>, factors: StructuralContextFactor[] = structuralContextFactors) {
   const nodeMap = new Map(nodes.map((node) => [node.id, node]));
-  return structuralContextFactors.flatMap((factor): PositionedStructuralContextFactor[] => {
+  return factors.flatMap((factor): PositionedStructuralContextFactor[] => {
     const parent = nodeMap.get(factor.parentNodeId);
     if (!parent || !visibleNodeIds.has(parent.id)) return [];
     const deltaX = parent.x - EMPLOYMENT_ORBIT_CENTER.x;

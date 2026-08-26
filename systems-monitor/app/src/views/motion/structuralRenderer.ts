@@ -1,4 +1,4 @@
-import type { MotionOutcome, MotionQaNode, MotionQaReadModel, MotionQaRelationship } from "../../data/motionQaReadModel";
+import type { MotionOutcome, MotionQaRelationship, StructuralSurfaceModel, StructuralSurfaceNode, StructuralSurfaceRelationship } from "../../data/motionQaReadModel";
 import { resolveStructuralNodeVisual, type StructuralNodeSymbol } from "./structuralVisualLanguage";
 
 export interface StructuralCamera {
@@ -53,13 +53,13 @@ export function connectorGlintProgress(nowMs: number, edgeIndex: number) {
   return ((nowMs / CONNECTOR_GLINT_PERIOD_MS) + edgeIndex * 0.137) % 1;
 }
 
-export function resolveStructuralDepths(model: MotionQaReadModel, focusNodeId: string | null = null) {
+export function resolveStructuralDepths(model: StructuralSurfaceModel, focusNodeId: string | null = null) {
   const nodeIds = new Set(model.nodes.map((node) => node.id));
   const adjacency = new Map(model.nodes.map((node) => [node.id, [] as string[]]));
   const inbound = new Set<string>();
   for (const edge of model.relationships) {
     if (!nodeIds.has(edge.from) || !nodeIds.has(edge.to)) continue;
-    if (!focusNodeId && ["BLOCKED", "ABSORBED", "UNKNOWN"].includes(edge.outcome)) continue;
+    if (!focusNodeId && edge.outcome && ["BLOCKED", "ABSORBED", "UNKNOWN"].includes(edge.outcome)) continue;
     adjacency.get(edge.from)!.push(edge.to);
     inbound.add(edge.to);
     if (focusNodeId) adjacency.get(edge.to)!.push(edge.from);
@@ -105,7 +105,7 @@ export function stepSpringParallax(current: SpringParallaxState, target: Point, 
 }
 
 export interface StructuralRenderState {
-  model: MotionQaReadModel;
+  model: StructuralSurfaceModel;
   currentEdges: MotionQaRelationship[];
   completedEdgeIds: Set<string>;
   pathEdgeIds: Set<string>;
@@ -123,6 +123,7 @@ export interface StructuralRenderState {
   nowMs: number;
   reconciliationTargetId: string | null;
   commonOriginNodeId: string | null;
+  centerNodeId: string;
   parallaxTarget: Point;
 }
 
@@ -150,7 +151,7 @@ const outcomeColors: Record<MotionOutcome, string> = {
   UNKNOWN: "#8196a2"
 };
 
-export function createStructuralCamera(width: number, height: number, selected?: MotionQaNode, focusDepth = 0): StructuralCamera {
+export function createStructuralCamera(width: number, height: number, selected?: StructuralSurfaceNode, focusDepth = 0): StructuralCamera {
   const baseScale = Math.min((width - 52) / DESIGN_WIDTH, (height - 44) / DESIGN_HEIGHT);
   const scale = baseScale * (selected ? Math.min(1.82, 1.64 + Math.max(0, focusDepth - 1) * 0.08) : 1);
   if (selected) {
@@ -183,7 +184,7 @@ export function interpolateCamera(from: StructuralCamera, to: StructuralCamera, 
   };
 }
 
-export function projectNode(node: MotionQaNode, camera: StructuralCamera): Point {
+export function projectNode(node: StructuralSurfaceNode, camera: StructuralCamera): Point {
   return { x: camera.offsetX + node.x * camera.scale, y: camera.offsetY + node.y * camera.scale };
 }
 
@@ -209,7 +210,7 @@ export function zoomStructuralViewportAt(viewport: StructuralViewportTransform, 
   };
 }
 
-export function sampleRelationship(edge: MotionQaRelationship, nodes: Map<string, MotionQaNode>, count = 64): Point[] {
+export function sampleRelationship(edge: StructuralSurfaceRelationship, nodes: Map<string, StructuralSurfaceNode>, count = 64): Point[] {
   const from = nodes.get(edge.from)!;
   const to = nodes.get(edge.to)!;
   const midpoint = (from.x + to.x) / 2;
@@ -346,13 +347,33 @@ function drawNodeSymbol(context: CanvasRenderingContext2D, symbol: StructuralNod
     context.moveTo(-9, 8); context.lineTo(-9, -3); context.lineTo(-3, 1); context.lineTo(-3, -3); context.lineTo(3, 1); context.lineTo(3, -8); context.lineTo(8, -8); context.lineTo(8, 8); context.closePath(); context.moveTo(-5, 5); context.lineTo(-5, 3); context.moveTo(0, 5); context.lineTo(0, 3); context.stroke();
   } else if (symbol === "people") {
     context.moveTo(-5, -7); context.arc(-5, -5, 2, 0, Math.PI * 2); context.moveTo(5, -7); context.arc(5, -5, 2, 0, Math.PI * 2); context.moveTo(-9, 8); context.bezierCurveTo(-9, 1, -1, 1, -1, 8); context.moveTo(1, 8); context.bezierCurveTo(1, 1, 9, 1, 9, 8); context.stroke();
+  } else if (symbol === "briefcase") {
+    context.rect(-9, -4, 18, 12); context.moveTo(-4, -4); context.lineTo(-4, -8); context.lineTo(4, -8); context.lineTo(4, -4); context.moveTo(-9, 1); context.lineTo(9, 1); context.stroke();
+  } else if (symbol === "unemployment") {
+    context.arc(0, -5, 3, 0, Math.PI * 2); context.moveTo(-7, 8); context.bezierCurveTo(-7, 0, 7, 0, 7, 8); context.moveTo(-9, -1); context.lineTo(-4, -1); context.stroke();
+  } else if (symbol === "participation") {
+    context.arc(-4, -5, 2.5, 0, Math.PI * 2); context.moveTo(6.5, -5); context.arc(4, -5, 2.5, 0, Math.PI * 2); context.moveTo(-9, 8); context.bezierCurveTo(-9, 1, 1, 1, 1, 8); context.moveTo(-1, 8); context.bezierCurveTo(-1, 1, 9, 1, 9, 8); context.stroke();
+  } else if (symbol === "claims") {
+    context.rect(-7, -9, 14, 18); context.moveTo(-4, -4); context.lineTo(4, -4); context.moveTo(-4, 0); context.lineTo(4, 0); context.moveTo(-4, 4); context.lineTo(2, 4); context.stroke();
+  } else if (symbol === "openings") {
+    context.rect(-7, -9, 14, 18); context.moveTo(2, 0); context.arc(1, 0, 1, 0, Math.PI * 2); context.stroke();
+  } else if (symbol === "hire") {
+    context.arc(-3, -5, 3, 0, Math.PI * 2); context.moveTo(-9, 8); context.bezierCurveTo(-9, 0, 3, 0, 3, 8); context.moveTo(5, -2); context.lineTo(5, 6); context.moveTo(1, 2); context.lineTo(9, 2); context.stroke();
+  } else if (symbol === "clock") {
+    context.arc(0, 0, 9, 0, Math.PI * 2); context.moveTo(0, -5); context.lineTo(0, 1); context.lineTo(5, 4); context.stroke();
+  } else if (symbol === "earnings") {
+    context.arc(0, 0, 9, 0, Math.PI * 2); context.moveTo(3, -5); context.bezierCurveTo(-5, -8, -5, -1, 1, 0); context.bezierCurveTo(7, 1, 5, 8, -3, 6); context.moveTo(0, -8); context.lineTo(0, 8); context.stroke();
+  } else if (symbol === "separations") {
+    context.moveTo(-9, 0); context.lineTo(-1, 0); context.moveTo(-1, 0); context.lineTo(7, -7); context.moveTo(-1, 0); context.lineTo(7, 7); context.moveTo(7, -7); context.lineTo(3, -7); context.moveTo(7, -7); context.lineTo(7, -3); context.moveTo(7, 7); context.lineTo(3, 7); context.moveTo(7, 7); context.lineTo(7, 3); context.stroke();
+  } else if (symbol === "ratio") {
+    context.arc(-5, -5, 3, 0, Math.PI * 2); context.moveTo(8, 5); context.arc(5, 5, 3, 0, Math.PI * 2); context.moveTo(-7, 8); context.lineTo(7, -8); context.stroke();
   } else {
     context.arc(0, 0, 7, 0, Math.PI * 2); context.moveTo(-7, 0); context.lineTo(7, 0); context.moveTo(0, -7); context.lineTo(0, 7); context.stroke();
   }
   context.restore();
 }
 
-function drawNodeShape(context: CanvasRenderingContext2D, node: MotionQaNode, state: string, selected: boolean, hovered: boolean, phase: number, depthVisual: StructuralDepthVisual) {
+function drawNodeShape(context: CanvasRenderingContext2D, node: StructuralSurfaceNode, state: string, selected: boolean, hovered: boolean, phase: number, depthVisual: StructuralDepthVisual) {
   const active = state !== "IDLE" && state !== "SIGNAL_READY";
   const visual = resolveStructuralNodeVisual(node);
   const pulse = 0.5 + Math.sin(phase * Math.PI * 2) * 0.5;
@@ -402,7 +423,7 @@ function seededUnit(seed: string) {
   return (hash >>> 0) / 4294967295;
 }
 
-function drawDepthField(context: CanvasRenderingContext2D, nodes: MotionQaNode[], depths: Map<string, number>, nowMs: number, parallax: Point, reducedMotion: boolean) {
+function drawDepthField(context: CanvasRenderingContext2D, nodes: StructuralSurfaceNode[], depths: Map<string, number>, nowMs: number, parallax: Point, reducedMotion: boolean) {
   for (const node of nodes) {
     const visual = resolveStructuralNodeVisual(node);
     const structuralDepth = depths.get(node.id) ?? 0;
@@ -434,10 +455,10 @@ function drawDepthField(context: CanvasRenderingContext2D, nodes: MotionQaNode[]
   }
 }
 
-function drawConcentricOrbitGuides(context: CanvasRenderingContext2D, nodes: MotionQaNode[], selectedNodeId: string | null, traceMode: boolean) {
+function drawConcentricOrbitGuides(context: CanvasRenderingContext2D, nodes: StructuralSurfaceNode[], centerNodeId: string, selectedNodeId: string | null, traceMode: boolean) {
   if (selectedNodeId || traceMode) return;
-  const center = nodes.find((node) => node.id === "fixture-employment");
-  const orbitNodes = nodes.filter((node) => node.id !== "fixture-employment");
+  const center = nodes.find((node) => node.id === centerNodeId);
+  const orbitNodes = nodes.filter((node) => node.id !== centerNodeId);
   if (!center || orbitNodes.length < 3) return;
   const radius = orbitNodes.reduce((sum, node) => sum + Math.hypot(node.x - center.x, node.y - center.y), 0) / orbitNodes.length;
 
@@ -572,7 +593,7 @@ export class CanvasStructuralRenderer implements StructuralRenderer {
     context.scale(camera.scale, camera.scale);
 
     const structuralDepths = resolveStructuralDepths(state.model, state.traceMode ? null : state.selectedNodeId);
-    drawConcentricOrbitGuides(context, renderNodes, state.selectedNodeId, state.traceMode);
+    drawConcentricOrbitGuides(context, renderNodes, state.centerNodeId, state.selectedNodeId, state.traceMode);
     drawDepthField(context, renderNodes, structuralDepths, state.nowMs, this.parallax.position, state.reducedMotion);
 
     if (state.traceMode) this.hoverVisuals.clear();
@@ -600,14 +621,15 @@ export class CanvasStructuralRenderer implements StructuralRenderer {
       const glintColor = blendConnectorColor("#75c9bd", hoverVisual.accent, hoverVisual.emphasis);
       tracePoints(context, points);
       context.strokeStyle = isComplete ? "rgba(105,198,178,.55)" : primaryColor;
-      context.lineWidth = isPath ? 8 : (5 + hoverVisual.emphasis * 1.5) * edgeDepthVisual.scale;
+      const hierarchyTether = edge.relationshipClass === "HIERARCHY";
+      context.lineWidth = isPath ? 8 : ((hierarchyTether ? 2.8 : 5) + hoverVisual.emphasis * 1.5) * edgeDepthVisual.scale;
       context.lineCap = "round";
       context.stroke();
       tracePoints(context, points);
       context.strokeStyle = isComplete ? "rgba(146,237,215,.52)" : innerColor;
       context.lineWidth = 1.15;
       context.stroke();
-      if (isPath || !state.traceMode) drawArrow(context, points, 0.9, isPath ? "#719d9f" : arrowColor, isPath ? 0.68 : 0.36 + hoverVisual.emphasis * 0.34);
+      if (!hierarchyTether && (isPath || !state.traceMode)) drawArrow(context, points, 0.9, isPath ? "#719d9f" : arrowColor, isPath ? 0.68 : 0.36 + hoverVisual.emphasis * 0.34);
       if (!state.traceMode && !state.reducedMotion) {
         const glint = connectorGlintProgress(state.nowMs, edgeIndex);
         const start = Math.max(0, glint - 0.08);
@@ -665,7 +687,7 @@ export class CanvasStructuralRenderer implements StructuralRenderer {
       if (!state.visibleNodeIds.has(node.id)) continue;
       const visible = !state.traceMode || pathNodes.has(node.id) || state.selectedNodeId === node.id;
       if (!visible) continue;
-      const emphasized = state.selectedNodeId === node.id || state.hoveredNodeId === node.id || (!state.selectedNodeId && node.id === "fixture-employment") || (state.traceMode && pathNodes.has(node.id));
+      const emphasized = state.selectedNodeId === node.id || state.hoveredNodeId === node.id || (!state.selectedNodeId && node.id === state.centerNodeId) || (state.traceMode && pathNodes.has(node.id));
       const depthVisual = resolveStructuralDepthVisual(structuralDepths.get(node.id) ?? 0, emphasized);
       drawNodeShape(context, node, state.nodeStates.get(node.id) ?? "IDLE", state.selectedNodeId === node.id, state.hoveredNodeId === node.id, phase, depthVisual);
     }

@@ -91,14 +91,17 @@ describe("Workstream 1A factual Labor Market UI", () => {
     render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
     expect(await screen.findByRole("heading", { name: "Labor Market" }, { timeout: 15_000 })).toBeTruthy();
     expect(screen.getByText("LOCAL FACTUAL SNAPSHOT")).toBeTruthy();
-    const map = screen.getByRole("region", { name: "Labor Market factor map" });
-    const factorTargets = map.querySelectorAll<HTMLButtonElement>('[aria-label$="Open details."]');
+    const map = screen.getByRole("region", { name: "Factual Labor Market structural surface" });
+    const surface = map.querySelector<HTMLElement>('[data-structural-renderer="canvas-rd"]')!;
+    const factorTargets = map.querySelectorAll<HTMLButtonElement>('[data-motion-node-id^="factor:"]');
     expect(factorTargets).toHaveLength(10);
-    expect(map.querySelectorAll("button.is-populated")).toHaveLength(6);
-    expect(map.querySelectorAll("button.is-unavailable")).toHaveLength(4);
-    expect(screen.getByText("6/10")).toBeTruthy();
-    expect(screen.getByText("10/10")).toBeTruthy();
-    expect(map.getAttribute("data-hierarchy-relationship")).toBe("navigation-only");
+    expect(map.querySelectorAll('[data-motion-node-id^="factor:"][data-motion-state="SIGNAL_READY"]')).toHaveLength(6);
+    expect(map.querySelectorAll('[data-motion-node-id^="factor:"][data-motion-state="IDLE"]')).toHaveLength(4);
+    expect(screen.getAllByText(/10\/10 factors/).length).toBeGreaterThan(0);
+    expect(screen.getAllByText(/6 official readings/).length).toBeGreaterThan(0);
+    expect(surface.getAttribute("data-relationship-semantics")).toBe("hierarchy-navigation-only");
+    expect(surface.getAttribute("data-orbit-geometry")).toBe("10-around-one");
+    expect(surface.getAttribute("data-visible-relationship-count")).toBe("10");
     expect(map.querySelector("marker, [data-motion-edge-id], [data-relationship-class]")).toBeNull();
   });
 
@@ -119,7 +122,7 @@ describe("Workstream 1A factual Labor Market UI", () => {
     await screen.findByRole("heading", { name: "Labor Market" });
     fireEvent.click(screen.getByRole("button", { name: /Payroll Employment\. 158,858 thousands of persons/ }));
     const inspector = screen.getByRole("complementary", { name: "Payroll Employment details" });
-    expect(within(inspector).getByText("158,858 thousands of persons")).toBeTruthy();
+    expect(within(inspector).getAllByText("158,858 thousands of persons")).toHaveLength(2);
     expect(within(inspector).getByText("CES0000000001")).toBeTruthy();
     expect(within(inspector).getByRole("link", { name: "Open original evidence" }).getAttribute("href")).toBe("https://data.bls.gov/timeseries/CES0000000001");
     expect(window.location.search).toContain("path=payroll-employment");
@@ -131,7 +134,7 @@ describe("Workstream 1A factual Labor Market UI", () => {
     await screen.findByRole("heading", { name: "Labor Market" });
     fireEvent.click(screen.getByRole("button", { name: /Total Separations\. Current data not yet enabled/ }));
     const inspector = screen.getByRole("complementary", { name: "Total Separations details" });
-    expect(within(inspector).getByText("Current data not yet enabled")).toBeTruthy();
+    expect(within(inspector).getAllByText("Data not yet enabled")).toHaveLength(2);
     expect(within(inspector).getByText(/quits, layoffs, discharges/)).toBeTruthy();
     const text = inspector.textContent ?? "";
     expect(text).not.toMatch(/\b0\b/);
@@ -148,6 +151,6 @@ describe("Workstream 1A factual Labor Market UI", () => {
     expect(document.activeElement).toBe(claims);
     fireEvent.click(claims);
     expect(screen.getByText(initialIdentity)).toBeTruthy();
-    expect(screen.getByText(/Six have accepted current observations and four are not yet enabled/)).toBeTruthy();
+    expect(screen.getByText(/6 official readings · 4 data sources not yet enabled/)).toBeTruthy();
   });
 });

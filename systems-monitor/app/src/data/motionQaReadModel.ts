@@ -1,7 +1,7 @@
 export const motionOutcomes = ["TRANSMITTED", "DELAYED", "PARTIALLY_ABSORBED", "ABSORBED", "BLOCKED", "AMPLIFIED", "UNKNOWN"] as const;
 export type MotionOutcome = typeof motionOutcomes[number];
 
-export interface MotionQaNode {
+export interface StructuralSurfaceNode {
   id: string;
   label: string;
   overviewLabel: string;
@@ -22,13 +22,26 @@ export interface MotionQaNode {
   y: number;
 }
 
-export interface MotionQaRelationship {
+export interface StructuralSurfaceRelationship {
   id: string;
   from: string;
   to: string;
+  plainLanguage: string;
+  relationshipClass?: "HIERARCHY" | "STRUCTURAL_FIXTURE";
+  outcome?: MotionOutcome;
+}
+
+export interface StructuralSurfaceModel {
+  nodes: StructuralSurfaceNode[];
+  relationships: StructuralSurfaceRelationship[];
+  centerNodeId: string;
+}
+
+export interface MotionQaNode extends StructuralSurfaceNode {}
+
+export interface MotionQaRelationship extends StructuralSurfaceRelationship {
   outcome: MotionOutcome;
   mechanism: string;
-  plainLanguage: string;
   evidenceClass: "TEST_FIXTURE";
   originId: string;
   commonCauseId: string | null;
@@ -46,7 +59,7 @@ export interface MotionQaPath {
   stopReason: string;
 }
 
-export interface MotionQaReadModel {
+export interface MotionQaReadModel extends StructuralSurfaceModel {
   schemaVersion: "phase4-motion-qa-read-model-1.0.0";
   publicationClass: "fixture";
   fixtureType: "TEST_FIXTURE";
@@ -136,6 +149,6 @@ export function validateMotionQaReadModel(value: unknown): MotionQaReadModel {
   return {
     schemaVersion: "phase4-motion-qa-read-model-1.0.0", publicationClass: "fixture", fixtureType: "TEST_FIXTURE", activationStatus: "DEVELOPMENT_ONLY_MOTION_QA", candidateEligibility: "NEVER_ACCEPTED_NEVER_PUBLISHED",
     title: string(model.title, "title"), coverage: { scope: "MOTION_QA_ONLY", nodeCount: nodes.length, relationshipCount: relationships.length, factualRelationshipCount: 0, acceptedRelationshipCount: 0 },
-    sourceHealth: Object.fromEntries(Object.entries(object(model.sourceHealth, "sourceHealth")).map(([key, state]) => [key, string(state, `sourceHealth.${key}`)])), humanMotionQa: "PENDING", gateBStatus: "OPEN_UNCHANGED", phase5Status: "LOCKED", nodes, relationships, paths, derivations
+    sourceHealth: Object.fromEntries(Object.entries(object(model.sourceHealth, "sourceHealth")).map(([key, state]) => [key, string(state, `sourceHealth.${key}`)])), humanMotionQa: "PENDING", gateBStatus: "OPEN_UNCHANGED", phase5Status: "LOCKED", nodes, relationships, centerNodeId: "fixture-employment", paths, derivations
   };
 }

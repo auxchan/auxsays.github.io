@@ -1,4 +1,4 @@
-import type { MotionQaNode, MotionQaReadModel, MotionQaRelationship } from "../../data/motionQaReadModel";
+import type { StructuralSurfaceModel, StructuralSurfaceNode, StructuralSurfaceRelationship } from "../../data/motionQaReadModel";
 import type { Point, StructuralCamera } from "./structuralRenderer";
 import { projectNode } from "./structuralRenderer";
 
@@ -18,8 +18,15 @@ const employmentOrbitPositions: Record<string, Point> = {
   "fixture-employment": EMPLOYMENT_ORBIT_CENTER
 };
 
-export function layoutEmploymentOrbit(model: MotionQaReadModel): MotionQaNode[] {
-  return model.nodes.map((node) => ({ ...node, ...(employmentOrbitPositions[node.id] ?? {}) }));
+export function layoutEmploymentOrbit(model: StructuralSurfaceModel): StructuralSurfaceNode[] {
+  if (model.centerNodeId === "fixture-employment") return model.nodes.map((node) => ({ ...node, ...(employmentOrbitPositions[node.id] ?? {}) }));
+  const orbitNodes = model.nodes.filter((node) => node.id !== model.centerNodeId).sort((left, right) => left.displayRank - right.displayRank || left.id.localeCompare(right.id));
+  const positions = new Map(orbitNodes.map((node, index) => {
+    const angle = -Math.PI / 2 + (index / Math.max(1, orbitNodes.length)) * Math.PI * 2;
+    return [node.id, { x: EMPLOYMENT_ORBIT_CENTER.x + Math.cos(angle) * 225, y: EMPLOYMENT_ORBIT_CENTER.y + Math.sin(angle) * 225 }];
+  }));
+  positions.set(model.centerNodeId, EMPLOYMENT_ORBIT_CENTER);
+  return model.nodes.map((node) => ({ ...node, ...(positions.get(node.id) ?? {}) }));
 }
 
 export interface SpatialViewport {
@@ -46,7 +53,7 @@ export interface SpatialLabelPlacement {
 }
 
 interface LabelLayoutOptions {
-  nodes: MotionQaNode[];
+  nodes: StructuralSurfaceNode[];
   camera: StructuralCamera;
   width: number;
   height: number;
@@ -56,12 +63,12 @@ interface LabelLayoutOptions {
   traceNodeIds: Set<string>;
 }
 
-const relationshipKey = (edge: MotionQaRelationship, nodes: Map<string, MotionQaNode>) => {
+const relationshipKey = (edge: StructuralSurfaceRelationship, nodes: Map<string, StructuralSurfaceNode>) => {
   const endpoint = nodes.get(edge.to)?.displayRank ?? nodes.get(edge.from)?.displayRank ?? Number.MAX_SAFE_INTEGER;
   return `${String(endpoint).padStart(4, "0")}:${edge.id}`;
 };
 
-export function resolveSpatialViewport(model: MotionQaReadModel, focusNodeId: string | null, preferredEdgeIds: Set<string>, limit = MAX_VISIBLE_RELATIONSHIPS): SpatialViewport {
+export function resolveSpatialViewport(model: StructuralSurfaceModel, focusNodeId: string | null, preferredEdgeIds: Set<string>, limit = MAX_VISIBLE_RELATIONSHIPS): SpatialViewport {
   const nodes = new Map(model.nodes.map((node) => [node.id, node]));
   const boundedLimit = Math.max(1, limit);
   const candidates = focusNodeId
@@ -79,7 +86,7 @@ export function resolveSpatialViewport(model: MotionQaReadModel, focusNodeId: st
     model.nodes
       .slice()
       .sort((left, right) => left.displayRank - right.displayRank || left.id.localeCompare(right.id))
-      .slice(0, 10)
+      .slice(0, 11)
       .forEach((node) => visibleNodeIds.add(node.id));
   }
   return {
@@ -91,7 +98,7 @@ export function resolveSpatialViewport(model: MotionQaReadModel, focusNodeId: st
   };
 }
 
-export function nodeLabelAtDepth(node: MotionQaNode, focusDepth: number, selected: boolean) {
+export function nodeLabelAtDepth(node: StructuralSurfaceNode, focusDepth: number, selected: boolean) {
   if (focusDepth === 0) return node.overviewLabel;
   if (focusDepth > 1 && selected) return node.detailLabel;
   return node.label;
@@ -104,7 +111,7 @@ function sidePositions(count: number, side: "upstream" | "downstream") {
   return Array.from({ length: count }, (_, index) => ({ x, y: 310 + (index - (count - 1) / 2) * spacing }));
 }
 
-export function layoutSpatialNodes(model: MotionQaReadModel, viewport: SpatialViewport): MotionQaNode[] {
+export function layoutSpatialNodes(model: StructuralSurfaceModel, viewport: SpatialViewport): StructuralSurfaceNode[] {
   if (!viewport.focusNodeId) return model.nodes.map((node) => ({ ...node }));
   const relationships = model.relationships.filter((edge) => viewport.visibleRelationshipIds.has(edge.id));
   const upstreamIds = [...new Set(relationships.filter((edge) => edge.to === viewport.focusNodeId).map((edge) => edge.from))];
@@ -138,7 +145,7 @@ function boxCenter(box: Box) {
 }
 
 export function layoutSpatialLabels({ nodes, camera, width, height, focusDepth, selectedNodeId, visibleNodeIds, traceNodeIds }: LabelLayoutOptions): SpatialLabelPlacement[] {
-  const priority = (node: MotionQaNode): LabelPriority => node.id === selectedNodeId ? "PRIMARY" : traceNodeIds.has(node.id) ? "CONTEXT" : "DETAIL";
+  const priority = (node: StructuralSurfaceNode): LabelPriority => node.id === selectedNodeId ? "PRIMARY" : traceNodeIds.has(node.id) ? "CONTEXT" : "DETAIL";
   const ordered = nodes
     .filter((node) => visibleNodeIds.has(node.id))
     .sort((left, right) => {
@@ -178,7 +185,7 @@ export function layoutSpatialLabels({ nodes, camera, width, height, focusDepth, 
   });
 }
 
-export function nextNodeInDirection(nodes: MotionQaNode[], visibleNodeIds: Set<string>, currentNodeId: string, key: "ArrowLeft" | "ArrowRight" | "ArrowUp" | "ArrowDown") {
+export function nextNodeInDirection(nodes: StructuralSurfaceNode[], visibleNodeIds: Set<string>, currentNodeId: string, key: "ArrowLeft" | "ArrowRight" | "ArrowUp" | "ArrowDown") {
   const current = nodes.find((node) => node.id === currentNodeId);
   if (!current) return null;
   const candidates = nodes.filter((node) => node.id !== currentNodeId && visibleNodeIds.has(node.id)).map((node) => {
