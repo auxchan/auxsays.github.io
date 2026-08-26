@@ -397,8 +397,17 @@ def run() -> int:  # noqa: PLR0915
     row = (_REPO / "auxsays" / "_includes" / "patch-table-row.html").read_text(encoding="utf-8")
     check("D15 sibling rows are distinguishable (the build is rendered)",
           "item.target_build" in row and "patch-cell-version__build" in row)
+    # Behavioural, not literal: what matters is that the sort key appends the build under a guard,
+    # not which local the guard happens to read. The previous literal pinned the ORIGINAL guard
+    # (`item.target_build != blank`), which is a no-op in this Liquid stack -- `blank` resolves via
+    # respond_to?(:blank?) and no String#blank? exists, so it fired on '' and rendered a dangling
+    # build on every version-only row. Pinning that spelling would have blocked its own fix.
+    sort_key = re.search(r'data-version="([^"]*)"', row).group(1)
     check("D15 the sort key carries the build too",
-          'data-version="{{ item.update_version | escape }}{% if item.target_build' in row)
+          "item.update_version" in sort_key and "{% if" in sort_key
+          and re.search(r"\{\{\s*(item\.target_build|row_build)", sort_key), sort_key)
+    check("D15 the build guard is not the `blank` no-op",
+          "!= blank" not in sort_key, sort_key)
 
     # ---------- D1(monitoring): the fail-open siblings would have caused ----------
     print("\n[monitoring] telemetry is joined per exact patch, not per version")

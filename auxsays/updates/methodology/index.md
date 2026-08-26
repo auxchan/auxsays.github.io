@@ -94,7 +94,7 @@ permalink: /updates/methodology/
   <section class="panel methodology-method-health">
     <div class="eyebrow">Collector audit</div>
     <h2>Collector / method health telemetry</h2>
-    <p>This describes collection attempts for community/report evidence. It is not accepted evidence by itself, and it does not change report counts, verdicts, or consensus state.</p>
+    <p>This describes collection attempts for community/report evidence. It is not accepted evidence by itself, and it does not change report counts, verdicts, or consensus state. Each row is one collection method against one exact patch, so a product with per-build updates has a separate row per build.</p>
     <p>Status values such as <strong>success</strong>, <strong>partial</strong>, <strong>blocked</strong>, <strong>broken</strong>, <strong>stale</strong>, <strong>disabled</strong>, and similar states describe collector or method execution. They do not mean users are reporting patch problems.</p>
 
     {% assign method_health_rows = site.data.evidence_method_health.methods %}
@@ -122,12 +122,13 @@ permalink: /updates/methodology/
 
     <div class="source-health-table method-health-table" role="table" aria-label="AUXSAYS collector method-health telemetry">
       <div class="source-health-row method-health-row source-health-row--head" role="row">
-        <span>Product</span><span>Version</span><span>Method</span><span>Source type</span><span>Status</span><span>Last run</span><span>Candidates</span><span>Accepted</span><span>Public counted</span><span>Notes / block reason</span>
+        <span>Product</span><span>Version / build</span><span>Method</span><span>Source type</span><span>Status</span><span>Last run</span><span>Candidates</span><span>Accepted</span><span>Public counted</span><span>Notes / block reason</span>
       </div>
       {% for item in method_health_rows %}
       <div class="source-health-row method-health-row method-health-row--{{ item.status | downcase | replace: '_', '-' }}" role="row">
         <span>{{ item.product_id }}</span>
-        <span>{{ item.update_version }}</span>
+        {%- assign mh_build = item.target_build | default: '' %}
+        <span>{{ item.update_version }}{% if mh_build != '' %}<small class="method-health-build">Build {{ mh_build }}</small>{% endif %}</span>
         <span>{{ item.method_id }}</span>
         <span>{{ item.source_type }}</span>
         <span><mark class="source-health-status method-health-status--{{ item.status | downcase | replace: '_', '-' }}">{{ item.status | replace: '_', ' ' }}</mark></span>

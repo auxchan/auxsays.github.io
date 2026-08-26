@@ -4415,6 +4415,12 @@ button, input, select, textarea { font: inherit; }
   min-width: 1480px;
 }
 
+/* The Version/build track is one of the narrowest in this grid, and .source-health-row span sets
+   overflow-wrap:anywhere -- which the sub-label inherits. That would break a build INSIDE the
+   number ("20228.2012" / "6"), silently showing a different identity than the one stored. Break at
+   the space instead: "Build" / "20228.20110". An exact identity must never be split mid-digit. */
+.method-health-row .method-health-build { overflow-wrap: normal; }
+
 .method-health-status--success { color: #9af0be; border-color: rgba(70,209,137,.34); background: rgba(70,209,137,.10); }
 .method-health-status--partial,
 .method-health-status--low-confidence,

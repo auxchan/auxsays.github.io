@@ -62,10 +62,11 @@
 {% else %}{% assign evidence_strength = "Insufficient" %}{% assign evidence_rank = 0 %}{% endif %}
 {% endif %}
 {% assign verdict_class = decision_label | downcase | replace: ' ', '-' | replace: ':', '' %}
-<tr class="patch-row" data-date="{{ item.update_published_at }}" data-product="{{ product_name | escape }}" data-version="{{ item.update_version | escape }}{% if item.target_build != blank %}.{{ item.target_build | escape }}{% endif %}" data-verdict-rank="{{ verdict_rank }}" data-reports="{{ report_count_num }}" data-evidence-rank="{{ evidence_rank }}">
+{% assign row_build = item.target_build | default: '' %}
+<tr class="patch-row" data-date="{{ item.update_published_at }}" data-product="{{ product_name | escape }}" data-version="{{ item.update_version | escape }}{% if row_build != '' %}.{{ row_build | escape }}{% endif %}" data-verdict-rank="{{ verdict_rank }}" data-reports="{{ report_count_num }}" data-evidence-rank="{{ evidence_rank }}">
 <td data-label="Date"><time datetime="{{ item.update_published_at }}">{{ item.update_published_at | date: "%b %-d, %Y" }}</time></td>
 {% if include.show_product %}{% capture product_page_url %}/updates/{{ item.company_id }}/{{ item.product_id }}/{% endcapture %}<td data-label="Product" class="patch-cell-product"><a href="{{ product_page_url | relative_url }}">{{ product_name }}</a></td>{% endif %}
-<td data-label="Version" class="patch-cell-version">{{ item.update_version }}{% if item.target_build != blank %} <span class="patch-cell-version__build">Build {{ item.target_build }}</span>{% endif %}</td>
+<td data-label="Version" class="patch-cell-version">{{ item.update_version }}{% if row_build != '' %} <span class="patch-cell-version__build">Build {{ row_build }}</span>{% endif %}</td>
 <td data-label="Verdict"><span class="patch-verdict patch-verdict--rank{{ verdict_rank }}">{{ decision_label }}</span></td>
 <td data-label="Monitoring" class="patch-cell-monitoring">{% include monitoring-status.html mode='cell' product_id=item.product_id version=item.update_version target_build=item.target_build published_at=item.update_published_at report_count=item.update_report_count %}</td>
 <td data-label="Reports" class="patch-cell-num">{{ report_count_num }}</td>
