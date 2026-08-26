@@ -23,7 +23,9 @@ Run: PYTHONDONTWRITEBYTECODE=1 python auxsays/scripts/tests/test_powerpoint_mult
 """
 from __future__ import annotations
 
+import inspect
 import re
+import subprocess
 import sys
 import tempfile
 import traceback
@@ -414,6 +416,91 @@ def run() -> int:  # noqa: PLR0915
         check(f"monitoring: {caller} passes the build at every call site",
               n_build >= n_inc, f"{n_build} of {n_inc}")
 
+    # ---------- P1: public source limitations are per exact patch ----------
+    # A "source limitation" is a factual claim about a collection run. Method-health rows are stored
+    # per exact patch, so joining them on (product, version) let a build with NO telemetry of its own
+    # publish a sibling build's limitation -- the same fail-open shape as the monitoring join above,
+    # one layer down, in a field the repo classifies as PUBLIC text (qa_patch_records
+    # PUBLIC_TEXT_FIELDS) and commits to a public repository.
+    print("\n[limitations] a public source limitation belongs to ONE build, never its siblings")
+    import apply_consensus_to_records as acr  # noqa: PLC0415
+    SENT = "Some community sources were unavailable"
+    emh = {"methods": [
+        {"product_id": PPT, "update_version": "2607", "target_build": B110,
+         "method_id": "learn_qna_search_rss", "status": "blocked"},
+        {"product_id": PPT, "update_version": "2607", "target_build": B124,
+         "method_id": "learn_qna_search_rss", "status": "success"},
+        {"product_id": PPT, "update_version": "2607", "target_build": B158,
+         "method_id": "learn_qna_search_rss", "status": "no_results"},
+        # B190 deliberately carries NO row at all -- the sharpest fail-open case: a build for which
+        # no check has ever run must not assert that a check ran and was blocked.
+        {"product_id": "blackmagic-davinci", "update_version": "21", "target_build": "",
+         "method_id": "reddit_search", "status": "blocked"},
+    ]}
+    with tempfile.TemporaryDirectory() as td:
+        fake = Path(td) / "evidence_method_health.yml"
+        fake.write_text(yaml.safe_dump(emh), encoding="utf-8")
+        real_path = acr.METHOD_HEALTH_PATH
+        try:
+            acr.METHOD_HEALTH_PATH = fake
+
+            def lim(build, version="2607", pid=PPT):
+                return acr._public_source_limitations(pid, version, [], "Insufficient", build=build)
+
+            check("P1 the build whose source WAS blocked still says so",
+                  any(SENT in x for x in lim(B110)), str(lim(B110)))
+            for sibling, why in ((B124, "healthy"), (B158, "clean no_results"),
+                                 (B190, "no telemetry at all")):
+                check(f"P1 sibling {sibling} ({why}) does NOT inherit it",
+                      not any(SENT in x for x in lim(sibling)), str(lim(sibling)))
+            check("P1 a version-only product keeps its limitation whatever the build slot says",
+                  all(any(SENT in x for x in acr._public_source_limitations(
+                          "blackmagic-davinci", "21", [], "Insufficient", build=b))
+                      for b in ("", "99999.99999")))
+            check("P1 the build is REQUIRED, so no caller can silently re-widen the join",
+                  inspect.signature(acr._public_source_limitations)
+                         .parameters["build"].default is inspect.Parameter.empty
+                  and inspect.signature(acr._proposed_record_fields)
+                         .parameters["build"].default is inspect.Parameter.empty)
+        finally:
+            acr.METHOD_HEALTH_PATH = real_path
+
+    # ---------- P8: no orphan landing under the normal lifecycle ----------
+    print("\n[lifecycle] a version landing cannot outlive the records it exists for")
+    ing = (_REPO / "auxsays" / "scripts" / "patch_ingest.py").read_text(encoding="utf-8")
+    check("P8 the landing is written strictly AFTER the record",
+          ing.index("ensure_for_record(landing_root") > ing.index("write_record(args.output"))
+    check("P8 both are downstream of the dry-run short-circuit, so a dry run leaves nothing",
+          ing.index("if not write:") < ing.index("write_record(args.output"))
+    # There is no deletion path under updates/ at all: nothing in the ingest lane removes,
+    # renames or archives a generated record, so no automated sequence can strand a landing.
+    scripts = _REPO / "auxsays" / "scripts"
+    removers = [f"{f.relative_to(_REPO)}:{n}"
+                for f in scripts.rglob("*.py") if "tests" not in f.parts
+                for n, line in enumerate(f.read_text(encoding="utf-8").splitlines(), 1)
+                if re.search(r"(unlink|rmtree|os\.remove|shutil\.move)", line)
+                and "updates/" in line]
+    check("P8 no script deletes or moves anything under updates/", not removers, str(removers))
+    check("P8 no workflow git-rm's a record or a landing",
+          not [w for w in (_REPO / ".github" / "workflows").glob("*.yml")
+               if "git rm" in w.read_text(encoding="utf-8")])
+    # Empirical: every landing in the live tree today is backed by at least one real record.
+    landings = sorted((_REPO / "auxsays" / "updates").glob("*/*/*/index.md"))
+    generated = [f.read_text(encoding="utf-8") for f in
+                 (_REPO / "auxsays" / "updates" / "generated").glob("*.md")]
+    orphans = []
+    for lp in landings:
+        fm = front(lp)
+        if fm.get("layout") != "aux-patch-version":
+            continue
+        pid_l, ver_l = str(fm.get("product_id") or ""), str(fm.get("update_version") or "")
+        if not any(f"product_id: {pid_l}" in g and "update_entry: true" in g
+                   and re.search(rf"update_version: '?{re.escape(ver_l)}'?\s*$", g, re.M)
+                   for g in generated):
+            orphans.append(f"{pid_l}/{ver_l}")
+    check("P8 every landing in the live tree is backed by a real record",
+          landings and not orphans, str(orphans))
+
     # ---------- D16: non-PowerPoint compatibility ----------
     print("\n[D16] version-only products are untouched")
     check("D16 obs-studio is not build-aware", not pi.is_build_aware(OBS))
@@ -503,10 +590,49 @@ def run() -> int:  # noqa: PLR0915
     check("writeback: it does NOT widen to the product index or _data",
           not awb._matches_any(f"auxsays/updates/microsoft/{PPT}/index.md", pats)
           and not awb._matches_any("auxsays/_data/consensus_evidence.yml", pats))
+    # Behavioural, not literal: assert the PARSED site-path and recovery-site-path lists actually
+    # match a landing, so narrowing or widening the pattern is caught by what it does rather than by
+    # a hardcoded string that has to be edited every time the pattern changes.
+    site = [x.strip("'") for x in re.findall(r"--site-path ('?[^ ']+'?)", wf)]
+    recovery = [x.strip("'") for x in re.findall(r"--recovery-site-path ('?[^ ']+'?)", wf)]
+    landing = f"auxsays/updates/microsoft/{PPT}/2608/index.md"
     check("writeback: a landing change counts as a site change (Pages dispatch)",
-          "--site-path 'auxsays/updates/*/*/*/index.md'" in wf)
-    check("writeback: deploy recovery recognises it too",
-          "--recovery-site-path 'auxsays/updates/*/*/*/index.md'" in wf)
+          awb._matches_any(landing, site), str(site))
+    check("writeback: deploy recovery recognises the same landing",
+          awb._matches_any(landing, recovery), str(recovery))
+    # AUTHORITY BOUND. The allow surface must cover only the landings this lane creates. The
+    # pattern width is the whole boundary: a broader one silently authorizes the ingest bot to
+    # commit an unrelated vendor's page, and `*` crosses `/` in this matcher, so breadth is not
+    # limited to one path segment.
+    for surface, name in ((pats, "allow"), (site, "site-path"), (recovery, "recovery-site-path")):
+        for unrelated in ("auxsays/updates/adobe/adobe-photoshop/26-1/index.md",
+                          "auxsays/updates/blackmagic-design/davinci-resolve/20-2-2/index.md",
+                          "auxsays/updates/microsoft/microsoft-teams/1-2/index.md"):
+            check(f"writeback: {name} REJECTS {unrelated.split('/')[2]}",
+                  not awb._matches_any(unrelated, surface), f"{name} {surface}")
+    tracked = subprocess.run(["git", "ls-files"], capture_output=True, text=True,
+                             cwd=str(_REPO)).stdout.split()
+    # The LANDING half of the authority, isolated: of the allow entries that can reach a version
+    # landing (the glob entries), every tracked file they authorize must be a PowerPoint landing.
+    # The broad 'auxsays/updates/*/*/*/index.md' this replaced also authorized the hand-authored
+    # blackmagic-design/davinci-resolve/20-2-2/index.md -- commit authority over a human page this
+    # lane never generates.
+    landing_pats = [p for p in pats if p.endswith("index.md")]
+    authorized = [f for f in tracked if awb._matches_any(f, landing_pats)]
+    check("writeback: the landing authority is exactly the PowerPoint landings",
+          bool(authorized) and all(f.startswith(f"auxsays/updates/microsoft/{PPT}/")
+                                   for f in authorized),
+          str([f for f in authorized if f"microsoft/{PPT}/" not in f]))
+    # And the WHOLE allow surface: generated records, the ingest state file, PowerPoint landings.
+    # Nothing else in the tracked tree may be committable by this lane.
+    stray = [f for f in tracked if awb._matches_any(f, pats)
+             and not f.startswith("auxsays/updates/generated/")
+             and f != "auxsays/_data/patch_ingest_state.json"
+             and not f.startswith(f"auxsays/updates/microsoft/{PPT}/")]
+    check("writeback: no tracked file outside generated/ + state + landings is authorized",
+          not stray, str(stray[:5]))
+    check("writeback: the product index is still not writable",
+          not awb._matches_any(f"auxsays/updates/microsoft/{PPT}/index.md", pats))
 
     # ================= adversarial-review regressions =================
     # Each of these is a defect three independent read-only reviewers found in this change before

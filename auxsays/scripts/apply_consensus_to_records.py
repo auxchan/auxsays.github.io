@@ -15,7 +15,7 @@ import json
 import re
 import sys
 from collections import Counter, defaultdict
-from lib.patch_identity import patch_key
+from lib.patch_identity import key_from, patch_key
 from copy import deepcopy
 from datetime import datetime, timezone
 from pathlib import Path
@@ -425,7 +425,7 @@ def _result_for_group(pid: str, ver: str, rows: list[dict[str, Any]], *, is_cand
     proposed_fields: dict[str, Any] = {}
     effective_write_plan: dict[str, Any] = {}
     if gate_eval["would_write"]:
-        proposed_fields = _proposed_record_fields(pid, ver, included, record, evidence_last_checked)
+        proposed_fields = _proposed_record_fields(pid, ver, included, record, evidence_last_checked, build=build)
         if record:
             effective_write_plan = _public_write_plan(_load_front_matter(record["abs_path"]), proposed_fields)
 
@@ -658,17 +658,26 @@ def _load_method_health_rows() -> list[dict[str, Any]]:
     return []
 
 
-def _public_source_limitations(pid: str, ver: str, rows: list[dict[str, Any]], confidence: str) -> list[str]:
+def _public_source_limitations(pid: str, ver: str, rows: list[dict[str, Any]], confidence: str, *, build: str) -> list[str]:
     limitations: list[str] = []
     limitation = _source_limitation_sentence(rows, confidence)
     if limitation:
         limitations.append(limitation)
 
-    method_rows = [
-        row for row in _load_method_health_rows()
-        if str(row.get("product_id") or "").strip() == pid
-        and str(row.get("update_version") or "").strip() == ver
-    ]
+    # Method-health rows are stored per EXACT patch: patch_collectors.base.method_health_key is the
+    # canonical identity triple plus method_id, so two builds under one YYMM are two independent
+    # rows. Joining on (product, version) alone projected that per-build table down to a version,
+    # which let a build with NO telemetry of its own publish a sibling build's limitation -- the
+    # same fail-open shape already fixed in _includes/monitoring-status.html. `build` is a REQUIRED
+    # keyword here: a caller that cannot state the build must fail loudly rather than silently
+    # widen the join back to the whole version.
+    #
+    # This is deliberately NOT gated on is_build_aware(). patch_key already collapses the build slot
+    # to '' for every product without a build contract, on BOTH sides of the comparison, so a
+    # version-only product keeps the exact identity it had -- proven no-op across all 304 live
+    # method-health identities. Branching on the product here would duplicate that one decision.
+    target = patch_key(pid, ver, build)
+    method_rows = [row for row in _load_method_health_rows() if key_from(row) == target]
     statuses = {str(row.get("status") or "").strip().lower() for row in method_rows}
     if statuses & {"blocked", "partial", "low_confidence", "broken"}:
         limitations.append("Some community sources were unavailable during the last check; unavailable sources were not counted as reports.")
@@ -797,7 +806,7 @@ def _public_source_item(pid: str, ver: str, row: dict[str, Any]) -> dict[str, An
     }
 
 
-def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], record: dict[str, Any] | None, evidence_last_checked: str) -> dict[str, Any]:
+def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], record: dict[str, Any] | None, evidence_last_checked: str, *, build: str) -> dict[str, Any]:
     count = len(rows)
     sentiments = Counter(str(r.get("sentiment") or "").lower() for r in rows)
     themes = _issue_counter(pid, rows)
@@ -854,7 +863,7 @@ def _proposed_record_fields(pid: str, ver: str, rows: list[dict[str, Any]], reco
         "evidence_samples": samples,
         "evidence_sample_visible_limit": 5,
         "accepted_report_sources": accepted_report_sources,
-        "evidence_source_limitations": _public_source_limitations(pid, ver, rows, confidence),
+        "evidence_source_limitations": _public_source_limitations(pid, ver, rows, confidence, build=build),
         "status_events_append": {
             "at": now,
             "label": "User reports found" if count > 0 else "Insufficient data",
