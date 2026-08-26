@@ -43,10 +43,10 @@ layout: aux-base
       <div class="patch-intel-stat-card">
         {% if product_updates.size > 0 %}
         <span>{{ product_updates.size }}</span>
-        <em>documented patch records</em>
+        <em>tracked patch records</em>
         {% elsif product.ingestion_active %}
         <span>OFFICIAL SOURCE ACTIVE</span>
-        <em>awaiting first attributed record</em>
+        <em>awaiting first tracked patch</em>
         {% else %}
         <span>STAGED</span>
         <em>official source mapped</em>

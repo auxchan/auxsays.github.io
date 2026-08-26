@@ -451,6 +451,7 @@ def run() -> int:
         coherence_rows,
         archived_stable_record,
         "2026-05-13T00:00:00Z",
+        build="",
     )
     check(
         "stable evidence promotes archived DaVinci 21 to current",
@@ -470,6 +471,7 @@ def run() -> int:
         coherence_rows,
         {"update_product": "DaVinci Resolve", "update_status": "current"},
         "2026-05-13T00:00:00Z",
+        build="",
     )
     check(
         "active stable DaVinci 21 keeps coherence wording managed",
@@ -484,6 +486,7 @@ def run() -> int:
         [row_from_candidate(beta_record, candidate_from_fixture(control), "2026-05-13T00:00:00Z")],
         {"update_product": "DaVinci Resolve", "update_status": "archived"},
         "2026-05-13T00:00:00Z",
+        build="",
     )
     check(
         "Beta writeback does not use stable activation fields",

@@ -4,13 +4,20 @@
   evidence/collection status, NOT a verdict, and it is kept separate from the AUXSAYS verdict.
 
   Derived ONLY from structured per-exact-patch telemetry in _data/evidence_method_health.yml (EMH),
-  joined on (product_id, update_version). No manual allowlist -- "monitored" means EMH rows exist.
+  joined on the CANONICAL PATCH IDENTITY (product_id, update_version, target_build). The build
+  component matters: a build-aware product can ship several builds under one version, and every one
+  of their EMH rows carries the same update_version. Joining on the version alone let a build with
+  NO telemetry of its own inherit a sibling's -- the ladder's rule 1 would see rows and report a
+  monitoring state that build never earned, which is a fail-OPEN in the one place that must fail
+  closed. An empty build on both sides is a no-op, so version-only products are unaffected.
+  No manual allowlist -- "monitored" means EMH rows exist FOR THIS EXACT PATCH.
   It FAILS CLOSED: missing, stale, future, disabled, blocked, broken, partial, low-confidence, or
   manual-review telemetry can never produce a clean "no reports" read.
 
   Inputs:
     include.product_id    -- exact tracked product id
     include.version       -- exact patch version (numeric YAML versions are string-normalized)
+    include.target_build  -- exact vendor build for build-aware products ('' when not build-aware)
     include.published_at  -- record release timestamp (ISO); gates post-release runs
     include.report_count  -- accepted patch-specific community report count
     include.mode          -- 'full' (detail card) | 'cell' (table cell) | 'feed' (feed line)
@@ -34,6 +41,7 @@
 {%- endcomment -%}
 {%- assign mon_mode = include.mode | default: 'cell' -%}
 {%- assign mon_ver = include.version | append: '' -%}
+{%- assign mon_build = include.target_build | default: '' | append: '' -%}
 {%- assign mon_reports = include.report_count | default: 0 | plus: 0 -%}
 {%- assign mon_min_healthy = site.monitoring_min_healthy_methods | default: 2 -%}
 {%- assign mon_max_age_days = site.monitoring_max_age_days | default: 14 -%}
@@ -59,7 +67,8 @@
 {%- if mon_rows != '' and mon_rows.size > 0 -%}
 {%- for m in mon_rows -%}
 {%- assign m_ver = m.update_version | append: '' -%}
-{%- if m_ver == mon_ver -%}
+{%- assign m_build = m.target_build | default: '' | append: '' -%}
+{%- if m_ver == mon_ver and m_build == mon_build -%}
 {%- assign mon_total = mon_total | plus: 1 -%}
 {%- assign m_status = m.status | default: '' | downcase | strip -%}
 {%- assign m_is_disabled = false -%}
@@ -127,12 +136,13 @@
   </dl>
   {%- if mon_rows != '' and mon_rows.size > 0 -%}
   {%- assign mon_has_method_rows = false -%}
-  {%- for m in mon_rows -%}{%- assign m_ver2 = m.update_version | append: '' -%}{%- if m_ver2 == mon_ver -%}{%- assign mon_has_method_rows = true -%}{%- endif -%}{%- endfor -%}
+  {%- for m in mon_rows -%}{%- assign m_ver2 = m.update_version | append: '' -%}{%- assign m_build2 = m.target_build | default: '' | append: '' -%}{%- if m_ver2 == mon_ver and m_build2 == mon_build -%}{%- assign mon_has_method_rows = true -%}{%- endif -%}{%- endfor -%}
   {%- if mon_has_method_rows -%}
   <ul class="update-monitoring-methods">
   {%- for m in mon_rows -%}
   {%- assign m_ver2 = m.update_version | append: '' -%}
-  {%- if m_ver2 == mon_ver -%}
+  {%- assign m_build2 = m.target_build | default: '' | append: '' -%}
+  {%- if m_ver2 == mon_ver and m_build2 == mon_build -%}
   {%- assign m_status2 = m.status | default: '' | downcase | strip -%}
   {%- assign m_expl = 'Status recorded' -%}
   {%- if m_status2 == 'success' -%}{%- assign m_expl = 'Completed' -%}

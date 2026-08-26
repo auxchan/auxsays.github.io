@@ -69,6 +69,39 @@ BANNED_PUBLIC_TERMS = {
 BANNED_TERM_FIELD_EXEMPTIONS: dict[str, frozenset[str]] = {
     "collector": frozenset({"release_summary"}),
 }
+# Claims AUXSAYS must never make on a vendor's behalf. A build with no app-specific release note is
+# not a build in which the app did not change -- and the official-notes body is scanned too, since
+# that is where a fabricated vendor claim would actually live.
+FORBIDDEN_ABSENCE_CLAIMS = (
+    "no powerpoint changes",
+    "no app-specific changes",
+    "no changes for",
+    "was unchanged",
+    "were unchanged",
+    "nothing changed",
+    "no changes were made",
+)
+# AUXSAYS-authored text: a forbidden claim here is our own fabrication -> ERROR.
+ABSENCE_CLAIM_SCANNED_FIELDS = (
+    "official_summary",
+    "release_summary",
+    "summary",
+    "description",
+    "quick_verdict",
+    "update_consensus_summary",
+    "official_app_attribution_label",
+)
+# Vendor-captured text: the vendor may legitimately write any of these phrases about their own
+# product. Flag it for review, but never fail the whole ingest run on somebody else's wording.
+ABSENCE_CLAIM_WARN_FIELDS = ("official_patch_notes_body",)
+# Vendor-attribution states an official record may declare (lib.write_update_record).
+VALID_APP_ATTRIBUTION_STATES = {
+    "app_named_by_source",
+    "suite_wide_by_source",
+    "app_named_and_suite_wide_by_source",
+    "not_documented_by_source",
+}
+
 PUBLIC_TEXT_FIELDS = {
     "description",
     "update_consensus_summary",
@@ -230,6 +263,30 @@ def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]
     source_type = str(data.get("official_patch_notes_source_type") or data.get("official_source_type") or "").strip()
     official_body = str(data.get("official_patch_notes_body") or "")
     report_count = int(data.get("update_report_count") or data.get("confirmed_patch_specific_report_count") or 0)
+
+    # DOCTRINE GATE. "The vendor did not document a change for this app" and "the app did not
+    # change" are different claims, and only the first is ours to make. A build ships shared Office
+    # components, security fixes and installers whether or not the notes single an app out, so a
+    # substantive-negative claim would assert something the vendor never said. Enforced here rather
+    # than trusted, because prose is exactly what regresses quietly.
+    for field in ABSENCE_CLAIM_SCANNED_FIELDS:
+        text = str(data.get(field) or "").lower()
+        for phrase in FORBIDDEN_ABSENCE_CLAIMS:
+            if phrase in text:
+                add(errors, path, "substantive_absence_claim",
+                    f"{field} claims {phrase!r}. Absence of a documented note describes the notes, "
+                    "not the software -- say the vendor did not document a change instead.")
+    for field in ABSENCE_CLAIM_WARN_FIELDS:
+        text = str(data.get(field) or "").lower()
+        for phrase in FORBIDDEN_ABSENCE_CLAIMS:
+            if phrase in text:
+                add(warnings, path, "vendor_text_absence_claim",
+                    f"{field} (vendor-captured) contains {phrase!r}. Confirm it is the vendor's "
+                    "own wording and not AUXSAYS prose.")
+    attribution = str(data.get("official_app_attribution") or "").strip()
+    if attribution and attribution not in VALID_APP_ATTRIBUTION_STATES:
+        add(errors, path, "unknown_app_attribution_state",
+            f"official_app_attribution {attribution!r} is not one of {sorted(VALID_APP_ATTRIBUTION_STATES)}.")
 
     if not title:
         add(errors, path, "empty_title", "Generated record title is empty.")

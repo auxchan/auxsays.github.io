@@ -30,7 +30,7 @@ layout: aux-base
         <div class="patch-status-line">
           <span class="patch-coverage-pill patch-coverage-pill--{{ company.coverage_state | default: 'active_watch' }}">{{ company.coverage_status_label | default: 'Active watch' }}</span>
           <span>{{ products.size }} tracked software{% if products.size != 1 %}s{% endif %}</span>
-          <span>{{ documented_count }} documented patch record{% if documented_count != 1 %}s{% endif %}</span>
+          <span>{{ documented_count }} tracked patch record{% if documented_count != 1 %}s{% endif %}</span>
         </div>
       </div>
       <div class="patch-intel-stat-card">

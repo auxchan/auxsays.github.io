@@ -3317,7 +3317,7 @@
   software: Microsoft PowerPoint
   public_category: Productivity
   enabled: true
-  recommended_priority: P1 app-attributed official ingestion (fail-closed)
+  recommended_priority: P1 per-build official ingestion (fail-closed on identity)
   ingestion:
     type: html_release_notes
     adapter: microsoft_office_updates
@@ -3330,6 +3330,14 @@
     feed_url: null
     api_url: null
     parser_profile: microsoft_365_powerpoint_release_notes
+    # FORWARD-ONLY INGESTION FLOOR. Record existence is keyed on Current Channel build identity
+    # rather than on app-specific prose, so every historical build on the release-notes page became
+    # a candidate at once. This lane creates records only for builds released on or after this
+    # date, so activating multi-build ingestion cannot start an unbounded historical backfill.
+    # 2026-07-23 is the release date of the oldest 2607 build already tracked, so the forward set is
+    # exactly the 2607 siblings and everything newer. Widening history is a separate, deliberate
+    # decision: move this date. Existing records are matched by identity and are never re-created.
+    record_floor_date: '2026-07-23'
     target_app: powerpoint
     channel: Current Channel
     official_source_type: release_notes
@@ -3341,7 +3349,7 @@
     reliability: Medium
     breakage_risk: Medium
     polling_frequency: 24h
-    update_detection_method: Per-app release-note attribution (explicit PowerPoint or explicit suite-wide only; generic channel/build rows stay on Microsoft 365 Apps)
+    update_detection_method: Per-BUILD Current Channel release-note sections. A build with a resolvable version, build and release date becomes a record; app attribution is recorded as official_app_attribution metadata (app_named_by_source / suite_wide_by_source / app_named_and_suite_wide_by_source / not_documented_by_source) and is NOT an admission gate -- the build ships the app either way. Generic suite servicing still also has its own microsoft-365-apps lane.
     file_size_status_when_missing: microsoft_managed
     extractable_fields: {version: true, release_date: true, title: true, release_note_body: true, download_url: false, file_size: false, checksum: false, known_issues: false, platform_specific_installers: false, archived_release_history: true}
     keywords: [PowerPoint, presentation, release, update]

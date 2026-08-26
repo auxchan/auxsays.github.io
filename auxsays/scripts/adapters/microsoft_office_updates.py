@@ -31,6 +31,10 @@ from typing import Any
 
 from lib.http import fetch_text
 from lib.normalize import strip_tags, first_nonempty
+from lib.write_update_record import (
+    ATTRIBUTION_APP_NAMED, ATTRIBUTION_APP_NAMED_AND_SUITE_WIDE, ATTRIBUTION_NOT_DOCUMENTED,
+    ATTRIBUTION_SUITE_WIDE, attribution_label,
+)
 
 ROW_RE = re.compile(r"<tr\b[^>]*>(?P<row>.*?)</tr>", re.I | re.S)
 CELL_RE = re.compile(r"<t[dh]\b[^>]*>(?P<cell>.*?)</t[dh]>", re.I | re.S)
@@ -563,6 +567,123 @@ def _target_app(source: dict[str, Any]) -> str:
     return str(source.get("product_id") or "").split("-")[-1].strip().lower()
 
 
+# Within a build section the page groups changes under an app sub-heading -- <h3>PowerPoint</h3>,
+# <h3>Word</h3>, <h3>Office Suite</h3> -- and the bullets under it belong to THAT app.
+APP_SUBHEADING_RE = re.compile(r"<h[34]\b[^>]*>(?P<heading>.*?)</h[34]>", re.I | re.S)
+SUITE_HEADING_RE = re.compile(r"\b(office\s+suite|suite)\b", re.I)
+# "Version 2607: August 11" is a version heading, not an app heading. APP_VERSION_HEADING_RE matches
+# h1-h4, so on a page that writes versions as <h3> a section's own heading would otherwise be read
+# as an app sub-heading and take ownership of every bullet beneath it.
+VERSION_HEADING_TEXT_RE = re.compile(r"\bversion\s+\d{3,4}\b", re.I)
+
+
+def _section_build(section: str, version: str) -> str:
+    """This section's OWN build, read from its version pairing rather than from any prose.
+
+    The page states a build section's identity as "Version <ver> (Build <build>)". Preferring that
+    pairing means a build mentioned in surrounding prose can never become the record's identity.
+    Falls back to the first bare "Build N.N" only when no pairing exists at all, so a page shape
+    without the pairing still ingests exactly as before."""
+    paired = re.search(
+        rf"version\s+{re.escape(str(version))}\s*\(\s*build\s+(\d{{3,6}}\.\d{{3,6}})\s*\)",
+        section, re.I)
+    if paired:
+        return paired.group(1)
+    loose = BUILD_IN_TEXT_RE.search(section)
+    return loose.group(1) if loose else ""
+
+
+def _names_an_app(heading: str, app_word: re.Pattern[str]) -> bool:
+    """True when a sub-heading identifies an Office app or the suite (i.e. can own bullets)."""
+    if not heading or VERSION_HEADING_TEXT_RE.search(heading):
+        return False
+    if app_word.search(heading) or SUITE_HEADING_RE.search(heading):
+        return True
+    return any(re.search(rf"(?<![A-Za-z]){re.escape(name)}(?![A-Za-z])", heading, re.I)
+               for name in OFFICE_APP_NAMES)
+
+
+def _attribute_section(section: str, target_app: str,
+                       app_word: re.Pattern[str]) -> tuple[list[str], bool, bool]:
+    """Entries attributable to ``target_app``, plus (applies_suitewide, app_named).
+
+    Attribution is scoped to the OWNING app sub-heading. Matching a bare mention anywhere in the
+    section credited another app's bullet to this app whenever it happened to name it -- "pasting a
+    chart from PowerPoint into Word lost its formatting" is a Word fix, and a known-issue note for
+    Outlook that mentions PowerPoint is not a PowerPoint change. Under the previous admission gate
+    that produced a spurious record; now it would produce a spurious *authority claim* that the
+    ratchet makes permanent, so the ownership rule matters more, not less.
+
+    Blocks appearing BEFORE any app sub-heading have no owner, so they fall back to naming the app
+    themselves -- that is how a page with no per-app headings still attributes correctly."""
+    heads = list(APP_SUBHEADING_RE.finditer(section))
+    groups: list[tuple[str, str]] = []
+    if heads:
+        if heads[0].start() > 0:
+            groups.append(("", section[: heads[0].start()]))
+        for i, h in enumerate(heads):
+            owner = re.sub(r"\s+", " ", strip_tags(h.group("heading"))).strip()
+            # ONLY a heading that actually identifies an app (or the suite) owns its bullets.
+            # A version heading ("Version 2607: August 11") or a category heading ("Resolved
+            # issues", "Feature updates") identifies no app, so its bullets fall back to naming
+            # the app themselves -- which is how a page without per-app headings still works.
+            if not _names_an_app(owner, app_word):
+                owner = ""
+            body = section[h.end(): heads[i + 1].start() if i + 1 < len(heads) else len(section)]
+            groups.append((owner, body))
+    else:
+        groups.append(("", section))
+
+    entries: list[str] = []
+    applies_suitewide = False
+    app_named = False
+    for owner, body in groups:
+        owner_is_app = bool(app_word.search(owner))
+        owner_is_suite = bool(SUITE_HEADING_RE.search(owner))
+        owner_is_other_app = bool(owner) and not owner_is_app and not owner_is_suite and any(
+            re.search(rf"(?<![A-Za-z]){re.escape(name)}(?![A-Za-z])", owner, re.I)
+            for name in OFFICE_APP_NAMES if name != target_app)
+        for block in BLOCK_RE.finditer(body):
+            text = re.sub(r"\s+", " ", strip_tags(block.group("block"))).strip()
+            if not text:
+                continue
+            if owner_is_other_app:
+                continue  # this bullet belongs to another app, whoever it mentions
+            suite_text = bool(SUITEWIDE_APPLICABILITY_RE.search(text))
+            if owner_is_suite or suite_text:
+                entries.append(text)
+                applies_suitewide = True
+                if owner_is_app or app_word.search(text):
+                    app_named = True
+            elif owner_is_app or (not owner and app_word.search(text)):
+                entries.append(text)
+                app_named = True
+    return entries, applies_suitewide, app_named
+
+
+def _record_floor_date(source: dict[str, Any]) -> str:
+    """Earliest release date this lane may create records for, as 'YYYY-MM-DD', or '' for no floor.
+
+    Forward-only ingestion control. Declared per source as ``ingestion.record_floor_date`` so the
+    boundary is explicit, auditable and repo-owned -- not a side effect of whatever the per-run
+    record limit happens to be.
+
+    FAILS CLOSED on a malformed value. Ignoring it would REMOVE the guard, so a one-character typo
+    in the YAML ('2026-7-23') would silently re-enable exactly the unbounded historical backfill the
+    floor exists to prevent. An absent key means no floor and is fine; a present-but-unparseable one
+    is a configuration error and stops the lane."""
+    ingestion = source.get("ingestion", {}) or {}
+    if "record_floor_date" not in ingestion:
+        return ""
+    raw = str(ingestion.get("record_floor_date") or "").strip()
+    match = re.fullmatch(r"(\d{4})-(\d{2})-(\d{2})", raw)
+    if not match or not _iso_date(int(match.group(1)), int(match.group(2)), int(match.group(3))):
+        raise ValueError(
+            f"ingestion.record_floor_date must be a real YYYY-MM-DD date when present "
+            f"(got {raw!r}); refusing to run without the forward-only ingestion guard")
+    return raw
+
+
 def _app_record(
     source: dict[str, Any],
     source_url: str,
@@ -573,6 +694,7 @@ def _app_record(
     target_app: str,
     entries: list[str],
     applies_suitewide: bool,
+    app_named: bool = False,
 ) -> dict[str, Any]:
     digest = hashlib.sha256((source_url + version + build + target_app).encode("utf-8")).hexdigest()[:16]
     ingestion = source.get("ingestion", {}) or {}
@@ -602,18 +724,46 @@ def _app_record(
                 "extraction_status": "summary_captured" if url.strip() == source_url else "reference_only",
             })
 
+    attribution = (
+        ATTRIBUTION_APP_NAMED_AND_SUITE_WIDE if (app_named and applies_suitewide)
+        else ATTRIBUTION_SUITE_WIDE if applies_suitewide
+        else ATTRIBUTION_APP_NAMED if app_named
+        else ATTRIBUTION_NOT_DOCUMENTED
+    )
+
     joined = " ".join(entries)[:1200]
-    scope = "an all-apps (suite-wide) change" if applies_suitewide else f"a {software}-specific change"
-    body = (
-        f"{software} {version_label} on the {channel}"
-        + (f" (release date {date_str})." if date_str else ".")
-        + f" Official Microsoft 365 Apps release notes attribute {scope} to this version"
-        f" for {software}: {joined}"
-    )
-    official_summary = (
-        f"Microsoft 365 Apps release notes attribute a {software} change to {version_label}"
-        + (f" on the {channel} ({date_str})." if date_str else f" on the {channel}.")
-    )
+    if entries:
+        scope = ("an all-apps (suite-wide) change" if applies_suitewide
+                 else f"a {software}-specific change")
+        body = (
+            f"{software} {version_label} on the {channel}"
+            + (f" (release date {date_str})." if date_str else ".")
+            + f" Official Microsoft 365 Apps release notes attribute {scope} to this version"
+            f" for {software}: {joined}"
+        )
+        official_summary = (
+            f"Microsoft 365 Apps release notes attribute a {software} change to {version_label}"
+            + (f" on the {channel} ({date_str})." if date_str else f" on the {channel}.")
+        )
+    else:
+        # This build shipped; Microsoft simply published nothing app-specific for it.
+        #
+        # There is therefore NO vendor text to capture, so the record carries none. Writing an
+        # AUXSAYS-authored paragraph into official_patch_notes_body would publish our prose under a
+        # heading that reads "vendor release notes captured from the official source" -- and it
+        # would also let one lossy re-parse overwrite genuine vendor text with our own, since the
+        # body advances on change. An empty body cannot do either: the refresh merge only advances
+        # the body when incoming text exists, so real notes captured later are never clobbered.
+        #
+        # The claim itself lives where it can be read exactly: official_app_attribution
+        # (not_documented_by_source) and its rendered label. The summary stays purely factual
+        # identity, so it is still true whatever Microsoft publishes afterwards -- prose written at
+        # creation is never refreshed, so it must not assert anything time-dependent.
+        body = ""
+        official_summary = (
+            f"{software} {version_label} on the {channel}"
+            + (f" (release date {date_str})." if date_str else ".")
+        )
 
     return {
         "record_id": f"microsoft:{product_id}:{version}:{digest}",
@@ -639,10 +789,15 @@ def _app_record(
         "summary": "",
         "source_type": "release_notes",
         "official_source_type": "release_notes",
-        "official_note_status": "release_notes_captured",
+        # Honest capture state. A build Microsoft documented nothing app-specific for was still
+        # READ from the official source -- but nothing app-specific was there to capture, so it must
+        # not claim captured vendor notes.
+        "official_note_status": ("release_notes_captured" if entries
+                                 else "release_notes_no_app_specific_entry"),
         "official_note_label": f"Official {software} release notes",
         "official_sources": official_sources,
-        "capture_status": "captured-from-official-microsoft365-app-release-notes",
+        "capture_status": ("captured-from-official-microsoft365-app-release-notes" if entries
+                           else "official-source-no-app-specific-note"),
         "official_summary": official_summary,
         # Structured, precise identity (never keyed by a vague marketing version alone).
         "target_channel": channel,
@@ -651,6 +806,10 @@ def _app_record(
         # Explicit applicability list + label (auditable; suite-wide items carry the suite id).
         "applicability": applicability,
         "applies_to_label": applies_to_label,
+        # What the VENDOR documented for this app on this exact build. Metadata, never an
+        # admission gate, and never a claim that the app was unchanged.
+        "official_app_attribution": attribution,
+        "official_app_attribution_label": attribution_label(attribution),
     }
 
 
@@ -679,42 +838,60 @@ def _records_from_office_app_release_notes(
 
     heads = list(APP_VERSION_HEADING_RE.finditer(html))
     records: list[dict[str, Any]] = []
-    seen_versions: set[str] = set()
+    # Identity dedupe is per BUILD, not per version. The page carries one section per build
+    # ("Version 2607: August 11", "…: August 04", …), and this product's canonical patch identity is
+    # (product_id, update_version, target_build) -- so collapsing on the marketing version threw
+    # away every sibling build after the first, which is a different patch each time.
+    seen_builds: set[str] = set()
+    floor = _record_floor_date(source)
 
     for i, match in enumerate(heads):
         version = match.group("ver")
-        if not version or version in seen_versions:
+        if not version:
             continue
         section = html[match.start(): heads[i + 1].start() if i + 1 < len(heads) else len(html)]
 
-        build_match = BUILD_IN_TEXT_RE.search(section)
-        build = build_match.group(1) if build_match else ""
+        # Anchor the build to THIS section's own version pairing -- "Version 2607 (Build 20228.20190)"
+        # -- not to the first "Build N.N" anywhere in the section. Prose routinely names other
+        # builds ("Known issue: present since Build X", "requires Build Y or later"), and an
+        # unanchored search let one of those become the record's identity. With build-keyed dedupe
+        # that is not a cosmetic wrong field: the real build is never ingested, the hijacked build
+        # inherits the wrong section's release date, and its genuine section is then discarded as a
+        # duplicate. Same failure mode as the date, so it gets the same anchoring.
+        build = _section_build(section, version)
         if not build:
             continue  # fail closed: require the precise build, not just a marketing version
+        if build in seen_builds:
+            continue
 
-        published = _release_date(re.sub(r"\s+", " ", strip_tags(section)), version)
+        # Anchor the date on the section's own heading ("Version 2607: August 11"), which is the
+        # authoritative release date for that build. Scanning the whole section for a full
+        # "Month DD, YYYY" picks up dates quoted in feature prose -- measured on the live page it
+        # produced exactly one wrong date (2408 dated from an "October 1, 2024" service note) and
+        # zero right ones.
+        heading_text = re.sub(r"\s+", " ", strip_tags(match.group(0))).strip()
+        published = _release_date(heading_text, version) or _release_date(
+            re.sub(r"\s+", " ", strip_tags(section)), version)
         if not published:
             continue  # fail closed: require the official release date (every record must carry one)
+        if floor and published[:10] < floor:
+            # FORWARD-ONLY GUARD. Relaxing the attribution gate makes every historical build on the
+            # page a candidate at once. This lane ingests forward from a declared date instead, so
+            # merging cannot start an unbounded historical backfill. Existing records are unaffected
+            # -- they are matched by identity, not re-created. Widening history is a deliberate,
+            # separate decision: move the floor.
+            continue
 
-        entries: list[str] = []
-        applies_suitewide = False
-        for block in BLOCK_RE.finditer(section):
-            text = re.sub(r"\s+", " ", strip_tags(block.group("block"))).strip()
-            if not text:
-                continue
-            if SUITEWIDE_APPLICABILITY_RE.search(text):
-                entries.append(text)
-                applies_suitewide = True
-            elif app_word.search(text):
-                entries.append(text)
-            # Blocks that name only other Office apps (or no app) are not attributed here.
+        entries, applies_suitewide, app_named = _attribute_section(section, target_app, app_word)
 
-        if not entries:
-            continue  # no explicit target-app / suite-wide attribution in this version
+        # Attribution is METADATA, not an admission gate. A Current Channel build ships the
+        # installed app binary whether or not Microsoft's prose happens to carry an app-specific
+        # bullet, so record existence depends only on the identity guards above.
 
-        seen_versions.add(version)
+        seen_builds.add(build)
         records.append(
-            _app_record(source, source_url, channel, version, build, published, target_app, entries, applies_suitewide)
+            _app_record(source, source_url, channel, version, build, published, target_app,
+                        entries, applies_suitewide, app_named=app_named)
         )
         if len(records) >= max(1, int(limit)):
             break

@@ -115,11 +115,16 @@ layout: aux-base
 {% capture method_health_status_tokens %}|blocked|broken|partial|{{ low_confidence_status }}|{{ manual_review_status }}|stale|{% endcapture %}
 {% assign page_product_id_token = page.product_id | append: '' %}
 {% assign page_update_version_token = page.update_version | append: '' %}
+{%- comment -%} Build-aware products ship several builds under one version and every one of
+their method-health rows carries the same update_version, so this join needs the build too
+or a sibling's telemetry decides this build's freshness notice. {%- endcomment -%}
+{% assign page_target_build_token = page.target_build | default: '' | append: '' %}
 {% if site.data.evidence_method_health and site.data.evidence_method_health.methods %}
   {% for method in site.data.evidence_method_health.methods %}
     {% assign method_product_id_token = method.product_id | append: '' %}
     {% assign method_update_version_token = method.update_version | append: '' %}
-    {% if method_product_id_token == page_product_id_token and method_update_version_token == page_update_version_token %}
+    {% assign method_target_build_token = method.target_build | default: '' | append: '' %}
+    {% if method_product_id_token == page_product_id_token and method_update_version_token == page_update_version_token and method_target_build_token == page_target_build_token %}
       {% assign method_status = method.status | default: '' | downcase | replace: '_', ' ' | replace: '-', ' ' | strip %}
       {% assign method_status_token = '|' | append: method_status | append: '|' %}
       {% assign method_source_type_key = method.source_type | default: '' | downcase | replace: '_', ' ' | replace: '-', ' ' | strip %}
@@ -369,7 +374,7 @@ layout: aux-base
         </div>
       </div>
 
-      {% include monitoring-status.html mode='full' product_id=page.product_id version=page.update_version published_at=page.update_published_at report_count=page.update_report_count %}
+      {% include monitoring-status.html mode='full' product_id=page.product_id version=page.update_version target_build=page.target_build published_at=page.update_published_at report_count=page.update_report_count %}
 
       {% assign official_active = page.official_active_issue_count | default: 0 | plus: 0 %}
       {% assign official_resolved = page.official_resolved_issue_count | default: 0 | plus: 0 %}
@@ -393,6 +398,10 @@ layout: aux-base
     <details id="official-patch-notes" class="panel update-info-card update-official-details update-order-official-details">
       <summary>Official Patch Notes — {% if official_body_renderable %}vendor release notes captured from the official source{% else %}not captured{% endif %}</summary>
       {% if summary_text != blank %}<p>{{ summary_text }}</p>{% endif %}
+      {%- comment -%} What the vendor documented for THIS app on THIS build. A build with no
+      app-specific note is still a real shipped build; saying so is not the same as saying the app
+      was unchanged, and this line is the only place that distinction is visible. {%- endcomment -%}
+      {% if page.official_app_attribution_label != blank %}<p class="update-official-attribution"><strong>{{ page.update_product }} in these notes:</strong> {{ page.official_app_attribution_label }}.</p>{% endif %}
       {% if page.official_additions or page.official_fixes %}
       <div class="update-change-grid">
         {% if page.official_additions and page.official_additions.size > 0 %}

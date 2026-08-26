@@ -292,9 +292,18 @@ def run() -> int:  # noqa: PLR0915
     # write -> mark_seen ordering: mark_seen is only reached after write_record returns, so a
     # refused write leaves the identity unseen and therefore retryable.
     src = (_REPO / "auxsays" / "scripts" / "patch_ingest.py").read_text(encoding="utf-8")
-    m = re.search(r"^(\s*)path, action = write_record\(.*\)\n\1mark_seen\(", src, re.M)
-    check("F2 mark_seen runs strictly AFTER write_record returns", m is not None,
+    # ORDER, not adjacency: other work may legitimately sit between the write and the ledger
+    # update (version-landing generation does). What must never change is that mark_seen cannot be
+    # reached unless write_record returned, so a refused write leaves the identity retryable.
+    write_at = src.find("path, action = write_record(")
+    seen_at = src.find("mark_seen(state, product_id, record_id)")
+    check("F2 mark_seen runs strictly AFTER write_record returns",
+          write_at != -1 and seen_at != -1 and write_at < seen_at,
           "the write/seen ordering changed -- re-audit before trusting retry")
+    between = src[write_at:seen_at]
+    check("F2 nothing between the write and the ledger can swallow the failure",
+          "try" not in between and "except" not in between,
+          f"a try/except appeared between write_record and mark_seen: {between!r}")
     from lib import state as st  # noqa: PLC0415
     with tempfile.TemporaryDirectory() as td:
         out = Path(td)
