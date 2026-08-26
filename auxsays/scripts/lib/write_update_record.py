@@ -70,10 +70,67 @@ APPLICABILITY_FIELDS = (
     "applies_to_label",
 )
 
+# What the VENDOR's own release notes said about this app for this exact build. This is official
+# capture metadata -- a statement about what the source was found to say -- not a claim about the
+# software. ``not_documented_by_source`` deliberately mirrors ``not_provided_by_source``: it says
+# Microsoft published nothing app-specific for this build, and it must NEVER be read or rendered as
+# "there were no changes for this app". Those are different claims.
+OFFICE_APP_ATTRIBUTION_FIELDS = (
+    "official_app_attribution",
+    "official_app_attribution_label",
+)
+
+ATTRIBUTION_NOT_DOCUMENTED = "not_documented_by_source"
+ATTRIBUTION_SUITE_WIDE = "suite_wide_by_source"
+ATTRIBUTION_APP_NAMED = "app_named_by_source"
+ATTRIBUTION_APP_NAMED_AND_SUITE_WIDE = "app_named_and_suite_wide_by_source"
+
+# Strength order. A refresh may only ever move UP this ladder.
+#
+# Precedent: ``official_patch_notes_capture_status`` is already a strengthening-only ratchet -- a
+# strong capture status is never overwritten by a failed observation, and the per-run truth lives in
+# the bounded ``official_source_attempts`` ledger instead. Attribution is the same kind of fact, and
+# the observation channel is just as lossy (a regex over a long multi-version HTML page, fetched
+# under a byte cap). "Not observed this run" must not erase "observed last run", because a build's
+# release notes are a historical fact about one immutable build, not a live pointer like the Windows
+# KB or an issue-lifecycle count -- the two field groups that legitimately DO accept downgrades.
+ATTRIBUTION_RANK = {
+    "": -1,
+    ATTRIBUTION_NOT_DOCUMENTED: 0,
+    ATTRIBUTION_SUITE_WIDE: 1,
+    ATTRIBUTION_APP_NAMED: 2,
+    ATTRIBUTION_APP_NAMED_AND_SUITE_WIDE: 3,
+}
+
+ATTRIBUTION_LABELS = {
+    ATTRIBUTION_NOT_DOCUMENTED: "Not documented in the official release notes for this build",
+    ATTRIBUTION_SUITE_WIDE: "Documented as an all-apps (suite-wide) change",
+    ATTRIBUTION_APP_NAMED: "Named in the official release notes",
+    ATTRIBUTION_APP_NAMED_AND_SUITE_WIDE: "Named in the official notes, plus an all-apps change",
+}
+
 # All opt-in structured identity/applicability fields the official adapters may supply.
+#
+# Attribution is deliberately NOT in this tuple: the loop that consumes it advances on any change,
+# which would silently downgrade a record the moment one parse failed to see the app block.
 OPTIONAL_STRUCTURED_FIELDS = (
     OFFICE_APP_IDENTITY_FIELDS + ACROBAT_IDENTITY_FIELDS + APPLICABILITY_FIELDS
 )
+
+
+def _shrinks_applicability(existing: Any, incoming: Any) -> bool:
+    """True when the incoming applicability list drops product ids the record already claims."""
+    if not isinstance(existing, list) or not isinstance(incoming, list):
+        return False
+    return bool(set(existing) - set(incoming))
+
+
+def attribution_rank(value: Any) -> int:
+    return ATTRIBUTION_RANK.get(str(value or "").strip(), -1)
+
+
+def attribution_label(value: Any) -> str:
+    return ATTRIBUTION_LABELS.get(str(value or "").strip(), "")
 
 
 def _file_size_status(record: dict[str, Any]) -> str:
@@ -168,15 +225,32 @@ def _capture_status(record: dict[str, Any], *, body: str) -> str:
     return str(record.get("capture_status") or "captured-from-primary")
 
 
+def _public_version_label(record: dict[str, Any], version: Any) -> str:
+    """Public label for a patch: 'X' normally, 'X (Build Y)' for a build-aware product.
+
+    Several builds ship under one marketing version, so a version-only label made sibling pages
+    indistinguishable -- same title, same feed card, same meta description, four different verdicts.
+    """
+    build = identity_build(record, record.get("product_id"))
+    return f"{version} (Build {build})" if build else str(version)
+
+
 def _official_source_attempt(record: dict[str, Any], checked_at: str, *, body: str, checksums_body: str) -> dict[str, Any]:
     source_url = record.get("source_url") or record.get("official_patch_notes_source_url") or record.get("official_url") or ""
-    return {
+    attempt = {
         "at": checked_at,
         "url": source_url,
         "status": _capture_status(record, body=body),
         "body_captured": bool(body),
         "checksums_captured": bool(checksums_body),
     }
+    # What THIS observation saw for app attribution. The headline field only ratchets upward, so
+    # without this the run that saw a weaker state left no trace at all and the refusal to downgrade
+    # was unauditable -- an operator could not tell a lossy parse from a vendor rewording.
+    observed = str(record.get("official_app_attribution") or "").strip()
+    if observed:
+        attempt["app_attribution_observed"] = observed
+    return attempt
 
 def build_front_matter(record: dict[str, Any]) -> dict[str, Any]:
     version = record.get("version") or record.get("title") or "Update"
@@ -212,8 +286,9 @@ def build_front_matter(record: dict[str, Any]) -> dict[str, Any]:
     ]
     front = {
         "layout": "aux-update",
-        "title": f"{software} {version} official update breakdown",
-        "description": f"Official {software} update record captured from {company}.",
+        "title": f"{software} {_public_version_label(record, version)} official update breakdown",
+        "description": (f"Official {software} update record captured from {company} for "
+                        f"{_public_version_label(record, version)}."),
         # Canonical public URL. Version-only products keep the established four-segment shape;
         # a build-aware product gains one exact-build segment, so two builds under one YYMM are
         # two distinct public pages instead of silently sharing one.
@@ -240,8 +315,8 @@ def build_front_matter(record: dict[str, Any]) -> dict[str, Any]:
         "patch_file_size_note": record.get("file_size_note") or "",
         "patch_file_size_status": _file_size_status(record),
         "update_status": "current",
-        "update_feed_title": f"{software} {version}",
-        "update_detail_title": f"{software} {version}",
+        "update_feed_title": f"{software} {_public_version_label(record, version)}",
+        "update_detail_title": f"{software} {_public_version_label(record, version)}",
         "update_consensus_label": consensus_label,
         "update_report_count": report_count,
         "update_consensus_confidence": consensus_confidence,
@@ -293,6 +368,18 @@ def build_front_matter(record: dict[str, Any]) -> dict[str, Any]:
     for field in OPTIONAL_STRUCTURED_FIELDS:
         if record.get(field) is not None:
             front[field] = record[field]
+    # Official app attribution. Emitted on CREATE here and ratcheted on REFRESH in
+    # refresh_existing_record -- both halves are required, or a field that only ever appears at
+    # creation would be frozen forever, and one that only ever appears on refresh would never
+    # appear at all.
+    # Vocabulary-checked on CREATE too. The refresh ratchet rejects anything outside the ladder,
+    # but create copied the incoming value verbatim -- so an adapter bug could have written a
+    # free-text claim (including the substantive-negative one this field exists to avoid) straight
+    # into front matter. The label is always derived, never trusted from the caller.
+    attribution = str(record.get("official_app_attribution") or "").strip()
+    if attribution_rank(attribution) >= 0:
+        front["official_app_attribution"] = attribution
+        front["official_app_attribution_label"] = attribution_label(attribution)
     return front
 
 
@@ -390,8 +477,30 @@ def refresh_existing_record(path: Path, record: dict[str, Any]) -> tuple[Path, s
     # build/track/version rollover never leaves a stale identity on the record.
     for field in OPTIONAL_STRUCTURED_FIELDS:
         if field in record and record[field] is not None and existing.get(field) != record[field]:
+            if field in APPLICABILITY_FIELDS and _shrinks_applicability(
+                    existing.get("applicability"), record.get("applicability")):
+                # A re-parse that happened to match only the app block must not drop an
+                # already-established suite-wide applicability. Widening is fine; narrowing is a
+                # lost observation, not a vendor change. The LABEL is held back with the list --
+                # protecting one and letting the other advance just desyncs them.
+                continue
             existing[field] = record[field]
             material_changed = True
+
+    # Official app attribution: strengthening-only ratchet (see ATTRIBUTION_RANK). A weaker
+    # observation is recorded in the attempts ledger by the block above and never touches the
+    # headline field, so one failed parse cannot downgrade a record.
+    incoming_attr = str(record.get("official_app_attribution") or "").strip()
+    existing_attr = str(existing.get("official_app_attribution") or "").strip()
+    if incoming_attr and attribution_rank(incoming_attr) > attribution_rank(existing_attr):
+        existing["official_app_attribution"] = incoming_attr
+        existing["official_app_attribution_label"] = attribution_label(incoming_attr)
+        material_changed = True
+    elif existing_attr and not str(existing.get("official_app_attribution_label") or "").strip():
+        # Equal rank never rewrites the value, so a record whose label is missing would keep an
+        # unreadable state forever. Repair the derived label without touching the claim.
+        existing["official_app_attribution_label"] = attribution_label(existing_attr)
+        material_changed = True
 
     if material_changed:
         existing["record_last_updated"] = checked_at

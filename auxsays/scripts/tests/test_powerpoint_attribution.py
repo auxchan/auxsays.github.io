@@ -193,14 +193,39 @@ def run() -> int:
     check("CC case1: applicability is PowerPoint-only (no suite id)", pp.get("applicability") == ["microsoft-powerpoint"], str(pp.get("applicability")))
     check("CC case1: official source URL is the Current Channel page", pp.get("source_url") == PP_SOURCE["ingestion"]["official_url"], str(pp.get("source_url")))
 
-    # Cases 2-4: Word / Excel / Outlook-only version (2606) -> no PowerPoint record; no leak
-    check("CC case2-4: Word/Excel/Outlook-only version (2606) yields no PowerPoint record", all(x.get("version") != "2606" for x in cc))
+    # Cases 2-4: Word / Excel / Outlook-only version (2606).
+    #
+    # DOCTRINE CHANGE (multi-build official ingestion): a Current Channel build ships the installed
+    # PowerPoint binary whether or not Microsoft's prose carries a PowerPoint bullet, so the build
+    # now EXISTS as a record and the attribution is recorded as metadata instead of being used as
+    # the admission gate. What must still never happen is another app's change text being presented
+    # as PowerPoint's -- that assertion is unchanged and is the one that protects credibility.
+    v2606 = [x for x in cc if x.get("version") == "2606"]
+    check("CC case2-4: an other-app-only version still yields a PowerPoint build record",
+          len(v2606) >= 1, str(cc_versions))
+    check("CC case2-4: it is marked as not documented for PowerPoint",
+          all(x.get("official_app_attribution") == "not_documented_by_source" for x in v2606),
+          str([x.get("official_app_attribution") for x in v2606]))
     check("CC case2-4: no other-app text leaks into any PowerPoint record",
           all(t not in (x.get("body") or "") for x in cc for t in ("citations pane", "large workbooks", "search folders")))
+    check("CC case2-4: it never claims PowerPoint was unchanged",
+          all("no powerpoint" not in (x.get("body") or "").lower()
+              and "no changes" not in (x.get("body") or "").lower() for x in v2606))
 
-    # Case 5: generic Microsoft 365 servicing (2605) with no app attribution -> rejected
-    check("CC case5: generic Microsoft 365 version (2605) yields no PowerPoint record", all(x.get("version") != "2605" for x in cc))
-    check("CC: exactly one PowerPoint record from the multi-version page (only v2607)", cc_versions == ["2607"], str(cc_versions))
+    # Case 5: generic Microsoft 365 servicing (2605) with no app attribution -> record EXISTS,
+    # attribution says the vendor documented nothing app-specific.
+    v2605 = [x for x in cc if x.get("version") == "2605"]
+    check("CC case5: a generic servicing version still yields a PowerPoint build record",
+          len(v2605) >= 1, str(cc_versions))
+    check("CC case5: attribution is not_documented_by_source",
+          all(x.get("official_app_attribution") == "not_documented_by_source" for x in v2605),
+          str([x.get("official_app_attribution") for x in v2605]))
+    check("CC: the explicitly-attributed version is still marked app_named_by_source",
+          all(x.get("official_app_attribution") == "app_named_by_source"
+              for x in cc if x.get("version") == "2607"),
+          str([(x.get("version"), x.get("official_app_attribution")) for x in cc]))
+    check("CC: every emitted record carries a build, a date and a source URL",
+          all(x.get("target_build") and x.get("published_at") and x.get("source_url") for x in cc))
 
     # Case 6: explicit suite-wide materially-applicable item -> accepted with shared applicability + one source identity
     suite_ok = _parse('<h2>Version 2608 (Build 20250.20050)</h2><p>Current Channel released September 8, 2026.</p>'

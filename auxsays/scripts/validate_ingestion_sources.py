@@ -12,7 +12,9 @@ the problems that have already cost time:
 from __future__ import annotations
 
 import argparse
+import re
 import sys
+from datetime import date
 from pathlib import Path
 from typing import Any
 from urllib.parse import urlparse
@@ -124,6 +126,33 @@ def _validate_entry(errors: list[str], warnings: list[str], source: dict[str, An
             errors.append(f"{label}: ingestion.record_limit must be a positive integer when present (got {record_limit_raw!r})")
         else:
             record_limit_floor = record_limit_raw
+
+    # Forward-only ingestion floor (see microsoft_office_updates._record_floor_date). A malformed
+    # value would remove the guard rather than narrow it, so it is rejected here as well as at
+    # runtime -- a typo must fail the config check, not quietly re-enable historical backfill.
+    #
+    # A lane whose record existence is keyed on build identity rather than app prose MUST declare
+    # the floor. Validating only the value left a hole: a typo in the KEY name
+    # ('record_floor_data') removes the only backfill guard, passes validation, and silently starts
+    # ingesting the entire release-notes history.
+    profile = str(ingestion.get("parser_profile") or "").strip()
+    if profile == "microsoft_365_powerpoint_release_notes" and "record_floor_date" not in ingestion:
+        errors.append(f"{label}: ingestion.record_floor_date is REQUIRED for the per-build "
+                      f"PowerPoint lane (forward-only ingestion guard); check the key spelling")
+    if "record_floor_date" in ingestion:
+        floor_raw = ingestion.get("record_floor_date")
+        floor_ok = False
+        if isinstance(floor_raw, str):
+            match = re.fullmatch(r"(\d{4})-(\d{2})-(\d{2})", floor_raw.strip())
+            if match:
+                try:
+                    date(int(match.group(1)), int(match.group(2)), int(match.group(3)))
+                    floor_ok = True
+                except ValueError:
+                    floor_ok = False   # shape-valid but not a real day (e.g. 2026-13-45)
+        if not floor_ok:
+            errors.append(f"{label}: ingestion.record_floor_date must be a real 'YYYY-MM-DD' date "
+                          f"when present (got {floor_raw!r})")
 
     scan_limit_raw = ingestion.get("scan_limit")
     if scan_limit_raw is not None:

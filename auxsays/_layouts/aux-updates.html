@@ -186,7 +186,7 @@ layout: aux-base
           {% if company_products.size > 4 %}<span>+{{ company_products.size | minus: 4 }} more</span>{% endif %}
         </div>
         <p>{{ company.summary }}</p>
-        <p class="patch-source-reason">Hierarchy: {{ company.company_name }} → software → patches/updates{% if company_update_count > 0 %} • {{ company_update_count }} documented patch record{% if company_update_count != 1 %}s{% endif %}{% endif %}.</p>
+        <p class="patch-source-reason">Hierarchy: {{ company.company_name }} → software → patches/updates{% if company_update_count > 0 %} • {{ company_update_count }} tracked patch record{% if company_update_count != 1 %}s{% endif %}{% endif %}.</p>
         <div class="patch-card-links patch-source-card-links">
           {% if company.company_url %}<a class="patch-source-link patch-source-link--primary" href="{{ company.company_url | relative_url }}">View company →</a>{% endif %}
           {% assign first_official_source = company.official_sources | first %}
@@ -258,7 +258,7 @@ layout: aux-base
             {% endif %}
             <span class="patch-report-count">{{ feed_evidence_label }}</span>
             <span class="patch-report-count">{{ item.update_report_count | default: 0 }} confirmed community report{% unless item.update_report_count == 1 %}s{% endunless %}</span>
-            {% include monitoring-status.html mode='feed' product_id=item.product_id version=item.update_version published_at=item.update_published_at report_count=item.update_report_count %}
+            {% include monitoring-status.html mode='feed' product_id=item.product_id version=item.update_version target_build=item.target_build published_at=item.update_published_at report_count=item.update_report_count %}
           </span>
         </div>
         {% if item.update_feed_title != blank %}
@@ -359,7 +359,7 @@ layout: aux-base
               {% endif %}
               <span class="patch-report-count">{{ feed_evidence_label }}</span>
               <span class="patch-report-count">{{ item.update_report_count | default: 0 }} confirmed community report{% unless item.update_report_count == 1 %}s{% endunless %}</span>
-              {% include monitoring-status.html mode='feed' product_id=item.product_id version=item.update_version published_at=item.update_published_at report_count=item.update_report_count %}
+              {% include monitoring-status.html mode='feed' product_id=item.product_id version=item.update_version target_build=item.target_build published_at=item.update_published_at report_count=item.update_report_count %}
             </span>
           </div>
           {% if item.update_feed_title != blank %}

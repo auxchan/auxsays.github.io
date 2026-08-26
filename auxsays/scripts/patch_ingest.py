@@ -34,10 +34,14 @@ from lib.http import fetch_text
 from lib.normalize import split_front_matter, strip_tags, utc_now
 from lib.state import load_state, save_state, is_seen, mark_seen, update_source_success, update_source_error, source_state, SEEN_RETENTION
 from lib.write_update_record import refresh_existing_record, write_record
+from lib.version_landing import ensure_for_record
 
 DEFAULT_CONFIG = Path("auxsays/_data/patch_ingestion_sources.yml")
 DEFAULT_STATE = Path("auxsays/_data/patch_ingest_state.json")
 DEFAULT_OUTPUT = Path("auxsays/updates/generated")
+# Root of the public /updates tree. Version landing pages for build-aware products live under
+# <updates_dir>/<company>/<product>/<version>/index.md -- one segment above the build records.
+DEFAULT_UPDATES_DIR = Path("auxsays/updates")
 
 URL_RE = re.compile(r"https?://[^\s\])}>\"']+")
 RETRY_CAPTURE_STATUSES = {
@@ -283,6 +287,7 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
     written = []
     skipped = []
     refreshed = []
+    landings: list[dict[str, str]] = []
     deferred = []
     deferred_source_urls: set[str] = set()  # URLs of accepted-but-deferred records (see promote below)
     would_create = []     # dry-run: unseen records this run WOULD create (no disk/state write)
@@ -337,6 +342,17 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
         record.setdefault("fallback_official_sources", fallback_sources)
 
         path, action = write_record(args.output, record, overwrite_existing=args.overwrite_existing)
+        # A build-aware product's record lives one segment BELOW the version URL, so the version URL
+        # needs a landing page that lists the builds. Generated strictly AFTER a successful write --
+        # never from a candidate -- so a landing page can never exist for a version with no records.
+        # Idempotent: unchanged bytes are not rewritten, so a steady-state run touches nothing.
+        # Landing pages follow the RECORD output, not a fixed repo path: a caller writing records
+        # into a temporary directory must not have landing pages appear in the real tree. Only an
+        # explicit --updates-dir overrides that.
+        landing_root = getattr(args, "updates_dir", None) or Path(args.output).parent
+        landing_path, landing_action = ensure_for_record(landing_root, record)
+        if landing_action in {"created", "updated"}:
+            landings.append({"path": str(landing_path), "action": landing_action})
         mark_seen(state, product_id, record_id)
         if action == "created":
             written.append(str(path))
@@ -388,6 +404,9 @@ def run_source(source: dict[str, Any], args: argparse.Namespace, state: dict[str
         "refreshed": refreshed,
         "skipped": skipped,
         "deferred": deferred,
+        # Version landing routes created/repaired this run. Reported because the lane publishes
+        # them: an artifact the pipeline writes but never mentions is invisible to the operator.
+        "version_landings": landings,
         "status": "success",
         "duration_ms": duration_ms,
     }
@@ -401,6 +420,10 @@ def main() -> int:
     parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
     parser.add_argument("--state", type=Path, default=DEFAULT_STATE)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument("--updates-dir", type=Path, default=None,
+                        help="Root of the public /updates tree (version landing pages). "
+                             "Defaults to the parent of --output, so redirecting record output "
+                             "also redirects landing pages.")
     parser.add_argument("--source", action="append", help="Run a specific product_id or company_id. May be used multiple times.")
     parser.add_argument("--all", action="store_true", help="Run all non-manual sources, including P2/P3 experimental sources.")
     parser.add_argument("--limit", type=int, default=2, help="Max records per source.")
