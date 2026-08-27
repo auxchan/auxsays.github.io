@@ -27,6 +27,8 @@ from typing import Any
 import yaml
 
 from lib.normalize import split_front_matter, atomic_write_text
+from lib.patch_identity import patch_key
+from lib.report_counts import counted_evidence_counts
 
 ROOT = Path(__file__).resolve().parents[1]
 EVIDENCE_PATH = ROOT / "_data" / "consensus_evidence.yml"
@@ -412,13 +414,19 @@ def write_evidence(rows: list[dict[str, Any]]) -> tuple[int, int, list[dict[str,
 
 
 def counted_evidence_count(rows: list[dict[str, Any]], version: str) -> int:
-    return sum(
-        1
-        for row in rows
-        if str(row.get("product_id") or "").strip() == PRODUCT_ID
-        and str(row.get("update_version") or "").strip() == version
-        and row.get("counted") is not False
-    )
+    """This collector's count of accepted reports -- from the ONE canonical population.
+
+    It used to apply its own looser predicate (`counted is not False`, without
+    `patch_version_matched`) and then write the result straight into the record's
+    `update_report_count`: a private count authority for one product. It happens to agree with the
+    canonical predicate on the whole live corpus (all 9 OBS versions, zero delta -- measured, and
+    pinned by test), so delegating changes no published number today and stops the two drifting
+    tomorrow. Rows are narrowed to this collector's own product FIRST, so no other product's
+    evidence can influence -- or, via the build-identity guard, fail -- an OBS count."""
+    own = [row for row in rows
+           if str(row.get("product_id") or "").strip() == PRODUCT_ID]
+    return counted_evidence_counts(own, windows_targets={}).get(
+        patch_key(PRODUCT_ID, version, ""), 0)
 
 
 def front_matter_parts(path: Path) -> tuple[dict[str, Any], str]:

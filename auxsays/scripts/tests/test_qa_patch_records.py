@@ -108,7 +108,7 @@ def run() -> int:
         qa.EVIDENCE_PATH = evidence_path
         try:
             # Counted-row filtering: only counted+patch-matched rows count (3 of 5 raw rows).
-            counts = qa.load_counted_evidence_counts()
+            counts = qa.load_counted_evidence_counts([])
             check(
                 "only counted+patch-matched rows are counted (3 of 5 raw rows)",
                 counts.get(("obs-studio", "32.1.2", "")) == 3,

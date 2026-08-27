@@ -21,16 +21,61 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, Iterable
 
-from patch_collectors.base import load_front_matter_and_body, write_front_matter_and_body
+from patch_collectors.base import (WINDOWS_PRODUCT_ID, load_front_matter_and_body,
+                                   windows_identity_gate, write_front_matter_and_body)
 from .patch_identity import patch_key, require_build
 
 
-def counted_evidence_counts(evidence_rows: Iterable[dict[str, Any]]) -> dict[tuple[str, str, str], int]:
+def windows_targets_from_front_matter(
+        records: Iterable[dict[str, Any]]) -> dict[tuple[str, str, str], dict[str, Any]]:
+    """Canonical patch key -> that Windows record's CURRENT-patch identity.
+
+    Pure: the caller supplies front matter it has already read, so building this costs no extra I/O.
+    Windows-only because ``windows_identity_gate`` is the only identity gate keyed on a record's
+    rolling ``target_kb``/``target_os_build``; every other product's acceptance is decided by the row
+    alone."""
+    targets: dict[tuple[str, str, str], dict[str, Any]] = {}
+    for data in records or []:
+        if not isinstance(data, dict) or data.get("update_entry") is not True:
+            continue
+        if str(data.get("product_id") or "").strip() != WINDOWS_PRODUCT_ID:
+            continue
+        version = str(data.get("update_version") or "").strip()
+        if not version:
+            continue
+        targets[patch_key(WINDOWS_PRODUCT_ID, version, data.get("target_build"))] = data
+    return targets
+
+
+def counted_evidence_counts(
+        evidence_rows: Iterable[dict[str, Any]],
+        *,
+        windows_targets: dict[tuple[str, str, str], dict[str, Any]],
+) -> dict[tuple[str, str, str], int]:
     """Authoritative count of final counted, patch-matched evidence rows per CANONICAL patch identity.
 
-    Predicate (identical to the QA gate): ``counted is not False`` AND ``patch_version_matched is True``.
-    Keys are patch_key(product_id, update_version, target_build); Reader and Pro are distinct product_ids
-    and are never merged."""
+    Predicate: ``counted is not False`` AND ``patch_version_matched is True`` AND, for
+    ``microsoft-windows-11``, the row passes ``windows_identity_gate`` against that record's current
+    target identity.
+
+    THE WINDOWS GATE IS PART OF THE PREDICATE, not an extra. A Windows record tracks ONE cumulative
+    update (a KB / OS build) inside a feature train, and the train rolls over monthly. Without the
+    gate this function counted every row ever accepted for "25H2" -- live, 32 rows spanning THREE
+    different cumulative updates (KB5095093/26200.8737, KB5101684/26200.8973 and the record's actual
+    KB5121003/26200.9168) -- while the consensus writer counted the 12 belonging to the current
+    patch. The record then published `update_report_count: 32` beside prose saying "9 user reports".
+    Reports about a superseded KB are reports about a different patch; counting them is exactly the
+    version-mismatched evidence AUXSAYS doctrine forbids.
+
+    ``windows_targets`` supplies those identities (see ``windows_targets_from_front_matter``). It is
+    keyword-only and REQUIRED, deliberately: if it were optional, omitting it would silently return
+    0 for every Windows patch, and ``reconcile_record_counts`` would then write that 0 onto a live
+    record. Required makes a forgotten argument a TypeError at the call site instead. Passing a map
+    that simply has no entry for some Windows patch stays FAIL-CLOSED -- those rows are not counted
+    rather than counted against an unknown identity, the same direction ``windows_identity_gate``
+    itself takes -- so a genuinely record-less patch reads 0 while a caller bug cannot.
+    Keys are patch_key(product_id, update_version, target_build); Reader and Pro are distinct
+    product_ids and are never merged."""
     counts: dict[tuple[str, str, str], int] = {}
     for row in evidence_rows or []:
         if not isinstance(row, dict):
@@ -43,6 +88,12 @@ def counted_evidence_counts(evidence_rows: Iterable[dict[str, Any]]) -> dict[tup
             continue
         if row.get("patch_version_matched") is not True:
             continue
+        if product_id == WINDOWS_PRODUCT_ID:
+            target = windows_targets.get(
+                patch_key(product_id, version, row.get("target_build")))
+            counts_ok, _reason = windows_identity_gate(row, target)
+            if not counts_ok:
+                continue
         # Fail closed. This is the AUTHORITATIVE counted-evidence predicate -- QA alignment and
         # record reconciliation both read it. A counted, patch-matched row for a build-aware
         # product that carries no exact build cannot be attributed to any build-specific record;
@@ -91,11 +142,17 @@ def reconcile_record_counts(evidence_rows: Iterable[dict[str, Any]], generated_d
     unrelated product's record cannot be silently rewritten by a run that never collected for it.
     The algorithm is unchanged; this only restricts which records are eligible.
     """
-    counts = counted_evidence_counts(evidence_rows)
+    # ONE pass of record I/O. The Windows identity gate needs each record's current target, so read
+    # every record once, build the target map from what we already hold, then count -- rather than
+    # scanning the tree twice or re-reading per row.
+    loaded = [(path, *load_front_matter_and_body(path))
+              for path in sorted(Path(generated_dir).glob("*.md"))]
+    counts = counted_evidence_counts(
+        evidence_rows,
+        windows_targets=windows_targets_from_front_matter(data for _p, data, _b in loaded))
     scope = {str(p).strip() for p in product_ids} if product_ids is not None else None
     changed: list[dict[str, Any]] = []
-    for path in sorted(Path(generated_dir).glob("*.md")):
-        data, body = load_front_matter_and_body(path)
+    for path, data, body in loaded:
         if not isinstance(data, dict) or data.get("update_entry") is not True:
             continue
         product_id = str(data.get("product_id") or "").strip()

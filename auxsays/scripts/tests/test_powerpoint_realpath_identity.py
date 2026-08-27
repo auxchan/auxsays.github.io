@@ -155,7 +155,7 @@ def run() -> int:
               again == 0, f"added={again} dupes={dupes2}")
 
         # ---- 5. COUNTING / GROUPING / RECONCILIATION FROM THE RELOADED ROWS ----------------
-        counts = counted_evidence_counts(reloaded)
+        counts = counted_evidence_counts(reloaded, windows_targets={})
         check("5 counts are per exact build",
               counts.get(pi.patch_key(PRODUCT, VERSION, BUILD_A)) == 1
               and counts.get(pi.patch_key(PRODUCT, VERSION, BUILD_B)) == 1, str(counts))
@@ -285,15 +285,16 @@ def run() -> int:
               "counted": True, "patch_version_matched": True}
     raised = False
     try:
-        counted_evidence_counts([orphan])
+        counted_evidence_counts([orphan], windows_targets={})
     except pi.MissingBuildIdentity:
         raised = True
     check("11 authoritative counted-evidence predicate FAILS CLOSED on a missing build",
           raised, "an orphan (product, version, '') count bucket was created")
     check("11 a version-only PRODUCT still counts normally",
-          counted_evidence_counts([{"id": "o2", "product_id": "obs-studio",
-                                    "update_version": "32.2.0", "counted": True,
-                                    "patch_version_matched": True}])
+          counted_evidence_counts(
+              [{"id": "o2", "product_id": "obs-studio", "update_version": "32.2.0",
+                "counted": True, "patch_version_matched": True}],
+              windows_targets={})
           == {("obs-studio", "32.2.0", ""): 1})
 
     with tempfile.TemporaryDirectory() as d:

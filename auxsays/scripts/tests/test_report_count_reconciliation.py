@@ -99,7 +99,8 @@ def run() -> int:
     changed, detail = reconcile_record_counts(ev, gen)
     check("1 reproduces + fixes: 4 -> 14", changed == 1 and rec_count(r) == 14, f"count={rec_count(r)}")
     check("1 QA invariant holds after reconcile (record == QA count)",
-          rec_count(r) == counted_evidence_counts(ev).get(("adobe-acrobat-pro", "26.001.21563", "")))
+          rec_count(r) == counted_evidence_counts(ev, windows_targets={}).get(
+              ("adobe-acrobat-pro", "26.001.21563", "")))
     check("1 same-boundary count fix does NOT rewrite the label", rec_field(r, "evidence_state_label") == "Verified reports")
 
     # 2. idempotent: reconciling an aligned tree writes nothing
@@ -139,7 +140,8 @@ def run() -> int:
           row("adobe-acrobat-pro", "22.0", rid="same", url="http://dup")]
     reconcile_record_counts(ev, gen)
     check("6 duplicate rows: record == QA count (both count 2 identically)",
-          rec_count(r) == counted_evidence_counts(ev).get(("adobe-acrobat-pro", "22.0", "")))
+          rec_count(r) == counted_evidence_counts(ev, windows_targets={}).get(
+              ("adobe-acrobat-pro", "22.0", "")))
 
     # 7. Reader/Pro isolation: distinct product_ids never merge
     gen = tmp()
@@ -185,7 +187,8 @@ def run() -> int:
     ev = [row("obs-studio", "32.2.1", rid=f"g{i}", source_type="github_issue") for i in range(14)]
     # QA's scan_evidence_count_alignment must ERROR when record (2) != counted (14)
     orig = qa_patch_records.load_counted_evidence_counts
-    qa_patch_records.load_counted_evidence_counts = lambda: counted_evidence_counts(ev)
+    qa_patch_records.load_counted_evidence_counts = (
+        lambda _records=None: counted_evidence_counts(ev, windows_targets={}))
     try:
         errs, _ = qa_patch_records.scan_evidence_count_alignment([r])
         check("12 QA catches mismatch (2 vs 14) before fix", any(e.get("code") == "generated_report_count_mismatch" for e in errs), str(errs))

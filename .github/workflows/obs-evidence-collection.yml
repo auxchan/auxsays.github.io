@@ -142,7 +142,23 @@ jobs:
             --product-id microsoft-powerpoint \
             --write-all --confirm-write
 
-      - name: Re-run QA after PowerPoint promotion
+      - name: Promote Windows consensus to its current patch identity
+        # Windows records are the one place the count and its prose could disagree: a Windows record
+        # tracks ONE cumulative update (KB / OS build) inside a feature train that rolls over
+        # monthly, and reconcile_record_counts fixes only the NUMBER. Before this step existed the
+        # 25H2 record published `update_report_count: 32` beside prose reading "9 user reports",
+        # because the number advanced with each rollover while nothing regenerated the sentence.
+        # Scoped to --product-id: no other product's records are touched, and every count-derived
+        # field here is regenerated from the same canonical population the count comes from.
+        # Windows has no branch in _record_coherence_fields, so this cannot rewrite verdict prose --
+        # verified, and all 361 commits across the two Windows records are automated.
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          python auxsays/scripts/apply_consensus_to_records.py \
+            --product-id microsoft-windows-11 \
+            --write-all --confirm-write
+
+      - name: Re-run QA after consensus promotion
         # Promotion mutates report counts; re-validate before anything is staged so a
         # half-promoted tree cannot reach the writeback.
         if: ${{ github.event.inputs.dry_run != 'true' }}

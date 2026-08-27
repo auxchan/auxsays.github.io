@@ -190,7 +190,7 @@ def run() -> int:
     check("5 a version-only product still forms exactly ONE group", len(obs_groups) == 1)
 
     # ---- 6. REPORT-COUNT RECONCILIATION ------------------------------------------------------
-    counts = counted_evidence_counts(rows)
+    counts = counted_evidence_counts(rows, windows_targets={})
     check("6 counts are kept per exact build (A=2, B=1)",
           counts.get(pi.patch_key(PRODUCT, VERSION, BUILD_A)) == 2
           and counts.get(pi.patch_key(PRODUCT, VERSION, BUILD_B)) == 1, str(counts))
@@ -239,7 +239,8 @@ def run() -> int:
         pa.write_text(record_md(BUILD_A, 2, "community_reported"), encoding="utf-8")
         pb.write_text(record_md(BUILD_B, 1, "community_reported"), encoding="utf-8")
         orig_loader = qa_patch_records.load_counted_evidence_counts
-        qa_patch_records.load_counted_evidence_counts = lambda: counted_evidence_counts(rows)
+        qa_patch_records.load_counted_evidence_counts = (
+            lambda _records=None: counted_evidence_counts(rows, windows_targets={}))
         try:
             errs, _warns = qa_patch_records.scan_evidence_count_alignment([pa, pb])
             check("8 QA ACCEPTS correct per-build alignment", errs == [], str(errs))
