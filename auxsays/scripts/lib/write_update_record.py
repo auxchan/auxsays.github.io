@@ -19,6 +19,13 @@ from .normalize import (
 
 DEFAULT_CONSENSUS = "Insufficient data"
 
+# What a patch with ZERO accepted patch-specific reports says in public. Named because it is also the
+# state a record must be RETURNED to when its accepted population empties -- see
+# lib.report_counts.reconcile_record_counts, which retracts count projections against this exact text
+# so a record can never keep claiming reports it no longer has.
+DEFERRED_CONSENSUS_REPORT = ("Confirmed patch-specific consensus collection is deferred. "
+                             "This page currently reflects official-source ingestion only.")
+
 # Official-source Release Health issue signals: deterministic counts produced by an
 # adapter from a vendor status page. Surfaced in the UI as OFFICIAL vendor status,
 # kept strictly separate from consensus/user-report fields (never derived from
@@ -276,7 +283,7 @@ def build_front_matter(record: dict[str, Any]) -> dict[str, Any]:
     official_note_status = record.get("official_note_status") or ("release_notes_captured" if official_source_type in {"release_notes", "fixed_issues", "security_advisory", "changelog"} else "official_source_captured")
     official_note_label = record.get("official_note_label") or ("Official release notes" if official_source_type == "release_notes" else "Official source summary")
     quick_verdict = record.get("quick_verdict") or f"{software} {version} has an official AUXSAYS record. Confirmed patch-specific consensus is deferred until the consensus refresh pipeline is active."
-    consensus_report = record.get("consensus_report") or "Confirmed patch-specific consensus collection is deferred. This page currently reflects official-source ingestion only."
+    consensus_report = record.get("consensus_report") or DEFERRED_CONSENSUS_REPORT
     known_issues_present = record.get("known_issues_present")
     if known_issues_present is None and record.get("complaint_themes"):
         known_issues_present = True

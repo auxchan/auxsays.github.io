@@ -149,7 +149,10 @@ jobs:
         # 25H2 record published `update_report_count: 32` beside prose reading "9 user reports",
         # because the number advanced with each rollover while nothing regenerated the sentence.
         # Scoped to --product-id: no other product's records are touched, and every count-derived
-        # field here is regenerated from the same canonical population the count comes from.
+        # field here is regenerated from the same canonical population the count comes from --
+        # while that population is NON-EMPTY. This step skips a group at count <= 0, so the empty
+        # case (every KB rollover) is retracted by reconcile_record_counts instead; see
+        # lib.report_counts.retract_zero_count_projections.
         # Windows has no branch in _record_coherence_fields, so this cannot rewrite verdict prose --
         # verified, and all 361 commits across the two Windows records are automated.
         if: ${{ github.event.inputs.dry_run != 'true' }}

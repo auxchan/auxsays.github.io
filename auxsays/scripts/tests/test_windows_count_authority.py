@@ -9,7 +9,7 @@ over monthly. Two count authorities existed:
 
 Only A fed `update_report_count`; only B fed the count-derived prose. Live on `435c2620` that split
 published `update_report_count: 32` beside `consensus_report: "9 user reports found..."` on
-2026-06-23-windows-11-25h2.md. Row-level, all 20 disputed rows were reports about SUPERSEDED
+2026-06-23-windows-11-25h2.md. Row-level, all 21 disputed rows were reports about SUPERSEDED
 cumulative updates of the same train -- KB5095093/26200.8737 and KB5101684/26200.8973 -- while the
 record's current patch was KB5121003/26200.9168. Counting them is exactly the version-mismatched
 evidence AUXSAYS doctrine forbids, so B was right and A was wrong.
@@ -36,6 +36,8 @@ import yaml  # noqa: E402
 
 import apply_consensus_to_records as acr  # noqa: E402
 from lib.patch_identity import patch_key  # noqa: E402
+from patch_collectors.base import (load_front_matter_and_body,  # noqa: E402
+                                   write_front_matter_and_body)
 from lib.report_counts import (counted_evidence_counts, reconcile_record_counts,  # noqa: E402
                                windows_targets_from_front_matter)
 
@@ -115,6 +117,26 @@ def consensus(rows, rec_front, pid, ver):
                                 product_id=pid, version=ver, is_candidate_mode=False,
                                 record=None if rec_front is None else dict(rec_front))
     return len(inc), exc
+
+
+def _zero_record(path: Path) -> Path:
+    """A record that honestly has no accepted reports -- the shape a real zero record has."""
+    record(path, ver="23H2", kb="KB5120240", build="22631.7517", count=0)
+    return path
+
+
+def flag_value(command: str, flag: str) -> str | None:
+    """Value of `flag` in a shell command, accepting both `--flag value` and `--flag=value`.
+
+    Property, not spelling: the two forms are equivalent to the shell, so a test that only
+    recognises one fails on a harmless rewrite."""
+    tokens = command.replace("\\\n", " ").split()
+    for i, tok in enumerate(tokens):
+        if tok == flag:
+            return tokens[i + 1] if i + 1 < len(tokens) else None
+        if tok.startswith(flag + "="):
+            return tok.split("=", 1)[1]
+    return None
 
 
 def historical_predicate(rows):
@@ -290,37 +312,128 @@ def run() -> int:
 
     # ---------- N5: the pipeline wires a Windows promotion after reconciliation ----------
     print("\n[N5] the scheduled lane regenerates Windows count-derived prose")
-    wf = (_REPO / ".github" / "workflows" / "obs-evidence-collection.yml").read_text(encoding="utf-8")
-    steps = [ln.strip() for ln in wf.splitlines() if ln.strip().startswith("- name:")]
-    names = [s[len("- name:"):].strip() for s in steps]
-    check("N5 a Windows-scoped consensus promotion step exists",
-          any("Windows consensus" in n for n in names), str(names))
-    win_block = wf[wf.index("Promote Windows consensus"):]
-    win_block = win_block[:win_block.index("- name:", 10)]
-    check("N5 it is product-scoped, never an unscoped --write-all",
-          "--product-id microsoft-windows-11" in win_block and "--write-all" in win_block,
-          win_block[-160:])
-    check("N5 it runs AFTER the consensus/reconcile step",
-          names.index("Build consensus status") < next(i for i, n in enumerate(names)
-                                                       if "Windows consensus" in n))
-    check("N5 QA re-runs after the promotions",
-          any("Re-run QA" in n for n in names)
-          and next(i for i, n in enumerate(names) if "Re-run QA" in n)
-          > next(i for i, n in enumerate(names) if "Windows consensus" in n))
+    # Parsed as YAML and asserted as PROPERTIES. An earlier version sliced the raw text with
+    # `wf.index("Promote Windows consensus")` and `names.index("Build consensus status")`; renaming a
+    # step -- a behaviour-neutral edit -- crashed the suite with an uncaught ValueError and printed no
+    # Results line at all, and `"--product-id microsoft-windows-11" in block` failed on the equally
+    # valid `--product-id=microsoft-windows-11`. A test must not pin the spelling of a thing whose
+    # PROPERTY is what matters.
+    wf_path = _REPO / ".github" / "workflows" / "obs-evidence-collection.yml"
+    wf = wf_path.read_text(encoding="utf-8")
+    job = yaml.safe_load(wf)["jobs"]["collect"]
+    steps = job["steps"]
+
+    def find_step(token):
+        """Index of the step whose run: invokes a promotion scoped to `token`; -1 if none."""
+        for i, st in enumerate(steps):
+            run = str(st.get("run") or "")
+            if "apply_consensus_to_records" in run and flag_value(run, "--product-id") == token:
+                return i
+        return -1
+
+    def find_named(token):
+        for i, st in enumerate(steps):
+            if token.lower() in str(st.get("name") or "").lower():
+                return i
+        return -1
+
+    win_i = find_step(WIN)
+    check("N5 a promotion step scoped to microsoft-windows-11 exists", win_i >= 0,
+          str([st.get("name") for st in steps]))
+    if win_i >= 0:
+        run = str(steps[win_i].get("run") or "")
+        check("N5 it is product-scoped, never an unscoped --write-all",
+              flag_value(run, "--product-id") == WIN and "--write-all" in run, run)
+        check("N5 it does not also carry another product's scope",
+              run.count("--product-id") == 1, run)
+    reconcile_i = next((i for i, st in enumerate(steps)
+                        if "build_consensus_from_evidence" in str(st.get("run") or "")), -1)
+    check("N5 the reconcile step is identifiable by what it RUNS, not its title",
+          reconcile_i >= 0, str([st.get("name") for st in steps]))
+    check("N5 promotion runs AFTER reconciliation",
+          0 <= reconcile_i < win_i, f"reconcile={reconcile_i} windows={win_i}")
+    qa_after = [i for i, st in enumerate(steps)
+                if "qa_patch_records" in str(st.get("run") or "") and i > win_i]
+    check("N5 QA re-runs after the promotions", bool(qa_after), str(qa_after))
     check("N5 the writeback may commit the repaired Windows records",
-          "auxsays/updates/generated/*windows-11*.md" in wf)
+          any("windows-11" in str(st.get("run") or "") and "--allow" in str(st.get("run") or "")
+              for st in steps), "no --allow entry covers windows-11 records")
+
+    # ---------- N6: the promotion structurally cannot rewrite Windows verdict prose ----------
+    print("\n[N6] the unattended promotion cannot touch editorial prose")
+    # The workflow comment claims this; nothing enforced it. Adding a Windows branch to
+    # _record_coherence_fields let an unattended cron step overwrite quick_verdict,
+    # update_decision_body, practical_recommendations, release_summary and official_summary on all
+    # three live Windows records with every test and QA still green. Pin the property.
+    from collections import Counter  # noqa: PLC0415
+    win_record = {"update_product": "Windows 11", "product_id": WIN, "update_version": "25H2"}
+    check("N6 _record_coherence_fields yields nothing for Windows",
+          acr._record_coherence_fields(WIN, "25H2", 12, win_record, Counter({"bsod": 3})) == {},
+          str(acr._record_coherence_fields(WIN, "25H2", 12, win_record, Counter({"bsod": 3}))))
+    editorial = {"quick_verdict", "update_decision_label", "update_decision_body",
+                 "practical_recommendations", "release_summary", "official_summary"}
+    proposed = acr._proposed_record_fields(
+        WIN, "25H2", [row(rid=f"p{i}", url=f"https://x/p{i}") for i in range(12)],
+        win_record, "2026-08-27T00:00:00Z", build="")
+    leaked = editorial & set(proposed)
+    check("N6 the promotion proposes no editorial field for Windows", not leaked, str(leaked))
 
     # ---------- QA recurrence guard ----------
-    print("\n[QA] the contradiction is now caught by a structured gate, not prose parsing")
+    print("\n[QA] the contradiction is caught behaviourally, not by reading source text")
     import qa_patch_records as qa  # noqa: PLC0415
     check("QA delegates to the canonical predicate",
           qa.counted_evidence_counts is counted_evidence_counts)
-    import inspect  # noqa: PLC0415
-    src = inspect.getsource(qa.load_counted_evidence_counts)
-    check("QA supplies the Windows target identities",
-          "windows_targets" in src, src)
-    check("QA compares the record's own count against the canonical population",
-          "generated_report_count_mismatch" in inspect.getsource(qa.scan_evidence_count_alignment))
+    # BEHAVIOURAL. This previously asserted that the string "windows_targets" appeared in the
+    # function's source -- which a mutation passing `windows_targets={}` satisfied while silently
+    # disabling the gate: with an empty map the Windows count is 0, the key is absent from the map,
+    # and `if key not in evidence_counts: continue` skips the comparison entirely. QA went from 2
+    # blocking errors to 0 on the real defective records with this suite still at 41/41. Assert the
+    # ERROR, so only a QA that really resolves the Windows identity can pass.
+    with tempfile.TemporaryDirectory() as td:
+        rec_path = Path(td) / "2026-06-23-windows-11-25h2.md"
+        record(rec_path, count=32, prose="9 user reports found for Windows 11 25H2.")
+        orig_loader = qa.load_yaml
+        try:
+            qa.load_yaml = lambda *_a, **_k: rows_25
+            errors, _warn = qa.scan_evidence_count_alignment([rec_path])
+        finally:
+            qa.load_yaml = orig_loader
+        codes = [e.get("code") for e in errors]
+        check("QA blocks a Windows record that claims more reports than the canonical population",
+              "generated_report_count_mismatch" in codes, str(errors))
+        check("QA names the canonical count, not the inflated one",
+              any("12" in str(e.get("message", "")) for e in errors), str(errors))
+
+    # An EMPTY canonical population is a real expected count of zero. The gate used to `continue` on
+    # a missing key, so a rolled-over record claiming reports for a patch with no accepted evidence
+    # at all was never challenged -- blind in precisely the direction the Windows gate produces.
+    with tempfile.TemporaryDirectory() as td:
+        rec_path = Path(td) / "2026-06-23-windows-11-25h2.md"
+        record(rec_path, count=12, prose="12 user reports found for Windows 11 25H2.")
+        rolled, body = load_front_matter_and_body(rec_path)
+        rolled["target_kb"], rolled["target_os_build"] = "KB5130777", "26200.9400"
+        write_front_matter_and_body(rec_path, rolled, body)
+        # A SECOND record that still has accepted evidence, because production's map is never empty
+        # (124 keys live). scan_evidence_count_alignment returns early on a wholly empty map, and
+        # that guard is right: an unreadable evidence file must not flag all 905 records at once.
+        other = Path(td) / "2026-06-23-windows-11-26h1.md"
+        record(other, ver="26H1", kb="KB5121000", build="28000.2704", count=1)
+        rows = rows_25 + [row(ver="26H1", kb="KB5121000", build="28000.2704", feat="26H1",
+                              rid="ok26", url="https://x/ok26")]
+        orig_loader = qa.load_yaml
+        try:
+            qa.load_yaml = lambda *_a, **_k: rows
+            errors, _warn = qa.scan_evidence_count_alignment([rec_path, other])
+            zero_errors, _zw = qa.scan_evidence_count_alignment(
+                [_zero_record(Path(td) / "2026-06-09-windows-11-23h2.md"), other])
+        finally:
+            qa.load_yaml = orig_loader
+        rolled_errs = [e for e in errors if "25h2" in str(e.get("file", ""))]
+        check("QA challenges a record claiming reports for an EMPTY population",
+              any(e.get("code") == "generated_report_count_mismatch" for e in rolled_errs),
+              str(errors))
+        check("QA stays silent on a record that is honestly at zero",
+              not [e for e in zero_errors if "23h2" in str(e.get("file", ""))], str(zero_errors))
 
     # ---------- C11: a forgotten target map must be loud, never a silent zero ----------
     print("\n[C11] the target map is required, so a caller bug cannot publish 0")
@@ -357,6 +470,62 @@ def run() -> int:
           cor.counted_evidence_count(obs_rows + rows_25, "32.1.2") == 3)
     check("C12 a Windows row with no target cannot fail an OBS count",
           cor.counted_evidence_count(obs_rows + [row(rid="nt")], "32.1.2") == 3)
+
+    # ---------- R1-R4: the monthly KB rollover ----------
+    print("\n[R1-R4] when the population empties, the record stops claiming reports")
+    # The failure this pins: a rollover moves the record's target to next month's cumulative update,
+    # every accepted row becomes stale, and the count correctly falls to 0 -- but BOTH downstream
+    # writers bail out at count <= 0 (`--write-all` skips the group, _record_coherence_fields returns
+    # {}), so the record kept publishing "0 / Official source only" beside "WAIT: ... has 12 user
+    # reports found" and twelve source links about a superseded KB. Same contradiction, inverted, and
+    # it recurred every patch Tuesday.
+    with tempfile.TemporaryDirectory() as td:
+        gen = Path(td) / "generated"
+        gen.mkdir(parents=True)
+        rec_path = gen / "2026-06-23-windows-11-25h2.md"
+        record(rec_path, count=12, prose="12 user reports found for Windows 11 25H2.")
+        # give it the full projection set a healthy record carries
+        data, body = load_front_matter_and_body(rec_path)
+        data["accepted_report_sources"] = [{"source": f"s{i}"} for i in range(12)]
+        data["evidence_samples"] = [{"issue": "bsod"} for _ in range(5)]
+        data["evidence_sample_visible_limit"] = 5
+        data["update_consensus_label"] = "Negative"
+        write_front_matter_and_body(rec_path, data, body)
+
+        rolled, _b = load_front_matter_and_body(rec_path)
+        rolled["target_kb"] = "KB5130777"          # next month's cumulative update
+        rolled["target_os_build"] = "26200.9400"
+        rolled["target_release_date"] = "2026-09-08T00:00:00Z"
+        write_front_matter_and_body(rec_path, rolled, _b)
+
+        changed, details = reconcile_record_counts(rows_25, gen)
+        after, _ = load_front_matter_and_body(rec_path)
+        check("R1 the count falls to zero after the rollover",
+              after["update_report_count"] == 0, str(after["update_report_count"]))
+        check("R2 the record stops asserting reports in prose",
+              "user report" not in str(after.get("consensus_report") or ""),
+              str(after.get("consensus_report"))[:90])
+        check("R2 the summary claiming N reports is withdrawn",
+              "update_consensus_summary" not in after, str(after.get("update_consensus_summary")))
+        check("R3 stale source links and samples are withdrawn",
+              "accepted_report_sources" not in after and "evidence_samples" not in after,
+              f"sources={len(after.get('accepted_report_sources') or [])} "
+              f"samples={len(after.get('evidence_samples') or [])}")
+        check("R3 the verdict label returns to insufficient data",
+              str(after.get("update_consensus_label")) == "Insufficient data",
+              str(after.get("update_consensus_label")))
+        check("R3 the retraction is reported, not silent",
+              details and details[0].get("retracted"), str(details))
+        check("R4 a record that never had consensus is left alone",
+              reconcile_record_counts(rows_25, gen)[0] == 0,
+              "a second pass rewrote an already-coherent zero record")
+        # and the state fields still agree with the zero count
+        check("R4 the zero state is internally consistent",
+              after.get("evidence_state") == "official_only"
+              and after.get("evidence_state_label") == "Official source only"
+              and after.get("consensus_collection_status") == "deferred_official_only",
+              str({k: after.get(k) for k in ("evidence_state", "evidence_state_label",
+                                             "consensus_collection_status")}))
 
     print()
     print("=" * 74)

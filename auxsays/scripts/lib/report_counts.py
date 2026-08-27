@@ -24,6 +24,7 @@ from typing import Any, Iterable
 from patch_collectors.base import (WINDOWS_PRODUCT_ID, load_front_matter_and_body,
                                    windows_identity_gate, write_front_matter_and_body)
 from .patch_identity import patch_key, require_build
+from .write_update_record import DEFAULT_CONSENSUS, DEFERRED_CONSENSUS_REPORT
 
 
 def windows_targets_from_front_matter(
@@ -128,6 +129,56 @@ def _as_int(value: Any) -> int:
         return 0
 
 
+# Count PROJECTIONS: fields that publicly assert "this patch has N accepted reports". They are
+# written by the consensus writer from the same population the count comes from -- but only while
+# that population is NON-EMPTY. `apply_consensus_to_records --write-all` skips a group whose
+# confirmed count is <= 0, and `_record_coherence_fields` returns {} at count <= 0, so once the
+# population empties nothing downstream can retract what it previously published.
+#
+# Windows empties one every month. On a KB rollover the record's target moves to the new cumulative
+# update, every previously accepted row becomes stale_due_to_patch_rollover, and the count correctly
+# falls to 0 -- leaving `0` / "Official source only" published beside "WAIT: ... has 12 user reports
+# found" and twelve source links about a superseded KB. That is the same count-vs-prose
+# contradiction this module exists to prevent, merely inverted, and it recurs on every patch Tuesday.
+#
+# Retracting them here follows the one rule the count follows: zero accepted reports means zero
+# reported reports. The target shape is a genuine zero record (2026-06-09-windows-11-23h2.md) --
+# deferred sentence, no summary, no source list, no samples, "Insufficient data" as the label.
+# Measured against the live corpus: all 781 records whose canonical count is 0 already match this
+# shape, so on a coherent tree it rewrites nothing.
+ZERO_COUNT_PROJECTION_FIELDS = ("update_consensus_summary", "accepted_report_sources",
+                                "evidence_samples", "evidence_sample_visible_limit")
+
+
+def zero_count_projection_drift(data: dict[str, Any]) -> bool:
+    """Does this record still claim accepted reports it no longer has? (No mutation.)"""
+    return (str(data.get("consensus_report") or "").strip() != DEFERRED_CONSENSUS_REPORT
+            or str(data.get("update_consensus_label") or "").strip() != DEFAULT_CONSENSUS
+            or any(field in data for field in ZERO_COUNT_PROJECTION_FIELDS))
+
+
+def retract_zero_count_projections(data: dict[str, Any]) -> list[str]:
+    """Return a record with ZERO accepted reports to the zero shape. Returns the fields changed.
+
+    Deliberately does NOT touch ``update_consensus_confidence`` -- a real zero record stores "Low",
+    not ``_confidence(0)``, and 779 of 896 live records already disagree with that function, so
+    writing it here would be a corpus-wide change disguised as a coherence fix. Nor does it touch
+    ``quick_verdict``, the decision body, recommendations, or official/release prose: those are not
+    count projections and are not this function's to rewrite."""
+    changed: list[str] = []
+    if str(data.get("consensus_report") or "").strip() != DEFERRED_CONSENSUS_REPORT:
+        data["consensus_report"] = DEFERRED_CONSENSUS_REPORT
+        changed.append("consensus_report")
+    if str(data.get("update_consensus_label") or "").strip() != DEFAULT_CONSENSUS:
+        data["update_consensus_label"] = DEFAULT_CONSENSUS
+        changed.append("update_consensus_label")
+    for field in ZERO_COUNT_PROJECTION_FIELDS:
+        if field in data:
+            data.pop(field)
+            changed.append(field)
+    return changed
+
+
 def reconcile_record_counts(evidence_rows: Iterable[dict[str, Any]], generated_dir: Path,
                             product_ids: set[str] | None = None) -> tuple[int, list[dict[str, Any]]]:
     """One authoritative reconciliation: after all collectors + consensus, set every update record's
@@ -170,11 +221,14 @@ def reconcile_record_counts(evidence_rows: Iterable[dict[str, Any]], generated_d
         # the existing label untouched so this count fix never rewrites legitimate label variation
         # (e.g. "User reports found" vs "Verified reports") or otherwise mutates verdict presentation.
         new_label = evidence_state_label_for(n) if state_changed else str(data.get("evidence_state_label") or "")
+        # At zero the record must also stop CLAIMING reports, not merely report the number 0.
+        needs_retraction = n == 0 and zero_count_projection_drift(data)
         if (_as_int(data.get("update_report_count")) == n
                 and _as_int(data.get("confirmed_patch_specific_report_count")) == n
                 and cur_state == new_state
                 and str(data.get("consensus_collection_status") or "") == new_status
-                and str(data.get("evidence_state_label") or "") == new_label):
+                and str(data.get("evidence_state_label") or "") == new_label
+                and not needs_retraction):
             continue  # already authoritative -> no write (idempotent)
         before = _as_int(data.get("update_report_count"))
         data["update_report_count"] = n
@@ -182,7 +236,9 @@ def reconcile_record_counts(evidence_rows: Iterable[dict[str, Any]], generated_d
         data["evidence_state"] = new_state
         data["consensus_collection_status"] = new_status
         data["evidence_state_label"] = new_label
+        retracted = retract_zero_count_projections(data) if n == 0 else []
         write_front_matter_and_body(path, data, body)
         changed.append({"product_id": product_id, "version": version,
-                        "before": before, "after": n, "record": path.name})
+                        "before": before, "after": n, "record": path.name,
+                        "retracted": retracted})
     return len(changed), changed
