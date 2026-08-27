@@ -18,13 +18,15 @@ normalized canonical patch identity (product_id, update_version, target_build).
 """
 from __future__ import annotations
 
+import re
 from pathlib import Path
 from typing import Any, Iterable
 
 from patch_collectors.base import (WINDOWS_PRODUCT_ID, load_front_matter_and_body,
                                    windows_identity_gate, write_front_matter_and_body)
 from .patch_identity import patch_key, require_build
-from .write_update_record import DEFAULT_CONSENSUS, DEFERRED_CONSENSUS_REPORT
+from .write_update_record import (DEFAULT_CONSENSUS, DEFERRED_CONSENSUS_REPORT,
+                                  deferred_quick_verdict)
 
 
 def windows_targets_from_front_matter(
@@ -165,7 +167,14 @@ ZERO_COUNT_PROJECTION_FIELDS = ("update_consensus_summary", "accepted_report_sou
 # cannot drift apart silently. For every other product a stale projection beside a dropped count
 # stays visible -- unchanged from before this module retracted anything -- and the QA warning
 # `report_count_source_list_mismatch` is what surfaces it.
-CONSENSUS_PROMOTION_PRODUCTS = frozenset({"microsoft-powerpoint", "microsoft-windows-11"})
+#
+# obs-studio joined when its promotion step did. It is the product that PROVED why membership and a
+# promotion step must move together: with no step in the lane, obs 32.2.2's count reached 7 while its
+# source list stayed at the first 3 of those 7 issues and its `quick_verdict` still read "has 3 user
+# reports found". Coherence had been restored only by the unscoped --write-all in
+# davinci-updates.yml, which is manual-dispatch-only.
+CONSENSUS_PROMOTION_PRODUCTS = frozenset({"microsoft-powerpoint", "microsoft-windows-11",
+                                          "obs-studio"})
 
 
 def format_reconcile_detail(detail: dict[str, Any]) -> str:
@@ -180,10 +189,23 @@ def format_reconcile_detail(detail: dict[str, Any]) -> str:
             f"{detail['before']} -> {detail['after']}{suffix}")
 
 
+# A headline verdict that STATES a report count is a count projection, whatever field it lives in.
+# obs-studio's coherence branch writes "TEST FIRST: OBS Studio 32.2.2 has 7 user reports found" into
+# quick_verdict; Windows and PowerPoint have no such branch, so this matches nothing for them. It is
+# matched on CONTENT rather than by product, so a hand-written verdict that names no number -- the
+# shape premiere 26.2 carries -- is never touched by the retraction.
+COUNT_IN_VERDICT_RE = re.compile(r"\d+\s+user report")
+
+
+def verdict_states_a_count(data: dict[str, Any]) -> bool:
+    return bool(COUNT_IN_VERDICT_RE.search(str(data.get("quick_verdict") or "")))
+
+
 def zero_count_projection_drift(data: dict[str, Any]) -> bool:
     """Does this record still claim accepted reports it no longer has? (No mutation.)"""
     return (str(data.get("consensus_report") or "").strip() != DEFERRED_CONSENSUS_REPORT
             or str(data.get("update_consensus_label") or "").strip() != DEFAULT_CONSENSUS
+            or verdict_states_a_count(data)
             or any(field in data for field in ZERO_COUNT_PROJECTION_FIELDS))
 
 
@@ -199,6 +221,16 @@ def retract_zero_count_projections(data: dict[str, Any]) -> list[str]:
     if str(data.get("consensus_report") or "").strip() != DEFERRED_CONSENSUS_REPORT:
         data["consensus_report"] = DEFERRED_CONSENSUS_REPORT
         changed.append("consensus_report")
+    # Only when it actually states a number. Retracting the count while leaving the HEADLINE saying
+    # "has 7 user reports found" republishes exactly the contradiction this module exists to end --
+    # and worse, the QA warning that catches it is keyed on a non-empty source list, which the very
+    # next line of this function deletes. So the alarm would go quiet at the same moment the page
+    # started lying.
+    if verdict_states_a_count(data):
+        data["quick_verdict"] = deferred_quick_verdict(
+            str(data.get("update_product") or data.get("product_id") or "").strip(),
+            str(data.get("update_version") or "").strip())
+        changed.append("quick_verdict")
     if str(data.get("update_consensus_label") or "").strip() != DEFAULT_CONSENSUS:
         data["update_consensus_label"] = DEFAULT_CONSENSUS
         changed.append("update_consensus_label")

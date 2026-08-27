@@ -323,6 +323,23 @@ def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]
     if re.search(r"https?://\S+;\s*https?://", public_text):
         add(errors, path, "raw_source_urls_in_public_prose", "Public-facing generated prose appears to dump raw source URLs; use source objects/lists instead.")
 
+    # The HEADLINE is a count projection too, on any product whose coherence branch writes a
+    # number into it (obs-studio does: "has N user reports found"). Checked separately from the
+    # source list because the two fail apart: at a canonical zero the source list is RETRACTED,
+    # so the mismatch check below goes quiet by construction while the verdict can still be
+    # publishing a stale number. This check has no such blind spot, and it would have caught the
+    # original obs 32.2.2 defect at the most-read field rather than at the source list.
+    # Matched on content, so a hand-written verdict naming no number is never flagged.
+    verdict = str(data.get("quick_verdict") or "")
+    stated = re.search(r"(\d+)\s+user report", verdict)
+    if stated:
+        claimed_total = int(data.get("update_report_count")
+                            or data.get("confirmed_patch_specific_report_count") or 0)
+        if int(stated.group(1)) != claimed_total:
+            add(warnings, path, "quick_verdict_count_mismatch",
+                f"Headline verdict states {stated.group(1)} user reports but the record's "
+                f"count is {claimed_total}; both must state the same counted population.")
+
     if report_count > 0:
         if is_blank(data.get("update_consensus_summary")):
             add(errors, path, "report_count_without_consensus_summary", "Record has report_count > 0 but no update_consensus_summary.")
@@ -596,14 +613,17 @@ def scan_evidence_count_alignment(files: list[Path]) -> tuple[list[dict[str, str
             claimed = int(data.get("update_report_count")
                           or data.get("confirmed_patch_specific_report_count") or 0)
             if len(sources) != claimed:
-                # WARNING, not an error, and deliberately so. Live it fires on three records: the
-                # two Windows ones this change repairs, and obs-studio 32.2.2 (count 7, sources 3),
-                # whose COUNT is already canonical -- only its projection is stale. That one is
-                # pre-existing and documented in PR #69; repairing it means an obs-scoped
-                # --write-all, and obs-studio DOES have a branch in _record_coherence_fields, so
-                # that would rewrite its verdict prose. Blocking here would therefore halt the
-                # writeback lane on a defect this change is scoped not to touch. Surfacing beats
-                # both ignoring it and holding production hostage to it.
+                # WARNING, not an error, and deliberately so: this fires during the normal lane,
+                # in the window between reconciliation writing the count and the scoped promotion
+                # rebuilding the projection. Blocking there would fail the run that is on its way to
+                # fixing the very thing being flagged. It also fires in `patch-ingest.yml`, which
+                # runs QA with no reconcile or promotion step at all and so can never clear it.
+                #
+                # It found obs-studio 32.2.2 (count 7, sources 3), which is now repaired by that
+                # product's own promotion step. Note the blind spot this check has and the headline
+                # check above does not: it is guarded on a NON-EMPTY source list, and at a canonical
+                # zero the list is retracted, so it goes quiet exactly when a stale verdict could
+                # still be publishing a number.
                 add(warnings, path, "report_count_source_list_mismatch",
                     f"Record claims {claimed} user reports but lists {len(sources)} accepted "
                     f"report sources; both must project the same counted-evidence population.")

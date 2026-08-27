@@ -620,25 +620,28 @@ def run() -> int:
         # R6: a product with NO promotion step must never be retracted -- its count can legitimately
         # dip and recover (revalidate_consensus_evidence can mark rows uncounted), and coming back
         # with the count restored but the summary gone is a blocking QA error with no automated exit.
-        obs = gen / "2026-07-21-obs-studio-32-2-0.md"
-        obs_fm = {"layout": "aux-update", "update_entry": True, "product_id": "obs-studio",
-                  "update_version": "32.2.0", "update_product": "OBS Studio",
+        # The fixture is blackmagic-davinci because obs-studio LEFT this category: it gained a
+        # scoped promotion step and joined CONSENSUS_PROMOTION_PRODUCTS, which is the pairing this
+        # test enforces -- membership and a rebuild path move together or not at all.
+        dav = gen / "2026-04-14-davinci-resolve-21.md"
+        dav_fm = {"layout": "aux-update", "update_entry": True, "product_id": "blackmagic-davinci",
+                  "update_version": "21", "update_product": "DaVinci Resolve",
                   "update_report_count": 9, "confirmed_patch_specific_report_count": 9,
-                  "consensus_report": "9 user reports found for OBS Studio 32.2.0.",
-                  "update_consensus_summary": "WAIT: OBS Studio 32.2.0 has 9 user reports found.",
+                  "consensus_report": "9 user reports found for DaVinci Resolve 21.",
+                  "update_consensus_summary": "WAIT: DaVinci Resolve 21 has 9 user reports found.",
                   "accepted_report_sources": [{"source": f"s{i}"} for i in range(9)]}
-        obs.write_text("---\n" + yaml.safe_dump(obs_fm, sort_keys=False) + "---\nbody\n",
+        dav.write_text("---\n" + yaml.safe_dump(dav_fm, sort_keys=False) + "---\nbody\n",
                        encoding="utf-8")
         keep = gen / "2026-06-23-windows-11-26h1.md"   # keeps the canonical map non-empty
         record(keep, ver="26H1", kb="KB5121000", build="28000.2704", count=1)
         live = [row(ver="26H1", kb="KB5121000", build="28000.2704", feat="26H1",
                     rid="k", url="https://x/k")]
-        reconcile_record_counts(live, gen)            # obs population is empty in `live`
-        after, _ = load_front_matter_and_body(obs)
+        reconcile_record_counts(live, gen)            # the davinci population is empty in `live`
+        after, _ = load_front_matter_and_body(dav)
         check("R6 the dipped count is still corrected", after["update_report_count"] == 0)
         check("R6 a product the lane cannot regenerate keeps its projections",
               len(after.get("accepted_report_sources") or []) == 9
-              and "update_consensus_summary" in after, str(_projected(obs)))
+              and "update_consensus_summary" in after, str(_projected(dav)))
 
     # R6b: the log must NAME what was deleted. "0 -> 0" reads as a no-op.
     from lib.report_counts import format_reconcile_detail  # noqa: PLC0415
@@ -664,9 +667,12 @@ def run() -> int:
           f"workflow={sorted(promoted)} constant={sorted(CONSENSUS_PROMOTION_PRODUCTS)}")
     check("R8 Windows is retractable, because the lane can rebuild it",
           WIN in CONSENSUS_PROMOTION_PRODUCTS)
+    check("R8 obs-studio is retractable, because the lane now rebuilds it",
+          "obs-studio" in CONSENSUS_PROMOTION_PRODUCTS)
     check("R8 a product with no promotion step is not retractable",
-          "obs-studio" not in CONSENSUS_PROMOTION_PRODUCTS
-          and "blackmagic-davinci" not in CONSENSUS_PROMOTION_PRODUCTS)
+          "blackmagic-davinci" not in CONSENSUS_PROMOTION_PRODUCTS
+          and "adobe-premiere-pro" not in CONSENSUS_PROMOTION_PRODUCTS
+          and "adobe-acrobat-pro" not in CONSENSUS_PROMOTION_PRODUCTS)
 
     print()
     print("=" * 74)
