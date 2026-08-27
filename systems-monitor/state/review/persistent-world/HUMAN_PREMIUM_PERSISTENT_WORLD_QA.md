@@ -37,6 +37,19 @@ Preview: `http://127.0.0.1:4174/systems-monitor/#persistent-world`
 - factual Labor Market remains the current destination for accepted live readings; no fixture node or hierarchy placement was promoted to factual evidence;
 - topology fingerprint remains `fnv1a32:d8ccde70`.
 
+## Factual-binding and readability correction
+
+- four persistent-world factor placements now resolve read-only to already accepted factual observations: Labor-Force Participation, Initial Claims, Job Openings, and Hires;
+- connected nodes expose the accepted value, represented period, source authority, exact series ID, original evidence, methodology, acquisition record, and freshness in the inspector;
+- Average Weekly Hours, Average Hourly Earnings, and Employment-Population Ratio are explicitly marked `SOURCE_IDENTIFIED` without displaying a value because their candidate series have not completed intake and acceptance;
+- every other named factor remains visibly `UNMAPPED`/binding pending; the interface does not convert taxonomy placement into a data claim;
+- the header reports `4 factual nodes linked`, `3 sources staged`, and `6 accepted labor readings` so current coverage is obvious;
+- the 100 named Level-2 placements receive stable semantic glyphs with deterministic child-specific markers; the ten Labor Supply factors use ten distinct pictograms;
+- focused exact-ten labels alternate into tangent lanes with quiet leader lines, reducing connector/label collisions without changing node coordinates;
+- diagonal focus framing is tighter and the graph workspace is taller so dense neighborhoods remain readable at ordinary browser sizes;
+- in-app browser audit confirmed the unchanged `fnv1a32:d8ccde70` topology fingerprint and approximately 1.9–2.1 ms focused draw p95;
+- no network fetch, public activation, synthetic value, new relationship, Gate-B change, or deployment is introduced by this bridge.
+
 ## Taylor visual review
 
 Confirm:
@@ -55,5 +68,7 @@ Confirm:
 12. Every named factor has an intuitive subject icon, while deep renderer fixtures remain visibly non-semantic.
 13. The factor inspector feels like the image-led Factual Labor Market panel and keeps its text readable without shrinking the graph.
 14. Image credit and license links are reachable, and the empty live-data state is honest rather than populated with placeholders.
+15. Connected nodes show accepted factual readings and exact evidence, staged nodes show only their candidate series identity, and unbound nodes show no value.
+16. The Labor Supply exact-ten neighborhood has ten distinguishable icons and its labels can be scanned without tracing through connector convergence.
 
 Human QA is not self-approved by implementation evidence.

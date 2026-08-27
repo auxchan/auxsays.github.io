@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { createPersistentWorld, persistentWorldPath, type PersistentWorldPlacement } from "../../data/persistentWorldModel";
+import { PERSISTENT_FACTUAL_OBSERVATION_COUNT, persistentWorldFactualBinding } from "../../data/persistentWorldFactualBindings";
 import { StructuralNodeIcon } from "../motion/StructuralNodeIcon";
 import type { StructuralNodeSymbol } from "../motion/structuralVisualLanguage";
 import { PremiumPersistentWorldSurface as PersistentWorldSurface } from "./PremiumPersistentWorldSurface";
@@ -30,11 +31,13 @@ function placementLabel(model: ReturnType<typeof createPersistentWorld>, placeme
 }
 
 function panelSymbol(glyph: string): StructuralNodeSymbol {
+  const baseGlyph = glyph.split("@")[0];
   const symbols: Record<string, StructuralNodeSymbol> = {
     network: "labor-market", growth: "factory", consumer: "people", demand: "people", layoffs: "separations", investment: "factory", rates: "earnings", wages: "earnings", automation: "system", supply: "participation", shocks: "bolt",
-    claims: "claims", openings: "openings", hire: "hire", clock: "clock", participation: "participation", freight: "freight"
+    claims: "claims", openings: "openings", hire: "hire", clock: "clock", participation: "participation", freight: "freight",
+    ratio: "participation", population: "people", "prime-age": "participation", migration: "freight", education: "system", skills: "system", retirement: "people", caregiving: "people", mobility: "freight"
   };
-  return symbols[glyph] ?? "system";
+  return symbols[baseGlyph] ?? "system";
 }
 
 export function PersistentWorldShell() {
@@ -46,6 +49,12 @@ export function PersistentWorldShell() {
     return { model, initializationMs: performance.now() - started, heapDeltaBytes: heapBefore === undefined ? null : Math.max(0, memory!.usedJSHeapSize - heapBefore) };
   }, []);
   const model = modelEvidence.model;
+  const factualBindings = useMemo(() => Object.fromEntries(Object.values(model.placements).filter((placement) => placement.depth === 2).map((placement) => {
+    const label = model.factors[placement.canonicalFactorId].label;
+    return [placement.id, persistentWorldFactualBinding(label)];
+  })), [model]);
+  const connectedBindingCount = Object.values(factualBindings).filter((binding) => binding.status === "CONNECTED").length;
+  const identifiedBindingCount = Object.values(factualBindings).filter((binding) => binding.status === "SOURCE_IDENTIFIED").length;
   const reducedMotion = useReducedMotion();
   const workspaceRef = useRef<HTMLDivElement>(null);
   const [selectedId, setSelectedId] = useState<string | null>(() => selectionFromHash(model));
@@ -59,6 +68,7 @@ export function PersistentWorldShell() {
   const selectedMedia = selected ? persistentWorldMediaFor(model, selected) : undefined;
   const selectedAccent = selected ? persistentPlacementAccent(selected) : "#6fe4d0";
   const selectedSymbol = selected && factor ? panelSymbol(factorGlyph(selected, factor.label)) : "system";
+  const selectedBinding = selected?.depth === 2 ? factualBindings[selected.id] : undefined;
   const path = useMemo(() => persistentWorldPath(model, selectedId), [model, selectedId]);
   const visibleChoiceIds = useMemo(() => {
     if (!selected) return model.childrenByPlacement[model.outcomePlacementId];
@@ -119,7 +129,7 @@ export function PersistentWorldShell() {
     <section className="sm-pw-instrument" aria-label="Persistent Employment influence world R&D" data-model-initialization-ms={modelEvidence.initializationMs.toFixed(3)} data-model-heap-delta-bytes={modelEvidence.heapDeltaBytes ?? "UNAVAILABLE"}>
       <header className="sm-pw-header">
         <div><span>Persistent world R&amp;D</span><strong>{factor?.label ?? "Employment influence systems"}</strong></div>
-        <div className="sm-pw-header__facts"><span>1,111 placements resident</span><span>3,110 fixture relationships resident</span><span>Human QA pending</span></div>
+        <div className="sm-pw-header__facts"><span>{connectedBindingCount} factual nodes linked</span><span>{identifiedBindingCount} sources staged</span><span>{PERSISTENT_FACTUAL_OBSERVATION_COUNT} accepted labor readings</span></div>
       </header>
       <nav className="sm-pw-breadcrumbs" aria-label="Persistent world exploration history">
         <button type="button" aria-current={!selected ? "location" : undefined} onClick={() => navigate(null)}>Employment outcome</button>
@@ -137,13 +147,15 @@ export function PersistentWorldShell() {
             <p className="sm-pw-inspector__definition">{factor.definition}</p>
             <section><h3>What it tracks</h3><p>{selected.depth === 1 ? "A major upstream system the Master identifies as relevant to employment and unemployment outcomes." : selected.depth === 2 ? `A defensible candidate component inside ${placementLabel(model, model.placements[selected.parentPlacementId!])}. It remains subject to taxonomy and source review.` : "Rendering capacity, navigation persistence, camera travel, and label LOD only. It does not describe a real economic factor."}</p></section>
             <section><h3>Why it matters</h3><p>{selected.depth === 1 ? "It organizes a major family of conditions that can help explain changes around employment, without asserting that every child directly causes jobs to rise or fall." : selected.depth === 2 ? `It gives people a specific way to inspect one part of ${placementLabel(model, model.placements[selected.parentPlacementId!])}; evidence and structural relationships must still be accepted separately.` : "It proves the interface can retain, distinguish, and revisit deep records. It carries no economic meaning until an approved factor replaces the fixture."}</p></section>
-            <section className="sm-pw-inspector__data-boundary"><h3>Current data</h3><strong>Not connected in this fixture</strong><p>No statistic is shown until this factor has an accepted source, unit, represented period, and provenance record. Existing official labor readings remain available in Factual Labor Market.</p><a href="/systems-monitor/#workstream1a">Open factual Labor Market</a></section>
+            {selectedBinding?.status === "CONNECTED" ? <section className="sm-pw-inspector__data-boundary is-connected"><h3>Latest accepted reading</h3><strong>{selectedBinding.displayValue}</strong><p>{selectedBinding.validTime} · {selectedBinding.provider}<br /><code>{selectedBinding.seriesId}</code></p><div className="sm-pw-inspector__data-actions">{selectedBinding.evidenceUrl && <a href={selectedBinding.evidenceUrl} target="_blank" rel="noreferrer">Original evidence</a>}{selectedBinding.methodologyUrl && <a href={selectedBinding.methodologyUrl} target="_blank" rel="noreferrer">Methodology</a>}{selectedBinding.acquisitionProvenanceUrl && <a href={selectedBinding.acquisitionProvenanceUrl} target="_blank" rel="noreferrer">Acquisition record</a>}</div><small>Accepted local factual snapshot · {selectedBinding.freshness}</small></section>
+              : selectedBinding?.status === "SOURCE_IDENTIFIED" ? <section className="sm-pw-inspector__data-boundary is-staged"><h3>Current data</h3><strong>Official series identified</strong><p>Intake and acceptance remain pending. No value is displayed until provenance and validation are complete.</p><code>{selectedBinding.candidateSeriesId}</code><a href="/systems-monitor/#workstream1a">Open factual Labor Market</a></section>
+              : <section className="sm-pw-inspector__data-boundary"><h3>Current data</h3><strong>Dataset binding pending</strong><p>This placement has no accepted observation yet. AUXSAYS will not display a placeholder value or imply that a taxonomy node is a live feed.</p><a href="/systems-monitor/#workstream1a">Open factual Labor Market</a></section>}
             <section><h3>Evidence posture</h3><dl><div><dt>Identity</dt><dd>{factor.evidencePosture}</dd></div><div><dt>Source family</dt><dd>{factor.sourceFamily}</dd></div><div><dt>Relationship status</dt><dd>TEST_FIXTURE · never accepted</dd></div></dl></section>
             <section><h3>Why the next ten are here</h3><p>{selected.depth < 2 ? "They form the bounded exact-ten navigation neighborhood for this review candidate. Placement communicates organization only—not causality, weight, or propagation." : selected.depth === 2 ? "They are deterministic Level-3 stress records proving the renderer can retain and revisit a deep world without fabricating factual economic coverage." : "This record has no factual children."}</p></section>
             {selectedMedia && <footer className="sm-pw-inspector__credit"><span>Illustrative context only · not data evidence</span><a href={selectedMedia.sourcePage} target="_blank" rel="noreferrer">Photo: {selectedMedia.credit} · {selectedMedia.license === "CC0_1_0" ? "CC0 1.0" : "Public domain"}</a></footer>}
           </div>}
         </aside>
-        <PersistentWorldSurface model={model} selectedPlacementId={selectedId} fullWorld={fullWorld} traceMode={traceMode} reducedMotion={reducedMotion} resetVersion={resetVersion} onSelect={navigate} onReset={resetWorld} />
+        <PersistentWorldSurface model={model} factualBindings={factualBindings} selectedPlacementId={selectedId} fullWorld={fullWorld} traceMode={traceMode} reducedMotion={reducedMotion} resetVersion={resetVersion} onSelect={navigate} onReset={resetWorld} />
         <div className="sm-pw-controls" aria-label="Persistent world view controls">
           <button type="button" onClick={resetWorld}>Reset</button>
           <button type="button" aria-pressed={fullWorld} onClick={() => setFullWorld((current) => !current)}>{fullWorld ? "Normal overview" : "Full-world view"}</button>

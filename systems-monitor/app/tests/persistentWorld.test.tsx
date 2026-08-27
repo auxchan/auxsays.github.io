@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import { SnapshotProvider } from "../src/app/SnapshotContext";
 import { SystemsMonitorApp } from "../src/app/SystemsMonitorApp";
 import { createPersistentWorld, employmentDriverCandidates, persistentWorldFingerprint, persistentWorldSelectionSequence } from "../src/data/persistentWorldModel";
+import { persistentWorldFactualBinding } from "../src/data/persistentWorldFactualBindings";
 import { persistentWorldMediaFor } from "../src/views/persistent/persistentWorldMedia";
 import { PERSISTENT_GLINT_PERIOD_MS, PERSISTENT_GLINT_TRAIL, blendPremiumColor, easePremiumHover, factorGlyph, persistentGlintProgress, persistentPlacementAccent, premiumCurveRoute, resolvePersistentLod, resolvePremiumLabels } from "../src/views/persistent/persistentWorldVisuals";
 
@@ -36,11 +37,29 @@ describe("premium persistent-world visual language", () => {
     const policy = model.placements["placement:policy-trade-external-shocks"];
     const policyChildren = model.childrenByPlacement[policy.id].map((id) => model.placements[id]);
     const labels = policyChildren.map((placement) => model.factors[placement.canonicalFactorId].label);
-    expect(factorGlyph(policyChildren[0], labels[0])).toBe("claims");
-    expect(factorGlyph(policyChildren[1], labels[1])).toBe("freight");
-    expect(factorGlyph(policyChildren[3], labels[3])).toBe("shocks");
+    expect(factorGlyph(policyChildren[0], labels[0])).toBe("claims@1");
+    expect(factorGlyph(policyChildren[1], labels[1])).toBe("freight@2");
+    expect(factorGlyph(policyChildren[3], labels[3])).toBe("shocks@4");
     const fixtureChildren = model.childrenByPlacement[policyChildren[0].id].map((id) => model.placements[id]);
     expect(new Set(fixtureChildren.map((placement) => factorGlyph(placement, model.factors[placement.canonicalFactorId].label)))).toHaveLength(10);
+  });
+
+  it("gives the ten Labor Supply factors distinct semantic glyphs", () => {
+    const model = createPersistentWorld();
+    const laborSupply = model.placements["placement:labor-supply"];
+    const children = model.childrenByPlacement[laborSupply.id].map((id) => model.placements[id]);
+    const glyphs = children.map((placement) => factorGlyph(placement, model.factors[placement.canonicalFactorId].label));
+    expect(new Set(glyphs)).toHaveLength(10);
+    expect(glyphs).toEqual(["participation@1", "ratio@2", "population@3", "prime-age@4", "migration@5", "education@6", "skills@7", "retirement@8", "caregiving@9", "mobility@10"]);
+  });
+
+  it("bridges only accepted factual observations and preserves staged-series boundaries", () => {
+    const participation = persistentWorldFactualBinding("Labor-Force Participation");
+    expect(participation.status).toBe("CONNECTED");
+    expect(participation.seriesId).toBe("LNS11300000");
+    expect(participation.evidenceUrl).toBe("https://data.bls.gov/timeseries/LNS11300000");
+    expect(persistentWorldFactualBinding("Average Weekly Hours")).toMatchObject({ status: "SOURCE_IDENTIFIED", candidateSeriesId: "CES0500000002" });
+    expect(persistentWorldFactualBinding("Geographic Mobility").status).toBe("UNMAPPED");
   });
 
   it("provides reviewed local imagery and lets fixture details inherit named context", () => {
@@ -130,6 +149,7 @@ describe("persistent world local-review shell", () => {
     expect(surface.getAttribute("data-resident-placement-count")).toBe("1111");
     expect(surface.getAttribute("data-resident-relationship-count")).toBe("3110");
     expect(surface.getAttribute("data-semantic-node-count")).toBe("11");
+    expect(surface.getAttribute("data-factual-binding-count")).toBe("4");
     expect(surface.getAttribute("data-lod-mode")).toBe("OVERVIEW");
     expect(screen.getByRole("button", { name: "Enter full screen" })).toBeTruthy();
     fireEvent.wheel(surface, { deltaY: -120, clientX: 400, clientY: 300 });
@@ -156,6 +176,8 @@ describe("persistent world local-review shell", () => {
     expect(surface.getAttribute("data-selected-placement-id")).toContain("job-openings");
     expect(surface.getAttribute("data-resident-placement-count")).toBe("1111");
     expect(screen.getAllByText(/Synthetic renderer record/)).toHaveLength(10);
+    expect(within(inspector).getByRole("heading", { name: "Latest accepted reading" })).toBeTruthy();
+    expect(within(inspector).getByRole("link", { name: "Original evidence" }).getAttribute("href")).toBe("https://data.bls.gov/timeseries/JTS000000000000000JOL");
     fireEvent.doubleClick(surface, { clientX: -100, clientY: -100 });
     expect(surface.getAttribute("data-selected-placement-id")).toBe("");
     fireEvent.click(screen.getByRole("button", { name: "Reset" }));

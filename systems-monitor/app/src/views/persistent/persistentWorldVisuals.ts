@@ -2,7 +2,7 @@ import type { PersistentWorldDepth, PersistentWorldPlacement } from "../../data/
 
 export interface Point { x: number; y: number }
 export interface CubicRoute { start: Point; control1: Point; control2: Point; end: Point }
-export interface LabelCandidate { id: string; text: string; x: number; y: number; priority: number; width: number; height: number; accent: string }
+export interface LabelCandidate { id: string; text: string; x: number; y: number; priority: number; width: number; height: number; accent: string; anchorX?: number; anchorY?: number }
 export interface ResolvedLabel extends LabelCandidate { left: number; top: number }
 
 export const PERSISTENT_GLINT_PERIOD_MS = 2500;
@@ -141,24 +141,37 @@ export function factorGlyph(placement: PersistentWorldPlacement, label = "") {
   if (placement.depth === 3) return fixtureDetailGlyphs[Math.max(0, placement.order - 1)] ?? "detail-1";
   if (placement.depth === 1) return ["growth", "consumer", "demand", "layoffs", "investment", "rates", "wages", "automation", "supply", "shocks"][Math.max(0, placement.sector)] ?? "detail-1";
   const text = label.toLowerCase();
-  if (/claim|filing|document|regulat|fiscal/.test(text)) return "claims";
-  if (/opening|vacancy/.test(text)) return "openings";
-  if (/hire|recruit/.test(text)) return "hire";
-  if (/hour|duration|temporary|time/.test(text)) return "clock";
-  if (/wage|earning|income|pay|cost|compensation/.test(text)) return "wages";
-  if (/rate|credit|yield|spread|financial|mortgage|delinquen|saving/.test(text)) return "rates";
-  if (/layoff|loss|closing|separation|contraction/.test(text)) return "layoffs";
-  if (/participation|population|migration|education|skill|retirement|caregiving|worker/.test(text)) return "participation";
-  if (/trade|tariff|transport|freight|bottleneck|shipment/.test(text)) return "freight";
-  if (/energy|fuel|weather|health|geopolitical|risk|shock/.test(text)) return "shocks";
-  if (/retail|consumer|spending|sentiment|demand/.test(text)) return "consumer";
-  if (/automation|robot|software|technology|research|productivity/.test(text)) return "automation";
-  if (/investment|capital|construction|business|inventory/.test(text)) return "investment";
-  if (/production|output|capacity|sales|growth|activity/.test(text)) return "growth";
-  return ["growth", "consumer", "demand", "layoffs", "investment", "rates", "wages", "automation", "supply", "shocks"][Math.max(0, placement.sector)] ?? "detail-1";
+  let glyph: string;
+  if (/employment-population/.test(text)) glyph = "ratio";
+  else if (/working-age population/.test(text)) glyph = "population";
+  else if (/prime-age participation/.test(text)) glyph = "prime-age";
+  else if (/migration|immigration/.test(text)) glyph = "migration";
+  else if (/educational attainment/.test(text)) glyph = "education";
+  else if (/skill/.test(text)) glyph = "skills";
+  else if (/retirement/.test(text)) glyph = "retirement";
+  else if (/caregiving/.test(text)) glyph = "caregiving";
+  else if (/geographic mobility/.test(text)) glyph = "mobility";
+  else if (/claim|filing|document|regulat|fiscal/.test(text)) glyph = "claims";
+  else if (/opening|vacancy/.test(text)) glyph = "openings";
+  else if (/hire|recruit/.test(text)) glyph = "hire";
+  else if (/hour|duration|temporary|time/.test(text)) glyph = "clock";
+  else if (/wage|earning|income|pay|cost|compensation/.test(text)) glyph = "wages";
+  else if (/rate|credit|yield|spread|financial|mortgage|delinquen|saving/.test(text)) glyph = "rates";
+  else if (/layoff|loss|closing|separation|contraction/.test(text)) glyph = "layoffs";
+  else if (/participation|population|worker/.test(text)) glyph = "participation";
+  else if (/trade|tariff|transport|freight|bottleneck|shipment/.test(text)) glyph = "freight";
+  else if (/energy|fuel|weather|health|geopolitical|risk|shock/.test(text)) glyph = "shocks";
+  else if (/retail|consumer|spending|sentiment|demand/.test(text)) glyph = "consumer";
+  else if (/automation|robot|software|technology|research|productivity/.test(text)) glyph = "automation";
+  else if (/investment|capital|construction|business|inventory/.test(text)) glyph = "investment";
+  else if (/production|output|capacity|sales|growth|activity/.test(text)) glyph = "growth";
+  else glyph = ["growth", "consumer", "demand", "layoffs", "investment", "rates", "wages", "automation", "supply", "shocks"][Math.max(0, placement.sector)] ?? "detail-1";
+  return `${glyph}@${placement.order}`;
 }
 
 export function drawPremiumGlyph(context: CanvasRenderingContext2D, glyph: string, x: number, y: number, radius: number, color: string) {
+  const variant = Number(glyph.split("@")[1] ?? 0);
+  glyph = glyph.split("@")[0];
   const scale = radius / 20;
   context.save();
   context.translate(x, y);
@@ -203,6 +216,24 @@ export function drawPremiumGlyph(context: CanvasRenderingContext2D, glyph: strin
     context.arc(0,0,10,0,Math.PI*2); context.moveTo(0,-6); context.lineTo(0,1); context.lineTo(6,4); context.stroke();
   } else if (glyph === "participation") {
     [-7,0,7].forEach((px) => { context.moveTo(px,-7); context.arc(px,-7,2.4,0,Math.PI*2); context.moveTo(px,-3); context.lineTo(px,8); }); context.moveTo(-11,2); context.lineTo(11,2); context.stroke();
+  } else if (glyph === "ratio") {
+    context.arc(-5,-4,3,0,Math.PI*2); context.moveTo(-10,8); context.quadraticCurveTo(-9,1,-5,1); context.quadraticCurveTo(-1,1,0,8); context.moveTo(3,-8); context.lineTo(8,-8); context.moveTo(3,0); context.lineTo(8,0); context.moveTo(3,8); context.lineTo(8,8); context.stroke();
+  } else if (glyph === "population") {
+    context.arc(0,-6,3.5,0,Math.PI*2); context.moveTo(-7,8); context.quadraticCurveTo(-6,0,0,0); context.quadraticCurveTo(6,0,7,8); context.moveTo(-11,8); context.lineTo(11,8); context.stroke();
+  } else if (glyph === "prime-age") {
+    context.arc(0,0,9,0,Math.PI*2); context.moveTo(0,-9); context.lineTo(0,-12); context.moveTo(0,9); context.lineTo(0,12); context.moveTo(-9,0); context.lineTo(-12,0); context.moveTo(9,0); context.lineTo(12,0); context.moveTo(-3,2); context.lineTo(0,-3); context.lineTo(3,2); context.stroke();
+  } else if (glyph === "migration") {
+    context.moveTo(-11,-4); context.lineTo(5,-4); context.moveTo(1,-8); context.lineTo(6,-4); context.lineTo(1,0); context.moveTo(11,5); context.lineTo(-5,5); context.moveTo(-1,1); context.lineTo(-6,5); context.lineTo(-1,9); context.stroke();
+  } else if (glyph === "education") {
+    context.moveTo(-11,-3); context.lineTo(0,-9); context.lineTo(11,-3); context.lineTo(0,3); context.closePath(); context.moveTo(-7,0); context.lineTo(-7,6); context.quadraticCurveTo(0,11,7,6); context.lineTo(7,0); context.stroke();
+  } else if (glyph === "skills") {
+    context.moveTo(-10,7); context.lineTo(-3,0); context.lineTo(1,4); context.lineTo(10,-6); context.moveTo(-8,-8); context.lineTo(-3,-3); context.moveTo(4,5); context.lineTo(9,10); context.stroke();
+  } else if (glyph === "retirement") {
+    context.arc(-2,-5,4,0,Math.PI*2); context.moveTo(-8,10); context.quadraticCurveTo(-7,1,-2,1); context.quadraticCurveTo(3,1,4,10); context.moveTo(8,-9); context.arc(8,-9,2,0,Math.PI*2); context.moveTo(8,-5); context.lineTo(8,8); context.stroke();
+  } else if (glyph === "caregiving") {
+    context.arc(-5,-5,3,0,Math.PI*2); context.moveTo(5,-5); context.arc(5,-5,3,0,Math.PI*2); context.moveTo(-10,9); context.quadraticCurveTo(-8,0,-4,2); context.quadraticCurveTo(0,6,4,2); context.quadraticCurveTo(8,0,10,9); context.stroke();
+  } else if (glyph === "mobility") {
+    context.moveTo(-10,0); context.lineTo(8,0); context.moveTo(4,-4); context.lineTo(9,0); context.lineTo(4,4); context.moveTo(-5,-8); context.arc(-5,-8,2,0,Math.PI*2); context.moveTo(-5,-5); context.lineTo(-5,8); context.stroke();
   } else if (glyph === "freight") {
     context.rect(-10,-7,12,11); context.moveTo(2,-2); context.lineTo(7,-2); context.lineTo(10,1); context.lineTo(10,4); context.lineTo(2,4); context.moveTo(-7,4); context.arc(-6,7,3,Math.PI,Math.PI*2); context.moveTo(5,4); context.arc(6,7,3,Math.PI,Math.PI*2); context.stroke();
   } else if (glyph.startsWith("detail-")) {
@@ -220,6 +251,15 @@ export function drawPremiumGlyph(context: CanvasRenderingContext2D, glyph: strin
     context.stroke();
   } else {
     context.arc(0,0,3.2,0,Math.PI*2); context.stroke();
+  }
+  if (variant > 0 && !glyph.startsWith("detail-")) {
+    const angle = ((variant - 1) / 10) * Math.PI * 2 - Math.PI / 2;
+    const markerX = Math.cos(angle) * 12;
+    const markerY = Math.sin(angle) * 12;
+    context.fillStyle = color;
+    context.beginPath();
+    context.arc(markerX, markerY, variant > 5 ? 1.9 : 1.35, 0, Math.PI * 2);
+    if (variant > 5) context.stroke(); else context.fill();
   }
   context.restore();
 }

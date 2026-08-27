@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { PersistentWorldPlacement, PersistentWorldReadModel } from "../../data/persistentWorldModel";
+import type { PersistentWorldFactualBinding } from "../../data/persistentWorldFactualBindings";
 import {
   PERSISTENT_GLINT_TRAIL, blendPremiumColor, drawPremiumGlyph,
   easePremiumHover, factorGlyph, persistentGlintProgress, pointOnCubic, premiumCurveRoute,
@@ -11,6 +12,7 @@ interface Camera { x: number; y: number; scale: number }
 interface Viewport { zoom: number; panX: number; panY: number }
 interface Props {
   model: PersistentWorldReadModel;
+  factualBindings: Readonly<Record<string, PersistentWorldFactualBinding>>;
   selectedPlacementId: string | null;
   fullWorld: boolean;
   traceMode: boolean;
@@ -29,11 +31,11 @@ function targetCamera(model: PersistentWorldReadModel, selectedPlacementId: stri
   if (selected.depth === 1) {
     const distance = Math.max(1, Math.hypot(selected.x, selected.y));
     const verticalSector = Math.abs(selected.y) / distance > .9;
-    const outwardShift = verticalSector ? 260 : 235;
+    const outwardShift = verticalSector ? 260 : 285;
     return {
       x: selected.x + (selected.x / distance) * outwardShift,
       y: selected.y + (selected.y / distance) * outwardShift,
-      scale: verticalSector ? 1.14 : 1.26
+      scale: verticalSector ? 1.14 : 1.04
     };
   }
   return { x: selected.x, y: selected.y, scale: selected.depth === 2 ? 1.72 : 2.7 };
@@ -85,7 +87,7 @@ function drawBackground(context: CanvasRenderingContext2D, width: number, height
   vignette.addColorStop(0, "rgba(0,0,0,0)"); vignette.addColorStop(1, "rgba(0,5,9,.58)"); context.fillStyle = vignette; context.fillRect(0, 0, width, height);
 }
 
-export function PremiumPersistentWorldSurface({ model, selectedPlacementId, fullWorld, traceMode, reducedMotion, resetVersion, onSelect, onReset }: Props) {
+export function PremiumPersistentWorldSurface({ model, factualBindings, selectedPlacementId, fullWorld, traceMode, reducedMotion, resetVersion, onSelect, onReset }: Props) {
   const hostRef = useRef<HTMLDivElement>(null); const canvasRef = useRef<HTMLCanvasElement>(null);
   const cameraRef = useRef<Camera>(targetCamera(model, selectedPlacementId, fullWorld));
   const mountedAtRef = useRef(performance.now()); const viewportRef = useRef<Viewport>({ zoom: 1, panX: 0, panY: 0 });
@@ -150,30 +152,44 @@ export function PremiumPersistentWorldSurface({ model, selectedPlacementId, full
       const labelCandidates: LabelCandidate[] = [];
       for (const placement of placements) {
         const point = project(placement, camera, viewport, width, height); if (point.x < -42 || point.y < -42 || point.x > width + 42 || point.y > height + 42) continue;
-        const factorLabel = model.factors[placement.canonicalFactorId].label;
+        const factorLabel = model.factors[placement.canonicalFactorId].label; const factualBinding = factualBindings[placement.id];
         const emphasized = semanticSet.has(placement.id) || selectedPath.has(placement.id); const sectorActive = isInSelectedSector(model, placement, selectedPlacementId); const effectiveScale = camera.scale * viewport.zoom; const lod = resolvePersistentLod(placement.depth, effectiveScale, emphasized); const radius = premiumRadius(placement, lod);
         const accent = persistentPlacementAccent(placement); const isHovered = placement.id === currentHovered; const isSelected = placement.id === selectedPlacementId;
         context.globalAlpha = emphasized ? 1 : sectorActive ? (placement.depth === 3 ? .36 : .58) : (fullWorld ? .24 : .1);
         if (lod === 0) { context.fillStyle = accent; context.beginPath(); context.arc(point.x, point.y, Math.max(1, radius), 0, Math.PI * 2); context.fill(); }
         else {
           context.save(); context.shadowColor = accent; context.shadowBlur = isSelected ? 25 : isHovered ? 18 : emphasized ? 9 : 0; context.fillStyle = placement.depth === 0 ? "rgba(35,18,42,.96)" : "rgba(5,27,35,.94)"; context.strokeStyle = blendPremiumColor(accent, "#ffffff", isHovered ? .25 : .05, .9); context.lineWidth = placement.depth === 0 ? 3.2 : 2;
-          context.beginPath(); context.arc(point.x, point.y, radius + (isHovered ? 2 : 0), 0, Math.PI * 2); context.fill(); context.stroke(); context.shadowBlur = 0; context.strokeStyle = blendPremiumColor(accent, accent, 1, .23); context.lineWidth = 1; context.beginPath(); context.ellipse(point.x, point.y, radius * 1.75, radius * 1.18, placement.sector * .18, 0, Math.PI * 2); context.stroke(); if (lod >= 2) drawPremiumGlyph(context, factorGlyph(placement, factorLabel), point.x, point.y, radius * (placement.depth === 3 ? .85 : .62), accent); context.restore();
+          context.beginPath(); context.arc(point.x, point.y, radius + (isHovered ? 2 : 0), 0, Math.PI * 2); context.fill(); context.stroke(); context.shadowBlur = 0; context.strokeStyle = blendPremiumColor(accent, accent, 1, .23); context.lineWidth = 1; context.beginPath(); context.ellipse(point.x, point.y, radius * 1.75, radius * 1.18, placement.sector * .18, 0, Math.PI * 2); context.stroke(); if (lod >= 2) drawPremiumGlyph(context, factorGlyph(placement, factorLabel), point.x, point.y, radius * (placement.depth === 3 ? .85 : .62), accent);
+          if (factualBinding && lod >= 2) {
+            const badgeX = point.x + radius * .72; const badgeY = point.y - radius * .72;
+            context.fillStyle = factualBinding.status === "CONNECTED" ? "#55e7bc" : factualBinding.status === "SOURCE_IDENTIFIED" ? "#f0bd64" : "rgba(126,161,170,.5)";
+            context.strokeStyle = "rgba(2,18,24,.96)"; context.lineWidth = 2.2; context.beginPath(); context.arc(badgeX, badgeY, factualBinding.status === "CONNECTED" ? 4.2 : 3.1, 0, Math.PI * 2); context.fill(); context.stroke();
+          }
+          context.restore();
         }
         if (emphasized && lod >= 1) {
-          const label = factorLabel; const fontSize = placement.depth === 0 ? 13 : placement.depth === 1 ? 12 : 11; context.font = `${placement.depth < 2 ? 750 : 650} ${fontSize}px Inter, system-ui, sans-serif`; const textWidth = Math.min(210, context.measureText(label).width + 18);
-          let labelX = point.x; let labelY = point.y + radius + 17;
+          const label = factualBinding?.status === "CONNECTED" ? `${factorLabel} · ${factualBinding.displayValue}` : factorLabel; const fontSize = placement.depth === 0 ? 13 : placement.depth === 1 ? 12 : 11; context.font = `${placement.depth < 2 ? 750 : 650} ${fontSize}px Inter, system-ui, sans-serif`; const textWidth = Math.min(226, context.measureText(label).width + 18);
+          let labelX = point.x; let labelY = point.y + radius + 17; let anchorX: number | undefined; let anchorY: number | undefined;
           const parent = placement.parentPlacementId ? model.placements[placement.parentPlacementId] : undefined;
           if (parent && placement.depth >= 2) {
             const parentPoint = project(parent, camera, viewport, width, height); const dx = point.x - parentPoint.x; const dy = point.y - parentPoint.y; const distance = Math.max(1, Math.hypot(dx, dy)); const tangent = placement.order % 2 ? -6 : 6;
             labelX = point.x + (dx / distance) * (radius + 15) + (-dy / distance) * tangent;
             labelY = point.y + (dy / distance) * (radius + 15) + (dx / distance) * tangent;
+            const focused = selectedPlacementId ? model.placements[selectedPlacementId] : undefined;
+            if (focused?.depth === 1 && placement.depth === 2 && placement.parentPlacementId === focused.id) {
+              const side = placement.order % 2 ? -1 : 1; const tangentX = -dy / distance; const tangentY = dx / distance; const radialX = dx / distance; const radialY = dy / distance; const offset = textWidth / 2 + radius + 18;
+              labelX = point.x + tangentX * side * offset + radialX * 9;
+              labelY = point.y + tangentY * side * offset + radialY * 9;
+              anchorX = point.x + tangentX * side * (radius + 3);
+              anchorY = point.y + tangentY * side * (radius + 3);
+            }
           }
-          labelCandidates.push({ id: placement.id, text: label, x: labelX, y: labelY, priority: placement.depth === 0 ? 100 : isSelected ? 90 : placement.depth === 1 ? 70 : placement.depth === 2 ? 50 : 20, width: textWidth, height: 22, accent });
+          labelCandidates.push({ id: placement.id, text: label, x: labelX, y: labelY, priority: placement.depth === 0 ? 100 : isSelected ? 90 : placement.depth === 1 ? 70 : placement.depth === 2 ? 50 : 20, width: textWidth, height: 22, accent, anchorX, anchorY });
         }
         context.globalAlpha = 1;
       }
       const labels = resolvePremiumLabels(labelCandidates, width, height);
-      for (const label of labels) { context.fillStyle = "rgba(2,16,22,.88)"; context.strokeStyle = blendPremiumColor(label.accent, label.accent, 1, .22); context.lineWidth = 1; context.beginPath(); context.roundRect(label.left, label.top, label.width, label.height, 6); context.fill(); context.stroke(); context.fillStyle = label.id === selectedPlacementId ? "#f4fffc" : blendPremiumColor("#d9eeeb", label.accent, .28, 1); context.font = `${label.priority >= 70 ? 750 : 650} ${label.priority >= 70 ? 12 : 11}px Inter, system-ui, sans-serif`; context.textAlign = "center"; context.textBaseline = "middle"; context.fillText(label.text, label.x, label.y, label.width - 12); }
+      for (const label of labels) { if (label.anchorX !== undefined && label.anchorY !== undefined) { context.strokeStyle = blendPremiumColor(label.accent, label.accent, 1, .3); context.lineWidth = .8; context.beginPath(); context.moveTo(label.anchorX, label.anchorY); context.lineTo(label.x, label.y); context.stroke(); } context.fillStyle = "rgba(2,16,22,.9)"; context.strokeStyle = blendPremiumColor(label.accent, label.accent, 1, .3); context.lineWidth = 1; context.beginPath(); context.roundRect(label.left, label.top, label.width, label.height, 6); context.fill(); context.stroke(); context.fillStyle = label.id === selectedPlacementId ? "#f4fffc" : blendPremiumColor("#d9eeeb", label.accent, .28, 1); context.font = `${label.priority >= 70 ? 750 : 650} ${label.priority >= 70 ? 12 : 11}px Inter, system-ui, sans-serif`; context.textAlign = "center"; context.textBaseline = "middle"; context.fillText(label.text, label.x, label.y, label.width - 12); }
 
       const elapsed = performance.now() - started;
       if (frameCount === 0) host.dataset.firstDrawMs = (performance.now() - mountedAtRef.current).toFixed(3);
@@ -187,7 +203,7 @@ export function PremiumPersistentWorldSurface({ model, selectedPlacementId, full
     };
     invalidateRef.current = () => { if (reducedMotion) draw(performance.now()); }; draw(performance.now());
     return () => { observer.disconnect(); cancelAnimationFrame(frame); invalidateRef.current = () => undefined; };
-  }, [fullWorld, model, reducedMotion, selectedPath, selectedPlacementId, semantic, semanticSet, traceMode]);
+  }, [factualBindings, fullWorld, model, reducedMotion, selectedPath, selectedPlacementId, semantic, semanticSet, traceMode]);
 
   function hitTest(event: { clientX: number; clientY: number }) {
     const host = hostRef.current; if (!host) return null; const bounds = host.getBoundingClientRect(); const camera = cameraRef.current; let best: { id: string; distance: number } | null = null;
@@ -196,7 +212,7 @@ export function PremiumPersistentWorldSurface({ model, selectedPlacementId, full
   }
   function updateViewport(next: Viewport) { viewportRef.current = next; const host = hostRef.current; if (host) { host.dataset.viewportZoom = next.zoom.toFixed(3); host.dataset.viewportPanX = Math.round(next.panX).toString(); host.dataset.viewportPanY = Math.round(next.panY).toString(); } invalidateRef.current(); }
 
-  return <div ref={hostRef} className="sm-pw-surface sm-pw-surface--premium" role="application" aria-label="Persistent Employment influence world" data-world-id={model.worldId} data-graph-snapshot-id={model.graphSnapshotId} data-layout-version={model.layoutVersion} data-topology-fingerprint={model.topologyFingerprint} data-resident-placement-count={model.coverage.placementCount} data-resident-relationship-count={model.coverage.hierarchyRelationshipCount + model.coverage.syntheticInfluenceCount} data-semantic-node-count={semantic.length} data-lod-mode={fullWorld ? "FULL_WORLD_DENSITY" : selectedPlacementId ? "FOCUS" : "OVERVIEW"} data-trace-mode={traceMode} data-selected-placement-id={selectedPlacementId ?? ""} data-viewport-zoom="1.000" data-viewport-pan-x="0" data-viewport-pan-y="0" data-glint-period-ms="2500" data-glint-trail="0.085" data-hovered-placement-id={hoveredId ?? ""} onWheel={(event) => {
+  return <div ref={hostRef} className="sm-pw-surface sm-pw-surface--premium" role="application" aria-label="Persistent Employment influence world" data-world-id={model.worldId} data-graph-snapshot-id={model.graphSnapshotId} data-layout-version={model.layoutVersion} data-topology-fingerprint={model.topologyFingerprint} data-resident-placement-count={model.coverage.placementCount} data-resident-relationship-count={model.coverage.hierarchyRelationshipCount + model.coverage.syntheticInfluenceCount} data-semantic-node-count={semantic.length} data-factual-binding-count={Object.values(factualBindings).filter((binding) => binding.status === "CONNECTED").length} data-lod-mode={fullWorld ? "FULL_WORLD_DENSITY" : selectedPlacementId ? "FOCUS" : "OVERVIEW"} data-trace-mode={traceMode} data-selected-placement-id={selectedPlacementId ?? ""} data-viewport-zoom="1.000" data-viewport-pan-x="0" data-viewport-pan-y="0" data-glint-period-ms="2500" data-glint-trail="0.085" data-hovered-placement-id={hoveredId ?? ""} onWheel={(event) => {
     const started = performance.now(); event.preventDefault(); const bounds = event.currentTarget.getBoundingClientRect(); const current = viewportRef.current; const zoom = Math.max(.55, Math.min(3.25, current.zoom * Math.exp(-event.deltaY * .0014))); const ratio = zoom / current.zoom; const cursorX = event.clientX - bounds.left - bounds.width / 2; const cursorY = event.clientY - bounds.top - bounds.height / 2; updateViewport({ zoom, panX: cursorX - (cursorX - current.panX) * ratio, panY: cursorY - (cursorY - current.panY) * ratio }); event.currentTarget.dataset.wheelHandlerMs = (performance.now() - started).toFixed(3);
   }} onPointerDown={(event) => { if (event.button !== 1) return; event.preventDefault(); event.currentTarget.setPointerCapture(event.pointerId); const current = viewportRef.current; panRef.current = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, panX: current.panX, panY: current.panY, moved: false }; }} onPointerMove={(event) => {
     const bounds = event.currentTarget.getBoundingClientRect(); pointerRef.current = { x: event.clientX - bounds.left, y: event.clientY - bounds.top }; const pan = panRef.current;
