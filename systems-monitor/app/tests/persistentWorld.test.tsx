@@ -3,6 +3,39 @@ import { describe, expect, it } from "vitest";
 import { SnapshotProvider } from "../src/app/SnapshotContext";
 import { SystemsMonitorApp } from "../src/app/SystemsMonitorApp";
 import { createPersistentWorld, employmentDriverCandidates, persistentWorldFingerprint, persistentWorldSelectionSequence } from "../src/data/persistentWorldModel";
+import { PERSISTENT_GLINT_PERIOD_MS, PERSISTENT_GLINT_TRAIL, blendPremiumColor, easePremiumHover, persistentGlintProgress, premiumCurveRoute, resolvePersistentLod, resolvePremiumLabels } from "../src/views/persistent/persistentWorldVisuals";
+
+describe("premium persistent-world visual language", () => {
+  it("routes curves deterministically without changing endpoints", () => {
+    const first = premiumCurveRoute("hierarchy:a:b", { x: 10, y: 20 }, { x: 300, y: 160 });
+    expect(first).toEqual(premiumCurveRoute("hierarchy:a:b", { x: 10, y: 20 }, { x: 300, y: 160 }));
+    expect(first.start).toEqual({ x: 10, y: 20 });
+    expect(first.end).toEqual({ x: 300, y: 160 });
+    expect(first.control1.y).not.toBe(20 + (160 - 20) * .33);
+  });
+
+  it("keeps glint period and trail independent from hover emphasis", () => {
+    expect(PERSISTENT_GLINT_PERIOD_MS).toBe(2500);
+    expect(PERSISTENT_GLINT_TRAIL).toBe(.085);
+    expect(persistentGlintProgress(1300, "edge:7")).toBe(persistentGlintProgress(1300, "edge:7"));
+    expect(easePremiumHover(0, 1, 16)).toBeGreaterThan(0);
+    expect(blendPremiumColor("#315b67", "#ef7f84", .5, .9)).toMatch(/^rgba\(/);
+  });
+
+  it("resolves premium LOD and label collisions deterministically", () => {
+    expect(resolvePersistentLod(0, .1, true)).toBe(3);
+    expect(resolvePersistentLod(3, .2, false)).toBe(0);
+    expect(resolvePersistentLod(3, 2.2, true)).toBe(2);
+    const candidates = [
+      { id: "a", text: "A", x: 100, y: 100, priority: 100, width: 80, height: 22, accent: "#fff" },
+      { id: "b", text: "B", x: 108, y: 103, priority: 20, width: 80, height: 22, accent: "#fff" },
+      { id: "c", text: "C", x: 250, y: 100, priority: 50, width: 80, height: 22, accent: "#fff" }
+    ];
+    const first = resolvePremiumLabels(candidates, 400, 240);
+    expect(first).toEqual(resolvePremiumLabels(candidates, 400, 240));
+    expect(first.map((item) => item.id)).toEqual(["a", "c"]);
+  });
+});
 
 describe("persistent Employment influence world model", () => {
   it("creates one deterministic 1→10→100→1000 fixture world", () => {
@@ -80,6 +113,9 @@ describe("persistent world local-review shell", () => {
     expect(surface.getAttribute("data-selected-placement-id")).toBe("placement:employer-labor-demand");
     expect(surface.getAttribute("data-resident-placement-count")).toBe("1111");
     expect(surface.getAttribute("data-semantic-node-count")).toBe("12");
+    fireEvent.click(screen.getByRole("button", { name: "Trace" }));
+    expect(surface.getAttribute("data-trace-mode")).toBe("true");
+    expect(surface.getAttribute("data-topology-fingerprint")).toMatch(/^fnv1a32:/);
     const inspector = screen.getByRole("complementary", { name: "Persistent world factor details" });
     expect(within(inspector).getByRole("heading", { name: "Employer Labor Demand" })).toBeTruthy();
     expect(window.location.hash).toContain("placement%3Aemployer-labor-demand");
@@ -92,6 +128,7 @@ describe("persistent world local-review shell", () => {
     expect(surface.getAttribute("data-selected-placement-id")).toBe("");
     fireEvent.click(screen.getByRole("button", { name: "Reset" }));
     expect(surface.getAttribute("data-selected-placement-id")).toBe("");
+    expect(surface.getAttribute("data-trace-mode")).toBe("false");
     expect(surface.getAttribute("data-topology-fingerprint")).toMatch(/^fnv1a32:/);
   });
 

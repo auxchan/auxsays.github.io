@@ -1,0 +1,144 @@
+import type { PersistentWorldDepth, PersistentWorldPlacement } from "../../data/persistentWorldModel";
+
+export interface Point { x: number; y: number }
+export interface CubicRoute { start: Point; control1: Point; control2: Point; end: Point }
+export interface LabelCandidate { id: string; text: string; x: number; y: number; priority: number; width: number; height: number; accent: string }
+export interface ResolvedLabel extends LabelCandidate { left: number; top: number }
+
+export const PERSISTENT_GLINT_PERIOD_MS = 2500;
+export const PERSISTENT_GLINT_TRAIL = 0.085;
+export const PERSISTENT_SECTOR_COLORS = ["#6fe4d0", "#59bff5", "#7d9cff", "#ef7f84", "#f0ae54", "#d8ca69", "#e685c4", "#a68cf0", "#66d0a4", "#f18d67"] as const;
+
+function stableHash(value: string) {
+  let hash = 0x811c9dc5;
+  for (let index = 0; index < value.length; index += 1) {
+    hash ^= value.charCodeAt(index);
+    hash = Math.imul(hash, 0x01000193);
+  }
+  return hash >>> 0;
+}
+
+export function premiumCurveRoute(id: string, start: Point, end: Point, quiet = false): CubicRoute {
+  const dx = end.x - start.x;
+  const dy = end.y - start.y;
+  const distance = Math.max(1, Math.hypot(dx, dy));
+  const nx = -dy / distance;
+  const ny = dx / distance;
+  const sign = stableHash(id) % 2 ? 1 : -1;
+  const bend = Math.min(quiet ? 18 : 34, distance * (quiet ? 0.065 : 0.115)) * sign;
+  return {
+    start,
+    control1: { x: start.x + dx * .33 + nx * bend, y: start.y + dy * .33 + ny * bend },
+    control2: { x: start.x + dx * .67 + nx * bend, y: start.y + dy * .67 + ny * bend },
+    end
+  };
+}
+
+export function pointOnCubic(route: CubicRoute, rawProgress: number): Point {
+  const t = Math.max(0, Math.min(1, rawProgress));
+  const inverse = 1 - t;
+  return {
+    x: inverse ** 3 * route.start.x + 3 * inverse ** 2 * t * route.control1.x + 3 * inverse * t ** 2 * route.control2.x + t ** 3 * route.end.x,
+    y: inverse ** 3 * route.start.y + 3 * inverse ** 2 * t * route.control1.y + 3 * inverse * t ** 2 * route.control2.y + t ** 3 * route.end.y
+  };
+}
+
+export function traceCubic(context: CanvasRenderingContext2D, route: CubicRoute) {
+  context.beginPath();
+  context.moveTo(route.start.x, route.start.y);
+  context.bezierCurveTo(route.control1.x, route.control1.y, route.control2.x, route.control2.y, route.end.x, route.end.y);
+}
+
+export function persistentGlintProgress(nowMs: number, edgeId: string) {
+  return ((nowMs / PERSISTENT_GLINT_PERIOD_MS) + (stableHash(edgeId) % 997) / 997) % 1;
+}
+
+export function easePremiumHover(current: number, target: number, elapsedMs: number, reducedMotion = false) {
+  if (reducedMotion) return target;
+  return current + (target - current) * (1 - Math.exp(-Math.max(0, elapsedMs) / 180));
+}
+
+export function blendPremiumColor(from: string, to: string, progress: number, alpha = 1) {
+  const read = (value: string) => {
+    const match = /^#([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i.exec(value);
+    return match ? [Number.parseInt(match[1], 16), Number.parseInt(match[2], 16), Number.parseInt(match[3], 16)] : [111, 228, 208];
+  };
+  const start = read(from);
+  const end = read(to);
+  const amount = Math.max(0, Math.min(1, progress));
+  const channels = start.map((channel, index) => Math.round(channel + (end[index] - channel) * amount));
+  return `rgba(${channels[0]}, ${channels[1]}, ${channels[2]}, ${Math.max(0, Math.min(1, alpha))})`;
+}
+
+export function resolvePersistentLod(depth: PersistentWorldDepth, effectiveScale: number, semantic: boolean) {
+  if (!semantic) return 0;
+  if (depth === 0) return 3;
+  if (depth === 1) return effectiveScale >= .28 ? 3 : 2;
+  if (depth === 2) return effectiveScale >= .9 ? 3 : effectiveScale >= .48 ? 2 : 1;
+  return effectiveScale >= 2.1 ? 2 : effectiveScale >= 1.3 ? 1 : 0;
+}
+
+export function resolvePremiumLabels(candidates: readonly LabelCandidate[], width: number, height: number) {
+  const accepted: ResolvedLabel[] = [];
+  for (const candidate of [...candidates].sort((left, right) => right.priority - left.priority || left.id.localeCompare(right.id))) {
+    const resolved = { ...candidate, left: candidate.x - candidate.width / 2, top: candidate.y - candidate.height / 2 };
+    if (resolved.left < 8 || resolved.top < 8 || resolved.left + resolved.width > width - 8 || resolved.top + resolved.height > height - 8) continue;
+    const collides = accepted.some((item) => resolved.left < item.left + item.width + 8 && resolved.left + resolved.width + 8 > item.left && resolved.top < item.top + item.height + 6 && resolved.top + resolved.height + 6 > item.top);
+    if (!collides) accepted.push(resolved);
+  }
+  return accepted;
+}
+
+export function premiumRadius(placement: PersistentWorldPlacement, lod: number) {
+  if (placement.depth === 0) return 31;
+  if (placement.depth === 1) return lod >= 3 ? 24 : 18;
+  if (placement.depth === 2) return lod >= 3 ? 19 : lod === 2 ? 14 : 8;
+  return lod >= 2 ? 9 : lod === 1 ? 4.5 : 1.35;
+}
+
+export function factorGlyph(placement: PersistentWorldPlacement) {
+  if (placement.depth === 0) return "network";
+  if (placement.depth > 1) return "detail";
+  return ["growth", "consumer", "demand", "layoffs", "investment", "rates", "wages", "automation", "supply", "shocks"][Math.max(0, placement.sector)] ?? "detail";
+}
+
+export function drawPremiumGlyph(context: CanvasRenderingContext2D, glyph: string, x: number, y: number, radius: number, color: string) {
+  const scale = radius / 20;
+  context.save();
+  context.translate(x, y);
+  context.scale(scale, scale);
+  context.strokeStyle = color;
+  context.fillStyle = color;
+  context.lineWidth = 1.8;
+  context.lineCap = "round";
+  context.lineJoin = "round";
+  context.beginPath();
+  if (glyph === "network") {
+    [[0,0],[-8,-7],[8,-7],[0,9]].forEach(([px,py], index) => { context.moveTo(index ? 0 : px, index ? 0 : py); if (index) context.lineTo(px,py); });
+    context.stroke();
+    [[0,0],[-8,-7],[8,-7],[0,9]].forEach(([px,py]) => { context.beginPath(); context.arc(px,py,2.4,0,Math.PI*2); context.fill(); });
+  } else if (glyph === "growth") {
+    context.moveTo(-9,7); context.lineTo(-3,1); context.lineTo(2,4); context.lineTo(9,-7); context.moveTo(4,-7); context.lineTo(9,-7); context.lineTo(9,-2); context.stroke();
+  } else if (glyph === "consumer") {
+    context.moveTo(-9,-5); context.lineTo(-6,6); context.lineTo(7,6); context.lineTo(9,-4); context.closePath(); context.moveTo(-4,-6); context.quadraticCurveTo(0,-12,4,-6); context.stroke();
+  } else if (glyph === "demand") {
+    context.arc(-5,-4,3,0,Math.PI*2); context.moveTo(1,-4); context.arc(4,-4,3,0,Math.PI*2); context.moveTo(-10,9); context.quadraticCurveTo(-5,1,0,9); context.moveTo(0,9); context.quadraticCurveTo(5,1,10,9); context.stroke();
+  } else if (glyph === "layoffs") {
+    context.moveTo(-10,-6); context.lineTo(-3,1); context.lineTo(2,-4); context.lineTo(9,8); context.moveTo(-10,8); context.lineTo(10,8); context.stroke();
+  } else if (glyph === "investment") {
+    context.rect(-9,-8,18,16); context.moveTo(-5,5); context.lineTo(-5,0); context.moveTo(0,5); context.lineTo(0,-4); context.moveTo(5,5); context.lineTo(5,-7); context.stroke();
+  } else if (glyph === "rates") {
+    context.arc(-5,-5,3,0,Math.PI*2); context.moveTo(-7,8); context.lineTo(7,-8); context.moveTo(5,5); context.arc(5,5,3,0,Math.PI*2); context.stroke();
+  } else if (glyph === "wages") {
+    context.arc(0,0,9,0,Math.PI*2); context.moveTo(3,-5); context.quadraticCurveTo(-5,-8,-5,-2); context.quadraticCurveTo(-5,2,3,2); context.quadraticCurveTo(7,4,2,7); context.stroke();
+  } else if (glyph === "automation") {
+    context.rect(-8,-7,16,14); context.moveTo(-3,-1); context.arc(-3,-1,1,0,Math.PI*2); context.moveTo(4,-1); context.arc(3,-1,1,0,Math.PI*2); context.moveTo(-4,4); context.lineTo(4,4); context.moveTo(0,-10); context.lineTo(0,-7); context.stroke();
+  } else if (glyph === "supply") {
+    context.arc(0,-5,4,0,Math.PI*2); context.moveTo(-9,9); context.quadraticCurveTo(-8,0,0,0); context.quadraticCurveTo(8,0,9,9); context.stroke();
+  } else if (glyph === "shocks") {
+    context.moveTo(1,-10); context.lineTo(-6,1); context.lineTo(0,1); context.lineTo(-2,10); context.lineTo(7,-2); context.lineTo(1,-2); context.closePath(); context.stroke();
+  } else {
+    context.arc(0,0,3.2,0,Math.PI*2); context.stroke();
+  }
+  context.restore();
+}

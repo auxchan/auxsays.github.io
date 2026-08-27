@@ -221,7 +221,7 @@ export function PersistentWorldSurface({ model, selectedPlacementId, fullWorld, 
         const medianFrameMs = ordered[Math.floor(ordered.length / 2)];
         const p95FrameMs = ordered[Math.min(ordered.length - 1, Math.ceil(ordered.length * .95) - 1)];
         const mode = fullWorld ? "FULL_WORLD_LOD" : selectedPlacementId ? "FOCUS_LOD" : "OVERVIEW_LOD";
-        window.__AUXSAYS_PERSISTENT_WORLD_METRICS__ = { placementCount: placements.length, relationshipCount: hierarchy.length + influence.length, meanFrameMs, medianFrameMs, p95FrameMs, mode };
+        window.__AUXSAYS_PERSISTENT_WORLD_METRICS__ = { placementCount: placements.length, relationshipCount: hierarchy.length + influence.length, meanFrameMs, medianFrameMs, p95FrameMs, mode, semanticLabelCount: semantic.length };
         host.dataset.meanFrameMs = meanFrameMs.toFixed(3);
         host.dataset.medianFrameMs = medianFrameMs.toFixed(3);
         host.dataset.p95FrameMs = p95FrameMs.toFixed(3);
@@ -297,6 +297,6 @@ export function PersistentWorldSurface({ model, selectedPlacementId, fullWorld, 
 
 declare global {
   interface Window {
-    __AUXSAYS_PERSISTENT_WORLD_METRICS__?: { placementCount: number; relationshipCount: number; meanFrameMs: number; medianFrameMs: number; p95FrameMs: number; mode: string };
+    __AUXSAYS_PERSISTENT_WORLD_METRICS__?: { placementCount: number; relationshipCount: number; meanFrameMs: number; medianFrameMs: number; p95FrameMs: number; mode: string; semanticLabelCount: number };
   }
 }

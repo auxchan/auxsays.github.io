@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { createPersistentWorld, persistentWorldPath, type PersistentWorldPlacement } from "../../data/persistentWorldModel";
-import { PersistentWorldSurface } from "./PersistentWorldSurface";
+import { PremiumPersistentWorldSurface as PersistentWorldSurface } from "./PremiumPersistentWorldSurface";
 import "./persistentWorld.css";
 
 function useReducedMotion() {
@@ -38,6 +38,7 @@ export function PersistentWorldShell() {
   const workspaceRef = useRef<HTMLDivElement>(null);
   const [selectedId, setSelectedId] = useState<string | null>(() => selectionFromHash(model));
   const [fullWorld, setFullWorld] = useState(false);
+  const [traceMode, setTraceMode] = useState(false);
   const [resetVersion, setResetVersion] = useState(0);
   const [fullscreen, setFullscreen] = useState(false);
   const [fullscreenFallback, setFullscreenFallback] = useState(false);
@@ -81,6 +82,7 @@ export function PersistentWorldShell() {
   function resetWorld() {
     navigate(null);
     setFullWorld(false);
+    setTraceMode(false);
     setResetVersion((current) => current + 1);
   }
 
@@ -118,10 +120,11 @@ export function PersistentWorldShell() {
             <section><h3>Why the next ten are here</h3><p>{selected.depth < 2 ? "They form the bounded exact-ten navigation neighborhood for this review candidate. Placement communicates organization only—not causality, weight, or propagation." : selected.depth === 2 ? "They are deterministic Level-3 stress records proving the renderer can retain and revisit a deep world without fabricating factual economic coverage." : "This record has no factual children."}</p></section>
           </div>}
         </aside>
-        <PersistentWorldSurface model={model} selectedPlacementId={selectedId} fullWorld={fullWorld} reducedMotion={reducedMotion} resetVersion={resetVersion} onSelect={navigate} onReset={resetWorld} />
+        <PersistentWorldSurface model={model} selectedPlacementId={selectedId} fullWorld={fullWorld} traceMode={traceMode} reducedMotion={reducedMotion} resetVersion={resetVersion} onSelect={navigate} onReset={resetWorld} />
         <div className="sm-pw-controls" aria-label="Persistent world view controls">
           <button type="button" onClick={resetWorld}>Reset</button>
           <button type="button" aria-pressed={fullWorld} onClick={() => setFullWorld((current) => !current)}>{fullWorld ? "Normal overview" : "Full-world view"}</button>
+          <button type="button" aria-pressed={traceMode} disabled={!selected} onClick={() => setTraceMode((current) => !current)}>Trace</button>
           <button type="button" aria-label={fullscreenActive ? "Exit full screen" : "Enter full screen"} aria-pressed={fullscreenActive} onClick={() => void toggleFullscreen()}><span aria-hidden="true">⛶</span> {fullscreenActive ? "Exit" : "Full screen"}</button>
         </div>
       </div>
