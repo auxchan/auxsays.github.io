@@ -25,17 +25,19 @@ interface Props {
 const OVERVIEW_SCALE = .205;
 const AMBIENT_EDGE = "#315b67";
 
-function targetCamera(model: PersistentWorldReadModel, selectedPlacementId: string | null, fullWorld: boolean): Camera {
+function targetCamera(model: PersistentWorldReadModel, selectedPlacementId: string | null, fullWorld: boolean, viewportHeight = 720): Camera {
   const selected = selectedPlacementId ? model.placements[selectedPlacementId] : undefined;
   if (!selected || fullWorld) return { x: 0, y: 0, scale: fullWorld ? .17 : OVERVIEW_SCALE };
   if (selected.depth === 1) {
     const distance = Math.max(1, Math.hypot(selected.x, selected.y));
     const verticalSector = Math.abs(selected.y) / distance > .9;
-    const outwardShift = verticalSector ? 260 : 285;
+    const heightBoost = Math.max(1, Math.min(verticalSector ? 1.16 : 1.23, viewportHeight / 720));
+    const scale = (verticalSector ? 1.14 : 1.04) * heightBoost;
+    const outwardShift = 296 / scale;
     return {
       x: selected.x + (selected.x / distance) * outwardShift,
       y: selected.y + (selected.y / distance) * outwardShift,
-      scale: verticalSector ? 1.14 : 1.04
+      scale
     };
   }
   return { x: selected.x, y: selected.y, scale: selected.depth === 2 ? 1.72 : 2.7 };
@@ -111,10 +113,10 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
     const host = hostRef.current; const canvas = canvasRef.current; const context = canvas?.getContext("2d", { alpha: false });
     if (!host || !canvas || !context) return;
     let frame = 0; let last = performance.now(); let frameCount = 0; let accumulated = 0; const frameSamples: number[] = [];
-    const destination = targetCamera(model, selectedPlacementId, fullWorld); const cameraStarted = performance.now(); let cameraSettled = false;
+    let destination = targetCamera(model, selectedPlacementId, fullWorld, host.getBoundingClientRect().height); const cameraStarted = performance.now(); let cameraSettled = false;
     delete host.dataset.cameraSettleMs; if (reducedMotion) cameraRef.current = destination;
     const resize = () => {
-      const bounds = host.getBoundingClientRect(); const ratio = Math.min(2, window.devicePixelRatio || 1);
+      const bounds = host.getBoundingClientRect(); const ratio = Math.min(2, window.devicePixelRatio || 1); destination = targetCamera(model, selectedPlacementId, fullWorld, bounds.height);
       canvas.width = Math.max(1, Math.round(bounds.width * ratio)); canvas.height = Math.max(1, Math.round(bounds.height * ratio)); canvas.style.width = `${bounds.width}px`; canvas.style.height = `${bounds.height}px`; context.setTransform(ratio, 0, 0, ratio, 0, 0);
       if (reducedMotion) invalidateRef.current();
     };
@@ -127,6 +129,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
     const draw = (now: number) => {
       const started = performance.now(); const elapsedMs = Math.min(48, Math.max(0, now - last)); const bounds = host.getBoundingClientRect(); const width = bounds.width; const height = bounds.height; const camera = cameraRef.current; const viewport = viewportRef.current;
       if (!reducedMotion) { const amount = 1 - Math.pow(.00000003, Math.min(.06, elapsedMs / 1000)); camera.x += (destination.x - camera.x) * amount; camera.y += (destination.y - camera.y) * amount; camera.scale += (destination.scale - camera.scale) * amount; }
+      host.dataset.cameraScale = camera.scale.toFixed(3);
       if (!cameraSettled && (reducedMotion || (Math.abs(camera.x - destination.x) < .35 && Math.abs(camera.y - destination.y) < .35 && Math.abs(camera.scale - destination.scale) < .001))) { cameraSettled = true; host.dataset.cameraSettleMs = (performance.now() - cameraStarted).toFixed(3); }
       last = now;
       const parallax = reducedMotion ? { x: 0, y: 0 } : { x: (pointerRef.current.x - width / 2) * .018, y: (pointerRef.current.y - height / 2) * .018 };

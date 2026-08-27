@@ -47,6 +47,7 @@ Preview: `http://127.0.0.1:4174/systems-monitor/#persistent-world`
 - the 100 named Level-2 placements receive stable semantic glyphs with deterministic child-specific markers; the ten Labor Supply factors use ten distinct pictograms;
 - focused exact-ten labels alternate into tangent lanes with quiet leader lines, reducing connector/label collisions without changing node coordinates;
 - diagonal focus framing is tighter and the graph workspace is taller so dense neighborhoods remain readable at ordinary browser sizes;
+- focus scale now responds to the actual graph height: larger desktop workspaces spread the same fixed nodes farther apart, while smaller windows retain the compact safe framing;
 - in-app browser audit confirmed the unchanged `fnv1a32:d8ccde70` topology fingerprint and approximately 1.9–2.1 ms focused draw p95;
 - no network fetch, public activation, synthetic value, new relationship, Gate-B change, or deployment is introduced by this bridge.
 
