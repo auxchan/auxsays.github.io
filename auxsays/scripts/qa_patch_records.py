@@ -13,7 +13,7 @@ import yaml
 
 from lib.patch_identity import patch_key
 
-from lib.report_counts import counted_evidence_counts
+from lib.report_counts import counted_evidence_counts, windows_targets_from_front_matter
 
 ROOT = Path(__file__).resolve().parents[1]
 GENERATED_DIR = ROOT / "updates" / "generated"
@@ -236,7 +236,8 @@ def internal_term_findings(data: dict[str, Any], path: str) -> list[dict[str, An
     return findings
 
 
-def load_counted_evidence_counts() -> dict[tuple[str, str, str], int]:
+def load_counted_evidence_counts(
+        records: list[dict[str, Any]]) -> dict[tuple[str, str, str], int]:
     # Delegates to the single authoritative predicate (lib.report_counts.counted_evidence_counts) so
     # this QA gate and the post-collection reconciliation count evidence IDENTICALLY and can never
     # diverge -- that shared definition is what makes update_report_count == final counted evidence.
@@ -244,7 +245,13 @@ def load_counted_evidence_counts() -> dict[tuple[str, str, str], int]:
     rows = payload.get("evidence") if isinstance(payload, dict) else payload
     if not isinstance(rows, list):
         return {}
-    return counted_evidence_counts(rows)
+    # `records` supplies the Windows current-patch identities the canonical predicate gates on, and
+    # is REQUIRED for the same reason the predicate requires them: defaulting it would make a
+    # forgotten argument read 0 counted reports for every Windows patch, which this gate would then
+    # "confirm" against a record. A Windows patch present in `records` but carrying no target
+    # identity still fails closed -- excluded, not counted against an unknown identity.
+    return counted_evidence_counts(
+        rows, windows_targets=windows_targets_from_front_matter(records or []))
 
 
 def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
@@ -568,18 +575,60 @@ def scan_required_record_paths() -> tuple[list[dict[str, str]], list[dict[str, s
 def scan_evidence_count_alignment(files: list[Path]) -> tuple[list[dict[str, str]], list[dict[str, str]]]:
     errors: list[dict[str, str]] = []
     warnings: list[dict[str, str]] = []
-    evidence_counts = load_counted_evidence_counts()
+    # Read each record ONCE and reuse it for both the target map and the comparison below.
+    loaded = [(path, front_matter(path)) for path in files]
+    evidence_counts = load_counted_evidence_counts([data for _p, data in loaded])
     if not evidence_counts:
         return errors, warnings
 
-    for path in files:
-        data = front_matter(path)
+    for path, data in loaded:
+        # The count and the public source list are BOTH projections of one accepted-evidence
+        # population -- `accepted_report_sources` is one entry per counted row, uncapped (the cap,
+        # `evidence_sample_visible_limit`, applies to `evidence_samples` instead). So a record whose
+        # list length differs from its own count is publishing two different populations, whatever
+        # its count says. This is the drift the count comparison below structurally CANNOT see: that
+        # one compares the record to the same predicate that wrote it, so it agrees by construction
+        # even when the predicate is wrong. Windows 25H2 published count 32 beside 9 sources and 9
+        # in its prose for three weeks with the count gate green. Checked only when a list exists,
+        # and it is a length comparison -- no prose is parsed.
+        sources = data.get("accepted_report_sources")
+        if isinstance(sources, list) and sources:
+            claimed = int(data.get("update_report_count")
+                          or data.get("confirmed_patch_specific_report_count") or 0)
+            if len(sources) != claimed:
+                # WARNING, not an error, and deliberately so. Live it fires on three records: the
+                # two Windows ones this change repairs, and obs-studio 32.2.2 (count 7, sources 3),
+                # whose COUNT is already canonical -- only its projection is stale. That one is
+                # pre-existing and documented in PR #69; repairing it means an obs-scoped
+                # --write-all, and obs-studio DOES have a branch in _record_coherence_fields, so
+                # that would rewrite its verdict prose. Blocking here would therefore halt the
+                # writeback lane on a defect this change is scoped not to touch. Surfacing beats
+                # both ignoring it and holding production hostage to it.
+                add(warnings, path, "report_count_source_list_mismatch",
+                    f"Record claims {claimed} user reports but lists {len(sources)} accepted "
+                    f"report sources; both must project the same counted-evidence population.")
         product_id = str(data.get("product_id") or "").strip()
         version = str(data.get("update_version") or "").strip()
         if not product_id or not version:
             continue
         key = patch_key(product_id, version, data.get("target_build"))
+        # An absent key means the canonical population for this exact patch is EMPTY. That is real
+        # information: after a KB rollover a record can still claim reports for a patch with no
+        # accepted evidence at all, and the count comparison below structurally cannot see it.
+        #
+        # It is a WARNING, never an error, and that is the whole point. `patch-ingest.yml` runs this
+        # gate with NO reconcile step, and the rollover is exactly what that lane writes -- so
+        # erroring fails the run that PERFORMS the rollover, its writeback never commits the new
+        # target, and the rollover can never land. Verified: a permanent cross-lane wedge. Warning
+        # keeps the signal AND lets the rollover land; the obs lane's reconcile corrects the count
+        # within six hours. Measured zero false positives across all 905 live records.
         if key not in evidence_counts:
+            claimed = int(data.get("update_report_count")
+                          or data.get("confirmed_patch_specific_report_count") or 0)
+            if claimed > 0:
+                add(warnings, path, "report_count_for_empty_population",
+                    f"Record claims {claimed} user reports, but the canonical counted-evidence "
+                    f"population for this exact patch is empty.")
             continue
         expected = evidence_counts[key]
         actual = int(data.get("update_report_count") or data.get("confirmed_patch_specific_report_count") or 0)

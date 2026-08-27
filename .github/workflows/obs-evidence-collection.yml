@@ -120,6 +120,55 @@ jobs:
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: python auxsays/scripts/build_consensus_from_evidence.py
 
+      - name: Promote PowerPoint consensus to build-aware records
+        # Scoped to microsoft-powerpoint via --product-id: no other product's promotion behaviour
+        # changes. The engine is the existing generic one; identity is the canonical triple
+        # (product_id, update_version, target_build), so evidence for one Current Channel build
+        # can only ever reconcile onto that build's own record. No-ops when PowerPoint has no
+        # evidence.
+        #
+        # POSITION IS LOAD-BEARING, and this step used to sit after QA/audit. Reconciliation moves
+        # the count and retracts projections for every retractable product; only that product's own
+        # promotion rebuilds them. With QA in between, the first run after a PowerPoint population
+        # emptied and refilled died on report_count_without_consensus_summary before this step ran,
+        # taking the whole writeback with it -- so a cycle of OBS, DaVinci, Acrobat and Premiere
+        # evidence was never committed either. Reproduced. Both retractable products' promotions now
+        # sit between reconciliation and the first QA, and a test asserts that for every product in
+        # lib.report_counts.CONSENSUS_PROMOTION_PRODUCTS rather than for one product by name.
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          python auxsays/scripts/apply_consensus_to_records.py \
+            --product-id microsoft-powerpoint \
+            --write-all --confirm-write
+
+      - name: Promote Windows consensus to its current patch identity
+        # Windows records are the one place the count and its prose could disagree: a Windows record
+        # tracks ONE cumulative update (KB / OS build) inside a feature train that rolls over
+        # monthly, and reconcile_record_counts fixes only the NUMBER. Before this step existed the
+        # 25H2 record published `update_report_count: 32` beside prose reading "9 user reports",
+        # because the number advanced with each rollover while nothing regenerated the sentence.
+        # Scoped to --product-id: no other product's records are touched, and every count-derived
+        # field here is regenerated from the same canonical population the count comes from --
+        # while that population is NON-EMPTY. This step skips a group at count <= 0, so the empty
+        # case (every KB rollover) is retracted by reconcile_record_counts instead; see
+        # lib.report_counts.retract_zero_count_projections.
+        #
+        # POSITION IS LOAD-BEARING: this runs immediately after reconciliation and BEFORE QA.
+        # Reconciliation moves the NUMBER and retracts projections; this step is the only thing that
+        # rebuilds them. With QA in between, the first run after a rollover -- count back above zero,
+        # projections not yet regenerated -- failed `report_count_without_consensus_summary` and
+        # `report_count_without_evidence_samples`, so the job died before reaching this step, the
+        # projections were never rebuilt, and every later run repeated it. Verified: a permanent
+        # wedge. QA must validate the state the writers finished, not one halfway through.
+        #
+        # Windows has no branch in _record_coherence_fields, so this cannot rewrite verdict prose --
+        # pinned by test, not just asserted here. All 361 commits across the two records are automated.
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          python auxsays/scripts/apply_consensus_to_records.py \
+            --product-id microsoft-windows-11 \
+            --write-all --confirm-write
+
       - name: QA patch records
         id: qa
         if: ${{ github.event.inputs.dry_run != 'true' }}
@@ -130,19 +179,7 @@ jobs:
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: python auxsays/scripts/audit_consensus_evidence.py
 
-      - name: Promote PowerPoint consensus to build-aware records
-        # Scoped to microsoft-powerpoint via --product-id: no other product's promotion behaviour
-        # changes. The engine is the existing generic one; identity is the canonical triple
-        # (product_id, update_version, target_build), so evidence for one Current Channel build
-        # can only ever reconcile onto that build's own record. Runs after QA/audit so it never
-        # promotes onto a tree those gates rejected. No-ops when PowerPoint has no evidence.
-        if: ${{ github.event.inputs.dry_run != 'true' }}
-        run: |
-          python auxsays/scripts/apply_consensus_to_records.py \
-            --product-id microsoft-powerpoint \
-            --write-all --confirm-write
-
-      - name: Re-run QA after PowerPoint promotion
+      - name: Re-run QA after consensus promotion
         # Promotion mutates report counts; re-validate before anything is staged so a
         # half-promoted tree cannot reach the writeback.
         if: ${{ github.event.inputs.dry_run != 'true' }}

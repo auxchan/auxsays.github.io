@@ -261,7 +261,7 @@ def run() -> int:  # noqa: PLR0915
 
         original = qa.load_counted_evidence_counts
         try:
-            qa.load_counted_evidence_counts = lambda: {(PRODUCT, "2607", BUILD): 1}
+            qa.load_counted_evidence_counts = lambda _records=None: {(PRODUCT, "2607", BUILD): 1}
 
             write_record(0)
             errors, warnings = qa.scan_evidence_count_alignment([rec])
@@ -288,9 +288,10 @@ def run() -> int:  # noqa: PLR0915
            "patch_version_matched": True, "id": "e1",
            "source_url": "https://learn.microsoft.com/en-us/answers/questions/5975138/x"}
     check("promotion counts only patch-matched evidence (exact-patch doctrine)",
-          counted_evidence_counts([row]) == {(PRODUCT, "2607", BUILD): 1}
-          and counted_evidence_counts([{**row, "patch_version_matched": False}]) == {},
-          str(counted_evidence_counts([row])))
+          counted_evidence_counts([row], windows_targets={}) == {(PRODUCT, "2607", BUILD): 1}
+          and counted_evidence_counts([{**row, "patch_version_matched": False}],
+                                     windows_targets={}) == {},
+          str(counted_evidence_counts([row], windows_targets={})))
     with tempfile.TemporaryDirectory() as td2:
         tmp2 = Path(td2)
         rec2 = tmp2 / "2026-07-23-microsoft-powerpoint-2607.md"
@@ -310,7 +311,7 @@ def run() -> int:  # noqa: PLR0915
             ]), encoding="utf-8")
         original2 = qa.load_counted_evidence_counts
         try:
-            qa.load_counted_evidence_counts = lambda: {(PRODUCT, "2607", BUILD): 1}
+            qa.load_counted_evidence_counts = lambda _records=None: {(PRODUCT, "2607", BUILD): 1}
             before_errors, _ = qa.scan_evidence_count_alignment([rec2])
             changed, detail = reconcile_record_counts([row], tmp2)
             after_text = rec2.read_text(encoding="utf-8")
