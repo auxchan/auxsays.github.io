@@ -31,13 +31,18 @@ layout: aux-base
 {% endif %}
 {% assign company = site.data.patch_companies | where: "id", page.company_id | first %}
 {% assign product = site.data.patch_products | where: "id", page.product_id | first %}
-{% if page.update_detail_title != blank %}
-  {% assign display_title = page.update_detail_title %}
-{% elsif page.update_feed_title != blank %}
-  {% assign display_title = page.update_feed_title %}
-{% else %}
-  {% assign display_title = page.update_product | append: ' ' | append: page.update_version %}
-{% endif %}
+{%- comment -%} Stored public label, then the build this record actually identifies. The stored
+  half keeps its established precedence; patch-public-label.html adds the exact build when the
+  record carries one, so a build-aware headline can never sit beside a per-build monitoring status
+  while naming only the version. The guards below compare against '' rather than `blank`, which is
+  an always-true no-op in this stack; every shipped record carries both fields, so the corrected
+  guards change nothing today and simply make the documented fallback reachable. {%- endcomment -%}
+{% assign stored_title = page.update_detail_title | default: '' %}
+{% if stored_title == '' %}{% assign stored_title = page.update_feed_title | default: '' %}{% endif %}
+{% if stored_title == '' %}{% assign stored_title = page.update_product | append: ' ' | append: page.update_version %}{% endif %}
+{% capture display_title %}{% include patch-public-label.html label=stored_title target_build=page.target_build %}{% endcapture %}
+{% capture citation_title %}{% include patch-public-label.html label=page.update_feed_title target_build=page.target_build %}{% endcapture %}
+{% if citation_title == '' %}{% assign citation_title = display_title %}{% endif %}
 {% assign evidence_checked_at = page.evidence_last_checked | default: page.consensus_last_checked %}
 {% assign evidence_checked_label = 'Not recorded' %}
 {% if evidence_checked_at != blank %}{% assign evidence_checked_label = evidence_checked_at | date: "%b %-d, %Y" %}{% endif %}
@@ -488,7 +493,7 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
           <li><cite>{% if page.update_source_name != blank %}{{ page.update_source_name }}. {% endif %}{% if page.update_published_at != blank %}({{ page.update_published_at | date: "%Y, %B %-d" }}). {% endif %}<a href="{{ source.url }}">{{ source.label | default: source.source_type }}</a>.</cite><span>{{ source.source_type | replace: '_', ' ' }}</span></li>
           {% endfor %}
         {% elsif page.update_source_url != blank %}
-          <li><cite>{% if page.update_source_name != blank %}{{ page.update_source_name }}. {% endif %}{% if page.update_published_at != blank %}({{ page.update_published_at | date: "%Y, %B %-d" }}). {% endif %}<a href="{{ page.update_source_url }}">{{ page.update_feed_title | default: display_title }}</a>.</cite><span>{{ official_source_type | replace: '_', ' ' }}</span></li>
+          <li><cite>{% if page.update_source_name != blank %}{{ page.update_source_name }}. {% endif %}{% if page.update_published_at != blank %}({{ page.update_published_at | date: "%Y, %B %-d" }}). {% endif %}<a href="{{ page.update_source_url }}">{{ citation_title }}</a>.</cite><span>{{ official_source_type | replace: '_', ' ' }}</span></li>
         {% endif %}
         {% if page.update_download_url != blank %}<li><cite>{% if page.update_source_name != blank %}{{ page.update_source_name }}. {% endif %}<a href="{{ page.update_download_url }}">Download page</a>.</cite><span>download</span></li>{% endif %}
       </ul>

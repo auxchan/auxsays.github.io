@@ -1,0 +1,44 @@
+{%- comment -%}
+  The PUBLIC LABEL for one patch: "Microsoft PowerPoint 2607" normally, "Microsoft PowerPoint 2607
+  (Build 20228.20110)" when the record's canonical identity carries an exact build.
+
+  SINGLE SOURCE OF TRUTH for the build half of every AUXSAYS-rendered patch headline -- the detail
+  H1, both patch-feed card titles, the home signal card and the detail-page citation. It exists
+  because the stored label is baked once, at record CREATE time, and `refresh_existing_record`
+  never rewrites it: the 20 PowerPoint records written before the writer learned about builds carry
+  a bare "2607" forever, sitting immediately beside a per-BUILD monitoring status. Deriving the
+  label at render time from the record's own `target_build` instead means it cannot drift from the
+  identity again, for these records or for any future one.
+
+  Inputs:
+    include.label         -- the stored public label ('' / missing renders as '')
+    include.target_build  -- the record's exact vendor build ('' for every version-only product)
+
+  Emits the label VERBATIM plus, at most, one appended build marker. It is:
+
+    - ADDITIVE. It never rewrites, reorders or strips authored text, so a hand-edited title keeps
+      its wording and only gains the build it was missing.
+    - IDEMPOTENT. The write path DOES bake "(Build X)" into new records, so the corpus is
+      permanently mixed; a label that already states this record's own build is passed through
+      untouched rather than re-appended.
+    - SILENT WITHOUT EVIDENCE. No build, no marker -- never "(Build )", never empty parens, never a
+      guessed or inherited build. Every version-only product renders byte-identically to before.
+
+  GUARD IDIOM. An "if x != blank" guard is a NO-OP in this stack: Liquid resolves `blank` as
+  MethodLiteral(:blank?) and neither liquid-4.0.4 nor jekyll-4.4.1 defines String#blank?, so the
+  comparison yields nil and inverts to ALWAYS TRUE. That is exactly how the live methodology page
+  came to render a dangling "Build " on 119 version-only rows. Both guards below therefore compare
+  a `default`-normalised local against the empty string.
+
+  (Written without tag delimiters on purpose: Liquid still PARSES tags inside a comment block, so a
+  literal example tag in here is a syntax error that fails the whole build, not documentation.)
+{%- endcomment -%}
+{%- assign public_label_text = include.label | default: '' -%}
+{%- assign public_label_build = include.target_build | default: '' -%}
+{%- if public_label_text != '' and public_label_build != '' -%}
+  {%- assign public_label_marker = '(Build ' | append: public_label_build | append: ')' -%}
+  {%- unless public_label_text contains public_label_marker -%}
+    {%- assign public_label_text = public_label_text | append: ' ' | append: public_label_marker -%}
+  {%- endunless -%}
+{%- endif -%}
+{{- public_label_text -}}
