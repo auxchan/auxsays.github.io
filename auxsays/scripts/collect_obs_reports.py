@@ -484,11 +484,15 @@ def apply_consensus_writeback(version: str) -> bool:
     matches = [item for item in results if item["update_version"] == version]
     if len(matches) != 1 or not matches[0].get("would_write"):
         return False
-    record_key = (PRODUCT_ID, version)
-    if record_key not in records_index:
-        return False
     result = matches[0]
-    record_path = records_index[record_key]["abs_path"]
+    # Reuse the record the dry-run already resolved by CANONICAL identity rather than re-deriving a
+    # key. The index has been keyed by the identity TRIPLE since #58 (4fe9e415); this 2-tuple
+    # predates it, so the membership test above never matched and this writeback has been silently
+    # inert. Reusing the resolved path is build-exact and cannot drift from the gated group.
+    record_rel = result.get("matched_generated_record_path")
+    if not record_rel:
+        return False
+    record_path = ROOT / record_rel
     fields = dict(result["proposed_fields_if_written"])
     data, _body = front_matter_parts(record_path)
     comparable = {k: v for k, v in fields.items() if k != "status_events_append"}

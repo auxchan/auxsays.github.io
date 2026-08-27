@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Consensus-to-generated-record updater with dry-run-first safety gates.
 
-Reads structured evidence rows, aggregates by (product_id, update_version),
+Reads structured evidence rows, aggregates by canonical patch identity,
 finds matching generated Markdown records, validates safety gates, and outputs
 an auditable plan.
 
@@ -263,7 +263,7 @@ def _evaluate_gates(
         _gate("gate_03_product_id_matches_record", record["product_id"] == product_id, f"Evidence product_id={product_id!r}, record product_id={record['product_id']!r}.")
         _gate("gate_04_version_matches_record", record["update_version"] == version, f"Evidence version={version!r}, record version={record['update_version']!r}.")
     else:
-        _gate("gate_03_product_id_matches_record", False, "No generated record found for this (product_id, version) key.")
+        _gate("gate_03_product_id_matches_record", False, "No generated record found for this canonical patch identity.")
         _gate("gate_04_version_matches_record", False, "No generated record found — cannot verify version match.")
 
     version_mismatches = [r for r in included_rows if _row_version(r, is_candidate_mode=is_candidate_mode) != version]
@@ -983,7 +983,7 @@ def _davinci_version_is_beta(version: str) -> bool:
     return bool(re.search(r"\b(?:public\s+)?beta\b|b\d+\b", str(version or ""), flags=re.I))
 
 
-def run_dry_run(*, evidence_path: Path, product_id_filter: str | None, is_candidate_mode: bool, records_index: dict[tuple[str, str], dict[str, Any]], write_requested: bool = False) -> list[dict[str, Any]]:
+def run_dry_run(*, evidence_path: Path, product_id_filter: str | None, is_candidate_mode: bool, records_index: dict[tuple[str, str, str], dict[str, Any]], write_requested: bool = False) -> list[dict[str, Any]]:
     all_rows = _load_yaml_list(evidence_path)
     groups = _group_rows(all_rows, is_candidate_mode=is_candidate_mode)
     if product_id_filter:
@@ -992,7 +992,7 @@ def run_dry_run(*, evidence_path: Path, product_id_filter: str | None, is_candid
             for (pid, ver, build), rows in sorted(groups.items())]
 
 
-def _payload(results: list[dict[str, Any]], *, evidence_path: Path, is_candidate_mode: bool, product_id_filter: str | None, version_filter: str | None, records_index: dict[tuple[str, str], dict[str, Any]], write_mode_active: bool) -> dict[str, Any]:
+def _payload(results: list[dict[str, Any]], *, evidence_path: Path, is_candidate_mode: bool, product_id_filter: str | None, version_filter: str | None, records_index: dict[tuple[str, str, str], dict[str, Any]], write_mode_active: bool) -> dict[str, Any]:
     return {
         "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "mode": "write_back" if write_mode_active else ("dry_run_candidate_staging" if is_candidate_mode else "dry_run_production_evidence"),

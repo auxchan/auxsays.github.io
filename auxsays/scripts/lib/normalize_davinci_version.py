@@ -10,7 +10,6 @@ product — all logic is gated behind the blackmagic-davinci product_id.
 Public API:
     normalize_davinci_version(raw: str) -> dict
     is_same_version(a: str, b: str) -> bool
-    canonical_to_record_key(canonical: str) -> tuple[str, str]
 """
 from __future__ import annotations
 
@@ -246,14 +245,3 @@ def is_same_version(a: str, b: str) -> bool:
     if result_a["rejected"] or result_b["rejected"]:
         return False
     return result_a["canonical_update_version"] == result_b["canonical_update_version"]
-
-
-def canonical_to_record_key(canonical: str) -> tuple[str, str]:
-    """Return the (product_id, update_version) key used in generated records.
-
-    This is the key used for matching evidence rows to generated Markdown records.
-    The update_version in the key is the canonical form as produced by
-    normalize_davinci_version(). It is NOT re-normalized here — the caller must
-    ensure canonical is already in canonical form.
-    """
-    return (PRODUCT_ID, canonical)
