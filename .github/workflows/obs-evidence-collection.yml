@@ -120,6 +120,28 @@ jobs:
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: python auxsays/scripts/build_consensus_from_evidence.py
 
+      - name: Promote OBS consensus to its counted population
+        # OBS records were the last consensus product whose PROJECTIONS nothing in this lane
+        # refreshed. Reconciliation writes the count and nothing else, so 2026-08-14-obs-studio-32-2-2
+        # published `update_report_count: 7` beside `accepted_report_sources` holding only the FIRST
+        # THREE of those seven issues (13803/13806/13807), `evidence_samples` stuck at 3 where the
+        # cap is 5, and -- worst -- `quick_verdict` reading "TEST FIRST: OBS Studio 32.2.2 has 3 user
+        # reports found." A reader saw 7 and 3 on one page. Historically OBS coherence was restored
+        # only by the UNSCOPED --write-all in davinci-updates.yml, which is workflow_dispatch-only,
+        # so any record accumulating rows after the last manual run drifted until someone noticed.
+        #
+        # Scoped to --product-id, and positioned with the other promotions between reconciliation and
+        # the first QA -- see the PowerPoint step for why that gap must contain no validation.
+        # obs-studio DOES have a branch in _record_coherence_fields, and that is required here rather
+        # than avoided: its `quick_verdict` states the report count, so it is count-derived and stale
+        # too. All 51 commits on that record are automated (zero human), unlike premiere 26.2 which
+        # carries 6 hand commits and is not in scope for any promotion step.
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          python auxsays/scripts/apply_consensus_to_records.py \
+            --product-id obs-studio \
+            --write-all --confirm-write
+
       - name: Promote PowerPoint consensus to build-aware records
         # Scoped to microsoft-powerpoint via --product-id: no other product's promotion behaviour
         # changes. The engine is the existing generic one; identity is the canonical triple
@@ -132,7 +154,7 @@ jobs:
         # promotion rebuilds them. With QA in between, the first run after a PowerPoint population
         # emptied and refilled died on report_count_without_consensus_summary before this step ran,
         # taking the whole writeback with it -- so a cycle of OBS, DaVinci, Acrobat and Premiere
-        # evidence was never committed either. Reproduced. Both retractable products' promotions now
+        # evidence was never committed either. Reproduced. Every retractable product's promotion now
         # sit between reconciliation and the first QA, and a test asserts that for every product in
         # lib.report_counts.CONSENSUS_PROMOTION_PRODUCTS rather than for one product by name.
         if: ${{ github.event.inputs.dry_run != 'true' }}
