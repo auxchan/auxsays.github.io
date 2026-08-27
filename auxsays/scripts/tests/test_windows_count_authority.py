@@ -119,12 +119,6 @@ def consensus(rows, rec_front, pid, ver):
     return len(inc), exc
 
 
-def _zero_record(path: Path) -> Path:
-    """A record that honestly has no accepted reports -- the shape a real zero record has."""
-    record(path, ver="23H2", kb="KB5120240", build="22631.7517", count=0)
-    return path
-
-
 def flag_value(command: str, flag: str) -> str | None:
     """Value of `flag` in a shell command, accepting both `--flag value` and `--flag=value`.
 
@@ -352,9 +346,18 @@ def run() -> int:
           reconcile_i >= 0, str([st.get("name") for st in steps]))
     check("N5 promotion runs AFTER reconciliation",
           0 <= reconcile_i < win_i, f"reconcile={reconcile_i} windows={win_i}")
-    qa_after = [i for i, st in enumerate(steps)
-                if "qa_patch_records" in str(st.get("run") or "") and i > win_i]
-    check("N5 QA re-runs after the promotions", bool(qa_after), str(qa_after))
+    qa_steps = [i for i, st in enumerate(steps)
+                if "qa_patch_records" in str(st.get("run") or "")]
+    check("N5 QA runs after the promotion", any(i > win_i for i in qa_steps), str(qa_steps))
+    # And NOTHING validates in between. Reconciliation moves the number and retracts projections;
+    # the promotion is the only thing that rebuilds them. With a QA step in that gap, the first run
+    # after a rollover -- count back above zero, projections not yet regenerated -- failed
+    # report_count_without_consensus_summary and report_count_without_evidence_samples, so the job
+    # died before the promotion ran, the projections were never rebuilt, and every later run
+    # repeated it: a permanent wedge, reproduced. QA must see the state the writers finished.
+    check("N5 no QA runs between reconciliation and the Windows promotion",
+          not [i for i in qa_steps if reconcile_i < i < win_i],
+          f"reconcile={reconcile_i} qa={qa_steps} windows={win_i}")
     # Find the WRITEBACK step by what it runs, then read its --allow values as TOKENS and glob them
     # against a real record path. An earlier version asked whether "windows-11" and "--allow" both
     # appeared anywhere in the same step's run:, which the collection step satisfied by accident --
@@ -421,37 +424,6 @@ def run() -> int:
               "generated_report_count_mismatch" in codes, str(errors))
         check("QA names the canonical count, not the inflated one",
               any("12" in str(e.get("message", "")) for e in errors), str(errors))
-
-    # An EMPTY canonical population is a real expected count of zero. The gate used to `continue` on
-    # a missing key, so a rolled-over record claiming reports for a patch with no accepted evidence
-    # at all was never challenged -- blind in precisely the direction the Windows gate produces.
-    with tempfile.TemporaryDirectory() as td:
-        rec_path = Path(td) / "2026-06-23-windows-11-25h2.md"
-        record(rec_path, count=12, prose="12 user reports found for Windows 11 25H2.")
-        rolled, body = load_front_matter_and_body(rec_path)
-        rolled["target_kb"], rolled["target_os_build"] = "KB5130777", "26200.9400"
-        write_front_matter_and_body(rec_path, rolled, body)
-        # A SECOND record that still has accepted evidence, because production's map is never empty
-        # (124 keys live). scan_evidence_count_alignment returns early on a wholly empty map, and
-        # that guard is right: an unreadable evidence file must not flag all 905 records at once.
-        other = Path(td) / "2026-06-23-windows-11-26h1.md"
-        record(other, ver="26H1", kb="KB5121000", build="28000.2704", count=1)
-        rows = rows_25 + [row(ver="26H1", kb="KB5121000", build="28000.2704", feat="26H1",
-                              rid="ok26", url="https://x/ok26")]
-        orig_loader = qa.load_yaml
-        try:
-            qa.load_yaml = lambda *_a, **_k: rows
-            errors, _warn = qa.scan_evidence_count_alignment([rec_path, other])
-            zero_errors, _zw = qa.scan_evidence_count_alignment(
-                [_zero_record(Path(td) / "2026-06-09-windows-11-23h2.md"), other])
-        finally:
-            qa.load_yaml = orig_loader
-        rolled_errs = [e for e in errors if "25h2" in str(e.get("file", ""))]
-        check("QA challenges a record claiming reports for an EMPTY population",
-              any(e.get("code") == "generated_report_count_mismatch" for e in rolled_errs),
-              str(errors))
-        check("QA stays silent on a record that is honestly at zero",
-              not [e for e in zero_errors if "23h2" in str(e.get("file", ""))], str(zero_errors))
 
     # ---------- C11: a forgotten target map must be loud, never a silent zero ----------
     print("\n[C11] the target map is required, so a caller bug cannot publish 0")

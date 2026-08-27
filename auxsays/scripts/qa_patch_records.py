@@ -612,13 +612,17 @@ def scan_evidence_count_alignment(files: list[Path]) -> tuple[list[dict[str, str
         if not product_id or not version:
             continue
         key = patch_key(product_id, version, data.get("target_build"))
-        # An ABSENT key means the canonical population for this patch is EMPTY -- a real expected
-        # count of zero, not "nothing to check". Skipping it left this gate blind in exactly the
-        # direction the Windows identity gate now routinely produces: after a KB rollover every row
-        # for the record's previous patch stops counting, the key disappears from the map, and a
-        # record still claiming 12 reports sailed through unchallenged. A record legitimately at 0
-        # with no key still says nothing, so the 781 zero-count records stay silent.
-        expected = evidence_counts.get(key, 0)
+        # An absent key is NOT treated as an expected count of zero, deliberately. It would close a
+        # real blind spot -- after a KB rollover the key disappears and a record still claiming 12
+        # reports goes unchallenged -- but `patch-ingest.yml` runs this gate with NO reconcile step,
+        # and the rollover is exactly what that lane writes. Erroring here fails the run that
+        # performs the rollover, so its writeback never commits the new target and the rollover can
+        # never land: verified, a permanent cross-lane wedge. The obs lane's reconcile corrects the
+        # count within six hours, and `report_count_source_list_mismatch` surfaces the drift
+        # meanwhile. Closing this needs the lane to own a repair step, not a stricter gate here.
+        if key not in evidence_counts:
+            continue
+        expected = evidence_counts[key]
         actual = int(data.get("update_report_count") or data.get("confirmed_patch_specific_report_count") or 0)
         if actual != expected:
             add(
