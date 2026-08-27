@@ -53,9 +53,35 @@ jobs:
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: python auxsays/scripts/build_consensus_from_evidence.py
 
-      - name: Reconcile generated evidence records
+      - name: Promote DaVinci consensus to its records
+        # SCOPED to the one product this lane owns. It collects only blackmagic-davinci (see the
+        # collection step above), yet this promotion ran unscoped and therefore promoted all 905
+        # records. That is not theoretical: 23 minutes after the unscoped form was introduced in
+        # b5259931, run d0fd2b81 rewrote 2026-04-30-premiere-pro-26-2.md, replacing a hand-authored
+        # `consensus_report` ("Manually reviewed Adobe Community reports naming Premiere Pro 26.2 or
+        # 26.2.0 Build 65 describe timeline...") with generated template text. That damage is still
+        # on main. `--product-id` already existed when the unscoped line was written (8d93b72c, three
+        # days earlier), so the breadth was an unremarked side effect, never a contract.
+        #
+        # DaVinci is deliberately NOT in lib.report_counts.CONSENSUS_PROMOTION_PRODUCTS, so this
+        # scoped promotion carries no retraction obligation.
+        #
+        # The unscoped form DID serve as a projection-rebuild path for other products -- #75 says so
+        # outright, and it is measurable: running it rebuilds obs-studio 32.2.2 from 3 sources to 7.
+        # That is why removing it is only safe now: #75 gave obs-studio, powerpoint and windows-11
+        # their own scoped steps on obs-evidence-collection.yml, which runs on cron rather than
+        # dispatch. Acrobat Pro / Reader still have no scoped promotion anywhere -- see the steps
+        # added alongside the others in that lane.
+        #
+        # The writeback --allow below stays broad ON PURPOSE: the consensus step above runs a GLOBAL
+        # reconcile_record_counts, so non-DaVinci records can legitimately change their counts, and
+        # automation_writeback fails the whole run when the tree holds material the commit candidate
+        # omits. Narrowing the allow without also restoring those records would fail-close the lane.
         if: ${{ github.event.inputs.dry_run != 'true' }}
-        run: python auxsays/scripts/apply_consensus_to_records.py --write-all --confirm-write
+        run: |
+          python auxsays/scripts/apply_consensus_to_records.py \
+            --product-id blackmagic-davinci \
+            --write-all --confirm-write
 
       - name: QA patch records
         if: ${{ github.event.inputs.dry_run != 'true' }}

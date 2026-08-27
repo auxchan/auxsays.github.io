@@ -120,6 +120,32 @@ jobs:
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: python auxsays/scripts/build_consensus_from_evidence.py
 
+      - name: Promote Acrobat consensus to its counted population
+        # Acrobat Pro and Reader had NO scoped promotion anywhere. Their projections were rebuilt
+        # only by the UNSCOPED --write-all in davinci-updates.yml -- the same call that overwrote
+        # Premiere's hand-authored prose -- so scoping that lane (PR #76) would have left 83
+        # positive-count Acrobat records with no rebuild path at all, re-opening for Acrobat exactly
+        # the STALE_EXHAUSTIVE_PROJECTION class #75 closed for OBS. Reproduced: add one counted
+        # Acrobat row and the scoped lane leaves `report_count_source_list_mismatch` standing that
+        # the unscoped lane cleared.
+        #
+        # Two invocations because --product-id takes ONE value and Pro/Reader are distinct
+        # product_ids that are never merged. Neither is in CONSENSUS_PROMOTION_PRODUCTS, so neither
+        # is retraction-eligible; a promotion without retraction-eligibility is always safe, which is
+        # why the test invariant is `retractable SUBSET OF promoted` rather than equality.
+        #
+        # adobe-premiere-pro is deliberately absent and must stay absent: its record carries 6 hand
+        # commits and `_record_coherence_fields` has a premiere branch, so promoting it would replace
+        # human decision prose with generated text. That is the defect PR #76 exists to stop.
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        run: |
+          python auxsays/scripts/apply_consensus_to_records.py \
+            --product-id adobe-acrobat-pro \
+            --write-all --confirm-write
+          python auxsays/scripts/apply_consensus_to_records.py \
+            --product-id adobe-acrobat-reader \
+            --write-all --confirm-write
+
       - name: Promote OBS consensus to its counted population
         # OBS records were the last consensus product whose PROJECTIONS nothing in this lane
         # refreshed. Reconciliation writes the count and nothing else, so 2026-08-14-obs-studio-32-2-2

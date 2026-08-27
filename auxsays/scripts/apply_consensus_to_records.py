@@ -1336,6 +1336,17 @@ def main(argv: list[str] | None = None) -> int:
             print("ERROR: Write mode cannot use --candidate-file. Promote rows to production evidence first.", file=sys.stderr)
             return 2
 
+    # An explicitly supplied but EMPTY --product-id must never mean "every product". The filter is
+    # applied as `if product_id_filter:` (run_dry_run), so an empty string is falsy and silently
+    # widens the run to the whole corpus -- measured: `--product-id ""` with --write-all rewrites 8
+    # records across 4 products, byte-identical to passing no scope at all, while a MISSPELLED id
+    # correctly writes nothing. A caller that meant to scope and expanded a variable to nothing would
+    # get the unscoped blast radius and no error. Identity is uncertain here, so fail closed.
+    if args.product_id is not None and not str(args.product_id).strip():
+        print("ERROR: --product-id was supplied but is empty. Give a product id, or omit the flag "
+              "entirely to act on every product.", file=sys.stderr)
+        return 2
+
     if args.write:
         if not args.product_id:
             print("ERROR: --write requires --product-id.", file=sys.stderr)
