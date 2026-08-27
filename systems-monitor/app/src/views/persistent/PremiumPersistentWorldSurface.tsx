@@ -25,20 +25,16 @@ interface Props {
 const OVERVIEW_SCALE = .205;
 const AMBIENT_EDGE = "#315b67";
 
-function targetCamera(model: PersistentWorldReadModel, selectedPlacementId: string | null, fullWorld: boolean, viewportHeight = 720): Camera {
+function targetCamera(model: PersistentWorldReadModel, selectedPlacementId: string | null, fullWorld: boolean, viewportWidth = 980, viewportHeight = 720): Camera {
   const selected = selectedPlacementId ? model.placements[selectedPlacementId] : undefined;
   if (!selected || fullWorld) return { x: 0, y: 0, scale: fullWorld ? .17 : OVERVIEW_SCALE };
   if (selected.depth === 1) {
-    const distance = Math.max(1, Math.hypot(selected.x, selected.y));
-    const verticalSector = Math.abs(selected.y) / distance > .9;
-    const heightBoost = Math.max(1, Math.min(verticalSector ? 1.16 : 1.23, viewportHeight / 720));
-    const scale = (verticalSector ? 1.14 : 1.04) * heightBoost;
-    const outwardShift = 296 / scale;
-    return {
-      x: selected.x + (selected.x / distance) * outwardShift,
-      y: selected.y + (selected.y / distance) * outwardShift,
-      scale
-    };
+    const neighborhood = [selected, ...(model.childrenByPlacement[selected.id] ?? []).map((id) => model.placements[id])];
+    const xs = neighborhood.map((placement) => placement.x); const ys = neighborhood.map((placement) => placement.y);
+    const minX = Math.min(...xs); const maxX = Math.max(...xs); const minY = Math.min(...ys); const maxY = Math.max(...ys);
+    const worldWidth = Math.max(1, maxX - minX); const worldHeight = Math.max(1, maxY - minY);
+    const scale = Math.max(.82, Math.min(1.28, (viewportWidth - 170) / worldWidth, (viewportHeight - 170) / worldHeight));
+    return { x: (minX + maxX) / 2, y: (minY + maxY) / 2, scale };
   }
   return { x: selected.x, y: selected.y, scale: selected.depth === 2 ? 1.72 : 2.7 };
 }
@@ -113,10 +109,11 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
     const host = hostRef.current; const canvas = canvasRef.current; const context = canvas?.getContext("2d", { alpha: false });
     if (!host || !canvas || !context) return;
     let frame = 0; let last = performance.now(); let frameCount = 0; let accumulated = 0; const frameSamples: number[] = [];
-    let destination = targetCamera(model, selectedPlacementId, fullWorld, host.getBoundingClientRect().height); const cameraStarted = performance.now(); let cameraSettled = false;
+    const initialBounds = host.getBoundingClientRect();
+    let destination = targetCamera(model, selectedPlacementId, fullWorld, initialBounds.width, initialBounds.height); const cameraStarted = performance.now(); let cameraSettled = false;
     delete host.dataset.cameraSettleMs; if (reducedMotion) cameraRef.current = destination;
     const resize = () => {
-      const bounds = host.getBoundingClientRect(); const ratio = Math.min(2, window.devicePixelRatio || 1); destination = targetCamera(model, selectedPlacementId, fullWorld, bounds.height);
+      const bounds = host.getBoundingClientRect(); const ratio = Math.min(2, window.devicePixelRatio || 1); destination = targetCamera(model, selectedPlacementId, fullWorld, bounds.width, bounds.height);
       canvas.width = Math.max(1, Math.round(bounds.width * ratio)); canvas.height = Math.max(1, Math.round(bounds.height * ratio)); canvas.style.width = `${bounds.width}px`; canvas.style.height = `${bounds.height}px`; context.setTransform(ratio, 0, 0, ratio, 0, 0);
       if (reducedMotion) invalidateRef.current();
     };
@@ -187,7 +184,8 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
               anchorY = point.y + tangentY * side * (radius + 3);
             }
           }
-          labelCandidates.push({ id: placement.id, text: label, x: labelX, y: labelY, priority: placement.depth === 0 ? 100 : isSelected ? 90 : placement.depth === 1 ? 70 : placement.depth === 2 ? 50 : 20, width: textWidth, height: 22, accent, anchorX, anchorY });
+          const focusedExactTenChild = Boolean(selectedPlacementId && model.placements[selectedPlacementId]?.depth === 1 && placement.depth === 2 && placement.parentPlacementId === selectedPlacementId);
+          labelCandidates.push({ id: placement.id, text: label, x: labelX, y: labelY, priority: placement.depth === 0 ? 100 : isSelected ? 90 : placement.depth === 1 ? 70 : placement.depth === 2 ? 50 : 20, width: textWidth, height: 22, accent, anchorX, anchorY, required: focusedExactTenChild });
         }
         context.globalAlpha = 1;
       }

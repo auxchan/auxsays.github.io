@@ -1,5 +1,5 @@
 export const PERSISTENT_WORLD_SCHEMA = "persistent-world-0.1.0" as const;
-export const PERSISTENT_WORLD_LAYOUT = "employment-sectors-1.0.0" as const;
+export const PERSISTENT_WORLD_LAYOUT = "employment-sectors-1.1.0" as const;
 
 export type PersistentWorldDepth = 0 | 1 | 2 | 3;
 export type PersistentWorldRelationshipClass = "HIERARCHY_TETHER" | "SYNTHETIC_INFLUENCE";
@@ -130,8 +130,11 @@ export function createPersistentWorld(): PersistentWorldReadModel {
     relationships[`hierarchy:${outcomePlacementId}:${l1PlacementId}`] = { id: `hierarchy:${outcomePlacementId}:${l1PlacementId}`, fromPlacementId: outcomePlacementId, toPlacementId: l1PlacementId, relationshipClass: "HIERARCHY_TETHER", status: "TEST_FIXTURE", evidenceClass: "SYNTHETIC", publicationEligibility: "NEVER_ACCEPTED_NEVER_PUBLISHED" };
 
     driver.children.forEach((label, level2Index) => {
-      const l2Angle = sectorAngle + (level2Index - 4.5) * 0.082;
-      const l2Radius = 430 + (level2Index % 2) * 72;
+      // Keep every exact-ten neighborhood legible as a camera destination.
+      // The wider fan is part of the versioned layout, not an interaction-time
+      // mutation, so selection still moves the camera through one fixed world.
+      const l2Angle = sectorAngle + (level2Index - 4.5) * 0.145;
+      const l2Radius = 500 + (level2Index % 2) * 74;
       const l2FactorId = `factor:${driver.id}:${slug(label)}`;
       const l2PlacementId = `placement:${driver.id}:${slug(label)}`;
       const l2X = round(l1X + Math.cos(l2Angle) * l2Radius);

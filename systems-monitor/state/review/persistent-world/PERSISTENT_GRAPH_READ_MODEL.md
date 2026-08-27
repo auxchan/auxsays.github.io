@@ -17,6 +17,11 @@ worldId + graphSnapshotId + layoutVersion + topologyFingerprint
 Selection never creates factors, placements, relationships, or coordinates.
 The browser derives only camera, LOD, emphasis, and inspector context.
 
+Layout `employment-sectors-1.1.0` widens every Level-1 exact-ten fan and fits
+the focus camera to the selected immutable neighborhood. All ten child labels
+are retained with deterministic collision recovery rather than silently
+dropping crowded labels.
+
 The model distinguishes:
 
 - `MASTER_DEFINED` Level-1 driver identities;
@@ -24,6 +29,11 @@ The model distinguishes:
 - `TEST_FIXTURE` Level-3 renderer records;
 - `HIERARCHY_TETHER` navigation relationships;
 - `SYNTHETIC_INFLUENCE` stress relationships.
+
+All 100 Level-2 candidates have a separate review-only source profile with one
+of two states: `CANDIDATE_DATASET` or `DERIVATION_REQUIRED`. The inspector may
+show that profile, but only the existing accepted factual bridge may show an
+observation value.
 
 Every relationship is synthetic, test-only, never accepted, and never
 publishable. Factual observations remain in the separate Workstream-1A

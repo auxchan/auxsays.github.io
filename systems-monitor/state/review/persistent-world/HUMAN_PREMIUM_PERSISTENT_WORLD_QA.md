@@ -6,7 +6,7 @@ Preview: `http://127.0.0.1:4174/systems-monitor/#persistent-world`
 
 ## Automated evidence
 
-- topology fingerprint before/after: `fnv1a32:d8ccde70` / `fnv1a32:d8ccde70`;
+- intentional layout-version change: `employment-sectors-1.0.0` / `fnv1a32:d8ccde70` → `employment-sectors-1.1.0` / `fnv1a32:73cac7b9`;
 - resident world: 1,111 placements / 3,110 relationships;
 - exact-ten semantic overview: 11 nodes including Outcome;
 - 50-selection invariance: PASS;
@@ -17,12 +17,12 @@ Preview: `http://127.0.0.1:4174/systems-monitor/#persistent-world`
 ## Exact-ten focus crowding correction
 
 - every Level-1 focus keeps the selected node, its parent, and all ten Level-2 children in the same immutable world;
-- Level-1 camera framing is offset toward the child neighborhood without changing any canonical coordinate;
+- every Level-1 exact-ten fan uses a wider versioned layout and the camera fits the full immutable neighborhood;
 - the ten child nodes use ten deterministic hues within their parent sector palette;
 - converging focus rails are narrower and their glow is reduced while retaining the fixed light-trail timing;
-- Level-2 labels are placed outward from their parent and collision-suppressed deterministically;
-- all ten Level-1 sectors were exercised in the in-app browser: 12 semantic nodes each, 5–8 collision-safe labels, and 1.4–1.9 ms focused draw p95;
-- topology fingerprint remains `fnv1a32:d8ccde70`.
+- Level-2 labels are placed outward from their parent and use bounded deterministic collision recovery;
+- all ten Level-1 sectors were exercised in the in-app browser: 12 semantic nodes each, all ten child labels plus the selected-parent label retained, and 2.1–2.7 ms focused draw p95;
+- the new topology/layout fingerprint is `fnv1a32:73cac7b9` and remains invariant during selection, pan, zoom, Trace, and Reset.
 
 ## Subject-detail and inspector correction
 
@@ -35,20 +35,22 @@ Preview: `http://127.0.0.1:4174/systems-monitor/#persistent-world`
 - Policy and government subjects use the public-domain U.S. Capitol image from the Library of Congress; rates and credit subjects use the public-domain Federal Reserve Eccles Building image from the Board of Governors;
 - the persistent-world fixture does not display a current statistic until an accepted source, series, unit, observation period, release time, and provenance binding exist;
 - factual Labor Market remains the current destination for accepted live readings; no fixture node or hierarchy placement was promoted to factual evidence;
-- topology fingerprint remains `fnv1a32:d8ccde70`.
+- topology/layout fingerprint remains `fnv1a32:73cac7b9` after interaction.
 
 ## Factual-binding and readability correction
 
 - four persistent-world factor placements now resolve read-only to already accepted factual observations: Labor-Force Participation, Initial Claims, Job Openings, and Hires;
 - connected nodes expose the accepted value, represented period, source authority, exact series ID, original evidence, methodology, acquisition record, and freshness in the inspector;
 - Average Weekly Hours, Average Hourly Earnings, and Employment-Population Ratio are explicitly marked `SOURCE_IDENTIFIED` without displaying a value because their candidate series have not completed intake and acceptance;
-- every other named factor remains visibly `UNMAPPED`/binding pending; the interface does not convert taxonomy placement into a data claim;
-- the header reports `4 factual nodes linked`, `3 sources staged`, and `6 accepted labor readings` so current coverage is obvious;
+- every one of the 100 Level-2 factors now exposes either a review-only official dataset profile or an explicit derivation/source-design requirement; the interface does not convert that candidate path into a data claim;
+- each candidate profile states authority, dataset, cadence, registration state, and official review link; only accepted bindings display a value;
+- every selected node exposes its parent hierarchy tether, organizational meaning, and `None` for accepted structural relationship;
+- the header reports `100 dataset paths cataloged`, `4 factual nodes linked`, and `6 accepted labor readings` so source planning and factual coverage cannot be confused;
 - the 100 named Level-2 placements receive stable semantic glyphs with deterministic child-specific markers; the ten Labor Supply factors use ten distinct pictograms;
-- focused exact-ten labels alternate into tangent lanes with quiet leader lines, reducing connector/label collisions without changing node coordinates;
+- focused exact-ten labels alternate into tangent lanes with quiet leader lines and bounded collision recovery;
 - diagonal focus framing is tighter and the graph workspace is taller so dense neighborhoods remain readable at ordinary browser sizes;
-- focus scale now responds to the actual graph height: larger desktop workspaces spread the same fixed nodes farther apart, while smaller windows retain the compact safe framing;
-- in-app browser audit confirmed the unchanged `fnv1a32:d8ccde70` topology fingerprint and approximately 1.9–2.1 ms focused draw p95;
+- every Level-1 focus camera now uses the actual graph width and height to fit the selected neighborhood without clipping outer children;
+- in-app browser audit confirmed `fnv1a32:73cac7b9`, 11 rendered focus labels for every one of the ten Level-1 sectors, and 2.1–2.7 ms focused draw p95;
 - no network fetch, public activation, synthetic value, new relationship, Gate-B change, or deployment is introduced by this bridge.
 
 ## Taylor visual review

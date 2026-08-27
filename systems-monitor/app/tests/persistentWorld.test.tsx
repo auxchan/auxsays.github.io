@@ -4,6 +4,7 @@ import { SnapshotProvider } from "../src/app/SnapshotContext";
 import { SystemsMonitorApp } from "../src/app/SystemsMonitorApp";
 import { createPersistentWorld, employmentDriverCandidates, persistentWorldFingerprint, persistentWorldSelectionSequence } from "../src/data/persistentWorldModel";
 import { persistentWorldFactualBinding } from "../src/data/persistentWorldFactualBindings";
+import { PERSISTENT_WORLD_PROFILED_FACTOR_COUNT, persistentWorldCandidateSourceProfile } from "../src/data/persistentWorldSourceCatalog";
 import { persistentWorldMediaFor } from "../src/views/persistent/persistentWorldMedia";
 import { PERSISTENT_GLINT_PERIOD_MS, PERSISTENT_GLINT_TRAIL, blendPremiumColor, easePremiumHover, factorGlyph, persistentGlintProgress, persistentPlacementAccent, premiumCurveRoute, resolvePersistentLod, resolvePremiumLabels } from "../src/views/persistent/persistentWorldVisuals";
 
@@ -62,6 +63,15 @@ describe("premium persistent-world visual language", () => {
     expect(persistentWorldFactualBinding("Geographic Mobility").status).toBe("UNMAPPED");
   });
 
+  it("catalogs an explicit official-data or derivation path for every Level-2 factor", () => {
+    const model = createPersistentWorld();
+    const level2 = Object.values(model.placements).filter((placement) => placement.depth === 2);
+    expect(PERSISTENT_WORLD_PROFILED_FACTOR_COUNT).toBe(100);
+    expect(level2.every((placement) => persistentWorldCandidateSourceProfile(model.factors[placement.canonicalFactorId].label))).toBe(true);
+    expect(persistentWorldCandidateSourceProfile("Fiscal Policy")).toMatchObject({ authority: "U.S. Department of the Treasury", readiness: "CANDIDATE_DATASET" });
+    expect(persistentWorldCandidateSourceProfile("Geopolitical Risk")).toMatchObject({ readiness: "DERIVATION_REQUIRED", registrationState: "SOURCE_DESIGN_REQUIRED" });
+  });
+
   it("provides reviewed local imagery and lets fixture details inherit named context", () => {
     const model = createPersistentWorld();
     const fiscal = model.placements["placement:policy-trade-external-shocks:fiscal-policy"];
@@ -112,6 +122,16 @@ describe("persistent Employment influence world model", () => {
     level1.forEach((item) => expect(model.childrenByPlacement[item.id]).toHaveLength(10));
     level2.forEach((item) => expect(model.childrenByPlacement[item.id]).toHaveLength(10));
     expect(employmentDriverCandidates.map((item) => item.label)).toEqual(["Output & Growth", "Consumer Demand", "Employer Labor Demand", "Layoffs & Job Destruction", "Business Investment", "Rates & Credit", "Labor Costs & Wages", "Productivity & Automation", "Labor Supply", "Policy, Trade & External Shocks"]);
+  });
+
+  it("uses the widened versioned fan for every Level-1 exact-ten neighborhood", () => {
+    const model = createPersistentWorld();
+    expect(model.layoutVersion).toBe("employment-sectors-1.1.0");
+    for (const parent of Object.values(model.placements).filter((placement) => placement.depth === 1)) {
+      const children = model.childrenByPlacement[parent.id].map((id) => model.placements[id]);
+      const neighborDistances = children.slice(1).map((child, index) => Math.hypot(child.x - children[index].x, child.y - children[index].y));
+      expect(Math.min(...neighborDistances)).toBeGreaterThan(90);
+    }
   });
 
   it("keeps topology, coordinates, and relationship identity invariant across 50 deterministic selections and reset", () => {
@@ -177,6 +197,8 @@ describe("persistent world local-review shell", () => {
     expect(surface.getAttribute("data-resident-placement-count")).toBe("1111");
     expect(screen.getAllByText(/Synthetic renderer record/)).toHaveLength(10);
     expect(within(inspector).getByRole("heading", { name: "Latest accepted reading" })).toBeTruthy();
+    expect(within(inspector).getByRole("heading", { name: "How it connects" })).toBeTruthy();
+    expect(within(inspector).getByText("Hierarchy tether · active")).toBeTruthy();
     expect(within(inspector).getByRole("link", { name: "Original evidence" }).getAttribute("href")).toBe("https://data.bls.gov/timeseries/JTS000000000000000JOL");
     fireEvent.doubleClick(surface, { clientX: -100, clientY: -100 });
     expect(surface.getAttribute("data-selected-placement-id")).toBe("");

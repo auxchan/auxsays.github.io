@@ -21,9 +21,18 @@ economic relationship.
 | Policy, Trade & External Shocks | Fiscal Policy; Trade Volumes; Tariffs and Restrictions; Energy Supply; Food and Agriculture Supply; Weather Disruption; Public Health Disruption; Geopolitical Risk; Transportation Bottlenecks; Regulatory Change | Treasury, Census/USITC, EIA, USDA, NOAA, FEMA, BTS | CANDIDATE / broad-branch taxonomy risk |
 
 Each machine-readable entry in `persistentWorldModel.ts` carries a stable
-candidate ID, parent, definition, source family, and evidence posture. Cadence,
-units, geography, exact dataset/series, references, rights, and relationship
-evidence must be supplied by later source-specific profiles before promotion.
+candidate ID, parent, definition, source family, and evidence posture.
+`persistentWorldSourceCatalog.ts` now supplies a review-only official dataset
+path or an explicit `DERIVATION_REQUIRED` state for all 100 Level-2 factors.
+Those profiles identify authority, dataset family, expected cadence, and an
+official review URL. They do **not** register, ingest, accept, or publish a
+source. Exact series, units, geography, rights, parser, provenance, and
+relationship evidence remain required before any candidate can display a
+current value.
+
+The local inspector also shows the current hierarchy tether and its meaning.
+No hierarchy tether is described as causal, weighted, or propagating, and the
+accepted structural-relationship count remains zero.
 
 ## Level-3 scaling
 

@@ -50,6 +50,14 @@
 [data-aux-product="systems-monitor"] .sm-pw-inspector__data-actions { display: flex; flex-wrap: wrap; gap: 7px 12px; }
 [data-aux-product="systems-monitor"] .sm-pw-inspector__data-actions a { text-decoration-thickness: 1px; text-underline-offset: 3px; }
 [data-aux-product="systems-monitor"] .sm-pw-inspector__data-boundary.is-staged { border-color: rgba(240,189,100,.36) !important; background: rgba(75,59,31,.25); }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__data-boundary.is-candidate { border-color: rgba(98,190,221,.38) !important; background: linear-gradient(145deg,rgba(22,78,99,.28),rgba(10,43,55,.3)); }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__data-boundary.is-design { border-color: rgba(196,145,232,.34) !important; background: rgba(66,38,84,.23); }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__data-boundary dl,[data-aux-product="systems-monitor"] .sm-pw-inspector__connector dl { display: grid; gap: 8px; margin: 11px 0 13px; }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__data-boundary dl div,[data-aux-product="systems-monitor"] .sm-pw-inspector__connector dl div { display: grid; grid-template-columns: 94px minmax(0,1fr); gap: 10px; }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__data-boundary dt,[data-aux-product="systems-monitor"] .sm-pw-inspector__connector dt { color: #6fa4ae; font-size: 10px; font-weight: 750; letter-spacing: .07em; text-transform: uppercase; }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__data-boundary dd,[data-aux-product="systems-monitor"] .sm-pw-inspector__connector dd { margin: 0; color: #dcebef; font-size: 12px; line-height: 1.35; }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__connector { border-left: 2px solid rgba(111,228,208,.34); padding-left: 14px !important; }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__connector p { margin: 8px 0 0; color: #8fb0b7; font-size: 12px; }
 [data-aux-product="systems-monitor"] .sm-pw-inspector__credit { display: grid; gap: 5px; margin-top: 22px; padding-top: 16px; border-top: 1px solid #17343e; }
 [data-aux-product="systems-monitor"] .sm-pw-inspector__credit span { color: #6f9298; font-size: 10px; text-transform: uppercase; letter-spacing: .06em; }
 [data-aux-product="systems-monitor"] .sm-pw-inspector__credit a { color: #86bbb9; font-size: 11px; line-height: 1.4; }

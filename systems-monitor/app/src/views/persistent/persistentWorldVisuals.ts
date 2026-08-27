@@ -2,7 +2,7 @@ import type { PersistentWorldDepth, PersistentWorldPlacement } from "../../data/
 
 export interface Point { x: number; y: number }
 export interface CubicRoute { start: Point; control1: Point; control2: Point; end: Point }
-export interface LabelCandidate { id: string; text: string; x: number; y: number; priority: number; width: number; height: number; accent: string; anchorX?: number; anchorY?: number }
+export interface LabelCandidate { id: string; text: string; x: number; y: number; priority: number; width: number; height: number; accent: string; anchorX?: number; anchorY?: number; required?: boolean }
 export interface ResolvedLabel extends LabelCandidate { left: number; top: number }
 
 export const PERSISTENT_GLINT_PERIOD_MS = 2500;
@@ -119,10 +119,16 @@ export function resolvePersistentLod(depth: PersistentWorldDepth, effectiveScale
 export function resolvePremiumLabels(candidates: readonly LabelCandidate[], width: number, height: number) {
   const accepted: ResolvedLabel[] = [];
   for (const candidate of [...candidates].sort((left, right) => right.priority - left.priority || left.id.localeCompare(right.id))) {
-    const resolved = { ...candidate, left: candidate.x - candidate.width / 2, top: candidate.y - candidate.height / 2 };
-    if (resolved.left < 8 || resolved.top < 8 || resolved.left + resolved.width > width - 8 || resolved.top + resolved.height > height - 8) continue;
-    const collides = accepted.some((item) => resolved.left < item.left + item.width + 8 && resolved.left + resolved.width + 8 > item.left && resolved.top < item.top + item.height + 6 && resolved.top + resolved.height + 6 > item.top);
-    if (!collides) accepted.push(resolved);
+    const attempts = candidate.required ? [[0,0],[0,-26],[0,26],[-28,0],[28,0],[-28,-26],[28,26],[-56,0],[56,0],[0,-52],[0,52],[-56,-26],[56,26],[-84,0],[84,0],[0,-78],[0,78]] : [[0,0]];
+    for (const [offsetX, offsetY] of attempts) {
+      const rawX = candidate.x + offsetX; const rawY = candidate.y + offsetY;
+      const x = candidate.required ? Math.max(8 + candidate.width / 2, Math.min(width - 8 - candidate.width / 2, rawX)) : rawX;
+      const y = candidate.required ? Math.max(8 + candidate.height / 2, Math.min(height - 8 - candidate.height / 2, rawY)) : rawY;
+      const resolved = { ...candidate, x, y, left: x - candidate.width / 2, top: y - candidate.height / 2 };
+      if (resolved.left < 8 || resolved.top < 8 || resolved.left + resolved.width > width - 8 || resolved.top + resolved.height > height - 8) continue;
+      const collides = accepted.some((item) => resolved.left < item.left + item.width + 8 && resolved.left + resolved.width + 8 > item.left && resolved.top < item.top + item.height + 6 && resolved.top + resolved.height + 6 > item.top);
+      if (!collides) { accepted.push(resolved); break; }
+    }
   }
   return accepted;
 }
