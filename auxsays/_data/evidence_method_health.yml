@@ -17206,16 +17206,16 @@ methods:
   method_id: learn_qna_search_rss
   source_type: microsoft_learn_qna
   status: no_results
-  candidates_found: 4
+  candidates_found: 5
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 4
+  rejected_reports: 5
   blocked_reason: ''
-  last_run: '2026-08-27T10:57:43Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2312, PowerPoint Version 2312, PowerPoint 17126.20126. Candidates 4, accepted 0, rejected 4. Top rejections: missing_powerpoint_version=4. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+  last_run: '2026-08-27T23:24:14Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2312, PowerPoint Version 2312, PowerPoint 17126.20126. Candidates 5, accepted 0, rejected 5. Top rejections: missing_powerpoint_version=5. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2312'
   target_build: '17126.20126'
@@ -17230,7 +17230,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-27T10:58:24Z'
+  last_run: '2026-08-27T23:25:00Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2403'
@@ -17238,16 +17238,16 @@ methods:
   method_id: learn_qna_search_rss
   source_type: microsoft_learn_qna
   status: no_results
-  candidates_found: 5
+  candidates_found: 6
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 5
+  rejected_reports: 6
   blocked_reason: ''
-  last_run: '2026-08-27T10:57:43Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2403, PowerPoint Version 2403, PowerPoint 17425.20138. Candidates 5, accepted 0, rejected 5. Top rejections: missing_powerpoint_version=4, product_not_powerpoint=1. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+  last_run: '2026-08-27T23:24:14Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2403, PowerPoint Version 2403, PowerPoint 17425.20138. Candidates 6, accepted 0, rejected 6. Top rejections: missing_powerpoint_version=5, product_not_powerpoint=1. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2403'
   target_build: '17425.20138'
@@ -17262,7 +17262,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-27T10:58:24Z'
+  last_run: '2026-08-27T23:25:00Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2404'
@@ -17278,7 +17278,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 2
   blocked_reason: ''
-  last_run: '2026-08-27T10:57:43Z'
+  last_run: '2026-08-27T23:24:14Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2404, PowerPoint Version 2404, PowerPoint 17531.20152. Candidates 2, accepted 0, rejected 2. Top rejections: missing_powerpoint_version=2. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2404'
@@ -17294,7 +17294,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-27T10:58:24Z'
+  last_run: '2026-08-27T23:25:00Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2405'
@@ -17302,16 +17302,16 @@ methods:
   method_id: learn_qna_search_rss
   source_type: microsoft_learn_qna
   status: no_results
-  candidates_found: 5
+  candidates_found: 6
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 5
+  rejected_reports: 6
   blocked_reason: ''
-  last_run: '2026-08-27T10:57:43Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2405, PowerPoint Version 2405, PowerPoint 17628.20110. Candidates 5, accepted 0, rejected 5. Top rejections: missing_powerpoint_version=3, product_not_powerpoint=2. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+  last_run: '2026-08-27T23:24:14Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2405, PowerPoint Version 2405, PowerPoint 17628.20110. Candidates 6, accepted 0, rejected 6. Top rejections: missing_powerpoint_version=4, product_not_powerpoint=2. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2405'
   target_build: '17628.20110'
@@ -17326,7 +17326,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-27T10:58:24Z'
+  last_run: '2026-08-27T23:25:00Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2406'
@@ -17342,7 +17342,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 2
   blocked_reason: ''
-  last_run: '2026-08-27T10:57:43Z'
+  last_run: '2026-08-27T23:24:14Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2406, PowerPoint Version 2406, PowerPoint 17726.20126. Candidates 2, accepted 0, rejected 2. Top rejections: missing_powerpoint_version=2. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2406'
@@ -17358,7 +17358,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-27T10:58:24Z'
+  last_run: '2026-08-27T23:25:00Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2407'
@@ -17366,16 +17366,16 @@ methods:
   method_id: learn_qna_search_rss
   source_type: microsoft_learn_qna
   status: no_results
-  candidates_found: 6
+  candidates_found: 5
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 6
+  rejected_reports: 5
   blocked_reason: ''
-  last_run: '2026-08-27T10:57:43Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2407, PowerPoint Version 2407, PowerPoint 17830.20138. Candidates 6, accepted 0, rejected 6. Top rejections: missing_powerpoint_version=3, product_not_powerpoint=3. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+  last_run: '2026-08-27T23:24:14Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2407, PowerPoint Version 2407, PowerPoint 17830.20138. Candidates 5, accepted 0, rejected 5. Top rejections: missing_powerpoint_version=2, product_not_powerpoint=3. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2407'
   target_build: '17830.20138'
@@ -17390,7 +17390,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-27T10:58:24Z'
+  last_run: '2026-08-27T23:25:00Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2408'
@@ -17398,16 +17398,16 @@ methods:
   method_id: learn_qna_search_rss
   source_type: microsoft_learn_qna
   status: no_results
-  candidates_found: 1
+  candidates_found: 2
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 1
+  rejected_reports: 2
   blocked_reason: ''
-  last_run: '2026-08-27T10:57:43Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2408, PowerPoint Version 2408, PowerPoint 17928.20114. Candidates 1, accepted 0, rejected 1. Top rejections: missing_powerpoint_version=1. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+  last_run: '2026-08-27T23:24:14Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2408, PowerPoint Version 2408, PowerPoint 17928.20114. Candidates 2, accepted 0, rejected 2. Top rejections: missing_powerpoint_version=2. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2408'
   target_build: '17928.20114'
@@ -17422,7 +17422,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-27T10:58:24Z'
+  last_run: '2026-08-27T23:25:00Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2409'
@@ -17430,16 +17430,16 @@ methods:
   method_id: learn_qna_search_rss
   source_type: microsoft_learn_qna
   status: no_results
-  candidates_found: 4
+  candidates_found: 5
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 4
+  rejected_reports: 5
   blocked_reason: ''
-  last_run: '2026-08-27T10:57:43Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2409, PowerPoint Version 2409, PowerPoint 18025.20096. Candidates 4, accepted 0, rejected 4. Top rejections: missing_powerpoint_version=4. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+  last_run: '2026-08-27T23:24:14Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2409, PowerPoint Version 2409, PowerPoint 18025.20096. Candidates 5, accepted 0, rejected 5. Top rejections: missing_powerpoint_version=5. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2409'
   target_build: '18025.20096'
@@ -17454,7 +17454,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-27T10:58:24Z'
+  last_run: '2026-08-27T23:25:00Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2410'
@@ -17470,7 +17470,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 3
   blocked_reason: ''
-  last_run: '2026-08-27T10:57:43Z'
+  last_run: '2026-08-27T23:24:14Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2410, PowerPoint Version 2410, PowerPoint 18129.20158. Candidates 3, accepted 0, rejected 3. Top rejections: missing_powerpoint_version=3. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2410'
@@ -17486,7 +17486,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-27T10:58:24Z'
+  last_run: '2026-08-27T23:25:00Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2411'
@@ -17494,16 +17494,16 @@ methods:
   method_id: learn_qna_search_rss
   source_type: microsoft_learn_qna
   status: no_results
-  candidates_found: 4
+  candidates_found: 5
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 4
+  rejected_reports: 5
   blocked_reason: ''
-  last_run: '2026-08-27T10:57:43Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2411, PowerPoint Version 2411, PowerPoint 18227.20152. Candidates 4, accepted 0, rejected 4. Top rejections: missing_powerpoint_version=4. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+  last_run: '2026-08-27T23:24:14Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2411, PowerPoint Version 2411, PowerPoint 18227.20152. Candidates 5, accepted 0, rejected 5. Top rejections: missing_powerpoint_version=5. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2411'
   target_build: '18227.20152'
@@ -17518,7 +17518,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-27T10:58:24Z'
+  last_run: '2026-08-27T23:25:00Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2501'
@@ -17534,7 +17534,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 4
   blocked_reason: ''
-  last_run: '2026-08-27T10:57:43Z'
+  last_run: '2026-08-27T23:24:14Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2501, PowerPoint Version 2501, PowerPoint 18429.20132. Candidates 4, accepted 0, rejected 4. Top rejections: missing_powerpoint_version=4. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2501'
@@ -17550,7 +17550,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-27T10:58:24Z'
+  last_run: '2026-08-27T23:25:00Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2502'
@@ -17566,7 +17566,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: learn_qna_search_fetch_failed:blocked:login_or_auth_challenge
-  last_run: '2026-08-27T10:57:43Z'
+  last_run: '2026-08-27T23:24:14Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2502, PowerPoint Version 2502, PowerPoint 18526.20144. Candidates 0, accepted 0, rejected 0. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2502'
@@ -17582,7 +17582,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-27T10:58:24Z'
+  last_run: '2026-08-27T23:25:00Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2503'
@@ -17590,16 +17590,16 @@ methods:
   method_id: learn_qna_search_rss
   source_type: microsoft_learn_qna
   status: no_results
-  candidates_found: 6
+  candidates_found: 7
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 6
+  rejected_reports: 7
   blocked_reason: ''
-  last_run: '2026-08-27T10:57:43Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2503, PowerPoint Version 2503, PowerPoint 18623.20156. Candidates 6, accepted 0, rejected 6. Top rejections: missing_powerpoint_version=4, product_not_powerpoint=2. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+  last_run: '2026-08-27T23:24:14Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2503, PowerPoint Version 2503, PowerPoint 18623.20156. Candidates 7, accepted 0, rejected 7. Top rejections: missing_powerpoint_version=5, product_not_powerpoint=2. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2503'
   target_build: '18623.20156'
@@ -17614,7 +17614,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-27T10:58:24Z'
+  last_run: '2026-08-27T23:25:00Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2504'
@@ -17630,7 +17630,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 5
   blocked_reason: ''
-  last_run: '2026-08-27T10:57:43Z'
+  last_run: '2026-08-27T23:24:14Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2504, PowerPoint Version 2504, PowerPoint 18730.20122. Candidates 5, accepted 0, rejected 5. Top rejections: missing_powerpoint_version=5. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2504'
@@ -17646,7 +17646,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-27T10:58:24Z'
+  last_run: '2026-08-27T23:25:00Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2506'
@@ -17662,7 +17662,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 6
   blocked_reason: ''
-  last_run: '2026-08-27T10:57:43Z'
+  last_run: '2026-08-27T23:24:14Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2506, PowerPoint Version 2506, PowerPoint 18925.20184. Candidates 6, accepted 0, rejected 6. Top rejections: missing_powerpoint_version=5, product_not_powerpoint=1. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2506'
@@ -17678,7 +17678,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-27T10:58:24Z'
+  last_run: '2026-08-27T23:25:00Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2601'
@@ -17686,16 +17686,16 @@ methods:
   method_id: learn_qna_search_rss
   source_type: microsoft_learn_qna
   status: no_results
-  candidates_found: 5
+  candidates_found: 6
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 5
+  rejected_reports: 6
   blocked_reason: ''
-  last_run: '2026-08-27T10:57:43Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2601, PowerPoint Version 2601, PowerPoint 19628.20150. Candidates 5, accepted 0, rejected 5. Top rejections: missing_powerpoint_version=4, product_not_powerpoint=1. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+  last_run: '2026-08-27T23:24:14Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2601, PowerPoint Version 2601, PowerPoint 19628.20150. Candidates 6, accepted 0, rejected 6. Top rejections: missing_powerpoint_version=5, product_not_powerpoint=1. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2601'
   target_build: '19628.20150'
@@ -17710,7 +17710,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-27T10:58:24Z'
+  last_run: '2026-08-27T23:25:00Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2602'
@@ -17726,7 +17726,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 13
   blocked_reason: ''
-  last_run: '2026-08-27T10:57:43Z'
+  last_run: '2026-08-27T23:24:14Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2602, PowerPoint Version 2602, PowerPoint 19725.20126. Candidates 13, accepted 0, rejected 13. Top rejections: missing_powerpoint_version=5, product_not_powerpoint=8. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2602'
@@ -17742,7 +17742,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-27T10:58:24Z'
+  last_run: '2026-08-27T23:25:00Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2603'
@@ -17750,16 +17750,16 @@ methods:
   method_id: learn_qna_search_rss
   source_type: microsoft_learn_qna
   status: no_results
-  candidates_found: 6
+  candidates_found: 7
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 6
+  rejected_reports: 7
   blocked_reason: ''
-  last_run: '2026-08-27T10:57:43Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2603, PowerPoint Version 2603, PowerPoint 19822.20182. Candidates 6, accepted 0, rejected 6. Top rejections: missing_powerpoint_version=4, product_not_powerpoint=2. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+  last_run: '2026-08-27T23:24:14Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2603, PowerPoint Version 2603, PowerPoint 19822.20182. Candidates 7, accepted 0, rejected 7. Top rejections: missing_powerpoint_version=5, product_not_powerpoint=2. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2603'
   target_build: '19822.20182'
@@ -17774,7 +17774,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-27T10:58:24Z'
+  last_run: '2026-08-27T23:25:00Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2605'
@@ -17790,8 +17790,8 @@ methods:
   accepted_reports: 0
   rejected_reports: 21
   blocked_reason: ''
-  last_run: '2026-08-27T10:57:43Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2605, PowerPoint Version 2605, PowerPoint 20026.20076. Candidates 21, accepted 0, rejected 21. Top rejections: build_mismatch=1, missing_powerpoint_version=4, product_not_powerpoint=16. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+  last_run: '2026-08-27T23:24:14Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2605, PowerPoint Version 2605, PowerPoint 20026.20076. Candidates 21, accepted 0, rejected 21. Top rejections: build_mismatch=1, missing_powerpoint_version=5, product_not_powerpoint=15. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2605'
   target_build: '20026.20076'
@@ -17806,7 +17806,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-27T10:58:24Z'
+  last_run: '2026-08-27T23:25:00Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2607'
@@ -17814,16 +17814,16 @@ methods:
   method_id: learn_qna_search_rss
   source_type: microsoft_learn_qna
   status: no_results
-  candidates_found: 43
+  candidates_found: 44
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 43
+  rejected_reports: 44
   blocked_reason: ''
-  last_run: '2026-08-27T10:57:43Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2607, PowerPoint Version 2607, PowerPoint 20228.20110. Candidates 43, accepted 0, rejected 43. Top rejections: missing_exact_build=3, missing_powerpoint_version=4, product_not_powerpoint=36. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+  last_run: '2026-08-27T23:24:14Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2607, PowerPoint Version 2607, PowerPoint 20228.20110. Candidates 44, accepted 0, rejected 44. Top rejections: missing_exact_build=3, missing_powerpoint_version=5, product_not_powerpoint=36. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2607'
   target_build: '20228.20110'
@@ -17838,7 +17838,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-27T10:58:24Z'
+  last_run: '2026-08-27T23:25:00Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2607'
@@ -17854,5 +17854,69 @@ methods:
   accepted_reports: 1
   rejected_reports: 2
   blocked_reason: ''
-  last_run: '2026-08-27T10:58:23Z'
+  last_run: '2026-08-27T23:25:00Z'
   notes: segment-scoped exact-build resolution; fetches=3
+- product_id: microsoft-powerpoint
+  update_version: '2608'
+  target_build: '20326.20100'
+  method_id: learn_qna_search_rss
+  source_type: microsoft_learn_qna
+  status: no_results
+  candidates_found: 22
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 22
+  blocked_reason: ''
+  last_run: '2026-08-27T23:24:14Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2608, PowerPoint Version 2608, PowerPoint 20326.20100. Candidates 22, accepted 0, rejected 22. Top rejections: missing_powerpoint_version=6, product_not_powerpoint=16. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+- product_id: microsoft-powerpoint
+  update_version: '2608'
+  target_build: '20326.20112'
+  method_id: learn_qna_search_rss
+  source_type: microsoft_learn_qna
+  status: no_results
+  candidates_found: 22
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 22
+  blocked_reason: ''
+  last_run: '2026-08-27T23:24:14Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2608, PowerPoint Version 2608, PowerPoint 20326.20112. Candidates 22, accepted 0, rejected 22. Top rejections: missing_powerpoint_version=6, product_not_powerpoint=16. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+- product_id: microsoft-powerpoint
+  update_version: '2608'
+  target_build: '20326.20100'
+  method_id: reddit_search
+  source_type: reddit_community_report
+  status: disabled
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: ''
+  last_run: '2026-08-27T23:25:00Z'
+  notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
+- product_id: microsoft-powerpoint
+  update_version: '2608'
+  target_build: '20326.20112'
+  method_id: reddit_search
+  source_type: reddit_community_report
+  status: disabled
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: ''
+  last_run: '2026-08-27T23:25:00Z'
+  notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
