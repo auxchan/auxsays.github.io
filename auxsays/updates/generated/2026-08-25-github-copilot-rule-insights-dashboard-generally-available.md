@@ -17,8 +17,8 @@ update_version: Rule insights dashboard generally available
 update_logo_text: GIT
 update_published_at: '2026-08-25T20:05:35Z'
 update_last_checked: '2026-08-26T02:53:12Z'
-source_last_checked: '2026-08-26T14:13:12Z'
-official_body_last_checked: '2026-08-26T14:13:12Z'
+source_last_checked: '2026-08-27T11:00:51Z'
+official_body_last_checked: '2026-08-27T11:00:51Z'
 record_last_updated: '2026-08-26T02:53:12Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -96,6 +96,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-08-26T14:13:12Z'
+  url: https://github.blog/changelog/2026-08-25-rule-insights-dashboard-generally-available
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-08-27T11:00:51Z'
   url: https://github.blog/changelog/2026-08-25-rule-insights-dashboard-generally-available
   status: captured-from-rss-feed
   body_captured: true
