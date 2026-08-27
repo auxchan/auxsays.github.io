@@ -182,8 +182,10 @@ def run() -> int:
     owned = acr.COLLECTOR_WRITABLE_FIELDS
     check("O1 COLLECTOR_WRITABLE_FIELDS exists and is immutable",
           isinstance(owned, frozenset) and owned, str(type(owned)))
-    check("O1 it is far smaller than the proposed field set",
-          len(owned) < 5, str(sorted(owned)))
+    check("O1 it holds exactly the two collector-owned fields",
+          owned == frozenset({"evidence_last_checked", "record_last_updated"}), str(sorted(owned)))
+    check("O1 the append-only status event is NOT collector-owned",
+          "status_events_append" not in owned and "status_events" not in owned, str(sorted(owned)))
     # A denylist would admit every field not explicitly protected. Prove we do not do that.
     not_protected = {k for k in full_proposal()
                      if k not in acr.PROTECTED_FIELDS and k not in acr.CONSENSUS_COHERENCE_FIELDS}
@@ -279,13 +281,24 @@ def run() -> int:
         premiere_record(rec)
         data = front(rec)
         data["status_events"] = [{"at": "2026-01-01T00:00:00Z", "label": "Seeded",
-                                  "note": "internal scraper backfill note"}]
+                                  # a REAL PUBLIC_INTERNAL_TERMS member, so the redaction
+                                  # branch actually fires instead of short-circuiting
+                                  "note": "promoted evidence rows from collector"}]
         rec.write_text("---\n" + yaml.safe_dump(data, sort_keys=False)
                        + "---\nbody\n", encoding="utf-8")
         n_before = len(front(rec)["status_events"])
-        _plan, exc = apply(rec, full_proposal(evidence_last_checked="2026-05-01T00:00:00Z"))
+        seeded = front(rec)["status_events"][0]["note"]
+        check("O4c the seeded note really is dirty (else this block proves nothing)",
+              acr._contains_internal_public_term(seeded), seeded)
+        # SUBSTANTIVE input: evidence_last_checked ADVANCES, so the append branch is genuinely
+        # reachable. With an identical value the plan short-circuits and every assertion below
+        # would hold for any implementation -- which is how this block was vacuous before.
+        _plan, exc = apply(rec, full_proposal(evidence_last_checked="2027-01-01T00:00:00Z"))
         after = front(rec)
         check("O4c it did not raise", exc is None, repr(exc))
+        check("O4c the owned field did advance (so the append branch was reachable)",
+              after["evidence_last_checked"] == "2027-01-01T00:00:00Z",
+              str(after["evidence_last_checked"]))
         check("O4c no event was APPENDED", len(after["status_events"]) == n_before,
               f"{n_before} -> {len(after['status_events'])}")
         check("O4c no count-derived note reached the record",
@@ -372,6 +385,86 @@ def run() -> int:
           "if not record_updated" in (_SCRIPTS / "collect_obs_reports.py").read_text(encoding="utf-8"))
     check("O8 update_obs_record still exists as the fallback writer",
           hasattr(obs, "update_obs_record"))
+
+    # ---------- O8b: drive a REAL collector writeback with the REAL full field set ----------
+    # The decisive seam. Everything above exercises apply_collector_record_fields in isolation, so a
+    # collector that imports the raw writer under an alias (`from ... import _apply_record_fields as
+    # _raw`) satisfies every grep-based check and still overwrites editorial prose. Only calling the
+    # collector's own apply_consensus_writeback with a full proposal can catch that.
+    print("\n[O8b] each collector's real writeback, driven with the real full field set")
+    for module_name, label in SITES:
+        acr_mod = importlib.import_module("apply_consensus_to_records")
+        mod = importlib.import_module(module_name)
+        with tempfile.TemporaryDirectory() as td:
+            root = Path(td)
+            gen = root / "updates" / "generated"
+            gen.mkdir(parents=True)
+            rec = premiere_record(gen / "rec.md")
+            rel = str(rec.relative_to(root))
+            proposal = full_proposal(evidence_last_checked="2028-03-03T00:00:00Z")
+            result = {"product_id": "x", "update_version": "26.2", "would_write": True,
+                      "matched_generated_record_path": rel,
+                      "proposed_fields_if_written": proposal}
+            saved = {k: getattr(acr_mod, k) for k in ("_index_generated_records", "run_dry_run")}
+            saved_root = mod.ROOT
+            try:
+                acr_mod._index_generated_records = lambda: {}
+                acr_mod.run_dry_run = lambda **kw: [result]
+                mod.ROOT = root
+                call = (mod.apply_consensus_writeback("adobe-acrobat-pro", "26.2")
+                        if label == "acrobat" else mod.apply_consensus_writeback("26.2"))
+            except Exception as exc:  # noqa: BLE001
+                call = exc
+            finally:
+                for k, v in saved.items():
+                    setattr(acr_mod, k, v)
+                mod.ROOT = saved_root
+            after = front(rec)
+            check(f"O8b {label}: writeback did not raise", not isinstance(call, Exception), repr(call))
+            check(f"O8b {label}: human quick_verdict survives the REAL writeback",
+                  after["quick_verdict"] == HUMAN_VERDICT, str(after["quick_verdict"])[:80])
+            check(f"O8b {label}: human recommendations survive",
+                  after["practical_recommendations"] == HUMAN_RECS,
+                  str(after["practical_recommendations"]))
+            check(f"O8b {label}: nested source_date survives",
+                  [s.get("source_date") for s in after["accepted_report_sources"]]
+                  == [REAL_DATE, REAL_DATE],
+                  str([s.get("source_date") for s in after["accepted_report_sources"]]))
+            check(f"O8b {label}: the count was not written",
+                  after["update_report_count"] == 3, str(after["update_report_count"]))
+            check(f"O8b {label}: count-derived prose was not written",
+                  after["consensus_report"] == "3 user reports found for Premiere Pro 26.2.",
+                  str(after["consensus_report"]))
+            check(f"O8b {label}: the owned freshness field DID advance",
+                  after["evidence_last_checked"] == "2028-03-03T00:00:00Z",
+                  str(after["evidence_last_checked"]))
+
+    # ---------- O8c: the OBS count repair must not be suppressed by a freshness write ----------
+    # COMPOSED, which is the point: O8 pins "an owned change returns True" and "the fallback is
+    # gated on not record_updated" separately, and both held while the composition was broken. The
+    # boundary returns True exactly when evidence_last_checked advances -- i.e. when new evidence
+    # arrived, which is when the count is most likely stale -- so gating the count repair on
+    # `not record_updated` suppressed it precisely then, and the boundary refuses to write the count
+    # itself. The gate is now the count.
+    print("\n[O8c] a freshness write does not suppress the OBS count repair")
+    obs_src = (_SCRIPTS / "collect_obs_reports.py").read_text(encoding="utf-8")
+    body = obs_src[obs_src.index("        if record_path:"):]
+    body = body[:body.index("result[")]
+    check("O8c the count repair is gated on the COUNT, not on record_updated",
+          "if record_needs_count_update(record_path, structured_count):" in body
+          and "if not record_updated and record_needs_count_update" not in body, body[-260:])
+    check("O8c a freshness write still reports True to the run summary",
+          "or record_updated" in body, body[-260:])
+    # and prove the boundary genuinely returns True on an advancing freshness value, which is what
+    # made the old gate misfire
+    with tempfile.TemporaryDirectory() as td:
+        rec = premiere_record(Path(td) / "r.md")
+        out, exc = apply(rec, full_proposal(evidence_last_checked="2029-09-09T00:00:00Z"))
+        check("O8c an advancing freshness value does report True",
+              exc is None and bool((out or {"write_plan": {"fields": {}}})["write_plan"]["fields"]),
+              repr(exc))
+        check("O8c ...while still refusing to write the count",
+              front(rec)["update_report_count"] == 3, str(front(rec)["update_report_count"]))
 
     # ---------- O9 / section 33: no bypass inside the repaired collector flow ----------
     print("\n[O9] no collector can reach the record around the boundary")

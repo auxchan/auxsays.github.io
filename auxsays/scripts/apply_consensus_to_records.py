@@ -1228,6 +1228,31 @@ def _fields_written_labels(fields: dict[str, Any]) -> list[str]:
     return labels
 
 
+def _is_earlier_iso(candidate: Any, existing: Any) -> bool:
+    """True when `candidate` is a strictly older timestamp than `existing`.
+
+    evidence_last_checked answers "how fresh is this patch's evidence", and audit_consensus_evidence
+    gates on it (stale_/missing_evidence_last_checked) as a --validate command. It is derived from
+    max(captured_at) over the collector's INCLUDED rows, so a gate change that newly excludes the
+    newest run -- a Windows KB rollover, say -- could hand back an older maximum. Freshness must only
+    ever advance; an unparseable value on either side is left to the normal write path."""
+    def _utc(value: Any) -> datetime | None:
+        text = str(value or "").strip()
+        if not text:
+            return None
+        if text.endswith("Z"):
+            text = text[:-1] + "+00:00"
+        try:
+            dt = datetime.fromisoformat(text)
+        except ValueError:
+            return None
+        return (dt.replace(tzinfo=timezone.utc) if dt.tzinfo is None
+                else dt.astimezone(timezone.utc))
+
+    a, b = _utc(candidate), _utc(existing)
+    return a is not None and b is not None and a < b
+
+
 def apply_collector_record_fields(record_path: Path, fields: dict[str, Any]) -> dict[str, Any]:
     """The ONLY sanctioned record write for an in-collector writeback.
 
@@ -1250,8 +1275,14 @@ def apply_collector_record_fields(record_path: Path, fields: dict[str, Any]) -> 
     """
     owned = collector_owned_fields(fields)
     current = _load_front_matter(record_path)
-    kept = {key: value for key, value in owned.items()
-            if not (_is_blank_value(value) and not _is_blank_value(current.get(key)))}
+    kept: dict[str, Any] = {}
+    for key, value in owned.items():
+        existing = current.get(key)
+        if _is_blank_value(value) and not _is_blank_value(existing):
+            continue                                  # never blank a meaningful value
+        if key == "evidence_last_checked" and _is_earlier_iso(value, existing):
+            continue                                  # freshness only ever advances
+        kept[key] = value
     return _apply_record_fields(record_path, kept)
 
 

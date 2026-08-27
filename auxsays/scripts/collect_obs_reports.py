@@ -593,8 +593,15 @@ def collect_one(
         record_updated = False
         if record_path:
             record_updated = apply_consensus_writeback(version)
-            if not record_updated and record_needs_count_update(record_path, structured_count):
-                record_updated = update_obs_record(record_path, structured_count, utc_now())
+            # These two writes are ORTHOGONAL now, so they must not be mutually exclusive. The
+            # consensus writeback is bounded to collector-owned fields (freshness) and returns True
+            # whenever evidence_last_checked advances -- which is exactly when new evidence arrived,
+            # and therefore exactly when the count is most likely stale. Gating the count repair on
+            # `not record_updated` would suppress it precisely then. Gate it on the count instead,
+            # which is the condition it actually exists for.
+            if record_needs_count_update(record_path, structured_count):
+                record_updated = update_obs_record(record_path, structured_count,
+                                                   utc_now()) or record_updated
         result["evidence_rows_added"] = added
         result["evidence_rows_total"] = total
         result["structured_count_for_version"] = structured_count
