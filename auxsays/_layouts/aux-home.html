@@ -72,16 +72,17 @@ layout: aux-base
 
       <div class="featured-list">
         {% for post in site.posts limit:2 %}
-        {% assign article_image_src = '' %}
-        {% if post.image != blank %}{% assign article_image_src = post.image %}{% endif %}
-        {% if article_image_src == '' and post.thumbnail != blank %}{% assign article_image_src = post.thumbnail %}{% endif %}
-        {% if article_image_src == '' and post.thumb != blank %}{% assign article_image_src = post.thumb %}{% endif %}
-        {% if article_image_src == '' and post.cover != blank %}{% assign article_image_src = post.cover %}{% endif %}
-        {% if article_image_src == '' and post.hero_image != blank %}{% assign article_image_src = post.hero_image %}{% endif %}
-        {% if article_image_src == '' and post.featured_image != blank %}{% assign article_image_src = post.featured_image %}{% endif %}
-        {% if article_image_src.path != blank %}{% assign article_image_src = article_image_src.path %}{% endif %}
-        {% if article_image_src.url != blank %}{% assign article_image_src = article_image_src.url %}{% endif %}
-        {% if article_image_src.src != blank %}{% assign article_image_src = article_image_src.src %}{% endif %}
+        {%- comment -%} Comparing against the `blank` literal is a silent no-op here (Liquid resolves
+          it to MethodLiteral(:blank?) and no String#blank? exists in jekyll/liquid), so the old
+          chain assigned a nil post.image on the FIRST line and every later `article_image_src == ''`
+          test then failed on nil -- the whole fallback was unreachable and the placeholder branch
+          below never rendered. `default` is the working idiom: it replaces nil, false AND the
+          empty string, so one chain covers every shape. {%- endcomment -%}
+        {% assign article_image_src = post.image | default: post.thumbnail | default: post.thumb | default: post.cover | default: post.hero_image | default: post.featured_image | default: '' %}
+        {%- comment -%} A front-matter image may be a mapping ({path:}/{url:}/{src:}) or a plain
+          string; on a string these lookups are nil, so the final `default` keeps the string. {%- endcomment -%}
+        {% assign article_image_obj = article_image_src %}
+        {% assign article_image_src = article_image_obj.path | default: article_image_obj.url | default: article_image_obj.src | default: article_image_obj | default: '' %}
         <article class="featured-card featured-card--wide">
           <a class="featured-card-visual" href="{{ post.url | relative_url }}" aria-hidden="true">
             {% if article_image_src != '' %}

@@ -118,7 +118,10 @@
 {%- endif -%}
 {%- assign mon_status_class = mon_status | downcase | replace: ' ', '-' -%}
 {%- assign mon_latest_label = '' -%}
-{%- if mon_latest_raw != blank -%}{%- assign mon_latest_label = mon_latest_raw | date: "%b %-d, %Y" -%}{%- endif -%}
+{%- comment -%} mon_latest_raw / m_checked are initialised to '' as the "no valid timestamp"
+  sentinel. Comparing against the `blank` literal never sees that (it is a no-op in liquid-4.0.4
+  with no String#blank?), which made the 'Not recorded' fallback below unreachable. {%- endcomment -%}
+{%- if mon_latest_raw != '' -%}{%- assign mon_latest_label = mon_latest_raw | date: "%b %-d, %Y" -%}{%- endif -%}
 {%- if mon_mode == 'cell' -%}
 <span class="patch-monitoring patch-monitoring--{{ mon_status_class }}" title="Community-evidence monitoring status (separate from the verdict)">{{ mon_status }}</span>
 {%- elsif mon_mode == 'feed' -%}
@@ -131,7 +134,7 @@
   </div>
   <dl class="update-monitoring-facts">
     <div class="update-monitoring-fact"><dt>Accepted reports</dt><dd>{{ mon_reports }}</dd></div>
-    <div class="update-monitoring-fact"><dt>Latest evidence run</dt><dd>{% if mon_latest_label != blank %}{{ mon_latest_label }}{% else %}Not recorded{% endif %}</dd></div>
+    <div class="update-monitoring-fact"><dt>Latest evidence run</dt><dd>{% if mon_latest_label != '' %}{{ mon_latest_label }}{% else %}Not recorded{% endif %}</dd></div>
     <div class="update-monitoring-fact"><dt>Healthy methods</dt><dd>{{ mon_healthy }} fresh (success / no reports) &middot; need {{ mon_min_healthy }}</dd></div>
   </dl>
   {%- if mon_rows != '' and mon_rows.size > 0 -%}
@@ -157,7 +160,7 @@
   {%- endif -%}
   {%- assign m_checked = '' -%}
   {%- if m.last_run != blank -%}{%- assign m_run_s2 = m.last_run | date: '%s' | plus: 0 -%}{%- if m_run_s2 <= mon_now_s -%}{%- assign m_checked = m.last_run | date: "%b %-d, %Y" -%}{%- endif -%}{%- endif -%}
-  <li class="update-monitoring-method update-monitoring-method--{{ m_status2 | replace: '_', '-' }}"><span class="update-monitoring-method__id">{{ m.method_id | escape }}</span> <span class="update-monitoring-method__state">{{ m_expl }}</span>{% if m_checked != blank %} <span class="update-monitoring-method__checked">last checked {{ m_checked }}</span>{% endif %}</li>
+  <li class="update-monitoring-method update-monitoring-method--{{ m_status2 | replace: '_', '-' }}"><span class="update-monitoring-method__id">{{ m.method_id | escape }}</span> <span class="update-monitoring-method__state">{{ m_expl }}</span>{% if m_checked != '' %} <span class="update-monitoring-method__checked">last checked {{ m_checked }}</span>{% endif %}</li>
   {%- endif -%}
   {%- endfor -%}
   </ul>
