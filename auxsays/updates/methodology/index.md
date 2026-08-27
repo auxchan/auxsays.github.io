@@ -122,21 +122,21 @@ permalink: /updates/methodology/
 
     <div class="source-health-table method-health-table" role="table" aria-label="AUXSAYS collector method-health telemetry">
       <div class="source-health-row method-health-row source-health-row--head" role="row">
-        <span>Product</span><span>Version / build</span><span>Method</span><span>Source type</span><span>Status</span><span>Last run</span><span>Candidates</span><span>Accepted</span><span>Public counted</span><span>Notes / block reason</span>
+        <span role="columnheader">Product</span><span role="columnheader">Version / build</span><span role="columnheader">Method</span><span role="columnheader">Source type</span><span role="columnheader">Status</span><span role="columnheader">Last run</span><span role="columnheader">Candidates</span><span role="columnheader">Accepted</span><span role="columnheader">Public counted</span><span role="columnheader">Notes / block reason</span>
       </div>
       {% for item in method_health_rows %}
       <div class="source-health-row method-health-row method-health-row--{{ item.status | downcase | replace: '_', '-' }}" role="row">
-        <span>{{ item.product_id }}</span>
+        <span role="cell">{{ item.product_id }}</span>
         {%- assign mh_build = item.target_build | default: '' %}
-        <span>{{ item.update_version }}{% if mh_build != '' %}<small class="method-health-build">Build {{ mh_build }}</small>{% endif %}</span>
-        <span>{{ item.method_id }}</span>
-        <span>{{ item.source_type }}</span>
-        <span><mark class="source-health-status method-health-status--{{ item.status | downcase | replace: '_', '-' }}">{{ item.status | replace: '_', ' ' }}</mark></span>
-        <span>{% if item.last_run != blank %}{{ item.last_run }}{% else %}Not checked{% endif %}</span>
-        <span>{{ item.candidates_found | default: 0 }}</span>
-        <span>{{ item.accepted_candidates | default: 0 }}<small>{{ item.evidence_rows_added | default: 0 }} added</small></span>
-        <span>{{ item.public_counted_reports | default: 0 }}</span>
-        <span>{% if item.blocked_reason != blank %}{{ item.blocked_reason }}{% else %}{{ item.notes }}{% endif %}<small>{% if item.blocked_reason != blank and item.notes != blank %}{{ item.notes }}{% endif %}</small></span>
+        <span role="cell">{{ item.update_version }}{% if mh_build != '' %}<small class="method-health-build">Build {{ mh_build }}</small>{% endif %}</span>
+        <span role="cell">{{ item.method_id }}</span>
+        <span role="cell">{{ item.source_type }}</span>
+        <span role="cell"><mark class="source-health-status method-health-status--{{ item.status | downcase | replace: '_', '-' }}">{{ item.status | replace: '_', ' ' }}</mark></span>
+        <span role="cell">{% if item.last_run != blank %}{{ item.last_run }}{% else %}Not checked{% endif %}</span>
+        <span role="cell">{{ item.candidates_found | default: 0 }}</span>
+        <span role="cell">{{ item.accepted_candidates | default: 0 }}<small>{{ item.evidence_rows_added | default: 0 }} added</small></span>
+        <span role="cell">{{ item.public_counted_reports | default: 0 }}</span>
+        <span role="cell">{% if item.blocked_reason != blank %}{{ item.blocked_reason }}{% else %}{{ item.notes }}{% endif %}<small>{% if item.blocked_reason != blank and item.notes != blank %}{{ item.notes }}{% endif %}</small></span>
       </div>
       {% endfor %}
     </div>
@@ -167,16 +167,16 @@ permalink: /updates/methodology/
 
     <div class="source-health-table" role="table" aria-label="AUXSAYS official ingestion source-health snapshot">
       <div class="source-health-row source-health-row--head" role="row">
-        <span>Source</span><span>Software</span><span>Status</span><span>Last run</span><span>Records</span><span>Capabilities</span><span>Last error</span>
+        <span role="columnheader">Source</span><span role="columnheader">Software</span><span role="columnheader">Status</span><span role="columnheader">Last run</span><span role="columnheader">Records</span><span role="columnheader">Capabilities</span><span role="columnheader">Last error</span>
       </div>
       {% for item in site.data.source_health %}
       <div class="source-health-row source-health-row--{{ item.status | downcase | replace: ' ', '-' }}" role="row">
-        <span class="source-health-id"><strong>{{ item.source_id }}</strong><em>{{ item.company }}</em></span>
-        <span>{{ item.software }}<small>{{ item.adapter_type }}</small></span>
-        <span><mark class="source-health-status source-health-status--{{ item.status | downcase | replace: ' ', '-' }}">{{ item.status }}</mark><small>{{ item.status_detail }}</small></span>
-        <span>{% if item.last_checked != blank %}{{ item.last_checked }}{% else %}Not checked{% endif %}<small>{% if item.polling_frequency != blank %}Target: {{ item.polling_frequency }}{% endif %}</small></span>
-        <span>{{ item.last_records_fetched }} fetched / {{ item.last_records_written }} written<small>{{ item.last_records_skipped }} skipped · {{ item.consecutive_failures }} failures</small></span>
-        <span class="source-health-capabilities">
+        <span class="source-health-id" role="cell"><strong>{{ item.source_id }}</strong><em>{{ item.company }}</em></span>
+        <span role="cell">{{ item.software }}<small>{{ item.adapter_type }}</small></span>
+        <span role="cell"><mark class="source-health-status source-health-status--{{ item.status | downcase | replace: ' ', '-' }}">{{ item.status }}</mark><small>{{ item.status_detail }}</small></span>
+        <span role="cell">{% if item.last_checked != blank %}{{ item.last_checked }}{% else %}Not checked{% endif %}<small>{% if item.polling_frequency != blank %}Target: {{ item.polling_frequency }}{% endif %}</small></span>
+        <span role="cell">{{ item.last_records_fetched }} fetched / {{ item.last_records_written }} written<small>{{ item.last_records_skipped }} skipped · {{ item.consecutive_failures }} failures</small></span>
+        <span class="source-health-capabilities" role="cell">
           {% if item.capabilities.release_notes %}<b>notes</b>{% endif %}
           {% if item.capabilities.version %}<b>version</b>{% endif %}
           {% if item.capabilities.download_url %}<b>download</b>{% endif %}
@@ -184,7 +184,7 @@ permalink: /updates/methodology/
           {% if item.capabilities.checksum %}<b>checksum</b>{% endif %}
           {% if item.capabilities.known_issues %}<b>known issues</b>{% endif %}
         </span>
-        <span>{% if item.last_error_display != blank and item.last_error_display != 'None' %}{{ item.last_error_display }}{% else %}None{% endif %}</span>
+        <span role="cell">{% if item.last_error_display != blank and item.last_error_display != 'None' %}{{ item.last_error_display }}{% else %}None{% endif %}</span>
       </div>
       {% endfor %}
     </div>

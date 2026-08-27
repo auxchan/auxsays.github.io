@@ -175,7 +175,7 @@ def without_build_label(page_text: str) -> str:
 
 def identity_of(row_html: str) -> str:
     """The first three rendered cells -- product, version(+build), method -- as visible text."""
-    cells = re.findall(r"<span>(.*?)</span>", row_html, re.S)[:3]
+    cells = re.findall(r"<span\b[^>]*>(.*?)</span>", row_html, re.S)[:3]
     return " | ".join(re.sub(r"<[^>]+>", " ", c).strip() for c in cells)
 
 
@@ -278,7 +278,7 @@ def run() -> int:
               f"new={new_rows[0][:90]!r}")
         for label, rendered in zip(("davinci", "acrobat"), new_rows):
             # The Version cell is the second <span> of the row.
-            version_cell = re.findall(r"<span>.*?</span>", rendered, re.S)[1]
+            version_cell = re.findall(r"<span\b[^>]*>.*?</span>", rendered, re.S)[1]
             check(f"M5 {label}: the Version cell emits no <small> element at all",
                   "<small>" not in version_cell, version_cell)
             for junk in ("Build ", "None", "null", "target_build"):
@@ -330,10 +330,10 @@ def run() -> int:
     # ---------- structural invariant: header / cells / CSS grid agree ----------
     print("\n[grid] the column contract is internally consistent")
     head = re.search(r'source-health-row--head" role="row">\s*(.*?)\s*</div>', PAGE, re.S).group(1)
-    headers = re.findall(r"<span>(.*?)</span>", head, re.S)
+    headers = re.findall(r"<span\b[^>]*>(.*?)</span>", head, re.S)
     body = method_health_block(PAGE)
     body_rows = body[body.index("{% for item"):]
-    cells = re.findall(r"<span>", body_rows)
+    cells = re.findall(r"<span\b[^>]*>", body_rows)
     grid = re.search(r"\.method-health-row \{[^}]*grid-template-columns:([^;]+);",
                      CSS).group(1).split()
     minw = int(re.search(r"\.method-health-row \{[^}]*min-width:\s*([0-9]+)px", CSS).group(1))
@@ -348,11 +348,28 @@ def run() -> int:
           "build" in headers[1].lower() and "version" in headers[1].lower(), headers[1])
     # Intent, not spelling: the build is emitted upstream of the Method cell, i.e. inside the
     # existing Version cell rather than as an eleventh column (the count check above covers that).
-    before_method = PAGE.split("<span>{{ item.method_id }}</span>")[0]
+    before_method = re.split(r"<span\b[^>]*>\{\{ item\.method_id \}\}</span>", PAGE)[0]
     check("grid: the build rides in the Version cell, not a column of its own",
           bool(re.search(r"\{\{\s*(" + re.escape(page_build_local)
                          + r"|item\.target_build)\b", before_method)), page_build_local)
 
+    # ---------- ARIA: a role="row" that owns no cells associates nothing ----------
+    print("\n[aria] every table row exposes real cells")
+    # Both health tables are div-based, so no cell role is implied by the tag name the way it is
+    # for <td>/<th>. An element with role="row" whose children carry no cell role exposes ZERO
+    # cells, and a screen reader then cannot say which column a value sits under -- the same
+    # header-to-value association this page relies on to keep sibling builds apart.
+    aria_rows = re.findall(r'(<div class="source-health-row[^"]*" role="row">)(.*?)\n      </div>', PAGE, re.S)
+    check(f"aria: both tables' head and body rows are found ({len(aria_rows)})",
+          len(aria_rows) == 4, [o for o, _ in aria_rows])
+    for open_tag, blk in aria_rows:
+        want = "columnheader" if "--head" in open_tag else "cell"
+        spans = re.findall(r"<span\b[^>]*>", blk)
+        label = ("head" if "--head" in open_tag else "body") + (
+            " method-health" if "method-health-row" in open_tag else " source-health")
+        bare = [t for t in spans if f'role="{want}"' not in t]
+        check(f'aria: {label} row -- all {len(spans)} cells carry role="{want}"',
+              bool(spans) and not bare, bare[:3])
     # ---------- the guard idiom: `!= blank` must never gate a build ----------
     print("\n[guard] the build guard must actually be able to be false")
     # `!= blank` is one spelling of an always-true comparison; `!= nil` and `!= false` are others,
