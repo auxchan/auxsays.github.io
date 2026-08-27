@@ -65,6 +65,7 @@ product_id: {pid}
 update_version: '{ver}'
 {build_line}update_product: {product}
 update_report_count: 0
+evidence_last_checked: '2026-01-01T00:00:00Z'
 ---
 body
 """
@@ -99,8 +100,11 @@ def drive_writeback(module_name: str, call, *, matched_rel: str | None, root: Pa
     result = {
         "product_id": "x", "update_version": version, "would_write": would_write,
         "matched_generated_record_path": matched_rel,
+        # A COLLECTOR-OWNED field: the collector boundary (COLLECTOR_WRITABLE_FIELDS) filters
+        # everything else out, and this suite is about WHICH RECORD is written, not which fields.
+        # Field authority is covered by test_collector_write_authority.py.
         "proposed_fields_if_written": dict(fields if fields is not None
-                                           else {"update_report_count": 7}),
+                                           else {"evidence_last_checked": "2099-01-01T00:00:00Z"}),
     }
     # A record that is NOT the resolved one, reachable by every partial-key strategy.
     decoy = write_record(root, "decoy-product", version)
@@ -426,7 +430,9 @@ def run() -> int:
             ok, changed, exc = drive_writeback(
                 module_name, call, matched_rel=rel, root=root,
                 # same count already on the record + a fresh timestamp: nothing substantive
-                fields={"update_report_count": 0,
+                # evidence_last_checked MATCHES the fixture, so only record_last_updated differs
+                # -- and that is excluded from substantiveness, so nothing may be written.
+                fields={"evidence_last_checked": "2026-01-01T00:00:00Z",
                         "record_last_updated": "2099-01-01T00:00:00Z"})
             check(f"I8d {label}: nothing written", not changed and exc is None, f"{changed} {exc}")
             check(f"I8d {label}: reports False, not a phantom update", ok is False, repr(ok))

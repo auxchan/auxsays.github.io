@@ -68,6 +68,40 @@ CONSENSUS_COHERENCE_FIELDS = {
     "source_freshness_note",
 }
 
+# POSITIVE collector write authority. An in-collector writeback runs BEFORE
+# lib.report_counts.reconcile_record_counts and before the final consensus/coherence application,
+# so at that moment it does not know the final counted-evidence population: `_filter_rows` and
+# `counted_evidence_counts` apply DIFFERENT predicates (live: Windows 25H2 is 9 vs 29, 26H1 is 1 vs
+# 2), and reconciliation later rewrites the NUMBERS without rewriting the prose derived from them.
+# A collector that writes count-derived narrative therefore publishes "9 user reports" beside a
+# reconciled count of 29 -- and qa_patch_records compares only the number, so nothing catches it.
+# It would also overwrite human-authored editorial prose: premiere-pro-26-2's quick_verdict,
+# update_decision_body and practical_recommendations came from a hand commit, not the engine.
+#
+# So a collector may write ONLY fields whose truth is already complete when that collector finishes.
+# Everything else -- counts, anything textually derived from a count, the accepted-row projections
+# (accepted_report_sources / evidence_samples, whose nested source_date the collector would blank),
+# and every editorial/coherence field -- belongs to a later authority.
+#
+# This is a POSITIVE allow-list, deliberately not "everything except PROTECTED|CONSENSUS_COHERENCE".
+# A field added to _proposed_record_fields later must NOT become collector-writable by default:
+# unknown field -> not collector-owned -> not written. Fail closed.
+COLLECTOR_WRITABLE_FIELDS = frozenset({
+    # "when did this collector last look at evidence for this patch" -- complete at collector
+    # completion, and nothing later reconciles it. This is the field that makes a collector write
+    # meaningful; without it the in-collector write would be permanently inert, since
+    # record_last_updated alone is excluded from substantiveness.
+    "evidence_last_checked",
+    # bookkeeping only; RECORD_SUBSTANTIVE_COMPARE_IGNORED means it can never by itself cause a write
+    "record_last_updated",
+})
+
+
+def collector_owned_fields(fields: dict[str, Any]) -> dict[str, Any]:
+    """The subset of `fields` an in-collector writeback is authorized to apply."""
+    return {key: value for key, value in fields.items() if key in COLLECTOR_WRITABLE_FIELDS}
+
+
 WRITEABLE_FIELDS = {
     "update_report_count",
     "confirmed_patch_specific_report_count",
@@ -1183,6 +1217,17 @@ def _fields_written_labels(fields: dict[str, Any]) -> list[str]:
     if "status_events_append" in fields:
         labels.append("status_events")
     return labels
+
+
+def apply_collector_record_fields(record_path: Path, fields: dict[str, Any]) -> dict[str, Any]:
+    """The ONLY sanctioned record write for an in-collector writeback.
+
+    Filters `fields` through COLLECTOR_WRITABLE_FIELDS once, then applies the remainder through the
+    normal write plan, so a collector cannot publish a claim it does not yet have the authority to
+    make. Collectors must call this rather than _apply_record_fields directly -- that is what makes
+    the boundary a boundary. Returns the same shape as _apply_record_fields, so
+    ``bool(result["write_plan"]["fields"])`` still reports truthfully whether bytes changed."""
+    return _apply_record_fields(record_path, collector_owned_fields(fields))
 
 
 def _apply_record_fields(record_path: Path, fields: dict[str, Any]) -> dict[str, Any]:

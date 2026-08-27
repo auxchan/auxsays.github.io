@@ -597,7 +597,7 @@ def apply_consensus_writeback(update_version: str) -> bool:
     """Run the deterministic consensus writeback for one Windows version (used only in
     --write mode). The Windows identity gate in apply_consensus re-verifies every row
     against the record's current target_* before counting."""
-    from apply_consensus_to_records import _apply_record_fields, _index_generated_records, run_dry_run
+    from apply_consensus_to_records import _index_generated_records, apply_collector_record_fields, run_dry_run
 
     records_index = _index_generated_records()
     results = run_dry_run(
@@ -629,11 +629,11 @@ def apply_consensus_writeback(update_version: str) -> bool:
         return False
     # Report whether bytes actually changed, not merely that we reached the write.
     # `comparable` above always differs (proposed_fields carries a fresh record_last_updated), so
-    # the early-exit never fires; _apply_record_fields then recomputes substantiveness EXCLUDING
+    # the early-exit never fires; the collector boundary then recomputes substantiveness EXCLUDING
     # that timestamp and can legitimately write nothing. Returning True regardless would report
     # record_updated for a no-op -- and in the OBS caller it would suppress the count fallback that
     # runs only `if not record_updated`.
-    return bool(_apply_record_fields(record_path, fields)["write_plan"]["fields"])
+    return bool(apply_collector_record_fields(record_path, fields)["write_plan"]["fields"])
 
 
 def _dry_run_main(argv: list[str] | None = None) -> int:
