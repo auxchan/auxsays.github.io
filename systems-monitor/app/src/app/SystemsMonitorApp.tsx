@@ -8,6 +8,9 @@ const SummaryView = lazy(() => import("../views/summary/SummaryView"));
 const VerifiedDataView = lazy(() => import("../views/verified/VerifiedDataView"));
 const OutlookView = lazy(() => import("../views/outlook/OutlookView"));
 const MotionQaHarness = lazy(() => import("../views/motion/MotionQaHarness").then((module) => ({ default: module.MotionQaHarness })));
+const PersistentWorldShell = import.meta.env.DEV
+  ? lazy(() => import("../views/persistent/PersistentWorldShell").then((module) => ({ default: module.PersistentWorldShell })))
+  : null;
 
 class AppErrorBoundary extends Component<{ children: React.ReactNode }, { error: Error | null }> {
   state = { error: null } as { error: Error | null };
@@ -20,14 +23,17 @@ function ValidatedApp() {
   const { route, navigate } = useRouteState(snapshot);
   if (variant === "loading") return <LoadingState />;
   if (variant === "snapshot-unavailable") return <ErrorState />;
-  const view = motionQa
+  const persistentWorld = Boolean(PersistentWorldShell) && window.location.hash.startsWith("#persistent-world");
+  const view = persistentWorld && PersistentWorldShell
+    ? <PersistentWorldShell />
+    : motionQa
     ? <MotionQaHarness model={motionQa} route={route} />
     : route.view === "verified"
     ? <VerifiedDataView snapshot={snapshot} phase4b={phase4b} route={route} navigate={navigate} variant={variant} />
     : route.view === "outlook"
       ? <OutlookView snapshot={snapshot} phase4b={phase4b} route={route} navigate={navigate} variant={variant} />
       : <SummaryView snapshot={snapshot} phase4b={phase4b} route={route} navigate={navigate} variant={variant} />;
-  return <AppShell snapshot={snapshot} phase4b={phase4b} motionQa={motionQa} route={route} navigate={navigate} variant={variant} setVariant={setVariant}><DegradedState variant={variant} /><Suspense fallback={<LoadingState />}>{view}</Suspense></AppShell>;
+  return <AppShell snapshot={snapshot} phase4b={phase4b} motionQa={motionQa} persistentWorld={persistentWorld} route={route} navigate={navigate} variant={variant} setVariant={setVariant}><DegradedState variant={variant} /><Suspense fallback={<LoadingState />}>{view}</Suspense></AppShell>;
 }
 
 export function SystemsMonitorApp() {

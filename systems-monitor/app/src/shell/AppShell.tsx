@@ -75,17 +75,27 @@ export function SystemHealthSummary({ snapshot, phase4b, variant, setVariant }: 
   </section>;
 }
 
-export function AppShell({ children, snapshot, phase4b, motionQa, route, navigate, variant, setVariant }: {
+export function AppShell({ children, snapshot, phase4b, motionQa, persistentWorld = false, route, navigate, variant, setVariant }: {
   children: React.ReactNode;
   snapshot: SnapshotViewModel;
   phase4b?: Phase4bReadModel;
   motionQa?: MotionQaReadModel;
+  persistentWorld?: boolean;
   route: RouteState;
   navigate: (next: RouteState | ((current: RouteState) => RouteState), replace?: boolean) => void;
   variant: FixtureVariant;
   setVariant: (variant: FixtureVariant) => void;
 }) {
   const factual = snapshot.snapshot.publicationClass === "factual";
+  if (import.meta.env.DEV && persistentWorld) {
+    return <div className="sm-app-shell sm-app-shell--immersive sm-app-shell--persistent-world">
+      <a className="sm-skip" href="#systems-monitor-content">Skip to persistent world</a>
+      <div className="sm-motion-warning" role="status"><SystemIcon name="network" size={18} /><strong>PERSISTENT WORLD R&amp;D — TEST FIXTURE</strong><span>Not factual structural coverage · never publishable</span></div>
+      <header className="sm-immersive-header"><a className="sm-parent-brand" href="/">AUXSAYS <span>/ U.S. Systems Monitor</span></a><div className="sm-review-status" aria-label="Persistent-world review status"><span>Development only</span><span>Human QA pending</span></div></header>
+      <main id="systems-monitor-content" className="sm-immersive-main" tabIndex={-1}>{children}</main>
+      <footer className="sm-immersive-footer"><span>1→10→100→1000 persistent-world proof</span><span>Gate B open · accepted factual relationships 0</span></footer>
+    </div>;
+  }
   if (motionQa) {
     return <div className="sm-app-shell sm-app-shell--immersive sm-app-shell--motion-qa">
       <a className="sm-skip" href="#systems-monitor-content">Skip to motion test</a>
