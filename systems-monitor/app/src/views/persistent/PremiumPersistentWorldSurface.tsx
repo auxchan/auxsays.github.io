@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { PersistentWorldPlacement, PersistentWorldReadModel } from "../../data/persistentWorldModel";
 import {
-  PERSISTENT_GLINT_TRAIL, PERSISTENT_SECTOR_COLORS, blendPremiumColor, drawPremiumGlyph,
+  PERSISTENT_GLINT_TRAIL, blendPremiumColor, drawPremiumGlyph,
   easePremiumHover, factorGlyph, persistentGlintProgress, pointOnCubic, premiumCurveRoute,
-  premiumRadius, resolvePersistentLod, resolvePremiumLabels, traceCubic,
+  persistentPlacementAccent, premiumRadius, resolvePersistentLod, resolvePremiumLabels, traceCubic,
   type LabelCandidate, type Point
 } from "./persistentWorldVisuals";
 
@@ -26,7 +26,16 @@ const AMBIENT_EDGE = "#315b67";
 function targetCamera(model: PersistentWorldReadModel, selectedPlacementId: string | null, fullWorld: boolean): Camera {
   const selected = selectedPlacementId ? model.placements[selectedPlacementId] : undefined;
   if (!selected || fullWorld) return { x: 0, y: 0, scale: fullWorld ? .17 : OVERVIEW_SCALE };
-  return { x: selected.x, y: selected.y, scale: selected.depth === 1 ? .64 : selected.depth === 2 ? 1.72 : 2.7 };
+  if (selected.depth === 1) {
+    const distance = Math.max(1, Math.hypot(selected.x, selected.y));
+    const outwardShift = 260;
+    return {
+      x: selected.x + (selected.x / distance) * outwardShift,
+      y: selected.y + (selected.y / distance) * outwardShift,
+      scale: .86
+    };
+  }
+  return { x: selected.x, y: selected.y, scale: selected.depth === 2 ? 1.72 : 2.7 };
 }
 
 function project(placement: PersistentWorldPlacement, camera: Camera, viewport: Viewport, width: number, height: number): Point {
@@ -128,11 +137,12 @@ export function PremiumPersistentWorldSurface({ model, selectedPlacementId, full
       context.lineCap = "round"; const currentHovered = hoveredRef.current;
       for (const edge of highlightedEdges) {
         const fromPlacement = model.placements[edge.fromPlacementId]; const toPlacement = model.placements[edge.toPlacementId]; const from = project(fromPlacement, camera, viewport, width, height); const to = project(toPlacement, camera, viewport, width, height); const route = premiumCurveRoute(edge.id, from, to);
-        const accent = toPlacement.depth === 0 ? "#f08acb" : PERSISTENT_SECTOR_COLORS[Math.max(0, toPlacement.sector)] ?? PERSISTENT_SECTOR_COLORS[0]; const incident = Boolean(currentHovered && (edge.fromPlacementId === currentHovered || edge.toPlacementId === currentHovered)); const traceEdge = selectedPath.has(edge.fromPlacementId) && selectedPath.has(edge.toPlacementId);
+        const accent = persistentPlacementAccent(toPlacement); const incident = Boolean(currentHovered && (edge.fromPlacementId === currentHovered || edge.toPlacementId === currentHovered)); const traceEdge = selectedPath.has(edge.fromPlacementId) && selectedPath.has(edge.toPlacementId);
         const hoverAmount = easePremiumHover(hoverVisualsRef.current.get(edge.id) ?? 0, incident ? 1 : 0, elapsedMs, reducedMotion); hoverVisualsRef.current.set(edge.id, hoverAmount);
-        const traceAlpha = traceMode ? traceEdge ? 1 : .13 : 1; const color = blendPremiumColor(AMBIENT_EDGE, accent, .52 + hoverAmount * .48, (currentHovered && !incident ? .24 : .9) * traceAlpha);
-        context.save(); context.shadowColor = accent; context.shadowBlur = (8 + hoverAmount * 10) * traceAlpha; context.strokeStyle = blendPremiumColor(AMBIENT_EDGE, accent, .45 + hoverAmount * .55, (.18 + hoverAmount * .18) * traceAlpha); context.lineWidth = 8 + hoverAmount * 2; traceCubic(context, route); context.stroke();
-        context.shadowBlur = 0; context.strokeStyle = color; context.lineWidth = 3.2 + hoverAmount * 1.2; traceCubic(context, route); context.stroke(); context.strokeStyle = blendPremiumColor("#b8e1df", accent, .42 + hoverAmount * .58, .88); context.lineWidth = 1.05; traceCubic(context, route); context.stroke(); context.restore();
+        const focused = selectedPlacementId ? model.placements[selectedPlacementId] : undefined; const denseFanEdge = Boolean(focused && focused.depth < 3 && (edge.fromPlacementId === focused.id || edge.toPlacementId === focused.id)); const railScale = denseFanEdge ? .64 : 1;
+        const traceAlpha = traceMode ? traceEdge ? 1 : .13 : 1; const color = blendPremiumColor(AMBIENT_EDGE, accent, (denseFanEdge ? .76 : .52) + hoverAmount * (denseFanEdge ? .24 : .48), (currentHovered && !incident ? .24 : .9) * traceAlpha);
+        context.save(); context.shadowColor = accent; context.shadowBlur = (denseFanEdge ? 5 + hoverAmount * 8 : 8 + hoverAmount * 10) * traceAlpha; context.strokeStyle = blendPremiumColor(AMBIENT_EDGE, accent, .45 + hoverAmount * .55, (.18 + hoverAmount * .18) * traceAlpha); context.lineWidth = (8 + hoverAmount * 2) * railScale; traceCubic(context, route); context.stroke();
+        context.shadowBlur = 0; context.strokeStyle = color; context.lineWidth = (3.2 + hoverAmount * 1.2) * railScale; traceCubic(context, route); context.stroke(); context.strokeStyle = blendPremiumColor("#b8e1df", accent, .42 + hoverAmount * .58, .88); context.lineWidth = denseFanEdge ? .85 : 1.05; traceCubic(context, route); context.stroke(); context.restore();
         if (!reducedMotion && (!traceMode || traceEdge)) { const progress = persistentGlintProgress(now, edge.id); const trailStart = pointOnCubic(route, Math.max(0, progress - PERSISTENT_GLINT_TRAIL)); const trailEnd = pointOnCubic(route, progress); const gradient = context.createLinearGradient(trailStart.x, trailStart.y, trailEnd.x, trailEnd.y); gradient.addColorStop(0, blendPremiumColor(accent, accent, 1, 0)); gradient.addColorStop(1, blendPremiumColor("#ffffff", accent, .26, .98)); context.save(); context.strokeStyle = gradient; context.lineWidth = 3.1; context.shadowColor = accent; context.shadowBlur = 12; context.beginPath(); context.moveTo(trailStart.x, trailStart.y); context.lineTo(trailEnd.x, trailEnd.y); context.stroke(); context.restore(); }
       }
 
@@ -140,14 +150,24 @@ export function PremiumPersistentWorldSurface({ model, selectedPlacementId, full
       for (const placement of placements) {
         const point = project(placement, camera, viewport, width, height); if (point.x < -42 || point.y < -42 || point.x > width + 42 || point.y > height + 42) continue;
         const emphasized = semanticSet.has(placement.id) || selectedPath.has(placement.id); const sectorActive = isInSelectedSector(model, placement, selectedPlacementId); const effectiveScale = camera.scale * viewport.zoom; const lod = resolvePersistentLod(placement.depth, effectiveScale, emphasized); const radius = premiumRadius(placement, lod);
-        const accent = placement.depth === 0 ? "#f08acb" : PERSISTENT_SECTOR_COLORS[Math.max(0, placement.sector)] ?? PERSISTENT_SECTOR_COLORS[0]; const isHovered = placement.id === currentHovered; const isSelected = placement.id === selectedPlacementId;
+        const accent = persistentPlacementAccent(placement); const isHovered = placement.id === currentHovered; const isSelected = placement.id === selectedPlacementId;
         context.globalAlpha = emphasized ? 1 : sectorActive ? (placement.depth === 3 ? .36 : .58) : (fullWorld ? .24 : .1);
         if (lod === 0) { context.fillStyle = accent; context.beginPath(); context.arc(point.x, point.y, Math.max(1, radius), 0, Math.PI * 2); context.fill(); }
         else {
           context.save(); context.shadowColor = accent; context.shadowBlur = isSelected ? 25 : isHovered ? 18 : emphasized ? 9 : 0; context.fillStyle = placement.depth === 0 ? "rgba(35,18,42,.96)" : "rgba(5,27,35,.94)"; context.strokeStyle = blendPremiumColor(accent, "#ffffff", isHovered ? .25 : .05, .9); context.lineWidth = placement.depth === 0 ? 3.2 : 2;
           context.beginPath(); context.arc(point.x, point.y, radius + (isHovered ? 2 : 0), 0, Math.PI * 2); context.fill(); context.stroke(); context.shadowBlur = 0; context.strokeStyle = blendPremiumColor(accent, accent, 1, .23); context.lineWidth = 1; context.beginPath(); context.ellipse(point.x, point.y, radius * 1.75, radius * 1.18, placement.sector * .18, 0, Math.PI * 2); context.stroke(); if (lod >= 2) drawPremiumGlyph(context, factorGlyph(placement), point.x, point.y, radius * .62, accent); context.restore();
         }
-        if (emphasized && lod >= 1) { const label = model.factors[placement.canonicalFactorId].label; const fontSize = placement.depth === 0 ? 13 : placement.depth === 1 ? 12 : 11; context.font = `${placement.depth < 2 ? 750 : 650} ${fontSize}px Inter, system-ui, sans-serif`; const textWidth = Math.min(210, context.measureText(label).width + 18); labelCandidates.push({ id: placement.id, text: label, x: point.x, y: point.y + radius + 17, priority: placement.depth === 0 ? 100 : isSelected ? 90 : placement.depth === 1 ? 70 : placement.depth === 2 ? 50 : 20, width: textWidth, height: 22, accent }); }
+        if (emphasized && lod >= 1) {
+          const label = model.factors[placement.canonicalFactorId].label; const fontSize = placement.depth === 0 ? 13 : placement.depth === 1 ? 12 : 11; context.font = `${placement.depth < 2 ? 750 : 650} ${fontSize}px Inter, system-ui, sans-serif`; const textWidth = Math.min(210, context.measureText(label).width + 18);
+          let labelX = point.x; let labelY = point.y + radius + 17;
+          const parent = placement.parentPlacementId ? model.placements[placement.parentPlacementId] : undefined;
+          if (parent && placement.depth >= 2) {
+            const parentPoint = project(parent, camera, viewport, width, height); const dx = point.x - parentPoint.x; const dy = point.y - parentPoint.y; const distance = Math.max(1, Math.hypot(dx, dy)); const tangent = placement.order % 2 ? -6 : 6;
+            labelX = point.x + (dx / distance) * (radius + 15) + (-dy / distance) * tangent;
+            labelY = point.y + (dy / distance) * (radius + 15) + (dx / distance) * tangent;
+          }
+          labelCandidates.push({ id: placement.id, text: label, x: labelX, y: labelY, priority: placement.depth === 0 ? 100 : isSelected ? 90 : placement.depth === 1 ? 70 : placement.depth === 2 ? 50 : 20, width: textWidth, height: 22, accent });
+        }
         context.globalAlpha = 1;
       }
       const labels = resolvePremiumLabels(labelCandidates, width, height);

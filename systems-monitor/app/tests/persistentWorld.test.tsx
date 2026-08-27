@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import { SnapshotProvider } from "../src/app/SnapshotContext";
 import { SystemsMonitorApp } from "../src/app/SystemsMonitorApp";
 import { createPersistentWorld, employmentDriverCandidates, persistentWorldFingerprint, persistentWorldSelectionSequence } from "../src/data/persistentWorldModel";
-import { PERSISTENT_GLINT_PERIOD_MS, PERSISTENT_GLINT_TRAIL, blendPremiumColor, easePremiumHover, persistentGlintProgress, premiumCurveRoute, resolvePersistentLod, resolvePremiumLabels } from "../src/views/persistent/persistentWorldVisuals";
+import { PERSISTENT_GLINT_PERIOD_MS, PERSISTENT_GLINT_TRAIL, blendPremiumColor, easePremiumHover, persistentGlintProgress, persistentPlacementAccent, premiumCurveRoute, resolvePersistentLod, resolvePremiumLabels } from "../src/views/persistent/persistentWorldVisuals";
 
 describe("premium persistent-world visual language", () => {
   it("routes curves deterministically without changing endpoints", () => {
@@ -20,6 +20,14 @@ describe("premium persistent-world visual language", () => {
     expect(persistentGlintProgress(1300, "edge:7")).toBe(persistentGlintProgress(1300, "edge:7"));
     expect(easePremiumHover(0, 1, 16)).toBeGreaterThan(0);
     expect(blendPremiumColor("#315b67", "#ef7f84", .5, .9)).toMatch(/^rgba\(/);
+  });
+
+  it("gives each exact-ten child a stable related hue", () => {
+    const parent = persistentPlacementAccent({ depth: 1, order: 9, sector: 8 });
+    const children = Array.from({ length: 10 }, (_, index) => persistentPlacementAccent({ depth: 2, order: index + 1, sector: 8 }));
+    expect(parent).toBe("#66d0a4");
+    expect(new Set(children)).toHaveLength(10);
+    expect(children.every((color) => /^#[\da-f]{6}$/i.test(color))).toBe(true);
   });
 
   it("resolves premium LOD and label collisions deterministically", () => {

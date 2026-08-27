@@ -9,6 +9,44 @@ export const PERSISTENT_GLINT_PERIOD_MS = 2500;
 export const PERSISTENT_GLINT_TRAIL = 0.085;
 export const PERSISTENT_SECTOR_COLORS = ["#6fe4d0", "#59bff5", "#7d9cff", "#ef7f84", "#f0ae54", "#d8ca69", "#e685c4", "#a68cf0", "#66d0a4", "#f18d67"] as const;
 
+function hexToRgb(value: string) {
+  const match = /^#([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i.exec(value);
+  return match ? [Number.parseInt(match[1], 16), Number.parseInt(match[2], 16), Number.parseInt(match[3], 16)] : [111, 228, 208];
+}
+
+function rgbToHsl([red, green, blue]: number[]) {
+  const r = red / 255; const g = green / 255; const b = blue / 255;
+  const max = Math.max(r, g, b); const min = Math.min(r, g, b); const delta = max - min;
+  let hue = 0;
+  if (delta) {
+    if (max === r) hue = 60 * (((g - b) / delta) % 6);
+    else if (max === g) hue = 60 * ((b - r) / delta + 2);
+    else hue = 60 * ((r - g) / delta + 4);
+  }
+  const lightness = (max + min) / 2;
+  const saturation = delta ? delta / (1 - Math.abs(2 * lightness - 1)) : 0;
+  return { hue: (hue + 360) % 360, saturation: saturation * 100, lightness: lightness * 100 };
+}
+
+function hslToHex(hue: number, saturation: number, lightness: number) {
+  const s = saturation / 100; const l = lightness / 100;
+  const chroma = (1 - Math.abs(2 * l - 1)) * s; const section = ((hue % 360) + 360) % 360 / 60; const x = chroma * (1 - Math.abs((section % 2) - 1));
+  const [red, green, blue] = section < 1 ? [chroma, x, 0] : section < 2 ? [x, chroma, 0] : section < 3 ? [0, chroma, x] : section < 4 ? [0, x, chroma] : section < 5 ? [x, 0, chroma] : [chroma, 0, x];
+  const match = l - chroma / 2;
+  return `#${[red, green, blue].map((channel) => Math.round((channel + match) * 255).toString(16).padStart(2, "0")).join("")}`;
+}
+
+/** Keeps children in one parent palette while making ten converging routes distinguishable. */
+export function persistentPlacementAccent(placement: Pick<PersistentWorldPlacement, "depth" | "order" | "sector">) {
+  if (placement.depth === 0) return "#f08acb";
+  const base = PERSISTENT_SECTOR_COLORS[Math.max(0, placement.sector)] ?? PERSISTENT_SECTOR_COLORS[0];
+  if (placement.depth === 1) return base;
+  const hsl = rgbToHsl(hexToRgb(base));
+  const offset = (placement.order - 5.5) * 4.8;
+  const lightness = Math.max(48, Math.min(73, hsl.lightness + ((placement.order % 3) - 1) * 4));
+  return hslToHex((hsl.hue + offset + 360) % 360, Math.max(48, hsl.saturation), lightness);
+}
+
 function stableHash(value: string) {
   let hash = 0x811c9dc5;
   for (let index = 0; index < value.length; index += 1) {
