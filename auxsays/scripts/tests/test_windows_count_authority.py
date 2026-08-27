@@ -355,9 +355,27 @@ def run() -> int:
     qa_after = [i for i, st in enumerate(steps)
                 if "qa_patch_records" in str(st.get("run") or "") and i > win_i]
     check("N5 QA re-runs after the promotions", bool(qa_after), str(qa_after))
-    check("N5 the writeback may commit the repaired Windows records",
-          any("windows-11" in str(st.get("run") or "") and "--allow" in str(st.get("run") or "")
-              for st in steps), "no --allow entry covers windows-11 records")
+    # Find the WRITEBACK step by what it runs, then read its --allow values as TOKENS and glob them
+    # against a real record path. An earlier version asked whether "windows-11" and "--allow" both
+    # appeared anywhere in the same step's run:, which the collection step satisfied by accident --
+    # `microsoft-windows-11` sits in its product-id list and `--allow` appears in one of its code
+    # comments. Deleting the real allow entry, the one thing that lets the lane commit these records,
+    # left the suite fully green.
+    import fnmatch  # noqa: PLC0415
+    # Steps that INVOKE the writeback, not steps that merely mention it -- "automation_writeback"
+    # appears in a comment in a neighbouring step too, and matching that one found no real flags.
+    wb_steps = [st for st in steps
+                if "automation_writeback.py" in str(st.get("run") or "")]
+    check("N5 the conflict-safe writeback step is identifiable", bool(wb_steps),
+          str([st.get("name") for st in steps]))
+    allows = []
+    for st in wb_steps:
+        toks = str(st.get("run") or "").replace("\\\n", " ").split()
+        allows += [toks[i + 1].strip("'\"") for i, t in enumerate(toks[:-1]) if t == "--allow"]
+    target = "auxsays/updates/generated/2026-06-23-windows-11-25h2.md"
+    check("N5 an --allow entry actually authorizes a Windows record path",
+          any(fnmatch.fnmatch(target, pat) for pat in allows),
+          f"allow entries: {allows}")
 
     # ---------- N6: the promotion structurally cannot rewrite Windows verdict prose ----------
     print("\n[N6] the unattended promotion cannot touch editorial prose")
@@ -498,7 +516,15 @@ def run() -> int:
         rolled["target_release_date"] = "2026-09-08T00:00:00Z"
         write_front_matter_and_body(rec_path, rolled, _b)
 
-        changed, details = reconcile_record_counts(rows_25, gen)
+        # A second patch that still HAS accepted evidence, because retraction is fenced behind a
+        # non-empty canonical population (see R5) and production's map is never empty -- 124 keys
+        # live. Without this the fixture would exercise the guard, not the rollover.
+        keep = gen / "2026-06-23-windows-11-26h1.md"
+        record(keep, ver="26H1", kb="KB5121000", build="28000.2704", count=1)
+        rollover_rows = rows_25 + [row(ver="26H1", kb="KB5121000", build="28000.2704",
+                                       feat="26H1", rid="keep", url="https://x/keep")]
+        changed, details = reconcile_record_counts(rollover_rows, gen)
+        details = [d for d in details if "25h2" in d.get("record", "")]
         after, _ = load_front_matter_and_body(rec_path)
         check("R1 the count falls to zero after the rollover",
               after["update_report_count"] == 0, str(after["update_report_count"]))
@@ -516,16 +542,105 @@ def run() -> int:
               str(after.get("update_consensus_label")))
         check("R3 the retraction is reported, not silent",
               details and details[0].get("retracted"), str(details))
-        check("R4 a record that never had consensus is left alone",
-              reconcile_record_counts(rows_25, gen)[0] == 0,
-              "a second pass rewrote an already-coherent zero record")
         # and the state fields still agree with the zero count
+        check("R4 re-running does not rewrite the just-retracted record",
+              reconcile_record_counts(rollover_rows, gen)[0] == 0,
+              "a second pass rewrote an already-retracted record")
         check("R4 the zero state is internally consistent",
               after.get("evidence_state") == "official_only"
               and after.get("evidence_state_label") == "Official source only"
               and after.get("consensus_collection_status") == "deferred_official_only",
               str({k: after.get(k) for k in ("evidence_state", "evidence_state_label",
                                              "consensus_collection_status")}))
+
+    # ---------- R5-R8: retraction must never outrun restoration ----------
+    print("\n[R5-R8] the one deleting operation is fenced in")
+    # Retracting DELETES published content, and deletion and regeneration are NOT symmetric:
+    # reconciliation runs for every product, but only a product with a scoped --write-all step in the
+    # lane gets its projections rebuilt. Two guards, each with its own failure story.
+    def _projected(path):
+        d, _b = load_front_matter_and_body(path)
+        return {k: (len(d[k]) if isinstance(d.get(k), list) else "present")
+                for k in ("update_consensus_summary", "accepted_report_sources",
+                          "evidence_samples") if k in d}
+
+    with tempfile.TemporaryDirectory() as td:
+        gen = Path(td) / "generated"
+        gen.mkdir(parents=True)
+        win = gen / "2026-06-23-windows-11-25h2.md"
+        record(win, count=12, prose="12 user reports found for Windows 11 25H2.")
+        d, b = load_front_matter_and_body(win)
+        d["accepted_report_sources"] = [{"source": f"s{i}"} for i in range(12)]
+        d["evidence_samples"] = [{"issue": "bsod"}]
+        write_front_matter_and_body(win, d, b)
+
+        # R5: an EMPTY canonical population means the evidence file was missing, empty or key-less --
+        # load_evidence() returns [] for all three -- not that every patch lost its reports. Live,
+        # retracting on that input stripped 124 records and deleted 570 source entries in one pass,
+        # and only two products could ever rebuild them. Reconciling the NUMBERS on an empty map is
+        # fine: the next healthy run restores it. Deleting content is not.
+        changed, _det = reconcile_record_counts([], gen)
+        check("R5 an empty evidence population zeroes the count",
+              load_front_matter_and_body(win)[0]["update_report_count"] == 0)
+        check("R5 ... but deletes nothing",
+              _projected(win) == {"update_consensus_summary": "present",
+                                  "accepted_report_sources": 12, "evidence_samples": 1},
+              str(_projected(win)))
+
+    with tempfile.TemporaryDirectory() as td:
+        gen = Path(td) / "generated"
+        gen.mkdir(parents=True)
+        # R6: a product with NO promotion step must never be retracted -- its count can legitimately
+        # dip and recover (revalidate_consensus_evidence can mark rows uncounted), and coming back
+        # with the count restored but the summary gone is a blocking QA error with no automated exit.
+        obs = gen / "2026-07-21-obs-studio-32-2-0.md"
+        obs_fm = {"layout": "aux-update", "update_entry": True, "product_id": "obs-studio",
+                  "update_version": "32.2.0", "update_product": "OBS Studio",
+                  "update_report_count": 9, "confirmed_patch_specific_report_count": 9,
+                  "consensus_report": "9 user reports found for OBS Studio 32.2.0.",
+                  "update_consensus_summary": "WAIT: OBS Studio 32.2.0 has 9 user reports found.",
+                  "accepted_report_sources": [{"source": f"s{i}"} for i in range(9)]}
+        obs.write_text("---\n" + yaml.safe_dump(obs_fm, sort_keys=False) + "---\nbody\n",
+                       encoding="utf-8")
+        keep = gen / "2026-06-23-windows-11-26h1.md"   # keeps the canonical map non-empty
+        record(keep, ver="26H1", kb="KB5121000", build="28000.2704", count=1)
+        live = [row(ver="26H1", kb="KB5121000", build="28000.2704", feat="26H1",
+                    rid="k", url="https://x/k")]
+        reconcile_record_counts(live, gen)            # obs population is empty in `live`
+        after, _ = load_front_matter_and_body(obs)
+        check("R6 the dipped count is still corrected", after["update_report_count"] == 0)
+        check("R6 a product the lane cannot regenerate keeps its projections",
+              len(after.get("accepted_report_sources") or []) == 9
+              and "update_consensus_summary" in after, str(_projected(obs)))
+
+    # R6b: the log must NAME what was deleted. "0 -> 0" reads as a no-op.
+    from lib.report_counts import format_reconcile_detail  # noqa: PLC0415
+    line = format_reconcile_detail({"record": "w.md", "product_id": WIN, "version": "23H2",
+                                    "before": 0, "after": 0,
+                                    "retracted": ["accepted_report_sources", "evidence_samples"]})
+    check("R6b a retraction is named in the run log, not hidden behind 0 -> 0",
+          "accepted_report_sources" in line and "evidence_samples" in line, line)
+    check("R6b an ordinary count change stays a one-liner",
+          "retracted" not in format_reconcile_detail(
+              {"record": "w.md", "product_id": WIN, "version": "25H2",
+               "before": 32, "after": 12, "retracted": []}))
+
+    # R7: the set of retractable products must EQUAL the scoped promotions in the lane, or the two
+    # drift and retraction silently outruns restoration again.
+    from lib.report_counts import CONSENSUS_PROMOTION_PRODUCTS  # noqa: PLC0415
+    promoted = {flag_value(str(st.get("run") or ""), "--product-id")
+                for st in steps
+                if "apply_consensus_to_records" in str(st.get("run") or "")
+                and "--write-all" in str(st.get("run") or "")}
+    promoted.discard(None)
+    check("R7 retractable products == the lane's scoped promotion steps",
+          promoted == set(CONSENSUS_PROMOTION_PRODUCTS),
+          f"workflow={sorted(promoted)} constant={sorted(CONSENSUS_PROMOTION_PRODUCTS)}")
+    check("R8 Windows is retractable, because the lane can rebuild it",
+          WIN in CONSENSUS_PROMOTION_PRODUCTS)
+    check("R8 a product with no promotion step is not retractable",
+          "obs-studio" not in CONSENSUS_PROMOTION_PRODUCTS
+          and "blackmagic-davinci" not in CONSENSUS_PROMOTION_PRODUCTS)
 
     print()
     print("=" * 74)

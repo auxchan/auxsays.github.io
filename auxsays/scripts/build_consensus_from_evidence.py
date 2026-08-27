@@ -16,7 +16,7 @@ from typing import Any
 import yaml
 
 from patch_collectors.base import WINDOWS_PRODUCT_ID, load_front_matter_and_body, windows_identity_gate
-from lib.report_counts import reconcile_record_counts
+from lib.report_counts import format_reconcile_detail, reconcile_record_counts
 
 ROOT = Path(__file__).resolve().parents[1]
 EVIDENCE_PATH = ROOT / "_data" / "consensus_evidence.yml"
@@ -332,7 +332,7 @@ def main() -> int:
     if reconciled:
         print(f"Reconciled report counts on {reconciled} record(s) to final counted evidence.")
         for d in reconciled_detail:
-            print(f"  {d['record']}: {d['product_id']} {d['version']} {d['before']} -> {d['after']}")
+            print(f"  {format_reconcile_detail(d)}")
     windows_targets = windows_target_index()
     # Grouped by canonical patch identity: a build-aware product's two builds under one YYMM are
     # two independent groups, so one build's reports can never move the other's counts or summary.

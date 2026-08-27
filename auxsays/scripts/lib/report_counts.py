@@ -147,7 +147,37 @@ def _as_int(value: Any) -> int:
 # Measured against the live corpus: all 781 records whose canonical count is 0 already match this
 # shape, so on a coherent tree it rewrites nothing.
 ZERO_COUNT_PROJECTION_FIELDS = ("update_consensus_summary", "accepted_report_sources",
-                                "evidence_samples", "evidence_sample_visible_limit")
+                                "evidence_samples", "evidence_sample_visible_limit",
+                                "evidence_source_limitations")
+
+# RETRACTION IS ONLY SAFE WHERE RESTORATION IS AUTOMATIC.
+#
+# Retracting is the one thing in this module that DELETES published content, and deletion and
+# regeneration are not symmetric: reconciliation runs for every product, but only a product with a
+# scoped `apply_consensus_to_records --write-all` step in the lane gets its projections rebuilt when
+# its population refills. Retracting for a product without one is a one-way door -- e.g. obs-studio
+# 32.2.0 dipping 9 -> 0 -> 9 (which `revalidate_consensus_evidence` can legitimately do) would come
+# back with the count restored and the summary and source list gone, which QA then reports as
+# `report_count_without_consensus_summary`: a blocking error with no automated way out.
+#
+# So retraction is limited to the products the lane can regenerate. `test_windows_count_authority`
+# asserts this set EQUALS the scoped promotion steps actually present in the workflow, so the two
+# cannot drift apart silently. For every other product a stale projection beside a dropped count
+# stays visible -- unchanged from before this module retracted anything -- and the QA warning
+# `report_count_source_list_mismatch` is what surfaces it.
+CONSENSUS_PROMOTION_PRODUCTS = frozenset({"microsoft-powerpoint", "microsoft-windows-11"})
+
+
+def format_reconcile_detail(detail: dict[str, Any]) -> str:
+    """One log line per reconciled record, naming anything DELETED.
+
+    Separate from the print so it can be tested: a retraction on a record already at zero renders as
+    "0 -> 0", which reads as a no-op while a summary, a source list and its samples were removed. The
+    only content-destroying step in this lane must not be invisible in the run log."""
+    retracted = detail.get("retracted") or []
+    suffix = f" (retracted: {', '.join(retracted)})" if retracted else ""
+    return (f"{detail['record']}: {detail['product_id']} {detail['version']} "
+            f"{detail['before']} -> {detail['after']}{suffix}")
 
 
 def zero_count_projection_drift(data: dict[str, Any]) -> bool:
@@ -222,7 +252,15 @@ def reconcile_record_counts(evidence_rows: Iterable[dict[str, Any]], generated_d
         # (e.g. "User reports found" vs "Verified reports") or otherwise mutates verdict presentation.
         new_label = evidence_state_label_for(n) if state_changed else str(data.get("evidence_state_label") or "")
         # At zero the record must also stop CLAIMING reports, not merely report the number 0.
-        needs_retraction = n == 0 and zero_count_projection_drift(data)
+        # Two guards, both load-bearing. `counts` being wholly empty means the evidence file was
+        # missing, empty, or key-less -- `load_evidence()` returns [] for all three -- and NOT that
+        # every patch on earth lost its reports; retracting then would strip 124 records (570 source
+        # entries) in one pass, and only two products could ever rebuild them. Reconciling the
+        # NUMBERS on an empty map stays as it was, because that is self-healing: the next healthy run
+        # restores it. Deleting content is not.
+        may_retract = (bool(counts)
+                       and product_id in CONSENSUS_PROMOTION_PRODUCTS)
+        needs_retraction = n == 0 and may_retract and zero_count_projection_drift(data)
         if (_as_int(data.get("update_report_count")) == n
                 and _as_int(data.get("confirmed_patch_specific_report_count")) == n
                 and cur_state == new_state
@@ -236,7 +274,8 @@ def reconcile_record_counts(evidence_rows: Iterable[dict[str, Any]], generated_d
         data["evidence_state"] = new_state
         data["consensus_collection_status"] = new_status
         data["evidence_state_label"] = new_label
-        retracted = retract_zero_count_projections(data) if n == 0 else []
+        retracted = (retract_zero_count_projections(data)
+                     if n == 0 and may_retract else [])
         write_front_matter_and_body(path, data, body)
         changed.append({"product_id": product_id, "version": version,
                         "before": before, "after": n, "record": path.name,
