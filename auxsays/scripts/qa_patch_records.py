@@ -612,15 +612,23 @@ def scan_evidence_count_alignment(files: list[Path]) -> tuple[list[dict[str, str
         if not product_id or not version:
             continue
         key = patch_key(product_id, version, data.get("target_build"))
-        # An absent key is NOT treated as an expected count of zero, deliberately. It would close a
-        # real blind spot -- after a KB rollover the key disappears and a record still claiming 12
-        # reports goes unchallenged -- but `patch-ingest.yml` runs this gate with NO reconcile step,
-        # and the rollover is exactly what that lane writes. Erroring here fails the run that
-        # performs the rollover, so its writeback never commits the new target and the rollover can
-        # never land: verified, a permanent cross-lane wedge. The obs lane's reconcile corrects the
-        # count within six hours, and `report_count_source_list_mismatch` surfaces the drift
-        # meanwhile. Closing this needs the lane to own a repair step, not a stricter gate here.
+        # An absent key means the canonical population for this exact patch is EMPTY. That is real
+        # information: after a KB rollover a record can still claim reports for a patch with no
+        # accepted evidence at all, and the count comparison below structurally cannot see it.
+        #
+        # It is a WARNING, never an error, and that is the whole point. `patch-ingest.yml` runs this
+        # gate with NO reconcile step, and the rollover is exactly what that lane writes -- so
+        # erroring fails the run that PERFORMS the rollover, its writeback never commits the new
+        # target, and the rollover can never land. Verified: a permanent cross-lane wedge. Warning
+        # keeps the signal AND lets the rollover land; the obs lane's reconcile corrects the count
+        # within six hours. Measured zero false positives across all 905 live records.
         if key not in evidence_counts:
+            claimed = int(data.get("update_report_count")
+                          or data.get("confirmed_patch_specific_report_count") or 0)
+            if claimed > 0:
+                add(warnings, path, "report_count_for_empty_population",
+                    f"Record claims {claimed} user reports, but the canonical counted-evidence "
+                    f"population for this exact patch is empty.")
             continue
         expected = evidence_counts[key]
         actual = int(data.get("update_report_count") or data.get("confirmed_patch_specific_report_count") or 0)

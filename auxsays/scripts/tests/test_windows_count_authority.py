@@ -38,7 +38,8 @@ import apply_consensus_to_records as acr  # noqa: E402
 from lib.patch_identity import patch_key  # noqa: E402
 from patch_collectors.base import (load_front_matter_and_body,  # noqa: E402
                                    write_front_matter_and_body)
-from lib.report_counts import (counted_evidence_counts, reconcile_record_counts,  # noqa: E402
+from lib.report_counts import (CONSENSUS_PROMOTION_PRODUCTS,  # noqa: E402
+                               counted_evidence_counts, reconcile_record_counts,
                                windows_targets_from_front_matter)
 
 WIN = "microsoft-windows-11"
@@ -349,15 +350,33 @@ def run() -> int:
     qa_steps = [i for i, st in enumerate(steps)
                 if "qa_patch_records" in str(st.get("run") or "")]
     check("N5 QA runs after the promotion", any(i > win_i for i in qa_steps), str(qa_steps))
-    # And NOTHING validates in between. Reconciliation moves the number and retracts projections;
-    # the promotion is the only thing that rebuilds them. With a QA step in that gap, the first run
-    # after a rollover -- count back above zero, projections not yet regenerated -- failed
-    # report_count_without_consensus_summary and report_count_without_evidence_samples, so the job
-    # died before the promotion ran, the projections were never rebuilt, and every later run
-    # repeated it: a permanent wedge, reproduced. QA must see the state the writers finished.
-    check("N5 no QA runs between reconciliation and the Windows promotion",
-          not [i for i in qa_steps if reconcile_i < i < win_i],
-          f"reconcile={reconcile_i} qa={qa_steps} windows={win_i}")
+
+    # ---------- N5b: the ordering property, for EVERY retractable product ----------
+    # Asserted over the constant, not for one product by name. Reconciliation retracts projections
+    # for every product in CONSENSUS_PROMOTION_PRODUCTS; only that product's OWN scoped promotion
+    # rebuilds them. A QA step in that gap kills the job on the first run after a population empties
+    # and refills -- report_count_without_consensus_summary / _without_evidence_samples -- before the
+    # promotion can run, taking the whole writeback and therefore every OTHER product's evidence for
+    # that cycle with it. Reproduced twice: once for Windows, and then again for PowerPoint after the
+    # Windows-only fix, which is exactly why this is a loop and not a second hard-coded check.
+    #
+    # Scope note: this reads the `collect` job only. PowerPoint is ALSO promoted inside
+    # orchestrate_evidence_run.py in the powerpoint-orchestrated job; that path reconciles and
+    # promotes within one graph, so it has no such gap. If a promotion ever moves out of `collect`
+    # entirely, R7's equality assertion below is what will fail and bring someone back here.
+    for product in sorted(CONSENSUS_PROMOTION_PRODUCTS):
+        pi = find_step(product)
+        check(f"N5b {product} has a scoped promotion step in the lane", pi >= 0,
+              str([st.get("name") for st in steps]))
+        if pi < 0:
+            continue
+        check(f"N5b {product} is promoted AFTER reconciliation",
+              0 <= reconcile_i < pi, f"reconcile={reconcile_i} {product}={pi}")
+        check(f"N5b nothing validates between reconciliation and {product}'s promotion",
+              not [i for i in qa_steps if reconcile_i < i < pi],
+              f"reconcile={reconcile_i} qa={qa_steps} {product}={pi}")
+        check(f"N5b QA still runs after {product}'s promotion",
+              any(i > pi for i in qa_steps), f"qa={qa_steps} {product}={pi}")
     # Find the WRITEBACK step by what it runs, then read its --allow values as TOKENS and glob them
     # against a real record path. An earlier version asked whether "windows-11" and "--allow" both
     # appeared anywhere in the same step's run:, which the collection step satisfied by accident --
@@ -424,6 +443,42 @@ def run() -> int:
               "generated_report_count_mismatch" in codes, str(errors))
         check("QA names the canonical count, not the inflated one",
               any("12" in str(e.get("message", "")) for e in errors), str(errors))
+
+    # An EMPTY canonical population is surfaced as a WARNING, never an error, and both halves of that
+    # are load-bearing. Erroring here fails the run that PERFORMS a KB rollover: `patch-ingest.yml`
+    # runs this gate with no reconcile step, so its writeback never commits the new target and the
+    # rollover can never land -- verified, a permanent cross-lane wedge. Staying silent instead loses
+    # the one signal that a record is claiming reports for a patch with no accepted evidence at all.
+    with tempfile.TemporaryDirectory() as td:
+        rolled_path = Path(td) / "2026-06-23-windows-11-25h2.md"
+        record(rolled_path, count=12, prose="12 user reports found for Windows 11 25H2.")
+        rolled, body = load_front_matter_and_body(rolled_path)
+        rolled["target_kb"], rolled["target_os_build"] = "KB5130777", "26200.9400"
+        write_front_matter_and_body(rolled_path, rolled, body)
+        honest_path = Path(td) / "2026-06-09-windows-11-23h2.md"
+        record(honest_path, ver="23H2", kb="KB5120240", build="22631.7517", count=0)
+        keep_path = Path(td) / "2026-06-23-windows-11-26h1.md"
+        record(keep_path, ver="26H1", kb="KB5121000", build="28000.2704", count=1)
+        live = rows_25 + [row(ver="26H1", kb="KB5121000", build="28000.2704", feat="26H1",
+                              rid="keep2", url="https://x/keep2")]
+        orig_loader = qa.load_yaml
+        try:
+            qa.load_yaml = lambda *_a, **_k: live
+            errs, warns = qa.scan_evidence_count_alignment(
+                [rolled_path, honest_path, keep_path])
+        finally:
+            qa.load_yaml = orig_loader
+        rolled_errs = [e for e in errs if "25h2" in str(e.get("file", ""))]
+        rolled_warns = [w for w in warns
+                        if w.get("code") == "report_count_for_empty_population"
+                        and "25h2" in str(w.get("file", ""))]
+        check("QA warns when a record claims reports for an EMPTY population",
+              bool(rolled_warns), str(warns))
+        check("QA does NOT error there -- that would wedge the lane that writes the rollover",
+              not rolled_errs, str(rolled_errs))
+        check("QA stays silent on a record honestly at zero",
+              not [w for w in warns if "23h2" in str(w.get("file", ""))]
+              and not [e for e in errs if "23h2" in str(e.get("file", ""))], str(warns))
 
     # ---------- C11: a forgotten target map must be loud, never a silent zero ----------
     print("\n[C11] the target map is required, so a caller bug cannot publish 0")
@@ -599,7 +654,6 @@ def run() -> int:
 
     # R7: the set of retractable products must EQUAL the scoped promotions in the lane, or the two
     # drift and retraction silently outruns restoration again.
-    from lib.report_counts import CONSENSUS_PROMOTION_PRODUCTS  # noqa: PLC0415
     promoted = {flag_value(str(st.get("run") or ""), "--product-id")
                 for st in steps
                 if "apply_consensus_to_records" in str(st.get("run") or "")
