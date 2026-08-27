@@ -243,6 +243,58 @@ def run() -> int:
         check("O4 count-derived prose was not refreshed either",
               after["consensus_report"] == before["consensus_report"])
 
+    # ---------- O4b: the ONE owned field cannot be blanked ----------
+    # _latest_captured_at([]) returns "" when a collector's gates exclude every row, and
+    # premiere/davinci/obs do not gate their writeback on a non-empty accepted list. Without a
+    # provenance guard an unlucky run could erase the single field the collector is trusted with.
+    print("\n[O4b] an empty owned value cannot erase a meaningful existing one")
+    with tempfile.TemporaryDirectory() as td:
+        rec = premiere_record(Path(td) / "r.md")
+        keep = front(rec)["evidence_last_checked"]
+        _plan, exc = apply(rec, full_proposal(evidence_last_checked=""))
+        check("O4b the boundary did not raise", exc is None, repr(exc))
+        check("O4b the existing evidence_last_checked survives an empty proposal",
+              front(rec)["evidence_last_checked"] == keep, str(front(rec).get("evidence_last_checked")))
+    with tempfile.TemporaryDirectory() as td:
+        rec = premiere_record(Path(td) / "r.md")
+        _plan, _e = apply(rec, full_proposal(evidence_last_checked="   "))
+        check("O4b whitespace-only is treated as empty too",
+              front(rec)["evidence_last_checked"] == "2026-05-01T00:00:00Z",
+              str(front(rec).get("evidence_last_checked")))
+    # ...but a genuinely NEW value must still be applied -- the guard must not freeze the field.
+    with tempfile.TemporaryDirectory() as td:
+        rec = premiere_record(Path(td) / "r.md")
+        apply(rec, full_proposal(evidence_last_checked="2026-12-12T00:00:00Z"))
+        check("O4b a real value still advances the field",
+              front(rec)["evidence_last_checked"] == "2026-12-12T00:00:00Z",
+              str(front(rec).get("evidence_last_checked")))
+
+    # ---------- O4c: the one carve-out is a redaction, never an append ----------
+    # When nothing owned changed, _record_write_plan may still redact banned internal terms out of
+    # the record's EXISTING status_events. That is protective, but it means the write set is not
+    # literally COLLECTOR_WRITABLE_FIELDS -- so pin what it can and cannot do.
+    print("\n[O4c] the status_events carve-out redacts, and cannot append or introduce a count")
+    with tempfile.TemporaryDirectory() as td:
+        rec = Path(td) / "r.md"
+        premiere_record(rec)
+        data = front(rec)
+        data["status_events"] = [{"at": "2026-01-01T00:00:00Z", "label": "Seeded",
+                                  "note": "internal scraper backfill note"}]
+        rec.write_text("---\n" + yaml.safe_dump(data, sort_keys=False)
+                       + "---\nbody\n", encoding="utf-8")
+        n_before = len(front(rec)["status_events"])
+        _plan, exc = apply(rec, full_proposal(evidence_last_checked="2026-05-01T00:00:00Z"))
+        after = front(rec)
+        check("O4c it did not raise", exc is None, repr(exc))
+        check("O4c no event was APPENDED", len(after["status_events"]) == n_before,
+              f"{n_before} -> {len(after['status_events'])}")
+        check("O4c no count-derived note reached the record",
+              not any("count updated to" in str(e.get("note", "")) for e in after["status_events"]),
+              str(after["status_events"]))
+        check("O4c editorial content still untouched", after["quick_verdict"] == HUMAN_VERDICT)
+        check("O4c the count was still not written", after["update_report_count"] == 3,
+              str(after["update_report_count"]))
+
     # ---------- O5 / sections 14+15: Windows count/narrative contradiction ----------
     print("\n[O5] the collector cannot introduce count-inconsistent narrative")
     for version, collector_pop, reconciled in (("25H2", 9, 29), ("26H1", 1, 2)):

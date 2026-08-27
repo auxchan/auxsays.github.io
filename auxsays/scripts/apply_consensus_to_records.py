@@ -87,10 +87,14 @@ CONSENSUS_COHERENCE_FIELDS = {
 # A field added to _proposed_record_fields later must NOT become collector-writable by default:
 # unknown field -> not collector-owned -> not written. Fail closed.
 COLLECTOR_WRITABLE_FIELDS = frozenset({
-    # "when did this collector last look at evidence for this patch" -- complete at collector
-    # completion, and nothing later reconciles it. This is the field that makes a collector write
-    # meaningful; without it the in-collector write would be permanently inert, since
-    # record_last_updated alone is excluded from substantiveness.
+    # "when did this collector last look at evidence for this patch". captured_at is stamped once
+    # per RUN, not per row, so max(captured_at) over the collector's own included rows equals the
+    # max over the full population -- verified across four live groups including the 9-vs-29 Windows
+    # one. That is what makes it a run fact rather than a population fact. It is the field that makes
+    # a collector write meaningful at all; record_last_updated alone is excluded from
+    # substantiveness, so without this the in-collector write would be permanently inert.
+    # (The later `promote` stage also writes it, so this is a freshness update BETWEEN collect and
+    # promote, not a field only the collector can set.)
     "evidence_last_checked",
     # bookkeeping only; RECORD_SUBSTANTIVE_COMPARE_IGNORED means it can never by itself cause a write
     "record_last_updated",
@@ -100,6 +104,11 @@ COLLECTOR_WRITABLE_FIELDS = frozenset({
 def collector_owned_fields(fields: dict[str, Any]) -> dict[str, Any]:
     """The subset of `fields` an in-collector writeback is authorized to apply."""
     return {key: value for key, value in fields.items() if key in COLLECTOR_WRITABLE_FIELDS}
+
+
+def _is_blank_value(value: Any) -> bool:
+    """True for None, "" and whitespace -- the shapes a weaker proposal uses to erase a value."""
+    return value is None or (isinstance(value, str) and not value.strip())
 
 
 WRITEABLE_FIELDS = {
@@ -1226,8 +1235,24 @@ def apply_collector_record_fields(record_path: Path, fields: dict[str, Any]) -> 
     normal write plan, so a collector cannot publish a claim it does not yet have the authority to
     make. Collectors must call this rather than _apply_record_fields directly -- that is what makes
     the boundary a boundary. Returns the same shape as _apply_record_fields, so
-    ``bool(result["write_plan"]["fields"])`` still reports truthfully whether bytes changed."""
-    return _apply_record_fields(record_path, collector_owned_fields(fields))
+    ``bool(result["write_plan"]["fields"])`` still reports truthfully whether bytes changed.
+
+    PROVENANCE: an owned field whose proposed value is empty is dropped when the record already
+    holds a meaningful one. `_latest_captured_at([])` returns "" when a collector's gates exclude
+    every row, and premiere/davinci/obs do not gate their writeback on a non-empty accepted list --
+    so without this an unlucky run could blank the one field the collector is trusted with. Preserve
+    rather than destructively blank; a later stage with the full population can still set it.
+
+    ONE CARVE-OUT, deliberate: when nothing owned changed, `_record_write_plan` may still redact
+    banned internal terms out of the record's EXISTING `status_events` (see its non-substantive
+    branch). That is a doctrine-protective redaction of content already published, never an append
+    and never a new count -- `status_events_append` is filtered out here like any other unowned key.
+    """
+    owned = collector_owned_fields(fields)
+    current = _load_front_matter(record_path)
+    kept = {key: value for key, value in owned.items()
+            if not (_is_blank_value(value) and not _is_blank_value(current.get(key)))}
+    return _apply_record_fields(record_path, kept)
 
 
 def _apply_record_fields(record_path: Path, fields: dict[str, Any]) -> dict[str, Any]:
