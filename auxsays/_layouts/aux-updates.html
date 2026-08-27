@@ -261,15 +261,21 @@ layout: aux-base
             {% include monitoring-status.html mode='feed' product_id=item.product_id version=item.update_version target_build=item.target_build published_at=item.update_published_at report_count=item.update_report_count %}
           </span>
         </div>
-        {% if item.update_feed_title != blank %}
-        {% assign card_title = item.update_feed_title %}
-        {% elsif item.update_product != blank and item.update_version != blank %}
-        {% assign card_title = item.update_product | append: ' ' | append: item.update_version %}
-        {% elsif item.update_product != blank %}
-        {% assign card_title = item.update_product %}
-        {% else %}
-        {% assign card_title = item.title %}
+        {%- comment -%} Stored feed label first, then the exact build this record identifies. The
+          card sits directly under a per-BUILD monitoring status, so a build-aware title naming
+          only its version left the two disagreeing. Guards compare against '' because
+          `!= blank` is an always-true no-op in this stack; every shipped record carries
+          update_feed_title, so the corrected guards change nothing today and only make the
+          documented fallback reachable. {%- endcomment -%}
+        {% assign card_title = item.update_feed_title | default: '' %}
+        {% if card_title == '' %}
+          {% assign card_product = item.update_product | default: '' %}
+          {% assign card_version = item.update_version | default: '' %}
+          {% assign card_title = card_product | append: ' ' | append: card_version | strip %}
         {% endif %}
+        {% if card_title == '' %}{% assign card_title = item.title %}{% endif %}
+        {% capture card_title_labelled %}{% include patch-public-label.html label=card_title target_build=item.target_build %}{% endcapture %}
+        {% assign card_title = card_title_labelled %}
         <h2 class="patch-card-title"><a href="{{ item.url | relative_url }}">{{ card_title }}</a></h2>
         <p class="patch-card-summary">{{ item.description }}</p>
         {% assign consensus_summary = item.update_consensus_summary | default: item.community_summary %}
@@ -362,15 +368,17 @@ layout: aux-base
               {% include monitoring-status.html mode='feed' product_id=item.product_id version=item.update_version target_build=item.target_build published_at=item.update_published_at report_count=item.update_report_count %}
             </span>
           </div>
-          {% if item.update_feed_title != blank %}
-          {% assign card_title = item.update_feed_title %}
-          {% elsif item.update_product != blank and item.update_version != blank %}
-          {% assign card_title = item.update_product | append: ' ' | append: item.update_version %}
-          {% elsif item.update_product != blank %}
-          {% assign card_title = item.update_product %}
-          {% else %}
-          {% assign card_title = item.title %}
+          {%- comment -%} Same stored-label-then-build resolution as the primary feed grid above;
+            see that block for why the guards compare against '' rather than `blank`. {%- endcomment -%}
+          {% assign card_title = item.update_feed_title | default: '' %}
+          {% if card_title == '' %}
+            {% assign card_product = item.update_product | default: '' %}
+            {% assign card_version = item.update_version | default: '' %}
+            {% assign card_title = card_product | append: ' ' | append: card_version | strip %}
           {% endif %}
+          {% if card_title == '' %}{% assign card_title = item.title %}{% endif %}
+          {% capture card_title_labelled %}{% include patch-public-label.html label=card_title target_build=item.target_build %}{% endcapture %}
+          {% assign card_title = card_title_labelled %}
           <h2 class="patch-card-title"><a href="{{ item.url | relative_url }}">{{ card_title }}</a></h2>
           <p class="patch-card-summary">{{ item.description }}</p>
           {% assign consensus_summary = item.update_consensus_summary | default: item.community_summary %}

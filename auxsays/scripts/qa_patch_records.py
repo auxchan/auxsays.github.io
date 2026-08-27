@@ -11,7 +11,7 @@ from urllib.parse import urlparse
 
 import yaml
 
-from lib.patch_identity import patch_key
+from lib.patch_identity import identity_build, is_build_aware, patch_key
 
 from lib.report_counts import counted_evidence_counts, windows_targets_from_front_matter
 
@@ -304,6 +304,27 @@ def scan_record(path: Path) -> tuple[list[dict[str, str]], list[dict[str, str]]]
         add(warnings, path, "duplicated_detail_title_version", f"Detail title appears to repeat version '{version}'.")
     if version and title and len(re.findall(re.escape(version), title, flags=re.I)) > 1:
         add(warnings, path, "duplicated_title_version", f"Title appears to repeat version '{version}'.")
+
+    # STORED PUBLIC LABEL vs CANONICAL IDENTITY. `title` and `description` are the two public
+    # strings no layout can reach: aux-base.html renders `{% seo %}`, and jekyll-seo-tag reads them
+    # straight off the front matter for <title>, og:title, og:description and the meta description.
+    # Every other headline derives its build at render time from `target_build`
+    # (_includes/patch-public-label.html), so these two are the only ones that can silently keep a
+    # stale, build-free label -- which is exactly what happened: they are baked once at record
+    # CREATE time and refresh_existing_record never rewrites them, so 20 PowerPoint records shipped
+    # a bare version beside a per-BUILD monitoring status. Repair with
+    # `normalize_public_build_labels.py --apply`. Only ever checked when the record ALREADY states
+    # its own build; a build-aware record with no build is an identity fault reported elsewhere and
+    # never a licence to guess a label for it here.
+    record_build = identity_build(data, data.get("product_id"))
+    if is_build_aware(data.get("product_id")) and record_build:
+        stale_label_fields = sorted(
+            field for field in ("title", "description")
+            if str(data.get(field) or "").strip() and record_build not in str(data.get(field)))
+        if stale_label_fields:
+            add(errors, path, "public_label_missing_build",
+                f"{', '.join(stale_label_fields)} does not state build {record_build}. A sibling "
+                "build under the same version would publish an identical public label.")
 
     if evidence_state == "official_only" and report_count > 0:
         add(errors, path, "official_only_with_reports", "Record has report_count > 0 but evidence_state is official_only.")

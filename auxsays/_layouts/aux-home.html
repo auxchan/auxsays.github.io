@@ -237,7 +237,11 @@ layout: aux-base
                 <a class="home-patch-item home-patch-item--signal" href="{{ item.url | relative_url }}" data-home-patch-signal>
                   <span class="home-patch-dot home-patch-dot--{{ consensus_key }}" aria-hidden="true"></span>
                   <span class="home-patch-copy">
-                    <strong>{{ item.update_feed_title | default: item.update_detail_title | default: item.title }}</strong>
+                    {%- comment -%} Same public label as the patch feed and the detail H1: the stored
+                      label plus the exact build this record identifies, when it has one. {%- endcomment -%}
+                    {% assign home_stored_title = item.update_feed_title | default: item.update_detail_title | default: item.title %}
+                    {% capture home_patch_title %}{% include patch-public-label.html label=home_stored_title target_build=item.target_build %}{% endcapture %}
+                    <strong>{{ home_patch_title }}</strong>
                     <em>
                       {{ consensus_label }}
                       {% if report_count > 0 %}
