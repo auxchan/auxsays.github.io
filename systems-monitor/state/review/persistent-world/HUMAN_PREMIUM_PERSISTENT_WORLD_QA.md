@@ -18,6 +18,7 @@ Preview: `http://127.0.0.1:4174/systems-monitor/#persistent-world`
 
 - every Level-1 focus keeps the selected node, its parent, and all ten Level-2 children in the same immutable world;
 - every Level-1 exact-ten fan uses a wider versioned layout and the camera fits the full immutable neighborhood;
+- focus-camera rotation normalizes every Level-1 sector into the same selected-system-below / exact-ten-above composition without changing stored graph coordinates;
 - the ten child nodes use ten deterministic hues within their parent sector palette;
 - converging focus rails are narrower and their glow is reduced while retaining the fixed light-trail timing;
 - Level-2 labels use one outward-side rule (left, right, top, or bottom) derived from parent-to-child geometry, then resolve into ordered lanes with uniform gaps;
@@ -50,7 +51,11 @@ Preview: `http://127.0.0.1:4174/systems-monitor/#persistent-world`
 - focused exact-ten labels no longer alternate arbitrarily around nodes: every label occupies the outward side of its node, with its nearest box edge connected by a quiet leader and ordered lane spacing;
 - diagonal focus framing is tighter and the graph workspace is taller so dense neighborhoods remain readable at ordinary browser sizes;
 - every Level-1 focus camera now uses the actual graph width and height to fit the selected neighborhood without clipping outer children;
-- in-app browser audit confirmed `fnv1a32:73cac7b9`, 11 rendered focus labels for every one of the ten Level-1 sectors, and 2.5–3.9 ms focused draw p95;
+- label-aware horizontal and vertical margins keep long child names and bottom controls inside the canvas across all ten normalized focus compositions;
+- non-central child names resolve into fixed left/right label rails, central names use the top lane, and the off-focus Outcome ancestor cannot displace one of the selected system's exact-ten labels;
+- the same required-label rule now applies one level deeper: a selected Level-2 factor and all ten Level-3 records retain deterministic side/top/bottom rails instead of silently dropping a colliding label;
+- in-app browser audit confirmed `fnv1a32:73cac7b9`, 11 rendered focus labels for every one of the ten Level-1 sectors, and 11 labels for one representative Level-2 focus in every sector;
+- the ten representative deeper layouts measured 2.0–3.1 ms focused draw p95, while the normalized Level-1 sample remained within the established focused-render budget;
 - no network fetch, public activation, synthetic value, new relationship, Gate-B change, or deployment is introduced by this bridge.
 
 ## Taylor visual review

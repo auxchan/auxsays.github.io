@@ -4,11 +4,11 @@ import type { PersistentWorldFactualBinding } from "../../data/persistentWorldFa
 import {
   PERSISTENT_GLINT_TRAIL, blendPremiumColor, drawPremiumGlyph,
   easePremiumHover, factorGlyph, persistentGlintProgress, pointOnCubic, premiumCurveRoute,
-  persistentPlacementAccent, premiumRadius, resolvePersistentLod, resolvePremiumLabels, traceCubic,
+  persistentFocusRotation, persistentPlacementAccent, premiumRadius, resolvePersistentLod, resolvePremiumLabels, shortestAngleDelta, traceCubic,
   type LabelCandidate, type Point
 } from "./persistentWorldVisuals";
 
-interface Camera { x: number; y: number; scale: number }
+interface Camera { x: number; y: number; scale: number; rotation: number }
 interface Viewport { zoom: number; panX: number; panY: number }
 interface Props {
   model: PersistentWorldReadModel;
@@ -27,20 +27,24 @@ const AMBIENT_EDGE = "#315b67";
 
 function targetCamera(model: PersistentWorldReadModel, selectedPlacementId: string | null, fullWorld: boolean, viewportWidth = 980, viewportHeight = 720): Camera {
   const selected = selectedPlacementId ? model.placements[selectedPlacementId] : undefined;
-  if (!selected || fullWorld) return { x: 0, y: 0, scale: fullWorld ? .17 : OVERVIEW_SCALE };
+  if (!selected || fullWorld) return { x: 0, y: 0, scale: fullWorld ? .17 : OVERVIEW_SCALE, rotation: 0 };
+  const rotation = persistentFocusRotation(selected.sector);
   if (selected.depth === 1) {
     const neighborhood = [selected, ...(model.childrenByPlacement[selected.id] ?? []).map((id) => model.placements[id])];
-    const xs = neighborhood.map((placement) => placement.x); const ys = neighborhood.map((placement) => placement.y);
+    const rotated = neighborhood.map((placement) => ({ x: placement.x * Math.cos(rotation) - placement.y * Math.sin(rotation), y: placement.x * Math.sin(rotation) + placement.y * Math.cos(rotation) }));
+    const xs = rotated.map((placement) => placement.x); const ys = rotated.map((placement) => placement.y);
     const minX = Math.min(...xs); const maxX = Math.max(...xs); const minY = Math.min(...ys); const maxY = Math.max(...ys);
     const worldWidth = Math.max(1, maxX - minX); const worldHeight = Math.max(1, maxY - minY);
-    const scale = Math.max(.82, Math.min(1.28, (viewportWidth - 170) / worldWidth, (viewportHeight - 170) / worldHeight));
-    return { x: (minX + maxX) / 2, y: (minY + maxY) / 2, scale };
+    const scale = Math.max(.72, Math.min(.95, (viewportWidth - Math.min(380, viewportWidth * .42)) / worldWidth, (viewportHeight - Math.min(250, viewportHeight * .35)) / worldHeight));
+    const centerX = (minX + maxX) / 2; const centerY = (minY + maxY) / 2;
+    return { x: centerX * Math.cos(rotation) + centerY * Math.sin(rotation), y: -centerX * Math.sin(rotation) + centerY * Math.cos(rotation), scale, rotation };
   }
-  return { x: selected.x, y: selected.y, scale: selected.depth === 2 ? 1.72 : 2.7 };
+  return { x: selected.x, y: selected.y, scale: selected.depth === 2 ? 1.72 : 2.7, rotation };
 }
 
 function project(placement: PersistentWorldPlacement, camera: Camera, viewport: Viewport, width: number, height: number): Point {
-  return { x: width / 2 + (placement.x - camera.x) * camera.scale * viewport.zoom + viewport.panX, y: height / 2 + (placement.y - camera.y) * camera.scale * viewport.zoom + viewport.panY };
+  const dx = placement.x - camera.x; const dy = placement.y - camera.y; const cos = Math.cos(camera.rotation); const sin = Math.sin(camera.rotation);
+  return { x: width / 2 + (dx * cos - dy * sin) * camera.scale * viewport.zoom + viewport.panX, y: height / 2 + (dx * sin + dy * cos) * camera.scale * viewport.zoom + viewport.panY };
 }
 
 function semanticIds(model: PersistentWorldReadModel, selectedPlacementId: string | null) {
@@ -125,9 +129,9 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
 
     const draw = (now: number) => {
       const started = performance.now(); const elapsedMs = Math.min(48, Math.max(0, now - last)); const bounds = host.getBoundingClientRect(); const width = bounds.width; const height = bounds.height; const camera = cameraRef.current; const viewport = viewportRef.current;
-      if (!reducedMotion) { const amount = 1 - Math.pow(.00000003, Math.min(.06, elapsedMs / 1000)); camera.x += (destination.x - camera.x) * amount; camera.y += (destination.y - camera.y) * amount; camera.scale += (destination.scale - camera.scale) * amount; }
-      host.dataset.cameraScale = camera.scale.toFixed(3);
-      if (!cameraSettled && (reducedMotion || (Math.abs(camera.x - destination.x) < .35 && Math.abs(camera.y - destination.y) < .35 && Math.abs(camera.scale - destination.scale) < .001))) { cameraSettled = true; host.dataset.cameraSettleMs = (performance.now() - cameraStarted).toFixed(3); }
+      if (!reducedMotion) { const amount = 1 - Math.pow(.00000003, Math.min(.06, elapsedMs / 1000)); camera.x += (destination.x - camera.x) * amount; camera.y += (destination.y - camera.y) * amount; camera.scale += (destination.scale - camera.scale) * amount; camera.rotation += shortestAngleDelta(camera.rotation, destination.rotation) * amount; }
+      host.dataset.cameraScale = camera.scale.toFixed(3); host.dataset.cameraRotationDegrees = (camera.rotation * 180 / Math.PI).toFixed(1);
+      if (!cameraSettled && (reducedMotion || (Math.abs(camera.x - destination.x) < .35 && Math.abs(camera.y - destination.y) < .35 && Math.abs(camera.scale - destination.scale) < .001 && Math.abs(shortestAngleDelta(camera.rotation, destination.rotation)) < .001))) { cameraSettled = true; host.dataset.cameraSettleMs = (performance.now() - cameraStarted).toFixed(3); }
       last = now;
       const parallax = reducedMotion ? { x: 0, y: 0 } : { x: (pointerRef.current.x - width / 2) * .018, y: (pointerRef.current.y - height / 2) * .018 };
       drawBackground(context, width, height, parallax);
@@ -149,7 +153,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
         if (!reducedMotion && (!traceMode || traceEdge)) { const progress = persistentGlintProgress(now, edge.id); const trailStart = pointOnCubic(route, Math.max(0, progress - PERSISTENT_GLINT_TRAIL)); const trailEnd = pointOnCubic(route, progress); const gradient = context.createLinearGradient(trailStart.x, trailStart.y, trailEnd.x, trailEnd.y); gradient.addColorStop(0, blendPremiumColor(accent, accent, 1, 0)); gradient.addColorStop(1, blendPremiumColor("#ffffff", accent, .26, .98)); context.save(); context.strokeStyle = gradient; context.lineWidth = 3.1; context.shadowColor = accent; context.shadowBlur = 12; context.beginPath(); context.moveTo(trailStart.x, trailStart.y); context.lineTo(trailEnd.x, trailEnd.y); context.stroke(); context.restore(); }
       }
 
-      const labelCandidates: LabelCandidate[] = [];
+      const labelCandidates: LabelCandidate[] = []; const focusPlacement = selectedPlacementId ? model.placements[selectedPlacementId] : undefined;
       for (const placement of placements) {
         const point = project(placement, camera, viewport, width, height); if (point.x < -42 || point.y < -42 || point.x > width + 42 || point.y > height + 42) continue;
         const factorLabel = model.factors[placement.canonicalFactorId].label; const factualBinding = factualBindings[placement.id];
@@ -167,7 +171,9 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
           }
           context.restore();
         }
-        if (emphasized && lod >= 1) {
+        const focusHasChildren = Boolean(focusPlacement && (model.childrenByPlacement[focusPlacement.id]?.length ?? 0) > 0);
+        const suppressFocusAncestorLabel = Boolean(focusHasChildren && placement.id === focusPlacement?.parentPlacementId);
+        if (emphasized && lod >= 1 && !suppressFocusAncestorLabel) {
           const label = factualBinding?.status === "CONNECTED" ? `${factorLabel} · ${factualBinding.displayValue}` : factorLabel; const fontSize = placement.depth === 0 ? 13 : placement.depth === 1 ? 12 : 11; context.font = `${placement.depth < 2 ? 750 : 650} ${fontSize}px Inter, system-ui, sans-serif`; const textWidth = Math.min(226, context.measureText(label).width + 18);
           let labelX = point.x; let labelY = point.y + radius + 17; let anchorX: number | undefined; let anchorY: number | undefined; let labelSide: "left" | "right" | "top" | "bottom" | undefined;
           const parent = placement.parentPlacementId ? model.placements[placement.parentPlacementId] : undefined;
@@ -176,21 +182,22 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
             labelX = point.x + (dx / distance) * (radius + 15) + (-dy / distance) * tangent;
             labelY = point.y + (dy / distance) * (radius + 15) + (dx / distance) * tangent;
             const focused = selectedPlacementId ? model.placements[selectedPlacementId] : undefined;
-            if (focused?.depth === 1 && placement.depth === 2 && placement.parentPlacementId === focused.id) {
-              const radialX = dx / distance; const radialY = dy / distance; const horizontal = Math.abs(radialX) >= Math.abs(radialY);
+            const focusedExactTenChild = Boolean(focused && focused.depth < 3 && placement.parentPlacementId === focused.id && placement.depth === focused.depth + 1);
+            if (focusedExactTenChild) {
+              const radialX = dx / distance; const radialY = dy / distance; const horizontal = Math.abs(radialX) >= .18;
               labelSide = horizontal ? radialX < 0 ? "left" : "right" : radialY < 0 ? "top" : "bottom";
               if (labelSide === "left" || labelSide === "right") {
                 const direction = labelSide === "left" ? -1 : 1;
-                labelX = point.x + direction * (radius + 12 + textWidth / 2); labelY = point.y;
+                labelX = labelSide === "left" ? 14 + textWidth / 2 : width - 14 - textWidth / 2; labelY = point.y;
                 anchorX = point.x + direction * (radius + 3); anchorY = point.y;
               } else {
                 const direction = labelSide === "top" ? -1 : 1;
-                labelX = point.x; labelY = point.y + direction * (radius + 12 + 11);
+                labelX = point.x; labelY = labelSide === "top" ? 25 : height - 25;
                 anchorX = point.x; anchorY = point.y + direction * (radius + 3);
               }
             }
           }
-          const focusedExactTenChild = Boolean(selectedPlacementId && model.placements[selectedPlacementId]?.depth === 1 && placement.depth === 2 && placement.parentPlacementId === selectedPlacementId);
+          const focusedExactTenChild = Boolean(focusPlacement && focusPlacement.depth < 3 && placement.parentPlacementId === focusPlacement.id && placement.depth === focusPlacement.depth + 1);
           labelCandidates.push({ id: placement.id, text: label, x: labelX, y: labelY, priority: placement.depth === 0 ? 100 : isSelected ? 90 : placement.depth === 1 ? 70 : placement.depth === 2 ? 50 : 20, width: textWidth, height: 22, accent, anchorX, anchorY, required: focusedExactTenChild, side: labelSide });
         }
         context.globalAlpha = 1;

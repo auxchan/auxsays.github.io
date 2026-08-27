@@ -6,7 +6,7 @@ import { createPersistentWorld, employmentDriverCandidates, persistentWorldFinge
 import { persistentWorldFactualBinding } from "../src/data/persistentWorldFactualBindings";
 import { PERSISTENT_WORLD_PROFILED_FACTOR_COUNT, persistentWorldCandidateSourceProfile } from "../src/data/persistentWorldSourceCatalog";
 import { persistentWorldMediaFor } from "../src/views/persistent/persistentWorldMedia";
-import { PERSISTENT_GLINT_PERIOD_MS, PERSISTENT_GLINT_TRAIL, blendPremiumColor, easePremiumHover, factorGlyph, persistentGlintProgress, persistentPlacementAccent, premiumCurveRoute, resolvePersistentLod, resolvePremiumLabels } from "../src/views/persistent/persistentWorldVisuals";
+import { PERSISTENT_GLINT_PERIOD_MS, PERSISTENT_GLINT_TRAIL, blendPremiumColor, easePremiumHover, factorGlyph, persistentFocusRotation, persistentGlintProgress, persistentPlacementAccent, premiumCurveRoute, resolvePersistentLod, resolvePremiumLabels, shortestAngleDelta } from "../src/views/persistent/persistentWorldVisuals";
 
 describe("premium persistent-world visual language", () => {
   it("routes curves deterministically without changing endpoints", () => {
@@ -106,6 +106,13 @@ describe("premium persistent-world visual language", () => {
     expect(new Set(lane.map((item) => item.x))).toEqual(new Set([100]));
     expect(lane[1].top - (lane[0].top + lane[0].height)).toBe(8);
     expect(lane[2].top - (lane[1].top + lane[1].height)).toBe(8);
+  });
+
+  it("normalizes every sector into the same focus-camera orientation", () => {
+    expect(persistentFocusRotation(0)).toBeCloseTo(0);
+    expect(persistentFocusRotation(1)).toBeCloseTo(-Math.PI / 5);
+    expect(persistentFocusRotation(9)).toBeCloseTo(Math.PI / 5);
+    expect(shortestAngleDelta(Math.PI * .9, -Math.PI * .9)).toBeCloseTo(Math.PI * .2);
   });
 });
 

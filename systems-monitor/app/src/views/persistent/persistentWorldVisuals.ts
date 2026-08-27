@@ -117,6 +117,15 @@ export function resolvePersistentLod(depth: PersistentWorldDepth, effectiveScale
   return effectiveScale >= 1.55 ? 2 : effectiveScale >= 1.3 ? 1 : 0;
 }
 
+export function persistentFocusRotation(sector: number) {
+  const angle = -sector * Math.PI * 2 / 10;
+  return Math.atan2(Math.sin(angle), Math.cos(angle));
+}
+
+export function shortestAngleDelta(from: number, to: number) {
+  return Math.atan2(Math.sin(to - from), Math.cos(to - from));
+}
+
 export function resolvePremiumLabels(candidates: readonly LabelCandidate[], width: number, height: number) {
   const accepted: ResolvedLabel[] = [];
   const ordered = [...candidates].sort((left, right) => right.priority - left.priority || left.id.localeCompare(right.id));
