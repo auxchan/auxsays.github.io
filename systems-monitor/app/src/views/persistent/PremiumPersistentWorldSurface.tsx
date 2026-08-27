@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import type { PersistentWorldPlacement, PersistentWorldReadModel } from "../../data/persistentWorldModel";
 import type { PersistentWorldFactualBinding } from "../../data/persistentWorldFactualBindings";
+import { persistentWorldCandidateSourceProfile } from "../../data/persistentWorldSourceCatalog";
 import {
-  PERSISTENT_GLINT_TRAIL, blendPremiumColor, drawPremiumGlyph,
+  PERSISTENT_GLINT_TRAIL, blendPremiumColor, compactPersistentValue, drawPremiumGlyph,
   easePremiumHover, factorGlyph, persistentGlintProgress, pointOnCubic, premiumCurveRoute,
   persistentFocusRotation, persistentPlacementAccent, premiumRadius, resolvePersistentLod, resolvePremiumLabels, shortestAngleDelta, traceCubic,
   type LabelCandidate, type Point
@@ -24,6 +25,22 @@ interface Props {
 
 const OVERVIEW_SCALE = .205;
 const AMBIENT_EDGE = "#315b67";
+
+function hoverPurpose(model: PersistentWorldReadModel, placement: PersistentWorldPlacement) {
+  if (placement.depth === 0) return "The outcome at the center of the employment system.";
+  const parent = placement.parentPlacementId ? model.placements[placement.parentPlacementId] : undefined;
+  const parentLabel = parent ? model.factors[parent.canonicalFactorId].label : "the employment system";
+  if (placement.depth === 1) return "Organizes ten related factors that can contextualize employment.";
+  if (placement.depth === 2) return `Places this signal inside ${parentLabel} without claiming causality.`;
+  return `Renderer-only depth proof inside ${parentLabel}; not an economic claim.`;
+}
+
+function hoverWhy(model: PersistentWorldReadModel, placement: PersistentWorldPlacement) {
+  if (placement.depth === 0) return "It keeps the map anchored to the labor outcome people are trying to understand.";
+  if (placement.depth === 1) return "It groups a major family of conditions that may help explain labor-market movement.";
+  if (placement.depth === 2) return "It gives people one specific, independently inspectable part of the parent system.";
+  return "It verifies deep navigation and rendering capacity only.";
+}
 
 function targetCamera(model: PersistentWorldReadModel, selectedPlacementId: string | null, fullWorld: boolean, viewportWidth = 980, viewportHeight = 720): Camera {
   const selected = selectedPlacementId ? model.placements[selectedPlacementId] : undefined;
@@ -97,6 +114,11 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
   const suppressClickRef = useRef(false); const hoveredRef = useRef<string | null>(null); const hoverVisualsRef = useRef(new Map<string, number>());
   const pointerRef = useRef<Point>({ x: 0, y: 0 }); const invalidateRef = useRef<() => void>(() => undefined);
   const [hoveredId, setHoveredId] = useState<string | null>(null);
+  const hoveredPlacement = hoveredId ? model.placements[hoveredId] : undefined;
+  const hoveredFactor = hoveredPlacement ? model.factors[hoveredPlacement.canonicalFactorId] : undefined;
+  const hoveredBinding = hoveredId ? factualBindings[hoveredId] : undefined;
+  const hoveredSource = hoveredPlacement?.depth === 2 && hoveredFactor ? persistentWorldCandidateSourceProfile(hoveredFactor.label) : undefined;
+  const hoveredValue = compactPersistentValue(hoveredBinding?.status === "CONNECTED" ? hoveredBinding.displayValue : undefined);
   const semantic = useMemo(() => semanticIds(model, fullWorld ? null : selectedPlacementId), [fullWorld, model, selectedPlacementId]); const semanticSet = useMemo(() => new Set(semantic), [semantic]);
   const selectedPath = useMemo(() => {
     const ids = new Set<string>(); let current = selectedPlacementId ? model.placements[selectedPlacementId] : undefined;
@@ -174,7 +196,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
         const focusHasChildren = Boolean(focusPlacement && (model.childrenByPlacement[focusPlacement.id]?.length ?? 0) > 0);
         const suppressFocusAncestorLabel = Boolean(focusHasChildren && placement.id === focusPlacement?.parentPlacementId);
         if (emphasized && lod >= 1 && !suppressFocusAncestorLabel) {
-          const label = factualBinding?.status === "CONNECTED" ? `${factorLabel} · ${factualBinding.displayValue}` : factorLabel; const fontSize = placement.depth === 0 ? 13 : placement.depth === 1 ? 12 : 11; context.font = `${placement.depth < 2 ? 750 : 650} ${fontSize}px Inter, system-ui, sans-serif`; const textWidth = Math.min(226, context.measureText(label).width + 18);
+          const compactValue = compactPersistentValue(factualBinding?.status === "CONNECTED" ? factualBinding.displayValue : undefined); const label = compactValue ? `${factorLabel} · ${compactValue}` : factorLabel; const fontSize = placement.depth === 0 ? 13 : placement.depth === 1 ? 12 : 11; context.font = `${placement.depth < 2 ? 750 : 650} ${fontSize}px Inter, system-ui, sans-serif`; const textWidth = Math.min(226, context.measureText(label).width + 18);
           let labelX = point.x; let labelY = point.y + radius + 17; let anchorX: number | undefined; let anchorY: number | undefined; let labelSide: "left" | "right" | "top" | "bottom" | undefined;
           const parent = placement.parentPlacementId ? model.placements[placement.parentPlacementId] : undefined;
           if (parent && placement.depth >= 2) {
@@ -231,9 +253,12 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
   }} onPointerDown={(event) => { if (event.button !== 1) return; event.preventDefault(); event.currentTarget.setPointerCapture(event.pointerId); const current = viewportRef.current; panRef.current = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, panX: current.panX, panY: current.panY, moved: false }; }} onPointerMove={(event) => {
     const bounds = event.currentTarget.getBoundingClientRect(); pointerRef.current = { x: event.clientX - bounds.left, y: event.clientY - bounds.top }; const pan = panRef.current;
     if (pan?.pointerId === event.pointerId) { const dx = event.clientX - pan.startX; const dy = event.clientY - pan.startY; pan.moved ||= Math.hypot(dx, dy) > 3; suppressClickRef.current = pan.moved; updateViewport({ ...viewportRef.current, panX: pan.panX + dx, panY: pan.panY + dy }); return; }
-    const started = performance.now(); setHoveredId(hitTest(event)); event.currentTarget.dataset.hoverHitTestMs = (performance.now() - started).toFixed(3); invalidateRef.current();
+    const started = performance.now(); const hit = hitTest(event); setHoveredId(hit); if (hit) { event.currentTarget.style.setProperty("--pw-hover-x", `${Math.max(14, Math.min(bounds.width - 304, pointerRef.current.x + 18))}px`); event.currentTarget.style.setProperty("--pw-hover-y", `${Math.max(14, Math.min(bounds.height - 246, pointerRef.current.y + 18))}px`); } event.currentTarget.dataset.hoverHitTestMs = (performance.now() - started).toFixed(3); invalidateRef.current();
   }} onPointerUp={(event) => { if (panRef.current?.pointerId === event.pointerId) { event.currentTarget.releasePointerCapture(event.pointerId); panRef.current = null; } }} onPointerCancel={() => { panRef.current = null; }} onPointerLeave={() => { if (!panRef.current) setHoveredId(null); }} onMouseDown={(event) => { if (event.button === 1) event.preventDefault(); }} onAuxClick={(event) => { if (event.button === 1) event.preventDefault(); }} onDoubleClick={(event) => { if (!hitTest(event)) onReset(); }} onClick={(event) => { if (suppressClickRef.current) { suppressClickRef.current = false; return; } const id = hitTest(event); if (id) onSelect(id); }}>
     <canvas ref={canvasRef} role="img" aria-label="All 1,111 fixture placements remain resident; premium visual detail and labels are bounded to the current exact-ten neighborhood." />
+    <aside className="sm-pw-hover-card" role="tooltip" aria-hidden={!hoveredPlacement} data-visible={Boolean(hoveredPlacement)}>
+      {hoveredPlacement && hoveredFactor && <><header><span>{hoveredPlacement.depth === 1 ? "System" : hoveredPlacement.depth === 2 ? "Factor" : hoveredPlacement.depth === 0 ? "Outcome" : "Fixture detail"}</span><strong>{hoveredFactor.label}</strong>{hoveredValue && <b>{hoveredValue}</b>}</header><dl><div><dt>Purpose</dt><dd>{hoverPurpose(model, hoveredPlacement)}</dd></div><div><dt>Tracks</dt><dd>{hoveredSource?.summary ?? hoveredFactor.definition}</dd></div><div><dt>Why</dt><dd>{hoverWhy(model, hoveredPlacement)}</dd></div></dl><small>{hoveredBinding?.status === "CONNECTED" ? `${hoveredBinding.validTime} · ${hoveredBinding.provider} · click for evidence` : "Click for full details"}</small></>}
+    </aside>
     <p className="sm-sr-only">Use the structured factor controls following the world to navigate without relying on position, color, hover, or motion.</p>
   </div>;
 }

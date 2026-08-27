@@ -58,6 +58,16 @@ Preview: `http://127.0.0.1:4174/systems-monitor/#persistent-world`
 - the ten representative deeper layouts measured 2.0–3.1 ms focused draw p95, while the normalized Level-1 sample remained within the established focused-render budget;
 - no network fetch, public activation, synthetic value, new relationship, Gate-B change, or deployment is introduced by this bridge.
 
+## Factual handoff and hover preview correction
+
+- connected percentage labels use the compact display form (`61.4%`) while the accepted source observation remains unchanged;
+- hovering a semantic node reveals a pointer-local summary of its purpose, tracking scope, relevance, and—only when accepted—its current reading, period, and authority;
+- the hover summary is supplementary and non-interactive; click and keyboard/touch controls remain the routes to the full inspector;
+- connected inspectors place the compact reading, represented period, provider, and an explicit `Open factual record` handoff directly beneath the factor title;
+- the same factual handoff remains available beside the evidence, methodology, and acquisition links;
+- in-app browser QA confirmed the Labor Supply label and hover summary show `61.4%`, selecting Labor-Force Participation opens its evidence-rich inspector, and `Open factual record` lands on the factual Labor Market view;
+- no source observation, provenance, hierarchy placement, relationship, or publication status changed.
+
 ## Taylor visual review
 
 Confirm:
@@ -78,5 +88,7 @@ Confirm:
 14. Image credit and license links are reachable, and the empty live-data state is honest rather than populated with placeholders.
 15. Connected nodes show accepted factual readings and exact evidence, staged nodes show only their candidate series identity, and unbound nodes show no value.
 16. The Labor Supply exact-ten neighborhood has ten distinguishable icons and its labels can be scanned without tracing through connector convergence.
+17. Hovering a factor provides a concise purpose / tracks / why preview without blocking the graph, and clicking still opens the complete inspector.
+18. Labor-Force Participation displays `61.4%` and its `Open factual record` action reaches the factual Labor Market view.
 
 Human QA is not self-approved by implementation evidence.

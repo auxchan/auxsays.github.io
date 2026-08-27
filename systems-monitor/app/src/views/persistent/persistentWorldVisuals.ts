@@ -126,6 +126,11 @@ export function shortestAngleDelta(from: number, to: number) {
   return Math.atan2(Math.sin(to - from), Math.cos(to - from));
 }
 
+export function compactPersistentValue(value?: string) {
+  if (!value) return undefined;
+  return value.replace(/\s+percent\b/gi, "%");
+}
+
 export function resolvePremiumLabels(candidates: readonly LabelCandidate[], width: number, height: number) {
   const accepted: ResolvedLabel[] = [];
   const ordered = [...candidates].sort((left, right) => right.priority - left.priority || left.id.localeCompare(right.id));

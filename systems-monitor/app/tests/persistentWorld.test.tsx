@@ -6,7 +6,7 @@ import { createPersistentWorld, employmentDriverCandidates, persistentWorldFinge
 import { persistentWorldFactualBinding } from "../src/data/persistentWorldFactualBindings";
 import { PERSISTENT_WORLD_PROFILED_FACTOR_COUNT, persistentWorldCandidateSourceProfile } from "../src/data/persistentWorldSourceCatalog";
 import { persistentWorldMediaFor } from "../src/views/persistent/persistentWorldMedia";
-import { PERSISTENT_GLINT_PERIOD_MS, PERSISTENT_GLINT_TRAIL, blendPremiumColor, easePremiumHover, factorGlyph, persistentFocusRotation, persistentGlintProgress, persistentPlacementAccent, premiumCurveRoute, resolvePersistentLod, resolvePremiumLabels, shortestAngleDelta } from "../src/views/persistent/persistentWorldVisuals";
+import { PERSISTENT_GLINT_PERIOD_MS, PERSISTENT_GLINT_TRAIL, blendPremiumColor, compactPersistentValue, easePremiumHover, factorGlyph, persistentFocusRotation, persistentGlintProgress, persistentPlacementAccent, premiumCurveRoute, resolvePersistentLod, resolvePremiumLabels, shortestAngleDelta } from "../src/views/persistent/persistentWorldVisuals";
 
 describe("premium persistent-world visual language", () => {
   it("routes curves deterministically without changing endpoints", () => {
@@ -61,6 +61,11 @@ describe("premium persistent-world visual language", () => {
     expect(participation.evidenceUrl).toBe("https://data.bls.gov/timeseries/LNS11300000");
     expect(persistentWorldFactualBinding("Average Weekly Hours")).toMatchObject({ status: "SOURCE_IDENTIFIED", candidateSeriesId: "CES0500000002" });
     expect(persistentWorldFactualBinding("Geographic Mobility").status).toBe("UNMAPPED");
+  });
+
+  it("compacts percentage readings without changing other units", () => {
+    expect(compactPersistentValue("61.4 percent")).toBe("61.4%");
+    expect(compactPersistentValue("209 thousand")).toBe("209 thousand");
   });
 
   it("catalogs an explicit official-data or derivation path for every Level-2 factor", () => {
@@ -239,6 +244,20 @@ describe("persistent world local-review shell", () => {
     expect(document.body.textContent).toContain("accepted factual relationships 0");
     expect(document.body.textContent).not.toContain("Gate B closed");
     fireEvent.click(factualLink);
+    window.dispatchEvent(new HashChangeEvent("hashchange"));
+    expect(await screen.findByRole("heading", { name: "Labor Market" }, { timeout: 15_000 })).toBeTruthy();
+  });
+
+  it("connects Labor-Force Participation to its compact reading and factual record", async () => {
+    window.history.replaceState({}, "", "/systems-monitor/#persistent-world/placement%3Alabor-supply%3Alabor-force-participation");
+    render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
+    const inspector = await screen.findByRole("complementary", { name: "Persistent world factor details" }, { timeout: 15_000 });
+    expect(within(inspector).getAllByText("61.4%").length).toBeGreaterThan(0);
+    expect(within(inspector).queryByText("61.4 percent")).toBeNull();
+    const factualLinks = within(inspector).getAllByRole("link", { name: "Open factual record" });
+    expect(factualLinks.length).toBeGreaterThan(0);
+    expect(factualLinks.every((link) => link.getAttribute("href") === "/systems-monitor/#workstream1a")).toBe(true);
+    fireEvent.click(factualLinks[0]);
     window.dispatchEvent(new HashChangeEvent("hashchange"));
     expect(await screen.findByRole("heading", { name: "Labor Market" }, { timeout: 15_000 })).toBeTruthy();
   });
