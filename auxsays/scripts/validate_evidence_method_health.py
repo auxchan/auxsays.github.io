@@ -162,7 +162,7 @@ def validate(path: Path = DEFAULT_PATH) -> int:
         methods = []
 
     status_counts: Counter[str] = Counter()
-    seen_keys: dict[tuple[str, str, str], int] = {}
+    seen_keys: dict[tuple[str, str, str, str], int] = {}
 
     for row_index, row in enumerate(methods, start=1):
         if not isinstance(row, dict):

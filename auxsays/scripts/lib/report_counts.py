@@ -14,7 +14,7 @@ used by BOTH the QA gate and the post-collection reconciliation, so ``update_rep
 diverge from what QA enforces. The predicate is deliberately the QA basis -- this does NOT weaken QA,
 does not change acceptance (the ``counted`` / ``patch_version_matched`` flags), and does not discard
 evidence; it only makes every record's rendered count equal the final counted evidence for that exact
-normalized (product_id, update_version).
+normalized canonical patch identity (product_id, update_version, target_build).
 """
 from __future__ import annotations
 
@@ -25,13 +25,13 @@ from patch_collectors.base import load_front_matter_and_body, write_front_matter
 from .patch_identity import patch_key, require_build
 
 
-def counted_evidence_counts(evidence_rows: Iterable[dict[str, Any]]) -> dict[tuple[str, str], int]:
-    """Authoritative count of final counted, patch-matched evidence rows per (product_id, version).
+def counted_evidence_counts(evidence_rows: Iterable[dict[str, Any]]) -> dict[tuple[str, str, str], int]:
+    """Authoritative count of final counted, patch-matched evidence rows per CANONICAL patch identity.
 
     Predicate (identical to the QA gate): ``counted is not False`` AND ``patch_version_matched is True``.
-    Keys are the exact normalized (product_id, update_version); Reader and Pro are distinct product_ids
+    Keys are patch_key(product_id, update_version, target_build); Reader and Pro are distinct product_ids
     and are never merged."""
-    counts: dict[tuple[str, str], int] = {}
+    counts: dict[tuple[str, str, str], int] = {}
     for row in evidence_rows or []:
         if not isinstance(row, dict):
             continue
@@ -81,7 +81,7 @@ def reconcile_record_counts(evidence_rows: Iterable[dict[str, Any]], generated_d
                             product_ids: set[str] | None = None) -> tuple[int, list[dict[str, Any]]]:
     """One authoritative reconciliation: after all collectors + consensus, set every update record's
     ``update_report_count`` (and the count-derived state fields) to the final counted evidence for its
-    exact (product_id, version). Idempotent -- an already-aligned tree produces zero writes. Returns
+    exact canonical patch identity. Idempotent -- an already-aligned tree produces zero writes. Returns
     (changed_count, [details]). Never merges across products; never touches records that already match.
 
     ``product_ids`` OPTIONALLY narrows the records this call may touch. ``None`` (the default, and

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Consensus-to-generated-record updater with dry-run-first safety gates.
 
-Reads structured evidence rows, aggregates by (product_id, update_version),
+Reads structured evidence rows, aggregates by canonical patch identity,
 finds matching generated Markdown records, validates safety gates, and outputs
 an auditable plan.
 
@@ -67,6 +67,49 @@ CONSENSUS_COHERENCE_FIELDS = {
     "practical_recommendations",
     "source_freshness_note",
 }
+
+# POSITIVE collector write authority. An in-collector writeback runs BEFORE
+# lib.report_counts.reconcile_record_counts and before the final consensus/coherence application,
+# so at that moment it does not know the final counted-evidence population: `_filter_rows` and
+# `counted_evidence_counts` apply DIFFERENT predicates (live: Windows 25H2 is 9 vs 29, 26H1 is 1 vs
+# 2), and reconciliation later rewrites the NUMBERS without rewriting the prose derived from them.
+# A collector that writes count-derived narrative therefore publishes "9 user reports" beside a
+# reconciled count of 29 -- and qa_patch_records compares only the number, so nothing catches it.
+# It would also overwrite human-authored editorial prose: premiere-pro-26-2's quick_verdict,
+# update_decision_body and practical_recommendations came from a hand commit, not the engine.
+#
+# So a collector may write ONLY fields whose truth is already complete when that collector finishes.
+# Everything else -- counts, anything textually derived from a count, the accepted-row projections
+# (accepted_report_sources / evidence_samples, whose nested source_date the collector would blank),
+# and every editorial/coherence field -- belongs to a later authority.
+#
+# This is a POSITIVE allow-list, deliberately not "everything except PROTECTED|CONSENSUS_COHERENCE".
+# A field added to _proposed_record_fields later must NOT become collector-writable by default:
+# unknown field -> not collector-owned -> not written. Fail closed.
+COLLECTOR_WRITABLE_FIELDS = frozenset({
+    # "when did this collector last look at evidence for this patch". captured_at is stamped once
+    # per RUN, not per row, so max(captured_at) over the collector's own included rows equals the
+    # max over the full population -- verified across four live groups including the 9-vs-29 Windows
+    # one. That is what makes it a run fact rather than a population fact. It is the field that makes
+    # a collector write meaningful at all; record_last_updated alone is excluded from
+    # substantiveness, so without this the in-collector write would be permanently inert.
+    # (The later `promote` stage also writes it, so this is a freshness update BETWEEN collect and
+    # promote, not a field only the collector can set.)
+    "evidence_last_checked",
+    # bookkeeping only; RECORD_SUBSTANTIVE_COMPARE_IGNORED means it can never by itself cause a write
+    "record_last_updated",
+})
+
+
+def collector_owned_fields(fields: dict[str, Any]) -> dict[str, Any]:
+    """The subset of `fields` an in-collector writeback is authorized to apply."""
+    return {key: value for key, value in fields.items() if key in COLLECTOR_WRITABLE_FIELDS}
+
+
+def _is_blank_value(value: Any) -> bool:
+    """True for None, "" and whitespace -- the shapes a weaker proposal uses to erase a value."""
+    return value is None or (isinstance(value, str) and not value.strip())
+
 
 WRITEABLE_FIELDS = {
     "update_report_count",
@@ -263,7 +306,7 @@ def _evaluate_gates(
         _gate("gate_03_product_id_matches_record", record["product_id"] == product_id, f"Evidence product_id={product_id!r}, record product_id={record['product_id']!r}.")
         _gate("gate_04_version_matches_record", record["update_version"] == version, f"Evidence version={version!r}, record version={record['update_version']!r}.")
     else:
-        _gate("gate_03_product_id_matches_record", False, "No generated record found for this (product_id, version) key.")
+        _gate("gate_03_product_id_matches_record", False, "No generated record found for this canonical patch identity.")
         _gate("gate_04_version_matches_record", False, "No generated record found — cannot verify version match.")
 
     version_mismatches = [r for r in included_rows if _row_version(r, is_candidate_mode=is_candidate_mode) != version]
@@ -983,7 +1026,7 @@ def _davinci_version_is_beta(version: str) -> bool:
     return bool(re.search(r"\b(?:public\s+)?beta\b|b\d+\b", str(version or ""), flags=re.I))
 
 
-def run_dry_run(*, evidence_path: Path, product_id_filter: str | None, is_candidate_mode: bool, records_index: dict[tuple[str, str], dict[str, Any]], write_requested: bool = False) -> list[dict[str, Any]]:
+def run_dry_run(*, evidence_path: Path, product_id_filter: str | None, is_candidate_mode: bool, records_index: dict[tuple[str, str, str], dict[str, Any]], write_requested: bool = False) -> list[dict[str, Any]]:
     all_rows = _load_yaml_list(evidence_path)
     groups = _group_rows(all_rows, is_candidate_mode=is_candidate_mode)
     if product_id_filter:
@@ -992,7 +1035,7 @@ def run_dry_run(*, evidence_path: Path, product_id_filter: str | None, is_candid
             for (pid, ver, build), rows in sorted(groups.items())]
 
 
-def _payload(results: list[dict[str, Any]], *, evidence_path: Path, is_candidate_mode: bool, product_id_filter: str | None, version_filter: str | None, records_index: dict[tuple[str, str], dict[str, Any]], write_mode_active: bool) -> dict[str, Any]:
+def _payload(results: list[dict[str, Any]], *, evidence_path: Path, is_candidate_mode: bool, product_id_filter: str | None, version_filter: str | None, records_index: dict[tuple[str, str, str], dict[str, Any]], write_mode_active: bool) -> dict[str, Any]:
     return {
         "generated_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
         "mode": "write_back" if write_mode_active else ("dry_run_candidate_staging" if is_candidate_mode else "dry_run_production_evidence"),
@@ -1183,6 +1226,64 @@ def _fields_written_labels(fields: dict[str, Any]) -> list[str]:
     if "status_events_append" in fields:
         labels.append("status_events")
     return labels
+
+
+def _is_earlier_iso(candidate: Any, existing: Any) -> bool:
+    """True when `candidate` is a strictly older timestamp than `existing`.
+
+    evidence_last_checked answers "how fresh is this patch's evidence", and audit_consensus_evidence
+    gates on it (stale_/missing_evidence_last_checked) as a --validate command. It is derived from
+    max(captured_at) over the collector's INCLUDED rows, so a gate change that newly excludes the
+    newest run -- a Windows KB rollover, say -- could hand back an older maximum. Freshness must only
+    ever advance; an unparseable value on either side is left to the normal write path."""
+    def _utc(value: Any) -> datetime | None:
+        text = str(value or "").strip()
+        if not text:
+            return None
+        if text.endswith("Z"):
+            text = text[:-1] + "+00:00"
+        try:
+            dt = datetime.fromisoformat(text)
+        except ValueError:
+            return None
+        return (dt.replace(tzinfo=timezone.utc) if dt.tzinfo is None
+                else dt.astimezone(timezone.utc))
+
+    a, b = _utc(candidate), _utc(existing)
+    return a is not None and b is not None and a < b
+
+
+def apply_collector_record_fields(record_path: Path, fields: dict[str, Any]) -> dict[str, Any]:
+    """The ONLY sanctioned record write for an in-collector writeback.
+
+    Filters `fields` through COLLECTOR_WRITABLE_FIELDS once, then applies the remainder through the
+    normal write plan, so a collector cannot publish a claim it does not yet have the authority to
+    make. Collectors must call this rather than _apply_record_fields directly -- that is what makes
+    the boundary a boundary. Returns the same shape as _apply_record_fields, so
+    ``bool(result["write_plan"]["fields"])`` still reports truthfully whether bytes changed.
+
+    PROVENANCE: an owned field whose proposed value is empty is dropped when the record already
+    holds a meaningful one. `_latest_captured_at([])` returns "" when a collector's gates exclude
+    every row, and premiere/davinci/obs do not gate their writeback on a non-empty accepted list --
+    so without this an unlucky run could blank the one field the collector is trusted with. Preserve
+    rather than destructively blank; a later stage with the full population can still set it.
+
+    ONE CARVE-OUT, deliberate: when nothing owned changed, `_record_write_plan` may still redact
+    banned internal terms out of the record's EXISTING `status_events` (see its non-substantive
+    branch). That is a doctrine-protective redaction of content already published, never an append
+    and never a new count -- `status_events_append` is filtered out here like any other unowned key.
+    """
+    owned = collector_owned_fields(fields)
+    current = _load_front_matter(record_path)
+    kept: dict[str, Any] = {}
+    for key, value in owned.items():
+        existing = current.get(key)
+        if _is_blank_value(value) and not _is_blank_value(existing):
+            continue                                  # never blank a meaningful value
+        if key == "evidence_last_checked" and _is_earlier_iso(value, existing):
+            continue                                  # freshness only ever advances
+        kept[key] = value
+    return _apply_record_fields(record_path, kept)
 
 
 def _apply_record_fields(record_path: Path, fields: dict[str, Any]) -> dict[str, Any]:

@@ -471,7 +471,7 @@ def update_obs_record(record_path: Path, count: int, captured_at: str) -> bool:
 
 
 def apply_consensus_writeback(version: str) -> bool:
-    from apply_consensus_to_records import _apply_record_fields, _index_generated_records, run_dry_run
+    from apply_consensus_to_records import _index_generated_records, apply_collector_record_fields, run_dry_run
 
     records_index = _index_generated_records()
     results = run_dry_run(
@@ -484,18 +484,27 @@ def apply_consensus_writeback(version: str) -> bool:
     matches = [item for item in results if item["update_version"] == version]
     if len(matches) != 1 or not matches[0].get("would_write"):
         return False
-    record_key = (PRODUCT_ID, version)
-    if record_key not in records_index:
-        return False
     result = matches[0]
-    record_path = records_index[record_key]["abs_path"]
+    # Reuse the record the dry-run already resolved by CANONICAL identity rather than re-deriving a
+    # key. The index has been keyed by the identity TRIPLE since #58 (4fe9e415); this 2-tuple
+    # predates it, so the membership test above never matched and this writeback has been silently
+    # inert. Reusing the resolved path is build-exact and cannot drift from the gated group.
+    record_rel = result.get("matched_generated_record_path")
+    if not record_rel:
+        return False
+    record_path = ROOT / record_rel
     fields = dict(result["proposed_fields_if_written"])
     data, _body = front_matter_parts(record_path)
     comparable = {k: v for k, v in fields.items() if k != "status_events_append"}
     if all(data.get(k) == v for k, v in comparable.items()):
         return False
-    _apply_record_fields(record_path, fields)
-    return True
+    # Report whether bytes actually changed, not merely that we reached the write.
+    # `comparable` above always differs (proposed_fields carries a fresh record_last_updated), so
+    # the early-exit never fires; the collector boundary then recomputes substantiveness EXCLUDING
+    # that timestamp and can legitimately write nothing. Returning True regardless would report
+    # record_updated for a no-op -- and in the OBS caller it would suppress the count fallback that
+    # runs only `if not record_updated`.
+    return bool(apply_collector_record_fields(record_path, fields)["write_plan"]["fields"])
 
 
 def valid_update_version(value: Any) -> bool:
@@ -584,8 +593,15 @@ def collect_one(
         record_updated = False
         if record_path:
             record_updated = apply_consensus_writeback(version)
-            if not record_updated and record_needs_count_update(record_path, structured_count):
-                record_updated = update_obs_record(record_path, structured_count, utc_now())
+            # These two writes are ORTHOGONAL now, so they must not be mutually exclusive. The
+            # consensus writeback is bounded to collector-owned fields (freshness) and returns True
+            # whenever evidence_last_checked advances -- which is exactly when new evidence arrived,
+            # and therefore exactly when the count is most likely stale. Gating the count repair on
+            # `not record_updated` would suppress it precisely then. Gate it on the count instead,
+            # which is the condition it actually exists for.
+            if record_needs_count_update(record_path, structured_count):
+                record_updated = update_obs_record(record_path, structured_count,
+                                                   utc_now()) or record_updated
         result["evidence_rows_added"] = added
         result["evidence_rows_total"] = total
         result["structured_count_for_version"] = structured_count

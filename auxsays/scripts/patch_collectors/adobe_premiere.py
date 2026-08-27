@@ -24,6 +24,7 @@ from .base import (
     CollectorContext,
     PatchRecord,
     ProductCollector,
+    ROOT,
     append_evidence_rows,
     apply_acceptance_gates,
     counted_rows,
@@ -1173,7 +1174,7 @@ def format_rejection_counts(rows: list[dict[str, Any]]) -> str:
 
 
 def apply_consensus_writeback(update_version: str) -> bool:
-    from apply_consensus_to_records import _apply_record_fields, _index_generated_records, run_dry_run
+    from apply_consensus_to_records import _index_generated_records, apply_collector_record_fields, run_dry_run
 
     records_index = _index_generated_records()
     results = run_dry_run(
@@ -1187,11 +1188,26 @@ def apply_consensus_writeback(update_version: str) -> bool:
     if len(matches) != 1 or not matches[0].get("would_write"):
         return False
     result = matches[0]
-    record_path = records_index[(PRODUCT_ID, update_version)]["abs_path"]
+    # The dry-run already resolved this group's record by CANONICAL identity
+    # (apply_consensus_to_records._result_for_group -> records_index.get(patch_key(pid, ver, build))),
+    # so reuse that resolution instead of re-deriving a key here. Re-deriving is what broke: the index
+    # has been keyed by the identity TRIPLE since #58 (4fe9e415), while this 2-tuple predates it and
+    # therefore misses every record. Reusing the resolved path also guarantees the write lands on the
+    # same record the gates were evaluated against, and is build-exact for free. Fail closed when the
+    # group resolved to no record -- never fall back to a version-level pick.
+    record_rel = result.get("matched_generated_record_path")
+    if not record_rel:
+        return False
+    record_path = ROOT / record_rel
     fields = dict(result["proposed_fields_if_written"])
     data, _body = load_front_matter_and_body(record_path)
     comparable = {key: value for key, value in fields.items() if key != "status_events_append"}
     if all(data.get(key) == value for key, value in comparable.items()):
         return False
-    _apply_record_fields(record_path, fields)
-    return True
+    # Report whether bytes actually changed, not merely that we reached the write.
+    # `comparable` above always differs (proposed_fields carries a fresh record_last_updated), so
+    # the early-exit never fires; the collector boundary then recomputes substantiveness EXCLUDING
+    # that timestamp and can legitimately write nothing. Returning True regardless would report
+    # record_updated for a no-op -- and in the OBS caller it would suppress the count fallback that
+    # runs only `if not record_updated`.
+    return bool(apply_collector_record_fields(record_path, fields)["write_plan"]["fields"])

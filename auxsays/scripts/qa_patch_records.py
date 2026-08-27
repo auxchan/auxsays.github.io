@@ -236,7 +236,7 @@ def internal_term_findings(data: dict[str, Any], path: str) -> list[dict[str, An
     return findings
 
 
-def load_counted_evidence_counts() -> dict[tuple[str, str], int]:
+def load_counted_evidence_counts() -> dict[tuple[str, str, str], int]:
     # Delegates to the single authoritative predicate (lib.report_counts.counted_evidence_counts) so
     # this QA gate and the post-collection reconciliation count evidence IDENTICALLY and can never
     # diverge -- that shared definition is what makes update_report_count == final counted evidence.

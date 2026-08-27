@@ -503,20 +503,35 @@ class Pipeline:
                     independent_rows.append(own)
             outcomes.append(entry)
 
-        if outcomes:
+        # ONE method result per PATCH TARGET, never one per run. `pending` is flattened across every
+        # target in the run, so stamping the aggregate with pending[0]'s key attributed every
+        # resolved row -- and the entire health row, with run-wide counters -- to whichever target
+        # happened to sort first. verify_candidates then raises "cross-build leakage" and the lane
+        # writes nothing at all. Group by each row's OWN canonical identity so a resolution can only
+        # ever land on the build it actually belongs to.
+        def _row_key(row: dict[str, Any]) -> str:
+            return "|".join(patch_key(row.get("product_id"), row.get("update_version"),
+                                      row.get("target_build")))
+
+        for key in sorted({str(o.get("patch_key") or "") for o in outcomes}
+                          | {_row_key(r) for r in resolved_rows + independent_rows}):
+            key_outcomes = [o for o in outcomes if str(o.get("patch_key") or "") == key]
+            key_resolved = [r for r in resolved_rows if _row_key(r) == key]
+            key_independent = [r for r in independent_rows if _row_key(r) == key]
+            if not key_outcomes and not key_resolved and not key_independent:
+                continue
             # Land as a distinct method result so identity, health and provenance stay separable
             # from the primary discovery that produced the original candidates. Health is emitted
             # even when nothing resolved -- an honest zero is the point of the telemetry.
-            key = pending[0][0]["patch_key"]
-            accepted_rows = resolved_rows + independent_rows
-            blocked = sum(1 for o in outcomes if o["resolution_result"] == cr.FETCH_BLOCKED)
-            broken = sum(1 for o in outcomes if o["resolution_result"] == cr.FETCH_BROKEN)
+            accepted_rows = key_resolved + key_independent
+            blocked = sum(1 for o in key_outcomes if o["resolution_result"] == cr.FETCH_BLOCKED)
+            broken = sum(1 for o in key_outcomes if o["resolution_result"] == cr.FETCH_BROKEN)
             # Status must come from the SHARED vocabulary; anything outside it is normalized to
             # "broken", which would report a healthy stage as a failure. "The source stated no
             # usable build" is low_confidence, not broken -- a working method finding nothing.
-            if blocked and blocked + broken == len(outcomes):
+            if blocked and blocked + broken == len(key_outcomes):
                 status = "blocked"
-            elif broken and blocked + broken == len(outcomes):
+            elif broken and blocked + broken == len(key_outcomes):
                 status = "broken"
             elif accepted_rows:
                 status = "success"
@@ -534,9 +549,19 @@ class Pipeline:
                     product_id=key.split("|")[0], update_version=key.split("|")[1],
                     target_build=key.split("|")[2], method_id=cr.METHOD_ID,
                     source_type="microsoft_learn_qna", status=status,
-                    candidates_found=len(outcomes),
+                    # An independent reply IS a discovered candidate report -- a distinct author's
+                    # report found in the already-fetched thread -- so it counts in BOTH
+                    # candidates_found and accepted_candidates. The validator enforces
+                    # accepted_candidates <= candidates_found AND evidence_rows_added <=
+                    # accepted_candidates (evidence_rows_added/public_counted_reports default to
+                    # accepted_reports), so excluding independents from either side violates one of
+                    # them; that validator is a --validate gate, and a violation refuses the whole
+                    # lane's writeback. Per-key grouping removed the run-wide dilution that used to
+                    # hide this, so both counters state it explicitly.
+                    candidates_found=len(key_outcomes) + len(key_independent),
+                    accepted_candidates=len(accepted_rows),
                     accepted_reports=len(accepted_rows),
-                    rejected_reports=len(outcomes) - len(resolved_rows),
+                    rejected_reports=max(0, len(key_outcomes) - len(key_resolved)),
                     blocked_reason="context_fetch_blocked" if blocked else None,
                     last_run=captured_at,
                     notes=f"segment-scoped exact-build resolution; fetches={budget.fetched}"),
