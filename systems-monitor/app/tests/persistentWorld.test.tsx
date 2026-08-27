@@ -95,6 +95,17 @@ describe("premium persistent-world visual language", () => {
     const first = resolvePremiumLabels(candidates, 400, 240);
     expect(first).toEqual(resolvePremiumLabels(candidates, 400, 240));
     expect(first.map((item) => item.id)).toEqual(["a", "c"]);
+
+    const lane = resolvePremiumLabels([
+      { id: "lane-c", text: "C", x: 100, y: 108, priority: 50, width: 80, height: 22, accent: "#fff", required: true, side: "left" },
+      { id: "lane-a", text: "A", x: 100, y: 100, priority: 50, width: 80, height: 22, accent: "#fff", required: true, side: "left" },
+      { id: "lane-b", text: "B", x: 100, y: 104, priority: 50, width: 80, height: 22, accent: "#fff", required: true, side: "left" }
+    ], 400, 240);
+    expect(lane).toHaveLength(3);
+    expect(lane.map((item) => item.id)).toEqual(["lane-a", "lane-b", "lane-c"]);
+    expect(new Set(lane.map((item) => item.x))).toEqual(new Set([100]));
+    expect(lane[1].top - (lane[0].top + lane[0].height)).toBe(8);
+    expect(lane[2].top - (lane[1].top + lane[1].height)).toBe(8);
   });
 });
 

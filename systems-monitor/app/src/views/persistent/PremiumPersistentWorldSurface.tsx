@@ -169,7 +169,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
         }
         if (emphasized && lod >= 1) {
           const label = factualBinding?.status === "CONNECTED" ? `${factorLabel} · ${factualBinding.displayValue}` : factorLabel; const fontSize = placement.depth === 0 ? 13 : placement.depth === 1 ? 12 : 11; context.font = `${placement.depth < 2 ? 750 : 650} ${fontSize}px Inter, system-ui, sans-serif`; const textWidth = Math.min(226, context.measureText(label).width + 18);
-          let labelX = point.x; let labelY = point.y + radius + 17; let anchorX: number | undefined; let anchorY: number | undefined;
+          let labelX = point.x; let labelY = point.y + radius + 17; let anchorX: number | undefined; let anchorY: number | undefined; let labelSide: "left" | "right" | "top" | "bottom" | undefined;
           const parent = placement.parentPlacementId ? model.placements[placement.parentPlacementId] : undefined;
           if (parent && placement.depth >= 2) {
             const parentPoint = project(parent, camera, viewport, width, height); const dx = point.x - parentPoint.x; const dy = point.y - parentPoint.y; const distance = Math.max(1, Math.hypot(dx, dy)); const tangent = placement.order % 2 ? -6 : 6;
@@ -177,20 +177,26 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
             labelY = point.y + (dy / distance) * (radius + 15) + (dx / distance) * tangent;
             const focused = selectedPlacementId ? model.placements[selectedPlacementId] : undefined;
             if (focused?.depth === 1 && placement.depth === 2 && placement.parentPlacementId === focused.id) {
-              const side = placement.order % 2 ? -1 : 1; const tangentX = -dy / distance; const tangentY = dx / distance; const radialX = dx / distance; const radialY = dy / distance; const offset = textWidth / 2 + radius + 18;
-              labelX = point.x + tangentX * side * offset + radialX * 9;
-              labelY = point.y + tangentY * side * offset + radialY * 9;
-              anchorX = point.x + tangentX * side * (radius + 3);
-              anchorY = point.y + tangentY * side * (radius + 3);
+              const radialX = dx / distance; const radialY = dy / distance; const horizontal = Math.abs(radialX) >= Math.abs(radialY);
+              labelSide = horizontal ? radialX < 0 ? "left" : "right" : radialY < 0 ? "top" : "bottom";
+              if (labelSide === "left" || labelSide === "right") {
+                const direction = labelSide === "left" ? -1 : 1;
+                labelX = point.x + direction * (radius + 12 + textWidth / 2); labelY = point.y;
+                anchorX = point.x + direction * (radius + 3); anchorY = point.y;
+              } else {
+                const direction = labelSide === "top" ? -1 : 1;
+                labelX = point.x; labelY = point.y + direction * (radius + 12 + 11);
+                anchorX = point.x; anchorY = point.y + direction * (radius + 3);
+              }
             }
           }
           const focusedExactTenChild = Boolean(selectedPlacementId && model.placements[selectedPlacementId]?.depth === 1 && placement.depth === 2 && placement.parentPlacementId === selectedPlacementId);
-          labelCandidates.push({ id: placement.id, text: label, x: labelX, y: labelY, priority: placement.depth === 0 ? 100 : isSelected ? 90 : placement.depth === 1 ? 70 : placement.depth === 2 ? 50 : 20, width: textWidth, height: 22, accent, anchorX, anchorY, required: focusedExactTenChild });
+          labelCandidates.push({ id: placement.id, text: label, x: labelX, y: labelY, priority: placement.depth === 0 ? 100 : isSelected ? 90 : placement.depth === 1 ? 70 : placement.depth === 2 ? 50 : 20, width: textWidth, height: 22, accent, anchorX, anchorY, required: focusedExactTenChild, side: labelSide });
         }
         context.globalAlpha = 1;
       }
       const labels = resolvePremiumLabels(labelCandidates, width, height);
-      for (const label of labels) { if (label.anchorX !== undefined && label.anchorY !== undefined) { context.strokeStyle = blendPremiumColor(label.accent, label.accent, 1, .3); context.lineWidth = .8; context.beginPath(); context.moveTo(label.anchorX, label.anchorY); context.lineTo(label.x, label.y); context.stroke(); } context.fillStyle = "rgba(2,16,22,.9)"; context.strokeStyle = blendPremiumColor(label.accent, label.accent, 1, .3); context.lineWidth = 1; context.beginPath(); context.roundRect(label.left, label.top, label.width, label.height, 6); context.fill(); context.stroke(); context.fillStyle = label.id === selectedPlacementId ? "#f4fffc" : blendPremiumColor("#d9eeeb", label.accent, .28, 1); context.font = `${label.priority >= 70 ? 750 : 650} ${label.priority >= 70 ? 12 : 11}px Inter, system-ui, sans-serif`; context.textAlign = "center"; context.textBaseline = "middle"; context.fillText(label.text, label.x, label.y, label.width - 12); }
+      for (const label of labels) { if (label.anchorX !== undefined && label.anchorY !== undefined) { const targetX = label.side === "left" ? label.left + label.width : label.side === "right" ? label.left : label.x; const targetY = label.side === "top" ? label.top + label.height : label.side === "bottom" ? label.top : label.y; context.strokeStyle = blendPremiumColor(label.accent, label.accent, 1, .3); context.lineWidth = .8; context.beginPath(); context.moveTo(label.anchorX, label.anchorY); context.lineTo(targetX, targetY); context.stroke(); } context.fillStyle = "rgba(2,16,22,.9)"; context.strokeStyle = blendPremiumColor(label.accent, label.accent, 1, .3); context.lineWidth = 1; context.beginPath(); context.roundRect(label.left, label.top, label.width, label.height, 6); context.fill(); context.stroke(); context.fillStyle = label.id === selectedPlacementId ? "#f4fffc" : blendPremiumColor("#d9eeeb", label.accent, .28, 1); context.font = `${label.priority >= 70 ? 750 : 650} ${label.priority >= 70 ? 12 : 11}px Inter, system-ui, sans-serif`; context.textAlign = "center"; context.textBaseline = "middle"; context.fillText(label.text, label.x, label.y, label.width - 12); }
 
       const elapsed = performance.now() - started;
       if (frameCount === 0) host.dataset.firstDrawMs = (performance.now() - mountedAtRef.current).toFixed(3);

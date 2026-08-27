@@ -20,8 +20,8 @@ Preview: `http://127.0.0.1:4174/systems-monitor/#persistent-world`
 - every Level-1 exact-ten fan uses a wider versioned layout and the camera fits the full immutable neighborhood;
 - the ten child nodes use ten deterministic hues within their parent sector palette;
 - converging focus rails are narrower and their glow is reduced while retaining the fixed light-trail timing;
-- Level-2 labels are placed outward from their parent and use bounded deterministic collision recovery;
-- all ten Level-1 sectors were exercised in the in-app browser: 12 semantic nodes each, all ten child labels plus the selected-parent label retained, and 2.1–2.7 ms focused draw p95;
+- Level-2 labels use one outward-side rule (left, right, top, or bottom) derived from parent-to-child geometry, then resolve into ordered lanes with uniform gaps;
+- all ten Level-1 sectors were exercised in the in-app browser: all ten child labels plus the selected-parent label retained, with 2.5–3.9 ms focused draw p95;
 - the new topology/layout fingerprint is `fnv1a32:73cac7b9` and remains invariant during selection, pan, zoom, Trace, and Reset.
 
 ## Subject-detail and inspector correction
@@ -47,10 +47,10 @@ Preview: `http://127.0.0.1:4174/systems-monitor/#persistent-world`
 - every selected node exposes its parent hierarchy tether, organizational meaning, and `None` for accepted structural relationship;
 - the header reports `100 dataset paths cataloged`, `4 factual nodes linked`, and `6 accepted labor readings` so source planning and factual coverage cannot be confused;
 - the 100 named Level-2 placements receive stable semantic glyphs with deterministic child-specific markers; the ten Labor Supply factors use ten distinct pictograms;
-- focused exact-ten labels alternate into tangent lanes with quiet leader lines and bounded collision recovery;
+- focused exact-ten labels no longer alternate arbitrarily around nodes: every label occupies the outward side of its node, with its nearest box edge connected by a quiet leader and ordered lane spacing;
 - diagonal focus framing is tighter and the graph workspace is taller so dense neighborhoods remain readable at ordinary browser sizes;
 - every Level-1 focus camera now uses the actual graph width and height to fit the selected neighborhood without clipping outer children;
-- in-app browser audit confirmed `fnv1a32:73cac7b9`, 11 rendered focus labels for every one of the ten Level-1 sectors, and 2.1–2.7 ms focused draw p95;
+- in-app browser audit confirmed `fnv1a32:73cac7b9`, 11 rendered focus labels for every one of the ten Level-1 sectors, and 2.5–3.9 ms focused draw p95;
 - no network fetch, public activation, synthetic value, new relationship, Gate-B change, or deployment is introduced by this bridge.
 
 ## Taylor visual review
