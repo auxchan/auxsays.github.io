@@ -40,8 +40,11 @@ COLLECTORS = {
 # --product-id, so it invokes every REGISTERED collector. To keep the dormant Windows Learn
 # Q&A collector from ever being invoked accidentally by that hourly writeback, it is NOT part
 # of the static COLLECTORS base; it is registered ONLY when an explicit enable flag is set.
-# The default (flag absent) is always "not registered" -> no Windows writeback. No workflow
-# sets this flag; enabling it is a deliberate, separate activation step.
+# The default (flag absent) is always "not registered" -> no Windows writeback. NOTE: this flag
+# IS set in production -- obs-evidence-collection.yml sets it to "true" in the env of the scheduled
+# `--write` "Collect patch evidence" step, so the Windows collector IS registered on every 6-hourly
+# run. (An earlier version of this comment claimed no workflow set it; that was stale, and it made
+# the Windows writeback look unreachable during a reachability audit.)
 WINDOWS_LEARN_QNA_PRODUCT_ID = "microsoft-windows-11"
 WINDOWS_LEARN_QNA_ENABLE_ENV = "AUXSAYS_ENABLE_WINDOWS_LEARN_QNA_WRITEBACK"
 
@@ -69,9 +72,10 @@ def windows_learn_qna_writeback_enabled(env: dict[str, str] | None = None) -> bo
 # always-on base would make the hourly scheduled ``--write`` writeback treat Acrobat
 # consensus as active while every source is blocked. So, exactly like the Windows Learn Q&A
 # collector above, it is registered ONLY when an explicit enable flag is set. The default
-# (flag absent) is always "not registered". No workflow sets this flag; turning it on --
-# together with proving a reachable source and re-adding the workflow routing -- is a
-# deliberate, separate activation step.
+# (flag absent) is always "not registered". NOTE: this flag IS set in production -- Acrobat
+# consensus was activated once the keyless inSided/Algolia discovery method proved reachable from
+# CI (PR #23), and obs-evidence-collection.yml sets it to "true" in the env of the scheduled
+# `--write` step. The paragraph above records why it was originally held off, not today's state.
 ACROBAT_CONSENSUS_PRODUCT_IDS = ("adobe-acrobat-reader", "adobe-acrobat-pro")
 ACROBAT_CONSENSUS_ENABLE_ENV = "AUXSAYS_ENABLE_ACROBAT_CONSENSUS"
 
@@ -131,11 +135,19 @@ def build_collectors(env: dict[str, str] | None = None) -> dict[str, Any]:
     its flag is off. Gated collector classes are imported lazily so they are only pulled in
     when actually enabled.
 
-    - Windows Learn Q&A: ``AUXSAYS_ENABLE_WINDOWS_LEARN_QNA_WRITEBACK``.
-    - Adobe Acrobat (Reader + Pro) consensus: ``AUXSAYS_ENABLE_ACROBAT_CONSENSUS`` -- held
-      off because both discovery methods are currently blocked from CI (see PR #23).
-    - Microsoft PowerPoint consensus PILOT: ``AUXSAYS_ENABLE_POWERPOINT_CONSENSUS`` -- default
-      off; the workflow only sets it for a manual dry_run, never a scheduled ``--write``."""
+    All three flags below are SET to "true" in production, in the env of the scheduled ``--write``
+    step of obs-evidence-collection.yml. "Default off" describes the default, not the deployment.
+
+    - Windows Learn Q&A: ``AUXSAYS_ENABLE_WINDOWS_LEARN_QNA_WRITEBACK`` -- registered on every
+      scheduled run.
+    - Adobe Acrobat (Reader + Pro) consensus: ``AUXSAYS_ENABLE_ACROBAT_CONSENSUS`` -- activated
+      once the keyless inSided/Algolia discovery proved reachable from CI (PR #23); registered on
+      every scheduled run.
+    - Microsoft PowerPoint consensus: ``AUXSAYS_ENABLE_POWERPOINT_CONSENSUS`` -- default off, but
+      SET to "true" on the scheduled ``--write`` step in production. PowerPoint is nonetheless not
+      collected here: ``AUXSAYS_ORCHESTRATED_PRODUCTS`` removes it from this registry because the
+      orchestration graph owns it (no double collection). The exclusion, not the flag, is what
+      keeps it out."""
     collectors: dict[str, Any] = dict(COLLECTORS)
     if windows_learn_qna_writeback_enabled(env):
         from patch_collectors.microsoft_windows import WindowsLearnQnaCollector

@@ -498,8 +498,13 @@ def apply_consensus_writeback(version: str) -> bool:
     comparable = {k: v for k, v in fields.items() if k != "status_events_append"}
     if all(data.get(k) == v for k, v in comparable.items()):
         return False
-    _apply_record_fields(record_path, fields)
-    return True
+    # Report whether bytes actually changed, not merely that we reached the write.
+    # `comparable` above always differs (proposed_fields carries a fresh record_last_updated), so
+    # the early-exit never fires; _apply_record_fields then recomputes substantiveness EXCLUDING
+    # that timestamp and can legitimately write nothing. Returning True regardless would report
+    # record_updated for a no-op -- and in the OBS caller it would suppress the count fallback that
+    # runs only `if not record_updated`.
+    return bool(_apply_record_fields(record_path, fields)["write_plan"]["fields"])
 
 
 def valid_update_version(value: Any) -> bool:

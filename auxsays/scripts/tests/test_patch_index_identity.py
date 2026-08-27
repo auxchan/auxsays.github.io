@@ -85,33 +85,35 @@ def write_record(root: Path, pid: str, ver: str, build: str = "") -> Path:
 
 
 def drive_writeback(module_name: str, call, *, matched_rel: str | None, root: Path,
-                    would_write: bool = True, version: str = "1.0", extra_results: int = 0):
-    """Run the REAL apply_consensus_writeback with the module seams stubbed.
+                    would_write: bool = True, version: str = "1.0", fields: dict | None = None):
+    """Run the REAL apply_consensus_writeback, with the REAL _apply_record_fields.
 
-    Returns (returned_value, [paths passed to _apply_record_fields], raised_exception_or_None)."""
+    Only `_index_generated_records` and `run_dry_run` are stubbed -- the index deliberately EMPTY so
+    the resolved path is the only way to reach a record, and the write plan is exercised for real so
+    a "returned True but wrote nothing" answer is visible rather than hidden behind a stub.
+    Returns (returned_value, file_changed, raised_exception_or_None)."""
     acr = importlib.import_module("apply_consensus_to_records")
     mod = importlib.import_module(module_name)
-    written: list[Path] = []
 
     result = {
         "product_id": "x", "update_version": version, "would_write": would_write,
         "matched_generated_record_path": matched_rel,
-        "proposed_fields_if_written": {"update_report_count": 7},
+        "proposed_fields_if_written": dict(fields if fields is not None
+                                           else {"update_report_count": 7}),
     }
-    results = [result] + [dict(result, update_version=f"{version}-other") for _ in range(extra_results)]
-
-    saved = {k: getattr(acr, k) for k in ("_index_generated_records", "run_dry_run", "_apply_record_fields")}
+    saved = {k: getattr(acr, k) for k in ("_index_generated_records", "run_dry_run")}
     saved_root = getattr(mod, "ROOT", None)
-    # A deliberately hostile index: the ONLY way to reach a record is the resolved path. Any
-    # implementation that rebuilds a key -- 2-tuple or 3-tuple -- finds nothing here.
+    target = (root / matched_rel) if matched_rel else None
+    before = target.read_text(encoding="utf-8") if target and target.exists() else None
     acr._index_generated_records = lambda: {}
-    acr.run_dry_run = lambda **kw: results
-    acr._apply_record_fields = lambda p, f: written.append(Path(p))
+    acr.run_dry_run = lambda **kw: [result]
     mod.ROOT = root
     try:
-        return call(mod), written, None
+        got = call(mod)
+        after = target.read_text(encoding="utf-8") if target and target.exists() else None
+        return got, (before != after), None
     except Exception as exc:  # noqa: BLE001 -- the point is to observe it
-        return None, written, exc
+        return None, False, exc
     finally:
         for k, v in saved.items():
             setattr(acr, k, v)
@@ -262,11 +264,11 @@ def run() -> int:
         rec = write_record(root, PPT, "1.0")
         rel = str(rec.relative_to(root))
         for module_name, call, label in SITES:
-            ok, written, exc = drive_writeback(module_name, call, matched_rel=rel, root=root)
+            rec.write_text(RECORD.format(pid=PPT, ver="1.0", product=PPT, build_line=""),
+                           encoding="utf-8")   # reset between sites
+            ok, changed, exc = drive_writeback(module_name, call, matched_rel=rel, root=root)
             check(f"I2-I6 {label}: does not raise", exc is None, repr(exc))
-            check(f"I2-I6 {label}: wrote exactly one record", len(written) == 1, str(written))
-            check(f"I2-I6 {label}: wrote the record the dry-run resolved",
-                  written == [rec], f"{written} != {[rec]}")
+            check(f"I2-I6 {label}: wrote the record the dry-run resolved", changed, "file unchanged")
             check(f"I2-I6 {label}: reported success", ok is True, repr(ok))
 
     # ---------- I8: fail closed when identity is missing ----------
@@ -275,9 +277,9 @@ def run() -> int:
         root = Path(td)
         write_record(root, PPT, "1.0")
         for module_name, call, label in SITES:
-            ok, written, exc = drive_writeback(module_name, call, matched_rel=None, root=root)
+            ok, changed, exc = drive_writeback(module_name, call, matched_rel=None, root=root)
             check(f"I8 {label}: refuses rather than raising", exc is None, repr(exc))
-            check(f"I8 {label}: writes NOTHING", written == [], str(written))
+            check(f"I8 {label}: writes NOTHING", not changed)
             check(f"I8 {label}: reports failure", ok is False, repr(ok))
 
     print("\n[I8b] a group whose gates refused is never written")
@@ -286,10 +288,10 @@ def run() -> int:
         rec = write_record(root, PPT, "1.0")
         rel = str(rec.relative_to(root))
         for module_name, call, label in SITES:
-            ok, written, exc = drive_writeback(module_name, call, matched_rel=rel, root=root,
+            ok, changed, exc = drive_writeback(module_name, call, matched_rel=rel, root=root,
                                                would_write=False)
             check(f"I8b {label}: would_write=False writes nothing",
-                  written == [] and ok is False and exc is None, f"{ok} {written} {exc}")
+                  not changed and ok is False and exc is None, f"{ok} {changed} {exc}")
 
     print("\n[I8c] an ambiguous version (more than one matching group) is never written")
     with tempfile.TemporaryDirectory() as td:
@@ -320,6 +322,28 @@ def run() -> int:
             check(f"I8c {label}: two matching groups -> refuse", ok is False and written == [],
                   f"{ok} {written}")
 
+    # ---------- I8d: an already-current record is reported honestly ----------
+    # The writeback's own early-exit compares proposed vs current INCLUDING record_last_updated,
+    # which is regenerated every call, so it never fires. _apply_record_fields then recomputes
+    # substantiveness EXCLUDING that timestamp and can legitimately write nothing. Returning True
+    # there would report a phantom record update -- and in the OBS caller it would suppress the
+    # count fallback that runs only `if not record_updated`.
+    print("\n[I8d] a write that changes nothing reports False, not a phantom success")
+    with tempfile.TemporaryDirectory() as td:
+        root = Path(td)
+        rec = write_record(root, PPT, "1.0")          # fixture has update_report_count: 0
+        rel = str(rec.relative_to(root))
+        for module_name, call, label in SITES:
+            rec.write_text(RECORD.format(pid=PPT, ver="1.0", product=PPT, build_line=""),
+                           encoding="utf-8")
+            ok, changed, exc = drive_writeback(
+                module_name, call, matched_rel=rel, root=root,
+                # same count already on the record + a fresh timestamp: nothing substantive
+                fields={"update_report_count": 0,
+                        "record_last_updated": "2099-01-01T00:00:00Z"})
+            check(f"I8d {label}: nothing written", not changed and exc is None, f"{changed} {exc}")
+            check(f"I8d {label}: reports False, not a phantom update", ok is False, repr(ok))
+
     # ---------- I9: version-only products keep working ----------
     print("\n[I9] version-only products are unaffected")
     check("I9 patch_key collapses the build slot for a non-build-aware product",
@@ -328,19 +352,21 @@ def run() -> int:
           all(patch_key(p, "1.0", "9.9") == (p, "1.0", "") for p in
               ("adobe-premiere-pro", "blackmagic-davinci", "microsoft-windows-11",
                "adobe-acrobat-pro", "adobe-acrobat-reader", "obs-studio")))
-    check("I9 only microsoft-powerpoint is build-aware today",
-          is_build_aware(PPT) and not any(is_build_aware(p) for p in
-                                          ("obs-studio", "adobe-premiere-pro", "blackmagic-davinci",
-                                           "microsoft-windows-11", "adobe-acrobat-pro")))
+    # Phrased as "these products are not build-aware" rather than "only PowerPoint is", so
+    # legitimately adding Word/Excel/Outlook later does not read as a regression here.
+    check("I9 the products these writebacks serve are all version-only",
+          not any(is_build_aware(p) for p in
+                  ("obs-studio", "adobe-premiere-pro", "blackmagic-davinci",
+                   "microsoft-windows-11", "adobe-acrobat-pro", "adobe-acrobat-reader")))
     with tempfile.TemporaryDirectory() as td:
         root = Path(td)
         rec = write_record(root, "obs-studio", "31.0.4")
         rel = str(rec.relative_to(root))
-        ok, written, exc = drive_writeback("collect_obs_reports",
+        ok, changed, exc = drive_writeback("collect_obs_reports",
                                            lambda m: m.apply_consensus_writeback("31.0.4"),
                                            matched_rel=rel, root=root, version="31.0.4")
         check("I9 a version-only writeback still writes its record",
-              exc is None and ok is True and written == [rec], f"{ok} {written} {exc}")
+              exc is None and ok is True and changed, f"{ok} {changed} {exc}")
 
     # ---------- no rebuilt partial keys remain ----------
     print("\n[doctrine] no exact-patch lookup rebuilds a partial key")
@@ -349,22 +375,31 @@ def run() -> int:
         if "tests" in path.parts:
             continue
         text = path.read_text(encoding="utf-8")
+        # Catch BOTH shapes: an inline tuple subscript, and a tuple bound to a local on one line
+        # and used to subscript on another (what adobe_acrobat_community and collect_obs_reports
+        # actually had). Any subscript of the index by anything other than a patch_key/key_from
+        # call is suspect.
         for n, line in enumerate(text.splitlines(), 1):
-            if re.search(r"records_index\s*[\[(]\s*\(", line) or re.search(
-                    r"records_index\[\(", line):
-                offenders.append(f"{path.relative_to(_REPO)}:{n}")
+            sub = re.search(r"records_index\s*(?:\[|\.get\()\s*([^\]\)]*)", line)
+            if not sub:
+                continue
+            expr = sub.group(1).strip()
+            if expr.startswith("(") or (expr and not re.match(r"(patch_key|key_from)\s*\(", expr)):
+                offenders.append(f"{path.relative_to(_REPO)}:{n}: {line.strip()[:80]}")
     check("doctrine: nothing subscripts the record index with a rebuilt tuple",
           not offenders, str(offenders))
 
-    idx_users = []
-    for path in sorted(_SCRIPTS.rglob("*.py")):
-        if "tests" in path.parts:
-            continue
-        text = path.read_text(encoding="utf-8")
-        if "_index_generated_records" in text and path.name != "apply_consensus_to_records.py":
-            idx_users.append(path.name)
-    check("doctrine: the five collector writebacks still obtain the index (for the dry run)",
-          len(idx_users) == 5, str(idx_users))
+    # Deliberately NOT pinning how many modules obtain the index: none of them keys into it any
+    # more, so letting run_dry_run build its own would be a pure cleanup with no behaviour change,
+    # and a count assertion would block it. What matters is that nobody re-derives a key -- checked
+    # above -- so assert only that the ones which do obtain it are the writeback modules.
+    idx_users = {path.name for path in sorted(_SCRIPTS.rglob("*.py"))
+                 if "tests" not in path.parts
+                 and "_index_generated_records" in path.read_text(encoding="utf-8")
+                 and path.name != "apply_consensus_to_records.py"}
+    check("doctrine: only the collector writebacks obtain the record index",
+          idx_users <= {"adobe_premiere.py", "davinci.py", "microsoft_windows.py",
+                        "adobe_acrobat_community.py", "collect_obs_reports.py"}, str(idx_users))
 
     acr_src = (_SCRIPTS / "apply_consensus_to_records.py").read_text(encoding="utf-8")
     check("doctrine: the index parameter is typed as the identity TRIPLE everywhere",
