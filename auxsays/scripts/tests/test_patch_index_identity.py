@@ -91,7 +91,8 @@ def drive_writeback(module_name: str, call, *, matched_rel: str | None, root: Pa
     Only `_index_generated_records` and `run_dry_run` are stubbed -- the index deliberately EMPTY so
     the resolved path is the only way to reach a record, and the write plan is exercised for real so
     a "returned True but wrote nothing" answer is visible rather than hidden behind a stub.
-    Returns (returned_value, file_changed, raised_exception_or_None)."""
+    Returns (returned_value, file_changed, raised_exception_or_None). Also asserts, via
+    `decoy_written`, that no implementation reached the record through the index."""
     acr = importlib.import_module("apply_consensus_to_records")
     mod = importlib.import_module(module_name)
 
@@ -101,16 +102,30 @@ def drive_writeback(module_name: str, call, *, matched_rel: str | None, root: Pa
         "proposed_fields_if_written": dict(fields if fields is not None
                                            else {"update_report_count": 7}),
     }
+    # A record that is NOT the resolved one, reachable by every partial-key strategy.
+    decoy = write_record(root, "decoy-product", version)
+    decoy_rel = decoy.relative_to(root)
+    pid_const = getattr(mod, "PRODUCT_ID", None) or "adobe-acrobat-pro"
+    decoy_keys = {(pid_const, version, ""), (pid_const, version), pid_const, version}
     saved = {k: getattr(acr, k) for k in ("_index_generated_records", "run_dry_run")}
     saved_root = getattr(mod, "ROOT", None)
     target = (root / matched_rel) if matched_rel else None
     before = target.read_text(encoding="utf-8") if target and target.exists() else None
-    acr._index_generated_records = lambda: {}
+    # The index is seeded with a DECOY keyed on this product+version. An empty index would make the
+    # fail-closed claim vacuous -- every strategy, including "pick a version-level sibling", would
+    # find nothing and return False. With a decoy present, any implementation that reaches into the
+    # index by product+version writes the WRONG record, and the assertions below catch it.
+    acr._index_generated_records = lambda: {k: {"abs_path": decoy, "path": str(decoy_rel)}
+                                            for k in decoy_keys}
     acr.run_dry_run = lambda **kw: [result]
     mod.ROOT = root
     try:
+        decoy_before = decoy.read_text(encoding="utf-8")
         got = call(mod)
         after = target.read_text(encoding="utf-8") if target and target.exists() else None
+        if decoy.read_text(encoding="utf-8") != decoy_before:
+            raise AssertionError(f"DECOY WRITTEN: reached the record via the index, not the "
+                                 f"resolved path ({decoy})")
         return got, (before != after), None
     except Exception as exc:  # noqa: BLE001 -- the point is to observe it
         return None, False, exc
@@ -157,6 +172,11 @@ def _drive_resolve_context():
         return {"product_id": PPT, "update_version": "2607",
                 "target_build": target["target_build"], "counted": True,
                 "source_url": "https://x/" + target["target_build"]}
+
+    def _state_with(results):
+        st = OrchestrationState()
+        st.method_results = [dict(r) for r in results]
+        return st
 
     saved = (cr.resolve_candidate, cr.independent_reports, ppt.row_from_candidate,
              cr.augmented_candidate)
@@ -206,6 +226,73 @@ def _drive_resolve_context():
         plan = st.method_plan.get("context_resolution") or {}
         out.append(("F1 the run-wide telemetry still aggregates over every target",
                     plan.get("attempted") == 2, str(plan.get("attempted"))))
+
+        # F1b: INDEPENDENT REPLIES. A candidate whose thread yields extra qualifying reports emits
+        # more accepted rows than outcomes. The health-row counter contract is
+        # accepted_candidates <= candidates_found AND evidence_rows_added <= accepted_candidates
+        # (the latter two default to accepted_reports), so an independent reply must count on BOTH
+        # sides. Getting this wrong makes validate_evidence_method_health fail -- and it is a
+        # --validate gate, so the whole lane's writeback is refused and the run publishes nothing.
+        import validate_evidence_method_health as vh  # noqa: PLC0415
+
+        def two_replies(candidate, *, budget, exclude_segment_key, issue_predicate):
+            return [types.SimpleNamespace(segment_url=f"https://x/r{i}", author_id=f"a{i}",
+                                          explicit_build=B110, candidate=candidate)
+                    for i in (1, 2)]
+
+        cr.independent_reports = two_replies
+        st2 = orch.Pipeline.resolve_context(
+            types.SimpleNamespace(_records={key_a: rec}, _seen={},
+                                  context_fetch=lambda *a, **k: None, context_max_fetches=8,
+                                  _persist_url_state=lambda *a, **k: None),
+            _state_with([{"method_id": "m", "patch_key": key_a, "accepted_rows": [],
+                          "resolvable_rows": [{"source_url": "https://x/a"}]}]))
+        ctx2 = [r for r in st2.method_results if r.get("role") == "context_resolution"]
+        rows = [r["health_row"] for r in ctx2]
+        errs: list[str] = []
+        for i, hr in enumerate(rows, 1):
+            vh._validate_counter_relationships(errs, row_index=i, row=hr)
+        out.append(("F1b independent replies produce a VALID method-health row",
+                    not errs, f"{errs} | {[{k: hr[k] for k in ('candidates_found','accepted_candidates','evidence_rows_added','accepted_reports')} for hr in rows]}"))
+        # F1c: per-key STATUS and rejected_reports. Reverting the status ladder to run-wide
+        # mislabels a blocked target as `partial`, stamps blocked_reason on healthy targets, and
+        # inflates rejected_reports -- none of which the count assertions above would notice.
+        cr.independent_reports = lambda *a, **k: []
+        calls = {"n": 0}
+
+        def blocked_first(candidate, reason, *, fetch_thread, budget):
+            calls["n"] += 1
+            res = cr.FETCH_BLOCKED if calls["n"] == 1 else cr.RESOLVED_EXACT_BUILD
+            return types.SimpleNamespace(
+                resolution_result=res, segment_key="seg",
+                as_dict=lambda: {"resolution_result": res, "role_counts": {},
+                                 "build_claims": [], "resolution_match_basis": ""})
+
+        cr.resolve_candidate = blocked_first
+        st3 = orch.Pipeline.resolve_context(
+            types.SimpleNamespace(_records={key_a: rec, key_b: rec}, _seen={},
+                                  context_fetch=lambda *a, **k: None, context_max_fetches=8,
+                                  _persist_url_state=lambda *a, **k: None),
+            _state_with([{"method_id": "m", "patch_key": key_a, "accepted_rows": [],
+                          "resolvable_rows": [{"source_url": "https://x/a"}]},
+                         {"method_id": "m", "patch_key": key_b, "accepted_rows": [],
+                          "resolvable_rows": [{"source_url": "https://x/b"}]}]))
+        by_key = {r["patch_key"]: r for r in st3.method_results
+                  if r.get("role") == "context_resolution"}
+        out.append(("F1c the blocked target alone is marked blocked",
+                    by_key.get(key_a, {}).get("status") == "blocked"
+                    and by_key.get(key_b, {}).get("status") == "success",
+                    str({k: v.get("status") for k, v in by_key.items()})))
+        out.append(("F1c blocked_reason is not stamped on the healthy target",
+                    not (by_key.get(key_b, {}).get("health_row") or {}).get("blocked_reason"),
+                    str((by_key.get(key_b, {}).get("health_row") or {}).get("blocked_reason"))))
+        out.append(("F1c rejected_reports is per key, not the run total",
+                    [(by_key[k]["health_row"]["rejected_reports"]) for k in (key_a, key_b)] == [1, 0],
+                    str({k: v["health_row"]["rejected_reports"] for k, v in by_key.items()})))
+
+        out.append(("F1b every accepted row is still on its own build",
+                    all(row.get("target_build") == r["patch_key"].split("|")[2]
+                        for r in ctx2 for row in r["accepted_rows"]), ""))
     finally:
         (cr.resolve_candidate, cr.independent_reports, ppt.row_from_candidate,
          cr.augmented_candidate) = saved
@@ -379,12 +466,21 @@ def run() -> int:
         # and used to subscript on another (what adobe_acrobat_community and collect_obs_reports
         # actually had). Any subscript of the index by anything other than a patch_key/key_from
         # call is suspect.
+        # Locals assigned FROM a canonical helper are as good as the call itself -- binding the key
+        # to a name first is a readability refactor, not a defect, so collect those names and treat
+        # them as canonical. What stays an offender is a tuple literal, or any other expression.
+        canonical_locals = set(re.findall(
+            r"^\s*([a-z_][a-z0-9_]*)\s*=\s*(?:patch_key|key_from)\s*\(", text, re.M))
         for n, line in enumerate(text.splitlines(), 1):
             sub = re.search(r"records_index\s*(?:\[|\.get\()\s*([^\]\)]*)", line)
             if not sub:
                 continue
             expr = sub.group(1).strip()
-            if expr.startswith("(") or (expr and not re.match(r"(patch_key|key_from)\s*\(", expr)):
+            if not expr:
+                continue
+            canonical = (re.match(r"(patch_key|key_from)\s*\(", expr)
+                         or expr in canonical_locals)
+            if expr.startswith("(") or not canonical:
                 offenders.append(f"{path.relative_to(_REPO)}:{n}: {line.strip()[:80]}")
     check("doctrine: nothing subscripts the record index with a rebuilt tuple",
           not offenders, str(offenders))
