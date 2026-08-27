@@ -4380,14 +4380,29 @@ button, input, select, textarea { font: inherit; }
   text-transform: uppercase;
 }
 
+/* Source-health status pills. The FIRST selector in each group is the status the snapshot
+   writer emits today (PUBLIC_SOURCE_STATUSES in scripts/source_health_snapshot.py); the ones
+   after it are the writer's earlier names, kept so an older snapshot still renders in colour.
+   Without an --error rule a failing source rendered in the same neutral pill as a working one,
+   which is the opposite of what this table exists to show. */
+.source-health-status--active,
 .source-health-status--healthy { color: #9af0be; border-color: rgba(70,209,137,.34); background: rgba(70,209,137,.10); }
 .source-health-status--idle-healthy { color: #9bdff0; border-color: rgba(95,212,229,.26); background: rgba(95,212,229,.08); }
+.source-health-status--unknown,
 .source-health-status--degraded,
 .source-health-status--no-records-last-run { color: #f0ca67; border-color: rgba(240,202,103,.34); background: rgba(240,202,103,.10); }
+.source-health-status--error,
 .source-health-status--failing { color: #ff9386; border-color: rgba(238,110,95,.38); background: rgba(238,110,95,.10); }
+.source-health-status--needs-adapter,
 .source-health-status--staged,
 .source-health-status--manual-watch { color: #9bdff0; border-color: rgba(95,212,229,.26); background: rgba(95,212,229,.08); }
 .source-health-status--disabled { color: rgba(230,234,236,.64); }
+
+.source-health-total {
+  margin: -.35rem 0 1.1rem;
+  color: var(--aux-muted);
+  font-size: .82rem;
+}
 
 .source-health-capabilities {
   display: flex;
