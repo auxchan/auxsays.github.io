@@ -1,6 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
 import { createPersistentWorld, persistentWorldPath, type PersistentWorldPlacement } from "../../data/persistentWorldModel";
+import { StructuralNodeIcon } from "../motion/StructuralNodeIcon";
+import type { StructuralNodeSymbol } from "../motion/structuralVisualLanguage";
 import { PremiumPersistentWorldSurface as PersistentWorldSurface } from "./PremiumPersistentWorldSurface";
+import { persistentWorldMediaFor } from "./persistentWorldMedia";
+import { factorGlyph, persistentPlacementAccent } from "./persistentWorldVisuals";
 import "./persistentWorld.css";
 
 function useReducedMotion() {
@@ -25,6 +29,14 @@ function placementLabel(model: ReturnType<typeof createPersistentWorld>, placeme
   return model.factors[placement.canonicalFactorId].label;
 }
 
+function panelSymbol(glyph: string): StructuralNodeSymbol {
+  const symbols: Record<string, StructuralNodeSymbol> = {
+    network: "labor-market", growth: "factory", consumer: "people", demand: "people", layoffs: "separations", investment: "factory", rates: "earnings", wages: "earnings", automation: "system", supply: "participation", shocks: "bolt",
+    claims: "claims", openings: "openings", hire: "hire", clock: "clock", participation: "participation", freight: "freight"
+  };
+  return symbols[glyph] ?? "system";
+}
+
 export function PersistentWorldShell() {
   const modelEvidence = useMemo(() => {
     const memory = (performance as Performance & { memory?: { usedJSHeapSize: number } }).memory;
@@ -44,6 +56,9 @@ export function PersistentWorldShell() {
   const [fullscreenFallback, setFullscreenFallback] = useState(false);
   const selected = selectedId ? model.placements[selectedId] : undefined;
   const factor = selected ? model.factors[selected.canonicalFactorId] : undefined;
+  const selectedMedia = selected ? persistentWorldMediaFor(model, selected) : undefined;
+  const selectedAccent = selected ? persistentPlacementAccent(selected) : "#6fe4d0";
+  const selectedSymbol = selected && factor ? panelSymbol(factorGlyph(selected, factor.label)) : "system";
   const path = useMemo(() => persistentWorldPath(model, selectedId), [model, selectedId]);
   const visibleChoiceIds = useMemo(() => {
     if (!selected) return model.childrenByPlacement[model.outcomePlacementId];
@@ -114,10 +129,18 @@ export function PersistentWorldShell() {
         <aside className={`sm-pw-inspector ${selected ? "is-open" : ""}`} aria-label="Persistent world factor details" aria-hidden={!selected}>
           {selected && factor && <div>
             <header><span>{selected.depth === 1 ? "Master-defined driver system" : selected.depth === 2 ? "Level-2 review candidate" : "Synthetic renderer detail"}</span><button type="button" aria-label="Close factor details" onClick={() => navigate(null)}>×</button><h2>{factor.label}</h2></header>
-            <p>{factor.definition}</p>
+            {selectedMedia && <div className="sm-pw-inspector__portrait" style={{ "--pw-photo": `url(${selectedMedia.imageUrl})`, "--pw-accent": selectedAccent } as CSSProperties}>
+              <span className="sm-pw-inspector__photo" role="img" aria-label={selectedMedia.alt} />
+              <span className="sm-pw-inspector__portrait-icon" aria-hidden="true"><StructuralNodeIcon symbol={selectedSymbol} /></span>
+              <span className="sm-pw-inspector__portrait-label"><small>{selected.depth === 3 ? "Renderer stress record" : "Selected economic subject"}</small><strong>{selected.depth === 3 ? `Inside ${placementLabel(model, model.placements[selected.parentPlacementId!])}` : factor.evidencePosture.replaceAll("_", " ")}</strong></span>
+            </div>}
+            <p className="sm-pw-inspector__definition">{factor.definition}</p>
             <section><h3>What it tracks</h3><p>{selected.depth === 1 ? "A major upstream system the Master identifies as relevant to employment and unemployment outcomes." : selected.depth === 2 ? `A defensible candidate component inside ${placementLabel(model, model.placements[selected.parentPlacementId!])}. It remains subject to taxonomy and source review.` : "Rendering capacity, navigation persistence, camera travel, and label LOD only. It does not describe a real economic factor."}</p></section>
+            <section><h3>Why it matters</h3><p>{selected.depth === 1 ? "It organizes a major family of conditions that can help explain changes around employment, without asserting that every child directly causes jobs to rise or fall." : selected.depth === 2 ? `It gives people a specific way to inspect one part of ${placementLabel(model, model.placements[selected.parentPlacementId!])}; evidence and structural relationships must still be accepted separately.` : "It proves the interface can retain, distinguish, and revisit deep records. It carries no economic meaning until an approved factor replaces the fixture."}</p></section>
+            <section className="sm-pw-inspector__data-boundary"><h3>Current data</h3><strong>Not connected in this fixture</strong><p>No statistic is shown until this factor has an accepted source, unit, represented period, and provenance record. Existing official labor readings remain available in Factual Labor Market.</p><a href="/systems-monitor/#workstream1a">Open factual Labor Market</a></section>
             <section><h3>Evidence posture</h3><dl><div><dt>Identity</dt><dd>{factor.evidencePosture}</dd></div><div><dt>Source family</dt><dd>{factor.sourceFamily}</dd></div><div><dt>Relationship status</dt><dd>TEST_FIXTURE · never accepted</dd></div></dl></section>
             <section><h3>Why the next ten are here</h3><p>{selected.depth < 2 ? "They form the bounded exact-ten navigation neighborhood for this review candidate. Placement communicates organization only—not causality, weight, or propagation." : selected.depth === 2 ? "They are deterministic Level-3 stress records proving the renderer can retain and revisit a deep world without fabricating factual economic coverage." : "This record has no factual children."}</p></section>
+            {selectedMedia && <footer className="sm-pw-inspector__credit"><span>Illustrative context only · not data evidence</span><a href={selectedMedia.sourcePage} target="_blank" rel="noreferrer">Photo: {selectedMedia.credit} · {selectedMedia.license === "CC0_1_0" ? "CC0 1.0" : "Public domain"}</a></footer>}
           </div>}
         </aside>
         <PersistentWorldSurface model={model} selectedPlacementId={selectedId} fullWorld={fullWorld} traceMode={traceMode} reducedMotion={reducedMotion} resetVersion={resetVersion} onSelect={navigate} onReset={resetWorld} />

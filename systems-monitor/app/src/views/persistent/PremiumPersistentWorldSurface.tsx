@@ -28,11 +28,12 @@ function targetCamera(model: PersistentWorldReadModel, selectedPlacementId: stri
   if (!selected || fullWorld) return { x: 0, y: 0, scale: fullWorld ? .17 : OVERVIEW_SCALE };
   if (selected.depth === 1) {
     const distance = Math.max(1, Math.hypot(selected.x, selected.y));
-    const outwardShift = 260;
+    const verticalSector = Math.abs(selected.y) / distance > .9;
+    const outwardShift = verticalSector ? 260 : 235;
     return {
       x: selected.x + (selected.x / distance) * outwardShift,
       y: selected.y + (selected.y / distance) * outwardShift,
-      scale: .86
+      scale: verticalSector ? 1.14 : 1.26
     };
   }
   return { x: selected.x, y: selected.y, scale: selected.depth === 2 ? 1.72 : 2.7 };
@@ -149,16 +150,17 @@ export function PremiumPersistentWorldSurface({ model, selectedPlacementId, full
       const labelCandidates: LabelCandidate[] = [];
       for (const placement of placements) {
         const point = project(placement, camera, viewport, width, height); if (point.x < -42 || point.y < -42 || point.x > width + 42 || point.y > height + 42) continue;
+        const factorLabel = model.factors[placement.canonicalFactorId].label;
         const emphasized = semanticSet.has(placement.id) || selectedPath.has(placement.id); const sectorActive = isInSelectedSector(model, placement, selectedPlacementId); const effectiveScale = camera.scale * viewport.zoom; const lod = resolvePersistentLod(placement.depth, effectiveScale, emphasized); const radius = premiumRadius(placement, lod);
         const accent = persistentPlacementAccent(placement); const isHovered = placement.id === currentHovered; const isSelected = placement.id === selectedPlacementId;
         context.globalAlpha = emphasized ? 1 : sectorActive ? (placement.depth === 3 ? .36 : .58) : (fullWorld ? .24 : .1);
         if (lod === 0) { context.fillStyle = accent; context.beginPath(); context.arc(point.x, point.y, Math.max(1, radius), 0, Math.PI * 2); context.fill(); }
         else {
           context.save(); context.shadowColor = accent; context.shadowBlur = isSelected ? 25 : isHovered ? 18 : emphasized ? 9 : 0; context.fillStyle = placement.depth === 0 ? "rgba(35,18,42,.96)" : "rgba(5,27,35,.94)"; context.strokeStyle = blendPremiumColor(accent, "#ffffff", isHovered ? .25 : .05, .9); context.lineWidth = placement.depth === 0 ? 3.2 : 2;
-          context.beginPath(); context.arc(point.x, point.y, radius + (isHovered ? 2 : 0), 0, Math.PI * 2); context.fill(); context.stroke(); context.shadowBlur = 0; context.strokeStyle = blendPremiumColor(accent, accent, 1, .23); context.lineWidth = 1; context.beginPath(); context.ellipse(point.x, point.y, radius * 1.75, radius * 1.18, placement.sector * .18, 0, Math.PI * 2); context.stroke(); if (lod >= 2) drawPremiumGlyph(context, factorGlyph(placement), point.x, point.y, radius * .62, accent); context.restore();
+          context.beginPath(); context.arc(point.x, point.y, radius + (isHovered ? 2 : 0), 0, Math.PI * 2); context.fill(); context.stroke(); context.shadowBlur = 0; context.strokeStyle = blendPremiumColor(accent, accent, 1, .23); context.lineWidth = 1; context.beginPath(); context.ellipse(point.x, point.y, radius * 1.75, radius * 1.18, placement.sector * .18, 0, Math.PI * 2); context.stroke(); if (lod >= 2) drawPremiumGlyph(context, factorGlyph(placement, factorLabel), point.x, point.y, radius * (placement.depth === 3 ? .85 : .62), accent); context.restore();
         }
         if (emphasized && lod >= 1) {
-          const label = model.factors[placement.canonicalFactorId].label; const fontSize = placement.depth === 0 ? 13 : placement.depth === 1 ? 12 : 11; context.font = `${placement.depth < 2 ? 750 : 650} ${fontSize}px Inter, system-ui, sans-serif`; const textWidth = Math.min(210, context.measureText(label).width + 18);
+          const label = factorLabel; const fontSize = placement.depth === 0 ? 13 : placement.depth === 1 ? 12 : 11; context.font = `${placement.depth < 2 ? 750 : 650} ${fontSize}px Inter, system-ui, sans-serif`; const textWidth = Math.min(210, context.measureText(label).width + 18);
           let labelX = point.x; let labelY = point.y + radius + 17;
           const parent = placement.parentPlacementId ? model.placements[placement.parentPlacementId] : undefined;
           if (parent && placement.depth >= 2) {

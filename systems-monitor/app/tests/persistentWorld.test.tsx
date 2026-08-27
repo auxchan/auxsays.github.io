@@ -3,7 +3,8 @@ import { describe, expect, it } from "vitest";
 import { SnapshotProvider } from "../src/app/SnapshotContext";
 import { SystemsMonitorApp } from "../src/app/SystemsMonitorApp";
 import { createPersistentWorld, employmentDriverCandidates, persistentWorldFingerprint, persistentWorldSelectionSequence } from "../src/data/persistentWorldModel";
-import { PERSISTENT_GLINT_PERIOD_MS, PERSISTENT_GLINT_TRAIL, blendPremiumColor, easePremiumHover, persistentGlintProgress, persistentPlacementAccent, premiumCurveRoute, resolvePersistentLod, resolvePremiumLabels } from "../src/views/persistent/persistentWorldVisuals";
+import { persistentWorldMediaFor } from "../src/views/persistent/persistentWorldMedia";
+import { PERSISTENT_GLINT_PERIOD_MS, PERSISTENT_GLINT_TRAIL, blendPremiumColor, easePremiumHover, factorGlyph, persistentGlintProgress, persistentPlacementAccent, premiumCurveRoute, resolvePersistentLod, resolvePremiumLabels } from "../src/views/persistent/persistentWorldVisuals";
 
 describe("premium persistent-world visual language", () => {
   it("routes curves deterministically without changing endpoints", () => {
@@ -30,9 +31,32 @@ describe("premium persistent-world visual language", () => {
     expect(children.every((color) => /^#[\da-f]{6}$/i.test(color))).toBe(true);
   });
 
+  it("assigns intuitive named-factor glyphs and ten distinct fixture-detail marks", () => {
+    const model = createPersistentWorld();
+    const policy = model.placements["placement:policy-trade-external-shocks"];
+    const policyChildren = model.childrenByPlacement[policy.id].map((id) => model.placements[id]);
+    const labels = policyChildren.map((placement) => model.factors[placement.canonicalFactorId].label);
+    expect(factorGlyph(policyChildren[0], labels[0])).toBe("claims");
+    expect(factorGlyph(policyChildren[1], labels[1])).toBe("freight");
+    expect(factorGlyph(policyChildren[3], labels[3])).toBe("shocks");
+    const fixtureChildren = model.childrenByPlacement[policyChildren[0].id].map((id) => model.placements[id]);
+    expect(new Set(fixtureChildren.map((placement) => factorGlyph(placement, model.factors[placement.canonicalFactorId].label)))).toHaveLength(10);
+  });
+
+  it("provides reviewed local imagery and lets fixture details inherit named context", () => {
+    const model = createPersistentWorld();
+    const fiscal = model.placements["placement:policy-trade-external-shocks:fiscal-policy"];
+    const detail = model.placements[model.childrenByPlacement[fiscal.id][0]];
+    const media = persistentWorldMediaFor(model, fiscal);
+    expect(media.imageUrl).toMatch(/^\/systems-monitor\/__local-review\/media\/.+\.jpg$/);
+    expect(media.sourcePage).toMatch(/^https:\/\/commons\.wikimedia\.org\/wiki\/File:/);
+    expect(persistentWorldMediaFor(model, detail)).toEqual(media);
+  });
+
   it("resolves premium LOD and label collisions deterministically", () => {
     expect(resolvePersistentLod(0, .1, true)).toBe(3);
     expect(resolvePersistentLod(3, .2, false)).toBe(0);
+    expect(resolvePersistentLod(3, 1.72, true)).toBe(2);
     expect(resolvePersistentLod(3, 2.2, true)).toBe(2);
     const candidates = [
       { id: "a", text: "A", x: 100, y: 100, priority: 100, width: 80, height: 22, accent: "#fff" },

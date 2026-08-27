@@ -14,7 +14,9 @@ const motionQaMedia = new Map([
   ["freight-intermodal-cc0.jpg", resolve(import.meta.dirname, "fixtures/media/freight-intermodal-cc0.jpg")],
   ["distribution-port-public-domain.jpg", resolve(import.meta.dirname, "fixtures/media/distribution-port-public-domain.jpg")],
   ["industrial-demand-public-domain.jpg", resolve(import.meta.dirname, "fixtures/media/industrial-demand-public-domain.jpg")],
-  ["employment-exposure-public-domain.jpg", resolve(import.meta.dirname, "fixtures/media/employment-exposure-public-domain.jpg")]
+  ["employment-exposure-public-domain.jpg", resolve(import.meta.dirname, "fixtures/media/employment-exposure-public-domain.jpg")],
+  ["us-capitol-public-domain.jpg", resolve(import.meta.dirname, "fixtures/media/us-capitol-public-domain.jpg")],
+  ["federal-reserve-eccles-public-domain.jpg", resolve(import.meta.dirname, "fixtures/media/federal-reserve-eccles-public-domain.jpg")]
 ]);
 
 function localPhase4bCheckpoint() {

@@ -11,7 +11,7 @@
 [data-aux-product="systems-monitor"] .sm-pw-breadcrumbs i { color: #3b7479; font-style: normal; }
 [data-aux-product="systems-monitor"] .sm-pw-breadcrumbs button { padding: 7px 4px; border: 0; background: transparent; color: #87aab0; cursor: pointer; }
 [data-aux-product="systems-monitor"] .sm-pw-breadcrumbs button[aria-current="location"] { color: #dcfbf5; }
-[data-aux-product="systems-monitor"] .sm-pw-workspace { position: relative; min-height: 650px; display: grid; grid-template-columns: 0 minmax(0,1fr); transition: grid-template-columns 340ms cubic-bezier(.22,.85,.25,1); }
+[data-aux-product="systems-monitor"] .sm-pw-workspace { position: relative; min-height: 650px; height: clamp(650px,72vh,860px); display: grid; grid-template-columns: 0 minmax(0,1fr); transition: grid-template-columns 340ms cubic-bezier(.22,.85,.25,1); }
 [data-aux-product="systems-monitor"] .sm-pw-workspace:fullscreen,[data-aux-product="systems-monitor"] .sm-pw-workspace.is-fullscreen-fallback { width: 100vw; height: 100vh; min-height: 100vh; grid-template-rows: minmax(0,1fr); background: #06151d; }
 [data-aux-product="systems-monitor"] .sm-pw-workspace.is-fullscreen-fallback { position: fixed; z-index: 9999; inset: 0; }
 [data-aux-product="systems-monitor"] .sm-pw-workspace:fullscreen .sm-pw-surface,[data-aux-product="systems-monitor"] .sm-pw-workspace.is-fullscreen-fallback .sm-pw-surface { min-height: 100vh; }
@@ -23,13 +23,29 @@
 [data-aux-product="systems-monitor"] .sm-pw-inspector header span { color: #6fe4d0; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; }
 [data-aux-product="systems-monitor"] .sm-pw-inspector h2 { grid-column: 1 / -1; margin: 0; color: #effbf9; font-size: clamp(24px,2vw,34px); line-height: 1.08; }
 [data-aux-product="systems-monitor"] .sm-pw-inspector header button { width: 36px; height: 36px; border: 1px solid #28515a; border-radius: 50%; background: #0d2932; color: #d7efec; cursor: pointer; }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__portrait { position: relative; display: grid; height: 168px; margin: 18px 0 20px; overflow: hidden; place-items: center; border: 1px solid color-mix(in srgb,var(--pw-accent) 32%,#17343e); border-radius: 17px; background: #06151d; box-shadow: inset 0 1px rgba(255,255,255,.05),0 18px 42px rgba(0,0,0,.25); isolation: isolate; }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__photo { position: absolute; z-index: -2; inset: 0; background-image: var(--pw-photo); background-position: center; background-size: cover; filter: saturate(.62) contrast(1.08) brightness(.62) sepia(.08); transform: scale(1.025); }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__portrait::before { position: absolute; z-index: -1; inset: 0; content: ""; background: radial-gradient(circle at 50% 43%,transparent 17%,rgba(2,12,18,.34) 58%,rgba(2,11,17,.92) 100%),linear-gradient(145deg,color-mix(in srgb,var(--pw-accent) 24%,transparent),rgba(5,26,35,.44) 48%,rgba(2,12,18,.8)); }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__portrait-icon { display: grid; width: 72px; height: 72px; place-items: center; border: 1px solid color-mix(in srgb,var(--pw-accent) 80%,white 8%); border-radius: 22px; background: rgba(4,21,29,.82); color: var(--pw-accent); box-shadow: 0 0 34px color-mix(in srgb,var(--pw-accent) 36%,transparent),0 12px 28px rgba(0,0,0,.42); backdrop-filter: blur(6px); }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__portrait-icon svg { width: 39px; height: 39px; }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__portrait-label { position: absolute; right: 12px; bottom: 10px; display: grid; justify-items: end; text-shadow: 0 2px 10px #000; }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__portrait-label small { color: #8ba9ad; font-size: 9px; font-weight: 760; letter-spacing: .08em; text-transform: uppercase; }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__portrait-label strong { color: #e6f5f2; font-size: 11px; }
 [data-aux-product="systems-monitor"] .sm-pw-inspector p { color: #b1c9cc; font-size: 15px; line-height: 1.55; }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__definition { margin: 0; color: #d1e4e2 !important; }
 [data-aux-product="systems-monitor"] .sm-pw-inspector section { margin-top: 21px; padding-top: 18px; border-top: 1px solid #17343e; }
 [data-aux-product="systems-monitor"] .sm-pw-inspector h3 { margin: 0 0 7px; color: #e5f6f3; font-size: 14px; }
 [data-aux-product="systems-monitor"] .sm-pw-inspector dl { display: grid; gap: 8px; margin: 0; }
 [data-aux-product="systems-monitor"] .sm-pw-inspector dl div { display: grid; gap: 2px; }
 [data-aux-product="systems-monitor"] .sm-pw-inspector dt { color: #668f96; font-size: 10px; letter-spacing: .09em; text-transform: uppercase; }
 [data-aux-product="systems-monitor"] .sm-pw-inspector dd { margin: 0; color: #cfe3e1; font-size: 13px; }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__data-boundary { padding: 15px !important; border: 1px solid #2d5363 !important; border-radius: 13px; background: rgba(24,59,72,.28); }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__data-boundary strong { color: #f3d293; font-size: 15px; }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__data-boundary p { margin: 6px 0 12px; font-size: 13px; }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__data-boundary a { color: #81e7d5; font-size: 13px; font-weight: 700; }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__credit { display: grid; gap: 5px; margin-top: 22px; padding-top: 16px; border-top: 1px solid #17343e; }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__credit span { color: #6f9298; font-size: 10px; text-transform: uppercase; letter-spacing: .06em; }
+[data-aux-product="systems-monitor"] .sm-pw-inspector__credit a { color: #86bbb9; font-size: 11px; line-height: 1.4; }
 [data-aux-product="systems-monitor"] .sm-pw-surface { position: relative; min-width: 0; min-height: 650px; touch-action: pan-y; cursor: crosshair; overflow: hidden; overscroll-behavior: contain; background: #041219; }
 [data-aux-product="systems-monitor"] .sm-pw-surface:active { cursor: grabbing; }
 [data-aux-product="systems-monitor"] .sm-pw-surface canvas { display: block; width: 100%; height: 100%; }

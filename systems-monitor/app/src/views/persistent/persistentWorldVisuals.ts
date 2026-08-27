@@ -113,7 +113,7 @@ export function resolvePersistentLod(depth: PersistentWorldDepth, effectiveScale
   if (depth === 0) return 3;
   if (depth === 1) return effectiveScale >= .28 ? 3 : 2;
   if (depth === 2) return effectiveScale >= .9 ? 3 : effectiveScale >= .48 ? 2 : 1;
-  return effectiveScale >= 2.1 ? 2 : effectiveScale >= 1.3 ? 1 : 0;
+  return effectiveScale >= 1.55 ? 2 : effectiveScale >= 1.3 ? 1 : 0;
 }
 
 export function resolvePremiumLabels(candidates: readonly LabelCandidate[], width: number, height: number) {
@@ -131,13 +131,31 @@ export function premiumRadius(placement: PersistentWorldPlacement, lod: number) 
   if (placement.depth === 0) return 31;
   if (placement.depth === 1) return lod >= 3 ? 24 : 18;
   if (placement.depth === 2) return lod >= 3 ? 19 : lod === 2 ? 14 : 8;
-  return lod >= 2 ? 9 : lod === 1 ? 4.5 : 1.35;
+  return lod >= 2 ? 18 : lod === 1 ? 7.5 : 1.35;
 }
 
-export function factorGlyph(placement: PersistentWorldPlacement) {
+const fixtureDetailGlyphs = ["detail-1", "detail-2", "detail-3", "detail-4", "detail-5", "detail-6", "detail-7", "detail-8", "detail-9", "detail-10"] as const;
+
+export function factorGlyph(placement: PersistentWorldPlacement, label = "") {
   if (placement.depth === 0) return "network";
-  if (placement.depth > 1) return "detail";
-  return ["growth", "consumer", "demand", "layoffs", "investment", "rates", "wages", "automation", "supply", "shocks"][Math.max(0, placement.sector)] ?? "detail";
+  if (placement.depth === 3) return fixtureDetailGlyphs[Math.max(0, placement.order - 1)] ?? "detail-1";
+  if (placement.depth === 1) return ["growth", "consumer", "demand", "layoffs", "investment", "rates", "wages", "automation", "supply", "shocks"][Math.max(0, placement.sector)] ?? "detail-1";
+  const text = label.toLowerCase();
+  if (/claim|filing|document|regulat|fiscal/.test(text)) return "claims";
+  if (/opening|vacancy/.test(text)) return "openings";
+  if (/hire|recruit/.test(text)) return "hire";
+  if (/hour|duration|temporary|time/.test(text)) return "clock";
+  if (/wage|earning|income|pay|cost|compensation/.test(text)) return "wages";
+  if (/rate|credit|yield|spread|financial|mortgage|delinquen|saving/.test(text)) return "rates";
+  if (/layoff|loss|closing|separation|contraction/.test(text)) return "layoffs";
+  if (/participation|population|migration|education|skill|retirement|caregiving|worker/.test(text)) return "participation";
+  if (/trade|tariff|transport|freight|bottleneck|shipment/.test(text)) return "freight";
+  if (/energy|fuel|weather|health|geopolitical|risk|shock/.test(text)) return "shocks";
+  if (/retail|consumer|spending|sentiment|demand/.test(text)) return "consumer";
+  if (/automation|robot|software|technology|research|productivity/.test(text)) return "automation";
+  if (/investment|capital|construction|business|inventory/.test(text)) return "investment";
+  if (/production|output|capacity|sales|growth|activity/.test(text)) return "growth";
+  return ["growth", "consumer", "demand", "layoffs", "investment", "rates", "wages", "automation", "supply", "shocks"][Math.max(0, placement.sector)] ?? "detail-1";
 }
 
 export function drawPremiumGlyph(context: CanvasRenderingContext2D, glyph: string, x: number, y: number, radius: number, color: string) {
@@ -147,7 +165,7 @@ export function drawPremiumGlyph(context: CanvasRenderingContext2D, glyph: strin
   context.scale(scale, scale);
   context.strokeStyle = color;
   context.fillStyle = color;
-  context.lineWidth = 1.8;
+  context.lineWidth = glyph.startsWith("detail-") ? 2.6 : 1.8;
   context.lineCap = "round";
   context.lineJoin = "round";
   context.beginPath();
@@ -175,6 +193,31 @@ export function drawPremiumGlyph(context: CanvasRenderingContext2D, glyph: strin
     context.arc(0,-5,4,0,Math.PI*2); context.moveTo(-9,9); context.quadraticCurveTo(-8,0,0,0); context.quadraticCurveTo(8,0,9,9); context.stroke();
   } else if (glyph === "shocks") {
     context.moveTo(1,-10); context.lineTo(-6,1); context.lineTo(0,1); context.lineTo(-2,10); context.lineTo(7,-2); context.lineTo(1,-2); context.closePath(); context.stroke();
+  } else if (glyph === "claims") {
+    context.moveTo(-7,-10); context.lineTo(4,-10); context.lineTo(8,-6); context.lineTo(8,10); context.lineTo(-7,10); context.closePath(); context.moveTo(4,-10); context.lineTo(4,-5); context.lineTo(8,-5); context.moveTo(-3,-1); context.lineTo(4,-1); context.moveTo(-3,4); context.lineTo(3,4); context.stroke();
+  } else if (glyph === "openings") {
+    context.rect(-7,-10,13,20); context.moveTo(6,0); context.lineTo(10,0); context.moveTo(3,0); context.arc(2,0,1,0,Math.PI*2); context.fill(); context.stroke();
+  } else if (glyph === "hire") {
+    context.arc(-3,-5,4,0,Math.PI*2); context.moveTo(-10,10); context.quadraticCurveTo(-9,1,-3,1); context.quadraticCurveTo(3,1,4,10); context.moveTo(7,-2); context.lineTo(7,6); context.moveTo(3,2); context.lineTo(11,2); context.stroke();
+  } else if (glyph === "clock") {
+    context.arc(0,0,10,0,Math.PI*2); context.moveTo(0,-6); context.lineTo(0,1); context.lineTo(6,4); context.stroke();
+  } else if (glyph === "participation") {
+    [-7,0,7].forEach((px) => { context.moveTo(px,-7); context.arc(px,-7,2.4,0,Math.PI*2); context.moveTo(px,-3); context.lineTo(px,8); }); context.moveTo(-11,2); context.lineTo(11,2); context.stroke();
+  } else if (glyph === "freight") {
+    context.rect(-10,-7,12,11); context.moveTo(2,-2); context.lineTo(7,-2); context.lineTo(10,1); context.lineTo(10,4); context.lineTo(2,4); context.moveTo(-7,4); context.arc(-6,7,3,Math.PI,Math.PI*2); context.moveTo(5,4); context.arc(6,7,3,Math.PI,Math.PI*2); context.stroke();
+  } else if (glyph.startsWith("detail-")) {
+    const variant = Number(glyph.slice(7));
+    if (variant === 1) { context.moveTo(-8,0); context.lineTo(8,0); context.moveTo(0,-8); context.lineTo(0,8); }
+    else if (variant === 2) { context.moveTo(0,-9); context.lineTo(9,0); context.lineTo(0,9); context.lineTo(-9,0); context.closePath(); }
+    else if (variant === 3) { context.moveTo(0,-9); context.lineTo(9,8); context.lineTo(-9,8); context.closePath(); }
+    else if (variant === 4) context.rect(-7,-7,14,14);
+    else if (variant === 5) { context.arc(-5,0,3,0,Math.PI*2); context.moveTo(2,0); context.arc(5,0,3,0,Math.PI*2); context.moveTo(-2,0); context.lineTo(2,0); }
+    else if (variant === 6) { context.moveTo(-7,-7); context.lineTo(7,7); context.moveTo(7,-7); context.lineTo(-7,7); }
+    else if (variant === 7) { [-6,0,6].forEach((px, index) => { context.moveTo(px,8); context.lineTo(px,2-index*5); }); }
+    else if (variant === 8) { context.moveTo(-9,-5); context.lineTo(0,5); context.lineTo(9,-5); context.moveTo(-9,2); context.lineTo(0,10); context.lineTo(9,2); }
+    else if (variant === 9) { for (let index=0; index<=6; index+=1) { const angle=Math.PI/3*index; const px=Math.cos(angle)*8; const py=Math.sin(angle)*8; if (index) context.lineTo(px,py); else context.moveTo(px,py); } }
+    else { context.arc(0,0,8,0,Math.PI*2); context.moveTo(-11,0); context.lineTo(11,0); context.moveTo(0,-11); context.lineTo(0,11); }
+    context.stroke();
   } else {
     context.arc(0,0,3.2,0,Math.PI*2); context.stroke();
   }

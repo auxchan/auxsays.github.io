@@ -24,6 +24,19 @@ Preview: `http://127.0.0.1:4174/systems-monitor/#persistent-world`
 - all ten Level-1 sectors were exercised in the in-app browser: 12 semantic nodes each, 5–8 collision-safe labels, and 1.4–1.9 ms focused draw p95;
 - topology fingerprint remains `fnv1a32:d8ccde70`.
 
+## Subject-detail and inspector correction
+
+- Level-1 framing now adapts to vertical versus diagonal sectors so the ten-child fan receives more usable space without moving any canonical node coordinate;
+- all 100 named Level-2 factor placements receive a deterministic, subject-oriented icon selected from the existing AUXSAYS icon language;
+- each ten-child Level-3 renderer-fixture ring receives ten distinct deterministic geometric marks so the records are individually recognizable without implying an approved economic taxonomy;
+- Level-3 marks become full-detail icons at the normal Level-2 focus scale instead of remaining anonymous dots;
+- the inspector workspace is height-bounded and scrolls internally so explanatory content cannot stretch the graph or change its camera geometry;
+- the inspector uses a locally served, tinted subject image, icon overlay, concise definition, tracking scope, relevance, evidence posture, and explicit source credit/license;
+- Policy and government subjects use the public-domain U.S. Capitol image from the Library of Congress; rates and credit subjects use the public-domain Federal Reserve Eccles Building image from the Board of Governors;
+- the persistent-world fixture does not display a current statistic until an accepted source, series, unit, observation period, release time, and provenance binding exist;
+- factual Labor Market remains the current destination for accepted live readings; no fixture node or hierarchy placement was promoted to factual evidence;
+- topology fingerprint remains `fnv1a32:d8ccde70`.
+
 ## Taylor visual review
 
 Confirm:
@@ -39,5 +52,8 @@ Confirm:
 9. Trace, reduced-motion, keyboard controls, Reset and fullscreen retain equivalent information.
 10. Development fixture warnings remain unmistakable.
 11. Each exact-ten child neighborhood reads as one family while individual nodes and connector routes remain distinguishable.
+12. Every named factor has an intuitive subject icon, while deep renderer fixtures remain visibly non-semantic.
+13. The factor inspector feels like the image-led Factual Labor Market panel and keeps its text readable without shrinking the graph.
+14. Image credit and license links are reachable, and the empty live-data state is honest rather than populated with placeholders.
 
 Human QA is not self-approved by implementation evidence.
