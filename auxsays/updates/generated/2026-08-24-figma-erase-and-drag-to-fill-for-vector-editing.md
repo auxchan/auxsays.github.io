@@ -17,8 +17,8 @@ update_version: Erase and drag to fill for vector editing
 update_logo_text: FIG
 update_published_at: '2026-08-24T00:00:00.000Z'
 update_last_checked: '2026-08-24T19:54:01Z'
-source_last_checked: '2026-08-28T12:39:41Z'
-official_body_last_checked: '2026-08-28T12:39:41Z'
+source_last_checked: '2026-08-28T23:33:07Z'
+official_body_last_checked: '2026-08-28T23:33:07Z'
 record_last_updated: '2026-08-24T19:54:01Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -69,11 +69,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-08-26T08:05:13Z'
-  url: https://www.figma.com/release-notes/?title=erase-vector-editing
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-08-26T14:12:43Z'
   url: https://www.figma.com/release-notes/?title=erase-vector-editing
   status: captured-from-rss-feed
@@ -90,6 +85,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-08-28T12:39:41Z'
+  url: https://www.figma.com/release-notes/?title=erase-vector-editing
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-08-28T23:33:07Z'
   url: https://www.figma.com/release-notes/?title=erase-vector-editing
   status: captured-from-rss-feed
   body_captured: true
