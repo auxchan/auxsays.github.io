@@ -14341,3 +14341,60 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5986842-how-to-fix-update-failure-for-updates
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5986842/how-to-fix-update-failure-for-updates
+  parent_title: how to fix update failure for updates - Microsoft Q&A
+  report_title: how to fix update failure for updates - Microsoft Q&A
+  report_text_excerpt: how to fix update failure for updates - Microsoft Q&A 2026-08.NET Framework Security Update (KB5120708) and 2026-08 Security update (KB5121003) (26200.9168) keep getting message error and says will try again later . Need help to get these done
+  captured_at: '2026-08-28T12:24:28Z'
+  source_date: '2026-08-28'
+  target_release_date: '2026-08-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9168'
+  match_basis: exact_os_build
+  matched_kb: KB5121003
+  matched_os_build: '26200.9168'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5987544-windows-update-failed-to-install
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5987544/windows-update-failed-to-install
+  parent_title: Windows update failed to install - Microsoft Q&A
+  report_title: Windows update failed to install - Microsoft Q&A
+  report_text_excerpt: Windows update failed to install - Microsoft Q&A Tried this 3 or 4 times. It fails every time and gets automatically rolled back. System says "something didn't go as expected" 2026-08 Security Update (KB5121003) (26200.9168) Failed to install on ‎8/‎27/‎2026 - 0x80070002...
+  captured_at: '2026-08-28T12:24:28Z'
+  source_date: '2026-08-28'
+  target_release_date: '2026-08-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9168'
+  match_basis: exact_os_build
+  matched_kb: KB5121003
+  matched_os_build: '26200.9168'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
