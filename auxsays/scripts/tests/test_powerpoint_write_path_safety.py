@@ -361,23 +361,72 @@ def run() -> int:  # noqa: PLR0915
                                    f"2026-08-11-microsoft-powerpoint-{VERSION}-20228-20190.md") == "")
 
     # ================= I: Candidate 1 =================
+    # THE LIVE-REPO SECTION. Sections A-H prove both guarantees offline against synthetic records in
+    # temp dirs; this one asserts the real generated tree satisfies them as it stands today.
+    #
+    # It used to read:
+    #
+    #     live = sorted(...glob("*powerpoint*2607*.md"))
+    #     check("I exactly one live 2607 record today", len(live) == 1, ...)
+    #     if live:
+    #         f = front_of(live[0])
+    #
+    # Both halves were wrong, and they were wrong together. The count was a snapshot of the tree on
+    # the day #65 was written; #66 -- whose entire purpose was multi-build ingestion -- then
+    # legitimately created the .20158 and .20190 siblings, so the assertion began failing BECAUSE
+    # the feature it sits next to worked. Bumping 1 to 3 would just re-arm the same trap at the next
+    # sibling. The positional `live[0]` was the more dangerous half: it identified Candidate 1 only
+    # by filename sort order, and the count assertion was the crutch holding that up. A sibling
+    # published on an EARLIER date sorts first, which would have silently pointed every assertion
+    # below at the wrong record -- the exact confusion this suite exists to prevent.
+    #
+    # So Candidate 1 is now selected by its canonical build identity, never by position, and the
+    # sibling properties are stated as invariants: another legitimate 2607 sibling tomorrow keeps
+    # this section green, while a collapse of two builds into one record still fails it.
     print("\n[I] Candidate 1's identity is untouched by all of this")
     live = sorted((_REPO / "auxsays" / "updates" / "generated").glob("*powerpoint*2607*.md"))
-    check("I exactly one live 2607 record today", len(live) == 1, str([p.name for p in live]))
-    if live:
-        f = front_of(live[0])
-        check(f"I it declares {BUILD_A}", f.get("target_build") == BUILD_A, str(f.get("target_build")))
+    fronts = {p: front_of(p) for p in live}
+    check("I Candidate 1's version is tracked at all", bool(live), "no live 2607 record found")
+
+    # IDENTITY on live data: one record per canonical (product, update_version, target_build).
+    # Siblings may multiply freely -- two records claiming the SAME build is the collapse that
+    # `_matching_existing_path`'s version-only fallback used to cause.
+    keys = [pi.patch_key(PPT, str(f.get("update_version")), str(f.get("target_build")))
+            for f in fronts.values()]
+    check("I every live 2607 record has a distinct canonical build identity",
+          len(keys) == len(set(keys)), str(sorted(keys)))
+
+    # STRUCTURE on live data, generalised from Candidate 1 alone to EVERY sibling: strictly stronger
+    # than what this section used to check, and it does not care how many siblings there are.
+    incoherent = {p.name: pi.build_identity_reason(
+        PPT, str(f.get("update_version")), str(f.get("target_build")),
+        str(f.get("permalink")), p.name) for p, f in fronts.items()}
+    incoherent = {name: reason for name, reason in incoherent.items() if reason}
+    check("I every live 2607 record's build, permalink and filename agree",
+          not incoherent, str(incoherent))
+
+    # Candidate 1 BY IDENTITY. This is the invariant the old count assertion was groping for: not
+    # "one 2607 record exists" but "exactly one record claims Candidate 1's build".
+    cands = [p for p, f in fronts.items()
+             if pi.normalize_build(f.get("target_build")) == BUILD_A]
+    check(f"I exactly one live 2607 record declares {BUILD_A}", len(cands) == 1,
+          str([p.name for p in cands]))
+    if len(cands) == 1:
+        c1 = cands[0]
+        f = fronts[c1]
         check(f"I its permalink carries {BUILD_A}",
               (f.get("permalink") or "").rstrip("/").endswith(BUILD_A), str(f.get("permalink")))
-        check("I filename, permalink and target_build all agree",
-              pi.build_identity_reason(PPT, str(f.get("update_version")),
-                                       str(f.get("target_build")), str(f.get("permalink")),
-                                       live[0].name) == "",
-              pi.build_identity_reason(PPT, str(f.get("update_version")),
-                                       str(f.get("target_build")), str(f.get("permalink")),
-                                       live[0].name))
+        check("I its filename carries its own build slug",
+              pi.record_version_slug(VERSION, BUILD_A, PPT) in c1.name, c1.name)
         check("I it still carries its counted report", int(f.get("update_report_count") or 0) >= 1,
               str(f.get("update_report_count")))
+        # No sibling may wear Candidate 1's build in the two places write targeting reads.
+        poachers = sorted(
+            p.name for p in fronts
+            if p != c1 and (pi.record_version_slug(VERSION, BUILD_A, PPT) in p.name
+                            or pi.permalink_build_segment(fronts[p].get("permalink")) == BUILD_A))
+        check("I no sibling claims Candidate 1's build in its filename or permalink",
+              not poachers, str(poachers))
 
     print()
     print("=" * 74)
