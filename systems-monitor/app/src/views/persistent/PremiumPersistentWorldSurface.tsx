@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import type { PersistentWorldPlacement, PersistentWorldReadModel } from "../../data/persistentWorldModel";
+import { persistentWorldPlacementLabel, type PersistentWorldPlacement, type PersistentWorldReadModel } from "../../data/persistentWorldModel";
 import type { PersistentWorldFactualBinding } from "../../data/persistentWorldFactualBindings";
 import { persistentWorldCandidateSourceProfile } from "../../data/persistentWorldSourceCatalog";
 import {
@@ -29,17 +29,17 @@ const AMBIENT_EDGE = "#315b67";
 function hoverPurpose(model: PersistentWorldReadModel, placement: PersistentWorldPlacement) {
   if (placement.depth === 0) return "The outcome at the center of the employment system.";
   const parent = placement.parentPlacementId ? model.placements[placement.parentPlacementId] : undefined;
-  const parentLabel = parent ? model.factors[parent.canonicalFactorId].label : "the employment system";
+  const parentLabel = parent ? persistentWorldPlacementLabel(model, parent) : "the employment system";
   if (placement.depth === 1) return "Organizes ten related factors that can contextualize employment.";
   if (placement.depth === 2) return `Places this signal inside ${parentLabel} without claiming causality.`;
-  return `Renderer-only depth proof inside ${parentLabel}; not an economic claim.`;
+  return `Places this reviewed factor inside ${parentLabel} without claiming causality.`;
 }
 
 function hoverWhy(model: PersistentWorldReadModel, placement: PersistentWorldPlacement) {
   if (placement.depth === 0) return "It keeps the map anchored to the labor outcome people are trying to understand.";
   if (placement.depth === 1) return "It groups a major family of conditions that may help explain labor-market movement.";
   if (placement.depth === 2) return "It gives people one specific, independently inspectable part of the parent system.";
-  return "It verifies deep navigation and rendering capacity only.";
+  return "It adds a separately inspectable economic concept while evidence and relationships remain governed independently.";
 }
 
 function targetCamera(model: PersistentWorldReadModel, selectedPlacementId: string | null, fullWorld: boolean, viewportWidth = 980, viewportHeight = 720): Camera {
@@ -117,7 +117,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
   const hoveredPlacement = hoveredId ? model.placements[hoveredId] : undefined;
   const hoveredFactor = hoveredPlacement ? model.factors[hoveredPlacement.canonicalFactorId] : undefined;
   const hoveredBinding = hoveredId ? factualBindings[hoveredId] : undefined;
-  const hoveredSource = hoveredPlacement?.depth === 2 && hoveredFactor ? persistentWorldCandidateSourceProfile(hoveredFactor.label) : undefined;
+  const hoveredSource = hoveredPlacement && hoveredPlacement.depth >= 2 && hoveredFactor ? persistentWorldCandidateSourceProfile(persistentWorldPlacementLabel(model, hoveredPlacement)) ?? persistentWorldCandidateSourceProfile(hoveredFactor.label) : undefined;
   const hoveredValue = compactPersistentValue(hoveredBinding?.status === "CONNECTED" ? hoveredBinding.displayValue : undefined);
   const semantic = useMemo(() => semanticIds(model, fullWorld ? null : selectedPlacementId), [fullWorld, model, selectedPlacementId]); const semanticSet = useMemo(() => new Set(semantic), [semantic]);
   const selectedPath = useMemo(() => {
@@ -178,7 +178,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
       const labelCandidates: LabelCandidate[] = []; const focusPlacement = selectedPlacementId ? model.placements[selectedPlacementId] : undefined;
       for (const placement of placements) {
         const point = project(placement, camera, viewport, width, height); if (point.x < -42 || point.y < -42 || point.x > width + 42 || point.y > height + 42) continue;
-        const factorLabel = model.factors[placement.canonicalFactorId].label; const factualBinding = factualBindings[placement.id];
+        const factorLabel = persistentWorldPlacementLabel(model, placement); const factualBinding = factualBindings[placement.id];
         const emphasized = semanticSet.has(placement.id) || selectedPath.has(placement.id); const sectorActive = isInSelectedSector(model, placement, selectedPlacementId); const effectiveScale = camera.scale * viewport.zoom; const lod = resolvePersistentLod(placement.depth, effectiveScale, emphasized); const radius = premiumRadius(placement, lod);
         const accent = persistentPlacementAccent(placement); const isHovered = placement.id === currentHovered; const isSelected = placement.id === selectedPlacementId;
         context.globalAlpha = emphasized ? 1 : sectorActive ? (placement.depth === 3 ? .36 : .58) : (fullWorld ? .24 : .1);
@@ -257,7 +257,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
   }} onPointerUp={(event) => { if (panRef.current?.pointerId === event.pointerId) { event.currentTarget.releasePointerCapture(event.pointerId); panRef.current = null; } }} onPointerCancel={() => { panRef.current = null; }} onPointerLeave={() => { if (!panRef.current) setHoveredId(null); }} onMouseDown={(event) => { if (event.button === 1) event.preventDefault(); }} onAuxClick={(event) => { if (event.button === 1) event.preventDefault(); }} onDoubleClick={(event) => { if (!hitTest(event)) onReset(); }} onClick={(event) => { if (suppressClickRef.current) { suppressClickRef.current = false; return; } const id = hitTest(event); if (id) onSelect(id); }}>
     <canvas ref={canvasRef} role="img" aria-label="All 1,111 fixture placements remain resident; premium visual detail and labels are bounded to the current exact-ten neighborhood." />
     <aside className="sm-pw-hover-card" role="tooltip" aria-hidden={!hoveredPlacement} data-visible={Boolean(hoveredPlacement)}>
-      {hoveredPlacement && hoveredFactor && <><header><span>{hoveredPlacement.depth === 1 ? "System" : hoveredPlacement.depth === 2 ? "Factor" : hoveredPlacement.depth === 0 ? "Outcome" : "Fixture detail"}</span><strong>{hoveredFactor.label}</strong>{hoveredValue && <b>{hoveredValue}</b>}</header><dl><div><dt>Purpose</dt><dd>{hoverPurpose(model, hoveredPlacement)}</dd></div><div><dt>Tracks</dt><dd>{hoveredSource?.summary ?? hoveredFactor.definition}</dd></div><div><dt>Why</dt><dd>{hoverWhy(model, hoveredPlacement)}</dd></div></dl><small>{hoveredBinding?.status === "CONNECTED" ? `${hoveredBinding.validTime} · ${hoveredBinding.provider} · click for evidence` : "Click for full details"}</small></>}
+      {hoveredPlacement && hoveredFactor && <><header><span>{hoveredPlacement.depth === 1 ? "System" : hoveredPlacement.depth === 2 ? "Factor" : hoveredPlacement.depth === 0 ? "Outcome" : "Supporting factor"}</span><strong>{persistentWorldPlacementLabel(model, hoveredPlacement)}</strong>{hoveredValue && <b>{hoveredValue}</b>}</header><dl><div><dt>Purpose</dt><dd>{hoverPurpose(model, hoveredPlacement)}</dd></div><div><dt>Tracks</dt><dd>{hoveredSource?.summary ?? hoveredFactor.definition}</dd></div><div><dt>Why</dt><dd>{hoverWhy(model, hoveredPlacement)}</dd></div></dl><small>{hoveredBinding?.status === "CONNECTED" ? `${hoveredBinding.validTime} · ${hoveredBinding.provider} · click for evidence` : hoveredBinding?.status === "SOURCE_ENABLED_PENDING_ACCEPTANCE" ? "Collector enabled · acceptance pending" : hoveredBinding?.status === "BLOCKED" ? "Official path identified · retrieval blocked" : "Click for full details"}</small></>}
     </aside>
     <p className="sm-sr-only">Use the structured factor controls following the world to navigate without relying on position, color, hover, or motion.</p>
   </div>;

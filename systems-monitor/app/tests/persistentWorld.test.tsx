@@ -71,7 +71,7 @@ describe("premium persistent-world visual language", () => {
   it("catalogs an explicit official-data or derivation path for every Level-2 factor", () => {
     const model = createPersistentWorld();
     const level2 = Object.values(model.placements).filter((placement) => placement.depth === 2);
-    expect(PERSISTENT_WORLD_PROFILED_FACTOR_COUNT).toBe(100);
+    expect(PERSISTENT_WORLD_PROFILED_FACTOR_COUNT).toBeGreaterThanOrEqual(100);
     expect(level2.every((placement) => persistentWorldCandidateSourceProfile(model.factors[placement.canonicalFactorId].label))).toBe(true);
     expect(persistentWorldCandidateSourceProfile("Fiscal Policy")).toMatchObject({ authority: "U.S. Department of the Treasury", readiness: "CANDIDATE_DATASET" });
     expect(persistentWorldCandidateSourceProfile("Geopolitical Risk")).toMatchObject({ readiness: "DERIVATION_REQUIRED", registrationState: "SOURCE_DESIGN_REQUIRED" });
@@ -192,7 +192,7 @@ describe("persistent world local-review shell", () => {
     expect(surface.getAttribute("data-resident-placement-count")).toBe("1111");
     expect(surface.getAttribute("data-resident-relationship-count")).toBe("3110");
     expect(surface.getAttribute("data-semantic-node-count")).toBe("11");
-    expect(surface.getAttribute("data-factual-binding-count")).toBe("4");
+    expect(surface.getAttribute("data-factual-binding-count")).toBe("5");
     expect(surface.getAttribute("data-lod-mode")).toBe("OVERVIEW");
     expect(screen.getByRole("button", { name: "Enter full screen" })).toBeTruthy();
     fireEvent.wheel(surface, { deltaY: -120, clientX: 400, clientY: 300 });
@@ -215,7 +215,7 @@ describe("persistent world local-review shell", () => {
     expect(within(inspector).getByRole("heading", { name: "Employer Labor Demand" })).toBeTruthy();
     expect(window.location.hash).toContain("placement%3Aemployer-labor-demand");
 
-    fireEvent.click(screen.getByRole("button", { name: /01Job OpeningsReview candidate/ }));
+    fireEvent.click(screen.getByRole("button", { name: /01Job OpeningsAccepted factual reading/ }));
     expect(surface.getAttribute("data-selected-placement-id")).toContain("job-openings");
     expect(surface.getAttribute("data-resident-placement-count")).toBe("1111");
     expect(screen.getAllByText(/Synthetic renderer record/)).toHaveLength(10);

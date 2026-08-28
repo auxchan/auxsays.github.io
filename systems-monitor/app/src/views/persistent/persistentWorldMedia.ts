@@ -92,13 +92,13 @@ function mediaKey(label: string, sector: number): keyof typeof media {
   const text = label.toLowerCase();
   if (/freight|transport|bottleneck|shipment|rail/.test(text)) return "freight";
   if (/fiscal|regulat|policy|geopolitical/.test(text)) return "government";
+  if (/labor|employment|worker|wage|earnings|hours|hire|job|layoff|participation|population|skills|education|retirement|caregiving|migration/.test(text)) return "people";
   if (/rate|credit|yield|financial|bank|mortgage|delinquen/.test(text)) return "centralBank";
   if (/trade|tariff|import|export|retail|consumer|spending|demand/.test(text)) return "trade";
   if (/energy|fuel|oil|gas|pipeline/.test(text)) return "energy";
   if (/storage|inventory|saving|stock/.test(text)) return "storage";
   if (/power|utility|electric|grid/.test(text)) return "utilities";
   if (/refin|manufactur|industrial|production|output|construction|capital|investment|automation|technology|business/.test(text)) return "industry";
-  if (/labor|employment|worker|wage|earnings|hours|hire|job|layoff|participation|population|skills|education|retirement|caregiving|migration/.test(text)) return "people";
   return (["industry", "trade", "people", "people", "industry", "utilities", "people", "industry", "people", "trade"] as const)[Math.max(0, sector)] ?? "industry";
 }
 
