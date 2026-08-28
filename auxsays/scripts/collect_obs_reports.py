@@ -29,6 +29,7 @@ import yaml
 from lib.normalize import split_front_matter, atomic_write_text
 from lib.patch_identity import patch_key
 from lib.report_counts import counted_evidence_counts
+from lib.target_outcome import target_is_contradicted
 
 ROOT = Path(__file__).resolve().parents[1]
 EVIDENCE_PATH = ROOT / "_data" / "consensus_evidence.yml"
@@ -162,6 +163,49 @@ def match_basis(issue: dict[str, Any], version: str) -> str | None:
     return None
 
 
+# The issue template asks the reporter which version they are on. That answer is a structured
+# self-report of the AFFECTED version, and it is what keeps this fix from being destructive: 164 of
+# 188 counted OBS rows declare their version in this field (130 name it ONLY here), so a rule
+# demanding defect prose beside the identity would discard most of the legitimate corpus.
+DECLARED_VERSION_FIELDS = re.compile(
+    r"###\s*OBS Studio Version(?:\s*\(Other\))?\s*\n(.*?)(?=\n###|\Z)", re.I | re.S)
+_DECLARED_VERSION_TOKEN = re.compile(r"(?<![0-9.])\d+(?:\.\d+){1,3}(?![0-9.])")
+
+
+def declared_versions(issue: dict[str, Any]) -> set[str]:
+    """Versions the reporter declared running, from the issue template's own version fields."""
+    body = str(issue.get("body") or "")
+    found: set[str] = set()
+    for block in DECLARED_VERSION_FIELDS.finditer(body):
+        found |= set(_DECLARED_VERSION_TOKEN.findall(block.group(1)))
+    return found
+
+
+# One rejection reason per contradicted role, so a refusal stays diagnosable in method health
+# rather than collapsing into a single opaque bucket.
+CONTRADICTED_REASONS = {
+    "working": "version_reported_working",
+    "rollback_target": "version_is_rollback_target",
+    "fixed_in_target": "version_reported_fixed",
+    "reference_only": "version_reference_only",
+}
+
+
+def contradiction_reason(issue: dict[str, Any], version: str) -> str | None:
+    """Refuse a version the report itself says is NOT affected.
+
+    ``match_basis`` is pure containment, so "I downgraded to 32.1.2, which doesn't have this
+    problem" made 32.1.2 -- the author's fix -- count as a report AGAINST 32.1.2. This asks what
+    the report actually says about that version, and vetoes only on explicit contradictory
+    language. Silence keeps the existing decision.
+    """
+    text = f"{issue.get('title') or ''}\n{issue.get('body') or ''}"
+    outcome = target_is_contradicted(text, version, declared_versions(issue))
+    if outcome is None:
+        return None
+    return CONTRADICTED_REASONS.get(outcome.outcome, "version_not_affected_by_report")
+
+
 def issue_text(issue: dict[str, Any]) -> tuple[str, str, str, str]:
     """Return normalized title/body/labels plus body with template headings removed."""
     title = str(issue.get("title") or "")
@@ -246,10 +290,18 @@ def release_date_gate(issue: dict[str, Any], release_date) -> str | None:
 def evaluate_issue(issue: dict[str, Any], version: str, release_date=None) -> tuple[str | None, str | None]:
     """Deterministic acceptance decision for one candidate issue.
     Returns (match_basis, None) when accepted, or (None, rejection_reason) when rejected.
-    Order: exact-version -> developer-only -> generic/no-concrete-issue -> release-date."""
+    Order: exact-version -> version-not-contradicted -> developer-only -> generic/no-concrete-issue
+    -> release-date.
+
+    The contradiction gate sits immediately after the version match because it answers the same
+    question -- is this report about THIS version -- and a version the report names as its fix must
+    not reach the later gates at all."""
     basis = match_basis(issue, version)
     if not basis:
         return None, "missing_exact_version"
+    contradicted = contradiction_reason(issue, version)
+    if contradicted:
+        return None, contradicted
     if likely_developer_only(issue):
         return None, "developer_or_build_only"
     if not describes_concrete_issue(issue):

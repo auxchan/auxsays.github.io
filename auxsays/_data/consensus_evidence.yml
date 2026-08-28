@@ -4613,27 +4613,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-- id: obs-studio-32-1-2-github-issue-13575
-  product_id: obs-studio
-  update_version: 32.1.2
-  source_type: github_issue
-  source_name: obsproject/obs-studio
-  source_url: https://github.com/obsproject/obs-studio/issues/13575
-  parent_title: IME doesn't work
-  report_title: IME doesn't work
-  report_text_excerpt: 'For example, typing `nihao` directly produces `nihao` instead of Chinese candidates. OBS 32.1.2 does not exhibit this issue. This issue has been verified with Weasel (Rime), Mircosoft Pinyin and sougou pinyin so far. ### Steps to Reproduce 1. Build current master on Windows. 2.'
-  captured_at: '2026-06-20T12:15:13Z'
-  patch_version_matched: true
-  matched_version: 32.1.2
-  match_basis: body
-  counted: true
-  exclusion_reason: null
-  issue_theme: freeze / hang
-  workflow_area: application stability
-  platform: windows
-  severity: high
-  sentiment: negative
-  source_weight: 1
 - id: blackmagic-davinci-21-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1u7mxxq-m5-max-128-gb-ram-choking-on-premade-fusi
   product_id: blackmagic-davinci
   update_version: '21'
@@ -8750,27 +8729,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-- id: obs-studio-32-1-2-github-issue-13689
-  product_id: obs-studio
-  update_version: 32.1.2
-  source_type: github_issue
-  source_name: obsproject/obs-studio
-  source_url: https://github.com/obsproject/obs-studio/issues/13689
-  parent_title: Version 32.2 broke NVENC encoder for legacy graphics cards
-  report_title: Version 32.2 broke NVENC encoder for legacy graphics cards
-  report_text_excerpt: 'on. 2. 3. ... ### Anything else we should know? The only fix is to revert back to version 32.1.2 as updating drivers does not fix the issue. If you are a content creator still using a legacy NVIDIA graphics card you are SOL. Continue to use the previous version or switch to an en'
-  captured_at: '2026-07-23T01:10:14Z'
-  patch_version_matched: true
-  matched_version: 32.1.2
-  match_basis: body
-  counted: true
-  exclusion_reason: null
-  issue_theme: unspecified issue
-  workflow_area: general OBS workflow
-  platform: windows
-  severity: medium
-  sentiment: moderate
-  source_weight: 1
 - id: obs-studio-32-2-0-github-issue-13686
   product_id: obs-studio
   update_version: 32.2.0
@@ -9090,27 +9048,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-- id: obs-studio-32-1-2-github-issue-13692
-  product_id: obs-studio
-  update_version: 32.1.2
-  source_type: github_issue
-  source_name: obsproject/obs-studio
-  source_url: https://github.com/obsproject/obs-studio/issues/13692
-  parent_title: CoreAudio not loading on 32.2 when DLLs in PATH-referenced folder
-  report_title: CoreAudio not loading on 32.2 when DLLs in PATH-referenced folder
-  report_text_excerpt: 'in a directory referenced by the PATH variable. Since 32.2, CoreAudio fails to load. OBS 32.1.2 log on the same system, showing successful loading of CoreAudio: https://obsproject.com/logs/sCM2O79sPswOI8XW ### Steps to Reproduce 1. Add the CoreAudio DLLs to a directory reference'
-  captured_at: '2026-07-23T10:40:31Z'
-  patch_version_matched: true
-  matched_version: 32.1.2
-  match_basis: body
-  counted: true
-  exclusion_reason: null
-  issue_theme: audio mixer regression
-  workflow_area: audio mixer UI
-  platform: windows
-  severity: medium
-  sentiment: negative
-  source_weight: 1
 - id: obs-studio-32-2-0-github-issue-13692
   product_id: obs-studio
   update_version: 32.2.0
@@ -9344,27 +9281,6 @@ evidence:
   captured_at: '2026-07-23T18:01:36Z'
   patch_version_matched: true
   matched_version: 32.1.2
-  match_basis: body
-  counted: true
-  exclusion_reason: null
-  issue_theme: freeze / hang
-  workflow_area: application stability
-  platform: windows
-  severity: high
-  sentiment: negative
-  source_weight: 1
-- id: obs-studio-32-2-0-github-issue-13693
-  product_id: obs-studio
-  update_version: 32.2.0
-  source_type: github_issue
-  source_name: obsproject/obs-studio
-  source_url: https://github.com/obsproject/obs-studio/issues/13693
-  parent_title: Check for updates button not working
-  report_title: Check for updates button not working
-  report_text_excerpt: 'te available - There is a new update available" and the changelog of the new update (e.g. 32.2.0) ### Current Behavior It did nothing https://github.com/user-attachments/assets/f32923e1-dd00-4a0a-822b-1e4055319b6e ### Steps to Reproduce 1. Open obs 2. Go to "help" 3. Click "Check'
-  captured_at: '2026-07-23T18:01:46Z'
-  patch_version_matched: true
-  matched_version: 32.2.0
   match_basis: body
   counted: true
   exclusion_reason: null
@@ -11427,48 +11343,6 @@ evidence:
   issue_theme: unspecified issue
   workflow_area: general OBS workflow
   platform: windows
-  severity: medium
-  sentiment: moderate
-  source_weight: 1
-- id: obs-studio-32-1-2-github-issue-13716
-  product_id: obs-studio
-  update_version: 32.1.2
-  source_type: github_issue
-  source_name: obsproject/obs-studio
-  source_url: https://github.com/obsproject/obs-studio/issues/13716
-  parent_title: OBS 32.2.1 fails to run on MacOS X 12.7.6 and closes immediately
-  report_title: OBS 32.2.1 fails to run on MacOS X 12.7.6 and closes immediately
-  report_text_excerpt: 'and double-click the app to run it. ... ### Anything else we should know? I downgraded to 32.1.2, which doesn''t have this problem.'
-  captured_at: '2026-08-07T03:56:02Z'
-  patch_version_matched: true
-  matched_version: 32.1.2
-  match_basis: body
-  counted: true
-  exclusion_reason: null
-  issue_theme: unspecified issue
-  workflow_area: general OBS workflow
-  platform: macos
-  severity: medium
-  sentiment: moderate
-  source_weight: 1
-- id: obs-studio-32-1-2-github-issue-13708
-  product_id: obs-studio
-  update_version: 32.1.2
-  source_type: github_issue
-  source_name: obsproject/obs-studio
-  source_url: https://github.com/obsproject/obs-studio/issues/13708
-  parent_title: QSV (Intel oneVPL/msdk) fails with MFX_ERR_NOT_FOUND in 32.2.0, works in 32.1.2 (Linux, snap, Intel Iris Xe / Raptor Lake-P)
-  report_title: QSV (Intel oneVPL/msdk) fails with MFX_ERR_NOT_FOUND in 32.2.0, works in 32.1.2 (Linux, snap, Intel Iris Xe / Raptor Lake-P)
-  report_text_excerpt: QSV (Intel oneVPL/msdk) fails with MFX_ERR_NOT_FOUND in 32.2.0, works in 32.1.2 (Linux, snap, Intel Iris Xe / Raptor Lake-P)
-  captured_at: '2026-08-07T03:56:02Z'
-  patch_version_matched: true
-  matched_version: 32.1.2
-  match_basis: title
-  counted: true
-  exclusion_reason: null
-  issue_theme: unspecified issue
-  workflow_area: general OBS workflow
-  platform: linux
   severity: medium
   sentiment: moderate
   source_weight: 1
@@ -13636,27 +13510,6 @@ evidence:
   severity: critical
   sentiment: negative
   source_weight: 1
-- id: obs-studio-32-1-2-github-issue-13785
-  product_id: obs-studio
-  update_version: 32.1.2
-  source_type: github_issue
-  source_name: obsproject/obs-studio
-  source_url: https://github.com/obsproject/obs-studio/issues/13785
-  parent_title: WebM-VP9 codec no longer loads with BGRA format
-  report_title: WebM-VP9 codec no longer loads with BGRA format
-  report_text_excerpt: seen in steps 5 and 6. Comment explains that this behavior worked as intended on version 32.1.2, with using an older installation being a fix. I would rather have this fixed in the future over relying on an older version of OBS, so I'm creating this issue. Log Analyzer shows `Wr
-  captured_at: '2026-08-14T03:50:48Z'
-  patch_version_matched: true
-  matched_version: 32.1.2
-  match_basis: body
-  counted: true
-  exclusion_reason: null
-  issue_theme: unspecified issue
-  workflow_area: general OBS workflow
-  platform: windows
-  severity: medium
-  sentiment: moderate
-  source_weight: 1
 - id: obs-studio-32-2-1-github-issue-13785
   product_id: obs-studio
   update_version: 32.2.1
@@ -14341,7 +14194,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5986842-how-to-fix-update-failure-for-updates
   product_id: microsoft-windows-11
   update_version: 25H2
