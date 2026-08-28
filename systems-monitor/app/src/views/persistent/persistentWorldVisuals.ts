@@ -2,8 +2,10 @@ import type { PersistentWorldDepth, PersistentWorldPlacement } from "../../data/
 
 export interface Point { x: number; y: number }
 export interface CubicRoute { start: Point; control1: Point; control2: Point; end: Point }
+export interface PersistentCameraPose { x: number; y: number; scale: number; rotation: number }
+export interface PersistentCameraTransition { from: PersistentCameraPose; to: PersistentCameraPose; startedAt: number; durationMs: number; arc: number; orbit: number }
 export type PremiumLabelSide = "left" | "right" | "top" | "bottom";
-export interface LabelCandidate { id: string; text: string; x: number; y: number; priority: number; width: number; height: number; accent: string; anchorX?: number; anchorY?: number; required?: boolean; side?: PremiumLabelSide }
+export interface LabelCandidate { id: string; text: string; x: number; y: number; priority: number; width: number; height: number; accent: string; anchorX?: number; anchorY?: number; required?: boolean; side?: PremiumLabelSide; opacity?: number }
 export interface ResolvedLabel extends LabelCandidate { left: number; top: number }
 
 export const PERSISTENT_GLINT_PERIOD_MS = 2500;
@@ -124,6 +126,48 @@ export function persistentFocusRotation(sector: number) {
 
 export function shortestAngleDelta(from: number, to: number) {
   return Math.atan2(Math.sin(to - from), Math.cos(to - from));
+}
+
+function smootherStep(progress: number) {
+  const value = Math.max(0, Math.min(1, progress));
+  return value ** 3 * (value * (value * 6 - 15) + 10);
+}
+
+/** Creates one bounded camera move that survives rapid path switching without changing world coordinates. */
+export function createPersistentCameraTransition(from: PersistentCameraPose, to: PersistentCameraPose, startedAt: number, identity: string): PersistentCameraTransition {
+  const distance = Math.hypot(to.x - from.x, to.y - from.y);
+  const zoomDistance = Math.abs(Math.log(Math.max(.001, to.scale) / Math.max(.001, from.scale)));
+  const sign = stableHash(identity) % 2 ? 1 : -1;
+  return {
+    from: { ...from },
+    to: { ...to },
+    startedAt,
+    durationMs: Math.max(820, Math.min(1220, 820 + distance * .16 + zoomDistance * 210)),
+    arc: sign * Math.max(14, Math.min(92, distance * .14)),
+    orbit: sign * Math.max(.025, Math.min(.075, .025 + distance / 5600))
+  };
+}
+
+/** Samples a drone-like dolly: eased travel, a shallow lateral arc, a gentle bank, and a mid-flight pullback. */
+export function samplePersistentCameraTransition(transition: PersistentCameraTransition, now: number) {
+  const progress = Math.max(0, Math.min(1, (now - transition.startedAt) / transition.durationMs));
+  const eased = smootherStep(progress);
+  const pulse = Math.sin(Math.PI * eased);
+  const dx = transition.to.x - transition.from.x;
+  const dy = transition.to.y - transition.from.y;
+  const distance = Math.max(1, Math.hypot(dx, dy));
+  const nx = -dy / distance;
+  const ny = dx / distance;
+  const logScale = Math.log(Math.max(.001, transition.from.scale)) + (Math.log(Math.max(.001, transition.to.scale)) - Math.log(Math.max(.001, transition.from.scale))) * eased - pulse * .13;
+  return {
+    progress,
+    pose: {
+      x: transition.from.x + dx * eased + nx * transition.arc * pulse,
+      y: transition.from.y + dy * eased + ny * transition.arc * pulse,
+      scale: Math.exp(logScale),
+      rotation: transition.from.rotation + shortestAngleDelta(transition.from.rotation, transition.to.rotation) * eased + transition.orbit * pulse
+    }
+  };
 }
 
 export function compactPersistentValue(value?: string) {

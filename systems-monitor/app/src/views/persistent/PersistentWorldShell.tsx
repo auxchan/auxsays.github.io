@@ -140,7 +140,7 @@ export function PersistentWorldShell() {
       </nav>
       <div ref={workspaceRef} className={`sm-pw-workspace ${selected ? "has-inspector" : ""} ${fullscreenFallback ? "is-fullscreen-fallback" : ""}`} data-fullscreen={fullscreenActive}>
         <aside className={`sm-pw-inspector ${selected ? "is-open" : ""}`} aria-label="Persistent world factor details" aria-hidden={!selected}>
-          {selected && factor && <div>
+          {selected && factor && <div key={selected.id} className="sm-pw-inspector__content">
             <header><span>{selected.depth === 1 ? "Master-defined driver system" : selected.depth === 2 ? "Level-2 review candidate" : "Level-3 reviewed factor"}</span><button type="button" aria-label="Close factor details" onClick={() => navigate(null)}>×</button><h2>{placementLabel(model, selected)}</h2>{selectedCompactValue && <div className="sm-pw-inspector__quick-reading"><strong>{selectedCompactValue}</strong><span>{selectedBinding?.validTime} · {selectedBinding?.provider}</span><a href="/systems-monitor/#workstream1a">Open factual record</a></div>}</header>
             {selectedMedia && <div className="sm-pw-inspector__portrait" style={{ "--pw-photo": `url(${selectedMedia.imageUrl})`, "--pw-accent": selectedAccent } as CSSProperties}>
               <span className="sm-pw-inspector__photo" role="img" aria-label={selectedMedia.alt} />

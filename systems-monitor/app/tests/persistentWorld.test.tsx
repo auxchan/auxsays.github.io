@@ -6,7 +6,7 @@ import { createPersistentWorld, employmentDriverCandidates, persistentWorldFinge
 import { persistentWorldFactualBinding } from "../src/data/persistentWorldFactualBindings";
 import { PERSISTENT_WORLD_PROFILED_FACTOR_COUNT, persistentWorldCandidateSourceProfile } from "../src/data/persistentWorldSourceCatalog";
 import { persistentWorldMediaFor } from "../src/views/persistent/persistentWorldMedia";
-import { PERSISTENT_GLINT_PERIOD_MS, PERSISTENT_GLINT_TRAIL, blendPremiumColor, compactPersistentValue, easePremiumHover, factorGlyph, persistentFocusRotation, persistentGlintProgress, persistentPlacementAccent, premiumCurveRoute, resolvePersistentLod, resolvePremiumLabels, shortestAngleDelta } from "../src/views/persistent/persistentWorldVisuals";
+import { PERSISTENT_GLINT_PERIOD_MS, PERSISTENT_GLINT_TRAIL, blendPremiumColor, compactPersistentValue, createPersistentCameraTransition, easePremiumHover, factorGlyph, persistentFocusRotation, persistentGlintProgress, persistentPlacementAccent, premiumCurveRoute, resolvePersistentLod, resolvePremiumLabels, samplePersistentCameraTransition, shortestAngleDelta } from "../src/views/persistent/persistentWorldVisuals";
 
 describe("premium persistent-world visual language", () => {
   it("routes curves deterministically without changing endpoints", () => {
@@ -118,6 +118,21 @@ describe("premium persistent-world visual language", () => {
     expect(persistentFocusRotation(1)).toBeCloseTo(-Math.PI / 5);
     expect(persistentFocusRotation(9)).toBeCloseTo(Math.PI / 5);
     expect(shortestAngleDelta(Math.PI * .9, -Math.PI * .9)).toBeCloseTo(Math.PI * .2);
+  });
+
+  it("uses a bounded cinematic camera arc with a mid-flight dolly pullback", () => {
+    const transition = createPersistentCameraTransition({ x: 0, y: 0, scale: .2, rotation: 0 }, { x: 300, y: 160, scale: 1.72, rotation: .4 }, 1000, "placement:test");
+    const start = samplePersistentCameraTransition(transition, 1000);
+    const middle = samplePersistentCameraTransition(transition, 1000 + transition.durationMs / 2);
+    const end = samplePersistentCameraTransition(transition, 1000 + transition.durationMs);
+    expect(transition.durationMs).toBeGreaterThanOrEqual(820);
+    expect(transition.durationMs).toBeLessThanOrEqual(1220);
+    expect(start.pose).toEqual(transition.from);
+    expect(end.pose.x).toBeCloseTo(transition.to.x);
+    expect(end.pose.y).toBeCloseTo(transition.to.y);
+    expect(end.pose.scale).toBeCloseTo(transition.to.scale);
+    expect(middle.pose.x).not.toBeCloseTo((transition.from.x + transition.to.x) / 2);
+    expect(middle.pose.scale).toBeLessThan(Math.sqrt(transition.from.scale * transition.to.scale));
   });
 });
 

@@ -4,12 +4,12 @@ import type { PersistentWorldFactualBinding } from "../../data/persistentWorldFa
 import { persistentWorldCandidateSourceProfile } from "../../data/persistentWorldSourceCatalog";
 import {
   PERSISTENT_GLINT_TRAIL, blendPremiumColor, compactPersistentValue, drawPremiumGlyph,
-  easePremiumHover, factorGlyph, persistentGlintProgress, pointOnCubic, premiumCurveRoute,
-  persistentFocusRotation, persistentPlacementAccent, premiumRadius, resolvePersistentLod, resolvePremiumLabels, shortestAngleDelta, traceCubic,
-  type LabelCandidate, type Point
+  createPersistentCameraTransition, easePremiumHover, factorGlyph, persistentGlintProgress, pointOnCubic, premiumCurveRoute,
+  persistentFocusRotation, persistentPlacementAccent, premiumRadius, resolvePersistentLod, resolvePremiumLabels, traceCubic,
+  samplePersistentCameraTransition, type LabelCandidate, type PersistentCameraPose, type Point
 } from "./persistentWorldVisuals";
 
-interface Camera { x: number; y: number; scale: number; rotation: number }
+type Camera = PersistentCameraPose;
 interface Viewport { zoom: number; panX: number; panY: number }
 interface Props {
   model: PersistentWorldReadModel;
@@ -45,7 +45,7 @@ function hoverWhy(model: PersistentWorldReadModel, placement: PersistentWorldPla
 function targetCamera(model: PersistentWorldReadModel, selectedPlacementId: string | null, fullWorld: boolean, viewportWidth = 980, viewportHeight = 720): Camera {
   const selected = selectedPlacementId ? model.placements[selectedPlacementId] : undefined;
   if (!selected || fullWorld) return { x: 0, y: 0, scale: fullWorld ? .17 : OVERVIEW_SCALE, rotation: 0 };
-  const rotation = persistentFocusRotation(selected.sector);
+  const rotation = persistentFocusRotation(selected.sector) + (selected.depth >= 2 ? (selected.order - 5.5) * .008 : 0);
   if (selected.depth === 1) {
     const neighborhood = [selected, ...(model.childrenByPlacement[selected.id] ?? []).map((id) => model.placements[id])];
     const rotated = neighborhood.map((placement) => ({ x: placement.x * Math.cos(rotation) - placement.y * Math.sin(rotation), y: placement.x * Math.sin(rotation) + placement.y * Math.cos(rotation) }));
@@ -81,7 +81,7 @@ function isInSelectedSector(model: PersistentWorldReadModel, placement: Persiste
   return selected ? placement.sector === selected.sector || placement.depth === 0 : false;
 }
 
-function drawBackground(context: CanvasRenderingContext2D, width: number, height: number, parallax: Point) {
+function drawBackground(context: CanvasRenderingContext2D, width: number, height: number, parallax: Point, momentum: Point) {
   context.fillStyle = "#041219"; context.fillRect(0, 0, width, height);
   const gradient = context.createRadialGradient(width * .5 + parallax.x, height * .48 + parallax.y, 20, width * .5, height * .5, Math.max(width, height) * .72);
   gradient.addColorStop(0, "rgba(27,111,117,.31)"); gradient.addColorStop(.45, "rgba(7,39,48,.18)"); gradient.addColorStop(1, "rgba(1,9,14,0)");
@@ -96,11 +96,14 @@ function drawBackground(context: CanvasRenderingContext2D, width: number, height
     context.strokeStyle = `rgba(93,201,195,${radius < 200 ? .08 : .045})`; context.lineWidth = 1; context.setLineDash([3, 11]);
     context.beginPath(); context.ellipse(0, 0, radius * 1.12, radius * .82, -.08, 0, Math.PI * 2); context.stroke();
   }
-  context.setLineDash([]); context.restore(); context.fillStyle = "rgba(111,228,208,.16)";
+  context.setLineDash([]); context.restore();
   for (let index = 0; index < 54; index += 1) {
-    const x = ((index * 193 + 71) % Math.max(1, Math.round(width))) + parallax.x * ((index % 3) + 1) * .12;
-    const y = ((index * 97 + 43) % Math.max(1, Math.round(height))) + parallax.y * ((index % 4) + 1) * .1;
-    context.beginPath(); context.arc(x, y, index % 7 === 0 ? 1.6 : .7, 0, Math.PI * 2); context.fill();
+    const depth = .35 + (index % 5) * .19;
+    const x = ((index * 193 + 71) % Math.max(1, Math.round(width))) + parallax.x * depth;
+    const y = ((index * 97 + 43) % Math.max(1, Math.round(height))) + parallax.y * depth;
+    context.strokeStyle = `rgba(111,228,208,${.055 + depth * .09})`; context.fillStyle = `rgba(111,228,208,${.08 + depth * .12})`; context.lineWidth = Math.max(.45, depth * .85);
+    if (Math.hypot(momentum.x, momentum.y) > 1.5) { context.beginPath(); context.moveTo(x - momentum.x * depth * .48, y - momentum.y * depth * .48); context.lineTo(x, y); context.stroke(); }
+    context.beginPath(); context.arc(x, y, index % 7 === 0 ? 1.1 + depth * .75 : .45 + depth * .35, 0, Math.PI * 2); context.fill();
   }
   const vignette = context.createRadialGradient(width / 2, height / 2, Math.min(width, height) * .3, width / 2, height / 2, Math.max(width, height) * .7);
   vignette.addColorStop(0, "rgba(0,0,0,0)"); vignette.addColorStop(1, "rgba(0,5,9,.58)"); context.fillStyle = vignette; context.fillRect(0, 0, width, height);
@@ -113,6 +116,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
   const panRef = useRef<{ pointerId: number; startX: number; startY: number; panX: number; panY: number; moved: boolean } | null>(null);
   const suppressClickRef = useRef(false); const hoveredRef = useRef<string | null>(null); const hoverVisualsRef = useRef(new Map<string, number>());
   const pointerRef = useRef<Point>({ x: 0, y: 0 }); const invalidateRef = useRef<() => void>(() => undefined);
+  const semanticHistoryRef = useRef<readonly string[]>([]); const cameraMomentumRef = useRef<Point>({ x: 0, y: 0 });
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const hoveredPlacement = hoveredId ? model.placements[hoveredId] : undefined;
   const hoveredFactor = hoveredPlacement ? model.factors[hoveredPlacement.canonicalFactorId] : undefined;
@@ -137,9 +141,12 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
     let frame = 0; let last = performance.now(); let frameCount = 0; let accumulated = 0; const frameSamples: number[] = [];
     const initialBounds = host.getBoundingClientRect();
     let destination = targetCamera(model, selectedPlacementId, fullWorld, initialBounds.width, initialBounds.height); const cameraStarted = performance.now(); let cameraSettled = false;
+    let cameraTransition = createPersistentCameraTransition(cameraRef.current, destination, cameraStarted, selectedPlacementId ?? (fullWorld ? "full-world" : "overview"));
+    const previousSemantic = semanticHistoryRef.current.length ? semanticHistoryRef.current : semantic; semanticHistoryRef.current = semantic;
+    const previousSemanticSet = new Set(previousSemantic); const transitionSemanticSet = new Set([...previousSemantic, ...semantic]);
     delete host.dataset.cameraSettleMs; if (reducedMotion) cameraRef.current = destination;
     const resize = () => {
-      const bounds = host.getBoundingClientRect(); const ratio = Math.min(2, window.devicePixelRatio || 1); destination = targetCamera(model, selectedPlacementId, fullWorld, bounds.width, bounds.height);
+      const bounds = host.getBoundingClientRect(); const ratio = Math.min(2, window.devicePixelRatio || 1); destination = targetCamera(model, selectedPlacementId, fullWorld, bounds.width, bounds.height); cameraTransition.to = destination;
       canvas.width = Math.max(1, Math.round(bounds.width * ratio)); canvas.height = Math.max(1, Math.round(bounds.height * ratio)); canvas.style.width = `${bounds.width}px`; canvas.style.height = `${bounds.height}px`; context.setTransform(ratio, 0, 0, ratio, 0, 0);
       if (reducedMotion) invalidateRef.current();
     };
@@ -147,16 +154,19 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
     const placements = Object.values(model.placements);
     const hierarchy = Object.values(model.relationships).filter((edge) => edge.relationshipClass === "HIERARCHY_TETHER");
     const influence = Object.values(model.relationships).filter((edge) => edge.relationshipClass === "SYNTHETIC_INFLUENCE");
-    const highlightedEdges = hierarchy.filter((edge) => semanticSet.has(edge.fromPlacementId) && semanticSet.has(edge.toPlacementId));
+    const highlightedEdges = hierarchy.filter((edge) => transitionSemanticSet.has(edge.fromPlacementId) && transitionSemanticSet.has(edge.toPlacementId));
 
     const draw = (now: number) => {
       const started = performance.now(); const elapsedMs = Math.min(48, Math.max(0, now - last)); const bounds = host.getBoundingClientRect(); const width = bounds.width; const height = bounds.height; const camera = cameraRef.current; const viewport = viewportRef.current;
-      if (!reducedMotion) { const amount = 1 - Math.pow(.00000003, Math.min(.06, elapsedMs / 1000)); camera.x += (destination.x - camera.x) * amount; camera.y += (destination.y - camera.y) * amount; camera.scale += (destination.scale - camera.scale) * amount; camera.rotation += shortestAngleDelta(camera.rotation, destination.rotation) * amount; }
-      host.dataset.cameraScale = camera.scale.toFixed(3); host.dataset.cameraRotationDegrees = (camera.rotation * 180 / Math.PI).toFixed(1);
-      if (!cameraSettled && (reducedMotion || (Math.abs(camera.x - destination.x) < .35 && Math.abs(camera.y - destination.y) < .35 && Math.abs(camera.scale - destination.scale) < .001 && Math.abs(shortestAngleDelta(camera.rotation, destination.rotation)) < .001))) { cameraSettled = true; host.dataset.cameraSettleMs = (performance.now() - cameraStarted).toFixed(3); }
+      const priorCamera = { ...camera }; const transitionSample = reducedMotion ? { progress: 1, pose: destination } : samplePersistentCameraTransition(cameraTransition, now); Object.assign(camera, transitionSample.pose);
+      const targetMomentum = reducedMotion ? { x: 0, y: 0 } : { x: Math.max(-32, Math.min(32, (priorCamera.x - camera.x) * camera.scale * 1.4)), y: Math.max(-32, Math.min(32, (priorCamera.y - camera.y) * camera.scale * 1.4)) };
+      cameraMomentumRef.current.x += (targetMomentum.x - cameraMomentumRef.current.x) * .18; cameraMomentumRef.current.y += (targetMomentum.y - cameraMomentumRef.current.y) * .18;
+      host.dataset.cameraX = camera.x.toFixed(3); host.dataset.cameraY = camera.y.toFixed(3); host.dataset.cameraScale = camera.scale.toFixed(3); host.dataset.cameraRotationDegrees = (camera.rotation * 180 / Math.PI).toFixed(1);
+      host.dataset.cameraTransitionProgress = transitionSample.progress.toFixed(3); host.dataset.cameraTransitionPhase = reducedMotion ? "REDUCED_MOTION" : transitionSample.progress < .28 ? "DOLLY_OUT" : transitionSample.progress < .82 ? "ORBITAL_TRAVEL" : transitionSample.progress < 1 ? "DOLLY_IN" : "SETTLED";
+      if (!cameraSettled && transitionSample.progress >= 1) { cameraSettled = true; host.dataset.cameraSettleMs = (performance.now() - cameraStarted).toFixed(3); }
       last = now;
-      const parallax = reducedMotion ? { x: 0, y: 0 } : { x: (pointerRef.current.x - width / 2) * .018, y: (pointerRef.current.y - height / 2) * .018 };
-      drawBackground(context, width, height, parallax);
+      const parallax = reducedMotion ? { x: 0, y: 0 } : { x: (pointerRef.current.x - width / 2) * .016 + cameraMomentumRef.current.x, y: (pointerRef.current.y - height / 2) * .016 + cameraMomentumRef.current.y };
+      drawBackground(context, width, height, parallax, cameraMomentumRef.current);
 
       context.lineWidth = .58; context.strokeStyle = "rgba(93,176,176,.075)"; context.beginPath();
       for (const edge of hierarchy) { const from = project(model.placements[edge.fromPlacementId], camera, viewport, width, height); const to = project(model.placements[edge.toPlacementId], camera, viewport, width, height); const route = premiumCurveRoute(edge.id, from, to, true); context.moveTo(route.start.x, route.start.y); context.bezierCurveTo(route.control1.x, route.control1.y, route.control2.x, route.control2.y, route.end.x, route.end.y); }
@@ -166,10 +176,11 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
       context.lineCap = "round"; const currentHovered = hoveredRef.current;
       for (const edge of highlightedEdges) {
         const fromPlacement = model.placements[edge.fromPlacementId]; const toPlacement = model.placements[edge.toPlacementId]; const from = project(fromPlacement, camera, viewport, width, height); const to = project(toPlacement, camera, viewport, width, height); const route = premiumCurveRoute(edge.id, from, to);
+        const currentEdge = semanticSet.has(edge.fromPlacementId) && semanticSet.has(edge.toPlacementId); const previousEdge = previousSemanticSet.has(edge.fromPlacementId) && previousSemanticSet.has(edge.toPlacementId); const transitionAlpha = Math.min(1, (currentEdge ? transitionSample.progress : 0) + (previousEdge ? 1 - transitionSample.progress : 0));
         const accent = persistentPlacementAccent(toPlacement); const incident = Boolean(currentHovered && (edge.fromPlacementId === currentHovered || edge.toPlacementId === currentHovered)); const traceEdge = selectedPath.has(edge.fromPlacementId) && selectedPath.has(edge.toPlacementId);
         const hoverAmount = easePremiumHover(hoverVisualsRef.current.get(edge.id) ?? 0, incident ? 1 : 0, elapsedMs, reducedMotion); hoverVisualsRef.current.set(edge.id, hoverAmount);
         const focused = selectedPlacementId ? model.placements[selectedPlacementId] : undefined; const denseFanEdge = Boolean(focused && focused.depth < 3 && (edge.fromPlacementId === focused.id || edge.toPlacementId === focused.id)); const railScale = denseFanEdge ? .64 : 1;
-        const traceAlpha = traceMode ? traceEdge ? 1 : .13 : 1; const color = blendPremiumColor(AMBIENT_EDGE, accent, (denseFanEdge ? .76 : .52) + hoverAmount * (denseFanEdge ? .24 : .48), (currentHovered && !incident ? .24 : .9) * traceAlpha);
+        const traceAlpha = (traceMode ? traceEdge ? 1 : .13 : 1) * transitionAlpha; const color = blendPremiumColor(AMBIENT_EDGE, accent, (denseFanEdge ? .76 : .52) + hoverAmount * (denseFanEdge ? .24 : .48), (currentHovered && !incident ? .24 : .9) * traceAlpha);
         context.save(); context.shadowColor = accent; context.shadowBlur = (denseFanEdge ? 5 + hoverAmount * 8 : 8 + hoverAmount * 10) * traceAlpha; context.strokeStyle = blendPremiumColor(AMBIENT_EDGE, accent, .45 + hoverAmount * .55, (.18 + hoverAmount * .18) * traceAlpha); context.lineWidth = (8 + hoverAmount * 2) * railScale; traceCubic(context, route); context.stroke();
         context.shadowBlur = 0; context.strokeStyle = color; context.lineWidth = (3.2 + hoverAmount * 1.2) * railScale; traceCubic(context, route); context.stroke(); context.strokeStyle = blendPremiumColor("#b8e1df", accent, .42 + hoverAmount * .58, .88); context.lineWidth = denseFanEdge ? .85 : 1.05; traceCubic(context, route); context.stroke(); context.restore();
         if (!reducedMotion && (!traceMode || traceEdge)) { const progress = persistentGlintProgress(now, edge.id); const trailStart = pointOnCubic(route, Math.max(0, progress - PERSISTENT_GLINT_TRAIL)); const trailEnd = pointOnCubic(route, progress); const gradient = context.createLinearGradient(trailStart.x, trailStart.y, trailEnd.x, trailEnd.y); gradient.addColorStop(0, blendPremiumColor(accent, accent, 1, 0)); gradient.addColorStop(1, blendPremiumColor("#ffffff", accent, .26, .98)); context.save(); context.strokeStyle = gradient; context.lineWidth = 3.1; context.shadowColor = accent; context.shadowBlur = 12; context.beginPath(); context.moveTo(trailStart.x, trailStart.y); context.lineTo(trailEnd.x, trailEnd.y); context.stroke(); context.restore(); }
@@ -179,9 +190,9 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
       for (const placement of placements) {
         const point = project(placement, camera, viewport, width, height); if (point.x < -42 || point.y < -42 || point.x > width + 42 || point.y > height + 42) continue;
         const factorLabel = persistentWorldPlacementLabel(model, placement); const factualBinding = factualBindings[placement.id];
-        const emphasized = semanticSet.has(placement.id) || selectedPath.has(placement.id); const sectorActive = isInSelectedSector(model, placement, selectedPlacementId); const effectiveScale = camera.scale * viewport.zoom; const lod = resolvePersistentLod(placement.depth, effectiveScale, emphasized); const radius = premiumRadius(placement, lod);
+        const semanticAlpha = Math.min(1, (semanticSet.has(placement.id) ? transitionSample.progress : 0) + (previousSemanticSet.has(placement.id) ? 1 - transitionSample.progress : 0)); const emphasized = semanticAlpha > .015 || selectedPath.has(placement.id); const sectorActive = isInSelectedSector(model, placement, selectedPlacementId); const effectiveScale = camera.scale * viewport.zoom; const lod = resolvePersistentLod(placement.depth, effectiveScale, emphasized); const radius = premiumRadius(placement, lod);
         const accent = persistentPlacementAccent(placement); const isHovered = placement.id === currentHovered; const isSelected = placement.id === selectedPlacementId;
-        context.globalAlpha = emphasized ? 1 : sectorActive ? (placement.depth === 3 ? .36 : .58) : (fullWorld ? .24 : .1);
+        context.globalAlpha = emphasized ? Math.max(.08, semanticAlpha, selectedPath.has(placement.id) ? .7 : 0) : sectorActive ? (placement.depth === 3 ? .36 : .58) : (fullWorld ? .24 : .1);
         if (lod === 0) { context.fillStyle = accent; context.beginPath(); context.arc(point.x, point.y, Math.max(1, radius), 0, Math.PI * 2); context.fill(); }
         else {
           context.save(); context.shadowColor = accent; context.shadowBlur = isSelected ? 25 : isHovered ? 18 : emphasized ? 9 : 0; context.fillStyle = placement.depth === 0 ? "rgba(35,18,42,.96)" : "rgba(5,27,35,.94)"; context.strokeStyle = blendPremiumColor(accent, "#ffffff", isHovered ? .25 : .05, .9); context.lineWidth = placement.depth === 0 ? 3.2 : 2;
@@ -220,12 +231,12 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
             }
           }
           const focusedExactTenChild = Boolean(focusPlacement && focusPlacement.depth < 3 && placement.parentPlacementId === focusPlacement.id && placement.depth === focusPlacement.depth + 1);
-          labelCandidates.push({ id: placement.id, text: label, x: labelX, y: labelY, priority: placement.depth === 0 ? 100 : isSelected ? 90 : placement.depth === 1 ? 70 : placement.depth === 2 ? 50 : 20, width: textWidth, height: 22, accent, anchorX, anchorY, required: focusedExactTenChild, side: labelSide });
+          labelCandidates.push({ id: placement.id, text: label, x: labelX, y: labelY, priority: placement.depth === 0 ? 100 : isSelected ? 90 : placement.depth === 1 ? 70 : placement.depth === 2 ? 50 : 20, width: textWidth, height: 22, accent, anchorX, anchorY, required: focusedExactTenChild, side: labelSide, opacity: Math.max(.08, semanticAlpha, selectedPath.has(placement.id) ? .7 : 0) });
         }
         context.globalAlpha = 1;
       }
       const labels = resolvePremiumLabels(labelCandidates, width, height);
-      for (const label of labels) { if (label.anchorX !== undefined && label.anchorY !== undefined) { const targetX = label.side === "left" ? label.left + label.width : label.side === "right" ? label.left : label.x; const targetY = label.side === "top" ? label.top + label.height : label.side === "bottom" ? label.top : label.y; context.strokeStyle = blendPremiumColor(label.accent, label.accent, 1, .3); context.lineWidth = .8; context.beginPath(); context.moveTo(label.anchorX, label.anchorY); context.lineTo(targetX, targetY); context.stroke(); } context.fillStyle = "rgba(2,16,22,.9)"; context.strokeStyle = blendPremiumColor(label.accent, label.accent, 1, .3); context.lineWidth = 1; context.beginPath(); context.roundRect(label.left, label.top, label.width, label.height, 6); context.fill(); context.stroke(); context.fillStyle = label.id === selectedPlacementId ? "#f4fffc" : blendPremiumColor("#d9eeeb", label.accent, .28, 1); context.font = `${label.priority >= 70 ? 750 : 650} ${label.priority >= 70 ? 12 : 11}px Inter, system-ui, sans-serif`; context.textAlign = "center"; context.textBaseline = "middle"; context.fillText(label.text, label.x, label.y, label.width - 12); }
+      for (const label of labels) { context.save(); context.globalAlpha = label.opacity ?? 1; if (label.anchorX !== undefined && label.anchorY !== undefined) { const targetX = label.side === "left" ? label.left + label.width : label.side === "right" ? label.left : label.x; const targetY = label.side === "top" ? label.top + label.height : label.side === "bottom" ? label.top : label.y; context.strokeStyle = blendPremiumColor(label.accent, label.accent, 1, .3); context.lineWidth = .8; context.beginPath(); context.moveTo(label.anchorX, label.anchorY); context.lineTo(targetX, targetY); context.stroke(); } context.fillStyle = "rgba(2,16,22,.9)"; context.strokeStyle = blendPremiumColor(label.accent, label.accent, 1, .3); context.lineWidth = 1; context.beginPath(); context.roundRect(label.left, label.top, label.width, label.height, 6); context.fill(); context.stroke(); context.fillStyle = label.id === selectedPlacementId ? "#f4fffc" : blendPremiumColor("#d9eeeb", label.accent, .28, 1); context.font = `${label.priority >= 70 ? 750 : 650} ${label.priority >= 70 ? 12 : 11}px Inter, system-ui, sans-serif`; context.textAlign = "center"; context.textBaseline = "middle"; context.fillText(label.text, label.x, label.y, label.width - 12); context.restore(); }
 
       const elapsed = performance.now() - started;
       if (frameCount === 0) host.dataset.firstDrawMs = (performance.now() - mountedAtRef.current).toFixed(3);
