@@ -1,0 +1,525 @@
+schemaVersion: 1.0.0
+registryId: layoffs-job-destruction-source-acquisition
+generatedAt: 2026-08-27T00:00:00Z
+purpose: >-
+  Review-only source acquisition map for the frozen Layoffs & Job Destruction
+  10-by-10 hierarchy. This registry identifies candidates; it does not accept,
+  publish, or create any observation, calculation, or structural relationship.
+activationPolicy:
+  defaultState: SOURCE_IDENTIFIED
+  acceptedObservationRequired: true
+  rightsAcceptanceRequired: true
+  noPlaceholderValues: true
+  secretsInArtifacts: false
+credentialEnvironmentVariables:
+  census: AUXSAYS_CENSUS_API_KEY
+  bea: AUXSAYS_BEA_USER_ID
+  eia: AUXSAYS_EIA_API_KEY
+
+sources:
+  bls_jolts:
+    agency: U.S. Bureau of Labor Statistics
+    product: Job Openings and Labor Turnover Survey
+    acquisitionUrl: https://download.bls.gov/pub/time.series/jt/
+    apiUrl: https://api.bls.gov/publicAPI/v2/timeseries/data/
+    evidenceUrl: https://www.bls.gov/news.release/jolts.htm
+    methodologyUrl: https://www.bls.gov/opub/hom/jlt/
+    cadence: monthly
+    historyAndRevision: monthly history; preliminary estimates are revised on the next release
+    auth: optional BLS registration key; unregistered API access has lower limits
+    rights: EXISTING_BLS_POLICY_REVIEW
+    unitsAdjustment: levels in thousands and rates in percent; seasonally adjusted and not seasonally adjusted series
+    viability: READY
+    currentness: June 2026 release published 2026-08-04; July 2026 scheduled 2026-09-01
+  dol_ui_claims:
+    agency: U.S. Department of Labor, Employment and Training Administration
+    product: Unemployment Insurance Weekly Claims
+    acquisitionUrl: https://oui.doleta.gov/unemploy/wkclaims/report.asp
+    evidenceUrl: https://www.dol.gov/ui/data.pdf
+    methodologyUrl: https://oui.doleta.gov/unemploy/claims.asp
+    archiveUrl: https://oui.doleta.gov/unemploy/claims_arch.asp
+    cadence: weekly, Thursday 08:30 ET
+    historyAndRevision: advance weekly values followed by revision; PDF and structured feed must be versioned separately
+    auth: none
+    rights: EXISTING_DOL_POLICY_REVIEW
+    unitsAdjustment: claims count and insured-unemployment percent; SA and NSA fields
+    viability: READY_WITH_DEGRADED_STRUCTURED_PATH
+    currentness: official PDF through week ending 2026-08-08; structured XML observed lagging through 2026-07-18
+  bls_cps:
+    agency: U.S. Bureau of Labor Statistics
+    product: Current Population Survey / Employment Situation
+    acquisitionUrl: https://download.bls.gov/pub/time.series/ln/
+    apiUrl: https://api.bls.gov/publicAPI/v2/timeseries/data/
+    evidenceUrl: https://www.bls.gov/news.release/empsit.htm
+    methodologyUrl: https://www.bls.gov/cps/definitions.htm
+    cadence: monthly
+    historyAndRevision: monthly time series; seasonal factors and population controls may revise history
+    auth: optional BLS registration key
+    rights: EXISTING_BLS_POLICY_REVIEW
+    unitsAdjustment: persons in thousands, rates in percent, durations in weeks; SA and NSA series
+    viability: READY_AFTER_SERIES_METADATA_JOIN
+    currentness: July 2026 release published 2026-08-07; August 2026 scheduled 2026-09-04
+  bls_ces:
+    agency: U.S. Bureau of Labor Statistics
+    product: Current Employment Statistics
+    acquisitionUrl: https://download.bls.gov/pub/time.series/ce/
+    apiUrl: https://api.bls.gov/publicAPI/v2/timeseries/data/
+    evidenceUrl: https://www.bls.gov/news.release/empsit.htm
+    methodologyUrl: https://www.bls.gov/opub/hom/ces/
+    cadence: monthly
+    historyAndRevision: two monthly revisions plus annual benchmark revision
+    auth: optional BLS registration key
+    rights: EXISTING_BLS_POLICY_REVIEW
+    unitsAdjustment: employment in thousands, average weekly hours in hours, earnings in dollars; SA and NSA
+    viability: READY
+    currentness: July 2026 release published 2026-08-07
+  bls_bed:
+    agency: U.S. Bureau of Labor Statistics
+    product: Business Employment Dynamics
+    acquisitionUrl: https://download.bls.gov/pub/time.series/bd/
+    evidenceUrl: https://www.bls.gov/news.release/cewbd.nr0.htm
+    methodologyUrl: https://www.bls.gov/opub/hom/bdm/
+    cadence: quarterly, approximately seven months after quarter end
+    historyAndRevision: historical series can be revised with QCEW updates and seasonal re-estimation
+    auth: none for flat files
+    rights: EXISTING_BLS_POLICY_REVIEW
+    unitsAdjustment: jobs in thousands, establishments in thousands, rates in percent; SA and NSA
+    viability: READY_AFTER_SERIES_METADATA_JOIN
+    currentness: 2025-Q4 release published 2026-07-29; 2026-Q1 scheduled 2026-10-28
+  census_bds:
+    agency: U.S. Census Bureau
+    product: Business Dynamics Statistics
+    acquisitionUrl: https://api.census.gov/data/timeseries/bds
+    evidenceUrl: https://www.census.gov/programs-surveys/ces/data/public-use-data/experimental-bds.html
+    methodologyUrl: https://www.census.gov/programs-surveys/ces/technical-documentation/methodology.html
+    cadence: annual
+    historyAndRevision: long historical panel; vintages may revise prior years
+    auth: API key required by current Census API policy
+    rights: PENDING_RIGHTS_REVIEW
+    unitsAdjustment: establishments, firms, employment and rates; annual, not seasonally adjusted
+    viability: READY_WITH_CREDENTIAL
+    currentness: API currently extends through reference year 2023
+  uscourts_bankruptcy:
+    agency: Administrative Office of the U.S. Courts
+    product: Table F-2, U.S. Bankruptcy Courts—Business and Nonbusiness Cases
+    acquisitionUrl: https://www.uscourts.gov/data-news/data-tables/2026/06/30/statistical-tables-federal-judiciary/f-2
+    evidenceUrl: https://www.uscourts.gov/data-news/reports/statistical-reports/bankruptcy-filings-statistics
+    methodologyUrl: https://www.uscourts.gov/data-news/data-tables/data-definitions
+    cadence: quarterly rolling 12-month releases
+    historyAndRevision: archived tables by reporting date; replacements must be retained by content hash
+    auth: none
+    rights: PENDING_RIGHTS_REVIEW
+    unitsAdjustment: filed cases, by business/nonbusiness and chapter; not seasonally adjusted
+    viability: READY_WITH_PAGE_DISCOVERY_OF_XLSX
+    currentness: current official table for 12 months ending 2026-06-30
+  bea_nipa:
+    agency: U.S. Bureau of Economic Analysis
+    product: National Income and Product Accounts
+    acquisitionUrl: https://apps.bea.gov/api/data
+    evidenceUrl: https://www.bea.gov/data/gdp/gross-domestic-product
+    methodologyUrl: https://www.bea.gov/resources/methodologies/nipa-handbook
+    cadence: monthly and quarterly by table
+    historyAndRevision: advance/second/third estimates, annual updates, comprehensive updates
+    auth: BEA UserID required via environment variable
+    rights: BEA_ATTRIBUTION_REQUIRED
+    unitsAdjustment: dollars, chained dollars, index levels and percent changes; table-specific SAAR/SA
+    viability: READY_WITH_CREDENTIAL
+    currentness: Q2 2026 second GDP/corporate-profits estimate published 2026-08-26; July PIO published 2026-08-26
+  bea_gdp_industry:
+    agency: U.S. Bureau of Economic Analysis
+    product: GDP by Industry
+    acquisitionUrl: https://apps.bea.gov/api/data
+    evidenceUrl: https://www.bea.gov/data/gdp/gdp-industry
+    methodologyUrl: https://www.bea.gov/resources/methodologies/industry-economic-accounts
+    cadence: quarterly and annual
+    historyAndRevision: revised with annual and comprehensive industry-account updates
+    auth: BEA UserID required via environment variable
+    rights: BEA_ATTRIBUTION_REQUIRED
+    unitsAdjustment: value added/output dollars, quantity indexes and percent changes; table-specific SAAR
+    viability: READY_WITH_CREDENTIAL
+    currentness: current through 2026-Q2 release cycle; exact table vintage must be recorded at retrieval
+  fed_g17:
+    agency: Board of Governors of the Federal Reserve System
+    product: Industrial Production and Capacity Utilization, G.17
+    acquisitionUrl: https://www.federalreserve.gov/releases/g17/Current/ipdisk/alltables.txt
+    evidenceUrl: https://www.federalreserve.gov/releases/g17/current/
+    methodologyUrl: https://www.federalreserve.gov/releases/g17/about.htm
+    cadence: monthly
+    historyAndRevision: recent months revise each release; annual revision can alter longer history
+    auth: none
+    rights: PENDING_RIGHTS_REVIEW
+    unitsAdjustment: indexes and utilization percent; seasonally adjusted unless table says otherwise
+    viability: READY
+    currentness: July 2026 published and updated 2026-08-18
+  fed_sloos:
+    agency: Board of Governors of the Federal Reserve System
+    product: Senior Loan Officer Opinion Survey on Bank Lending Practices
+    acquisitionUrl: https://www.federalreserve.gov/data/sloos/sloos-202607.htm
+    evidenceUrl: https://www.federalreserve.gov/data/sloos.htm
+    methodologyUrl: https://www.federalreserve.gov/data/sloos/sloos-about.htm
+    cadence: quarterly
+    historyAndRevision: survey vintages are retained; question wording and respondent universe can change
+    auth: none
+    rights: PENDING_RIGHTS_REVIEW
+    unitsAdjustment: net percent of respondents and respondent counts; not seasonally adjusted
+    viability: READY_AFTER_TABLE_SCHEMA_VALIDATION
+    currentness: July 2026 survey published 2026-08-03
+  fed_h15:
+    agency: Board of Governors of the Federal Reserve System
+    product: Selected Interest Rates, H.15
+    acquisitionUrl: https://www.federalreserve.gov/datadownload/Choose.aspx?rel=H15
+    evidenceUrl: https://www.federalreserve.gov/releases/h15/
+    methodologyUrl: https://www.federalreserve.gov/releases/h15/about.htm
+    cadence: business daily
+    historyAndRevision: daily observations with occasional corrections; each downloaded vintage must be retained
+    auth: none
+    rights: PENDING_RIGHTS_REVIEW
+    unitsAdjustment: annual percent rates, not seasonally adjusted
+    viability: READY_AFTER_SERIES_SELECTION
+    currentness: official H.15 page current through 2026-08-26 at audit time
+  census_marts:
+    agency: U.S. Census Bureau
+    product: Advance Monthly Sales for Retail and Food Services
+    acquisitionUrl: https://api.census.gov/data/timeseries/eits/marts
+    evidenceUrl: https://www.census.gov/retail/sales.html
+    methodologyUrl: https://www.census.gov/retail/marts/about_the_surveys.html
+    cadence: monthly
+    historyAndRevision: advance estimates revised by the full monthly survey and annual benchmark
+    auth: Census API key required
+    rights: PENDING_RIGHTS_REVIEW
+    unitsAdjustment: millions of dollars and percent change; SA and NSA series
+    viability: READY_WITH_CREDENTIAL
+    currentness: July 2026 published 2026-08-14
+  census_m3:
+    agency: U.S. Census Bureau
+    product: Manufacturers' Shipments, Inventories, and Orders
+    acquisitionUrl: https://api.census.gov/data/timeseries/eits/m3
+    evidenceUrl: https://www.census.gov/manufacturing/m3/current/index.html
+    methodologyUrl: https://www.census.gov/manufacturing/m3/how_the_data_are_collected/index.html
+    cadence: monthly
+    historyAndRevision: advance durable-goods estimate followed by full M3 and annual benchmark revisions
+    auth: Census API key required
+    rights: PENDING_RIGHTS_REVIEW
+    unitsAdjustment: millions of dollars and ratios; SA and NSA series
+    viability: READY_WITH_CREDENTIAL
+    currentness: July 2026 advance published 2026-08-26; June 2026 full report published 2026-08-04
+  census_mtis:
+    agency: U.S. Census Bureau
+    product: Manufacturing and Trade Inventories and Sales
+    acquisitionUrl: https://api.census.gov/data/timeseries/eits/mtis
+    evidenceUrl: https://www.census.gov/mtis/current/index.html
+    methodologyUrl: https://www.census.gov/mtis/how_the_data_are_collected/index.html
+    cadence: monthly
+    historyAndRevision: revised with component surveys and annual benchmarks
+    auth: Census API key required
+    rights: PENDING_RIGHTS_REVIEW
+    unitsAdjustment: millions of dollars and inventories-to-sales ratio; seasonally adjusted
+    viability: READY_WITH_CREDENTIAL
+    currentness: June 2026 published 2026-08-14
+  census_bfs:
+    agency: U.S. Census Bureau
+    product: Business Formation Statistics
+    acquisitionUrl: https://api.census.gov/data/timeseries/eits/bfs
+    evidenceUrl: https://www.census.gov/econ/bfs/current/index.html
+    methodologyUrl: https://www.census.gov/econ/bfs/methodology.html
+    cadence: monthly, with weekly estimates released in the monthly package
+    historyAndRevision: weekly and monthly estimates can revise with processing and seasonal adjustment
+    auth: Census API key required
+    rights: PENDING_RIGHTS_REVIEW
+    unitsAdjustment: applications and projected formations; SA and NSA
+    viability: READY_WITH_CREDENTIAL
+    currentness: July 2026 published 2026-08-12
+  census_ftd:
+    agency: U.S. Census Bureau
+    product: U.S. International Trade in Goods and Services
+    acquisitionUrl: https://api.census.gov/data/timeseries/eits/ftd
+    evidenceUrl: https://www.census.gov/foreign-trade/current/index.html
+    methodologyUrl: https://www.census.gov/foreign-trade/guide/index.html
+    cadence: monthly
+    historyAndRevision: monthly revisions and annual revisions; advance goods release precedes full release
+    auth: Census API key required
+    rights: PENDING_RIGHTS_REVIEW
+    unitsAdjustment: millions of dollars and quantities, SA/NSA depending table
+    viability: READY_WITH_CREDENTIAL_AND_CROSSWALK
+    currentness: June 2026 full release published 2026-08-04; July advance goods scheduled 2026-08-27
+  bls_productivity:
+    agency: U.S. Bureau of Labor Statistics
+    product: Productivity and Costs
+    acquisitionUrl: https://download.bls.gov/pub/time.series/pr/
+    apiUrl: https://api.bls.gov/publicAPI/v2/timeseries/data/
+    evidenceUrl: https://www.bls.gov/news.release/prod2.nr0.htm
+    methodologyUrl: https://www.bls.gov/opub/hom/opt/
+    cadence: quarterly
+    historyAndRevision: preliminary, revised, and annual benchmark revisions
+    auth: optional BLS registration key
+    rights: EXISTING_BLS_POLICY_REVIEW
+    unitsAdjustment: indexes, percent changes at SAAR, and cost levels; seasonally adjusted
+    viability: READY_AFTER_SERIES_METADATA_JOIN
+    currentness: 2026-Q2 preliminary published 2026-08-06; revision scheduled 2026-09-03
+  bls_ppi:
+    agency: U.S. Bureau of Labor Statistics
+    product: Producer Price Index
+    acquisitionUrl: https://download.bls.gov/pub/time.series/wp/
+    apiUrl: https://api.bls.gov/publicAPI/v2/timeseries/data/
+    evidenceUrl: https://www.bls.gov/news.release/ppi.htm
+    methodologyUrl: https://www.bls.gov/opub/hom/ppi/
+    cadence: monthly
+    historyAndRevision: recent seasonally adjusted indexes can revise; unadjusted indexes are generally final
+    auth: optional BLS registration key
+    rights: EXISTING_BLS_POLICY_REVIEW
+    unitsAdjustment: index values and percent change; SA and NSA
+    viability: READY_AFTER_SERIES_METADATA_JOIN
+    currentness: July 2026 published 2026-08-13; August 2026 scheduled 2026-09-10
+  fema_openfema:
+    agency: Federal Emergency Management Agency
+    product: OpenFEMA Disaster Declarations Summaries
+    acquisitionUrl: https://www.fema.gov/api/open/v2/DisasterDeclarationsSummaries
+    evidenceUrl: https://www.fema.gov/disaster/declarations
+    methodologyUrl: https://www.fema.gov/about/openfema/api
+    cadence: event-driven
+    historyAndRevision: records update as declarations and amendments are issued; snapshot by retrieval time
+    auth: none
+    rights: PENDING_RIGHTS_REVIEW
+    unitsAdjustment: event/declaration records, geography and dates; no seasonal adjustment
+    viability: READY
+    currentness: live official v2 endpoint; retrieval-time heartbeat required
+  noaa_storm_events:
+    agency: NOAA National Centers for Environmental Information
+    product: Storm Events Database
+    acquisitionUrl: https://www.ncei.noaa.gov/pub/data/swdi/stormevents/csvfiles/
+    evidenceUrl: https://www.ncdc.noaa.gov/stormevents/
+    methodologyUrl: https://www.ncei.noaa.gov/stormevents/pd01016005curr.pdf
+    cadence: monthly bulk-file updates with publication lag
+    historyAndRevision: annual bulk files are updated as reports are corrected
+    auth: none
+    rights: PENDING_RIGHTS_REVIEW
+    unitsAdjustment: event counts, damage estimates, injuries/fatalities, location and dates; no seasonal adjustment
+    viability: READY_WITH_DYNAMIC_FILE_DISCOVERY
+    currentness: live official bulk directory; latest file vintage must be discovered and recorded
+  eia_energy:
+    agency: U.S. Energy Information Administration
+    product: EIA API v2 energy series
+    acquisitionUrl: https://api.eia.gov/v2/
+    evidenceUrl: https://www.eia.gov/
+    methodologyUrl: https://www.eia.gov/opendata/documentation.php
+    cadence: daily, weekly, monthly, or annual by selected route
+    historyAndRevision: series-specific revisions; raw response and route/facets must be versioned
+    auth: EIA API key required
+    rights: EXISTING_EIA_POLICY_REVIEW_FOR_APPROVED_PRODUCTS_ONLY
+    unitsAdjustment: series-specific physical quantities, prices, stocks, and indexes; generally NSA
+    viability: BLOCKED_PENDING_EXACT_ROUTE_AND_RIGHTS_SCOPE
+    currentness: not asserted until an exact EIA route/facet is approved
+
+factorSourceMap:
+  real-output-growth: [bea_nipa]
+  consumer-spending: [bea_nipa]
+  consumer-demand: [bea_nipa, census_marts]
+  retail-sales: [census_marts]
+  job-openings-rate: [bls_jolts]
+  hires-rate: [bls_jolts]
+  layoffs-discharges: [bls_jolts]
+  average-weekly-hours: [bls_ces]
+  corporate-profits: [bea_nipa]
+  ci-lending-standards: [fed_sloos]
+  ci-loan-demand: [fed_sloos]
+  unit-labor-costs: [bls_productivity]
+  business-failure-stress: [uscourts_bankruptcy]
+  initial-ui-claims: [dol_ui_claims]
+  continued-claims-insured-unemployment: [dol_ui_claims]
+  permanent-job-losers: [bls_cps]
+  temporary-layoffs: [bls_cps]
+  gross-job-losses: [bls_bed]
+  establishment-contractions: [bls_bed]
+  establishment-closures: [bls_bed]
+  establishment-deaths: [census_bds, bls_bed]
+  closing-establishment-losses: [bls_bed]
+  firm-deaths: [census_bds]
+  firm-death-shutdown-stress: [census_bds, uscourts_bankruptcy]
+  industry-payroll-contraction: [bls_ces]
+  payroll-growth: [bls_ces]
+  temporary-help-employment: [bls_ces]
+  regional-employment-growth: [bls_ces]
+  business-formations: [census_bfs]
+  business-formation-dynamism: [census_bfs, census_bds]
+  disaster-operational-shock: [fema_openfema, noaa_storm_events]
+  disaster-weather-shock: [noaa_storm_events, fema_openfema]
+  industrial-production: [fed_g17]
+  capacity-utilization: [fed_g17]
+  new-orders: [census_m3]
+  inventory-sales-balance: [census_mtis, census_m3]
+  inventory-sales-ratio: [census_mtis]
+  manufacturing-output: [fed_g17, bea_gdp_industry]
+  energy-input-shock: [eia_energy, bls_ppi]
+  producer-input-prices: [bls_ppi]
+  trade-import-pressure: [census_ftd]
+  import-exposure: [census_ftd]
+  industry-output: [bea_gdp_industry, fed_g17]
+  industry-sales-shipments: [census_m3]
+  industry-new-orders: [census_m3]
+  industry-layoffs-discharges: [bls_jolts]
+  industry-gross-job-losses: [bls_bed]
+  industry-capacity-utilization: [fed_g17]
+  industry-unit-labor-costs: [bls_productivity]
+  industry-input-prices: [bls_ppi]
+  industry-credit-conditions: [fed_sloos]
+  productivity-automation: [bls_productivity]
+  borrowing-costs: [fed_h15]
+  interest-rates: [fed_h15]
+  sales-revenue-growth: [census_m3, census_marts]
+  sales-revenue: [census_m3, census_marts]
+  firm-age-size-vulnerability: [census_bds]
+  firm-age-size: [census_bds]
+  trade-external-shock: [census_ftd, fema_openfema]
+  input-costs: [bls_ppi]
+
+hierarchy:
+  - id: layoffs-discharges
+    label: Layoffs & Discharges
+    primarySourceCandidates: [bls_jolts]
+    placements:
+      - [real-output-growth, Real Output Growth]
+      - [consumer-spending, Consumer Spending]
+      - [retail-sales, Retail Sales]
+      - [job-openings-rate, Job Openings Rate]
+      - [hires-rate, Hires Rate]
+      - [average-weekly-hours, Average Weekly Hours]
+      - [corporate-profits, Corporate Profits]
+      - [ci-lending-standards, C&I Lending Standards]
+      - [unit-labor-costs, Unit Labor Costs]
+      - [business-failure-stress, Business Failure Stress]
+  - id: initial-ui-claims
+    label: Initial UI Claims
+    primarySourceCandidates: [dol_ui_claims]
+    placements:
+      - [layoffs-discharges, Layoffs & Discharges]
+      - [temporary-layoffs, Temporary Layoffs]
+      - [permanent-job-losers, Permanent Job Losers]
+      - [industry-payroll-contraction, Industry Payroll Contraction]
+      - [gross-job-losses, Gross Job Losses]
+      - [establishment-deaths, Establishment Deaths]
+      - [business-failure-stress, Business Bankruptcy Stress]
+      - [real-output-growth, Real Output Growth]
+      - [consumer-demand, Consumer Demand]
+      - [disaster-operational-shock, Disaster / Operational Shock]
+  - id: continued-claims-insured-unemployment
+    label: Continued Claims / Insured Unemployment
+    primarySourceCandidates: [dol_ui_claims]
+    placements:
+      - [initial-ui-claims, Initial Claims]
+      - [hires-rate, Hires Rate]
+      - [job-openings-rate, Job Openings Rate]
+      - [payroll-growth, Payroll Growth]
+      - [temporary-help-employment, Temporary Help Employment]
+      - [average-weekly-hours, Average Weekly Hours]
+      - [business-formations, Business Formations]
+      - [real-output-growth, Real Output Growth]
+      - [consumer-demand, Consumer Demand]
+      - [regional-employment-growth, Regional Employment Growth]
+  - id: permanent-job-losers
+    label: Permanent Job Losers
+    primarySourceCandidates: [bls_cps]
+    placements:
+      - [establishment-deaths, Establishment Deaths]
+      - [firm-deaths, Firm Deaths]
+      - [business-failure-stress, Business Bankruptcy Stress]
+      - [industry-payroll-contraction, Industry Payroll Contraction]
+      - [gross-job-losses, Gross Job Losses]
+      - [productivity-automation, Productivity / Automation]
+      - [trade-import-pressure, Import / Trade Pressure]
+      - [ci-lending-standards, C&I Credit Conditions]
+      - [corporate-profits, Corporate Profitability]
+      - [real-output-growth, Real Output Growth]
+  - id: temporary-layoffs
+    label: Temporary Layoffs
+    primarySourceCandidates: [bls_cps]
+    placements:
+      - [average-weekly-hours, Average Weekly Hours]
+      - [industrial-production, Industrial Production]
+      - [capacity-utilization, Capacity Utilization]
+      - [new-orders, New Orders]
+      - [inventory-sales-balance, Inventory / Sales Balance]
+      - [consumer-demand, Consumer Demand]
+      - [manufacturing-output, Manufacturing Output]
+      - [energy-input-shock, Energy / Input Shock]
+      - [disaster-weather-shock, Disaster / Weather Shock]
+      - [industry-payroll-contraction, Industry Payroll Contraction]
+  - id: gross-job-losses
+    label: Gross Job Losses
+    primarySourceCandidates: [bls_bed]
+    placements:
+      - [establishment-contractions, Establishment Contractions]
+      - [establishment-closures, Establishment Closures]
+      - [real-output-growth, Real Output Growth]
+      - [consumer-spending, Consumer Spending]
+      - [new-orders, New Orders]
+      - [corporate-profits, Corporate Profits]
+      - [ci-lending-standards, C&I Lending Standards]
+      - [unit-labor-costs, Unit Labor Costs]
+      - [producer-input-prices, Producer Input Prices]
+      - [trade-import-pressure, Trade / Import Pressure]
+  - id: establishment-death-closure-losses
+    label: Establishment Death / Closure Losses
+    primarySourceCandidates: [bls_bed, census_bds]
+    placements:
+      - [closing-establishment-losses, Closing Establishment Losses]
+      - [business-failure-stress, Business Bankruptcy Stress]
+      - [corporate-profits, Corporate Profitability]
+      - [ci-lending-standards, C&I Lending Standards]
+      - [borrowing-costs, Borrowing Costs]
+      - [sales-revenue-growth, Sales / Revenue Growth]
+      - [producer-input-prices, Producer Input Prices]
+      - [business-formation-dynamism, Business Formation / Dynamism]
+      - [firm-age-size-vulnerability, Firm Age / Size Vulnerability]
+      - [disaster-operational-shock, Disaster / External Shock]
+  - id: firm-death-shutdown-stress
+    label: Firm Death / Shutdown Stress
+    primarySourceCandidates: [census_bds, uscourts_bankruptcy]
+    placements:
+      - [establishment-deaths, Establishment Deaths]
+      - [business-failure-stress, Business Bankruptcy Filings]
+      - [corporate-profits, Corporate Profits]
+      - [interest-rates, Interest Rates]
+      - [ci-lending-standards, C&I Lending Standards]
+      - [sales-revenue, Sales / Revenue]
+      - [input-costs, Input Costs]
+      - [inventory-sales-balance, Inventory / Sales Imbalance]
+      - [firm-age-size, Firm Age / Size]
+      - [trade-external-shock, Trade / External Shock]
+  - id: industry-payroll-contraction
+    label: Industry Payroll Contraction
+    primarySourceCandidates: [bls_ces]
+    placements:
+      - [industry-output, Industry Output]
+      - [industry-sales-shipments, Industry Sales / Shipments]
+      - [industry-new-orders, Industry New Orders]
+      - [industry-layoffs-discharges, Industry Layoffs & Discharges]
+      - [industry-gross-job-losses, Industry Gross Job Losses]
+      - [industry-capacity-utilization, Industry Capacity Utilization]
+      - [industry-unit-labor-costs, Industry Unit Labor Costs]
+      - [industry-input-prices, Industry Input Prices]
+      - [import-exposure, Import Exposure]
+      - [industry-credit-conditions, Industry Credit Conditions]
+  - id: business-failure-bankruptcy-stress
+    label: Business Failure / Bankruptcy Stress
+    primarySourceCandidates: [uscourts_bankruptcy]
+    placements:
+      - [corporate-profits, Corporate Profits]
+      - [interest-rates, Interest Rates]
+      - [ci-lending-standards, C&I Lending Standards]
+      - [ci-loan-demand, C&I Loan Demand]
+      - [sales-revenue, Sales / Revenue]
+      - [producer-input-prices, Producer Input Costs]
+      - [unit-labor-costs, Unit Labor Costs]
+      - [inventory-sales-ratio, Inventory / Sales Ratio]
+      - [business-formations, Business Formation]
+      - [real-output-growth, Real Output Growth]
+
+coverageGaps:
+  - Industry Credit Conditions has no accepted official industry-granular series; SLOOS is an aggregate candidate only.
+  - Import Exposure requires an accepted trade-to-industry crosswalk before it can be calculated.
+  - Productivity / Automation has an official productivity source but no approved direct automation measure.
+  - Energy / Input Shock requires an exact EIA route and rights scope before activation.
+  - Broad Sales / Revenue has no single universal official series; program-specific Census series must not be presented as economy-wide.
+  - CPS permanent-job-loser and temporary-layoff series keys must be selected from official LN metadata, not guessed.
+  - BED establishment closure/death concepts require metadata joins and definitional review to prevent closure, death, contraction, and job-loss conflation.
+  - Bankruptcy filings are legal filings and must not be represented as firm deaths, closures, or layoffs.

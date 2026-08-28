@@ -1,0 +1,5 @@
+[
+  ["data_type_code", "time_slot_id", "seasonally_adj", "category_code", "cell_value", "error_data", "time", "us"],
+  ["T", "1500", "yes", "BA_BA", "470000", "no", "2026-07", "1"],
+  ["T", "1500", "yes", "BF_BF4Q", "31500", "no", "2026-07", "1"]
+]

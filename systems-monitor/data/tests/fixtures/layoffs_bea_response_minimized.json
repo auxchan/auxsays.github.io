@@ -1,0 +1,27 @@
+{
+  "BEAAPI": {
+    "Request": {
+      "RequestParam": []
+    },
+    "Results": {
+      "Data": [
+        {
+          "TableName": "T-REVIEWED",
+          "LineNumber": "1",
+          "LineDescription": "Reviewed test-only NIPA concept",
+          "TimePeriod": "2026Q2",
+          "DataValue": "12,345.6",
+          "UNIT_MULT": "0",
+          "CL_UNIT": "Test unit"
+        },
+        {
+          "TableName": "T-OTHER",
+          "LineNumber": "99",
+          "LineDescription": "Must not be selected",
+          "TimePeriod": "2026Q2",
+          "DataValue": "999"
+        }
+      ]
+    }
+  }
+}
