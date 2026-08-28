@@ -662,9 +662,18 @@ def run() -> int:
                 if "apply_consensus_to_records" in str(st.get("run") or "")
                 and "--write-all" in str(st.get("run") or "")}
     promoted.discard(None)
-    check("R7 retractable products == the lane's scoped promotion steps",
-          promoted == set(CONSENSUS_PROMOTION_PRODUCTS),
-          f"workflow={sorted(promoted)} constant={sorted(CONSENSUS_PROMOTION_PRODUCTS)}")
+    # SUBSET, not equality. The safety property is one-directional: every RETRACTABLE product must
+    # have a rebuild path, because retraction without one strands a record. The converse is not a
+    # hazard -- promoting a product that is not retraction-eligible is always safe, and Acrobat
+    # Pro/Reader need exactly that (they can drift, but never retract). Equality forbade giving them
+    # a rebuild path at all, which is how 83 Acrobat records came to have none once the unscoped
+    # --write-all in davinci-updates.yml was scoped away.
+    check("R7 every retractable product has a scoped promotion in the lane",
+          set(CONSENSUS_PROMOTION_PRODUCTS) <= promoted,
+          f"missing={sorted(set(CONSENSUS_PROMOTION_PRODUCTS) - promoted)} "
+          f"workflow={sorted(promoted)}")
+    check("R7 adobe-premiere-pro is never promoted -- its prose is hand-authored",
+          "adobe-premiere-pro" not in promoted, str(sorted(promoted)))
     check("R8 Windows is retractable, because the lane can rebuild it",
           WIN in CONSENSUS_PROMOTION_PRODUCTS)
     check("R8 obs-studio is retractable, because the lane now rebuilds it",

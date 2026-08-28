@@ -342,9 +342,13 @@ def run() -> int:
           OBS in promoted_products(), str(sorted(promoted_products())))
     check("O11 obs-studio is retraction-eligible, because the lane can now rebuild it",
           OBS in CONSENSUS_PROMOTION_PRODUCTS, str(sorted(CONSENSUS_PROMOTION_PRODUCTS)))
-    check("O11 the two sets are equal -- neither can drift ahead of the other",
-          promoted_products() == set(CONSENSUS_PROMOTION_PRODUCTS),
-          f"workflow={sorted(promoted_products())} constant={sorted(CONSENSUS_PROMOTION_PRODUCTS)}")
+    # Subset, not equality: every retractable product needs a rebuild path, but a product may hold a
+    # promotion without being retraction-eligible (Acrobat Pro/Reader do -- they drift, never retract).
+    check("O11 every retractable product has a rebuild path in the lane",
+          set(CONSENSUS_PROMOTION_PRODUCTS) <= promoted_products(),
+          f"missing={sorted(set(CONSENSUS_PROMOTION_PRODUCTS) - promoted_products())}")
+    check("O11 adobe-premiere-pro is never promoted -- its prose is hand-authored",
+          "adobe-premiere-pro" not in promoted_products(), str(sorted(promoted_products())))
     reconcile_i = next((i for i, st in enumerate(steps)
                         if "build_consensus_from_evidence" in str(st.get("run") or "")), -1)
     obs_i = next((i for i, st in enumerate(steps)
