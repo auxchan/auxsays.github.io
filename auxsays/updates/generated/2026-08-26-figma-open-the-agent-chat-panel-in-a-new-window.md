@@ -17,8 +17,8 @@ update_version: Open the agent chat panel in a new window
 update_logo_text: FIG
 update_published_at: '2026-08-26T00:00:00.000Z'
 update_last_checked: '2026-08-27T11:00:17Z'
-source_last_checked: '2026-08-27T23:26:40Z'
-official_body_last_checked: '2026-08-27T23:26:40Z'
+source_last_checked: '2026-08-28T12:39:41Z'
+official_body_last_checked: '2026-08-28T12:39:41Z'
 record_last_updated: '2026-08-27T11:00:17Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -76,6 +76,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-08-27T23:26:40Z'
+  url: https://www.figma.com/release-notes/?title=open-the-agent-chat-panel-in-a-new-window
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-08-28T12:39:41Z'
   url: https://www.figma.com/release-notes/?title=open-the-agent-chat-panel-in-a-new-window
   status: captured-from-rss-feed
   body_captured: true
