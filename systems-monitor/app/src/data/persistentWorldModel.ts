@@ -1,3 +1,5 @@
+import { LAYOFFS_JOB_DESTRUCTION_DRIVER_ID, layoffsBranchPlacementMigration, layoffsBranchTaxonomy, layoffsCanonicalFactorId, layoffsCanonicalLabel } from "./layoffsBranchTaxonomy";
+
 export const PERSISTENT_WORLD_SCHEMA = "persistent-world-0.1.0" as const;
 export const PERSISTENT_WORLD_LAYOUT = "employment-sectors-1.1.0" as const;
 
@@ -21,7 +23,8 @@ export interface PersistentWorldPlacement {
   sector: number;
   x: number;
   y: number;
-  labelPriority: "OUTCOME" | "DRIVER" | "FACTOR" | "FIXTURE_DETAIL";
+  labelPriority: "OUTCOME" | "DRIVER" | "FACTOR" | "CANDIDATE_DETAIL" | "FIXTURE_DETAIL";
+  displayLabel?: string;
 }
 
 export interface PersistentWorldRelationship {
@@ -118,6 +121,7 @@ export function createPersistentWorld(): PersistentWorldReadModel {
   childrenByPlacement[outcomePlacementId] = [];
 
   employmentDriverCandidates.forEach((driver, driverIndex) => {
+    const layoffsGroups = driver.id === LAYOFFS_JOB_DESTRUCTION_DRIVER_ID ? layoffsBranchTaxonomy : undefined;
     const sectorAngle = -Math.PI / 2 + driverIndex * Math.PI * 2 / 10;
     const l1FactorId = `factor:${driver.id}`;
     const l1PlacementId = `placement:${driver.id}`;
@@ -130,27 +134,38 @@ export function createPersistentWorld(): PersistentWorldReadModel {
     relationships[`hierarchy:${outcomePlacementId}:${l1PlacementId}`] = { id: `hierarchy:${outcomePlacementId}:${l1PlacementId}`, fromPlacementId: outcomePlacementId, toPlacementId: l1PlacementId, relationshipClass: "HIERARCHY_TETHER", status: "TEST_FIXTURE", evidenceClass: "SYNTHETIC", publicationEligibility: "NEVER_ACCEPTED_NEVER_PUBLISHED" };
 
     driver.children.forEach((label, level2Index) => {
+      const layoffsGroup = layoffsGroups?.[level2Index];
+      const factorLabel = layoffsGroup?.label ?? label;
       // Keep every exact-ten neighborhood legible as a camera destination.
       // The wider fan is part of the versioned layout, not an interaction-time
       // mutation, so selection still moves the camera through one fixed world.
       const l2Angle = sectorAngle + (level2Index - 4.5) * 0.145;
       const l2Radius = 500 + (level2Index % 2) * 74;
-      const l2FactorId = `factor:${driver.id}:${slug(label)}`;
-      const l2PlacementId = `placement:${driver.id}:${slug(label)}`;
+      const l2FactorId = layoffsGroup ? layoffsCanonicalFactorId(factorLabel) : `factor:${driver.id}:${slug(label)}`;
+      const l2PlacementId = layoffsGroup ? `placement:${driver.id}:${layoffsGroup.id}` : `placement:${driver.id}:${slug(label)}`;
       const l2X = round(l1X + Math.cos(l2Angle) * l2Radius);
       const l2Y = round(l1Y + Math.sin(l2Angle) * l2Radius);
-      factors[l2FactorId] = { id: l2FactorId, label, definition: `${label} is a review candidate within ${driver.label}; it does not become a factual relationship through placement.`, sourceFamily: driver.sourceFamily, evidencePosture: "CANDIDATE" };
-      placements[l2PlacementId] = { id: l2PlacementId, canonicalFactorId: l2FactorId, parentPlacementId: l1PlacementId, depth: 2, order: level2Index + 1, sector: driverIndex, x: l2X, y: l2Y, labelPriority: "FACTOR" };
+      factors[l2FactorId] = layoffsGroup
+        ? { id: l2FactorId, label: layoffsCanonicalLabel(factorLabel), definition: layoffsGroup.definition, sourceFamily: layoffsGroup.sourceFamily, evidencePosture: "CANDIDATE" }
+        : { id: l2FactorId, label, definition: `${label} is a review candidate within ${driver.label}; it does not become a factual relationship through placement.`, sourceFamily: driver.sourceFamily, evidencePosture: "CANDIDATE" };
+      placements[l2PlacementId] = { id: l2PlacementId, canonicalFactorId: l2FactorId, parentPlacementId: l1PlacementId, depth: 2, order: level2Index + 1, sector: driverIndex, x: l2X, y: l2Y, labelPriority: "FACTOR", ...(layoffsGroup ? { displayLabel: factorLabel } : {}) };
       childrenByPlacement[l1PlacementId].push(l2PlacementId);
       childrenByPlacement[l2PlacementId] = [];
       relationships[`hierarchy:${l1PlacementId}:${l2PlacementId}`] = { id: `hierarchy:${l1PlacementId}:${l2PlacementId}`, fromPlacementId: l1PlacementId, toPlacementId: l2PlacementId, relationshipClass: "HIERARCHY_TETHER", status: "TEST_FIXTURE", evidenceClass: "SYNTHETIC", publicationEligibility: "NEVER_ACCEPTED_NEVER_PUBLISHED" };
 
       for (let level3Index = 0; level3Index < 10; level3Index += 1) {
         const localAngle = level3Index * Math.PI * 2 / 10 + driverIndex * 0.11;
-        const l3FactorId = `fixture-factor:${driver.id}:${String(level2Index + 1).padStart(2, "0")}:${String(level3Index + 1).padStart(2, "0")}`;
-        const l3PlacementId = `fixture-placement:${driver.id}:${String(level2Index + 1).padStart(2, "0")}:${String(level3Index + 1).padStart(2, "0")}`;
-        factors[l3FactorId] = { id: l3FactorId, label: `Renderer fixture ${String(level3Index + 1).padStart(2, "0")}`, definition: `Synthetic Level-3 renderer-capacity record under ${label}. It is not an economic claim.`, sourceFamily: "Repository deterministic test fixture", evidencePosture: "TEST_FIXTURE" };
-        placements[l3PlacementId] = { id: l3PlacementId, canonicalFactorId: l3FactorId, parentPlacementId: l2PlacementId, depth: 3, order: level3Index + 1, sector: driverIndex, x: round(l2X + Math.cos(localAngle) * 108), y: round(l2Y + Math.sin(localAngle) * 108), labelPriority: "FIXTURE_DETAIL" };
+        const layoffsCandidate = layoffsGroup?.placements[level3Index];
+        const l3FactorId = layoffsCandidate?.canonicalFactorId ?? `fixture-factor:${driver.id}:${String(level2Index + 1).padStart(2, "0")}:${String(level3Index + 1).padStart(2, "0")}`;
+        const l3PlacementId = layoffsCandidate
+          ? `placement:${driver.id}:${layoffsGroup.id}:${slug(layoffsCandidate.label)}`
+          : `fixture-placement:${driver.id}:${String(level2Index + 1).padStart(2, "0")}:${String(level3Index + 1).padStart(2, "0")}`;
+        if (layoffsCandidate) {
+          factors[l3FactorId] ??= { id: l3FactorId, label: layoffsCanonicalLabel(layoffsCandidate.label), definition: `${layoffsCandidate.label} is a reviewed candidate placement within the Layoffs & Job Destruction branch. Hierarchy placement alone does not assert causality or factual acceptance.`, sourceFamily: layoffsGroup.sourceFamily, evidencePosture: "CANDIDATE" };
+        } else {
+          factors[l3FactorId] = { id: l3FactorId, label: `Renderer fixture ${String(level3Index + 1).padStart(2, "0")}`, definition: `Synthetic Level-3 renderer-capacity record under ${label}. It is not an economic claim.`, sourceFamily: "Repository deterministic test fixture", evidencePosture: "TEST_FIXTURE" };
+        }
+        placements[l3PlacementId] = { id: l3PlacementId, canonicalFactorId: l3FactorId, parentPlacementId: l2PlacementId, depth: 3, order: level3Index + 1, sector: driverIndex, x: round(l2X + Math.cos(localAngle) * 108), y: round(l2Y + Math.sin(localAngle) * 108), labelPriority: layoffsCandidate ? "CANDIDATE_DETAIL" : "FIXTURE_DETAIL", ...(layoffsCandidate ? { displayLabel: layoffsCandidate.label } : {}) };
         childrenByPlacement[l2PlacementId].push(l3PlacementId);
         childrenByPlacement[l3PlacementId] = [];
         relationships[`hierarchy:${l2PlacementId}:${l3PlacementId}`] = { id: `hierarchy:${l2PlacementId}:${l3PlacementId}`, fromPlacementId: l2PlacementId, toPlacementId: l3PlacementId, relationshipClass: "HIERARCHY_TETHER", status: "TEST_FIXTURE", evidenceClass: "SYNTHETIC", publicationEligibility: "NEVER_ACCEPTED_NEVER_PUBLISHED" };
@@ -197,6 +212,16 @@ export function persistentWorldPath(model: PersistentWorldReadModel, placementId
     current = current.parentPlacementId ? model.placements[current.parentPlacementId] : undefined;
   }
   return path;
+}
+
+export function persistentWorldPlacementLabel(model: Pick<PersistentWorldReadModel, "factors">, placement: PersistentWorldPlacement) {
+  return placement.displayLabel ?? model.factors[placement.canonicalFactorId].label;
+}
+
+export function persistentWorldResolvePlacementId(model: Pick<PersistentWorldReadModel, "placements">, requestedId: string) {
+  if (model.placements[requestedId]) return requestedId;
+  const migrated = layoffsBranchPlacementMigration[requestedId];
+  return migrated && model.placements[migrated] ? migrated : null;
 }
 
 export function persistentWorldSelectionSequence(model: PersistentWorldReadModel, count = 50) {
