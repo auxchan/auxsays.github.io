@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import json
 import re
+import sys
 from collections import Counter, defaultdict
 from lib.patch_identity import patch_key
 from datetime import datetime, timezone
@@ -321,18 +322,47 @@ def windows_target_index() -> dict[tuple[str, str], dict[str, str]]:
     return index
 
 
-def main() -> int:
+def main(argv: list[str] | None = None) -> int:
+    import argparse
+
+    parser = argparse.ArgumentParser(
+        description="Build consensus aggregates from structured evidence, after reconciling every "
+                    "generated record's count to its exact-patch evidence population.")
+    parser.add_argument(
+        "--product-id", action="append", dest="product_ids", metavar="PRODUCT_ID",
+        help="Limit RECONCILIATION to this product (repeatable). Omit to reconcile every product, "
+             "which is what the scheduled evidence lane does. A lane that collected nothing for a "
+             "product must not silently rewrite that product's counts, so a lane which only "
+             "advanced one product's patch identity passes its own product here.")
+    parser.add_argument(
+        "--reconcile-only", action="store_true",
+        help="Reconcile record counts to the evidence population and stop, without rebuilding "
+             "consensus aggregates. For a lane that MUTATES patch identity but collects no "
+             "evidence -- patch ingestion advancing a Windows cumulative update -- so it can repair "
+             "the drift it just created without republishing consensus it did not gather.")
+    args = parser.parse_args(argv)
+    if args.product_ids is not None and not all(str(p).strip() for p in args.product_ids):
+        print("ERROR: --product-id was supplied but is empty. Give a product id, or omit the flag "
+              "entirely to reconcile every product.", file=sys.stderr)
+        return 2
+    scope = {str(p).strip() for p in args.product_ids} if args.product_ids else None
+
     evidence = load_evidence()
     # AUTHORITATIVE RECONCILIATION (runs after all collectors, before QA): make every generated
     # record's update_report_count equal the final counted evidence for its exact (product_id,
     # version), using the same predicate QA enforces. Idempotent -- an already-aligned tree writes
     # nothing. This closes the generated_report_count_mismatch (record showed 4 while structured
     # evidence had 14) at one place instead of trusting each collector's per-run count.
-    reconciled, reconciled_detail = reconcile_record_counts(evidence, GENERATED_DIR)
+    reconciled, reconciled_detail = reconcile_record_counts(evidence, GENERATED_DIR, product_ids=scope)
     if reconciled:
-        print(f"Reconciled report counts on {reconciled} record(s) to final counted evidence.")
+        scope_label = f" (scoped to {', '.join(sorted(scope))})" if scope else ""
+        print(f"Reconciled report counts on {reconciled} record(s) to final counted evidence{scope_label}.")
         for d in reconciled_detail:
             print(f"  {format_reconcile_detail(d)}")
+    if args.reconcile_only:
+        if not reconciled:
+            print("Reconcile-only: every record already matches its exact-patch evidence population.")
+        return 0
     windows_targets = windows_target_index()
     # Grouped by canonical patch identity: a build-aware product's two builds under one YYMM are
     # two independent groups, so one build's reports can never move the other's counts or summary.
