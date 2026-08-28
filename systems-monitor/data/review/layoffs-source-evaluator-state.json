@@ -1,0 +1,108 @@
+{
+  "evaluatedAt": "2026-08-28T12:00:00Z",
+  "schemaVersion": "layoffs-source-evaluator-state-1.0.0",
+  "sources": {
+    "bea-gdp-industry": {
+      "activationState": "BLOCKED",
+      "health": "blocked",
+      "lastAttemptAt": null,
+      "reasonCode": "MISSING_AUXSAYS_BEA_USER_ID"
+    },
+    "bea-nipa": {
+      "activationState": "BLOCKED",
+      "health": "blocked",
+      "lastAttemptAt": null,
+      "reasonCode": "MISSING_AUXSAYS_BEA_USER_ID"
+    },
+    "bls-bed": {
+      "activationState": "SOURCE_IDENTIFIED",
+      "health": "disabled",
+      "lastAttemptAt": null,
+      "reasonCode": "NETWORK_DISABLED_REVIEW_BUILD"
+    },
+    "bls-ces": {
+      "activationState": "SOURCE_IDENTIFIED",
+      "health": "disabled",
+      "lastAttemptAt": null,
+      "reasonCode": "NETWORK_DISABLED_REVIEW_BUILD"
+    },
+    "bls-cps": {
+      "activationState": "SOURCE_IDENTIFIED",
+      "health": "disabled",
+      "lastAttemptAt": null,
+      "reasonCode": "NETWORK_DISABLED_REVIEW_BUILD"
+    },
+    "bls-jolts": {
+      "activationState": "SOURCE_IDENTIFIED",
+      "health": "disabled",
+      "lastAttemptAt": null,
+      "reasonCode": "NETWORK_DISABLED_REVIEW_BUILD"
+    },
+    "census-bds": {
+      "activationState": "BLOCKED",
+      "health": "blocked",
+      "lastAttemptAt": null,
+      "reasonCode": "MISSING_AUXSAYS_CENSUS_API_KEY"
+    },
+    "census-bfs": {
+      "activationState": "BLOCKED",
+      "health": "blocked",
+      "lastAttemptAt": null,
+      "reasonCode": "MISSING_AUXSAYS_CENSUS_API_KEY"
+    },
+    "census-ftd": {
+      "activationState": "BLOCKED",
+      "health": "blocked",
+      "lastAttemptAt": null,
+      "reasonCode": "MISSING_AUXSAYS_CENSUS_API_KEY"
+    },
+    "census-m3": {
+      "activationState": "BLOCKED",
+      "health": "blocked",
+      "lastAttemptAt": null,
+      "reasonCode": "MISSING_AUXSAYS_CENSUS_API_KEY"
+    },
+    "census-marts": {
+      "activationState": "BLOCKED",
+      "health": "blocked",
+      "lastAttemptAt": null,
+      "reasonCode": "MISSING_AUXSAYS_CENSUS_API_KEY"
+    },
+    "census-mtis": {
+      "activationState": "BLOCKED",
+      "health": "blocked",
+      "lastAttemptAt": null,
+      "reasonCode": "MISSING_AUXSAYS_CENSUS_API_KEY"
+    },
+    "dol-ui-claims": {
+      "activationState": "SOURCE_IDENTIFIED",
+      "health": "disabled",
+      "lastAttemptAt": null,
+      "reasonCode": "NETWORK_DISABLED_REVIEW_BUILD"
+    },
+    "fed-g17": {
+      "activationState": "SOURCE_IDENTIFIED",
+      "health": "disabled",
+      "lastAttemptAt": null,
+      "reasonCode": "NETWORK_DISABLED_REVIEW_BUILD"
+    },
+    "fed-h15": {
+      "activationState": "SOURCE_IDENTIFIED",
+      "health": "disabled",
+      "lastAttemptAt": null,
+      "reasonCode": "NETWORK_DISABLED_REVIEW_BUILD"
+    },
+    "fed-sloos": {
+      "activationState": "SOURCE_IDENTIFIED",
+      "health": "disabled",
+      "lastAttemptAt": null,
+      "reasonCode": "NETWORK_DISABLED_REVIEW_BUILD"
+    },
+    "uscourts-f2": {
+      "activationState": "SOURCE_IDENTIFIED",
+      "health": "disabled",
+      "lastAttemptAt": null,
+      "reasonCode": "NETWORK_DISABLED_REVIEW_BUILD"
+    }
+  }
+}

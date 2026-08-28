@@ -1,7 +1,7 @@
 # Layoffs & Job Destruction — Official Source Acquisition Audit
 
-**Audit date:** 2026-08-27  
-**Scope:** the ten frozen Level-2 factors and their 100 frozen Level-3 hierarchy placements  
+**Audit date:** 2026-08-27
+**Scope:** the ten frozen Level-2 factors and their 100 frozen Level-3 hierarchy placements
 **Artifact status:** review-only source discovery; no source, observation, calculation, relationship, or UI state is accepted by this document
 
 ## 1. Outcome
