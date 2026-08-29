@@ -1,0 +1,18 @@
+{
+  "schemaVersion": "handoff-source-catalog-1.0.0",
+  "asOfImplementationCommit": "5e65d429857eb9a88f41c6672dc3043130988cfc",
+  "summary": {"profiledFactorLabels": 160, "legacyReviewedPathCount": 100, "persistentWorldFactualNodesLinked": 4, "acceptedLaborReadings": 6, "acceptedStructuralRelationships": 0},
+  "credentialEnvironmentVariableNames": ["AUXSAYS_BEA_USER_ID", "AUXSAYS_CENSUS_API_KEY", "AUXSAYS_EIA_API_KEY"],
+  "acceptedReadings": [
+    {"canonicalFactorId":"payroll-employment","publisher":"BLS","seriesId":"CES0000000001","displayValue":"158,858 thousand","period":"2026-07","status":"ACCEPTED"},
+    {"canonicalFactorId":"u-3-unemployment","publisher":"BLS","seriesId":"LNS14000000","displayValue":"4.1%","period":"2026-07","status":"ACCEPTED"},
+    {"canonicalFactorId":"labor-force-participation","publisher":"BLS","seriesId":"LNS11300000","displayValue":"61.4%","period":"2026-07","status":"ACCEPTED"},
+    {"canonicalFactorId":"initial-claims","publisher":"DOL ETA","seriesId":"InitialClaims","displayValue":"209,000","period":"2026-08-08","status":"ACCEPTED"},
+    {"canonicalFactorId":"job-openings","publisher":"BLS","seriesId":"JTS000000000000000JOL","displayValue":"7,359 thousand","period":"2026-06","status":"ACCEPTED"},
+    {"canonicalFactorId":"hires","publisher":"BLS","seriesId":"JTS000000000000000HIL","displayValue":"5,348 thousand","period":"2026-06","status":"ACCEPTED"}
+  ],
+  "sourceFamilies": ["BLS CES","BLS CPS","BLS JOLTS","BLS BED","BLS Productivity","BLS PPI","DOL UI","Census BDS","Census BFS","Census economic indicators","BEA","Federal Reserve/SLOOS","U.S. Courts","EIA","USDA","NOAA/FEMA","BTS"],
+  "statusSemantics": ["ACCEPTED","SOURCE_IDENTIFIED","SOURCE_ENABLED_PENDING_ACCEPTANCE","BLOCKED","DERIVATION_ONLY","FIXTURE_ONLY","SOURCE_UNKNOWN"],
+  "credentialNote": "AUXSAYS_EIA_API_KEY belongs to a blocked candidate route. Credential-bearing transport URLs may exist in memory and must never be logged or copied into artifacts.",
+  "provenanceFiles": ["systems-monitor/data/config/sources/sources.json","systems-monitor/data/config/layoffs_source_acquisition_registry.yaml","systems-monitor/app/src/data/persistentWorldFactualBindings.ts","systems-monitor/app/src/data/persistentWorldSourceCatalog.ts"]
+}
