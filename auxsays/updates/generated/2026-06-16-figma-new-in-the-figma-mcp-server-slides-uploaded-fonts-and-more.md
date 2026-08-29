@@ -17,8 +17,8 @@ update_version: 'New in the Figma MCP server: Slides, uploaded fonts, and more'
 update_logo_text: FIG
 update_published_at: '2026-06-16T00:00:00.000Z'
 update_last_checked: '2026-06-16T17:23:27Z'
-source_last_checked: '2026-06-17T16:07:27Z'
-official_body_last_checked: '2026-06-17T16:07:27Z'
+source_last_checked: '2026-08-29T08:16:57Z'
+official_body_last_checked: '2026-08-29T08:16:57Z'
 record_last_updated: '2026-06-16T17:23:27Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -85,6 +85,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-06-17T16:07:27Z'
+  url: https://www.figma.com/release-notes/?title=new-in-the-figma-mcp-server-slides-uploaded-fonts-and-more
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-08-29T08:16:57Z'
   url: https://www.figma.com/release-notes/?title=new-in-the-figma-mcp-server-slides-uploaded-fonts-and-more
   status: captured-from-rss-feed
   body_captured: true
