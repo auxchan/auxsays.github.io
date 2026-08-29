@@ -64,7 +64,12 @@ jobs:
       # on the runner while silently dropping 51 of its 72 checks -- caught only by diffing CI check
       # totals against a local run. Installing the gem is what makes the CI number match.
       - name: Install the Liquid gem so template assertions actually run
-        run: gem install --no-document liquid -v 4.0.4
+        # --user-install because the runner's system gem dir (/var/lib/gems) is not writable and
+        # this job deliberately does nothing as root. GEM_HOME is exported so the `ruby` the test
+        # spawns resolves the gem; the require below fails the step loudly if it cannot.
+        run: |
+          gem install --no-document --user-install liquid -v 4.0.4
+          echo "GEM_HOME=$(ruby -e 'print Gem.user_dir')" >> "$GITHUB_ENV"
 
       - name: Report environment
         run: |
