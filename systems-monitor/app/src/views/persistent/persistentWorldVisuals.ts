@@ -2,8 +2,9 @@ import type { PersistentWorldDepth, PersistentWorldPlacement } from "../../data/
 
 export interface Point { x: number; y: number }
 export interface CubicRoute { start: Point; control1: Point; control2: Point; end: Point }
-export interface PersistentCameraPose { x: number; y: number; scale: number; rotation: number }
-export interface PersistentCameraTransition { from: PersistentCameraPose; to: PersistentCameraPose; startedAt: number; durationMs: number; arc: number; orbit: number }
+export interface PersistentCameraPose { x: number; y: number; z: number; scale: number; rotation: number; pitch: number; yaw: number }
+export interface PersistentCameraVelocity { x: number; y: number; z: number; logScale: number; rotation: number; pitch: number; yaw: number }
+export interface PersistentCameraTransition { from: PersistentCameraPose; to: PersistentCameraPose; startedAt: number; durationMs: number; arc: number; orbit: number; velocity: PersistentCameraVelocity }
 export type PremiumLabelSide = "left" | "right" | "top" | "bottom";
 export interface LabelCandidate { id: string; text: string; x: number; y: number; priority: number; width: number; height: number; accent: string; anchorX?: number; anchorY?: number; required?: boolean; side?: PremiumLabelSide; opacity?: number }
 export interface ResolvedLabel extends LabelCandidate { left: number; top: number }
@@ -134,8 +135,8 @@ function smootherStep(progress: number) {
 }
 
 /** Creates one bounded camera move that survives rapid path switching without changing world coordinates. */
-export function createPersistentCameraTransition(from: PersistentCameraPose, to: PersistentCameraPose, startedAt: number, identity: string): PersistentCameraTransition {
-  const distance = Math.hypot(to.x - from.x, to.y - from.y);
+export function createPersistentCameraTransition(from: PersistentCameraPose, to: PersistentCameraPose, startedAt: number, identity: string, velocity?: Partial<PersistentCameraVelocity>): PersistentCameraTransition {
+  const distance = Math.hypot(to.x - from.x, to.y - from.y, to.z - from.z);
   const zoomDistance = Math.abs(Math.log(Math.max(.001, to.scale) / Math.max(.001, from.scale)));
   const sign = stableHash(identity) % 2 ? 1 : -1;
   return {
@@ -144,11 +145,24 @@ export function createPersistentCameraTransition(from: PersistentCameraPose, to:
     startedAt,
     durationMs: Math.max(820, Math.min(1220, 820 + distance * .16 + zoomDistance * 210)),
     arc: sign * Math.max(14, Math.min(92, distance * .14)),
-    orbit: sign * Math.max(.025, Math.min(.075, .025 + distance / 5600))
+    orbit: sign * Math.max(.025, Math.min(.075, .025 + distance / 5600)),
+    velocity: {
+      x: Math.max(-.9, Math.min(.9, velocity?.x ?? 0)), y: Math.max(-.9, Math.min(.9, velocity?.y ?? 0)), z: Math.max(-.5, Math.min(.5, velocity?.z ?? 0)),
+      logScale: Math.max(-.002, Math.min(.002, velocity?.logScale ?? 0)), rotation: Math.max(-.0015, Math.min(.0015, velocity?.rotation ?? 0)),
+      pitch: Math.max(-.0005, Math.min(.0005, velocity?.pitch ?? 0)), yaw: Math.max(-.0005, Math.min(.0005, velocity?.yaw ?? 0))
+    }
   };
 }
 
-/** Samples a drone-like dolly: eased travel, a shallow lateral arc, a gentle bank, and a mid-flight pullback. */
+function hermite(from: number, to: number, velocity: number, progress: number, durationMs: number) {
+  const t2 = progress * progress; const t3 = t2 * progress;
+  const h00 = 2 * t3 - 3 * t2 + 1; const h10 = t3 - 2 * t2 + progress; const h01 = -2 * t3 + 3 * t2;
+  const value = h00 * from + h10 * velocity * durationMs + h01 * to;
+  const derivative = ((6 * t2 - 6 * progress) * from + (3 * t2 - 4 * progress + 1) * velocity * durationMs + (-6 * t2 + 6 * progress) * to) / durationMs;
+  return { value, derivative };
+}
+
+/** Samples a drone-like dolly with carried start velocity, a shallow lateral arc, and a mid-flight pullback. */
 export function samplePersistentCameraTransition(transition: PersistentCameraTransition, now: number) {
   const progress = Math.max(0, Math.min(1, (now - transition.startedAt) / transition.durationMs));
   const eased = smootherStep(progress);
@@ -158,15 +172,27 @@ export function samplePersistentCameraTransition(transition: PersistentCameraTra
   const distance = Math.max(1, Math.hypot(dx, dy));
   const nx = -dy / distance;
   const ny = dx / distance;
-  const logScale = Math.log(Math.max(.001, transition.from.scale)) + (Math.log(Math.max(.001, transition.to.scale)) - Math.log(Math.max(.001, transition.from.scale))) * eased - pulse * .13;
+  const x = hermite(transition.from.x, transition.to.x, transition.velocity.x, progress, transition.durationMs);
+  const y = hermite(transition.from.y, transition.to.y, transition.velocity.y, progress, transition.durationMs);
+  const z = hermite(transition.from.z, transition.to.z, transition.velocity.z, progress, transition.durationMs);
+  const logScale = hermite(Math.log(Math.max(.001, transition.from.scale)), Math.log(Math.max(.001, transition.to.scale)), transition.velocity.logScale, progress, transition.durationMs);
+  const rotationTarget = transition.from.rotation + shortestAngleDelta(transition.from.rotation, transition.to.rotation);
+  const rotation = hermite(transition.from.rotation, rotationTarget, transition.velocity.rotation, progress, transition.durationMs);
+  const pitch = hermite(transition.from.pitch, transition.to.pitch, transition.velocity.pitch, progress, transition.durationMs);
+  const yaw = hermite(transition.from.yaw, transition.to.yaw, transition.velocity.yaw, progress, transition.durationMs);
+  const arcX = nx * transition.arc * pulse; const arcY = ny * transition.arc * pulse;
   return {
     progress,
     pose: {
-      x: transition.from.x + dx * eased + nx * transition.arc * pulse,
-      y: transition.from.y + dy * eased + ny * transition.arc * pulse,
-      scale: Math.exp(logScale),
-      rotation: transition.from.rotation + shortestAngleDelta(transition.from.rotation, transition.to.rotation) * eased + transition.orbit * pulse
-    }
+      x: x.value + arcX,
+      y: y.value + arcY,
+      z: z.value,
+      scale: Math.exp(logScale.value - pulse * .13),
+      rotation: rotation.value + transition.orbit * pulse,
+      pitch: pitch.value,
+      yaw: yaw.value
+    },
+    velocity: { x: x.derivative, y: y.derivative, z: z.derivative, logScale: logScale.derivative, rotation: rotation.derivative, pitch: pitch.derivative, yaw: yaw.derivative }
   };
 }
 

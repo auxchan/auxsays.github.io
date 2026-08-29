@@ -198,7 +198,7 @@ export function PersistentWorldShell() {
       </div>
       <div className="sm-pw-status" role="status">
         <div><strong>{fullWorld ? "Full-world density LOD" : selected ? `Depth ${selected.depth} focus` : "Outcome + 10 driver systems"}</strong><span>The world stays fixed; only camera, detail, emphasis, and inspector context change.</span></div>
-        <div><strong>{model.topologyFingerprint}</strong><span>Topology/layout fingerprint</span></div>
+        <div><strong>{model.topologyFingerprint}</strong><span>Topology fingerprint</span></div>
       </div>
     </section>
 
