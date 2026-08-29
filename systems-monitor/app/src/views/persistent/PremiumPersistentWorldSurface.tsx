@@ -214,7 +214,8 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
       for (const placement of placements) projected.set(placement.id, projectFrame(placement, viewMode === "CINEMATIC_2_5D" ? spatialLayout.zByPlacementId[placement.id] ?? 0 : 0));
       const projectedAt = (id: string) => projected.get(id)!;
 
-      const ambientHierarchy = persistentAmbientEdges(hierarchy, [...transitionSemanticSet], fullWorld);
+      const ambientHierarchy = selectedPlacementId && !fullWorld ? [] : persistentAmbientEdges(hierarchy, [...semanticSet], fullWorld);
+      host.dataset.ambientHierarchyCount = ambientHierarchy.length.toString();
       context.lineWidth = .58; context.strokeStyle = fullWorld ? "rgba(93,176,176,.055)" : "rgba(93,176,176,.035)"; context.beginPath();
       for (const edge of ambientHierarchy) { const from = projectedAt(edge.fromPlacementId); const to = projectedAt(edge.toPlacementId); const route = premiumCurveRoute(edge.id, from, to, true); context.moveTo(route.start.x, route.start.y); context.bezierCurveTo(route.control1.x, route.control1.y, route.control2.x, route.control2.y, route.end.x, route.end.y); }
       context.stroke();
@@ -265,7 +266,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
             labelY = point.y + (dy / distance) * (radius + 15) + (dx / distance) * tangent;
             const focused = selectedPlacementId ? model.placements[selectedPlacementId] : undefined;
             const focusedExactTenChild = Boolean(focused && focused.depth < 3 && placement.parentPlacementId === focused.id && placement.depth === focused.depth + 1);
-            if (focusedExactTenChild) {
+            if (focusedExactTenChild && viewMode === "TOP_DOWN") {
               const radialX = dx / distance; const radialY = dy / distance; const horizontal = Math.abs(radialX) >= .18;
               labelSide = horizontal ? radialX < 0 ? "left" : "right" : radialY < 0 ? "top" : "bottom";
               if (labelSide === "left" || labelSide === "right") {
@@ -280,11 +281,12 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
             }
           }
           const focusedExactTenChild = Boolean(focusPlacement && focusPlacement.depth < 3 && placement.parentPlacementId === focusPlacement.id && placement.depth === focusPlacement.depth + 1);
-          labelCandidates.push({ id: placement.id, text: label, x: labelX, y: labelY, priority: placement.depth === 0 ? 100 : isSelected ? 90 : placement.depth === 1 ? 70 : placement.depth === 2 ? 50 : 20, width: textWidth, height: 22, accent, anchorX, anchorY, required: focusedExactTenChild, side: labelSide, opacity: Math.max(.08, semanticAlpha, selectedPath.has(placement.id) ? .7 : 0) * point.opacity });
+          labelCandidates.push({ id: placement.id, text: label, x: labelX, y: labelY, priority: placement.depth === 0 ? 100 : isSelected ? 90 : placement.depth === 1 ? 70 : placement.depth === 2 ? 50 : 20, width: textWidth, height: 22, accent, anchorX, anchorY, required: focusedExactTenChild && viewMode === "TOP_DOWN", side: labelSide, opacity: Math.max(.08, semanticAlpha, selectedPath.has(placement.id) ? .7 : 0) * point.opacity });
         }
         context.globalAlpha = 1;
       }
       const labels = resolvePremiumLabels(labelCandidates, width, height);
+      host.dataset.labelLeaderCount = labels.filter((label) => label.anchorX !== undefined && label.anchorY !== undefined).length.toString();
       for (const label of labels) { context.save(); context.globalAlpha = label.opacity ?? 1; if (label.anchorX !== undefined && label.anchorY !== undefined) { const targetX = label.side === "left" ? label.left + label.width : label.side === "right" ? label.left : label.x; const targetY = label.side === "top" ? label.top + label.height : label.side === "bottom" ? label.top : label.y; context.strokeStyle = blendPremiumColor(label.accent, label.accent, 1, .3); context.lineWidth = .8; context.beginPath(); context.moveTo(label.anchorX, label.anchorY); context.lineTo(targetX, targetY); context.stroke(); } context.fillStyle = "rgba(2,16,22,.9)"; context.strokeStyle = blendPremiumColor(label.accent, label.accent, 1, .3); context.lineWidth = 1; context.beginPath(); context.roundRect(label.left, label.top, label.width, label.height, 6); context.fill(); context.stroke(); context.fillStyle = label.id === selectedPlacementId ? "#f4fffc" : blendPremiumColor("#d9eeeb", label.accent, .28, 1); context.font = `${label.priority >= 70 ? 750 : 650} ${label.priority >= 70 ? 12 : 11}px Inter, system-ui, sans-serif`; context.textAlign = "center"; context.textBaseline = "middle"; context.fillText(label.text, label.x, label.y, label.width - 12); context.restore(); }
 
       const elapsed = performance.now() - started;
