@@ -43,6 +43,11 @@ TESTS = REPO / "auxsays" / "scripts" / "tests"
 MANIFEST = Path(__file__).resolve().parent / "integrity_suites.txt"
 
 RESULTS_RE = re.compile(r"^Results:\s*(\d+)\s*/\s*(\d+)\s+passed,\s*(\d+)\s+failed", re.M)
+# A suite may SKIP individual assertions when an optional tool is missing. That is not a failure,
+# but it MUST be visible: test_public_method_health_presentation silently dropped 51 of its 72
+# checks on the Ubuntu runner (no Ruby `liquid` gem) while still reporting "21/21 passed", and the
+# only way anyone noticed was diffing CI check totals against a local run.
+SKIP_RE = re.compile(r"^\s*SKIP\s", re.M)
 PER_TEST_TIMEOUT = 900
 
 # Every category a test file may be classified into. `blocking` and `diagnostic` are executed;
@@ -170,8 +175,8 @@ def _env() -> dict[str, str]:
     return env
 
 
-def run_one(name: str) -> tuple[bool, str, int, int, float]:
-    """Run one suite. Returns (ok, detail, checks_passed, checks_failed, seconds)."""
+def run_one(name: str) -> tuple[bool, str, int, int, int, float]:
+    """Run one suite. Returns (ok, detail, checks_passed, checks_failed, checks_skipped, seconds)."""
     path = TESTS / name
     started = time.monotonic()
     try:
@@ -179,7 +184,7 @@ def run_one(name: str) -> tuple[bool, str, int, int, float]:
             [sys.executable, str(path)], cwd=REPO, capture_output=True, text=True,
             encoding="utf-8", errors="replace", timeout=PER_TEST_TIMEOUT, env=_env())
     except subprocess.TimeoutExpired:
-        return False, f"TIMEOUT after {PER_TEST_TIMEOUT}s", 0, 0, time.monotonic() - started
+        return False, f"TIMEOUT after {PER_TEST_TIMEOUT}s", 0, 0, 0, time.monotonic() - started
     elapsed = time.monotonic() - started
     blob = f"{proc.stdout}\n{proc.stderr}"
 
@@ -189,9 +194,10 @@ def run_one(name: str) -> tuple[bool, str, int, int, float]:
     if match is None:
         # An import error, a crash, or malformed output. Never a skip, never a pass.
         tail = "\n".join(x for x in blob.strip().splitlines()[-8:] if x.strip())
-        return False, f"NO RESULTS LINE (exit {proc.returncode})\n{tail}", 0, 0, elapsed
+        return False, f"NO RESULTS LINE (exit {proc.returncode})\n{tail}", 0, 0, 0, elapsed
 
     passed, total, failed = int(match.group(1)), int(match.group(2)), int(match.group(3))
+    skipped = len(SKIP_RE.findall(blob))
     # Both conditions matter: a suite can print 0 failed and still exit nonzero (teardown, or a
     # crash after its summary), and a suite can exit 0 while reporting failures.
     if failed or proc.returncode != 0:
@@ -201,8 +207,8 @@ def run_one(name: str) -> tuple[bool, str, int, int, float]:
             detail += "\n" + "\n".join("      " + x for x in failing[:12])
             if len(failing) > 12:
                 detail += f"\n      ... and {len(failing) - 12} more"
-        return False, detail, passed, failed, elapsed
-    return True, f"{passed}/{total}", passed, failed, elapsed
+        return False, detail, passed, failed, skipped, elapsed
+    return True, f"{passed}/{total}" + (f" ({skipped} skipped)" if skipped else ""), passed, failed, skipped, elapsed
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -249,12 +255,16 @@ def main(argv: list[str] | None = None) -> int:
     print("=" * 84)
 
     failures: list[tuple[str, str]] = []
-    total_passed = total_failed = 0
+    skipped_suites: list[tuple[str, int]] = []
+    total_passed = total_failed = total_skipped = 0
     started = time.monotonic()
     for i, name in enumerate(names, 1):
-        ok, detail, passed, failed, secs = run_one(name)
+        ok, detail, passed, failed, skipped, secs = run_one(name)
         total_passed += passed
         total_failed += failed
+        total_skipped += skipped
+        if skipped:
+            skipped_suites.append((name, skipped))
         head, *rest = detail.splitlines() or [""]
         print(f"  [{i:>2}/{len(names)}] {'PASS' if ok else 'FAIL'}  {name:<52} {head}  ({secs:.1f}s)",
               flush=True)
@@ -270,7 +280,13 @@ def main(argv: list[str] | None = None) -> int:
     print(f"suites failed  : {len(failures)}")
     print(f"checks passed  : {total_passed}")
     print(f"checks failed  : {total_failed}")
+    print(f"checks skipped : {total_skipped}")
     print(f"duration       : {elapsed:.1f}s")
+
+    if skipped_suites:
+        print("\nsuites that SKIPPED assertions (optional tooling absent -- coverage is reduced):")
+        for name, n in skipped_suites:
+            print(f"  - {name}: {n} skipped")
 
     exit_code = 1 if failures else 0
     if failures:

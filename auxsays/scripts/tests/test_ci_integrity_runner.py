@@ -133,7 +133,7 @@ def run() -> int:
             write_suite(tmp, "test_ok.py", """
                 print("Results: 3/3 passed, 0 failed")
                 """)
-            ok, detail, passed, failed, _ = mod.run_one("test_ok.py")
+            ok, detail, passed, failed, _sk, _ = mod.run_one("test_ok.py")
             check("R3.1 a clean suite passes", ok and passed == 3 and failed == 0, detail)
 
             write_suite(tmp, "test_reports_failure.py", """
@@ -142,7 +142,7 @@ def run() -> int:
                 print("Results: 2/3 passed, 1 failed")
                 sys.exit(1)
                 """)
-            ok, detail, _, failed, _ = mod.run_one("test_reports_failure.py")
+            ok, detail, _, failed, _sk, _ = mod.run_one("test_reports_failure.py")
             check("R3.2 a failing suite fails and its FAIL lines survive",
                   not ok and failed == 1 and "something important" in detail, detail[:160])
 
@@ -152,7 +152,7 @@ def run() -> int:
                 print("Results: 5/5 passed, 0 failed")
                 sys.exit(3)
                 """)
-            ok, detail, _, _, _ = mod.run_one("test_green_but_nonzero.py")
+            ok, detail, _, _, _sk, _ = mod.run_one("test_green_but_nonzero.py")
             check("R3.3 a nonzero exit fails even when the summary says 0 failed",
                   not ok, detail[:160])
 
@@ -160,14 +160,14 @@ def run() -> int:
             write_suite(tmp, "test_import_error.py", """
                 import a_module_that_does_not_exist  # noqa
                 """)
-            ok, detail, _, _, _ = mod.run_one("test_import_error.py")
+            ok, detail, _, _, _sk, _ = mod.run_one("test_import_error.py")
             check("R3.4 an import error is a failure, not a skip",
                   not ok and "NO RESULTS LINE" in detail, detail[:160])
 
             write_suite(tmp, "test_silent.py", """
                 pass
                 """)
-            ok, detail, _, _, _ = mod.run_one("test_silent.py")
+            ok, detail, _, _, _sk, _ = mod.run_one("test_silent.py")
             check("R3.5 a suite printing nothing is a failure, not a skip",
                   not ok and "NO RESULTS LINE" in detail, detail[:160])
 
@@ -176,9 +176,18 @@ def run() -> int:
                 print("  FAIL  the real outcome")
                 print("Results: 1/2 passed, 1 failed")
                 """)
-            ok, _, _, failed, _ = mod.run_one("test_two_summaries.py")
+            ok, _, _, failed, _sk, _ = mod.run_one("test_two_summaries.py")
             check("R3.6 the LAST summary wins, so an early line cannot mask the real one",
                   not ok and failed == 1)
+
+            write_suite(tmp, "test_skips.py", """
+                print("  SKIP  render case")
+                print("  SKIP  second render case")
+                print("Results: 2/2 passed, 0 failed")
+                """)
+            ok, detail, _, _, skipped, _ = mod.run_one("test_skips.py")
+            check("R3.8 skipped assertions are counted and surfaced, not hidden",
+                  ok and skipped == 2 and "2 skipped" in detail, f"skipped={skipped} detail={detail!r}")
 
             write_suite(tmp, "test_slow.py", """
                 import time
@@ -188,7 +197,7 @@ def run() -> int:
             saved = mod.PER_TEST_TIMEOUT
             mod.PER_TEST_TIMEOUT = 2
             try:
-                ok, detail, _, _, _ = mod.run_one("test_slow.py")
+                ok, detail, _, _, _sk, _ = mod.run_one("test_slow.py")
             finally:
                 mod.PER_TEST_TIMEOUT = saved
             check("R3.7 a hung suite times out and fails", not ok and "TIMEOUT" in detail, detail[:120])

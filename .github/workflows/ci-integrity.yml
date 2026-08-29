@@ -59,11 +59,20 @@ jobs:
       - name: Install dependencies
         run: pip install -r auxsays/scripts/requirements-ingest.txt
 
+      # test_public_method_health_presentation renders the SHIPPED Liquid template with the real
+      # gem, and SKIPS those assertions when it is missing. Without this it reported "21/21 passed"
+      # on the runner while silently dropping 51 of its 72 checks -- caught only by diffing CI check
+      # totals against a local run. Installing the gem is what makes the CI number match.
+      - name: Install the Liquid gem so template assertions actually run
+        run: gem install --no-document liquid -v 4.0.4
+
       - name: Report environment
         run: |
           python --version
           python -c "import yaml; print('PyYAML', yaml.__version__)"
           git --version
+          ruby --version
+          ruby -e "require 'liquid'; puts %(liquid #{Liquid::VERSION})"
 
       # Fails when a test file exists that no category claims, when a category names a file that is
       # gone, or when a suite is classified twice. Runs first so a classification mistake is
