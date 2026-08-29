@@ -26,25 +26,21 @@ patch_file_size_status: not_provided_by_source
 update_status: current
 update_feed_title: DaVinci Resolve 15
 update_detail_title: DaVinci Resolve 15
-update_consensus_label: Moderate
-update_report_count: 1
+update_consensus_label: Insufficient data
+update_report_count: 0
 update_consensus_confidence: Low
-quick_verdict: 'WAIT: DaVinci Resolve 15 has 1 user reports found.'
+quick_verdict: DaVinci Resolve 15 has an official AUXSAYS record. Confirmed patch-specific consensus is deferred until the consensus refresh pipeline is active.
 official_summary: Blackmagic Design lists DaVinci Resolve 15 in its official support downloads feed.
-release_summary: This software installs the full shipping version of DaVinci Resolve 15 which features integrated
-  Fusion visual effects and motion graphics, additional Fairlight audio tools and over 300 new features and improvements.
-  Technical support for the free version of DaVinci Resolve 15 is available via the Blackmagic Design community
-  forums.
-consensus_report: '1 user report found for DaVinci Resolve 15. Current reports are too varied to group cleanly.
-  Too few reports for a firm verdict yet. Sources represented: Creative COW DaVinci Resolve.'
-evidence_state: pilot_sample
-evidence_state_label: Verified reports
+release_summary: This software installs the full shipping version of DaVinci Resolve 15 which features integrated Fusion visual effects and motion graphics, additional Fairlight audio tools and over 300 new features and improvements. Technical support for the free version of DaVinci Resolve 15 is available via the Blackmagic Design community forums.
+consensus_report: Confirmed patch-specific consensus collection is deferred. This page currently reflects official-source ingestion only.
+evidence_state: official_only
+evidence_state_label: Official source only
 intelligence_stage: pilot
 official_source_captured: true
-confirmed_patch_specific_report_count: 1
+confirmed_patch_specific_report_count: 0
 evidence_last_checked: '2026-08-21T02:56:21Z'
 known_issues_present: null
-consensus_collection_status: pilot_initial_sample
+consensus_collection_status: deferred_official_only
 consensus_match_policy: confirmed_patch_specific_reports_v1
 consensus_match_policy_label: Confirmed patch-specific reports only
 consensus_report_count_label: user reports found
@@ -70,8 +66,7 @@ official_patch_notes_source_url: https://www.blackmagicdesign.com/support/family
 official_note_status: official_source_captured
 official_note_label: Official download portal entry
 official_source_type: download_portal
-official_source_classification_note: Blackmagic's support downloads API is treated as an official download-portal
-  source. It confirms version availability and summary text; community evidence remains separate.
+official_source_classification_note: Blackmagic's support downloads API is treated as an official download-portal source. It confirms version availability and summary text; community evidence remains separate.
 official_sources:
 - label: Blackmagic support downloads
   url: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
@@ -98,9 +93,7 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   Platforms listed: Mac OS X, Windows, Linux
 
 
-  This software installs the full shipping version of DaVinci Resolve 15 which features integrated Fusion visual
-  effects and motion graphics, additional Fairlight audio tools and over 300 new features and improvements. Technical
-  support for the free version of DaVinci Resolve 15 is available via the Blackmagic Design community forums.
+  This software installs the full shipping version of DaVinci Resolve 15 which features integrated Fusion visual effects and motion graphics, additional Fairlight audio tools and over 300 new features and improvements. Technical support for the free version of DaVinci Resolve 15 is available via the Blackmagic Design community forums.
 
 
   Official support page: https://www.blackmagicdesign.com/support/family/davinci-resolve-and-fusion
@@ -111,38 +104,5 @@ official_patch_notes_body: 'Official Blackmagic support-download entry: DaVinci 
   AUXSAYS note: this is official download-portal metadata, not broad community consensus.'
 official_checksums_body: ''
 official_checksums_capture_status: not-present
-update_consensus_summary: 'TEST FIRST: DaVinci Resolve 15 has 1 user report found. Small sample size. Current reports
-  are too varied to group cleanly. Production editors should test on copied projects before moving active work to
-  this version. Too few reports for a firm verdict yet.'
-evidence_samples:
-- source_name: Creative COW DaVinci Resolve
-  source_url: https://creativecow.net/forums/thread/failed-backup/
-  source_title: Creative Communities of the World Forums
-  counted: true
-  version_matched: '15'
-  patch_version_matched: true
-  issue: general workflow reports
-  outcome: medium
-evidence_sample_visible_limit: 5
-accepted_report_sources:
-- source_name: Creative COW DaVinci Resolve
-  source_type: creator forum report
-  source_url: https://creativecow.net/forums/thread/failed-backup/
-  source_title: Creative Communities of the World Forums
-  source_date: '2026-07-30'
-  version_matched: '15'
-  patch_version_matched: true
-  issue: general workflow reports
-  workflow_area: general DaVinci Resolve workflow
-evidence_source_limitations:
-- Too few reports for a firm verdict yet.
-- Some community sources were unavailable during the last check; unavailable sources were not counted as reports.
-update_decision_label: WAIT
-update_decision_body: Current reports are too varied to group cleanly. Production editors with active delivery deadlines
-  should wait or test on copied projects.
-practical_recommendations:
-- Wait if you have active render/export deadlines.
-- Test on copied projects before moving client work to this version.
-- Review the sample reports before updating a production workstation.
 source_freshness_note: ''
 ---
