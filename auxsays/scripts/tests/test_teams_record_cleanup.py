@@ -63,7 +63,16 @@ def run() -> int:
     print("Microsoft Teams record/state cleanup invariants")
     print("=" * 60)
 
-    teams_files = sorted(_GENERATED.glob("*microsoft-teams*.md"))
+    # Identity is the record's DECLARED product_id, never its filename. A generated slug falls back
+    # to the vendor-authored TITLE (write_update_record.record_slug), so any other product whose
+    # title merely mentions Microsoft Teams lands in a "*microsoft-teams*.md" glob. That is not
+    # hypothetical: 2026-08-21-github-copilot-shared-agentic-work-with-github-copilot-in-microsoft-
+    # teams.md carries `product_id: github`, and globbing made this suite red from 2026-08-22 by
+    # holding a GitHub record to the Teams identity contract. Same family as asserting records[0].
+    teams_files = sorted(
+        path for path in _GENERATED.glob("*.md")
+        if _fm(path.read_text(encoding="utf-8"), "product_id") == "microsoft-teams"
+    )
     versions: list[str] = []
     bad_identity: list[str] = []
     for path in teams_files:

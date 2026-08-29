@@ -458,12 +458,22 @@ def run() -> int:
         stable_fields.get("update_status") == "current" and stable_fields.get("feed_hidden") is False,
         f"status={stable_fields.get('update_status')!r}, feed_hidden={stable_fields.get('feed_hidden')!r}",
     )
+    # The invariant is the PROSE the promotion publishes, not the field slot it happens to occupy.
+    # b5259931 moved the stable/Studio scoping out of record_note into description /
+    # official_summary / release_summary, and 2c316ac5 stopped generating record_note at all --
+    # neither changed what is claimed, but both broke a check pinned to one key. Assert across the
+    # managed prose fields so a future relocation does not read as a regression, while a genuine
+    # loss of the stable/beta separation still does.
+    MANAGED_PROSE = ("description", "record_note", "official_summary", "release_summary",
+                     "update_channel_label", "quick_verdict", "update_decision_body")
+    stable_prose = " ".join(str(stable_fields.get(k) or "") for k in MANAGED_PROSE)
     check(
         "stable writeback removes archived-only beta wording",
-        "archived" not in str(stable_fields.get("record_note") or "").lower()
-        and "primary public record" not in str(stable_fields.get("record_note") or "").lower()
-        and "stable/Studio" in str(stable_fields.get("record_note") or ""),
-        f"record_note={stable_fields.get('record_note')!r}",
+        "archived" not in stable_prose.lower()
+        and "primary public record" not in stable_prose.lower()
+        and "stable" in stable_prose.lower()
+        and "beta" in stable_prose.lower(),
+        f"stable_prose={stable_prose!r}",
     )
     active_stable_fields = _proposed_record_fields(
         "blackmagic-davinci",
@@ -473,11 +483,15 @@ def run() -> int:
         "2026-05-13T00:00:00Z",
         build="",
     )
+    active_prose = " ".join(str(active_stable_fields.get(k) or "") for k in MANAGED_PROSE)
     check(
         "active stable DaVinci 21 keeps coherence wording managed",
-        "stable Resolve 21 release" in str(active_stable_fields.get("update_decision_body") or "")
-        and "render/export failures" in str(active_stable_fields.get("update_decision_body") or ""),
-        f"decision_body={active_stable_fields.get('update_decision_body')!r}",
+        # The stable/beta scoping is still stated somewhere in managed prose, AND the decision body
+        # is still DERIVED FROM EVIDENCE rather than hard-coded -- b5259931 replaced the literal
+        # sentence with _issue_cluster_sentence(themes), so the theme is the durable assertion.
+        "stable" in active_prose.lower() and "beta" in active_prose.lower()
+        and "render/export failures" in active_prose,
+        f"active_prose={active_prose!r}",
     )
 
     beta_fields = _proposed_record_fields(

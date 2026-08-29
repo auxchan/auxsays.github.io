@@ -1,0 +1,139 @@
+# AUXSAYS CI test-governance manifest.
+#
+# CLOSED WORLD: every test file under auxsays/scripts/tests/ must appear in exactly one category
+# below. The runner fails if a test file exists that is classified nowhere (so a new test cannot
+# silently bypass CI), if a category names a file that does not exist (so coverage cannot silently
+# shrink), or if any file is listed twice. Listing is explicit rather than glob-discovered for
+# exactly that reason.
+#
+#   blocking              run by CI, must pass. Deterministic, offline, proven not to write.
+#   diagnostic            run by CI, must pass. Deterministic but broader/slower, or protecting
+#                         presentation rather than patch correctness.
+#   network               NOT run: makes live external requests. Transport availability is not PR
+#                         correctness; it belongs to the scheduled source-health lanes.
+#   mutating              NOT run: writes the live checkout. Would silently revert a contributor.
+#   environment_specific  NOT run: needs tooling absent from the runner, and reports green anyway.
+#   stale                 NOT run: currently failing for a test-side reason, with a named follow-up.
+#
+# Every entry outside `blocking`/`diagnostic` carries the reason it is excluded. Nothing is excluded
+# without one.
+
+[blocking]
+# --- canonical patch identity -------------------------------------------------
+test_patch_index_identity.py
+test_windows_patch_identity.py
+test_frontmatter_roundtrip.py
+
+# --- build identity and the exact-build write path ----------------------------
+test_powerpoint_build_identity.py
+test_powerpoint_realpath_identity.py
+test_powerpoint_build_roles.py
+test_powerpoint_write_path_safety.py
+test_powerpoint_multibuild_ingestion.py
+test_powerpoint_attribution.py
+test_powerpoint_context_resolution.py
+test_transactional_writeback.py
+test_automation_writeback.py
+
+# --- collector field ownership and write authority ----------------------------
+test_collector_write_authority.py
+test_collector_ownership.py
+test_collector_transaction.py
+test_collector_txn_nested_root.py
+test_ownership_identity_fixes.py
+test_ownership_reason_codes.py
+
+# --- consensus count authority and workflow ordering --------------------------
+test_windows_count_authority.py
+test_report_count_reconciliation.py
+
+# --- evidence projection, acceptance and dedupe -------------------------------
+test_obs_consensus_projection.py
+test_obs_consensus_acceptance.py
+test_evidence_strength_thresholds.py
+test_reader_evidence_identity.py
+test_evidence_method_health_dupes.py
+
+# --- version / authority attribution ------------------------------------------
+test_version_outcome_attribution.py
+test_windows_rollover_convergence.py
+test_davinci_bare_version_identity.py
+test_normalize_davinci_version.py
+test_acrobat_vendor_authority.py
+test_premiere_editorial_protection.py
+
+# --- generated-record QA and coherence gates ----------------------------------
+test_qa_patch_records.py
+test_audit_consensus_evidence.py
+test_validate_ingestion_sources.py
+test_validate_evidence_method_health.py
+test_teams_record_cleanup.py
+test_davinci_verified_reports.py
+
+# --- the CI runner is policy, so it is tested like production code ---------------
+test_ci_integrity_runner.py
+
+[diagnostic]
+# Deterministic and offline; broader surface or presentation-level. Also blocking in CI --
+# "diagnostic" names the domain, not a weaker guarantee.
+test_adobe_acrobat_adapter.py
+test_adobe_acrobat_community_collector.py
+test_adobe_photoshop_adapter.py
+test_adobe_release_notes_adapter.py
+test_blackmagic_support_downloads.py
+test_davinci_creative_cow_source.py
+test_davinci_reddit_source.py
+test_elgato_help_center_adapter.py
+test_failsoft_collection.py
+test_http_credential_scope.py
+test_microsoft_learn_qna_source.py
+test_microsoft_office_updates_adapter.py
+test_microsoft_powerpoint_collector.py
+test_microsoft_release_health_adapter.py
+test_microsoft_windows_collector.py
+test_monitoring_status.py
+test_orchestration_production_adoption.py
+test_orchestration_r1.py
+test_patch_ingest_front_matter.py
+test_patch_ingest_record_limit.py
+test_powerpoint_production_readiness.py
+test_product_page_layout.py
+test_promote_local_playwright_captures.py
+test_public_method_health_presentation.py
+test_reddit_source.py
+test_revalidate_consensus_evidence.py
+test_route_integrity.py
+test_run_patch_evidence_collection.py
+test_runtime_budget.py
+test_vendor_page_layout.py
+test_write_update_record_official_issues.py
+
+[network]
+# Makes live external requests: 301 connection attempts to reddit.com / web.archive.org in one run,
+# measured. It degrades gracefully (72/72 offline) but costs ~530s online vs ~47s offline and its
+# runtime is rate-limit dependent, so it must not gate a pull request. Its own docstring says it
+# must not perform live requests -- that is a real bug in the test, tracked as follow-up.
+test_adobe_premiere_collector.py
+
+[mutating]
+# Runs `apply_consensus_to_records.py --write-all --confirm-write` against the LIVE checkout
+# (run_cli at :114 uses cwd=_REPO; called at :171, :188, :199). It currently reports zero writes only
+# because every DaVinci group is already converged -- that is incidental, not a safety property.
+# Demonstrated: with one managed field edited as a PR would, the test REWRITES the record and still
+# exits 0, so CI would be green while silently reverting the contributor's diff. Must be rewritten
+# against a temp copy before it can gate anything.
+test_davinci_promotion_scope.py
+
+[environment_specific]
+# Exits 0 with "SKIP fixture Jekyll build unavailable" when `bundle exec jekyll build` is missing.
+# On a runner without Ruby it would report green while asserting nothing, which is the silent-skip
+# failure mode this runner exists to prevent. Excluded until it can fail closed.
+test_monitoring_status_render.py
+
+[stale]
+# EMPTY, deliberately. Both suites that were red on main were diagnosed as stale test assumptions
+# and REPAIRED in this change rather than parked here -- test_teams_record_cleanup identified a
+# product by filename substring (and so held a GitHub record to the Teams contract), and
+# test_davinci_verified_reports pinned literal prose to a field the product had stopped writing.
+# A permanently-red allowlist teaches contributors to ignore CI, so this category exists to be
+# visible when it is used, and to be empty the rest of the time.

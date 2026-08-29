@@ -1,0 +1,104 @@
+name: CI integrity
+
+# AUXSAYS protects exact-patch intelligence with ~71 standalone test suites, but until this workflow
+# existed nothing ran them automatically -- they were enforced only by an engineer remembering. A
+# test that is never run is documentation, not enforcement.
+#
+# This workflow is READ-ONLY by construction. It never commits, never deploys, never touches Actions
+# state, and the runner it invokes fails the build if any test writes a tracked file or one of the
+# gitignored status snapshots.
+
+on:
+  pull_request:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+# Least privilege. Every other workflow in this repo needs `contents: write` because it commits
+# evidence; a test workflow does not, and must not inherit that by habit.
+permissions:
+  contents: read
+
+# Deliberately NOT `auxsays-main-writeback`. Sharing that group would let a PR test run queue behind
+# -- or cancel -- evidence collection and Pages deployment. Superseded runs for the same PR are
+# cancelled; runs on main are keyed by ref so a push run is never cancelled by an unrelated PR.
+concurrency:
+  group: ci-integrity-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  # Keep the checkout pristine: no __pycache__ from any step. .gitignore already covers it, but the
+  # point of this workflow is that CI leaves nothing behind, not that .gitignore hides what it does.
+  PYTHONDONTWRITEBYTECODE: "1"
+  PYTHONIOENCODING: "utf-8"
+
+jobs:
+  # Stable, unique check name. GitHub required-status rules are keyed on the job/check name, so this
+  # must not collide with a job in any other workflow.
+  integrity:
+    name: integrity
+    runs-on: ubuntu-latest
+    # Measured ~5.5 min locally for 66 suites. 20 min leaves generous room for runner variance
+    # without letting a hung suite burn an hour; the runner also caps each suite at 900s itself.
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out the pull request
+        uses: actions/checkout@v4
+        # No test needs git history: every suite that uses git builds its own repository in a temp
+        # directory, and a depth-1 checkout was verified to produce identical results.
+        with:
+          fetch-depth: 1
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r auxsays/scripts/requirements-ingest.txt
+
+      - name: Report environment
+        run: |
+          python --version
+          python -c "import yaml; print('PyYAML', yaml.__version__)"
+          git --version
+
+      # Fails when a test file exists that no category claims, when a category names a file that is
+      # gone, or when a suite is classified twice. Runs first so a classification mistake is
+      # reported immediately rather than after five minutes of tests.
+      - name: Verify the test manifest is closed-world
+        run: python auxsays/scripts/ci/run_integrity_tests.py --check-manifest
+
+      # Every executed suite, in one job. A missing Results line, an import error, a crash or a
+      # timeout is a failure -- never a skip. Exits 2 if any tracked file or watched status snapshot
+      # changed while the tests ran.
+      - name: Run integrity suites
+        run: python auxsays/scripts/ci/run_integrity_tests.py --suite all
+
+      # Read-only data gates, proven not to write: a full-tree hash before/after all three is
+      # unchanged. `qa_patch_records.py` is deliberately NOT here -- it writes
+      # auxsays/_data/qa_status.json and has no read-only mode, and running a writer under a
+      # git-diff guard that cannot see a gitignored file would be a false assurance. Its invariants
+      # are covered by test_qa_patch_records.py in the blocking category.
+      - name: Audit consensus evidence
+        run: python auxsays/scripts/audit_consensus_evidence.py
+
+      - name: Validate ingestion sources
+        run: python auxsays/scripts/validate_ingestion_sources.py
+
+      - name: Validate evidence method health
+        run: python auxsays/scripts/validate_evidence_method_health.py
+
+      # Belt and braces alongside the runner's own hash check: this also catches anything the QA
+      # gates above might write to a TRACKED path.
+      - name: Prove the checkout was not modified
+        run: |
+          git diff --exit-code
+          git diff --cached --exit-code
+          if [ -n "$(git status --porcelain --untracked-files=normal)" ]; then
+            echo "::error::CI produced repository changes; it must be read-only"
+            git status --porcelain --untracked-files=normal
+            exit 1
+          fi
