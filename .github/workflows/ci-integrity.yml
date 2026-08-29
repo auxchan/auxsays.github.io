@@ -65,8 +65,15 @@ jobs:
       # totals against a local run. Installing the gem is what makes the CI number match.
       - name: Install the Liquid gem so template assertions actually run
         # --user-install because the runner's system gem dir (/var/lib/gems) is not writable and
-        # this job deliberately does nothing as root. GEM_HOME is exported so the `ruby` the test
-        # spawns resolves the gem; the require below fails the step loudly if it cannot.
+        # this job deliberately does nothing as root. GEM_HOME is exported so the `ruby` the tests
+        # spawn resolves the gem.
+        #
+        # BEST EFFORT on purpose. This is the one step that reaches the network, and a rubygems.org
+        # outage must not redden every pull request -- that is the network-dependence this design
+        # forbids in the blocking path. Without the gem, test_public_method_health_presentation
+        # skips its 51 render assertions; the runner now COUNTS and NAMES skipped assertions, so
+        # the reduced coverage is visible in the summary instead of silently passing as 21/21.
+        continue-on-error: true
         run: |
           gem install --no-document --user-install liquid -v 4.0.4
           echo "GEM_HOME=$(ruby -e 'print Gem.user_dir')" >> "$GITHUB_ENV"
@@ -77,7 +84,10 @@ jobs:
           python -c "import yaml; print('PyYAML', yaml.__version__)"
           git --version
           ruby --version
-          ruby -e "require 'liquid'; puts %(liquid #{Liquid::VERSION})"
+          # Reports, never fails: if the optional gem is missing the run stays green and the
+          # affected assertions appear in the runner's "checks skipped" total.
+          ruby -e "require 'liquid'; puts %(liquid #{Liquid::VERSION})" \
+            || echo "liquid gem unavailable -- template render assertions will SKIP (see checks skipped)"
 
       # Fails when a test file exists that no category claims, when a category names a file that is
       # gone, or when a suite is classified twice. Runs first so a classification mistake is
