@@ -14178,3 +14178,52 @@ evidence:
   severity: critical
   sentiment: negative
   source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5987922-edge-short-freeze-win11-pro-x64-stable
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5987922/edge-short-freeze-win11-pro-x64-stable-channel
+  parent_title: '[Edge short freeze] Win11 pro x64, stable channel - Microsoft Q&A'
+  report_title: '[Edge short freeze] Win11 pro x64, stable channel - Microsoft Q&A'
+  report_text_excerpt: '[Edge short freeze] Win11 pro x64, stable channel - Microsoft Q&A i tried all steps from my side, the issue is not from my side, could be amd or microsoft, i saw https://learn.microsoft.com/en-us/answers/questions/5839296/ms-edge-constantly-freezing-after-recent-...'
+  captured_at: '2026-08-29T17:47:33Z'
+  source_date: '2026-08-28'
+  target_release_date: '2026-08-27'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9278'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9278'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-2-github-issue-13836
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13836
+  parent_title: Multiple PipeWire screen capture sources cause severe render/compositor lag, even when disabled
+  report_title: Multiple PipeWire screen capture sources cause severe render/compositor lag, even when disabled
+  report_text_excerpt: '### Operating System Info Other ### Other OS Arch Linux ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL Logs are attached at the bottom because I have multiple after debugging ### OBS Studio Crash Log URL _No response_'
+  captured_at: '2026-08-29T17:54:10Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: screen capture regression
+  workflow_area: screen/window capture
+  platform: linux
+  severity: high
+  sentiment: negative
+  source_weight: 1
