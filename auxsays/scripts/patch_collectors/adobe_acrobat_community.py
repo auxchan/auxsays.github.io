@@ -160,6 +160,64 @@ ACROBAT_NON_REPORT_RE = re.compile(
 )
 _GENUINE_FAILURE_RE = re.compile(r"\b(crash|fail|broke|broken|error|corrupt|freeze|hang|regression|not\s+responding)\b", re.I)
 
+# --- vendor authority: official information is not user consensus -------------
+# Adobe publishes its OWN release announcements and support documents as ordinary community
+# threads, from accounts the platform ranks like any other member. There is nothing structural to
+# key on: the evidence schema stores no author/rank/role/post-type field at all, and source_type,
+# source_name and sentiment are constant across every stored Acrobat row. (The platform's own
+# rank.name == "Adobe Employee" flag rides on LAST posts and was observed firing on none of the
+# fetchable openers, both vendor threads included -- but that is a network observation, not
+# something this repo can assert.) So authority has to be read off what the post IS.
+#
+# Deliberately NOT cancellable by _GENUINE_FAILURE_RE: a release announcement enumerates the
+# defects it fixes, so a failure word is EXPECTED in vendor prose. That cancellation is precisely
+# how "Adobe Acrobat and Reader DC - June 2021 Update Release" was counted as three user reports.
+#
+# TITLE-anchored, and only the title. A member titles a thread with the symptom they hit; only the
+# publisher titles one as the release itself. Two properties make the title safe to read where the
+# body is not:
+#   * a title is short and is stored whole, so what this rule sees in production is exactly what the
+#     corpus lets us audit. The BODY is not: collection passes ~6000 chars (`_clean_html(...)[:6000]`
+#     at the fetch sites) while `report_text_excerpt` keeps only 280, an ~18x gap, so any body rule
+#     is validated against ~5% of its real input.
+#   * on the /t5 path the body is the whole thread page with every reply concatenated -- post
+#     boundaries are already destroyed by _clean_html -- so body prose cannot be attributed to the
+#     opening author at all.
+#
+# Deliberately NOT cancellable by _GENUINE_FAILURE_RE: a release announcement enumerates the defects
+# it fixes, so a failure word is EXPECTED in vendor prose. That cancellation is precisely how
+# "Adobe Acrobat and Reader DC - June 2021 Update Release" was counted as three user reports.
+ACROBAT_VENDOR_ANNOUNCEMENT_TITLE_RE = re.compile(
+    r"\b(?:update\s+release|release\s+notes?|what'?s\s+new|announc\w+"
+    r"|(?:is|are)\s+now\s+available|release\s+is\s+now|new\s+release)\b",
+    re.I,
+)
+
+# NOT IMPLEMENTED, deliberately: Adobe support documents ("Problem : ... Solution: ...").
+# One is counted today (thread 1288217, adobe-acrobat-pro 21.005.20058) and stays counted. A
+# Problem/Solution text rule was built, measured and REJECTED: `problem:` occurs mid-sentence in
+# ordinary member prose ("keep running into a problem: I'm getting the error" -- four such rows are
+# counted right now), the true positive's own label sits mid-run at offset 147 so no start-anchor
+# separates them, and whitespace is already collapsed so no line anchor exists. Every narrowing
+# tried either lost the one true positive or kept refusing real reports. That trade is not
+# recoverable: `append_evidence_rows` builds `seen_urls` from ALL rows regardless of `counted`, so a
+# genuine report once stamped vendor-authored is never re-collected. Prefer counting one vendor
+# document to permanently destroying real user reports. Reopen only with an author/role signal.
+
+
+def acrobat_vendor_authority(title: str, text: str) -> str:
+    """Vendor-authority reason for this post, or '' when it reads as a member report.
+
+    Returns a stable reason token; never raises. Refuses exactly one shape -- an announcement
+    TITLE -- so a gap here is a missed refusal, never a false accusation against a user. `text` is
+    accepted for call-site symmetry and is deliberately NOT read; see the note above on why body
+    prose is not a sound authority signal on this platform.
+    """
+    if ACROBAT_VENDOR_ANNOUNCEMENT_TITLE_RE.search(str(title or "")):
+        return "vendor_release_announcement"
+    return ""
+
+
 # --- specific Adobe Community thread/message URL -----------------------------
 _ADOBE_THREAD_RE = re.compile(r"/t5/[^/]+/[^/]+/(?:td-p|m-p|idi-p)/\d+", re.I)
 _ADOBE_BUG_RE = re.compile(r"/bug-reports?[-\w]*/[\w%-]+/\d+", re.I)
@@ -668,6 +726,8 @@ def row_from_candidate(product_id: str, record: PatchRecord, candidate: dict[str
         reason = "source_url_not_specific_report"
     elif source_date_pass is False:
         reason = "source_date_before_or_unverified_against_release"
+    elif vendor_reason := acrobat_vendor_authority(str(row.get("report_title") or ""), report_text):
+        reason = vendor_reason
     elif not acrobat_strong_issue_match(report_text):
         reason = "not_a_real_issue_report"
 

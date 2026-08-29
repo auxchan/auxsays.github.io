@@ -7142,8 +7142,8 @@ evidence:
   match_basis: exact_version_text
   matched_product_alias: acrobat reader + acrobat pro
   applicability: adobe-acrobat-reader,adobe-acrobat-pro
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: vendor_release_announcement
   issue_theme: printing regression
   workflow_area: printing
   platform: windows
@@ -7168,8 +7168,8 @@ evidence:
   match_basis: exact_version_text
   matched_product_alias: acrobat reader + acrobat pro
   applicability: adobe-acrobat-reader,adobe-acrobat-pro
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: vendor_release_announcement
   issue_theme: printing regression
   workflow_area: printing
   platform: windows
@@ -11056,8 +11056,8 @@ evidence:
   match_basis: exact_version_text
   matched_product_alias: acrobat reader + acrobat pro
   applicability: adobe-acrobat-reader,adobe-acrobat-pro
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: vendor_release_announcement
   issue_theme: printing regression
   workflow_area: printing
   platform: windows

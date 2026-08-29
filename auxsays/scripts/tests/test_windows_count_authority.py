@@ -125,13 +125,25 @@ def flag_value(command: str, flag: str) -> str | None:
 
     Property, not spelling: the two forms are equivalent to the shell, so a test that only
     recognises one fails on a harmless rewrite."""
+    values = flag_values(command, flag)
+    return values[0] if values else None
+
+
+def flag_values(command: str, flag: str) -> list[str]:
+    """EVERY value of `flag` in a shell command, in order.
+
+    One `run:` block may hold several invocations -- Acrobat Pro and Reader are promoted by two
+    commands in a single step, because --product-id takes one value. Reading only the first match
+    made Reader invisible to this file and would have let a retractable product ship with no
+    rebuild path recorded, which is exactly what R7 exists to prevent."""
     tokens = command.replace("\\\n", " ").split()
+    found: list[str] = []
     for i, tok in enumerate(tokens):
-        if tok == flag:
-            return tokens[i + 1] if i + 1 < len(tokens) else None
-        if tok.startswith(flag + "="):
-            return tok.split("=", 1)[1]
-    return None
+        if tok == flag and i + 1 < len(tokens):
+            found.append(tokens[i + 1])
+        elif tok.startswith(flag + "="):
+            found.append(tok.split("=", 1)[1])
+    return found
 
 
 def historical_predicate(rows):
@@ -322,7 +334,7 @@ def run() -> int:
         """Index of the step whose run: invokes a promotion scoped to `token`; -1 if none."""
         for i, st in enumerate(steps):
             run = str(st.get("run") or "")
-            if "apply_consensus_to_records" in run and flag_value(run, "--product-id") == token:
+            if "apply_consensus_to_records" in run and token in flag_values(run, "--product-id"):
                 return i
         return -1
 
@@ -657,11 +669,11 @@ def run() -> int:
 
     # R7: the set of retractable products must EQUAL the scoped promotions in the lane, or the two
     # drift and retraction silently outruns restoration again.
-    promoted = {flag_value(str(st.get("run") or ""), "--product-id")
+    promoted = {pid
                 for st in steps
                 if "apply_consensus_to_records" in str(st.get("run") or "")
-                and "--write-all" in str(st.get("run") or "")}
-    promoted.discard(None)
+                and "--write-all" in str(st.get("run") or "")
+                for pid in flag_values(str(st.get("run") or ""), "--product-id")}
     # SUBSET, not equality. The safety property is one-directional: every RETRACTABLE product must
     # have a rebuild path, because retraction without one strands a record. The converse is not a
     # hazard -- promoting a product that is not retraction-eligible is always safe, and Acrobat
@@ -680,8 +692,15 @@ def run() -> int:
           "obs-studio" in CONSENSUS_PROMOTION_PRODUCTS)
     check("R8 a product with no promotion step is not retractable",
           "blackmagic-davinci" not in CONSENSUS_PROMOTION_PRODUCTS
-          and "adobe-premiere-pro" not in CONSENSUS_PROMOTION_PRODUCTS
-          and "adobe-acrobat-pro" not in CONSENSUS_PROMOTION_PRODUCTS)
+          and "adobe-premiere-pro" not in CONSENSUS_PROMOTION_PRODUCTS)
+    # Acrobat moved to the other side of this line. It always HAD scoped promotion steps, so R7 was
+    # satisfied all along; only membership was missing. It was granted when vendor-authored posts
+    # stopped being counted, because `--write-all` skips zero-count groups -- so without retraction
+    # no lane could produce the zero shape, and the records kept publishing Adobe's own release
+    # announcement as an accepted user report. R7 above still pins the real invariant.
+    check("R8 Acrobat is retractable, because the lane promotes it",
+          "adobe-acrobat-pro" in CONSENSUS_PROMOTION_PRODUCTS
+          and "adobe-acrobat-reader" in CONSENSUS_PROMOTION_PRODUCTS)
 
     print()
     print("=" * 74)
