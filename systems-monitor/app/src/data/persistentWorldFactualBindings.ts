@@ -4,7 +4,7 @@ import { createSnapshotViewModel } from "./snapshotViewModelFactory";
 import { validatePublicSnapshot } from "./validatePublicSnapshot";
 import { layoffsFactorSourceState } from "./layoffsBranchReadModel";
 
-export type PersistentWorldBindingStatus = "CONNECTED" | "SOURCE_ENABLED_PENDING_ACCEPTANCE" | "SOURCE_IDENTIFIED" | "BLOCKED" | "UNMAPPED";
+export type PersistentWorldBindingStatus = "CONNECTED" | "SOURCE_ENABLED_PENDING_ACCEPTANCE" | "SOURCE_IDENTIFIED" | "BLOCKED" | "FIXTURE_ONLY" | "UNMAPPED";
 
 export interface PersistentWorldFactualBinding {
   status: PersistentWorldBindingStatus;
@@ -60,6 +60,7 @@ export function persistentWorldFactualBinding(label: string): PersistentWorldFac
 /** Resolve a canonical persistent-world factor without confusing a hierarchy
  * alias (for example Initial UI Claims) with a second analytical identity. */
 export function persistentWorldFactualBindingForFactor(canonicalFactorId: string, label: string): PersistentWorldFactualBinding {
+  if (canonicalFactorId.startsWith("fixture-factor:")) return { status: "FIXTURE_ONLY", label };
   const layoffs = layoffsFactorSourceState(canonicalFactorId);
   if (!layoffs) return persistentWorldFactualBinding(label);
   if (layoffs.activationState === "ACCEPTED" && canonicalFactorId === "factor:canonical:initial-claims") {

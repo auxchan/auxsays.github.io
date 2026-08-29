@@ -20,7 +20,16 @@ interface Props {
   reducedMotion: boolean;
   resetVersion: number;
   onSelect: (placementId: string) => void;
+  onNavigateParent: () => void;
   onReset: () => void;
+}
+
+export type PersistentWorldDoubleClickAction = "UP_ONE_LEVEL" | "RESET" | "NONE";
+
+export function persistentWorldDoubleClickAction(hitPlacementId: string | null, parentPlacementId: string | null): PersistentWorldDoubleClickAction {
+  if (!hitPlacementId) return "RESET";
+  if (parentPlacementId && hitPlacementId === parentPlacementId) return "UP_ONE_LEVEL";
+  return "NONE";
 }
 
 const OVERVIEW_SCALE = .205;
@@ -109,7 +118,7 @@ function drawBackground(context: CanvasRenderingContext2D, width: number, height
   vignette.addColorStop(0, "rgba(0,0,0,0)"); vignette.addColorStop(1, "rgba(0,5,9,.58)"); context.fillStyle = vignette; context.fillRect(0, 0, width, height);
 }
 
-export function PremiumPersistentWorldSurface({ model, factualBindings, selectedPlacementId, fullWorld, traceMode, reducedMotion, resetVersion, onSelect, onReset }: Props) {
+export function PremiumPersistentWorldSurface({ model, factualBindings, selectedPlacementId, fullWorld, traceMode, reducedMotion, resetVersion, onSelect, onNavigateParent, onReset }: Props) {
   const hostRef = useRef<HTMLDivElement>(null); const canvasRef = useRef<HTMLCanvasElement>(null);
   const cameraRef = useRef<Camera>(targetCamera(model, selectedPlacementId, fullWorld));
   const mountedAtRef = useRef(performance.now()); const viewportRef = useRef<Viewport>({ zoom: 1, panX: 0, panY: 0 });
@@ -259,13 +268,17 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
   }
   function updateViewport(next: Viewport) { viewportRef.current = next; const host = hostRef.current; if (host) { host.dataset.viewportZoom = next.zoom.toFixed(3); host.dataset.viewportPanX = Math.round(next.panX).toString(); host.dataset.viewportPanY = Math.round(next.panY).toString(); } invalidateRef.current(); }
 
-  return <div ref={hostRef} className="sm-pw-surface sm-pw-surface--premium" role="application" aria-label="Persistent Employment influence world" data-world-id={model.worldId} data-graph-snapshot-id={model.graphSnapshotId} data-layout-version={model.layoutVersion} data-topology-fingerprint={model.topologyFingerprint} data-resident-placement-count={model.coverage.placementCount} data-resident-relationship-count={model.coverage.hierarchyRelationshipCount + model.coverage.syntheticInfluenceCount} data-semantic-node-count={semantic.length} data-factual-binding-count={Object.values(factualBindings).filter((binding) => binding.status === "CONNECTED").length} data-lod-mode={fullWorld ? "FULL_WORLD_DENSITY" : selectedPlacementId ? "FOCUS" : "OVERVIEW"} data-trace-mode={traceMode} data-selected-placement-id={selectedPlacementId ?? ""} data-viewport-zoom="1.000" data-viewport-pan-x="0" data-viewport-pan-y="0" data-glint-period-ms="2500" data-glint-trail="0.085" data-hovered-placement-id={hoveredId ?? ""} onWheel={(event) => {
+  const parentPlacementId = selectedPlacementId ? model.placements[selectedPlacementId]?.parentPlacementId : null;
+
+  return <div ref={hostRef} className="sm-pw-surface sm-pw-surface--premium" role="application" tabIndex={0} aria-label="Persistent Employment influence world" aria-keyshortcuts="Alt+ArrowLeft" data-world-id={model.worldId} data-graph-snapshot-id={model.graphSnapshotId} data-layout-version={model.layoutVersion} data-topology-fingerprint={model.topologyFingerprint} data-resident-placement-count={model.coverage.placementCount} data-resident-relationship-count={model.coverage.hierarchyRelationshipCount + model.coverage.syntheticInfluenceCount} data-semantic-node-count={semantic.length} data-factual-binding-count={Object.values(factualBindings).filter((binding) => binding.status === "CONNECTED").length} data-lod-mode={fullWorld ? "FULL_WORLD_DENSITY" : selectedPlacementId ? "FOCUS" : "OVERVIEW"} data-trace-mode={traceMode} data-selected-placement-id={selectedPlacementId ?? ""} data-parent-placement-id={parentPlacementId ?? ""} data-viewport-zoom="1.000" data-viewport-pan-x="0" data-viewport-pan-y="0" data-glint-period-ms="2500" data-glint-trail="0.085" data-hovered-placement-id={hoveredId ?? ""} onKeyDown={(event) => {
+    if (event.altKey && event.key === "ArrowLeft" && selectedPlacementId) { event.preventDefault(); onNavigateParent(); }
+  }} onWheel={(event) => {
     const started = performance.now(); event.preventDefault(); const bounds = event.currentTarget.getBoundingClientRect(); const current = viewportRef.current; const zoom = Math.max(.55, Math.min(3.25, current.zoom * Math.exp(-event.deltaY * .0014))); const ratio = zoom / current.zoom; const cursorX = event.clientX - bounds.left - bounds.width / 2; const cursorY = event.clientY - bounds.top - bounds.height / 2; updateViewport({ zoom, panX: cursorX - (cursorX - current.panX) * ratio, panY: cursorY - (cursorY - current.panY) * ratio }); event.currentTarget.dataset.wheelHandlerMs = (performance.now() - started).toFixed(3);
   }} onPointerDown={(event) => { if (event.button !== 1) return; event.preventDefault(); event.currentTarget.setPointerCapture(event.pointerId); const current = viewportRef.current; panRef.current = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, panX: current.panX, panY: current.panY, moved: false }; }} onPointerMove={(event) => {
     const bounds = event.currentTarget.getBoundingClientRect(); pointerRef.current = { x: event.clientX - bounds.left, y: event.clientY - bounds.top }; const pan = panRef.current;
     if (pan?.pointerId === event.pointerId) { const dx = event.clientX - pan.startX; const dy = event.clientY - pan.startY; pan.moved ||= Math.hypot(dx, dy) > 3; suppressClickRef.current = pan.moved; updateViewport({ ...viewportRef.current, panX: pan.panX + dx, panY: pan.panY + dy }); return; }
     const started = performance.now(); const hit = hitTest(event); setHoveredId(hit); if (hit) { event.currentTarget.style.setProperty("--pw-hover-x", `${Math.max(14, Math.min(bounds.width - 304, pointerRef.current.x + 18))}px`); event.currentTarget.style.setProperty("--pw-hover-y", `${Math.max(14, Math.min(bounds.height - 246, pointerRef.current.y + 18))}px`); } event.currentTarget.dataset.hoverHitTestMs = (performance.now() - started).toFixed(3); invalidateRef.current();
-  }} onPointerUp={(event) => { if (panRef.current?.pointerId === event.pointerId) { event.currentTarget.releasePointerCapture(event.pointerId); panRef.current = null; } }} onPointerCancel={() => { panRef.current = null; }} onPointerLeave={() => { if (!panRef.current) setHoveredId(null); }} onMouseDown={(event) => { if (event.button === 1) event.preventDefault(); }} onAuxClick={(event) => { if (event.button === 1) event.preventDefault(); }} onDoubleClick={(event) => { if (!hitTest(event)) onReset(); }} onClick={(event) => { if (suppressClickRef.current) { suppressClickRef.current = false; return; } const id = hitTest(event); if (id) onSelect(id); }}>
+  }} onPointerUp={(event) => { if (panRef.current?.pointerId === event.pointerId) { event.currentTarget.releasePointerCapture(event.pointerId); panRef.current = null; } }} onPointerCancel={() => { panRef.current = null; }} onPointerLeave={() => { if (!panRef.current) setHoveredId(null); }} onMouseDown={(event) => { if (event.button === 1) event.preventDefault(); }} onAuxClick={(event) => { if (event.button === 1) event.preventDefault(); }} onDoubleClick={(event) => { const action = persistentWorldDoubleClickAction(hitTest(event), parentPlacementId); if (action === "UP_ONE_LEVEL") onNavigateParent(); else if (action === "RESET") onReset(); }} onClick={(event) => { if (event.detail > 1) return; if (suppressClickRef.current) { suppressClickRef.current = false; return; } const id = hitTest(event); if (id && id !== parentPlacementId) onSelect(id); }}>
     <canvas ref={canvasRef} role="img" aria-label="All 1,111 fixture placements remain resident; premium visual detail and labels are bounded to the current exact-ten neighborhood." />
     <aside className="sm-pw-hover-card" role="tooltip" aria-hidden={!hoveredPlacement} data-visible={Boolean(hoveredPlacement)}>
       {hoveredPlacement && hoveredFactor && <><header><span>{hoveredPlacement.depth === 1 ? "System" : hoveredPlacement.depth === 2 ? "Factor" : hoveredPlacement.depth === 0 ? "Outcome" : "Supporting factor"}</span><strong>{persistentWorldPlacementLabel(model, hoveredPlacement)}</strong>{hoveredValue && <b>{hoveredValue}</b>}</header><dl><div><dt>Purpose</dt><dd>{hoverPurpose(model, hoveredPlacement)}</dd></div><div><dt>Tracks</dt><dd>{hoveredSource?.summary ?? hoveredFactor.definition}</dd></div><div><dt>Why</dt><dd>{hoverWhy(model, hoveredPlacement)}</dd></div></dl><small>{hoveredBinding?.status === "CONNECTED" ? `${hoveredBinding.validTime} · ${hoveredBinding.provider} · click for evidence` : hoveredBinding?.status === "SOURCE_ENABLED_PENDING_ACCEPTANCE" ? "Collector enabled · acceptance pending" : hoveredBinding?.status === "BLOCKED" ? "Official path identified · retrieval blocked" : "Click for full details"}</small></>}

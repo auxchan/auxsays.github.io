@@ -7,6 +7,8 @@ import { persistentWorldFactualBinding } from "../src/data/persistentWorldFactua
 import { PERSISTENT_WORLD_PROFILED_FACTOR_COUNT, persistentWorldCandidateSourceProfile } from "../src/data/persistentWorldSourceCatalog";
 import { persistentWorldMediaFor } from "../src/views/persistent/persistentWorldMedia";
 import { PERSISTENT_GLINT_PERIOD_MS, PERSISTENT_GLINT_TRAIL, blendPremiumColor, compactPersistentValue, createPersistentCameraTransition, easePremiumHover, factorGlyph, persistentFocusRotation, persistentGlintProgress, persistentPlacementAccent, premiumCurveRoute, resolvePersistentLod, resolvePremiumLabels, samplePersistentCameraTransition, shortestAngleDelta } from "../src/views/persistent/persistentWorldVisuals";
+import { persistentWorldDoubleClickAction } from "../src/views/persistent/PremiumPersistentWorldSurface";
+import { persistentWorldUpSelection } from "../src/views/persistent/PersistentWorldShell";
 
 describe("premium persistent-world visual language", () => {
   it("routes curves deterministically without changing endpoints", () => {
@@ -137,6 +139,21 @@ describe("premium persistent-world visual language", () => {
 });
 
 describe("persistent Employment influence world model", () => {
+  it("resolves parent navigation and double-click actions without mutating topology", () => {
+    const model = createPersistentWorld();
+    const levelThree = "fixture-placement:consumer-demand:05:09";
+    const levelTwo = model.placements[levelThree].parentPlacementId!;
+    const levelOne = model.placements[levelTwo].parentPlacementId!;
+    const before = persistentWorldFingerprint(model);
+    expect(persistentWorldUpSelection(model, levelThree)).toBe(levelTwo);
+    expect(persistentWorldUpSelection(model, levelTwo)).toBe(levelOne);
+    expect(persistentWorldUpSelection(model, levelOne)).toBeNull();
+    expect(persistentWorldDoubleClickAction(levelTwo, levelTwo)).toBe("UP_ONE_LEVEL");
+    expect(persistentWorldDoubleClickAction(null, levelTwo)).toBe("RESET");
+    expect(persistentWorldDoubleClickAction(levelThree, levelTwo)).toBe("NONE");
+    expect(persistentWorldFingerprint(model)).toBe(before);
+  });
+
   it("creates one deterministic 1→10→100→1000 fixture world", () => {
     const first = createPersistentWorld();
     const second = createPersistentWorld();
@@ -233,7 +250,7 @@ describe("persistent world local-review shell", () => {
     fireEvent.click(screen.getByRole("button", { name: /01Job OpeningsAccepted factual reading/ }));
     expect(surface.getAttribute("data-selected-placement-id")).toContain("job-openings");
     expect(surface.getAttribute("data-resident-placement-count")).toBe("1111");
-    expect(screen.getAllByText(/Synthetic renderer record/)).toHaveLength(10);
+    expect(screen.getAllByText(/Fixture only · hierarchy tether/)).toHaveLength(10);
     expect(within(inspector).getByRole("heading", { name: "Latest accepted reading" })).toBeTruthy();
     expect(within(inspector).getByRole("heading", { name: "How it connects" })).toBeTruthy();
     expect(within(inspector).getByText("Hierarchy tether · active")).toBeTruthy();
@@ -275,5 +292,39 @@ describe("persistent world local-review shell", () => {
     fireEvent.click(factualLinks[0]);
     window.dispatchEvent(new HashChangeEvent("hashchange"));
     expect(await screen.findByRole("heading", { name: "Labor Market" }, { timeout: 15_000 })).toBeTruthy();
+  });
+
+  it("offers keyboard and touch up-level navigation and explicit fixture-only Level-4 evidence", async () => {
+    window.history.replaceState({}, "", "/systems-monitor/#persistent-world/fixture-placement%3Aconsumer-demand%3A05%3A09");
+    render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
+    const surface = await screen.findByRole("application", { name: "Persistent Employment influence world" }, { timeout: 15_000 });
+    const inspector = screen.getByRole("complementary", { name: "Persistent world factor details" });
+    expect(within(inspector).getByText("Fixture only · not factual")).toBeTruthy();
+    expect(within(inspector).getByText(/hierarchy tether only/)).toBeTruthy();
+    const initialFingerprint = surface.getAttribute("data-topology-fingerprint");
+    fireEvent.keyDown(surface, { key: "ArrowLeft", altKey: true });
+    expect(surface.getAttribute("data-selected-placement-id")).toBe("placement:consumer-demand:real-wage-purchasing-power");
+    fireEvent.click(screen.getByRole("button", { name: "Up one level" }));
+    expect(surface.getAttribute("data-selected-placement-id")).toBe("placement:consumer-demand");
+    fireEvent.click(screen.getByRole("button", { name: "Up one level" }));
+    expect(surface.getAttribute("data-selected-placement-id")).toBe("");
+    expect(surface.getAttribute("data-topology-fingerprint")).toBe(initialFingerprint);
+    expect(window.location.hash).toBe("#persistent-world");
+  });
+
+  it("renders graph-linked What changed history without turning source health into economic adversity", async () => {
+    window.history.replaceState({}, "", "/systems-monitor/#persistent-world");
+    render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
+    await screen.findByRole("heading", { name: "What changed" }, { timeout: 15_000 });
+    expect(screen.getByText("0 governed connector signals")).toBeTruthy();
+    expect(screen.getByText("Structured retrieval path is stale")).toBeTruthy();
+    const staleItem = screen.getByText("Structured retrieval path is stale").closest("li");
+    expect(staleItem?.getAttribute("data-impact")).toBe("UNKNOWN");
+    expect(staleItem?.getAttribute("data-kind")).toBe("SOURCE_STALE");
+    fireEvent.click(screen.getByRole("button", { name: "24h" }));
+    expect(screen.getByText("Structured retrieval path is stale")).toBeTruthy();
+    expect(screen.getByText("Structured retrieval path is stale").closest("li")?.getAttribute("data-impact")).toBe("UNKNOWN");
+    fireEvent.click(screen.getByRole("button", { name: "1y" }));
+    expect(screen.getByText("Structured retrieval path is stale")).toBeTruthy();
   });
 });
