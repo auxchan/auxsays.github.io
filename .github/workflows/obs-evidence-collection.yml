@@ -130,9 +130,11 @@ jobs:
         # the unscoped lane cleared.
         #
         # Two invocations because --product-id takes ONE value and Pro/Reader are distinct
-        # product_ids that are never merged. Neither is in CONSENSUS_PROMOTION_PRODUCTS, so neither
-        # is retraction-eligible; a promotion without retraction-eligibility is always safe, which is
-        # why the test invariant is `retractable SUBSET OF promoted` rather than equality.
+        # product_ids that are never merged. BOTH are now in CONSENSUS_PROMOTION_PRODUCTS, i.e.
+        # retraction-eligible -- granted precisely BECAUSE these steps exist, since `--write-all`
+        # skips zero-count groups and without retraction no lane could produce the zero shape. The
+        # test invariant stays `retractable SUBSET OF promoted` rather than equality, so these two
+        # invocations are what makes that membership legal: delete either one and R7 fails.
         #
         # adobe-premiere-pro is deliberately absent and must stay absent: its record carries 6 hand
         # commits and `_record_coherence_fields` has a premiere branch, so promoting it would replace

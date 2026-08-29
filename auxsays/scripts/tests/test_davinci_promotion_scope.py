@@ -82,13 +82,24 @@ def steps() -> list[dict]:
 
 def flag_value(command: str, flag: str) -> str | None:
     """Value of `flag`, accepting both `--flag value` and `--flag=value`. Property, not spelling."""
+    values = flag_values(command, flag)
+    return values[0] if values else None
+
+
+def flag_values(command: str, flag: str) -> list[str]:
+    """EVERY value of `flag`, in order.
+
+    A single `run:` block may hold several invocations -- the cron lane promotes Acrobat Pro and
+    Reader with two commands in one step. Reading only the first match makes the second invisible,
+    which is exactly how a scope violation could hide INSIDE an existing step's run block."""
     tokens = command.replace("\\" + NEWLINE, " ").split()
+    found: list[str] = []
     for i, tok in enumerate(tokens):
-        if tok == flag:
-            return tokens[i + 1] if i + 1 < len(tokens) else None
-        if tok.startswith(flag + "="):
-            return tok.split("=", 1)[1]
-    return None
+        if tok == flag and i + 1 < len(tokens):
+            found.append(tokens[i + 1])
+        elif tok.startswith(flag + "="):
+            found.append(tok.split("=", 1)[1])
+    return found
 
 
 def promotion_steps() -> list[tuple[int, dict, str]]:
@@ -267,8 +278,7 @@ def run() -> int:
     promoted_here = {pid
                      for st in steps()
                      if "apply_consensus_to_records" in str(st.get("run") or "")
-                     for pid in [flag_value(str(st.get("run") or ""), "--product-id")]
-                     if pid}
+                     for pid in flag_values(str(st.get("run") or ""), "--product-id")}
     check("D11 the retractable products are promoted by the cron lane, not this one",
           not (set(CONSENSUS_PROMOTION_PRODUCTS) & promoted_here),
           f"promoted_here={sorted(promoted_here)} retractable={sorted(CONSENSUS_PROMOTION_PRODUCTS)}")

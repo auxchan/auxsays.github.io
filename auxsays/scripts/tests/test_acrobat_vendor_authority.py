@@ -18,6 +18,7 @@ Offline: no network, no repo writes.
 """
 from __future__ import annotations
 
+import ast
 import re
 import sys
 import traceback
@@ -111,6 +112,34 @@ def run() -> int:
 
     print()
     print("=" * 96)
+    print("A2b  a MEMBER title may contain announcement vocabulary  (regression: 10/10 destroyed)")
+    print("=" * 96)
+    # The corpus contains no member title carrying a trigger token, so A8's "0 false positives over
+    # 587 rows" was TRUE AND VACUOUS -- it could not fail no matter how broad the rule got. These
+    # cases are the ones that actually constrain it. "update release", "new release" and
+    # "is now available" carry no vendor semantics; the last is Acrobat's own updater dialog string.
+    MEMBER_TITLES = [
+        "Crashes since the June update release",
+        "Printing broken after the June 2021 update release",
+        "Release notes don't mention this printing regression",
+        "Reader crashes after the new release",
+        "New release 21.005.20048 breaks printing on Windows 10",
+        "Acrobat says an update is now available but install fails",
+        "Reader keeps telling me updates are now available - loop",
+        "What's new in 21.005.20048 broke my print workflow",
+        "Was this printing bug ever announced?",
+        "Anyone else? Acrobat announces update then crashes",
+    ]
+    for t in MEMBER_TITLES:
+        check(f"A2b.1 member title kept: {t[:52]!r}", authority(t, "") == "", authority(t, ""))
+    check("A2b.2 every one of them DOES trip the announcement vocabulary",
+          all(ac.ACROBAT_VENDOR_ANNOUNCEMENT_TITLE_RE.search(t) for t in MEMBER_TITLES))
+    check("A2b.3 the vendor title states no problem and is still refused",
+          not ac.ACROBAT_MEMBER_TITLE_CUE_RE.search(ANNOUNCE_TITLE)
+          and authority(ANNOUNCE_TITLE) == "vendor_release_announcement")
+
+    print()
+    print("=" * 96)
     print("A3  title-anchored: a member may DISCUSS a release without becoming one")
     print("=" * 96)
     check("A3.1 'update release' in the BODY does not refuse",
@@ -137,9 +166,16 @@ def run() -> int:
           authority(ANNOUNCE_TITLE, "") == "vendor_release_announcement")
     src = (ROOT / "scripts" / "patch_collectors" / "adobe_acrobat_community.py").read_text(encoding="utf-8")
     fn = src.split("def acrobat_vendor_authority", 1)[1].split("\ndef ", 1)[0]
+    # Parsed, not grepped: a substring check breaks on any local whose name contains "text".
+    tree = ast.parse(src)
+    target = next((n for n in ast.walk(tree)
+                   if isinstance(n, ast.FunctionDef) and n.name == "acrobat_vendor_authority"), None)
+    reads_text = target is not None and any(
+        isinstance(n, ast.Name) and n.id == "text" and isinstance(n.ctx, ast.Load)
+        for n in ast.walk(target))
     check("A4.4 the function body never reads its `text` argument",
-          "text" not in fn.split('"""')[2] if fn.count('"""') >= 2 else False,
-          "text is referenced in code, not just the docstring")
+          target is not None and not reads_text,
+          "the `text` parameter is loaded somewhere in the body")
 
     print()
     print("=" * 96)

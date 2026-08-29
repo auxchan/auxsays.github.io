@@ -192,6 +192,24 @@ ACROBAT_VENDOR_ANNOUNCEMENT_TITLE_RE = re.compile(
     r"|(?:is|are)\s+now\s+available|release\s+is\s+now|new\s+release)\b",
     re.I,
 )
+# ...cancelled when the TITLE ITSELF states a problem or asks a question. Several of the tokens
+# above carry no vendor semantics at all -- "update release", "new release" and "is now available"
+# are ordinary English, and the last is Acrobat's own updater dialog string, which a member will
+# quote. Without this, "Crashes since the June update release" and "New release 21.005.20048 breaks
+# printing" were both refused as vendor-authored: 10 of 10 realistic member titles destroyed.
+#
+# This does NOT reopen the cancellation the announcement rule was written to defeat. That one was
+# body-scoped, and an announcement's BODY enumerates the defects it fixes, so failure words there
+# are expected. A publisher's TITLE names the release ("Adobe Acrobat and Reader DC - June 2021
+# Update Release") and carries no symptom or question; a member's title states what broke.
+ACROBAT_MEMBER_TITLE_CUE_RE = re.compile(
+    r"\?"
+    r"|\b(?:crash\w*|fail\w*|broke\w*|break\w*|error\w*|corrupt\w*|freez\w*|hang\w*|stuck"
+    r"|regress\w*|bug|bugs|issue\w*|problem\w*|glitch\w*|loop|lag\w*|slow|blank|missing|lost"
+    r"|not\s+responding|won'?t|will\s+not|can'?t|cannot|unable|doesn'?t|does\s+not|don'?t"
+    r"|no\s+longer|stopped|stops|refus\w*|denied|help|anyone\s+else)\b",
+    re.I,
+)
 
 # NOT IMPLEMENTED, deliberately: Adobe support documents ("Problem : ... Solution: ...").
 # One is counted today (thread 1288217, adobe-acrobat-pro 21.005.20058) and stays counted. A
@@ -208,14 +226,22 @@ ACROBAT_VENDOR_ANNOUNCEMENT_TITLE_RE = re.compile(
 def acrobat_vendor_authority(title: str, text: str) -> str:
     """Vendor-authority reason for this post, or '' when it reads as a member report.
 
-    Returns a stable reason token; never raises. Refuses exactly one shape -- an announcement
-    TITLE -- so a gap here is a missed refusal, never a false accusation against a user. `text` is
-    accepted for call-site symmetry and is deliberately NOT read; see the note above on why body
-    prose is not a sound authority signal on this platform.
+    Returns a stable reason token; never raises. Refuses exactly one shape: a title that uses
+    announcement vocabulary AND states no problem of its own. `text` is accepted for call-site
+    symmetry and is deliberately NOT read; see the note above on why body prose is not a sound
+    authority signal on this platform.
+
+    The refusal is narrow ON PURPOSE, because it is irreversible: `append_evidence_rows` builds its
+    dedupe sets from ALL rows regardless of `counted`, so a member report refused here is never
+    re-collected. Missing a vendor announcement costs one over-counted report; refusing a member
+    costs that report permanently. When those trade against each other, miss the announcement.
     """
-    if ACROBAT_VENDOR_ANNOUNCEMENT_TITLE_RE.search(str(title or "")):
-        return "vendor_release_announcement"
-    return ""
+    text_title = str(title or "")
+    if not ACROBAT_VENDOR_ANNOUNCEMENT_TITLE_RE.search(text_title):
+        return ""
+    if ACROBAT_MEMBER_TITLE_CUE_RE.search(text_title):
+        return ""
+    return "vendor_release_announcement"
 
 
 # --- specific Adobe Community thread/message URL -----------------------------

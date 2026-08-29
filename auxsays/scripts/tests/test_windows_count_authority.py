@@ -676,10 +676,11 @@ def run() -> int:
                 for pid in flag_values(str(st.get("run") or ""), "--product-id")}
     # SUBSET, not equality. The safety property is one-directional: every RETRACTABLE product must
     # have a rebuild path, because retraction without one strands a record. The converse is not a
-    # hazard -- promoting a product that is not retraction-eligible is always safe, and Acrobat
-    # Pro/Reader need exactly that (they can drift, but never retract). Equality forbade giving them
-    # a rebuild path at all, which is how 83 Acrobat records came to have none once the unscoped
-    # --write-all in davinci-updates.yml was scoped away.
+    # hazard -- promoting a product that is not retraction-eligible is always safe. Equality forbade
+    # giving such a product a rebuild path at all, which is how 83 Acrobat records came to have none
+    # once the unscoped --write-all in davinci-updates.yml was scoped away. Acrobat has since been
+    # granted retraction-eligibility BECAUSE those promotion steps already existed; it now sits on
+    # the retractable side of this subset, not the drift-only side.
     check("R7 every retractable product has a scoped promotion in the lane",
           set(CONSENSUS_PROMOTION_PRODUCTS) <= promoted,
           f"missing={sorted(set(CONSENSUS_PROMOTION_PRODUCTS) - promoted)} "
