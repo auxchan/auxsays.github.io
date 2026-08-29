@@ -82,6 +82,51 @@ jobs:
           fi
 
 
+      # THE LANE THAT ADVANCES A PATCH IDENTITY MUST REPAIR THE DRIFT IT CREATES.
+      #
+      # Ingestion moves a Windows record's target_kb / target_os_build to the new cumulative update.
+      # Every report accepted for the superseded KB instantly becomes `stale_due_to_patch_rollover`,
+      # so the record's canonical count drops -- usually to zero -- at the instant this lane commits.
+      # Nothing here used to recompute it, so the rollover was published and deployed with the old
+      # count still attached to the new identity, and stayed that way until the evidence lane's next
+      # cron. Both workflows carry the identical `17 */6 * * *` and share the writeback concurrency
+      # group, and GitHub has queued evidence collection FIRST in every observed slot, so the repair
+      # always landed a full cycle late. Measured on 2026-08-28: 25H2 published 14 reports whose
+      # canonical population was 0, and across 16 target advances in git history not one had ever
+      # changed update_report_count in the same commit.
+      #
+      # Scoped to the products this lane can actually invalidate. Windows is the only product whose
+      # EXISTING record's identity mutates in place; for every other product a new version is a new
+      # record, which strands no evidence. An unscoped reconcile here would let a lane that
+      # collected nothing rewrite every other product's counts.
+      # Only when this run could actually have advanced a Windows identity. `source` is an optional
+      # product_id or company_id; a dispatch scoped to some other product ingested no Windows record
+      # and must not reconcile or promote one -- that is the same "a lane must not rewrite what it
+      # never collected" rule these steps exist to honour, applied to the steps themselves.
+      - name: Converge records whose patch identity this run advanced
+        if: ${{ github.event.inputs.dry_run != 'true'
+          && (github.event.inputs.source == '' || github.event.inputs.source == null
+              || github.event.inputs.source == 'microsoft-windows-11'
+              || github.event.inputs.source == 'microsoft') }}
+        run: |
+          python auxsays/scripts/build_consensus_from_evidence.py \
+            --product-id microsoft-windows-11 \
+            --reconcile-only
+
+      # The repopulate half of the same lifecycle: if the new identity already has matching
+      # evidence, promotion rebuilds the source list and count-bearing prose that reconciliation's
+      # zero-state retraction would otherwise have to leave empty. Must sit BEFORE QA, the same
+      # ordering the evidence lane uses and `test_davinci_promotion_scope` pins.
+      - name: Promote Windows consensus to its current patch identity
+        if: ${{ github.event.inputs.dry_run != 'true'
+          && (github.event.inputs.source == '' || github.event.inputs.source == null
+              || github.event.inputs.source == 'microsoft-windows-11'
+              || github.event.inputs.source == 'microsoft') }}
+        run: |
+          python auxsays/scripts/apply_consensus_to_records.py \
+            --product-id microsoft-windows-11 \
+            --write-all --confirm-write
+
       - name: Validate logo assets before commit
         if: ${{ github.event.inputs.dry_run != 'true' }}
         run: python auxsays/scripts/validate_logo_assets.py
