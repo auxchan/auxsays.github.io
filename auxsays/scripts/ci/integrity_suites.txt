@@ -40,7 +40,7 @@
 auxsays/scripts/tests/test_acrobat_vendor_authority.py = 49
 auxsays/scripts/tests/test_audit_consensus_evidence.py = 18
 auxsays/scripts/tests/test_automation_writeback.py = 134
-auxsays/scripts/tests/test_ci_integrity_runner.py = 38
+auxsays/scripts/tests/test_ci_integrity_runner.py = 39
 auxsays/scripts/tests/test_collector_ownership.py = 52
 auxsays/scripts/tests/test_collector_transaction.py = 23
 auxsays/scripts/tests/test_collector_txn_nested_root.py = 26
@@ -128,9 +128,10 @@ auxsays/scripts/tests/test_adobe_premiere_collector.py
 auxsays/scripts/tests/test_davinci_promotion_scope.py
 
 [environment_specific]
-# test_monitoring_status_render exits 0 with "SKIP fixture Jekyll build unavailable" when
-# `bundle exec jekyll build` is missing. On a runner without Ruby it would report green while
-# asserting nothing, which is the silent-skip failure mode this runner exists to prevent.
+# test_monitoring_status_render needs `bundle exec jekyll build`, which this job does not install.
+# It prints NO `Results:` line at all, so the runner would treat it as NO RESULTS LINE and fail the
+# build loudly -- the consequence of including it is a permanently red check, not a silent pass.
+# (An earlier version of this note had that backwards.) Excluded until it can run or fail meaningfully.
 #
 # The three .mjs suites are Node, not Python: one is wired into auxsays/package.json
 # (`npm run test:local-browser-capture`), the others cover browser-capture tooling. They were

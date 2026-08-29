@@ -191,6 +191,11 @@ def tracked_snapshot() -> dict[str, str] | None:
     """
     try:
         out = subprocess.run(["git", "ls-files", "-z"], cwd=REPO, capture_output=True, check=True)
+        # `ls-files` reads the INDEX, so a brand-new untracked file is invisible to it: a test could
+        # fabricate auxsays/updates/generated/<record>.md and the guard would still say "clean".
+        # Porcelain with -uall is what actually sees an addition.
+        status = subprocess.run(["git", "status", "--porcelain", "-uall", "-z"],
+                                cwd=REPO, capture_output=True, check=True)
     except (OSError, subprocess.CalledProcessError):
         return None
     snap: dict[str, str] = {}
@@ -201,6 +206,7 @@ def tracked_snapshot() -> dict[str, str] | None:
         snap[rel] = _hash_path(REPO / rel)
     for rel in WATCHED_IGNORED:
         snap[f"[ignored] {rel}"] = _hash_path(REPO / rel)
+    snap["[untracked+status]"] = hashlib.sha256(status.stdout).hexdigest()
     return snap
 
 
@@ -374,7 +380,11 @@ def main(argv: list[str] | None = None) -> int:
             print(f"  - {name}: {detail.splitlines()[0]}")
 
     if before is None:
-        print("\nworking-tree check: SKIPPED (git unavailable)")
+        # FAIL CLOSED. This runner's doctrine is that a skip is a failure, and a write guard that
+        # quietly disables itself when git is unavailable was the one place still exempt from it:
+        # the run reported "SKIPPED" and still exited 0 while a test clobbered a tracked file.
+        print("\nworking-tree check: FAILED -- git unavailable, so writes cannot be detected")
+        exit_code = max(exit_code, MUTATION_ERROR)
     else:
         moved = diff_snapshots(before, tracked_snapshot() or {})
         if moved:

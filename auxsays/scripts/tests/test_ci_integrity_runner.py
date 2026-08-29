@@ -78,6 +78,11 @@ def run() -> int:
     check("R1.6 blocking is non-empty", counts["blocking"] > 0, str(counts))
     check("R1.7 excluded categories stay small and deliberate",
           sum(counts[c] for c in mod.NOT_EXECUTED) < len(on_disk) // 4, str(counts))
+    # Parking a suite in a never-executed category is otherwise silent and unbounded: 14 more could
+    # be moved to [stale] before the ratio check above objected. [stale] is documented as a
+    # transient holding pen that ships empty, so assert exactly that.
+    check("R1.8 [stale] is empty -- red suites get repaired, not parked",
+          counts["stale"] == 0, str(sections["stale"]))
 
     print()
     print("=" * 92)

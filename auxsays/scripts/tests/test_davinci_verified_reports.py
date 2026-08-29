@@ -471,7 +471,11 @@ def run() -> int:
         "stable writeback removes archived-only beta wording",
         "archived" not in stable_prose.lower()
         and "primary public record" not in stable_prose.lower()
-        and "stable" in stable_prose.lower()
+        # The exact scoping phrase, not a bag of words. Widening the SEARCH from record_note to the
+        # managed prose fields was the necessary part of this repair; weakening the PREDICATE to
+        # "stable" and "beta" appearing somewhere was not, and it cost real detection -- deleting
+        # every "stable/Studio" while leaving the word "stable" elsewhere then passed 68/68.
+        and "stable/Studio" in stable_prose
         and "beta" in stable_prose.lower(),
         f"stable_prose={stable_prose!r}",
     )
@@ -489,8 +493,11 @@ def run() -> int:
         # The stable/beta scoping is still stated somewhere in managed prose, AND the decision body
         # is still DERIVED FROM EVIDENCE rather than hard-coded -- b5259931 replaced the literal
         # sentence with _issue_cluster_sentence(themes), so the theme is the durable assertion.
-        "stable" in active_prose.lower() and "beta" in active_prose.lower()
-        and "render/export failures" in active_prose,
+        "stable/Studio" in active_prose and "beta" in active_prose.lower()
+        # Pinned to the decision body specifically: the theme must reach the field the reader sees,
+        # not merely appear somewhere in the managed prose, or planting the literal in a static
+        # description would satisfy it while the body stopped deriving from evidence at all.
+        and "render/export failures" in str(active_stable_fields.get("update_decision_body") or ""),
         f"active_prose={active_prose!r}",
     )
 
