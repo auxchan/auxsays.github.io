@@ -17,103 +17,106 @@
 #
 # Every entry outside `blocking`/`diagnostic` carries the reason it is excluded. Nothing is excluded
 # without one.
+#
+# Entries are REPO-RELATIVE PATHS, and discovery is repo-wide and recursive: a single non-recursive
+# glob of one directory let a new suite bypass CI five ways (a `*_test.py` suffix, a subdirectory,
+# another tests root, the repo root, a file beside the runner), and three real .mjs suites were
+# already living outside the closed world.
+#
+# Executed entries declare `= N`, the governed number of checks the suite must report. A
+# self-consistent summary proves nothing about how much work was done -- `0/0 passed, 0 failed` is
+# perfectly consistent and perfectly empty -- so this number is what makes silent coverage loss a
+# failed build. Change it deliberately, in the same commit as the test change.
 
 [blocking]
 # --- canonical patch identity -------------------------------------------------
-test_patch_index_identity.py
-test_windows_patch_identity.py
-test_frontmatter_roundtrip.py
-
 # --- build identity and the exact-build write path ----------------------------
-test_powerpoint_build_identity.py
-test_powerpoint_realpath_identity.py
-test_powerpoint_build_roles.py
-test_powerpoint_write_path_safety.py
-test_powerpoint_multibuild_ingestion.py
-test_powerpoint_attribution.py
-test_powerpoint_context_resolution.py
-test_transactional_writeback.py
-test_automation_writeback.py
-
 # --- collector field ownership and write authority ----------------------------
-test_collector_write_authority.py
-test_collector_ownership.py
-test_collector_transaction.py
-test_collector_txn_nested_root.py
-test_ownership_identity_fixes.py
-test_ownership_reason_codes.py
-
 # --- consensus count authority and workflow ordering --------------------------
-test_windows_count_authority.py
-test_report_count_reconciliation.py
-
 # --- evidence projection, acceptance and dedupe -------------------------------
-test_obs_consensus_projection.py
-test_obs_consensus_acceptance.py
-test_evidence_strength_thresholds.py
-test_reader_evidence_identity.py
-test_evidence_method_health_dupes.py
-
 # --- version / authority attribution ------------------------------------------
-test_version_outcome_attribution.py
-test_windows_rollover_convergence.py
-test_davinci_bare_version_identity.py
-test_normalize_davinci_version.py
-test_acrobat_vendor_authority.py
-test_premiere_editorial_protection.py
-
 # --- generated-record QA and coherence gates ----------------------------------
-test_qa_patch_records.py
-test_audit_consensus_evidence.py
-test_validate_ingestion_sources.py
-test_validate_evidence_method_health.py
-test_teams_record_cleanup.py
-test_davinci_verified_reports.py
-
 # --- the CI runner is policy, so it is tested like production code ---------------
-test_ci_integrity_runner.py
+auxsays/scripts/tests/test_acrobat_vendor_authority.py = 49
+auxsays/scripts/tests/test_audit_consensus_evidence.py = 18
+auxsays/scripts/tests/test_automation_writeback.py = 134
+auxsays/scripts/tests/test_ci_integrity_runner.py = 38
+auxsays/scripts/tests/test_collector_ownership.py = 52
+auxsays/scripts/tests/test_collector_transaction.py = 23
+auxsays/scripts/tests/test_collector_txn_nested_root.py = 26
+auxsays/scripts/tests/test_collector_write_authority.py = 104
+auxsays/scripts/tests/test_davinci_bare_version_identity.py = 55
+auxsays/scripts/tests/test_davinci_verified_reports.py = 68
+auxsays/scripts/tests/test_evidence_method_health_dupes.py = 4
+auxsays/scripts/tests/test_evidence_strength_thresholds.py = 38
+auxsays/scripts/tests/test_frontmatter_roundtrip.py = 99
+auxsays/scripts/tests/test_normalize_davinci_version.py = 53
+auxsays/scripts/tests/test_obs_consensus_acceptance.py = 27
+auxsays/scripts/tests/test_obs_consensus_projection.py = 49
+auxsays/scripts/tests/test_ownership_identity_fixes.py = 47
+auxsays/scripts/tests/test_ownership_reason_codes.py = 48
+auxsays/scripts/tests/test_patch_index_identity.py = 82
+auxsays/scripts/tests/test_powerpoint_attribution.py = 65
+auxsays/scripts/tests/test_powerpoint_build_identity.py = 55
+auxsays/scripts/tests/test_powerpoint_build_roles.py = 108
+auxsays/scripts/tests/test_powerpoint_context_resolution.py = 101
+auxsays/scripts/tests/test_powerpoint_multibuild_ingestion.py = 165
+auxsays/scripts/tests/test_powerpoint_realpath_identity.py = 40
+auxsays/scripts/tests/test_powerpoint_write_path_safety.py = 68
+auxsays/scripts/tests/test_premiere_editorial_protection.py = 13
+auxsays/scripts/tests/test_qa_patch_records.py = 30
+auxsays/scripts/tests/test_reader_evidence_identity.py = 17
+auxsays/scripts/tests/test_report_count_reconciliation.py = 17
+auxsays/scripts/tests/test_teams_record_cleanup.py = 6
+auxsays/scripts/tests/test_transactional_writeback.py = 10
+auxsays/scripts/tests/test_validate_evidence_method_health.py = 10
+auxsays/scripts/tests/test_validate_ingestion_sources.py = 30
+auxsays/scripts/tests/test_version_outcome_attribution.py = 64
+auxsays/scripts/tests/test_windows_count_authority.py = 89
+auxsays/scripts/tests/test_windows_patch_identity.py = 29
+auxsays/scripts/tests/test_windows_rollover_convergence.py = 33
 
 [diagnostic]
 # Deterministic and offline; broader surface or presentation-level. Also blocking in CI --
 # "diagnostic" names the domain, not a weaker guarantee.
-test_adobe_acrobat_adapter.py
-test_adobe_acrobat_community_collector.py
-test_adobe_photoshop_adapter.py
-test_adobe_release_notes_adapter.py
-test_blackmagic_support_downloads.py
-test_davinci_creative_cow_source.py
-test_davinci_reddit_source.py
-test_elgato_help_center_adapter.py
-test_failsoft_collection.py
-test_http_credential_scope.py
-test_microsoft_learn_qna_source.py
-test_microsoft_office_updates_adapter.py
-test_microsoft_powerpoint_collector.py
-test_microsoft_release_health_adapter.py
-test_microsoft_windows_collector.py
-test_monitoring_status.py
-test_orchestration_production_adoption.py
-test_orchestration_r1.py
-test_patch_ingest_front_matter.py
-test_patch_ingest_record_limit.py
-test_powerpoint_production_readiness.py
-test_product_page_layout.py
-test_promote_local_playwright_captures.py
-test_public_method_health_presentation.py
-test_reddit_source.py
-test_revalidate_consensus_evidence.py
-test_route_integrity.py
-test_run_patch_evidence_collection.py
-test_runtime_budget.py
-test_vendor_page_layout.py
-test_write_update_record_official_issues.py
+auxsays/scripts/tests/test_adobe_acrobat_adapter.py = 48
+auxsays/scripts/tests/test_adobe_acrobat_community_collector.py = 89
+auxsays/scripts/tests/test_adobe_photoshop_adapter.py = 63
+auxsays/scripts/tests/test_adobe_release_notes_adapter.py = 8
+auxsays/scripts/tests/test_blackmagic_support_downloads.py = 10
+auxsays/scripts/tests/test_davinci_creative_cow_source.py = 23
+auxsays/scripts/tests/test_davinci_reddit_source.py = 27
+auxsays/scripts/tests/test_elgato_help_center_adapter.py = 75
+auxsays/scripts/tests/test_failsoft_collection.py = 25
+auxsays/scripts/tests/test_http_credential_scope.py = 55
+auxsays/scripts/tests/test_microsoft_learn_qna_source.py = 17
+auxsays/scripts/tests/test_microsoft_office_updates_adapter.py = 70
+auxsays/scripts/tests/test_microsoft_powerpoint_collector.py = 101
+auxsays/scripts/tests/test_microsoft_release_health_adapter.py = 68
+auxsays/scripts/tests/test_microsoft_windows_collector.py = 59
+auxsays/scripts/tests/test_monitoring_status.py = 37
+auxsays/scripts/tests/test_orchestration_production_adoption.py = 73
+auxsays/scripts/tests/test_orchestration_r1.py = 55
+auxsays/scripts/tests/test_patch_ingest_front_matter.py = 15
+auxsays/scripts/tests/test_patch_ingest_record_limit.py = 77
+auxsays/scripts/tests/test_powerpoint_production_readiness.py = 75
+auxsays/scripts/tests/test_product_page_layout.py = 52
+auxsays/scripts/tests/test_promote_local_playwright_captures.py = 36
+auxsays/scripts/tests/test_public_method_health_presentation.py = 72
+auxsays/scripts/tests/test_reddit_source.py = 8
+auxsays/scripts/tests/test_revalidate_consensus_evidence.py = 49
+auxsays/scripts/tests/test_route_integrity.py = 9
+auxsays/scripts/tests/test_run_patch_evidence_collection.py = 76
+auxsays/scripts/tests/test_runtime_budget.py = 37
+auxsays/scripts/tests/test_vendor_page_layout.py = 26
+auxsays/scripts/tests/test_write_update_record_official_issues.py = 17
 
 [network]
 # Makes live external requests: 301 connection attempts to reddit.com / web.archive.org in one run,
 # measured. It degrades gracefully (72/72 offline) but costs ~530s online vs ~47s offline and its
 # runtime is rate-limit dependent, so it must not gate a pull request. Its own docstring says it
 # must not perform live requests -- that is a real bug in the test, tracked as follow-up.
-test_adobe_premiere_collector.py
+auxsays/scripts/tests/test_adobe_premiere_collector.py
 
 [mutating]
 # Runs `apply_consensus_to_records.py --write-all --confirm-write` against the LIVE checkout
@@ -122,13 +125,23 @@ test_adobe_premiere_collector.py
 # Demonstrated: with one managed field edited as a PR would, the test REWRITES the record and still
 # exits 0, so CI would be green while silently reverting the contributor's diff. Must be rewritten
 # against a temp copy before it can gate anything.
-test_davinci_promotion_scope.py
+auxsays/scripts/tests/test_davinci_promotion_scope.py
 
 [environment_specific]
-# Exits 0 with "SKIP fixture Jekyll build unavailable" when `bundle exec jekyll build` is missing.
-# On a runner without Ruby it would report green while asserting nothing, which is the silent-skip
-# failure mode this runner exists to prevent. Excluded until it can fail closed.
-test_monitoring_status_render.py
+# test_monitoring_status_render exits 0 with "SKIP fixture Jekyll build unavailable" when
+# `bundle exec jekyll build` is missing. On a runner without Ruby it would report green while
+# asserting nothing, which is the silent-skip failure mode this runner exists to prevent.
+#
+# The three .mjs suites are Node, not Python: one is wired into auxsays/package.json
+# (`npm run test:local-browser-capture`), the others cover browser-capture tooling. They were
+# discovered by the repo-wide scan -- they had been outside the closed world entirely, which is
+# precisely the hole that scan was widened to close. Running them needs a Node toolchain this job
+# does not install; classifying them keeps them visible and makes adding a Node lane a deliberate
+# decision rather than something nobody notices is missing.
+auxsays/assets/js/patch-table-sort.test.mjs
+auxsays/scripts/tests/test_monitoring_status_render.py
+auxsays/tools/local-browser-capture/tests/capture-core.test.mjs
+auxsays/tools/local-playwright-capture/scripts/test-capture.mjs
 
 [stale]
 # EMPTY, deliberately. Both suites that were red on main were diagnosed as stale test assumptions
@@ -137,3 +150,5 @@ test_monitoring_status_render.py
 # test_davinci_verified_reports pinned literal prose to a field the product had stopped writing.
 # A permanently-red allowlist teaches contributors to ignore CI, so this category exists to be
 # visible when it is used, and to be empty the rest of the time.
+
+

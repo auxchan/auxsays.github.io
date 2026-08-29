@@ -70,7 +70,8 @@ def run() -> int:
           str(sorted(on_disk - classified)))
     check("R1.3 no manifest entry lacks a file", classified <= on_disk,
           str(sorted(classified - on_disk)))
-    check("R1.4 this very test file is classified", Path(__file__).name in classified)
+    own = Path(__file__).resolve().relative_to(ROOT.parent).as_posix()
+    check("R1.4 this very test file is classified", own in classified, own)
     check("R1.5 categories are exactly the documented set",
           set(sections) == set(mod.CATEGORIES), str(sorted(sections)))
     counts = {c: len(sections[c]) for c in mod.CATEGORIES}
@@ -127,9 +128,12 @@ def run() -> int:
     print("=" * 92)
     with tempfile.TemporaryDirectory() as td:
         tmp = Path(td)
-        original_tests = mod.TESTS
+        original_tests, original_repo = mod.TESTS, mod.REPO
         try:
+            # Suites are addressed relative to the repo root, so point the runner's root at the
+            # temp dir for these synthetic suites.
             mod.TESTS = tmp
+            mod.REPO = tmp
             write_suite(tmp, "test_ok.py", """
                 print("Results: 3/3 passed, 0 failed")
                 """)
@@ -202,7 +206,77 @@ def run() -> int:
                 mod.PER_TEST_TIMEOUT = saved
             check("R3.7 a hung suite times out and fails", not ok and "TIMEOUT" in detail, detail[:120])
         finally:
-            mod.TESTS = original_tests
+            mod.TESTS, mod.REPO = original_tests, original_repo
+
+    print()
+    print("=" * 92)
+    print("R6  a suite cannot misreport how much work it did")
+    print("=" * 92)
+    with tempfile.TemporaryDirectory() as td:
+        tmp = Path(td)
+        original_tests, original_repo = mod.TESTS, mod.REPO
+        saved_expected = dict(mod.EXPECTED_CHECKS)
+        try:
+            mod.TESTS = tmp
+            mod.REPO = tmp
+            # A decoy summary on stderr must not decide the verdict: stdout is the only authority.
+            write_suite(tmp, "test_stderr_decoy.py", """
+                import sys
+                print("  FAIL  the real outcome")
+                print("Results: 0/1 passed, 1 failed")
+                print("Results: 7/7 passed, 0 failed", file=sys.stderr)
+                """)
+            ok, detail, _, _, _sk, _ = mod.run_one("test_stderr_decoy.py")
+            check("R6.1 a passing summary on stderr cannot mask a failing one on stdout",
+                  not ok, detail.splitlines()[0][:120])
+
+            write_suite(tmp, "test_shrunk.py", """
+                print("Results: 3/40 passed, 0 failed")
+                """)
+            ok, detail, _, _, _sk, _ = mod.run_one("test_shrunk.py")
+            check("R6.2 a summary whose parts do not add up fails",
+                  not ok and "SUMMARY INCONSISTENT" in detail, detail.splitlines()[0][:120])
+
+            write_suite(tmp, "test_lying.py", """
+                print("  FAIL  one")
+                print("  FAIL  two")
+                print("Results: 9/9 passed, 0 failed")
+                """)
+            ok, detail, _, _, _sk, _ = mod.run_one("test_lying.py")
+            check("R6.3 printed FAIL lines beside '0 failed' fail",
+                  not ok and "SUMMARY INCONSISTENT" in detail, detail.splitlines()[0][:120])
+
+            # Governed coverage size: a consistent-but-empty suite must not pass.
+            write_suite(tmp, "test_empty.py", """
+                print("Results: 0/0 passed, 0 failed")
+                """)
+            mod.EXPECTED_CHECKS["test_empty.py"] = 12
+            ok, detail, _, _, _sk, _ = mod.run_one("test_empty.py")
+            check("R6.4 a suite that stops running checks fails on declared count",
+                  not ok and "CHECK COUNT DRIFT" in detail, detail.splitlines()[0][:120])
+
+            write_suite(tmp, "test_grew.py", """
+                print("Results: 14/14 passed, 0 failed")
+                """)
+            mod.EXPECTED_CHECKS["test_grew.py"] = 12
+            ok, detail, _, _, _sk, _ = mod.run_one("test_grew.py")
+            check("R6.5 gaining checks also fails, so the declared number stays honest",
+                  not ok and "CHECK COUNT DRIFT" in detail, detail.splitlines()[0][:120])
+
+            mod.EXPECTED_CHECKS["test_grew.py"] = 14
+            ok, _, _, _, _sk, _ = mod.run_one("test_grew.py")
+            check("R6.6 a matching declared count passes", ok)
+        finally:
+            mod.TESTS, mod.REPO = original_tests, original_repo
+            mod.EXPECTED_CHECKS.clear()
+            mod.EXPECTED_CHECKS.update(saved_expected)
+
+    check("R6.7 every executed suite declares a check count",
+          all(n in mod.EXPECTED_CHECKS for c in mod.EXECUTED for n in sections[c]),
+          str([n for c in mod.EXECUTED for n in sections[c] if n not in mod.EXPECTED_CHECKS][:5]))
+    check("R6.8 discovery is repo-wide, not one directory",
+          any(not n.startswith("auxsays/scripts/tests/") for n in on_disk),
+          "discovery found nothing outside the python tests dir")
 
     print()
     print("=" * 92)

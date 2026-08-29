@@ -68,14 +68,22 @@ jobs:
         # this job deliberately does nothing as root. GEM_HOME is exported so the `ruby` the tests
         # spawn resolves the gem.
         #
-        # BEST EFFORT on purpose. This is the one step that reaches the network, and a rubygems.org
-        # outage must not redden every pull request -- that is the network-dependence this design
-        # forbids in the blocking path. Without the gem, test_public_method_health_presentation
-        # skips its 51 render assertions; the runner now COUNTS and NAMES skipped assertions, so
-        # the reduced coverage is visible in the summary instead of silently passing as 21/21.
-        continue-on-error: true
+        # REQUIRED, and the tradeoff is deliberate. This is the only step that reaches the network,
+        # so it does make the job depend on rubygems.org. The alternative is worse: without the gem
+        # test_public_method_health_presentation runs 21 of its 72 checks while printing
+        # "21/21 passed, 0 failed" -- and it emits only 6 SKIP lines for 51 dropped assertions,
+        # because the rest live inside `if liquid_ok:` blocks and are never announced at all. A
+        # best-effort install therefore bought undisclosed coverage loss, not resilience.
+        #
+        # It fails loudly here instead. The governed check count in the manifest would catch it
+        # regardless (CHECK COUNT DRIFT: ran 21, declares 72), so the only question was whether the
+        # failure arrives with a clear cause at install time or three minutes later; this is the
+        # clearer one. Retried to absorb a transient blip rather than a real outage.
         run: |
-          gem install --no-document --user-install liquid -v 4.0.4
+          for attempt in 1 2 3; do
+            gem install --no-document --user-install liquid -v 4.0.4 && break
+            echo "gem install attempt $attempt failed; retrying" && sleep 5
+          done
           echo "GEM_HOME=$(ruby -e 'print Gem.user_dir')" >> "$GITHUB_ENV"
 
       - name: Report environment
@@ -84,10 +92,7 @@ jobs:
           python -c "import yaml; print('PyYAML', yaml.__version__)"
           git --version
           ruby --version
-          # Reports, never fails: if the optional gem is missing the run stays green and the
-          # affected assertions appear in the runner's "checks skipped" total.
-          ruby -e "require 'liquid'; puts %(liquid #{Liquid::VERSION})" \
-            || echo "liquid gem unavailable -- template render assertions will SKIP (see checks skipped)"
+          ruby -e "require 'liquid'; puts %(liquid #{Liquid::VERSION})"
 
       # Fails when a test file exists that no category claims, when a category names a file that is
       # gone, or when a suite is classified twice. Runs first so a classification mistake is

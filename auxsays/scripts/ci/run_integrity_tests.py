@@ -59,14 +59,45 @@ CATEGORIES = EXECUTED + NOT_EXECUTED
 MANIFEST_ERROR = 3
 MUTATION_ERROR = 2
 
+# suite path -> governed number of checks it must report, filled in by load_manifest()
+EXPECTED_CHECKS: dict[str, int] = {}
+
+
+# Where test-shaped files can appear. A single non-recursive glob of one directory let a new suite
+# bypass CI five different ways -- a pytest-style `*_test.py` suffix, a subdirectory, another tests
+# root, the repo root, or a file dropped beside the runner. Three real .mjs suites already lived
+# outside the closed world, one of them wired into package.json.
+TEST_GLOBS = ("**/test_*.py", "**/*_test.py", "**/*.test.mjs", "**/test-*.mjs", "**/*_test.mjs")
+DISCOVERY_EXCLUDE = ("node_modules", "_site", ".git", ".jekyll-cache", "__pycache__", "vendor")
+
 
 def discovered_tests() -> set[str]:
-    """Test files on disk. `__init__.py` is package plumbing, not a suite."""
-    return {p.name for p in TESTS.glob("test_*.py") if p.is_file()}
+    """Every test-shaped file in the repo, as a path relative to the repo root.
+
+    Repo-wide and recursive on purpose: the manifest can only be closed-world if discovery sees
+    everything a contributor might reasonably add. `__init__.py` is package plumbing, not a suite.
+    """
+    found: set[str] = set()
+    for pattern in TEST_GLOBS:
+        for path in REPO.glob(pattern):
+            if not path.is_file():
+                continue
+            rel = path.relative_to(REPO).as_posix()
+            if any(part in DISCOVERY_EXCLUDE for part in path.relative_to(REPO).parts):
+                continue
+            found.add(rel)
+    return found
 
 
 def load_manifest() -> tuple[dict[str, list[str]], list[str]]:
-    """Parse the manifest. Returns (category -> [names], problems)."""
+    """Parse the manifest. Returns (category -> [names], problems).
+
+    An executed entry may carry an expected check count, `path = N`. That number is the governed
+    size of the suite's coverage: a suite that quietly stops running assertions -- an empty fixture
+    loop, an early return, an optional dependency that disables half its cases -- otherwise reports
+    a perfectly self-consistent summary and passes. `test_public_method_health_presentation` did
+    exactly that, dropping 72 checks to 21 with only 6 SKIP lines to show for it.
+    """
     sections: dict[str, list[str]] = {c: [] for c in CATEGORIES}
     problems: list[str] = []
     seen: dict[str, str] = {}
@@ -86,12 +117,24 @@ def load_manifest() -> tuple[dict[str, list[str]], list[str]]:
             continue
         if current not in sections:
             continue  # already reported as an unknown category
-        if line in seen:
-            problems.append(f"line {lineno}: {line} classified twice "
-                            f"([{seen[line]}] and [{current}]) -- each suite belongs to exactly one")
+        name, _, expected = line.partition("=")
+        name = name.strip()
+        expected = expected.strip()
+        if expected:
+            if not expected.isdigit():
+                problems.append(f"line {lineno}: expected check count for {name} must be an "
+                                f"integer, got {expected!r}")
+            else:
+                EXPECTED_CHECKS[name] = int(expected)
+        elif current in EXECUTED:
+            problems.append(f"line {lineno}: {name} is in [{current}] and must declare its expected "
+                            f"check count as `{name} = N`, so silent coverage loss fails the run")
+        if name in seen:
+            problems.append(f"line {lineno}: {name} classified twice "
+                            f"([{seen[name]}] and [{current}]) -- each suite belongs to exactly one")
             continue
-        seen[line] = current
-        sections[current].append(line)
+        seen[name] = current
+        sections[current].append(name)
     return sections, problems
 
 
@@ -177,7 +220,7 @@ def _env() -> dict[str, str]:
 
 def run_one(name: str) -> tuple[bool, str, int, int, int, float]:
     """Run one suite. Returns (ok, detail, checks_passed, checks_failed, checks_skipped, seconds)."""
-    path = TESTS / name
+    path = REPO / name
     started = time.monotonic()
     try:
         proc = subprocess.run(
@@ -186,11 +229,16 @@ def run_one(name: str) -> tuple[bool, str, int, int, int, float]:
     except subprocess.TimeoutExpired:
         return False, f"TIMEOUT after {PER_TEST_TIMEOUT}s", 0, 0, 0, time.monotonic() - started
     elapsed = time.monotonic() - started
-    blob = f"{proc.stdout}\n{proc.stderr}"
+    # STDOUT ONLY decides the verdict. Because the two streams were concatenated, a `Results:` line
+    # on stderr always sorted last under the "last line wins" rule -- so a suite could print its
+    # real failing summary to stdout and a fabricated passing one to stderr and be recorded PASS.
+    # stderr is still kept in `blob` for diagnostics; it just cannot decide the outcome.
+    stdout, stderr = proc.stdout or "", proc.stderr or ""
+    blob = f"{stdout}\n{stderr}"
 
     match = None
-    for match in RESULTS_RE.finditer(blob):
-        pass  # the LAST Results line is the suite's own summary
+    for match in RESULTS_RE.finditer(stdout):
+        pass  # the LAST Results line on stdout is the suite's own summary
     if match is None:
         # An import error, a crash, or malformed output. Never a skip, never a pass.
         tail = "\n".join(x for x in blob.strip().splitlines()[-8:] if x.strip())
@@ -198,10 +246,41 @@ def run_one(name: str) -> tuple[bool, str, int, int, int, float]:
 
     passed, total, failed = int(match.group(1)), int(match.group(2)), int(match.group(3))
     skipped = len(SKIP_RE.findall(blob))
+    # A suite counts its own checks, so its summary must at least be self-consistent. Two ways it
+    # was not, each reproduced against a real child process:
+    #   * `Results: 3/40 passed, 0 failed` -- 37 assertions vanished and the suite reported PASS,
+    #     because passed was never compared to total.
+    #   * FAIL lines printed above `Results: 9/9 passed, 0 failed` with exit 0 -- every suite here
+    #     hand-rolls its counter, so one that stops incrementing its failure count reads as green.
+    printed_fail = [x.strip() for x in stdout.splitlines() if x.strip().startswith("FAIL")]
+    inconsistent = ""
+    if passed + failed != total:
+        inconsistent = (f"SUMMARY INCONSISTENT: {passed} passed + {failed} failed != {total} total "
+                        f"-- {total - passed - failed} check(s) unaccounted for")
+    elif printed_fail and not failed:
+        inconsistent = (f"SUMMARY INCONSISTENT: printed {len(printed_fail)} FAIL line(s) "
+                        f"but reports 0 failed")
+    if inconsistent:
+        detail = inconsistent
+        if printed_fail:
+            detail += "\n" + "\n".join("      " + x for x in printed_fail[:12])
+        return False, detail, passed, max(failed, len(printed_fail)), skipped, elapsed
+
+    # The governed coverage size. A self-consistent summary proves nothing about how much the suite
+    # actually did: `0/0 passed, 0 failed` is perfectly consistent and perfectly empty. Comparing
+    # against the declared number is what turns "this suite quietly stopped testing things" from an
+    # invisible event into a failed build -- which is exactly how 72 checks became 21 unnoticed.
+    expected = EXPECTED_CHECKS.get(name)
+    if expected is not None and total != expected:
+        direction = "lost" if total < expected else "gained"
+        return False, (f"CHECK COUNT DRIFT: ran {total} checks, manifest declares {expected} "
+                       f"({abs(total - expected)} {direction}). If this is intended, update the "
+                       f"count in integrity_suites.txt in the same change."), passed, failed, skipped, elapsed
+
     # Both conditions matter: a suite can print 0 failed and still exit nonzero (teardown, or a
     # crash after its summary), and a suite can exit 0 while reporting failures.
     if failed or proc.returncode != 0:
-        failing = [x.strip() for x in blob.splitlines() if x.strip().startswith("FAIL")]
+        failing = printed_fail
         detail = f"{failed} failed of {total} (exit {proc.returncode})"
         if failing:
             detail += "\n" + "\n".join("      " + x for x in failing[:12])
