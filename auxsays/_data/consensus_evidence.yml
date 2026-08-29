@@ -8348,30 +8348,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-- id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1svlm8w-davinci-resolve-crashing-from-nowhere-i-s
-  product_id: blackmagic-davinci
-  update_version: '20'
-  source_type: reddit_community_report
-  source_name: r/davinciresolve
-  source_url: https://www.reddit.com/r/davinciresolve/comments/1svlm8w/davinci_resolve_crashing_from_nowhere_i_swear_bruh/
-  parent_title: davinci resolve crashing from nowhere i swear bruh
-  report_title: davinci resolve crashing from nowhere i swear bruh
-  report_text_excerpt: davinci resolve crashing from nowhere i swear bruh Randomly davinci resolve started to use 20 gb of ram and crashing after i put like one effect. This happening on a 720p timeline project because the whole timeline was edited on 4k without no problems and i don't understand...
-  captured_at: '2026-07-23T00:47:58Z'
-  source_date: '2026-04-25'
-  target_release_date: '2025-05-28'
-  source_date_pass: true
-  patch_version_matched: true
-  matched_version: '20'
-  match_basis: exact_version_text
-  counted: true
-  exclusion_reason: null
-  issue_theme: startup or application crash
-  workflow_area: application stability
-  platform: unknown
-  severity: high
-  sentiment: negative
-  source_weight: 1
 - id: blackmagic-davinci-20-reddit-community-report-https-www-reddit-com-r-davinciresolve-comments-1skmihy-sick-of-the-crashing-how-do-i-fix-it
   product_id: blackmagic-davinci
   update_version: '20'
@@ -13552,30 +13528,6 @@ evidence:
   severity: medium
   sentiment: moderate
   source_weight: 1
-- id: blackmagic-davinci-11-creator-forum-report-https-creativecow-net-forums-thread-failed-backup
-  product_id: blackmagic-davinci
-  update_version: '11'
-  source_type: creator_forum_report
-  source_name: Creative COW DaVinci Resolve
-  source_url: https://creativecow.net/forums/thread/failed-backup/
-  parent_title: Creative Communities of the World Forums
-  report_title: Creative Communities of the World Forums
-  report_text_excerpt: Failed backup - DaVinci Resolve - Creative COW FORUMS Adobe After Effects Adobe After Effects Expressions Adobe Premiere Pro A.I. Apple Final Cut Pro Apple Motion Avid Media Composer Blackmagic Fusion Blender Creative Community Conversations DaVinci Resolve Maxon Cinema 4D...
-  captured_at: '2026-08-15T13:41:19Z'
-  source_date: '2026-07-30'
-  target_release_date: '2014-08-06'
-  source_date_pass: true
-  patch_version_matched: true
-  matched_version: '11'
-  match_basis: exact_version_text
-  counted: true
-  exclusion_reason: null
-  issue_theme: unspecified issue
-  workflow_area: general DaVinci Resolve workflow
-  platform: macos
-  severity: medium
-  sentiment: moderate
-  source_weight: 1
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5975976-windows-11-25h2-recall-still-missing-a
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -13891,30 +13843,6 @@ evidence:
   platform: linux
   severity: medium
   sentiment: negative
-  source_weight: 1
-- id: blackmagic-davinci-15-creator-forum-report-https-creativecow-net-forums-thread-failed-backup
-  product_id: blackmagic-davinci
-  update_version: '15'
-  source_type: creator_forum_report
-  source_name: Creative COW DaVinci Resolve
-  source_url: https://creativecow.net/forums/thread/failed-backup/
-  parent_title: Creative Communities of the World Forums
-  report_title: Creative Communities of the World Forums
-  report_text_excerpt: Failed backup - DaVinci Resolve - Creative COW FORUMS Adobe After Effects Adobe After Effects Expressions Adobe Premiere Pro A.I. Apple Final Cut Pro Apple Motion Avid Media Composer Blackmagic Fusion Blender Creative Community Conversations DaVinci Resolve Maxon Cinema 4D...
-  captured_at: '2026-08-21T02:56:21Z'
-  source_date: '2026-07-30'
-  target_release_date: '2018-08-13'
-  source_date_pass: true
-  patch_version_matched: true
-  matched_version: '15'
-  match_basis: exact_version_text
-  counted: true
-  exclusion_reason: null
-  issue_theme: unspecified issue
-  workflow_area: general DaVinci Resolve workflow
-  platform: macos
-  severity: medium
-  sentiment: moderate
   source_weight: 1
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5981187-remote-audio-with-rdp-broken-after-ins
   product_id: microsoft-windows-11

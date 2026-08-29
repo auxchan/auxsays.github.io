@@ -102,6 +102,120 @@ DAVINCI_VERSION_CONTEXT_RE = re.compile(
     r"\b(?:davinci\s+resolve(?:\s+studio)?|resolve(?:\s+studio)?|davinci|version)\s+v?(\d{1,2})(?:\.\d+){0,2}\b",
     flags=re.I,
 )
+# --- bare-integer version identity -------------------------------------------------------------
+# DaVinci is the only product whose update_version can be a bare 1-2 digit number ("11", "20",
+# "21"); every other product's version carries dots and is self-identifying. `exact_version_match`
+# is numeric-boundary containment, and both SPACE and COLON are legal neighbours of a genuine
+# version mention -- so "at 11:53", "15 Solve Coins" and "20 gb of ram" all satisfied it and were
+# published as exact-patch evidence. One Creative COW thread that states no version at all was
+# counted simultaneously as evidence for Resolve 11 (2014), 15 (2018) and 16 (2019).
+#
+# This CANNOT be repaired by changing the boundary: a colon follows a real version in
+# "Resolve 20: crash on launch", and spaces surround one in "on 20 the export fails". The missing
+# constraint is contextual, so it lives here, product-local -- the same shape as
+# `microsoft_powerpoint.version_in_context` and the OBS veto in `lib/target_outcome`, and the
+# reason `base.exact_version_match` is deliberately left as containment and nothing more.
+#
+# It is a NOISE rule, not a positive-context rule. Measured on the live corpus, demanding an
+# adjacent product word would drop 6-9 legitimate rows ("Crashing on Render After Updating to 21",
+# "Since the 21 Update", "21 on iPad loses sound") while STILL admitting "davinci resolve started
+# to use 20 gb of ram", whose gap to the product name is only 23 characters. Rejecting on
+# demonstrable non-version shapes keeps every legitimate mention while refusing the shapes
+# enumerated below.
+#
+# WHAT IT DOES NOT CLAIM. This refuses the enumerated shapes, not "every possible non-version
+# number". A blocklist cannot be exhaustive, and two limits are known and deliberate: a bare
+# integer beside an unlisted noun ("20 widgets") still passes, and a qualified alias occurring
+# ANYWHERE -- including forum nav chrome that names the product -- wins the pre-pass and exempts
+# the document. The rule is strictly narrowing (it never accepts anything the shared matcher
+# rejected), so each gap is a missed refusal, never a new false identity.
+_BARE_VERSION_RE = re.compile(r"^\d{1,2}$")
+_NON_VERSION_UNIT = (
+    r"gb|gib|mb|tb|kb|gigs?|megs?|ram|vram|fps|hz|bit|bits|clips?|tracks?|layers?|nodes?|"
+    r"coins?|points?|credits?|karma|min(?:ute)?s?|sec(?:ond)?s?|hours?|hrs?|days?|weeks?|months?|"
+    r"years?|dollars?|usd|eur|gbp|percent|files?|projects?|times?|pages?|frames?|replies|comments?"
+)
+_MONTH = (r"jan(?:uary)?|feb(?:ruary)?|mar(?:ch)?|apr(?:il)?|may|jun(?:e)?|jul(?:y)?|aug(?:ust)?|"
+          r"sep(?:t|tember)?|oct(?:ober)?|nov(?:ember)?|dec(?:ember)?")
+# Other software whose version could be confused for a DaVinci major, including OS codenames --
+# a NLE forum names these constantly. Adjacency is required, so this is not a deny-list on the
+# number itself.
+_OTHER_PRODUCT = (
+    r"windows|win|macos|mac\s*os|osx|os\s*x|ios|ipados|android|ubuntu|fedora|debian|mint|nobara|"
+    r"pop!?_?os|sequoia|sonoma|ventura|monterey|big\s*sur|catalina|mojave|tahoe|"
+    r"nvidia|amd|intel|geforce|radeon|cuda|driver|studio\s+driver|game\s+ready|"
+    r"final\s+cut(?:\s+pro)?|fcpx?|premiere(?:\s+pro)?|after\s+effects|vegas|avid|"
+    r"media\s+composer|blender|xcode|python|qt|opencl|directx|unreal|unity"
+)
+_NON_VERSION_CONTEXT = (
+    # a clock time, from EITHER side: "at 11:53" (hour) and "at 10:20" (minute) and "11:53:16".
+    # Anchoring only on the hour was the original hole: every live DaVinci major (16/19/20/21) is
+    # also a plausible minute, and Creative COW prints exactly this format.
+    r"(?<![A-Za-z0-9.])%V\s*:\s*\d"
+    r"|\d\s*:\s*%V(?![A-Za-z0-9.])"
+    # a date: "2026-08-15", "15/08/2026", "August 19, 2026", "19 August"
+    r"|\d{{4}}\s*[-/]\s*\d{{1,2}}\s*[-/]\s*%V(?![A-Za-z0-9.])"
+    r"|(?<![A-Za-z0-9.])%V\s*[-/]\s*\d{{1,2}}\s*[-/]\s*\d{{2,4}}"
+    r"|(?<![A-Za-z0-9.])\d{{1,2}}\s*[-/]\s*%V\s*[-/]\s*\d{{2,4}}"
+    r"|(?:{month})\w*\.?\s+%V(?![A-Za-z0-9.])"
+    r"|(?<![A-Za-z0-9.])%V\s+(?:{month})\w*\b"
+    # a quantity: "20 gb of ram", "20 clips", "16 replies"
+    r"|(?<![A-Za-z0-9.])%V\s*(?:{unit})\b"
+    # a reputation/points counter, from either side: "15 Solve Coins", "Coins: 15"
+    r"|(?<![A-Za-z0-9.])%V\s+(?:[A-Za-z]+\s+){{0,2}}(?:coins?|points?|credits?|karma|upvotes?)\b"
+    r"|(?:coins?|points?|credits?|karma|upvotes?|replies|comments?)\s*:?\s*%V(?![A-Za-z0-9.])"
+    # money and percentage: "$20", "20$", "20%"
+    r"|[$£€]\s*%V(?![A-Za-z0-9.])"
+    r"|(?<![A-Za-z0-9.])%V\s*(?:%|\$|£|€)"
+    # an ordinal or index reference: "page 20", "step 20", "#20", "episode 20"
+    r"|(?<![A-Za-z0-9.])(?:page|p\.|chapter|step|item|line|port|build|episode|day|part|reply|"
+    r"post|no\.|number)\s+%V(?![A-Za-z0-9.])"
+    r"|#\s*%V(?![A-Za-z0-9.])"
+    # ANOTHER product's version: "Windows 11", "Final Cut Pro 11", "macOS Sequoia 15"
+    r"|(?<![A-Za-z0-9.])(?:{other})\s+%V(?![A-Za-z0-9.])"
+).format(unit=_NON_VERSION_UNIT, month=_MONTH, other=_OTHER_PRODUCT)
+
+
+def bare_version_noise(text: str, version: str) -> str:
+    """The non-version token a bare DaVinci version matched, or '' when the mention is usable.
+
+    Returns the offending substring so a refusal is auditable rather than silent. Dotted versions
+    are self-identifying and are never examined.
+    """
+    candidate = str(version or "").strip()
+    if not _BARE_VERSION_RE.match(candidate):
+        return ""
+    pattern = re.compile(_NON_VERSION_CONTEXT.replace("%V", re.escape(candidate)), re.I)
+    hit = pattern.search(str(text or ""))
+    return " ".join(hit.group(0).split()) if hit else ""
+
+
+def davinci_version_match(text: str, version: str) -> tuple[bool, str, str]:
+    """`exact_version_match` for DaVinci, refusing a bare integer used as an ordinary number.
+
+    A DOTTED version is self-identifying and routes through the shared matcher completely
+    unchanged, basis included -- 226 of 237 live rows carry `exact_version_text`, and this must not
+    silently relabel them.
+
+    For a bare integer, a qualified form ("DaVinci Resolve 20", "Resolve 20", "v20") is tried
+    first: it is unambiguous, so it wins outright and is never subject to the noise rule. Only when
+    the sole evidence is the bare token itself is that token checked for a non-version shape.
+    """
+    aliases = version_aliases(version)
+    if not _BARE_VERSION_RE.match(str(version or "").strip()):
+        return exact_version_match(text, version, aliases)
+    for alias in aliases:
+        if _BARE_VERSION_RE.match(str(alias).strip()):
+            continue
+        matched, matched_version, _basis = exact_version_match(text, alias, ())
+        if matched:
+            return True, matched_version, "exact_version_alias"
+    matched, matched_version, basis = exact_version_match(text, version, aliases)
+    if matched and bare_version_noise(text, matched_version):
+        return False, "", ""
+    return matched, matched_version, basis
+
+
 DAVINCI_STRONG_ISSUE_RE = re.compile(
     r"\b(?:crash(?:es|ed|ing)?|freez(?:e|es|ing|en)|hang(?:s|ing)?|fail(?:ed|s|ure|ing)?|error|bug|broke|broken|breaks|corrupt(?:ed|ion)?|regression|slow|lag(?:gy)?|won't\s+open|can't\s+open|cannot\s+open|does\s+not\s+open|decode|install(?:ation)?\s+issue|problem)\b",
     flags=re.I,
@@ -1574,7 +1688,11 @@ def row_from_candidate(record: PatchRecord, candidate: dict[str, Any], captured_
         str(candidate.get("report_title") or ""),
         str(candidate.get("report_text") or ""),
     ])
-    matched, matched_version, basis = exact_version_match(report_text, record.update_version, version_aliases(record.update_version))
+    # The bare-integer noise rule belongs HERE, in the version decision itself, not in a later
+    # gate: patch_version_matched / matched_version / match_basis must all be false together, so a
+    # refused row never asserts a version match it cannot demonstrate. `apply_consensus_to_records`
+    # reads patch_version_matched as an acceptance input.
+    matched, matched_version, basis = davinci_version_match(report_text, record.update_version)
     theme, workflow_area, platform, severity, sentiment = classify(report_text)
     row = make_evidence_row(
         product_id=PRODUCT_ID,
