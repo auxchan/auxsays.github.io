@@ -11,12 +11,14 @@ import {
 import { createPersistentProjector, createPersistentWorldSpatialLayout, type PersistentProjectedPlacement } from "./persistentWorldSpatialLayout";
 
 type Camera = PersistentCameraPose;
+export type PersistentWorldViewMode = "TOP_DOWN" | "CINEMATIC_2_5D";
 interface Viewport { zoom: number; panX: number; panY: number }
 interface Props {
   model: PersistentWorldReadModel;
   factualBindings: Readonly<Record<string, PersistentWorldFactualBinding>>;
   selectedPlacementId: string | null;
   fullWorld: boolean;
+  viewMode: PersistentWorldViewMode;
   traceMode: boolean;
   reducedMotion: boolean;
   resetVersion: number;
@@ -56,13 +58,14 @@ function hoverWhy(model: PersistentWorldReadModel, placement: PersistentWorldPla
   return "It adds a separately inspectable economic concept while evidence and relationships remain governed independently.";
 }
 
-function targetCamera(model: PersistentWorldReadModel, selectedPlacementId: string | null, fullWorld: boolean, viewportWidth = 980, viewportHeight = 720, spatial = createPersistentWorldSpatialLayout(model)): Camera {
+function targetCamera(model: PersistentWorldReadModel, selectedPlacementId: string | null, fullWorld: boolean, viewMode: PersistentWorldViewMode, viewportWidth = 980, viewportHeight = 720, spatial = createPersistentWorldSpatialLayout(model)): Camera {
   const selected = selectedPlacementId ? model.placements[selectedPlacementId] : undefined;
-  if (!selected || fullWorld) return { x: 0, y: 0, z: 0, scale: fullWorld ? .17 : OVERVIEW_SCALE, rotation: 0, pitch: fullWorld ? -.18 : -.14, yaw: fullWorld ? .06 : -.04 };
+  const cinematic = viewMode === "CINEMATIC_2_5D";
+  if (!selected || fullWorld) return { x: 0, y: 0, z: 0, scale: fullWorld ? .17 : OVERVIEW_SCALE, rotation: 0, pitch: cinematic ? fullWorld ? -.18 : -.14 : 0, yaw: cinematic ? fullWorld ? .06 : -.04 : 0 };
   const rotation = persistentFocusRotation(selected.sector) + (selected.depth >= 2 ? (selected.order - 5.5) * .008 : 0);
-  const z = spatial.zByPlacementId[selected.id] ?? 0;
-  const pitch = selected.depth === 1 ? .52 : selected.depth === 2 ? .68 : .78;
-  const yaw = Math.max(-.42, Math.min(.42, (selected.sector - 4.5) * .056 + (selected.depth >= 2 ? (selected.order - 5.5) * .026 : 0)));
+  const z = cinematic ? spatial.zByPlacementId[selected.id] ?? 0 : 0;
+  const pitch = cinematic ? selected.depth === 1 ? .52 : selected.depth === 2 ? .68 : .78 : 0;
+  const yaw = cinematic ? Math.max(-.42, Math.min(.42, (selected.sector - 4.5) * .056 + (selected.depth >= 2 ? (selected.order - 5.5) * .026 : 0))) : 0;
   if (selected.depth === 1) {
     const neighborhood = [selected, ...(model.childrenByPlacement[selected.id] ?? []).map((id) => model.placements[id])];
     const rotated = neighborhood.map((placement) => ({ x: placement.x * Math.cos(rotation) - placement.y * Math.sin(rotation), y: placement.x * Math.sin(rotation) + placement.y * Math.cos(rotation) }));
@@ -93,23 +96,28 @@ function isInSelectedSector(model: PersistentWorldReadModel, placement: Persiste
   return selected ? placement.sector === selected.sector || placement.depth === 0 : false;
 }
 
-function drawBackground(context: CanvasRenderingContext2D, width: number, height: number, parallax: Point, momentum: Point, camera: Camera) {
+function drawBackground(context: CanvasRenderingContext2D, width: number, height: number, parallax: Point, momentum: Point, camera: Camera, viewMode: PersistentWorldViewMode) {
   context.fillStyle = "#041219"; context.fillRect(0, 0, width, height);
   const gradient = context.createRadialGradient(width * .5 + parallax.x, height * .48 + parallax.y, 20, width * .5, height * .5, Math.max(width, height) * .72);
   gradient.addColorStop(0, "rgba(27,111,117,.31)"); gradient.addColorStop(.45, "rgba(7,39,48,.18)"); gradient.addColorStop(1, "rgba(1,9,14,0)");
   context.fillStyle = gradient; context.fillRect(0, 0, width, height);
-  const vanishingX = width * .5 - camera.yaw * width * .72 + parallax.x * .08;
-  const horizonY = Math.max(height * .16, Math.min(height * .48, height * .34 - camera.pitch * height * .42 + parallax.y * .035));
   context.strokeStyle = "rgba(76,148,156,.06)"; context.lineWidth = 1; context.beginPath();
-  for (let x = -width * .3; x <= width * 1.3; x += Math.max(54, width / 15)) { context.moveTo(vanishingX, horizonY); context.lineTo(x, height); }
-  for (let index = 1; index <= 12; index += 1) { const t = index / 12; const y = horizonY + (height - horizonY) * t * t; context.moveTo(0, y); context.lineTo(width, y); }
+  if (viewMode === "CINEMATIC_2_5D") {
+    const vanishingX = width * .5 - camera.yaw * width * .72 + parallax.x * .08;
+    const horizonY = Math.max(height * .16, Math.min(height * .48, height * .34 - camera.pitch * height * .42 + parallax.y * .035));
+    for (let x = -width * .3; x <= width * 1.3; x += Math.max(54, width / 15)) { context.moveTo(vanishingX, horizonY); context.lineTo(x, height); }
+    for (let index = 1; index <= 12; index += 1) { const t = index / 12; const y = horizonY + (height - horizonY) * t * t; context.moveTo(0, y); context.lineTo(width, y); }
+  } else {
+    const grid = 48;
+    for (let x = ((parallax.x * .16) % grid) - grid; x < width + grid; x += grid) { context.moveTo(x, 0); context.lineTo(x, height); }
+    for (let y = ((parallax.y * .16) % grid) - grid; y < height + grid; y += grid) { context.moveTo(0, y); context.lineTo(width, y); }
+  }
   context.stroke();
-  context.strokeStyle = "rgba(76,148,156,.025)"; context.beginPath(); context.moveTo(0, horizonY); context.lineTo(width, horizonY); context.stroke();
   context.save(); context.translate(width / 2 + parallax.x * .22, height / 2 + parallax.y * .22);
   for (const radius of [Math.min(width, height) * .19, Math.min(width, height) * .34, Math.min(width, height) * .49]) {
     context.strokeStyle = `rgba(93,201,195,${radius < 200 ? .08 : .045})`; context.lineWidth = 1; context.setLineDash([3, 11]);
-    const planeCompression = Math.max(.32, .62 - Math.abs(camera.pitch) * .55);
-    context.beginPath(); context.ellipse(0, 0, radius * 1.14, radius * planeCompression, camera.yaw * .42, 0, Math.PI * 2); context.stroke();
+    const planeCompression = viewMode === "CINEMATIC_2_5D" ? Math.max(.32, .62 - Math.abs(camera.pitch) * .55) : .82;
+    context.beginPath(); context.ellipse(0, 0, radius * 1.14, radius * planeCompression, viewMode === "CINEMATIC_2_5D" ? camera.yaw * .42 : -.08, 0, Math.PI * 2); context.stroke();
   }
   context.setLineDash([]); context.restore();
   for (let index = 0; index < 54; index += 1) {
@@ -139,10 +147,10 @@ function drawDimensionalNode(context: CanvasRenderingContext2D, point: Persisten
   context.restore();
 }
 
-export function PremiumPersistentWorldSurface({ model, factualBindings, selectedPlacementId, fullWorld, traceMode, reducedMotion, resetVersion, onSelect, onNavigateParent, onReset }: Props) {
+export function PremiumPersistentWorldSurface({ model, factualBindings, selectedPlacementId, fullWorld, viewMode, traceMode, reducedMotion, resetVersion, onSelect, onNavigateParent, onReset }: Props) {
   const spatialLayout = useMemo(() => createPersistentWorldSpatialLayout(model), [model]);
   const hostRef = useRef<HTMLDivElement>(null); const canvasRef = useRef<HTMLCanvasElement>(null);
-  const cameraRef = useRef<Camera>(targetCamera(model, selectedPlacementId, fullWorld, 980, 720, spatialLayout));
+  const cameraRef = useRef<Camera>(targetCamera(model, selectedPlacementId, fullWorld, viewMode, 980, 720, spatialLayout));
   const cameraVelocityRef = useRef<PersistentCameraVelocity>({ x: 0, y: 0, z: 0, logScale: 0, rotation: 0, pitch: 0, yaw: 0 });
   const mountedAtRef = useRef(performance.now()); const viewportRef = useRef<Viewport>({ zoom: 1, panX: 0, panY: 0 });
   const panRef = useRef<{ pointerId: number; startX: number; startY: number; panX: number; panY: number; moved: boolean } | null>(null);
@@ -162,6 +170,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
   }, [model, selectedPlacementId]);
 
   useEffect(() => { hoveredRef.current = hoveredId; invalidateRef.current(); }, [hoveredId]);
+  useEffect(() => { if (hostRef.current) hostRef.current.dataset.viewMode = viewMode; }, [viewMode]);
   useEffect(() => {
     viewportRef.current = { zoom: 1, panX: 0, panY: 0 }; const host = hostRef.current;
     if (host) { host.dataset.viewportZoom = "1.000"; host.dataset.viewportPanX = "0"; host.dataset.viewportPanY = "0"; } invalidateRef.current();
@@ -172,13 +181,13 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
     if (!host || !canvas || !context) return;
     let frame = 0; let last = performance.now(); let frameCount = 0; let accumulated = 0; const frameSamples: number[] = [];
     const initialBounds = host.getBoundingClientRect();
-    let destination = targetCamera(model, selectedPlacementId, fullWorld, initialBounds.width, initialBounds.height, spatialLayout); const cameraStarted = performance.now(); let cameraSettled = false;
-    let cameraTransition = createPersistentCameraTransition(cameraRef.current, destination, cameraStarted, selectedPlacementId ?? (fullWorld ? "full-world" : "overview"), cameraVelocityRef.current);
+    let destination = targetCamera(model, selectedPlacementId, fullWorld, viewMode, initialBounds.width, initialBounds.height, spatialLayout); const cameraStarted = performance.now(); let cameraSettled = false;
+    let cameraTransition = createPersistentCameraTransition(cameraRef.current, destination, cameraStarted, `${viewMode}:${selectedPlacementId ?? (fullWorld ? "full-world" : "overview")}`, cameraVelocityRef.current);
     const previousSemantic = semanticHistoryRef.current.length ? semanticHistoryRef.current : semantic; semanticHistoryRef.current = semantic;
     const previousSemanticSet = new Set(previousSemantic); const transitionSemanticSet = new Set([...previousSemantic, ...semantic]);
     delete host.dataset.cameraSettleMs; if (reducedMotion) { cameraRef.current = destination; cameraVelocityRef.current = { x: 0, y: 0, z: 0, logScale: 0, rotation: 0, pitch: 0, yaw: 0 }; }
     const resize = () => {
-      const bounds = host.getBoundingClientRect(); const ratio = Math.min(2, window.devicePixelRatio || 1); destination = targetCamera(model, selectedPlacementId, fullWorld, bounds.width, bounds.height, spatialLayout); cameraTransition.to = destination;
+      const bounds = host.getBoundingClientRect(); const ratio = Math.min(2, window.devicePixelRatio || 1); destination = targetCamera(model, selectedPlacementId, fullWorld, viewMode, bounds.width, bounds.height, spatialLayout); cameraTransition.to = destination;
       canvas.width = Math.max(1, Math.round(bounds.width * ratio)); canvas.height = Math.max(1, Math.round(bounds.height * ratio)); canvas.style.width = `${bounds.width}px`; canvas.style.height = `${bounds.height}px`; context.setTransform(ratio, 0, 0, ratio, 0, 0);
       if (reducedMotion) invalidateRef.current();
     };
@@ -199,10 +208,10 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
       if (!cameraSettled && transitionSample.progress >= 1) { cameraSettled = true; host.dataset.cameraSettleMs = (performance.now() - cameraStarted).toFixed(3); }
       last = now;
       const parallax = reducedMotion ? { x: 0, y: 0 } : { x: (pointerRef.current.x - width / 2) * .016 + cameraMomentumRef.current.x, y: (pointerRef.current.y - height / 2) * .016 + cameraMomentumRef.current.y };
-      drawBackground(context, width, height, parallax, cameraMomentumRef.current, camera);
+      drawBackground(context, width, height, parallax, cameraMomentumRef.current, camera, viewMode);
       const projectFrame = createPersistentProjector(camera, viewport, width, height);
       const projected = new Map<string, PersistentProjectedPlacement>();
-      for (const placement of placements) projected.set(placement.id, projectFrame(placement, spatialLayout.zByPlacementId[placement.id] ?? 0));
+      for (const placement of placements) projected.set(placement.id, projectFrame(placement, viewMode === "CINEMATIC_2_5D" ? spatialLayout.zByPlacementId[placement.id] ?? 0 : 0));
       const projectedAt = (id: string) => projected.get(id)!;
 
       const ambientHierarchy = persistentAmbientEdges(hierarchy, [...transitionSemanticSet], fullWorld);
@@ -293,12 +302,12 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
     };
     invalidateRef.current = () => { if (reducedMotion) draw(performance.now()); else if (!frame) frame = requestAnimationFrame(draw); }; draw(performance.now());
     return () => { observer.disconnect(); cancelAnimationFrame(frame); invalidateRef.current = () => undefined; };
-  }, [factualBindings, fullWorld, model, reducedMotion, selectedPath, selectedPlacementId, semantic, semanticSet, spatialLayout, traceMode]);
+  }, [factualBindings, fullWorld, model, reducedMotion, selectedPath, selectedPlacementId, semantic, semanticSet, spatialLayout, traceMode, viewMode]);
 
   function hitTest(event: { clientX: number; clientY: number }) {
     const host = hostRef.current; if (!host) return null; const bounds = host.getBoundingClientRect(); const camera = cameraRef.current; let best: { id: string; score: number; depth: number } | null = null;
     const projectHit = createPersistentProjector(camera, viewportRef.current, bounds.width, bounds.height);
-    for (const id of semantic) { const placement = model.placements[id]; const point = projectHit(placement, spatialLayout.zByPlacementId[id] ?? 0); const lod = resolvePersistentLod(placement.depth, camera.scale * viewportRef.current.zoom * point.perspectiveScale, true); const radius = Math.max(24, premiumRadius(placement, lod) * point.perspectiveScale + 8); const distance = Math.hypot(event.clientX - bounds.left - point.x, event.clientY - bounds.top - point.y); const score = distance / radius; if (score <= 1 && (!best || score < best.score - .04 || (Math.abs(score - best.score) <= .04 && point.cameraDepth > best.depth))) best = { id, score, depth: point.cameraDepth }; }
+    for (const id of semantic) { const placement = model.placements[id]; const point = projectHit(placement, viewMode === "CINEMATIC_2_5D" ? spatialLayout.zByPlacementId[id] ?? 0 : 0); const lod = resolvePersistentLod(placement.depth, camera.scale * viewportRef.current.zoom * point.perspectiveScale, true); const radius = Math.max(24, premiumRadius(placement, lod) * point.perspectiveScale + 8); const distance = Math.hypot(event.clientX - bounds.left - point.x, event.clientY - bounds.top - point.y); const score = distance / radius; if (score <= 1 && (!best || score < best.score - .04 || (Math.abs(score - best.score) <= .04 && point.cameraDepth > best.depth))) best = { id, score, depth: point.cameraDepth }; }
     return best?.id ?? null;
   }
   function updateViewport(next: Viewport) { viewportRef.current = next; const host = hostRef.current; if (host) { host.dataset.viewportZoom = next.zoom.toFixed(3); host.dataset.viewportPanX = Math.round(next.panX).toString(); host.dataset.viewportPanY = Math.round(next.panY).toString(); } invalidateRef.current(); }

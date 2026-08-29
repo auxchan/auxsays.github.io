@@ -289,6 +289,13 @@ describe("persistent world local-review shell", () => {
     expect(surface.getAttribute("data-semantic-node-count")).toBe("11");
     expect(surface.getAttribute("data-factual-binding-count")).toBe("5");
     expect(surface.getAttribute("data-lod-mode")).toBe("OVERVIEW");
+    expect(surface.getAttribute("data-view-mode")).toBe("TOP_DOWN");
+    expect(screen.getByRole("button", { name: "Top-down" }).getAttribute("aria-pressed")).toBe("true");
+    fireEvent.click(screen.getByRole("button", { name: "Cinematic 2.5D" }));
+    expect(surface.getAttribute("data-view-mode")).toBe("CINEMATIC_2_5D");
+    expect(screen.getByRole("button", { name: "Cinematic 2.5D" }).getAttribute("aria-pressed")).toBe("true");
+    fireEvent.click(screen.getByRole("button", { name: "Top-down" }));
+    expect(surface.getAttribute("data-view-mode")).toBe("TOP_DOWN");
     expect(screen.getByRole("button", { name: "Enter full screen" })).toBeTruthy();
     fireEvent.wheel(surface, { deltaY: -120, clientX: 400, clientY: 300 });
     expect(Number(surface.getAttribute("data-viewport-zoom"))).toBeGreaterThan(1);

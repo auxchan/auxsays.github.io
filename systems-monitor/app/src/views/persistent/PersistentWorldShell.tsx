@@ -6,7 +6,7 @@ import { LAYOFFS_BLOCKED_FACTOR_COUNT, LAYOFFS_SOURCE_ENABLED_FACTOR_COUNT } fro
 import { PERSISTENT_ACCEPTED_IMPACT_COUNT, persistentChangesForWindow, type PersistentChangeNotice, type PersistentTimeWindow } from "../../data/persistentWorldTemporalReadModel";
 import { StructuralNodeIcon } from "../motion/StructuralNodeIcon";
 import type { StructuralNodeSymbol } from "../motion/structuralVisualLanguage";
-import { PremiumPersistentWorldSurface as PersistentWorldSurface } from "./PremiumPersistentWorldSurface";
+import { PremiumPersistentWorldSurface as PersistentWorldSurface, type PersistentWorldViewMode } from "./PremiumPersistentWorldSurface";
 import { persistentWorldMediaFor } from "./persistentWorldMedia";
 import { compactPersistentValue, factorGlyph, persistentPlacementAccent } from "./persistentWorldVisuals";
 import "./persistentWorld.css";
@@ -68,6 +68,7 @@ export function PersistentWorldShell() {
   const workspaceRef = useRef<HTMLDivElement>(null);
   const [selectedId, setSelectedId] = useState<string | null>(() => selectionFromHash(model));
   const [fullWorld, setFullWorld] = useState(false);
+  const [viewMode, setViewMode] = useState<PersistentWorldViewMode>("TOP_DOWN");
   const [traceMode, setTraceMode] = useState(false);
   const [resetVersion, setResetVersion] = useState(0);
   const [fullscreen, setFullscreen] = useState(false);
@@ -187,17 +188,19 @@ export function PersistentWorldShell() {
             {selectedMedia && <footer className="sm-pw-inspector__credit"><span>Illustrative context only · not data evidence</span><a href={selectedMedia.sourcePage} target="_blank" rel="noreferrer">Photo: {selectedMedia.credit} · {selectedMedia.license === "CC0_1_0" ? "CC0 1.0" : "Public domain"}</a></footer>}
           </div>}
         </aside>
-        <PersistentWorldSurface model={model} factualBindings={factualBindings} selectedPlacementId={selectedId} fullWorld={fullWorld} traceMode={traceMode} reducedMotion={reducedMotion} resetVersion={resetVersion} onSelect={navigate} onNavigateParent={navigateUp} onReset={resetWorld} />
+        <PersistentWorldSurface model={model} factualBindings={factualBindings} selectedPlacementId={selectedId} fullWorld={fullWorld} viewMode={viewMode} traceMode={traceMode} reducedMotion={reducedMotion} resetVersion={resetVersion} onSelect={navigate} onNavigateParent={navigateUp} onReset={resetWorld} />
         <div className="sm-pw-controls" aria-label="Persistent world view controls">
           <button type="button" disabled={!selected} onClick={navigateUp}>Up one level</button>
           <button type="button" onClick={resetWorld}>Reset</button>
+          <button type="button" aria-pressed={viewMode === "TOP_DOWN"} onClick={() => setViewMode("TOP_DOWN")}>Top-down</button>
+          <button type="button" aria-pressed={viewMode === "CINEMATIC_2_5D"} onClick={() => setViewMode("CINEMATIC_2_5D")}>Cinematic 2.5D</button>
           <button type="button" aria-pressed={fullWorld} onClick={() => setFullWorld((current) => !current)}>{fullWorld ? "Normal overview" : "Full-world view"}</button>
           <button type="button" aria-pressed={traceMode} disabled={!selected} onClick={() => setTraceMode((current) => !current)}>Trace</button>
           <button type="button" aria-label={fullscreenActive ? "Exit full screen" : "Enter full screen"} aria-pressed={fullscreenActive} onClick={() => void toggleFullscreen()}><span aria-hidden="true">⛶</span> {fullscreenActive ? "Exit" : "Full screen"}</button>
         </div>
       </div>
       <div className="sm-pw-status" role="status">
-        <div><strong>{fullWorld ? "Full-world density LOD" : selected ? `Depth ${selected.depth} focus` : "Outcome + 10 driver systems"}</strong><span>The world stays fixed; only camera, detail, emphasis, and inspector context change.</span></div>
+        <div><strong>{fullWorld ? "Full-world density LOD" : selected ? `Depth ${selected.depth} focus` : "Outcome + 10 driver systems"}</strong><span>{viewMode === "TOP_DOWN" ? "Symmetric top-down camera" : "Angled cinematic 2.5D camera"} · the world stays fixed; only camera, detail, emphasis, and inspector context change.</span></div>
         <div><strong>{model.topologyFingerprint}</strong><span>Topology fingerprint</span></div>
       </div>
     </section>
