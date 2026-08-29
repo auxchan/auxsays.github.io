@@ -173,8 +173,19 @@ ZERO_COUNT_PROJECTION_FIELDS = ("update_consensus_summary", "accepted_report_sou
 # source list stayed at the first 3 of those 7 issues and its `quick_verdict` still read "has 3 user
 # reports found". Coherence had been restored only by the unscoped --write-all in
 # davinci-updates.yml, which is manual-dispatch-only.
+# adobe-acrobat-pro/-reader joined for the same reason obs-studio did, arriving from the opposite
+# direction: they have had scoped promotion steps in the lane for some time, so they satisfied
+# `retractable <= promoted` already -- membership was simply never granted. The gap became load
+# bearing when vendor-authored posts stopped being counted: two Acrobat records drop to a real zero,
+# and NO lane in this repo could produce the zero shape for them. `--write-all` skips zero-count
+# groups, so promotion cannot reach them, and without membership `reconcile_record_counts` may not
+# retract -- leaving records that publish "has 1 user report found" beside "0 confirmed community
+# reports", still listing Adobe's own release announcement as the source, with QA exiting 0.
+# Measured blast radius before granting it: of 807 zero-count records across every product, ZERO
+# have `zero_count_projection_drift`, so this reaches exactly the records a change drives to zero.
 CONSENSUS_PROMOTION_PRODUCTS = frozenset({"microsoft-powerpoint", "microsoft-windows-11",
-                                          "obs-studio"})
+                                          "obs-studio", "adobe-acrobat-pro",
+                                          "adobe-acrobat-reader"})
 
 
 def format_reconcile_detail(detail: dict[str, Any]) -> str:

@@ -259,10 +259,19 @@ def run() -> int:
     print(NEWLINE + "[D11] the owned set is derived, not assumed")
     check("D11 DaVinci is not retraction-eligible, so scoping adds no obligation",
           OWNED not in CONSENSUS_PROMOTION_PRODUCTS, str(sorted(CONSENSUS_PROMOTION_PRODUCTS)))
+    # The PROPERTY, not the membership list. This asserted set equality against three literal ids,
+    # so it failed the moment Acrobat was legitimately granted retraction-eligibility -- reporting a
+    # scope violation in THIS workflow when nothing here had changed. What it means to protect is
+    # that no retractable product is promoted by this manual-dispatch lane; where they ARE promoted
+    # (the cron lane) is pinned by R7 in test_windows_count_authority.py.
+    promoted_here = {pid
+                     for st in steps()
+                     if "apply_consensus_to_records" in str(st.get("run") or "")
+                     for pid in [flag_value(str(st.get("run") or ""), "--product-id")]
+                     if pid}
     check("D11 the retractable products are promoted by the cron lane, not this one",
-          set(CONSENSUS_PROMOTION_PRODUCTS) == {"microsoft-powerpoint", "microsoft-windows-11",
-                                                "obs-studio"},
-          str(sorted(CONSENSUS_PROMOTION_PRODUCTS)))
+          not (set(CONSENSUS_PROMOTION_PRODUCTS) & promoted_here),
+          f"promoted_here={sorted(promoted_here)} retractable={sorted(CONSENSUS_PROMOTION_PRODUCTS)}")
 
     print()
     print("=" * 78)
