@@ -2,12 +2,12 @@ import { fireEvent, render, screen, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { SnapshotProvider } from "../src/app/SnapshotContext";
 import { SystemsMonitorApp } from "../src/app/SystemsMonitorApp";
-import { createPersistentWorld, employmentDriverCandidates, persistentWorldFingerprint, persistentWorldSelectionSequence } from "../src/data/persistentWorldModel";
+import { createPersistentWorld, employmentDriverCandidates, persistentWorldFingerprint, persistentWorldPlacementLabel, persistentWorldSelectionSequence } from "../src/data/persistentWorldModel";
 import { persistentWorldFactualBinding } from "../src/data/persistentWorldFactualBindings";
 import { PERSISTENT_WORLD_PROFILED_FACTOR_COUNT, persistentWorldCandidateSourceProfile } from "../src/data/persistentWorldSourceCatalog";
 import { persistentWorldMediaFor } from "../src/views/persistent/persistentWorldMedia";
 import { PERSISTENT_GLINT_PERIOD_MS, PERSISTENT_GLINT_TRAIL, blendPremiumColor, compactPersistentValue, createPersistentCameraTransition, easePremiumHover, factorGlyph, persistentFocusRotation, persistentGlintProgress, persistentPlacementAccent, premiumCurveRoute, resolvePersistentLod, resolvePremiumLabels, samplePersistentCameraTransition, shortestAngleDelta } from "../src/views/persistent/persistentWorldVisuals";
-import { persistentWorldDoubleClickAction } from "../src/views/persistent/PremiumPersistentWorldSurface";
+import { persistentWorldDoubleClickAction, persistentWorldGraphNodeLabel } from "../src/views/persistent/PremiumPersistentWorldSurface";
 import { persistentWorldUpSelection } from "../src/views/persistent/PersistentWorldShell";
 
 describe("premium persistent-world visual language", () => {
@@ -68,6 +68,34 @@ describe("premium persistent-world visual language", () => {
   it("compacts percentage readings without changing other units", () => {
     expect(compactPersistentValue("61.4 percent")).toBe("61.4%");
     expect(compactPersistentValue("209 thousand")).toBe("209 thousand");
+  });
+
+  it("keeps stable graph titles identity-only at every depth while detail values remain compact", () => {
+    const model = createPersistentWorld();
+    const initialUiClaims = Object.values(model.placements).find(
+      (placement) => persistentWorldPlacementLabel(model, placement) === "Initial UI Claims"
+    );
+    expect(initialUiClaims).toBeDefined();
+    const placements = [
+      model.placements[model.outcomePlacementId],
+      model.placements["placement:labor-supply"],
+      model.placements["placement:labor-supply:labor-force-participation"],
+      initialUiClaims!,
+      model.placements["fixture-placement:consumer-demand:05:09"]
+    ];
+    const before = persistentWorldFingerprint(model);
+
+    expect(placements.map((placement) => persistentWorldGraphNodeLabel(model, placement)))
+      .toEqual(placements.map((placement) => persistentWorldPlacementLabel(model, placement)));
+    expect(persistentWorldGraphNodeLabel(model, placements[2])).toBe("Labor-Force Participation");
+    expect(persistentWorldGraphNodeLabel(model, placements[2])).not.toContain("61.4");
+    expect(persistentWorldGraphNodeLabel(model, placements[2])).not.toContain("%");
+    expect(persistentWorldGraphNodeLabel(model, placements[3])).toBe("Initial UI Claims");
+    expect(persistentWorldGraphNodeLabel(model, placements[3])).not.toContain("209");
+    expect(persistentWorldGraphNodeLabel(model, placements[3])).not.toContain("thousand");
+    expect(compactPersistentValue(persistentWorldFactualBinding("Labor-Force Participation").displayValue)).toBe("61.4%");
+    expect(compactPersistentValue("209 thousand")).toBe("209 thousand");
+    expect(persistentWorldFingerprint(model)).toBe(before);
   });
 
   it("catalogs an explicit official-data or derivation path for every Level-2 factor", () => {
@@ -284,8 +312,19 @@ describe("persistent world local-review shell", () => {
     window.history.replaceState({}, "", "/systems-monitor/#persistent-world/placement%3Alabor-supply%3Alabor-force-participation");
     render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
     const inspector = await screen.findByRole("complementary", { name: "Persistent world factor details" }, { timeout: 15_000 });
+    const surface = screen.getByRole("application", { name: "Persistent Employment influence world" });
+    const topologyFingerprint = surface.getAttribute("data-topology-fingerprint");
+    expect(surface.getAttribute("data-factual-binding-count")).toBe("5");
     expect(within(inspector).getAllByText("61.4%").length).toBeGreaterThan(0);
     expect(within(inspector).queryByText("61.4 percent")).toBeNull();
+    Object.defineProperty(surface, "getBoundingClientRect", { configurable: true, value: () => ({ x: 0, y: 0, left: 0, top: 0, right: 980, bottom: 720, width: 980, height: 720, toJSON: () => ({}) }) });
+    fireEvent.pointerMove(surface, { pointerId: 1, clientX: 490, clientY: 360 });
+    const hover = screen.getByRole("tooltip");
+    expect(within(hover).getByText("Labor-Force Participation")).toBeTruthy();
+    expect(within(hover).getByText("61.4%")).toBeTruthy();
+    expect(within(hover).queryByText(/Labor-Force Participation\s*·\s*61\.4%/)).toBeNull();
+    expect(surface.getAttribute("data-factual-binding-count")).toBe("5");
+    expect(surface.getAttribute("data-topology-fingerprint")).toBe(topologyFingerprint);
     const factualLinks = within(inspector).getAllByRole("link", { name: "Open factual record" });
     expect(factualLinks.length).toBeGreaterThan(0);
     expect(factualLinks.every((link) => link.getAttribute("href") === "/systems-monitor/#workstream1a")).toBe(true);

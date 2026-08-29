@@ -32,6 +32,10 @@ export function persistentWorldDoubleClickAction(hitPlacementId: string | null, 
   return "NONE";
 }
 
+export function persistentWorldGraphNodeLabel(model: PersistentWorldReadModel, placement: PersistentWorldPlacement) {
+  return persistentWorldPlacementLabel(model, placement);
+}
+
 const OVERVIEW_SCALE = .205;
 const AMBIENT_EDGE = "#315b67";
 
@@ -198,7 +202,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
       const labelCandidates: LabelCandidate[] = []; const focusPlacement = selectedPlacementId ? model.placements[selectedPlacementId] : undefined;
       for (const placement of placements) {
         const point = project(placement, camera, viewport, width, height); if (point.x < -42 || point.y < -42 || point.x > width + 42 || point.y > height + 42) continue;
-        const factorLabel = persistentWorldPlacementLabel(model, placement); const factualBinding = factualBindings[placement.id];
+        const factorLabel = persistentWorldGraphNodeLabel(model, placement); const factualBinding = factualBindings[placement.id];
         const semanticAlpha = Math.min(1, (semanticSet.has(placement.id) ? transitionSample.progress : 0) + (previousSemanticSet.has(placement.id) ? 1 - transitionSample.progress : 0)); const emphasized = semanticAlpha > .015 || selectedPath.has(placement.id); const sectorActive = isInSelectedSector(model, placement, selectedPlacementId); const effectiveScale = camera.scale * viewport.zoom; const lod = resolvePersistentLod(placement.depth, effectiveScale, emphasized); const radius = premiumRadius(placement, lod);
         const accent = persistentPlacementAccent(placement); const isHovered = placement.id === currentHovered; const isSelected = placement.id === selectedPlacementId;
         context.globalAlpha = emphasized ? Math.max(.08, semanticAlpha, selectedPath.has(placement.id) ? .7 : 0) : sectorActive ? (placement.depth === 3 ? .36 : .58) : (fullWorld ? .24 : .1);
@@ -216,7 +220,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
         const focusHasChildren = Boolean(focusPlacement && (model.childrenByPlacement[focusPlacement.id]?.length ?? 0) > 0);
         const suppressFocusAncestorLabel = Boolean(focusHasChildren && placement.id === focusPlacement?.parentPlacementId);
         if (emphasized && lod >= 1 && !suppressFocusAncestorLabel) {
-          const compactValue = compactPersistentValue(factualBinding?.status === "CONNECTED" ? factualBinding.displayValue : undefined); const label = compactValue ? `${factorLabel} · ${compactValue}` : factorLabel; const fontSize = placement.depth === 0 ? 13 : placement.depth === 1 ? 12 : 11; context.font = `${placement.depth < 2 ? 750 : 650} ${fontSize}px Inter, system-ui, sans-serif`; const textWidth = Math.min(226, context.measureText(label).width + 18);
+          const label = factorLabel; const fontSize = placement.depth === 0 ? 13 : placement.depth === 1 ? 12 : 11; context.font = `${placement.depth < 2 ? 750 : 650} ${fontSize}px Inter, system-ui, sans-serif`; const textWidth = Math.min(226, context.measureText(label).width + 18);
           let labelX = point.x; let labelY = point.y + radius + 17; let anchorX: number | undefined; let anchorY: number | undefined; let labelSide: "left" | "right" | "top" | "bottom" | undefined;
           const parent = placement.parentPlacementId ? model.placements[placement.parentPlacementId] : undefined;
           if (parent && placement.depth >= 2) {
