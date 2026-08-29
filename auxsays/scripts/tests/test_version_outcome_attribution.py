@@ -224,6 +224,62 @@ def run() -> int:  # noqa: PLR0915
               "loading", "32.1.2").vetoes,
           "a statement about another version cancelled this one")
 
+    # ---------------- inflection coverage ----------------
+    # A live Windows title reads "Keeps Failing to Install and ROLLS BACK to 26200.9168" -- the
+    # target is the working build the machine fell back to, and the original cue set missed it.
+    # The gap was systematic, not one word: a report written about the MACHINE ("it rolls back")
+    # rather than the author ("I rolled back") is the natural voice for install-failure reports.
+    print(NEWLINE + "[I] rollback verbs are matched in the third person too")
+    for verb in ("rolls back to", "rolled back to", "rolling back to", "roll back to",
+                 "reverts to", "reverted to", "downgrades to", "downgraded to",
+                 "goes back to", "went back to", "falls back to"):
+        check(f"I '{verb}' is a rollback",
+              to.classify_target_outcome(f"Install failed and it {verb} 32.1.2", "32.1.2").vetoes,
+              str(to.classify_target_outcome(f"Install failed and it {verb} 32.1.2", "32.1.2")))
+    # But the -s is added only to MOTION verbs. stay/remain/stick depend on their subject: "I stay
+    # on X" is a rollback, "the bug stays on X" is an affected report. Adding `stays` classified
+    # that second sentence as a rollback target, i.e. deleted a real report.
+    check("I 'the bug stays on X' is not a rollback (subject decides the meaning)",
+          not to.classify_target_outcome("The bug stays on 32.1.2 too", "32.1.2").vetoes,
+          str(to.classify_target_outcome("The bug stays on 32.1.2 too", "32.1.2")))
+    check("I 'the crash remains on X' is not a rollback",
+          not to.classify_target_outcome("The crash remains on 32.1.2", "32.1.2").vetoes,
+          str(to.classify_target_outcome("The crash remains on 32.1.2", "32.1.2")))
+    check("I first-person 'staying on X' is still a rollback",
+          to.classify_target_outcome("I am staying on 32.1.2 until this is fixed", "32.1.2").vetoes,
+          str(to.classify_target_outcome("I am staying on 32.1.2 until this is fixed", "32.1.2")))
+    live = ("Windows Insider Build 26220.9022 Keeps Failing to Install and "
+            "Rolls Back to 26200.9168")
+    check("I the live Windows title: the rollback target is vetoed",
+          to.classify_target_outcome(live, "26200.9168").vetoes,
+          str(to.classify_target_outcome(live, "26200.9168")))
+    check("I the live Windows title: the failing build is still affected",
+          to.classify_target_outcome(live, "26220.9022").outcome == to.AFFECTED,
+          str(to.classify_target_outcome(live, "26220.9022")))
+
+    # ---------------- interrogative suppression ----------------
+    # "Was this fixed in KB5121003?" ASKS whether the target is healthy; it does not claim it.
+    # Read as an assertion it vetoes a legitimately affected row, and R3 cannot rescue it because a
+    # question rarely carries a failure verb of its own. The sentence below appears verbatim in a
+    # live Microsoft Q&A thread, so this is native phrasing rather than a constructed edge case.
+    print(NEWLINE + "[Q] a question about the target is not a claim about it")
+    for text, target in (
+        ("Was this exact issue fixed in KB5121003 / build 26200.9168, even if it is not "
+         "listed in the public release notes?", "KB5121003"),
+        ("Is it fixed in 32.2.3?", "32.2.3"),
+        ("Does anyone know if 32.1.2 works?", "32.1.2"),
+        ("Has this been resolved in 32.2.1?", "32.2.1"),
+    ):
+        check(f"Q {text[:44]!r} does not veto",
+              not to.classify_target_outcome(text, target).vetoes,
+              str(to.classify_target_outcome(text, target)))
+    for text, target in (("This was fixed in 32.2.3.", "32.2.3"),
+                         ("It works in 32.1.2", "32.1.2"),
+                         ("worked as intended on version 32.1.2", "32.1.2")):
+        check(f"Q the ASSERTION {text[:38]!r} still vetoes",
+              to.classify_target_outcome(text, target).vetoes,
+              str(to.classify_target_outcome(text, target)))
+
     # ---------------- primitive-level guards ----------------
     print(NEWLINE + "[P] primitive behaviour")
     check("P a target absent from the text yields no outcome",

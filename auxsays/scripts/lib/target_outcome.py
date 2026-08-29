@@ -60,10 +60,21 @@ _T = "%T"
 _STOP = r"[^.;!?\n]"
 
 _ROLLBACK_CUES: list[tuple[str, str]] = [
-    # "downgraded to X", "revert back to X", "went back to X", "staying on X"
-    (rf"\b(?:down\s?grad(?:e|ed|ing)?|revert(?:ed|ing)?|roll(?:ed|ing)?\s*back|went\s+back"
-     rf"|go(?:ing)?\s+back|fall(?:ing)?\s+back|fell\s+back|stay(?:ed|ing)?|remain(?:ed|ing)?"
-     rf"|stick(?:ing)?)\b{_STOP}{{0,40}}?\b(?:back\s+)?(?:to|on|with)\b{_STOP}{{0,25}}?{_T}",
+    # "downgraded to X", "revert back to X", "went back to X", "staying on X".
+    # Every verb carries its third-person -s form. Without them the cue missed a live Windows
+    # title -- "Keeps Failing to Install and ROLLS BACK to 26200.9168" -- where the target is the
+    # working build the machine fell back to. The gap was systematic, not one word: `rolls back`,
+    # `reverts`, `downgrades`, `goes back` and `falls back` all read as no-outcome, because a
+    # title written about the machine ("it rolls back") rather than the author ("I rolled back")
+    # is the natural voice for install-failure reports.
+    # The -s is added only to the MOTION verbs, which mean the same thing whoever the subject is:
+    # something moved TO the target. It is deliberately NOT added to stay / remain / stick, where
+    # the subject decides the meaning -- "I stay on X" is a rollback, but "the bug stays on X" is
+    # an affected report, and adding `stays` classified that second sentence as a rollback target.
+    (rf"\b(?:down\s?grad(?:e|es|ed|ing)?|revert(?:s|ed|ing)?|roll(?:s|ed|ing)?\s*back"
+     rf"|went\s+back|go(?:es|ing)?\s+back|fall(?:s|ing)?\s+back|fell\s+back"
+     rf"|stay(?:ed|ing)?|remain(?:ed|ing)?|stick(?:ing)?)\b"
+     rf"{_STOP}{{0,40}}?\b(?:back\s+)?(?:to|on|with)\b{_STOP}{{0,25}}?{_T}",
      "rollback_to_target"),
     # "the previous/older/last known good version X"
     (rf"\b(?:previous|older|earlier|last\s+(?:known\s+)?(?:good|working))\s+"
@@ -170,6 +181,23 @@ def _spans_another_identity(matched: str, target: str) -> bool:
                for found in _NEIGHBOUR_IDENTITY.findall(blanked))
 
 
+_SENTENCE_BREAK = re.compile(r"[.;!?\n]")
+# An auxiliary or wh-word opening the clause. Paired with a trailing "?", this is a question rather
+# than a claim.
+_INTERROGATIVE = re.compile(
+    r"^\s*(?:was|were|is|are|has|have|had|does|do|did|will|would|can|could|should|any(?:one|body)?"
+    r"|who|what|when|where|why|how)\b", re.I)
+
+
+def _is_question(text: str, start: int, end: int) -> bool:
+    """Is the clause carrying this match a question rather than an assertion?"""
+    left = max((m.end() for m in _SENTENCE_BREAK.finditer(text, 0, start)), default=0)
+    closer = _SENTENCE_BREAK.search(text, end)
+    right = closer.end() if closer else len(text)
+    clause = text[left:right].strip()
+    return clause.endswith("?") and bool(_INTERROGATIVE.match(clause))
+
+
 def _mask_foreign_numbers(text: str, target: str) -> str:
     """Blank dotted numbers that cannot be a version of this product, preserving offsets.
 
@@ -200,6 +228,12 @@ def _first_hit(text: str, target: str, cues: list[tuple[str, str]]) -> tuple[str
     for pattern, basis in cues:
         for match in re.finditer(pattern.replace(_T, escaped), scanned, re.I):
             if _spans_another_identity(match.group(0), target):
+                continue
+            if basis in _POLARITY_SENSITIVE and _is_question(scanned, match.start(), match.end()):
+                # "Was this fixed in KB5121003?" ASKS whether the target is healthy; it does not
+                # say so. Read as an assertion it vetoes a legitimately affected row, and R3 cannot
+                # rescue it because a question rarely carries a failure verb of its own. This
+                # phrasing is native to Microsoft Q&A, where the sentence appears verbatim.
                 continue
             if basis in _POLARITY_SENSITIVE:
                 lead = scanned[max(0, match.start() - _POLARITY_LOOKBACK):match.start()]
