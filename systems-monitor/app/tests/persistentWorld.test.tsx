@@ -7,11 +7,18 @@ import { persistentWorldFactualBinding } from "../src/data/persistentWorldFactua
 import { PERSISTENT_WORLD_PROFILED_FACTOR_COUNT, persistentWorldCandidateSourceProfile } from "../src/data/persistentWorldSourceCatalog";
 import { persistentWorldMediaFor } from "../src/views/persistent/persistentWorldMedia";
 import { PERSISTENT_GLINT_PERIOD_MS, PERSISTENT_GLINT_TRAIL, blendPremiumColor, compactPersistentValue, createPersistentCameraTransition, easePremiumHover, factorGlyph, persistentAmbientEdges, persistentFocusRotation, persistentGlintProgress, persistentPlacementAccent, premiumCurveRoute, resolvePersistentLod, resolvePremiumLabels, samplePersistentCameraTransition, shortestAngleDelta } from "../src/views/persistent/persistentWorldVisuals";
-import { persistentWorldDoubleClickAction, persistentWorldGraphNodeLabel } from "../src/views/persistent/PremiumPersistentWorldSurface";
+import { persistentWorldDoubleClickAction, persistentWorldEdgeTransitionAlpha, persistentWorldGraphNodeLabel } from "../src/views/persistent/PremiumPersistentWorldSurface";
 import { persistentWorldUpSelection } from "../src/views/persistent/PersistentWorldShell";
 import { createPersistentWorldSpatialLayout, projectPersistentPlacement } from "../src/views/persistent/persistentWorldSpatialLayout";
 
 describe("premium persistent-world visual language", () => {
+  it("fully retires previous-view connector passes after navigation settles", () => {
+    expect(persistentWorldEdgeTransitionAlpha(false, true, 0)).toBe(1);
+    expect(persistentWorldEdgeTransitionAlpha(false, true, 0.2)).toBe(0.5);
+    expect(persistentWorldEdgeTransitionAlpha(false, true, 1)).toBe(0);
+    expect(persistentWorldEdgeTransitionAlpha(true, false, 1)).toBe(1);
+  });
+
   it("routes curves deterministically without changing endpoints", () => {
     const first = premiumCurveRoute("hierarchy:a:b", { x: 10, y: 20 }, { x: 300, y: 160 });
     expect(first).toEqual(premiumCurveRoute("hierarchy:a:b", { x: 10, y: 20 }, { x: 300, y: 160 }));
