@@ -65,7 +65,11 @@ Fifty alternating Level-1 hash targets completed with:
 - phase `SETTLED`;
 - render loop `IDLE`;
 - topology `fnv1a32:88684cdb`;
-- presentation `fnv1a32:68569dc2`;
+- presentation `fnv1a32:e163ce8a`;
+
+## Human-review correction
+
+The first integration was visually rejected because its focus angles were too restrained and global ambient hierarchy strands remained visible in deep focus. The corrected focus sample uses a 39-degree pitch, settles in 824.6 ms, returns the render loop to `IDLE`, and measured 1.2 ms Canvas p95 on the reported Vacancy Duration route. Off-context ambient hierarchy strands are now excluded from focus rendering.
 - final sampled Canvas p95 1.8 ms.
 
 ## Limitations

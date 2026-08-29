@@ -6,7 +6,7 @@ import { createPersistentWorld, employmentDriverCandidates, persistentWorldFinge
 import { persistentWorldFactualBinding } from "../src/data/persistentWorldFactualBindings";
 import { PERSISTENT_WORLD_PROFILED_FACTOR_COUNT, persistentWorldCandidateSourceProfile } from "../src/data/persistentWorldSourceCatalog";
 import { persistentWorldMediaFor } from "../src/views/persistent/persistentWorldMedia";
-import { PERSISTENT_GLINT_PERIOD_MS, PERSISTENT_GLINT_TRAIL, blendPremiumColor, compactPersistentValue, createPersistentCameraTransition, easePremiumHover, factorGlyph, persistentFocusRotation, persistentGlintProgress, persistentPlacementAccent, premiumCurveRoute, resolvePersistentLod, resolvePremiumLabels, samplePersistentCameraTransition, shortestAngleDelta } from "../src/views/persistent/persistentWorldVisuals";
+import { PERSISTENT_GLINT_PERIOD_MS, PERSISTENT_GLINT_TRAIL, blendPremiumColor, compactPersistentValue, createPersistentCameraTransition, easePremiumHover, factorGlyph, persistentAmbientEdges, persistentFocusRotation, persistentGlintProgress, persistentPlacementAccent, premiumCurveRoute, resolvePersistentLod, resolvePremiumLabels, samplePersistentCameraTransition, shortestAngleDelta } from "../src/views/persistent/persistentWorldVisuals";
 import { persistentWorldDoubleClickAction, persistentWorldGraphNodeLabel } from "../src/views/persistent/PremiumPersistentWorldSurface";
 import { persistentWorldUpSelection } from "../src/views/persistent/PersistentWorldShell";
 import { createPersistentWorldSpatialLayout, projectPersistentPlacement } from "../src/views/persistent/persistentWorldSpatialLayout";
@@ -18,6 +18,16 @@ describe("premium persistent-world visual language", () => {
     expect(first.start).toEqual({ x: 10, y: 20 });
     expect(first.end).toEqual({ x: 300, y: 160 });
     expect(first.control1.y).not.toBe(20 + (160 - 20) * .33);
+  });
+
+  it("culls off-context hierarchy strands from focus views", () => {
+    const edges = [
+      { id: "current", fromPlacementId: "parent", toPlacementId: "child" },
+      { id: "stale", fromPlacementId: "old-parent", toPlacementId: "old-child" },
+      { id: "cross", fromPlacementId: "parent", toPlacementId: "old-child" }
+    ];
+    expect(persistentAmbientEdges(edges, ["parent", "child"], false).map((edge) => edge.id)).toEqual(["current"]);
+    expect(persistentAmbientEdges(edges, ["parent", "child"], true)).toEqual(edges);
   });
 
   it("keeps glint period and trail independent from hover emphasis", () => {
@@ -179,8 +189,8 @@ describe("premium persistent-world visual language", () => {
     const first = createPersistentWorldSpatialLayout(model);
     const second = createPersistentWorldSpatialLayout(model);
     expect(first).toEqual(second);
-    expect(first.version).toBe("employment-spatial-presentation-1.0.0");
-    expect(first.projectionVersion).toBe("restrained-perspective-1.0.0");
+    expect(first.version).toBe("employment-spatial-presentation-1.1.0");
+    expect(first.projectionVersion).toBe("perspective-depth-1.1.0");
     expect(first.fingerprint).toMatch(/^fnv1a32:[0-9a-f]{8}$/);
     expect(new Set(Object.values(first.zByPlacementId)).size).toBeGreaterThan(100);
     expect(model.topologyFingerprint).toBe(before);
@@ -296,9 +306,9 @@ describe("persistent world local-review shell", () => {
     fireEvent.click(screen.getByRole("button", { name: "Trace" }));
     expect(surface.getAttribute("data-trace-mode")).toBe("true");
     expect(surface.getAttribute("data-topology-fingerprint")).toBe("fnv1a32:88684cdb");
-    expect(surface.getAttribute("data-presentation-layout-version")).toBe("employment-spatial-presentation-1.0.0");
-    expect(surface.getAttribute("data-projection-version")).toBe("restrained-perspective-1.0.0");
-    expect(surface.getAttribute("data-presentation-fingerprint")).toBe("fnv1a32:68569dc2");
+    expect(surface.getAttribute("data-presentation-layout-version")).toBe("employment-spatial-presentation-1.1.0");
+    expect(surface.getAttribute("data-projection-version")).toBe("perspective-depth-1.1.0");
+    expect(surface.getAttribute("data-presentation-fingerprint")).toBe("fnv1a32:e163ce8a");
     const inspector = screen.getByRole("complementary", { name: "Persistent world factor details" });
     expect(within(inspector).getByRole("heading", { name: "Employer Labor Demand" })).toBeTruthy();
     expect(window.location.hash).toContain("placement%3Aemployer-labor-demand");

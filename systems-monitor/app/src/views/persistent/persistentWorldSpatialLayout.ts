@@ -1,7 +1,7 @@
 import type { PersistentWorldPlacement, PersistentWorldReadModel } from "../../data/persistentWorldModel";
 
-export const PERSISTENT_PRESENTATION_LAYOUT_VERSION = "employment-spatial-presentation-1.0.0";
-export const PERSISTENT_PROJECTION_VERSION = "restrained-perspective-1.0.0";
+export const PERSISTENT_PRESENTATION_LAYOUT_VERSION = "employment-spatial-presentation-1.1.0";
+export const PERSISTENT_PROJECTION_VERSION = "perspective-depth-1.1.0";
 
 export type PersistentDepthBand = "far" | "mid" | "near";
 
@@ -61,9 +61,9 @@ export function createPersistentWorldSpatialLayout(model: PersistentWorldReadMod
     const parent = placement.parentPlacementId ? model.placements[placement.parentPlacementId] : undefined;
     const parentZ = parent ? zByPlacementId[parent.id] ?? 0 : 0;
     let z = 0;
-    if (placement.depth === 1) z = 120 * Math.sin(sectorPhase + .35) + 24 * signedHash(placement.id, "l1");
-    else if (placement.depth === 2) z = parentZ + 76 * Math.sin(slotPhase + .41 * sectorPhase) + 16 * signedHash(placement.id, "l2");
-    else if (placement.depth === 3) z = parentZ + 42 * Math.sin(slotPhase + .37 * (parent?.order ?? 0) + .19 * sectorPhase) + 10 * signedHash(placement.id, "l3");
+    if (placement.depth === 1) z = 220 * Math.sin(sectorPhase + .35) + 42 * signedHash(placement.id, "l1");
+    else if (placement.depth === 2) z = parentZ + 150 * Math.sin(slotPhase + .41 * sectorPhase) + 28 * signedHash(placement.id, "l2");
+    else if (placement.depth === 3) z = parentZ + 90 * Math.sin(slotPhase + .37 * (parent?.order ?? 0) + .19 * sectorPhase) + 18 * signedHash(placement.id, "l3");
     zByPlacementId[placement.id] = rounded(z);
   }
   const serialized = Object.keys(zByPlacementId).sort().map((id) => `${id}|${zByPlacementId[id].toFixed(3)}`).join("\n");
@@ -101,13 +101,13 @@ export function createPersistentProjector(camera: PersistentSpatialCamera, viewp
     const rotatedX = dx * cosRotation - dy * sinRotation; const rotatedY = dx * sinRotation + dy * cosRotation;
     const yawX = rotatedX * cosYaw - dz * sinYaw; const yawZ = rotatedX * sinYaw + dz * cosYaw;
     const pitchY = rotatedY * cosPitch - yawZ * sinPitch; const cameraDepth = rotatedY * sinPitch + yawZ * cosPitch;
-    const perspectiveScale = Math.max(.82, Math.min(1.2, 1850 / (1850 - cameraDepth)));
-    const band: PersistentDepthBand = cameraDepth < -90 ? "far" : cameraDepth > 90 ? "near" : "mid";
+    const perspectiveScale = Math.max(.7, Math.min(1.36, 1200 / (1200 - cameraDepth)));
+    const band: PersistentDepthBand = cameraDepth < -110 ? "far" : cameraDepth > 110 ? "near" : "mid";
     return {
       x: width / 2 + yawX * scale * perspectiveScale + viewport.panX,
       y: height / 2 + pitchY * scale * perspectiveScale + viewport.panY,
       cameraDepth, perspectiveScale,
-      opacity: band === "far" ? .62 : band === "mid" ? .82 : 1,
+      opacity: band === "far" ? .46 : band === "mid" ? .78 : 1,
       band
     };
   };

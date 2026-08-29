@@ -36,9 +36,11 @@ Depth expresses visual position only. It does not express importance, confidence
 
 ## Deterministic depth
 
-Presentation layout version: `employment-spatial-presentation-1.0.0`  
-Projection version: `restrained-perspective-1.0.0`  
-Presentation fingerprint: `fnv1a32:68569dc2`
+Presentation layout version: `employment-spatial-presentation-1.1.0`
+Projection version: `perspective-depth-1.1.0`
+Presentation fingerprint: `fnv1a32:e163ce8a`
+
+Correction-round note: the initial 1.0 presentation used angles too shallow to read as spatial depth and drew the complete hierarchy as a faint focus-view underlay. Version 1.1 increases final focus pitch to roughly 30–45 degrees, adds a perspective deck/horizon, and culls ambient hierarchy edges to the current and transitioning semantic neighborhoods. Full-world mode alone retains the intentionally faint global hierarchy.
 
 Stable Z is derived from hierarchy depth, sector phase, sibling order, parent Z, and an FNV-1a hash of stable placement identity. Values are rounded to three decimals before fingerprinting. The same model produces the same frozen Z map on every load; selection never changes it.
 

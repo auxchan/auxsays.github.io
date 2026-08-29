@@ -4,7 +4,7 @@ import type { PersistentWorldFactualBinding } from "../../data/persistentWorldFa
 import { persistentWorldCandidateSourceProfile } from "../../data/persistentWorldSourceCatalog";
 import {
   PERSISTENT_GLINT_TRAIL, blendPremiumColor, compactPersistentValue, drawPremiumGlyph,
-  createPersistentCameraTransition, easePremiumHover, factorGlyph, persistentGlintProgress, pointOnCubic, premiumCurveRoute,
+  createPersistentCameraTransition, easePremiumHover, factorGlyph, persistentAmbientEdges, persistentGlintProgress, pointOnCubic, premiumCurveRoute,
   persistentFocusRotation, persistentPlacementAccent, premiumRadius, resolvePersistentLod, resolvePremiumLabels, traceCubic,
   samplePersistentCameraTransition, type LabelCandidate, type PersistentCameraPose, type PersistentCameraVelocity, type Point
 } from "./persistentWorldVisuals";
@@ -58,11 +58,11 @@ function hoverWhy(model: PersistentWorldReadModel, placement: PersistentWorldPla
 
 function targetCamera(model: PersistentWorldReadModel, selectedPlacementId: string | null, fullWorld: boolean, viewportWidth = 980, viewportHeight = 720, spatial = createPersistentWorldSpatialLayout(model)): Camera {
   const selected = selectedPlacementId ? model.placements[selectedPlacementId] : undefined;
-  if (!selected || fullWorld) return { x: 0, y: 0, z: 0, scale: fullWorld ? .17 : OVERVIEW_SCALE, rotation: 0, pitch: fullWorld ? -.026 : -.035, yaw: 0 };
+  if (!selected || fullWorld) return { x: 0, y: 0, z: 0, scale: fullWorld ? .17 : OVERVIEW_SCALE, rotation: 0, pitch: fullWorld ? -.18 : -.14, yaw: fullWorld ? .06 : -.04 };
   const rotation = persistentFocusRotation(selected.sector) + (selected.depth >= 2 ? (selected.order - 5.5) * .008 : 0);
   const z = spatial.zByPlacementId[selected.id] ?? 0;
-  const pitch = selected.depth === 1 ? .052 : selected.depth === 2 ? .07 : .087;
-  const yaw = Math.max(-.105, Math.min(.105, (selected.sector - 4.5) * .014 + (selected.depth >= 2 ? (selected.order - 5.5) * .005 : 0)));
+  const pitch = selected.depth === 1 ? .52 : selected.depth === 2 ? .68 : .78;
+  const yaw = Math.max(-.42, Math.min(.42, (selected.sector - 4.5) * .056 + (selected.depth >= 2 ? (selected.order - 5.5) * .026 : 0)));
   if (selected.depth === 1) {
     const neighborhood = [selected, ...(model.childrenByPlacement[selected.id] ?? []).map((id) => model.placements[id])];
     const rotated = neighborhood.map((placement) => ({ x: placement.x * Math.cos(rotation) - placement.y * Math.sin(rotation), y: placement.x * Math.sin(rotation) + placement.y * Math.cos(rotation) }));
@@ -98,15 +98,18 @@ function drawBackground(context: CanvasRenderingContext2D, width: number, height
   const gradient = context.createRadialGradient(width * .5 + parallax.x, height * .48 + parallax.y, 20, width * .5, height * .5, Math.max(width, height) * .72);
   gradient.addColorStop(0, "rgba(27,111,117,.31)"); gradient.addColorStop(.45, "rgba(7,39,48,.18)"); gradient.addColorStop(1, "rgba(1,9,14,0)");
   context.fillStyle = gradient; context.fillRect(0, 0, width, height);
-  context.strokeStyle = "rgba(76,148,156,.055)"; context.lineWidth = 1; context.beginPath();
-  const grid = 48;
-  for (let x = ((parallax.x * .16) % grid) - grid; x < width + grid; x += grid) { context.moveTo(x, 0); context.lineTo(x, height); }
-  for (let y = ((parallax.y * .16) % grid) - grid; y < height + grid; y += grid) { context.moveTo(0, y); context.lineTo(width, y); }
+  const vanishingX = width * .5 - camera.yaw * width * .72 + parallax.x * .08;
+  const horizonY = Math.max(height * .16, Math.min(height * .48, height * .34 - camera.pitch * height * .42 + parallax.y * .035));
+  context.strokeStyle = "rgba(76,148,156,.06)"; context.lineWidth = 1; context.beginPath();
+  for (let x = -width * .3; x <= width * 1.3; x += Math.max(54, width / 15)) { context.moveTo(vanishingX, horizonY); context.lineTo(x, height); }
+  for (let index = 1; index <= 12; index += 1) { const t = index / 12; const y = horizonY + (height - horizonY) * t * t; context.moveTo(0, y); context.lineTo(width, y); }
   context.stroke();
+  context.strokeStyle = "rgba(76,148,156,.025)"; context.beginPath(); context.moveTo(0, horizonY); context.lineTo(width, horizonY); context.stroke();
   context.save(); context.translate(width / 2 + parallax.x * .22, height / 2 + parallax.y * .22);
   for (const radius of [Math.min(width, height) * .19, Math.min(width, height) * .34, Math.min(width, height) * .49]) {
     context.strokeStyle = `rgba(93,201,195,${radius < 200 ? .08 : .045})`; context.lineWidth = 1; context.setLineDash([3, 11]);
-    context.beginPath(); context.ellipse(0, 0, radius * 1.12, radius * .82, -.08, 0, Math.PI * 2); context.stroke();
+    const planeCompression = Math.max(.32, .62 - Math.abs(camera.pitch) * .55);
+    context.beginPath(); context.ellipse(0, 0, radius * 1.14, radius * planeCompression, camera.yaw * .42, 0, Math.PI * 2); context.stroke();
   }
   context.setLineDash([]); context.restore();
   for (let index = 0; index < 54; index += 1) {
@@ -202,8 +205,9 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
       for (const placement of placements) projected.set(placement.id, projectFrame(placement, spatialLayout.zByPlacementId[placement.id] ?? 0));
       const projectedAt = (id: string) => projected.get(id)!;
 
-      context.lineWidth = .58; context.strokeStyle = "rgba(93,176,176,.075)"; context.beginPath();
-      for (const edge of hierarchy) { const from = projectedAt(edge.fromPlacementId); const to = projectedAt(edge.toPlacementId); const route = premiumCurveRoute(edge.id, from, to, true); context.moveTo(route.start.x, route.start.y); context.bezierCurveTo(route.control1.x, route.control1.y, route.control2.x, route.control2.y, route.end.x, route.end.y); }
+      const ambientHierarchy = persistentAmbientEdges(hierarchy, [...transitionSemanticSet], fullWorld);
+      context.lineWidth = .58; context.strokeStyle = fullWorld ? "rgba(93,176,176,.055)" : "rgba(93,176,176,.035)"; context.beginPath();
+      for (const edge of ambientHierarchy) { const from = projectedAt(edge.fromPlacementId); const to = projectedAt(edge.toPlacementId); const route = premiumCurveRoute(edge.id, from, to, true); context.moveTo(route.start.x, route.start.y); context.bezierCurveTo(route.control1.x, route.control1.y, route.control2.x, route.control2.y, route.end.x, route.end.y); }
       context.stroke();
       if (fullWorld) { context.strokeStyle = "rgba(166,132,238,.024)"; context.lineWidth = .38; context.beginPath(); for (const edge of influence) { const from = projectedAt(edge.fromPlacementId); const to = projectedAt(edge.toPlacementId); context.moveTo(from.x, from.y); context.lineTo(to.x, to.y); } context.stroke(); }
 
@@ -211,7 +215,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
       const depthEdges = [...highlightedEdges].sort((left, right) => (projectedAt(left.fromPlacementId).cameraDepth + projectedAt(left.toPlacementId).cameraDepth) - (projectedAt(right.fromPlacementId).cameraDepth + projectedAt(right.toPlacementId).cameraDepth));
       for (const edge of depthEdges) {
         const fromPlacement = model.placements[edge.fromPlacementId]; const toPlacement = model.placements[edge.toPlacementId]; const from = projectedAt(edge.fromPlacementId); const to = projectedAt(edge.toPlacementId); const route = premiumCurveRoute(edge.id, from, to);
-        const currentEdge = semanticSet.has(edge.fromPlacementId) && semanticSet.has(edge.toPlacementId); const previousEdge = previousSemanticSet.has(edge.fromPlacementId) && previousSemanticSet.has(edge.toPlacementId); const transitionAlpha = Math.min(1, (currentEdge ? transitionSample.progress : 0) + (previousEdge ? 1 - transitionSample.progress : 0));
+        const currentEdge = semanticSet.has(edge.fromPlacementId) && semanticSet.has(edge.toPlacementId); const previousEdge = previousSemanticSet.has(edge.fromPlacementId) && previousSemanticSet.has(edge.toPlacementId); const transitionAlpha = Math.min(1, (currentEdge ? transitionSample.progress * 1.8 : 0) + (previousEdge ? Math.max(0, 1 - transitionSample.progress * 2.5) : 0));
         const accent = persistentPlacementAccent(toPlacement); const incident = Boolean(currentHovered && (edge.fromPlacementId === currentHovered || edge.toPlacementId === currentHovered)); const traceEdge = selectedPath.has(edge.fromPlacementId) && selectedPath.has(edge.toPlacementId);
         const hoverAmount = easePremiumHover(hoverVisualsRef.current.get(edge.id) ?? 0, incident ? 1 : 0, elapsedMs, reducedMotion); hoverVisualsRef.current.set(edge.id, hoverAmount);
         const focused = selectedPlacementId ? model.placements[selectedPlacementId] : undefined; const denseFanEdge = Boolean(focused && focused.depth < 3 && (edge.fromPlacementId === focused.id || edge.toPlacementId === focused.id)); const railScale = denseFanEdge ? .64 : 1;
@@ -228,7 +232,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
       for (const placement of orderedPlacements) {
         const point = projectedAt(placement.id); if (point.x < -42 || point.y < -42 || point.x > width + 42 || point.y > height + 42) continue;
         const factorLabel = persistentWorldGraphNodeLabel(model, placement); const factualBinding = factualBindings[placement.id];
-        const semanticAlpha = Math.min(1, (semanticSet.has(placement.id) ? transitionSample.progress : 0) + (previousSemanticSet.has(placement.id) ? 1 - transitionSample.progress : 0)); const emphasized = semanticAlpha > .015 || selectedPath.has(placement.id); const sectorActive = isInSelectedSector(model, placement, selectedPlacementId); const effectiveScale = camera.scale * viewport.zoom * point.perspectiveScale; const lod = resolvePersistentLod(placement.depth, effectiveScale, emphasized); const radius = premiumRadius(placement, lod) * (.9 + point.perspectiveScale * .1);
+        const semanticAlpha = Math.min(1, (semanticSet.has(placement.id) ? transitionSample.progress * 1.8 : 0) + (previousSemanticSet.has(placement.id) ? Math.max(0, 1 - transitionSample.progress * 2.5) : 0)); const emphasized = semanticAlpha > .015 || selectedPath.has(placement.id); const sectorActive = isInSelectedSector(model, placement, selectedPlacementId); const effectiveScale = camera.scale * viewport.zoom * point.perspectiveScale; const lod = resolvePersistentLod(placement.depth, effectiveScale, emphasized); const radius = premiumRadius(placement, lod) * (.82 + point.perspectiveScale * .18);
         const accent = persistentPlacementAccent(placement); const isHovered = placement.id === currentHovered; const isSelected = placement.id === selectedPlacementId;
         context.globalAlpha = (emphasized ? Math.max(.08, semanticAlpha, selectedPath.has(placement.id) ? .7 : 0) : sectorActive ? (placement.depth === 3 ? .36 : .58) : (fullWorld ? .24 : .1)) * point.opacity;
         if (lod === 0) { context.fillStyle = accent; context.beginPath(); context.arc(point.x, point.y, Math.max(1, radius), 0, Math.PI * 2); context.fill(); }

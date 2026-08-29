@@ -33,7 +33,8 @@ Local preview:
 
 - Current Canvas architecture preserved.
 - Canonical topology fingerprint preserved: `fnv1a32:88684cdb`.
-- Separate presentation fingerprint: `fnv1a32:68569dc2`.
+- Separate presentation fingerprint: `fnv1a32:e163ce8a`.
+- Correction round 1 removes off-context focus strands and makes the final focus camera visibly oblique (roughly 30–45 degrees by depth).
 - 1,111 placements and 3,110 fixture relationships remain resident.
 - Reduced-motion final state is spatially equivalent without travel/glints/parallax.
 - Structured keyboard/touch navigation remains the non-Canvas accessibility authority.

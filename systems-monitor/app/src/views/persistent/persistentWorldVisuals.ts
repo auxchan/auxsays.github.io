@@ -13,6 +13,13 @@ export const PERSISTENT_GLINT_PERIOD_MS = 2500;
 export const PERSISTENT_GLINT_TRAIL = 0.085;
 export const PERSISTENT_SECTOR_COLORS = ["#6fe4d0", "#59bff5", "#7d9cff", "#ef7f84", "#f0ae54", "#d8ca69", "#e685c4", "#a68cf0", "#66d0a4", "#f18d67"] as const;
 
+/** Prevents off-context hierarchy strands from leaking into a settled focus view. */
+export function persistentAmbientEdges<T extends { fromPlacementId: string; toPlacementId: string }>(edges: readonly T[], semanticIds: readonly string[], fullWorld: boolean) {
+  if (fullWorld) return edges;
+  const semantic = new Set(semanticIds);
+  return edges.filter((edge) => semantic.has(edge.fromPlacementId) && semantic.has(edge.toPlacementId));
+}
+
 function hexToRgb(value: string) {
   const match = /^#([\da-f]{2})([\da-f]{2})([\da-f]{2})$/i.exec(value);
   return match ? [Number.parseInt(match[1], 16), Number.parseInt(match[2], 16), Number.parseInt(match[3], 16)] : [111, 228, 208];
