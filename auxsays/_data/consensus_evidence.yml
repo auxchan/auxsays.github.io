@@ -14248,3 +14248,82 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: microsoft-powerpoint-2501-github-officedev-issue-https-github-com-officedev-office-js-issues-5680
+  product_id: microsoft-powerpoint
+  update_version: '2501'
+  source_type: github_officedev_issue
+  source_name: OfficeDev office-js
+  source_url: https://github.com/OfficeDev/office-js/issues/5680
+  parent_title: Eyedropper on windows cannot pick a color from a taskpane add-in
+  report_title: Eyedropper on windows cannot pick a color from a taskpane add-in
+  report_text_excerpt: 'Office desktop version: Microsoft® PowerPoint® for Microsoft 365 MSO (Version 2501 Build 18429.20132) 64-bit. Host: powerpoint Office desktop version: Microsoft® PowerPoint® for Microsoft 365 MSO (Version 2501 Build 16.0.18429.20132) 64-bit Eyedropper on windows cannot pick a...'
+  captured_at: '2026-08-30T03:57:26Z'
+  source_date: '2025-05-04'
+  target_release_date: '2025-01-30'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '2501'
+  match_basis: exact_version_channel_build
+  applicability: microsoft-powerpoint
+  counted: true
+  exclusion_reason: null
+  issue_theme: add-in incompatibility
+  workflow_area: add-ins
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '18429.20132'
+- id: microsoft-powerpoint-2607-stack-exchange-question-https-superuser-com-questions-1939469-why-am-i-experiencing-powerpoint-annotation-glitches
+  product_id: microsoft-powerpoint
+  update_version: '2607'
+  source_type: stack_exchange_question
+  source_name: Super User
+  source_url: https://superuser.com/questions/1939469/why-am-i-experiencing-powerpoint-annotation-glitches
+  parent_title: Why am I experiencing PowerPoint annotation glitches?
+  report_title: Why am I experiencing PowerPoint annotation glitches?
+  report_text_excerpt: Why am I experiencing PowerPoint annotation glitches? I see apparently random glitches when drawing on PowerPoint slideshow using the annotation tools. There would be a short vertical displacement form the line I am drawing. I tried to search about it on the internet but...
+  captured_at: '2026-08-30T03:57:26Z'
+  source_date: '2026-08-04'
+  target_release_date: '2026-07-29'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '2607'
+  match_basis: exact_version_channel_build
+  applicability: microsoft-powerpoint
+  counted: true
+  exclusion_reason: null
+  issue_theme: slideshow failure
+  workflow_area: presenting
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '20228.20124'
+- id: microsoft-powerpoint-2607-github-officedev-issue-https-github-com-officedev-office-js-issues-6886
+  product_id: microsoft-powerpoint
+  update_version: '2607'
+  source_type: github_officedev_issue
+  source_name: OfficeDev office-js
+  source_url: https://github.com/OfficeDev/office-js/issues/6886
+  parent_title: Unreliable Document Settings
+  report_title: Unreliable Document Settings
+  report_text_excerpt: 'Office desktop version: Version 2607 Build 20228.20124. Host: powerpoint Office desktop version: Version 2607 Build 16.0.20228.20124 Unreliable Document Settings <!--- Provide a general summary of the issue in the Title above --> # Provide required information needed to triage...'
+  captured_at: '2026-08-30T03:57:26Z'
+  source_date: '2026-08-07'
+  target_release_date: '2026-07-29'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '2607'
+  match_basis: exact_version_channel_build
+  applicability: microsoft-powerpoint
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '20228.20124'

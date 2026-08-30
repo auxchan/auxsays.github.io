@@ -17206,16 +17206,16 @@ methods:
   method_id: learn_qna_search_rss
   source_type: microsoft_learn_qna
   status: no_results
-  candidates_found: 4
+  candidates_found: 23
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 4
+  rejected_reports: 22
   blocked_reason: ''
-  last_run: '2026-08-29T22:12:09Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2312, PowerPoint Version 2312, PowerPoint 17126.20126. Candidates 4, accepted 0, rejected 4. Top rejections: missing_powerpoint_version=4. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2312, PowerPoint Version 2312, PowerPoint 17126.20126, PowerPoint Copilot error, PowerPoint crash after update, PowerPoint not responding update, PowerPoint slideshow problem after update, PowerPoint save export fails. Candidates 23, accepted 0, rejected 22. Top rejections: missing_powerpoint_version=10, official_announcement_not_user_report=1, product_not_powerpoint=11. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2312'
   target_build: '17126.20126'
@@ -17230,7 +17230,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-29T22:13:02Z'
+  last_run: '2026-08-30T04:00:27Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2403'
@@ -17238,16 +17238,16 @@ methods:
   method_id: learn_qna_search_rss
   source_type: microsoft_learn_qna
   status: no_results
-  candidates_found: 5
+  candidates_found: 24
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 5
+  rejected_reports: 23
   blocked_reason: ''
-  last_run: '2026-08-29T22:12:09Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2403, PowerPoint Version 2403, PowerPoint 17425.20138. Candidates 5, accepted 0, rejected 5. Top rejections: missing_powerpoint_version=4, product_not_powerpoint=1. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2403, PowerPoint Version 2403, PowerPoint 17425.20138, PowerPoint Copilot error, PowerPoint crash after update, PowerPoint not responding update, PowerPoint slideshow problem after update, PowerPoint save export fails. Candidates 24, accepted 0, rejected 23. Top rejections: missing_powerpoint_version=10, official_announcement_not_user_report=1, product_not_powerpoint=12. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2403'
   target_build: '17425.20138'
@@ -17262,7 +17262,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-29T22:13:02Z'
+  last_run: '2026-08-30T04:00:27Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2404'
@@ -17270,16 +17270,16 @@ methods:
   method_id: learn_qna_search_rss
   source_type: microsoft_learn_qna
   status: no_results
-  candidates_found: 3
+  candidates_found: 22
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 3
+  rejected_reports: 22
   blocked_reason: ''
-  last_run: '2026-08-29T22:12:09Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2404, PowerPoint Version 2404, PowerPoint 17531.20152. Candidates 3, accepted 0, rejected 3. Top rejections: missing_powerpoint_version=3. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2404, PowerPoint Version 2404, PowerPoint 17531.20152, PowerPoint Copilot error, PowerPoint crash after update, PowerPoint not responding update, PowerPoint slideshow problem after update, PowerPoint save export fails. Candidates 22, accepted 0, rejected 22. Top rejections: missing_powerpoint_version=10, official_announcement_not_user_report=1, product_not_powerpoint=11. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2404'
   target_build: '17531.20152'
@@ -17294,7 +17294,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-29T22:13:02Z'
+  last_run: '2026-08-30T04:00:27Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2405'
@@ -17302,16 +17302,16 @@ methods:
   method_id: learn_qna_search_rss
   source_type: microsoft_learn_qna
   status: no_results
-  candidates_found: 5
+  candidates_found: 24
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 5
+  rejected_reports: 23
   blocked_reason: ''
-  last_run: '2026-08-29T22:12:09Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2405, PowerPoint Version 2405, PowerPoint 17628.20110. Candidates 5, accepted 0, rejected 5. Top rejections: missing_powerpoint_version=3, product_not_powerpoint=2. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2405, PowerPoint Version 2405, PowerPoint 17628.20110, PowerPoint Copilot error, PowerPoint crash after update, PowerPoint not responding update, PowerPoint slideshow problem after update, PowerPoint save export fails. Candidates 24, accepted 0, rejected 23. Top rejections: missing_powerpoint_version=9, official_announcement_not_user_report=1, product_not_powerpoint=13. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2405'
   target_build: '17628.20110'
@@ -17326,7 +17326,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-29T22:13:02Z'
+  last_run: '2026-08-30T04:00:27Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2406'
@@ -17334,16 +17334,16 @@ methods:
   method_id: learn_qna_search_rss
   source_type: microsoft_learn_qna
   status: no_results
-  candidates_found: 3
+  candidates_found: 22
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 3
+  rejected_reports: 22
   blocked_reason: ''
-  last_run: '2026-08-29T22:12:09Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2406, PowerPoint Version 2406, PowerPoint 17726.20126. Candidates 3, accepted 0, rejected 3. Top rejections: missing_powerpoint_version=3. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2406, PowerPoint Version 2406, PowerPoint 17726.20126, PowerPoint Copilot error, PowerPoint crash after update, PowerPoint not responding update, PowerPoint slideshow problem after update, PowerPoint save export fails. Candidates 22, accepted 0, rejected 22. Top rejections: missing_powerpoint_version=10, official_announcement_not_user_report=1, product_not_powerpoint=11. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2406'
   target_build: '17726.20126'
@@ -17358,7 +17358,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-29T22:13:02Z'
+  last_run: '2026-08-30T04:00:27Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2407'
@@ -17366,16 +17366,16 @@ methods:
   method_id: learn_qna_search_rss
   source_type: microsoft_learn_qna
   status: no_results
-  candidates_found: 6
+  candidates_found: 25
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 6
+  rejected_reports: 25
   blocked_reason: ''
-  last_run: '2026-08-29T22:12:09Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2407, PowerPoint Version 2407, PowerPoint 17830.20138. Candidates 6, accepted 0, rejected 6. Top rejections: missing_powerpoint_version=3, product_not_powerpoint=3. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2407, PowerPoint Version 2407, PowerPoint 17830.20138, PowerPoint Copilot error, PowerPoint crash after update, PowerPoint not responding update, PowerPoint slideshow problem after update, PowerPoint save export fails. Candidates 25, accepted 0, rejected 25. Top rejections: missing_powerpoint_version=10, official_announcement_not_user_report=1, product_not_powerpoint=14. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2407'
   target_build: '17830.20138'
@@ -17390,7 +17390,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-29T22:13:02Z'
+  last_run: '2026-08-30T04:00:27Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2408'
@@ -17398,16 +17398,16 @@ methods:
   method_id: learn_qna_search_rss
   source_type: microsoft_learn_qna
   status: no_results
-  candidates_found: 1
+  candidates_found: 20
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 1
+  rejected_reports: 20
   blocked_reason: ''
-  last_run: '2026-08-29T22:12:09Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2408, PowerPoint Version 2408, PowerPoint 17928.20114. Candidates 1, accepted 0, rejected 1. Top rejections: missing_powerpoint_version=1. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2408, PowerPoint Version 2408, PowerPoint 17928.20114, PowerPoint Copilot error, PowerPoint crash after update, PowerPoint not responding update, PowerPoint slideshow problem after update, PowerPoint save export fails. Candidates 20, accepted 0, rejected 20. Top rejections: missing_powerpoint_version=8, official_announcement_not_user_report=1, product_not_powerpoint=11. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2408'
   target_build: '17928.20114'
@@ -17422,7 +17422,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-29T22:13:02Z'
+  last_run: '2026-08-30T04:00:27Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2409'
@@ -17430,16 +17430,16 @@ methods:
   method_id: learn_qna_search_rss
   source_type: microsoft_learn_qna
   status: no_results
-  candidates_found: 4
+  candidates_found: 23
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 4
+  rejected_reports: 22
   blocked_reason: ''
-  last_run: '2026-08-29T22:12:09Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2409, PowerPoint Version 2409, PowerPoint 18025.20096. Candidates 4, accepted 0, rejected 4. Top rejections: missing_powerpoint_version=4. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2409, PowerPoint Version 2409, PowerPoint 18025.20096, PowerPoint Copilot error, PowerPoint crash after update, PowerPoint not responding update, PowerPoint slideshow problem after update, PowerPoint save export fails. Candidates 23, accepted 0, rejected 22. Top rejections: missing_powerpoint_version=10, official_announcement_not_user_report=1, product_not_powerpoint=11. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2409'
   target_build: '18025.20096'
@@ -17454,7 +17454,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-29T22:13:02Z'
+  last_run: '2026-08-30T04:00:27Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2410'
@@ -17462,327 +17462,7 @@ methods:
   method_id: learn_qna_search_rss
   source_type: microsoft_learn_qna
   status: no_results
-  candidates_found: 3
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 3
-  blocked_reason: ''
-  last_run: '2026-08-29T22:12:09Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2410, PowerPoint Version 2410, PowerPoint 18129.20158. Candidates 3, accepted 0, rejected 3. Top rejections: missing_powerpoint_version=3. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
-- product_id: microsoft-powerpoint
-  update_version: '2410'
-  target_build: '18129.20158'
-  method_id: reddit_search
-  source_type: reddit_community_report
-  status: disabled
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: ''
-  last_run: '2026-08-29T22:13:02Z'
-  notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
-- product_id: microsoft-powerpoint
-  update_version: '2411'
-  target_build: '18227.20152'
-  method_id: learn_qna_search_rss
-  source_type: microsoft_learn_qna
-  status: no_results
-  candidates_found: 4
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 4
-  blocked_reason: ''
-  last_run: '2026-08-29T22:12:09Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2411, PowerPoint Version 2411, PowerPoint 18227.20152. Candidates 4, accepted 0, rejected 4. Top rejections: missing_powerpoint_version=4. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
-- product_id: microsoft-powerpoint
-  update_version: '2411'
-  target_build: '18227.20152'
-  method_id: reddit_search
-  source_type: reddit_community_report
-  status: disabled
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: ''
-  last_run: '2026-08-29T22:13:02Z'
-  notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
-- product_id: microsoft-powerpoint
-  update_version: '2501'
-  target_build: '18429.20132'
-  method_id: learn_qna_search_rss
-  source_type: microsoft_learn_qna
-  status: no_results
-  candidates_found: 4
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 4
-  blocked_reason: ''
-  last_run: '2026-08-29T22:12:09Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2501, PowerPoint Version 2501, PowerPoint 18429.20132. Candidates 4, accepted 0, rejected 4. Top rejections: missing_powerpoint_version=4. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
-- product_id: microsoft-powerpoint
-  update_version: '2501'
-  target_build: '18429.20132'
-  method_id: reddit_search
-  source_type: reddit_community_report
-  status: disabled
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: ''
-  last_run: '2026-08-29T22:13:02Z'
-  notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
-- product_id: microsoft-powerpoint
-  update_version: '2502'
-  target_build: '18526.20144'
-  method_id: learn_qna_search_rss
-  source_type: microsoft_learn_qna
-  status: blocked
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: learn_qna_search_fetch_failed:blocked:login_or_auth_challenge
-  last_run: '2026-08-29T22:12:09Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2502, PowerPoint Version 2502, PowerPoint 18526.20144. Candidates 0, accepted 0, rejected 0. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
-- product_id: microsoft-powerpoint
-  update_version: '2502'
-  target_build: '18526.20144'
-  method_id: reddit_search
-  source_type: reddit_community_report
-  status: disabled
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: ''
-  last_run: '2026-08-29T22:13:02Z'
-  notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
-- product_id: microsoft-powerpoint
-  update_version: '2503'
-  target_build: '18623.20156'
-  method_id: learn_qna_search_rss
-  source_type: microsoft_learn_qna
-  status: no_results
-  candidates_found: 6
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 6
-  blocked_reason: ''
-  last_run: '2026-08-29T22:12:09Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2503, PowerPoint Version 2503, PowerPoint 18623.20156. Candidates 6, accepted 0, rejected 6. Top rejections: missing_powerpoint_version=4, product_not_powerpoint=2. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
-- product_id: microsoft-powerpoint
-  update_version: '2503'
-  target_build: '18623.20156'
-  method_id: reddit_search
-  source_type: reddit_community_report
-  status: disabled
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: ''
-  last_run: '2026-08-29T22:13:02Z'
-  notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
-- product_id: microsoft-powerpoint
-  update_version: '2504'
-  target_build: '18730.20122'
-  method_id: learn_qna_search_rss
-  source_type: microsoft_learn_qna
-  status: no_results
-  candidates_found: 5
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 5
-  blocked_reason: ''
-  last_run: '2026-08-29T22:12:09Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2504, PowerPoint Version 2504, PowerPoint 18730.20122. Candidates 5, accepted 0, rejected 5. Top rejections: missing_powerpoint_version=5. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
-- product_id: microsoft-powerpoint
-  update_version: '2504'
-  target_build: '18730.20122'
-  method_id: reddit_search
-  source_type: reddit_community_report
-  status: disabled
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: ''
-  last_run: '2026-08-29T22:13:02Z'
-  notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
-- product_id: microsoft-powerpoint
-  update_version: '2506'
-  target_build: '18925.20184'
-  method_id: learn_qna_search_rss
-  source_type: microsoft_learn_qna
-  status: no_results
-  candidates_found: 5
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 5
-  blocked_reason: ''
-  last_run: '2026-08-29T22:12:09Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2506, PowerPoint Version 2506, PowerPoint 18925.20184. Candidates 5, accepted 0, rejected 5. Top rejections: missing_powerpoint_version=4, product_not_powerpoint=1. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
-- product_id: microsoft-powerpoint
-  update_version: '2506'
-  target_build: '18925.20184'
-  method_id: reddit_search
-  source_type: reddit_community_report
-  status: disabled
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: ''
-  last_run: '2026-08-29T22:13:02Z'
-  notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
-- product_id: microsoft-powerpoint
-  update_version: '2601'
-  target_build: '19628.20150'
-  method_id: learn_qna_search_rss
-  source_type: microsoft_learn_qna
-  status: no_results
-  candidates_found: 5
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 5
-  blocked_reason: ''
-  last_run: '2026-08-29T22:12:09Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2601, PowerPoint Version 2601, PowerPoint 19628.20150. Candidates 5, accepted 0, rejected 5. Top rejections: missing_powerpoint_version=4, product_not_powerpoint=1. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
-- product_id: microsoft-powerpoint
-  update_version: '2601'
-  target_build: '19628.20150'
-  method_id: reddit_search
-  source_type: reddit_community_report
-  status: disabled
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: ''
-  last_run: '2026-08-29T22:13:02Z'
-  notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
-- product_id: microsoft-powerpoint
-  update_version: '2602'
-  target_build: '19725.20126'
-  method_id: learn_qna_search_rss
-  source_type: microsoft_learn_qna
-  status: no_results
-  candidates_found: 13
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 13
-  blocked_reason: ''
-  last_run: '2026-08-29T22:12:09Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2602, PowerPoint Version 2602, PowerPoint 19725.20126. Candidates 13, accepted 0, rejected 13. Top rejections: missing_powerpoint_version=5, product_not_powerpoint=8. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
-- product_id: microsoft-powerpoint
-  update_version: '2602'
-  target_build: '19725.20126'
-  method_id: reddit_search
-  source_type: reddit_community_report
-  status: disabled
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: ''
-  last_run: '2026-08-29T22:13:02Z'
-  notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
-- product_id: microsoft-powerpoint
-  update_version: '2603'
-  target_build: '19822.20182'
-  method_id: learn_qna_search_rss
-  source_type: microsoft_learn_qna
-  status: no_results
-  candidates_found: 6
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 6
-  blocked_reason: ''
-  last_run: '2026-08-29T22:12:09Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2603, PowerPoint Version 2603, PowerPoint 19822.20182. Candidates 6, accepted 0, rejected 6. Top rejections: missing_powerpoint_version=4, product_not_powerpoint=2. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
-- product_id: microsoft-powerpoint
-  update_version: '2603'
-  target_build: '19822.20182'
-  method_id: reddit_search
-  source_type: reddit_community_report
-  status: disabled
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: ''
-  last_run: '2026-08-29T22:13:02Z'
-  notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
-- product_id: microsoft-powerpoint
-  update_version: '2605'
-  target_build: '20026.20076'
-  method_id: learn_qna_search_rss
-  source_type: microsoft_learn_qna
-  status: low_confidence
-  candidates_found: 21
+  candidates_found: 22
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
@@ -17790,8 +17470,328 @@ methods:
   accepted_reports: 0
   rejected_reports: 21
   blocked_reason: ''
-  last_run: '2026-08-29T22:12:09Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2605, PowerPoint Version 2605, PowerPoint 20026.20076. Candidates 21, accepted 0, rejected 21. Top rejections: build_mismatch=1, missing_powerpoint_version=4, product_not_powerpoint=16. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2410, PowerPoint Version 2410, PowerPoint 18129.20158, PowerPoint Copilot error, PowerPoint crash after update, PowerPoint not responding update, PowerPoint slideshow problem after update, PowerPoint save export fails. Candidates 22, accepted 0, rejected 21. Top rejections: missing_powerpoint_version=9, official_announcement_not_user_report=1, product_not_powerpoint=11. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+- product_id: microsoft-powerpoint
+  update_version: '2410'
+  target_build: '18129.20158'
+  method_id: reddit_search
+  source_type: reddit_community_report
+  status: disabled
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: ''
+  last_run: '2026-08-30T04:00:27Z'
+  notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
+- product_id: microsoft-powerpoint
+  update_version: '2411'
+  target_build: '18227.20152'
+  method_id: learn_qna_search_rss
+  source_type: microsoft_learn_qna
+  status: no_results
+  candidates_found: 23
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 22
+  blocked_reason: ''
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2411, PowerPoint Version 2411, PowerPoint 18227.20152, PowerPoint Copilot error, PowerPoint crash after update, PowerPoint not responding update, PowerPoint slideshow problem after update, PowerPoint save export fails. Candidates 23, accepted 0, rejected 22. Top rejections: missing_powerpoint_version=10, official_announcement_not_user_report=1, product_not_powerpoint=11. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+- product_id: microsoft-powerpoint
+  update_version: '2411'
+  target_build: '18227.20152'
+  method_id: reddit_search
+  source_type: reddit_community_report
+  status: disabled
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: ''
+  last_run: '2026-08-30T04:00:27Z'
+  notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
+- product_id: microsoft-powerpoint
+  update_version: '2501'
+  target_build: '18429.20132'
+  method_id: learn_qna_search_rss
+  source_type: microsoft_learn_qna
+  status: no_results
+  candidates_found: 23
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 22
+  blocked_reason: ''
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2501, PowerPoint Version 2501, PowerPoint 18429.20132, PowerPoint Copilot error, PowerPoint crash after update, PowerPoint not responding update, PowerPoint slideshow problem after update, PowerPoint save export fails. Candidates 23, accepted 0, rejected 22. Top rejections: missing_powerpoint_version=10, official_announcement_not_user_report=1, product_not_powerpoint=11. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+- product_id: microsoft-powerpoint
+  update_version: '2501'
+  target_build: '18429.20132'
+  method_id: reddit_search
+  source_type: reddit_community_report
+  status: disabled
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: ''
+  last_run: '2026-08-30T04:00:27Z'
+  notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
+- product_id: microsoft-powerpoint
+  update_version: '2502'
+  target_build: '18526.20144'
+  method_id: learn_qna_search_rss
+  source_type: microsoft_learn_qna
+  status: partial
+  candidates_found: 19
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 19
+  blocked_reason: learn_qna_search_fetch_failed:blocked:login_or_auth_challenge
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2502, PowerPoint Version 2502, PowerPoint 18526.20144, PowerPoint Copilot error, PowerPoint crash after update, PowerPoint not responding update, PowerPoint slideshow problem after update, PowerPoint save export fails. Candidates 19, accepted 0, rejected 19. Top rejections: missing_powerpoint_version=7, official_announcement_not_user_report=1, product_not_powerpoint=11. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+- product_id: microsoft-powerpoint
+  update_version: '2502'
+  target_build: '18526.20144'
+  method_id: reddit_search
+  source_type: reddit_community_report
+  status: disabled
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: ''
+  last_run: '2026-08-30T04:00:27Z'
+  notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
+- product_id: microsoft-powerpoint
+  update_version: '2503'
+  target_build: '18623.20156'
+  method_id: learn_qna_search_rss
+  source_type: microsoft_learn_qna
+  status: no_results
+  candidates_found: 24
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 23
+  blocked_reason: ''
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2503, PowerPoint Version 2503, PowerPoint 18623.20156, PowerPoint Copilot error, PowerPoint crash after update, PowerPoint not responding update, PowerPoint slideshow problem after update, PowerPoint save export fails. Candidates 24, accepted 0, rejected 23. Top rejections: missing_powerpoint_version=9, official_announcement_not_user_report=1, product_not_powerpoint=13. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+- product_id: microsoft-powerpoint
+  update_version: '2503'
+  target_build: '18623.20156'
+  method_id: reddit_search
+  source_type: reddit_community_report
+  status: disabled
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: ''
+  last_run: '2026-08-30T04:00:27Z'
+  notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
+- product_id: microsoft-powerpoint
+  update_version: '2504'
+  target_build: '18730.20122'
+  method_id: learn_qna_search_rss
+  source_type: microsoft_learn_qna
+  status: no_results
+  candidates_found: 23
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 22
+  blocked_reason: ''
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2504, PowerPoint Version 2504, PowerPoint 18730.20122, PowerPoint Copilot error, PowerPoint crash after update, PowerPoint not responding update, PowerPoint slideshow problem after update, PowerPoint save export fails. Candidates 23, accepted 0, rejected 22. Top rejections: missing_powerpoint_version=10, official_announcement_not_user_report=1, product_not_powerpoint=11. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+- product_id: microsoft-powerpoint
+  update_version: '2504'
+  target_build: '18730.20122'
+  method_id: reddit_search
+  source_type: reddit_community_report
+  status: disabled
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: ''
+  last_run: '2026-08-30T04:00:27Z'
+  notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
+- product_id: microsoft-powerpoint
+  update_version: '2506'
+  target_build: '18925.20184'
+  method_id: learn_qna_search_rss
+  source_type: microsoft_learn_qna
+  status: no_results
+  candidates_found: 24
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 23
+  blocked_reason: ''
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2506, PowerPoint Version 2506, PowerPoint 18925.20184, PowerPoint Copilot error, PowerPoint crash after update, PowerPoint not responding update, PowerPoint slideshow problem after update, PowerPoint save export fails. Candidates 24, accepted 0, rejected 23. Top rejections: missing_powerpoint_version=10, official_announcement_not_user_report=1, product_not_powerpoint=12. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+- product_id: microsoft-powerpoint
+  update_version: '2506'
+  target_build: '18925.20184'
+  method_id: reddit_search
+  source_type: reddit_community_report
+  status: disabled
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: ''
+  last_run: '2026-08-30T04:00:27Z'
+  notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
+- product_id: microsoft-powerpoint
+  update_version: '2601'
+  target_build: '19628.20150'
+  method_id: learn_qna_search_rss
+  source_type: microsoft_learn_qna
+  status: no_results
+  candidates_found: 24
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 23
+  blocked_reason: ''
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2601, PowerPoint Version 2601, PowerPoint 19628.20150, PowerPoint Copilot error, PowerPoint crash after update, PowerPoint not responding update, PowerPoint slideshow problem after update, PowerPoint save export fails. Candidates 24, accepted 0, rejected 23. Top rejections: missing_powerpoint_version=10, official_announcement_not_user_report=1, product_not_powerpoint=12. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+- product_id: microsoft-powerpoint
+  update_version: '2601'
+  target_build: '19628.20150'
+  method_id: reddit_search
+  source_type: reddit_community_report
+  status: disabled
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: ''
+  last_run: '2026-08-30T04:00:27Z'
+  notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
+- product_id: microsoft-powerpoint
+  update_version: '2602'
+  target_build: '19725.20126'
+  method_id: learn_qna_search_rss
+  source_type: microsoft_learn_qna
+  status: no_results
+  candidates_found: 31
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 30
+  blocked_reason: ''
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2602, PowerPoint Version 2602, PowerPoint 19725.20126, PowerPoint Copilot error, PowerPoint crash after update, PowerPoint not responding update, PowerPoint slideshow problem after update, PowerPoint save export fails. Candidates 31, accepted 0, rejected 30. Top rejections: missing_powerpoint_version=10, official_announcement_not_user_report=1, product_not_powerpoint=19. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+- product_id: microsoft-powerpoint
+  update_version: '2602'
+  target_build: '19725.20126'
+  method_id: reddit_search
+  source_type: reddit_community_report
+  status: disabled
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: ''
+  last_run: '2026-08-30T04:00:27Z'
+  notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
+- product_id: microsoft-powerpoint
+  update_version: '2603'
+  target_build: '19822.20182'
+  method_id: learn_qna_search_rss
+  source_type: microsoft_learn_qna
+  status: no_results
+  candidates_found: 25
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 24
+  blocked_reason: ''
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2603, PowerPoint Version 2603, PowerPoint 19822.20182, PowerPoint Copilot error, PowerPoint crash after update, PowerPoint not responding update, PowerPoint slideshow problem after update, PowerPoint save export fails. Candidates 25, accepted 0, rejected 24. Top rejections: missing_powerpoint_version=10, official_announcement_not_user_report=1, product_not_powerpoint=13. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+- product_id: microsoft-powerpoint
+  update_version: '2603'
+  target_build: '19822.20182'
+  method_id: reddit_search
+  source_type: reddit_community_report
+  status: disabled
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: ''
+  last_run: '2026-08-30T04:00:27Z'
+  notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
+- product_id: microsoft-powerpoint
+  update_version: '2605'
+  target_build: '20026.20076'
+  method_id: learn_qna_search_rss
+  source_type: microsoft_learn_qna
+  status: low_confidence
+  candidates_found: 40
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 39
+  blocked_reason: ''
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2605, PowerPoint Version 2605, PowerPoint 20026.20076, PowerPoint Copilot error, PowerPoint crash after update, PowerPoint not responding update, PowerPoint slideshow problem after update, PowerPoint save export fails. Candidates 40, accepted 0, rejected 39. Top rejections: build_mismatch=1, missing_powerpoint_version=10, official_announcement_not_user_report=1, product_not_powerpoint=27. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2605'
   target_build: '20026.20076'
@@ -17806,7 +17806,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-29T22:13:02Z'
+  last_run: '2026-08-30T04:00:27Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2607'
@@ -17814,16 +17814,16 @@ methods:
   method_id: learn_qna_search_rss
   source_type: microsoft_learn_qna
   status: no_results
-  candidates_found: 44
+  candidates_found: 63
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 44
+  rejected_reports: 61
   blocked_reason: ''
-  last_run: '2026-08-29T22:12:09Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2607, PowerPoint Version 2607, PowerPoint 20228.20110. Candidates 44, accepted 0, rejected 44. Top rejections: missing_exact_build=3, missing_powerpoint_version=4, product_not_powerpoint=37. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2607, PowerPoint Version 2607, PowerPoint 20228.20110, PowerPoint Copilot error, PowerPoint crash after update, PowerPoint not responding update, PowerPoint slideshow problem after update, PowerPoint save export fails. Candidates 63, accepted 0, rejected 61. Top rejections: missing_exact_build=3, missing_powerpoint_version=10, official_announcement_not_user_report=1, product_not_powerpoint=47. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2607'
   target_build: '20228.20110'
@@ -17838,7 +17838,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-29T22:13:02Z'
+  last_run: '2026-08-30T04:00:27Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2607'
@@ -17854,40 +17854,40 @@ methods:
   accepted_reports: 1
   rejected_reports: 2
   blocked_reason: ''
-  last_run: '2026-08-29T22:13:01Z'
-  notes: segment-scoped exact-build resolution; fetches=3
+  last_run: '2026-08-30T04:00:26Z'
+  notes: segment-scoped exact-build resolution; fetches=4
 - product_id: microsoft-powerpoint
   update_version: '2608'
   target_build: '20326.20100'
   method_id: learn_qna_search_rss
   source_type: microsoft_learn_qna
   status: no_results
-  candidates_found: 25
+  candidates_found: 44
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 25
+  rejected_reports: 43
   blocked_reason: ''
-  last_run: '2026-08-29T22:12:09Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2608, PowerPoint Version 2608, PowerPoint 20326.20100. Candidates 25, accepted 0, rejected 25. Top rejections: missing_powerpoint_version=5, product_not_powerpoint=20. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2608, PowerPoint Version 2608, PowerPoint 20326.20100, PowerPoint Copilot error, PowerPoint crash after update, PowerPoint not responding update, PowerPoint slideshow problem after update, PowerPoint save export fails. Candidates 44, accepted 0, rejected 43. Top rejections: missing_powerpoint_version=11, official_announcement_not_user_report=1, product_not_powerpoint=31. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2608'
   target_build: '20326.20112'
   method_id: learn_qna_search_rss
   source_type: microsoft_learn_qna
   status: no_results
-  candidates_found: 26
+  candidates_found: 44
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 26
+  rejected_reports: 43
   blocked_reason: ''
-  last_run: '2026-08-29T22:12:09Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2608, PowerPoint Version 2608, PowerPoint 20326.20112. Candidates 26, accepted 0, rejected 26. Top rejections: missing_powerpoint_version=6, product_not_powerpoint=20. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2608, PowerPoint Version 2608, PowerPoint 20326.20112, PowerPoint Copilot error, PowerPoint crash after update, PowerPoint not responding update, PowerPoint slideshow problem after update, PowerPoint save export fails. Candidates 44, accepted 0, rejected 43. Top rejections: missing_powerpoint_version=11, official_announcement_not_user_report=1, product_not_powerpoint=31. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2608'
   target_build: '20326.20100'
@@ -17902,7 +17902,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-29T22:13:02Z'
+  last_run: '2026-08-30T04:00:27Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2608'
@@ -17918,7 +17918,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-29T22:13:02Z'
+  last_run: '2026-08-30T04:00:27Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2607'
@@ -17926,32 +17926,32 @@ methods:
   method_id: learn_qna_search_rss
   source_type: microsoft_learn_qna
   status: no_results
-  candidates_found: 45
+  candidates_found: 63
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 45
+  rejected_reports: 61
   blocked_reason: ''
-  last_run: '2026-08-29T22:12:09Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2607, PowerPoint Version 2607, PowerPoint 20228.20158. Candidates 45, accepted 0, rejected 45. Top rejections: missing_exact_build=3, missing_powerpoint_version=5, product_not_powerpoint=37. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2607, PowerPoint Version 2607, PowerPoint 20228.20158, PowerPoint Copilot error, PowerPoint crash after update, PowerPoint not responding update, PowerPoint slideshow problem after update, PowerPoint save export fails. Candidates 63, accepted 0, rejected 61. Top rejections: missing_exact_build=3, missing_powerpoint_version=10, official_announcement_not_user_report=1, product_not_powerpoint=47. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2607'
   target_build: '20228.20190'
   method_id: learn_qna_search_rss
   source_type: microsoft_learn_qna
   status: no_results
-  candidates_found: 45
+  candidates_found: 64
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 45
+  rejected_reports: 62
   blocked_reason: ''
-  last_run: '2026-08-29T22:12:09Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2607, PowerPoint Version 2607, PowerPoint 20228.20190. Candidates 45, accepted 0, rejected 45. Top rejections: missing_exact_build=3, missing_powerpoint_version=4, product_not_powerpoint=38. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2607, PowerPoint Version 2607, PowerPoint 20228.20190, PowerPoint Copilot error, PowerPoint crash after update, PowerPoint not responding update, PowerPoint slideshow problem after update, PowerPoint save export fails. Candidates 64, accepted 0, rejected 62. Top rejections: missing_exact_build=3, missing_powerpoint_version=10, official_announcement_not_user_report=1, product_not_powerpoint=48. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2607'
   target_build: '20228.20158'
@@ -17966,8 +17966,8 @@ methods:
   accepted_reports: 0
   rejected_reports: 3
   blocked_reason: ''
-  last_run: '2026-08-29T22:13:01Z'
-  notes: segment-scoped exact-build resolution; fetches=3
+  last_run: '2026-08-30T04:00:26Z'
+  notes: segment-scoped exact-build resolution; fetches=4
 - product_id: microsoft-powerpoint
   update_version: '2607'
   target_build: '20228.20190'
@@ -17982,8 +17982,8 @@ methods:
   accepted_reports: 0
   rejected_reports: 3
   blocked_reason: ''
-  last_run: '2026-08-29T22:13:01Z'
-  notes: segment-scoped exact-build resolution; fetches=3
+  last_run: '2026-08-30T04:00:26Z'
+  notes: segment-scoped exact-build resolution; fetches=4
 - product_id: microsoft-powerpoint
   update_version: '2607'
   target_build: '20228.20158'
@@ -17998,7 +17998,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-29T22:13:02Z'
+  last_run: '2026-08-30T04:00:27Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2607'
@@ -18014,7 +18014,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-29T22:13:02Z'
+  last_run: '2026-08-30T04:00:27Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
 - product_id: microsoft-powerpoint
   update_version: '2607'
@@ -18022,16 +18022,16 @@ methods:
   method_id: learn_qna_search_rss
   source_type: microsoft_learn_qna
   status: no_results
-  candidates_found: 45
+  candidates_found: 63
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 45
+  rejected_reports: 61
   blocked_reason: ''
-  last_run: '2026-08-29T22:12:09Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2607, PowerPoint Version 2607, PowerPoint 20228.20124. Candidates 45, accepted 0, rejected 45. Top rejections: missing_exact_build=3, missing_powerpoint_version=5, product_not_powerpoint=37. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-powerpoint. Searched: PowerPoint 2607, PowerPoint Version 2607, PowerPoint 20228.20124, PowerPoint Copilot error, PowerPoint crash after update, PowerPoint not responding update, PowerPoint slideshow problem after update, PowerPoint save export fails. Candidates 63, accepted 0, rejected 61. Top rejections: missing_exact_build=3, missing_powerpoint_version=10, official_announcement_not_user_report=1, product_not_powerpoint=47. Counts only when the report names PowerPoint, the exact Version YYMM in context, is Current-Channel-consistent, carries no conflicting build, has a specific URL, is dated on/after release, and describes a concrete issue.'
 - product_id: microsoft-powerpoint
   update_version: '2607'
   target_build: '20228.20124'
@@ -18046,8 +18046,8 @@ methods:
   accepted_reports: 0
   rejected_reports: 3
   blocked_reason: ''
-  last_run: '2026-08-29T22:13:01Z'
-  notes: segment-scoped exact-build resolution; fetches=3
+  last_run: '2026-08-30T04:00:26Z'
+  notes: segment-scoped exact-build resolution; fetches=4
 - product_id: microsoft-powerpoint
   update_version: '2607'
   target_build: '20228.20124'
@@ -18062,5 +18062,821 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-29T22:13:02Z'
+  last_run: '2026-08-30T04:00:27Z'
   notes: 'Reddit community search across r/powerpoint, r/microsoft365, r/Office365. Fallback disabled by default (documented CI-blocked, PR #23); enable with AUXSAYS_POWERPOINT_REDDIT_FALLBACK=true. Not required for the pilot.'
+- product_id: microsoft-powerpoint
+  update_version: '2312'
+  target_build: '17126.20126'
+  method_id: stack_exchange_search
+  source_type: stack_exchange_question
+  status: partial
+  candidates_found: 50
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 50
+  blocked_reason: request_budget_exhausted_after_4
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Stack Exchange official API (api.stackexchange.com/2.3), keyless, across Super User, Stack Overflow. Queried: 17126.20126, PowerPoint 2312; plus the PowerPoint tag route. Candidates 50, accepted 0, rejected 50. Top rejections: different_version_not_target=3, missing_powerpoint_version=34, product_not_powerpoint=10, vague_latest_update=3. report_text is the QUESTION''s own title and body only -- answers and comments are never folded in, so an answerer''s build can never become the asker''s patch identity. Same acceptance gates as Learn Q&A.'
+- product_id: microsoft-powerpoint
+  update_version: '2312'
+  target_build: '17126.20126'
+  method_id: github_officedev_issues
+  source_type: github_officedev_issue
+  status: low_confidence
+  candidates_found: 11
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 11
+  blocked_reason: ''
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'OfficeDev/office-js public GitHub issues API. Queries 4, requests 4, issues discovered 61, rate remaining 26/30. Candidates 11, accepted 0, rejected 11. Top rejections: different_version_not_target=2, missing_powerpoint_version=6, product_not_powerpoint=3. Product comes from the template''s Host field, so an Excel issue stays Excel however often it says PowerPoint; only the desktop half of the Office version field can supply a build. Same acceptance gates as every other method.'
+- product_id: microsoft-powerpoint
+  update_version: '2403'
+  target_build: '17425.20138'
+  method_id: stack_exchange_search
+  source_type: stack_exchange_question
+  status: partial
+  candidates_found: 50
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 50
+  blocked_reason: request_budget_exhausted_after_4
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Stack Exchange official API (api.stackexchange.com/2.3), keyless, across Super User, Stack Overflow. Queried: 17425.20138, PowerPoint 2403; plus the PowerPoint tag route. Candidates 50, accepted 0, rejected 50. Top rejections: different_version_not_target=3, missing_powerpoint_version=34, product_not_powerpoint=10, vague_latest_update=3. report_text is the QUESTION''s own title and body only -- answers and comments are never folded in, so an answerer''s build can never become the asker''s patch identity. Same acceptance gates as Learn Q&A.'
+- product_id: microsoft-powerpoint
+  update_version: '2403'
+  target_build: '17425.20138'
+  method_id: github_officedev_issues
+  source_type: github_officedev_issue
+  status: low_confidence
+  candidates_found: 10
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 10
+  blocked_reason: ''
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'OfficeDev/office-js public GitHub issues API. Queries 4, requests 4, issues discovered 57, rate remaining 22/30. Candidates 10, accepted 0, rejected 10. Top rejections: different_version_not_target=2, missing_powerpoint_version=6, product_not_powerpoint=2. Product comes from the template''s Host field, so an Excel issue stays Excel however often it says PowerPoint; only the desktop half of the Office version field can supply a build. Same acceptance gates as every other method.'
+- product_id: microsoft-powerpoint
+  update_version: '2404'
+  target_build: '17531.20152'
+  method_id: stack_exchange_search
+  source_type: stack_exchange_question
+  status: partial
+  candidates_found: 50
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 50
+  blocked_reason: request_budget_exhausted_after_4
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Stack Exchange official API (api.stackexchange.com/2.3), keyless, across Super User, Stack Overflow. Queried: 17531.20152, PowerPoint 2404; plus the PowerPoint tag route. Candidates 50, accepted 0, rejected 50. Top rejections: different_version_not_target=3, missing_exact_build=1, missing_powerpoint_version=33, product_not_powerpoint=10, vague_latest_update=3. report_text is the QUESTION''s own title and body only -- answers and comments are never folded in, so an answerer''s build can never become the asker''s patch identity. Same acceptance gates as Learn Q&A.'
+- product_id: microsoft-powerpoint
+  update_version: '2404'
+  target_build: '17531.20152'
+  method_id: github_officedev_issues
+  source_type: github_officedev_issue
+  status: low_confidence
+  candidates_found: 12
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 12
+  blocked_reason: ''
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'OfficeDev/office-js public GitHub issues API. Queries 4, requests 4, issues discovered 65, rate remaining 18/30. Candidates 12, accepted 0, rejected 12. Top rejections: different_version_not_target=2, missing_powerpoint_version=7, product_not_powerpoint=3. Product comes from the template''s Host field, so an Excel issue stays Excel however often it says PowerPoint; only the desktop half of the Office version field can supply a build. Same acceptance gates as every other method.'
+- product_id: microsoft-powerpoint
+  update_version: '2405'
+  target_build: '17628.20110'
+  method_id: stack_exchange_search
+  source_type: stack_exchange_question
+  status: partial
+  candidates_found: 50
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 50
+  blocked_reason: request_budget_exhausted_after_4
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Stack Exchange official API (api.stackexchange.com/2.3), keyless, across Super User, Stack Overflow. Queried: 17628.20110, PowerPoint 2405; plus the PowerPoint tag route. Candidates 50, accepted 0, rejected 50. Top rejections: different_version_not_target=3, missing_powerpoint_version=34, product_not_powerpoint=10, vague_latest_update=3. report_text is the QUESTION''s own title and body only -- answers and comments are never folded in, so an answerer''s build can never become the asker''s patch identity. Same acceptance gates as Learn Q&A.'
+- product_id: microsoft-powerpoint
+  update_version: '2405'
+  target_build: '17628.20110'
+  method_id: github_officedev_issues
+  source_type: github_officedev_issue
+  status: low_confidence
+  candidates_found: 10
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 10
+  blocked_reason: ''
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'OfficeDev/office-js public GitHub issues API. Queries 4, requests 4, issues discovered 59, rate remaining 14/30. Candidates 10, accepted 0, rejected 10. Top rejections: different_version_not_target=2, missing_powerpoint_version=6, product_not_powerpoint=2. Product comes from the template''s Host field, so an Excel issue stays Excel however often it says PowerPoint; only the desktop half of the Office version field can supply a build. Same acceptance gates as every other method.'
+- product_id: microsoft-powerpoint
+  update_version: '2406'
+  target_build: '17726.20126'
+  method_id: stack_exchange_search
+  source_type: stack_exchange_question
+  status: partial
+  candidates_found: 50
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 50
+  blocked_reason: request_budget_exhausted_after_4
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Stack Exchange official API (api.stackexchange.com/2.3), keyless, across Super User, Stack Overflow. Queried: 17726.20126, PowerPoint 2406; plus the PowerPoint tag route. Candidates 50, accepted 0, rejected 50. Top rejections: different_version_not_target=3, missing_powerpoint_version=34, product_not_powerpoint=10, vague_latest_update=3. report_text is the QUESTION''s own title and body only -- answers and comments are never folded in, so an answerer''s build can never become the asker''s patch identity. Same acceptance gates as Learn Q&A.'
+- product_id: microsoft-powerpoint
+  update_version: '2406'
+  target_build: '17726.20126'
+  method_id: github_officedev_issues
+  source_type: github_officedev_issue
+  status: low_confidence
+  candidates_found: 10
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 10
+  blocked_reason: ''
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'OfficeDev/office-js public GitHub issues API. Queries 4, requests 4, issues discovered 59, rate remaining 10/30. Candidates 10, accepted 0, rejected 10. Top rejections: different_version_not_target=2, missing_powerpoint_version=6, product_not_powerpoint=2. Product comes from the template''s Host field, so an Excel issue stays Excel however often it says PowerPoint; only the desktop half of the Office version field can supply a build. Same acceptance gates as every other method.'
+- product_id: microsoft-powerpoint
+  update_version: '2407'
+  target_build: '17830.20138'
+  method_id: stack_exchange_search
+  source_type: stack_exchange_question
+  status: partial
+  candidates_found: 51
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 51
+  blocked_reason: request_budget_exhausted_after_4
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Stack Exchange official API (api.stackexchange.com/2.3), keyless, across Super User, Stack Overflow. Queried: 17830.20138, PowerPoint 2407; plus the PowerPoint tag route. Candidates 51, accepted 0, rejected 51. Top rejections: different_version_not_target=3, missing_powerpoint_version=34, product_not_powerpoint=11, vague_latest_update=3. report_text is the QUESTION''s own title and body only -- answers and comments are never folded in, so an answerer''s build can never become the asker''s patch identity. Same acceptance gates as Learn Q&A.'
+- product_id: microsoft-powerpoint
+  update_version: '2407'
+  target_build: '17830.20138'
+  method_id: github_officedev_issues
+  source_type: github_officedev_issue
+  status: low_confidence
+  candidates_found: 10
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 10
+  blocked_reason: ''
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'OfficeDev/office-js public GitHub issues API. Queries 4, requests 4, issues discovered 59, rate remaining 6/30. Candidates 10, accepted 0, rejected 10. Top rejections: different_version_not_target=2, missing_powerpoint_version=6, product_not_powerpoint=2. Product comes from the template''s Host field, so an Excel issue stays Excel however often it says PowerPoint; only the desktop half of the Office version field can supply a build. Same acceptance gates as every other method.'
+- product_id: microsoft-powerpoint
+  update_version: '2408'
+  target_build: '17928.20114'
+  method_id: stack_exchange_search
+  source_type: stack_exchange_question
+  status: partial
+  candidates_found: 50
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 50
+  blocked_reason: request_budget_exhausted_after_4
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Stack Exchange official API (api.stackexchange.com/2.3), keyless, across Super User, Stack Overflow. Queried: 17928.20114, PowerPoint 2408; plus the PowerPoint tag route. Candidates 50, accepted 0, rejected 50. Top rejections: different_version_not_target=3, missing_powerpoint_version=34, product_not_powerpoint=10, vague_latest_update=3. report_text is the QUESTION''s own title and body only -- answers and comments are never folded in, so an answerer''s build can never become the asker''s patch identity. Same acceptance gates as Learn Q&A.'
+- product_id: microsoft-powerpoint
+  update_version: '2408'
+  target_build: '17928.20114'
+  method_id: github_officedev_issues
+  source_type: github_officedev_issue
+  status: low_confidence
+  candidates_found: 12
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 12
+  blocked_reason: ''
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'OfficeDev/office-js public GitHub issues API. Queries 4, requests 4, issues discovered 69, rate remaining 2/30. Candidates 12, accepted 0, rejected 12. Top rejections: different_version_not_target=2, missing_powerpoint_version=6, product_not_powerpoint=4. Product comes from the template''s Host field, so an Excel issue stays Excel however often it says PowerPoint; only the desktop half of the Office version field can supply a build. Same acceptance gates as every other method.'
+- product_id: microsoft-powerpoint
+  update_version: '2409'
+  target_build: '18025.20096'
+  method_id: stack_exchange_search
+  source_type: stack_exchange_question
+  status: partial
+  candidates_found: 50
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 50
+  blocked_reason: request_budget_exhausted_after_4
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Stack Exchange official API (api.stackexchange.com/2.3), keyless, across Super User, Stack Overflow. Queried: 18025.20096, PowerPoint 2409; plus the PowerPoint tag route. Candidates 50, accepted 0, rejected 50. Top rejections: different_version_not_target=3, missing_powerpoint_version=34, product_not_powerpoint=10, vague_latest_update=3. report_text is the QUESTION''s own title and body only -- answers and comments are never folded in, so an answerer''s build can never become the asker''s patch identity. Same acceptance gates as Learn Q&A.'
+- product_id: microsoft-powerpoint
+  update_version: '2409'
+  target_build: '18025.20096'
+  method_id: github_officedev_issues
+  source_type: github_officedev_issue
+  status: partial
+  candidates_found: 2
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 2
+  blocked_reason: rate_limited x2
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'OfficeDev/office-js public GitHub issues API. Queries 4, requests 2, issues discovered 25, rate remaining 0/30. Candidates 2, accepted 0, rejected 2. Top rejections: product_not_powerpoint=2. Product comes from the template''s Host field, so an Excel issue stays Excel however often it says PowerPoint; only the desktop half of the Office version field can supply a build. Same acceptance gates as every other method.'
+- product_id: microsoft-powerpoint
+  update_version: '2410'
+  target_build: '18129.20158'
+  method_id: stack_exchange_search
+  source_type: stack_exchange_question
+  status: partial
+  candidates_found: 50
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 50
+  blocked_reason: request_budget_exhausted_after_4
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Stack Exchange official API (api.stackexchange.com/2.3), keyless, across Super User, Stack Overflow. Queried: 18129.20158, PowerPoint 2410; plus the PowerPoint tag route. Candidates 50, accepted 0, rejected 50. Top rejections: different_version_not_target=3, missing_powerpoint_version=34, product_not_powerpoint=10, vague_latest_update=3. report_text is the QUESTION''s own title and body only -- answers and comments are never folded in, so an answerer''s build can never become the asker''s patch identity. Same acceptance gates as Learn Q&A.'
+- product_id: microsoft-powerpoint
+  update_version: '2410'
+  target_build: '18129.20158'
+  method_id: github_officedev_issues
+  source_type: github_officedev_issue
+  status: blocked
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: rate_limited x4
+  last_run: '2026-08-30T03:57:26Z'
+  notes: OfficeDev/office-js public GitHub issues API. Queries 4, requests 0, issues discovered 0, rate remaining /. Candidates 0, accepted 0, rejected 0. Product comes from the template's Host field, so an Excel issue stays Excel however often it says PowerPoint; only the desktop half of the Office version field can supply a build. Same acceptance gates as every other method.
+- product_id: microsoft-powerpoint
+  update_version: '2411'
+  target_build: '18227.20152'
+  method_id: stack_exchange_search
+  source_type: stack_exchange_question
+  status: partial
+  candidates_found: 50
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 50
+  blocked_reason: request_budget_exhausted_after_4
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Stack Exchange official API (api.stackexchange.com/2.3), keyless, across Super User, Stack Overflow. Queried: 18227.20152, PowerPoint 2411; plus the PowerPoint tag route. Candidates 50, accepted 0, rejected 50. Top rejections: different_version_not_target=3, missing_powerpoint_version=34, product_not_powerpoint=10, vague_latest_update=3. report_text is the QUESTION''s own title and body only -- answers and comments are never folded in, so an answerer''s build can never become the asker''s patch identity. Same acceptance gates as Learn Q&A.'
+- product_id: microsoft-powerpoint
+  update_version: '2411'
+  target_build: '18227.20152'
+  method_id: github_officedev_issues
+  source_type: github_officedev_issue
+  status: low_confidence
+  candidates_found: 10
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 10
+  blocked_reason: ''
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'OfficeDev/office-js public GitHub issues API. Queries 4, requests 4, issues discovered 59, rate remaining 26/30. Candidates 10, accepted 0, rejected 10. Top rejections: different_version_not_target=2, missing_powerpoint_version=6, product_not_powerpoint=2. Product comes from the template''s Host field, so an Excel issue stays Excel however often it says PowerPoint; only the desktop half of the Office version field can supply a build. Same acceptance gates as every other method.'
+- product_id: microsoft-powerpoint
+  update_version: '2501'
+  target_build: '18429.20132'
+  method_id: stack_exchange_search
+  source_type: stack_exchange_question
+  status: partial
+  candidates_found: 50
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 50
+  blocked_reason: request_budget_exhausted_after_4
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Stack Exchange official API (api.stackexchange.com/2.3), keyless, across Super User, Stack Overflow. Queried: 18429.20132, PowerPoint 2501; plus the PowerPoint tag route. Candidates 50, accepted 0, rejected 50. Top rejections: different_version_not_target=3, missing_powerpoint_version=34, product_not_powerpoint=10, vague_latest_update=3. report_text is the QUESTION''s own title and body only -- answers and comments are never folded in, so an answerer''s build can never become the asker''s patch identity. Same acceptance gates as Learn Q&A.'
+- product_id: microsoft-powerpoint
+  update_version: '2501'
+  target_build: '18429.20132'
+  method_id: github_officedev_issues
+  source_type: github_officedev_issue
+  status: success
+  candidates_found: 17
+  accepted_candidates: 1
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 1
+  public_counted_reports: 1
+  accepted_reports: 1
+  rejected_reports: 16
+  blocked_reason: ''
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'OfficeDev/office-js public GitHub issues API. Queries 4, requests 4, issues discovered 73, rate remaining 22/30. Candidates 17, accepted 1, rejected 16. Top rejections: different_version_not_target=2, missing_powerpoint_version=6, product_not_powerpoint=8. Product comes from the template''s Host field, so an Excel issue stays Excel however often it says PowerPoint; only the desktop half of the Office version field can supply a build. Same acceptance gates as every other method.'
+- product_id: microsoft-powerpoint
+  update_version: '2502'
+  target_build: '18526.20144'
+  method_id: stack_exchange_search
+  source_type: stack_exchange_question
+  status: partial
+  candidates_found: 50
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 50
+  blocked_reason: request_budget_exhausted_after_4
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Stack Exchange official API (api.stackexchange.com/2.3), keyless, across Super User, Stack Overflow. Queried: 18526.20144, PowerPoint 2502; plus the PowerPoint tag route. Candidates 50, accepted 0, rejected 50. Top rejections: different_version_not_target=3, missing_powerpoint_version=34, product_not_powerpoint=10, vague_latest_update=3. report_text is the QUESTION''s own title and body only -- answers and comments are never folded in, so an answerer''s build can never become the asker''s patch identity. Same acceptance gates as Learn Q&A.'
+- product_id: microsoft-powerpoint
+  update_version: '2502'
+  target_build: '18526.20144'
+  method_id: github_officedev_issues
+  source_type: github_officedev_issue
+  status: low_confidence
+  candidates_found: 11
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 11
+  blocked_reason: ''
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'OfficeDev/office-js public GitHub issues API. Queries 4, requests 4, issues discovered 62, rate remaining 18/30. Candidates 11, accepted 0, rejected 11. Top rejections: different_version_not_target=2, missing_powerpoint_version=6, product_not_powerpoint=3. Product comes from the template''s Host field, so an Excel issue stays Excel however often it says PowerPoint; only the desktop half of the Office version field can supply a build. Same acceptance gates as every other method.'
+- product_id: microsoft-powerpoint
+  update_version: '2503'
+  target_build: '18623.20156'
+  method_id: stack_exchange_search
+  source_type: stack_exchange_question
+  status: partial
+  candidates_found: 50
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 50
+  blocked_reason: request_budget_exhausted_after_4
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Stack Exchange official API (api.stackexchange.com/2.3), keyless, across Super User, Stack Overflow. Queried: 18623.20156, PowerPoint 2503; plus the PowerPoint tag route. Candidates 50, accepted 0, rejected 50. Top rejections: different_version_not_target=3, missing_powerpoint_version=34, product_not_powerpoint=10, vague_latest_update=3. report_text is the QUESTION''s own title and body only -- answers and comments are never folded in, so an answerer''s build can never become the asker''s patch identity. Same acceptance gates as Learn Q&A.'
+- product_id: microsoft-powerpoint
+  update_version: '2503'
+  target_build: '18623.20156'
+  method_id: github_officedev_issues
+  source_type: github_officedev_issue
+  status: low_confidence
+  candidates_found: 10
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 10
+  blocked_reason: ''
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'OfficeDev/office-js public GitHub issues API. Queries 4, requests 4, issues discovered 58, rate remaining 14/30. Candidates 10, accepted 0, rejected 10. Top rejections: different_version_not_target=2, missing_powerpoint_version=6, product_not_powerpoint=2. Product comes from the template''s Host field, so an Excel issue stays Excel however often it says PowerPoint; only the desktop half of the Office version field can supply a build. Same acceptance gates as every other method.'
+- product_id: microsoft-powerpoint
+  update_version: '2504'
+  target_build: '18730.20122'
+  method_id: stack_exchange_search
+  source_type: stack_exchange_question
+  status: partial
+  candidates_found: 50
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 50
+  blocked_reason: request_budget_exhausted_after_4
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Stack Exchange official API (api.stackexchange.com/2.3), keyless, across Super User, Stack Overflow. Queried: 18730.20122, PowerPoint 2504; plus the PowerPoint tag route. Candidates 50, accepted 0, rejected 50. Top rejections: different_version_not_target=3, missing_powerpoint_version=34, product_not_powerpoint=10, vague_latest_update=3. report_text is the QUESTION''s own title and body only -- answers and comments are never folded in, so an answerer''s build can never become the asker''s patch identity. Same acceptance gates as Learn Q&A.'
+- product_id: microsoft-powerpoint
+  update_version: '2504'
+  target_build: '18730.20122'
+  method_id: github_officedev_issues
+  source_type: github_officedev_issue
+  status: low_confidence
+  candidates_found: 13
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 13
+  blocked_reason: ''
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'OfficeDev/office-js public GitHub issues API. Queries 4, requests 4, issues discovered 66, rate remaining 10/30. Candidates 13, accepted 0, rejected 13. Top rejections: different_version_not_target=2, missing_powerpoint_version=6, product_not_powerpoint=5. Product comes from the template''s Host field, so an Excel issue stays Excel however often it says PowerPoint; only the desktop half of the Office version field can supply a build. Same acceptance gates as every other method.'
+- product_id: microsoft-powerpoint
+  update_version: '2506'
+  target_build: '18925.20184'
+  method_id: stack_exchange_search
+  source_type: stack_exchange_question
+  status: partial
+  candidates_found: 50
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 50
+  blocked_reason: request_budget_exhausted_after_4
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Stack Exchange official API (api.stackexchange.com/2.3), keyless, across Super User, Stack Overflow. Queried: 18925.20184, PowerPoint 2506; plus the PowerPoint tag route. Candidates 50, accepted 0, rejected 50. Top rejections: different_version_not_target=3, missing_powerpoint_version=34, product_not_powerpoint=10, vague_latest_update=3. report_text is the QUESTION''s own title and body only -- answers and comments are never folded in, so an answerer''s build can never become the asker''s patch identity. Same acceptance gates as Learn Q&A.'
+- product_id: microsoft-powerpoint
+  update_version: '2506'
+  target_build: '18925.20184'
+  method_id: github_officedev_issues
+  source_type: github_officedev_issue
+  status: low_confidence
+  candidates_found: 10
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 10
+  blocked_reason: ''
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'OfficeDev/office-js public GitHub issues API. Queries 4, requests 4, issues discovered 58, rate remaining 6/30. Candidates 10, accepted 0, rejected 10. Top rejections: different_version_not_target=2, missing_powerpoint_version=6, product_not_powerpoint=2. Product comes from the template''s Host field, so an Excel issue stays Excel however often it says PowerPoint; only the desktop half of the Office version field can supply a build. Same acceptance gates as every other method.'
+- product_id: microsoft-powerpoint
+  update_version: '2601'
+  target_build: '19628.20150'
+  method_id: stack_exchange_search
+  source_type: stack_exchange_question
+  status: partial
+  candidates_found: 50
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 50
+  blocked_reason: request_budget_exhausted_after_4
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Stack Exchange official API (api.stackexchange.com/2.3), keyless, across Super User, Stack Overflow. Queried: 19628.20150, PowerPoint 2601; plus the PowerPoint tag route. Candidates 50, accepted 0, rejected 50. Top rejections: different_version_not_target=3, missing_powerpoint_version=34, product_not_powerpoint=10, vague_latest_update=3. report_text is the QUESTION''s own title and body only -- answers and comments are never folded in, so an answerer''s build can never become the asker''s patch identity. Same acceptance gates as Learn Q&A.'
+- product_id: microsoft-powerpoint
+  update_version: '2601'
+  target_build: '19628.20150'
+  method_id: github_officedev_issues
+  source_type: github_officedev_issue
+  status: low_confidence
+  candidates_found: 10
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 10
+  blocked_reason: ''
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'OfficeDev/office-js public GitHub issues API. Queries 4, requests 4, issues discovered 57, rate remaining 2/30. Candidates 10, accepted 0, rejected 10. Top rejections: different_version_not_target=2, missing_powerpoint_version=6, product_not_powerpoint=2. Product comes from the template''s Host field, so an Excel issue stays Excel however often it says PowerPoint; only the desktop half of the Office version field can supply a build. Same acceptance gates as every other method.'
+- product_id: microsoft-powerpoint
+  update_version: '2602'
+  target_build: '19725.20126'
+  method_id: stack_exchange_search
+  source_type: stack_exchange_question
+  status: partial
+  candidates_found: 50
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 50
+  blocked_reason: request_budget_exhausted_after_4
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Stack Exchange official API (api.stackexchange.com/2.3), keyless, across Super User, Stack Overflow. Queried: 19725.20126, PowerPoint 2602; plus the PowerPoint tag route. Candidates 50, accepted 0, rejected 50. Top rejections: different_version_not_target=3, missing_powerpoint_version=34, product_not_powerpoint=10, vague_latest_update=3. report_text is the QUESTION''s own title and body only -- answers and comments are never folded in, so an answerer''s build can never become the asker''s patch identity. Same acceptance gates as Learn Q&A.'
+- product_id: microsoft-powerpoint
+  update_version: '2602'
+  target_build: '19725.20126'
+  method_id: github_officedev_issues
+  source_type: github_officedev_issue
+  status: partial
+  candidates_found: 4
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 4
+  blocked_reason: rate_limited x2
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'OfficeDev/office-js public GitHub issues API. Queries 4, requests 2, issues discovered 34, rate remaining 0/30. Candidates 4, accepted 0, rejected 4. Top rejections: product_not_powerpoint=4. Product comes from the template''s Host field, so an Excel issue stays Excel however often it says PowerPoint; only the desktop half of the Office version field can supply a build. Same acceptance gates as every other method.'
+- product_id: microsoft-powerpoint
+  update_version: '2603'
+  target_build: '19822.20182'
+  method_id: stack_exchange_search
+  source_type: stack_exchange_question
+  status: partial
+  candidates_found: 50
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 50
+  blocked_reason: request_budget_exhausted_after_4
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Stack Exchange official API (api.stackexchange.com/2.3), keyless, across Super User, Stack Overflow. Queried: 19822.20182, PowerPoint 2603; plus the PowerPoint tag route. Candidates 50, accepted 0, rejected 50. Top rejections: different_version_not_target=3, missing_powerpoint_version=34, product_not_powerpoint=10, vague_latest_update=3. report_text is the QUESTION''s own title and body only -- answers and comments are never folded in, so an answerer''s build can never become the asker''s patch identity. Same acceptance gates as Learn Q&A.'
+- product_id: microsoft-powerpoint
+  update_version: '2603'
+  target_build: '19822.20182'
+  method_id: github_officedev_issues
+  source_type: github_officedev_issue
+  status: blocked
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: rate_limited x4
+  last_run: '2026-08-30T03:57:26Z'
+  notes: OfficeDev/office-js public GitHub issues API. Queries 4, requests 0, issues discovered 0, rate remaining /. Candidates 0, accepted 0, rejected 0. Product comes from the template's Host field, so an Excel issue stays Excel however often it says PowerPoint; only the desktop half of the Office version field can supply a build. Same acceptance gates as every other method.
+- product_id: microsoft-powerpoint
+  update_version: '2605'
+  target_build: '20026.20076'
+  method_id: stack_exchange_search
+  source_type: stack_exchange_question
+  status: partial
+  candidates_found: 50
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 50
+  blocked_reason: request_budget_exhausted_after_4
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Stack Exchange official API (api.stackexchange.com/2.3), keyless, across Super User, Stack Overflow. Queried: 20026.20076, PowerPoint 2605; plus the PowerPoint tag route. Candidates 50, accepted 0, rejected 50. Top rejections: different_version_not_target=3, missing_powerpoint_version=34, product_not_powerpoint=10, vague_latest_update=3. report_text is the QUESTION''s own title and body only -- answers and comments are never folded in, so an answerer''s build can never become the asker''s patch identity. Same acceptance gates as Learn Q&A.'
+- product_id: microsoft-powerpoint
+  update_version: '2605'
+  target_build: '20026.20076'
+  method_id: github_officedev_issues
+  source_type: github_officedev_issue
+  status: low_confidence
+  candidates_found: 12
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 12
+  blocked_reason: ''
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'OfficeDev/office-js public GitHub issues API. Queries 4, requests 4, issues discovered 60, rate remaining 26/30. Candidates 12, accepted 0, rejected 12. Top rejections: different_version_not_target=2, missing_powerpoint_version=6, product_not_powerpoint=4. Product comes from the template''s Host field, so an Excel issue stays Excel however often it says PowerPoint; only the desktop half of the Office version field can supply a build. Same acceptance gates as every other method.'
+- product_id: microsoft-powerpoint
+  update_version: '2607'
+  target_build: '20228.20110'
+  method_id: stack_exchange_search
+  source_type: stack_exchange_question
+  status: partial
+  candidates_found: 50
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 50
+  blocked_reason: request_budget_exhausted_after_4
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Stack Exchange official API (api.stackexchange.com/2.3), keyless, across Super User, Stack Overflow. Queried: 20228.20110, PowerPoint 2607; plus the PowerPoint tag route. Candidates 50, accepted 0, rejected 50. Top rejections: build_mismatch=1, different_version_not_target=2, missing_powerpoint_version=34, product_not_powerpoint=10, vague_latest_update=3. report_text is the QUESTION''s own title and body only -- answers and comments are never folded in, so an answerer''s build can never become the asker''s patch identity. Same acceptance gates as Learn Q&A.'
+- product_id: microsoft-powerpoint
+  update_version: '2607'
+  target_build: '20228.20110'
+  method_id: github_officedev_issues
+  source_type: github_officedev_issue
+  status: low_confidence
+  candidates_found: 10
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 10
+  blocked_reason: ''
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'OfficeDev/office-js public GitHub issues API. Queries 4, requests 4, issues discovered 59, rate remaining 22/30. Candidates 10, accepted 0, rejected 10. Top rejections: build_mismatch=1, different_version_not_target=1, missing_powerpoint_version=6, product_not_powerpoint=2. Product comes from the template''s Host field, so an Excel issue stays Excel however often it says PowerPoint; only the desktop half of the Office version field can supply a build. Same acceptance gates as every other method.'
+- product_id: microsoft-powerpoint
+  update_version: '2607'
+  target_build: '20228.20124'
+  method_id: stack_exchange_search
+  source_type: stack_exchange_question
+  status: partial
+  candidates_found: 50
+  accepted_candidates: 1
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 1
+  public_counted_reports: 1
+  accepted_reports: 1
+  rejected_reports: 49
+  blocked_reason: request_budget_exhausted_after_4
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Stack Exchange official API (api.stackexchange.com/2.3), keyless, across Super User, Stack Overflow. Queried: 20228.20124, PowerPoint 2607; plus the PowerPoint tag route. Candidates 50, accepted 1, rejected 49. Top rejections: different_version_not_target=2, missing_powerpoint_version=34, product_not_powerpoint=10, vague_latest_update=3. report_text is the QUESTION''s own title and body only -- answers and comments are never folded in, so an answerer''s build can never become the asker''s patch identity. Same acceptance gates as Learn Q&A.'
+- product_id: microsoft-powerpoint
+  update_version: '2607'
+  target_build: '20228.20124'
+  method_id: github_officedev_issues
+  source_type: github_officedev_issue
+  status: success
+  candidates_found: 11
+  accepted_candidates: 1
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 1
+  public_counted_reports: 1
+  accepted_reports: 1
+  rejected_reports: 10
+  blocked_reason: ''
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'OfficeDev/office-js public GitHub issues API. Queries 4, requests 4, issues discovered 63, rate remaining 18/30. Candidates 11, accepted 1, rejected 10. Top rejections: different_version_not_target=1, missing_powerpoint_version=6, product_not_powerpoint=3. Product comes from the template''s Host field, so an Excel issue stays Excel however often it says PowerPoint; only the desktop half of the Office version field can supply a build. Same acceptance gates as every other method.'
+- product_id: microsoft-powerpoint
+  update_version: '2607'
+  target_build: '20228.20158'
+  method_id: stack_exchange_search
+  source_type: stack_exchange_question
+  status: partial
+  candidates_found: 50
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 50
+  blocked_reason: request_budget_exhausted_after_4
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Stack Exchange official API (api.stackexchange.com/2.3), keyless, across Super User, Stack Overflow. Queried: 20228.20158, PowerPoint 2607; plus the PowerPoint tag route. Candidates 50, accepted 0, rejected 50. Top rejections: build_mismatch=1, different_version_not_target=2, missing_powerpoint_version=34, product_not_powerpoint=10, vague_latest_update=3. report_text is the QUESTION''s own title and body only -- answers and comments are never folded in, so an answerer''s build can never become the asker''s patch identity. Same acceptance gates as Learn Q&A.'
+- product_id: microsoft-powerpoint
+  update_version: '2607'
+  target_build: '20228.20158'
+  method_id: github_officedev_issues
+  source_type: github_officedev_issue
+  status: low_confidence
+  candidates_found: 10
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 10
+  blocked_reason: ''
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'OfficeDev/office-js public GitHub issues API. Queries 4, requests 4, issues discovered 57, rate remaining 14/30. Candidates 10, accepted 0, rejected 10. Top rejections: build_mismatch=1, different_version_not_target=1, missing_powerpoint_version=6, product_not_powerpoint=2. Product comes from the template''s Host field, so an Excel issue stays Excel however often it says PowerPoint; only the desktop half of the Office version field can supply a build. Same acceptance gates as every other method.'
+- product_id: microsoft-powerpoint
+  update_version: '2607'
+  target_build: '20228.20190'
+  method_id: stack_exchange_search
+  source_type: stack_exchange_question
+  status: partial
+  candidates_found: 50
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 50
+  blocked_reason: request_budget_exhausted_after_4
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Stack Exchange official API (api.stackexchange.com/2.3), keyless, across Super User, Stack Overflow. Queried: 20228.20190, PowerPoint 2607; plus the PowerPoint tag route. Candidates 50, accepted 0, rejected 50. Top rejections: build_mismatch=1, different_version_not_target=2, missing_powerpoint_version=34, product_not_powerpoint=10, vague_latest_update=3. report_text is the QUESTION''s own title and body only -- answers and comments are never folded in, so an answerer''s build can never become the asker''s patch identity. Same acceptance gates as Learn Q&A.'
+- product_id: microsoft-powerpoint
+  update_version: '2607'
+  target_build: '20228.20190'
+  method_id: github_officedev_issues
+  source_type: github_officedev_issue
+  status: low_confidence
+  candidates_found: 12
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 12
+  blocked_reason: ''
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'OfficeDev/office-js public GitHub issues API. Queries 4, requests 4, issues discovered 60, rate remaining 10/30. Candidates 12, accepted 0, rejected 12. Top rejections: build_mismatch=1, different_version_not_target=1, missing_powerpoint_version=6, product_not_powerpoint=4. Product comes from the template''s Host field, so an Excel issue stays Excel however often it says PowerPoint; only the desktop half of the Office version field can supply a build. Same acceptance gates as every other method.'
+- product_id: microsoft-powerpoint
+  update_version: '2608'
+  target_build: '20326.20100'
+  method_id: stack_exchange_search
+  source_type: stack_exchange_question
+  status: partial
+  candidates_found: 50
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 50
+  blocked_reason: request_budget_exhausted_after_4
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Stack Exchange official API (api.stackexchange.com/2.3), keyless, across Super User, Stack Overflow. Queried: 20326.20100, PowerPoint 2608; plus the PowerPoint tag route. Candidates 50, accepted 0, rejected 50. Top rejections: different_version_not_target=3, missing_powerpoint_version=34, product_not_powerpoint=10, vague_latest_update=3. report_text is the QUESTION''s own title and body only -- answers and comments are never folded in, so an answerer''s build can never become the asker''s patch identity. Same acceptance gates as Learn Q&A.'
+- product_id: microsoft-powerpoint
+  update_version: '2608'
+  target_build: '20326.20100'
+  method_id: github_officedev_issues
+  source_type: github_officedev_issue
+  status: low_confidence
+  candidates_found: 11
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 11
+  blocked_reason: ''
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'OfficeDev/office-js public GitHub issues API. Queries 4, requests 4, issues discovered 58, rate remaining 6/30. Candidates 11, accepted 0, rejected 11. Top rejections: different_version_not_target=2, missing_powerpoint_version=6, product_not_powerpoint=3. Product comes from the template''s Host field, so an Excel issue stays Excel however often it says PowerPoint; only the desktop half of the Office version field can supply a build. Same acceptance gates as every other method.'
+- product_id: microsoft-powerpoint
+  update_version: '2608'
+  target_build: '20326.20112'
+  method_id: stack_exchange_search
+  source_type: stack_exchange_question
+  status: partial
+  candidates_found: 50
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 50
+  blocked_reason: request_budget_exhausted_after_4
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'Stack Exchange official API (api.stackexchange.com/2.3), keyless, across Super User, Stack Overflow. Queried: 20326.20112, PowerPoint 2608; plus the PowerPoint tag route. Candidates 50, accepted 0, rejected 50. Top rejections: different_version_not_target=3, missing_powerpoint_version=34, product_not_powerpoint=10, vague_latest_update=3. report_text is the QUESTION''s own title and body only -- answers and comments are never folded in, so an answerer''s build can never become the asker''s patch identity. Same acceptance gates as Learn Q&A.'
+- product_id: microsoft-powerpoint
+  update_version: '2608'
+  target_build: '20326.20112'
+  method_id: github_officedev_issues
+  source_type: github_officedev_issue
+  status: low_confidence
+  candidates_found: 11
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 11
+  blocked_reason: ''
+  last_run: '2026-08-30T03:57:26Z'
+  notes: 'OfficeDev/office-js public GitHub issues API. Queries 4, requests 4, issues discovered 58, rate remaining 2/30. Candidates 11, accepted 0, rejected 11. Top rejections: different_version_not_target=2, missing_powerpoint_version=6, product_not_powerpoint=3. Product comes from the template''s Host field, so an Excel issue stays Excel however often it says PowerPoint; only the desktop half of the Office version field can supply a build. Same acceptance gates as every other method.'
+- product_id: microsoft-powerpoint
+  update_version: '2404'
+  target_build: '17531.20152'
+  method_id: learn_qna_segment_context
+  source_type: microsoft_learn_qna
+  status: blocked
+  candidates_found: 1
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 1
+  blocked_reason: context_fetch_blocked
+  last_run: '2026-08-30T04:00:26Z'
+  notes: segment-scoped exact-build resolution; fetches=4
