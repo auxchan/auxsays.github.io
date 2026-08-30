@@ -38,7 +38,8 @@ import re
 from typing import Any
 
 from lib.build_claims import (
-    BUILD_TOKEN_RE, extract_build_claims, select_current_failing_build, single_named_build,
+    BUILD_TOKEN_RE, OFFICE_FULL_VERSION_RE, extract_build_claims,
+    select_current_failing_build, single_named_build,
 )
 from lib.patch_identity import is_build_aware, patch_key
 from .base import (
@@ -60,6 +61,8 @@ from .base import (
 )
 from . import microsoft_learn_qna_source as learn_qna
 from . import reddit_source
+from . import stack_exchange_source
+from . import github_officedev_source
 
 PRODUCT_ID = "microsoft-powerpoint"
 
@@ -75,6 +78,24 @@ LEARN_QNA_SOURCE_NAME = "Microsoft Learn Q&A"
 # Reddit (davinci, premiere, both Acrobats) already uses this exact id.
 REDDIT_METHOD_ID = "reddit_search"
 REDDIT_SOURCE_TYPE = "reddit_community_report"
+
+STACK_EXCHANGE_METHOD_ID = "stack_exchange_search"
+STACK_EXCHANGE_SOURCE_TYPE = "stack_exchange_question"
+# Super User carries the PowerPoint desktop reports; Stack Overflow's `powerpoint` tag carries
+# add-in/automation regressions that name a build. Both are one API call per route per run.
+STACK_EXCHANGE_SITES = ("superuser", "stackoverflow")
+STACK_EXCHANGE_TAGS = {"superuser": "microsoft-powerpoint", "stackoverflow": "powerpoint"}
+
+GITHUB_METHOD_ID = "github_officedev_issues"
+GITHUB_SOURCE_TYPE = "github_officedev_issue"
+# Measured: a BARE build token finds nothing on GitHub search, the full 16.0.<build> form finds the
+# issues. Symptom terms carry the recall for reports whose author never wrote a build at all.
+GITHUB_SYMPTOM_QUERIES = (
+    "repo:OfficeDev/office-js PowerPoint crash",
+    "repo:OfficeDev/office-js PowerPoint settings",
+    "repo:OfficeDev/office-js PowerPoint slideshow",
+)
+MAX_GITHUB_QUERIES = 4
 REDDIT_SOURCE_NAME = "Reddit"
 REDDIT_SUBREDDITS = ("powerpoint", "microsoft365", "Office365")
 # Reddit is a documented CI-blocked fallback (PR #23). It is attempted ONLY when this flag is
@@ -119,8 +140,20 @@ POWERPOINT_ISSUE_RE = re.compile(
     r"\b(?:"
     r"crash(?:es|ing|ed)?|won'?t\s+(?:open|start|launch)|does\s+not\s+open|cannot\s+open|can'?t\s+open|"
     r"fail(?:s|ed|ing)?\s+to\s+(?:open|start|launch|save|export|load|respond)|"
+    # Unqualified failure statements. The pattern above requires "fail TO <verb>", so a report
+    # saying "Copilot ... fails consistently in PowerPoint desktop" -- which is as concrete as a
+    # failure claim gets -- matched nothing and was refused not_a_concrete_powerpoint_issue after
+    # passing product, version, channel, build AND date. These forms are unambiguous statements
+    # that something is broken; they are not how-to or feature language.
+    r"fail(?:s|ed|ing)?\s+(?:consistently|constantly|always|every\s+time|intermittently|randomly|silently)|"
+    r"not\s+working|does\s+not\s+work|doesn'?t\s+work|no\s+longer\s+works?|stopped\s+working|"
+    r"unable\s+to\s+(?:read|open|save|export|load|print|insert|edit)|"
     r"freez(?:e|es|ing|en)|hang(?:s|ing|ed)?|not\s+responding|"
     r"corrupt(?:s|ed|ion)?|damaged\s+(?:file|presentation|deck)|blank\s+(?:slide|presentation|deck)|"
+    # The same "cannot <verb>" family already covers open and save; read/write/retrieve/access are
+    # the identical shape and were simply missing, so a report saying "I cannot read the value from
+    # PowerPoint web" described a concrete failure the classifier could not see.
+    r"(?:cannot|can'?t|could\s+not|couldn'?t)\s+(?:read|write|retrieve|access|load|update|insert|print)|"
     r"can'?t\s+save|cannot\s+save|save\s+(?:fail\w*|error)|unable\s+to\s+save|lost\s+(?:my\s+)?(?:work|slides|changes)|data\s+loss|"
     r"slide[\s-]?show\s+(?:fail\w*|crash\w*|black|freez\w*|won'?t\s+start|not\s+working)|presenter\s+view\s+(?:broken|not\s+working|black)|"
     r"export\s+(?:fail\w*|error|broken)|can'?t\s+export|animation[s]?\s+(?:broken|not\s+working|glitch\w*|regress\w*|stutter\w*)|"
@@ -129,7 +162,13 @@ POWERPOINT_ISSUE_RE = re.compile(
     r"(?:very\s+)?slow|lag(?:s|ging|gy)?|performance\s+(?:regress\w*|issue|problem)|high\s+cpu|memory\s+leak|"
     r"install(?:ation)?\s+(?:fail\w*|error|stuck|loop)|update\s+(?:fail\w*|error|broke\w*|stuck)|"
     r"broke\w*\s+after|stopped\s+working\s+after|no\s+longer\s+works?\s+after|not\s+working\s+after|regress\w*|"
-    r"bug|glitch|error\s+message"
+    # Inflected like every sibling verb above. `bug` and `glitch` were the only two symptom words
+    # here without their plurals, and the group's trailing \b then made the plural unmatchable --
+    # "crashes" matched but "glitches" did not. A real Super User report of PowerPoint slideshow
+    # annotation glitches on Build 20228.20124 passed URL, product, version, channel, build and date
+    # and was then refused `not_a_concrete_powerpoint_issue` solely because all three of its symptom
+    # words were plural. Same \b-boundary family as the DaVinci identity defects.
+    r"bugs?|glitch(?:es|ing|ed)?|error\s+message"
     r")\b",
     re.I,
 )
@@ -183,7 +222,25 @@ OTHER_OFFICE_APP_TITLE_RE = re.compile(
 )
 
 
-def product_primacy_reason(parent_title: str, report_title: str) -> str | None:
+MIN_BODY_POWERPOINT_MENTIONS = 2
+
+
+def body_attribution_is_exclusive(report_body: str) -> bool:
+    """True when the body attributes the failure to PowerPoint and to nothing else.
+
+    Requires at least two PowerPoint mentions and NO other Office application anywhere in the body.
+    One passing mention is not attribution, and a single mention of Word/Excel/Outlook/Teams/
+    OneNote/Access/Publisher makes the report multi-application, which fails closed exactly as a
+    multi-app title does.
+    """
+    body = report_body or ""
+    if OTHER_OFFICE_APP_RE.search(body):
+        return False
+    return len(POWERPOINT_RE.findall(body)) >= MIN_BODY_POWERPOINT_MENTIONS
+
+
+def product_primacy_reason(parent_title: str, report_title: str, report_body: str = "",
+                           declared_host: str = "") -> str | None:
     """PowerPoint must be the PRIMARY subject via title/parent structure (Part A). Returns an
     exclusion reason or None.
 
@@ -192,11 +249,31 @@ def product_primacy_reason(parent_title: str, report_title: str) -> str | None:
     absent from both titles (a body-only mention never establishes primacy), when another Office
     app is the clear subject of the report title without PowerPoint, or when the report title names
     PowerPoint AND another Office app (multi-application — fail closed)."""
+    # A STRUCTURED host declaration outranks title text in both directions. OfficeDev's issue
+    # template asks "Host [Excel, Word, PowerPoint, etc.]:" and the reporter answers it, which is a
+    # far better product signal than which words appear in a title -- and the template's own
+    # placeholder puts "Excel, Word" in every body, so text heuristics read that as multi-app.
+    host = (declared_host or "").strip().lower()
+    if host:
+        return None if host == "powerpoint" else "product_not_powerpoint"
     parent_title = parent_title or ""
     report_title = report_title or ""
     pp_report = bool(POWERPOINT_RE.search(report_title))
     pp_parent = bool(POWERPOINT_RE.search(parent_title))
     if not (pp_report or pp_parent):
+        # EXCLUSIVE BODY ATTRIBUTION is the one way a title-less report still identifies the
+        # product. A user who writes "Copilot works in web PowerPoint and all other office desktop
+        # apps, but fails consistently in PowerPoint desktop" has attributed the failure to
+        # PowerPoint more precisely than a title mention ever does -- but their thread is titled
+        # "Copilot Unable to Read Document Error", so title primacy alone discards it.
+        #
+        # Deliberately narrow and fail-closed: the body must name PowerPoint at least twice AND
+        # name no other Office application anywhere, so a multi-app thread can never qualify.
+        # Measured over 486 symptom-discovered candidates, 12 qualify, every one PowerPoint-specific
+        # (slideshow, PPSX, presentation, PowerPoint Copilot). They still face every remaining
+        # gate -- version, exact build, channel, date, concrete issue -- unchanged.
+        if body_attribution_is_exclusive(report_body):
+            return None
         return "product_not_powerpoint"  # PowerPoint is not the titled subject
     # Reply/title primarily about another Office app (a body mention must not override the title).
     if OTHER_OFFICE_APP_TITLE_RE.search(report_title) and not pp_report:
@@ -412,7 +489,7 @@ def classify(text: str) -> tuple[str, str, str, str, str]:
 
 # --- ordered, deterministic acceptance -----------------------------------------
 
-def powerpoint_reason(target: dict[str, Any], source_url: str, source_date: str, parent_title: str, report_title: str, report_body: str) -> tuple[str | None, str, bool]:
+def powerpoint_reason(target: dict[str, Any], source_url: str, source_date: str, parent_title: str, report_title: str, report_body: str, declared_host: str = "") -> tuple[str | None, str, bool]:
     """Ordered acceptance for a PowerPoint candidate. Returns
     (exclusion_reason_or_None, match_basis, build_matched).
 
@@ -438,7 +515,7 @@ def powerpoint_reason(target: dict[str, Any], source_url: str, source_date: str,
         return "official_announcement_not_user_report", match_basis, build_matched
     # 3. Product primacy (Part A) — PowerPoint must be the titled subject; another Office app as the
     #    title subject (or a multi-application title) fails closed. A body-only mention never counts.
-    primacy = product_primacy_reason(parent_title, report_title)
+    primacy = product_primacy_reason(parent_title, report_title, report_body, declared_host)
     if primacy:
         return primacy, match_basis, build_matched
     # 4. Official announcement / release note phrased only in the body (not a user report).
@@ -528,6 +605,7 @@ def row_from_candidate(record: PatchRecord, target: dict[str, Any], candidate: d
 
     reason, match_basis, build_matched = powerpoint_reason(
         target, source_url, source_date, parent_title, report_title, report_body,
+        str(candidate.get("github_declared_host") or ""),
     )
     version_matched = version_in_context(combined, version, str(target.get("target_build") or ""))
     matched_version = version if version_matched else ""
@@ -659,6 +737,69 @@ def search_query_terms(target: dict[str, Any]) -> list[str]:
     return terms[:MAX_QUERIES_PER_RECORD]
 
 
+# SYMPTOM-FIRST discovery terms. Identity-first search cannot find the reports that matter most:
+# a user titles their thread with what broke, not with a build number, and often supplies the build
+# only when asked. Measured against the live index: the 67 identity queries this collector issues
+# across all 25 PowerPoint records returned 6591 items and 2199 distinct threads, and a real
+# PowerPoint Copilot failure report was in NONE of them -- its title is "Copilot Unable to Read
+# Document Error", which contains neither "PowerPoint" nor any version, and its build sits in a
+# comment the search index does not cover. A symptom query returns it immediately.
+#
+# Recall and precision are separate stages: these terms only widen what is LOOKED AT. Every
+# candidate still faces the unchanged acceptance authority, which decides identity on its own.
+# Ordered by MEASURED reach against the live index, not by guesswork. "PowerPoint Copilot error"
+# returns the Copilot failure thread that identity search cannot reach; it sat below an earlier
+# 3-query cap and was silently never issued, which is exactly the kind of unmeasured truncation
+# that makes a widened funnel look like it did not help.
+SYMPTOM_QUERY_TERMS = (
+    "PowerPoint Copilot error",
+    "PowerPoint crash after update",
+    "PowerPoint not responding update",
+    "PowerPoint slideshow problem after update",
+    "PowerPoint save export fails",
+)
+MAX_SYMPTOM_QUERIES = 5
+
+
+# Symptom queries are PRODUCT-level: they carry no version or build, so every record in a run would
+# otherwise issue the identical searches and pay for them 25 times over. The results are cached for
+# the process, which is the natural scope of one collection run. Identity-first queries are NOT
+# cached -- those genuinely differ per record.
+_SYMPTOM_CACHE: dict[str, list[dict[str, Any]]] = {}
+
+
+def reset_symptom_cache() -> None:
+    """Drop the per-run symptom cache.
+
+    The cache's correct lifetime is ONE collection run: results are product-level, but they are
+    still a point-in-time view of the index. A long-lived process (the orchestration graph, a test
+    session) must not serve one run's discoveries to the next.
+    """
+    _SYMPTOM_CACHE.clear()
+
+
+def cached_symptom_candidates(queries: list[str], context: CollectorContext,
+                              errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    key = " | ".join(queries)
+    hit = _SYMPTOM_CACHE.get(key)
+    if hit is not None:
+        return list(hit)
+    found = learn_qna.collect_learn_qna_candidates(
+        queries=queries, context=context, errors=errors,
+        source_type=LEARN_QNA_SOURCE_TYPE, source_name=LEARN_QNA_SOURCE_NAME)
+    _SYMPTOM_CACHE[key] = list(found)
+    return found
+
+
+def symptom_query_terms() -> list[str]:
+    """Product-level symptom terms, independent of any one record's identity.
+
+    Deliberately NOT version-parameterised: the whole point is to reach threads that never state a
+    version in indexed text. Bounded so a widened funnel cannot become an unbounded request budget.
+    """
+    return list(SYMPTOM_QUERY_TERMS[:MAX_SYMPTOM_QUERIES])
+
+
 # --- method health -----------------------------------------------------------
 
 NEAR_MISS_REASONS = {"bare_version_no_context", "different_version_not_target", "build_mismatch", "channel_conflict", "reply_drifted_to_other_version", "insufficient_source_content"}
@@ -744,17 +885,23 @@ def run_primary_method(record: PatchRecord, target: dict[str, Any], context: Col
     Extracted from collect_for_record so the orchestration control plane can invoke exactly the
     production method path; collect_for_record composes this same function. Acceptance gates are
     unchanged and identical for every method."""
-    query_terms = search_query_terms(target)
+    # Identity-first terms find threads that state the patch; symptom-first terms find the ones
+    # whose author described what broke instead. Both feed the same unchanged acceptance authority.
+    identity_terms = search_query_terms(target)
+    symptom_terms = symptom_query_terms()
+    query_terms = identity_terms + symptom_terms
     lq_errors: list[dict[str, Any]] = []
     lq_candidates: list[dict[str, Any]] = []
-    if query_terms:
+    if identity_terms:
         lq_candidates = learn_qna.collect_learn_qna_candidates(
-            queries=query_terms,
+            queries=identity_terms,
             context=context,
             errors=lq_errors,
             source_type=LEARN_QNA_SOURCE_TYPE,
             source_name=LEARN_QNA_SOURCE_NAME,
         )
+    if symptom_terms:
+        lq_candidates = lq_candidates + cached_symptom_candidates(symptom_terms, context, lq_errors)
     lq_accepted, lq_rejected = evaluate_candidates(record, target, lq_candidates, captured_at, seen, run_accepted_urls)
     lq_status = learn_qna_method_status(lq_candidates, lq_accepted, lq_rejected, lq_errors)
     lq_notes = (
@@ -803,6 +950,122 @@ def run_fallback_method(record: PatchRecord, target: dict[str, Any], context: Co
     return rd_accepted, rd_rejected, row
 
 
+def stack_exchange_method_status(candidates: list[dict[str, Any]], accepted: list[dict[str, Any]], rejected: list[dict[str, Any]], errors: list[dict[str, Any]]) -> str:
+    if accepted:
+        return "partial" if errors else "success"
+    if errors and (candidates or rejected):
+        return "partial"
+    if errors:
+        # A throttled source is capacity-limited, not broken; the distinction matters because a
+        # "broken" method invites debugging an endpoint that is working perfectly well.
+        return "blocked" if any("rate_limited" in str(e.get("reason") or "") for e in errors) else "broken"
+    if rejected and any(str(r.get("exclusion_reason")) in NEAR_MISS_REASONS for r in rejected):
+        return "low_confidence"
+    return "no_results"
+
+
+def run_stack_exchange_method(record: PatchRecord, target: dict[str, Any], context: CollectorContext, seen: set[str], run_accepted_urls: dict[str, str] | None, captured_at: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]], dict[str, Any]]:
+    """Stack Exchange (Super User + Stack Overflow), keyless official API.
+
+    Two routes per site because they fail differently: the TAG route surfaces PowerPoint questions
+    whose author never wrote a build, and the TEXT route finds an exact build token wherever it was
+    written. Acceptance is the same unchanged authority used by every other method -- only discovery
+    is new."""
+    se_errors: list[dict[str, Any]] = []
+    build = str(target.get("target_build") or "").strip()
+    version = str(target.get("update_version") or "").strip()
+    queries = [q for q in (build, f"PowerPoint {version}" if version else "") if q]
+    se_candidates = stack_exchange_source.collect_stack_exchange_candidates(
+        sites=list(STACK_EXCHANGE_SITES),
+        queries=queries,
+        tags=[STACK_EXCHANGE_TAGS.get(site, "") for site in STACK_EXCHANGE_SITES if STACK_EXCHANGE_TAGS.get(site)][:1],
+        errors=se_errors,
+        max_requests=max(2, min(8, 2 * len(STACK_EXCHANGE_SITES))),
+        source_type=STACK_EXCHANGE_SOURCE_TYPE,
+    )
+    se_accepted, se_rejected = evaluate_candidates(record, target, se_candidates, captured_at, seen, run_accepted_urls)
+    se_status = stack_exchange_method_status(se_candidates, se_accepted, se_rejected, se_errors)
+    se_notes = (
+        "Stack Exchange official API (api.stackexchange.com/2.3), keyless, across "
+        + ", ".join(stack_exchange_source.SITE_NAMES.get(s, s) for s in STACK_EXCHANGE_SITES) + ". "
+        f"Queried: {', '.join(queries) if queries else 'none (record missing version)'}; plus the PowerPoint tag route. "
+        f"Candidates {len(se_candidates)}, accepted {len(se_accepted)}, rejected {len(se_rejected)}. "
+        + (f"Top rejections: {format_rejection_counts(se_rejected)}. " if se_rejected else "")
+        + "report_text is the QUESTION's own title and body only -- answers and comments are never "
+        "folded in, so an answerer's build can never become the asker's patch identity. Same "
+        "acceptance gates as Learn Q&A."
+    )
+    row = health_row(record, STACK_EXCHANGE_METHOD_ID, STACK_EXCHANGE_SOURCE_TYPE, se_status, se_candidates, se_accepted, se_rejected, se_errors, captured_at, se_notes)
+    return se_accepted, se_rejected, row
+
+
+def github_method_status(candidates: list[dict[str, Any]], accepted: list[dict[str, Any]], rejected: list[dict[str, Any]], errors: list[dict[str, Any]]) -> str:
+    if accepted:
+        return "partial" if errors else "success"
+    if errors and (candidates or rejected):
+        return "partial"
+    if errors:
+        return "blocked" if any("rate_limited" in str(e.get("reason") or "") for e in errors) else "broken"
+    if rejected and any(str(r.get("exclusion_reason")) in NEAR_MISS_REASONS for r in rejected):
+        return "low_confidence"
+    return "no_results"
+
+
+def run_github_method(record: PatchRecord, target: dict[str, Any], context: CollectorContext, seen: set[str], run_accepted_urls: dict[str, str] | None, captured_at: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]], dict[str, Any]]:
+    """OfficeDev/office-js issues, public GitHub API, read-only.
+
+    Build-first uses the FULL Office form because the bare token matches nothing in GitHub search;
+    symptom-first carries recall. The issue's structured `Host:` answer decides the product, and only
+    the DESKTOP half of the version field can supply a Click-to-Run build."""
+    gh_errors: list[dict[str, Any]] = []
+    build = str(target.get("target_build") or "").strip()
+    queries = ([f'repo:{github_officedev_source.REPO} "16.0.{build}"'] if build else []) + list(GITHUB_SYMPTOM_QUERIES)
+    def _canonicalise(candidate: dict[str, Any]) -> dict[str, Any]:
+        """Reduce Office's 16.0.<build> full form to the canonical token, host permitting.
+
+        lib.build_claims deliberately does not treat 16.0.<build> as a bare token, because that form
+        appears in crash records whose AppName may be Word or Excel -- it becomes a claim only when
+        the application is proven. An OfficeDev issue answering "Host: PowerPoint" beside its
+        version field IS that proof, so the reduction is applied here, using the SHARED primitive,
+        and only for a PowerPoint-declared host.
+        """
+        if str(candidate.get("github_declared_host") or "") != "powerpoint":
+            return candidate
+        # ONLY the reporter's declared DESKTOP version is reduced, prepended as its own statement.
+        # Substituting across the whole body also reduced the WEB build (web: 16.0.20329.45605) to a
+        # bare token, so the authority saw TWO builds and refused -- reintroducing exactly the
+        # web/desktop confusion the desktop scoping exists to prevent. The body's remaining 16.0.
+        # forms are deliberately left alone: as non-tokens they stay invisible to the build gate.
+        desktop = str(candidate.get("github_desktop_version") or "").strip()
+        if not desktop:
+            return candidate
+        reduced = OFFICE_FULL_VERSION_RE.sub(lambda m: m.group(1), desktop)
+        if reduced == desktop:
+            return candidate
+        text = str(candidate.get("report_text") or "")
+        return {**candidate, "report_text": f"Office desktop version: {reduced}. {text}"}
+
+    gh_candidates, telemetry = github_officedev_source.collect_officedev_candidates(
+        queries=queries[:MAX_GITHUB_QUERIES], errors=gh_errors,
+        max_requests=MAX_GITHUB_QUERIES, source_type=GITHUB_SOURCE_TYPE,
+    )
+    gh_candidates = [_canonicalise(c) for c in gh_candidates]
+    gh_accepted, gh_rejected = evaluate_candidates(record, target, gh_candidates, captured_at, seen, run_accepted_urls)
+    gh_status = github_method_status(gh_candidates, gh_accepted, gh_rejected, gh_errors)
+    gh_notes = (
+        f"OfficeDev/office-js public GitHub issues API. Queries {telemetry.get('queries')}, "
+        f"requests {telemetry.get('requests')}, issues discovered {telemetry.get('issues_discovered')}, "
+        f"rate remaining {telemetry.get('rate_remaining')}/{telemetry.get('rate_limit')}. "
+        f"Candidates {len(gh_candidates)}, accepted {len(gh_accepted)}, rejected {len(gh_rejected)}. "
+        + (f"Top rejections: {format_rejection_counts(gh_rejected)}. " if gh_rejected else "")
+        + "Product comes from the template's Host field, so an Excel issue stays Excel however often "
+        "it says PowerPoint; only the desktop half of the Office version field can supply a build. "
+        "Same acceptance gates as every other method."
+    )
+    row = health_row(record, GITHUB_METHOD_ID, GITHUB_SOURCE_TYPE, gh_status, gh_candidates, gh_accepted, gh_rejected, gh_errors, captured_at, gh_notes)
+    return gh_accepted, gh_rejected, row
+
+
 def collect_for_record(record: PatchRecord, context: CollectorContext, env: dict[str, str] | None = None, version_ambiguous: bool = False, run_accepted_urls: dict[str, str] | None = None) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
     captured_at = utc_now()
     target = record_target(record)
@@ -812,12 +1075,18 @@ def collect_for_record(record: PatchRecord, context: CollectorContext, env: dict
     lq_accepted, lq_rejected, lq_health = run_primary_method(record, target, context, seen, run_accepted_urls, captured_at)
     health = [lq_health]
 
+    se_accepted, se_rejected, se_health = run_stack_exchange_method(record, target, context, seen, run_accepted_urls, captured_at)
+    health.append(se_health)
+
+    gh_accepted, gh_rejected, gh_health = run_github_method(record, target, context, seen, run_accepted_urls, captured_at)
+    health.append(gh_health)
+
     rd_attempted = reddit_fallback_enabled(env)
     rd_accepted, rd_rejected, rd_health = run_fallback_method(record, target, context, seen, run_accepted_urls, captured_at, rd_attempted)
     health.append(rd_health)
 
-    accepted = lq_accepted + rd_accepted
-    rejected = lq_rejected + rd_rejected
+    accepted = lq_accepted + se_accepted + gh_accepted + rd_accepted
+    rejected = lq_rejected + se_rejected + gh_rejected + rd_rejected
     return accepted, rejected, health
 
 
@@ -825,6 +1094,7 @@ class PowerPointLearnQnaCollector(ProductCollector):
     product_id = PRODUCT_ID
 
     def collect(self, context: CollectorContext) -> list[dict[str, Any]]:
+        reset_symptom_cache()   # one run, one point-in-time view of the index
         records = generated_records(PRODUCT_ID, context.target_versions)
         # Exact-patch ambiguity is computed over the FULL tracked record set (unfiltered), so a
         # --update-version filter can never hide a sibling record that makes a version ambiguous.

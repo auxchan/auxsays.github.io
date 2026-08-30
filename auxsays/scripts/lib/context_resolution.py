@@ -69,6 +69,16 @@ BUILD_RE = BUILD_TOKEN_RE
 # rejected for being about another product, another version, an announcement, a bad URL or a
 # non-concrete issue is not made countable by finding a build somewhere on its page.
 RESOLVABLE_REASON = "missing_exact_build"
+# `missing_powerpoint_version` is resolvable for the SAME structural reason. A search-RSS item shows
+# only the opener; when a responder asks "what build?" the reporter answers in a comment that names
+# BOTH the version and the build ("The build is current channel 2607 20228.20124"). The opener is
+# then rejected on the version gate before the build gate is ever reached, so restricting resolution
+# to missing_exact_build made that whole class unreachable.
+#
+# This widens only WHAT MAY BE RECONSIDERED, never what is accepted: the resolver re-presents the
+# candidate to the UNCHANGED authority, which re-decides product, version, channel, build, date and
+# concrete issue for itself, and it reads only the reporter's OWN segments.
+RESOLVABLE_REASONS = frozenset({RESOLVABLE_REASON, "missing_powerpoint_version"})
 
 # resolution_result vocabulary. The first six are the required contract values.
 RESOLVED_EXACT_BUILD = "resolved_exact_build"
@@ -242,7 +252,7 @@ def resolve_candidate(candidate: dict[str, Any], rejection_reason: str, *,
     outcome = ResolutionOutcome(original_candidate_url=url,
                                 original_rejection_reason=str(rejection_reason or ""))
 
-    if rejection_reason != RESOLVABLE_REASON:
+    if rejection_reason not in RESOLVABLE_REASONS:
         outcome.detail = "only missing_exact_build is resolvable"
         return outcome
     if not url:
@@ -298,10 +308,38 @@ def resolve_candidate(candidate: dict[str, Any], rejection_reason: str, *,
         budget.receipts[url] = prior
         return prior
 
-    claims = extract_build_claims(segment.segment_text)
-    builds = [c.build for c in claims]
-    elsewhere = [b for seg in thread.segments if seg.segment_key != segment.segment_key
+    # AUTHOR-scoped, not segment-scoped. The rule this module states is about WHO spoke -- "a build
+    # exists on this thread, but a DIFFERENT participant stated it" -- but the comparison was
+    # `segment_key`, so a reporter's OWN later post counted as a stranger's. That is the normal
+    # shape of a support thread: the opener describes the symptom, a responder asks for the build,
+    # and the SAME person supplies it in a comment. On the calibration thread the question author
+    # and the comment naming Build 20228.20124 carry the identical author GUID
+    # (4bf12226-06e6-4d29-81dd-92bb3ba0d634), while three other comments carry two different ones.
+    #
+    # A reporter may therefore complete their own single report. Nothing is relaxed across authors:
+    # a segment with a different author_id -- or with no identifiable author at all -- is still
+    # "elsewhere" and is still never borrowed.
+    own_author = str(segment.author_id or "").strip()
+
+    def _is_own(seg: Any) -> bool:
+        other = str(getattr(seg, "author_id", "") or "").strip()
+        return bool(own_author) and other == own_author
+
+    same_author_text = " ".join(seg.segment_text for seg in thread.segments
+                                if _is_own(seg) and seg.segment_key != segment.segment_key)
+    elsewhere = [b for seg in thread.segments
+                 if seg.segment_key != segment.segment_key and not _is_own(seg)
                  for b in build_tokens(seg.segment_text)]
+    # Everything this reporter wrote on this thread, in order: their origin segment first, then any
+    # other segment carrying their author id. The provenance excerpt is cut from THIS, so a build
+    # they supplied in a later comment is quoted with the sentence that surrounds it -- which is
+    # what carries the version alongside it ("The build is current channel 2607 20228.20124").
+    own_text = (segment.segment_text + " " + same_author_text).strip()
+    # The reporter's OWN text is their origin segment plus anything else they wrote on this
+    # thread. Build claims are extracted from that combined text so a build they supplied
+    # when asked still carries its author's own role language with it.
+    claims = extract_build_claims(segment.segment_text + " " + same_author_text)
+    builds = [c.build for c in claims]
     outcome.cross_segment_builds = sorted(set(elsewhere))
     outcome.build_claims = [c.as_dict() for c in claims]
     outcome.role_counts = role_counts(claims)
@@ -323,7 +361,7 @@ def resolve_candidate(candidate: dict[str, Any], rejection_reason: str, *,
         outcome.resolved_build = named
         outcome.resolution_result = RESOLVED_EXACT_BUILD
         outcome.resolution_match_basis = f"explicit_build_in_own_{segment.segment_type}_segment"
-        outcome.provenance_excerpt = _excerpt(segment.segment_text, named)
+        outcome.provenance_excerpt = _excerpt(own_text, named)
     elif len(set(builds)) == 1:
         # The ONLY build named, and its own author positively placed it somewhere other than the
         # current/failing role -- rolled back to, on another machine, or contradicted. Being the
@@ -345,7 +383,7 @@ def resolve_candidate(candidate: dict[str, Any], rejection_reason: str, *,
             outcome.resolution_result = RESOLVED_EXACT_BUILD
             outcome.resolution_match_basis = (
                 f"explicit_role_{basis}_in_own_{segment.segment_type}_segment")
-            outcome.provenance_excerpt = _excerpt(segment.segment_text, selected)
+            outcome.provenance_excerpt = _excerpt(own_text, selected)
             outcome.detail = ("role-attributed: "
                               + "; ".join(f"{c.build}={c.role}" for c in claims))
         else:

@@ -47,6 +47,7 @@ PARSE_UNEXPECTED_SHAPE = "unexpected_shape"
 
 SEGMENT_QUESTION = "question"
 SEGMENT_ANSWER = "answer"
+SEGMENT_COMMENT = "comment"
 
 # Learn Q&A publishes its first-party generated replies under this fixed author id.
 MACHINE_AUTHOR_IDS = frozenset({"a1a1a1a1-a1a1-a1a1-a1a1-a1a1a1a1a1a1"})
@@ -213,7 +214,54 @@ def parse_learn_qna_thread(thread_url: str, page_html: str) -> ThreadSegments:
                 machine_generated=is_machine_generated(author, author_id),
             ))
 
+    segments.extend(parse_comment_segments(page_html, thread_url=parsed.thread_url, base_url=base_url))
+
     parsed.parse_status = PARSE_OK
     parsed.segments = segments
     parsed.detail = f"{len(segments)} segments"
     return parsed
+
+
+# Comments are NOT in the schema.org block -- verified live: the ld+json QAPage carries the question
+# and its answer buckets only, while the build a reporter supplies when asked ("The build is current
+# channel 2607 20228.20124") appears solely in comment markup. They were previously left unmodelled
+# on the grounds that comments carried no stable id; the markup does in fact expose one, together
+# with the author's GUID:
+#
+#     data-test-id="comment-2758987"        ... the comment's own id
+#     /en-us/users/na/?userid=<guid>        ... that comment's author
+#
+# The author GUID is what makes this safe. On the calibration thread the question author is
+# 4bf12226-06e6-4d29-81dd-92bb3ba0d634 and the comment stating the build carries the SAME guid,
+# while the three other comments carry two different ones. Same-author enrichment and cross-author
+# refusal are therefore both decidable from the markup, with no inference.
+_COMMENT_BLOCK_RE = re.compile(r'data-test-id="comment-(\d+)"(.*?)(?=data-test-id="comment-\d+"|\Z)', re.S)
+_COMMENT_AUTHOR_RE = re.compile(r'userid=([0-9a-fA-F-]{36})')
+_COMMENT_DATE_RE = re.compile(r'(\d{4}-\d{2}-\d{2}T[0-9:.]+)')
+
+
+def parse_comment_segments(html: str, *, thread_url: str, base_url: str) -> list[SourceSegment]:
+    """Comment segments from thread markup, each attributed to its own author.
+
+    A comment whose author cannot be identified is DROPPED rather than attributed to nobody: an
+    unattributed segment could otherwise let a stranger's build reach a reporter's record, which is
+    the one thing segment scoping exists to prevent.
+    """
+    segments: list[SourceSegment] = []
+    for cid, block in _COMMENT_BLOCK_RE.findall(html or ""):
+        author = _COMMENT_AUTHOR_RE.search(block)
+        if not author:
+            continue
+        text = strip_html(block)
+        if not text:
+            continue
+        date = _COMMENT_DATE_RE.search(block)
+        segments.append(SourceSegment(
+            thread_url=thread_url, segment_type=SEGMENT_COMMENT, segment_id=cid,
+            segment_url=f"{base_url}#comment-{cid}",
+            segment_text=text,
+            author_name="", author_id=author.group(1),
+            author_role="", segment_date=date.group(1) if date else "",
+            machine_generated=False,
+        ))
+    return segments

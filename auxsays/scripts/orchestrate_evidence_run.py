@@ -160,7 +160,17 @@ def default_powerpoint_methods() -> dict[str, Callable[..., tuple]]:
     def fallback(record, target, context, seen, run_urls, captured_at, attempted=False):
         return ppt.run_fallback_method(record, target, context, seen, run_urls, captured_at, attempted)
 
-    return {"learn_qna_search_rss": primary, "reddit_search": fallback}
+    def stack_exchange(record, target, context, seen, run_urls, captured_at, attempted=True):
+        return ppt.run_stack_exchange_method(record, target, context, seen, run_urls, captured_at)
+
+    def github_officedev(record, target, context, seen, run_urls, captured_at, attempted=True):
+        return ppt.run_github_method(record, target, context, seen, run_urls, captured_at)
+
+    # Stack Exchange and OfficeDev are PRIMARY, not fallbacks. They discover different populations
+    # from Q&A -- a Super User question and a GitHub issue are not the same corpus -- so gating them
+    # on Q&A failing would hide reports precisely when Q&A is healthy. Each is a handful of requests.
+    return {"learn_qna_search_rss": primary, "reddit_search": fallback,
+            "stack_exchange_search": stack_exchange, "github_officedev_issues": github_officedev}
 
 
 def default_capability(env: dict[str, str] | None) -> dict[str, bool]:
@@ -344,7 +354,15 @@ class Pipeline:
                     justified, reason = decision.get("justified", False), decision.get("reason", "")
                     capable = self.capability.get(method_id, False)
                     attempted = bool(justified and capable)
-                fn = self.methods[method_id]
+                fn = self.methods.get(method_id)
+                if fn is None:
+                    # A plan may name a method this runner has no binding for -- a fixture that
+                    # injects its own method map, or a plan entry added ahead of its implementation.
+                    # Skipping is honest and keeps the rest of the plan running; raising would take
+                    # every other method down with it. Recorded so the gap is visible, not silent.
+                    state.receipt(node, f"{identity}:{method_id}:no_binding",
+                                  {"method_id": method_id, "skipped": "no_binding"})
+                    continue
                 t = {"update_version": target["update_version"], "target_build": target["target_build"],
                      "target_release_date": getattr(record, "update_published_at", ""),
                      "version_ambiguous": False}

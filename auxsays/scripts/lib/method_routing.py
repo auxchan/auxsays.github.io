@@ -41,7 +41,11 @@ FALLBACK_CONDITIONS = frozenset({
 # has no orchestrated fallback -- their existing collectors keep their current behaviour.
 METHOD_PLANS: dict[str, dict[str, Any]] = {
     "microsoft-powerpoint": {
-        "primary": ["learn_qna_search_rss"],
+        # Three primaries, run every cycle. They are independent corpora, not a retry chain: a
+        # Super User question, a Microsoft Q&A thread and an OfficeDev issue are written by
+        # different people in different places. Making the newer two conditional on Q&A failing
+        # would suppress them exactly when Q&A is working.
+        "primary": ["learn_qna_search_rss", "stack_exchange_search", "github_officedev_issues"],
         "fallback": ["reddit_search"],
         "fallback_when": ["no_accepted_reports", "blocked", "broken", "stale", "low_confidence"],
     },
