@@ -48,6 +48,9 @@ from lib.orchestration import (  # noqa: E402
     run_summary, utc_now,
 )
 from lib import context_resolution as cr  # noqa: E402
+# The resolution budget is ordered with the authority's OWN concreteness predicate, never a local
+# re-implementation: prioritisation must not be able to disagree with acceptance.
+from patch_collectors.microsoft_powerpoint import concrete_issue as ppt_concrete_issue  # noqa: E402
 from lib.method_routing import fallback_justified, plan_methods  # noqa: E402
 from lib.patch_identity import is_build_aware, patch_key, require_build  # noqa: E402
 from lib.report_counts import reconcile_record_counts  # noqa: E402
@@ -183,6 +186,31 @@ def default_capability(env: dict[str, str] | None) -> dict[str, bool]:
 # Pipeline
 # ---------------------------------------------------------------------------
 
+def resolution_priority(row: dict[str, Any]) -> tuple[int, str]:
+    """Sort key deciding which rejected rows get to spend a resolution fetch.
+
+    Reconsidering `missing_powerpoint_version` took the resolvable population from 15 rows to 2155,
+    and a budget of 8 fetches then covered 0.4% of it -- the widening made the right report reachable
+    in principle and unreachable in practice. Rows are ranked by how close they already are to
+    acceptance, using the authority's OWN concreteness predicate so prioritisation can never disagree
+    with acceptance:
+
+      0  missing_exact_build          product, version, concreteness and date have all passed
+      1  missing_powerpoint_version   and the text describes a concrete post-install failure
+      2  everything else              reached only when the budget outlasts the first two
+
+    The URL tiebreak keeps the ordering reproducible for the same input set.
+    """
+    reason = str(row.get("exclusion_reason") or "")
+    if reason == cr.RESOLVABLE_REASON:
+        rank = 0
+    else:
+        text = " ".join(str(row.get(field) or "")
+                        for field in ("parent_title", "report_title", "report_text"))
+        rank = 1 if ppt_concrete_issue(text) else 2
+    return rank, str(row.get("source_url") or "")
+
+
 class Pipeline:
     def __init__(self, repo_root: Path, product_ids: list[str], *, write: bool,
                  checkpoint_dir: Path, evidence_path: Path | None = None,
@@ -195,7 +223,7 @@ class Pipeline:
                  env: dict[str, str] | None = None,
                  context: CollectorContext | None = None,
                  context_fetch: Callable[[str], tuple[str, str]] | None = None,
-                 context_max_fetches: int = 8) -> None:
+                 context_max_fetches: int = 60) -> None:
         self.repo_root = Path(repo_root)
         self.product_ids = list(product_ids)
         self.write = bool(write)
@@ -476,6 +504,15 @@ class Pipeline:
             state.receipt("RESOLVE_CONTEXT", identity, {"attempted": 0})
             return state
 
+        # ORDER THE SPEND. Reconsidering `missing_powerpoint_version` took the resolvable population
+        # from 15 rows to 2155, and a budget of 8 fetches then covered 0.4% of it -- the widening
+        # made the right report reachable in principle and unreachable in practice. Rows are sorted
+        # by how close they already are to acceptance, using the SAME production predicate the
+        # authority uses, so this is prioritisation and never a second opinion about acceptance:
+        #   0  missing_exact_build          product, version, concreteness and date already passed
+        #   1  missing_powerpoint_version   AND the text describes a concrete post-install failure
+        #   2  everything else              only reached when the budget outlasts the first two
+        pending.sort(key=lambda entry: resolution_priority(entry[1]))
         budget = cr.ResolutionBudget(max_fetches=self.context_max_fetches)
         captured_at = utc_now()
         outcomes: list[dict[str, Any]] = []

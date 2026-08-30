@@ -337,6 +337,45 @@ def run() -> int:
 
     print()
     print("=" * 96)
+    print("S6  the resolution budget is spent on the rows closest to acceptance")
+    print("=" * 96)
+    # Widening the resolvable set is only half a fix. In the first production run after it, the graph
+    # reported attempted=2155 with fetches=8 -- reachable in principle, 0.4% covered in practice.
+    from orchestrate_evidence_run import Pipeline, resolution_priority  # noqa: PLC0415
+
+    def row(reason: str, text: str, url: str) -> dict:
+        return {"exclusion_reason": reason, "report_text": text, "source_url": url}
+
+    build_gap = row("missing_exact_build", "PowerPoint 2607 crashes on save", "a")
+    concrete = row("missing_powerpoint_version",
+                   "PowerPoint crashes every time I save since the update", "b")
+    howto = row("missing_powerpoint_version", "How do I find the design tab", "c")
+    order = [r["source_url"] for r in sorted([howto, concrete, build_gap], key=resolution_priority)]
+    check("S6.1 a build-gap row outranks a version-gap row", order[0] == "a", str(order))
+    check("S6.2 a concrete failure outranks a how-to question", order[1] == "b", str(order))
+    check("S6.3 the how-to question is last", order[2] == "c", str(order))
+    check("S6.4 ordering is deterministic for the same input",
+          [r["source_url"] for r in sorted([build_gap, howto, concrete], key=resolution_priority)]
+          == order, "unstable ordering")
+    # The rank must come from the authority's own predicate, so prioritisation cannot disagree with
+    # acceptance. Flip the predicate and the ranking must follow it.
+    import orchestrate_evidence_run as _orch  # noqa: PLC0415
+    saved_pred = _orch.ppt_concrete_issue
+    _orch.ppt_concrete_issue = lambda _t: False
+    try:
+        demoted = resolution_priority(concrete)[0]
+    finally:
+        _orch.ppt_concrete_issue = saved_pred
+    check("S6.5 the rank follows the authority's concreteness predicate, not a local copy",
+          demoted == 2 and resolution_priority(concrete)[0] == 1, str(demoted))
+    # The budget must be sized for the widened population, not the 15 rows it was written for.
+    defaults = Pipeline.__init__.__kwdefaults__ or {}
+    check("S6.6 the default fetch budget was raised past the pre-widening value",
+          int(defaults.get("context_max_fetches") or 0) >= 40,
+          str(defaults.get("context_max_fetches")))
+
+    print()
+    print("=" * 96)
     print(f"Results: {PASS}/{PASS + FAIL} passed, {FAIL} failed")
     if FAILURES:
         print("Failed: " + ", ".join(FAILURES))
