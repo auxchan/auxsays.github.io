@@ -1,0 +1,114 @@
+{
+  "acceptedRelationships": [],
+  "activationStatus": "LOCAL_REVIEW_ONLY_NOT_PUBLICLY_ACTIVATED",
+  "artifactClass": "phase4b_bounded_structural_candidate",
+  "behavioralEvidence": {
+    "capacity": "HEADROOM_CONSTRAINED",
+    "inventory": "BUFFER_AVAILABLE",
+    "lag": "UNKNOWN_NOT_ZERO_PENDING_ACCEPTED_STRUCTURAL_RUN",
+    "numericAttenuation": null,
+    "substitution": "NO_PROVEN_SUBSTITUTE"
+  },
+  "candidateId": "phase4b-candidate:cd20b292d2dfce0a2361f9f07c774f0f5b8a0049189fb5cd5c7470b4fbacb7e9",
+  "claimClassesAbsent": [
+    "FCST",
+    "SCEN"
+  ],
+  "claimClassesPresent": [
+    "OBS"
+  ],
+  "coverageWarning": "Only the approved energy/refining/utilities/transport slice is in scope; this is not a whole-economy model.",
+  "coveredCodes": [
+    "211",
+    "22",
+    "324",
+    "484",
+    "486",
+    "493"
+  ],
+  "crosswalk": {
+    "beaNaicsVintage": "2017_NAICS",
+    "beaSummaryCode": "484",
+    "bridgeVersion": "bea-2017-to-bls-2022-naics-484-1.0.0",
+    "crosswalkSha256": "6e25267ff60ccedc0808c14153b0cdeb566a7f5e9097536c70c2b9694ef5ff47",
+    "employmentNaicsCode": "484",
+    "employmentNaicsVintage": "2022_NAICS",
+    "mappingType": "ONE_TO_ONE_UNCHANGED_AGGREGATE"
+  },
+  "currentObservations": [
+    {
+      "acquisition_provenance_url": "https://ir.eia.gov/wpsr/table4.csv",
+      "artifact_sha256": "9a6f6a3d12fb4a844271b7566e4c714e34bc9bfe7041dd287bfd5236cdf94341",
+      "assessment": "BUFFER_AVAILABLE",
+      "authority": "U.S. Energy Information Administration",
+      "evidence_url": "https://www.eia.gov/dnav/pet/pet_stoc_wstk_dcu_nus_w.htm",
+      "geography": "US",
+      "label": "U.S. commercial crude oil stocks excluding SPR",
+      "methodology_url": "https://www.eia.gov/petroleum/supply/weekly/",
+      "public_time": "2026-08-19T14:30:00Z",
+      "retrieved_time": "2026-08-22T04:47:28Z",
+      "series_id": "EIA_WPSR_TABLE4_US_COMMERCIAL_CRUDE_EXCLUDING_SPR",
+      "state_id": "eia-obs:9999c0a44f1a0d2841ddf10a35b1c11ba6f85836e260eebc78dd25179b5cd3e8",
+      "state_type": "OBS",
+      "unit": "million_barrels",
+      "valid_time": "8/14/26",
+      "value": "428.815"
+    },
+    {
+      "acquisition_provenance_url": "https://ir.eia.gov/wpsr/table2.csv",
+      "artifact_sha256": "304fcb173d22e9af933295d716d3cfc07b7eb475995a8c8a5c1f7628b6a0afb7",
+      "assessment": "HEADROOM_CONSTRAINED",
+      "authority": "U.S. Energy Information Administration",
+      "evidence_url": "https://www.eia.gov/dnav/pet/pet_pnp_wiup_dcu_nus_w.htm",
+      "geography": "US",
+      "label": "U.S. percent operable refinery utilization",
+      "methodology_url": "https://www.eia.gov/petroleum/supply/weekly/",
+      "public_time": "2026-08-19T14:30:00Z",
+      "retrieved_time": "2026-08-22T04:47:28Z",
+      "series_id": "EIA_WPSR_TABLE2_US_PERCENT_OPERABLE_UTILIZATION",
+      "state_id": "eia-obs:75739b95eb70df7818d3de3b10bd0e69b5490163a815049a991c2f481d63b958",
+      "state_type": "OBS",
+      "unit": "percent",
+      "valid_time": "8/14/26",
+      "value": "97.2"
+    },
+    {
+      "acquisitionProvenanceUrl": "https://api.bls.gov/publicAPI/v2/timeseries/data/",
+      "artifactSha256": "4d64c6eb7e1d0e764812002efb2301b980d2b249159d7099aebf573b497d28fe",
+      "evidenceUrl": "https://data.bls.gov/timeseries/CES4348400001",
+      "label": "Truck transportation employment",
+      "methodologyUrl": "https://www.bls.gov/ces/",
+      "naicsCode": "484",
+      "naicsVintage": "2022_NAICS",
+      "nodeId": "bls:industry-employment:484",
+      "observationPeriod": "2026-07",
+      "publicationClass": "PRELIMINARY",
+      "seasonalAdjustment": "seasonally_adjusted",
+      "seriesId": "CES4348400001",
+      "stateId": "e49a7c92887ce09674b6dc42bc3991290be78baaad0e772d083ddb0746c9bb3d",
+      "stateType": "OBS",
+      "unit": "thousands",
+      "value": "1465.1"
+    }
+  ],
+  "derivations": [],
+  "downstreamTarget": {
+    "beaSummaryCode": "484",
+    "blsSeriesId": "CES4348400001"
+  },
+  "evaluatedAt": "2026-08-21T17:00:00-07:00",
+  "gateBStatus": "BLOCKED_LIVE_BEA_CREDENTIAL",
+  "humanPhase4bQa": "PENDING",
+  "phase5Status": "LOCKED",
+  "recurringInfrastructureCostUsd": 0,
+  "rejectedRelationshipCount": 0,
+  "schemaVersion": "phase4b-master-read-model-0.1.0",
+  "sourceHealth": {
+    "beaConcordance": "VERIFIED_RETAINED_OFFICIAL_WORKBOOK",
+    "beaInputOutput": "BLOCKED_LIVE_BEA_CREDENTIAL",
+    "blsCes484": "VERIFIED_RETAINED_OFFICIAL_API_RESPONSE",
+    "eiaWpsr": "VERIFIED_RETAINED_OFFICIAL_CSV"
+  },
+  "structuralCalculations": [],
+  "structuralCoverageState": "BOUNDED_STRUCTURAL_PROOF_PENDING_LIVE_ACCEPTANCE"
+}

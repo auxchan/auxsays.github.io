@@ -1,0 +1,13 @@
+{
+  "schemaVersion": "claude-development-handoff-1.0.0",
+  "repository": "D:\\Auxsays\\auxsays.github.io",
+  "branch": "codex/systems-monitor-persistent-world",
+  "implementationBaselineHead": "5e65d429857eb9a88f41c6672dc3043130988cfc",
+  "originMainAtFetch": "e37e6c97dc39b625aa3b89db88bf94e3d957a81a",
+  "masterSpecVersion": "4.1",
+  "masterSpecSha256": "08895B471909DC600FC6AA5F373E2D6E16F457580A9BA141363ED210676397EA",
+  "topologyFingerprint": "fnv1a32:88684cdb",
+  "counts": {"placements":1111,"hierarchyTethers":1110,"syntheticInfluences":2000,"acceptedStructuralRelationships":0,"acceptedLaborReadings":6,"profiledFactorLabels":160,"legacyReviewedPathCount":100,"bindingContracts":18},
+  "gates": {"gateA":"PASS","phase3":"CLOSED","phase4A":"COMPLETE_LIMITED_ENGINE_PROOF","gateB":"OPEN","phase5":"LOCKED"},
+  "handoffFiles": ["START_HERE_CLAUDE.md","CURRENT_WORK_LOCATION.md","PRODUCT_AND_GOVERNANCE.md","CURRENT_ARCHITECTURE.md","PERSISTENT_WORLD_UI_UX.md","GRAPH_MODEL_AND_TAXONOMY.md","DATA_SOURCE_CATALOG.md","DATA_SOURCE_CATALOG.json","RELATIONSHIP_MODEL.md","TEMPORAL_INTELLIGENCE.md","AUTOMATION_AND_DEPLOYMENT.md","TESTING_AND_QA.md","DEVELOPMENT_STATE.md","NEXT_WORK.md","CLAUDE_CODE_OPERATING_GUIDE.md","CLAUDE_BOOTSTRAP_PROMPT.md","GLOSSARY.md","FAST_HANDOFF_METHOD.md","HANDOFF_MANIFEST.json","HANDOFF_ADVERSARIAL_REVIEW.md","REVIEW_MANIFEST.txt"]
+}

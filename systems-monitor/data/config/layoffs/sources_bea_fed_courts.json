@@ -1,0 +1,154 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_class": "internal_source_registry",
+  "publication_status": "NOT_ACCEPTED_NOT_PUBLISHABLE",
+  "credential_environment_variables": {
+    "bea": "AUXSAYS_BEA_USER_ID"
+  },
+  "sources": [
+    {
+      "source_id": "bea-nipa",
+      "publisher": "U.S. Bureau of Economic Analysis",
+      "product": "National Income and Product Accounts",
+      "endpoint": "https://apps.bea.gov/api/data",
+      "evidence_url": "https://www.bea.gov/data/gdp/gross-domestic-product",
+      "methodology_url": "https://www.bea.gov/resources/methodologies/nipa-handbook",
+      "cadence": "monthly and quarterly by table",
+      "expected_release_policy": "evaluate daily; retrieve only after the relevant official BEA release",
+      "grace_period_hours": 72,
+      "revision_behavior": "advance, second, third, annual, and comprehensive NIPA estimates can revise history; retain every vintage",
+      "rights_policy": "BEA_ATTRIBUTION_REQUIRED",
+      "selector_status": "UNRESOLVED_EXACT_TABLE_LINE",
+      "extraction_mode": "BEA_API_JSON",
+      "series": [],
+      "selector_candidates": [
+        {
+          "canonical_factor": "factor:canonical:real-output-growth",
+          "required_decision": "Select exact NIPA table, line, level-versus-rate measure, frequency, and SAAR semantics."
+        },
+        {
+          "canonical_factor": "factor:canonical:consumer-spending",
+          "required_decision": "Select exact personal-consumption table, line, unit, frequency, and nominal-versus-real semantics."
+        },
+        {
+          "canonical_factor": "factor:canonical:corporate-profits",
+          "required_decision": "Select exact profits concept, valuation adjustments, table, line, unit, and frequency."
+        }
+      ],
+      "blocked_reason": "The official product and credential path are known, but exact table/line semantics have not been accepted."
+    },
+    {
+      "source_id": "bea-gdp-industry",
+      "publisher": "U.S. Bureau of Economic Analysis",
+      "product": "GDP by Industry",
+      "endpoint": "https://apps.bea.gov/api/data",
+      "evidence_url": "https://www.bea.gov/data/gdp/gdp-industry",
+      "methodology_url": "https://www.bea.gov/resources/methodologies/industry-economic-accounts",
+      "cadence": "quarterly and annual",
+      "expected_release_policy": "evaluate daily; retrieve only after the relevant official GDP-by-industry release",
+      "grace_period_hours": 168,
+      "revision_behavior": "annual and comprehensive industry-account updates can revise history; retain every vintage",
+      "rights_policy": "BEA_ATTRIBUTION_REQUIRED",
+      "selector_status": "UNRESOLVED_TABLE_VINTAGE_AND_NAICS_CROSSWALK",
+      "extraction_mode": "BEA_API_JSON",
+      "series": [],
+      "selector_candidates": [
+        {
+          "canonical_factor": "factor:canonical:industry-output",
+          "required_decision": "Select exact GDP-by-industry table, industry code, vintage, unit, frequency, and approved NAICS crosswalk."
+        }
+      ],
+      "blocked_reason": "No industry observation can be emitted until table/vintage and taxonomy-crosswalk decisions are accepted."
+    },
+    {
+      "source_id": "fed-g17",
+      "publisher": "Board of Governors of the Federal Reserve System",
+      "product": "Industrial Production and Capacity Utilization, G.17",
+      "endpoint": "https://www.federalreserve.gov/releases/g17/Current/ipdisk/alltables.txt",
+      "evidence_url": "https://www.federalreserve.gov/releases/g17/current/",
+      "methodology_url": "https://www.federalreserve.gov/releases/g17/about.htm",
+      "cadence": "monthly",
+      "expected_release_policy": "evaluate daily; retrieve after the official monthly G.17 release",
+      "grace_period_hours": 72,
+      "revision_behavior": "recent months and annual revisions can alter history; retain every all-tables vintage",
+      "rights_policy": "PENDING_RIGHTS_ACCEPTANCE",
+      "selector_status": "RAW_SCHEMA_VERIFIED_SELECTOR_BINDING_PENDING",
+      "extraction_mode": "G17_ALLTABLES_TEXT",
+      "series": [],
+      "selector_candidates": [
+        {"canonical_factor": "factor:canonical:industrial-production", "required_decision": "Bind an exact G.17 series identifier and table row, not a visual row position."},
+        {"canonical_factor": "factor:canonical:capacity-utilization", "required_decision": "Bind an exact total-industry utilization series identifier and table row."},
+        {"canonical_factor": "factor:canonical:manufacturing-output", "required_decision": "Bind the exact manufacturing production series and adjustment semantics."},
+        {"canonical_factor": "factor:canonical:industry-capacity-utilization", "required_decision": "Bind exact industry series identifiers and an approved industry crosswalk."}
+      ],
+      "blocked_reason": "Raw release intake is reviewable; observation extraction remains blocked pending exact series bindings and rights acceptance."
+    },
+    {
+      "source_id": "fed-h15",
+      "publisher": "Board of Governors of the Federal Reserve System",
+      "product": "Selected Interest Rates, H.15",
+      "endpoint": "https://www.federalreserve.gov/datadownload/Choose.aspx?rel=H15",
+      "evidence_url": "https://www.federalreserve.gov/releases/h15/",
+      "methodology_url": "https://www.federalreserve.gov/releases/h15/about.htm",
+      "cadence": "business daily",
+      "expected_release_policy": "evaluate on business days after the official H.15 update",
+      "grace_period_hours": 24,
+      "revision_behavior": "daily observations may be corrected; retain every downloaded vintage",
+      "rights_policy": "PENDING_RIGHTS_ACCEPTANCE",
+      "selector_status": "UNRESOLVED_EXACT_RATE_SELECTION",
+      "extraction_mode": "FED_DDP_CSV",
+      "series": [],
+      "selector_candidates": [
+        {"canonical_factor": "factor:canonical:interest-rates", "required_decision": "Select a named H.15 rate, exact DDP series identifier, tenor, unit, and observation convention."},
+        {"canonical_factor": "factor:canonical:borrowing-costs", "required_decision": "Select an official borrowing-cost proxy and prohibit presenting it as a business-specific borrowing rate."}
+      ],
+      "blocked_reason": "The H.15 product is official, but a broad label such as Interest Rates is not an exact source series."
+    },
+    {
+      "source_id": "fed-sloos",
+      "publisher": "Board of Governors of the Federal Reserve System",
+      "product": "Senior Loan Officer Opinion Survey on Bank Lending Practices",
+      "endpoint": "https://www.federalreserve.gov/data/sloos/sloos-202607.htm",
+      "evidence_url": "https://www.federalreserve.gov/data/sloos.htm",
+      "methodology_url": "https://www.federalreserve.gov/data/sloos/sloos-about.htm",
+      "cadence": "quarterly",
+      "expected_release_policy": "evaluate daily; retrieve after the official quarterly SLOOS release",
+      "grace_period_hours": 72,
+      "revision_behavior": "retain every survey vintage because wording, question identifiers, and respondent universes can change",
+      "rights_policy": "PENDING_RIGHTS_ACCEPTANCE",
+      "selector_status": "UNRESOLVED_QUESTION_IDENTIFIER_AND_UNIVERSE",
+      "extraction_mode": "SLOOS_TABLE_PACKAGE",
+      "series": [],
+      "selector_candidates": [
+        {"canonical_factor": "factor:canonical:candi-lending-standards", "required_decision": "Bind the exact official question identifier, wording, bank universe, answer aggregation, and unit."},
+        {"canonical_factor": "factor:canonical:candi-loan-demand", "required_decision": "Bind the exact official question identifier, wording, bank universe, answer aggregation, and unit."},
+        {"canonical_factor": "factor:canonical:industry-credit-conditions", "required_decision": "No industry-granular SLOOS series is accepted; aggregate C&I evidence may only be contextual."}
+      ],
+      "blocked_reason": "Question text and respondent universe must be schema-bound; visual row positions cannot define a series."
+    },
+    {
+      "source_id": "uscourts-f2",
+      "publisher": "Administrative Office of the U.S. Courts",
+      "product": "Table F-2, U.S. Bankruptcy Courts—Business and Nonbusiness Cases",
+      "endpoint": "https://www.uscourts.gov/data-news/data-tables/2026/06/30/statistical-tables-federal-judiciary/f-2",
+      "evidence_url": "https://www.uscourts.gov/data-news/reports/statistical-reports/bankruptcy-filings-statistics",
+      "methodology_url": "https://www.uscourts.gov/data-news/data-tables/data-definitions",
+      "cadence": "quarterly rolling 12-month releases",
+      "expected_release_policy": "evaluate daily; discover the current XLSX only from the dated official F-2 page",
+      "grace_period_hours": 168,
+      "revision_behavior": "retain dated table pages and every workbook vintage by content hash",
+      "rights_policy": "PENDING_RIGHTS_ACCEPTANCE",
+      "selector_status": "VERIFIED_OFFICIAL_PAGE_DISCOVERY_SCHEMA_REVIEW_PENDING",
+      "extraction_mode": "OFFICIAL_PAGE_XLSX",
+      "series": [
+        {"canonical_factor": "factor:canonical:business-bankruptcy-filings", "source_series_id": "F2:US:BUSINESS:ALL", "label": "Business bankruptcy cases, all chapters", "unit": "filed cases", "chapter_header": "All Chapters", "placement_candidates": ["business-bankruptcy-filings", "business-bankruptcy-stress"]},
+        {"canonical_factor": "factor:courts-business-chapter-7", "source_series_id": "F2:US:BUSINESS:CH7", "label": "Business bankruptcy cases, Chapter 7", "unit": "filed cases", "chapter_header": "Chapter 7", "placement_candidates": ["business-bankruptcy-stress"]},
+        {"canonical_factor": "factor:courts-business-chapter-11", "source_series_id": "F2:US:BUSINESS:CH11", "label": "Business bankruptcy cases, Chapter 11", "unit": "filed cases", "chapter_header": "Chapter 11", "placement_candidates": ["business-bankruptcy-stress"]},
+        {"canonical_factor": "factor:courts-business-chapter-12", "source_series_id": "F2:US:BUSINESS:CH12", "label": "Business bankruptcy cases, Chapter 12", "unit": "filed cases", "chapter_header": "Chapter 12", "placement_candidates": ["business-bankruptcy-stress"]},
+        {"canonical_factor": "factor:courts-business-chapter-13", "source_series_id": "F2:US:BUSINESS:CH13", "label": "Business bankruptcy cases, Chapter 13", "unit": "filed cases", "chapter_header": "Chapter 13", "placement_candidates": ["business-bankruptcy-stress"]}
+      ],
+      "relationship_boundary": "CONTEXT_ONLY_NOT_FIRM_DEATH_NOT_CLOSURE_NOT_LAYOFFS",
+      "blocked_reason": "Workbook discovery is ready for review intake; values remain non-publishable until workbook schema and rights are accepted."
+    }
+  ]
+}

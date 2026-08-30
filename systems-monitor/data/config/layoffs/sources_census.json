@@ -1,0 +1,207 @@
+{
+  "schema_version": "1.0.0",
+  "artifact_class": "internal_source_registry",
+  "publication_status": "NOT_ACCEPTED_NOT_PUBLISHABLE",
+  "credential_environment_variable": "AUXSAYS_CENSUS_API_KEY",
+  "publisher": "U.S. Census Bureau",
+  "attribution": "Source: U.S. Census Bureau",
+  "sources": [
+    {
+      "source_id": "census-bds",
+      "program": "Business Dynamics Statistics",
+      "endpoint": "https://api.census.gov/data/timeseries/bds",
+      "variables_url": "https://api.census.gov/data/timeseries/bds/variables.html",
+      "evidence_url": "https://www.census.gov/data/developers/data-sets/business-dynamics.html",
+      "methodology_url": "https://www.census.gov/programs-surveys/ces/technical-documentation/methodology.html",
+      "cadence": "annual",
+      "expected_release_policy": "evaluate monthly; retrieve only after Census publishes a new BDS reference year",
+      "grace_period_hours": 168,
+      "revision_behavior": "annual vintages can revise prior reference years; retain every retrieved vintage",
+      "rights_policy": "PENDING_RIGHTS_ACCEPTANCE",
+      "selector_status": "VERIFIED_OFFICIAL_VARIABLES",
+      "query_mode": "BDS",
+      "query_fields": [
+        "JOB_DESTRUCTION",
+        "JOB_DESTRUCTION_CONTINUERS",
+        "JOB_DESTRUCTION_DEATHS",
+        "ESTABS_EXIT",
+        "FIRMDEATH_FIRMS",
+        "FIRMDEATH_ESTABS",
+        "FIRMDEATH_EMP"
+      ],
+      "geography": "us:1",
+      "series": [
+        {
+          "canonical_factor": "factor:bds-job-destruction",
+          "source_series_id": "JOB_DESTRUCTION",
+          "label": "BDS annual job destruction",
+          "unit": "jobs",
+          "seasonal_adjustment": "not seasonally adjusted",
+          "placement_candidates": ["gross-job-losses"]
+        },
+        {
+          "canonical_factor": "factor:bds-job-destruction-continuers",
+          "source_series_id": "JOB_DESTRUCTION_CONTINUERS",
+          "label": "BDS jobs lost at continuing establishments",
+          "unit": "jobs",
+          "seasonal_adjustment": "not seasonally adjusted",
+          "placement_candidates": ["establishment-contractions"]
+        },
+        {
+          "canonical_factor": "factor:bds-job-destruction-deaths",
+          "source_series_id": "JOB_DESTRUCTION_DEATHS",
+          "label": "BDS jobs lost at closing establishments",
+          "unit": "jobs",
+          "seasonal_adjustment": "not seasonally adjusted",
+          "placement_candidates": ["closing-establishment-losses"]
+        },
+        {
+          "canonical_factor": "factor:bds-establishment-exits",
+          "source_series_id": "ESTABS_EXIT",
+          "label": "BDS establishment exits",
+          "unit": "establishments",
+          "seasonal_adjustment": "not seasonally adjusted",
+          "placement_candidates": ["establishment-deaths"]
+        },
+        {
+          "canonical_factor": "factor:bds-firm-deaths",
+          "source_series_id": "FIRMDEATH_FIRMS",
+          "label": "BDS firm deaths",
+          "unit": "firms",
+          "seasonal_adjustment": "not seasonally adjusted",
+          "placement_candidates": ["firm-deaths"]
+        },
+        {
+          "canonical_factor": "factor:bds-firm-death-establishments",
+          "source_series_id": "FIRMDEATH_ESTABS",
+          "label": "BDS establishments associated with firm deaths",
+          "unit": "establishments",
+          "seasonal_adjustment": "not seasonally adjusted",
+          "placement_candidates": ["firm-age-size-vulnerability"]
+        },
+        {
+          "canonical_factor": "factor:bds-firm-death-employment",
+          "source_series_id": "FIRMDEATH_EMP",
+          "label": "BDS employment associated with firm deaths",
+          "unit": "employees",
+          "seasonal_adjustment": "not seasonally adjusted",
+          "placement_candidates": ["firm-death-shutdown-stress"]
+        }
+      ]
+    },
+    {
+      "source_id": "census-bfs",
+      "program": "Business Formation Statistics",
+      "endpoint": "https://api.census.gov/data/timeseries/eits/bfs",
+      "variables_url": "https://api.census.gov/data/timeseries/eits/bfs/variables.html",
+      "evidence_url": "https://www.census.gov/econ/bfs/current/index.html",
+      "methodology_url": "https://www.census.gov/econ/bfs/methodology.html",
+      "cadence": "monthly package with weekly estimates",
+      "expected_release_policy": "evaluate daily; retrieve after the published monthly BFS release",
+      "grace_period_hours": 48,
+      "revision_behavior": "weekly and monthly estimates can revise; retain every release vintage",
+      "rights_policy": "PENDING_RIGHTS_ACCEPTANCE",
+      "selector_status": "VERIFIED_OFFICIAL_SELECTOR",
+      "query_mode": "EITS",
+      "query_fields": ["data_type_code", "time_slot_id", "seasonally_adj", "category_code", "cell_value", "error_data"],
+      "geography": "us:*",
+      "series": [
+        {
+          "canonical_factor": "factor:business-formations-four-quarters",
+          "source_series_id": "BFS:T:BF_BF4Q:SA",
+          "label": "Business formations within four quarters",
+          "unit": "business formations",
+          "seasonal_adjustment": "seasonally adjusted",
+          "selector": {"data_type_code": "T", "category_code": "BF_BF4Q", "seasonally_adj": "yes"},
+          "placement_candidates": ["business-formations", "business-formation-dynamism"]
+        }
+      ]
+    },
+    {
+      "source_id": "census-marts",
+      "program": "Advance Monthly Sales for Retail and Food Services",
+      "endpoint": "https://api.census.gov/data/timeseries/eits/marts",
+      "variables_url": "https://api.census.gov/data/timeseries/eits/marts/variables.html",
+      "evidence_url": "https://www.census.gov/retail/sales.html",
+      "methodology_url": "https://www.census.gov/retail/marts/about_the_surveys.html",
+      "cadence": "monthly advance with later revisions",
+      "expected_release_policy": "evaluate daily; retrieve only after the official MARTS release",
+      "grace_period_hours": 48,
+      "revision_behavior": "advance estimates revise in later monthly and benchmark releases",
+      "rights_policy": "PENDING_RIGHTS_ACCEPTANCE",
+      "selector_status": "UNRESOLVED_OFFICIAL_METADATA_JOIN",
+      "query_mode": "EITS",
+      "query_fields": ["data_type_code", "time_slot_id", "seasonally_adj", "category_code", "cell_value", "error_data"],
+      "geography": null,
+      "series": [],
+      "blocked_reason": "Exact total-retail sales measure/category selector and unit metadata are not yet approved."
+    },
+    {
+      "source_id": "census-m3",
+      "program": "Manufacturers' Shipments, Inventories, and Orders",
+      "endpoint": "https://api.census.gov/data/timeseries/eits/m3",
+      "variables_url": "https://api.census.gov/data/timeseries/eits/m3/variables.html",
+      "evidence_url": "https://www.census.gov/manufacturing/m3/current/index.html",
+      "methodology_url": "https://www.census.gov/manufacturing/m3/how_the_data_are_collected/index.html",
+      "cadence": "monthly; advance durable goods precedes full M3",
+      "expected_release_policy": "evaluate daily; retrieve only after the relevant advance or full M3 release",
+      "grace_period_hours": 48,
+      "revision_behavior": "advance and full estimates plus annual benchmarks revise history",
+      "rights_policy": "PENDING_RIGHTS_ACCEPTANCE",
+      "selector_status": "UNRESOLVED_OFFICIAL_METADATA_JOIN",
+      "query_mode": "EITS",
+      "query_fields": ["data_type_code", "time_slot_id", "seasonally_adj", "category_code", "cell_value", "error_data"],
+      "geography": null,
+      "series": [],
+      "blocked_reason": "Exact new-orders, shipments, inventories, and industry selectors require the official M3 data-dictionary join."
+    },
+    {
+      "source_id": "census-mtis",
+      "program": "Manufacturing and Trade Inventories and Sales",
+      "endpoint": "https://api.census.gov/data/timeseries/eits/mtis",
+      "variables_url": "https://api.census.gov/data/timeseries/eits/mtis/variables.html",
+      "evidence_url": "https://www.census.gov/mtis/current/index.html",
+      "methodology_url": "https://www.census.gov/mtis/how_the_data_are_collected/index.html",
+      "cadence": "monthly",
+      "expected_release_policy": "evaluate daily; retrieve only after the official MTIS release",
+      "grace_period_hours": 48,
+      "revision_behavior": "component survey and annual benchmark revisions alter prior observations",
+      "rights_policy": "PENDING_RIGHTS_ACCEPTANCE",
+      "selector_status": "UNRESOLVED_OFFICIAL_METADATA_JOIN",
+      "query_mode": "EITS",
+      "query_fields": ["data_type_code", "time_slot_id", "seasonally_adj", "category_code", "cell_value", "error_data"],
+      "geography": null,
+      "series": [],
+      "blocked_reason": "Exact inventory-to-sales and sales selectors require the official MTIS data-dictionary join."
+    },
+    {
+      "source_id": "census-ftd",
+      "program": "U.S. International Trade in Goods and Services",
+      "endpoint": "https://api.census.gov/data/timeseries/eits/ftd",
+      "variables_url": "https://api.census.gov/data/timeseries/eits/ftd/variables.html",
+      "evidence_url": "https://www.census.gov/foreign-trade/current/index.html",
+      "methodology_url": "https://www.census.gov/foreign-trade/guide/index.html",
+      "cadence": "monthly; advance goods precedes full release",
+      "expected_release_policy": "evaluate daily; retrieve only after the relevant official FTD release",
+      "grace_period_hours": 48,
+      "revision_behavior": "monthly and annual revisions; retain advance and full-release vintages distinctly",
+      "rights_policy": "PENDING_RIGHTS_ACCEPTANCE",
+      "selector_status": "VERIFIED_OFFICIAL_SELECTOR_CONTEXT_ONLY",
+      "query_mode": "EITS",
+      "query_fields": ["program_code", "data_type_code", "time_slot_id", "time_slot_date", "time_slot_name", "seasonally_adj", "category_code", "cell_value", "error_data"],
+      "geography": null,
+      "series": [
+        {
+          "canonical_factor": "factor:imports-goods-services",
+          "source_series_id": "FTD:IMP:BOPGS:SA",
+          "label": "Imports of goods and services",
+          "unit": "millions of dollars",
+          "seasonal_adjustment": "seasonally adjusted",
+          "selector": {"data_type_code": "IMP", "category_code": "BOPGS", "seasonally_adj": "yes"},
+          "placement_candidates": ["trade-import-pressure", "trade-external-shock"],
+          "relationship_boundary": "CONTEXT_ONLY_UNTIL_CROSSWALK_AND_DERIVATION_ACCEPTANCE"
+        }
+      ]
+    }
+  ]
+}

@@ -29,7 +29,7 @@ jobs:
         with:
           ruby-version: '3.3'
 
-      - name: Setup Node for logo generation
+      - name: Setup Node for logo generation and Systems Monitor
         uses: actions/setup-node@v6
         with:
           node-version: '24'
@@ -41,7 +41,6 @@ jobs:
 
       - name: Install source health dependencies
         run: pip install -r auxsays/scripts/requirements-ingest.txt
-
 
       - name: Install image metadata tools
         run: |
@@ -70,9 +69,18 @@ jobs:
       - name: Run generated record QA
         run: python auxsays/scripts/qa_patch_records.py
 
+      - name: Install Systems Monitor dependencies
+        run: npm ci --prefix systems-monitor/app
+
+      - name: Validate and build Systems Monitor
+        run: npm run validate --prefix systems-monitor/app
+
       - name: Build site
         working-directory: ./auxsays
         run: bundle exec jekyll build --trace
+
+      - name: Verify Systems Monitor static integration
+        run: npm run verify:site --prefix systems-monitor/app
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5

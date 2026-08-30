@@ -1,0 +1,27 @@
+{
+  "schemaVersion": "layoffs-source-scheduler-1.0.0",
+  "heartbeat": "0 */4 * * *",
+  "evaluationTimezone": "UTC",
+  "unchangedPolicy": "NO_SNAPSHOT_CHURN",
+  "failurePolicy": "RETAIN_LAST_VALID_SNAPSHOT",
+  "retryPolicy": {"attempts": 3, "baseDelaySeconds": 30, "maximumDelaySeconds": 900},
+  "sources": [
+    {"sourceId": "dol-ui-claims", "cadence": "weekly", "minimumIntervalHours": 20, "graceHours": 8, "credentialEnv": null},
+    {"sourceId": "bls-jolts", "cadence": "monthly", "minimumIntervalHours": 120, "graceHours": 24, "credentialEnv": null},
+    {"sourceId": "bls-cps", "cadence": "monthly", "minimumIntervalHours": 120, "graceHours": 24, "credentialEnv": null},
+    {"sourceId": "bls-ces", "cadence": "monthly", "minimumIntervalHours": 120, "graceHours": 24, "credentialEnv": null},
+    {"sourceId": "bls-bed", "cadence": "quarterly", "minimumIntervalHours": 672, "graceHours": 72, "credentialEnv": null},
+    {"sourceId": "census-bds", "cadence": "annual", "minimumIntervalHours": 2160, "graceHours": 168, "credentialEnv": "AUXSAYS_CENSUS_API_KEY"},
+    {"sourceId": "census-bfs", "cadence": "weekly_monthly", "minimumIntervalHours": 20, "graceHours": 24, "credentialEnv": "AUXSAYS_CENSUS_API_KEY"},
+    {"sourceId": "census-marts", "cadence": "monthly", "minimumIntervalHours": 120, "graceHours": 48, "credentialEnv": "AUXSAYS_CENSUS_API_KEY"},
+    {"sourceId": "census-m3", "cadence": "monthly", "minimumIntervalHours": 120, "graceHours": 48, "credentialEnv": "AUXSAYS_CENSUS_API_KEY"},
+    {"sourceId": "census-mtis", "cadence": "quarterly", "minimumIntervalHours": 672, "graceHours": 96, "credentialEnv": "AUXSAYS_CENSUS_API_KEY"},
+    {"sourceId": "census-ftd", "cadence": "monthly", "minimumIntervalHours": 120, "graceHours": 48, "credentialEnv": "AUXSAYS_CENSUS_API_KEY"},
+    {"sourceId": "bea-nipa", "cadence": "monthly_quarterly", "minimumIntervalHours": 120, "graceHours": 24, "credentialEnv": "AUXSAYS_BEA_USER_ID"},
+    {"sourceId": "bea-gdp-industry", "cadence": "quarterly_annual", "minimumIntervalHours": 672, "graceHours": 168, "credentialEnv": "AUXSAYS_BEA_USER_ID"},
+    {"sourceId": "fed-g17", "cadence": "monthly", "minimumIntervalHours": 120, "graceHours": 24, "credentialEnv": null},
+    {"sourceId": "fed-h15", "cadence": "daily", "minimumIntervalHours": 20, "graceHours": 8, "credentialEnv": null},
+    {"sourceId": "fed-sloos", "cadence": "quarterly", "minimumIntervalHours": 672, "graceHours": 72, "credentialEnv": null},
+    {"sourceId": "uscourts-f2", "cadence": "quarterly", "minimumIntervalHours": 672, "graceHours": 72, "credentialEnv": null}
+  ]
+}

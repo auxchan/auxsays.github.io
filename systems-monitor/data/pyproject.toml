@@ -1,0 +1,13 @@
+[project]
+name = "auxsays-systems-monitor-data"
+version = "0.3.0"
+description = "AUXSAYS Systems Monitor data integrity and bounded Phase-4 structural engine"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+auxsays-phase4b-live = "systems_monitor_data.phase4b_live:main"
+
+[tool.auxsays]
+dependency_policy = "Python standard library only"
+recurring_infrastructure_cost_usd = 0

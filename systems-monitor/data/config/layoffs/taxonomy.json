@@ -1,0 +1,831 @@
+{
+  "schemaVersion": "layoffs-branch-taxonomy-1.0.0",
+  "branchId": "layoffs-job-destruction",
+  "branchLabel": "Layoffs & Job Destruction",
+  "authority": "Taylor implementation authorization 2026-08-27; UI/UX Contract 1.0.1 UX-003/UX-060/UX-061",
+  "status": "CANDIDATE_HIERARCHY_ONLY",
+  "layoutVersion": "employment-sectors-1.1.0",
+  "topologyMigration": {
+    "reason": "Semantic placement identifiers replace fixture-slot identifiers while coordinates and layout version remain unchanged.",
+    "previousFingerprint": "fnv1a32:d8ccde70",
+    "currentFingerprint": "fnv1a32:88684cdb"
+  },
+  "canonicalAliases": {
+    "Initial UI Claims": "Initial Claims",
+    "Closing Establishment Losses": "Establishment Closures",
+    "Business Formations": "Business Formation",
+    "Import / Trade Pressure": "Trade / Import Pressure"
+  },
+  "groups": [
+    {
+      "order": 1,
+      "id": "layoffs-and-discharges",
+      "label": "Layoffs & Discharges",
+      "canonicalFactorId": "factor:canonical:layoffs-and-discharges",
+      "placementId": "placement:layoffs-job-destruction:layoffs-and-discharges",
+      "legacyPlacementId": "placement:layoffs-job-destruction:initial-claims",
+      "sourceFamily": "BLS JOLTS; BEA; Census; BLS CES/Productivity; Federal Reserve SLOOS; U.S. Courts",
+      "placements": [
+        {
+          "order": 1,
+          "label": "Real Output Growth",
+          "canonicalFactorId": "factor:canonical:real-output-growth",
+          "placementId": "placement:layoffs-job-destruction:layoffs-and-discharges:real-output-growth",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:01:01"
+        },
+        {
+          "order": 2,
+          "label": "Consumer Spending",
+          "canonicalFactorId": "factor:canonical:consumer-spending",
+          "placementId": "placement:layoffs-job-destruction:layoffs-and-discharges:consumer-spending",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:01:02"
+        },
+        {
+          "order": 3,
+          "label": "Retail Sales",
+          "canonicalFactorId": "factor:canonical:retail-sales",
+          "placementId": "placement:layoffs-job-destruction:layoffs-and-discharges:retail-sales",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:01:03"
+        },
+        {
+          "order": 4,
+          "label": "Job Openings Rate",
+          "canonicalFactorId": "factor:canonical:job-openings-rate",
+          "placementId": "placement:layoffs-job-destruction:layoffs-and-discharges:job-openings-rate",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:01:04"
+        },
+        {
+          "order": 5,
+          "label": "Hires Rate",
+          "canonicalFactorId": "factor:canonical:hires-rate",
+          "placementId": "placement:layoffs-job-destruction:layoffs-and-discharges:hires-rate",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:01:05"
+        },
+        {
+          "order": 6,
+          "label": "Average Weekly Hours",
+          "canonicalFactorId": "factor:canonical:average-weekly-hours",
+          "placementId": "placement:layoffs-job-destruction:layoffs-and-discharges:average-weekly-hours",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:01:06"
+        },
+        {
+          "order": 7,
+          "label": "Corporate Profits",
+          "canonicalFactorId": "factor:canonical:corporate-profits",
+          "placementId": "placement:layoffs-job-destruction:layoffs-and-discharges:corporate-profits",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:01:07"
+        },
+        {
+          "order": 8,
+          "label": "C&I Lending Standards",
+          "canonicalFactorId": "factor:canonical:candi-lending-standards",
+          "placementId": "placement:layoffs-job-destruction:layoffs-and-discharges:candi-lending-standards",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:01:08"
+        },
+        {
+          "order": 9,
+          "label": "Unit Labor Costs",
+          "canonicalFactorId": "factor:canonical:unit-labor-costs",
+          "placementId": "placement:layoffs-job-destruction:layoffs-and-discharges:unit-labor-costs",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:01:09"
+        },
+        {
+          "order": 10,
+          "label": "Business Failure Stress",
+          "canonicalFactorId": "factor:canonical:business-failure-stress",
+          "placementId": "placement:layoffs-job-destruction:layoffs-and-discharges:business-failure-stress",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:01:10"
+        }
+      ]
+    },
+    {
+      "order": 2,
+      "id": "initial-ui-claims",
+      "label": "Initial UI Claims",
+      "canonicalFactorId": "factor:canonical:initial-claims",
+      "placementId": "placement:layoffs-job-destruction:initial-ui-claims",
+      "legacyPlacementId": "placement:layoffs-job-destruction:continued-claims",
+      "sourceFamily": "U.S. Department of Labor ETA; BLS JOLTS/CPS/CES/BED; BEA; disaster authorities",
+      "placements": [
+        {
+          "order": 1,
+          "label": "Layoffs & Discharges",
+          "canonicalFactorId": "factor:canonical:layoffs-and-discharges",
+          "placementId": "placement:layoffs-job-destruction:initial-ui-claims:layoffs-and-discharges",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:02:01"
+        },
+        {
+          "order": 2,
+          "label": "Temporary Layoffs",
+          "canonicalFactorId": "factor:canonical:temporary-layoffs",
+          "placementId": "placement:layoffs-job-destruction:initial-ui-claims:temporary-layoffs",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:02:02"
+        },
+        {
+          "order": 3,
+          "label": "Permanent Job Losers",
+          "canonicalFactorId": "factor:canonical:permanent-job-losers",
+          "placementId": "placement:layoffs-job-destruction:initial-ui-claims:permanent-job-losers",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:02:03"
+        },
+        {
+          "order": 4,
+          "label": "Industry Payroll Contraction",
+          "canonicalFactorId": "factor:canonical:industry-payroll-contraction",
+          "placementId": "placement:layoffs-job-destruction:initial-ui-claims:industry-payroll-contraction",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:02:04"
+        },
+        {
+          "order": 5,
+          "label": "Gross Job Losses",
+          "canonicalFactorId": "factor:canonical:gross-job-losses",
+          "placementId": "placement:layoffs-job-destruction:initial-ui-claims:gross-job-losses",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:02:05"
+        },
+        {
+          "order": 6,
+          "label": "Establishment Deaths",
+          "canonicalFactorId": "factor:canonical:establishment-deaths",
+          "placementId": "placement:layoffs-job-destruction:initial-ui-claims:establishment-deaths",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:02:06"
+        },
+        {
+          "order": 7,
+          "label": "Business Bankruptcy Stress",
+          "canonicalFactorId": "factor:canonical:business-bankruptcy-stress",
+          "placementId": "placement:layoffs-job-destruction:initial-ui-claims:business-bankruptcy-stress",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:02:07"
+        },
+        {
+          "order": 8,
+          "label": "Real Output Growth",
+          "canonicalFactorId": "factor:canonical:real-output-growth",
+          "placementId": "placement:layoffs-job-destruction:initial-ui-claims:real-output-growth",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:02:08"
+        },
+        {
+          "order": 9,
+          "label": "Consumer Demand",
+          "canonicalFactorId": "factor:canonical:consumer-demand",
+          "placementId": "placement:layoffs-job-destruction:initial-ui-claims:consumer-demand",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:02:09"
+        },
+        {
+          "order": 10,
+          "label": "Disaster / Operational Shock",
+          "canonicalFactorId": "factor:canonical:disaster-operational-shock",
+          "placementId": "placement:layoffs-job-destruction:initial-ui-claims:disaster-operational-shock",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:02:10"
+        }
+      ]
+    },
+    {
+      "order": 3,
+      "id": "continued-claims-insured-unemployment",
+      "label": "Continued Claims / Insured Unemployment",
+      "canonicalFactorId": "factor:canonical:continued-claims-insured-unemployment",
+      "placementId": "placement:layoffs-job-destruction:continued-claims-insured-unemployment",
+      "legacyPlacementId": "placement:layoffs-job-destruction:layoffs-and-discharges",
+      "sourceFamily": "U.S. Department of Labor ETA; BLS JOLTS/CES; Census; BEA",
+      "placements": [
+        {
+          "order": 1,
+          "label": "Initial Claims",
+          "canonicalFactorId": "factor:canonical:initial-claims",
+          "placementId": "placement:layoffs-job-destruction:continued-claims-insured-unemployment:initial-claims",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:03:01"
+        },
+        {
+          "order": 2,
+          "label": "Hires Rate",
+          "canonicalFactorId": "factor:canonical:hires-rate",
+          "placementId": "placement:layoffs-job-destruction:continued-claims-insured-unemployment:hires-rate",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:03:02"
+        },
+        {
+          "order": 3,
+          "label": "Job Openings Rate",
+          "canonicalFactorId": "factor:canonical:job-openings-rate",
+          "placementId": "placement:layoffs-job-destruction:continued-claims-insured-unemployment:job-openings-rate",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:03:03"
+        },
+        {
+          "order": 4,
+          "label": "Payroll Growth",
+          "canonicalFactorId": "factor:canonical:payroll-growth",
+          "placementId": "placement:layoffs-job-destruction:continued-claims-insured-unemployment:payroll-growth",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:03:04"
+        },
+        {
+          "order": 5,
+          "label": "Temporary Help Employment",
+          "canonicalFactorId": "factor:canonical:temporary-help-employment",
+          "placementId": "placement:layoffs-job-destruction:continued-claims-insured-unemployment:temporary-help-employment",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:03:05"
+        },
+        {
+          "order": 6,
+          "label": "Average Weekly Hours",
+          "canonicalFactorId": "factor:canonical:average-weekly-hours",
+          "placementId": "placement:layoffs-job-destruction:continued-claims-insured-unemployment:average-weekly-hours",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:03:06"
+        },
+        {
+          "order": 7,
+          "label": "Business Formations",
+          "canonicalFactorId": "factor:canonical:business-formation",
+          "placementId": "placement:layoffs-job-destruction:continued-claims-insured-unemployment:business-formations",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:03:07"
+        },
+        {
+          "order": 8,
+          "label": "Real Output Growth",
+          "canonicalFactorId": "factor:canonical:real-output-growth",
+          "placementId": "placement:layoffs-job-destruction:continued-claims-insured-unemployment:real-output-growth",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:03:08"
+        },
+        {
+          "order": 9,
+          "label": "Consumer Demand",
+          "canonicalFactorId": "factor:canonical:consumer-demand",
+          "placementId": "placement:layoffs-job-destruction:continued-claims-insured-unemployment:consumer-demand",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:03:09"
+        },
+        {
+          "order": 10,
+          "label": "Regional Employment Growth",
+          "canonicalFactorId": "factor:canonical:regional-employment-growth",
+          "placementId": "placement:layoffs-job-destruction:continued-claims-insured-unemployment:regional-employment-growth",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:03:10"
+        }
+      ]
+    },
+    {
+      "order": 4,
+      "id": "permanent-job-losers",
+      "label": "Permanent Job Losers",
+      "canonicalFactorId": "factor:canonical:permanent-job-losers",
+      "placementId": "placement:layoffs-job-destruction:permanent-job-losers",
+      "legacyPlacementId": "placement:layoffs-job-destruction:establishment-closings",
+      "sourceFamily": "BLS CPS/BED/CES/Productivity; Census BDS/trade; U.S. Courts; Federal Reserve; BEA",
+      "placements": [
+        {
+          "order": 1,
+          "label": "Establishment Deaths",
+          "canonicalFactorId": "factor:canonical:establishment-deaths",
+          "placementId": "placement:layoffs-job-destruction:permanent-job-losers:establishment-deaths",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:04:01"
+        },
+        {
+          "order": 2,
+          "label": "Firm Deaths",
+          "canonicalFactorId": "factor:canonical:firm-deaths",
+          "placementId": "placement:layoffs-job-destruction:permanent-job-losers:firm-deaths",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:04:02"
+        },
+        {
+          "order": 3,
+          "label": "Business Bankruptcy Stress",
+          "canonicalFactorId": "factor:canonical:business-bankruptcy-stress",
+          "placementId": "placement:layoffs-job-destruction:permanent-job-losers:business-bankruptcy-stress",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:04:03"
+        },
+        {
+          "order": 4,
+          "label": "Industry Payroll Contraction",
+          "canonicalFactorId": "factor:canonical:industry-payroll-contraction",
+          "placementId": "placement:layoffs-job-destruction:permanent-job-losers:industry-payroll-contraction",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:04:04"
+        },
+        {
+          "order": 5,
+          "label": "Gross Job Losses",
+          "canonicalFactorId": "factor:canonical:gross-job-losses",
+          "placementId": "placement:layoffs-job-destruction:permanent-job-losers:gross-job-losses",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:04:05"
+        },
+        {
+          "order": 6,
+          "label": "Productivity / Automation",
+          "canonicalFactorId": "factor:canonical:productivity-automation",
+          "placementId": "placement:layoffs-job-destruction:permanent-job-losers:productivity-automation",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:04:06"
+        },
+        {
+          "order": 7,
+          "label": "Import / Trade Pressure",
+          "canonicalFactorId": "factor:canonical:trade-import-pressure",
+          "placementId": "placement:layoffs-job-destruction:permanent-job-losers:import-trade-pressure",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:04:07"
+        },
+        {
+          "order": 8,
+          "label": "C&I Credit Conditions",
+          "canonicalFactorId": "factor:canonical:candi-credit-conditions",
+          "placementId": "placement:layoffs-job-destruction:permanent-job-losers:candi-credit-conditions",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:04:08"
+        },
+        {
+          "order": 9,
+          "label": "Corporate Profitability",
+          "canonicalFactorId": "factor:canonical:corporate-profitability",
+          "placementId": "placement:layoffs-job-destruction:permanent-job-losers:corporate-profitability",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:04:09"
+        },
+        {
+          "order": 10,
+          "label": "Real Output Growth",
+          "canonicalFactorId": "factor:canonical:real-output-growth",
+          "placementId": "placement:layoffs-job-destruction:permanent-job-losers:real-output-growth",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:04:10"
+        }
+      ]
+    },
+    {
+      "order": 5,
+      "id": "temporary-layoffs",
+      "label": "Temporary Layoffs",
+      "canonicalFactorId": "factor:canonical:temporary-layoffs",
+      "placementId": "placement:layoffs-job-destruction:temporary-layoffs",
+      "legacyPlacementId": "placement:layoffs-job-destruction:gross-job-losses",
+      "sourceFamily": "BLS CPS/CES; Federal Reserve; Census; BEA; EIA and disaster authorities",
+      "placements": [
+        {
+          "order": 1,
+          "label": "Average Weekly Hours",
+          "canonicalFactorId": "factor:canonical:average-weekly-hours",
+          "placementId": "placement:layoffs-job-destruction:temporary-layoffs:average-weekly-hours",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:05:01"
+        },
+        {
+          "order": 2,
+          "label": "Industrial Production",
+          "canonicalFactorId": "factor:canonical:industrial-production",
+          "placementId": "placement:layoffs-job-destruction:temporary-layoffs:industrial-production",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:05:02"
+        },
+        {
+          "order": 3,
+          "label": "Capacity Utilization",
+          "canonicalFactorId": "factor:canonical:capacity-utilization",
+          "placementId": "placement:layoffs-job-destruction:temporary-layoffs:capacity-utilization",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:05:03"
+        },
+        {
+          "order": 4,
+          "label": "New Orders",
+          "canonicalFactorId": "factor:canonical:new-orders",
+          "placementId": "placement:layoffs-job-destruction:temporary-layoffs:new-orders",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:05:04"
+        },
+        {
+          "order": 5,
+          "label": "Inventory / Sales Balance",
+          "canonicalFactorId": "factor:canonical:inventory-sales-balance",
+          "placementId": "placement:layoffs-job-destruction:temporary-layoffs:inventory-sales-balance",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:05:05"
+        },
+        {
+          "order": 6,
+          "label": "Consumer Demand",
+          "canonicalFactorId": "factor:canonical:consumer-demand",
+          "placementId": "placement:layoffs-job-destruction:temporary-layoffs:consumer-demand",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:05:06"
+        },
+        {
+          "order": 7,
+          "label": "Manufacturing Output",
+          "canonicalFactorId": "factor:canonical:manufacturing-output",
+          "placementId": "placement:layoffs-job-destruction:temporary-layoffs:manufacturing-output",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:05:07"
+        },
+        {
+          "order": 8,
+          "label": "Energy / Input Shock",
+          "canonicalFactorId": "factor:canonical:energy-input-shock",
+          "placementId": "placement:layoffs-job-destruction:temporary-layoffs:energy-input-shock",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:05:08"
+        },
+        {
+          "order": 9,
+          "label": "Disaster / Weather Shock",
+          "canonicalFactorId": "factor:canonical:disaster-weather-shock",
+          "placementId": "placement:layoffs-job-destruction:temporary-layoffs:disaster-weather-shock",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:05:09"
+        },
+        {
+          "order": 10,
+          "label": "Industry Payroll Contraction",
+          "canonicalFactorId": "factor:canonical:industry-payroll-contraction",
+          "placementId": "placement:layoffs-job-destruction:temporary-layoffs:industry-payroll-contraction",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:05:10"
+        }
+      ]
+    },
+    {
+      "order": 6,
+      "id": "gross-job-losses",
+      "label": "Gross Job Losses",
+      "canonicalFactorId": "factor:canonical:gross-job-losses",
+      "placementId": "placement:layoffs-job-destruction:gross-job-losses",
+      "legacyPlacementId": "placement:layoffs-job-destruction:mass-layoff-signals",
+      "sourceFamily": "BLS BED; BEA; Census; Federal Reserve SLOOS; BLS Productivity/PPI",
+      "placements": [
+        {
+          "order": 1,
+          "label": "Establishment Contractions",
+          "canonicalFactorId": "factor:canonical:establishment-contractions",
+          "placementId": "placement:layoffs-job-destruction:gross-job-losses:establishment-contractions",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:06:01"
+        },
+        {
+          "order": 2,
+          "label": "Establishment Closures",
+          "canonicalFactorId": "factor:canonical:establishment-closures",
+          "placementId": "placement:layoffs-job-destruction:gross-job-losses:establishment-closures",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:06:02"
+        },
+        {
+          "order": 3,
+          "label": "Real Output Growth",
+          "canonicalFactorId": "factor:canonical:real-output-growth",
+          "placementId": "placement:layoffs-job-destruction:gross-job-losses:real-output-growth",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:06:03"
+        },
+        {
+          "order": 4,
+          "label": "Consumer Spending",
+          "canonicalFactorId": "factor:canonical:consumer-spending",
+          "placementId": "placement:layoffs-job-destruction:gross-job-losses:consumer-spending",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:06:04"
+        },
+        {
+          "order": 5,
+          "label": "New Orders",
+          "canonicalFactorId": "factor:canonical:new-orders",
+          "placementId": "placement:layoffs-job-destruction:gross-job-losses:new-orders",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:06:05"
+        },
+        {
+          "order": 6,
+          "label": "Corporate Profits",
+          "canonicalFactorId": "factor:canonical:corporate-profits",
+          "placementId": "placement:layoffs-job-destruction:gross-job-losses:corporate-profits",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:06:06"
+        },
+        {
+          "order": 7,
+          "label": "C&I Lending Standards",
+          "canonicalFactorId": "factor:canonical:candi-lending-standards",
+          "placementId": "placement:layoffs-job-destruction:gross-job-losses:candi-lending-standards",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:06:07"
+        },
+        {
+          "order": 8,
+          "label": "Unit Labor Costs",
+          "canonicalFactorId": "factor:canonical:unit-labor-costs",
+          "placementId": "placement:layoffs-job-destruction:gross-job-losses:unit-labor-costs",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:06:08"
+        },
+        {
+          "order": 9,
+          "label": "Producer Input Prices",
+          "canonicalFactorId": "factor:canonical:producer-input-prices",
+          "placementId": "placement:layoffs-job-destruction:gross-job-losses:producer-input-prices",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:06:09"
+        },
+        {
+          "order": 10,
+          "label": "Trade / Import Pressure",
+          "canonicalFactorId": "factor:canonical:trade-import-pressure",
+          "placementId": "placement:layoffs-job-destruction:gross-job-losses:trade-import-pressure",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:06:10"
+        }
+      ]
+    },
+    {
+      "order": 7,
+      "id": "establishment-death-closure-losses",
+      "label": "Establishment Death / Closure Losses",
+      "canonicalFactorId": "factor:canonical:establishment-death-closure-losses",
+      "placementId": "placement:layoffs-job-destruction:establishment-death-closure-losses",
+      "legacyPlacementId": "placement:layoffs-job-destruction:permanent-job-losers",
+      "sourceFamily": "BLS BED; Census BDS/BFS; U.S. Courts; BEA; Federal Reserve; BLS PPI; disaster authorities",
+      "placements": [
+        {
+          "order": 1,
+          "label": "Closing Establishment Losses",
+          "canonicalFactorId": "factor:canonical:establishment-closures",
+          "placementId": "placement:layoffs-job-destruction:establishment-death-closure-losses:closing-establishment-losses",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:07:01"
+        },
+        {
+          "order": 2,
+          "label": "Business Bankruptcy Stress",
+          "canonicalFactorId": "factor:canonical:business-bankruptcy-stress",
+          "placementId": "placement:layoffs-job-destruction:establishment-death-closure-losses:business-bankruptcy-stress",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:07:02"
+        },
+        {
+          "order": 3,
+          "label": "Corporate Profitability",
+          "canonicalFactorId": "factor:canonical:corporate-profitability",
+          "placementId": "placement:layoffs-job-destruction:establishment-death-closure-losses:corporate-profitability",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:07:03"
+        },
+        {
+          "order": 4,
+          "label": "C&I Lending Standards",
+          "canonicalFactorId": "factor:canonical:candi-lending-standards",
+          "placementId": "placement:layoffs-job-destruction:establishment-death-closure-losses:candi-lending-standards",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:07:04"
+        },
+        {
+          "order": 5,
+          "label": "Borrowing Costs",
+          "canonicalFactorId": "factor:canonical:borrowing-costs",
+          "placementId": "placement:layoffs-job-destruction:establishment-death-closure-losses:borrowing-costs",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:07:05"
+        },
+        {
+          "order": 6,
+          "label": "Sales / Revenue Growth",
+          "canonicalFactorId": "factor:canonical:sales-revenue-growth",
+          "placementId": "placement:layoffs-job-destruction:establishment-death-closure-losses:sales-revenue-growth",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:07:06"
+        },
+        {
+          "order": 7,
+          "label": "Producer Input Prices",
+          "canonicalFactorId": "factor:canonical:producer-input-prices",
+          "placementId": "placement:layoffs-job-destruction:establishment-death-closure-losses:producer-input-prices",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:07:07"
+        },
+        {
+          "order": 8,
+          "label": "Business Formation / Dynamism",
+          "canonicalFactorId": "factor:canonical:business-formation-dynamism",
+          "placementId": "placement:layoffs-job-destruction:establishment-death-closure-losses:business-formation-dynamism",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:07:08"
+        },
+        {
+          "order": 9,
+          "label": "Firm Age / Size Vulnerability",
+          "canonicalFactorId": "factor:canonical:firm-age-size-vulnerability",
+          "placementId": "placement:layoffs-job-destruction:establishment-death-closure-losses:firm-age-size-vulnerability",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:07:09"
+        },
+        {
+          "order": 10,
+          "label": "Disaster / External Shock",
+          "canonicalFactorId": "factor:canonical:disaster-external-shock",
+          "placementId": "placement:layoffs-job-destruction:establishment-death-closure-losses:disaster-external-shock",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:07:10"
+        }
+      ]
+    },
+    {
+      "order": 8,
+      "id": "firm-death-shutdown-stress",
+      "label": "Firm Death / Shutdown Stress",
+      "canonicalFactorId": "factor:canonical:firm-death-shutdown-stress",
+      "placementId": "placement:layoffs-job-destruction:firm-death-shutdown-stress",
+      "legacyPlacementId": "placement:layoffs-job-destruction:temporary-layoffs",
+      "sourceFamily": "Census BDS; U.S. Courts; BLS BED; BEA; Federal Reserve; Census economic indicators",
+      "placements": [
+        {
+          "order": 1,
+          "label": "Establishment Deaths",
+          "canonicalFactorId": "factor:canonical:establishment-deaths",
+          "placementId": "placement:layoffs-job-destruction:firm-death-shutdown-stress:establishment-deaths",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:08:01"
+        },
+        {
+          "order": 2,
+          "label": "Business Bankruptcy Filings",
+          "canonicalFactorId": "factor:canonical:business-bankruptcy-filings",
+          "placementId": "placement:layoffs-job-destruction:firm-death-shutdown-stress:business-bankruptcy-filings",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:08:02"
+        },
+        {
+          "order": 3,
+          "label": "Corporate Profits",
+          "canonicalFactorId": "factor:canonical:corporate-profits",
+          "placementId": "placement:layoffs-job-destruction:firm-death-shutdown-stress:corporate-profits",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:08:03"
+        },
+        {
+          "order": 4,
+          "label": "Interest Rates",
+          "canonicalFactorId": "factor:canonical:interest-rates",
+          "placementId": "placement:layoffs-job-destruction:firm-death-shutdown-stress:interest-rates",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:08:04"
+        },
+        {
+          "order": 5,
+          "label": "C&I Lending Standards",
+          "canonicalFactorId": "factor:canonical:candi-lending-standards",
+          "placementId": "placement:layoffs-job-destruction:firm-death-shutdown-stress:candi-lending-standards",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:08:05"
+        },
+        {
+          "order": 6,
+          "label": "Sales / Revenue",
+          "canonicalFactorId": "factor:canonical:sales-revenue",
+          "placementId": "placement:layoffs-job-destruction:firm-death-shutdown-stress:sales-revenue",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:08:06"
+        },
+        {
+          "order": 7,
+          "label": "Input Costs",
+          "canonicalFactorId": "factor:canonical:input-costs",
+          "placementId": "placement:layoffs-job-destruction:firm-death-shutdown-stress:input-costs",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:08:07"
+        },
+        {
+          "order": 8,
+          "label": "Inventory / Sales Imbalance",
+          "canonicalFactorId": "factor:canonical:inventory-sales-imbalance",
+          "placementId": "placement:layoffs-job-destruction:firm-death-shutdown-stress:inventory-sales-imbalance",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:08:08"
+        },
+        {
+          "order": 9,
+          "label": "Firm Age / Size",
+          "canonicalFactorId": "factor:canonical:firm-age-size",
+          "placementId": "placement:layoffs-job-destruction:firm-death-shutdown-stress:firm-age-size",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:08:09"
+        },
+        {
+          "order": 10,
+          "label": "Trade / External Shock",
+          "canonicalFactorId": "factor:canonical:trade-external-shock",
+          "placementId": "placement:layoffs-job-destruction:firm-death-shutdown-stress:trade-external-shock",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:08:10"
+        }
+      ]
+    },
+    {
+      "order": 9,
+      "id": "industry-payroll-contraction",
+      "label": "Industry Payroll Contraction",
+      "canonicalFactorId": "factor:canonical:industry-payroll-contraction",
+      "placementId": "placement:layoffs-job-destruction:industry-payroll-contraction",
+      "legacyPlacementId": "placement:layoffs-job-destruction:contraction-breadth",
+      "sourceFamily": "BLS CES/JOLTS/BED/Productivity/PPI; BEA industry accounts; Census; Federal Reserve",
+      "placements": [
+        {
+          "order": 1,
+          "label": "Industry Output",
+          "canonicalFactorId": "factor:canonical:industry-output",
+          "placementId": "placement:layoffs-job-destruction:industry-payroll-contraction:industry-output",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:09:01"
+        },
+        {
+          "order": 2,
+          "label": "Industry Sales / Shipments",
+          "canonicalFactorId": "factor:canonical:industry-sales-shipments",
+          "placementId": "placement:layoffs-job-destruction:industry-payroll-contraction:industry-sales-shipments",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:09:02"
+        },
+        {
+          "order": 3,
+          "label": "Industry New Orders",
+          "canonicalFactorId": "factor:canonical:industry-new-orders",
+          "placementId": "placement:layoffs-job-destruction:industry-payroll-contraction:industry-new-orders",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:09:03"
+        },
+        {
+          "order": 4,
+          "label": "Industry Layoffs & Discharges",
+          "canonicalFactorId": "factor:canonical:industry-layoffs-and-discharges",
+          "placementId": "placement:layoffs-job-destruction:industry-payroll-contraction:industry-layoffs-and-discharges",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:09:04"
+        },
+        {
+          "order": 5,
+          "label": "Industry Gross Job Losses",
+          "canonicalFactorId": "factor:canonical:industry-gross-job-losses",
+          "placementId": "placement:layoffs-job-destruction:industry-payroll-contraction:industry-gross-job-losses",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:09:05"
+        },
+        {
+          "order": 6,
+          "label": "Industry Capacity Utilization",
+          "canonicalFactorId": "factor:canonical:industry-capacity-utilization",
+          "placementId": "placement:layoffs-job-destruction:industry-payroll-contraction:industry-capacity-utilization",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:09:06"
+        },
+        {
+          "order": 7,
+          "label": "Industry Unit Labor Costs",
+          "canonicalFactorId": "factor:canonical:industry-unit-labor-costs",
+          "placementId": "placement:layoffs-job-destruction:industry-payroll-contraction:industry-unit-labor-costs",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:09:07"
+        },
+        {
+          "order": 8,
+          "label": "Industry Input Prices",
+          "canonicalFactorId": "factor:canonical:industry-input-prices",
+          "placementId": "placement:layoffs-job-destruction:industry-payroll-contraction:industry-input-prices",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:09:08"
+        },
+        {
+          "order": 9,
+          "label": "Import Exposure",
+          "canonicalFactorId": "factor:canonical:import-exposure",
+          "placementId": "placement:layoffs-job-destruction:industry-payroll-contraction:import-exposure",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:09:09"
+        },
+        {
+          "order": 10,
+          "label": "Industry Credit Conditions",
+          "canonicalFactorId": "factor:canonical:industry-credit-conditions",
+          "placementId": "placement:layoffs-job-destruction:industry-payroll-contraction:industry-credit-conditions",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:09:10"
+        }
+      ]
+    },
+    {
+      "order": 10,
+      "id": "business-failure-bankruptcy-stress",
+      "label": "Business Failure / Bankruptcy Stress",
+      "canonicalFactorId": "factor:canonical:business-failure-bankruptcy-stress",
+      "placementId": "placement:layoffs-job-destruction:business-failure-bankruptcy-stress",
+      "legacyPlacementId": "placement:layoffs-job-destruction:job-loss-duration",
+      "sourceFamily": "U.S. Courts; BEA; Federal Reserve; Census; BLS Productivity/PPI",
+      "placements": [
+        {
+          "order": 1,
+          "label": "Corporate Profits",
+          "canonicalFactorId": "factor:canonical:corporate-profits",
+          "placementId": "placement:layoffs-job-destruction:business-failure-bankruptcy-stress:corporate-profits",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:10:01"
+        },
+        {
+          "order": 2,
+          "label": "Interest Rates",
+          "canonicalFactorId": "factor:canonical:interest-rates",
+          "placementId": "placement:layoffs-job-destruction:business-failure-bankruptcy-stress:interest-rates",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:10:02"
+        },
+        {
+          "order": 3,
+          "label": "C&I Lending Standards",
+          "canonicalFactorId": "factor:canonical:candi-lending-standards",
+          "placementId": "placement:layoffs-job-destruction:business-failure-bankruptcy-stress:candi-lending-standards",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:10:03"
+        },
+        {
+          "order": 4,
+          "label": "C&I Loan Demand",
+          "canonicalFactorId": "factor:canonical:candi-loan-demand",
+          "placementId": "placement:layoffs-job-destruction:business-failure-bankruptcy-stress:candi-loan-demand",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:10:04"
+        },
+        {
+          "order": 5,
+          "label": "Sales / Revenue",
+          "canonicalFactorId": "factor:canonical:sales-revenue",
+          "placementId": "placement:layoffs-job-destruction:business-failure-bankruptcy-stress:sales-revenue",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:10:05"
+        },
+        {
+          "order": 6,
+          "label": "Producer Input Costs",
+          "canonicalFactorId": "factor:canonical:producer-input-costs",
+          "placementId": "placement:layoffs-job-destruction:business-failure-bankruptcy-stress:producer-input-costs",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:10:06"
+        },
+        {
+          "order": 7,
+          "label": "Unit Labor Costs",
+          "canonicalFactorId": "factor:canonical:unit-labor-costs",
+          "placementId": "placement:layoffs-job-destruction:business-failure-bankruptcy-stress:unit-labor-costs",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:10:07"
+        },
+        {
+          "order": 8,
+          "label": "Inventory / Sales Ratio",
+          "canonicalFactorId": "factor:canonical:inventory-sales-ratio",
+          "placementId": "placement:layoffs-job-destruction:business-failure-bankruptcy-stress:inventory-sales-ratio",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:10:08"
+        },
+        {
+          "order": 9,
+          "label": "Business Formation",
+          "canonicalFactorId": "factor:canonical:business-formation",
+          "placementId": "placement:layoffs-job-destruction:business-failure-bankruptcy-stress:business-formation",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:10:09"
+        },
+        {
+          "order": 10,
+          "label": "Real Output Growth",
+          "canonicalFactorId": "factor:canonical:real-output-growth",
+          "placementId": "placement:layoffs-job-destruction:business-failure-bankruptcy-stress:real-output-growth",
+          "legacyPlacementId": "fixture-placement:layoffs-job-destruction:10:10"
+        }
+      ]
+    }
+  ]
+}
