@@ -123,8 +123,20 @@ def run() -> int:
     check("public method explanations are normalized, status-derived strings",
           "Source request was blocked" in INCLUDE and "Source returned an error" in INCLUDE
           and "Source requires manual review" in INCLUDE)
-    check("method_id is HTML-escaped where rendered",
-          "m.method_id | escape" in INCLUDE)
+    # The method identity now renders as a PUBLIC SOURCE FAMILY (several methods deliberately read
+    # the same community by different routes, and three raw ids made one community look like
+    # three). The invariant is unchanged and is asserted on the property rather than on a variable
+    # name: whatever carries that identity into the page is escaped, and the raw field is never
+    # emitted unescaped.
+    check("the rendered method identity is HTML-escaped",
+          "m_family | escape" in INCLUDE or "m.method_id | escape" in INCLUDE)
+    check("the family label is derived from the method id, not invented",
+          "assign m_family = m.method_id" in INCLUDE)
+    check("the raw method_id is never emitted unescaped",
+          "{{ m.method_id }}" not in INCLUDE)
+    check("routes over one community are labelled as that community",
+          INCLUDE.count("Microsoft Q&A (") >= 2,
+          "three Q&A routes must not read as three independent sources")
 
     # --- Verdict and Monitoring kept structurally separate on every surface -------
     check("detail page renders the full monitoring card (mode='full'), separate from #verdict",
