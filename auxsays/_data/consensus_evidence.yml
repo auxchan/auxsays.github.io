@@ -14327,3 +14327,30 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '20228.20124'
+
+- id: microsoft-powerpoint-2607-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5956657-copilot-unable-to-read-document-error
+  product_id: microsoft-powerpoint
+  update_version: '2607'
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5956657/copilot-unable-to-read-document-error
+  parent_title: Copilot Unable to Read Document Error - Microsoft Q&A
+  report_title: Copilot Unable to Read Document Error - Microsoft Q&A
+  report_text_excerpt: Copilot Unable to Read Document Error - Microsoft Q&A Please wait a bit and try again later' is always received. Copilot works in web PowerPoint and all other office desktop apps, but fails consistently in PowerPoint desktop. I have attempted a quick repair of office,...
+  captured_at: '2026-08-30T07:17:03Z'
+  source_date: '2026-08-06'
+  target_release_date: '2026-07-29'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '2607'
+  match_basis: exact_version_channel_build
+  applicability: microsoft-powerpoint
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified PowerPoint issue
+  workflow_area: PowerPoint workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '20228.20124'
