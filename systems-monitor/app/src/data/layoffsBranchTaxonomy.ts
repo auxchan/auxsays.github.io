@@ -18,7 +18,7 @@ const slug = (value: string) => value.toLowerCase().replace(/&/g, "and").replace
 // Canonical aliases are intentionally narrow. They cover only reviewed cases
 // where different hierarchy labels refer to the same underlying factor. The
 // placement label remains available to the UI under UX-060.
-const canonicalAliases: Readonly<Record<string, string>> = Object.freeze({
+export const layoffsCanonicalAliases: Readonly<Record<string, string>> = Object.freeze({
   "Initial UI Claims": "Initial Claims",
   "Closing Establishment Losses": "Establishment Closures",
   "Business Formations": "Business Formation",
@@ -26,7 +26,13 @@ const canonicalAliases: Readonly<Record<string, string>> = Object.freeze({
 });
 
 export function layoffsCanonicalLabel(label: string) {
-  return canonicalAliases[label] ?? label;
+  return layoffsCanonicalAliases[label] ?? label;
+}
+
+export function layoffsSearchAliasesForFactorId(canonicalFactorId: string) {
+  return Object.entries(layoffsCanonicalAliases)
+    .filter(([, canonicalLabel]) => layoffsCanonicalFactorId(canonicalLabel) === canonicalFactorId)
+    .map(([alias]) => alias);
 }
 
 export function layoffsCanonicalFactorId(label: string) {

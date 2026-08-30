@@ -7,7 +7,9 @@ import { PERSISTENT_ACCEPTED_IMPACT_COUNT, persistentChangesForWindow, type Pers
 import { StructuralNodeIcon } from "../motion/StructuralNodeIcon";
 import type { StructuralNodeSymbol } from "../motion/structuralVisualLanguage";
 import { PremiumPersistentWorldSurface as PersistentWorldSurface, type PersistentWorldViewMode } from "./PremiumPersistentWorldSurface";
+import { PersistentWorldMinimap } from "./PersistentWorldMinimap";
 import { persistentWorldMediaFor } from "./persistentWorldMedia";
+import { buildPersistentWorldSearchIndex, searchPersistentWorld } from "./persistentWorldSearch";
 import { compactPersistentValue, factorGlyph, persistentPlacementAccent } from "./persistentWorldVisuals";
 import "./persistentWorld.css";
 
@@ -66,6 +68,7 @@ export function PersistentWorldShell() {
   const connectedBindingCount = new Set(Object.values(model.placements).filter((placement) => factualBindings[placement.id]?.status === "CONNECTED").map((placement) => placement.canonicalFactorId)).size;
   const reducedMotion = useReducedMotion();
   const workspaceRef = useRef<HTMLDivElement>(null);
+  const searchTriggerRef = useRef<HTMLButtonElement>(null);
   const [selectedId, setSelectedId] = useState<string | null>(() => selectionFromHash(model));
   const [fullWorld, setFullWorld] = useState(false);
   const [viewMode, setViewMode] = useState<PersistentWorldViewMode>("TOP_DOWN");
@@ -74,6 +77,11 @@ export function PersistentWorldShell() {
   const [fullscreen, setFullscreen] = useState(false);
   const [fullscreenFallback, setFullscreenFallback] = useState(false);
   const [changeWindow, setChangeWindow] = useState<PersistentTimeWindow>("RECENT");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [deepDiveOpen, setDeepDiveOpen] = useState(false);
+  const [routePulseVersion, setRoutePulseVersion] = useState(0);
+  const [exploration, setExploration] = useState<{ ids: readonly (string | null)[]; index: number }>(() => ({ ids: [selectionFromHash(model)], index: 0 }));
   const selected = selectedId ? model.placements[selectedId] : undefined;
   const factor = selected ? model.factors[selected.canonicalFactorId] : undefined;
   const selectedMedia = selected ? persistentWorldMediaFor(model, selected) : undefined;
@@ -85,6 +93,8 @@ export function PersistentWorldShell() {
   const path = useMemo(() => persistentWorldPath(model, selectedId), [model, selectedId]);
   const visibleChanges = useMemo(() => persistentChangesForWindow(changeWindow), [changeWindow]);
   const selectedChanges = useMemo(() => selected ? visibleChanges.filter((notice) => notice.placementId === selected.id) : [], [selected, visibleChanges]);
+  const searchIndex = useMemo(() => buildPersistentWorldSearchIndex(model), [model]);
+  const searchResults = useMemo(() => searchPersistentWorld(searchIndex, searchQuery), [searchIndex, searchQuery]);
   const visibleChoiceIds = useMemo(() => {
     if (!selected) return model.childrenByPlacement[model.outcomePlacementId];
     const children = model.childrenByPlacement[selected.id] ?? [];
@@ -93,7 +103,20 @@ export function PersistentWorldShell() {
   }, [model, selected]);
 
   useEffect(() => {
-    const restore = () => { setSelectedId(selectionFromHash(model)); setFullWorld(false); };
+    const restore = () => {
+      const id = selectionFromHash(model);
+      setSelectedId(id);
+      setFullWorld(false);
+      setDeepDiveOpen(false);
+      setRoutePulseVersion((current) => current + 1);
+      setExploration((current) => {
+        if (current.ids[current.index] === id) return current;
+        if (current.index > 0 && current.ids[current.index - 1] === id) return { ...current, index: current.index - 1 };
+        if (current.index + 1 < current.ids.length && current.ids[current.index + 1] === id) return { ...current, index: current.index + 1 };
+        const ids = [...current.ids.slice(0, current.index + 1), id].slice(-40);
+        return { ids, index: ids.length - 1 };
+      });
+    };
     window.addEventListener("popstate", restore);
     window.addEventListener("hashchange", restore);
     return () => { window.removeEventListener("popstate", restore); window.removeEventListener("hashchange", restore); };
@@ -112,11 +135,42 @@ export function PersistentWorldShell() {
     return () => window.removeEventListener("keydown", close);
   }, [fullscreenFallback]);
 
-  function navigate(id: string | null) {
+  useEffect(() => {
+    const handleShortcut = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === "k") { event.preventDefault(); setSearchOpen(true); }
+      if (event.key === "Escape" && searchOpen) { event.preventDefault(); setSearchOpen(false); requestAnimationFrame(() => searchTriggerRef.current?.focus()); }
+    };
+    window.addEventListener("keydown", handleShortcut);
+    return () => window.removeEventListener("keydown", handleShortcut);
+  }, [searchOpen]);
+
+  function navigate(id: string | null, options: { record?: boolean; replace?: boolean } = {}) {
     setSelectedId(id);
     setFullWorld(false);
+    setDeepDiveOpen(false);
+    setRoutePulseVersion((current) => current + 1);
     const hash = id ? `#persistent-world/${encodeURIComponent(id)}` : "#persistent-world";
-    window.history.pushState({ persistentWorldPlacementId: id }, "", `${window.location.pathname}${window.location.search}${hash}`);
+    const url = `${window.location.pathname}${window.location.search}${hash}`;
+    if (options.replace) window.history.replaceState({ persistentWorldPlacementId: id }, "", url);
+    else window.history.pushState({ persistentWorldPlacementId: id }, "", url);
+    if (options.record !== false) setExploration((current) => {
+      if (current.ids[current.index] === id) return current;
+      const ids = [...current.ids.slice(0, current.index + 1), id];
+      return { ids: ids.slice(-40), index: Math.min(39, ids.length - 1) };
+    });
+  }
+
+  function moveExploration(delta: -1 | 1) {
+    const index = Math.max(0, Math.min(exploration.ids.length - 1, exploration.index + delta));
+    if (index === exploration.index) return;
+    navigate(exploration.ids[index], { record: false, replace: true });
+    setExploration((current) => ({ ...current, index }));
+  }
+
+  function chooseSearchResult(id: string) {
+    navigate(id);
+    setSearchOpen(false);
+    setSearchQuery("");
   }
 
   function resetWorld() {
@@ -153,13 +207,31 @@ export function PersistentWorldShell() {
     <section className="sm-pw-instrument" aria-label="Persistent Employment influence world R&D" data-model-initialization-ms={modelEvidence.initializationMs.toFixed(3)} data-model-heap-delta-bytes={modelEvidence.heapDeltaBytes ?? "UNAVAILABLE"}>
       <header className="sm-pw-header">
         <div><span>Persistent world R&amp;D</span><strong>{selected ? placementLabel(model, selected) : "Employment influence systems"}</strong></div>
-        <div className="sm-pw-header__facts"><span>{PERSISTENT_WORLD_PROFILED_FACTOR_COUNT} dataset paths cataloged</span><span>{connectedBindingCount} accepted branch {connectedBindingCount === 1 ? "reading" : "readings"}</span><span>{PERSISTENT_ACCEPTED_IMPACT_COUNT} governed connector signals</span><span>{LAYOFFS_SOURCE_ENABLED_FACTOR_COUNT} collectors enabled</span><span>{LAYOFFS_BLOCKED_FACTOR_COUNT} retrieval-blocked</span></div>
+        <div className="sm-pw-header__facts"><span>{connectedBindingCount} accepted readings</span><span>{PERSISTENT_ACCEPTED_IMPACT_COUNT} governed connector signals</span><details><summary>System status</summary><div><strong>{PERSISTENT_WORLD_PROFILED_FACTOR_COUNT}</strong> dataset paths cataloged<br /><strong>{LAYOFFS_SOURCE_ENABLED_FACTOR_COUNT}</strong> collectors enabled<br /><strong>{LAYOFFS_BLOCKED_FACTOR_COUNT}</strong> retrieval-blocked<br /><strong>0</strong> accepted structural relationships</div></details></div>
       </header>
+      <div className="sm-pw-discovery">
+        <button ref={searchTriggerRef} type="button" className="sm-pw-search-trigger" aria-expanded={searchOpen} onClick={() => setSearchOpen(true)}><span aria-hidden="true">⌕</span> Find a factor <kbd>Ctrl K</kbd></button>
+        <div className="sm-pw-history" aria-label="Exploration history">
+          <button type="button" aria-label="Back in exploration history" disabled={exploration.index === 0} onClick={() => moveExploration(-1)}>←</button>
+          <button type="button" aria-label="Forward in exploration history" disabled={exploration.index >= exploration.ids.length - 1} onClick={() => moveExploration(1)}>→</button>
+          <span>Level {(selected?.depth ?? 0) + 1} of 4</span>
+        </div>
+      </div>
+      {searchOpen && <div className="sm-pw-search" role="dialog" aria-modal="true" aria-label="Find a factor">
+        <div className="sm-pw-search__panel">
+          <header><label htmlFor="pw-factor-search">Find any factor</label><button type="button" aria-label="Close factor search" onClick={() => { setSearchOpen(false); requestAnimationFrame(() => searchTriggerRef.current?.focus()); }}>×</button></header>
+          <input id="pw-factor-search" autoFocus value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} placeholder="Try initial claims, wages, oil, bankruptcy…" />
+          <p>Searches stable names, definitions, hierarchy paths, and official source vocabulary.</p>
+          {searchQuery.trim() ? <ol>{searchResults.map((result) => <li key={result.placementId}><button type="button" onClick={() => chooseSearchResult(result.placementId)}><strong>{result.label}</strong><span>{result.pathText}</span><small>{result.evidencePosture === "TEST_FIXTURE" ? "Fixture only" : result.evidencePosture === "CANDIDATE" ? "Reviewed candidate" : "Master-defined"}</small></button></li>)}</ol> : <div className="sm-pw-search__hint">Type a factor, source, or economic concept.</div>}
+          {searchQuery.trim() && !searchResults.length && <div className="sm-pw-search__hint">No matching factor in the current persistent world.</div>}
+        </div>
+      </div>}
       <nav className="sm-pw-breadcrumbs" aria-label="Persistent world exploration history">
         <button type="button" aria-current={!selected ? "location" : undefined} onClick={() => navigate(null)}>Employment outcome</button>
         {path.filter((item) => item.depth > 0).map((item) => <span key={item.id}><i aria-hidden="true">›</i><button type="button" aria-current={item.id === selectedId ? "location" : undefined} onClick={() => navigate(item.id)}>{placementLabel(model, item)}</button></span>)}
       </nav>
       <div ref={workspaceRef} className={`sm-pw-workspace ${selected ? "has-inspector" : ""} ${fullscreenFallback ? "is-fullscreen-fallback" : ""}`} data-fullscreen={fullscreenActive}>
+        <PersistentWorldMinimap model={model} selectedPlacementId={selectedId} onSelect={navigate} />
         <aside className={`sm-pw-inspector ${selected ? "is-open" : ""}`} aria-label="Persistent world factor details" aria-hidden={!selected}>
           {selected && factor && <div key={selected.id} className="sm-pw-inspector__content">
             <header><span>{selected.depth === 1 ? "Master-defined driver system" : selected.depth === 2 ? "Level-2 review candidate" : "Level-3 reviewed factor"}</span><button type="button" aria-label="Close factor details" onClick={() => navigate(null)}>×</button><h2>{placementLabel(model, selected)}</h2>{selectedCompactValue && <div className="sm-pw-inspector__quick-reading"><strong>{selectedCompactValue}</strong><span>{selectedBinding?.validTime} · {selectedBinding?.provider}</span><a href="/systems-monitor/#workstream1a">Open factual record</a></div>}</header>
@@ -182,13 +254,16 @@ export function PersistentWorldShell() {
               : selected.depth === 3 ? <section className="sm-pw-inspector__data-boundary"><h3>Current data</h3><strong>Source mapping under review</strong><p>This is a real candidate economic identity. AUXSAYS shows no value until an exact official dataset, parser, provenance, rights posture, and acceptance decision exist.</p></section>
               : selected.depth === 1 ? <section className="sm-pw-inspector__data-boundary"><h3>Current data</h3><strong>Aggregate system · multiple datasets</strong><p>Select one of the ten child factors to inspect its official dataset candidate, readiness state, and available factual reading.</p></section>
               : <section className="sm-pw-inspector__data-boundary"><h3>Current data</h3><strong>Dataset binding pending</strong><p>This placement has no accepted observation yet. AUXSAYS will not display a placeholder value or imply that a taxonomy node is a live feed.</p><a href="/systems-monitor/#workstream1a">Open factual Labor Market</a></section>}
-            {selected.parentPlacementId && <section className="sm-pw-inspector__connector"><h3>How it connects</h3><dl><div><dt>Parent</dt><dd>{placementLabel(model, model.placements[selected.parentPlacementId])}</dd></div><div><dt>Map connector</dt><dd>Hierarchy tether · active</dd></div><div><dt>Meaning</dt><dd>Organization and drill-down only</dd></div><div><dt>Accepted structural relationship</dt><dd>None</dd></div></dl><p>A connector shows where this factor belongs. It does not claim causality, weight, or propagation.</p></section>}
-            <section><h3>Evidence posture</h3><dl><div><dt>Identity</dt><dd>{factor.evidencePosture}</dd></div><div><dt>Source family</dt><dd>{factor.sourceFamily}</dd></div><div><dt>Relationship status</dt><dd>HIERARCHY ONLY · candidate relationships remain non-traversable</dd></div></dl></section>
-            <section><h3>Why the next ten are here</h3><p>{selected.depth < 2 ? "They form the bounded exact-ten navigation neighborhood for this review candidate. Placement communicates organization only—not causality, weight, or propagation." : selected.depth === 2 ? "They are the reviewed connective-tissue factors for this branch. Repeated names reuse one canonical identity and one source/provenance state." : "This factor has no deeper hierarchy children in the current bounded branch."}</p></section>
-            {selectedMedia && <footer className="sm-pw-inspector__credit"><span>Illustrative context only · not data evidence</span><a href={selectedMedia.sourcePage} target="_blank" rel="noreferrer">Photo: {selectedMedia.credit} · {selectedMedia.license === "CC0_1_0" ? "CC0 1.0" : "Public domain"}</a></footer>}
+            <button type="button" className="sm-pw-inspector__deep-trigger" aria-expanded={deepDiveOpen} onClick={() => setDeepDiveOpen((current) => !current)}>{deepDiveOpen ? "Hide Deep Dive" : "Open Deep Dive"}<span aria-hidden="true">{deepDiveOpen ? "−" : "+"}</span></button>
+            {deepDiveOpen && <div className="sm-pw-inspector__deep">
+              {selected.parentPlacementId && <section className="sm-pw-inspector__connector"><h3>How it connects</h3><dl><div><dt>Parent</dt><dd>{placementLabel(model, model.placements[selected.parentPlacementId])}</dd></div><div><dt>Map connector</dt><dd>Hierarchy tether · active</dd></div><div><dt>Meaning</dt><dd>Organization and drill-down only</dd></div><div><dt>Accepted structural relationship</dt><dd>None</dd></div></dl><p>A connector shows where this factor belongs. It does not claim causality, weight, or propagation.</p></section>}
+              <section><h3>Evidence posture</h3><dl><div><dt>Identity</dt><dd>{factor.evidencePosture}</dd></div><div><dt>Source family</dt><dd>{factor.sourceFamily}</dd></div><div><dt>Relationship status</dt><dd>HIERARCHY ONLY · candidate relationships remain non-traversable</dd></div></dl></section>
+              <section><h3>Why the next ten are here</h3><p>{selected.depth < 2 ? "They form the bounded exact-ten navigation neighborhood for this review candidate. Placement communicates organization only—not causality, weight, or propagation." : selected.depth === 2 ? "They are the reviewed connective-tissue factors for this branch. Repeated names reuse one canonical identity and one source/provenance state." : "This factor has no deeper hierarchy children in the current bounded branch."}</p></section>
+              {selectedMedia && <footer className="sm-pw-inspector__credit"><span>Illustrative context only · not data evidence</span><a href={selectedMedia.sourcePage} target="_blank" rel="noreferrer">Photo: {selectedMedia.credit} · {selectedMedia.license === "CC0_1_0" ? "CC0 1.0" : "Public domain"}</a></footer>}
+            </div>}
           </div>}
         </aside>
-        <PersistentWorldSurface model={model} factualBindings={factualBindings} selectedPlacementId={selectedId} fullWorld={fullWorld} viewMode={viewMode} traceMode={traceMode} reducedMotion={reducedMotion} resetVersion={resetVersion} onSelect={navigate} onNavigateParent={navigateUp} onReset={resetWorld} />
+        <PersistentWorldSurface model={model} factualBindings={factualBindings} selectedPlacementId={selectedId} fullWorld={fullWorld} viewMode={viewMode} traceMode={traceMode} reducedMotion={reducedMotion} resetVersion={resetVersion} routePulseVersion={routePulseVersion} onSelect={navigate} onNavigateParent={navigateUp} onReset={resetWorld} />
         <div className="sm-pw-controls" aria-label="Persistent world view controls">
           <button type="button" disabled={!selected} onClick={navigateUp}>Up one level</button>
           <button type="button" onClick={resetWorld}>Reset</button>

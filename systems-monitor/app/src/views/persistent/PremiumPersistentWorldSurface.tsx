@@ -22,6 +22,7 @@ interface Props {
   traceMode: boolean;
   reducedMotion: boolean;
   resetVersion: number;
+  routePulseVersion: number;
   onSelect: (placementId: string) => void;
   onNavigateParent: () => void;
   onReset: () => void;
@@ -151,7 +152,7 @@ function drawDimensionalNode(context: CanvasRenderingContext2D, point: Persisten
   context.restore();
 }
 
-export function PremiumPersistentWorldSurface({ model, factualBindings, selectedPlacementId, fullWorld, viewMode, traceMode, reducedMotion, resetVersion, onSelect, onNavigateParent, onReset }: Props) {
+export function PremiumPersistentWorldSurface({ model, factualBindings, selectedPlacementId, fullWorld, viewMode, traceMode, reducedMotion, resetVersion, routePulseVersion, onSelect, onNavigateParent, onReset }: Props) {
   const spatialLayout = useMemo(() => createPersistentWorldSpatialLayout(model), [model]);
   const hostRef = useRef<HTMLDivElement>(null); const canvasRef = useRef<HTMLCanvasElement>(null);
   const cameraRef = useRef<Camera>(targetCamera(model, selectedPlacementId, fullWorld, viewMode, 980, 720, spatialLayout));
@@ -161,6 +162,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
   const suppressClickRef = useRef(false); const hoveredRef = useRef<string | null>(null); const hoverVisualsRef = useRef(new Map<string, number>());
   const pointerRef = useRef<Point>({ x: 0, y: 0 }); const invalidateRef = useRef<() => void>(() => undefined);
   const semanticHistoryRef = useRef<readonly string[]>([]); const cameraMomentumRef = useRef<Point>({ x: 0, y: 0 });
+  const routePulseRef = useRef({ version: routePulseVersion, startedAt: performance.now() });
   const [hoveredId, setHoveredId] = useState<string | null>(null);
   const hoveredPlacement = hoveredId ? model.placements[hoveredId] : undefined;
   const hoveredFactor = hoveredPlacement ? model.factors[hoveredPlacement.canonicalFactorId] : undefined;
@@ -174,6 +176,10 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
   }, [model, selectedPlacementId]);
 
   useEffect(() => { hoveredRef.current = hoveredId; invalidateRef.current(); }, [hoveredId]);
+  useEffect(() => {
+    routePulseRef.current = { version: routePulseVersion, startedAt: performance.now() };
+    invalidateRef.current();
+  }, [routePulseVersion]);
   useEffect(() => { if (hostRef.current) hostRef.current.dataset.viewMode = viewMode; }, [viewMode]);
   useEffect(() => {
     viewportRef.current = { zoom: 1, panX: 0, panY: 0 }; const host = hostRef.current;
@@ -202,10 +208,10 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
     const focusedPlacementForEdges = selectedPlacementId ? model.placements[selectedPlacementId] : undefined;
     const focusedChildrenForEdges = new Set(focusedPlacementForEdges ? model.childrenByPlacement[focusedPlacementForEdges.id] ?? [] : []);
     const highlightedEdges = hierarchy.filter((edge) => {
-      if (!fullWorld && focusedPlacementForEdges?.depth === 2) {
-        const incomingMainline = edge.fromPlacementId === focusedPlacementForEdges.parentPlacementId && edge.toPlacementId === focusedPlacementForEdges.id;
+      if (!fullWorld && focusedPlacementForEdges) {
+        const routeMainline = selectedPath.has(edge.fromPlacementId) && selectedPath.has(edge.toPlacementId);
         const directChild = edge.fromPlacementId === focusedPlacementForEdges.id && focusedChildrenForEdges.has(edge.toPlacementId);
-        return incomingMainline || directChild;
+        return routeMainline || directChild;
       }
       return transitionSemanticSet.has(edge.fromPlacementId) && transitionSemanticSet.has(edge.toPlacementId);
     });
@@ -239,16 +245,18 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
       let visiblePreviousEdgeCount = 0; let visibleCurrentEdgeCount = 0;
       for (const edge of depthEdges) {
         const fromPlacement = model.placements[edge.fromPlacementId]; const toPlacement = model.placements[edge.toPlacementId]; const from = projectedAt(edge.fromPlacementId); const to = projectedAt(edge.toPlacementId); const route = premiumCurveRoute(edge.id, from, to);
-        const currentEdge = semanticSet.has(edge.fromPlacementId) && semanticSet.has(edge.toPlacementId); const previousEdge = previousSemanticSet.has(edge.fromPlacementId) && previousSemanticSet.has(edge.toPlacementId); const transitionAlpha = persistentWorldEdgeTransitionAlpha(currentEdge, previousEdge, transitionSample.progress);
-        const accent = persistentPlacementAccent(toPlacement); const incident = Boolean(currentHovered && (edge.fromPlacementId === currentHovered || edge.toPlacementId === currentHovered)); const traceEdge = selectedPath.has(edge.fromPlacementId) && selectedPath.has(edge.toPlacementId);
+        const traceEdge = selectedPath.has(edge.fromPlacementId) && selectedPath.has(edge.toPlacementId);
+        const currentEdge = traceEdge || (semanticSet.has(edge.fromPlacementId) && semanticSet.has(edge.toPlacementId)); const previousEdge = previousSemanticSet.has(edge.fromPlacementId) && previousSemanticSet.has(edge.toPlacementId); const transitionAlpha = persistentWorldEdgeTransitionAlpha(currentEdge, previousEdge, transitionSample.progress);
+        const accent = persistentPlacementAccent(toPlacement); const incident = Boolean(currentHovered && (edge.fromPlacementId === currentHovered || edge.toPlacementId === currentHovered));
         const hoverAmount = easePremiumHover(hoverVisualsRef.current.get(edge.id) ?? 0, incident ? 1 : 0, elapsedMs, reducedMotion); hoverVisualsRef.current.set(edge.id, hoverAmount);
         const focused = selectedPlacementId ? model.placements[selectedPlacementId] : undefined; const denseFanEdge = Boolean(focused && focused.depth < 3 && (edge.fromPlacementId === focused.id || edge.toPlacementId === focused.id)); const railScale = denseFanEdge ? .64 : 1;
+        const routePulse = reducedMotion || !traceEdge ? 0 : Math.max(0, 1 - (now - routePulseRef.current.startedAt) / 700);
         const depthAlpha = Math.min(from.opacity, to.opacity); const traceAlpha = (traceMode ? traceEdge ? 1 : .13 : 1) * transitionAlpha * depthAlpha;
         if (traceAlpha <= .012) continue;
         if (currentEdge) visibleCurrentEdgeCount += 1;
         if (previousEdge && !currentEdge) visiblePreviousEdgeCount += 1;
         const color = blendPremiumColor(AMBIENT_EDGE, accent, (denseFanEdge ? .76 : .52) + hoverAmount * (denseFanEdge ? .24 : .48), (currentHovered && !incident ? .24 : .9) * traceAlpha);
-        context.save(); context.shadowColor = accent; context.shadowBlur = (denseFanEdge ? 5 + hoverAmount * 8 : 8 + hoverAmount * 10) * traceAlpha; context.strokeStyle = blendPremiumColor(AMBIENT_EDGE, accent, .45 + hoverAmount * .55, (.18 + hoverAmount * .18) * traceAlpha); context.lineWidth = (8 + hoverAmount * 2) * railScale; traceCubic(context, route); context.stroke();
+        context.save(); context.shadowColor = accent; context.shadowBlur = ((denseFanEdge ? 5 + hoverAmount * 8 : 8 + hoverAmount * 10) + routePulse * 7) * traceAlpha; context.strokeStyle = blendPremiumColor(AMBIENT_EDGE, accent, .45 + hoverAmount * .55, (.18 + hoverAmount * .18 + routePulse * .1) * traceAlpha); context.lineWidth = (8 + hoverAmount * 2 + routePulse * 1.4) * railScale; traceCubic(context, route); context.stroke();
         context.shadowBlur = 0; context.strokeStyle = color; context.lineWidth = (3.2 + hoverAmount * 1.2) * railScale; traceCubic(context, route); context.stroke(); context.strokeStyle = blendPremiumColor("#b8e1df", accent, .42 + hoverAmount * .58, .88 * traceAlpha); context.lineWidth = denseFanEdge ? .85 : 1.05; traceCubic(context, route); context.stroke(); context.restore();
         if (!reducedMotion && (!traceMode || traceEdge)) { const progress = persistentGlintProgress(now, edge.id); const trailStart = pointOnCubic(route, Math.max(0, progress - PERSISTENT_GLINT_TRAIL)); const trailEnd = pointOnCubic(route, progress); const gradient = context.createLinearGradient(trailStart.x, trailStart.y, trailEnd.x, trailEnd.y); gradient.addColorStop(0, blendPremiumColor(accent, accent, 1, 0)); gradient.addColorStop(1, blendPremiumColor("#ffffff", accent, .26, .98 * traceAlpha)); context.save(); context.strokeStyle = gradient; context.lineWidth = 3.1; context.shadowColor = accent; context.shadowBlur = 12 * traceAlpha; context.beginPath(); context.moveTo(trailStart.x, trailStart.y); context.lineTo(trailEnd.x, trailEnd.y); context.stroke(); context.restore(); }
       }
@@ -320,7 +328,9 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
         host.dataset.meanFrameMs = meanFrameMs.toFixed(3); host.dataset.medianFrameMs = medianFrameMs.toFixed(3); host.dataset.p95FrameMs = p95FrameMs.toFixed(3); host.dataset.performanceMode = mode; host.dataset.semanticLabelCount = labels.length.toString();
       }
       const hoverAnimating = [...hoverVisualsRef.current.values()].some((value) => currentHovered ? value < .995 : value > .01);
-      const shouldContinue = !reducedMotion && (transitionSample.progress < 1 || Boolean(currentHovered) || hoverAnimating || traceMode);
+      const routePulseActive = !reducedMotion && now - routePulseRef.current.startedAt < 700;
+      host.dataset.routePulseState = routePulseActive ? "ACTIVE" : "IDLE";
+      const shouldContinue = !reducedMotion && (transitionSample.progress < 1 || Boolean(currentHovered) || hoverAnimating || traceMode || routePulseActive);
       host.dataset.renderLoopState = shouldContinue ? "ACTIVE" : "IDLE";
       if (shouldContinue) frame = requestAnimationFrame(draw);
     };
@@ -338,7 +348,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
 
   const parentPlacementId = selectedPlacementId ? model.placements[selectedPlacementId]?.parentPlacementId : null;
 
-  return <div ref={hostRef} className="sm-pw-surface sm-pw-surface--premium" role="application" tabIndex={0} aria-label="Persistent Employment influence world" aria-keyshortcuts="Alt+ArrowLeft" data-world-id={model.worldId} data-graph-snapshot-id={model.graphSnapshotId} data-layout-version={model.layoutVersion} data-topology-fingerprint={model.topologyFingerprint} data-presentation-layout-version={spatialLayout.version} data-projection-version={spatialLayout.projectionVersion} data-presentation-fingerprint={spatialLayout.fingerprint} data-resident-placement-count={model.coverage.placementCount} data-resident-relationship-count={model.coverage.hierarchyRelationshipCount + model.coverage.syntheticInfluenceCount} data-semantic-node-count={semantic.length} data-factual-binding-count={Object.values(factualBindings).filter((binding) => binding.status === "CONNECTED").length} data-lod-mode={fullWorld ? "FULL_WORLD_DENSITY" : selectedPlacementId ? "FOCUS" : "OVERVIEW"} data-trace-mode={traceMode} data-selected-placement-id={selectedPlacementId ?? ""} data-parent-placement-id={parentPlacementId ?? ""} data-viewport-zoom="1.000" data-viewport-pan-x="0" data-viewport-pan-y="0" data-glint-period-ms="2500" data-glint-trail="0.085" data-hovered-placement-id={hoveredId ?? ""} onKeyDown={(event) => {
+  return <div ref={hostRef} className="sm-pw-surface sm-pw-surface--premium" role="application" tabIndex={0} aria-label="Persistent Employment influence world" aria-keyshortcuts="Alt+ArrowLeft" data-world-id={model.worldId} data-graph-snapshot-id={model.graphSnapshotId} data-layout-version={model.layoutVersion} data-topology-fingerprint={model.topologyFingerprint} data-presentation-layout-version={spatialLayout.version} data-projection-version={spatialLayout.projectionVersion} data-presentation-fingerprint={spatialLayout.fingerprint} data-resident-placement-count={model.coverage.placementCount} data-resident-relationship-count={model.coverage.hierarchyRelationshipCount + model.coverage.syntheticInfluenceCount} data-semantic-node-count={semantic.length} data-factual-binding-count={Object.values(factualBindings).filter((binding) => binding.status === "CONNECTED").length} data-lod-mode={fullWorld ? "FULL_WORLD_DENSITY" : selectedPlacementId ? "FOCUS" : "OVERVIEW"} data-trace-mode={traceMode} data-route-pulse-version={routePulseVersion} data-selected-placement-id={selectedPlacementId ?? ""} data-parent-placement-id={parentPlacementId ?? ""} data-viewport-zoom="1.000" data-viewport-pan-x="0" data-viewport-pan-y="0" data-glint-period-ms="2500" data-glint-trail="0.085" data-hovered-placement-id={hoveredId ?? ""} onKeyDown={(event) => {
     if (event.altKey && event.key === "ArrowLeft" && selectedPlacementId) { event.preventDefault(); onNavigateParent(); }
   }} onWheel={(event) => {
     const started = performance.now(); event.preventDefault(); const bounds = event.currentTarget.getBoundingClientRect(); const current = viewportRef.current; const zoom = Math.max(.55, Math.min(3.25, current.zoom * Math.exp(-event.deltaY * .0014))); const ratio = zoom / current.zoom; const cursorX = event.clientX - bounds.left - bounds.width / 2; const cursorY = event.clientY - bounds.top - bounds.height / 2; updateViewport({ zoom, panX: cursorX - (cursorX - current.panX) * ratio, panY: cursorY - (cursorY - current.panY) * ratio }); event.currentTarget.dataset.wheelHandlerMs = (performance.now() - started).toFixed(3);

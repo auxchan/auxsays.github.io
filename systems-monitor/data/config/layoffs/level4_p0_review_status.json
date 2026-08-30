@@ -1,0 +1,71 @@
+{
+  "schemaVersion": "level4-p0-review-status-0.1.0",
+  "scope": "Layoffs & Job Destruction",
+  "asOfStartingCommit": "c9c84a221b024d038c315a4058a414f58dc10dea",
+  "authority": "REVIEW_EVIDENCE_ONLY",
+  "promotionAuthority": "NONE",
+  "taxonomy": {
+    "level2Parents": 10,
+    "level4Placements": 100,
+    "uniqueLevel4CanonicalFactors": 64,
+    "repeatedLevel4Placements": 36,
+    "multiPlacementCanonicalFactors": 21,
+    "rendererFixturePlacementsInScope": 0
+  },
+  "classification": {
+    "status": "BLOCKED_REQUIRES_GOVERNED_FACTOR_BY_FACTOR_REVIEW",
+    "A_DIRECT_OBS": 0,
+    "B_CALC": 0,
+    "C_EVENT_OR_STRUCTURAL": 0,
+    "D_TAXONOMY_OR_SOURCE_PROBLEM": 0,
+    "unclassifiedCanonicalFactors": 64,
+    "unclassifiedPlacements": 100,
+    "note": "No authoritative A/B/C/D registry exists. Source posture is not a substitute for claim-class review. Counts remain zero rather than inferring classifications from labels."
+  },
+  "sourcePosture": {
+    "profiledRecords": 77,
+    "ACCEPTED": 1,
+    "SOURCE_ENABLED_PENDING_ACCEPTANCE": 17,
+    "BLOCKED": 24,
+    "SOURCE_IDENTIFIED": 35,
+    "recordsWithExactSeriesTableOrSelector": 42,
+    "acceptedExternalObservationRefs": 1
+  },
+  "history": {
+    "acceptedComparableHistoriesForNewLevel4Factors": 0,
+    "status": "PENDING_ACCEPTED_COMPARABLE_OBSERVATIONS"
+  },
+  "relationships": {
+    "hierarchyTethersInWholeWorld": 1110,
+    "semanticCandidatesInLayoffsRegistry": 6,
+    "validatedAccountingCandidates": 2,
+    "acceptedStructuralRelationships": 0,
+    "traversableStructuralRelationships": 0,
+    "status": "CANDIDATE_ONLY_NON_TRAVERSABLE"
+  },
+  "persistentWorld": {
+    "placements": 1111,
+    "fixtureInfluenceRelationships": 2000,
+    "topologyFingerprint": "fnv1a32:88684cdb"
+  },
+  "ux": {
+    "minimap": "IMPLEMENTED_REQUIRES_HUMAN_QA",
+    "levelIndicator": "IMPLEMENTED_REQUIRES_HUMAN_QA",
+    "persistentMainline": "IMPLEMENTED_REQUIRES_HUMAN_QA",
+    "routeIllumination": "IMPLEMENTED_REQUIRES_HUMAN_QA",
+    "explorationBackForward": "IMPLEMENTED_REQUIRES_HUMAN_QA",
+    "searchAndJump": "IMPLEMENTED_REQUIRES_HUMAN_QA",
+    "progressiveInspector": "IMPLEMENTED_REQUIRES_HUMAN_QA"
+  },
+  "humanQa": {
+    "HUMAN_LEVEL4_LAYOFFS_QA": "PENDING",
+    "HUMAN_ORIENTATION_UX_QA": "PENDING"
+  },
+  "blockers": [
+    "L4-001_GOVERNED_ABCD_CLASSIFICATION_MISSING",
+    "L4-002_ACCEPTED_COMPARABLE_HISTORY_MISSING",
+    "L4-003_ACCEPTED_STRUCTURAL_RELATIONSHIPS_MISSING",
+    "L4-004_SOURCE_PROFILE_AND_OFFLINE_SNAPSHOT_RECONCILIATION_REQUIRED",
+    "L4-005_NON_BLS_DOL_COLLECTOR_ACTIVATION_REQUIRES_APPROVED_SELECTORS_OR_CREDENTIALS"
+  ]
+}

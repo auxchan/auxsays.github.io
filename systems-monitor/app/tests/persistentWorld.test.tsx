@@ -10,6 +10,7 @@ import { PERSISTENT_GLINT_PERIOD_MS, PERSISTENT_GLINT_TRAIL, blendPremiumColor, 
 import { persistentWorldDoubleClickAction, persistentWorldEdgeTransitionAlpha, persistentWorldGraphNodeLabel } from "../src/views/persistent/PremiumPersistentWorldSurface";
 import { persistentWorldUpSelection } from "../src/views/persistent/PersistentWorldShell";
 import { createPersistentWorldSpatialLayout, projectPersistentPlacement } from "../src/views/persistent/persistentWorldSpatialLayout";
+import { buildPersistentWorldSearchIndex, searchPersistentWorld } from "../src/views/persistent/persistentWorldSearch";
 
 describe("premium persistent-world visual language", () => {
   it("fully retires previous-view connector passes after navigation settles", () => {
@@ -332,6 +333,7 @@ describe("persistent world local-review shell", () => {
     expect(surface.getAttribute("data-resident-placement-count")).toBe("1111");
     expect(screen.getAllByText(/Fixture only · hierarchy tether/)).toHaveLength(10);
     expect(within(inspector).getByRole("heading", { name: "Latest accepted reading" })).toBeTruthy();
+    fireEvent.click(within(inspector).getByRole("button", { name: "Open Deep Dive" }));
     expect(within(inspector).getByRole("heading", { name: "How it connects" })).toBeTruthy();
     expect(within(inspector).getByText("Hierarchy tether · active")).toBeTruthy();
     expect(within(inspector).getByRole("link", { name: "Original evidence" }).getAttribute("href")).toBe("https://data.bls.gov/timeseries/JTS000000000000000JOL");
@@ -417,5 +419,37 @@ describe("persistent world local-review shell", () => {
     expect(screen.getByText("Structured retrieval path is stale").closest("li")?.getAttribute("data-impact")).toBe("UNKNOWN");
     fireEvent.click(screen.getByRole("button", { name: "1y" }));
     expect(screen.getByText("Structured retrieval path is stale")).toBeTruthy();
+  });
+
+  it("indexes all resident placements and ranks reviewed factors above fixtures", () => {
+    const model = createPersistentWorld();
+    const index = buildPersistentWorldSearchIndex(model);
+    expect(index).toHaveLength(1111);
+    expect(searchPersistentWorld(index, "initial claims")[0].label).toMatch(/Initial/);
+    expect(searchPersistentWorld(index, "initial ui claims").some((entry) => entry.label === "Initial Claims")).toBe(true);
+    expect(searchPersistentWorld(index, "Census BDS").some((entry) => entry.evidencePosture !== "TEST_FIXTURE")).toBe(true);
+    expect(searchPersistentWorld(index, "renderer fixture")[0].evidencePosture).toBe("TEST_FIXTURE");
+  });
+
+  it("offers search, bounded minimap navigation, exploration history, and progressive evidence", async () => {
+    window.history.replaceState({}, "", "/systems-monitor/#persistent-world");
+    render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
+    await screen.findByRole("heading", { name: "Persistent Employment Influence World" });
+    expect(screen.getAllByText("Level 1 of 4").length).toBeGreaterThanOrEqual(2);
+    expect(screen.getByLabelText("World location")).toBeTruthy();
+    fireEvent.keyDown(window, { key: "k", ctrlKey: true });
+    const dialog = screen.getByRole("dialog", { name: "Find a factor" });
+    const input = within(dialog).getByRole("textbox", { name: "Find any factor" });
+    fireEvent.change(input, { target: { value: "permanent job losers" } });
+    fireEvent.click(within(dialog).getAllByRole("button", { name: /Permanent Job Losers/ })[0]);
+    expect(screen.getAllByText("Level 3 of 4").length).toBeGreaterThanOrEqual(2);
+    const inspector = screen.getByRole("complementary", { name: "Persistent world factor details" });
+    expect(within(inspector).queryByRole("heading", { name: "How it connects" })).toBeNull();
+    fireEvent.click(within(inspector).getByRole("button", { name: "Open Deep Dive" }));
+    expect(within(inspector).getByRole("heading", { name: "How it connects" })).toBeTruthy();
+    fireEvent.click(screen.getByRole("button", { name: "Back in exploration history" }));
+    expect(screen.getAllByText("Level 1 of 4").length).toBeGreaterThanOrEqual(2);
+    fireEvent.click(screen.getByRole("button", { name: "Forward in exploration history" }));
+    expect(screen.getAllByText("Level 3 of 4").length).toBeGreaterThanOrEqual(2);
   });
 });
