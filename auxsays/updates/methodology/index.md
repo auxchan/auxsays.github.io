@@ -136,7 +136,9 @@ permalink: /updates/methodology/
         <span>{{ item.candidates_found | default: 0 }}</span>
         <span>{{ item.accepted_candidates | default: 0 }}<small>{{ item.evidence_rows_added | default: 0 }} added</small></span>
         <span>{{ item.public_counted_reports | default: 0 }}</span>
-        <span>{% if item.blocked_reason != blank %}{{ item.blocked_reason }}{% else %}{{ item.notes }}{% endif %}<small>{% if item.blocked_reason != blank and item.notes != blank %}{{ item.notes }}{% endif %}</small></span>
+        {%- assign mh_blocked = item.blocked_reason | default: '' -%}
+        {%- assign mh_notes = item.notes | default: '' -%}
+        <span>{% if mh_blocked != '' %}{{ mh_blocked }}{% else %}{{ mh_notes }}{% endif %}<small>{% if mh_blocked != '' and mh_notes != '' %}{{ mh_notes }}{% endif %}</small></span>
       </div>
       {% endfor %}
     </div>

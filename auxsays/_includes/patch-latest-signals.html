@@ -45,7 +45,10 @@
     {{ staged_html }}
   </ul>
   {% endif %}
-  {% if latest_count == 0 and staged_html == blank %}
+  {%- comment -%} staged_html is a captured string, so it is '' when the loop emits nothing.
+    A `blank` comparison can never see that, which made this honest empty state
+    unreachable on its own terms. {%- endcomment -%}
+  {% if latest_count == 0 and staged_html == '' %}
   <p class="patch-empty-note">No tracked software yet.</p>
   {% endif %}
 </div>

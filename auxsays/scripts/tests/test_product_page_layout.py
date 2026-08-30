@@ -18,6 +18,7 @@ Run: PYTHONDONTWRITEBYTECODE=1 python auxsays/scripts/tests/test_product_page_la
 """
 from __future__ import annotations
 
+import re
 import sys
 import traceback
 from pathlib import Path
@@ -112,10 +113,30 @@ def run() -> int:
           "No recent patches" in HISTORY and "{% if recent_count > 0 %}" in HISTORY)
 
     # --- Verdict column derived from the real AUXSAYS decision (not consensus) --
+    # Intent, not spelling: the chain must READ all three fields, in that order. Each may be
+    # normalised through a `default`-ed local first -- it now has to be, because the old
+    # `decision_label == blank` test could never be true (Liquid resolves the `blank` literal to
+    # MethodLiteral(:blank?) and nothing here defines String#blank?), which made every fallback
+    # branch unreachable and left 35 Verdict cells blank on one live product page.
+    # A field may now be read into a `default`-ed local at the top of the include, so first-mention
+    # order no longer encodes priority. Assert the BRANCH order instead: whichever locals carry the
+    # consensus summary and the quick verdict, the summary must be split before the verdict is,
+    # and INSUFFICIENT DATA must come last.
+    def local_for(field: str) -> str:
+        m = re.search(r"assign\s+(\w+)\s*=\s*item\." + field + r"\b", ROW)
+        return m.group(1) if m else "item." + field
+    summary_split = ROW.find(f"= {local_for('update_consensus_summary')} | split")
+    verdict_split = ROW.find(f"= {local_for('quick_verdict')} | split")
+    last_resort = ROW.find("'INSUFFICIENT DATA'")
+    reads = [ROW.find(f) for f in ("item.update_decision_label", "item.update_consensus_summary",
+                                  "item.quick_verdict")]
     check("verdict uses update_decision_label with the detail-page fallback chain",
-          "item.update_decision_label" in ROW
-          and "item.update_consensus_summary contains ':'" in ROW
-          and "item.quick_verdict" in ROW)
+          all(i != -1 for i in reads) and "contains ':'" in ROW
+          and -1 < summary_split < verdict_split < last_resort,
+          f"reads={reads} summary={summary_split} verdict={verdict_split} last={last_resort}")
+    check("the verdict fallback is reachable -- guarded on emptiness, not on `blank`",
+          re.search(r"decision_label\s*==\s*(?:''|\"\")", ROW) is not None
+          and re.search(r"decision_label\s*(?:==|!=)\s*blank\b", ROW) is None)
     check("verdict falls back to INSUFFICIENT DATA, and official-only + 0 reports resolves to it",
           "'INSUFFICIENT DATA'" in ROW and "is_official_only and report_count_num == 0" in ROW)
     check("verdict column never substitutes the community-consensus label",

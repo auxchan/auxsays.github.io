@@ -283,11 +283,13 @@ def run() -> int:
                   "<small>" not in version_cell, version_cell)
             for junk in ("Build ", "None", "null", "target_build"):
                 check(f"M5 {label}: no {junk!r} placeholder in the row", junk not in rendered)
-        # The NOTES cell already emits <small></small> on main -- that is the methodology page's own
-        # `!= blank` no-op on blocked_reason, reported as backlog and deliberately not touched here.
-        # Assert it is unchanged rather than pretending this fix cleaned it up.
+        # The Notes cell emits an empty <small></small> when a row carries no note to demote. That
+        # is layout, not the old defect: the `!= blank` no-op on blocked_reason (which used to put
+        # an empty block reason in the PRIMARY slot and push the note down into <small>) is fixed
+        # separately, and test_blank_guard_emptiness.py owns that behaviour. What is pinned here is
+        # only that the BUILD-label change does not disturb the Notes cell either way.
         if old_rows is not None:
-            check("M5 the Notes-cell <small> behaviour is untouched by this change",
+            check("M5 the Notes-cell <small> behaviour is untouched by the build-label change",
                   [r.count("<small></small>") for r in new_rows]
                   == [r.count("<small></small>") for r in old_rows])
 

@@ -286,7 +286,10 @@ layout: aux-base
         <div class="patch-card-links">
           <a href="{{ item.url | relative_url }}">Read breakdown →</a>
           {% if item.update_source_url != blank %}<a href="{{ item.update_source_url }}">Official source ↗</a>{% endif %}
-          {% if item.update_download_url != blank %}<a href="{{ item.update_download_url }}">Download page ↗</a>{% endif %}
+          {%- comment -%} 733 of 905 records store update_download_url: '' -- and a `blank`
+            comparison is a no-op here, so this link used to render with an EMPTY href. {%- endcomment -%}
+          {% assign card_download_url = item.update_download_url | default: '' | strip %}
+          {% if card_download_url != '' %}<a href="{{ card_download_url }}">Download page ↗</a>{% endif %}
         </div>
       </article>
     {% endfor %}
@@ -387,7 +390,8 @@ layout: aux-base
           <div class="patch-card-links">
             <a href="{{ item.url | relative_url }}">Read breakdown →</a>
             {% if item.update_source_url != blank %}<a href="{{ item.update_source_url }}">Official source ↗</a>{% endif %}
-            {% if item.update_download_url != blank %}<a href="{{ item.update_download_url }}">Download page ↗</a>{% endif %}
+            {% assign card_download_url = item.update_download_url | default: '' | strip %}
+            {% if card_download_url != '' %}<a href="{{ card_download_url }}">Download page ↗</a>{% endif %}
           </div>
         </article>
         {% endunless %}

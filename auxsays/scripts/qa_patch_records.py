@@ -551,8 +551,17 @@ def scan_update_layout_public_copy() -> tuple[list[dict[str, str]], list[dict[st
         add(errors, UPDATE_LAYOUT_PATH, "sentiment_neutral_state_missing", "Not-enough-report pages should use a neutral chart treatment.")
     if "update_platform_clean" in text or "platform_label_clean" in text or "update_type_clean" in text:
         add(errors, UPDATE_LAYOUT_PATH, "top_metadata_placeholder_pill_regression", "Top metadata should render only data-bearing product, version, channel, release date, and file-size pills.")
-    if "file_size_pill_value" not in text or "{% if file_size_pill_value != blank %}" not in text:
+    # The guard must be an EMPTINESS test. It used to be pinned to the exact spelling
+    # `{% if file_size_pill_value != blank %}`, which is an always-true comparison: Liquid resolves
+    # the `blank` literal to MethodLiteral(:blank?) and neither liquid-4.0.4 nor jekyll-4.4.1
+    # defines String#blank?, so the pill rendered EMPTY on the 850 records that store no file size.
+    # Assert the rule's intent instead, and reject the whole always-true family rather than one
+    # spelling of it.
+    if "file_size_pill_value" not in text or not re.search(
+            r"\{%-?\s*if\s+file_size_pill_value\s*!=\s*(?:''|\"\")\s*-?%\}", text):
         add(errors, UPDATE_LAYOUT_PATH, "file_size_pill_value_guard_missing", "The top file-size pill must render only when a stripped real value exists.")
+    if re.search(r"file_size_pill_value\s*(?:!=|==)\s*(?:blank|nil|null|false)\b", text):
+        add(errors, UPDATE_LAYOUT_PATH, "file_size_pill_value_guard_always_true", "The file-size pill guard must test emptiness; blank/nil/null/false comparisons never fire here.")
     if "File size: {{ patch_file_size_clean" in text:
         add(errors, UPDATE_LAYOUT_PATH, "file_size_label_only_regression", "File-size metadata should use guarded label/value markup, not a label that can render without a value.")
     if "issue_cluster_first" not in text or "issue_label_first" not in text:
