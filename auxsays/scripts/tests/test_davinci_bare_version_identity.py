@@ -188,10 +188,32 @@ def run() -> int:  # noqa: PLR0915
 
     check("C Candidate 1 is still 2607 / 20228.20110 with one counted report",
           count_of("*powerpoint-2607-20228-20110*.md") == 1, str(count_of("*powerpoint-2607-20228-20110*.md")))
-    check("C OBS 32.1.2 still carries its 95 reports (the #79 exclusions stand)",
-          count_of("*obs-studio-32-1-2*.md") == 95, str(count_of("*obs-studio-32-1-2*.md")))
+    # These two are CONTROLS: they exist to show the DaVinci migration did not disturb other
+    # products. Both were pinned to a literal count of the day they were written (95 and 0) and
+    # therefore broke on ordinary corpus growth -- OBS legitimately collected a 96th report and
+    # Windows 25H2 rolled to a new cumulative update -- reporting a DaVinci regression where none
+    # exists. Asserted as the properties they are named for instead.
+    obs_now = count_of("*obs-studio-32-1-2*.md")
+    check("C OBS 32.1.2 still carries its reports (the #79 exclusions stand)",
+          obs_now >= 95, f"{obs_now} (floor 95; growth is legitimate, loss is not)")
+    # "Converged" means the record's published count equals the canonical counted population for
+    # its CURRENT target -- not that the number is any particular value.
+    from lib.report_counts import (  # noqa: PLC0415
+        counted_evidence_counts, windows_targets_from_front_matter,
+    )
+    _rows = (yaml.safe_load(Path(_REPO / "auxsays" / "_data" / "consensus_evidence.yml")
+                            .read_text(encoding="utf-8")) or {}).get("evidence") or []
+    _fronts = []
+    for _p in gen.glob("*.md"):
+        _fr, _b = split_front_matter(_p.read_text(encoding="utf-8"))
+        _d = yaml.safe_load(_fr) or {}
+        if isinstance(_d, dict):
+            _fronts.append(_d)
+    _canon = counted_evidence_counts(_rows, windows_targets=windows_targets_from_front_matter(_fronts))
+    _win = _canon.get(("microsoft-windows-11", "25H2", ""), 0)
     check("C Windows 25H2 is still converged to its current cumulative update",
-          count_of("*windows-11-25h2*.md") == 0, str(count_of("*windows-11-25h2*.md")))
+          count_of("*windows-11-25h2*.md") == _win,
+          f"record={count_of('*windows-11-25h2*.md')} canonical={_win}")
 
     # ---------------- the migration outcome ----------------
     # One Creative COW thread that states no version was counted for Resolve 11, 15 AND 16. The

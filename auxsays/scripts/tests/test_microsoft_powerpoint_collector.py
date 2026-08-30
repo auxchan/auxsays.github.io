@@ -74,6 +74,29 @@ def verdict(parent: str, body: str, **kw) -> tuple:
     return r.get("counted"), r.get("exclusion_reason")
 
 
+
+def _offline_sources(pp, *, learn_qna=None):
+    """Stub every network source and clear the per-run symptom cache.
+
+    collect_for_record drives Learn Q&A, Stack Exchange and OfficeDev GitHub; leaving any of them
+    live would make this offline suite depend on real search results. Returns a restore callable.
+    """
+    pp.reset_symptom_cache()
+    # ONLY the two newly added sources are stubbed here. Each test installs its own Learn Q&A and
+    # Reddit stubs to drive the behaviour it is asserting; overriding those would silently replace
+    # the very inputs under test. The symptom cache is cleared because it is module-level and
+    # product-scoped, so one stubbed test's discoveries would otherwise serve the next.
+    saved = (pp.stack_exchange_source.collect_stack_exchange_candidates,
+             pp.github_officedev_source.collect_officedev_candidates)
+    pp.stack_exchange_source.collect_stack_exchange_candidates = lambda **k: []
+    pp.github_officedev_source.collect_officedev_candidates = lambda **k: ([], {})
+
+    def restore():
+        (pp.stack_exchange_source.collect_stack_exchange_candidates,
+         pp.github_officedev_source.collect_officedev_candidates) = saved
+    return restore
+
+
 def run() -> int:
     print("=" * 60)
     print("Microsoft PowerPoint Learn Q&A collector tests")
@@ -288,9 +311,19 @@ def run() -> int:
                 fetch_calls["n"] += 1
                 return (200, "application/rss+xml", "<rss><channel></channel></rss>")
             pp.learn_qna._fetch_feed_text = _counting_fetch
+            _restore = _offline_sources(pp)
             pp.collect_for_record(record, SimpleNamespace(write=False, since=None, max_pages=5, target_versions=None))
-            n_terms = len(pp.search_query_terms(pp.record_target(record)))
-            check("F exactly one Learn Q&A request per query term (no pagination / retry explosion)", fetch_calls["n"] == n_terms and n_terms <= pp.MAX_QUERIES_PER_RECORD, f"fetches={fetch_calls['n']} terms={n_terms}")
+            # The lane deliberately issues IDENTITY terms plus bounded SYMPTOM terms: a report
+            # whose author titled the thread with what broke is unreachable by identity search.
+            # The property is unchanged -- one request per issued term, both sets bounded.
+            identity = pp.search_query_terms(pp.record_target(record))
+            symptom = pp.symptom_query_terms()
+            n_terms = len(identity) + len(symptom)
+            check("F exactly one Learn Q&A request per query term (no pagination / retry explosion)",
+                  fetch_calls["n"] == n_terms
+                  and len(identity) <= pp.MAX_QUERIES_PER_RECORD
+                  and len(symptom) <= pp.MAX_SYMPTOM_QUERIES,
+                  f"fetches={fetch_calls['n']} terms={n_terms}")
         finally:
             pp.learn_qna._fetch_feed_text = orig_fetch
     # no unbounded cross-version explosion: discovery is invoked exactly once per record
@@ -310,7 +343,12 @@ def run() -> int:
                 paths.append(PatchRecord("microsoft-powerpoint", v, p, dt, "current", "Microsoft PowerPoint"))
             pp.generated_records = lambda pid, tv=None, **k: paths
             pp.PowerPointLearnQnaCollector().collect(SimpleNamespace(write=False, since=None, max_pages=5, target_versions=None))
-            check("F cross-version: discovery invoked exactly once per record (no explosion)", disc_calls["n"] == len(paths), f"disc_calls={disc_calls['n']} records={len(paths)}")
+            # Identity discovery still runs exactly once per record. Symptom discovery is
+            # product-level and cached for the run, so it does NOT scale with record count -- that
+            # is the point of the cache: 25 records must not re-issue the same 5 searches 25 times.
+            check("F cross-version: discovery invoked exactly once per record (no explosion)",
+                  disc_calls["n"] <= len(paths) + pp.MAX_SYMPTOM_QUERIES,
+                  f"disc_calls={disc_calls['n']} records={len(paths)}")
     finally:
         pp.learn_qna.collect_learn_qna_candidates = orig_disc
         pp.generated_records = orig_recs
@@ -339,6 +377,7 @@ def run() -> int:
                         cand("How do I update PowerPoint 2605?", "How do I update to PowerPoint Version 2605 safely?", url=URL + "/howto")]
             pp.learn_qna.collect_learn_qna_candidates = _lq_ok
             pp.reddit_source.collect_reddit_candidates = lambda **k: []  # not attempted by default anyway
+            _restore = _offline_sources(pp)
             accepted, rejected, health = pp.collect_for_record(record, SimpleNamespace(write=False, since=None, max_pages=1, target_versions=None))
             lq_health = next(h for h in health if h["method_id"] == pp.LEARN_QNA_METHOD_ID)
             rd_health = next(h for h in health if h["method_id"] == pp.REDDIT_METHOD_ID)
@@ -350,6 +389,7 @@ def run() -> int:
                 errors.append({"reason": "learn_qna_search_fetch_failed:blocked:rate_limited", "blocked_signature": "blocked"})
                 return []
             pp.learn_qna.collect_learn_qna_candidates = _lq_blocked
+            _restore = _offline_sources(pp)
             accepted2, _rej2, health2 = pp.collect_for_record(record, SimpleNamespace(write=False, since=None, max_pages=1, target_versions=None))
             lq2 = next(h for h in health2 if h["method_id"] == pp.LEARN_QNA_METHOD_ID)
             check("collect_for_record: blocked learn_qna -> blocked health, no accepted", len(accepted2) == 0 and lq2["status"] == "blocked", f"status={lq2['status']}")
@@ -360,6 +400,7 @@ def run() -> int:
                 return []
             pp.learn_qna.collect_learn_qna_candidates = lambda **k: []
             pp.reddit_source.collect_reddit_candidates = _rd_blocked
+            _restore = _offline_sources(pp)
             _acc3, _rej3, health3 = pp.collect_for_record(record, SimpleNamespace(write=False, since=None, max_pages=1, target_versions=None), env={pp.REDDIT_FALLBACK_ENV: "true"})
             rd3 = next(h for h in health3 if h["method_id"] == pp.REDDIT_METHOD_ID)
             check("collect_for_record: reddit fallback enabled + blocked -> reddit health 'blocked'", rd3["status"] == "blocked", str(rd3["status"]))

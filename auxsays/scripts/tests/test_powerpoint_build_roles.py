@@ -316,9 +316,26 @@ def run() -> int:  # noqa: PLR0915
 
     # ================= M: other products =================
     print("\n[M] non-PowerPoint products are untouched")
+    # CONSUMPTION means importing the primitive, not mentioning its name. A text scan also fired on
+    # a comment explaining why a module deliberately does NOT duplicate the build regex -- which is
+    # the opposite of the violation this guards against. Parsed, so only a real import counts.
+    import ast as _ast
     other_src = (_REPO / "auxsays" / "scripts" / "patch_collectors").glob("*.py")
-    users = [p.name for p in other_src
-             if "build_claims" in p.read_text(encoding="utf-8") and p.name != "__init__.py"]
+    users = []
+    for _p in other_src:
+        if _p.name == "__init__.py":
+            continue
+        try:
+            _tree = _ast.parse(_p.read_text(encoding="utf-8"))
+        except SyntaxError:
+            continue
+        for _node in _ast.walk(_tree):
+            if isinstance(_node, _ast.ImportFrom) and "build_claims" in (_node.module or ""):
+                users.append(_p.name)
+                break
+            if isinstance(_node, _ast.Import) and any("build_claims" in a.name for a in _node.names):
+                users.append(_p.name)
+                break
     check("M only the PowerPoint collector consumes the build-role primitive",
           users == ["microsoft_powerpoint.py"], str(users))
     for product in ("obs-studio", "blackmagic-davinci", "adobe-premiere-pro",
