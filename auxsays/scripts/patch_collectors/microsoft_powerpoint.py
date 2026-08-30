@@ -42,6 +42,7 @@ from lib.build_claims import (
     select_current_failing_build, single_named_build,
 )
 from lib.patch_identity import is_build_aware, patch_key
+from lib.source_segments import parse_learn_qna_thread
 from .base import (
     CollectorContext,
     PatchRecord,
@@ -63,6 +64,8 @@ from . import microsoft_learn_qna_source as learn_qna
 from . import reddit_source
 from . import stack_exchange_source
 from . import github_officedev_source
+from . import microsoft_qna_tags_source as qna_tags
+from . import techcommunity_source
 
 PRODUCT_ID = "microsoft-powerpoint"
 
@@ -99,6 +102,56 @@ GITHUB_SYMPTOM_QUERIES = (
     "repo:OfficeDev/office-js PowerPoint slideshow",
 )
 MAX_GITHUB_QUERIES = 4
+
+# --- Microsoft Q&A PowerPoint community enumeration -------------------------------------------
+# A distinct DISCOVERY method, not a second search: it walks the PowerPoint tag inventories
+# (12,969 questions in "For home | Windows" alone) newest-first instead of asking a search index
+# for fixed phrasings. Same source family as learn_qna_search_rss, different discovery path.
+QNA_TAG_METHOD_ID = "learn_qna_powerpoint_tags"
+# Microsoft Tech Community: a DIFFERENT community from Q&A, skewed toward admins and IT pros.
+TECH_COMMUNITY_METHOD_ID = "tech_community_discussions"
+TECH_COMMUNITY_SOURCE_TYPE = "microsoft_tech_community"
+TECH_COMMUNITY_SOURCE_NAME = "Microsoft Tech Community"
+TECH_COMMUNITY_MAX_HYDRATIONS = 30
+# How far back a run looks. 60 days covers every currently tracked PowerPoint build's release date
+# with margin; older builds cannot gain new reports from a recency sweep, and pretending otherwise
+# would just spend requests to re-read the same archive every cycle.
+QNA_TAG_SINCE_DAYS = 60
+QNA_TAG_MAX_PAGES = 8          # per tag, and the walk also stops early once a page falls out of window
+QNA_TAG_MAX_HYDRATIONS = 45    # one request each; the hard ceiling on a run's hydration cost
+
+# ADMISSION vocabulary -- deliberately BROADER than the acceptance gate. A tag listing gives a
+# title and a date, so this decides only "is this worth one hydration request", never "is this
+# evidence". The authority still has to prove exact patch identity afterwards.
+def qna_tag_since(context: CollectorContext) -> str:
+    """The lookback boundary for the community walk, as YYYY-MM-DD.
+
+    Honours an explicit collector `since` when the run supplies one so a targeted backfill stays
+    targeted, and otherwise falls back to the standing window.
+    """
+    from datetime import datetime, timedelta, timezone  # noqa: PLC0415 - module-local, as elsewhere
+
+    explicit = str(getattr(context, "since", "") or "").strip()
+    if explicit:
+        return explicit[:10]
+    return (datetime.now(timezone.utc) - timedelta(days=QNA_TAG_SINCE_DAYS)).strftime("%Y-%m-%d")
+
+
+QNA_TAG_SYMPTOM_RE = re.compile(
+    r"(?i)\b("
+    r"crash(?:es|ed|ing)?|freez(?:e|es|ing)|frozen|hang(?:s|ing)?|not\s+responding|"
+    r"won'?t\s+(?:launch|open|start|save|print|load|play|run)|"
+    r"(?:can'?t|cannot|unable\s+to)\s+(?:launch|open|start|save|print|load|play|run|insert|edit|export)|"
+    r"fail(?:s|ed|ing)?|error|broken|bug|glitch(?:es|ing|ed)?|issue|problem|"
+    r"slide\s?show|present(?:ation|ing)\s+(?:fail|problem|issue|error)|"
+    r"render(?:ing)?|blank|missing|disappear(?:s|ed|ing)?|corrupt(?:ed|ion)?|"
+    r"image|picture|video|media|audio|sound|"
+    r"add-?in|export|pdf|print(?:ing)?|font|animation|transition|timing|"
+    r"copilot|designer|hyperlink|link|copy\s*(?:/|and|-)?\s*paste|paste|"
+    r"slow|lag(?:gy|ging)?|performance|stops?\s+working|stopped\s+working|"
+    r"not\s+working|does\s+not\s+work|doesn'?t\s+work|greyed\s+out|grayed\s+out|"
+    r"will\s+not\s+advance|autosave|auto-?save|sync"
+    r")\b")
 REDDIT_SOURCE_NAME = "Reddit"
 REDDIT_SUBREDDITS = ("powerpoint", "microsoft365", "Office365")
 # Reddit is a documented CI-blocked fallback (PR #23). It is attempted ONLY when this flag is
@@ -1038,6 +1091,164 @@ def github_method_status(candidates: list[dict[str, Any]], accepted: list[dict[s
     if rejected and any(str(r.get("exclusion_reason")) in NEAR_MISS_REASONS for r in rejected):
         return "low_confidence"
     return "no_results"
+
+
+def qna_tag_method_status(candidates: list[dict[str, Any]], accepted: list[dict[str, Any]],
+                          rejected: list[dict[str, Any]], errors: list[dict[str, Any]],
+                          *, enumerated: int) -> str:
+    """Health for the tag lane, judged on ENUMERATION as well as acceptance.
+
+    The distinction the other methods cannot make: this lane knows how much of the community it
+    actually read. Reading thousands of questions and finding none that name an exact build is a
+    healthy lane reporting an honest absence; failing to read the community at all is not, and the
+    two must never render the same. `no_results` is therefore reserved for the case where the
+    inventory really was walked.
+    """
+    if accepted:
+        return "partial" if errors else "success"
+    if errors and any("rate_limited" in str(e.get("reason") or "") for e in errors):
+        return "blocked"
+    if enumerated <= 0:
+        return "broken" if errors else "no_results"
+    if errors and not candidates:
+        return "partial"
+    if rejected and any(str(r.get("exclusion_reason")) in NEAR_MISS_REASONS for r in rejected):
+        return "low_confidence"
+    return "no_results"
+
+
+def run_qna_tag_method(record: PatchRecord, target: dict[str, Any], context: CollectorContext,
+                       seen: set[str], run_accepted_urls: dict[str, str] | None,
+                       captured_at: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]], dict[str, Any]]:
+    """Enumerate the Microsoft Q&A PowerPoint communities, then hydrate the plausible ones.
+
+    Independent of learn_qna_search_rss by construction: that method asks a search index for fixed
+    phrasings and gets back whatever the index ranks; this one walks the community inventories in
+    recency order and never consults a search engine at all. A report whose author used wording no
+    query anticipated is invisible to the first and ordinary to the second.
+
+    Enumeration and hydration are PRODUCT-level -- the same walk answers every tracked build -- so
+    both are memoised for one run and only the per-record date/identity filtering differs.
+    """
+    tag_errors: list[dict[str, Any]] = []
+    since = qna_tag_since(context)
+
+    def _walk() -> list[dict[str, Any]]:
+        rows: list[dict[str, Any]] = []
+        for tag_id, slug, label, _volume in qna_tags.POWERPOINT_TAGS:
+            found, _pages = qna_tags.enumerate_tag(tag_id, slug, since=since,
+                                                   max_pages=QNA_TAG_MAX_PAGES, errors=tag_errors)
+            for row in found:
+                rows.append({**row, "tag_label": label})
+        return rows
+
+    enumerated = cached_product_candidates("qna_tag_enumeration", [since], _walk)
+
+    def _hydrate() -> list[dict[str, Any]]:
+        # Filter BEFORE spending requests: in window, and the title reads as a concrete problem.
+        # Newest first, so a bounded run always hydrates the most recent reports.
+        wanted = [row for row in enumerated
+                  if str(row.get("date") or "") >= since
+                  and QNA_TAG_SYMPTOM_RE.search(str(row.get("title") or ""))]
+        wanted.sort(key=lambda row: str(row.get("date") or ""), reverse=True)
+        built: list[dict[str, Any]] = []
+        for row in wanted[:QNA_TAG_MAX_HYDRATIONS]:
+            url = qna_tags.question_url(str(row.get("question_id")), str(row.get("slug") or ""))
+            try:
+                page = qna_tags.fetch(url)
+            except Exception as exc:  # noqa: BLE001 - recorded for method health
+                tag_errors.append({"source_url": url, "reason": qna_tags.error_reason(exc)})
+                continue
+            candidate = qna_tags.question_candidate(
+                str(row.get("question_id")), str(row.get("slug") or ""),
+                title=str(row.get("title") or ""), date=str(row.get("asked") or row.get("date") or ""),
+                page_html=page, source_type=LEARN_QNA_SOURCE_TYPE, source_name=LEARN_QNA_SOURCE_NAME,
+                parse_thread=parse_learn_qna_thread)
+            if candidate:
+                built.append(candidate)
+        return built
+
+    tag_candidates = cached_product_candidates("qna_tag_hydration", [since], _hydrate)
+
+    accepted, rejected = evaluate_candidates(record, target, list(tag_candidates), captured_at,
+                                             seen, run_accepted_urls)
+    status = qna_tag_method_status(list(tag_candidates), accepted, rejected, tag_errors,
+                                   enumerated=len(enumerated))
+    notes = (
+        f"Microsoft Q&A PowerPoint community enumeration ({len(qna_tags.POWERPOINT_TAGS)} tag "
+        f"inventories, newest-first since {since}). Questions enumerated {len(enumerated)}, "
+        f"hydrated {len(tag_candidates)}, accepted {len(accepted)}, rejected {len(rejected)}. "
+        + (f"Top rejections: {format_rejection_counts(rejected)}. " if rejected else "")
+        + "Discovery browses the community inventory rather than querying a search index, so a "
+          "report is not limited to the words its author happened to use. Acceptance is the same "
+          "unchanged authority as every other method."
+    )
+    row = method_health_row(
+        product_id=record.product_id, update_version=record.update_version,
+        target_build=str(target.get("target_build") or ""), method_id=QNA_TAG_METHOD_ID,
+        source_type=LEARN_QNA_SOURCE_TYPE, status=status, candidates_found=len(tag_candidates),
+        accepted_reports=len(accepted), rejected_reports=len(rejected),
+        blocked_reason=(tag_errors[0].get("reason") if status == "blocked" and tag_errors else None),
+        last_run=captured_at, notes=notes)
+    return accepted, rejected, row
+
+
+def run_tech_community_method(record: PatchRecord, target: dict[str, Any], context: CollectorContext,
+                              seen: set[str], run_accepted_urls: dict[str, str] | None,
+                              captured_at: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]], dict[str, Any]]:
+    """Microsoft Tech Community discussions, enumerated by sitemap.
+
+    A DIFFERENT community from Microsoft Q&A, written by different people: Tech Community skews
+    toward admins and IT pros, Q&A toward end users. It is enumerated by <lastmod> because the
+    board pagination and the on-site search both silently return the same threads for every page,
+    so a sitemap is the only honest way to walk it by date.
+    """
+    tc_errors: list[dict[str, Any]] = []
+    since = qna_tag_since(context)
+
+    def _walk() -> list[dict[str, Any]]:
+        return techcommunity_source.enumerate_boards(since=since, errors=tc_errors)
+
+    threads = cached_product_candidates("techcommunity_enumeration", [since], _walk)
+
+    def _hydrate() -> list[dict[str, Any]]:
+        built: list[dict[str, Any]] = []
+        for row in list(threads)[:TECH_COMMUNITY_MAX_HYDRATIONS]:
+            url = str(row.get("source_url") or "")
+            try:
+                page = techcommunity_source.fetch(url)
+            except Exception as exc:  # noqa: BLE001 - recorded for method health
+                tc_errors.append({"source_url": url, "reason": techcommunity_source.error_reason(exc)})
+                continue
+            candidate = techcommunity_source.thread_candidate(
+                url, date=str(row.get("date") or ""), page_html=page,
+                source_type=TECH_COMMUNITY_SOURCE_TYPE, source_name=TECH_COMMUNITY_SOURCE_NAME)
+            if candidate:
+                built.append(candidate)
+        return built
+
+    tc_candidates = cached_product_candidates("techcommunity_hydration", [since], _hydrate)
+    accepted, rejected = evaluate_candidates(record, target, list(tc_candidates), captured_at,
+                                             seen, run_accepted_urls)
+    status = qna_tag_method_status(list(tc_candidates), accepted, rejected, tc_errors,
+                                   enumerated=len(threads))
+    notes = (
+        f"Microsoft Tech Community discussions, enumerated from {len(techcommunity_source.POWERPOINT_BOARDS)} "
+        f"board sitemaps by last-modified date since {since}. Threads found {len(threads)}, "
+        f"hydrated {len(tc_candidates)}, accepted {len(accepted)}, rejected {len(rejected)}. "
+        + (f"Top rejections: {format_rejection_counts(rejected)}. " if rejected else "")
+        + "Blog posts are excluded at discovery: a vendor announcement is not a user report. "
+          "There is no dedicated PowerPoint board, so PowerPoint threads are gathered from the "
+          "general boards that actually carry them."
+    )
+    row = method_health_row(
+        product_id=record.product_id, update_version=record.update_version,
+        target_build=str(target.get("target_build") or ""), method_id=TECH_COMMUNITY_METHOD_ID,
+        source_type=TECH_COMMUNITY_SOURCE_TYPE, status=status, candidates_found=len(tc_candidates),
+        accepted_reports=len(accepted), rejected_reports=len(rejected),
+        blocked_reason=(tc_errors[0].get("reason") if status == "blocked" and tc_errors else None),
+        last_run=captured_at, notes=notes)
+    return accepted, rejected, row
 
 
 def canonicalise_github_candidate(candidate: dict[str, Any]) -> dict[str, Any]:
