@@ -157,7 +157,23 @@
   {%- endif -%}
   {%- assign m_checked = '' -%}
   {%- if m.last_run != blank -%}{%- assign m_run_s2 = m.last_run | date: '%s' | plus: 0 -%}{%- if m_run_s2 <= mon_now_s -%}{%- assign m_checked = m.last_run | date: "%b %-d, %Y" -%}{%- endif -%}{%- endif -%}
-  <li class="update-monitoring-method update-monitoring-method--{{ m_status2 | replace: '_', '-' }}"><span class="update-monitoring-method__id">{{ m.method_id | escape }}</span> <span class="update-monitoring-method__state">{{ m_expl }}</span>{% if m_checked != blank %} <span class="update-monitoring-method__checked">last checked {{ m_checked }}</span>{% endif %}</li>
+    {%- comment -%}
+      PUBLIC SOURCE FAMILY, not the internal method id. Several methods deliberately read the
+      SAME community by different routes -- Microsoft Q&A is searched, enumerated by community
+      tag, and re-read for thread context -- and printing three raw ids made one community look
+      like three independent sources. The family is named first so the real source universe is
+      legible, with the route in parentheses so the rows are still distinguishable.
+    {%- endcomment -%}
+    {%- assign m_family = m.method_id | replace: '_', ' ' -%}
+    {%- if m.method_id == 'learn_qna_search_rss' -%}{%- assign m_family = 'Microsoft Q&A (search)' -%}
+    {%- elsif m.method_id == 'learn_qna_powerpoint_tags' -%}{%- assign m_family = 'Microsoft Q&A (community enumeration)' -%}
+    {%- elsif m.method_id == 'learn_qna_segment_context' -%}{%- assign m_family = 'Microsoft Q&A (thread context)' -%}
+    {%- elsif m.method_id == 'tech_community_discussions' -%}{%- assign m_family = 'Microsoft Tech Community' -%}
+    {%- elsif m.method_id == 'stack_exchange_search' -%}{%- assign m_family = 'Super User / Stack Exchange' -%}
+    {%- elsif m.method_id == 'github_officedev_issues' -%}{%- assign m_family = 'OfficeDev GitHub issues' -%}
+    {%- elsif m.method_id == 'reddit_search' -%}{%- assign m_family = 'Reddit' -%}
+    {%- endif -%}
+  <li class="update-monitoring-method update-monitoring-method--{{ m_status2 | replace: '_', '-' }}"><span class="update-monitoring-method__id">{{ m_family | escape }}</span> <span class="update-monitoring-method__state">{{ m_expl }}</span>{% if m_checked != blank %} <span class="update-monitoring-method__checked">last checked {{ m_checked }}</span>{% endif %}</li>
   {%- endif -%}
   {%- endfor -%}
   </ul>
