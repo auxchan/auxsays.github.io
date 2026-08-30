@@ -370,9 +370,20 @@ def run() -> int:
           demoted == 2 and resolution_priority(concrete)[0] == 1, str(demoted))
     # The budget must be sized for the widened population, not the 15 rows it was written for.
     defaults = Pipeline.__init__.__kwdefaults__ or {}
-    check("S6.6 the default fetch budget was raised past the pre-widening value",
-          int(defaults.get("context_max_fetches") or 0) >= 40,
+    # The budget counts THREAD fetches, and ResolutionBudget caches one fetch per thread URL. Judging
+    # it against `attempted` (rows) is what made a mis-sized budget look impossible: the same thread
+    # is re-queued once per patch record, so 296 real threads presented as 2153 rows. Measured live
+    # against the shipped symptom queries: 296 distinct threads, 170 of them rank 0 or 1, with the
+    # calibration thread at distinct position 166 -- inside the useful set, outside a 60 budget.
+    check("S6.6 the default fetch budget covers the measured eligible thread population",
+          int(defaults.get("context_max_fetches") or 0) >= 170,
           str(defaults.get("context_max_fetches")))
+    check("S6.7 and it stays bounded -- a resolver must never become a crawl",
+          int(defaults.get("context_max_fetches") or 0) <= 500,
+          str(defaults.get("context_max_fetches")))
+    orch_src2 = (ROOT / "scripts" / "orchestrate_evidence_run.py").read_text(encoding="utf-8")
+    check("S6.8 coverage telemetry reports threads, not just rows",
+          "distinct_threads" in orch_src2 and "eligible_threads" in orch_src2)
 
     print()
     print("=" * 96)
