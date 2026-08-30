@@ -223,7 +223,7 @@ class Pipeline:
                  env: dict[str, str] | None = None,
                  context: CollectorContext | None = None,
                  context_fetch: Callable[[str], tuple[str, str]] | None = None,
-                 context_max_fetches: int = 60) -> None:
+                 context_max_fetches: int = 200) -> None:
         self.repo_root = Path(repo_root)
         self.product_ids = list(product_ids)
         self.write = bool(write)
@@ -513,6 +513,13 @@ class Pipeline:
         #   1  missing_powerpoint_version   AND the text describes a concrete post-install failure
         #   2  everything else              only reached when the budget outlasts the first two
         pending.sort(key=lambda entry: resolution_priority(entry[1]))
+        # The budget counts THREAD FETCHES, and ResolutionBudget already caches one fetch per thread
+        # URL, so `attempted` (rows) is the wrong denominator for coverage: the same thread is
+        # re-queued once per patch record, which inflated 296 real threads into 2153 rows and made a
+        # mis-sized budget look like an impossible one. Report the denominator that governs.
+        distinct_threads = {str(row.get("source_url") or "") for _res, row in pending}
+        eligible_threads = {str(row.get("source_url") or "") for _res, row in pending
+                            if resolution_priority(row)[0] <= 1}
         budget = cr.ResolutionBudget(max_fetches=self.context_max_fetches)
         captured_at = utc_now()
         outcomes: list[dict[str, Any]] = []
@@ -657,7 +664,10 @@ class Pipeline:
         }
         state.method_plan["context_resolution_done"] = True
         self._persist_url_state(state)
-        state.receipt("RESOLVE_CONTEXT", identity, {"attempted": len(outcomes),
+        state.receipt("RESOLVE_CONTEXT", identity,
+                      {"attempted": len(outcomes),
+                       "distinct_threads": len(distinct_threads),
+                       "eligible_threads": len(eligible_threads),
                                                     "fetches": budget.fetched})
         return state
 
