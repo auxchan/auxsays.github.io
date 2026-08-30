@@ -144,12 +144,16 @@ QNA_TAG_SYMPTOM_RE = re.compile(
     r"(?:can'?t|cannot|unable\s+to)\s+(?:launch|open|start|save|print|load|play|run|insert|edit|export)|"
     r"fail(?:s|ed|ing)?|error|broken|bug|glitch(?:es|ing|ed)?|issue|problem|"
     r"slide\s?show|present(?:ation|ing)\s+(?:fail|problem|issue|error)|"
-    r"render(?:ing)?|blank|missing|disappear(?:s|ed|ing)?|corrupt(?:ed|ion)?|"
+    r"render(?:ing)?|blank|missing|dis+a\.?p{1,3}ear\w*|corrupt(?:ed|ion)?|"
     r"image|picture|video|media|audio|sound|"
     r"add-?in|export|pdf|print(?:ing)?|font|animation|transition|timing|"
     r"copilot|designer|hyperlink|link|copy\s*(?:/|and|-)?\s*paste|paste|"
     r"slow|lag(?:gy|ging)?|performance|stops?\s+working|stopped\s+working|"
-    r"not\s+working|does\s+not\s+work|doesn'?t\s+work|greyed\s+out|grayed\s+out|"
+    # "not opening" / "not work" / a doubled letter in "dissappear" each cost a real report in the
+    # measured window, including the only exact-build one. This is the ADMISSION gate on the sole
+    # discovery path that reaches these threads, so it tolerates ordinary spelling.
+    r"not\s+(?:open|work|respond|launch|start|sav|load|play|print|advanc)\w*|"
+    r"does\s+not\s+work|doesn'?t\s+work|greyed\s+out|grayed\s+out|"
     r"will\s+not\s+advance|autosave|auto-?save|sync"
     r")\b")
 REDDIT_SOURCE_NAME = "Reddit"
@@ -1151,6 +1155,7 @@ def run_qna_tag_method(record: PatchRecord, target: dict[str, Any], context: Col
                   if str(row.get("date") or "") >= since
                   and QNA_TAG_SYMPTOM_RE.search(str(row.get("title") or ""))]
         wanted.sort(key=lambda row: str(row.get("date") or ""), reverse=True)
+        admitted_total = len(wanted)
         built: list[dict[str, Any]] = []
         for row in wanted[:QNA_TAG_MAX_HYDRATIONS]:
             url = qna_tags.question_url(str(row.get("question_id")), str(row.get("slug") or ""))
@@ -1161,11 +1166,22 @@ def run_qna_tag_method(record: PatchRecord, target: dict[str, Any], context: Col
                 continue
             candidate = qna_tags.question_candidate(
                 str(row.get("question_id")), str(row.get("slug") or ""),
-                title=str(row.get("title") or ""), date=str(row.get("asked") or row.get("date") or ""),
+                # The LAST-ACTIVITY date, not the asked date. A thread opened before a build
+                # shipped and completed by the same reporter afterwards is exactly the case this
+                # lane exists for, and stamping it with its asked date made the authority refuse it
+                # as date_before_release_or_undated after resolution had already recovered the
+                # build correctly. Measured on 5956657: asked 2026-07-25, build stated 2026-08-06,
+                # release 2026-07-29 -- the report is real and the asked date threw it away.
+                title=str(row.get("title") or ""), date=str(row.get("date") or row.get("asked") or ""),
                 page_html=page, source_type=LEARN_QNA_SOURCE_TYPE, source_name=LEARN_QNA_SOURCE_NAME,
                 parse_thread=parse_learn_qna_thread)
             if candidate:
                 built.append(candidate)
+        if admitted_total > QNA_TAG_MAX_HYDRATIONS:
+            # Say so rather than letting a truncated run read as a complete one.
+            tag_errors.append({"source_url": "hydration_budget",
+                               "reason": f"hydration_cap_reached_{QNA_TAG_MAX_HYDRATIONS}"
+                                         f"_of_{admitted_total}"})
         return built
 
     tag_candidates = cached_product_candidates("qna_tag_hydration", [since], _hydrate)
