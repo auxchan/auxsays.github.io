@@ -381,8 +381,12 @@ class Pipeline:
                     # Retained ONLY for the reason context resolution may act on. A rejected row
                     # is a lossless candidate (it carries parent_title/report_title/report_text/
                     # source_url/source_date), so the resolver never has to re-discover anything.
+                    # The SET, not the single constant. A report whose version and build both
+                    # arrive in the reporter's later comment dies on the VERSION gate before the
+                    # build gate is reached, so filtering on missing_exact_build alone made that
+                    # whole class unreachable no matter what the resolver could do.
                     "resolvable_rows": [dict(r) for r in rejected
-                                        if r.get("exclusion_reason") == cr.RESOLVABLE_REASON],
+                                        if r.get("exclusion_reason") in cr.RESOLVABLE_REASONS],
                 })
                 state.candidate_counts[key] = state.candidate_counts.get(key, 0) \
                     + int(health.get("candidates_found") or 0)
@@ -489,7 +493,11 @@ class Pipeline:
             candidate = {k: row.get(k) for k in ("source_url", "source_date", "source_type",
                                                  "source_name", "parent_title", "report_title",
                                                  "report_text")}
-            outcome = cr.resolve_candidate(candidate, cr.RESOLVABLE_REASON,
+            # Pass the row's OWN rejection reason. Hard-coding one reason here meant a row selected
+            # for a different resolvable reason was then re-presented as if it had the other, and
+            # the resolver's own gate would have refused it.
+            outcome = cr.resolve_candidate(candidate,
+                                           str(row.get("exclusion_reason") or cr.RESOLVABLE_REASON),
                                            fetch_thread=self.context_fetch, budget=budget)
             entry = outcome.as_dict()
             entry["patch_key"] = key
@@ -807,6 +815,15 @@ class Pipeline:
                      max_steps=64, max_attempts_per_node=3)
 
     def run(self, trigger: str = "dispatch", resume_run_id: str | None = None) -> OrchestrationState:
+        # Product-level discovery routes are memoised for the lifetime of ONE run. The graph is the
+        # only production PowerPoint path and never calls the CLI collector that used to do this, so
+        # without an explicit reset a long-lived process would serve one run's index view to the
+        # next. Cheap and unconditional: an empty cache is the correct state at every run start.
+        try:
+            from patch_collectors import microsoft_powerpoint as _ppt
+            _ppt.reset_symptom_cache()
+        except Exception:                      # noqa: BLE001 - a missing collector is not a run error
+            pass
         head = subprocess.run(["git", "-C", str(self.repo_root), "rev-parse", "HEAD"],
                               capture_output=True, text=True).stdout.strip()
         if resume_run_id:

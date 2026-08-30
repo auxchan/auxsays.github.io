@@ -122,6 +122,13 @@ _ROLLBACK_CUES: list[tuple[str, str]] = [
     (rf"\b(?:roll\w*\s+back|rollback|revert\w*|went\s+back|go(?:ing|es)?\s+back|"
      rf"down\s?grad\w*|step\w*\s+back|fall\w*\s+back|fell\s+back)\b"
      rf"[^.;!?]{{0,60}}?{_B}", BASIS_ROLLBACK_PHRASE),
+    # The SAME rollback vocabulary with the build named FIRST: "20228.20190 is the build I rolled
+    # back to", "18429.20132 is what I reverted to". The forward-only form missed every such
+    # sentence, so a build the author had returned to -- and called fine -- was counted as the
+    # failing one. Clause-bounded like its mirror, and when a current-failing cue also fires the
+    # existing contradiction rule makes the claim AMBIGUOUS, which the authority refuses.
+    (rf"{_B}[^.;!?]{{0,60}}?\b(?:roll\w*\s+back|rollback|revert\w*|went\s+back|go(?:ing|es)?\s+back|"
+     rf"down\s?grad\w*|step\w*\s+back|fall\w*\s+back|fell\s+back)\b", BASIS_ROLLBACK_PHRASE),
     # "upgraded FROM X", "came from build X" -- explicit history: X is what they left behind.
     (rf"\b(?:upgrad\w*|updat\w*|mov\w*|migrat\w*|com\w*|cam\w*|jump\w*|went)\s+from\b"
      rf"[^.;!?]{{0,60}}?{_B}", BASIS_PREVIOUS_BUILD),

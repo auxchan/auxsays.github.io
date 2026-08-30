@@ -44,7 +44,9 @@ ENDPOINT_FAMILY = "github_officedev_issues"
 USER_AGENT = "AUXSAYS-patch-evidence/1.0 (+https://auxsays.com)"
 REQUEST_TIMEOUT = 30
 MAX_BYTES = 2_000_000
-_MIN_INTERVAL = 0.8
+# Authenticated GitHub SEARCH is 30 requests/minute. 0.8s paced at 75/min, and the real merged run
+# drained "rate remaining" by 4 per record until two records came back `blocked`. 2.1s is 28/min.
+_MIN_INTERVAL = 2.1
 _last_at = 0.0
 
 # `* Host [Excel, Word, PowerPoint, etc.]: PowerPoint`  (the bracketed list is part of the template)
@@ -58,6 +60,12 @@ _HOST_WORD_RE = re.compile(r"\b(powerpoint|excel|word|outlook|onenote|access|pro
 # which is not a Click-to-Run patch and must never supply a desktop build.
 _DESKTOP_SEGMENT_RE = re.compile(r"desktop\s*:\s*(.+?)(?:;|$)", re.I)
 _WEB_SEGMENT_RE = re.compile(r"web\s*:\s*(.+?)(?:;|$)", re.I)
+# "web:" is only ONE of the ways a reporter marks a web build. Keying the guard on that exact form
+# let "web 16.0...", "Office on the web 16.0...", "web version 16.0..." and "Web - 16.0..." through
+# as if they were desktop builds, which would attribute a WEB build to a Click-to-Run desktop patch.
+# The word alone is the marker, and it also truncates a desktop segment that runs on into a web one
+# ("desktop: ..., web: ..."), which the ";"-only terminator did not stop.
+_WEB_MARKER_RE = re.compile(r"\bweb\b", re.I)
 
 
 class GitHubError(Exception):
@@ -147,9 +155,11 @@ def desktop_version_text(body: str) -> str:
     line = match.group(1).strip()
     desktop = _DESKTOP_SEGMENT_RE.search(line)
     if desktop:
-        return desktop.group(1).strip()
-    if _WEB_SEGMENT_RE.search(line):
-        return ""       # web-only: not a Click-to-Run desktop patch
+        segment = desktop.group(1).strip()
+        web = _WEB_MARKER_RE.search(segment)
+        return (segment[:web.start()] if web else segment).strip()
+    if _WEB_MARKER_RE.search(line):
+        return ""       # web build named anywhere and no desktop marker: not a Click-to-Run patch
     return line         # a single unlabelled version is taken as stated
 
 

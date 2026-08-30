@@ -235,7 +235,32 @@ def parse_learn_qna_thread(thread_url: str, page_html: str) -> ThreadSegments:
 # 4bf12226-06e6-4d29-81dd-92bb3ba0d634 and the comment stating the build carries the SAME guid,
 # while the three other comments carry two different ones. Same-author enrichment and cross-author
 # refusal are therefore both decidable from the markup, with no inference.
-_COMMENT_BLOCK_RE = re.compile(r'data-test-id="comment-(\d+)"(.*?)(?=data-test-id="comment-\d+"|\Z)', re.S)
+# The marker locates a comment; it does NOT delimit one. An earlier form ended each block at the
+# next marker or \Z, which made the LAST comment absorb every remaining byte of the page -- measured
+# at 45,496 characters of footer, nav and "related questions" rail attributed to one author, and an
+# answer rendered between two comments absorbed into the preceding one. Foreign text attributed to a
+# reporter is exactly what segment scoping exists to prevent, so a comment is now bounded by its OWN
+# <li> element, found by depth-tracking so a nested list inside a comment does not end it early.
+_COMMENT_MARKER_RE = re.compile(r'data-test-id="comment-(\d+)"')
+_LI_TAG_RE = re.compile(r'<(/?)li\b', re.I)
+
+
+def _comment_block(html: str, start: int, hard_stop: int) -> str:
+    """Text of the comment whose marker sits at `start`, bounded by its own </li>.
+
+    Falls back to `hard_stop` (the next marker, or end of document) only when the element is
+    unterminated. Never returns more than `hard_stop`, so a missing </li> cannot resurrect the
+    absorb-the-rest-of-the-page behaviour.
+    """
+    depth = 0
+    for tag in _LI_TAG_RE.finditer(html, start, hard_stop):
+        if tag.group(1):                      # </li>
+            if depth == 0:
+                return html[start:tag.start()]
+            depth -= 1
+        else:                                 # <li ...>
+            depth += 1
+    return html[start:hard_stop]
 _COMMENT_AUTHOR_RE = re.compile(r'userid=([0-9a-fA-F-]{36})')
 _COMMENT_DATE_RE = re.compile(r'(\d{4}-\d{2}-\d{2}T[0-9:.]+)')
 
@@ -248,7 +273,12 @@ def parse_comment_segments(html: str, *, thread_url: str, base_url: str) -> list
     the one thing segment scoping exists to prevent.
     """
     segments: list[SourceSegment] = []
-    for cid, block in _COMMENT_BLOCK_RE.findall(html or ""):
+    page = html or ""
+    markers = list(_COMMENT_MARKER_RE.finditer(page))
+    for index, marker in enumerate(markers):
+        cid = marker.group(1)
+        hard_stop = markers[index + 1].start() if index + 1 < len(markers) else len(page)
+        block = _comment_block(page, marker.end(), hard_stop)
         author = _COMMENT_AUTHOR_RE.search(block)
         if not author:
             continue

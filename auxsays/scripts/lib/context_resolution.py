@@ -325,7 +325,12 @@ def resolve_candidate(candidate: dict[str, Any], rejection_reason: str, *,
         other = str(getattr(seg, "author_id", "") or "").strip()
         return bool(own_author) and other == own_author
 
-    same_author_text = " ".join(seg.segment_text for seg in thread.segments
+    # Segments are joined on a CLAUSE BOUNDARY, never a bare space. Real comment text routinely ends
+    # without terminal punctuation, and _CLAUSE_SPLIT_RE breaks on newline but not on " ", so a space
+    # join merged two segments into ONE clause: cue words from the question ("crashes ... started
+    # after") then classified a build named in a later comment, turning a build the author had
+    # ROLLED BACK TO into current_failing. The newline keeps each segment its own clause.
+    same_author_text = "\n".join(seg.segment_text for seg in thread.segments
                                 if _is_own(seg) and seg.segment_key != segment.segment_key)
     elsewhere = [b for seg in thread.segments
                  if seg.segment_key != segment.segment_key and not _is_own(seg)
@@ -334,11 +339,11 @@ def resolve_candidate(candidate: dict[str, Any], rejection_reason: str, *,
     # other segment carrying their author id. The provenance excerpt is cut from THIS, so a build
     # they supplied in a later comment is quoted with the sentence that surrounds it -- which is
     # what carries the version alongside it ("The build is current channel 2607 20228.20124").
-    own_text = (segment.segment_text + " " + same_author_text).strip()
+    own_text = (segment.segment_text + "\n" + same_author_text).strip()
     # The reporter's OWN text is their origin segment plus anything else they wrote on this
     # thread. Build claims are extracted from that combined text so a build they supplied
     # when asked still carries its author's own role language with it.
-    claims = extract_build_claims(segment.segment_text + " " + same_author_text)
+    claims = extract_build_claims(segment.segment_text + "\n" + same_author_text)
     builds = [c.build for c in claims]
     outcome.cross_segment_builds = sorted(set(elsewhere))
     outcome.build_claims = [c.as_dict() for c in claims]

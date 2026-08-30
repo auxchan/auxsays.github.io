@@ -87,6 +87,9 @@ STACK_EXCHANGE_SITES = ("superuser", "stackoverflow")
 STACK_EXCHANGE_TAGS = {"superuser": "microsoft-powerpoint", "stackoverflow": "powerpoint"}
 
 GITHUB_METHOD_ID = "github_officedev_issues"
+# Event-log / crash-record vocabulary. Its presence means the version token is a FAULTING BINARY's
+# version, whose owning application lib.build_claims decides from the governing AppName.
+CRASH_RECORD_MARKER_RE = re.compile(r"\b(?:AppName|ModName|Faulting\s+(?:application|module))\b", re.I)
 GITHUB_SOURCE_TYPE = "github_officedev_issue"
 # Measured: a BARE build token finds nothing on GitHub search, the full 16.0.<build> form finds the
 # issues. Symptom terms carry the recall for reports whose author never wrote a build at all.
@@ -778,6 +781,23 @@ def reset_symptom_cache() -> None:
     _SYMPTOM_CACHE.clear()
 
 
+def cached_product_candidates(namespace: str, key_parts: list[str], produce):
+    """Memoise a PRODUCT-level discovery route for the lifetime of one run.
+
+    Record-level routes (a specific build token) must run per record. Product-level routes -- the
+    symptom queries, the PowerPoint tag route -- return the same result for all 25 records, so
+    issuing them per record burns 25x the API budget for identical answers. That is not theoretical:
+    the merged run drained GitHub's search allowance to `blocked` on two records this way.
+    """
+    key = namespace + "::" + " | ".join(key_parts)
+    hit = _SYMPTOM_CACHE.get(key)
+    if hit is not None:
+        return list(hit)
+    found = produce()
+    _SYMPTOM_CACHE[key] = list(found)
+    return found
+
+
 def cached_symptom_candidates(queries: list[str], context: CollectorContext,
                               errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
     key = " | ".join(queries)
@@ -975,14 +995,23 @@ def run_stack_exchange_method(record: PatchRecord, target: dict[str, Any], conte
     build = str(target.get("target_build") or "").strip()
     version = str(target.get("update_version") or "").strip()
     queries = [q for q in (build, f"PowerPoint {version}" if version else "") if q]
-    se_candidates = stack_exchange_source.collect_stack_exchange_candidates(
-        sites=list(STACK_EXCHANGE_SITES),
-        queries=queries,
-        tags=[STACK_EXCHANGE_TAGS.get(site, "") for site in STACK_EXCHANGE_SITES if STACK_EXCHANGE_TAGS.get(site)][:1],
-        errors=se_errors,
-        max_requests=max(2, min(8, 2 * len(STACK_EXCHANGE_SITES))),
-        source_type=STACK_EXCHANGE_SOURCE_TYPE,
-    )
+    # The tag route is product-level and identical for every record, so it runs ONCE per run; only
+    # the build/version text routes are record-specific.
+    se_candidates = list(cached_product_candidates(
+        "stack_exchange_tag", sorted(STACK_EXCHANGE_SITES),
+        lambda: stack_exchange_source.collect_stack_exchange_candidates(
+            sites=list(STACK_EXCHANGE_SITES), queries=[], tags_by_site=dict(STACK_EXCHANGE_TAGS),
+            errors=se_errors, max_requests=len(STACK_EXCHANGE_SITES),
+            source_type=STACK_EXCHANGE_SOURCE_TYPE)))
+    if queries:
+        se_candidates += stack_exchange_source.collect_stack_exchange_candidates(
+            sites=list(STACK_EXCHANGE_SITES), queries=queries, tags_by_site=None,
+            errors=se_errors, max_requests=len(STACK_EXCHANGE_SITES) * len(queries),
+            source_type=STACK_EXCHANGE_SOURCE_TYPE)
+    _seen_se: set[str] = set()
+    se_candidates = [c for c in se_candidates
+                     if not (str(c.get("source_url") or "").rstrip("/").lower() in _seen_se
+                             or _seen_se.add(str(c.get("source_url") or "").rstrip("/").lower()))]
     se_accepted, se_rejected = evaluate_candidates(record, target, se_candidates, captured_at, seen, run_accepted_urls)
     se_status = stack_exchange_method_status(se_candidates, se_accepted, se_rejected, se_errors)
     se_notes = (
@@ -1011,6 +1040,39 @@ def github_method_status(candidates: list[dict[str, Any]], accepted: list[dict[s
     return "no_results"
 
 
+def canonicalise_github_candidate(candidate: dict[str, Any]) -> dict[str, Any]:
+    """Reduce Office's 16.0.<build> full form to the canonical token, host permitting.
+
+    lib.build_claims deliberately does not treat 16.0.<build> as a bare token, because that form
+    appears in crash records whose AppName may be Word or Excel -- it becomes a claim only when
+    the application is proven. An OfficeDev issue answering "Host: PowerPoint" beside its
+    version field IS that proof, so the reduction is applied here, using the SHARED primitive,
+    and only for a PowerPoint-declared host.
+    """
+    if str(candidate.get("github_declared_host") or "") != "powerpoint":
+        return candidate
+    # ONLY the reporter's declared DESKTOP version is reduced, prepended as its own statement.
+    # Substituting across the whole body also reduced the WEB build (web: 16.0.20329.45605) to a
+    # bare token, so the authority saw TWO builds and refused -- reintroducing exactly the
+    # web/desktop confusion the desktop scoping exists to prevent. The body's remaining 16.0.
+    # forms are deliberately left alone: as non-tokens they stay invisible to the build gate.
+    desktop = str(candidate.get("github_desktop_version") or "").strip()
+    if not desktop:
+        return candidate
+    # A crash record pasted into the version field is NOT a version declaration, and reducing it
+    # would defeat the guard it exists for: lib.build_claims classifies 16.0.<build> governed by
+    # a foreign AppName as reference_other, but a pre-reduced bare token reaches it as an
+    # ordinary claim and an EXCEL.EXE crash version becomes PowerPoint patch evidence. Leave any
+    # crash record raw and let the shared primitive apply its own AppName reasoning.
+    if CRASH_RECORD_MARKER_RE.search(desktop):
+        return candidate
+    reduced = OFFICE_FULL_VERSION_RE.sub(lambda m: m.group(1), desktop)
+    if reduced == desktop:
+        return candidate
+    text = str(candidate.get("report_text") or "")
+    return {**candidate, "report_text": f"Office desktop version: {reduced}. {text}"}
+
+
 def run_github_method(record: PatchRecord, target: dict[str, Any], context: CollectorContext, seen: set[str], run_accepted_urls: dict[str, str] | None, captured_at: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]], dict[str, Any]]:
     """OfficeDev/office-js issues, public GitHub API, read-only.
 
@@ -1019,37 +1081,39 @@ def run_github_method(record: PatchRecord, target: dict[str, Any], context: Coll
     the DESKTOP half of the version field can supply a Click-to-Run build."""
     gh_errors: list[dict[str, Any]] = []
     build = str(target.get("target_build") or "").strip()
-    queries = ([f'repo:{github_officedev_source.REPO} "16.0.{build}"'] if build else []) + list(GITHUB_SYMPTOM_QUERIES)
-    def _canonicalise(candidate: dict[str, Any]) -> dict[str, Any]:
-        """Reduce Office's 16.0.<build> full form to the canonical token, host permitting.
+    # Split by SCOPE, not convenience: the build query is record-specific, the symptom queries are
+    # product-level and identical for all 25 records. Issuing all four per record sent ~75 of every
+    # 100 search requests as exact duplicates and exhausted the 30/min allowance mid-run.
+    build_queries = [f'repo:{github_officedev_source.REPO} "16.0.{build}"'] if build else []
+    queries = build_queries + list(GITHUB_SYMPTOM_QUERIES)
 
-        lib.build_claims deliberately does not treat 16.0.<build> as a bare token, because that form
-        appears in crash records whose AppName may be Word or Excel -- it becomes a claim only when
-        the application is proven. An OfficeDev issue answering "Host: PowerPoint" beside its
-        version field IS that proof, so the reduction is applied here, using the SHARED primitive,
-        and only for a PowerPoint-declared host.
-        """
-        if str(candidate.get("github_declared_host") or "") != "powerpoint":
-            return candidate
-        # ONLY the reporter's declared DESKTOP version is reduced, prepended as its own statement.
-        # Substituting across the whole body also reduced the WEB build (web: 16.0.20329.45605) to a
-        # bare token, so the authority saw TWO builds and refused -- reintroducing exactly the
-        # web/desktop confusion the desktop scoping exists to prevent. The body's remaining 16.0.
-        # forms are deliberately left alone: as non-tokens they stay invisible to the build gate.
-        desktop = str(candidate.get("github_desktop_version") or "").strip()
-        if not desktop:
-            return candidate
-        reduced = OFFICE_FULL_VERSION_RE.sub(lambda m: m.group(1), desktop)
-        if reduced == desktop:
-            return candidate
-        text = str(candidate.get("report_text") or "")
-        return {**candidate, "report_text": f"Office desktop version: {reduced}. {text}"}
+    def _symptom_route():
+        found, tel = github_officedev_source.collect_officedev_candidates(
+            queries=list(GITHUB_SYMPTOM_QUERIES), errors=gh_errors,
+            max_requests=len(GITHUB_SYMPTOM_QUERIES), source_type=GITHUB_SOURCE_TYPE)
+        return [{"candidates": found, "telemetry": tel}]
 
-    gh_candidates, telemetry = github_officedev_source.collect_officedev_candidates(
-        queries=queries[:MAX_GITHUB_QUERIES], errors=gh_errors,
-        max_requests=MAX_GITHUB_QUERIES, source_type=GITHUB_SOURCE_TYPE,
-    )
-    gh_candidates = [_canonicalise(c) for c in gh_candidates]
+    payload = cached_product_candidates("github_symptom", list(GITHUB_SYMPTOM_QUERIES),
+                                        _symptom_route)[0]
+    gh_candidates = list(payload["candidates"])
+    telemetry = dict(payload["telemetry"])
+    if build_queries:
+        build_found, build_tel = github_officedev_source.collect_officedev_candidates(
+            queries=build_queries, errors=gh_errors, max_requests=len(build_queries),
+            source_type=GITHUB_SOURCE_TYPE)
+        gh_candidates += build_found
+        # Telemetry is the RUN's cost as this record saw it: the record-specific request is added to
+        # the cached symptom cost, and the rate headers come from the most recent live call.
+        for field in ("queries", "requests", "issues_discovered"):
+            telemetry[field] = int(telemetry.get(field) or 0) + int(build_tel.get(field) or 0)
+        telemetry["rate_remaining"] = build_tel.get("rate_remaining", telemetry.get("rate_remaining"))
+        telemetry["rate_limit"] = build_tel.get("rate_limit", telemetry.get("rate_limit"))
+    # Dedupe across the two routes: the same issue found by build AND symptom is ONE candidate.
+    _seen_gh: set[str] = set()
+    gh_candidates = [c for c in gh_candidates
+                     if not (str(c.get("source_url") or "") in _seen_gh
+                             or _seen_gh.add(str(c.get("source_url") or "")))]
+    gh_candidates = [canonicalise_github_candidate(c) for c in gh_candidates]
     gh_accepted, gh_rejected = evaluate_candidates(record, target, gh_candidates, captured_at, seen, run_accepted_urls)
     gh_status = github_method_status(gh_candidates, gh_accepted, gh_rejected, gh_errors)
     gh_notes = (
