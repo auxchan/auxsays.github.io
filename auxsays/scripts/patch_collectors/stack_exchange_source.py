@@ -184,7 +184,7 @@ def collect_stack_exchange_candidates(
     *,
     sites: list[str],
     queries: list[str],
-    tags: list[str],
+    tags_by_site: dict[str, str] | None,
     errors: list[dict[str, Any]],
     from_date: int | None = None,
     max_requests: int = 8,
@@ -205,8 +205,11 @@ def collect_stack_exchange_candidates(
     for site in sites:
         source_name = SITE_NAMES.get(site, site)
         routes: list[tuple[str, dict[str, Any]]] = []
-        for tag in tags:
-            routes.append(("tag", {"tagged": tag}))
+        # Each site has its OWN tag ("microsoft-powerpoint" on Super User, "powerpoint" on Stack
+        # Overflow). Sending one site's tag to the other returns nothing and still costs a request.
+        site_tag = (tags_by_site or {}).get(site, "")
+        if site_tag:
+            routes.append(("tag", {"tagged": site_tag}))
         for query in queries:
             routes.append(("text", {"query": query}))
 
@@ -218,6 +221,15 @@ def collect_stack_exchange_candidates(
             url = search_advanced_url(site, from_date=from_date, **params)
             payload = None
             for attempt in range(3):
+                # The budget bounds HTTP ATTEMPTS, not successes and not routes. Counting only
+                # successful payloads let a 429 storm make 3 calls per route while the counter stayed
+                # at zero -- measured at 18 calls against a declared budget of 4, on a keyless
+                # ~300/day quota shared by every AUXSAYS run from this IP.
+                if requests_made >= max_requests:
+                    errors.append({"source_url": API_BASE,
+                                   "reason": f"request_budget_exhausted_after_{requests_made}"})
+                    return candidates
+                requests_made += 1
                 try:
                     payload = request_json(url)
                     break
@@ -232,7 +244,6 @@ def collect_stack_exchange_candidates(
                     break
             if payload is None:
                 continue
-            requests_made += 1
             remaining = payload.get("quota_remaining")
             if isinstance(remaining, int):
                 quota_remaining = remaining
