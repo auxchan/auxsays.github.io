@@ -212,11 +212,24 @@ def run() -> int:  # noqa: PLR0915
 
     # ================= GATE 1: REAL WRITE AUTHORITY =================
     print("\n[gate 1] the production graph binds the REAL automation_writeback authority")
+    # The allow surface is pinned EXACTLY, so widening it is always a deliberate, reviewed edit.
+    # update_linked_evidence.yml was added when the two-tier model shipped: Tier 2 is a separate
+    # corpus in a separate file, so it needs its own write permission rather than riding on the
+    # consensus file's.
     check("1 the lane declares its own allow surface",
           orch.POWERPOINT_ALLOW == ["auxsays/_data/consensus_evidence.yml",
                                     "auxsays/_data/evidence_method_health.yml",
+                                    "auxsays/_data/update_linked_evidence.yml",
                                     "auxsays/updates/generated/*powerpoint*.md"],
           str(orch.POWERPOINT_ALLOW))
+    check("1 the update-linked path is a single named file, never a directory glob",
+          "auxsays/_data/update_linked_evidence.yml" in orch.POWERPOINT_ALLOW
+          and not any(entry.startswith("auxsays/_data/") and "*" in entry
+                      for entry in orch.POWERPOINT_ALLOW),
+          str(orch.POWERPOINT_ALLOW))
+    check("1 the workflow grants the same path the graph declares",
+          "--allow auxsays/_data/update_linked_evidence.yml"
+          in (_REPO / ".github" / "workflows" / "obs-evidence-collection.yml").read_text(encoding="utf-8"))
     check("1 the lane runs the same validation commands as the proven workflow",
           orch.PRODUCTION_VALIDATE == [
               "python auxsays/scripts/qa_patch_records.py",

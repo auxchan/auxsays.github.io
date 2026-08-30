@@ -383,6 +383,51 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
       </aside>
       {% endif %}
 
+      {%- comment -%}
+        TIER 2 -- UPDATE-LINKED REPORTS. Real community reports about this update whose exact build
+        the reporter never stated. 94% of the live PowerPoint corpus is in that position, so gating
+        VISIBILITY on the same proof consensus requires meant a page could read "0 reports" after
+        hundreds of threads had been read. These are shown, labelled, and never counted: the count
+        above and every consensus number come from confirmed evidence only.
+      {%- endcomment -%}
+      {%- assign t2_all = site.data.update_linked_evidence.reports | default: empty -%}
+      {%- assign t2_product = t2_all | where: "product_id", page.product_id -%}
+      {%- assign t2_build = page.target_build | default: '' -%}
+      {%- if t2_build != '' -%}
+        {%- assign t2_rows = t2_product | where: "associated_target_build", t2_build -%}
+      {%- else -%}
+        {%- assign t2_rows = t2_product | where: "associated_update_version", page.update_version -%}
+      {%- endif -%}
+      {%- assign t2_count = t2_rows | size -%}
+      {% if t2_count > 0 %}
+      <section class="update-linked-card" aria-label="Update-linked user reports">
+        <div class="update-linked-card__counts">
+          <div class="update-linked-count">
+            <dt>Confirmed patch-specific reports</dt>
+            <dd>{{ report_count }}</dd>
+          </div>
+          <div class="update-linked-count">
+            <dt>Update-linked reports</dt>
+            <dd>{{ t2_count }}</dd>
+          </div>
+        </div>
+        <p class="update-linked-card__note">These reporters tie the problem to a PowerPoint or Office
+          update but never state the exact build, so they are shown here and are <strong>not</strong>
+          counted toward the consensus above.</p>
+        <ul class="update-linked-list">
+          {% for r in t2_rows %}
+          <li class="update-linked-item">
+            <a class="update-linked-item__title" href="{{ r.source_url }}" rel="nofollow noopener" target="_blank">{{ r.report_title | escape }}</a>
+            <span class="update-linked-item__meta">{{ r.source_family | escape }} &middot; {{ r.report_date }}</span>
+            <p class="update-linked-item__why"><strong>Why linked:</strong> {{ r.update_link_reason | escape }}</p>
+            <p class="update-linked-item__build"><strong>Exact build:</strong> Not provided by the reporter.</p>
+          </li>
+          {% endfor %}
+        </ul>
+      </section>
+      {% endif %}
+
+
       <div id="verdict" class="update-decision-box update-decision-box--{{ evidence_state_class }}">
         <div class="update-decision-box__header">
           <span class="update-decision-eyebrow">AUXSAYS verdict</span>

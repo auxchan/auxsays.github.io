@@ -740,7 +740,16 @@ def evaluate_candidates(record: PatchRecord, target: dict[str, Any], candidates:
                 row["exclusion_reason"] = "cross_version_duplicate"
             else:
                 run_accepted_urls[key] = identity
-        (accepted if row.get("counted") is True else rejected).append(row)
+        if row.get("counted") is True:
+            accepted.append(row)
+        else:
+            # Carry the candidate's FULL text on the REJECTED row only. The persisted row keeps a
+            # truncated report_text_excerpt, and update linkage is routinely stated further into a
+            # post than the excerpt reaches -- classifying the excerpt would silently discard the
+            # reports this exists to recover. Transient by design: rejected rows are never written.
+            rejected.append({**row, "tier2_full_text": " ".join(
+                str(candidate.get(field_name) or "") for field_name in
+                ("parent_title", "report_title", "report_text"))[:8000]})
     return accepted, rejected
 
 

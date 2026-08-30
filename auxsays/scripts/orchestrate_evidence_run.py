@@ -48,6 +48,7 @@ from lib.orchestration import (  # noqa: E402
     run_summary, utc_now,
 )
 from lib import context_resolution as cr  # noqa: E402
+from lib import tier2_evidence as t2  # noqa: E402
 # The resolution budget is ordered with the authority's OWN concreteness predicate, never a local
 # re-implementation: prioritisation must not be able to disagree with acceptance.
 from patch_collectors.microsoft_powerpoint import concrete_issue as ppt_concrete_issue  # noqa: E402
@@ -89,6 +90,9 @@ def default_authorities(repo_root: Path, product_id: str, write: bool) -> dict[s
 POWERPOINT_ALLOW = [
     "auxsays/_data/consensus_evidence.yml",
     "auxsays/_data/evidence_method_health.yml",
+    # Update-linked (Tier 2) reports. A separate path because it is a separate corpus: consensus
+    # never reads it, and it needs its own write permission rather than riding on evidence's.
+    "auxsays/_data/update_linked_evidence.yml",
     "auxsays/updates/generated/*powerpoint*.md",
 ]
 PRODUCTION_VALIDATE = [
@@ -237,6 +241,9 @@ class Pipeline:
         self.write = bool(write)
         self.evidence_path = evidence_path or (self.repo_root / "auxsays" / "_data" / "consensus_evidence.yml")
         self.health_path = health_path or (self.repo_root / "auxsays" / "_data" / "evidence_method_health.yml")
+        # Its OWN file. Consensus never reads this one, which is what makes Tier-2 isolation
+        # structural rather than a rule someone has to remember.
+        self.tier2_path = self.repo_root / "auxsays" / "_data" / "update_linked_evidence.yml"
         self.generated_dir = generated_dir or (self.repo_root / "auxsays" / "updates" / "generated")
         self.methods = methods if methods is not None else default_powerpoint_methods()
         self.authorities = authorities if authorities is not None else default_authorities(
@@ -423,6 +430,12 @@ class Pipeline:
                     # whole class unreachable no matter what the resolver could do.
                     "resolvable_rows": [dict(r) for r in rejected
                                         if r.get("exclusion_reason") in cr.RESOLVABLE_REASONS],
+                    # TIER 2. A rejection that means "identity unproven" is not the same as "not a
+                    # report", and treating them alike is what made a page read 0 after 806 threads
+                    # were examined. These rows are re-offered to the update-linkage classifier;
+                    # everything it accepts is written to its OWN file, never to consensus evidence.
+                    "tier2_source_rows": [dict(r) for r in rejected
+                                          if r.get("exclusion_reason") in t2.PROMOTABLE_REJECTIONS],
                 })
                 state.candidate_counts[key] = state.candidate_counts.get(key, 0) \
                     + int(health.get("candidates_found") or 0)
@@ -703,9 +716,48 @@ class Pipeline:
             changed, total, _ = upsert_method_health(health, self.health_path)
             state.evidence_changes = {"mode": "write", "added": added, "duplicates": dupes}
             state.health_changes = {"mode": "write", "changed": changed, "total": total}
+        self._write_tier2(state, counted)
         state.receipt("FINALIZE_EVIDENCE", identity,
-                      {**state.evidence_changes, **{"health_" + k: v for k, v in state.health_changes.items()}})
+                      {**state.evidence_changes, **{"health_" + k: v for k, v in state.health_changes.items()},
+                       **{"tier2_" + k: v for k, v in (state.tier2_changes or {}).items()}})
         return state
+
+    def _write_tier2(self, state: OrchestrationState, counted: list[dict[str, Any]]) -> None:
+        """Build UPDATE-LINKED rows from this run's rejections and store them separately.
+
+        Separately is the point: consensus reads consensus_evidence.yml and nothing here writes to
+        it, so a Tier-2 row cannot reach a count through any code path -- including one written
+        later by someone who never heard of tiers.
+        """
+        # Windows come from the RECORDS, which carry the release date. patch_targets deliberately
+        # carries only patch identity, so reading a release date from it silently produced zero
+        # windows -- and therefore zero update-linked reports, with no error anywhere.
+        windows = t2.build_release_windows([
+            {"product_id": record.product_id, "update_version": record.update_version,
+             "target_build": (key.split("|")[2] if key.count("|") >= 2 else ""),
+             "released_on": str(getattr(record, "update_published_at", "") or "")[:10]}
+            for key, record in self._records.items()])
+        captured_at = utc_now()
+        fresh: list[dict[str, Any]] = []
+        seen_ids: set[str] = set()
+        for result in state.method_results:
+            for row in result.get("tier2_source_rows") or []:
+                built = t2.tier2_row_from_rejection(row, windows=windows, captured_at=captured_at)
+                if built is None:
+                    continue
+                # One report is one row even when several methods or several patch targets
+                # surfaced it: the identity is the report, not the route that found it.
+                if built.report_id in seen_ids:
+                    continue
+                seen_ids.add(built.report_id)
+                fresh.append(built.as_dict())
+        confirmed_urls = {str(r.get("source_url") or "") for r in counted}
+        existing = t2.load_tier2(self.tier2_path) if self.tier2_path.exists() else []
+        merged, stats = t2.merge_tier2_rows(existing, fresh, confirmed_urls=confirmed_urls)
+        state.tier2_changes = {"mode": "write" if self.write else "dry",
+                               "candidates": len(fresh), "stored": len(merged), **stats}
+        if self.write:
+            t2.write_tier2(merged, self.tier2_path)
 
     def reconcile_counts(self, state: OrchestrationState) -> OrchestrationState:
         identity = inputs_identity({"evidence": state.evidence_changes, "targets":

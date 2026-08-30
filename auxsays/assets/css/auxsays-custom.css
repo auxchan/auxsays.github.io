@@ -5640,3 +5640,59 @@ th[aria-sort="descending"] .patch-sort-btn { color: var(--text-0); }
 .update-monitoring-method--low-confidence .update-monitoring-method__state,
 .update-monitoring-method--manual-review-needed .update-monitoring-method__state { color: #f7e5bd; }
 .update-monitoring-note { color: var(--text-2); font-size: .8rem; margin: .9rem 0 0; }
+
+
+/* Update-linked (Tier 2) reports: real community reports whose exact build was never stated.
+   Styled as a distinct, quieter card than the consensus evidence card on purpose -- these are
+   shown for their information value and must never read as confirmed patch-specific evidence. */
+.update-linked-card {
+  margin: 1rem 0 0;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--aux-border, #d7d7db);
+  border-left: 3px solid var(--aux-accent-muted, #8a8a94);
+  border-radius: 6px;
+  background: var(--aux-surface-muted, #fafafb);
+}
+.update-linked-card__counts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+.update-linked-count dt {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--aux-text-muted, #63636d);
+}
+.update-linked-count dd {
+  margin: 0.1rem 0 0;
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1.1;
+}
+.update-linked-card__note {
+  margin: 0 0 0.75rem;
+  font-size: 0.85rem;
+  color: var(--aux-text-muted, #63636d);
+}
+.update-linked-list { margin: 0; padding: 0; list-style: none; }
+.update-linked-item { padding: 0.6rem 0; border-top: 1px solid var(--aux-border, #e3e3e7); }
+.update-linked-item__title { font-weight: 600; }
+.update-linked-item__meta {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--aux-text-muted, #63636d);
+  margin-top: 0.15rem;
+}
+.update-linked-item__why,
+.update-linked-item__build {
+  margin: 0.3rem 0 0;
+  font-size: 0.85rem;
+}
+.patch-cell-num__linked {
+  display: inline-block;
+  font-size: 0.78rem;
+  color: var(--aux-text-muted, #63636d);
+  white-space: nowrap;
+}
