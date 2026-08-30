@@ -13,13 +13,13 @@ import { createPersistentWorldSpatialLayout, projectPersistentPlacement } from "
 import { buildPersistentWorldSearchIndex, searchPersistentWorld } from "../src/views/persistent/persistentWorldSearch";
 
 describe("premium persistent-world visual language", () => {
-  it("derives a public-beta graph without fixture placements or synthetic influence edges", () => {
+  it("retains configuration-pending Level-4 placements while excluding synthetic influence edges", () => {
     const model = createPersistentWorld();
     const publicPlacements = Object.values(model.placements).filter((placement) => persistentWorldPublicPlacementVisible(model, placement.id));
     const publicRelationships = Object.values(model.relationships).filter((relationship) => persistentWorldPublicRelationshipVisible(model, relationship));
-    expect(publicPlacements).toHaveLength(211);
-    expect(publicPlacements.every((placement) => model.factors[placement.canonicalFactorId].evidencePosture !== "TEST_FIXTURE")).toBe(true);
-    expect(publicRelationships).toHaveLength(210);
+    expect(publicPlacements).toHaveLength(1111);
+    expect(publicPlacements.filter((placement) => model.factors[placement.canonicalFactorId].evidencePosture === "TEST_FIXTURE")).toHaveLength(900);
+    expect(publicRelationships).toHaveLength(1110);
     expect(publicRelationships.every((relationship) => relationship.relationshipClass === "HIERARCHY_TETHER")).toBe(true);
     expect(publicRelationships.some((relationship) => relationship.relationshipClass === "SYNTHETIC_INFLUENCE")).toBe(false);
     expect(persistentWorldFingerprint(model)).toBe("fnv1a32:88684cdb");
@@ -420,8 +420,8 @@ describe("persistent world local-review shell", () => {
     render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
     const surface = await screen.findByRole("application", { name: "U.S. systems factor map" }, { timeout: 15_000 });
     const inspector = screen.getByRole("complementary", { name: "Persistent world factor details" });
-    expect(within(inspector).getByText("Fixture only · not factual")).toBeTruthy();
-    expect(within(inspector).getByText(/hierarchy tether only/)).toBeTruthy();
+    expect(within(inspector).getByText("Configuration pending · not factual")).toBeTruthy();
+    expect(within(inspector).getByText(/parent hierarchy tether/)).toBeTruthy();
     const initialFingerprint = surface.getAttribute("data-topology-fingerprint");
     fireEvent.keyDown(surface, { key: "ArrowLeft", altKey: true });
     expect(surface.getAttribute("data-selected-placement-id")).toBe("placement:consumer-demand:real-wage-purchasing-power");
