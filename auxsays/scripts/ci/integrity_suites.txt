@@ -54,6 +54,7 @@ auxsays/scripts/tests/test_davinci_bare_version_identity.py = 55
 auxsays/scripts/tests/test_davinci_verified_reports.py = 68
 auxsays/scripts/tests/test_evidence_method_health_dupes.py = 4
 auxsays/scripts/tests/test_evidence_strength_thresholds.py = 38
+auxsays/scripts/tests/test_consensus_sample_honesty.py = 74
 auxsays/scripts/tests/test_frontmatter_roundtrip.py = 99
 auxsays/scripts/tests/test_normalize_davinci_version.py = 53
 auxsays/scripts/tests/test_obs_consensus_acceptance.py = 27

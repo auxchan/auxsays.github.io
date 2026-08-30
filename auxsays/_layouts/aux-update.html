@@ -76,6 +76,25 @@ layout: aux-base
   {% assign evidence_state = 'Official source only' %}
   {% assign evidence_state_class = 'official' %}
 {% endif %}
+{%- comment -%}
+  Community evidence strength for THIS patch, derived from the confirmed report count with the
+  SAME ladder patch-table-row.html uses and test_evidence_strength_thresholds locks:
+  0 Insufficient | 1-7 Low | 8-24 Low-Medium | 25-32 Medium | 33+ High.
+  The listing page has always shown this column; the detail page showed neither it nor any other
+  sample qualifier, so a 3-report read and a 33-report read rendered identically. Strength reflects
+  SAMPLE SIZE ONLY -- it is never a statement that the patch is safe.
+
+  consensus_established is the existing contract, not a new threshold: evidence_state_class is
+  'live' only for collection_status live_consensus / consensus_live. Nothing else is mature
+  consensus, so nothing else may be presented as though it were.
+{%- endcomment -%}
+{% assign evidence_strength = 'Insufficient' %}
+{% if report_count >= 33 %}{% assign evidence_strength = 'High' %}
+{% elsif report_count >= 25 %}{% assign evidence_strength = 'Medium' %}
+{% elsif report_count >= 8 %}{% assign evidence_strength = 'Low-Medium' %}
+{% elsif report_count > 0 %}{% assign evidence_strength = 'Low' %}{% endif %}
+{% assign consensus_established = false %}
+{% if evidence_state_class == 'live' %}{% assign consensus_established = true %}{% endif %}
 {% assign confirmed_report_count = page.confirmed_patch_specific_report_count | default: report_count | plus: 0 %}
 {% assign report_bearing_count = report_count %}
 {% if report_bearing_count == 0 and confirmed_report_count > 0 %}{% assign report_bearing_count = confirmed_report_count %}{% endif %}
@@ -343,6 +362,16 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
             <span>Negative</span><span>Moderate</span><span>Optimal</span>
           </div>
           {% endif %}
+          {%- comment -%}
+            The categorical word above is RAW SAMPLE SENTIMENT, not a maturity claim. Until the
+            record is actually marked live, say so in the same breath, and always carry the
+            sample size and its canonical strength so a 3-report read cannot look like a 33-report
+            one. This replaces a hard `report_count < 3` cut-off that removed the last qualifier at
+            exactly three reports -- the point where the sample is still weakest.
+          {%- endcomment -%}
+          {% if consensus_established == false and report_count > 0 %}
+          <p class="consensus-chart-meta consensus-sample-note">Community consensus not established &mdash; {{ report_count }} user report{% unless report_count == 1 %}s{% endunless %}, evidence strength {{ evidence_strength }}. This is a verified report sample, not live consensus telemetry.</p>
+          {% endif %}
           {% if evidence_checked_at != blank %}<p class="consensus-chart-meta">Last evidence checked: {{ evidence_checked_label }}</p>{% endif %}
         </div>
       </div>
@@ -369,7 +398,12 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
           <p>Too few reports for a verdict yet.</p>
           {% endif %}
           {% if show_test_first_context %}<p class="update-credibility-note">This is report-backed caution guidance, not a clean safe signal.</p>{% endif %}
-          {% if report_count > 0 and report_count < 3 %}<p>Too few reports for a verdict yet.</p>{% endif %}
+          {%- comment -%}
+            The low-sample statement is no longer cut off at three reports. Every sub-live sample
+            carries honest framing, worded by the canonical strength ladder rather than a hard
+            count, so nothing changes discontinuously at exactly n=3.
+          {%- endcomment -%}
+          {% if consensus_established == false and evidence_strength == 'Low' %}<p>Too few reports for a firm verdict yet &mdash; treat this as early evidence.</p>{% endif %}
           {% if record_note_text != blank %}<p>{{ record_note_text }}</p>{% endif %}
         </div>
       </div>
