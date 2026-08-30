@@ -137,6 +137,18 @@ def run() -> int:
     check("routes over one community are labelled as that community",
           INCLUDE.count("Microsoft Q&A (") >= 2,
           "three Q&A routes must not read as three independent sources")
+    # The coverage floor exists to require more than one COMMUNITY. Counting method rows let two
+    # routes over the same community satisfy it, which is the same conflation one layer down from
+    # the labels: measured live, two Q&A rows took 20228.20158 from healthy=1 to healthy=2 without
+    # any new source being read.
+    check("healthy coverage is counted per source family, not per method row",
+          "mon_healthy_seen" in INCLUDE and "m.source_type" in INCLUDE)
+    check("the family key is the evidence source_type, matching the ownership manifest",
+          "assign m_fam = m.source_type" in INCLUDE)
+    check("a family already counted cannot be counted twice",
+          "unless mon_healthy_seen contains m_fam_key" in INCLUDE)
+    check("the public fact is labelled sources, not methods",
+          "<dt>Healthy sources</dt>" in INCLUDE and "<dt>Healthy methods</dt>" not in INCLUDE)
 
     # --- Verdict and Monitoring kept structurally separate on every surface -------
     check("detail page renders the full monitoring card (mode='full'), separate from #verdict",

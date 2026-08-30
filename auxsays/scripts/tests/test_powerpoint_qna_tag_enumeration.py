@@ -73,6 +73,16 @@ def run() -> int:
     excluded = {t[0] for t in tags.EXCLUDED_TAGS}
     check("T1.5 mobile-only inventories are excluded deliberately, not forgotten",
           excluded and not (excluded & set(ids)), str(sorted(excluded)))
+    # The first inventory was taken by walking the tag index to page 35; it runs to 41, and six
+    # live PowerPoint surfaces sat past the break -- one of them a Windows DESKTOP community with
+    # more recent volume than eight of the tags that WERE listed. A frozen count is the failure
+    # mode, so the declared total is asserted rather than assumed.
+    check("T1.7 the declared inventory covers every PowerPoint surface found on the tag index",
+          len(tags.POWERPOINT_TAGS) + len(tags.EXCLUDED_TAGS) == 24,
+          f"{len(tags.POWERPOINT_TAGS)} enumerated + {len(tags.EXCLUDED_TAGS)} excluded")
+    check("T1.8 the Windows-desktop surface found late is enumerated, not excluded",
+          any(t[0] == "1320" for t in tags.POWERPOINT_TAGS)
+          and "1320" not in {t[0] for t in tags.EXCLUDED_TAGS})
     check("T1.6 every tag carries a human-readable public label",
           all(t[2] and "powerpoint" in t[2].lower() for t in tags.POWERPOINT_TAGS))
 

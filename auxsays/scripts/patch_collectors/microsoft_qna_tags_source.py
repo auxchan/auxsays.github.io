@@ -61,6 +61,14 @@ POWERPOINT_TAGS: tuple[tuple[str, str, str, int], ...] = (
     ("1253", "m365-office-office-powerpoint-education-unknown-platform", "PowerPoint for education", 121),
     ("1199", "m365-office-office-powerpoint-home-unknown-platform", "PowerPoint for home", 100),
     ("1310", "m365-insider-office-powerpoint-platform-windows", "Microsoft 365 Insider PowerPoint, Windows", 27),
+    # Found by re-walking the tag index to its true end. The first pass stopped at page 35 and the
+    # index runs to 41, which hid six live surfaces -- including 1320, a Windows DESKTOP community
+    # carrying 27 questions asked in the last 60 days, more recent volume than eight of the tags
+    # above it. The inventory is re-derived, never assumed; test T1.7 fails if it drifts again.
+    ("1320", "m365-office-office-powerpoint-unknown-routing-platform-windows", "PowerPoint, Windows", 0),
+    ("1514", "m365-office-office-powerpoint-unknown-routing-macos", "PowerPoint, macOS", 0),
+    ("1315", "m365-insider-office-powerpoint-macos", "Microsoft 365 Insider PowerPoint, macOS", 0),
+    ("1537", "m365-insider-office-powerpoint-unknown-platform", "Microsoft 365 Insider PowerPoint", 0),
 )
 
 # Mobile tags are deliberately excluded: a Click-to-Run desktop build cannot be the patch identity
@@ -69,7 +77,7 @@ POWERPOINT_TAGS: tuple[tuple[str, str, str, int], ...] = (
 EXCLUDED_TAGS: tuple[tuple[str, str], ...] = (
     ("1419", "home-ios"), ("1294", "home-android"), ("1509", "education-android"),
     ("1557", "business-ios"), ("1204", "business-android"), ("1441", "unknown-routing-android"),
-    ("1388", "insider-ios"),
+    ("1388", "insider-ios"), ("1326", "education-ios"), ("1552", "unknown-routing-ios"),
 )
 
 _QUESTION_LINK_RE = re.compile(r'href="(/en-us/answers/questions/(\d+)/([^"?#]*))["?#]')

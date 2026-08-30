@@ -47,12 +47,22 @@ _last_request_at = 0.0
 # The boards that actually carry PowerPoint discussions, chosen by MEASURED yield rather than by
 # name. Walking all 621 sitemaps per run would cost hundreds of multi-megabyte fetches to reach the
 # same handful of threads.  (sitemap basename, measured PowerPoint thread count)
+# Ranked by ALL-TIME volume, but SELECTED on recent yield -- those are different orders, and using
+# the first as a proxy for the second is what a measured-once list gets wrong. `sharepoint_general`
+# and `onedriveforbusiness` are small archives that nonetheless carried the only two PowerPoint
+# discussions in the most recent window, while three of the largest boards carried none.
+# (sitemap basename, measured all-time PowerPoint discussions, measured recent ones)
 POWERPOINT_BOARDS: tuple[tuple[str, int], ...] = (
     ("sitemap_microsoft-365.xml.gz", 272),
     ("sitemap_microsoft365insider.xml.gz", 112),
+    ("sitemap_microsoftteams.xml.gz", 85),
+    ("sitemap_sharepoint_general.xml.gz", 47),
     ("sitemap_microsoft365copilot.xml.gz", 39),
     ("sitemap_microsoft365apps.xml.gz", 27),
     ("sitemap_1_excelgeneral.xml.gz", 25),
+    ("sitemap_onedriveforbusiness.xml.gz", 8),
+    ("sitemap_microsoft-learn-for-educators.xml.gz", 1),
+    ("sitemap_drivingadoption.xml.gz", 1),
 )
 
 POWERPOINT_URL_RE = re.compile(r"powerpoint|pptx|/ppt\b", re.I)

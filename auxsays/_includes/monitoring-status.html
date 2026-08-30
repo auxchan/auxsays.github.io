@@ -52,6 +52,7 @@
 {%- assign mon_total = 0 -%}
 {%- assign mon_disabled = 0 -%}
 {%- assign mon_healthy = 0 -%}
+{%- assign mon_healthy_seen = '' -%}
 {%- assign mon_fresh_usable = 0 -%}
 {%- assign mon_has_valid_usable_ts = false -%}
 {%- assign mon_has_post_release_valid = false -%}
@@ -90,7 +91,20 @@
 {%- assign m_age_s = mon_now_s | minus: m_run_s -%}
 {%- if m_age_s <= mon_max_age_s -%}
 {%- assign mon_fresh_usable = mon_fresh_usable | plus: 1 -%}
-{%- if m_status == 'success' or m_status == 'no_results' -%}{%- assign mon_healthy = mon_healthy | plus: 1 -%}{%- endif -%}
+{%- comment -%}
+  Coverage is counted per SOURCE FAMILY, not per method row. Several methods deliberately read
+  the same community by different routes, so counting rows let two routes over one community
+  satisfy a floor that exists to require more than one community. The family is the evidence
+  source_type, which is exactly what the ownership manifest treats as a source identity.
+{%- endcomment -%}
+{%- if m_status == 'success' or m_status == 'no_results' -%}
+  {%- assign m_fam = m.source_type | default: m.method_id -%}
+  {%- capture m_fam_key -%}|{{ m_fam }}|{%- endcapture -%}
+  {%- unless mon_healthy_seen contains m_fam_key -%}
+    {%- assign mon_healthy = mon_healthy | plus: 1 -%}
+    {%- assign mon_healthy_seen = mon_healthy_seen | append: m_fam_key -%}
+  {%- endunless -%}
+{%- endif -%}
 {%- endif -%}
 {%- endif -%}
 {%- else -%}
@@ -132,7 +146,7 @@
   <dl class="update-monitoring-facts">
     <div class="update-monitoring-fact"><dt>Accepted reports</dt><dd>{{ mon_reports }}</dd></div>
     <div class="update-monitoring-fact"><dt>Latest evidence run</dt><dd>{% if mon_latest_label != blank %}{{ mon_latest_label }}{% else %}Not recorded{% endif %}</dd></div>
-    <div class="update-monitoring-fact"><dt>Healthy methods</dt><dd>{{ mon_healthy }} fresh (success / no reports) &middot; need {{ mon_min_healthy }}</dd></div>
+    <div class="update-monitoring-fact"><dt>Healthy sources</dt><dd>{{ mon_healthy }} fresh (success / no reports) &middot; need {{ mon_min_healthy }}</dd></div>
   </dl>
   {%- if mon_rows != '' and mon_rows.size > 0 -%}
   {%- assign mon_has_method_rows = false -%}
