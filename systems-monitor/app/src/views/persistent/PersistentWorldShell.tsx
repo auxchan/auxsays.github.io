@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { flushSync } from "react-dom";
 import { createPersistentWorld, persistentWorldPath, persistentWorldPlacementLabel, type PersistentWorldPlacement } from "../../data/persistentWorldModel";
 import { persistentWorldFactualBindingForFactor } from "../../data/persistentWorldFactualBindings";
 import { PERSISTENT_WORLD_PROFILED_FACTOR_COUNT, persistentWorldCandidateSourceProfile } from "../../data/persistentWorldSourceCatalog";
@@ -69,6 +70,9 @@ export function PersistentWorldShell() {
   const reducedMotion = useReducedMotion();
   const workspaceRef = useRef<HTMLDivElement>(null);
   const searchTriggerRef = useRef<HTMLButtonElement>(null);
+  const inspectorTransitionTokenRef = useRef(0);
+  const inspectorTransitionTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const inspectorGhostRef = useRef<HTMLElement | null>(null);
   const [selectedId, setSelectedId] = useState<string | null>(() => selectionFromHash(model));
   const [fullWorld, setFullWorld] = useState(false);
   const [viewMode, setViewMode] = useState<PersistentWorldViewMode>("TOP_DOWN");
@@ -128,6 +132,11 @@ export function PersistentWorldShell() {
     return () => document.removeEventListener("fullscreenchange", update);
   }, []);
 
+  useEffect(() => () => {
+    if (inspectorTransitionTimerRef.current) clearTimeout(inspectorTransitionTimerRef.current);
+    inspectorGhostRef.current?.remove();
+  }, []);
+
   useEffect(() => {
     if (!fullscreenFallback) return;
     const close = (event: KeyboardEvent) => { if (event.key === "Escape") setFullscreenFallback(false); };
@@ -145,19 +154,72 @@ export function PersistentWorldShell() {
   }, [searchOpen]);
 
   function navigate(id: string | null, options: { record?: boolean; replace?: boolean } = {}) {
-    setSelectedId(id);
-    setFullWorld(false);
-    setDeepDiveOpen(false);
-    setRoutePulseVersion((current) => current + 1);
     const hash = id ? `#persistent-world/${encodeURIComponent(id)}` : "#persistent-world";
     const url = `${window.location.pathname}${window.location.search}${hash}`;
-    if (options.replace) window.history.replaceState({ persistentWorldPlacementId: id }, "", url);
-    else window.history.pushState({ persistentWorldPlacementId: id }, "", url);
-    if (options.record !== false) setExploration((current) => {
-      if (current.ids[current.index] === id) return current;
-      const ids = [...current.ids.slice(0, current.index + 1), id];
-      return { ids: ids.slice(-40), index: Math.min(39, ids.length - 1) };
-    });
+    const update = () => {
+      setSelectedId(id);
+      setFullWorld(false);
+      setDeepDiveOpen(false);
+      setRoutePulseVersion((current) => current + 1);
+      if (options.replace) window.history.replaceState({ persistentWorldPlacementId: id }, "", url);
+      else window.history.pushState({ persistentWorldPlacementId: id }, "", url);
+      if (options.record !== false) setExploration((current) => {
+        if (current.ids[current.index] === id) return current;
+        const ids = [...current.ids.slice(0, current.index + 1), id];
+        return { ids: ids.slice(-40), index: Math.min(39, ids.length - 1) };
+      });
+    };
+
+    const transitionDocument = document as Document & {
+      startViewTransition?: (callback: () => void) => { finished: Promise<void> };
+    };
+    if (reducedMotion || !selectedId || !id || selectedId === id) {
+      update();
+      return;
+    }
+
+    const transitionToken = ++inspectorTransitionTokenRef.current;
+    if (!transitionDocument.startViewTransition) {
+      if (inspectorTransitionTimerRef.current) clearTimeout(inspectorTransitionTimerRef.current);
+      inspectorGhostRef.current?.remove();
+      const outgoingPanel = document.querySelector<HTMLElement>(".sm-pw-inspector");
+      const outgoingContent = outgoingPanel?.querySelector<HTMLElement>(".sm-pw-inspector__content");
+      if (outgoingPanel && outgoingContent) {
+        const bounds = outgoingPanel.getBoundingClientRect();
+        const ghostHost = document.createElement("div");
+        ghostHost.dataset.auxProduct = "systems-monitor";
+        ghostHost.className = "sm-pw-inspector-ghost-host";
+        Object.assign(ghostHost.style, { left: `${bounds.left}px`, top: `${bounds.top}px`, width: `${bounds.width}px`, height: `${bounds.height}px` });
+        const ghostPanel = document.createElement("aside");
+        ghostPanel.className = "sm-pw-inspector sm-pw-inspector-ghost-stage is-open";
+        ghostPanel.setAttribute("aria-hidden", "true");
+        ghostPanel.setAttribute("inert", "");
+        ghostPanel.appendChild(outgoingContent.cloneNode(true));
+        ghostHost.appendChild(ghostPanel);
+        document.body.appendChild(ghostHost);
+        ghostPanel.scrollTop = outgoingPanel.scrollTop;
+        inspectorGhostRef.current = ghostHost;
+      }
+      flushSync(update);
+      inspectorTransitionTimerRef.current = setTimeout(() => {
+        if (inspectorTransitionTokenRef.current !== transitionToken) return;
+        inspectorTransitionTimerRef.current = null;
+        inspectorGhostRef.current?.remove();
+        inspectorGhostRef.current = null;
+      }, 480);
+      return;
+    }
+
+    document.documentElement.dataset.pwInspectorTransition = "active";
+    try {
+      const transition = transitionDocument.startViewTransition(() => flushSync(update));
+      void transition.finished.finally(() => {
+        if (inspectorTransitionTokenRef.current === transitionToken) delete document.documentElement.dataset.pwInspectorTransition;
+      });
+    } catch {
+      if (inspectorTransitionTokenRef.current === transitionToken) delete document.documentElement.dataset.pwInspectorTransition;
+      update();
+    }
   }
 
   function moveExploration(delta: -1 | 1) {
@@ -232,7 +294,7 @@ export function PersistentWorldShell() {
       </nav>
       <div ref={workspaceRef} className={`sm-pw-workspace ${selected ? "has-inspector" : ""} ${fullscreenFallback ? "is-fullscreen-fallback" : ""}`} data-fullscreen={fullscreenActive}>
         <PersistentWorldMinimap model={model} selectedPlacementId={selectedId} onSelect={navigate} />
-        <aside className={`sm-pw-inspector ${selected ? "is-open" : ""}`} aria-label="Persistent world factor details" aria-hidden={!selected}>
+        <aside className={`sm-pw-inspector ${selected ? "is-open" : ""}`} aria-label="Persistent world factor details" aria-hidden={!selected} data-panel-motion="crossfade-retarget">
           {selected && factor && <div key={selected.id} className="sm-pw-inspector__content">
             <header><span>{selected.depth === 1 ? "Master-defined driver system" : selected.depth === 2 ? "Level-2 review candidate" : "Level-3 reviewed factor"}</span><button type="button" aria-label="Close factor details" onClick={() => navigate(null)}>×</button><h2>{placementLabel(model, selected)}</h2>{selectedCompactValue && <div className="sm-pw-inspector__quick-reading"><strong>{selectedCompactValue}</strong><span>{selectedBinding?.validTime} · {selectedBinding?.provider}</span><a href="/systems-monitor/#workstream1a">Open factual record</a></div>}</header>
             {selectedMedia && <div className="sm-pw-inspector__portrait" style={{ "--pw-photo": `url(${selectedMedia.imageUrl})`, "--pw-accent": selectedAccent } as CSSProperties}>
