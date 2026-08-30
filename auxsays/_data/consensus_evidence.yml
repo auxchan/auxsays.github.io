@@ -14354,3 +14354,32 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '20228.20124'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5988811-slideshow-not-available-after-update
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5988811/slideshow-not-available-after-update
+  parent_title: Slideshow not available after update - Microsoft Q&A
+  report_title: Slideshow not available after update - Microsoft Q&A
+  report_text_excerpt: Slideshow not available after update - Microsoft Q&A After update to Windows 11 Pro 25H2 build 26200.9278 Slideshow cannot be selected in Windows Personalization. Dropdown menu immediately goes to Picture if Slideshow is selected.
+  captured_at: '2026-08-30T12:56:27Z'
+  source_date: '2026-08-30'
+  target_release_date: '2026-08-27'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9278'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9278'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Windows issue
+  workflow_area: Windows workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
