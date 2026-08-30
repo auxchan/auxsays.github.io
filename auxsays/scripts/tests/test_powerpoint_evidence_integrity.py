@@ -28,6 +28,7 @@ from lib.build_claims import OFFICE_FULL_VERSION_RE, extract_build_claims  # noq
 from patch_collectors import github_officedev_source as gh  # noqa: E402
 from patch_collectors import microsoft_powerpoint as ppt  # noqa: E402
 from patch_collectors import stack_exchange_source as se  # noqa: E402
+from patch_collectors.base import PatchRecord  # noqa: E402
 
 PASS = FAIL = 0
 FAILURES: list[str] = []
@@ -35,6 +36,8 @@ FAILURES: list[str] = []
 THREAD = "https://learn.microsoft.com/answers/questions/5956657/copilot-unable-to-read-document-error"
 AUTHOR = "4bf12226-06e6-4d29-81dd-92bb3ba0d634"
 STRANGER = "11111111-2222-3333-4444-555555555555"
+CAL_RECORD = (ROOT / "updates" / "generated"
+              / "2026-07-29-microsoft-powerpoint-2607-20228-20124.md")
 
 
 def check(label: str, condition: bool, detail: str = "") -> None:
@@ -384,6 +387,58 @@ def run() -> int:
     orch_src2 = (ROOT / "scripts" / "orchestrate_evidence_run.py").read_text(encoding="utf-8")
     check("S6.8 coverage telemetry reports threads, not just rows",
           "distinct_threads" in orch_src2 and "eligible_threads" in orch_src2)
+
+    print()
+    print("=" * 96)
+    print("S7  the resolver is handed the report body the row actually carries")
+    print("=" * 96)
+    # A rejected row records the report as `report_text_excerpt` and has NO `report_text` key, so
+    # rebuilding the candidate from that name handed the resolver an EMPTY body. Resolution still
+    # recovered the exact build from the reporter's own comment, and the re-evaluation then failed
+    # PRODUCT PRIMACY -- the report was discovered, resolved, and discarded on a key name.
+    rec = PatchRecord("microsoft-powerpoint", "2607", CAL_RECORD, "2026-07-29T00:00:00Z",
+                      "current", "Microsoft PowerPoint")
+    target = ppt.record_target(rec) if CAL_RECORD.exists() else None
+    if target is None:
+        check("S7 calibration record fixture present", False, "record missing")
+    else:
+        discovered = {
+            "source_type": "microsoft_learn_qna", "source_name": "Microsoft Learn Q&A",
+            "source_url": THREAD, "source_date": "2026-08-06T03:42:05Z",
+            "parent_title": "Copilot Unable to Read Document Error",
+            "report_title": "Copilot Unable to Read Document Error",
+            "report_text": ("Copilot in PowerPoint returns Unable to Read Document. PowerPoint "
+                            "fails every time I submit a prompt since the update."),
+        }
+        _acc, rejected = ppt.evaluate_candidates(rec, dict(target), [discovered],
+                                                 "2026-08-30T00:00:00Z", set(), {})
+        check("S7.1 the report is rejected on the VERSION gate, so it is resolvable",
+              len(rejected) == 1
+              and rejected[0].get("exclusion_reason") in cr.RESOLVABLE_REASONS,
+              str(rejected[0].get("exclusion_reason")) if rejected else "no row")
+        row = rejected[0]
+        check("S7.2 a rejected row carries report_text_excerpt and NOT report_text",
+              "report_text_excerpt" in row and "report_text" not in row, str(sorted(row)[:4]))
+        rebuilt = {k: row.get(k) for k in ("source_url", "source_date", "source_type",
+                                           "source_name", "parent_title", "report_title")}
+        rebuilt["report_text"] = str(row.get("report_text")
+                                     or row.get("report_text_excerpt") or "")
+        check("S7.3 the rebuilt candidate carries a non-empty report body",
+              len(rebuilt["report_text"]) > 0, repr(rebuilt["report_text"])[:70])
+        # The gate that actually failed: with an empty body the report is not even PowerPoint's.
+        empty = {**rebuilt, "report_text": ""}
+        check("S7.4 an empty body fails product primacy (this is what was happening)",
+              ppt.product_primacy_reason(str(empty.get("parent_title") or ""),
+                                         str(empty.get("report_title") or ""), "", "")
+              is not None
+              or ppt.row_from_candidate(rec, dict(target), empty,
+                                        "2026-08-30T00:00:00Z").get("counted") is not True)
+        check("S7.5 and the excerpt-backed body does not",
+              ppt.product_primacy_reason(str(rebuilt.get("parent_title") or ""),
+                                         str(rebuilt.get("report_title") or ""),
+                                         rebuilt["report_text"], "") is None)
+    check("S7.6 the graph reads the excerpt when no report_text key exists",
+          'row.get("report_text_excerpt")' in orch_src2)
 
     print()
     print("=" * 96)

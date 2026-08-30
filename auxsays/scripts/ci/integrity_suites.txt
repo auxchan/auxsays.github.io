@@ -45,7 +45,7 @@ auxsays/scripts/tests/test_ci_integrity_runner.py = 39
 # --- PowerPoint collection expansion: same-author context + OfficeDev issues -----
 auxsays/scripts/tests/test_powerpoint_same_author_context.py = 18
 auxsays/scripts/tests/test_powerpoint_github_officedev.py = 22
-auxsays/scripts/tests/test_powerpoint_evidence_integrity.py = 56
+auxsays/scripts/tests/test_powerpoint_evidence_integrity.py = 62
 auxsays/scripts/tests/test_collector_ownership.py = 52
 auxsays/scripts/tests/test_collector_transaction.py = 23
 auxsays/scripts/tests/test_collector_txn_nested_root.py = 26

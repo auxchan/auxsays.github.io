@@ -535,8 +535,14 @@ class Pipeline:
                       "target_release_date": getattr(record, "update_published_at", ""),
                       "version_ambiguous": False}
             candidate = {k: row.get(k) for k in ("source_url", "source_date", "source_type",
-                                                 "source_name", "parent_title", "report_title",
-                                                 "report_text")}
+                                                 "source_name", "parent_title", "report_title")}
+            # A rejected row records the report as `report_text_excerpt`; it has NO `report_text`
+            # key. Reading the key that never exists handed the resolver an EMPTY report body, so the
+            # re-evaluation failed PRODUCT PRIMACY and returned product_not_powerpoint even when
+            # resolution had correctly recovered the exact build from the reporter's own comment.
+            # The report was discovered, resolved, and then thrown away on a key name.
+            candidate["report_text"] = str(row.get("report_text")
+                                           or row.get("report_text_excerpt") or "")
             # Pass the row's OWN rejection reason. Hard-coding one reason here meant a row selected
             # for a different resolvable reason was then re-presented as if it had the other, and
             # the resolver's own gate would have refused it.
