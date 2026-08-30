@@ -40,11 +40,11 @@ function localPhase4bCheckpoint() {
           response.end(`<!doctype html><meta charset="utf-8"><title>Loading Workstream 1A</title><script>location.replace("/systems-monitor/?view=summary#workstream1a");</script>`);
           return;
         }
-        const mediaPrefix = "/systems-monitor/__local-review/media/";
+        const mediaPrefix = "/systems-monitor/media/";
         if (pathname.startsWith(mediaPrefix)) {
           if (!loopbackOnly) {
             response.statusCode = 403;
-            response.end("Motion QA media requires a loopback-only development server.");
+            response.end("Systems Monitor review media requires a loopback-only development server.");
             return;
           }
           const mediaPath = motionQaMedia.get(pathname.slice(mediaPrefix.length));

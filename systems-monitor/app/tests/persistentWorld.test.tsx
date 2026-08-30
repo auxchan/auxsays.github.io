@@ -7,12 +7,23 @@ import { persistentWorldFactualBinding } from "../src/data/persistentWorldFactua
 import { PERSISTENT_WORLD_PROFILED_FACTOR_COUNT, persistentWorldCandidateSourceProfile } from "../src/data/persistentWorldSourceCatalog";
 import { persistentWorldMediaFor } from "../src/views/persistent/persistentWorldMedia";
 import { PERSISTENT_GLINT_PERIOD_MS, PERSISTENT_GLINT_TRAIL, blendPremiumColor, compactPersistentValue, createPersistentCameraTransition, easePremiumHover, factorGlyph, persistentAmbientEdges, persistentFocusRotation, persistentGlintProgress, persistentPlacementAccent, premiumCurveRoute, resolvePersistentLod, resolvePremiumLabels, samplePersistentCameraTransition, shortestAngleDelta } from "../src/views/persistent/persistentWorldVisuals";
-import { persistentWorldDoubleClickAction, persistentWorldEdgeTransitionAlpha, persistentWorldGraphNodeLabel } from "../src/views/persistent/PremiumPersistentWorldSurface";
+import { persistentWorldDoubleClickAction, persistentWorldEdgeTransitionAlpha, persistentWorldGraphNodeLabel, persistentWorldPublicPlacementVisible, persistentWorldPublicRelationshipVisible, polishPersistentCameraTransition } from "../src/views/persistent/PremiumPersistentWorldSurface";
 import { persistentWorldUpSelection } from "../src/views/persistent/PersistentWorldShell";
 import { createPersistentWorldSpatialLayout, projectPersistentPlacement } from "../src/views/persistent/persistentWorldSpatialLayout";
 import { buildPersistentWorldSearchIndex, searchPersistentWorld } from "../src/views/persistent/persistentWorldSearch";
 
 describe("premium persistent-world visual language", () => {
+  it("derives a public-beta graph without fixture placements or synthetic influence edges", () => {
+    const model = createPersistentWorld();
+    const publicPlacements = Object.values(model.placements).filter((placement) => persistentWorldPublicPlacementVisible(model, placement.id));
+    const publicRelationships = Object.values(model.relationships).filter((relationship) => persistentWorldPublicRelationshipVisible(model, relationship));
+    expect(publicPlacements).toHaveLength(211);
+    expect(publicPlacements.every((placement) => model.factors[placement.canonicalFactorId].evidencePosture !== "TEST_FIXTURE")).toBe(true);
+    expect(publicRelationships).toHaveLength(210);
+    expect(publicRelationships.every((relationship) => relationship.relationshipClass === "HIERARCHY_TETHER")).toBe(true);
+    expect(publicRelationships.some((relationship) => relationship.relationshipClass === "SYNTHETIC_INFLUENCE")).toBe(false);
+    expect(persistentWorldFingerprint(model)).toBe("fnv1a32:88684cdb");
+  });
   it("fully retires previous-view connector passes after navigation settles", () => {
     expect(persistentWorldEdgeTransitionAlpha(false, true, 0)).toBe(1);
     expect(persistentWorldEdgeTransitionAlpha(false, true, 0.2)).toBe(0.5);
@@ -131,7 +142,7 @@ describe("premium persistent-world visual language", () => {
     const fiscal = model.placements["placement:policy-trade-external-shocks:fiscal-policy"];
     const detail = model.placements[model.childrenByPlacement[fiscal.id][0]];
     const media = persistentWorldMediaFor(model, fiscal);
-    expect(media.imageUrl).toMatch(/^\/systems-monitor\/__local-review\/media\/.+\.jpg$/);
+    expect(media.imageUrl).toMatch(/^\/systems-monitor\/media\/.+\.jpg$/);
     expect(media.sourcePage).toMatch(/^https:\/\/commons\.wikimedia\.org\/wiki\/File:/);
     expect(persistentWorldMediaFor(model, detail)).toEqual(media);
   });
@@ -189,6 +200,23 @@ describe("premium persistent-world visual language", () => {
     expect(start.velocity.x).toBeCloseTo(.1);
     expect(middle.pose.x).not.toBeCloseTo((transition.from.x + transition.to.x) / 2);
     expect(middle.pose.scale).toBeLessThan(Math.sqrt(transition.from.scale * transition.to.scale));
+  });
+
+  it("bounds camera momentum without breaking continuous rapid retargets", () => {
+    const transition = polishPersistentCameraTransition(createPersistentCameraTransition(
+      { x: 0, y: 0, z: 0, scale: .72, rotation: 0, pitch: 0, yaw: 0 },
+      { x: 360, y: 220, z: 55, scale: 1.64, rotation: .4, pitch: .08, yaw: -.09 },
+      1000, "placement:rapid-retarget", { x: .8, y: -.7, z: .4, logScale: .0018, rotation: .0012 }
+    ));
+    const start = samplePersistentCameraTransition(transition, 1000);
+    const end = samplePersistentCameraTransition(transition, 1000 + transition.durationMs);
+    expect(start.pose).toEqual(transition.from);
+    expect(Math.hypot(start.velocity.x, start.velocity.y)).toBeLessThanOrEqual(.200001);
+    expect(Math.abs(transition.arc)).toBeLessThanOrEqual(26);
+    expect(Math.abs(transition.orbit)).toBeLessThanOrEqual(.016);
+    expect(transition.durationMs).toBeGreaterThanOrEqual(740);
+    expect(transition.durationMs).toBeLessThanOrEqual(1020);
+    expect(end.pose).toMatchObject(transition.to);
   });
 
   it("adds deterministic presentation depth without changing canonical topology", () => {
@@ -289,9 +317,9 @@ describe("persistent world local-review shell", () => {
   it("uses strict overview LOD and drills through the same resident world", async () => {
     window.history.replaceState({}, "", "/systems-monitor/#persistent-world");
     render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
-    expect(await screen.findByRole("heading", { name: "Persistent Employment Influence World" }, { timeout: 15_000 })).toBeTruthy();
-    expect(screen.getByText("PERSISTENT WORLD R&D — TEST FIXTURE")).toBeTruthy();
-    const surface = screen.getByRole("application", { name: "Persistent Employment influence world" });
+    expect(await screen.findByRole("heading", { name: "U.S. systems factor explorer" }, { timeout: 15_000 })).toBeTruthy();
+    expect(screen.getByText("PUBLIC BETA — COVERAGE IN PROGRESS")).toBeTruthy();
+    const surface = screen.getByRole("application", { name: "U.S. systems factor map" });
     expect(surface.getAttribute("data-resident-placement-count")).toBe("1111");
     expect(surface.getAttribute("data-resident-relationship-count")).toBe("3110");
     expect(surface.getAttribute("data-semantic-node-count")).toBe("11");
@@ -348,14 +376,14 @@ describe("persistent world local-review shell", () => {
   it("offers full-world density as an explicit action and keeps factual readings separate", async () => {
     window.history.replaceState({}, "", "/systems-monitor/#persistent-world");
     render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
-    await screen.findByRole("heading", { name: "Persistent Employment Influence World" });
-    const surface = screen.getByRole("application", { name: "Persistent Employment influence world" });
+    await screen.findByRole("heading", { name: "U.S. systems factor explorer" });
+    const surface = screen.getByRole("application", { name: "U.S. systems factor map" });
     fireEvent.click(screen.getByRole("button", { name: "Full-world view" }));
     expect(surface.getAttribute("data-lod-mode")).toBe("FULL_WORLD_DENSITY");
     expect(surface.getAttribute("data-semantic-node-count")).toBe("11");
     const factualLink = screen.getByRole("link", { name: "Open factual Labor Market" });
     expect(factualLink.getAttribute("href")).toBe("/systems-monitor/#workstream1a");
-    expect(document.body.textContent).toContain("accepted factual relationships 0");
+    expect(document.body.textContent).toContain("Accepted structural relationships: 0");
     expect(document.body.textContent).not.toContain("Gate B closed");
     fireEvent.click(factualLink);
     window.dispatchEvent(new HashChangeEvent("hashchange"));
@@ -366,7 +394,7 @@ describe("persistent world local-review shell", () => {
     window.history.replaceState({}, "", "/systems-monitor/#persistent-world/placement%3Alabor-supply%3Alabor-force-participation");
     render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
     const inspector = await screen.findByRole("complementary", { name: "Persistent world factor details" }, { timeout: 15_000 });
-    const surface = screen.getByRole("application", { name: "Persistent Employment influence world" });
+    const surface = screen.getByRole("application", { name: "U.S. systems factor map" });
     const topologyFingerprint = surface.getAttribute("data-topology-fingerprint");
     expect(surface.getAttribute("data-factual-binding-count")).toBe("5");
     expect(within(inspector).getAllByText("61.4%").length).toBeGreaterThan(0);
@@ -390,7 +418,7 @@ describe("persistent world local-review shell", () => {
   it("offers keyboard and touch up-level navigation and explicit fixture-only Level-4 evidence", async () => {
     window.history.replaceState({}, "", "/systems-monitor/#persistent-world/fixture-placement%3Aconsumer-demand%3A05%3A09");
     render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
-    const surface = await screen.findByRole("application", { name: "Persistent Employment influence world" }, { timeout: 15_000 });
+    const surface = await screen.findByRole("application", { name: "U.S. systems factor map" }, { timeout: 15_000 });
     const inspector = screen.getByRole("complementary", { name: "Persistent world factor details" });
     expect(within(inspector).getByText("Fixture only · not factual")).toBeTruthy();
     expect(within(inspector).getByText(/hierarchy tether only/)).toBeTruthy();
@@ -434,7 +462,7 @@ describe("persistent world local-review shell", () => {
   it("offers search, bounded minimap navigation, exploration history, and progressive evidence", async () => {
     window.history.replaceState({}, "", "/systems-monitor/#persistent-world");
     render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
-    await screen.findByRole("heading", { name: "Persistent Employment Influence World" });
+    await screen.findByRole("heading", { name: "U.S. systems factor explorer" });
     expect(screen.getAllByText("Level 1 of 4").length).toBeGreaterThanOrEqual(2);
     expect(screen.getByLabelText("World location")).toBeTruthy();
     fireEvent.keyDown(window, { key: "k", ctrlKey: true });

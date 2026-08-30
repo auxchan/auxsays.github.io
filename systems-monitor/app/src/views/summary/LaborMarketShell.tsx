@@ -11,7 +11,7 @@ import "../motion/motionRenderer.css";
 import type { ViewProps } from "../viewProps";
 
 const laborPortrait = {
-  imageUrl: "/systems-monitor/__local-review/media/employment-exposure-public-domain.jpg",
+  imageUrl: "/systems-monitor/media/employment-exposure-public-domain.jpg",
   alt: "Warehouse employees preparing packages for shipment at an industrial depot.",
   sourcePage: "https://commons.wikimedia.org/wiki/File:Warehouse_workers_prepare_packages_for_shipment_at_Sharpe_Army_Depot_-_DPLA_-_414220df83b823977c05c01a4b6b4106.jpeg",
   license: "PUBLIC_DOMAIN" as const,

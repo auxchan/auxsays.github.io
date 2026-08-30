@@ -6,7 +6,7 @@ import { LAYOFFS_BLOCKED_FACTOR_COUNT, LAYOFFS_SOURCE_ENABLED_FACTOR_COUNT } fro
 import { PERSISTENT_ACCEPTED_IMPACT_COUNT, persistentChangesForWindow, type PersistentChangeNotice, type PersistentTimeWindow } from "../../data/persistentWorldTemporalReadModel";
 import { StructuralNodeIcon } from "../motion/StructuralNodeIcon";
 import type { StructuralNodeSymbol } from "../motion/structuralVisualLanguage";
-import { PremiumPersistentWorldSurface as PersistentWorldSurface, type PersistentWorldViewMode } from "./PremiumPersistentWorldSurface";
+import { PremiumPersistentWorldSurface as PersistentWorldSurface, persistentWorldPublicPlacementVisible, type PersistentWorldViewMode } from "./PremiumPersistentWorldSurface";
 import { PersistentWorldMinimap } from "./PersistentWorldMinimap";
 import { persistentWorldMediaFor } from "./persistentWorldMedia";
 import { buildPersistentWorldSearchIndex, searchPersistentWorld } from "./persistentWorldSearch";
@@ -24,11 +24,13 @@ function useReducedMotion() {
   return reduced;
 }
 
-function selectionFromHash(model: ReturnType<typeof createPersistentWorld>) {
+function selectionFromHash(model: ReturnType<typeof createPersistentWorld>, allowFixtures = true) {
   const prefix = "#persistent-world/";
   if (!window.location.hash.startsWith(prefix)) return null;
   const id = decodeURIComponent(window.location.hash.slice(prefix.length));
-  return model.placements[id] ? id : null;
+  const placement = model.placements[id];
+  if (!placement) return null;
+  return allowFixtures || persistentWorldPublicPlacementVisible(model, id) ? id : null;
 }
 
 function placementLabel(model: ReturnType<typeof createPersistentWorld>, placement: PersistentWorldPlacement) {
@@ -53,6 +55,7 @@ function panelSymbol(glyph: string): StructuralNodeSymbol {
 }
 
 export function PersistentWorldShell() {
+  const publicBeta = import.meta.env.PROD;
   const modelEvidence = useMemo(() => {
     const memory = (performance as Performance & { memory?: { usedJSHeapSize: number } }).memory;
     const heapBefore = memory?.usedJSHeapSize;
@@ -69,8 +72,8 @@ export function PersistentWorldShell() {
   const reducedMotion = useReducedMotion();
   const workspaceRef = useRef<HTMLDivElement>(null);
   const searchTriggerRef = useRef<HTMLButtonElement>(null);
-  const [selectedId, setSelectedId] = useState<string | null>(() => selectionFromHash(model));
-  const [inspectorOpen, setInspectorOpen] = useState(() => Boolean(selectionFromHash(model)));
+  const [selectedId, setSelectedId] = useState<string | null>(() => selectionFromHash(model, !publicBeta));
+  const [inspectorOpen, setInspectorOpen] = useState(() => Boolean(selectionFromHash(model, !publicBeta)));
   const [fullWorld, setFullWorld] = useState(false);
   const [viewMode, setViewMode] = useState<PersistentWorldViewMode>("TOP_DOWN");
   const [traceMode, setTraceMode] = useState(false);
@@ -82,7 +85,7 @@ export function PersistentWorldShell() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [deepDiveOpen, setDeepDiveOpen] = useState(false);
   const [routePulseVersion, setRoutePulseVersion] = useState(0);
-  const [exploration, setExploration] = useState<{ ids: readonly (string | null)[]; index: number }>(() => ({ ids: [selectionFromHash(model)], index: 0 }));
+  const [exploration, setExploration] = useState<{ ids: readonly (string | null)[]; index: number }>(() => ({ ids: [selectionFromHash(model, !publicBeta)], index: 0 }));
   const selected = selectedId ? model.placements[selectedId] : undefined;
   const factor = selected ? model.factors[selected.canonicalFactorId] : undefined;
   const selectedMedia = selected ? persistentWorldMediaFor(model, selected) : undefined;
@@ -95,17 +98,18 @@ export function PersistentWorldShell() {
   const visibleChanges = useMemo(() => persistentChangesForWindow(changeWindow), [changeWindow]);
   const selectedChanges = useMemo(() => selected ? visibleChanges.filter((notice) => notice.placementId === selected.id) : [], [selected, visibleChanges]);
   const searchIndex = useMemo(() => buildPersistentWorldSearchIndex(model), [model]);
-  const searchResults = useMemo(() => searchPersistentWorld(searchIndex, searchQuery), [searchIndex, searchQuery]);
+  const searchResults = useMemo(() => searchPersistentWorld(searchIndex, searchQuery).filter((entry) => !publicBeta || entry.evidencePosture !== "TEST_FIXTURE"), [publicBeta, searchIndex, searchQuery]);
   const visibleChoiceIds = useMemo(() => {
-    if (!selected) return model.childrenByPlacement[model.outcomePlacementId];
+    const publishable = (id: string) => !publicBeta || persistentWorldPublicPlacementVisible(model, id);
+    if (!selected) return model.childrenByPlacement[model.outcomePlacementId].filter(publishable);
     const children = model.childrenByPlacement[selected.id] ?? [];
-    if (children.length) return children;
-    return selected.parentPlacementId ? model.childrenByPlacement[selected.parentPlacementId] ?? [] : [];
-  }, [model, selected]);
+    if (children.some(publishable)) return children.filter(publishable);
+    return selected.parentPlacementId ? (model.childrenByPlacement[selected.parentPlacementId] ?? []).filter(publishable) : [];
+  }, [model, publicBeta, selected]);
 
   useEffect(() => {
     const restore = () => {
-      const id = selectionFromHash(model);
+      const id = selectionFromHash(model, !publicBeta);
       setSelectedId(id);
       setInspectorOpen(Boolean(id));
       setFullWorld(false);
@@ -122,7 +126,7 @@ export function PersistentWorldShell() {
     window.addEventListener("popstate", restore);
     window.addEventListener("hashchange", restore);
     return () => { window.removeEventListener("popstate", restore); window.removeEventListener("hashchange", restore); };
-  }, [model]);
+  }, [model, publicBeta]);
 
   useEffect(() => {
     const update = () => setFullscreen(document.fullscreenElement === workspaceRef.current);
@@ -147,6 +151,7 @@ export function PersistentWorldShell() {
   }, [searchOpen]);
 
   function navigate(id: string | null, options: { record?: boolean; replace?: boolean } = {}) {
+    if (id && publicBeta && !persistentWorldPublicPlacementVisible(model, id)) return;
     const hash = id ? `#persistent-world/${encodeURIComponent(id)}` : "#persistent-world";
     const url = `${window.location.pathname}${window.location.search}${hash}`;
     const update = () => {
@@ -210,12 +215,13 @@ export function PersistentWorldShell() {
   const fullscreenActive = fullscreen || fullscreenFallback;
 
   return <div className="sm-pw-view">
-    <h1 className="sm-sr-only" data-route-heading tabIndex={-1}>Persistent Employment Influence World</h1>
-    <section className="sm-pw-instrument" aria-label="Persistent Employment influence world R&D" data-model-initialization-ms={modelEvidence.initializationMs.toFixed(3)} data-model-heap-delta-bytes={modelEvidence.heapDeltaBytes ?? "UNAVAILABLE"}>
+    <h1 className="sm-sr-only" data-route-heading tabIndex={-1}>U.S. systems factor explorer</h1>
+    <section className="sm-pw-instrument" aria-label="U.S. systems factor explorer public beta" data-model-initialization-ms={modelEvidence.initializationMs.toFixed(3)} data-model-heap-delta-bytes={modelEvidence.heapDeltaBytes ?? "UNAVAILABLE"}>
       <header className="sm-pw-header">
-        <div><span>Persistent world R&amp;D</span><strong>{selected ? placementLabel(model, selected) : "Employment influence systems"}</strong></div>
-        <div className="sm-pw-header__facts"><span>{connectedBindingCount} accepted readings</span><span>{PERSISTENT_ACCEPTED_IMPACT_COUNT} governed connector signals</span><details><summary>System status</summary><div><strong>{PERSISTENT_WORLD_PROFILED_FACTOR_COUNT}</strong> dataset paths cataloged<br /><strong>{LAYOFFS_SOURCE_ENABLED_FACTOR_COUNT}</strong> collectors enabled<br /><strong>{LAYOFFS_BLOCKED_FACTOR_COUNT}</strong> retrieval-blocked<br /><strong>0</strong> accepted structural relationships</div></details></div>
+        <div><span>Systems Monitor public beta</span><strong>{selected ? placementLabel(model, selected) : "Employment system factor map"}</strong></div>
+        <div className="sm-pw-header__facts"><span>{connectedBindingCount} mapped accepted observations</span><span>{PERSISTENT_ACCEPTED_IMPACT_COUNT} governed connector signals</span><details><summary>Coverage status</summary><div><strong>{PERSISTENT_WORLD_PROFILED_FACTOR_COUNT}</strong> candidate data paths cataloged<br /><strong>{LAYOFFS_SOURCE_ENABLED_FACTOR_COUNT}</strong> source-enabled Layoffs candidates<br /><strong>{LAYOFFS_BLOCKED_FACTOR_COUNT}</strong> Layoffs candidate paths blocked<br /><strong>0</strong> accepted structural relationships</div></details></div>
       </header>
+      <p className="sm-pw-beta-boundary"><strong>How to read this map:</strong> lines show hierarchy and drill-down only—not causality, influence, or economic impact. Verified observations appear only where an accepted source is explicitly shown; missing Level-4 coverage remains unavailable.</p>
       <div className="sm-pw-discovery">
         <button ref={searchTriggerRef} type="button" className="sm-pw-search-trigger" aria-expanded={searchOpen} onClick={() => setSearchOpen(true)}><span aria-hidden="true">⌕</span> Find a factor <kbd>Ctrl K</kbd></button>
         <div className="sm-pw-history" aria-label="Exploration history">
@@ -241,7 +247,7 @@ export function PersistentWorldShell() {
         <PersistentWorldMinimap model={model} selectedPlacementId={selectedId} onSelect={navigate} />
         <aside className={`sm-pw-inspector ${selected && inspectorOpen ? "is-open" : ""}`} aria-label="Persistent world factor details" aria-hidden={!selected || !inspectorOpen} data-panel-motion="settled-fade">
           {selected && factor && <div key={selected.id} className="sm-pw-inspector__content">
-            <header><span>{selected.depth === 1 ? "Master-defined driver system" : selected.depth === 2 ? "Level-2 review candidate" : "Level-3 reviewed factor"}</span><button type="button" aria-label="Close factor details" onClick={() => setInspectorOpen(false)}>×</button><h2>{placementLabel(model, selected)}</h2>{selectedCompactValue && <div className="sm-pw-inspector__quick-reading"><strong>{selectedCompactValue}</strong><span>{selectedBinding?.validTime} · {selectedBinding?.provider}</span><a href="/systems-monitor/#workstream1a">Open factual record</a></div>}</header>
+            <header><span>{selected.depth === 1 ? "Master-defined taxonomy system" : selected.depth === 2 ? "Level-3 review candidate" : "Level-4 reviewed factor"}</span><button type="button" aria-label="Close factor details" onClick={() => setInspectorOpen(false)}>×</button><h2>{placementLabel(model, selected)}</h2>{selectedCompactValue && <div className="sm-pw-inspector__quick-reading"><strong>{selectedCompactValue}</strong><span>{selectedBinding?.validTime} · {selectedBinding?.provider}</span><a href="/systems-monitor/#workstream1a">Open factual record</a></div>}</header>
             {selectedMedia && <div className="sm-pw-inspector__portrait" style={{ "--pw-photo": `url(${selectedMedia.imageUrl})`, "--pw-accent": selectedAccent } as CSSProperties}>
               <span className="sm-pw-inspector__photo" role="img" aria-label={selectedMedia.alt} />
               <span className="sm-pw-inspector__portrait-icon" aria-hidden="true"><StructuralNodeIcon symbol={selectedSymbol} /></span>
@@ -252,13 +258,13 @@ export function PersistentWorldShell() {
             <section><h3>Why it matters</h3><p>{selected.depth === 1 ? "It organizes a major family of conditions that can help explain changes around employment, without asserting that every child directly causes jobs to rise or fall." : `It gives people a specific way to inspect one part of ${placementLabel(model, model.placements[selected.parentPlacementId!])}; hierarchy placement does not by itself prove causality, weight, or propagation.`}</p></section>
             <section className="sm-pw-inspector__change"><h3>What changed</h3>{selectedChanges.length ? selectedChanges.slice(0, 2).map((notice) => <article key={notice.id} data-impact={notice.impactClass}><span>{notice.sourceHealthOnly ? "SOURCE HEALTH" : notice.kind.replaceAll("_", " ")}</span><strong>{notice.headline}</strong><p>{notice.summary}</p><small>{notice.comparisonBasis}</small></article>) : <p>{factor.evidencePosture === "TEST_FIXTURE" ? "Fixture only — this renderer-capacity node has no observation history, live feed, or economic change signal." : "No accepted comparable change is available for this factor in the selected time window."}</p>}</section>
             {selectedBinding?.status === "CONNECTED" ? <section className="sm-pw-inspector__data-boundary is-connected"><h3>Latest accepted reading</h3><strong>{selectedCompactValue}</strong><p>{selectedBinding.validTime} · {selectedBinding.provider}<br /><code>{selectedBinding.seriesId}</code></p><div className="sm-pw-inspector__data-actions">{selectedBinding.evidenceUrl && <a href={selectedBinding.evidenceUrl} target="_blank" rel="noreferrer">Original evidence</a>}{selectedBinding.methodologyUrl && <a href={selectedBinding.methodologyUrl} target="_blank" rel="noreferrer">Methodology</a>}{selectedBinding.acquisitionProvenanceUrl && <a href={selectedBinding.acquisitionProvenanceUrl} target="_blank" rel="noreferrer">Acquisition record</a>}<a href="/systems-monitor/#workstream1a">Open factual record</a></div><small>Accepted local factual snapshot · {selectedBinding.freshness}</small></section>
-              : selectedBinding?.status === "SOURCE_ENABLED_PENDING_ACCEPTANCE" ? <section className="sm-pw-inspector__data-boundary is-staged"><h3>Current data</h3><strong>Collector enabled · acceptance pending</strong><p>The official series can be retrieved and parsed, but no value is shown until rights, provenance, units, timing, revision, and publication acceptance pass.</p>{selectedBinding.candidateSeries?.map((series) => <div key={`${series.sourceId}:${series.seriesId}`}><code>{series.seriesId}</code><div className="sm-pw-inspector__data-actions"><a href={series.evidenceUrl} target="_blank" rel="noreferrer">Official evidence</a>{series.methodologyUrl && <a href={series.methodologyUrl} target="_blank" rel="noreferrer">Methodology</a>}</div></div>)}</section>
+              : selectedBinding?.status === "SOURCE_ENABLED_PENDING_ACCEPTANCE" ? <section className="sm-pw-inspector__data-boundary is-staged"><h3>Data status</h3><strong>Source adapter available · acceptance pending</strong><p>The official series has a candidate retrieval path, but no value is shown until current runtime health, rights, provenance, units, timing, revision, and publication acceptance pass.</p>{selectedBinding.candidateSeries?.map((series) => <div key={`${series.sourceId}:${series.seriesId}`}><code>{series.seriesId}</code><div className="sm-pw-inspector__data-actions"><a href={series.evidenceUrl} target="_blank" rel="noreferrer">Official evidence</a>{series.methodologyUrl && <a href={series.methodologyUrl} target="_blank" rel="noreferrer">Methodology</a>}</div></div>)}</section>
               : selectedBinding?.status === "BLOCKED" ? <section className="sm-pw-inspector__data-boundary is-design"><h3>Current data</h3><strong>Official path identified · retrieval blocked</strong><p>{selectedBinding.blockedReason ?? "A required credential or source decision is not yet available. No placeholder value is shown."}</p>{selectedBinding.candidateSeries?.map((series) => <div key={`${series.sourceId}:${series.seriesId}`}><code>{series.seriesId}</code><div className="sm-pw-inspector__data-actions"><a href={series.evidenceUrl} target="_blank" rel="noreferrer">Review official dataset</a></div></div>)}</section>
               : selectedBinding?.status === "SOURCE_IDENTIFIED" ? <section className="sm-pw-inspector__data-boundary is-staged"><h3>Current data</h3><strong>Official source identified</strong><p>Exact source intake or acceptance remains pending. No value is displayed until provenance and validation are complete.</p><code>{selectedBinding.candidateSeriesId}</code>{selectedSourceProfile && <dl><div><dt>Authority</dt><dd>{selectedSourceProfile.authority}</dd></div><div><dt>Dataset</dt><dd>{selectedSourceProfile.dataset}</dd></div><div><dt>Cadence</dt><dd>{selectedSourceProfile.cadence}</dd></div></dl>}<div className="sm-pw-inspector__data-actions">{selectedSourceProfile && <a href={selectedSourceProfile.evidenceUrl} target="_blank" rel="noreferrer">Review official dataset</a>}<a href="/systems-monitor/#workstream1a">Open factual Labor Market</a></div></section>
               : selectedSourceProfile?.readiness === "CANDIDATE_DATASET" ? <section className="sm-pw-inspector__data-boundary is-candidate"><h3>Candidate data path</h3><strong>{selectedSourceProfile.dataset}</strong><p>{selectedSourceProfile.summary}</p><dl><div><dt>Authority</dt><dd>{selectedSourceProfile.authority}</dd></div><div><dt>Expected cadence</dt><dd>{selectedSourceProfile.cadence}</dd></div><div><dt>Registration</dt><dd>Candidate · not enabled or accepted</dd></div></dl><div className="sm-pw-inspector__data-actions"><a href={selectedSourceProfile.evidenceUrl} target="_blank" rel="noreferrer">Review official dataset</a>{selectedSourceProfile.methodologyUrl && <a href={selectedSourceProfile.methodologyUrl} target="_blank" rel="noreferrer">Methodology</a>}</div><small>No current value is shown until source registration, rights, mapping, validation, and provenance acceptance pass.</small></section>
               : selectedSourceProfile?.readiness === "DERIVATION_REQUIRED" ? <section className="sm-pw-inspector__data-boundary is-design"><h3>Candidate data path</h3><strong>Derivation design required</strong><p>{selectedSourceProfile.summary}</p><dl><div><dt>Authority</dt><dd>{selectedSourceProfile.authority}</dd></div><div><dt>Registration</dt><dd>Source and calculation design pending</dd></div></dl><small>No single series is presented as the answer, and no placeholder value is shown.</small></section>
               : selectedBinding?.status === "FIXTURE_ONLY" ? <section className="sm-pw-inspector__data-boundary is-fixture"><h3>Evidence state</h3><strong>Fixture only · not factual</strong><p>This Level-4 renderer-capacity slot is connected to its parent by a hierarchy tether only. It has no official dataset, live value, accepted relationship, or temporal signal.</p></section>
-              : selected.depth === 3 ? <section className="sm-pw-inspector__data-boundary"><h3>Current data</h3><strong>Source mapping under review</strong><p>This is a real candidate economic identity. AUXSAYS shows no value until an exact official dataset, parser, provenance, rights posture, and acceptance decision exist.</p></section>
+              : selected.depth === 3 ? <section className="sm-pw-inspector__data-boundary"><h3>Data status</h3><strong>Source mapping under review</strong><p>This is a reviewed candidate concept. AUXSAYS shows no value until an exact official dataset, parser, provenance, rights posture, and acceptance decision exist.</p></section>
               : selected.depth === 1 ? <section className="sm-pw-inspector__data-boundary"><h3>Current data</h3><strong>Aggregate system · multiple datasets</strong><p>Select one of the ten child factors to inspect its official dataset candidate, readiness state, and available factual reading.</p></section>
               : <section className="sm-pw-inspector__data-boundary"><h3>Current data</h3><strong>Dataset binding pending</strong><p>This placement has no accepted observation yet. AUXSAYS will not display a placeholder value or imply that a taxonomy node is a live feed.</p><a href="/systems-monitor/#workstream1a">Open factual Labor Market</a></section>}
             <button type="button" className="sm-pw-inspector__deep-trigger" aria-expanded={deepDiveOpen} onClick={() => setDeepDiveOpen((current) => !current)}>{deepDiveOpen ? "Hide Deep Dive" : "Open Deep Dive"}<span aria-hidden="true">{deepDiveOpen ? "−" : "+"}</span></button>
@@ -270,7 +276,7 @@ export function PersistentWorldShell() {
             </div>}
           </div>}
         </aside>
-        <PersistentWorldSurface model={model} factualBindings={factualBindings} selectedPlacementId={selectedId} fullWorld={fullWorld} viewMode={viewMode} traceMode={traceMode} reducedMotion={reducedMotion} resetVersion={resetVersion} routePulseVersion={routePulseVersion} onSelect={navigate} onNavigateParent={navigateUp} onReset={resetWorld} />
+        <PersistentWorldSurface model={model} factualBindings={factualBindings} selectedPlacementId={selectedId} fullWorld={fullWorld} viewMode={viewMode} traceMode={traceMode} reducedMotion={reducedMotion} resetVersion={resetVersion} routePulseVersion={routePulseVersion} publicBeta={publicBeta} onSelect={navigate} onNavigateParent={navigateUp} onReset={resetWorld} />
         <div className="sm-pw-controls" aria-label="Persistent world view controls">
           <button type="button" disabled={!selected} onClick={navigateUp}>Up one level</button>
           <button type="button" onClick={resetWorld}>Reset</button>
@@ -294,10 +300,10 @@ export function PersistentWorldShell() {
 
     <section className="sm-pw-access" aria-labelledby="pw-access-title">
       <div><span>{selected ? "Current exact-ten neighborhood" : "Master-defined Level-1 systems"}</span><h2 id="pw-access-title">Explore without relying on the map</h2><p>These controls expose the same bounded hierarchy by keyboard and touch. Hierarchy tethers do not claim causality.</p></div>
-      <ol>{visibleChoiceIds.map((id, index) => {
+      {visibleChoiceIds.length ? <ol>{visibleChoiceIds.map((id, index) => {
         const placement = model.placements[id]; const item = model.factors[placement.canonicalFactorId]; const binding = factualBindings[id];
         return <li key={id}><button type="button" onClick={() => navigate(id)} aria-current={id === selectedId ? "true" : undefined}><span>{String(index + 1).padStart(2, "0")}</span><strong>{placementLabel(model, placement)}</strong><small>{binding?.status === "CONNECTED" ? "Accepted factual reading" : binding?.status === "SOURCE_ENABLED_PENDING_ACCEPTANCE" ? "Collector enabled · acceptance pending" : binding?.status === "BLOCKED" ? "Official path · retrieval blocked" : binding?.status === "FIXTURE_ONLY" ? "Fixture only · hierarchy tether" : item.evidencePosture === "CANDIDATE" ? "Source identified · no value" : "Master-defined system"}</small></button></li>;
-      })}</ol>
+      })}</ol> : <p className="sm-pw-access__pending">Level 4 is not yet available for this branch. Candidate identities and official source paths must pass review before they appear in the public beta.</p>}
     </section>
 
     <aside className="sm-pw-factual-boundary" role="note"><div><strong>Factual labor readings remain separate</strong><p>The six accepted BLS/DOL observations are unchanged and inspectable in Workstream‑1A. They are measurements—not synthetic influence edges in this fixture world.</p></div><a href="/systems-monitor/#workstream1a">Open factual Labor Market</a></aside>

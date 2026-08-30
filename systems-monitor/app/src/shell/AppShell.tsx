@@ -87,13 +87,13 @@ export function AppShell({ children, snapshot, phase4b, motionQa, persistentWorl
   setVariant: (variant: FixtureVariant) => void;
 }) {
   const factual = snapshot.snapshot.publicationClass === "factual";
-  if (import.meta.env.DEV && persistentWorld) {
+  if (persistentWorld) {
     return <div className="sm-app-shell sm-app-shell--immersive sm-app-shell--persistent-world">
       <a className="sm-skip" href="#systems-monitor-content">Skip to persistent world</a>
-      <div className="sm-motion-warning" role="status"><SystemIcon name="network" size={18} /><strong>PERSISTENT WORLD R&amp;D — TEST FIXTURE</strong><span>Not factual structural coverage · never publishable</span></div>
-      <header className="sm-immersive-header"><a className="sm-parent-brand" href="/">AUXSAYS <span>/ U.S. Systems Monitor</span></a><div className="sm-review-status" aria-label="Persistent-world review status"><span>Development only</span><span>Human QA pending</span></div></header>
+      <div className="sm-motion-warning" role="status"><SystemIcon name="network" size={18} /><strong>PUBLIC BETA — COVERAGE IN PROGRESS</strong><span>Verified readings and reviewed candidates are separated; map lines show hierarchy only</span></div>
+      <header className="sm-immersive-header"><a className="sm-parent-brand" href="/">AUXSAYS <span>/ U.S. Systems Monitor</span></a><div className="sm-review-status" aria-label="Systems Monitor beta status"><span>Public beta</span><span>Gate B open</span></div></header>
       <main id="systems-monitor-content" className="sm-immersive-main" tabIndex={-1}>{children}</main>
-      <footer className="sm-immersive-footer"><span>1→10→100→1000 persistent-world proof</span><span>Gate B open · accepted factual relationships 0</span></footer>
+      <footer className="sm-immersive-footer"><span>Evidence-first beta · incomplete coverage stays visible</span><span>Accepted structural relationships: 0 · forecasting unavailable</span></footer>
     </div>;
   }
   if (motionQa) {

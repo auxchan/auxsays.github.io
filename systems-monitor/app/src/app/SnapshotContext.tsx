@@ -26,14 +26,15 @@ export function SnapshotProvider({ children }: { children: React.ReactNode }) {
     return () => { window.removeEventListener("hashchange", update); window.removeEventListener("popstate", update); };
   }, []);
   const workstream1aReview = routeHash === "#workstream1a";
-  const persistentWorldReview = import.meta.env.DEV && routeHash.startsWith("#persistent-world");
+  const explicitLegacyView = new URLSearchParams(window.location.search).has("view") || routeHash === "#workstream1a";
+  const persistentWorldReview = routeHash.startsWith("#persistent-world") || (import.meta.env.PROD && !explicitLegacyView);
   const snapshot = useMemo(() => {
     const storedCandidate = import.meta.env.DEV && !workstream1aReview && !persistentWorldReview ? window.localStorage.getItem("auxsays.localFactualCandidate") : null;
     const localCandidate = workstream1aReview || persistentWorldReview ? undefined : window.__AUXSAYS_LOCAL_FACTUAL_SNAPSHOT__ ?? (storedCandidate ? JSON.parse(storedCandidate) : undefined);
     if (localCandidate && typeof localCandidate === "object" && "artifactType" in localCandidate) {
       return createCandidateViewModel(validatePublicationCandidate(localCandidate));
     }
-    const defaultSnapshot = persistentWorldReview || (import.meta.env.MODE === "test" && !workstream1aReview) ? phase2Fixture : activeFactualSnapshot;
+    const defaultSnapshot = import.meta.env.MODE === "test" && !workstream1aReview ? phase2Fixture : activeFactualSnapshot;
     return createSnapshotViewModel(validatePublicSnapshot((localCandidate ?? defaultSnapshot) as unknown));
   }, [persistentWorldReview, workstream1aReview]);
   const phase4b = useMemo(() => {

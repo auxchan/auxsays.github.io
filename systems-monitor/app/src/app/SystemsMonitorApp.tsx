@@ -7,10 +7,10 @@ import { useRouteState } from "../state/useRouteState";
 const SummaryView = lazy(() => import("../views/summary/SummaryView"));
 const VerifiedDataView = lazy(() => import("../views/verified/VerifiedDataView"));
 const OutlookView = lazy(() => import("../views/outlook/OutlookView"));
-const MotionQaHarness = lazy(() => import("../views/motion/MotionQaHarness").then((module) => ({ default: module.MotionQaHarness })));
-const PersistentWorldShell = import.meta.env.DEV
-  ? lazy(() => import("../views/persistent/PersistentWorldShell").then((module) => ({ default: module.PersistentWorldShell })))
+const MotionQaHarness = import.meta.env.DEV
+  ? lazy(() => import("../views/motion/MotionQaHarness").then((module) => ({ default: module.MotionQaHarness })))
   : null;
+const PersistentWorldShell = lazy(() => import("../views/persistent/PersistentWorldShell").then((module) => ({ default: module.PersistentWorldShell })));
 
 class AppErrorBoundary extends Component<{ children: React.ReactNode }, { error: Error | null }> {
   state = { error: null } as { error: Error | null };
@@ -23,10 +23,11 @@ function ValidatedApp() {
   const { route, navigate } = useRouteState(snapshot);
   if (variant === "loading") return <LoadingState />;
   if (variant === "snapshot-unavailable") return <ErrorState />;
-  const persistentWorld = Boolean(PersistentWorldShell) && window.location.hash.startsWith("#persistent-world");
-  const view = persistentWorld && PersistentWorldShell
+  const explicitLegacyView = new URLSearchParams(window.location.search).has("view") || window.location.hash === "#workstream1a";
+  const persistentWorld = window.location.hash.startsWith("#persistent-world") || (import.meta.env.PROD && !explicitLegacyView);
+  const view = persistentWorld
     ? <PersistentWorldShell />
-    : motionQa
+    : motionQa && MotionQaHarness
     ? <MotionQaHarness model={motionQa} route={route} />
     : route.view === "verified"
     ? <VerifiedDataView snapshot={snapshot} phase4b={phase4b} route={route} navigate={navigate} variant={variant} />

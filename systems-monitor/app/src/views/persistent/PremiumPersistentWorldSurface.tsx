@@ -6,7 +6,7 @@ import {
   PERSISTENT_GLINT_TRAIL, blendPremiumColor, compactPersistentValue, drawPremiumGlyph,
   createPersistentCameraTransition, easePremiumHover, factorGlyph, persistentAmbientEdges, persistentGlintProgress, pointOnCubic, premiumCurveRoute,
   persistentFocusRotation, persistentPlacementAccent, premiumRadius, resolvePersistentLod, resolvePremiumLabels, traceCubic,
-  samplePersistentCameraTransition, type LabelCandidate, type PersistentCameraPose, type PersistentCameraVelocity, type Point
+  samplePersistentCameraTransition, type LabelCandidate, type PersistentCameraPose, type PersistentCameraTransition, type PersistentCameraVelocity, type Point
 } from "./persistentWorldVisuals";
 import { createPersistentProjector, createPersistentWorldSpatialLayout, type PersistentProjectedPlacement } from "./persistentWorldSpatialLayout";
 
@@ -23,6 +23,7 @@ interface Props {
   reducedMotion: boolean;
   resetVersion: number;
   routePulseVersion: number;
+  publicBeta?: boolean;
   onSelect: (placementId: string) => void;
   onNavigateParent: () => void;
   onReset: () => void;
@@ -34,6 +35,45 @@ export function persistentWorldDoubleClickAction(hitPlacementId: string | null, 
   if (!hitPlacementId) return "RESET";
   if (parentPlacementId && hitPlacementId === parentPlacementId) return "UP_ONE_LEVEL";
   return "NONE";
+}
+
+export function persistentWorldPublicPlacementVisible(model: PersistentWorldReadModel, placementId: string) {
+  const placement = model.placements[placementId];
+  return Boolean(placement && model.factors[placement.canonicalFactorId].evidencePosture !== "TEST_FIXTURE");
+}
+
+export function persistentWorldPublicRelationshipVisible(model: PersistentWorldReadModel, relationship: PersistentWorldReadModel["relationships"][string]) {
+  return relationship.relationshipClass === "HIERARCHY_TETHER"
+    && persistentWorldPublicPlacementVisible(model, relationship.fromPlacementId)
+    && persistentWorldPublicPlacementVisible(model, relationship.toPlacementId);
+}
+
+/** Keeps rapid camera retargets continuous while bounding carried momentum and lateral travel. */
+export function polishPersistentCameraTransition(transition: PersistentCameraTransition): PersistentCameraTransition {
+  const planarDistance = Math.hypot(transition.to.x - transition.from.x, transition.to.y - transition.from.y);
+  const averagePlanarSpeed = planarDistance / Math.max(1, transition.durationMs);
+  const maxPlanarCarry = Math.min(.2, Math.max(.018, averagePlanarSpeed * .58));
+  const carriedPlanarSpeed = Math.hypot(transition.velocity.x, transition.velocity.y);
+  const carryScale = carriedPlanarSpeed > maxPlanarCarry ? maxPlanarCarry / carriedPlanarSpeed : 1;
+  const zDistance = Math.abs(transition.to.z - transition.from.z);
+  const logScaleDistance = Math.abs(Math.log(Math.max(.001, transition.to.scale) / Math.max(.001, transition.from.scale)));
+  const maxZCarry = Math.min(.11, Math.max(.008, zDistance / Math.max(1, transition.durationMs) * .62));
+  const maxScaleCarry = Math.min(.00065, Math.max(.00008, logScaleDistance / Math.max(1, transition.durationMs) * .52));
+  return {
+    ...transition,
+    durationMs: Math.max(740, Math.min(1020, 740 + planarDistance * .11 + logScaleDistance * 135)),
+    arc: Math.sign(transition.arc || 1) * Math.min(26, planarDistance * .045),
+    orbit: Math.sign(transition.orbit || 1) * Math.min(.016, planarDistance / 24000),
+    velocity: {
+      x: transition.velocity.x * carryScale,
+      y: transition.velocity.y * carryScale,
+      z: Math.max(-maxZCarry, Math.min(maxZCarry, transition.velocity.z)),
+      logScale: Math.max(-maxScaleCarry, Math.min(maxScaleCarry, transition.velocity.logScale)),
+      rotation: Math.max(-.00055, Math.min(.00055, transition.velocity.rotation)),
+      pitch: Math.max(-.00022, Math.min(.00022, transition.velocity.pitch)),
+      yaw: Math.max(-.00022, Math.min(.00022, transition.velocity.yaw))
+    }
+  };
 }
 
 export function persistentWorldGraphNodeLabel(model: PersistentWorldReadModel, placement: PersistentWorldPlacement) {
@@ -152,7 +192,7 @@ function drawDimensionalNode(context: CanvasRenderingContext2D, point: Persisten
   context.restore();
 }
 
-export function PremiumPersistentWorldSurface({ model, factualBindings, selectedPlacementId, fullWorld, viewMode, traceMode, reducedMotion, resetVersion, routePulseVersion, onSelect, onNavigateParent, onReset }: Props) {
+export function PremiumPersistentWorldSurface({ model, factualBindings, selectedPlacementId, fullWorld, viewMode, traceMode, reducedMotion, resetVersion, routePulseVersion, publicBeta = false, onSelect, onNavigateParent, onReset }: Props) {
   const spatialLayout = useMemo(() => createPersistentWorldSpatialLayout(model), [model]);
   const hostRef = useRef<HTMLDivElement>(null); const canvasRef = useRef<HTMLCanvasElement>(null);
   const cameraRef = useRef<Camera>(targetCamera(model, selectedPlacementId, fullWorld, viewMode, 980, 720, spatialLayout));
@@ -169,7 +209,8 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
   const hoveredBinding = hoveredId ? factualBindings[hoveredId] : undefined;
   const hoveredSource = hoveredPlacement && hoveredPlacement.depth >= 2 && hoveredFactor ? persistentWorldCandidateSourceProfile(persistentWorldPlacementLabel(model, hoveredPlacement)) ?? persistentWorldCandidateSourceProfile(hoveredFactor.label) : undefined;
   const hoveredValue = compactPersistentValue(hoveredBinding?.status === "CONNECTED" ? hoveredBinding.displayValue : undefined);
-  const semantic = useMemo(() => semanticIds(model, fullWorld ? null : selectedPlacementId), [fullWorld, model, selectedPlacementId]); const semanticSet = useMemo(() => new Set(semantic), [semantic]);
+  const isVisiblePlacement = (id: string) => !publicBeta || persistentWorldPublicPlacementVisible(model, id);
+  const semantic = useMemo(() => semanticIds(model, fullWorld ? null : selectedPlacementId).filter(isVisiblePlacement), [fullWorld, model, publicBeta, selectedPlacementId]); const semanticSet = useMemo(() => new Set(semantic), [semantic]);
   const selectedPath = useMemo(() => {
     const ids = new Set<string>(); let current = selectedPlacementId ? model.placements[selectedPlacementId] : undefined;
     while (current) { ids.add(current.id); current = current.parentPlacementId ? model.placements[current.parentPlacementId] : undefined; } return ids;
@@ -192,19 +233,19 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
     let frame = 0; let last = performance.now(); let frameCount = 0; let accumulated = 0; const frameSamples: number[] = [];
     const initialBounds = host.getBoundingClientRect();
     let destination = targetCamera(model, selectedPlacementId, fullWorld, viewMode, initialBounds.width, initialBounds.height, spatialLayout); const cameraStarted = performance.now(); let cameraSettled = false;
-    let cameraTransition = createPersistentCameraTransition(cameraRef.current, destination, cameraStarted, `${viewMode}:${selectedPlacementId ?? (fullWorld ? "full-world" : "overview")}`, cameraVelocityRef.current);
+    let cameraTransition = polishPersistentCameraTransition(createPersistentCameraTransition(cameraRef.current, destination, cameraStarted, `${viewMode}:${selectedPlacementId ?? (fullWorld ? "full-world" : "overview")}`, cameraVelocityRef.current));
     const previousSemantic = semanticHistoryRef.current.length ? semanticHistoryRef.current : semantic; semanticHistoryRef.current = semantic;
     const previousSemanticSet = new Set(previousSemantic); const transitionSemanticSet = new Set([...previousSemantic, ...semantic]);
-    delete host.dataset.cameraSettleMs; if (reducedMotion) { cameraRef.current = destination; cameraVelocityRef.current = { x: 0, y: 0, z: 0, logScale: 0, rotation: 0, pitch: 0, yaw: 0 }; }
+    delete host.dataset.cameraSettleMs; if (reducedMotion) { cameraRef.current = destination; cameraVelocityRef.current = { x: 0, y: 0, z: 0, logScale: 0, rotation: 0, pitch: 0, yaw: 0 }; cameraMomentumRef.current = { x: 0, y: 0 }; }
     const resize = () => {
       const bounds = host.getBoundingClientRect(); const ratio = Math.min(2, window.devicePixelRatio || 1); destination = targetCamera(model, selectedPlacementId, fullWorld, viewMode, bounds.width, bounds.height, spatialLayout); cameraTransition.to = destination;
       canvas.width = Math.max(1, Math.round(bounds.width * ratio)); canvas.height = Math.max(1, Math.round(bounds.height * ratio)); canvas.style.width = `${bounds.width}px`; canvas.style.height = `${bounds.height}px`; context.setTransform(ratio, 0, 0, ratio, 0, 0);
       if (reducedMotion) invalidateRef.current();
     };
     resize(); const observer = new ResizeObserver(resize); observer.observe(host);
-    const placements = Object.values(model.placements);
-    const hierarchy = Object.values(model.relationships).filter((edge) => edge.relationshipClass === "HIERARCHY_TETHER");
-    const influence = Object.values(model.relationships).filter((edge) => edge.relationshipClass === "SYNTHETIC_INFLUENCE");
+    const placements = Object.values(model.placements).filter((placement) => isVisiblePlacement(placement.id));
+    const hierarchy = Object.values(model.relationships).filter((edge) => publicBeta ? persistentWorldPublicRelationshipVisible(model, edge) : edge.relationshipClass === "HIERARCHY_TETHER");
+    const influence = publicBeta ? [] : Object.values(model.relationships).filter((edge) => edge.relationshipClass === "SYNTHETIC_INFLUENCE");
     const focusedPlacementForEdges = selectedPlacementId ? model.placements[selectedPlacementId] : undefined;
     const focusedChildrenForEdges = new Set(focusedPlacementForEdges ? model.childrenByPlacement[focusedPlacementForEdges.id] ?? [] : []);
     const highlightedEdges = hierarchy.filter((edge) => {
@@ -220,8 +261,9 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
       const started = performance.now(); const elapsedMs = Math.min(48, Math.max(0, now - last)); const bounds = host.getBoundingClientRect(); const width = bounds.width; const height = bounds.height; const camera = cameraRef.current; const viewport = viewportRef.current;
       frame = 0;
       const priorCamera = { ...camera }; const transitionSample = reducedMotion ? { progress: 1, pose: destination, velocity: { x: 0, y: 0, z: 0, logScale: 0, rotation: 0, pitch: 0, yaw: 0 } } : samplePersistentCameraTransition(cameraTransition, now); Object.assign(camera, transitionSample.pose); cameraVelocityRef.current = transitionSample.velocity;
-      const targetMomentum = reducedMotion ? { x: 0, y: 0 } : { x: Math.max(-32, Math.min(32, (priorCamera.x - camera.x) * camera.scale * 1.4)), y: Math.max(-32, Math.min(32, (priorCamera.y - camera.y) * camera.scale * 1.4)) };
-      cameraMomentumRef.current.x += (targetMomentum.x - cameraMomentumRef.current.x) * .18; cameraMomentumRef.current.y += (targetMomentum.y - cameraMomentumRef.current.y) * .18;
+      const targetMomentum = reducedMotion ? { x: 0, y: 0 } : { x: Math.max(-14, Math.min(14, (priorCamera.x - camera.x) * camera.scale * .72)), y: Math.max(-14, Math.min(14, (priorCamera.y - camera.y) * camera.scale * .72)) };
+      const momentumEase = reducedMotion ? 1 : 1 - Math.exp(-elapsedMs / 86);
+      cameraMomentumRef.current.x += (targetMomentum.x - cameraMomentumRef.current.x) * momentumEase; cameraMomentumRef.current.y += (targetMomentum.y - cameraMomentumRef.current.y) * momentumEase;
       host.dataset.cameraX = camera.x.toFixed(3); host.dataset.cameraY = camera.y.toFixed(3); host.dataset.cameraZ = camera.z.toFixed(3); host.dataset.cameraScale = camera.scale.toFixed(3); host.dataset.cameraRotationDegrees = (camera.rotation * 180 / Math.PI).toFixed(1); host.dataset.cameraPitchDegrees = (camera.pitch * 180 / Math.PI).toFixed(1); host.dataset.cameraYawDegrees = (camera.yaw * 180 / Math.PI).toFixed(1);
       host.dataset.cameraTransitionProgress = transitionSample.progress.toFixed(3); host.dataset.cameraTransitionPhase = reducedMotion ? "REDUCED_MOTION" : transitionSample.progress < .28 ? "DOLLY_OUT" : transitionSample.progress < .82 ? "ORBITAL_TRAVEL" : transitionSample.progress < 1 ? "DOLLY_IN" : "SETTLED";
       if (!cameraSettled && transitionSample.progress >= 1) { cameraSettled = true; host.dataset.cameraSettleMs = (performance.now() - cameraStarted).toFixed(3); }
@@ -336,7 +378,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
     };
     invalidateRef.current = () => { if (reducedMotion) draw(performance.now()); else if (!frame) frame = requestAnimationFrame(draw); }; draw(performance.now());
     return () => { observer.disconnect(); cancelAnimationFrame(frame); invalidateRef.current = () => undefined; };
-  }, [factualBindings, fullWorld, model, reducedMotion, selectedPath, selectedPlacementId, semantic, semanticSet, spatialLayout, traceMode, viewMode]);
+  }, [factualBindings, fullWorld, model, publicBeta, reducedMotion, selectedPath, selectedPlacementId, semantic, semanticSet, spatialLayout, traceMode, viewMode]);
 
   function hitTest(event: { clientX: number; clientY: number }) {
     const host = hostRef.current; if (!host) return null; const bounds = host.getBoundingClientRect(); const camera = cameraRef.current; let best: { id: string; score: number; depth: number } | null = null;
@@ -348,7 +390,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
 
   const parentPlacementId = selectedPlacementId ? model.placements[selectedPlacementId]?.parentPlacementId : null;
 
-  return <div ref={hostRef} className="sm-pw-surface sm-pw-surface--premium" role="application" tabIndex={0} aria-label="Persistent Employment influence world" aria-keyshortcuts="Alt+ArrowLeft" data-world-id={model.worldId} data-graph-snapshot-id={model.graphSnapshotId} data-layout-version={model.layoutVersion} data-topology-fingerprint={model.topologyFingerprint} data-presentation-layout-version={spatialLayout.version} data-projection-version={spatialLayout.projectionVersion} data-presentation-fingerprint={spatialLayout.fingerprint} data-resident-placement-count={model.coverage.placementCount} data-resident-relationship-count={model.coverage.hierarchyRelationshipCount + model.coverage.syntheticInfluenceCount} data-semantic-node-count={semantic.length} data-factual-binding-count={Object.values(factualBindings).filter((binding) => binding.status === "CONNECTED").length} data-lod-mode={fullWorld ? "FULL_WORLD_DENSITY" : selectedPlacementId ? "FOCUS" : "OVERVIEW"} data-trace-mode={traceMode} data-route-pulse-version={routePulseVersion} data-selected-placement-id={selectedPlacementId ?? ""} data-parent-placement-id={parentPlacementId ?? ""} data-viewport-zoom="1.000" data-viewport-pan-x="0" data-viewport-pan-y="0" data-glint-period-ms="2500" data-glint-trail="0.085" data-hovered-placement-id={hoveredId ?? ""} onKeyDown={(event) => {
+  return <div ref={hostRef} className="sm-pw-surface sm-pw-surface--premium" role="application" tabIndex={0} aria-label="U.S. systems factor map" aria-keyshortcuts="Alt+ArrowLeft" data-world-id={model.worldId} data-graph-snapshot-id={model.graphSnapshotId} data-layout-version={model.layoutVersion} data-topology-fingerprint={model.topologyFingerprint} data-presentation-layout-version={spatialLayout.version} data-projection-version={spatialLayout.projectionVersion} data-presentation-fingerprint={spatialLayout.fingerprint} data-resident-placement-count={model.coverage.placementCount} data-resident-relationship-count={model.coverage.hierarchyRelationshipCount + model.coverage.syntheticInfluenceCount} data-semantic-node-count={semantic.length} data-factual-binding-count={Object.values(factualBindings).filter((binding) => binding.status === "CONNECTED").length} data-lod-mode={fullWorld ? "FULL_WORLD_DENSITY" : selectedPlacementId ? "FOCUS" : "OVERVIEW"} data-trace-mode={traceMode} data-route-pulse-version={routePulseVersion} data-selected-placement-id={selectedPlacementId ?? ""} data-parent-placement-id={parentPlacementId ?? ""} data-viewport-zoom="1.000" data-viewport-pan-x="0" data-viewport-pan-y="0" data-glint-period-ms="2500" data-glint-trail="0.085" data-hovered-placement-id={hoveredId ?? ""} onKeyDown={(event) => {
     if (event.altKey && event.key === "ArrowLeft" && selectedPlacementId) { event.preventDefault(); onNavigateParent(); }
   }} onWheel={(event) => {
     const started = performance.now(); event.preventDefault(); const bounds = event.currentTarget.getBoundingClientRect(); const current = viewportRef.current; const zoom = Math.max(.55, Math.min(3.25, current.zoom * Math.exp(-event.deltaY * .0014))); const ratio = zoom / current.zoom; const cursorX = event.clientX - bounds.left - bounds.width / 2; const cursorY = event.clientY - bounds.top - bounds.height / 2; updateViewport({ zoom, panX: cursorX - (cursorX - current.panX) * ratio, panY: cursorY - (cursorY - current.panY) * ratio }); event.currentTarget.dataset.wheelHandlerMs = (performance.now() - started).toFixed(3);
@@ -357,7 +399,9 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
     if (pan?.pointerId === event.pointerId) { const dx = event.clientX - pan.startX; const dy = event.clientY - pan.startY; pan.moved ||= Math.hypot(dx, dy) > 3; suppressClickRef.current = pan.moved; updateViewport({ ...viewportRef.current, panX: pan.panX + dx, panY: pan.panY + dy }); return; }
     const started = performance.now(); const hit = hitTest(event); setHoveredId(hit); if (hit) { event.currentTarget.style.setProperty("--pw-hover-x", `${Math.max(14, Math.min(bounds.width - 304, pointerRef.current.x + 18))}px`); event.currentTarget.style.setProperty("--pw-hover-y", `${Math.max(14, Math.min(bounds.height - 246, pointerRef.current.y + 18))}px`); } event.currentTarget.dataset.hoverHitTestMs = (performance.now() - started).toFixed(3); invalidateRef.current();
   }} onPointerUp={(event) => { if (panRef.current?.pointerId === event.pointerId) { event.currentTarget.releasePointerCapture(event.pointerId); panRef.current = null; } }} onPointerCancel={() => { panRef.current = null; }} onPointerLeave={() => { if (!panRef.current) setHoveredId(null); }} onMouseDown={(event) => { if (event.button === 1) event.preventDefault(); }} onAuxClick={(event) => { if (event.button === 1) event.preventDefault(); }} onDoubleClick={(event) => { const action = persistentWorldDoubleClickAction(hitTest(event), parentPlacementId); if (action === "UP_ONE_LEVEL") onNavigateParent(); else if (action === "RESET") onReset(); }} onClick={(event) => { if (event.detail > 1) return; if (suppressClickRef.current) { suppressClickRef.current = false; return; } const id = hitTest(event); if (id && id !== parentPlacementId) onSelect(id); }}>
-    <canvas ref={canvasRef} role="img" aria-label="All 1,111 fixture placements remain resident; premium visual detail and labels are bounded to the current exact-ten neighborhood." />
+    <canvas ref={canvasRef} role="img" aria-label={publicBeta
+      ? "Reviewed public-beta factors and hierarchy-only navigation connections, bounded to the current neighborhood."
+      : "All 1,111 fixture placements remain resident; premium visual detail and labels are bounded to the current exact-ten neighborhood."} />
     <aside className="sm-pw-hover-card" role="tooltip" aria-hidden={!hoveredPlacement} data-visible={Boolean(hoveredPlacement)}>
       {hoveredPlacement && hoveredFactor && <><header><span>{hoveredPlacement.depth === 1 ? "System" : hoveredPlacement.depth === 2 ? "Factor" : hoveredPlacement.depth === 0 ? "Outcome" : "Supporting factor"}</span><strong>{persistentWorldPlacementLabel(model, hoveredPlacement)}</strong>{hoveredValue && <b>{hoveredValue}</b>}</header><dl><div><dt>Purpose</dt><dd>{hoverPurpose(model, hoveredPlacement)}</dd></div><div><dt>Tracks</dt><dd>{hoveredSource?.summary ?? hoveredFactor.definition}</dd></div><div><dt>Why</dt><dd>{hoverWhy(model, hoveredPlacement)}</dd></div></dl><small>{hoveredBinding?.status === "CONNECTED" ? `${hoveredBinding.validTime} · ${hoveredBinding.provider} · click for evidence` : hoveredBinding?.status === "SOURCE_ENABLED_PENDING_ACCEPTANCE" ? "Collector enabled · acceptance pending" : hoveredBinding?.status === "BLOCKED" ? "Official path identified · retrieval blocked" : "Click for full details"}</small></>}
     </aside>

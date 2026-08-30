@@ -38,6 +38,8 @@
 [data-aux-product="systems-monitor"] .sm-pw-breadcrumbs i { color: #3b7479; font-style: normal; }
 [data-aux-product="systems-monitor"] .sm-pw-breadcrumbs button { padding: 7px 4px; border: 0; background: transparent; color: #87aab0; cursor: pointer; }
 [data-aux-product="systems-monitor"] .sm-pw-breadcrumbs button[aria-current="location"] { color: #dcfbf5; }
+[data-aux-product="systems-monitor"] .sm-pw-beta-boundary { margin: 0; padding: 10px 22px; border-bottom: 1px solid #17343e; background: rgba(10,43,53,.72); color: #9fc3c5; font-size: 12px; line-height: 1.45; }
+[data-aux-product="systems-monitor"] .sm-pw-beta-boundary strong { color: #d8efec; }
 [data-aux-product="systems-monitor"] .sm-pw-workspace { position: relative; min-height: 720px; height: clamp(720px,78vh,920px); display: grid; grid-template-columns: 0 minmax(0,1fr); transition: grid-template-columns 340ms cubic-bezier(.22,.85,.25,1); }
 [data-aux-product="systems-monitor"] .sm-pw-workspace:fullscreen,[data-aux-product="systems-monitor"] .sm-pw-workspace.is-fullscreen-fallback { width: 100vw; height: 100vh; min-height: 100vh; grid-template-rows: minmax(0,1fr); background: #06151d; }
 [data-aux-product="systems-monitor"] .sm-pw-workspace.is-fullscreen-fallback { position: fixed; z-index: 9999; inset: 0; }
@@ -124,7 +126,8 @@
 [data-aux-product="systems-monitor"] .sm-pw-inspector__deep-trigger span { color: #6fe4d0; font-size: 18px; }
 [data-aux-product="systems-monitor"] .sm-pw-inspector__deep { animation: sm-pw-deep-reveal 220ms ease both; }
 @keyframes sm-pw-deep-reveal { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
-[data-aux-product="systems-monitor"] .sm-pw-surface { position: relative; min-width: 0; min-height: 650px; touch-action: pan-y; cursor: crosshair; overflow: hidden; overscroll-behavior: contain; background: #041219; }
+[data-aux-product="systems-monitor"] .sm-pw-surface { position: relative; min-width: 0; min-height: 650px; touch-action: pan-y; cursor: crosshair; overflow: hidden; outline: 0; overscroll-behavior: contain; background: #041219; }
+[data-aux-product="systems-monitor"] .sm-pw-surface:focus-visible { outline: 2px solid rgba(111,228,208,.78); outline-offset: -4px; box-shadow: inset 0 0 0 1px rgba(4,18,25,.9),inset 0 0 18px rgba(111,228,208,.08); }
 [data-aux-product="systems-monitor"] .sm-pw-surface:active { cursor: grabbing; }
 [data-aux-product="systems-monitor"] .sm-pw-surface canvas { display: block; width: 100%; height: 100%; }
 [data-aux-product="systems-monitor"] .sm-pw-hover-card { position: absolute; z-index: 5; top: var(--pw-hover-y,14px); left: var(--pw-hover-x,14px); width: min(286px,calc(100% - 28px)); box-sizing: border-box; padding: 13px 14px 12px; pointer-events: none; border: 1px solid rgba(111,228,208,.34); border-radius: 13px; background: linear-gradient(155deg,rgba(9,39,48,.97),rgba(4,20,28,.96)); box-shadow: 0 18px 44px rgba(0,0,0,.42),inset 0 1px rgba(255,255,255,.04); opacity: 0; transform: translateY(7px) scale(.985); transition: opacity 150ms ease,transform 190ms cubic-bezier(.2,.8,.2,1); backdrop-filter: blur(12px); }
@@ -176,6 +179,7 @@
 [data-aux-product="systems-monitor"] .sm-pw-access ol { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; margin: 0; padding: 0; list-style: none; }
 [data-aux-product="systems-monitor"] .sm-pw-access li button { width: 100%; min-height: 58px; display: grid; grid-template-columns: 30px minmax(0,1fr); gap: 2px 9px; align-items: center; padding: 9px 12px; border: 1px solid #173a44; border-radius: 10px; background: #0a222b; color: #d6e9e7; text-align: left; cursor: pointer; }
 [data-aux-product="systems-monitor"] .sm-pw-access li button:hover,[data-aux-product="systems-monitor"] .sm-pw-access li button:focus-visible { border-color: #63d9c7; background: #0d2b34; }
+[data-aux-product="systems-monitor"] .sm-pw-access__pending { margin: 18px 0 0; padding: 18px 20px; border: 1px solid rgba(111,228,208,.2); border-radius: 12px; background: rgba(8,37,45,.42); color: #a8c7c8; line-height: 1.55; }
 [data-aux-product="systems-monitor"] .sm-pw-access li span { grid-row: 1 / 3; color: #588087; font-size: 11px; }
 [data-aux-product="systems-monitor"] .sm-pw-access li strong { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
 [data-aux-product="systems-monitor"] .sm-pw-access li small { color: #698e94; font-size: 10px; }

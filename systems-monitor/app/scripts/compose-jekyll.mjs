@@ -1,13 +1,15 @@
 import { cp, mkdir, readFile, writeFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 import path from "node:path";
-import { generatedInclude, publishedAssetRoot, viteManifest, viteOutput } from "./paths.mjs";
+import { generatedInclude, publishedAssetRoot, publishedMediaRoot, reviewedMediaRoot, viteManifest, viteOutput } from "./paths.mjs";
 
 const manifest = JSON.parse(await readFile(viteManifest, "utf8"));
 const entry = manifest["src/main.tsx"];
 if (!entry?.file) throw new Error("Missing Vite entry while composing Jekyll include");
 await mkdir(publishedAssetRoot, { recursive: true });
 await cp(path.join(viteOutput, "assets"), publishedAssetRoot, { recursive: true });
+await mkdir(publishedMediaRoot, { recursive: true });
+await cp(reviewedMediaRoot, publishedMediaRoot, { recursive: true });
 const assetFiles = [entry.file, ...(entry.css ?? [])];
 const hash = createHash("sha256").update(JSON.stringify(manifest)).digest("hex").slice(0, 16);
 const tags = assetFiles.map((file) => {

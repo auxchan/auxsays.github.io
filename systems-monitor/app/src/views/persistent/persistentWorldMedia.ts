@@ -10,77 +10,77 @@ export interface PersistentWorldMedia {
 
 const media = {
   people: {
-    imageUrl: "/systems-monitor/__local-review/media/employment-exposure-public-domain.jpg",
+    imageUrl: "/systems-monitor/media/employment-exposure-public-domain.jpg",
     alt: "Warehouse employees preparing packages for shipment at an industrial depot.",
     sourcePage: "https://commons.wikimedia.org/wiki/File:Warehouse_workers_prepare_packages_for_shipment_at_Sharpe_Army_Depot_-_DPLA_-_414220df83b823977c05c01a4b6b4106.jpeg",
     license: "PUBLIC_DOMAIN",
     credit: "U.S. Department of Defense / National Archives"
   },
   industry: {
-    imageUrl: "/systems-monitor/__local-review/media/industrial-demand-public-domain.jpg",
+    imageUrl: "/systems-monitor/media/industrial-demand-public-domain.jpg",
     alt: "Production workers completing an aircraft on an outdoor assembly line.",
     sourcePage: "https://commons.wikimedia.org/wiki/File:On_North_American%27s_outdoor_assembly_line1a35297v.jpg",
     license: "PUBLIC_DOMAIN",
     credit: "Alfred T. Palmer / Library of Congress"
   },
   refining: {
-    imageUrl: "/systems-monitor/__local-review/media/petroleum-refining-public-domain.jpg",
+    imageUrl: "/systems-monitor/media/petroleum-refining-public-domain.jpg",
     alt: "Dusk view of a petroleum refinery with illuminated processing towers and pipework.",
     sourcePage: "https://commons.wikimedia.org/wiki/File:Industrial-720706_640.jpg",
     license: "PUBLIC_DOMAIN",
     credit: "Carol M. Highsmith / Library of Congress"
   },
   storage: {
-    imageUrl: "/systems-monitor/__local-review/media/product-storage-public-domain.jpg",
+    imageUrl: "/systems-monitor/media/product-storage-public-domain.jpg",
     alt: "Rows of petroleum storage tanks at an industrial tank farm.",
     sourcePage: "https://commons.wikimedia.org/wiki/File:Petroleum_Storage_Tanks_-_DPLA_-_1802f5b6546765dfcfa9750b2e75fb37.jpg",
     license: "PUBLIC_DOMAIN",
     credit: "Hennepin County Library / DPLA"
   },
   utilities: {
-    imageUrl: "/systems-monitor/__local-review/media/industrial-utilities-public-domain.jpg",
+    imageUrl: "/systems-monitor/media/industrial-utilities-public-domain.jpg",
     alt: "Outdoor electrical substation with transformers, conductors, and switching equipment.",
     sourcePage: "https://commons.wikimedia.org/wiki/File:Outdoor_power_substation.jpg",
     license: "PUBLIC_DOMAIN",
     credit: "Steve Karg"
   },
   energy: {
-    imageUrl: "/systems-monitor/__local-review/media/refined-fuel-supply-public-domain.jpg",
+    imageUrl: "/systems-monitor/media/refined-fuel-supply-public-domain.jpg",
     alt: "Trans-Alaska pipeline crossing open terrain toward the horizon.",
     sourcePage: "https://commons.wikimedia.org/wiki/File:Trans-Alaska_Pipeline.jpg",
     license: "PUBLIC_DOMAIN",
     credit: "U.S. Department of the Interior"
   },
   trade: {
-    imageUrl: "/systems-monitor/__local-review/media/distribution-port-public-domain.jpg",
+    imageUrl: "/systems-monitor/media/distribution-port-public-domain.jpg",
     alt: "Aerial view of a container port with cranes, ships, roadways, and stacked freight.",
     sourcePage: "https://commons.wikimedia.org/wiki/File:Aerial_photograph_of_the_Port_of_Miami_Container_Port.jpg",
     license: "PUBLIC_DOMAIN",
     credit: "James R. Tourtellotte / U.S. Customs and Border Protection"
   },
   freight: {
-    imageUrl: "/systems-monitor/__local-review/media/freight-intermodal-cc0.jpg",
+    imageUrl: "/systems-monitor/media/freight-intermodal-cc0.jpg",
     alt: "Double-stack intermodal freight train moving containers through a rail network.",
     sourcePage: "https://commons.wikimedia.org/wiki/File:Intermodal_train_01.jpg",
     license: "CC0_1_0",
     credit: "Wikideas1"
   },
   supply: {
-    imageUrl: "/systems-monitor/__local-review/media/commercial-crude-supply-public-domain.jpg",
+    imageUrl: "/systems-monitor/media/commercial-crude-supply-public-domain.jpg",
     alt: "Oil pumpjack operating against a clear sky in Electra, Texas.",
     sourcePage: "https://commons.wikimedia.org/wiki/File:A_pumpjack,_sometimes_called_a_%22grasshopper%22_oil_pump_because_of_its_appearance,_on_the_outskirts_of_Electra,_a_small_city_in_Wichita_County,_Texas_LCCN2014633920.tif",
     license: "PUBLIC_DOMAIN",
     credit: "Carol M. Highsmith / Library of Congress"
   },
   government: {
-    imageUrl: "/systems-monitor/__local-review/media/us-capitol-public-domain.jpg",
+    imageUrl: "/systems-monitor/media/us-capitol-public-domain.jpg",
     alt: "Historic view of the United States Capitol framed by trees in Washington, D.C.",
     sourcePage: "https://commons.wikimedia.org/wiki/File:CAPITOL,_U.S._LCCN2016867207.jpg",
     license: "PUBLIC_DOMAIN",
     credit: "Harris & Ewing / Library of Congress"
   },
   centralBank: {
-    imageUrl: "/systems-monitor/__local-review/media/federal-reserve-eccles-public-domain.jpg",
+    imageUrl: "/systems-monitor/media/federal-reserve-eccles-public-domain.jpg",
     alt: "The Marriner S. Eccles Federal Reserve Board Building in Washington, D.C.",
     sourcePage: "https://commons.wikimedia.org/wiki/File:US_Federal_Reserve_Eccles_Building_1937.jpg",
     license: "PUBLIC_DOMAIN",
