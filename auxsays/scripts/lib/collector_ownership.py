@@ -58,8 +58,9 @@ ALLOWED_METHODS: dict[str, set[str]] = {
     },
     "obs-studio": {"github_issues", "known_watchlist"},
     "microsoft-windows-11": {"learn_qna_search_rss"},
-    "microsoft-powerpoint": {"learn_qna_search_rss", "reddit_search", "stack_exchange_search",
-                             "github_officedev_issues"},
+    "microsoft-powerpoint": {"learn_qna_search_rss", "learn_qna_powerpoint_tags", "reddit_search",
+                             "stack_exchange_search", "github_officedev_issues",
+                             "tech_community_discussions"},
 }
 
 # Per-product allowed evidence source_type identities. Evidence rows carry ``source_type`` (not a
@@ -79,8 +80,10 @@ ALLOWED_SOURCE_TYPES: dict[str, set[str]] = {
     "adobe-acrobat-pro": {"adobe_community_bug_report", "reddit_community_report"},
     "obs-studio": {"github_issue", "curated_watchlist"},
     "microsoft-windows-11": {"microsoft_learn_qna"},
+    # learn_qna_powerpoint_tags deliberately shares the microsoft_learn_qna source_type: it is the
+    # same community, discovered a different way, and one report must not become two identities.
     "microsoft-powerpoint": {"microsoft_learn_qna", "reddit_community_report", "stack_exchange_question",
-                             "github_officedev_issue"},
+                             "github_officedev_issue", "microsoft_tech_community"},
 }
 
 # Per-product allowed permalink route slug(s). A record's public permalink is the canonical shape

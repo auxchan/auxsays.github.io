@@ -169,11 +169,19 @@ def default_powerpoint_methods() -> dict[str, Callable[..., tuple]]:
     def github_officedev(record, target, context, seen, run_urls, captured_at, attempted=True):
         return ppt.run_github_method(record, target, context, seen, run_urls, captured_at)
 
+    def qna_tags(record, target, context, seen, run_urls, captured_at, attempted=True):
+        return ppt.run_qna_tag_method(record, target, context, seen, run_urls, captured_at)
+
+    def tech_community(record, target, context, seen, run_urls, captured_at, attempted=True):
+        return ppt.run_tech_community_method(record, target, context, seen, run_urls, captured_at)
+
     # Stack Exchange and OfficeDev are PRIMARY, not fallbacks. They discover different populations
     # from Q&A -- a Super User question and a GitHub issue are not the same corpus -- so gating them
     # on Q&A failing would hide reports precisely when Q&A is healthy. Each is a handful of requests.
     return {"learn_qna_search_rss": primary, "reddit_search": fallback,
-            "stack_exchange_search": stack_exchange, "github_officedev_issues": github_officedev}
+            "stack_exchange_search": stack_exchange, "github_officedev_issues": github_officedev,
+            "learn_qna_powerpoint_tags": qna_tags,
+            "tech_community_discussions": tech_community}
 
 
 def default_capability(env: dict[str, str] | None) -> dict[str, bool]:
