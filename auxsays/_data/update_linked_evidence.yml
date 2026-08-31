@@ -5,7 +5,7 @@ reports:
 - associated_target_build: '20326.20100'
   associated_update_version: '2608'
   association_basis: report_date_inside_release_window
-  captured_at: '2026-08-30T00:00:00Z'
+  captured_at: '2026-08-31T00:33:35Z'
   classification: update_linked
   confirmation_state: not_confirmed
   issue_summary: rendering regression
@@ -31,7 +31,7 @@ reports:
 - associated_target_build: '20228.20158'
   associated_update_version: '2607'
   association_basis: report_date_inside_release_window
-  captured_at: '2026-08-30T00:00:00Z'
+  captured_at: '2026-08-31T00:33:35Z'
   classification: update_linked
   confirmation_state: not_confirmed
   issue_summary: add-in incompatibility
@@ -52,5 +52,31 @@ reports:
   update_link_evidence: 'ss multiple devices in our organization following recent updates. Issue Description:
     Hyperlink Execution Failure: When clicking on hyperlinks created within PowerPoint presentations that
     lin'
+  update_link_reason: Reporter says the problem began after an Office or PowerPoint update.
+  update_link_signal: explicit_update_attribution
+- associated_target_build: '18025.20096'
+  associated_update_version: '2409'
+  association_basis: report_date_inside_release_window
+  captured_at: '2026-08-31T00:33:35Z'
+  classification: update_linked
+  confirmation_state: not_confirmed
+  issue_summary: export failure
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
+  report_date: '2024-10-17'
+  report_excerpt: 'PowerPoint shows "Error exporting file as PDF: The online service is not available
+    in your region." (Germany, Mac) I am using Microsoft® PowerPoint for Mac (Version 16.90 (24101387))
+    with an "Office LTSC Standard for Mac 2021" License (no corporate). I am on a MacBook Pro with...'
+  report_id: microsoft-powerpoint:0515ca491099c6ea
+  report_title: 'PowerPoint shows "Error exporting file as PDF: The online service is not available in
+    your region." (Germany, Mac)'
+  source_family: Super User / Stack Exchange
+  source_report_id: '1859085'
+  source_type: stack_exchange_question
+  source_url: https://superuser.com/questions/1859085/powerpoint-shows-error-exporting-file-as-pdf-the-online-service-is-not-availab
+  strict_exclusion_reason: vague_latest_update
+  update_link_evidence: ook Pro with Sequoia (15.0.1 (24A348)). After the latest update and restart of
+    PowerPoint today, I am unable to export my slides to PDF anymore, getting the following error message
+    (I am in
   update_link_reason: Reporter says the problem began after an Office or PowerPoint update.
   update_link_signal: explicit_update_attribution
