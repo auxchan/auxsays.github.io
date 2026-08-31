@@ -29,6 +29,7 @@ from .update_linkage import LinkageOutcome, classify_update_linkage
 
 TIER_CONFIRMED = "confirmed_patch_specific"
 TIER_UPDATE_LINKED = "update_linked"
+TIER_UNRESOLVED = "unresolved"
 
 # A Tier-2 row is only ever built from a candidate the strict authority refused for a reason that
 # means "identity not established" -- never for a reason that means "this is not a user report about
@@ -141,6 +142,19 @@ def associate_window(report_date: str, windows: list[ReleaseWindow],
     return window, WINDOW_BASIS_DATE_IN_WINDOW
 
 
+def patch_join_key(product_id: str, update_version: str, target_build: str) -> str:
+    """The key a TEMPLATE filters on. Deliberately NOT numeric-looking.
+
+    Jekyll's `where` filter passes the property through `parse_sort_input`, which coerces any
+    numeric-looking string to a Float. A build like "20326.20100" therefore becomes 20326.201 --
+    the trailing zero is silently lost -- and the comparison against the original string fails.
+    Measured: .20100 and .20110 break, .20158 and .20096 survive, which is why the defect looked
+    arbitrary and why every direct `==` test passed. Joining product, version and build with a
+    separator makes the value non-numeric, so no coercion can apply.
+    """
+    return "|".join([str(product_id or ""), str(update_version or ""), str(target_build or "")])
+
+
 def report_identity(product_id: str, source_url: str) -> str:
     """A STABLE id for one report, independent of tier.
 
@@ -173,6 +187,7 @@ class Tier2Row:
     update_link_evidence: str = ""
     associated_update_version: str = ""
     associated_target_build: str = ""
+    associated_patch_key: str = ""
     association_basis: str = ""
     stated_version_family: str = ""
     stated_build_family: str = ""
@@ -203,6 +218,7 @@ class Tier2Row:
             "update_link_evidence": self.update_link_evidence,
             "associated_update_version": self.associated_update_version,
             "associated_target_build": self.associated_target_build,
+            "associated_patch_key": self.associated_patch_key,
             "association_basis": self.association_basis,
             "stated_version_family": self.stated_version_family,
             "stated_build_family": self.stated_build_family,
@@ -266,6 +282,43 @@ def _source_report_id(source_url: str) -> str:
         if re.fullmatch(r"\d{3,}", part):
             return part
     return tail[-1] if tail else ""
+
+
+def unresolved_row_from_rejection(rejected_row: dict[str, Any], *, captured_at: str,
+                                  is_concrete=None) -> Tier2Row | None:
+    """A real, concrete PowerPoint complaint that attributes itself to NOTHING.
+
+    Measured on the live corpus: of 299 unique candidates only 4 carry genuine update attribution.
+    The rest are ordinary complaints -- no build, and no claim that an update caused them. They are
+    not patch evidence and must never be shown as such, because associating them would be the
+    date-alone inference this tier exists to forbid. They are RETAINED so a future run can rehydrate
+    the thread: reporters routinely add "this started after the August update" when a moderator
+    asks, and at that point the same stable identity is promoted rather than rediscovered.
+
+    Deliberately carries NO associated_patch_key, which is what the templates filter on -- so an
+    unresolved row is structurally incapable of rendering on a patch page.
+    """
+    reason = str(rejected_row.get("exclusion_reason") or "")
+    if reason in NEVER_PROMOTE or reason not in PROMOTABLE_REJECTIONS:
+        return None
+    text = str(rejected_row.get("tier2_full_text") or "")
+    if is_concrete is not None and not is_concrete(text):
+        return None
+    url = str(rejected_row.get("source_url") or "")
+    if not url:
+        return None
+    product = str(rejected_row.get("product_id") or "")
+    title = str(rejected_row.get("parent_title") or rejected_row.get("report_title") or "").strip()
+    excerpt = str(rejected_row.get("report_text_excerpt") or "").strip()
+    return Tier2Row(
+        report_id=report_identity(product, url), product_id=product,
+        source_family=source_family(str(rejected_row.get("source_type") or "")),
+        source_type=str(rejected_row.get("source_type") or ""), source_url=url,
+        source_report_id=_source_report_id(url),
+        report_date=str(rejected_row.get("source_date") or "")[:10],
+        report_title=normalise_text(title)[:300], report_excerpt=normalise_text(excerpt)[:400],
+        classification=TIER_UNRESOLVED, confirmation_state="not_confirmed",
+        promotion_eligible=True, strict_exclusion_reason=reason, captured_at=captured_at)
 
 
 def tier2_row_from_rejection(rejected_row: dict[str, Any], *, windows: list[ReleaseWindow],
@@ -342,6 +395,7 @@ def tier2_row_from_rejection(rejected_row: dict[str, Any], *, windows: list[Rele
         update_link_evidence=linkage.evidence_phrase,
         associated_update_version=window.update_version,
         associated_target_build=window.target_build,
+        associated_patch_key=patch_join_key(product, window.update_version, window.target_build),
         association_basis=basis,
         stated_version_family=linkage.version_family,
         stated_build_family=linkage.build_family,

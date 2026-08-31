@@ -179,13 +179,17 @@ def default_powerpoint_methods() -> dict[str, Callable[..., tuple]]:
     def tech_community(record, target, context, seen, run_urls, captured_at, attempted=True):
         return ppt.run_tech_community_method(record, target, context, seen, run_urls, captured_at)
 
+    def open_web(record, target, context, seen, run_urls, captured_at, attempted=True):
+        return ppt.run_open_web_method(record, target, context, seen, run_urls, captured_at)
+
     # Stack Exchange and OfficeDev are PRIMARY, not fallbacks. They discover different populations
     # from Q&A -- a Super User question and a GitHub issue are not the same corpus -- so gating them
     # on Q&A failing would hide reports precisely when Q&A is healthy. Each is a handful of requests.
     return {"learn_qna_search_rss": primary, "reddit_search": fallback,
             "stack_exchange_search": stack_exchange, "github_officedev_issues": github_officedev,
             "learn_qna_powerpoint_tags": qna_tags,
-            "tech_community_discussions": tech_community}
+            "tech_community_discussions": tech_community,
+            "open_web_discovery": open_web}
 
 
 def default_capability(env: dict[str, str] | None) -> dict[str, bool]:
@@ -746,6 +750,14 @@ class Pipeline:
             for row in result.get("tier2_source_rows") or []:
                 built = t2.tier2_row_from_rejection(row, windows=windows, captured_at=captured_at,
                                                     is_concrete=_ppt.concrete_issue)
+                if built is None:
+                    # Not update-linked, but possibly a real concrete complaint. Retained as
+                    # UNRESOLVED so a later run can rehydrate the thread: reporters routinely add
+                    # "this started after the August update" once a moderator asks, and the stable
+                    # identity means that becomes a PROMOTION rather than a new report. An
+                    # unresolved row carries no patch key, so it cannot render as patch evidence.
+                    built = t2.unresolved_row_from_rejection(
+                        row, captured_at=captured_at, is_concrete=_ppt.concrete_issue)
                 if built is None:
                     continue
                 # One report is one row even when several methods or several patch targets

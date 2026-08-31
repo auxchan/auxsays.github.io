@@ -52,7 +52,7 @@ METHOD_PLANS: dict[str, dict[str, Any]] = {
         # primary rather than a fallback.
         "primary": ["learn_qna_search_rss", "learn_qna_powerpoint_tags",
                     "stack_exchange_search", "github_officedev_issues",
-                    "tech_community_discussions"],
+                    "tech_community_discussions", "open_web_discovery"],
         "fallback": ["reddit_search"],
         "fallback_when": ["no_accepted_reports", "blocked", "broken", "stale", "low_confidence"],
     },

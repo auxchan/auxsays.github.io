@@ -390,14 +390,17 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
         hundreds of threads had been read. These are shown, labelled, and never counted: the count
         above and every consensus number come from confirmed evidence only.
       {%- endcomment -%}
+      {%- comment -%}
+        Filtered on a JOINED key, never on the build alone. Jekyll's `where` runs the property
+        through parse_sort_input, which coerces a numeric-looking string to a Float -- so
+        "20326.20100" became 20326.201, the trailing zero vanished, and the row silently never
+        matched. Builds ending in a zero broke; the others worked, which made the defect look
+        arbitrary. A key containing the product id cannot be read as a number.
+      {%- endcomment -%}
       {%- assign t2_all = site.data.update_linked_evidence.reports | default: empty -%}
-      {%- assign t2_product = t2_all | where: "product_id", page.product_id -%}
       {%- assign t2_build = page.target_build | default: '' -%}
-      {%- if t2_build != '' -%}
-        {%- assign t2_rows = t2_product | where: "associated_target_build", t2_build -%}
-      {%- else -%}
-        {%- assign t2_rows = t2_product | where: "associated_update_version", page.update_version -%}
-      {%- endif -%}
+      {%- capture t2_key %}{{ page.product_id }}|{{ page.update_version }}|{{ t2_build }}{% endcapture -%}
+      {%- assign t2_rows = t2_all | where: "associated_patch_key", t2_key -%}
       {%- assign t2_count = t2_rows | size -%}
       {% if t2_count > 0 %}
       <section class="update-linked-card" aria-label="Update-linked user reports">

@@ -66,6 +66,7 @@ from . import stack_exchange_source
 from . import github_officedev_source
 from . import microsoft_qna_tags_source as qna_tags
 from . import techcommunity_source
+from . import open_web_source
 
 PRODUCT_ID = "microsoft-powerpoint"
 
@@ -113,6 +114,13 @@ TECH_COMMUNITY_METHOD_ID = "tech_community_discussions"
 TECH_COMMUNITY_SOURCE_TYPE = "microsoft_tech_community"
 TECH_COMMUNITY_SOURCE_NAME = "Microsoft Tech Community"
 TECH_COMMUNITY_MAX_HYDRATIONS = 30
+
+# Open-web federated search. Bounded by what it ASKS rather than where it looks, which is what lets
+# it reach threads outside every enumerator's window.
+OPEN_WEB_METHOD_ID = "open_web_discovery"
+OPEN_WEB_MAX_QUERIES = 10
+OPEN_WEB_MAX_REQUESTS = 24
+OPEN_WEB_MAX_HYDRATIONS = 120
 # How far back a run looks. 60 days covers every currently tracked PowerPoint build's release date
 # with margin; older builds cannot gain new reports from a recency sweep, and pretending otherwise
 # would just spend requests to re-read the same archive every cycle.
@@ -1272,6 +1280,126 @@ def run_tech_community_method(record: PatchRecord, target: dict[str, Any], conte
         source_type=TECH_COMMUNITY_SOURCE_TYPE, status=status, candidates_found=len(tc_candidates),
         accepted_reports=len(accepted), rejected_reports=len(rejected),
         blocked_reason=(tc_errors[0].get("reason") if status == "blocked" and tc_errors else None),
+        last_run=captured_at, notes=notes)
+    return accepted, rejected, row
+
+
+def hydrate_discovered_url(row: dict[str, Any]) -> dict[str, Any] | None:
+    """Fetch a discovered URL from its ORIGINAL source and build a candidate, or None.
+
+    Dispatches on the identified source so each page is parsed by the adapter that already owns
+    that format. The candidate's source_url is the URL the PAGE declares, not the one search
+    returned: a search result is id-only while the native lanes store the slugged form, and two
+    spellings of one thread would become two evidence rows.
+    """
+    url = str(row.get("source_url") or "")
+    source_type = str(row.get("source_type") or "")
+
+    if source_type == LEARN_QNA_SOURCE_TYPE:
+        page = qna_tags.fetch(url if url.endswith("/") else url + "/")
+        canonical = open_web_source.canonical_from_page(page, url)
+        thread = parse_learn_qna_thread(canonical, page)
+        opening = author = ""
+        for segment in getattr(thread, "segments", []):
+            if segment.segment_type == "question":
+                opening = str(segment.segment_text or "").strip()
+                author = str(segment.author_id or "").strip()
+                break
+        heading = re.search(r"<title>(.*?)</title>", page, re.S)
+        title = " ".join(re.sub(r"<[^>]+>", " ", heading.group(1)).split()) if heading else ""
+        title = title.replace(" - Microsoft Q&A", "").strip()
+        if not (title or opening):
+            return None
+        stamp = re.search(r'datetime="(\d{4}-\d{2}-\d{2})', page)
+        return {"source_type": LEARN_QNA_SOURCE_TYPE, "source_name": LEARN_QNA_SOURCE_NAME,
+                "source_url": canonical, "parent_title": title, "report_title": title,
+                "report_text": " ".join(x for x in (title, opening) if x)[:6000],
+                "source_date": stamp.group(1) if stamp else "", "qna_author_id": author}
+
+    if source_type == TECH_COMMUNITY_SOURCE_TYPE:
+        page = techcommunity_source.fetch(url)
+        canonical = open_web_source.canonical_from_page(page, url)
+        stamp = re.search(r'"dateCreated"\s*:\s*"(\d{4}-\d{2}-\d{2})', page)
+        return techcommunity_source.thread_candidate(
+            canonical, date=(stamp.group(1) if stamp else ""), page_html=page,
+            source_type=TECH_COMMUNITY_SOURCE_TYPE, source_name=TECH_COMMUNITY_SOURCE_NAME)
+
+    if source_type == STACK_EXCHANGE_SOURCE_TYPE:
+        found = re.search(r"/questions/(\d+)", url)
+        if not found:
+            return None
+        site = "superuser" if "superuser.com" in url else "stackoverflow"
+        payload = stack_exchange_source.request_json(stack_exchange_source._api_url(
+            f"questions/{found.group(1)}",
+            {"site": site, "filter": stack_exchange_source.BODY_FILTER}))
+        items = payload.get("items") or []
+        if not items:
+            return None
+        return stack_exchange_source.item_candidate(
+            items[0], site=site, source_type=STACK_EXCHANGE_SOURCE_TYPE,
+            source_name=stack_exchange_source.SITE_NAMES.get(site, site))
+
+    return None
+
+
+def run_open_web_method(record: PatchRecord, target: dict[str, Any], context: CollectorContext,
+                        seen: set[str], run_accepted_urls: dict[str, str] | None,
+                        captured_at: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]], dict[str, Any]]:
+    """Federated search across the endpoints AUXSAYS is permitted to query.
+
+    The enumerators are bounded by WHERE they look -- a tag's recent pages, a sitemap's lastmod, an
+    issue label. This lane is bounded by WHAT IT ASKS, so it reaches threads outside every one of
+    those windows, including archives no recency walk would ever page back to.
+    """
+    ow_errors: list[dict[str, Any]] = []
+    build = str(target.get("target_build") or "").strip()
+    version = str(target.get("update_version") or "").strip()
+    queries = open_web_source.build_queries(version=version, build=build,
+                                            max_queries=OPEN_WEB_MAX_QUERIES)
+
+    def _discover() -> list[dict[str, Any]]:
+        found, telemetry = open_web_source.discover_urls(
+            queries, errors=ow_errors, max_requests=OPEN_WEB_MAX_REQUESTS)
+        return [{"__telemetry__": telemetry}] + found
+
+    discovered = cached_product_candidates("open_web_discovery", queries, _discover)
+    telemetry = (discovered[0].get("__telemetry__") if discovered else {}) or {}
+    rows = [r for r in discovered if "__telemetry__" not in r]
+
+    def _hydrate() -> list[dict[str, Any]]:
+        built: list[dict[str, Any]] = []
+        for row in rows[:OPEN_WEB_MAX_HYDRATIONS]:
+            try:
+                candidate = hydrate_discovered_url(row)
+            except Exception as exc:  # noqa: BLE001 - recorded for method health
+                ow_errors.append({"source_url": row.get("source_url"),
+                                  "reason": open_web_source.error_reason(exc)})
+                continue
+            if candidate:
+                built.append(candidate)
+        return built
+
+    candidates = cached_product_candidates("open_web_hydration", queries, _hydrate)
+    accepted, rejected = evaluate_candidates(record, target, list(candidates), captured_at,
+                                             seen, run_accepted_urls)
+    status = qna_tag_method_status(list(candidates), accepted, rejected, ow_errors,
+                                   enumerated=len(rows))
+    notes = (
+        f"Open-web federated search across {len(open_web_source.PROVIDERS)} permitted endpoints. "
+        f"Queries {telemetry.get('queries', 0)}, requests {telemetry.get('requests', 0)}, "
+        f"results {telemetry.get('raw_results', 0)}, supported URLs {len(rows)}, "
+        f"hydrated {len(candidates)}, accepted {len(accepted)}, rejected {len(rejected)}. "
+        + (f"Top rejections: {format_rejection_counts(rejected)}. " if rejected else "")
+        + "General web indexes are not used: one serves a bot challenge, two forbid /search in "
+          "robots.txt and one requires a paid key. Search output supplies URLs only -- every page "
+          "is fetched from its original source and judged by the same gates as every other method."
+    )
+    row = method_health_row(
+        product_id=record.product_id, update_version=record.update_version,
+        target_build=build, method_id=OPEN_WEB_METHOD_ID, source_type=LEARN_QNA_SOURCE_TYPE,
+        status=status, candidates_found=len(candidates), accepted_reports=len(accepted),
+        rejected_reports=len(rejected),
+        blocked_reason=(ow_errors[0].get("reason") if status == "blocked" and ow_errors else None),
         last_run=captured_at, notes=notes)
     return accepted, rejected, row
 
