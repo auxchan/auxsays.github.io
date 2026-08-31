@@ -28,58 +28,6 @@ reports:
     in third
   update_link_reason: Reporter says the problem began after an Office or PowerPoint update.
   update_link_signal: explicit_update_attribution
-- associated_target_build: '20228.20190'
-  associated_update_version: '2607'
-  association_basis: stated_version_family_matches_window
-  captured_at: '2026-08-30T00:00:00Z'
-  classification: update_linked
-  confirmation_state: not_confirmed
-  issue_summary: unspecified PowerPoint issue
-  product_id: microsoft-powerpoint
-  promotion_eligible: true
-  report_date: '2026-08-17'
-  report_excerpt: Powerpoint file is missing - Microsoft Q&A My excel is 'Microsoft® Excel® for Microsoft
-    365 MSO (Version 2607 Build 16.0.20228.20124) 64-bit'| Hi Maeve , Since you already did every steps
-    in the mentioned thread, the only place you can find would be depend on whether you turn...
-  report_id: microsoft-powerpoint:669c249804b2b458
-  report_title: Powerpoint file is missing - Microsoft Q&A
-  source_family: Microsoft Q&A
-  source_report_id: '5976427'
-  source_type: microsoft_learn_qna
-  source_url: https://learn.microsoft.com/en-us/answers/questions/5976427/powerpoint-file-is-missing
-  stated_version_family: '2607'
-  strict_exclusion_reason: missing_exact_build
-  update_link_evidence: icrosoft® Excel® for Microsoft 365 MSO (Version 2607 Build 16.0.20228.20124) 64-bit'|
-    Hi Maeve , Since you already did every steps in the mentioned thread, the only place you can find
-    would
-  update_link_reason: Reporter identifies the update version; exact build not supplied.
-  update_link_signal: version_family_stated
-- associated_target_build: '20228.20190'
-  associated_update_version: '2607'
-  association_basis: stated_version_family_matches_window
-  captured_at: '2026-08-30T00:00:00Z'
-  classification: update_linked
-  confirmation_state: not_confirmed
-  issue_summary: add-in incompatibility
-  product_id: microsoft-powerpoint
-  promotion_eligible: true
-  report_date: '2026-08-14'
-  report_excerpt: videos not playing in PowerPoint LIVE - Microsoft Q&A I'm using current Teams app and
-    PPTX version 2607. It seems to be happening only in the last few weeks with new presentations I'm
-    creating or older ones that I'm adding a new video to. If I click back a slide and then come...
-  report_id: microsoft-powerpoint:ac01c16554db1d7c
-  report_title: videos not playing in PowerPoint LIVE - Microsoft Q&A
-  source_family: Microsoft Q&A
-  source_report_id: '5973911'
-  source_type: microsoft_learn_qna
-  source_url: https://learn.microsoft.com/en-us/answers/questions/5973911/videos-not-playing-in-powerpoint-live
-  stated_version_family: '2607'
-  strict_exclusion_reason: missing_exact_build
-  update_link_evidence: '&A I''m using current Teams app and PPTX version 2607. It seems to be happening
-    only in the last few weeks with new presentations I''m creating or older ones that I''m adding a new
-    video to. If'
-  update_link_reason: Reporter identifies the update version; exact build not supplied.
-  update_link_signal: version_family_stated
 - associated_target_build: '20228.20158'
   associated_update_version: '2607'
   association_basis: report_date_inside_release_window

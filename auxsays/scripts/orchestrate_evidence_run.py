@@ -732,6 +732,8 @@ class Pipeline:
         # Windows come from the RECORDS, which carry the release date. patch_targets deliberately
         # carries only patch identity, so reading a release date from it silently produced zero
         # windows -- and therefore zero update-linked reports, with no error anywhere.
+        from patch_collectors import microsoft_powerpoint as _ppt  # noqa: PLC0415
+
         windows = t2.build_release_windows([
             {"product_id": record.product_id, "update_version": record.update_version,
              "target_build": (key.split("|")[2] if key.count("|") >= 2 else ""),
@@ -742,7 +744,8 @@ class Pipeline:
         seen_ids: set[str] = set()
         for result in state.method_results:
             for row in result.get("tier2_source_rows") or []:
-                built = t2.tier2_row_from_rejection(row, windows=windows, captured_at=captured_at)
+                built = t2.tier2_row_from_rejection(row, windows=windows, captured_at=captured_at,
+                                                    is_concrete=_ppt.concrete_issue)
                 if built is None:
                     continue
                 # One report is one row even when several methods or several patch targets
@@ -751,7 +754,15 @@ class Pipeline:
                     continue
                 seen_ids.add(built.report_id)
                 fresh.append(built.as_dict())
-        confirmed_urls = {str(r.get("source_url") or "") for r in counted}
+        # Promotion must consider the STORED corpus, not only what this run happened to accept. A
+        # report confirmed by an earlier run would otherwise stay published as update-linked
+        # forever, visible in both tiers at once -- which is exactly the double count the stable
+        # identity exists to prevent. Verified live: one URL was counted evidence AND a Tier-2 row.
+        stored_confirmed = [r for r in (load_evidence(self.evidence_path)
+                                        if self.evidence_path.exists() else [])
+                            if r.get("counted") is True]
+        confirmed_urls = ({str(r.get("source_url") or "") for r in counted}
+                          | {str(r.get("source_url") or "") for r in stored_confirmed})
         existing = t2.load_tier2(self.tier2_path) if self.tier2_path.exists() else []
         merged, stats = t2.merge_tier2_rows(existing, fresh, confirmed_urls=confirmed_urls)
         state.tier2_changes = {"mode": "write" if self.write else "dry",

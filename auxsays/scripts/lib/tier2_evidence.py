@@ -61,6 +61,9 @@ NEVER_PROMOTE = frozenset({
     "evidence_existing_row_modified",
 })
 
+# A full Click-to-Run build token as written in prose, e.g. "20228.20110" or "16.0.20228.20110".
+FULL_BUILD_RE = re.compile(r"(?<![\d.])(?:16\.0\.)?(\d{5}\.\d{4,5})(?![\d.])")
+
 WINDOW_BASIS_STATED_FAMILY = "stated_version_family_matches_window"
 WINDOW_BASIS_DATE_IN_WINDOW = "report_date_inside_release_window"
 WINDOW_BASIS_NONE = "no_release_window_matches"
@@ -236,7 +239,7 @@ def _source_report_id(source_url: str) -> str:
 
 
 def tier2_row_from_rejection(rejected_row: dict[str, Any], *, windows: list[ReleaseWindow],
-                             captured_at: str) -> Tier2Row | None:
+                             captured_at: str, is_concrete=None) -> Tier2Row | None:
     """One strict-authority rejection -> one Tier-2 row, or None.
 
     Four independent conditions, all required and each able to refuse alone: the strict reason must
@@ -255,10 +258,37 @@ def tier2_row_from_rejection(rejected_row: dict[str, Any], *, windows: list[Rele
     if not linkage.linked:
         return None
 
+    # CONCRETENESS IS CHECKED HERE, not assumed from the rejection reason. The strict authority
+    # evaluates the version gate BEFORE the concreteness gate, so a report that fails on version
+    # never reaches the concreteness test at all -- measured, not_a_concrete_powerpoint_issue fires
+    # ZERO times across 2328 rejections. Listing it in NEVER_PROMOTE therefore blocks nothing, and
+    # how-to questions, feature requests and "I like the new icons" were becoming Tier 2.
+    if is_concrete is not None and not is_concrete(text):
+        return None
+
     day = str(rejected_row.get("source_date") or "")[:10]
     window, basis = associate_window(day, windows, linkage)
     if window is None:
         return None
+
+    # An EXACT build stated in the text outranks the date. If the reporter named a full build and it
+    # is not this window's, the report is about something else -- and it must not be filed here
+    # merely because its date landed in this span. This is also what stops a report naming a build
+    # as WORKING from being attached to that build.
+    stated_builds = {token for token in FULL_BUILD_RE.findall(text)}
+    if stated_builds and window.target_build not in stated_builds:
+        return None
+
+    # BUILD ROLES APPLY HERE TOO. A reporter who names this window's build as the one that WORKS,
+    # or the one they rolled back TO, has said the opposite of a complaint about it. Tier 1 has
+    # vetoed that since #79; without the same veto Tier 2 would publish "X is broken" sourced from
+    # a post saying "X is fine". The shared primitive decides the role -- never a second opinion.
+    if stated_builds:
+        from .build_claims import ROLE_CURRENT_FAILING, extract_build_claims  # noqa: PLC0415
+
+        for claim in extract_build_claims(text):
+            if claim.build == window.target_build and claim.role != ROLE_CURRENT_FAILING:
+                return None
 
     url = str(rejected_row.get("source_url") or "")
     product = str(rejected_row.get("product_id") or window.product_id)

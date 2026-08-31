@@ -316,6 +316,82 @@ def run() -> int:
 
     print()
     print("=" * 96)
+    print("H  defects an adversarial review found in the first cut")
+    print("=" * 96)
+    from patch_collectors import microsoft_powerpoint as ppt  # noqa: PLC0415
+
+    def t2row(text, date="2026-08-27"):
+        return t2.tier2_row_from_rejection(rejection(text, date=date), windows=WINDOWS,
+                                           captured_at="x", is_concrete=ppt.concrete_issue)
+
+    # H1. A version STRING is not an update ATTRIBUTION. Matching any YYMM after "version" made
+    # this a string detector: a BIOS version linked, and so did an Excel build quoted by a support
+    # agent in a reply -- which produced two of the first four rows this module ever wrote.
+    for text in ("asus prime z590 bios ver. 2405 and PowerPoint crashes",
+                 "My Excel is Microsoft Excel for Microsoft 365 MSO (Version 2607 Build "
+                 "16.0.20228.20124) 64-bit and PowerPoint crashes",
+                 "Support told me to stay on Version 2607 until this is sorted, PowerPoint crashes",
+                 "Windows 11 version 2409 and PowerPoint crashes"):
+        check(f"H1 a foreign product's version never links: {text[:44]!r}",
+              classify_update_linkage(text).version_family == "")
+    check("H1b the reporter's own Office version still links",
+          classify_update_linkage("PowerPoint Version 2608 hangs when saving.").version_family
+          == "2608")
+
+    # H2. Concreteness is checked HERE. The strict authority tests the version gate BEFORE the
+    # concreteness gate, so a report failing on version is never tested for concreteness at all --
+    # not_a_concrete_powerpoint_issue fires ZERO times across 2328 live rejections, which makes its
+    # presence in NEVER_PROMOTE useless on its own.
+    for label, text in (("how-to", "How do I change the theme after the latest Office update?"),
+                        ("feature request",
+                         "Please add dark mode since the latest Office update."),
+                        ("praise",
+                         "I quite like the new icons since the latest Office update.")):
+        check(f"H2 a non-concrete post is refused: {label}", t2row(text) is None)
+    check("H2b a real defect with the same linkage language is still admitted",
+          t2row("PowerPoint crashes on save since the latest Office update.") is not None)
+    check("H2c the concreteness predicate is the authority's own, not a copy",
+          "is_concrete=_ppt.concrete_issue" in
+          (ROOT / "scripts" / "orchestrate_evidence_run.py").read_text(encoding="utf-8"))
+
+    # H3. Build roles apply in Tier 2. Without them a post saying "20228.20190 works fine" was
+    # filed as a complaint ABOUT 20228.20190 -- publishing the opposite of what the reporter said.
+    working = ("PowerPoint 20228.20110 is not working; on 20228.20190 it works fine, "
+               "since the latest Office update.")
+    check("H3 a build the reporter calls WORKING is never the associated build",
+          t2row(working, date="2026-08-17") is None)
+    check("H3b a build named as the ROLLBACK target is refused too",
+          t2row("I rolled back to 20228.20190 and it is fine, since the latest Office update.",
+                date="2026-08-17") is None)
+    check("H3c a build named as FAILING is still admitted",
+          t2row("PowerPoint 20228.20190 crashes on save since the latest Office update.",
+                date="2026-08-17") is not None)
+    check("H3d a stated exact build that is not this window's refuses the row",
+          t2row("PowerPoint 20228.20110 crashes since the latest Office update.",
+                date="2026-08-27") is None)
+
+    # H4. Vetoes must be at least as broad as the positives. The positive patterns accept
+    # "following"; several vetoes only accepted "after|since", so a Teams/driver/Windows-cumulative
+    # attribution linked while the equivalent "after" phrasing did not.
+    for text in ("since the latest cumulative update for Windows 11 landed, PowerPoint crashes",
+                 "Following the Teams update PowerPoint Live stopped sharing",
+                 "after the latest NVIDIA Studio update PowerPoint renders wrong",
+                 "After the Citrix update PowerPoint is slow",
+                 "since the macOS update PowerPoint crashes"):
+        check(f"H4 non-Office attribution is vetoed: {text[:44]!r}",
+              not classify_update_linkage(text).linked,
+              classify_update_linkage(text).signal)
+
+    # H5. Promotion has to consider the STORED corpus. Using only this run's accepted rows left a
+    # report published in BOTH tiers, because the run that confirmed it had already finished.
+    orch_src = (ROOT / "scripts" / "orchestrate_evidence_run.py").read_text(encoding="utf-8")
+    check("H5 promotion reads stored confirmed evidence, not just this run",
+          "stored_confirmed" in orch_src and "load_evidence(self.evidence_path)" in orch_src)
+    check("H5b and this run's accepted rows are still included",
+          'for r in counted}' in orch_src)
+
+    print()
+    print("=" * 96)
     print(f"Results: {PASS}/{PASS + FAIL} passed, {FAIL} failed")
     if FAILURES:
         print("Failed: " + ", ".join(FAILURES))

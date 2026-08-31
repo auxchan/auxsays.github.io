@@ -68,10 +68,49 @@ _EXPLICIT_PATTERNS: tuple[str, ...] = (
 )
 
 # A stated release identity WITHOUT a full build. "Version 2608", "Current Channel 2608".
-# Four digits in YYMM shape; a full build token is a Tier-1 concern and is not this module's job.
+#
+# The version token is NOT enough on its own. A YYMM-shaped number after the word "version" is one
+# of the most common strings in a support thread, and matching it alone made this a version-STRING
+# detector rather than an update-ATTRIBUTION one: "asus prime z590 bios ver. 2405" linked, and so
+# did an Excel build quoted by a support agent in a reply. Two of the first four rows this module
+# produced were exactly that error. So the version has to be Office-scoped -- named alongside
+# PowerPoint, Office, Microsoft 365, or a Click-to-Run channel -- and any OTHER application named
+# beside it disqualifies it, because then the version belongs to that application.
 _VERSION_FAMILY_RE = re.compile(
     r"\b(?:version|ver\.?|current\s+channel|monthly\s+enterprise|semi-?annual)\s*"
     r"(?:channel\s*)?(?:version\s*)?((?:19|2[0-9])(?:0[1-9]|1[0-2]))\b", re.I)
+_OFFICE_SCOPE_RE = re.compile(
+    r"(?:powerpoint|power\s*point|\bppt\b|\boffice\b|microsoft\s*365|\bm365\b|"
+    r"current\s+channel|monthly\s+enterprise|semi-?annual)", re.I)
+# Another product's version string. If one of these sits beside the number, the number is theirs.
+_FOREIGN_VERSION_OWNER_RE = re.compile(
+    r"(?:\bexcel\b|\bword\b|\boutlook\b|\bteams\b|\bonedrive\b|\bsharepoint\b|\bvisio\b|"
+    r"\bproject\b|\baccess\b|\bbios\b|\bfirmware\b|\bdriver\b|\bwindows\b|\bandroid\b|\bios\b|"
+    r"\bmacos\b|\bchrome\b|\bedge\b|\bfirefox\b|\bacrobat\b|\bcitrix\b|\bnvidia\b)", re.I)
+
+
+# A version the reporter is being POINTED AT rather than running: advice, a rollback target, a
+# support instruction. "Support told me to stay on Version 2607" identifies a version, but not the
+# one the reporter is attributing their problem to.
+_ADVISED_VERSION_RE = re.compile(
+    r"(?:told\s+(?:me|us)\s+to|advised\s+(?:me|us)?|you\s+should|please|recommend|"
+    r"stay\s+on|remain\s+on|revert\s+to|roll\s*back\s+to|downgrade\s+to|"
+    r"pin(?:ned)?\s+to|go\s+back\s+to)", re.I)
+
+
+def _office_scoped(text: str, start: int, end: int, window: int = 60) -> bool:
+    """Is this version token the reporter's OWN Office version, and not some other product's?"""
+    left = max(0, start - window)
+    right = min(len(text), end + window)
+    around = text[left:right]
+    if _FOREIGN_VERSION_OWNER_RE.search(around):
+        return False
+    # Advice is checked on the text BEFORE the token: "stay on Version 2607" is advice, whereas
+    # "Version 2607 crashes, support told me to open a ticket" is a report that happens to mention
+    # being advised of something else.
+    if _ADVISED_VERSION_RE.search(text[left:start]):
+        return False
+    return bool(_OFFICE_SCOPE_RE.search(around))
 # A partial build family such as "build 20326", with no ".NNNNN" suffix following it.
 #
 # A bare five-digit number is NOT enough. Measured on the live corpus, the first thing this matched
@@ -95,7 +134,9 @@ VETO_OTHER_APP = "attributed_to_another_application"
 
 _VETOES: tuple[tuple[str, str], ...] = (
     (VETO_WINDOWS_UPDATE,
-     r"\b(?:after|since|following)\b[^.;!?]{0,25}?\bwindows\s*(?:10|11)?\s*update"
+     r"\b(?:after|since|following)\b[^.;!?]{0,30}?\bwindows\s*(?:10|11)?\s*"
+     r"(?:cumulative\s+|feature\s+|security\s+)?updat"
+     r"|\b(?:after|since|following)\b[^.;!?]{0,25}?\b(?:cumulative|feature)\s+update"
      r"|\bwindows\s+update\b[^.;!?]{0,25}?\b(?:broke|caused|started)\b"
      r"|\bKB\d{7}\b"),
     (VETO_ADDIN_UPDATE,
@@ -105,7 +146,9 @@ _VETOES: tuple[tuple[str, str], ...] = (
     (VETO_DRIVER_UPDATE,
      r"\b(?:gpu|graphics|display|nvidia|amd|intel|audio|printer|firmware)\b"
      r"[^.;!?]{0,25}?\bdriver\b[^.;!?]{0,25}?\bupdat"
-     r"|\bdriver\s+updat(?:e|ed|ing)\b"),
+     r"|\bdriver\s+updat(?:e|ed|ing)\b"
+     r"|\b(?:after|since|following)\b[^.;!?]{0,25}?\b(?:nvidia|amd|radeon|geforce|intel|"
+     r"realtek|hp|dell|lenovo|logitech)\b[^.;!?]{0,25}?\bupdat"),
     (VETO_SERVICE_INCIDENT,
      r"\b(?:powerpoint|office|microsoft\s*365)\s*(?:for\s+the\s+)?(?:online|web|on\s+the\s+web)\b"
      r"[^.;!?]{0,30}?\b(?:outage|down|unavailable|incident|service\s+status)\b"
@@ -115,8 +158,9 @@ _VETOES: tuple[tuple[str, str], ...] = (
      r"[^.;!?]{0,25}?\bupdat(?:e|ing)\b"
      r"|\b(?:make\s+sure|ensure)\b[^.;!?]{0,30}?\bup\s*to\s*date\b"),
     (VETO_OTHER_APP,
-     r"\b(?:after|since)\b[^.;!?]{0,20}?\b(?:teams|outlook|onedrive|sharepoint|excel|word|"
-     r"acrobat|chrome|edge|zoom)\b[^.;!?]{0,20}?\bupdat"),
+     r"\b(?:after|since|following)\b[^.;!?]{0,25}?\b(?:teams|outlook|onedrive|sharepoint|"
+     r"excel|word|visio|access|acrobat|chrome|edge|firefox|zoom|citrix|vmware|dropbox|"
+     r"macos|android|ios|defender|intune|sccm)\b[^.;!?]{0,25}?\bupdat"),
 )
 
 _COMPILED_EXPLICIT = tuple(re.compile(p, re.I) for p in _EXPLICIT_PATTERNS)
@@ -183,16 +227,18 @@ def classify_update_linkage(text: str) -> LinkageOutcome:
             outcome.evidence_phrase = _excerpt(body, found.start(), found.end())
             break
 
-    version = _VERSION_FAMILY_RE.search(body)
-    if version:
+    for version in _VERSION_FAMILY_RE.finditer(body):
+        if not _office_scoped(body, version.start(), version.end()):
+            continue
         outcome.version_family = version.group(1)
         outcome.signals_found.append(LINK_VERSION_FAMILY)
         if not outcome.evidence_phrase:
             outcome.evidence_phrase = _excerpt(body, version.start(), version.end())
+        break
 
     if not outcome.version_family:
         family = _BUILD_FAMILY_RE.search(body)
-        if family:
+        if family and _office_scoped(body, family.start(), family.end()):
             outcome.build_family = family.group(1)
             outcome.signals_found.append(LINK_BUILD_FAMILY)
             if not outcome.evidence_phrase:

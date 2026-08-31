@@ -401,7 +401,7 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
       {%- assign t2_count = t2_rows | size -%}
       {% if t2_count > 0 %}
       <section class="update-linked-card" aria-label="Update-linked user reports">
-        <div class="update-linked-card__counts">
+        <dl class="update-linked-card__counts">
           <div class="update-linked-count">
             <dt>Confirmed patch-specific reports</dt>
             <dd>{{ report_count }}</dd>
@@ -410,17 +410,18 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
             <dt>Update-linked reports</dt>
             <dd>{{ t2_count }}</dd>
           </div>
-        </div>
+        </dl>
         <p class="update-linked-card__note">These reporters tie the problem to a PowerPoint or Office
           update but never state the exact build, so they are shown here and are <strong>not</strong>
           counted toward the consensus above.</p>
         <ul class="update-linked-list">
           {% for r in t2_rows %}
           <li class="update-linked-item">
-            <a class="update-linked-item__title" href="{{ r.source_url }}" rel="nofollow noopener" target="_blank">{{ r.report_title | escape }}</a>
+            <a class="update-linked-item__title" href="{{ r.source_url }}" rel="nofollow noopener" target="_blank">{{ r.report_title | escape_once }}</a>
             <span class="update-linked-item__meta">{{ r.source_family | escape }} &middot; {{ r.report_date }}</span>
             <p class="update-linked-item__why"><strong>Why linked:</strong> {{ r.update_link_reason | escape }}</p>
-            <p class="update-linked-item__build"><strong>Exact build:</strong> Not provided by the reporter.</p>
+            {%- assign r_build = r.exact_build_known | default: '' -%}
+            <p class="update-linked-item__build"><strong>Exact build:</strong> {% if r_build != '' %}{{ r_build | escape }}{% elsif r.stated_version_family %}Not supplied; reporter states version {{ r.stated_version_family | escape }}.{% else %}Not supplied by the reporter.{% endif %}</p>
           </li>
           {% endfor %}
         </ul>
