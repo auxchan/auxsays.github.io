@@ -5,7 +5,7 @@ reports:
 - associated_target_build: '20326.20100'
   associated_update_version: '2608'
   association_basis: report_date_inside_release_window
-  captured_at: '2026-08-31T00:33:35Z'
+  captured_at: '2026-08-31T06:51:05Z'
   classification: update_linked
   confirmation_state: not_confirmed
   issue_summary: rendering regression
@@ -31,7 +31,7 @@ reports:
 - associated_target_build: '20228.20158'
   associated_update_version: '2607'
   association_basis: report_date_inside_release_window
-  captured_at: '2026-08-31T00:33:35Z'
+  captured_at: '2026-08-31T06:51:05Z'
   classification: update_linked
   confirmation_state: not_confirmed
   issue_summary: add-in incompatibility
@@ -57,7 +57,7 @@ reports:
 - associated_target_build: '18025.20096'
   associated_update_version: '2409'
   association_basis: report_date_inside_release_window
-  captured_at: '2026-08-31T00:33:35Z'
+  captured_at: '2026-08-31T06:51:05Z'
   classification: update_linked
   confirmation_state: not_confirmed
   issue_summary: export failure
