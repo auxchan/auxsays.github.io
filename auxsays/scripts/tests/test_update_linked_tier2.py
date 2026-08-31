@@ -390,6 +390,18 @@ def run() -> int:
     check("H5b and this run's accepted rows are still included",
           'for r in counted}' in orch_src)
 
+    check("H6 stored text carries no smart punctuation or leftover entities",
+          t2.normalise_text('OneDrive – PowerPoint “Embed” &amp;amp; more')
+          == 'OneDrive - PowerPoint "Embed" & more')
+    check("H6b normalisation is idempotent",
+          t2.normalise_text(t2.normalise_text("A &amp;amp; B")) == t2.normalise_text("A &amp;amp; B"))
+    check("H6c plain text is untouched", t2.normalise_text("plain text") == "plain text")
+    stored = t2.load_tier2(ROOT / "_data" / "update_linked_evidence.yml")
+    bad = [r.get("report_title") for r in stored
+           if any(ord(ch) > 127 for ch in str(r.get("report_title") or ""))
+           or "&amp;" in str(r.get("report_title") or "")]
+    check("H6d no stored row carries smart punctuation or an entity", not bad, str(bad)[:120])
+
     print()
     print("=" * 96)
     print(f"Results: {PASS}/{PASS + FAIL} passed, {FAIL} failed")
