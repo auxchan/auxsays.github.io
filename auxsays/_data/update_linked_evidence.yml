@@ -12,11 +12,11 @@ reports:
   product_id: microsoft-powerpoint
   promotion_eligible: true
   report_date: '2026-08-22'
-  report_excerpt: OneDrive personal – PowerPoint “Embed” iframes now show blank on external sites (Google
-    Sites, local HTML) OneDrive personal – PowerPoint “Embed” iframes now show blank on external sites
+  report_excerpt: OneDrive personal - PowerPoint "Embed" iframes now show blank on external sites (Google
+    Sites, local HTML) OneDrive personal - PowerPoint "Embed" iframes now show blank on external sites
     (Google Sites, local HTML) Hi, Since around mid‑August 2026, all of my previously working...
   report_id: microsoft-powerpoint:da664311eb4e8d71
-  report_title: OneDrive personal – PowerPoint “Embed” iframes now show blank on external sites (Google
+  report_title: OneDrive personal - PowerPoint "Embed" iframes now show blank on external sites (Google
     Sites, local HTML)
   source_family: Microsoft Q&A
   source_report_id: '5982727'
@@ -38,11 +38,11 @@ reports:
   product_id: microsoft-powerpoint
   promotion_eligible: true
   report_date: '2026-08-05'
-  report_excerpt: 'Urgent Support Required: Hyperlink File Opening Failure &amp; Rollback Error in Microsoft
+  report_excerpt: 'Urgent Support Required: Hyperlink File Opening Failure & Rollback Error in Microsoft
     365 (Error 30088-29) Urgent Support Required: Hyperlink File Opening Failure & Rollback Error in Microsoft
     365 (Error 30088-29) Subject: Urgent Support Required: Hyperlink File Opening...'
   report_id: microsoft-powerpoint:37509bca9663fc05
-  report_title: 'Urgent Support Required: Hyperlink File Opening Failure &amp; Rollback Error in Microsoft
+  report_title: 'Urgent Support Required: Hyperlink File Opening Failure & Rollback Error in Microsoft
     365 (Error 30088-29)'
   source_family: Microsoft Q&A
   source_report_id: '5966700'

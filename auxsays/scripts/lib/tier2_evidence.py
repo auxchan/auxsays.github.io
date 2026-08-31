@@ -226,6 +226,36 @@ _SOURCE_FAMILIES = {
 }
 
 
+# Source titles arrive full of typographic punctuation and HTML entities. Both have already caused
+# trouble downstream -- an entity that was escaped twice showed readers a literal "&amp;amp;" -- and
+# they add a variable to every string comparison and template render for no reader benefit. Titles
+# and excerpts are normalised once, here, where they are stored.
+_SMART_PUNCTUATION = {
+    "‘": "'", "’": "'", "‚": "'", "‛": "'",
+    "“": '"', "”": '"', "„": '"', "‟": '"',
+    "–": "-", "—": "-", "‒": "-", "―": "-",
+    "…": "...", " ": " ", "​": "", "﻿": "",
+}
+
+
+def normalise_text(value: str) -> str:
+    """Plain, single-escaped, ASCII-punctuation text for storage and display."""
+    import html as _html  # noqa: PLC0415
+
+    # Bounded loop, not a single pass: source titles reach us DOUBLE-encoded ("&amp;amp;"), so one
+    # unescape leaves "&amp;" and a reader still sees an entity. Three passes converge on every
+    # real case and cannot loop on text that contains a literal ampersand.
+    text = str(value or "")
+    for _ in range(3):
+        decoded = _html.unescape(text)
+        if decoded == text:
+            break
+        text = decoded
+    for fancy, plain in _SMART_PUNCTUATION.items():
+        text = text.replace(fancy, plain)
+    return " ".join(text.split())
+
+
 def source_family(source_type: str) -> str:
     return _SOURCE_FAMILIES.get(str(source_type or ""), str(source_type or "").replace("_", " "))
 
@@ -304,8 +334,8 @@ def tier2_row_from_rejection(rejected_row: dict[str, Any], *, windows: list[Rele
         source_report_id=_source_report_id(url),
         author_id=str(rejected_row.get("author_id") or rejected_row.get("qna_author_id") or ""),
         report_date=day,
-        report_title=title[:300],
-        report_excerpt=" ".join(excerpt.split())[:400],
+        report_title=normalise_text(title)[:300],
+        report_excerpt=normalise_text(excerpt)[:400],
         issue_summary=str(rejected_row.get("issue_theme") or "").strip(),
         update_link_signal=linkage.signal,
         update_link_reason=linkage.reason,
