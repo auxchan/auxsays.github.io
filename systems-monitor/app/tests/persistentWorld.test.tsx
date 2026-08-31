@@ -7,7 +7,7 @@ import { persistentWorldFactualBinding } from "../src/data/persistentWorldFactua
 import { PERSISTENT_WORLD_PROFILED_FACTOR_COUNT, persistentWorldCandidateSourceProfile } from "../src/data/persistentWorldSourceCatalog";
 import { persistentWorldMediaFor } from "../src/views/persistent/persistentWorldMedia";
 import { PERSISTENT_GLINT_PERIOD_MS, PERSISTENT_GLINT_TRAIL, blendPremiumColor, compactPersistentValue, createPersistentCameraTransition, easePremiumHover, factorGlyph, persistentAmbientEdges, persistentFocusRotation, persistentGlintProgress, persistentPlacementAccent, premiumCurveRoute, resolvePersistentLod, resolvePremiumLabels, samplePersistentCameraTransition, shortestAngleDelta } from "../src/views/persistent/persistentWorldVisuals";
-import { persistentWorldDoubleClickAction, persistentWorldEdgeTransitionAlpha, persistentWorldGraphNodeLabel, persistentWorldPublicPlacementVisible, persistentWorldPublicRelationshipVisible, polishPersistentCameraTransition } from "../src/views/persistent/PremiumPersistentWorldSurface";
+import { decayPersistentWorldOrbitVelocity, persistentWorldDoubleClickAction, persistentWorldEdgeTransitionAlpha, persistentWorldGraphNodeLabel, persistentWorldOrbitAngle, persistentWorldOrbitVelocity, persistentWorldPublicPlacementVisible, persistentWorldPublicRelationshipVisible, polishPersistentCameraTransition } from "../src/views/persistent/PremiumPersistentWorldSurface";
 import { persistentWorldUpSelection } from "../src/views/persistent/PersistentWorldShell";
 import { createPersistentWorldSpatialLayout, projectPersistentPlacement } from "../src/views/persistent/persistentWorldSpatialLayout";
 import { buildPersistentWorldSearchIndex, searchPersistentWorld } from "../src/views/persistent/persistentWorldSearch";
@@ -219,6 +219,17 @@ describe("premium persistent-world visual language", () => {
     expect(end.pose).toMatchObject(transition.to);
   });
 
+  it("keeps blank-space orbital rotation restrained and angle-aware", () => {
+    const topDownAngle = persistentWorldOrbitAngle(0, 240, "TOP_DOWN", 0);
+    const cinematicAngle = persistentWorldOrbitAngle(0, 240, "CINEMATIC_2_5D", .78);
+    expect(topDownAngle).toBeGreaterThan(0);
+    expect(cinematicAngle).toBeGreaterThan(0);
+    expect(cinematicAngle).toBeLessThan(topDownAngle);
+    expect(Math.abs(persistentWorldOrbitVelocity(1000, 8, "TOP_DOWN"))).toBeLessThanOrEqual(.00115);
+    expect(decayPersistentWorldOrbitVelocity(.001, 430)).toBeCloseTo(.001 / Math.E);
+    expect(decayPersistentWorldOrbitVelocity(.000009, 4300)).toBe(0);
+  });
+
   it("adds deterministic presentation depth without changing canonical topology", () => {
     const model = createPersistentWorld();
     const before = model.topologyFingerprint;
@@ -341,6 +352,13 @@ describe("persistent world local-review shell", () => {
     fireEvent.pointerMove(surface, { pointerId: 7, clientX: 440, clientY: 325 });
     fireEvent.pointerUp(surface, { pointerId: 7, clientX: 440, clientY: 325 });
     expect(Number(surface.getAttribute("data-viewport-pan-x"))).not.toBe(0);
+    const canvas = surface.querySelector("canvas")!;
+    fireEvent.pointerDown(canvas, { button: 0, pointerId: 8, clientX: -120, clientY: -120 });
+    fireEvent.pointerMove(canvas, { pointerId: 8, clientX: -20, clientY: -116 });
+    expect(surface.getAttribute("data-orbit-drag-state")).toBe("DRAGGING");
+    expect(Math.abs(Number(surface.getAttribute("data-orbit-angle-degrees")))).toBeGreaterThan(5);
+    fireEvent.pointerUp(canvas, { pointerId: 8, clientX: -20, clientY: -116 });
+    expect(["DRIFTING", "IDLE"]).toContain(surface.getAttribute("data-orbit-drag-state"));
 
     fireEvent.click(screen.getByRole("button", { name: /03Employer Labor DemandMaster-defined system/ }));
     expect(surface.getAttribute("data-selected-placement-id")).toBe("placement:employer-labor-demand");

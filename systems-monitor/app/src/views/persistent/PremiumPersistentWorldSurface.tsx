@@ -13,6 +13,7 @@ import { createPersistentProjector, createPersistentWorldSpatialLayout, type Per
 type Camera = PersistentCameraPose;
 export type PersistentWorldViewMode = "TOP_DOWN" | "CINEMATIC_2_5D";
 interface Viewport { zoom: number; panX: number; panY: number }
+interface OrbitDrag { pointerId: number; startX: number; startY: number; lastX: number; lastAt: number; startAngle: number; moved: boolean }
 interface Props {
   model: PersistentWorldReadModel;
   factualBindings: Readonly<Record<string, PersistentWorldFactualBinding>>;
@@ -81,6 +82,28 @@ export function persistentWorldGraphNodeLabel(model: PersistentWorldReadModel, p
 
 export function persistentWorldEdgeTransitionAlpha(currentEdge: boolean, previousEdge: boolean, progress: number) {
   return Math.min(1, (currentEdge ? progress * 1.8 : 0) + (previousEdge ? Math.max(0, 1 - progress * 2.5) : 0));
+}
+
+const MAX_ORBIT_VELOCITY = .00115;
+
+function normalizeOrbitAngle(angle: number) {
+  return Math.atan2(Math.sin(angle), Math.cos(angle));
+}
+
+/** Horizontal blank-space dragging rotates the presentation only; the cinematic view is deliberately less sensitive. */
+export function persistentWorldOrbitAngle(startAngle: number, horizontalPixels: number, viewMode: PersistentWorldViewMode, pitch = 0) {
+  const cinematicCompensation = viewMode === "CINEMATIC_2_5D" ? Math.max(.62, Math.min(.76, Math.cos(Math.abs(pitch)) * .9)) : 1;
+  return normalizeOrbitAngle(startAngle + horizontalPixels * .00215 * cinematicCompensation);
+}
+
+export function persistentWorldOrbitVelocity(horizontalPixels: number, elapsedMs: number, viewMode: PersistentWorldViewMode, pitch = 0) {
+  const angle = persistentWorldOrbitAngle(0, horizontalPixels, viewMode, pitch);
+  return Math.max(-MAX_ORBIT_VELOCITY, Math.min(MAX_ORBIT_VELOCITY, angle / Math.max(8, elapsedMs)));
+}
+
+export function decayPersistentWorldOrbitVelocity(velocity: number, elapsedMs: number) {
+  const decayed = velocity * Math.exp(-Math.max(0, elapsedMs) / 430);
+  return Math.abs(decayed) < .000008 ? 0 : decayed;
 }
 
 const OVERVIEW_SCALE = .205;
@@ -198,6 +221,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
   const cameraVelocityRef = useRef<PersistentCameraVelocity>({ x: 0, y: 0, z: 0, logScale: 0, rotation: 0, pitch: 0, yaw: 0 });
   const mountedAtRef = useRef(performance.now()); const viewportRef = useRef<Viewport>({ zoom: 1, panX: 0, panY: 0 });
   const panRef = useRef<{ pointerId: number; startX: number; startY: number; panX: number; panY: number; moved: boolean } | null>(null);
+  const orbitDragRef = useRef<OrbitDrag | null>(null); const orbitAngleRef = useRef(0); const orbitVelocityRef = useRef(0);
   const suppressClickRef = useRef(false); const hoveredRef = useRef<string | null>(null); const hoverVisualsRef = useRef(new Map<string, number>());
   const pointerRef = useRef<Point>({ x: 0, y: 0 }); const invalidateRef = useRef<() => void>(() => undefined);
   const semanticHistoryRef = useRef<readonly string[]>([]); const cameraMomentumRef = useRef<Point>({ x: 0, y: 0 });
@@ -225,6 +249,10 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
     viewportRef.current = { zoom: 1, panX: 0, panY: 0 }; const host = hostRef.current;
     if (host) { host.dataset.viewportZoom = "1.000"; host.dataset.viewportPanX = "0"; host.dataset.viewportPanY = "0"; } invalidateRef.current();
   }, [fullWorld, resetVersion, selectedPlacementId]);
+  useEffect(() => {
+    orbitAngleRef.current = 0; orbitVelocityRef.current = 0; orbitDragRef.current = null; const host = hostRef.current;
+    if (host) { host.dataset.orbitAngleDegrees = "0.0"; host.dataset.orbitDragState = "IDLE"; } invalidateRef.current();
+  }, [resetVersion]);
 
   useEffect(() => {
     const host = hostRef.current; const canvas = canvasRef.current; const context = canvas?.getContext("2d", { alpha: false });
@@ -260,16 +288,22 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
       const started = performance.now(); const elapsedMs = Math.min(48, Math.max(0, now - last)); const bounds = host.getBoundingClientRect(); const width = bounds.width; const height = bounds.height; const camera = cameraRef.current; const viewport = viewportRef.current;
       frame = 0;
       const priorCamera = { ...camera }; const transitionSample = reducedMotion ? { progress: 1, pose: destination, velocity: { x: 0, y: 0, z: 0, logScale: 0, rotation: 0, pitch: 0, yaw: 0 } } : samplePersistentCameraTransition(cameraTransition, now); Object.assign(camera, transitionSample.pose); cameraVelocityRef.current = transitionSample.velocity;
+      if (!orbitDragRef.current && !reducedMotion && orbitVelocityRef.current !== 0) {
+        orbitAngleRef.current = normalizeOrbitAngle(orbitAngleRef.current + orbitVelocityRef.current * elapsedMs);
+        orbitVelocityRef.current = decayPersistentWorldOrbitVelocity(orbitVelocityRef.current, elapsedMs);
+      }
       const targetMomentum = reducedMotion ? { x: 0, y: 0 } : { x: Math.max(-14, Math.min(14, (priorCamera.x - camera.x) * camera.scale * .72)), y: Math.max(-14, Math.min(14, (priorCamera.y - camera.y) * camera.scale * .72)) };
       const momentumEase = reducedMotion ? 1 : 1 - Math.exp(-elapsedMs / 86);
       cameraMomentumRef.current.x += (targetMomentum.x - cameraMomentumRef.current.x) * momentumEase; cameraMomentumRef.current.y += (targetMomentum.y - cameraMomentumRef.current.y) * momentumEase;
-      host.dataset.cameraX = camera.x.toFixed(3); host.dataset.cameraY = camera.y.toFixed(3); host.dataset.cameraZ = camera.z.toFixed(3); host.dataset.cameraScale = camera.scale.toFixed(3); host.dataset.cameraRotationDegrees = (camera.rotation * 180 / Math.PI).toFixed(1); host.dataset.cameraPitchDegrees = (camera.pitch * 180 / Math.PI).toFixed(1); host.dataset.cameraYawDegrees = (camera.yaw * 180 / Math.PI).toFixed(1);
+      const orbitCamera = { ...camera, rotation: camera.rotation + orbitAngleRef.current };
+      host.dataset.cameraX = camera.x.toFixed(3); host.dataset.cameraY = camera.y.toFixed(3); host.dataset.cameraZ = camera.z.toFixed(3); host.dataset.cameraScale = camera.scale.toFixed(3); host.dataset.cameraRotationDegrees = (orbitCamera.rotation * 180 / Math.PI).toFixed(1); host.dataset.cameraPitchDegrees = (camera.pitch * 180 / Math.PI).toFixed(1); host.dataset.cameraYawDegrees = (camera.yaw * 180 / Math.PI).toFixed(1);
+      host.dataset.orbitAngleDegrees = (orbitAngleRef.current * 180 / Math.PI).toFixed(1); host.dataset.orbitVelocity = orbitVelocityRef.current.toFixed(6);
       host.dataset.cameraTransitionProgress = transitionSample.progress.toFixed(3); host.dataset.cameraTransitionPhase = reducedMotion ? "REDUCED_MOTION" : transitionSample.progress < .28 ? "DOLLY_OUT" : transitionSample.progress < .82 ? "ORBITAL_TRAVEL" : transitionSample.progress < 1 ? "DOLLY_IN" : "SETTLED";
       if (!cameraSettled && transitionSample.progress >= 1) { cameraSettled = true; host.dataset.cameraSettleMs = (performance.now() - cameraStarted).toFixed(3); }
       last = now;
       const parallax = reducedMotion ? { x: 0, y: 0 } : { x: (pointerRef.current.x - width / 2) * .016 + cameraMomentumRef.current.x, y: (pointerRef.current.y - height / 2) * .016 + cameraMomentumRef.current.y };
-      drawBackground(context, width, height, parallax, cameraMomentumRef.current, camera, viewMode);
-      const projectFrame = createPersistentProjector(camera, viewport, width, height);
+      drawBackground(context, width, height, parallax, cameraMomentumRef.current, orbitCamera, viewMode);
+      const projectFrame = createPersistentProjector(orbitCamera, viewport, width, height);
       const projected = new Map<string, PersistentProjectedPlacement>();
       for (const placement of placements) projected.set(placement.id, projectFrame(placement, viewMode === "CINEMATIC_2_5D" ? spatialLayout.zByPlacementId[placement.id] ?? 0 : 0));
       const projectedAt = (id: string) => projected.get(id)!;
@@ -371,7 +405,9 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
       const hoverAnimating = [...hoverVisualsRef.current.values()].some((value) => currentHovered ? value < .995 : value > .01);
       const routePulseActive = !reducedMotion && now - routePulseRef.current.startedAt < 700;
       host.dataset.routePulseState = routePulseActive ? "ACTIVE" : "IDLE";
-      const shouldContinue = !reducedMotion && (transitionSample.progress < 1 || Boolean(currentHovered) || hoverAnimating || traceMode || routePulseActive);
+      const orbitDrifting = !reducedMotion && Math.abs(orbitVelocityRef.current) > 0;
+      if (!orbitDragRef.current) host.dataset.orbitDragState = orbitDrifting ? "DRIFTING" : "IDLE";
+      const shouldContinue = !reducedMotion && (transitionSample.progress < 1 || Boolean(currentHovered) || hoverAnimating || traceMode || routePulseActive || orbitDrifting);
       host.dataset.renderLoopState = shouldContinue ? "ACTIVE" : "IDLE";
       if (shouldContinue) frame = requestAnimationFrame(draw);
     };
@@ -381,7 +417,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
 
   function hitTest(event: { clientX: number; clientY: number }) {
     const host = hostRef.current; if (!host) return null; const bounds = host.getBoundingClientRect(); const camera = cameraRef.current; let best: { id: string; score: number; depth: number } | null = null;
-    const projectHit = createPersistentProjector(camera, viewportRef.current, bounds.width, bounds.height);
+    const projectHit = createPersistentProjector({ ...camera, rotation: camera.rotation + orbitAngleRef.current }, viewportRef.current, bounds.width, bounds.height);
     for (const id of semantic) { const placement = model.placements[id]; const point = projectHit(placement, viewMode === "CINEMATIC_2_5D" ? spatialLayout.zByPlacementId[id] ?? 0 : 0); const lod = resolvePersistentLod(placement.depth, camera.scale * viewportRef.current.zoom * point.perspectiveScale, true); const radius = Math.max(24, premiumRadius(placement, lod) * point.perspectiveScale + 8); const distance = Math.hypot(event.clientX - bounds.left - point.x, event.clientY - bounds.top - point.y); const score = distance / radius; if (score <= 1 && (!best || score < best.score - .04 || (Math.abs(score - best.score) <= .04 && point.cameraDepth > best.depth))) best = { id, score, depth: point.cameraDepth }; }
     return best?.id ?? null;
   }
@@ -389,15 +425,42 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
 
   const parentPlacementId = selectedPlacementId ? model.placements[selectedPlacementId]?.parentPlacementId : null;
 
-  return <div ref={hostRef} className="sm-pw-surface sm-pw-surface--premium" role="application" tabIndex={0} aria-label="U.S. systems factor map" aria-keyshortcuts="Alt+ArrowLeft" data-world-id={model.worldId} data-graph-snapshot-id={model.graphSnapshotId} data-layout-version={model.layoutVersion} data-topology-fingerprint={model.topologyFingerprint} data-presentation-layout-version={spatialLayout.version} data-projection-version={spatialLayout.projectionVersion} data-presentation-fingerprint={spatialLayout.fingerprint} data-resident-placement-count={model.coverage.placementCount} data-resident-relationship-count={model.coverage.hierarchyRelationshipCount + model.coverage.syntheticInfluenceCount} data-semantic-node-count={semantic.length} data-factual-binding-count={Object.values(factualBindings).filter((binding) => binding.status === "CONNECTED").length} data-lod-mode={fullWorld ? "FULL_WORLD_DENSITY" : selectedPlacementId ? "FOCUS" : "OVERVIEW"} data-trace-mode={traceMode} data-route-pulse-version={routePulseVersion} data-selected-placement-id={selectedPlacementId ?? ""} data-parent-placement-id={parentPlacementId ?? ""} data-viewport-zoom="1.000" data-viewport-pan-x="0" data-viewport-pan-y="0" data-glint-period-ms="2500" data-glint-trail="0.085" data-hovered-placement-id={hoveredId ?? ""} onKeyDown={(event) => {
+  return <div ref={hostRef} className="sm-pw-surface sm-pw-surface--premium" role="application" tabIndex={0} aria-label="U.S. systems factor map" aria-keyshortcuts="Alt+ArrowLeft" data-world-id={model.worldId} data-graph-snapshot-id={model.graphSnapshotId} data-layout-version={model.layoutVersion} data-topology-fingerprint={model.topologyFingerprint} data-presentation-layout-version={spatialLayout.version} data-projection-version={spatialLayout.projectionVersion} data-presentation-fingerprint={spatialLayout.fingerprint} data-resident-placement-count={model.coverage.placementCount} data-resident-relationship-count={model.coverage.hierarchyRelationshipCount + model.coverage.syntheticInfluenceCount} data-semantic-node-count={semantic.length} data-factual-binding-count={Object.values(factualBindings).filter((binding) => binding.status === "CONNECTED").length} data-lod-mode={fullWorld ? "FULL_WORLD_DENSITY" : selectedPlacementId ? "FOCUS" : "OVERVIEW"} data-trace-mode={traceMode} data-route-pulse-version={routePulseVersion} data-selected-placement-id={selectedPlacementId ?? ""} data-parent-placement-id={parentPlacementId ?? ""} data-viewport-zoom="1.000" data-viewport-pan-x="0" data-viewport-pan-y="0" data-orbit-angle-degrees="0.0" data-orbit-velocity="0.000000" data-orbit-drag-state="IDLE" data-glint-period-ms="2500" data-glint-trail="0.085" data-hovered-placement-id={hoveredId ?? ""} onKeyDown={(event) => {
     if (event.altKey && event.key === "ArrowLeft" && selectedPlacementId) { event.preventDefault(); onNavigateParent(); }
   }} onWheel={(event) => {
     const started = performance.now(); event.preventDefault(); const bounds = event.currentTarget.getBoundingClientRect(); const current = viewportRef.current; const zoom = Math.max(.55, Math.min(3.25, current.zoom * Math.exp(-event.deltaY * .0014))); const ratio = zoom / current.zoom; const cursorX = event.clientX - bounds.left - bounds.width / 2; const cursorY = event.clientY - bounds.top - bounds.height / 2; updateViewport({ zoom, panX: cursorX - (cursorX - current.panX) * ratio, panY: cursorY - (cursorY - current.panY) * ratio }); event.currentTarget.dataset.wheelHandlerMs = (performance.now() - started).toFixed(3);
-  }} onPointerDown={(event) => { if (event.button === 0 && event.target === canvasRef.current) event.preventDefault(); if (event.button !== 1) return; event.preventDefault(); event.currentTarget.setPointerCapture(event.pointerId); const current = viewportRef.current; panRef.current = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, panX: current.panX, panY: current.panY, moved: false }; }} onPointerMove={(event) => {
+  }} onPointerDown={(event) => {
+    if (event.button === 0 && event.target === canvasRef.current) {
+      event.preventDefault(); suppressClickRef.current = false;
+      if (!hitTest(event)) {
+        event.currentTarget.setPointerCapture(event.pointerId); orbitVelocityRef.current = 0;
+        orbitDragRef.current = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, lastX: event.clientX, lastAt: performance.now(), startAngle: orbitAngleRef.current, moved: false };
+        event.currentTarget.dataset.orbitDragState = "DRAGGING"; setHoveredId(null); invalidateRef.current();
+      }
+      return;
+    }
+    if (event.button !== 1) return;
+    event.preventDefault(); event.currentTarget.setPointerCapture(event.pointerId); const current = viewportRef.current; panRef.current = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, panX: current.panX, panY: current.panY, moved: false };
+  }} onPointerMove={(event) => {
     const bounds = event.currentTarget.getBoundingClientRect(); pointerRef.current = { x: event.clientX - bounds.left, y: event.clientY - bounds.top }; const pan = panRef.current;
     if (pan?.pointerId === event.pointerId) { const dx = event.clientX - pan.startX; const dy = event.clientY - pan.startY; pan.moved ||= Math.hypot(dx, dy) > 3; suppressClickRef.current = pan.moved; updateViewport({ ...viewportRef.current, panX: pan.panX + dx, panY: pan.panY + dy }); return; }
+    const orbit = orbitDragRef.current;
+    if (orbit?.pointerId === event.pointerId) {
+      event.preventDefault(); const now = performance.now(); const totalX = event.clientX - orbit.startX; const totalY = event.clientY - orbit.startY;
+      orbit.moved ||= Math.abs(totalX) > 4 && Math.abs(totalX) >= Math.abs(totalY) * .55; suppressClickRef.current = orbit.moved;
+      if (orbit.moved) {
+        orbitAngleRef.current = persistentWorldOrbitAngle(orbit.startAngle, totalX, viewMode, cameraRef.current.pitch);
+        const sampledVelocity = reducedMotion ? 0 : persistentWorldOrbitVelocity(event.clientX - orbit.lastX, now - orbit.lastAt, viewMode, cameraRef.current.pitch);
+        orbitVelocityRef.current += (sampledVelocity - orbitVelocityRef.current) * .58;
+        orbit.lastX = event.clientX; orbit.lastAt = now; event.currentTarget.dataset.orbitAngleDegrees = (orbitAngleRef.current * 180 / Math.PI).toFixed(1); invalidateRef.current();
+      }
+      return;
+    }
     const started = performance.now(); const hit = hitTest(event); setHoveredId(hit); if (hit) { event.currentTarget.style.setProperty("--pw-hover-x", `${Math.max(14, Math.min(bounds.width - 304, pointerRef.current.x + 18))}px`); event.currentTarget.style.setProperty("--pw-hover-y", `${Math.max(14, Math.min(bounds.height - 246, pointerRef.current.y + 18))}px`); } event.currentTarget.dataset.hoverHitTestMs = (performance.now() - started).toFixed(3); invalidateRef.current();
-  }} onPointerUp={(event) => { if (panRef.current?.pointerId === event.pointerId) { event.currentTarget.releasePointerCapture(event.pointerId); panRef.current = null; } }} onPointerCancel={() => { panRef.current = null; }} onPointerLeave={() => { if (!panRef.current) setHoveredId(null); }} onMouseDown={(event) => { if ((event.button === 0 && event.target === canvasRef.current) || event.button === 1) event.preventDefault(); }} onAuxClick={(event) => { if (event.button === 1) event.preventDefault(); }} onDoubleClick={(event) => { const action = persistentWorldDoubleClickAction(hitTest(event), parentPlacementId); if (action === "UP_ONE_LEVEL") onNavigateParent(); else if (action === "RESET") onReset(); }} onClick={(event) => { if (event.detail > 1) return; if (suppressClickRef.current) { suppressClickRef.current = false; return; } const id = hitTest(event); if (id && id !== parentPlacementId) onSelect(id); }}>
+  }} onPointerUp={(event) => {
+    if (panRef.current?.pointerId === event.pointerId) { event.currentTarget.releasePointerCapture(event.pointerId); panRef.current = null; }
+    if (orbitDragRef.current?.pointerId === event.pointerId) { const moved = orbitDragRef.current.moved; event.currentTarget.releasePointerCapture(event.pointerId); orbitDragRef.current = null; if (!moved || reducedMotion) orbitVelocityRef.current = 0; event.currentTarget.dataset.orbitDragState = orbitVelocityRef.current ? "DRIFTING" : "IDLE"; invalidateRef.current(); }
+  }} onPointerCancel={(event) => { panRef.current = null; orbitDragRef.current = null; orbitVelocityRef.current = 0; event.currentTarget.dataset.orbitDragState = "IDLE"; }} onPointerLeave={() => { if (!panRef.current && !orbitDragRef.current) setHoveredId(null); }} onMouseDown={(event) => { if ((event.button === 0 && event.target === canvasRef.current) || event.button === 1) event.preventDefault(); }} onAuxClick={(event) => { if (event.button === 1) event.preventDefault(); }} onDoubleClick={(event) => { const action = persistentWorldDoubleClickAction(hitTest(event), parentPlacementId); if (action === "UP_ONE_LEVEL") onNavigateParent(); else if (action === "RESET") onReset(); }} onClick={(event) => { if (event.detail > 1) return; if (suppressClickRef.current) { suppressClickRef.current = false; return; } const id = hitTest(event); if (id && id !== parentPlacementId) onSelect(id); }}>
     <canvas ref={canvasRef} role="img" aria-label={publicBeta
       ? "Reviewed factors and configuration-pending Level-4 nodes with hierarchy-only navigation connections, bounded to the current neighborhood."
       : "All 1,111 fixture placements remain resident; premium visual detail and labels are bounded to the current exact-ten neighborhood."} />
