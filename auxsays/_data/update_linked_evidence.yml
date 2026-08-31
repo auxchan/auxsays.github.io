@@ -2,7 +2,8 @@ schema_version: 1
 note: Update-linked user reports. These are REAL community reports about a PowerPoint update whose exact
   build was never stated. They are shown to readers and are deliberately NOT counted toward consensus.
 reports:
-- associated_target_build: '20326.20100'
+- associated_patch_key: microsoft-powerpoint|2608|20326.20100
+  associated_target_build: '20326.20100'
   associated_update_version: '2608'
   association_basis: report_date_inside_release_window
   captured_at: '2026-08-31T15:04:46Z'
@@ -28,7 +29,8 @@ reports:
     in third
   update_link_reason: Reporter says the problem began after an Office or PowerPoint update.
   update_link_signal: explicit_update_attribution
-- associated_target_build: '20228.20158'
+- associated_patch_key: microsoft-powerpoint|2607|20228.20158
+  associated_target_build: '20228.20158'
   associated_update_version: '2607'
   association_basis: report_date_inside_release_window
   captured_at: '2026-08-31T15:04:46Z'
@@ -54,7 +56,8 @@ reports:
     lin'
   update_link_reason: Reporter says the problem began after an Office or PowerPoint update.
   update_link_signal: explicit_update_attribution
-- associated_target_build: '18025.20096'
+- associated_patch_key: microsoft-powerpoint|2409|18025.20096
+  associated_target_build: '18025.20096'
   associated_update_version: '2409'
   association_basis: report_date_inside_release_window
   captured_at: '2026-08-31T15:04:46Z'

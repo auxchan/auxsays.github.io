@@ -80,7 +80,8 @@
   a version fallback would only add an unguarded third site.
 {%- endcomment -%}
 {%- assign row_t2_all = site.data.update_linked_evidence.reports | default: empty -%}
-{%- assign row_t2 = row_t2_all | where: "product_id", item.product_id | where: "associated_target_build", row_build -%}
+{%- capture row_t2_key %}{{ item.product_id }}|{{ item.update_version }}|{{ row_build }}{% endcapture -%}
+{%- assign row_t2 = row_t2_all | where: "associated_patch_key", row_t2_key -%}
 {%- assign row_t2_count = row_t2 | size -%}
 <td data-label="Reports" class="patch-cell-num">{{ report_count_num }}{% if row_t2_count > 0 %} <span class="patch-cell-num__linked" title="Update-linked reports: the reporter ties the problem to a PowerPoint or Office update but never states the exact build. Not counted toward consensus.">&middot; {{ row_t2_count }} update-linked</span>{% endif %}</td>
 <td data-label="Evidence"><span class="patch-evidence patch-evidence--rank{{ evidence_rank }}">{{ evidence_strength }}</span></td>

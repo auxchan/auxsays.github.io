@@ -60,7 +60,7 @@ ALLOWED_METHODS: dict[str, set[str]] = {
     "microsoft-windows-11": {"learn_qna_search_rss"},
     "microsoft-powerpoint": {"learn_qna_search_rss", "learn_qna_powerpoint_tags", "reddit_search",
                              "stack_exchange_search", "github_officedev_issues",
-                             "tech_community_discussions"},
+                             "tech_community_discussions", "open_web_discovery"},
 }
 
 # Per-product allowed evidence source_type identities. Evidence rows carry ``source_type`` (not a

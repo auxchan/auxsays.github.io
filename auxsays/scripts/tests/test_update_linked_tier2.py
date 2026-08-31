@@ -404,6 +404,141 @@ def run() -> int:
 
     print()
     print("=" * 96)
+    print("I  the Jekyll `where` numeric-coercion trap")
+    print("=" * 96)
+    # ROOT CAUSE of a live defect: Jekyll's `where` runs the property through parse_sort_input,
+    # which coerces a numeric-looking string to a Float. "20326.20100" became 20326.201 -- the
+    # trailing zero silently lost -- so the row never matched its own page. Builds ending in a
+    # zero broke and the rest worked, which made it look arbitrary. Every offline `==` test
+    # passed, because direct comparison never coerces.
+    import re as _re  # noqa: PLC0415
+
+    JEKYLL_NUMERIC = _re.compile(r"\A\s*-?(?:\d+\.?\d*|\.\d+)(?:[eE][-+]?\d+)?\s*\Z")
+
+    def coerces(value):
+        return bool(JEKYLL_NUMERIC.match(value))
+
+    for build, breaks in (("20326.20100", True), ("20326.20110", True),
+                          ("20228.20158", False), ("18025.20096", False)):
+        coerced = float(build) if coerces(build) else build
+        lost = str(coerced) != build
+        check(f"I.1 the trap is real for {build}: round-trip lost = {breaks}", lost is breaks,
+              f"{build} -> {coerced}")
+    # The fix: filter on a key that cannot be read as a number.
+    for build in ("20326.20100", "20326.20110", "20228.20158"):
+        key = t2.patch_join_key("microsoft-powerpoint", "2608", build)
+        check(f"I.2 the join key for {build} is not numeric-looking", not coerces(key), key)
+        check(f"I.3 and it round-trips exactly for {build}", str(key) == key)
+    layout = (ROOT / "_layouts" / "aux-update.html").read_text(encoding="utf-8")
+    row_inc = (ROOT / "_includes" / "patch-table-row.html").read_text(encoding="utf-8")
+    check("I.4 the patch page filters on the join key, never the bare build",
+          'where: "associated_patch_key"' in layout
+          and 'where: "associated_target_build"' not in layout)
+    check("I.5 the listing filters on the join key too",
+          'where: "associated_patch_key"' in row_inc
+          and 'where: "associated_target_build"' not in row_inc)
+    check("I.6 every stored row carries the join key",
+          all(r.get("associated_patch_key") for r in
+              t2.load_tier2(ROOT / "_data" / "update_linked_evidence.yml")))
+    check("I.7 the key the row stores equals the key a template builds",
+          all(r.get("associated_patch_key") == t2.patch_join_key(
+              r.get("product_id"), r.get("associated_update_version"),
+              r.get("associated_target_build"))
+              for r in t2.load_tier2(ROOT / "_data" / "update_linked_evidence.yml")))
+
+    print()
+    print("=" * 96)
+    print("J  OPEN-WEB discovery -- permitted providers, and a snippet is never evidence")
+    print("=" * 96)
+    from patch_collectors import open_web_source as ow  # noqa: PLC0415
+
+    # Every general web index was evaluated and rejected on POLICY or on gating, not on taste:
+    # duckduckgo serves an interactive bot challenge after a few automated queries, mojeek and
+    # marginalia both say `Disallow: /search`, and brave answers 402/422 without a paid key.
+    # None of them may appear as a production provider.
+    provider_names = [name for name, _fn in ow.PROVIDERS]
+    for forbidden in ("duckduckgo", "mojeek", "marginalia", "brave", "startpage", "google", "bing"):
+        check(f"J.1 no general web index is a production provider: {forbidden}",
+              not any(forbidden in name for name in provider_names), str(provider_names))
+    check("J.2 the providers are endpoints this repo already queries in production",
+          set(provider_names) == {"learn_qna_search", "stack_exchange_search", "github_search"},
+          str(provider_names))
+    source = (ROOT / "scripts" / "patch_collectors" / "open_web_source.py").read_text(encoding="utf-8")
+    check("J.3 the reason each index was rejected is recorded, not just the decision",
+          "Disallow: /search" in source and "bot challenge" in source and "paid key" in source)
+
+    # A search result contributes a URL and nothing else. If a title or summary could reach the
+    # authority, the index would be deciding what a report says.
+    fake = [{"source_url": "https://learn.microsoft.com/en-us/answers/questions/1/x",
+             "source_type": "microsoft_learn_qna", "discovered_by": "learn_qna_search",
+             "matched_query": "q"}]
+    check("J.4 a discovered row carries no title, summary or snippet",
+          not ({"title", "snippet", "summary", "description", "report_text"} & set(fake[0])))
+    check("J.5 discovery output keys are URL + provenance only",
+          set(fake[0]) == {"source_url", "source_type", "discovered_by", "matched_query"})
+    check("J.6 hydration fetches the ORIGINAL page rather than trusting the result",
+          "def hydrate_discovered_url" in
+          (ROOT / "scripts" / "patch_collectors" / "microsoft_powerpoint.py").read_text(encoding="utf-8"))
+
+    print()
+    print("=" * 96)
+    print("K  a report found by search and by its native lane is ONE row")
+    print("=" * 96)
+    # Search returns an id-only URL; the native lanes store the slugged form. Comparing those two
+    # spellings as strings reports zero overlap even when the sets overlap, and -- worse -- would
+    # write the same thread twice. The page's own canonical link is the spelling both agree on.
+    slugged = ("https://learn.microsoft.com/en-us/answers/questions/5975138/"
+               "version-2607-powerpoint-crashing-when-using-an-add")
+    page = f'<html><head><link rel="canonical" href="{slugged}"></head><body></body></html>'
+    check("K.1 the page's canonical link wins over the id-only search URL",
+          ow.canonical_from_page(page, "https://learn.microsoft.com/en-us/answers/questions/5975138")
+          == slugged)
+    check("K.2 and it equals the form the native lane stores",
+          ow.canonical_from_page(page, "") == slugged)
+    check("K.3 tracking parameters never create a second identity",
+          ow.canonical_url(slugged + "?utm_source=x&ref=y") == slugged)
+    check("K.4 a fragment never creates a second identity",
+          ow.canonical_url(slugged + "#answer-12") == slugged)
+    check("K.5 a locale variant folds to the stored locale",
+          ow.canonical_url(slugged.replace("/en-us/", "/en-gb/")) == slugged)
+    check("K.6 a trailing slash never creates a second identity",
+          ow.canonical_url(slugged + "/") == slugged)
+
+    print()
+    print("=" * 96)
+    print("L  discovery is broad; INGESTION is restricted to what we can actually read")
+    print("=" * 96)
+    for url, expected in (
+            ("https://learn.microsoft.com/en-us/answers/questions/5/x", "supported"),
+            ("https://superuser.com/questions/123/x", "supported"),
+            ("https://techcommunity.microsoft.com/discussions/microsoft-365/x", "supported"),
+            ("https://github.com/OfficeDev/office-js/issues/1", "supported"),
+            ("https://www.reddit.com/r/powerpoint/comments/x", "uningestable"),
+            ("https://answers.microsoft.com/en-us/msoffice/forum/x", "uningestable"),
+            ("https://example.invalid/some-blog-post", "unsupported")):
+        _stype, disposition = ow.identify_source(url)
+        check(f"L.1 {expected:12s} <- {url[:52]}", disposition == expected, disposition)
+    check("L.2 a known venue we cannot parse is RECORDED, never guessed at",
+          "uningestable" in source and "KNOWN_UNINGESTABLE" in source)
+
+    print()
+    print("=" * 96)
+    print("M  the query set is bounded and deterministic")
+    print("=" * 96)
+    first = ow.build_queries(version="2608", build="20326.20112", max_queries=10)
+    again = ow.build_queries(version="2608", build="20326.20112", max_queries=10)
+    check("M.1 the same patch always produces the same queries", first == again)
+    check("M.2 the set is capped", len(first) <= 10, str(len(first)))
+    check("M.3 identity-bearing queries come first, since only they can yield Tier 1",
+          "20326.20112" in first[0])
+    check("M.4 no query is duplicated", len(first) == len(set(first)))
+    check("M.5 it is not a Cartesian product of every term",
+          len(ow.build_queries(version="2608", build="20326.20112", max_queries=999)) < 40)
+    check("M.6 a patch with no build still gets a usable query set",
+          len(ow.build_queries(version="2608", build="")) > 0)
+
+    print()
+    print("=" * 96)
     print(f"Results: {PASS}/{PASS + FAIL} passed, {FAIL} failed")
     if FAILURES:
         print("Failed: " + ", ".join(FAILURES))
