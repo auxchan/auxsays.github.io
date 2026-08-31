@@ -14383,3 +14383,56 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: microsoft-powerpoint-2501-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5413616-powerpoint-cant-insert-internet-video
+  product_id: microsoft-powerpoint
+  update_version: '2501'
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5413616/powerpoint-cant-insert-internet-video
+  parent_title: PowerPoint // Can&#39;t Insert Internet Video - Microsoft Q&amp;A
+  report_title: PowerPoint // Can&#39;t Insert Internet Video - Microsoft Q&amp;A
+  report_text_excerpt: PowerPoint // Can&#39;t Insert Internet Video - Microsoft Q&amp;A PowerPoint // Can't Insert Internet Video I'm trying to insert a link from a YouTube video but the Insert => Video => Online Videos dialogue box will not populate. (please see attached) I tried restarting the...
+  captured_at: '2026-08-31T20:50:46Z'
+  source_date: '2025-02-04'
+  target_release_date: '2025-01-30'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '2501'
+  match_basis: exact_version_channel_build
+  applicability: microsoft-powerpoint
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified PowerPoint issue
+  workflow_area: PowerPoint workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '18429.20132'
+- id: microsoft-powerpoint-2406-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5312132-inconsistent-thickness-of-underlines-i
+  product_id: microsoft-powerpoint
+  update_version: '2406'
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5312132/inconsistent-thickness-of-underlines-in-the-export
+  parent_title: Inconsistent thickness of underlines in the exported PDF file by PowerPoint - Microsoft Q&amp;A
+  report_title: Inconsistent thickness of underlines in the exported PDF file by PowerPoint - Microsoft Q&amp;A
+  report_text_excerpt: Inconsistent thickness of underlines in the exported PDF file by PowerPoint - Microsoft Q&amp;A Inconsistent thickness of underlines in the exported PDF file by PowerPoint I try to export a presentation as PDF file in PowerPoint, by File > Export > Create PDF/XPS > Publish....
+  captured_at: '2026-08-31T21:26:09Z'
+  source_date: '2024-07-04'
+  target_release_date: '2024-06-26'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '2406'
+  match_basis: exact_version_channel_build
+  applicability: microsoft-powerpoint
+  counted: true
+  exclusion_reason: null
+  issue_theme: export failure
+  workflow_area: export
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '17726.20126'
