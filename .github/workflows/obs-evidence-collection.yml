@@ -261,6 +261,7 @@ jobs:
             --message "Update automated patch evidence" \
             --allow auxsays/_data/consensus_evidence.yml \
             --allow auxsays/_data/evidence_method_health.yml \
+            --allow auxsays/_data/update_linked_evidence.yml \
             --allow 'auxsays/updates/generated/*obs-studio*.md' \
             --allow 'auxsays/updates/generated/*davinci*.md' \
             --allow 'auxsays/updates/generated/*premiere-pro*.md' \

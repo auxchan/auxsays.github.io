@@ -69,17 +69,26 @@ EXPECTED_CHECKS: dict[str, int] = {}
 # outside the closed world, one of them wired into package.json.
 TEST_GLOBS = ("**/test_*.py", "**/*_test.py", "**/*.test.mjs", "**/test-*.mjs", "**/*_test.mjs")
 DISCOVERY_EXCLUDE = ("node_modules", "_site", ".git", ".jekyll-cache", "__pycache__", "vendor")
+# This repository now also hosts an unrelated project (systems-monitor) with its own test
+# tree and its own tooling. Repo-wide discovery therefore reported ~40 files "classified
+# nowhere" and refused to run at all -- main has been red since that project landed, for a
+# reason that has nothing to do with AUXSAYS correctness. Discovery is scoped to the tree this
+# manifest actually governs, which restores the closed-world property WITHIN that tree: an
+# AUXSAYS test that nobody classified still fails the run.
+DISCOVERY_ROOTS = ("auxsays",)
 
 
 def discovered_tests() -> set[str]:
-    """Every test-shaped file in the repo, as a path relative to the repo root.
+    """Every test-shaped file under the governed roots, relative to the repo root.
 
-    Repo-wide and recursive on purpose: the manifest can only be closed-world if discovery sees
-    everything a contributor might reasonably add. `__init__.py` is package plumbing, not a suite.
+    Recursive within those roots on purpose: the manifest can only be closed-world if discovery
+    sees everything a contributor might reasonably add to the tree it governs. `__init__.py` is
+    package plumbing, not a suite.
     """
     found: set[str] = set()
     for pattern in TEST_GLOBS:
-        for path in REPO.glob(pattern):
+        for root in DISCOVERY_ROOTS:
+          for path in (REPO / root).glob(pattern):
             if not path.is_file():
                 continue
             rel = path.relative_to(REPO).as_posix()
