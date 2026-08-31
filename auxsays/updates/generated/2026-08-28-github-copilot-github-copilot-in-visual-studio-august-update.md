@@ -17,8 +17,8 @@ update_version: GitHub Copilot in Visual Studio — August update
 update_logo_text: GIT
 update_published_at: '2026-08-28T20:24:20Z'
 update_last_checked: '2026-08-28T23:33:36Z'
-source_last_checked: '2026-08-30T22:24:16Z'
-official_body_last_checked: '2026-08-30T22:24:16Z'
+source_last_checked: '2026-08-31T06:52:58Z'
+official_body_last_checked: '2026-08-31T06:52:58Z'
 record_last_updated: '2026-08-28T23:33:36Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -88,11 +88,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-08-29T08:17:25Z'
-  url: https://github.blog/changelog/2026-08-28-github-copilot-in-visual-studio-august-update-2
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-08-29T18:02:46Z'
   url: https://github.blog/changelog/2026-08-28-github-copilot-in-visual-studio-august-update-2
   status: captured-from-rss-feed
@@ -109,6 +104,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-08-30T22:24:16Z'
+  url: https://github.blog/changelog/2026-08-28-github-copilot-in-visual-studio-august-update-2
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-08-31T06:52:58Z'
   url: https://github.blog/changelog/2026-08-28-github-copilot-in-visual-studio-august-update-2
   status: captured-from-rss-feed
   body_captured: true
