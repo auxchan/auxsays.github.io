@@ -15122,3 +15122,751 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: acrobat-26-001-21789-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-26-001-21789-breaks-printing-on-macos-ventura-13-7
+  product_id: adobe-acrobat-pro
+  update_version: 26.001.21789
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-26-001-21789-breaks-printing-on-macos-ventura-13-7-8-jobs-never-reach-print-queue-1638388
+  parent_title: Acrobat 26.001.21789 breaks printing on macOS Ventura 13.7.8 — jobs never reach print queue
+  report_title: Acrobat 26.001.21789 breaks printing on macOS Ventura 13.7.8 — jobs never reach print queue
+  report_text_excerpt: 'Acrobat 26.001.21789 breaks printing on macOS Ventura 13.7.8 — jobs never reach print queue Since updating to Acrobat Standard 26.001.21789 (released Aug 11, 2026), I cannot print from Acrobat at all on macOS Ventura 13.7.8. Symptoms: - Print jobs never appear in the macOS...'
+  captured_at: '2026-09-01T17:40:03Z'
+  source_date: '2026-08-23'
+  target_release_date: '2026-08-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.001.21789
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-26-001-21771-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-26-001-21771-consistently-crashes-on-mac-os
+  product_id: adobe-acrobat-pro
+  update_version: 26.001.21771
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-26-001-21771-consistently-crashes-on-mac-os-tahoe-26-5-2-despite-trashing-prefs-restarting-uninstalling-and-reinstalling-acrobat-1635416
+  parent_title: Adobe Acrobat 26.001.21771 consistently crashes on Mac OS Tahoe 26.5.2 despite trashing prefs, restarting, uninstalling and reinstalling Acrobat
+  report_title: Adobe Acrobat 26.001.21771 consistently crashes on Mac OS Tahoe 26.5.2 despite trashing prefs, restarting, uninstalling and reinstalling Acrobat
+  report_text_excerpt: Adobe Acrobat 26.001.21771 consistently crashes on Mac OS Tahoe 26.5.2 despite trashing prefs, restarting, uninstalling and reinstalling Acrobat Adobe Acrobat 26.001.21771 consistently crashes on Mac OS Tahoe 26.5.2 despite trashing prefs, restarting (multiple times),...
+  captured_at: '2026-09-01T17:40:03Z'
+  source_date: '2026-08-05'
+  target_release_date: '2026-08-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.001.21771
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-26-001-21771-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-26-001-21789-breaks-printing-on-macos-ventura-13-7
+  product_id: adobe-acrobat-pro
+  update_version: 26.001.21771
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-26-001-21789-breaks-printing-on-macos-ventura-13-7-8-jobs-never-reach-print-queue-1638388
+  parent_title: Acrobat 26.001.21789 breaks printing on macOS Ventura 13.7.8 — jobs never reach print queue
+  report_title: Acrobat 26.001.21789 breaks printing on macOS Ventura 13.7.8 — jobs never reach print queue
+  report_text_excerpt: 'Acrobat 26.001.21789 breaks printing on macOS Ventura 13.7.8 — jobs never reach print queue Since updating to Acrobat Standard 26.001.21789 (released Aug 11, 2026), I cannot print from Acrobat at all on macOS Ventura 13.7.8. Symptoms: - Print jobs never appear in the macOS...'
+  captured_at: '2026-09-01T17:40:03Z'
+  source_date: '2026-08-23'
+  target_release_date: '2026-08-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.001.21771
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-26-001-21771-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-26-001-21771-crashes-access-violation-when-opening
+  product_id: adobe-acrobat-pro
+  update_version: 26.001.21771
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-26-001-21771-crashes-access-violation-when-opening-pdfs-with-a-hidden-text-annotation-1635232
+  parent_title: Acrobat 26.001.21771 crashes (access violation) when opening PDFs with a hidden Text annotation
+  report_title: Acrobat 26.001.21771 crashes (access violation) when opening PDFs with a hidden Text annotation
+  report_text_excerpt: 'Acrobat 26.001.21771 crashes (access violation) when opening PDFs with a hidden Text annotation After updating to Acrobat 26.001.21771 (Windows 11 Pro, x64), Acrobat crashes immediately when opening certain PDFs: the window opens, shows a blank page, then closes. Windows Event...'
+  captured_at: '2026-09-01T17:40:03Z'
+  source_date: '2026-08-04'
+  target_release_date: '2026-08-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.001.21771
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: PDF rendering regression
+  workflow_area: PDF rendering
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-26-001-21771-adobe-community-bug-report-https-community-adobe-com-questions-9-recent-acrobat-update-causes-print-failures-when-choose-pa
+  product_id: adobe-acrobat-pro
+  update_version: 26.001.21771
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/recent-acrobat-update-causes-print-failures-when-choose-paper-source-by-pdf-page-size-is-enabled-1635555
+  parent_title: Recent Acrobat Update Causes Print Failures When "Choose Paper Source by PDF Page Size" Is Enabled
+  report_title: Recent Acrobat Update Causes Print Failures When "Choose Paper Source by PDF Page Size" Is Enabled
+  report_text_excerpt: Recent Acrobat Update Causes Print Failures When "Choose Paper Source by PDF Page Size" Is Enabled We identified what appears to be a bug introduced in a recent Adobe Acrobat update. After updating Acrobat, PDFs fail to print correctly when "Choose Paper Source by PDF Page...
+  captured_at: '2026-09-01T17:40:03Z'
+  source_date: '2026-08-06'
+  target_release_date: '2026-08-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.001.21771
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-26-001-21745-adobe-community-bug-report-https-community-adobe-com-questions-9-recent-acrobat-update-causes-print-failures-when-choose-pa
+  product_id: adobe-acrobat-pro
+  update_version: 26.001.21745
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/recent-acrobat-update-causes-print-failures-when-choose-paper-source-by-pdf-page-size-is-enabled-1635555
+  parent_title: Recent Acrobat Update Causes Print Failures When "Choose Paper Source by PDF Page Size" Is Enabled
+  report_title: Recent Acrobat Update Causes Print Failures When "Choose Paper Source by PDF Page Size" Is Enabled
+  report_text_excerpt: Recent Acrobat Update Causes Print Failures When "Choose Paper Source by PDF Page Size" Is Enabled We identified what appears to be a bug introduced in a recent Adobe Acrobat update. After updating Acrobat, PDFs fail to print correctly when "Choose Paper Source by PDF Page...
+  captured_at: '2026-09-01T17:40:03Z'
+  source_date: '2026-08-06'
+  target_release_date: '2026-07-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.001.21745
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-26-001-21691-adobe-community-bug-report-https-community-adobe-com-questions-9-document-freezing-after-clicking-save-adobe-ver-26-001-216
+  product_id: adobe-acrobat-pro
+  update_version: 26.001.21691
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/document-freezing-after-clicking-save-adobe-ver-26-001-21691-1632405
+  parent_title: Document Freezing After Clicking Save (Adobe Ver. 26.001.21691)
+  report_title: Document Freezing After Clicking Save (Adobe Ver. 26.001.21691)
+  report_text_excerpt: Document Freezing After Clicking Save (Adobe Ver. 26.001.21691) One end user experiencing issue where document will sometimes freeze when clicking save. Watch icon appears and spools continuously after clicking save. This happens after editing a text field on the document....
+  captured_at: '2026-09-01T17:40:03Z'
+  source_date: '2026-07-16'
+  target_release_date: '2026-06-25'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.001.21691
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-26-001-21691-adobe-community-bug-report-https-community-adobe-com-questions-9-blank-gray-modal-overlay-blocks-ui-in-acrobat-26-001-21691
+  product_id: adobe-acrobat-pro
+  update_version: 26.001.21691
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/blank-gray-modal-overlay-blocks-ui-in-acrobat-26-001-21691-windows-persists-after-repair-cache-clear-dns-registry-fixe-1632344
+  parent_title: Blank/gray modal overlay blocks UI in Acrobat 26.001.21691 (Windows) — persists after repair, cache clear, DNS/registry fixe
+  report_title: Blank/gray modal overlay blocks UI in Acrobat 26.001.21691 (Windows) — persists after repair, cache clear, DNS/registry fixe
+  report_text_excerpt: Blank/gray modal overlay blocks UI in Acrobat 26.001.21691 (Windows) — persists after repair, cache clear, DNS/registry fixe Hi, I'm seeing the "Black screen after sign-in" — solid gray/black overlay blocking the UI, both on the Home screen welcome dialog and inside the...
+  captured_at: '2026-09-01T17:40:03Z'
+  source_date: '2026-07-16'
+  target_release_date: '2026-06-25'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.001.21691
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-26-001-21677-adobe-community-bug-report-https-community-adobe-com-questions-9-why-do-i-no-longer-have-the-option-to-turn-of-generative-a
+  product_id: adobe-acrobat-pro
+  update_version: 26.001.21677
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/why-do-i-no-longer-have-the-option-to-turn-of-generative-ai-after-the-7-23-26-update-1633755
+  parent_title: Why do I no longer have the option to turn of Generative AI after the 7.23.26 update???
+  report_title: Why do I no longer have the option to turn of Generative AI after the 7.23.26 update???
+  report_text_excerpt: Why do I no longer have the option to turn of Generative AI after the 7.23.26 update??? Why was the option to turn off generative AI taken away with the 7.23.26 acrobat update?! I’ve been avoiding doing any updates since that usually makes the software unusable until everyone...
+  captured_at: '2026-09-01T17:40:03Z'
+  source_date: '2026-07-24'
+  target_release_date: '2026-06-17'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.001.21677
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-26-001-21662-adobe-community-bug-report-https-community-adobe-com-questions-9-26-001-21662-update-broke-the-toolbar-1628457
+  product_id: adobe-acrobat-pro
+  update_version: 26.001.21662
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/26-001-21662-update-broke-the-toolbar-1628457
+  parent_title: 26.001.21662 update broke the Toolbar
+  report_title: 26.001.21662 update broke the Toolbar
+  report_text_excerpt: 26.001.21662 update broke the Toolbar This latest update has broken the Toolbar. If you select anything in your toolbar, it will go black and stop being interactive. The only way to bring it back is to close the file. Workaround is to Disable new Acrobat. What is the actual...
+  captured_at: '2026-09-01T17:40:03Z'
+  source_date: '2026-06-18'
+  target_release_date: '2026-06-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.001.21662
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-26-001-21651-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-26-001-21789-breaks-printing-on-macos-ventura-13-7
+  product_id: adobe-acrobat-pro
+  update_version: 26.001.21651
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-26-001-21789-breaks-printing-on-macos-ventura-13-7-8-jobs-never-reach-print-queue-1638388
+  parent_title: Acrobat 26.001.21789 breaks printing on macOS Ventura 13.7.8 — jobs never reach print queue
+  report_title: Acrobat 26.001.21789 breaks printing on macOS Ventura 13.7.8 — jobs never reach print queue
+  report_text_excerpt: 'Acrobat 26.001.21789 breaks printing on macOS Ventura 13.7.8 — jobs never reach print queue Since updating to Acrobat Standard 26.001.21789 (released Aug 11, 2026), I cannot print from Acrobat at all on macOS Ventura 13.7.8. Symptoms: - Print jobs never appear in the macOS...'
+  captured_at: '2026-09-01T17:40:03Z'
+  source_date: '2026-08-23'
+  target_release_date: '2026-06-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.001.21651
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-26-001-21651-adobe-community-bug-report-https-community-adobe-com-questions-9-updating-adobe-acrobat-to-version-2026-001-21651-broke-fil
+  product_id: adobe-acrobat-pro
+  update_version: 26.001.21651
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/updating-adobe-acrobat-to-version-2026-001-21651-broke-filemaker-pro-pdf-integration-1627017
+  parent_title: Updating Adobe Acrobat to version 2026.001.21651 broke FileMaker Pro PDF integration
+  report_title: Updating Adobe Acrobat to version 2026.001.21651 broke FileMaker Pro PDF integration
+  report_text_excerpt: Updating Adobe Acrobat to version 2026.001.21651 broke FileMaker Pro PDF integration We use FileMaker Pro 11 and in one of our databases we use the PDF integration feature to view PDFs within FileMaker Pro. It was working without issue prior to updating to the newest version....
+  captured_at: '2026-09-01T17:40:03Z'
+  source_date: '2026-06-08'
+  target_release_date: '2026-06-05'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 2026.001.21651
+  match_basis: exact_version_alias
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-26-001-21563-adobe-community-bug-report-https-community-adobe-com-questions-9-pdf-keeps-crashing-1626217
+  product_id: adobe-acrobat-pro
+  update_version: 26.001.21563
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/pdf-keeps-crashing-1626217
+  parent_title: PDF Keeps Crashing
+  report_title: PDF Keeps Crashing
+  report_text_excerpt: PDF Keeps Crashing Hello, I am attempting to open a PDF that was sent by a 3rd party vendor. The PDF crashes when opened through Acrobat. However, it can be opened through Microsoft Edge. A temporary workaround I found is to open it through Edge and then print using “Microsoft...
+  captured_at: '2026-09-01T17:40:03Z'
+  source_date: '2026-06-02'
+  target_release_date: '2026-05-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.001.21563
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-26-001-21529-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-dc-26-001-21529-crashing-with-esignatures-1560885
+  product_id: adobe-acrobat-pro
+  update_version: 26.001.21529
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-dc-26-001-21529-crashing-with-esignatures-1560885
+  parent_title: Acrobat DC (26.001.21529) crashing with eSignatures
+  report_title: Acrobat DC (26.001.21529) crashing with eSignatures
+  report_text_excerpt: Acrobat DC (26.001.21529) crashing with eSignatures I have 2 users who have created fillable forms in Acrobat, and they are trying to set up eSignature and initials fields. However, when trying to designate fillable fields for initials or signatures, Acrobat crashes without...
+  captured_at: '2026-09-01T17:40:03Z'
+  source_date: '2026-05-08'
+  target_release_date: '2026-05-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.001.21529
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-25-001-21223-adobe-community-bug-report-https-community-adobe-com-questions-9-i-am-unable-to-open-adobe-acrobat-dc-unless-i-run-as-admin
+  product_id: adobe-acrobat-pro
+  update_version: 25.001.21223
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/i-am-unable-to-open-adobe-acrobat-dc-unless-i-run-as-admin-1551357
+  parent_title: I am unable to open Adobe Acrobat DC unless I run as admin
+  report_title: I am unable to open Adobe Acrobat DC unless I run as admin
+  report_text_excerpt: I am unable to open Adobe Acrobat DC unless I run as admin After the latest update to 25.001.21223 I am unable to run Acrobat on Windows 11 unless I choose to run Acrobat as administrator. If I run it as a normal user the program will appear briefly in task manager then will...
+  captured_at: '2026-09-01T17:40:03Z'
+  source_date: '2026-02-24'
+  target_release_date: '2026-02-17'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.001.21223
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-25-001-20997-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-pro-crashes-on-launch-on-macos-26-2-apple-silicon
+  product_id: adobe-acrobat-pro
+  update_version: 25.001.20997
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-pro-crashes-on-launch-on-macos-26-2-apple-silicon-exc-bad-access-sigsegv-1620914
+  parent_title: Acrobat Pro crashes on launch on macOS 26.2 (Apple Silicon) – EXC_BAD_ACCESS SIGSEGV
+  report_title: Acrobat Pro crashes on launch on macOS 26.2 (Apple Silicon) – EXC_BAD_ACCESS SIGSEGV
+  report_text_excerpt: Acrobat Pro crashes on launch on macOS 26.2 (Apple Silicon) – EXC_BAD_ACCESS SIGSEGV Hi, I’m facing a consistent crash on launch with Adobe Acrobat Pro on macOS 26.2. The issue is fully reproducible and persists even after a clean OS reinstall. Environment macOS 26.2 (Build...
+  captured_at: '2026-09-01T17:40:03Z'
+  source_date: '2026-01-11'
+  target_release_date: '2025-12-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.001.20997
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: form behavior regression
+  workflow_area: forms
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-25-001-20997-adobe-community-bug-report-https-community-adobe-com-questions-9-update-25-001-20997-constantly-crashes-1620723
+  product_id: adobe-acrobat-pro
+  update_version: 25.001.20997
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/update-25-001-20997-constantly-crashes-1620723
+  parent_title: Update 25.001.20997 Constantly Crashes
+  report_title: Update 25.001.20997 Constantly Crashes
+  report_text_excerpt: Update 25.001.20997 Constantly Crashes Today I opened Adobe Acrobat and immediately saw there was an update that was pushed through, and since then I cannot keep the program running as it should. Anytime I create a new page, move the window from one of my screens to another,...
+  captured_at: '2026-09-01T17:40:03Z'
+  source_date: '2025-12-17'
+  target_release_date: '2025-12-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.001.20997
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-25-001-20982-adobe-community-bug-report-https-community-adobe-com-questions-9-acobat-pro-desktop-and-some-pdf-files-compatibility-isssue
+  product_id: adobe-acrobat-pro
+  update_version: 25.001.20982
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acobat-pro-desktop-and-some-pdf-files-compatibility-isssue-1620625
+  parent_title: Acobat Pro Desktop and some pdf files compatibility isssue?
+  report_title: Acobat Pro Desktop and some pdf files compatibility isssue?
+  report_text_excerpt: Acobat Pro Desktop and some pdf files compatibility isssue? My company bought Adobe Acrobat so that it wouldn't have problems with handling (viewing and creating) PDF files. But some of our PDFs are shown correctly in any browser, in the online version of Adobe Acrobat Pro,...
+  captured_at: '2026-09-01T17:40:03Z'
+  source_date: '2025-12-08'
+  target_release_date: '2025-12-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 2025.001.20982
+  match_basis: exact_version_alias
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: form behavior regression
+  workflow_area: forms
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-25-001-20937-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-crashes-on-launch-macos-ventura-m3-pro-16205
+  product_id: adobe-acrobat-pro
+  update_version: 25.001.20937
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-crashes-on-launch-macos-ventura-m3-pro-1620513
+  parent_title: Adobe Acrobat Crashes on Launch (macOS Ventura / M3 Pro)
+  report_title: Adobe Acrobat Crashes on Launch (macOS Ventura / M3 Pro)
+  report_text_excerpt: Adobe Acrobat Crashes on Launch (macOS Ventura / M3 Pro) Hi everyone, Hoping someone can help — Adobe Acrobat (desktop app) keeps crashing a few seconds after launching, every single time. It has been working perfectly for years until recently, but now it closes almost...
+  captured_at: '2026-09-01T17:40:03Z'
+  source_date: '2025-11-30'
+  target_release_date: '2025-11-20'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.001.20937
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-25-001-20918-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-crashes-when-trying-to-check-properties-in-f
+  product_id: adobe-acrobat-pro
+  update_version: 25.001.20918
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-crashes-when-trying-to-check-properties-in-forms-1305739
+  parent_title: Adobe Acrobat crashes when trying to check properties in forms
+  report_title: Adobe Acrobat crashes when trying to check properties in forms
+  report_text_excerpt: Adobe Acrobat crashes when trying to check properties in forms I am using Adobe Acrobat (version 2025.001.20918) on MacOS Tahoe (26.1) and it crashes whenever I go to Prepare a Form, and then control-click on an element in the form and click Properties. It crashes on older...
+  captured_at: '2026-09-01T17:40:03Z'
+  source_date: '2025-11-18'
+  target_release_date: '2025-11-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 2025.001.20918
+  match_basis: exact_version_alias
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: form behavior regression
+  workflow_area: forms
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-25-001-20813-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-freezing-when-using-fill-sign-1506951
+  product_id: adobe-acrobat-pro
+  update_version: 25.001.20813
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-freezing-when-using-fill-sign-1506951
+  parent_title: Adobe Freezing When Using Fill & Sign
+  report_title: Adobe Freezing When Using Fill & Sign
+  report_text_excerpt: Adobe Freezing When Using Fill & Sign I've seen countless posts all the way back to 2020 about this issue while searching the Adobe community and it's hard to believe this is still an issue after 5+ years of users reporting the exact same issue. Several users in our office,...
+  captured_at: '2026-09-01T17:40:03Z'
+  source_date: '2025-10-21'
+  target_release_date: '2025-10-17'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.001.20813
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-25-001-20756-adobe-community-bug-report-https-community-adobe-com-questions-9-unable-to-install-acrobat-pro-extension-in-firefox-v144-13
+  product_id: adobe-acrobat-pro
+  update_version: 25.001.20756
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/unable-to-install-acrobat-pro-extension-in-firefox-v144-1305348
+  parent_title: Unable to Install Acrobat Pro Extension in Firefox v144
+  report_title: Unable to Install Acrobat Pro Extension in Firefox v144
+  report_text_excerpt: Unable to Install Acrobat Pro Extension in Firefox v144 Trying to manually install the Adobe extension in Firefox and I get a message that the .XPI file is corrupt. I am running Adobe Acrobat (64bit) v 25.001.20756 and Firefox v144 I am trying to install...
+  captured_at: '2026-09-01T17:40:03Z'
+  source_date: '2025-10-24'
+  target_release_date: '2025-10-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.001.20756
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-25-001-20756-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-pro-background-process-only-does-not-launch
+  product_id: adobe-acrobat-pro
+  update_version: 25.001.20756
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-pro-background-process-only-does-not-launch-1304913
+  parent_title: Adobe Acrobat Pro - Background process ONLY (Does not launch)
+  report_title: Adobe Acrobat Pro - Background process ONLY (Does not launch)
+  report_text_excerpt: Adobe Acrobat Pro - Background process ONLY (Does not launch) Hello all! My org has been having on-and-off issue with Adobe Acrobat Pro [ version 25.001.20756] Users are unable to get Acrobat to launch, but multiple Acrobat background processes will open in task manager. I've...
+  captured_at: '2026-09-01T17:40:03Z'
+  source_date: '2025-10-02'
+  target_release_date: '2025-10-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.001.20756
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-25-001-20744-adobe-community-bug-report-https-community-adobe-com-questions-9-i-ve-got-a-question-about-adobe-acrobat-25-001-20744-13048
+  product_id: adobe-acrobat-pro
+  update_version: 25.001.20744
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/i-ve-got-a-question-about-adobe-acrobat-25-001-20744-1304877
+  parent_title: I've got a question about Adobe Acrobat 25.001.20744
+  report_title: I've got a question about Adobe Acrobat 25.001.20744
+  report_text_excerpt: I've got a question about Adobe Acrobat 25.001.20744 I have been using Adobe Acrobat 2017 since...2017. I create and edit forms for personal uses. It stopped being supported and lately it stopped working. I guess Adobe was sincere in it's not supporting it. I just bought and...
+  captured_at: '2026-09-01T17:40:03Z'
+  source_date: '2025-10-01'
+  target_release_date: '2025-09-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.001.20744
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: form behavior regression
+  workflow_area: forms
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-25-001-20693-adobe-community-bug-report-https-community-adobe-com-questions-9-getting-error-message-acrobat-installation-failed-error-co
+  product_id: adobe-acrobat-pro
+  update_version: 25.001.20693
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/getting-error-message-acrobat-installation-failed-error-code-136-failed-with-exit-code-1603-1304862
+  parent_title: 'getting error message -Acrobat installation failed -error code 136 & failed with exit code: 1603'
+  report_title: 'getting error message -Acrobat installation failed -error code 136 & failed with exit code: 1603'
+  report_text_excerpt: 'getting error message -Acrobat installation failed -error code 136 & failed with exit code: 1603 Good day Team, one of my end-user facing challange and Acrobat installation failed - in-side creative cloud apps. but he able to install photo shop. Error code summary below. Exit...'
+  captured_at: '2026-09-01T17:40:03Z'
+  source_date: '2025-09-30'
+  target_release_date: '2025-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.001.20693
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-25-001-20693-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-won-t-load-premium-features-install-1304777
+  product_id: adobe-acrobat-pro
+  update_version: 25.001.20693
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-won-t-load-premium-features-install-1304777
+  parent_title: Adobe Acrobat Won't Load Premium Features / Install
+  report_title: Adobe Acrobat Won't Load Premium Features / Install
+  report_text_excerpt: Adobe Acrobat Won't Load Premium Features / Install Hello, I am an IT administrator working with an end-user who is unable to access premium features, (specifically the Organize Pages tool), despite having a valid Acrobat Standard license. This end-user is running Windows 11...
+  captured_at: '2026-09-01T17:40:03Z'
+  source_date: '2025-09-25'
+  target_release_date: '2025-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.001.20693
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-25-001-20643-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-pro-25-001-20643-optional-update-aug-25-2025-fails
+  product_id: adobe-acrobat-pro
+  update_version: 25.001.20643
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-pro-25-001-20643-optional-update-aug-25-2025-fails-to-install-corrupt-cabinet-file-1304182
+  parent_title: Acrobat Pro 25.001.20643 Optional update, Aug 25, 2025 - fails to install, corrupt cabinet file
+  report_title: Acrobat Pro 25.001.20643 Optional update, Aug 25, 2025 - fails to install, corrupt cabinet file
+  report_text_excerpt: Acrobat Pro 25.001.20643 Optional update, Aug 25, 2025 - fails to install, corrupt cabinet file Hello. In an attempt to fix the "combine files" context menu bug introduced by a recent update, I have tried to install the 20643 optional update that supposedly resolves the...
+  captured_at: '2026-09-01T17:40:03Z'
+  source_date: '2025-08-27'
+  target_release_date: '2025-08-25'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.001.20643
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-25-001-20630-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-64-bit-25-001-20630-keeps-crashing-1304132
+  product_id: adobe-acrobat-pro
+  update_version: 25.001.20630
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-64-bit-25-001-20630-keeps-crashing-1304132
+  parent_title: Adobe Acrobat (64 - bit) 25.001.20630 keeps crashing.
+  report_title: Adobe Acrobat (64 - bit) 25.001.20630 keeps crashing.
+  report_text_excerpt: Adobe Acrobat (64 - bit) 25.001.20630 keeps crashing. Hi, So this one has me a little stumped. Hopefully something simple I am over thinking and missing but not sure. Here are some of the facts I have if you need more just ask and I will add it. The problem comes when I open...
+  captured_at: '2026-09-01T17:40:03Z'
+  source_date: '2025-08-25'
+  target_release_date: '2025-08-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.001.20630
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
