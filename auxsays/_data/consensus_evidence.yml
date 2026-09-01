@@ -14248,7 +14248,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-powerpoint-2501-github-officedev-issue-https-github-com-officedev-office-js-issues-5680
   product_id: microsoft-powerpoint
   update_version: '2501'
@@ -14327,7 +14326,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '20228.20124'
-
 - id: microsoft-powerpoint-2607-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5956657-copilot-unable-to-read-document-error
   product_id: microsoft-powerpoint
   update_version: '2607'
@@ -14354,7 +14352,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '20228.20124'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5988811-slideshow-not-available-after-update
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -14383,7 +14380,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-powerpoint-2501-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5413616-powerpoint-cant-insert-internet-video
   product_id: microsoft-powerpoint
   update_version: '2501'
@@ -14436,3 +14432,24 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '17726.20126'
+- id: obs-studio-32-2-2-github-issue-13849
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13849
+  parent_title: SVT-AV1 CBR parameters are not applied because OBS uses the wrong FFmpeg AVOption name
+  report_title: SVT-AV1 CBR parameters are not applied because OBS uses the wrong FFmpeg AVOption name
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/KO7Py5pfWXfrTwwf ### OBS Studio Crash Log URL _No response_ ### Expected Behavior When'
+  captured_at: '2026-08-31T23:59:25Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
