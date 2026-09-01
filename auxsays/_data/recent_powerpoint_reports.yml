@@ -277,27 +277,6 @@ reports:
   window_start: '2026-07-23'
   window_version: '2607'
 - attribution_state: not_established
-  captured_at: '2026-09-01T10:31:16Z'
-  classification: recent_report
-  product_id: microsoft-powerpoint
-  promotion_eligible: true
-  release_window_key: microsoft-powerpoint|2605|20026.20076
-  report_date: '2026-07-16'
-  report_excerpt: Edit/Mass Edit Powerpoint linked file addresses As the title suggests I'm looking for
-    a way to manually edit or ideally mass edit the address to linked files in powerpoint. For context
-    I play several games where I need to keep track of what builds I have on which...
-  report_id: microsoft-powerpoint:ad938950f21596d1
-  report_title: Edit/Mass Edit Powerpoint linked file addresses
-  source_family: Microsoft Tech Community
-  source_report_id: '4538038'
-  source_type: microsoft_tech_community
-  source_url: https://techcommunity.microsoft.com/discussions/microsoft-365/editmass-edit-powerpoint-linked-file-addresses/4538038
-  strict_exclusion_reason: missing_powerpoint_version
-  window_build: '20026.20076'
-  window_end: '2026-07-23'
-  window_start: '2026-05-20'
-  window_version: '2605'
-- attribution_state: not_established
   captured_at: '2026-09-01T00:00:00Z'
   classification: recent_report
   product_id: microsoft-powerpoint
@@ -428,26 +407,6 @@ reports:
   product_id: microsoft-powerpoint
   promotion_eligible: true
   release_window_key: microsoft-powerpoint|2506|18925.20184
-  report_date: '2025-11-21'
-  report_excerpt: How do I get video to play in power point? How do I get video to play in power point?
-    Embedded video in power point will not play. Receiving 'can not play media' error message.
-  report_id: microsoft-powerpoint:9c95a07abc711c3e
-  report_title: How do I get video to play in power point?
-  source_family: Microsoft Q&A
-  source_report_id: '5631768'
-  source_type: microsoft_learn_qna
-  source_url: https://learn.microsoft.com/en-us/answers/questions/5631768/how-do-i-get-video-to-play-in-power-point
-  strict_exclusion_reason: missing_powerpoint_version
-  window_build: '18925.20184'
-  window_end: '2026-01-27'
-  window_start: '2025-07-22'
-  window_version: '2506'
-- attribution_state: not_established
-  captured_at: '2026-09-01T10:31:16Z'
-  classification: recent_report
-  product_id: microsoft-powerpoint
-  promotion_eligible: true
-  release_window_key: microsoft-powerpoint|2506|18925.20184
   report_date: '2025-10-28'
   report_excerpt: VBA Powerpoint SendKeys fails to take a screenshot I have succesfully implemented this
     from MS Excel, but making it work from PowerPoint has not been a success. I am making use of a proprietary
@@ -463,27 +422,6 @@ reports:
   window_end: '2026-01-27'
   window_start: '2025-07-22'
   window_version: '2506'
-- attribution_state: not_established
-  captured_at: '2026-09-01T10:31:16Z'
-  classification: recent_report
-  product_id: microsoft-powerpoint
-  promotion_eligible: true
-  release_window_key: microsoft-powerpoint|2502|18526.20144
-  report_date: '2025-03-27'
-  report_excerpt: How can I quickly convert a large PDF file with many pages into a PowerPoint (PPT) file?
-    I have approximately 10,000 PDF files that I've merged into files containing 500 pages each (20 files
-    of 500 pages). Now, I want to convert each merged PDF file into a PowerPoint (PPT)...
-  report_id: microsoft-powerpoint:ffdfa157250c23ea
-  report_title: How can I quickly convert a large PDF file with many pages into a PowerPoint (PPT) file?
-  source_family: Super User / Stack Exchange
-  source_report_id: '1888803'
-  source_type: stack_exchange_question
-  source_url: https://superuser.com/questions/1888803/how-can-i-quickly-convert-a-large-pdf-file-with-many-pages-into-a-powerpoint-pp
-  strict_exclusion_reason: missing_powerpoint_version
-  window_build: '18526.20144'
-  window_end: '2025-04-02'
-  window_start: '2025-03-05'
-  window_version: '2502'
 - attribution_state: not_established
   captured_at: '2026-09-01T10:31:16Z'
   classification: recent_report

@@ -68,6 +68,32 @@ _PERPETUAL_EDITION_RE = re.compile(
     re.I,
 )
 
+# Somebody asking for a way to do something is not reporting a problem, however much incidental
+# failure vocabulary their post contains. Two rows reached the live site through exactly that gap:
+# a "How can I quickly convert a PDF into PowerPoint?" question, and a request to mass-edit link
+# addresses whose body happened to say the old links "no longer work" -- true of the user's moved
+# files, not of PowerPoint. Matching failure words anywhere in the body cannot tell these apart.
+_L3_REQUEST_RE = re.compile(
+    r"\b(?:looking\s+for\s+a\s+way|is\s+there\s+a\s+way|any\s+way\s+to|"
+    r"i(?:'m|\s+am)\s+looking\s+for|(?:want|need|like)\s+to\s+be\s+able\s+to|"
+    r"what\s+i(?:'d|\s+would)\s+like\s+to\s+do|ideally\s+mass|"
+    r"how\s+(?:can|do|would|should)\s+i|how\s+to\b)",
+    re.I,
+)
+
+# What counts as the HEADLINE naming a failure. Deliberately wider than the strong evidence
+# vocabulary: a person writing "my power point is not work ing properly, the screen black" or
+# "How to fix my power point issue" IS reporting a problem, and the narrow set refused both while
+# their bodies tripped the request veto above. Breadth is safe here because it only decides whether
+# a title overrides that veto -- it never admits anything on its own.
+_L3_HEADLINE_PROBLEM_RE = re.compile(
+    r"\b(?:not\s+work\w*|isn'?t\s+work\w*|won'?t\s+work|stopped\s+work\w*|no\s+longer\s+work\w*|"
+    r"problem|issue|error|fail(?:s|ed|ing)?|broken|break(?:s|ing)?|crash\w*|freez\w*|hang\w*|"
+    r"black\s+screen|blank|corrupt\w*|unable\s+to|can'?t\b|cannot\b|missing|disappear\w*|"
+    r"greyed?\s+out|not\s+responding|slow)\b",
+    re.I,
+)
+
 # A defect in someone else's library that happens to write .pptx is not a PowerPoint defect.
 _THIRD_PARTY_LIB_RE = re.compile(
     r"\b(?:apache\s+poi|python-?pptx|aspose|docx4j|syncfusion|gembox|npoi|openxml\s+sdk|"
@@ -181,6 +207,14 @@ def recent_report_from_rejection(rejected_row: dict[str, Any], *, windows: list[
     # weak path let "How do I get video to play?" and "Changing the tabbing order of objects"
     # publish under a heading that promises reports of problems. Level 3 demands the strong signal.
     if states_problem is not None and not states_problem(text):
+        return None
+
+    # A request is refused unless the reporter's own HEADLINE names a failure. The title is their
+    # one-line summary of what they are posting about, so "PowerPoint crashes -- how do I fix it?"
+    # still publishes while "How can I convert a PDF?" does not, whatever its body mentions.
+    headline = str(rejected_row.get("parent_title")
+                   or rejected_row.get("report_title") or "").strip()
+    if _L3_REQUEST_RE.search(text) and not _L3_HEADLINE_PROBLEM_RE.search(headline):
         return None
 
     for veto in (_SERVICE_SURFACE_RE, _FOREIGN_PLATFORM_RE, _PERPETUAL_EDITION_RE,
