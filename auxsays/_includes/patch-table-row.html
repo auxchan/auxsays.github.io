@@ -19,12 +19,12 @@
   sort key). Deterministic from the record; never inferred. {%- endcomment -%}
 {% assign product_name = item.update_product | default: item.product_id %}
 {% assign verdict_text = item.quick_verdict %}
-{% assign decision_label = item.update_decision_label %}
-{% if decision_label == blank and item.update_consensus_summary contains ':' %}
+{% assign decision_label = item.update_decision_label | default: '' | strip %}
+{% if decision_label == '' and item.update_consensus_summary contains ':' %}
 {% assign decision_label = item.update_consensus_summary | split: ':' | first | strip %}
-{% elsif decision_label == blank and verdict_text contains ':' %}
+{% elsif decision_label == '' and verdict_text contains ':' %}
 {% assign decision_label = verdict_text | split: ':' | first | strip %}
-{% elsif decision_label == blank %}
+{% elsif decision_label == '' %}
 {% assign decision_label = 'INSUFFICIENT DATA' %}
 {% endif %}
 {% assign report_count_num = item.update_report_count | default: 0 | plus: 0 %}
