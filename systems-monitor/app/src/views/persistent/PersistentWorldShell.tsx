@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { createPersistentWorld, persistentWorldPath, persistentWorldPlacementLabel, type PersistentWorldPlacement } from "../../data/persistentWorldModel";
 import { persistentWorldFactualBindingForFactor } from "../../data/persistentWorldFactualBindings";
 import { PERSISTENT_WORLD_PROFILED_FACTOR_COUNT, persistentWorldCandidateSourceProfile } from "../../data/persistentWorldSourceCatalog";
@@ -72,6 +72,7 @@ export function PersistentWorldShell() {
   const reducedMotion = useReducedMotion();
   const workspaceRef = useRef<HTMLDivElement>(null);
   const searchTriggerRef = useRef<HTMLButtonElement>(null);
+  const searchDialogRef = useRef<HTMLDivElement>(null);
   const [selectedId, setSelectedId] = useState<string | null>(() => selectionFromHash(model, !publicBeta));
   const [inspectorOpen, setInspectorOpen] = useState(() => Boolean(selectionFromHash(model, !publicBeta)));
   const [fullWorld, setFullWorld] = useState(false);
@@ -185,6 +186,24 @@ export function PersistentWorldShell() {
     setSearchQuery("");
   }
 
+  function trapSearchFocus(event: ReactKeyboardEvent<HTMLDivElement>) {
+    if (event.key !== "Tab") return;
+    const focusable = Array.from(event.currentTarget.querySelectorAll<HTMLElement>('button:not([disabled]),input:not([disabled]),[href],select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])')).filter((item) => !item.hasAttribute("hidden"));
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+  }
+
+  function closeInspector() {
+    setInspectorOpen(false);
+    requestAnimationFrame(() => {
+      const activeChoice = document.querySelector<HTMLButtonElement>('.sm-pw-access button[aria-current="true"]');
+      (activeChoice ?? searchTriggerRef.current)?.focus();
+    });
+  }
+
   function resetWorld() {
     navigate(null);
     setFullWorld(false);
@@ -230,7 +249,7 @@ export function PersistentWorldShell() {
           <span>Level {(selected?.depth ?? 0) + 1} of 4</span>
         </div>
       </div>
-      {searchOpen && <div className="sm-pw-search" role="dialog" aria-modal="true" aria-label="Find a factor">
+      {searchOpen && <div ref={searchDialogRef} className="sm-pw-search" role="dialog" aria-modal="true" aria-label="Find a factor" onKeyDown={trapSearchFocus}>
         <div className="sm-pw-search__panel">
           <header><label htmlFor="pw-factor-search">Find any factor</label><button type="button" aria-label="Close factor search" onClick={() => { setSearchOpen(false); requestAnimationFrame(() => searchTriggerRef.current?.focus()); }}>×</button></header>
           <input id="pw-factor-search" autoFocus value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} placeholder="Try initial claims, wages, oil, bankruptcy…" />
@@ -246,8 +265,8 @@ export function PersistentWorldShell() {
       <div ref={workspaceRef} className={`sm-pw-workspace ${selected && inspectorOpen ? "has-inspector" : ""} ${fullscreenFallback ? "is-fullscreen-fallback" : ""}`} data-fullscreen={fullscreenActive}>
         <PersistentWorldMinimap model={model} selectedPlacementId={selectedId} onSelect={navigate} />
         <aside className={`sm-pw-inspector ${selected && inspectorOpen ? "is-open" : ""}`} aria-label="Persistent world factor details" aria-hidden={!selected || !inspectorOpen} data-panel-motion="settled-fade">
-          {selected && factor && <div key={selected.id} className="sm-pw-inspector__content">
-            <header><span>{selected.depth === 1 ? "Master-defined taxonomy system" : selected.depth === 2 ? "Level-3 review candidate" : "Level-4 reviewed factor"}</span><button type="button" aria-label="Close factor details" onClick={() => setInspectorOpen(false)}>×</button><h2>{placementLabel(model, selected)}</h2>{selectedCompactValue && <div className="sm-pw-inspector__quick-reading"><strong>{selectedCompactValue}</strong><span>{selectedBinding?.validTime} · {selectedBinding?.provider}</span><a href="/systems-monitor/#workstream1a">Open factual record</a></div>}</header>
+          {selected && factor && inspectorOpen && <div key={selected.id} className="sm-pw-inspector__content">
+            <header><span>{selected.depth === 1 ? "Master-defined taxonomy system" : selected.depth === 2 ? "Level-3 review candidate" : "Level-4 reviewed factor"}</span><button type="button" aria-label="Close factor details" onClick={closeInspector}>×</button><h2>{placementLabel(model, selected)}</h2>{selectedCompactValue && <div className="sm-pw-inspector__quick-reading"><strong>{selectedCompactValue}</strong><span>{selectedBinding?.validTime} · {selectedBinding?.provider}</span><a href="/systems-monitor/#workstream1a">Open factual record</a></div>}</header>
             {selectedMedia && <div className="sm-pw-inspector__portrait" style={{ "--pw-photo": `url(${selectedMedia.imageUrl})`, "--pw-accent": selectedAccent } as CSSProperties}>
               <span className="sm-pw-inspector__photo" role="img" aria-label={selectedMedia.alt} />
               <span className="sm-pw-inspector__portrait-icon" aria-hidden="true"><StructuralNodeIcon symbol={selectedSymbol} /></span>

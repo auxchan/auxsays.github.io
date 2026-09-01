@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { SnapshotProvider } from "../src/app/SnapshotContext";
 import { SystemsMonitorApp } from "../src/app/SystemsMonitorApp";
@@ -325,6 +325,42 @@ describe("persistent Employment influence world model", () => {
 });
 
 describe("persistent world local-review shell", () => {
+  it("removes closed inspector controls, restores focus, and traps search focus", async () => {
+    window.history.replaceState({}, "", "/systems-monitor/#persistent-world/placement%3Aconsumer-demand");
+    render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
+    const inspector = await screen.findByRole("complementary", { name: "Persistent world factor details" }, { timeout: 15_000 });
+    const searchTrigger = screen.getByRole("button", { name: /Find a factor/ });
+    fireEvent.click(within(inspector).getByRole("button", { name: "Close factor details" }));
+    expect(screen.queryByRole("complementary", { name: "Persistent world factor details" })).toBeNull();
+    await waitFor(() => expect(document.activeElement).toBe(searchTrigger));
+
+    fireEvent.click(searchTrigger);
+    const dialog = screen.getByRole("dialog", { name: "Find a factor" });
+    const close = within(dialog).getByRole("button", { name: "Close factor search" });
+    const input = within(dialog).getByRole("textbox", { name: "Find any factor" });
+    close.focus();
+    fireEvent.keyDown(close, { key: "Tab", shiftKey: true });
+    expect(document.activeElement).toBe(input);
+    input.focus();
+    fireEvent.keyDown(input, { key: "Tab" });
+    expect(document.activeElement).toBe(close);
+  });
+
+  it("renders the persistent world in reduced-motion mode without camera animation", async () => {
+    const original = window.matchMedia;
+    window.matchMedia = ((query: string) => ({ matches: query.includes("prefers-reduced-motion"), media: query, onchange: null, addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {}, dispatchEvent: () => false })) as typeof window.matchMedia;
+    try {
+      window.history.replaceState({}, "", "/systems-monitor/#persistent-world/placement%3Alabor-supply");
+      render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
+      const surface = await screen.findByRole("application", { name: "U.S. systems factor map" }, { timeout: 15_000 });
+      await waitFor(() => expect(surface.getAttribute("data-reduced-motion")).toBe("true"));
+      expect(surface.getAttribute("data-orbit-drag-state")).toBe("IDLE");
+      expect(surface.getAttribute("data-topology-fingerprint")).toBe("fnv1a32:88684cdb");
+    } finally {
+      window.matchMedia = original;
+    }
+  });
+
   it("uses strict overview LOD and drills through the same resident world", async () => {
     window.history.replaceState({}, "", "/systems-monitor/#persistent-world");
     render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
@@ -335,6 +371,8 @@ describe("persistent world local-review shell", () => {
     expect(surface.getAttribute("data-resident-relationship-count")).toBe("3110");
     expect(surface.getAttribute("data-semantic-node-count")).toBe("11");
     expect(surface.getAttribute("data-factual-binding-count")).toBe("5");
+    expect(surface.getAttribute("data-connected-placement-count")).toBe("5");
+    expect(surface.getAttribute("data-connected-canonical-factor-count")).toBe("4");
     expect(surface.getAttribute("data-lod-mode")).toBe("OVERVIEW");
     expect(surface.getAttribute("data-view-mode")).toBe("TOP_DOWN");
     expect(screen.getByRole("button", { name: "Top-down" }).getAttribute("aria-pressed")).toBe("true");

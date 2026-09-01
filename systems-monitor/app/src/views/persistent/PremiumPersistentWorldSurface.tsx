@@ -125,7 +125,7 @@ function hoverWhy(model: PersistentWorldReadModel, placement: PersistentWorldPla
   return "It adds a separately inspectable economic concept while evidence and relationships remain governed independently.";
 }
 
-function targetCamera(model: PersistentWorldReadModel, selectedPlacementId: string | null, fullWorld: boolean, viewMode: PersistentWorldViewMode, viewportWidth = 980, viewportHeight = 720, spatial = createPersistentWorldSpatialLayout(model)): Camera {
+export function persistentWorldTargetCamera(model: PersistentWorldReadModel, selectedPlacementId: string | null, fullWorld: boolean, viewMode: PersistentWorldViewMode, viewportWidth = 980, viewportHeight = 720, spatial = createPersistentWorldSpatialLayout(model)): Camera {
   const selected = selectedPlacementId ? model.placements[selectedPlacementId] : undefined;
   const cinematic = viewMode === "CINEMATIC_2_5D";
   if (!selected || fullWorld) return { x: 0, y: 0, z: 0, scale: fullWorld ? .17 : OVERVIEW_SCALE, rotation: 0, pitch: cinematic ? fullWorld ? -.18 : -.14 : 0, yaw: cinematic ? fullWorld ? .06 : -.04 : 0 };
@@ -146,7 +146,7 @@ function targetCamera(model: PersistentWorldReadModel, selectedPlacementId: stri
   return { x: selected.x, y: selected.y, z, scale: selected.depth === 2 ? 1.72 : 2.7, rotation, pitch, yaw };
 }
 
-function semanticIds(model: PersistentWorldReadModel, selectedPlacementId: string | null) {
+export function persistentWorldSemanticIds(model: PersistentWorldReadModel, selectedPlacementId: string | null) {
   if (!selectedPlacementId) return [model.outcomePlacementId, ...model.childrenByPlacement[model.outcomePlacementId]];
   const selected = model.placements[selectedPlacementId];
   if (!selected) return [model.outcomePlacementId];
@@ -217,7 +217,7 @@ function drawDimensionalNode(context: CanvasRenderingContext2D, point: Persisten
 export function PremiumPersistentWorldSurface({ model, factualBindings, selectedPlacementId, fullWorld, viewMode, traceMode, reducedMotion, resetVersion, routePulseVersion, publicBeta = false, onSelect, onNavigateParent, onReset }: Props) {
   const spatialLayout = useMemo(() => createPersistentWorldSpatialLayout(model), [model]);
   const hostRef = useRef<HTMLDivElement>(null); const canvasRef = useRef<HTMLCanvasElement>(null);
-  const cameraRef = useRef<Camera>(targetCamera(model, selectedPlacementId, fullWorld, viewMode, 980, 720, spatialLayout));
+  const cameraRef = useRef<Camera>(persistentWorldTargetCamera(model, selectedPlacementId, fullWorld, viewMode, 980, 720, spatialLayout));
   const cameraVelocityRef = useRef<PersistentCameraVelocity>({ x: 0, y: 0, z: 0, logScale: 0, rotation: 0, pitch: 0, yaw: 0 });
   const mountedAtRef = useRef(performance.now()); const viewportRef = useRef<Viewport>({ zoom: 1, panX: 0, panY: 0 });
   const panRef = useRef<{ pointerId: number; startX: number; startY: number; panX: number; panY: number; moved: boolean } | null>(null);
@@ -233,7 +233,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
   const hoveredSource = hoveredPlacement && hoveredPlacement.depth >= 2 && hoveredFactor ? persistentWorldCandidateSourceProfile(persistentWorldPlacementLabel(model, hoveredPlacement)) ?? persistentWorldCandidateSourceProfile(hoveredFactor.label) : undefined;
   const hoveredValue = compactPersistentValue(hoveredBinding?.status === "CONNECTED" ? hoveredBinding.displayValue : undefined);
   const isVisiblePlacement = (id: string) => !publicBeta || persistentWorldPublicPlacementVisible(model, id);
-  const semantic = useMemo(() => semanticIds(model, fullWorld ? null : selectedPlacementId).filter(isVisiblePlacement), [fullWorld, model, publicBeta, selectedPlacementId]); const semanticSet = useMemo(() => new Set(semantic), [semantic]);
+  const semantic = useMemo(() => persistentWorldSemanticIds(model, fullWorld ? null : selectedPlacementId).filter(isVisiblePlacement), [fullWorld, model, publicBeta, selectedPlacementId]); const semanticSet = useMemo(() => new Set(semantic), [semantic]);
   const selectedPath = useMemo(() => {
     const ids = new Set<string>(); let current = selectedPlacementId ? model.placements[selectedPlacementId] : undefined;
     while (current) { ids.add(current.id); current = current.parentPlacementId ? model.placements[current.parentPlacementId] : undefined; } return ids;
@@ -259,13 +259,13 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
     if (!host || !canvas || !context) return;
     let frame = 0; let last = performance.now(); let frameCount = 0; let accumulated = 0; const frameSamples: number[] = [];
     const initialBounds = host.getBoundingClientRect();
-    let destination = targetCamera(model, selectedPlacementId, fullWorld, viewMode, initialBounds.width, initialBounds.height, spatialLayout); const cameraStarted = performance.now(); let cameraSettled = false;
+    let destination = persistentWorldTargetCamera(model, selectedPlacementId, fullWorld, viewMode, initialBounds.width, initialBounds.height, spatialLayout); const cameraStarted = performance.now(); let cameraSettled = false;
     let cameraTransition = polishPersistentCameraTransition(createPersistentCameraTransition(cameraRef.current, destination, cameraStarted, `${viewMode}:${selectedPlacementId ?? (fullWorld ? "full-world" : "overview")}`, cameraVelocityRef.current));
     const previousSemantic = semanticHistoryRef.current.length ? semanticHistoryRef.current : semantic; semanticHistoryRef.current = semantic;
     const previousSemanticSet = new Set(previousSemantic); const transitionSemanticSet = new Set([...previousSemantic, ...semantic]);
     delete host.dataset.cameraSettleMs; if (reducedMotion) { cameraRef.current = destination; cameraVelocityRef.current = { x: 0, y: 0, z: 0, logScale: 0, rotation: 0, pitch: 0, yaw: 0 }; cameraMomentumRef.current = { x: 0, y: 0 }; }
     const resize = () => {
-      const bounds = host.getBoundingClientRect(); const ratio = Math.min(2, window.devicePixelRatio || 1); destination = targetCamera(model, selectedPlacementId, fullWorld, viewMode, bounds.width, bounds.height, spatialLayout); cameraTransition.to = destination;
+      const bounds = host.getBoundingClientRect(); const ratio = Math.min(2, window.devicePixelRatio || 1); destination = persistentWorldTargetCamera(model, selectedPlacementId, fullWorld, viewMode, bounds.width, bounds.height, spatialLayout); cameraTransition.to = destination;
       canvas.width = Math.max(1, Math.round(bounds.width * ratio)); canvas.height = Math.max(1, Math.round(bounds.height * ratio)); canvas.style.width = `${bounds.width}px`; canvas.style.height = `${bounds.height}px`; context.setTransform(ratio, 0, 0, ratio, 0, 0);
       if (reducedMotion) invalidateRef.current();
     };
@@ -275,6 +275,11 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
     const influence = publicBeta ? [] : Object.values(model.relationships).filter((edge) => edge.relationshipClass === "SYNTHETIC_INFLUENCE");
     const focusedPlacementForEdges = selectedPlacementId ? model.placements[selectedPlacementId] : undefined;
     const focusedChildrenForEdges = new Set(focusedPlacementForEdges ? model.childrenByPlacement[focusedPlacementForEdges.id] ?? [] : []);
+    const renderedPlacements = !focusedPlacementForEdges || fullWorld
+      ? placements
+      : focusedPlacementForEdges.depth === 1
+        ? placements.filter((placement) => placement.depth <= 1 || placement.sector === focusedPlacementForEdges.sector)
+        : placements.filter((placement) => transitionSemanticSet.has(placement.id) || selectedPath.has(placement.id));
     const highlightedEdges = hierarchy.filter((edge) => {
       if (!fullWorld && focusedPlacementForEdges) {
         const routeMainline = selectedPath.has(edge.fromPlacementId) && selectedPath.has(edge.toPlacementId);
@@ -305,7 +310,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
       drawBackground(context, width, height, parallax, cameraMomentumRef.current, orbitCamera, viewMode);
       const projectFrame = createPersistentProjector(orbitCamera, viewport, width, height);
       const projected = new Map<string, PersistentProjectedPlacement>();
-      for (const placement of placements) projected.set(placement.id, projectFrame(placement, viewMode === "CINEMATIC_2_5D" ? spatialLayout.zByPlacementId[placement.id] ?? 0 : 0));
+      for (const placement of renderedPlacements) projected.set(placement.id, projectFrame(placement, viewMode === "CINEMATIC_2_5D" ? spatialLayout.zByPlacementId[placement.id] ?? 0 : 0));
       const projectedAt = (id: string) => projected.get(id)!;
 
       const ambientHierarchy = selectedPlacementId && !fullWorld ? [] : persistentAmbientEdges(hierarchy, [...semanticSet], fullWorld);
@@ -340,7 +345,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
 
       const labelCandidates: LabelCandidate[] = []; const focusPlacement = selectedPlacementId ? model.placements[selectedPlacementId] : undefined;
       const farPlacements: PersistentWorldPlacement[] = []; const midPlacements: PersistentWorldPlacement[] = []; const nearPlacements: PersistentWorldPlacement[] = [];
-      for (const placement of placements) (projectedAt(placement.id).band === "far" ? farPlacements : projectedAt(placement.id).band === "near" ? nearPlacements : midPlacements).push(placement);
+      for (const placement of renderedPlacements) (projectedAt(placement.id).band === "far" ? farPlacements : projectedAt(placement.id).band === "near" ? nearPlacements : midPlacements).push(placement);
       const orderedPlacements = [...farPlacements, ...midPlacements, ...nearPlacements];
       for (const placement of orderedPlacements) {
         const point = projectedAt(placement.id); if (point.x < -42 || point.y < -42 || point.x > width + 42 || point.y > height + 42) continue;
@@ -425,7 +430,10 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
 
   const parentPlacementId = selectedPlacementId ? model.placements[selectedPlacementId]?.parentPlacementId : null;
 
-  return <div ref={hostRef} className="sm-pw-surface sm-pw-surface--premium" role="application" tabIndex={0} aria-label="U.S. systems factor map" aria-keyshortcuts="Alt+ArrowLeft" data-world-id={model.worldId} data-graph-snapshot-id={model.graphSnapshotId} data-layout-version={model.layoutVersion} data-topology-fingerprint={model.topologyFingerprint} data-presentation-layout-version={spatialLayout.version} data-projection-version={spatialLayout.projectionVersion} data-presentation-fingerprint={spatialLayout.fingerprint} data-resident-placement-count={model.coverage.placementCount} data-resident-relationship-count={model.coverage.hierarchyRelationshipCount + model.coverage.syntheticInfluenceCount} data-semantic-node-count={semantic.length} data-factual-binding-count={Object.values(factualBindings).filter((binding) => binding.status === "CONNECTED").length} data-lod-mode={fullWorld ? "FULL_WORLD_DENSITY" : selectedPlacementId ? "FOCUS" : "OVERVIEW"} data-trace-mode={traceMode} data-route-pulse-version={routePulseVersion} data-selected-placement-id={selectedPlacementId ?? ""} data-parent-placement-id={parentPlacementId ?? ""} data-viewport-zoom="1.000" data-viewport-pan-x="0" data-viewport-pan-y="0" data-orbit-angle-degrees="0.0" data-orbit-velocity="0.000000" data-orbit-drag-state="IDLE" data-glint-period-ms="2500" data-glint-trail="0.085" data-hovered-placement-id={hoveredId ?? ""} onKeyDown={(event) => {
+  const connectedPlacements = Object.entries(factualBindings).filter(([, binding]) => binding.status === "CONNECTED");
+  const connectedCanonicalFactors = new Set(connectedPlacements.map(([placementId]) => model.placements[placementId]?.canonicalFactorId).filter(Boolean)).size;
+  useEffect(() => { if (hostRef.current) hostRef.current.dataset.reducedMotion = reducedMotion.toString(); }, [reducedMotion]);
+  return <div ref={hostRef} className="sm-pw-surface sm-pw-surface--premium" role="application" tabIndex={0} aria-label="U.S. systems factor map" aria-keyshortcuts="Alt+ArrowLeft" data-world-id={model.worldId} data-graph-snapshot-id={model.graphSnapshotId} data-layout-version={model.layoutVersion} data-topology-fingerprint={model.topologyFingerprint} data-semantic-fingerprint={model.semanticFingerprint} data-presentation-layout-version={spatialLayout.version} data-projection-version={spatialLayout.projectionVersion} data-presentation-fingerprint={spatialLayout.fingerprint} data-resident-placement-count={model.coverage.placementCount} data-resident-relationship-count={model.coverage.hierarchyRelationshipCount + model.coverage.syntheticInfluenceCount} data-semantic-node-count={semantic.length} data-factual-binding-count={connectedPlacements.length} data-connected-placement-count={connectedPlacements.length} data-connected-canonical-factor-count={connectedCanonicalFactors} data-lod-mode={fullWorld ? "FULL_WORLD_DENSITY" : selectedPlacementId ? "FOCUS" : "OVERVIEW"} data-trace-mode={traceMode} data-route-pulse-version={routePulseVersion} data-selected-placement-id={selectedPlacementId ?? ""} data-parent-placement-id={parentPlacementId ?? ""} data-viewport-zoom="1.000" data-viewport-pan-x="0" data-viewport-pan-y="0" data-orbit-angle-degrees="0.0" data-orbit-velocity="0.000000" data-orbit-drag-state="IDLE" data-glint-period-ms="2500" data-glint-trail="0.085" data-hovered-placement-id={hoveredId ?? ""} onKeyDown={(event) => {
     if (event.altKey && event.key === "ArrowLeft" && selectedPlacementId) { event.preventDefault(); onNavigateParent(); }
   }} onWheel={(event) => {
     const started = performance.now(); event.preventDefault(); const bounds = event.currentTarget.getBoundingClientRect(); const current = viewportRef.current; const zoom = Math.max(.55, Math.min(3.25, current.zoom * Math.exp(-event.deltaY * .0014))); const ratio = zoom / current.zoom; const cursorX = event.clientX - bounds.left - bounds.width / 2; const cursorY = event.clientY - bounds.top - bounds.height / 2; updateViewport({ zoom, panX: cursorX - (cursorX - current.panX) * ratio, panY: cursorY - (cursorY - current.panY) * ratio }); event.currentTarget.dataset.wheelHandlerMs = (performance.now() - started).toFixed(3);

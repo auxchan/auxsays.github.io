@@ -53,6 +53,7 @@ export interface PersistentWorldReadModel {
   relationships: Readonly<Record<string, PersistentWorldRelationship>>;
   childrenByPlacement: Readonly<Record<string, readonly string[]>>;
   topologyFingerprint: string;
+  semanticFingerprint: string;
   coverage: {
     placementCount: 1111;
     level1Count: 10;
@@ -107,6 +108,15 @@ export function persistentWorldFingerprint(model: Pick<PersistentWorldReadModel,
   const placements = Object.values(model.placements).sort((left, right) => left.id.localeCompare(right.id)).map((item) => `${item.id}|${item.parentPlacementId ?? "ROOT"}|${item.x}|${item.y}|${item.depth}`);
   const relationships = Object.values(model.relationships).sort((left, right) => left.id.localeCompare(right.id)).map((item) => `${item.id}|${item.fromPlacementId}|${item.toPlacementId}|${item.relationshipClass}`);
   return `fnv1a32:${fnv1a([model.layoutVersion, ...placements, ...relationships].join("\n"))}`;
+}
+
+export function persistentWorldSemanticFingerprint(model: Pick<PersistentWorldReadModel, "schemaVersion" | "worldId" | "layoutVersion" | "publicationClass" | "activationStatus" | "candidateEligibility" | "humanQa" | "gateBStatus" | "outcomePlacementId" | "factors" | "placements" | "relationships" | "childrenByPlacement" | "coverage">) {
+  const factors = Object.values(model.factors).sort((left, right) => left.id.localeCompare(right.id)).map((item) => `${item.id}|${item.label}|${item.definition}|${item.sourceFamily}|${item.evidencePosture}`);
+  const placements = Object.values(model.placements).sort((left, right) => left.id.localeCompare(right.id)).map((item) => `${item.id}|${item.canonicalFactorId}|${item.parentPlacementId ?? "ROOT"}|${item.depth}|${item.order}|${item.sector}|${item.x}|${item.y}|${item.labelPriority}|${item.displayLabel ?? ""}`);
+  const relationships = Object.values(model.relationships).sort((left, right) => left.id.localeCompare(right.id)).map((item) => `${item.id}|${item.fromPlacementId}|${item.toPlacementId}|${item.relationshipClass}|${item.status}|${item.evidenceClass}|${item.publicationEligibility}`);
+  const children = Object.entries(model.childrenByPlacement).sort(([left], [right]) => left.localeCompare(right)).map(([id, ids]) => `${id}|${ids.join(",")}`);
+  const governance = [model.schemaVersion, model.worldId, model.layoutVersion, model.publicationClass, model.activationStatus, model.candidateEligibility, model.humanQa, model.gateBStatus, model.outcomePlacementId, JSON.stringify(model.coverage)];
+  return `fnv1a32:${fnv1a([...governance, ...factors, ...placements, ...relationships, ...children].join("\n"))}`;
 }
 
 export function createPersistentWorld(): PersistentWorldReadModel {
@@ -183,6 +193,23 @@ export function createPersistentWorld(): PersistentWorldReadModel {
 
   const partial = { layoutVersion: PERSISTENT_WORLD_LAYOUT, placements, relationships };
   const topologyFingerprint = persistentWorldFingerprint(partial);
+  const semanticSource = {
+    schemaVersion: PERSISTENT_WORLD_SCHEMA,
+    worldId: "persistent-employment-world-rd-001" as const,
+    layoutVersion: PERSISTENT_WORLD_LAYOUT,
+    publicationClass: "fixture" as const,
+    activationStatus: "DEVELOPMENT_ONLY" as const,
+    candidateEligibility: "NEVER_ACCEPTED_NEVER_PUBLISHED" as const,
+    humanQa: "PENDING" as const,
+    gateBStatus: "OPEN_UNCHANGED" as const,
+    outcomePlacementId,
+    factors,
+    placements,
+    relationships,
+    childrenByPlacement,
+    coverage: { placementCount: 1111 as const, level1Count: 10 as const, level2Count: 100 as const, level3Count: 1000 as const, hierarchyRelationshipCount: 1110 as const, syntheticInfluenceCount: 2000 as const, factualRelationshipCount: 0 as const, acceptedRelationshipCount: 0 as const }
+  };
+  const semanticFingerprint = persistentWorldSemanticFingerprint(semanticSource);
   const model: PersistentWorldReadModel = {
     schemaVersion: PERSISTENT_WORLD_SCHEMA,
     worldId: "persistent-employment-world-rd-001",
@@ -199,7 +226,8 @@ export function createPersistentWorld(): PersistentWorldReadModel {
     relationships: freezeRecord(relationships),
     childrenByPlacement: Object.freeze(Object.fromEntries(Object.entries(childrenByPlacement).map(([id, children]) => [id, Object.freeze(children)]))),
     topologyFingerprint,
-    coverage: { placementCount: 1111, level1Count: 10, level2Count: 100, level3Count: 1000, hierarchyRelationshipCount: 1110, syntheticInfluenceCount: 2000, factualRelationshipCount: 0, acceptedRelationshipCount: 0 }
+    semanticFingerprint,
+    coverage: semanticSource.coverage
   };
   return Object.freeze(model);
 }
