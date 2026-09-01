@@ -481,6 +481,70 @@ def run() -> int:
         check("Part E: a DIFFERENT build in year form is still refused",
               other == "missing_exact_patch_version_match", str(other))
 
+    print()
+    print("=" * 60)
+    print("Part F: what adversarial review found the shared build had let in")
+    print("=" * 60)
+    if live is not None:
+        def verdictF(text, pid=P, rec=None):
+            row = ac.row_from_candidate(pid, rec or live, cand(
+                text, text, url="https://community.adobe.com/questions-9/x-1234567",
+                date="2026-08-01"), CAPTURED)
+            return row.get("counted"), row.get("exclusion_reason")
+
+        # A person comparing versions names several builds: the one that broke, the one they want
+        # to revert to, the one a release note mentions. One live thread was published as a
+        # confirmed report against THREE builds, two of which its author explicitly did not blame.
+        # Where more than one TRACKED build is named, silence is not enough any more.
+        _, revert = verdictF("Acrobat 26.001.21789 breaks printing. Can I get the installer for "
+                             "26.001.21745 (Jul 23) to revert in the meantime?")
+        check("Part F: a build named only as the REVERT TARGET is not counted as failing",
+              revert == "multiple_builds_named_target_not_blamed", str(revert))
+        _, cited = verdictF("Acrobat 26.001.21789 breaks printing. The release notes show macOS 12 "
+                            "was dropped in 26.001.21745, but Ventura is not listed as dropped.")
+        check("Part F: a build named only as a release-note CITATION is not counted as failing",
+              cited == "multiple_builds_named_target_not_blamed", str(cited))
+        _, baseline = verdictF("Initial version: 26.001.21745 installs fine. Updated version: "
+                               "26.001.21789. After that Acrobat fails to launch.")
+        check("Part F: a build named as the WORKING BASELINE of an upgrade pair is not counted",
+              baseline == "multiple_builds_named_target_not_blamed", str(baseline))
+        blamed, _ = verdictF("I was on 26.001.21691 with no trouble. Since 26.001.21745 Acrobat "
+                             "crashes on every launch.")
+        check("Part F: naming another build does NOT block a report that blames this one",
+              blamed is True)
+        single, _ = verdictF("Acrobat crashes on every launch since 26.001.21745")
+        check("Part F: a single-build report is unaffected by the multi-build rule", single is True)
+
+        # Acrobat STANDARD is a named edition, not a generic mention. It reads as licensing
+        # language to the tier rule, so it fell through to generic and the shared-build fallback
+        # published it on BOTH tracked editions -- one such report was the entire evidentiary
+        # basis of a live Reader page.
+        _, std = verdictF("Since updating to Acrobat Standard 26.001.21745 I cannot print at all")
+        check("Part F: an Acrobat STANDARD report is not published as Reader or Pro",
+              std == "acrobat_standard_edition_not_tracked", str(std))
+        lic, _ = verdictF("Acrobat 26.001.21745 crashes; the user signs in with a Pro or Standard "
+                          "license")
+        check("Part F: a licensing mention of Standard is still not an edition claim", lic is True)
+
+    # The theme is printed on the patch page as "Current reports mention ...". The old rule was a
+    # bare substring scan with `crash` checked LAST, so "sign" matched "de-SIGN" and "SIGN in", and
+    # 59 of 63 counted rows whose own title said crash/freeze/hang published a different theme.
+    check("Part F: a crash report is themed as a crash",
+          ac.acrobat_classify("Acrobat keeps crashing immediately upon opening")[0]
+          == "crash or launch failure")
+    check("Part F: a freeze is too, even when a signature pad is mentioned",
+          ac.acrobat_classify("Document Freezing After Clicking Save. We use a Topaz Signature "
+                              "pad.")[0] == "crash or launch failure")
+    check("Part F: a printing failure is still themed as printing",
+          ac.acrobat_classify("Acrobat breaks printing on macOS - jobs never reach print queue")[0]
+          == "printing regression")
+    check("Part F: a workaround the reporter already tried does not set the theme",
+          ac.acrobat_classify("PDF Keeps Crashing. Workaround: open it through Edge and print "
+                              "using Microsoft Print to PDF")[0] == "crash or launch failure")
+    check("Part F: 'design' no longer reads as a signing failure",
+          ac.acrobat_classify("Acrobat crashes when I open a design document")[0]
+          == "crash or launch failure")
+
     # The walk order is the reach fix: oldest-first plus a wall-clock budget meant 44 of the 48
     # records released since 2025-12-01 had never been attempted by any method.
     ordered = ac._newest_first(generated_records(R))

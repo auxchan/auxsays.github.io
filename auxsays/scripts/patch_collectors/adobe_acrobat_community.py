@@ -32,7 +32,11 @@ from urllib.error import HTTPError, URLError
 
 from . import reddit_source
 from . import runtime_budget as rb
-from lib.target_outcome import target_is_contradicted
+from lib.target_outcome import (
+    AFFECTED as OUTCOME_AFFECTED,
+    classify_target_outcome,
+    target_is_contradicted,
+)
 
 # Active RuntimeBudget for the collector currently running (set by AdobeAcrobatCollector.collect). Safe as
 # a module global because collectors run strictly serially (no concurrent repository writes / requests).
@@ -69,6 +73,28 @@ def record_applicability(record: Any) -> tuple[str, ...]:
         return ()
     return tuple(str(item).strip() for item in declared if str(item).strip())
 
+
+
+# Acrobat STANDARD named as the product the reporter is running. Requires a product-ish context
+# ("updating to Acrobat Standard 26.x", "Acrobat Standard crashes"), so a licensing sentence like
+# "signs in with a Pro or Standard license" is untouched -- that is a different claim.
+_STANDARD_PRODUCT_RE = re.compile(
+    r"\b(?:adobe\s+)?acrobat\s+standard\b(?!\s+licen)", re.I)
+
+
+def _tracked_builds_named(text: str, product_id: str, target: str) -> set[str]:
+    """Every build AUXSAYS tracks for this product that appears in the report.
+
+    Deliberately scoped to TRACKED builds rather than anything version-shaped: a post is full of
+    numbers -- dates, error codes, OS versions -- and only a real patch identity should make a
+    report ambiguous about which patch it is about.
+    """
+    found = {str(target or "").strip()} if str(target or "").strip() in (text or "") else set()
+    for record in generated_records(product_id):
+        version = str(record.update_version or "").strip()
+        if version and version in (text or ""):
+            found.add(version)
+    return found
 
 def _newest_first(records: list[Any]) -> list[Any]:
     """Most recently released patch first.
@@ -407,30 +433,73 @@ def _url_specific(url: str, source_type: str) -> bool:
     return source_url_is_specific(url)
 
 
-def acrobat_classify(text: str) -> tuple[str, str, str, str, str]:
-    lowered = (text or "").lower()
+# What a report is ABOUT, scored rather than first-match.
+#
+# The previous rule was a bare substring scan in a fixed order with `crash` checked LAST, over the
+# whole ~6000-character body. Two consequences, both measured on published rows: "sign" matched
+# "de-SIGN", "SIGN in" and "signature pad", and any mention of printing anywhere -- including in a
+# workaround the reporter had tried -- won outright. 59 of 63 counted rows whose own TITLE says
+# crash/freeze/hang published a different theme, and that theme is the sentence the patch page
+# prints as "Current reports mention ...".
+#
+# Three changes: word boundaries, the reporter's own TITLE weighted far above the body, and stability
+# scored alongside everything else instead of last.
+_THEME_RULES: tuple[tuple[str, str, str, str, "re.Pattern[str]"], ...] = (
+    ("crash or launch failure", "application stability", "high",
+     "crash", re.compile(r"\b(?:crash\w*|freez\w*|hang(?:s|ing|ed)?|not\s+responding|"
+                        r"appcrash|fails?\s+to\s+launch|won'?t\s+(?:launch|start|open))\b", re.I)),
+    ("printing regression", "printing", "high",
+     "print", re.compile(r"\b(?:print\w*|printer|print\s+queue|spooler)\b", re.I)),
+    ("signing/certificate failure", "e-signatures", "high",
+     "sign", re.compile(r"\b(?:e-?sign\w*|signature\w*|signing|certificat\w*|digital\s+id)\b", re.I)),
+    ("form behavior regression", "forms", "high",
+     "form", re.compile(r"\b(?:form\s+field\w*|fillable|form\w*)\b", re.I)),
+    ("install/update failure", "deployment", "high",
+     "install", re.compile(r"\b(?:install\w*|uninstall\w*|deploy\w*|msi|silent\s+update|"
+                          r"update\s+fail\w*|patch\s+fail\w*)\b", re.I)),
+    ("PDF rendering regression", "PDF rendering", "high",
+     "render", re.compile(r"\b(?:render\w*|blank\s+page|garbled|corrupt\w*|display\s+issue)\b", re.I)),
+    ("browser/plugin handoff failure", "browser integration", "medium",
+     "browser", re.compile(r"\b(?:browser|plugin|plug-in|add-?in|extension|edge|chrome|firefox)\b", re.I)),
+    ("performance regression", "performance", "medium",
+     "perf", re.compile(r"\b(?:high\s+cpu|memory\s+leak|slow\w*|sluggish|performance)\b", re.I)),
+)
+# Everything after one of these headings is what the reporter has ALREADY TRIED, not what failed.
+_TRIED_SPLIT_RE = re.compile(
+    r"(?is)\b(?:troubleshooting|already\s+tried|things?\s+i(?:'ve)?\s+tried|what\s+i(?:'ve)?\s+tried|"
+    r"work\s?around|steps?\s+to\s+reproduce\s*:)\b")
+
+
+def acrobat_classify(text: str, title: str = "") -> tuple[str, str, str, str, str]:
+    """(theme, workflow_area, platform, severity, sentiment) for one report."""
+    body = str(text or "")
+    heading = str(title or "")
+    if not heading:
+        # No title supplied: treat the first line as one, which is how these candidates are built.
+        heading = body.splitlines()[0][:200] if body.strip() else ""
+    # Whatever the heading turned out to be, it stops at the point the reporter starts listing what
+    # they already tried -- otherwise a one-line post carries its own workaround into the title.
+    heading = _TRIED_SPLIT_RE.split(heading, maxsplit=1)[0]
+    scored_body = _TRIED_SPLIT_RE.split(body, maxsplit=1)[0]
+
+    lowered = body.lower()
     platform = "unknown"
-    for token, label in (("windows", "windows"), ("macos", "macos"), ("mac os", "macos"), ("mac ", "macos")):
+    for token, label in (("windows", "windows"), ("macos", "macos"), ("mac os", "macos"),
+                         ("mac ", "macos")):
         if token in lowered:
             platform = label
             break
-    if "print" in lowered:
-        return "printing regression", "printing", platform, "high", "negative"
-    if "sign" in lowered or "certificate" in lowered:
-        return "signing/certificate failure", "e-signatures", platform, "high", "negative"
-    if "form" in lowered:
-        return "form behavior regression", "forms", platform, "high", "negative"
-    if "install" in lowered or "update" in lowered or "deploy" in lowered:
-        return "install/update failure", "deployment", platform, "high", "negative"
-    if "render" in lowered or "display" in lowered or "blank" in lowered:
-        return "PDF rendering regression", "PDF rendering", platform, "high", "negative"
-    if "browser" in lowered or "plugin" in lowered or "add-in" in lowered or "extension" in lowered:
-        return "browser/plugin handoff failure", "browser integration", platform, "medium", "negative"
-    if "cpu" in lowered or "memory" in lowered or "slow" in lowered or "performance" in lowered:
-        return "performance regression", "performance", platform, "medium", "negative"
-    if "crash" in lowered or "freeze" in lowered or "hang" in lowered:
-        return "crash or launch failure", "application stability", platform, "high", "negative"
-    return "unspecified Acrobat issue", "Acrobat workflow", platform, "medium", "negative"
+
+    best = None
+    for theme, area, severity, _key, pattern in _THEME_RULES:
+        # The title is the reporter's own one-line summary of what went wrong, so a hit there is
+        # worth far more than a passing mention buried in a long body.
+        score = 5 * len(pattern.findall(heading)) + len(pattern.findall(scored_body))
+        if score and (best is None or score > best[0]):
+            best = (score, theme, area, severity)
+    if best is None:
+        return "unspecified Acrobat issue", "Acrobat workflow", platform, "medium", "negative"
+    return best[1], best[2], platform, best[3], "negative"
 
 
 # --- HTTP (Adobe Community) ---------------------------------------------------
@@ -794,11 +863,22 @@ def row_from_candidate(product_id: str, record: PatchRecord, candidate: dict[str
     edition_basis = "explicit_edition" if attributed else ""
     if not attributed and edition_reason == "generic_acrobat_without_edition":
         shared = record_applicability(record)
-        if product_id in shared:
+        # "Acrobat Standard" is a NAMED edition, not a generic mention. It is treated as licensing
+        # language by the tier rule, so it fell through to "generic" and the shared-build fallback
+        # then published it on both tracked editions. Adobe ships Standard from the Pro binary, and
+        # Reader is a separate installer, so a Standard report on a READER page is simply wrong --
+        # one such report was the entire evidentiary basis of the 26.001.21789 Reader page.
+        if _STANDARD_PRODUCT_RE.search(report_text):
+            edition_reason = "acrobat_standard_edition_not_tracked"
+        elif product_id in shared:
             attributed, alias = True, "acrobat (shared DC build)"
             applicability = ",".join(shared)
             edition_reason, edition_basis = None, "shared_build_generic_acrobat"
-    theme, workflow_area, platform, severity, sentiment = acrobat_classify(report_text)
+    # Pass the reporter's OWN title, not a guess at the first line: the title is the one-line
+    # summary of what went wrong and the classifier weights it far above the body.
+    theme, workflow_area, platform, severity, sentiment = acrobat_classify(
+        report_text,
+        title=str(candidate.get("report_title") or candidate.get("parent_title") or ""))
     source_date = date_part(candidate.get("source_date"))
     source_type = str(candidate.get("source_type") or ADOBE_COMMUNITY_SOURCE_TYPE)
 
@@ -854,6 +934,16 @@ def row_from_candidate(product_id: str, record: PatchRecord, candidate: dict[str
     # has to be in place with it, not after it. Silence and any affirmative statement pass through.
     elif (contradiction := target_is_contradicted(report_text, record.update_version)) is not None:
         reason = f"version_named_but_{contradiction.outcome}"
+    # MULTIPLE BUILDS NAMED. A person comparing versions names several: the one that broke, the one
+    # they want to revert to, the one a release note mentions, the one they were on before. The
+    # directional veto above only catches phrasings it has cues for, and it missed all of these --
+    # one live thread was published as a confirmed report against THREE builds, two of which its
+    # author explicitly did not blame ("Can I get the installer for 26.001.21771 to revert in the
+    # meantime?" and a release-note citation of 26.001.21651). Where more than one tracked build is
+    # named, silence is no longer enough: the report has to say THIS build is the one failing.
+    elif len(_tracked_builds_named(report_text, product_id, record.update_version)) > 1 and \
+            classify_target_outcome(report_text, record.update_version).outcome != OUTCOME_AFFECTED:
+        reason = "multiple_builds_named_target_not_blamed"
     elif not _url_specific(str(row.get("source_url") or ""), source_type):
         reason = "source_url_not_specific_report"
     elif source_date_pass is False:
