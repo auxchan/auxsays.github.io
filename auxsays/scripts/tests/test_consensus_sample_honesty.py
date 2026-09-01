@@ -354,6 +354,71 @@ def run() -> int:
 
     print()
     print("=" * 96)
+    print("D  the verdict must actually RENDER -- `x == blank` is a no-op in this stack")
+    print("=" * 96)
+    # `blank` is not a usable operand here: `x == blank` is always FALSE and `x != blank` always
+    # TRUE. Three fallback branches that were supposed to derive a verdict label therefore never
+    # ran, and 86 records rendered no label AND no recommendation at all -- the WORST cases being
+    # the pages carrying the most evidence, because the zero-report rescue only covers count == 0.
+    # On Acrobat the intended verdict sat unused in update_consensus_summary the whole time.
+    def rendered(page_extra: dict, template: str | None = None) -> str | None:
+        base = page_vars(2, "Negative")
+        base.update(page_extra)
+        return liquid_render(template if template is not None else consensus_block(),
+                             {"page": base, "site": {}})
+
+    no_label = rendered({"update_decision_label": "",
+                         "update_consensus_summary": "WAIT: hold off until the signing fix lands"})
+    if no_label is None:
+        check("D.1 liquid gem available (render assertions SKIPPED without it)", True,
+              "skipped")
+    else:
+        text = " ".join(re.sub(r"<[^>]+>", " ", no_label).split())
+        check("D.1 a report-bearing record with no decision label still renders one",
+              "WAIT" in text, text[:160])
+        check("D.2 and it renders a recommendation body, never an empty one",
+              "Review the report sources" in text or "test before updating" in text, text[:160])
+        missing = rendered({"update_decision_label": "", "update_consensus_summary": "",
+                            "quick_verdict": ""})
+        mtext = " ".join(re.sub(r"<[^>]+>", " ", missing or "").split())
+        check("D.3 with nothing to derive from, it falls back to INSUFFICIENT DATA",
+              "INSUFFICIENT DATA" in mtext, mtext[:160])
+        dated = rendered({"evidence_last_checked": "", "consensus_last_checked": ""})
+        dtext = " ".join(re.sub(r"<[^>]+>", " ", dated or "").split())
+        check("D.4 a record with no evidence date renders no dangling 'Last evidence checked:'",
+              "Last evidence checked:" not in dtext
+              or not re.search(r"Last evidence checked:\s*(?:$|[A-Z][a-z]* ?$)", dtext),
+              dtext[-160:])
+        # The row carries one {% include %} the standalone renderer cannot resolve, so render the
+        # span above it -- which is where the label is derived -- exactly as consensus_block does.
+        # The row's first statement is `assign item = include.item`, so the fixture has to arrive
+        # the way an include passes it -- handing it `item` directly leaves every lookup nil and
+        # the row falls through to INSUFFICIENT DATA for the wrong reason.
+        row_head = ROW.split("{% include")[0]
+        row_out = liquid_render(row_head + "LABEL=[{{ decision_label }}]", {"include": {"item": {
+            "update_decision_label": "", "update_consensus_summary": "WAIT: hold off",
+            "update_report_count": 2, "update_version": "26.001.21529",
+            "product_id": "adobe-acrobat-pro"}}, "site": {}})
+        check("D.5 the listing row derives a label the same way",
+              row_out is not None and "LABEL=[WAIT]" in row_out,
+              (row_out or "render failed")[-90:])
+
+    # Static locks: the broken operand must not come back in the sites that decide a verdict.
+    for name, blob in (("aux-update.html", LAYOUT), ("patch-table-row.html", ROW)):
+        for pattern in ("decision_label == blank", "decision_body == blank"):
+            check(f"D.6 {name} no longer compares a verdict field to `blank`: {pattern!r}",
+                  pattern not in blob)
+    check("D.7 the layout defaults the label before comparing it",
+          "decision_label | default: '' | strip" in LAYOUT)
+    check("D.8 and defaults the body before comparing it",
+          "decision_body | default: '' | strip" in LAYOUT)
+    check("D.9 the evidence-date guard compares to '' rather than `blank`",
+          "evidence_checked_at != ''" in LAYOUT and "evidence_checked_at != blank" not in LAYOUT)
+    check("D.10 the staleness guard likewise",
+          "evidence_checked_at == ''" in LAYOUT and "evidence_checked_at == blank" not in LAYOUT)
+
+    print()
+    print("=" * 96)
     total = _PASS + _FAIL
     print(f"Results: {_PASS}/{total} passed, {_FAIL} failed")
     if _FAILURES:

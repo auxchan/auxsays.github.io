@@ -38,12 +38,12 @@ layout: aux-base
 {% else %}
   {% assign display_title = page.update_product | append: ' ' | append: page.update_version %}
 {% endif %}
-{% assign evidence_checked_at = page.evidence_last_checked | default: page.consensus_last_checked %}
+{% assign evidence_checked_at = page.evidence_last_checked | default: page.consensus_last_checked | default: '' %}
 {% assign evidence_checked_label = 'Not recorded' %}
-{% if evidence_checked_at != blank %}{% assign evidence_checked_label = evidence_checked_at | date: "%b %-d, %Y" %}{% endif %}
-{% assign source_checked_at = page.source_last_checked %}
+{% if evidence_checked_at != '' %}{% assign evidence_checked_label = evidence_checked_at | date: "%b %-d, %Y" %}{% endif %}
+{% assign source_checked_at = page.source_last_checked | default: '' %}
 {% assign source_checked_label = 'Not recorded' %}
-{% if source_checked_at != blank %}{% assign source_checked_label = source_checked_at | date: "%b %-d, %Y" %}{% endif %}
+{% if source_checked_at != '' %}{% assign source_checked_label = source_checked_at | date: "%b %-d, %Y" %}{% endif %}
 {% assign official_body_checked_at = page.official_body_last_checked %}
 {% assign official_body_checked_label = 'Not recorded' %}
 {% if official_body_checked_at != blank %}{% assign official_body_checked_label = official_body_checked_at | date: "%b %-d, %Y" %}{% endif %}
@@ -119,7 +119,7 @@ layout: aux-base
 {% endif %}
 {% assign report_evidence_stale = false %}
 {% if report_bearing_count > 0 %}
-  {% if evidence_checked_at == blank %}
+  {% if evidence_checked_at == '' %}
     {% assign report_evidence_stale = true %}
   {% else %}
     {% assign evidence_checked_epoch = evidence_checked_at | date: "%s" | plus: 0 %}
@@ -171,11 +171,19 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
 {% assign verdict_text = page.quick_verdict %}
 {% assign decision_body = page.update_decision_body %}
 {% assign decision_label = page.update_decision_label %}
-{% if decision_label == blank and page.update_consensus_summary contains ':' %}
+{%- comment -%}
+  `x == blank` is a no-op in this stack -- it is ALWAYS false -- so none of these branches has ever
+  run. A record that carries reports but no `update_decision_label` therefore rendered no label at
+  all: 86 records corpus-wide, and the worst of them are the pages with the MOST evidence, because
+  the zero-report rescue below only covers records with a count of 0. On Acrobat the intended
+  verdict was sitting unused in `update_consensus_summary` the whole time. Normalise to '' first.
+{%- endcomment -%}
+{% assign decision_label = decision_label | default: '' | strip %}
+{% if decision_label == '' and page.update_consensus_summary contains ':' %}
   {% assign decision_label = page.update_consensus_summary | split: ':' | first | strip %}
-{% elsif decision_label == blank and verdict_text contains ':' %}
+{% elsif decision_label == '' and verdict_text contains ':' %}
   {% assign decision_label = verdict_text | split: ':' | first | strip %}
-{% elsif decision_label == blank %}
+{% elsif decision_label == '' %}
   {% assign decision_label = 'INSUFFICIENT DATA' %}
 {% endif %}
 {% assign decision_label_key = decision_label | downcase %}
@@ -242,10 +250,11 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
 {% assign issue_cluster_text = issue_cluster_text | replace: ' ,', ',' | replace: ', ,', ', ' | replace: '  ', ' ' | strip %}
 {% assign has_practical_recommendations = false %}
 {% if page.practical_recommendations and page.practical_recommendations.size > 0 %}{% assign has_practical_recommendations = true %}{% endif %}
-{% if decision_body == blank and has_practical_recommendations %}
+{% assign decision_body = decision_body | default: '' | strip %}
+{% if decision_body == '' and has_practical_recommendations %}
   {% assign decision_body = page.practical_recommendations | first %}
 {% endif %}
-{% if decision_body == blank %}
+{% if decision_body == '' %}
   {% if report_count > 0 %}
     {% assign decision_body = 'Review the report sources and test before updating deadline-sensitive work.' %}
   {% else %}
@@ -372,7 +381,7 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
           {% if consensus_established == false and report_count > 0 %}
           <p class="consensus-chart-meta consensus-sample-note">Community consensus not established &mdash; {{ report_count }} user report{% unless report_count == 1 %}s{% endunless %}, evidence strength {{ evidence_strength }}. This is a verified report sample, not live consensus telemetry.</p>
           {% endif %}
-          {% if evidence_checked_at != blank %}<p class="consensus-chart-meta">Last evidence checked: {{ evidence_checked_label }}</p>{% endif %}
+          {% if evidence_checked_at != '' %}<p class="consensus-chart-meta">Last evidence checked: {{ evidence_checked_label }}</p>{% endif %}
         </div>
       </div>
 
