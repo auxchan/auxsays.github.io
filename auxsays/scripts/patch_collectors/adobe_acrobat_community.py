@@ -32,10 +32,74 @@ from urllib.error import HTTPError, URLError
 
 from . import reddit_source
 from . import runtime_budget as rb
+from lib.target_outcome import target_is_contradicted
 
 # Active RuntimeBudget for the collector currently running (set by AdobeAcrobatCollector.collect). Safe as
 # a module global because collectors run strictly serially (no concurrent repository writes / requests).
 _ACTIVE_BUDGET: Any = None
+
+
+def acrobat_version_aliases(version: str) -> tuple[str, ...]:
+    """Other spellings of THIS build that mean the same build, and nothing else.
+
+    Acrobat's Help > About dialog shows the year-prefixed form -- 2026.001.21789 for the build the
+    release notes call 26.001.21789 -- and that is the string admins copy verbatim into a post. The
+    matcher saw two different versions and refused the report. This is a spelling alias, not a
+    loosening: the trailing build number must still be exactly this record's.
+    """
+    text = str(version or "").strip()
+    match = re.fullmatch(r"(\d{2})(\.\d{3}\.\d{4,6})", text)
+    return (f"20{match.group(1)}{match.group(2)}",) if match else ()
+
+
+def record_applicability(record: Any) -> tuple[str, ...]:
+    """The editions Adobe ships THIS build to, as the record itself states.
+
+    Read from the record's front matter rather than assumed: the Acrobat adapter derives
+    `applicability` from the release-note text and narrows it when Adobe says an update is
+    edition-specific. Falling back to an EMPTY tuple matters -- a record that does not declare
+    shared applicability gets no shared-build attribution at all.
+    """
+    try:
+        data, _body = load_front_matter_and_body(record.path)
+    except Exception:
+        return ()
+    declared = data.get("applicability")
+    if not isinstance(declared, list):
+        return ()
+    return tuple(str(item).strip() for item in declared if str(item).strip())
+
+
+def _newest_first(records: list[Any]) -> list[Any]:
+    """Most recently released patch first.
+
+    `generated_records` returns the corpus sorted by FILENAME, and every filename is date-prefixed,
+    so the natural order is oldest-first: 2015 before 2026. This collector is bounded by a
+    wall-clock budget and stops mid-corpus when it expires, so oldest-first meant it re-scraped
+    2015-2017 patches on every run and never reached the current ones. Measured before this change:
+    44 of the 48 Acrobat records released since 2025-12-01 had NEVER been attempted by any method,
+    and the situation was getting worse, because each backfilled historical record inserts AHEAD of
+    the recent tail.
+
+    Reversing the order does not create budget, it spends it where a reader is actually looking.
+    Old records keep whatever remains, and they are the ones that already carry evidence.
+    Deterministic: ties break on version so two runs walk the same order.
+    """
+    return sorted(records,
+                  key=lambda r: (str(getattr(r, "update_published_at", "") or ""),
+                                 str(getattr(r, "update_version", "") or "")),
+                  reverse=True)
+
+
+def _retired_methods_enabled() -> bool:
+    """Re-enable the two blocked fallback methods, for a one-off reachability re-test.
+
+    Off by default. A transport that is blocked from CI today may not be tomorrow, and the way to
+    find out is a deliberate probe, not a permanent tax on every record of every run.
+    """
+    import os  # noqa: PLC0415
+    return str(os.environ.get("AUXSAYS_ACROBAT_RETIRED_METHODS") or "").strip().lower() in {
+        "1", "true", "yes", "on"}
 
 
 def _set_active_budget(budget: Any) -> None:
@@ -52,6 +116,7 @@ from .base import (
     date_part,
     exact_version_match,
     generated_records,
+    load_front_matter_and_body,
     make_evidence_row,
     method_health_row,
     slug,
@@ -136,8 +201,16 @@ EDITION_CONFIG: dict[str, dict[str, Any]] = {
 # Terminal "failure" verbs allowing common suffixes (fails/failed/failure/errors/...).
 _F = r"(?:fail(?:s|ed|ure)?|error(?:s|ed)?|broke|broken|invalid|problem|issue)"
 ACROBAT_STRONG_ISSUE_RE = re.compile(
-    r"\b(?:crash(?:e[sd])?"
-    r"|won'?t\s+(?:open|launch|install|start|print)"
+    # "crash", "crashes", "crashed" were accepted but "crashING" was not, so the single most
+    # common way a person titles an Acrobat crash report -- "Acrobat DC (26.001.21529) crashing
+    # with eSignatures" -- was refused as not-a-real-issue after passing every other gate.
+    r"\b(?:crash(?:e[sd]|ing)?"
+    # "won't print" was accepted; "will not print" and "does not print" were not, though they are
+    # the same claim written out. Both forms take the same verb list, so neither widens what
+    # counts as a failure -- they only stop the matcher depending on a contraction.
+    r"|(?:won'?t|will\s+not|do(?:es)?\s+not|doesn'?t|cannot|can'?t)\s+"
+    r"(?:open|launch|install|start|print|save|load|sign|update|respond)"
+    r"|stopped\s+(?:print|work|respond|open|load|sav)\w*"
     r"|(?:fail(?:s|ed|ure)?|unable)\s+to\s+(?:install|update|open|launch|print|sign|save|load|activate)"
     rf"|install(?:ation)?\s+{_F}"
     rf"|update\s+{_F}"
@@ -692,13 +765,39 @@ def reddit_search_candidates(
 # --- acceptance ---------------------------------------------------------------
 
 def row_from_candidate(product_id: str, record: PatchRecord, candidate: dict[str, Any], captured_at: str) -> dict[str, Any]:
-    report_text = " ".join([
-        str(candidate.get("parent_title") or ""),
-        str(candidate.get("report_title") or ""),
-        str(candidate.get("report_text") or ""),
-    ])
-    matched, matched_version, basis = exact_version_match(report_text, record.update_version)
+    # De-duplicate the parts before joining. Every Adobe candidate sets parent_title and
+    # report_title to the SAME thread title, so the naive join repeated it, and repetition is not
+    # harmless for any rule that reads word order: "…rolled back to 26.001.21745" followed by a
+    # second copy beginning "Acrobat crashes…" puts a failure word next to the build the reporter
+    # rolled back TO, and the outcome classifier then reads it as affected rather than as a
+    # rollback. One copy of each distinct part says exactly what the reporter said.
+    seen_parts: set[str] = set()
+    parts: list[str] = []
+    for field in ("parent_title", "report_title", "report_text"):
+        value = str(candidate.get(field) or "").strip()
+        key = " ".join(value.lower().split())
+        if not value or key in seen_parts:
+            continue
+        seen_parts.add(key)
+        parts.append(value)
+    report_text = " ".join(parts)
+    matched, matched_version, basis = exact_version_match(
+        report_text, record.update_version, aliases=acrobat_version_aliases(record.update_version))
     attributed, alias, applicability, edition_reason = acrobat_edition_attribution(report_text, product_id)
+    # SHARED BUILD. Adobe ships ONE DC build to Reader and to Pro, and every Acrobat record states
+    # so itself in a structured `applicability` field derived from the release note -- not guessed
+    # here. Users write what Adobe's own UI and forum call the product: bare "Acrobat", or
+    # "Acrobat DC", or "Acrobat Standard". Requiring the words "Reader" or "Pro" refused 73 of 98
+    # recent candidates, including reports that named the exact build and described a concrete
+    # post-install failure. Naming the edition is not what makes a report about this patch; naming
+    # the build is, and gate 2 below still demands it.
+    edition_basis = "explicit_edition" if attributed else ""
+    if not attributed and edition_reason == "generic_acrobat_without_edition":
+        shared = record_applicability(record)
+        if product_id in shared:
+            attributed, alias = True, "acrobat (shared DC build)"
+            applicability = ",".join(shared)
+            edition_reason, edition_basis = None, "shared_build_generic_acrobat"
     theme, workflow_area, platform, severity, sentiment = acrobat_classify(report_text)
     source_date = date_part(candidate.get("source_date"))
     source_type = str(candidate.get("source_type") or ADOBE_COMMUNITY_SOURCE_TYPE)
@@ -748,6 +847,13 @@ def row_from_candidate(product_id: str, record: PatchRecord, candidate: dict[str
         reason = edition_reason or "missing_product_attribution"
     elif not matched:
         reason = "missing_exact_patch_version_match"
+    # Naming the build is not the same as blaming it. "26.001.21745 works fine, it is .21789 that
+    # crashes" and "rolled back to 26.001.21745 and it works" both satisfy the version match above,
+    # and both say the OPPOSITE of what counting them would publish. This is the defect PR #79
+    # fixed for OBS and DaVinci; the shared-build relaxation above widens acceptance, so the veto
+    # has to be in place with it, not after it. Silence and any affirmative statement pass through.
+    elif (contradiction := target_is_contradicted(report_text, record.update_version)) is not None:
+        reason = f"version_named_but_{contradiction.outcome}"
     elif not _url_specific(str(row.get("source_url") or ""), source_type):
         reason = "source_url_not_specific_report"
     elif source_date_pass is False:
@@ -862,6 +968,7 @@ class AdobeAcrobatCollector(ProductCollector):
             captured_at = utc_now()
             results: list[dict[str, Any]] = []
             records = generated_records(self.product_id, context.target_versions, include_archived=bool(context.target_versions))
+            records = _newest_first(records)
             return self._collect_records(records, context, captured_at, budget, results)
         finally:
             _set_active_budget(None)
@@ -907,12 +1014,21 @@ class AdobeAcrobatCollector(ProductCollector):
         methods = (
             # Primary, CI-reachable: keyless inSided/Algolia JSON discovery + getTopics content.
             ("adobe_community_algolia_search", ADOBE_COMMUNITY_SOURCE_TYPE, adobe_community_algolia_search_candidates),
-            # Fallbacks kept even though they are blocked from CI datacenter IPs (Part D): the
-            # direct /t5 HTML search (CloudFront-blocked) and Reddit (403/429). They degrade to
-            # honest "blocked" health and never widen acceptance.
-            ("adobe_community_search", ADOBE_COMMUNITY_SOURCE_TYPE, adobe_community_search_candidates),
-            ("reddit_search", REDDIT_SOURCE_TYPE, reddit_search_candidates),
         )
+        # RETIRED, not deleted -- their health rows stay honest, they just stop costing time.
+        # Measured over the whole recorded history, 143 runs each:
+        #   adobe_community_algolia_search  0 blocked, 83 success, 128 accepted reports
+        #   adobe_community_search        143 blocked (100%),        0 accepted   <- CloudFront
+        #   reddit_search                 142 blocked (99%),         0 accepted   <- robots + 403
+        # Keeping a method that has never once returned a candidate is not free: this collector is
+        # bounded by a wall-clock budget and stops mid-corpus when it expires, so every second the
+        # two dead methods spend failing is a record at the END of the list -- the RECENT one -- that
+        # is never reached at all. They were costing the reach they were supposed to widen.
+        if _retired_methods_enabled():
+            methods = methods + (
+                ("adobe_community_search", ADOBE_COMMUNITY_SOURCE_TYPE, adobe_community_search_candidates),
+                ("reddit_search", REDDIT_SOURCE_TYPE, reddit_search_candidates),
+            )
         all_accepted: list[dict[str, Any]] = []
         all_rejected: list[dict[str, Any]] = []
         method_health: list[dict[str, Any]] = []
