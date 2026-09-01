@@ -17390,3 +17390,242 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: acrobat-25-001-20918-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-crashes-when-trying-to-check-properties-in-f
+  product_id: adobe-acrobat-reader
+  update_version: 25.001.20918
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-crashes-when-trying-to-check-properties-in-forms-1305739
+  parent_title: Adobe Acrobat crashes when trying to check properties in forms
+  report_title: Adobe Acrobat crashes when trying to check properties in forms
+  report_text_excerpt: Adobe Acrobat crashes when trying to check properties in forms I am using Adobe Acrobat (version 2025.001.20918) on MacOS Tahoe (26.1) and it crashes whenever I go to Prepare a Form, and then control-click on an element in the form and click Properties. It crashes on older...
+  captured_at: '2026-09-01T21:21:07Z'
+  source_date: '2025-11-18'
+  target_release_date: '2025-11-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 2025.001.20918
+  match_basis: exact_version_alias
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-25-001-20744-adobe-community-bug-report-https-community-adobe-com-questions-9-i-ve-got-a-question-about-adobe-acrobat-25-001-20744-13048
+  product_id: adobe-acrobat-reader
+  update_version: 25.001.20744
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/i-ve-got-a-question-about-adobe-acrobat-25-001-20744-1304877
+  parent_title: I've got a question about Adobe Acrobat 25.001.20744
+  report_title: I've got a question about Adobe Acrobat 25.001.20744
+  report_text_excerpt: I've got a question about Adobe Acrobat 25.001.20744 I have been using Adobe Acrobat 2017 since...2017. I create and edit forms for personal uses. It stopped being supported and lately it stopped working. I guess Adobe was sincere in it's not supporting it. I just bought and...
+  captured_at: '2026-09-01T21:21:07Z'
+  source_date: '2025-10-01'
+  target_release_date: '2025-09-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.001.20744
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: form behavior regression
+  workflow_area: forms
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-25-001-20693-adobe-community-bug-report-https-community-adobe-com-questions-12-pdf-file-could-not-be-printed-error-message-in-adobe-read
+  product_id: adobe-acrobat-reader
+  update_version: 25.001.20693
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/pdf-file-could-not-be-printed-error-message-in-adobe-reader-prints-partially-then-errors-1634514
+  parent_title: Pdf file could not be printed error message in Adobe Reader. Prints partially, then errors.
+  report_title: Pdf file could not be printed error message in Adobe Reader. Prints partially, then errors.
+  report_text_excerpt: Pdf file could not be printed error message in Adobe Reader. Prints partially, then errors. Followed the Adobe Help steps from the link. Ended background processes using end process tree, repaired the Adobe program, tried printing "Print as Image", disabled Protected Mode at...
+  captured_at: '2026-09-01T21:21:07Z'
+  source_date: '2026-07-29'
+  target_release_date: '2025-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.001.20693
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: printing regression
+  workflow_area: printing
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-25-001-20693-adobe-community-bug-report-https-community-adobe-com-questions-9-password-prompt-box-error-1304940
+  product_id: adobe-acrobat-reader
+  update_version: 25.001.20693
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/password-prompt-box-error-1304940
+  parent_title: Password prompt box error
+  report_title: Password prompt box error
+  report_text_excerpt: Password prompt box error Windows 11 • Chinese • version 25.001.20693 Some Acrobat Reader files are password-protected. If you close the password prompt box for one file, other Acrobat Reader files won't open anymore. You'll need to restart the computer to open them again....
+  captured_at: '2026-09-01T21:21:07Z'
+  source_date: '2025-10-06'
+  target_release_date: '2025-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.001.20693
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-25-001-20693-adobe-community-bug-report-https-community-adobe-com-questions-9-getting-error-message-acrobat-installation-failed-error-co
+  product_id: adobe-acrobat-reader
+  update_version: 25.001.20693
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/getting-error-message-acrobat-installation-failed-error-code-136-failed-with-exit-code-1603-1304862
+  parent_title: 'getting error message -Acrobat installation failed -error code 136 & failed with exit code: 1603'
+  report_title: 'getting error message -Acrobat installation failed -error code 136 & failed with exit code: 1603'
+  report_text_excerpt: 'getting error message -Acrobat installation failed -error code 136 & failed with exit code: 1603 Good day Team, one of my end-user facing challange and Acrobat installation failed - in-side creative cloud apps. but he able to install photo shop. Error code summary below. Exit...'
+  captured_at: '2026-09-01T21:21:07Z'
+  source_date: '2025-09-30'
+  target_release_date: '2025-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.001.20693
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-25-001-20693-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-won-t-load-premium-features-install-1304777
+  product_id: adobe-acrobat-reader
+  update_version: 25.001.20693
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-won-t-load-premium-features-install-1304777
+  parent_title: Adobe Acrobat Won't Load Premium Features / Install
+  report_title: Adobe Acrobat Won't Load Premium Features / Install
+  report_text_excerpt: Adobe Acrobat Won't Load Premium Features / Install Hello, I am an IT administrator working with an end-user who is unable to access premium features, (specifically the Organize Pages tool), despite having a valid Acrobat Standard license. This end-user is running Windows 11...
+  captured_at: '2026-09-01T21:21:07Z'
+  source_date: '2025-09-25'
+  target_release_date: '2025-09-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.001.20693
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-25-001-20630-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-64-bit-25-001-20630-keeps-crashing-1304132
+  product_id: adobe-acrobat-reader
+  update_version: 25.001.20630
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-64-bit-25-001-20630-keeps-crashing-1304132
+  parent_title: Adobe Acrobat (64 - bit) 25.001.20630 keeps crashing.
+  report_title: Adobe Acrobat (64 - bit) 25.001.20630 keeps crashing.
+  report_text_excerpt: Adobe Acrobat (64 - bit) 25.001.20630 keeps crashing. Hi, So this one has me a little stumped. Hopefully something simple I am over thinking and missing but not sure. Here are some of the facts I have if you need more just ask and I will add it. The problem comes when I open...
+  captured_at: '2026-09-01T21:21:07Z'
+  source_date: '2025-08-25'
+  target_release_date: '2025-08-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.001.20630
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-25-001-20623-adobe-community-bug-report-https-community-adobe-com-questions-12-seeking-help-adobe-reader-error-message-on-exit-1506870
+  product_id: adobe-acrobat-reader
+  update_version: 25.001.20623
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/seeking-help-adobe-reader-error-message-on-exit-1506870
+  parent_title: 'Seeking Help: Adobe Reader Error Message on Exit'
+  report_title: 'Seeking Help: Adobe Reader Error Message on Exit'
+  report_text_excerpt: 'Seeking Help: Adobe Reader Error Message on Exit Hi everyone in the Adobe community, Our team has recently encountered a peculiar error with Adobe Acrobat Reader . We''re hoping to get some help from anyone who might have experienced a similar issue or has a potential solution....'
+  captured_at: '2026-09-01T21:21:07Z'
+  source_date: '2025-09-11'
+  target_release_date: '2025-08-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.001.20623
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-25-001-20623-adobe-community-bug-report-https-community-adobe-com-questions-12-corrupt-color-profile-with-acrobat-reader-25-001-20623-on
+  product_id: adobe-acrobat-reader
+  update_version: 25.001.20623
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/corrupt-color-profile-with-acrobat-reader-25-001-20623-on-certain-windows-11-environments-1506864
+  parent_title: Corrupt color profile with Acrobat Reader 25.001.20623 on certain Windows 11 environments
+  report_title: Corrupt color profile with Acrobat Reader 25.001.20623 on certain Windows 11 environments
+  report_text_excerpt: Corrupt color profile with Acrobat Reader 25.001.20623 on certain Windows 11 environments Dear community! After updating Acrobat Reader to 25.001.20623, certain embedded JPGs in PDF files are being displayed in a corrupt way, apparently with an invalid color profile - see...
+  captured_at: '2026-09-01T21:21:07Z'
+  source_date: '2025-08-28'
+  target_release_date: '2025-08-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.001.20623
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: PDF rendering regression
+  workflow_area: PDF rendering
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
