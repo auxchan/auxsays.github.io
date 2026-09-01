@@ -23,6 +23,7 @@ any code path, including one written later by someone who never heard of levels.
 """
 from __future__ import annotations
 
+import re
 from dataclasses import dataclass
 from typing import Any
 
@@ -38,6 +39,41 @@ from .tier2_evidence import (
 
 LEVEL_RECENT_REPORT = "recent_report"
 ATTRIBUTION_NOT_ESTABLISHED = "not_established"
+
+# --- admission vetoes ---------------------------------------------------------------------------
+# Level 3 makes exactly one factual claim: a concrete problem with THIS product, on THIS platform,
+# was reported while THIS release was current. Every veto below exists because a row was published
+# for which some part of that sentence was not true. A veto is cheap; a false public claim is not.
+
+# The release windows are Windows Click-to-Run Microsoft 365 builds. A report about the web app,
+# the file-hosting service or the Copilot service is not about the desktop build at all, so even
+# "reported during this window" invites a reader to connect two unrelated things.
+_SERVICE_SURFACE_RE = re.compile(
+    r"\b(?:power\s?point\s+online|office\.com|officeapps\.live|view\.officeapps|"
+    r"web\s+(?:app|version|browser)\s+of\s+power\s?point|power\s?point\s+for\s+the\s+web|"
+    r"onedrive\s+embed|embedded\s+(?:in|via)\s+onedrive|sharepoint\s+online\s+viewer)\b",
+    re.I,
+)
+
+# A different platform is a different product line with its own release train.
+_FOREIGN_PLATFORM_RE = re.compile(
+    r"\b(?:mac\s?os|macos|osx|os\s+x|on\s+(?:a\s+)?mac\b|for\s+mac\b|macbook|"
+    r"ipad|iphone|ios\b|android|chromebook|linux)\b",
+    re.I,
+)
+
+# Perpetual editions ship on their own cadence and never receive a Current Channel build.
+_PERPETUAL_EDITION_RE = re.compile(
+    r"\bpower\s?point\s*(?:20(?:07|10|13|16|19|21|24))\b|\boffice\s*(?:20(?:07|10|13|16|19|21|24))\b",
+    re.I,
+)
+
+# A defect in someone else's library that happens to write .pptx is not a PowerPoint defect.
+_THIRD_PARTY_LIB_RE = re.compile(
+    r"\b(?:apache\s+poi|python-?pptx|aspose|docx4j|syncfusion|gembox|npoi|openxml\s+sdk|"
+    r"spire\.presentation|unoconv|libre\s?office|open\s?office|google\s+slides|wps\s+office)\b",
+    re.I,
+)
 
 # The public sentence. Kept here, beside the data, so the storage layer and the page cannot drift
 # into saying different things about what a Level-3 row means.
@@ -122,7 +158,8 @@ def window_for_date(report_date: str, windows: list[ReleaseWindow]) -> ReleaseWi
 
 
 def recent_report_from_rejection(rejected_row: dict[str, Any], *, windows: list[ReleaseWindow],
-                                 captured_at: str, is_concrete=None,
+                                 captured_at: str, is_concrete=None, states_problem=None,
+                                 states_target_build=None,
                                  exclude_urls: set[str] | None = None) -> RecentReport | None:
     """One strict-authority rejection -> one Level-3 row, or None.
 
@@ -139,6 +176,18 @@ def recent_report_from_rejection(rejected_row: dict[str, Any], *, windows: list[
     if is_concrete is not None and not is_concrete(text):
         return None
 
+    # `concrete_issue` accepts a feature-location question backed by regression evidence, which is
+    # right for evidence but wrong here: with no patch attribution to supply that evidence, the
+    # weak path let "How do I get video to play?" and "Changing the tabbing order of objects"
+    # publish under a heading that promises reports of problems. Level 3 demands the strong signal.
+    if states_problem is not None and not states_problem(text):
+        return None
+
+    for veto in (_SERVICE_SURFACE_RE, _FOREIGN_PLATFORM_RE, _PERPETUAL_EDITION_RE,
+                 _THIRD_PARTY_LIB_RE):
+        if veto.search(text):
+            return None
+
     url = str(rejected_row.get("source_url") or "").strip()
     if not url or not url.startswith("http"):
         return None
@@ -149,9 +198,19 @@ def recent_report_from_rejection(rejected_row: dict[str, Any], *, windows: list[
     if exclude_urls and canonical in exclude_urls:
         return None
 
-    day = str(rejected_row.get("source_date") or "")[:10]
+    # The ORIGINAL post date, never the feed's last-activity stamp -- see lib/post_dates. A reply
+    # bumping a nine-month-old question once carried it forward five windows, and in one case onto
+    # the page of a build that had not yet shipped when the report was written. No fallback: if the
+    # lane cannot establish when the report was written, the window cannot be asserted.
+    day = str(rejected_row.get("original_post_date") or "")[:10]
     window = window_for_date(day, windows)
     if window is None:
+        return None
+
+    # A report that names this window's exact build, in a failing role, is making an attribution.
+    # Publishing it here would print "the reporters did not identify this update as the cause"
+    # directly above their words doing exactly that. It belongs at Level 1; refuse it either way.
+    if states_target_build is not None and states_target_build(text, window.target_build):
         return None
 
     title = str(rejected_row.get("parent_title") or rejected_row.get("report_title") or "").strip()
@@ -211,7 +270,24 @@ def merge_recent_reports(existing: list[dict[str, Any]], fresh: list[dict[str, A
     ordered = sorted(by_id.values(),
                      key=lambda r: (str(r.get("report_date") or ""), str(r.get("report_id") or "")),
                      reverse=True)
-    return ordered, stats
+
+    # One incident, one card. The identity hashes product|url, so the same person cross-posting the
+    # same problem to Q&A and to Super User mints two ids and the window's heading counts two
+    # reports where there was one. Same window and same title is that case; keep the earliest
+    # telling, which is the one that was actually written first.
+    seen_content: dict[tuple[str, str], dict[str, Any]] = {}
+    deduped: list[dict[str, Any]] = []
+    for row in sorted(ordered, key=lambda r: str(r.get("report_date") or "")):
+        key = (str(row.get("release_window_key") or ""),
+               " ".join(str(row.get("report_title") or "").lower().split())[:80])
+        if key[1] and key in seen_content:
+            stats["cross_post_merged"] = stats.get("cross_post_merged", 0) + 1
+            continue
+        seen_content[key] = row
+        deduped.append(row)
+    deduped.sort(key=lambda r: (str(r.get("report_date") or ""), str(r.get("report_id") or "")),
+                 reverse=True)
+    return deduped, stats
 
 
 SCHEMA_VERSION = 1

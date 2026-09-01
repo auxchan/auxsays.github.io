@@ -458,7 +458,9 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
           <li class="recent-reports-item">
             <a class="recent-reports-item__title" href="{{ r.source_url }}" rel="nofollow noopener" target="_blank">{{ r.report_title | escape_once }}</a>
             <span class="recent-reports-item__meta">{{ r.source_family | escape }} &middot; {{ r.report_date }}</span>
-            <p class="recent-reports-item__window">Reported during the {{ r.window_version }} / Build {{ r.window_build }} release window{% if r.window_start != '' %} ({{ r.window_start }}{% if r.window_end != '' %} to {{ r.window_end }}{% else %} onward{% endif %}){% endif %}.</p>
+            {%- assign win_start = r.window_start | default: '' -%}
+            {%- assign win_end = r.window_end | default: '' -%}
+            <p class="recent-reports-item__window">Reported during the {{ r.window_version }} / Build {{ r.window_build }} release window{% if win_start != '' %} ({{ win_start }}{% if win_end != '' %} to {{ win_end }}{% else %} onward{% endif %}){% endif %}.</p>
             <p class="recent-reports-item__attribution">Patch attribution: not established.</p>
           </li>
           {% endfor %}

@@ -204,6 +204,46 @@ def default_capability(env: dict[str, str] | None) -> dict[str, bool]:
 # Pipeline
 # ---------------------------------------------------------------------------
 
+def _l3_states_problem(text: str) -> bool:
+    """A Level-3 card must report a PROBLEM, on the strong signal only.
+
+    `concrete_issue` also accepts a feature-location question carrying regression evidence, which
+    is correct when a patch attribution supplies the context. Level 3 has no attribution, so that
+    weaker path published a how-to and a feature request under a heading promising reports.
+    """
+    from patch_collectors.microsoft_powerpoint import (  # noqa: PLC0415
+        POWERPOINT_ISSUE_RE,
+        REGRESSION_EVIDENCE_RE,
+    )
+    body = text or ""
+    return bool(POWERPOINT_ISSUE_RE.search(body) or REGRESSION_EVIDENCE_RE.search(body))
+
+
+def _l3_states_target_build(text: str, target_build: str) -> bool:
+    """True when the report itself names this window's build as the thing that is failing.
+
+    Such a report HAS attributed its problem to the update, so it must never appear beneath the
+    sentence "the reporters did not identify this update as the cause".
+
+    Fail closed on an AMBIGUOUS role. "Occurring since the update to build 20326.20100" reads as an
+    attribution to any person, yet the role extractor -- tuned for deciding what counts as evidence
+    -- returns `ambiguous` for it, so keying on `current_failing` alone would have let exactly the
+    report this guard exists to stop through. Only a build named as the ROLLBACK or as a working
+    reference is positively non-attributing; everything else is refused rather than denied on the
+    reporter's behalf. The cost is a dropped context card; the alternative is contradicting them.
+    """
+    from lib.build_claims import (  # noqa: PLC0415
+        ROLE_REFERENCE_OTHER,
+        ROLE_ROLLBACK_PREVIOUS,
+        extract_build_claims,
+    )
+    if not target_build:
+        return False
+    non_attributing = {ROLE_ROLLBACK_PREVIOUS, ROLE_REFERENCE_OTHER}
+    return any(claim.build == target_build and claim.role not in non_attributing
+               for claim in extract_build_claims(text or ""))
+
+
 def resolution_priority(row: dict[str, Any]) -> tuple[int, str]:
     """Sort key deciding which rejected rows get to spend a resolution fetch.
 
@@ -792,15 +832,23 @@ class Pipeline:
         # LEVEL 3. Everything the strict authority refused for an identity reason, that reads as a
         # concrete PowerPoint problem, that carries a date inside a real release window, and that is
         # not already visible at a higher level. Situational context, never patch evidence.
+        # Only a report visible at a HIGHER level evicts a Level-3 row. Tier 2's file also holds
+        # `unresolved` retention rows, which render nowhere and are strictly LOWER than Level 3 --
+        # counting those as "higher" silently emptied this layer on the run after it was populated,
+        # and suppressed every fresh candidate too, because the same set gates admission.
         higher = {str(u).strip().rstrip("/").lower() for u in confirmed_urls}
-        higher |= {str(r.get("source_url") or "").strip().rstrip("/").lower() for r in merged}
+        higher |= {str(r.get("source_url") or "").strip().rstrip("/").lower() for r in merged
+                   if r.get("classification") == t2.TIER_UPDATE_LINKED}
         recent_fresh: list[dict[str, Any]] = []
         recent_seen: set[str] = set()
         for result in state.method_results:
             for row in result.get("tier2_source_rows") or []:
                 built = l3.recent_report_from_rejection(
                     row, windows=windows, captured_at=captured_at,
-                    is_concrete=_ppt.concrete_issue, exclude_urls=higher)
+                    is_concrete=_ppt.concrete_issue,
+                    states_problem=_l3_states_problem,
+                    states_target_build=_l3_states_target_build,
+                    exclude_urls=higher)
                 if built is None or built.report_id in recent_seen:
                     continue
                 recent_seen.add(built.report_id)

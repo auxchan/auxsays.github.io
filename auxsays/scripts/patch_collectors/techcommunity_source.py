@@ -26,6 +26,8 @@ from __future__ import annotations
 
 import gzip
 import re
+
+from lib.post_dates import original_post_date_from_html
 import time
 import urllib.error
 import urllib.request
@@ -210,4 +212,8 @@ def thread_candidate(url: str, *, date: str, page_html: str, source_type: str,
         "report_title": title,
         "report_text": " ".join(x for x in (title, body) if x)[:6000],
         "source_date": date,
+        # When the question was WRITTEN. The listing date moves with the newest reply, and the
+        # page also carries a dateCreated per answer, so both are the wrong thing to place a
+        # release window on. See lib/post_dates.
+        "original_post_date": original_post_date_from_html(page_html) or date,
     }

@@ -61,12 +61,31 @@ def check(label: str, condition: bool, detail: str = "") -> None:
 
 def rejection(text: str, *, date: str, reason: str = "missing_powerpoint_version",
               url: str = "https://learn.microsoft.com/en-us/answers/questions/1/x",
-              source_type: str = "microsoft_learn_qna") -> dict:
-    """A strict-authority rejection, shaped as the collector hands it over."""
-    return {"product_id": "microsoft-powerpoint", "exclusion_reason": reason,
-            "source_url": url, "source_type": source_type, "source_date": date,
-            "parent_title": text[:80], "report_title": text[:80],
-            "report_text_excerpt": text[:280], "tier2_full_text": text}
+              source_type: str = "microsoft_learn_qna", original: str | None = None) -> dict:
+    """A strict-authority rejection, shaped as the collector hands it over.
+
+    `source_date` is the feed's stamp, which a reply bumps; `original_post_date` is when the report
+    was written. They are separate here because conflating them put reports in the wrong window.
+    """
+    row = {"product_id": "microsoft-powerpoint", "exclusion_reason": reason,
+           "source_url": url, "source_type": source_type, "source_date": date,
+           "parent_title": text[:80], "report_title": text[:80],
+           "report_text_excerpt": text[:280], "tier2_full_text": text}
+    if original is None:
+        original = date
+    if original != "":
+        row["original_post_date"] = original
+    return row
+
+
+def l3_problem(text: str) -> bool:
+    from orchestrate_evidence_run import _l3_states_problem  # noqa: PLC0415
+    return _l3_states_problem(text)
+
+
+def l3_states_build(text: str, build: str) -> bool:
+    from orchestrate_evidence_run import _l3_states_target_build  # noqa: PLC0415
+    return _l3_states_target_build(text, build)
 
 
 def run() -> int:
@@ -553,10 +572,11 @@ def run() -> int:
     from patch_collectors import microsoft_powerpoint as _ppt3  # noqa: PLC0415
 
     def l3row(text, date, reason="missing_powerpoint_version",
-              url="https://learn.microsoft.com/en-us/answers/questions/900/x"):
+              url="https://learn.microsoft.com/en-us/answers/questions/900/x", original=None):
         return l3.recent_report_from_rejection(
-            rejection(text, date=date, reason=reason, url=url),
-            windows=WINDOWS, captured_at="x", is_concrete=_ppt3.concrete_issue)
+            rejection(text, date=date, reason=reason, url=url, original=original),
+            windows=WINDOWS, captured_at="x", is_concrete=_ppt3.concrete_issue,
+            states_problem=l3_problem, states_target_build=l3_states_build)
 
     built = l3row("PowerPoint freezes while saving my deck.", "2026-08-20")
     check("N.1 a concrete complaint with no update attribution becomes Level 3",
@@ -706,6 +726,139 @@ def run() -> int:
     check("Q.10 the Level-3 block is styled distinctly from confirmed evidence",
           ".recent-reports-card" in
           (ROOT / "assets" / "css" / "auxsays-custom.css").read_text(encoding="utf-8"))
+
+    print()
+    print("=" * 96)
+    print("R  repairs -- each of these published something untrue before it was caught")
+    print("=" * 96)
+    from lib import post_dates as pd  # noqa: PLC0415
+
+    # R.1 The layer used to delete itself. Tier 2's file also stores `unresolved` retention rows,
+    # which render nowhere; treating those as a HIGHER level evicted every Level-3 row on the very
+    # next run, and the same set gates admission, so nothing could come back.
+    ev_src = (ROOT / "scripts" / "orchestrate_evidence_run.py").read_text(encoding="utf-8")
+    check("R.1 only update-linked Tier-2 rows join the Level-3 eviction set",
+          "if r.get(\"classification\") == t2.TIER_UPDATE_LINKED" in ev_src)
+
+    real_t2 = t2.load_tier2(ROOT / "_data" / "update_linked_evidence.yml")
+    real_l3 = l3.load_recent(ROOT / "_data" / "recent_powerpoint_reports.yml")
+    unresolved_urls = {str(r.get("source_url") or "").strip().rstrip("/").lower()
+                       for r in real_t2 if r.get("classification") == t2.TIER_UNRESOLVED}
+    linked_urls = {str(r.get("source_url") or "").strip().rstrip("/").lower()
+                   for r in real_t2 if r.get("classification") == t2.TIER_UPDATE_LINKED}
+    l3_urls_now = {str(r.get("source_url") or "").strip().rstrip("/").lower() for r in real_l3}
+    check("R.2 the retention store really does overlap Level 3, so R.3 is not vacuous",
+          bool(unresolved_urls & l3_urls_now),
+          f"{len(unresolved_urls & l3_urls_now)} shared")
+    survive, _ = l3.merge_recent_reports([dict(r) for r in real_l3], [],
+                                         promoted_urls=linked_urls)
+    check("R.3 re-running against the REAL files leaves every published row in place",
+          len(survive) == len(real_l3), f"{len(survive)} of {len(real_l3)}")
+    twice, _ = l3.merge_recent_reports(survive, [], promoted_urls=linked_urls)
+    check("R.4 and it is idempotent -- a third run changes nothing either",
+          len(twice) == len(real_l3), str(len(twice)))
+
+    # R.5-R.7 The window is Level 3's ONLY claim, so it must rest on when the report was WRITTEN.
+    check("R.5 a row with no original post date is refused, never dated from the feed stamp",
+          l3row("PowerPoint crashes when saving.", "2026-08-20", original="") is None)
+    bumped = l3row("PowerPoint crashes when saving.", "2026-08-20", original="2026-07-25")
+    check("R.6 the ORIGINAL date decides the window, not the last-activity stamp",
+          bumped is not None and bumped.window_build == "20228.20110",
+          bumped.window_build if bumped else "none")
+    check("R.7 a report cannot land on a build that had not shipped when it was written",
+          bumped is not None and bumped.report_date < "2026-08-26"
+          and bumped.window_build != "20326.20112")
+
+    # R.8-R.10 The date extractor itself.
+    answer_page = ('<script type="application/ld+json">{"@type":"QAPage","mainEntity":'
+                   '{"@type":"Question","dateCreated":"2026-08-24T22:21:43-07:00",'
+                   '"suggestedAnswer":[{"dateCreated":"2026-08-28T09:00:00-07:00"}]}}</script>')
+    check("R.8 the QUESTION's dateCreated wins over an answer's",
+          pd.original_post_date_from_html(answer_page) == "2026-08-24",
+          pd.original_post_date_from_html(answer_page))
+    stamps = '<time datetime="2026-08-20T10:00Z"></time><time datetime="2025-11-21T08:00Z"></time>'
+    check("R.9 with no JSON-LD, the EARLIEST stamp is the question",
+          pd.original_post_date_from_html(stamps) == "2025-11-21")
+    check("R.10 an unreadable page yields no date rather than a guess",
+          pd.original_post_date_from_html("<html><body>nothing</body></html>") == "")
+
+    # R.11 A reporter who names this build as the thing failing HAS attributed their problem to it.
+    attributing = ("PowerPoint crashes on every save. Occurring since Office update to "
+                   "build 2608 20326.20100.")
+    check("R.11 a report naming this window's build as failing is never published as unattributed",
+          l3row(attributing, "2026-08-20") is None)
+    check("R.12 that guard is specific -- a DIFFERENT build named as failing does not trip it",
+          not l3_states_build("Crashes since build 20228.20110", "20326.20100"))
+    check("R.13 nor does this build named as the ROLLBACK rather than the fault",
+          not l3_states_build("Rolled back to 20326.20100 and it works", "20326.20100"))
+    check("R.13b an AMBIGUOUS mention is refused rather than denied on the reporter's behalf",
+          l3_states_build("Occurring since the Office update to 20326.20100", "20326.20100"))
+
+    # R.14 The identity gate that demoted R.11's report in the first place.
+    from patch_collectors.microsoft_powerpoint import version_in_context as _vic  # noqa: PLC0415
+    check("R.14 version + exact build with no brackets establishes identity",
+          _vic("Occurring since Office update to build 2501 18429.20132", "2501", "18429.20132"))
+    check("R.15 the bracketed spelling still does",
+          _vic("Office 2607 (20228.20110)", "2607", "20228.20110"))
+    check("R.16 a WRONG build next to the version establishes nothing",
+          not _vic("Office 2607 20228.29999", "2607", "20228.20110"))
+    check("R.17 and a bare version still establishes nothing",
+          not _vic("Office 2607 is broken", "2607", "20228.20110"))
+
+    # R.18-R.21 Level 3 claims a problem with THIS product on THIS platform. Each veto below was
+    # written because a row was published for which some part of that was false.
+    for label, text in (
+            ("a PowerPoint Online / service outage",
+             "PowerPoint Online will not open my presentation, error from view.officeapps.live"),
+            ("a macOS report on a Windows Click-to-Run window",
+             "PowerPoint crashes on macOS when I open the icons task pane"),
+            ("a perpetual-edition report",
+             "PowerPoint 2021 crashes when saving .ppsm files"),
+            ("a third-party library defect",
+             "Apache POI 4.1.2 writes a PowerPoint file that crashes on open")):
+        check(f"R.18 refused: {label}", l3row(text, "2026-08-20") is None)
+
+    # R.22 Level 3 has no attribution to lend context, so it needs the strong problem signal.
+    check("R.22 a how-to question never publishes as a report",
+          l3row("How do I get video to play in power point?", "2026-08-20") is None)
+    check("R.23 nor a feature request",
+          l3row("Changing the navigating (tabbing) order of objects in PowerPoint", "2026-08-20")
+          is None)
+    check("R.24 while a real crash report still does",
+          l3row("PowerPoint crashes every time I start a slide show.", "2026-08-20") is not None)
+
+    # R.25 One incident, one card.
+    xpost = [l3row("PowerPoint crashes on slide show.", "2026-08-20",
+                   url="https://learn.microsoft.com/en-us/answers/questions/8001/a"),
+             l3row("PowerPoint crashes on slide show.", "2026-08-19",
+                   url="https://superuser.com/questions/8002/b")]
+    merged_x, stats_x = l3.merge_recent_reports([], [r.as_dict() for r in xpost if r],
+                                                promoted_urls=set())
+    check("R.25 the same report cross-posted to two sites is ONE card",
+          len(merged_x) == 1 and stats_x.get("cross_post_merged") == 1,
+          f"{len(merged_x)} {stats_x}")
+    check("R.26 and the earlier telling is the one kept",
+          bool(merged_x) and merged_x[0]["report_date"] == "2026-08-19")
+    distinct = [r.as_dict() for r in
+                (l3row("PowerPoint crashes on slide show.", "2026-08-20",
+                       url="https://learn.microsoft.com/en-us/answers/questions/8003/c"),
+                 l3row("PowerPoint crashes when I insert a table.", "2026-08-20",
+                       url="https://learn.microsoft.com/en-us/answers/questions/8004/d")) if r]
+    merged_d, _ = l3.merge_recent_reports([], distinct, promoted_urls=set())
+    check("R.27 two DIFFERENT reports are not collapsed", len(merged_d) == 2, str(len(merged_d)))
+
+    # R.28 Liquid treats a missing key as nil, and `nil != ''` is true, so the else-branch never
+    # ran and the live current-build page printed a dangling "(2026-08-26 to )".
+    layout_r = (ROOT / "_layouts" / "aux-update.html").read_text(encoding="utf-8")
+    check("R.28 window_end is defaulted before it is compared",
+          "assign win_end = r.window_end | default: ''" in layout_r)
+    check("R.29 window_start likewise",
+          "assign win_start = r.window_start | default: ''" in layout_r)
+    check("R.30 and the raw properties are no longer compared to '' directly",
+          "r.window_end != ''" not in layout_r and "r.window_start != ''" not in layout_r)
+    open_window = [r for r in real_l3 if not str(r.get("window_end") or "")]
+    check("R.31 the open-ended window really is present, so R.28 is not vacuous",
+          bool(open_window), f"{len(open_window)} rows with no window_end")
 
     print()
     print("=" * 96)

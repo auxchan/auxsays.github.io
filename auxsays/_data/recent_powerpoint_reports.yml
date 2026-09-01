@@ -9,26 +9,6 @@ reports:
   product_id: microsoft-powerpoint
   promotion_eligible: true
   release_window_key: microsoft-powerpoint|2608|20326.20112
-  report_date: '2026-08-28'
-  report_excerpt: OneDrive embedded PowerPoint slides showing blank page or error I embed PowerPoint files
-    from OneDrive into eLearning courses using the standard embed links.As of today, all of them have
-    stopped working. All my embedded PowerPoint slides are currently down across several live...
-  report_id: microsoft-powerpoint:a324fe662c5c404d
-  report_title: OneDrive embedded PowerPoint slides showing blank page or error
-  source_family: Microsoft Tech Community
-  source_report_id: '4549841'
-  source_type: microsoft_tech_community
-  source_url: https://techcommunity.microsoft.com/discussions/onedriveforbusiness/onedrive-embedded-powerpoint-slides-showing-blank-page-or-error/4549841
-  strict_exclusion_reason: missing_powerpoint_version
-  window_build: '20326.20112'
-  window_start: '2026-08-26'
-  window_version: '2608'
-- attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
-  classification: recent_report
-  product_id: microsoft-powerpoint
-  promotion_eligible: true
-  release_window_key: microsoft-powerpoint|2608|20326.20112
   report_date: '2026-08-26'
   report_excerpt: 'PowerPoint embed codes are not working PowerPoint embed codes are not working I took
     these steps to embed a PowerPoint presentation from OneDrive into a webpage: Log in to OneDrive Select
@@ -70,15 +50,16 @@ reports:
   product_id: microsoft-powerpoint
   promotion_eligible: true
   release_window_key: microsoft-powerpoint|2608|20326.20100
-  report_date: '2026-08-20'
-  report_excerpt: Power point is not working - Microsoft Q&A my laptop power point presentation is not
-    working help me to solve this issue
-  report_id: microsoft-powerpoint:ddc7a22e69ba92f5
-  report_title: Power point is not working - Microsoft Q&A
-  source_family: Microsoft Q&A
-  source_report_id: '5980477'
-  source_type: microsoft_learn_qna
-  source_url: https://learn.microsoft.com/en-us/answers/questions/5980477/power-point-is-not-working
+  report_date: '2026-08-24'
+  report_excerpt: OneDrive embedded PowerPoint slides showing blank page or error I embed PowerPoint files
+    from OneDrive into eLearning courses using the standard embed links.As of today, all of them have
+    stopped working. All my embedded PowerPoint slides are currently down across several live...
+  report_id: microsoft-powerpoint:a324fe662c5c404d
+  report_title: OneDrive embedded PowerPoint slides showing blank page or error
+  source_family: Microsoft Tech Community
+  source_report_id: '4549841'
+  source_type: microsoft_tech_community
+  source_url: https://techcommunity.microsoft.com/discussions/onedriveforbusiness/onedrive-embedded-powerpoint-slides-showing-blank-page-or-error/4549841
   strict_exclusion_reason: missing_powerpoint_version
   window_build: '20326.20100'
   window_end: '2026-08-26'
@@ -91,14 +72,14 @@ reports:
   promotion_eligible: true
   release_window_key: microsoft-powerpoint|2608|20326.20100
   report_date: '2026-08-20'
-  report_excerpt: How do I get video to play in power point? How do I get video to play in power point?
-    Embedded video in power point will not play. Receiving 'can not play media' error message.
-  report_id: microsoft-powerpoint:9c95a07abc711c3e
-  report_title: How do I get video to play in power point?
+  report_excerpt: Power point is not working - Microsoft Q&A my laptop power point presentation is not
+    working help me to solve this issue
+  report_id: microsoft-powerpoint:ddc7a22e69ba92f5
+  report_title: Power point is not working - Microsoft Q&A
   source_family: Microsoft Q&A
-  source_report_id: '5631768'
+  source_report_id: '5980477'
   source_type: microsoft_learn_qna
-  source_url: https://learn.microsoft.com/en-us/answers/questions/5631768/how-do-i-get-video-to-play-in-power-point
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5980477/power-point-is-not-working
   strict_exclusion_reason: missing_powerpoint_version
   window_build: '20326.20100'
   window_end: '2026-08-26'
@@ -175,27 +156,6 @@ reports:
   promotion_eligible: true
   release_window_key: microsoft-powerpoint|2607|20228.20190
   report_date: '2026-08-12'
-  report_excerpt: Office Online Viewer fails to open PowerPoint files via view.officeapps.live.com Office
-    Online Viewer fails to open PowerPoint files via view.officeapps.live.com We are experiencing an issue
-    with the Microsoft Office Online Viewer ( view.officeapps.live.com ) when attempting...
-  report_id: microsoft-powerpoint:b8ef50b867e7ede1
-  report_title: Office Online Viewer fails to open PowerPoint files via view.officeapps.live.com
-  source_family: Microsoft Q&A
-  source_report_id: '5973167'
-  source_type: microsoft_learn_qna
-  source_url: https://learn.microsoft.com/en-us/answers/questions/5973167/office-online-viewer-fails-to-open-powerpoint-file
-  strict_exclusion_reason: missing_powerpoint_version
-  window_build: '20228.20190'
-  window_end: '2026-08-18'
-  window_start: '2026-08-11'
-  window_version: '2607'
-- attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
-  classification: recent_report
-  product_id: microsoft-powerpoint
-  promotion_eligible: true
-  release_window_key: microsoft-powerpoint|2607|20228.20190
-  report_date: '2026-08-12'
   report_excerpt: Office timeline is not working with powerpoint Office timeline is not working with powerpoint
     Office timeline is not working with powerpoint - unable to use plus or expert editions. Please help
     us
@@ -226,48 +186,6 @@ reports:
   source_report_id: '5971107'
   source_type: microsoft_learn_qna
   source_url: https://learn.microsoft.com/en-us/answers/questions/5971107/preserve-master-slides-is-not-working-in-powerpoin
-  strict_exclusion_reason: missing_powerpoint_version
-  window_build: '20228.20158'
-  window_end: '2026-08-11'
-  window_start: '2026-08-04'
-  window_version: '2607'
-- attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
-  classification: recent_report
-  product_id: microsoft-powerpoint
-  promotion_eligible: true
-  release_window_key: microsoft-powerpoint|2607|20228.20158
-  report_date: '2026-08-10'
-  report_excerpt: Powerpoint issue Powerpoint issue I am using Microsoft 365 Family edition. While working
-    on Powerpoint, when selecting multiple objects the objects come along with cursor. Tried the Microsoft
-    support, troubleshooting done uninstalled MS Office and reinstalled. They have tried...
-  report_id: microsoft-powerpoint:37527fb4d7370a75
-  report_title: Powerpoint issue
-  source_family: Microsoft Q&A
-  source_report_id: '5971382'
-  source_type: microsoft_learn_qna
-  source_url: https://learn.microsoft.com/en-us/answers/questions/5971382/powerpoint-issue
-  strict_exclusion_reason: missing_powerpoint_version
-  window_build: '20228.20158'
-  window_end: '2026-08-11'
-  window_start: '2026-08-04'
-  window_version: '2607'
-- attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
-  classification: recent_report
-  product_id: microsoft-powerpoint
-  promotion_eligible: true
-  release_window_key: microsoft-powerpoint|2607|20228.20158
-  report_date: '2026-08-09'
-  report_excerpt: 'Powerpoint animations not working in Record mode Powerpoint animations not working
-    in Record mode Issue Summary: I am experiencing a problem with PowerPoint recording mode where animations
-    do not trigger during recording, even though they work correctly in normal slideshow...'
-  report_id: microsoft-powerpoint:fcc05da10383b89a
-  report_title: Powerpoint animations not working in Record mode
-  source_family: Microsoft Q&A
-  source_report_id: '5877267'
-  source_type: microsoft_learn_qna
-  source_url: https://learn.microsoft.com/en-us/answers/questions/5877267/powerpoint-animations-not-working-in-record-mode
   strict_exclusion_reason: missing_powerpoint_version
   window_build: '20228.20158'
   window_end: '2026-08-11'
@@ -320,27 +238,6 @@ reports:
   product_id: microsoft-powerpoint
   promotion_eligible: true
   release_window_key: microsoft-powerpoint|2607|20228.20124
-  report_date: '2026-08-02'
-  report_excerpt: PowerPoint 2021 crashes when saving .ppsm files containing ActiveX controls Hello,I
-    believe I found a regression in recent Office 2021 builds.PowerPoint crashes every time I try to save
-    a macro-enabled presentation as PowerPoint Show (*.ppsm) if the presentation contains...
-  report_id: microsoft-powerpoint:bd5440646f33435c
-  report_title: PowerPoint 2021 crashes when saving .ppsm files containing ActiveX controls
-  source_family: Microsoft Tech Community
-  source_report_id: '4541266'
-  source_type: microsoft_tech_community
-  source_url: https://techcommunity.microsoft.com/discussions/microsoft-365/powerpoint-2021-crashes-when-saving-ppsm-files-containing-activex-controls/4541266
-  strict_exclusion_reason: missing_powerpoint_version
-  window_build: '20228.20124'
-  window_end: '2026-08-04'
-  window_start: '2026-07-29'
-  window_version: '2607'
-- attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
-  classification: recent_report
-  product_id: microsoft-powerpoint
-  promotion_eligible: true
-  release_window_key: microsoft-powerpoint|2607|20228.20124
   report_date: '2026-08-01'
   report_excerpt: A colleague at another schools shared a power point with me, it is ready only but why
     I try to save a copy as ppt or pdf it doesn't work A colleague at another schools shared a power point
@@ -363,7 +260,7 @@ reports:
   product_id: microsoft-powerpoint
   promotion_eligible: true
   release_window_key: microsoft-powerpoint|2607|20228.20110
-  report_date: '2026-07-28'
+  report_date: '2026-07-27'
   report_excerpt: 'Title: PowerPoint crashes on opening file Tags: PowerPoint, Microsoft 365, Windows
     11, Crash, Protected View, Repair - Microsoft Q&A PowerPoint crashes on opening file * PowerPoint
     Repair Now error * PowerPoint keeps crashing * PowerPoint won''t open presentation * PowerPoint...'
@@ -379,27 +276,6 @@ reports:
   window_end: '2026-07-29'
   window_start: '2026-07-23'
   window_version: '2607'
-- attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
-  classification: recent_report
-  product_id: microsoft-powerpoint
-  promotion_eligible: true
-  release_window_key: microsoft-powerpoint|2605|20026.20076
-  report_date: '2026-07-17'
-  report_excerpt: Powerpoint copilot not able to connect to image service - Microsoft Q&A ...ge generation
-    in the Microsoft 365 Copilot app, quality and performance may also vary depending on service availability,
-    and if the service is unavailable Copilot notifies that it is unavailableFor...
-  report_id: microsoft-powerpoint:19a66c0cc4c2e386
-  report_title: Powerpoint copilot not able to connect to image service - Microsoft Q&A
-  source_family: Microsoft Q&A
-  source_report_id: '5947549'
-  source_type: microsoft_learn_qna
-  source_url: https://learn.microsoft.com/en-us/answers/questions/5947549/powerpoint-copilot-not-able-to-connect-to-image-se
-  strict_exclusion_reason: missing_powerpoint_version
-  window_build: '20026.20076'
-  window_end: '2026-07-23'
-  window_start: '2026-05-20'
-  window_version: '2605'
 - attribution_state: not_established
   captured_at: '2026-09-01T00:00:00Z'
   classification: recent_report
@@ -446,6 +322,27 @@ reports:
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
+  release_window_key: microsoft-powerpoint|2603|19822.20182
+  report_date: '2026-04-30'
+  report_excerpt: 'Powerpoint animations not working in Record mode Powerpoint animations not working
+    in Record mode Issue Summary: I am experiencing a problem with PowerPoint recording mode where animations
+    do not trigger during recording, even though they work correctly in normal slideshow...'
+  report_id: microsoft-powerpoint:fcc05da10383b89a
+  report_title: Powerpoint animations not working in Record mode
+  source_family: Microsoft Q&A
+  source_report_id: '5877267'
+  source_type: microsoft_learn_qna
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5877267/powerpoint-animations-not-working-in-record-mode
+  strict_exclusion_reason: missing_powerpoint_version
+  window_build: '19822.20182'
+  window_end: '2026-05-20'
+  window_start: '2026-04-14'
+  window_version: '2603'
+- attribution_state: not_established
+  captured_at: '2026-09-01T00:00:00Z'
+  classification: recent_report
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
   release_window_key: microsoft-powerpoint|2601|19628.20150
   report_date: '2026-02-22'
   report_excerpt: Power point keeps showing me it is not responding - Microsoft Q&A Power point keeps
@@ -487,49 +384,6 @@ reports:
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
-  release_window_key: microsoft-powerpoint|2601|19628.20150
-  report_date: '2026-02-17'
-  report_excerpt: video lagging in Power Point - Microsoft Q&A video lagging in Power Point hello I have
-    issues with recording a video in my powerpoint. the video keep lagging. PP is updated (16.106 for
-    Mac),the macOS is under Tahoe 26.3, and this issue appeared after a macOS update. And I...
-  report_id: microsoft-powerpoint:283619c16e9a9755
-  report_title: video lagging in Power Point - Microsoft Q&A
-  source_family: Microsoft Q&A
-  source_report_id: '5778776'
-  source_type: microsoft_learn_qna
-  source_url: https://learn.microsoft.com/en-us/answers/questions/5778776/video-lagging-in-power-point
-  strict_exclusion_reason: missing_powerpoint_version
-  window_build: '19628.20150'
-  window_end: '2026-02-24'
-  window_start: '2026-01-27'
-  window_version: '2601'
-- attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
-  classification: recent_report
-  product_id: microsoft-powerpoint
-  promotion_eligible: true
-  release_window_key: microsoft-powerpoint|2506|18925.20184
-  report_date: '2026-01-14'
-  report_excerpt: PowerPoint VSTO add-in is very slow when creating multiple TextBoxes after opening a
-    Blank Presentation We have a VSTO add-in that draws different shapes in PowerPoint. We observed that
-    rendering TextBoxes (creating them and setting common properties such as font, size,...
-  report_id: microsoft-powerpoint:f90f7edcd3154332
-  report_title: PowerPoint VSTO add-in is very slow when creating multiple TextBoxes after opening a Blank
-    Presentation
-  source_family: Super User / Stack Exchange
-  source_report_id: '79867745'
-  source_type: stack_exchange_question
-  source_url: https://stackoverflow.com/questions/79867745/powerpoint-vsto-add-in-is-very-slow-when-creating-multiple-textboxes-after-openi
-  strict_exclusion_reason: missing_powerpoint_version
-  window_build: '18925.20184'
-  window_end: '2026-01-27'
-  window_start: '2025-07-22'
-  window_version: '2506'
-- attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
-  classification: recent_report
-  product_id: microsoft-powerpoint
-  promotion_eligible: true
   release_window_key: microsoft-powerpoint|2506|18925.20184
   report_date: '2026-01-13'
   report_excerpt: PowerPoint VSTO add-in is very slow when creating multiple TextBoxes after opening a
@@ -553,127 +407,20 @@ reports:
   product_id: microsoft-powerpoint
   promotion_eligible: true
   release_window_key: microsoft-powerpoint|2506|18925.20184
-  report_date: '2025-09-08'
-  report_excerpt: 'PowerPoint VBA - Display the Icons Task Pane on macOS As part of a customised VBA-based
-    add-in, I''ve been trying to display the Icons task pane which idMSO is " IconInsertFromFile " (button
-    type) but which doesn''t work on macOS , although it runs on Windows: +It is frustrating...'
-  report_id: microsoft-powerpoint:f11bfb846657bc18
-  report_title: PowerPoint VBA - Display the Icons Task Pane on macOS
-  source_family: Super User / Stack Exchange
-  source_report_id: '79759151'
-  source_type: stack_exchange_question
-  source_url: https://stackoverflow.com/questions/79759151/powerpoint-vba-display-the-icons-task-pane-on-macos
+  report_date: '2025-11-21'
+  report_excerpt: How do I get video to play in power point? How do I get video to play in power point?
+    Embedded video in power point will not play. Receiving 'can not play media' error message.
+  report_id: microsoft-powerpoint:9c95a07abc711c3e
+  report_title: How do I get video to play in power point?
+  source_family: Microsoft Q&A
+  source_report_id: '5631768'
+  source_type: microsoft_learn_qna
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5631768/how-do-i-get-video-to-play-in-power-point
   strict_exclusion_reason: missing_powerpoint_version
   window_build: '18925.20184'
   window_end: '2026-01-27'
   window_start: '2025-07-22'
   window_version: '2506'
-- attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
-  classification: recent_report
-  product_id: microsoft-powerpoint
-  promotion_eligible: true
-  release_window_key: microsoft-powerpoint|2504|18730.20122
-  report_date: '2025-06-25'
-  report_excerpt: Set shape's language in PowerPoint 365 for MacOS I want to set English US as default
-    language for all shapes on my slides. It seems the object model for PPT has changed over the years
-    because none of the >5 years old macros here 1 , 2 work. I get the error Method or data...
-  report_id: microsoft-powerpoint:75016eb1cf177d10
-  report_title: Set shape's language in PowerPoint 365 for MacOS
-  source_family: Super User / Stack Exchange
-  source_report_id: '79678508'
-  source_type: stack_exchange_question
-  source_url: https://stackoverflow.com/questions/79678508/set-shapes-language-in-powerpoint-365-for-macos
-  strict_exclusion_reason: missing_powerpoint_version
-  window_build: '18730.20122'
-  window_end: '2025-07-22'
-  window_start: '2025-04-29'
-  window_version: '2504'
-- attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
-  classification: recent_report
-  product_id: microsoft-powerpoint
-  promotion_eligible: true
-  release_window_key: microsoft-powerpoint|2504|18730.20122
-  report_date: '2025-05-05'
-  report_excerpt: Apache POI `4.1.2` PowerPoint file corrupt on open, worked with Apache POI `3.17` I'm
-    generating a PowerPoint file using Apache POI version 4.1.2 . The file is created without any errors
-    during execution, but when I try to open it in PowerPoint, I get the following error...
-  report_id: microsoft-powerpoint:a43f8f1be1c0a4f9
-  report_title: Apache POI `4.1.2` PowerPoint file corrupt on open, worked with Apache POI `3.17`
-  source_family: Super User / Stack Exchange
-  source_report_id: '79606751'
-  source_type: stack_exchange_question
-  source_url: https://stackoverflow.com/questions/79606751/apache-poi-4-1-2-powerpoint-file-corrupt-on-open-worked-with-apache-poi-3-17
-  strict_exclusion_reason: missing_powerpoint_version
-  window_build: '18730.20122'
-  window_end: '2025-07-22'
-  window_start: '2025-04-29'
-  window_version: '2504'
-- attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
-  classification: recent_report
-  product_id: microsoft-powerpoint
-  promotion_eligible: true
-  release_window_key: microsoft-powerpoint|2501|18429.20132
-  report_date: '2025-02-10'
-  report_excerpt: Can't open .pptx from mapped SharePoint drive since Office update - Microsoft Q&A Can't
-    open .pptx from mapped SharePoint drive since Office update Occurring since Office update to build
-    2501 18429.20132 Double clicking on any .pptx in a mapped SharePoint drive in...
-  report_id: microsoft-powerpoint:892c2da580fe360d
-  report_title: Can't open .pptx from mapped SharePoint drive since Office update - Microsoft Q&A
-  source_family: Microsoft Q&A
-  source_report_id: '5395007'
-  source_type: microsoft_learn_qna
-  source_url: https://learn.microsoft.com/en-us/answers/questions/5395007/cant-open-pptx-from-mapped-sharepoint-drive-since
-  strict_exclusion_reason: bare_version_no_context
-  window_build: '18429.20132'
-  window_end: '2025-03-05'
-  window_start: '2025-01-30'
-  window_version: '2501'
-- attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
-  classification: recent_report
-  product_id: microsoft-powerpoint
-  promotion_eligible: true
-  release_window_key: microsoft-powerpoint|2501|18429.20132
-  report_date: '2025-02-07'
-  report_excerpt: PowerPoint VBA code is inconsistent when running in attempt to export OLE objects as
-    high resolution JPG files I have linked macro-enabled worksheet objects from excel to 25 different
-    powerpoint slides in my powerpoint deck. Some slides have up to three linked objects and...
-  report_id: microsoft-powerpoint:2b9b99726b421668
-  report_title: PowerPoint VBA code is inconsistent when running in attempt to export OLE objects as high
-    resolution JPG files
-  source_family: Super User / Stack Exchange
-  source_report_id: '79421749'
-  source_type: stack_exchange_question
-  source_url: https://stackoverflow.com/questions/79421749/powerpoint-vba-code-is-inconsistent-when-running-in-attempt-to-export-ole-object
-  strict_exclusion_reason: missing_powerpoint_version
-  window_build: '18429.20132'
-  window_end: '2025-03-05'
-  window_start: '2025-01-30'
-  window_version: '2501'
-- attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
-  classification: recent_report
-  product_id: microsoft-powerpoint
-  promotion_eligible: true
-  release_window_key: microsoft-powerpoint|2411|18227.20152
-  report_date: '2025-01-28'
-  report_excerpt: Changing the navigating (tabbing) order of objects in PowerPoint I think that the order
-    that I can move from one object to the next using my Tab key is determined by the order in which the
-    objects were placed on the (Master) slide. However , what I'd like to do is change the...
-  report_id: microsoft-powerpoint:43854b9487168404
-  report_title: Changing the navigating (tabbing) order of objects in PowerPoint
-  source_family: Super User / Stack Exchange
-  source_report_id: '1873586'
-  source_type: stack_exchange_question
-  source_url: https://superuser.com/questions/1873586/changing-the-navigating-tabbing-order-of-objects-in-powerpoint
-  strict_exclusion_reason: missing_powerpoint_version
-  window_build: '18227.20152'
-  window_end: '2025-01-30'
-  window_start: '2024-12-05'
-  window_version: '2411'
 - attribution_state: not_established
   captured_at: '2026-09-01T00:00:00Z'
   classification: recent_report
@@ -764,68 +511,6 @@ reports:
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
-  release_window_key: microsoft-powerpoint|2409|18025.20096
-  report_date: '2024-11-07'
-  report_excerpt: Powerpoint change picture without changing cropping area My question is similar to this
-    one posted on stackoverflow 9 years ago, viewed 17k times but closed because it should have been posted
-    on superuser based on the comments. I didn't find this question there. Then, here it...
-  report_id: microsoft-powerpoint:5c98e3e4a935462b
-  report_title: Powerpoint change picture without changing cropping area
-  source_family: Super User / Stack Exchange
-  source_report_id: '1861025'
-  source_type: stack_exchange_question
-  source_url: https://superuser.com/questions/1861025/powerpoint-change-picture-without-changing-cropping-area
-  strict_exclusion_reason: missing_powerpoint_version
-  window_build: '18025.20096'
-  window_end: '2024-11-12'
-  window_start: '2024-09-23'
-  window_version: '2409'
-- attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
-  classification: recent_report
-  product_id: microsoft-powerpoint
-  promotion_eligible: true
-  release_window_key: microsoft-powerpoint|2409|18025.20096
-  report_date: '2024-10-11'
-  report_excerpt: powerpoint 2013 is not working key - Microsoft Q&A powerpoint 2013 is not working key
-    hi need help ***Moved from Microsoft 365 and Office / PowerPoint / For education / Windows***
-  report_id: microsoft-powerpoint:2b336d1771d84b72
-  report_title: powerpoint 2013 is not working key - Microsoft Q&A
-  source_family: Microsoft Q&A
-  source_report_id: '5343336'
-  source_type: microsoft_learn_qna
-  source_url: https://learn.microsoft.com/en-us/answers/questions/5343336/powerpoint-2013-is-not-working-key
-  strict_exclusion_reason: missing_powerpoint_version
-  window_build: '18025.20096'
-  window_end: '2024-11-12'
-  window_start: '2024-09-23'
-  window_version: '2409'
-- attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
-  classification: recent_report
-  product_id: microsoft-powerpoint
-  promotion_eligible: true
-  release_window_key: microsoft-powerpoint|2407|17830.20138
-  report_date: '2024-08-14'
-  report_excerpt: Compare feature in Powerpoint not working as intended. - Microsoft Q&A Compare feature
-    in Powerpoint not working as intended. I am having an issue where the compare feature in Powerpoint
-    is not working as intended. To show how this happens, I created a presentation with 4...
-  report_id: microsoft-powerpoint:48af5784a32663a0
-  report_title: Compare feature in Powerpoint not working as intended. - Microsoft Q&A
-  source_family: Microsoft Q&A
-  source_report_id: '5359638'
-  source_type: microsoft_learn_qna
-  source_url: https://learn.microsoft.com/en-us/answers/questions/5359638/compare-feature-in-powerpoint-not-working-as-inten
-  strict_exclusion_reason: bare_version_no_context
-  window_build: '17830.20138'
-  window_end: '2024-08-26'
-  window_start: '2024-08-01'
-  window_version: '2407'
-- attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
-  classification: recent_report
-  product_id: microsoft-powerpoint
-  promotion_eligible: true
   release_window_key: microsoft-powerpoint|2404|17531.20152
   report_date: '2024-05-18'
   report_excerpt: Can't write in a textbox I have designed in Powerpoint slidemaster I have downloaded
@@ -863,45 +548,3 @@ reports:
   window_end: '2024-05-14'
   window_start: '2024-03-27'
   window_version: '2403'
-- attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
-  classification: recent_report
-  product_id: microsoft-powerpoint
-  promotion_eligible: true
-  release_window_key: microsoft-powerpoint|2312|17126.20126
-  report_date: '2024-02-20'
-  report_excerpt: Why my power point gets the old version? - Microsoft Q&A Why my power point gets the
-    old version? I have Office21 installed on my laptop and one day it got updated. Some things changed
-    on apps like the look that they had. The problem is that powerpoint sometimes when i...
-  report_id: microsoft-powerpoint:d5497248de4def10
-  report_title: Why my power point gets the old version? - Microsoft Q&A
-  source_family: Microsoft Q&A
-  source_report_id: '5273648'
-  source_type: microsoft_learn_qna
-  source_url: https://learn.microsoft.com/en-us/answers/questions/5273648/why-my-power-point-gets-the-old-version
-  strict_exclusion_reason: vague_latest_update
-  window_build: '17126.20126'
-  window_end: '2024-03-27'
-  window_start: '2024-01-04'
-  window_version: '2312'
-- attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
-  classification: recent_report
-  product_id: microsoft-powerpoint
-  promotion_eligible: true
-  release_window_key: microsoft-powerpoint|2312|17126.20126
-  report_date: '2024-01-23'
-  report_excerpt: Powerpoint - slide master - link not working as expected I have Powerpoint for Mac v
-    16.81 (24011420) on a Macbook pro 2018 macos 12.7.2 I set up a slide master with 3 placeholders, which
-    cover the entire slide in 3 slices with no overlap. I then put a shape on top to cover...
-  report_id: microsoft-powerpoint:e01deac2448a28db
-  report_title: Powerpoint - slide master - link not working as expected
-  source_family: Super User / Stack Exchange
-  source_report_id: '1826948'
-  source_type: stack_exchange_question
-  source_url: https://superuser.com/questions/1826948/powerpoint-slide-master-link-not-working-as-expected
-  strict_exclusion_reason: missing_powerpoint_version
-  window_build: '17126.20126'
-  window_end: '2024-03-27'
-  window_start: '2024-01-04'
-  window_version: '2312'
