@@ -30,7 +30,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:http_403_blocked
-  last_run: '2026-08-31T23:31:48Z'
+  last_run: '2026-09-01T05:54:05Z'
   notes: 'Adobe Community search discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. Search requests are deliberately capped so rate limiting moves the collector to fallback methods instead of retrying the blocked endpoint repeatedly. Fetch failures: 1.'
 - product_id: adobe-premiere-pro
   update_version: 26.2.2
@@ -46,7 +46,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_bug_tab_fetch_failed:rate_limited
-  last_run: '2026-08-31T23:31:48Z'
+  last_run: '2026-09-01T05:54:05Z'
   notes: 'Adobe Community Premiere bug-tab listing discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. Fetch failures: 1.'
 - product_id: adobe-premiere-pro
   update_version: 26.2.2
@@ -62,14 +62,14 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-31T23:31:48Z'
+  last_run: '2026-09-01T05:54:05Z'
   notes: Known Adobe Community bug-report URL recheck discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates.
 - product_id: adobe-premiere-pro
   update_version: 26.2.2
   target_build: ''
   method_id: brave_search_api
   source_type: adobe_community_bug_report
-  status: broken
+  status: blocked
   candidates_found: 0
   accepted_candidates: 0
   duplicate_existing_evidence: 0
@@ -77,9 +77,9 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: brave_search_fetch_failed:http_402_error x2
-  last_run: '2026-08-31T23:31:48Z'
-  notes: 'Brave Search API fallback discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. This method reads BRAVE_SEARCH_API_KEY from the workflow environment, uses it only as an API header, and never logs the token. Fetch failures: 2.'
+  blocked_reason: brave_search_api_report_fetch_failed:rate_limited x10; brave_search_api_report_fetch_failed:http_404_none
+  last_run: '2026-09-01T05:54:05Z'
+  notes: 'Brave Search API fallback discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. This method reads BRAVE_SEARCH_API_KEY from the workflow environment, uses it only as an API header, and never logs the token. Fetch failures: 11.'
 - product_id: adobe-premiere-pro
   update_version: 26.2.2
   target_build: ''
@@ -93,9 +93,9 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: wayback_brave_search_fetch_failed:http_402_error x2
-  last_run: '2026-08-31T23:31:48Z'
-  notes: 'Wayback snapshot recheck discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. This method verifies blocked Adobe Community report pages through public Wayback snapshots of the same specific report URL when enough archived text is available. Fetch failures: 2.'
+  blocked_reason: 'wayback_cdx_fetch_failed:url_error_timed out x6; wayback_cdx_fetch_failed:url_error__ssl.c:993: The handshake operation timed out x2; wayback_no_snapshot x3'
+  last_run: '2026-09-01T05:54:05Z'
+  notes: 'Wayback snapshot recheck discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. This method verifies blocked Adobe Community report pages through public Wayback snapshots of the same specific report URL when enough archived text is available. Fetch failures: 11.'
 - product_id: adobe-premiere-pro
   update_version: 26.2.2
   target_build: ''
@@ -110,14 +110,14 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: creativecow_forum_index_fetch_failed:browser_challenge
-  last_run: '2026-08-31T23:31:48Z'
+  last_run: '2026-09-01T05:54:05Z'
   notes: 'Creative COW Premiere Pro forum index discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. This non-Adobe source is used only for specific Creative COW Premiere Pro forum threads that explicitly match the same patch/version and concrete-issue gates. Fetch failures: 1.'
 - product_id: adobe-premiere-pro
   update_version: 26.2.2
   target_build: ''
   method_id: creativecow_brave_search
   source_type: creativecow_forum_report
-  status: broken
+  status: blocked
   candidates_found: 0
   accepted_candidates: 0
   duplicate_existing_evidence: 0
@@ -125,9 +125,9 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: creativecow_brave_search_fetch_failed:http_402_error x3
-  last_run: '2026-08-31T23:31:48Z'
-  notes: 'Creative COW Brave Search fallback discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. This non-Adobe source is used only for specific Creative COW Premiere Pro forum threads that explicitly match the same patch/version and concrete-issue gates. Fetch failures: 3.'
+  blocked_reason: creativecow_brave_search_thread_fetch_failed:browser_challenge
+  last_run: '2026-09-01T05:54:05Z'
+  notes: 'Creative COW Brave Search fallback discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. This non-Adobe source is used only for specific Creative COW Premiere Pro forum threads that explicitly match the same patch/version and concrete-issue gates. Fetch failures: 1.'
 - product_id: adobe-premiere-pro
   update_version: '26.2'
   target_build: ''
@@ -142,7 +142,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:http_403_blocked
-  last_run: '2026-08-31T23:30:16Z'
+  last_run: '2026-09-01T05:46:32Z'
   notes: 'Adobe Community search discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. Search requests are deliberately capped so rate limiting moves the collector to fallback methods instead of retrying the blocked endpoint repeatedly. Fetch failures: 1.'
 - product_id: adobe-premiere-pro
   update_version: '26.2'
@@ -158,7 +158,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_bug_tab_fetch_failed:rate_limited
-  last_run: '2026-08-31T23:30:16Z'
+  last_run: '2026-09-01T05:46:32Z'
   notes: 'Adobe Community Premiere bug-tab listing discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. Fetch failures: 1.'
 - product_id: adobe-premiere-pro
   update_version: '26.2'
@@ -174,14 +174,14 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_known_url_recheck_report_fetch_failed:rate_limited x2; adobe_community_known_url_recheck_report_fetch_failed:http_404_none
-  last_run: '2026-08-31T23:30:16Z'
+  last_run: '2026-09-01T05:46:32Z'
   notes: 'Known Adobe Community bug-report URL recheck discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. Fetch failures: 3.'
 - product_id: adobe-premiere-pro
   update_version: '26.2'
   target_build: ''
   method_id: brave_search_api
   source_type: adobe_community_bug_report
-  status: broken
+  status: blocked
   candidates_found: 0
   accepted_candidates: 0
   duplicate_existing_evidence: 0
@@ -189,15 +189,15 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: brave_search_fetch_failed:http_402_error x4
-  last_run: '2026-08-31T23:30:16Z'
-  notes: 'Brave Search API fallback discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. This method reads BRAVE_SEARCH_API_KEY from the workflow environment, uses it only as an API header, and never logs the token. Fetch failures: 4.'
+  blocked_reason: brave_search_api_report_fetch_failed:http_404_none x2; brave_search_api_report_fetch_failed:rate_limited x14
+  last_run: '2026-09-01T05:46:32Z'
+  notes: 'Brave Search API fallback discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. This method reads BRAVE_SEARCH_API_KEY from the workflow environment, uses it only as an API header, and never logs the token. Fetch failures: 16.'
 - product_id: adobe-premiere-pro
   update_version: '26.2'
   target_build: ''
   method_id: wayback_snapshot_recheck
   source_type: adobe_community_bug_report
-  status: broken
+  status: blocked
   candidates_found: 0
   accepted_candidates: 0
   duplicate_existing_evidence: 0
@@ -205,9 +205,9 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: wayback_cdx_fetch_failed:TimeoutError x2; wayback_cdx_fetch_failed:url_error_[Errno 111] Connection refused
-  last_run: '2026-08-31T23:30:16Z'
-  notes: 'Wayback snapshot recheck discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. This method verifies blocked Adobe Community report pages through public Wayback snapshots of the same specific report URL when enough archived text is available. Fetch failures: 3.'
+  blocked_reason: 'wayback_snapshot_fetch_failed:rate_limited x2; wayback_no_snapshot x5; wayback_snapshot_fetch_failed:url_error_timed out x2; wayback_cdx_fetch_failed:url_error_timed out x7; wayback_cdx_fetch_failed:url_error__ssl.c:993: The handshake operation timed out x2'
+  last_run: '2026-09-01T05:46:32Z'
+  notes: 'Wayback snapshot recheck discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. This method verifies blocked Adobe Community report pages through public Wayback snapshots of the same specific report URL when enough archived text is available. Fetch failures: 18.'
 - product_id: adobe-premiere-pro
   update_version: '26.2'
   target_build: ''
@@ -222,14 +222,14 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: creativecow_forum_index_fetch_failed:browser_challenge
-  last_run: '2026-08-31T23:30:16Z'
+  last_run: '2026-09-01T05:46:32Z'
   notes: 'Creative COW Premiere Pro forum index discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. This non-Adobe source is used only for specific Creative COW Premiere Pro forum threads that explicitly match the same patch/version and concrete-issue gates. Fetch failures: 1.'
 - product_id: adobe-premiere-pro
   update_version: '26.2'
   target_build: ''
   method_id: creativecow_brave_search
   source_type: creativecow_forum_report
-  status: broken
+  status: blocked
   candidates_found: 0
   accepted_candidates: 0
   duplicate_existing_evidence: 0
@@ -237,9 +237,9 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: creativecow_brave_search_fetch_failed:http_402_error x4
-  last_run: '2026-08-31T23:30:16Z'
-  notes: 'Creative COW Brave Search fallback discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. This non-Adobe source is used only for specific Creative COW Premiere Pro forum threads that explicitly match the same patch/version and concrete-issue gates. Fetch failures: 4.'
+  blocked_reason: creativecow_brave_search_thread_fetch_failed:browser_challenge x2
+  last_run: '2026-09-01T05:46:32Z'
+  notes: 'Creative COW Brave Search fallback discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. This non-Adobe source is used only for specific Creative COW Premiere Pro forum threads that explicitly match the same patch/version and concrete-issue gates. Fetch failures: 2.'
 - product_id: blackmagic-davinci
   update_version: 20.3.1
   target_build: ''
@@ -638,7 +638,7 @@ methods:
   accepted_reports: 2
   rejected_reports: 2
   blocked_reason: ''
-  last_run: '2026-08-31T23:57:56Z'
+  last_run: '2026-09-01T06:25:07Z'
   notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
 - product_id: obs-studio
   update_version: 32.1.2
@@ -646,15 +646,15 @@ methods:
   method_id: github_issues
   source_type: github_issue
   status: success
-  candidates_found: 21
-  accepted_candidates: 12
+  candidates_found: 20
+  accepted_candidates: 11
   duplicate_existing_evidence: 0
-  evidence_rows_added: 12
-  public_counted_reports: 12
-  accepted_reports: 12
+  evidence_rows_added: 11
+  public_counted_reports: 11
+  accepted_reports: 11
   rejected_reports: 9
   blocked_reason: ''
-  last_run: '2026-08-31T23:58:24Z'
+  last_run: '2026-09-01T06:25:36Z'
   notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
 - product_id: obs-studio
   update_version: 32.1.2
@@ -925,9 +925,9 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x18; reddit_feed_fetch_failed:http_429 x14; reddit_feed_fetch_failed:network_network x3; reddit_budget:max_requests
-  last_run: '2026-08-31T23:30:16Z'
-  notes: 'Reddit community search (r/premierepro, r/editors, r/Adobe) discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. Fetch failures: 36.'
+  blocked_reason: reddit_feed_fetch_failed:network_network x6; reddit_feed_fetch_failed:feed_parse_failed:ParseError x18; reddit_feed_fetch_failed:http_429 x10; reddit_budget:max_requests
+  last_run: '2026-09-01T05:46:32Z'
+  notes: 'Reddit community search (r/premierepro, r/editors, r/Adobe) discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. Fetch failures: 35.'
 - product_id: adobe-premiere-pro
   update_version: 26.2.2
   target_build: ''
@@ -941,9 +941,9 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x21; reddit_feed_fetch_failed:network_network x2; reddit_feed_fetch_failed:http_429 x17
-  last_run: '2026-08-31T23:31:48Z'
-  notes: 'Reddit community search (r/premierepro, r/editors, r/Adobe) discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. Fetch failures: 40.'
+  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x21; reddit_feed_fetch_failed:http_429 x20
+  last_run: '2026-09-01T05:54:05Z'
+  notes: 'Reddit community search (r/premierepro, r/editors, r/Adobe) discovers candidate URLs only; accepted rows still require exact product, version, date, URL, and issue gates. Fetch failures: 41.'
 - product_id: microsoft-windows-11
   update_version: 23H2
   target_build: ''
@@ -958,7 +958,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-31T23:52:40Z'
+  last_run: '2026-09-01T06:19:32Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5120240, 22631.7517. Exact KB/OS-build search attempted: True. Candidates 0, accepted 0, rejected 0. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 24H2
@@ -974,7 +974,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 12
   blocked_reason: ''
-  last_run: '2026-08-31T23:52:42Z'
+  last_run: '2026-09-01T06:19:34Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5120998, 26100.9278. Exact KB/OS-build search attempted: True. Candidates 12, accepted 0, rejected 12. Top rejections: generic_support_request=3, missing_kb_or_build=6, wrong_kb_for_current_patch=3. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 25H2
@@ -990,7 +990,7 @@ methods:
   accepted_reports: 2
   rejected_reports: 13
   blocked_reason: ''
-  last_run: '2026-08-31T23:52:44Z'
+  last_run: '2026-09-01T06:19:36Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5120998, 26200.9278. Exact KB/OS-build search attempted: True. Candidates 15, accepted 2, rejected 13. Top rejections: build_only_in_system_specs=1, generic_support_request=3, missing_kb_or_build=6, missing_update_attribution=1, wrong_kb_for_current_patch=2. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 26H1
@@ -1006,7 +1006,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 1
   blocked_reason: ''
-  last_run: '2026-08-31T23:52:58Z'
+  last_run: '2026-09-01T06:19:51Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5120996, 28000.2804. Exact KB/OS-build search attempted: True. Candidates 1, accepted 0, rejected 1. Top rejections: generic_support_request=1. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: obs-studio
   update_version: 32.1.1
@@ -1582,7 +1582,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-31T23:57:10Z'
+  last_run: '2026-09-01T06:24:19Z'
   notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
 - product_id: obs-studio
   update_version: 32.0.4
@@ -1598,7 +1598,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: no_obs_watchlist_configured
-  last_run: '2026-08-31T23:57:10Z'
+  last_run: '2026-09-01T06:24:19Z'
   notes: Reserved OBS secondary discovery slot. It does not discover candidates in Phase A.
 - product_id: obs-studio
   update_version: 32.1.0
@@ -1614,7 +1614,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-31T23:57:32Z'
+  last_run: '2026-09-01T06:24:42Z'
   notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
 - product_id: obs-studio
   update_version: 32.1.0
@@ -1998,7 +1998,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-31T23:56:26Z'
+  last_run: '2026-09-01T06:23:32Z'
   notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
 - product_id: obs-studio
   update_version: 32.0.3
@@ -2014,7 +2014,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-31T23:56:48Z'
+  last_run: '2026-09-01T06:23:55Z'
   notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
 - product_id: obs-studio
   update_version: 32.0.3
@@ -2030,7 +2030,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: no_obs_watchlist_configured
-  last_run: '2026-08-31T23:56:48Z'
+  last_run: '2026-09-01T06:23:55Z'
   notes: Reserved OBS secondary discovery slot. It does not discover candidates in Phase A.
 - product_id: adobe-acrobat-pro
   update_version: 23.003.20244
@@ -2398,7 +2398,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-31T23:55:43Z'
+  last_run: '2026-09-01T06:22:46Z'
   notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
 - product_id: obs-studio
   update_version: 32.0.0
@@ -2414,7 +2414,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: no_obs_watchlist_configured
-  last_run: '2026-08-31T23:55:43Z'
+  last_run: '2026-09-01T06:22:46Z'
   notes: Reserved OBS secondary discovery slot. It does not discover candidates in Phase A.
 - product_id: obs-studio
   update_version: 32.0.1
@@ -2430,7 +2430,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-31T23:56:05Z'
+  last_run: '2026-09-01T06:23:09Z'
   notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
 - product_id: obs-studio
   update_version: 32.0.1
@@ -2446,7 +2446,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: no_obs_watchlist_configured
-  last_run: '2026-08-31T23:56:05Z'
+  last_run: '2026-09-01T06:23:09Z'
   notes: Reserved OBS secondary discovery slot. It does not discover candidates in Phase A.
 - product_id: adobe-acrobat-pro
   update_version: 21.005.20058
@@ -2814,7 +2814,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 1
   blocked_reason: ''
-  last_run: '2026-08-31T23:55:21Z'
+  last_run: '2026-09-01T06:22:22Z'
   notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
 - product_id: obs-studio
   update_version: 31.1.2
@@ -2838,15 +2838,15 @@ methods:
   method_id: github_issues
   source_type: github_issue
   status: success
-  candidates_found: 13
+  candidates_found: 12
   accepted_candidates: 8
   duplicate_existing_evidence: 0
   evidence_rows_added: 8
   public_counted_reports: 8
   accepted_reports: 8
-  rejected_reports: 5
+  rejected_reports: 4
   blocked_reason: ''
-  last_run: '2026-08-31T23:58:49Z'
+  last_run: '2026-09-01T06:26:03Z'
   notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
 - product_id: obs-studio
   update_version: 32.2.0
@@ -3230,7 +3230,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-31T23:54:36Z'
+  last_run: '2026-09-01T06:21:35Z'
   notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
 - product_id: obs-studio
   update_version: 31.1.0
@@ -3246,7 +3246,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: no_obs_watchlist_configured
-  last_run: '2026-08-31T23:54:36Z'
+  last_run: '2026-09-01T06:21:35Z'
   notes: Reserved OBS secondary discovery slot. It does not discover candidates in Phase A.
 - product_id: obs-studio
   update_version: 31.1.1
@@ -3262,7 +3262,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-31T23:54:58Z'
+  last_run: '2026-09-01T06:21:58Z'
   notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
 - product_id: obs-studio
   update_version: 31.1.1
@@ -3278,7 +3278,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: no_obs_watchlist_configured
-  last_run: '2026-08-31T23:54:58Z'
+  last_run: '2026-09-01T06:21:58Z'
   notes: Reserved OBS secondary discovery slot. It does not discover candidates in Phase A.
 - product_id: adobe-acrobat-pro
   update_version: 20.013.20074
@@ -3646,7 +3646,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-31T23:53:52Z'
+  last_run: '2026-09-01T06:20:49Z'
   notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
 - product_id: obs-studio
   update_version: 31.0.3
@@ -3662,7 +3662,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: no_obs_watchlist_configured
-  last_run: '2026-08-31T23:53:52Z'
+  last_run: '2026-09-01T06:20:49Z'
   notes: Reserved OBS secondary discovery slot. It does not discover candidates in Phase A.
 - product_id: obs-studio
   update_version: 31.0.4
@@ -3678,7 +3678,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-08-31T23:54:15Z'
+  last_run: '2026-09-01T06:21:12Z'
   notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
 - product_id: adobe-acrobat-pro
   update_version: 20.009.20067
@@ -9614,7 +9614,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 7
   blocked_reason: ''
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.008.20082
@@ -9630,7 +9630,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.008.20082
@@ -9645,8 +9645,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x7
-  last_run: '2026-08-31T22:48:51Z'
+  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x8
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.009.20069
@@ -9662,7 +9662,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 10
   blocked_reason: ''
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.009.20069
@@ -9678,7 +9678,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.009.20069
@@ -9694,7 +9694,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x8
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.009.20071
@@ -9710,7 +9710,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 2
   blocked_reason: ''
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.009.20071
@@ -9726,7 +9726,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.009.20071
@@ -9742,7 +9742,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: reddit_feed_fetch_failed:http_429 x9; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.009.20077
@@ -9758,7 +9758,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 6
   blocked_reason: ''
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.009.20077
@@ -9774,7 +9774,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.009.20077
@@ -9789,8 +9789,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:http_429 x9; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9
-  last_run: '2026-08-31T22:48:51Z'
+  blocked_reason: reddit_feed_fetch_failed:http_429 x8; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.009.20079
@@ -9806,7 +9806,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 9
   blocked_reason: ''
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.009.20079
@@ -9822,7 +9822,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.009.20079
@@ -9838,7 +9838,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: reddit_feed_fetch_failed:http_429 x9; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.010.20056
@@ -9854,7 +9854,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 12
   blocked_reason: ''
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.010.20056
@@ -9870,7 +9870,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.010.20056
@@ -9886,7 +9886,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: reddit_feed_fetch_failed:http_429 x7; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network x2
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.010.20059
@@ -9902,7 +9902,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 4
   blocked_reason: ''
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.010.20059
@@ -9918,7 +9918,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.010.20059
@@ -9933,8 +9933,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x3; reddit_feed_fetch_failed:network_network x5
-  last_run: '2026-08-31T22:48:51Z'
+  blocked_reason: reddit_feed_fetch_failed:network_network x5; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x3
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.010.20060
@@ -9950,7 +9950,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 12
   blocked_reason: ''
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.010.20060
@@ -9966,7 +9966,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.010.20060
@@ -9981,8 +9981,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:network_network x3; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x5
-  last_run: '2026-08-31T22:48:51Z'
+  blocked_reason: reddit_feed_fetch_failed:http_429 x7; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network x2
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.016.20039
@@ -9998,7 +9998,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 14
   blocked_reason: ''
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.016.20039
@@ -10014,7 +10014,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.016.20039
@@ -10029,8 +10029,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:network_network x5; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x3
-  last_run: '2026-08-31T22:48:51Z'
+  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x8
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.016.20041
@@ -10046,7 +10046,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 8
   blocked_reason: ''
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.016.20041
@@ -10062,7 +10062,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.016.20041
@@ -10077,8 +10077,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x6; reddit_feed_fetch_failed:network_network x2
-  last_run: '2026-08-31T22:48:51Z'
+  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x5; reddit_feed_fetch_failed:network_network x3
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.016.20045
@@ -10094,7 +10094,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 7
   blocked_reason: ''
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.016.20045
@@ -10110,7 +10110,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.016.20045
@@ -10125,8 +10125,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:http_429 x7; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network x2
-  last_run: '2026-08-31T22:48:51Z'
+  blocked_reason: reddit_feed_fetch_failed:http_429 x8; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.017.20050
@@ -10142,7 +10142,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 12
   blocked_reason: ''
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.017.20050
@@ -10158,7 +10158,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.017.20050
@@ -10173,8 +10173,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x4; reddit_feed_fetch_failed:network_network x3
-  last_run: '2026-08-31T22:48:51Z'
+  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x5; reddit_feed_fetch_failed:network_network x3
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.017.20053
@@ -10190,7 +10190,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 11
   blocked_reason: ''
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.017.20053
@@ -10206,7 +10206,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.017.20053
@@ -10221,8 +10221,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:http_429 x8; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network
-  last_run: '2026-08-31T22:48:51Z'
+  blocked_reason: reddit_feed_fetch_failed:http_429 x7; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network x2
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.020.20039
@@ -10238,7 +10238,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 12
   blocked_reason: ''
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.020.20039
@@ -10254,7 +10254,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.020.20039
@@ -10269,8 +10269,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network x6; reddit_feed_fetch_failed:http_429 x2
-  last_run: '2026-08-31T22:48:51Z'
+  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x8
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.020.20042
@@ -10286,7 +10286,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 17
   blocked_reason: ''
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.020.20042
@@ -10302,7 +10302,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.020.20042
@@ -10317,8 +10317,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:http_429 x9; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9
-  last_run: '2026-08-31T22:48:51Z'
+  blocked_reason: reddit_feed_fetch_failed:http_429 x6; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network x2
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.023.20053
@@ -10334,7 +10334,7 @@ methods:
   accepted_reports: 2
   rejected_reports: 10
   blocked_reason: ''
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.023.20053
@@ -10350,7 +10350,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.023.20053
@@ -10365,8 +10365,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:http_429 x8; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network
-  last_run: '2026-08-31T22:48:51Z'
+  blocked_reason: reddit_feed_fetch_failed:http_429 x7; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network x2
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.023.20056
@@ -10382,7 +10382,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 9
   blocked_reason: ''
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.023.20056
@@ -10398,7 +10398,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.023.20056
@@ -10413,8 +10413,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network x4; reddit_feed_fetch_failed:http_429 x4
-  last_run: '2026-08-31T22:48:51Z'
+  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x5; reddit_feed_fetch_failed:network_network x3
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.023.20070
@@ -10430,7 +10430,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 16
   blocked_reason: ''
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.023.20070
@@ -10446,7 +10446,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 15.023.20070
@@ -10461,8 +10461,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:network_network x4; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x5
-  last_run: '2026-08-31T22:48:51Z'
+  blocked_reason: reddit_feed_fetch_failed:http_429 x4; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network x4
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 17.009.20044
@@ -10478,7 +10478,7 @@ methods:
   accepted_reports: 3
   rejected_reports: 16
   blocked_reason: ''
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 17.009.20044
@@ -10494,7 +10494,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 17.009.20044
@@ -10509,8 +10509,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:network_network x4; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x4
-  last_run: '2026-08-31T22:48:51Z'
+  blocked_reason: reddit_feed_fetch_failed:http_429 x6; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network x3
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 17.009.20058
@@ -10526,7 +10526,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 12
   blocked_reason: ''
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 17.009.20058
@@ -10542,7 +10542,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 17.009.20058
@@ -10557,8 +10557,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network x4; reddit_feed_fetch_failed:http_429 x4
-  last_run: '2026-08-31T22:48:51Z'
+  blocked_reason: reddit_feed_fetch_failed:network_network x4; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x4
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 17.012.20093
@@ -10574,7 +10574,7 @@ methods:
   accepted_reports: 2
   rejected_reports: 6
   blocked_reason: ''
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 17.012.20093
@@ -10590,7 +10590,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 17.012.20093
@@ -10605,8 +10605,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:network_network x5; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x3
-  last_run: '2026-08-31T22:48:51Z'
+  blocked_reason: reddit_feed_fetch_failed:network_network x2; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x6
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 17.012.20095
@@ -10622,7 +10622,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 12
   blocked_reason: ''
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 17.012.20095
@@ -10638,7 +10638,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 17.012.20095
@@ -10653,8 +10653,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:network_network x4; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x3
-  last_run: '2026-08-31T22:48:51Z'
+  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network x2; reddit_feed_fetch_failed:http_429 x5
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 17.012.20098
@@ -10670,7 +10670,7 @@ methods:
   accepted_reports: 2
   rejected_reports: 11
   blocked_reason: ''
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 17.012.20098
@@ -10686,7 +10686,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 17.012.20098
@@ -10701,8 +10701,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:http_429 x7; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network x2
-  last_run: '2026-08-31T22:48:51Z'
+  blocked_reason: reddit_feed_fetch_failed:http_429 x5; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network x4
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 18.009.20044
@@ -10718,7 +10718,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 12
   blocked_reason: ''
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 18.009.20044
@@ -10734,7 +10734,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 18.009.20044
@@ -10749,8 +10749,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x7; reddit_feed_fetch_failed:network_network
-  last_run: '2026-08-31T22:48:51Z'
+  blocked_reason: reddit_feed_fetch_failed:network_network x4; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x4
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 18.009.20050
@@ -10766,7 +10766,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 14
   blocked_reason: ''
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 18.009.20050
@@ -10782,7 +10782,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 18.009.20050
@@ -10797,8 +10797,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x8
-  last_run: '2026-08-31T22:48:51Z'
+  blocked_reason: reddit_feed_fetch_failed:network_network x5; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x3
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 18.011.20038
@@ -10814,7 +10814,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 11
   blocked_reason: ''
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 18.011.20038
@@ -10830,7 +10830,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 18.011.20038
@@ -10845,8 +10845,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:http_429 x8; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network
-  last_run: '2026-08-31T22:48:51Z'
+  blocked_reason: reddit_feed_fetch_failed:http_429 x6; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network x3
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 18.011.20040
@@ -10862,7 +10862,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 15
   blocked_reason: ''
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 18.011.20040
@@ -10878,7 +10878,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 18.011.20040
@@ -10894,7 +10894,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: reddit_feed_fetch_failed:network_network x2; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x6
-  last_run: '2026-08-31T22:48:51Z'
+  last_run: '2026-09-01T05:04:42Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 18.011.20055
@@ -12174,7 +12174,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: no_obs_watchlist_configured
-  last_run: '2026-08-31T23:54:15Z'
+  last_run: '2026-09-01T06:21:12Z'
   notes: Reserved OBS secondary discovery slot. It does not discover candidates in Phase A.
 - product_id: obs-studio
   update_version: 32.0.2
@@ -12190,7 +12190,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: no_obs_watchlist_configured
-  last_run: '2026-08-31T23:56:26Z'
+  last_run: '2026-09-01T06:23:32Z'
   notes: Reserved OBS secondary discovery slot. It does not discover candidates in Phase A.
 - product_id: obs-studio
   update_version: 32.2.1
@@ -12206,7 +12206,7 @@ methods:
   accepted_reports: 24
   rejected_reports: 17
   blocked_reason: ''
-  last_run: '2026-08-31T23:59:21Z'
+  last_run: '2026-09-01T06:26:39Z'
   notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
 - product_id: adobe-acrobat-reader
   update_version: 15.008.20082
@@ -12222,7 +12222,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 11
   blocked_reason: ''
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.008.20082
@@ -12238,7 +12238,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.008.20082
@@ -12253,8 +12253,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:network_network x4; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x4
-  last_run: '2026-08-31T23:09:15Z'
+  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network x5; reddit_feed_fetch_failed:http_429 x3
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.009.20069
@@ -12270,7 +12270,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 9
   blocked_reason: ''
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.009.20069
@@ -12286,7 +12286,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.009.20069
@@ -12302,7 +12302,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x8
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.009.20071
@@ -12318,7 +12318,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 2
   blocked_reason: ''
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.009.20071
@@ -12334,7 +12334,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.009.20071
@@ -12350,7 +12350,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: reddit_feed_fetch_failed:http_429 x9; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.009.20077
@@ -12366,7 +12366,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 6
   blocked_reason: ''
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.009.20077
@@ -12382,7 +12382,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.009.20077
@@ -12397,8 +12397,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:http_429 x7; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network x2
-  last_run: '2026-08-31T23:09:15Z'
+  blocked_reason: reddit_feed_fetch_failed:http_429 x9; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.009.20079
@@ -12414,7 +12414,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 2
   blocked_reason: ''
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.009.20079
@@ -12430,7 +12430,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.009.20079
@@ -12445,8 +12445,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:http_429 x7; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network x2
-  last_run: '2026-08-31T23:09:15Z'
+  blocked_reason: reddit_feed_fetch_failed:http_429 x9; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.010.20056
@@ -12462,7 +12462,7 @@ methods:
   accepted_reports: 2
   rejected_reports: 12
   blocked_reason: ''
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.010.20056
@@ -12478,7 +12478,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.010.20056
@@ -12493,8 +12493,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:http_429 x5; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network x4
-  last_run: '2026-08-31T23:09:15Z'
+  blocked_reason: reddit_feed_fetch_failed:http_429 x6; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network x3
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.010.20059
@@ -12510,7 +12510,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 11
   blocked_reason: ''
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.010.20059
@@ -12526,7 +12526,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.010.20059
@@ -12541,8 +12541,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x6; reddit_feed_fetch_failed:network_network x2
-  last_run: '2026-08-31T23:09:15Z'
+  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network x2; reddit_feed_fetch_failed:http_429 x6
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.010.20060
@@ -12558,7 +12558,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 14
   blocked_reason: ''
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.010.20060
@@ -12574,7 +12574,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.010.20060
@@ -12589,8 +12589,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:network_network x5; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x4
-  last_run: '2026-08-31T23:09:15Z'
+  blocked_reason: reddit_feed_fetch_failed:http_429 x8; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.016.20039
@@ -12606,7 +12606,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 13
   blocked_reason: ''
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.016.20039
@@ -12622,7 +12622,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.016.20039
@@ -12637,8 +12637,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:network_network x4; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x4
-  last_run: '2026-08-31T23:09:15Z'
+  blocked_reason: reddit_feed_fetch_failed:network_network x6; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x3
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.016.20041
@@ -12654,7 +12654,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 6
   blocked_reason: ''
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.016.20041
@@ -12670,7 +12670,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.016.20041
@@ -12685,8 +12685,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:network_network x2; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x6
-  last_run: '2026-08-31T23:09:15Z'
+  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x5; reddit_feed_fetch_failed:network_network x3
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.016.20045
@@ -12702,7 +12702,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 7
   blocked_reason: ''
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.016.20045
@@ -12718,7 +12718,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.016.20045
@@ -12733,8 +12733,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x7; reddit_feed_fetch_failed:network_network
-  last_run: '2026-08-31T23:09:15Z'
+  blocked_reason: reddit_feed_fetch_failed:network_network x4; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x3
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.017.20050
@@ -12750,7 +12750,7 @@ methods:
   accepted_reports: 2
   rejected_reports: 14
   blocked_reason: ''
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.017.20050
@@ -12766,7 +12766,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.017.20050
@@ -12781,8 +12781,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network x3; reddit_feed_fetch_failed:http_429 x5
-  last_run: '2026-08-31T23:09:15Z'
+  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x6; reddit_feed_fetch_failed:network_network x2
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.017.20053
@@ -12798,7 +12798,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 10
   blocked_reason: ''
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.017.20053
@@ -12814,7 +12814,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.017.20053
@@ -12829,8 +12829,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network x3; reddit_feed_fetch_failed:http_429 x4
-  last_run: '2026-08-31T23:09:15Z'
+  blocked_reason: reddit_feed_fetch_failed:network_network x3; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x5
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.020.20039
@@ -12846,7 +12846,7 @@ methods:
   accepted_reports: 5
   rejected_reports: 9
   blocked_reason: ''
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.020.20039
@@ -12862,7 +12862,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.020.20039
@@ -12877,8 +12877,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:http_429 x5; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network x4
-  last_run: '2026-08-31T23:09:15Z'
+  blocked_reason: reddit_feed_fetch_failed:http_429 x7; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network x2
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.020.20042
@@ -12894,7 +12894,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 14
   blocked_reason: ''
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.020.20042
@@ -12910,7 +12910,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.020.20042
@@ -12925,8 +12925,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x3; reddit_feed_fetch_failed:network_network x4
-  last_run: '2026-08-31T23:09:15Z'
+  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network x2; reddit_feed_fetch_failed:http_429 x5
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.023.20053
@@ -12942,7 +12942,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 15
   blocked_reason: ''
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.023.20053
@@ -12958,7 +12958,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.023.20053
@@ -12973,8 +12973,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x7; reddit_feed_fetch_failed:network_network
-  last_run: '2026-08-31T23:09:15Z'
+  blocked_reason: reddit_feed_fetch_failed:network_network x6; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x2
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.023.20056
@@ -12990,7 +12990,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 11
   blocked_reason: ''
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.023.20056
@@ -13006,7 +13006,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.023.20056
@@ -13021,8 +13021,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:network_network x3; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x5
-  last_run: '2026-08-31T23:09:15Z'
+  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x6; reddit_feed_fetch_failed:network_network x2
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.023.20070
@@ -13038,7 +13038,7 @@ methods:
   accepted_reports: 3
   rejected_reports: 12
   blocked_reason: ''
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.023.20070
@@ -13054,7 +13054,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 15.023.20070
@@ -13069,8 +13069,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:network_network x4; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x4
-  last_run: '2026-08-31T23:09:15Z'
+  blocked_reason: reddit_feed_fetch_failed:network_network x2; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x5
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 17.009.20044
@@ -13086,7 +13086,7 @@ methods:
   accepted_reports: 3
   rejected_reports: 13
   blocked_reason: ''
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 17.009.20044
@@ -13102,7 +13102,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: adobe_community_search_fetch_failed:blocked
-  last_run: '2026-08-31T23:09:15Z'
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 17.009.20044
@@ -13117,8 +13117,8 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:network_network x4; reddit_feed_fetch_failed:http_429 x4
-  last_run: '2026-08-31T23:09:15Z'
+  blocked_reason: reddit_feed_fetch_failed:network_network x3; reddit_feed_fetch_failed:feed_parse_failed:ParseError x9; reddit_feed_fetch_failed:http_429 x5
+  last_run: '2026-09-01T05:25:21Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 17.009.20058
@@ -16142,7 +16142,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 1
   blocked_reason: probe_fetch_failed:http_202_aws_waf_challenge x6
-  last_run: '2026-08-31T14:34:59Z'
+  last_run: '2026-09-01T06:16:17Z'
   notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 6. Rejected candidates: missing_exact_patch_version_match=1.'
 - product_id: blackmagic-davinci
   update_version: 12.0.1
@@ -16157,25 +16157,25 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]; reddit_search_feed_fetch_failed:http_429_Too Many Requests x24; reddit_listing_feed_fetch_failed:http_429_Too Many Requests x4
-  last_run: '2026-08-31T14:34:59Z'
+  blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]; reddit_search_feed_fetch_failed:http_429_Too Many Requests x10; reddit_search_feed_fetch_failed:feed_parse_failed:ParseError x10; reddit_search_feed_fetch_failed:network_TimeoutError x2; reddit_search_feed_fetch_failed:RequestDeadlineExceeded x2; reddit_listing_feed_fetch_failed:http_429_Too Many Requests; reddit_listing_feed_fetch_failed:RequestDeadlineExceeded x2; reddit_listing_feed_fetch_failed:network_TimeoutError
+  last_run: '2026-09-01T06:16:17Z'
   notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 32.'
 - product_id: blackmagic-davinci
   update_version: 12.0.1
   target_build: ''
   method_id: creative_cow_forum_search
   source_type: creator_forum_report
-  status: success
-  candidates_found: 2
+  status: broken
+  candidates_found: 0
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 2
-  blocked_reason: ''
-  last_run: '2026-08-31T14:34:59Z'
-  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=2.'
+  rejected_reports: 0
+  blocked_reason: creative_cow_listing_fetch_failed:RequestDeadlineExceeded x5
+  last_run: '2026-09-01T06:16:17Z'
+  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Fetch failures: 5.'
 - product_id: blackmagic-davinci
   update_version: 12.0.1
   target_build: ''
@@ -16189,9 +16189,9 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
-  last_run: '2026-08-31T14:34:59Z'
-  notes: Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
+  blocked_reason: vendor_forum_search_blocked_or_failed:RequestDeadlineExceeded x24
+  last_run: '2026-09-01T06:16:17Z'
+  notes: Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. vendor_forum_search_blocked_or_failed:RequestDeadlineExceeded x24
 - product_id: blackmagic-davinci
   update_version: 12.0.1
   target_build: ''
@@ -16206,7 +16206,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: web_search_adapter_disabled_in_phase_a
-  last_run: '2026-08-31T14:34:59Z'
+  last_run: '2026-09-01T06:16:17Z'
   notes: 'Reserved fallback discovery method; no adapter is configured in Phase A. Fetch failures: 1.'
 - product_id: blackmagic-davinci
   update_version: '12.1'
@@ -16302,410 +16302,10 @@ methods:
   accepted_reports: 0
   rejected_reports: 1
   blocked_reason: probe_fetch_failed:http_202_aws_waf_challenge x6
-  last_run: '2026-08-31T23:49:41Z'
+  last_run: '2026-09-01T06:12:31Z'
   notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 6. Rejected candidates: missing_exact_patch_version_match=1.'
 - product_id: blackmagic-davinci
   update_version: 11.3.1
-  target_build: ''
-  method_id: reddit_search
-  source_type: reddit_community_report
-  status: blocked
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]; reddit_search_feed_fetch_failed:http_429_Too Many Requests x11; reddit_search_feed_fetch_failed:feed_parse_failed:ParseError x12; reddit_listing_feed_fetch_failed:http_429_Too Many Requests x2; reddit_listing_feed_fetch_failed:feed_parse_failed:ParseError x2
-  last_run: '2026-08-31T23:49:41Z'
-  notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 31.'
-- product_id: blackmagic-davinci
-  update_version: 11.3.1
-  target_build: ''
-  method_id: creative_cow_forum_search
-  source_type: creator_forum_report
-  status: success
-  candidates_found: 2
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 2
-  blocked_reason: ''
-  last_run: '2026-08-31T23:49:41Z'
-  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=2.'
-- product_id: blackmagic-davinci
-  update_version: 11.3.1
-  target_build: ''
-  method_id: vendor_forum_search
-  source_type: blackmagic_forum
-  status: blocked
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
-  last_run: '2026-08-31T23:49:41Z'
-  notes: Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
-- product_id: blackmagic-davinci
-  update_version: 11.3.1
-  target_build: ''
-  method_id: web_search
-  source_type: web_search
-  status: disabled
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: web_search_adapter_disabled_in_phase_a
-  last_run: '2026-08-31T23:49:41Z'
-  notes: 'Reserved fallback discovery method; no adapter is configured in Phase A. Fetch failures: 1.'
-- product_id: blackmagic-davinci
-  update_version: '12.0'
-  target_build: ''
-  method_id: known_watchlist
-  source_type: curated_watchlist
-  status: blocked
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: probe_fetch_failed:http_202_aws_waf_challenge x6; reddit_post_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_post_www_atom=http_429_Too Many Requests:rate_limited;reddit_post_old_atom=feed_parse_failed:ParseError:ParseError;reddit_post_www_rss_suffix=http_429_Too Many Requests:rate_limited;reddit_post_old_rss_suffix=feed_parse_failed:ParseError:ParseError]
-  last_run: '2026-08-31T23:51:24Z'
-  notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 7.'
-- product_id: blackmagic-davinci
-  update_version: '12.0'
-  target_build: ''
-  method_id: reddit_search
-  source_type: reddit_community_report
-  status: blocked
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=budget_expired:budget_expired;reddit_search_old_json=budget_expired:budget_expired;reddit_search_global_json=budget_expired:budget_expired] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=budget_expired:budget_expired;reddit_listing_old_json=budget_expired:budget_expired]; reddit_search_feed_fetch_failed:network_TimeoutError x6; reddit_search_feed_fetch_failed:RequestDeadlineExceeded x12; reddit_search_feed_fetch_failed:http_429_Too Many Requests x6; reddit_listing_feed_fetch_failed:http_429_Too Many Requests; reddit_listing_feed_fetch_failed:RequestDeadlineExceeded x2; reddit_listing_feed_fetch_failed:network_TimeoutError
-  last_run: '2026-08-31T23:51:24Z'
-  notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 32.'
-- product_id: blackmagic-davinci
-  update_version: '12.0'
-  target_build: ''
-  method_id: creative_cow_forum_search
-  source_type: creator_forum_report
-  status: broken
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: creative_cow_listing_fetch_failed:RequestDeadlineExceeded x5
-  last_run: '2026-08-31T23:51:24Z'
-  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Fetch failures: 5.'
-- product_id: blackmagic-davinci
-  update_version: '12.0'
-  target_build: ''
-  method_id: vendor_forum_search
-  source_type: blackmagic_forum
-  status: blocked
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: vendor_forum_search_blocked_or_failed:RequestDeadlineExceeded x24
-  last_run: '2026-08-31T23:51:24Z'
-  notes: Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. vendor_forum_search_blocked_or_failed:RequestDeadlineExceeded x24
-- product_id: blackmagic-davinci
-  update_version: '12.0'
-  target_build: ''
-  method_id: web_search
-  source_type: web_search
-  status: disabled
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: web_search_adapter_disabled_in_phase_a
-  last_run: '2026-08-31T23:51:24Z'
-  notes: 'Reserved fallback discovery method; no adapter is configured in Phase A. Fetch failures: 1.'
-- product_id: blackmagic-davinci
-  update_version: 11.2.1
-  target_build: ''
-  method_id: known_watchlist
-  source_type: curated_watchlist
-  status: partial
-  candidates_found: 1
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 1
-  blocked_reason: probe_fetch_failed:http_202_aws_waf_challenge x6
-  last_run: '2026-08-31T23:44:25Z'
-  notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 6. Rejected candidates: missing_exact_patch_version_match=1.'
-- product_id: blackmagic-davinci
-  update_version: 11.2.1
-  target_build: ''
-  method_id: reddit_search
-  source_type: reddit_community_report
-  status: blocked
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]; reddit_search_feed_fetch_failed:http_429_Too Many Requests x11; reddit_search_feed_fetch_failed:feed_parse_failed:ParseError x12; reddit_listing_feed_fetch_failed:http_429_Too Many Requests x2; reddit_listing_feed_fetch_failed:feed_parse_failed:ParseError x2
-  last_run: '2026-08-31T23:44:25Z'
-  notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 31.'
-- product_id: blackmagic-davinci
-  update_version: 11.2.1
-  target_build: ''
-  method_id: creative_cow_forum_search
-  source_type: creator_forum_report
-  status: success
-  candidates_found: 2
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 2
-  blocked_reason: ''
-  last_run: '2026-08-31T23:44:25Z'
-  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=2.'
-- product_id: blackmagic-davinci
-  update_version: 11.2.1
-  target_build: ''
-  method_id: vendor_forum_search
-  source_type: blackmagic_forum
-  status: blocked
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
-  last_run: '2026-08-31T23:44:25Z'
-  notes: Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
-- product_id: blackmagic-davinci
-  update_version: 11.2.1
-  target_build: ''
-  method_id: web_search
-  source_type: web_search
-  status: disabled
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: web_search_adapter_disabled_in_phase_a
-  last_run: '2026-08-31T23:44:25Z'
-  notes: 'Reserved fallback discovery method; no adapter is configured in Phase A. Fetch failures: 1.'
-- product_id: blackmagic-davinci
-  update_version: '11.3'
-  target_build: ''
-  method_id: known_watchlist
-  source_type: curated_watchlist
-  status: blocked
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: probe_fetch_failed:http_202_aws_waf_challenge x6; reddit_post_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_post_www_atom=http_429_Too Many Requests:rate_limited;reddit_post_old_atom=feed_parse_failed:ParseError:ParseError;reddit_post_www_rss_suffix=http_429_Too Many Requests:rate_limited;reddit_post_old_rss_suffix=feed_parse_failed:ParseError:ParseError]
-  last_run: '2026-08-31T23:45:48Z'
-  notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 7.'
-- product_id: blackmagic-davinci
-  update_version: '11.3'
-  target_build: ''
-  method_id: reddit_search
-  source_type: reddit_community_report
-  status: blocked
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]; reddit_search_feed_fetch_failed:feed_parse_failed:ParseError x12; reddit_search_feed_fetch_failed:http_429_Too Many Requests x9; reddit_listing_feed_fetch_failed:http_429_Too Many Requests x2; reddit_listing_feed_fetch_failed:feed_parse_failed:ParseError x2
-  last_run: '2026-08-31T23:45:48Z'
-  notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 29.'
-- product_id: blackmagic-davinci
-  update_version: '11.3'
-  target_build: ''
-  method_id: creative_cow_forum_search
-  source_type: creator_forum_report
-  status: success
-  candidates_found: 2
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 2
-  blocked_reason: ''
-  last_run: '2026-08-31T23:45:48Z'
-  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=2.'
-- product_id: blackmagic-davinci
-  update_version: '11.3'
-  target_build: ''
-  method_id: vendor_forum_search
-  source_type: blackmagic_forum
-  status: blocked
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
-  last_run: '2026-08-31T23:45:48Z'
-  notes: Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
-- product_id: blackmagic-davinci
-  update_version: '11.3'
-  target_build: ''
-  method_id: web_search
-  source_type: web_search
-  status: disabled
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: web_search_adapter_disabled_in_phase_a
-  last_run: '2026-08-31T23:45:48Z'
-  notes: 'Reserved fallback discovery method; no adapter is configured in Phase A. Fetch failures: 1.'
-- product_id: blackmagic-davinci
-  update_version: 11.1.3
-  target_build: ''
-  method_id: known_watchlist
-  source_type: curated_watchlist
-  status: partial
-  candidates_found: 1
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 1
-  blocked_reason: probe_fetch_failed:http_202_aws_waf_challenge x6
-  last_run: '2026-08-31T23:40:08Z'
-  notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 6. Rejected candidates: missing_exact_patch_version_match=1.'
-- product_id: blackmagic-davinci
-  update_version: 11.1.3
-  target_build: ''
-  method_id: reddit_search
-  source_type: reddit_community_report
-  status: blocked
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]; reddit_search_feed_fetch_failed:http_429_Too Many Requests x11; reddit_search_feed_fetch_failed:feed_parse_failed:ParseError x12; reddit_listing_feed_fetch_failed:http_429_Too Many Requests x2; reddit_listing_feed_fetch_failed:feed_parse_failed:ParseError x2
-  last_run: '2026-08-31T23:40:08Z'
-  notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 31.'
-- product_id: blackmagic-davinci
-  update_version: 11.1.3
-  target_build: ''
-  method_id: creative_cow_forum_search
-  source_type: creator_forum_report
-  status: success
-  candidates_found: 2
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 2
-  blocked_reason: ''
-  last_run: '2026-08-31T23:40:08Z'
-  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=2.'
-- product_id: blackmagic-davinci
-  update_version: 11.1.3
-  target_build: ''
-  method_id: vendor_forum_search
-  source_type: blackmagic_forum
-  status: blocked
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
-  last_run: '2026-08-31T23:40:08Z'
-  notes: Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
-- product_id: blackmagic-davinci
-  update_version: 11.1.3
-  target_build: ''
-  method_id: web_search
-  source_type: web_search
-  status: disabled
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: web_search_adapter_disabled_in_phase_a
-  last_run: '2026-08-31T23:40:08Z'
-  notes: 'Reserved fallback discovery method; no adapter is configured in Phase A. Fetch failures: 1.'
-- product_id: blackmagic-davinci
-  update_version: '11.2'
-  target_build: ''
-  method_id: known_watchlist
-  source_type: curated_watchlist
-  status: partial
-  candidates_found: 1
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 1
-  blocked_reason: probe_fetch_failed:http_202_aws_waf_challenge x6
-  last_run: '2026-08-31T23:43:03Z'
-  notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 6. Rejected candidates: missing_exact_patch_version_match=1.'
-- product_id: blackmagic-davinci
-  update_version: '11.2'
   target_build: ''
   method_id: reddit_search
   source_type: reddit_community_report
@@ -16718,10 +16318,10 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]; reddit_search_feed_fetch_failed:http_429_Too Many Requests x12; reddit_search_feed_fetch_failed:feed_parse_failed:ParseError x12; reddit_listing_feed_fetch_failed:http_429_Too Many Requests x2; reddit_listing_feed_fetch_failed:feed_parse_failed:ParseError x2
-  last_run: '2026-08-31T23:43:03Z'
+  last_run: '2026-09-01T06:12:31Z'
   notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 32.'
 - product_id: blackmagic-davinci
-  update_version: '11.2'
+  update_version: 11.3.1
   target_build: ''
   method_id: creative_cow_forum_search
   source_type: creator_forum_report
@@ -16734,10 +16334,10 @@ methods:
   accepted_reports: 0
   rejected_reports: 2
   blocked_reason: ''
-  last_run: '2026-08-31T23:43:03Z'
+  last_run: '2026-09-01T06:12:31Z'
   notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=2.'
 - product_id: blackmagic-davinci
-  update_version: '11.2'
+  update_version: 11.3.1
   target_build: ''
   method_id: vendor_forum_search
   source_type: blackmagic_forum
@@ -16750,10 +16350,10 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
-  last_run: '2026-08-31T23:43:03Z'
+  last_run: '2026-09-01T06:12:31Z'
   notes: Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
 - product_id: blackmagic-davinci
-  update_version: '11.2'
+  update_version: 11.3.1
   target_build: ''
   method_id: web_search
   source_type: web_search
@@ -16766,10 +16366,10 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: web_search_adapter_disabled_in_phase_a
-  last_run: '2026-08-31T23:43:03Z'
+  last_run: '2026-09-01T06:12:31Z'
   notes: 'Reserved fallback discovery method; no adapter is configured in Phase A. Fetch failures: 1.'
 - product_id: blackmagic-davinci
-  update_version: 11.1.1
+  update_version: '12.0'
   target_build: ''
   method_id: known_watchlist
   source_type: curated_watchlist
@@ -16782,10 +16382,10 @@ methods:
   accepted_reports: 0
   rejected_reports: 1
   blocked_reason: probe_fetch_failed:http_202_aws_waf_challenge x6
-  last_run: '2026-08-31T23:36:35Z'
+  last_run: '2026-09-01T06:14:38Z'
   notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 6. Rejected candidates: missing_exact_patch_version_match=1.'
 - product_id: blackmagic-davinci
-  update_version: 11.1.1
+  update_version: '12.0'
   target_build: ''
   method_id: reddit_search
   source_type: reddit_community_report
@@ -16797,250 +16397,650 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]; reddit_search_feed_fetch_failed:http_429_Too Many Requests x11; reddit_search_feed_fetch_failed:feed_parse_failed:ParseError x12; reddit_listing_feed_fetch_failed:http_429_Too Many Requests x2; reddit_listing_feed_fetch_failed:feed_parse_failed:ParseError x2
-  last_run: '2026-08-31T23:36:35Z'
-  notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 31.'
-- product_id: blackmagic-davinci
-  update_version: 11.1.1
-  target_build: ''
-  method_id: creative_cow_forum_search
-  source_type: creator_forum_report
-  status: success
-  candidates_found: 2
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 2
-  blocked_reason: ''
-  last_run: '2026-08-31T23:36:35Z'
-  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=2.'
-- product_id: blackmagic-davinci
-  update_version: 11.1.1
-  target_build: ''
-  method_id: vendor_forum_search
-  source_type: blackmagic_forum
-  status: blocked
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
-  last_run: '2026-08-31T23:36:35Z'
-  notes: Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
-- product_id: blackmagic-davinci
-  update_version: 11.1.1
-  target_build: ''
-  method_id: web_search
-  source_type: web_search
-  status: disabled
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: web_search_adapter_disabled_in_phase_a
-  last_run: '2026-08-31T23:36:35Z'
-  notes: 'Reserved fallback discovery method; no adapter is configured in Phase A. Fetch failures: 1.'
-- product_id: blackmagic-davinci
-  update_version: 11.1.2
-  target_build: ''
-  method_id: known_watchlist
-  source_type: curated_watchlist
-  status: partial
-  candidates_found: 1
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 1
-  blocked_reason: probe_fetch_failed:http_202_aws_waf_challenge x6
-  last_run: '2026-08-31T23:38:21Z'
-  notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 6. Rejected candidates: missing_exact_patch_version_match=1.'
-- product_id: blackmagic-davinci
-  update_version: 11.1.2
-  target_build: ''
-  method_id: reddit_search
-  source_type: reddit_community_report
-  status: blocked
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]; reddit_search_feed_fetch_failed:http_429_Too Many Requests x11; reddit_search_feed_fetch_failed:feed_parse_failed:ParseError x12; reddit_listing_feed_fetch_failed:http_429_Too Many Requests x2; reddit_listing_feed_fetch_failed:feed_parse_failed:ParseError x2
-  last_run: '2026-08-31T23:38:21Z'
-  notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 31.'
-- product_id: blackmagic-davinci
-  update_version: 11.1.2
-  target_build: ''
-  method_id: creative_cow_forum_search
-  source_type: creator_forum_report
-  status: success
-  candidates_found: 2
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 2
-  blocked_reason: ''
-  last_run: '2026-08-31T23:38:21Z'
-  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=2.'
-- product_id: blackmagic-davinci
-  update_version: 11.1.2
-  target_build: ''
-  method_id: vendor_forum_search
-  source_type: blackmagic_forum
-  status: blocked
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
-  last_run: '2026-08-31T23:38:21Z'
-  notes: Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
-- product_id: blackmagic-davinci
-  update_version: 11.1.2
-  target_build: ''
-  method_id: web_search
-  source_type: web_search
-  status: disabled
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: web_search_adapter_disabled_in_phase_a
-  last_run: '2026-08-31T23:38:21Z'
-  notes: 'Reserved fallback discovery method; no adapter is configured in Phase A. Fetch failures: 1.'
-- product_id: blackmagic-davinci
-  update_version: '11'
-  target_build: ''
-  method_id: known_watchlist
-  source_type: curated_watchlist
-  status: blocked
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: probe_fetch_failed:http_202_aws_waf_challenge x6; reddit_post_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_post_www_atom=http_429_Too Many Requests:rate_limited;reddit_post_old_atom=feed_parse_failed:ParseError:ParseError;reddit_post_www_rss_suffix=http_429_Too Many Requests:rate_limited;reddit_post_old_rss_suffix=feed_parse_failed:ParseError:ParseError]
-  last_run: '2026-08-31T23:33:06Z'
-  notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 7.'
-- product_id: blackmagic-davinci
-  update_version: '11'
-  target_build: ''
-  method_id: reddit_search
-  source_type: reddit_community_report
-  status: blocked
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]; reddit_search_feed_fetch_failed:http_429_Too Many Requests x12; reddit_search_feed_fetch_failed:feed_parse_failed:ParseError x12; reddit_listing_feed_fetch_failed:http_429_Too Many Requests x2; reddit_listing_feed_fetch_failed:feed_parse_failed:ParseError x2
-  last_run: '2026-08-31T23:33:06Z'
-  notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 32.'
-- product_id: blackmagic-davinci
-  update_version: '11'
-  target_build: ''
-  method_id: creative_cow_forum_search
-  source_type: creator_forum_report
-  status: success
-  candidates_found: 2
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 2
-  blocked_reason: ''
-  last_run: '2026-08-31T23:33:06Z'
-  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=2.'
-- product_id: blackmagic-davinci
-  update_version: '11'
-  target_build: ''
-  method_id: vendor_forum_search
-  source_type: blackmagic_forum
-  status: blocked
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
-  last_run: '2026-08-31T23:33:06Z'
-  notes: Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
-- product_id: blackmagic-davinci
-  update_version: '11'
-  target_build: ''
-  method_id: web_search
-  source_type: web_search
-  status: disabled
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: web_search_adapter_disabled_in_phase_a
-  last_run: '2026-08-31T23:33:06Z'
-  notes: 'Reserved fallback discovery method; no adapter is configured in Phase A. Fetch failures: 1.'
-- product_id: blackmagic-davinci
-  update_version: '11.1'
-  target_build: ''
-  method_id: known_watchlist
-  source_type: curated_watchlist
-  status: partial
-  candidates_found: 1
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 1
-  blocked_reason: probe_fetch_failed:http_202_aws_waf_challenge x6
-  last_run: '2026-08-31T23:33:34Z'
-  notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 6. Rejected candidates: missing_exact_patch_version_match=1.'
-- product_id: blackmagic-davinci
-  update_version: '11.1'
-  target_build: ''
-  method_id: reddit_search
-  source_type: reddit_community_report
-  status: blocked
-  candidates_found: 0
-  accepted_candidates: 0
-  duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]; reddit_search_feed_fetch_failed:http_429_Too Many Requests x11; reddit_search_feed_fetch_failed:feed_parse_failed:ParseError x12; reddit_listing_feed_fetch_failed:http_429_Too Many Requests; reddit_listing_feed_fetch_failed:feed_parse_failed:ParseError x2
-  last_run: '2026-08-31T23:33:34Z'
+  blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]; reddit_search_feed_fetch_failed:http_429_Too Many Requests x10; reddit_search_feed_fetch_failed:feed_parse_failed:ParseError x12; reddit_listing_feed_fetch_failed:http_429_Too Many Requests x2; reddit_listing_feed_fetch_failed:feed_parse_failed:ParseError x2
+  last_run: '2026-09-01T06:14:38Z'
   notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 30.'
 - product_id: blackmagic-davinci
+  update_version: '12.0'
+  target_build: ''
+  method_id: creative_cow_forum_search
+  source_type: creator_forum_report
+  status: success
+  candidates_found: 2
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 2
+  blocked_reason: ''
+  last_run: '2026-09-01T06:14:38Z'
+  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=2.'
+- product_id: blackmagic-davinci
+  update_version: '12.0'
+  target_build: ''
+  method_id: vendor_forum_search
+  source_type: blackmagic_forum
+  status: blocked
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
+  last_run: '2026-09-01T06:14:38Z'
+  notes: Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
+- product_id: blackmagic-davinci
+  update_version: '12.0'
+  target_build: ''
+  method_id: web_search
+  source_type: web_search
+  status: disabled
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: web_search_adapter_disabled_in_phase_a
+  last_run: '2026-09-01T06:14:38Z'
+  notes: 'Reserved fallback discovery method; no adapter is configured in Phase A. Fetch failures: 1.'
+- product_id: blackmagic-davinci
+  update_version: 11.2.1
+  target_build: ''
+  method_id: known_watchlist
+  source_type: curated_watchlist
+  status: partial
+  candidates_found: 1
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 1
+  blocked_reason: probe_fetch_failed:http_202_aws_waf_challenge x6
+  last_run: '2026-09-01T06:08:20Z'
+  notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 6. Rejected candidates: missing_exact_patch_version_match=1.'
+- product_id: blackmagic-davinci
+  update_version: 11.2.1
+  target_build: ''
+  method_id: reddit_search
+  source_type: reddit_community_report
+  status: blocked
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]; reddit_search_feed_fetch_failed:http_429_Too Many Requests x11; reddit_search_feed_fetch_failed:feed_parse_failed:ParseError x12; reddit_listing_feed_fetch_failed:http_429_Too Many Requests x2; reddit_listing_feed_fetch_failed:feed_parse_failed:ParseError x2
+  last_run: '2026-09-01T06:08:20Z'
+  notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 31.'
+- product_id: blackmagic-davinci
+  update_version: 11.2.1
+  target_build: ''
+  method_id: creative_cow_forum_search
+  source_type: creator_forum_report
+  status: success
+  candidates_found: 2
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 2
+  blocked_reason: ''
+  last_run: '2026-09-01T06:08:20Z'
+  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=2.'
+- product_id: blackmagic-davinci
+  update_version: 11.2.1
+  target_build: ''
+  method_id: vendor_forum_search
+  source_type: blackmagic_forum
+  status: blocked
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
+  last_run: '2026-09-01T06:08:20Z'
+  notes: Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
+- product_id: blackmagic-davinci
+  update_version: 11.2.1
+  target_build: ''
+  method_id: web_search
+  source_type: web_search
+  status: disabled
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: web_search_adapter_disabled_in_phase_a
+  last_run: '2026-09-01T06:08:20Z'
+  notes: 'Reserved fallback discovery method; no adapter is configured in Phase A. Fetch failures: 1.'
+- product_id: blackmagic-davinci
+  update_version: '11.3'
+  target_build: ''
+  method_id: known_watchlist
+  source_type: curated_watchlist
+  status: blocked
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: probe_fetch_failed:http_202_aws_waf_challenge x6; reddit_post_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_post_www_atom=http_429_Too Many Requests:rate_limited;reddit_post_old_atom=feed_parse_failed:ParseError:ParseError;reddit_post_www_rss_suffix=http_429_Too Many Requests:rate_limited;reddit_post_old_rss_suffix=feed_parse_failed:ParseError:ParseError]
+  last_run: '2026-09-01T06:10:19Z'
+  notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 7.'
+- product_id: blackmagic-davinci
+  update_version: '11.3'
+  target_build: ''
+  method_id: reddit_search
+  source_type: reddit_community_report
+  status: blocked
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]; reddit_search_feed_fetch_failed:http_429_Too Many Requests x11; reddit_search_feed_fetch_failed:feed_parse_failed:ParseError x12; reddit_listing_feed_fetch_failed:http_429_Too Many Requests; reddit_listing_feed_fetch_failed:feed_parse_failed:ParseError x2; reddit_listing_feed_fetch_failed:http_500_Internal Server Error
+  last_run: '2026-09-01T06:10:19Z'
+  notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 31.'
+- product_id: blackmagic-davinci
+  update_version: '11.3'
+  target_build: ''
+  method_id: creative_cow_forum_search
+  source_type: creator_forum_report
+  status: success
+  candidates_found: 2
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 2
+  blocked_reason: ''
+  last_run: '2026-09-01T06:10:19Z'
+  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=2.'
+- product_id: blackmagic-davinci
+  update_version: '11.3'
+  target_build: ''
+  method_id: vendor_forum_search
+  source_type: blackmagic_forum
+  status: blocked
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
+  last_run: '2026-09-01T06:10:19Z'
+  notes: Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
+- product_id: blackmagic-davinci
+  update_version: '11.3'
+  target_build: ''
+  method_id: web_search
+  source_type: web_search
+  status: disabled
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: web_search_adapter_disabled_in_phase_a
+  last_run: '2026-09-01T06:10:19Z'
+  notes: 'Reserved fallback discovery method; no adapter is configured in Phase A. Fetch failures: 1.'
+- product_id: blackmagic-davinci
+  update_version: 11.1.3
+  target_build: ''
+  method_id: known_watchlist
+  source_type: curated_watchlist
+  status: blocked
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: probe_fetch_failed:http_202_aws_waf_challenge x6; reddit_post_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_post_www_atom=http_429_Too Many Requests:rate_limited;reddit_post_old_atom=feed_parse_failed:ParseError:ParseError;reddit_post_www_rss_suffix=http_429_Too Many Requests:rate_limited;reddit_post_old_rss_suffix=feed_parse_failed:ParseError:ParseError]
+  last_run: '2026-09-01T06:05:21Z'
+  notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 7.'
+- product_id: blackmagic-davinci
+  update_version: 11.1.3
+  target_build: ''
+  method_id: reddit_search
+  source_type: reddit_community_report
+  status: blocked
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]; reddit_search_feed_fetch_failed:feed_parse_failed:ParseError x12; reddit_search_feed_fetch_failed:http_429_Too Many Requests x11; reddit_listing_feed_fetch_failed:http_429_Too Many Requests x2; reddit_listing_feed_fetch_failed:feed_parse_failed:ParseError x2
+  last_run: '2026-09-01T06:05:21Z'
+  notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 31.'
+- product_id: blackmagic-davinci
+  update_version: 11.1.3
+  target_build: ''
+  method_id: creative_cow_forum_search
+  source_type: creator_forum_report
+  status: success
+  candidates_found: 2
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 2
+  blocked_reason: ''
+  last_run: '2026-09-01T06:05:21Z'
+  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=2.'
+- product_id: blackmagic-davinci
+  update_version: 11.1.3
+  target_build: ''
+  method_id: vendor_forum_search
+  source_type: blackmagic_forum
+  status: blocked
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
+  last_run: '2026-09-01T06:05:21Z'
+  notes: Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
+- product_id: blackmagic-davinci
+  update_version: 11.1.3
+  target_build: ''
+  method_id: web_search
+  source_type: web_search
+  status: disabled
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: web_search_adapter_disabled_in_phase_a
+  last_run: '2026-09-01T06:05:21Z'
+  notes: 'Reserved fallback discovery method; no adapter is configured in Phase A. Fetch failures: 1.'
+- product_id: blackmagic-davinci
+  update_version: '11.2'
+  target_build: ''
+  method_id: known_watchlist
+  source_type: curated_watchlist
+  status: partial
+  candidates_found: 1
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 1
+  blocked_reason: probe_fetch_failed:http_202_aws_waf_challenge x6
+  last_run: '2026-09-01T06:06:39Z'
+  notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 6. Rejected candidates: missing_exact_patch_version_match=1.'
+- product_id: blackmagic-davinci
+  update_version: '11.2'
+  target_build: ''
+  method_id: reddit_search
+  source_type: reddit_community_report
+  status: blocked
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]; reddit_search_feed_fetch_failed:http_429_Too Many Requests x11; reddit_search_feed_fetch_failed:feed_parse_failed:ParseError x12; reddit_listing_feed_fetch_failed:http_429_Too Many Requests x2; reddit_listing_feed_fetch_failed:feed_parse_failed:ParseError x2
+  last_run: '2026-09-01T06:06:39Z'
+  notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 31.'
+- product_id: blackmagic-davinci
+  update_version: '11.2'
+  target_build: ''
+  method_id: creative_cow_forum_search
+  source_type: creator_forum_report
+  status: success
+  candidates_found: 2
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 2
+  blocked_reason: ''
+  last_run: '2026-09-01T06:06:39Z'
+  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=2.'
+- product_id: blackmagic-davinci
+  update_version: '11.2'
+  target_build: ''
+  method_id: vendor_forum_search
+  source_type: blackmagic_forum
+  status: blocked
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
+  last_run: '2026-09-01T06:06:39Z'
+  notes: Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
+- product_id: blackmagic-davinci
+  update_version: '11.2'
+  target_build: ''
+  method_id: web_search
+  source_type: web_search
+  status: disabled
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: web_search_adapter_disabled_in_phase_a
+  last_run: '2026-09-01T06:06:39Z'
+  notes: 'Reserved fallback discovery method; no adapter is configured in Phase A. Fetch failures: 1.'
+- product_id: blackmagic-davinci
+  update_version: 11.1.1
+  target_build: ''
+  method_id: known_watchlist
+  source_type: curated_watchlist
+  status: partial
+  candidates_found: 1
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 1
+  blocked_reason: probe_fetch_failed:http_202_aws_waf_challenge x6
+  last_run: '2026-09-01T06:01:26Z'
+  notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 6. Rejected candidates: missing_exact_patch_version_match=1.'
+- product_id: blackmagic-davinci
+  update_version: 11.1.1
+  target_build: ''
+  method_id: reddit_search
+  source_type: reddit_community_report
+  status: blocked
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]; reddit_search_feed_fetch_failed:http_429_Too Many Requests x12; reddit_search_feed_fetch_failed:feed_parse_failed:ParseError x12; reddit_listing_feed_fetch_failed:http_429_Too Many Requests x2; reddit_listing_feed_fetch_failed:feed_parse_failed:ParseError x2
+  last_run: '2026-09-01T06:01:26Z'
+  notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 32.'
+- product_id: blackmagic-davinci
+  update_version: 11.1.1
+  target_build: ''
+  method_id: creative_cow_forum_search
+  source_type: creator_forum_report
+  status: success
+  candidates_found: 2
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 2
+  blocked_reason: ''
+  last_run: '2026-09-01T06:01:26Z'
+  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=2.'
+- product_id: blackmagic-davinci
+  update_version: 11.1.1
+  target_build: ''
+  method_id: vendor_forum_search
+  source_type: blackmagic_forum
+  status: blocked
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
+  last_run: '2026-09-01T06:01:26Z'
+  notes: Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
+- product_id: blackmagic-davinci
+  update_version: 11.1.1
+  target_build: ''
+  method_id: web_search
+  source_type: web_search
+  status: disabled
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: web_search_adapter_disabled_in_phase_a
+  last_run: '2026-09-01T06:01:26Z'
+  notes: 'Reserved fallback discovery method; no adapter is configured in Phase A. Fetch failures: 1.'
+- product_id: blackmagic-davinci
+  update_version: 11.1.2
+  target_build: ''
+  method_id: known_watchlist
+  source_type: curated_watchlist
+  status: partial
+  candidates_found: 1
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 1
+  blocked_reason: probe_fetch_failed:http_202_aws_waf_challenge x6
+  last_run: '2026-09-01T06:02:52Z'
+  notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 6. Rejected candidates: missing_exact_patch_version_match=1.'
+- product_id: blackmagic-davinci
+  update_version: 11.1.2
+  target_build: ''
+  method_id: reddit_search
+  source_type: reddit_community_report
+  status: blocked
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]; reddit_search_feed_fetch_failed:http_429_Too Many Requests x11; reddit_search_feed_fetch_failed:feed_parse_failed:ParseError x12; reddit_listing_feed_fetch_failed:feed_parse_failed:ParseError x2; reddit_listing_feed_fetch_failed:http_429_Too Many Requests
+  last_run: '2026-09-01T06:02:52Z'
+  notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 30.'
+- product_id: blackmagic-davinci
+  update_version: 11.1.2
+  target_build: ''
+  method_id: creative_cow_forum_search
+  source_type: creator_forum_report
+  status: success
+  candidates_found: 2
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 2
+  blocked_reason: ''
+  last_run: '2026-09-01T06:02:52Z'
+  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=2.'
+- product_id: blackmagic-davinci
+  update_version: 11.1.2
+  target_build: ''
+  method_id: vendor_forum_search
+  source_type: blackmagic_forum
+  status: blocked
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
+  last_run: '2026-09-01T06:02:52Z'
+  notes: Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
+- product_id: blackmagic-davinci
+  update_version: 11.1.2
+  target_build: ''
+  method_id: web_search
+  source_type: web_search
+  status: disabled
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: web_search_adapter_disabled_in_phase_a
+  last_run: '2026-09-01T06:02:52Z'
+  notes: 'Reserved fallback discovery method; no adapter is configured in Phase A. Fetch failures: 1.'
+- product_id: blackmagic-davinci
+  update_version: '11'
+  target_build: ''
+  method_id: known_watchlist
+  source_type: curated_watchlist
+  status: partial
+  candidates_found: 1
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 1
+  blocked_reason: probe_fetch_failed:http_202_aws_waf_challenge x6
+  last_run: '2026-09-01T05:59:45Z'
+  notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 6. Rejected candidates: missing_exact_patch_version_match=1.'
+- product_id: blackmagic-davinci
+  update_version: '11'
+  target_build: ''
+  method_id: reddit_search
+  source_type: reddit_community_report
+  status: blocked
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]; reddit_search_feed_fetch_failed:http_429_Too Many Requests x12; reddit_search_feed_fetch_failed:feed_parse_failed:ParseError x12; reddit_listing_feed_fetch_failed:http_429_Too Many Requests x2; reddit_listing_feed_fetch_failed:feed_parse_failed:ParseError x2
+  last_run: '2026-09-01T05:59:45Z'
+  notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 32.'
+- product_id: blackmagic-davinci
+  update_version: '11'
+  target_build: ''
+  method_id: creative_cow_forum_search
+  source_type: creator_forum_report
+  status: success
+  candidates_found: 2
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 2
+  blocked_reason: ''
+  last_run: '2026-09-01T05:59:45Z'
+  notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=2.'
+- product_id: blackmagic-davinci
+  update_version: '11'
+  target_build: ''
+  method_id: vendor_forum_search
+  source_type: blackmagic_forum
+  status: blocked
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
+  last_run: '2026-09-01T05:59:45Z'
+  notes: Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
+- product_id: blackmagic-davinci
+  update_version: '11'
+  target_build: ''
+  method_id: web_search
+  source_type: web_search
+  status: disabled
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: web_search_adapter_disabled_in_phase_a
+  last_run: '2026-09-01T05:59:45Z'
+  notes: 'Reserved fallback discovery method; no adapter is configured in Phase A. Fetch failures: 1.'
+- product_id: blackmagic-davinci
+  update_version: '11.1'
+  target_build: ''
+  method_id: known_watchlist
+  source_type: curated_watchlist
+  status: blocked
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: probe_fetch_failed:http_202_aws_waf_challenge x6; reddit_post_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_post_www_atom=http_429_Too Many Requests:rate_limited;reddit_post_old_atom=feed_parse_failed:ParseError:ParseError;reddit_post_www_rss_suffix=http_429_Too Many Requests:rate_limited;reddit_post_old_rss_suffix=feed_parse_failed:ParseError:ParseError]
+  last_run: '2026-09-01T06:00:11Z'
+  notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 7.'
+- product_id: blackmagic-davinci
+  update_version: '11.1'
+  target_build: ''
+  method_id: reddit_search
+  source_type: reddit_community_report
+  status: blocked
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]; reddit_search_feed_fetch_failed:feed_parse_failed:ParseError x12; reddit_search_feed_fetch_failed:http_429_Too Many Requests x11; reddit_listing_feed_fetch_failed:http_429_Too Many Requests x2; reddit_listing_feed_fetch_failed:feed_parse_failed:ParseError x2
+  last_run: '2026-09-01T06:00:11Z'
+  notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 31.'
+- product_id: blackmagic-davinci
   update_version: '11.1'
   target_build: ''
   method_id: creative_cow_forum_search
@@ -17054,7 +17054,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 2
   blocked_reason: ''
-  last_run: '2026-08-31T23:33:34Z'
+  last_run: '2026-09-01T06:00:11Z'
   notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=2.'
 - product_id: blackmagic-davinci
   update_version: '11.1'
@@ -17070,7 +17070,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
-  last_run: '2026-08-31T23:33:34Z'
+  last_run: '2026-09-01T06:00:11Z'
   notes: Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
 - product_id: blackmagic-davinci
   update_version: '11.1'
@@ -17086,7 +17086,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: web_search_adapter_disabled_in_phase_a
-  last_run: '2026-08-31T23:33:34Z'
+  last_run: '2026-09-01T06:00:11Z'
   notes: 'Reserved fallback discovery method; no adapter is configured in Phase A. Fetch failures: 1.'
 - product_id: obs-studio
   update_version: 32.2.2
@@ -17102,7 +17102,7 @@ methods:
   accepted_reports: 8
   rejected_reports: 9
   blocked_reason: ''
-  last_run: '2026-08-31T23:59:48Z'
+  last_run: '2026-09-01T06:27:06Z'
   notes: Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.
 - product_id: obs-studio
   update_version: 32.2.2
@@ -17125,17 +17125,17 @@ methods:
   target_build: ''
   method_id: known_watchlist
   source_type: curated_watchlist
-  status: blocked
-  candidates_found: 0
+  status: partial
+  candidates_found: 1
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 0
-  blocked_reason: probe_fetch_failed:http_202_aws_waf_challenge x6; reddit_post_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_post_www_atom=http_429_Too Many Requests:rate_limited;reddit_post_old_atom=feed_parse_failed:ParseError:ParseError;reddit_post_www_rss_suffix=http_429_Too Many Requests:rate_limited;reddit_post_old_rss_suffix=feed_parse_failed:ParseError:ParseError]
-  last_run: '2026-08-31T23:32:37Z'
-  notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 7.'
+  rejected_reports: 1
+  blocked_reason: probe_fetch_failed:http_202_aws_waf_challenge x6
+  last_run: '2026-09-01T05:59:34Z'
+  notes: 'Temporary seed/calibration fallback. Specific known report URLs are fetched and passed through the same deterministic evidence gates, but this must not be the primary long-term DaVinci discovery method. Fetch failures: 6. Rejected candidates: missing_exact_patch_version_match=1.'
 - product_id: blackmagic-davinci
   update_version: 10.1.5
   target_build: ''
@@ -17149,9 +17149,9 @@ methods:
   public_counted_reports: 0
   accepted_reports: 0
   rejected_reports: 0
-  blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]; reddit_search_feed_fetch_failed:feed_parse_failed:ParseError x12; reddit_search_feed_fetch_failed:http_429_Too Many Requests x11; reddit_listing_feed_fetch_failed:http_429_Too Many Requests x2; reddit_listing_feed_fetch_failed:feed_parse_failed:ParseError x2
-  last_run: '2026-08-31T23:32:37Z'
-  notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 31.'
+  blocked_reason: reddit_search_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_search_www_json=http_403_Blocked:blocked;reddit_search_old_json=http_403_Blocked:blocked;reddit_search_global_json=http_403_Blocked:blocked] x3; reddit_listing_fetch_failed:all_reddit_endpoint_attempts_failed[reddit_listing_www_json=http_403_Blocked:blocked;reddit_listing_old_json=http_403_Blocked:blocked]; reddit_search_feed_fetch_failed:http_429_Too Many Requests x12; reddit_search_feed_fetch_failed:feed_parse_failed:ParseError x12; reddit_listing_feed_fetch_failed:http_429_Too Many Requests x2; reddit_listing_feed_fetch_failed:feed_parse_failed:ParseError x2
+  last_run: '2026-09-01T05:59:34Z'
+  notes: 'Subreddit search discovers candidate posts; RSS/Atom candidates are prefiltered to exact version hints, and accepted rows still require exact version/date/report gates. Fetch failures: 32.'
 - product_id: blackmagic-davinci
   update_version: 10.1.5
   target_build: ''
@@ -17166,7 +17166,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 2
   blocked_reason: ''
-  last_run: '2026-08-31T23:32:37Z'
+  last_run: '2026-09-01T05:59:34Z'
   notes: 'Creative COW DaVinci Resolve forum listing discovers public thread URLs, fetches specific threads, and passes candidates through exact version/date/report gates. This is community/creator evidence, not official vendor evidence. Rejected candidates: missing_exact_patch_version_match=2.'
 - product_id: blackmagic-davinci
   update_version: 10.1.5
@@ -17182,7 +17182,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
-  last_run: '2026-08-31T23:32:37Z'
+  last_run: '2026-09-01T05:59:34Z'
   notes: Blackmagic forum acquisition did not return usable forum content. No unusable source checks were counted as reports. vendor_forum_search_blocked_or_failed:http_202_aws_waf_challenge
 - product_id: blackmagic-davinci
   update_version: 10.1.5
@@ -17198,7 +17198,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: web_search_adapter_disabled_in_phase_a
-  last_run: '2026-08-31T23:32:37Z'
+  last_run: '2026-09-01T05:59:34Z'
   notes: 'Reserved fallback discovery method; no adapter is configured in Phase A. Fetch failures: 1.'
 - product_id: microsoft-powerpoint
   update_version: '2312'
