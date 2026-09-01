@@ -491,8 +491,11 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
           <p>Current reports mention {{ issue_cluster_text }}.</p>
           {% elsif report_count > 0 %}
           <p>User reports are present; review the source list before updating critical work.</p>
-          {% else %}
-          <p>Too few reports for a verdict yet.</p>
+          {%- comment -%}
+            No else-branch. On a zero-report page the recommendation line directly above already
+            says "Too few reports for a verdict yet.", so repeating it here printed the same
+            sentence twice in consecutive paragraphs -- the state most patch pages are in.
+          {%- endcomment -%}
           {% endif %}
           {% if show_test_first_context %}<p class="update-credibility-note">This is report-backed caution guidance, not a clean safe signal.</p>{% endif %}
           {%- comment -%}
