@@ -1029,16 +1029,16 @@ methods:
   target_build: ''
   method_id: adobe_community_algolia_search
   source_type: adobe_community_bug_report
-  status: no_results
+  status: success
   candidates_found: 8
-  accepted_candidates: 0
+  accepted_candidates: 1
   duplicate_existing_evidence: 0
-  evidence_rows_added: 0
-  public_counted_reports: 0
-  accepted_reports: 0
-  rejected_reports: 8
+  evidence_rows_added: 1
+  public_counted_reports: 1
+  accepted_reports: 1
+  rejected_reports: 7
   blocked_reason: ''
-  last_run: '2026-07-26T07:09:33Z'
+  last_run: '2026-09-01T16:31:11Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 26.001.21529
@@ -1079,14 +1079,14 @@ methods:
   source_type: adobe_community_bug_report
   status: success
   candidates_found: 11
-  accepted_candidates: 1
+  accepted_candidates: 2
   duplicate_existing_evidence: 0
-  evidence_rows_added: 1
-  public_counted_reports: 1
-  accepted_reports: 1
-  rejected_reports: 10
+  evidence_rows_added: 2
+  public_counted_reports: 2
+  accepted_reports: 2
+  rejected_reports: 9
   blocked_reason: ''
-  last_run: '2026-07-26T07:09:33Z'
+  last_run: '2026-09-01T16:31:11Z'
   notes: acrobat community collector; edition=adobe-acrobat-reader
 - product_id: adobe-acrobat-reader
   update_version: 26.001.21563
@@ -20400,3 +20400,355 @@ methods:
   blocked_reason: rate_limited
   last_run: '2026-09-01T13:06:53Z'
   notes: 'Open-web federated search across 3 permitted endpoints. Queries 8, requests 24, results 804, supported URLs 501, hydrated 120, accepted 0, rejected 114. Top rejections: different_version_not_target=9, missing_powerpoint_version=92, product_not_powerpoint=13. General web indexes are not used: one serves a bot challenge, two forbid /search in robots.txt and one requires a paid key. Search output supplies URLs only -- every page is fetched from its original source and judged by the same gates as every other method.'
+- product_id: adobe-acrobat-reader
+  update_version: 26.002.21869
+  target_build: ''
+  method_id: adobe_community_algolia_search
+  source_type: adobe_community_bug_report
+  status: no_results
+  candidates_found: 0
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 0
+  blocked_reason: ''
+  last_run: '2026-09-01T16:31:11Z'
+  notes: acrobat community collector; edition=adobe-acrobat-reader
+- product_id: adobe-acrobat-reader
+  update_version: 26.001.21789
+  target_build: ''
+  method_id: adobe_community_algolia_search
+  source_type: adobe_community_bug_report
+  status: success
+  candidates_found: 7
+  accepted_candidates: 1
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 1
+  public_counted_reports: 1
+  accepted_reports: 1
+  rejected_reports: 6
+  blocked_reason: ''
+  last_run: '2026-09-01T16:31:11Z'
+  notes: acrobat community collector; edition=adobe-acrobat-reader
+- product_id: adobe-acrobat-reader
+  update_version: 26.001.21771
+  target_build: ''
+  method_id: adobe_community_algolia_search
+  source_type: adobe_community_bug_report
+  status: success
+  candidates_found: 11
+  accepted_candidates: 5
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 5
+  public_counted_reports: 5
+  accepted_reports: 5
+  rejected_reports: 6
+  blocked_reason: ''
+  last_run: '2026-09-01T16:31:11Z'
+  notes: acrobat community collector; edition=adobe-acrobat-reader
+- product_id: adobe-acrobat-reader
+  update_version: 26.001.21745
+  target_build: ''
+  method_id: adobe_community_algolia_search
+  source_type: adobe_community_bug_report
+  status: success
+  candidates_found: 9
+  accepted_candidates: 1
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 1
+  public_counted_reports: 1
+  accepted_reports: 1
+  rejected_reports: 8
+  blocked_reason: ''
+  last_run: '2026-09-01T16:31:11Z'
+  notes: acrobat community collector; edition=adobe-acrobat-reader
+- product_id: adobe-acrobat-reader
+  update_version: 26.001.21691
+  target_build: ''
+  method_id: adobe_community_algolia_search
+  source_type: adobe_community_bug_report
+  status: success
+  candidates_found: 11
+  accepted_candidates: 3
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 3
+  public_counted_reports: 3
+  accepted_reports: 3
+  rejected_reports: 8
+  blocked_reason: ''
+  last_run: '2026-09-01T16:31:11Z'
+  notes: acrobat community collector; edition=adobe-acrobat-reader
+- product_id: adobe-acrobat-reader
+  update_version: 26.001.21677
+  target_build: ''
+  method_id: adobe_community_algolia_search
+  source_type: adobe_community_bug_report
+  status: success
+  candidates_found: 9
+  accepted_candidates: 1
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 1
+  public_counted_reports: 1
+  accepted_reports: 1
+  rejected_reports: 8
+  blocked_reason: ''
+  last_run: '2026-09-01T16:31:11Z'
+  notes: acrobat community collector; edition=adobe-acrobat-reader
+- product_id: adobe-acrobat-reader
+  update_version: 26.001.21662
+  target_build: ''
+  method_id: adobe_community_algolia_search
+  source_type: adobe_community_bug_report
+  status: success
+  candidates_found: 10
+  accepted_candidates: 2
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 2
+  public_counted_reports: 2
+  accepted_reports: 2
+  rejected_reports: 8
+  blocked_reason: ''
+  last_run: '2026-09-01T16:31:11Z'
+  notes: acrobat community collector; edition=adobe-acrobat-reader
+- product_id: adobe-acrobat-reader
+  update_version: 26.001.21651
+  target_build: ''
+  method_id: adobe_community_algolia_search
+  source_type: adobe_community_bug_report
+  status: success
+  candidates_found: 8
+  accepted_candidates: 2
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 2
+  public_counted_reports: 2
+  accepted_reports: 2
+  rejected_reports: 6
+  blocked_reason: ''
+  last_run: '2026-09-01T16:31:11Z'
+  notes: acrobat community collector; edition=adobe-acrobat-reader
+- product_id: adobe-acrobat-reader
+  update_version: 26.001.21483
+  target_build: ''
+  method_id: adobe_community_algolia_search
+  source_type: adobe_community_bug_report
+  status: no_results
+  candidates_found: 3
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 3
+  blocked_reason: ''
+  last_run: '2026-09-01T16:31:11Z'
+  notes: acrobat community collector; edition=adobe-acrobat-reader
+- product_id: adobe-acrobat-reader
+  update_version: 26.001.21431
+  target_build: ''
+  method_id: adobe_community_algolia_search
+  source_type: adobe_community_bug_report
+  status: no_results
+  candidates_found: 7
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 7
+  blocked_reason: ''
+  last_run: '2026-09-01T16:31:11Z'
+  notes: acrobat community collector; edition=adobe-acrobat-reader
+- product_id: adobe-acrobat-reader
+  update_version: 26.001.21411
+  target_build: ''
+  method_id: adobe_community_algolia_search
+  source_type: adobe_community_bug_report
+  status: no_results
+  candidates_found: 11
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 11
+  blocked_reason: ''
+  last_run: '2026-09-01T16:31:11Z'
+  notes: acrobat community collector; edition=adobe-acrobat-reader
+- product_id: adobe-acrobat-reader
+  update_version: 26.001.21367
+  target_build: ''
+  method_id: adobe_community_algolia_search
+  source_type: adobe_community_bug_report
+  status: no_results
+  candidates_found: 2
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 2
+  blocked_reason: ''
+  last_run: '2026-09-01T16:31:11Z'
+  notes: acrobat community collector; edition=adobe-acrobat-reader
+- product_id: adobe-acrobat-reader
+  update_version: 26.001.21346
+  target_build: ''
+  method_id: adobe_community_algolia_search
+  source_type: adobe_community_bug_report
+  status: no_results
+  candidates_found: 9
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 9
+  blocked_reason: ''
+  last_run: '2026-09-01T16:31:11Z'
+  notes: acrobat community collector; edition=adobe-acrobat-reader
+- product_id: adobe-acrobat-reader
+  update_version: 25.001.21288
+  target_build: ''
+  method_id: adobe_community_algolia_search
+  source_type: adobe_community_bug_report
+  status: no_results
+  candidates_found: 3
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 3
+  blocked_reason: ''
+  last_run: '2026-09-01T16:31:11Z'
+  notes: acrobat community collector; edition=adobe-acrobat-reader
+- product_id: adobe-acrobat-reader
+  update_version: 25.001.21265
+  target_build: ''
+  method_id: adobe_community_algolia_search
+  source_type: adobe_community_bug_report
+  status: no_results
+  candidates_found: 3
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 3
+  blocked_reason: ''
+  last_run: '2026-09-01T16:31:11Z'
+  notes: acrobat community collector; edition=adobe-acrobat-reader
+- product_id: adobe-acrobat-reader
+  update_version: 25.001.21223
+  target_build: ''
+  method_id: adobe_community_algolia_search
+  source_type: adobe_community_bug_report
+  status: success
+  candidates_found: 8
+  accepted_candidates: 1
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 1
+  public_counted_reports: 1
+  accepted_reports: 1
+  rejected_reports: 7
+  blocked_reason: ''
+  last_run: '2026-09-01T16:31:11Z'
+  notes: acrobat community collector; edition=adobe-acrobat-reader
+- product_id: adobe-acrobat-reader
+  update_version: 25.001.21208
+  target_build: ''
+  method_id: adobe_community_algolia_search
+  source_type: adobe_community_bug_report
+  status: no_results
+  candidates_found: 3
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 3
+  blocked_reason: ''
+  last_run: '2026-09-01T16:31:11Z'
+  notes: acrobat community collector; edition=adobe-acrobat-reader
+- product_id: adobe-acrobat-reader
+  update_version: 25.001.21184
+  target_build: ''
+  method_id: adobe_community_algolia_search
+  source_type: adobe_community_bug_report
+  status: no_results
+  candidates_found: 7
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 7
+  blocked_reason: ''
+  last_run: '2026-09-01T16:31:11Z'
+  notes: acrobat community collector; edition=adobe-acrobat-reader
+- product_id: adobe-acrobat-reader
+  update_version: 25.001.21111
+  target_build: ''
+  method_id: adobe_community_algolia_search
+  source_type: adobe_community_bug_report
+  status: success
+  candidates_found: 9
+  accepted_candidates: 1
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 1
+  public_counted_reports: 1
+  accepted_reports: 1
+  rejected_reports: 8
+  blocked_reason: ''
+  last_run: '2026-09-01T16:31:11Z'
+  notes: acrobat community collector; edition=adobe-acrobat-reader
+- product_id: adobe-acrobat-reader
+  update_version: 25.001.21078
+  target_build: ''
+  method_id: adobe_community_algolia_search
+  source_type: adobe_community_bug_report
+  status: no_results
+  candidates_found: 5
+  accepted_candidates: 0
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 5
+  blocked_reason: ''
+  last_run: '2026-09-01T16:31:11Z'
+  notes: acrobat community collector; edition=adobe-acrobat-reader
+- product_id: adobe-acrobat-reader
+  update_version: 25.001.20997
+  target_build: ''
+  method_id: adobe_community_algolia_search
+  source_type: adobe_community_bug_report
+  status: success
+  candidates_found: 13
+  accepted_candidates: 2
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 2
+  public_counted_reports: 2
+  accepted_reports: 2
+  rejected_reports: 11
+  blocked_reason: ''
+  last_run: '2026-09-01T16:31:11Z'
+  notes: acrobat community collector; edition=adobe-acrobat-reader
+- product_id: adobe-acrobat-reader
+  update_version: 25.001.20982
+  target_build: ''
+  method_id: adobe_community_algolia_search
+  source_type: adobe_community_bug_report
+  status: success
+  candidates_found: 8
+  accepted_candidates: 1
+  duplicate_existing_evidence: 0
+  evidence_rows_added: 1
+  public_counted_reports: 1
+  accepted_reports: 1
+  rejected_reports: 7
+  blocked_reason: ''
+  last_run: '2026-09-01T16:31:11Z'
+  notes: acrobat community collector; edition=adobe-acrobat-reader
