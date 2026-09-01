@@ -432,6 +432,45 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
       {% endif %}
 
 
+      {%- comment -%}
+        LEVEL 3 -- RECENT POWERPOINT REPORTS. Concrete problems reported WHILE this release was
+        current. Situational context only: the reporters did not identify this update as the cause,
+        and nothing here is patch evidence. Filtered on the joined release_window_key because
+        Jekyll's `where` coerces a numeric-looking property to a Float and silently drops a
+        trailing zero, which is what made a build like 20326.20100 stop matching its own page.
+      {%- endcomment -%}
+      {%- assign l3_all = site.data.recent_powerpoint_reports.reports | default: empty -%}
+      {%- capture l3_key %}{{ page.product_id }}|{{ page.update_version }}|{{ t2_build }}{% endcapture -%}
+      {%- assign l3_rows = l3_all | where: "release_window_key", l3_key -%}
+      {%- assign l3_count = l3_rows | size -%}
+      {% if l3_count > 0 %}
+      <section class="recent-reports-card" aria-label="Recent PowerPoint reports in this release window">
+        <div class="recent-reports-card__head">
+          <h2 class="recent-reports-card__title">Recent PowerPoint reports</h2>
+          <span class="recent-reports-card__count">{{ l3_count }}</span>
+          <span class="recent-reports-card__qualifier">Not attributed to this update.</span>
+        </div>
+        <p class="recent-reports-card__note">These issues were reported while this release was
+          current. The reporters did not identify this update as the cause, and they are
+          <strong>not</strong> counted toward the consensus above.</p>
+        <ul class="recent-reports-list">
+          {% for r in l3_rows limit: 8 %}
+          <li class="recent-reports-item">
+            <a class="recent-reports-item__title" href="{{ r.source_url }}" rel="nofollow noopener" target="_blank">{{ r.report_title | escape_once }}</a>
+            <span class="recent-reports-item__meta">{{ r.source_family | escape }} &middot; {{ r.report_date }}</span>
+            {%- assign win_start = r.window_start | default: '' -%}
+            {%- assign win_end = r.window_end | default: '' -%}
+            <p class="recent-reports-item__window">Reported during the {{ r.window_version }} / Build {{ r.window_build }} release window{% if win_start != '' %} ({{ win_start }}{% if win_end != '' %} to {{ win_end }}{% else %} onward{% endif %}){% endif %}.</p>
+            <p class="recent-reports-item__attribution">Patch attribution: not established.</p>
+          </li>
+          {% endfor %}
+        </ul>
+        {% if l3_count > 8 %}
+        <p class="recent-reports-card__more">Showing 8 of {{ l3_count }} recent PowerPoint reports in this release window. Every source is linked above and in the sources list.</p>
+        {% endif %}
+      </section>
+      {% endif %}
+
       <div id="verdict" class="update-decision-box update-decision-box--{{ evidence_state_class }}">
         <div class="update-decision-box__header">
           <span class="update-decision-eyebrow">AUXSAYS verdict</span>

@@ -85,6 +85,7 @@ class OrchestrationState:
     evidence_changes: dict[str, Any] = field(default_factory=dict)
     health_changes: dict[str, Any] = field(default_factory=dict)
     tier2_changes: dict[str, Any] = field(default_factory=dict)
+    recent_changes: dict[str, Any] = field(default_factory=dict)
     promotion_changes: dict[str, Any] = field(default_factory=dict)
     qa_result: dict[str, Any] = field(default_factory=dict)
     audit_result: dict[str, Any] = field(default_factory=dict)
