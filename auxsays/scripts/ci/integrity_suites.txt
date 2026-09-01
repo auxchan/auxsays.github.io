@@ -88,7 +88,7 @@ auxsays/scripts/tests/test_windows_rollover_convergence.py = 33
 # Deterministic and offline; broader surface or presentation-level. Also blocking in CI --
 # "diagnostic" names the domain, not a weaker guarantee.
 auxsays/scripts/tests/test_adobe_acrobat_adapter.py = 48
-auxsays/scripts/tests/test_adobe_acrobat_community_collector.py = 105
+auxsays/scripts/tests/test_adobe_acrobat_community_collector.py = 117
 auxsays/scripts/tests/test_adobe_photoshop_adapter.py = 63
 auxsays/scripts/tests/test_adobe_release_notes_adapter.py = 8
 auxsays/scripts/tests/test_blackmagic_support_downloads.py = 10
