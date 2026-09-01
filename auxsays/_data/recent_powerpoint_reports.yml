@@ -4,7 +4,7 @@ note: Concrete PowerPoint problems reported while a release was current. These a
   and these rows are excluded from every consensus calculation.
 reports:
 - attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
+  captured_at: '2026-09-01T10:31:16Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -24,7 +24,7 @@ reports:
   window_start: '2026-08-26'
   window_version: '2608'
 - attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
+  captured_at: '2026-09-01T10:31:16Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -45,7 +45,7 @@ reports:
   window_start: '2026-08-18'
   window_version: '2608'
 - attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
+  captured_at: '2026-09-01T10:31:16Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -86,7 +86,7 @@ reports:
   window_start: '2026-08-18'
   window_version: '2608'
 - attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
+  captured_at: '2026-09-01T10:31:16Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -107,7 +107,7 @@ reports:
   window_start: '2026-08-18'
   window_version: '2608'
 - attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
+  captured_at: '2026-09-01T10:31:16Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -129,7 +129,7 @@ reports:
   window_start: '2026-08-11'
   window_version: '2607'
 - attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
+  captured_at: '2026-09-01T10:31:16Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -150,7 +150,7 @@ reports:
   window_start: '2026-08-11'
   window_version: '2607'
 - attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
+  captured_at: '2026-09-01T10:31:16Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -171,7 +171,7 @@ reports:
   window_start: '2026-08-11'
   window_version: '2607'
 - attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
+  captured_at: '2026-09-01T10:31:16Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -192,7 +192,7 @@ reports:
   window_start: '2026-08-04'
   window_version: '2607'
 - attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
+  captured_at: '2026-09-01T10:31:16Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -213,7 +213,7 @@ reports:
   window_start: '2026-08-04'
   window_version: '2607'
 - attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
+  captured_at: '2026-09-01T10:31:16Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -233,7 +233,7 @@ reports:
   window_start: '2026-07-29'
   window_version: '2607'
 - attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
+  captured_at: '2026-09-01T10:31:16Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -277,6 +277,27 @@ reports:
   window_start: '2026-07-23'
   window_version: '2607'
 - attribution_state: not_established
+  captured_at: '2026-09-01T10:31:16Z'
+  classification: recent_report
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
+  release_window_key: microsoft-powerpoint|2605|20026.20076
+  report_date: '2026-07-16'
+  report_excerpt: Edit/Mass Edit Powerpoint linked file addresses As the title suggests I'm looking for
+    a way to manually edit or ideally mass edit the address to linked files in powerpoint. For context
+    I play several games where I need to keep track of what builds I have on which...
+  report_id: microsoft-powerpoint:ad938950f21596d1
+  report_title: Edit/Mass Edit Powerpoint linked file addresses
+  source_family: Microsoft Tech Community
+  source_report_id: '4538038'
+  source_type: microsoft_tech_community
+  source_url: https://techcommunity.microsoft.com/discussions/microsoft-365/editmass-edit-powerpoint-linked-file-addresses/4538038
+  strict_exclusion_reason: missing_powerpoint_version
+  window_build: '20026.20076'
+  window_end: '2026-07-23'
+  window_start: '2026-05-20'
+  window_version: '2605'
+- attribution_state: not_established
   captured_at: '2026-09-01T00:00:00Z'
   classification: recent_report
   product_id: microsoft-powerpoint
@@ -318,7 +339,7 @@ reports:
   window_start: '2026-05-20'
   window_version: '2605'
 - attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
+  captured_at: '2026-09-01T10:31:16Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -402,7 +423,7 @@ reports:
   window_start: '2025-07-22'
   window_version: '2506'
 - attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
+  captured_at: '2026-09-01T10:31:16Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -422,7 +443,71 @@ reports:
   window_start: '2025-07-22'
   window_version: '2506'
 - attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
+  captured_at: '2026-09-01T10:31:16Z'
+  classification: recent_report
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
+  release_window_key: microsoft-powerpoint|2506|18925.20184
+  report_date: '2025-10-28'
+  report_excerpt: VBA Powerpoint SendKeys fails to take a screenshot I have succesfully implemented this
+    from MS Excel, but making it work from PowerPoint has not been a success. I am making use of a proprietary
+    screenshot tool which accepts the alt+PRTSC shortcut, but even without that, I...
+  report_id: microsoft-powerpoint:fb41a33aa60fffad
+  report_title: VBA Powerpoint SendKeys fails to take a screenshot
+  source_family: Super User / Stack Exchange
+  source_report_id: '79802566'
+  source_type: stack_exchange_question
+  source_url: https://stackoverflow.com/questions/79802566/vba-powerpoint-sendkeys-fails-to-take-a-screenshot
+  strict_exclusion_reason: missing_powerpoint_version
+  window_build: '18925.20184'
+  window_end: '2026-01-27'
+  window_start: '2025-07-22'
+  window_version: '2506'
+- attribution_state: not_established
+  captured_at: '2026-09-01T10:31:16Z'
+  classification: recent_report
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
+  release_window_key: microsoft-powerpoint|2502|18526.20144
+  report_date: '2025-03-27'
+  report_excerpt: How can I quickly convert a large PDF file with many pages into a PowerPoint (PPT) file?
+    I have approximately 10,000 PDF files that I've merged into files containing 500 pages each (20 files
+    of 500 pages). Now, I want to convert each merged PDF file into a PowerPoint (PPT)...
+  report_id: microsoft-powerpoint:ffdfa157250c23ea
+  report_title: How can I quickly convert a large PDF file with many pages into a PowerPoint (PPT) file?
+  source_family: Super User / Stack Exchange
+  source_report_id: '1888803'
+  source_type: stack_exchange_question
+  source_url: https://superuser.com/questions/1888803/how-can-i-quickly-convert-a-large-pdf-file-with-many-pages-into-a-powerpoint-pp
+  strict_exclusion_reason: missing_powerpoint_version
+  window_build: '18526.20144'
+  window_end: '2025-04-02'
+  window_start: '2025-03-05'
+  window_version: '2502'
+- attribution_state: not_established
+  captured_at: '2026-09-01T10:31:16Z'
+  classification: recent_report
+  product_id: microsoft-powerpoint
+  promotion_eligible: true
+  release_window_key: microsoft-powerpoint|2501|18429.20132
+  report_date: '2025-02-07'
+  report_excerpt: PowerPoint VBA code is inconsistent when running in attempt to export OLE objects as
+    high resolution JPG files I have linked macro-enabled worksheet objects from excel to 25 different
+    powerpoint slides in my powerpoint deck. Some slides have up to three linked objects and...
+  report_id: microsoft-powerpoint:2b9b99726b421668
+  report_title: PowerPoint VBA code is inconsistent when running in attempt to export OLE objects as high
+    resolution JPG files
+  source_family: Super User / Stack Exchange
+  source_report_id: '79421749'
+  source_type: stack_exchange_question
+  source_url: https://stackoverflow.com/questions/79421749/powerpoint-vba-code-is-inconsistent-when-running-in-attempt-to-export-ole-object
+  strict_exclusion_reason: missing_powerpoint_version
+  window_build: '18429.20132'
+  window_end: '2025-03-05'
+  window_start: '2025-01-30'
+  window_version: '2501'
+- attribution_state: not_established
+  captured_at: '2026-09-01T10:31:16Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -443,7 +528,7 @@ reports:
   window_start: '2024-12-05'
   window_version: '2411'
 - attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
+  captured_at: '2026-09-01T10:31:16Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -507,7 +592,7 @@ reports:
   window_start: '2024-11-12'
   window_version: '2410'
 - attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
+  captured_at: '2026-09-01T10:31:16Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true
@@ -528,7 +613,7 @@ reports:
   window_start: '2024-05-14'
   window_version: '2404'
 - attribution_state: not_established
-  captured_at: '2026-09-01T00:00:00Z'
+  captured_at: '2026-09-01T10:31:16Z'
   classification: recent_report
   product_id: microsoft-powerpoint
   promotion_eligible: true

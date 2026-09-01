@@ -14453,3 +14453,30 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: microsoft-powerpoint-2501-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5395007-cant-open-pptx-from-mapped-sharepoint
+  product_id: microsoft-powerpoint
+  update_version: '2501'
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5395007/cant-open-pptx-from-mapped-sharepoint-drive-since
+  parent_title: Can&#39;t open .pptx from mapped SharePoint drive since Office update - Microsoft Q&amp;A
+  report_title: Can&#39;t open .pptx from mapped SharePoint drive since Office update - Microsoft Q&amp;A
+  report_text_excerpt: Can&#39;t open .pptx from mapped SharePoint drive since Office update - Microsoft Q&amp;A Can't open .pptx from mapped SharePoint drive since Office update Occurring since Office update to build 2501 18429.20132 Double clicking on any .pptx in a mapped SharePoint drive in...
+  captured_at: '2026-09-01T09:54:49Z'
+  source_date: '2025-02-10'
+  target_release_date: '2025-01-30'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '2501'
+  match_basis: exact_version_channel_build
+  applicability: microsoft-powerpoint
+  counted: true
+  exclusion_reason: null
+  issue_theme: launch / open failure
+  workflow_area: startup
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '18429.20132'
