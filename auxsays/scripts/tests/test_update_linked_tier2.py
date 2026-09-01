@@ -847,6 +847,29 @@ def run() -> int:
     merged_d, _ = l3.merge_recent_reports([], distinct, promoted_urls=set())
     check("R.27 two DIFFERENT reports are not collapsed", len(merged_d) == 2, str(len(merged_d)))
 
+    # R.32 Asking for a way to do something is not reporting a problem, however much incidental
+    # failure vocabulary the body carries. Both of these reached the LIVE site: the second was
+    # admitted because its author said their moved links "no longer work" -- true of their files,
+    # not of PowerPoint. Body-wide matching cannot separate them; the headline can.
+    check("R.32 a how-to question never publishes, whatever its body says",
+          l3row("How can I quickly convert a large PDF into a PowerPoint? "
+                "The old converter no longer works and crashes on 500 pages.", "2026-08-20")
+          is None)
+    check("R.33 nor a feature request whose body mentions something not working",
+          l3row("Edit/Mass Edit Powerpoint linked file addresses. I'm looking for a way to mass "
+                "edit link addresses; the old links no longer work after I moved the files.",
+                "2026-08-20") is None)
+    check("R.34 but a real failure titled as a question still publishes",
+          l3row("How to fix my power point issue which is not repair now - it crashes on open",
+                "2026-08-20") is not None)
+    check("R.35 and a clumsily-worded real report is not lost to the request veto",
+          l3row("my power point is not work ing properly the screen black and i dont know how to "
+                "fix it, it crashes", "2026-08-20") is not None)
+    published = {str(r.get("report_title") or "") for r in real_l3}
+    check("R.36 no published row is a bare how-to",
+          not [t for t in published if t.lower().startswith(("how can i", "how do i"))],
+          str([t for t in published if t.lower().startswith(("how can i", "how do i"))][:2]))
+
     # R.28 Liquid treats a missing key as nil, and `nil != ''` is true, so the else-branch never
     # ran and the live current-build page printed a dangling "(2026-08-26 to )".
     layout_r = (ROOT / "_layouts" / "aux-update.html").read_text(encoding="utf-8")
