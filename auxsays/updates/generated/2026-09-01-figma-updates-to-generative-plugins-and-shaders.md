@@ -1,8 +1,8 @@
 ---
 layout: aux-update
-title: Figma Erase and drag to fill for vector editing official update breakdown
-description: Official Figma update record captured from Figma.
-permalink: /updates/figma/figma/erase-and-drag-to-fill-for-vector-editing/
+title: Figma Updates to generative plugins and shaders official update breakdown
+description: Official Figma update record captured from Figma for Updates to generative plugins and shaders.
+permalink: /updates/figma/figma/updates-to-generative-plugins-and-shaders/
 update_entry: true
 company_id: figma
 product_id: figma
@@ -11,28 +11,30 @@ update_product: Figma
 update_category: Design Workflow
 update_type: official-source
 update_source_name: Figma
-update_source_url: https://www.figma.com/release-notes/?title=erase-vector-editing
+update_source_url: https://www.figma.com/release-notes/?title=updates-to-generative-plugins-shaders
 update_download_url: ''
-update_version: Erase and drag to fill for vector editing
+update_version: Updates to generative plugins and shaders
 update_logo_text: FIG
-update_published_at: '2026-08-24T00:00:00.000Z'
-update_last_checked: '2026-08-24T19:54:01Z'
+update_published_at: '2026-09-01T00:00:00.000Z'
+update_last_checked: '2026-09-01T17:36:56Z'
 source_last_checked: '2026-09-01T17:36:56Z'
 official_body_last_checked: '2026-09-01T17:36:56Z'
-record_last_updated: '2026-08-24T19:54:01Z'
+record_last_updated: '2026-09-01T17:36:56Z'
 patch_file_size: ''
 patch_file_size_note: ''
 patch_file_size_status: pending_adapter_support
 update_status: current
-update_feed_title: Figma Erase and drag to fill for vector editing
-update_detail_title: Figma Erase and drag to fill for vector editing
+update_feed_title: Figma Updates to generative plugins and shaders
+update_detail_title: Figma Updates to generative plugins and shaders
 update_consensus_label: Insufficient data
 update_report_count: 0
 update_consensus_confidence: Low
-quick_verdict: Figma Erase and drag to fill for vector editing has an official AUXSAYS record. Confirmed patch-specific consensus
+quick_verdict: Figma Updates to generative plugins and shaders has an official AUXSAYS record. Confirmed patch-specific consensus
   is deferred until the consensus refresh pipeline is active.
-official_summary: Figma published Figma Erase and drag to fill for vector editing.
-release_summary: Vector editing in Figma now brings familiar interactions to precise edits on the canvas.
+official_summary: Figma published Figma Updates to generative plugins and shaders.
+release_summary: At Config, we launched the ability build your own custom generative plugins and shaders by prompting the
+  Figma agent. Now, you can do more with those generative plugins and shaders with animations and interactions, publishing
+  capabilities, and access to the code.
 consensus_report: Confirmed patch-specific consensus collection is deferred. This page currently reflects official-source
   ingestion only.
 evidence_state: official_only
@@ -50,10 +52,10 @@ consensus_report_weighting: equal_per_confirmed_report
 consensus_low_context_policy: excluded
 complaint_themes: []
 status_events:
-- at: '2026-08-24T00:00:00.000Z'
+- at: '2026-09-01T00:00:00.000Z'
   label: Published
   note: Official source entry detected.
-- at: '2026-08-24T19:54:07Z'
+- at: '2026-09-01T17:37:05Z'
   label: Insufficient data
   note: AUXSAYS official-ingestion record initialized.
 official_patch_notes_source_type: rss-feed
@@ -61,7 +63,7 @@ primary_official_source: https://www.figma.com/release-notes/
 fallback_official_sources:
 - https://forum.figma.com/product-updates-3
 official_patch_notes_capture_status: captured-from-rss-feed
-official_patch_notes_source_url: https://www.figma.com/release-notes/?title=erase-vector-editing
+official_patch_notes_source_url: https://www.figma.com/release-notes/?title=updates-to-generative-plugins-shaders
 official_note_status: official_source_captured
 official_note_label: Official source summary
 official_source_type: rss-feed
@@ -69,32 +71,14 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-08-31T15:06:39Z'
-  url: https://www.figma.com/release-notes/?title=erase-vector-editing
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
-- at: '2026-09-01T00:42:13Z'
-  url: https://www.figma.com/release-notes/?title=erase-vector-editing
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
-- at: '2026-09-01T07:09:46Z'
-  url: https://www.figma.com/release-notes/?title=erase-vector-editing
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
-- at: '2026-09-01T13:45:49Z'
-  url: https://www.figma.com/release-notes/?title=erase-vector-editing
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-09-01T17:36:56Z'
-  url: https://www.figma.com/release-notes/?title=erase-vector-editing
+  url: https://www.figma.com/release-notes/?title=updates-to-generative-plugins-shaders
   status: captured-from-rss-feed
   body_captured: true
   checksums_captured: false
-official_patch_notes_body: Vector editing in Figma now brings familiar interactions to precise edits on the canvas.
+official_patch_notes_body: At Config, we launched the ability build your own custom generative plugins and shaders by prompting
+  the Figma agent. Now, you can do more with those generative plugins and shaders with animations and interactions, publishing
+  capabilities, and access to the code.
 official_checksums_body: ''
 official_checksums_capture_status: not-present
 ---

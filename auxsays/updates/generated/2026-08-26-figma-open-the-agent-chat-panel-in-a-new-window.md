@@ -17,8 +17,8 @@ update_version: Open the agent chat panel in a new window
 update_logo_text: FIG
 update_published_at: '2026-08-26T00:00:00.000Z'
 update_last_checked: '2026-08-27T11:00:17Z'
-source_last_checked: '2026-09-01T13:45:49Z'
-official_body_last_checked: '2026-09-01T13:45:49Z'
+source_last_checked: '2026-09-01T17:36:56Z'
+official_body_last_checked: '2026-09-01T17:36:56Z'
 record_last_updated: '2026-08-27T11:00:17Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -70,11 +70,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-08-31T06:52:29Z'
-  url: https://www.figma.com/release-notes/?title=open-the-agent-chat-panel-in-a-new-window
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-08-31T15:06:39Z'
   url: https://www.figma.com/release-notes/?title=open-the-agent-chat-panel-in-a-new-window
   status: captured-from-rss-feed
@@ -91,6 +86,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-01T13:45:49Z'
+  url: https://www.figma.com/release-notes/?title=open-the-agent-chat-panel-in-a-new-window
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-01T17:36:56Z'
   url: https://www.figma.com/release-notes/?title=open-the-agent-chat-panel-in-a-new-window
   status: captured-from-rss-feed
   body_captured: true
