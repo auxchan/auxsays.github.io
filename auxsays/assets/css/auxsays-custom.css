@@ -5696,3 +5696,56 @@ th[aria-sort="descending"] .patch-sort-btn { color: var(--text-0); }
   color: var(--aux-text-muted, #63636d);
   white-space: nowrap;
 }
+
+
+/* Level 3 -- recent PowerPoint reports. Deliberately the quietest of the three evidence blocks:
+   this is situational context, and it must never read with the weight of confirmed evidence. */
+.recent-reports-card {
+  margin: 1rem 0 0;
+  padding: 0.9rem 1rem;
+  border: 1px dashed var(--aux-border, #d7d7db);
+  border-radius: 6px;
+  background: transparent;
+}
+.recent-reports-card__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+.recent-reports-card__title {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+.recent-reports-card__count { font-size: 1.15rem; font-weight: 600; }
+.recent-reports-card__qualifier {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: var(--aux-text-muted, #63636d);
+}
+.recent-reports-card__note,
+.recent-reports-card__more {
+  margin: 0.4rem 0 0.6rem;
+  font-size: 0.85rem;
+  color: var(--aux-text-muted, #63636d);
+}
+.recent-reports-list { margin: 0; padding: 0; list-style: none; }
+.recent-reports-item { padding: 0.55rem 0; border-top: 1px solid var(--aux-border, #e3e3e7); }
+.recent-reports-item__title { font-weight: 600; }
+.recent-reports-item__meta,
+.recent-reports-item__window,
+.recent-reports-item__attribution {
+  display: block;
+  margin: 0.2rem 0 0;
+  font-size: 0.8rem;
+  color: var(--aux-text-muted, #63636d);
+}
+.patch-cell-num__recent {
+  display: inline-block;
+  font-size: 0.78rem;
+  color: var(--aux-text-muted, #63636d);
+  white-space: nowrap;
+}

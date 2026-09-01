@@ -49,6 +49,7 @@ from lib.orchestration import (  # noqa: E402
 )
 from lib import context_resolution as cr  # noqa: E402
 from lib import tier2_evidence as t2  # noqa: E402
+from lib import recent_reports as l3  # noqa: E402
 # The resolution budget is ordered with the authority's OWN concreteness predicate, never a local
 # re-implementation: prioritisation must not be able to disagree with acceptance.
 from patch_collectors.microsoft_powerpoint import concrete_issue as ppt_concrete_issue  # noqa: E402
@@ -93,6 +94,7 @@ POWERPOINT_ALLOW = [
     # Update-linked (Tier 2) reports. A separate path because it is a separate corpus: consensus
     # never reads it, and it needs its own write permission rather than riding on evidence's.
     "auxsays/_data/update_linked_evidence.yml",
+    "auxsays/_data/recent_powerpoint_reports.yml",
     "auxsays/updates/generated/*powerpoint*.md",
 ]
 PRODUCTION_VALIDATE = [
@@ -248,6 +250,10 @@ class Pipeline:
         # Its OWN file. Consensus never reads this one, which is what makes Tier-2 isolation
         # structural rather than a rule someone has to remember.
         self.tier2_path = self.repo_root / "auxsays" / "_data" / "update_linked_evidence.yml"
+        # Level 3 gets its own file too. Nothing that computes a count, a percentage, a verdict or
+        # a consensus state reads either of these, which is what makes the isolation structural
+        # rather than a rule somebody has to remember.
+        self.recent_path = self.repo_root / "auxsays" / "_data" / "recent_powerpoint_reports.yml"
         self.generated_dir = generated_dir or (self.repo_root / "auxsays" / "updates" / "generated")
         self.methods = methods if methods is not None else default_powerpoint_methods()
         self.authorities = authorities if authorities is not None else default_authorities(
@@ -723,7 +729,8 @@ class Pipeline:
         self._write_tier2(state, counted)
         state.receipt("FINALIZE_EVIDENCE", identity,
                       {**state.evidence_changes, **{"health_" + k: v for k, v in state.health_changes.items()},
-                       **{"tier2_" + k: v for k, v in (state.tier2_changes or {}).items()}})
+                       **{"tier2_" + k: v for k, v in (state.tier2_changes or {}).items()},
+                       **{"recent_" + k: v for k, v in (state.recent_changes or {}).items()}})
         return state
 
     def _write_tier2(self, state: OrchestrationState, counted: list[dict[str, Any]]) -> None:
@@ -781,6 +788,31 @@ class Pipeline:
                                "candidates": len(fresh), "stored": len(merged), **stats}
         if self.write:
             t2.write_tier2(merged, self.tier2_path)
+
+        # LEVEL 3. Everything the strict authority refused for an identity reason, that reads as a
+        # concrete PowerPoint problem, that carries a date inside a real release window, and that is
+        # not already visible at a higher level. Situational context, never patch evidence.
+        higher = {str(u).strip().rstrip("/").lower() for u in confirmed_urls}
+        higher |= {str(r.get("source_url") or "").strip().rstrip("/").lower() for r in merged}
+        recent_fresh: list[dict[str, Any]] = []
+        recent_seen: set[str] = set()
+        for result in state.method_results:
+            for row in result.get("tier2_source_rows") or []:
+                built = l3.recent_report_from_rejection(
+                    row, windows=windows, captured_at=captured_at,
+                    is_concrete=_ppt.concrete_issue, exclude_urls=higher)
+                if built is None or built.report_id in recent_seen:
+                    continue
+                recent_seen.add(built.report_id)
+                recent_fresh.append(built.as_dict())
+        existing_recent = l3.load_recent(self.recent_path) if self.recent_path.exists() else []
+        recent_merged, recent_stats = l3.merge_recent_reports(
+            existing_recent, recent_fresh, promoted_urls=higher)
+        state.recent_changes = {"mode": "write" if self.write else "dry",
+                                "candidates": len(recent_fresh),
+                                "stored": len(recent_merged), **recent_stats}
+        if self.write:
+            l3.write_recent(recent_merged, self.recent_path)
 
     def reconcile_counts(self, state: OrchestrationState) -> OrchestrationState:
         identity = inputs_identity({"evidence": state.evidence_changes, "targets":

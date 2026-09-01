@@ -220,6 +220,7 @@ def run() -> int:  # noqa: PLR0915
           orch.POWERPOINT_ALLOW == ["auxsays/_data/consensus_evidence.yml",
                                     "auxsays/_data/evidence_method_health.yml",
                                     "auxsays/_data/update_linked_evidence.yml",
+                                    "auxsays/_data/recent_powerpoint_reports.yml",
                                     "auxsays/updates/generated/*powerpoint*.md"],
           str(orch.POWERPOINT_ALLOW))
     check("1 the update-linked path is a single named file, never a directory glob",
