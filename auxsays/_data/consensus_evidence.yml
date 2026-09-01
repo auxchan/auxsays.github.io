@@ -14480,3 +14480,60 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '18429.20132'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5990420-urgent-kb5120998-26200-9278-is-wiping
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5990420/urgent-kb5120998-26200-9278-is-wiping-all-edge-coo
+  parent_title: 'URGENT: KB5120998 (26200.9278) is wiping all Edge cookie settings on close - Microsoft Q&A'
+  report_title: 'URGENT: KB5120998 (26200.9278) is wiping all Edge cookie settings on close - Microsoft Q&A'
+  report_text_excerpt: 'URGENT: KB5120998 (26200.9278) is wiping all Edge cookie settings on close - Microsoft Q&A URGENT: KB5120998 (26200.9278) is wiping all Edge cookie settings on close Just sent thie to Feedback hub: ChatGBT helped me write it Feedback Hub Note (Urgent) Title: URGENT: KB5120998...'
+  captured_at: '2026-09-01T12:53:12Z'
+  source_date: '2026-09-01'
+  target_release_date: '2026-08-27'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9278'
+  match_basis: exact_os_build
+  matched_kb: KB5120998
+  matched_os_build: '26200.9278'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5989625-file-history-ui-and-previous-versions
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5989625/file-history-ui-and-previous-versions-broken-after
+  parent_title: File History UI and Previous Versions Broken After Installing Recent Windows Updates (KB5101684 / KB5120249) - Microsoft Q&A
+  report_title: File History UI and Previous Versions Broken After Installing Recent Windows Updates (KB5101684 / KB5120249) - Microsoft Q&A
+  report_text_excerpt: File History UI and Previous Versions Broken After Installing Recent Windows Updates (KB5101684 / KB5120249) - Microsoft Q&A win 10 22H2 desktop computer os build 19045.7663 BIOS american megatrends inc P11-A4 202108acerPC win 11 25H2 latop OS Builds 26200.9278 BIOS Inysde...
+  captured_at: '2026-09-01T12:53:12Z'
+  source_date: '2026-09-01'
+  target_release_date: '2026-08-27'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9278'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9278'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
