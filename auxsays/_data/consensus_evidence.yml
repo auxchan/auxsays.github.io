@@ -16111,3 +16111,57 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: acrobat-26-002-21869-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-26-002-21869-for-mac-font-list-is-empty-1640132
+  product_id: adobe-acrobat-pro
+  update_version: 26.002.21869
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-26-002-21869-for-mac-font-list-is-empty-1640132
+  parent_title: 'Acrobat 26.002.21869 for Mac: Font list is empty'
+  report_title: 'Acrobat 26.002.21869 for Mac: Font list is empty'
+  report_text_excerpt: 'Acrobat 26.002.21869 for Mac: Font list is empty Hello! I really appreciate if anyone can help me with this issue. Since the 2026 version of Acrobat for Mac, the font list while editing a file shows empty. macOS Tahoe 26.6.2, Acrobat 26.002.21869. I performed a clean install,...'
+  captured_at: '2026-09-02T21:01:16Z'
+  source_date: '2026-09-02'
+  target_release_date: '2026-08-31'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.002.21869
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-26-002-21869-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-26-002-21869-for-mac-font-list-is-empty-1640132
+  product_id: adobe-acrobat-reader
+  update_version: 26.002.21869
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-26-002-21869-for-mac-font-list-is-empty-1640132
+  parent_title: 'Acrobat 26.002.21869 for Mac: Font list is empty'
+  report_title: 'Acrobat 26.002.21869 for Mac: Font list is empty'
+  report_text_excerpt: 'Acrobat 26.002.21869 for Mac: Font list is empty Hello! I really appreciate if anyone can help me with this issue. Since the 2026 version of Acrobat for Mac, the font list while editing a file shows empty. macOS Tahoe 26.6.2, Acrobat 26.002.21869. I performed a clean install,...'
+  captured_at: '2026-09-02T21:21:20Z'
+  source_date: '2026-09-02'
+  target_release_date: '2026-08-31'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.002.21869
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
