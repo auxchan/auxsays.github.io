@@ -16090,3 +16090,24 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+- id: obs-studio-32-2-2-github-issue-13856
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13856
+  parent_title: Two confirmed bugs in the YouTube broadcast dialog (OAuth language not sent; Auto-stop setting not saved)
+  report_title: Two confirmed bugs in the YouTube broadcast dialog (OAuth language not sent; Auto-stop setting not saved)
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/8ksOQVq06JvBJbce ### OBS Studio Crash Log URL _No response_ ### Expected Behavior (1) W'
+  captured_at: '2026-09-02T12:31:02Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
