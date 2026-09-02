@@ -17,8 +17,8 @@ update_version: Design with agents on the Figma canvas, now in beta
 update_logo_text: FIG
 update_published_at: '2026-03-24T00:00:00.000Z'
 update_last_checked: '2026-07-23T04:51:08Z'
-source_last_checked: '2026-07-23T04:51:08Z'
-official_body_last_checked: '2026-07-23T04:51:08Z'
+source_last_checked: '2026-09-02T06:32:11Z'
+official_body_last_checked: '2026-09-02T06:32:11Z'
 record_last_updated: '2026-07-23T04:51:08Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -70,6 +70,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-07-23T04:51:08Z'
+  url: https://www.figma.com/release-notes/?title=design-with-agents-on-the-figma-canvas-now-in-beta
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-02T06:32:11Z'
   url: https://www.figma.com/release-notes/?title=design-with-agents-on-the-figma-canvas-now-in-beta
   status: captured-from-rss-feed
   body_captured: true
