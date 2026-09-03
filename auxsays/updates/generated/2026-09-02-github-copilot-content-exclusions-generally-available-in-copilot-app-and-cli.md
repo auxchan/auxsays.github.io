@@ -18,8 +18,8 @@ update_version: Content exclusions generally available in Copilot app and CLI
 update_logo_text: GIT
 update_published_at: '2026-09-02T18:14:23Z'
 update_last_checked: '2026-09-02T23:03:05Z'
-source_last_checked: '2026-09-03T12:08:14Z'
-official_body_last_checked: '2026-09-03T12:08:14Z'
+source_last_checked: '2026-09-03T18:14:11Z'
+official_body_last_checked: '2026-09-03T18:14:11Z'
 record_last_updated: '2026-09-02T23:03:05Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -85,6 +85,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-03T12:08:14Z'
+  url: https://github.blog/changelog/2026-09-02-content-exclusions-generally-available-in-copilot-app-and-cli
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-03T18:14:11Z'
   url: https://github.blog/changelog/2026-09-02-content-exclusions-generally-available-in-copilot-app-and-cli
   status: captured-from-rss-feed
   body_captured: true
