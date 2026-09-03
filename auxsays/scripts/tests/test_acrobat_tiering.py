@@ -346,6 +346,100 @@ def run() -> int:  # noqa: PLR0915
           ac.TIER2_PATH.name == "acrobat_update_linked_evidence.yml"
           and ac.TIER3_PATH.name == "recent_acrobat_reports.yml")
 
+    # WRITE AUTHORITY. Two independent guards must both name these files, and the first production
+    # run proved it: the collector wrote them, the per-collector transaction read that as an
+    # undeclared mutation, and the ENTIRE Acrobat run was rolled back with
+    # `unexpected_mutation:UnexpectedMutation`. A local backfill script never exercises either guard.
+    from run_patch_evidence_collection import _extra_write_surface  # noqa: PLC0415
+    for pid in (READER, PRO):
+        names = {p.name for p in _extra_write_surface(pid)}
+        check(f"F.7 the transaction surface declares both tier files for {pid.split('-')[-1]}",
+              names == {ac.TIER2_PATH.name, ac.TIER3_PATH.name}, str(names))
+    check("F.8 and declares them for NO other product",
+          _extra_write_surface("obs-studio") == []
+          and _extra_write_surface("microsoft-powerpoint") == [])
+    workflow = (_REPO / ".github" / "workflows" / "obs-evidence-collection.yml"
+                ).read_text(encoding="utf-8")
+    for name in (ac.TIER2_PATH.name, ac.TIER3_PATH.name):
+        check(f"F.9 the writeback allow-list permits {name}",
+              f"--allow auxsays/_data/{name}" in workflow)
+
+    print()
+    print("=" * 98)
+    print("W  two writers cannot silently clobber newer adjudication with stale output")
+    print("=" * 98)
+    # THE INCIDENT THIS LOCKS. Two backfills ran against the same file. The one started BEFORE a
+    # rule was corrected finished AFTER the corrected one and replaced 7 adjudicated rows with its
+    # own stale 10, two of which the corrected rules refuse. Both writes "succeeded", the YAML was
+    # valid, the suites were green, and it reached main. Losing a race must be loud.
+    import tempfile  # noqa: PLC0415
+
+    from lib import single_writer as sw  # noqa: PLC0415
+    with tempfile.TemporaryDirectory() as td:
+        target = Path(td) / "tier.yml"
+        target.write_text("rows: [A]", encoding="utf-8")
+
+        # A slow writer reads the baseline...
+        baseline = sw.fingerprint(target)
+        check("W.1 a fingerprint identifies the exact bytes a writer derived its output from",
+              baseline and baseline == sw.fingerprint(target))
+        # ...a second writer publishes newer adjudication meanwhile...
+        sw.guarded_write(target, b"rows: [B_newer]", expected=baseline)
+        check("W.2 the second writer succeeds against the baseline it read",
+              target.read_text(encoding="utf-8") == "rows: [B_newer]")
+        # ...and the slow writer now tries to publish output built from the OLD bytes.
+        refused = False
+        try:
+            sw.guarded_write(target, b"rows: [A_stale]", expected=baseline)
+        except sw.StaleWrite:
+            refused = True
+        check("W.3 the stale writer is REFUSED rather than winning by finishing late", refused)
+        check("W.4 and the newer adjudication is still on disk",
+              target.read_text(encoding="utf-8") == "rows: [B_newer]")
+
+        # Mutual exclusion, so two writers cannot interleave a partial file.
+        held = False
+        with sw.write_lock(target):
+            try:
+                with sw.write_lock(target, timeout_s=0.5):
+                    pass
+            except sw.WriterBusy:
+                held = True
+        check("W.5 a second writer waits or fails while the lock is held", held)
+        check("W.6 and the lock is released afterwards, not leaked",
+              not Path(str(target) + sw.LOCK_SUFFIX).exists())
+
+        # Atomicity: a writer that dies mid-serialisation must not truncate the published file.
+        def exploding(_tmp):
+            raise RuntimeError("serialiser died")
+
+        try:
+            sw.guarded_write_via(target, exploding, expected=None)
+        except RuntimeError:
+            pass
+        check("W.7 a writer that raises leaves the previous complete file in place",
+              target.read_text(encoding="utf-8") == "rows: [B_newer]")
+        check("W.8 and leaves no temp file behind",
+              not list(Path(td).glob(".*tmp")))
+
+        # A first creation legitimately has no baseline.
+        fresh = Path(td) / "new.yml"
+        sw.guarded_write(fresh, b"rows: []", expected="")
+        check("W.9 creating a file states an ABSENT baseline, not no baseline at all",
+              fresh.read_text(encoding="utf-8") == "rows: []")
+
+    # The production path holds the lock across its read AND its write, so it merges whatever
+    # another writer published instead of having a stale baseline to reinstate.
+    collector_src = (_AUX / "scripts" / "patch_collectors" / "adobe_acrobat_community.py"
+                     ).read_text(encoding="utf-8")
+    check("W.10 the collector writes tier files under the write lock",
+          "with write_lock(path):" in collector_src)
+    check("W.11 and re-reads the existing rows INSIDE that lock",
+          collector_src.index("with write_lock(path):")
+          < collector_src.index("others = [r for r in loader(path)"))
+    check("W.12 publication is atomic, never a partial serialisation",
+          "replace_via(path," in collector_src)
+
     print()
     print("=" * 98)
     print("G  the page says context, never causation")
