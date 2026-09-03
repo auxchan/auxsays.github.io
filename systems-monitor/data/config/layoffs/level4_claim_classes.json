@@ -1,0 +1,88 @@
+{
+  "schemaVersion": "layoffs-level4-claim-classes-1.0.0",
+  "scope": "Layoffs & Job Destruction Level-4 canonical factors",
+  "reviewedAt": "2026-09-02",
+  "authority": "GOVERNED_FACTOR_CLASSIFICATION",
+  "observationPromotionAuthority": "NONE",
+  "relationshipPromotionAuthority": "NONE",
+  "definitions": {
+    "A_DIRECT_OBS": "An official agency publishes the measurement directly.",
+    "B_CALC": "A deterministic AUXSAYS calculation from accepted official observations.",
+    "C_EVENT_OR_STRUCTURAL": "A legitimate factor represented through official events, structural tables, or another non-conventional series.",
+    "D_TAXONOMY_OR_SOURCE_PROBLEM": "The concept is too broad, duplicative, misleading, or unsupported and must not be forced into production."
+  },
+  "factors": [
+    {
+      "canonicalFactorId": "factor:canonical:average-weekly-hours",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "BLS CES publishes the total-private average weekly hours observation directly.",
+      "sourceRefs": ["bls-ces:CES0500000002"]
+    },
+    {
+      "canonicalFactorId": "factor:canonical:business-bankruptcy-filings",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "The Administrative Office of the U.S. Courts publishes business bankruptcy filing counts directly in Table F-2.",
+      "sourceRefs": ["uscourts-f2:F2:US:BUSINESS:ALL"]
+    },
+    {
+      "canonicalFactorId": "factor:canonical:establishment-contractions",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "BLS BED publishes jobs lost at contracting establishments directly; Census BDS provides a separately governed annual counterpart.",
+      "sourceRefs": ["bls-bed:BDS0000000000000000110005LQ5", "census-bds:JOB_DESTRUCTION_CONTINUERS"]
+    },
+    {
+      "canonicalFactorId": "factor:canonical:firm-deaths",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "Census BDS publishes firm-death counts directly.",
+      "sourceRefs": ["census-bds:FIRMDEATH_FIRMS"]
+    },
+    {
+      "canonicalFactorId": "factor:canonical:gross-job-losses",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "BLS BED and Census BDS publish gross job-loss/job-destruction measurements directly with separately governed cadence and adjustment semantics.",
+      "sourceRefs": ["bls-bed:BDS0000000000000000110004LQ5", "census-bds:JOB_DESTRUCTION"]
+    },
+    {
+      "canonicalFactorId": "factor:canonical:hires-rate",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "BLS JOLTS publishes the hires rate directly.",
+      "sourceRefs": ["bls-jolts:JTS000000000000000HIR"]
+    },
+    {
+      "canonicalFactorId": "factor:canonical:initial-claims",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "DOL ETA publishes national initial unemployment-insurance claims directly.",
+      "sourceRefs": ["dol-ui-claims:DOL-UI-SA-INITIAL"]
+    },
+    {
+      "canonicalFactorId": "factor:canonical:job-openings-rate",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "BLS JOLTS publishes the job openings rate directly.",
+      "sourceRefs": ["bls-jolts:JTS000000000000000JOR"]
+    },
+    {
+      "canonicalFactorId": "factor:canonical:layoffs-and-discharges",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "BLS JOLTS publishes both the layoffs-and-discharges level and rate directly.",
+      "sourceRefs": ["bls-jolts:JTS000000000000000LDL", "bls-jolts:JTS000000000000000LDR"]
+    },
+    {
+      "canonicalFactorId": "factor:canonical:permanent-job-losers",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "BLS CPS publishes the permanent-job-losers estimate directly.",
+      "sourceRefs": ["bls-cps:LNS13026638"]
+    },
+    {
+      "canonicalFactorId": "factor:canonical:temporary-help-employment",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "BLS CES publishes temporary help services employment directly.",
+      "sourceRefs": ["bls-ces:CES6056132001"]
+    },
+    {
+      "canonicalFactorId": "factor:canonical:temporary-layoffs",
+      "claimClass": "A_DIRECT_OBS",
+      "rationale": "BLS CPS publishes the job-losers-on-temporary-layoff estimate directly.",
+      "sourceRefs": ["bls-cps:LNS13023653"]
+    }
+  ]
+}

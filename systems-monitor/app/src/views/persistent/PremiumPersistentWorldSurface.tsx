@@ -85,6 +85,8 @@ export function persistentWorldEdgeTransitionAlpha(currentEdge: boolean, previou
 }
 
 const MAX_ORBIT_VELOCITY = .00115;
+export const PERSISTENT_AMBIENT_ORBIT_PERIOD_MS = 900_000;
+export const PERSISTENT_TENDRIL_SWAY_PERIOD_MS = 18_000;
 
 function normalizeOrbitAngle(angle: number) {
   return Math.atan2(Math.sin(angle), Math.cos(angle));
@@ -106,8 +108,59 @@ export function decayPersistentWorldOrbitVelocity(velocity: number, elapsedMs: n
   return Math.abs(decayed) < .000008 ? 0 : decayed;
 }
 
+/** A presentation-only drift for the Level-1 overview and Level-3 orbital neighborhood. */
+export function persistentWorldAmbientOrbitDelta(elapsedMs: number, userLevel: number, reducedMotion = false) {
+  if (reducedMotion || (userLevel !== 1 && userLevel !== 3)) return 0;
+  return Math.max(0, elapsedMs) * Math.PI * 2 / PERSISTENT_AMBIENT_ORBIT_PERIOD_MS;
+}
+
+function persistentMotionPhase(identity: string) {
+  let hash = 0x811c9dc5;
+  for (let index = 0; index < identity.length; index += 1) { hash ^= identity.charCodeAt(index); hash = Math.imul(hash, 0x01000193); }
+  return (hash >>> 0) / 0xffffffff * Math.PI * 2;
+}
+
+/** Bounded, deliberately weighty endpoint drift for the Level-2 tendril view. */
+export function persistentWorldTendrilSway(identity: string, order: number, nowMs: number, viewMode: PersistentWorldViewMode, reducedMotion = false): Point {
+  if (reducedMotion) return { x: 0, y: 0 };
+  const phase = persistentMotionPhase(identity);
+  const cycle = nowMs / PERSISTENT_TENDRIL_SWAY_PERIOD_MS * Math.PI * 2 + phase;
+  const amplitude = viewMode === "CINEMATIC_2_5D" ? 1.35 : 1.8;
+  const orderBias = (Math.max(1, Math.min(10, order)) - 5.5) / 5.5;
+  return {
+    x: Math.sin(cycle * .72) * amplitude + Math.sin(cycle * .31 + phase) * .28,
+    y: Math.cos(cycle * .53 + phase * .35) * amplitude * .58 + orderBias * .2
+  };
+}
+
+/** The lighter strand flexes more than its weighted endpoint without detaching from it. */
+export function persistentWorldTendrilStrandSway(identity: string, order: number, nowMs: number, viewMode: PersistentWorldViewMode, reducedMotion = false): Point {
+  if (reducedMotion) return { x: 0, y: 0 };
+  const phase = persistentMotionPhase(identity);
+  const cycle = nowMs / PERSISTENT_TENDRIL_SWAY_PERIOD_MS * Math.PI * 2 + phase;
+  const amplitude = viewMode === "CINEMATIC_2_5D" ? 4.2 : 5.8;
+  const orderBias = (Math.max(1, Math.min(10, order)) - 5.5) / 5.5;
+  return {
+    x: Math.sin(cycle * .94 + .55) * amplitude + orderBias * .55,
+    y: Math.cos(cycle * .67 + phase * .24) * amplitude * .68
+  };
+}
+
+/** Avoid resetting the canvas bitmap when React retargets the camera at the same viewport size. */
+export function persistentWorldCanvasResizeRequired(currentWidth: number, currentHeight: number, nextWidth: number, nextHeight: number) {
+  return currentWidth !== nextWidth || currentHeight !== nextHeight;
+}
+
 const OVERVIEW_SCALE = .205;
 const AMBIENT_EDGE = "#315b67";
+export const PERSISTENT_RIGHT_CONTROL_LABEL_INSET = 190;
+
+/** Keeps exact-ten side labels clear of the persistent vertical control rail. */
+export function persistentWorldSideLabelX(side: "left" | "right", width: number, textWidth: number) {
+  const edgePadding = 14;
+  if (side === "left") return edgePadding + textWidth / 2;
+  return Math.max(edgePadding + textWidth / 2, width - PERSISTENT_RIGHT_CONTROL_LABEL_INSET - edgePadding - textWidth / 2);
+}
 
 function hoverPurpose(model: PersistentWorldReadModel, placement: PersistentWorldPlacement) {
   if (placement.depth === 0) return "The outcome at the center of the employment system.";
@@ -216,12 +269,12 @@ function drawDimensionalNode(context: CanvasRenderingContext2D, point: Persisten
 
 export function PremiumPersistentWorldSurface({ model, factualBindings, selectedPlacementId, fullWorld, viewMode, traceMode, reducedMotion, resetVersion, routePulseVersion, publicBeta = false, onSelect, onNavigateParent, onReset }: Props) {
   const spatialLayout = useMemo(() => createPersistentWorldSpatialLayout(model), [model]);
-  const hostRef = useRef<HTMLDivElement>(null); const canvasRef = useRef<HTMLCanvasElement>(null);
+  const hostRef = useRef<HTMLDivElement>(null); const canvasRef = useRef<HTMLCanvasElement>(null); const canvasBitmapResetCountRef = useRef(0);
   const cameraRef = useRef<Camera>(persistentWorldTargetCamera(model, selectedPlacementId, fullWorld, viewMode, 980, 720, spatialLayout));
   const cameraVelocityRef = useRef<PersistentCameraVelocity>({ x: 0, y: 0, z: 0, logScale: 0, rotation: 0, pitch: 0, yaw: 0 });
   const mountedAtRef = useRef(performance.now()); const viewportRef = useRef<Viewport>({ zoom: 1, panX: 0, panY: 0 });
   const panRef = useRef<{ pointerId: number; startX: number; startY: number; panX: number; panY: number; moved: boolean } | null>(null);
-  const orbitDragRef = useRef<OrbitDrag | null>(null); const orbitAngleRef = useRef(0); const orbitVelocityRef = useRef(0);
+  const orbitDragRef = useRef<OrbitDrag | null>(null); const orbitAngleRef = useRef(0); const orbitVelocityRef = useRef(0); const ambientOrbitAngleRef = useRef(0);
   const suppressClickRef = useRef(false); const hoveredRef = useRef<string | null>(null); const hoverVisualsRef = useRef(new Map<string, number>());
   const pointerRef = useRef<Point>({ x: 0, y: 0 }); const invalidateRef = useRef<() => void>(() => undefined);
   const semanticHistoryRef = useRef<readonly string[]>([]); const cameraMomentumRef = useRef<Point>({ x: 0, y: 0 });
@@ -250,8 +303,8 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
     if (host) { host.dataset.viewportZoom = "1.000"; host.dataset.viewportPanX = "0"; host.dataset.viewportPanY = "0"; } invalidateRef.current();
   }, [fullWorld, resetVersion, selectedPlacementId]);
   useEffect(() => {
-    orbitAngleRef.current = 0; orbitVelocityRef.current = 0; orbitDragRef.current = null; const host = hostRef.current;
-    if (host) { host.dataset.orbitAngleDegrees = "0.0"; host.dataset.orbitDragState = "IDLE"; } invalidateRef.current();
+    orbitAngleRef.current = 0; orbitVelocityRef.current = 0; ambientOrbitAngleRef.current = 0; orbitDragRef.current = null; const host = hostRef.current;
+    if (host) { host.dataset.orbitAngleDegrees = "0.0"; host.dataset.ambientOrbitAngleDegrees = "0.0"; host.dataset.orbitDragState = "IDLE"; } invalidateRef.current();
   }, [resetVersion]);
 
   useEffect(() => {
@@ -266,10 +319,16 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
     delete host.dataset.cameraSettleMs; if (reducedMotion) { cameraRef.current = destination; cameraVelocityRef.current = { x: 0, y: 0, z: 0, logScale: 0, rotation: 0, pitch: 0, yaw: 0 }; cameraMomentumRef.current = { x: 0, y: 0 }; }
     const resize = () => {
       const bounds = host.getBoundingClientRect(); const ratio = Math.min(2, window.devicePixelRatio || 1); destination = persistentWorldTargetCamera(model, selectedPlacementId, fullWorld, viewMode, bounds.width, bounds.height, spatialLayout); cameraTransition.to = destination;
-      canvas.width = Math.max(1, Math.round(bounds.width * ratio)); canvas.height = Math.max(1, Math.round(bounds.height * ratio)); canvas.style.width = `${bounds.width}px`; canvas.style.height = `${bounds.height}px`; context.setTransform(ratio, 0, 0, ratio, 0, 0);
-      if (reducedMotion) invalidateRef.current();
+      const nextWidth = Math.max(1, Math.round(bounds.width * ratio)); const nextHeight = Math.max(1, Math.round(bounds.height * ratio));
+      const bitmapChanged = persistentWorldCanvasResizeRequired(canvas.width, canvas.height, nextWidth, nextHeight);
+      if (bitmapChanged) {
+        canvas.width = nextWidth; canvas.height = nextHeight; context.setTransform(ratio, 0, 0, ratio, 0, 0);
+        canvasBitmapResetCountRef.current += 1;
+      }
+      host.dataset.canvasBitmapResetCount = canvasBitmapResetCountRef.current.toString();
+      canvas.style.width = `${bounds.width}px`; canvas.style.height = `${bounds.height}px`;
+      return bitmapChanged;
     };
-    resize(); const observer = new ResizeObserver(resize); observer.observe(host);
     const placements = Object.values(model.placements).filter((placement) => isVisiblePlacement(placement.id));
     const hierarchy = Object.values(model.relationships).filter((edge) => publicBeta ? persistentWorldPublicRelationshipVisible(model, edge) : edge.relationshipClass === "HIERARCHY_TETHER");
     const influence = publicBeta ? [] : Object.values(model.relationships).filter((edge) => edge.relationshipClass === "SYNTHETIC_INFLUENCE");
@@ -297,12 +356,17 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
         orbitAngleRef.current = normalizeOrbitAngle(orbitAngleRef.current + orbitVelocityRef.current * elapsedMs);
         orbitVelocityRef.current = decayPersistentWorldOrbitVelocity(orbitVelocityRef.current, elapsedMs);
       }
+      const focusedForMotion = selectedPlacementId ? model.placements[selectedPlacementId] : undefined;
+      const userLevel = focusedForMotion ? focusedForMotion.depth + 1 : 1;
+      const ambientOrbitActive = !fullWorld && transitionSample.progress >= 1 && !orbitDragRef.current && persistentWorldAmbientOrbitDelta(1, userLevel, reducedMotion) > 0;
+      if (ambientOrbitActive) ambientOrbitAngleRef.current = normalizeOrbitAngle(ambientOrbitAngleRef.current + persistentWorldAmbientOrbitDelta(elapsedMs, userLevel));
       const targetMomentum = reducedMotion ? { x: 0, y: 0 } : { x: Math.max(-14, Math.min(14, (priorCamera.x - camera.x) * camera.scale * .72)), y: Math.max(-14, Math.min(14, (priorCamera.y - camera.y) * camera.scale * .72)) };
       const momentumEase = reducedMotion ? 1 : 1 - Math.exp(-elapsedMs / 86);
       cameraMomentumRef.current.x += (targetMomentum.x - cameraMomentumRef.current.x) * momentumEase; cameraMomentumRef.current.y += (targetMomentum.y - cameraMomentumRef.current.y) * momentumEase;
-      const orbitCamera = { ...camera, rotation: camera.rotation + orbitAngleRef.current };
+      const orbitCamera = { ...camera, rotation: camera.rotation + orbitAngleRef.current + ambientOrbitAngleRef.current };
       host.dataset.cameraX = camera.x.toFixed(3); host.dataset.cameraY = camera.y.toFixed(3); host.dataset.cameraZ = camera.z.toFixed(3); host.dataset.cameraScale = camera.scale.toFixed(3); host.dataset.cameraRotationDegrees = (orbitCamera.rotation * 180 / Math.PI).toFixed(1); host.dataset.cameraPitchDegrees = (camera.pitch * 180 / Math.PI).toFixed(1); host.dataset.cameraYawDegrees = (camera.yaw * 180 / Math.PI).toFixed(1);
       host.dataset.orbitAngleDegrees = (orbitAngleRef.current * 180 / Math.PI).toFixed(1); host.dataset.orbitVelocity = orbitVelocityRef.current.toFixed(6);
+      host.dataset.ambientOrbitAngleDegrees = (ambientOrbitAngleRef.current * 180 / Math.PI).toFixed(2); host.dataset.ambientOrbitState = ambientOrbitActive ? "ACTIVE" : "IDLE";
       host.dataset.cameraTransitionProgress = transitionSample.progress.toFixed(3); host.dataset.cameraTransitionPhase = reducedMotion ? "REDUCED_MOTION" : transitionSample.progress < .28 ? "DOLLY_OUT" : transitionSample.progress < .82 ? "ORBITAL_TRAVEL" : transitionSample.progress < 1 ? "DOLLY_IN" : "SETTLED";
       if (!cameraSettled && transitionSample.progress >= 1) { cameraSettled = true; host.dataset.cameraSettleMs = (performance.now() - cameraStarted).toFixed(3); }
       last = now;
@@ -310,7 +374,19 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
       drawBackground(context, width, height, parallax, cameraMomentumRef.current, orbitCamera, viewMode);
       const projectFrame = createPersistentProjector(orbitCamera, viewport, width, height);
       const projected = new Map<string, PersistentProjectedPlacement>();
-      for (const placement of renderedPlacements) projected.set(placement.id, projectFrame(placement, viewMode === "CINEMATIC_2_5D" ? spatialLayout.zByPlacementId[placement.id] ?? 0 : 0));
+      const tendrilSwayActive = !fullWorld && focusedForMotion?.depth === 1 && !reducedMotion;
+      const tendrilChildren = tendrilSwayActive && focusedForMotion ? new Set(model.childrenByPlacement[focusedForMotion.id] ?? []) : new Set<string>();
+      const stableProjected = new Map<string, PersistentProjectedPlacement>();
+      for (const placement of renderedPlacements) {
+        const point = projectFrame(placement, viewMode === "CINEMATIC_2_5D" ? spatialLayout.zByPlacementId[placement.id] ?? 0 : 0);
+        stableProjected.set(placement.id, point);
+        if (tendrilChildren.has(placement.id)) {
+          const sway = persistentWorldTendrilSway(placement.id, placement.order, now, viewMode);
+          projected.set(placement.id, { ...point, x: point.x + sway.x, y: point.y + sway.y });
+        } else projected.set(placement.id, point);
+      }
+      host.dataset.tendrilSwayState = tendrilSwayActive ? "ACTIVE" : "IDLE";
+      host.dataset.motionProfile = ambientOrbitActive ? "ORBIT" : tendrilSwayActive ? "WEIGHTED_TENDRILS" : "STATIC";
       const projectedAt = (id: string) => projected.get(id)!;
 
       const ambientHierarchy = selectedPlacementId && !fullWorld ? [] : persistentAmbientEdges(hierarchy, [...semanticSet], fullWorld);
@@ -324,7 +400,11 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
       const depthEdges = [...highlightedEdges].sort((left, right) => (projectedAt(left.fromPlacementId).cameraDepth + projectedAt(left.toPlacementId).cameraDepth) - (projectedAt(right.fromPlacementId).cameraDepth + projectedAt(right.toPlacementId).cameraDepth));
       let visiblePreviousEdgeCount = 0; let visibleCurrentEdgeCount = 0;
       for (const edge of depthEdges) {
-        const fromPlacement = model.placements[edge.fromPlacementId]; const toPlacement = model.placements[edge.toPlacementId]; const from = projectedAt(edge.fromPlacementId); const to = projectedAt(edge.toPlacementId); const route = premiumCurveRoute(edge.id, from, to);
+        const fromPlacement = model.placements[edge.fromPlacementId]; const toPlacement = model.placements[edge.toPlacementId]; const from = projectedAt(edge.fromPlacementId); const to = projectedAt(edge.toPlacementId); let route = premiumCurveRoute(edge.id, from, to);
+        if (tendrilSwayActive && focusedForMotion && edge.fromPlacementId === focusedForMotion.id && tendrilChildren.has(edge.toPlacementId)) {
+          const strandSway = persistentWorldTendrilStrandSway(edge.id, toPlacement.order, now, viewMode);
+          route = { ...route, control1: { x: route.control1.x + strandSway.x * .46, y: route.control1.y + strandSway.y * .46 }, control2: { x: route.control2.x + strandSway.x, y: route.control2.y + strandSway.y } };
+        }
         const traceEdge = selectedPath.has(edge.fromPlacementId) && selectedPath.has(edge.toPlacementId);
         const currentEdge = traceEdge || (semanticSet.has(edge.fromPlacementId) && semanticSet.has(edge.toPlacementId)); const previousEdge = previousSemanticSet.has(edge.fromPlacementId) && previousSemanticSet.has(edge.toPlacementId); const transitionAlpha = persistentWorldEdgeTransitionAlpha(currentEdge, previousEdge, transitionSample.progress);
         const accent = persistentPlacementAccent(toPlacement); const incident = Boolean(currentHovered && (edge.fromPlacementId === currentHovered || edge.toPlacementId === currentHovered));
@@ -348,7 +428,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
       for (const placement of renderedPlacements) (projectedAt(placement.id).band === "far" ? farPlacements : projectedAt(placement.id).band === "near" ? nearPlacements : midPlacements).push(placement);
       const orderedPlacements = [...farPlacements, ...midPlacements, ...nearPlacements];
       for (const placement of orderedPlacements) {
-        const point = projectedAt(placement.id); if (point.x < -42 || point.y < -42 || point.x > width + 42 || point.y > height + 42) continue;
+        const point = projectedAt(placement.id); const stableLabelPoint = stableProjected.get(placement.id) ?? point; if (point.x < -42 || point.y < -42 || point.x > width + 42 || point.y > height + 42) continue;
         const factorLabel = persistentWorldGraphNodeLabel(model, placement); const factualBinding = factualBindings[placement.id];
         const semanticAlpha = Math.min(1, (semanticSet.has(placement.id) ? transitionSample.progress * 1.8 : 0) + (previousSemanticSet.has(placement.id) ? Math.max(0, 1 - transitionSample.progress * 2.5) : 0));
         if (!fullWorld && focusPlacement?.depth === 2 && !semanticSet.has(placement.id) && semanticAlpha <= .015) continue;
@@ -368,12 +448,12 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
         }
         if (emphasized && lod >= 1) {
           const label = factorLabel; const fontSize = placement.depth === 0 ? 13 : placement.depth === 1 ? 12 : 11; context.font = `${placement.depth < 2 ? 750 : 650} ${fontSize}px Inter, system-ui, sans-serif`; const textWidth = Math.min(226, context.measureText(label).width + 18);
-          let labelX = point.x; let labelY = point.y + radius + 17; let anchorX: number | undefined; let anchorY: number | undefined; let labelSide: "left" | "right" | "top" | "bottom" | undefined;
+          let labelX = stableLabelPoint.x; let labelY = stableLabelPoint.y + radius + 17; let anchorX: number | undefined; let anchorY: number | undefined; let labelSide: "left" | "right" | "top" | "bottom" | undefined;
           const parent = placement.parentPlacementId ? model.placements[placement.parentPlacementId] : undefined;
           if (parent && placement.depth >= 2) {
-            const parentPoint = projectedAt(parent.id); const dx = point.x - parentPoint.x; const dy = point.y - parentPoint.y; const distance = Math.max(1, Math.hypot(dx, dy)); const tangent = placement.order % 2 ? -6 : 6;
-            labelX = point.x + (dx / distance) * (radius + 15) + (-dy / distance) * tangent;
-            labelY = point.y + (dy / distance) * (radius + 15) + (dx / distance) * tangent;
+            const parentPoint = stableProjected.get(parent.id) ?? projectedAt(parent.id); const dx = stableLabelPoint.x - parentPoint.x; const dy = stableLabelPoint.y - parentPoint.y; const distance = Math.max(1, Math.hypot(dx, dy)); const tangent = placement.order % 2 ? -6 : 6;
+            labelX = stableLabelPoint.x + (dx / distance) * (radius + 15) + (-dy / distance) * tangent;
+            labelY = stableLabelPoint.y + (dy / distance) * (radius + 15) + (dx / distance) * tangent;
             const focused = selectedPlacementId ? model.placements[selectedPlacementId] : undefined;
             const focusedExactTenChild = Boolean(focused && focused.depth < 3 && placement.parentPlacementId === focused.id && placement.depth === focused.depth + 1);
             if (focusedExactTenChild && viewMode === "TOP_DOWN") {
@@ -381,11 +461,11 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
               labelSide = horizontal ? radialX < 0 ? "left" : "right" : radialY < 0 ? "top" : "bottom";
               if (labelSide === "left" || labelSide === "right") {
                 const direction = labelSide === "left" ? -1 : 1;
-                labelX = labelSide === "left" ? 14 + textWidth / 2 : width - 14 - textWidth / 2; labelY = point.y;
+                labelX = persistentWorldSideLabelX(labelSide, width, textWidth); labelY = stableLabelPoint.y;
                 anchorX = point.x + direction * (radius + 3); anchorY = point.y;
               } else {
                 const direction = labelSide === "top" ? -1 : 1;
-                labelX = point.x; labelY = labelSide === "top" ? 25 : height - 25;
+                labelX = stableLabelPoint.x; labelY = labelSide === "top" ? 25 : height - 25;
                 anchorX = point.x; anchorY = point.y + direction * (radius + 3);
               }
             }
@@ -412,18 +492,27 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
       host.dataset.routePulseState = routePulseActive ? "ACTIVE" : "IDLE";
       const orbitDrifting = !reducedMotion && Math.abs(orbitVelocityRef.current) > 0;
       if (!orbitDragRef.current) host.dataset.orbitDragState = orbitDrifting ? "DRIFTING" : "IDLE";
-      const shouldContinue = !reducedMotion && (transitionSample.progress < 1 || Boolean(currentHovered) || hoverAnimating || traceMode || routePulseActive || orbitDrifting);
+      const shouldContinue = !reducedMotion && (transitionSample.progress < 1 || Boolean(currentHovered) || hoverAnimating || traceMode || routePulseActive || orbitDrifting || ambientOrbitActive || tendrilSwayActive);
       host.dataset.renderLoopState = shouldContinue ? "ACTIVE" : "IDLE";
       if (shouldContinue) frame = requestAnimationFrame(draw);
     };
+    resize();
+    const observer = new ResizeObserver(() => {
+      if (!resize()) return;
+      if (frame) cancelAnimationFrame(frame);
+      frame = 0;
+      draw(performance.now());
+    });
+    observer.observe(host);
     invalidateRef.current = () => { if (reducedMotion) draw(performance.now()); else if (!frame) frame = requestAnimationFrame(draw); }; draw(performance.now());
     return () => { observer.disconnect(); cancelAnimationFrame(frame); invalidateRef.current = () => undefined; };
   }, [factualBindings, fullWorld, model, publicBeta, reducedMotion, selectedPath, selectedPlacementId, semantic, semanticSet, spatialLayout, traceMode, viewMode]);
 
   function hitTest(event: { clientX: number; clientY: number }) {
     const host = hostRef.current; if (!host) return null; const bounds = host.getBoundingClientRect(); const camera = cameraRef.current; let best: { id: string; score: number; depth: number } | null = null;
-    const projectHit = createPersistentProjector({ ...camera, rotation: camera.rotation + orbitAngleRef.current }, viewportRef.current, bounds.width, bounds.height);
-    for (const id of semantic) { const placement = model.placements[id]; const point = projectHit(placement, viewMode === "CINEMATIC_2_5D" ? spatialLayout.zByPlacementId[id] ?? 0 : 0); const lod = resolvePersistentLod(placement.depth, camera.scale * viewportRef.current.zoom * point.perspectiveScale, true); const radius = Math.max(24, premiumRadius(placement, lod) * point.perspectiveScale + 8); const distance = Math.hypot(event.clientX - bounds.left - point.x, event.clientY - bounds.top - point.y); const score = distance / radius; if (score <= 1 && (!best || score < best.score - .04 || (Math.abs(score - best.score) <= .04 && point.cameraDepth > best.depth))) best = { id, score, depth: point.cameraDepth }; }
+    const projectHit = createPersistentProjector({ ...camera, rotation: camera.rotation + orbitAngleRef.current + ambientOrbitAngleRef.current }, viewportRef.current, bounds.width, bounds.height);
+    const selected = selectedPlacementId ? model.placements[selectedPlacementId] : undefined; const swayChildren = selected?.depth === 1 && !reducedMotion ? new Set(model.childrenByPlacement[selected.id] ?? []) : new Set<string>(); const now = performance.now();
+    for (const id of semantic) { const placement = model.placements[id]; const basePoint = projectHit(placement, viewMode === "CINEMATIC_2_5D" ? spatialLayout.zByPlacementId[id] ?? 0 : 0); const sway = swayChildren.has(id) ? persistentWorldTendrilSway(id, placement.order, now, viewMode) : { x: 0, y: 0 }; const point = { ...basePoint, x: basePoint.x + sway.x, y: basePoint.y + sway.y }; const lod = resolvePersistentLod(placement.depth, camera.scale * viewportRef.current.zoom * point.perspectiveScale, true); const radius = Math.max(24, premiumRadius(placement, lod) * point.perspectiveScale + 8); const distance = Math.hypot(event.clientX - bounds.left - point.x, event.clientY - bounds.top - point.y); const score = distance / radius; if (score <= 1 && (!best || score < best.score - .04 || (Math.abs(score - best.score) <= .04 && point.cameraDepth > best.depth))) best = { id, score, depth: point.cameraDepth }; }
     return best?.id ?? null;
   }
   function updateViewport(next: Viewport) { viewportRef.current = next; const host = hostRef.current; if (host) { host.dataset.viewportZoom = next.zoom.toFixed(3); host.dataset.viewportPanX = Math.round(next.panX).toString(); host.dataset.viewportPanY = Math.round(next.panY).toString(); } invalidateRef.current(); }
@@ -433,7 +522,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
   const connectedPlacements = Object.entries(factualBindings).filter(([, binding]) => binding.status === "CONNECTED");
   const connectedCanonicalFactors = new Set(connectedPlacements.map(([placementId]) => model.placements[placementId]?.canonicalFactorId).filter(Boolean)).size;
   useEffect(() => { if (hostRef.current) hostRef.current.dataset.reducedMotion = reducedMotion.toString(); }, [reducedMotion]);
-  return <div ref={hostRef} className="sm-pw-surface sm-pw-surface--premium" role="application" tabIndex={0} aria-label="U.S. systems factor map" aria-keyshortcuts="Alt+ArrowLeft" data-world-id={model.worldId} data-graph-snapshot-id={model.graphSnapshotId} data-layout-version={model.layoutVersion} data-topology-fingerprint={model.topologyFingerprint} data-semantic-fingerprint={model.semanticFingerprint} data-presentation-layout-version={spatialLayout.version} data-projection-version={spatialLayout.projectionVersion} data-presentation-fingerprint={spatialLayout.fingerprint} data-resident-placement-count={model.coverage.placementCount} data-resident-relationship-count={model.coverage.hierarchyRelationshipCount + model.coverage.syntheticInfluenceCount} data-semantic-node-count={semantic.length} data-factual-binding-count={connectedPlacements.length} data-connected-placement-count={connectedPlacements.length} data-connected-canonical-factor-count={connectedCanonicalFactors} data-lod-mode={fullWorld ? "FULL_WORLD_DENSITY" : selectedPlacementId ? "FOCUS" : "OVERVIEW"} data-trace-mode={traceMode} data-route-pulse-version={routePulseVersion} data-selected-placement-id={selectedPlacementId ?? ""} data-parent-placement-id={parentPlacementId ?? ""} data-viewport-zoom="1.000" data-viewport-pan-x="0" data-viewport-pan-y="0" data-orbit-angle-degrees="0.0" data-orbit-velocity="0.000000" data-orbit-drag-state="IDLE" data-glint-period-ms="2500" data-glint-trail="0.085" data-hovered-placement-id={hoveredId ?? ""} onKeyDown={(event) => {
+  return <div ref={hostRef} className="sm-pw-surface sm-pw-surface--premium" role="application" tabIndex={0} aria-label="U.S. systems factor map" aria-keyshortcuts="Alt+ArrowLeft" data-world-id={model.worldId} data-graph-snapshot-id={model.graphSnapshotId} data-layout-version={model.layoutVersion} data-topology-fingerprint={model.topologyFingerprint} data-semantic-fingerprint={model.semanticFingerprint} data-presentation-layout-version={spatialLayout.version} data-projection-version={spatialLayout.projectionVersion} data-presentation-fingerprint={spatialLayout.fingerprint} data-resident-placement-count={model.coverage.placementCount} data-resident-relationship-count={model.coverage.hierarchyRelationshipCount + model.coverage.syntheticInfluenceCount} data-semantic-node-count={semantic.length} data-factual-binding-count={connectedPlacements.length} data-connected-placement-count={connectedPlacements.length} data-connected-canonical-factor-count={connectedCanonicalFactors} data-lod-mode={fullWorld ? "FULL_WORLD_DENSITY" : selectedPlacementId ? "FOCUS" : "OVERVIEW"} data-trace-mode={traceMode} data-route-pulse-version={routePulseVersion} data-selected-placement-id={selectedPlacementId ?? ""} data-parent-placement-id={parentPlacementId ?? ""} data-viewport-zoom="1.000" data-viewport-pan-x="0" data-viewport-pan-y="0" data-orbit-angle-degrees="0.0" data-orbit-velocity="0.000000" data-orbit-drag-state="IDLE" data-canvas-bitmap-reset-count="0" data-glint-period-ms="2500" data-glint-trail="0.085" data-hovered-placement-id={hoveredId ?? ""} onKeyDown={(event) => {
     if (event.altKey && event.key === "ArrowLeft" && selectedPlacementId) { event.preventDefault(); onNavigateParent(); }
   }} onWheel={(event) => {
     const started = performance.now(); event.preventDefault(); const bounds = event.currentTarget.getBoundingClientRect(); const current = viewportRef.current; const zoom = Math.max(.55, Math.min(3.25, current.zoom * Math.exp(-event.deltaY * .0014))); const ratio = zoom / current.zoom; const cursorX = event.clientX - bounds.left - bounds.width / 2; const cursorY = event.clientY - bounds.top - bounds.height / 2; updateViewport({ zoom, panX: cursorX - (cursorX - current.panX) * ratio, panY: cursorY - (cursorY - current.panY) * ratio }); event.currentTarget.dataset.wheelHandlerMs = (performance.now() - started).toFixed(3);

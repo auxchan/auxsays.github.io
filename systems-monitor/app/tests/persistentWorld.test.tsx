@@ -7,7 +7,7 @@ import { persistentWorldFactualBinding } from "../src/data/persistentWorldFactua
 import { PERSISTENT_WORLD_PROFILED_FACTOR_COUNT, persistentWorldCandidateSourceProfile } from "../src/data/persistentWorldSourceCatalog";
 import { persistentWorldMediaFor } from "../src/views/persistent/persistentWorldMedia";
 import { PERSISTENT_GLINT_PERIOD_MS, PERSISTENT_GLINT_TRAIL, blendPremiumColor, compactPersistentValue, createPersistentCameraTransition, easePremiumHover, factorGlyph, persistentAmbientEdges, persistentFocusRotation, persistentGlintProgress, persistentPlacementAccent, premiumCurveRoute, resolvePersistentLod, resolvePremiumLabels, samplePersistentCameraTransition, shortestAngleDelta } from "../src/views/persistent/persistentWorldVisuals";
-import { decayPersistentWorldOrbitVelocity, persistentWorldDoubleClickAction, persistentWorldEdgeTransitionAlpha, persistentWorldGraphNodeLabel, persistentWorldOrbitAngle, persistentWorldOrbitVelocity, persistentWorldPublicPlacementVisible, persistentWorldPublicRelationshipVisible, polishPersistentCameraTransition } from "../src/views/persistent/PremiumPersistentWorldSurface";
+import { PERSISTENT_AMBIENT_ORBIT_PERIOD_MS, PERSISTENT_RIGHT_CONTROL_LABEL_INSET, PERSISTENT_TENDRIL_SWAY_PERIOD_MS, decayPersistentWorldOrbitVelocity, persistentWorldAmbientOrbitDelta, persistentWorldCanvasResizeRequired, persistentWorldDoubleClickAction, persistentWorldEdgeTransitionAlpha, persistentWorldGraphNodeLabel, persistentWorldOrbitAngle, persistentWorldOrbitVelocity, persistentWorldPublicPlacementVisible, persistentWorldPublicRelationshipVisible, persistentWorldSideLabelX, persistentWorldTendrilStrandSway, persistentWorldTendrilSway, polishPersistentCameraTransition } from "../src/views/persistent/PremiumPersistentWorldSurface";
 import { persistentWorldUpSelection } from "../src/views/persistent/PersistentWorldShell";
 import { createPersistentWorldSpatialLayout, projectPersistentPlacement } from "../src/views/persistent/persistentWorldSpatialLayout";
 import { buildPersistentWorldSearchIndex, searchPersistentWorld } from "../src/views/persistent/persistentWorldSearch";
@@ -228,6 +228,41 @@ describe("premium persistent-world visual language", () => {
     expect(Math.abs(persistentWorldOrbitVelocity(1000, 8, "TOP_DOWN"))).toBeLessThanOrEqual(.00115);
     expect(decayPersistentWorldOrbitVelocity(.001, 430)).toBeCloseTo(.001 / Math.E);
     expect(decayPersistentWorldOrbitVelocity(.000009, 4300)).toBe(0);
+  });
+
+  it("keeps ambient orbit and Level-3 tendril motion slow, bounded, and presentation-only", () => {
+    const model = createPersistentWorld();
+    const topology = model.topologyFingerprint;
+    expect(PERSISTENT_AMBIENT_ORBIT_PERIOD_MS).toBe(900_000);
+    expect(persistentWorldAmbientOrbitDelta(1000, 1)).toBeCloseTo(Math.PI * 2 / 900);
+    expect(persistentWorldAmbientOrbitDelta(1000, 2)).toBe(0);
+    expect(persistentWorldAmbientOrbitDelta(1000, 3)).toBeCloseTo(Math.PI * 2 / 900);
+    expect(persistentWorldAmbientOrbitDelta(1000, 4)).toBe(0);
+    expect(persistentWorldAmbientOrbitDelta(1000, 1, true)).toBe(0);
+    expect(PERSISTENT_TENDRIL_SWAY_PERIOD_MS).toBe(18_000);
+    const first = persistentWorldTendrilSway("fixture-placement:consumer-demand:05:09", 9, 1234, "TOP_DOWN");
+    const strand = persistentWorldTendrilStrandSway("fixture-placement:consumer-demand:05:09", 9, 1234, "TOP_DOWN");
+    expect(first).toEqual(persistentWorldTendrilSway("fixture-placement:consumer-demand:05:09", 9, 1234, "TOP_DOWN"));
+    expect(Math.hypot(first.x, first.y)).toBeLessThan(3);
+    expect(Math.hypot(strand.x, strand.y)).toBeGreaterThan(Math.hypot(first.x, first.y));
+    expect(Math.hypot(strand.x, strand.y)).toBeLessThan(8);
+    expect(persistentWorldTendrilSway("fixture-placement:consumer-demand:05:09", 9, 1234, "TOP_DOWN", true)).toEqual({ x: 0, y: 0 });
+    expect(persistentWorldTendrilStrandSway("fixture-placement:consumer-demand:05:09", 9, 1234, "TOP_DOWN", true)).toEqual({ x: 0, y: 0 });
+    expect(model.topologyFingerprint).toBe(topology);
+  });
+
+  it("preserves the canvas bitmap across same-size node retargets", () => {
+    expect(persistentWorldCanvasResizeRequired(1600, 1200, 1600, 1200)).toBe(false);
+    expect(persistentWorldCanvasResizeRequired(1600, 1200, 1599, 1200)).toBe(true);
+    expect(persistentWorldCanvasResizeRequired(1600, 1200, 1600, 1199)).toBe(true);
+  });
+
+  it("keeps exact-ten side labels clear of the right-side control rail", () => {
+    const width = 2226;
+    const labelWidth = 120;
+    expect(persistentWorldSideLabelX("left", width, labelWidth)).toBe(74);
+    const rightCenter = persistentWorldSideLabelX("right", width, labelWidth);
+    expect(rightCenter + labelWidth / 2).toBe(width - PERSISTENT_RIGHT_CONTROL_LABEL_INSET - 14);
   });
 
   it("adds deterministic presentation depth without changing canonical topology", () => {

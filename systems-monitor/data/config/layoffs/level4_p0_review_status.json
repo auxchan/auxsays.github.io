@@ -13,14 +13,14 @@
     "rendererFixturePlacementsInScope": 0
   },
   "classification": {
-    "status": "BLOCKED_REQUIRES_GOVERNED_FACTOR_BY_FACTOR_REVIEW",
-    "A_DIRECT_OBS": 0,
+    "status": "PARTIAL_GOVERNED_FACTOR_BY_FACTOR_REVIEW",
+    "A_DIRECT_OBS": 12,
     "B_CALC": 0,
     "C_EVENT_OR_STRUCTURAL": 0,
     "D_TAXONOMY_OR_SOURCE_PROBLEM": 0,
-    "unclassifiedCanonicalFactors": 64,
-    "unclassifiedPlacements": 100,
-    "note": "No authoritative A/B/C/D registry exists. Source posture is not a substitute for claim-class review. Counts remain zero rather than inferring classifications from labels."
+    "unclassifiedCanonicalFactors": 52,
+    "unclassifiedPlacements": 83,
+    "note": "The first bounded batch classifies only canonical factors whose taxonomy meaning matches an exact direct official measurement. Classification does not accept or publish an observation, history, or relationship."
   },
   "sourcePosture": {
     "profiledRecords": 77,
@@ -62,7 +62,7 @@
     "HUMAN_ORIENTATION_UX_QA": "PENDING"
   },
   "blockers": [
-    "L4-001_GOVERNED_ABCD_CLASSIFICATION_MISSING",
+    "L4-001_GOVERNED_ABCD_CLASSIFICATION_INCOMPLETE",
     "L4-002_ACCEPTED_COMPARABLE_HISTORY_MISSING",
     "L4-003_ACCEPTED_STRUCTURAL_RELATIONSHIPS_MISSING",
     "L4-004_SOURCE_PROFILE_AND_OFFLINE_SNAPSHOT_RECONCILIATION_REQUIRED",

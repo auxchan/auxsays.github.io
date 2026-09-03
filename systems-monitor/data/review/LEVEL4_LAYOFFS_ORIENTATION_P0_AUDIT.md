@@ -35,17 +35,17 @@ The other nine branches still contain 900 renderer-fixture deep placements. They
 
 ## A/B/C/D classification gate
 
-No authoritative factor-by-factor A/B/C/D registry exists in the repository. Current source-state records cannot safely stand in for claim-class review.
+The first bounded factor-by-factor review batch is recorded in `data/config/layoffs/level4_claim_classes.json`. It classifies only Level-4 canonical factors whose taxonomy meaning matches an exact direct official measurement. Source readiness remains separate and no observation, history, or relationship is promoted by the classification.
 
 | Class | Count |
 |---|---:|
-| A — direct OBS | 0 governed classifications |
+| A — direct OBS | 12 governed classifications / 17 placements |
 | B — CALC | 0 governed classifications |
 | C — event / structural | 0 governed classifications |
 | D — taxonomy / source problem | 0 governed classifications |
-| Unclassified | 64 canonical factors / 100 placements |
+| Unclassified | 52 canonical factors / 83 placements |
 
-This is an explicit P0 blocker, not an inference that all factors are unusable. The machine-readable lock is `data/config/layoffs/level4_p0_review_status.json`.
+The remaining classification work is an explicit blocker, not an inference that the remaining factors are unusable. The machine-readable status lock is `data/config/layoffs/level4_p0_review_status.json`.
 
 ## Source and collector posture
 

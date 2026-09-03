@@ -2,7 +2,7 @@ import activeFactualSnapshot from "../../../data/review/local-active-pdi-test-sn
 import { laborMarketHierarchy, observationForFactor, evidenceForFactor } from "./laborMarketReadModel";
 import { createSnapshotViewModel } from "./snapshotViewModelFactory";
 import { validatePublicSnapshot } from "./validatePublicSnapshot";
-import { layoffsFactorSourceState } from "./layoffsBranchReadModel";
+import { layoffsFactorSourceState, type LayoffsClaimClassification } from "./layoffsBranchReadModel";
 
 export type PersistentWorldBindingStatus = "CONNECTED" | "SOURCE_ENABLED_PENDING_ACCEPTANCE" | "SOURCE_IDENTIFIED" | "BLOCKED" | "FIXTURE_ONLY" | "UNMAPPED";
 
@@ -21,6 +21,7 @@ export interface PersistentWorldFactualBinding {
   acquisitionProvenanceUrl?: string;
   acceptedAt?: string;
   candidateSeries?: readonly { sourceId: string; seriesId: string; label: string; unit: string; cadence: string; adjustment: string; evidenceUrl: string; methodologyUrl?: string }[];
+  claimClassification?: LayoffsClaimClassification;
   blockedReason?: string;
 }
 
@@ -76,7 +77,7 @@ export function persistentWorldFactualBindingForFactor(canonicalFactorId: string
         provider: source?.provider, dataset: source?.dataset, seriesId, freshness: source?.freshness,
         evidenceUrl: seriesId ? provenance?.seriesEvidenceUrls?.[seriesId] ?? provenance?.evidenceUrl : provenance?.evidenceUrl,
         methodologyUrl: source?.methodologyUrl, acquisitionProvenanceUrl: provenance?.evidenceUrl,
-        acceptedAt: provenance?.acceptedAt, candidateSeries: layoffs.series
+        acceptedAt: provenance?.acceptedAt, candidateSeries: layoffs.series, claimClassification: layoffs.claimClassification
       };
     }
   }
@@ -88,6 +89,7 @@ export function persistentWorldFactualBindingForFactor(canonicalFactorId: string
     label,
     candidateSeriesId: layoffs.series[0]?.seriesId,
     candidateSeries: layoffs.series,
+    claimClassification: layoffs.claimClassification,
     blockedReason: layoffs.blockedReason
   };
 }
