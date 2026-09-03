@@ -700,8 +700,14 @@ def run() -> int:
     print("=" * 96)
     layout3 = (ROOT / "_layouts" / "aux-update.html").read_text(encoding="utf-8")
     row3 = (ROOT / "_includes" / "patch-table-row.html").read_text(encoding="utf-8")
-    check("Q.1 the section is headed 'Recent PowerPoint reports'",
-          "Recent PowerPoint reports" in layout3)
+    # The heading is now product-aware, because a second product (Acrobat) publishes Level 3 through
+    # the same block and a section headed with another product's name is a factual error about
+    # whose reports these are. PowerPoint must still be what a PowerPoint page renders.
+    check("Q.1 the section heading names the product, and defaults to PowerPoint",
+          "Recent {{ l3_product }} reports" in layout3
+          and "assign l3_product = 'PowerPoint'" in layout3)
+    check("Q.1b and it switches to Acrobat only on an Acrobat record",
+          "contains 'acrobat'" in layout3 and "assign l3_product = 'Acrobat'" in layout3)
     check("Q.2 the page carries the not-attributed qualifier",
           "Not attributed to this update." in layout3)
     check("Q.3 the page explains the reporters did not identify the update as the cause",
@@ -879,9 +885,17 @@ def run() -> int:
           "assign win_start = r.window_start | default: ''" in layout_r)
     check("R.30 and the raw properties are no longer compared to '' directly",
           "r.window_end != ''" not in layout_r and "r.window_start != ''" not in layout_r)
-    open_window = [r for r in real_l3 if not str(r.get("window_end") or "")]
-    check("R.31 the open-ended window really is present, so R.28 is not vacuous",
-          bool(open_window), f"{len(open_window)} rows with no window_end")
+    # Non-vacuity, asserted on BEHAVIOUR rather than on whichever build happens to be newest today.
+    # The original form required an open-ended row to exist in the live file; a later release closed
+    # that window and the control started failing for a reason that had nothing to do with the guard.
+    open_row = l3.RecentReport(report_id="x", product_id="microsoft-powerpoint",
+                               report_title="t", window_start="2026-08-26", window_end="")
+    check("R.31 an open-ended window omits window_end entirely, which is why R.28 is needed",
+          "window_end" not in open_row.as_dict()
+          and open_row.as_dict().get("window_start") == "2026-08-26")
+    live_open = [r for r in real_l3 if not str(r.get("window_end") or "")]
+    check("R.31b and the live file is consistent either way",
+          all("window_start" in r for r in live_open), f"{len(live_open)} open rows")
 
     print()
     print("=" * 96)

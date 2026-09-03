@@ -1,0 +1,26 @@
+schema_version: 1
+note: Update-linked user reports. These are REAL community reports about a PowerPoint update whose exact
+  build was never stated. They are shown to readers and are deliberately NOT counted toward consensus.
+reports:
+- associated_patch_key: adobe-acrobat-reader|25.001.21078|25.001.21078
+  associated_target_build: 25.001.21078
+  associated_update_version: 25.001.21078
+  association_basis: release_window_containment
+  captured_at: '2026-09-02T00:00:00Z'
+  classification: update_linked
+  confirmation_state: not_confirmed
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  report_date: '2026-01-13'
+  report_excerpt: Websaver.ca coupons to print - can't Can't print coupons from websaver.ca as a security
+    alert comes up saying there is a restriction in my security area...was able to print for years until
+    new upgrade on adobe acrobat reader
+  report_id: adobe-acrobat-reader:c38cf8cfba915bc8
+  report_title: Websaver.ca coupons to print - can't
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-12/websaver-ca-coupons-to-print-can-t-1623765
+  strict_exclusion_reason: missing_exact_patch_version_match
+  update_link_evidence: until new upgrade
+  update_link_reason: update_named_as_cause
+  update_link_signal: explicit_update_attribution

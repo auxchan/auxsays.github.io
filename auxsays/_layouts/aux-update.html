@@ -406,8 +406,24 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
         matched. Builds ending in a zero broke; the others worked, which made the defect look
         arbitrary. A key containing the product id cannot be read as a number.
       {%- endcomment -%}
+      {%- comment -%}
+        Per-PRODUCT tier files. Acrobat's Levels 2 and 3 live in their own data files rather than
+        sharing PowerPoint's, so cross-product isolation is structural instead of resting on the
+        same `where` filter that already failed silently once via Float coercion.
+      {%- endcomment -%}
       {%- assign t2_all = site.data.update_linked_evidence.reports | default: empty -%}
+      {%- assign l3_src = site.data.recent_powerpoint_reports.reports | default: empty -%}
+      {%- if page.product_id contains 'acrobat' -%}
+        {%- assign t2_all = site.data.acrobat_update_linked_evidence.reports | default: empty -%}
+        {%- assign l3_src = site.data.recent_acrobat_reports.reports | default: empty -%}
+      {%- endif -%}
+      {%- comment -%}
+        Acrobat has no second build token -- its canonical identity IS the DC version -- so the
+        joined key carries the version in the build slot. Reading page.target_build here would
+        produce an empty slot and match nothing.
+      {%- endcomment -%}
       {%- assign t2_build = page.target_build | default: '' -%}
+      {%- if page.product_id contains 'acrobat' -%}{%- assign t2_build = page.update_version -%}{%- endif -%}
       {%- capture t2_key %}{{ page.product_id }}|{{ page.update_version }}|{{ t2_build }}{% endcapture -%}
       {%- assign t2_rows = t2_all | where: "associated_patch_key", t2_key -%}
       {%- assign t2_count = t2_rows | size -%}
@@ -423,9 +439,19 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
             <dd>{{ t2_count }}</dd>
           </div>
         </dl>
-        <p class="update-linked-card__note">These reporters tie the problem to a PowerPoint or Office
-          update but never state the exact build, so they are shown here and are <strong>not</strong>
-          counted toward the consensus above.</p>
+        {%- comment -%} Name THIS product. "a PowerPoint or Office update" on an Acrobat page is a
+          factual error about what the reporter said. {%- endcomment -%}
+        {%- assign t2_product = 'PowerPoint or Office' -%}
+        {%- if page.product_id contains 'acrobat' -%}{%- assign t2_product = 'Acrobat' -%}{%- endif -%}
+        {%- comment -%}
+          "never state the exact build" was false on reports that DO name one in a spelling the
+          matcher cannot resolve -- and on two of them the build was in the title printed directly
+          above this sentence. What is always true is that AUXSAYS could not tie the report to an
+          exact patch, which is the reason it is not counted.
+        {%- endcomment -%}
+        <p class="update-linked-card__note">These reporters tie the problem to {% unless page.product_id contains 'acrobat' %}a {% endunless %}{% if page.product_id contains 'acrobat' %}an {% endif %}{{ t2_product }}
+          update, but the exact build could not be established from their report, so they are shown
+          here and are <strong>not</strong> counted toward the consensus above.</p>
         <ul class="update-linked-list">
           {% for r in t2_rows %}
           <li class="update-linked-item">
@@ -448,14 +474,18 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
         Jekyll's `where` coerces a numeric-looking property to a Float and silently drops a
         trailing zero, which is what made a build like 20326.20100 stop matching its own page.
       {%- endcomment -%}
-      {%- assign l3_all = site.data.recent_powerpoint_reports.reports | default: empty -%}
+      {%- assign l3_all = l3_src -%}
+      {%- comment -%} The heading names THIS product. A section headed with another product's
+        name is a factual error about whose reports these are. {%- endcomment -%}
+      {%- assign l3_product = 'PowerPoint' -%}
+      {%- if page.product_id contains 'acrobat' -%}{%- assign l3_product = 'Acrobat' -%}{%- endif -%}
       {%- capture l3_key %}{{ page.product_id }}|{{ page.update_version }}|{{ t2_build }}{% endcapture -%}
       {%- assign l3_rows = l3_all | where: "release_window_key", l3_key -%}
       {%- assign l3_count = l3_rows | size -%}
       {% if l3_count > 0 %}
-      <section class="recent-reports-card" aria-label="Recent PowerPoint reports in this release window">
+      <section class="recent-reports-card" aria-label="Recent {{ l3_product }} reports in this release window">
         <div class="recent-reports-card__head">
-          <h2 class="recent-reports-card__title">Recent PowerPoint reports</h2>
+          <h2 class="recent-reports-card__title">Recent {{ l3_product }} reports</h2>
           <span class="recent-reports-card__count">{{ l3_count }}</span>
           <span class="recent-reports-card__qualifier">Not attributed to this update.</span>
         </div>
@@ -475,7 +505,7 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
           {% endfor %}
         </ul>
         {% if l3_count > 8 %}
-        <p class="recent-reports-card__more">Showing 8 of {{ l3_count }} recent PowerPoint reports in this release window. Every source is linked above and in the sources list.</p>
+        <p class="recent-reports-card__more">Showing 8 of {{ l3_count }} recent {{ l3_product }} reports in this release window. Every source is linked above and in the sources list.</p>
         {% endif %}
       </section>
       {% endif %}
