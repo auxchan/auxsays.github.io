@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, within } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 import { SnapshotProvider } from "../src/app/SnapshotContext";
 import { SystemsMonitorApp } from "../src/app/SystemsMonitorApp";
@@ -7,7 +7,7 @@ import { persistentWorldFactualBinding } from "../src/data/persistentWorldFactua
 import { PERSISTENT_WORLD_PROFILED_FACTOR_COUNT, persistentWorldCandidateSourceProfile } from "../src/data/persistentWorldSourceCatalog";
 import { persistentWorldMediaFor } from "../src/views/persistent/persistentWorldMedia";
 import { PERSISTENT_GLINT_PERIOD_MS, PERSISTENT_GLINT_TRAIL, blendPremiumColor, compactPersistentValue, createPersistentCameraTransition, easePremiumHover, factorGlyph, persistentAmbientEdges, persistentFocusRotation, persistentGlintProgress, persistentPlacementAccent, premiumCurveRoute, resolvePersistentLod, resolvePremiumLabels, samplePersistentCameraTransition, shortestAngleDelta } from "../src/views/persistent/persistentWorldVisuals";
-import { persistentWorldDoubleClickAction, persistentWorldEdgeTransitionAlpha, persistentWorldGraphNodeLabel, persistentWorldPublicPlacementVisible, persistentWorldPublicRelationshipVisible, polishPersistentCameraTransition } from "../src/views/persistent/PremiumPersistentWorldSurface";
+import { PERSISTENT_AMBIENT_ORBIT_PERIOD_MS, PERSISTENT_RIGHT_CONTROL_LABEL_INSET, PERSISTENT_TENDRIL_SWAY_PERIOD_MS, decayPersistentWorldOrbitVelocity, persistentWorldAmbientOrbitDelta, persistentWorldCanvasResizeRequired, persistentWorldDoubleClickAction, persistentWorldEdgeTransitionAlpha, persistentWorldGraphNodeLabel, persistentWorldOrbitAngle, persistentWorldOrbitVelocity, persistentWorldPublicPlacementVisible, persistentWorldPublicRelationshipVisible, persistentWorldSideLabelX, persistentWorldTendrilStrandSway, persistentWorldTendrilSway, polishPersistentCameraTransition } from "../src/views/persistent/PremiumPersistentWorldSurface";
 import { persistentWorldUpSelection } from "../src/views/persistent/PersistentWorldShell";
 import { createPersistentWorldSpatialLayout, projectPersistentPlacement } from "../src/views/persistent/persistentWorldSpatialLayout";
 import { buildPersistentWorldSearchIndex, searchPersistentWorld } from "../src/views/persistent/persistentWorldSearch";
@@ -219,6 +219,52 @@ describe("premium persistent-world visual language", () => {
     expect(end.pose).toMatchObject(transition.to);
   });
 
+  it("keeps blank-space orbital rotation restrained and angle-aware", () => {
+    const topDownAngle = persistentWorldOrbitAngle(0, 240, "TOP_DOWN", 0);
+    const cinematicAngle = persistentWorldOrbitAngle(0, 240, "CINEMATIC_2_5D", .78);
+    expect(topDownAngle).toBeGreaterThan(0);
+    expect(cinematicAngle).toBeGreaterThan(0);
+    expect(cinematicAngle).toBeLessThan(topDownAngle);
+    expect(Math.abs(persistentWorldOrbitVelocity(1000, 8, "TOP_DOWN"))).toBeLessThanOrEqual(.00115);
+    expect(decayPersistentWorldOrbitVelocity(.001, 430)).toBeCloseTo(.001 / Math.E);
+    expect(decayPersistentWorldOrbitVelocity(.000009, 4300)).toBe(0);
+  });
+
+  it("keeps ambient orbit and Level-3 tendril motion slow, bounded, and presentation-only", () => {
+    const model = createPersistentWorld();
+    const topology = model.topologyFingerprint;
+    expect(PERSISTENT_AMBIENT_ORBIT_PERIOD_MS).toBe(900_000);
+    expect(persistentWorldAmbientOrbitDelta(1000, 1)).toBeCloseTo(Math.PI * 2 / 900);
+    expect(persistentWorldAmbientOrbitDelta(1000, 2)).toBe(0);
+    expect(persistentWorldAmbientOrbitDelta(1000, 3)).toBeCloseTo(Math.PI * 2 / 900);
+    expect(persistentWorldAmbientOrbitDelta(1000, 4)).toBe(0);
+    expect(persistentWorldAmbientOrbitDelta(1000, 1, true)).toBe(0);
+    expect(PERSISTENT_TENDRIL_SWAY_PERIOD_MS).toBe(18_000);
+    const first = persistentWorldTendrilSway("fixture-placement:consumer-demand:05:09", 9, 1234, "TOP_DOWN");
+    const strand = persistentWorldTendrilStrandSway("fixture-placement:consumer-demand:05:09", 9, 1234, "TOP_DOWN");
+    expect(first).toEqual(persistentWorldTendrilSway("fixture-placement:consumer-demand:05:09", 9, 1234, "TOP_DOWN"));
+    expect(Math.hypot(first.x, first.y)).toBeLessThan(3);
+    expect(Math.hypot(strand.x, strand.y)).toBeGreaterThan(Math.hypot(first.x, first.y));
+    expect(Math.hypot(strand.x, strand.y)).toBeLessThan(8);
+    expect(persistentWorldTendrilSway("fixture-placement:consumer-demand:05:09", 9, 1234, "TOP_DOWN", true)).toEqual({ x: 0, y: 0 });
+    expect(persistentWorldTendrilStrandSway("fixture-placement:consumer-demand:05:09", 9, 1234, "TOP_DOWN", true)).toEqual({ x: 0, y: 0 });
+    expect(model.topologyFingerprint).toBe(topology);
+  });
+
+  it("preserves the canvas bitmap across same-size node retargets", () => {
+    expect(persistentWorldCanvasResizeRequired(1600, 1200, 1600, 1200)).toBe(false);
+    expect(persistentWorldCanvasResizeRequired(1600, 1200, 1599, 1200)).toBe(true);
+    expect(persistentWorldCanvasResizeRequired(1600, 1200, 1600, 1199)).toBe(true);
+  });
+
+  it("keeps exact-ten side labels clear of the right-side control rail", () => {
+    const width = 2226;
+    const labelWidth = 120;
+    expect(persistentWorldSideLabelX("left", width, labelWidth)).toBe(74);
+    const rightCenter = persistentWorldSideLabelX("right", width, labelWidth);
+    expect(rightCenter + labelWidth / 2).toBe(width - PERSISTENT_RIGHT_CONTROL_LABEL_INSET - 14);
+  });
+
   it("adds deterministic presentation depth without changing canonical topology", () => {
     const model = createPersistentWorld();
     const before = model.topologyFingerprint;
@@ -314,6 +360,42 @@ describe("persistent Employment influence world model", () => {
 });
 
 describe("persistent world local-review shell", () => {
+  it("removes closed inspector controls, restores focus, and traps search focus", async () => {
+    window.history.replaceState({}, "", "/systems-monitor/#persistent-world/placement%3Aconsumer-demand");
+    render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
+    const inspector = await screen.findByRole("complementary", { name: "Persistent world factor details" }, { timeout: 15_000 });
+    const searchTrigger = screen.getByRole("button", { name: /Find a factor/ });
+    fireEvent.click(within(inspector).getByRole("button", { name: "Close factor details" }));
+    expect(screen.queryByRole("complementary", { name: "Persistent world factor details" })).toBeNull();
+    await waitFor(() => expect(document.activeElement).toBe(searchTrigger));
+
+    fireEvent.click(searchTrigger);
+    const dialog = screen.getByRole("dialog", { name: "Find a factor" });
+    const close = within(dialog).getByRole("button", { name: "Close factor search" });
+    const input = within(dialog).getByRole("textbox", { name: "Find any factor" });
+    close.focus();
+    fireEvent.keyDown(close, { key: "Tab", shiftKey: true });
+    expect(document.activeElement).toBe(input);
+    input.focus();
+    fireEvent.keyDown(input, { key: "Tab" });
+    expect(document.activeElement).toBe(close);
+  });
+
+  it("renders the persistent world in reduced-motion mode without camera animation", async () => {
+    const original = window.matchMedia;
+    window.matchMedia = ((query: string) => ({ matches: query.includes("prefers-reduced-motion"), media: query, onchange: null, addListener() {}, removeListener() {}, addEventListener() {}, removeEventListener() {}, dispatchEvent: () => false })) as typeof window.matchMedia;
+    try {
+      window.history.replaceState({}, "", "/systems-monitor/#persistent-world/placement%3Alabor-supply");
+      render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
+      const surface = await screen.findByRole("application", { name: "U.S. systems factor map" }, { timeout: 15_000 });
+      await waitFor(() => expect(surface.getAttribute("data-reduced-motion")).toBe("true"));
+      expect(surface.getAttribute("data-orbit-drag-state")).toBe("IDLE");
+      expect(surface.getAttribute("data-topology-fingerprint")).toBe("fnv1a32:88684cdb");
+    } finally {
+      window.matchMedia = original;
+    }
+  });
+
   it("uses strict overview LOD and drills through the same resident world", async () => {
     window.history.replaceState({}, "", "/systems-monitor/#persistent-world");
     render(<SnapshotProvider><SystemsMonitorApp /></SnapshotProvider>);
@@ -324,6 +406,8 @@ describe("persistent world local-review shell", () => {
     expect(surface.getAttribute("data-resident-relationship-count")).toBe("3110");
     expect(surface.getAttribute("data-semantic-node-count")).toBe("11");
     expect(surface.getAttribute("data-factual-binding-count")).toBe("5");
+    expect(surface.getAttribute("data-connected-placement-count")).toBe("5");
+    expect(surface.getAttribute("data-connected-canonical-factor-count")).toBe("4");
     expect(surface.getAttribute("data-lod-mode")).toBe("OVERVIEW");
     expect(surface.getAttribute("data-view-mode")).toBe("TOP_DOWN");
     expect(screen.getByRole("button", { name: "Top-down" }).getAttribute("aria-pressed")).toBe("true");
@@ -341,6 +425,13 @@ describe("persistent world local-review shell", () => {
     fireEvent.pointerMove(surface, { pointerId: 7, clientX: 440, clientY: 325 });
     fireEvent.pointerUp(surface, { pointerId: 7, clientX: 440, clientY: 325 });
     expect(Number(surface.getAttribute("data-viewport-pan-x"))).not.toBe(0);
+    const canvas = surface.querySelector("canvas")!;
+    fireEvent.pointerDown(canvas, { button: 0, pointerId: 8, clientX: -120, clientY: -120 });
+    fireEvent.pointerMove(canvas, { pointerId: 8, clientX: -20, clientY: -116 });
+    expect(surface.getAttribute("data-orbit-drag-state")).toBe("DRAGGING");
+    expect(Math.abs(Number(surface.getAttribute("data-orbit-angle-degrees")))).toBeGreaterThan(5);
+    fireEvent.pointerUp(canvas, { pointerId: 8, clientX: -20, clientY: -116 });
+    expect(["DRIFTING", "IDLE"]).toContain(surface.getAttribute("data-orbit-drag-state"));
 
     fireEvent.click(screen.getByRole("button", { name: /03Employer Labor DemandMaster-defined system/ }));
     expect(surface.getAttribute("data-selected-placement-id")).toBe("placement:employer-labor-demand");

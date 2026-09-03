@@ -1,9 +1,18 @@
 import blsDolRegistry from "../../../data/config/layoffs/sources_bls_dol.json";
 import censusRegistry from "../../../data/config/layoffs/sources_census.json";
 import contextRegistry from "../../../data/config/layoffs/sources_bea_fed_courts.json";
+import claimClassRegistry from "../../../data/config/layoffs/level4_claim_classes.json";
 import { layoffsBranchTaxonomy, layoffsCanonicalFactorId } from "./layoffsBranchTaxonomy";
 
 export type LayoffsSourceActivationState = "ACCEPTED" | "SOURCE_ENABLED_PENDING_ACCEPTANCE" | "SOURCE_IDENTIFIED" | "BLOCKED";
+export type LayoffsClaimClass = "A_DIRECT_OBS" | "B_CALC" | "C_EVENT_OR_STRUCTURAL" | "D_TAXONOMY_OR_SOURCE_PROBLEM";
+
+export interface LayoffsClaimClassification {
+  canonicalFactorId: string;
+  claimClass: LayoffsClaimClass;
+  rationale: string;
+  sourceRefs: readonly string[];
+}
 
 export interface LayoffsSourceSeries {
   sourceId: string;
@@ -20,6 +29,7 @@ export interface LayoffsFactorSourceState {
   canonicalFactorId: string;
   activationState: LayoffsSourceActivationState;
   series: readonly LayoffsSourceSeries[];
+  claimClassification?: LayoffsClaimClassification;
   blockedReason?: string;
 }
 
@@ -57,6 +67,16 @@ function canonicalId(configured: string) {
 }
 
 const mutable = new Map<string, { activationState: LayoffsSourceActivationState; series: LayoffsSourceSeries[]; blockedReason?: string }>();
+
+const claimClassifications = new Map<string, LayoffsClaimClassification>(claimClassRegistry.factors.map((row) => [
+  row.canonicalFactorId,
+  Object.freeze({
+    canonicalFactorId: row.canonicalFactorId,
+    claimClass: row.claimClass as LayoffsClaimClass,
+    rationale: row.rationale,
+    sourceRefs: Object.freeze([...row.sourceRefs])
+  })
+]));
 
 for (const group of layoffsBranchTaxonomy) {
   mutable.set(layoffsCanonicalFactorId(group.label), { activationState: "SOURCE_IDENTIFIED", series: [] });
@@ -121,7 +141,7 @@ for (const source of contextRegistry.sources) {
   }
 }
 
-export const layoffsFactorSourceStates: Readonly<Record<string, LayoffsFactorSourceState>> = Object.freeze(Object.fromEntries([...mutable.entries()].map(([id, state]) => [id, Object.freeze({ canonicalFactorId: id, ...state, series: Object.freeze(state.series) })])));
+export const layoffsFactorSourceStates: Readonly<Record<string, LayoffsFactorSourceState>> = Object.freeze(Object.fromEntries([...mutable.entries()].map(([id, state]) => [id, Object.freeze({ canonicalFactorId: id, ...state, series: Object.freeze(state.series), claimClassification: claimClassifications.get(id) })])));
 
 export function layoffsFactorSourceState(canonicalFactorId: string) {
   return layoffsFactorSourceStates[canonicalFactorId];
@@ -129,3 +149,4 @@ export function layoffsFactorSourceState(canonicalFactorId: string) {
 
 export const LAYOFFS_SOURCE_ENABLED_FACTOR_COUNT = Object.values(layoffsFactorSourceStates).filter((row) => row.activationState === "SOURCE_ENABLED_PENDING_ACCEPTANCE").length;
 export const LAYOFFS_BLOCKED_FACTOR_COUNT = Object.values(layoffsFactorSourceStates).filter((row) => row.activationState === "BLOCKED").length;
+export const LAYOFFS_CLASSIFIED_LEVEL4_FACTOR_COUNT = claimClassifications.size;

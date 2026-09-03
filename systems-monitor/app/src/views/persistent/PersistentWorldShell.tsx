@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useMemo, useRef, useState, type CSSProperties, type KeyboardEvent as ReactKeyboardEvent } from "react";
 import { createPersistentWorld, persistentWorldPath, persistentWorldPlacementLabel, type PersistentWorldPlacement } from "../../data/persistentWorldModel";
 import { persistentWorldFactualBindingForFactor } from "../../data/persistentWorldFactualBindings";
 import { PERSISTENT_WORLD_PROFILED_FACTOR_COUNT, persistentWorldCandidateSourceProfile } from "../../data/persistentWorldSourceCatalog";
@@ -72,6 +72,7 @@ export function PersistentWorldShell() {
   const reducedMotion = useReducedMotion();
   const workspaceRef = useRef<HTMLDivElement>(null);
   const searchTriggerRef = useRef<HTMLButtonElement>(null);
+  const searchDialogRef = useRef<HTMLDivElement>(null);
   const [selectedId, setSelectedId] = useState<string | null>(() => selectionFromHash(model, !publicBeta));
   const [inspectorOpen, setInspectorOpen] = useState(() => Boolean(selectionFromHash(model, !publicBeta)));
   const [fullWorld, setFullWorld] = useState(false);
@@ -185,6 +186,24 @@ export function PersistentWorldShell() {
     setSearchQuery("");
   }
 
+  function trapSearchFocus(event: ReactKeyboardEvent<HTMLDivElement>) {
+    if (event.key !== "Tab") return;
+    const focusable = Array.from(event.currentTarget.querySelectorAll<HTMLElement>('button:not([disabled]),input:not([disabled]),[href],select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])')).filter((item) => !item.hasAttribute("hidden"));
+    if (!focusable.length) return;
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+    if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+  }
+
+  function closeInspector() {
+    setInspectorOpen(false);
+    requestAnimationFrame(() => {
+      const activeChoice = document.querySelector<HTMLButtonElement>('.sm-pw-access button[aria-current="true"]');
+      (activeChoice ?? searchTriggerRef.current)?.focus();
+    });
+  }
+
   function resetWorld() {
     navigate(null);
     setFullWorld(false);
@@ -230,7 +249,7 @@ export function PersistentWorldShell() {
           <span>Level {(selected?.depth ?? 0) + 1} of 4</span>
         </div>
       </div>
-      {searchOpen && <div className="sm-pw-search" role="dialog" aria-modal="true" aria-label="Find a factor">
+      {searchOpen && <div ref={searchDialogRef} className="sm-pw-search" role="dialog" aria-modal="true" aria-label="Find a factor" onKeyDown={trapSearchFocus}>
         <div className="sm-pw-search__panel">
           <header><label htmlFor="pw-factor-search">Find any factor</label><button type="button" aria-label="Close factor search" onClick={() => { setSearchOpen(false); requestAnimationFrame(() => searchTriggerRef.current?.focus()); }}>×</button></header>
           <input id="pw-factor-search" autoFocus value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} placeholder="Try initial claims, wages, oil, bankruptcy…" />
@@ -246,8 +265,8 @@ export function PersistentWorldShell() {
       <div ref={workspaceRef} className={`sm-pw-workspace ${selected && inspectorOpen ? "has-inspector" : ""} ${fullscreenFallback ? "is-fullscreen-fallback" : ""}`} data-fullscreen={fullscreenActive}>
         <PersistentWorldMinimap model={model} selectedPlacementId={selectedId} onSelect={navigate} />
         <aside className={`sm-pw-inspector ${selected && inspectorOpen ? "is-open" : ""}`} aria-label="Persistent world factor details" aria-hidden={!selected || !inspectorOpen} data-panel-motion="settled-fade">
-          {selected && factor && <div key={selected.id} className="sm-pw-inspector__content">
-            <header><span>{selected.depth === 1 ? "Master-defined taxonomy system" : selected.depth === 2 ? "Level-3 review candidate" : "Level-4 reviewed factor"}</span><button type="button" aria-label="Close factor details" onClick={() => setInspectorOpen(false)}>×</button><h2>{placementLabel(model, selected)}</h2>{selectedCompactValue && <div className="sm-pw-inspector__quick-reading"><strong>{selectedCompactValue}</strong><span>{selectedBinding?.validTime} · {selectedBinding?.provider}</span><a href="/systems-monitor/#workstream1a">Open factual record</a></div>}</header>
+          {selected && factor && inspectorOpen && <div key={selected.id} className="sm-pw-inspector__content">
+            <header><span>{selected.depth === 1 ? "Master-defined taxonomy system" : selected.depth === 2 ? "Level-3 review candidate" : "Level-4 reviewed factor"}</span><button type="button" aria-label="Close factor details" onClick={closeInspector}>×</button><h2>{placementLabel(model, selected)}</h2>{selectedCompactValue && <div className="sm-pw-inspector__quick-reading"><strong>{selectedCompactValue}</strong><span>{selectedBinding?.validTime} · {selectedBinding?.provider}</span><a href="/systems-monitor/#workstream1a">Open factual record</a></div>}</header>
             {selectedMedia && <div className="sm-pw-inspector__portrait" style={{ "--pw-photo": `url(${selectedMedia.imageUrl})`, "--pw-accent": selectedAccent } as CSSProperties}>
               <span className="sm-pw-inspector__photo" role="img" aria-label={selectedMedia.alt} />
               <span className="sm-pw-inspector__portrait-icon" aria-hidden="true"><StructuralNodeIcon symbol={selectedSymbol} /></span>
@@ -256,6 +275,7 @@ export function PersistentWorldShell() {
             <p className="sm-pw-inspector__definition">{factor.definition}</p>
             <section><h3>What it tracks</h3><p>{selected.depth === 1 ? "A major upstream system the Master identifies as relevant to employment and unemployment outcomes." : selectedSourceProfile?.summary ?? `A reviewed economic factor inside ${placementLabel(model, model.placements[selected.parentPlacementId!])}. Its source, value, and relationships remain independently governed.`}</p></section>
             <section><h3>Why it matters</h3><p>{selected.depth === 1 ? "It organizes a major family of conditions that can help explain changes around employment, without asserting that every child directly causes jobs to rise or fall." : `It gives people a specific way to inspect one part of ${placementLabel(model, model.placements[selected.parentPlacementId!])}; hierarchy placement does not by itself prove causality, weight, or propagation.`}</p></section>
+            {selected.depth === 3 && selectedBinding?.claimClassification && <section className="sm-pw-inspector__claim-class"><h3>Evidence method</h3><strong>{selectedBinding.claimClassification.claimClass === "A_DIRECT_OBS" ? "Class A · Direct official observation" : selectedBinding.claimClassification.claimClass}</strong><p>{selectedBinding.claimClassification.rationale}</p><small>Factor classification only · no observation, history, or relationship is accepted by this designation.</small></section>}
             <section className="sm-pw-inspector__change"><h3>What changed</h3>{selectedChanges.length ? selectedChanges.slice(0, 2).map((notice) => <article key={notice.id} data-impact={notice.impactClass}><span>{notice.sourceHealthOnly ? "SOURCE HEALTH" : notice.kind.replaceAll("_", " ")}</span><strong>{notice.headline}</strong><p>{notice.summary}</p><small>{notice.comparisonBasis}</small></article>) : <p>{factor.evidencePosture === "TEST_FIXTURE" ? "Fixture only — this renderer-capacity node has no observation history, live feed, or economic change signal." : "No accepted comparable change is available for this factor in the selected time window."}</p>}</section>
             {selectedBinding?.status === "CONNECTED" ? <section className="sm-pw-inspector__data-boundary is-connected"><h3>Latest accepted reading</h3><strong>{selectedCompactValue}</strong><p>{selectedBinding.validTime} · {selectedBinding.provider}<br /><code>{selectedBinding.seriesId}</code></p><div className="sm-pw-inspector__data-actions">{selectedBinding.evidenceUrl && <a href={selectedBinding.evidenceUrl} target="_blank" rel="noreferrer">Original evidence</a>}{selectedBinding.methodologyUrl && <a href={selectedBinding.methodologyUrl} target="_blank" rel="noreferrer">Methodology</a>}{selectedBinding.acquisitionProvenanceUrl && <a href={selectedBinding.acquisitionProvenanceUrl} target="_blank" rel="noreferrer">Acquisition record</a>}<a href="/systems-monitor/#workstream1a">Open factual record</a></div><small>Accepted local factual snapshot · {selectedBinding.freshness}</small></section>
               : selectedBinding?.status === "SOURCE_ENABLED_PENDING_ACCEPTANCE" ? <section className="sm-pw-inspector__data-boundary is-staged"><h3>Data status</h3><strong>Source adapter available · acceptance pending</strong><p>The official series has a candidate retrieval path, but no value is shown until current runtime health, rights, provenance, units, timing, revision, and publication acceptance pass.</p>{selectedBinding.candidateSeries?.map((series) => <div key={`${series.sourceId}:${series.seriesId}`}><code>{series.seriesId}</code><div className="sm-pw-inspector__data-actions"><a href={series.evidenceUrl} target="_blank" rel="noreferrer">Official evidence</a>{series.methodologyUrl && <a href={series.methodologyUrl} target="_blank" rel="noreferrer">Methodology</a>}</div></div>)}</section>
