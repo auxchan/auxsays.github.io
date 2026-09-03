@@ -191,21 +191,72 @@
 [data-aux-product="systems-monitor"] .sm-pw-factual-boundary a { flex: 0 0 auto; padding: 10px 14px; border: 1px solid #6fe4d0; border-radius: 10px; color: #80ecd9; text-decoration: none; }
 @media (max-width:900px) {
   [data-aux-product="systems-monitor"] .sm-pw-header,[data-aux-product="systems-monitor"] .sm-pw-status,[data-aux-product="systems-monitor"] .sm-pw-factual-boundary { align-items: flex-start; flex-direction: column; }
+  [data-aux-product="systems-monitor"] .sm-pw-header__facts { width: 100%; justify-content: flex-start; }
+  [data-aux-product="systems-monitor"] .sm-pw-header__facts summary,[data-aux-product="systems-monitor"] .sm-pw-search-trigger,[data-aux-product="systems-monitor"] .sm-pw-history button,[data-aux-product="systems-monitor"] .sm-pw-controls button,[data-aux-product="systems-monitor"] .sm-pw-inspector__deep-trigger,[data-aux-product="systems-monitor"] .sm-pw-changes__filters button { min-height: 44px; }
+  [data-aux-product="systems-monitor"] .sm-pw-history button { width: 44px; }
+  [data-aux-product="systems-monitor"] .sm-pw-workspace { height: clamp(620px,76svh,820px); min-height: 620px; grid-template-columns: minmax(0,1fr); }
   [data-aux-product="systems-monitor"] .sm-pw-workspace.has-inspector { grid-template-columns: 1fr; }
-  [data-aux-product="systems-monitor"] .sm-pw-inspector { position: absolute; z-index: 4; inset: 0 auto 0 0; width: min(350px,92vw); box-shadow: 18px 0 55px rgba(0,0,0,.45); }
+  [data-aux-product="systems-monitor"] .sm-pw-inspector { position: absolute; z-index: 8; inset: 0 auto 0 0; width: min(380px,96vw); box-shadow: 18px 0 55px rgba(0,0,0,.45); }
+  [data-aux-product="systems-monitor"] .sm-pw-inspector > div { width: 100%; }
+  [data-aux-product="systems-monitor"] .sm-pw-inspector header button { width: 44px; height: 44px; }
+  [data-aux-product="systems-monitor"] .sm-pw-workspace.has-inspector .sm-pw-controls,[data-aux-product="systems-monitor"] .sm-pw-workspace.has-inspector .sm-pw-minimap { opacity: 0; pointer-events: none; }
   [data-aux-product="systems-monitor"] .sm-pw-access { grid-template-columns: 1fr; }
   [data-aux-product="systems-monitor"] .sm-pw-changes > header { align-items: flex-start; flex-direction: column; }
   [data-aux-product="systems-monitor"] .sm-pw-changes__filters { justify-content: flex-start; }
+  [data-aux-product="systems-monitor"] .sm-pw-changes__filters button { min-width: 44px; }
   [data-aux-product="systems-monitor"] .sm-pw-changes ol { grid-template-columns: 1fr; }
-  [data-aux-product="systems-monitor"] .sm-pw-minimap { width: 128px; opacity: .86; }
+  [data-aux-product="systems-monitor"] .sm-pw-minimap { width: 128px; opacity: .86; pointer-events: none; transition: opacity 160ms ease; }
   [data-aux-product="systems-monitor"] .sm-pw-minimap svg { height: 94px; }
+  [data-aux-product="systems-monitor"] .sm-pw-minimap__jumps { display: none; }
 }
 @media (max-width:620px) {
-  [data-aux-product="systems-monitor"] .sm-pw-header__facts { justify-content: flex-start; }
-  [data-aux-product="systems-monitor"] .sm-pw-surface,[data-aux-product="systems-monitor"] .sm-pw-workspace { min-height: 540px; }
+  [data-aux-product="systems-monitor"] .sm-pw-view { gap: 12px; }
+  [data-aux-product="systems-monitor"] .sm-pw-instrument { border-radius: 14px; }
+  [data-aux-product="systems-monitor"] .sm-pw-header { min-height: 0; gap: 12px; padding: 13px 14px; }
+  [data-aux-product="systems-monitor"] .sm-pw-header strong { font-size: 17px; }
+  [data-aux-product="systems-monitor"] .sm-pw-header__facts { flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; padding-bottom: 3px; scroll-snap-type: x proximity; scrollbar-width: thin; }
+  [data-aux-product="systems-monitor"] .sm-pw-header__facts span,[data-aux-product="systems-monitor"] .sm-pw-header__facts summary { min-height: 44px; box-sizing: border-box; display: inline-flex; flex: 0 0 auto; align-items: center; scroll-snap-align: start; }
+  [data-aux-product="systems-monitor"] .sm-pw-header__facts details > div { position: fixed; z-index: 10030; top: auto; right: 14px; bottom: 14px; left: 14px; width: auto; max-height: min(70dvh,520px); overflow: auto; }
+  [data-aux-product="systems-monitor"] .sm-pw-beta-boundary,[data-aux-product="systems-monitor"] .sm-pw-breadcrumbs { padding-inline: 14px; }
+  [data-aux-product="systems-monitor"] .sm-pw-breadcrumbs { min-height: 46px; scroll-snap-type: x proximity; scrollbar-width: thin; }
+  [data-aux-product="systems-monitor"] .sm-pw-breadcrumbs button { min-height: 44px; scroll-snap-align: start; }
+  [data-aux-product="systems-monitor"] .sm-pw-surface,[data-aux-product="systems-monitor"] .sm-pw-workspace { min-height: 560px; }
+  [data-aux-product="systems-monitor"] .sm-pw-workspace { height: clamp(560px,72svh,680px); }
+  [data-aux-product="systems-monitor"] .sm-pw-inspector { z-index: 9; inset: 0; width: 100%; border-right: 0; box-shadow: none; }
+  [data-aux-product="systems-monitor"] .sm-pw-inspector > div { padding: 18px 16px max(28px,env(safe-area-inset-bottom)); }
+  [data-aux-product="systems-monitor"] .sm-pw-inspector header button { width: 44px; height: 44px; }
+  [data-aux-product="systems-monitor"] .sm-pw-inspector h2 { font-size: clamp(25px,8vw,32px); }
+  [data-aux-product="systems-monitor"] .sm-pw-inspector__portrait { height: 150px; margin: 14px 0 16px; }
+  [data-aux-product="systems-monitor"] .sm-pw-inspector p { font-size: 14px; }
+  [data-aux-product="systems-monitor"] .sm-pw-inspector__deep-trigger { min-height: 44px; }
+  [data-aux-product="systems-monitor"] .sm-pw-workspace.has-inspector .sm-pw-controls { opacity: 0; pointer-events: none; transform: translateX(8px); }
+  [data-aux-product="systems-monitor"] .sm-pw-controls { top: auto; right: max(8px,env(safe-area-inset-right)); bottom: max(8px,env(safe-area-inset-bottom)); width: 126px; transform: none; transition: opacity 160ms ease,transform 200ms ease; }
+  [data-aux-product="systems-monitor"] .sm-pw-controls button { min-height: 44px; padding-inline: 11px; font-size: 12px; }
   [data-aux-product="systems-monitor"] .sm-pw-access ol { grid-template-columns: 1fr; }
-  [data-aux-product="systems-monitor"] .sm-pw-discovery { align-items: stretch; flex-direction: column; }
+  [data-aux-product="systems-monitor"] .sm-pw-discovery { align-items: stretch; flex-direction: column; padding: 10px 14px; }
+  [data-aux-product="systems-monitor"] .sm-pw-search-trigger { min-height: 44px; justify-content: center; }
+  [data-aux-product="systems-monitor"] .sm-pw-history { min-height: 44px; justify-content: space-between; }
+  [data-aux-product="systems-monitor"] .sm-pw-history button { width: 48px; min-height: 44px; }
+  [data-aux-product="systems-monitor"] .sm-pw-history span { flex: 1; text-align: center; }
+  [data-aux-product="systems-monitor"] .sm-pw-search { padding: 10px; place-items: stretch; }
+  [data-aux-product="systems-monitor"] .sm-pw-search__panel { width: auto; max-height: calc(100dvh - 20px); padding: 15px; border-radius: 14px; }
+  [data-aux-product="systems-monitor"] .sm-pw-search__panel header button { width: 44px; height: 44px; }
+  [data-aux-product="systems-monitor"] .sm-pw-search__panel li button { min-height: 64px; grid-template-columns: 1fr; }
+  [data-aux-product="systems-monitor"] .sm-pw-search__panel li span { white-space: normal; }
+  [data-aux-product="systems-monitor"] .sm-pw-search__panel li small { grid-row: auto; }
   [data-aux-product="systems-monitor"] .sm-pw-minimap { display: none; }
+  [data-aux-product="systems-monitor"] .sm-pw-status { gap: 10px; padding: 12px 14px; }
+  [data-aux-product="systems-monitor"] .sm-pw-status span { line-height: 1.45; overflow-wrap: anywhere; }
+  [data-aux-product="systems-monitor"] .sm-pw-changes,[data-aux-product="systems-monitor"] .sm-pw-access { padding: 16px 14px; border-radius: 14px; }
+  [data-aux-product="systems-monitor"] .sm-pw-changes h2,[data-aux-product="systems-monitor"] .sm-pw-access h2 { font-size: 22px; }
+  [data-aux-product="systems-monitor"] .sm-pw-changes__filters { width: 100%; display: grid; grid-template-columns: repeat(3,1fr); }
+  [data-aux-product="systems-monitor"] .sm-pw-changes__filters button { min-height: 44px; border-right: 1px solid #23454e; border-bottom: 1px solid #23454e; }
+  [data-aux-product="systems-monitor"] .sm-pw-access li button { min-height: 64px; }
+  [data-aux-product="systems-monitor"] .sm-pw-factual-boundary { gap: 14px; padding: 16px 14px; }
+  [data-aux-product="systems-monitor"] .sm-pw-factual-boundary a { width: 100%; min-height: 44px; box-sizing: border-box; display: grid; place-items: center; text-align: center; }
+}
+@media (hover:none),(pointer:coarse) {
+  [data-aux-product="systems-monitor"] .sm-pw-hover-card { display: none; }
 }
 @media (prefers-reduced-motion:reduce) {
   [data-aux-product="systems-monitor"] .sm-pw-workspace,[data-aux-product="systems-monitor"] .sm-pw-inspector,[data-aux-product="systems-monitor"] .sm-pw-hover-card { transition-duration: 80ms; }
