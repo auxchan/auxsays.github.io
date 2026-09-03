@@ -17,8 +17,8 @@ update_version: Connect FigJam to Notion
 update_logo_text: FIG
 update_published_at: '2026-02-24T00:00:00.000Z'
 update_last_checked: '2026-07-28T05:12:53Z'
-source_last_checked: '2026-07-28T05:12:53Z'
-official_body_last_checked: '2026-07-28T05:12:53Z'
+source_last_checked: '2026-09-03T12:07:45Z'
+official_body_last_checked: '2026-09-03T12:07:45Z'
 record_last_updated: '2026-07-28T05:12:53Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -70,6 +70,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-07-28T05:12:53Z'
+  url: https://www.figma.com/release-notes/?title=connect-figjam-to-notion
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-03T12:07:45Z'
   url: https://www.figma.com/release-notes/?title=connect-figjam-to-notion
   status: captured-from-rss-feed
   body_captured: true
