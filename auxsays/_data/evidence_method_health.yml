@@ -1134,7 +1134,7 @@ methods:
   accepted_reports: 3
   rejected_reports: 9
   blocked_reason: ''
-  last_run: '2026-09-03T04:20:41Z'
+  last_run: '2026-09-03T12:10:31Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 26.001.21529
@@ -1182,7 +1182,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 11
   blocked_reason: ''
-  last_run: '2026-09-03T04:20:41Z'
+  last_run: '2026-09-03T12:10:31Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 26.001.21563
@@ -20766,7 +20766,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 2
   blocked_reason: ''
-  last_run: '2026-09-03T04:20:41Z'
+  last_run: '2026-09-03T12:10:31Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 26.001.21789
@@ -20782,7 +20782,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 8
   blocked_reason: ''
-  last_run: '2026-09-03T04:20:41Z'
+  last_run: '2026-09-03T12:10:31Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 26.001.21771
@@ -20798,7 +20798,7 @@ methods:
   accepted_reports: 2
   rejected_reports: 8
   blocked_reason: ''
-  last_run: '2026-09-03T04:20:41Z'
+  last_run: '2026-09-03T12:10:31Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 26.001.21745
@@ -20814,7 +20814,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 9
   blocked_reason: ''
-  last_run: '2026-09-03T04:20:41Z'
+  last_run: '2026-09-03T12:10:31Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 26.001.21691
@@ -20830,7 +20830,7 @@ methods:
   accepted_reports: 2
   rejected_reports: 13
   blocked_reason: ''
-  last_run: '2026-09-03T04:20:41Z'
+  last_run: '2026-09-03T12:10:31Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 26.001.21677
@@ -20846,7 +20846,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 8
   blocked_reason: ''
-  last_run: '2026-09-03T04:20:41Z'
+  last_run: '2026-09-03T12:10:31Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 26.001.21662
@@ -20862,7 +20862,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 8
   blocked_reason: ''
-  last_run: '2026-09-03T04:20:41Z'
+  last_run: '2026-09-03T12:10:31Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 26.001.21651
@@ -20878,7 +20878,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 8
   blocked_reason: ''
-  last_run: '2026-09-03T04:20:41Z'
+  last_run: '2026-09-03T12:10:31Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 26.001.21483
@@ -20894,7 +20894,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 3
   blocked_reason: ''
-  last_run: '2026-09-03T04:20:41Z'
+  last_run: '2026-09-03T12:10:31Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 26.001.21431
@@ -20910,7 +20910,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 6
   blocked_reason: ''
-  last_run: '2026-09-03T04:20:41Z'
+  last_run: '2026-09-03T12:10:31Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 26.001.21411
@@ -20926,7 +20926,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 13
   blocked_reason: ''
-  last_run: '2026-09-03T04:20:41Z'
+  last_run: '2026-09-03T12:10:31Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 26.001.21367
@@ -20942,7 +20942,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 10
   blocked_reason: ''
-  last_run: '2026-09-03T04:20:41Z'
+  last_run: '2026-09-03T12:10:31Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 26.001.21346
@@ -20958,7 +20958,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 11
   blocked_reason: ''
-  last_run: '2026-09-03T04:20:41Z'
+  last_run: '2026-09-03T12:10:31Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 25.001.21288
@@ -20974,7 +20974,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 3
   blocked_reason: ''
-  last_run: '2026-09-03T04:20:41Z'
+  last_run: '2026-09-03T12:10:31Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 25.001.21265
@@ -20990,7 +20990,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 3
   blocked_reason: ''
-  last_run: '2026-09-03T04:20:41Z'
+  last_run: '2026-09-03T12:10:31Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 25.001.21223
@@ -21006,7 +21006,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 7
   blocked_reason: ''
-  last_run: '2026-09-03T04:20:41Z'
+  last_run: '2026-09-03T12:10:31Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 25.001.21208
@@ -21022,7 +21022,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 3
   blocked_reason: ''
-  last_run: '2026-09-03T04:20:41Z'
+  last_run: '2026-09-03T12:10:31Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 25.001.21184
@@ -21038,7 +21038,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 7
   blocked_reason: ''
-  last_run: '2026-09-03T04:20:41Z'
+  last_run: '2026-09-03T12:10:31Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 25.001.21111
@@ -21054,7 +21054,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 9
   blocked_reason: ''
-  last_run: '2026-09-03T04:20:41Z'
+  last_run: '2026-09-03T12:10:31Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 25.001.21078
@@ -21070,7 +21070,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 5
   blocked_reason: ''
-  last_run: '2026-09-03T04:20:41Z'
+  last_run: '2026-09-03T12:10:31Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 25.001.20997
@@ -21086,7 +21086,7 @@ methods:
   accepted_reports: 2
   rejected_reports: 13
   blocked_reason: ''
-  last_run: '2026-09-03T04:20:41Z'
+  last_run: '2026-09-03T12:10:31Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 25.001.20982
