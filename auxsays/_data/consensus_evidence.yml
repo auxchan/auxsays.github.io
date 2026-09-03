@@ -16265,3 +16265,84 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: acrobat-26-001-21745-adobe-community-bug-report-https-community-adobe-com-questions-624-some-computers-in-our-environment-will-only-autotag-with
+  product_id: adobe-acrobat-pro
+  update_version: 26.001.21745
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-624/some-computers-in-our-environment-will-only-autotag-with-cloud-tagging-disabled-others-allow-auto-tagging-with-cloud-tagging-enabled-1633551
+  parent_title: Some computers in our environment will only autotag with cloud tagging disabled, others allow auto tagging with cloud tagging enabled
+  report_title: Some computers in our environment will only autotag with cloud tagging disabled, others allow auto tagging with cloud tagging enabled
+  report_text_excerpt: Some computers in our environment will only autotag with cloud tagging disabled, others allow auto tagging with cloud tagging enabled Sys admin here, a few users want to use the Auto-tag feature with cloud tagging enabled but for some reason, their Adobe Acrobat will hang at...
+  captured_at: '2026-09-03T22:01:21Z'
+  source_date: '2026-07-23'
+  target_release_date: '2026-07-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.001.21745
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-26-001-21691-adobe-community-bug-report-https-community-adobe-com-questions-9-issue-with-adobe-acrobat-26-001-21691-1633161
+  product_id: adobe-acrobat-pro
+  update_version: 26.001.21691
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/issue-with-adobe-acrobat-26-001-21691-1633161
+  parent_title: Issue with Adobe acrobat 26.001 21691
+  report_title: Issue with Adobe acrobat 26.001 21691
+  report_text_excerpt: 'Issue with Adobe acrobat 26.001 21691 I was wondering if anyone else is having the following issues with Adobe acrobat 26.001 21691. Stops responding when you try to print a document. If you let is sit there it eventually starts responding. Adobe will randomly crash. Note: We...'
+  captured_at: '2026-09-03T22:01:21Z'
+  source_date: '2026-07-21'
+  target_release_date: '2026-06-25'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.001 21691
+  match_basis: exact_version_alias
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-26-001-21529-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-doesn-t-open-and-is-creating-lots-of-subprocesses
+  product_id: adobe-acrobat-pro
+  update_version: 26.001.21529
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-doesn-t-open-and-is-creating-lots-of-subprocesses-1561925
+  parent_title: Acrobat doesn't open and is creating lots of subprocesses
+  report_title: Acrobat doesn't open and is creating lots of subprocesses
+  report_text_excerpt: Acrobat doesn't open and is creating lots of subprocesses Hello everyone, We have been experiencing issues with Adobe for some time now. Our users are working on an RDS server, and after a while they are no longer able to open PDF files with Adobe. When checking the Task...
+  captured_at: '2026-09-03T22:01:21Z'
+  source_date: '2026-05-17'
+  target_release_date: '2026-05-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 26.001.21529
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Acrobat issue
+  workflow_area: Acrobat workflow
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
