@@ -150,12 +150,27 @@ permalink: /updates/methodology/
     <h2>Current official-ingestion source health</h2>
     <p>This is a static audit snapshot produced from the ingestion config and the latest GitHub Actions state file. It is meant to show whether official-source monitoring is active, manual watch, needs an adapter, disabled, in error, or unknown. It is not a backend service and it does not represent live community consensus.</p>
 
-    {% assign active_sources = site.data.source_health | where: "status", "Active" %}
-    {% assign manual_watch_sources = site.data.source_health | where: "status", "Manual watch" %}
-    {% assign needs_adapter_sources = site.data.source_health | where: "status", "Needs adapter" %}
-    {% assign disabled_sources = site.data.source_health | where: "status", "Disabled" %}
-    {% assign error_sources = site.data.source_health | where: "status", "Error" %}
-    {% assign unknown_sources = site.data.source_health | where: "status", "Unknown" %}
+    {% assign source_health_rows = site.data.source_health %}
+    {% assign active_sources = source_health_rows | where: "status", "Active" %}
+    {% assign manual_watch_sources = source_health_rows | where: "status", "Manual watch" %}
+    {% assign needs_adapter_sources = source_health_rows | where: "status", "Needs adapter" %}
+    {% assign disabled_sources = source_health_rows | where: "status", "Disabled" %}
+    {% assign error_sources = source_health_rows | where: "status", "Error" %}
+    {% assign unknown_sources = source_health_rows | where: "status", "Unknown" %}
+    {%- comment -%}
+    These six statuses are exactly PUBLIC_SOURCE_STATUSES in scripts/source_health_snapshot.py,
+    which regenerates _data/source_health.yml during the Pages build. Nothing in Jekyll enforces
+    that agreement, and it has drifted before: the writer's earlier vocabulary was Healthy /
+    Staged / Failing / Degraded / Idle healthy, and a band that only sums named statuses reports
+    zeros for every name it no longer recognises while the table below still lists the sources.
+    So the band is made self-accounting instead: anything outside the six is counted under Other,
+    and the total states how many sources the tiles cover. The tiles can therefore never claim
+    fewer sources than the table lists. Locked by
+    scripts/tests/test_public_source_health_presentation.py.
+    {%- endcomment -%}
+    {% assign source_health_total = source_health_rows | size | default: 0 %}
+    {% assign counted_sources = active_sources.size | plus: manual_watch_sources.size | plus: needs_adapter_sources.size | plus: disabled_sources.size | plus: error_sources.size | plus: unknown_sources.size %}
+    {% assign other_sources = source_health_total | minus: counted_sources %}
     <div class="source-health-summary" aria-label="Source health totals">
       <div><strong>{{ active_sources.size }}</strong><span>Active</span></div>
       <div><strong>{{ manual_watch_sources.size }}</strong><span>Manual watch</span></div>
@@ -163,7 +178,9 @@ permalink: /updates/methodology/
       <div><strong>{{ disabled_sources.size }}</strong><span>Disabled</span></div>
       <div><strong>{{ error_sources.size }}</strong><span>Error</span></div>
       <div><strong>{{ unknown_sources.size }}</strong><span>Unknown</span></div>
+      {% if other_sources > 0 %}<div><strong>{{ other_sources }}</strong><span>Other</span></div>{% endif %}
     </div>
+    {% if source_health_total > 0 %}<p class="source-health-total">These totals cover all {{ source_health_total }} tracked source{% unless source_health_total == 1 %}s{% endunless %} listed below.</p>{% endif %}
 
     <div class="source-health-table" role="table" aria-label="AUXSAYS official ingestion source-health snapshot">
       <div class="source-health-row source-health-row--head" role="row">

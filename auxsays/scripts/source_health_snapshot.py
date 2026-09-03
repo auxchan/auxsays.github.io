@@ -22,6 +22,26 @@ CONFIG_PATH = ROOT / "_data" / "patch_ingestion_sources.yml"
 STATE_PATH = ROOT / "_data" / "patch_ingest_state.json"
 OUTPUT_PATH = ROOT / "_data" / "source_health.yml"
 
+# The public status vocabulary of THIS file, and the audit order the snapshot is sorted in.
+#
+# This is per-source adapter health. It is a separate taxonomy from the per-patch collector
+# vocabulary in _data/evidence_method_health.yml (success/partial/no_results/blocked/stale/
+# broken/low_confidence/disabled/manual_review_needed); "Disabled" means a different thing in
+# each, and the two must never be merged or cross-populated.
+#
+# updates/methodology/index.md renders one summary tile per status here. status_for must not
+# return anything outside this tuple -- an unlisted status still renders its own table row but
+# would fall out of every named tile. Both halves are locked by
+# scripts/tests/test_public_source_health_presentation.py.
+PUBLIC_SOURCE_STATUSES: tuple[str, ...] = (
+    "Error",
+    "Unknown",
+    "Active",
+    "Manual watch",
+    "Needs adapter",
+    "Disabled",
+)
+
 
 def load_yaml(path: Path) -> Any:
     return yaml.safe_load(path.read_text(encoding="utf-8")) if path.exists() else []
@@ -162,7 +182,7 @@ def main() -> int:
         })
 
     # Status order first, then alpha. Active/error enabled sources should be easy to audit.
-    status_order = {"Error": 0, "Unknown": 1, "Active": 2, "Manual watch": 3, "Needs adapter": 4, "Disabled": 5}
+    status_order = {status: index for index, status in enumerate(PUBLIC_SOURCE_STATUSES)}
     rows.sort(key=lambda row: (status_order.get(row.get("status"), 9), (row.get("company") or "").lower(), (row.get("software") or "").lower()))
     OUTPUT_PATH.write_text(yaml.safe_dump(rows, sort_keys=False, allow_unicode=True, width=140), encoding="utf-8")
     print(f"Wrote {len(rows)} source-health rows to {OUTPUT_PATH.relative_to(ROOT)}")
