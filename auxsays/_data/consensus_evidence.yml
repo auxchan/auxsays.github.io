@@ -16111,7 +16111,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-26-002-21869-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-26-002-21869-for-mac-font-list-is-empty-1640132
   product_id: adobe-acrobat-pro
   update_version: 26.002.21869
@@ -16138,7 +16137,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-26-002-21869-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-26-002-21869-for-mac-font-list-is-empty-1640132
   product_id: adobe-acrobat-reader
   update_version: 26.002.21869
@@ -16163,5 +16161,26 @@ evidence:
   workflow_area: deployment
   platform: macos
   severity: high
+  sentiment: negative
+  source_weight: 1
+- id: obs-studio-32-2-2-github-issue-13860
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13860
+  parent_title: OBS initializing HDMI capture cards at 44.1Khz and causing havoc on the USB bus
+  report_title: OBS initializing HDMI capture cards at 44.1Khz and causing havoc on the USB bus
+  report_text_excerpt: '### Operating System Info Windows 11 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL https://obsproject.com/logs/CICmxeCpMAmlvztN ### OBS Studio Crash Log URL _No response_ ### Expected Behavior The e'
+  captured_at: '2026-09-03T05:39:32Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: audio mixer regression
+  workflow_area: audio mixer UI
+  platform: windows
+  severity: medium
   sentiment: negative
   source_weight: 1
