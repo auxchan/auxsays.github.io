@@ -1215,14 +1215,24 @@ class AdobeAcrobatCollector(ProductCollector):
                 level3_fresh=len(fresh3), level3_stored=len(merged3), level3_stats=stats3)
         if not context.write:
             return
-        # Each edition owns only its own rows in the shared files, so a Reader run must not drop
-        # Pro's rows and vice versa.
-        others2 = [r for r in at.load_tier2(TIER2_PATH) if r.get("product_id") != self.product_id] \
-            if TIER2_PATH.exists() else []
-        others3 = [r for r in load_recent(TIER3_PATH) if r.get("product_id") != self.product_id] \
-            if TIER3_PATH.exists() else []
-        at.write_tier2(others2 + merged2, TIER2_PATH)
-        write_recent(others3 + merged3, TIER3_PATH)
+        # SINGLE WRITER. Both editions write these two shared files, and a local backfill can be
+        # running against the same repo. Each write states the fingerprint of the content it was
+        # derived from, so a writer whose baseline has since been replaced FAILS rather than
+        # silently reinstating stale adjudication -- which is how two corrected rows were lost once.
+        # Read and write happen under the SAME lock, so the fingerprint cannot go stale between them.
+        from lib.single_writer import replace_via, write_lock  # noqa: PLC0415
+        for path, loader, writer_fn, own_rows in (
+                (TIER2_PATH, at.load_tier2, at.write_tier2, merged2),
+                (TIER3_PATH, load_recent, write_recent, merged3)):
+            with write_lock(path):
+                # Re-read INSIDE the lock rather than reusing a baseline from before the network
+                # work: whatever another writer published meanwhile is merged rather than
+                # overwritten, so this path has nothing stale to reinstate and needs no fingerprint.
+                # Each edition owns only its own rows here, so a Reader run must not drop Pro's.
+                others = [r for r in loader(path)
+                          if r.get("product_id") != self.product_id] if path.exists() else []
+                payload = others + own_rows
+                replace_via(path, lambda tmp, f=writer_fn, rows=payload: f(rows, tmp))
 
     def collect_for_record(self, record: PatchRecord, context: CollectorContext, captured_at: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
         methods = (

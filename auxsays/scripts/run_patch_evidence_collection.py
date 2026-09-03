@@ -296,6 +296,19 @@ def _write_github_summary(outcome: str, writeback_eligible: bool, per_collector:
         pass
 
 
+def _extra_write_surface(product_id: str) -> list[Path]:
+    """Additional files a specific collector is allowed to write, beyond evidence + records.
+
+    Kept here beside the transaction rather than inside the collector: the surface is what
+    the RUNNER promises to snapshot and restore, so it has to be declared where the
+    transaction is built.
+    """
+    if product_id in ("adobe-acrobat-reader", "adobe-acrobat-pro"):
+        from patch_collectors.adobe_acrobat_community import TIER2_PATH, TIER3_PATH
+        return [TIER2_PATH, TIER3_PATH]
+    return []
+
+
 def main(argv: list[str] | None = None) -> int:
     collectors = build_collectors()
     parser = argparse.ArgumentParser(description="Run AUXSAYS patch evidence collection.")
@@ -373,7 +386,14 @@ def main(argv: list[str] | None = None) -> int:
         # this collector's baseline). Exception catching alone is insufficient; this is the isolation.
         # Production write mode REQUIRES git-based mutation detection (require_git=True): if git is
         # unavailable the transaction is unsafe and the run hard-aborts -- never a silent degrade.
-        txn = CollectorTransaction(REPO_ROOT, [EVIDENCE_PATH, GENERATED_DIR], require_git=True) if context.write else None
+        # The Acrobat collector also writes its own Level-2/Level-3 context files, so those are
+        # part of ITS declared surface -- otherwise the transaction correctly reads them as an
+        # undeclared mutation and rolls the whole collector back, which is exactly what the
+        # first production run did. Declared per product, not globally: no other collector may
+        # touch them, and rollback still has to restore them byte-for-byte.
+        surface = [EVIDENCE_PATH, GENERATED_DIR]
+        surface.extend(_extra_write_surface(product_id))
+        txn = CollectorTransaction(REPO_ROOT, surface, require_git=True) if context.write else None
         try:
             if txn is not None:
                 txn.begin()  # raises GitUnavailable (fail closed) if git is missing / not a work tree
