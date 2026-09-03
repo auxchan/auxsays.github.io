@@ -47,7 +47,7 @@ auxsays/scripts/tests/test_powerpoint_same_author_context.py = 18
 auxsays/scripts/tests/test_powerpoint_github_officedev.py = 22
 auxsays/scripts/tests/test_powerpoint_evidence_integrity.py = 62
 auxsays/scripts/tests/test_powerpoint_qna_tag_enumeration.py = 65
-auxsays/scripts/tests/test_update_linked_tier2.py = 154
+auxsays/scripts/tests/test_update_linked_tier2.py = 241
 auxsays/scripts/tests/test_collector_ownership.py = 52
 auxsays/scripts/tests/test_collector_transaction.py = 23
 auxsays/scripts/tests/test_collector_txn_nested_root.py = 26
@@ -56,7 +56,7 @@ auxsays/scripts/tests/test_davinci_bare_version_identity.py = 55
 auxsays/scripts/tests/test_davinci_verified_reports.py = 68
 auxsays/scripts/tests/test_evidence_method_health_dupes.py = 4
 auxsays/scripts/tests/test_evidence_strength_thresholds.py = 38
-auxsays/scripts/tests/test_consensus_sample_honesty.py = 74
+auxsays/scripts/tests/test_consensus_sample_honesty.py = 87
 auxsays/scripts/tests/test_frontmatter_roundtrip.py = 99
 auxsays/scripts/tests/test_normalize_davinci_version.py = 53
 auxsays/scripts/tests/test_obs_consensus_acceptance.py = 27
@@ -88,7 +88,7 @@ auxsays/scripts/tests/test_windows_rollover_convergence.py = 33
 # Deterministic and offline; broader surface or presentation-level. Also blocking in CI --
 # "diagnostic" names the domain, not a weaker guarantee.
 auxsays/scripts/tests/test_adobe_acrobat_adapter.py = 48
-auxsays/scripts/tests/test_adobe_acrobat_community_collector.py = 89
+auxsays/scripts/tests/test_adobe_acrobat_community_collector.py = 117
 auxsays/scripts/tests/test_adobe_photoshop_adapter.py = 63
 auxsays/scripts/tests/test_adobe_release_notes_adapter.py = 8
 auxsays/scripts/tests/test_blackmagic_support_downloads.py = 10

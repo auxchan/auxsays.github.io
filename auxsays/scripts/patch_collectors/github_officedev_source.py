@@ -211,6 +211,8 @@ def issue_candidate(issue: dict[str, Any], *, source_type: str, source_name: str
         "report_title": str(issue.get("title") or ""),
         "report_text": issue_report_text(issue),
         "source_date": str(issue.get("created_at") or ""),
+        # created_at is the issue's own creation time and never moves with later comments.
+        "original_post_date": str(issue.get("created_at") or ""),
         "github_repo": REPO,
         "github_issue_number": str(number),
         "github_author_login": str(user.get("login") or ""),

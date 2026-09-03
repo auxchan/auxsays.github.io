@@ -27,6 +27,8 @@ that later reply. Nothing is counted until the unchanged authority proves exact 
 from __future__ import annotations
 
 import re
+
+from lib.post_dates import original_post_date_from_html
 import time
 import urllib.error
 import urllib.parse
@@ -256,6 +258,9 @@ def question_candidate(question_id: str, slug: str, *, title: str, date: str,
         "report_title": heading,
         "report_text": " ".join(x for x in (heading, opening) if x)[:6000],
         "source_date": date,
+        # When the question was ASKED. The tag listing shows last-activity, so a reply to an old
+        # thread carried it into a much later release window. See lib/post_dates.
+        "original_post_date": original_post_date_from_html(page_html) or date,
         "qna_question_id": question_id,
         "qna_author_id": author_id,
     }

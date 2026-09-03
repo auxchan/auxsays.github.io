@@ -32,10 +32,100 @@ from urllib.error import HTTPError, URLError
 
 from . import reddit_source
 from . import runtime_budget as rb
+from lib.target_outcome import (
+    AFFECTED as OUTCOME_AFFECTED,
+    classify_target_outcome,
+    target_is_contradicted,
+)
 
 # Active RuntimeBudget for the collector currently running (set by AdobeAcrobatCollector.collect). Safe as
 # a module global because collectors run strictly serially (no concurrent repository writes / requests).
 _ACTIVE_BUDGET: Any = None
+
+
+def acrobat_version_aliases(version: str) -> tuple[str, ...]:
+    """Other spellings of THIS build that mean the same build, and nothing else.
+
+    Acrobat's Help > About dialog shows the year-prefixed form -- 2026.001.21789 for the build the
+    release notes call 26.001.21789 -- and that is the string admins copy verbatim into a post. The
+    matcher saw two different versions and refused the report. This is a spelling alias, not a
+    loosening: the trailing build number must still be exactly this record's.
+    """
+    text = str(version or "").strip()
+    match = re.fullmatch(r"(\d{2})(\.\d{3}\.\d{4,6})", text)
+    return (f"20{match.group(1)}{match.group(2)}",) if match else ()
+
+
+def record_applicability(record: Any) -> tuple[str, ...]:
+    """The editions Adobe ships THIS build to, as the record itself states.
+
+    Read from the record's front matter rather than assumed: the Acrobat adapter derives
+    `applicability` from the release-note text and narrows it when Adobe says an update is
+    edition-specific. Falling back to an EMPTY tuple matters -- a record that does not declare
+    shared applicability gets no shared-build attribution at all.
+    """
+    try:
+        data, _body = load_front_matter_and_body(record.path)
+    except Exception:
+        return ()
+    declared = data.get("applicability")
+    if not isinstance(declared, list):
+        return ()
+    return tuple(str(item).strip() for item in declared if str(item).strip())
+
+
+
+# Acrobat STANDARD named as the product the reporter is running. Requires a product-ish context
+# ("updating to Acrobat Standard 26.x", "Acrobat Standard crashes"), so a licensing sentence like
+# "signs in with a Pro or Standard license" is untouched -- that is a different claim.
+_STANDARD_PRODUCT_RE = re.compile(
+    r"\b(?:adobe\s+)?acrobat\s+standard\b(?!\s+licen)", re.I)
+
+
+def _tracked_builds_named(text: str, product_id: str, target: str) -> set[str]:
+    """Every build AUXSAYS tracks for this product that appears in the report.
+
+    Deliberately scoped to TRACKED builds rather than anything version-shaped: a post is full of
+    numbers -- dates, error codes, OS versions -- and only a real patch identity should make a
+    report ambiguous about which patch it is about.
+    """
+    found = {str(target or "").strip()} if str(target or "").strip() in (text or "") else set()
+    for record in generated_records(product_id):
+        version = str(record.update_version or "").strip()
+        if version and version in (text or ""):
+            found.add(version)
+    return found
+
+def _newest_first(records: list[Any]) -> list[Any]:
+    """Most recently released patch first.
+
+    `generated_records` returns the corpus sorted by FILENAME, and every filename is date-prefixed,
+    so the natural order is oldest-first: 2015 before 2026. This collector is bounded by a
+    wall-clock budget and stops mid-corpus when it expires, so oldest-first meant it re-scraped
+    2015-2017 patches on every run and never reached the current ones. Measured before this change:
+    44 of the 48 Acrobat records released since 2025-12-01 had NEVER been attempted by any method,
+    and the situation was getting worse, because each backfilled historical record inserts AHEAD of
+    the recent tail.
+
+    Reversing the order does not create budget, it spends it where a reader is actually looking.
+    Old records keep whatever remains, and they are the ones that already carry evidence.
+    Deterministic: ties break on version so two runs walk the same order.
+    """
+    return sorted(records,
+                  key=lambda r: (str(getattr(r, "update_published_at", "") or ""),
+                                 str(getattr(r, "update_version", "") or "")),
+                  reverse=True)
+
+
+def _retired_methods_enabled() -> bool:
+    """Re-enable the two blocked fallback methods, for a one-off reachability re-test.
+
+    Off by default. A transport that is blocked from CI today may not be tomorrow, and the way to
+    find out is a deliberate probe, not a permanent tax on every record of every run.
+    """
+    import os  # noqa: PLC0415
+    return str(os.environ.get("AUXSAYS_ACROBAT_RETIRED_METHODS") or "").strip().lower() in {
+        "1", "true", "yes", "on"}
 
 
 def _set_active_budget(budget: Any) -> None:
@@ -52,6 +142,7 @@ from .base import (
     date_part,
     exact_version_match,
     generated_records,
+    load_front_matter_and_body,
     make_evidence_row,
     method_health_row,
     slug,
@@ -136,8 +227,16 @@ EDITION_CONFIG: dict[str, dict[str, Any]] = {
 # Terminal "failure" verbs allowing common suffixes (fails/failed/failure/errors/...).
 _F = r"(?:fail(?:s|ed|ure)?|error(?:s|ed)?|broke|broken|invalid|problem|issue)"
 ACROBAT_STRONG_ISSUE_RE = re.compile(
-    r"\b(?:crash(?:e[sd])?"
-    r"|won'?t\s+(?:open|launch|install|start|print)"
+    # "crash", "crashes", "crashed" were accepted but "crashING" was not, so the single most
+    # common way a person titles an Acrobat crash report -- "Acrobat DC (26.001.21529) crashing
+    # with eSignatures" -- was refused as not-a-real-issue after passing every other gate.
+    r"\b(?:crash(?:e[sd]|ing)?"
+    # "won't print" was accepted; "will not print" and "does not print" were not, though they are
+    # the same claim written out. Both forms take the same verb list, so neither widens what
+    # counts as a failure -- they only stop the matcher depending on a contraction.
+    r"|(?:won'?t|will\s+not|do(?:es)?\s+not|doesn'?t|cannot|can'?t)\s+"
+    r"(?:open|launch|install|start|print|save|load|sign|update|respond)"
+    r"|stopped\s+(?:print|work|respond|open|load|sav)\w*"
     r"|(?:fail(?:s|ed|ure)?|unable)\s+to\s+(?:install|update|open|launch|print|sign|save|load|activate)"
     rf"|install(?:ation)?\s+{_F}"
     rf"|update\s+{_F}"
@@ -334,30 +433,73 @@ def _url_specific(url: str, source_type: str) -> bool:
     return source_url_is_specific(url)
 
 
-def acrobat_classify(text: str) -> tuple[str, str, str, str, str]:
-    lowered = (text or "").lower()
+# What a report is ABOUT, scored rather than first-match.
+#
+# The previous rule was a bare substring scan in a fixed order with `crash` checked LAST, over the
+# whole ~6000-character body. Two consequences, both measured on published rows: "sign" matched
+# "de-SIGN", "SIGN in" and "signature pad", and any mention of printing anywhere -- including in a
+# workaround the reporter had tried -- won outright. 59 of 63 counted rows whose own TITLE says
+# crash/freeze/hang published a different theme, and that theme is the sentence the patch page
+# prints as "Current reports mention ...".
+#
+# Three changes: word boundaries, the reporter's own TITLE weighted far above the body, and stability
+# scored alongside everything else instead of last.
+_THEME_RULES: tuple[tuple[str, str, str, str, "re.Pattern[str]"], ...] = (
+    ("crash or launch failure", "application stability", "high",
+     "crash", re.compile(r"\b(?:crash\w*|freez\w*|hang(?:s|ing|ed)?|not\s+responding|"
+                        r"appcrash|fails?\s+to\s+launch|won'?t\s+(?:launch|start|open))\b", re.I)),
+    ("printing regression", "printing", "high",
+     "print", re.compile(r"\b(?:print\w*|printer|print\s+queue|spooler)\b", re.I)),
+    ("signing/certificate failure", "e-signatures", "high",
+     "sign", re.compile(r"\b(?:e-?sign\w*|signature\w*|signing|certificat\w*|digital\s+id)\b", re.I)),
+    ("form behavior regression", "forms", "high",
+     "form", re.compile(r"\b(?:form\s+field\w*|fillable|form\w*)\b", re.I)),
+    ("install/update failure", "deployment", "high",
+     "install", re.compile(r"\b(?:install\w*|uninstall\w*|deploy\w*|msi|silent\s+update|"
+                          r"update\s+fail\w*|patch\s+fail\w*)\b", re.I)),
+    ("PDF rendering regression", "PDF rendering", "high",
+     "render", re.compile(r"\b(?:render\w*|blank\s+page|garbled|corrupt\w*|display\s+issue)\b", re.I)),
+    ("browser/plugin handoff failure", "browser integration", "medium",
+     "browser", re.compile(r"\b(?:browser|plugin|plug-in|add-?in|extension|edge|chrome|firefox)\b", re.I)),
+    ("performance regression", "performance", "medium",
+     "perf", re.compile(r"\b(?:high\s+cpu|memory\s+leak|slow\w*|sluggish|performance)\b", re.I)),
+)
+# Everything after one of these headings is what the reporter has ALREADY TRIED, not what failed.
+_TRIED_SPLIT_RE = re.compile(
+    r"(?is)\b(?:troubleshooting|already\s+tried|things?\s+i(?:'ve)?\s+tried|what\s+i(?:'ve)?\s+tried|"
+    r"work\s?around|steps?\s+to\s+reproduce\s*:)\b")
+
+
+def acrobat_classify(text: str, title: str = "") -> tuple[str, str, str, str, str]:
+    """(theme, workflow_area, platform, severity, sentiment) for one report."""
+    body = str(text or "")
+    heading = str(title or "")
+    if not heading:
+        # No title supplied: treat the first line as one, which is how these candidates are built.
+        heading = body.splitlines()[0][:200] if body.strip() else ""
+    # Whatever the heading turned out to be, it stops at the point the reporter starts listing what
+    # they already tried -- otherwise a one-line post carries its own workaround into the title.
+    heading = _TRIED_SPLIT_RE.split(heading, maxsplit=1)[0]
+    scored_body = _TRIED_SPLIT_RE.split(body, maxsplit=1)[0]
+
+    lowered = body.lower()
     platform = "unknown"
-    for token, label in (("windows", "windows"), ("macos", "macos"), ("mac os", "macos"), ("mac ", "macos")):
+    for token, label in (("windows", "windows"), ("macos", "macos"), ("mac os", "macos"),
+                         ("mac ", "macos")):
         if token in lowered:
             platform = label
             break
-    if "print" in lowered:
-        return "printing regression", "printing", platform, "high", "negative"
-    if "sign" in lowered or "certificate" in lowered:
-        return "signing/certificate failure", "e-signatures", platform, "high", "negative"
-    if "form" in lowered:
-        return "form behavior regression", "forms", platform, "high", "negative"
-    if "install" in lowered or "update" in lowered or "deploy" in lowered:
-        return "install/update failure", "deployment", platform, "high", "negative"
-    if "render" in lowered or "display" in lowered or "blank" in lowered:
-        return "PDF rendering regression", "PDF rendering", platform, "high", "negative"
-    if "browser" in lowered or "plugin" in lowered or "add-in" in lowered or "extension" in lowered:
-        return "browser/plugin handoff failure", "browser integration", platform, "medium", "negative"
-    if "cpu" in lowered or "memory" in lowered or "slow" in lowered or "performance" in lowered:
-        return "performance regression", "performance", platform, "medium", "negative"
-    if "crash" in lowered or "freeze" in lowered or "hang" in lowered:
-        return "crash or launch failure", "application stability", platform, "high", "negative"
-    return "unspecified Acrobat issue", "Acrobat workflow", platform, "medium", "negative"
+
+    best = None
+    for theme, area, severity, _key, pattern in _THEME_RULES:
+        # The title is the reporter's own one-line summary of what went wrong, so a hit there is
+        # worth far more than a passing mention buried in a long body.
+        score = 5 * len(pattern.findall(heading)) + len(pattern.findall(scored_body))
+        if score and (best is None or score > best[0]):
+            best = (score, theme, area, severity)
+    if best is None:
+        return "unspecified Acrobat issue", "Acrobat workflow", platform, "medium", "negative"
+    return best[1], best[2], platform, best[3], "negative"
 
 
 # --- HTTP (Adobe Community) ---------------------------------------------------
@@ -692,14 +834,51 @@ def reddit_search_candidates(
 # --- acceptance ---------------------------------------------------------------
 
 def row_from_candidate(product_id: str, record: PatchRecord, candidate: dict[str, Any], captured_at: str) -> dict[str, Any]:
-    report_text = " ".join([
-        str(candidate.get("parent_title") or ""),
-        str(candidate.get("report_title") or ""),
-        str(candidate.get("report_text") or ""),
-    ])
-    matched, matched_version, basis = exact_version_match(report_text, record.update_version)
+    # De-duplicate the parts before joining. Every Adobe candidate sets parent_title and
+    # report_title to the SAME thread title, so the naive join repeated it, and repetition is not
+    # harmless for any rule that reads word order: "…rolled back to 26.001.21745" followed by a
+    # second copy beginning "Acrobat crashes…" puts a failure word next to the build the reporter
+    # rolled back TO, and the outcome classifier then reads it as affected rather than as a
+    # rollback. One copy of each distinct part says exactly what the reporter said.
+    seen_parts: set[str] = set()
+    parts: list[str] = []
+    for field in ("parent_title", "report_title", "report_text"):
+        value = str(candidate.get(field) or "").strip()
+        key = " ".join(value.lower().split())
+        if not value or key in seen_parts:
+            continue
+        seen_parts.add(key)
+        parts.append(value)
+    report_text = " ".join(parts)
+    matched, matched_version, basis = exact_version_match(
+        report_text, record.update_version, aliases=acrobat_version_aliases(record.update_version))
     attributed, alias, applicability, edition_reason = acrobat_edition_attribution(report_text, product_id)
-    theme, workflow_area, platform, severity, sentiment = acrobat_classify(report_text)
+    # SHARED BUILD. Adobe ships ONE DC build to Reader and to Pro, and every Acrobat record states
+    # so itself in a structured `applicability` field derived from the release note -- not guessed
+    # here. Users write what Adobe's own UI and forum call the product: bare "Acrobat", or
+    # "Acrobat DC", or "Acrobat Standard". Requiring the words "Reader" or "Pro" refused 73 of 98
+    # recent candidates, including reports that named the exact build and described a concrete
+    # post-install failure. Naming the edition is not what makes a report about this patch; naming
+    # the build is, and gate 2 below still demands it.
+    edition_basis = "explicit_edition" if attributed else ""
+    if not attributed and edition_reason == "generic_acrobat_without_edition":
+        shared = record_applicability(record)
+        # "Acrobat Standard" is a NAMED edition, not a generic mention. It is treated as licensing
+        # language by the tier rule, so it fell through to "generic" and the shared-build fallback
+        # then published it on both tracked editions. Adobe ships Standard from the Pro binary, and
+        # Reader is a separate installer, so a Standard report on a READER page is simply wrong --
+        # one such report was the entire evidentiary basis of the 26.001.21789 Reader page.
+        if _STANDARD_PRODUCT_RE.search(report_text):
+            edition_reason = "acrobat_standard_edition_not_tracked"
+        elif product_id in shared:
+            attributed, alias = True, "acrobat (shared DC build)"
+            applicability = ",".join(shared)
+            edition_reason, edition_basis = None, "shared_build_generic_acrobat"
+    # Pass the reporter's OWN title, not a guess at the first line: the title is the one-line
+    # summary of what went wrong and the classifier weights it far above the body.
+    theme, workflow_area, platform, severity, sentiment = acrobat_classify(
+        report_text,
+        title=str(candidate.get("report_title") or candidate.get("parent_title") or ""))
     source_date = date_part(candidate.get("source_date"))
     source_type = str(candidate.get("source_type") or ADOBE_COMMUNITY_SOURCE_TYPE)
 
@@ -748,6 +927,23 @@ def row_from_candidate(product_id: str, record: PatchRecord, candidate: dict[str
         reason = edition_reason or "missing_product_attribution"
     elif not matched:
         reason = "missing_exact_patch_version_match"
+    # Naming the build is not the same as blaming it. "26.001.21745 works fine, it is .21789 that
+    # crashes" and "rolled back to 26.001.21745 and it works" both satisfy the version match above,
+    # and both say the OPPOSITE of what counting them would publish. This is the defect PR #79
+    # fixed for OBS and DaVinci; the shared-build relaxation above widens acceptance, so the veto
+    # has to be in place with it, not after it. Silence and any affirmative statement pass through.
+    elif (contradiction := target_is_contradicted(report_text, record.update_version)) is not None:
+        reason = f"version_named_but_{contradiction.outcome}"
+    # MULTIPLE BUILDS NAMED. A person comparing versions names several: the one that broke, the one
+    # they want to revert to, the one a release note mentions, the one they were on before. The
+    # directional veto above only catches phrasings it has cues for, and it missed all of these --
+    # one live thread was published as a confirmed report against THREE builds, two of which its
+    # author explicitly did not blame ("Can I get the installer for 26.001.21771 to revert in the
+    # meantime?" and a release-note citation of 26.001.21651). Where more than one tracked build is
+    # named, silence is no longer enough: the report has to say THIS build is the one failing.
+    elif len(_tracked_builds_named(report_text, product_id, record.update_version)) > 1 and \
+            classify_target_outcome(report_text, record.update_version).outcome != OUTCOME_AFFECTED:
+        reason = "multiple_builds_named_target_not_blamed"
     elif not _url_specific(str(row.get("source_url") or ""), source_type):
         reason = "source_url_not_specific_report"
     elif source_date_pass is False:
@@ -862,6 +1058,7 @@ class AdobeAcrobatCollector(ProductCollector):
             captured_at = utc_now()
             results: list[dict[str, Any]] = []
             records = generated_records(self.product_id, context.target_versions, include_archived=bool(context.target_versions))
+            records = _newest_first(records)
             return self._collect_records(records, context, captured_at, budget, results)
         finally:
             _set_active_budget(None)
@@ -907,12 +1104,21 @@ class AdobeAcrobatCollector(ProductCollector):
         methods = (
             # Primary, CI-reachable: keyless inSided/Algolia JSON discovery + getTopics content.
             ("adobe_community_algolia_search", ADOBE_COMMUNITY_SOURCE_TYPE, adobe_community_algolia_search_candidates),
-            # Fallbacks kept even though they are blocked from CI datacenter IPs (Part D): the
-            # direct /t5 HTML search (CloudFront-blocked) and Reddit (403/429). They degrade to
-            # honest "blocked" health and never widen acceptance.
-            ("adobe_community_search", ADOBE_COMMUNITY_SOURCE_TYPE, adobe_community_search_candidates),
-            ("reddit_search", REDDIT_SOURCE_TYPE, reddit_search_candidates),
         )
+        # RETIRED, not deleted -- their health rows stay honest, they just stop costing time.
+        # Measured over the whole recorded history, 143 runs each:
+        #   adobe_community_algolia_search  0 blocked, 83 success, 128 accepted reports
+        #   adobe_community_search        143 blocked (100%),        0 accepted   <- CloudFront
+        #   reddit_search                 142 blocked (99%),         0 accepted   <- robots + 403
+        # Keeping a method that has never once returned a candidate is not free: this collector is
+        # bounded by a wall-clock budget and stops mid-corpus when it expires, so every second the
+        # two dead methods spend failing is a record at the END of the list -- the RECENT one -- that
+        # is never reached at all. They were costing the reach they were supposed to widen.
+        if _retired_methods_enabled():
+            methods = methods + (
+                ("adobe_community_search", ADOBE_COMMUNITY_SOURCE_TYPE, adobe_community_search_candidates),
+                ("reddit_search", REDDIT_SOURCE_TYPE, reddit_search_candidates),
+            )
         all_accepted: list[dict[str, Any]] = []
         all_rejected: list[dict[str, Any]] = []
         method_health: list[dict[str, Any]] = []

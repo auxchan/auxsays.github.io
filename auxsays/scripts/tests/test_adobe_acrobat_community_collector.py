@@ -157,8 +157,18 @@ def run() -> int:
         ac.reddit_search_candidates = lambda *a, **k: []
         accepted, rejected, health = coll.collect_for_record(REC_R, _NoNet(), CAPTURED)
         method_ids = sorted(h["method_id"] for h in health)
-        check("collect_for_record emits health for ALL THREE methods",
-              method_ids == ["adobe_community_algolia_search", "adobe_community_search", "reddit_search"], str(method_ids))
+        # Only the productive method runs by default. Measured over the whole recorded history,
+        # 143 runs each: algolia 0 blocked / 128 accepted reports; adobe_community_search 143
+        # blocked (100%) / 0 accepted; reddit_search 142 blocked / 0 accepted. Keeping the two dead
+        # transports was not free -- this collector stops mid-corpus on a wall-clock budget, so the
+        # time they spent failing was a RECENT record never reached at all.
+        check("collect_for_record runs only the method that produces evidence",
+              method_ids == ["adobe_community_algolia_search"], str(method_ids))
+        check("the retired transports are recoverable for a deliberate reachability probe",
+              ac._retired_methods_enabled() is False
+              and "AUXSAYS_ACROBAT_RETIRED_METHODS" in
+              (_REPO / "auxsays" / "scripts" / "patch_collectors"
+               / "adobe_acrobat_community.py").read_text(encoding="utf-8"))
         check("zero candidates -> zero accepted, honest no_results health", accepted == [] and all(h["status"] == "no_results" for h in health))
         check("health rows carry the collector product_id", all(h["product_id"] == R for h in health))
     finally:
@@ -393,6 +403,157 @@ def run() -> int:
     leak_row = ac.row_from_candidate(P, REC_P, {**pro2, "source_url": ac._canonical_url(pro2["source_url"])}, CAPTURED)
     check("Part D: no secured token leaks into evidence row values",
           not any("SECURED-TOKEN" in str(v) for v in leak_row.values()))
+
+    print()
+    print("=" * 60)
+    print("Part E: shared DC build, and the veto that has to come with it")
+    print("=" * 60)
+    # Adobe ships ONE DC build to Reader and to Pro. Requiring the words "Reader" or "Pro" refused
+    # 73 of 98 recent candidates -- reports that named the exact build and described a concrete
+    # post-install failure -- because Adobe's own forum and UI call the product "Acrobat".
+    # The relaxation is not an inference: every Acrobat record states its own `applicability`,
+    # derived by the adapter from the release note, and the collector reads THAT.
+    from patch_collectors.base import generated_records  # noqa: PLC0415
+    real = {(r.product_id, r.update_version): r
+            for pid in (R, P) for r in generated_records(pid)}
+    live = real.get((P, "26.001.21745"))
+    check("Part E: a real Acrobat record declares its shared applicability",
+          live is not None and ac.record_applicability(live) == (R, P),
+          str(ac.record_applicability(live)) if live else "record missing")
+
+    if live is not None:
+        def verdict(text, pid=P, rec=None):
+            row = ac.row_from_candidate(pid, rec or live, cand(
+                text, text, url="https://community.adobe.com/questions-9/x-1234567",
+                date="2026-08-01"), CAPTURED)
+            return row.get("counted"), row.get("exclusion_reason")
+
+        counted, reason = verdict("Acrobat 26.001.21745 crashes when opening a signed PDF")
+        check("Part E: bare 'Acrobat' + exact build now counts on a shared-build record",
+              counted is True, str(reason))
+        counted_dc, reason_dc = verdict("Acrobat DC (26.001.21745) crashing with eSignatures")
+        check("Part E: 'Acrobat DC' counts too, and 'crashing' is a failure word",
+              counted_dc is True, str(reason_dc))
+        # Precision the relaxation must NOT cost.
+        _, wrong = verdict("Adobe Acrobat Reader 26.001.21745 crashes")
+        check("Part E: naming the OTHER edition is still wrong_product",
+              wrong == "wrong_product", str(wrong))
+        _, nover = verdict("Acrobat crashes all the time")
+        check("Part E: bare Acrobat with no build still fails the identity gate",
+              nover == "missing_exact_patch_version_match", str(nover))
+        _, noappl = verdict("Acrobat 26.001.21563 crashes", pid=R, rec=REC_R)
+        check("Part E: a record that declares NO applicability gets no relaxation",
+              noappl == "generic_acrobat_without_edition", str(noappl))
+
+        # Naming the build is not blaming it. The shared-build relaxation widens what reaches this
+        # gate, so the veto ships WITH it -- this is the defect PR #79 fixed for OBS and DaVinci.
+        _, works = verdict("Acrobat 26.001.21745 works fine, it is 26.001.21789 that crashes")
+        check("Part E: a build named as WORKING is never counted as failing",
+              works == "version_named_but_working", str(works))
+        _, rolled = verdict("Acrobat crashes on 26.001.21789 so I rolled back to 26.001.21745")
+        check("Part E: a build named as the ROLLBACK target is not counted as failing",
+              rolled == "version_named_but_rollback_target", str(rolled))
+        affected, _ = verdict("Acrobat has crashed on every launch since 26.001.21745")
+        check("Part E: an affirmative failure statement still counts", affected is True)
+        # Every Adobe candidate carries the SAME string as parent_title and report_title, so the
+        # naive join repeated it -- and repetition is not harmless for any rule that reads word
+        # order. A second copy beginning "Acrobat crashes" lands beside the build the reporter
+        # rolled back TO, and the outcome classifier reads it as affected.
+        dup = ac.row_from_candidate(P, live, {
+            "source_type": ac.ADOBE_COMMUNITY_SOURCE_TYPE, "source_name": "Adobe Community",
+            "source_url": "https://community.adobe.com/questions-9/x-1234567",
+            "parent_title": "Acrobat crashes on 26.001.21789 so I rolled back to 26.001.21745",
+            "report_title": "Acrobat crashes on 26.001.21789 so I rolled back to 26.001.21745",
+            "report_text": "Acrobat crashes on 26.001.21789 so I rolled back to 26.001.21745",
+            "source_date": "2026-08-01"}, CAPTURED)
+        check("Part E: a repeated title cannot turn a rollback into a failure",
+              dup.get("exclusion_reason") == "version_named_but_rollback_target",
+              str(dup.get("exclusion_reason")))
+
+        # Adobe's own Help > About shows the year-prefixed spelling, which admins paste verbatim.
+        year, yreason = verdict("Help > About shows 2026.001.21745 and Acrobat will not print")
+        check("Part E: the year-prefixed build spelling is the same build",
+              year is True, str(yreason))
+        check("Part E: the alias is a spelling, not a loosening",
+              ac.acrobat_version_aliases("26.001.21745") == ("2026.001.21745",)
+              and ac.acrobat_version_aliases("garbage") == ())
+        _, other = verdict("Help > About shows 2026.001.21789 and Acrobat will not print")
+        check("Part E: a DIFFERENT build in year form is still refused",
+              other == "missing_exact_patch_version_match", str(other))
+
+    print()
+    print("=" * 60)
+    print("Part F: what adversarial review found the shared build had let in")
+    print("=" * 60)
+    if live is not None:
+        def verdictF(text, pid=P, rec=None):
+            row = ac.row_from_candidate(pid, rec or live, cand(
+                text, text, url="https://community.adobe.com/questions-9/x-1234567",
+                date="2026-08-01"), CAPTURED)
+            return row.get("counted"), row.get("exclusion_reason")
+
+        # A person comparing versions names several builds: the one that broke, the one they want
+        # to revert to, the one a release note mentions. One live thread was published as a
+        # confirmed report against THREE builds, two of which its author explicitly did not blame.
+        # Where more than one TRACKED build is named, silence is not enough any more.
+        _, revert = verdictF("Acrobat 26.001.21789 breaks printing. Can I get the installer for "
+                             "26.001.21745 (Jul 23) to revert in the meantime?")
+        check("Part F: a build named only as the REVERT TARGET is not counted as failing",
+              revert == "multiple_builds_named_target_not_blamed", str(revert))
+        _, cited = verdictF("Acrobat 26.001.21789 breaks printing. The release notes show macOS 12 "
+                            "was dropped in 26.001.21745, but Ventura is not listed as dropped.")
+        check("Part F: a build named only as a release-note CITATION is not counted as failing",
+              cited == "multiple_builds_named_target_not_blamed", str(cited))
+        _, baseline = verdictF("Initial version: 26.001.21745 installs fine. Updated version: "
+                               "26.001.21789. After that Acrobat fails to launch.")
+        check("Part F: a build named as the WORKING BASELINE of an upgrade pair is not counted",
+              baseline == "multiple_builds_named_target_not_blamed", str(baseline))
+        blamed, _ = verdictF("I was on 26.001.21691 with no trouble. Since 26.001.21745 Acrobat "
+                             "crashes on every launch.")
+        check("Part F: naming another build does NOT block a report that blames this one",
+              blamed is True)
+        single, _ = verdictF("Acrobat crashes on every launch since 26.001.21745")
+        check("Part F: a single-build report is unaffected by the multi-build rule", single is True)
+
+        # Acrobat STANDARD is a named edition, not a generic mention. It reads as licensing
+        # language to the tier rule, so it fell through to generic and the shared-build fallback
+        # published it on BOTH tracked editions -- one such report was the entire evidentiary
+        # basis of a live Reader page.
+        _, std = verdictF("Since updating to Acrobat Standard 26.001.21745 I cannot print at all")
+        check("Part F: an Acrobat STANDARD report is not published as Reader or Pro",
+              std == "acrobat_standard_edition_not_tracked", str(std))
+        lic, _ = verdictF("Acrobat 26.001.21745 crashes; the user signs in with a Pro or Standard "
+                          "license")
+        check("Part F: a licensing mention of Standard is still not an edition claim", lic is True)
+
+    # The theme is printed on the patch page as "Current reports mention ...". The old rule was a
+    # bare substring scan with `crash` checked LAST, so "sign" matched "de-SIGN" and "SIGN in", and
+    # 59 of 63 counted rows whose own title said crash/freeze/hang published a different theme.
+    check("Part F: a crash report is themed as a crash",
+          ac.acrobat_classify("Acrobat keeps crashing immediately upon opening")[0]
+          == "crash or launch failure")
+    check("Part F: a freeze is too, even when a signature pad is mentioned",
+          ac.acrobat_classify("Document Freezing After Clicking Save. We use a Topaz Signature "
+                              "pad.")[0] == "crash or launch failure")
+    check("Part F: a printing failure is still themed as printing",
+          ac.acrobat_classify("Acrobat breaks printing on macOS - jobs never reach print queue")[0]
+          == "printing regression")
+    check("Part F: a workaround the reporter already tried does not set the theme",
+          ac.acrobat_classify("PDF Keeps Crashing. Workaround: open it through Edge and print "
+                              "using Microsoft Print to PDF")[0] == "crash or launch failure")
+    check("Part F: 'design' no longer reads as a signing failure",
+          ac.acrobat_classify("Acrobat crashes when I open a design document")[0]
+          == "crash or launch failure")
+
+    # The walk order is the reach fix: oldest-first plus a wall-clock budget meant 44 of the 48
+    # records released since 2025-12-01 had never been attempted by any method.
+    ordered = ac._newest_first(generated_records(R))
+    check("Part E: the record walk starts at the most recent patch",
+          bool(ordered) and ordered[0].update_published_at >= ordered[-1].update_published_at
+          and ordered[0].update_published_at[:4] >= "2026", str(ordered[0].update_published_at))
+    check("Part E: and it is deterministic",
+          [r.update_version for r in ac._newest_first(generated_records(R))]
+          == [r.update_version for r in ordered])
 
     print()
     print("=" * 60)

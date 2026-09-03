@@ -49,6 +49,7 @@ from lib.orchestration import (  # noqa: E402
 )
 from lib import context_resolution as cr  # noqa: E402
 from lib import tier2_evidence as t2  # noqa: E402
+from lib import recent_reports as l3  # noqa: E402
 # The resolution budget is ordered with the authority's OWN concreteness predicate, never a local
 # re-implementation: prioritisation must not be able to disagree with acceptance.
 from patch_collectors.microsoft_powerpoint import concrete_issue as ppt_concrete_issue  # noqa: E402
@@ -93,6 +94,7 @@ POWERPOINT_ALLOW = [
     # Update-linked (Tier 2) reports. A separate path because it is a separate corpus: consensus
     # never reads it, and it needs its own write permission rather than riding on evidence's.
     "auxsays/_data/update_linked_evidence.yml",
+    "auxsays/_data/recent_powerpoint_reports.yml",
     "auxsays/updates/generated/*powerpoint*.md",
 ]
 PRODUCTION_VALIDATE = [
@@ -202,6 +204,46 @@ def default_capability(env: dict[str, str] | None) -> dict[str, bool]:
 # Pipeline
 # ---------------------------------------------------------------------------
 
+def _l3_states_problem(text: str) -> bool:
+    """A Level-3 card must report a PROBLEM, on the strong signal only.
+
+    `concrete_issue` also accepts a feature-location question carrying regression evidence, which
+    is correct when a patch attribution supplies the context. Level 3 has no attribution, so that
+    weaker path published a how-to and a feature request under a heading promising reports.
+    """
+    from patch_collectors.microsoft_powerpoint import (  # noqa: PLC0415
+        POWERPOINT_ISSUE_RE,
+        REGRESSION_EVIDENCE_RE,
+    )
+    body = text or ""
+    return bool(POWERPOINT_ISSUE_RE.search(body) or REGRESSION_EVIDENCE_RE.search(body))
+
+
+def _l3_states_target_build(text: str, target_build: str) -> bool:
+    """True when the report itself names this window's build as the thing that is failing.
+
+    Such a report HAS attributed its problem to the update, so it must never appear beneath the
+    sentence "the reporters did not identify this update as the cause".
+
+    Fail closed on an AMBIGUOUS role. "Occurring since the update to build 20326.20100" reads as an
+    attribution to any person, yet the role extractor -- tuned for deciding what counts as evidence
+    -- returns `ambiguous` for it, so keying on `current_failing` alone would have let exactly the
+    report this guard exists to stop through. Only a build named as the ROLLBACK or as a working
+    reference is positively non-attributing; everything else is refused rather than denied on the
+    reporter's behalf. The cost is a dropped context card; the alternative is contradicting them.
+    """
+    from lib.build_claims import (  # noqa: PLC0415
+        ROLE_REFERENCE_OTHER,
+        ROLE_ROLLBACK_PREVIOUS,
+        extract_build_claims,
+    )
+    if not target_build:
+        return False
+    non_attributing = {ROLE_ROLLBACK_PREVIOUS, ROLE_REFERENCE_OTHER}
+    return any(claim.build == target_build and claim.role not in non_attributing
+               for claim in extract_build_claims(text or ""))
+
+
 def resolution_priority(row: dict[str, Any]) -> tuple[int, str]:
     """Sort key deciding which rejected rows get to spend a resolution fetch.
 
@@ -248,6 +290,10 @@ class Pipeline:
         # Its OWN file. Consensus never reads this one, which is what makes Tier-2 isolation
         # structural rather than a rule someone has to remember.
         self.tier2_path = self.repo_root / "auxsays" / "_data" / "update_linked_evidence.yml"
+        # Level 3 gets its own file too. Nothing that computes a count, a percentage, a verdict or
+        # a consensus state reads either of these, which is what makes the isolation structural
+        # rather than a rule somebody has to remember.
+        self.recent_path = self.repo_root / "auxsays" / "_data" / "recent_powerpoint_reports.yml"
         self.generated_dir = generated_dir or (self.repo_root / "auxsays" / "updates" / "generated")
         self.methods = methods if methods is not None else default_powerpoint_methods()
         self.authorities = authorities if authorities is not None else default_authorities(
@@ -723,7 +769,8 @@ class Pipeline:
         self._write_tier2(state, counted)
         state.receipt("FINALIZE_EVIDENCE", identity,
                       {**state.evidence_changes, **{"health_" + k: v for k, v in state.health_changes.items()},
-                       **{"tier2_" + k: v for k, v in (state.tier2_changes or {}).items()}})
+                       **{"tier2_" + k: v for k, v in (state.tier2_changes or {}).items()},
+                       **{"recent_" + k: v for k, v in (state.recent_changes or {}).items()}})
         return state
 
     def _write_tier2(self, state: OrchestrationState, counted: list[dict[str, Any]]) -> None:
@@ -781,6 +828,39 @@ class Pipeline:
                                "candidates": len(fresh), "stored": len(merged), **stats}
         if self.write:
             t2.write_tier2(merged, self.tier2_path)
+
+        # LEVEL 3. Everything the strict authority refused for an identity reason, that reads as a
+        # concrete PowerPoint problem, that carries a date inside a real release window, and that is
+        # not already visible at a higher level. Situational context, never patch evidence.
+        # Only a report visible at a HIGHER level evicts a Level-3 row. Tier 2's file also holds
+        # `unresolved` retention rows, which render nowhere and are strictly LOWER than Level 3 --
+        # counting those as "higher" silently emptied this layer on the run after it was populated,
+        # and suppressed every fresh candidate too, because the same set gates admission.
+        higher = {str(u).strip().rstrip("/").lower() for u in confirmed_urls}
+        higher |= {str(r.get("source_url") or "").strip().rstrip("/").lower() for r in merged
+                   if r.get("classification") == t2.TIER_UPDATE_LINKED}
+        recent_fresh: list[dict[str, Any]] = []
+        recent_seen: set[str] = set()
+        for result in state.method_results:
+            for row in result.get("tier2_source_rows") or []:
+                built = l3.recent_report_from_rejection(
+                    row, windows=windows, captured_at=captured_at,
+                    is_concrete=_ppt.concrete_issue,
+                    states_problem=_l3_states_problem,
+                    states_target_build=_l3_states_target_build,
+                    exclude_urls=higher)
+                if built is None or built.report_id in recent_seen:
+                    continue
+                recent_seen.add(built.report_id)
+                recent_fresh.append(built.as_dict())
+        existing_recent = l3.load_recent(self.recent_path) if self.recent_path.exists() else []
+        recent_merged, recent_stats = l3.merge_recent_reports(
+            existing_recent, recent_fresh, promoted_urls=higher)
+        state.recent_changes = {"mode": "write" if self.write else "dry",
+                                "candidates": len(recent_fresh),
+                                "stored": len(recent_merged), **recent_stats}
+        if self.write:
+            l3.write_recent(recent_merged, self.recent_path)
 
     def reconcile_counts(self, state: OrchestrationState) -> OrchestrationState:
         identity = inputs_identity({"evidence": state.evidence_changes, "targets":

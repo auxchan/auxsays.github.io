@@ -17,8 +17,8 @@ update_version: GitHub Copilot in VS Code, August 2026 releases
 update_logo_text: GIT
 update_published_at: '2026-08-31T08:39:54Z'
 update_last_checked: '2026-09-01T00:42:42Z'
-source_last_checked: '2026-09-01T07:10:16Z'
-official_body_last_checked: '2026-09-01T07:10:16Z'
+source_last_checked: '2026-09-01T17:37:34Z'
+official_body_last_checked: '2026-09-01T17:37:34Z'
 record_last_updated: '2026-09-01T00:42:42Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -115,6 +115,16 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-01T07:10:16Z'
+  url: https://github.blog/changelog/2026-08-31-github-copilot-in-vs-code-august-2026-releases
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-01T13:46:17Z'
+  url: https://github.blog/changelog/2026-08-31-github-copilot-in-vs-code-august-2026-releases
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-01T17:37:34Z'
   url: https://github.blog/changelog/2026-08-31-github-copilot-in-vs-code-august-2026-releases
   status: captured-from-rss-feed
   body_captured: true

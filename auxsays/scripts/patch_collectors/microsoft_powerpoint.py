@@ -418,8 +418,15 @@ def version_in_context(text: str, version: str, target_build: str = "") -> bool:
     if re.search(rf"(?<![0-9.]){v}(?![0-9.])\s*\(\s*build", text, re.I):
         return True
     build = str(target_build or "").strip()
-    if build and re.search(rf"(?<![0-9.]){v}(?![0-9.])\s*\(\s*{re.escape(build)}(?![0-9.])",
-                           text, re.I):
+    # The version paired with THIS record's exact build, however the source punctuates the pair:
+    # "2501 (18429.20132)", "2501 18429.20132", "build 2501 18429.20132", "2607 - 20228.20110".
+    # Requiring the exact build keeps this the strongest identity form rather than a looser one --
+    # only the parenthesised spelling was accepted before, so a reporter who wrote the very same
+    # pair without brackets was refused as `bare_version_no_context` and then republished at
+    # Level 3 under "attribution: not established", which their own words contradicted.
+    if build and re.search(
+            rf"(?<![0-9.]){v}(?![0-9.])[\s,;:/(-]*(?:build\s+)?{re.escape(build)}(?![0-9.])",
+            text, re.I):
         return True
     return False
 
@@ -757,7 +764,10 @@ def evaluate_candidates(record: PatchRecord, target: dict[str, Any], candidates:
             # reports this exists to recover. Transient by design: rejected rows are never written.
             rejected.append({**row, "tier2_full_text": " ".join(
                 str(candidate.get(field_name) or "") for field_name in
-                ("parent_title", "report_title", "report_text"))[:8000]})
+                ("parent_title", "report_title", "report_text"))[:8000],
+                # Level 3 places a report in a release window, so it needs the date the report was
+                # WRITTEN, not the thread's last-activity stamp that `source_date` carries.
+                "original_post_date": str(candidate.get("original_post_date") or "")})
     return accepted, rejected
 
 
