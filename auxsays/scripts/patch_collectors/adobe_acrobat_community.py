@@ -51,10 +51,40 @@ def acrobat_version_aliases(version: str) -> tuple[str, ...]:
     release notes call 26.001.21789 -- and that is the string admins copy verbatim into a post. The
     matcher saw two different versions and refused the report. This is a spelling alias, not a
     loosening: the trailing build number must still be exactly this record's.
+
+    Four further spellings were measured in the live corpus, each written by a real reporter about
+    a build AUXSAYS tracks. Every one is a rewriting of THIS record's own digits -- none widens
+    what counts as a match, and none is taught to any other product:
+
+      25.1.20982      installer / file-version form: Adobe drops the leading zeros of the middle
+                      group, and its own installer filenames use it.
+      25.1.20982.0    the same, with the 4th component Windows file properties append.
+      25.001.20997.0  the CANONICAL form with that 4th component -- "(Version 25.001.20997.0)" is
+                      what Acrobat's own about-box copies to the clipboard. Listed explicitly
+                      rather than left to the matcher, because ".0" there is a real version
+                      component and the boundary rule must keep rejecting ".1" as a DIFFERENT build.
+      26.001 21691    space where the second dot belongs -- a typo common enough to appear twice.
+      2500121208      no separators at all: how AUSST deployment paths and RUM output write it.
+
+    The BARE TAIL ("21208") is deliberately NOT an alias. It is five digits with no structure, so
+    it collides with error codes, ticket numbers and ordinary quantities; `names_any_tracked_build`
+    may treat it as a refusal cue precisely because a false match there is cheap, but confirming
+    Level-1 evidence on it would not be.
     """
     text = str(version or "").strip()
-    match = re.fullmatch(r"(\d{2})(\.\d{3}\.\d{4,6})", text)
-    return (f"20{match.group(1)}{match.group(2)}",) if match else ()
+    match = re.fullmatch(r"(\d{2})\.(\d{3})\.(\d{4,6})", text)
+    if not match:
+        return ()
+    major, mid, tail = match.groups()
+    short = str(int(mid))
+    return (
+        f"20{major}.{mid}.{tail}",      # 2026.001.21789   Help > About
+        f"{major}.{short}.{tail}",      # 25.1.20982       installer / file version
+        f"{major}.{short}.{tail}.0",    # 25.1.20982.0     Windows file properties
+        f"{major}.{mid}.{tail}.0",      # 25.001.20997.0   Acrobat's own about-box text
+        f"{major}.{mid} {tail}",        # 26.001 21691     space for the second dot
+        f"{major}{mid}{tail}",          # 2500121208       AUSST / RUM, no separators
+    )
 
 
 def record_applicability(record: Any) -> tuple[str, ...]:
