@@ -1,0 +1,96 @@
+schema_version: 1
+note: Update-linked user reports. These are REAL community reports about a PowerPoint update whose exact
+  build was never stated. They are shown to readers and are deliberately NOT counted toward consensus.
+reports:
+- associated_patch_key: adobe-acrobat-reader|26.001.21662|26.001.21662
+  associated_target_build: 26.001.21662
+  associated_update_version: 26.001.21662
+  association_basis: release_window_containment
+  captured_at: '2026-09-02T00:00:00Z'
+  classification: update_linked
+  confirmation_state: not_confirmed
+  exact_build_known: 'no'
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  report_date: '2026-06-10'
+  report_excerpt: Acrobat fails to launch after silent Reader update when user license switches to Pro/Std
+    Hello, We are experiencing an issue with Adobe Acrobat after performing a silent update of Adobe Acrobat
+    Reader 64-bit. Initial installation:...
+  report_id: adobe-acrobat-reader:d11675076a455da5
+  report_title: Acrobat fails to launch after silent Reader update when user license switches to Pro/Std
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-fails-to-launch-after-silent-reader-update-when-user-license-switches-to-pro-std-1627235
+  strict_exclusion_reason: missing_exact_patch_version_match
+  update_link_evidence: fails to launch after silent Reader update
+  update_link_reason: update_named_as_cause
+  update_link_signal: explicit_update_attribution
+- associated_patch_key: adobe-acrobat-reader|25.001.21208|25.001.21208
+  associated_target_build: 25.001.21208
+  associated_update_version: 25.001.21208
+  association_basis: release_window_containment
+  captured_at: '2026-09-02T00:00:00Z'
+  classification: update_linked
+  confirmation_state: not_confirmed
+  exact_build_known: 'no'
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  report_date: '2026-02-15'
+  report_excerpt: '[Reader][Win7] 21208 update breaks Acrobat Reader, won''t start, missing dll Update
+    21208 of Acrobat Reader breaks the app, it won''t start on Windows 7. It shows "This program couldn''t
+    launch because the object api-ms-win-core-winrt-l1-1-0.dll is missing" or something along...'
+  report_id: adobe-acrobat-reader:8375f28051ee5e66
+  report_title: '[Reader][Win7] 21208 update breaks Acrobat Reader, won''t start, missing dll'
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-12/reader-win7-21208-update-breaks-acrobat-reader-won-t-start-missing-dll-1550183
+  strict_exclusion_reason: missing_exact_patch_version_match
+  update_link_evidence: 21208 update breaks
+  update_link_reason: update_named_as_cause
+  update_link_signal: explicit_update_attribution
+- associated_patch_key: adobe-acrobat-reader|25.001.21078|25.001.21078
+  associated_target_build: 25.001.21078
+  associated_update_version: 25.001.21078
+  association_basis: release_window_containment
+  captured_at: '2026-09-02T00:00:00Z'
+  classification: update_linked
+  confirmation_state: not_confirmed
+  exact_build_known: 'no'
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  report_date: '2026-01-13'
+  report_excerpt: Websaver.ca coupons to print - can't Can't print coupons from websaver.ca as a security
+    alert comes up saying there is a restriction in my security area...was able to print for years until
+    new upgrade on adobe acrobat reader
+  report_id: adobe-acrobat-reader:c38cf8cfba915bc8
+  report_title: Websaver.ca coupons to print - can't
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-12/websaver-ca-coupons-to-print-can-t-1623765
+  strict_exclusion_reason: missing_exact_patch_version_match
+  update_link_evidence: until new upgrade
+  update_link_reason: update_named_as_cause
+  update_link_signal: explicit_update_attribution
+- associated_patch_key: adobe-acrobat-reader|25.001.20982|25.001.20982
+  associated_target_build: 25.001.20982
+  associated_update_version: 25.001.20982
+  association_basis: release_window_containment
+  captured_at: '2026-09-02T00:00:00Z'
+  classification: update_linked
+  confirmation_state: not_confirmed
+  exact_build_known: 'no'
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  report_date: '2025-12-04'
+  report_excerpt: Adobe Reader 25.1.20982.0 Crash Hi In our Enterprise we Upgrade Adobe Reader x86 from
+    25.1.20813.0 to 25.1.20982.0. After that most but not all client (W10 and W11) can't open Adobe Reader
+    and get the following errors or in Browser What should I do to fix this?
+  report_id: adobe-acrobat-reader:815923b429a59791
+  report_title: Adobe Reader 25.1.20982.0 Crash
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-12/adobe-reader-25-1-20982-0-crash-1623724
+  strict_exclusion_reason: missing_exact_patch_version_match
+  update_link_evidence: Upgrade Adobe Reader x86 from 25.1.20813.0 to 25.1.20982.0. After that
+  update_link_reason: update_named_as_cause
+  update_link_signal: explicit_update_attribution

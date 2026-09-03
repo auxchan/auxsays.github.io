@@ -1,0 +1,387 @@
+schema_version: 1
+note: Concrete PowerPoint problems reported while a release was current. These are situational context
+  ONLY. The reporters did not identify any update as the cause, no patch attribution has been established,
+  and these rows are excluded from every consensus calculation.
+reports:
+- attribution_state: not_established
+  captured_at: '2026-09-02T00:00:00Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|26.001.21789|26.001.21789
+  report_date: '2026-08-21'
+  report_excerpt: Acrobat randomly stalls, grays out, "not responding" - recurs after reinstall Hi Folks,
+    sorry, I posted this concern before but without any results. That's why I'm trying again since I need
+    Acrobat and diminishes my workflow and, after all, paying for it. This happens for...
+  report_id: adobe-acrobat-pro:69932f4d997b1d8c
+  report_title: Acrobat randomly stalls, grays out, "not responding" - recurs after reinstall
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-randomly-stalls-grays-out-not-responding-recurs-after-reinstall-1638120
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.001.21789
+  window_end: '2026-08-31'
+  window_start: '2026-08-11'
+  window_version: 26.001.21789
+- attribution_state: not_established
+  captured_at: '2026-09-02T00:00:00Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|26.001.21745|26.001.21745
+  report_date: '2026-07-23'
+  report_excerpt: Some computers in our environment will only autotag with cloud tagging disabled, others
+    allow auto tagging with cloud tagging enabled Sys admin here, a few users want to use the Auto-tag
+    feature with cloud tagging enabled but for some reason, their Adobe Acrobat will hang at...
+  report_id: adobe-acrobat-reader:7bfeef593870c21e
+  report_title: Some computers in our environment will only autotag with cloud tagging disabled, others
+    allow auto tagging with cloud tagging enabled
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-624/some-computers-in-our-environment-will-only-autotag-with-cloud-tagging-disabled-others-allow-auto-tagging-with-cloud-tagging-enabled-1633551
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.001.21745
+  window_end: '2026-08-01'
+  window_start: '2026-07-23'
+  window_version: 26.001.21745
+- attribution_state: not_established
+  captured_at: '2026-09-02T00:00:00Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|26.001.21745|26.001.21745
+  report_date: '2026-07-23'
+  report_excerpt: Some computers in our environment will only autotag with cloud tagging disabled, others
+    allow auto tagging with cloud tagging enabled Sys admin here, a few users want to use the Auto-tag
+    feature with cloud tagging enabled but for some reason, their Adobe Acrobat will hang at...
+  report_id: adobe-acrobat-pro:c2ee96b358e1fd85
+  report_title: Some computers in our environment will only autotag with cloud tagging disabled, others
+    allow auto tagging with cloud tagging enabled
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-624/some-computers-in-our-environment-will-only-autotag-with-cloud-tagging-disabled-others-allow-auto-tagging-with-cloud-tagging-enabled-1633551
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.001.21745
+  window_end: '2026-08-01'
+  window_start: '2026-07-23'
+  window_version: 26.001.21745
+- attribution_state: not_established
+  captured_at: '2026-09-02T00:00:00Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|26.001.21691|26.001.21691
+  report_date: '2026-07-21'
+  report_excerpt: 'Issue with Adobe acrobat 26.001 21691 I was wondering if anyone else is having the
+    following issues with Adobe acrobat 26.001 21691. Stops responding when you try to print a document.
+    If you let is sit there it eventually starts responding. Adobe will randomly crash. Note: We...'
+  report_id: adobe-acrobat-reader:c4d0fd2dbbdb323f
+  report_title: Issue with Adobe acrobat 26.001 21691
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/issue-with-adobe-acrobat-26-001-21691-1633161
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.001.21691
+  window_end: '2026-07-23'
+  window_start: '2026-06-25'
+  window_version: 26.001.21691
+- attribution_state: not_established
+  captured_at: '2026-09-02T00:00:00Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|26.001.21691|26.001.21691
+  report_date: '2026-07-21'
+  report_excerpt: 'Issue with Adobe acrobat 26.001 21691 I was wondering if anyone else is having the
+    following issues with Adobe acrobat 26.001 21691. Stops responding when you try to print a document.
+    If you let is sit there it eventually starts responding. Adobe will randomly crash. Note: We...'
+  report_id: adobe-acrobat-pro:feb13ffd3a4645b8
+  report_title: Issue with Adobe acrobat 26.001 21691
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/issue-with-adobe-acrobat-26-001-21691-1633161
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.001.21691
+  window_end: '2026-07-23'
+  window_start: '2026-06-25'
+  window_version: 26.001.21691
+- attribution_state: not_established
+  captured_at: '2026-09-02T00:00:00Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|26.001.21691|26.001.21691
+  report_date: '2026-06-29'
+  report_excerpt: 'Adobe Acrobat crashes when editing text (font or font size) Hello there, I am repeatedly
+    encountered the issue, that Adobe crashes, when I try to edit an existing PDF regard font type or
+    font size. This happens on multiple PDF documents. I am using Adobe Acrobat: Architecture:...'
+  report_id: adobe-acrobat-reader:24d6645dbeeee6eb
+  report_title: Adobe Acrobat crashes when editing text (font or font size)
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-crashes-when-editing-text-font-or-font-size-1629821
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.001.21691
+  window_end: '2026-07-23'
+  window_start: '2026-06-25'
+  window_version: 26.001.21691
+- attribution_state: not_established
+  captured_at: '2026-09-02T00:00:00Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|26.001.21691|26.001.21691
+  report_date: '2026-06-29'
+  report_excerpt: 'Adobe Acrobat crashes when editing text (font or font size) Hello there, I am repeatedly
+    encountered the issue, that Adobe crashes, when I try to edit an existing PDF regard font type or
+    font size. This happens on multiple PDF documents. I am using Adobe Acrobat: Architecture:...'
+  report_id: adobe-acrobat-pro:17c262b6be954001
+  report_title: Adobe Acrobat crashes when editing text (font or font size)
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-crashes-when-editing-text-font-or-font-size-1629821
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.001.21691
+  window_end: '2026-07-23'
+  window_start: '2026-06-25'
+  window_version: 26.001.21691
+- attribution_state: not_established
+  captured_at: '2026-09-02T00:00:00Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|26.001.21662|26.001.21662
+  report_date: '2026-06-15'
+  report_excerpt: No save the content adobe Acrobat When I tried to edit a PDF with underlines and the
+    automatic save function failed to save correctly, I lost all my progress. Honestly, this is the worst
+    Adobe software. I much prefer software that isn't up-to-date but still works perfectly for...
+  report_id: adobe-acrobat-reader:79ad8d6f436754cf
+  report_title: No save the content adobe Acrobat
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/no-save-the-content-adobe-acrobat-1627960
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.001.21662
+  window_end: '2026-06-17'
+  window_start: '2026-06-09'
+  window_version: 26.001.21662
+- attribution_state: not_established
+  captured_at: '2026-09-02T00:00:00Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|26.001.21662|26.001.21662
+  report_date: '2026-06-15'
+  report_excerpt: No save the content adobe Acrobat When I tried to edit a PDF with underlines and the
+    automatic save function failed to save correctly, I lost all my progress. Honestly, this is the worst
+    Adobe software. I much prefer software that isn't up-to-date but still works perfectly for...
+  report_id: adobe-acrobat-pro:53a94fe29e117c82
+  report_title: No save the content adobe Acrobat
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/no-save-the-content-adobe-acrobat-1627960
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.001.21662
+  window_end: '2026-06-17'
+  window_start: '2026-06-09'
+  window_version: 26.001.21662
+- attribution_state: not_established
+  captured_at: '2026-09-02T00:00:00Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|26.001.21563|26.001.21563
+  report_date: '2026-05-27'
+  report_excerpt: Acrobat DC Pro super slow / stalls For a while now Acrobat DC Pro is sluggish / stops
+    / not responding / need to close ("not responding") I repaired ... re-installed ... updated ... turned
+    off Protection Mode in preferences ... sometimes can't even scroll down to security in...
+  report_id: adobe-acrobat-pro:d359c779b947e00d
+  report_title: Acrobat DC Pro super slow / stalls
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-dc-pro-super-slow-stalls-1625320
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.001.21563
+  window_end: '2026-06-05'
+  window_start: '2026-05-18'
+  window_version: 26.001.21563
+- attribution_state: not_established
+  captured_at: '2026-09-02T00:00:00Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|26.001.21529|26.001.21529
+  report_date: '2026-05-17'
+  report_excerpt: Acrobat doesn't open and is creating lots of subprocesses Hello everyone, We have been
+    experiencing issues with Adobe for some time now. Our users are working on an RDS server, and after
+    a while they are no longer able to open PDF files with Adobe. When checking the Task...
+  report_id: adobe-acrobat-reader:20ef7db78c15f591
+  report_title: Acrobat doesn't open and is creating lots of subprocesses
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-doesn-t-open-and-is-creating-lots-of-subprocesses-1561925
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.001.21529
+  window_end: '2026-05-18'
+  window_start: '2026-05-01'
+  window_version: 26.001.21529
+- attribution_state: not_established
+  captured_at: '2026-09-02T00:00:00Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|26.001.21529|26.001.21529
+  report_date: '2026-05-17'
+  report_excerpt: Acrobat doesn't open and is creating lots of subprocesses Hello everyone, We have been
+    experiencing issues with Adobe for some time now. Our users are working on an RDS server, and after
+    a while they are no longer able to open PDF files with Adobe. When checking the Task...
+  report_id: adobe-acrobat-pro:3b83c65f441ec0d5
+  report_title: Acrobat doesn't open and is creating lots of subprocesses
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-doesn-t-open-and-is-creating-lots-of-subprocesses-1561925
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.001.21529
+  window_end: '2026-05-18'
+  window_start: '2026-05-01'
+  window_version: 26.001.21529
+- attribution_state: not_established
+  captured_at: '2026-09-02T00:00:00Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|26.001.21529|26.001.21529
+  report_date: '2026-05-11'
+  report_excerpt: netdocuments save error After combining files and trying to save to netdocuments the
+    users get an error message with a crash report. Attached is some of the crash report. !DOCTYPE AdobeCrashReport
+    SYSTEM "AdobeCrashReporter.dtd"> <crashreport...
+  report_id: adobe-acrobat-pro:02ea9fb58f290400
+  report_title: netdocuments save error
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/netdocuments-save-error-1561173
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.001.21529
+  window_end: '2026-05-18'
+  window_start: '2026-05-01'
+  window_version: 26.001.21529
+- attribution_state: not_established
+  captured_at: '2026-09-02T00:00:00Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|25.001.21223|25.001.21223
+  report_date: '2026-02-19'
+  report_excerpt: 'RUM Exit Code 2 - AcrobatDC 25.0 Fails to Install via AUSST Override (Works on Some
+    Devices) Environment Product: Adobe Acrobat DC (Continuous Track) Version attempting to install: 25.0
+    (e.g. 2500121208) RUM Version: 3.1.0.3 Update method: Remote Update Manager Updates hosted...'
+  report_id: adobe-acrobat-reader:2016d912b8a8bcdc
+  report_title: RUM Exit Code 2 - AcrobatDC 25.0 Fails to Install via AUSST Override (Works on Some Devices)
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-624/rum-exit-code-2-acrobatdc-25-0-fails-to-install-via-ausst-override-works-on-some-devices-1550674
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 25.001.21223
+  window_end: '2026-03-02'
+  window_start: '2026-02-17'
+  window_version: 25.001.21223
+- attribution_state: not_established
+  captured_at: '2026-09-02T00:00:00Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|25.001.21223|25.001.21223
+  report_date: '2026-02-19'
+  report_excerpt: 'RUM Exit Code 2 - AcrobatDC 25.0 Fails to Install via AUSST Override (Works on Some
+    Devices) Environment Product: Adobe Acrobat DC (Continuous Track) Version attempting to install: 25.0
+    (e.g. 2500121208) RUM Version: 3.1.0.3 Update method: Remote Update Manager Updates hosted...'
+  report_id: adobe-acrobat-pro:b6ad0dfb2062959b
+  report_title: RUM Exit Code 2 - AcrobatDC 25.0 Fails to Install via AUSST Override (Works on Some Devices)
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-624/rum-exit-code-2-acrobatdc-25-0-fails-to-install-via-ausst-override-works-on-some-devices-1550674
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 25.001.21223
+  window_end: '2026-03-02'
+  window_start: '2026-02-17'
+  window_version: 25.001.21223
+- attribution_state: not_established
+  captured_at: '2026-09-02T00:00:00Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|25.001.21208|25.001.21208
+  report_date: '2026-02-12'
+  report_excerpt: Adobe crashing after trying to print a document So when i start my adobe acrobat reader
+    all of the tabs load up from previous session and i have no idea when it is done so when i click print
+    to a certain document it says it cannot open a document. it says that several times...
+  report_id: adobe-acrobat-reader:7a44245dcfacee71
+  report_title: Adobe crashing after trying to print a document
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/adobe-crashing-after-trying-to-print-a-document-1549754
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 25.001.21208
+  window_end: '2026-02-17'
+  window_start: '2026-02-12'
+  window_version: 25.001.21208
+- attribution_state: not_established
+  captured_at: '2026-09-02T00:00:00Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|25.001.21111|25.001.21111
+  report_date: '2026-01-29'
+  report_excerpt: I cannot install Acrobate reader on my PC (Win 11) I have uninstalled Acrobat reader
+    from my PC due to an error message that I was receiving. Ever since, I am trying to install it again
+    from the download page of Adobe, but I have no luck. I start the installation, the...
+  report_id: adobe-acrobat-reader:9077a504f8be61d7
+  report_title: I cannot install Acrobate reader on my PC (Win 11)
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/i-cannot-install-acrobate-reader-on-my-pc-win-11-1547623
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 25.001.21111
+  window_end: '2026-02-06'
+  window_start: '2026-01-20'
+  window_version: 25.001.21111
+- attribution_state: not_established
+  captured_at: '2026-09-02T00:00:00Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|25.001.21111|25.001.21111
+  report_date: '2026-01-20'
+  report_excerpt: 'Acrobat issue I have an active Creative Cloud All Apps subscription including Acrobat
+    Pro. Adobe Acrobat Classic crashes immediately after launch on Windows 11. The app opens, shows the
+    Home screen, and then closes. I have: - disabled GPU acceleration - disabled New Acrobat...'
+  report_id: adobe-acrobat-pro:06300781d57f58b8
+  report_title: Acrobat issue
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-issue-1621017
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 25.001.21111
+  window_end: '2026-02-06'
+  window_start: '2026-01-20'
+  window_version: 25.001.21111
+- attribution_state: not_established
+  captured_at: '2026-09-02T00:00:00Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|25.001.20997|25.001.20997
+  report_date: '2025-12-18'
+  report_excerpt: Adobe Acrobat Pro Not Responding / Crashing Good morning, I am currently using Adobe
+    Acrobat Pro on Windows 11 (Version 25.001.20997.0) and have been experiencing persistent performance
+    issues for several months. The application is extremely slow to open, and nearly every...
+  report_id: adobe-acrobat-pro:aa37c328fbc1841f
+  report_title: Adobe Acrobat Pro Not Responding / Crashing
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-pro-not-responding-crashing-1620742
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 25.001.20997
+  window_end: '2026-01-12'
+  window_start: '2025-12-09'
+  window_version: 25.001.20997

@@ -263,6 +263,8 @@ jobs:
             --allow auxsays/_data/evidence_method_health.yml \
             --allow auxsays/_data/update_linked_evidence.yml \
             --allow auxsays/_data/recent_powerpoint_reports.yml \
+            --allow auxsays/_data/acrobat_update_linked_evidence.yml \
+            --allow auxsays/_data/recent_acrobat_reports.yml \
             --allow 'auxsays/updates/generated/*obs-studio*.md' \
             --allow 'auxsays/updates/generated/*davinci*.md' \
             --allow 'auxsays/updates/generated/*premiere-pro*.md' \

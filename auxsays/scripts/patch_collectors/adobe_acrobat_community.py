@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import json
 import re
+import sys
 import urllib.parse
 import urllib.request
 from datetime import datetime, timezone
@@ -128,6 +129,11 @@ def _retired_methods_enabled() -> bool:
         "1", "true", "yes", "on"}
 
 
+# This module IS the Acrobat safety authority the tiering adapter re-applies. Passing it in by
+# reference keeps the rules in one place -- a second copy inside lib/ would be free to drift.
+_SAFETY: Any = None
+
+
 def _set_active_budget(budget: Any) -> None:
     global _ACTIVE_BUDGET
     _ACTIVE_BUDGET = budget
@@ -153,6 +159,12 @@ from .base import (
 READER_ID = "adobe-acrobat-reader"
 PRO_ID = "adobe-acrobat-pro"
 ACROBAT_PRODUCT_IDS = (READER_ID, PRO_ID)
+
+# The two published tier files. Per-product, deliberately: cross-product isolation would
+# otherwise rest on a Liquid `where` filter, and that filter has already failed silently once
+# via Float coercion of a numeric-looking key.
+TIER2_PATH = ROOT / "_data" / "acrobat_update_linked_evidence.yml"
+TIER3_PATH = ROOT / "_data" / "recent_acrobat_reports.yml"
 
 ADOBE_COMMUNITY_SOURCE_TYPE = "adobe_community_bug_report"
 REDDIT_SOURCE_TYPE = "reddit_community_report"
@@ -759,6 +771,16 @@ def _topic_to_candidate(topic: dict[str, Any]) -> dict[str, Any] | None:
         "report_title": title,
         "report_text": f"{title} {body}".strip(),
         "source_date": source_date,
+        # When the QUESTION was written, taken structurally from the opening post rather than from
+        # a listing stamp that a later reply bumps. Release-window ownership uses this. `report_text`
+        # above is the first post ONLY -- no answers, no comments -- so a reply can neither enrich
+        # this report's identity nor drift it into a newer window.
+        "original_post_date": date_part(first_post.get("creationDate")) or source_date,
+        # The opening author's forum rank, as the platform states it ("Participant",
+        # "Community Manager"). Carried so vendor-authored posts are distinguishable from user
+        # reports without inferring it from wording.
+        "author_rank": str((first_post.get("author") or {}).get("rank", {}).get("name") or "")
+        if isinstance(first_post.get("author"), dict) else "",
     }
 
 
@@ -969,7 +991,18 @@ def evaluate_candidates(product_id: str, record: PatchRecord, candidates: list[d
             continue
         seen.add(url.lower())
         row = row_from_candidate(product_id, record, {**candidate, "source_url": url}, captured_at)
-        (accepted if row.get("counted") is True else rejected).append(row)
+        if row.get("counted") is True:
+            accepted.append(row)
+            continue
+        # Carry the FULL candidate text and the original post date on the REJECTED row only.
+        # The persisted row keeps a truncated excerpt, and an update attribution is routinely
+        # stated further into a post than the excerpt reaches -- classifying the excerpt would
+        # silently discard the reports Levels 2 and 3 exist to recover. Transient by design:
+        # rejected rows are never written to the evidence file.
+        rejected.append({**row,
+                         "tier2_full_text": str(candidate.get("report_text") or "")[:8000],
+                         "original_post_date": str(candidate.get("original_post_date") or ""),
+                         "author_rank": str(candidate.get("author_rank") or "")})
     return accepted, rejected
 
 
@@ -1098,7 +1131,98 @@ class AdobeAcrobatCollector(ProductCollector):
                     "record_updated": record_updated,
                 })
             results.append(result)
+            # Levels 2 and 3, from THIS record's rejections while they are still in hand. Rejected
+            # rows are transient by design, so the tiers are built here rather than in the runner,
+            # which only ever sees counts. See lib/acrobat_tiering.
+            self._collect_tiers(record, rejected, captured_at)
+        self._write_tiers(context)
         return results
+
+    # --- Levels 2 and 3 ---------------------------------------------------------------------
+    # Kept on the collector so Acrobat stays on its existing production routing: no runner change,
+    # no orchestration-graph onboarding (the graph binds product_ids[0], which would promote Reader
+    # and silently skip Pro). The tiering rules themselves live in lib/acrobat_tiering, over the
+    # product-neutral primitives PowerPoint already uses.
+
+    def _tier_windows(self) -> list[Any]:
+        from lib.acrobat_tiering import build_release_windows  # noqa: PLC0415
+        if getattr(self, "_windows_cache", None) is None:
+            patches = [{"product_id": pid, "update_version": rec.update_version,
+                        # Acrobat's canonical identity is the DC version; there is no second build
+                        # token, so the window key carries the version in both slots.
+                        "target_build": rec.update_version,
+                        "released_on": rec.update_published_at[:10]}
+                       for pid in ACROBAT_PRODUCT_IDS for rec in generated_records(pid)]
+            self._windows_cache = build_release_windows(patches)
+        return self._windows_cache
+
+    def _confirmed_urls(self) -> set[str]:
+        """URLs already visible at Level 1 for THIS product. One report, one level."""
+        if getattr(self, "_confirmed_cache", None) is None:
+            from .base import load_evidence  # noqa: PLC0415
+            rows = load_evidence(EVIDENCE_PATH) if EVIDENCE_PATH.exists() else []
+            self._confirmed_cache = {
+                str(r.get("source_url") or "").strip().rstrip("/").lower()
+                for r in rows if r.get("counted") is True and r.get("product_id") == self.product_id}
+        return self._confirmed_cache
+
+    def _collect_tiers(self, record: PatchRecord, rejected: list[dict[str, Any]],
+                       captured_at: str) -> None:
+        from lib import acrobat_tiering as at  # noqa: PLC0415
+        if getattr(self, "_tier2_rows", None) is None:
+            self._tier2_rows, self._tier3_rows = [], []
+            self._tier_seen2, self._tier_seen3 = set(), set()
+        windows = self._tier_windows()
+        applicability = record_applicability(record)
+        confirmed = self._confirmed_urls()
+        for row in rejected:
+            linked = at.acrobat_update_linked_from_rejection(
+                row, windows=windows, captured_at=captured_at, safety=_SAFETY,
+                applicability=applicability, exclude_urls=confirmed)
+            if linked is not None:
+                if linked.report_id not in self._tier_seen2:
+                    self._tier_seen2.add(linked.report_id)
+                    self._tier2_rows.append(linked.as_dict())
+                continue
+            recent = at.acrobat_recent_from_rejection(
+                row, windows=windows, captured_at=captured_at, safety=_SAFETY,
+                applicability=applicability, exclude_urls=confirmed)
+            if recent is not None and recent.report_id not in self._tier_seen3:
+                self._tier_seen3.add(recent.report_id)
+                self._tier3_rows.append(recent.as_dict())
+
+    def _write_tiers(self, context: CollectorContext) -> None:
+        """Merge this run's tier rows into the two published files, evicting on promotion."""
+        from lib import acrobat_tiering as at  # noqa: PLC0415
+        from lib.recent_reports import load_recent, merge_recent_reports, write_recent  # noqa: PLC0415
+        fresh2 = list(getattr(self, "_tier2_rows", None) or [])
+        fresh3 = list(getattr(self, "_tier3_rows", None) or [])
+        confirmed = self._confirmed_urls()
+        merged2, stats2 = at.merge_tier2_rows(
+            [r for r in at.load_tier2(TIER2_PATH) if r.get("product_id") == self.product_id]
+            if TIER2_PATH.exists() else [], fresh2, confirmed_urls=confirmed)
+        # A report that has since become Level 1 OR Level 2 is no longer a Level-3 row. Only rows
+        # visible at a HIGHER level evict -- never the whole of the other file, which is what made
+        # the PowerPoint layer delete itself on the run after it was populated.
+        higher = set(confirmed) | {str(r.get("source_url") or "").strip().rstrip("/").lower()
+                                   for r in merged2
+                                   if r.get("classification") == at.TIER_UPDATE_LINKED}
+        merged3, stats3 = merge_recent_reports(
+            [r for r in load_recent(TIER3_PATH) if r.get("product_id") == self.product_id]
+            if TIER3_PATH.exists() else [], fresh3, promoted_urls=higher)
+        rb.emit("acrobat_tiers", product_id=self.product_id, mode="write" if context.write else "dry",
+                level2_fresh=len(fresh2), level2_stored=len(merged2), level2_stats=stats2,
+                level3_fresh=len(fresh3), level3_stored=len(merged3), level3_stats=stats3)
+        if not context.write:
+            return
+        # Each edition owns only its own rows in the shared files, so a Reader run must not drop
+        # Pro's rows and vice versa.
+        others2 = [r for r in at.load_tier2(TIER2_PATH) if r.get("product_id") != self.product_id] \
+            if TIER2_PATH.exists() else []
+        others3 = [r for r in load_recent(TIER3_PATH) if r.get("product_id") != self.product_id] \
+            if TIER3_PATH.exists() else []
+        at.write_tier2(others2 + merged2, TIER2_PATH)
+        write_recent(others3 + merged3, TIER3_PATH)
 
     def collect_for_record(self, record: PatchRecord, context: CollectorContext, captured_at: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
         methods = (
@@ -1159,3 +1283,6 @@ def _rejection_counts(rows: list[dict[str, Any]]) -> dict[str, int]:
         reason = str(row.get("exclusion_reason") or "unknown")
         counts[reason] = counts.get(reason, 0) + 1
     return counts
+
+
+_SAFETY = sys.modules[__name__]
