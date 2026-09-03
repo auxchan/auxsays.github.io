@@ -114,7 +114,11 @@ def run() -> int:  # noqa: PLR0915
         check("A.3 it records WHY it linked, and the reporter's own words",
               row["update_link_reason"] == "update_named_as_cause"
               and "update" in row["update_link_evidence"].lower(), str(row.get("update_link_evidence")))
-        check("A.4 it states the exact build is NOT known", row["exact_build_known"] == "no")
+        # The field is a build STRING in the shared contract, and the template prints it AS the
+        # build. A "no" sentinel here rendered the literal words "Exact build: no" on every
+        # Level-2 card; empty is what produces the intended "Not supplied by the reporter."
+        check("A.4 exact_build_known is absent, not a sentinel the page would print",
+              "exact_build_known" not in row)
         check("A.5 it carries no `counted` field, so no count predicate can see it",
               "counted" not in row)
         check("A.6 the patch key is non-numeric, so Jekyll's `where` cannot coerce it",
@@ -196,6 +200,51 @@ def run() -> int:  # noqa: PLR0915
                                      / "adobe_acrobat_community.py").read_text(encoding="utf-8")
           and "_STANDARD_PRODUCT_RE" not in (_AUX / "scripts" / "lib" / "acrobat_tiering.py"
                                              ).read_text(encoding="utf-8").split("safety._")[0])
+
+    print()
+    print("=" * 98)
+    print("C2  a reporter who names a version has told us which one they mean")
+    print("=" * 98)
+    # THE HOLE THIS CLOSES. Phase A's gate chain is an `elif`: for a patch whose build a report
+    # does not name, `missing_exact_patch_version_match` short-circuits BEFORE the multi-build and
+    # working/rollback vetoes, so those refusals never execute and are invisible here. A live row
+    # went through it -- a thread refused at Level 1 twice as
+    # `multiple_builds_named_target_not_blamed` was published at Level 2 against a third build.
+    # Re-running those vetoes would test the wrong build, so the rule is structural instead.
+    for label, text in (
+            ("a DIFFERENT tracked build (wrong window)",
+             "After the update Acrobat will not print. We are on 26.001.21691."),
+            ("two builds it is comparing",
+             "Initial version: 26.001.21691 Updated version: 26.001.21771. Acrobat crashes."),
+            ("an UNTRACKED version pasted from a crash log",
+             'Acrobat crashes. applicationVersion="26.001.21462" year=2026 month=4'),
+            ("this window's OWN build -- that report is Level-1 material, and publishing it here "
+             "would deny an attribution the reporter made",
+             "Acrobat 26.001.21745 crashes every time I print.")):
+        check(f"C2.1 Level 2 refuses a report naming {label}", l2(text) is None)
+        check(f"C2.2 Level 3 refuses a report naming {label}", l3(text) is None)
+    check("C2.3 a report naming NO version is still admitted",
+          l3("Acrobat crashes every time I print.") is not None)
+    check("C2.4 the refusal reason names the build, so it is diagnosable",
+          at.names_any_tracked_build("Acrobat crashes on 26.001.21745", READER, ac) != "")
+
+    # Adobe writes the same build five ways. Over-inclusive on purpose: this is a REFUSAL, so a
+    # false match costs one context row while a miss publishes a claim the reporter contradicts.
+    for spelling, why in (("26.001.21745", "release notes"),
+                          ("2026.001.21745", "Help > About"),
+                          ("26.1.21745", "installer / file version"),
+                          ("2600121745", "AUSST deployment path"),
+                          ("21745", "how people write it in a title")):
+        check(f"C2.5 detected: {spelling} ({why})",
+              at.names_any_tracked_build(f"Acrobat broke, we are on {spelling} here", READER, ac)
+              != "", spelling)
+    for benign in ("Error 30088-29 keeps appearing", "This started on 2026-05-01",
+                   "I have 21745 documents in the folder"):
+        # The last one is a deliberate false positive: a bare tail is ambiguous, and refusing a
+        # context row is the cheap side of that trade.
+        detected = at.names_any_tracked_build(benign, READER, ac)
+        check(f"C2.6 non-version numbers: {benign[:34]!r} -> {detected or 'clear'}",
+              detected == "" or benign.startswith("I have"))
 
     print()
     print("=" * 98)

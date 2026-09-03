@@ -443,9 +443,15 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
           factual error about what the reporter said. {%- endcomment -%}
         {%- assign t2_product = 'PowerPoint or Office' -%}
         {%- if page.product_id contains 'acrobat' -%}{%- assign t2_product = 'Acrobat' -%}{%- endif -%}
+        {%- comment -%}
+          "never state the exact build" was false on reports that DO name one in a spelling the
+          matcher cannot resolve -- and on two of them the build was in the title printed directly
+          above this sentence. What is always true is that AUXSAYS could not tie the report to an
+          exact patch, which is the reason it is not counted.
+        {%- endcomment -%}
         <p class="update-linked-card__note">These reporters tie the problem to {% unless page.product_id contains 'acrobat' %}a {% endunless %}{% if page.product_id contains 'acrobat' %}an {% endif %}{{ t2_product }}
-          update but never state the exact build, so they are shown here and are <strong>not</strong>
-          counted toward the consensus above.</p>
+          update, but the exact build could not be established from their report, so they are shown
+          here and are <strong>not</strong> counted toward the consensus above.</p>
         <ul class="update-linked-list">
           {% for r in t2_rows %}
           <li class="update-linked-item">

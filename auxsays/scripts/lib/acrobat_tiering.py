@@ -15,10 +15,17 @@ Acrobat as-is:
     Click-to-Run build and wrong for Acrobat -- Adobe ships the same DC build to macOS.
 
 WHAT THIS DOES NOT DO. It does not weaken any Phase-A rule. Edition authority, the Acrobat Standard
-exclusion, concreteness, the multi-build fail-closed rule and the working/rollback/fixed role vetoes
-are all imported from the collector and applied here, so a report that Level 1 refused on SAFETY
-grounds is refused at Levels 2 and 3 as well. Only the IDENTITY refusal -- "you did not name the
-exact build" -- is what these levels are allowed to recover from.
+exclusion, concreteness, vendor authority and URL specificity are imported from the collector and
+re-applied here. Only the IDENTITY refusal -- "you did not name the exact build" -- is what these
+levels are allowed to recover from.
+
+THE ONE THAT IS NOT A RE-RUN. Phase A's role and multi-build vetoes sit BELOW its identity gate in
+an `elif` chain, so for a patch whose build a report does not name they never execute and their
+refusals are invisible here. Re-running them would test the wrong build. Instead the tiers refuse
+any report that names a tracked build AT ALL (`names_any_tracked_build`): a reporter who names
+builds has told us which ones they mean, and placing their report on a different build by date
+overrides them. That closes the hole a live row went through -- a thread refused at Level 1 twice
+as `multiple_builds_named_target_not_blamed` was published at Level 2 against a third build.
 """
 from __future__ import annotations
 
@@ -171,6 +178,73 @@ def update_causality(text: str) -> Causality:
 
 # --- shared admission ----------------------------------------------------------------------------
 
+# An Acrobat DC version as Adobe writes it anywhere: 26.001.21745, 2026.001.21745, 25.1.20982.
+# Bounded to the real shape so an ordinary number, a date or an error code cannot match.
+# `generated_records` re-reads ~160 markdown files per call. This is invoked once per candidate
+# per patch, so without a cache one run does tens of thousands of file reads.
+_TRACKED_VERSIONS: dict[str, tuple[str, ...]] = {}
+
+
+def _tracked_versions(product_id: str, safety) -> tuple[str, ...]:
+    cached = _TRACKED_VERSIONS.get(product_id)
+    if cached is None:
+        cached = tuple(sorted({str(r.update_version or "").strip()
+                               for r in safety.generated_records(product_id)
+                               if str(r.update_version or "").strip()}))
+        _TRACKED_VERSIONS[product_id] = cached
+    return cached
+
+
+_ACROBAT_VERSION_RE = re.compile(r"(?<![\d.])(?:20)?\d{2}\.\d{1,3}\.\d{4,5}(?![\d])")
+
+
+def names_any_tracked_build(text: str, product_id: str, safety) -> str:
+    """The first tracked build of this product that the report names, in ANY spelling, or "".
+
+    WHY THIS EXISTS. Phase A's gate chain is an `elif`: for a patch whose build the report does not
+    name, it returns `missing_exact_patch_version_match` and never reaches the multi-build or
+    working/rollback vetoes below it. Those refusals are therefore invisible to the tiers, and a
+    report that Level 1 safety-vetoed for patch X arrived here labelled "identity unknown" for
+    patch Y. One did: a thread naming 26.001.21563 and 26.001.21651 was refused at Level 1 for both
+    and published at Level 2 against 26.001.21662.
+
+    The rule is structural rather than a re-run of those vetoes. A reporter who names builds has
+    told us which builds they mean; assigning their report to a different build BY DATE overrides
+    them. So if the report names any tracked build at all, the tiers decline it -- either the
+    authority can resolve it (Level 1) or nobody should place it by date.
+
+    Spelling-tolerant on purpose, and deliberately over-inclusive: this is a REFUSAL, so a false
+    match costs one context row while a miss publishes a claim the reporter contradicts. Adobe's
+    own strings vary -- "26.001.21789", "2026.001.21789" (Help > About), "25.1.20982.0" (the
+    installer), and bare "21208" (how people write it in a title).
+    """
+    body = str(text or "")
+    # Any Acrobat-shaped version at all, tracked or not. A post written in May can paste an April
+    # crash log -- applicationVersion="26.001.21462" -- and post-date containment will happily place
+    # it on May's window, which the reporter's own log contradicts. 21462 is not a tracked record,
+    # so a tracked-only scan cannot see it.
+    generic = _ACROBAT_VERSION_RE.search(body)
+    if generic:
+        return generic.group(0)
+
+    for version in _tracked_versions(product_id, safety):
+        parts = version.split(".")
+        if len(parts) != 3:
+            continue
+        major, mid, tail = parts
+        spellings = {
+            version,                              # 25.001.21208  release notes
+            f"20{major}.{mid}.{tail}",            # 2025.001.21208  Help > About
+            f"{major}.{int(mid)}.{tail}",         # 25.1.21208  installer / file version
+            f"{major}{mid}{tail}",                # 2500121208  AUSST / deployment paths
+            tail,                                 # 21208  how people write it in a title
+        }
+        for spelling in spellings:
+            if re.search(rf"(?<![\d.]){re.escape(spelling)}(?![\d])", body):
+                return version
+    return ""
+
+
 def _authority_refusal(rejected_row: dict[str, Any], text: str, *,
                        product_id: str, safety) -> str:
     """Re-apply Phase A's SAFETY rules. Returns a refusal reason, or "" when clear.
@@ -202,6 +276,13 @@ def _authority_refusal(rejected_row: dict[str, Any], text: str, *,
     url = str(rejected_row.get("source_url") or "")
     if not safety.acrobat_url_is_specific(url):
         return "source_url_not_specific_report"
+
+    # The reporter named a build. Placing their report on a window by DATE would override what they
+    # actually said, and it is how a Level-1 safety veto leaked into Level 2. See the docstring on
+    # names_any_tracked_build.
+    named = names_any_tracked_build(text, product_id, safety)
+    if named:
+        return f"names_tracked_build_{named}"
     return ""
 
 
@@ -268,7 +349,10 @@ def acrobat_update_linked_from_rejection(rejected_row: dict[str, Any], *,
         associated_target_build=window.target_build,
         associated_patch_key=patch_join_key(product_id, window.update_version, window.target_build),
         association_basis="release_window_containment",
-        exact_build_known="no",
+        # Empty, not "no": the template prints this field AS the build, so a sentinel here
+        # rendered the literal words "Exact build: no" on every Level-2 card. The intended
+        # fallback -- "Not supplied by the reporter." -- is what an empty value produces.
+        exact_build_known="",
         classification=TIER_UPDATE_LINKED,
         confirmation_state="not_confirmed",
         promotion_eligible=True,
