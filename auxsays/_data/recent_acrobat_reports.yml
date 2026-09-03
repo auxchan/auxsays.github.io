@@ -26,26 +26,6 @@ reports:
 - attribution_state: not_established
   captured_at: '2026-09-02T00:00:00Z'
   classification: recent_report
-  product_id: adobe-acrobat-reader
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-reader|26.001.21662|26.001.21662
-  report_date: '2026-06-15'
-  report_excerpt: No save the content adobe Acrobat When I tried to edit a PDF with underlines and the
-    automatic save function failed to save correctly, I lost all my progress. Honestly, this is the worst
-    Adobe software. I much prefer software that isn't up-to-date but still works perfectly for...
-  report_id: adobe-acrobat-reader:79ad8d6f436754cf
-  report_title: No save the content adobe Acrobat
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-9/no-save-the-content-adobe-acrobat-1627960
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 26.001.21662
-  window_end: '2026-06-17'
-  window_start: '2026-06-09'
-  window_version: 26.001.21662
-- attribution_state: not_established
-  captured_at: '2026-09-02T00:00:00Z'
-  classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
   release_window_key: adobe-acrobat-pro|26.001.21662|26.001.21662
@@ -86,6 +66,46 @@ reports:
 - attribution_state: not_established
   captured_at: '2026-09-02T00:00:00Z'
   classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|25.001.21111|25.001.21111
+  report_date: '2026-01-20'
+  report_excerpt: 'Acrobat issue I have an active Creative Cloud All Apps subscription including Acrobat
+    Pro. Adobe Acrobat Classic crashes immediately after launch on Windows 11. The app opens, shows the
+    Home screen, and then closes. I have: - disabled GPU acceleration - disabled New Acrobat...'
+  report_id: adobe-acrobat-pro:06300781d57f58b8
+  report_title: Acrobat issue
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-issue-1621017
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 25.001.21111
+  window_end: '2026-02-06'
+  window_start: '2026-01-20'
+  window_version: 25.001.21111
+- attribution_state: not_established
+  captured_at: '2026-09-03T10:17:27Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|26.001.21662|26.001.21662
+  report_date: '2026-06-15'
+  report_excerpt: No save the content adobe Acrobat When I tried to edit a PDF with underlines and the
+    automatic save function failed to save correctly, I lost all my progress. Honestly, this is the worst
+    Adobe software. I much prefer software that isn't up-to-date but still works perfectly for...
+  report_id: adobe-acrobat-reader:79ad8d6f436754cf
+  report_title: No save the content adobe Acrobat
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/no-save-the-content-adobe-acrobat-1627960
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.001.21662
+  window_end: '2026-06-17'
+  window_start: '2026-06-09'
+  window_version: 26.001.21662
+- attribution_state: not_established
+  captured_at: '2026-09-02T00:00:00Z'
+  classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
   release_window_key: adobe-acrobat-reader|25.001.21208|25.001.21208
@@ -118,26 +138,6 @@ reports:
   source_family: adobe community bug report
   source_type: adobe_community_bug_report
   source_url: https://community.adobe.com/questions-9/i-cannot-install-acrobate-reader-on-my-pc-win-11-1547623
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 25.001.21111
-  window_end: '2026-02-06'
-  window_start: '2026-01-20'
-  window_version: 25.001.21111
-- attribution_state: not_established
-  captured_at: '2026-09-02T00:00:00Z'
-  classification: recent_report
-  product_id: adobe-acrobat-pro
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-pro|25.001.21111|25.001.21111
-  report_date: '2026-01-20'
-  report_excerpt: 'Acrobat issue I have an active Creative Cloud All Apps subscription including Acrobat
-    Pro. Adobe Acrobat Classic crashes immediately after launch on Windows 11. The app opens, shows the
-    Home screen, and then closes. I have: - disabled GPU acceleration - disabled New Acrobat...'
-  report_id: adobe-acrobat-pro:06300781d57f58b8
-  report_title: Acrobat issue
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-9/acrobat-issue-1621017
   strict_exclusion_reason: missing_exact_patch_version_match
   window_build: 25.001.21111
   window_end: '2026-02-06'
