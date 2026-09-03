@@ -10,6 +10,7 @@ Run with: PYTHONDONTWRITEBYTECODE=1 python auxsays/scripts/tests/test_adobe_acro
 """
 from __future__ import annotations
 
+import re
 import sys
 import traceback
 from pathlib import Path
@@ -474,12 +475,94 @@ def run() -> int:
         year, yreason = verdict("Help > About shows 2026.001.21745 and Acrobat will not print")
         check("Part E: the year-prefixed build spelling is the same build",
               year is True, str(yreason))
-        check("Part E: the alias is a spelling, not a loosening",
-              ac.acrobat_version_aliases("26.001.21745") == ("2026.001.21745",)
-              and ac.acrobat_version_aliases("garbage") == ())
+        # Asserted as a PROPERTY rather than a pinned tuple: the set grew when four more real
+        # reporter spellings were measured, and a literal would have to be rewritten each time
+        # while proving less. Every alias must be a rewriting of THIS build's own digits.
+        from patch_collectors.base import exact_version_match as _evm  # noqa: PLC0415
+        aliases = ac.acrobat_version_aliases("26.001.21745")
+        check("Part E: every alias resolves to THIS build",
+              bool(aliases) and all(
+                  _evm(f"we are on {a} here", "26.001.21745", aliases)[0] for a in aliases),
+              str([a for a in aliases
+                   if not _evm(f"we are on {a} here", "26.001.21745", aliases)[0]]))
+        # The decisive negative: no alias of one build may resolve to its NEIGHBOUR. This is what
+        # makes the set a spelling table rather than a loosening.
+        neighbour = "26.001.21771"
+        check("Part E: and no alias of one build resolves to the adjacent build",
+              not any(_evm(f"we are on {a} here", neighbour,
+                           ac.acrobat_version_aliases(neighbour))[0] for a in aliases),
+              str(aliases))
+        check("Part E: a build with no alias form yields none",
+              ac.acrobat_version_aliases("garbage") == ())
+        check("Part E: the real reporter spellings are covered",
+              {"25.1.20982", "25.1.20982.0", "25.001 20982", "2500120982"}
+              <= set(ac.acrobat_version_aliases("25.001.20982")),
+              str(ac.acrobat_version_aliases("25.001.20982")))
         _, other = verdict("Help > About shows 2026.001.21789 and Acrobat will not print")
         check("Part E: a DIFFERENT build in year form is still refused",
               other == "missing_exact_patch_version_match", str(other))
+
+    print()
+    print("=" * 60)
+    print("Part G: version normalization -- the real spellings, and what must still be refused")
+    print("=" * 60)
+    from patch_collectors.base import exact_version_match as evm  # noqa: PLC0415
+
+    # THE REAL CORPUS SPELLINGS. Each of these was written by a reporter about a build AUXSAYS
+    # tracks, and each was refused purely on how they typed it. Fixtures rather than live URLs so
+    # the control is deterministic; the text is verbatim from the measured threads.
+    calibration = [
+        ("25.001.20982", "Adobe Reader 25.1.20982.0 Crash", "installer, 4 components"),
+        ("25.001.20982", "we run Adobe Reader 25.1.20982 here", "installer, 3 components"),
+        ("26.001.21691", "Issue with Adobe acrobat 26.001 21691", "space for the second dot"),
+        ("25.001.21208", "RUM Exit Code 2 - AcrobatDC via AUSST path 2500121208",
+         "AUSST, no separators"),
+        ("25.001.20997", "Adobe Acrobat Pro Not Responding after 25.001.20997.",
+         "sentence-ending period"),
+        ("25.001.21111", "Adobe Acrobat Reader Vulnerabilities v25.001.21111", "v prefix"),
+        ("26.001.21789", "Help > About reports 2026.001.21789", "Help > About year prefix"),
+    ]
+    for build, text, why in calibration:
+        check(f"Part G: recognised -- {why}",
+              evm(text, build, ac.acrobat_version_aliases(build))[0], f"{build} <- {text[:52]}")
+
+    # A spelling table must not blur ADJACENT builds. Every calibration string is re-tested against
+    # the neighbouring build and must fail.
+    neighbours = {"25.001.20982": "25.001.20997", "26.001.21691": "26.001.21677",
+                  "25.001.21208": "25.001.21223", "25.001.20997": "25.001.20982",
+                  "25.001.21111": "25.001.21078", "26.001.21789": "26.001.21771"}
+    for build, text, why in calibration:
+        other = neighbours[build]
+        check(f"Part G: NOT the adjacent build -- {why}",
+              not evm(text, other, ac.acrobat_version_aliases(other))[0], f"{other} <- {text[:44]}")
+
+    # Boundaries the normalization must not cross.
+    for text, build, want, why in (
+            ("build 26.001.21745.1 shipped", "26.001.21745", False, "a longer build is different"),
+            ("saw 26.001.217450 in logs", "26.001.21745", False, "a longer number is different"),
+            ("ticket 126.001.21745", "26.001.21745", False, "a longer prefix is different"),
+            ("dev25.001.21111 nightly", "25.001.21111", False, "'dev' is not a version prefix"),
+            ("rev25.001.21111", "25.001.21111", False, "'rev' is not a version prefix"),
+            ("Error 30088-29 on 2026-05-01", "26.001.21745", False, "error codes and dates"),
+            ("CVE-2026-21745 advisory", "26.001.21745", False, "a CVE is not a build"),
+            ("on 26.001.21745, printing broke", "26.001.21745", True, "a comma still matches"),
+            ("(26.001.21745)", "26.001.21745", True, "parentheses still match")):
+        check(f"Part G: {why}",
+              evm(text, build, ac.acrobat_version_aliases(build))[0] is want, text[:46])
+
+    # ROLE AUTHORITY STILL WINS. Recognising a version string says nothing about blame; every one
+    # of these now MATCHES and must still be refused by the Phase-A role gates.
+    if live is not None:
+        rec_745 = real.get((P, "26.001.21745"))
+        for text, why in (
+                ("Acrobat 25.1.21745 works fine for us", "a build named as WORKING"),
+                ("we rolled back to Acrobat 26.001.21745 and it works", "a ROLLBACK target"),
+                ("fixed in 26.001.21745, no more crashes", "a build named as the FIX")):
+            row = ac.row_from_candidate(P, rec_745, cand(
+                text, text, url="https://community.adobe.com/questions-9/x-1234567",
+                date="2026-08-01"), CAPTURED)
+            check(f"Part G: normalization does not bypass role authority -- {why}",
+                  row.get("counted") is not True, str(row.get("exclusion_reason")))
 
     print()
     print("=" * 60)

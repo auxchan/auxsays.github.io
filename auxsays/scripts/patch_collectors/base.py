@@ -568,14 +568,43 @@ def normalize_url(url: str) -> str:
     return url.strip().rstrip("/").lower()
 
 
+# A version prefix a reporter writes immediately before the number. Only these: an arbitrary
+# preceding letter must still block the match, or "dev25.001.21111" and "rev25.001.21111" would
+# read as 25.001.21111.
+_VERSION_PREFIX_RE = re.compile(r"(?:^|[^A-Za-z0-9.])(?:v|ver|version|build)\.?$", re.I)
+
+
 def exact_version_match(text: str, version: str, aliases: Iterable[str] = ()) -> tuple[bool, str, str]:
+    """Does ``text`` name exactly this version (or one of its product-local spellings)?
+
+    BOUNDARIES. The trailing guard has to reject a longer version -- "26.001.21745.1" is a
+    different build, and "26.001.217450" is a different number -- while accepting the sentence that
+    simply ENDS: "we are on version 26.001.21745." A period is only a version component when a
+    digit follows it, so that is the rule, rather than banning the character outright. Measured on
+    the live Acrobat corpus, the old guard refused six real reports on prose punctuation alone.
+
+    The leading guard stays strict about letters, with one exception: a recognised version prefix
+    written against the number ("v25.001.21111"). `dev`/`rev`/any other word still blocks.
+    """
+    body = text or ""
     for candidate in [version, *aliases]:
         candidate = str(candidate or "").strip()
         if not candidate:
             continue
-        pattern = re.compile(rf"(?<![A-Za-z0-9.]){re.escape(candidate)}(?![A-Za-z0-9.])", flags=re.I)
-        if pattern.search(text or ""):
-            return True, candidate, "exact_version_text" if candidate == version else "exact_version_alias"
+        # No leading lookbehind in the pattern: a version prefix is alphabetic, so a lookbehind
+        # would reject "v25.001.21111" before the loop could tell "v" from "dev". The leading
+        # boundary is decided below instead, on the text actually preceding the hit.
+        pattern = re.compile(rf"{re.escape(candidate)}(?![A-Za-z0-9])(?!\.\d)", flags=re.I)
+        for hit in pattern.finditer(body):
+            before = body[:hit.start()]
+            if not before:
+                pass                                    # start of text
+            elif _VERSION_PREFIX_RE.search(before):
+                pass                                    # v / ver / version / build, written against
+            elif before[-1].isdigit() or before[-1] == "." or before[-1].isalpha():
+                continue                                # inside a longer number, or another word
+            return True, candidate, ("exact_version_text" if candidate == version
+                                     else "exact_version_alias")
     return False, "", ""
 
 
