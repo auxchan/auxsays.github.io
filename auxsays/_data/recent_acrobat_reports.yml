@@ -4,104 +4,6 @@ note: Concrete PowerPoint problems reported while a release was current. These a
   and these rows are excluded from every consensus calculation.
 reports:
 - attribution_state: not_established
-  captured_at: '2026-09-04T16:40:43Z'
-  classification: recent_report
-  product_id: adobe-acrobat-reader
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-reader|26.002.21869|26.002.21869
-  report_date: '2026-09-03'
-  report_excerpt: Adobe Acrobat Error 43 I have a PDF located on a dropbox server accessible to about
-    4-5 people. 3 people were on the document leaving comments as a way to proof. When one of them went
-    to save, the entire document got corrupted. The file was NOT a read only file. This issue...
-  report_id: adobe-acrobat-reader:4699fa76e20af4fa
-  report_title: Adobe Acrobat Error 43
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-12/adobe-acrobat-error-43-1640295
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 26.002.21869
-  window_start: '2026-08-31'
-  window_version: 26.002.21869
-- attribution_state: not_established
-  captured_at: '2026-09-04T16:40:43Z'
-  classification: recent_report
-  product_id: adobe-acrobat-reader
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-reader|26.002.21869|26.002.21869
-  report_date: '2026-09-03'
-  report_excerpt: 'Acrobat crashes trying to print I am running Acrobat desktop version 26.1 on a Windows
-    11 enterprise Dell laptop. I created a PDF report from an outside source and when I open the file
-    in Acrobat I get this message: This appears to be a scanned document. Use Scan & OCR to make...'
-  report_id: adobe-acrobat-reader:2c9e108cf1ba6450
-  report_title: Acrobat crashes trying to print
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-9/acrobat-crashes-trying-to-print-1640329
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 26.002.21869
-  window_start: '2026-08-31'
-  window_version: 26.002.21869
-- attribution_state: not_established
-  captured_at: '2026-09-04T16:40:43Z'
-  classification: recent_report
-  product_id: adobe-acrobat-reader
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-reader|26.001.21662|26.001.21662
-  report_date: '2026-06-15'
-  report_excerpt: No save the content adobe Acrobat When I tried to edit a PDF with underlines and the
-    automatic save function failed to save correctly, I lost all my progress. Honestly, this is the worst
-    Adobe software. I much prefer software that isn't up-to-date but still works perfectly for...
-  report_id: adobe-acrobat-reader:79ad8d6f436754cf
-  report_title: No save the content adobe Acrobat
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-9/no-save-the-content-adobe-acrobat-1627960
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 26.001.21662
-  window_end: '2026-06-17'
-  window_start: '2026-06-09'
-  window_version: 26.001.21662
-- attribution_state: not_established
-  captured_at: '2026-09-04T16:40:43Z'
-  classification: recent_report
-  product_id: adobe-acrobat-reader
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-reader|25.001.21208|25.001.21208
-  report_date: '2026-02-12'
-  report_excerpt: Adobe crashing after trying to print a document So when i start my adobe acrobat reader
-    all of the tabs load up from previous session and i have no idea when it is done so when i click print
-    to a certain document it says it cannot open a document. it says that several times...
-  report_id: adobe-acrobat-reader:7a44245dcfacee71
-  report_title: Adobe crashing after trying to print a document
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-9/adobe-crashing-after-trying-to-print-a-document-1549754
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 25.001.21208
-  window_end: '2026-02-17'
-  window_start: '2026-02-12'
-  window_version: 25.001.21208
-- attribution_state: not_established
-  captured_at: '2026-09-03T16:19:57Z'
-  classification: recent_report
-  product_id: adobe-acrobat-reader
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-reader|25.001.21111|25.001.21111
-  report_date: '2026-01-29'
-  report_excerpt: I cannot install Acrobate reader on my PC (Win 11) I have uninstalled Acrobat reader
-    from my PC due to an error message that I was receiving. Ever since, I am trying to install it again
-    from the download page of Adobe, but I have no luck. I start the installation, the...
-  report_id: adobe-acrobat-reader:9077a504f8be61d7
-  report_title: I cannot install Acrobate reader on my PC (Win 11)
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-9/i-cannot-install-acrobate-reader-on-my-pc-win-11-1547623
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 25.001.21111
-  window_end: '2026-02-06'
-  window_start: '2026-01-20'
-  window_version: 25.001.21111
-- attribution_state: not_established
   captured_at: '2026-09-04T11:14:55Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
@@ -214,6 +116,104 @@ reports:
   source_family: adobe community bug report
   source_type: adobe_community_bug_report
   source_url: https://community.adobe.com/questions-9/acrobat-issue-1621017
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 25.001.21111
+  window_end: '2026-02-06'
+  window_start: '2026-01-20'
+  window_version: 25.001.21111
+- attribution_state: not_established
+  captured_at: '2026-09-04T20:53:05Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|26.002.21869|26.002.21869
+  report_date: '2026-09-03'
+  report_excerpt: Adobe Acrobat Error 43 I have a PDF located on a dropbox server accessible to about
+    4-5 people. 3 people were on the document leaving comments as a way to proof. When one of them went
+    to save, the entire document got corrupted. The file was NOT a read only file. This issue...
+  report_id: adobe-acrobat-reader:4699fa76e20af4fa
+  report_title: Adobe Acrobat Error 43
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-12/adobe-acrobat-error-43-1640295
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.002.21869
+  window_start: '2026-08-31'
+  window_version: 26.002.21869
+- attribution_state: not_established
+  captured_at: '2026-09-04T20:53:05Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|26.002.21869|26.002.21869
+  report_date: '2026-09-03'
+  report_excerpt: 'Acrobat crashes trying to print I am running Acrobat desktop version 26.1 on a Windows
+    11 enterprise Dell laptop. I created a PDF report from an outside source and when I open the file
+    in Acrobat I get this message: This appears to be a scanned document. Use Scan & OCR to make...'
+  report_id: adobe-acrobat-reader:2c9e108cf1ba6450
+  report_title: Acrobat crashes trying to print
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-crashes-trying-to-print-1640329
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.002.21869
+  window_start: '2026-08-31'
+  window_version: 26.002.21869
+- attribution_state: not_established
+  captured_at: '2026-09-04T20:53:05Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|26.001.21662|26.001.21662
+  report_date: '2026-06-15'
+  report_excerpt: No save the content adobe Acrobat When I tried to edit a PDF with underlines and the
+    automatic save function failed to save correctly, I lost all my progress. Honestly, this is the worst
+    Adobe software. I much prefer software that isn't up-to-date but still works perfectly for...
+  report_id: adobe-acrobat-reader:79ad8d6f436754cf
+  report_title: No save the content adobe Acrobat
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/no-save-the-content-adobe-acrobat-1627960
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.001.21662
+  window_end: '2026-06-17'
+  window_start: '2026-06-09'
+  window_version: 26.001.21662
+- attribution_state: not_established
+  captured_at: '2026-09-04T16:40:43Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|25.001.21208|25.001.21208
+  report_date: '2026-02-12'
+  report_excerpt: Adobe crashing after trying to print a document So when i start my adobe acrobat reader
+    all of the tabs load up from previous session and i have no idea when it is done so when i click print
+    to a certain document it says it cannot open a document. it says that several times...
+  report_id: adobe-acrobat-reader:7a44245dcfacee71
+  report_title: Adobe crashing after trying to print a document
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/adobe-crashing-after-trying-to-print-a-document-1549754
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 25.001.21208
+  window_end: '2026-02-17'
+  window_start: '2026-02-12'
+  window_version: 25.001.21208
+- attribution_state: not_established
+  captured_at: '2026-09-03T16:19:57Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|25.001.21111|25.001.21111
+  report_date: '2026-01-29'
+  report_excerpt: I cannot install Acrobate reader on my PC (Win 11) I have uninstalled Acrobat reader
+    from my PC due to an error message that I was receiving. Ever since, I am trying to install it again
+    from the download page of Adobe, but I have no luck. I start the installation, the...
+  report_id: adobe-acrobat-reader:9077a504f8be61d7
+  report_title: I cannot install Acrobate reader on my PC (Win 11)
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/i-cannot-install-acrobate-reader-on-my-pc-win-11-1547623
   strict_exclusion_reason: missing_exact_patch_version_match
   window_build: 25.001.21111
   window_end: '2026-02-06'
