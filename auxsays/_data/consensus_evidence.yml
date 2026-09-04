@@ -16403,3 +16403,84 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
+
+- id: acrobat-25-001-21208-adobe-community-bug-report-https-community-adobe-com-questions-624-rum-exit-code-2-acrobatdc-25-0-fails-to-install-via-auss
+  product_id: adobe-acrobat-pro
+  update_version: 25.001.21208
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-624/rum-exit-code-2-acrobatdc-25-0-fails-to-install-via-ausst-override-works-on-some-devices-1550674
+  parent_title: RUM Exit Code 2 – AcrobatDC 25.0 Fails to Install via AUSST Override (Works on Some Devices)
+  report_title: RUM Exit Code 2 – AcrobatDC 25.0 Fails to Install via AUSST Override (Works on Some Devices)
+  report_text_excerpt: 'RUM Exit Code 2 – AcrobatDC 25.0 Fails to Install via AUSST Override (Works on Some Devices) Environment Product: Adobe Acrobat DC (Continuous Track) Version attempting to install: 25.0 (e.g. 2500121208) RUM Version: 3.1.0.3 Update method: Remote Update Manager Updates hosted...'
+  captured_at: '2026-09-04T16:19:33Z'
+  source_date: '2026-02-19'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '2500121208'
+  match_basis: exact_version_alias
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-25-001-20997-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-pro-not-responding-crashing-1620742
+  product_id: adobe-acrobat-pro
+  update_version: 25.001.20997
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-pro-not-responding-crashing-1620742
+  parent_title: Adobe Acrobat Pro Not Responding / Crashing
+  report_title: Adobe Acrobat Pro Not Responding / Crashing
+  report_text_excerpt: Adobe Acrobat Pro Not Responding / Crashing Good morning, I am currently using Adobe Acrobat Pro on Windows 11 (Version 25.001.20997.0) and have been experiencing persistent performance issues for several months. The application is extremely slow to open, and nearly every...
+  captured_at: '2026-09-04T16:19:33Z'
+  source_date: '2025-12-18'
+  target_release_date: '2025-12-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.001.20997.0
+  match_basis: exact_version_alias
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-25-001-21208-adobe-community-bug-report-https-community-adobe-com-questions-624-rum-exit-code-2-acrobatdc-25-0-fails-to-install-via-auss
+  product_id: adobe-acrobat-reader
+  update_version: 25.001.21208
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-624/rum-exit-code-2-acrobatdc-25-0-fails-to-install-via-ausst-override-works-on-some-devices-1550674
+  parent_title: RUM Exit Code 2 – AcrobatDC 25.0 Fails to Install via AUSST Override (Works on Some Devices)
+  report_title: RUM Exit Code 2 – AcrobatDC 25.0 Fails to Install via AUSST Override (Works on Some Devices)
+  report_text_excerpt: 'RUM Exit Code 2 – AcrobatDC 25.0 Fails to Install via AUSST Override (Works on Some Devices) Environment Product: Adobe Acrobat DC (Continuous Track) Version attempting to install: 25.0 (e.g. 2500121208) RUM Version: 3.1.0.3 Update method: Remote Update Manager Updates hosted...'
+  captured_at: '2026-09-04T16:40:43Z'
+  source_date: '2026-02-19'
+  target_release_date: '2026-02-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '2500121208'
+  match_basis: exact_version_alias
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
