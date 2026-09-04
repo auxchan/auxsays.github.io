@@ -17,8 +17,8 @@ update_version: Faster tab navigation on the desktop app
 update_logo_text: FIG
 update_published_at: '2026-02-13T00:00:00.000Z'
 update_last_checked: '2026-07-29T05:07:34Z'
-source_last_checked: '2026-07-29T05:07:34Z'
-official_body_last_checked: '2026-07-29T05:07:34Z'
+source_last_checked: '2026-09-04T13:19:37Z'
+official_body_last_checked: '2026-09-04T13:19:37Z'
 record_last_updated: '2026-07-29T05:07:34Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -71,6 +71,11 @@ official_source_classification_note: Official vendor sources are classified befo
 official_sources: []
 official_source_attempts:
 - at: '2026-07-29T05:07:34Z'
+  url: https://www.figma.com/release-notes/?title=faster-tab-navigation-on-the-desktop-app
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-04T13:19:37Z'
   url: https://www.figma.com/release-notes/?title=faster-tab-navigation-on-the-desktop-app
   status: captured-from-rss-feed
   body_captured: true
