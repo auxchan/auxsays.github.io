@@ -12,6 +12,13 @@ on:
         required: false
         default: false
         type: boolean
+      update_version:
+        description: "Optional exact update_version(s), comma separated. Narrows the record walk to
+          those patches. The runner has always supported --update-version; this input forwards it,
+          so a specific record can be revisited without waiting for the time-bounded newest-first
+          traversal to come back round to it."
+        required: false
+        type: string
   schedule:
     # Temporary bounded-recovery cadence: every 6 hours (was 4h). A run can take up to the 300-min
     # job timeout; a 6h (360-min) interval leaves 60 min after the job bound before the next slot is
@@ -105,6 +112,20 @@ jobs:
 
           if [ "$product_id" != "" ]; then
             args+=(--product-id "$product_id")
+          fi
+
+          # Optional targeted mode. The collector already filters its record walk by
+          # target_versions; this only forwards the flag, so a targeted run takes exactly the same
+          # authority path as an ordinary one -- discovery, normalization, edition authority,
+          # concreteness, role, dedupe, evidence writeback, reconciliation.
+          raw_versions="${{ github.event.inputs.update_version }}"
+          versions="$(printf '%s' "$raw_versions" | tr -d '\r' | xargs)"
+          if [ -n "$versions" ]; then
+            IFS=',' read -ra wanted <<< "$versions"
+            for v in "${wanted[@]}"; do
+              trimmed="$(printf '%s' "$v" | xargs)"
+              if [ -n "$trimmed" ]; then args+=(--update-version "$trimmed"); fi
+            done
           fi
 
           if [ "${{ github.event.inputs.dry_run }}" = "true" ]; then
