@@ -16484,3 +16484,30 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: acrobat-25-001-20982-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-reader-25-1-20982-0-crash-1623724
+  product_id: adobe-acrobat-reader
+  update_version: 25.001.20982
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-reader-25-1-20982-0-crash-1623724
+  parent_title: Adobe Reader 25.1.20982.0 Crash
+  report_title: Adobe Reader 25.1.20982.0 Crash
+  report_text_excerpt: Adobe Reader 25.1.20982.0 Crash Hi In our Enterprise we Upgrade Adobe Reader x86 from 25.1.20813.0 to 25.1.20982.0. After that most but not all client (W10 and W11) can't open Adobe Reader and get the following errors or in Browser What should I do to fix this?
+  captured_at: '2026-09-04T19:04:26Z'
+  source_date: '2025-12-04'
+  target_release_date: '2025-12-02'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.1.20982.0
+  match_basis: exact_version_alias
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
