@@ -4,7 +4,125 @@ note: Concrete PowerPoint problems reported while a release was current. These a
   and these rows are excluded from every consensus calculation.
 reports:
 - attribution_state: not_established
-  captured_at: '2026-09-03T20:51:56Z'
+  captured_at: '2026-09-04T04:29:07Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|26.002.21869|26.002.21869
+  report_date: '2026-09-03'
+  report_excerpt: Adobe Acrobat Error 43 I have a PDF located on a dropbox server accessible to about
+    4-5 people. 3 people were on the document leaving comments as a way to proof. When one of them went
+    to save, the entire document got corrupted. The file was NOT a read only file. This issue...
+  report_id: adobe-acrobat-pro:73a1b8dd447a43ca
+  report_title: Adobe Acrobat Error 43
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-12/adobe-acrobat-error-43-1640295
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.002.21869
+  window_start: '2026-08-31'
+  window_version: 26.002.21869
+- attribution_state: not_established
+  captured_at: '2026-09-04T04:29:07Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|26.002.21869|26.002.21869
+  report_date: '2026-09-03'
+  report_excerpt: 'Acrobat crashes trying to print I am running Acrobat desktop version 26.1 on a Windows
+    11 enterprise Dell laptop. I created a PDF report from an outside source and when I open the file
+    in Acrobat I get this message: This appears to be a scanned document. Use Scan & OCR to make...'
+  report_id: adobe-acrobat-pro:39596b99cdab47ba
+  report_title: Acrobat crashes trying to print
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-crashes-trying-to-print-1640329
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.002.21869
+  window_start: '2026-08-31'
+  window_version: 26.002.21869
+- attribution_state: not_established
+  captured_at: '2026-09-04T04:29:07Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|26.001.21789|26.001.21789
+  report_date: '2026-08-21'
+  report_excerpt: Acrobat randomly stalls, grays out, "not responding" - recurs after reinstall Hi Folks,
+    sorry, I posted this concern before but without any results. That's why I'm trying again since I need
+    Acrobat and diminishes my workflow and, after all, paying for it. This happens for...
+  report_id: adobe-acrobat-pro:69932f4d997b1d8c
+  report_title: Acrobat randomly stalls, grays out, "not responding" - recurs after reinstall
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-randomly-stalls-grays-out-not-responding-recurs-after-reinstall-1638120
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.001.21789
+  window_end: '2026-08-31'
+  window_start: '2026-08-11'
+  window_version: 26.001.21789
+- attribution_state: not_established
+  captured_at: '2026-09-04T04:29:07Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|26.001.21662|26.001.21662
+  report_date: '2026-06-15'
+  report_excerpt: No save the content adobe Acrobat When I tried to edit a PDF with underlines and the
+    automatic save function failed to save correctly, I lost all my progress. Honestly, this is the worst
+    Adobe software. I much prefer software that isn't up-to-date but still works perfectly for...
+  report_id: adobe-acrobat-pro:53a94fe29e117c82
+  report_title: No save the content adobe Acrobat
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/no-save-the-content-adobe-acrobat-1627960
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.001.21662
+  window_end: '2026-06-17'
+  window_start: '2026-06-09'
+  window_version: 26.001.21662
+- attribution_state: not_established
+  captured_at: '2026-09-04T04:29:07Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|26.001.21563|26.001.21563
+  report_date: '2026-05-27'
+  report_excerpt: Acrobat DC Pro super slow / stalls For a while now Acrobat DC Pro is sluggish / stops
+    / not responding / need to close ("not responding") I repaired ... re-installed ... updated ... turned
+    off Protection Mode in preferences ... sometimes can't even scroll down to security in...
+  report_id: adobe-acrobat-pro:d359c779b947e00d
+  report_title: Acrobat DC Pro super slow / stalls
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-dc-pro-super-slow-stalls-1625320
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 26.001.21563
+  window_end: '2026-06-05'
+  window_start: '2026-05-18'
+  window_version: 26.001.21563
+- attribution_state: not_established
+  captured_at: '2026-09-03T12:10:31Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|25.001.21111|25.001.21111
+  report_date: '2026-01-20'
+  report_excerpt: 'Acrobat issue I have an active Creative Cloud All Apps subscription including Acrobat
+    Pro. Adobe Acrobat Classic crashes immediately after launch on Windows 11. The app opens, shows the
+    Home screen, and then closes. I have: - disabled GPU acceleration - disabled New Acrobat...'
+  report_id: adobe-acrobat-pro:06300781d57f58b8
+  report_title: Acrobat issue
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/acrobat-issue-1621017
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 25.001.21111
+  window_end: '2026-02-06'
+  window_start: '2026-01-20'
+  window_version: 25.001.21111
+- attribution_state: not_established
+  captured_at: '2026-09-04T04:49:44Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -23,7 +141,7 @@ reports:
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-09-03T20:51:56Z'
+  captured_at: '2026-09-04T04:49:44Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -42,7 +160,7 @@ reports:
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-09-03T20:51:56Z'
+  captured_at: '2026-09-04T04:49:44Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -96,124 +214,6 @@ reports:
   source_family: adobe community bug report
   source_type: adobe_community_bug_report
   source_url: https://community.adobe.com/questions-9/i-cannot-install-acrobate-reader-on-my-pc-win-11-1547623
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 25.001.21111
-  window_end: '2026-02-06'
-  window_start: '2026-01-20'
-  window_version: 25.001.21111
-- attribution_state: not_established
-  captured_at: '2026-09-03T22:01:21Z'
-  classification: recent_report
-  product_id: adobe-acrobat-pro
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-pro|26.002.21869|26.002.21869
-  report_date: '2026-09-03'
-  report_excerpt: Adobe Acrobat Error 43 I have a PDF located on a dropbox server accessible to about
-    4-5 people. 3 people were on the document leaving comments as a way to proof. When one of them went
-    to save, the entire document got corrupted. The file was NOT a read only file. This issue...
-  report_id: adobe-acrobat-pro:73a1b8dd447a43ca
-  report_title: Adobe Acrobat Error 43
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-12/adobe-acrobat-error-43-1640295
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 26.002.21869
-  window_start: '2026-08-31'
-  window_version: 26.002.21869
-- attribution_state: not_established
-  captured_at: '2026-09-03T22:01:21Z'
-  classification: recent_report
-  product_id: adobe-acrobat-pro
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-pro|26.002.21869|26.002.21869
-  report_date: '2026-09-03'
-  report_excerpt: 'Acrobat crashes trying to print I am running Acrobat desktop version 26.1 on a Windows
-    11 enterprise Dell laptop. I created a PDF report from an outside source and when I open the file
-    in Acrobat I get this message: This appears to be a scanned document. Use Scan & OCR to make...'
-  report_id: adobe-acrobat-pro:39596b99cdab47ba
-  report_title: Acrobat crashes trying to print
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-9/acrobat-crashes-trying-to-print-1640329
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 26.002.21869
-  window_start: '2026-08-31'
-  window_version: 26.002.21869
-- attribution_state: not_established
-  captured_at: '2026-09-03T22:01:21Z'
-  classification: recent_report
-  product_id: adobe-acrobat-pro
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-pro|26.001.21789|26.001.21789
-  report_date: '2026-08-21'
-  report_excerpt: Acrobat randomly stalls, grays out, "not responding" - recurs after reinstall Hi Folks,
-    sorry, I posted this concern before but without any results. That's why I'm trying again since I need
-    Acrobat and diminishes my workflow and, after all, paying for it. This happens for...
-  report_id: adobe-acrobat-pro:69932f4d997b1d8c
-  report_title: Acrobat randomly stalls, grays out, "not responding" - recurs after reinstall
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-9/acrobat-randomly-stalls-grays-out-not-responding-recurs-after-reinstall-1638120
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 26.001.21789
-  window_end: '2026-08-31'
-  window_start: '2026-08-11'
-  window_version: 26.001.21789
-- attribution_state: not_established
-  captured_at: '2026-09-03T22:01:21Z'
-  classification: recent_report
-  product_id: adobe-acrobat-pro
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-pro|26.001.21662|26.001.21662
-  report_date: '2026-06-15'
-  report_excerpt: No save the content adobe Acrobat When I tried to edit a PDF with underlines and the
-    automatic save function failed to save correctly, I lost all my progress. Honestly, this is the worst
-    Adobe software. I much prefer software that isn't up-to-date but still works perfectly for...
-  report_id: adobe-acrobat-pro:53a94fe29e117c82
-  report_title: No save the content adobe Acrobat
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-9/no-save-the-content-adobe-acrobat-1627960
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 26.001.21662
-  window_end: '2026-06-17'
-  window_start: '2026-06-09'
-  window_version: 26.001.21662
-- attribution_state: not_established
-  captured_at: '2026-09-03T22:01:21Z'
-  classification: recent_report
-  product_id: adobe-acrobat-pro
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-pro|26.001.21563|26.001.21563
-  report_date: '2026-05-27'
-  report_excerpt: Acrobat DC Pro super slow / stalls For a while now Acrobat DC Pro is sluggish / stops
-    / not responding / need to close ("not responding") I repaired ... re-installed ... updated ... turned
-    off Protection Mode in preferences ... sometimes can't even scroll down to security in...
-  report_id: adobe-acrobat-pro:d359c779b947e00d
-  report_title: Acrobat DC Pro super slow / stalls
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-9/acrobat-dc-pro-super-slow-stalls-1625320
-  strict_exclusion_reason: missing_exact_patch_version_match
-  window_build: 26.001.21563
-  window_end: '2026-06-05'
-  window_start: '2026-05-18'
-  window_version: 26.001.21563
-- attribution_state: not_established
-  captured_at: '2026-09-03T12:10:31Z'
-  classification: recent_report
-  product_id: adobe-acrobat-pro
-  promotion_eligible: true
-  release_window_key: adobe-acrobat-pro|25.001.21111|25.001.21111
-  report_date: '2026-01-20'
-  report_excerpt: 'Acrobat issue I have an active Creative Cloud All Apps subscription including Acrobat
-    Pro. Adobe Acrobat Classic crashes immediately after launch on Windows 11. The app opens, shows the
-    Home screen, and then closes. I have: - disabled GPU acceleration - disabled New Acrobat...'
-  report_id: adobe-acrobat-pro:06300781d57f58b8
-  report_title: Acrobat issue
-  source_family: adobe community bug report
-  source_type: adobe_community_bug_report
-  source_url: https://community.adobe.com/questions-9/acrobat-issue-1621017
   strict_exclusion_reason: missing_exact_patch_version_match
   window_build: 25.001.21111
   window_end: '2026-02-06'
