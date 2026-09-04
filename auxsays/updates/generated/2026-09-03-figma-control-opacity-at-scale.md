@@ -17,8 +17,8 @@ update_version: Control opacity at scale
 update_logo_text: FIG
 update_published_at: '2026-09-03T00:00:00.000Z'
 update_last_checked: '2026-09-03T18:13:37Z'
-source_last_checked: '2026-09-04T13:19:37Z'
-official_body_last_checked: '2026-09-04T13:19:37Z'
+source_last_checked: '2026-09-04T20:50:09Z'
+official_body_last_checked: '2026-09-04T20:50:09Z'
 record_last_updated: '2026-09-03T18:13:37Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -85,6 +85,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-04T13:19:37Z'
+  url: https://www.figma.com/release-notes/?title=control-opacity-at-scale
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-04T20:50:09Z'
   url: https://www.figma.com/release-notes/?title=control-opacity-at-scale
   status: captured-from-rss-feed
   body_captured: true

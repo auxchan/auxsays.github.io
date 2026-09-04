@@ -17,8 +17,8 @@ update_version: 'GitHub Actions: Early September 2026 updates'
 update_logo_text: GIT
 update_published_at: '2026-09-03T20:30:53Z'
 update_last_checked: '2026-09-03T21:57:51Z'
-source_last_checked: '2026-09-04T13:20:04Z'
-official_body_last_checked: '2026-09-04T13:20:04Z'
+source_last_checked: '2026-09-04T20:50:37Z'
+official_body_last_checked: '2026-09-04T20:50:37Z'
 record_last_updated: '2026-09-03T21:57:51Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -95,6 +95,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-04T13:20:04Z'
+  url: https://github.blog/changelog/2026-09-03-github-actions-early-september-2026-updates
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-04T20:50:37Z'
   url: https://github.blog/changelog/2026-09-03-github-actions-early-september-2026-updates
   status: captured-from-rss-feed
   body_captured: true
