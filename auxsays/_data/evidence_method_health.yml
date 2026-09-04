@@ -21022,7 +21022,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 2
   blocked_reason: ''
-  last_run: '2026-09-04T16:19:33Z'
+  last_run: '2026-09-04T19:56:02Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 25.001.21184
@@ -21086,7 +21086,7 @@ methods:
   accepted_reports: 3
   rejected_reports: 12
   blocked_reason: ''
-  last_run: '2026-09-04T16:19:33Z'
+  last_run: '2026-09-04T19:56:02Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 25.001.20982
@@ -21102,7 +21102,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 7
   blocked_reason: ''
-  last_run: '2026-09-03T04:20:41Z'
+  last_run: '2026-09-04T19:56:02Z'
   notes: acrobat community collector; edition=adobe-acrobat-pro
 - product_id: adobe-acrobat-pro
   update_version: 25.001.20937
