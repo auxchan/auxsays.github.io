@@ -16553,3 +16553,1914 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5991641-windows-update-kb5121003-breaking-ther
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5991641/windows-update-kb5121003-breaking-thermal-printers
+  parent_title: Windows Update KB5121003 breaking thermal printers - Microsoft Q&A
+  report_title: Windows Update KB5121003 breaking thermal printers - Microsoft Q&A
+  report_text_excerpt: Windows Update KB5121003 breaking thermal printers - Microsoft Q&A WIndows update KB5121003, Windows 11 24H2/25H2 cumulative update (builds 26100.9168/26200.9168) is breaking thermal printing. Specfically Cognitive TPG thermal printers. I have around 450 reports as of...
+  captured_at: '2026-09-05T04:16:19Z'
+  source_date: '2026-09-02'
+  target_release_date: '2026-08-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9168'
+  match_basis: exact_os_build
+  matched_kb: KB5121003
+  matched_os_build: '26200.9168'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9168'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5991929-blank-and-start-2026-08-security-updat
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5991929/blank-and-start-2026-08-security-update-kb5121003
+  parent_title: Blank and Start 2026-08 Security Update (KB5121003) (26200.9168) - Microsoft Q&A
+  report_title: Blank and Start 2026-08 Security Update (KB5121003) (26200.9168) - Microsoft Q&A
+  report_text_excerpt: Blank and Start 2026-08 Security Update (KB5121003) (26200.9168) - Microsoft Q&A I'm having the exact same problem as you. I actually returned my previous laptop and exchanged it for a brand-new replacement because I thought the issue might have been specific to that device,...
+  captured_at: '2026-09-05T04:16:19Z'
+  source_date: '2026-09-02'
+  target_release_date: '2026-08-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9168'
+  match_basis: exact_os_build
+  matched_kb: KB5121003
+  matched_os_build: '26200.9168'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9168'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5980613-windows-firewall-not-working-after-upd
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5980613/windows-firewall-not-working-after-updating-to-win
+  parent_title: Windows Firewall not working after updating to windows 11 - Microsoft Q&A
+  report_title: Windows Firewall not working after updating to windows 11 - Microsoft Q&A
+  report_text_excerpt: Windows Firewall not working after updating to windows 11 - Microsoft Q&A Windows 11 25H2 build 26200.9168. Windows Defender Firewall service ( ) remains stuck in after reboot and after an in-place Windows repair reinstall. reports service-specific error 87 (“The parameter is...
+  captured_at: '2026-09-05T04:16:19Z'
+  source_date: '2026-09-02'
+  target_release_date: '2026-08-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9168'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9168'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9168'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5987983-excel-2608-build-16-0-20326-20100-cras
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5987983/excel-2608-build-16-0-20326-20100-crashes-when-fil
+  parent_title: Excel 2608 (Build 16.0.20326.20100) crashes when filtering a PivotTable - Microsoft Q&A
+  report_title: Excel 2608 (Build 16.0.20326.20100) crashes when filtering a PivotTable - Microsoft Q&A
+  report_text_excerpt: 'Excel 2608 (Build 16.0.20326.20100) crashes when filtering a PivotTable - Microsoft Q&A Environment Product: Microsoft 365 Apps for enterprise Update channel: Current Channel Excel version: 2608, Build 16.0.20326.20100, 64-bit OS: Windows 11 Enterprise, Version 25H2 (OS Build...'
+  captured_at: '2026-09-05T04:16:19Z'
+  source_date: '2026-08-31'
+  target_release_date: '2026-08-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9168'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9168'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: display regression
+  workflow_area: display / graphics
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9168'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5988497-windows-11-25h2-drivers-hive-is-empty
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5988497/windows-11-25h2-drivers-hive-is-empty-8-kb-driver
+  parent_title: Windows 11 25H2 - DRIVERS hive is empty 8 KB, driver package registration fails with 0x00000002 - Microsoft Q&A
+  report_title: Windows 11 25H2 - DRIVERS hive is empty 8 KB, driver package registration fails with 0x00000002 - Microsoft Q&A
+  report_text_excerpt: 'Windows 11 25H2 - DRIVERS hive is empty 8 KB, driver package registration fails with 0x00000002 - Microsoft Q&A I am looking for help with what appears to be a corrupted/empty Windows DRIVERS registry hive. System: Windows 11 25H2, Build 26200.9168 MSI PRO Z690-A WIFI DDR4...'
+  captured_at: '2026-09-05T04:16:19Z'
+  source_date: '2026-08-29'
+  target_release_date: '2026-08-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9168'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9168'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9168'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5983256-facial-recognition-not-working-surface
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5983256/facial-recognition-not-working-surface-pro-11
+  parent_title: facial recognition not working, surface pro 11 - Microsoft Q&A
+  report_title: facial recognition not working, surface pro 11 - Microsoft Q&A
+  report_text_excerpt: facial recognition not working, surface pro 11 - Microsoft Q&A for couple of weeks now since some windows update facial recognition not working. We couldnt find a camera compatible? was working fine for long time... i done fresh reset and install of windows and still same.....
+  captured_at: '2026-09-05T04:16:19Z'
+  source_date: '2026-08-25'
+  target_release_date: '2026-08-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9168'
+  match_basis: exact_os_build
+  matched_os_build: '26200.9168'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9168'
+
+- id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5991641-windows-update-kb5121003-breaking-ther
+  product_id: microsoft-windows-11
+  update_version: 24H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5991641/windows-update-kb5121003-breaking-thermal-printers
+  parent_title: Windows Update KB5121003 breaking thermal printers - Microsoft Q&A
+  report_title: Windows Update KB5121003 breaking thermal printers - Microsoft Q&A
+  report_text_excerpt: Windows Update KB5121003 breaking thermal printers - Microsoft Q&A WIndows update KB5121003, Windows 11 24H2/25H2 cumulative update (builds 26100.9168/26200.9168) is breaking thermal printing. Specfically Cognitive TPG thermal printers. I have around 450 reports as of...
+  captured_at: '2026-09-05T04:16:22Z'
+  source_date: '2026-09-02'
+  target_release_date: '2026-08-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26100.9168'
+  match_basis: exact_os_build
+  matched_kb: KB5121003
+  matched_os_build: '26100.9168'
+  matched_feature_version: 24H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26100.9168'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5989625-file-history-ui-and-previous-versions
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5989625/file-history-ui-and-previous-versions-broken-after
+  parent_title: File History UI and Previous Versions Broken After Installing Recent Windows Updates (KB5101684 / KB5120249) - Microsoft Q&A
+  report_title: File History UI and Previous Versions Broken After Installing Recent Windows Updates (KB5101684 / KB5120249) - Microsoft Q&A
+  report_text_excerpt: File History UI and Previous Versions Broken After Installing Recent Windows Updates (KB5101684 / KB5120249) - Microsoft Q&A win 10 22H2 desktop computer os build 19045.7663 BIOS american megatrends inc P11-A4 202108acerPC win 11 25H2 latop OS Builds 26200.9278 BIOS Inysde...
+  captured_at: '2026-09-05T04:16:28Z'
+  source_date: '2026-09-02'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5101684
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5101684
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8973'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5978256-win-11-25h2kb5101684-os-builds-26200-8
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5978256/win-11-25h2kb5101684-os-builds-26200-8973-and-2610
+  parent_title: win 11 25H2KB5101684 (OS Builds 26200.8973 and 26100.8973) Preview snd win 10 22H2 KB5120249 (OS Builds 19045.7663 and 19044.7663) issue - Microsoft Q&A
+  report_title: win 11 25H2KB5101684 (OS Builds 26200.8973 and 26100.8973) Preview snd win 10 22H2 KB5120249 (OS Builds 19045.7663 and 19044.7663) issue - Microsoft Q&A
+  report_text_excerpt: win 11 25H2KB5101684 (OS Builds 26200.8973 and 26100.8973) Preview snd win 10 22H2 KB5120249 (OS Builds 19045.7663 and 19044.7663) issue - Microsoft Q&A Is Microsoft ignoring a File History problem caused by recent Windows updates? Hi everyone, I’m wondering if anyone else is...
+  captured_at: '2026-09-05T04:16:28Z'
+  source_date: '2026-08-23'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8973'
+  match_basis: exact_os_build
+  matched_kb: KB5101684
+  matched_os_build: '26200.8973'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8973'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5982769-file-history-problems-after-installing
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5982769/file-history-problems-after-installing-kb5101684-a
+  parent_title: File History problems after installing KB5101684 and KB5120249 - Microsoft Q&A
+  report_title: File History problems after installing KB5101684 and KB5120249 - Microsoft Q&A
+  report_text_excerpt: 'File History problems after installing KB5101684 and KB5120249 - Microsoft Q&A Hello,I would like to know if other Windows 10/11 users have noticed similar File History issues after recent updates. I have observed the problem on two different PCs: Windows 11 25H2 + KB5101684...'
+  captured_at: '2026-09-05T04:16:28Z'
+  source_date: '2026-08-23'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5101684
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5101684
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8973'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5983062-files-are-backed-up-but-file-history-s
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5983062/files-are-backed-up-but-file-history-status-and-pr
+  parent_title: Files are backed up, but File History status and Previous Versions are not updating after recent Windows updates KB5101684 and KB5120249 - Microsoft Q&A
+  report_title: Files are backed up, but File History status and Previous Versions are not updating after recent Windows updates KB5101684 and KB5120249 - Microsoft Q&A
+  report_text_excerpt: Files are backed up, but File History status and Previous Versions are not updating after recent Windows updates KB5101684 and KB5120249 - Microsoft Q&A Hello,I would like to ask whether anyone else has noticed unusual behavior with File History on Windows 10 or Windows 11...
+  captured_at: '2026-09-05T04:16:28Z'
+  source_date: '2026-08-23'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5101684
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5101684
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8973'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5975976-windows-11-25h2-recall-still-missing-a
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5975976/windows-11-25h2-recall-still-missing-after-august
+  parent_title: Windows 11 25H2 Recall still missing after August cumulative update KB5121003 — AIX/CoreAI installed but Recall won't launch - Microsoft Q&A
+  report_title: Windows 11 25H2 Recall still missing after August cumulative update KB5121003 — AIX/CoreAI installed but Recall won't launch - Microsoft Q&A
+  report_text_excerpt: 'Windows 11 25H2 Recall still missing after August cumulative update KB5121003 — AIX/CoreAI installed but Recall won''t launch - Microsoft Q&A Hello, I am trying to troubleshoot a Recall (Preview) issue on my HP Copilot+ PC. System configuration HP Copilot+ PC CPU: AMD Ryzen AI...'
+  captured_at: '2026-09-05T04:16:28Z'
+  source_date: '2026-08-18'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8973'
+  match_basis: exact_os_build
+  matched_kb: KB5101684
+  matched_os_build: '26200.8973'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8973'
+
+- id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5978256-win-11-25h2kb5101684-os-builds-26200-8
+  product_id: microsoft-windows-11
+  update_version: 24H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5978256/win-11-25h2kb5101684-os-builds-26200-8973-and-2610
+  parent_title: win 11 25H2KB5101684 (OS Builds 26200.8973 and 26100.8973) Preview snd win 10 22H2 KB5120249 (OS Builds 19045.7663 and 19044.7663) issue - Microsoft Q&A
+  report_title: win 11 25H2KB5101684 (OS Builds 26200.8973 and 26100.8973) Preview snd win 10 22H2 KB5120249 (OS Builds 19045.7663 and 19044.7663) issue - Microsoft Q&A
+  report_text_excerpt: win 11 25H2KB5101684 (OS Builds 26200.8973 and 26100.8973) Preview snd win 10 22H2 KB5120249 (OS Builds 19045.7663 and 19044.7663) issue - Microsoft Q&A Is Microsoft ignoring a File History problem caused by recent Windows updates? Hi everyone, I’m wondering if anyone else is...
+  captured_at: '2026-09-05T04:16:30Z'
+  source_date: '2026-08-23'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26100.8973'
+  match_basis: exact_os_build
+  matched_kb: KB5101684
+  matched_os_build: '26100.8973'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26100.8973'
+- id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5988390-dism-suddenly-cant-repair-my-windows-1
+  product_id: microsoft-windows-11
+  update_version: 24H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5988390/dism-suddenly-cant-repair-my-windows-11-install-re
+  parent_title: DISM suddenly can't repair my Windows 11 install. Repair content cannot be found. - Microsoft Q&A
+  report_title: DISM suddenly can't repair my Windows 11 install. Repair content cannot be found. - Microsoft Q&A
+  report_text_excerpt: DISM suddenly can't repair my Windows 11 install. Repair content cannot be found. - Microsoft Q&A Having trouble installing latest update to Windows 11, and having "repair install" fail (in SAFE_OS with BOOT) I tried using "DISM /online /cleanup-image /restorehealth" to fix...
+  captured_at: '2026-09-05T04:16:30Z'
+  source_date: '2026-08-30'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26100.8973'
+  match_basis: exact_os_build
+  matched_os_build: '26100.8973'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26100.8973'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5956166-azure-virtual-desktop-external-identit
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5956166/azure-virtual-desktop-external-identity-sign-in-vi
+  parent_title: 'Azure Virtual Desktop: External identity sign-in via Windows App fails when switching to resource tenant - error 0x8AA5015A - Microsoft Q&A'
+  report_title: 'Azure Virtual Desktop: External identity sign-in via Windows App fails when switching to resource tenant - error 0x8AA5015A - Microsoft Q&A'
+  report_text_excerpt: 'Azure Virtual Desktop: External identity sign-in via Windows App fails when switching to resource tenant - error 0x8AA5015A - Microsoft Q&A Service: Azure Virtual Desktop, Windows App, Microsoft Entra External ID (B2B guests) Scenario: AVD configured for external identity...'
+  captured_at: '2026-09-05T04:16:32Z'
+  source_date: '2026-08-05'
+  target_release_date: '2026-07-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8894'
+  match_basis: exact_os_build
+  matched_kb: KB5121767
+  matched_os_build: '26200.8894'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8894'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5961591-mirroring-from-phone-to-pc-lagging-dis
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5961591/mirroring-from-phone-to-pc-lagging-display
+  parent_title: 'Mirroring from Phone to PC: Lagging Display - Microsoft Q&A'
+  report_title: 'Mirroring from Phone to PC: Lagging Display - Microsoft Q&A'
+  report_text_excerpt: 'Mirroring from Phone to PC: Lagging Display - Microsoft Q&A In the past two weeks, I have lost the capability to work on my phone via both Phone Link and Samsung Flow. The response time of using my PC mouse and keyboard is far, far behind. The lag makes the option to mirror...'
+  captured_at: '2026-09-05T04:16:32Z'
+  source_date: '2026-08-01'
+  target_release_date: '2026-07-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8894'
+  match_basis: exact_os_build
+  matched_kb: KB5121767
+  matched_os_build: '26200.8894'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: display regression
+  workflow_area: display / graphics
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8894'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5956430-os-build-26200-8894-office-errors-majo
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5956430/os-build-26200-8894-office-errors-major-headache-p
+  parent_title: OS Build 26200.8894 Office Errors - Major Headache Part 2 - Microsoft Q&A
+  report_title: OS Build 26200.8894 Office Errors - Major Headache Part 2 - Microsoft Q&A
+  report_text_excerpt: 'OS Build 26200.8894 Office Errors - Major Headache Part 2 - Microsoft Q&A My system PC: Windows 11 Pro 25H2 x64 bit OS with OS Build 26200.8894 Most recent update: 7/19/2026 update (KB5121767)(26200.8894) AMD Ryzen 5800X 8-core (3.8 GHz), 32 GB RAM Graphics NVIDIA G Force GT...'
+  captured_at: '2026-09-05T04:16:32Z'
+  source_date: '2026-07-28'
+  target_release_date: '2026-07-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8894'
+  match_basis: exact_os_build
+  matched_kb: KB5121767
+  matched_os_build: '26200.8894'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: display regression
+  workflow_area: display / graphics
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8894'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5956328-os-build-26200-8894-office-errors-majo
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5956328/os-build-26200-8894-office-errors-major-headache
+  parent_title: OS Build 26200.8894 Office Errors - Major Headache - Microsoft Q&A
+  report_title: OS Build 26200.8894 Office Errors - Major Headache - Microsoft Q&A
+  report_text_excerpt: 'OS Build 26200.8894 Office Errors - Major Headache - Microsoft Q&A My system PC: Windows 11 Pro 25H2 x64 bit OS with OS Build 26200.8894 Most recent update: 7/19/2026 update (KB5121767)(26200.8894) AMD Ryzen 5800X 8-core (3.8 GHz), 32 GB RAM Graphics NVIDIA G Force GT 710 (2...'
+  captured_at: '2026-09-05T04:16:32Z'
+  source_date: '2026-07-24'
+  target_release_date: '2026-07-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8894'
+  match_basis: exact_os_build
+  matched_kb: KB5121767
+  matched_os_build: '26200.8894'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: display regression
+  workflow_area: display / graphics
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8894'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5957946-regression-mixed-dpi-classic-win32-che
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5957946/regression-mixed-dpi-classic-win32-checkbox-render
+  parent_title: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A'
+  report_title: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A'
+  report_text_excerpt: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A After a recent Windows 11 update, standard checkboxes in classic Win32 applications (Visual Styles / Common Controls v6 NOT enabled, and...'
+  captured_at: '2026-09-05T04:16:32Z'
+  source_date: '2026-08-06'
+  target_release_date: '2026-07-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8894'
+  match_basis: exact_os_build
+  matched_os_build: '26200.8894'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8894'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5964210-windows-11-25h2-26200-8894-loss-of-out
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5964210/windows-11-25h2-26200-8894-loss-of-outlook-onedriv
+  parent_title: Windows 11 25H2 (26200.8894) – Loss of Outlook/OneDrive/Windows Update authentication after July update - Microsoft Q&A
+  report_title: Windows 11 25H2 (26200.8894) – Loss of Outlook/OneDrive/Windows Update authentication after July update - Microsoft Q&A
+  report_text_excerpt: Windows 11 25H2 (26200.8894) – Loss of Outlook/OneDrive/Windows Update authentication after July update - Microsoft Q&A After installing the July update on Windows 11 25H2 (build 26200.8894), all cloud‑based authentication stopped working — Outlook, OneDrive, and Windows...
+  captured_at: '2026-09-05T04:16:32Z'
+  source_date: '2026-08-03'
+  target_release_date: '2026-07-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8894'
+  match_basis: exact_os_build
+  matched_os_build: '26200.8894'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8894'
+
+- id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5956166-azure-virtual-desktop-external-identit
+  product_id: microsoft-windows-11
+  update_version: 24H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5956166/azure-virtual-desktop-external-identity-sign-in-vi
+  parent_title: 'Azure Virtual Desktop: External identity sign-in via Windows App fails when switching to resource tenant - error 0x8AA5015A - Microsoft Q&A'
+  report_title: 'Azure Virtual Desktop: External identity sign-in via Windows App fails when switching to resource tenant - error 0x8AA5015A - Microsoft Q&A'
+  report_text_excerpt: 'Azure Virtual Desktop: External identity sign-in via Windows App fails when switching to resource tenant - error 0x8AA5015A - Microsoft Q&A Service: Azure Virtual Desktop, Windows App, Microsoft Entra External ID (B2B guests) Scenario: AVD configured for external identity...'
+  captured_at: '2026-09-05T04:16:34Z'
+  source_date: '2026-08-05'
+  target_release_date: '2026-07-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5121767
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5121767
+  matched_feature_version: 24H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26100.8894'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5948496-how-do-i-remove-the-recent-windows-upd
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5948496/how-do-i-remove-the-recent-windows-update
+  parent_title: How do I remove the recent windows update?? - Microsoft Q&A
+  report_title: How do I remove the recent windows update?? - Microsoft Q&A
+  report_text_excerpt: How do I remove the recent windows update?? - Microsoft Q&A i have tried four separate times to delete the most recent windows 11 update (2026-07 Security Update (KB5101650) (26200.8875) and 2026-07 .NET Framework Security Update (KB5100998)) due to it messing up my pc ( as...
+  captured_at: '2026-09-05T04:16:38Z'
+  source_date: '2026-08-27'
+  target_release_date: '2026-07-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8875'
+  match_basis: exact_os_build
+  matched_kb: KB5101650
+  matched_os_build: '26200.8875'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8875'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5966824-title-chrome-and-teams-fail-to-launch
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5966824/title-chrome-and-teams-fail-to-launch-in-windows-p
+  parent_title: 'Title: Chrome and Teams fail to launch in Windows profile works in new profile, need to recover passwords in chrome - Microsoft Q&A'
+  report_title: 'Title: Chrome and Teams fail to launch in Windows profile works in new profile, need to recover passwords in chrome - Microsoft Q&A'
+  report_text_excerpt: 'Title: Chrome and Teams fail to launch in Windows profile works in new profile, need to recover passwords in chrome - Microsoft Q&A Hi I am experiencing a critical issue with my Windows 11 system where both Google Chrome and Microsoft Teams fail to launch in my current user...'
+  captured_at: '2026-09-05T04:16:38Z'
+  source_date: '2026-08-13'
+  target_release_date: '2026-07-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5101650
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5101650
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8875'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5948531-images-are-not-displayed-in-emails-new
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5948531/images-are-not-displayed-in-emails-newsletters-or
+  parent_title: Images are not displayed in emails, newsletters, or signatures in classic Outlook 2016 - Microsoft Q&A
+  report_title: Images are not displayed in emails, newsletters, or signatures in classic Outlook 2016 - Microsoft Q&A
+  report_text_excerpt: Images are not displayed in emails, newsletters, or signatures in classic Outlook 2016 - Microsoft Q&A Hi, I'm have problem in outlook 2016 after windows update patch july 2016 Security Update for Microsoft Excel 2016 (KB5002886) 64-Bit Edition. Security Update for Microsoft...
+  captured_at: '2026-09-05T04:16:38Z'
+  source_date: '2026-08-08'
+  target_release_date: '2026-07-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8875'
+  match_basis: exact_os_build
+  matched_kb: KB5101650
+  matched_os_build: '26200.8875'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: display regression
+  workflow_area: display / graphics
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8875'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5948337-windows-11-25h2-build-26200-8875-kb510
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5948337/windows-11-25h2-build-26200-8875-kb5101650-caused
+  parent_title: Windows 11 25H2 Build 26200.8875 (KB5101650) caused system tray, audio, camera, microphone and network status issues on ASUS TUF A15 - Microsoft Q&A
+  report_title: Windows 11 25H2 Build 26200.8875 (KB5101650) caused system tray, audio, camera, microphone and network status issues on ASUS TUF A15 - Microsoft Q&A
+  report_text_excerpt: 'Windows 11 25H2 Build 26200.8875 (KB5101650) caused system tray, audio, camera, microphone and network status issues on ASUS TUF A15 - Microsoft Q&A Device: ASUS TUF Gaming A15 FA506ICB Windows Version: Windows 11 Version 25H2 OS Build: 26200.8875 Update Installed: KB5101650...'
+  captured_at: '2026-09-05T04:16:38Z'
+  source_date: '2026-08-06'
+  target_release_date: '2026-07-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8875'
+  match_basis: exact_os_build
+  matched_kb: KB5101650
+  matched_os_build: '26200.8875'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8875'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5957946-regression-mixed-dpi-classic-win32-che
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5957946/regression-mixed-dpi-classic-win32-checkbox-render
+  parent_title: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A'
+  report_title: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A'
+  report_text_excerpt: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A After a recent Windows 11 update, standard checkboxes in classic Win32 applications (Visual Styles / Common Controls v6 NOT enabled, and...'
+  captured_at: '2026-09-05T04:16:38Z'
+  source_date: '2026-08-06'
+  target_release_date: '2026-07-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8875'
+  match_basis: exact_os_build
+  matched_kb: KB5101650
+  matched_os_build: '26200.8875'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8875'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5948960-windows-update-kb5100998-audio-issues
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5948960/windows-update-kb5100998-audio-issues
+  parent_title: Windows Update KB5100998 Audio Issues - Microsoft Q&A
+  report_title: Windows Update KB5100998 Audio Issues - Microsoft Q&A
+  report_text_excerpt: Windows Update KB5100998 Audio Issues - Microsoft Q&A After installing Windows Update KB5100998 & Security Update KB5101650 (7/14/2026), audio on internal speakers from applications such as Google Chrome no longer work (barely audible). System sounds are fine, BT headphones...
+  captured_at: '2026-09-05T04:16:38Z'
+  source_date: '2026-08-04'
+  target_release_date: '2026-07-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8875'
+  match_basis: exact_os_build
+  matched_kb: KB5101650
+  matched_os_build: '26200.8875'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8875'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5962150-2026-07-security-update-kb5101650-2620
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5962150/2026-07-security-update-kb5101650-26200-8875
+  parent_title: 2026-07 Security Update (KB5101650) (26200.8875) - Microsoft Q&A
+  report_title: 2026-07 Security Update (KB5101650) (26200.8875) - Microsoft Q&A
+  report_text_excerpt: 2026-07 Security Update (KB5101650) (26200.8875) - Microsoft Q&A I have Windows 11 Pro and 2026-07 Security Update (KB5101650) (26200.8875) continues to fail to update. Is there an easy fix that doesn't require me to change settings to make it go through?
+  captured_at: '2026-09-05T04:16:38Z'
+  source_date: '2026-08-04'
+  target_release_date: '2026-07-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8875'
+  match_basis: exact_os_build
+  matched_kb: KB5101650
+  matched_os_build: '26200.8875'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8875'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5950126-kb5101650-os-builds-26200-8875-and-261
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5950126/kb5101650-os-builds-26200-8875-and-26100-8875-inst
+  parent_title: KB5101650 (OS Builds 26200.8875 and 26100.8875) installation failed on Surface - Microsoft Q&A
+  report_title: KB5101650 (OS Builds 26200.8875 and 26100.8875) installation failed on Surface - Microsoft Q&A
+  report_text_excerpt: KB5101650 (OS Builds 26200.8875 and 26100.8875) installation failed on Surface - Microsoft Q&A The update KB5101650 (OS Builds 26200.8875 and 26100.8875) failed to install on my Surface Pro 11. Nevertheless, the system asks every time for a restart to finish the "installation".
+  captured_at: '2026-09-05T04:16:38Z'
+  source_date: '2026-07-22'
+  target_release_date: '2026-07-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8875'
+  match_basis: exact_os_build
+  matched_kb: KB5101650
+  matched_os_build: '26200.8875'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8875'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5981971-bsod-multiples-veces-jugando-fornite-o
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5981971/bsod-multiples-veces-jugando-fornite-o-otros-juego
+  parent_title: BSOD Multiples veces jugando fornite o otros juegos Windows 11 25H2 (26200.8875) Componentes Ryzen 7 5700G, Biostar Storm 16GB x2 (32GB) 3200MHZ, Kingston NV3 de 1 TB (SNV3S1000G), NVMe. - Microsoft Q&A
+  report_title: BSOD Multiples veces jugando fornite o otros juegos Windows 11 25H2 (26200.8875) Componentes Ryzen 7 5700G, Biostar Storm 16GB x2 (32GB) 3200MHZ, Kingston NV3 de 1 TB (SNV3S1000G), NVMe. - Microsoft Q&A
+  report_text_excerpt: BSOD Multiples veces jugando fornite o otros juegos Windows 11 25H2 (26200.8875) Componentes Ryzen 7 5700G, Biostar Storm 16GB x2 (32GB) 3200MHZ, Kingston NV3 de 1 TB (SNV3S1000G), NVMe. - Microsoft Q&A Hace mucho que vengo expermitentando problems de BSODs en Fornite Google...
+  captured_at: '2026-09-05T04:16:38Z'
+  source_date: '2026-09-01'
+  target_release_date: '2026-07-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8875'
+  match_basis: exact_os_build
+  matched_os_build: '26200.8875'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8875'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5982539-windows-11-kb5121003-installation-and
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5982539/windows-11-kb5121003-installation-and-boot-failure
+  parent_title: Windows 11 KB5121003 Installation and Boot Failure Issue - Microsoft Q&A
+  report_title: Windows 11 KB5121003 Installation and Boot Failure Issue - Microsoft Q&A
+  report_text_excerpt: Windows 11 KB5121003 Installation and Boot Failure Issue - Microsoft Q&A I recently purchased a new HP laptop running Windows 11 25H2. I am experiencing repeated problems installing the August 2026 security update KB5121003 (OS Build 26200.9168) . Initial problem The first...
+  captured_at: '2026-09-05T04:16:38Z'
+  source_date: '2026-08-31'
+  target_release_date: '2026-07-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8875'
+  match_basis: exact_os_build
+  matched_os_build: '26200.8875'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8875'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5970143-store-start-menu-and-aad-brokerplugin
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5970143/store-start-menu-and-aad-brokerplugin-all-crash-in
+  parent_title: Store, Start menu and AAD BrokerPlugin all crash in twinapi.appcore.dll (0xc0000409) — 25H2 26200.8875, survives two in-place upgrades - Microsoft Q&A
+  report_title: Store, Start menu and AAD BrokerPlugin all crash in twinapi.appcore.dll (0xc0000409) — 25H2 26200.8875, survives two in-place upgrades - Microsoft Q&A
+  report_text_excerpt: 'Store, Start menu and AAD BrokerPlugin all crash in twinapi.appcore.dll (0xc0000409) — 25H2 26200.8875, survives two in-place upgrades - Microsoft Q&A Summary: On a clean, unmanaged consumer device, multiple unrelated UWP packages crash at the same offset inside . Two in-place...'
+  captured_at: '2026-09-05T04:16:38Z'
+  source_date: '2026-08-13'
+  target_release_date: '2026-07-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8875'
+  match_basis: exact_os_build
+  matched_os_build: '26200.8875'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8875'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5972257-windows-11-25h2-sha-256-tcg-replay-has
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5972257/windows-11-25h2-sha-256-tcg-replay-has-zero-values
+  parent_title: 'Windows 11 25H2: SHA-256 TCG replay has zero values for PCR 0–7, causing BitLocker TPM protector error 0x8007000D - Microsoft Q&A'
+  report_title: 'Windows 11 25H2: SHA-256 TCG replay has zero values for PCR 0–7, causing BitLocker TPM protector error 0x8007000D - Microsoft Q&A'
+  report_text_excerpt: 'Windows 11 25H2: SHA-256 TCG replay has zero values for PCR 0–7, causing BitLocker TPM protector error 0x8007000D - Microsoft Q&A Hello, we are investigating a reproducible Measured Boot / BitLocker problem on multiple Lenovo ThinkPad X390 Yoga systems. Environment: Windows 11...'
+  captured_at: '2026-09-05T04:16:38Z'
+  source_date: '2026-08-11'
+  target_release_date: '2026-07-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8875'
+  match_basis: exact_os_build
+  matched_os_build: '26200.8875'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8875'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5963242-hibernate-only-shuts-down-after-window
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5963242/hibernate-only-shuts-down-after-windows-update
+  parent_title: Hibernate only shuts down after Windows Update - Microsoft Q&A
+  report_title: Hibernate only shuts down after Windows Update - Microsoft Q&A
+  report_text_excerpt: Hibernate only shuts down after Windows Update - Microsoft Q&A Hello Support, after installing the latest Windows 11 update, the hibernate function only shuts down my Surface Pro. I have tried every troubleshooting step I could find, but the issue still isn’t resolved. Tried...
+  captured_at: '2026-09-05T04:16:38Z'
+  source_date: '2026-08-04'
+  target_release_date: '2026-07-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8875'
+  match_basis: exact_os_build
+  matched_os_build: '26200.8875'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8875'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5955437-microsoft-store-downloads-failed-0x802
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5955437/microsoft-store-downloads-failed-0x80244022-window
+  parent_title: Microsoft Store downloads failed 0x80244022, Windows Update and Optional Features failed with 0x801901F7 - Microsoft Q&A
+  report_title: Microsoft Store downloads failed 0x80244022, Windows Update and Optional Features failed with 0x801901F7 - Microsoft Q&A
+  report_text_excerpt: Microsoft Store downloads failed 0x80244022, Windows Update and Optional Features failed with 0x801901F7 - Microsoft Q&A I’m using Windows 11 Pro N, build 26200.8875, on a newly formatted PC. Microsoft Store downloads failed with 0x80244022 . Windows Update and Optional...
+  captured_at: '2026-09-05T04:16:38Z'
+  source_date: '2026-07-25'
+  target_release_date: '2026-07-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8875'
+  match_basis: exact_os_build
+  matched_os_build: '26200.8875'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8875'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5951311-windows-11-freeze-no-bsod-no-critical
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5951311/windows-11-freeze-no-bsod-no-critical-event-error
+  parent_title: Windows 11 Freeze - NO BSOD - NO CRITICAL EVENT ERROR - Microsoft Q&A
+  report_title: Windows 11 Freeze - NO BSOD - NO CRITICAL EVENT ERROR - Microsoft Q&A
+  report_text_excerpt: Windows 11 Freeze - NO BSOD - NO CRITICAL EVENT ERROR - Microsoft Q&A Hi, Since a few day I've a strange issue and I didn't succeed at identifying the source cause. My computer freeze randomly but the mouse is still responsive. For a few seconds, or a minute I can click on...
+  captured_at: '2026-09-05T04:16:38Z'
+  source_date: '2026-07-22'
+  target_release_date: '2026-07-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8875'
+  match_basis: exact_os_build
+  matched_os_build: '26200.8875'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8875'
+
+- id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5957946-regression-mixed-dpi-classic-win32-che
+  product_id: microsoft-windows-11
+  update_version: 24H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5957946/regression-mixed-dpi-classic-win32-checkbox-render
+  parent_title: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A'
+  report_title: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A'
+  report_text_excerpt: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A After a recent Windows 11 update, standard checkboxes in classic Win32 applications (Visual Styles / Common Controls v6 NOT enabled, and...'
+  captured_at: '2026-09-05T04:16:41Z'
+  source_date: '2026-08-06'
+  target_release_date: '2026-07-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5101650
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5101650
+  matched_feature_version: 24H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26100.8875'
+- id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5950126-kb5101650-os-builds-26200-8875-and-261
+  product_id: microsoft-windows-11
+  update_version: 24H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5950126/kb5101650-os-builds-26200-8875-and-26100-8875-inst
+  parent_title: KB5101650 (OS Builds 26200.8875 and 26100.8875) installation failed on Surface - Microsoft Q&A
+  report_title: KB5101650 (OS Builds 26200.8875 and 26100.8875) installation failed on Surface - Microsoft Q&A
+  report_text_excerpt: KB5101650 (OS Builds 26200.8875 and 26100.8875) installation failed on Surface - Microsoft Q&A The update KB5101650 (OS Builds 26200.8875 and 26100.8875) failed to install on my Surface Pro 11. Nevertheless, the system asks every time for a restart to finish the "installation".
+  captured_at: '2026-09-05T04:16:41Z'
+  source_date: '2026-07-22'
+  target_release_date: '2026-07-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26100.8875'
+  match_basis: exact_os_build
+  matched_kb: KB5101650
+  matched_os_build: '26100.8875'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26100.8875'
+- id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5956564-winrt-windows-devices-display-core-idi
+  product_id: microsoft-windows-11
+  update_version: 24H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5956564/winrt-windows-devices-display-core-idisplaypath-wi
+  parent_title: WinRT Windows.Devices.Display.Core IDisplayPath WireFormat HDR10 does not enable HDR Metadata on output signal - Microsoft Q&A
+  report_title: WinRT Windows.Devices.Display.Core IDisplayPath WireFormat HDR10 does not enable HDR Metadata on output signal - Microsoft Q&A
+  report_text_excerpt: WinRT Windows.Devices.Display.Core IDisplayPath WireFormat HDR10 does not enable HDR Metadata on output signal - Microsoft Q&A I have been using WinRT Windows.Devices.Display.Core IDisplayPath WireFormat to set the wire format on display output. Previously I was able to use...
+  captured_at: '2026-09-05T04:16:41Z'
+  source_date: '2026-07-30'
+  target_release_date: '2026-07-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26100.8875'
+  match_basis: exact_os_build
+  matched_os_build: '26100.8875'
+  matched_feature_version: 24H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: display regression
+  workflow_area: display / graphics
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26100.8875'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5966824-title-chrome-and-teams-fail-to-launch
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5966824/title-chrome-and-teams-fail-to-launch-in-windows-p
+  parent_title: 'Title: Chrome and Teams fail to launch in Windows profile works in new profile, need to recover passwords in chrome - Microsoft Q&A'
+  report_title: 'Title: Chrome and Teams fail to launch in Windows profile works in new profile, need to recover passwords in chrome - Microsoft Q&A'
+  report_text_excerpt: 'Title: Chrome and Teams fail to launch in Windows profile works in new profile, need to recover passwords in chrome - Microsoft Q&A Hi I am experiencing a critical issue with my Windows 11 system where both Google Chrome and Microsoft Teams fail to launch in my current user...'
+  captured_at: '2026-09-05T04:16:47Z'
+  source_date: '2026-08-13'
+  target_release_date: '2026-06-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5095093
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5095093
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8737'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5957946-regression-mixed-dpi-classic-win32-che
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5957946/regression-mixed-dpi-classic-win32-checkbox-render
+  parent_title: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A'
+  report_title: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A'
+  report_text_excerpt: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A After a recent Windows 11 update, standard checkboxes in classic Win32 applications (Visual Styles / Common Controls v6 NOT enabled, and...'
+  captured_at: '2026-09-05T04:16:47Z'
+  source_date: '2026-08-06'
+  target_release_date: '2026-06-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8737'
+  match_basis: exact_os_build
+  matched_kb: KB5095093
+  matched_os_build: '26200.8737'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8737'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5960381-windows-file-explorer-going-back-to-de
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5960381/windows-file-explorer-going-back-to-desktop-folder
+  parent_title: Windows File Explorer Going Back to "Desktop" folder after opening file - Microsoft Q&A
+  report_title: Windows File Explorer Going Back to "Desktop" folder after opening file - Microsoft Q&A
+  report_text_excerpt: Windows File Explorer Going Back to "Desktop" folder after opening file - Microsoft Q&A This issue has been raised a number of times on this forum, in slightly different forms and apparently with multiple root causes. When I opened an image from any subfolder using any of the...
+  captured_at: '2026-09-05T04:16:47Z'
+  source_date: '2026-07-29'
+  target_release_date: '2026-06-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8737'
+  match_basis: exact_os_build
+  matched_os_build: '26200.8737'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8737'
+
+- id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5957946-regression-mixed-dpi-classic-win32-che
+  product_id: microsoft-windows-11
+  update_version: 24H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5957946/regression-mixed-dpi-classic-win32-checkbox-render
+  parent_title: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A'
+  report_title: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A'
+  report_text_excerpt: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A After a recent Windows 11 update, standard checkboxes in classic Win32 applications (Visual Styles / Common Controls v6 NOT enabled, and...'
+  captured_at: '2026-09-05T04:16:49Z'
+  source_date: '2026-08-06'
+  target_release_date: '2026-06-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5095093
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5095093
+  matched_feature_version: 24H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26100.8737'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5936317-kb5094126-causes-recurring-0x1a-memory
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5936317/kb5094126-causes-recurring-0x1a-memory-management
+  parent_title: KB5094126 causes recurring 0x1A MEMORY_MANAGEMENT bugcheck in nt!EtwpProfileInterrupt stack-walk (Win11 25H2 26200.8655) - Microsoft Q&A
+  report_title: KB5094126 causes recurring 0x1A MEMORY_MANAGEMENT bugcheck in nt!EtwpProfileInterrupt stack-walk (Win11 25H2 26200.8655) - Microsoft Q&A
+  report_text_excerpt: KB5094126 causes recurring 0x1A MEMORY_MANAGEMENT bugcheck in nt!EtwpProfileInterrupt stack-walk (Win11 25H2 26200.8655) - Microsoft Q&A Since installing KB5094126 (OS Build 26200.8655) on 2026-06-12, this PC bugchecks repeatedly — 9 times between 2026-06-12 and 2026-07-02....
+  captured_at: '2026-09-05T04:16:53Z'
+  source_date: '2026-08-14'
+  target_release_date: '2026-06-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8655'
+  match_basis: exact_os_build
+  matched_kb: KB5094126
+  matched_os_build: '26200.8655'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8655'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5966824-title-chrome-and-teams-fail-to-launch
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5966824/title-chrome-and-teams-fail-to-launch-in-windows-p
+  parent_title: 'Title: Chrome and Teams fail to launch in Windows profile works in new profile, need to recover passwords in chrome - Microsoft Q&A'
+  report_title: 'Title: Chrome and Teams fail to launch in Windows profile works in new profile, need to recover passwords in chrome - Microsoft Q&A'
+  report_text_excerpt: 'Title: Chrome and Teams fail to launch in Windows profile works in new profile, need to recover passwords in chrome - Microsoft Q&A Hi I am experiencing a critical issue with my Windows 11 system where both Google Chrome and Microsoft Teams fail to launch in my current user...'
+  captured_at: '2026-09-05T04:16:53Z'
+  source_date: '2026-08-13'
+  target_release_date: '2026-06-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5094126
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5094126
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8655'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5923815-repeated-video-dxgkrnl-fatal-error-0x1
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5923815/repeated-video-dxgkrnl-fatal-error-0x113-after-win
+  parent_title: Repeated VIDEO_DXGKRNL_FATAL_ERROR 0x113 after Windows update KB5094126 on NVIDIA RTX 4060 Laptop GPU - Microsoft Q&A
+  report_title: Repeated VIDEO_DXGKRNL_FATAL_ERROR 0x113 after Windows update KB5094126 on NVIDIA RTX 4060 Laptop GPU - Microsoft Q&A
+  report_text_excerpt: Repeated VIDEO_DXGKRNL_FATAL_ERROR 0x113 after Windows update KB5094126 on NVIDIA RTX 4060 Laptop GPU - Microsoft Q&A After installing Windows update KB5094126 on Windows 11 build 26200.8655, I started getting repeated blue screens during GPU-heavy gaming workloads. The crash...
+  captured_at: '2026-09-05T04:16:53Z'
+  source_date: '2026-07-31'
+  target_release_date: '2026-06-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8655'
+  match_basis: exact_os_build
+  matched_kb: KB5094126
+  matched_os_build: '26200.8655'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8655'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5957946-regression-mixed-dpi-classic-win32-che
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5957946/regression-mixed-dpi-classic-win32-checkbox-render
+  parent_title: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A'
+  report_title: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A'
+  report_text_excerpt: '[Regression][Mixed DPI] Classic Win32 checkbox renders incorrectly after Windows 11 24H2/25H2 update (build 26200.8875+) - Microsoft Q&A After a recent Windows 11 update, standard checkboxes in classic Win32 applications (Visual Styles / Common Controls v6 NOT enabled, and...'
+  captured_at: '2026-09-05T04:16:53Z'
+  source_date: '2026-08-06'
+  target_release_date: '2026-06-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8655'
+  match_basis: exact_os_build
+  matched_os_build: '26200.8655'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8655'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5957809-surface-laptop-7-qualcomm-snapdragon-x
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5957809/surface-laptop-7-qualcomm-snapdragon-x-plus-not-go
+  parent_title: Surface Laptop 7 (Qualcomm Snapdragon X Plus) not going into deep idle during Modern Standby, then hibernates too quickly - Microsoft Q&A
+  report_title: Surface Laptop 7 (Qualcomm Snapdragon X Plus) not going into deep idle during Modern Standby, then hibernates too quickly - Microsoft Q&A
+  report_text_excerpt: Surface Laptop 7 (Qualcomm Snapdragon X Plus) not going into deep idle during Modern Standby, then hibernates too quickly - Microsoft Q&A Since June 2026 firmware update for my Surface Laptop 7, I noticed that often times it takes a while to wake up. I know the laptop goes...
+  captured_at: '2026-09-05T04:16:53Z'
+  source_date: '2026-07-30'
+  target_release_date: '2026-06-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8655'
+  match_basis: exact_os_build
+  matched_os_build: '26200.8655'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Windows issue
+  workflow_area: Windows workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8655'
+
+- id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5921413-recurring-0x1e-bugcheck-in-nt-exppoolt
+  product_id: microsoft-windows-11
+  update_version: 24H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5921413/recurring-0x1e-bugcheck-in-nt-exppooltrackercharge
+  parent_title: Recurring 0x1E bugcheck in nt!ExpPoolTrackerChargeEntry on Windows 11 25H2 (26100.8655), not fixed by KB5094135 - Microsoft Q&A
+  report_title: Recurring 0x1E bugcheck in nt!ExpPoolTrackerChargeEntry on Windows 11 25H2 (26100.8655), not fixed by KB5094135 - Microsoft Q&A
+  report_text_excerpt: Recurring 0x1E bugcheck in nt!ExpPoolTrackerChargeEntry on Windows 11 25H2 (26100.8655), not fixed by KB5094135 - Microsoft Q&A My Alienware 18 (model AA18250) on Windows 11 25H2 has been blue-screening repeatedly for about five weeks, and I would like it escalated since the...
+  captured_at: '2026-09-05T04:16:56Z'
+  source_date: '2026-09-01'
+  target_release_date: '2026-06-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26100.8655'
+  match_basis: exact_os_build
+  matched_os_build: '26100.8655'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26100.8655'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5910839-2026-05-preview-update-appears-to-brea
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5910839/2026-05-preview-update-appears-to-break-excel
+  parent_title: 2026-05 Preview Update appears to break Excel - Microsoft Q&A
+  report_title: 2026-05 Preview Update appears to break Excel - Microsoft Q&A
+  report_text_excerpt: 2026-05 Preview Update appears to break Excel - Microsoft Q&A My system runs Windows 11 Pro, 25H2, and I tend to keep it updated. After recently updating to the 2026-05 Preview Update (KB5089573) (26200.8524), when I start Excel, it crashes Windows 11 (your device ran into a...
+  captured_at: '2026-09-05T04:17:02Z'
+  source_date: '2026-07-29'
+  target_release_date: '2026-05-26'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8524'
+  match_basis: exact_os_build
+  matched_kb: KB5089573
+  matched_os_build: '26200.8524'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8524'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5902453-virtual-keyboard-clipboard-history-sta
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5902453/virtual-keyboard-clipboard-history-start-menu-sear
+  parent_title: Virtual keyboard/Clipboard history, Start menu Search bar, and Outlook (MS Store) keep breaking together on Surface Pro 11 - Microsoft Q&A
+  report_title: Virtual keyboard/Clipboard history, Start menu Search bar, and Outlook (MS Store) keep breaking together on Surface Pro 11 - Microsoft Q&A
+  report_text_excerpt: Virtual keyboard/Clipboard history, Start menu Search bar, and Outlook (MS Store) keep breaking together on Surface Pro 11 - Microsoft Q&A Hello, I just bought a brand new Surface Pro 11 13" (OLED, Snapdragon X Elite, 16Gb). It is running Windows 11 Home, 25H5, build...
+  captured_at: '2026-09-05T04:17:09Z'
+  source_date: '2026-08-31'
+  target_release_date: '2026-05-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8457'
+  match_basis: exact_os_build
+  matched_os_build: '26200.8457'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8457'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5901486-how-to-fix-download-error-code-0x80040
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5901486/how-to-fix-download-error-code-0x80040155
+  parent_title: How to fix download error code 0x80040155 - Microsoft Q&A
+  report_title: How to fix download error code 0x80040155 - Microsoft Q&A
+  report_text_excerpt: 'How to fix download error code 0x80040155 - Microsoft Q&A I am getting Error code 0x80040155 when updates below fail: 2026-05 .NET Framework Security update (KB5087051) 2026-05 Security Update (KB5089459) (26200.8457) How do I fix this please? Thank you,'
+  captured_at: '2026-09-05T04:17:09Z'
+  source_date: '2026-08-25'
+  target_release_date: '2026-05-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8457'
+  match_basis: exact_os_build
+  matched_os_build: '26200.8457'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8457'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5897110-file-history-silently-fails-to-turn-on
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5897110/file-history-silently-fails-to-turn-on-after-windo
+  parent_title: File History silently fails to turn on after Windows 11 24H2 update (Stops during Catalog creation) - Microsoft Q&A
+  report_title: File History silently fails to turn on after Windows 11 24H2 update (Stops during Catalog creation) - Microsoft Q&A
+  report_text_excerpt: File History silently fails to turn on after Windows 11 24H2 update (Stops during Catalog creation) - Microsoft Q&A I have been investigating a persistent OS-level issue where Windows File History completely fails to initialize after a system is upgraded to Windows 11 24H2....
+  captured_at: '2026-09-05T04:17:09Z'
+  source_date: '2026-08-23'
+  target_release_date: '2026-05-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8457'
+  match_basis: exact_os_build
+  matched_os_build: '26200.8457'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8457'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5947426-permanent-security-update-problem-sinc
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5947426/permanent-security-update-problem-since-update-to
+  parent_title: Permanent Security Update Problem since update to 25H2 - Microsoft Q&A
+  report_title: Permanent Security Update Problem since update to 25H2 - Microsoft Q&A
+  report_text_excerpt: Permanent Security Update Problem since update to 25H2 - Microsoft Q&A Windows security updates fail everytime (even after scannow and dism ops carried out and and after extending EFI partition from 100MB to 1GB, and UEFI secure boot enabled and certificates are correct ),...
+  captured_at: '2026-09-05T04:17:09Z'
+  source_date: '2026-08-18'
+  target_release_date: '2026-05-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8457'
+  match_basis: exact_os_build
+  matched_os_build: '26200.8457'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8457'
+
+- id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5907742-regression-in-25h2-hlk-studio-26100-83
+  product_id: microsoft-windows-11
+  update_version: 24H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5907742/regression-in-25h2-hlk-studio-26100-8328-create-pa
+  parent_title: 'Regression in 25H2 HLK Studio (26100.8328): Create Package crashes when adding driver folder, works in previous build 26100.7705 - Microsoft Q&A'
+  report_title: 'Regression in 25H2 HLK Studio (26100.8328): Create Package crashes when adding driver folder, works in previous build 26100.7705 - Microsoft Q&A'
+  report_text_excerpt: 'Regression in 25H2 HLK Studio (26100.8328): Create Package crashes when adding driver folder, works in previous build 26100.7705 - Microsoft Q&A Hi Microsoft team, We encountered a reproducible issue in the Windows 11 25H2 HLK environment after updating the HLK server from...'
+  captured_at: '2026-09-05T04:17:19Z'
+  source_date: '2026-08-31'
+  target_release_date: '2026-04-30'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26100.8328'
+  match_basis: exact_os_build
+  matched_os_build: '26100.8328'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26100.8328'
+- id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5989091-i-got-an-error-during-hlk-client-insta
+  product_id: microsoft-windows-11
+  update_version: 24H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5989091/i-got-an-error-during-hlk-client-installation
+  parent_title: I got an error during HLK client installation - Microsoft Q&A
+  report_title: I got an error during HLK client installation - Microsoft Q&A
+  report_text_excerpt: I got an error during HLK client installation - Microsoft Q&A Hi, I install the HLK Sever 26100.8328 on the Server machine. Then i ran the HLK client installation on other machine when the installation is running from the server machine Both machine are in the same network...
+  captured_at: '2026-09-05T04:17:19Z'
+  source_date: '2026-08-30'
+  target_release_date: '2026-04-30'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26100.8328'
+  match_basis: exact_os_build
+  matched_os_build: '26100.8328'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26100.8328'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5886975-defender-for-endpoint-consistently-tri
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5886975/defender-for-endpoint-consistently-triggers-twinap
+  parent_title: Defender for Endpoint consistently triggers twinapi.appcore.dll crash cascade on Azure AD joined BYOD device - reproducible, confirmed, need guidance - Microsoft Q&A
+  report_title: Defender for Endpoint consistently triggers twinapi.appcore.dll crash cascade on Azure AD joined BYOD device - reproducible, confirmed, need guidance - Microsoft Q&A
+  report_text_excerpt: 'Defender for Endpoint consistently triggers twinapi.appcore.dll crash cascade on Azure AD joined BYOD device - reproducible, confirmed, need guidance - Microsoft Q&A TL;DR: Defender for Endpoint consistently triggers a twinapi.appcore.dll crash cascade on my Azure AD joined...'
+  captured_at: '2026-09-05T04:17:24Z'
+  source_date: '2026-07-28'
+  target_release_date: '2026-04-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8246'
+  match_basis: exact_os_build
+  matched_kb: KB5083769
+  matched_os_build: '26200.8246'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8246'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5897110-file-history-silently-fails-to-turn-on
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5897110/file-history-silently-fails-to-turn-on-after-windo
+  parent_title: File History silently fails to turn on after Windows 11 24H2 update (Stops during Catalog creation) - Microsoft Q&A
+  report_title: File History silently fails to turn on after Windows 11 24H2 update (Stops during Catalog creation) - Microsoft Q&A
+  report_text_excerpt: File History silently fails to turn on after Windows 11 24H2 update (Stops during Catalog creation) - Microsoft Q&A I have been investigating a persistent OS-level issue where Windows File History completely fails to initialize after a system is upgraded to Windows 11 24H2....
+  captured_at: '2026-09-05T04:17:47Z'
+  source_date: '2026-08-23'
+  target_release_date: '2026-03-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8037'
+  match_basis: exact_os_build
+  matched_kb: KB5079473
+  matched_os_build: '26200.8037'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8037'
+
+- id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5897110-file-history-silently-fails-to-turn-on
+  product_id: microsoft-windows-11
+  update_version: 24H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5897110/file-history-silently-fails-to-turn-on-after-windo
+  parent_title: File History silently fails to turn on after Windows 11 24H2 update (Stops during Catalog creation) - Microsoft Q&A
+  report_title: File History silently fails to turn on after Windows 11 24H2 update (Stops during Catalog creation) - Microsoft Q&A
+  report_text_excerpt: File History silently fails to turn on after Windows 11 24H2 update (Stops during Catalog creation) - Microsoft Q&A I have been investigating a persistent OS-level issue where Windows File History completely fails to initialize after a system is upgraded to Windows 11 24H2....
+  captured_at: '2026-09-05T04:17:49Z'
+  source_date: '2026-08-23'
+  target_release_date: '2026-03-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5079473
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5079473
+  matched_feature_version: 24H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26100.8037'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5858421-kb5077181-unable-to-switch-between-log
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5858421/kb5077181-unable-to-switch-between-logged-in-users
+  parent_title: 'KB5077181: Unable to switch between logged-in users when using UPN - Microsoft Q&A'
+  report_title: 'KB5077181: Unable to switch between logged-in users when using UPN - Microsoft Q&A'
+  report_text_excerpt: 'KB5077181: Unable to switch between logged-in users when using UPN - Microsoft Q&A Background We are experiencing problems when end users try to switch between logged-in users on computers shared by multiple people. This issue started after KB5077181 was automatically...'
+  captured_at: '2026-09-05T04:18:02Z'
+  source_date: '2026-07-22'
+  target_release_date: '2026-02-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5077181
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5077181
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.7840'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5993083-inquiry-regarding-update-rollback-undo
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5993083/inquiry-regarding-update-rollback-undoing-changes
+  parent_title: Inquiry Regarding Update Rollback (Undoing changes) from Build 26200.7840 to Build 9168 - Microsoft Q&A
+  report_title: Inquiry Regarding Update Rollback (Undoing changes) from Build 26200.7840 to Build 9168 - Microsoft Q&A
+  report_text_excerpt: Inquiry Regarding Update Rollback (Undoing changes) from Build 26200.7840 to Build 9168 - Microsoft Q&A Dear Microsoft Support Team, Good day. I am writing to seek technical clarification regarding a recurring update failure we are experiencing on Windows 11. During the...
+  captured_at: '2026-09-05T04:18:02Z'
+  source_date: '2026-09-03'
+  target_release_date: '2026-02-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.7840'
+  match_basis: exact_os_build
+  matched_os_build: '26200.7840'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.7840'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5816066-wsl2-install-stuck-at-14-virtualmachin
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5816066/wsl2-install-stuck-at-14-virtualmachineplatform-ca
+  parent_title: WSL2 install stuck at 14% / VirtualMachinePlatform cannot be enabled - Microsoft Q&A
+  report_title: WSL2 install stuck at 14% / VirtualMachinePlatform cannot be enabled - Microsoft Q&A
+  report_text_excerpt: 'WSL2 install stuck at 14% / VirtualMachinePlatform cannot be enabled - Microsoft Q&A System: Windows 11 Pro, Version 25H2, OS Build 26200.7840 Hardware: Virtualization enabled in BIOS (confirmed via Get-ComputerInfo) Location: Iraq (relevant — see root cause below) Initial...'
+  captured_at: '2026-09-05T04:18:02Z'
+  source_date: '2026-08-26'
+  target_release_date: '2026-02-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.7840'
+  match_basis: exact_os_build
+  matched_os_build: '26200.7840'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.7840'
+
+- id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5907742-regression-in-25h2-hlk-studio-26100-83
+  product_id: microsoft-windows-11
+  update_version: 24H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5907742/regression-in-25h2-hlk-studio-26100-8328-create-pa
+  parent_title: 'Regression in 25H2 HLK Studio (26100.8328): Create Package crashes when adding driver folder, works in previous build 26100.7705 - Microsoft Q&A'
+  report_title: 'Regression in 25H2 HLK Studio (26100.8328): Create Package crashes when adding driver folder, works in previous build 26100.7705 - Microsoft Q&A'
+  report_text_excerpt: 'Regression in 25H2 HLK Studio (26100.8328): Create Package crashes when adding driver folder, works in previous build 26100.7705 - Microsoft Q&A Hi Microsoft team, We encountered a reproducible issue in the Windows 11 25H2 HLK environment after updating the HLK server from...'
+  captured_at: '2026-09-05T04:18:11Z'
+  source_date: '2026-08-31'
+  target_release_date: '2026-01-29'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26100.7705'
+  match_basis: exact_os_build
+  matched_os_build: '26100.7705'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or hang
+  workflow_area: system stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26100.7705'
+
+- id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5696105-computer-crashing-after-recent-windows
+  product_id: microsoft-windows-11
+  update_version: 24H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5696105/computer-crashing-after-recent-windows-update
+  parent_title: Computer crashing after recent windows update - Microsoft Q&A
+  report_title: Computer crashing after recent windows update - Microsoft Q&A
+  report_text_excerpt: Computer crashing after recent windows update - Microsoft Q&A Hello, I have been this issue recently after updating to the latest windows update 2 025-12 Security Update (KB5072033) (26100.7462) and 2025-11 Security Update (KB5068861) (26100.7171) I started noticing that...
+  captured_at: '2026-09-05T04:18:36Z'
+  source_date: '2026-09-01'
+  target_release_date: '2025-12-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26100.7462'
+  match_basis: exact_os_build
+  matched_kb: KB5072033
+  matched_os_build: '26100.7462'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26100.7462'
+- id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5656824-kb5072033-break-remote-credential-guar
+  product_id: microsoft-windows-11
+  update_version: 24H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5656824/kb5072033-break-remote-credential-guard-to-windows
+  parent_title: KB5072033 break remote credential guard to Windows server 2025 - Microsoft Q&A
+  report_title: KB5072033 break remote credential guard to Windows server 2025 - Microsoft Q&A
+  report_text_excerpt: KB5072033 break remote credential guard to Windows server 2025 - Microsoft Q&A We are experiencing a reproducible issue with Remote Credential Guard (RCG) when connecting from Windows 11 24H2 clients to a Windows Server 2025 RDP host. Remote Credential Guard works correctly...
+  captured_at: '2026-09-05T04:18:36Z'
+  source_date: '2026-08-12'
+  target_release_date: '2025-12-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5072033
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5072033
+  matched_feature_version: 24H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26100.7462'
