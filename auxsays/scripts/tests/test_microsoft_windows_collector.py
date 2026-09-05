@@ -292,6 +292,62 @@ def run() -> int:
             win.learn_qna.collect_learn_qna_candidates = orig_source
             win.append_evidence_rows = orig_append
 
+    # --- one report, one patch -----------------------------------------------
+    # REGRESSION. `append_evidence_rows` refuses a source_url already present under the same
+    # `evidence_key`, and that key's build slot was empty for Windows -- so the append guard was
+    # build-blind and a URL could physically exist only once for the product. Stamping the exact
+    # build onto rows (required for build-aware counting) silently WIDENED the key, and one thread
+    # naming two builds became two counted rows on two different patches. Production run
+    # 33944086829 wrote 14 such pairs, including one "ngcctnrsvc crashes" report counted for both
+    # 24H2 26100.9168 and 25H2 26200.9168 -- both ship KB5121003.
+    print(NEWLINE + "[exclusivity] one report is never counted on two patches")
+    shared_url = "https://learn.microsoft.com/en-us/answers/questions/5973125/ngcctnrsvc-crashes"
+    shared = {"source_url": shared_url,
+              "report_title": "KB5121003 crashes ucrtbase.dll after installing",
+              "report_text": "After installing KB5121003 ngcctnrsvc crashes three times in "
+                             "ucrtbase.dll with 0xc0000409. Same on Windows 11 24H2 (26100.9168) "
+                             "and 25H2 (26200.9168) here.",
+              "source_date": "2026-09-01"}
+    tgt_25 = {"target_feature_version": "25H2", "target_kb": "KB5121003",
+              "target_os_build": "26200.9168", "target_release_date": "2026-08-11T00:00:00Z",
+              "update_version": "25H2"}
+    tgt_24 = {"target_feature_version": "24H2", "target_kb": "KB5121003",
+              "target_os_build": "26100.9168", "target_release_date": "2026-08-11T00:00:00Z",
+              "update_version": "24H2"}
+    rec_25 = PatchRecord("microsoft-windows-11", "25H2", Path("x.md"),
+                         "2026-08-11T00:00:00Z", "current", "Windows 11", "26200.9168")
+    rec_24 = PatchRecord("microsoft-windows-11", "24H2", Path("y.md"),
+                         "2026-08-11T00:00:00Z", "current", "Windows 11", "26100.9168")
+    # Without a claims map both records accept it -- the defect, reproduced.
+    a25, _ = win.evaluate_candidates(rec_25, tgt_25, [dict(shared)], CAPTURED)
+    a24, _ = win.evaluate_candidates(rec_24, tgt_24, [dict(shared)], CAPTURED)
+    check("exclusivity: without the claims map BOTH patches accept it (the defect)",
+          len(a25) == 1 and len(a24) == 1, f"{len(a25)} {len(a24)}")
+    # With one shared claims map, the first record to walk keeps it and the second refuses.
+    claims: dict = {}
+    b25, r25 = win.evaluate_candidates(rec_25, tgt_25, [dict(shared)], CAPTURED, claims)
+    b24, r24 = win.evaluate_candidates(rec_24, tgt_24, [dict(shared)], CAPTURED, claims)
+    check("exclusivity: the first patch to walk keeps the report",
+          len(b25) == 1 and b25[0].get("target_build") == "26200.9168", str(len(b25)))
+    check("exclusivity: the second patch refuses it as a cross-patch duplicate",
+          len(b24) == 0 and len(r24) == 1
+          and r24[0].get("exclusion_reason") == "cross_patch_duplicate",
+          str([r.get("exclusion_reason") for r in r24]))
+    check("exclusivity: the refused row is attributed to NO patch",
+          r24 and str(r24[0].get("target_build") or "") == "", str(r24[0].get("target_build")))
+    # ...and it holds ACROSS runs, because the map is seeded from stored evidence.
+    stored_claims = {shared_url.lower(): ("microsoft-windows-11", "25H2", "26200.9168")}
+    c24, cr24 = win.evaluate_candidates(rec_24, tgt_24, [dict(shared)], CAPTURED, stored_claims)
+    check("exclusivity: a URL already stored for another patch is refused on a later run",
+          len(c24) == 0 and cr24 and cr24[0].get("exclusion_reason") == "cross_patch_duplicate",
+          str([r.get("exclusion_reason") for r in cr24]))
+    # The same patch re-discovering its OWN report is not a cross-patch duplicate; the append
+    # guard deduplicates that, and turning it into a rejection would flip a real row to uncounted.
+    same_claims = {shared_url.lower(): ("microsoft-windows-11", "25H2", "26200.9168")}
+    d25, _dr = win.evaluate_candidates(rec_25, tgt_25, [dict(shared)], CAPTURED, same_claims)
+    check("exclusivity: a patch re-finding its OWN report still accepts it",
+          len(d25) == 1, str(len(d25)))
+
     # --- the runner's ownership validator accepts what this collector emits --
     # WHY THIS EXISTS. Ownership validation runs in run_patch_evidence_collection, NOT in this
     # module's dry-run, so a collector can look completely healthy locally and still fail the whole
@@ -406,7 +462,7 @@ def run() -> int:
             try:
                 win.generated_records = lambda pid, tv=None, **k: list(recs)
                 # Every record "accepts" a row (or none), so every one is a writeback candidate.
-                win.collect_for_record = lambda record, context: (
+                win.collect_for_record = lambda record, context, claims=None: (
                     ([{"source_url": "https://x/1"}] if accept else []), [], {})
                 win.append_evidence_rows = lambda rows, *a, **k: (1 if accept else 0, 1, [])
                 acr_mod._index_generated_records = lambda *a, **k: (

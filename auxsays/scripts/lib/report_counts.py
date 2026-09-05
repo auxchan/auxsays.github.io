@@ -150,7 +150,21 @@ def _as_int(value: Any) -> int:
 # shape, so on a coherent tree it rewrites nothing.
 ZERO_COUNT_PROJECTION_FIELDS = ("update_consensus_summary", "accepted_report_sources",
                                 "evidence_samples", "evidence_sample_visible_limit",
-                                "evidence_source_limitations")
+                                "evidence_source_limitations",
+                                # The install VERDICT is a count projection too. It was left out
+                                # while the products that wrote it (davinci/obs/premiere) were the
+                                # ones whose prose might be hand-authored -- and the fence below
+                                # already keeps this away from premiere, which is the one that is.
+                                # A Windows record whose population empties otherwise keeps
+                                # publishing `update_decision_label: WAIT` with zero reports;
+                                # qa_patch_records names that exactly
+                                # (`official_only_zero_reports_recommendation_language`) and it
+                                # fired on 5 live records the moment a retraction happened.
+                                # The rendered page is not currently wrong -- the layout forces
+                                # INSUFFICIENT DATA at zero -- so this is stored-state hygiene, and
+                                # it matters because a gate that always warns stops being read.
+                                "update_decision_label", "update_decision_body",
+                                "practical_recommendations")
 
 # RETRACTION IS ONLY SAFE WHERE RESTORATION IS AUTOMATIC.
 #
