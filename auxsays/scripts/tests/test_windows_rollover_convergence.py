@@ -264,10 +264,23 @@ def run() -> int:  # noqa: PLR0915
               f"report={str(b.get('consensus_report'))[:60]!r} verdict={str(b.get('quick_verdict'))[:60]!r}")
         check("W6 the consensus label returns to the zero shape",
               str(b.get("update_consensus_label")) != "Negative", str(b.get("update_consensus_label")))
-        for field in ("update_decision_label", "update_decision_body", "practical_recommendations",
-                      "update_consensus_confidence"):
-            check(f"W7 human field {field} untouched", b.get(field) == record("25H2", KB_B, BUILD_B, 0).get(field),
+        # W7 SPLIT, because these three fields changed hands. The install VERDICT
+        # (update_decision_label / update_decision_body / practical_recommendations) is written by
+        # the scoped consensus promotion for every product in CONSENSUS_PROMOTION_PRODUCTS, so at a
+        # canonical zero it is a count projection like any other and must go -- otherwise the record
+        # stores "WAIT" with no reports behind it, which is precisely what
+        # qa_patch_records.official_only_zero_reports_recommendation_language names. The retraction
+        # fence keeps this away from adobe-premiere-pro, the product whose prose really is hand
+        # authored, because premiere is not in that set and so is never retracted at all.
+        for field in ("update_decision_label", "update_decision_body", "practical_recommendations"):
+            check(f"W7 the verdict field {field} is retracted at zero", field not in b,
                   f"{field} = {b.get(field)!r}")
+        # Confidence is NOT a count projection in this codebase: a real zero record stores "Low",
+        # and 779 of 896 live records already disagree with _confidence(0), so touching it here
+        # would be a corpus-wide rewrite disguised as a coherence fix.
+        check("W7 update_consensus_confidence is still untouched",
+              b.get("update_consensus_confidence") == record("25H2", KB_B, BUILD_B, 0).get("update_consensus_confidence"),
+              f"update_consensus_confidence = {b.get('update_consensus_confidence')!r}")
 
         # ---------------- RECOVERY ----------------
         print(NEWLINE + "[W8/W9] recovery: one report naming the NEW target")
@@ -330,7 +343,8 @@ def run() -> int:  # noqa: PLR0915
         check("W-F the zero-projection field set is the documented one",
               set(ZERO_COUNT_PROJECTION_FIELDS) == {
                   "update_consensus_summary", "accepted_report_sources", "evidence_samples",
-                  "evidence_sample_visible_limit", "evidence_source_limitations"},
+                  "evidence_sample_visible_limit", "evidence_source_limitations",
+                  "update_decision_label", "update_decision_body", "practical_recommendations"},
               str(ZERO_COUNT_PROJECTION_FIELDS))
 
     # ---------------- W14: the rollover lane owns its own repair ----------------

@@ -13426,7 +13426,7 @@ evidence:
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5973125-ngcctnrsvc-crashes-3-times-in-ucrtbase
   product_id: microsoft-windows-11
   update_version: 24H2
-  target_build: '26100.9168'
+  target_build: ''
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5973125/ngcctnrsvc-crashes-3-times-in-ucrtbase-dll-0xc0000
@@ -13442,10 +13442,10 @@ evidence:
   match_basis: exact_kb_feature_train
   matched_kb: KB5121003
   matched_feature_version: 24H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: cross_patch_duplicate
   issue_theme: BSOD / stop error
   workflow_area: system stability
   platform: windows
@@ -16750,17 +16750,17 @@ evidence:
   matched_kb: KB5121003
   matched_os_build: '26100.9168'
   matched_feature_version: 24H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: cross_patch_duplicate
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
   severity: high
   sentiment: negative
   source_weight: 1
-  target_build: '26100.9168'
+  target_build: ''
 
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5989625-file-history-ui-and-previous-versions
   product_id: microsoft-windows-11
@@ -16780,17 +16780,17 @@ evidence:
   match_basis: exact_kb_feature_train
   matched_kb: KB5101684
   matched_feature_version: 25H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: cross_patch_duplicate
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
   severity: high
   sentiment: negative
   source_weight: 1
-  target_build: '26200.8973'
+  target_build: ''
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5978256-win-11-25h2kb5101684-os-builds-26200-8
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -16898,17 +16898,17 @@ evidence:
   matched_kb: KB5101684
   matched_os_build: '26200.8973'
   matched_feature_version: 25H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: cross_patch_duplicate
   issue_theme: BSOD / stop error
   workflow_area: system stability
   platform: windows
   severity: critical
   sentiment: negative
   source_weight: 1
-  target_build: '26200.8973'
+  target_build: ''
 
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5978256-win-11-25h2kb5101684-os-builds-26200-8
   product_id: microsoft-windows-11
@@ -16928,17 +16928,17 @@ evidence:
   match_basis: exact_os_build
   matched_kb: KB5101684
   matched_os_build: '26100.8973'
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: cross_patch_duplicate
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
   severity: high
   sentiment: negative
   source_weight: 1
-  target_build: '26100.8973'
+  target_build: ''
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5988390-dism-suddenly-cant-repair-my-windows-1
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -17016,17 +17016,17 @@ evidence:
   match_basis: exact_os_build
   matched_kb: KB5121767
   matched_os_build: '26200.8894'
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: cross_patch_duplicate
   issue_theme: display regression
   workflow_area: display / graphics
   platform: windows
   severity: medium
   sentiment: negative
   source_weight: 1
-  target_build: '26200.8894'
+  target_build: ''
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5956430-os-build-26200-8894-office-errors-majo
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -17164,17 +17164,17 @@ evidence:
   match_basis: exact_kb_feature_train
   matched_kb: KB5121767
   matched_feature_version: 24H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: cross_patch_duplicate
   issue_theme: BSOD / stop error
   workflow_area: system stability
   platform: windows
   severity: critical
   sentiment: negative
   source_weight: 1
-  target_build: '26100.8894'
+  target_build: ''
 
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5948496-how-do-i-remove-the-recent-windows-upd
   product_id: microsoft-windows-11
@@ -17312,17 +17312,17 @@ evidence:
   matched_kb: KB5101650
   matched_os_build: '26200.8875'
   matched_feature_version: 25H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: cross_patch_duplicate
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
   severity: high
   sentiment: negative
   source_weight: 1
-  target_build: '26200.8875'
+  target_build: ''
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5948960-windows-update-kb5100998-audio-issues
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -17458,17 +17458,17 @@ evidence:
   match_basis: exact_os_build
   matched_os_build: '26200.8875'
   matched_feature_version: 25H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: cross_patch_duplicate
   issue_theme: BSOD / stop error
   workflow_area: system stability
   platform: windows
   severity: critical
   sentiment: negative
   source_weight: 1
-  target_build: '26200.8875'
+  target_build: ''
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5970143-store-start-menu-and-aad-brokerplugin
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -17487,17 +17487,17 @@ evidence:
   match_basis: exact_os_build
   matched_os_build: '26200.8875'
   matched_feature_version: 25H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: cross_patch_duplicate
   issue_theme: BSOD / stop error
   workflow_area: system stability
   platform: windows
   severity: critical
   sentiment: negative
   source_weight: 1
-  target_build: '26200.8875'
+  target_build: ''
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5972257-windows-11-25h2-sha-256-tcg-replay-has
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -17631,17 +17631,17 @@ evidence:
   match_basis: exact_kb_feature_train
   matched_kb: KB5101650
   matched_feature_version: 24H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: cross_patch_duplicate
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
   severity: high
   sentiment: negative
   source_weight: 1
-  target_build: '26100.8875'
+  target_build: ''
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5950126-kb5101650-os-builds-26200-8875-and-261
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -17660,17 +17660,17 @@ evidence:
   match_basis: exact_os_build
   matched_kb: KB5101650
   matched_os_build: '26100.8875'
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: cross_patch_duplicate
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
   severity: high
   sentiment: negative
   source_weight: 1
-  target_build: '26100.8875'
+  target_build: ''
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5956564-winrt-windows-devices-display-core-idi
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -17719,17 +17719,17 @@ evidence:
   match_basis: exact_kb_feature_train
   matched_kb: KB5095093
   matched_feature_version: 25H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: cross_patch_duplicate
   issue_theme: BSOD / stop error
   workflow_area: system stability
   platform: windows
   severity: critical
   sentiment: negative
   source_weight: 1
-  target_build: '26200.8737'
+  target_build: ''
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5957946-regression-mixed-dpi-classic-win32-che
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -17749,17 +17749,17 @@ evidence:
   matched_kb: KB5095093
   matched_os_build: '26200.8737'
   matched_feature_version: 25H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: cross_patch_duplicate
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
   severity: high
   sentiment: negative
   source_weight: 1
-  target_build: '26200.8737'
+  target_build: ''
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5960381-windows-file-explorer-going-back-to-de
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -17807,17 +17807,17 @@ evidence:
   match_basis: exact_kb_feature_train
   matched_kb: KB5095093
   matched_feature_version: 24H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: cross_patch_duplicate
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
   severity: high
   sentiment: negative
   source_weight: 1
-  target_build: '26100.8737'
+  target_build: ''
 
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5936317-kb5094126-causes-recurring-0x1a-memory
   product_id: microsoft-windows-11
@@ -17867,17 +17867,17 @@ evidence:
   match_basis: exact_kb_feature_train
   matched_kb: KB5094126
   matched_feature_version: 25H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: cross_patch_duplicate
   issue_theme: BSOD / stop error
   workflow_area: system stability
   platform: windows
   severity: critical
   sentiment: negative
   source_weight: 1
-  target_build: '26200.8655'
+  target_build: ''
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5923815-repeated-video-dxgkrnl-fatal-error-0x1
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -17925,17 +17925,17 @@ evidence:
   match_basis: exact_os_build
   matched_os_build: '26200.8655'
   matched_feature_version: 25H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: cross_patch_duplicate
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
   severity: high
   sentiment: negative
   source_weight: 1
-  target_build: '26200.8655'
+  target_build: ''
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5957809-surface-laptop-7-qualcomm-snapdragon-x
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -18248,17 +18248,17 @@ evidence:
   matched_kb: KB5079473
   matched_os_build: '26200.8037'
   matched_feature_version: 25H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: cross_patch_duplicate
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
   severity: high
   sentiment: negative
   source_weight: 1
-  target_build: '26200.8037'
+  target_build: ''
 
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5897110-file-history-silently-fails-to-turn-on
   product_id: microsoft-windows-11
@@ -18278,17 +18278,17 @@ evidence:
   match_basis: exact_kb_feature_train
   matched_kb: KB5079473
   matched_feature_version: 24H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: cross_patch_duplicate
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
   severity: high
   sentiment: negative
   source_weight: 1
-  target_build: '26100.8037'
+  target_build: ''
 
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5858421-kb5077181-unable-to-switch-between-log
   product_id: microsoft-windows-11
@@ -18394,17 +18394,17 @@ evidence:
   matched_version: '26100.7705'
   match_basis: exact_os_build
   matched_os_build: '26100.7705'
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: cross_patch_duplicate
   issue_theme: crash or hang
   workflow_area: system stability
   platform: windows
   severity: high
   sentiment: negative
   source_weight: 1
-  target_build: '26100.7705'
+  target_build: ''
 
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5696105-computer-crashing-after-recent-windows
   product_id: microsoft-windows-11

@@ -40,6 +40,7 @@ from .base import (
     date_part,
     exact_version_match,
     generated_records,
+    load_evidence,
     load_front_matter_and_body,
     make_evidence_row,
     method_health_row,
@@ -442,10 +443,47 @@ def row_from_candidate(record: PatchRecord, target: dict[str, Any], candidate: d
     return row
 
 
-def evaluate_candidates(record: PatchRecord, target: dict[str, Any], candidates: list[dict[str, Any]], captured_at: str) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+def claimed_urls() -> dict[str, tuple[str, str, str]]:
+    """canonical URL -> the Windows patch that already holds it, from stored evidence.
+
+    See ``evaluate_candidates``: this is the CROSS-RUN half of one-report-one-patch."""
+    claims: dict[str, tuple[str, str, str]] = {}
+    for row in load_evidence():
+        if str(row.get("product_id") or "").strip() != PRODUCT_ID:
+            continue
+        if row.get("counted") is False:
+            continue
+        url = learn_qna.canonical_learn_qna_url(str(row.get("source_url") or ""))
+        if url:
+            claims.setdefault(url.lower(),
+                              patch_key(PRODUCT_ID, row.get("update_version"), row.get("target_build")))
+    return claims
+
+
+def evaluate_candidates(record: PatchRecord, target: dict[str, Any], candidates: list[dict[str, Any]],
+                        captured_at: str,
+                        claims: dict[str, tuple[str, str, str]] | None = None) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    """Evaluate one record's candidates.
+
+    ``claims`` maps a canonical URL to the patch that already holds it, and enforces
+    ONE REPORT, ONE PATCH across every record in the run and across previous runs.
+
+    THIS USED TO BE FREE. `append_evidence_rows` refuses a source_url already present under the
+    same `evidence_key`, and that key's build slot was empty for Windows, so the append guard was
+    build-blind and a URL could physically exist only once for the product. Stamping the exact
+    build onto rows -- required for build-aware counting -- silently WIDENED that key, and one
+    thread naming two builds became two counted rows on two different patches. Measured on the
+    first production run after the change: 14 URLs counted twice, e.g. a single
+    "ngcctnrsvc crashes" report counted for both 24H2 26100.9168 and 25H2 26200.9168 because both
+    ship KB5121003.
+
+    A person reporting one problem is one report. Which patch keeps it follows the walk order,
+    which is newest-first, so the most recent update naming the report wins -- the same rule
+    PowerPoint's `run_accepted_urls` exclusivity applies for the same reason."""
     accepted: list[dict[str, Any]] = []
     rejected: list[dict[str, Any]] = []
     seen: set[str] = set()
+    mine = patch_key(PRODUCT_ID, record.update_version, record.target_build)
     for candidate in candidates:
         url = learn_qna.canonical_learn_qna_url(str(candidate.get("source_url") or ""))
         key = url.lower()
@@ -453,6 +491,16 @@ def evaluate_candidates(record: PatchRecord, target: dict[str, Any], candidates:
             continue  # run-level duplicate URL dedup
         seen.add(key)
         row = row_from_candidate(record, target, {**candidate, "source_url": url}, captured_at)
+        if row.get("counted") is True and claims is not None:
+            holder = claims.get(key)
+            if holder is not None and holder != mine:
+                row["counted"] = False
+                row["exclusion_reason"] = "cross_patch_duplicate"
+                row["evidence_valid_for_current_patch"] = False
+                # A rejected row carries no build: only a COUNTED row is attributed to a patch.
+                row["target_build"] = ""
+            else:
+                claims[key] = mine
         (accepted if row.get("counted") is True else rejected).append(row)
     return accepted, rejected
 
@@ -555,7 +603,8 @@ def health_for_method(record: PatchRecord, target: dict[str, Any], captured_at: 
 
 # --- collection --------------------------------------------------------------
 
-def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
+def collect_for_record(record: PatchRecord, context: CollectorContext,
+                       claims: dict[str, tuple[str, str, str]] | None = None) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
     captured_at = utc_now()
     target = record_target(record)
     query_terms = search_query_terms(target)
@@ -569,7 +618,7 @@ def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[
             source_type=SOURCE_TYPE,
             source_name=SOURCE_NAME,
         )
-    accepted, rejected = evaluate_candidates(record, target, candidates, captured_at)
+    accepted, rejected = evaluate_candidates(record, target, candidates, captured_at, claims)
     health = [health_for_method(record, target, captured_at, candidates, accepted, rejected, errors, query_terms)]
     return accepted, rejected, health
 
@@ -608,12 +657,15 @@ class WindowsLearnQnaCollector(ProductCollector):
         # The consensus writeback is applied to all of them in ONE pass after the loop; see
         # _writeback_all for why it cannot stay inside it.
         pending: list[tuple[tuple[str, str, str], dict[str, Any]]] = []
+        # ONE REPORT, ONE PATCH. Seeded from stored evidence so the rule holds across runs, then
+        # extended in place as this run accepts. See evaluate_candidates for what broke without it.
+        claims = claimed_urls()
         for record in records:
             _b = rb.get_run_budget()
             if _b is not None and _b.collector_finalize_expired():
                 rb.emit("collector_budget_stop", product_id=PRODUCT_ID, reason="collector_finalize")
                 break
-            accepted, rejected, health = collect_for_record(record, context)
+            accepted, rejected, health = collect_for_record(record, context, claims)
             result: dict[str, Any] = {
                 "product_id": PRODUCT_ID,
                 "version": record.update_version,
