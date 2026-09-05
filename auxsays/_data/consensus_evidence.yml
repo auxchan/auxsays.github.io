@@ -5456,10 +5456,10 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: true
   exclusion_reason: null
-  issue_theme: BSOD / stop error
-  workflow_area: system stability
+  issue_theme: update/install failure
+  workflow_area: windows update
   platform: windows
-  severity: critical
+  severity: high
   sentiment: negative
   source_weight: 1
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5935689-after-windows-11-pro-update-kb5095093
@@ -5485,10 +5485,10 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: true
   exclusion_reason: null
-  issue_theme: BSOD / stop error
-  workflow_area: system stability
+  issue_theme: network regression
+  workflow_area: networking
   platform: windows
-  severity: critical
+  severity: high
   sentiment: negative
   source_weight: 1
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5936734-windows-11-pc-build-26200-8737-kb50950
@@ -5631,10 +5631,10 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: true
   exclusion_reason: null
-  issue_theme: BSOD / stop error
+  issue_theme: crash or hang
   workflow_area: system stability
   platform: windows
-  severity: critical
+  severity: high
   sentiment: negative
   source_weight: 1
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5945620-2026-06-update-kb5095093-26200-8737-wi
@@ -10049,10 +10049,10 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: true
   exclusion_reason: null
-  issue_theme: BSOD / stop error
-  workflow_area: system stability
+  issue_theme: update/install failure
+  workflow_area: windows update
   platform: windows
-  severity: critical
+  severity: high
   sentiment: negative
   source_weight: 1
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5962540-2026-07-preview-update-kb5101684-26200
@@ -10161,10 +10161,10 @@ evidence:
   match_basis: exact_os_build
   matched_os_build: '26200.8973'
   matched_feature_version: 25H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: foreign_product_subject_not_windows_patch
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
@@ -11201,10 +11201,10 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: true
   exclusion_reason: null
-  issue_theme: BSOD / stop error
-  workflow_area: system stability
+  issue_theme: unspecified Windows issue
+  workflow_area: Windows workflow
   platform: windows
-  severity: critical
+  severity: medium
   sentiment: negative
   source_weight: 1
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5965983-windows-11-component-store-cbs-winsxs
@@ -11230,10 +11230,10 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: true
   exclusion_reason: null
-  issue_theme: BSOD / stop error
-  workflow_area: system stability
+  issue_theme: update/install failure
+  workflow_area: windows update
   platform: windows
-  severity: critical
+  severity: high
   sentiment: negative
   source_weight: 1
 - id: obs-studio-31-1-2-github-issue-13711
@@ -13283,10 +13283,10 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: true
   exclusion_reason: null
-  issue_theme: BSOD / stop error
+  issue_theme: crash or hang
   workflow_area: system stability
   platform: windows
-  severity: critical
+  severity: high
   sentiment: negative
   source_weight: 1
 - id: obs-studio-32-1-2-github-issue-13773
@@ -13333,10 +13333,10 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: true
   exclusion_reason: null
-  issue_theme: BSOD / stop error
-  workflow_area: system stability
+  issue_theme: update/install failure
+  workflow_area: windows update
   platform: windows
-  severity: critical
+  severity: high
   sentiment: negative
   source_weight: 1
 - id: obs-studio-32-2-1-github-issue-13779
@@ -13446,10 +13446,10 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: false
   exclusion_reason: cross_patch_duplicate
-  issue_theme: BSOD / stop error
-  workflow_area: system stability
+  issue_theme: display regression
+  workflow_area: display / graphics
   platform: windows
-  severity: critical
+  severity: medium
   sentiment: negative
   source_weight: 1
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5973125-ngcctnrsvc-crashes-3-times-in-ucrtbase
@@ -13476,10 +13476,10 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: true
   exclusion_reason: null
-  issue_theme: BSOD / stop error
-  workflow_area: system stability
+  issue_theme: display regression
+  workflow_area: display / graphics
   platform: windows
-  severity: critical
+  severity: medium
   sentiment: negative
   source_weight: 1
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5973207-windows-update-kb5101650-continually-f
@@ -13504,10 +13504,10 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: true
   exclusion_reason: null
-  issue_theme: BSOD / stop error
-  workflow_area: system stability
+  issue_theme: update/install failure
+  workflow_area: windows update
   platform: windows
-  severity: critical
+  severity: high
   sentiment: negative
   source_weight: 1
 - id: obs-studio-32-2-1-github-issue-13785
@@ -13576,10 +13576,10 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: true
   exclusion_reason: null
-  issue_theme: BSOD / stop error
-  workflow_area: system stability
+  issue_theme: update/install failure
+  workflow_area: windows update
   platform: windows
-  severity: critical
+  severity: high
   sentiment: negative
   source_weight: 1
 - id: obs-studio-32-2-1-github-issue-13793
@@ -13626,10 +13626,10 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: true
   exclusion_reason: null
-  issue_theme: BSOD / stop error
-  workflow_area: system stability
+  issue_theme: unspecified Windows issue
+  workflow_area: Windows workflow
   platform: windows
-  severity: critical
+  severity: medium
   sentiment: negative
   source_weight: 1
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5976649-windows-insider-build-26220-9022-keeps
@@ -13730,10 +13730,10 @@ evidence:
   match_basis: exact_os_build
   matched_os_build: '28000.2704'
   matched_feature_version: 26H1
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: foreign_product_subject_not_windows_patch
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
@@ -13926,10 +13926,10 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: true
   exclusion_reason: null
-  issue_theme: BSOD / stop error
-  workflow_area: system stability
+  issue_theme: update/install failure
+  workflow_area: windows update
   platform: windows
-  severity: critical
+  severity: high
   sentiment: negative
   source_weight: 1
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5981040-why-did-my-bluetooth-stop-working-afte
@@ -14052,10 +14052,10 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: true
   exclusion_reason: null
-  issue_theme: BSOD / stop error
-  workflow_area: system stability
+  issue_theme: update/install failure
+  workflow_area: windows update
   platform: windows
-  severity: critical
+  severity: high
   sentiment: negative
   source_weight: 1
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5984873-2026-08-security-update-kb5121003-2620
@@ -14110,10 +14110,10 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: true
   exclusion_reason: null
-  issue_theme: BSOD / stop error
-  workflow_area: system stability
+  issue_theme: unspecified Windows issue
+  workflow_area: Windows workflow
   platform: windows
-  severity: critical
+  severity: medium
   sentiment: negative
   source_weight: 1
 - id: obs-studio-32-2-2-github-issue-13830
@@ -14210,10 +14210,10 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: true
   exclusion_reason: null
-  issue_theme: BSOD / stop error
-  workflow_area: system stability
+  issue_theme: update/install failure
+  workflow_area: windows update
   platform: windows
-  severity: critical
+  severity: high
   sentiment: negative
   source_weight: 1
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5987922-edge-short-freeze-win11-pro-x64-stable
@@ -14235,10 +14235,10 @@ evidence:
   match_basis: exact_os_build
   matched_os_build: '26200.9278'
   matched_feature_version: 25H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: foreign_product_subject_not_windows_patch
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
@@ -16445,7 +16445,6 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-25-001-21208-adobe-community-bug-report-https-community-adobe-com-questions-624-rum-exit-code-2-acrobatdc-25-0-fails-to-install-via-auss
   product_id: adobe-acrobat-pro
   update_version: 25.001.21208
@@ -16472,7 +16471,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-25-001-20997-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-pro-not-responding-crashing-1620742
   product_id: adobe-acrobat-pro
   update_version: 25.001.20997
@@ -16499,7 +16497,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-25-001-21208-adobe-community-bug-report-https-community-adobe-com-questions-624-rum-exit-code-2-acrobatdc-25-0-fails-to-install-via-auss
   product_id: adobe-acrobat-reader
   update_version: 25.001.21208
@@ -16526,7 +16523,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: acrobat-25-001-20982-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-reader-25-1-20982-0-crash-1623724
   product_id: adobe-acrobat-reader
   update_version: 25.001.20982
@@ -16553,7 +16549,6 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5991641-windows-update-kb5121003-breaking-ther
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -16607,10 +16602,10 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: true
   exclusion_reason: null
-  issue_theme: BSOD / stop error
+  issue_theme: crash or hang
   workflow_area: system stability
   platform: windows
-  severity: critical
+  severity: high
   sentiment: negative
   source_weight: 1
   target_build: '26200.9168'
@@ -16636,10 +16631,10 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: true
   exclusion_reason: null
-  issue_theme: BSOD / stop error
-  workflow_area: system stability
+  issue_theme: update/install failure
+  workflow_area: windows update
   platform: windows
-  severity: critical
+  severity: high
   sentiment: negative
   source_weight: 1
   target_build: '26200.9168'
@@ -16694,10 +16689,10 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: true
   exclusion_reason: null
-  issue_theme: BSOD / stop error
-  workflow_area: system stability
+  issue_theme: network regression
+  workflow_area: networking
   platform: windows
-  severity: critical
+  severity: high
   sentiment: negative
   source_weight: 1
   target_build: '26200.9168'
@@ -16730,7 +16725,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9168'
-
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5991641-windows-update-kb5121003-breaking-ther
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -16761,7 +16755,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26100.9168'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5989625-file-history-ui-and-previous-versions
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -16902,14 +16895,13 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: false
   exclusion_reason: cross_patch_duplicate
-  issue_theme: BSOD / stop error
-  workflow_area: system stability
+  issue_theme: update/install failure
+  workflow_area: windows update
   platform: windows
-  severity: critical
+  severity: high
   sentiment: negative
   source_weight: 1
   target_build: '26200.8973'
-
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5978256-win-11-25h2kb5101684-os-builds-26200-8
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -16960,14 +16952,13 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: true
   exclusion_reason: null
-  issue_theme: BSOD / stop error
-  workflow_area: system stability
+  issue_theme: update/install failure
+  workflow_area: windows update
   platform: windows
-  severity: critical
+  severity: high
   sentiment: negative
   source_weight: 1
   target_build: '26100.8973'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5956166-azure-virtual-desktop-external-identit
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -16991,10 +16982,10 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: true
   exclusion_reason: null
-  issue_theme: BSOD / stop error
-  workflow_area: system stability
+  issue_theme: unspecified Windows issue
+  workflow_area: Windows workflow
   platform: windows
-  severity: critical
+  severity: medium
   sentiment: negative
   source_weight: 1
   target_build: '26200.8894'
@@ -17145,7 +17136,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8894'
-
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5956166-azure-virtual-desktop-external-identit
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -17168,14 +17158,13 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: false
   exclusion_reason: cross_patch_duplicate
-  issue_theme: BSOD / stop error
-  workflow_area: system stability
+  issue_theme: unspecified Windows issue
+  workflow_area: Windows workflow
   platform: windows
-  severity: critical
+  severity: medium
   sentiment: negative
   source_weight: 1
   target_build: '26100.8894'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5948496-how-do-i-remove-the-recent-windows-upd
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -17223,14 +17212,14 @@ evidence:
   match_basis: exact_kb_feature_train
   matched_kb: KB5101650
   matched_feature_version: 25H2
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
-  issue_theme: BSOD / stop error
-  workflow_area: system stability
+  counted: false
+  exclusion_reason: foreign_product_subject_not_windows_patch
+  issue_theme: unspecified Windows issue
+  workflow_area: Windows workflow
   platform: windows
-  severity: critical
+  severity: medium
   sentiment: negative
   source_weight: 1
   target_build: '26200.8875'
@@ -17252,10 +17241,10 @@ evidence:
   match_basis: exact_os_build
   matched_kb: KB5101650
   matched_os_build: '26200.8875'
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: foreign_product_subject_not_windows_patch
   issue_theme: display regression
   workflow_area: display / graphics
   platform: windows
@@ -17462,10 +17451,10 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: false
   exclusion_reason: cross_patch_duplicate
-  issue_theme: BSOD / stop error
-  workflow_area: system stability
+  issue_theme: update/install failure
+  workflow_area: windows update
   platform: windows
-  severity: critical
+  severity: high
   sentiment: negative
   source_weight: 1
   target_build: '26200.8875'
@@ -17491,10 +17480,10 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: false
   exclusion_reason: cross_patch_duplicate
-  issue_theme: BSOD / stop error
+  issue_theme: crash or hang
   workflow_area: system stability
   platform: windows
-  severity: critical
+  severity: high
   sentiment: negative
   source_weight: 1
   target_build: '26200.8875'
@@ -17520,10 +17509,10 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: true
   exclusion_reason: null
-  issue_theme: BSOD / stop error
-  workflow_area: system stability
+  issue_theme: update/install failure
+  workflow_area: windows update
   platform: windows
-  severity: critical
+  severity: high
   sentiment: negative
   source_weight: 1
   target_build: '26200.8875'
@@ -17576,10 +17565,10 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: true
   exclusion_reason: null
-  issue_theme: BSOD / stop error
-  workflow_area: system stability
+  issue_theme: unspecified Windows issue
+  workflow_area: Windows workflow
   platform: windows
-  severity: critical
+  severity: medium
   sentiment: negative
   source_weight: 1
   target_build: '26200.8875'
@@ -17612,7 +17601,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8875'
-
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5957946-regression-mixed-dpi-classic-win32-che
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -17700,7 +17688,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26100.8875'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5966824-title-chrome-and-teams-fail-to-launch
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -17723,10 +17710,10 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: false
   exclusion_reason: cross_patch_duplicate
-  issue_theme: BSOD / stop error
-  workflow_area: system stability
+  issue_theme: unspecified Windows issue
+  workflow_area: Windows workflow
   platform: windows
-  severity: critical
+  severity: medium
   sentiment: negative
   source_weight: 1
   target_build: '26200.8737'
@@ -17788,7 +17775,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8737'
-
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5957946-regression-mixed-dpi-classic-win32-che
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -17818,7 +17804,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26100.8737'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5936317-kb5094126-causes-recurring-0x1a-memory
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -17871,10 +17856,10 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: false
   exclusion_reason: cross_patch_duplicate
-  issue_theme: BSOD / stop error
-  workflow_area: system stability
+  issue_theme: unspecified Windows issue
+  workflow_area: Windows workflow
   platform: windows
-  severity: critical
+  severity: medium
   sentiment: negative
   source_weight: 1
   target_build: '26200.8655'
@@ -17965,7 +17950,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8655'
-
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5921413-recurring-0x1e-bugcheck-in-nt-exppoolt
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -17994,7 +17978,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26100.8655'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5910839-2026-05-preview-update-appears-to-brea
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -18025,7 +18008,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8524'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5902453-virtual-keyboard-clipboard-history-sta
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -18075,10 +18057,10 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: true
   exclusion_reason: null
-  issue_theme: BSOD / stop error
-  workflow_area: system stability
+  issue_theme: update/install failure
+  workflow_area: windows update
   platform: windows
-  severity: critical
+  severity: high
   sentiment: negative
   source_weight: 1
   target_build: '26200.8457'
@@ -18140,7 +18122,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8457'
-
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5907742-regression-in-25h2-hlk-studio-26100-83
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -18186,10 +18167,10 @@ evidence:
   matched_version: '26100.8328'
   match_basis: exact_os_build
   matched_os_build: '26100.8328'
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: foreign_product_subject_not_windows_patch
   issue_theme: update/install failure
   workflow_area: windows update
   platform: windows
@@ -18197,7 +18178,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26100.8328'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5886975-defender-for-endpoint-consistently-tri
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -18221,14 +18201,13 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: true
   exclusion_reason: null
-  issue_theme: BSOD / stop error
+  issue_theme: crash or hang
   workflow_area: system stability
   platform: windows
-  severity: critical
+  severity: high
   sentiment: negative
   source_weight: 1
   target_build: '26200.8246'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5897110-file-history-silently-fails-to-turn-on
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -18259,7 +18238,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8037'
-
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5897110-file-history-silently-fails-to-turn-on
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -18289,7 +18267,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26100.8037'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5858421-kb5077181-unable-to-switch-between-log
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -18369,14 +18346,13 @@ evidence:
   stale_due_to_patch_rollover: false
   counted: true
   exclusion_reason: null
-  issue_theme: BSOD / stop error
-  workflow_area: system stability
+  issue_theme: update/install failure
+  workflow_area: windows update
   platform: windows
-  severity: critical
+  severity: high
   sentiment: negative
   source_weight: 1
   target_build: '26200.7840'
-
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5907742-regression-in-25h2-hlk-studio-26100-83
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -18405,7 +18381,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26100.7705'
-
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5696105-computer-crashing-after-recent-windows
   product_id: microsoft-windows-11
   update_version: 24H2

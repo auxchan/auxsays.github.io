@@ -83,6 +83,7 @@ auxsays/scripts/tests/test_validate_evidence_method_health.py = 10
 auxsays/scripts/tests/test_validate_ingestion_sources.py = 30
 auxsays/scripts/tests/test_version_outcome_attribution.py = 64
 auxsays/scripts/tests/test_windows_count_authority.py = 96
+auxsays/scripts/tests/test_windows_evidence_recovery.py = 83
 auxsays/scripts/tests/test_windows_patch_identity.py = 30
 auxsays/scripts/tests/test_windows_rollover_convergence.py = 36
 
@@ -103,7 +104,7 @@ auxsays/scripts/tests/test_microsoft_learn_qna_source.py = 17
 auxsays/scripts/tests/test_microsoft_office_updates_adapter.py = 70
 auxsays/scripts/tests/test_microsoft_powerpoint_collector.py = 101
 auxsays/scripts/tests/test_microsoft_release_health_adapter.py = 80
-auxsays/scripts/tests/test_microsoft_windows_collector.py = 77
+auxsays/scripts/tests/test_microsoft_windows_collector.py = 78
 auxsays/scripts/tests/test_monitoring_status.py = 44
 auxsays/scripts/tests/test_orchestration_production_adoption.py = 75
 auxsays/scripts/tests/test_orchestration_r1.py = 55
