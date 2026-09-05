@@ -338,10 +338,17 @@ def run() -> int:  # noqa: PLR0915
                 break
     check("M only the PowerPoint collector consumes the build-role primitive",
           users == ["microsoft_powerpoint.py"], str(users))
+    # microsoft-windows-11 left this list when one Windows record stopped meaning one servicing
+    # TRAIN and started meaning one cumulative update. What this check is really protecting is
+    # unchanged: no product acquires build identity as a side effect of the PowerPoint work.
     for product in ("obs-studio", "blackmagic-davinci", "adobe-premiere-pro",
-                    "adobe-acrobat-reader", "microsoft-windows-11"):
+                    "adobe-acrobat-reader"):
         from lib.patch_identity import is_build_aware  # noqa: PLC0415
         check(f"M {product} remains non-build-aware", not is_build_aware(product))
+    from lib.patch_identity import is_build_aware  # noqa: PLC0415
+    check("M microsoft-windows-11 is build-aware by its own decision, not this primitive",
+          is_build_aware("microsoft-windows-11")
+          and "microsoft_windows.py" not in users, str(users))
 
     # ================= N: zero AI =================
     print("\n[N] zero-AI environment")

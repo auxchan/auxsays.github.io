@@ -626,18 +626,33 @@ def run() -> int:  # noqa: PLR0915
     # The broad 'auxsays/updates/*/*/*/index.md' this replaced also authorized the hand-authored
     # blackmagic-design/davinci-resolve/20-2-2/index.md -- commit authority over a human page this
     # lane never generates.
+    # The bound is "version landings of BUILD-AWARE products", derived from the identity
+    # allowlist rather than named per product: microsoft-windows-11 joined that allowlist when
+    # one Windows record came to mean one cumulative update, and its landings are created by
+    # this same lane. Deriving the expectation keeps the boundary tight while making the next
+    # build-aware product one line in patch_identity.py, not a silent test failure here.
+    from lib.patch_identity import BUILD_AWARE_PRODUCTS  # noqa: PLC0415
+    landing_prefixes = tuple(f"auxsays/updates/microsoft/{pid}/" for pid in sorted(BUILD_AWARE_PRODUCTS))
     landing_pats = [p for p in pats if p.endswith("index.md")]
     authorized = [f for f in tracked if awb._matches_any(f, landing_pats)]
-    check("writeback: the landing authority is exactly the PowerPoint landings",
-          bool(authorized) and all(f.startswith(f"auxsays/updates/microsoft/{PPT}/")
-                                   for f in authorized),
-          str([f for f in authorized if f"microsoft/{PPT}/" not in f]))
+    check("writeback: the landing authority is exactly the build-aware product landings",
+          bool(authorized) and all(f.startswith(landing_prefixes) for f in authorized),
+          str([f for f in authorized if not f.startswith(landing_prefixes)]))
+    unauthorized_products = [pid for pid in sorted(BUILD_AWARE_PRODUCTS)
+                             if not awb._matches_any(
+                                 f"auxsays/updates/microsoft/{pid}/v/index.md", landing_pats)]
+    check("writeback: every build-aware product's version landings ARE authorized",
+          not unauthorized_products, str(unauthorized_products))
+    check("writeback: ...but no build-aware product's PRODUCT index is",
+          not [pid for pid in sorted(BUILD_AWARE_PRODUCTS)
+               if awb._matches_any(f"auxsays/updates/microsoft/{pid}/index.md", pats)],
+          str(pats))
     # And the WHOLE allow surface: generated records, the ingest state file, PowerPoint landings.
     # Nothing else in the tracked tree may be committable by this lane.
     stray = [f for f in tracked if awb._matches_any(f, pats)
              and not f.startswith("auxsays/updates/generated/")
              and f != "auxsays/_data/patch_ingest_state.json"
-             and not f.startswith(f"auxsays/updates/microsoft/{PPT}/")]
+             and not f.startswith(landing_prefixes)]
     check("writeback: no tracked file outside generated/ + state + landings is authorized",
           not stray, str(stray[:5]))
     check("writeback: the product index is still not writable",

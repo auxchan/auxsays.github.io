@@ -10,12 +10,13 @@ in PR #14, so evidence for an older KB/build can never count after a train rolls
 Deterministic + repo-owned: no AI, no manual candidate approval. Discovery is
 keyword-anchored (search by exact KB/build); acceptance is a fixed ordered rule set.
 
-Safety — NOT wired to the production runner yet. This collector is intentionally NOT
-registered in run_patch_evidence_collection.py, because the scheduled "Patch Evidence
-Collection" workflow runs that runner in --write mode with no product filter (all
-registered collectors). Leaving it unregistered means the default post-merge behavior
-cannot write Windows Learn Q&A evidence. Observe it first with the read-only dry-run
-below; a later PR can register it behind a default-off gate after dry-run observation.
+Activation — LIVE IN PRODUCTION, behind a default-off flag. The collector is registered by
+run_patch_evidence_collection.py only when AUXSAYS_ENABLE_WINDOWS_LEARN_QNA_WRITEBACK is
+exactly "true", and obs-evidence-collection.yml sets that in the env of the scheduled
+`--write` step, so it runs on every 6-hourly cycle. (This paragraph previously said the
+collector was "NOT wired to the production runner yet" and would be registered by "a later
+PR". That later PR happened; the same stale claim had already been corrected once in the
+runner itself, where it made the Windows writeback look unreachable during an audit.)
 
 Read-only local dry-run (never writes evidence or records):
     cd auxsays/scripts && python -m patch_collectors.microsoft_windows [--update-version 24H2] [--since-days 45]
@@ -48,6 +49,7 @@ from .base import (
     utc_now,
     windows_identity_gate,
 )
+from lib.patch_identity import patch_key
 from . import microsoft_learn_qna_source as learn_qna
 from . import runtime_budget as rb
 
@@ -425,6 +427,16 @@ def row_from_candidate(record: PatchRecord, target: dict[str, Any], candidate: d
     counted = reason is None
     row["counted"] = counted
     row["exclusion_reason"] = reason
+    # Durable exact-build attribution, required since Windows became build-aware: the canonical
+    # patch identity is (product_id, update_version, target_build), so a counted row that carries
+    # no build belongs to no page. Set from the RECORD's build rather than from `matched_os_build`,
+    # and only once the gate has passed, because the gate is what proves the row belongs to this
+    # record -- and it accepts TWO exact bases, not one. `exact_kb_feature_train` (KB + train, no
+    # build named) is as exact as `exact_os_build`: a KB identifies exactly one cumulative update
+    # inside one servicing train, which is precisely why the gate demands both together. Taking
+    # `matched_os_build` alone would leave every KB-only report unattributed -- four live rows,
+    # measured -- and those reports name their patch just as unambiguously as the rest.
+    row["target_build"] = str(target.get("target_os_build") or "").strip() if counted else ""
     row["evidence_valid_for_current_patch"] = counted
     row["stale_due_to_patch_rollover"] = reason == "stale_due_to_patch_rollover"
     return row
@@ -555,12 +567,40 @@ def collect_for_record(record: PatchRecord, context: CollectorContext) -> tuple[
     return accepted, rejected, health
 
 
+def _newest_first(records: list[PatchRecord]) -> list[PatchRecord]:
+    """Most recently released cumulative update first.
+
+    `generated_records` returns the corpus in FILENAME order, and every filename is date-prefixed,
+    so the natural order is oldest-first. That was harmless while one record meant one servicing
+    TRAIN (four records, all current). It is not harmless now: one record means one cumulative
+    update, and there are 71 of them in the ingestion window. This collector stops mid-corpus when
+    its wall-clock budget expires, so oldest-first would spend every run re-searching December 2025
+    patches and never reach the update a reader is deciding about today. It is the same starvation
+    the Acrobat collector measured (44 of 48 recent records never attempted), arriving here through
+    the record expansion rather than through backfill.
+
+    Ordering also decides ATTRIBUTION, not just spend. `append_evidence_rows` refuses a source_url
+    that already exists in evidence, so when one thread names two KBs the record processed first
+    keeps it. Newest-first means the current patch wins that tie rather than a superseded one.
+
+    Deterministic: ties break on version then build, so two runs walk the identical order."""
+    return sorted(records,
+                  key=lambda r: (str(getattr(r, "update_published_at", "") or ""),
+                                 str(getattr(r, "update_version", "") or ""),
+                                 str(getattr(r, "target_build", "") or "")),
+                  reverse=True)
+
+
 class WindowsLearnQnaCollector(ProductCollector):
     product_id = PRODUCT_ID
 
     def collect(self, context: CollectorContext) -> list[dict[str, Any]]:
-        records = generated_records(PRODUCT_ID, context.target_versions)
+        records = _newest_first(generated_records(PRODUCT_ID, context.target_versions))
         results: list[dict[str, Any]] = []
+        # (canonical patch key -> that record's result dict) for every record that accepted rows.
+        # The consensus writeback is applied to all of them in ONE pass after the loop; see
+        # _writeback_all for why it cannot stay inside it.
+        pending: list[tuple[tuple[str, str, str], dict[str, Any]]] = []
         for record in records:
             _b = rb.get_run_budget()
             if _b is not None and _b.collector_finalize_expired():
@@ -582,58 +622,91 @@ class WindowsLearnQnaCollector(ProductCollector):
             if context.write:
                 added, total, rows = append_evidence_rows(accepted)
                 structured_count = len(counted_rows(rows, PRODUCT_ID, record.update_version))
-                record_updated = apply_consensus_writeback(record.update_version) if accepted else False
                 result.update({
                     "evidence_rows_added": added,
                     "evidence_rows_total": total,
                     "structured_count_for_version": structured_count,
-                    "windows_record_updated": record_updated,
+                    # Filled after the loop -- see _writeback_all.
+                    "windows_record_updated": False,
                 })
+                if accepted:
+                    pending.append((patch_key(PRODUCT_ID, record.update_version,
+                                              record.target_build), result))
             results.append(result)
+        if context.write and pending:
+            _writeback_all(pending)
         return results
 
 
-def apply_consensus_writeback(update_version: str) -> bool:
-    """Run the deterministic consensus writeback for one Windows version (used only in
-    --write mode). The Windows identity gate in apply_consensus re-verifies every row
-    against the record's current target_* before counting."""
-    from apply_consensus_to_records import _index_generated_records, apply_collector_record_fields, run_dry_run
+def _writeback_all(pending: list[tuple[tuple[str, str, str], dict[str, Any]]]) -> None:
+    """Apply the consensus writeback to EVERY record that accepted rows, in one pass.
 
-    records_index = _index_generated_records()
+    WHY THIS IS NOT IN THE LOOP. `apply_consensus_writeback` rebuilds the whole picture on every
+    call: `_index_generated_records()` reads all 1110 generated records (4.2s measured) and
+    `run_dry_run` regroups the entire evidence corpus (5.4s). That cost was paid at most four
+    times a run while one Windows record meant one servicing train. There are now 71 records, so
+    leaving it inside the loop spends 11 minutes per run re-deriving the same two structures --
+    and it spends it out of the collector's wall-clock BUDGET, so the price is paid in records
+    never searched. Both structures are identical for every record in the run, so they are built
+    once here and each pending patch is resolved out of the same results.
+
+    Deliberately AFTER all appends: the results are computed from the evidence file as it stands
+    when the run has finished writing, so every record sees the final population rather than the
+    one that happened to exist when its own turn came round.
+    """
+    from apply_consensus_to_records import (_index_generated_records,  # noqa: PLC0415
+                                            apply_collector_record_fields, run_dry_run)
+
     results = run_dry_run(
         evidence_path=EVIDENCE_PATH,
         product_id_filter=PRODUCT_ID,
         is_candidate_mode=False,
-        records_index=records_index,
+        records_index=_index_generated_records(),
         write_requested=True,
     )
-    matches = [item for item in results if item["update_version"] == update_version]
-    if len(matches) != 1 or not matches[0].get("would_write"):
-        return False
-    result = matches[0]
-    # The dry-run already resolved this group's record by CANONICAL identity
-    # (apply_consensus_to_records._result_for_group -> records_index.get(patch_key(pid, ver, build))),
-    # so reuse that resolution instead of re-deriving a key here. Re-deriving is what broke: the index
-    # has been keyed by the identity TRIPLE since #58 (4fe9e415), while this 2-tuple predates it and
-    # therefore misses every record. Reusing the resolved path also guarantees the write lands on the
-    # same record the gates were evaluated against, and is build-exact for free. Fail closed when the
-    # group resolved to no record -- never fall back to a version-level pick.
-    record_rel = result.get("matched_generated_record_path")
-    if not record_rel:
-        return False
-    record_path = ROOT / record_rel
-    fields = dict(result["proposed_fields_if_written"])
-    data, _body = load_front_matter_and_body(record_path)
-    comparable = {key: value for key, value in fields.items() if key != "status_events_append"}
-    if all(data.get(key) == value for key, value in comparable.items()):
-        return False
-    # Report whether bytes actually changed, not merely that we reached the write.
-    # `comparable` above always differs (proposed_fields carries a fresh record_last_updated), so
-    # the early-exit never fires; the collector boundary then recomputes substantiveness EXCLUDING
-    # that timestamp and can legitimately write nothing. Returning True regardless would report
-    # record_updated for a no-op -- and in the OBS caller it would suppress the count fallback that
-    # runs only `if not record_updated`.
-    return bool(apply_collector_record_fields(record_path, fields)["write_plan"]["fields"])
+    # key -> LIST, not key -> item. Collapsing duplicates into a dict would silently pick the last
+    # one; an identity that resolves to more than one group is ambiguous and must be refused, which
+    # is the guarantee the previous `len(matches) != 1` check carried and the one `[I8c]` pins.
+    by_key: dict[tuple[str, str, str], list[dict[str, Any]]] = {}
+    for item in results:
+        by_key.setdefault(
+            patch_key(PRODUCT_ID, item.get("update_version"), item.get("target_build")),
+            []).append(item)
+    for key, result_row in pending:
+        matches = by_key.get(key) or []
+        if len(matches) != 1 or not matches[0].get("would_write"):
+            continue
+        item = matches[0]
+        record_rel = item.get("matched_generated_record_path")
+        if not record_rel:
+            continue
+        record_path = ROOT / record_rel
+        fields = dict(item["proposed_fields_if_written"])
+        data, _body = load_front_matter_and_body(record_path)
+        comparable = {k: v for k, v in fields.items() if k != "status_events_append"}
+        if all(data.get(k) == v for k, v in comparable.items()):
+            continue
+        applied = apply_collector_record_fields(record_path, fields) or {}
+        result_row["windows_record_updated"] = bool(
+            ((applied.get("write_plan") or {}).get("fields")))
+
+
+def apply_consensus_writeback(update_version: str, target_build: str = "") -> bool:
+    """Run the deterministic consensus writeback for ONE Windows patch. Returns whether the
+    record's bytes actually changed.
+
+    Selects by canonical patch identity, not by version. Matching on ``update_version`` alone was
+    correct while one record meant one servicing train; 28 records now share "25H2", so a
+    version-only filter matched 28 groups and returned False for every one of them.
+
+    Delegates to ``_writeback_all`` so there is ONE writeback implementation: the collector's
+    batched path and this single-patch entry point cannot drift into different notions of what a
+    writeback does, and the behavioural suites that drive this function are therefore exercising
+    the code production actually runs.
+    """
+    row: dict[str, Any] = {}
+    _writeback_all([(patch_key(PRODUCT_ID, update_version, target_build), row)])
+    return bool(row.get("windows_record_updated"))
 
 
 def _dry_run_main(argv: list[str] | None = None) -> int:

@@ -9,7 +9,7 @@ import json
 import re
 import sys
 from collections import Counter, defaultdict
-from lib.patch_identity import patch_key
+from lib.patch_identity import patch_display_label, patch_key
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -17,7 +17,8 @@ from typing import Any
 import yaml
 
 from patch_collectors.base import WINDOWS_PRODUCT_ID, load_front_matter_and_body, windows_identity_gate
-from lib.report_counts import format_reconcile_detail, reconcile_record_counts
+from lib.report_counts import (format_reconcile_detail, reconcile_record_counts,
+                               windows_targets_from_front_matter)
 
 ROOT = Path(__file__).resolve().parents[1]
 EVIDENCE_PATH = ROOT / "_data" / "consensus_evidence.yml"
@@ -259,9 +260,13 @@ def issue_cluster_sentence(themes: Counter[str]) -> str:
     return "Current reports are too varied to group cleanly."
 
 
-def consensus_summary(product_id: str, version: str, items: list[dict[str, Any]], counts: Counter[str], themes: Counter[str]) -> str:
+def consensus_summary(product_id: str, version: str, items: list[dict[str, Any]], counts: Counter[str], themes: Counter[str], target_build: str = "") -> str:
     total = len(items)
     label_name = product_label(product_id)
+    # Build-aware products must name the exact patch: 28 Windows records share "25H2", so
+    # "25H2 has N user reports" is four different sentences that read as one contradiction.
+    # Collapses to the bare version for every product without a build contract.
+    version = patch_display_label(version, target_build, product_id)
     if total <= 0:
         return (
             f"INSUFFICIENT DATA: {label_name} {version} has no user reports found yet. "
@@ -299,27 +304,26 @@ def latest_captured_at(items: list[dict[str, Any]]) -> str:
     return max(parsed).isoformat().replace("+00:00", "Z")
 
 
-def windows_target_index() -> dict[tuple[str, str], dict[str, str]]:
-    """Map (product_id, update_version) -> the record's current-patch identity for
-    Windows records, so the fail-closed identity gate can exclude stale/wrong-KB rows."""
-    index: dict[tuple[str, str], dict[str, str]] = {}
+def windows_target_index() -> dict[tuple[str, str, str], dict[str, Any]]:
+    """Map CANONICAL PATCH KEY -> that Windows record's current-patch identity, so the
+    fail-closed identity gate can exclude stale/wrong-KB rows.
+
+    Keyed by ``patch_key`` -- i.e. including the exact build -- and NOT by
+    ``(product_id, update_version)``. Windows became build-aware because one feature train
+    carries many cumulative updates; 25H2 alone has 28 records. A version-only key collapses
+    all 28 into whichever record sorts last, so every row belonging to any earlier build in
+    the train gets gated against a stranger's target and excluded as
+    ``stale_due_to_patch_rollover``. That is precisely the divergence ``lib.report_counts``
+    exists to end: the reconciler would count 38 rows across six patches while this lane
+    published four.
+
+    Delegates to ``windows_targets_from_front_matter`` so there is ONE definition of that
+    map. The gate reads only the ``target_*`` fields plus ``update_version``, all of which
+    the front matter already carries."""
     if not GENERATED_DIR.exists():
-        return index
-    for path in sorted(GENERATED_DIR.glob("*.md")):
-        data, _body = load_front_matter_and_body(path)
-        if data.get("update_entry") is not True or str(data.get("product_id") or "").strip() != WINDOWS_PRODUCT_ID:
-            continue
-        version = str(data.get("update_version") or "").strip()
-        if not version:
-            continue
-        index[(WINDOWS_PRODUCT_ID, version)] = {
-            "target_feature_version": str(data.get("target_feature_version") or "").strip(),
-            "target_kb": str(data.get("target_kb") or "").strip(),
-            "target_os_build": str(data.get("target_os_build") or "").strip(),
-            "target_release_date": str(data.get("target_release_date") or "").strip(),
-            "update_version": version,
-        }
-    return index
+        return {}
+    return windows_targets_from_front_matter(
+        load_front_matter_and_body(path)[0] for path in sorted(GENERATED_DIR.glob("*.md")))
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -393,7 +397,8 @@ def main(argv: list[str] | None = None) -> int:
         # Windows-only fail-closed current-patch identity gate: exclude reports whose
         # matched KB/OS build is not the record's current patch (stale after rollover).
         if product_id == WINDOWS_PRODUCT_ID:
-            identity_ok, identity_reason = windows_identity_gate(item, windows_targets.get((product_id, version)))
+            identity_ok, identity_reason = windows_identity_gate(
+                item, windows_targets.get(patch_key(product_id, version, item.get("target_build"))))
             if not identity_ok:
                 item["exclusion_reason"] = item.get("exclusion_reason") or identity_reason
                 excluded.append(item)
@@ -421,7 +426,7 @@ def main(argv: list[str] | None = None) -> int:
             "consensus_label": consensus_label(sentiments),
             "confidence": confidence(len(items)),
             "evidence_state": evidence_state(len(items)),
-            "consensus_summary": consensus_summary(product_id, version, items, sentiments, themes),
+            "consensus_summary": consensus_summary(product_id, version, items, sentiments, themes, _build),
             "evidence_last_checked": latest_captured_at(items),
         })
 

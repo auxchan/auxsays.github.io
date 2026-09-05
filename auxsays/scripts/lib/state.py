@@ -36,7 +36,11 @@ def load_state(path: Path) -> dict[str, Any]:
 
 def save_state(path: Path, payload: dict[str, Any]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8")
+    # newline="" so Python's text layer does not translate "\n" to the platform separator. This is
+    # a TRACKED data file, and `test_teams_record_cleanup` requires it to be LF-only; an ingestion
+    # run on Windows rewrote all 2034 line endings as CRLF and turned that suite red, with a diff
+    # touching every line of the file. Production runs on Linux, where the bug is invisible.
+    path.write_text(json.dumps(payload, indent=2, sort_keys=True), encoding="utf-8", newline="")
 
 
 def source_state(state: dict[str, Any], product_id: str) -> dict[str, Any]:

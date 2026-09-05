@@ -47,6 +47,10 @@ def base_record(**overrides) -> dict[str, object]:
         "company": "Microsoft",
         "software": "Windows 11",
         "version": "23H2",
+        # Windows is build-aware: one record is one cumulative update, so a record without its
+        # exact build has no canonical filename or permalink and is refused on the write path.
+        "target_build": "22631.7517",
+        "target_os_build": "22631.7517",
         "published_at": "2026-06-09T00:00:00Z",
         "source_url": "https://learn.microsoft.com/en-us/windows/release-health/windows11-release-information",
         "body": "Windows 11 23H2 base body.",

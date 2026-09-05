@@ -100,6 +100,18 @@ WIN11_HTML = """
 <tr><td>General Availability Channel</td><td>2026-06 D</td><td>2026-06-23</td><td>28000.2340</td><td>KB5095091</td></tr>
 <tr><td>General Availability Channel</td><td>2026-06 D</td><td>2026-06-23</td><td>26200.8737</td><td>KB5095093</td></tr>
 <tr><td>General Availability Channel</td><td>2026-06 B</td><td>2026-06-09</td><td>26200.8655</td><td>KB5094126</td></tr>
+<tr><td>LTSC &#8226; General Availability Channel</td><td>2026-06 B</td><td>2026-06-09</td><td>26100.8500</td><td>KB5094127</td></tr>
+</tbody>
+</table>
+
+<h2 id="windows-11-hotpatch-release-history">Windows 11 hotpatch release history</h2>
+<table>
+<thead>
+<tr><th>Month</th><th>Update type</th><th>Type</th><th>Availability date</th><th>Build</th><th>KB article</th></tr>
+</thead>
+<tbody>
+<tr><td>June</td><td>2026.06 B</td><td>Hotpatch</td><td>2026-06-09</td><td>26200.8600</td><td>KB5094100</td></tr>
+<tr><td>June</td><td>2026.06 B</td><td>Hotpatch</td><td>2026-06-09</td><td>26100.8600</td><td>KB5094100</td></tr>
 </tbody>
 </table>
 
@@ -227,7 +239,12 @@ def run() -> int:
         check("latest OS build captured in body", "28000.2340" in str(first.get("body")), str(first.get("body"))[:200])
         check("KB resolved from release-history build match (KB5095091)", "KB5095091" in str(first.get("official_summary")) and "KB5095091" in str(first.get("body")), str(first.get("official_summary")))
         check("latest revision date normalized to ISO (2026-06-23)", first.get("published_at") == "2026-06-23T00:00:00Z", str(first.get("published_at")))
-        check("title carries software + feature version", first.get("title") == "Windows 11 26H1", str(first.get("title")))
+        # The title names the exact CUMULATIVE UPDATE, not just the train. It used to be
+        # "Windows 11 26H1", which was a complete identity while one record tracked a whole
+        # servicing train; with one record per update, dozens of pages would share that title.
+        check("title carries software, feature version, build and KB",
+              first.get("title") == "Windows 11 26H1 OS Build 28000.2340 (KB5095091)",
+              str(first.get("title")))
         check("version field is the feature version (26H1)", first.get("version") == "26H1", str(first.get("version")))
         check("record is official-only: no report_count", first.get("report_count") is None and first.get("update_report_count") is None, str({k: first.get(k) for k in ("report_count", "update_report_count")}))
         check("record is official-only: no evidence/consensus state", first.get("evidence_state") is None and first.get("consensus_label") is None and first.get("consensus_collection_status") is None, str({k: first.get(k) for k in ("evidence_state", "consensus_label", "consensus_collection_status")}))
@@ -275,6 +292,41 @@ def run() -> int:
     kb_map = mrh._build_kb_map(WIN11_HTML)
     check("build->KB map resolves an unambiguous build", kb_map.get("28000.2340") == "KB5095091" and kb_map.get("26200.8737") == "KB5095093", str(kb_map))
     check("build->KB map omits a build with no KB row (26100.9999)", "26100.9999" not in kb_map, str(kb_map))
+
+    # --- per-cumulative-update records, and what is NOT one -----------------
+    hist = mrh._records_from_release_history(source(), URL, WIN11_HTML, "", 0)
+    builds = [r.get("target_build") for r in hist]
+    check("release history yields ONE record per cumulative update",
+          sorted(builds) == ["26100.8500", "26200.8655", "26200.8737", "28000.2340"], str(builds))
+    check("every history record carries its exact build and its own KB",
+          all(r.get("target_build") and r.get("target_kb") for r in hist),
+          str([(r.get("target_build"), r.get("target_kb")) for r in hist]))
+    check("two updates in one train are two records, not one",
+          len([r for r in hist if r.get("version") == "25H2"]) == 2, str(builds))
+    check("the feature version is derived from the build prefix, never from row order",
+          {r["target_build"]: r["version"] for r in hist}
+          == {"28000.2340": "26H1", "26200.8737": "25H2", "26200.8655": "25H2",
+              "26100.8500": "24H2"},
+          str({r["target_build"]: r["version"] for r in hist}))
+    # HOTPATCH is a different servicing channel, not a different view of the same update. Its
+    # tables carry no "servicing" column at all, so excluding them was previously an accident of
+    # `servicing` being empty rather than a rule -- and 10 hotpatch builds reached the live tree
+    # publishing prose that claimed the General Availability Channel. The fixture contains two
+    # such rows so the rule is proven, not merely asserted.
+    check("hotpatch rows produce no record",
+          not [r for r in hist if r.get("target_build") in {"26200.8600", "26100.8600"}],
+          str(builds))
+    check("...and the fixture really does contain them, so that check is not vacuous",
+          WIN11_HTML.count("Hotpatch") == 2, str(WIN11_HTML.count("Hotpatch")))
+    # An update serving BOTH channels ships to ordinary users: a substring veto on "LTSC" dropped
+    # 57 such rows live, including a train's own current build.
+    check("an 'LTSC - General Availability Channel' row is kept, not vetoed",
+          "26100.8500" in builds, str(builds))
+    # `since` is the window, and it is applied to the row's own availability date.
+    windowed = mrh._records_from_release_history(source(), URL, WIN11_HTML, "2026-06-20", 0)
+    check("history respects the `since` window",
+          sorted(r.get("target_build") for r in windowed) == ["26200.8737", "28000.2340"],
+          str([r.get("target_build") for r in windowed]))
 
     ambiguous_map = mrh._build_kb_map(AMBIGUOUS_HISTORY_HTML)
     check("build->KB map drops ambiguous build (two KBs -> omitted)", "26200.8737" not in ambiguous_map and ambiguous_map.get("26100.8655") == "KB5094126", str(ambiguous_map))
@@ -345,7 +397,7 @@ def run() -> int:
         check("official_* fields never populate known_issues_present or complaint_themes", by_ver["24H2"].get("known_issues_present") is None and by_ver["24H2"].get("complaint_themes") is None, "separation")
     if "26H1" in by_ver:
         body26 = str(by_ver["26H1"].get("body"))
-        check("26H1 (no known issues) body NOT enriched, base intact", "Microsoft Release Health status (official)" not in body26 and "current General Availability Channel" in body26, body26[-120:])
+        check("26H1 (no known issues) body NOT enriched, base intact", "Microsoft Release Health status (official)" not in body26 and "on the General Availability Channel" in body26, body26[-120:])
         check("26H1 (no issues parsed) emits NO official_* fields", by_ver["26H1"].get("official_active_issue_count") is None and by_ver["26H1"].get("official_known_issues_present") is None, str(by_ver["26H1"].get("official_active_issue_count")))
 
     # --- status-page fetch failure must leave the base record intact --------
@@ -359,7 +411,7 @@ def run() -> int:
     check("status fetch failure still yields the base records", set(fby) == {"26H1", "25H2", "24H2"}, str(sorted(fby)))
     if "24H2" in fby:
         fbody = str(fby["24H2"].get("body"))
-        check("status fetch failure leaves base body unmodified (no roll-up)", "Microsoft Release Health status (official)" not in fbody and "current General Availability Channel" in fbody, fbody[-120:])
+        check("status fetch failure leaves base body unmodified (no roll-up)", "Microsoft Release Health status (official)" not in fbody and "on the General Availability Channel" in fbody, fbody[-120:])
 
     # --- known_issues_capture unset -> no enrichment attempt at all ----------
     _orig3 = mrh.fetch_text

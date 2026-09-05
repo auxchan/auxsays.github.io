@@ -127,6 +127,7 @@ def _record(
     build: str,
     kb: str,
     published: str,
+    update_type: str = "",
 ) -> dict[str, Any]:
     ingestion = source.get("ingestion", {}) or {}
     software = source["software"]
@@ -148,17 +149,23 @@ def _record(
                 "extraction_status": "summary_captured" if url.strip() == source_url else "reference_only",
             })
 
+    # One record is one cumulative update, so the prose describes THAT update rather than the
+    # train's newest build. The old train wording said "latest OS build X" and rolled forward
+    # monthly, which left a live page asserting two different "latest OS build" values at once --
+    # the stale one in the summary and the current one in the identity fields.
+    type_str = f" Update type {update_type}." if update_type else ""
     body = (
-        f"{software} {version} is a current General Availability Channel servicing version. "
-        f"Latest OS build {build}{kb_str}."
-        + (f" Latest revision date {date_str}." if date_str else "")
+        f"{software} {version} cumulative update, OS build {build}{kb_str}."
+        + (f" Released {date_str} on the General Availability Channel." if date_str
+           else " Released on the General Availability Channel.")
+        + type_str
         + " This is the official Microsoft Windows release-health entry"
         " (learn.microsoft.com/windows/release-health). Known-issue and safeguard-hold"
         " details are published on the per-version Windows release-health status page."
     )
     official_summary = (
-        f"Windows 11 {version} latest OS build is {build}{kb_str}"
-        + (f" (revised {date_str})." if date_str else ".")
+        f"Windows 11 {version} OS build {build}{kb_str}"
+        + (f", released {date_str}." if date_str else ".")
     )
 
     return {
@@ -169,7 +176,8 @@ def _record(
         "software": software,
         "category": source.get("public_category"),
         "version": version,
-        "title": first_nonempty(f"{software} {version}", software),
+        "title": first_nonempty(
+            f"{software} {version} OS Build {build}" + (f" ({kb})" if kb else ""), software),
         "published_at": published,
         "source_url": source_url,
         "official_url": source_url,
@@ -198,6 +206,14 @@ def _record(
         "target_feature_version": version,
         "target_kb": kb,
         "target_os_build": build,
+        # EXACT PATCH IDENTITY. Windows 11 is build-aware: one record is one cumulative update,
+        # so the canonical key is (product_id, feature version, OS build). Without this the second
+        # record for a train would overwrite the first in any dict keyed by (product, version) and
+        # both would share one public URL -- the hazard lib/patch_identity documents.
+        "target_build": build,
+        # "B" (monthly security), "D" (optional preview) or "OOB" (out-of-band). Carried because
+        # they are different install decisions, not cosmetic labels.
+        "update_type": update_type,
         "target_release_date": published,
     }
 
@@ -268,6 +284,149 @@ def _records_from_windows_release_information(
             return records
 
     return records
+
+
+def _version_by_build_prefix(html: str) -> dict[str, str]:
+    """Build-number prefix -> feature version, stated by the page itself.
+
+    The per-build release-history tables carry no version column -- their columns are
+    Servicing option / Update type / Availability date / Build / KB article -- so a build row
+    cannot say which servicing train it belongs to. The current-versions summary table does:
+    it gives each supported version's latest build, and every build in a train shares that
+    build's five-digit prefix (25H2 -> 26200.x, 24H2 -> 26100.x, 26H1 -> 28000.x).
+
+    Derived rather than hardcoded, and CURRENT versions only: a prefix that no supported
+    version claims is skipped, so out-of-support trains (22621.x, 22000.x) never produce
+    records, matching this adapter's existing current-versions-only doctrine.
+    """
+    prefixes: dict[str, str] = {}
+    for table in TABLE_RE.finditer(html or ""):
+        rows = list(ROW_RE.finditer(table.group("table")))
+        if not rows:
+            continue
+        header = [c.lower() for c in _row_cells(rows[0].group("row"))]
+        if not header or not (_has(header, "version") and _has(header, "latest build")):
+            continue
+        if _has(header, "kb article") or _has(header, "update type"):
+            continue
+        idx_version, idx_build = _col(header, "version"), _col(header, "latest build")
+        idx_serv = _col(header, "servicing")
+        if idx_version is None or idx_build is None:
+            continue
+        for row in rows[1:]:
+            cells = _row_cells(row.group("row"))
+            if idx_version >= len(cells) or idx_build >= len(cells):
+                continue
+            servicing = cells[idx_serv] if (idx_serv is not None and idx_serv < len(cells)) else ""
+            if any(token in servicing.lower() for token in SKIP_SERVICING_TOKENS):
+                continue
+            version, build = cells[idx_version], cells[idx_build]
+            if not VERSION_RE.fullmatch(version) or not BUILD_RE.fullmatch(build):
+                continue
+            prefix = build.split(".")[0]
+            # Fail closed on a contested prefix rather than picking one.
+            if prefixes.get(prefix, version) != version:
+                prefixes[prefix] = ""
+            else:
+                prefixes.setdefault(prefix, version)
+        if prefixes:
+            break
+    return {p: v for p, v in prefixes.items() if v}
+
+
+def _records_from_release_history(
+    source: dict[str, Any],
+    source_url: str,
+    html: str,
+    since: str,
+    limit: int,
+) -> list[dict[str, Any]]:
+    """Per-build release-history tables -> ONE official record per cumulative update.
+
+    WHY THIS EXISTS. A Windows record represents one cumulative update inside a servicing train,
+    and `report_counts.counted_evidence_counts` gates community reports on that record's
+    target_kb / target_os_build. With only one record per TRAIN, that record's identity rolled
+    forward every Patch Tuesday and every report about the superseded KB became uncountable and
+    invisible -- measured live, 38 counted evidence rows spanning five KBs on a page showing four.
+    Reports about a superseded KB are reports about a different patch; they need that patch's page.
+
+    Deterministic and conservative, like the summary parser above: General Availability Channel
+    rows only (LTSC skipped), a real build and a real ISO date required, the feature version taken
+    from the page's own current-versions table via the build prefix, and the KB read from the row
+    itself rather than the ambiguity-pruned page-wide map.
+    """
+    prefix_map = _version_by_build_prefix(html or "")
+    if not prefix_map:
+        return []
+
+    seen: set[tuple[str, str]] = set()
+    records: list[dict[str, Any]] = []
+    for table in TABLE_RE.finditer(html or ""):
+        rows = list(ROW_RE.finditer(table.group("table")))
+        if not rows:
+            continue
+        header = [c.lower() for c in _row_cells(rows[0].group("row"))]
+        if not (_has(header, "build") and _has(header, "kb article")):
+            continue
+        idx_build, idx_kb = _col(header, "build"), _col(header, "kb article")
+        idx_date = _col(header, "availability date")
+        idx_serv = _col(header, "servicing")
+        idx_type = _col(header, "update type")
+        # Distinct from "update type" (which holds "2026-08 B"): "type" is the release-KIND column
+        # that hotpatch tables use. `_col` matches on containment, so it is resolved from an exact
+        # header cell to keep it from binding to "update type".
+        idx_row_type = header.index("type") if "type" in header else None
+        if idx_build is None or idx_date is None:
+            continue
+
+        for row in rows[1:]:
+            cells = _row_cells(row.group("row"))
+            if idx_build >= len(cells) or idx_date >= len(cells):
+                continue
+            build = cells[idx_build]
+            if not BUILD_RE.fullmatch(build):
+                continue
+            # Hotpatch is a DIFFERENT SERVICING CHANNEL, not another presentation of the same
+            # update: restart-free monthly security updates for Windows 11 Enterprise / Windows 365,
+            # published in their own tables whose header is
+            # (month, update type, TYPE, availability date, build, kb article) -- note it carries no
+            # "servicing" column at all. Those rows are excluded today only as a SIDE EFFECT of that
+            # missing column leaving `servicing` empty, which is not a rule, it is an accident: let
+            # the source grow one "General Availability Channel • Hotpatch" cell and every hotpatch
+            # build silently becomes a GA record. That already happened once -- 10 such records
+            # reached this checkout, each publishing prose reading "Released ... on the General
+            # Availability Channel", which is false for a hotpatch row. Refuse on the Type column by
+            # name, so the exclusion is a stated rule that survives the table gaining a column.
+            row_type = cells[idx_row_type] if (idx_row_type is not None and idx_row_type < len(cells)) else ""
+            if "hotpatch" in row_type.lower():
+                continue
+            servicing = cells[idx_serv] if (idx_serv is not None and idx_serv < len(cells)) else ""
+            # POSITIVE test, not the summary table's "skip anything mentioning LTSC". In the
+            # release-history tables 57 rows read "LTSC • General Availability Channel" -- one
+            # update serving BOTH channels -- and a substring veto dropped every one of them,
+            # including 24H2's own current build. A row ships to ordinary users when it names the
+            # General Availability Channel, whatever else it also serves.
+            if "general availability" not in servicing.lower():
+                continue
+            published = _iso(cells[idx_date])
+            if not published or (since and published[:10] < since):
+                continue
+            version = prefix_map.get(build.split(".")[0], "")
+            if not version:
+                continue
+            kb_cell = cells[idx_kb] if (idx_kb is not None and idx_kb < len(cells)) else ""
+            kb_found = KB_RE.search(kb_cell)
+            kb = kb_found.group(0) if kb_found else ""
+            key = (version, build)
+            if key in seen:
+                continue
+            seen.add(key)
+            update_type = cells[idx_type] if (idx_type is not None and idx_type < len(cells)) else ""
+            records.append(_record(source, source_url, version, build, kb, published,
+                                   update_type=update_type))
+    records.sort(key=lambda r: (str(r.get("published_at") or ""), str(r.get("version") or "")),
+                 reverse=True)
+    return records[:max(1, int(limit))] if limit else records
 
 
 def _short(text: str, limit: int = MAX_SUMMARY_CHARS) -> str:
@@ -450,7 +609,15 @@ def fetch(source: dict[str, Any], limit: int = 3) -> list[dict[str, Any]]:
         if not html.strip():
             fetch_errors.append(f"{url}: empty response")
             continue
-        records = _records_from_windows_release_information(source, result.final_url or url, html, limit)
+        # Per-cumulative-update records first: one record per servicing update is what makes a
+        # superseded KB's reports countable on their own page. Fall back to the current-versions
+        # summary parser when the history tables are absent or unparseable, so a page change
+        # degrades to the previous behaviour rather than emitting nothing.
+        since = str((source.get("ingestion", {}) or {}).get("history_since") or "").strip()
+        records = _records_from_release_history(source, result.final_url or url, html, since,
+                                                int(ingestion.get("history_limit") or 0))
+        if not records:
+            records = _records_from_windows_release_information(source, result.final_url or url, html, limit)
         if records:
             # Best-effort body enrichment; never drops or blocks the base records.
             _enrich_records_with_status(source, records, options)
