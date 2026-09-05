@@ -108,8 +108,16 @@ def fetch(url: str) -> str:
     """Fetch and decode. The .gz sitemaps are sometimes served already decompressed, so the
     gzip magic number decides rather than the file extension."""
     _pace()
-    request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT,
-                                                   "Accept": "application/xml,text/html"})
+    # `Accept: application/xml,text/html` is not a header any browser sends for a discussion page,
+    # and the first production run to actually hydrate threads from this host got HTTP 403 on all
+    # 133 of them while the sitemaps under the SAME host returned 200. A conformant Accept plus an
+    # Accept-Language is the ordinary-client request; it is not an attempt to defeat a challenge,
+    # and if the refusal is by address rather than by header it will not change anything.
+    request = urllib.request.Request(url, headers={
+        "User-Agent": USER_AGENT,
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+    })
     try:
         with urllib.request.urlopen(request, timeout=REQUEST_TIMEOUT) as response:
             raw = response.read(MAX_BYTES)

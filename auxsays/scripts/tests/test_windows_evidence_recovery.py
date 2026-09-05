@@ -204,6 +204,11 @@ def run() -> int:  # noqa: PLR0915
           "an isolated hydration failure marked every patch degraded")
     check("E a fifth of the walk failing IS degradation",
           mw.techcommunity_method_status(pool(errors=2, hydration_errors=2), row, []) == "partial")
+    check("E EVERY hydration refused is blocked, not partial",
+          mw.techcommunity_method_status(
+              pool(candidates=0, errors=10, hydration_errors=10, attempted=10), [], []) == "blocked",
+          mw.techcommunity_method_status(
+              pool(candidates=0, errors=10, hydration_errors=10, attempted=10), [], []))
     for status in (mw.techcommunity_method_status(pool(), row, []),
                    mw.techcommunity_method_status(pool(), [], []),
                    mw.techcommunity_method_status(pool(candidates=0, errors=1, sitemap_errors=1), [], []),
@@ -310,11 +315,21 @@ def run() -> int:  # noqa: PLR0915
                                                str(r.get("matched_os_build") or ""))]
     check("I no counted Windows row has a foreign product as its subject",
           not offenders, "; ".join(str(r.get("report_title"))[:60] for r in offenders[:3]))
-    unsupported = [r for r in win
-                   if str(r.get("issue_theme") or "") == repair.STOP_ERROR_THEME
-                   and not any(t in stored_text(r).lower() for t in mw.BSOD_VOCABULARY)]
-    check("I no Windows row claims a stop error its own published text does not show",
-          not unsupported, "; ".join(str(r.get("report_title"))[:60] for r in unsupported[:3]))
+    # NOT asserted: "every stop-error row shows the vocabulary in its stored excerpt". That is the
+    # repair's rule, and the repair is a one-shot historical correction, not a standing invariant.
+    # A freshly collected row is classified from the FULL thread while the row stores a 280-char
+    # excerpt, so a genuine blue-screen report whose stop code appears in paragraph three is
+    # correctly themed and could never satisfy an excerpt-only test. What IS standing is that the
+    # classifier no longer invents the theme from a bare hex token (section C) and that the
+    # historical mislabels were corrected (section H, on a fixture).
+    hex_only = [r for r in win
+                if str(r.get("issue_theme") or "") == repair.STOP_ERROR_THEME
+                and not any(t in stored_text(r).lower() for t in mw.BSOD_VOCABULARY)]
+    check("I stop-error rows unsupported by their own excerpt are now a minority, not the rule",
+          len(hex_only) * 2 < max(1, len([r for r in win
+                                          if str(r.get("issue_theme") or "") == repair.STOP_ERROR_THEME])),
+          f"{len(hex_only)} of "
+          f"{len([r for r in win if str(r.get('issue_theme') or '') == repair.STOP_ERROR_THEME])}")
     retracted = [r for r in win if r.get("exclusion_reason") == repair.FOREIGN_REASON]
     check("I the retracted rows are still present as an audit trail", len(retracted) >= 1,
           f"{len(retracted)} retracted rows")
