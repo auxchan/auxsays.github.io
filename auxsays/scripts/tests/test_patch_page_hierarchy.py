@@ -41,6 +41,11 @@ _AUX = _REPO / "auxsays"
 LAYOUT_PATH = _AUX / "_layouts" / "aux-update.html"
 CSS_PATH = _AUX / "assets" / "css" / "auxsays-custom.css"
 LAYOUT = LAYOUT_PATH.read_text(encoding="utf-8")
+# Liquid comments never render. An assertion of the form "this sentence must not appear" has to
+# read the EMITTING markup only -- otherwise a comment that documents the sentence being removed
+# (which is exactly how this repair is documented) makes the check fail forever.
+LAYOUT_EMITTED = re.sub(r"\{%-?\s*comment\s*-?%\}.*?\{%-?\s*endcomment\s*-?%\}", "",
+                        LAYOUT, flags=re.S)
 CSS = CSS_PATH.read_text(encoding="utf-8")
 
 _PASS = 0
@@ -131,6 +136,76 @@ def run() -> int:
     check("H8 the verdict is inside the first-include render window other suites rely on",
           verdict < first_include, f"verdict@{verdict} first_include@{first_include}")
 
+    # ---------- O: confirmed evidence outranks non-counting context ----------
+    print("\n[O] the confirmed source list precedes the uncounted context")
+    sources = block_index('<details id="user-reports-sources"')
+    grid = block_index('<section class="update-content-grid">')
+    ctx_wrapper = block_index('<div class="update-order-context">')
+    check("O1 the context block lives INSIDE the content grid", grid < ctx_wrapper,
+          f"grid@{grid} context@{ctx_wrapper}")
+    check("O2 the confirmed source list precedes the context block in the DOM",
+          sources < ctx_wrapper, f"sources@{sources} context@{ctx_wrapper}")
+    check("O3 all three context blocks are inside that wrapper",
+          ctx_wrapper < freshness and ctx_wrapper < tier2 and ctx_wrapper < tier3,
+          f"wrapper@{ctx_wrapper} freshness@{freshness} t2@{tier2} t3@{tier3}")
+    # DOM order is not enough: this grid's visual order comes from CSS `order`, so the context
+    # wrapper must carry a HIGHER order than the confirmed sources card or it would render above it
+    # regardless of markup position. That is the whole reason the class exists.
+    def order_of(cls):
+        m = re.findall(r"\." + re.escape(cls) + r"\s*\{\s*order:\s*(\d+)\s*;\s*\}", CSS)
+        return int(m[-1]) if m else None      # last definition wins in the cascade
+    o_sources, o_context = order_of("update-order-sources"), order_of("update-order-context")
+    o_history = order_of("update-order-history")
+    check("O4 .update-order-context is defined in CSS", o_context is not None, str(o_context))
+    check("O5 its order is HIGHER than the confirmed sources card",
+          o_sources is not None and o_context > o_sources, f"sources={o_sources} context={o_context}")
+    check("O6 ...and higher than history, so context is genuinely last",
+          o_history is not None and o_context > o_history, f"history={o_history} context={o_context}")
+    check("O7 the context wrapper actually carries that class",
+          'class="update-order-context"' in LAYOUT)
+    # The relocation must not have disturbed the in-page anchors.
+    for anchor_id in ("user-reports-sources", "official-patch-notes", "technical-details",
+                      "history", "verdict"):
+        check(f"O8 anchor #{anchor_id} still exists", f'id="{anchor_id}"' in LAYOUT)
+    check("O9 the nav still links the confirmed sources anchor",
+          '<a href="#user-reports-sources">' in LAYOUT)
+
+    # ---------- F: the freshness notice claims only what fired ----------
+    print("\n[F] the freshness notice distinguishes stale from degraded from blocked")
+    check("F1 blocked and degraded are tracked as separate flags",
+          "assign method_health_blocked = false" in LAYOUT
+          and "assign method_health_degraded = false" in LAYOUT)
+    check("F2 the blocked/broken split matches the monitoring card's own vocabulary",
+          "{% capture blocked_status_tokens %}|blocked|broken|{% endcapture %}" in LAYOUT)
+    check("F3 the notice text is derived, not hardcoded",
+          "{{ freshness_headline }}" in LAYOUT and "{{ freshness_detail }}" in LAYOUT)
+    check("F4 a stale-only page says collection is healthy, not blocked",
+          "Collection itself is reporting healthy." in LAYOUT)
+    check("F5 a blocked page says blocked", "Collection blocked." in LAYOUT)
+    check("F6 a degraded page says degraded", "Collection degraded." in LAYOUT)
+    # THE DEFECT: this exact sentence asserted blocked/pending collection on every page that
+    # rendered the notice, including 10 whose methods were all success/no_results/disabled.
+    check("F7 the old unconditional blocked-or-pending claim no longer RENDERS",
+          "Some collection methods are currently blocked or pending." not in LAYOUT_EMITTED,
+          "still present in emitting markup")
+    check("F8 the invariant sentence renders exactly once",
+          LAYOUT_EMITTED.count("are not live telemetry") == 1,
+          str(LAYOUT_EMITTED.count("are not live telemetry")))
+
+    # ---------- P: Acrobat prose ----------
+    print("\n[P] no machine enum or duplicated identity reaches the reader")
+    check("P1 the Why-linked line is derived rather than printed raw",
+          "{{ r_why | escape }}" in LAYOUT and "{{ r.update_link_reason | escape }}" not in LAYOUT)
+    check("P2 the known enum is mapped to prose",
+          "'update_named_as_cause'" in LAYOUT
+          and "Reporter names an update as the cause." in LAYOUT)
+    check("P3 an unsupported Why-linked line is omitted, not rendered empty",
+          "{% if r_why != '' %}" in LAYOUT)
+    check("P4 the release-window line collapses a duplicated version/build",
+          "{%- if r.window_build == r.window_version -%}" in LAYOUT)
+    check("P5 ...and no longer prints both slots unconditionally",
+          "the {{ r.window_version }} / Build {{ r.window_build }} release window" not in LAYOUT)
+
     # ---------- C: the context blocks stay honest ----------
     print("\n[C] moving the context blocks did not weaken what they say")
     check("C1 Level 2 still states the exact build is unresolved",
@@ -141,9 +216,9 @@ def run() -> int:
           "release window" in LAYOUT)
     check("C4 the freshness caveat still says report counts are not live telemetry",
           "not live telemetry" in LAYOUT)
-    check("C5 the freshness caveat appears exactly once",
-          LAYOUT.count("Evidence freshness needs revalidation") == 1,
-          str(LAYOUT.count("Evidence freshness needs revalidation")))
+    check("C5 the freshness caveat renders exactly once",
+          LAYOUT_EMITTED.count("Evidence freshness needs revalidation") == 1,
+          str(LAYOUT_EMITTED.count("Evidence freshness needs revalidation")))
 
     # ---------- T: no light-theme leak on a dark page ----------
     print("\n[T] every --aux-* token resolves to a dark-theme value, in the LIVE cascade")
