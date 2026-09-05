@@ -497,8 +497,14 @@ def evaluate_candidates(record: PatchRecord, target: dict[str, Any], candidates:
                 row["counted"] = False
                 row["exclusion_reason"] = "cross_patch_duplicate"
                 row["evidence_valid_for_current_patch"] = False
-                # A rejected row carries no build: only a COUNTED row is attributed to a patch.
-                row["target_build"] = ""
+                # The row KEEPS the build it was refused for. Blanking it looked tidier -- only a
+                # counted row is attributed for COUNTING -- but it conflates that with attribution
+                # for DIAGNOSIS. A stored uncounted row with no build belongs to no patch, so it
+                # groups under (product, version, ''), a key no record has: `audit_consensus_evidence`
+                # then reports "structured evidence without matching generated record ... 0 rows",
+                # which is how the first repair of these rows added 2 integrity errors. `counted:
+                # false` is what keeps it out of every count; the build is what makes the audit
+                # trail say WHICH patch refused this URL.
             else:
                 claims[key] = mine
         (accepted if row.get("counted") is True else rejected).append(row)

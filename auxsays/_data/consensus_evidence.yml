@@ -13426,7 +13426,7 @@ evidence:
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5973125-ngcctnrsvc-crashes-3-times-in-ucrtbase
   product_id: microsoft-windows-11
   update_version: 24H2
-  target_build: ''
+  target_build: '26100.9168'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5973125/ngcctnrsvc-crashes-3-times-in-ucrtbase-dll-0xc0000
@@ -16760,7 +16760,7 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-  target_build: ''
+  target_build: '26100.9168'
 
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5989625-file-history-ui-and-previous-versions
   product_id: microsoft-windows-11
@@ -16790,7 +16790,7 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-  target_build: ''
+  target_build: '26200.8973'
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5978256-win-11-25h2kb5101684-os-builds-26200-8
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -16908,7 +16908,7 @@ evidence:
   severity: critical
   sentiment: negative
   source_weight: 1
-  target_build: ''
+  target_build: '26200.8973'
 
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5978256-win-11-25h2kb5101684-os-builds-26200-8
   product_id: microsoft-windows-11
@@ -16938,7 +16938,7 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-  target_build: ''
+  target_build: '26100.8973'
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5988390-dism-suddenly-cant-repair-my-windows-1
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -17026,7 +17026,7 @@ evidence:
   severity: medium
   sentiment: negative
   source_weight: 1
-  target_build: ''
+  target_build: '26200.8894'
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5956430-os-build-26200-8894-office-errors-majo
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -17174,7 +17174,7 @@ evidence:
   severity: critical
   sentiment: negative
   source_weight: 1
-  target_build: ''
+  target_build: '26100.8894'
 
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5948496-how-do-i-remove-the-recent-windows-upd
   product_id: microsoft-windows-11
@@ -17322,7 +17322,7 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-  target_build: ''
+  target_build: '26200.8875'
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5948960-windows-update-kb5100998-audio-issues
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -17468,7 +17468,7 @@ evidence:
   severity: critical
   sentiment: negative
   source_weight: 1
-  target_build: ''
+  target_build: '26200.8875'
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5970143-store-start-menu-and-aad-brokerplugin
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -17497,7 +17497,7 @@ evidence:
   severity: critical
   sentiment: negative
   source_weight: 1
-  target_build: ''
+  target_build: '26200.8875'
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5972257-windows-11-25h2-sha-256-tcg-replay-has
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -17641,7 +17641,7 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-  target_build: ''
+  target_build: '26100.8875'
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5950126-kb5101650-os-builds-26200-8875-and-261
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -17670,7 +17670,7 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-  target_build: ''
+  target_build: '26100.8875'
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5956564-winrt-windows-devices-display-core-idi
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -17729,7 +17729,7 @@ evidence:
   severity: critical
   sentiment: negative
   source_weight: 1
-  target_build: ''
+  target_build: '26200.8737'
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5957946-regression-mixed-dpi-classic-win32-che
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -17759,7 +17759,7 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-  target_build: ''
+  target_build: '26200.8737'
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5960381-windows-file-explorer-going-back-to-de
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -17817,7 +17817,7 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-  target_build: ''
+  target_build: '26100.8737'
 
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5936317-kb5094126-causes-recurring-0x1a-memory
   product_id: microsoft-windows-11
@@ -17877,7 +17877,7 @@ evidence:
   severity: critical
   sentiment: negative
   source_weight: 1
-  target_build: ''
+  target_build: '26200.8655'
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5923815-repeated-video-dxgkrnl-fatal-error-0x1
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -17935,7 +17935,7 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-  target_build: ''
+  target_build: '26200.8655'
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5957809-surface-laptop-7-qualcomm-snapdragon-x
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -18258,7 +18258,7 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-  target_build: ''
+  target_build: '26200.8037'
 
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5897110-file-history-silently-fails-to-turn-on
   product_id: microsoft-windows-11
@@ -18288,7 +18288,7 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-  target_build: ''
+  target_build: '26100.8037'
 
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5858421-kb5077181-unable-to-switch-between-log
   product_id: microsoft-windows-11
@@ -18404,7 +18404,7 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
-  target_build: ''
+  target_build: '26100.7705'
 
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5696105-computer-crashing-after-recent-windows
   product_id: microsoft-windows-11

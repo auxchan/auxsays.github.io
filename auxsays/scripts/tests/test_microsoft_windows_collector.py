@@ -333,8 +333,16 @@ def run() -> int:
           len(b24) == 0 and len(r24) == 1
           and r24[0].get("exclusion_reason") == "cross_patch_duplicate",
           str([r.get("exclusion_reason") for r in r24]))
-    check("exclusivity: the refused row is attributed to NO patch",
-          r24 and str(r24[0].get("target_build") or "") == "", str(r24[0].get("target_build")))
+    # The refused row KEEPS the build it was refused for. `counted: false` is what keeps it out of
+    # every count; the build is what lets the audit trail say WHICH patch refused this URL. Blanking
+    # it puts a stored row under (product, version, ''), a key no record has, and
+    # audit_consensus_evidence reports that as an integrity error -- measured: the first repair of
+    # these rows added exactly 2.
+    check("exclusivity: the refused row still records WHICH patch refused it",
+          r24 and str(r24[0].get("target_build") or "") == "26100.9168",
+          str(r24[0].get("target_build")))
+    check("exclusivity: ...and being uncounted is what keeps it out of the count",
+          r24 and r24[0].get("counted") is False, str(r24[0].get("counted")))
     # ...and it holds ACROSS runs, because the map is seeded from stored evidence.
     stored_claims = {shared_url.lower(): ("microsoft-windows-11", "25H2", "26200.9168")}
     c24, cr24 = win.evaluate_candidates(rec_24, tgt_24, [dict(shared)], CAPTURED, stored_claims)
