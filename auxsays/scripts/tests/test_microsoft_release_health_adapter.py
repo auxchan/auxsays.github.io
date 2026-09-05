@@ -388,6 +388,29 @@ def run() -> int:
         mrh.fetch_text = _orig
     by_ver = {r.get("version"): r for r in enriched}
     check("fetch() still returns the base current versions", set(by_ver) == {"26H1", "25H2", "24H2"}, str(sorted(by_ver)))
+    # OFFICIAL KNOWN ISSUES ARE PER VERSION, NOT PER BUILD. Microsoft publishes one status page
+    # per servicing train describing its CURRENT state. Copying it onto every build's record makes
+    # two false claims at once: a months-old build's page claims today's issue list as its own, and
+    # the product page -- which SUMS official_active_issue_count across records -- would publish
+    # "223 active official known issues" for Windows 11 where there are 11. Enrich the train's
+    # current update only.
+    enriched_25 = [r for r in enriched if r.get("version") == "25H2"]
+    carriers = [r for r in enriched_25 if r.get("official_active_issue_count") is not None]
+    check("known issues attach to exactly ONE record per version",
+          len(enriched_25) == 2 and len(carriers) == 1,
+          str([(r.get("target_build"), r.get("official_active_issue_count")) for r in enriched_25]))
+    check("...and it is the NEWEST update of that train",
+          carriers and carriers[0].get("target_build") == "26200.8737",
+          str([(r.get("target_build"), r.get("published_at")) for r in enriched_25]))
+    check("the superseded build claims no issue counts of its own",
+          all(r.get("official_active_issue_count") is None
+              and r.get("official_known_issues_present") is None
+              for r in enriched_25 if r is not carriers[0]),
+          str([(r.get("target_build"), r.get("official_known_issues_present")) for r in enriched_25]))
+    # It still tells the reader where that train's issues are published, so nothing is hidden.
+    check("every record still points at the per-version status page in its body",
+          all("per-version Windows release-health status page" in str(r.get("body"))
+              for r in enriched_25), str(enriched_25[-1].get("body"))[-120:])
     if "24H2" in by_ver:
         body24 = str(by_ver["24H2"].get("body"))
         check("24H2 body enriched with official issue roll-up", "Microsoft Release Health status (official)" in body24 and "1 active known issue(s), 1 resolved" in body24, body24[-160:])

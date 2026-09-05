@@ -564,7 +564,26 @@ def _enrich_records_with_status(source: dict[str, Any], records: list[dict[str, 
         return
     software = source.get("software") or ""
 
+    # ONE record per feature version, the newest. Microsoft's release-health status page is
+    # published per VERSION, not per build: it describes the current state of a servicing train.
+    # While one record WAS a train, copying it onto that record was exact. With one record per
+    # cumulative update it stops being exact in two ways at once. A December 2025 build's page
+    # would claim today's issue list as its own -- the same over-attribution this sprint removes
+    # from community reports -- and, worse, the product page SUMS official_active_issue_count
+    # across records, so 11 distinct issues spread over 71 records would publish "223 active
+    # official known issues" for Windows 11. Attaching the train's status to the train's current
+    # update keeps the number true and the attribution honest; every other record still links the
+    # per-version status page in its body prose.
+    newest_by_version: dict[str, dict[str, Any]] = {}
     for record in records:
+        version = str(record.get("version") or "")
+        if not version:
+            continue
+        current = newest_by_version.get(version)
+        if current is None or str(record.get("published_at") or "") > str(current.get("published_at") or ""):
+            newest_by_version[version] = record
+
+    for record in newest_by_version.values():
         version = str(record.get("version") or "")
         url = _status_url_for(source, version)
         if not url:
