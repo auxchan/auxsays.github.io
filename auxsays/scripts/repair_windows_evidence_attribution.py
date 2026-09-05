@@ -21,10 +21,14 @@ true of new evidence and false of the evidence already on the live pages.
      full thread instead was measured and rejected: the stored excerpt disagrees with the full text
      on 44 of 105 rows, so a full-text pass would silently rewrite themes this defect never touched.
 
-Idempotent: a second run changes nothing. Dry-run by default.
+Dry-run by default. Part A is safe to re-run forever and should report zero, because the collector
+now enforces the same rule; a non-zero result means something escaped the gate. Part B is a ONE-SHOT
+migration behind an explicit flag -- see ``run`` for why re-running it would demote genuine reports.
 
-    python auxsays/scripts/repair_windows_evidence_attribution.py            # report only
-    python auxsays/scripts/repair_windows_evidence_attribution.py --write    # apply
+    python auxsays/scripts/repair_windows_evidence_attribution.py                    # report only
+    python auxsays/scripts/repair_windows_evidence_attribution.py --write            # part A
+    python auxsays/scripts/repair_windows_evidence_attribution.py --write \
+        --reclassify-stop-errors                                                     # A + the one-shot
 """
 from __future__ import annotations
 
@@ -103,7 +107,18 @@ def load_raw(path: Path) -> tuple[dict[str, Any], list[dict[str, Any]]]:
     return payload, [item for item in rows if isinstance(item, dict)]
 
 
-def run(write: bool, path: Path = EVIDENCE_PATH) -> dict[str, Any]:
+def run(write: bool, path: Path = EVIDENCE_PATH, reclassify: bool = False) -> dict[str, Any]:
+    """Part A always; part B only when asked.
+
+    THE TWO PARTS ARE NOT THE SAME KIND OF THING. Retraction enforces a rule the collector now
+    enforces too, so re-running it is safe forever and a non-zero result means something escaped
+    the gate. Reclassification is a ONE-SHOT historical correction whose evidence is the stored
+    280-char excerpt, because a migration cannot re-read the source. The collector classifies from
+    the whole thread, so the two rules legitimately disagree on rows collected since -- measured at
+    7 of 1050 the day after the fix shipped -- and re-running part B would demote genuine
+    stop-error reports whose stop code sits past the excerpt. It stays behind an explicit flag so
+    that cannot happen by accident.
+    """
     payload, rows = load_raw(path)
     retracted: list[dict[str, str]] = []
     reclassified: list[dict[str, str]] = []
@@ -114,7 +129,7 @@ def run(write: bool, path: Path = EVIDENCE_PATH) -> dict[str, Any]:
                               "target_build": str(row.get("target_build") or ""),
                               "source_url": str(row.get("source_url") or ""),
                               "report_title": str(row.get("report_title") or "")[:100]})
-        if reclassify_stop_error(row):
+        if reclassify and reclassify_stop_error(row):
             reclassified.append({"update_version": str(row.get("update_version") or ""),
                                  "target_build": str(row.get("target_build") or ""),
                                  "from": before_theme,
@@ -140,8 +155,10 @@ def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--write", action="store_true", help="Apply the repair (default: report only).")
     parser.add_argument("--evidence-path", default=str(EVIDENCE_PATH))
+    parser.add_argument("--reclassify-stop-errors", action="store_true",
+                        help="Also run the ONE-SHOT stop-error reclassification (see run()).")
     args = parser.parse_args(argv)
-    result = run(args.write, Path(args.evidence_path))
+    result = run(args.write, Path(args.evidence_path), reclassify=args.reclassify_stop_errors)
     print(json.dumps(result, indent=2, ensure_ascii=False))
     return 0
 

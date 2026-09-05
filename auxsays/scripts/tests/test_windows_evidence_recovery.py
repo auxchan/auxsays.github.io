@@ -274,7 +274,7 @@ def run() -> int:  # noqa: PLR0915
         ]
         path.write_text(yaml.safe_dump({"schema_version": 1, "evidence": rows}, sort_keys=False),
                         encoding="utf-8")
-        first = repair.run(True, path)
+        first = repair.run(True, path, reclassify=True)
         check("H the foreign-subject row is retracted", first["retracted_foreign_subject"] == 1,
               str(first["retracted_foreign_subject"]))
         check("H the unsupported stop-error claim is reclassified",
@@ -296,7 +296,10 @@ def run() -> int:  # noqa: PLR0915
               and by_id["c"]["severity"] == "critical")
         check("H another product's rows are never touched",
               by_id["d"]["counted"] is True and by_id["d"]["issue_theme"] == "BSOD / stop error")
-        second = repair.run(True, path)
+        second = repair.run(True, path, reclassify=True)
+        check("H the one-shot reclassification is OFF by default",
+              repair.run(False, path)["reclassified_stop_error"] == 0,
+              "part B would run unasked, demoting rows classified from the full thread")
         check("H a second run is a no-op",
               second["retracted_foreign_subject"] == 0 and second["reclassified_stop_error"] == 0,
               f'{second["retracted_foreign_subject"]}/{second["reclassified_stop_error"]}')
