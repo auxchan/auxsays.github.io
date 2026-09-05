@@ -420,7 +420,11 @@ def run() -> int:  # noqa: PLR0915
     for caller in ("_layouts/aux-update.html", "_layouts/aux-updates.html",
                    "_includes/patch-table-row.html"):
         text = (_REPO / "auxsays" / caller).read_text(encoding="utf-8")
-        n_inc = text.count("monitoring-status.html")
+        # Count CALL SITES, not mentions of the filename. `text.count("monitoring-status.html")`
+        # also matched a comment that cites the include by path while explaining how its
+        # blocked/degraded split is reused -- so a prose reference made this read "1 of 2" while
+        # the single real call site did pass the build. Match the include tag itself.
+        n_inc = len(re.findall(r"\{%-?\s*include\s+monitoring-status\.html", text))
         n_build = text.count("target_build=")
         check(f"monitoring: {caller} passes the build at every call site",
               n_build >= n_inc, f"{n_build} of {n_inc}")
