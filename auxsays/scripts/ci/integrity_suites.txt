@@ -83,7 +83,7 @@ auxsays/scripts/tests/test_validate_evidence_method_health.py = 10
 auxsays/scripts/tests/test_validate_ingestion_sources.py = 30
 auxsays/scripts/tests/test_version_outcome_attribution.py = 64
 auxsays/scripts/tests/test_windows_count_authority.py = 96
-auxsays/scripts/tests/test_windows_evidence_recovery.py = 83
+auxsays/scripts/tests/test_windows_evidence_recovery.py = 84
 auxsays/scripts/tests/test_windows_patch_identity.py = 30
 auxsays/scripts/tests/test_windows_rollover_convergence.py = 36
 

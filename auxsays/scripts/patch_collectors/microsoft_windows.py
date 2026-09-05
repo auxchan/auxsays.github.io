@@ -876,6 +876,12 @@ def techcommunity_method_status(pool: TechCommunityPool, accepted: list[dict[str
     # ran out of budget or hit the hydration ceiling.
     thin = attempted > 0 and hydration_errors * 5 >= attempted
     degraded = bool(telemetry.get("sitemap_errors")) or bool(telemetry.get("truncated")) or thin
+    # EVERY hydration refused is a blocked source, not a degraded one. Measured in production run
+    # 33995052762: the sitemaps returned 200 and listed 141 threads, and all 133 thread pages
+    # returned HTTP 403 from the GitHub runner. `partial` would describe that as "some results",
+    # which is the opposite of what happened -- nothing was read at all.
+    if attempted > 0 and hydration_errors == attempted:
+        return "blocked"
     if telemetry.get("sitemap_errors") and not pool.candidates:
         return "blocked"
     if accepted:
