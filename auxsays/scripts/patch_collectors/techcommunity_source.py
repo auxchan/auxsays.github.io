@@ -31,6 +31,7 @@ from lib.post_dates import original_post_date_from_html
 import time
 import urllib.error
 import urllib.request
+from collections.abc import Iterable
 from typing import Any
 
 BASE = "https://techcommunity.microsoft.com"
@@ -130,11 +131,16 @@ def board_sitemap_url(basename: str) -> str:
     return f"{BASE}/{basename}"
 
 
-def powerpoint_threads(sitemap_xml: str, *, since: str) -> list[dict[str, str]]:
-    """PowerPoint DISCUSSION urls from one board sitemap, filtered to the window.
+def matching_threads(sitemap_xml: str, *, since: str, url_pattern: re.Pattern[str]) -> list[dict[str, str]]:
+    """DISCUSSION urls from one board sitemap that match ``url_pattern``, inside the window.
 
     A thread with no <lastmod> is skipped rather than assumed recent: an undated entry would
     otherwise be hydrated on every run forever.
+
+    ``url_pattern`` is the caller's SUBJECT filter and the only product-specific input. It is a
+    parameter rather than a module constant because a second product now enumerates these same
+    sitemaps for a different subject; the walk, the window and the discussions-only rule are
+    identical for both and must not be forked.
     """
     rows: list[dict[str, str]] = []
     for block in _URL_BLOCK_RE.findall(sitemap_xml):
@@ -142,7 +148,7 @@ def powerpoint_threads(sitemap_xml: str, *, since: str) -> list[dict[str, str]]:
         if not loc:
             continue
         url = loc.group(1).strip()
-        if not POWERPOINT_URL_RE.search(url) or not DISCUSSION_PATH_RE.search(url):
+        if not url_pattern.search(url) or not DISCUSSION_PATH_RE.search(url):
             continue
         stamp = _LASTMOD_RE.search(block)
         if not stamp or stamp.group(1) < since:
@@ -151,24 +157,36 @@ def powerpoint_threads(sitemap_xml: str, *, since: str) -> list[dict[str, str]]:
     return rows
 
 
-def enumerate_boards(*, since: str, errors: list[dict[str, Any]]) -> list[dict[str, str]]:
-    """Every recent PowerPoint discussion across the measured boards, de-duplicated by URL."""
+def powerpoint_threads(sitemap_xml: str, *, since: str) -> list[dict[str, str]]:
+    """PowerPoint DISCUSSION urls from one board sitemap, filtered to the window."""
+    return matching_threads(sitemap_xml, since=since, url_pattern=POWERPOINT_URL_RE)
+
+
+def enumerate_sitemaps(basenames: Iterable[str], *, since: str, url_pattern: re.Pattern[str],
+                       errors: list[dict[str, Any]]) -> list[dict[str, str]]:
+    """Every recent matching discussion across the named board sitemaps, de-duplicated by URL."""
     rows: list[dict[str, str]] = []
     seen: set[str] = set()
-    for basename, _yield in POWERPOINT_BOARDS:
+    for basename in basenames:
         url = board_sitemap_url(basename)
         try:
             xml = fetch(url)
         except Exception as exc:  # noqa: BLE001 - recorded for method health
             errors.append({"source_url": url, "reason": error_reason(exc)})
             continue
-        for row in powerpoint_threads(xml, since=since):
+        for row in matching_threads(xml, since=since, url_pattern=url_pattern):
             key = row["source_url"].rstrip("/").lower()
             if key in seen:
                 continue
             seen.add(key)
             rows.append({**row, "board": basename})
     return rows
+
+
+def enumerate_boards(*, since: str, errors: list[dict[str, Any]]) -> list[dict[str, str]]:
+    """Every recent PowerPoint discussion across the measured boards, de-duplicated by URL."""
+    return enumerate_sitemaps([basename for basename, _yield in POWERPOINT_BOARDS],
+                              since=since, url_pattern=POWERPOINT_URL_RE, errors=errors)
 
 
 def thread_candidate(url: str, *, date: str, page_html: str, source_type: str,

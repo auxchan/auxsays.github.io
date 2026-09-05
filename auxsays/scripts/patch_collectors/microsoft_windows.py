@@ -1,11 +1,20 @@
-"""Windows 11 community-evidence collector (Microsoft Learn Q&A).
+"""Windows 11 community-evidence collector (Microsoft Learn Q&A + Microsoft Tech Community).
 
-Discovers real Windows 11 user reports from Microsoft Learn Q&A (learn.microsoft.com/
-answers) via its search-RSS API, driving each search by the *exact current patch
-identity* already captured on the generated record (target_kb / target_os_build). It
-then applies deterministic acceptance gates so a report counts ONLY when it names the
+Discovers real Windows 11 user reports from TWO independent communities and applies ONE
+authority to both:
+
+  * Microsoft Learn Q&A (learn.microsoft.com/answers) via its search-RSS API, driving each
+    search by the *exact current patch identity* already captured on the generated record
+    (target_kb / target_os_build);
+  * Microsoft Tech Community (techcommunity.microsoft.com) by walking the Windows discussion
+    sitemaps and hydrating threads whose URL already carries a KB or OS build.
+
+It then applies deterministic acceptance gates so a report counts ONLY when it names the
 record's current KB or OS build. It reuses the fail-closed Windows identity gate added
 in PR #14, so evidence for an older KB/build can never count after a train rolls over.
+
+DISCOVERY DIVERSITY IS NOT ACCEPTANCE DIVERGENCE. Both methods feed `evaluate_candidates`,
+sharing one claims map, so one report is one row on one patch whichever community found it.
 
 Deterministic + repo-owned: no AI, no manual candidate approval. Discovery is
 keyword-anchored (search by exact KB/build); acceptance is a fixed ordered rule set.
@@ -26,6 +35,8 @@ are never reached; it only fetches Learn Q&A and prints candidate/acceptance/hea
 from __future__ import annotations
 
 import re
+import urllib.parse
+from dataclasses import dataclass
 from typing import Any
 
 from .base import (
@@ -53,11 +64,65 @@ from .base import (
 from lib.patch_identity import patch_key
 from . import microsoft_learn_qna_source as learn_qna
 from . import runtime_budget as rb
+from . import techcommunity_source as techcommunity
 
 PRODUCT_ID = WINDOWS_PRODUCT_ID
 METHOD_ID = "learn_qna_search_rss"
 SOURCE_TYPE = "microsoft_learn_qna"
 SOURCE_NAME = "Microsoft Learn Q&A"
+
+# --- second discovery method -------------------------------------------------
+#
+# WHY A SECOND METHOD, AND WHY THIS ONE. Windows had exactly one discovery method, against a
+# monitoring floor of two (`monitoring_min_healthy_methods: 2`), so its public coverage state could
+# never be honest. Five candidates were measured end to end rather than argued about:
+#
+#   Microsoft Tech Community   sitemaps allowed by robots.txt and explicitly advertised there; 624
+#                              board sitemaps, of which windows11 / windows10space /
+#                              windowsinsiderprogram / windows-servicing carry server-rendered
+#                              user threads. 132 identity-bearing threads since 2025-12-01, 22
+#                              accepted by the UNCHANGED authority across 11 records, zero overlap
+#                              with Learn Q&A (different domain). CHOSEN.
+#   Super User (Stack Exchange API)  reachable, keyless, 300/day quota. 176 questions since
+#                              2025-12-01, 16 carrying any KB/build token, ~2 that would survive
+#                              exact-patch authority. Genuine but an order of magnitude thinner,
+#                              and it spends a shared daily quota. Not chosen; see the report.
+#   Reddit                     robots.txt is `User-agent: * / Disallow: /`. Foreclosed on policy,
+#                              not on convenience.
+#   Microsoft Q&A tag feeds    same site and same corpus as the existing method: a second way to
+#                              ask the SAME community, so a Learn outage takes both down together.
+#                              That is a method counter, not coverage.
+#   Open-web federation        federates Learn Q&A and Stack Exchange, i.e. it is the union of
+#                              lanes above rather than an independent one.
+#
+# ATTRIBUTION SAFETY. `techcommunity_source.thread_candidate` reads the JSON-LD `mainEntity` --
+# the OPENING POST only. Replies belong to other people, and folding them in would let a stranger's
+# KB become this reporter's patch identity.
+TECHCOMMUNITY_METHOD_ID = "techcommunity_windows_sitemap"
+TECHCOMMUNITY_SOURCE_TYPE = "microsoft_tech_community"
+TECHCOMMUNITY_SOURCE_NAME = "Microsoft Tech Community"
+
+# Measured Windows spaces. windows-servicing / windowsosplatformdiscussions / windows-deployment are
+# included for servicing threads; the server, PowerShell, IoT and blog sitemaps are not Windows 11
+# client user reports and are deliberately absent.
+TECHCOMMUNITY_SPACES: tuple[str, ...] = (
+    "sitemap_windows11.xml.gz",
+    "sitemap_windows10space.xml.gz",
+    "sitemap_windowsinsiderprogram.xml.gz",
+    "sitemap_windows-servicing.xml.gz",
+    "sitemap_windowsosplatformdiscussions.xml.gz",
+    "sitemap_windows-deployment.xml.gz",
+)
+
+# The cheap first stage. 5,712 Windows threads were modified inside a nine-month window; hydrating
+# all of them to find a handful is not a production behaviour, so discovery admits only threads
+# whose URL SLUG already carries a KB or an OS build. This bounds the walk at the cost of recall --
+# a thread naming its KB only in the body is not reachable this way, and the report says so.
+WINDOWS_IDENTITY_SLUG_RE = re.compile(r"kb\d{7}|(?<!\d)2[0-9]{4}[-.]\d{3,5}(?!\d)", re.I)
+
+# A hard ceiling on stage two, so an unbounded `--since` cannot turn one run into thousands of
+# fetches. Reaching it is reported as `partial`, never as success.
+TECHCOMMUNITY_MAX_HYDRATIONS = 400
 
 # --- deterministic content classifiers (no AI) -------------------------------
 KB_TOKEN_RE = re.compile(r"\bKB\d{6,7}\b", re.I)
@@ -183,6 +248,61 @@ DRIVER_QUESTION_RE = re.compile(
     r")"
 )
 
+# --- foreign-product subject -------------------------------------------------
+#
+# WHAT THIS CLOSES, MEASURED. `update_attributed` below is satisfied by ANY install/update
+# vocabulary anywhere in the body, unlinked from the record's own KB or build. A Windows Q&A post
+# about a DIFFERENT product's installer therefore attributes to whichever Windows patch the author
+# happened to declare running: "Java 8 update 491 installation error code1603", "DirectX End-User
+# Runtime June 2010 installation keeps failing", "Can't install Resident Evil 7 from Microsoft
+# store", "Microsoft Outlook 2024 no longer synchronizes imap email from gmail". Nineteen such rows
+# were measured -- 13 in a historical replay and 6 already published on live patch pages.
+#
+# THE TITLE, AND ONLY THE TITLE. Same shape as DRIVER_QUESTION_RE, for the same reason: the title
+# is the post's primary SUBJECT, while a body names other software constantly and innocently. A
+# body-scoped rule would delete genuine Windows regressions that merely name an affected app.
+#
+# WHY NOT A GENERAL ATTRIBUTION TIGHTENING. Measured and rejected. Requiring the attribution cue to
+# sit near a Windows-update referent (sentence-scoped, and again at +/-140 characters) dropped 30 of
+# 321 replayed rows, roughly half of them legitimate -- "Windows 11 latest security patch is
+# failing", "2026-06 update issues", "Why doesn't the recent Windows update install?" -- because cue
+# and referent routinely land in different clauses. That is exactly the over-deletion the OBS
+# version-outcome veto module in lib/ documents (it names it in its own "WHAT THIS IS NOT"
+# paragraph, and is deliberately NOT imported here -- a governed test pins that independence).
+# This veto stays narrow instead: it fires only when the title's subject is a separately-updated
+# product AND the title carries neither the record's own identity, nor a Windows update, nor a
+# Windows component.
+FOREIGN_PRODUCT_SUBJECT_RE = re.compile(
+    r"(?i)\b(?:"
+    r"teams|onedrive|outlook|office\s*(?:365|2016|2019|2021|2024)|excel|powerpoint|"
+    r"microsoft\s+edge|edge|chrome|firefox|opera|brave|"
+    r"java|jre|jdk|directx|visual\s+studio|vs\s*code|"
+    r"sql\s+server|ssms|hlk|"
+    r"steam|epic\s+games|resident\s+evil|minecraft|roblox|valorant|fortnite|"
+    r"adobe|acrobat|photoshop|autocad|solidworks|"
+    r"quickbooks|dropbox|zoom|slack|discord|spotify|itunes|vmware|virtualbox|docker"
+    r")\b"
+)
+
+# The Windows update itself as the title's subject. "2026-05 Preview Update appears to break Excel"
+# is a report ABOUT the update; Excel is the symptom. A live row the veto would otherwise delete.
+WINDOWS_UPDATE_SUBJECT_RE = re.compile(
+    r"(?i)(?:"
+    r"\bkb\s?\d{6,7}\b|\bos\s+build\b|\b2[0-9]{4}\.\d{3,5}\b|"
+    r"(?:cumulative|security|preview|quality|feature|windows)\s+updat\w*|windows\s+11\s+updat\w*|"
+    r"\bpatch\s+tuesday\b|servicing\s+stack"
+    r")"
+)
+
+# A Windows component named alongside the foreign product. "Virtual keyboard/Clipboard history,
+# Start menu Search bar, and Outlook (MS Store) ..." is a Windows report that lists an Office app
+# among several symptoms -- also a live row the veto would otherwise delete.
+WINDOWS_COMPONENT_SUBJECT_RE = re.compile(
+    r"(?i)\b(?:taskbar|start\s+menu|file\s+explorer|explorer\.exe|windows\s+search|clipboard|"
+    r"virtual\s+keyboard|windows\s+hello|bitlocker|windows\s+defender|windows\s+update|bluetooth|"
+    r"wi-?fi|printer|print\s+spooler|hyper-?v|wsl|winsxs|dism|sfc|blue\s+screen|bsod|boot|bugcheck)\b"
+)
+
 SYSTEM_SPEC_RE = re.compile(
     r"(?i)(?:"
     r"secure\s+boot\s*[=:]|csm\s+(?:support\s+)?(?:enabled|disabled)|\btpm\s*(?:2\.0|version|enabled|:)|"
@@ -256,6 +376,27 @@ def update_attributed(report_text: str, report_title: str, matched_kb: str, matc
     )
 
 
+def foreign_product_subject(report_title: str, matched_kb: str, matched_os_build: str) -> bool:
+    """The post's SUBJECT is a separately-updated product, not this Windows cumulative update.
+
+    Four ordered escapes, each derived from a measured live row (see FOREIGN_PRODUCT_SUBJECT_RE):
+      1. the record's own KB or build in the title -- the post names this patch, whatever else it
+         mentions ("OS Build 26200.8894 Office Errors");
+      2. no foreign product in the title at all -- nothing to veto;
+      3. a Windows update named in the title -- the update is the subject, the app is the symptom;
+      4. a Windows component named in the title -- a Windows report listing an app among symptoms.
+    """
+    title = report_title or ""
+    if (matched_os_build and matched_os_build in title) or (
+            matched_kb and re.search(re.escape(matched_kb), title, re.I)):
+        return False
+    if not FOREIGN_PRODUCT_SUBJECT_RE.search(title):
+        return False
+    if WINDOWS_UPDATE_SUBJECT_RE.search(title):
+        return False
+    return not WINDOWS_COMPONENT_SUBJECT_RE.search(title)
+
+
 def build_only_in_system_specs(report_text: str, report_title: str, matched_kb: str, matched_os_build: str) -> bool:
     """The identity token is present but only in a system-spec/diagnostics context (a spec
     footer or signature), not in the problem statement."""
@@ -277,6 +418,12 @@ def windows_intent_reason(report_text: str, report_title: str, matched_kb: str, 
     # attribution to the Windows update to rescue "after KB..., my driver broke" reports.
     if DRIVER_QUESTION_RE.search(report_title) and not TEMPORAL_REGRESSION_RE.search(report_text):
         return "driver_update_question_not_windows_patch"
+    # A separately-updated product's own failure is not this cumulative update's defect. Placed
+    # next to the driver rule because it is the same rule one category wider, and BEFORE the
+    # attribution check because the whole point is that generic install/update vocabulary in the
+    # body must not attribute another product's installer to this patch.
+    if foreign_product_subject(report_title, matched_kb, matched_os_build):
+        return "foreign_product_subject_not_windows_patch"
     if FEATURE_QUESTION_RE.search(report_text) and not update_attributed(report_text, report_title, matched_kb, matched_os_build):
         return "feature_question_not_regression"
     attributed = update_attributed(report_text, report_title, matched_kb, matched_os_build)
@@ -302,9 +449,26 @@ def identity_basis(matched_kb: str, matched_os_build: str, matched_feature: str)
     return False, "no_exact_windows_identity"
 
 
+# A stop error names itself. Windows update failures do not: their error codes are ordinary
+# HRESULT/NTSTATUS values (0x800f0991, 0x80070306, 0x8024001e, 0xc000009c) and a bare hex token is
+# therefore NOT evidence of a bugcheck. It used to be: `re.search(r"0x[0-9a-f]{6,8}")` sat in the
+# BSOD branch, which runs FIRST, so every install-failure report was published as "BSOD / stop
+# error" at severity `critical`. Measured on the live corpus: 32 rows carried that theme and only 5
+# contained any stop-error vocabulary -- "WINDOWS UPDATE not functioning" and "cannot connect to
+# shares" among the 27 that did not. Bugcheck NAMES are added so a report that gives the stop code
+# in words rather than the acronym still classifies correctly.
+BSOD_VOCABULARY = (
+    "bsod", "blue screen", "blue-screen", "bugcheck", "bug check", "stop code", "stop error",
+    "kernel_security_check", "memory_management", "irql_not_less_or_equal", "page_fault_in",
+    "page fault in nonpaged area", "dpc_watchdog", "unexpected_kernel_mode_trap",
+    "critical_process_died", "whea_uncorrectable", "system_service_exception",
+    "driver_irql_not_less_or_equal", "video_tdr", "kmode_exception_not_handled",
+)
+
+
 def classify(text: str) -> tuple[str, str, str, str, str]:
     lowered = (text or "").lower()
-    if any(t in lowered for t in ("bsod", "blue screen", "blue-screen", "bugcheck", "bug check", "stop code", "stop error")) or re.search(r"0x[0-9a-f]{6,8}", lowered):
+    if any(t in lowered for t in BSOD_VOCABULARY):
         return "BSOD / stop error", "system stability", "windows", "critical", "negative"
     if any(t in lowered for t in ("won't boot", "wont boot", "fails to boot", "boot loop", "black screen", "no boot")):
         return "boot failure", "startup / boot", "windows", "critical", "negative"
@@ -535,6 +699,165 @@ def search_query_terms(target: dict[str, Any]) -> list[str]:
     return terms
 
 
+# --- Tech Community discovery ------------------------------------------------
+
+def techcommunity_slug(url: str) -> str:
+    """The thread's title slug, which is its identity ACROSS spaces.
+
+    Tech Community cross-posts: the same report appears under /windows11/ and
+    /windowsinsiderprogram/ with different thread ids, and one user posted the identical thread
+    three times into one space (ids 4526757/4526758/4526760). Both were measured. Keying dedup on
+    the full URL counts one person's report two or three times; keying it on the slug is the same
+    one-report-one-row rule `evaluate_candidates` already enforces for URLs.
+    """
+    path = urllib.parse.urlsplit(str(url or "")).path
+    parts = [part for part in path.rstrip("/").split("/") if part]
+    if len(parts) < 2:
+        return ""
+    return urllib.parse.unquote(parts[-2]).lower()
+
+
+def collect_techcommunity_candidates(context: CollectorContext,
+                                     errors: list[dict[str, Any]]) -> tuple[list[dict[str, Any]], dict[str, Any]]:
+    """Enumerate, dedupe and hydrate Windows threads. Returns (candidates, discovery telemetry).
+
+    Run-scoped, NOT record-scoped: the sitemaps are the same for all 71 records, so walking them
+    once per record would cost 71x the fetches to reach the identical thread set. The candidates
+    are then offered to every record, and the unchanged authority decides which patch (if any) each
+    belongs to.
+    """
+    since = str(getattr(context, "since", "") or "") or "1970-01-01"
+    sitemap_errors: list[dict[str, Any]] = []
+    listed = techcommunity.enumerate_sitemaps(
+        TECHCOMMUNITY_SPACES, since=since, url_pattern=WINDOWS_IDENTITY_SLUG_RE,
+        errors=sitemap_errors)
+    errors.extend(sitemap_errors)
+    by_slug: dict[str, dict[str, str]] = {}
+    for row in listed:
+        key = techcommunity_slug(row.get("source_url", ""))
+        if key and key not in by_slug:
+            by_slug[key] = row
+    unique = list(by_slug.values())
+    truncated = len(unique) > TECHCOMMUNITY_MAX_HYDRATIONS
+    hydrate = unique[:TECHCOMMUNITY_MAX_HYDRATIONS]
+    candidates: list[dict[str, Any]] = []
+    attempted = 0
+    hydration_errors = 0
+    for row in hydrate:
+        budget = rb.get_run_budget()
+        if budget is not None and budget.collector_finalize_expired():
+            truncated = True
+            break
+        url = row["source_url"]
+        attempted += 1
+        try:
+            page = techcommunity.fetch(url)
+        except Exception as exc:  # noqa: BLE001 - recorded for method health
+            hydration_errors += 1
+            errors.append({"source_url": url, "reason": techcommunity.error_reason(exc)})
+            continue
+        candidate = techcommunity.thread_candidate(
+            url, date=row.get("date", ""), page_html=page,
+            source_type=TECHCOMMUNITY_SOURCE_TYPE, source_name=TECHCOMMUNITY_SOURCE_NAME)
+        if not candidate:
+            continue
+        # The date gate is `source_date >= target_release_date`, so it must run on the day the
+        # report was WRITTEN. A sitemap <lastmod> moves with the newest reply, which would let a
+        # thread written before the patch shipped pass as evidence about it. See lib/post_dates.
+        candidate["source_date"] = candidate.get("original_post_date") or row.get("date", "")
+        candidates.append(candidate)
+        techcommunity._pace()  # noqa: SLF001 - the module's own politeness pacing
+    telemetry = {
+        "listed": len(listed),
+        "unique_slugs": len(unique),
+        "hydrated": len(candidates),
+        "attempted": attempted,
+        "sitemap_errors": len(sitemap_errors),
+        "hydration_errors": hydration_errors,
+        "truncated": truncated,
+    }
+    return candidates, telemetry
+
+
+@dataclass(frozen=True)
+class TechCommunityPool:
+    """One run's Tech Community discovery, shared by every record."""
+
+    candidates: list[dict[str, Any]]
+    telemetry: dict[str, Any]
+    errors: list[dict[str, Any]]
+
+
+def build_techcommunity_pool(context: CollectorContext) -> TechCommunityPool:
+    errors: list[dict[str, Any]] = []
+    candidates, telemetry = collect_techcommunity_candidates(context, errors)
+    return TechCommunityPool(candidates=candidates, telemetry=telemetry, errors=errors)
+
+
+def techcommunity_method_status(pool: TechCommunityPool, accepted: list[dict[str, Any]],
+                                rejected: list[dict[str, Any]]) -> str:
+    """Canonical source-health vocabulary only, with the SAME meaning as the Learn Q&A method.
+
+    A method that reached the source but found nothing for THIS patch is `no_results`, not
+    `success`. The first wiring of this method returned `success` whenever the shared pool held
+    any candidate at all -- which was every record, because the pool is run-scoped -- so all 71
+    rows read healthy while 60 of them had found nothing. That is exactly the "do not mark a
+    zero-value source healthy to satisfy the method floor" failure, arrived at by accident.
+    """
+    telemetry = pool.telemetry
+    attempted = int(telemetry.get("attempted") or 0)
+    hydration_errors = int(telemetry.get("hydration_errors") or 0)
+    # An ISOLATED thread that would not hydrate is normal operation on a 130-page walk, and
+    # reporting it as `partial` would mark all 71 patches MONITORING DEGRADED over one dead
+    # thread. A whole SPACE that would not enumerate is real degradation, and so is a walk that
+    # ran out of budget or hit the hydration ceiling.
+    thin = attempted > 0 and hydration_errors * 5 >= attempted
+    degraded = bool(telemetry.get("sitemap_errors")) or bool(telemetry.get("truncated")) or thin
+    if telemetry.get("sitemap_errors") and not pool.candidates:
+        return "blocked"
+    if accepted:
+        return "partial" if degraded else "success"
+    if degraded:
+        return "partial"
+    return "no_results"
+
+
+def techcommunity_health(record: PatchRecord, captured_at: str, pool: TechCommunityPool,
+                         accepted: list[dict[str, Any]], rejected: list[dict[str, Any]]) -> dict[str, Any]:
+    telemetry = pool.telemetry
+    notes = (
+        "Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for "
+        "microsoft-windows-11. Enumerated spaces: "
+        f"{', '.join(TECHCOMMUNITY_SPACES)}. "
+        f"Threads listed with a KB/OS-build slug {telemetry.get('listed', 0)}, unique after "
+        f"cross-post slug dedupe {telemetry.get('unique_slugs', 0)}, hydrated "
+        f"{telemetry.get('hydrated', 0)}. "
+        f"For this record: accepted {len(accepted)}, rejected {len(rejected)}. "
+        "The pool is enumerated once per run and offered to every record; the unchanged Windows "
+        "authority decides which patch each thread belongs to. Discovery admits only threads whose "
+        "URL slug already carries a KB or OS build, so a thread naming its patch only in the body "
+        "is out of reach of this method."
+    )
+    if telemetry.get("truncated"):
+        notes += f" Hydration truncated at {TECHCOMMUNITY_MAX_HYDRATIONS} or by the run budget."
+    if pool.errors:
+        notes += f" Fetch failures: {blocked_reason_from_errors(pool.errors)}."
+    return method_health_row(
+        product_id=PRODUCT_ID,
+        update_version=record.update_version,
+        target_build=record.target_build,
+        method_id=TECHCOMMUNITY_METHOD_ID,
+        source_type=TECHCOMMUNITY_SOURCE_TYPE,
+        status=techcommunity_method_status(pool, accepted, rejected),
+        candidates_found=len(pool.candidates),
+        accepted_reports=len(accepted),
+        rejected_reports=len(rejected),
+        blocked_reason=blocked_reason_from_errors(pool.errors),
+        last_run=captured_at,
+        notes=notes,
+    )
+
+
 # --- method health -----------------------------------------------------------
 
 def learn_qna_method_status(candidates: list[dict[str, Any]], accepted: list[dict[str, Any]], rejected: list[dict[str, Any]], errors: list[dict[str, Any]]) -> str:
@@ -610,7 +933,8 @@ def health_for_method(record: PatchRecord, target: dict[str, Any], captured_at: 
 # --- collection --------------------------------------------------------------
 
 def collect_for_record(record: PatchRecord, context: CollectorContext,
-                       claims: dict[str, tuple[str, str, str]] | None = None) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
+                       claims: dict[str, tuple[str, str, str]] | None = None,
+                       techcommunity_pool: TechCommunityPool | None = None) -> tuple[list[dict[str, Any]], list[dict[str, Any]], list[dict[str, Any]]]:
     captured_at = utc_now()
     target = record_target(record)
     query_terms = search_query_terms(target)
@@ -626,6 +950,18 @@ def collect_for_record(record: PatchRecord, context: CollectorContext,
         )
     accepted, rejected = evaluate_candidates(record, target, candidates, captured_at, claims)
     health = [health_for_method(record, target, captured_at, candidates, accepted, rejected, errors, query_terms)]
+    if techcommunity_pool is not None:
+        # THE SAME AUTHORITY, DELIBERATELY. Discovery diversity must never become acceptance
+        # divergence: the Tech Community pool goes through `evaluate_candidates`, i.e. the same
+        # identity gate, concrete-issue gate, date gate, role rules, foreign-subject veto and
+        # one-report-one-patch claims map as Learn Q&A. `claims` is the SAME dict, so a URL taken
+        # by one method cannot be taken again by the other.
+        tc_accepted, tc_rejected = evaluate_candidates(
+            record, target, techcommunity_pool.candidates, captured_at, claims)
+        accepted = accepted + tc_accepted
+        rejected = rejected + tc_rejected
+        health.append(techcommunity_health(record, captured_at, techcommunity_pool,
+                                           tc_accepted, tc_rejected))
     return accepted, rejected, health
 
 
@@ -666,12 +1002,19 @@ class WindowsLearnQnaCollector(ProductCollector):
         # ONE REPORT, ONE PATCH. Seeded from stored evidence so the rule holds across runs, then
         # extended in place as this run accepts. See evaluate_candidates for what broke without it.
         claims = claimed_urls()
+        # ONE ENUMERATION PER RUN. See collect_techcommunity_candidates: the sitemaps do not vary
+        # by record, so walking them inside the loop would cost 71x the fetches for the identical
+        # thread set -- and it would spend that out of the collector's wall-clock budget, i.e. in
+        # records never searched. Built before the loop so every record sees the same pool.
+        techcommunity_pool = build_techcommunity_pool(context)
+        rb.emit("windows_techcommunity_pool", product_id=PRODUCT_ID, **techcommunity_pool.telemetry)
         for record in records:
             _b = rb.get_run_budget()
             if _b is not None and _b.collector_finalize_expired():
                 rb.emit("collector_budget_stop", product_id=PRODUCT_ID, reason="collector_finalize")
                 break
-            accepted, rejected, health = collect_for_record(record, context, claims)
+            accepted, rejected, health = collect_for_record(record, context, claims,
+                                                            techcommunity_pool)
             result: dict[str, Any] = {
                 "product_id": PRODUCT_ID,
                 "version": record.update_version,
