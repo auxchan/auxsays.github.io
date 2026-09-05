@@ -23,7 +23,7 @@ reports:
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-09-05T15:11:19Z'
+  captured_at: '2026-09-05T20:18:21Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -42,7 +42,7 @@ reports:
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-09-05T15:11:19Z'
+  captured_at: '2026-09-05T20:18:21Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -62,7 +62,7 @@ reports:
   window_start: '2026-08-11'
   window_version: 26.001.21789
 - attribution_state: not_established
-  captured_at: '2026-09-05T15:11:19Z'
+  captured_at: '2026-09-05T20:18:21Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -82,7 +82,7 @@ reports:
   window_start: '2026-06-09'
   window_version: 26.001.21662
 - attribution_state: not_established
-  captured_at: '2026-09-05T15:11:19Z'
+  captured_at: '2026-09-05T20:18:21Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -102,7 +102,7 @@ reports:
   window_start: '2026-05-18'
   window_version: 26.001.21563
 - attribution_state: not_established
-  captured_at: '2026-09-05T06:28:30Z'
+  captured_at: '2026-09-05T20:18:21Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -122,7 +122,7 @@ reports:
   window_start: '2026-01-20'
   window_version: 25.001.21111
 - attribution_state: not_established
-  captured_at: '2026-09-05T15:31:11Z'
+  captured_at: '2026-09-05T20:39:17Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -141,7 +141,7 @@ reports:
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-09-05T15:31:11Z'
+  captured_at: '2026-09-05T20:39:17Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -160,7 +160,7 @@ reports:
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-09-05T15:31:11Z'
+  captured_at: '2026-09-05T20:39:17Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -180,7 +180,7 @@ reports:
   window_start: '2026-06-09'
   window_version: 26.001.21662
 - attribution_state: not_established
-  captured_at: '2026-09-05T06:49:28Z'
+  captured_at: '2026-09-05T20:39:17Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -200,7 +200,7 @@ reports:
   window_start: '2026-02-12'
   window_version: 25.001.21208
 - attribution_state: not_established
-  captured_at: '2026-09-03T16:19:57Z'
+  captured_at: '2026-09-05T20:39:17Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
