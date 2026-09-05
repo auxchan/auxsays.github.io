@@ -21550,7 +21550,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 2
   blocked_reason: ''
-  last_run: '2026-09-05T04:16:11Z'
+  last_run: '2026-09-05T05:33:43Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5120996, 28000.2804. Exact KB/OS-build search attempted: True. Candidates 2, accepted 0, rejected 2. Top rejections: generic_support_request=2. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 25H2
@@ -21566,7 +21566,7 @@ methods:
   accepted_reports: 4
   rejected_reports: 26
   blocked_reason: ''
-  last_run: '2026-09-05T04:16:13Z'
+  last_run: '2026-09-05T05:33:46Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5120998, 26200.9278. Exact KB/OS-build search attempted: True. Candidates 30, accepted 4, rejected 26. Top rejections: build_only_in_system_specs=1, generic_support_request=9, missing_kb_or_build=8, missing_update_attribution=4, wrong_kb_for_current_patch=4. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 24H2
@@ -21582,7 +21582,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 22
   blocked_reason: ''
-  last_run: '2026-09-05T04:16:15Z'
+  last_run: '2026-09-05T05:33:49Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5120998, 26100.9278. Exact KB/OS-build search attempted: True. Candidates 22, accepted 0, rejected 22. Top rejections: generic_support_request=7, missing_kb_or_build=8, wrong_kb_for_current_patch=7. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 26H1
@@ -21598,7 +21598,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 4
   blocked_reason: ''
-  last_run: '2026-09-05T04:16:17Z'
+  last_run: '2026-09-05T05:33:51Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5121000, 28000.2704. Exact KB/OS-build search attempted: True. Candidates 5, accepted 1, rejected 4. Top rejections: build_only_in_system_specs=2, generic_support_request=2. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 25H2
@@ -21614,7 +21614,7 @@ methods:
   accepted_reports: 20
   rejected_reports: 65
   blocked_reason: ''
-  last_run: '2026-09-05T04:16:19Z'
+  last_run: '2026-09-05T05:33:54Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5121003, 26200.9168. Exact KB/OS-build search attempted: True. Candidates 85, accepted 20, rejected 65. Top rejections: build_only_in_system_specs=7, date_only_inference=1, generic_support_request=19, how_to_question_not_regression=1, missing_kb_or_build=16, missing_update_attribution=9, release_announcement_not_user_report=1, tenant_service_incident_not_client_patch=1, wrong_feature_train_for_kb=1, wrong_kb_for_current_patch=9. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 24H2
@@ -21623,15 +21623,15 @@ methods:
   source_type: microsoft_learn_qna
   status: success
   candidates_found: 49
-  accepted_candidates: 3
+  accepted_candidates: 1
   duplicate_existing_evidence: 0
-  evidence_rows_added: 3
-  public_counted_reports: 3
-  accepted_reports: 3
-  rejected_reports: 46
+  evidence_rows_added: 1
+  public_counted_reports: 1
+  accepted_reports: 1
+  rejected_reports: 48
   blocked_reason: ''
-  last_run: '2026-09-05T04:16:22Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5121003, 26100.9168. Exact KB/OS-build search attempted: True. Candidates 49, accepted 3, rejected 46. Top rejections: date_only_inference=1, generic_support_request=7, missing_kb_or_build=12, missing_update_attribution=1, release_announcement_not_user_report=1, wrong_feature_train_for_kb=6, wrong_kb_for_current_patch=18. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
+  last_run: '2026-09-05T05:33:57Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5121003, 26100.9168. Exact KB/OS-build search attempted: True. Candidates 49, accepted 1, rejected 48. Top rejections: cross_patch_duplicate=2, date_only_inference=1, generic_support_request=7, missing_kb_or_build=12, missing_update_attribution=1, release_announcement_not_user_report=1, wrong_feature_train_for_kb=6, wrong_kb_for_current_patch=18. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 23H2
   target_build: '22631.7517'
@@ -21646,7 +21646,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-09-05T04:16:24Z'
+  last_run: '2026-09-05T05:33:59Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5120240, 22631.7517. Exact KB/OS-build search attempted: True. Candidates 0, accepted 0, rejected 0. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 26H1
@@ -21662,7 +21662,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 1
   blocked_reason: ''
-  last_run: '2026-09-05T04:16:26Z'
+  last_run: '2026-09-05T05:34:02Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5101681, 28000.2608. Exact KB/OS-build search attempted: True. Candidates 2, accepted 1, rejected 1. Top rejections: generic_support_request=1. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 25H2
@@ -21671,15 +21671,15 @@ methods:
   source_type: microsoft_learn_qna
   status: success
   candidates_found: 54
-  accepted_candidates: 15
+  accepted_candidates: 13
   duplicate_existing_evidence: 0
-  evidence_rows_added: 15
-  public_counted_reports: 15
-  accepted_reports: 15
-  rejected_reports: 39
+  evidence_rows_added: 13
+  public_counted_reports: 13
+  accepted_reports: 13
+  rejected_reports: 41
   blocked_reason: ''
-  last_run: '2026-09-05T04:16:28Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5101684, 26200.8973. Exact KB/OS-build search attempted: True. Candidates 54, accepted 15, rejected 39. Top rejections: build_only_in_system_specs=3, date_only_inference=1, generic_support_request=11, missing_kb_or_build=15, missing_update_attribution=4, wrong_kb_for_current_patch=5. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
+  last_run: '2026-09-05T05:34:05Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5101684, 26200.8973. Exact KB/OS-build search attempted: True. Candidates 54, accepted 13, rejected 41. Top rejections: build_only_in_system_specs=3, cross_patch_duplicate=2, date_only_inference=1, generic_support_request=11, missing_kb_or_build=15, missing_update_attribution=4, wrong_kb_for_current_patch=5. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 24H2
   target_build: '26100.8973'
@@ -21687,15 +21687,15 @@ methods:
   source_type: microsoft_learn_qna
   status: success
   candidates_found: 47
-  accepted_candidates: 2
+  accepted_candidates: 1
   duplicate_existing_evidence: 0
-  evidence_rows_added: 2
-  public_counted_reports: 2
-  accepted_reports: 2
-  rejected_reports: 45
+  evidence_rows_added: 1
+  public_counted_reports: 1
+  accepted_reports: 1
+  rejected_reports: 46
   blocked_reason: ''
-  last_run: '2026-09-05T04:16:30Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5101684, 26100.8973. Exact KB/OS-build search attempted: True. Candidates 47, accepted 2, rejected 45. Top rejections: account_backend_issue_not_patch=1, date_only_inference=1, generic_support_request=8, missing_kb_or_build=15, wrong_feature_train_for_kb=9, wrong_kb_for_current_patch=11. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
+  last_run: '2026-09-05T05:34:07Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5101684, 26100.8973. Exact KB/OS-build search attempted: True. Candidates 47, accepted 1, rejected 46. Top rejections: account_backend_issue_not_patch=1, cross_patch_duplicate=1, date_only_inference=1, generic_support_request=8, missing_kb_or_build=15, wrong_feature_train_for_kb=9, wrong_kb_for_current_patch=11. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 25H2
   target_build: '26200.8894'
@@ -21703,31 +21703,31 @@ methods:
   source_type: microsoft_learn_qna
   status: success
   candidates_found: 23
-  accepted_candidates: 6
+  accepted_candidates: 5
   duplicate_existing_evidence: 0
-  evidence_rows_added: 6
-  public_counted_reports: 6
-  accepted_reports: 6
-  rejected_reports: 17
+  evidence_rows_added: 5
+  public_counted_reports: 5
+  accepted_reports: 5
+  rejected_reports: 18
   blocked_reason: ''
-  last_run: '2026-09-05T04:16:32Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5121767, 26200.8894. Exact KB/OS-build search attempted: True. Candidates 23, accepted 6, rejected 17. Top rejections: build_only_in_system_specs=1, generic_support_request=5, missing_kb_or_build=4, missing_update_attribution=2, wrong_kb_for_current_patch=5. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
+  last_run: '2026-09-05T05:34:10Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5121767, 26200.8894. Exact KB/OS-build search attempted: True. Candidates 23, accepted 5, rejected 18. Top rejections: build_only_in_system_specs=1, cross_patch_duplicate=1, generic_support_request=5, missing_kb_or_build=4, missing_update_attribution=2, wrong_kb_for_current_patch=5. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 24H2
   target_build: '26100.8894'
   method_id: learn_qna_search_rss
   source_type: microsoft_learn_qna
-  status: success
+  status: no_results
   candidates_found: 14
-  accepted_candidates: 1
+  accepted_candidates: 0
   duplicate_existing_evidence: 0
-  evidence_rows_added: 1
-  public_counted_reports: 1
-  accepted_reports: 1
-  rejected_reports: 13
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 14
   blocked_reason: ''
-  last_run: '2026-09-05T04:16:34Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5121767, 26100.8894. Exact KB/OS-build search attempted: True. Candidates 14, accepted 1, rejected 13. Top rejections: generic_support_request=2, missing_kb_or_build=4, wrong_feature_train_for_kb=2, wrong_kb_for_current_patch=5. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
+  last_run: '2026-09-05T05:34:13Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5121767, 26100.8894. Exact KB/OS-build search attempted: True. Candidates 14, accepted 0, rejected 14. Top rejections: cross_patch_duplicate=1, generic_support_request=2, missing_kb_or_build=4, wrong_feature_train_for_kb=2, wrong_kb_for_current_patch=5. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 26H1
   target_build: '28000.2525'
@@ -21742,7 +21742,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-09-05T04:16:36Z'
+  last_run: '2026-09-05T05:34:15Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5101649, 28000.2525. Exact KB/OS-build search attempted: True. Candidates 0, accepted 0, rejected 0. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 25H2
@@ -21751,15 +21751,15 @@ methods:
   source_type: microsoft_learn_qna
   status: success
   candidates_found: 48
-  accepted_candidates: 15
+  accepted_candidates: 12
   duplicate_existing_evidence: 0
-  evidence_rows_added: 15
-  public_counted_reports: 15
-  accepted_reports: 15
-  rejected_reports: 33
+  evidence_rows_added: 12
+  public_counted_reports: 12
+  accepted_reports: 12
+  rejected_reports: 36
   blocked_reason: ''
-  last_run: '2026-09-05T04:16:38Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5101650, 26200.8875. Exact KB/OS-build search attempted: True. Candidates 48, accepted 15, rejected 33. Top rejections: build_only_in_system_specs=2, date_only_inference=1, feature_question_not_regression=1, generic_support_request=11, missing_kb_or_build=4, missing_update_attribution=6, vague_latest_update=1, wrong_kb_for_current_patch=7. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
+  last_run: '2026-09-05T05:34:18Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5101650, 26200.8875. Exact KB/OS-build search attempted: True. Candidates 48, accepted 12, rejected 36. Top rejections: build_only_in_system_specs=2, cross_patch_duplicate=3, date_only_inference=1, feature_question_not_regression=1, generic_support_request=11, missing_kb_or_build=4, missing_update_attribution=6, vague_latest_update=1, wrong_kb_for_current_patch=7. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 24H2
   target_build: '26100.8875'
@@ -21767,15 +21767,15 @@ methods:
   source_type: microsoft_learn_qna
   status: success
   candidates_found: 31
-  accepted_candidates: 3
+  accepted_candidates: 1
   duplicate_existing_evidence: 0
-  evidence_rows_added: 3
-  public_counted_reports: 3
-  accepted_reports: 3
-  rejected_reports: 28
+  evidence_rows_added: 1
+  public_counted_reports: 1
+  accepted_reports: 1
+  rejected_reports: 30
   blocked_reason: ''
-  last_run: '2026-09-05T04:16:41Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5101650, 26100.8875. Exact KB/OS-build search attempted: True. Candidates 31, accepted 3, rejected 28. Top rejections: date_only_inference=1, generic_support_request=8, how_to_question_not_regression=1, missing_kb_or_build=3, vague_latest_update=1, wrong_feature_train_for_kb=5, wrong_kb_for_current_patch=9. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
+  last_run: '2026-09-05T05:34:20Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5101650, 26100.8875. Exact KB/OS-build search attempted: True. Candidates 31, accepted 1, rejected 30. Top rejections: cross_patch_duplicate=2, date_only_inference=1, generic_support_request=8, how_to_question_not_regression=1, missing_kb_or_build=3, vague_latest_update=1, wrong_feature_train_for_kb=5, wrong_kb_for_current_patch=9. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 23H2
   target_build: '22631.7376'
@@ -21790,7 +21790,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 1
   blocked_reason: ''
-  last_run: '2026-09-05T04:16:43Z'
+  last_run: '2026-09-05T05:34:23Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5099414, 22631.7376. Exact KB/OS-build search attempted: True. Candidates 1, accepted 0, rejected 1. Top rejections: generic_support_request=1. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 26H1
@@ -21806,7 +21806,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-09-05T04:16:45Z'
+  last_run: '2026-09-05T05:34:26Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5095091, 28000.2340. Exact KB/OS-build search attempted: True. Candidates 0, accepted 0, rejected 0. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 25H2
@@ -21815,15 +21815,15 @@ methods:
   source_type: microsoft_learn_qna
   status: success
   candidates_found: 12
-  accepted_candidates: 3
+  accepted_candidates: 1
   duplicate_existing_evidence: 0
-  evidence_rows_added: 3
-  public_counted_reports: 3
-  accepted_reports: 3
-  rejected_reports: 9
+  evidence_rows_added: 1
+  public_counted_reports: 1
+  accepted_reports: 1
+  rejected_reports: 11
   blocked_reason: ''
-  last_run: '2026-09-05T04:16:47Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5095093, 26200.8737. Exact KB/OS-build search attempted: True. Candidates 12, accepted 3, rejected 9. Top rejections: generic_support_request=3, missing_kb_or_build=2, tenant_service_incident_not_client_patch=2, vague_latest_update=1, wrong_kb_for_current_patch=1. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
+  last_run: '2026-09-05T05:34:28Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5095093, 26200.8737. Exact KB/OS-build search attempted: True. Candidates 12, accepted 1, rejected 11. Top rejections: cross_patch_duplicate=2, generic_support_request=3, missing_kb_or_build=2, tenant_service_incident_not_client_patch=2, vague_latest_update=1, wrong_kb_for_current_patch=1. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 24H2
   target_build: '26100.8737'
@@ -21831,15 +21831,15 @@ methods:
   source_type: microsoft_learn_qna
   status: partial
   candidates_found: 8
-  accepted_candidates: 1
+  accepted_candidates: 0
   duplicate_existing_evidence: 0
-  evidence_rows_added: 1
-  public_counted_reports: 1
-  accepted_reports: 1
-  rejected_reports: 7
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 8
   blocked_reason: learn_qna_search_fetch_failed:blocked:login_or_auth_challenge
-  last_run: '2026-09-05T04:16:49Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5095093, 26100.8737. Exact KB/OS-build search attempted: True. Candidates 8, accepted 1, rejected 7. Top rejections: generic_support_request=1, missing_kb_or_build=1, tenant_service_incident_not_client_patch=2, vague_latest_update=1, wrong_feature_train_for_kb=1, wrong_kb_for_current_patch=1. Fetch failures: 1. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
+  last_run: '2026-09-05T05:34:31Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5095093, 26100.8737. Exact KB/OS-build search attempted: True. Candidates 8, accepted 0, rejected 8. Top rejections: cross_patch_duplicate=1, generic_support_request=1, missing_kb_or_build=1, tenant_service_incident_not_client_patch=2, vague_latest_update=1, wrong_feature_train_for_kb=1, wrong_kb_for_current_patch=1. Fetch failures: 1. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 26H1
   target_build: '28000.2269'
@@ -21854,7 +21854,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-09-05T04:16:51Z'
+  last_run: '2026-09-05T05:34:34Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5095051, 28000.2269. Exact KB/OS-build search attempted: True. Candidates 0, accepted 0, rejected 0. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 25H2
@@ -21863,15 +21863,15 @@ methods:
   source_type: microsoft_learn_qna
   status: success
   candidates_found: 22
-  accepted_candidates: 5
+  accepted_candidates: 3
   duplicate_existing_evidence: 0
-  evidence_rows_added: 5
-  public_counted_reports: 5
-  accepted_reports: 5
-  rejected_reports: 17
+  evidence_rows_added: 3
+  public_counted_reports: 3
+  accepted_reports: 3
+  rejected_reports: 19
   blocked_reason: ''
-  last_run: '2026-09-05T04:16:53Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5094126, 26200.8655. Exact KB/OS-build search attempted: True. Candidates 22, accepted 5, rejected 17. Top rejections: account_backend_issue_not_patch=1, build_only_in_system_specs=2, feature_question_not_regression=2, generic_support_request=2, missing_kb_or_build=2, missing_update_attribution=2, vague_latest_update=2, wrong_kb_for_current_patch=4. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
+  last_run: '2026-09-05T05:34:36Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5094126, 26200.8655. Exact KB/OS-build search attempted: True. Candidates 22, accepted 3, rejected 19. Top rejections: account_backend_issue_not_patch=1, build_only_in_system_specs=2, cross_patch_duplicate=2, feature_question_not_regression=2, generic_support_request=2, missing_kb_or_build=2, missing_update_attribution=2, vague_latest_update=2, wrong_kb_for_current_patch=4. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 24H2
   target_build: '26100.8655'
@@ -21886,7 +21886,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 14
   blocked_reason: ''
-  last_run: '2026-09-05T04:16:56Z'
+  last_run: '2026-09-05T05:34:39Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5094126, 26100.8655. Exact KB/OS-build search attempted: True. Candidates 15, accepted 1, rejected 14. Top rejections: generic_support_request=3, missing_kb_or_build=1, vague_latest_update=2, wrong_feature_train_for_kb=3, wrong_kb_for_current_patch=5. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 23H2
@@ -21902,7 +21902,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-09-05T04:16:58Z'
+  last_run: '2026-09-05T05:34:42Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5093998, 22631.7219. Exact KB/OS-build search attempted: True. Candidates 0, accepted 0, rejected 0. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 26H1
@@ -21918,7 +21918,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-09-05T04:17:00Z'
+  last_run: '2026-09-05T05:34:45Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5089570, 28000.2179. Exact KB/OS-build search attempted: True. Candidates 0, accepted 0, rejected 0. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 25H2
@@ -21934,7 +21934,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 5
   blocked_reason: ''
-  last_run: '2026-09-05T04:17:02Z'
+  last_run: '2026-09-05T05:34:47Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5089573, 26200.8524. Exact KB/OS-build search attempted: True. Candidates 6, accepted 1, rejected 5. Top rejections: generic_support_request=1, missing_kb_or_build=2, vague_latest_update=1, wrong_kb_for_current_patch=1. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 24H2
@@ -21950,7 +21950,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 6
   blocked_reason: ''
-  last_run: '2026-09-05T04:17:04Z'
+  last_run: '2026-09-05T05:34:50Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5089573, 26100.8524. Exact KB/OS-build search attempted: True. Candidates 6, accepted 0, rejected 6. Top rejections: generic_support_request=1, missing_kb_or_build=2, vague_latest_update=1, wrong_feature_train_for_kb=1, wrong_kb_for_current_patch=1. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 26H1
@@ -21966,7 +21966,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-09-05T04:17:06Z'
+  last_run: '2026-09-05T05:34:53Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5089548, 28000.2113. Exact KB/OS-build search attempted: True. Candidates 0, accepted 0, rejected 0. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 25H2
@@ -21982,7 +21982,7 @@ methods:
   accepted_reports: 4
   rejected_reports: 8
   blocked_reason: ''
-  last_run: '2026-09-05T04:17:09Z'
+  last_run: '2026-09-05T05:34:55Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5089549, 26200.8457. Exact KB/OS-build search attempted: True. Candidates 12, accepted 4, rejected 8. Top rejections: build_only_in_system_specs=1, generic_support_request=1, missing_kb_or_build=1, missing_update_attribution=2, release_announcement_not_user_report=1, wrong_kb_for_current_patch=2. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 24H2
@@ -21998,7 +21998,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 4
   blocked_reason: ''
-  last_run: '2026-09-05T04:17:11Z'
+  last_run: '2026-09-05T05:34:58Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5089549, 26100.8457. Exact KB/OS-build search attempted: True. Candidates 4, accepted 0, rejected 4. Top rejections: generic_support_request=1, missing_kb_or_build=1, wrong_kb_for_current_patch=2. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 23H2
@@ -22014,7 +22014,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-09-05T04:17:13Z'
+  last_run: '2026-09-05T05:35:01Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5087420, 22631.7079. Exact KB/OS-build search attempted: True. Candidates 0, accepted 0, rejected 0. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 26H1
@@ -22030,7 +22030,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-09-05T04:17:15Z'
+  last_run: '2026-09-05T05:35:03Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5083806, 28000.1896. Exact KB/OS-build search attempted: True. Candidates 0, accepted 0, rejected 0. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 25H2
@@ -22046,7 +22046,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 2
   blocked_reason: ''
-  last_run: '2026-09-05T04:17:17Z'
+  last_run: '2026-09-05T05:35:06Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5083631, 26200.8328. Exact KB/OS-build search attempted: True. Candidates 2, accepted 0, rejected 2. Top rejections: missing_kb_or_build=1, missing_update_attribution=1. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 24H2
@@ -22062,7 +22062,7 @@ methods:
   accepted_reports: 2
   rejected_reports: 1
   blocked_reason: ''
-  last_run: '2026-09-05T04:17:19Z'
+  last_run: '2026-09-05T05:35:09Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5083631, 26100.8328. Exact KB/OS-build search attempted: True. Candidates 3, accepted 2, rejected 1. Top rejections: release_announcement_not_user_report=1. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 26H1
@@ -22078,7 +22078,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-09-05T04:17:21Z'
+  last_run: '2026-09-05T05:35:11Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5083768, 28000.1836. Exact KB/OS-build search attempted: True. Candidates 0, accepted 0, rejected 0. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 25H2
@@ -22094,7 +22094,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 3
   blocked_reason: ''
-  last_run: '2026-09-05T04:17:24Z'
+  last_run: '2026-09-05T05:35:13Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5083769, 26200.8246. Exact KB/OS-build search attempted: True. Candidates 4, accepted 1, rejected 3. Top rejections: account_backend_issue_not_patch=1, generic_support_request=2. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 24H2
@@ -22110,7 +22110,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 4
   blocked_reason: ''
-  last_run: '2026-09-05T04:17:26Z'
+  last_run: '2026-09-05T05:35:16Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5083769, 26100.8246. Exact KB/OS-build search attempted: True. Candidates 4, accepted 0, rejected 4. Top rejections: account_backend_issue_not_patch=1, generic_support_request=1, missing_update_attribution=1, tenant_service_incident_not_client_patch=1. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 23H2
@@ -22126,7 +22126,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-09-05T04:17:28Z'
+  last_run: '2026-09-05T05:35:19Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5082052, 22631.6936. Exact KB/OS-build search attempted: True. Candidates 0, accepted 0, rejected 0. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 25H2
@@ -22142,7 +22142,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 3
   blocked_reason: ''
-  last_run: '2026-09-05T04:17:30Z'
+  last_run: '2026-09-05T05:35:21Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5086672, 26200.8117. Exact KB/OS-build search attempted: True. Candidates 3, accepted 0, rejected 3. Top rejections: generic_support_request=1, missing_kb_or_build=1, vague_latest_update=1. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 24H2
@@ -22158,7 +22158,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 2
   blocked_reason: ''
-  last_run: '2026-09-05T04:17:32Z'
+  last_run: '2026-09-05T05:35:24Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5086672, 26100.8117. Exact KB/OS-build search attempted: True. Candidates 2, accepted 0, rejected 2. Top rejections: missing_kb_or_build=1, vague_latest_update=1. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 26H1
@@ -22174,7 +22174,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-09-05T04:17:34Z'
+  last_run: '2026-09-05T05:35:27Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5079489, 28000.1764. Exact KB/OS-build search attempted: True. Candidates 0, accepted 0, rejected 0. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 25H2
@@ -22190,7 +22190,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 2
   blocked_reason: ''
-  last_run: '2026-09-05T04:17:36Z'
+  last_run: '2026-09-05T05:35:29Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5079391, 26200.8116. Exact KB/OS-build search attempted: True. Candidates 2, accepted 0, rejected 2. Top rejections: missing_kb_or_build=2. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 24H2
@@ -22206,7 +22206,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 2
   blocked_reason: ''
-  last_run: '2026-09-05T04:17:38Z'
+  last_run: '2026-09-05T05:35:32Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5079391, 26100.8116. Exact KB/OS-build search attempted: True. Candidates 2, accepted 0, rejected 2. Top rejections: missing_kb_or_build=2. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 25H2
@@ -22222,7 +22222,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 2
   blocked_reason: ''
-  last_run: '2026-09-05T04:17:40Z'
+  last_run: '2026-09-05T05:35:34Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5085516, 26200.8039. Exact KB/OS-build search attempted: True. Candidates 2, accepted 0, rejected 2. Top rejections: account_backend_issue_not_patch=1, generic_support_request=1. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 24H2
@@ -22238,7 +22238,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 2
   blocked_reason: ''
-  last_run: '2026-09-05T04:17:43Z'
+  last_run: '2026-09-05T05:35:37Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5085516, 26100.8039. Exact KB/OS-build search attempted: True. Candidates 2, accepted 0, rejected 2. Top rejections: account_backend_issue_not_patch=1, generic_support_request=1. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 26H1
@@ -22254,40 +22254,40 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-09-05T04:17:45Z'
+  last_run: '2026-09-05T05:35:39Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5079466, 28000.1719. Exact KB/OS-build search attempted: True. Candidates 0, accepted 0, rejected 0. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 25H2
   target_build: '26200.8037'
   method_id: learn_qna_search_rss
   source_type: microsoft_learn_qna
-  status: success
+  status: no_results
   candidates_found: 12
-  accepted_candidates: 1
+  accepted_candidates: 0
   duplicate_existing_evidence: 0
-  evidence_rows_added: 1
-  public_counted_reports: 1
-  accepted_reports: 1
-  rejected_reports: 11
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 12
   blocked_reason: ''
-  last_run: '2026-09-05T04:17:47Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5079473, 26200.8037. Exact KB/OS-build search attempted: True. Candidates 12, accepted 1, rejected 11. Top rejections: account_backend_issue_not_patch=1, generic_support_request=3, missing_kb_or_build=5, wrong_kb_for_current_patch=2. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
+  last_run: '2026-09-05T05:35:41Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5079473, 26200.8037. Exact KB/OS-build search attempted: True. Candidates 12, accepted 0, rejected 12. Top rejections: account_backend_issue_not_patch=1, cross_patch_duplicate=1, generic_support_request=3, missing_kb_or_build=5, wrong_kb_for_current_patch=2. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 24H2
   target_build: '26100.8037'
   method_id: learn_qna_search_rss
   source_type: microsoft_learn_qna
-  status: success
+  status: no_results
   candidates_found: 10
-  accepted_candidates: 1
+  accepted_candidates: 0
   duplicate_existing_evidence: 0
-  evidence_rows_added: 1
-  public_counted_reports: 1
-  accepted_reports: 1
-  rejected_reports: 9
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 10
   blocked_reason: ''
-  last_run: '2026-09-05T04:17:49Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5079473, 26100.8037. Exact KB/OS-build search attempted: True. Candidates 10, accepted 1, rejected 9. Top rejections: generic_support_request=3, missing_kb_or_build=4, missing_update_attribution=1, wrong_kb_for_current_patch=1. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
+  last_run: '2026-09-05T05:35:44Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5079473, 26100.8037. Exact KB/OS-build search attempted: True. Candidates 10, accepted 0, rejected 10. Top rejections: cross_patch_duplicate=1, generic_support_request=3, missing_kb_or_build=4, missing_update_attribution=1, wrong_kb_for_current_patch=1. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 23H2
   target_build: '22631.6783'
@@ -22302,7 +22302,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-09-05T04:17:51Z'
+  last_run: '2026-09-05T05:35:47Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5078883, 22631.6783. Exact KB/OS-build search attempted: True. Candidates 0, accepted 0, rejected 0. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 26H1
@@ -22318,7 +22318,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-09-05T04:17:54Z'
+  last_run: '2026-09-05T05:35:49Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5077239, 28000.1643. Exact KB/OS-build search attempted: True. Candidates 0, accepted 0, rejected 0. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 25H2
@@ -22334,7 +22334,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 6
   blocked_reason: ''
-  last_run: '2026-09-05T04:17:56Z'
+  last_run: '2026-09-05T05:35:52Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5077241, 26200.7922. Exact KB/OS-build search attempted: True. Candidates 6, accepted 0, rejected 6. Top rejections: generic_support_request=1, missing_update_attribution=2, wrong_kb_for_current_patch=3. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 24H2
@@ -22350,7 +22350,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 5
   blocked_reason: ''
-  last_run: '2026-09-05T04:17:58Z'
+  last_run: '2026-09-05T05:35:55Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5077241, 26100.7922. Exact KB/OS-build search attempted: True. Candidates 5, accepted 0, rejected 5. Top rejections: generic_support_request=1, wrong_feature_train_for_kb=1, wrong_kb_for_current_patch=3. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 26H1
@@ -22366,7 +22366,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-09-05T04:18:00Z'
+  last_run: '2026-09-05T05:35:57Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5077179, 28000.1575. Exact KB/OS-build search attempted: True. Candidates 0, accepted 0, rejected 0. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 25H2
@@ -22382,7 +22382,7 @@ methods:
   accepted_reports: 3
   rejected_reports: 5
   blocked_reason: ''
-  last_run: '2026-09-05T04:18:02Z'
+  last_run: '2026-09-05T05:36:00Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5077181, 26200.7840. Exact KB/OS-build search attempted: True. Candidates 8, accepted 3, rejected 5. Top rejections: generic_support_request=3, missing_kb_or_build=2. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 24H2
@@ -22398,7 +22398,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 8
   blocked_reason: ''
-  last_run: '2026-09-05T04:18:05Z'
+  last_run: '2026-09-05T05:36:03Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5077181, 26100.7840. Exact KB/OS-build search attempted: True. Candidates 8, accepted 0, rejected 8. Top rejections: account_backend_issue_not_patch=1, build_only_in_system_specs=1, generic_support_request=3, missing_kb_or_build=2, missing_update_attribution=1. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 23H2
@@ -22414,7 +22414,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-09-05T04:18:07Z'
+  last_run: '2026-09-05T05:36:05Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5075941, 22631.6649. Exact KB/OS-build search attempted: True. Candidates 0, accepted 0, rejected 0. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 25H2
@@ -22430,24 +22430,24 @@ methods:
   accepted_reports: 0
   rejected_reports: 3
   blocked_reason: ''
-  last_run: '2026-09-05T04:18:09Z'
+  last_run: '2026-09-05T05:36:08Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5074105, 26200.7705. Exact KB/OS-build search attempted: True. Candidates 3, accepted 0, rejected 3. Top rejections: generic_support_request=2, wrong_kb_for_current_patch=1. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 24H2
   target_build: '26100.7705'
   method_id: learn_qna_search_rss
   source_type: microsoft_learn_qna
-  status: success
+  status: no_results
   candidates_found: 4
-  accepted_candidates: 1
+  accepted_candidates: 0
   duplicate_existing_evidence: 0
-  evidence_rows_added: 1
-  public_counted_reports: 1
-  accepted_reports: 1
-  rejected_reports: 3
+  evidence_rows_added: 0
+  public_counted_reports: 0
+  accepted_reports: 0
+  rejected_reports: 4
   blocked_reason: ''
-  last_run: '2026-09-05T04:18:11Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5074105, 26100.7705. Exact KB/OS-build search attempted: True. Candidates 4, accepted 1, rejected 3. Top rejections: generic_support_request=3. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
+  last_run: '2026-09-05T05:36:11Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5074105, 26100.7705. Exact KB/OS-build search attempted: True. Candidates 4, accepted 0, rejected 4. Top rejections: cross_patch_duplicate=1, generic_support_request=3. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 25H2
   target_build: '26200.7628'
@@ -22462,7 +22462,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-09-05T04:18:14Z'
+  last_run: '2026-09-05T05:36:13Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5078127, 26200.7628. Exact KB/OS-build search attempted: True. Candidates 0, accepted 0, rejected 0. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 24H2
@@ -22478,7 +22478,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-09-05T04:18:16Z'
+  last_run: '2026-09-05T05:36:16Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5078127, 26100.7628. Exact KB/OS-build search attempted: True. Candidates 0, accepted 0, rejected 0. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 23H2
@@ -22494,7 +22494,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-09-05T04:18:18Z'
+  last_run: '2026-09-05T05:36:18Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5078132, 22631.6495. Exact KB/OS-build search attempted: True. Candidates 0, accepted 0, rejected 0. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 25H2
@@ -22510,7 +22510,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 1
   blocked_reason: ''
-  last_run: '2026-09-05T04:18:20Z'
+  last_run: '2026-09-05T05:36:21Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5077744, 26200.7627. Exact KB/OS-build search attempted: True. Candidates 1, accepted 0, rejected 1. Top rejections: wrong_kb_for_current_patch=1. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 24H2
@@ -22526,7 +22526,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 1
   blocked_reason: ''
-  last_run: '2026-09-05T04:18:22Z'
+  last_run: '2026-09-05T05:36:24Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5077744, 26100.7627. Exact KB/OS-build search attempted: True. Candidates 1, accepted 0, rejected 1. Top rejections: wrong_kb_for_current_patch=1. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 23H2
@@ -22542,7 +22542,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-09-05T04:18:24Z'
+  last_run: '2026-09-05T05:36:26Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5077797, 22631.6494. Exact KB/OS-build search attempted: True. Candidates 0, accepted 0, rejected 0. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 25H2
@@ -22558,7 +22558,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 7
   blocked_reason: ''
-  last_run: '2026-09-05T04:18:27Z'
+  last_run: '2026-09-05T05:36:29Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5074109, 26200.7623. Exact KB/OS-build search attempted: True. Candidates 7, accepted 0, rejected 7. Top rejections: generic_support_request=1, missing_kb_or_build=2, wrong_kb_for_current_patch=4. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 24H2
@@ -22574,7 +22574,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 7
   blocked_reason: ''
-  last_run: '2026-09-05T04:18:29Z'
+  last_run: '2026-09-05T05:36:31Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5074109, 26100.7623. Exact KB/OS-build search attempted: True. Candidates 7, accepted 0, rejected 7. Top rejections: generic_support_request=1, missing_kb_or_build=2, wrong_kb_for_current_patch=4. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 23H2
@@ -22590,7 +22590,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-09-05T04:18:31Z'
+  last_run: '2026-09-05T05:36:34Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5073455, 22631.6491. Exact KB/OS-build search attempted: True. Candidates 0, accepted 0, rejected 0. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 25H2
@@ -22606,7 +22606,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 6
   blocked_reason: ''
-  last_run: '2026-09-05T04:18:33Z'
+  last_run: '2026-09-05T05:36:36Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5072033, 26200.7462. Exact KB/OS-build search attempted: True. Candidates 6, accepted 0, rejected 6. Top rejections: generic_support_request=2, missing_kb_or_build=2, wrong_feature_train_for_kb=1, wrong_kb_for_current_patch=1. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 24H2
@@ -22622,7 +22622,7 @@ methods:
   accepted_reports: 2
   rejected_reports: 3
   blocked_reason: ''
-  last_run: '2026-09-05T04:18:36Z'
+  last_run: '2026-09-05T05:36:39Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5072033, 26100.7462. Exact KB/OS-build search attempted: True. Candidates 5, accepted 2, rejected 3. Top rejections: generic_support_request=1, missing_kb_or_build=2. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 23H2
@@ -22638,7 +22638,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 0
   blocked_reason: ''
-  last_run: '2026-09-05T04:18:38Z'
+  last_run: '2026-09-05T05:36:42Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5071417, 22631.6345. Exact KB/OS-build search attempted: True. Candidates 0, accepted 0, rejected 0. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 25H2
@@ -22654,7 +22654,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 3
   blocked_reason: ''
-  last_run: '2026-09-05T04:18:40Z'
+  last_run: '2026-09-05T05:36:44Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5070311, 26200.7309. Exact KB/OS-build search attempted: True. Candidates 3, accepted 0, rejected 3. Top rejections: generic_support_request=1, official_note_not_user_report=1, wrong_kb_for_current_patch=1. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 24H2
@@ -22670,5 +22670,5 @@ methods:
   accepted_reports: 0
   rejected_reports: 3
   blocked_reason: ''
-  last_run: '2026-09-05T04:18:43Z'
+  last_run: '2026-09-05T05:36:47Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5070311, 26100.7309. Exact KB/OS-build search attempted: True. Candidates 3, accepted 0, rejected 3. Top rejections: generic_support_request=1, official_note_not_user_report=1, wrong_kb_for_current_patch=1. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
