@@ -717,8 +717,17 @@ def run() -> int:
     check("Q.5 each card names the release WINDOW it was reported during",
           "release window" in layout3 and "window_build" in layout3)
     # Causal phrasing must not appear anywhere near the Level-3 block.
+    # Scope the scan to the Level-3 SECTION by its own closing tag. This used to slice from
+    # "recent-reports-card" up to id="verdict", which silently assumed the verdict box renders
+    # AFTER the Level-3 card. The patch page now puts the decision first and demotes Level 3 to
+    # subordinate context below it, so that marker no longer appears downstream: the `in` guard
+    # fell through and the slice quietly became the whole tail of the file. It would still have
+    # PASSED -- none of the banned phrases appears in the tail -- while no longer testing the
+    # Level-3 block at all. A block's own closing tag does not move when the page is reordered.
     l3_block = layout3[layout3.index("recent-reports-card"):]
-    l3_block = l3_block[:l3_block.index("id=\"verdict\"")] if 'id="verdict"' in l3_block else l3_block
+    _end = l3_block.find("</section>")
+    assert _end > 0, "Level-3 section has no closing tag -- the slice would be unbounded"
+    l3_block = l3_block[:_end]
     for phrase in ("caused by", "problems with build", "regression", "suspected",
                    "likely caused", "evidence against", "linked to this update"):
         check(f"Q.6 no causal phrasing in the Level-3 block: {phrase!r}",

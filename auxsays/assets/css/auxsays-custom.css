@@ -21,6 +21,37 @@
   --border-subtle: rgba(255,255,255,0.08);
   --border-strong: rgba(199, 162, 85, 0.24);
   --shadow-soft: 0 24px 70px rgba(0,0,0,0.32);
+
+  /* The --aux-* namespace, bound to the palette above.
+     These were introduced by the evidence-card styling and never defined anywhere, so every
+     `var(--aux-…, fallback)` silently resolved to its LIGHT-THEME fallback on a dark page:
+     .update-linked-card painted `background: var(--aux-surface-muted)` -- a near-white
+     card -- with `color: var(--aux-text-muted)` dark-grey text inside it. That is the
+     white Level-2 block. The three tokens written without a fallback (--aux-text, --aux-muted,
+     --aux-cyan) failed more quietly: the declaration was dropped, so those elements inherited
+     whatever colour surrounded them.
+
+     THEY MUST LIVE HERE, ABOVE LINE 24. The next line begins `--radius-xl: 28px@font-face {`
+     -- a missing semicolon that swallows the following 933 lines into that custom property's
+     value -- so this rule's only live declarations are the ones above that point. Defining these
+     aliases below it (e.g. beside --radius-lg, or in the duplicated :root inside the swallowed
+     region) parses without error and has no effect whatsoever. Measured, not assumed: walking
+     brace depth from line 7 puts the matching `}` on line 960 and terminates the --radius-xl
+     value on line 958.
+
+     Aliasing at the source fixes all 37 `var(--aux-…)` usages at once, rather than rewriting
+     ~20 declarations across a dozen selectors and risking a missed one. */
+  --aux-text: var(--text-0);
+  --aux-muted: var(--text-2);
+  --aux-text-muted: var(--text-2);
+  --aux-border: var(--border-subtle);
+  --aux-cyan: var(--cyan-0);
+  --aux-gold: var(--accent-1);
+  /* Subordinate card surface. Reuses the value .update-monitoring-card already uses, so Level 2
+     reads as a secondary card rather than a new visual language; its subordination to the verdict
+     comes from having no gradient, no shadow, a smaller radius and a position below the decision. */
+  --aux-surface-muted: rgba(255,255,255,.022);
+  --aux-accent-muted: var(--border-strong);
   --radius-xl: 28px@font-face {
   font-family: 'AUX Triad Fusion';
   src: url('/assets/fonts/AUX-TriadFusion-v13-Regular.otf') format('opentype');
@@ -47,6 +78,7 @@
   --radius-xl: 28px;
   --radius-lg: 22px;
   --radius-md: 16px;
+
 }
 
 * { box-sizing: border-box; }
@@ -5648,10 +5680,10 @@ th[aria-sort="descending"] .patch-sort-btn { color: var(--text-0); }
 .update-linked-card {
   margin: 1rem 0 0;
   padding: 0.9rem 1rem;
-  border: 1px solid var(--aux-border, #d7d7db);
-  border-left: 3px solid var(--aux-accent-muted, #8a8a94);
+  border: 1px solid var(--aux-border);
+  border-left: 3px solid var(--aux-accent-muted);
   border-radius: 6px;
-  background: var(--aux-surface-muted, #fafafb);
+  background: var(--aux-surface-muted);
 }
 .update-linked-card__counts {
   display: flex;
@@ -5663,7 +5695,7 @@ th[aria-sort="descending"] .patch-sort-btn { color: var(--text-0); }
   font-size: 0.78rem;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--aux-text-muted, #63636d);
+  color: var(--aux-text-muted);
 }
 .update-linked-count dd {
   margin: 0.1rem 0 0;
@@ -5674,15 +5706,15 @@ th[aria-sort="descending"] .patch-sort-btn { color: var(--text-0); }
 .update-linked-card__note {
   margin: 0 0 0.75rem;
   font-size: 0.85rem;
-  color: var(--aux-text-muted, #63636d);
+  color: var(--aux-text-muted);
 }
 .update-linked-list { margin: 0; padding: 0; list-style: none; }
-.update-linked-item { padding: 0.6rem 0; border-top: 1px solid var(--aux-border, #e3e3e7); }
+.update-linked-item { padding: 0.6rem 0; border-top: 1px solid var(--aux-border); }
 .update-linked-item__title { font-weight: 600; }
 .update-linked-item__meta {
   display: block;
   font-size: 0.8rem;
-  color: var(--aux-text-muted, #63636d);
+  color: var(--aux-text-muted);
   margin-top: 0.15rem;
 }
 .update-linked-item__why,
@@ -5693,7 +5725,7 @@ th[aria-sort="descending"] .patch-sort-btn { color: var(--text-0); }
 .patch-cell-num__linked {
   display: inline-block;
   font-size: 0.78rem;
-  color: var(--aux-text-muted, #63636d);
+  color: var(--aux-text-muted);
   white-space: nowrap;
 }
 
@@ -5703,7 +5735,7 @@ th[aria-sort="descending"] .patch-sort-btn { color: var(--text-0); }
 .recent-reports-card {
   margin: 1rem 0 0;
   padding: 0.9rem 1rem;
-  border: 1px dashed var(--aux-border, #d7d7db);
+  border: 1px dashed var(--aux-border);
   border-radius: 6px;
   background: transparent;
 }
@@ -5724,16 +5756,16 @@ th[aria-sort="descending"] .patch-sort-btn { color: var(--text-0); }
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.03em;
-  color: var(--aux-text-muted, #63636d);
+  color: var(--aux-text-muted);
 }
 .recent-reports-card__note,
 .recent-reports-card__more {
   margin: 0.4rem 0 0.6rem;
   font-size: 0.85rem;
-  color: var(--aux-text-muted, #63636d);
+  color: var(--aux-text-muted);
 }
 .recent-reports-list { margin: 0; padding: 0; list-style: none; }
-.recent-reports-item { padding: 0.55rem 0; border-top: 1px solid var(--aux-border, #e3e3e7); }
+.recent-reports-item { padding: 0.55rem 0; border-top: 1px solid var(--aux-border); }
 .recent-reports-item__title { font-weight: 600; }
 .recent-reports-item__meta,
 .recent-reports-item__window,
@@ -5741,11 +5773,11 @@ th[aria-sort="descending"] .patch-sort-btn { color: var(--text-0); }
   display: block;
   margin: 0.2rem 0 0;
   font-size: 0.8rem;
-  color: var(--aux-text-muted, #63636d);
+  color: var(--aux-text-muted);
 }
 .patch-cell-num__recent {
   display: inline-block;
   font-size: 0.78rem;
-  color: var(--aux-text-muted, #63636d);
+  color: var(--aux-text-muted);
   white-space: nowrap;
 }
