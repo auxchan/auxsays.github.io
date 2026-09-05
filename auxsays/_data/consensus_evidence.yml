@@ -5378,6 +5378,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5943592-2026-06-update-kb5095093-26200-8737-wi
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.8737'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5943592/2026-06-update-(kb5095093)-(26200-8737)-will-not-i
@@ -5406,6 +5407,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5939606-2026-06-preview-update-failed-to-insta
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.8737'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5939606/2026-06-preview-update-failed-to-install-in-window
@@ -5434,6 +5436,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5938732-windows-update-not-functioning
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.8737'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5938732/windows-update-not-functioning
@@ -5462,6 +5465,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5935689-after-windows-11-pro-update-kb5095093
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.8737'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5935689/after-windows-11-pro-update-(kb5095093)-today-i-ca
@@ -5490,6 +5494,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5936734-windows-11-pc-build-26200-8737-kb50950
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.8737'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5936734/windows-11-pc-build-26200-8737-(kb5095093)-windows
@@ -5519,6 +5524,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5929223-problem-with-kb5095093-update-to-win-1
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.8737'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5929223/problem-with-kb5095093-update-to-win-11-home
@@ -5548,6 +5554,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5933035-2026-06-update-issues
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.8737'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5933035/2026-06-update-issues
@@ -5575,6 +5582,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5944695-windows-hello-face-recognition-fails-o
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.8737'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5944695/windows-hello-face-recognition-fails-only-after-co
@@ -5603,6 +5611,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5942024-windows-11-25h2-26200-8737-enabling-th
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.8737'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5942024/windows-11-25h2-(26200-8737)-enabling-the-hypervis
@@ -5631,6 +5640,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5945620-2026-06-update-kb5095093-26200-8737-wi
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.8737'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5945620/2026-06-update-(kb5095093)-(26200-8737)-will-not-i
@@ -10018,6 +10028,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5965489-keep-getting-install-error-25h2-os-bui
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.8973'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5965489/keep-getting-install-error-25h2-os-build-26200-897
@@ -10047,6 +10058,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5962540-2026-07-preview-update-kb5101684-26200
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.8973'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5962540/2026-07-preview-update-kb5101684-26200-8973-causes
@@ -10075,6 +10087,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5961591-mirroring-from-phone-to-pc-lagging-dis
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.8973'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5961591/mirroring-from-phone-to-pc-lagging-display
@@ -10103,6 +10116,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5961757-title-windows-kits-folder-disappeared
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.8973'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5961757/title-windows-kits-folder-disappeared-and-microsof
@@ -10131,6 +10145,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5964428-sql-server-2022-database-engine-recove
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.8973'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5964428/sql-server-2022-database-engine-recovery-handle-fa
@@ -10159,6 +10174,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5960137-windows-11-build-26200-8973-25h2-langu
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.8973'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5960137/windows-11-build-26200-8973-25h2-language-pack-err
@@ -10187,6 +10203,7 @@ evidence:
 - id: microsoft-windows-11-26h1-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5962557-windows-update-upgraded-my-windows-11
   product_id: microsoft-windows-11
   update_version: 26H1
+  target_build: '28000.2608'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5962557/windows-update-upgraded-my-windows-11-enterprise-i
@@ -11163,6 +11180,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5966064-windows-11-25h2-kernel-pool-leak-fmfn
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.8973'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5966064/windows-11-25h2-kernel-pool-leak-fmfn-and-file-all
@@ -11192,6 +11210,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5965983-windows-11-component-store-cbs-winsxs
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.8973'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5965983/windows-11-component-store-cbs-winsxs-corruption-o
@@ -13243,6 +13262,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5970143-store-start-menu-and-aad-brokerplugin
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.8973'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5970143/store-start-menu-and-aad-brokerplugin-all-crash-in
@@ -13293,6 +13313,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5970905-windows-update-download-error-0x800705
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.8973'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5970905/windows-update-download-error-0x800705b9-2026-07-p
@@ -13405,6 +13426,7 @@ evidence:
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5973125-ngcctnrsvc-crashes-3-times-in-ucrtbase
   product_id: microsoft-windows-11
   update_version: 24H2
+  target_build: '26100.9168'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5973125/ngcctnrsvc-crashes-3-times-in-ucrtbase-dll-0xc0000
@@ -13433,6 +13455,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5973125-ngcctnrsvc-crashes-3-times-in-ucrtbase
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.9168'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5973125/ngcctnrsvc-crashes-3-times-in-ucrtbase-dll-0xc0000
@@ -13462,6 +13485,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5973207-windows-update-kb5101650-continually-f
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.9168'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5973207/windows-update-kb5101650-continually-failing-with
@@ -13531,6 +13555,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5975976-windows-11-25h2-recall-still-missing-a
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.9168'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5975976/windows-11-25h2-recall-still-missing-after-august
@@ -13581,6 +13606,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5976660-windows-11-latest-security-patch-is-fa
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.9168'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5976660/windows-11-latest-security-patch-is-failing
@@ -13609,6 +13635,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5976649-windows-insider-build-26220-9022-keeps
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.9168'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5976649/windows-insider-build-26220-9022-keeps-failing-to
@@ -13637,6 +13664,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5976594-windows-update-not-installing
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.9168'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5976594/windows-update-not-installing
@@ -13686,6 +13714,7 @@ evidence:
 - id: microsoft-windows-11-26h1-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5977137-how-to-set-up-vs-code-and-use-python-o
   product_id: microsoft-windows-11
   update_version: 26H1
+  target_build: '28000.2704'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5977137/how-to-set-up-vs-code-and-use-python-on-new-surfac
@@ -13735,6 +13764,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5979011-my-laptop-screen-goes-black-and-will-n
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.9168'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5979011/my-laptop-screen-goes-black-and-will-not-wake-up-f
@@ -13847,6 +13877,7 @@ evidence:
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5981187-remote-audio-with-rdp-broken-after-ins
   product_id: microsoft-windows-11
   update_version: 24H2
+  target_build: '26100.9168'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5981187/remote-audio-with-rdp-broken-after-installing-win1
@@ -13875,6 +13906,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5980571-registry-state-mismatch-after-kb512100
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.9168'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5980571/registry-state-mismatch-after-kb5121003-installati
@@ -13903,6 +13935,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5981040-why-did-my-bluetooth-stop-working-afte
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.9168'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5981040/why-did-my-bluetooth-stop-working-after-win-11-upd
@@ -13999,6 +14032,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5982539-windows-11-kb5121003-installation-and
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.9168'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5982539/windows-11-kb5121003-installation-and-boot-failure
@@ -14027,6 +14061,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5984873-2026-08-security-update-kb5121003-2620
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.9168'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5984873/2026-08-security-update-kb5121003-26200-9168-not-i
@@ -14055,6 +14090,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5984299-comment-r-soudre-l-erreur-de-t-l-charg
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.9168'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5984299/comment-r-soudre-l-erreur-de-t-l-chargement-0x8024
@@ -14125,6 +14161,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5986842-how-to-fix-update-failure-for-updates
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.9168'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5986842/how-to-fix-update-failure-for-updates
@@ -14153,6 +14190,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5987544-windows-update-failed-to-install
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.9168'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5987544/windows-update-failed-to-install
@@ -14181,6 +14219,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5987922-edge-short-freeze-win11-pro-x64-stable
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.9278'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5987922/edge-short-freeze-win11-pro-x64-stable-channel
@@ -14355,6 +14394,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5988811-slideshow-not-available-after-update
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.9278'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5988811/slideshow-not-available-after-update
@@ -14482,6 +14522,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5990420-urgent-kb5120998-26200-9278-is-wiping
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.9278'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5990420/urgent-kb5120998-26200-9278-is-wiping-all-edge-coo
@@ -14510,6 +14551,7 @@ evidence:
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5989625-file-history-ui-and-previous-versions
   product_id: microsoft-windows-11
   update_version: 25H2
+  target_build: '26200.9278'
   source_type: microsoft_learn_qna
   source_name: Microsoft Learn Q&A
   source_url: https://learn.microsoft.com/en-us/answers/questions/5989625/file-history-ui-and-previous-versions-broken-after

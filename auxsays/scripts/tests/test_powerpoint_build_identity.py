@@ -268,12 +268,23 @@ def run() -> int:
     # ---- 10. NON-POWERPOINT COMPATIBILITY --------------------------------------------------------
     for pid, ver in (("obs-studio", "32.2.0"), ("blackmagic-davinci", "21.0.3"),
                      ("adobe-premiere-pro", "26.2"), ("adobe-acrobat-reader", "26.001.21563"),
-                     ("adobe-acrobat-pro", "26.001.21563"), ("microsoft-windows-11", "24H2")):
+                     ("adobe-acrobat-pro", "26.001.21563")):
         key = pi.patch_key(pid, ver)
         check(f"10 {pid} identity keeps an empty build slot", key == (pid, ver, ""), str(key))
         check(f"10 {pid} is not build-aware", not pi.is_build_aware(pid))
-    check("10 exactly one product is build-aware today",
-          pi.BUILD_AWARE_PRODUCTS == frozenset({PRODUCT}), str(pi.BUILD_AWARE_PRODUCTS))
+    # The allowlist is pinned EXACTLY, not by size. This assertion previously read "exactly one
+    # product is build-aware today" and listed microsoft-windows-11 among the version-only
+    # products above -- correct while a Windows record meant one servicing TRAIN, and wrong once
+    # one record came to mean one cumulative update (25H2 alone ships 23 of them, which is the
+    # very collision this module exists to prevent). What must stay pinned is that membership is
+    # DELIBERATE: adding a product here changes its URLs, filenames and count keys, so it should
+    # never be possible to do by accident. An exact-set comparison catches that; a count does not.
+    check("10 the build-aware allowlist is exactly the products intended to be build-aware",
+          pi.BUILD_AWARE_PRODUCTS == frozenset({PRODUCT, "microsoft-windows-11"}),
+          str(pi.BUILD_AWARE_PRODUCTS))
+    check("10 microsoft-windows-11 identity carries its exact build",
+          pi.patch_key("microsoft-windows-11", "25H2", "26200.9168")
+          == ("microsoft-windows-11", "25H2", "26200.9168"))
 
     print()
     print("=" * 68)

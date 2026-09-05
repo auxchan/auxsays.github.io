@@ -1,17 +1,25 @@
 #!/usr/bin/env python3
-"""When Microsoft advances the cumulative update, the record must stop counting the old one.
+"""A Windows record counts exactly its own cumulative update -- across a rollover, and at zero.
 
 A Windows record tracks ONE cumulative update (a KB / OS build) inside a feature train, and the
 train rolls over roughly monthly. Evidence accepted for the superseded update is still true --
 about the OLD patch -- but it is not evidence about the NEW one. AUXSAYS answers "should I install
-THIS exact update", so a record whose target has advanced must converge to the evidence population
-of its CURRENT identity, and the historical rows must survive as history rather than be deleted.
+THIS exact update", so each patch's page must count its own population and nobody else's.
 
-WHAT THIS LOCKS DOWN. The lifecycle end to end, in one pass of the authority:
+WHAT CHANGED, AND WHY THIS FILE READS DIFFERENTLY THAN ITS TITLE SUGGESTS. It was written when one
+record tracked a whole TRAIN: the single 25H2 page followed the newest KB, so a rollover moved the
+page's identity and every report about the superseded update stopped counting anywhere. Windows is
+now build-aware -- one record IS one cumulative update -- so a rollover CREATES a record rather
+than re-pointing one, and moving a published record's build is refused on the write path. The
+superseded update keeps its page, its URL and its reports.
 
-    state A   record targets KB-A / build-A, two rows name A        -> count 2, projections present
-    rollover  official target advances to KB-B / build-B, no B rows -> count 0, projections retracted
-    recovery  one row names B                                       -> count 1, projections rebuilt
+WHAT THIS LOCKS DOWN, end to end, in passes of the authority:
+
+    state A    record A targets KB-A / build-A, two rows name A  -> count 2, projections present
+    rollover   record B appears alongside A, no B rows           -> A stays 2; B is 0 and claims
+                                                                    nothing; A's rows never move
+    population record A's rows leave the accepted set            -> count 0, projections retracted
+    recovery   one row names B                                   -> count 1, projections rebuilt
 
 At the zero step the record must stop CLAIMING reports, not merely print 0: the source list, the
 samples and the count-bearing prose all have to go, or the page keeps asserting evidence its own
@@ -73,19 +81,29 @@ def check(label: str, condition: bool, detail: str = "") -> None:
 
 
 def record(train: str, kb: str, build: str, count: int) -> dict:
-    """A Windows record in the shape reconcile expects, with projections for `count` reports."""
+    """A Windows record in the shape reconcile expects, with projections for `count` reports.
+
+    Carries ``target_build`` because Windows is build-aware: one record is one cumulative update,
+    so its exact build is part of its canonical identity and every count keys on it."""
     data = {
         "update_entry": True,
         "product_id": WIN,
         "update_version": train,
         "update_product": "Windows 11",
+        "target_build": build,
         "target_kb": kb,
         "target_os_build": build,
         "target_feature_version": train,
         "target_release_date": "2026-08-01T00:00:00Z",
         "update_report_count": count,
         "confirmed_patch_specific_report_count": count,
-        # editorial / human-owned fields -- W7 asserts these survive untouched
+        # Fields the RETRACTION must not touch. They were described here as "human-owned", which
+        # is no longer accurate for Windows: the scoped consensus promotion now owns
+        # update_decision_label / update_decision_body / practical_recommendations, because a
+        # Windows page that gathered reports otherwise kept publishing "consensus is deferred"
+        # beside its own report count. What W7 tests is unchanged and still worth pinning --
+        # reconcile retracts COUNT PROJECTIONS and nothing else, so a lane that only reconciles
+        # never silently rewrites the verdict.
         "update_decision_label": "WAIT",
         "update_decision_body": "Hand-written editorial guidance that automation must not rewrite.",
         "practical_recommendations": ["Pilot on a spare device first."],
@@ -111,6 +129,8 @@ def row(train: str, kb: str, build: str, n: int) -> dict:
     return {
         "product_id": WIN,
         "update_version": train,
+        # The row states the patch it belongs to, exactly as the collector now writes it.
+        "target_build": build,
         "source_url": f"https://learn.microsoft.com/en-us/answers/questions/{n}/x",
         "counted": True,
         "patch_version_matched": True,
@@ -177,7 +197,40 @@ def run() -> int:  # noqa: PLR0915
                          "obs.md": other_product_record()})
 
         # ---------------- ROLLOVER ----------------
-        print(NEWLINE + "[W1-W7] rollover: official target advances to KB-B/build-B, no B evidence")
+        # WHAT A ROLLOVER IS NOW. This step used to REWRITE 25h2.md so its target advanced to
+        # KB-B/build-B -- the one-record-per-train model, where a single page followed the train
+        # and its evidence went dark every Patch Tuesday. That advance is now refused on the write
+        # path (lib.write_update_record.refresh_existing_record): a record's build is its identity,
+        # stamped into its permalink and filename, so a new cumulative update gets its OWN record.
+        #
+        # So the rollover is modelled as it actually happens: record B APPEARS alongside record A.
+        # The first thing to assert is the property this whole change exists to create -- A does
+        # not go dark. Its two reports stay counted, on A's own page, forever.
+        print(NEWLINE + "[W0] rollover: record B appears; record A keeps its own evidence")
+        write_tree(tmp, {"25h2.md": record("25H2", KB_A, BUILD_A, 2),
+                         "25h2-b.md": record("25H2", KB_B, BUILD_B, 0),
+                         "obs.md": other_product_record()})
+        reconcile_record_counts(evidence, tmp)
+        a_after, b_new = read_record(tmp, "25h2.md"), read_record(tmp, "25h2-b.md")
+        check("W0 the superseded update keeps its own count -- it does not go dark",
+              int(a_after.get("update_report_count") or 0) == 2,
+              str(a_after.get("update_report_count")))
+        check("W0 the new update starts at zero and claims nothing",
+              int(b_new.get("update_report_count") or 0) == 0
+              and "accepted_report_sources" not in b_new,
+              str(b_new.get("update_report_count")))
+        check("W0 A's rows are never borrowed by B",
+              counted_evidence_counts(
+                  evidence, windows_targets=windows_targets_from_front_matter([a_after, b_new])
+              ).get((WIN, "25H2", BUILD_B), 0) == 0,
+              str(counted_evidence_counts(
+                  evidence, windows_targets=windows_targets_from_front_matter([a_after, b_new]))))
+
+        # ---------------- RETRACTION ----------------
+        # The zero state is still reachable, and still has to be safe: a record's accepted
+        # population empties when its rows are re-adjudicated or withdrawn, not only when a target
+        # moves. Drive it the way production now can, and assert the identical guarantees.
+        print(NEWLINE + "[W1-W7] the accepted population empties: the page must stop claiming reports")
         write_tree(tmp, {"25h2.md": record("25H2", KB_B, BUILD_B, 2),
                          "obs.md": other_product_record()})
         before_rows = list(evidence)
@@ -223,12 +276,15 @@ def run() -> int:  # noqa: PLR0915
         c = read_record(tmp, "25h2.md")
         check("W8 the count repopulates to 1", int(c.get("update_report_count") or 0) == 1,
               str(c.get("update_report_count")))
-        check("W8 the historical A rows are still stored and still not counted",
+        # Keyed by the canonical TRIPLE: with only record B in view, B counts its one row and the
+        # two A rows are attributed to no record at all rather than folded into B's number.
+        check("W8 the historical A rows are still stored and still not counted here",
               len(evidence) == 4
               and counted_evidence_counts(
                   evidence, windows_targets=windows_targets_from_front_matter([c])
-              ).get((WIN, "25H2", "")) == 1,
-              str(len(evidence)))
+              ) == {(WIN, "25H2", BUILD_B): 1, ("obs-studio", "32.1.2", ""): 1},
+              str(counted_evidence_counts(
+                  evidence, windows_targets=windows_targets_from_front_matter([c]))))
         again, _d = reconcile_record_counts(evidence, tmp)
         check("W9 a second identical pass writes nothing (idempotent)", again == 0, f"{again} writes")
 

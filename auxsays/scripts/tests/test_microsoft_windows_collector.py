@@ -24,6 +24,7 @@ from patch_collectors.base import PatchRecord, windows_identity_gate
 import patch_collectors.microsoft_windows as win
 import lib.write_update_record as wur
 
+NEWLINE = chr(10)
 _PASS = 0
 _FAIL = 0
 _ERRORS: list[str] = []
@@ -60,7 +61,7 @@ TARGET_25H2 = {
 }
 TARGET_24H2_ROLLED = {**TARGET_24H2, "target_kb": "KB5099999", "target_os_build": "26100.9001", "target_release_date": "2026-07-14T00:00:00Z"}
 
-REC_24H2 = PatchRecord("microsoft-windows-11", "24H2", Path("2026-06-23-windows-11-24h2.md"), "2026-06-23T00:00:00Z", "current", "Windows 11")
+REC_24H2 = PatchRecord("microsoft-windows-11", "24H2", Path("2026-06-23-windows-11-24h2-26100-8737.md"), "2026-06-23T00:00:00Z", "current", "Windows 11", "26100.8737")
 REC_25H2 = PatchRecord("microsoft-windows-11", "25H2", Path("2026-06-23-windows-11-25h2.md"), "2026-06-23T00:00:00Z", "current", "Windows 11")
 CAPTURED = "2026-07-01T00:00:00Z"
 
@@ -144,16 +145,18 @@ def run() -> int:
 
     # --- collect_for_record end-to-end (source monkeypatched, no network) ---
     with tempfile.TemporaryDirectory() as d:
-        rec_path = Path(d) / "2026-06-23-windows-11-24h2.md"
+        # Canonical build-aware filename: one Windows record is one cumulative update.
+        rec_path = Path(d) / "2026-06-23-windows-11-24h2-26100-8737.md"
         rec_path.write_text(wur._dump_record(wur.build_front_matter({
             "company_id": "microsoft", "product_id": "microsoft-windows-11", "company": "Microsoft",
             "software": "Windows 11", "version": "24H2", "published_at": "2026-06-23T00:00:00Z",
             "source_url": "https://learn.microsoft.com/en-us/windows/release-health/",
             "body": "Windows 11 24H2 official record.", "official_summary": "Windows 11 24H2.",
             "target_feature_version": "24H2", "target_kb": "KB5095093",
-            "target_os_build": "26100.8737", "target_release_date": "2026-06-23T00:00:00Z",
+            "target_os_build": "26100.8737", "target_build": "26100.8737",
+            "target_release_date": "2026-06-23T00:00:00Z",
         })), encoding="utf-8")
-        record = PatchRecord("microsoft-windows-11", "24H2", rec_path, "2026-06-23T00:00:00Z", "current", "Windows 11")
+        record = PatchRecord("microsoft-windows-11", "24H2", rec_path, "2026-06-23T00:00:00Z", "current", "Windows 11", "26100.8737")
 
         original = win.learn_qna.collect_learn_qna_candidates
         try:
@@ -255,14 +258,16 @@ def run() -> int:
     )
 
     with tempfile.TemporaryDirectory() as d:
-        rec_path = Path(d) / "2026-06-23-windows-11-24h2.md"
+        # Canonical build-aware filename: one Windows record is one cumulative update.
+        rec_path = Path(d) / "2026-06-23-windows-11-24h2-26100-8737.md"
         rec_path.write_text(wur._dump_record(wur.build_front_matter({
             "company_id": "microsoft", "product_id": "microsoft-windows-11", "company": "Microsoft",
             "software": "Windows 11", "version": "24H2", "published_at": "2026-06-23T00:00:00Z",
             "source_url": "https://learn.microsoft.com/en-us/windows/release-health/",
             "body": "Windows 11 24H2.", "official_summary": "Windows 11 24H2.",
             "target_feature_version": "24H2", "target_kb": "KB5095093",
-            "target_os_build": "26100.8737", "target_release_date": "2026-06-23T00:00:00Z",
+            "target_os_build": "26100.8737", "target_build": "26100.8737",
+            "target_release_date": "2026-06-23T00:00:00Z",
         })), encoding="utf-8")
         synthetic = PatchRecord("microsoft-windows-11", "24H2", rec_path, "2026-06-23T00:00:00Z", "current", "Windows 11")
 
@@ -286,6 +291,67 @@ def run() -> int:
             win.generated_records = orig_records
             win.learn_qna.collect_learn_qna_candidates = orig_source
             win.append_evidence_rows = orig_append
+
+    # --- the consensus writeback is batched, not per record -----------------
+    # WHY THIS IS PINNED. `apply_consensus_writeback` rebuilds the whole picture on every call:
+    # _index_generated_records reads all 1110 generated records (4.2s measured) and run_dry_run
+    # regroups the entire evidence corpus (5.4s). Calling it inside the record loop cost 4 x 9.6s
+    # while one Windows record meant one servicing TRAIN. There are 71 records now, so the same
+    # code costs 11 minutes a run -- spent out of the collector's wall-clock budget, i.e. paid in
+    # records never searched. Assert the CALL COUNT, because the runtime cost is invisible to every
+    # other check in this file: the records come out identical either way.
+    print(NEWLINE + "[batched writeback] the whole-corpus rebuild happens once, not once per record")
+    import apply_consensus_to_records as acr_mod  # noqa: PLC0415
+    with tempfile.TemporaryDirectory() as d:
+        recs = []
+        for build, kb in (("26100.8737", "KB5095093"), ("26100.8973", "KB5101684"),
+                          ("26100.9168", "KB5121003")):
+            rp = Path(d) / f"2026-06-23-windows-11-24h2-{build.replace('.', '-')}.md"
+            rp.write_text(wur._dump_record(wur.build_front_matter({
+                "company_id": "microsoft", "product_id": "microsoft-windows-11",
+                "company": "Microsoft", "software": "Windows 11", "version": "24H2",
+                "published_at": "2026-06-23T00:00:00Z",
+                "source_url": "https://learn.microsoft.com/en-us/windows/release-health/",
+                "body": "Windows 11 24H2.", "official_summary": "Windows 11 24H2.",
+                "target_feature_version": "24H2", "target_kb": kb,
+                "target_os_build": build, "target_build": build,
+                "target_release_date": "2026-06-23T00:00:00Z",
+            })), encoding="utf-8")
+            recs.append(PatchRecord("microsoft-windows-11", "24H2", rp,
+                                    "2026-06-23T00:00:00Z", "current", "Windows 11", build))
+
+        def _run(accept: bool) -> dict:
+            counts = {"index": 0, "dry_run": 0, "results": 0}
+            orig = (win.generated_records, win.collect_for_record, win.append_evidence_rows,
+                    acr_mod._index_generated_records, acr_mod.run_dry_run)
+            try:
+                win.generated_records = lambda pid, tv=None, **k: list(recs)
+                # Every record "accepts" a row (or none), so every one is a writeback candidate.
+                win.collect_for_record = lambda record, context: (
+                    ([{"source_url": "https://x/1"}] if accept else []), [], {})
+                win.append_evidence_rows = lambda rows, *a, **k: (1 if accept else 0, 1, [])
+                acr_mod._index_generated_records = lambda *a, **k: (
+                    counts.__setitem__("index", counts["index"] + 1), {})[1]
+                acr_mod.run_dry_run = lambda **k: (
+                    counts.__setitem__("dry_run", counts["dry_run"] + 1), [])[1]
+                out = win.WindowsLearnQnaCollector().collect(
+                    SimpleNamespace(write=True, since=None, max_pages=1, target_versions=None))
+                counts["results"] = len(out)
+            finally:
+                (win.generated_records, win.collect_for_record, win.append_evidence_rows,
+                 acr_mod._index_generated_records, acr_mod.run_dry_run) = orig
+            return counts
+
+        accepted_run = _run(accept=True)
+        check("batched: all three records were walked", accepted_run["results"] == 3,
+              str(accepted_run))
+        check("batched: the record index is built ONCE for the whole run",
+              accepted_run["index"] == 1, f"index builds={accepted_run['index']} for 3 records")
+        check("batched: the evidence corpus is regrouped ONCE for the whole run",
+              accepted_run["dry_run"] == 1, f"dry runs={accepted_run['dry_run']} for 3 records")
+        empty_run = _run(accept=False)
+        check("batched: a run that accepted nothing rebuilds nothing",
+              empty_run["index"] == 0 and empty_run["dry_run"] == 0, str(empty_run))
 
     print()
     print("=" * 60)

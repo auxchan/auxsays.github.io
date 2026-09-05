@@ -85,8 +85,17 @@ def run() -> int:
 
     # --- against the real config --------------------------------------------
     win = load_config_source("microsoft-windows-11")
-    check("config: microsoft-windows-11 declares record_limit: 6", (win.get("ingestion") or {}).get("record_limit") == 6, str((win.get("ingestion") or {}).get("record_limit")))
-    check("config: windows-11 resolves to 6 even with global --limit 2", resolve(win, args(2)) == 6, str(resolve(win, args(2))))
+    # 6 was right when one record meant one servicing TRAIN -- there are only a handful of live
+    # feature versions. One record now means one CUMULATIVE UPDATE, and the release-history tables
+    # legitimately carry ~70 of those inside the ingestion window, so a cap of 6 would stall the
+    # backfill for weeks. Asserted as a PROPERTY (it overrides the global, and stays under the
+    # scan limit) plus the literal, so a future re-tune is a deliberate one-line change here.
+    win_limit = (win.get("ingestion") or {}).get("record_limit")
+    check("config: microsoft-windows-11 declares record_limit: 70", win_limit == 70, str(win_limit))
+    check("config: windows-11 resolves to its own limit even with global --limit 2",
+          resolve(win, args(2)) == win_limit, str(resolve(win, args(2))))
+    check("config: windows-11's record_limit stays within the seen-history scan window",
+          win_limit <= patch_ingest.BACKFILL_SCAN_LIMIT, f"{win_limit} > {patch_ingest.BACKFILL_SCAN_LIMIT}")
 
     m365 = load_config_source("microsoft-365-apps")
     check("config: microsoft-365-apps has NO record_limit (regression guard)", "record_limit" not in (m365.get("ingestion") or {}), str((m365.get("ingestion") or {}).get("record_limit")))

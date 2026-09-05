@@ -28,6 +28,7 @@ from patch_collectors.base import windows_identity_gate, WINDOWS_PRODUCT_ID
 import apply_consensus_to_records as ac
 import build_consensus_from_evidence as bc
 import lib.write_update_record as wur
+from lib.patch_identity import InconsistentBuildIdentity
 from adapters import microsoft_release_health as mrh
 
 _PASS = 0
@@ -143,30 +144,32 @@ def run() -> int:
 
     # --- C. end-to-end _result_for_group count (writeback field) ------------
     with tempfile.TemporaryDirectory() as d:
-        rec_path = Path(d) / "2026-06-23-windows-11-24h2.md"
+        rec_path = Path(d) / "2026-06-23-windows-11-24h2-26100-8737.md"
         rec_path.write_text(wur._dump_record(wur.build_front_matter({
             "company_id": "microsoft", "product_id": WINDOWS_PRODUCT_ID, "company": "Microsoft",
             "software": "Windows 11", "version": "24H2", "published_at": "2026-06-23T00:00:00Z",
             "source_url": "https://learn.microsoft.com/en-us/windows/release-health/",
             "body": "Windows 11 24H2 official record.", "official_summary": "Windows 11 24H2.",
             "target_feature_version": "24H2", "target_kb": "KB5095093",
-            "target_os_build": "26100.8737", "target_release_date": "2026-06-23T00:00:00Z",
+            "target_os_build": "26100.8737", "target_build": "26100.8737",
+            "target_release_date": "2026-06-23T00:00:00Z",
         })), encoding="utf-8")
 
         def index_for(target):
-            # Identity is the canonical triple; Windows is not build-aware, so its build slot is
-            # empty and its grouping/lookup semantics are unchanged.
-            return {(WINDOWS_PRODUCT_ID, "24H2", ""): {
+            # Identity is the canonical triple, and Windows IS build-aware: one record is one
+            # cumulative update, so the build slot carries this record's own OS build. It was
+            # empty here while a record meant a whole servicing train.
+            return {(WINDOWS_PRODUCT_ID, "24H2", "26100.8737"): {
                 "path": rec_path.name, "abs_path": rec_path,
                 "product_id": WINDOWS_PRODUCT_ID, "update_version": "24H2",
                 "evidence_state": "official_only", "legacy_manual_report_count": None,
                 **target,
             }}
 
-        res_cur = ac._result_for_group(WINDOWS_PRODUCT_ID, "24H2", [win_row()], is_candidate_mode=False, records_index=index_for(TARGET_24H2))
+        res_cur = ac._result_for_group(WINDOWS_PRODUCT_ID, "24H2", [win_row()], is_candidate_mode=False, records_index=index_for(TARGET_24H2), build="26100.8737")
         check("result: confirmed count = 1 for current KB", res_cur["confirmed_patch_specific_report_count"] == 1, str(res_cur["confirmed_patch_specific_report_count"]))
 
-        res_rolled = ac._result_for_group(WINDOWS_PRODUCT_ID, "24H2", [win_row()], is_candidate_mode=False, records_index=index_for(TARGET_24H2_ROLLED))
+        res_rolled = ac._result_for_group(WINDOWS_PRODUCT_ID, "24H2", [win_row()], is_candidate_mode=False, records_index=index_for(TARGET_24H2_ROLLED), build="26100.8737")
         check("result: confirmed count = 0 after rollover (old KB evidence stops counting)", res_rolled["confirmed_patch_specific_report_count"] == 0, str(res_rolled["confirmed_patch_specific_report_count"]))
 
     # --- D. adapter emits target_* + write/refresh persistence --------------
@@ -176,7 +179,8 @@ def run() -> int:
         "source_url": "https://learn.microsoft.com/en-us/windows/release-health/",
         "body": "Windows 11 24H2.", "official_summary": "Windows 11 24H2.",
         "target_feature_version": "24H2", "target_kb": "KB5095093",
-        "target_os_build": "26100.8737", "target_release_date": "2026-06-23T00:00:00Z",
+        "target_os_build": "26100.8737", "target_build": "26100.8737",
+        "target_release_date": "2026-06-23T00:00:00Z",
     }
     front = wur.build_front_matter(win_record)
     check("write: build_front_matter persists target_* fields", front.get("target_os_build") == "26100.8737" and front.get("target_kb") == "KB5095093" and front.get("target_feature_version") == "24H2" and front.get("target_release_date") == "2026-06-23T00:00:00Z", str({k: front.get(k) for k in wur.WINDOWS_IDENTITY_FIELDS}))
@@ -187,29 +191,58 @@ def run() -> int:
     check("write: non-Windows record carries NO target_* keys", all(f not in front_non for f in wur.WINDOWS_IDENTITY_FIELDS), str([f for f in wur.WINDOWS_IDENTITY_FIELDS if f in front_non]))
 
     with tempfile.TemporaryDirectory() as d:
-        path = Path(d) / "2026-06-23-windows-11-24h2.md"
+        path = Path(d) / "2026-06-23-windows-11-24h2-26100-8737.md"
         path.write_text(wur._dump_record(wur.build_front_matter(win_record)), encoding="utf-8")
-        # Refresh with a NEW current KB/build (a Patch-Tuesday advance).
+        # A Patch-Tuesday advance is a NEW RECORD now, not an edit to this one. This block used
+        # to assert the opposite -- "target_os_build advances on build change (not stale)" -- which
+        # was right while one record tracked a whole servicing train and had to roll monthly. With
+        # one record per cumulative update, rolling the build in place would leave the page's
+        # target_build, permalink and filename saying 26100.8737 while the fields the counting gate
+        # reads say 26100.9001: every report counted for the old build would silently stop counting
+        # and the new build's reports would land on the old build's page.
         rolled_record = {**win_record, "target_kb": "KB5099999", "target_os_build": "26100.9001",
                          "target_release_date": "2026-07-14T00:00:00Z",
                          "body": "Windows 11 24H2 (July).", "source_last_checked": "2026-07-14T00:00:00Z"}
-        _, status = wur.refresh_existing_record(path, rolled_record)
+        raised = None
+        try:
+            wur.refresh_existing_record(path, rolled_record)
+        except InconsistentBuildIdentity as exc:
+            raised = exc
         refreshed, _body = wur._front_matter(path)
-        check("refresh: target_os_build advances on build change (not stale)", refreshed.get("target_os_build") == "26100.9001", f"status={status} got={refreshed.get('target_os_build')}")
-        check("refresh: target_kb advances on KB change", refreshed.get("target_kb") == "KB5099999", str(refreshed.get("target_kb")))
-        check("refresh: target_release_date advances", refreshed.get("target_release_date") == "2026-07-14T00:00:00Z", str(refreshed.get("target_release_date")))
+        check("refresh: a build advance on a published record is REFUSED",
+              raised is not None, "no exception raised")
+        check("refresh: and the record keeps its own build",
+              refreshed.get("target_os_build") == "26100.8737"
+              and refreshed.get("target_build") == "26100.8737",
+              str({k: refreshed.get(k) for k in ("target_build", "target_os_build")}))
+        # Within ONE build, the other identity fields must still track the source: a KB re-issue or
+        # a corrected release date for this same build is a legitimate in-place update. Refusing
+        # everything would be a different bug from refusing nothing.
+        same_build = {**win_record, "target_kb": "KB5095094",
+                      "target_release_date": "2026-06-24T00:00:00Z",
+                      "source_last_checked": "2026-06-24T00:00:00Z"}
+        _, status = wur.refresh_existing_record(path, same_build)
+        refreshed2, _b2 = wur._front_matter(path)
+        check("refresh: target_kb still advances within the same build",
+              refreshed2.get("target_kb") == "KB5095094", f"status={status} got={refreshed2.get('target_kb')}")
+        check("refresh: target_release_date still advances within the same build",
+              refreshed2.get("target_release_date") == "2026-06-24T00:00:00Z",
+              str(refreshed2.get("target_release_date")))
 
     # build_consensus wiring reads target_* from generated records.
     with tempfile.TemporaryDirectory() as d:
         gen = Path(d)
-        (gen / "2026-06-23-windows-11-24h2.md").write_text(wur._dump_record(wur.build_front_matter(win_record)), encoding="utf-8")
+        (gen / "2026-06-23-windows-11-24h2-26100-8737.md").write_text(wur._dump_record(wur.build_front_matter(win_record)), encoding="utf-8")
         original_dir = bc.GENERATED_DIR
         bc.GENERATED_DIR = gen
         try:
             idx = bc.windows_target_index()
         finally:
             bc.GENERATED_DIR = original_dir
-        entry = idx.get((WINDOWS_PRODUCT_ID, "24H2")) or {}
+        # Keyed by the canonical TRIPLE now: 28 records share "24H2", so a version-only key
+        # collapses them to whichever sorts last and gates every other build's rows against a
+        # stranger's target.
+        entry = idx.get((WINDOWS_PRODUCT_ID, "24H2", "26100.8737")) or {}
         check("build_consensus: windows_target_index reads target_* from records", entry.get("target_os_build") == "26100.8737" and entry.get("target_kb") == "KB5095093", str(entry))
 
     # --- E. adapter parser emits target_* (reuse the adapter's own path) ----

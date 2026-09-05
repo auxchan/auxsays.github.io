@@ -6,7 +6,9 @@ from typing import Any
 import yaml
 
 from .patch_identity import (
-    assert_build_identity, identity_build, is_build_aware, permalink_path, record_version_slug,
+    REASON_BUILD_MISSING, REASON_FILENAME_BUILD_MISMATCH, InconsistentBuildIdentity,
+    assert_build_identity, identity_build, is_build_aware, patch_display_label, permalink_path,
+    record_version_slug,
 )
 from .normalize import (
     slugify,
@@ -293,7 +295,11 @@ def build_front_matter(record: dict[str, Any]) -> dict[str, Any]:
     official_source_type = record.get("official_source_type") or record.get("source_type") or "official-source"
     official_note_status = record.get("official_note_status") or ("release_notes_captured" if official_source_type in {"release_notes", "fixed_issues", "security_advisory", "changelog"} else "official_source_captured")
     official_note_label = record.get("official_note_label") or ("Official release notes" if official_source_type == "release_notes" else "Official source summary")
-    quick_verdict = record.get("quick_verdict") or deferred_quick_verdict(software, version)
+    # Build-aware products name the exact patch even at zero reports: 64 Windows records would
+    # otherwise each publish "Windows 11 25H2 has an official AUXSAYS record", one sentence
+    # for 23 different cumulative updates.
+    quick_verdict = record.get("quick_verdict") or deferred_quick_verdict(
+        software, patch_display_label(version, record.get("target_build"), record.get("product_id")))
     consensus_report = record.get("consensus_report") or DEFERRED_CONSENSUS_REPORT
     known_issues_present = record.get("known_issues_present")
     if known_issues_present is None and record.get("complaint_themes"):
@@ -486,10 +492,29 @@ def refresh_existing_record(path: Path, record: dict[str, Any]) -> tuple[Path, s
     # build advance (KB-A/build-A -> KB-B/build-B) never leaves a stale target_* on the
     # record. Consensus counting gates Windows user reports against these fields, so a
     # stale value here would be exactly the rollover bug this sprint prevents.
+    #
+    # EXCEPT the build itself, once the product is build-aware. That in-place advance was the
+    # right repair while ONE record tracked a whole servicing train and had to roll every Patch
+    # Tuesday. Now one record IS one cumulative update: its build is its identity, fixed at
+    # creation and stamped into its permalink and its filename. Advancing `target_os_build` here
+    # would leave the page's own `target_build`, URL and filename saying build A while the fields
+    # the counting gate actually reads say build B -- so A's counted reports would silently stop
+    # counting and B's would land on A's page. A rollover is a NEW record now, not an edit to a
+    # published one. Same shape as the PowerPoint sibling-build write guard.
     for field in WINDOWS_IDENTITY_FIELDS:
-        if field in record and record[field] is not None and existing.get(field) != record[field]:
-            existing[field] = record[field]
-            material_changed = True
+        if field not in record or record[field] is None or existing.get(field) == record[field]:
+            continue
+        if (field == "target_os_build" and is_build_aware(existing.get("product_id"))
+                and str(existing.get("target_build") or "").strip()):
+            raise InconsistentBuildIdentity(
+                REASON_BUILD_MISSING if not str(record[field] or "").strip()
+                else REASON_FILENAME_BUILD_MISMATCH,
+                f"refresh would move {path.name} from build "
+                f"{existing.get('target_build')!r} to {record[field]!r}; a new cumulative "
+                "update needs its own record, not an edit to this one",
+            )
+        existing[field] = record[field]
+        material_changed = True
 
     # Office/Acrobat structured identity + applicability advance on change so a channel/
     # build/track/version rollover never leaves a stale identity on the record.

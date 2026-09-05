@@ -24,7 +24,7 @@ from typing import Any, Iterable
 
 from patch_collectors.base import (WINDOWS_PRODUCT_ID, load_front_matter_and_body,
                                    windows_identity_gate, write_front_matter_and_body)
-from .patch_identity import patch_key, require_build
+from .patch_identity import patch_display_label, patch_key, require_build
 from .write_update_record import (DEFAULT_CONSENSUS, DEFERRED_CONSENSUS_REPORT,
                                   deferred_quick_verdict)
 
@@ -240,7 +240,8 @@ def retract_zero_count_projections(data: dict[str, Any]) -> list[str]:
     if verdict_states_a_count(data):
         data["quick_verdict"] = deferred_quick_verdict(
             str(data.get("update_product") or data.get("product_id") or "").strip(),
-            str(data.get("update_version") or "").strip())
+            patch_display_label(data.get("update_version"), data.get("target_build"),
+                                data.get("product_id")))
         changed.append("quick_verdict")
     if str(data.get("update_consensus_label") or "").strip() != DEFAULT_CONSENSUS:
         data["update_consensus_label"] = DEFAULT_CONSENSUS
