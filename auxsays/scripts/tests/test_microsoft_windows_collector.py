@@ -292,6 +292,85 @@ def run() -> int:
             win.learn_qna.collect_learn_qna_candidates = orig_source
             win.append_evidence_rows = orig_append
 
+    # --- the runner's ownership validator accepts what this collector emits --
+    # WHY THIS EXISTS. Ownership validation runs in run_patch_evidence_collection, NOT in this
+    # module's dry-run, so a collector can look completely healthy locally and still fail the whole
+    # production run closed. It did: run 33941301615 aborted with
+    # `ownership_violation:method_health_version_unresolved` because health rows still keyed on
+    # (product, "25H2", "") -- an identity no Windows record has had since one record came to mean
+    # one cumulative update. Drive the REAL validator against a REAL health row, against the live
+    # record set, so the gap between "the module is happy" and "the runner accepts it" is closed.
+    print(NEWLINE + "[ownership] the runner's validator accepts this collector's method health")
+    from lib import collector_ownership as own  # noqa: PLC0415
+    live = win.generated_records("microsoft-windows-11")
+    check("ownership: there are live Windows records to validate against", bool(live), "none found")
+    if live:
+        rec = live[0]
+        health = win.health_for_method(rec, win.record_target(rec), "2026-09-01T00:00:00Z",
+                                       [], [], [], [], [])
+        check("ownership: the health row states the record's exact build",
+              str(health.get("target_build") or "") == rec.target_build,
+              f"{health.get('target_build')!r} vs {rec.target_build!r}")
+        raised = None
+        try:
+            own.validate_method_health("microsoft-windows-11", [health])
+        except Exception as exc:  # noqa: BLE001 - the violation type is the assertion
+            raised = exc
+        check("ownership: validate_method_health ACCEPTS it", raised is None, str(raised))
+        # And the negative: a row that names no build must still be refused, or this check would
+        # pass for the wrong reason on a version-only fallback nobody intended to add.
+        stripped = {**health, "target_build": ""}
+        refused = None
+        try:
+            own.validate_method_health("microsoft-windows-11", [stripped])
+        except Exception as exc:  # noqa: BLE001
+            refused = exc
+        # The reason CODE, not the message text: the code is the contract the runner reports and
+        # the message is prose that may legitimately be reworded.
+        # The EVIDENCE surface, same reasoning. `_validate_ownership` runs only under --write
+        # (txn is None on a dry run), so neither this module's dry-run nor the runner's dry-run
+        # reaches it; a row shape that cannot resolve would surface for the first time as a
+        # production abort. Build a real accepted row and put it through the real validator.
+        import yaml as _yaml  # noqa: PLC0415
+        own_candidate = {"source_url": "https://learn.microsoft.com/en-us/answers/questions/1/x",
+                "report_title": f"{win.record_target(rec).get('target_kb')} "
+                                f"({rec.target_build}) will not install",
+                "report_text": f"After installing {win.record_target(rec).get('target_kb')} "
+                               f"({rec.target_build}) the update fails with error 0x800f0991.",
+                "source_date": "2026-09-01"}
+        ev_row = win.row_from_candidate(rec, win.record_target(rec), own_candidate,
+                                        "2026-09-01T00:00:00Z")
+        check("ownership: an accepted evidence row carries the record's exact build",
+              ev_row.get("counted") is True
+              and str(ev_row.get("target_build") or "") == rec.target_build,
+              f"counted={ev_row.get('counted')} reason={ev_row.get('exclusion_reason')!r} "
+              f"build={ev_row.get('target_build')!r}")
+        before = _yaml.safe_dump({"schema_version": 1, "evidence": []})
+        after = _yaml.safe_dump({"schema_version": 1, "evidence": [ev_row]})
+        ev_raised = None
+        try:
+            own.validate_evidence("microsoft-windows-11", before, after)
+        except Exception as exc:  # noqa: BLE001
+            ev_raised = exc
+        check("ownership: validate_evidence ACCEPTS the appended row", ev_raised is None,
+              str(ev_raised))
+        ev_stripped = {**ev_row, "target_build": ""}
+        ev_refused = None
+        try:
+            own.validate_evidence("microsoft-windows-11", before,
+                                  _yaml.safe_dump({"schema_version": 1, "evidence": [ev_stripped]}))
+        except Exception as exc:  # noqa: BLE001
+            ev_refused = exc
+        check("ownership: a build-less evidence row is still REFUSED",
+              ev_refused is not None
+              and getattr(ev_refused, "reason", getattr(ev_refused, "code", "")) == "evidence_version_unresolved",
+              f"{type(ev_refused).__name__}: {ev_refused}")
+        check("ownership: a build-less health row is still REFUSED",
+              refused is not None
+              and getattr(refused, "reason", getattr(refused, "code", "")) == "method_health_version_unresolved",
+              f"{type(refused).__name__}: {refused} "
+              f"reason={getattr(refused, 'reason', getattr(refused, 'code', None))!r}")
+
     # --- the consensus writeback is batched, not per record -----------------
     # WHY THIS IS PINNED. `apply_consensus_writeback` rebuilds the whole picture on every call:
     # _index_generated_records reads all 1110 generated records (4.2s measured) and run_dry_run

@@ -534,6 +534,13 @@ def health_for_method(record: PatchRecord, target: dict[str, Any], captured_at: 
     return method_health_row(
         product_id=PRODUCT_ID,
         update_version=record.update_version,
+        # Method health is stored per EXACT patch, and Windows is build-aware, so the row must
+        # state the build of the record it describes. Omitted, the row keys on
+        # (product, "25H2", "") -- an identity no record has had since one record came to mean one
+        # cumulative update -- and `collector_ownership.validate_method_health` fails the whole run
+        # closed with `method_health_version_unresolved`. It did, in production run 33941301615.
+        # A row that named no build would also project one build's telemetry onto its 22 siblings.
+        target_build=record.target_build,
         method_id=METHOD_ID,
         source_type=SOURCE_TYPE,
         status=learn_qna_method_status(candidates, accepted, rejected, errors),
