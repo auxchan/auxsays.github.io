@@ -1,0 +1,2477 @@
+schema_version: 1
+# AUXSAYS product-expansion backlog: candidates for products AUXSAYS should ONBOARD or ACTIVATE.
+#
+# Lives in _data for the same measured reason as expansion_source_opportunities.yml: `_data` is
+# not copied into the built site, while `auxsays/scripts/**` currently is. Planning data only --
+# never read by the pipeline, never a source of evidence.
+#
+# TERMINOLOGY (kept distinct on purpose; 47 configured products is NOT 47 actively tracked ones):
+#   configured products                -- present in patch_products.yml (47)
+#   enabled-ingestion products         -- an ingestion source with enabled: true (16)
+#   products with generated records    -- at least one record under updates/generated (11)
+#   products with registered consensus -- listed in collector_ownership.ALLOWED_METHODS (7)
+#   products with consensus evidence   -- at least one row in consensus_evidence.yml (6)
+#
+# TWO INDEPENDENT QUESTIONS. The first pass conflated them; they are now separate fields.
+#
+#   priority_score / priority_tier -- "would tracking this be strategically valuable?"
+#   readiness                      -- "do we have enough PROOF to build its lane now?"
+#
+# A product can be the highest-priority item in the inventory and still be nowhere near buildable;
+# that is the normal case, not a contradiction. Priority is a judgement about value and is allowed
+# to stay high. Readiness is DERIVED and FAILS CLOSED, so a large priority score can never bypass
+# missing proof. Do not push strategic scores down to make readiness look tidy -- the point is
+# separation, not score gaming.
+#
+# Popularity alone still cannot buy Tier A: `automation_feasibility` and `version_identifiability`
+# carry the heaviest weights and act as hard gates, because a product whose updates carry no
+# user-visible version cannot be answered at all.
+
+# Readiness vocabulary and its gate. Recomputed on every validator run from this candidate plus
+# the proof dimensions on its referenced opportunities.
+readiness_model:
+  values:
+    ready_to_build: Every proof gate below is satisfied with current, non-stale evidence.
+    prove_source: >-
+      Strategically worth doing, but at least one proof gate is unmet. The next action is a
+      measurement, not an implementation.
+    defer: A proof gate is unmet AND strategic priority is Tier C.
+  ready_to_build_requires:
+    - official_source_quality >= 3 (a deterministic official release path exists)
+    - version_identifiability >= 4 (exact patch identity is plausibly enforceable)
+    - at least one referenced CONSENSUS opportunity with structure_proven = proven
+    - that opportunity actions_reachable = proven OR production_proven = proven
+    - that opportunity patch_specificity_proven = proven FOR THIS PRODUCT
+    - its supporting measurement is not stale
+    - zero declared readiness_blockers
+    - product_scope is resolved (never scope_split_required)
+    - support_lifecycle is current or legacy_supported (never unknown)
+    - all four hard-gate score_basis confidences are high or medium
+  never_sufficient:
+    - A high priority_score or Tier A.
+    - transport_precedent from a different product on the same transport.
+    - A high numeric score whose score_basis confidence is low or unproven.
+    - A stale measurement, however strong it was when taken.
+
+# Evidence grounding for the four feasibility-critical dimensions. The arithmetic was already
+# checked; this records whether the INPUTS deserve their values.
+confidence_values:
+  high: Measured directly for THIS product, or backed by committed production health for it.
+  medium: >-
+    Same-transport or same-vendor precedent measured, with the product-specific behaviour still
+    unmeasured. Enough to plan on, and the weakest confidence that may support ready_to_build.
+  low: Reasoned from public knowledge; nothing probed for this product.
+  unproven: Explicitly contradicted, or the blocking unknown sits exactly on this dimension.
+
+# Product scope. A vendor is never written off because the first candidate definition was too
+# broad: a continuously deployed service and a separately versioned installable client are
+# different products and are evaluated separately. This never weakens exact-version acceptance --
+# it records the scope question instead of compromising patch specificity.
+product_scopes:
+  generic_cloud_service: Continuously deployed; no user-installable version to decide about.
+  installable_desktop_client: Ships versioned desktop builds users choose to install.
+  installable_mobile_client: Ships versioned mobile builds, typically via app-store metadata.
+  separately_versioned_application: Driver, firmware or OS-like component with its own versioning.
+  scope_split_required: >-
+    The candidate as scored mixes a service with a separately versioned client. Must be split
+    before it can be built; `scope_split_note` names the variant to evaluate.
+
+# Support-lifecycle horizon. Stops a high-impact legacy product from silently dominating
+# long-term investment, without inventing a second scoring system. `unknown` must never behave
+# like `current`: it blocks ready_to_build until someone verifies it.
+support_lifecycles:
+  current: Actively developed with ordinary ongoing releases.
+  legacy_supported: Past its main cycle but still receiving normal updates.
+  extended_security_only: Security/ESU updates only.
+  end_of_support: No further updates.
+  unknown: Not verified. Blocks readiness rather than defaulting to current.
+
+scoring:
+  scale:
+    min: 0
+    max: 5
+    meaning: 0 = absent/impossible, 1 = poor, 2 = weak, 3 = adequate, 4 = good, 5 = excellent
+  dimensions:
+    user_impact:
+      weight: 3
+      direction: higher_is_better
+      meaning: How many people plausibly face a real decision about this product's updates.
+    patch_risk:
+      weight: 4
+      direction: higher_is_better
+      meaning: >-
+        Can an update break workflows, hardware, files, plugins, projects, drivers, security or
+        compatibility? This is AUXSAYS's whole reason to exist, so it is weighted heavily.
+    update_frequency:
+      weight: 2
+      direction: higher_is_better
+      meaning: Frequent enough to justify a standing lane, without being continuous/unversioned.
+    commercial_value:
+      weight: 3
+      direction: higher_is_better
+      meaning: Would people actually search "should I install <version>" / "<version> problems"?
+    official_source_quality:
+      weight: 3
+      direction: higher_is_better
+      meaning: Can a release be detected deterministically, with a version and a date?
+    consensus_source_quality:
+      weight: 4
+      direction: higher_is_better
+      meaning: Do patch-specific user reports exist in a machine-readable, non-blocked surface?
+    automation_feasibility:
+      weight: 5
+      direction: higher_is_better
+      meaning: >-
+        Can the FULL lane (official -> discovery -> acceptance -> writeback -> deploy) run with no
+        human and no AI in the loop? Highest weight: an unattendable lane is not a product.
+    source_diversity:
+      weight: 2
+      direction: higher_is_better
+      meaning: Are multiple independent discovery methods available (no single point of failure)?
+    version_identifiability:
+      weight: 4
+      direction: higher_is_better
+      meaning: >-
+        Can a report be tied to an EXACT version? Acceptance requires it, so a low score here
+        caps the product regardless of popularity.
+    maintenance_cost:
+      weight: 2
+      direction: higher_is_better_means_cheaper
+      meaning: 5 = robust documented API unlikely to drift; 1 = brittle HTML likely to break.
+    cross_product_reuse:
+      weight: 2
+      direction: higher_is_better
+      meaning: Does building this improve shared infrastructure other products will use?
+  weight_total: 34
+  max_total: 170
+  total_score_formula: sum(score[d] * weight[d]) over all 11 dimensions
+  tiers:
+    A:
+      label: BUILD SOON
+      min_total: 120
+      hard_gates:
+        automation_feasibility: 4
+        version_identifiability: 4
+        official_source_quality: 3
+      rationale: >-
+        The gates exist so a popular product cannot reach Tier A on impact and search volume
+        alone. Tier A is a STRATEGIC statement; buildability is `readiness`, derived separately.
+    B:
+      label: RESEARCH / PROVE SOURCE
+      min_total: 90
+      rationale: Valuable, but at least one source or automation question is unresolved.
+    C:
+      label: DEFER
+      rationale: >-
+        Weak patch-decision value, poor exact-version evidence, very low update frequency, or it
+        would require sustained manual curation.
+
+repo_states:
+  untracked: Not present in patch_products.yml at all.
+  configured_disabled: >-
+    Present in patch_products.yml with an ingestion source but `enabled: false` -- onboarding cost
+    is reactivation, not greenfield. 31 of the 47 CONFIGURED products are in this state, which is
+    why configured count must never be reported as a tracked-product count.
+  tracked_official_only: >-
+    Enabled ingestion producing official records, but with zero rows in consensus_evidence.yml --
+    so the site cannot yet answer its own question for them.
+
+candidates:
+
+  # =========================================================================================
+  # TRACKED-BUT-UNANSWERABLE: products that already publish records with no consensus lane.
+  # These are coverage gaps, not new products, and they are the cheapest credibility wins.
+  # =========================================================================================
+
+  - candidate_id: comfyui
+    product_name: ComfyUI
+    vendor: Comfy Org
+    category: ai_creative_tooling
+    repo_state: tracked_official_only
+    product_scope: installable_desktop_client
+    support_lifecycle: current
+    opportunity_refs:
+      - comfyui-github-issues
+    scores: {user_impact: 3, patch_risk: 5, update_frequency: 5, commercial_value: 3, official_source_quality: 5, consensus_source_quality: 5, automation_feasibility: 5, source_diversity: 3, version_identifiability: 5, maintenance_cost: 4, cross_product_reuse: 4}
+    priority_score: 150          # strategic value; recomputed by the validator
+    priority_tier: A
+    score_basis:
+      official_source_quality:
+        confidence: high
+        basis: >-
+          github_releases adapter is enabled and has produced 35 records in-repo.
+      consensus_source_quality:
+        confidence: unproven
+        basis: >-
+          GitHub Issues answers 200 locally and the method is production-proven for obs-studio, but
+          ComfyUI version-token density in issue bodies is UNMEASURED.
+      automation_feasibility:
+        confidence: medium
+        basis: >-
+          Both lanes reuse transports already running in Actions for other products; no
+          ComfyUI-specific run has ever executed.
+      version_identifiability:
+        confidence: unproven
+        basis: >-
+          ComfyUI releases are tag-like and issue bodies were never sampled for exact version tokens.
+    readiness_blockers:
+      - >-
+        ComfyUI-specific patch identity and per-release supply are unmeasured. The obs-studio
+        github_issues success is transport precedent and does not transfer.
+    readiness: prove_source
+    known_sources: [github_releases (implemented, 35 records), comfyui-github-issues (transport_proven)]
+    blocking_unknowns: [Version-token density in issue bodies is unmeasured.]
+    recommended_next_step: >-
+      PROBE FIRST, in isolation, with no production registration: drive the existing github_issues
+      primitive against one ComfyUI release window offline, measure exact-version token density in
+      issue titles and bodies, run the real acceptance gates, and capture accepted/rejected counts
+      with their exclusion reasons plus method-health and runtime-budget behaviour. Only if that
+      demonstrates patch identity and adequate supply should a SEPARATE implementation task wire
+      the method into collector ownership and the workflow. The obs-studio success is transport
+      precedent, not ComfyUI proof, so registering first would be building on an assumption.
+
+  - candidate_id: microsoft-powerpoint
+    product_name: Microsoft PowerPoint
+    vendor: Microsoft
+    category: productivity
+    repo_state: tracked_official_only
+    product_scope: installable_desktop_client
+    support_lifecycle: current
+    opportunity_refs:
+      - microsoft-learn-qna-powerpoint
+      - microsoft-365-message-center-and-release-health
+    scores: {user_impact: 5, patch_risk: 4, update_frequency: 4, commercial_value: 4, official_source_quality: 5, consensus_source_quality: 3, automation_feasibility: 4, source_diversity: 3, version_identifiability: 4, maintenance_cost: 3, cross_product_reuse: 4}
+    priority_score: 134          # strategic value; recomputed by the validator
+    priority_tier: A
+    score_basis:
+      official_source_quality:
+        confidence: high
+        basis: >-
+          microsoft_office_updates enabled with 20 records in-repo.
+      consensus_source_quality:
+        confidence: unproven
+        basis: >-
+          learn_qna_search_rss and reddit_search are registered and evidence_method_health.yml holds
+          ZERO rows for this product.
+      automation_feasibility:
+        confidence: unproven
+        basis: >-
+          An observability gap rather than an estimate: the registered lane emits no health signal, so
+          we cannot tell whether it runs, crashes, or finds nothing.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Office build numbers (16.0.xxxxx.yyyyy) are exact in principle; their density in Q&A titles
+          is unmeasured.
+    readiness_blockers:
+      - >-
+        OBSERVABILITY PROOF GAP: two registered consensus methods produce zero method-health rows,
+        so it is unknown whether the lane runs, crashes, is never invoked, or runs and finds
+        nothing. Must be diagnosed before it can be a lane.
+    readiness: prove_source
+    known_sources: [microsoft_office_updates (implemented, 20 records), microsoft-learn-qna-powerpoint (registered, ZERO health rows)]
+    blocking_unknowns: [Why the registered consensus methods produce no health rows at all.]
+    recommended_next_step: >-
+      Treat as an observability defect first: trace one collection run and find out whether the
+      lane never runs, crashes, or silently finds nothing.
+
+  - candidate_id: figma
+    product_name: Figma
+    vendor: Figma
+    category: graphics_design
+    repo_state: tracked_official_only
+    product_scope: scope_split_required
+    scope_split_note: >-
+      Figma ships a separately versioned desktop app; the scored candidate was the continuously
+      deployed web service. Evaluate the desktop client on its own.
+    support_lifecycle: current
+    opportunity_refs:
+      - figma-zendesk-help-center
+      - figma-community-forum
+    scores: {user_impact: 4, patch_risk: 2, update_frequency: 5, commercial_value: 2, official_source_quality: 4, consensus_source_quality: 2, automation_feasibility: 3, source_diversity: 2, version_identifiability: 1, maintenance_cost: 3, cross_product_reuse: 2}
+    priority_score: 89          # strategic value; recomputed by the validator
+    priority_tier: C
+    score_basis:
+      official_source_quality:
+        confidence: high
+        basis: >-
+          rss_feed adapter enabled with 132 records in-repo.
+      consensus_source_quality:
+        confidence: unproven
+        basis: >-
+          forum.figma.com answers but the expected Discourse JSON contract is measured ABSENT
+          (latest.json and search.json both 404).
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          No consensus path identified.
+      version_identifiability:
+        confidence: unproven
+        basis: >-
+          The scored product is a continuously deployed web service with no user-installable version.
+    readiness_blockers: []
+    readiness: defer
+    known_sources: [rss_feed (implemented, 132 records), figma-zendesk-help-center (transport_proven), figma-community-forum (needs_probe)]
+    blocking_unknowns: [Figma is a continuously deployed web product -- users cannot choose a version.]
+    recommended_next_step: >-
+      Decide whether a product with no user-installable version belongs in a patch-decision site.
+      132 official-only records currently imply an answer AUXSAYS cannot give.
+
+  - candidate_id: github
+    product_name: GitHub
+    vendor: GitHub
+    category: developer_tools
+    repo_state: tracked_official_only
+    product_scope: scope_split_required
+    scope_split_note: >-
+      GitHub the service ships continuously, but GitHub Desktop is a separately versioned
+      installable client. Evaluate GitHub Desktop separately rather than classifying the vendor
+      unsuitable.
+    support_lifecycle: current
+    opportunity_refs:
+      - github-product-changelog-consensus
+    scores: {user_impact: 4, patch_risk: 1, update_frequency: 5, commercial_value: 1, official_source_quality: 4, consensus_source_quality: 2, automation_feasibility: 3, source_diversity: 2, version_identifiability: 1, maintenance_cost: 4, cross_product_reuse: 1}
+    priority_score: 82          # strategic value; recomputed by the validator
+    priority_tier: C
+    score_basis:
+      official_source_quality:
+        confidence: high
+        basis: >-
+          rss_feed adapter enabled with 206 records in-repo.
+      consensus_source_quality:
+        confidence: unproven
+        basis: >-
+          Nothing probed.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          No consensus path identified.
+      version_identifiability:
+        confidence: unproven
+        basis: >-
+          The scored product ships continuously with no install decision.
+    readiness_blockers: []
+    readiness: defer
+    known_sources: [rss_feed (implemented, 206 records), github-product-changelog-consensus (needs_probe)]
+    blocking_unknowns: [A continuously deployed SaaS has no install decision.]
+    recommended_next_step: >-
+      Scope review, not engineering. This is the largest record population in the repo (206) for
+      the question AUXSAYS is least able to answer.
+
+  - candidate_id: microsoft-365-apps
+    product_name: Microsoft 365 Apps
+    vendor: Microsoft
+    category: productivity
+    repo_state: tracked_official_only
+    product_scope: installable_desktop_client
+    support_lifecycle: current
+    opportunity_refs:
+      - microsoft-365-message-center-and-release-health
+    scores: {user_impact: 5, patch_risk: 4, update_frequency: 5, commercial_value: 4, official_source_quality: 5, consensus_source_quality: 3, automation_feasibility: 4, source_diversity: 3, version_identifiability: 4, maintenance_cost: 3, cross_product_reuse: 5}
+    priority_score: 138          # strategic value; recomputed by the validator
+    priority_tier: A
+    score_basis:
+      official_source_quality:
+        confidence: high
+        basis: >-
+          microsoft_office_updates enabled; 2 records in-repo.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No consensus method registered; the Learn Q&A method is proven only for windows-11 and that
+          does not transfer.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Official half proven, consensus half unbuilt.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Suite-wide vs per-app attribution is unresolved.
+    readiness_blockers:
+      - >-
+        No consensus method registered for this product.
+    readiness: prove_source
+    known_sources: [microsoft_office_updates (implemented, 2 records), microsoft-learn-qna-powerpoint (reusable)]
+    blocking_unknowns: [Suite-wide vs per-app attribution; only 2 records exist so far.]
+    recommended_next_step: Reuse the proven `learn_qna_search_rss` method once PowerPoint's zero-health-row defect is understood.
+
+  # =========================================================================================
+  # REACTIVATION: configured with an adapter, deliberately disabled. Cheapest breadth per unit
+  # of engineering, because the product page, config and category already exist.
+  # =========================================================================================
+
+  - candidate_id: microsoft-teams
+    product_name: Microsoft Teams
+    vendor: Microsoft
+    category: communication_collaboration
+    repo_state: configured_disabled
+    product_scope: installable_desktop_client
+    support_lifecycle: current
+    opportunity_refs:
+      - microsoft-365-message-center-and-release-health
+    scores: {user_impact: 5, patch_risk: 4, update_frequency: 5, commercial_value: 4, official_source_quality: 4, consensus_source_quality: 3, automation_feasibility: 4, source_diversity: 3, version_identifiability: 4, maintenance_cost: 3, cross_product_reuse: 4}
+    priority_score: 133          # strategic value; recomputed by the validator
+    priority_tier: A
+    score_basis:
+      official_source_quality:
+        confidence: medium
+        basis: >-
+          Adapter configured and the Learn versioning page answers; the staged identity-scoped parser
+          has never been validated against the live page.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No probed consensus surface for Teams specifically.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Activation is gated on re-validating a staged parser.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          PR #29 found the previous parser leaked Mac and mixed builds as generic records; the
+          identity-scoped fix is staged but unproven.
+    readiness_blockers:
+      - >-
+        The staged identity-scoped official parser has never been validated against the live page.
+    readiness: prove_source
+    known_sources: [microsoft-365-message-center-and-release-health (adapter staged, identity-scoped)]
+    blocking_unknowns:
+      - 'The staged identity-scoped parser (PR #29) was never validated against the current page.'
+    recommended_next_step: Re-validate the staged parser live, then activate behind its existing fail-closed identity scoping.
+
+  - candidate_id: nvidia
+    product_name: NVIDIA GeForce / Studio drivers
+    vendor: NVIDIA
+    category: gpu_drivers
+    repo_state: configured_disabled
+    product_scope: separately_versioned_application
+    support_lifecycle: current
+    opportunity_refs:
+      - nvidia-developer-forums-discourse
+    scores: {user_impact: 5, patch_risk: 5, update_frequency: 5, commercial_value: 5, official_source_quality: 4, consensus_source_quality: 3, automation_feasibility: 3, source_diversity: 3, version_identifiability: 5, maintenance_cost: 3, cross_product_reuse: 3}
+    priority_score: 137          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          html_blog adapter staged and never proven.
+      consensus_source_quality:
+        confidence: unproven
+        basis: >-
+          The Discourse instance that answers is developer-facing (CUDA/Jetson); GeForce driver
+          regression reports are elsewhere and unprobed.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither half proven.
+      version_identifiability:
+        confidence: medium
+        basis: >-
+          Driver versions (581.42) are unambiguous and universally quoted by users, though no report
+          corpus was sampled.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [html_blog (staged), nvidia-developer-forums-discourse (transport_proven, possibly wrong board)]
+    blocking_unknowns: [The measured Discourse instance is developer-facing; GeForce regression reports live elsewhere.]
+    recommended_next_step: >-
+      Find the right consensus surface for GeForce driver regressions before building. Driver
+      versions (581.42) are highly identifiable and drivers break AUXSAYS's core video products,
+      so this is the most strategically valuable reactivation once the source question is closed.
+
+  - candidate_id: adobe-lightroom-classic
+    product_name: Adobe Lightroom Classic
+    vendor: Adobe
+    category: photography
+    repo_state: configured_disabled
+    product_scope: installable_desktop_client
+    support_lifecycle: current
+    opportunity_refs:
+      - adobe-algolia-lightroom-classic
+      - vendor-sitemap-delta
+    scores: {user_impact: 4, patch_risk: 5, update_frequency: 4, commercial_value: 4, official_source_quality: 2, consensus_source_quality: 5, automation_feasibility: 2, source_diversity: 3, version_identifiability: 5, maintenance_cost: 3, cross_product_reuse: 5}
+    priority_score: 130          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: unproven
+        basis: >-
+          helpx.adobe.com is measured CI-unreachable (run 31530112187: 12/12 timeouts, zero body
+          bytes, four User-Agent classes). Root cause UNRESOLVED, so no official path exists today.
+      consensus_source_quality:
+        confidence: medium
+        basis: >-
+          Per-product supply measured at 6520 documents on the Adobe Community Algolia index, using a
+          chain already Actions-proven for other Adobe products; board ids and version-token density
+          for this product are unmeasured.
+      automation_feasibility:
+        confidence: unproven
+        basis: >-
+          The official transport is measured blocked in Actions, so the full lane cannot run
+          unattended regardless of community supply.
+      version_identifiability:
+        confidence: medium
+        basis: >-
+          Adobe products use exact X.Y(.Z) versions and PR #51's identity gate is proven against the
+          same community index for Premiere; per-product title density unmeasured.
+    readiness_blockers:
+      - >-
+        Official ingestion transport is measured CI-unreachable (helpx.adobe.com) with the root
+        cause unresolved; evidence has no patch record to attach to.
+    readiness: prove_source
+    known_sources: [adobe_release_notes (staged), adobe-algolia-lightroom-classic (structure_proven, 6520 docs)]
+    blocking_unknowns: [helpx.adobe.com is CI-unreachable, root cause UNRESOLVED -- official ingestion is the blocker.]
+    recommended_next_step: >-
+      Do not build the consensus lane first. Resolve Adobe official ingestion transport, or find a
+      non-HelpX official surface; evidence has nothing to attach to without a patch record.
+
+  - candidate_id: adobe-photoshop
+    product_name: Adobe Photoshop
+    vendor: Adobe
+    category: graphics_design
+    repo_state: configured_disabled
+    product_scope: installable_desktop_client
+    support_lifecycle: current
+    opportunity_refs:
+      - adobe-algolia-photoshop
+      - vendor-sitemap-delta
+    scores: {user_impact: 5, patch_risk: 4, update_frequency: 4, commercial_value: 5, official_source_quality: 2, consensus_source_quality: 5, automation_feasibility: 2, source_diversity: 3, version_identifiability: 4, maintenance_cost: 3, cross_product_reuse: 5}
+    priority_score: 128          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: unproven
+        basis: >-
+          helpx.adobe.com is measured CI-unreachable (run 31530112187: 12/12 timeouts, zero body
+          bytes, four User-Agent classes). Root cause UNRESOLVED, so no official path exists today.
+      consensus_source_quality:
+        confidence: medium
+        basis: >-
+          Per-product supply measured at 4573 documents on the Adobe Community Algolia index, using a
+          chain already Actions-proven for other Adobe products; board ids and version-token density
+          for this product are unmeasured.
+      automation_feasibility:
+        confidence: unproven
+        basis: >-
+          The official transport is measured blocked in Actions, so the full lane cannot run
+          unattended regardless of community supply.
+      version_identifiability:
+        confidence: medium
+        basis: >-
+          Adobe products use exact X.Y(.Z) versions and PR #51's identity gate is proven against the
+          same community index for Premiere; per-product title density unmeasured.
+    readiness_blockers:
+      - >-
+        Official ingestion transport is measured CI-unreachable (helpx.adobe.com) with the root
+        cause unresolved; evidence has no patch record to attach to.
+    readiness: prove_source
+    known_sources:
+      - 'adobe_photoshop adapter (staged, PR #28 NO-GO)'
+      - 'adobe-algolia-photoshop (structure_proven, 4573 docs)'
+    blocking_unknowns:
+      - 'Same HelpX CI block; PR #28 was correctly refused activation.'
+    recommended_next_step: Blocked on the same Adobe official-transport question as Lightroom Classic.
+
+  - candidate_id: adobe-after-effects
+    product_name: Adobe After Effects
+    vendor: Adobe
+    category: creative_video
+    repo_state: configured_disabled
+    product_scope: installable_desktop_client
+    support_lifecycle: current
+    opportunity_refs:
+      - adobe-algolia-after-effects
+      - vendor-sitemap-delta
+    scores: {user_impact: 4, patch_risk: 5, update_frequency: 4, commercial_value: 4, official_source_quality: 2, consensus_source_quality: 4, automation_feasibility: 2, source_diversity: 3, version_identifiability: 4, maintenance_cost: 3, cross_product_reuse: 5}
+    priority_score: 122          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: unproven
+        basis: >-
+          helpx.adobe.com is measured CI-unreachable (run 31530112187: 12/12 timeouts, zero body
+          bytes, four User-Agent classes). Root cause UNRESOLVED, so no official path exists today.
+      consensus_source_quality:
+        confidence: medium
+        basis: >-
+          Per-product supply measured at 1610 documents on the Adobe Community Algolia index, using a
+          chain already Actions-proven for other Adobe products; board ids and version-token density
+          for this product are unmeasured.
+      automation_feasibility:
+        confidence: unproven
+        basis: >-
+          The official transport is measured blocked in Actions, so the full lane cannot run
+          unattended regardless of community supply.
+      version_identifiability:
+        confidence: medium
+        basis: >-
+          Adobe products use exact X.Y(.Z) versions and PR #51's identity gate is proven against the
+          same community index for Premiere; per-product title density unmeasured.
+    readiness_blockers:
+      - >-
+        Official ingestion transport is measured CI-unreachable (helpx.adobe.com) with the root
+        cause unresolved; evidence has no patch record to attach to.
+    readiness: prove_source
+    known_sources: [adobe_release_notes (staged), adobe-algolia-after-effects (structure_proven, 1610 docs)]
+    blocking_unknowns: [HelpX CI block; AE/Media Encoder/Premiere defect overlap needs product-scoped identity.]
+    recommended_next_step: Queue behind the Adobe official-transport resolution.
+
+  - candidate_id: adobe-media-encoder
+    product_name: Adobe Media Encoder
+    vendor: Adobe
+    category: creative_video
+    repo_state: configured_disabled
+    product_scope: installable_desktop_client
+    support_lifecycle: current
+    opportunity_refs:
+      - adobe-algolia-media-encoder
+      - vendor-sitemap-delta
+    scores: {user_impact: 3, patch_risk: 4, update_frequency: 4, commercial_value: 2, official_source_quality: 2, consensus_source_quality: 2, automation_feasibility: 2, source_diversity: 2, version_identifiability: 4, maintenance_cost: 3, cross_product_reuse: 4}
+    priority_score: 97          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: unproven
+        basis: >-
+          helpx.adobe.com is measured CI-unreachable (run 31530112187: 12/12 timeouts, zero body
+          bytes, four User-Agent classes). Root cause UNRESOLVED, so no official path exists today.
+      consensus_source_quality:
+        confidence: unproven
+        basis: >-
+          296 lifetime documents measured -- recorded as a FAILED supply proof, so a lane would likely
+          report no_results indefinitely.
+      automation_feasibility:
+        confidence: unproven
+        basis: >-
+          The official transport is measured blocked in Actions, so the full lane cannot run
+          unattended regardless of community supply.
+      version_identifiability:
+        confidence: medium
+        basis: >-
+          Adobe products use exact X.Y(.Z) versions and PR #51's identity gate is proven against the
+          same community index for Premiere; per-product title density unmeasured.
+    readiness_blockers:
+      - >-
+        Official ingestion transport is measured CI-unreachable (helpx.adobe.com) with the root
+        cause unresolved; evidence has no patch record to attach to.
+    readiness: prove_source
+    known_sources: [adobe_release_notes (staged), adobe-algolia-media-encoder (low_supply, 296 docs)]
+    blocking_unknowns: [Only 296 lifetime community documents -- supply may never justify a lane.]
+    recommended_next_step: Measure Bug Reports supply in a 180-day window before any build.
+
+  - candidate_id: blender
+    product_name: Blender
+    vendor: Blender Foundation
+    category: three_d
+    repo_state: configured_disabled
+    product_scope: installable_desktop_client
+    support_lifecycle: current
+    opportunity_refs:
+      - blender-devtalk-discourse
+    scores: {user_impact: 4, patch_risk: 4, update_frequency: 4, commercial_value: 3, official_source_quality: 4, consensus_source_quality: 4, automation_feasibility: 4, source_diversity: 4, version_identifiability: 5, maintenance_cost: 3, cross_product_reuse: 3}
+    priority_score: 133          # strategic value; recomputed by the validator
+    priority_tier: A
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          html_changelog staged and unproven.
+      consensus_source_quality:
+        confidence: medium
+        basis: >-
+          devtalk.blender.org answers 200 with the standard Discourse topic_list contract; it is
+          developer-facing, and the projects.blender.org tracker is unprobed.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Official half unproven.
+      version_identifiability:
+        confidence: medium
+        basis: >-
+          Blender uses exact 4.x.y versions.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [html_changelog (staged), blender-devtalk-discourse (structure_proven), projects.blender.org tracker (unprobed)]
+    blocking_unknowns: [devtalk is developer-facing; the public bug tracker is a better-fit unprobed surface.]
+    recommended_next_step: Probe projects.blender.org issue API, then reactivate with the PR #53 Discourse primitive as a second source.
+
+  - candidate_id: unity
+    product_name: Unity Editor
+    vendor: Unity Technologies
+    category: three_d
+    repo_state: configured_disabled
+    product_scope: installable_desktop_client
+    support_lifecycle: current
+    opportunity_refs:
+      - unity-discussions-discourse
+    scores: {user_impact: 4, patch_risk: 5, update_frequency: 5, commercial_value: 3, official_source_quality: 4, consensus_source_quality: 4, automation_feasibility: 4, source_diversity: 3, version_identifiability: 5, maintenance_cost: 3, cross_product_reuse: 3}
+    priority_score: 137          # strategic value; recomputed by the validator
+    priority_tier: A
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          html_changelog staged and unproven.
+      consensus_source_quality:
+        confidence: medium
+        basis: >-
+          discussions.unity.com answers 200 with the Discourse contract.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Official half unproven; release-stream scope undefined.
+      version_identifiability:
+        confidence: medium
+        basis: >-
+          Unity versions are exact but span concurrent LTS/tech streams.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [html_changelog (staged), unity-discussions-discourse (structure_proven)]
+    blocking_unknowns: [Unity ships many concurrent streams (LTS/tech); the unit of record must be defined.]
+    recommended_next_step: Define the release stream scope, then reactivate with the Discourse primitive.
+
+  - candidate_id: epic-unreal
+    product_name: Unreal Engine
+    vendor: Epic Games
+    category: three_d
+    repo_state: configured_disabled
+    product_scope: installable_desktop_client
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 3, patch_risk: 5, update_frequency: 3, commercial_value: 3, official_source_quality: 4, consensus_source_quality: 3, automation_feasibility: 3, source_diversity: 3, version_identifiability: 5, maintenance_cost: 2, cross_product_reuse: 2}
+    priority_score: 117          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [html_changelog (staged), Epic developer community (unprobed), GitHub (gated repo)]
+    blocking_unknowns: [The Unreal GitHub repo requires account linkage, so issue discovery may not be anonymous.]
+    recommended_next_step: Probe the Epic developer community forum surface.
+
+  - candidate_id: openai-chatgpt
+    product_name: ChatGPT
+    vendor: OpenAI
+    category: ai_desktop
+    repo_state: configured_disabled
+    product_scope: scope_split_required
+    scope_split_note: >-
+      The consumer web product has no user-visible version; the ChatGPT desktop app is separately
+      versioned and user-installable. Evaluate that instead.
+    support_lifecycle: current
+    opportunity_refs:
+      - openai-community-discourse
+    scores: {user_impact: 5, patch_risk: 2, update_frequency: 5, commercial_value: 3, official_source_quality: 2, consensus_source_quality: 4, automation_feasibility: 2, source_diversity: 3, version_identifiability: 1, maintenance_cost: 2, cross_product_reuse: 2}
+    priority_score: 92          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          html_changelog staged; changelog entries are not version/date pairs.
+      consensus_source_quality:
+        confidence: medium
+        basis: >-
+          community.openai.com search.json answers 200 with 50 topics.
+      automation_feasibility:
+        confidence: unproven
+        basis: >-
+          Rich supply with no version identity is the combination that manufactures false consensus.
+      version_identifiability:
+        confidence: unproven
+        basis: >-
+          The consumer web product has no user-visible version. Only the desktop app versions -- see
+          scope_split_note.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [html_changelog (staged), openai-community-discourse (structure_proven, low_confidence)]
+    blocking_unknowns: [The consumer product has no user-visible version; only the desktop app versions.]
+    recommended_next_step: >-
+      Narrow the product to the DESKTOP APP (which has builds) or defer. As "ChatGPT" generally it
+      fails the exact-patch acceptance requirement in principle, not just in practice.
+
+  - candidate_id: anthropic-claude
+    product_name: Claude
+    vendor: Anthropic
+    category: ai_desktop
+    repo_state: configured_disabled
+    product_scope: scope_split_required
+    scope_split_note: >-
+      Same split as ChatGPT: the web product is unversioned, the desktop app ships installable
+      builds. Evaluate the desktop app separately.
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 4, patch_risk: 2, update_frequency: 5, commercial_value: 2, official_source_quality: 3, consensus_source_quality: 2, automation_feasibility: 2, source_diversity: 2, version_identifiability: 2, maintenance_cost: 3, cross_product_reuse: 2}
+    priority_score: 85          # strategic value; recomputed by the validator
+    priority_tier: C
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          html_changelog staged and unproven.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither half proven.
+      version_identifiability:
+        confidence: unproven
+        basis: >-
+          Web product unversioned; desktop app not evaluated.
+    readiness_blockers: []
+    readiness: defer
+    known_sources: [html_changelog (staged)]
+    blocking_unknowns: [Same unversioned-web-product problem as ChatGPT; desktop app builds may be enumerable.]
+    recommended_next_step: Same as ChatGPT -- narrow to the desktop app or defer.
+
+  - candidate_id: amd
+    product_name: AMD Adrenalin / Radeon drivers
+    vendor: AMD
+    category: gpu_drivers
+    repo_state: configured_disabled
+    product_scope: separately_versioned_application
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 4, patch_risk: 5, update_frequency: 4, commercial_value: 4, official_source_quality: 4, consensus_source_quality: 2, automation_feasibility: 3, source_diversity: 2, version_identifiability: 5, maintenance_cost: 2, cross_product_reuse: 3}
+    priority_score: 121          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [download_portal_snapshot (staged)]
+    blocking_unknowns: [No probed community surface; AMD community is a Khoros/Lithium instance, unprobed.]
+    recommended_next_step: Probe the AMD community platform for a JSON surface before reactivating.
+
+  - candidate_id: intel-arc
+    product_name: Intel Arc / graphics drivers
+    vendor: Intel
+    category: gpu_drivers
+    repo_state: configured_disabled
+    product_scope: separately_versioned_application
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 2, patch_risk: 4, update_frequency: 4, commercial_value: 2, official_source_quality: 4, consensus_source_quality: 2, automation_feasibility: 3, source_diversity: 2, version_identifiability: 5, maintenance_cost: 2, cross_product_reuse: 2}
+    priority_score: 103          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [download_portal_snapshot (staged)]
+    blocking_unknowns: [Smaller install base; community surface unprobed.]
+    recommended_next_step: Defer behind NVIDIA and AMD.
+
+  - candidate_id: steam
+    product_name: Steam client
+    vendor: Valve
+    category: game_launchers
+    repo_state: configured_disabled
+    product_scope: installable_desktop_client
+    support_lifecycle: current
+    opportunity_refs:
+      - steam-news-api
+    scores: {user_impact: 4, patch_risk: 2, update_frequency: 4, commercial_value: 2, official_source_quality: 2, consensus_source_quality: 2, automation_feasibility: 2, source_diversity: 2, version_identifiability: 1, maintenance_cost: 2, cross_product_reuse: 1}
+    priority_score: 72          # strategic value; recomputed by the validator
+    priority_tier: C
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          official_forum_watch staged; client builds are not publicly versioned.
+      consensus_source_quality:
+        confidence: unproven
+        basis: >-
+          The measured Steam Web API returns per-GAME news, not client builds -- recorded as a FAILED
+          patch-specificity proof.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          The measured endpoint answers a different question than the product asks.
+      version_identifiability:
+        confidence: unproven
+        basis: >-
+          Steam client updates are silent and not user-versioned.
+    readiness_blockers: []
+    readiness: defer
+    known_sources: [official_forum_watch (staged), steam-news-api (low_confidence -- per-game, not client)]
+    blocking_unknowns: [Steam client builds are largely silent and not publicly versioned for users.]
+    recommended_next_step: Reclassify or retire. The measured API answers a different question than the product asks.
+
+  - candidate_id: twitch
+    product_name: Twitch
+    vendor: Amazon
+    category: streaming
+    repo_state: configured_disabled
+    product_scope: scope_split_required
+    scope_split_note: >-
+      Twitch is a service, but the desktop/mobile apps ship installable versioned builds.
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 4, patch_risk: 1, update_frequency: 5, commercial_value: 1, official_source_quality: 2, consensus_source_quality: 2, automation_feasibility: 2, source_diversity: 2, version_identifiability: 1, maintenance_cost: 2, cross_product_reuse: 1}
+    priority_score: 67          # strategic value; recomputed by the validator
+    priority_tier: C
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: defer
+    known_sources: [html_blog (manual watch)]
+    blocking_unknowns: [A web service with no install decision.]
+    recommended_next_step: Defer; consider retiring from the product set.
+
+  - candidate_id: notion
+    product_name: Notion
+    vendor: Notion Labs
+    category: productivity
+    repo_state: configured_disabled
+    product_scope: scope_split_required
+    scope_split_note: >-
+      Notion ships a separately versioned desktop app alongside the web product.
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 4, patch_risk: 2, update_frequency: 5, commercial_value: 2, official_source_quality: 3, consensus_source_quality: 2, automation_feasibility: 3, source_diversity: 2, version_identifiability: 2, maintenance_cost: 3, cross_product_reuse: 1}
+    priority_score: 88          # strategic value; recomputed by the validator
+    priority_tier: C
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: defer
+    known_sources: [html_changelog (staged), status.notion.so RSS (200, unparsed in this audit)]
+    blocking_unknowns: [Desktop app versions exist but changelogs are web-product oriented.]
+    recommended_next_step: Defer.
+
+  - candidate_id: canva
+    product_name: Canva
+    vendor: Canva
+    category: graphics_design
+    repo_state: configured_disabled
+    product_scope: scope_split_required
+    scope_split_note: >-
+      Canva ships a desktop app alongside the web product; only the web product was scored.
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 4, patch_risk: 1, update_frequency: 5, commercial_value: 1, official_source_quality: 2, consensus_source_quality: 1, automation_feasibility: 2, source_diversity: 1, version_identifiability: 1, maintenance_cost: 2, cross_product_reuse: 1}
+    priority_score: 61          # strategic value; recomputed by the validator
+    priority_tier: C
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: defer
+    known_sources: [html_blog (manual watch)]
+    blocking_unknowns: [Unversioned web product.]
+    recommended_next_step: Defer.
+
+  - candidate_id: runway
+    product_name: Runway
+    vendor: Runway
+    category: ai_creative_tooling
+    repo_state: configured_disabled
+    product_scope: generic_cloud_service
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 2, patch_risk: 2, update_frequency: 4, commercial_value: 1, official_source_quality: 2, consensus_source_quality: 1, automation_feasibility: 2, source_diversity: 1, version_identifiability: 1, maintenance_cost: 2, cross_product_reuse: 1}
+    priority_score: 57          # strategic value; recomputed by the validator
+    priority_tier: C
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: defer
+    known_sources: [html_blog (manual watch)]
+    blocking_unknowns: [Unversioned web product.]
+    recommended_next_step: Defer.
+
+  - candidate_id: midjourney
+    product_name: Midjourney
+    vendor: Midjourney
+    category: ai_creative_tooling
+    repo_state: configured_disabled
+    product_scope: generic_cloud_service
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 3, patch_risk: 2, update_frequency: 4, commercial_value: 2, official_source_quality: 1, consensus_source_quality: 2, automation_feasibility: 1, source_diversity: 1, version_identifiability: 3, maintenance_cost: 1, cross_product_reuse: 1}
+    priority_score: 65          # strategic value; recomputed by the validator
+    priority_tier: C
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: defer
+    known_sources: [manual_watch]
+    blocking_unknowns: [Announcements are Discord-native; no documented anonymous surface.]
+    recommended_next_step: Defer. Currently a manual-watch dependency, which the doctrine treats as temporary only.
+
+  # =========================================================================================
+  # NEW: untracked products, ranked on the same model.
+  # =========================================================================================
+
+  - candidate_id: windows-10
+    product_name: Windows 10
+    vendor: Microsoft
+    category: operating_systems
+    repo_state: untracked
+    product_scope: separately_versioned_application
+    support_lifecycle: unknown
+    support_lifecycle_note: >-
+      Lifecycle horizon must be VERIFIED before investing: mainstream support and ESU terms
+      determine whether this is valuable legacy coverage or the best long-term investment. Not
+      assumed either way by this inventory.
+    opportunity_refs: []
+    scores: {user_impact: 5, patch_risk: 5, update_frequency: 3, commercial_value: 4, official_source_quality: 5, consensus_source_quality: 4, automation_feasibility: 5, source_diversity: 4, version_identifiability: 5, maintenance_cost: 4, cross_product_reuse: 5}
+    priority_score: 155          # strategic value; recomputed by the validator
+    priority_tier: A
+    score_basis:
+      official_source_quality:
+        confidence: medium
+        basis: >-
+          microsoft_release_health is enabled and production-proven for windows-11; the Windows 10
+          surface itself was not probed in this audit.
+      consensus_source_quality:
+        confidence: medium
+        basis: >-
+          learn_qna_search_rss is production-proven for windows-11 (24 accepted rows); the Windows 10
+          path is unprobed.
+      automation_feasibility:
+        confidence: medium
+        basis: >-
+          Both halves exist and run in Actions for the sibling product; no Windows 10 run has
+          executed.
+      version_identifiability:
+        confidence: high
+        basis: >-
+          Windows builds are exact and KB-numbered, and identity is already proven in the windows-11
+          lane.
+    readiness_blockers:
+      - >-
+        Support-lifecycle horizon is unverified, so long-term investment value is unknown.
+    readiness: prove_source
+    known_sources: [microsoft_release_health (implemented for Windows 11 -- direct reuse), microsoft-learn-qna (implemented, proven)]
+    blocking_unknowns: [Post-EOL cadence is ESU-only, so update frequency is falling.]
+    recommended_next_step: >-
+      Highest-reuse new product in the inventory: both the official adapter and the only proven
+      Microsoft consensus method already exist and succeed for Windows 11. Large ESU install base
+      still faces genuine monthly install decisions.
+
+  - candidate_id: vscode
+    product_name: Visual Studio Code
+    vendor: Microsoft
+    category: developer_tools
+    repo_state: untracked
+    product_scope: installable_desktop_client
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 5, patch_risk: 3, update_frequency: 5, commercial_value: 4, official_source_quality: 5, consensus_source_quality: 5, automation_feasibility: 5, source_diversity: 4, version_identifiability: 5, maintenance_cost: 4, cross_product_reuse: 5}
+    priority_score: 155          # strategic value; recomputed by the validator
+    priority_tier: A
+    score_basis:
+      official_source_quality:
+        confidence: medium
+        basis: >-
+          github_releases is an implemented adapter proven for other products; the microsoft/vscode
+          release surface was not probed.
+      consensus_source_quality:
+        confidence: medium
+        basis: >-
+          github_issues is production-proven for obs-studio; the vscode repo was not sampled.
+      automation_feasibility:
+        confidence: medium
+        basis: >-
+          Both lanes are existing transports; no vscode run has executed.
+      version_identifiability:
+        confidence: medium
+        basis: >-
+          Monthly 1.9x.y versions are unambiguous; report density unsampled.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [GitHub Releases (github_releases adapter, implemented), microsoft/vscode GitHub Issues (github_issues, proven method)]
+    blocking_unknowns: [Very high issue volume -- duplicate/noise risk needs bounding.]
+    recommended_next_step: >-
+      Onboard on existing infrastructure only: `github_releases` for official, `github_issues` for
+      consensus. Monthly versions (1.9x.y) are unambiguous and the repo is public and anonymous.
+
+  - candidate_id: docker-desktop
+    product_name: Docker Desktop
+    vendor: Docker
+    category: developer_tools
+    repo_state: untracked
+    product_scope: installable_desktop_client
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 4, patch_risk: 5, update_frequency: 4, commercial_value: 4, official_source_quality: 5, consensus_source_quality: 4, automation_feasibility: 4, source_diversity: 3, version_identifiability: 5, maintenance_cost: 3, cross_product_reuse: 3}
+    priority_score: 141          # strategic value; recomputed by the validator
+    priority_tier: A
+    score_basis:
+      official_source_quality:
+        confidence: medium
+        basis: >-
+          github_releases is an implemented, production-proven adapter; the docker/for-win release
+          surface itself was not probed.
+      consensus_source_quality:
+        confidence: medium
+        basis: >-
+          github_issues is production-proven for obs-studio; this repo was not sampled for
+          version-token density.
+      automation_feasibility:
+        confidence: medium
+        basis: >-
+          Both lanes are existing transports running in Actions today; no run has executed for this
+          product.
+      version_identifiability:
+        confidence: medium
+        basis: >-
+          Release tags are exact; report density unsampled.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [docs.docker.com release notes (unprobed), docker/for-win + docker/for-mac GitHub Issues (github_issues reuse)]
+    blocking_unknowns: [Official release-note surface not yet probed for a parseable version/date pair.]
+    recommended_next_step: >-
+      Probe the release-notes surface; consensus is a straight `github_issues` reuse. Docker
+      Desktop updates routinely break WSL and local dev environments, so patch risk is high.
+
+  - candidate_id: ollama
+    product_name: Ollama
+    vendor: Ollama
+    category: ai_desktop
+    repo_state: untracked
+    product_scope: installable_desktop_client
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 3, patch_risk: 4, update_frequency: 5, commercial_value: 3, official_source_quality: 5, consensus_source_quality: 5, automation_feasibility: 5, source_diversity: 3, version_identifiability: 5, maintenance_cost: 4, cross_product_reuse: 4}
+    priority_score: 146          # strategic value; recomputed by the validator
+    priority_tier: A
+    score_basis:
+      official_source_quality:
+        confidence: medium
+        basis: >-
+          github_releases is an implemented, production-proven adapter; the ollama/ollama release
+          surface itself was not probed.
+      consensus_source_quality:
+        confidence: medium
+        basis: >-
+          github_issues is production-proven for obs-studio; this repo was not sampled for
+          version-token density.
+      automation_feasibility:
+        confidence: medium
+        basis: >-
+          Both lanes are existing transports running in Actions today; no run has executed for this
+          product.
+      version_identifiability:
+        confidence: medium
+        basis: >-
+          Release tags are exact; report density unsampled.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [GitHub Releases (adapter implemented), ollama/ollama GitHub Issues (proven method)]
+    blocking_unknowns: [Audience smaller than the Adobe/Microsoft products.]
+    recommended_next_step: >-
+      Pure infrastructure reuse and a fast-moving local-AI audience that genuinely asks whether to
+      update. Good low-risk proving ground for the GitHub consensus lane beyond OBS.
+
+  - candidate_id: adobe-illustrator
+    product_name: Adobe Illustrator
+    vendor: Adobe
+    category: graphics_design
+    repo_state: untracked
+    product_scope: installable_desktop_client
+    support_lifecycle: current
+    opportunity_refs:
+      - adobe-algolia-illustrator
+    scores: {user_impact: 4, patch_risk: 4, update_frequency: 4, commercial_value: 4, official_source_quality: 2, consensus_source_quality: 5, automation_feasibility: 3, source_diversity: 3, version_identifiability: 5, maintenance_cost: 3, cross_product_reuse: 5}
+    priority_score: 131          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: unproven
+        basis: >-
+          helpx.adobe.com is measured CI-unreachable (run 31530112187: 12/12 timeouts, zero body
+          bytes, four User-Agent classes). Root cause UNRESOLVED, so no official path exists today.
+      consensus_source_quality:
+        confidence: medium
+        basis: >-
+          Per-product supply measured at 5769 documents on the Adobe Community Algolia index, using a
+          chain already Actions-proven for other Adobe products; board ids and version-token density
+          for this product are unmeasured.
+      automation_feasibility:
+        confidence: unproven
+        basis: >-
+          The official transport is measured blocked in Actions, so the full lane cannot run
+          unattended regardless of community supply.
+      version_identifiability:
+        confidence: medium
+        basis: >-
+          Adobe products use exact X.Y(.Z) versions and PR #51's identity gate is proven against the
+          same community index for Premiere; per-product title density unmeasured.
+    readiness_blockers:
+      - >-
+        Official ingestion transport is measured CI-unreachable (helpx.adobe.com) with the root
+        cause unresolved; evidence has no patch record to attach to.
+    readiness: prove_source
+    known_sources: [adobe-algolia-illustrator (structure_proven, 5769 docs)]
+    blocking_unknowns: [Adobe official ingestion transport (HelpX CI block) is the gating question.]
+    recommended_next_step: Bundle with the Adobe official-transport fix; community supply is already measured.
+
+  - candidate_id: adobe-indesign
+    product_name: Adobe InDesign
+    vendor: Adobe
+    category: graphics_design
+    repo_state: untracked
+    product_scope: installable_desktop_client
+    support_lifecycle: current
+    opportunity_refs:
+      - adobe-algolia-indesign
+    scores: {user_impact: 3, patch_risk: 4, update_frequency: 4, commercial_value: 3, official_source_quality: 2, consensus_source_quality: 5, automation_feasibility: 3, source_diversity: 3, version_identifiability: 5, maintenance_cost: 3, cross_product_reuse: 5}
+    priority_score: 125          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: unproven
+        basis: >-
+          helpx.adobe.com is measured CI-unreachable (run 31530112187: 12/12 timeouts, zero body
+          bytes, four User-Agent classes). Root cause UNRESOLVED, so no official path exists today.
+      consensus_source_quality:
+        confidence: medium
+        basis: >-
+          Per-product supply measured at 9057 documents on the Adobe Community Algolia index, using a
+          chain already Actions-proven for other Adobe products; board ids and version-token density
+          for this product are unmeasured.
+      automation_feasibility:
+        confidence: unproven
+        basis: >-
+          The official transport is measured blocked in Actions, so the full lane cannot run
+          unattended regardless of community supply.
+      version_identifiability:
+        confidence: medium
+        basis: >-
+          Adobe products use exact X.Y(.Z) versions and PR #51's identity gate is proven against the
+          same community index for Premiere; per-product title density unmeasured.
+    readiness_blockers:
+      - >-
+        Official ingestion transport is measured CI-unreachable (helpx.adobe.com) with the root
+        cause unresolved; evidence has no patch record to attach to.
+    readiness: prove_source
+    known_sources: [adobe-algolia-indesign (structure_proven, 9057 docs -- second largest Adobe board)]
+    blocking_unknowns: [Same Adobe official-transport block.]
+    recommended_next_step: Bundle with the Adobe official-transport fix.
+
+  - candidate_id: tailscale
+    product_name: Tailscale
+    vendor: Tailscale
+    category: vpn_networking
+    repo_state: untracked
+    product_scope: installable_desktop_client
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 3, patch_risk: 4, update_frequency: 5, commercial_value: 2, official_source_quality: 5, consensus_source_quality: 4, automation_feasibility: 5, source_diversity: 3, version_identifiability: 5, maintenance_cost: 4, cross_product_reuse: 3}
+    priority_score: 137          # strategic value; recomputed by the validator
+    priority_tier: A
+    score_basis:
+      official_source_quality:
+        confidence: medium
+        basis: >-
+          github_releases is an implemented, production-proven adapter; the tailscale/tailscale
+          release surface itself was not probed.
+      consensus_source_quality:
+        confidence: medium
+        basis: >-
+          github_issues is production-proven for obs-studio; this repo was not sampled for
+          version-token density.
+      automation_feasibility:
+        confidence: medium
+        basis: >-
+          Both lanes are existing transports running in Actions today; no run has executed for this
+          product.
+      version_identifiability:
+        confidence: medium
+        basis: >-
+          Release tags are exact; report density unsampled.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [GitHub Releases (adapter implemented), tailscale/tailscale GitHub Issues (proven method)]
+    blocking_unknowns: [Niche audience relative to the core product set.]
+    recommended_next_step: Cheap GitHub-native onboarding; good second datapoint for the shared lane.
+
+  - candidate_id: synology-dsm
+    product_name: Synology DSM
+    vendor: Synology
+    category: storage_backup
+    repo_state: untracked
+    product_scope: separately_versioned_application
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 3, patch_risk: 5, update_frequency: 3, commercial_value: 4, official_source_quality: 4, consensus_source_quality: 3, automation_feasibility: 3, source_diversity: 3, version_identifiability: 5, maintenance_cost: 3, cross_product_reuse: 2}
+    priority_score: 122          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [Synology release notes pages (unprobed), Synology community + r/synology (unprobed)]
+    blocking_unknowns: [Community platform not probed for a JSON surface.]
+    recommended_next_step: >-
+      Probe the official release-notes surface. NAS firmware updates are among the highest-stakes
+      install decisions ordinary users face, which is a strong fit for the site's question.
+
+  - candidate_id: proxmox-ve
+    product_name: Proxmox VE
+    vendor: Proxmox
+    category: virtualization
+    repo_state: untracked
+    product_scope: separately_versioned_application
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 2, patch_risk: 5, update_frequency: 3, commercial_value: 3, official_source_quality: 4, consensus_source_quality: 3, automation_feasibility: 3, source_diversity: 3, version_identifiability: 5, maintenance_cost: 2, cross_product_reuse: 2}
+    priority_score: 114          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [Proxmox roadmap/changelog wiki (unprobed), forum.proxmox.com (phpBB-like, unprobed)]
+    blocking_unknowns: [Forum may be challenge-gated like Blackmagic and DJI.]
+    recommended_next_step: Probe the forum surface before committing.
+
+  - candidate_id: affinity-suite
+    product_name: Affinity Photo / Designer / Publisher
+    vendor: Canva (Serif)
+    category: graphics_design
+    repo_state: untracked
+    product_scope: installable_desktop_client
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 3, patch_risk: 4, update_frequency: 3, commercial_value: 3, official_source_quality: 3, consensus_source_quality: 4, automation_feasibility: 3, source_diversity: 2, version_identifiability: 4, maintenance_cost: 2, cross_product_reuse: 2}
+    priority_score: 108          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [Affinity official forum (Invision Community, unprobed), release notes pages (unprobed)]
+    blocking_unknowns: [Invision Community JSON/RSS surface unprobed; three products share one forum.]
+    recommended_next_step: Probe the Invision platform for an anonymous feed; a positive result would open a new framework family.
+
+  - candidate_id: topaz-video-ai
+    product_name: Topaz Video AI
+    vendor: Topaz Labs
+    category: creative_video
+    repo_state: untracked
+    product_scope: installable_desktop_client
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 2, patch_risk: 5, update_frequency: 4, commercial_value: 3, official_source_quality: 3, consensus_source_quality: 4, automation_feasibility: 3, source_diversity: 2, version_identifiability: 4, maintenance_cost: 2, cross_product_reuse: 3}
+    priority_score: 113          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [Topaz community (Discourse -- unprobed but likely), release notes (unprobed)]
+    blocking_unknowns:
+      - 'If the community is Discourse'
+      - 'the PR #53 primitive applies directly.'
+    recommended_next_step: Probe for Discourse. High patch-risk product whose updates frequently regress model output.
+
+  - candidate_id: capture-one
+    product_name: Capture One
+    vendor: Capture One
+    category: photography
+    repo_state: untracked
+    product_scope: installable_desktop_client
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 2, patch_risk: 4, update_frequency: 3, commercial_value: 3, official_source_quality: 3, consensus_source_quality: 3, automation_feasibility: 3, source_diversity: 2, version_identifiability: 4, maintenance_cost: 2, cross_product_reuse: 2}
+    priority_score: 101          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [Capture One support/release notes (unprobed), community forum (unprobed)]
+    blocking_unknowns: [No probed machine-readable surface.]
+    recommended_next_step: Defer behind Lightroom Classic, which shares the audience and is already configured.
+
+  - candidate_id: final-cut-pro
+    product_name: Final Cut Pro
+    vendor: Apple
+    category: creative_video
+    repo_state: untracked
+    product_scope: installable_desktop_client
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 4, patch_risk: 4, update_frequency: 3, commercial_value: 4, official_source_quality: 4, consensus_source_quality: 2, automation_feasibility: 2, source_diversity: 2, version_identifiability: 4, maintenance_cost: 2, cross_product_reuse: 1}
+    priority_score: 102          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [Apple release notes (parseable), Apple Support Communities (no anonymous API), app-store release metadata (unprobed)]
+    blocking_unknowns: [Apple provides no anonymous community API; consensus supply is the blocker.]
+    recommended_next_step: >-
+      Probe public app-store release metadata and review feeds as a consensus substitute before
+      considering this. Without a consensus surface it would ship as official-only.
+
+  - candidate_id: logic-pro
+    product_name: Logic Pro
+    vendor: Apple
+    category: audio_production
+    repo_state: untracked
+    product_scope: installable_desktop_client
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 3, patch_risk: 4, update_frequency: 3, commercial_value: 3, official_source_quality: 4, consensus_source_quality: 2, automation_feasibility: 2, source_diversity: 2, version_identifiability: 4, maintenance_cost: 2, cross_product_reuse: 1}
+    priority_score: 96          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [Apple release notes, Apple Support Communities (no API)]
+    blocking_unknowns: [Same Apple consensus problem as Final Cut Pro.]
+    recommended_next_step: Defer with Final Cut Pro; solve the Apple consensus surface once, for both.
+
+  - candidate_id: ableton-live
+    product_name: Ableton Live
+    vendor: Ableton
+    category: audio_production
+    repo_state: untracked
+    product_scope: installable_desktop_client
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 3, patch_risk: 5, update_frequency: 3, commercial_value: 3, official_source_quality: 4, consensus_source_quality: 3, automation_feasibility: 3, source_diversity: 2, version_identifiability: 5, maintenance_cost: 3, cross_product_reuse: 2}
+    priority_score: 117          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [Ableton release notes (versioned, unprobed), Ableton forum + r/ableton (unprobed)]
+    blocking_unknowns: [Community surface unprobed.]
+    recommended_next_step: >-
+      Probe the release-notes page. Audio software has unusually high patch risk because updates
+      break plugins and project compatibility -- a good fit for the site's question.
+
+  - candidate_id: pro-tools
+    product_name: Pro Tools
+    vendor: Avid
+    category: audio_production
+    repo_state: untracked
+    product_scope: installable_desktop_client
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 2, patch_risk: 5, update_frequency: 3, commercial_value: 3, official_source_quality: 3, consensus_source_quality: 3, automation_feasibility: 2, source_diversity: 2, version_identifiability: 4, maintenance_cost: 2, cross_product_reuse: 2}
+    priority_score: 100          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [Avid Knowledge Base (unprobed), Avid community (Khoros/Lithium, unprobed)]
+    blocking_unknowns: [Avid gates much documentation behind accounts.]
+    recommended_next_step: Defer; probe whether Avid's community platform has an anonymous JSON surface.
+
+  - candidate_id: avid-media-composer
+    product_name: Avid Media Composer
+    vendor: Avid
+    category: creative_video
+    repo_state: untracked
+    product_scope: installable_desktop_client
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 2, patch_risk: 5, update_frequency: 3, commercial_value: 2, official_source_quality: 3, consensus_source_quality: 3, automation_feasibility: 2, source_diversity: 2, version_identifiability: 4, maintenance_cost: 2, cross_product_reuse: 2}
+    priority_score: 97          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [Avid Knowledge Base (unprobed), Avid community (unprobed)]
+    blocking_unknowns: [Same Avid access questions as Pro Tools.]
+    recommended_next_step: Defer; bundle any Avid work with Pro Tools.
+
+  - candidate_id: streamlabs
+    product_name: Streamlabs Desktop
+    vendor: Streamlabs (Logitech)
+    category: streaming
+    repo_state: untracked
+    product_scope: installable_desktop_client
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 3, patch_risk: 4, update_frequency: 5, commercial_value: 3, official_source_quality: 4, consensus_source_quality: 4, automation_feasibility: 4, source_diversity: 3, version_identifiability: 4, maintenance_cost: 3, cross_product_reuse: 3}
+    priority_score: 126          # strategic value; recomputed by the validator
+    priority_tier: A
+    score_basis:
+      official_source_quality:
+        confidence: medium
+        basis: >-
+          github_releases is an implemented, production-proven adapter; the streamlabs/desktop release
+          surface itself was not probed.
+      consensus_source_quality:
+        confidence: medium
+        basis: >-
+          github_issues is production-proven for obs-studio; this repo was not sampled for
+          version-token density.
+      automation_feasibility:
+        confidence: medium
+        basis: >-
+          Both lanes are existing transports running in Actions today; no run has executed for this
+          product.
+      version_identifiability:
+        confidence: medium
+        basis: >-
+          Release tags are exact; report density unsampled.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [streamlabs/desktop GitHub (releases + issues -- both proven methods)]
+    blocking_unknowns: [Whether the public repo is the actual release channel for the shipped app.]
+    recommended_next_step: >-
+      Confirm the public repo tracks shipped builds, then onboard on the existing GitHub lane.
+      Strong adjacency to OBS and Elgato, which is where AUXSAYS already has audience.
+
+  - candidate_id: bitfocus-companion
+    product_name: Bitfocus Companion
+    vendor: Bitfocus
+    category: broadcast
+    repo_state: untracked
+    product_scope: installable_desktop_client
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 2, patch_risk: 4, update_frequency: 4, commercial_value: 2, official_source_quality: 5, consensus_source_quality: 4, automation_feasibility: 5, source_diversity: 3, version_identifiability: 5, maintenance_cost: 4, cross_product_reuse: 3}
+    priority_score: 132          # strategic value; recomputed by the validator
+    priority_tier: A
+    score_basis:
+      official_source_quality:
+        confidence: medium
+        basis: >-
+          github_releases is an implemented, production-proven adapter; the bitfocus/companion release
+          surface itself was not probed.
+      consensus_source_quality:
+        confidence: medium
+        basis: >-
+          github_issues is production-proven for obs-studio; this repo was not sampled for
+          version-token density.
+      automation_feasibility:
+        confidence: medium
+        basis: >-
+          Both lanes are existing transports running in Actions today; no run has executed for this
+          product.
+      version_identifiability:
+        confidence: medium
+        basis: >-
+          Release tags are exact; report density unsampled.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [GitHub Releases + Issues (both proven methods)]
+    blocking_unknowns: [Niche audience.]
+    recommended_next_step: >-
+      Very cheap GitHub-native onboarding and directly adjacent to the Elgato Stream Deck audience
+      AUXSAYS already targets (Companion is the main third-party Stream Deck controller).
+
+  - candidate_id: blackmagic-desktop-video
+    product_name: Blackmagic Desktop Video
+    vendor: Blackmagic Design
+    category: capture_hardware
+    repo_state: untracked
+    product_scope: separately_versioned_application
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs:
+      - blackmagic-forum-phpbb
+    scores: {user_impact: 3, patch_risk: 5, update_frequency: 3, commercial_value: 3, official_source_quality: 3, consensus_source_quality: 2, automation_feasibility: 2, source_diversity: 1, version_identifiability: 4, maintenance_cost: 2, cross_product_reuse: 3}
+    priority_score: 99          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          The Blackmagic downloads adapter exists for DaVinci but was not exercised for Desktop Video.
+      consensus_source_quality:
+        confidence: unproven
+        basis: >-
+          The vendor's only community surface is measured challenge-gated.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          No viable consensus surface.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Driver/firmware versions are exact but no report corpus was sampled.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [Blackmagic support downloads (adapter exists for DaVinci), blackmagic-forum-phpbb (BLOCKED, measured)]
+    blocking_unknowns: [The vendor's only community surface is measurably challenge-gated.]
+    recommended_next_step: >-
+      Would ship official-only. Notable because Desktop Video driver/firmware mismatches are a
+      classic cause of DaVinci failures, so it has diagnostic value for a product already tracked.
+
+  - candidate_id: dji-mimo
+    product_name: DJI Mimo
+    vendor: DJI
+    category: hardware_companion
+    repo_state: untracked
+    product_scope: installable_mobile_client
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs:
+      - dji-forum
+    scores: {user_impact: 3, patch_risk: 4, update_frequency: 3, commercial_value: 3, official_source_quality: 2, consensus_source_quality: 2, automation_feasibility: 2, source_diversity: 2, version_identifiability: 3, maintenance_cost: 2, cross_product_reuse: 1}
+    priority_score: 86          # strategic value; recomputed by the validator
+    priority_tier: C
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          dji.com support pages answer locally but were not parsed.
+      consensus_source_quality:
+        confidence: unproven
+        basis: >-
+          forum.dji.com is measured HTTP 202 with a zero-byte challenge body -- the same signature as
+          the Blackmagic forum.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither half has a proven surface.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Mobile-app versioning is exposed mainly via app-store metadata, unprobed.
+    readiness_blockers: []
+    readiness: defer
+    known_sources: [dji.com support pages (200 locally, unparsed), dji-forum (BLOCKED, measured 202/0 bytes)]
+    blocking_unknowns:
+      - The vendor forum is challenge-gated (measured).
+      - Mobile-app versioning is exposed mainly through app-store metadata, which is unprobed.
+    recommended_next_step: >-
+      Probe public app-store release metadata as the official signal and Reddit as consensus.
+      Named as a strategic target, but it scores into the defer tier on MEASURED source
+      availability rather than on interest -- that gap is the finding, not an omission.
+
+  - candidate_id: discord
+    product_name: Discord
+    vendor: Discord
+    category: communication_collaboration
+    repo_state: untracked
+    product_scope: installable_desktop_client
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 5, patch_risk: 2, update_frequency: 5, commercial_value: 2, official_source_quality: 1, consensus_source_quality: 3, automation_feasibility: 2, source_diversity: 2, version_identifiability: 2, maintenance_cost: 2, cross_product_reuse: 1}
+    priority_score: 82          # strategic value; recomputed by the validator
+    priority_tier: C
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: defer
+    known_sources: [Discord changelog (no stable version/date pairing), r/discordapp (unprobed)]
+    blocking_unknowns: [Silent forced auto-update means users have no install decision to make.]
+    recommended_next_step: Defer. High audience, but there is no decision for AUXSAYS to inform.
+
+  - candidate_id: zoom
+    product_name: Zoom Workplace
+    vendor: Zoom
+    category: communication_collaboration
+    repo_state: untracked
+    product_scope: installable_desktop_client
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 4, patch_risk: 3, update_frequency: 5, commercial_value: 3, official_source_quality: 4, consensus_source_quality: 3, automation_feasibility: 3, source_diversity: 2, version_identifiability: 4, maintenance_cost: 3, cross_product_reuse: 2}
+    priority_score: 112          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [Zoom release notes (versioned, unprobed), Zoom community (Khoros, unprobed)]
+    blocking_unknowns: [Community platform surface unprobed.]
+    recommended_next_step: Probe both surfaces; a Khoros JSON result would also unlock AMD and Avid.
+
+  - candidate_id: firefox
+    product_name: Mozilla Firefox
+    vendor: Mozilla
+    category: browsers
+    repo_state: untracked
+    product_scope: installable_desktop_client
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 4, patch_risk: 3, update_frequency: 5, commercial_value: 2, official_source_quality: 5, consensus_source_quality: 4, automation_feasibility: 4, source_diversity: 4, version_identifiability: 5, maintenance_cost: 4, cross_product_reuse: 4}
+    priority_score: 135          # strategic value; recomputed by the validator
+    priority_tier: A
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [Mozilla release notes (structured), Bugzilla REST API (documented, anonymous), r/firefox]
+    blocking_unknowns: [Bugzilla reports are developer-filed; user-facing regression framing may be thin.]
+    recommended_next_step: >-
+      Probe the Bugzilla REST API. It would be the first true public bug-tracker framework in the
+      repo, reusable for any Bugzilla-hosted product.
+
+  - candidate_id: chrome
+    product_name: Google Chrome
+    vendor: Google
+    category: browsers
+    repo_state: untracked
+    product_scope: installable_desktop_client
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 5, patch_risk: 3, update_frequency: 5, commercial_value: 2, official_source_quality: 4, consensus_source_quality: 3, automation_feasibility: 3, source_diversity: 3, version_identifiability: 5, maintenance_cost: 3, cross_product_reuse: 2}
+    priority_score: 118          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [Chrome releases blog (RSS), issues.chromium.org (migrated tracker, API unprobed)]
+    blocking_unknowns: [The Chromium tracker migration changed the API surface; unprobed.]
+    recommended_next_step: Defer behind Firefox; auto-update leaves users little decision latitude.
+
+  - candidate_id: razer-synapse
+    product_name: Razer Synapse
+    vendor: Razer
+    category: peripheral_software
+    repo_state: untracked
+    product_scope: installable_desktop_client
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 3, patch_risk: 4, update_frequency: 4, commercial_value: 3, official_source_quality: 2, consensus_source_quality: 3, automation_feasibility: 2, source_diversity: 2, version_identifiability: 3, maintenance_cost: 1, cross_product_reuse: 2}
+    priority_score: 92          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [Razer support pages (no clean version/date pairing), Razer Insider forum (unprobed)]
+    blocking_unknowns: [Official versioning is poorly published despite frequent user complaints.]
+    recommended_next_step: Defer. Complaint volume is high but the official signal is too weak to anchor records.
+
+  - candidate_id: logitech-ghub
+    product_name: Logitech G HUB
+    vendor: Logitech
+    category: peripheral_software
+    repo_state: untracked
+    product_scope: installable_desktop_client
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 3, patch_risk: 4, update_frequency: 3, commercial_value: 3, official_source_quality: 2, consensus_source_quality: 3, automation_feasibility: 2, source_diversity: 2, version_identifiability: 3, maintenance_cost: 1, cross_product_reuse: 2}
+    priority_score: 90          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [Logitech support (weak versioning), r/LogitechG (unprobed)]
+    blocking_unknowns: [Same weak-official-signal problem as Razer.]
+    recommended_next_step: Defer.
+
+  - candidate_id: handbrake
+    product_name: HandBrake
+    vendor: HandBrake Team
+    category: creative_video
+    repo_state: untracked
+    product_scope: installable_desktop_client
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 3, patch_risk: 3, update_frequency: 3, commercial_value: 2, official_source_quality: 5, consensus_source_quality: 4, automation_feasibility: 5, source_diversity: 3, version_identifiability: 5, maintenance_cost: 4, cross_product_reuse: 3}
+    priority_score: 129          # strategic value; recomputed by the validator
+    priority_tier: A
+    score_basis:
+      official_source_quality:
+        confidence: medium
+        basis: >-
+          github_releases is an implemented, production-proven adapter; the HandBrake/HandBrake
+          release surface itself was not probed.
+      consensus_source_quality:
+        confidence: medium
+        basis: >-
+          github_issues is production-proven for obs-studio; this repo was not sampled for
+          version-token density.
+      automation_feasibility:
+        confidence: medium
+        basis: >-
+          Both lanes are existing transports running in Actions today; no run has executed for this
+          product.
+      version_identifiability:
+        confidence: medium
+        basis: >-
+          Release tags are exact; report density unsampled.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [GitHub Releases + Issues (both proven methods)]
+    blocking_unknowns: [Moderate patch risk; encoding regressions are real but rarely catastrophic.]
+    recommended_next_step: Cheap GitHub-native onboarding if capacity allows after the higher-impact products.
+
+  - candidate_id: vlc
+    product_name: VLC media player
+    vendor: VideoLAN
+    category: creative_video
+    repo_state: untracked
+    product_scope: installable_desktop_client
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 4, patch_risk: 2, update_frequency: 2, commercial_value: 1, official_source_quality: 4, consensus_source_quality: 3, automation_feasibility: 3, source_diversity: 3, version_identifiability: 5, maintenance_cost: 3, cross_product_reuse: 2}
+    priority_score: 102          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [VideoLAN release notes, GitLab issues (public instance, API unprobed)]
+    blocking_unknowns: [Low update frequency; a GitLab framework would be new infrastructure.]
+    recommended_next_step: Defer, but note it as the natural first GitLab-API target if one is ever needed.
+
+  - candidate_id: lm-studio
+    product_name: LM Studio
+    vendor: LM Studio
+    category: ai_desktop
+    repo_state: untracked
+    product_scope: installable_desktop_client
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 2, patch_risk: 4, update_frequency: 5, commercial_value: 2, official_source_quality: 3, consensus_source_quality: 3, automation_feasibility: 3, source_diversity: 2, version_identifiability: 4, maintenance_cost: 3, cross_product_reuse: 2}
+    priority_score: 104          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [LM Studio release notes (unprobed), GitHub issues repo (partial -- app is closed-source)]
+    blocking_unknowns: [Closed-source app with only a partial public issue tracker.]
+    recommended_next_step: Defer behind Ollama, which is fully public.
+
+  - candidate_id: virtualbox
+    product_name: Oracle VirtualBox
+    vendor: Oracle
+    category: virtualization
+    repo_state: untracked
+    product_scope: installable_desktop_client
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 3, patch_risk: 4, update_frequency: 3, commercial_value: 2, official_source_quality: 4, consensus_source_quality: 3, automation_feasibility: 3, source_diversity: 2, version_identifiability: 5, maintenance_cost: 2, cross_product_reuse: 1}
+    priority_score: 106          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [VirtualBox changelog (structured), Oracle forums + Bugtracker (unprobed)]
+    blocking_unknowns: [Community surface unprobed.]
+    recommended_next_step: Defer.
+
+  - candidate_id: 1password
+    product_name: 1Password
+    vendor: AgileBits
+    category: security_software
+    repo_state: untracked
+    product_scope: installable_desktop_client
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 3, patch_risk: 3, update_frequency: 5, commercial_value: 2, official_source_quality: 4, consensus_source_quality: 3, automation_feasibility: 3, source_diversity: 2, version_identifiability: 4, maintenance_cost: 3, cross_product_reuse: 2}
+    priority_score: 106          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [1Password releases page (versioned), 1Password community (Discourse -- likely, unprobed)]
+    blocking_unknowns:
+      - 'If the community is Discourse'
+      - 'the PR #53 primitive applies.'
+    recommended_next_step: Probe for Discourse; otherwise defer.
+
+  - candidate_id: autodesk-fusion-360
+    product_name: Autodesk Fusion
+    vendor: Autodesk
+    category: cad
+    repo_state: untracked
+    product_scope: installable_desktop_client
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 3, patch_risk: 5, update_frequency: 4, commercial_value: 3, official_source_quality: 3, consensus_source_quality: 3, automation_feasibility: 2, source_diversity: 2, version_identifiability: 3, maintenance_cost: 2, cross_product_reuse: 2}
+    priority_score: 101          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [Autodesk release notes (unprobed), Autodesk forums (Khoros/Lithium, unprobed)]
+    blocking_unknowns: [Forced cloud updates reduce user choice; versioning is date-like rather than semantic.]
+    recommended_next_step: Defer; bundle any Khoros probe with Zoom/AMD/Avid.
+
+  - candidate_id: cinema-4d
+    product_name: Cinema 4D
+    vendor: Maxon
+    category: three_d
+    repo_state: untracked
+    product_scope: installable_desktop_client
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 2, patch_risk: 4, update_frequency: 3, commercial_value: 2, official_source_quality: 3, consensus_source_quality: 3, automation_feasibility: 2, source_diversity: 2, version_identifiability: 4, maintenance_cost: 2, cross_product_reuse: 1}
+    priority_score: 91          # strategic value; recomputed by the validator
+    priority_tier: B
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: prove_source
+    known_sources: [Maxon release notes (unprobed), Maxon community (unprobed)]
+    blocking_unknowns: [No probed surfaces.]
+    recommended_next_step: Defer behind Blender.
+
+  - candidate_id: gopro-quik
+    product_name: GoPro Quik
+    vendor: GoPro
+    category: hardware_companion
+    repo_state: untracked
+    product_scope: installable_mobile_client
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 2, patch_risk: 3, update_frequency: 3, commercial_value: 2, official_source_quality: 2, consensus_source_quality: 2, automation_feasibility: 2, source_diversity: 2, version_identifiability: 2, maintenance_cost: 2, cross_product_reuse: 1}
+    priority_score: 72          # strategic value; recomputed by the validator
+    priority_tier: C
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: defer
+    known_sources: [GoPro support (weak versioning), app-store metadata (unprobed)]
+    blocking_unknowns: [Mobile-app versioning problem, same as DJI Mimo.]
+    recommended_next_step: Defer; solve app-store release metadata once for all mobile companions.
+
+  - candidate_id: insta360-studio
+    product_name: Insta360 Studio
+    vendor: Insta360
+    category: hardware_companion
+    repo_state: untracked
+    product_scope: installable_desktop_client
+    support_lifecycle: unknown
+    support_lifecycle_note: Not verified in this audit; unknown must never read as current.
+    opportunity_refs: []
+    scores: {user_impact: 2, patch_risk: 3, update_frequency: 3, commercial_value: 2, official_source_quality: 2, consensus_source_quality: 2, automation_feasibility: 2, source_diversity: 1, version_identifiability: 3, maintenance_cost: 2, cross_product_reuse: 1}
+    priority_score: 74          # strategic value; recomputed by the validator
+    priority_tier: C
+    score_basis:
+      official_source_quality:
+        confidence: low
+        basis: >-
+          Reasoned from public product knowledge; no official release surface probed in this audit.
+      consensus_source_quality:
+        confidence: low
+        basis: >-
+          No community surface probed in this audit.
+      automation_feasibility:
+        confidence: low
+        basis: >-
+          Neither lane probed for this product; feasibility is an estimate, not a measurement.
+      version_identifiability:
+        confidence: low
+        basis: >-
+          Version scheme assumed from public knowledge, not verified against real reports.
+    readiness_blockers: []
+    readiness: defer
+    known_sources: [Insta360 download pages (unprobed)]
+    blocking_unknowns: [No probed surfaces.]
+    recommended_next_step: Defer.

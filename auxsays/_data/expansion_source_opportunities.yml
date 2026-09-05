@@ -1,0 +1,2198 @@
+schema_version: 1
+# AUXSAYS source-expansion backlog: additional evidence sources for CONFIGURED products.
+#
+# TERMINOLOGY (used consistently; 47 configured products is NOT 47 actively tracked products):
+#   configured products                     -- present in patch_products.yml (47)
+#   enabled-ingestion products              -- an ingestion source with enabled: true (16)
+#   products with generated records         -- at least one record under updates/generated (11)
+#   products with registered consensus      -- listed in collector_ownership.ALLOWED_METHODS (7)
+#   products with consensus evidence        -- at least one row in consensus_evidence.yml (6)
+#
+# WHY THIS FILE LIVES IN _data (measured, not assumed): `auxsays/_config.yml` has no `exclude:`
+# list, so Jekyll copies `auxsays/scripts/**` into the built site -- every collector, adapter and
+# test fixture is currently fetchable at https://auxsays.com/scripts/... (verified 2026-08-13:
+# /scripts/lib/http.py -> 200). Underscore-prefixed data directories are NOT copied
+# (/_data/patch_products.yml -> 404), and every template reference is key-specific
+# (`site.data.<key>`) with no generic iteration, so adding keys here renders nothing. `_data` is
+# therefore the LESS exposed location, which is the opposite of the usual assumption.
+#
+# This file is planning/backlog data. It is never read by the pipeline, never a source of
+# evidence, and must never be confused with `patch_ingestion_sources.yml` (production config).
+#
+# DOCTRINE. Discovery-method quality never weakens acceptance. Wherever a report is found, it
+# counts only if `base.apply_acceptance_gates` is satisfied: exact product, exact patch/version,
+# report date on/after release where known, specific report URL, concrete user-facing issue --
+# official notes, announcements, generic discussion, search-result pages, pre-release complaints
+# and duplicates never count. Different discovery methods, same acceptance rules.
+#
+# Method CLASSES (transport, bounds, health semantics) are documented separately in
+# `auxsays/scripts/README-discovery-methods.md` (PR #53). This file is the per-product backlog:
+# which concrete source serves which product, what has actually been measured, and what the next
+# experiment is. Keep the two in sync rather than duplicating method-class detail here.
+
+# Deterministic lifecycle. Every opportunity carries exactly one.
+lifecycle_states:
+  discovered: Named and classified; nothing measured yet.
+  needs_probe: Requires a transport/structure measurement before it can be judged.
+  transport_proven: Endpoint answers and its structure is understood; acceptance not yet tested.
+  acceptance_probe_needed: Transport proven; must still prove patch-specific rows survive gating.
+  viable: Transport + patch specificity + supply all measured adequate; not yet implemented.
+  blocked: Measured refusal (challenge page, 403/429, empty body) -- fail closed, not silent.
+  broken: Previously worked, now fails structurally (parser or endpoint contract changed).
+  low_supply: Reachable and parseable but too few patch-specific rows to justify a lane.
+  low_confidence: Reachable but identity/version attribution is unreliable.
+  rejected: Deliberately not pursued; `notes` records why.
+  needs_policy_decision: >-
+    Measured enough to describe, but proceeding is a policy/economics call (cost, key
+    management, vendor dependency) rather than a further measurement.
+  production_candidate: Viable and scheduled for implementation.
+  implemented: Shipped as a registered method in `collector_ownership.ALLOWED_METHODS`.
+
+# INDEPENDENT PROOF DIMENSIONS -- not an ascending ladder.
+#
+# A single `proof_level` field was logically wrong: these facts are independent and are routinely
+# measured in incompatible combinations. helpx.adobe.com answers locally and times out on every
+# Actions User-Agent class (run 31530112187, 12/12, zero body bytes), so local reachability cannot
+# imply Actions reachability. forum.blackmagicdesign.com answers HTTP 202 with a zero-byte
+# challenge body, so `local_reachable: proven` coexists with `structure_proven: failed`. Every
+# opportunity therefore records each dimension separately, and "not measured" is never dressed up
+# as an intermediate rung.
+proof_dimensions:
+  local_reachable: The endpoint answered from a developer machine.
+  actions_reachable: The endpoint answered from a GitHub Actions runner.
+  structure_proven: The response shape was parsed and the fields a lane needs were located.
+  patch_specificity_proven: Rows can be tied to an EXACT patch version for THIS product.
+  supply_proven: Enough qualifying rows exist per release to be worth collecting.
+  production_proven: A scheduled run produced accepted evidence for THIS product.
+
+proof_values:
+  proven: Measured and satisfied.
+  failed: Measured and NOT satisfied (a refusal, a missing contract, a dead credential).
+  unknown: Not measured. Never treat as a soft pass.
+  not_applicable: The dimension cannot apply to this source class.
+
+# `production_proven: proven` is the only derived-constrained value: it requires
+# actions_reachable, structure_proven, patch_specificity_proven and supply_proven to be proven,
+# because that combination is what "a scheduled run produced accepted evidence" means.
+#
+# NO BORROWED CREDIBILITY. `transport_precedent` records that the same transport works for a
+# DIFFERENT product. It is free text, never a proof value, and can never satisfy a proof gate:
+# "github_issues works for OBS" supports reuse confidence for a ComfyUI lane, it does not make
+# that lane production-proven.
+
+# MEASUREMENT FRESHNESS. `last_checked` + `recheck_after_days` let the validator distinguish a
+# current measurement from a stale one from one that never happened. Stale proof is surfaced and
+# cannot support ready_to_build; an opportunity that has measured nothing carries no last_checked
+# and reads as never_measured. No scheduler is required for this to be useful -- the validator
+# computes the state on every run.
+
+# PAID / KEYED DEPENDENCIES ARE NOT CATEGORICALLY FORBIDDEN. The doctrine bars production
+# evidence collection from depending on Taylor or on an AI subscription; it does not bar a
+# conventional deterministic paid API. Such a source is evaluated on cost, key management, rate
+# limits, reliability, ToS, vendor lock-in, single-source risk, and whether a deterministic
+# direct source is simply better -- see `paid_api_evaluation` on any opportunity that needs one.
+
+# SHARED FRAMEWORKS. Declared so that an opportunity cannot silently borrow a framework bound to
+# the other evidence lane. The Zendesk case is the reason this exists: Help Center ARTICLES and
+# COMMUNITY POSTS are different endpoint families with different response contracts, different
+# lanes and different acceptance semantics, even though they share a vendor, a host and probably
+# a lower-level request/pagination client.
+shared_frameworks:
+  adobe_community_algolia:
+    lane: consensus
+    contract: searchToken -> keyless Algolia query -> getTopics hydration; thread-level rows.
+    reuse_note: One client, per-product category/forum ids and per-product acceptance.
+  zendesk_help_center_articles:
+    lane: official
+    contract: >-
+      GET /api/v2/help_center/<locale>/sections/<id>/articles.json -- editorial release-note
+      articles with title/body/created_at. This is what PR #52 implements, for OFFICIAL ingestion.
+    reuse_note: >-
+      Article rows are vendor-authored and can never be consensus evidence.
+  zendesk_community_posts:
+    lane: consensus
+    contract: >-
+      GET /api/v2/community/posts.json and /api/v2/community/topics.json -- USER-authored posts
+      with details/created_at/html_url/comment_count, paginated by the same next_page envelope.
+      A DIFFERENT endpoint family and response contract from Help Center articles.
+    reuse_note: >-
+      NOT supplied by PR #52. The likely shared surface is the lower-level request + pagination +
+      byte-cap client (same host, same envelope shape, same anonymous auth model); the article and
+      community record contracts, lane assignment and acceptance semantics stay distinct. Building
+      it is out of scope for this sprint -- this entry records the split, not an implementation.
+  github_issues:
+    lane: consensus
+    contract: GitHub Issues REST API; issue-level rows with created_at and body.
+    reuse_note: Anonymous works; GITHUB_TOKEN only raises rate limits.
+  discourse_json:
+    lane: consensus
+    contract: Anonymous /latest.json and /search.json; topic/post permalink rows.
+    reuse_note: PR #53 adds the shared primitive; instances differ only by base URL and scoping.
+  rss_atom:
+    lane: consensus
+    contract: Feed windows (not archives); item/entry rows with pubDate/updated.
+    reuse_note: Report-bearing feeds only -- vendor announcement feeds are excluded by acceptance.
+  microsoft_learn_qna:
+    lane: consensus
+    contract: Learn Q&A search RSS driven by exact KB/build/version terms.
+    reuse_note: Proven for windows-11; per-product proof is still per-product.
+  microsoft_office_updates:
+    lane: official
+    contract: Learn officeupdates release/version history pages.
+    reuse_note: Known-issues content is vendor-authored and never consensus evidence.
+  reddit_source:
+    lane: consensus
+    contract: Reddit search JSON; post-level rows.
+    reuse_note: Succeeds for davinci, blocked for every Adobe product -- reliability is asymmetric.
+  public_rest_api:
+    lane: official
+    contract: Vendor REST endpoint returning release/news objects.
+    reuse_note: Per-vendor; nothing generic to share yet.
+  archive_recheck:
+    lane: consensus
+    contract: Archive snapshot verification of URLs already known.
+    reuse_note: Durability tool, not a discovery method -- it cannot expand supply.
+  sitemap_delta:
+    lane: official
+    contract: sitemap.xml diffed across runs for new release-note URLs.
+    reuse_note: Discovery hint only; release date must still come from the page.
+  none_yet:
+    lane: any
+    contract: No framework identified -- platform or contract still unknown.
+    reuse_note: Anything here needs a probe before it can be planned.
+
+# Products AUXSAYS treats as strategic. Every one of these, plus every enabled-ingestion product,
+# MUST carry a product_source_audit entry -- so "no source research has been done" is a recorded
+# state rather than an absence. Only configured product_ids can appear here; DJI Mimo is a named
+# strategic interest that is NOT a configured product, so it is tracked as a product candidate and
+# cannot have an audit row yet.
+strategic_priority_products:
+  - obs-studio
+  - blackmagic-davinci
+  - adobe-premiere-pro
+  - adobe-acrobat-reader
+  - adobe-acrobat-pro
+  - microsoft-windows-11
+  - elgato-stream-deck
+  - elgato-wave-link
+  - elgato-camera-hub
+  - elgato-4k-capture-utility
+  - adobe-photoshop
+  - openai-chatgpt
+  - microsoft-powerpoint
+  - microsoft-teams
+  - microsoft-365-apps
+
+# Deferred, deliberately NOT done on this branch.
+deferred_follow_ups:
+  - id: scripts-web-exposure
+    classification: build-output / SEO / implementation-surface hygiene
+    finding: >-
+      auxsays/_config.yml declares no `exclude:`, so Jekyll copies auxsays/scripts/** into the
+      built site; 111 files are served (verified https://auxsays.com/scripts/lib/http.py -> 200).
+      The repository is public, so this is NOT a secret-leak emergency.
+    required_proof_for_the_fix: >-
+      before: scripts present in _site; after: scripts absent from _site; site still builds; site
+      functionality unchanged.
+    scope_note: Must be its own tiny PR. Not mixed into expansion-inventory-foundation.
+
+# PER-PRODUCT, PER-LANE SOURCE AUDIT. Answers "what sources do we have, what is missing, and where
+# should we keep looking?" for EVERY configured product -- all 47.
+#
+# OFFICIAL and CONSENSUS are audited SEPARATELY because they fail independently.
+#
+# CONFIGURATION IS NOT EXECUTION, AND EXECUTION IS NOT HEALTH. `current_methods` lists what the repo
+# is actually WIRED to run: the enabled ingestion adapter for official, every method registered in
+# collector_ownership.ALLOWED_METHODS for consensus. Being wired says nothing about whether it has
+# ever executed. `unobserved_methods` names the wired methods for which NO authoritative health
+# observation exists, and `configured_unobserved` is the lane state when EVERY wired method is in
+# that condition. The integration rehearsal proved this state is unavoidable: the moment PR #51
+# registers adobe_community_algolia_search for Premiere the method stops being pending, yet it has
+# never run -- so calling the lane present or degraded would both assert an execution that has not
+# happened. It is also not hypothetical: microsoft-powerpoint is in exactly this state today.
+#
+# `no_viable_source_found` means literally NO viable source is known for that lane. It may never
+# mean "we have one source and cannot find a second" -- that is diversification debt and lives in
+# `diversification_state`, which stays `not_applicable` until execution has actually been observed.
+#
+# `opportunity_ids` in a lane must reference opportunities of THAT lane. Opportunities are never
+# invented to satisfy coverage: needs_source_research with an empty list is the honest answer.
+audit_lane_states:
+  production_source_present: >-
+    Wiring exists AND at least one wired method has an observed usable execution (success/partial
+    for consensus, Healthy for official). The lane may still carry unobserved_methods.
+  production_source_degraded: >-
+    Wiring exists AND execution has been OBSERVED to be unusable (only blocked/broken/no_results
+    rows, or Failing/Degraded/Manual-watch health), with no usable observed method. Observed-bad,
+    not merely unproven. The lane may still carry unobserved_methods.
+  configured_unobserved: >-
+    Repo-owned production wiring exists for at least one current method, but NO authoritative health
+    observation exists for ANY of them, so execution has never been seen. This asserts neither
+    success nor failure nor blocked nor no_results -- strictly configured, not yet observed. It
+    blocks readiness, and transitions deterministically to present or degraded as soon as health
+    appears.
+  pending_production_source: >-
+    A method is NOT yet production-wired/registered, but proven work is waiting to be integrated
+    (typically an open PR).
+  opportunities_identified: No wiring and no pending source, but a same-lane opportunity exists.
+  needs_source_research: No wiring, no pending source, no same-lane opportunity.
+  no_viable_source_found: Researched, and NO viable source exists for this lane at all.
+audit_diversification_states:
+  sufficient: Multiple independent OBSERVED sources already carry this lane.
+  opportunities_identified: A second-source candidate is identified but unproven.
+  needs_source_research: One observed source exists and no alternative has been researched.
+  no_viable_additional_source_found: >-
+    An observed source exists, and additional sources were researched and found non-viable.
+    Diversification debt, NOT an absence of sources.
+  not_applicable: >-
+    Execution has not been observed yet (unobserved, pending, or no source at all), so
+    diversification is not yet the question. An unobserved method never counts as an independent
+    proven source.
+product_source_audit:
+  openai-chatgpt:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids:
+        - openai-community-discourse
+      diversification_state: not_applicable
+  anthropic-claude:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  google-gemini:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  perplexity:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  midjourney:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  stability-ai:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  runway:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  pika:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  lottiefiles:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  figma:
+    official:
+      state: production_source_present
+      current_methods:
+        - rss_feed
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids:
+        - figma-zendesk-help-center
+      diversification_state: opportunities_identified
+    consensus:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids:
+        - figma-community-forum
+      diversification_state: not_applicable
+  canva:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  adobe-premiere-pro:
+    official:
+      state: production_source_degraded
+      current_methods:
+        - adobe_release_notes
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: no_viable_additional_source_found
+      notes: >-
+        adobe_release_notes is enabled and has produced records, but source_health books this
+        product Failing -- observed failure, so degraded. Alternative official surfaces are
+        blocked by the HelpX CI transport question.
+    consensus:
+      state: production_source_degraded
+      current_methods:
+        - adobe_community_bug_tab_index
+        - adobe_community_known_url_recheck
+        - adobe_community_search
+        - brave_search_api
+        - creativecow_brave_search
+        - creativecow_forum_index
+        - known_watchlist
+        - reddit_search
+        - wayback_snapshot_recheck
+      pending_methods:
+        - adobe_community_algolia_search
+      unobserved_methods:
+        - known_watchlist
+      opportunity_ids:
+        - reddit-search-json
+        - wayback-archive-recheck
+        - brave-search-api
+      diversification_state: opportunities_identified
+      notes: >-
+        Nine methods are REGISTERED, so this lane is wired -- but not one books success or
+        partial: five blocked, three broken, one no_results. That is OBSERVED failure, so the lane
+        is degraded rather than unobserved. known_watchlist is registered with ZERO health rows
+        and is therefore listed under unobserved_methods. PR #51's adobe_community_algolia_search
+        is NOT yet registered on main, so it stays a pending method; once it registers it becomes
+        a current method that is initially UNOBSERVED, not automatically healthy.
+  adobe-after-effects:
+    official:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids:
+        - vendor-sitemap-delta
+      diversification_state: not_applicable
+    consensus:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids:
+        - adobe-algolia-after-effects
+      diversification_state: not_applicable
+  adobe-photoshop:
+    official:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids:
+        - vendor-sitemap-delta
+      diversification_state: not_applicable
+    consensus:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids:
+        - adobe-algolia-photoshop
+      diversification_state: not_applicable
+  adobe-media-encoder:
+    official:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids:
+        - vendor-sitemap-delta
+      diversification_state: not_applicable
+    consensus:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids:
+        - adobe-algolia-media-encoder
+      diversification_state: not_applicable
+  adobe-lightroom-classic:
+    official:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids:
+        - vendor-sitemap-delta
+      diversification_state: not_applicable
+    consensus:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids:
+        - adobe-algolia-lightroom-classic
+      diversification_state: not_applicable
+  blackmagic-davinci:
+    official:
+      state: production_source_degraded
+      current_methods:
+        - blackmagic_support_downloads
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: needs_source_research
+      notes: >-
+        source_health books official ingestion as Manual watch: records exist but unattended
+        official ingestion is not actually working. Observed, and observed-bad -- degraded, not
+        unobserved.
+    consensus:
+      state: production_source_present
+      current_methods:
+        - creative_cow_forum_search
+        - known_watchlist
+        - reddit_search
+        - vendor_forum_search
+        - web_search
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids:
+        - blackmagic-forum-phpbb
+        - reddit-search-json
+      diversification_state: no_viable_additional_source_found
+      notes: >-
+        All five registered methods have health rows and three are usable, supplying the largest
+        evidence population in the repo, so nothing here is unobserved. What FAILED is
+        diversification: the vast majority of rows are Reddit and the vendor forum is measured
+        challenge-gated (202 / zero-byte body). Diversification debt, not absence of a source.
+  obs-studio:
+    official:
+      state: production_source_present
+      current_methods:
+        - github_releases
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: needs_source_research
+      notes: >-
+        github_releases is enabled and source_health books it Healthy -- observed and usable.
+    consensus:
+      state: production_source_present
+      current_methods:
+        - github_issues
+        - known_watchlist
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids:
+        - obs-forum-xenforo-rss
+      diversification_state: opportunities_identified
+      notes: >-
+        github_issues is registered and observed usable, supplying effectively all accepted rows.
+        The XenForo feed is an identified consensus-lane diversification candidate.
+  twitch:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  youtube:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  kick:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  rumble:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  epic-unreal:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  unity:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids:
+        - unity-discussions-discourse
+      diversification_state: not_applicable
+  steam:
+    official:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids:
+        - steam-news-api
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  nvidia:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids:
+        - nvidia-developer-forums-discourse
+      diversification_state: not_applicable
+  amd:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  intel-arc:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  blender:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids:
+        - blender-devtalk-discourse
+      diversification_state: not_applicable
+  comfyui:
+    official:
+      state: production_source_present
+      current_methods:
+        - github_releases
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: needs_source_research
+    consensus:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids:
+        - comfyui-github-issues
+      diversification_state: not_applicable
+  hugging-face:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  github:
+    official:
+      state: production_source_present
+      current_methods:
+        - rss_feed
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: needs_source_research
+    consensus:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids:
+        - github-product-changelog-consensus
+      diversification_state: not_applicable
+  cloudflare:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  netlify:
+    official:
+      state: production_source_degraded
+      current_methods:
+        - html_changelog
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: needs_source_research
+      notes: >-
+        Ingestion is enabled and source_health books Degraded with zero records extracted:
+        observed, and observed-bad. Degraded, not unobserved.
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  notion:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  zapier:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  make:
+    official:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  adobe-acrobat-reader:
+    official:
+      state: configured_unobserved
+      current_methods:
+        - adobe_acrobat
+      pending_methods: []
+      unobserved_methods:
+        - adobe_acrobat
+      opportunity_ids: []
+      diversification_state: not_applicable
+      notes: >-
+        adobe_acrobat is the enabled adapter and has produced records, but no source_health row
+        exists, so official execution health is unobserved.
+    consensus:
+      state: production_source_present
+      current_methods:
+        - adobe_community_algolia_search
+        - adobe_community_bug_tab_index
+        - adobe_community_known_url_recheck
+        - adobe_community_search
+        - reddit_search
+      pending_methods: []
+      unobserved_methods:
+        - adobe_community_bug_tab_index
+        - adobe_community_known_url_recheck
+      opportunity_ids:
+        - reddit-search-json
+      diversification_state: needs_source_research
+      notes: >-
+        MIXED LANE CALIBRATION. adobe_community_algolia_search is registered and observed usable,
+        so the lane is production_source_present. Two further registered methods --
+        adobe_community_bug_tab_index and adobe_community_known_url_recheck -- have ZERO health
+        rows and are exposed in unobserved_methods rather than being silently counted as working.
+        They do NOT count as independent proven sources for diversification.
+  adobe-acrobat-pro:
+    official:
+      state: configured_unobserved
+      current_methods:
+        - adobe_acrobat
+      pending_methods: []
+      unobserved_methods:
+        - adobe_acrobat
+      opportunity_ids: []
+      diversification_state: not_applicable
+      notes: >-
+        adobe_acrobat is the enabled adapter and has produced records, but no source_health row
+        exists, so official execution health is unobserved.
+    consensus:
+      state: production_source_present
+      current_methods:
+        - adobe_community_algolia_search
+        - adobe_community_bug_tab_index
+        - adobe_community_known_url_recheck
+        - adobe_community_search
+        - reddit_search
+      pending_methods: []
+      unobserved_methods:
+        - adobe_community_bug_tab_index
+        - adobe_community_known_url_recheck
+      opportunity_ids:
+        - reddit-search-json
+      diversification_state: needs_source_research
+      notes: >-
+        As adobe-acrobat-reader: one observed usable method plus two registered-but-never-observed
+        methods exposed in unobserved_methods.
+  microsoft-windows-11:
+    official:
+      state: configured_unobserved
+      current_methods:
+        - microsoft_release_health
+      pending_methods: []
+      unobserved_methods:
+        - microsoft_release_health
+      opportunity_ids:
+        - microsoft-365-message-center-and-release-health
+      diversification_state: not_applicable
+      notes: >-
+        microsoft_release_health is the enabled adapter and has produced records, but this product
+        has NO row in source_health.yml, so execution health is unobserved. Records are historical
+        output and never prove present health.
+    consensus:
+      state: production_source_present
+      current_methods:
+        - learn_qna_search_rss
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: needs_source_research
+      notes: >-
+        learn_qna_search_rss is registered AND observed usable, and is the only consensus source.
+        No consensus-lane opportunity has been identified -- the Microsoft 365 message-center row
+        is an OFFICIAL-lane opportunity and cannot close a consensus diversification gap.
+  microsoft-teams:
+    official:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids:
+        - microsoft-365-message-center-and-release-health
+      diversification_state: not_applicable
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+  microsoft-powerpoint:
+    official:
+      state: configured_unobserved
+      current_methods:
+        - microsoft_office_updates
+      pending_methods: []
+      unobserved_methods:
+        - microsoft_office_updates
+      opportunity_ids: []
+      diversification_state: not_applicable
+      notes: >-
+        microsoft_office_updates is enabled with records, but no source_health row exists --
+        execution health is unobserved.
+    consensus:
+      state: configured_unobserved
+      current_methods:
+        - learn_qna_search_rss
+        - reddit_search
+      pending_methods: []
+      unobserved_methods:
+        - learn_qna_search_rss
+        - reddit_search
+      opportunity_ids:
+        - reddit-search-json
+        - microsoft-learn-qna-powerpoint
+      diversification_state: not_applicable
+      notes: >-
+        CALIBRATION CASE. Both registered methods have ZERO rows in evidence_method_health.yml, so
+        the lane is wired and entirely unobserved: we cannot tell whether it never runs, crashes,
+        or runs and finds nothing. configured_unobserved states exactly that and claims neither
+        success nor failure. The first action is an observability diagnosis, not sourcing.
+  microsoft-365-apps:
+    official:
+      state: configured_unobserved
+      current_methods:
+        - microsoft_office_updates
+      pending_methods: []
+      unobserved_methods:
+        - microsoft_office_updates
+      opportunity_ids:
+        - microsoft-365-message-center-and-release-health
+      diversification_state: not_applicable
+      notes: >-
+        microsoft_office_updates is enabled with records, but no source_health row exists --
+        execution health is unobserved.
+    consensus:
+      state: needs_source_research
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids: []
+      diversification_state: not_applicable
+      notes: >-
+        No consensus method is registered at all, so nothing is wired and nothing can be
+        unobserved.
+  elgato-stream-deck:
+    official:
+      state: configured_unobserved
+      current_methods:
+        - elgato_help_center
+      pending_methods: []
+      unobserved_methods:
+        - elgato_help_center
+      opportunity_ids: []
+      diversification_state: not_applicable
+      notes: >-
+        elgato_help_center is the enabled adapter but this product has no source_health row and no
+        generated records, so its official execution is UNOBSERVED -- and it cannot be called
+        degraded either, because no failing observation exists. PR #52 would replace the HTML
+        parser with the Zendesk Help Center ARTICLES API.
+    consensus:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids:
+        - elgato-zendesk-community-posts
+      diversification_state: not_applicable
+      notes: >-
+        No consensus method registered. The Zendesk COMMUNITY POSTS opportunity would serve all
+        four Elgato products; it is a different endpoint family from the official articles API.
+  elgato-wave-link:
+    official:
+      state: configured_unobserved
+      current_methods:
+        - elgato_help_center
+      pending_methods: []
+      unobserved_methods:
+        - elgato_help_center
+      opportunity_ids: []
+      diversification_state: not_applicable
+      notes: >-
+        elgato_help_center is the enabled adapter but this product has no source_health row and no
+        generated records, so its official execution is UNOBSERVED -- and it cannot be called
+        degraded either, because no failing observation exists. PR #52 would replace the HTML
+        parser with the Zendesk Help Center ARTICLES API.
+    consensus:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids:
+        - elgato-zendesk-community-posts
+      diversification_state: not_applicable
+      notes: >-
+        No consensus method registered. The Zendesk COMMUNITY POSTS opportunity would serve all
+        four Elgato products; it is a different endpoint family from the official articles API.
+  elgato-camera-hub:
+    official:
+      state: configured_unobserved
+      current_methods:
+        - elgato_help_center
+      pending_methods: []
+      unobserved_methods:
+        - elgato_help_center
+      opportunity_ids: []
+      diversification_state: not_applicable
+      notes: >-
+        elgato_help_center is the enabled adapter but this product has no source_health row and no
+        generated records, so its official execution is UNOBSERVED -- and it cannot be called
+        degraded either, because no failing observation exists. PR #52 would replace the HTML
+        parser with the Zendesk Help Center ARTICLES API.
+    consensus:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids:
+        - elgato-zendesk-community-posts
+      diversification_state: not_applicable
+      notes: >-
+        No consensus method registered. The Zendesk COMMUNITY POSTS opportunity would serve all
+        four Elgato products; it is a different endpoint family from the official articles API.
+  elgato-4k-capture-utility:
+    official:
+      state: configured_unobserved
+      current_methods:
+        - elgato_help_center
+      pending_methods: []
+      unobserved_methods:
+        - elgato_help_center
+      opportunity_ids: []
+      diversification_state: not_applicable
+      notes: >-
+        elgato_help_center is the enabled adapter but this product has no source_health row and no
+        generated records, so its official execution is UNOBSERVED -- and it cannot be called
+        degraded either, because no failing observation exists. PR #52 would replace the HTML
+        parser with the Zendesk Help Center ARTICLES API.
+    consensus:
+      state: opportunities_identified
+      current_methods: []
+      pending_methods: []
+      unobserved_methods: []
+      opportunity_ids:
+        - elgato-zendesk-community-posts
+      diversification_state: not_applicable
+      notes: >-
+        No consensus method registered. The Zendesk COMMUNITY POSTS opportunity would serve all
+        four Elgato products; it is a different endpoint family from the official articles API.
+
+opportunities:
+
+  # ---------------------------------------------------------------------------------------
+  # A. REUSE THE ALREADY CI-PROVEN ADOBE ALGOLIA CHAIN (highest leverage, zero new transport)
+  # The chain searchToken -> Algolia -> getTopics is CI-proven for Acrobat (main) and Premiere
+  # (PR #51). Facet enumeration on 2026-08-13 measured per-product supply on the SAME index,
+  # so extending it is configuration plus product-specific acceptance -- not a new collector.
+  # Exact `category_title` labels were measured because guessing them fails silently: the
+  # filter "Adobe Photoshop" returns 0 hits; the real label is "Photoshop".
+  # ---------------------------------------------------------------------------------------
+
+  - opportunity_id: adobe-algolia-photoshop
+    product_ids: [adobe-photoshop]
+    source_name: Adobe Community (Photoshop boards) via keyless Algolia
+    source_type: community_search_api
+    lane: consensus
+    official_or_community: community
+    domain: community.adobe.com
+    entry_point: https://community.adobe.com/search/searchToken
+    discovery_method: adobe_community_algolia_search
+    auth_requirement: none
+    proof:
+      local_reachable: proven
+      actions_reachable: unknown
+      structure_proven: proven
+      patch_specificity_proven: unknown
+      supply_proven: unknown
+      production_proven: unknown
+    transport_precedent: >-
+      The searchToken -> Algolia -> getTopics chain is Actions-proven for adobe-acrobat-reader /
+      adobe-acrobat-pro (committed adobe_community_algolia_search success rows) and for
+      adobe-premiere-pro on the PR #51 branch. That is TRANSPORT precedent only: it says nothing
+      about this product's board ids, version-token density or per-release supply.
+    last_checked: 2026-08-13
+    recheck_after_days: 30
+    measurement: >-
+      searchToken 200 (client_id + token + availableIndexes=[adobedme-en-unified]); facet query
+      200, index-wide nbHits 5618. category_title supply: "Photoshop" 4573, "Photoshop ecosystem"
+      2797, "Photoshop (Beta)" 565, "Photoshop Elements" 462. A "Bug Reports" forum_title exists
+      (1523 index-wide) alongside an "Announcements" forum that must be excluded by board scoping.
+    patch_specificity: expected_good
+    expected_supply: high
+    reuse_scope: [adobe-photoshop]
+    shared_framework: adobe_community_algolia
+    status: acceptance_probe_needed
+    blocking_unknowns:
+      - Exact category id behind category_title "Photoshop" and its Bug Reports forum id.
+      - Whether Photoshop titles carry version tokens as reliably as Premiere's (25.x/26.x).
+      - Whether "Photoshop ecosystem"/"(Beta)"/"Elements" must be excluded as separate products.
+    next_experiment: >-
+      Facet-enumerate category+forum ids for the Photoshop boards, then run the PR #51 identity
+      gate over one release's candidates offline and count what would survive acceptance.
+    notes: >-
+      Photoshop official ingestion is separately blocked -- helpx.adobe.com is CI-unreachable
+      (classification C, root cause unresolved), which is why PR #28 was a NO-GO activation.
+      Consensus here is useful only once an official record exists to attach evidence to.
+
+  - opportunity_id: adobe-algolia-lightroom-classic
+    product_ids: [adobe-lightroom-classic]
+    source_name: Adobe Community (Lightroom Classic boards) via keyless Algolia
+    source_type: community_search_api
+    lane: consensus
+    official_or_community: community
+    domain: community.adobe.com
+    entry_point: https://community.adobe.com/search/searchToken
+    discovery_method: adobe_community_algolia_search
+    auth_requirement: none
+    proof:
+      local_reachable: proven
+      actions_reachable: unknown
+      structure_proven: proven
+      patch_specificity_proven: unknown
+      supply_proven: unknown
+      production_proven: unknown
+    transport_precedent: >-
+      The searchToken -> Algolia -> getTopics chain is Actions-proven for adobe-acrobat-reader /
+      adobe-acrobat-pro (committed adobe_community_algolia_search success rows) and for
+      adobe-premiere-pro on the PR #51 branch. That is TRANSPORT precedent only: it says nothing
+      about this product's board ids, version-token density or per-release supply.
+    last_checked: 2026-08-13
+    recheck_after_days: 30
+    measurement: >-
+      Same chain and index. category_title "Lightroom Classic" 6520 documents -- the largest
+      measured supply of any staged Adobe product; "Lightroom ecosystem (Cloud-based)" 1042 is a
+      DIFFERENT product and must not be merged into it.
+    patch_specificity: unproven
+    expected_supply: high
+    reuse_scope: [adobe-lightroom-classic]
+    shared_framework: adobe_community_algolia
+    status: acceptance_probe_needed
+    blocking_unknowns:
+      - Lightroom Classic versioning (14.x) vs Lightroom (cloud) -- identity must not cross.
+      - Camera Raw version coupling: many LrC defects are actually Camera Raw defects.
+    next_experiment: Enumerate the LrC category/forum ids and measure version-token density in titles.
+    notes: Highest measured community supply among the staged Adobe products.
+
+  - opportunity_id: adobe-algolia-after-effects
+    product_ids: [adobe-after-effects]
+    source_name: Adobe Community (After Effects boards) via keyless Algolia
+    source_type: community_search_api
+    lane: consensus
+    official_or_community: community
+    domain: community.adobe.com
+    entry_point: https://community.adobe.com/search/searchToken
+    discovery_method: adobe_community_algolia_search
+    auth_requirement: none
+    proof:
+      local_reachable: proven
+      actions_reachable: unknown
+      structure_proven: proven
+      patch_specificity_proven: unknown
+      supply_proven: unknown
+      production_proven: unknown
+    transport_precedent: >-
+      The searchToken -> Algolia -> getTopics chain is Actions-proven for adobe-acrobat-reader /
+      adobe-acrobat-pro (committed adobe_community_algolia_search success rows) and for
+      adobe-premiere-pro on the PR #51 branch. That is TRANSPORT precedent only: it says nothing
+      about this product's board ids, version-token density or per-release supply.
+    last_checked: 2026-08-13
+    recheck_after_days: 30
+    measurement: 'category_title "After Effects" 1610; "After Effects (Beta)" 8; a stray localized "After Effectsフォーラム" 1.'
+    patch_specificity: unproven
+    expected_supply: medium
+    reuse_scope: [adobe-after-effects]
+    shared_framework: adobe_community_algolia
+    status: acceptance_probe_needed
+    blocking_unknowns:
+      - AE shares defects with Media Encoder and Premiere; identity must stay product-scoped.
+    next_experiment: Enumerate AE category/forum ids; measure version-token density.
+    notes: Localized category variants exist and must not be treated as the English board.
+
+  - opportunity_id: adobe-algolia-media-encoder
+    product_ids: [adobe-media-encoder]
+    source_name: Adobe Community (Media Encoder boards) via keyless Algolia
+    source_type: community_search_api
+    lane: consensus
+    official_or_community: community
+    domain: community.adobe.com
+    entry_point: https://community.adobe.com/search/searchToken
+    discovery_method: adobe_community_algolia_search
+    auth_requirement: none
+    proof:
+      local_reachable: proven
+      actions_reachable: unknown
+      structure_proven: proven
+      patch_specificity_proven: unknown
+      supply_proven: failed
+      production_proven: unknown
+    transport_precedent: >-
+      The searchToken -> Algolia -> getTopics chain is Actions-proven for adobe-acrobat-reader /
+      adobe-acrobat-pro (committed adobe_community_algolia_search success rows) and for
+      adobe-premiere-pro on the PR #51 branch. That is TRANSPORT precedent only: it says nothing
+      about this product's board ids, version-token density or per-release supply.
+    last_checked: 2026-08-13
+    recheck_after_days: 90
+    measurement: >-
+      category_title "Adobe Media Encoder" 296 -- an order of magnitude below the other Adobe
+      boards. Filtered query returned nbHits 5426 with a Bug Reports forum present, but the raw
+      per-category document count is the honest supply signal.
+    patch_specificity: unproven
+    expected_supply: low
+    reuse_scope: [adobe-media-encoder]
+    shared_framework: adobe_community_algolia
+    status: low_supply
+    blocking_unknowns:
+      - Whether 296 lifetime documents yield ANY patch-specific rows per release.
+    next_experiment: >-
+      Count Bug Reports rows in the last 180 days before building anything. If a release window
+      yields under ~2 qualifying rows, keep this deferred rather than shipping a lane that
+      reports no_results forever.
+    notes: >-
+      Media Encoder is also the product whose logo/icon remains unresolved from the earlier
+      Acrobat consensus work. Low supply is a reason to defer, not to loosen acceptance.
+
+  - opportunity_id: adobe-algolia-illustrator
+    product_ids: []
+    source_name: Adobe Community (Illustrator boards) via keyless Algolia
+    source_type: community_search_api
+    lane: consensus
+    official_or_community: community
+    domain: community.adobe.com
+    entry_point: https://community.adobe.com/search/searchToken
+    discovery_method: adobe_community_algolia_search
+    auth_requirement: none
+    proof:
+      local_reachable: proven
+      actions_reachable: unknown
+      structure_proven: proven
+      patch_specificity_proven: unknown
+      supply_proven: unknown
+      production_proven: unknown
+    transport_precedent: >-
+      The searchToken -> Algolia -> getTopics chain is Actions-proven for adobe-acrobat-reader /
+      adobe-acrobat-pro (committed adobe_community_algolia_search success rows) and for
+      adobe-premiere-pro on the PR #51 branch. That is TRANSPORT precedent only: it says nothing
+      about this product's board ids, version-token density or per-release supply.
+    last_checked: 2026-08-13
+    recheck_after_days: 30
+    measurement: 'category_title "Illustrator" 5769; "Illustrator on the iPad" 125; "Illustrator (Beta)" 36.'
+    patch_specificity: unproven
+    expected_supply: high
+    reuse_scope: []
+    shared_framework: adobe_community_algolia
+    status: transport_proven
+    blocking_unknowns: [Illustrator is not yet an AUXSAYS product -- needs onboarding first.]
+    next_experiment: Onboard as a product candidate; official source shares the Adobe HelpX blocker.
+    notes: Supply is already measured; the gap is product onboarding, not source discovery.
+
+  - opportunity_id: adobe-algolia-indesign
+    product_ids: []
+    source_name: Adobe Community (InDesign boards) via keyless Algolia
+    source_type: community_search_api
+    lane: consensus
+    official_or_community: community
+    domain: community.adobe.com
+    entry_point: https://community.adobe.com/search/searchToken
+    discovery_method: adobe_community_algolia_search
+    auth_requirement: none
+    proof:
+      local_reachable: proven
+      actions_reachable: unknown
+      structure_proven: proven
+      patch_specificity_proven: unknown
+      supply_proven: unknown
+      production_proven: unknown
+    transport_precedent: >-
+      The searchToken -> Algolia -> getTopics chain is Actions-proven for adobe-acrobat-reader /
+      adobe-acrobat-pro (committed adobe_community_algolia_search success rows) and for
+      adobe-premiere-pro on the PR #51 branch. That is TRANSPORT precedent only: it says nothing
+      about this product's board ids, version-token density or per-release supply.
+    last_checked: 2026-08-13
+    recheck_after_days: 30
+    measurement: 'category_title "InDesign" 9057 -- the second largest measured Adobe board after Acrobat (11364).'
+    patch_specificity: unproven
+    expected_supply: high
+    reuse_scope: []
+    shared_framework: adobe_community_algolia
+    status: transport_proven
+    blocking_unknowns: [InDesign is not yet an AUXSAYS product.]
+    next_experiment: Onboard as a product candidate.
+    notes: Largest untapped measured Adobe community supply.
+
+  - opportunity_id: adobe-algolia-camera-raw
+    product_ids: []
+    source_name: Adobe Community (Camera Raw boards) via keyless Algolia
+    source_type: community_search_api
+    lane: consensus
+    official_or_community: community
+    domain: community.adobe.com
+    entry_point: https://community.adobe.com/search/searchToken
+    discovery_method: adobe_community_algolia_search
+    auth_requirement: none
+    proof:
+      local_reachable: proven
+      actions_reachable: unknown
+      structure_proven: proven
+      patch_specificity_proven: unknown
+      supply_proven: unknown
+      production_proven: unknown
+    transport_precedent: >-
+      The searchToken -> Algolia -> getTopics chain is Actions-proven for adobe-acrobat-reader /
+      adobe-acrobat-pro (committed adobe_community_algolia_search success rows) and for
+      adobe-premiere-pro on the PR #51 branch. That is TRANSPORT precedent only: it says nothing
+      about this product's board ids, version-token density or per-release supply.
+    last_checked: 2026-08-13
+    recheck_after_days: 30
+    measurement: 'category_title "Camera Raw" 1504.'
+    patch_specificity: unproven
+    expected_supply: medium
+    reuse_scope: []
+    shared_framework: adobe_community_algolia
+    status: transport_proven
+    blocking_unknowns: [Camera Raw versions are coupled to Lightroom Classic and Photoshop releases.]
+    next_experiment: Decide whether Camera Raw is a product or an attribute of LrC/Ps records.
+    notes: >-
+      Useful mainly as a disambiguation source: many "Lightroom broke my raw files" reports are
+      Camera Raw version defects, and attributing them to the wrong product is a credibility risk.
+
+  # ---------------------------------------------------------------------------------------
+  # B. ZENDESK COMMUNITY POSTS -- the same host family PR #52 already adapts for official
+  # ingestion. This is the single cheapest way to give the four Elgato products a consensus
+  # lane, because they currently have NONE and produce zero records.
+  # ---------------------------------------------------------------------------------------
+
+  - opportunity_id: elgato-zendesk-community-posts
+    product_ids:
+      [elgato-stream-deck, elgato-wave-link, elgato-camera-hub, elgato-4k-capture-utility]
+    source_name: Elgato Help Center community posts (Zendesk Community API)
+    source_type: vendor_community_json
+    lane: consensus
+    official_or_community: community
+    domain: help.elgato.com
+    entry_point: https://help.elgato.com/api/v2/community/posts.json
+    discovery_method: zendesk_community_posts
+    auth_requirement: none
+    proof:
+      local_reachable: proven
+      actions_reachable: unknown
+      structure_proven: proven
+      patch_specificity_proven: unknown
+      supply_proven: unknown
+      production_proven: unknown
+    transport_precedent: >-
+      help.elgato.com is exercised in CI by the OFFICIAL Help Center articles lane. That is a
+      same-HOST signal for a DIFFERENT endpoint family (articles vs community posts) with a
+      different response contract and a different evidence lane -- see shared_frameworks. It is not
+      proof that this consensus path runs in Actions.
+    last_checked: 2026-08-13
+    recheck_after_days: 30
+    measurement: >-
+      HTTP 200 in 457 ms, 5932 B, keyless. Envelope: count/page/page_count/per_page/next_page/
+      previous_page/posts[]. Post fields include created_at, details, html_url, comment_count,
+      closed, frozen, follower_count. Companion /api/v2/community/topics.json 200 (351 ms) lists
+      topics with html_url + created_at, so board scoping is available the same way Premiere
+      scopes to a Bug Reports forum.
+    patch_specificity: unproven
+    expected_supply: unknown
+    reuse_scope:
+      [elgato-stream-deck, elgato-wave-link, elgato-camera-hub, elgato-4k-capture-utility, figma]
+    shared_framework: zendesk_community_posts
+    status: acceptance_probe_needed
+    blocking_unknowns:
+      - Do Elgato community posts name exact software versions (6.9.x) often enough to pass gating?
+      - Which topic ids correspond to per-product boards vs general discussion?
+      - Actions reachability (help.elgato.com official ingestion is already exercised in CI, which
+        is a positive signal for the same host but not a measurement of this path).
+    next_experiment: >-
+      Enumerate community topics, pull one product's posts for a known release window, and count
+      how many carry an exact version token in title or body. Decide go/no-go on that count.
+    notes: >-
+      Highest reuse-per-unit-effort finding in this audit: four enabled-but-silent products, one
+      vendor host, and it would convert them into products that can actually answer "should I
+      install this?".
+      CLASSIFICATION CORRECTION: PR #52 implements the Zendesk Help Center ARTICLES API for
+      OFFICIAL ingestion. This opportunity is the Zendesk COMMUNITY POSTS API for CONSENSUS
+      discovery -- a different endpoint family, a different response contract, a different
+      evidence lane and different acceptance semantics. PR #52 does NOT supply this transport.
+      What is plausibly shared is the lower-level request/pagination/byte-cap client (same host,
+      same next_page envelope, same anonymous auth model); the record contracts stay distinct.
+      Building it is out of scope for this sprint.
+
+  - opportunity_id: figma-zendesk-help-center
+    product_ids: [figma]
+    source_name: Figma Help Center (Zendesk Help Center API)
+    source_type: vendor_help_center_json
+    lane: official
+    official_or_community: official
+    domain: help.figma.com
+    entry_point: https://help.figma.com/api/v2/help_center/en-us/categories.json
+    discovery_method: zendesk_help_center
+    auth_requirement: none
+    proof:
+      local_reachable: proven
+      actions_reachable: unknown
+      structure_proven: proven
+      patch_specificity_proven: unknown
+      supply_proven: unknown
+      production_proven: unknown
+    last_checked: 2026-08-13
+    recheck_after_days: 30
+    measurement: HTTP 200, 5913 B, keyless Zendesk Help Center category envelope.
+    patch_specificity: unproven
+    expected_supply: unknown
+    reuse_scope: [figma]
+    shared_framework: zendesk_help_center_articles
+    status: transport_proven
+    blocking_unknowns:
+      - Figma official ingestion already works via rss_feed (132 records) -- is this an upgrade or noise?
+      - Whether a release-notes section exists with parseable version identity.
+    next_experiment: >-
+      Compare the Zendesk release-notes section against the existing RSS records. Only switch if
+      it yields version identity the feed lacks; Figma's real gap is consensus, not official.
+    notes: >-
+      Recorded because it proves the Zendesk framework generalizes beyond Elgato. Figma's actual
+      problem is 132 official-only records with zero consensus evidence.
+
+  - opportunity_id: figma-community-forum
+    product_ids: [figma]
+    source_name: Figma community forum
+    source_type: vendor_forum
+    lane: consensus
+    official_or_community: community
+    domain: forum.figma.com
+    entry_point: https://forum.figma.com/
+    discovery_method: unknown
+    auth_requirement: unknown
+    proof:
+      local_reachable: proven
+      actions_reachable: unknown
+      structure_proven: failed
+      patch_specificity_proven: unknown
+      supply_proven: unknown
+      production_proven: unknown
+    last_checked: 2026-08-13
+    recheck_after_days: 60
+    measurement: >-
+      Root 200 (HTML, 200 KB truncated read). NOT Discourse at that host: /latest.json and
+      /search.json both returned HTTP 404, and no Discourse generator hint appeared in the head.
+    patch_specificity: unproven
+    expected_supply: unknown
+    reuse_scope: [figma]
+    shared_framework: none_yet
+    status: needs_probe
+    blocking_unknowns:
+      - Which forum platform backs forum.figma.com, and whether it exposes any JSON/RSS surface.
+    next_experiment: >-
+      Identify the platform from the page markup, then look for its standard JSON/RSS endpoints
+      before considering HTML parsing (method class 8, highest breakage rate in this repo).
+    notes: Figma has 132 official-only records and no consensus path -- worth one more probe.
+
+  # ---------------------------------------------------------------------------------------
+  # C. GITHUB -- the only consensus method in this repo with an unbroken success record
+  # (obs-studio github_issues). Extending it to GitHub-hosted products is config, not code.
+  # ---------------------------------------------------------------------------------------
+
+  - opportunity_id: comfyui-github-issues
+    product_ids: [comfyui]
+    source_name: ComfyUI GitHub Issues
+    source_type: github_issues
+    lane: consensus
+    official_or_community: community
+    domain: api.github.com
+    entry_point: https://api.github.com/repos/comfyanonymous/ComfyUI/issues
+    discovery_method: github_issues
+    auth_requirement: optional_token_for_rate_limit
+    proof:
+      local_reachable: proven
+      actions_reachable: unknown
+      structure_proven: proven
+      patch_specificity_proven: unknown
+      supply_proven: unknown
+      production_proven: unknown
+    transport_precedent: >-
+      github_issues is production-proven for obs-studio (174 accepted rows). That is transport
+      precedent for reusing the same client; it does NOT establish that ComfyUI issue bodies carry
+      exact version tokens, nor per-release supply. Both remain unmeasured.
+    last_checked: 2026-08-13
+    recheck_after_days: 30
+    measurement: >-
+      HTTP 200 in 602 ms, 39 KB for 3 issues; full issue objects (body, created_at, closed_at,
+      author_association, comments). Identical method to obs-studio's `github_issues`, the only
+      consensus method in `evidence_method_health.yml` with a clean success record.
+    patch_specificity: expected_good
+    expected_supply: high
+    reuse_scope: [comfyui]
+    shared_framework: github_issues
+    status: acceptance_probe_needed
+    blocking_unknowns:
+      - ComfyUI releases are frequent and versions are tag-like; confirm issue bodies name them.
+      - 'PR #49 must be in main first -- any lane whose transport touches `lib.http` inherits the credential-egress defect until the exact-origin gate lands.'
+    next_experiment: >-
+      Isolated product-specific acceptance probe, NOT registration: run the existing github_issues
+      primitive over one ComfyUI release window, measure exact-version density, apply the unchanged
+      acceptance gates, and record accepted/rejected counts with exclusion reasons and health
+      behaviour. Registration in `collector_ownership.ALLOWED_METHODS` is a separate task that
+      happens only after that probe succeeds.
+    notes: >-
+      comfyui already has 35 official_only records from the proven `github_releases` adapter and
+      zero consensus rows. Same vendor, same platform, already-successful method: the lowest-risk
+      consensus lane available anywhere in the inventory.
+
+  - opportunity_id: obs-forum-xenforo-rss
+    product_ids: [obs-studio]
+    source_name: OBS Project forums (XenForo RSS)
+    source_type: vendor_forum_feed
+    lane: consensus
+    official_or_community: community
+    domain: obsproject.com
+    entry_point: https://obsproject.com/forum/forums/-/index.rss
+    discovery_method: rss_atom
+    auth_requirement: none
+    proof:
+      local_reachable: proven
+      actions_reachable: unknown
+      structure_proven: proven
+      patch_specificity_proven: unknown
+      supply_proven: unknown
+      production_proven: unknown
+    last_checked: 2026-08-13
+    recheck_after_days: 30
+    measurement: HTTP 200 in 559 ms, 29 KB, 20 feed items, channel title "OBS Forums".
+    patch_specificity: unproven
+    expected_supply: medium
+    reuse_scope: [obs-studio]
+    shared_framework: rss_atom
+    status: acceptance_probe_needed
+    blocking_unknowns:
+      - A 20-item feed is a window, not an archive -- backfill needs a different method.
+      - Whether forum thread titles carry exact OBS versions (31.0.3) often enough.
+    next_experiment: >-
+      Sample the feed across a release window and count version-token density before building.
+    notes: >-
+      obs-studio's 174 consensus rows are 100% `github_issue`. This is the cheapest way to remove
+      a single-source dependency on the one product whose consensus lane currently works best.
+
+  # ---------------------------------------------------------------------------------------
+  # D. DISCOURSE -- PR #53 adds the shared `discourse_json` primitive. These instances were
+  # measured to answer the documented anonymous endpoints, so they are configuration targets
+  # for that primitive rather than new collectors.
+  # ---------------------------------------------------------------------------------------
+
+  - opportunity_id: blender-devtalk-discourse
+    product_ids: [blender]
+    source_name: Blender devtalk (Discourse)
+    source_type: vendor_community_discourse
+    lane: consensus
+    official_or_community: community
+    domain: devtalk.blender.org
+    entry_point: https://devtalk.blender.org/latest.json
+    discovery_method: discourse_json
+    auth_requirement: none
+    proof:
+      local_reachable: proven
+      actions_reachable: unknown
+      structure_proven: proven
+      patch_specificity_proven: unknown
+      supply_proven: unknown
+      production_proven: unknown
+    last_checked: 2026-08-13
+    recheck_after_days: 30
+    measurement: >-
+      HTTP 200 in 443 ms, 42 KB; standard Discourse envelope topic_list.topics[30] with
+      created_at/bumped_at/category_id/archetype. Same contract as community.openai.com.
+    patch_specificity: unproven
+    expected_supply: medium
+    reuse_scope: [blender]
+    shared_framework: discourse_json
+    status: acceptance_probe_needed
+    blocking_unknowns:
+      - devtalk is developer-facing; end-user regression reports may live on blenderartists instead.
+      - Blender official ingestion is currently staged/disabled (html_changelog).
+    next_experiment: Run the PR #53 primitive against one Blender release version string.
+    notes: Blender is already configured in patch_products but disabled -- reactivation, not onboarding.
+
+  - opportunity_id: nvidia-developer-forums-discourse
+    product_ids: [nvidia]
+    source_name: NVIDIA developer forums (Discourse)
+    source_type: vendor_community_discourse
+    lane: consensus
+    official_or_community: community
+    domain: forums.developer.nvidia.com
+    entry_point: https://forums.developer.nvidia.com/latest.json
+    discovery_method: discourse_json
+    auth_requirement: none
+    proof:
+      local_reachable: proven
+      actions_reachable: unknown
+      structure_proven: proven
+      patch_specificity_proven: unknown
+      supply_proven: unknown
+      production_proven: unknown
+    last_checked: 2026-08-13
+    recheck_after_days: 30
+    measurement: HTTP 200 in 321 ms, 49 KB; Discourse topic_list.topics[30] with created_at.
+    patch_specificity: unproven
+    expected_supply: medium
+    reuse_scope: [nvidia]
+    shared_framework: discourse_json
+    status: acceptance_probe_needed
+    blocking_unknowns:
+      - Developer forums skew to CUDA/Jetson, not GeForce driver regressions.
+      - GeForce driver complaints concentrate on Reddit and the (non-Discourse) GeForce forums.
+      - NVIDIA driver versioning (581.42) is highly identifiable, which makes this attractive.
+    next_experiment: >-
+      Measure how many topics in a driver-release window name an exact driver version, and
+      compare against the GeForce forums surface before committing.
+    notes: >-
+      Driver updates are among the highest patch-risk events for AUXSAYS's core video products
+      (a driver can break Resolve/Premiere GPU acceleration), so this is strategically valuable
+      even though the measured board may be the wrong one.
+
+  - opportunity_id: unity-discussions-discourse
+    product_ids: [unity]
+    source_name: Unity Discussions (Discourse)
+    source_type: vendor_community_discourse
+    lane: consensus
+    official_or_community: community
+    domain: discussions.unity.com
+    entry_point: https://discussions.unity.com/latest.json
+    discovery_method: discourse_json
+    auth_requirement: none
+    proof:
+      local_reachable: proven
+      actions_reachable: unknown
+      structure_proven: proven
+      patch_specificity_proven: unknown
+      supply_proven: unknown
+      production_proven: unknown
+    last_checked: 2026-08-13
+    recheck_after_days: 30
+    measurement: HTTP 200 in 819 ms, 76 KB; Discourse topic_list.topics[30].
+    patch_specificity: unproven
+    expected_supply: medium
+    reuse_scope: [unity]
+    shared_framework: discourse_json
+    status: acceptance_probe_needed
+    blocking_unknowns: [Unity official ingestion is staged/disabled; Unity versioning (6000.0.x) is verbose but exact.]
+    next_experiment: Probe version-token density for one Unity LTS release.
+    notes: Unity is configured-disabled -- reactivation candidate.
+
+  - opportunity_id: openai-community-discourse
+    product_ids: [openai-chatgpt]
+    source_name: OpenAI community (Discourse)
+    source_type: vendor_community_discourse
+    lane: consensus
+    official_or_community: community
+    domain: community.openai.com
+    entry_point: https://community.openai.com/search.json
+    discovery_method: discourse_json
+    auth_requirement: none
+    proof:
+      local_reachable: proven
+      actions_reachable: unknown
+      structure_proven: proven
+      patch_specificity_proven: unknown
+      supply_proven: unknown
+      production_proven: unknown
+    last_checked: 2026-08-13
+    recheck_after_days: 30
+    measurement: >-
+      HTTP 200 in 1050 ms, 62 KB for search.json?q=bug; envelope carries topics[50] plus posts,
+      categories, tags, users. This is PR #53's verified target instance.
+    patch_specificity: doubtful
+    expected_supply: high
+    reuse_scope: [openai-chatgpt]
+    shared_framework: discourse_json
+    status: low_confidence
+    blocking_unknowns:
+      - ChatGPT has no user-visible version numbers for the consumer app, so exact-patch identity
+        -- the core acceptance requirement -- may be unobtainable in principle.
+      - The desktop app DOES version; the web product effectively does not.
+    next_experiment: >-
+      Decide the unit of record first (desktop app build vs model release vs feature rollout).
+      Do not build a lane until the thing being versioned is defined.
+    notes: >-
+      Rich supply but the weakest version identifiability in the inventory. High supply plus weak
+      identity is exactly the combination that manufactures false consensus, so this stays
+      low_confidence deliberately.
+
+  # ---------------------------------------------------------------------------------------
+  # E. MEASURED BLOCKS -- recorded so they are not rediscovered as "opportunities" later.
+  # ---------------------------------------------------------------------------------------
+
+  - opportunity_id: blackmagic-forum-phpbb
+    product_ids: [blackmagic-davinci]
+    source_name: Blackmagic Design official forum (phpBB)
+    source_type: vendor_forum
+    lane: consensus
+    official_or_community: community
+    domain: forum.blackmagicdesign.com
+    entry_point: https://forum.blackmagicdesign.com/viewforum.php?f=21
+    discovery_method: vendor_forum_search
+    auth_requirement: none
+    proof:
+      local_reachable: proven
+      actions_reachable: failed
+      structure_proven: failed
+      patch_specificity_proven: unknown
+      supply_proven: unknown
+      production_proven: unknown
+    last_checked: 2026-08-13
+    recheck_after_days: 90
+    measurement: >-
+      HTTP 202 with a ZERO-byte body on both the phpBB Atom feed (/feed.php?f=21) and the HTML
+      board view -- the signature of a bot-challenge interstitial, not a transport failure. This
+      independently explains the standing `vendor_forum_search: blocked` health rows.
+    patch_specificity: expected_good
+    expected_supply: high
+    reuse_scope: [blackmagic-davinci]
+    shared_framework: none_yet
+    status: blocked
+    blocking_unknowns:
+      - Whether any Blackmagic surface (feed, sitemap, search) answers without a challenge.
+    next_experiment: >-
+      None recommended for now. Do not attempt challenge evasion -- that is explicitly outside
+      what this repo may do. Revisit only if Blackmagic exposes a documented feed.
+    notes: >-
+      This matters because blackmagic-davinci's 235 consensus rows are 226 Reddit (96%), and the
+      vendor's own forum is the natural diversification target. It is measurably closed.
+
+  - opportunity_id: dji-forum
+    product_ids: []
+    source_name: DJI official forum
+    source_type: vendor_forum
+    lane: consensus
+    official_or_community: community
+    domain: forum.dji.com
+    entry_point: https://forum.dji.com/
+    discovery_method: unknown
+    auth_requirement: none
+    proof:
+      local_reachable: proven
+      actions_reachable: unknown
+      structure_proven: failed
+      patch_specificity_proven: unknown
+      supply_proven: unknown
+      production_proven: unknown
+    last_checked: 2026-08-13
+    recheck_after_days: 90
+    measurement: HTTP 202 with a zero-byte body -- the same challenge signature as Blackmagic.
+    patch_specificity: unproven
+    expected_supply: unknown
+    reuse_scope: []
+    shared_framework: none_yet
+    status: blocked
+    blocking_unknowns: [Whether any DJI community surface answers without a challenge.]
+    next_experiment: >-
+      If DJI Mimo is onboarded, plan consensus around Reddit (r/dji) and app-store review
+      metadata instead of the vendor forum.
+    notes: DJI Mimo is a named strategic target, so this block shapes its feasibility score.
+
+  - opportunity_id: reddit-search-json
+    product_ids: [blackmagic-davinci, adobe-premiere-pro, adobe-acrobat-reader, adobe-acrobat-pro, microsoft-powerpoint]
+    source_name: Reddit search JSON
+    source_type: aggregator_search
+    lane: consensus
+    official_or_community: community
+    domain: www.reddit.com
+    entry_point: https://www.reddit.com/r/<sub>/search.json
+    discovery_method: reddit_search
+    auth_requirement: none_but_aggressively_rate_limited
+    proof:
+      local_reachable: unknown
+      actions_reachable: proven
+      structure_proven: proven
+      patch_specificity_proven: proven
+      supply_proven: proven
+      production_proven: proven
+    transport_precedent: >-
+      Production-proven for blackmagic-davinci only (226 accepted rows). The SAME method books
+      `blocked` for adobe-premiere-pro and both Acrobat products, so this proof does not transfer to
+      any other product.
+    last_checked: 2026-08-13
+    recheck_after_days: 14
+    measurement: >-
+      Committed health, not a fresh probe: `reddit_search` books `partial` for
+      blackmagic-davinci (226 accepted rows -- the single largest evidence source in the repo)
+      and `blocked` for adobe-premiere-pro, adobe-acrobat-reader and adobe-acrobat-pro.
+      Registered but with ZERO health rows for microsoft-powerpoint.
+    patch_specificity: proven_for_davinci
+    expected_supply: high
+    reuse_scope: [blackmagic-davinci]
+    shared_framework: reddit_source
+    status: broken
+    blocking_unknowns:
+      - Why the same method succeeds for DaVinci and is blocked for every Adobe product.
+      - Whether the blocks are per-subreddit, per-query-shape, or runner-IP reputation.
+    next_experiment: >-
+      Diagnose the divergence before adding any new Reddit-dependent product. A method that is
+      the backbone of one product and blocked for four is the largest unexplained reliability
+      asymmetry in the repo.
+    notes: >-
+      Recorded as `broken` rather than `viable` on purpose: 96% of DaVinci's evidence rests on a
+      method that fails everywhere else, which is a concentration risk, not a success story.
+
+  # ---------------------------------------------------------------------------------------
+  # F. MICROSOFT -- the Learn Q&A search-RSS method already succeeds for Windows 11 and is
+  # registered but never exercised for PowerPoint.
+  # ---------------------------------------------------------------------------------------
+
+  - opportunity_id: microsoft-learn-qna-powerpoint
+    product_ids: [microsoft-powerpoint]
+    source_name: Microsoft Learn Q&A search RSS (PowerPoint)
+    source_type: vendor_qna_search_feed
+    lane: consensus
+    official_or_community: community
+    domain: learn.microsoft.com
+    entry_point: https://learn.microsoft.com/en-us/answers/
+    discovery_method: learn_qna_search_rss
+    auth_requirement: none
+    proof:
+      local_reachable: unknown
+      actions_reachable: unknown
+      structure_proven: proven
+      patch_specificity_proven: unknown
+      supply_proven: unknown
+      production_proven: unknown
+    transport_precedent: >-
+      learn_qna_search_rss is production-proven for microsoft-windows-11 (24 accepted rows). For
+      microsoft-powerpoint the method is registered but evidence_method_health.yml holds ZERO rows,
+      so nothing about the PowerPoint path is proven -- not even that it runs.
+    last_checked: 2026-08-13
+    recheck_after_days: 30
+    measurement: >-
+      The method is PROVEN for microsoft-windows-11 (`learn_qna_search_rss: success`, 24 counted
+      rows). For microsoft-powerpoint it is registered in ALLOWED_METHODS but
+      `evidence_method_health.yml` contains ZERO rows for the product -- so it has never
+      produced a health signal despite the product appearing in obs-evidence-collection.yml.
+    patch_specificity: expected_good
+    expected_supply: unknown
+    reuse_scope: [microsoft-powerpoint, microsoft-365-apps, microsoft-teams]
+    shared_framework: microsoft_learn_qna
+    status: acceptance_probe_needed
+    blocking_unknowns:
+      - Why no health rows exist: never invoked, invoked and crashed, or invoked and skipped?
+      - Whether Office build numbers (16.0.xxxxx.yyyyy) appear in Q&A titles.
+    next_experiment: >-
+      Trace one collection run for microsoft-powerpoint and find out why it books nothing. This
+      is an observability defect first and a source question second.
+    notes: >-
+      A registered method with zero health rows is worse than a blocked one: the dashboards
+      cannot distinguish "never ran" from "ran and found nothing".
+
+  - opportunity_id: microsoft-365-message-center-and-release-health
+    product_ids: [microsoft-365-apps, microsoft-teams, microsoft-windows-11]
+    source_name: Microsoft 365 / Windows release-health known issues
+    source_type: vendor_known_issues
+    lane: official
+    official_or_community: official
+    domain: learn.microsoft.com
+    entry_point: https://learn.microsoft.com/en-us/officeupdates/
+    discovery_method: html_release_index
+    auth_requirement: none
+    proof:
+      local_reachable: unknown
+      actions_reachable: proven
+      structure_proven: proven
+      patch_specificity_proven: proven
+      supply_proven: proven
+      production_proven: proven
+    transport_precedent: >-
+      Proven for the ENABLED products only (365-apps, powerpoint, windows-11). microsoft-teams uses
+      the same adapter but stays disabled with a staged identity-scoped parser.
+    last_checked: 2026-08-13
+    recheck_after_days: 14
+    measurement: >-
+      `microsoft_office_updates` and `microsoft_release_health` adapters exist and are enabled
+      for 365-apps (2 records), powerpoint (20) and windows-11 (4). microsoft-teams is configured
+      with the same adapter but `enabled: false`, capture status
+      `adapter_staged_identity_scoped` -- the identity-scoped fix from PR #29 was never activated.
+    patch_specificity: proven
+    expected_supply: medium
+    reuse_scope: [microsoft-365-apps, microsoft-teams, microsoft-powerpoint]
+    shared_framework: microsoft_office_updates
+    status: viable
+    blocking_unknowns:
+      - Teams activation was gated on identity scoping; is that fix still correct against the
+        current page structure?
+    next_experiment: >-
+      Re-validate the staged Teams parser against the live versioning page, then activate behind
+      the existing fail-closed identity scoping.
+    notes: >-
+      Known-issues content is officially authored and therefore NEVER consensus evidence. It is
+      valuable as official record enrichment only.
+
+  # ---------------------------------------------------------------------------------------
+  # G. OTHER MEASURED SURFACES
+  # ---------------------------------------------------------------------------------------
+
+  - opportunity_id: steam-news-api
+    product_ids: [steam]
+    source_name: Steam Web API news (ISteamNews)
+    source_type: public_rest_api
+    lane: official
+    official_or_community: official
+    domain: api.steampowered.com
+    entry_point: https://api.steampowered.com/ISteamNews/GetNewsForApp/v2/
+    discovery_method: public_rest_api
+    auth_requirement: none_for_this_endpoint
+    proof:
+      local_reachable: proven
+      actions_reachable: unknown
+      structure_proven: proven
+      patch_specificity_proven: failed
+      supply_proven: unknown
+      production_proven: unknown
+    last_checked: 2026-08-13
+    recheck_after_days: 30
+    measurement: HTTP 200 in 160 ms, 3094 B, keyless; `appnews` envelope.
+    patch_specificity: doubtful
+    expected_supply: medium
+    reuse_scope: [steam]
+    shared_framework: public_rest_api
+    status: low_confidence
+    blocking_unknowns:
+      - This is per-GAME news, not Steam CLIENT versioning; the AUXSAYS product is the client.
+      - Steam client updates are largely silent and unversioned to end users.
+    next_experiment: >-
+      Confirm whether Steam client builds are publicly enumerable at all before pursuing. If not,
+      Steam should be reclassified rather than left as an active_watch product.
+    notes: Recorded to prevent a plausible-looking endpoint being mistaken for client patch data.
+
+  - opportunity_id: github-product-changelog-consensus
+    product_ids: [github]
+    source_name: GitHub Community discussions
+    source_type: vendor_community
+    lane: consensus
+    official_or_community: community
+    domain: github.com
+    entry_point: https://github.com/orgs/community/discussions
+    discovery_method: github_discussions
+    auth_requirement: token_recommended
+    proof:
+      local_reachable: unknown
+      actions_reachable: unknown
+      structure_proven: unknown
+      patch_specificity_proven: unknown
+      supply_proven: unknown
+      production_proven: unknown
+    # No last_checked: nothing has been measured -> never_measured.
+    measurement: Not probed in this audit.
+    patch_specificity: doubtful
+    expected_supply: medium
+    reuse_scope: [github]
+    shared_framework: github_issues
+    status: needs_probe
+    blocking_unknowns:
+      - GitHub the SERVICE ships continuously without user-installable versions, so "should I
+        install this?" may not be a meaningful question for it.
+    next_experiment: >-
+      Decide whether a continuously deployed service belongs in a patch-decision product set at
+      all. 206 official-only records currently make it the largest product in the repo by volume.
+    notes: >-
+      github is the single biggest official-only record population (206). Before building a
+      consensus lane, confirm the product is in scope for AUXSAYS's actual question.
+
+  - opportunity_id: wayback-archive-recheck
+    product_ids: [adobe-premiere-pro]
+    source_name: Wayback Machine snapshot recheck
+    source_type: archive_verification
+    lane: consensus
+    official_or_community: community
+    domain: web.archive.org
+    entry_point: https://web.archive.org/
+    discovery_method: wayback_snapshot_recheck
+    auth_requirement: none
+    proof:
+      local_reachable: unknown
+      actions_reachable: failed
+      structure_proven: failed
+      patch_specificity_proven: not_applicable
+      supply_proven: unknown
+      production_proven: failed
+    last_checked: 2026-08-13
+    recheck_after_days: 90
+    measurement: 'Committed health: `wayback_snapshot_recheck: broken` for adobe-premiere-pro.'
+    patch_specificity: n_a
+    expected_supply: low
+    reuse_scope: [adobe-premiere-pro, blackmagic-davinci]
+    shared_framework: archive_recheck
+    status: broken
+    blocking_unknowns: [Whether the break is the archive API contract or the caller.]
+    next_experiment: >-
+      Deprioritize. Archive recheck verifies URLs already known; it does not expand supply, so it
+      is a durability tool rather than a discovery method.
+    notes: Kept in the inventory so its `broken` state is not mistaken for an untried opportunity.
+
+  - opportunity_id: brave-search-api
+    product_ids: [adobe-premiere-pro]
+    source_name: Brave Search API
+    source_type: paid_search_api
+    lane: consensus
+    official_or_community: community
+    domain: api.search.brave.com
+    entry_point: https://api.search.brave.com/res/v1/web/search
+    discovery_method: brave_search_api
+    auth_requirement: paid_api_key
+    proof:
+      local_reachable: unknown
+      actions_reachable: failed
+      structure_proven: failed
+      patch_specificity_proven: not_applicable
+      supply_proven: not_applicable
+      production_proven: failed
+    last_checked: 2026-08-13
+    recheck_after_days: 180
+    measurement: >-
+      Committed health: `brave_search_api: broken` and `creativecow_brave_search: broken` for
+      adobe-premiere-pro -- the credential-dead methods that left Premiere with zero successes
+      until the Algolia lane was built.
+    patch_specificity: n_a
+    expected_supply: n_a
+    reuse_scope: []
+    shared_framework: none_yet
+    status: needs_policy_decision
+    blocking_unknowns: []
+    paid_api_evaluation:
+      cost: unknown -- no current quote or usage estimate for AUXSAYS query volume.
+      key_management: >-
+        Requires a long-lived third-party secret in Actions, plus rotation. The repo already
+        proved credential scope is easy to get wrong (PR #49), so this is a real cost, not zero.
+      rate_limits: unknown -- tier-dependent, unmeasured.
+      reliability: >-
+        MEASURED NEGATIVE in this repo: both brave_search_api and creativecow_brave_search book
+        `broken` for adobe-premiere-pro, which is what left that product with zero successes.
+      tos: not reviewed.
+      vendor_lock_in: >-
+        Medium. A search provider mediates discovery, so results shift when its index or ranking
+        shifts -- with no repo-side way to detect the change.
+      single_source_risk: >-
+        High if it becomes the discovery path for a product, because there is no second provider.
+      deterministic_alternative: >-
+        DEMONSTRATED SUPERIOR for the product this was bought for. Premiere went from zero
+        successes to 7 accepted patch-specific rows on the keyless Adobe Community Algolia chain
+        (PR #51) -- a direct vendor source, no key, no provider ranking in the loop.
+      exact_patch_specificity: >-
+        Low by construction: a web-search result page is not a report. The verifier rejects
+        search-result URLs, so rows must still be resolved to specific threads afterwards.
+    next_experiment: >-
+      A policy/economics decision, not a measurement: decide whether a keyed search provider is
+      worth funding for any product that lacks a direct deterministic source. Do not activate and
+      do not add a key while the answer is unknown.
+    notes: >-
+      DOCTRINE CORRECTION: an earlier revision of this inventory claimed a paid API in the
+      production evidence path is forbidden. That rule does not exist and was wrong. The doctrine
+      bars production evidence collection from depending on Taylor or on an AI subscription; a
+      conventional deterministic paid API is evaluated on its merits (see paid_api_evaluation).
+      Brave is still not recommended -- measured broken here, low exact-patch specificity, and a
+      keyless direct vendor source already outperformed it for the same product -- but that is an
+      evidence and economics judgement, awaiting a policy call rather than settled by doctrine.
+
+  - opportunity_id: vendor-sitemap-delta
+    product_ids: [adobe-photoshop, adobe-after-effects, adobe-lightroom-classic, adobe-media-encoder]
+    source_name: Vendor sitemap delta (release-note URL discovery)
+    source_type: sitemap
+    lane: official
+    official_or_community: official
+    domain: helpx.adobe.com
+    entry_point: https://helpx.adobe.com/sitemap.xml
+    discovery_method: sitemap_delta
+    auth_requirement: none
+    proof:
+      local_reachable: unknown
+      actions_reachable: failed
+      structure_proven: unknown
+      patch_specificity_proven: unknown
+      supply_proven: unknown
+      production_proven: unknown
+    last_checked: 2026-08-13
+    recheck_after_days: 60
+    measurement: >-
+      Not probed. helpx.adobe.com is measured CI-UNREACHABLE (run 31530112187: 12/12 timeouts at
+      ~20 s, zero body bytes, across four User-Agent classes including a plain browser UA), so
+      any helpx-hosted surface inherits that block regardless of format.
+    patch_specificity: n_a
+    expected_supply: unknown
+    reuse_scope: [adobe-photoshop, adobe-after-effects, adobe-lightroom-classic, adobe-media-encoder]
+    shared_framework: sitemap_delta
+    status: blocked
+    blocking_unknowns:
+      - Root cause of the HelpX CI block is UNRESOLVED (classification C), so no workaround is
+        justified by evidence yet.
+    next_experiment: >-
+      Do not build sitemap_delta against helpx until the CI transport question is answered. The
+      four staged Adobe products are blocked on OFFICIAL ingestion, not on consensus discovery.
+    notes: >-
+      This is the real bottleneck for Adobe breadth: community supply is measured and plentiful,
+      but a patch record must exist before evidence can attach to it.
