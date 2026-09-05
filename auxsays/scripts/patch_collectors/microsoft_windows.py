@@ -37,6 +37,7 @@ from __future__ import annotations
 import re
 import urllib.parse
 from dataclasses import dataclass
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 from .base import (
@@ -123,6 +124,13 @@ WINDOWS_IDENTITY_SLUG_RE = re.compile(r"kb\d{7}|(?<!\d)2[0-9]{4}[-.]\d{3,5}(?!\d
 # A hard ceiling on stage two, so an unbounded `--since` cannot turn one run into thousands of
 # fetches. Reaching it is reported as `partial`, never as success.
 TECHCOMMUNITY_MAX_HYDRATIONS = 400
+
+# The window used when the caller supplied none. Matches the workflow's routine `--since-days 45`.
+TECHCOMMUNITY_DEFAULT_WINDOW_DAYS = 45
+
+
+def default_since_day(days: int) -> str:
+    return (datetime.now(timezone.utc) - timedelta(days=max(1, days))).strftime("%Y-%m-%d")
 
 # --- deterministic content classifiers (no AI) -------------------------------
 KB_TOKEN_RE = re.compile(r"\bKB\d{6,7}\b", re.I)
@@ -726,7 +734,12 @@ def collect_techcommunity_candidates(context: CollectorContext,
     are then offered to every record, and the unchanged authority decides which patch (if any) each
     belongs to.
     """
-    since = str(getattr(context, "since", "") or "") or "1970-01-01"
+    # NO WINDOW MEANS THE DEFAULT WINDOW, never the whole archive. The runner always supplies one
+    # (`--since`, or `--since-days`, which the workflow always passes), but a caller that omits it
+    # would otherwise walk every Windows thread Tech Community has ever published -- thousands of
+    # 400KB hydrations from a context that asked for nothing in particular. A sitemap walk has no
+    # natural bound the way a keyword search does, so it needs an explicit one.
+    since = str(getattr(context, "since", "") or "") or default_since_day(TECHCOMMUNITY_DEFAULT_WINDOW_DAYS)
     sitemap_errors: list[dict[str, Any]] = []
     listed = techcommunity.enumerate_sitemaps(
         TECHCOMMUNITY_SPACES, since=since, url_pattern=WINDOWS_IDENTITY_SLUG_RE,

@@ -274,10 +274,23 @@ def run() -> int:
         orig_records = win.generated_records
         orig_source = win.learn_qna.collect_learn_qna_candidates
         orig_append = win.append_evidence_rows
+        orig_pool = win.build_techcommunity_pool
+        orig_fetch = win.techcommunity.fetch
         calls = {"append": 0}
+        pool_calls = {"pool": 0}
         try:
+            # Offline proof, not a promise: any real Tech Community fetch during this block fails
+            # the suite rather than quietly reaching the network from CI.
+            def _no_network(url):
+                raise AssertionError(f"offline suite attempted a live fetch: {url}")
+            win.techcommunity.fetch = _no_network
             win.generated_records = lambda pid, tv=None, **k: [synthetic]
             win.learn_qna.collect_learn_qna_candidates = lambda **k: []  # no network
+            # The second discovery method walks Tech Community sitemaps once per RUN, inside
+            # collect(). Stubbed for the same reason Learn Q&A is: this suite is offline.
+            win.build_techcommunity_pool = lambda context: (
+                pool_calls.__setitem__("pool", pool_calls["pool"] + 1),
+                win.TechCommunityPool(candidates=[], telemetry={}, errors=[]))[1]
             win.append_evidence_rows = lambda rows, *a, **k: (calls.__setitem__("append", calls["append"] + 1), (0, 0, []))[1]
 
             calls["append"] = 0
@@ -287,10 +300,14 @@ def run() -> int:
             calls["append"] = 0
             win.WindowsLearnQnaCollector().collect(SimpleNamespace(write=True, since=None, max_pages=1, target_versions=None))
             check("write path is implemented (write=True reaches append_evidence_rows)", calls["append"] == 1, f"append calls={calls['append']}")
+            check("the Tech Community pool is built ONCE per run, not once per record",
+                  pool_calls["pool"] == 2, f"pool builds={pool_calls['pool']} across 2 runs of 1 record")
         finally:
             win.generated_records = orig_records
             win.learn_qna.collect_learn_qna_candidates = orig_source
             win.append_evidence_rows = orig_append
+            win.build_techcommunity_pool = orig_pool
+            win.techcommunity.fetch = orig_fetch
 
     # --- one report, one patch -----------------------------------------------
     # REGRESSION. `append_evidence_rows` refuses a source_url already present under the same
@@ -466,11 +483,15 @@ def run() -> int:
         def _run(accept: bool) -> dict:
             counts = {"index": 0, "dry_run": 0, "results": 0}
             orig = (win.generated_records, win.collect_for_record, win.append_evidence_rows,
-                    acr_mod._index_generated_records, acr_mod.run_dry_run)
+                    acr_mod._index_generated_records, acr_mod.run_dry_run, win.build_techcommunity_pool)
             try:
                 win.generated_records = lambda pid, tv=None, **k: list(recs)
+                win.build_techcommunity_pool = lambda context: win.TechCommunityPool(
+                    candidates=[], telemetry={}, errors=[])
                 # Every record "accepts" a row (or none), so every one is a writeback candidate.
-                win.collect_for_record = lambda record, context, claims=None: (
+                # The pool arrives as a fourth argument; accepting it here keeps this stub honest
+                # about the signature the collector actually calls.
+                win.collect_for_record = lambda record, context, claims=None, pool=None: (
                     ([{"source_url": "https://x/1"}] if accept else []), [], {})
                 win.append_evidence_rows = lambda rows, *a, **k: (1 if accept else 0, 1, [])
                 acr_mod._index_generated_records = lambda *a, **k: (
@@ -482,7 +503,8 @@ def run() -> int:
                 counts["results"] = len(out)
             finally:
                 (win.generated_records, win.collect_for_record, win.append_evidence_rows,
-                 acr_mod._index_generated_records, acr_mod.run_dry_run) = orig
+                 acr_mod._index_generated_records, acr_mod.run_dry_run,
+                 win.build_techcommunity_pool) = orig
             return counts
 
         accepted_run = _run(accept=True)
