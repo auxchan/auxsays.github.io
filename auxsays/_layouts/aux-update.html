@@ -385,6 +385,59 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
         </div>
       </div>
 
+
+      <div id="verdict" class="update-decision-box update-decision-box--{{ evidence_state_class }}">
+        <div class="update-decision-box__header">
+          <span class="update-decision-eyebrow">AUXSAYS verdict</span>
+          <strong>{{ decision_label }}</strong>
+          <p class="update-decision-recommendation">{{ decision_body }}</p>
+        </div>
+        <div class="update-decision-reasoning">
+          {% if report_count > 0 and issue_cluster_text != blank %}
+          <p>Current reports mention {{ issue_cluster_text }}.</p>
+          {% elsif report_count > 0 %}
+          <p>User reports are present; review the source list before updating critical work.</p>
+          {%- comment -%}
+            No else-branch. On a zero-report page the recommendation line directly above already
+            says "Too few reports for a verdict yet.", so repeating it here printed the same
+            sentence twice in consecutive paragraphs -- the state most patch pages are in.
+          {%- endcomment -%}
+          {% endif %}
+          {% if show_test_first_context %}<p class="update-credibility-note">This is report-backed caution guidance, not a clean safe signal.</p>{% endif %}
+          {%- comment -%}
+            The low-sample statement is no longer cut off at three reports. Every sub-live sample
+            carries honest framing, worded by the canonical strength ladder rather than a hard
+            count, so nothing changes discontinuously at exactly n=3.
+          {%- endcomment -%}
+          {% if consensus_established == false and evidence_strength == 'Low' %}<p>Too few reports for a firm verdict yet &mdash; treat this as early evidence.</p>{% endif %}
+          {% if record_note_text != blank %}<p>{{ record_note_text }}</p>{% endif %}
+        </div>
+      </div>
+
+      {% include monitoring-status.html mode='full' product_id=page.product_id version=page.update_version target_build=page.target_build published_at=page.update_published_at report_count=page.update_report_count %}
+
+      {% assign official_active = page.official_active_issue_count | default: 0 | plus: 0 %}
+      {% assign official_resolved = page.official_resolved_issue_count | default: 0 | plus: 0 %}
+      {% assign official_safeguard = page.official_safeguard_hold_count | default: 0 | plus: 0 %}
+      {% assign vki_has_data = false %}
+      {% if page.official_known_issues_present == true or page.official_known_issues_present == false or page.official_active_issue_count or page.official_resolved_issue_count or page.official_safeguard_hold_count %}{% assign vki_has_data = true %}{% endif %}
+      {% assign vki_source = page.update_source_url | default: page.official_patch_notes_source_url | default: page.primary_official_source %}
+      {% include aux-vendor-known-issues.html active=official_active resolved=official_resolved safeguard=official_safeguard has_data=vki_has_data source_url=vki_source scope='patch' %}
+
+      {%- comment -%}
+        ADDITIONAL CONTEXT -- everything below is subordinate to the decision above.
+
+        These blocks used to sit between the evidence summary and the AUXSAYS verdict, so a
+        reader met an evidence-freshness caveat, then reports that do not count, then the
+        explanation of why they do not count, and only then the answer to the question the page
+        exists for. On a zero-confirmed page that put the two non-counting cards visually above
+        the verdict entirely. AUXSAYS answers "should I install this update, wait, or avoid
+        it?" -- the decision comes first and its supporting audit trail comes after it.
+
+        Nothing here is hidden or weakened: Level 2 keeps its "exact tracked build unresolved"
+        framing, Level 3 keeps "not attributed to this update", and the freshness notice keeps
+        its wording. Only their position changed.
+      {%- endcomment -%}
       {% if show_report_freshness_notice %}
       <aside class="update-evidence-freshness-notice" aria-label="Evidence freshness notice">
         <strong>Verified report sample: Evidence freshness needs revalidation.</strong>
@@ -509,44 +562,6 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
         {% endif %}
       </section>
       {% endif %}
-
-      <div id="verdict" class="update-decision-box update-decision-box--{{ evidence_state_class }}">
-        <div class="update-decision-box__header">
-          <span class="update-decision-eyebrow">AUXSAYS verdict</span>
-          <strong>{{ decision_label }}</strong>
-          <p class="update-decision-recommendation">{{ decision_body }}</p>
-        </div>
-        <div class="update-decision-reasoning">
-          {% if report_count > 0 and issue_cluster_text != blank %}
-          <p>Current reports mention {{ issue_cluster_text }}.</p>
-          {% elsif report_count > 0 %}
-          <p>User reports are present; review the source list before updating critical work.</p>
-          {%- comment -%}
-            No else-branch. On a zero-report page the recommendation line directly above already
-            says "Too few reports for a verdict yet.", so repeating it here printed the same
-            sentence twice in consecutive paragraphs -- the state most patch pages are in.
-          {%- endcomment -%}
-          {% endif %}
-          {% if show_test_first_context %}<p class="update-credibility-note">This is report-backed caution guidance, not a clean safe signal.</p>{% endif %}
-          {%- comment -%}
-            The low-sample statement is no longer cut off at three reports. Every sub-live sample
-            carries honest framing, worded by the canonical strength ladder rather than a hard
-            count, so nothing changes discontinuously at exactly n=3.
-          {%- endcomment -%}
-          {% if consensus_established == false and evidence_strength == 'Low' %}<p>Too few reports for a firm verdict yet &mdash; treat this as early evidence.</p>{% endif %}
-          {% if record_note_text != blank %}<p>{{ record_note_text }}</p>{% endif %}
-        </div>
-      </div>
-
-      {% include monitoring-status.html mode='full' product_id=page.product_id version=page.update_version target_build=page.target_build published_at=page.update_published_at report_count=page.update_report_count %}
-
-      {% assign official_active = page.official_active_issue_count | default: 0 | plus: 0 %}
-      {% assign official_resolved = page.official_resolved_issue_count | default: 0 | plus: 0 %}
-      {% assign official_safeguard = page.official_safeguard_hold_count | default: 0 | plus: 0 %}
-      {% assign vki_has_data = false %}
-      {% if page.official_known_issues_present == true or page.official_known_issues_present == false or page.official_active_issue_count or page.official_resolved_issue_count or page.official_safeguard_hold_count %}{% assign vki_has_data = true %}{% endif %}
-      {% assign vki_source = page.update_source_url | default: page.official_patch_notes_source_url | default: page.primary_official_source %}
-      {% include aux-vendor-known-issues.html active=official_active resolved=official_resolved safeguard=official_safeguard has_data=vki_has_data source_url=vki_source scope='patch' %}
     </div>
   </section>
 
