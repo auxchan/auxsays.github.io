@@ -271,15 +271,16 @@ DRIVER_QUESTION_RE = re.compile(
 # body-scoped rule would delete genuine Windows regressions that merely name an affected app.
 #
 # WHY NOT A GENERAL ATTRIBUTION TIGHTENING. Measured and rejected. Requiring the attribution cue to
-# sit near a Windows-update referent (sentence-scoped, and again at +/-140 characters) dropped 30 of
-# 321 replayed rows, roughly half of them legitimate -- "Windows 11 latest security patch is
-# failing", "2026-06 update issues", "Why doesn't the recent Windows update install?" -- because cue
-# and referent routinely land in different clauses. That is exactly the over-deletion the OBS
-# version-outcome veto module in lib/ documents (it names it in its own "WHAT THIS IS NOT"
-# paragraph, and is deliberately NOT imported here -- a governed test pins that independence).
-# This veto stays narrow instead: it fires only when the title's subject is a separately-updated
-# product AND the title carries neither the record's own identity, nor a Windows update, nor a
-# Windows component.
+# sit in a clause with a Windows-update referent drops 41 of the 408 rows a full historical replay
+# accepts, and the casualties are ordinary Windows reports: "Why Did My Bluetooth Stop Working
+# After Win 11 Update", "2026-06 update issues", "How do I remove the recent windows update??",
+# "After update no longer detecting a connected screen" -- plus every non-English report, because
+# a referent lexicon is a list of English phrasings. Cue and referent routinely land in different
+# clauses. That is exactly the over-deletion the OBS version-outcome veto module in lib/ documents
+# (it names it in its own "WHAT THIS IS NOT" paragraph, and is deliberately NOT imported here -- a
+# governed test pins that independence). This veto stays narrow instead: it fires only when the
+# title's subject is a separately-updated product AND the title carries neither the record's own
+# identity, nor a Windows update, nor a Windows component.
 FOREIGN_PRODUCT_SUBJECT_RE = re.compile(
     r"(?i)\b(?:"
     r"teams|onedrive|outlook|office\s*(?:365|2016|2019|2021|2024)|excel|powerpoint|"
@@ -384,6 +385,52 @@ def update_attributed(report_text: str, report_title: str, matched_kb: str, matc
     )
 
 
+# A dot inside 26200.7462 is not the end of a sentence. Splitting on bare punctuation cuts every
+# build token in half, so a rule that looks for "this build, in this clause" silently never fires
+# on builds at all -- which is exactly how the first version of the veto below measured zero.
+_BUILD_DOT_SENTINEL = "␟"
+
+
+def sentences(text: str) -> list[str]:
+    """Clause-level segments, with version tokens kept whole."""
+    masked = BUILD_TOKEN_RE.sub(lambda m: m.group(0).replace(".", _BUILD_DOT_SENTINEL), text or "")
+    return [part.replace(_BUILD_DOT_SENTINEL, ".") for part in re.split(r"[.;!?\n]", masked)]
+
+
+# "There is a new OS version for my computer: 22631.6936 that may fix this problem" -- the build is
+# named as a REMEDY the reporter has not installed, not as the cause of anything. Counting it makes
+# the patch's own page say one person reported a defect in it, when that person said the opposite.
+PROSPECTIVE_REMEDY_RE = re.compile(
+    r"(?i)\b(?:may|might|should|would|will|hopefully|supposed\s+to|meant\s+to|expected\s+to)\b"
+    r"[^.;!?\n]{0,30}\b(?:fix|resolve|solve|correct|address)\w*"
+)
+
+
+def identity_named_as_prospective_fix(report_text: str, matched_os_build: str) -> bool:
+    """The record's own BUILD is named only as a future remedy, by someone running another build.
+
+    Deliberately narrow, and measured: over 408 rows accepted by a full historical replay this
+    fires exactly once -- on the one row a hand audit had already identified as wrong -- and on
+    nothing else.
+
+    BUILD ONLY, never KB. "KB5073455 Not Offered via Windows Update on Windows 11 23H2 Pro" names
+    a KB the reporter has not installed either, but that IS a report about the patch: it is not
+    reaching them. A build named as a remedy carries no such complaint.
+
+    The "another build" clause is what makes this a ROLE rule rather than a keyword rule: it holds
+    only when the reporter has placed themselves somewhere else, which is the situation in which
+    the target can be a remedy at all.
+    """
+    build = str(matched_os_build or "").strip()
+    if not build:
+        return False
+    text = report_text or ""
+    if not any(build in segment and PROSPECTIVE_REMEDY_RE.search(segment)
+               for segment in sentences(text)):
+        return False
+    return any(token != build for token in BUILD_TOKEN_RE.findall(text))
+
+
 def foreign_product_subject(report_title: str, matched_kb: str, matched_os_build: str) -> bool:
     """The post's SUBJECT is a separately-updated product, not this Windows cumulative update.
 
@@ -432,6 +479,9 @@ def windows_intent_reason(report_text: str, report_title: str, matched_kb: str, 
     # body must not attribute another product's installer to this patch.
     if foreign_product_subject(report_title, matched_kb, matched_os_build):
         return "foreign_product_subject_not_windows_patch"
+    # The build named as a not-yet-installed remedy is the fixed-in role, and a fix is not a defect.
+    if identity_named_as_prospective_fix(report_text, matched_os_build):
+        return "identity_named_as_prospective_fix"
     if FEATURE_QUESTION_RE.search(report_text) and not update_attributed(report_text, report_title, matched_kb, matched_os_build):
         return "feature_question_not_regression"
     attributed = update_attributed(report_text, report_title, matched_kb, matched_os_build)

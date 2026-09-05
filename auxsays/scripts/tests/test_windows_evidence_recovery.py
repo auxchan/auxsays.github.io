@@ -367,6 +367,42 @@ def run() -> int:  # noqa: PLR0915
           and not any("server" in name for name in mw.TECHCOMMUNITY_SPACES),
           str(mw.TECHCOMMUNITY_SPACES))
 
+    # ---------------- L: the build named as a remedy is not a defect report ----------------
+    print(NEWLINE + "[L] a build named as a future fix is the fixed-in role, not failing evidence")
+    snipping = ("I assume that the problem is related to the OS update only. Ther is a new OS "
+                "version for my computer: 22631.6936 that may fix this problem, some words around "
+                "graphical updates. The current OS version is W11, ver.23H2, 22631.6783.")
+    check("L the measured live false positive is vetoed",
+          mw.identity_named_as_prospective_fix(snipping, "22631.6936"))
+    check("L a report about installing the target is untouched",
+          not mw.identity_named_as_prospective_fix(
+              "After installing KB5121003 (26200.9168) my USB controller fails. "
+              "Rolling back to 26200.8973 fixes it.", "26200.9168"),
+          "an affected report was vetoed")
+    check("L the rule needs the reporter to be on another build",
+          not mw.identity_named_as_prospective_fix("26200.9168 may fix this problem", "26200.9168"),
+          "fired without the reporter placing themselves elsewhere")
+    check("L a KB named as a remedy is never vetoed (that is a distribution complaint)",
+          not mw.identity_named_as_prospective_fix(
+              "KB5073455 should fix this but is not offered on 23H2. I am on 22631.6783 and "
+              "22631.6936 exists.", ""),
+          "a KB-only report was vetoed")
+    check("L the gate returns the reason",
+          mw.windows_intent_reason(snipping, "Snipping tool freezing my laptop", "", "22631.6936")
+          == "identity_named_as_prospective_fix",
+          str(mw.windows_intent_reason(snipping, "Snipping tool freezing my laptop", "", "22631.6936")))
+    check("L a dot inside a build token is not a sentence boundary",
+          "26200.7462" in mw.sentences("the build 26200.7462 broke it. next sentence")[0],
+          str(mw.sentences("the build 26200.7462 broke it. next sentence")))
+    check("L real punctuation still splits",
+          len(mw.sentences("one. two. three")) == 3,
+          str(mw.sentences("one. two. three")))
+    check("L no counted Windows row names its own build only as a remedy",
+          not [r for r in counted
+               if mw.identity_named_as_prospective_fix(stored_text(r),
+                                                       str(r.get("matched_os_build") or ""))],
+          "a live row still names its build as a prospective fix")
+
     print()
     print("=" * 78)
     print(f"Results: {_PASS}/{_PASS + _FAIL} passed, {_FAIL} failed")
