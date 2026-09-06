@@ -21582,7 +21582,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 24
   blocked_reason: ''
-  last_run: '2026-09-06T01:28:53Z'
+  last_run: '2026-09-06T02:26:53Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5120998, 26100.9278. Exact KB/OS-build search attempted: True. Candidates 24, accepted 0, rejected 24. Top rejections: generic_support_request=7, missing_kb_or_build=10, wrong_kb_for_current_patch=7. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 26H1
@@ -21630,7 +21630,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 48
   blocked_reason: ''
-  last_run: '2026-09-06T01:28:56Z'
+  last_run: '2026-09-06T02:26:57Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5121003, 26100.9168. Exact KB/OS-build search attempted: True. Candidates 49, accepted 1, rejected 48. Top rejections: cross_patch_duplicate=2, date_only_inference=1, generic_support_request=7, missing_kb_or_build=12, missing_update_attribution=1, release_announcement_not_user_report=1, wrong_feature_train_for_kb=6, wrong_kb_for_current_patch=18. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 23H2
@@ -21694,7 +21694,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 46
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:00Z'
+  last_run: '2026-09-06T02:27:00Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5101684, 26100.8973. Exact KB/OS-build search attempted: True. Candidates 47, accepted 1, rejected 46. Top rejections: account_backend_issue_not_patch=1, cross_patch_duplicate=1, date_only_inference=1, generic_support_request=8, missing_kb_or_build=15, wrong_feature_train_for_kb=9, wrong_kb_for_current_patch=11. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 25H2
@@ -21726,7 +21726,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 15
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:03Z'
+  last_run: '2026-09-06T02:27:03Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5121767, 26100.8894. Exact KB/OS-build search attempted: True. Candidates 15, accepted 0, rejected 15. Top rejections: cross_patch_duplicate=1, generic_support_request=3, missing_kb_or_build=4, wrong_feature_train_for_kb=2, wrong_kb_for_current_patch=5. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 26H1
@@ -21774,7 +21774,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 38
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:07Z'
+  last_run: '2026-09-06T02:27:07Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5101650, 26100.8875. Exact KB/OS-build search attempted: True. Candidates 39, accepted 1, rejected 38. Top rejections: cross_patch_duplicate=2, date_only_inference=2, generic_support_request=10, how_to_question_not_regression=1, missing_kb_or_build=5, vague_latest_update=1, wrong_feature_train_for_kb=5, wrong_kb_for_current_patch=12. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 23H2
@@ -21829,17 +21829,17 @@ methods:
   target_build: '26100.8737'
   method_id: learn_qna_search_rss
   source_type: microsoft_learn_qna
-  status: partial
-  candidates_found: 38
+  status: no_results
+  candidates_found: 39
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 38
-  blocked_reason: learn_qna_search_fetch_failed:blocked:login_or_auth_challenge
-  last_run: '2026-09-06T01:29:10Z'
-  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5095093, 26100.8737. Exact KB/OS-build search attempted: True. Candidates 38, accepted 0, rejected 38. Top rejections: cross_patch_duplicate=1, date_only_inference=2, generic_support_request=9, missing_kb_or_build=7, tenant_service_incident_not_client_patch=2, vague_latest_update=3, wrong_feature_train_for_kb=4, wrong_kb_for_current_patch=10. Fetch failures: 1. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
+  rejected_reports: 39
+  blocked_reason: ''
+  last_run: '2026-09-06T02:27:10Z'
+  notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5095093, 26100.8737. Exact KB/OS-build search attempted: True. Candidates 39, accepted 0, rejected 39. Top rejections: cross_patch_duplicate=1, date_only_inference=2, generic_support_request=9, missing_kb_or_build=7, missing_update_attribution=1, tenant_service_incident_not_client_patch=2, vague_latest_update=3, wrong_feature_train_for_kb=4, wrong_kb_for_current_patch=10. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 26H1
   target_build: '28000.2269'
@@ -21886,7 +21886,7 @@ methods:
   accepted_reports: 3
   rejected_reports: 62
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:13Z'
+  last_run: '2026-09-06T02:27:13Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5094126, 26100.8655. Exact KB/OS-build search attempted: True. Candidates 65, accepted 3, rejected 62. Top rejections: account_backend_issue_not_patch=6, build_only_in_system_specs=1, date_only_inference=2, generic_support_request=10, missing_kb_or_build=15, release_announcement_not_user_report=2, vague_latest_update=4, wrong_feature_train_for_kb=8, wrong_kb_for_current_patch=14. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 23H2
@@ -21950,7 +21950,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 42
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:17Z'
+  last_run: '2026-09-06T02:27:17Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5089573, 26100.8524. Exact KB/OS-build search attempted: True. Candidates 42, accepted 0, rejected 42. Top rejections: account_backend_issue_not_patch=3, date_only_inference=1, foreign_product_subject_not_windows_patch=1, generic_support_request=9, missing_kb_or_build=12, vague_latest_update=1, wrong_feature_train_for_kb=3, wrong_kb_for_current_patch=12. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 26H1
@@ -21998,7 +21998,7 @@ methods:
   accepted_reports: 4
   rejected_reports: 56
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:20Z'
+  last_run: '2026-09-06T02:27:20Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5089549, 26100.8457. Exact KB/OS-build search attempted: True. Candidates 60, accepted 4, rejected 56. Top rejections: account_backend_issue_not_patch=3, foreign_product_subject_not_windows_patch=1, generic_support_request=10, missing_kb_or_build=12, missing_update_attribution=1, vague_latest_update=2, wrong_feature_train_for_kb=5, wrong_kb_for_current_patch=22. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 23H2
@@ -22062,7 +22062,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 11
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:24Z'
+  last_run: '2026-09-06T02:27:23Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5083631, 26100.8328. Exact KB/OS-build search attempted: True. Candidates 12, accepted 1, rejected 11. Top rejections: foreign_product_subject_not_windows_patch=1, generic_support_request=2, official_note_not_user_report=1, release_announcement_not_user_report=1, wrong_feature_train_for_kb=2, wrong_kb_for_current_patch=4. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 26H1
@@ -22110,7 +22110,7 @@ methods:
   accepted_reports: 2
   rejected_reports: 77
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:28Z'
+  last_run: '2026-09-06T02:27:27Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5083769, 26100.8246. Exact KB/OS-build search attempted: True. Candidates 79, accepted 2, rejected 77. Top rejections: account_backend_issue_not_patch=3, cross_patch_duplicate=1, date_only_inference=2, feature_question_not_regression=1, generic_support_request=28, missing_kb_or_build=15, missing_update_attribution=1, tenant_service_incident_not_client_patch=1, vague_latest_update=2, wrong_feature_train_for_kb=5, wrong_kb_for_current_patch=18. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 23H2
@@ -22158,7 +22158,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 31
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:31Z'
+  last_run: '2026-09-06T02:27:30Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5086672, 26100.8117. Exact KB/OS-build search attempted: True. Candidates 31, accepted 0, rejected 31. Top rejections: account_backend_issue_not_patch=1, date_only_inference=1, generic_support_request=3, missing_kb_or_build=14, vague_latest_update=3, wrong_feature_train_for_kb=5, wrong_kb_for_current_patch=4. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 26H1
@@ -22206,7 +22206,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 11
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:34Z'
+  last_run: '2026-09-06T02:27:33Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5079391, 26100.8116. Exact KB/OS-build search attempted: True. Candidates 11, accepted 0, rejected 11. Top rejections: cross_patch_duplicate=1, generic_support_request=3, missing_kb_or_build=4, wrong_kb_for_current_patch=3. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 25H2
@@ -22238,7 +22238,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 86
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:37Z'
+  last_run: '2026-09-06T02:27:37Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5085516, 26100.8039. Exact KB/OS-build search attempted: True. Candidates 86, accepted 0, rejected 86. Top rejections: account_backend_issue_not_patch=19, cross_patch_duplicate=1, date_only_inference=1, generic_support_request=37, missing_kb_or_build=17, vague_latest_update=1, wrong_feature_train_for_kb=2, wrong_kb_for_current_patch=8. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 26H1
@@ -22286,7 +22286,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 121
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:41Z'
+  last_run: '2026-09-06T02:27:40Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5079473, 26100.8037. Exact KB/OS-build search attempted: True. Candidates 122, accepted 1, rejected 121. Top rejections: account_backend_issue_not_patch=10, build_only_in_system_specs=2, cross_patch_duplicate=3, date_only_inference=4, generic_support_request=31, missing_kb_or_build=34, missing_update_attribution=2, vague_latest_update=1, wrong_feature_train_for_kb=7, wrong_kb_for_current_patch=27. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 23H2
@@ -22350,7 +22350,7 @@ methods:
   accepted_reports: 3
   rejected_reports: 45
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:44Z'
+  last_run: '2026-09-06T02:27:44Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5077241, 26100.7922. Exact KB/OS-build search attempted: True. Candidates 48, accepted 3, rejected 45. Top rejections: cross_patch_duplicate=2, generic_support_request=14, missing_kb_or_build=4, release_announcement_not_user_report=2, vague_latest_update=2, wrong_feature_train_for_kb=2, wrong_kb_for_current_patch=19. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 26H1
@@ -22398,7 +22398,7 @@ methods:
   accepted_reports: 7
   rejected_reports: 107
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:48Z'
+  last_run: '2026-09-06T02:27:47Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5077181, 26100.7840. Exact KB/OS-build search attempted: True. Candidates 114, accepted 7, rejected 107. Top rejections: account_backend_issue_not_patch=2, build_only_in_system_specs=2, cross_patch_duplicate=3, date_only_inference=1, generic_support_request=44, how_to_question_not_regression=1, missing_kb_or_build=27, missing_update_attribution=2, release_announcement_not_user_report=1, vague_latest_update=3, wrong_feature_train_for_kb=5, wrong_kb_for_current_patch=16. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 23H2
@@ -22446,7 +22446,7 @@ methods:
   accepted_reports: 1
   rejected_reports: 40
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:51Z'
+  last_run: '2026-09-06T02:27:50Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5074105, 26100.7705. Exact KB/OS-build search attempted: True. Candidates 41, accepted 1, rejected 40. Top rejections: account_backend_issue_not_patch=3, cross_patch_duplicate=2, date_only_inference=1, generic_support_request=10, missing_kb_or_build=11, wrong_kb_for_current_patch=13. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 25H2
@@ -22478,7 +22478,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 100
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:54Z'
+  last_run: '2026-09-06T02:27:55Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5078127, 26100.7628. Exact KB/OS-build search attempted: True. Candidates 100, accepted 0, rejected 100. Top rejections: account_backend_issue_not_patch=5, cross_patch_duplicate=1, generic_support_request=32, missing_kb_or_build=37, release_announcement_not_user_report=1, vague_latest_update=4, wrong_feature_train_for_kb=2, wrong_kb_for_current_patch=18. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 23H2
@@ -22526,7 +22526,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 25
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:58Z'
+  last_run: '2026-09-06T02:27:58Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5077744, 26100.7627. Exact KB/OS-build search attempted: True. Candidates 25, accepted 0, rejected 25. Top rejections: account_backend_issue_not_patch=6, cross_patch_duplicate=1, generic_support_request=4, missing_kb_or_build=1, wrong_feature_train_for_kb=2, wrong_kb_for_current_patch=11. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 23H2
@@ -22574,7 +22574,7 @@ methods:
   accepted_reports: 9
   rejected_reports: 108
   blocked_reason: ''
-  last_run: '2026-09-06T01:30:01Z'
+  last_run: '2026-09-06T02:28:01Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5074109, 26100.7623. Exact KB/OS-build search attempted: True. Candidates 117, accepted 9, rejected 108. Top rejections: account_backend_issue_not_patch=5, cross_patch_duplicate=2, date_only_inference=1, generic_support_request=20, how_to_question_not_regression=1, missing_kb_or_build=43, missing_update_attribution=4, vague_latest_update=1, wrong_feature_train_for_kb=3, wrong_kb_for_current_patch=28. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 23H2
@@ -22622,7 +22622,7 @@ methods:
   accepted_reports: 8
   rejected_reports: 99
   blocked_reason: ''
-  last_run: '2026-09-06T01:30:05Z'
+  last_run: '2026-09-06T02:28:05Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5072033, 26100.7462. Exact KB/OS-build search attempted: True. Candidates 107, accepted 8, rejected 99. Top rejections: account_backend_issue_not_patch=2, build_only_in_system_specs=1, cross_patch_duplicate=5, generic_support_request=15, missing_kb_or_build=19, missing_update_attribution=3, vague_latest_update=3, wrong_feature_train_for_kb=7, wrong_kb_for_current_patch=44. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 23H2
@@ -22670,7 +22670,7 @@ methods:
   accepted_reports: 0
   rejected_reports: 33
   blocked_reason: ''
-  last_run: '2026-09-06T01:30:09Z'
+  last_run: '2026-09-06T02:28:08Z'
   notes: 'Microsoft Learn Q&A search RSS (learn.microsoft.com/api/search/rss) for microsoft-windows-11. Searched exact terms: KB5070311, 26100.7309. Exact KB/OS-build search attempted: True. Candidates 33, accepted 0, rejected 33. Top rejections: account_backend_issue_not_patch=1, generic_support_request=6, missing_kb_or_build=10, official_note_not_user_report=1, vague_latest_update=1, wrong_feature_train_for_kb=4, wrong_kb_for_current_patch=10. Candidates require exact KB/OS-build identity for the record''s current patch, a concrete issue, a specific question URL, and source date on/after release before counting.'
 - product_id: microsoft-windows-11
   update_version: 26H1
@@ -22710,16 +22710,16 @@ methods:
   method_id: techcommunity_windows_sitemap
   source_type: microsoft_tech_community
   status: no_results
-  candidates_found: 134
+  candidates_found: 130
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 134
+  rejected_reports: 130
   blocked_reason: ''
-  last_run: '2026-09-06T01:28:53Z'
-  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 142, unique after cross-post slug dedupe 134, hydrated 134. For this record: accepted 0, rejected 134. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
+  last_run: '2026-09-06T02:26:53Z'
+  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 138, unique after cross-post slug dedupe 130, hydrated 130. For this record: accepted 0, rejected 130. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
 - product_id: microsoft-windows-11
   update_version: 26H1
   target_build: '28000.2704'
@@ -22758,16 +22758,16 @@ methods:
   method_id: techcommunity_windows_sitemap
   source_type: microsoft_tech_community
   status: no_results
-  candidates_found: 134
+  candidates_found: 130
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 134
+  rejected_reports: 130
   blocked_reason: ''
-  last_run: '2026-09-06T01:28:56Z'
-  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 142, unique after cross-post slug dedupe 134, hydrated 134. For this record: accepted 0, rejected 134. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
+  last_run: '2026-09-06T02:26:57Z'
+  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 138, unique after cross-post slug dedupe 130, hydrated 130. For this record: accepted 0, rejected 130. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
 - product_id: microsoft-windows-11
   update_version: 23H2
   target_build: '22631.7517'
@@ -22822,16 +22822,16 @@ methods:
   method_id: techcommunity_windows_sitemap
   source_type: microsoft_tech_community
   status: no_results
-  candidates_found: 134
+  candidates_found: 130
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 134
+  rejected_reports: 130
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:00Z'
-  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 142, unique after cross-post slug dedupe 134, hydrated 134. For this record: accepted 0, rejected 134. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
+  last_run: '2026-09-06T02:27:00Z'
+  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 138, unique after cross-post slug dedupe 130, hydrated 130. For this record: accepted 0, rejected 130. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
 - product_id: microsoft-windows-11
   update_version: 25H2
   target_build: '26200.8894'
@@ -22854,16 +22854,16 @@ methods:
   method_id: techcommunity_windows_sitemap
   source_type: microsoft_tech_community
   status: no_results
-  candidates_found: 134
+  candidates_found: 130
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 134
+  rejected_reports: 130
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:03Z'
-  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 142, unique after cross-post slug dedupe 134, hydrated 134. For this record: accepted 0, rejected 134. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
+  last_run: '2026-09-06T02:27:03Z'
+  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 138, unique after cross-post slug dedupe 130, hydrated 130. For this record: accepted 0, rejected 130. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
 - product_id: microsoft-windows-11
   update_version: 26H1
   target_build: '28000.2525'
@@ -22902,16 +22902,16 @@ methods:
   method_id: techcommunity_windows_sitemap
   source_type: microsoft_tech_community
   status: no_results
-  candidates_found: 134
+  candidates_found: 130
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 134
+  rejected_reports: 130
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:07Z'
-  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 142, unique after cross-post slug dedupe 134, hydrated 134. For this record: accepted 0, rejected 134. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
+  last_run: '2026-09-06T02:27:07Z'
+  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 138, unique after cross-post slug dedupe 130, hydrated 130. For this record: accepted 0, rejected 130. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
 - product_id: microsoft-windows-11
   update_version: 23H2
   target_build: '22631.7376'
@@ -22966,16 +22966,16 @@ methods:
   method_id: techcommunity_windows_sitemap
   source_type: microsoft_tech_community
   status: no_results
-  candidates_found: 134
+  candidates_found: 130
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 134
+  rejected_reports: 130
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:10Z'
-  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 142, unique after cross-post slug dedupe 134, hydrated 134. For this record: accepted 0, rejected 134. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
+  last_run: '2026-09-06T02:27:10Z'
+  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 138, unique after cross-post slug dedupe 130, hydrated 130. For this record: accepted 0, rejected 130. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
 - product_id: microsoft-windows-11
   update_version: 26H1
   target_build: '28000.2269'
@@ -23014,16 +23014,16 @@ methods:
   method_id: techcommunity_windows_sitemap
   source_type: microsoft_tech_community
   status: no_results
-  candidates_found: 134
+  candidates_found: 130
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 134
+  rejected_reports: 130
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:13Z'
-  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 142, unique after cross-post slug dedupe 134, hydrated 134. For this record: accepted 0, rejected 134. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
+  last_run: '2026-09-06T02:27:13Z'
+  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 138, unique after cross-post slug dedupe 130, hydrated 130. For this record: accepted 0, rejected 130. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
 - product_id: microsoft-windows-11
   update_version: 23H2
   target_build: '22631.7219'
@@ -23078,16 +23078,16 @@ methods:
   method_id: techcommunity_windows_sitemap
   source_type: microsoft_tech_community
   status: no_results
-  candidates_found: 134
+  candidates_found: 130
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 134
+  rejected_reports: 130
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:17Z'
-  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 142, unique after cross-post slug dedupe 134, hydrated 134. For this record: accepted 0, rejected 134. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
+  last_run: '2026-09-06T02:27:17Z'
+  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 138, unique after cross-post slug dedupe 130, hydrated 130. For this record: accepted 0, rejected 130. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
 - product_id: microsoft-windows-11
   update_version: 26H1
   target_build: '28000.2113'
@@ -23126,16 +23126,16 @@ methods:
   method_id: techcommunity_windows_sitemap
   source_type: microsoft_tech_community
   status: success
-  candidates_found: 134
+  candidates_found: 130
   accepted_candidates: 1
   duplicate_existing_evidence: 0
   evidence_rows_added: 1
   public_counted_reports: 1
   accepted_reports: 1
-  rejected_reports: 133
+  rejected_reports: 129
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:20Z'
-  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 142, unique after cross-post slug dedupe 134, hydrated 134. For this record: accepted 1, rejected 133. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
+  last_run: '2026-09-06T02:27:20Z'
+  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 138, unique after cross-post slug dedupe 130, hydrated 130. For this record: accepted 1, rejected 129. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
 - product_id: microsoft-windows-11
   update_version: 23H2
   target_build: '22631.7079'
@@ -23190,16 +23190,16 @@ methods:
   method_id: techcommunity_windows_sitemap
   source_type: microsoft_tech_community
   status: no_results
-  candidates_found: 134
+  candidates_found: 130
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 134
+  rejected_reports: 130
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:24Z'
-  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 142, unique after cross-post slug dedupe 134, hydrated 134. For this record: accepted 0, rejected 134. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
+  last_run: '2026-09-06T02:27:23Z'
+  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 138, unique after cross-post slug dedupe 130, hydrated 130. For this record: accepted 0, rejected 130. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
 - product_id: microsoft-windows-11
   update_version: 26H1
   target_build: '28000.1836'
@@ -23238,16 +23238,16 @@ methods:
   method_id: techcommunity_windows_sitemap
   source_type: microsoft_tech_community
   status: no_results
-  candidates_found: 134
+  candidates_found: 130
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 134
+  rejected_reports: 130
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:28Z'
-  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 142, unique after cross-post slug dedupe 134, hydrated 134. For this record: accepted 0, rejected 134. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
+  last_run: '2026-09-06T02:27:27Z'
+  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 138, unique after cross-post slug dedupe 130, hydrated 130. For this record: accepted 0, rejected 130. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
 - product_id: microsoft-windows-11
   update_version: 23H2
   target_build: '22631.6936'
@@ -23286,16 +23286,16 @@ methods:
   method_id: techcommunity_windows_sitemap
   source_type: microsoft_tech_community
   status: no_results
-  candidates_found: 134
+  candidates_found: 130
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 134
+  rejected_reports: 130
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:31Z'
-  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 142, unique after cross-post slug dedupe 134, hydrated 134. For this record: accepted 0, rejected 134. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
+  last_run: '2026-09-06T02:27:30Z'
+  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 138, unique after cross-post slug dedupe 130, hydrated 130. For this record: accepted 0, rejected 130. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
 - product_id: microsoft-windows-11
   update_version: 26H1
   target_build: '28000.1764'
@@ -23334,16 +23334,16 @@ methods:
   method_id: techcommunity_windows_sitemap
   source_type: microsoft_tech_community
   status: no_results
-  candidates_found: 134
+  candidates_found: 130
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 134
+  rejected_reports: 130
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:34Z'
-  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 142, unique after cross-post slug dedupe 134, hydrated 134. For this record: accepted 0, rejected 134. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
+  last_run: '2026-09-06T02:27:33Z'
+  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 138, unique after cross-post slug dedupe 130, hydrated 130. For this record: accepted 0, rejected 130. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
 - product_id: microsoft-windows-11
   update_version: 25H2
   target_build: '26200.8039'
@@ -23366,16 +23366,16 @@ methods:
   method_id: techcommunity_windows_sitemap
   source_type: microsoft_tech_community
   status: no_results
-  candidates_found: 134
+  candidates_found: 130
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 134
+  rejected_reports: 130
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:37Z'
-  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 142, unique after cross-post slug dedupe 134, hydrated 134. For this record: accepted 0, rejected 134. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
+  last_run: '2026-09-06T02:27:37Z'
+  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 138, unique after cross-post slug dedupe 130, hydrated 130. For this record: accepted 0, rejected 130. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
 - product_id: microsoft-windows-11
   update_version: 26H1
   target_build: '28000.1719'
@@ -23414,16 +23414,16 @@ methods:
   method_id: techcommunity_windows_sitemap
   source_type: microsoft_tech_community
   status: no_results
-  candidates_found: 134
+  candidates_found: 130
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 134
+  rejected_reports: 130
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:41Z'
-  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 142, unique after cross-post slug dedupe 134, hydrated 134. For this record: accepted 0, rejected 134. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
+  last_run: '2026-09-06T02:27:40Z'
+  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 138, unique after cross-post slug dedupe 130, hydrated 130. For this record: accepted 0, rejected 130. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
 - product_id: microsoft-windows-11
   update_version: 23H2
   target_build: '22631.6783'
@@ -23478,16 +23478,16 @@ methods:
   method_id: techcommunity_windows_sitemap
   source_type: microsoft_tech_community
   status: no_results
-  candidates_found: 134
+  candidates_found: 130
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 134
+  rejected_reports: 130
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:44Z'
-  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 142, unique after cross-post slug dedupe 134, hydrated 134. For this record: accepted 0, rejected 134. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
+  last_run: '2026-09-06T02:27:44Z'
+  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 138, unique after cross-post slug dedupe 130, hydrated 130. For this record: accepted 0, rejected 130. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
 - product_id: microsoft-windows-11
   update_version: 26H1
   target_build: '28000.1575'
@@ -23526,16 +23526,16 @@ methods:
   method_id: techcommunity_windows_sitemap
   source_type: microsoft_tech_community
   status: no_results
-  candidates_found: 134
+  candidates_found: 130
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 134
+  rejected_reports: 130
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:48Z'
-  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 142, unique after cross-post slug dedupe 134, hydrated 134. For this record: accepted 0, rejected 134. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
+  last_run: '2026-09-06T02:27:47Z'
+  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 138, unique after cross-post slug dedupe 130, hydrated 130. For this record: accepted 0, rejected 130. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
 - product_id: microsoft-windows-11
   update_version: 23H2
   target_build: '22631.6649'
@@ -23574,16 +23574,16 @@ methods:
   method_id: techcommunity_windows_sitemap
   source_type: microsoft_tech_community
   status: no_results
-  candidates_found: 134
+  candidates_found: 130
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 134
+  rejected_reports: 130
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:51Z'
-  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 142, unique after cross-post slug dedupe 134, hydrated 134. For this record: accepted 0, rejected 134. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
+  last_run: '2026-09-06T02:27:50Z'
+  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 138, unique after cross-post slug dedupe 130, hydrated 130. For this record: accepted 0, rejected 130. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
 - product_id: microsoft-windows-11
   update_version: 25H2
   target_build: '26200.7628'
@@ -23606,16 +23606,16 @@ methods:
   method_id: techcommunity_windows_sitemap
   source_type: microsoft_tech_community
   status: no_results
-  candidates_found: 134
+  candidates_found: 130
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 134
+  rejected_reports: 130
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:54Z'
-  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 142, unique after cross-post slug dedupe 134, hydrated 134. For this record: accepted 0, rejected 134. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
+  last_run: '2026-09-06T02:27:55Z'
+  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 138, unique after cross-post slug dedupe 130, hydrated 130. For this record: accepted 0, rejected 130. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
 - product_id: microsoft-windows-11
   update_version: 23H2
   target_build: '22631.6495'
@@ -23654,16 +23654,16 @@ methods:
   method_id: techcommunity_windows_sitemap
   source_type: microsoft_tech_community
   status: no_results
-  candidates_found: 134
+  candidates_found: 130
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 134
+  rejected_reports: 130
   blocked_reason: ''
-  last_run: '2026-09-06T01:29:58Z'
-  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 142, unique after cross-post slug dedupe 134, hydrated 134. For this record: accepted 0, rejected 134. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
+  last_run: '2026-09-06T02:27:58Z'
+  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 138, unique after cross-post slug dedupe 130, hydrated 130. For this record: accepted 0, rejected 130. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
 - product_id: microsoft-windows-11
   update_version: 23H2
   target_build: '22631.6494'
@@ -23702,16 +23702,16 @@ methods:
   method_id: techcommunity_windows_sitemap
   source_type: microsoft_tech_community
   status: no_results
-  candidates_found: 134
+  candidates_found: 130
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 134
+  rejected_reports: 130
   blocked_reason: ''
-  last_run: '2026-09-06T01:30:01Z'
-  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 142, unique after cross-post slug dedupe 134, hydrated 134. For this record: accepted 0, rejected 134. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
+  last_run: '2026-09-06T02:28:01Z'
+  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 138, unique after cross-post slug dedupe 130, hydrated 130. For this record: accepted 0, rejected 130. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
 - product_id: microsoft-windows-11
   update_version: 23H2
   target_build: '22631.6491'
@@ -23750,16 +23750,16 @@ methods:
   method_id: techcommunity_windows_sitemap
   source_type: microsoft_tech_community
   status: no_results
-  candidates_found: 134
+  candidates_found: 130
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 134
+  rejected_reports: 130
   blocked_reason: ''
-  last_run: '2026-09-06T01:30:05Z'
-  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 142, unique after cross-post slug dedupe 134, hydrated 134. For this record: accepted 0, rejected 134. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
+  last_run: '2026-09-06T02:28:05Z'
+  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 138, unique after cross-post slug dedupe 130, hydrated 130. For this record: accepted 0, rejected 130. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
 - product_id: microsoft-windows-11
   update_version: 23H2
   target_build: '22631.6345'
@@ -23798,13 +23798,13 @@ methods:
   method_id: techcommunity_windows_sitemap
   source_type: microsoft_tech_community
   status: no_results
-  candidates_found: 134
+  candidates_found: 130
   accepted_candidates: 0
   duplicate_existing_evidence: 0
   evidence_rows_added: 0
   public_counted_reports: 0
   accepted_reports: 0
-  rejected_reports: 134
+  rejected_reports: 130
   blocked_reason: ''
-  last_run: '2026-09-06T01:30:09Z'
-  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 142, unique after cross-post slug dedupe 134, hydrated 134. For this record: accepted 0, rejected 134. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
+  last_run: '2026-09-06T02:28:08Z'
+  notes: 'Microsoft Tech Community discussion sitemaps (techcommunity.microsoft.com) for microsoft-windows-11. Enumerated spaces: sitemap_windows11.xml.gz, sitemap_windows10space.xml.gz, sitemap_windowsinsiderprogram.xml.gz, sitemap_windows-servicing.xml.gz, sitemap_windowsosplatformdiscussions.xml.gz, sitemap_windows-deployment.xml.gz. Threads listed with a KB/OS-build slug 138, unique after cross-post slug dedupe 130, hydrated 130. For this record: accepted 0, rejected 130. The pool is enumerated once per run and offered to every record; the unchanged Windows authority decides which patch each thread belongs to. Discovery admits only threads whose URL slug already carries a KB or OS build, so a thread naming its patch only in the body is out of reach of this method.'
