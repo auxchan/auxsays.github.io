@@ -27967,3 +27967,33 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8655'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5995049-hp-pro-tower-290-g9-kb5121003-causes-b
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5995049/hp-pro-tower-290-g9-kb5121003-causes-boot-failure
+  parent_title: HP Pro Tower 290 G9 – KB5121003 causes boot failure and severe NTFS corruption after clean Windows 11 install - Microsoft Q&A
+  report_title: HP Pro Tower 290 G9 – KB5121003 causes boot failure and severe NTFS corruption after clean Windows 11 install - Microsoft Q&A
+  report_text_excerpt: HP Pro Tower 290 G9 – KB5121003 causes boot failure and severe NTFS corruption after clean Windows 11 install - Microsoft Q&A I’m working with a batch of five new HP Pro Tower 290 G9 desktops and have been troubleshooting repeated Windows 11 boot failures that appear to be...
+  captured_at: '2026-09-06T12:13:29Z'
+  source_date: '2026-09-05'
+  target_release_date: '2026-08-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9168'
+  match_basis: exact_os_build
+  matched_kb: KB5121003
+  matched_os_build: '26200.9168'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: boot failure
+  workflow_area: startup / boot
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9168'
