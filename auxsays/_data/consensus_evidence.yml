@@ -27893,3 +27893,121 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.7462'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-title-severe-font-rendering-issue-after
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windows11/title-severe-font-rendering-issue-after-installing-kb5122385-and-kb5120998-on-wi/4551614
+  parent_title: 'Title: Severe Font Rendering Issue After Installing KB5122385 and KB5120998 on Windows 11 25H2'
+  report_title: 'Title: Severe Font Rendering Issue After Installing KB5122385 and KB5120998 on Windows 11 25H2'
+  report_text_excerpt: 'Title: Severe Font Rendering Issue After Installing KB5122385 and KB5120998 on Windows 11 25H2 &amp;nbsp;&amp;nbsp;&amp;nbsp;Hello Microsoft Team,&amp;nbsp;I would like to report a significant font rendering issue that appeared immediately after installing Windows updates...'
+  captured_at: '2026-09-06T03:26:01Z'
+  source_date: '2026-08-30'
+  target_release_date: '2026-08-27'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5120998
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5120998
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9278'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-kb5101650-kb5121003-thunderbolt-4-nvme-c
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windows11/kb5101650--kb5121003-thunderbolt-4-nvme-causes-whea-pcie-errors-bugcheck-or-hang/4550826
+  parent_title: 'KB5101650 / KB5121003: Thunderbolt 4 NVMe causes WHEA PCIe errors, bugcheck or hang, rollback fixes'
+  report_title: 'KB5101650 / KB5121003: Thunderbolt 4 NVMe causes WHEA PCIe errors, bugcheck or hang, rollback fixes'
+  report_text_excerpt: 'KB5101650 / KB5121003: Thunderbolt 4 NVMe causes WHEA PCIe errors, bugcheck or hang, rollback fixes Looking for anyone else seeing this since the July or August 2026 cumulative updates.&amp;nbsp;Hardware: ASUS ProArt Z790-CREATOR WIFI (BIOS 2801), Core i9-14900KF, Windows 11...'
+  captured_at: '2026-09-06T03:26:01Z'
+  source_date: '2026-08-27'
+  target_release_date: '2026-08-27'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5120998
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5120998
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9278'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-file-history-broken-after-kb5101684-kb51
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windows11/file-history-broken-after-kb5101684--kb5120249/4551560
+  parent_title: File History Broken After KB5101684 &amp; KB5120249?
+  report_title: File History Broken After KB5101684 &amp; KB5120249?
+  report_text_excerpt: 'File History Broken After KB5101684 &amp; KB5120249? Hello everyone,(Note: I previously posted this issue on several community channels and feedback hubs, but only received a few hundred views and a few responses. Because this issue severely impacts daily backups on multiple...'
+  captured_at: '2026-09-06T03:26:24Z'
+  source_date: '2026-08-30'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5101684
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5101684
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8973'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-kb5101650kb5121003-hang-thunderbolt-4-nv
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windows11/kb5101650kb5121003-hang-thunderbolt-4-nvme-%e2%86%92-whea-17%e2%86%92-bugcheck-0xa--z790-26200-8/4550187
+  parent_title: 'KB5101650/KB5121003 hang: Thunderbolt 4 NVMe → WHEA 17→ bugcheck 0xA / (Z790, 26200.8655 clean) | Microsoft Community Hub'
+  report_title: 'KB5101650/KB5121003 hang: Thunderbolt 4 NVMe → WHEA 17→ bugcheck 0xA / (Z790, 26200.8655 clean) | Microsoft Community Hub'
+  report_text_excerpt: 'KB5101650/KB5121003 hang: Thunderbolt 4 NVMe → WHEA 17→ bugcheck 0xA / (Z790, 26200.8655 clean) | Microsoft Community Hub'
+  captured_at: '2026-09-06T03:27:03Z'
+  source_date: '2026-08-25'
+  target_release_date: '2026-06-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8655'
+  match_basis: exact_os_build
+  matched_os_build: '26200.8655'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8655'
