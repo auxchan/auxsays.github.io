@@ -421,6 +421,48 @@ def run() -> int:  # noqa: PLR0915
                                                        str(r.get("matched_os_build") or ""))],
           "a live row still names its build as a prospective fix")
 
+    # ---------------- M: a headline is not a report ----------------
+    print(NEWLINE + "[M] a Tech Community thread with no opening post is not a candidate")
+    QAPAGE = ('<script type="application/ld+json">{"@type":"QAPage","mainEntity":'
+              '{"name":"KB5121003 breaks USB","text":"After installing KB5121003 my USB fails.",'
+              '"dateCreated":"2026-08-12T10:00:00Z"}}</script>')
+    BREADCRUMB_ONLY = ('<script type="application/ld+json">{"@type":"BreadcrumbList",'
+                       '"itemListElement":[]}</script>'
+                       '<meta property="og:title" content="KB5101650/KB5121003 hang: bugcheck 0xA '
+                       '/ (Z790, 26200.8655 clean) | Microsoft Community Hub">')
+    url = "https://techcommunity.microsoft.com/discussions/windows11/x/1"
+    with_post = tc.thread_candidate(url, date="2026-08-25", page_html=QAPAGE,
+                                    source_type=mw.TECHCOMMUNITY_SOURCE_TYPE,
+                                    source_name=mw.TECHCOMMUNITY_SOURCE_NAME)
+    without = tc.thread_candidate(url, date="2026-08-25", page_html=BREADCRUMB_ONLY,
+                                  source_type=mw.TECHCOMMUNITY_SOURCE_TYPE,
+                                  source_name=mw.TECHCOMMUNITY_SOURCE_NAME)
+    check("M a thread with an opening post is still a candidate", with_post is not None)
+    check("M a thread whose page carries no QAPage yields NO candidate", without is None,
+          f"a page title became a report: {without}")
+    check("M the refused page is exactly the measured live one",
+          "26200.8655 clean" in BREADCRUMB_ONLY and "Microsoft Community Hub" in BREADCRUMB_ONLY)
+    tab_row = {"product_id": mw.PRODUCT_ID, "counted": True,
+               "source_type": repair.TECHCOMMUNITY_SOURCE_TYPE, "target_build": "26200.8655",
+               "report_title": "KB5101650 hang (Z790, 26200.8655 clean) | Microsoft Community Hub",
+               "report_text_excerpt": "KB5101650 hang (Z790, 26200.8655 clean) | Microsoft Community Hub"}
+    short_learn = {"product_id": mw.PRODUCT_ID, "counted": True,
+                   "source_type": "microsoft_learn_qna", "target_build": "26200.8655",
+                   "report_title": "hi, whenever i launch a game on 25h2 26200.8655 it crashes",
+                   "report_text_excerpt": "hi, whenever i launch a game on 25h2 26200.8655 it crashes"}
+    check("M the stored tab-title row is retracted", repair.retract_no_opening_post(tab_row)
+          and tab_row["counted"] is False
+          and tab_row["exclusion_reason"] == repair.NO_OPENING_POST_REASON)
+    check("M the retracted row KEEPS its build", tab_row["target_build"] == "26200.8655")
+    check("M a genuinely short Learn Q&A report whose excerpt equals its title is untouched",
+          not repair.retract_no_opening_post(short_learn) and short_learn["counted"] is True,
+          "the fingerprint is not specific to the hydration failure")
+    live_tab = [r for r in counted
+                if str(r.get("source_type") or "") == repair.TECHCOMMUNITY_SOURCE_TYPE
+                and " ".join(str(r.get("report_title") or "").split()).endswith(repair.TAB_TITLE_SUFFIX)]
+    check("M no counted Windows row is only a page title", not live_tab,
+          "; ".join(str(r.get("report_title"))[:60] for r in live_tab[:3]))
+
     print()
     print("=" * 78)
     print(f"Results: {_PASS}/{_PASS + _FAIL} passed, {_FAIL} failed")

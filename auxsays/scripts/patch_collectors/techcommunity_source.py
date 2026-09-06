@@ -228,7 +228,16 @@ def thread_candidate(url: str, *, date: str, page_html: str, source_type: str,
     if not title:
         meta = re.search(r'<meta[^>]+property="og:title"[^>]+content="([^"]+)"', page_html)
         title = meta.group(1).strip() if meta else ""
-    if not title and not body:
+    # NO OPENING POST, NO CANDIDATE. A title is a headline, not a report. Measured: 7 of 132
+    # Windows threads serve only a BreadcrumbList JSON-LD -- no QAPage, no mainEntity -- so this
+    # function fell through to the og:title meta and returned a candidate whose entire report_text
+    # was the browser tab title, "... | Microsoft Community Hub". One of them reached production and
+    # was counted for build 26200.8655 on the strength of the words "hang" and "bugcheck" in that
+    # title, while the title's actual claim is "(Z790, 26200.8655 clean)" -- the reporter naming
+    # that build as the one WITHOUT the defect. With no body there is nothing for any downstream
+    # role or contrast rule to read, so the only safe reading of a body-less thread is that it is
+    # not a report. The other 6 were refused by the authority anyway, so this costs no yield.
+    if not body:
         return None
     return {
         "source_type": source_type,
