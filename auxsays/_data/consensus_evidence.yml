@@ -27389,3 +27389,507 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.7309'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-kb5121003-breaks-amd-x470-usb-xhci-drive
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windows11/kb5121003-breaks-amd-x470-usb-xhci-driver-power-state-failure-0x9f/4546438
+  parent_title: 'KB5121003 breaks AMD X470 USB xHCI: DRIVER_POWER_STATE_FAILURE 0x9F'
+  report_title: 'KB5121003 breaks AMD X470 USB xHCI: DRIVER_POWER_STATE_FAILURE 0x9F'
+  report_text_excerpt: 'KB5121003 breaks AMD X470 USB xHCI: DRIVER_POWER_STATE_FAILURE 0x9F I am reporting what appears to be a USB/xHCI regression immediately following installation of the August 11, 2026 cumulative update KB5121003 on Windows 11 25H2.&amp;nbsp;System information&amp;nbsp;- OS:...'
+  captured_at: '2026-09-06T00:07:48Z'
+  source_date: '2026-08-12'
+  target_release_date: '2026-08-11'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.9168'
+  match_basis: exact_os_build
+  matched_kb: KB5121003
+  matched_os_build: '26200.9168'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9168'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-kb5101684kb5120249-caused-file-history-e
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windows11/kb5101684kb5120249-caused-file-history-errors-but-microsoft-has-not-acknowledged/4550372
+  parent_title: KB5101684/KB5120249 caused File History errors, but Microsoft has not acknowledged them.
+  report_title: KB5101684/KB5120249 caused File History errors, but Microsoft has not acknowledged them.
+  report_text_excerpt: KB5101684/KB5120249 caused File History errors, but Microsoft has not acknowledged them. Acer laptop (Windows 11 25H2, LAPTOP-GJTRIQFJ, Nitro AN515-57)desktop (Windows 10 22H2, 202108, Acer PC Aspire M1935)I recently posted on Microsoft Learn, Reddit, and Microsoft Community...
+  captured_at: '2026-09-06T00:07:59Z'
+  source_date: '2026-08-26'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5101684
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5101684
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Windows issue
+  workflow_area: Windows workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8973'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windowsinsiderprogram-win-11-25h2-kb5101684-previe
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windowsinsiderprogram/win-11-25h2-kb5101684-preview-and-win-10-22h2-kb5120249-issue/4547615
+  parent_title: win 11 25H2 KB5101684 Preview and win 10 22H2 KB5120249 issue
+  report_title: win 11 25H2 KB5101684 Preview and win 10 22H2 KB5120249 issue
+  report_text_excerpt: win 11 25H2 KB5101684 Preview and win 10 22H2 KB5120249 issue &amp;nbsp;Hi everyone,I’m wondering if anyone else is experiencing the same File History problems on Windows 10 or Windows 11.My laptop is running Windows 11 25H2. Before installing KB5101684, File History worked...
+  captured_at: '2026-09-06T00:07:59Z'
+  source_date: '2026-08-17'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5101684
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5101684
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8973'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-how-to-stop-the-win-11-kb5094126-install
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windows11/how-to-stop-the-win-11-kb5094126-installation-loop-and-safely-upgrade-from-march/4539047
+  parent_title: How to Stop the Win 11 KB5094126 Installation Loop and Safely Upgrade From March Baseline Risk-Free
+  report_title: How to Stop the Win 11 KB5094126 Installation Loop and Safely Upgrade From March Baseline Risk-Free
+  report_text_excerpt: How to Stop the Win 11 KB5094126 Installation Loop and Safely Upgrade From March Baseline Risk-Free Hello, I need some advice regarding a persistent Windows Update installation loop affecting my machine. My system is currently on a March baseline and is out of date. My primary...
+  captured_at: '2026-09-06T00:08:14Z'
+  source_date: '2026-07-20'
+  target_release_date: '2026-07-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5101650
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5101650
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8875'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-latest-windows-update-breaks-audio-kb510
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windows11/latest-windows-update-breaks-audio-kb5101650/4538369
+  parent_title: Latest Windows Update Breaks Audio (KB5101650)
+  report_title: Latest Windows Update Breaks Audio (KB5101650)
+  report_text_excerpt: Latest Windows Update Breaks Audio (KB5101650) The update KB5101650 came in yesterday to my machine running 25H2.&amp;nbsp;Today audio was unusable. I checked all the usual suspects including RTC processor affinity etc. and was unable to find the problem&amp;nbsp;Lenovo Laptop...
+  captured_at: '2026-09-06T00:08:14Z'
+  source_date: '2026-07-17'
+  target_release_date: '2026-07-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5101650
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5101650
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8875'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-case-study-windows-update-kb5094126-caus
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windows11/case-study-windows-update-kb5094126-causes-data-loss/4538900
+  parent_title: 'Case Study: Windows Update KB5094126 Causes Data Loss'
+  report_title: 'Case Study: Windows Update KB5094126 Causes Data Loss'
+  report_text_excerpt: 'Case Study: Windows Update KB5094126 Causes Data Loss Two Independent Incidents – Custom Build (ASUS Z390) and HP PavilionAuthor: Wasmut Fiedler, Dipl.-Inf. (FH) · IT Consultant · July 19, 2026SummaryThe Windows 11 June 2026 Patch Tuesday update KB5094126 (Build 26200.8655 /...'
+  captured_at: '2026-09-06T00:08:34Z'
+  source_date: '2026-07-20'
+  target_release_date: '2026-06-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8655'
+  match_basis: exact_os_build
+  matched_kb: KB5094126
+  matched_os_build: '26200.8655'
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: BSOD / stop error
+  workflow_area: system stability
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8655'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windowsinsiderprogram-urgent-stuck-kb5094126-2026
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windowsinsiderprogram/urgent-stuck-kb5094126-2026-06-security-update-loop-on-asus-m413a/4538362
+  parent_title: 'Urgent: Stuck KB5094126 (2026-06 Security Update) Loop on ASUS M413A'
+  report_title: 'Urgent: Stuck KB5094126 (2026-06 Security Update) Loop on ASUS M413A'
+  report_text_excerpt: 'Urgent: Stuck KB5094126 (2026-06 Security Update) Loop on ASUS M413A Hello, I have a very urgent issue. I am running an ASUS M413A Model M413IA-EB211T laptop running in the Windows 11 Insider Preview program.Right now, my machine is caught in a persistent and highly aggressive...'
+  captured_at: '2026-09-06T00:08:34Z'
+  source_date: '2026-07-17'
+  target_release_date: '2026-06-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8655'
+  match_basis: exact_os_build
+  matched_kb: KB5094126
+  matched_os_build: '26200.8655'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: boot failure
+  workflow_area: startup / boot
+  platform: windows
+  severity: critical
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8655'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windowsinsiderprogram-kb5089573-forced-install-len
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windowsinsiderprogram/kb5089573-forced-install--lenovo-network-stack-degradation-https-latency-build-2/4524034
+  parent_title: KB5089573 forced install + Lenovo network stack degradation (HTTPS latency, build 26200.8524)
+  report_title: KB5089573 forced install + Lenovo network stack degradation (HTTPS latency, build 26200.8524)
+  report_text_excerpt: KB5089573 forced install + Lenovo network stack degradation (HTTPS latency, build 26200.8524) KB5089573 installed automatically on a Lenovo system despite updates being paused and no preview updates enabled. After installation, the system jumped to build 26200.8524 and the...
+  captured_at: '2026-09-06T00:08:46Z'
+  source_date: '2026-05-29'
+  target_release_date: '2026-05-26'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8524'
+  match_basis: exact_os_build
+  matched_kb: KB5089573
+  matched_os_build: '26200.8524'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8524'
+
+- id: microsoft-windows-11-24h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-why-was-the-upgrade-to-26100-8457-so-mas
+  product_id: microsoft-windows-11
+  update_version: 24H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windows11/why-was-the-upgrade-to-26100-8457-so-massive/4527032
+  parent_title: Why was the upgrade to 26100.8457 so massive?
+  report_title: Why was the upgrade to 26100.8457 so massive?
+  report_text_excerpt: Why was the upgrade to 26100.8457 so massive? &amp;nbsp;The upgrade to build 26100.8457 has failed to install through Windows Update, and I noticed the update seems unusually massive in size. Is this build so large that downloading a fresh ISO and performing an in-place...
+  captured_at: '2026-09-06T00:09:01Z'
+  source_date: '2026-06-10'
+  target_release_date: '2026-05-12'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26100.8457'
+  match_basis: exact_os_build
+  matched_os_build: '26100.8457'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26100.8457'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windowsinsiderprogram-kb5077241-broke-wifi-windows
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windowsinsiderprogram/kb5077241-broke-wifi-windows-on-arm/4497623
+  parent_title: KB5077241 broke wifi (Windows on Arm)
+  report_title: KB5077241 broke wifi (Windows on Arm)
+  report_text_excerpt: KB5077241 broke wifi (Windows on Arm) Installed the KB5077241 yesterday on my Lenovo Yoga Slim 7x running Windows On Arm (Qualcomm Snapdragon X elite). Windows 11 25H2 Pro.After the install and reboot wifi no longer works. Device manager shows the wifi card as working. But the...
+  captured_at: '2026-09-06T00:10:02Z'
+  source_date: '2026-02-26'
+  target_release_date: '2026-02-24'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5077241
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5077241
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.7922'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-unable-to-download-kb5077181-4496435
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windows11/unable-to-download-kb5077181/4496435
+  parent_title: Unable to download KB5077181
+  report_title: Unable to download KB5077181
+  report_text_excerpt: Unable to download KB5077181 I have a Dell Desktop XPS 8930, 64 bits.&amp;nbsp;I migrated from Windows 10 to Windows 11 Pro in January.I lost WiFi during that migration, but managed to recover it with Dell&apos;s help.&amp;nbsp;my OS is now Windows 11 Pro, 25H2, build...
+  captured_at: '2026-09-06T00:10:10Z'
+  source_date: '2026-02-23'
+  target_release_date: '2026-02-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5077181
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5077181
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.7840'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-unable-to-manually-install-kb5074109-449
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windows11/unable-to-manually-install-kb5074109/4494943
+  parent_title: Unable to manually install KB5074109
+  report_title: Unable to manually install KB5074109
+  report_text_excerpt: Unable to manually install KB5074109 I have an HP Laptop with version 25H2 OS build 26C200.6584 with x64 bit.&amp;nbsp; I had tried to manually install KB5074109 thru the Microsoft Catalog, but getting an error message code Ox80070241.&amp;nbsp; Is there a way to fix this, or...
+  captured_at: '2026-09-06T00:10:10Z'
+  source_date: '2026-02-13'
+  target_release_date: '2026-02-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5077181
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5077181
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.7840'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-kb5074109-kb5077181-4494491
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windows11/kb5074109--kb5077181/4494491
+  parent_title: KB5074109 &amp; KB5077181
+  report_title: KB5074109 &amp; KB5077181
+  report_text_excerpt: KB5074109 &amp; KB5077181 Thanks for your help regarding KB5074109I have a HP Laptop, now with version 25h2 OS build 26200.6584 with 64 bit...&amp;nbsp; I have one more question.&amp;nbsp; I noticed that Microsoft has replaced KB5074109 with KB077181 which it also...
+  captured_at: '2026-09-06T00:10:10Z'
+  source_date: '2026-02-11'
+  target_release_date: '2026-02-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5077181
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5077181
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.7840'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-kb5077181-update-causes-hdmi-port-to-fai
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windows11/kb5077181-update-causes-hdmi-port-to-fail/4494548
+  parent_title: KB5077181 update causes HDMI port to fail
+  report_title: KB5077181 update causes HDMI port to fail
+  report_text_excerpt: 'KB5077181 update causes HDMI port to fail KB5077181 update causes HDMI port to fail. Worked prior to this 2/11/2026 update.K have the 3 display devices: Dell 1536 Laptop Integrated Display, dual monitor duplicated on HP2301 Monitor on USB-C port. Prior to the update, the...'
+  captured_at: '2026-09-06T00:10:10Z'
+  source_date: '2026-02-12'
+  target_release_date: '2026-02-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5077181
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5077181
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.7840'
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-february-10-2026-e2-80-94kb5077181-os-bu
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windows11/february-10-2026%e2%80%94kb5077181-os-builds-26200-7840-and-26100-7840/4494777
+  parent_title: February 10, 2026—KB5077181 (OS Builds 26200.7840 and 26100.7840)
+  report_title: February 10, 2026—KB5077181 (OS Builds 26200.7840 and 26100.7840)
+  report_text_excerpt: February 10, 2026—KB5077181 (OS Builds 26200.7840 and 26100.7840) Hi, i installed this upodate and My gigabyte GCC software lost fan control. Also Samsung Magician does not start normally and needs to be exit and re start. Uninstalled the update then it&apos;s ok. Pls fix it...
+  captured_at: '2026-09-06T00:10:10Z'
+  source_date: '2026-02-13'
+  target_release_date: '2026-02-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.7840'
+  match_basis: exact_os_build
+  matched_kb: KB5077181
+  matched_os_build: '26200.7840'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.7840'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-installation-failure-of-kb5074109-on-win
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windows11/installation-failure-of-kb5074109-on-windows-11-25h2-multi-session-%e2%80%93-error-0x800/4485889
+  parent_title: Installation Failure of KB5074109 on Windows 11 25H2 Multi-Session – Error 0x80073712
+  report_title: Installation Failure of KB5074109 on Windows 11 25H2 Multi-Session – Error 0x80073712
+  report_text_excerpt: Installation Failure of KB5074109 on Windows 11 25H2 Multi-Session – Error 0x80073712 We are experiencing persistent issues installing the latest Windows update, KB5074109, on Windows 11 25H2 Multi-Session running in Azure. The installation fails on multiple machines with...
+  captured_at: '2026-09-06T00:10:43Z'
+  source_date: '2026-01-15'
+  target_release_date: '2026-01-13'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5074109
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5074109
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.7623'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-after-kb5072033-my-app-starts-then-is-go
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windows11/after-kb5072033-my-app-starts-then-is-gone/4481419
+  parent_title: After KB5072033, my app starts, then is gone
+  report_title: After KB5072033, my app starts, then is gone
+  report_text_excerpt: After KB5072033, my app starts, then is gone I developed an app using Borland Delphi that has run successfully with no changes made since 2002.The app does NOT make any use of the internet, only local files accessed using the Borland Database Engine.The app has worked under a...
+  captured_at: '2026-09-06T00:10:52Z'
+  source_date: '2025-12-27'
+  target_release_date: '2025-12-09'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.7462'
+  match_basis: exact_os_build
+  matched_kb: KB5072033
+  matched_os_build: '26200.7462'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.7462'
