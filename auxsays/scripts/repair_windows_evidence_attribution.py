@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Apply two measured Windows corrections to evidence ALREADY stored.
+"""Apply measured Windows corrections to evidence ALREADY stored.
 
 Both corrections ship in `patch_collectors/microsoft_windows.py`, and both only reach rows
 collected AFTER they ship: `append_evidence_rows` refuses a source_url that already exists, so a
@@ -21,9 +21,16 @@ true of new evidence and false of the evidence already on the live pages.
      full thread instead was measured and rejected: the stored excerpt disagrees with the full text
      on 44 of 105 rows, so a full-text pass would silently rewrite themes this defect never touched.
 
-Dry-run by default. Part A is safe to re-run forever and should report zero, because the collector
-now enforces the same rule; a non-zero result means something escaped the gate. Part B is a ONE-SHOT
-migration behind an explicit flag -- see ``run`` for why re-running it would demote genuine reports.
+  C. NO OPENING POST. A Tech Community page that serves no QAPage/mainEntity made
+     `thread_candidate` fall through to the og:title meta, so the row's whole text became the
+     browser TAB title. One reached production and was counted for build 26200.8655 on the words
+     "hang" and "bugcheck" in that title -- whose actual claim is "(Z790, 26200.8655 clean)", the
+     reporter naming that build as the one WITHOUT the defect.
+
+Dry-run by default. Parts A and C are safe to re-run forever and should report zero, because the
+collectors now enforce the same rules; a non-zero result means something escaped a gate. Part B is a
+ONE-SHOT migration behind an explicit flag -- see ``run`` for why re-running it would demote genuine
+reports.
 
     python auxsays/scripts/repair_windows_evidence_attribution.py                    # report only
     python auxsays/scripts/repair_windows_evidence_attribution.py --write            # part A
@@ -47,6 +54,14 @@ from patch_collectors.base import EVIDENCE_PATH, atomic_write_text  # noqa: E402
 
 FOREIGN_REASON = "foreign_product_subject_not_windows_patch"
 STOP_ERROR_THEME = "BSOD / stop error"
+NO_OPENING_POST_REASON = "no_opening_post_extracted"
+# The fingerprint of a Tech Community page that served no QAPage/mainEntity: `thread_candidate`
+# fell through to the og:title meta, so the row's whole text is the browser TAB title -- title,
+# parent_title and excerpt all identical, ending in the site's tab suffix. That shape cannot occur
+# on any other source, which is what makes this safe to apply to stored rows: a Learn Q&A report
+# short enough for its excerpt to equal its title is a real report and is not matched.
+TAB_TITLE_SUFFIX = "| Microsoft Community Hub"
+TECHCOMMUNITY_SOURCE_TYPE = "microsoft_tech_community"
 
 
 def row_text(row: dict[str, Any]) -> str:
@@ -67,6 +82,27 @@ def retract_foreign_subject(row: dict[str, Any]) -> bool:
         return False
     row["counted"] = False
     row["exclusion_reason"] = FOREIGN_REASON
+    row["evidence_valid_for_current_patch"] = False
+    return True
+
+
+def retract_no_opening_post(row: dict[str, Any]) -> bool:
+    """A stored row that is only a page title. See TAB_TITLE_SUFFIX for the fingerprint.
+
+    Like the foreign-subject retraction, this mirrors a rule the collector now enforces
+    (`techcommunity_source.thread_candidate` refuses a body-less thread), so re-running it should
+    report zero and a non-zero result means something escaped the gate.
+    """
+    if str(row.get("product_id") or "") != mw.PRODUCT_ID or row.get("counted") is not True:
+        return False
+    if str(row.get("source_type") or "") != TECHCOMMUNITY_SOURCE_TYPE:
+        return False
+    title = " ".join(str(row.get("report_title") or "").split())
+    excerpt = " ".join(str(row.get("report_text_excerpt") or "").split())
+    if not title.endswith(TAB_TITLE_SUFFIX) or excerpt != title:
+        return False
+    row["counted"] = False
+    row["exclusion_reason"] = NO_OPENING_POST_REASON
     row["evidence_valid_for_current_patch"] = False
     return True
 
@@ -124,10 +160,11 @@ def run(write: bool, path: Path = EVIDENCE_PATH, reclassify: bool = False) -> di
     reclassified: list[dict[str, str]] = []
     for row in rows:
         before_theme = str(row.get("issue_theme") or "")
-        if retract_foreign_subject(row):
+        if retract_foreign_subject(row) or retract_no_opening_post(row):
             retracted.append({"update_version": str(row.get("update_version") or ""),
                               "target_build": str(row.get("target_build") or ""),
                               "source_url": str(row.get("source_url") or ""),
+                              "exclusion_reason": str(row.get("exclusion_reason") or ""),
                               "report_title": str(row.get("report_title") or "")[:100]})
         if reclassify and reclassify_stop_error(row):
             reclassified.append({"update_version": str(row.get("update_version") or ""),
@@ -138,9 +175,13 @@ def run(write: bool, path: Path = EVIDENCE_PATH, reclassify: bool = False) -> di
     result = {
         "mode": "write" if write else "dry-run",
         "evidence_rows": len(rows),
-        "retracted_foreign_subject": len(retracted),
+        "retracted": len(retracted),
+        "retracted_foreign_subject": sum(
+            1 for r in retracted if r["exclusion_reason"] == FOREIGN_REASON),
+        "retracted_no_opening_post": sum(
+            1 for r in retracted if r["exclusion_reason"] == NO_OPENING_POST_REASON),
         "reclassified_stop_error": len(reclassified),
-        "retracted": retracted,
+        "retracted_rows": retracted,
         "reclassified": reclassified,
     }
     if write and (retracted or reclassified):

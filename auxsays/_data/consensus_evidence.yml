@@ -18439,7 +18439,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26100.7462'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5952587-impossible-dinstaller-correctif-de-s-c
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -18498,7 +18497,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8875'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5945620-2026-june-update-kb5095093-26200-8737
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -18557,7 +18555,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8737'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5947765-how-to-fix-error-message-0x800f8011-fo
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -19052,7 +19049,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8655'
-
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5940029-com-marshalling-issue-following-window
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -19111,7 +19107,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26100.8655'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5912336-windows-11-25h2-kb5089573-26200-8524-c
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -19315,7 +19310,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8524'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5893967-uac-popup-appears-for-some-self-develo
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -19895,7 +19889,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8457'
-
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5915309-assistance-required-failure-to-deploy
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -20013,7 +20006,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26100.8457'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5886887-windows-11-kb5083631-persistent-0x800f
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -20217,7 +20209,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8328'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5862058-2026-04-security-update-kb5083769-2620
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -20800,7 +20791,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8246'
-
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5871539-possible-issue-with-kb5083769-bits-soa
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -20859,7 +20849,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26100.8246'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5851722-file-explorer-broken-after-march-2026
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -21036,7 +21025,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8117'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5841503-i-havent-received-kb5079391-update-wha
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -21067,7 +21055,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8116'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5842858-windows-11-2026-03-update-kb5085516-26
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -21270,7 +21257,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8039'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5827367-windows-11-freezes-since-kb5077181-os
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -21914,7 +21900,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8037'
-
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5828190-kb5079473-causing-system-freezes-and-f
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -21944,7 +21929,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26100.8037'
-
 - id: microsoft-windows-11-23h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5863846-snipping-tool-freezing-my-laptop-when
   product_id: microsoft-windows-11
   update_version: 23H2
@@ -21974,7 +21958,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '22631.6783'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5808602-how-to-deal-with-windows-updates-that
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -22411,7 +22394,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.7922'
-
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5857655-windows-11-24h2-nvidia-kepler-gtx-670
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -22499,7 +22481,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26100.7922'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5804809-windows-update
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -23313,7 +23294,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.7840'
-
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5876373-the-issue-of-automatic-restart-after-i
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -23518,7 +23498,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26100.7840'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5767614-kb5074109-makes-nvidia-geforce-card-un
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -23663,7 +23642,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.7705'
-
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5765997-2026-01-preview-update-kb5074105-26100
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -23693,7 +23671,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26100.7705'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5751253-problems-with-january-2026-updates-to
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -23839,7 +23816,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.7628'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5737223-cannot-install-kb5074109-nor-its-super
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -23869,7 +23845,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.7627'
-
 - id: microsoft-windows-11-23h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5736018-ongoing-issues-with-shutting-down-lapt
   product_id: microsoft-windows-11
   update_version: 23H2
@@ -23928,7 +23903,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '22631.6494'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5730359-security-update-kb5074109-26200-7623
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -25178,7 +25152,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.7623'
-
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5790760-recent-kb-updates
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -25439,7 +25412,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26100.7623'
-
 - id: microsoft-windows-11-23h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5761156-kb5073455-not-offered-via-windows-upda
   product_id: microsoft-windows-11
   update_version: 23H2
@@ -25469,7 +25441,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '22631.6491'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5660795-windows-shows-two-physical-disks-after
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -26920,7 +26891,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.7462'
-
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5822474-security-update-kb5072033-wont-install
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -27096,7 +27066,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26100.7462'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5647340-right-alt-shift-not-switching-language
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -27389,7 +27358,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.7309'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-kb5121003-breaks-amd-x470-usb-xhci-drive
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -27420,7 +27388,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9168'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-kb5101684kb5120249-caused-file-history-e
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -27479,7 +27446,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8973'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-how-to-stop-the-win-11-kb5094126-install
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -27538,7 +27504,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8875'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-case-study-windows-update-kb5094126-caus
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -27598,7 +27563,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8655'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windowsinsiderprogram-kb5089573-forced-install-len
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -27628,7 +27592,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8524'
-
 - id: microsoft-windows-11-24h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-why-was-the-upgrade-to-26100-8457-so-mas
   product_id: microsoft-windows-11
   update_version: 24H2
@@ -27657,7 +27620,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26100.8457'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windowsinsiderprogram-kb5077241-broke-wifi-windows
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -27687,7 +27649,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.7922'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-unable-to-download-kb5077181-4496435
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -27833,7 +27794,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.7840'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-installation-failure-of-kb5074109-on-win
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -27863,7 +27823,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.7623'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-after-kb5072033-my-app-starts-then-is-go
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -27893,7 +27852,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.7462'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-title-severe-font-rendering-issue-after
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -27952,7 +27910,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9278'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-file-history-broken-after-kb5101684-kb51
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -27982,7 +27939,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8973'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windows11-kb5101650kb5121003-hang-thunderbolt-4-nv
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -28000,10 +27956,10 @@ evidence:
   matched_version: '26200.8655'
   match_basis: exact_os_build
   matched_os_build: '26200.8655'
-  evidence_valid_for_current_patch: true
+  evidence_valid_for_current_patch: false
   stale_due_to_patch_rollover: false
-  counted: true
-  exclusion_reason: null
+  counted: false
+  exclusion_reason: no_opening_post_extracted
   issue_theme: BSOD / stop error
   workflow_area: system stability
   platform: windows
