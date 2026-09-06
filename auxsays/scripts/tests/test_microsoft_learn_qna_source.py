@@ -68,6 +68,20 @@ RSS_BROKEN = """<rss version="2.0"><channel><item><title>unclosed"""
 BLOCK_PAGE = "<html><body>Access Denied. request blocked.</body></html>"
 
 
+def _raises_broken(src, body: str) -> bool:
+    """A body that is not RSS must fail closed even when the content type claims a feed."""
+    original = src._fetch_feed_text
+    try:
+        src._fetch_feed_text = lambda _url, **_k: (200, "application/rss+xml", body)
+        try:
+            src.request_learn_qna_feed("probe")
+        except LearnQnaAccessError as exc:
+            return exc.signature == "broken"
+        return False
+    finally:
+        src._fetch_feed_text = original
+
+
 def run() -> int:
     print("=" * 60)
     print("Microsoft Learn Q&A source tests")
@@ -133,6 +147,44 @@ def run() -> int:
 
     src._fetch_feed_text = lambda _url, **_k: (200, "application/rss+xml", RSS_EMPTY)
     check("reachable empty feed returns no candidates (-> no_results upstream)", src.request_learn_qna_feed("KB5095093") == [])
+
+    # --- a refusal is a property of the RESPONSE, not of its contents -------
+    # Live defect, measured: the search for OS build 26100.8737 returns HTTP 200
+    # application/rss+xml with five real Q&A results, one titled "Xbox Live sign-in suspended
+    # error ... WAM/ADD broker issue" whose description mentions "a brand new Microsoft account".
+    # Two words from a user's report made the whole feed read as a login wall, so five candidates
+    # -- including "WINDOWS UPDATE not functioning" -- were discarded and the patch published
+    # `partial` / `login_or_auth_challenge` health while showing zero reports.
+    XML_CT = "application/rss+xml; charset=utf-8"
+    HTML_CT = "text/html; charset=utf-8"
+    FEED_WITH_SIGNIN = ('<?xml version="1.0"?><rss version="2.0"><channel><item>'
+                        '<title>Xbox Live sign-in suspended error</title>'
+                        '<description>A brand new Microsoft account gives the same error.</description>'
+                        '<link>https://learn.microsoft.com/en-us/answers/questions/1/x</link>'
+                        '</item></channel></rss>')
+    for label, body in (("a sign-in thread", FEED_WITH_SIGNIN),
+                        ("an access-denied thread", "<rss><item>fix access denied on shares</item></rss>"),
+                        ("a rate-limit thread", "<rss><item>API rate limit errors</item></rss>"),
+                        ("a captcha thread", "<rss><item>captcha will not load</item></rss>")):
+        check(f"a feed carrying {label} is results, not a refusal",
+              src.blocked_signature(body, status=200, content_type=XML_CT) == "none",
+              src.blocked_signature(body, status=200, content_type=XML_CT))
+    check("the feed escape needs the server to SAY it is a feed",
+          src.blocked_signature("<html>please sign in with your Microsoft account</html>",
+                                status=200, content_type=HTML_CT) == "login_or_auth_challenge")
+    for status, want in ((401, "blocked"), (403, "blocked"), (429, "rate_limited")):
+        check(f"status {status} is a refusal whatever the body says",
+              src.blocked_signature(FEED_WITH_SIGNIN, status=status, content_type=XML_CT) == want,
+              src.blocked_signature(FEED_WITH_SIGNIN, status=status, content_type=XML_CT))
+    check("an empty body is still empty_body",
+          src.blocked_signature("", status=200, content_type=XML_CT) == "empty_body")
+    check("a challenge served under a feed content type still fails closed as broken",
+          _raises_broken(src, "<html>sign in</html>"),
+          "an unparseable body under a feed content type was accepted")
+    src._fetch_feed_text = lambda _url, **_k: (200, XML_CT, FEED_WITH_SIGNIN)
+    check("the measured live feed now yields its candidate instead of being discarded",
+          len(src.request_learn_qna_feed("26100.8737")) == 1,
+          str(src.request_learn_qna_feed("26100.8737")))
 
     # --- collect_learn_qna_candidates orchestration -------------------------
     original_request = src.request_learn_qna_feed
