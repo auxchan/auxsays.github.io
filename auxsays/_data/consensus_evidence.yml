@@ -27997,3 +27997,33 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9168'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5995968-windows-store-uwp-apps-hang-in-backgro
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5995968/windows-store-uwp-apps-hang-in-background-no-gui-w
+  parent_title: Windows Store/UWP apps hang in background (no GUI), Wi-Fi forgets profiles, and search indexing broken after KB5120998 update attempt - Microsoft Q&A
+  report_title: Windows Store/UWP apps hang in background (no GUI), Wi-Fi forgets profiles, and search indexing broken after KB5120998 update attempt - Microsoft Q&A
+  report_text_excerpt: Windows Store/UWP apps hang in background (no GUI), Wi-Fi forgets profiles, and search indexing broken after KB5120998 update attempt - Microsoft Q&A Hello, After Windows Update attempted to install the latest cumulative update (KB5120998 on Windows 11 24H2/25H2 build 26100),...
+  captured_at: '2026-09-07T13:48:52Z'
+  source_date: '2026-09-06'
+  target_release_date: '2026-08-27'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5120998
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5120998
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.9278'
