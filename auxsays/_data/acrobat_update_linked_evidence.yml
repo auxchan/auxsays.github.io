@@ -6,7 +6,7 @@ reports:
   associated_target_build: 25.001.21078
   associated_update_version: 25.001.21078
   association_basis: release_window_containment
-  captured_at: '2026-09-06T20:43:02Z'
+  captured_at: '2026-09-07T04:56:42Z'
   classification: update_linked
   confirmation_state: not_confirmed
   product_id: adobe-acrobat-reader
