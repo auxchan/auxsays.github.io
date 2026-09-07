@@ -18,8 +18,8 @@ update_version: GPT-6 Astra is generally available in GitHub Copilot
 update_logo_text: GIT
 update_published_at: '2026-09-04T18:59:51Z'
 update_last_checked: '2026-09-04T20:50:37Z'
-source_last_checked: '2026-09-06T22:31:16Z'
-official_body_last_checked: '2026-09-06T22:31:16Z'
+source_last_checked: '2026-09-07T06:42:55Z'
+official_body_last_checked: '2026-09-07T06:42:55Z'
 record_last_updated: '2026-09-04T20:50:37Z'
 patch_file_size: ''
 patch_file_size_note: ''
@@ -84,11 +84,6 @@ official_source_classification_note: Official vendor sources are classified befo
   fixed issues, and vendor announcements are not mislabeled.
 official_sources: []
 official_source_attempts:
-- at: '2026-09-05T17:19:12Z'
-  url: https://github.blog/changelog/2026-09-04-gpt-6-astra-is-generally-available-in-github-copilot
-  status: captured-from-rss-feed
-  body_captured: true
-  checksums_captured: false
 - at: '2026-09-06T06:46:23Z'
   url: https://github.blog/changelog/2026-09-04-gpt-6-astra-is-generally-available-in-github-copilot
   status: captured-from-rss-feed
@@ -105,6 +100,11 @@ official_source_attempts:
   body_captured: true
   checksums_captured: false
 - at: '2026-09-06T22:31:16Z'
+  url: https://github.blog/changelog/2026-09-04-gpt-6-astra-is-generally-available-in-github-copilot
+  status: captured-from-rss-feed
+  body_captured: true
+  checksums_captured: false
+- at: '2026-09-07T06:42:55Z'
   url: https://github.blog/changelog/2026-09-04-gpt-6-astra-is-generally-available-in-github-copilot
   status: captured-from-rss-feed
   body_captured: true
