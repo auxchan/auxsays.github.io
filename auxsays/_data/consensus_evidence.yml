@@ -27967,7 +27967,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8655'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5995049-hp-pro-tower-290-g9-kb5121003-causes-b
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -27997,7 +27996,6 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9168'
-
 - id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5995968-windows-store-uwp-apps-hang-in-backgro
   product_id: microsoft-windows-11
   update_version: 25H2
@@ -28027,3 +28025,24 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.9278'
+- id: obs-studio-32-2-2-github-issue-13878
+  product_id: obs-studio
+  update_version: 32.2.2
+  source_type: github_issue
+  source_name: obsproject/obs-studio
+  source_url: https://github.com/obsproject/obs-studio/issues/13878
+  parent_title: obs crashes/freezes the whole computer
+  report_title: obs crashes/freezes the whole computer
+  report_text_excerpt: '### Operating System Info Windows 10 ### Other OS _No response_ ### OBS Studio Version 32.2.2 ### OBS Studio Version (Other) _No response_ ### OBS Studio Log URL n/a ; I can''t do it cuz I deleted obs and can''t download again ### OBS Studio Crash Log URL _No response_ ### Expec'
+  captured_at: '2026-09-07T22:53:48Z'
+  patch_version_matched: true
+  matched_version: 32.2.2
+  match_basis: body
+  counted: true
+  exclusion_reason: null
+  issue_theme: freeze / hang
+  workflow_area: application stability
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
