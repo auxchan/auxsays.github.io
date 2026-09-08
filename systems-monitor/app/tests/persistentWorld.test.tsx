@@ -7,7 +7,7 @@ import { persistentWorldFactualBinding } from "../src/data/persistentWorldFactua
 import { PERSISTENT_WORLD_PROFILED_FACTOR_COUNT, persistentWorldCandidateSourceProfile } from "../src/data/persistentWorldSourceCatalog";
 import { persistentWorldMediaFor } from "../src/views/persistent/persistentWorldMedia";
 import { PERSISTENT_GLINT_PERIOD_MS, PERSISTENT_GLINT_TRAIL, blendPremiumColor, compactPersistentValue, createPersistentCameraTransition, easePremiumHover, factorGlyph, persistentAmbientEdges, persistentFocusRotation, persistentGlintProgress, persistentPlacementAccent, premiumCurveRoute, resolvePersistentLod, resolvePremiumLabels, samplePersistentCameraTransition, shortestAngleDelta } from "../src/views/persistent/persistentWorldVisuals";
-import { PERSISTENT_AMBIENT_ORBIT_PERIOD_MS, PERSISTENT_RIGHT_CONTROL_LABEL_INSET, PERSISTENT_TENDRIL_SWAY_PERIOD_MS, decayPersistentWorldOrbitVelocity, persistentWorldAmbientOrbitDelta, persistentWorldCanvasPixelRatio, persistentWorldCanvasResizeRequired, persistentWorldDoubleClickAction, persistentWorldEdgeTransitionAlpha, persistentWorldGraphNodeLabel, persistentWorldOrbitAngle, persistentWorldOrbitVelocity, persistentWorldPublicPlacementVisible, persistentWorldPublicRelationshipVisible, persistentWorldSideLabelX, persistentWorldTendrilStrandSway, persistentWorldTendrilSway, polishPersistentCameraTransition } from "../src/views/persistent/PremiumPersistentWorldSurface";
+import { PERSISTENT_AMBIENT_ORBIT_PERIOD_MS, PERSISTENT_RIGHT_CONTROL_LABEL_INSET, PERSISTENT_TENDRIL_SWAY_PERIOD_MS, decayPersistentWorldOrbitVelocity, persistentWorldAmbientOrbitDelta, persistentWorldCanvasPixelRatio, persistentWorldCanvasResizeRequired, persistentWorldDoubleClickAction, persistentWorldEdgeTransitionAlpha, persistentWorldGraphNodeLabel, persistentWorldOrbitAngle, persistentWorldOrbitVelocity, persistentWorldPublicPlacementVisible, persistentWorldPublicRelationshipVisible, persistentWorldSideLabelX, persistentWorldTapWithinTolerance, persistentWorldTendrilStrandSway, persistentWorldTendrilSway, polishPersistentCameraTransition } from "../src/views/persistent/PremiumPersistentWorldSurface";
 import { persistentWorldUpSelection } from "../src/views/persistent/PersistentWorldShell";
 import { createPersistentWorldSpatialLayout, projectPersistentPlacement } from "../src/views/persistent/persistentWorldSpatialLayout";
 import { buildPersistentWorldSearchIndex, searchPersistentWorld } from "../src/views/persistent/persistentWorldSearch";
@@ -262,6 +262,12 @@ describe("premium persistent-world visual language", () => {
     expect(persistentWorldCanvasPixelRatio(3, 768)).toBe(1.6);
     expect(persistentWorldCanvasPixelRatio(3, 1280)).toBe(2);
     expect(persistentWorldCanvasPixelRatio(1, 390)).toBe(1);
+  });
+
+  it("tolerates normal finger drift while keeping mouse drags precise", () => {
+    expect(persistentWorldTapWithinTolerance(100, 100, 111, 107, "touch")).toBe(true);
+    expect(persistentWorldTapWithinTolerance(100, 100, 115, 100, "touch")).toBe(false);
+    expect(persistentWorldTapWithinTolerance(100, 100, 107, 100, "mouse")).toBe(false);
   });
 
   it("keeps exact-ten side labels clear of the right-side control rail", () => {
