@@ -190,13 +190,15 @@
 [data-aux-product="systems-monitor"] .sm-pw-factual-boundary p { margin: 5px 0 0; color: #9bb8bc; }
 [data-aux-product="systems-monitor"] .sm-pw-factual-boundary a { flex: 0 0 auto; padding: 10px 14px; border: 1px solid #6fe4d0; border-radius: 10px; color: #80ecd9; text-decoration: none; }
 @media (max-width:900px) {
+  body:has([data-aux-product="systems-monitor"] .sm-pw-inspector.is-open) { overflow: hidden; }
+  body:has([data-aux-product="systems-monitor"] .sm-pw-inspector.is-open) .aux-shell { z-index: 40; }
   [data-aux-product="systems-monitor"] .sm-pw-header,[data-aux-product="systems-monitor"] .sm-pw-status,[data-aux-product="systems-monitor"] .sm-pw-factual-boundary { align-items: flex-start; flex-direction: column; }
   [data-aux-product="systems-monitor"] .sm-pw-header__facts { width: 100%; justify-content: flex-start; }
   [data-aux-product="systems-monitor"] .sm-pw-header__facts summary,[data-aux-product="systems-monitor"] .sm-pw-search-trigger,[data-aux-product="systems-monitor"] .sm-pw-history button,[data-aux-product="systems-monitor"] .sm-pw-controls button,[data-aux-product="systems-monitor"] .sm-pw-inspector__deep-trigger,[data-aux-product="systems-monitor"] .sm-pw-changes__filters button { min-height: 44px; }
   [data-aux-product="systems-monitor"] .sm-pw-history button { width: 44px; }
   [data-aux-product="systems-monitor"] .sm-pw-workspace { height: clamp(620px,76svh,820px); min-height: 620px; grid-template-columns: minmax(0,1fr); }
   [data-aux-product="systems-monitor"] .sm-pw-workspace.has-inspector { grid-template-columns: 1fr; }
-  [data-aux-product="systems-monitor"] .sm-pw-inspector { position: absolute; z-index: 8; inset: 0 auto 0 0; width: min(380px,96vw); box-shadow: 18px 0 55px rgba(0,0,0,.45); }
+  [data-aux-product="systems-monitor"] .sm-pw-inspector { position: fixed; z-index: 8; inset: 0 auto 0 0; width: min(380px,96vw); height: 100dvh; max-height: 100dvh; box-shadow: 18px 0 55px rgba(0,0,0,.45); }
   [data-aux-product="systems-monitor"] .sm-pw-inspector > div { width: 100%; }
   [data-aux-product="systems-monitor"] .sm-pw-inspector header button { width: 44px; height: 44px; }
   [data-aux-product="systems-monitor"] .sm-pw-workspace.has-inspector .sm-pw-controls,[data-aux-product="systems-monitor"] .sm-pw-workspace.has-inspector .sm-pw-minimap { opacity: 0; pointer-events: none; }
@@ -223,7 +225,9 @@
   [data-aux-product="systems-monitor"] .sm-pw-surface,[data-aux-product="systems-monitor"] .sm-pw-workspace { min-height: 560px; }
   [data-aux-product="systems-monitor"] .sm-pw-workspace { height: clamp(560px,72svh,680px); }
   [data-aux-product="systems-monitor"] .sm-pw-inspector { z-index: 9; inset: 0; width: 100%; border-right: 0; box-shadow: none; }
-  [data-aux-product="systems-monitor"] .sm-pw-inspector > div { padding: 18px 16px max(28px,env(safe-area-inset-bottom)); }
+  [data-aux-product="systems-monitor"] .sm-pw-inspector.is-open { transform: none; }
+  [data-aux-product="systems-monitor"] .sm-pw-inspector > div { padding: max(18px,env(safe-area-inset-top)) 16px max(28px,env(safe-area-inset-bottom)); }
+  [data-aux-product="systems-monitor"] .sm-pw-inspector header { position: sticky; z-index: 10; top: 0; margin: calc(-1 * max(18px,env(safe-area-inset-top))) -16px 0; padding: max(18px,env(safe-area-inset-top)) 16px 14px; background: linear-gradient(180deg,rgba(7,25,32,.98),rgba(7,25,32,.92)); box-shadow: 0 10px 24px rgba(0,0,0,.22); backdrop-filter: blur(12px); }
   [data-aux-product="systems-monitor"] .sm-pw-inspector header button { width: 44px; height: 44px; }
   [data-aux-product="systems-monitor"] .sm-pw-inspector h2 { font-size: clamp(25px,8vw,32px); }
   [data-aux-product="systems-monitor"] .sm-pw-inspector__portrait { height: 150px; margin: 14px 0 16px; }
