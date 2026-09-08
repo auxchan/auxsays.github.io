@@ -295,6 +295,69 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
 {% if decision_body == '' and has_practical_recommendations %}
   {% assign decision_body = page.practical_recommendations | first %}
 {% endif %}
+{%- comment -%}
+  PRACTICAL RECOMMENDATIONS -- the list, not just item one.
+
+  `practical_recommendations` is written by apply_consensus_to_records._record_coherence_fields for
+  four products (Windows 40 records, DaVinci 24, OBS 9, Premiere 2) and retracted at zero alongside
+  update_decision_body by report_counts.ZERO_COUNT_PROJECTION_FIELDS. The only consumer was the
+  fallback directly above, which substitutes item ONE into an empty decision body -- and because the
+  producer writes body and recommendations in the same dict literal and the retraction removes them
+  together, an empty body with a populated list cannot occur. Measured across all 1125 records: 75
+  carry the field and the fallback fires on 0 of them. The field rendered on no page at all.
+
+  DE-DUPLICATION IS THE POINT, not an afterthought. The verdict body and item one often say the same
+  thing in different words, so an item is dropped when the body already contains it, when it
+  contains the body, or when an earlier item already said it. That also makes the fallback safe: if
+  item one BECAME the body, the body now contains it and the list skips it, so it cannot appear
+  twice. `rec_rendered` is what the block gates on -- an empty survivor set renders nothing at all,
+  rather than an empty heading on the 1050 records that carry no recommendations.
+{%- endcomment -%}
+{% assign rec_rendered = 0 %}
+{% assign rec_seen = '' %}
+{%- comment -%}
+  Both sides are compared on a NORMALISED form: lower-cased, curly quotes folded to straight ones,
+  periods dropped and runs of spaces collapsed. Byte-exact comparison missed a verdict body repeated
+  verbatim as a bullet when the two differed only by a smart apostrophe or a double space.
+
+  Then a PREFIX test, because the restatements in this corpus are not whole-string copies: a DaVinci
+  body ends "...or test on copied projects." and its bullet opens "Test on copied projects before
+  moving client work to this version." Measured over all 226 items in the 75 records that carry the
+  field: whole-string containment catches 0, the four-word prefix catches 24.
+
+  It does NOT catch paraphrase, and paraphrase is the rest of it: after this rule 32 items still
+  restate the body by content-word overlap -- DaVinci 23, OBS 8, Premiere 1 -- because those two
+  products' templates say the same thing in different words ("Test on a backup profile ..." vs
+  "Test with a backup scene collection and profile ..."). No renderer-side string rule can see that;
+  it is a property of the generated prose, and the producer is where it has to be fixed. Windows,
+  which is 120 of the 226 items, restates the body 0 times.
+{%- endcomment -%}
+{% assign rec_body_probe = decision_body | strip | downcase | replace: '’', "'" | replace: '.', '' | replace: '  ', ' ' | replace: '  ', ' ' %}
+{% capture rec_items %}
+  {%- if has_practical_recommendations -%}
+    {%- for rec in page.practical_recommendations -%}
+      {%- assign rec_text = rec | strip -%}
+      {%- assign rec_probe = rec_text | downcase | replace: '’', "'" | replace: '.', '' | replace: '  ', ' ' | replace: '  ', ' ' -%}
+      {%- assign rec_key = '|' | append: rec_probe | append: '|' -%}
+      {%- assign rec_skip = false -%}
+      {%- if rec_text == '' -%}{%- assign rec_skip = true -%}{%- endif -%}
+      {%- if rec_seen contains rec_key -%}{%- assign rec_skip = true -%}{%- endif -%}
+      {%- if rec_body_probe != '' and rec_probe != '' -%}
+        {%- if rec_body_probe contains rec_probe -%}{%- assign rec_skip = true -%}{%- endif -%}
+        {%- if rec_probe contains rec_body_probe -%}{%- assign rec_skip = true -%}{%- endif -%}
+        {%- assign rec_prefix = rec_probe | split: ' ' | slice: 0, 4 | join: ' ' -%}
+        {%- if rec_prefix != '' and rec_body_probe contains rec_prefix -%}
+          {%- assign rec_skip = true -%}
+        {%- endif -%}
+      {%- endif -%}
+      {%- unless rec_skip -%}
+        {%- assign rec_seen = rec_seen | append: rec_key -%}
+        {%- assign rec_rendered = rec_rendered | plus: 1 -%}
+        <li>{{ rec_text | escape }}</li>
+      {%- endunless -%}
+    {%- endfor -%}
+  {%- endif -%}
+{% endcapture %}
 {% if decision_body == '' %}
   {% if report_count > 0 %}
     {% assign decision_body = 'Review the report sources and test before updating deadline-sensitive work.' %}
@@ -432,6 +495,18 @@ or a sibling's telemetry decides this build's freshness notice. {%- endcomment -
           <span class="update-decision-eyebrow">AUXSAYS verdict</span>
           <strong>{{ decision_label }}</strong>
           <p class="update-decision-recommendation">{{ decision_body }}</p>
+          {%- if rec_rendered > 0 %}
+          <div class="update-decision-actions">
+            {%- comment -%}
+              The heading is the house word. qa_patch_records.scan_update_layout_public_copy scans
+              this file as raw TEXT and forbids the longer phrasing anywhere in it -- comments
+              included -- naming this one as the sanctioned public heading. The front-matter field
+              keeps its own name; the reader gets the house word.
+            {%- endcomment -%}
+            <p class="update-decision-actions__label">Recommendations</p>
+            <ul class="update-decision-actions__list">{{ rec_items }}</ul>
+          </div>
+          {%- endif %}
         </div>
         <div class="update-decision-reasoning">
           {% if report_count > 0 and issue_cluster_text != blank %}

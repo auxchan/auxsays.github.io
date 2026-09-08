@@ -23,7 +23,7 @@ reports:
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-09-06T15:26:30Z'
+  captured_at: '2026-09-08T04:32:03Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -39,10 +39,11 @@ reports:
   source_url: https://community.adobe.com/questions-9/acrobat-crashes-trying-to-print-1640329
   strict_exclusion_reason: missing_exact_patch_version_match
   window_build: 26.002.21869
+  window_end: '2026-09-07'
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-09-06T15:26:30Z'
+  captured_at: '2026-09-08T04:32:03Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -62,7 +63,7 @@ reports:
   window_start: '2026-08-11'
   window_version: 26.001.21789
 - attribution_state: not_established
-  captured_at: '2026-09-06T15:26:30Z'
+  captured_at: '2026-09-08T04:32:03Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -82,7 +83,7 @@ reports:
   window_start: '2026-06-09'
   window_version: 26.001.21662
 - attribution_state: not_established
-  captured_at: '2026-09-06T15:26:30Z'
+  captured_at: '2026-09-08T04:32:03Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -102,7 +103,7 @@ reports:
   window_start: '2026-05-18'
   window_version: 26.001.21563
 - attribution_state: not_established
-  captured_at: '2026-09-05T20:18:21Z'
+  captured_at: '2026-09-07T04:36:48Z'
   classification: recent_report
   product_id: adobe-acrobat-pro
   promotion_eligible: true
@@ -122,7 +123,27 @@ reports:
   window_start: '2026-01-20'
   window_version: 25.001.21111
 - attribution_state: not_established
-  captured_at: '2026-09-06T15:46:47Z'
+  captured_at: '2026-09-07T04:36:48Z'
+  classification: recent_report
+  product_id: adobe-acrobat-pro
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-pro|25.001.20918|25.001.20918
+  report_date: '2025-11-18'
+  report_excerpt: Adobe Acrobat crashes when trying to edit forms in Tahoe 26.1 I recently updated to
+    Tahoe 26.1 on my Macbook pro and now everytime I double click an editable field to update it crashs
+    (quits). Tried multiple files and also reinstalling Acrobat etc... but no luck. It ppears to...
+  report_id: adobe-acrobat-pro:62f72baaf9c666e8
+  report_title: Adobe Acrobat crashes when trying to edit forms in Tahoe 26.1
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-crashes-when-trying-to-edit-forms-in-tahoe-26-1-1305727
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 25.001.20918
+  window_end: '2025-11-20'
+  window_start: '2025-11-13'
+  window_version: 25.001.20918
+- attribution_state: not_established
+  captured_at: '2026-09-08T04:53:26Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -138,10 +159,11 @@ reports:
   source_url: https://community.adobe.com/questions-12/adobe-acrobat-error-43-1640295
   strict_exclusion_reason: missing_exact_patch_version_match
   window_build: 26.002.21869
+  window_end: '2026-09-07'
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-09-06T15:46:47Z'
+  captured_at: '2026-09-08T04:53:26Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -157,10 +179,11 @@ reports:
   source_url: https://community.adobe.com/questions-9/acrobat-crashes-trying-to-print-1640329
   strict_exclusion_reason: missing_exact_patch_version_match
   window_build: 26.002.21869
+  window_end: '2026-09-07'
   window_start: '2026-08-31'
   window_version: 26.002.21869
 - attribution_state: not_established
-  captured_at: '2026-09-06T15:46:47Z'
+  captured_at: '2026-09-08T04:53:26Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -180,7 +203,7 @@ reports:
   window_start: '2026-06-09'
   window_version: 26.001.21662
 - attribution_state: not_established
-  captured_at: '2026-09-05T20:39:17Z'
+  captured_at: '2026-09-07T04:56:42Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -200,7 +223,7 @@ reports:
   window_start: '2026-02-12'
   window_version: 25.001.21208
 - attribution_state: not_established
-  captured_at: '2026-09-05T20:39:17Z'
+  captured_at: '2026-09-07T04:56:42Z'
   classification: recent_report
   product_id: adobe-acrobat-reader
   promotion_eligible: true
@@ -219,3 +242,23 @@ reports:
   window_end: '2026-02-06'
   window_start: '2026-01-20'
   window_version: 25.001.21111
+- attribution_state: not_established
+  captured_at: '2026-09-07T04:56:42Z'
+  classification: recent_report
+  product_id: adobe-acrobat-reader
+  promotion_eligible: true
+  release_window_key: adobe-acrobat-reader|25.001.20918|25.001.20918
+  report_date: '2025-11-18'
+  report_excerpt: Adobe Acrobat crashes when trying to edit forms in Tahoe 26.1 I recently updated to
+    Tahoe 26.1 on my Macbook pro and now everytime I double click an editable field to update it crashs
+    (quits). Tried multiple files and also reinstalling Acrobat etc... but no luck. It ppears to...
+  report_id: adobe-acrobat-reader:7a53ca84831ba0cd
+  report_title: Adobe Acrobat crashes when trying to edit forms in Tahoe 26.1
+  source_family: adobe community bug report
+  source_type: adobe_community_bug_report
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-crashes-when-trying-to-edit-forms-in-tahoe-26-1-1305727
+  strict_exclusion_reason: missing_exact_patch_version_match
+  window_build: 25.001.20918
+  window_end: '2025-11-20'
+  window_start: '2025-11-13'
+  window_version: 25.001.20918

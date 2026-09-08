@@ -164,32 +164,32 @@ legacy_manual_report_count_note: Previous 7-report value appears to be a pre-evi
 known_issues_present: true
 official_checksums_body: ''
 intelligence_stage: pilot
-source_last_checked: '2026-09-06T17:50:32Z'
-official_body_last_checked: '2026-09-06T17:50:32Z'
+source_last_checked: '2026-09-08T06:44:43Z'
+official_body_last_checked: '2026-09-08T06:44:43Z'
 primary_official_source: https://www.blackmagicdesign.com/media/release/20260414-01
 fallback_official_sources: []
 official_source_attempts:
-- at: '2026-09-05T12:53:29Z'
+- at: '2026-09-06T22:31:34Z'
   url: https://www.blackmagicdesign.com/media/release/20260414-01
   status: official-source-parser-failed
   body_captured: false
   checksums_captured: false
-- at: '2026-09-05T17:19:55Z'
+- at: '2026-09-07T06:43:11Z'
   url: https://www.blackmagicdesign.com/media/release/20260414-01
   status: official-source-parser-failed
   body_captured: false
   checksums_captured: false
-- at: '2026-09-06T06:47:02Z'
+- at: '2026-09-07T14:54:02Z'
   url: https://www.blackmagicdesign.com/media/release/20260414-01
   status: official-source-parser-failed
   body_captured: false
   checksums_captured: false
-- at: '2026-09-06T13:22:11Z'
+- at: '2026-09-07T23:42:21Z'
   url: https://www.blackmagicdesign.com/media/release/20260414-01
   status: official-source-parser-failed
   body_captured: false
   checksums_captured: false
-- at: '2026-09-06T17:50:32Z'
+- at: '2026-09-08T06:44:43Z'
   url: https://www.blackmagicdesign.com/media/release/20260414-01
   status: official-source-parser-failed
   body_captured: false

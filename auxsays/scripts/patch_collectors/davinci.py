@@ -29,6 +29,7 @@ from .base import (
     ProductCollector,
     ROOT,
     append_evidence_rows,
+    finalize_method_health_delta,
     apply_acceptance_gates,
     counted_rows,
     date_part,
@@ -310,7 +311,11 @@ class DavinciCollector(ProductCollector):
                 "method_health": method_health,
             }
             if context.write:
-                added, total, rows = append_evidence_rows(accepted)
+                persisted: list[dict[str, Any]] = []
+                already_held: list[dict[str, Any]] = []
+                added, total, rows = append_evidence_rows(
+                    accepted, out_added=persisted, out_already_held=already_held)
+                finalize_method_health_delta(method_health, persisted, already_held)
                 structured_count = len(counted_rows(rows, PRODUCT_ID, record.update_version))
                 record_updated = False
                 if accepted:

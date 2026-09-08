@@ -4892,3 +4892,40 @@ th[aria-sort="descending"] .patch-sort-btn { color: var(--text-0); }
   color: var(--aux-text-muted);
   white-space: nowrap;
 }
+
+/* Practical recommendations, inside the verdict box.
+   Appended at the end of the file on purpose: the dead-region cleanup that removed the swallowed
+   block is settled, and nothing here reopens it. Existing tokens only -- no new colour system, no
+   browser-default list styling, and the same gold rule the recommendation line above already uses,
+   so the block reads as part of the verdict rather than as a second panel. */
+.update-decision-actions {
+  margin: .85rem 0 0;
+  padding-left: .75rem;
+  border-left: 2px solid rgba(240, 202, 103, .28);
+}
+/* Scoped under the header because the block renders INSIDE it, and
+   `.update-decision-box__header p` (0,1,1) already sets color / font-weight / margin on every
+   paragraph in there -- it beats a bare `.update-decision-actions__label` (0,1,0) whatever the
+   source order. Measured in a browser before this scoping: the declared muted colour, the 700
+   weight and both margins were all inert, so the label rendered in body colour and weight, flush
+   against the first bullet. */
+.update-decision-box__header .update-decision-actions__label {
+  margin: 0 0 .35rem;
+  font-size: .74rem;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--aux-text-muted);
+}
+.update-decision-actions__list {
+  margin: 0;
+  padding: 0 0 0 1.05rem;
+  list-style: disc;
+  display: grid;
+  gap: .3rem;
+}
+.update-decision-actions__list li {
+  color: var(--text-1);
+  font-size: .92rem;
+  line-height: 1.5;
+}

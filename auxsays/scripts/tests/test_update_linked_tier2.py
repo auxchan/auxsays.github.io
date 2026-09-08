@@ -236,8 +236,15 @@ def run() -> int:
     # Inside the writer, the two corpora never mix: consensus is appended from `counted`, and the
     # Tier-2 path is written only by its own helper.
     orch_src = (ROOT / "scripts" / writer).read_text(encoding="utf-8")
+    # Matched as a PREFIX on a whitespace-NORMALISED source: what this protects is that consensus
+    # evidence is appended from `counted` and goes to the evidence path, not the exact argument list
+    # or its line breaks. Pinning the closing parenthesis broke the moment the call gained an
+    # `out_added=` sink for method-health attribution; pinning the raw text broke again when the
+    # longer call wrapped onto two lines. Neither change touches which rows are appended.
+    orch_flat = " ".join(orch_src.split())
     check("D.5c the writer appends consensus evidence from the counted rows only",
-          "append_evidence_rows(counted, self.evidence_path)" in orch_src)
+          "append_evidence_rows( counted, self.evidence_path" in orch_flat
+          or "append_evidence_rows(counted, self.evidence_path" in orch_flat)
     # Structural rather than a magic count: every mention of the Tier-2 path is either where it is
     # defined or inside the helper that owns it, so no other stage of the graph can reach it.
     helper_at = orch_src.index("def _write_tier2")
