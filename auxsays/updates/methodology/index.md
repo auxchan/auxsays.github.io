@@ -134,7 +134,14 @@ permalink: /updates/methodology/
         <span><mark class="source-health-status method-health-status--{{ item.status | downcase | replace: '_', '-' }}">{{ item.status | replace: '_', ' ' }}</mark></span>
         <span>{% if item.last_run != blank %}{{ item.last_run }}{% else %}Not checked{% endif %}</span>
         <span>{{ item.candidates_found | default: 0 }}</span>
-        <span>{{ item.accepted_candidates | default: 0 }}<small>{{ item.evidence_rows_added | default: 0 }} added</small></span>
+        {%- comment -%}
+          "N added" used to render `evidence_rows_added`, which defaulted to the accepted count and
+          was therefore the same number twice: a run could accept 80 candidates, store 0 because the
+          append refused every one as already known, and still publish "80 added". The field now
+          carries the real append delta and `duplicate_existing_evidence` carries the remainder, so
+          both halves of what a run did are stated instead of one of them being invented.
+        {%- endcomment -%}
+        <span>{{ item.accepted_candidates | default: 0 }}<small>{{ item.evidence_rows_added | default: 0 }} newly stored{% if item.duplicate_existing_evidence and item.duplicate_existing_evidence > 0 %} &middot; {{ item.duplicate_existing_evidence }} already held{% endif %}</small></span>
         <span>{{ item.public_counted_reports | default: 0 }}</span>
         <span>{% if item.blocked_reason != blank %}{{ item.blocked_reason }}{% else %}{{ item.notes }}{% endif %}<small>{% if item.blocked_reason != blank and item.notes != blank %}{{ item.notes }}{% endif %}</small></span>
       </div>

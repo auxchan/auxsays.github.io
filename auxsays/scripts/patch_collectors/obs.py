@@ -50,6 +50,11 @@ class ObsCollector(ProductCollector):
             rejected_count = int(result.get("rejected_count") or 0)
             candidates = int(result.get("candidates_reviewed") or accepted_count + rejected_count)
             method_status = "success" if status == 0 and accepted_count > 0 else ("no_results" if status == 0 else "broken")
+            # The legacy runner appends internally and reports the REAL delta back on the result, so
+            # OBS does not need the out-parameter the other collectors use -- it only needs to stop
+            # letting `evidence_rows_added` default to the accepted count. All OBS evidence belongs
+            # to one method, so the delta needs no further attribution.
+            rows_added = int(result.get("evidence_rows_added") or 0)
             result["product_id"] = self.product_id
             result["collector_status"] = status
             result["method_health"] = [
@@ -62,6 +67,8 @@ class ObsCollector(ProductCollector):
                     candidates_found=candidates,
                     accepted_reports=accepted_count,
                     rejected_reports=rejected_count,
+                    evidence_rows_added=rows_added,
+                    duplicate_existing_evidence=max(0, accepted_count - rows_added),
                     blocked_reason=str(result.get("error") or "") if status != 0 else "",
                     last_run=last_run,
                     notes="Primary OBS evidence method. Uses obsproject/obs-studio GitHub Issues with exact version matching.",

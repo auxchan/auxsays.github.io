@@ -396,6 +396,83 @@ def write_method_health_file(rows: list[dict[str, Any]], path: Path = METHOD_HEA
     atomic_write_text(path, yaml.safe_dump(payload, sort_keys=False, allow_unicode=True, width=1000))
 
 
+def _family_key(row: dict[str, Any]) -> tuple[str, str, str, str]:
+    product_id, version, build = patch_key_from(row)
+    return (product_id, version, build, str(row.get("source_type") or "").strip())
+
+
+def _distribute_capped(rows: list[dict[str, Any]], total: int) -> list[int]:
+    """Share `total` across `rows`, giving no row more than it accepted.
+
+    An evidence row records the COMMUNITY it came from, not the route that found it, so a family
+    delta cannot be split by method with certainty when several methods read one community
+    (PowerPoint has three on `microsoft_learn_qna`; Adobe has five on `adobe_community_bug_report`).
+    What IS certain is that a method cannot have stored more than it accepted, so the share is
+    walked in order and capped at each row's own accepted count.
+
+    The first version of this handed the whole family delta to the FIRST row with that key. On the
+    real Premiere method order -- `adobe_community_search` first and usually empty, `brave_search_api`
+    later and productive -- that published `accepted=0, stored=3` for a method that found nothing and
+    `stored=0, already held=3` for the method that had just stored them. Worse, `stored > accepted`
+    is refused by `validate_evidence_method_health`, which runs `--validate-before-commit` in both
+    write lanes, so the whole run's writeback would have been rejected -- every product, every file,
+    on every retry.
+    """
+    shares = [0] * len(rows)
+    remaining = total
+    for index, row in enumerate(rows):
+        if remaining <= 0:
+            break
+        room = int(row.get("accepted_candidates") or 0)
+        take = min(remaining, max(0, room))
+        shares[index] = take
+        remaining -= take
+    return shares
+
+
+def finalize_method_health_delta(health_rows: Iterable[dict[str, Any]],
+                                 added_rows: Iterable[dict[str, Any]],
+                                 already_held_rows: Iterable[dict[str, Any]] = ()) -> list[dict[str, Any]]:
+    """Stamp the MEASURED append outcome onto health rows, after the append has happened.
+
+    Both numbers come from the append itself -- `added_rows` from ``out_added`` and
+    `already_held_rows` from ``out_already_held`` -- because neither can be inferred. Deriving
+    duplicates as "accepted minus stored" was wrong three ways: a batch the build gate abandoned
+    reported every accepted row as "already held" when the store was empty; a URL two methods of one
+    collector both accepted in the SAME run was reported as archive depth; and the row credited with
+    the family's stored rows reported them as duplicates.
+
+    Attribution is by (canonical patch identity, source_type) because that is what both a health row
+    and an evidence row carry, then shared within the family capped by each row's accepted count --
+    see `_distribute_capped`. Within one community read by several methods the split between those
+    methods is therefore approximate; the family total, and the invariant that no row claims more
+    than it accepted, are exact.
+
+    Mutates and returns the rows, so a caller can finalize the list it is about to hand back.
+    """
+    finalized = list(health_rows or ())
+    added_by_family: dict[tuple[str, str, str, str], int] = {}
+    for row in added_rows or ():
+        key = _family_key(row)
+        added_by_family[key] = added_by_family.get(key, 0) + 1
+    held_by_family: dict[tuple[str, str, str, str], int] = {}
+    for row in already_held_rows or ():
+        key = _family_key(row)
+        held_by_family[key] = held_by_family.get(key, 0) + 1
+
+    families: dict[tuple[str, str, str, str], list[dict[str, Any]]] = {}
+    for row in finalized:
+        families.setdefault(_family_key(row), []).append(row)
+    for key, rows in families.items():
+        for row, stored in zip(rows, _distribute_capped(rows, added_by_family.get(key, 0))):
+            row["evidence_rows_added"] = stored
+        for row, held in zip(rows, _distribute_capped(rows, held_by_family.get(key, 0))):
+            # A row cannot have both stored and already-held more than it accepted in total.
+            room = max(0, int(row.get("accepted_candidates") or 0) - int(row.get("evidence_rows_added") or 0))
+            row["duplicate_existing_evidence"] = min(held, room)
+    return finalized
+
+
 def method_health_key(row: dict[str, Any]) -> tuple[str, str, str, str]:
     """Method-health identity = canonical patch identity + method.
 
@@ -461,7 +538,20 @@ def method_health_row(
         "candidates_found": candidates_found,
         "accepted_candidates": accepted_reports if accepted_candidates is None else accepted_candidates,
         "duplicate_existing_evidence": duplicate_existing_evidence,
-        "evidence_rows_added": accepted_reports if evidence_rows_added is None else evidence_rows_added,
+        # ROWS PERSISTED, NOT CANDIDATES ACCEPTED. This defaulted to `accepted_reports`, which made
+        # the field a second name for `accepted_candidates` -- and it was exactly that in all 1484
+        # committed rows, with `duplicate_existing_evidence` zero in every one of them. A collector
+        # re-finds the same threads every run and re-accepts them; `append_evidence_rows` then
+        # refuses each one as a duplicate, so a run could accept 80 rows, store 0, and publish
+        # "80 added" on the public methodology table. Measured over the git history of that table:
+        # 336 rows claimed against 48 actually stored.
+        #
+        # A health row is now built claiming NOTHING was stored, and the collector overwrites it via
+        # `finalize_method_health_delta` once `append_evidence_rows` has reported the real delta. A
+        # dry run stores nothing and 0 is therefore correct there; a write run that forgets to
+        # finalize understates instead of overstating, which is the safe direction for a number
+        # whose whole job is to say what actually reached the store.
+        "evidence_rows_added": 0 if evidence_rows_added is None else evidence_rows_added,
         "public_counted_reports": accepted_reports if public_counted_reports is None else public_counted_reports,
         "accepted_reports": accepted_reports,
         "rejected_reports": rejected_reports,
@@ -506,14 +596,35 @@ def evidence_key(row: dict[str, Any], key_field: str) -> tuple[str, str, str, st
     return (product_id, version, build, normalize_url(str(row.get(key_field) or "")))
 
 
-def append_evidence_rows(rows: list[dict[str, Any]], path: Path = EVIDENCE_PATH) -> tuple[int, int, list[dict[str, Any]]]:
+def append_evidence_rows(rows: list[dict[str, Any]], path: Path = EVIDENCE_PATH,
+                         *, out_added: list[dict[str, Any]] | None = None,
+                         out_already_held: list[dict[str, Any]] | None = None) -> tuple[int, int, list[dict[str, Any]]]:
+    """Append rows the store does not already hold. Returns (added, total, all rows).
+
+    ``out_added`` is an OPTIONAL sink for the rows actually persisted. It exists because the count
+    alone cannot be attributed: method-health telemetry has to say how many rows THIS METHOD stored
+    for THIS patch, and only the rows themselves carry the source_type and the patch identity. It is
+    a keyword-only out-parameter rather than a fourth return value because seven production call
+    sites unpack this function's three-tuple, and silently changing that arity is how a refactor
+    becomes an outage.
+
+    ``out_already_held`` is the other half, and it has to be MEASURED here rather than derived by
+    the caller: a refusal because the STORE already held the row is not the same event as a refusal
+    because an earlier row in this same batch had the identical URL, and neither is the same as a
+    batch abandoned mid-flight by the build gate. Only this loop can tell them apart, because only
+    it knows which keys were present before the batch started.
+    """
     existing = load_evidence(path)
+    # The keys the store held BEFORE this batch. `seen_ids` / `seen_urls` grow as the loop accepts,
+    # so they cannot answer "was this already held?" once the batch is underway.
     seen_ids = {evidence_key(row, "id") for row in existing if row.get("id")}
     seen_urls = {
         evidence_key(row, "source_url")
         for row in existing
         if row.get("source_url") and row.get("match_basis") != "embedded_listing_report_card"
     }
+    preexisting_ids = set(seen_ids)
+    preexisting_urls = set(seen_urls)
     added = 0
     for row in rows:
         normalized = normalize_evidence_row(row)
@@ -533,6 +644,14 @@ def append_evidence_rows(rows: list[dict[str, Any]], path: Path = EVIDENCE_PATH)
             and url_key in seen_urls
         )
         if id_key in seen_ids or url_duplicate:
+            # Refused. Report it as "the store already held this" ONLY when the key was present
+            # before this batch began; a collision with an earlier row of this same batch is a
+            # different event and must not be published as archive depth.
+            if out_already_held is not None and (
+                    id_key in preexisting_ids
+                    or (normalized.get("match_basis") != "embedded_listing_report_card"
+                        and url_key in preexisting_urls)):
+                out_already_held.append(normalized)
             continue
         existing.append(normalized)
         seen_ids.add(id_key)
@@ -545,8 +664,16 @@ def append_evidence_rows(rows: list[dict[str, Any]], path: Path = EVIDENCE_PATH)
         # `open("a")` torn-write hazard (an interruption can no longer leave a partial YAML document)
         # while keeping the historical bytes untouched (no full reformat). No additions -> no write.
         appended_rows = existing[-added:]
+        if out_added is not None:
+            out_added.extend(appended_rows)
         serialized = yaml.safe_dump(appended_rows, sort_keys=False, allow_unicode=True, width=1000)
-        if path.exists():
+        # The byte-append is only valid when the file already ENDS INSIDE the evidence list. A store
+        # written as `{schema_version: 1, evidence: []}` ends inside a mapping, so concatenating a
+        # bare top-level sequence onto it produces a document PyYAML then refuses to load
+        # ("expected <block end>, but found '-'") -- the store is destroyed by its first append.
+        # Not reachable from the live file, which has never been empty, but reachable from any fresh
+        # store, which is how the mandated telemetry fixtures found it.
+        if path.exists() and len(existing) > added:
             existing_text = path.read_text(encoding="utf-8")
             separator = "\n" if existing_text and existing_text.strip() else ""
             atomic_write_text(path, existing_text + separator + serialized)
