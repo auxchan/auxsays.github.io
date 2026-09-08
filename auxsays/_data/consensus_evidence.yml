@@ -28046,3 +28046,62 @@ evidence:
   severity: high
   sentiment: negative
   source_weight: 1
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-techcommunity-microsoft-com-discussions-windowsinsiderprogram-broken-file-history-after-ju
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_tech_community
+  source_name: Microsoft Tech Community
+  source_url: https://techcommunity.microsoft.com/discussions/windowsinsiderprogram/broken-file-history-after-julyaugust-updates-kb5101684-on-win11-25h2--kb5120249-/4552324
+  parent_title: Broken File History after July/August Updates (KB5101684 on Win11 25H2 / KB5120249 on Win10 22H2)
+  report_title: Broken File History after July/August Updates (KB5101684 on Win11 25H2 / KB5120249 on Win10 22H2)
+  report_text_excerpt: Broken File History after July/August Updates (KB5101684 on Win11 25H2 / KB5120249 on Win10 22H2) Hi everyone,I am writing to report a major regression bug with File History that was introduced in the recent Windows updates. This is happening across two entirely different...
+  captured_at: '2026-09-08T12:34:56Z'
+  source_date: '2026-09-01'
+  target_release_date: '2026-07-28'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: KB5101684
+  match_basis: exact_kb_feature_train
+  matched_kb: KB5101684
+  matched_feature_version: 25H2
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: update/install failure
+  workflow_area: windows update
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8973'
+
+- id: microsoft-windows-11-25h2-microsoft-learn-qna-https-learn-microsoft-com-en-us-answers-questions-5996120-after-update-os-to-26200-8894-suffer-b
+  product_id: microsoft-windows-11
+  update_version: 25H2
+  source_type: microsoft_learn_qna
+  source_name: Microsoft Learn Q&A
+  source_url: https://learn.microsoft.com/en-us/answers/questions/5996120/after-update-os-to-26200-8894-suffer-below-issue
+  parent_title: After update OS to 26200.8894 suffer below issue - Microsoft Q&A
+  report_title: After update OS to 26200.8894 suffer below issue - Microsoft Q&A
+  report_text_excerpt: After update OS to 26200.8894 suffer below issue - Microsoft Q&A After update OS to 26200.8894 suffer below issue 1.There will flash yellow lines around the desktop screen when taking a screenshot by pressing the shortcut key. 2.Open some of the OS setting menu will take long...
+  captured_at: '2026-09-08T12:35:03Z'
+  source_date: '2026-09-08'
+  target_release_date: '2026-07-18'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: '26200.8894'
+  match_basis: exact_os_build
+  matched_os_build: '26200.8894'
+  evidence_valid_for_current_patch: true
+  stale_due_to_patch_rollover: false
+  counted: true
+  exclusion_reason: null
+  issue_theme: display regression
+  workflow_area: display / graphics
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+  target_build: '26200.8894'
