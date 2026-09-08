@@ -28105,3 +28105,428 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8894'
+
+- id: acrobat-25-001-20756-adobe-community-bug-report-https-community-adobe-com-questions-12-acrobat-freezes-after-performing-any-operations-1506925
+  product_id: adobe-acrobat-reader
+  update_version: 25.001.20756
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/acrobat-freezes-after-performing-any-operations-1506925
+  parent_title: Acrobat Freezes after performing any operations
+  report_title: Acrobat Freezes after performing any operations
+  report_text_excerpt: Acrobat Freezes after performing any operations Hello, I work in IT Support and some users have reported that the Acrobat Reader app freezes when performing any operations, eg adding a signature to a document - the screen goes black and the app becomes unresponsive. I managed...
+  captured_at: '2026-09-08T21:13:04Z'
+  source_date: '2025-10-07'
+  target_release_date: '2025-10-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.1.20756.0
+  match_basis: exact_version_alias
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-18-011-20055-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-dc-installation-failure-1303160
+  product_id: adobe-acrobat-pro
+  update_version: 18.011.20055
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-dc-installation-failure-1303160
+  parent_title: Acrobat DC installation failure
+  report_title: Acrobat DC installation failure
+  report_text_excerpt: Acrobat DC installation failure Hi everyone， I have encountered a problem when I am installing the Acrobat. I have try a lot of solutions accroding to the community, but none of them worked. Here is the PDApp.log when I try to install it via Offline Installation Package....
+  captured_at: '2026-09-08T22:33:25Z'
+  source_date: '2025-06-27'
+  target_release_date: '2018-07-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 18.011.20055
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-18-011-20055-adobe-community-bug-report-https-community-adobe-com-questions-9-installation-failed-error-dw071-1229542
+  product_id: adobe-acrobat-pro
+  update_version: 18.011.20055
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/installation-failed-error-dw071-1229542
+  parent_title: Installation failed error DW071
+  report_title: Installation failed error DW071
+  report_text_excerpt: 'Installation failed error DW071 After a clean installation of Windows 10 am I reinstalling my ADOBE products using Creative Cloud. Unfortunate does Acrobat DC fail installation error information: Exit Code: 7 Please see specific errors below for troubleshooting. For example,...'
+  captured_at: '2026-09-08T22:33:25Z'
+  source_date: '2018-08-28'
+  target_release_date: '2018-07-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 18.011.20055
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-18-011-20055-adobe-community-bug-report-https-community-adobe-com-questions-617-creative-cloud-app-install-error-after-suffering-from-wi
+  product_id: adobe-acrobat-pro
+  update_version: 18.011.20055
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-617/creative-cloud-app-install-error-after-suffering-from-windows-update-autorepair-srttrail-txt-failure-446785
+  parent_title: Creative Cloud App Install error after suffering from Windows Update AutoRepair SrtTrail.txt failure
+  report_title: Creative Cloud App Install error after suffering from Windows Update AutoRepair SrtTrail.txt failure
+  report_text_excerpt: Creative Cloud App Install error after suffering from Windows Update AutoRepair SrtTrail.txt failure On Sep. 15 2018 I suffered from the notorious Windows Update Autorepair failure ( SrtTrail.txt), which had thousands of victims. I had no choice but chose to Reset my Windows....
+  captured_at: '2026-09-08T22:33:25Z'
+  source_date: '2018-09-16'
+  target_release_date: '2018-07-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 18.011.20055
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-18-011-20040-adobe-community-bug-report-https-community-adobe-com-questions-624-updating-adobe-acrobat-pro-dc-w-rum-675663
+  product_id: adobe-acrobat-pro
+  update_version: 18.011.20040
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-624/updating-adobe-acrobat-pro-dc-w-rum-675663
+  parent_title: Updating Adobe Acrobat Pro DC w/ RUM
+  report_title: Updating Adobe Acrobat Pro DC w/ RUM
+  report_text_excerpt: Updating Adobe Acrobat Pro DC w/ RUM Currently, my organization has about 19 installations of Adobe Acrobat Pro DC and 2 installations of the full Adobe CC suite. I installed and configured AUSST on a server and deployed RUM to all user workstations. All workstations also have...
+  captured_at: '2026-09-08T22:33:25Z'
+  source_date: '2018-11-28'
+  target_release_date: '2018-05-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 18.011.20040
+  match_basis: exact_version_text
+  matched_product_alias: acrobat pro
+  applicability: adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-17-012-20098-adobe-community-bug-report-https-community-adobe-com-questions-9-after-update-i-can-t-open-any-pdf-form-from-irs-1312789
+  product_id: adobe-acrobat-pro
+  update_version: 17.012.20098
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/after-update-i-can-t-open-any-pdf-form-from-irs-1312789
+  parent_title: After Update, I can't open any PDF form from IRS
+  report_title: After Update, I can't open any PDF form from IRS
+  report_text_excerpt: After Update, I can't open any PDF form from IRS When I do my payroll reports, I download the IRS forms, say f941. They can be filled in. I save them with the name of the quarter... f941-2017-qtr3.pdf. Since the last update, any attempt to open these forms will crash Acrobat....
+  captured_at: '2026-09-08T22:33:25Z'
+  source_date: '2017-11-09'
+  target_release_date: '2017-08-29'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 17.012.20098
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: form behavior regression
+  workflow_area: forms
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-17-012-20098-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-dc-constantly-crashing-on-mac-1312391
+  product_id: adobe-acrobat-pro
+  update_version: 17.012.20098
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-dc-constantly-crashing-on-mac-1312391
+  parent_title: Acrobat DC Constantly Crashing on Mac
+  report_title: Acrobat DC Constantly Crashing on Mac
+  report_text_excerpt: 'Acrobat DC Constantly Crashing on Mac I am extremely frustrated with Adobe and in particular Acrobat DC. It is crashing every 5mins!!! Here is the error log; Date/Time: 2017-11-08 15:03:54 -0400 OS Version: Mac OS X 10.12.6 (Build 16G29) Architecture: x86_64h Report Version:...'
+  captured_at: '2026-09-08T22:33:25Z'
+  source_date: '2017-11-08'
+  target_release_date: '2017-08-29'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 17.012.20098
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-17-012-20093-adobe-community-bug-report-https-community-adobe-com-questions-9-escript-api-is-crashing-on-i9-form-1309446
+  product_id: adobe-acrobat-pro
+  update_version: 17.012.20093
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/escript-api-is-crashing-on-i9-form-1309446
+  parent_title: EScript.api is crashing on i9 form
+  report_title: EScript.api is crashing on i9 form
+  report_text_excerpt: EScript.api is crashing on i9 form Hello. The latest version of Acrobat DC Pro (17.012.20093) is crashing while opening the i9 form. Per the event the log, it's crashing on EScript.api. When JavaScript is disabled in DC, the form does open however there's a warning at the top...
+  captured_at: '2026-09-08T22:33:25Z'
+  source_date: '2017-08-08'
+  target_release_date: '2017-08-08'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 17.012.20093
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: form behavior regression
+  workflow_area: forms
+  platform: unknown
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-18-011-20055-adobe-community-bug-report-https-community-adobe-com-questions-9-acrobat-dc-installation-failure-1303160
+  product_id: adobe-acrobat-reader
+  update_version: 18.011.20055
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/acrobat-dc-installation-failure-1303160
+  parent_title: Acrobat DC installation failure
+  report_title: Acrobat DC installation failure
+  report_text_excerpt: Acrobat DC installation failure Hi everyone， I have encountered a problem when I am installing the Acrobat. I have try a lot of solutions accroding to the community, but none of them worked. Here is the PDApp.log when I try to install it via Offline Installation Package....
+  captured_at: '2026-09-08T22:54:00Z'
+  source_date: '2025-06-27'
+  target_release_date: '2018-07-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 18.011.20055
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-18-011-20055-adobe-community-bug-report-https-community-adobe-com-questions-9-installation-failed-error-dw071-1229542
+  product_id: adobe-acrobat-reader
+  update_version: 18.011.20055
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/installation-failed-error-dw071-1229542
+  parent_title: Installation failed error DW071
+  report_title: Installation failed error DW071
+  report_text_excerpt: 'Installation failed error DW071 After a clean installation of Windows 10 am I reinstalling my ADOBE products using Creative Cloud. Unfortunate does Acrobat DC fail installation error information: Exit Code: 7 Please see specific errors below for troubleshooting. For example,...'
+  captured_at: '2026-09-08T22:54:00Z'
+  source_date: '2018-08-28'
+  target_release_date: '2018-07-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 18.011.20055
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-18-011-20055-adobe-community-bug-report-https-community-adobe-com-questions-617-creative-cloud-app-install-error-after-suffering-from-wi
+  product_id: adobe-acrobat-reader
+  update_version: 18.011.20055
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-617/creative-cloud-app-install-error-after-suffering-from-windows-update-autorepair-srttrail-txt-failure-446785
+  parent_title: Creative Cloud App Install error after suffering from Windows Update AutoRepair SrtTrail.txt failure
+  report_title: Creative Cloud App Install error after suffering from Windows Update AutoRepair SrtTrail.txt failure
+  report_text_excerpt: Creative Cloud App Install error after suffering from Windows Update AutoRepair SrtTrail.txt failure On Sep. 15 2018 I suffered from the notorious Windows Update Autorepair failure ( SrtTrail.txt), which had thousands of victims. I had no choice but chose to Reset my Windows....
+  captured_at: '2026-09-08T22:54:00Z'
+  source_date: '2018-09-16'
+  target_release_date: '2018-07-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 18.011.20055
+  match_basis: exact_version_text
+  matched_product_alias: acrobat (shared DC build)
+  applicability: adobe-acrobat-reader,adobe-acrobat-pro
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-18-011-20055-adobe-community-bug-report-https-community-adobe-com-questions-12-adobe-acrobat-reader-dc-will-not-open-firmware-update-fro
+  product_id: adobe-acrobat-reader
+  update_version: 18.011.20055
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/adobe-acrobat-reader-dc-will-not-open-firmware-update-from-canon-1514559
+  parent_title: Adobe Acrobat Reader DC will not open Firmware update from Canon
+  report_title: Adobe Acrobat Reader DC will not open Firmware update from Canon
+  report_text_excerpt: Adobe Acrobat Reader DC will not open Firmware update from Canon Is Adobe Acrobat Reader DC capable of opening Firmware update from Canon ? This will then be uploaded onto a CF Card for insertion to Canon 7D camera. I am a Mac user. My version 18.011.20055 will not open...
+  captured_at: '2026-09-08T22:54:00Z'
+  source_date: '2018-08-12'
+  target_release_date: '2018-07-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 18.011.20055
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Acrobat issue
+  workflow_area: Acrobat workflow
+  platform: macos
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+- id: acrobat-18-011-20055-adobe-community-bug-report-https-community-adobe-com-questions-12-pdfs-with-no-bytes-1514714
+  product_id: adobe-acrobat-reader
+  update_version: 18.011.20055
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/pdfs-with-no-bytes-1514714
+  parent_title: PDFs with no bytes
+  report_title: PDFs with no bytes
+  report_text_excerpt: PDFs with no bytes I am saving Excel spreadsheets (not very complex) as pdfs but a day or so later the files are corrupted somehow. The file is there with no bytes and Reader will not open it... I uninstalled and reinstalled Adobe Acrobat Reader DC but still happening. Version...
+  captured_at: '2026-09-08T22:54:00Z'
+  source_date: '2018-07-19'
+  target_release_date: '2018-07-10'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 18.011.20055
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: install/update failure
+  workflow_area: deployment
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-18-011-20040-adobe-community-bug-report-https-community-adobe-com-questions-12-ie-plugin-doesn-t-save-file-on-network-path-dc-mui-update
+  product_id: adobe-acrobat-reader
+  update_version: 18.011.20040
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/ie-plugin-doesn-t-save-file-on-network-path-dc-mui-update-18-011-20040-1514297
+  parent_title: 'IE plugin: doesn''t save file on network path (DC - MUI Update 18.011.20040)'
+  report_title: 'IE plugin: doesn''t save file on network path (DC - MUI Update 18.011.20040)'
+  report_text_excerpt: 'IE plugin: doesn''t save file on network path (DC - MUI Update 18.011.20040) It doesn''t save current opened adobe reader file from plugin browser to a network path or mapped drive. This happens from installation of "Adobe Acrobat Reader DC - MUI Update 18.011.20040". Thank''s,...'
+  captured_at: '2026-09-08T22:54:00Z'
+  source_date: '2018-06-01'
+  target_release_date: '2018-05-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 18.011.20040
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: browser/plugin handoff failure
+  workflow_area: browser integration
+  platform: unknown
+  severity: medium
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-18-011-20038-adobe-community-bug-report-https-community-adobe-com-questions-9-adobe-acrobat-dc-not-letting-me-digitally-sign-a-document
+  product_id: adobe-acrobat-reader
+  update_version: 18.011.20038
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-9/adobe-acrobat-dc-not-letting-me-digitally-sign-a-document-1227636
+  parent_title: Adobe acrobat DC not letting me digitally sign a document
+  report_title: Adobe acrobat DC not letting me digitally sign a document
+  report_text_excerpt: Adobe acrobat DC not letting me digitally sign a document Hi, Have been struggling badly with this problem for the last few days. Looked up to all other similar threads too but none was able to help. I need to fill a simple form and digitally sign it. The form contains a...
+  captured_at: '2026-09-08T22:54:00Z'
+  source_date: '2018-05-09'
+  target_release_date: '2018-02-23'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 18.011.20038
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: signing/certificate failure
+  workflow_area: e-signatures
+  platform: windows
+  severity: high
+  sentiment: negative
+  source_weight: 1
+
+- id: acrobat-18-009-20044-adobe-community-bug-report-https-community-adobe-com-questions-12-problem-opening-pdf-s-from-multiple-sources-1511892
+  product_id: adobe-acrobat-reader
+  update_version: 18.009.20044
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/problem-opening-pdf-s-from-multiple-sources-1511892
+  parent_title: Problem opening PDF's from multiple sources.
+  report_title: Problem opening PDF's from multiple sources.
+  report_text_excerpt: Problem opening PDF's from multiple sources. I am using Acrobat Reader DC, 18.009.20044, Windows 10 Home, Office 365. My primary sources for opening PDF's are Outlook attachment, company server and hyperlink to company server from excel. When I try to open two PDF's at the...
+  captured_at: '2026-09-08T22:54:00Z'
+  source_date: '2017-11-15'
+  target_release_date: '2017-11-14'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 18.009.20044
+  match_basis: exact_version_text
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: unspecified Acrobat issue
+  workflow_area: Acrobat workflow
+  platform: windows
+  severity: medium
+  sentiment: negative
+  source_weight: 1
