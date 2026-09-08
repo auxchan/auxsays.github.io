@@ -7,7 +7,7 @@ import { persistentWorldFactualBinding } from "../src/data/persistentWorldFactua
 import { PERSISTENT_WORLD_PROFILED_FACTOR_COUNT, persistentWorldCandidateSourceProfile } from "../src/data/persistentWorldSourceCatalog";
 import { persistentWorldMediaFor } from "../src/views/persistent/persistentWorldMedia";
 import { PERSISTENT_GLINT_PERIOD_MS, PERSISTENT_GLINT_TRAIL, blendPremiumColor, compactPersistentValue, createPersistentCameraTransition, easePremiumHover, factorGlyph, persistentAmbientEdges, persistentFocusRotation, persistentGlintProgress, persistentPlacementAccent, premiumCurveRoute, resolvePersistentLod, resolvePremiumLabels, samplePersistentCameraTransition, shortestAngleDelta } from "../src/views/persistent/persistentWorldVisuals";
-import { PERSISTENT_AMBIENT_ORBIT_PERIOD_MS, PERSISTENT_RIGHT_CONTROL_LABEL_INSET, PERSISTENT_TENDRIL_SWAY_PERIOD_MS, decayPersistentWorldOrbitVelocity, persistentWorldAmbientOrbitDelta, persistentWorldCanvasPixelRatio, persistentWorldCanvasResizeRequired, persistentWorldDoubleClickAction, persistentWorldEdgeTransitionAlpha, persistentWorldGraphNodeLabel, persistentWorldOrbitAngle, persistentWorldOrbitVelocity, persistentWorldPublicPlacementVisible, persistentWorldPublicRelationshipVisible, persistentWorldSideLabelX, persistentWorldTapWithinTolerance, persistentWorldTendrilStrandSway, persistentWorldTendrilSway, polishPersistentCameraTransition } from "../src/views/persistent/PremiumPersistentWorldSurface";
+import { PERSISTENT_AMBIENT_ORBIT_PERIOD_MS, PERSISTENT_RIGHT_CONTROL_LABEL_INSET, PERSISTENT_TENDRIL_SWAY_PERIOD_MS, decayPersistentWorldOrbitVelocity, persistentWorldAmbientOrbitDelta, persistentWorldCanvasPixelRatio, persistentWorldCanvasResizeRequired, persistentWorldDoubleClickAction, persistentWorldEdgeTransitionAlpha, persistentWorldGraphNodeLabel, persistentWorldOrbitAngle, persistentWorldOrbitVelocity, persistentWorldOverviewScale, persistentWorldPublicPlacementVisible, persistentWorldPublicRelationshipVisible, persistentWorldSideLabelX, persistentWorldTapWithinTolerance, persistentWorldTendrilStrandSway, persistentWorldTendrilSway, persistentWorldTargetCamera, polishPersistentCameraTransition } from "../src/views/persistent/PremiumPersistentWorldSurface";
 import { persistentWorldUpSelection } from "../src/views/persistent/PersistentWorldShell";
 import { createPersistentWorldSpatialLayout, projectPersistentPlacement } from "../src/views/persistent/persistentWorldSpatialLayout";
 import { buildPersistentWorldSearchIndex, searchPersistentWorld } from "../src/views/persistent/persistentWorldSearch";
@@ -178,6 +178,24 @@ describe("premium persistent-world visual language", () => {
     expect(persistentFocusRotation(1)).toBeCloseTo(-Math.PI / 5);
     expect(persistentFocusRotation(9)).toBeCloseTo(Math.PI / 5);
     expect(shortestAngleDelta(Math.PI * .9, -Math.PI * .9)).toBeCloseTo(Math.PI * .2);
+  });
+
+  it("fits the complete Level-1 orbit in portrait and landscape mobile viewports", () => {
+    const model = createPersistentWorld();
+    const portraitScale = persistentWorldOverviewScale(390, 844);
+    const landscapeScale = persistentWorldOverviewScale(844, 390);
+    expect(portraitScale).toBeCloseTo(landscapeScale);
+    expect(portraitScale).toBeLessThan(.205);
+    expect(persistentWorldOverviewScale(980, 720)).toBe(.205);
+
+    for (const [width, height] of [[390, 844], [844, 390]] as const) {
+      const camera = persistentWorldTargetCamera(model, null, false, "TOP_DOWN", width, height);
+      const projected = model.childrenByPlacement[model.outcomePlacementId].map((id) => projectPersistentPlacement(model.placements[id], 0, camera, { zoom: 1, panX: 0, panY: 0 }, width, height));
+      expect(Math.min(...projected.map((point) => point.x))).toBeGreaterThanOrEqual(45);
+      expect(Math.max(...projected.map((point) => point.x))).toBeLessThanOrEqual(width - 45);
+      expect(Math.min(...projected.map((point) => point.y))).toBeGreaterThanOrEqual(45);
+      expect(Math.max(...projected.map((point) => point.y))).toBeLessThanOrEqual(height - 45);
+    }
   });
 
   it("uses a bounded cinematic camera arc with a mid-flight dolly pullback", () => {

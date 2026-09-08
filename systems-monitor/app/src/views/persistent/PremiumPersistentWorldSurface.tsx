@@ -165,8 +165,18 @@ export function persistentWorldCanvasPixelRatio(devicePixelRatio: number, viewpo
 }
 
 const OVERVIEW_SCALE = .205;
+const OVERVIEW_WORLD_DIAMETER = 2500;
+const OVERVIEW_FRAME_GUTTER = 92;
 const AMBIENT_EDGE = "#315b67";
 export const PERSISTENT_RIGHT_CONTROL_LABEL_INSET = 190;
+
+/** Fits the complete Level-1 orbit inside the shorter mobile viewport dimension. */
+export function persistentWorldOverviewScale(viewportWidth: number, viewportHeight: number) {
+  const width = Number.isFinite(viewportWidth) && viewportWidth > 0 ? viewportWidth : 980;
+  const height = Number.isFinite(viewportHeight) && viewportHeight > 0 ? viewportHeight : 720;
+  const fittedScale = (Math.min(width, height) - OVERVIEW_FRAME_GUTTER) / OVERVIEW_WORLD_DIAMETER;
+  return Math.max(.075, Math.min(OVERVIEW_SCALE, fittedScale));
+}
 
 /** Keeps exact-ten side labels clear of the persistent vertical control rail. */
 export function persistentWorldSideLabelX(side: "left" | "right", width: number, textWidth: number) {
@@ -194,7 +204,7 @@ function hoverWhy(model: PersistentWorldReadModel, placement: PersistentWorldPla
 export function persistentWorldTargetCamera(model: PersistentWorldReadModel, selectedPlacementId: string | null, fullWorld: boolean, viewMode: PersistentWorldViewMode, viewportWidth = 980, viewportHeight = 720, spatial = createPersistentWorldSpatialLayout(model)): Camera {
   const selected = selectedPlacementId ? model.placements[selectedPlacementId] : undefined;
   const cinematic = viewMode === "CINEMATIC_2_5D";
-  if (!selected || fullWorld) return { x: 0, y: 0, z: 0, scale: fullWorld ? .17 : OVERVIEW_SCALE, rotation: 0, pitch: cinematic ? fullWorld ? -.18 : -.14 : 0, yaw: cinematic ? fullWorld ? .06 : -.04 : 0 };
+  if (!selected || fullWorld) return { x: 0, y: 0, z: 0, scale: fullWorld ? .17 : persistentWorldOverviewScale(viewportWidth, viewportHeight), rotation: 0, pitch: cinematic ? fullWorld ? -.18 : -.14 : 0, yaw: cinematic ? fullWorld ? .06 : -.04 : 0 };
   const rotation = persistentFocusRotation(selected.sector) + (selected.depth >= 2 ? (selected.order - 5.5) * .008 : 0);
   const z = cinematic ? spatial.zByPlacementId[selected.id] ?? 0 : 0;
   const pitch = cinematic ? selected.depth === 1 ? .52 : selected.depth === 2 ? .68 : .78 : 0;
