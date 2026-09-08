@@ -28105,3 +28105,30 @@ evidence:
   sentiment: negative
   source_weight: 1
   target_build: '26200.8894'
+
+- id: acrobat-25-001-20756-adobe-community-bug-report-https-community-adobe-com-questions-12-acrobat-freezes-after-performing-any-operations-1506925
+  product_id: adobe-acrobat-reader
+  update_version: 25.001.20756
+  source_type: adobe_community_bug_report
+  source_name: Adobe Community
+  source_url: https://community.adobe.com/questions-12/acrobat-freezes-after-performing-any-operations-1506925
+  parent_title: Acrobat Freezes after performing any operations
+  report_title: Acrobat Freezes after performing any operations
+  report_text_excerpt: Acrobat Freezes after performing any operations Hello, I work in IT Support and some users have reported that the Acrobat Reader app freezes when performing any operations, eg adding a signature to a document - the screen goes black and the app becomes unresponsive. I managed...
+  captured_at: '2026-09-08T21:13:04Z'
+  source_date: '2025-10-07'
+  target_release_date: '2025-10-01'
+  source_date_pass: true
+  patch_version_matched: true
+  matched_version: 25.1.20756.0
+  match_basis: exact_version_alias
+  matched_product_alias: acrobat reader
+  applicability: adobe-acrobat-reader
+  counted: true
+  exclusion_reason: null
+  issue_theme: crash or launch failure
+  workflow_area: application stability
+  platform: macos
+  severity: high
+  sentiment: negative
+  source_weight: 1
