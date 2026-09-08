@@ -14,6 +14,7 @@ type Camera = PersistentCameraPose;
 export type PersistentWorldViewMode = "TOP_DOWN" | "CINEMATIC_2_5D";
 interface Viewport { zoom: number; panX: number; panY: number }
 interface OrbitDrag { pointerId: number; startX: number; startY: number; lastX: number; lastAt: number; startAngle: number; moved: boolean }
+interface TapGesture { pointerId: number; pointerType: string; startX: number; startY: number; hitId: string | null; moved: boolean }
 interface Props {
   model: PersistentWorldReadModel;
   factualBindings: Readonly<Record<string, PersistentWorldFactualBinding>>;
@@ -36,6 +37,12 @@ export function persistentWorldDoubleClickAction(hitPlacementId: string | null, 
   if (!hitPlacementId) return "RESET";
   if (parentPlacementId && hitPlacementId === parentPlacementId) return "UP_ONE_LEVEL";
   return "NONE";
+}
+
+/** Allows natural finger drift without converting a tap into a drag. */
+export function persistentWorldTapWithinTolerance(startX: number, startY: number, endX: number, endY: number, pointerType: string) {
+  const tolerance = pointerType === "touch" ? 14 : pointerType === "pen" ? 10 : 6;
+  return Math.hypot(endX - startX, endY - startY) <= tolerance;
 }
 
 export function persistentWorldPublicPlacementVisible(model: PersistentWorldReadModel, placementId: string) {
@@ -280,6 +287,7 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
   const cameraVelocityRef = useRef<PersistentCameraVelocity>({ x: 0, y: 0, z: 0, logScale: 0, rotation: 0, pitch: 0, yaw: 0 });
   const mountedAtRef = useRef(performance.now()); const viewportRef = useRef<Viewport>({ zoom: 1, panX: 0, panY: 0 });
   const panRef = useRef<{ pointerId: number; startX: number; startY: number; panX: number; panY: number; moved: boolean } | null>(null);
+  const tapRef = useRef<TapGesture | null>(null);
   const orbitDragRef = useRef<OrbitDrag | null>(null); const orbitAngleRef = useRef(0); const orbitVelocityRef = useRef(0); const ambientOrbitAngleRef = useRef(0);
   const suppressClickRef = useRef(false); const hoveredRef = useRef<string | null>(null); const hoverVisualsRef = useRef(new Map<string, number>());
   const pointerRef = useRef<Point>({ x: 0, y: 0 }); const invalidateRef = useRef<() => void>(() => undefined);
@@ -514,11 +522,12 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
     return () => { observer.disconnect(); cancelAnimationFrame(frame); invalidateRef.current = () => undefined; };
   }, [factualBindings, fullWorld, model, publicBeta, reducedMotion, selectedPath, selectedPlacementId, semantic, semanticSet, spatialLayout, traceMode, viewMode]);
 
-  function hitTest(event: { clientX: number; clientY: number }) {
+  function hitTest(event: { clientX: number; clientY: number; pointerType?: string }) {
     const host = hostRef.current; if (!host) return null; const bounds = host.getBoundingClientRect(); const camera = cameraRef.current; let best: { id: string; score: number; depth: number } | null = null;
     const projectHit = createPersistentProjector({ ...camera, rotation: camera.rotation + orbitAngleRef.current + ambientOrbitAngleRef.current }, viewportRef.current, bounds.width, bounds.height);
     const selected = selectedPlacementId ? model.placements[selectedPlacementId] : undefined; const swayChildren = selected?.depth === 1 && !reducedMotion ? new Set(model.childrenByPlacement[selected.id] ?? []) : new Set<string>(); const now = performance.now();
-    for (const id of semantic) { const placement = model.placements[id]; const basePoint = projectHit(placement, viewMode === "CINEMATIC_2_5D" ? spatialLayout.zByPlacementId[id] ?? 0 : 0); const sway = swayChildren.has(id) ? persistentWorldTendrilSway(id, placement.order, now, viewMode) : { x: 0, y: 0 }; const point = { ...basePoint, x: basePoint.x + sway.x, y: basePoint.y + sway.y }; const lod = resolvePersistentLod(placement.depth, camera.scale * viewportRef.current.zoom * point.perspectiveScale, true); const radius = Math.max(24, premiumRadius(placement, lod) * point.perspectiveScale + 8); const distance = Math.hypot(event.clientX - bounds.left - point.x, event.clientY - bounds.top - point.y); const score = distance / radius; if (score <= 1 && (!best || score < best.score - .04 || (Math.abs(score - best.score) <= .04 && point.cameraDepth > best.depth))) best = { id, score, depth: point.cameraDepth }; }
+    const touchInput = event.pointerType === "touch" || event.pointerType === "pen";
+    for (const id of semantic) { const placement = model.placements[id]; const basePoint = projectHit(placement, viewMode === "CINEMATIC_2_5D" ? spatialLayout.zByPlacementId[id] ?? 0 : 0); const sway = swayChildren.has(id) ? persistentWorldTendrilSway(id, placement.order, now, viewMode) : { x: 0, y: 0 }; const point = { ...basePoint, x: basePoint.x + sway.x, y: basePoint.y + sway.y }; const lod = resolvePersistentLod(placement.depth, camera.scale * viewportRef.current.zoom * point.perspectiveScale, true); const radius = Math.max(touchInput ? 34 : 24, premiumRadius(placement, lod) * point.perspectiveScale + (touchInput ? 14 : 8)); const distance = Math.hypot(event.clientX - bounds.left - point.x, event.clientY - bounds.top - point.y); const score = distance / radius; if (score <= 1 && (!best || score < best.score - .04 || (Math.abs(score - best.score) <= .04 && point.cameraDepth > best.depth))) best = { id, score, depth: point.cameraDepth }; }
     return best?.id ?? null;
   }
   function updateViewport(next: Viewport) { viewportRef.current = next; const host = hostRef.current; if (host) { host.dataset.viewportZoom = next.zoom.toFixed(3); host.dataset.viewportPanX = Math.round(next.panX).toString(); host.dataset.viewportPanY = Math.round(next.panY).toString(); } invalidateRef.current(); }
@@ -534,8 +543,10 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
     const started = performance.now(); event.preventDefault(); const bounds = event.currentTarget.getBoundingClientRect(); const current = viewportRef.current; const zoom = Math.max(.55, Math.min(3.25, current.zoom * Math.exp(-event.deltaY * .0014))); const ratio = zoom / current.zoom; const cursorX = event.clientX - bounds.left - bounds.width / 2; const cursorY = event.clientY - bounds.top - bounds.height / 2; updateViewport({ zoom, panX: cursorX - (cursorX - current.panX) * ratio, panY: cursorY - (cursorY - current.panY) * ratio }); event.currentTarget.dataset.wheelHandlerMs = (performance.now() - started).toFixed(3);
   }} onPointerDown={(event) => {
     if (event.button === 0 && event.target === canvasRef.current) {
-      event.preventDefault(); suppressClickRef.current = false;
-      if (!hitTest(event)) {
+      suppressClickRef.current = false; const hitId = hitTest(event);
+      tapRef.current = { pointerId: event.pointerId, pointerType: event.pointerType, startX: event.clientX, startY: event.clientY, hitId, moved: false };
+      if (!hitId) {
+        event.preventDefault();
         event.currentTarget.setPointerCapture(event.pointerId); orbitVelocityRef.current = 0;
         orbitDragRef.current = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, lastX: event.clientX, lastAt: performance.now(), startAngle: orbitAngleRef.current, moved: false };
         event.currentTarget.dataset.orbitDragState = "DRAGGING"; setHoveredId(null); invalidateRef.current();
@@ -546,11 +557,13 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
     event.preventDefault(); event.currentTarget.setPointerCapture(event.pointerId); const current = viewportRef.current; panRef.current = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, panX: current.panX, panY: current.panY, moved: false };
   }} onPointerMove={(event) => {
     const bounds = event.currentTarget.getBoundingClientRect(); pointerRef.current = { x: event.clientX - bounds.left, y: event.clientY - bounds.top }; const pan = panRef.current;
+    const tap = tapRef.current; if (tap?.pointerId === event.pointerId && !persistentWorldTapWithinTolerance(tap.startX, tap.startY, event.clientX, event.clientY, tap.pointerType)) tap.moved = true;
     if (pan?.pointerId === event.pointerId) { const dx = event.clientX - pan.startX; const dy = event.clientY - pan.startY; pan.moved ||= Math.hypot(dx, dy) > 3; suppressClickRef.current = pan.moved; updateViewport({ ...viewportRef.current, panX: pan.panX + dx, panY: pan.panY + dy }); return; }
     const orbit = orbitDragRef.current;
     if (orbit?.pointerId === event.pointerId) {
       event.preventDefault(); const now = performance.now(); const totalX = event.clientX - orbit.startX; const totalY = event.clientY - orbit.startY;
-      orbit.moved ||= Math.abs(totalX) > 4 && Math.abs(totalX) >= Math.abs(totalY) * .55; suppressClickRef.current = orbit.moved;
+      const dragThreshold = tap?.pointerType === "touch" ? 14 : tap?.pointerType === "pen" ? 10 : 4;
+      orbit.moved ||= Math.abs(totalX) > dragThreshold && Math.abs(totalX) >= Math.abs(totalY) * .55; suppressClickRef.current = orbit.moved;
       if (orbit.moved) {
         orbitAngleRef.current = persistentWorldOrbitAngle(orbit.startAngle, totalX, viewMode, cameraRef.current.pitch);
         const sampledVelocity = reducedMotion ? 0 : persistentWorldOrbitVelocity(event.clientX - orbit.lastX, now - orbit.lastAt, viewMode, cameraRef.current.pitch);
@@ -563,7 +576,15 @@ export function PremiumPersistentWorldSurface({ model, factualBindings, selected
   }} onPointerUp={(event) => {
     if (panRef.current?.pointerId === event.pointerId) { event.currentTarget.releasePointerCapture(event.pointerId); panRef.current = null; }
     if (orbitDragRef.current?.pointerId === event.pointerId) { const moved = orbitDragRef.current.moved; event.currentTarget.releasePointerCapture(event.pointerId); orbitDragRef.current = null; if (!moved || reducedMotion) orbitVelocityRef.current = 0; event.currentTarget.dataset.orbitDragState = orbitVelocityRef.current ? "DRIFTING" : "IDLE"; invalidateRef.current(); }
-  }} onPointerCancel={(event) => { panRef.current = null; orbitDragRef.current = null; orbitVelocityRef.current = 0; event.currentTarget.dataset.orbitDragState = "IDLE"; }} onPointerLeave={() => { if (!panRef.current && !orbitDragRef.current) setHoveredId(null); }} onMouseDown={(event) => { if ((event.button === 0 && event.target === canvasRef.current) || event.button === 1) event.preventDefault(); }} onAuxClick={(event) => { if (event.button === 1) event.preventDefault(); }} onDoubleClick={(event) => { const action = persistentWorldDoubleClickAction(hitTest(event), parentPlacementId); if (action === "UP_ONE_LEVEL") onNavigateParent(); else if (action === "RESET") onReset(); }} onClick={(event) => { if (event.detail > 1) return; if (suppressClickRef.current) { suppressClickRef.current = false; return; } const id = hitTest(event); if (id && id !== parentPlacementId) onSelect(id); }}>
+    const tap = tapRef.current;
+    if (tap?.pointerId === event.pointerId) {
+      tapRef.current = null;
+      if ((tap.pointerType === "touch" || tap.pointerType === "pen") && !tap.moved) {
+        const id = hitTest(event);
+        if (id && id === tap.hitId && id !== parentPlacementId) { suppressClickRef.current = true; onSelect(id); }
+      }
+    }
+  }} onPointerCancel={(event) => { panRef.current = null; tapRef.current = null; orbitDragRef.current = null; orbitVelocityRef.current = 0; event.currentTarget.dataset.orbitDragState = "IDLE"; }} onPointerLeave={() => { if (!panRef.current && !orbitDragRef.current) setHoveredId(null); }} onMouseDown={(event) => { if ((event.button === 0 && event.target === canvasRef.current) || event.button === 1) event.preventDefault(); }} onAuxClick={(event) => { if (event.button === 1) event.preventDefault(); }} onDoubleClick={(event) => { const action = persistentWorldDoubleClickAction(hitTest(event), parentPlacementId); if (action === "UP_ONE_LEVEL") onNavigateParent(); else if (action === "RESET") onReset(); }} onClick={(event) => { if (event.detail > 1) return; if (suppressClickRef.current) { suppressClickRef.current = false; return; } const id = hitTest(event); if (id && id !== parentPlacementId) onSelect(id); }}>
     <canvas ref={canvasRef} role="img" aria-label={publicBeta
       ? "Reviewed factors and configuration-pending Level-4 nodes with hierarchy-only navigation connections, bounded to the current neighborhood."
       : "All 1,111 fixture placements remain resident; premium visual detail and labels are bounded to the current exact-ten neighborhood."} />
